@@ -502,7 +502,7 @@ const Moves = {
       },
       onResidualOrder: 6,
       onResidual(pokemon) {
-        if (this.field.terrain === "mistyterrain") {
+        if (this.field.terrain === "mistyterrain" || this.field.terrain === "swampterrain") {
           this.heal(pokemon.baseMaxhp / 8);
         }
         if (this.field.terrain === "corrosivemistterrain" && (pokemon.types.includes("Poison") || pokemon.types.includes("Steel")))
@@ -2300,6 +2300,8 @@ const Moves = {
         newType = "Poison";
       } else if (this.field.isTerrain("burningterrain")) {
         newType = "Fire";
+      } else if (this.field.isTerrain("swampterrain")) {
+        newType = "Water";
       }
       if (target.getTypes().join() === newType || !target.setType(newType))
         return false;
@@ -5770,7 +5772,10 @@ const Moves = {
         return this.chainModify([5325, 4096]);
       }
     },
-    onAfterMove() {
+    onAfterMove(source, target, move) {
+      if (this.field.terrain === "burningterrain" || this.field.terrain === "rainbowterrain") {
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : console.log("WHAT THE FUCK");
+      }
       if (this.field.terrainState.Tchanges?.includes("waterpledge")) {
         this.field.setTerrain("rainbowterrain");
       } else if (this.field.terrainState.Tchanges?.includes("grasspledge")) {
@@ -8050,7 +8055,10 @@ const Moves = {
         return this.chainModify([5325, 4096]);
       }
     },
-    onAfterMove() {
+    onAfterMove(source) {
+      if (this.field.terrain === "burningterrain" || this.field.terrain === "swampterrain") {
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : console.log("WHAT THE FUCK");
+      }
       if (this.field.terrainState.Tchanges?.includes("waterpledge")) {
         this.field.setTerrain("swampterrain");
       } else if (this.field.terrainState.Tchanges?.includes("firepledge")) {
@@ -10144,7 +10152,7 @@ const Moves = {
       },
       onResidualOrder: 7,
       onResidual(pokemon) {
-        if (this.field.terrain === "corrosiveterrain") {
+        if (this.field.terrain === "corrosiveterrain" || this.field.terrain === "swampterrain") {
           if (!(pokemon.types.includes("Poison") || pokemon.types.includes("Steel")))
             this.heal(pokemon.baseMaxhp / 16);
           else
@@ -12918,10 +12926,10 @@ const Moves = {
         }
         return 5;
       },
-      onAnyTryMove(target, source, effect) {
+      onTryMove(target, source, effect) {
         if (["explosion", "mindblown", "selfdestruct"].includes(effect.id)) {
           this.attrLastMove("[still]");
-          this.add("cant", this.effectState.target, "terrain: Misty Terrrain", effect, "[of] " + target);
+          this.add("-message", "The terrain stifled the move!");
           return false;
         }
       },
@@ -13446,6 +13454,8 @@ const Moves = {
         move = "acidspray";
       } else if (this.field.isTerrain("burningterrain")) {
         move = "flamethrower";
+      } else if (this.field.isTerrain("swampterrain")) {
+        move = "muddywater";
       }
       this.actions.useMove(move, pokemon, target);
       return null;
@@ -15660,6 +15670,13 @@ const Moves = {
     pp: 5,
     priority: 0,
     flags: { metronome: 1 },
+    onAfterMove(source, target, move) {
+      if (this.field.terrainState.Tchanges?.includes("sunnyday")) {
+        this.field.setTerrain("rainbowterrain", source, move);
+      } else if (!this.field.terrainState.Tchanges?.includes("raindance")) {
+        this.field.terrainState.Tchanges?.push("raindance");
+      }
+    },
     weather: "RainDance",
     secondary: null,
     target: "all",
@@ -16958,7 +16975,7 @@ const Moves = {
             spa: -1
           }
         });
-      } else if (this.field.isTerrain("psychicterrain")) {
+      } else if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("swampterrain")) {
         move.secondaries.push({
           chance: 30,
           boosts: {
@@ -16969,6 +16986,11 @@ const Moves = {
         move.secondaries.push({
           chance: 30,
           status: "psn"
+        });
+      } else if (this.field.isTerrain("burningterrain")) {
+        move.secondaries.push({
+          chance: 30,
+          status: "brn"
         });
       }
     },
@@ -18012,7 +18034,7 @@ const Moves = {
     priority: 0,
     flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1, powder: 1 },
     onModifyMove(move) {
-      if (this.field.terrain === "corrosiveterrain")
+      if (this.field.terrain === "corrosiveterrain" || this.field.terrain === "swampterrain")
         move.accuracy = 100;
     },
     status: "slp",
@@ -19418,7 +19440,11 @@ const Moves = {
         return false;
       const atk = target.getStat("atk", false, true);
       const success = this.boost({ atk: -1 }, target, source, null, false, true);
-      return !!(this.heal(atk, source, target) || success);
+      if (this.field.terrain === "swampterrain") {
+        return !!(this.heal(atk * 5325 / 4096, source, target) || success);
+      } else {
+        return !!(this.heal(atk, source, target) || success);
+      }
     },
     secondary: null,
     target: "normal",
@@ -21920,7 +21946,10 @@ const Moves = {
         return this.chainModify([5325, 4096]);
       }
     },
-    onAfterMove() {
+    onAfterMove(source) {
+      if (this.field.terrain === "swampterrain" || this.field.terrain === "rainbowterrain") {
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : console.log("WHAT THE FUCK");
+      }
       if (this.field.terrainState.Tchanges?.includes("grasspledge")) {
         this.field.setTerrain("swampterrain");
       } else if (this.field.terrainState.Tchanges?.includes("firepledge")) {

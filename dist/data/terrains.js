@@ -27,13 +27,19 @@ const Terrains = {
     condition: {
       duration: 5,
       onBasePowerPriority: 6,
+      durationCallback(source, effect) {
+        if (source.hasItem("terrainextender")) {
+          return 7;
+        }
+        return 4;
+      },
       onModifyMove(move) {
         const fireMoves = ["smackdown", "thousandarrows", "clearsmog", "smog"];
         if (fireMoves.includes(move.id)) {
           move.types = [move.type, "Fire"];
         }
       },
-      onBasePower(basePower, target, source, move) {
+      onBasePower(basePower, source, target, move) {
         const terrainEndMoves = ["defog", "gust", "hurricane", "muddywater", "sandtomb", "razorwind", "sludgewave", "sparklingaria", "surf", "waterpledge", "watersport", "waterspout", "hydrovortex", "tailwind", "twister", "whirlwind", "oceanicoperatta", "continentalcrush", "supersonicskystrike"];
         const rockfireMoves = ["smackdown", "thousandarrows"];
         const smogfireMoves = ["smog", "clearsmog"];
@@ -102,7 +108,7 @@ const Terrains = {
           this.damage(pokemon.baseMaxhp / 4 * Math.pow(2, typeMod), pokemon);
         }
       },
-      onBasePower(basePower, target, source, move) {
+      onBasePower(basePower, source, target, move) {
         let superStrong = ["acid", "acidspray", "grassknot"];
         let poisonedMoves = ["mudbomb", "mudshot", "mudslap", "muddywater", "smackdown", "whirlpool", "thousandarrows"];
         if (superStrong.includes(move.id))
@@ -135,7 +141,7 @@ const Terrains = {
           move.types = [move.type, "Poison"];
         }
       },
-      onBasePower(basePower, target, source, move) {
+      onBasePower(basePower, source, target, move) {
         let modifier = 1;
         const poisonedMoves = ["bubblebeam", "bubble", "sparklingaria"];
         const smogMoves = ["smog", "clearsmog", "acidspray"];
@@ -152,7 +158,7 @@ const Terrains = {
           modifier *= 5325 / 4096;
         return this.chainModify(modifier);
       },
-      onAfterMove(target, source, move) {
+      onAfterMove(source, target, move) {
         const terrainEndMoves = ["defog", "gust", "hurricane", "razorwind", "tailwind", "twister", "whirlwind", "supersonicskystrike", "seedflare"];
         const igniteMoves = ["eruption", "explosion", "firepledge", "flameburst", "heatwave", "incinerate", "lavaplume", "mindblown", "searingshot", "selfdestruct", "infernooverdrive"];
         if (igniteMoves.includes(move.id)) {
@@ -190,6 +196,70 @@ const Terrains = {
       },
       onFieldEnd() {
         this.add("-fieldend", "Corrosive Mist Terrain");
+      }
+    }
+  },
+  rainbowterrain: {
+    name: "Rainbow Terrain",
+    condition: {
+      duration: 5,
+      onBasePowerPriority: 6,
+      durationCallback(source, effect) {
+        if (source.hasItem("terrainextender")) {
+          return 7;
+        }
+        return 4;
+      },
+      onBasePower(basePower, source, target, move) {
+      }
+    }
+  },
+  swampterrain: {
+    name: "Swamp Terrain",
+    condition: {
+      duration: 5,
+      onBasePowerPriority: 6,
+      durationCallback(source, effect) {
+        if (source.hasItem("terrainextender")) {
+          return 7;
+        }
+        return 4;
+      },
+      onTryMove(target, source, effect) {
+        if (["explosion", "mindblown", "selfdestruct"].includes(effect.id)) {
+          this.attrLastMove("[still]");
+          this.add("-message", "The terrain stifled the move!");
+          return false;
+        }
+      },
+      onModifyMove(move) {
+        if (move.id === "thousandarrows" || move.id === "smackdown") {
+          move.types = [move.type, "Water"];
+        }
+      },
+      onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        const strengthenedMoves = ["thousandarrows", "smackdown", "brine", "gunkshot", "mudbomb", "mudshot", "mudslap", "muddywater", "sludgewave", "surf", "hydrovortex"];
+        const weakenedMoves = ["bulldoze", "earthquake", "magnitude"];
+        if (move.type === "Poison" && target.isGrounded()) {
+          modifier *= 1.5;
+        }
+        if (strengthenedMoves.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        if (weakenedMoves.includes(move.id)) {
+          modifier *= 0.25;
+        }
+        return this.chainModify(modifier);
+      },
+      onResidual(pokemon) {
+        let immune = ["quickfeet", "swiftswim", "clearbody", "whitesmoke"];
+        if (pokemon.isGrounded() && !immune.includes(pokemon.ability)) {
+          pokemon.setBoost({ spe: -1 });
+        }
+        if (pokemon.status === "slp" || pokemon.hasAbility("comatose") && !pokemon.hasAbility("magicguard")) {
+          this.damage(pokemon.baseMaxhp / 16, pokemon);
+        }
       }
     }
   }

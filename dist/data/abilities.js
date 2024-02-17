@@ -1149,7 +1149,7 @@ const Abilities = {
     },
     onResidual(target) {
       if (!this.field.isWeather("raindance") || !this.field.isWeather("sunnyday")) {
-        if (this.field.terrain === "mistyterrain") {
+        if (this.field.terrain === "mistyterrain" || this.field.terrain === "swampterrain") {
           this.heal(target.baseMaxhp / 16);
         }
         if (this.field.terrain === "corrosivemistterrain") {
@@ -1693,7 +1693,11 @@ const Abilities = {
     onDamagingHit(damage, target, source, move) {
       if (this.checkMoveMakesContact(move, source, target, true)) {
         this.add("-ability", target, "Gooey");
-        this.boost({ spe: -1 }, source, target, null, true);
+        if (this.field.terrain === "swampterrain") {
+          this.boost({ spe: -2 }, source, target, null, true);
+        } else {
+          this.boost({ spe: -1 }, source, target, null, true);
+        }
       }
     },
     flags: {},
@@ -5632,6 +5636,11 @@ const Abilities = {
     },
     onDamagingHit(damage, target, source, move) {
       if (move.type === "Water") {
+        this.boost({ def: 2 });
+      }
+    },
+    onResidual() {
+      if (this.field.terrain === "swampterrain") {
         this.boost({ def: 2 });
       }
     },

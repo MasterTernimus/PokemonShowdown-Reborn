@@ -483,6 +483,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
+			if (this.field.terrainState.Tchanges?.includes('sunnyday')) {
+				this.field.setTerrain('rainbowterrain', source, effect);
+			}
+			else if (!this.field.terrainState.Tchanges?.includes('raindance')) {
+				this.field.terrainState.Tchanges?.push('raindance');
+			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, '[of] ' + source);
@@ -496,6 +502,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
+			if (this.field.terrainState.Tchanges?.includes('raindance')){
+				this.field.terrainState.Tchanges = this.field.terrainState.Tchanges?.filter(item => item !== 'raindance');
+			}
 			this.add('-weather', 'none');
 		},
 	},
@@ -557,6 +566,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(battle, source, effect) {
+			if (this.field.terrainState.Tchanges?.includes('raindance')) {
+				this.field.setTerrain('rainbowterrain', source, effect);
+			}
+			else if (!this.field.terrainState.Tchanges?.includes('raindance')) {
+				this.field.terrainState.Tchanges?.push('raindance');
+			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, '[of] ' + source);
@@ -574,6 +589,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
+			if (this.field.terrainState.Tchanges?.includes('raindance')) {
+				this.field.terrainState.Tchanges = this.field.terrainState.Tchanges?.filter(item => item !== 'raindance');
+			}
 			this.add('-weather', 'none');
 		},
 	},
