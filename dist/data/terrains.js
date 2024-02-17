@@ -83,6 +83,12 @@ const Terrains = {
         }
         if (this.field.weather === "rain" || this.field.weather === "sandstorm")
           this.field.clearTerrain();
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Burning Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Burning Terrain");
       }
     }
   },
@@ -124,6 +130,12 @@ const Terrains = {
             this.damage(pokemon.baseMaxhp / 16, pokemon);
           }
         }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Corrosive Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Corrosive Terrain");
       }
     }
   },
@@ -199,6 +211,10 @@ const Terrains = {
       }
     }
   },
+  fairytaleterrain: {
+    name: "Fairy Tale Terrain",
+    condition: {}
+  },
   rainbowterrain: {
     name: "Rainbow Terrain",
     condition: {
@@ -210,7 +226,46 @@ const Terrains = {
         }
         return 4;
       },
+      onModifyMove(move, pokemon) {
+        if (move.secondaries && move.id !== "secretpower" && !pokemon.hasAbility("serenegrace")) {
+          this.debug("doubling secondary chance");
+          for (const secondary of move.secondaries) {
+            if (secondary.chance)
+              secondary.chance *= 2;
+          }
+          if (move.self?.chance)
+            move.self.chance *= 2;
+        }
+      },
       onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        let strengthenedMoves = ["aurorabeam", "dazzlinggleam", "dragonpulse", "firepledge", "fleurcannon", "grasspledge", "heartstamp", "hiddenpower", "judgement", "mistball", "moonblast", "mysticalfire", "prismaticlaser", "relicsong", "sacredfire", "secretpower", "silverwind", "solarbeam", "solarblade", "sparklingaria", "triattack", "waterpledge", "weatherball", "zenheadbutt", "oceanicoperetta", "twinkletackle"];
+        let weakenedMoves = ["darkpulse", "nightdaze", "neverendingnightmare", "shadowball"];
+        if (move.type === "normal") {
+          const types = ["Normal", "Water", "Fire", "Grass", "Fighting", "Psychic", "Bug", "Flying", "Ground", "Dark", "Fairy", "Poison", "Electric", "Steel", "Ghost", "Dragon", "Ice", "Rock"];
+          move.types = [move.type, this.sample(types)];
+          modifier *= 1.5;
+        }
+        if (strengthenedMoves.includes(move.id)) {
+          this.add("-message", "The terrain strengthened the attack!");
+          modifier *= 1.5;
+        }
+        if (weakenedMoves.includes(move.id)) {
+          this.add("-message", " The terrain weakened the attack!");
+          modifier *= 0.5;
+        }
+        return this.chainModify(modifier);
+      },
+      onResidual(pokemon) {
+        if (pokemon.status === "slp" || pokemon.hasAbility("comatose") && !pokemon.hasAbility("magicguard")) {
+          this.heal(pokemon.baseMaxhp / 16, pokemon);
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Rainbow Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Rainbow Terrain");
       }
     }
   },
@@ -260,6 +315,12 @@ const Terrains = {
         if (pokemon.status === "slp" || pokemon.hasAbility("comatose") && !pokemon.hasAbility("magicguard")) {
           this.damage(pokemon.baseMaxhp / 16, pokemon);
         }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Swamp Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Swamp Terrain");
       }
     }
   }

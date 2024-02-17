@@ -575,7 +575,6 @@ const Conditions = {
     },
     onFieldStart(battle, source, effect) {
       if (this.field.terrainState.Tchanges?.includes("raindance")) {
-        this.hint("Wha");
         this.field.setTerrain("rainbowterrain", source, effect);
       } else if (!this.field.terrainState.Tchanges?.includes("raindance")) {
         this.field.terrainState.Tchanges?.push("raindance");

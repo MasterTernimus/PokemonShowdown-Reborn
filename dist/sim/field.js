@@ -143,7 +143,7 @@ class Field {
       id: status.id,
       Tchanges: [],
       duration: 9999,
-      originalduration: 9999
+      turn: this.battle.turn
     };
     this.terrainStack.unshift(this.terrainState);
     this.battle.add("-fieldstart", status.name);
@@ -160,6 +160,9 @@ class Field {
       throw new Error(`setting terrain without a source`);
     if (this.terrain === status.id)
       return false;
+    if (this.terrain !== "") {
+      this.terrainState.Tchanges = [];
+    }
     const prevTerrain = this.terrain;
     const prevTerrainState = this.terrainState;
     this.terrain = status.id;
@@ -169,7 +172,7 @@ class Field {
       sourceSlot: source.getSlot(),
       Tchanges: [],
       duration: status.duration,
-      originalduration: status.duration
+      turn: this.battle.turn
     };
     if (status.durationCallback) {
       this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
@@ -197,13 +200,14 @@ class Field {
       return false;
     const prevTerrainState = this.terrainState;
     this.terrain = status.id;
+    this.terrainState.Tchanges = [];
     this.terrainState = {
       id: status.id,
       source,
       sourceSlot: source.getSlot(),
       Tchanges: [],
       duration: prevTerrainState.duration,
-      originalduration: prevTerrainState.originalduration
+      turn: this.battle.turn
     };
     this.battle.add("-fieldstart", status.name);
     this.terrainStack.unshift(this.terrainState);
@@ -217,11 +221,10 @@ class Field {
     this.terrainStack.shift();
     let isterrain = false;
     for (const terrainState of this.terrainStack) {
-      if (terrainState.duration <= this.terrainState.originalduration) {
+      if (terrainState.duration <= this.battle.turn - this.terrainState.turn) {
         this.terrainStack.shift();
       } else {
-        this.terrainStack[0].duration -= this.terrainState.originalduration - this.terrainState.duration;
-        this.terrainStack[0].originalduration += this.terrainState.originalduration - this.terrainState.duration;
+        this.terrainStack[0].duration -= this.battle.turn - this.terrainState.turn;
         isterrain = true;
         break;
       }
