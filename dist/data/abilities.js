@@ -326,7 +326,7 @@ const Abilities = {
     onResidualOrder: 28,
     onResidualSubOrder: 2,
     onResidual(pokemon) {
-      if (!pokemon.hp)
+      if (!pokemon.hp || this.field.terrain === "rainbowterrain")
         return;
       for (const target of pokemon.foes()) {
         if (target.status === "slp" || target.hasAbility("comatose")) {
@@ -568,6 +568,23 @@ const Abilities = {
         this.effectState.switchingIn = false;
       }
       this.eachEvent("WeatherChange", this.effect);
+    },
+    onResidual(pokemon) {
+      if (this.field.terrain === "rainbowterrain") {
+        let stats = [];
+        const boost = {};
+        let statPlus;
+        for (statPlus in pokemon.boosts) {
+          if (statPlus === "accuracy" || statPlus === "evasion")
+            continue;
+          if (pokemon.boosts[statPlus] < 6) {
+            stats.push(statPlus);
+          }
+        }
+        let randomStat = stats.length ? this.sample(stats) : void 0;
+        if (randomStat)
+          boost[randomStat] = 1;
+      }
     },
     onEnd(pokemon) {
       this.eachEvent("WeatherChange", this.effect);
@@ -2630,7 +2647,7 @@ const Abilities = {
   marvelscale: {
     onModifyDefPriority: 6,
     onModifyDef(def, pokemon) {
-      if (pokemon.status || this.field.terrain === "mistyterrain") {
+      if (pokemon.status || this.field.terrain === "mistyterrain" || this.field.terrain === "rainbowterrain") {
         return this.chainModify(1.5);
       }
     },
@@ -5800,6 +5817,10 @@ const Abilities = {
   wonderskin: {
     onModifyAccuracyPriority: 10,
     onModifyAccuracy(accuracy, target, source, move) {
+      if (this.field.terrain === "rainbowterrain") {
+        this.debug("Wonder Skin - setting accuracy to 0");
+        return 0;
+      }
       if (move.category === "Status" && typeof accuracy === "number") {
         this.debug("Wonder Skin - setting accuracy to 50");
         return 50;

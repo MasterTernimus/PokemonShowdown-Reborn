@@ -139,7 +139,7 @@ export class Field {
 			turn: this.battle.turn,
 		};
 		this.terrainStack.unshift(this.terrainState);
-		this.battle.add('-fieldstart', status.name);
+		this.battle.add('-fieldstart', `${status.name}`);
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {

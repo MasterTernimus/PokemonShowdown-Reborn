@@ -191,6 +191,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 			}
 		}
 	},
+	fairytaleterrain: {
+		name: "Fairy Tale Terrain",
+		condition: {
+
+		}
+	},
 	rainbowterrain: {
 		name: "Rainbow Terrain",
 		condition: {

@@ -879,7 +879,7 @@ const Moves = {
     flags: { snatch: 1, metronome: 1 },
     sideCondition: "auroraveil",
     onTry() {
-      return this.field.isWeather(["hail", "snow"]);
+      return this.field.isWeather(["hail", "snow"]) || this.field.terrain === "rainbowterrain";
     },
     condition: {
       duration: 5,
@@ -2302,6 +2302,8 @@ const Moves = {
         newType = "Fire";
       } else if (this.field.isTerrain("swampterrain")) {
         newType = "Water";
+      } else if (this.field.terrain === "rainbowterrain") {
+        newType = "Dragon";
       }
       if (target.getTypes().join() === newType || !target.setType(newType))
         return false;
@@ -3132,7 +3134,7 @@ const Moves = {
     priority: 0,
     flags: { snatch: 1, metronome: 1 },
     onModifyMove(move) {
-      if (this.field.terrain === "mistyterrain" || this.field.terrain === "psychicterrain") {
+      if (this.field.terrain === "mistyterrain" || this.field.terrain === "psychicterrain" || this.field.terrain === "rainbowterrain") {
         move.boosts = {
           def: 2,
           spd: 2
@@ -12190,6 +12192,11 @@ const Moves = {
           spa: 2
         };
       }
+      if (this.field.terrain === "rainbowterrain") {
+        move.boosts = {
+          atk: 3
+        };
+      }
     },
     boosts: {
       atk: 1
@@ -12916,7 +12923,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (source.lastMove?.id === "mist") {
+        if (this.effect.id === "mist") {
           if (source.hasItem("terrainextender"))
             return 6;
           return 3;
@@ -13456,6 +13463,8 @@ const Moves = {
         move = "flamethrower";
       } else if (this.field.isTerrain("swampterrain")) {
         move = "muddywater";
+      } else if (this.field.isTerrain("rainbowterrain")) {
+        move = "aurorabeam";
       }
       this.actions.useMove(move, pokemon, target);
       return null;
@@ -13554,7 +13563,7 @@ const Moves = {
     condition: {
       noCopy: true,
       onStart(pokemon) {
-        if (pokemon.status !== "slp" && !pokemon.hasAbility("comatose")) {
+        if (pokemon.status !== "slp" && !pokemon.hasAbility("comatose") || this.field.terrain === "rainbowterrain") {
           return false;
         }
         this.add("-start", pokemon, "Nightmare");
@@ -16992,6 +17001,23 @@ const Moves = {
           chance: 30,
           status: "brn"
         });
+      } else if (this.field.isTerrain("rainbowterrain")) {
+        move.secondaries.push({
+          chance: 6,
+          status: "par"
+        });
+        move.secondaries.push({
+          chance: 6,
+          status: "slp"
+        });
+        move.secondaries.push({
+          chance: 6,
+          status: "frz"
+        });
+        move.secondaries.push({
+          chance: 6,
+          status: "brn"
+        });
       }
     },
     secondary: {
@@ -18437,7 +18463,7 @@ const Moves = {
         return;
       }
       this.add("-prepare", attacker, move.name);
-      if (["sunnyday", "desolateland"].includes(attacker.effectiveWeather())) {
+      if (["sunnyday", "desolateland"].includes(attacker.effectiveWeather()) || this.field.terrain === "rainbowterrain") {
         this.attrLastMove("[still]");
         this.addMove("-anim", attacker, move.name, defender);
         return;
@@ -18508,6 +18534,11 @@ const Moves = {
     pp: 20,
     priority: 0,
     flags: { protect: 1, mirror: 1, metronome: 1 },
+    onModifyMove(move) {
+      if (this.field.terrain === "rainbowterrain") {
+        move.damage = 140;
+      }
+    },
     secondary: null,
     target: "normal",
     type: "Normal",
@@ -22333,7 +22364,7 @@ const Moves = {
     condition: {
       duration: 2,
       onStart(pokemon, source) {
-        if (this.field.terrain === "mistyterrain")
+        if (this.field.terrain === "mistyterrain" || this.field.terrain === "rainbowterrain")
           this.effectState.hp = source.maxhp * 3 / 4;
         else
           this.effectState.hp = source.maxhp / 2;
