@@ -323,7 +323,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (!pokemon.hp) return;
+			if (!pokemon.hp || this.field.terrain === 'rainbowterrain') return;
 			for (const target of pokemon.foes()) {
 				if (target.status === 'slp' || target.hasAbility('comatose')) {
 					this.damage(target.baseMaxhp / 8, target, pokemon);
@@ -551,6 +551,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.effectState.switchingIn = false;
 			}
 			this.eachEvent('WeatherChange', this.effect);
+		},
+		onResidual(pokemon) {
+			if (this.field.terrain === 'rainbowterrain') {
+				let stats: BoostID[] = [];
+				const boost: SparseBoostsTable = {};
+				let statPlus: BoostID;
+				for (statPlus in pokemon.boosts) {
+					if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+					if (pokemon.boosts[statPlus] < 6) {
+						stats.push(statPlus);
+					}
+				}
+				let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) boost[randomStat] = 1;
+			}
 		},
 		onEnd(pokemon) {
 			this.eachEvent('WeatherChange', this.effect);
@@ -1108,7 +1123,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onResidual(target) {
 			if (!this.field.isWeather('raindance') || !this.field.isWeather('sunnyday')) {
-				if (this.field.terrain === 'mistyterrain') {
+				if (this.field.terrain === 'mistyterrain' || this.field.terrain === 'swampterrain') {
 					this.heal(target.baseMaxhp / 16);
 				}
 				if (this.field.terrain === 'corrosivemistterrain') {
@@ -1622,7 +1637,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Gooey');
-				this.boost({spe: -1}, source, target, null, true);
+				if (this.field.terrain === 'swampterrain') {
+					this.boost({ spe: -2 }, source, target, null, true);
+				}
+				else {
+					this.boost({spe: -1}, source, target, null, true);
+				}
 			}
 		},
 		flags: {},
@@ -2522,7 +2542,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	marvelscale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
-			if (pokemon.status || this.field.terrain === 'mistyterrain') {
+			if (pokemon.status || this.field.terrain === 'mistyterrain' || this.field.terrain === 'rainbowterrain') {
 				return this.chainModify(1.5);
 			}
 		},
@@ -5433,6 +5453,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({def: 2});
 			}
 		},
+		onResidual() {
+			if (this.field.terrain === 'swampterrain') {
+				this.boost({ def: 2 });
+			}
+		},
 		flags: {},
 		name: "Water Compaction",
 		rating: 1.5,
@@ -5584,6 +5609,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	wonderskin: {
 		onModifyAccuracyPriority: 10,
 		onModifyAccuracy(accuracy, target, source, move) {
+			if (this.field.terrain === 'rainbowterrain') {
+				this.debug('Wonder Skin - setting accuracy to 0');
+				return 0;
+			}
 			if (move.category === 'Status' && typeof accuracy === 'number') {
 				this.debug('Wonder Skin - setting accuracy to 50');
 				return 50;
