@@ -32,7 +32,7 @@ export class Field {
 		this.terrainState = { id: '' };
 		this.terrainStack = [];
 		this.pseudoWeather = {};
-		this.startTerrain('corrosivemistterrain');
+		this.startTerrain('fairytaleterrain');
 	}
 
 	toJSON(): AnyObject {
