@@ -2089,7 +2089,7 @@ export class Pokemon {
 		if (this.terastallized && move.type === 'Stellar') return 1;
 		let totalTypeMod = 0;
 		for (const type of this.getTypes()) {
-			let typeMod = this.battle.dex.getEffectiveness(move, type);
+			let typeMod = this.battle.dex.getEffectiveness(move.types !== undefined ? move.types : move, type);
 			typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
 			totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 		}

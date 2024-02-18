@@ -253,7 +253,7 @@ export class ModdedDex {
 	}
 
 	getEffectiveness(
-		source: {type: string} | string | string[],
+		source: { type: string } | string | string[],
 		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
 	): number {
 		const sourceTypes: string[] = (Array.isArray(source) ? source : (typeof source === 'string' ? [source] : [source.type]));
