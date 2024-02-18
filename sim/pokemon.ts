@@ -2097,25 +2097,28 @@ export class Pokemon {
 	}
 
 	/** false = immune, true = not immune */
-	runImmunity(type: string, message?: string | boolean) {
+	runImmunity(type: string | string[], message?: string | boolean) {
 		if (!type || type === '???') return true;
-		if (!this.battle.dex.types.isName(type)) {
-			throw new Error("Use runStatusImmunity for " + type);
-		}
-		if (this.fainted) return false;
+		const sourceTypes: string[] = Array.isArray(type) ? type : [type];
+		for (const type of sourceTypes) {
+			if (!this.battle.dex.types.isName(type)) {
+				throw new Error("Use runStatusImmunity for " + type);
+			}
+			if (this.fainted) return false;
 
-		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
-		const notImmune = type === 'Ground' ?
-			this.isGrounded(negateImmunity) :
-			negateImmunity || this.battle.dex.getImmunity(type, this);
-		if (notImmune) return true;
-		if (!message) return false;
-		if (notImmune === null) {
-			this.battle.add('-immune', this, '[from] ability: Levitate');
-		} else {
-			this.battle.add('-immune', this);
+			const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
+			const notImmune = type === 'Ground' ?
+				this.isGrounded(negateImmunity) :
+				negateImmunity || this.battle.dex.getImmunity(type, this);
+			if (notImmune) continue;
+			if (!message) return false;
+			if (notImmune === null) {
+				this.battle.add('-immune', this, '[from] ability: Levitate');
+			} else {
+				this.battle.add('-immune', this);
+			}
+			return false;
 		}
-		return false;
 	}
 
 	runStatusImmunity(type: string, message?: string) {
