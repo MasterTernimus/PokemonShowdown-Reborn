@@ -649,7 +649,7 @@ export class BattleActions {
 		const hitResults = [];
 		for (const i of targets.keys()) {
 			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) ||
-				targets[i].runImmunity(move.type, !move.smartTarget);
+				targets[i].runImmunity(move.types !== undefined ? move.types : move.type, !move.smartTarget);
 		}
 
 		return hitResults;
@@ -1589,7 +1589,7 @@ export class BattleActions {
 		}
 
 		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-			if (!target.runImmunity(move.type, !suppressMessages)) {
+			if (!target.runImmunity(move.types !== undefined ? move.types : move.type, !suppressMessages)) {
 				return false;
 			}
 		}
