@@ -4883,6 +4883,9 @@ const Moves = {
         if (electrified.includes(move.id)) {
           move.types = [move.type, "electric"];
         }
+        if (move.id === "magnetrise") {
+          move.duration = 8;
+        }
       },
       onBasePowerPriority: 6,
       onBasePower(basePower, attacker, defender, move) {
@@ -13302,6 +13305,10 @@ const Moves = {
     pp: 15,
     priority: 0,
     flags: { nonsky: 1, metronome: 1 },
+    onAfterMove() {
+      if (this.field.isTerrain("electricterrain"))
+        this.field.clearTerrain();
+    },
     pseudoWeather: "mudsport",
     condition: {
       duration: 5,
@@ -20523,6 +20530,16 @@ const Moves = {
     pp: 1,
     priority: 0,
     flags: {},
+    onBasePower() {
+      if (this.field.isTerrain("electricterrain")) {
+        return this.chainModify(5325 / 4096);
+      }
+    },
+    onAfterMove() {
+      if (this.field.isTerrain("electricfield")) {
+        this.field.clearTerrain();
+      }
+    },
     isZ: "groundiumz",
     secondary: null,
     target: "normal",

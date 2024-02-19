@@ -2397,17 +2397,33 @@ const Items = {
       basePower: 10
     },
     onStart(pokemon) {
-      if (!pokemon.ignoringItem() && this.field.isTerrain("grassyterrain")) {
+      if (!pokemon.ignoringItem() && this.field.isTerrain("grassyterrain") || this.field.isTerrain("electricterrain")) {
         pokemon.useItem();
+      }
+    },
+    onUseItem(item, pokemon) {
+      if (this.field.isTerrain("electricterrain")) {
+        this.boost({ spe: 1 });
+        pokemon.addVolatile("charge");
+      }
+      if (this.field.isTerrain("grassyterrain")) {
+        this.boost({ def: 1 });
+        pokemon.addVolatile("ingrain");
+      }
+      if (this.field.isTerrain("mistyterrain")) {
+        this.boost({ spd: 1 });
+        this.actions.useMove("wish", pokemon, pokemon);
+      }
+      if (this.field.isTerrain("burningterrain")) {
+        this.boost({ atk: 1, spa: 1, spe: 1 });
+        pokemon.addVolatile("partiallytrapped");
+        pokemon.volatiles["partiallytrapped"].duration = 4;
       }
     },
     onTerrainChange(pokemon) {
-      if (this.field.isTerrain("grassyterrain")) {
+      if (this.field.isTerrain("grassyterrain") || this.field.isTerrain("elecricterrain") || this.field.isTerrain("mistyterrain") || this.field.isTerrain("burningterrain") || this.field.isTerrain()) {
         pokemon.useItem();
       }
-    },
-    boosts: {
-      def: 1
     },
     num: 884,
     gen: 7

@@ -528,6 +528,9 @@ const Moves = {
           }
         }
         if (this.checkMoveMakesContact(move, source, target)) {
+          if (this.field.terrain === "fairytaleterrain") {
+            this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
+          }
           this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
         }
         return this.NOT_FAIL;
