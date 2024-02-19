@@ -1692,7 +1692,7 @@ class Pokemon {
       return 1;
     let totalTypeMod = 0;
     for (const type of this.getTypes()) {
-      let typeMod = this.battle.dex.getEffectiveness(move, type);
+      let typeMod = this.battle.dex.getEffectiveness(move.types !== void 0 ? move.types : move.type, type);
       typeMod = this.battle.singleEvent("Effectiveness", move, null, this, type, move, typeMod);
       totalTypeMod += this.battle.runEvent("Effectiveness", this, type, move, typeMod);
     }
@@ -1700,25 +1700,30 @@ class Pokemon {
   }
   /** false = immune, true = not immune */
   runImmunity(type, message) {
-    if (!type || type === "???")
+    if (!type)
       return true;
-    if (!this.battle.dex.types.isName(type)) {
-      throw new Error("Use runStatusImmunity for " + type);
-    }
-    if (this.fainted)
+    const sourceTypes = Array.isArray(type) ? type : [type];
+    for (const type2 of sourceTypes) {
+      if (!this.battle.dex.types.isName(type2)) {
+        throw new Error("Use runStatusImmunity for " + type2);
+      }
+      if (this.fainted)
+        return false;
+      const negateImmunity = !this.battle.runEvent("NegateImmunity", this, type2);
+      const notImmune = type2 === "Ground" ? this.isGrounded(negateImmunity) : negateImmunity || this.battle.dex.getImmunity(type2, this);
+      if (notImmune)
+        continue;
+      if (!message) {
+        return false;
+      }
+      if (notImmune === null) {
+        this.battle.add("-immune", this, "[from] ability: Levitate");
+      } else {
+        this.battle.add("-immune", this);
+      }
       return false;
-    const negateImmunity = !this.battle.runEvent("NegateImmunity", this, type);
-    const notImmune = type === "Ground" ? this.isGrounded(negateImmunity) : negateImmunity || this.battle.dex.getImmunity(type, this);
-    if (notImmune)
-      return true;
-    if (!message)
-      return false;
-    if (notImmune === null) {
-      this.battle.add("-immune", this, "[from] ability: Levitate");
-    } else {
-      this.battle.add("-immune", this);
     }
-    return false;
+    return true;
   }
   runStatusImmunity(type, message) {
     if (this.fainted)

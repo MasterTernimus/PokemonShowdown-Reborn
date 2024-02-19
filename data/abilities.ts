@@ -4536,11 +4536,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
 			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) {
-				if (targetForme === 'Aegislash') {
-					this.boost({ def: 1, atk: -1 });
-				}
-				else {
-					this.boost({ def: -1, atk: 1 });
+				if (this.field.terrain === 'fairytaleterrain') {
+					if (targetForme === 'Aegislash') {
+						this.boost({ def: 1, atk: -1 });
+					}
+					else {
+						this.boost({ def: -1, atk: 1 });
+					}
 				}
 				attacker.formeChange(targetForme);
 			}

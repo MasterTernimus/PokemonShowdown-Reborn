@@ -97,7 +97,7 @@ const Moves = {
     priority: 0,
     flags: { snatch: 1, metronome: 1 },
     onModifyMove(move) {
-      if (this.field.terrain === "corrosiveterrain" || this.field.terrain === "corrosivemistterrain") {
+      if (this.field.terrain === "corrosiveterrain" || this.field.terrain === "corrosivemistterrain" || this.field.terrain === "fairytaleterrain") {
         move.boosts = {
           def: 3
         };
@@ -2292,7 +2292,7 @@ const Moves = {
         newType = "Electric";
       } else if (this.field.isTerrain("grassyterrain")) {
         newType = "Grass";
-      } else if (this.field.isTerrain("mistyterrain")) {
+      } else if (this.field.isTerrain("mistyterrain") || this.field.isTerrain("fairytaleterrain")) {
         newType = "Fairy";
       } else if (this.field.isTerrain("psychicterrain")) {
         newType = "Psychic";
@@ -3386,6 +3386,11 @@ const Moves = {
     onTry() {
       return !!this.queue.willAct();
     },
+    onHitField() {
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ def: 1, spd: 1 });
+      }
+    },
     condition: {
       duration: 1,
       onSideStart(target, source) {
@@ -3554,6 +3559,11 @@ const Moves = {
     pp: 30,
     priority: 0,
     flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+    onModifyMove(move) {
+      if (this.field.terrain === "fairytaleterrain") {
+        move.type = "Steel";
+      }
+    },
     secondary: null,
     target: "normal",
     type: "Normal",
@@ -4540,6 +4550,13 @@ const Moves = {
     pp: 10,
     priority: 0,
     flags: { contact: 1, protect: 1, mirror: 1, heal: 1, metronome: 1 },
+    onHit(target) {
+      if (this.field.terrain === "fairytaleterrain") {
+        if (target.status === "slp") {
+          target.cureStatus();
+        }
+      }
+    },
     drain: [3, 4],
     secondary: null,
     target: "normal",
@@ -5768,7 +5785,7 @@ const Moves = {
     name: "Fire Pledge",
     pp: 10,
     priority: 0,
-    flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1, pledgecombo: 1 },
+    flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
     onBasePower() {
       if (this.field.terrainState.Tchanges?.includes("waterpledge") || this.field.terrainState.Tchanges?.includes("grasspledge")) {
         return this.chainModify([5325, 4096]);
@@ -6192,7 +6209,7 @@ const Moves = {
     flags: { protect: 1, reflectable: 1, heal: 1, allyanim: 1, metronome: 1 },
     onHit(target, source) {
       let success = false;
-      if (this.field.isTerrain("grassyterrain")) {
+      if (this.field.isTerrain("grassyterrain") || this.field.isTerrain("fairytaleterrain")) {
         success = !!this.heal(this.modify(target.baseMaxhp, 1));
       } else {
         success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
@@ -6231,6 +6248,9 @@ const Moves = {
         if (pokemon.hasType("Grass") && (!pokemon.volatiles["maxguard"] || this.runEvent("TryHit", pokemon, source, move))) {
           targets.push(pokemon);
         }
+      }
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ def: 1, spd: 1 });
       }
       let success = false;
       for (const target of targets) {
@@ -6518,8 +6538,13 @@ const Moves = {
     onHit(target) {
       if (target.hasType("Grass"))
         return false;
-      if (!target.addType("Grass"))
+      if (!target.setType("Grass"))
         return false;
+      if (this.field.terrain === "fairytaleterrain") {
+        if (!target.volatiles["curse"]) {
+          target.addVolatile("curse");
+        }
+      }
       this.add("-start", target, "typeadd", "Grass", "[from] move: Forest's Curse");
     },
     secondary: null,
@@ -8848,6 +8873,9 @@ const Moves = {
         if (!target.fainted && (target.hp < target.maxhp || target.status)) {
           target.heal(target.maxhp);
           target.clearStatus();
+          if (this.field.terrain === "fairytaleterrain") {
+            target.setBoost({ atk: 1, spa: 1 });
+          }
           this.add("-heal", target, target.getHealth, "[from] move: Healing Wish");
           target.side.removeSlotCondition(target, "healingwish");
         }
@@ -10494,7 +10522,7 @@ const Moves = {
       },
       onTryHitPriority: 3,
       onTryHit(target, source, move) {
-        if (!move.flags["protect"] || move.category === "Status") {
+        if (!move.flags["protect"] || move.category === "Status" && !(this.field.terrain === "fairytaleterrain")) {
           if (["gmaxoneblow", "gmaxrapidflow"].includes(move.id))
             return;
           if (move.isZ || move.isMax)
@@ -10513,13 +10541,19 @@ const Moves = {
           }
         }
         if (this.checkMoveMakesContact(move, source, target)) {
-          this.boost({ atk: -1 }, source, target, this.dex.getActiveMove("King's Shield"));
+          if (this.field.terrain === "fairytaleterrain") {
+            this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
+          }
+          this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
         }
         return this.NOT_FAIL;
       },
       onHit(target, source, move) {
         if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-          this.boost({ atk: -1 }, source, target, this.dex.getActiveMove("King's Shield"));
+          if (this.field.terrain === "fairytaleterrain") {
+            this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
+          }
+          this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
         }
       }
     },
@@ -12708,7 +12742,7 @@ const Moves = {
         return false;
     },
     onHit() {
-      if (this.field.terrain == "psychicterrain") {
+      if (this.field.terrain == "psychicterrain" || this.field.terrain === "fairytaleterain") {
         this.boost({ spa: 2 });
       }
     },
@@ -13465,6 +13499,8 @@ const Moves = {
         move = "muddywater";
       } else if (this.field.isTerrain("rainbowterrain")) {
         move = "aurorabeam";
+      } else if (this.field.isTerrain("fairytaleterrain")) {
+        move = "secretsword";
       }
       this.actions.useMove(move, pokemon, target);
       return null;
@@ -13618,6 +13654,14 @@ const Moves = {
     pp: 30,
     priority: 0,
     flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+    onModifyMove(move) {
+      if (this.field.terrain === "fairytaleterrain") {
+        move.boosts = {
+          atk: -2,
+          spa: -2
+        };
+      }
+    },
     boosts: {
       atk: -1,
       spa: -1
@@ -16605,6 +16649,11 @@ const Moves = {
     pp: 15,
     priority: 0,
     flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+    onModifyMove(move) {
+      if (this.field.terrain === "fairytaleterrain") {
+        move.type = "Steel";
+      }
+    },
     ignoreEvasion: true,
     ignoreDefensive: true,
     secondary: null,
@@ -16972,7 +17021,7 @@ const Moves = {
           chance: 30,
           status: "par"
         });
-      } else if (this.field.isTerrain("grassyterrain")) {
+      } else if (this.field.isTerrain("grassyterrain") || this.field.isTerrain("fairytaleterrain")) {
         move.secondaries.push({
           chance: 30,
           status: "slp"
@@ -17038,6 +17087,11 @@ const Moves = {
     pp: 10,
     priority: 0,
     flags: { protect: 1, mirror: 1, slicing: 1 },
+    onModifyMove(move) {
+      if (this.field.terrain === "fairytaleterrain") {
+        move.type = "Steel";
+      }
+    },
     secondary: null,
     target: "normal",
     type: "Fighting",
@@ -18044,6 +18098,11 @@ const Moves = {
     pp: 20,
     priority: 0,
     flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+    onModifyMove(move) {
+      if (this.field.terrain === "fairytaleterrain") {
+        move.type = "Steel";
+      }
+    },
     critRatio: 2,
     secondary: null,
     target: "normal",
@@ -19934,6 +19993,13 @@ const Moves = {
     pp: 10,
     priority: 0,
     flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+    onHit(target) {
+      if (this.field.terrain === "fairytaleterrain") {
+        if (target.status === "slp") {
+          target.cureStatus();
+        }
+      }
+    },
     volatileStatus: "confusion",
     secondary: null,
     target: "normal",
@@ -20040,6 +20106,13 @@ const Moves = {
     pp: 20,
     priority: 0,
     flags: { snatch: 1, dance: 1, metronome: 1 },
+    onModifyMove(move) {
+      if (this.field.terrain === "fairytaleterrain") {
+        move.boosts = {
+          atk: 3
+        };
+      }
+    },
     boosts: {
       atk: 2
     },
@@ -21971,7 +22044,7 @@ const Moves = {
     name: "Water Pledge",
     pp: 10,
     priority: 0,
-    flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1, pledgecombo: 1 },
+    flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
     onBasePower() {
       if (this.field.terrainState.Tchanges?.includes("grasspledge") || this.field.terrainState.Tchanges?.includes("firepledge")) {
         return this.chainModify([5325, 4096]);
@@ -22364,7 +22437,7 @@ const Moves = {
     condition: {
       duration: 2,
       onStart(pokemon, source) {
-        if (this.field.terrain === "mistyterrain" || this.field.terrain === "rainbowterrain")
+        if (this.field.terrain === "mistyterrain" || this.field.terrain === "rainbowterrain" || this.field.terrain === "fairytaleterrain")
           this.effectState.hp = source.maxhp * 3 / 4;
         else
           this.effectState.hp = source.maxhp / 2;

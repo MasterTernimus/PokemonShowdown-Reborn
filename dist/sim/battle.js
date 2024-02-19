@@ -1393,6 +1393,9 @@ class Battle {
         this.add(`${buf}</span>`);
       }
     }
+    if (this.turn === 1) {
+      this.field.startTerrain("fairytaleterrain");
+    }
     this.makeRequest("move");
   }
   maybeTriggerEndlessBattleClause(trappedBySide, stalenessBySide) {

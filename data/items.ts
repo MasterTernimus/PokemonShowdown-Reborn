@@ -1639,17 +1639,20 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain')) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('swampterrain')) {
 				pokemon.useItem();
+			}
+		},
+		onUseItem(item, pokemon) {
+			if (this.field.terrain === 'swampterrain') {
+				this.boost({ def: 1, spd: 1 });
+				pokemon.addVolatile('ingrain');
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('electricterrain')) {
+			if (this.field.isTerrain('swampterrain')) {
 				pokemon.useItem();
 			}
-		},
-		boosts: {
-			def: 1,
 		},
 		num: 881,
 		gen: 7,
@@ -2325,17 +2328,33 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain')) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain') || this.field.isTerrain('electricterrain')) {
 				pokemon.useItem();
+			}
+		},
+		onUseItem(item, pokemon) {
+			if (this.field.isTerrain('electricterrain')) {
+				this.boost({ spe: 1 });
+				pokemon.addVolatile('charge');
+			}
+			if (this.field.isTerrain('grassyterrain')) {
+				this.boost({ def: 1 });
+				pokemon.addVolatile('ingrain');
+			}
+			if (this.field.isTerrain('mistyterrain')) {
+				this.boost({ spd: 1 });
+				this.actions.useMove('wish', pokemon, pokemon);
+			}
+			if (this.field.isTerrain('burningterrain')) {
+				this.boost({ atk: 1, spa: 1, spe: 1 });
+				pokemon.addVolatile('partiallytrapped');
+				pokemon.volatiles['partiallytrapped'].duration = 4;
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('grassyterrain')) {
+			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('elecricterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('burningterrain') || this.field.isTerrain()) {
 				pokemon.useItem();
 			}
-		},
-		boosts: {
-			def: 1,
 		},
 		num: 884,
 		gen: 7,
@@ -3826,17 +3845,27 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain')) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain'))) {
 				pokemon.useItem();
+			}
+		},
+		onUseItem(item, pokemon) {
+			if (this.field.isTerrain('psychicterrain')) {
+				this.boost({ spa: 2 });
+				pokemon.addVolatile('confusion');
+			}
+			if (this.field.isTerrain('rainbowterrain')) {
+				this.boost({ spa: 1 });
+				this.actions.useMove('wish', pokemon, pokemon);
+			}
+			if (this.field.isTerrain('fairytaleterrain')) {
+				pokemon.addVolatile('kingsshield');
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('mistyterrain')) {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain')) {
 				pokemon.useItem();
 			}
-		},
-		boosts: {
-			spd: 1,
 		},
 		num: 883,
 		gen: 7,

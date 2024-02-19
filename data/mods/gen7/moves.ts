@@ -292,6 +292,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!target.fainted) {
 					target.heal(target.maxhp);
 					target.clearStatus();
+					if (this.field.terrain === 'fairytaleterrain') {
+						target.setBoost({ atk: 1, spa: 1 });
+					}
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSlotCondition(target, 'healingwish');
 				}
@@ -479,6 +482,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				if (this.checkMoveMakesContact(move, source, target)) {
+					if (this.field.terrain === 'fairytaleterrain') {
+						this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
+					}
 					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 				return this.NOT_FAIL;

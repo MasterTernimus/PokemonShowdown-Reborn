@@ -456,6 +456,7 @@ export class Battle {
 	 * Runs an event with no source on each Pokémon on the field, in Speed order.
 	 */
 	eachEvent(eventid: string, effect?: Effect | null, relayVar?: boolean) {
+
 		const actives = this.getAllActive();
 		if (!effect && this.effect) effect = this.effect;
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
@@ -522,6 +523,7 @@ export class Battle {
 		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
 		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown
 	) {
+
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -1442,7 +1444,6 @@ export class Battle {
 	nextTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
-
 		const dynamaxEnding: Pokemon[] = [];
 		for (const pokemon of this.getAllActive()) {
 			if (pokemon.volatiles['dynamax']?.turns === 3) {
@@ -1625,7 +1626,9 @@ export class Battle {
 				this.add(`${buf}</span>`);
 			}
 		}
-
+		if (this.turn === 1) {
+			this.field.startTerrain('fairytaleterrain');
+		}
 		this.makeRequest('move');
 	}
 
@@ -2546,7 +2549,6 @@ export class Battle {
 			this.midTurn = true;
 			break;
 		}
-
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
@@ -2775,7 +2777,6 @@ export class Battle {
 		this.add('');
 		this.add('t:', Math.floor(Date.now() / 1000));
 		if (this.requestState) this.requestState = '';
-
 		if (!this.midTurn) {
 			this.queue.insertChoice({choice: 'beforeTurn'});
 			this.queue.addChoice({choice: 'residual'});

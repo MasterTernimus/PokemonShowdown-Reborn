@@ -2089,7 +2089,7 @@ export class Pokemon {
 		if (this.terastallized && move.type === 'Stellar') return 1;
 		let totalTypeMod = 0;
 		for (const type of this.getTypes()) {
-			let typeMod = this.battle.dex.getEffectiveness(move.types !== undefined ? move.types : move, type);
+			let typeMod = this.battle.dex.getEffectiveness(move.types !== undefined ? move.types : move.type, type);
 			typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
 			totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 		}
@@ -2098,7 +2098,7 @@ export class Pokemon {
 
 	/** false = immune, true = not immune */
 	runImmunity(type: string | string[], message?: string | boolean) {
-		if (!type || type === '???') return true;
+		if (!type) return true;
 		const sourceTypes: string[] = Array.isArray(type) ? type : [type];
 		for (const type of sourceTypes) {
 			if (!this.battle.dex.types.isName(type)) {
@@ -2111,7 +2111,9 @@ export class Pokemon {
 				this.isGrounded(negateImmunity) :
 				negateImmunity || this.battle.dex.getImmunity(type, this);
 			if (notImmune) continue;
-			if (!message) return false;
+			if (!message) {
+				return false;
+			}
 			if (notImmune === null) {
 				this.battle.add('-immune', this, '[from] ability: Levitate');
 			} else {
@@ -2119,6 +2121,7 @@ export class Pokemon {
 			}
 			return false;
 		}
+		return true;
 	}
 
 	runStatusImmunity(type: string, message?: string) {

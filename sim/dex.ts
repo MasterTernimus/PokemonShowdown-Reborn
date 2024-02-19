@@ -256,6 +256,7 @@ export class ModdedDex {
 		source: { type: string } | string | string[],
 		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
 	): number {
+
 		const sourceTypes: string[] = (Array.isArray(source) ? source : (typeof source === 'string' ? [source] : [source.type]));
 		// @ts-ignore
 		const targetTyping: string[] = target.getTypes?.() || target.types || (typeof(target) === 'string' ? [target] : target) ;
@@ -265,11 +266,18 @@ export class ModdedDex {
 				const typeData = this.types.get(type);
 				if (!typeData) return 0;
 				switch (typeData.damageTaken[sourceType]) {
-					case 1: totalTypeMod += 1; // super-effective
-					case 2: totalTypeMod += -1; // resist
+					case 1: {
+						totalTypeMod++;
+						break;
+					} // super-effective
+					case 2: {
+						totalTypeMod--;
+						break;
+					} // resist
 					// in case of weird situations like Gravity, immunity is handled elsewhere
-					default: totalTypeMod += 0;
+					default: totalTypeMod = totalTypeMod;
 				}
+
 			}
 		}
 		return totalTypeMod;
