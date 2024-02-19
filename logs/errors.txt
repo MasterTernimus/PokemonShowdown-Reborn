@@ -929,3 +929,209 @@ Additional information:
 |t:|1708018210
 |move|p1a: Mimikyu|Play Rough|p2a: Clefable
 
+
+ReferenceError: type is not defined
+    at Pokemon.runEffectiveness (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:2089:15)
+    at BattleActions.modifyDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1784:24)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1710:15)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+    at BattleActions.useMoveInner (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:511:22)
+    at BattleActions.useMove (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:374:27)
+    at BattleActions.runMove (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:312:33)
+
+Additional information:
+  chunk = >p2 move 4
+  inputLog = 
+>start {"formatid":"gen7ubers","seed":[63540,24984,24355,20873]}
+>player p1 {"name":"Ternimus","avatar":"265","team":"Aegislash||GhostiumZ|StanceChange|ShadowBall,ShadowSneak,KingsShield,SacredSword|Quiet|252,,,252,4,|F||||]Clefable||KeeBerry|Unaware|CalmMind,Moonblast,Incinerate,MistyTerrain|Serious|252,,,4,,252|F|,0,,,,|||]Charizard||CharizarditeY|Blaze|FireSpin,FirePledge||,,,,,4|M|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"1","team":"Garchomp||RoseliBerry|RoughSkin|IronHead,Earthquake,SwordsDance,Outrage|Jolly|,252,,,4,252|M||||]Mimikyu||FocusSash|Disguise|SwordsDance,ShadowClaw,WillOWisp,PlayRough|Jolly|,252,,,4,252|F||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,Synthesis,GrassPledge,Earthquake|Modest|252,,,4,252,|M||||]Pelipper|||Drizzle|Tailwind||,,,,,16|F|,0,,,,|||","rating":0}
+>p1 team 1, 2, 3
+>p2 team 2, 1, 3, 4
+>p1 move sacredsword
+>p2 move playrough
+  log = 
+|t:|1708241621
+|-fieldstart|Fairy Tale Terrain
+|gametype|singles
+|player|p1|Ternimus|265|
+|player|p2|Ternimusalt|1|
+|teamsize|p1|3
+|teamsize|p2|4
+|gen|7
+|tier|[Gen 7] Ubers
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|rule|Species Clause: Limit one of each Pokémon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Moody Clause: Moody is banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Mega Rayquaza Clause: You cannot mega evolve Rayquaza
+|clearpoke
+|poke|p1|Aegislash, F|item
+|poke|p1|Clefable, F|item
+|poke|p1|Charizard, M|item
+|poke|p2|Garchomp, M|item
+|poke|p2|Mimikyu, F|item
+|poke|p2|Venusaur, M|item
+|poke|p2|Pelipper, F|
+|teampreview
+|
+|t:|1708241624
+|start
+|switch|p1a: Aegislash|Aegislash, F|324/324
+|switch|p2a: Mimikyu|Mimikyu, F|251/251
+|-ability|p1a: Aegislash|Stance Change|boost
+|-boost|p1a: Aegislash|def|1
+|turn|1
+|
+|t:|1708241628
+|move|p2a: Mimikyu|Play Rough|p1a: Aegislash
+
+
+TypeError: Cannot read properties of undefined (reading 'toLowerCase')
+    at DexTypes.isName (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-data.ts:294:19)
+    at Pokemon.runImmunity (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:2104:31)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1592:16)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.moveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1381:23)
+    at BattleActions.secondaries (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1354:11)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1111:34)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+
+Additional information:
+  chunk = >p2 move 1
+  inputLog = 
+>start {"formatid":"gen7ubers","seed":[21885,12546,24843,29388]}
+>player p1 {"name":"Ternimus","avatar":"101","team":"Aegislash||GhostiumZ|StanceChange|ShadowBall,ShadowSneak,KingsShield,SacredSword|Quiet|252,,,252,4,|F||||]Clefable||KeeBerry|Unaware|CalmMind,Moonblast,Incinerate,MistyTerrain|Serious|252,,,4,,252|F|,0,,,,|||]Charizard||CharizarditeY|Blaze|FireSpin,FirePledge||,,,,,4|F|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"170","team":"Garchomp||RoseliBerry|RoughSkin|IronHead,Earthquake,SwordsDance,Outrage|Jolly|,252,,,4,252|M||||]Mimikyu||FocusSash|Disguise|SwordsDance,ShadowClaw,WillOWisp,PlayRough|Jolly|,252,,,4,252|F||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,Synthesis,GrassPledge,Earthquake|Modest|252,,,4,252,|M||||]Pelipper|||Drizzle|Tailwind||,,,,,16|F|,0,,,,|||","rating":0}
+>p1 team 1, 2, 3
+>p2 team 2, 1, 3, 4
+>p1 move sacredsword
+>p2 move swordsdance
+>p1 move shadowsneak
+>p2 move shadowclaw
+>p1 switch 2
+>p1 move calmmind
+>p2 move shadowclaw
+>p1 move incinerate
+>p2 switch 3
+>p1 move calmmind
+>p2 move synthesis mega
+>p1 move incinerate
+>p2 move sludgebomb
+  log = 
+|t:|1708242854
+|-fieldstart|Fairy Tale Terrain
+|gametype|singles
+|player|p1|Ternimus|101|
+|player|p2|Ternimusalt|170|
+|teamsize|p1|3
+|teamsize|p2|4
+|gen|7
+|tier|[Gen 7] Ubers
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|rule|Species Clause: Limit one of each Pokémon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Moody Clause: Moody is banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Mega Rayquaza Clause: You cannot mega evolve Rayquaza
+|clearpoke
+|poke|p1|Aegislash, F|item
+|poke|p1|Clefable, F|item
+|poke|p1|Charizard, F|item
+|poke|p2|Garchomp, M|item
+|poke|p2|Mimikyu, F|item
+|poke|p2|Venusaur, M|item
+|poke|p2|Pelipper, F|
+|teampreview
+|
+|t:|1708242857
+|start
+|switch|p1a: Aegislash|Aegislash, F|324/324
+|switch|p2a: Mimikyu|Mimikyu, F|251/251
+|-ability|p1a: Aegislash|Stance Change|boost
+|-boost|p1a: Aegislash|def|1
+|turn|1
+|
+|t:|1708242862
+|move|p2a: Mimikyu|Swords Dance|p2a: Mimikyu
+|-boost|p2a: Mimikyu|atk|3
+|-ability|p1a: Aegislash|Stance Change|boost
+|-unboost|p1a: Aegislash|def|1
+|-boost|p1a: Aegislash|atk|1
+|-formechange|p1a: Aegislash|Aegislash-Blade||[from] ability: Stance Change
+|move|p1a: Aegislash|Sacred Sword|p2a: Mimikyu
+|-activate|p2a: Mimikyu|ability: Disguise
+|-damage|p2a: Mimikyu|251/251
+|detailschange|p2a: Mimikyu|Mimikyu-Busted, F
+|
+|upkeep
+|turn|2
+|
+|t:|1708242873
+|move|p1a: Aegislash|Shadow Sneak|p2a: Mimikyu
+|-supereffective|p2a: Mimikyu
+|-enditem|p2a: Mimikyu|Focus Sash
+|-damage|p2a: Mimikyu|1/251
+|move|p2a: Mimikyu|Shadow Claw|p1a: Aegislash
+|-supereffective|p1a: Aegislash
+|-damage|p1a: Aegislash|0 fnt
+|faint|p1a: Aegislash
+|
+|upkeep
+|
+|t:|1708242881
+|switch|p1a: Clefable|Clefable, F|394/394
+|turn|3
+|
+|t:|1708242891
+|move|p2a: Mimikyu|Shadow Claw|p1a: Clefable
+|-damage|p1a: Clefable|270/394
+|-enditem|p1a: Clefable|Kee Berry|[eat]
+|-boost|p1a: Clefable|def|1|[from] item: Kee Berry
+|move|p1a: Clefable|Calm Mind|p1a: Clefable
+|-boost|p1a: Clefable|spa|1
+|-boost|p1a: Clefable|spd|1
+|
+|upkeep
+|turn|4
+|
+|t:|1708242902
+|switch|p2a: Venusaur|Venusaur, M|364/364
+|move|p1a: Clefable|Incinerate|p2a: Venusaur
+|-supereffective|p2a: Venusaur
+|-damage|p2a: Venusaur|256/364
+|
+|upkeep
+|turn|5
+|
+|t:|1708242906
+|detailschange|p2a: Venusaur|Venusaur-Mega, M
+|-mega|p2a: Venusaur|Venusaur|Venusaurite
+|move|p1a: Clefable|Calm Mind|p1a: Clefable
+|-boost|p1a: Clefable|spa|1
+|-boost|p1a: Clefable|spd|1
+|move|p2a: Venusaur|Synthesis|p2a: Venusaur
+|-heal|p2a: Venusaur|364/364
+|
+|upkeep
+|turn|6
+|
+|t:|1708242917
+|move|p1a: Clefable|Incinerate|p2a: Venusaur
+|-supereffective|p2a: Venusaur
+|-damage|p2a: Venusaur|298/364
+|move|p2a: Venusaur|Sludge Bomb|p1a: Clefable
+|-supereffective|p1a: Clefable
+|-damage|p1a: Clefable|114/394
+

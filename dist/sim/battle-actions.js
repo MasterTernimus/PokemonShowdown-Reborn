@@ -584,7 +584,7 @@ class BattleActions {
     }
     const hitResults = [];
     for (const i of targets.keys()) {
-      hitResults[i] = move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type]) || targets[i].runImmunity(move.type, !move.smartTarget);
+      hitResults[i] = move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type]) || targets[i].runImmunity(move.types !== void 0 ? move.types : move.type, !move.smartTarget);
     }
     return hitResults;
   }
@@ -1447,7 +1447,7 @@ class BattleActions {
       move.hit = 0;
     }
     if (!move.ignoreImmunity || move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]) {
-      if (!target.runImmunity(move.type, !suppressMessages)) {
+      if (!target.runImmunity(move.types !== void 0 ? move.types : move.type, !suppressMessages)) {
         return false;
       }
     }

@@ -32,7 +32,6 @@ export class Field {
 		this.terrainState = { id: '' };
 		this.terrainStack = [];
 		this.pseudoWeather = {};
-		this.startTerrain('fairytaleterrain');
 	}
 
 	toJSON(): AnyObject {
@@ -135,11 +134,11 @@ export class Field {
 		this.terrainState = {
 			id: status.id,
 			Tchanges: [],
-			duration: 9999,
 			turn: this.battle.turn,
 		};
 		this.terrainStack.unshift(this.terrainState);
-		this.battle.add('-fieldstart', `${status.name}`);
+		this.battle.singleEvent('FieldStart', status, this.terrainState, this);
+		this.battle.eachEvent('TerrainChange');
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {

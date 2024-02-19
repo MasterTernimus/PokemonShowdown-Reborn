@@ -1696,17 +1696,20 @@ const Items = {
       basePower: 10
     },
     onStart(pokemon) {
-      if (!pokemon.ignoringItem() && this.field.isTerrain("electricterrain")) {
+      if (!pokemon.ignoringItem() && this.field.isTerrain("swampterrain")) {
         pokemon.useItem();
+      }
+    },
+    onUseItem(item, pokemon) {
+      if (this.field.terrain === "swampterrain") {
+        this.boost({ def: 1, spd: 1 });
+        pokemon.addVolatile("ingrain");
       }
     },
     onTerrainChange(pokemon) {
-      if (this.field.isTerrain("electricterrain")) {
+      if (this.field.isTerrain("swampterrain")) {
         pokemon.useItem();
       }
-    },
-    boosts: {
-      def: 1
     },
     num: 881,
     gen: 7
@@ -3927,17 +3930,27 @@ const Items = {
       basePower: 10
     },
     onStart(pokemon) {
-      if (!pokemon.ignoringItem() && this.field.isTerrain("mistyterrain")) {
+      if (!pokemon.ignoringItem() && (this.field.isTerrain("psychicterrain") || this.field.isTerrain("rainbowterrain") || this.field.isTerrain("fairytaleterrain"))) {
         pokemon.useItem();
+      }
+    },
+    onUseItem(item, pokemon) {
+      if (this.field.isTerrain("psychicterrain")) {
+        this.boost({ spa: 2 });
+        pokemon.addVolatile("confusion");
+      }
+      if (this.field.isTerrain("rainbowterrain")) {
+        this.boost({ spa: 1 });
+        this.actions.useMove("wish", pokemon, pokemon);
+      }
+      if (this.field.isTerrain("fairytaleterrain")) {
+        pokemon.addVolatile("kingsshield");
       }
     },
     onTerrainChange(pokemon) {
-      if (this.field.isTerrain("mistyterrain")) {
+      if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("rainbowterrain") || this.field.isTerrain("fairytaleterrain")) {
         pokemon.useItem();
       }
-    },
-    boosts: {
-      spd: 1
     },
     num: 883,
     gen: 7

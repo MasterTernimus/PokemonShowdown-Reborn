@@ -42,7 +42,6 @@ class Field {
     this.terrainState = { id: "" };
     this.terrainStack = [];
     this.pseudoWeather = {};
-    this.startTerrain("corrosivemistterrain");
   }
   toJSON() {
     return import_state.State.serializeField(this);
@@ -142,11 +141,11 @@ class Field {
     this.terrainState = {
       id: status.id,
       Tchanges: [],
-      duration: 9999,
       turn: this.battle.turn
     };
     this.terrainStack.unshift(this.terrainState);
-    this.battle.add("-fieldstart", status.name);
+    this.battle.singleEvent("FieldStart", status, this.terrainState, this);
+    this.battle.eachEvent("TerrainChange");
   }
   setTerrain(status, source = null, sourceEffect = null) {
     status = this.battle.dex.conditions.get(status);

@@ -213,7 +213,46 @@ const Terrains = {
   },
   fairytaleterrain: {
     name: "Fairy Tale Terrain",
-    condition: {}
+    condition: {
+      duration: 5,
+      onBasePowerPriority: 6,
+      onModifyMove(move) {
+        if (move.type === "Fire") {
+          move.types = [move.type, "Dragon"];
+        }
+      },
+      onEffectiveness(typeMod, target, type, move) {
+        const types = move.types !== void 0 ? move.types : [move.type];
+        if (type === "Dragon" && types.includes("Steel"))
+          return 1;
+      },
+      onBasePower(basePower, source, target, move) {
+        const strengthenedMoves = ["airslash", "ancientpower", "fleurcannon", "leafblade", "magicalleaf", "moongeistbeam", "mysticalfire", "nightslash", "psychocut", "smartstrike", "solarblade", "sparklingaria", "menacingmoonrazemaelstorm", "oceanicoperetta"];
+        let modifier = 1;
+        if (move.type === "Dragon") {
+          modifier *= 2;
+        }
+        if (move.type === "Fairy") {
+          modifier *= 1.5;
+        }
+        if (move.type === "Steel") {
+          modifier *= 1.5;
+        }
+        if (strengthenedMoves.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        if (move.id === "draining kiss") {
+          modifier *= 2;
+        }
+        return this.chainModify(modifier);
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Fairy Tale Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Fairy Tale Terrain");
+      }
+    }
   },
   rainbowterrain: {
     name: "Rainbow Terrain",

@@ -326,7 +326,7 @@ const Abilities = {
     onResidualOrder: 28,
     onResidualSubOrder: 2,
     onResidual(pokemon) {
-      if (!pokemon.hp || this.field.terrain === "rainbowterrain")
+      if (!pokemon.hp)
         return;
       for (const target of pokemon.foes()) {
         if (target.status === "slp" || target.hasAbility("comatose")) {
@@ -361,6 +361,11 @@ const Abilities = {
   battlearmor: {
     onCriticalHit: false,
     flags: { breakable: 1 },
+    onSwitchIn() {
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ def: 1 });
+      }
+    },
     name: "Battle Armor",
     rating: 1,
     num: 4
@@ -568,23 +573,6 @@ const Abilities = {
         this.effectState.switchingIn = false;
       }
       this.eachEvent("WeatherChange", this.effect);
-    },
-    onResidual(pokemon) {
-      if (this.field.terrain === "rainbowterrain") {
-        let stats = [];
-        const boost = {};
-        let statPlus;
-        for (statPlus in pokemon.boosts) {
-          if (statPlus === "accuracy" || statPlus === "evasion")
-            continue;
-          if (pokemon.boosts[statPlus] < 6) {
-            stats.push(statPlus);
-          }
-        }
-        let randomStat = stats.length ? this.sample(stats) : void 0;
-        if (randomStat)
-          boost[randomStat] = 1;
-      }
     },
     onEnd(pokemon) {
       this.eachEvent("WeatherChange", this.effect);
@@ -1033,7 +1021,7 @@ const Abilities = {
       const hitSub = target.volatiles["substitute"] && !move.flags["bypasssub"] && !(move.infiltrates && this.gen >= 6);
       if (hitSub)
         return;
-      if (!target.runImmunity(move.type))
+      if (!target.runImmunity(move.types !== void 0 ? move.types : move.type))
         return;
       return false;
     },
@@ -1046,7 +1034,7 @@ const Abilities = {
       const hitSub = target.volatiles["substitute"] && !move.flags["bypasssub"] && !(move.infiltrates && this.gen >= 6);
       if (hitSub)
         return;
-      if (!target.runImmunity(move.type))
+      if (!target.runImmunity(move.types !== void 0 ? move.types : move.type))
         return;
       return 0;
     },
@@ -1166,7 +1154,7 @@ const Abilities = {
     },
     onResidual(target) {
       if (!this.field.isWeather("raindance") || !this.field.isWeather("sunnyday")) {
-        if (this.field.terrain === "mistyterrain" || this.field.terrain === "swampterrain") {
+        if (this.field.terrain === "mistyterrain") {
           this.heal(target.baseMaxhp / 16);
         }
         if (this.field.terrain === "corrosivemistterrain") {
@@ -1323,6 +1311,10 @@ const Abilities = {
       if (this.suppressingAbility(pokemon))
         return;
       this.add("-ability", pokemon, "Fairy Aura");
+    },
+    onModifyMove(move) {
+      if (this.field.terrain === "fairytaleterrain")
+        move.accuracy = true;
     },
     onAnyBasePowerPriority: 20,
     onAnyBasePower(basePower, source, target, move) {
@@ -1710,11 +1702,7 @@ const Abilities = {
     onDamagingHit(damage, target, source, move) {
       if (this.checkMoveMakesContact(move, source, target, true)) {
         this.add("-ability", target, "Gooey");
-        if (this.field.terrain === "swampterrain") {
-          this.boost({ spe: -2 }, source, target, null, true);
-        } else {
-          this.boost({ spe: -1 }, source, target, null, true);
-        }
+        this.boost({ spe: -1 }, source, target, null, true);
       }
     },
     flags: {},
@@ -2073,7 +2061,7 @@ const Abilities = {
         return;
       if (target.volatiles["substitute"] && !(move.flags["bypasssub"] || move.infiltrates))
         return;
-      if (!target.runImmunity(move.type))
+      if (!target.runImmunity(move.types !== void 0 ? move.types : move.type))
         return;
       return false;
     },
@@ -2085,7 +2073,7 @@ const Abilities = {
       const hitSub = target.volatiles["substitute"] && !move.flags["bypasssub"] && !(move.infiltrates && this.gen >= 6);
       if (hitSub)
         return;
-      if (!target.runImmunity(move.type))
+      if (!target.runImmunity(move.types !== void 0 ? move.types : move.type))
         return;
       return 0;
     },
@@ -2453,7 +2441,7 @@ const Abilities = {
       }
     },
     onAnyRedirectTarget(target, source, source2, move) {
-      if (move.type !== "Electric" || move.flags["pledgecombo"])
+      if (move.type !== "Electric")
         return;
       const redirectTarget = ["randomNormal", "adjacentFoe"].includes(move.target) ? "normal" : move.target;
       if (this.validTarget(this.effectState.target, source, redirectTarget)) {
@@ -2545,6 +2533,11 @@ const Abilities = {
   },
   magicbounce: {
     onTryHitPriority: 1,
+    onSwitchIn() {
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ spd: 1 });
+      }
+    },
     onTryHit(target, source, move) {
       if (target === source || move.hasBounced || !move.flags["reflectable"]) {
         return;
@@ -2574,6 +2567,11 @@ const Abilities = {
     num: 156
   },
   magicguard: {
+    onSwitchIn() {
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ spd: 1 });
+      }
+    },
     onDamage(damage, target, source, effect) {
       if (effect.effectType !== "Move") {
         if (effect.effectType === "Ability")
@@ -2587,6 +2585,11 @@ const Abilities = {
     num: 98
   },
   magician: {
+    onSwitchIn() {
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ spa: 1 });
+      }
+    },
     onAfterMoveSecondarySelf(source, target, move) {
       if (!move || !target || source.switchFlag === true)
         return;
@@ -2647,7 +2650,7 @@ const Abilities = {
   marvelscale: {
     onModifyDefPriority: 6,
     onModifyDef(def, pokemon) {
-      if (pokemon.status || this.field.terrain === "mistyterrain" || this.field.terrain === "rainbowterrain") {
+      if (pokemon.status || this.field.terrain === "mistyterrain" || this.field.terrain === "fairytaleterrain") {
         return this.chainModify(1.5);
       }
     },
@@ -3487,6 +3490,11 @@ const Abilities = {
     num: 211
   },
   powerofalchemy: {
+    onSwitchIn() {
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ spd: 1, def: 1 });
+      }
+    },
     onAllyFaint(target) {
       if (!this.effectState.target.hp)
         return;
@@ -3828,6 +3836,11 @@ const Abilities = {
     num: 282
   },
   queenlymajesty: {
+    onModifyDamage() {
+      if (this.field.terrain === "fairytaleterrain") {
+        return this.chainModify(1.5);
+      }
+    },
     onFoeTryMove(target, source, move) {
       const targetAllExceptions = ["perishsong", "flowershield", "rototiller"];
       if (move.target === "foeSide" || move.target === "all" && !targetAllExceptions.includes(move.id)) {
@@ -4374,6 +4387,11 @@ const Abilities = {
   shellarmor: {
     onCriticalHit: false,
     flags: { breakable: 1 },
+    onSwitchIn() {
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ def: 1 });
+      }
+    },
     name: "Shell Armor",
     rating: 1,
     num: 75
@@ -4675,14 +4693,27 @@ const Abilities = {
   },
   stancechange: {
     onModifyMovePriority: 1,
+    onSwitchIn() {
+      if (this.field.terrain === "fairytaleterrain") {
+        this.boost({ def: 1 });
+      }
+    },
     onModifyMove(move, attacker, defender) {
       if (attacker.species.baseSpecies !== "Aegislash" || attacker.transformed)
         return;
       if (move.category === "Status" && move.id !== "kingsshield")
         return;
       const targetForme = move.id === "kingsshield" ? "Aegislash" : "Aegislash-Blade";
-      if (attacker.species.name !== targetForme)
+      if (attacker.species.name !== targetForme) {
+        if (this.field.terrain === "fairytaleterrain") {
+          if (targetForme === "Aegislash") {
+            this.boost({ def: 1, atk: -1 });
+          } else {
+            this.boost({ def: -1, atk: 1 });
+          }
+        }
         attacker.formeChange(targetForme);
+      }
     },
     flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
     name: "Stance Change",
@@ -5144,7 +5175,7 @@ const Abilities = {
         return -1;
       if (move.category === "Status")
         return;
-      if (!target.runImmunity(move.type))
+      if (!target.runImmunity(move.types !== void 0 ? move.types : move.type))
         return;
       if (target.hp < target.maxhp)
         return;
@@ -5656,11 +5687,6 @@ const Abilities = {
         this.boost({ def: 2 });
       }
     },
-    onResidual() {
-      if (this.field.terrain === "swampterrain") {
-        this.boost({ def: 2 });
-      }
-    },
     flags: {},
     name: "Water Compaction",
     rating: 1.5,
@@ -5817,10 +5843,6 @@ const Abilities = {
   wonderskin: {
     onModifyAccuracyPriority: 10,
     onModifyAccuracy(accuracy, target, source, move) {
-      if (this.field.terrain === "rainbowterrain") {
-        this.debug("Wonder Skin - setting accuracy to 0");
-        return 0;
-      }
       if (move.category === "Status" && typeof accuracy === "number") {
         this.debug("Wonder Skin - setting accuracy to 50");
         return 50;

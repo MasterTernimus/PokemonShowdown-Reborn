@@ -336,6 +336,9 @@ const Moves = {
         if (!target.fainted) {
           target.heal(target.maxhp);
           target.clearStatus();
+          if (this.field.terrain === "fairytaleterrain") {
+            target.setBoost({ atk: 1, spa: 1 });
+          }
           this.add("-heal", target, target.getHealth, "[from] move: Healing Wish");
           target.side.removeSlotCondition(target, "healingwish");
         }

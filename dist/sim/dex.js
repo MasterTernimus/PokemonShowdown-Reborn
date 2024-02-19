@@ -238,12 +238,16 @@ class ModdedDex {
         if (!typeData)
           return 0;
         switch (typeData.damageTaken[sourceType]) {
-          case 1:
-            totalTypeMod += 1;
-          case 2:
-            totalTypeMod += -1;
+          case 1: {
+            totalTypeMod++;
+            break;
+          }
+          case 2: {
+            totalTypeMod--;
+            break;
+          }
           default:
-            totalTypeMod += 0;
+            totalTypeMod = totalTypeMod;
         }
       }
     }
