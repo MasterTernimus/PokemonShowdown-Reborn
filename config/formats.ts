@@ -3981,8 +3981,7 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		searchShow: false,
 		bestOfDefault: true,
-		ruleset: ['Flat Rules', 'Min Source Gen = 6'],
-		banlist: ['Battle Bond'],
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'ThreevsThree', 'Min Source Gen = 6'],
 	},
 	{
 		name: "[Gen 7 Let's Go] OU",

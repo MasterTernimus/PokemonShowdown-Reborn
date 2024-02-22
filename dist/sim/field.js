@@ -63,6 +63,10 @@ class Field {
         return false;
       }
     }
+    if (this.terrain === "underwaterterrain") {
+      this.battle.add("-message", "The weather was annihilated by the crushing weight of the ocean!");
+      return false;
+    }
     if (source) {
       const result = this.battle.runEvent("SetWeather", source, source, status);
       if (!result) {
@@ -159,6 +163,10 @@ class Field {
       throw new Error(`setting terrain without a source`);
     if (this.terrain === status.id)
       return false;
+    if (this.terrain === "underwaterterrain") {
+      this.battle.add("-message", "The field was annihilated by the crushing weight of the ocean!");
+      return false;
+    }
     if (this.terrain !== "") {
       this.terrainState.Tchanges = [];
     }
@@ -199,7 +207,6 @@ class Field {
       return false;
     const prevTerrainState = this.terrainState;
     this.terrain = status.id;
-    this.terrainState.Tchanges = [];
     this.terrainState = {
       id: status.id,
       source,

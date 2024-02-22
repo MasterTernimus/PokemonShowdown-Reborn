@@ -5123,6 +5123,12 @@ const Rulesets = {
     desc: "Only allows two Pok&eacute;mon in battle",
     ruleset: ["Picked Team Size = 2"]
   },
+  threevsthree: {
+    effectType: "Rule",
+    name: "Three vs Three",
+    desc: "Three pokemon in battle",
+    ruleset: ["Team Preview", "Picked Team Size = 3"]
+  },
   littlecup: {
     effectType: "ValidatorRule",
     name: "Little Cup",

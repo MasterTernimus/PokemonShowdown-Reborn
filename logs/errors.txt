@@ -1135,3 +1135,289 @@ Additional information:
 |-supereffective|p1a: Clefable
 |-damage|p1a: Clefable|114/394
 
+
+Error: Adjust Level Down 100 will have no effect because it's not below max level 100.
+    at RuleTable.resolveNumbers (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-formats.ts:286:10)
+    at DexFormats.getRuleTable (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-formats.ts:823:13)
+    at DexFormats.getRuleTable (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-formats.ts:773:30)
+    at GlobalRoomState.get formatListText [as formatListText] (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\rooms.ts:1463:34)
+    at GlobalRoomState.handleConnect (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\rooms.ts:1718:80)
+    at Object.socketConnect (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\users.ts:1668:15)
+    at Object.onSpawn (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\sockets.ts:34:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+Error: Rule "!!adjustlevel=50" is not replacing anything (it should not have "!!")
+    at DexFormats.getRuleTable (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-formats.ts:749:14)
+    at GlobalRoomState.get formatListText [as formatListText] (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\rooms.ts:1463:34)
+    at GlobalRoomState.handleConnect (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\rooms.ts:1718:80)
+    at Object.socketConnect (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\users.ts:1668:15)
+    at Object.onSpawn (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\sockets.ts:34:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+Error: Rule "!!adjustlevel=50" is not replacing anything (it should not have "!!")
+    at DexFormats.getRuleTable (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-formats.ts:749:14)
+    at GlobalRoomState.get formatListText [as formatListText] (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\rooms.ts:1463:34)
+    at GlobalRoomState.handleConnect (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\rooms.ts:1718:80)
+    at Object.socketConnect (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\users.ts:1668:15)
+    at Object.onSpawn (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\sockets.ts:34:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+Error: The "Picked Team Size" rule requires Team Preview.
+    at Object.onValidateRule (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\rulesets.ts:1893:11)
+    at DexFormats.getRuleTable (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-formats.ts:839:45)
+    at DexFormats.getRuleTable (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-formats.ts:773:30)
+    at DexFormats.getRuleTable (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\dex-formats.ts:642:24)
+    at GlobalRoomState.get formatListText [as formatListText] (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\rooms.ts:1463:34)
+    at GlobalRoomState.handleConnect (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\rooms.ts:1718:80)
+    at Object.socketConnect (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\users.ts:1668:15)
+    at Object.onSpawn (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\sockets.ts:34:11)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+TypeError: this.sides is not iterable
+    at Battle.getAllActive (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:1189:27)
+    at Battle.eachEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:460:24)
+    at Field.startTerrain (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\field.ts:143:15)
+    at new Field (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\field.ts:35:8)
+    at new Battle (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:219:16)
+    at RoomBattleStream._writeLine (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-stream.ts:109:18)
+    at RoomBattleStream._writeLines (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-stream.ts:78:10)
+    at RoomBattleStream._write (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\room-battle.ts:1311:9)
+    at RoomBattleStream.write (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\lib\streams.ts:836:15)
+    at process.<anonymous> (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\lib\process-manager.ts:678:17)
+
+Additional information:
+  chunk = >start {"formatid":"gen7battlespotsingles","roomid":"battle-gen7battlespotsingles-844","rated":""}
+  inputLog = 
+  log = 
+
+
+TypeError: Cannot read properties of null (reading 'setPlayer')
+    at RoomBattleStream._writeLine (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-stream.ts:113:17)
+    at RoomBattleStream._writeLines (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-stream.ts:78:10)
+    at RoomBattleStream._write (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\room-battle.ts:1311:9)
+    at RoomBattleStream.write (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\lib\streams.ts:836:15)
+    at process.<anonymous> (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\lib\process-manager.ts:678:17)
+    at process.emit (node:events:514:28)
+    at process.emit (node:domain:488:12)
+    at process.emit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\node_modules\source-map-support\source-map-support.js:516:21)
+    at emit (node:internal/child_process:951:14)
+    at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+Additional information:
+  chunk = >player p1 {"name":"Ternimus","avatar":"265","team":"Aegislash||GhostiumZ|StanceChange|ShadowBall,ShadowSneak,KingsShield,SacredSword|Quiet|252,,,252,4,|F||||]Clefable||KeeBerry|Unaware|CalmMind,Moonblast,Incinerate,MistyTerrain|Serious|252,,,4,,252|M|,0,,,,|||]Charizard||CharizarditeY|Blaze|FireSpin,FirePledge||,,,,,4|M|,0,,,,|||","rating":0}
+  inputLog = 
+  log = 
+
+
+TypeError: Cannot read properties of null (reading 'setPlayer')
+    at RoomBattleStream._writeLine (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-stream.ts:113:17)
+    at RoomBattleStream._writeLines (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-stream.ts:78:10)
+    at RoomBattleStream._write (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\room-battle.ts:1311:9)
+    at RoomBattleStream.write (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\lib\streams.ts:836:15)
+    at process.<anonymous> (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\lib\process-manager.ts:678:17)
+    at process.emit (node:events:514:28)
+    at process.emit (node:domain:488:12)
+    at process.emit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\node_modules\source-map-support\source-map-support.js:516:21)
+    at emit (node:internal/child_process:951:14)
+    at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+Additional information:
+  chunk = >player p2 {"name":"Ternimusalt","avatar":"170","team":"Medicham||Medichamite|PurePower|BulletPunch,HighJumpKick,FirePunch,PsychoCut|Jolly|,252,,,4,252|F||||]Mimikyu||GhostiumZ|Disguise|SwordsDance,ShadowClaw,ShadowSneak,PlayRough|Jolly|,252,,,4,252|M||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,Synthesis,MagicalLeaf,Earthquake|Modest|252,,,4,252,|F||||]Escavalier||MistySeed|ShellArmor|SmartStrike,SwordsDance,XScissor,KnockOff|Brave|252,252,,,,|F||||]Marowak|MarowakAlola|ThickClub|RockHead|SwordsDance,FlareBlitz,StompingTantrum,ShadowBone|Brave|252,252,,,4,|M||||","rating":0}
+  inputLog = 
+  log = 
+
+
+TypeError: this.startTerrain is not a function
+    at Battle.go (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2775:9)
+    at Battle.commitDecisions (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2854:8)
+    at Battle.choose (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2810:35)
+    at RoomBattleStream._writeLine (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-stream.ts:122:18)
+    at RoomBattleStream._writeLines (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-stream.ts:78:10)
+    at RoomBattleStream._write (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\server\room-battle.ts:1311:9)
+    at RoomBattleStream.write (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\lib\streams.ts:836:15)
+    at process.<anonymous> (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\lib\process-manager.ts:678:17)
+    at process.emit (node:events:514:28)
+    at process.emit (node:domain:488:12)
+
+Additional information:
+  chunk = >p1 team 123
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[55096,54275,22987,21259]}
+>player p1 {"name":"Ternimus","avatar":"170","team":"Aegislash||GhostiumZ|StanceChange|ShadowBall,ShadowSneak,KingsShield,SacredSword|Quiet|252,,,252,4,|F||||]Clefable||KeeBerry|Unaware|CalmMind,Moonblast,Incinerate,MistyTerrain|Serious|252,,,4,,252|F|,0,,,,|||]Charizard||CharizarditeY|Blaze|FireSpin,FirePledge||,,,,,4|F|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"169","team":"Medicham||Medichamite|PurePower|BulletPunch,HighJumpKick,FirePunch,PsychoCut|Jolly|,252,,,4,252|F||||]Mimikyu||GhostiumZ|Disguise|SwordsDance,ShadowClaw,ShadowSneak,PlayRough|Jolly|,252,,,4,252|F||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,Synthesis,MagicalLeaf,Earthquake|Modest|252,,,4,252,|F||||]Escavalier||MistySeed|ShellArmor|SmartStrike,SwordsDance,XScissor,KnockOff|Brave|252,252,,,,|F||||]Marowak|MarowakAlola|ThickClub|RockHead|SwordsDance,FlareBlitz,StompingTantrum,ShadowBone|Brave|252,252,,,4,|M||||","rating":0}
+>p1 team 1, 2, 3
+>p2 team 4, 2, 5
+  log = 
+|t:|1708415147
+|gametype|singles
+|player|p1|Ternimus|170|
+|player|p2|Ternimusalt|169|
+|teamsize|p1|3
+|teamsize|p2|5
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Aegislash, F|item
+|poke|p1|Clefable, F|item
+|poke|p1|Charizard, F|item
+|poke|p2|Medicham, F|item
+|poke|p2|Mimikyu, F|item
+|poke|p2|Venusaur, F|item
+|poke|p2|Escavalier, F|item
+|poke|p2|Marowak-Alola, M|item
+|teampreview|3
+
+
+TypeError: Cannot read properties of undefined (reading 'id')
+    at Battle.onBasePower (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:275:70)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1641:27)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+    at BattleActions.useMoveInner (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:511:22)
+    at BattleActions.useMove (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:374:27)
+    at BattleActions.runMove (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:312:33)
+
+Additional information:
+  chunk = >p2 move 1
+  inputLog = 
+>start {"formatid":"gen7ubers","seed":[42288,22037,35652,38913]}
+>player p1 {"name":"Ternimusalt","avatar":"170","team":"Quagsire|||Damp|Dive||,,,,,24|F||||]Feraligatr|||Torrent|Dive||,,,,,8|M||||","rating":0}
+>player p2 {"name":"Ternimus","avatar":"2","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield||,,,,,12|F||||","rating":0}
+>p1 team 2, 1
+>p2 team 1
+>p1 move dive
+>p2 move kingsshield
+>p1 move dive
+>p2 move sacredsword
+  log = 
+|t:|1708591808
+|gametype|singles
+|player|p1|Ternimusalt|170|
+|player|p2|Ternimus|2|
+|teamsize|p1|2
+|teamsize|p2|1
+|gen|7
+|tier|[Gen 7] Ubers
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|rule|Species Clause: Limit one of each Pokémon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Moody Clause: Moody is banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Mega Rayquaza Clause: You cannot mega evolve Rayquaza
+|clearpoke
+|poke|p1|Quagsire, F|
+|poke|p1|Feraligatr, M|
+|poke|p2|Aegislash, F|
+|teampreview
+|
+|t:|1708591848
+|start
+|switch|p1a: Feraligatr|Feraligatr, M|311/311
+|switch|p2a: Aegislash|Aegislash, F|261/261
+|turn|1
+|
+|t:|1708591851
+|move|p2a: Aegislash|King's Shield|p2a: Aegislash
+|-singleturn|p2a: Aegislash|Protect
+|move|p1a: Feraligatr|Dive||[still]
+|-prepare|p1a: Feraligatr|Dive
+|
+|upkeep
+|turn|2
+|
+|t:|1708591857
+|move|p1a: Feraligatr|Dive|p2a: Aegislash|[from]lockedmove
+
+
+TypeError: Cannot read properties of undefined (reading 'layers')
+    at Battle.onUseItem (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\items.ts:2372:58)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.useItem (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:1730:19)
+    at Battle.onStart (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\items.ts:2332:13)
+    at Battle.singleEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:587:25)
+    at BattleActions.runSwitch (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:195:16)
+    at Battle.runAction (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2639:17)
+    at Battle.go (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2793:9)
+    at Battle.commitDecisions (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2859:8)
+    at Battle.choose (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2815:35)
+
+Additional information:
+  chunk = >p2 switch 2
+  inputLog = 
+>start {"formatid":"gen7ubers","seed":[51508,43561,1278,58634]}
+>player p1 {"name":"Ternimus","avatar":"1","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,Substitute||,,,,,12|M||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|M|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"1","team":"Quagsire|||Damp|Dive||,,,,,24|F||||]Feraligatr||GrassySeed|Torrent|Dive,Liquidation||,,,,,8|F||||]Blaziken||Blazikenite|SpeedBoost|PowerUpPunch||,,,,,8|M||||","rating":0}
+>p1 team 2, 1
+>p2 team 1, 2, 3
+>p1 move spikes
+>p2 move dive
+>p1 move spikes
+>p2 move dive
+>p1 move spikes
+>p2 switch 2
+  log = 
+|t:|1708596998
+|gametype|singles
+|player|p1|Ternimus|1|
+|player|p2|Ternimusalt|1|
+|teamsize|p1|2
+|teamsize|p2|3
+|gen|7
+|tier|[Gen 7] Ubers
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|rule|Species Clause: Limit one of each Pokémon
+|rule|OHKO Clause: OHKO moves are banned
+|rule|Moody Clause: Moody is banned
+|rule|Evasion Items Clause: Evasion items are banned
+|rule|Evasion Moves Clause: Evasion moves are banned
+|rule|Endless Battle Clause: Forcing endless battles is banned
+|rule|HP Percentage Mod: HP is shown in percentages
+|rule|Mega Rayquaza Clause: You cannot mega evolve Rayquaza
+|clearpoke
+|poke|p1|Aegislash, M|
+|poke|p1|Ferrothorn, M|
+|poke|p2|Quagsire, F|
+|poke|p2|Feraligatr, F|item
+|poke|p2|Blaziken, M|item
+|teampreview
+|-fieldstart|Icy Terrain
+|
+|t:|1708597005
+|start
+|switch|p1a: Ferrothorn|Ferrothorn, M|289/289
+|switch|p2a: Quagsire|Quagsire, F|331/331
+|turn|1
+|
+|t:|1708597008
+|move|p2a: Quagsire|Dive||[still]
+|-prepare|p2a: Quagsire|Dive
+|move|p1a: Ferrothorn|Spikes|p2a: Quagsire
+|-sidestart|p2: Ternimusalt|Spikes
+|
+|upkeep
+|turn|2
+|
+|t:|1708597013
+|move|p2a: Quagsire|Dive|p1a: Ferrothorn|[from]lockedmove
+|-resisted|p1a: Ferrothorn
+|-damage|p1a: Ferrothorn|259/289
+|-damage|p2a: Quagsire|290/331|[from] ability: Iron Barbs|[of] p1a: Ferrothorn
+|move|p1a: Ferrothorn|Spikes|p2a: Quagsire
+|-sidestart|p2: Ternimusalt|Spikes
+|
+|upkeep
+|turn|3
+|
+|t:|1708597022
+|switch|p2a: Feraligatr|Feraligatr, F|311/311
+|-damage|p2a: Feraligatr|260/311|[from] Spikes
+|-boost|p2a: Feraligatr|spe|2|[from] item: Grassy Seed
+

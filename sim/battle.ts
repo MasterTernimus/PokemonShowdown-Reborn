@@ -1626,9 +1626,6 @@ export class Battle {
 				this.add(`${buf}</span>`);
 			}
 		}
-		if (this.turn === 1) {
-			this.field.startTerrain('fairytaleterrain');
-		}
 		this.makeRequest('move');
 	}
 
@@ -2774,6 +2771,14 @@ export class Battle {
 	}
 
 	go() {
+		if (this.turn === 0) {
+			if (this.format.gameType === 'singles') {
+				this.field.startTerrain('icyterrain')
+			}
+			else {
+				this.field.startTerrain('watersurfaceterrain')
+			}
+		}
 		this.add('');
 		this.add('t:', Math.floor(Date.now() / 1000));
 		if (this.requestState) this.requestState = '';

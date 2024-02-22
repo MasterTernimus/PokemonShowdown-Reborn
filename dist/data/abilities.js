@@ -1130,7 +1130,7 @@ const Abilities = {
   },
   dryskin: {
     onTryHit(target, source, move) {
-      if (target !== source && move.type === "Water") {
+      if (target !== source && (move.types !== void 0 ? move.types : [move.type]).includes("Water")) {
         if (!this.heal(target.baseMaxhp / 4)) {
           this.add("-immune", target, "[from] ability: Dry Skin");
         }
@@ -1154,7 +1154,7 @@ const Abilities = {
     },
     onResidual(target) {
       if (!this.field.isWeather("raindance") || !this.field.isWeather("sunnyday")) {
-        if (this.field.terrain === "mistyterrain") {
+        if (this.field.terrain === "mistyterrain" || this.field.terrain === "watersurfaceterrain" && target.isGrounded() || this.field.terrain === "underwaterterrain" || this.field.terrain === "murkwatersurfaceterrain" && target.isGrounded() && target.types.includes("Poison")) {
           this.heal(target.baseMaxhp / 16);
         }
         if (this.field.terrain === "corrosivemistterrain") {
@@ -1370,7 +1370,7 @@ const Abilities = {
   },
   flashfire: {
     onTryHit(target, source, move) {
-      if (target !== source && move.type === "Fire") {
+      if (target !== source && (move.types !== void 0 ? move.types : [move.type]).includes("Fire")) {
         move.accuracy = true;
         if (!target.addVolatile("flashfire")) {
           this.add("-immune", target, "[from] ability: Flash Fire");
@@ -1702,7 +1702,11 @@ const Abilities = {
     onDamagingHit(damage, target, source, move) {
       if (this.checkMoveMakesContact(move, source, target, true)) {
         this.add("-ability", target, "Gooey");
-        this.boost({ spe: -1 }, source, target, null, true);
+        if (this.field.terrain === "murkwatersurfaceterrain") {
+          this.boost({ spe: -2 }, source, target, null, true);
+        } else {
+          this.boost({ spe: -1 }, source, target, null, true);
+        }
       }
     },
     flags: {},
@@ -1996,7 +2000,7 @@ const Abilities = {
     onResidualOrder: 5,
     onResidualSubOrder: 3,
     onResidual(pokemon) {
-      if (pokemon.status && ["raindance", "primordialsea"].includes(pokemon.effectiveWeather())) {
+      if (pokemon.status && ["raindance", "primordialsea"].includes(pokemon.effectiveWeather()) || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain") {
         this.debug("hydration");
         this.add("-activate", pokemon, "ability: Hydration");
         pokemon.cureStatus();
@@ -2025,7 +2029,7 @@ const Abilities = {
   },
   icebody: {
     onWeather(target, source, effect) {
-      if (effect.id === "hail" || effect.id === "snow") {
+      if (effect.id === "hail" || effect.id === "snow" || this.field.terrain === "icyterrain") {
         this.heal(target.baseMaxhp / 16);
       }
     },
@@ -2433,7 +2437,7 @@ const Abilities = {
   },
   lightningrod: {
     onTryHit(target, source, move) {
-      if (target !== source && move.type === "Electric") {
+      if (target !== source && (move.types !== void 0 ? move.types : [move.type]).includes("Electric")) {
         if (!this.boost({ spa: 1 })) {
           this.add("-immune", target, "[from] ability: Lightning Rod");
         }
@@ -2501,7 +2505,11 @@ const Abilities = {
       this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
       const canOoze = ["drain", "leechseed", "strengthsap"];
       if (canOoze.includes(effect.id)) {
-        this.damage(damage);
+        if (this.field.terrain === "murkwatersurfaceterrain") {
+          this.damage(damage * 2);
+        } else {
+          this.damage(damage);
+        }
         return 0;
       }
     },
@@ -2514,7 +2522,11 @@ const Abilities = {
     onModifyTypePriority: -1,
     onModifyType(move, pokemon) {
       if (move.flags["sound"] && !pokemon.volatiles["dynamax"]) {
-        move.type = "Water";
+        if (this.field.terrain === "icyterrain") {
+          move.type = "Ice";
+        } else {
+          move.type = "Water";
+        }
       }
     },
     flags: {},
@@ -2673,7 +2685,7 @@ const Abilities = {
   },
   merciless: {
     onModifyCritRatio(critRatio, source, target) {
-      if (target && ["psn", "tox"].includes(target.status) || this.field.terrain === "corrosivemistterrain" || this.field.terrain === "corrosiveterrain")
+      if (target && ["psn", "tox"].includes(target.status) || this.field.terrain === "corrosivemistterrain" || this.field.terrain === "corrosiveterrain" || this.field.terrain === "murkwatersurfaceterrain")
         return 5;
     },
     flags: {},
@@ -2843,7 +2855,7 @@ const Abilities = {
   },
   motordrive: {
     onTryHit(target, source, move) {
-      if (target !== source && move.type === "Electric") {
+      if (target !== source && (move.types !== void 0 ? move.types : [move.type]).includes("Electric")) {
         if (!this.boost({ spe: 1 })) {
           this.add("-immune", target, "[from] ability: Motor Drive");
         }
@@ -3415,7 +3427,7 @@ const Abilities = {
       }
     },
     onResidual(pokemon) {
-      if (this.field.terrain === "corrosiveterrain" && pokemon.isGrounded()) {
+      if (this.field.terrain === "corrosiveterrain" && pokemon.isGrounded() || this.field.terrain === "murkwatersurfaceterrain") {
         this.heal(pokemon.baseMaxhp / 8, pokemon);
       }
     },
@@ -3959,8 +3971,13 @@ const Abilities = {
     },
     onBasePowerPriority: 23,
     onBasePower(basePower, pokemon, target, move) {
-      if (move.typeChangerBoosted === this.effect)
-        return this.chainModify([4915, 4096]);
+      if (move.typeChangerBoosted === this.effect) {
+        if (this.field.terrain === "icyterrain")
+          return this.chainModify(1.5);
+        else {
+          return this.chainModify([4915, 4096]);
+        }
+      }
     },
     flags: {},
     name: "Refrigerate",
@@ -4184,7 +4201,7 @@ const Abilities = {
   sapsipper: {
     onTryHitPriority: 1,
     onTryHit(target, source, move) {
-      if (target !== source && move.type === "Grass") {
+      if (target !== source && (move.types !== void 0 ? move.types : [move.type]).includes("Grass")) {
         if (!this.boost({ atk: 1 })) {
           this.add("-immune", target, "[from] ability: Sap Sipper");
         }
@@ -4207,7 +4224,7 @@ const Abilities = {
     onStart(pokemon) {
       if (pokemon.baseSpecies.baseSpecies !== "Wishiwashi" || pokemon.level < 20 || pokemon.transformed)
         return;
-      if (pokemon.hp > pokemon.maxhp / 4) {
+      if (pokemon.hp > pokemon.maxhp / 4 || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain" || this.field.terrain === "murkwatersurfaceterrain") {
         if (pokemon.species.id === "wishiwashi") {
           pokemon.formeChange("Wishiwashi-School");
         }
@@ -4525,7 +4542,7 @@ const Abilities = {
   },
   slushrush: {
     onModifySpe(spe, pokemon) {
-      if (this.field.isWeather(["hail", "snow"])) {
+      if (this.field.isWeather(["hail", "snow"]) || this.field.terrain === "icyterrain") {
         return this.chainModify(2);
       }
     },
@@ -4555,7 +4572,7 @@ const Abilities = {
     onModifyAccuracy(accuracy) {
       if (typeof accuracy !== "number")
         return;
-      if (this.field.isWeather(["hail", "snow"])) {
+      if (this.field.isWeather(["hail", "snow"]) || this.field.terrain === "icyterrain") {
         this.debug("Snow Cloak - decreasing accuracy");
         return this.chainModify([3277, 4096]);
       }
@@ -4797,10 +4814,17 @@ const Abilities = {
           if (secondary.volatileStatus === "flinch")
             return;
         }
-        move.secondaries.push({
-          chance: 10,
-          volatileStatus: "flinch"
-        });
+        if (this.field.terrain === "murkwatersurfaceterrain") {
+          move.secondaries.push({
+            chance: 20,
+            volatileStatus: "flinch"
+          });
+        } else {
+          move.secondaries.push({
+            chance: 10,
+            volatileStatus: "flinch"
+          });
+        }
       }
     },
     flags: {},
@@ -4826,7 +4850,7 @@ const Abilities = {
   },
   stormdrain: {
     onTryHit(target, source, move) {
-      if (target !== source && move.type === "Water") {
+      if (target !== source && (move.types !== void 0 ? move.types : [move.type]).includes("Water")) {
         if (!this.boost({ spa: 1 })) {
           this.add("-immune", target, "[from] ability: Storm Drain");
         }
@@ -4953,7 +4977,7 @@ const Abilities = {
   },
   surgesurfer: {
     onModifySpe(spe) {
-      if (this.field.isTerrain("electricterrain")) {
+      if (this.field.isTerrain("electricterrain") || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain" || this.field.terrain === "murkwatersurfaceterrain") {
         return this.chainModify(2);
       }
     },
@@ -5006,7 +5030,7 @@ const Abilities = {
   },
   swiftswim: {
     onModifySpe(spe, pokemon) {
-      if (["raindance", "primordialsea"].includes(pokemon.effectiveWeather())) {
+      if (["raindance", "primordialsea"].includes(pokemon.effectiveWeather()) || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain" || this.field.terrain === "murkwatersurfaceterrain") {
         return this.chainModify(2);
       }
     },
@@ -5284,14 +5308,14 @@ const Abilities = {
   torrent: {
     onModifyAtkPriority: 5,
     onModifyAtk(atk, attacker, defender, move) {
-      if (move.type === "Water" && attacker.hp <= attacker.maxhp / 3) {
+      if (move.type === "Water" && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain") {
         this.debug("Torrent boost");
         return this.chainModify(1.5);
       }
     },
     onModifySpAPriority: 5,
     onModifySpA(atk, attacker, defender, move) {
-      if (move.type === "Water" && attacker.hp <= attacker.maxhp / 3) {
+      if (move.type === "Water" && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain") {
         this.debug("Torrent boost");
         return this.chainModify(1.5);
       }
@@ -5316,7 +5340,7 @@ const Abilities = {
   toxicboost: {
     onBasePowerPriority: 19,
     onBasePower(basePower, attacker, defender, move) {
-      if ((attacker.status === "psn" || attacker.status === "tox" || this.field.terrain === "corrosiveterrain") && move.category === "Physical") {
+      if ((attacker.status === "psn" || attacker.status === "tox" || this.field.terrain === "corrosiveterrain" || this.field.terrain === "murkwatersurfaceterrain") && move.category === "Physical") {
         return this.chainModify(1.5);
       }
     },
@@ -5584,7 +5608,7 @@ const Abilities = {
   },
   voltabsorb: {
     onTryHit(target, source, move) {
-      if (target !== source && move.type === "Electric") {
+      if (target !== source && (move.types !== void 0 ? move.types : [move.type]).includes("Electric")) {
         if (!this.heal(target.baseMaxhp / 4)) {
           this.add("-immune", target, "[from] ability: Volt Absorb");
         }
@@ -5622,11 +5646,16 @@ const Abilities = {
   },
   waterabsorb: {
     onTryHit(target, source, move) {
-      if (target !== source && move.type === "Water") {
+      if (target !== source && (move.types !== void 0 ? move.types : [move.type]).includes("Water") || this.field.terrain === "underwaterterrain") {
         if (!this.heal(target.baseMaxhp / 4)) {
           this.add("-immune", target, "[from] ability: Water Absorb");
         }
         return null;
+      }
+    },
+    onResidual(pokemon) {
+      if (this.field.terrain === "watersurfaceterrain" && pokemon.isGrounded() || this.field.terrain === "murkwatersurfaceterrain" && pokemon.isGrounded() && pokemon.types.includes("Poison")) {
+        this.heal(pokemon.baseMaxhp / 16);
       }
     },
     flags: { breakable: 1 },
@@ -5678,12 +5707,17 @@ const Abilities = {
   },
   watercompaction: {
     onSwitchIn() {
-      if (this.field.terrain === "mistyterrain" || this.field.terrain === "corrosivemistterrain") {
+      if (this.field.terrain === "mistyterrain" || this.field.terrain === "corrosivemistterrain" || this.field.terrain === "murkwatersurfaceterrain") {
         this.boost({ def: 2 });
       }
     },
     onDamagingHit(damage, target, source, move) {
       if (move.type === "Water") {
+        this.boost({ def: 2 });
+      }
+    },
+    onResidual() {
+      if (this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain") {
         this.boost({ def: 2 });
       }
     },
@@ -5706,6 +5740,10 @@ const Abilities = {
         this.add("-immune", target, "[from] ability: Water Veil");
       }
       return false;
+    },
+    onResidual(pokemon) {
+      if (this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain")
+        pokemon.cureStatus();
     },
     flags: { breakable: 1 },
     name: "Water Veil",

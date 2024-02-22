@@ -2328,7 +2328,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain') || this.field.isTerrain('electricterrain')) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain') || this.field.isTerrain('elecricterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('burningterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain' || this.field.terrain === 'icyterrain') {
 				pokemon.useItem();
 			}
 		},
@@ -2350,9 +2350,30 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.addVolatile('partiallytrapped');
 				pokemon.volatiles['partiallytrapped'].duration = 4;
 			}
+			if (this.field.isTerrain('corrosivemistterrain')) {
+				this.boost({ atk: 1, spa: 1 });
+				pokemon.trySetStatus('tox');
+			}
+			if (this.field.terrain === 'watersurfaceterrain') {
+				this.boost({ spd: 1 });
+				pokemon.addVolatile('aquaring');
+			}
+			if (this.field.terrain === 'underwaterterrain') {
+				this.boost({ spe: 1 });
+				this.actions.useMove('soak', pokemon, pokemon);
+			}
+			if (this.field.terrain === 'murkwatersurfaceterrain') {
+				this.boost({ spe: 1 });
+				pokemon.addVolatile('aquaring');
+			}
+			if (this.field.terrain === 'icyterrain') {
+				this.boost({ spe: 2 });
+				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
+				this.damage(damageAmounts[pokemon.side.sideConditions['spikes'] !== undefined ? pokemon.side.sideConditions['spikes'].layers : 1] * pokemon.maxhp / 24);
+			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('elecricterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('burningterrain') || this.field.isTerrain()) {
+			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('elecricterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('burningterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain' || this.field.terrain === 'icyterrain') {
 				pokemon.useItem();
 			}
 		},
