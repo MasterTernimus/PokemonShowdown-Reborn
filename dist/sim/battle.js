@@ -1393,9 +1393,6 @@ class Battle {
         this.add(`${buf}</span>`);
       }
     }
-    if (this.turn === 1) {
-      this.field.startTerrain("fairytaleterrain");
-    }
     this.makeRequest("move");
   }
   maybeTriggerEndlessBattleClause(trappedBySide, stalenessBySide) {
@@ -2448,6 +2445,13 @@ class Battle {
     return false;
   }
   go() {
+    if (this.turn === 0) {
+      if (this.format.gameType === "singles") {
+        this.field.startTerrain("icyterrain");
+      } else {
+        this.field.startTerrain("watersurfaceterrain");
+      }
+    }
     this.add("");
     this.add("t:", Math.floor(Date.now() / 1e3));
     if (this.requestState)

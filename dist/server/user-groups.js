@@ -374,7 +374,6 @@ class GlobalAuth extends Auth {
       if (!row)
         continue;
       const [name, symbol, sectionid] = row.split(",");
-      console.log(name, symbol);
       const id = (0, import_dex_data.toID)(name);
       if (!id) {
         Monitor.warn("Dropping malformed usergroups line (missing ID):");

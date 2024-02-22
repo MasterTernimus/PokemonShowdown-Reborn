@@ -37,7 +37,10 @@ const Conditions = {
     // Damage reduction is handled directly in the sim/battle.js damage function
     onResidualOrder: 10,
     onResidual(pokemon) {
-      this.damage(pokemon.baseMaxhp / 16);
+      if (this.field.terrain === "icyterrain")
+        this.damage(pokemon.baseMaxhp / 32);
+      else
+        this.damage(pokemon.baseMaxhp / 16);
     }
   },
   par: {
@@ -252,6 +255,10 @@ const Conditions = {
       this.add("-activate", pokemon, "move: " + this.effectState.sourceEffect, "[of] " + source);
       this.effectState.boundDivisor = source.hasItem("bindingband") ? 6 : 8;
       if (this.field.terrain === "burningterrain" && effect.id === "firespin") {
+        this.effectState.boundDivisor = 6;
+      }
+      if ((this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain") && effect.id === "whirlpool") {
+        pokemon.addVolatile("confusion");
         this.effectState.boundDivisor = 6;
       }
     },
@@ -689,7 +696,7 @@ const Conditions = {
     effectType: "Weather",
     duration: 5,
     durationCallback(source, effect) {
-      if (source?.hasItem("icyrock")) {
+      if (source?.hasItem("icyrock") || this.field.terrain === "icyterrain") {
         return 8;
       }
       return 5;
