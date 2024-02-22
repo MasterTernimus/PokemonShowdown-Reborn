@@ -78372,7 +78372,7 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 			explosion: ["8L1", "7M"],
 			facade: ["8M", "7M"],
 			firefang: ["8M", "8L1", "7L1"],
-			firepledge: ["7T"];
+			firepledge: ["7T"],
 			flamecharge: ["7M"],
 			flamethrower: ["8M", "7M"],
 			flashcannon: ["8M", "7M"],
@@ -78440,7 +78440,7 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 			toxic: ["7M"],
 			triattack: ["8M", "8L35", "7L75"],
 			uturn: ["8M", "7M"],
-			waterpledge: ["7T"];
+			waterpledge: ["7T"],
 			workup: ["8M", "7M"],
 			xscissor: ["8M", "8L40", "7M", "7L35"],
 			zenheadbutt: ["8M", "7T"],
