@@ -1571,7 +1571,7 @@ export class BattleActions {
 	 * Normal PS return value rules apply:
 	 * undefined = success, null = silent failure, false = loud failure
 	 */
-	 getDamage(
+	getDamage(
 		source: Pokemon, target: Pokemon, move: string | number | ActiveMove,
 		suppressMessages = false
 	): number | undefined | null | false {
@@ -1664,7 +1664,7 @@ export class BattleActions {
 		let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
 		const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
-		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+		const statTable = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
 
 		let atkBoosts = attacker.boosts[attackStat];
 		let defBoosts = defender.boosts[defenseStat];
@@ -1696,8 +1696,13 @@ export class BattleActions {
 		// Apply Stat Modifiers
 		attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
 		defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
-
-		if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
+		if (this.battle.field.terrain === 'glitchterrain') {
+			if(attackStat === 'spa')
+				attack = Math.max(attack, source.getStat('spd'));
+			if(defenseStat === 'spd')
+				defense = Math.max(defense, target.getStat('spa'));
+		}
+		if ((this.battle.gen <= 4 || this.battle.field.terrain === 'glitchterrain') && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
 		}
 

@@ -2443,6 +2443,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	longreach: {
 		onModifyMove(move) {
+			if (this.field.terrain === 'rockyterrain') {
+				move.accuracy = 90;
+			}
 			delete move.flags['contact'];
 		},
 		flags: {},
@@ -3928,6 +3931,24 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	rkssystem: {
 		// RKS System's type-changing itself is implemented in statuses.js
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
+		onSwitchIn(pokemon) {
+			if (this.field.terrain === 'glitchterrain') {
+				const newType = '???';
+				pokemon.types = (typeof newType === 'string' ? [newType] : newType);
+				pokemon.addedType = '';
+				pokemon.knownType = true;
+				pokemon.apparentType = pokemon.types.join('/');
+			}
+		},
+		onResidual(pokemon) {
+			if (this.field.terrain === 'glitchterrain') {
+				const newType = '???';
+				pokemon.types = (typeof newType === 'string' ? [newType] : newType);
+				pokemon.addedType = '';
+				pokemon.knownType = true;
+				pokemon.apparentType = pokemon.types.join('/');
+			}
+		},
 		name: "RKS System",
 		rating: 4,
 		num: 225,

@@ -1700,7 +1700,7 @@ class Pokemon {
   }
   /** false = immune, true = not immune */
   runImmunity(type, message) {
-    if (!type)
+    if (!type || type === "???")
       return true;
     const sourceTypes = Array.isArray(type) ? type : [type];
     for (const type2 of sourceTypes) {
@@ -1711,8 +1711,9 @@ class Pokemon {
         return false;
       const negateImmunity = !this.battle.runEvent("NegateImmunity", this, type2);
       const notImmune = type2 === "Ground" ? this.isGrounded(negateImmunity) : negateImmunity || this.battle.dex.getImmunity(type2, this);
-      if (notImmune)
+      if (notImmune) {
         continue;
+      }
       if (!message) {
         return false;
       }

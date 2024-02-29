@@ -1582,6 +1582,18 @@ const Items = {
     onTakeItem: false,
     zMove: "Extreme Evoboost",
     zMoveFrom: "Last Resort",
+    onModifyDefPriority: 2,
+    onModifyDef(def, pokemon) {
+      if (pokemon.baseSpecies.baseSpecies === "Eevee") {
+        return this.chainModify(1.5);
+      }
+    },
+    onModifySpDPriority: 2,
+    onModifySpD(spd, pokemon) {
+      if (pokemon.baseSpecies.baseSpecies === "Eevee") {
+        return this.chainModify(1.5);
+      }
+    },
     itemUser: ["Eevee"],
     num: 805,
     gen: 7,
@@ -3254,6 +3266,18 @@ const Items = {
       basePower: 30,
       status: "par"
     },
+    onModifyDefPriority: 2,
+    onModifyDef(def, pokemon) {
+      if (pokemon.baseSpecies.baseSpecies === "Pikachu") {
+        return this.chainModify(1.5);
+      }
+    },
+    onModifySpDPriority: 2,
+    onModifySpD(spd, pokemon) {
+      if (pokemon.baseSpecies.baseSpecies === "Pikachu") {
+        return this.chainModify(1.5);
+      }
+    },
     onModifyAtkPriority: 1,
     onModifyAtk(atk, pokemon) {
       if (pokemon.baseSpecies.baseSpecies === "Pikachu") {
@@ -4351,6 +4375,18 @@ const Items = {
     onTakeItem: false,
     zMove: "Catastropika",
     zMoveFrom: "Volt Tackle",
+    onModifyDefPriority: 2,
+    onModifyDef(def, pokemon) {
+      if (pokemon.baseSpecies.baseSpecies === "Pikachu") {
+        return this.chainModify(1.5);
+      }
+    },
+    onModifySpDPriority: 2,
+    onModifySpD(spd, pokemon) {
+      if (pokemon.baseSpecies.baseSpecies === "Pikachu") {
+        return this.chainModify(1.5);
+      }
+    },
     itemUser: ["Pikachu"],
     num: 794,
     gen: 7,
@@ -4682,17 +4718,20 @@ const Items = {
       basePower: 10
     },
     onStart(pokemon) {
-      if (!pokemon.ignoringItem() && this.field.isTerrain("psychicterrain")) {
+      if (!pokemon.ignoringItem() && this.field.isTerrain("glitchterrain")) {
         pokemon.useItem();
       }
     },
     onTerrainChange(pokemon) {
-      if (this.field.isTerrain("psychicterrain")) {
+      if (this.field.isTerrain("glitchterrain")) {
         pokemon.useItem();
       }
     },
+    onUseItem(item, pokemon) {
+      pokemon.setType("???");
+    },
     boosts: {
-      spd: 1
+      def: 1
     },
     num: 882,
     gen: 7

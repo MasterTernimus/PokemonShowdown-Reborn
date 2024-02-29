@@ -260,6 +260,68 @@ const Terrains = {
       }
     }
   },
+  glitchterrain: {
+    name: "Glitch Terrain",
+    condition: {
+      duration: 5,
+      onBasePowerPriority: 6,
+      durationCallback(source, effect) {
+        if (source.hasItem("terrainextender")) {
+          return 8;
+        }
+        return 5;
+      },
+      onModifyCritRatio(critRatio, source, target) {
+        if (source.getStat("spe", true, true) > target.getStat("spe", true, true))
+          return critRatio + 1;
+      },
+      onModifyMove(move) {
+        const Special = ["Grass", "Fire", "Water", "Electric", "Ice", "Dragon", "Ice", "Dragon", "Psychic"];
+        const Physical = ["Normal", "Fighting", "Ghost", "Poison", "Bug", "Flying", "Ground", "Rock", "???"];
+        const nonexistant = ["Dark", "Steel", "Fairy"];
+        if (nonexistant.includes(move.type)) {
+          move.type = "Normal";
+        }
+        if (Special.includes(move.type)) {
+          move.category = "Special";
+        }
+        if (Physical.includes(move.type)) {
+          move.category = "Physical";
+        }
+      },
+      onTryHit(target, source, move) {
+        if (target.types.includes("Psychic") && move.type === "Ghost") {
+          this.add("-message", "Ghosts forgot how to beat Psychics!");
+          return null;
+        }
+      },
+      onEffectiveness(typeMod, target, type, move) {
+        if (move.type === "Bug" && type === "Poison") {
+          return 1;
+        }
+        if (move.type === "Poison" && type === "Bug") {
+          return 1;
+        }
+        if (move.type === "Ice" && type === "Fire") {
+          return 0;
+        }
+        if (move.type === "Dragon") {
+          return 0;
+        }
+      },
+      onBasePower(basePower, source, target, move) {
+        if (move.type === "Psychic") {
+          return this.chainModify(4915, 4096);
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Glitch Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Glitch Terrain");
+      }
+    }
+  },
   icyterrain: {
     name: "Icy Terrain",
     condition: {
@@ -467,6 +529,38 @@ const Terrains = {
       }
     }
   },
+  rockyterrain: {
+    name: "Rocky Terrain",
+    condition: {
+      duration: 5,
+      onBasePowerPriority: 6,
+      onTryAddVolatile(status, pokemon) {
+        if (status.id === "flinch" && pokemon.boosts.def > 0) {
+          return null;
+        }
+      },
+      onTryHit(pokemon, target, move) {
+        if ((target.volatiles["substitute"] || target.boosts.def > 0) && move.flags["bullet"]) {
+          this.add("-message", "The bullet-like move rebounded!");
+          return null;
+        }
+      },
+      onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        if (move.type === "Rock") {
+          modifier *= 1.5;
+        }
+      },
+      onAfterMove(source, target, move) {
+        if (!move.lastHit && move.category === "Physical" && !source.hasAbility("rockhead")) {
+          this.damage(source.baseMaxhp / 8, source, source);
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Rocky Terrain");
+      }
+    }
+  },
   swampterrain: {
     name: "Swamp Terrain",
     condition: {
@@ -545,7 +639,7 @@ const Terrains = {
       },
       onEffectiveness(typeMod, target, type, move) {
         const types = move.types !== void 0 ? move.types : [move.type];
-        if (type === "Water" && types.includes("Water"))
+        if (type === "Water" || types.includes("Water"))
           return 0 + this.dex.getEffectiveness(move.type, type);
       },
       onBasePower(basePower, source, target, move) {
