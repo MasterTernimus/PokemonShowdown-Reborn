@@ -2776,7 +2776,7 @@ export class Battle {
 				this.field.startTerrain('rockyterrain');
 			}
 			else {
-				this.field.startTerrain('watersurfaceterrain');
+				this.field.startTerrain('rockyterrain');
 			}
 		}
 		this.add('');
