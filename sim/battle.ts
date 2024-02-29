@@ -2773,10 +2773,10 @@ export class Battle {
 	go() {
 		if (this.turn === 0) {
 			if (this.format.gameType === 'singles') {
-				this.field.startTerrain('fairytaleterrain')
+				this.field.startTerrain('rockyterrain');
 			}
 			else {
-				this.field.startTerrain('watersurfaceterrain')
+				this.field.startTerrain('watersurfaceterrain');
 			}
 		}
 		this.add('');

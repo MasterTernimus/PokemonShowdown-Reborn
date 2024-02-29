@@ -1558,8 +1558,13 @@ const Moves = {
     priority: 0,
     flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
     onModifyMove(move) {
-      if (this.field.isWeather(["hail", "snow"]))
+      if (this.field.isWeather(["hail", "snow"])) {
         move.accuracy = true;
+      } else {
+        if (this.field.terrain === "glitchterrain") {
+          move.accuracy = 90;
+        }
+      }
     },
     secondary: {
       chance: 10,
@@ -2291,6 +2296,8 @@ const Moves = {
         newType = "Dragon";
       } else if (this.field.terrain === "icyterrain") {
         newType = "Ice";
+      } else if (this.field.terrain === "glitchterrain") {
+        newType = "???";
       }
       if (target.getTypes().join() === newType || !target.setType(newType))
         return false;
@@ -2973,6 +2980,8 @@ const Moves = {
       if (target.hasType(type) || !target.setType(type))
         return false;
       this.add("-start", target, "typechange", type);
+      if (!this.field.terrainState.Tchanges?.includes("conversion"))
+        this.field.terrainState.Tchanges?.push("conversion");
     },
     secondary: null,
     target: "self",
@@ -3010,6 +3019,15 @@ const Moves = {
       if (!source.setType(randomType))
         return false;
       this.add("-start", source, "typechange", randomType);
+    },
+    onAfterMove(source, target, move) {
+      if (this.field.terrainState.Tchanges?.includes("conversion")) {
+        if (this.field.terrain === "glitchterrain") {
+          this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
+        }
+      } else {
+        this.field.setTerrain("glitchterrain");
+      }
     },
     secondary: null,
     target: "normal",
@@ -9653,8 +9671,13 @@ const Moves = {
     pp: 5,
     priority: 0,
     flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1 },
-    self: {
-      volatileStatus: "mustrecharge"
+    onAfterHit(target, source, move) {
+      if (target.hp === 0 && this.field.terrain === "glitchterrain") {
+        this.add("-message", "The glitchy terrain allowed Hyper Beam to feed off of the fallen pokemon's energy");
+        source.removeVolatile("mustrecharge");
+      } else {
+        source.addVolatile("mustrecharge");
+      }
     },
     secondary: null,
     target: "normal",
@@ -12526,7 +12549,12 @@ const Moves = {
     priority: 0,
     flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
     onHit(target, source, effect) {
-      const moves = this.dex.moves.all().filter((move) => (![2, 4].includes(this.gen) || !source.moves.includes(move.id)) && (!move.isNonstandard || move.isNonstandard === "Unobtainable") && move.flags["metronome"]);
+      let moves;
+      if (this.field.terrain === "glitchterrain") {
+        moves = this.dex.moves.all().filter((move) => (![2, 4].includes(this.gen) || !source.moves.includes(move.id)) && (!move.isNonstandard || move.isNonstandard === "Unobtainable") && move.flags["metronome"] && move.basePower >= 70);
+      } else {
+        moves = this.dex.moves.all().filter((move) => (![2, 4].includes(this.gen) || !source.moves.includes(move.id)) && (!move.isNonstandard || move.isNonstandard === "Unobtainable") && move.flags["metronome"]);
+      }
       let randomMove = "";
       if (moves.length) {
         moves.sort((a, b) => a.num - b.num);
@@ -13514,6 +13542,8 @@ const Moves = {
         move = "sludgewave";
       } else if (this.field.terrain === "icyterrain") {
         move = "icebeam";
+      } else if (this.field.terrain === "glitchterrain") {
+        move = "metronome";
       }
       this.actions.useMove(move, pokemon, target);
       return null;
@@ -15612,6 +15642,11 @@ const Moves = {
         }
       },
       onBeforeMovePriority: 100,
+      onLockMove(pokemon) {
+        if (this.field.terrain === "glitchterrain") {
+          return "rage";
+        }
+      },
       onBeforeMove(pokemon) {
         this.debug("removing Rage before attack");
         pokemon.removeVolatile("rage");
@@ -17046,7 +17081,7 @@ const Moves = {
             spa: -1
           }
         });
-      } else if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("swampterrain") || this.field.terrain === "watersurfaceterrain") {
+      } else if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("swampterrain") || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "glitchterrain") {
         move.secondaries.push({
           chance: 30,
           boosts: {

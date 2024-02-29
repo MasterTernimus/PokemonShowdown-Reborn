@@ -1532,7 +1532,13 @@ class BattleActions {
     attackStat = category === "Physical" ? "atk" : "spa";
     attack = this.battle.runEvent("Modify" + statTable[attackStat], source, target, move, attack);
     defense = this.battle.runEvent("Modify" + statTable[defenseStat], target, source, move, defense);
-    if (this.battle.gen <= 4 && ["explosion", "selfdestruct"].includes(move.id) && defenseStat === "def") {
+    if (this.battle.field.terrain === "glitchterrain") {
+      if (attackStat === "spa")
+        attack = Math.max(attack, source.getStat("spd"));
+      if (defenseStat === "spd")
+        defense = Math.max(defense, target.getStat("spa"));
+    }
+    if ((this.battle.gen <= 4 || this.battle.field.terrain === "glitchterrain") && ["explosion", "selfdestruct"].includes(move.id) && defenseStat === "def") {
       defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
     }
     const tr = this.battle.trunc;

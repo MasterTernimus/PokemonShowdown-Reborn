@@ -1521,7 +1521,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move) {
-			if (this.field.isWeather(['hail', 'snow'])) move.accuracy = true;
+			if (this.field.isWeather(['hail', 'snow'])) {
+				move.accuracy = true;
+			}
+			else {
+				if (this.field.terrain === 'glitchterrain') {
+					move.accuracy = 90;
+				}
+			}
 		},
 		secondary: {
 			chance: 10,
@@ -2242,6 +2249,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 				newType = 'Dragon';
 			} else if (this.field.terrain === 'icyterrain') {
 				newType = 'Ice';
+			} else if (this.field.terrain === 'glitchterrain') {
+				newType = '???';
+			} else if (this.field.terrain === 'rockyterrain') {
+				newType = 'Rock';
 			}
 			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
@@ -2904,6 +2915,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 			const type = this.dex.moves.get(target.moveSlots[0].id).type;
 			if (target.hasType(type) || !target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
+			if(!this.field.terrainState.Tchanges?.includes('conversion'))
+				this.field.terrainState.Tchanges?.push('conversion');
 		},
 		secondary: null,
 		target: "self",
@@ -2940,6 +2953,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 
 			if (!source.setType(randomType)) return false;
 			this.add('-start', source, 'typechange', randomType);
+		},
+		onAfterMove(source, target, move) {
+			if (this.field.terrainState.Tchanges?.includes('conversion')) {
+				if (this.field.terrain === 'glitchterrain') {
+					this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
+				}
+			}
+			else {
+				this.field.setTerrain('glitchterrain');
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -5212,7 +5235,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Explosion",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, noparentalbond: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
 		selfdestruct: "always",
 		secondary: null,
 		target: "allAdjacent",
@@ -9487,9 +9510,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Hyper Beam",
 		pp: 5,
 		priority: 0,
-		flags: {recharge: 1, protect: 1, mirror: 1, metronome: 1},
-		self: {
-			volatileStatus: 'mustrecharge',
+		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1 },
+		onAfterHit(target, source, move) {
+			if (target.hp === 0 && this.field.terrain === 'glitchterrain') {
+				this.add('-message', 'The glitchy terrain allowed Hyper Beam to feed off of the fallen pokemon\'s energy');
+				source.removeVolatile('mustrecharge');
+			}
+			else {
+				source.addVolatile('mustrecharge');
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -12305,11 +12334,21 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		onHit(target, source, effect) {
-			const moves = this.dex.moves.all().filter(move => (
-				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
-				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				move.flags['metronome']
-			));
+			let moves;
+			if (this.field.terrain === 'glitchterrain') {
+				moves = this.dex.moves.all().filter(move => (
+					(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+					(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+					move.flags['metronome'] && move.basePower >= 70
+				));
+			}
+			else {
+				moves = this.dex.moves.all().filter(move => (
+					(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+					(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+					move.flags['metronome']
+				));
+			}
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
@@ -13247,6 +13286,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'sludgewave';
 			} else if (this.field.terrain === 'icyterrain') {
 				move = 'icebeam';
+			} else if (this.field.terrain === 'glitchterrain') {
+				move = 'metronome';
+			} else if (this.field.terrain === 'rockyterrain') {
+				move = 'rocksmash';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -15314,7 +15357,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Rage",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		self: {
 			volatileStatus: 'rage',
 		},
@@ -15328,6 +15371,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 				}
 			},
 			onBeforeMovePriority: 100,
+			onLockMove(pokemon) {
+				if (this.field.terrain === 'glitchterrain') {
+					return 'rage';
+				}
+			},
 			onBeforeMove(pokemon) {
 				this.debug('removing Rage before attack');
 				pokemon.removeVolatile('rage');
@@ -16021,7 +16069,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Rock Polish",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.terrain === 'rockyterrain') {
+				move.boosts = {
+					spe: 3
+				};
+			}
+		},
 		boosts: {
 			spe: 2,
 		},
@@ -16752,7 +16807,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 						spa: -1,
 					},
 				});
-			} else if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('swampterrain') || this.field.terrain === 'watersurfaceterrain') {
+			} else if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('swampterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'glitchterrain') {
 				move.secondaries.push({
 					chance: 30,
 					boosts: {
@@ -16797,6 +16852,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move.secondaries.push({
 					chance: 30,
 					status: 'frz'
+				});
+			} else if (this.field.terrain === 'rockyterrain') {
+				move.secondaries.push({
+					chance: 30,
+					volatileStatus: 'flinch'
 				});
 			}
 		},
@@ -18853,7 +18913,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+				if (this.field.terrain === 'rockyterrain') {
+					this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+				}
+				else {
+					this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+				}
 			},
 		},
 		secondary: null,

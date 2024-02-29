@@ -1421,3 +1421,501 @@ Additional information:
 |-damage|p2a: Feraligatr|260/311|[from] Spikes
 |-boost|p2a: Feraligatr|spe|2|[from] item: Grassy Seed
 
+
+Error: Use runStatusImmunity for ???
+    at Pokemon.runImmunity (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:2105:11)
+    at BattleActions.hitStepTypeImmunity (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:652:16)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+    at BattleActions.useMoveInner (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:511:22)
+    at BattleActions.useMove (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:374:27)
+    at BattleActions.runMove (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:312:33)
+    at Battle.runAction (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2552:17)
+    at Battle.go (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2793:9)
+    at Battle.commitDecisions (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2859:8)
+    at Battle.choose (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:2815:35)
+
+Additional information:
+  chunk = >p2 move 1
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[52376,18308,12439,59616]}
+>player p1 {"name":"Ternimus","avatar":"2","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,HyperBeam||,,,,,12|M||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|M|,0,,,,|||]Ho-Oh|||Pressure|AncientPower||,,,,,20|N|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"2","team":"Medicham||Medichamite|PurePower|FakeOut,HighJumpKick,PsychoCut,BulletPunch|Jolly|32,252,,,,224|F||||]Mimikyu||MistySeed|Disguise|ShadowClaw,ShadowSneak,SwordsDance,PlayRough|Adamant|252,252,,,,|M||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,HiddenPowerFire,Earthquake,GigaDrain|Impish|252,,252,,,|M||||,Fire,,,,]Aegislash||GhostiumZ|StanceChange|SwordsDance,KingsShield,ShadowBall,SacredSword|Modest|252,,4,252,,|M||||]Garchomp||RoseliBerry|SandVeil|Earthquake,SwordsDance,Outrage,Slash|Jolly|252,,48,,,208|F||||]Marowak|MarowakAlola||CursedBody|Rage,StompingTantrum||,,,,,28|F||||","rating":0}
+>p1 team 3, 2, 1
+>p2 team 6, 5, 4
+>p1 move ancientpower
+>p2 move rage
+>p1 move ancientpower
+>p2 move rage
+>p1 move struggle
+>p2 move rage
+  log = 
+|t:|1709143358
+|gametype|singles
+|player|p1|Ternimus|2|
+|player|p2|Ternimusalt|2|
+|teamsize|p1|3
+|teamsize|p2|6
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Aegislash, M|
+|poke|p1|Ferrothorn, M|
+|poke|p1|Ho-Oh|
+|poke|p2|Medicham, F|item
+|poke|p2|Mimikyu, M|item
+|poke|p2|Venusaur, M|item
+|poke|p2|Aegislash, M|item
+|poke|p2|Garchomp, F|item
+|poke|p2|Marowak-Alola, F|
+|teampreview|3
+|-fieldstart|Glitch Terrain
+|
+|t:|1709143368
+|start
+|switch|p1a: Ho-Oh|Ho-Oh|353/353
+|switch|p2a: Marowak|Marowak-Alola, F|261/261
+|-ability|p1a: Ho-Oh|Pressure
+|turn|1
+|
+|t:|1709143372
+|move|p1a: Ho-Oh|Ancient Power|p2a: Marowak
+|-supereffective|p2a: Marowak
+|-damage|p2a: Marowak|171/261
+|move|p2a: Marowak|Rage|p1a: Ho-Oh
+|-damage|p1a: Ho-Oh|337/353
+|-singlemove|p2a: Marowak|Rage
+|
+|upkeep
+|turn|2
+|
+|t:|1709143383
+|move|p1a: Ho-Oh|Ancient Power|p2a: Marowak
+|-supereffective|p2a: Marowak
+|-damage|p2a: Marowak|79/261
+|-boost|p2a: Marowak|atk|1
+|-start|p1a: Ho-Oh|Disable|Ancient Power|[from] ability: Cursed Body|[of] p2a: Marowak
+|move|p2a: Marowak|Rage|p1a: Ho-Oh|[from]lockedmove
+|-damage|p1a: Ho-Oh|314/353
+|
+|upkeep
+|turn|3
+|
+|t:|1709143392
+|-activate|p1a: Ho-Oh|move: Struggle
+|move|p1a: Ho-Oh|Struggle|p2a: Marowak
+
+
+TypeError: Cannot read properties of null (reading 'getStat')
+    at Battle.onModifySpD (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:256:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:600:23)
+    at Battle.onModifySpA (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:259:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1697:24)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+
+Additional information:
+  chunk = >p2 move 2
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[51347,56730,8071,9920]}
+>player p1 {"name":"Ternimusalt","avatar":"169","team":"Medicham||Medichamite|PurePower|FakeOut,HighJumpKick,PsychoCut,BulletPunch|Jolly|32,252,,,,224|F||||]Mimikyu||MistySeed|Disguise|ShadowClaw,ShadowSneak,SwordsDance,PlayRough|Adamant|252,252,,,,|M||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,HiddenPowerFire,Earthquake,GigaDrain|Impish|252,,252,,,|M||||,Fire,,,,]Aegislash||GhostiumZ|StanceChange|SwordsDance,KingsShield,ShadowBall,SacredSword|Modest|252,,4,252,,|M||||]Garchomp||RoseliBerry|SandVeil|Earthquake,SwordsDance,Outrage,Slash|Jolly|252,,48,,,208|F||||]Marowak|MarowakAlola||CursedBody|Rage,StompingTantrum||,,,,,28|M||||","rating":0}
+>player p2 {"name":"Ternimus","avatar":"1","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,HyperBeam||,,,,,12|M||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|M|,0,,,,|||]Ho-Oh|||Pressure|CalmMind,Extrasensory||,,,,,20|N|,0,,,,|||","rating":0}
+>p1 team 6, 1, 2
+>p2 team 3, 1, 2
+>p1 move rage
+>p2 move extrasensory
+  log = 
+|t:|1709144179
+|gametype|singles
+|player|p1|Ternimusalt|169|
+|player|p2|Ternimus|1|
+|teamsize|p1|6
+|teamsize|p2|3
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Medicham, F|item
+|poke|p1|Mimikyu, M|item
+|poke|p1|Venusaur, M|item
+|poke|p1|Aegislash, M|item
+|poke|p1|Garchomp, F|item
+|poke|p1|Marowak-Alola, M|
+|poke|p2|Aegislash, M|
+|poke|p2|Ferrothorn, M|
+|poke|p2|Ho-Oh|
+|teampreview|3
+|-fieldstart|Glitch Terrain
+|
+|t:|1709144183
+|start
+|switch|p1a: Marowak|Marowak-Alola, M|261/261
+|switch|p2a: Ho-Oh|Ho-Oh|353/353
+|-ability|p2a: Ho-Oh|Pressure
+|turn|1
+|
+|t:|1709144188
+|move|p2a: Ho-Oh|Extrasensory|p1a: Marowak
+
+
+TypeError: Cannot read properties of null (reading 'name')
+    at Battle.onModifySpD (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:256:22)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:600:23)
+    at Battle.onModifySpA (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:260:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1697:24)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+
+Additional information:
+  chunk = >p2 move 1
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[23789,47334,52853,3709]}
+>player p1 {"name":"Ternimus","avatar":"169","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,HyperBeam||,,,,,12|M||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|M|,0,,,,|||]Ho-Oh|||Pressure|CalmMind,Extrasensory||,,,,,20|N|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"265","team":"Medicham||Medichamite|PurePower|FakeOut,HighJumpKick,PsychoCut,BulletPunch|Jolly|32,252,,,,224|M||||]Mimikyu||MistySeed|Disguise|ShadowClaw,ShadowSneak,SwordsDance,PlayRough|Adamant|252,252,,,,|M||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,HiddenPowerFire,Earthquake,GigaDrain|Impish|252,,252,,,|M||||,Fire,,,,]Aegislash||GhostiumZ|StanceChange|SwordsDance,KingsShield,ShadowBall,SacredSword|Modest|252,,4,252,,|F||||]Garchomp||RoseliBerry|SandVeil|Earthquake,SwordsDance,Outrage,Slash|Jolly|252,,48,,,208|F||||]Marowak|MarowakAlola||CursedBody|Rage,StompingTantrum||,,,,,28|M||||","rating":0}
+>p1 team 3, 1, 2
+>p2 team 6, 1, 2
+>p1 move extrasensory
+>p2 move rage
+  log = 
+|t:|1709144253
+|gametype|singles
+|player|p1|Ternimus|169|
+|player|p2|Ternimusalt|265|
+|teamsize|p1|3
+|teamsize|p2|6
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Aegislash, M|
+|poke|p1|Ferrothorn, M|
+|poke|p1|Ho-Oh|
+|poke|p2|Medicham, M|item
+|poke|p2|Mimikyu, M|item
+|poke|p2|Venusaur, M|item
+|poke|p2|Aegislash, F|item
+|poke|p2|Garchomp, F|item
+|poke|p2|Marowak-Alola, M|
+|teampreview|3
+|-fieldstart|Glitch Terrain
+|
+|t:|1709144257
+|start
+|switch|p1a: Ho-Oh|Ho-Oh|353/353
+|switch|p2a: Marowak|Marowak-Alola, M|261/261
+|-ability|p1a: Ho-Oh|Pressure
+|turn|1
+|
+|t:|1709144261
+|move|p1a: Ho-Oh|Extrasensory|p2a: Marowak
+
+
+TypeError: Cannot read properties of null (reading 'name')
+    at Battle.onModifySpD (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:256:22)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:600:23)
+    at Battle.onModifySpA (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:262:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1697:24)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+
+Additional information:
+  chunk = >p2 move 1
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[46058,25094,53437,5176]}
+>player p1 {"name":"Ternimus","avatar":"265","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,HyperBeam||,,,,,12|F||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|F|,0,,,,|||]Ho-Oh|||Pressure|CalmMind,Extrasensory||,,,,,20|N|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"102","team":"Medicham||Medichamite|PurePower|FakeOut,HighJumpKick,PsychoCut,BulletPunch|Jolly|32,252,,,,224|M||||]Mimikyu||MistySeed|Disguise|ShadowClaw,ShadowSneak,SwordsDance,PlayRough|Adamant|252,252,,,,|M||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,HiddenPowerFire,Earthquake,GigaDrain|Impish|252,,252,,,|M||||,Fire,,,,]Aegislash||GhostiumZ|StanceChange|SwordsDance,KingsShield,ShadowBall,SacredSword|Modest|252,,4,252,,|M||||]Garchomp||RoseliBerry|SandVeil|Earthquake,SwordsDance,Outrage,Slash|Jolly|252,,48,,,208|F||||]Marowak|MarowakAlola||CursedBody|Rage,StompingTantrum||,,,,,28|F||||","rating":0}
+>p1 team 3, 1, 2
+>p2 team 6, 1, 2
+>p1 move extrasensory
+>p2 move rage
+  log = 
+|t:|1709144333
+|gametype|singles
+|player|p1|Ternimus|265|
+|player|p2|Ternimusalt|102|
+|teamsize|p1|3
+|teamsize|p2|6
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Aegislash, F|
+|poke|p1|Ferrothorn, F|
+|poke|p1|Ho-Oh|
+|poke|p2|Medicham, M|item
+|poke|p2|Mimikyu, M|item
+|poke|p2|Venusaur, M|item
+|poke|p2|Aegislash, M|item
+|poke|p2|Garchomp, F|item
+|poke|p2|Marowak-Alola, F|
+|teampreview|3
+|-fieldstart|Glitch Terrain
+|
+|t:|1709144337
+|start
+|switch|p1a: Ho-Oh|Ho-Oh|353/353
+|switch|p2a: Marowak|Marowak-Alola, F|261/261
+|-ability|p1a: Ho-Oh|Pressure
+|turn|1
+|
+|t:|1709144341
+|move|p1a: Ho-Oh|Extrasensory|p2a: Marowak
+|-hint|Marowak
+
+
+Error: Stack overflow
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:718:10)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:585:31)
+    at Battle.onModifySpD (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:257:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:600:23)
+    at Battle.onModifySpA (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:261:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:600:23)
+    at Battle.onModifySpD (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:257:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+
+Additional information:
+  chunk = >p2 move 1
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[29106,60726,20462,36674]}
+>player p1 {"name":"Ternimus","avatar":"170","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,HyperBeam||,,,,,12|M||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|M|,0,,,,|||]Ho-Oh|||Pressure|CalmMind,Extrasensory||,,,,,20|N|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"265","team":"Medicham||Medichamite|PurePower|FakeOut,HighJumpKick,PsychoCut,BulletPunch|Jolly|32,252,,,,224|F||||]Mimikyu||MistySeed|Disguise|ShadowClaw,ShadowSneak,SwordsDance,PlayRough|Adamant|252,252,,,,|F||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,HiddenPowerFire,Earthquake,GigaDrain|Impish|252,,252,,,|F||||,Fire,,,,]Aegislash||GhostiumZ|StanceChange|SwordsDance,KingsShield,ShadowBall,SacredSword|Modest|252,,4,252,,|F||||]Garchomp||RoseliBerry|SandVeil|Earthquake,SwordsDance,Outrage,Slash|Jolly|252,,48,,,208|M||||]Marowak|MarowakAlola||CursedBody|Rage,StompingTantrum||,,,,,28|M||||","rating":0}
+>p1 team 3, 1, 2
+>p2 team 6, 1, 2
+>p1 move extrasensory
+>p2 move rage
+  log = 
+|t:|1709144402
+|gametype|singles
+|player|p1|Ternimus|170|
+|player|p2|Ternimusalt|265|
+|teamsize|p1|3
+|teamsize|p2|6
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Aegislash, M|
+|poke|p1|Ferrothorn, M|
+|poke|p1|Ho-Oh|
+|poke|p2|Medicham, F|item
+|poke|p2|Mimikyu, F|item
+|poke|p2|Venusaur, F|item
+|poke|p2|Aegislash, F|item
+|poke|p2|Garchomp, M|item
+|poke|p2|Marowak-Alola, M|
+|teampreview|3
+|-fieldstart|Glitch Terrain
+|
+|t:|1709144407
+|start
+|switch|p1a: Ho-Oh|Ho-Oh|353/353
+|switch|p2a: Marowak|Marowak-Alola, M|261/261
+|-ability|p1a: Ho-Oh|Pressure
+|turn|1
+|
+|t:|1709144410
+|move|p1a: Ho-Oh|Extrasensory|p2a: Marowak
+|-hint|Ho-Oh
+|-hint|Ho-Oh
+|-hint|Ho-Oh
+|-hint|Ho-Oh
+|message|STACK LIMIT EXCEEDED
+|message|PLEASE REPORT IN BUG THREAD
+|message|Event: ModifyBoost
+|message|Parent event: ModifySpD
+
+
+TypeError: Cannot read properties of null (reading 'getStat')
+    at Battle.onModifySpD (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:256:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:600:23)
+    at Battle.onModifySpA (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:259:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1697:24)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+
+Additional information:
+  chunk = >p2 move 2
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[20422,46637,55244,35911]}
+>player p1 {"name":"Ternimusalt","avatar":"2","team":"Medicham||Medichamite|PurePower|FakeOut,HighJumpKick,PsychoCut,BulletPunch|Jolly|32,252,,,,224|F||||]Mimikyu||MistySeed|Disguise|ShadowClaw,ShadowSneak,SwordsDance,PlayRough|Adamant|252,252,,,,|F||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,HiddenPowerFire,Earthquake,GigaDrain|Impish|252,,252,,,|F||||,Fire,,,,]Aegislash||GhostiumZ|StanceChange|SwordsDance,KingsShield,ShadowBall,SacredSword|Modest|252,,4,252,,|M||||]Garchomp||RoseliBerry|SandVeil|Earthquake,SwordsDance,Outrage,Slash|Jolly|252,,48,,,208|M||||]Marowak|MarowakAlola||CursedBody|Rage,StompingTantrum||,,,,,28|F||||","rating":0}
+>player p2 {"name":"Ternimus","avatar":"1","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,HyperBeam||,,,,,12|F||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|M|,0,,,,|||]Ho-Oh|||Pressure|CalmMind,Extrasensory||,,,,,20|N|,0,,,,|||","rating":0}
+>p1 team 6, 1, 2
+>p2 team 3, 1, 2
+>p1 move rage
+>p2 move extrasensory
+  log = 
+|t:|1709144626
+|gametype|singles
+|player|p1|Ternimusalt|2|
+|player|p2|Ternimus|1|
+|teamsize|p1|6
+|teamsize|p2|3
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Medicham, F|item
+|poke|p1|Mimikyu, F|item
+|poke|p1|Venusaur, F|item
+|poke|p1|Aegislash, M|item
+|poke|p1|Garchomp, M|item
+|poke|p1|Marowak-Alola, F|
+|poke|p2|Aegislash, F|
+|poke|p2|Ferrothorn, M|
+|poke|p2|Ho-Oh|
+|teampreview|3
+|-fieldstart|Glitch Terrain
+|
+|t:|1709144630
+|start
+|switch|p1a: Marowak|Marowak-Alola, F|261/261
+|switch|p2a: Ho-Oh|Ho-Oh|353/353
+|-ability|p2a: Ho-Oh|Pressure
+|turn|1
+|
+|t:|1709144634
+|move|p2a: Ho-Oh|Extrasensory|p1a: Marowak
+
+
+TypeError: Cannot read properties of null (reading 'getStat')
+    at Battle.onModifySpD (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:258:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:600:23)
+    at Battle.onModifySpA (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:262:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1697:24)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+
+Additional information:
+  chunk = >p2 move 1
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[54286,40837,41415,31676]}
+>player p1 {"name":"Ternimus","avatar":"101","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,HyperBeam||,,,,,12|M||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|F|,0,,,,|||]Ho-Oh|||Pressure|CalmMind,Extrasensory||,,,,,20|N|,0,,,,|||","rating":0}
+>player p2 {"name":"Ternimusalt","avatar":"2","team":"Medicham||Medichamite|PurePower|FakeOut,HighJumpKick,PsychoCut,BulletPunch|Jolly|32,252,,,,224|M||||]Mimikyu||MistySeed|Disguise|ShadowClaw,ShadowSneak,SwordsDance,PlayRough|Adamant|252,252,,,,|M||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,HiddenPowerFire,Earthquake,GigaDrain|Impish|252,,252,,,|M||||,Fire,,,,]Aegislash||GhostiumZ|StanceChange|SwordsDance,KingsShield,ShadowBall,SacredSword|Modest|252,,4,252,,|F||||]Garchomp||RoseliBerry|SandVeil|Earthquake,SwordsDance,Outrage,Slash|Jolly|252,,48,,,208|F||||]Marowak|MarowakAlola||CursedBody|Rage,StompingTantrum||,,,,,28|F||||","rating":0}
+>p1 team 3, 1, 2
+>p2 team 6, 1, 2
+>p1 move extrasensory
+>p2 move rage
+  log = 
+|t:|1709144682
+|gametype|singles
+|player|p1|Ternimus|101|
+|player|p2|Ternimusalt|2|
+|teamsize|p1|3
+|teamsize|p2|6
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Aegislash, M|
+|poke|p1|Ferrothorn, F|
+|poke|p1|Ho-Oh|
+|poke|p2|Medicham, M|item
+|poke|p2|Mimikyu, M|item
+|poke|p2|Venusaur, M|item
+|poke|p2|Aegislash, F|item
+|poke|p2|Garchomp, F|item
+|poke|p2|Marowak-Alola, F|
+|teampreview|3
+|-fieldstart|Glitch Terrain
+|
+|t:|1709144686
+|start
+|switch|p1a: Ho-Oh|Ho-Oh|353/353
+|switch|p2a: Marowak|Marowak-Alola, F|261/261
+|-ability|p1a: Ho-Oh|Pressure
+|turn|1
+|
+|t:|1709144691
+|move|p1a: Ho-Oh|Extrasensory|p2a: Marowak
+|-hint|Ho-Oh Source here
+|-hint|Ho-Oh Target here
+
+
+Error: EPERM: operation not permitted, rename 'C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\config\chat-plugins\the-studio.json.NEW' -> 'C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\config\chat-plugins\the-studio.json'
+
+TypeError: Cannot read properties of null (reading 'name')
+    at Battle.onModifySpD (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:256:22)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at Pokemon.getStat (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\pokemon.ts:600:23)
+    at Battle.onModifySpA (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\data\terrains.ts:262:33)
+    at Battle.runEvent (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle.ts:847:34)
+    at BattleActions.getDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1697:24)
+    at BattleActions.getSpreadDamage (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1163:27)
+    at BattleActions.spreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:1084:17)
+    at BattleActions.hitStepMoveHitLoop (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:933:44)
+    at BattleActions.trySpreadMoveHit (C:\Users\chinm\OneDrive\Documents\GitHub\PokemonShowdown-Reborn\sim\battle-actions.ts:594:79)
+
+Additional information:
+  chunk = >p2 move 2
+  inputLog = 
+>start {"formatid":"gen7battlespotsingles","seed":[30444,49639,14233,26926]}
+>player p1 {"name":"Ternimusalt","avatar":"170","team":"Medicham||Medichamite|PurePower|FakeOut,HighJumpKick,PsychoCut,BulletPunch|Jolly|32,252,,,,224|M||||]Mimikyu||MistySeed|Disguise|ShadowClaw,ShadowSneak,SwordsDance,PlayRough|Adamant|252,252,,,,|M||||]Venusaur||Venusaurite|Overgrow|SludgeBomb,HiddenPowerFire,Earthquake,GigaDrain|Impish|252,,252,,,|F||||,Fire,,,,]Aegislash||GhostiumZ|StanceChange|SwordsDance,KingsShield,ShadowBall,SacredSword|Modest|252,,4,252,,|M||||]Garchomp||RoseliBerry|SandVeil|Earthquake,SwordsDance,Outrage,Slash|Jolly|252,,48,,,208|M||||]Marowak|MarowakAlola||CursedBody|Rage,StompingTantrum||,,,,,28|F||||","rating":0}
+>player p2 {"name":"Ternimus","avatar":"101","team":"Aegislash|||StanceChange|SacredSword,ShadowBall,KingsShield,HyperBeam||,,,,,12|F||||]Ferrothorn|||IronBarbs|Spikes||,,,,,20|F|,0,,,,|||]Ho-Oh|||Pressure|CalmMind,Extrasensory||,,,,,20|N|,0,,,,|||","rating":0}
+>p1 team 6, 1, 2
+>p2 team 3, 1, 2
+>p1 move rage
+>p2 move extrasensory
+  log = 
+|t:|1709144733
+|gametype|singles
+|player|p1|Ternimusalt|170|
+|player|p2|Ternimus|101|
+|teamsize|p1|6
+|teamsize|p2|3
+|gen|7
+|tier|[Gen 7] Battle Spot Singles
+|rule|Species Clause: Limit one of each Pokémon
+|rule|Item Clause: Limit one of each item
+|clearpoke
+|poke|p1|Medicham, M|item
+|poke|p1|Mimikyu, M|item
+|poke|p1|Venusaur, F|item
+|poke|p1|Aegislash, M|item
+|poke|p1|Garchomp, M|item
+|poke|p1|Marowak-Alola, F|
+|poke|p2|Aegislash, F|
+|poke|p2|Ferrothorn, F|
+|poke|p2|Ho-Oh|
+|teampreview|3
+|-fieldstart|Glitch Terrain
+|
+|t:|1709144736
+|start
+|switch|p1a: Marowak|Marowak-Alola, F|261/261
+|switch|p2a: Ho-Oh|Ho-Oh|353/353
+|-ability|p2a: Ho-Oh|Pressure
+|turn|1
+|
+|t:|1709144739
+|move|p2a: Ho-Oh|Extrasensory|p1a: Marowak
+|-hint|Ho-Oh Source here
+

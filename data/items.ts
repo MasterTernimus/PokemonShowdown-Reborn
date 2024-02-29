@@ -1534,6 +1534,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		onTakeItem: false,
 		zMove: "Extreme Evoboost",
 		zMoveFrom: "Last Resort",
+		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Eevee') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Eevee') {
+				return this.chainModify(1.5);
+			}
+		},
 		itemUser: ["Eevee"],
 		num: 805,
 		gen: 7,
@@ -1639,7 +1651,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('swampterrain')) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain'))) {
 				pokemon.useItem();
 			}
 		},
@@ -1648,9 +1660,14 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ def: 1, spd: 1 });
 				pokemon.addVolatile('ingrain');
 			}
+			if (this.field.terrain === 'rockyterrain') {
+				this.boost({ def: 1 });
+				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('swampterrain')) {
+			if (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain')) {
 				pokemon.useItem();
 			}
 		},
@@ -3165,6 +3182,18 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 			status: 'par',
 		},
+		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
@@ -4245,6 +4274,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		onTakeItem: false,
 		zMove: "Catastropika",
 		zMoveFrom: "Volt Tackle",
+		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
+				return this.chainModify(1.5);
+			}
+		},
 		itemUser: ["Pikachu"],
 		num: 794,
 		gen: 7,
@@ -4573,17 +4614,20 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain')) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('glitchterrain')) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('psychicterrain')) {
+			if (this.field.isTerrain('glitchterrain')) {
 				pokemon.useItem();
 			}
 		},
+		onUseItem(item, pokemon) {
+			pokemon.setType('???');
+		},
 		boosts: {
-			spd: 1,
+			def: 1,
 		},
 		num: 882,
 		gen: 7,

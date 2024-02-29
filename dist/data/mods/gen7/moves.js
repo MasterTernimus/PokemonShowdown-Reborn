@@ -678,8 +678,7 @@ const Moves = {
     isNonstandard: null
   },
   multiattack: {
-    inherit: true,
-    basePower: 90
+    inherit: true
   },
   naturalgift: {
     inherit: true,

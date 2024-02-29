@@ -15,7 +15,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (fireMoves.includes(move.id)) {
 					move.types = [move.type, 'Fire'];
 				}
-
 			},
 			onBasePower(basePower, source, target, move) {
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike'];
@@ -241,6 +240,68 @@ export const Terrains: { [k: string]: TerrainData } = {
 			}
 		}
 	},
+	glitchterrain: {
+		name: "Glitch Terrain",
+		condition: {
+			duration: 5,
+			onBasePowerPriority: 6,
+			durationCallback(source, effect) {
+				if (source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onModifyCritRatio(critRatio, source, target) {
+				if (source.getStat('spe', true, true) > target.getStat('spe', true, true))
+					return critRatio + 1;
+			},
+			onModifyMove(move) {
+				const Special = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Ice', 'Dragon', 'Psychic'];
+				const Physical = ['Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', '???'];
+				const nonexistant = ['Dark', 'Steel', 'Fairy'];
+				if (nonexistant.includes(move.type)) {
+					move.type = 'Normal';
+				}
+				if (Special.includes(move.type)) {
+					move.category = 'Special';
+				}
+				if (Physical.includes(move.type)) {
+					move.category = 'Physical';
+				}
+			},
+			onTryHit(target, source, move) {
+				if (target.types.includes('Psychic') && move.type === 'Ghost') { 
+					this.add('-message', 'Ghosts forgot how to beat Psychics!');
+					return null;
+				}
+			},
+			onEffectiveness(typeMod, target, type, move) {
+				if (move.type === 'Bug' && type === 'Poison') {
+					return 1;
+				}
+				if (move.type === 'Poison' && type === 'Bug') {
+					return 1;
+				}
+				if (move.type === 'Ice' && type === 'Fire') {
+					return 0;
+				}
+				if (move.type === 'Dragon') {
+					return 0;
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				if (move.type === 'Psychic') {
+					return this.chainModify(4915, 4096);
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Glitch Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Glitch Terrain');
+			},
+		}
+	},
 	icyterrain: {
 		name: "Icy Terrain",
 		condition: {
@@ -447,6 +508,59 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	rockyterrain: {
+		name: "Rocky Terrain",
+		condition: {
+			duration: 5,
+			onBasePowerPriority: 6,
+			onModifyMove(move) {
+				const rockymoves = ['bulldoze', 'earthquake', 'magnitude', 'rockclimb', 'strength'];
+				if (rockymoves.includes(move.id)) {
+					move.types = [move.type, 'Rock'];
+				}
+			},
+			onTryAddVolatile(status, pokemon) {
+				if (status.id === 'flinch' && pokemon.boosts.def > 0) {
+					return null;
+				}
+			},
+			onTryHit(pokemon, target, move) {
+				if ((target.volatiles['substitute'] || target.boosts.def > 0) && move.flags['bullet']) {
+					this.add('-message', 'The bullet-like move rebounded!');
+					return null;
+				}
+			},
+			onFlinch(pokemon) {
+				if (!pokemon.hasAbility('steadfast') && !pokemon.hasAbility('sturdy')) {
+					this.add('-message', 'The flinch caused the pokemon to smash into the rocks!');
+					pokemon.damage(pokemon.baseMaxhp / 4, pokemon);
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const rockymoves = ['bulldoze', 'earthquake', 'magnitude', 'rockclimb', 'strength', 'accelerock'];
+				if (move.type === 'Rock') {
+					modifier *= 1.5;
+				}
+				if (move.id === 'rocksmash') {
+					modifier *= 2;
+				}
+				if (rockymoves.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				if (!move.lastHit && move.category === 'Physical' && !source.hasAbility('rockhead')) {
+					this.add('-message', 'The pokemon kept going and crashed into the rocks!')
+					this.damage(source.baseMaxhp / 8, source, source);
+				} 
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Rocky Terrain');
+			}
+		}
+	},
 	swampterrain: {
 		name: "Swamp Terrain",
 		condition: {
@@ -525,7 +639,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onEffectiveness(typeMod, target, type, move) {
 				const types = move.types !== undefined ? move.types : [move.type];
-				if (type === 'Water' && types.includes('Water'))
+				if (type === 'Water' || types.includes('Water'))
 					return 0 + this.dex.getEffectiveness(move.type, type);
 			},
 			onBasePower(basePower, source, target, move) {
