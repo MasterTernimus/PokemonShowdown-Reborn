@@ -576,8 +576,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.terrainState.Tchanges?.includes('raindance')) {
 				this.field.setTerrain('rainbowterrain', source, effect);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('raindance')) {
-				this.field.terrainState.Tchanges?.push('raindance');
+			else if (!this.field.terrainState.Tchanges?.includes('sunnyday')) {
+				this.field.terrainState.Tchanges?.push('sunnyday');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
