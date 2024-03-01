@@ -516,8 +516,12 @@ export class BattleActions {
 		}
 
 		if (!moveResult) {
+			move.success = move.success === undefined ? false : true;
 			this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return false;
+		}
+		else {
+			move.success = true;
 		}
 
 		if (

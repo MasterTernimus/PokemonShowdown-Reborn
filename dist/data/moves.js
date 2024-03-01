@@ -2298,6 +2298,8 @@ const Moves = {
         newType = "Ice";
       } else if (this.field.terrain === "glitchterrain") {
         newType = "???";
+      } else if (this.field.terrain === "rockyterrain") {
+        newType = "Rock";
       }
       if (target.getTypes().join() === newType || !target.setType(newType))
         return false;
@@ -13544,6 +13546,8 @@ const Moves = {
         move = "icebeam";
       } else if (this.field.terrain === "glitchterrain") {
         move = "metronome";
+      } else if (this.field.terrain === "rockyterrain") {
+        move = "rocksmash";
       }
       this.actions.useMove(move, pokemon, target);
       return null;
@@ -16350,6 +16354,13 @@ const Moves = {
     pp: 20,
     priority: 0,
     flags: { snatch: 1, metronome: 1 },
+    onModifyMove(move) {
+      if (this.field.terrain === "rockyterrain") {
+        move.boosts = {
+          spe: 3
+        };
+      }
+    },
     boosts: {
       spe: 2
     },
@@ -16361,7 +16372,7 @@ const Moves = {
   },
   rockslide: {
     num: 157,
-    accuracy: 90,
+    accuracy: 50,
     basePower: 75,
     category: "Physical",
     name: "Rock Slide",
@@ -17126,6 +17137,11 @@ const Moves = {
         move.secondaries.push({
           chance: 30,
           status: "frz"
+        });
+      } else if (this.field.terrain === "rockyterrain") {
+        move.secondaries.push({
+          chance: 30,
+          volatileStatus: "flinch"
         });
       }
     },
@@ -19221,7 +19237,11 @@ const Moves = {
         if (pokemon.hasItem("heavydutyboots"))
           return;
         const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove("stealthrock")), -6, 6);
-        this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+        if (this.field.terrain === "rockyterrain") {
+          this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+        } else {
+          this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+        }
       }
     },
     secondary: null,

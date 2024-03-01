@@ -1708,7 +1708,7 @@ const Items = {
       basePower: 10
     },
     onStart(pokemon) {
-      if (!pokemon.ignoringItem() && this.field.isTerrain("swampterrain")) {
+      if (!pokemon.ignoringItem() && (this.field.isTerrain("swampterrain") || this.field.isTerrain("rockyterrain"))) {
         pokemon.useItem();
       }
     },
@@ -1717,9 +1717,14 @@ const Items = {
         this.boost({ def: 1, spd: 1 });
         pokemon.addVolatile("ingrain");
       }
+      if (this.field.terrain === "rockyterrain") {
+        this.boost({ def: 1 });
+        const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove("stealthrock")), -6, 6);
+        this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+      }
     },
     onTerrainChange(pokemon) {
-      if (this.field.isTerrain("swampterrain")) {
+      if (this.field.isTerrain("swampterrain") || this.field.isTerrain("rockyterrain")) {
         pokemon.useItem();
       }
     },

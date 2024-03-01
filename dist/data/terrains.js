@@ -534,25 +534,46 @@ const Terrains = {
     condition: {
       duration: 5,
       onBasePowerPriority: 6,
+      onModifyMove(move) {
+        const rockymoves = ["bulldoze", "earthquake", "magnitude", "rockclimb", "strength"];
+        if (rockymoves.includes(move.id)) {
+          move.types = [move.type, "Rock"];
+        }
+      },
       onTryAddVolatile(status, pokemon) {
         if (status.id === "flinch" && pokemon.boosts.def > 0) {
           return null;
         }
       },
-      onTryHit(pokemon, target, move) {
+      onTryHit(target, source, move) {
         if ((target.volatiles["substitute"] || target.boosts.def > 0) && move.flags["bullet"]) {
           this.add("-message", "The bullet-like move rebounded!");
           return null;
         }
       },
+      onFlinch(pokemon) {
+        if (!pokemon.hasAbility("steadfast") && !pokemon.hasAbility("sturdy")) {
+          this.add("-message", "The flinch caused the pokemon to smash into the rocks!");
+          this.damage(pokemon.baseMaxhp / 4, pokemon);
+        }
+      },
       onBasePower(basePower, source, target, move) {
         let modifier = 1;
+        const rockymoves = ["bulldoze", "earthquake", "magnitude", "rockclimb", "strength", "accelerock"];
         if (move.type === "Rock") {
           modifier *= 1.5;
         }
+        if (move.id === "rocksmash") {
+          modifier *= 2;
+        }
+        if (rockymoves.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        return this.chainModify(modifier);
       },
       onAfterMove(source, target, move) {
-        if (!move.lastHit && move.category === "Physical" && !source.hasAbility("rockhead")) {
+        if (move.success === false && move.category === "Physical" && !source.hasAbility("rockhead")) {
+          this.add("-message", "The pokemon kept going and crashed into the rocks!");
           this.damage(source.baseMaxhp / 8, source, source);
         }
       },
