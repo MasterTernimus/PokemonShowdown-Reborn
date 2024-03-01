@@ -468,8 +468,11 @@ class BattleActions {
       this.battle.faint(pokemon, pokemon, move);
     }
     if (!moveResult) {
+      move.success = move.success === void 0 ? false : true;
       this.battle.singleEvent("MoveFail", move, null, target, pokemon, move);
       return false;
+    } else {
+      move.success = true;
     }
     if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility("sheerforce")) && !move.flags["futuremove"]) {
       const originalHp = pokemon.hp;

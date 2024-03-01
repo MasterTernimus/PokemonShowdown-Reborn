@@ -165,7 +165,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	damage?: number | 'level' | false | null;
 	contestType?: string;
 	noPPBoosts?: boolean;
-
+	success?: boolean;
 	// Z-move data
 	// -----------
 	/**

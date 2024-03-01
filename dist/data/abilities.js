@@ -2536,6 +2536,9 @@ const Abilities = {
   },
   longreach: {
     onModifyMove(move) {
+      if (this.field.terrain === "rockyterrain") {
+        move.accuracy = 90;
+      }
       delete move.flags["contact"];
     },
     flags: {},

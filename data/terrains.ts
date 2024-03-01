@@ -524,7 +524,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return null;
 				}
 			},
-			onTryHit(pokemon, target, move) {
+			onTryHit(target, source, move) {
 				if ((target.volatiles['substitute'] || target.boosts.def > 0) && move.flags['bullet']) {
 					this.add('-message', 'The bullet-like move rebounded!');
 					return null;
@@ -533,7 +533,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFlinch(pokemon) {
 				if (!pokemon.hasAbility('steadfast') && !pokemon.hasAbility('sturdy')) {
 					this.add('-message', 'The flinch caused the pokemon to smash into the rocks!');
-					pokemon.damage(pokemon.baseMaxhp / 4, pokemon);
+					this.damage(pokemon.baseMaxhp / 4, pokemon);
 				}
 			},
 			onBasePower(basePower, source, target, move) {
@@ -551,7 +551,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (!move.lastHit && move.category === 'Physical' && !source.hasAbility('rockhead')) {
+				if (move.success === false && move.category === 'Physical' && !source.hasAbility('rockhead')) {
 					this.add('-message', 'The pokemon kept going and crashed into the rocks!')
 					this.damage(source.baseMaxhp / 8, source, source);
 				} 
