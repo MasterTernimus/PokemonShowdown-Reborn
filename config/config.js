@@ -61,7 +61,13 @@ exports.wsdeflate = {
  *  something.
  * @type {{port: number, options: {key: string, cert: string}} | null}
  */
-exports.ssl = null;
+exports.ssl = {
+	port: 8000,
+	options: {
+		key: '/opt/bitnami/apache/conf/bitnami/certs/server.key',
+		cert: '/opt/bitnami/apache/conf/bitnami/certs/server.crt',
+	},
+};
 
 /*
 // example:
