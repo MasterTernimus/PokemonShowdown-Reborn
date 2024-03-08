@@ -276,7 +276,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		super();
 		if (!config.bindaddress) config.bindaddress = '0.0.0.0';
 
-		this.isTrustedProxyIp = config.proxyip ? IPTools.checker(config.proxyip) : () => false;
+		this.isTrustedProxyIp = config.proxyip ? IPTools.checker(config.proxyip) : () => true;
 
 		// Static HTTP server
 
