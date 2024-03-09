@@ -270,7 +270,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onTryHit(target, source, move) {
-				if (target.types.includes('Psychic') && move.type === 'Ghost') { 
+				if (target.types.includes('Psychic') && move.type === 'Ghost') {
 					this.add('-message', 'Ghosts forgot how to beat Psychics!');
 					return null;
 				}
@@ -444,9 +444,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldStart() {
 				if (this.field.terrainState[1].id === 'underwaterterrain') {
 					for (const pokemon of this.getAllActive()) {
-						if (!(pokemon.types.includes('Steel') || pokemon.types.includes('Poison')) || pokemon.isSemiInvulnerable()){
+						if (!(pokemon.types.includes('Steel') || pokemon.types.includes('Poison')) || pokemon.isSemiInvulnerable()) {
 							pokemon.faint();
-						} 
+						}
 					}
 				}
 				this.add('-fieldstart', 'Murkwater Surface Terrain');
@@ -554,10 +554,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.success === false && move.category === 'Physical' && !source.hasAbility('rockhead')) {
 					this.add('-message', 'The pokemon kept going and crashed into the rocks!')
 					this.damage(source.baseMaxhp / 8, source, source);
-				} 
+				}
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Rocky Terrain');
+			},
+			onFieldEnd(){
+				this.add('-fieldend', 'Rocky Terrain');
 			}
 		}
 	},
