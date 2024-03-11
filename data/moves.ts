@@ -19978,7 +19978,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	tackle: {
 		num: 33,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Special",
 		name: "Tackle",
 		pp: 15,
