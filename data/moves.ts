@@ -467,7 +467,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (this.field.terrain === 'mistyterrain' || this.field.terrain === 'swampterrain' || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
 					this.heal(pokemon.baseMaxhp / 8);
 				}
-				if (this.field.terrain === 'corrosivemistterrain' && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel')))
+				if (this.field.terrain === 'corrosivemistterrain' && (!(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))))
 					this.damage(pokemon.baseMaxhp / 16);
 				else
 					this.heal(pokemon.baseMaxhp / 16);
