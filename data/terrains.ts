@@ -461,11 +461,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			duration: 5,
 			onBasePowerPriority: 6,
-			durationCallback(source, effect) {
-				if (source.hasItem('terrainextender')) {
+			durationCallback(target, source, effect) {
+				if (source.hasItem('terrainextender') && (effect?.name !== 'sunnyday' && effect?.name !== 'raindance')) {
 					return 7;
 				}
-				return 4;
+				else if (effect?.name !== 'sunnyday' && effect?.name !== 'raindance') {
+					return effect?.duration !== undefined ? effect.duration : 5;
+				}
+				else
+					return 4;
 			},
 			onModifyMove(move, pokemon) {
 				if (move.secondaries && move.id !== 'secretpower' && !pokemon.hasAbility('serenegrace')) {
