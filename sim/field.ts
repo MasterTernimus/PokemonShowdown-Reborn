@@ -29,7 +29,7 @@ export class Field {
 		this.weather = '';
 		this.weatherState = { id: '' };
 		this.terrain = '';
-		this.terrainState = { id: '' };
+		this.terrainState = { id: '', Tchanges: [] };
 		this.terrainStack = [];
 		this.pseudoWeather = {};
 	}
