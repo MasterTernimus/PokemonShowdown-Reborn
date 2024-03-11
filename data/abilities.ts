@@ -557,6 +557,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 			this.eachEvent('WeatherChange', this.effect);
 		},
+		onResidual(pokemon) {
+			if (this.field.terrain === 'rainbowterrain') {
+				let stats: BoostID[] = [];
+				const boost: SparseBoostsTable = {};
+				let statPlus: BoostID;
+				for (statPlus in pokemon.boosts) {
+					if (pokemon.boosts[statPlus] < 6) {
+						stats.push(statPlus);
+					}
+				}
+				let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) boost[randomStat] = 1;
+			}
+		},
 		onEnd(pokemon) {
 			this.eachEvent('WeatherChange', this.effect);
 		},
