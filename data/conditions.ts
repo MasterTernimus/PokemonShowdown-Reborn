@@ -492,6 +492,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (this.field.terrainState.Tchanges?.includes('sunnyday')) {
 				this.field.setTerrain('rainbowterrain', source, effect);
+				this.field.setDuration(this.field.weatherState.duration);
 			}
 			else if (!this.field.terrainState.Tchanges?.includes('raindance')) {
 				this.field.terrainState.Tchanges?.push('raindance');
@@ -513,7 +514,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.field.terrainState.Tchanges = this.field.terrainState.Tchanges?.filter(item => item !== 'raindance');
 			}
 			this.add('-weather', 'none');
-		},
+		}
 	},
 	primordialsea: {
 		name: 'PrimordialSea',
@@ -575,6 +576,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(battle, source, effect) {
 			if (this.field.terrainState.Tchanges?.includes('raindance')) {
 				this.field.setTerrain('rainbowterrain', source, effect);
+				this.field.setDuration(this.field.weatherState.duration);
 			}
 			else if (!this.field.terrainState.Tchanges?.includes('sunnyday')) {
 				this.field.terrainState.Tchanges?.push('sunnyday');
