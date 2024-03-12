@@ -207,6 +207,10 @@ export class Field {
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 	}
 
+	setDuration(duration: number) {
+		this.terrainState.duration = duration;
+	}
+
 	clearTerrain() {
 		if (!this.terrain) return false;
 		const prevTerrain = this.getTerrain();
