@@ -1,6 +1,6 @@
 {
-  "name": "pokemon-showdown",
-  "description": "The server for the Pokémon Showdown battle simulator",
+  "name": "PokemonShowdown-Reborn",
+  "description": "The server for the Pokemon Showdown simulator for Pokemon Reborn",
   "version": "0.11.9",
   "main": "dist/sim/index.js",
   "dependencies": {
@@ -45,7 +45,7 @@
     "full-test-ci": "eslint --no-error-on-unmatched-pattern ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
     "postinstall": "npm run build postinstall"
   },
-  "bin": "./pokemon-showdown",
+  "bin": "./PokemonShowdown-Reborn",
   "homepage": "http://pokemonshowdown.com",
   "repository": {
     "type": "git",
