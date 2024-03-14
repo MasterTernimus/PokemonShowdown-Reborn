@@ -23,7 +23,7 @@
             "type": "node",
             "request": "launch",
             "name": "Parse input log (paste in terminal)",
-            "program": "${workspaceRoot}/pokemon-showdown",
+            "program": "${workspaceRoot}/PokemonShowdown-Reborn",
             "args": ["simulate-battle", "-R"],
             "console": "integratedTerminal"
         },

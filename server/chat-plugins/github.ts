@@ -7,7 +7,7 @@
 import {FS, Utils} from '../../lib';
 
 const STAFF_REPOS = Config.staffrepos || [
-	'pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex', 'pokemon-showdown-loginserver',
+	'PokemonShowdown-Reborn', 'PokemonShowdown-Client', 'Pokemon-Showdown-Dex', 'pokemon-showdown-loginserver',
 ];
 const COOLDOWN = 10 * 60 * 1000;
 
@@ -83,9 +83,9 @@ export const GitHub = new class {
 	}
 	private getRepoName(repo: string) {
 		switch (repo) {
-		case 'pokemon-showdown':
+		case 'PokemonShowdown-Reborn':
 			return 'server';
-		case 'pokemon-showdown-client':
+		case 'PokemonShowdown-Client':
 			return 'client';
 		case 'Pokemon-Showdown-Dex':
 			return 'dex';
