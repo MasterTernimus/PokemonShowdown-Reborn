@@ -5672,7 +5672,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onAfterMove(source, target, move) {
 			if (this.field.terrain === 'burningterrain' || this.field.terrain === 'rainbowterrain') {
-				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : console.log("WHAT THE FUCK");
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
 			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
 				this.field.setTerrain('rainbowterrain');
@@ -7932,7 +7932,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onAfterMove(source) {
 			if (this.field.terrain === 'burningterrain' || this.field.terrain === 'swampterrain') {
-				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : console.log("WHAT THE FUCK");
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
 			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
 				this.field.setTerrain('swampterrain');
@@ -21795,7 +21795,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onAfterMove(source) {
 			if (this.field.terrain === 'swampterrain' || this.field.terrain === 'rainbowterrain') {
-				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : console.log("WHAT THE FUCK");
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
 			if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
 				this.field.setTerrain('swampterrain');
