@@ -462,12 +462,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 5,
 			onBasePowerPriority: 6,
 			durationCallback(target, source, effect) {
-				this.hint("This got called yay");
 				if (source.hasItem('terrainextender') && (effect?.name !== 'sunnyday' && effect?.name !== 'raindance')) {
 					return 7;
 				}
 				else if (effect?.name !== 'sunnyday' && effect?.name !== 'raindance') {
-					this.hint("Hmmm");
 					return effect?.duration !== undefined ? effect.duration : 5;
 				}
 				else

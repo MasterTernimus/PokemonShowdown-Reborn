@@ -490,11 +490,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			if (this.field.terrainState.Tchanges?.includes('sunnyday')) {
+			if (this.field.terrainState.Tchanges?.includes('sunnyday') && !this.field.isTerrain('rainbowterrain')) {
 				this.field.setTerrain('rainbowterrain', source, effect);
-				this.field.setDuration(this.field.weatherState.duration);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('raindance')) {
+			else if (this.field.isTerrain('rainbowterrain') && this.field.terrainState.Tchanges?.includes('sunnyday')) {
+				this.field.setDuration(this.effectState.duration);
+			}
+			if (!this.field.terrainState.Tchanges?.includes('raindance')) {
 				this.field.terrainState.Tchanges?.push('raindance');
 			}
 			if (effect?.effectType === 'Ability') {
@@ -574,11 +576,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(battle, source, effect) {
-			if (this.field.terrainState.Tchanges?.includes('raindance')) {
+			if (this.field.terrainState.Tchanges?.includes('raindance') && !this.field.isTerrain('rainbowterrain')) {
 				this.field.setTerrain('rainbowterrain', source, effect);
-				this.field.setDuration(this.field.weatherState.duration);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('sunnyday')) {
+			else if (this.field.isTerrain('rainbowterrain') && this.field.terrainState.Tchanges?.includes('raindance')) {
+				this.field.setDuration(this.effectState.duration);
+			}
+			if (!this.field.terrainState.Tchanges?.includes('sunnyday')) {
 				this.field.terrainState.Tchanges?.push('sunnyday');
 			}
 			if (effect?.effectType === 'Ability') {
