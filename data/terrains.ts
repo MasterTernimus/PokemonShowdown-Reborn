@@ -49,7 +49,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onResidual(pokemon) {
 				const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil'];
 				const weak = ['leafguard', 'fluffy', 'grasspelt', 'icebody'];
-				if (!immune.includes(pokemon.ability) || !pokemon.volatiles['aquaring']) {
+				if (!immune.includes(pokemon.ability) || !pokemon.volatiles['aquaring'] || !pokemon.hasType('Fire')) {
 					let typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', pokemon.types), -6, 6);
 					let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
 					if (weak.includes(pokemon.ability)) {
