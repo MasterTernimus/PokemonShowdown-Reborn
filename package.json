@@ -45,7 +45,7 @@
     "full-test-ci": "eslint --no-error-on-unmatched-pattern ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
     "postinstall": "npm run build postinstall"
   },
-  "bin": "./PokemonShowdown-Reborn",
+  "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
   "repository": {
     "type": "git",

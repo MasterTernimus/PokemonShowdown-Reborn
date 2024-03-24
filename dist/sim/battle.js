@@ -2445,13 +2445,6 @@ class Battle {
     return false;
   }
   go() {
-    if (this.turn === 0) {
-      if (this.format.gameType === "singles") {
-        this.field.startTerrain("rockyterrain");
-      } else {
-        this.field.startTerrain("rockyterrain");
-      }
-    }
     this.add("");
     this.add("t:", Math.floor(Date.now() / 1e3));
     if (this.requestState)

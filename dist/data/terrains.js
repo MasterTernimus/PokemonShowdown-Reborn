@@ -72,7 +72,7 @@ const Terrains = {
       onResidual(pokemon) {
         const immune = ["flamebody", "flareboost", "flashfire", "heatproof", "magmaarmor", "waterbubble", "waterveil"];
         const weak = ["leafguard", "fluffy", "grasspelt", "icebody"];
-        if (!immune.includes(pokemon.ability) || !pokemon.volatiles["aquaring"]) {
+        if (!immune.includes(pokemon.ability) || !pokemon.volatiles["aquaring"] || !pokemon.hasType("Fire")) {
           let typeMod = this.clampIntRange(this.dex.getEffectiveness("Fire", pokemon.types), -6, 6);
           let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
           if (weak.includes(pokemon.ability)) {
@@ -480,11 +480,13 @@ const Terrains = {
     condition: {
       duration: 5,
       onBasePowerPriority: 6,
-      durationCallback(source, effect) {
-        if (source.hasItem("terrainextender")) {
+      durationCallback(target, source, effect) {
+        if (source.hasItem("terrainextender") && (effect?.name !== "sunnyday" && effect?.name !== "raindance")) {
           return 7;
-        }
-        return 4;
+        } else if (effect?.name !== "sunnyday" && effect?.name !== "raindance") {
+          return effect?.duration !== void 0 ? effect.duration : 5;
+        } else
+          return 4;
       },
       onModifyMove(move, pokemon) {
         if (move.secondaries && move.id !== "secretpower" && !pokemon.hasAbility("serenegrace")) {
@@ -579,6 +581,9 @@ const Terrains = {
       },
       onFieldStart() {
         this.add("-fieldstart", "Rocky Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Rocky Terrain");
       }
     }
   },
