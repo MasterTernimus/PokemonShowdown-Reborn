@@ -574,6 +574,21 @@ const Abilities = {
       }
       this.eachEvent("WeatherChange", this.effect);
     },
+    onResidual(pokemon) {
+      if (this.field.terrain === "rainbowterrain") {
+        let stats = [];
+        const boost = {};
+        let statPlus;
+        for (statPlus in pokemon.boosts) {
+          if (pokemon.boosts[statPlus] < 6) {
+            stats.push(statPlus);
+          }
+        }
+        let randomStat = stats.length ? this.sample(stats) : void 0;
+        if (randomStat)
+          boost[randomStat] = 1;
+      }
+    },
     onEnd(pokemon) {
       this.eachEvent("WeatherChange", this.effect);
     },

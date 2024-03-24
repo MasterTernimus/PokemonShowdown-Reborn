@@ -5805,7 +5805,7 @@ const Moves = {
     },
     onAfterMove(source, target, move) {
       if (this.field.terrain === "burningterrain" || this.field.terrain === "rainbowterrain") {
-        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : console.log("WHAT THE FUCK");
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
       }
       if (this.field.terrainState.Tchanges?.includes("waterpledge")) {
         this.field.setTerrain("rainbowterrain");
@@ -8096,7 +8096,7 @@ const Moves = {
     },
     onAfterMove(source) {
       if (this.field.terrain === "burningterrain" || this.field.terrain === "swampterrain") {
-        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : console.log("WHAT THE FUCK");
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
       }
       if (this.field.terrainState.Tchanges?.includes("waterpledge")) {
         this.field.setTerrain("swampterrain");
@@ -8276,7 +8276,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (this.field.terrain === "psychicterrain")
+        if (this.field.terrain === "psychicterrain" || source.hasItem("terrainextender"))
           return 8;
         if (source?.hasAbility("persistent")) {
           this.add("-activate", source, "ability: Persistent", "[move] Gravity");
@@ -11424,7 +11424,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (this.field.terrain === "psychicterrain")
+        if (this.field.terrain === "psychicterrain" || source.hasItem("terrainextender"))
           return 8;
         if (source?.hasAbility("persistent")) {
           this.add("-activate", source, "ability: Persistent", "[move] Magic Room");
@@ -13062,10 +13062,10 @@ const Moves = {
         return this.chainModify(modifier);
       },
       onAfterMove(target, source, move) {
-        const terrainChangeMoves = ["smog", "clearmsmog", "poisongas"];
+        const terrainChangeMoves = ["smog", "clearmsmog", "poisongas", "aciddownpour"];
         const terrainEndMoves = ["defog", "gust", "hurricane", "razorwind", "tailwind", "twister", "whirlwind", "supersonicskystrike"];
         if (terrainChangeMoves.includes(move.id)) {
-          if (this.field.terrainState.Tchanges?.includes("corrosivemistterrain")) {
+          if (this.field.terrainState.Tchanges?.includes("corrosivemistterrain") || move.id === "aciddownpour") {
             this.field.changeTerrain("corrosivemistterrain");
           } else
             this.field.terrainState.Tchanges?.push("corrosivemistterain");
@@ -16372,7 +16372,7 @@ const Moves = {
   },
   rockslide: {
     num: 157,
-    accuracy: 50,
+    accuracy: 90,
     basePower: 75,
     category: "Physical",
     name: "Rock Slide",
@@ -20323,15 +20323,15 @@ const Moves = {
   tackle: {
     num: 33,
     accuracy: 100,
-    basePower: 40,
-    category: "Physical",
+    basePower: 60,
+    category: "Special",
     name: "Tackle",
-    pp: 35,
+    pp: 15,
     priority: 0,
-    flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+    flags: { protect: 1, mirror: 1, metronome: 1 },
     secondary: null,
     target: "normal",
-    type: "Normal",
+    type: "Fairy",
     contestType: "Tough"
   },
   tailglow: {
@@ -21554,7 +21554,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (this.field.terrain === "psychicterrain")
+        if (this.field.terrain === "psychicterrain" || source.hasItem("terrainextender"))
           return 8;
         if (source?.hasAbility("persistent")) {
           this.add("-activate", source, "ability: Persistent", "[move] Trick Room");
@@ -22161,7 +22161,7 @@ const Moves = {
     },
     onAfterMove(source) {
       if (this.field.terrain === "swampterrain" || this.field.terrain === "rainbowterrain") {
-        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : console.log("WHAT THE FUCK");
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
       }
       if (this.field.terrainState.Tchanges?.includes("grasspledge")) {
         this.field.setTerrain("swampterrain");
@@ -22598,7 +22598,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (this.field.terrain === "psychicterrain")
+        if (this.field.terrain === "psychicterrain" || source.hasItem("terrainextender"))
           return 8;
         if (source?.hasAbility("persistent")) {
           this.add("-activate", source, "ability: Persistent", "[move] Wonder Room");

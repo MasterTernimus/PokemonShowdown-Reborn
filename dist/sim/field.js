@@ -39,7 +39,7 @@ class Field {
     this.weather = "";
     this.weatherState = { id: "" };
     this.terrain = "";
-    this.terrainState = { id: "" };
+    this.terrainState = { id: "", Tchanges: [] };
     this.terrainStack = [];
     this.pseudoWeather = {};
   }
@@ -218,6 +218,9 @@ class Field {
     this.battle.add("-fieldstart", status.name);
     this.terrainStack.unshift(this.terrainState);
     this.battle.eachEvent("TerrainChange", sourceEffect);
+  }
+  setDuration(duration) {
+    this.terrainState.duration = duration;
   }
   clearTerrain() {
     if (!this.terrain)

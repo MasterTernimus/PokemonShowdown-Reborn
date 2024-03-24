@@ -38,7 +38,6 @@ var http = __toESM(require("http"));
 var https = __toESM(require("https"));
 var path = __toESM(require("path"));
 var import_lib = require("../lib");
-var import_ip_tools = require("./ip-tools");
 var import_battle = require("../sim/battle");
 /**
  * Connections
@@ -272,7 +271,7 @@ class ServerStream extends import_lib.Streams.ObjectReadWriteStream {
     };
     if (!config.bindaddress)
       config.bindaddress = "0.0.0.0";
-    this.isTrustedProxyIp = config.proxyip ? import_ip_tools.IPTools.checker(config.proxyip) : () => false;
+    this.isTrustedProxyIp = () => true;
     this.server = http.createServer();
     this.serverSsl = null;
     if (config.ssl) {
