@@ -1,5 +1,4 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
-
 export const Moves: { [moveid: string]: MoveData } = {
 	"10000000voltthunderbolt": {
 		num: 719,
@@ -4770,7 +4769,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				let modifier = 1;
-				let electrified = ['explosion', 'hurricane', 'muddywater', 'selfdestruct', 'smackdown', 'thousandarrows', 'surf'];
+				let electrified = ['explosion', 'hurricane', 'muddywater', 'selfdestruct', 'smackdown', 'thousandarrows', 'surf', 'psyblade', 'overdrive'];
 				if ((move.type === 'Electric' || move.types?.includes('Electric')) && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					modifier *= 1.5;
@@ -12801,7 +12800,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (strMoves.includes(move.id)) {
 					modifier *= 1.5;
 				}
-				
+				if (move.id === 'mistyexplosion') {
+					modifier *= 2;
+				}
 				if ((terrainMoves.includes(move.id) && this.field.terrainState.Tchanges?.includes('corrosivemistterrain')) || move.id === 'aciddownpour') {
 					modifier *= 1.3;
 				}

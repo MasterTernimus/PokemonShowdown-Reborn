@@ -27,9 +27,9 @@ export class Field {
 		this.id = '';
 
 		this.weather = '';
-		this.weatherState = { id: '' };
+		this.weatherState = {id: ''};
 		this.terrain = '';
-		this.terrainState = { id: '', Tchanges: [] };
+		this.terrainState = {id: '', Tchanges: []};
 		this.terrainStack = [];
 		this.pseudoWeather = {};
 	}
@@ -54,7 +54,7 @@ export class Field {
 			}
 		}
 		if (this.terrain === 'underwaterterrain') {
-			this.battle.add('-message', 'The weather was annihilated by the crushing weight of the ocean!')
+			this.battle.add('-message', 'The weather was annihilated by the crushing weight of the ocean!');
 			return false;
 		}
 		if (source) {
@@ -73,7 +73,7 @@ export class Field {
 		const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
-		this.weatherState = { id: status.id };
+		this.weatherState = {id: status.id};
 		if (source) {
 			this.weatherState.source = source;
 			this.weatherState.sourceSlot = source.getSlot();
@@ -99,7 +99,7 @@ export class Field {
 		const prevWeather = this.getWeather();
 		this.battle.singleEvent('FieldEnd', prevWeather, this.weatherState, this);
 		this.weather = '';
-		this.weatherState = { id: '' };
+		this.weatherState = {id: ''};
 		this.battle.eachEvent('WeatherChange');
 		return true;
 	}
@@ -154,7 +154,7 @@ export class Field {
 
 		if (this.terrain === status.id) return false;
 		if (this.terrain === 'underwaterterrain') {
-			this.battle.add('-message', 'The field was annihilated by the crushing weight of the ocean!')
+			this.battle.add('-message', 'The field was annihilated by the crushing weight of the ocean!');
 			return false;
 		}
 		if (this.terrain !== '') {
@@ -220,8 +220,7 @@ export class Field {
 		for (const terrainState of this.terrainStack) {
 			if (terrainState.duration <= (this.battle.turn - this.terrainState.turn)) {
 				this.terrainStack.shift();
-			}
-			else {
+			} else {
 				this.terrainStack[0].duration -= (this.battle.turn - this.terrainState.turn);
 				isterrain = true;
 				break;
@@ -231,10 +230,9 @@ export class Field {
 			this.terrain = this.terrainStack[0].id;
 			this.terrainState = this.terrainStack[0];
 			this.battle.add('-fieldstart', this.terrain);
-		}
-		else {
+		} else {
 			this.terrain = '';
-			this.terrainState = { id: '' };
+			this.terrainState = {id: ''};
 		}
 		this.battle.eachEvent('TerrainChange');
 		return true;
