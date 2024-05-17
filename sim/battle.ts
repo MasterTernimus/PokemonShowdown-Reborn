@@ -2779,7 +2779,7 @@ export class Battle {
 			this.queue.addChoice({choice: 'residual'});
 			this.midTurn = true;
 		}
-
+		this.field.setTerrain('electricterrain');
 		let action;
 		while ((action = this.queue.shift())) {
 			this.runAction(action);
