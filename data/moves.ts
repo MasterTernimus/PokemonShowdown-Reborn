@@ -535,7 +535,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	armthrust: {
 		num: 292,
 		accuracy: 100,
-		basePower: 15,
+		basePower: 20,
 		category: "Physical",
 		name: "Arm Thrust",
 		pp: 20,
@@ -1069,7 +1069,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	barrage: {
 		num: 140,
 		accuracy: 85,
-		basePower: 15,
+		basePower: 25,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Barrage",
@@ -1355,7 +1355,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	bind: {
 		num: 20,
 		accuracy: 85,
-		basePower: 15,
+		basePower: 35,
 		category: "Physical",
 		name: "Bind",
 		pp: 20,
@@ -2868,7 +2868,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	constrict: {
 		num: 132,
 		accuracy: 100,
-		basePower: 10,
+		basePower: 30,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Constrict",
@@ -10331,7 +10331,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	kinesis: {
 		num: 134,
-		accuracy: 80,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		isNonstandard: "Past",
@@ -10471,7 +10471,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	landswrath: {
 		num: 616,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 110,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Land's Wrath",
@@ -11499,7 +11499,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		isNonstandard: "Past",
 		name: "Mat Block",
 		pp: 10,
-		priority: 0,
+		priority: 1,
 		flags: {snatch: 1, nonsky: 1, noassist: 1, failcopycat: 1},
 		stallingMove: true,
 		sideCondition: 'matblock',
@@ -12141,8 +12141,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	megapunch: {
 		num: 5,
-		accuracy: 85,
-		basePower: 80,
+		accuracy: 90,
+		basePower: 90,
 		category: "Physical",
 		name: "Mega Punch",
 		pp: 20,
@@ -14277,7 +14277,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	poisonsting: {
 		num: 40,
 		accuracy: 100,
-		basePower: 15,
+		basePower: 30,
 		category: "Physical",
 		name: "Poison Sting",
 		pp: 35,
@@ -15261,7 +15261,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			action.order = 201;
 			this.add('-activate', target, 'move: Quash');
 		},
-		secondary: null,
+		boosts: {
+			accuracy: -1,
+		},
 		target: "normal",
 		type: "Dark",
 		zMove: {boost: {spe: 1}},
@@ -15352,7 +15354,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	rage: {
 		num: 99,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 50,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rage",
@@ -17849,7 +17851,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	slam: {
 		num: 21,
 		accuracy: 75,
-		basePower: 80,
+		basePower: 90,
 		category: "Physical",
 		name: "Slam",
 		pp: 20,
@@ -21385,7 +21387,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	twineedle: {
 		num: 41,
 		accuracy: 100,
-		basePower: 25,
+		basePower: 30,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Twineedle",
@@ -22344,7 +22346,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	wrap: {
 		num: 35,
 		accuracy: 90,
-		basePower: 15,
+		basePower: 35,
 		category: "Physical",
 		name: "Wrap",
 		pp: 20,
