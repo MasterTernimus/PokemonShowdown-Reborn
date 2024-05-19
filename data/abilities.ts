@@ -362,6 +362,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.boost({ def: 1 });
 			}
 		},
+		onAfterBoost(boost, target, source, effect) {
+			//CALL
+		},
 		name: "Battle Armor",
 		rating: 1,
 		num: 4,
@@ -1589,7 +1592,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
+			if (move?.type === 'Flying' && pokemon.hp >= 0.75*pokemon.maxhp) return priority + 1;
 		},
 		flags: {},
 		name: "Gale Wings",
@@ -2254,7 +2257,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Iron Fist boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([4915, 2048]);
 			}
 		},
 		flags: {},
@@ -2359,7 +2362,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	lightningrod: {
 		onTryHit(target, source, move) {
 			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Electric')) {
-				if (!this.boost({ spa: 1 })) {
+				if (!this.boost({ spa: 1, atk: 1 })) {
 					this.add('-immune', target, '[from] ability: Lightning Rod');
 				}
 				return null;
@@ -2673,11 +2676,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	minus: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			for (const allyActive of pokemon.allies()) {
-				if (allyActive.hasAbility(['minus', 'plus'])) {
-					return this.chainModify(1.5);
-				}
-			}
+			return this.chainModify([5325, 4096]);
 		},
 		flags: {},
 		name: "Minus",
@@ -3327,11 +3326,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	plus: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			for (const allyActive of pokemon.allies()) {
-				if (allyActive.hasAbility(['minus', 'plus'])) {
-					return this.chainModify(1.5);
-				}
-			}
+			return this.chainModify([5325, 4096]);
 		},
 		flags: {},
 		name: "Plus",
@@ -3931,10 +3926,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				if (attacker.gender === defender.gender) {
 					this.debug('Rivalry boost');
 					return this.chainModify(1.25);
-				} else {
-					this.debug('Rivalry weaken');
-					return this.chainModify(0.75);
-				}
+				} 
 			}
 		},
 		flags: {},
@@ -4430,8 +4422,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).crit) {
 				this.debug('Sniper boost');
-				return this.chainModify(1.5);
+				return this.chainModify(3);
 			}
+		},
+		onSwitchIn() {
+			this.boost({ accuracy: 1 });
 		},
 		flags: {},
 		name: "Sniper",
