@@ -4763,7 +4763,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onModifyMove(move) {
 				let electrified = ['explosion', 'hurricane', 'muddywater', 'selfdestruct', 'smackdown', 'thousandarrows', 'surf', 'hydrovortex'];
 				if (electrified.includes(move.id)) {
-					move.types = [move.type, 'electric'];
+					move.types = [move.type, 'Electric'];
 				}
 			},
 			onBasePowerPriority: 6,
