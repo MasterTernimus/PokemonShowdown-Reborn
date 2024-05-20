@@ -15629,7 +15629,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		critRatio: 2,
 		secondary: null,
 		target: "allAdjacentFoes",
-		type: "Normal",
+		type: "Flying",
 		contestType: "Cool",
 	},
 	recover: {
