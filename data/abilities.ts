@@ -459,6 +459,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 					this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", "[of] " + target);
 				}
 			}
+			if (boost.spd && boost.spd < 0) {
+				delete boost.def;
+				if (!(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+					this.add("-fail", target, "unboost", "Special Defense", "[from] ability: Big Pecks", "[of] " + target);
+				}
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Big Pecks",
@@ -1480,6 +1486,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
+			this.boost({ spe: 1, spa: 1, def: 1, spd: 1 }, pokemon, null, null, false, true);
 			switch (pokemon.effectiveWeather()) {
 				case 'sunnyday':
 				case 'desolateland':
@@ -2257,7 +2264,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Iron Fist boost');
-				return this.chainModify([4915, 2048]);
+				return this.chainModify([5830, 4048]);
 			}
 		},
 		flags: {},
@@ -4282,6 +4289,21 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.boost({ def: 1 });
 			}
 		},
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({ spd: 2 }, target, target, null, false, true);
+			}
+		},
 		name: "Shell Armor",
 		rating: 1,
 		num: 75,
@@ -4424,9 +4446,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.debug('Sniper boost');
 				return this.chainModify(3);
 			}
-		},
-		onSwitchIn() {
-			this.boost({ accuracy: 1 });
 		},
 		flags: {},
 		name: "Sniper",
@@ -5568,6 +5587,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.add('-activate', pokemon, 'ability: Water Veil');
 				pokemon.cureStatus();
 			}
+		},
+		onSwitchIn(pokemon) {
+			pokemon.addVolatile('aquaring');
 		},
 		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'brn') return;
