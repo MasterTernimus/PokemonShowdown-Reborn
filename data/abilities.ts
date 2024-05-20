@@ -3525,17 +3525,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	protean: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.protean) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
-		},
-		onSwitchIn(pokemon) {
-			delete this.effectState.protean;
 		},
 		flags: {},
 		name: "Protean",
