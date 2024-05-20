@@ -2345,7 +2345,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('grassyterrain') || this.field.isTerrain('elecricterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('burningterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain' || this.field.terrain === 'icyterrain')) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('grassyterrain') || this.field.isTerrain('electricterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('burningterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain' || this.field.terrain === 'icyterrain')) {
 				pokemon.useItem();
 			}
 		},
