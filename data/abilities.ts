@@ -2340,17 +2340,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	libero: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.libero) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.libero = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
-		},
-		onSwitchIn() {
-			delete this.effectState.libero;
 		},
 		flags: {},
 		name: "Libero",
