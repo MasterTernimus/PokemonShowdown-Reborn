@@ -26,7 +26,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (smogfireMoves.includes(move.id)) {
 					modifier *= 1.5
 				}
-				if (move.type === 'Fire' && target.isGrounded()) {
+				if (move.type === 'Fire' && source.isGrounded()) {
 					modifier *= 1.5;
 				}
 				if (move.type === 'Grass' && target.isGrounded()) {
@@ -49,7 +49,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onResidual(pokemon) {
 				const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil'];
 				const weak = ['leafguard', 'fluffy', 'grasspelt', 'icebody'];
-				if (!immune.includes(pokemon.ability) || !pokemon.volatiles['aquaring'] || !pokemon.hasType('Fire')) {
+				if (!immune.includes(pokemon.ability) || !pokemon.volatiles['aquaring'] || !pokemon.hasType('Fire') || !pokemon.isGrounded()) {
 					let typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', pokemon.types), -6, 6);
 					let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
 					if (weak.includes(pokemon.ability)) {
@@ -59,8 +59,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.damage(damage, pokemon);
 					}
 				}
-				if (this.field.weather === 'rain' || this.field.weather === 'sandstorm')
+				if (this.field.weather === 'rain' || this.field.weather === 'sandstorm') {
 					this.field.clearTerrain();
+				}
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Burning Terrain');
@@ -85,8 +86,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onSwitchIn(pokemon) {
-				let immune = ['immunity, magicguard, poisonheal, toxicboost, wonderguard'];
-				if (!immune.includes(pokemon.ability) && pokemon.isGrounded() && !(pokemon.types.includes('Poison') || !pokemon.types.includes('Steel'))) {
+				let immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
+				if (!immune.includes(pokemon.ability) && pokemon.isGrounded() && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
 					let typeMod = this.dex.getEffectiveness('Poison', pokemon.types);
 					typeMod = this.clampIntRange(typeMod, -6, 6);
 					this.damage(pokemon.baseMaxhp / 4 * Math.pow(2, typeMod), pokemon);
@@ -102,8 +103,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
-				let immune = ['immunity, magicguard, poisonheal, toxicboost, wonderguard'];
-				if (!immune.includes(pokemon.ability) && !(pokemon.types.includes('Poison') || !pokemon.types.includes('Steel'))) {
+				let immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
+				if (!immune.includes(pokemon.ability) && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
 					if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
 						this.damage(pokemon.baseMaxhp / 16, pokemon);
 					}
@@ -153,8 +154,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				if (igniteMoves.includes(move.id)) {
 					for (const pokemon of this.getAllActive()) {
-						if (pokemon.hasAbility('damp'))
+						if (pokemon.hasAbility('damp')) {
 							return;
+						}
 					}
 					this.add('-message', 'The toxic mist combusted!');
 					for (const pokemon of this.getAllActive()) {
@@ -201,13 +203,19 @@ export const Terrains: { [k: string]: TerrainData } = {
 					move.types = [move.type, 'Dragon'];
 				}
 			},
+			onModifyType(move, pokemon) {
+				if (['cut', 'sacredsword', 'secretsword', 'slash'].includes(move.id)) {
+					move.type === "Steel";
+				}
+			},
 			onEffectiveness(typeMod, target, type, move) {
 				const types = move.types !== undefined ? move.types : [move.type];
-				if (type === 'Dragon' && types.includes('Steel'))
+				if (type === 'Dragon' && types.includes('Steel')) {
 					return 1;
+				}
 			},
 			onBasePower(basePower, source, target, move) {
-				const strengthenedMoves = ['airslash', 'ancientpower', 'fleurcannon', 'leafblade', 'magicalleaf', 'moongeistbeam', 'mysticalfire', 'nightslash', 'psychocut', 'smartstrike', 'solarblade', 'sparklingaria', 'menacingmoonrazemaelstorm', 'oceanicoperetta'];
+				const strengthenedMoves = ['airslash', 'ancientpower', 'fleurcannon', 'leafblade', 'magicalleaf', 'moongeistbeam', 'mysticalfire', 'nightslash', 'psychocut', 'relicsong', 'smartstrike', 'solarblade', 'sparklingaria', 'menacingmoonrazemaelstorm', 'oceanicoperetta'];
 				let modifier = 1;
 				if (move.type === 'Dragon') {
 					this.add('-message', 'The draconic energy was strengthened by the dead princesses on the field!');
@@ -225,7 +233,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The move was strengthened by the terrain!');
 					modifier *= 1.5
 				}
-				if (move.id === 'draining kiss') {
+				if (move.id === 'drainingkiss') {
 					this.add('-message', 'The move was strengthened by the terrain!');
 
 					modifier *= 2;
@@ -313,7 +321,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyMove(move, pokemon) {
-				const speedMoves = ['accelerock', 'aquajet', 'bulletpunch', 'extremespeed', 'fakeout', 'firstimpression', 'machpunch', 'quickattack', 'shadowsneak', 'suckerpunch', 'feint', 'lunge', 'rollout', 'steamroller'];
+				const speedMoves = ['accelerock', 'aquajet', 'bulletpunch', 'extremespeed', 'fakeout', 'firstimpression', 'machpunch', 'quickattack', 'shadowsneak', 'suckerpunch', 'defemsecurl', 'feint', 'lunge', 'rollout', 'steamroller'];
 				if (speedMoves.includes(move.id) && pokemon.isGrounded()) {
 					move.boosts = {
 						spe: 1
@@ -351,7 +359,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('watersurfaceterrain');
 					return;
 				}
-				if (watersurfaceMoves.includes(move.id)) {
+				if (watersurfaceMoves.includes(move.id) && this.field.terrainStack[1]?.id !== 'watersurfaceterrain') {
 					for (const sides of this.sides) {
 						sides.addSideCondition('spikes');
 					}
@@ -372,7 +380,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				let immune = ['surgesurfer', 'swiftswim'];
-				if (!pokemon.types.includes('Poison') || !immune.includes(pokemon.ability)) {
+				if (!pokemon.types.includes('Water') || !immune.includes(pokemon.ability)) {
 					return this.chainModify(0.75);
 				}
 			},
@@ -390,8 +398,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onTryMove(source, target, move) {
-				if (move.type === 'Ground' && !(move.category === 'Status' && move.id !== 'sandattack'))
+				if ((move.type === 'Ground' && move.category !== 'Status') || move.id === 'sandattack') {
 					return false;
+				}
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
@@ -428,11 +437,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onResidual(pokemon) {
 				const immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wondergaurd'];
 				const weak = ['dryskin', 'flamebody', 'magmaarmor', 'waterabsorb'];
-				if (!immune.includes(pokemon.ability) || !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel')) && pokemon.isGrounded()) {
+				if (!immune.includes(pokemon.ability) && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel')) && pokemon.isGrounded()) {
 					let typeMod = this.clampIntRange(this.dex.getEffectiveness('Poison', pokemon.types), -6, 6);
 					let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
-					if (pokemon.volatiles['dive'])
+					if (pokemon.volatiles['dive']) {
 						damage *= 4;
+					}
 					if (weak.includes(pokemon.ability)) {
 						this.damage(damage * 2, pokemon);
 					}
@@ -442,9 +452,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldStart() {
-				if (this.field.terrainState[1].id === 'underwaterterrain') {
+				if (this.field.terrainState[1].id === 'underwaterterrain' && this.field.terrainState[1].Tchanges?.includes('sludgewave')) {
 					for (const pokemon of this.getAllActive()) {
-						if (!(pokemon.types.includes('Steel') || pokemon.types.includes('Poison')) || pokemon.isSemiInvulnerable()) {
+						if (!(pokemon.types.includes('Steel') || pokemon.types.includes('Poison')) && !pokemon.isSemiInvulnerable()) {
 							pokemon.faint();
 						}
 					}
@@ -555,7 +565,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (move.success === false && move.category === 'Physical' && !source.hasAbility('rockhead')) {
+				if (move.success === false && move.flags['contact'] && !source.hasAbility('rockhead')) {
 					this.add('-message', 'The pokemon kept going and crashed into the rocks!')
 					this.damage(source.baseMaxhp / 8, source, source);
 				}
@@ -563,7 +573,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldStart() {
 				this.add('-fieldstart', 'Rocky Terrain');
 			},
-			onFieldEnd(){
+			onFieldEnd() {
 				this.add('-fieldend', 'Rocky Terrain');
 			}
 		}
@@ -630,7 +640,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				const immune = ['swiftswim', 'steelworker'];
-				if (pokemon.isGrounded() && !pokemon.getTypes().includes('Water') && !immune.includes(pokemon.ability)) {
+				if (!pokemon.getTypes().includes('Water') && !immune.includes(pokemon.ability)) {
 					return this.chainModify(0.5);
 				}
 			},
@@ -642,6 +652,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifyMove(move) {
 				if (move.type === 'Ground') {
 					move.types = [move.type, 'Water'];
+					
+				}
+				if (move.type === 'Electric' && typeof move.accuracy === 'number') {
+					return true;
 				}
 			},
 			onEffectiveness(typeMod, target, type, move) {
@@ -656,7 +670,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const change = ['bounce', 'dive', 'skydrop', 'fly', 'aciddownpour'];
-				if (move.type === 'Electric' || move.id === 'anchorshot') {
+				if (move.type === 'Electric') {
+					modifier *= 2;
+				}
+				if (move.id === 'anchorshot') {
 					modifier *= 2;
 				}
 				if (move.id === 'waterpulse') {
@@ -665,7 +682,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.type === 'Water') {
 					modifier *= 1.5;
 				}
-				if (move.category === 'Physical' && !source.hasAbility('steelworker')) {
+				if (move.category === 'Physical' && move.type !== 'Water' && !source.hasAbility('steelworker')) {
 					modifier *= 0.5;
 				}
 				if (change.includes(move.id) || (this.field.terrainState.Tchanges?.includes('sludgewave') && move.id === 'sludgewave')) {
@@ -691,12 +708,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onResidual(pokemon) {
 				let immune = ['magicguard', 'swiftswim'];
 				let weak = ['flamebody', 'magmaarmor'];
-				if (!pokemon.types.includes('Water') && !immune.includes(pokemon.ability)) {
+				if (!immune.includes(pokemon.ability)) {
 					let typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', pokemon.types), -6, 6);
 					let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
 					if (typeMod > 0) {
 						if (weak.includes(pokemon.ability)) {
-							this.damage(damage, pokemon);
+							this.damage(damage * 2, pokemon);
 						}
 						else {
 							this.damage(damage, pokemon);
@@ -704,8 +721,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 				}
 			},
-			onFieldStart() {
-				this.add('-fieldstart', 'Underwater Terrain');
+			onFieldStart(field, source, effect) {
+				this.field.clearWeather();
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Underwater Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'Underwater Terrain');
+				}
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Underwater Terrain');
@@ -724,8 +746,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onTryMove(source, target, move) {
-				if (move.type === 'Ground' && !(move.category === 'Status' && move.id !== 'sandattack'))
+				if ((move.type === 'Ground' && move.category !== 'Status') || move.id === 'sandattack') {
 					return false;
+				}
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
