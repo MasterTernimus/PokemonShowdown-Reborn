@@ -1667,7 +1667,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 			if (this.field.isTerrain('desertterrain')) {
 				this.boost({ def: 1, spd: 1, spe: 1 });
-				this.actions.useMove('sandtomb', pokemon, pokemon, item);
+				pokemon.addVolatile('partiallytrapped', pokemon, this.dex.moves.get('sandtomb'));
 			}
 		},
 		onTerrainChange(pokemon) {
