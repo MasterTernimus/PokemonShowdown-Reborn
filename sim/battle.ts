@@ -2779,7 +2779,7 @@ export class Battle {
 			this.queue.addChoice({choice: 'residual'});
 			this.midTurn = true;
 		}
-		if (this.turn === 1) {
+		if (this.turn === 0) {
 			this.field.startTerrain('desertterrain');
 			this.field.terrainStack.push(this.field.terrainState);
 		}
