@@ -1626,6 +1626,10 @@ export class Battle {
 				this.add(`${buf}</span>`);
 			}
 		}
+		if (this.turn === 0) {
+			this.field.startTerrain('desertterrain');
+			this.field.terrainStack.push(this.field.terrainState);
+		}
 		this.makeRequest('move');
 	}
 
@@ -2778,10 +2782,6 @@ export class Battle {
 			this.queue.insertChoice({choice: 'beforeTurn'});
 			this.queue.addChoice({choice: 'residual'});
 			this.midTurn = true;
-		}
-		if (this.turn === 0) {
-			this.field.startTerrain('desertterrain');
-			this.field.terrainStack.push(this.field.terrainState);
 		}
 		let action;
 		while ((action = this.queue.shift())) {
