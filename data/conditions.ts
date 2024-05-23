@@ -227,18 +227,25 @@ export const Conditions: {[k: string]: ConditionData} = {
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 5,
-		durationCallback(target, source) {
+		durationCallback(target, source, effect) {
+			console.log(effect?.id);
+			if (effect?.id === 'telluricseed') {
+				return 4;
+			}
 			if (source?.hasItem('gripclaw')) return 8;
 			return this.random(5, 7);
 		},
 		onStart(pokemon, source, effect) {
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, '[of] ' + source);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
-			if (this.field.terrain === 'burningterrain' && effect.id === 'firespin') {
+			if (this.field.isTerrain('burningterrain') && effect.id === 'firespin') {
 				this.effectState.boundDivisor = 6;
 			}
-			if ((this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') && effect.id === 'whirlpool') {
+			if ((this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) && effect.id === 'whirlpool') {
 				pokemon.addVolatile('confusion');
+				this.effectState.boundDivisor = 6;
+			}
+			if (this.field.isTerrain('desertterrain') && effect.id === 'sandtomb') {
 				this.effectState.boundDivisor = 6;
 			}
 		},
@@ -558,7 +565,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('heatrock')) {
+			if (source?.hasItem('heatrock') || this.field.isTerrain('desertterrain')) {
 				return 8;
 			}
 			return 5;
@@ -652,7 +659,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('smoothrock')) {
+			if (source?.hasItem('smoothrock') || this.field.isTerrain('desertterrain')) {
 				return 8;
 			}
 			return 5;
