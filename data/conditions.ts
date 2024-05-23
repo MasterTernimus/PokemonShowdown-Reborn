@@ -228,9 +228,8 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'partiallytrapped',
 		duration: 5,
 		durationCallback(target, source, effect) {
-			console.log(effect?.id);
 			if (effect?.id === 'sandtomb' && this.field.isTerrain('desertterrain')) {
-				return 4;
+				return 5;
 			}
 			if (source?.hasItem('gripclaw')) return 8;
 			return this.random(5, 7);
