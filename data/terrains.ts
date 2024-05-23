@@ -210,6 +210,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.5;
 				}
 			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Desert Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Desert Terrain');
+			},
 		}
 	},
 	fairytaleterrain: {
