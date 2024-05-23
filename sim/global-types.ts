@@ -89,7 +89,7 @@ interface EventInfo {
 	emeraldEventEgg?: boolean;
 }
 
-type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
+type Effect = Ability | Item | Move | Species | Condition | Format;
 
 interface CommonHandlers {
 	ModifierEffect: (this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | void;
