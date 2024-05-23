@@ -228,8 +228,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'partiallytrapped',
 		duration: 5,
 		durationCallback(target, source, effect) {
-			console.log(effect?.id);
-			if (effect?.id === 'telluricseed') {
+			if (effect?.id === 'electricseed' && this.field.isTerrain('desertterrain')) {
 				return 4;
 			}
 			if (source?.hasItem('gripclaw')) return 8;
