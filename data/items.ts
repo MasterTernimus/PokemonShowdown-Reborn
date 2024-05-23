@@ -1651,7 +1651,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain') || this.field.isTerrain('desertterrain'))) {
 				pokemon.useItem();
 			}
 		},
@@ -1664,6 +1664,10 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ def: 1 });
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+			}
+			if (this.field.isTerrain('desertterrain')) {
+				this.boost({ def: 1, spd: 1, spe: 1 });
+				pokemon.addVolatile('sandtomb');
 			}
 		},
 		onTerrainChange(pokemon) {

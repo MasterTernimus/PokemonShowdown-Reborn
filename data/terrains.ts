@@ -192,6 +192,26 @@ export const Terrains: { [k: string]: TerrainData } = {
 			}
 		}
 	},
+	desertterrain: {
+		name: "Desert Terrain",
+		condition: {
+			duration: 5,
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const sandified = ['burnup', 'dig', 'heatwave', 'needlearm', 'pinmissile', 'sandtomb', 'solarbeam', 'solarblade', 'thousandwaves', 'searingsunrazesmash'];
+				if (move.type === 'Water' && source.isGrounded()) {
+					modifier *= 0.5;
+				}
+				if (move.type === 'Electric' && target.isGrounded()) {
+					modifier *= 0.5;
+				}
+				if (sandified.includes(move.id)) {
+					modifier *= 1.5;
+				}
+			},
+		}
+	},
 	fairytaleterrain: {
 		name: "Fairy Tale Terrain",
 		condition: {

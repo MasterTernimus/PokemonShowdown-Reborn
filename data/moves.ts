@@ -2242,16 +2242,18 @@ export const Moves: { [moveid: string]: MoveData } = {
 				newType = 'Poison';
 			} else if (this.field.isTerrain('burningterrain')) {
 				newType = 'Fire';
-			} else if (this.field.isTerrain('swampterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+			} else if (this.field.isTerrain('swampterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.terrain === 'underwaterterrain' || this.field.isTerrain("murkwatersurfaceterrain")) {
 				newType = 'Water';
-			} else if (this.field.terrain === 'rainbowterrain') {
+			} else if (this.field.isTerrain('rainbowterrain')) {
 				newType = 'Dragon';
-			} else if (this.field.terrain === 'icyterrain') {
+			} else if (this.field.isTerrain('icyterrain')) {
 				newType = 'Ice';
-			} else if (this.field.terrain === 'glitchterrain') {
+			} else if (this.field.isTerrain('glitchterrain')) {
 				newType = '???';
-			} else if (this.field.terrain === 'rockyterrain') {
+			} else if (this.field.isTerrain('rockyterrain')) {
 				newType = 'Rock';
+			} else if (this.field.isTerrain('desertterrain')) {
+				newType = 'Ground';
 			}
 			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
@@ -13279,18 +13281,20 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'aurorabeam';
 			} else if (this.field.isTerrain('fairytaleterrain')) {
 				move = 'secretsword';
-			} else if (this.field.terrain === 'watersurfaceterrain') {
+			} else if (this.field.isTerrain('watersurfaceterrain')) {
 				move = 'whirlpool';
-			} else if (this.field.terrain === 'underwaterterrain') {
+			} else if (this.field.isTerrain('underwaterterrain')) {
 				move = 'waterpulse';
-			} else if (this.field.terrain === 'murkwatersurfaceterrain') {
+			} else if (this.field.isTerrain('murkwatersurfaceterrain')) {
 				move = 'sludgewave';
-			} else if (this.field.terrain === 'icyterrain') {
+			} else if (this.field.isTerrain('icyterrain')) {
 				move = 'icebeam';
-			} else if (this.field.terrain === 'glitchterrain') {
+			} else if (this.field.isTerrain('glitchterrain')) {
 				move = 'metronome';
-			} else if (this.field.terrain === 'rockyterrain') {
+			} else if (this.field.isTerrain('rockyterrain')) {
 				move = 'rocksmash';
+			} else if (this.field.isTerrain('desertterrain')) {
+				move = 'sandtomb';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -16541,7 +16545,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Sand Attack",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('desertterrain')) {
+				move.boosts = { accuracy: -2 };
+			}
+		},
 		boosts: {
 			accuracy: -1,
 		},
@@ -16844,23 +16853,30 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 6,
 					status: 'brn'
 				});
-			} else if (this.field.terrain === 'underwaterterrain') {
+			} else if (this.field.isTerrain('underwaterterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					boosts: {
-						atk: -1
+						atk: -1,
 					}
 				});
-			} else if (this.field.terrain === 'icyterrain') {
+			} else if (this.field.isTerrain('icyterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					status: 'frz'
 				});
-			} else if (this.field.terrain === 'rockyterrain') {
+			} else if (this.field.isTerrain('rockyterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					volatileStatus: 'flinch'
 				});
+			} else if (this.field.isTerrain('desertterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					boosts: {
+						accuracy: -1,
+					},
+				})
 			}
 		},
 		secondary: {
@@ -17350,6 +17366,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			let factor = 0.5;
 			if (this.field.isWeather('sandstorm')) {
 				factor = 0.667;
+			}
+			if (this.field.isTerrain('desertterain')) {
+				factor = 1;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
 			if (!success) {

@@ -37,7 +37,7 @@ import {Ability, DexAbilities} from './dex-abilities';
 import {Species, DexSpecies} from './dex-species';
 import {Format, DexFormats} from './dex-formats';
 import {Utils} from '../lib';
-import { DataTerrain, DexTerrains } from './dex-terrains';
+import {DataTerrain, DexTerrains} from './dex-terrains';
 
 const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
@@ -94,7 +94,7 @@ interface TextTableData {
 	Abilities: DexTable<AbilityText>;
 	Items: DexTable<ItemText>;
 	Moves: DexTable<MoveText>;
-	Terrains: DexTable<TerrainText>
+	Terrains: DexTable<TerrainText>;
 	Pokedex: DexTable<PokedexText>;
 	Default: DexTable<DefaultText>;
 }
@@ -256,28 +256,27 @@ export class ModdedDex {
 		source: { type: string } | string | string[],
 		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
 	): number {
-
 		const sourceTypes: string[] = (Array.isArray(source) ? source : (typeof source === 'string' ? [source] : [source.type]));
 		// @ts-ignore
-		const targetTyping: string[] = target.getTypes?.() || target.types || (typeof(target) === 'string' ? [target] : target) ;
+		const targetTyping: string[] = target.getTypes?.() || target.types || (typeof (target) === 'string' ? [target] : target);
 		let totalTypeMod = 0;
-		for(const sourceType of sourceTypes) {
+		for (const sourceType of sourceTypes) {
 			for (const type of targetTyping) {
 				const typeData = this.types.get(type);
 				if (!typeData) return 0;
 				switch (typeData.damageTaken[sourceType]) {
-					case 1: {
-						totalTypeMod++;
-						break;
-					} // super-effective
-					case 2: {
-						totalTypeMod--;
-						break;
-					} // resist
-					// in case of weird situations like Gravity, immunity is handled elsewhere
-					default: totalTypeMod = totalTypeMod;
+				case 1: {
+					totalTypeMod++;
+					break;
+				} // super-effective
+				case 2: {
+					totalTypeMod--;
+					break;
+				} // resist
+				// in case of weird situations like Gravity, immunity is handled elsewhere
+				default:
+					break;
 				}
-
 			}
 		}
 		return totalTypeMod;
