@@ -2779,13 +2779,13 @@ export class Battle {
 			this.midTurn = true;
 		}
 		let action;
+		if (this.turn === 0) {
+			this.field.startTerrain('desertterrain');
+			this.field.terrainStack.push(this.field.terrainState);
+		}
 		while ((action = this.queue.shift())) {
 			this.runAction(action);
 			if (this.requestState || this.ended) return;
-		}
-		if (this.turn === 1) {
-			this.field.startTerrain('desertterrain');
-			this.field.terrainStack.push(this.field.terrainState);
 		}
 		this.nextTurn();
 		this.midTurn = false;
