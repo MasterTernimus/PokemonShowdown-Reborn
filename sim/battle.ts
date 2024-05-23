@@ -1626,7 +1626,7 @@ export class Battle {
 				this.add(`${buf}</span>`);
 			}
 		}
-		if (this.turn === 0) {
+		if (this.turn === 1) {
 			this.field.startTerrain('desertterrain');
 			this.field.terrainStack.push(this.field.terrainState);
 		}
