@@ -523,7 +523,6 @@ export class Battle {
 		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
 		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown
 	) {
-
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -1535,12 +1534,12 @@ export class Battle {
 						}
 					}
 				}
-
 				pokemon.trapped = pokemon.maybeTrapped = false;
 				this.runEvent('TrapPokemon', pokemon);
 				if (!pokemon.knownType || this.dex.getImmunity('trapped', pokemon)) {
 					this.runEvent('MaybeTrapPokemon', pokemon);
 				}
+
 				// canceling switches would leak information
 				// if a foe might have a trapping ability
 				if (this.gen > 2) {
@@ -1625,10 +1624,6 @@ export class Battle {
 				}
 				this.add(`${buf}</span>`);
 			}
-		}
-		if (this.turn === 1) {
-			this.field.startTerrain('desertterrain');
-			this.field.terrainStack.push(this.field.terrainState);
 		}
 		this.makeRequest('move');
 	}
@@ -2788,7 +2783,10 @@ export class Battle {
 			this.runAction(action);
 			if (this.requestState || this.ended) return;
 		}
-
+		if (this.turn === 1) {
+			this.field.startTerrain('desertterrain');
+			this.field.terrainStack.push(this.field.terrainState);
+		}
 		this.nextTurn();
 		this.midTurn = false;
 		this.queue.clear();
