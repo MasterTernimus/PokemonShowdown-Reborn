@@ -251,6 +251,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onResidualOrder: 13,
 		onResidual(pokemon) {
 			const source = this.effectState.source;
+			if (source == pokemon) {
+				pokemon = source;
+			}
 			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
 			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
 			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
