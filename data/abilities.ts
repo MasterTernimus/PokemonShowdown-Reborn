@@ -1486,7 +1486,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
-			this.boost({ spe: 1, spa: 1, def: 1, spd: 1 }, pokemon, null, null, false, true);
 			switch (pokemon.effectiveWeather()) {
 				case 'sunnyday':
 				case 'desolateland':
@@ -1499,6 +1498,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				case 'hail':
 				case 'snow':
 					if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
+					break;
+				case 'sandstorm':
+					if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
 					break;
 				default:
 					if (pokemon.species.id !== 'castform') forme = 'Castform';
@@ -2633,6 +2635,8 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				case 'psychicterrain':
 					types = ['Psychic'];
 					break;
+				case 'desertterrain':
+					types = ['Ground'];
 				default:
 					types = pokemon.baseSpecies.types;
 			}
@@ -4041,6 +4045,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	sandspit: {
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('sandstorm');
+			if (this.field.isTerrain('desertterrain')) {
+				target.boostBy({ accuracy: -1 });
+			}
 		},
 		flags: {},
 		name: "Sand Spit",
