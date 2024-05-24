@@ -253,10 +253,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			const source = this.effectState.source;
 			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
 			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
-			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
-				delete pokemon.volatiles['partiallytrapped'];
-				this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
-				return;
+			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns && !gmaxEffect)) {
+				if (pokemon != source) {
+					delete pokemon.volatiles['partiallytrapped'];
+					this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
+					return;
+				}
 			}
 			this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
 		},
