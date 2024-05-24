@@ -2266,7 +2266,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Iron Fist boost');
-				return this.chainModify([5830, 4048]);
+				return this.chainModify([5734, 4096]);
 			}
 		},
 		flags: {},
