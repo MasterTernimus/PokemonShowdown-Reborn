@@ -259,6 +259,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 					this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
 					return;
 				}
+				else {
+					return;
+				}
 			}
 			this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
 		},
