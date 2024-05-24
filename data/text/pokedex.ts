@@ -1367,6 +1367,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	castformsnowy: {
 		name: "Castform-Snowy",
 	},
+	castformsandy: {
+		name: "Castform-Sandy",
+	},
 	kecleon: {
 		name: "Kecleon",
 	},
