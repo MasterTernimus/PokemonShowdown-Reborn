@@ -1650,7 +1650,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain') || this.field.isTerrain('desertterrain'))) {
 				pokemon.useItem();
 			}
@@ -1671,7 +1671,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain') || this.field.isTerrain("desertterrain")) {
+			if (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain')) {
 				pokemon.useItem();
 			}
 		},
