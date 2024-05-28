@@ -1651,27 +1651,36 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain') || this.field.isTerrain('desertterrain'))) {
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain'];
+			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
 		},
 		onUseItem(item, pokemon) {
+			if (this.field.isTerrain('corrosiveterrain')) {
+				pokemon.addVolatile('banefulbunker');
+				return;
+			}
 			if (this.field.terrain === 'swampterrain') {
 				this.boost({ def: 1, spd: 1 });
 				pokemon.addVolatile('ingrain');
+				return;
 			}
 			if (this.field.terrain === 'rockyterrain') {
 				this.boost({ def: 1 });
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+				return;
 			}
 			if (this.field.isTerrain('desertterrain')) {
 				this.boost({ def: 1, spd: 1, spe: 1 });
 				pokemon.addVolatile('partiallytrapped', pokemon, this.dex.moves.get('sandtomb'));
+				return;
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('swampterrain') || this.field.isTerrain('rockyterrain')) {
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain'];
+			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
 		},
@@ -2349,7 +2358,8 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('grassyterrain') || this.field.isTerrain('electricterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('burningterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain' || this.field.terrain === 'icyterrain')) {
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain'];
+			if (!pokemon.ignoringItem() && fields.includes(toID(this.field.terrain))) {
 				pokemon.useItem();
 			}
 		},
@@ -2394,7 +2404,8 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('elecricterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('burningterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain' || this.field.terrain === 'icyterrain') {
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain'];
+			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
 		},
