@@ -138,6 +138,7 @@ export class Field {
 		this.terrainState = {
 			id: status.id,
 			Tchanges: [],
+			duration: status.duration,
 			turn: this.battle.turn,
 		};
 		this.terrainStack.unshift(this.terrainState);
@@ -226,10 +227,12 @@ export class Field {
 				break;
 			}
 		}
+
 		if (isterrain) {
 			this.terrain = this.terrainStack[0].id;
 			this.terrainState = this.terrainStack[0];
-			this.battle.add('-fieldstart', this.terrain);
+			const current_terrain = this.battle.dex.conditions.get(this.terrain);
+			this.battle.add('-fieldstart', current_terrain.name);
 		} else {
 			this.terrain = '';
 			this.terrainState = {id: ''};

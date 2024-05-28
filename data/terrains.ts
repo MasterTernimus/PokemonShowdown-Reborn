@@ -2,7 +2,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	burningterrain: {
 		name: "Burning Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
 				if (source.hasItem('terrainextender')) {
@@ -74,7 +74,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	corrosiveterrain: {
 		name: "Corrosive Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
 				let poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows'];
@@ -121,7 +121,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	corrosivemistterrain: {
 		name: "Corrosive Mist Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
 				const poisonedMoves = ['bubblebeam', 'bubble', 'sparklingaria', 'energyball'];
@@ -195,7 +195,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	desertterrain: {
 		name: "Desert Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
@@ -221,7 +221,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	fairytaleterrain: {
 		name: "Fairy Tale Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
 				if (move.type === 'Fire') {
@@ -277,7 +277,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	glitchterrain: {
 		name: "Glitch Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
 				if (source.hasItem('terrainextender')) {
@@ -339,7 +339,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	icyterrain: {
 		name: "Icy Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyDef(def, pokemon) {
 				if (pokemon.types.includes('Ice') && this.field.isWeather('hail')) {
@@ -402,7 +402,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	murkwatersurfaceterrain: {
 		name: "Murkwater Surface Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				let immune = ['surgesurfer', 'swiftswim'];
@@ -495,7 +495,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	rainbowterrain: {
 		name: "Rainbow Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(target, source, effect) {
 				if (source.hasItem('terrainextender') && (effect?.name !== 'sunnyday' && effect?.name !== 'raindance')) {
@@ -551,7 +551,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	rockyterrain: {
 		name: "Rocky Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
 				const rockymoves = ['bulldoze', 'earthquake', 'magnitude', 'rockclimb', 'strength'];
@@ -607,7 +607,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	swampterrain: {
 		name: "Swamp Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
 				if (source.hasItem('terrainextender')) {
@@ -662,7 +662,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	underwaterterrain: {
 		name: "Underwater Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				const immune = ['swiftswim', 'steelworker'];
@@ -763,7 +763,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	watersurfaceterrain: {
 		name: "Water Surface Terrain",
 		condition: {
-			duration: 5,
+			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				const immune = ['swiftswim', 'surgesurfer'];

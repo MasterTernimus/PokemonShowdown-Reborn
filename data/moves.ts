@@ -8041,11 +8041,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (igniteMoves.includes(move.id) && this.field.weather !== 'rain' && !this.field.pseudoWeather['watersport']) {
 					this.field.changeTerrain('burningterrain');
 				}
-				if (this.field.terrainState.Tchanges?.includes('sludgewave') && move.id === 'sludgewave' || move.id === 'aciddownpour') {
+				if (move.id === 'sludgewave' || move.id === 'aciddownpour') {
 					this.field.changeTerrain('corrosiveterrain');
-				}
-				else if (move.id === 'sludgewave') {
-					this.field.terrainState.Tchanges?.push('sludgewave');
 				}
 			},
 			onFieldStart(field, source, effect) {
