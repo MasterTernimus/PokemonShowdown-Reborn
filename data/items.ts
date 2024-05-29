@@ -2359,7 +2359,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onStart(pokemon) {
 			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain'];
-			if (!pokemon.ignoringItem() && fields.includes(toID(this.field.terrain))) {
+			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
 		},
