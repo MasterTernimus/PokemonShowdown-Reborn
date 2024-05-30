@@ -274,6 +274,47 @@ export const Terrains: { [k: string]: TerrainData } = {
 			}
 		}
 	},
+	forestterrain: {
+		name: "Forest Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				let boosted = ['attackorder', 'cut', 'electroweb'];
+				let nerfed = ['muddywater', 'surf'];
+				if (move.type === 'Grass') {
+					modifier *= 1.5;
+				}
+				if (move.type === 'Bug' && move.category === 'Special') {
+					modifier *= 1.5;
+				}
+				if (boosted.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (nerfed.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (move.id === 'cut' && target.types.includes('Grass')) {
+					modifier *= 2;
+				}
+				return modifier;
+			},
+			onAfterMove(source, target, move) {
+				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
+				if (igniteMoves.includes(move.id) && (this.field.weather !== 'raindance' || !this.field.getPseudoWeather('watersport'))){
+					this.field.changeTerrain('burningterrain');
+					return;
+				} 
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Forest Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Forest Terrain');
+			}
+		},
+	},
 	glitchterrain: {
 		name: "Glitch Terrain",
 		condition: {

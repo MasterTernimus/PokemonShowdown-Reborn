@@ -1182,12 +1182,23 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target) && !source.status && source.runStatusImmunity('powder')) {
 				const r = this.random(100);
-				if (r < 11) {
-					source.setStatus('slp', target);
-				} else if (r < 21) {
-					source.setStatus('par', target);
-				} else if (r < 30) {
-					source.setStatus('psn', target);
+				if (this.field.isTerrain('forestterrain')) {
+					if (r > 0 && r < 22) {
+						source.setStatus('slp', target);
+					} else if (r > 22 && r < 42) {
+						source.setStatus('par', target);
+					} else if (r > 42 && r < 60) {
+						source.setStatus('psn', target);
+					}
+				}
+				else {
+					if (r < 11) {
+						source.setStatus('slp', target);
+					} else if (r < 21) {
+						source.setStatus('par', target);
+					} else if (r < 30) {
+						source.setStatus('psn', target);
+					}
 				}
 			}
 		},
@@ -1719,7 +1730,8 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	grasspelt: {
 		onModifyDefPriority: 6,
 		onModifyDef(pokemon) {
-			if (this.field.isTerrain('grassyterrain')) return this.chainModify(1.5);
+			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('forestterrain'))
+				return this.chainModify(1.5);
 		},
 		onResidual(pokemon) {
 			if (this.field.terrain === 'corrosiveterrain') {
@@ -2318,7 +2330,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	leafguard: {
 		onSetStatus(status, target, source, effect) {
-			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather()) || this.field.isTerrain('forestterrain')) {
 				if ((effect as Move)?.status) {
 					this.add('-immune', target, '[from] ability: Leaf Guard');
 				}
@@ -2326,7 +2338,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onTryAddVolatile(status, target) {
-			if (status.id === 'yawn' && ['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
+			if (status.id === 'yawn' && (['sunnyday', 'desolateland'].includes(target.effectiveWeather()) || this.field.isTerrain('forestterrain'))) {
 				this.add('-immune', target, '[from] ability: Leaf Guard');
 				return null;
 			}
@@ -2467,7 +2479,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	longreach: {
 		onModifyMove(move) {
-			if (this.field.terrain === 'rockyterrain') {
+			if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('grassyterrain')) {
 				move.accuracy = 90;
 			}
 			delete move.flags['contact'];
@@ -3141,14 +3153,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	overgrow: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) {
+			if ((move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
 				this.debug('Overgrow boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) {
+			if ((move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
 				this.debug('Overgrow boost');
 				return this.chainModify(1.5);
 			}
@@ -4099,6 +4111,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.boost({ atk: 1 }, this.effectState.target);
 			}
 		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('forestterrain')) {
+				this.heal(pokemon.baseMaxhp / 8);
+			}
+		},
 		flags: { breakable: 1 },
 		name: "Sap Sipper",
 		rating: 3,
@@ -4869,14 +4886,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	swarm: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
+			if ((move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
 				this.debug('Swarm boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) {
+			if ((move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
 				this.debug('Swarm boost');
 				return this.chainModify(1.5);
 			}

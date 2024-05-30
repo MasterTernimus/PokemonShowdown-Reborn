@@ -1651,7 +1651,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -1676,6 +1676,9 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ def: 1, spd: 1, spe: 1 });
 				pokemon.addVolatile('partiallytrapped', pokemon, this.dex.moves.get('sandtomb'));
 				return;
+			}
+			if (this.field.isTerrain('forestterrain')) {
+				pokemon.addVolatile('spikyshield');
 			}
 		},
 		onTerrainChange(pokemon) {

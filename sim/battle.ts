@@ -2780,8 +2780,8 @@ export class Battle {
 		}
 		let action;
 		if (this.turn === 0) {
-			this.field.startTerrain('corrosivemistterrain');
-			const lower_terrain = this.dex.conditions.get('corrosiveterrain');
+			this.field.startTerrain('desertterrain');
+			const lower_terrain = this.dex.conditions.get('desertterrain');
 			this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
 		}
 		while ((action = this.queue.shift())) {
