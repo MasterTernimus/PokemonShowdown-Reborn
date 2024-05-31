@@ -12557,7 +12557,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (target.volatiles['foresight']) return false;
 		},
 		onHit() {
-			if (this.field.terrain == 'psychicterrain' || this.field.terrain === 'fairytaleterain') {
+			if (this.field.terrain == 'psychicterrain' || this.field.terrain === 'fairytaleterrain') {
 				this.boost({ spa: 2 });
 			}
 		},
@@ -17389,7 +17389,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isWeather('sandstorm')) {
 				factor = 0.667;
 			}
-			if (this.field.isTerrain('desertterain')) {
+			if (this.field.isTerrain('desertterrain')) {
 				factor = 1;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
