@@ -2572,6 +2572,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				pokemon.cureStatus();
 			}
 		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Water') {
+				this.debug('Magma Armor weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ice') {
+				this.debug('Magma Armor weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		onImmunity(type, pokemon) {
 			if (type === 'frz') return false;
 		},
