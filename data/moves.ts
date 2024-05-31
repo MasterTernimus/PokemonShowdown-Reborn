@@ -12830,14 +12830,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(target, source, move) {
-				const terrainChangeMoves = ['smog', 'clearmsmog', 'poisongas', 'aciddownpour'];
+				const terrainChangeMoves = ['smog', 'clearsmog', 'poisongas', 'aciddownpour'];
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike'];
 				if (terrainChangeMoves.includes(move.id)) {
 					if (this.field.terrainState.Tchanges?.includes('corrosivemistterrain') || move.id === 'aciddownpour') {
 						this.field.changeTerrain('corrosivemistterrain');
 					}
-					else
-						this.field.terrainState.Tchanges?.push('corrosivemistterain')
+					else {
+						this.field.terrainState.Tchanges?.push('corrosivemistterrain')
+					}
 				}
 				if (terrainEndMoves.includes(move.id)) {
 					this.field.clearTerrain();
