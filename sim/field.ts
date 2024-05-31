@@ -29,7 +29,7 @@ export class Field {
 		this.weather = '';
 		this.weatherState = {id: ''};
 		this.terrain = '';
-		this.terrainState = {id: '', Tchanges: []};
+		this.terrainState = {id: '', Tchanges: [], prevterrain: ''};
 		this.terrainStack = [];
 		this.pseudoWeather = {};
 	}
@@ -202,6 +202,7 @@ export class Field {
 			Tchanges: [],
 			duration: prevTerrainState.duration,
 			turn: this.battle.turn,
+			prevterrain: prevTerrainState.id,
 		};
 		this.battle.add('-fieldstart', status.name);
 		this.terrainStack.unshift(this.terrainState);
