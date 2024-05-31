@@ -298,7 +298,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.id === 'cut' && target.types.includes('Grass')) {
 					modifier *= 2;
 				}
-				return modifier;
+				return this.chainModify(1.5);
 			},
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
