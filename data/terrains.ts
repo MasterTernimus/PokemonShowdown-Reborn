@@ -43,13 +43,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike'];
 				if (terrainEndMoves.includes(move.id)) {
-					this.field.changeTerrain(this.field.terrainState.prevterrain);
+					if (this.field.terrainState.prevterrain !== '')
+						this.field.changeTerrain(this.field.terrainState.prevterrain);
+					else {
+						this.field.clearTerrain();
+					}
 				}
 			},
 			onResidual(pokemon) {
 				const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil'];
 				const weak = ['leafguard', 'fluffy', 'grasspelt', 'icebody'];
-				if (!immune.includes(pokemon.ability) || !pokemon.volatiles['aquaring'] || !pokemon.hasType('Fire') || !pokemon.isGrounded()) {
+				if (!(immune.includes(pokemon.ability) || pokemon.volatiles['aquaring'] || pokemon.hasType('Fire')) && pokemon.isGrounded()) {
 					let typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', pokemon.types), -6, 6);
 					let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
 					if (weak.includes(pokemon.ability)) {
