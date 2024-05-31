@@ -298,7 +298,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.5;
 				}
 				if (nerfed.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= 0.5;
 				}
 				if (move.id === 'cut' && target.types.includes('Grass')) {
 					modifier *= 2;
