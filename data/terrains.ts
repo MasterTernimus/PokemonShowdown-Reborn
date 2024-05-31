@@ -285,8 +285,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				let boosted = ['attackorder', 'cut', 'electroweb'];
-				let nerfed = ['muddywater', 'surf'];
+				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
+				const boosted = ['attackorder', 'cut', 'electroweb'];
+				const nerfed = ['muddywater', 'surf'];
 				if (move.type === 'Grass') {
 					modifier *= 1.5;
 				}
@@ -302,7 +303,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.id === 'cut' && target.types.includes('Grass')) {
 					modifier *= 2;
 				}
-				return this.chainModify(1.5);
+				if (igniteMoves.includes(move.id)) {
+					modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
