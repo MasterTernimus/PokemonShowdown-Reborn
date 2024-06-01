@@ -205,7 +205,6 @@ export class Field {
 			prevterrain: prevTerrainState.id,
 		};
 		this.battle.add('-fieldstart', status.name);
-		this.terrainStack.unshift(this.terrainState);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 	}
 

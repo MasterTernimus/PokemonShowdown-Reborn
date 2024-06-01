@@ -1636,7 +1636,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+			let modifier = 4915/4096;
+			if (this.field.isTerrain('shortcircuitterrain')) {
+				modifier = 2;
+			}
+			if (move.typeChangerBoosted === this.effect)
+				return this.chainModify(modifier);
 		},
 		flags: {},
 		name: "Galvanize",
@@ -2713,6 +2718,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifySpA(spa, pokemon) {
 			return this.chainModify([5325, 4096]);
 		},
+		onModifyAtk(atk, pokemon) {
+			return this.chainModify([5325, 4096]);
+		},
 		flags: {},
 		name: "Minus",
 		rating: 0,
@@ -2799,7 +2807,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	motordrive: {
 		onTryHit(target, source, move) {
 			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Electric')) {
-				if (!this.boost({ spe: 1 })) {
+				let boost = 1;
+				if (this.field.isTerrain('shortcircuitterrain')) {
+					boost = 2;
+				}
+				if (!this.boost({ spe: boost })) {
 					this.add('-immune', target, '[from] ability: Motor Drive');
 				}
 				return null;
@@ -3361,6 +3373,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	plus: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
+			return this.chainModify([5325, 4096]);
+		},
+		onModifyAtk(atk, pokemon) {
 			return this.chainModify([5325, 4096]);
 		},
 		flags: {},
@@ -4657,7 +4672,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	static: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
-				if (this.randomChance(3, 10)) {
+				let chance = 3;
+				if (this.field.isTerrain('shortcircuitterrain')) {
+					chance = 6;
+				}
+				if (this.randomChance(6, 10)) {
 					source.trySetStatus('par', target);
 				}
 			}
@@ -4689,6 +4708,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	steelworker: {
 		onModifyAtkPriority: 5,
+		onModifyMove(move) {
+			if (move.type === 'Steel' && this.field.isTerrain('shortcircuitterrain')) {
+				move.types = ['Steel', 'Electric'];
+			}
+		},
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Steel') {
 				this.debug('Steelworker boost');
@@ -4888,7 +4912,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	surgesurfer: {
 		onModifySpe(spe) {
-			if (this.field.isTerrain('electricterrain') || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('shortcircuitterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -5502,6 +5526,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 					this.add('-immune', target, '[from] ability: Volt Absorb');
 				}
 				return null;
+			}
+		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('shortcircuitterrain')) {
+				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		flags: { breakable: 1 },

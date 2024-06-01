@@ -1,19 +1,18 @@
 import {EventMethods} from "./dex-conditions";
 import {BasicEffect, toID} from './dex-data';
 
-export interface TerrainData extends Partial<DataTerrain>, EventMethods {
-	condition: ConditionData;
-}
-
-export interface Terrain extends Readonly<BasicEffect & TerrainData> {
-}
-
 export class DataTerrain extends BasicEffect implements Readonly<BasicEffect> {
 	readonly condition: ConditionData;
 	constructor(data: AnyObject) {
 		super(data);
 		this.condition = {};
 	}
+}
+export interface TerrainData extends Partial<DataTerrain>, EventMethods {
+	condition: ConditionData;
+}
+
+export interface Terrain extends Readonly<BasicEffect & TerrainData> {
 }
 
 export class DexTerrains {

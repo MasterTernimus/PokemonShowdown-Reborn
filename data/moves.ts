@@ -2230,7 +2230,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {snatch: 1, metronome: 1},
 		onHit(target) {
 			let newType = 'Normal';
-			if (this.field.isTerrain('electricterrain')) {
+			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('shortcircuitterrain')) {
 				newType = 'Electric';
 			} else if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('forestterrain')) {
 				newType = 'Grass';
@@ -5931,7 +5931,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Flash",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('shortcircuitterrain')) {
+				move.boosts = {
+					accuracy: -2,
+				};
+			}
+		},
 		boosts: {
 			accuracy: -1,
 		},
@@ -11394,7 +11401,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback() {
-				if (this.field.isTerrain('electricterrain')) {
+				if (this.field.isTerrain('electricterrain') || this.field.isTerrain('shortcircuitterrain')) {
 					return 8;
 				}
 				return 5;
@@ -12271,7 +12278,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Metal Sound",
 		pp: 40,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, metronome: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('shortcircuitterrain')) {
+				move.boosts = {
+					spd: -3,
+				};
+			}
+		},
 		boosts: {
 			spd: -2,
 		},
@@ -13317,6 +13331,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'sandtomb';
 			} else if (this.field.isTerrain('forestterrain')) {
 				move = 'woodhammer';
+			} else if (this.field.isTerrain('shortcircuitterrain')) {
+				move = 'discharge';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -16824,7 +16840,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyMove(move, pokemon) {
 			if (this.field.isTerrain('')) return;
 			move.secondaries = [];
-			if (this.field.isTerrain('electricterrain')) {
+			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('shortcircuitterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					status: 'par',
@@ -22484,7 +22500,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Zap Cannon",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		onModifyMove(move) {
+			move.accuracy = 80;
+		},
 		secondary: {
 			chance: 100,
 			status: 'par',
