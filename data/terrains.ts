@@ -286,7 +286,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
-				const boosted = ['attackorder', 'cut', 'electroweb'];
+				const boosted = ['attackorder', 'cut', 'electroweb', 'drumbeating', 'skittersmack', 'pounce'];
 				const nerfed = ['muddywater', 'surf'];
 				if (move.type === 'Grass') {
 					modifier *= 1.5;
@@ -652,6 +652,61 @@ export const Terrains: { [k: string]: TerrainData } = {
 				this.add('-fieldend', 'Rocky Terrain');
 			}
 		}
+	},
+	shortcircuitterrain: {
+		name: "Short-Circuit Field",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onModifyMove(move) {
+				const electrified = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb', 'muddywater', 'surf', 'steelbeam', 'doubleironbash'];
+				if (electrified.includes(move.id)) {
+					move.types = [move.type, 'Electric'];
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const multiplier = [0.8, 1.5, 0.5, 4915 / 4096, 2.0];
+				const text = ['Bzzt', 'Bzzapp!', 'Bzt...', 'Bzap!', 'BZZZAPP!'];
+				const electrified = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb', 'muddywater', 'surf'];
+				const boosted = ['dazzlinggleam', 'hydrovortex', 'infernalparade'];
+				const shadow = ['darkpulse', 'nightdaze', 'nightslash', 'shadowball', 'shadowbone', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak'];
+				const nerfed = ['lightthatburnsthesky']
+				const fieldchange = ['chargebeam', 'discharge', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage']
+				if (electrified.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (boosted.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (shadow.includes(move.id)) {
+					modifier *= 5325/4096;
+				}
+				if (nerfed.includes(move.id)) {
+					modifier *= 0.5;
+				}
+				if (fieldchange.includes(move.id)) {
+					modifier *= 5325 / 4096;
+				}
+				if (move.type === 'Electric') {
+					modifier *= multiplier[this.ShortCircuitCounter];
+					this.add('-message', text[this.ShortCircuitCounter]);
+					this.ShortCircuitCounter += 1;
+					this.ShortCircuitCounter = this.ShortCircuitCounter % 5;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				const fieldchange = ['chargebeam', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage']
+
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Short-Circuit Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Short-Circuit Terrain');
+			},
+		},
 	},
 	swampterrain: {
 		name: "Swamp Terrain",

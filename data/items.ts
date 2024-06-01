@@ -4632,20 +4632,24 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.field.isTerrain('glitchterrain')) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain'))) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('glitchterrain')) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain'))) {
 				pokemon.useItem();
 			}
 		},
 		onUseItem(item, pokemon) {
-			pokemon.setType('???');
-		},
-		boosts: {
-			def: 1,
+			if (this.field.isTerrain('glitchterrain')) {
+				pokemon.setType('???');
+				return;
+			}
+			if (this.field.isTerrain('shortcircuitterrain')) {
+				this.boost({ spd: 1 }, pokemon);
+				pokemon.addVolatile('magnetrise');
+			}
 		},
 		num: 882,
 		gen: 7,
