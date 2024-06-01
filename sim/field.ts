@@ -188,17 +188,12 @@ export class Field {
 	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-		if (source === 'debug') source = this.battle.sides[0].active[0];
-		if (!source) throw new Error(`changing terrain without a source`);
-
-		if (this.terrain === status.id) return false;
+		if (this.isTerrain(status.id))
+			return false;
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
 		this.terrainState = {
 			id: status.id,
-			source,
-			sourceSlot: source.getSlot(),
 			Tchanges: [],
 			duration: prevTerrainState.duration,
 			turn: this.battle.turn,
