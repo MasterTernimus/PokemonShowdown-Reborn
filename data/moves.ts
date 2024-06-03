@@ -886,6 +886,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('factoryterrain')) {
+				move.boosts = {
+					spe: 3;
+				}
+			}
+		},
 		onTryHit(pokemon) {
 			const hasContrary = pokemon.hasAbility('contrary');
 			if ((!hasContrary && pokemon.boosts.spe === 6) || (hasContrary && pokemon.boosts.spe === -6)) {
@@ -2254,6 +2261,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				newType = 'Rock';
 			} else if (this.field.isTerrain('desertterrain')) {
 				newType = 'Ground';
+			} else if (this.field.isTerrain('factoryterrain')) {
+				newType = 'Steel';
 			}
 			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
@@ -6792,16 +6801,23 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Gear Up",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1, bypasssub: 1, metronome: 1},
+		flags: { snatch: 1, bypasssub: 1, metronome: 1 },
 		onHitSide(side, source, move) {
+			let boost = 1;
 			const targets = side.allies().filter(target => (
 				target.hasAbility(['plus', 'minus']) &&
 				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
 			));
-			if (!targets.length) return false;
 			let didSomething = false;
+			if (this.field.isTerrain('factoryterrain')) {
+				boost = 2;
+				if (!targets.includes(source)) {
+					didSomething = this.boost({ atk: boost, spa: boost }, source, source, move, false, true) || didSomething;
+				}
+			}
+			if (!targets.length) return false;
 			for (const target of targets) {
-				didSomething = this.boost({atk: 1, spa: 1}, target, source, move, false, true) || didSomething;
+				didSomething = this.boost({atk: boost, spa: boost}, target, source, move, false, true) || didSomething;
 			}
 			return didSomething;
 		},
@@ -10175,7 +10191,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Iron Defense",
 		pp: 15,
 		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('factoryterrain')) {
+				move.boosts = {
+					def: 3;
+				}
+			}
+		},
 		boosts: {
 			def: 2,
 		},
@@ -11401,7 +11424,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback() {
-				if (this.field.isTerrain('electricterrain') || this.field.isTerrain('shortcircuitterrain')) {
+				if (this.field.isTerrain('electricterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain')) {
 					return 8;
 				}
 				return 5;
@@ -12280,7 +12303,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('shortcircuitterrain')) {
+			if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain')) {
 				move.boosts = {
 					spd: -3,
 				};
@@ -13333,6 +13356,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'woodhammer';
 			} else if (this.field.isTerrain('shortcircuitterrain')) {
 				move = 'discharge';
+			} else if (this.field.isTerrain('factoryterrain')) {
+				move = 'geargrind';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -16891,7 +16916,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 6,
 					status: 'brn'
 				});
-			} else if (this.field.isTerrain('underwaterterrain')) {
+			} else if (this.field.isTerrain('underwaterterrain') || this.field.isTerrain('factoryterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					boosts: {
@@ -17366,7 +17391,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Shift Gear",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('factoryterrain')) {
+				move.boosts = {
+					spe: 2,
+					atk: 2,
+				};
+			}
+		},
 		boosts: {
 			spe: 2,
 			atk: 1,

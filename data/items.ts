@@ -4632,12 +4632,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain'))) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain'))) {
 				pokemon.useItem();
 			}
 		},
@@ -4649,6 +4649,10 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (this.field.isTerrain('shortcircuitterrain')) {
 				this.boost({ spd: 1 }, pokemon);
 				pokemon.addVolatile('magnetrise');
+			}
+			if (this.field.isTerrain('factoryterrain')) {
+				this.boost({ spa: 1 }, pokemon, pokemon, item, false, true);
+				pokemon.addVolatile('laserfocus');
 			}
 		},
 		num: 882,
