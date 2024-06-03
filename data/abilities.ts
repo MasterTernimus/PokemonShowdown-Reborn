@@ -5347,16 +5347,24 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	transistor: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
+			let boost = 5325;
+			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
+				boost = 8192;
+			}
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify([5325, 4096]);
+				return this.chainModify([boost, 4096]);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
+			let boost = 5325;
+			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
+				boost = 8192;
+			}
 			if (move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify([5325, 4096]);
+				return this.chainModify([boost, 4096]);
 			}
 		},
 		flags: {},

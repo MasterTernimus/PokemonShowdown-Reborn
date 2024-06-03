@@ -237,7 +237,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge']
+				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge', 'risingvoltage']
 				const uberboost = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb'];
 				const boost = ['steamroller', 'technoblast', 'doubleironbash'];
 				if (move.type === 'Electric') {
@@ -255,7 +255,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge']
+				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge', 'risingvoltage']
 				if (quakemoves.includes(move.id)) {
 					this.field.changeTerrain('shortcircuitterrain');
 				}
@@ -744,7 +744,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const fieldchange = ['discharge', 'chargebeam', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage']
-				if (fieldchange.includes(move.id)) {
+				if (fieldchange.includes(move.id) && !(this.lastMoveMissed && target.isSemiInvulnerable())) {
 					this.field.changeTerrain('factoryterrain');
 				}
 			},
