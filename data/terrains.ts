@@ -230,6 +230,44 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	factoryterrain: {
+		name: "Factory Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge']
+				const uberboost = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb'];
+				const boost = ['steamroller', 'technoblast', 'doubleironbash'];
+				if (move.type === 'Electric') {
+					modifier *= 1.5;
+				}
+				if (uberboost.includes(move.id)) {
+					modifier *= 2;
+				}
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (quakemoves.includes(move.id)) {
+					modifier *= 5325/4096;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge']
+				if (quakemoves.includes(move.id)) {
+					this.field.changeTerrain('shortcircuitterrain');
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Factory Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Factory Terrain');
+			}
+		}
+	},
 	fairytaleterrain: {
 		name: "Fairy Tale Terrain",
 		condition: {
@@ -705,8 +743,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const fieldchange = ['chargebeam', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage']
-
+				const fieldchange = ['discharge', 'chargebeam', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage']
+				if (fieldchange.includes(move.id)) {
+					this.field.changeTerrain('factoryterrain');
+				}
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Short-Circuit Terrain');

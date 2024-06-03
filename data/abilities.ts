@@ -1050,14 +1050,18 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onStart(pokemon) {
 			let totaldef = 0;
 			let totalspd = 0;
+			let boost = 1;
+			if (this.field.isTerrain('factoryterrain')) {
+				boost = 2;
+			}
 			for (const target of pokemon.foes()) {
 				totaldef += target.getStat('def', false, true);
 				totalspd += target.getStat('spd', false, true);
 			}
 			if (totaldef && totaldef >= totalspd) {
-				this.boost({ spa: 1 });
+				this.boost({ spa: boost });
 			} else if (totalspd) {
-				this.boost({ atk: 1 });
+				this.boost({ atk: boost });
 			}
 		},
 		flags: {},
@@ -1639,6 +1643,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			let modifier = 4915/4096;
 			if (this.field.isTerrain('shortcircuitterrain')) {
 				modifier = 2;
+			}
+			else if (this.field.isTerrain('factoryterrain')) {
+				modifier = 1.5;
 			}
 			if (move.typeChangerBoosted === this.effect)
 				return this.chainModify(modifier);
@@ -4716,7 +4723,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Steel') {
 				this.debug('Steelworker boost');
-				return this.chainModify(1.5);
+				if (this.field.isTerrain('factoryterrain')) {
+					return this.chainModify(2);
+				}
+				else {
+					return this.chainModify(1.5);
+				}
 			}
 		},
 		onModifySpAPriority: 5,
@@ -5074,9 +5086,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	technician: {
 		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {
+			let minimum = 60;
+			if (this.field.isTerrain('factoryterrain')) {
+				minimum = 80
+			}
 			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
 			this.debug('Base Power: ' + basePowerAfterMultiplier);
-			if (basePowerAfterMultiplier <= 60) {
+			if (basePowerAfterMultiplier <= minimum) {
 				this.debug('Technician boost');
 				return this.chainModify(1.5);
 			}
