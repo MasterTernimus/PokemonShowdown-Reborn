@@ -209,7 +209,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 35', 'Default Level = 35'],
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 40', 'Default Level = 40'],
 	},
 
 	// S/V Doubles
@@ -307,7 +307,7 @@ export const Formats: FormatList = [
 		battle: {trunc: Math.trunc},
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 35', 'Default Level = 35'],
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 40', 'Default Level = 40'],
 	},
 
 	// S/V Doubles
