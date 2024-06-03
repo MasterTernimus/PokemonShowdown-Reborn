@@ -261,7 +261,7 @@ export class Battle {
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
 		this.quickClawRoll = false;
-		this.ShortCircuitCounter = this.random(5);
+		this.ShortCircuitCounter = 0;
 
 		this.teamGenerator = null;
 
