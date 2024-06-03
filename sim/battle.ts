@@ -168,6 +168,7 @@ export class Battle {
 
 	lastMove: ActiveMove | null;
 	lastSuccessfulMoveThisTurn: ID | null;
+	lastMoveMissed: boolean | null;
 	lastMoveLine: number;
 	/** The last damage dealt by a move in the battle - only used by Gen 1 Counter. */
 	lastDamage: number;
@@ -258,6 +259,7 @@ export class Battle {
 		this.lastMove = null;
 		this.lastMoveLine = -1;
 		this.lastSuccessfulMoveThisTurn = null;
+		this.lastMoveMissed = true;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
 		this.quickClawRoll = false;

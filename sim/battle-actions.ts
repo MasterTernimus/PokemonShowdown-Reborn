@@ -741,6 +741,7 @@ export class BattleActions {
 				hitResults[i] = false;
 				continue;
 			}
+			this.battle.lastMoveMissed = false;
 			hitResults[i] = true;
 		}
 		return hitResults;
