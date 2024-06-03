@@ -700,7 +700,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		}
 	},
 	shortcircuitterrain: {
-		name: "Short-Circuit Field",
+		name: "Short-Circuit Terrain",
 		condition: {
 			duration: 9999,
 			onBasePowerPriority: 6,
