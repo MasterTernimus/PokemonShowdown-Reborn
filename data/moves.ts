@@ -889,7 +889,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyMove(move) {
 			if (this.field.isTerrain('factoryterrain')) {
 				move.boosts = {
-					spe: 3;
+					spe: 3,
 				}
 			}
 		},
@@ -10195,7 +10195,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyMove(move) {
 			if (this.field.isTerrain('factoryterrain')) {
 				move.boosts = {
-					def: 3;
+					def: 3,
 				}
 			}
 		},
