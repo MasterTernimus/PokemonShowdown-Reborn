@@ -3662,7 +3662,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 					success = true;
 				}
 			}
-			this.field.clearTerrain();
 			return success;
 		},
 		secondary: null,
@@ -6815,7 +6814,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					didSomething = this.boost({ atk: boost, spa: boost }, source, source, move, false, true) || didSomething;
 				}
 			}
-			if (!targets.length) return false;
+			if (!targets.length || !didSomething) return false;
 			for (const target of targets) {
 				didSomething = this.boost({atk: boost, spa: boost}, target, source, move, false, true) || didSomething;
 			}
