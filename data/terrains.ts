@@ -1,4 +1,49 @@
 export const Terrains: { [k: string]: TerrainData } = {
+	ashenbeachterrain: {
+		name: "Ashen Beach Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onTryAddVolatile(status, target) {
+				if ((target.hasAbility('innerfocus') || target.types.includes('Fighting')) && status.id === 'confusion') {
+					return false;
+				}
+			},
+			onModifyMove(move) {
+				const accuracy = ['firespin', 'leaftornado', 'razorwind', 'twister', 'whirlpool'];
+				if (accuracy.includes(move.id)) {
+					move.boosts = {
+						accuracy: 1,
+					};
+				}
+				if (move.id === 'strength') {
+					move.types = ['Fighting', 'Psychic'];
+				}
+				if (move.id === 'focusblast') {
+					move.accuracy = 90;
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				const uberboost = ['sandtomb', 'mudbomb', 'mudshot', 'mudslap'];
+				const megaboost = ['hiddenpower', 'landswrath', 'muddywater', 'strength', 'surf', 'thousandwaves', 'clangoroussoulblaze'];
+				const miniboost = ['aurasphere', 'focusblast', 'storedpower', 'zenheadbutt'];
+				const boost = ['psychic'];
+				let modifier = 1;
+				if (uberboost.includes(move.id)) {
+					modifier *= 2;
+				}
+				if (megaboost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (miniboost.includes(move.id)) {
+					modifier *= 1.3;
+				}
+				if (boost.includes(move.id)) {
+					modifier *= 1.2;
+				}
+			}
+		}
+	},
 	burningterrain: {
 		name: "Burning Terrain",
 		condition: {
