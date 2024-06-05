@@ -35,6 +35,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (boost.includes(move.id)) {
 					modifier *= 1.2;
 				}
+				return this.chainModify(modifier);
 			},
 			onAfterHit(source, target, move) {
 				const accuracy = ['firespin', 'leaftornado', 'razorwind', 'twister', 'whirlpool'];
