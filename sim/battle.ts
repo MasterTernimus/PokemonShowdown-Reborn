@@ -2784,9 +2784,17 @@ export class Battle {
 		}
 		let action;
 		if (this.turn === 0) {
-			this.field.startTerrain('shortcircuitterrain');
-			const lower_terrain = this.dex.conditions.get('shortcircuitterrain');
-			this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
+			if (this.gameType === 'doubles') {
+				this.field.startTerrain('ashenbeachterrain');
+				const lower_terrain = this.dex.conditions.get('ashenbeachterrain');
+				this.field.terrainStack.push({ id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn });
+			}
+			else {
+				this.field.startTerrain('shortcircuitterrain');
+				const lower_terrain = this.dex.conditions.get('shortcircuitterrain');
+				this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
+			}
+			
 		}
 		while ((action = this.queue.shift())) {
 			this.runAction(action);

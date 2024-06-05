@@ -2208,7 +2208,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.terrain === 'psychicterrain') {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				move.boosts = {
 					spa: 2,
 					spd: 2,
@@ -2259,7 +2259,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				newType = '???';
 			} else if (this.field.isTerrain('rockyterrain')) {
 				newType = 'Rock';
-			} else if (this.field.isTerrain('desertterrain')) {
+			} else if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				newType = 'Ground';
 			} else if (this.field.isTerrain('factoryterrain')) {
 				newType = 'Steel';
@@ -6251,7 +6251,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Focus Blast",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('ashenbeachterrain')) {
+				move.accuracy = 90;
+			}
+		},
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -6284,7 +6289,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 				}
 			},
 			onModifyCritRatio(critRatio) {
-				return critRatio + 2;
+				if (this.field.isTerrain('ashenbeachterrain')) {
+					return critRatio + 3;
+				}
+				else {
+					return critRatio + 2;
+				}
 			},
 		},
 		secondary: null,
@@ -10390,7 +10400,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.terrain === 'psychicterrain') {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				move.boosts = {
 					accuracy: -2,
 				};
@@ -12085,7 +12095,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.terrain === 'psychicterrain') {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				move.boosts = {
 					atk: 2,
 					spa: 2,
@@ -13357,6 +13367,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'discharge';
 			} else if (this.field.isTerrain('factoryterrain')) {
 				move = 'geargrind';
+			} else if (this.field.isTerrain('ashenbeachterrain')) {
+				move = 'meditate';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -14904,8 +14916,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 					source.removeVolatile(volatile);
 				}
 			}
-			if (this.field.terrain == 'psychicterrain') {
+			if (this.field.isTerrain('psychicterrain')) {
 				this.boost({ spa: 2 });
+			}
+			if (this.field.isTerrain('ashenbeachterrain')) {
+				source.cureStatus();
 			}
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
@@ -16609,7 +16624,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('desertterrain')) {
+			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				move.boosts = { accuracy: -2 };
 			}
 		},
@@ -16932,7 +16947,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 30,
 					volatileStatus: 'flinch'
 				});
-			} else if (this.field.isTerrain('desertterrain')) {
+			} else if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					boosts: {
@@ -17437,7 +17452,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isWeather('sandstorm')) {
 				factor = 0.667;
 			}
-			if (this.field.isTerrain('desertterrain')) {
+			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				factor = 1;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -19371,7 +19386,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Strength",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('ashenbeachterrain')) {
+				move.types = ['Fighting', 'Psychic'];
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",

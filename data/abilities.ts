@@ -4064,7 +4064,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	sandforce: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain')) {
+			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([5325, 4096]);
@@ -4081,7 +4081,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	sandrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain')) {
+			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -4121,7 +4121,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain')) {
+			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				this.debug('Sand Veil - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -5646,17 +5646,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	watercompaction: {
 		onSwitchIn() {
-			if (this.field.terrain === 'mistyterrain' || this.field.terrain === 'corrosivemistterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+			if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
 				this.boost({ def: 2 });
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water') {
+				if (this.field.isTerrain('ashenbeachterrain')) {
+					this.boost({ spd: 2 });
+				}
 				this.boost({ def: 2 });
 			}
 		},
 		onResidual() {
-			if (this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
+			if (this.field.isTerrain('underwaterterrain') || this.field.isTerrain('waterterrain')) {
 				this.boost({ def: 2 });
 			}
 		},
@@ -5834,9 +5837,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
+			if ((pokemon.hp <= pokemon.maxhp / 2 || this.field.isTerrain('ashenbeachterrain')) && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
 				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
+			} else if ((pokemon.hp > pokemon.maxhp / 2 && !this.field.isTerrain('ashenbeachterrain'))&& ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}

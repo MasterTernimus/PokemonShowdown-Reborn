@@ -4,23 +4,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			duration: 9999,
 			onBasePowerPriority: 6,
+			onAccuracy(accuracy, target, source, move) {
+				const noguard = ['owntempo', 'purepower', 'sandveil', 'steadfast'];
+				if (!target.hasAbility('unnerve') && source.hasAbility(noguard)) {
+					if(move && target === this.effectState.target)
+						return true;
+				}
+				return accuracy;
+			},
 			onTryAddVolatile(status, target) {
 				if ((target.hasAbility('innerfocus') || target.types.includes('Fighting')) && status.id === 'confusion') {
 					return false;
-				}
-			},
-			onModifyMove(move) {
-				const accuracy = ['firespin', 'leaftornado', 'razorwind', 'twister', 'whirlpool'];
-				if (accuracy.includes(move.id)) {
-					move.boosts = {
-						accuracy: 1,
-					};
-				}
-				if (move.id === 'strength') {
-					move.types = ['Fighting', 'Psychic'];
-				}
-				if (move.id === 'focusblast') {
-					move.accuracy = 90;
 				}
 			},
 			onBasePower(basePower, source, target, move) {
@@ -41,7 +35,26 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (boost.includes(move.id)) {
 					modifier *= 1.2;
 				}
-			}
+			},
+			onAfterHit(source, target, move) {
+				const accuracy = ['firespin', 'leaftornado', 'razorwind', 'twister', 'whirlpool'];
+				if (accuracy.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')){
+					for (const pokemon of this.getAllActive()) {
+						this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
+					}
+				}
+			},
+			onFieldResidual(field, pokemon) {
+				if (pokemon.getVolatile('sandtomb')) {
+					this.boost({ accuracy: -1 }, pokemon, null, this.dex.conditions.get('sandtomb') as Effect, false, false);
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Ashen Beach Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Ashen Beach Terrain');
+			},
 		}
 	},
 	burningterrain: {
