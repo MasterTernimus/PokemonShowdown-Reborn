@@ -663,7 +663,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('smoothrock') || this.field.isTerrain('desertterrain')) {
+			if (source?.hasItem('smoothrock') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				return 8;
 			}
 			return 5;

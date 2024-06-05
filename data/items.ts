@@ -1651,7 +1651,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -1680,9 +1680,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (this.field.isTerrain('forestterrain')) {
 				pokemon.addVolatile('spikyshield');
 			}
+			if (this.field.isTerrain('ashenbeachterrain')) {
+				pokemon.addVolatile('focusenergy')
+			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'ashenbeachterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -5326,7 +5329,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.totalDamage && !pokemon.forceSwitchFlag) {
-				this.heal(move.totalDamage / 8, pokemon);
+				if (this.field.isTerrain('ashenbeachterrain')) {
+					this.heal(move.totalDamage / 4, pokemon);
+				}
+				else {
+					this.heal(move.totalDamage / 8, pokemon);
+				}
 			}
 		},
 		num: 253,
