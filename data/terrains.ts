@@ -46,7 +46,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldResidual(field, pokemon) {
-				if (pokemon.getVolatile('sandtomb')) {
+				if (pokemon.volatiles['sandtomb']) {
 					this.boost({ accuracy: -1 }, pokemon, null, this.dex.conditions.get('sandtomb') as Effect, false, false);
 				}
 			},
