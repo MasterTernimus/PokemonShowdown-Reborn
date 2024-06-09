@@ -12095,13 +12095,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('ashenbeachterrain')) {
+			if (this.field.isTerrain('psychicterrain')) {
 				move.boosts = {
 					atk: 2,
 					spa: 2,
 				};
 			}
-			if (this.field.terrain === 'rainbowterrain') {
+			if (this.field.isTerrain('rainbowterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				move.boosts = {
 					atk: 3,
 				};
