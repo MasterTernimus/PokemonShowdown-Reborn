@@ -5833,18 +5833,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	zenmode: {
 		onResidualOrder: 29,
-		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('ashenbeachterrain') && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
-				pokemon.addVolatile('zenmode');
-			}
-		},
 		onResidual(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if ((pokemon.hp <= pokemon.maxhp / 2 || this.field.isTerrain('ashenbeachterrain')) && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
+			if (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
 				pokemon.addVolatile('zenmode');
-			} else if ((pokemon.hp > pokemon.maxhp / 2 && !this.field.isTerrain('ashenbeachterrain')) && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
+			} else if (pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
