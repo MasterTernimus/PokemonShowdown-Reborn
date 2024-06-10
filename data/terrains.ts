@@ -45,7 +45,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 				}
 			},
-			onResidual(field, pokemon) {
+			onResidual(pokemon) {
 				if (pokemon.volatiles['sandtomb']) {
 					this.boost({ accuracy: -1 }, pokemon, null, this.dex.conditions.get('sandtomb') as Effect, false, false);
 				}
@@ -122,6 +122,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 					else {
 						this.damage(damage, pokemon);
 					}
+				}
+				if (pokemon.moveThisTurn === 'burnup') {
+					pokemon.setType(pokemon.getTypes(true).map(type => type === "???" ? "Fire" : type));
 				}
 			},
 			onFieldResidual() {

@@ -2720,7 +2720,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Coaching",
 		pp: 10,
 		priority: 0,
-		flags: {bypasssub: 1, allyanim: 1, metronome: 1},
+		flags: { bypasssub: 1, allyanim: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('ashenbeachterrain')) {
+				move.boosts = {
+					atk: 2,
+					def: 2
+				};
+			}
+		},
 		secondary: null,
 		boosts: {
 			atk: 1,
