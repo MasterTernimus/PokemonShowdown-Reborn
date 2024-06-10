@@ -1355,7 +1355,7 @@ export class BattleActions {
 				// User stat boosts or target stat drops can possibly overflow if it goes beyond 256 in Gen 8 or prior
 				const secondaryOverflow = (secondary.boosts || secondary.self) && this.battle.gen <= 8;
 				if (typeof secondary.chance === 'undefined' ||
-					secondaryRoll * 10 < (secondaryOverflow ? secondary.chance % 256 : secondary.chance)) {
+					secondaryRoll < (secondaryOverflow ? (secondary.chance % 256) * 10 : secondary.chance * 10)) {
 					this.moveHit(target, source, move, secondary, true, isSelf);
 				}
 			}
