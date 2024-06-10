@@ -971,6 +971,76 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	wastelandterrain: {
+		name: "Wasteland Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onModifyMove(move) {
+				const poisoned = ['mudbomb', 'mudshot', 'mudslap'];
+				if (poisoned.includes(move.id)) {
+					move.types = [move.type, 'Poison'];
+				}
+			},
+			onBasePower(basePower, source, pokemon, move) {
+				let modifier = 1;
+				const boost = ['mudbomb', 'mudshot', 'mudslap', 'powerwhip', 'vinewhip'];
+				const miniboost = ['gunkshot', 'octazooka', 'sludge', 'sludgebomb', 'sludgewave'];
+				const weak = ['bulldoze', 'earthquake', 'magnitude'];
+				if (boost.includes(move.id)) {
+					this.add('-message', 'The waste joined the attack!');
+					modifier *= 1.5;
+				}
+				if (miniboost.includes(move.id)) {
+					this.add('-message', 'The waste did it for the vine!');
+					modifier *= 1.2;
+				}
+				if (weak.includes(move.id)) {
+					this.add('-message', 'Wibble-wibble wobble-wobb...');
+					modifier *= 0.25;
+				}
+				if (move.id === 'spitup') {
+					this.add('-message', 'BLEAAARGGGGH!');
+					modifier *= 2;
+				}
+				return this.chainModify(modifier);
+			},
+			onResidual(pokemon) {
+				if (this.field.terrainState.toxicspikes == 1) {
+					this.add('-message', '...Poison needles shot up from the ground!');
+					if (!(pokemon.hasType('Steel') || pokemon.hasType('Poison')) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+						pokemon.trySetStatus('psn');
+						this.damage(pokemon.baseMaxhp / 8, pokemon);
+					}
+				}
+				if (this.field.terrainState.spikes == 1) {
+					this.add('-message', '...Stalagmites burst up from the ground!');
+					if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+						this.damage(pokemon.baseMaxhp / 3, pokemon);
+					}
+				}
+				if (this.field.terrainState.stickyweb == 1) {
+					this.add('-message', '...Sticky string shot out of the ground!');
+					if (!pokemon.isSemiInvulnerable()) {
+						this.boost({ spe: -4 }, pokemon);
+					}
+				}
+				if (this.field.terrainState.stealthrock == 1) {
+					this.add('-message', '...Rocks spewed out from the ground below!');
+					if (!pokemon.isSemiInvulnerable()) {
+						const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+						this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4, pokemon);
+					}
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Wasteland Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Wasteland Terrain');
+			},
+		}
+	},
 	watersurfaceterrain: {
 		name: "Water Surface Terrain",
 		condition: {

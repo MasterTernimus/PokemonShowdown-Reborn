@@ -710,6 +710,26 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
 		flags: {},
 		name: "Corrosion",
+		onModifyMove(move) {
+			move.secondaries = [
+				{
+					chance: 2.5,
+					status: 'frz'
+				},
+				{
+					chance: 2.5,
+					status: 'brn'
+				},
+				{
+					chance: 2.5,
+					status: 'par'
+				},
+				{
+					chance: 2.5,
+					status: 'psn'
+				}
+			];
+		},
 		onBasePower() {
 			if (this.field.terrain === 'corrosivemistterrain' || this.field.terrain === 'corrosiveterrain')
 				this.chainModify(1.5);
@@ -1186,7 +1206,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target) && !source.status && source.runStatusImmunity('powder')) {
 				const r = this.random(100);
-				if (this.field.isTerrain('forestterrain')) {
+				if (this.field.isTerrain('forestterrain') || this.field.isTerrain('wastelandterrain')) {
 					if (r > 0 && r < 22) {
 						source.setStatus('slp', target);
 					} else if (r > 22 && r < 42) {
@@ -1683,8 +1703,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Gooey');
-				if (this.field.terrain === 'murkwatersurfaceterrain') {
+				if (this.field.isTerrain('murkwatersurfaceterrain')) {
 					this.boost({ spe: -2 }, source, target, null, true);
+				}
+				else if (this.field.isTerrain('wastelandterrain')) {
+					target.setStatus('psn', source);
 				}
 				else {
 					this.boost({ spe: -1 }, source, target, null, true);
@@ -2457,7 +2480,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
 			const canOoze = ['drain', 'leechseed', 'strengthsap'];
 			if (canOoze.includes(effect.id)) {
-				if (this.field.terrain === 'murkwatersurfaceterrain') {
+				if (this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain')) {
 					this.damage(damage*2);
 
 				}
@@ -2650,7 +2673,8 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	merciless: {
 		onModifyCritRatio(critRatio, source, target) {
-			if (target && ['psn', 'tox'].includes(target.status) || this.field.terrain === 'corrosivemistterrain' || this.field.terrain === 'corrosiveterrain' || this.field.terrain === 'murkwatersurfaceterrain') return 5;
+			if (target && ['psn', 'tox'].includes(target.status) || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain'))
+				return 5;
 		},
 		flags: {},
 		name: "Merciless",
@@ -3399,7 +3423,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.terrain === 'corrosiveterrain' && pokemon.isGrounded() || this.field.terrain === 'murkwatersurfaceterrain') {
+			if ((this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('wastelandterrain')) && pokemon.isGrounded() || this.field.isTerrain('murkwatersurfaceterrain')) {
 				this.heal(pokemon.baseMaxhp / 8, pokemon);
 			}
 		},
@@ -3411,7 +3435,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	poisonpoint: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
-				if (this.randomChance(3, 10)) {
+				let chance = 3;
+				if (this.field.isTerrain('wastelandterrain')) {
+					chance = 6;
+				}
+				if (this.randomChance(chance, 10)) {
 					source.trySetStatus('psn', target);
 				}
 			}
@@ -4765,7 +4793,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				for (const secondary of move.secondaries) {
 					if (secondary.volatileStatus === 'flinch') return;
 				}
-				if (this.field.terrain === 'murkwatersurfaceterrain') {
+				if (this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain')) {
 					move.secondaries.push({
 						chance: 20,
 						volatileStatus: 'flinch',
@@ -5275,7 +5303,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	toxicboost: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if ((attacker.status === 'psn' || attacker.status === 'tox' || this.field.terrain === 'corrosiveterrain' || this.field.terrain === 'murkwatersurfaceterrain') && move.category === 'Physical') {
+			if ((attacker.status === 'psn' || attacker.status === 'tox' || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain')) && move.category === 'Physical') {
 				return this.chainModify(1.5);
 			}
 		},

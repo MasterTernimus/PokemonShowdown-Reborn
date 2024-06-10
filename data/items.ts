@@ -1651,7 +1651,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain', 'wastelandterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -1682,6 +1682,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 			if (this.field.isTerrain('ashenbeachterrain')) {
 				pokemon.addVolatile('focusenergy')
+			}
+			if (this.field.isTerrain('wastelandterrain')) {
+				this.boost({ atk: 1, spa: 1 }, pokemon);
+				for (const side of this.sides) {
+					side.addSideCondition('stealthrock');
+				}
 			}
 		},
 		onTerrainChange(pokemon) {

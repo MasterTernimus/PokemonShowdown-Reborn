@@ -100,6 +100,28 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onModifyMove(move) {
+			if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [
+					{
+						chance: 25,
+						status: 'frz'
+					},
+					{
+						chance: 25,
+						status: 'brn'
+					},
+					{
+						chance: 25,
+						status: 'psn'
+					},
+					{
+						chance: 25,
+						status: 'par'
+					}
+				];
+			}
+		},
 		isZ: "poisoniumz",
 		secondary: null,
 		target: "normal",
@@ -8423,7 +8445,29 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Gunk Shot",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [
+					{
+						chance: 7.5,
+						status: 'frz'
+					},
+					{
+						chance: 7.5,
+						status: 'brn'
+					},
+					{
+						chance: 7.5,
+						status: 'psn'
+					},
+					{
+						chance: 7.5,
+						status: 'par'
+					}
+				];
+			}
+		},
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -10763,7 +10807,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				const damage = this.damage(pokemon.baseMaxhp / 8, pokemon, target);
+				let damage;
+				if (this.field.isTerrain('wastelandterrain')) {
+					damage = this.damage(pokemon.baseMaxhp / 4, pokemon, target);
+				}
+				else {
+					damage = this.damage(pokemon.baseMaxhp / 8, pokemon, target);
+				}
 				if (damage) {
 					this.heal(damage, target, pokemon);
 				}
@@ -13369,6 +13419,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'geargrind';
 			} else if (this.field.isTerrain('ashenbeachterrain')) {
 				move = 'meditate';
+			} else if (this.field.isTerrain('wastelandterrain')) {
+				move = 'gunkshot';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -13712,7 +13764,35 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Octazooka",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [
+					{
+						chance: 10,
+						status: 'frz'
+					},
+					{
+						chance: 10,
+						status: 'brn'
+					},
+					{
+						chance: 10,
+						status: 'psn'
+					},
+					{
+						chance: 10,
+						status: 'par'
+					},
+					{
+						chance: 10,
+						boosts: {
+							accuracy: -1,
+						}
+					},
+				];
+			}
+		},
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -16954,7 +17034,26 @@ export const Moves: { [moveid: string]: MoveData } = {
 						accuracy: -1,
 					},
 				})
-			}
+			} else if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [
+					{
+						chance: 7.5,
+						status: 'brn'
+					},
+					{
+						chance: 7.5,
+						status: 'par'
+					},
+					{
+						chance: 7.5,
+						status: 'psn'
+					},
+					{
+						chance: 7.5,
+						status: 'frz'
+					}
+				]
+			} 
 		},
 		secondary: {
 			chance: 30,
@@ -18051,7 +18150,29 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Sludge",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [
+					{
+						chance: 7.5,
+						status: 'frz'
+					},
+					{
+						chance: 7.5,
+						status: 'brn'
+					},
+					{
+						chance: 7.5,
+						status: 'psn'
+					},
+					{
+						chance: 7.5,
+						status: 'par'
+					}
+				];
+			}
+		},
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -18068,7 +18189,29 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Sludge Bomb",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [
+					{
+						chance: 7.5,
+						status: 'frz'
+					},
+					{
+						chance: 7.5,
+						status: 'brn'
+					},
+					{
+						chance: 7.5,
+						status: 'psn'
+					},
+					{
+						chance: 7.5,
+						status: 'par'
+					}
+				];
+			}
+		},
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -18085,7 +18228,29 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Sludge Wave",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [
+					{
+						chance: 2.5,
+						status: 'frz'
+					},
+					{
+						chance: 2.5,
+						status: 'brn'
+					},
+					{
+						chance: 2.5,
+						status: 'psn'
+					},
+					{
+						chance: 2.5,
+						status: 'par'
+					}
+				];
+			}
+		},
 		secondary: {
 			chance: 10,
 			status: 'psn',
@@ -18681,8 +18846,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers = 1;
-				if (this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+				if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
 					this.add('-sideend', side, 'Spikes');
+					side.removeSideCondition('spikes');
+				}
+				if (this.field.isTerrain('wastelandterrain')) {
+					this.add('-message', 'The waste swallowed up the spikes!');
+					this.add('-sideend', side, 'Spikes');
+					side.removeSideCondition('spikes');
+					this.field.terrainState.spikes = 1;
 				}
 			},
 			onSideRestart(side) {
@@ -19016,11 +19188,21 @@ export const Moves: { [moveid: string]: MoveData } = {
 			// this is a side condition
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
+				if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
+					this.add('-sideend', side, 'move: Stealth Rock');
+					side.removeSideCondition('stealthrock');
+				}
+				if (this.field.isTerrain('wastelandterrain')) {
+					this.add('-message', 'The waste swallowed up the pointed stones!');
+					this.add('-sideend', side, 'move: Stealth Rock');
+					side.removeSideCondition('stealthrock');
+					this.field.terrainState.stealthrock = 1;
+				}
 			},
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-				if (this.field.terrain === 'rockyterrain') {
+				if (this.field.isTerrain('rockyterrain')) {
 					this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
 				}
 				else {
@@ -19149,13 +19331,18 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
+				if (this.field.isTerrain('wastelandterrain')) {
+					this.add('-message', 'The waste swallowed up the sticky web!');
+					this.add('-sideend', side, 'move: Sticky Web');
+					side.removeSideCondition('stickyweb');
+					this.field.terrainState.stickyweb = 1;
+				}
 			},
 			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				if (this.field.isTerrain('forestterrain')) {
 					this.boost({ spe: -2 }, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
-
 				}
 				else {
 					this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
@@ -19843,7 +20030,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onHit(pokemon) {
 			const healAmount = [0.25, 0.5, 1];
-			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			let modifier = 1;
+			if (this.field.isTerrain('wastelandterrain')) {
+				modifier *= 2;
+				if (pokemon.volatiles['stockpile'].layers == 3) {
+					pokemon.cureStatus();
+				}
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp * modifier, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			if (!success) this.add('-fail', pokemon, 'heal');
 			pokemon.removeVolatile('stockpile');
 			return success || this.NOT_FAIL;
@@ -21103,8 +21297,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers = 1;
-				if (this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+				if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
 					this.add('-sideend', side, 'move: Toxic Spikes');
+					side.removeSideCondition('toxicspikes');
+				}
+				if (this.field.isTerrain('wastelandterrain')) {
+					this.add('-message', 'The waste swallowed up the toxic spikes!');
+					this.add('-sideend', side, 'move: Toxic Spikes');
+					side.removeSideCondition('toxicspikes');
+					this.field.terrainState.toxicspikes = 1;
 				}
 			},
 			onSideRestart(side) {
@@ -21114,7 +21315,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			},
 			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded()) return;
-				if (pokemon.hasType('Poison') && !(this.field.terrain === 'corrosiveterrain')) {
+				if (pokemon.hasType('Poison') && !this.field.isTerrain('corrosiveterrain')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
@@ -21717,7 +21918,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 		onHit(target, source, move) {
-			if (target.status === 'psn' || target.status === 'tox' || this.field.terrain === 'corrosivemistterrain' || this.field.terrain === 'corrosiveterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+			if (target.status === 'psn' || target.status === 'tox' || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain')) {
 				return !!this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
 			}
 			return false;
@@ -21738,7 +21939,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'psn' || target.status === 'tox' || this.field.terrain === 'corrosivemistterrain' || this.field.terrain === 'corrosiveterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+			if (target.status === 'psn' || target.status === 'tox' || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain')) {
 				return this.chainModify(2);
 			}
 		},
