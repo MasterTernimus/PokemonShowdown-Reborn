@@ -556,6 +556,100 @@ export const Terrains: { [k: string]: TerrainData } = {
 			}
 		}
 	},
+	mirrorarenaterrain: {
+		name: "Mirror Arena Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onSwitchIn(pokemon) {
+				if (pokemon.hasItem('brightpowder') || pokemon.hasItem('laxincense')) {
+					this.boost({ evasion: 1 }, pokemon);
+				}
+				if (pokemon.hasItem('zoomlens') || pokemon.hasItem('widelens')) {
+					this.boost({ accuracy: 1 }, pokemon);
+					pokemon.addVolatile('laserfocus');
+				}
+			},
+			onModifyCritRatio(critRatio, source, target) {
+				let boost = 0;
+				const targetacc = target.boosts.accuracy;
+				const targeteva = target.boosts.evasion;
+				const sourceacc = target.boosts.accuracy;
+				const sourceeva = target.boosts.evasion;
+				if (targetacc < 0) {
+					boost += targetacc;
+				}
+				if (targeteva < 0) {
+					boost += targeteva;
+				}
+				if (sourceacc > 0) {
+					boost += sourceacc;
+				}
+				if (sourceeva > 0) {
+					boost += sourceeva;
+				}
+				return critRatio + boost;
+			},
+			onModifyMove(move, pokemon, target) {
+				let reflected = false;
+				const reflectedmoves = ['mirrorshot', 'aurorabeam', 'dazzlinggleam', 'flashcannon', 'doomdesire', 'lusterpurge', 'photongeyser', 'prismaticlaser', 'signalbeam', 'technoblast', 'lightthatburnsthesky']; 
+				if (target && target.boosts.evasion > 0) {
+					reflected = true;
+				}
+				if ((move.category === 'Special' && move.target === 'normal' && reflected) || reflectedmoves.includes(move.id)) {
+					return true;
+				}
+			},
+			onBasePower(basePower, target, source, move) {
+				let modifier = 1;
+				let isevasion = false;
+				const evasionshredder = ['bubblebeam', 'chargebeam', 'fleurcannon', 'hyperbeam', 'icebeam', 'originpulse', 'moongeistbeam', 'psybeam', 'solarbeam', 'triattack'];
+				const minievasionshredder = ['aurorabeam', 'dazzlinggleam', 'flashcannon', 'doomdesire', 'lusterpurge', 'photongeyser', 'prismaticlaser', 'signalbeam', 'technoblast', 'lightthatburnsthesky']; 
+				const mirrorbreak = ['boomburst', 'bulldoze', 'earthquake', 'explosion', 'fissure', 'hypervoice', 'magnitude', 'selfdestruct', 'tectonicrage'];
+				if (target.boosts.evasion > 0) {
+					isevasion = true;
+				}
+				if (isevasion && evasionshredder.includes(move.id)) {
+					modifier *= 2;
+				}
+				if (move.id === 'mirrorshot') {
+					modifier *= 2;
+				}
+				if (minievasionshredder.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (mirrorbreak.includes(move.id)) {
+					modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
+			},
+			onMiss(source, target, move) {
+				this.damage(source.baseMaxhp / 4, source);
+				if (source.boosts.evasion > 0) {
+					this.boost({ evasion: -1 }, source);
+				}
+			},
+			onAfterMove(source, target, move) {
+				const mirrorbreak = ['boomburst', 'bulldoze', 'earthquake', 'explosion', 'fissure', 'hypervoice', 'magnitude', 'selfdestruct', 'tectonicrage'];
+				if (mirrorbreak.includes(move.id)) {
+					for (const side of this.sides) {
+						for (const pokemon of side.active) {
+							if (!pokemon.isSemiInvulnerable() && !(pokemon.hasAbility('shellarmor') || pokemon.hasAbility('battlearmor')) && !(pokemon.isProtected() || pokemon.volatiles['wideguard'] || pokemon.volatiles['endure'])) {
+								this.damage(pokemon.baseMaxhp / 2, pokemon);
+							}
+						}
+					}
+					this.field.clearTerrain();
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Mirror Arena Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Mirror Arena Terrain');
+			},
+		}
+	},
 	murkwatersurfaceterrain: {
 		name: "Murkwater Surface Terrain",
 		condition: {
@@ -1014,6 +1108,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (!(pokemon.hasType('Steel') || pokemon.hasType('Poison')) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 						pokemon.trySetStatus('psn');
 						this.damage(pokemon.baseMaxhp / 8, pokemon);
+						this.field.terrainState.toxicspikes = 0;
 					}
 				}
 				if (this.field.terrainState.spikes == 1) {
@@ -1021,12 +1116,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 						this.damage(pokemon.baseMaxhp / 3, pokemon);
 					}
+					this.field.terrainState.spikes = 0;
 				}
 				if (this.field.terrainState.stickyweb == 1) {
 					this.add('-message', '...Sticky string shot out of the ground!');
 					if (!pokemon.isSemiInvulnerable()) {
 						this.boost({ spe: -4 }, pokemon);
 					}
+					this.field.terrainState.stickyweb = 0;
 				}
 				if (this.field.terrainState.stealthrock == 1) {
 					this.add('-message', '...Rocks spewed out from the ground below!');
@@ -1034,6 +1131,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 						this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4, pokemon);
 					}
+					this.field.terrainState.stealthrock = 0;
 				}
 			},
 			onFieldStart() {
