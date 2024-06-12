@@ -860,12 +860,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'auroraveil',
 		onTry() {
-			return this.field.isWeather(['hail', 'snow']) || this.field.terrain === 'rainbowterrain' || this.field.terrain === 'icyterrain';
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('icyterrain') || this.field.isTerrain('mirrorarenaterrain')) {
+				return true;
+			}
 		},
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay')) {
+				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
 					return 8;
 				}
 				return 5;
@@ -881,6 +883,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
+				}
+			},
+			onAfterMove(source) {
+				if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+					this.boost({ evasion: 1 }, source);
 				}
 			},
 			onSideStart(side) {
@@ -2283,7 +2290,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				newType = 'Rock';
 			} else if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				newType = 'Ground';
-			} else if (this.field.isTerrain('factoryterrain')) {
+			} else if (this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain')) {
 				newType = 'Steel';
 			}
 			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
@@ -4236,7 +4243,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Double Team",
 		pp: 15,
 		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				move.boosts = {
+					evasion: 2,
+				};
+			}
+		},
 		boosts: {
 			evasion: 1,
 		},
@@ -5971,7 +5985,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('shortcircuitterrain')) {
+			if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('mirrorarenaterrain')) {
 				move.boosts = {
 					accuracy: -2,
 				};
@@ -10930,7 +10944,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay')) {
+				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
 					return 8;
 				}
 				return 5;
@@ -10942,6 +10956,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
+				}
+			},
+			onAfterMove(source) {
+				if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+					this.boost({ evasion: 1 }, source);
 				}
 			},
 			onSideStart(side) {
@@ -12693,6 +12712,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (!pokemon.volatiles['mirrorcoat']) return 0;
 			return pokemon.volatiles['mirrorcoat'].damage || 1;
 		},
+		onAfterMove(source) {
+			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+				this.boost({ def: 1, spd: 1, evasion: 1 }, source);
+			}
+		},
 		category: "Special",
 		name: "Mirror Coat",
 		pp: 20,
@@ -12747,6 +12771,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			}
 			this.actions.useMove(move.id, pokemon, target);
 			return null;
+		},
+		onAfterMove(source) {
+			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+				this.boost({ atk: 1, spa: 1, evasion: 1 }, source);
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -13429,6 +13458,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'meditate';
 			} else if (this.field.isTerrain('wastelandterrain')) {
 				move = 'gunkshot';
+			} else if (this.field.isTerrain('mirrorarenaterrain')) {
+				move = 'mirrorshot';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -15852,7 +15883,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay')) {
+				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
 					return 8;
 				}
 				return 5;
@@ -15864,6 +15895,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
+				}
+			},
+			onAfterMove(source) {
+				if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+					this.boost({ evasion: 1 }, source);
 				}
 			},
 			onSideStart(side) {
@@ -17043,8 +17079,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					},
 				})
 			} else if (this.field.isTerrain('wastelandterrain')) {
-				move.secondaries = [
-					{
+				move.secondaries.push({
 						chance: 7.5,
 						status: 'brn'
 					},
@@ -17059,9 +17094,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 					{
 						chance: 7.5,
 						status: 'frz'
-					}
-				]
-			} 
+					});
+			} else if (this.field.isTerrain('mirrorarenaterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					boosts: {
+						evasion: -1
+					},
+				});
+			}
 		},
 		secondary: {
 			chance: 30,
@@ -18862,7 +18903,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.add('-message', 'The waste swallowed up the spikes!');
 					this.add('-sideend', side, 'Spikes');
 					side.removeSideCondition('spikes');
-					this.field.terrainState.spikes = 1;
+					this.field.terrainState.spikes = side.id;
 				}
 			},
 			onSideRestart(side) {
@@ -19204,7 +19245,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.add('-message', 'The waste swallowed up the pointed stones!');
 					this.add('-sideend', side, 'move: Stealth Rock');
 					side.removeSideCondition('stealthrock');
-					this.field.terrainState.stealthrock = 1;
+					this.field.terrainState.stealthrock = side.id;
 				}
 			},
 			onEntryHazard(pokemon) {
@@ -19343,7 +19384,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.add('-message', 'The waste swallowed up the sticky web!');
 					this.add('-sideend', side, 'move: Sticky Web');
 					side.removeSideCondition('stickyweb');
-					this.field.terrainState.stickyweb = 1;
+					this.field.terrainState.stickyweb = side.id;
 				}
 			},
 			onEntryHazard(pokemon) {
@@ -21313,7 +21354,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.add('-message', 'The waste swallowed up the toxic spikes!');
 					this.add('-sideend', side, 'move: Toxic Spikes');
 					side.removeSideCondition('toxicspikes');
-					this.field.terrainState.toxicspikes = 1;
+					this.field.terrainState.toxicspikes = side.id;
 				}
 			},
 			onSideRestart(side) {
