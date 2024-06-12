@@ -49,6 +49,7 @@ export interface EventMethods {
 	onImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
 	onLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string);
 	onMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void;
+	onMiss?: MoveEventMethods['onAfterHit'];
 	onModifyAccuracy?: CommonHandlers['ModifierMove'];
 	onModifyAtk?: CommonHandlers['ModifierSourceMove'];
 	onModifyBoost?: (this: Battle, boosts: SparseBoostsTable, pokemon: Pokemon) => SparseBoostsTable | void;

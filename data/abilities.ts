@@ -590,6 +590,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 13,
 	},
 	colorchange: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 1 }, pokemon);
+			}
+		},
 		onAfterMoveSecondary(target, source, move) {
 			if (!target.hp) return;
 			const type = move.type;
@@ -682,6 +687,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 172,
 	},
 	compoundeyes: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ accuracy: 1 }, pokemon);
+				pokemon.addVolatile('laserfocus');
+			}
+		},
 		onSourceModifyAccuracyPriority: -1,
 		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
@@ -2108,6 +2119,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 246,
 	},
 	illuminate: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				for (const foe of pokemon.foes()) {
+					this.boost({ accuracy: -1 }, foe);
+				}
+			}
+		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost.accuracy && boost.accuracy < 0) {
@@ -2126,6 +2144,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 35,
 	},
 	illusion: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 2 }, pokemon);
+			}
+		},
 		onBeforeSwitchIn(pokemon) {
 			pokemon.illusion = null;
 			// yes, you can Illusion an active pokemon but only if it's to your right
@@ -2336,6 +2359,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 154,
 	},
 	keeneye: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ accuracy: 1 }, pokemon);
+				pokemon.addVolatile('laserfocus');
+			}
+		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost.accuracy && boost.accuracy < 0) {
@@ -2526,9 +2555,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	magicbounce: {
 		onTryHitPriority: 1,
-		onSwitchIn() {
+		onSwitchIn(pokemon) {
 			if (this.field.terrain === 'fairytaleterrain') {
-				this.boost({ spd: 1 });
+				this.boost({ spd: 1 }, pokemon);
+			}
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 1 }, pokemon);
 			}
 		},
 		onTryHit(target, source, move) {
@@ -2539,6 +2571,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, target, source);
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 1 }, source);
+			}
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -2746,11 +2781,15 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	minus: {
 		onModifySpAPriority: 5,
-		onModifySpA(spa, pokemon) {
-			return this.chainModify([5325, 4096]);
+		onModifySpA(spa, pokemon, target, move) {
+			if (move.type === 'Electric') {
+				return this.chainModify(1.3);
+			}
 		},
-		onModifyAtk(atk, pokemon) {
-			return this.chainModify([5325, 4096]);
+		onModifyAtk(atk, pokemon, target, move) {
+			if (move.type === 'Electric') {
+				return this.chainModify(1.3);
+			}
 		},
 		flags: {},
 		name: "Minus",
@@ -3403,11 +3442,15 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	plus: {
 		onModifySpAPriority: 5,
-		onModifySpA(spa, pokemon) {
-			return this.chainModify([5325, 4096]);
+		onModifySpA(spa, pokemon, target, move) {
+			if (move.type === 'Electric') {
+				return this.chainModify(1.3);
+			}
 		},
-		onModifyAtk(atk, pokemon) {
-			return this.chainModify([5325, 4096]);
+		onModifyAtk(atk, pokemon, target, move) {
+			if (move.type === 'Electric') {
+				return this.chainModify(1.3);
+			}
 		},
 		flags: {},
 		name: "Plus",
@@ -4143,6 +4186,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 45,
 	},
 	sandveil: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 1 }, pokemon);
+			}
+		},
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
@@ -4534,6 +4582,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 97,
 	},
 	snowcloak: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 1 }, pokemon);
+			}
+		},
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
@@ -5086,6 +5139,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 284,
 	},
 	tangledfeet: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 1 }, pokemon);
+			}
+		},
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, target) {
 			if (typeof accuracy !== 'number') return;

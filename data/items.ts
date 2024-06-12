@@ -4641,12 +4641,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain'))) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain'))) {
 				pokemon.useItem();
 			}
 		},
@@ -4656,12 +4656,16 @@ export const Items: {[itemid: string]: ItemData} = {
 				return;
 			}
 			if (this.field.isTerrain('shortcircuitterrain')) {
-				this.boost({ spd: 1 }, pokemon);
+				this.boost({ spd: 1 }, pokemon, pokemon, item, false, true);
 				pokemon.addVolatile('magnetrise');
 			}
 			if (this.field.isTerrain('factoryterrain')) {
 				this.boost({ spa: 1 }, pokemon, pokemon, item, false, true);
-				pokemon.addVolatile('laserfocus');
+				pokemon.addVolatile('laserfocus', null, item);
+			}
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 1 }, pokemon, pokemon, item, false, true);
+				pokemon.addVolatile('mirrorcoat', null, item);
 			}
 		},
 		num: 882,
