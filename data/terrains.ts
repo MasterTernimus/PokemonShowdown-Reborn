@@ -590,6 +590,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				return critRatio + boost;
 			},
+			onModifyMovePriority: 6,
 			onModifyMove(move, pokemon, target) {
 				let reflected = false;
 				const reflectedmoves = ['mirrorshot', 'aurorabeam', 'dazzlinggleam', 'flashcannon', 'doomdesire', 'lusterpurge', 'photongeyser', 'prismaticlaser', 'signalbeam', 'technoblast', 'lightthatburnsthesky']; 
