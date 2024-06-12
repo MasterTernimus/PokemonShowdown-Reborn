@@ -1103,26 +1103,26 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onResidual(pokemon) {
-				if (this.field.terrainState.toxicspikes == pokemon.side.id) {
+				if (this.field.terrainState.toxicspikes.includes(pokemon.side.id)) {
 					this.add('-message', '...Poison needles shot up from the ground!');
 					if (!(pokemon.hasType('Steel') || pokemon.hasType('Poison')) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 						pokemon.trySetStatus('psn');
 						this.damage(pokemon.baseMaxhp / 8, pokemon);
 					}
 				}
-				if (this.field.terrainState.spikes == pokemon.side.id) {
+				if (this.field.terrainState.spikes.includes(pokemon.side.id)) {
 					this.add('-message', '...Stalagmites burst up from the ground!');
 					if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 						this.damage(pokemon.baseMaxhp / 3, pokemon);
 					}
 				}
-				if (this.field.terrainState.stickyweb == pokemon.side.id) {
+				if (this.field.terrainState.stickyweb.includes(pokemon.side.id)) {
 					this.add('-message', '...Sticky string shot out of the ground!');
 					if (!pokemon.isSemiInvulnerable()) {
 						this.boost({ spe: -4 }, pokemon);
 					}
 				}
-				if (this.field.terrainState.stealthrock == pokemon.side.id) {
+				if (this.field.terrainState.stealthrock.includes(pokemon.side.id)) {
 					this.add('-message', '...Rocks spewed out from the ground below!');
 					if (!pokemon.isSemiInvulnerable()) {
 						const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
@@ -1131,13 +1131,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldResidual(source) {
-				this.field.terrainState.toxicspikes = 0; 
-				this.field.terrainState.spikes = 0;
-				this.field.terrainState.stickyweb = 0;
-				this.field.terrainState.stealthrock = 0;
+				this.field.terrainState.toxicspikes = []; 
+				this.field.terrainState.spikes = [];
+				this.field.terrainState.stickyweb = [];
+				this.field.terrainState.stealthrock = [];
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Wasteland Terrain');
+				this.field.terrainState.toxicspikes = [];
+				this.field.terrainState.spikes = [];
+				this.field.terrainState.stickyweb = [];
+				this.field.terrainState.stealthrock = [];
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Wasteland Terrain');

@@ -18903,7 +18903,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.add('-message', 'The waste swallowed up the spikes!');
 					this.add('-sideend', side, 'Spikes');
 					side.removeSideCondition('spikes');
-					this.field.terrainState.spikes = side.id;
+					this.field.terrainState.spikes.push(side.id);
 				}
 			},
 			onSideRestart(side) {
@@ -19245,7 +19245,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.add('-message', 'The waste swallowed up the pointed stones!');
 					this.add('-sideend', side, 'move: Stealth Rock');
 					side.removeSideCondition('stealthrock');
-					this.field.terrainState.stealthrock = side.id;
+					this.field.terrainState.stealthrock.push(side.id);
 				}
 			},
 			onEntryHazard(pokemon) {
@@ -19384,7 +19384,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.add('-message', 'The waste swallowed up the sticky web!');
 					this.add('-sideend', side, 'move: Sticky Web');
 					side.removeSideCondition('stickyweb');
-					this.field.terrainState.stickyweb = side.id;
+					this.field.terrainState.stickyweb.push(side.id);
 				}
 			},
 			onEntryHazard(pokemon) {
@@ -21354,7 +21354,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.add('-message', 'The waste swallowed up the toxic spikes!');
 					this.add('-sideend', side, 'move: Toxic Spikes');
 					side.removeSideCondition('toxicspikes');
-					this.field.terrainState.toxicspikes = side.id;
+					this.field.terrainState.toxicspikes.push(side.id);
 				}
 			},
 			onSideRestart(side) {
