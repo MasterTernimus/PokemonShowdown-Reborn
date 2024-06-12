@@ -2789,8 +2789,8 @@ export class Battle {
 				const lower_terrain = this.dex.conditions.get('wastelandterrain');
 				this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
 			} else {
-				this.field.startTerrain('ashenbeachterrain');
-				const lower_terrain = this.dex.conditions.get('ashenbeachterrain');
+				this.field.startTerrain('mirrorarenaterrain');
+				const lower_terrain = this.dex.conditions.get('mirrorarenaterrain');
 				this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
 			}
 		}
