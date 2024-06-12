@@ -1103,36 +1103,38 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onResidual(pokemon) {
-				if (this.field.terrainState.toxicspikes == 1) {
+				if (this.field.terrainState.toxicspikes == pokemon.side.id) {
 					this.add('-message', '...Poison needles shot up from the ground!');
 					if (!(pokemon.hasType('Steel') || pokemon.hasType('Poison')) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 						pokemon.trySetStatus('psn');
 						this.damage(pokemon.baseMaxhp / 8, pokemon);
-						this.field.terrainState.toxicspikes = 0;
 					}
 				}
-				if (this.field.terrainState.spikes == 1) {
+				if (this.field.terrainState.spikes == pokemon.side.id) {
 					this.add('-message', '...Stalagmites burst up from the ground!');
 					if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 						this.damage(pokemon.baseMaxhp / 3, pokemon);
 					}
-					this.field.terrainState.spikes = 0;
 				}
-				if (this.field.terrainState.stickyweb == 1) {
+				if (this.field.terrainState.stickyweb == pokemon.side.id) {
 					this.add('-message', '...Sticky string shot out of the ground!');
 					if (!pokemon.isSemiInvulnerable()) {
 						this.boost({ spe: -4 }, pokemon);
 					}
-					this.field.terrainState.stickyweb = 0;
 				}
-				if (this.field.terrainState.stealthrock == 1) {
+				if (this.field.terrainState.stealthrock == pokemon.side.id) {
 					this.add('-message', '...Rocks spewed out from the ground below!');
 					if (!pokemon.isSemiInvulnerable()) {
 						const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 						this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4, pokemon);
 					}
-					this.field.terrainState.stealthrock = 0;
 				}
+			},
+			onFieldResidual(source) {
+				this.field.terrainState.toxicspikes = 0; 
+				this.field.terrainState.spikes = 0;
+				this.field.terrainState.stickyweb = 0;
+				this.field.terrainState.stealthrock = 0;
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Wasteland Terrain');
