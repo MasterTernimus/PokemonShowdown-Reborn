@@ -598,7 +598,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					reflected = true;
 				}
 				if ((move.category === 'Special' && move.target === 'normal' && !move.flags.contact && reflected) || reflectedmoves.includes(move.id)) {
-					return true;
+					move.accuracy = true;
 				}
 			},
 			onBasePower(basePower, target, source, move) {
