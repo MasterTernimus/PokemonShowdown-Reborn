@@ -4664,6 +4664,8 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.addVolatile('laserfocus', null, item);
 			}
 			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.add('-activate', pokemon, item, '[consumed]');
+				this.add('-message', pokemon.name + ' shrouded itself with Magic Coat!');
 				this.boost({ evasion: 1 }, pokemon, pokemon, item, false, true);
 				pokemon.addVolatile('mirrorcoat', null, item);
 			}

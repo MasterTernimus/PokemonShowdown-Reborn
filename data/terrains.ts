@@ -597,7 +597,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (target && target.boosts.evasion > 0) {
 					reflected = true;
 				}
-				if ((move.category === 'Special' && move.target === 'normal' && reflected) || reflectedmoves.includes(move.id)) {
+				if ((move.category === 'Special' && move.target === 'normal' && !move.flags.contact && reflected) || reflectedmoves.includes(move.id)) {
 					return true;
 				}
 			},
@@ -614,9 +614,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 2;
 				}
 				if (move.id === 'mirrorshot') {
+					this.add('-message', 'The mirrors strengthened the attack!');
 					modifier *= 2;
 				}
 				if (minievasionshredder.includes(move.id)) {
+					this.add('-message', 'The reflected light was blinding!');
 					modifier *= 1.5;
 				}
 				if (mirrorbreak.includes(move.id)) {
