@@ -4570,6 +4570,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 202,
 	},
 	sniper: {
+		onSwitchIn(pokemon) {
+			this.boost({ accuracy: 1 }, pokemon, null);
+		},
 		onModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).crit) {
 				this.debug('Sniper boost');
