@@ -363,7 +363,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
 	readonly noLog: boolean;
-
+	/** The terrain that is used for the battle */
+	readonly terrain?: string;
 	/**
 	 * Only applies to rules, not formats
 	 */

@@ -19,6 +19,221 @@ The column value will be ignored for repeat sections.
 
 export const Formats: FormatList = [
 
+	//All Gen Reborn
+	///////////////////////////////////////////////////////////////////
+	{
+		section: "AllGen Singles",
+	},
+	{
+		name: "[Gen 9] Mirror Arena",
+		mod: 'gen9',
+		terrain: 'mirrorarenaterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Moves Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 50', 'Default Level = 50', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Wasteland Field",
+		mod: 'gen9',
+		terrain: 'wastelandterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 45', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Ashen Beach Field",
+		mod: 'gen9',
+		terrain: 'ashenbeachterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 45', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Short-Circuit Field",
+		mod: 'gen9',
+		terrain: 'shortcircuitterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 40', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Factory Field",
+		mod: 'gen9',
+		terrain: 'factoryterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 40', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Forest Field",
+		mod: 'gen9',
+		terrain: 'forestfield',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 35', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Corrosive Mist Field",
+		mod: 'gen9',
+		terrain: 'corrosivemistterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 35', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Corrosive Field",
+		mod: 'gen9',
+		terrain: 'corrosiveterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 35', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Desert Field",
+		mod: 'gen9',
+		terrain: 'desertterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 25', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Electric Terrain",
+		mod: 'gen9',
+		terrain: 'electricterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 20', '+Unobtainable', '+Past'],
+	},
+
+	//AllGen Doubles
+	//////////////////////////////////////////////////////////////
+
+	{
+		section: "AllGen Doubles",
+	},
+	{
+		name: "[Gen 9] Doubles Mirror Arena",
+		mod: 'gen9',
+		terrain: 'mirrorarenaterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Moves Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 50', 'Default Level = 50', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Wasteland Field",
+		mod: 'gen9',
+		terrain: 'wastelandterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 45', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Ashen Beach Field",
+		mod: 'gen9',
+		terrain: 'ashenbeachterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 45', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Short-Circuit Field",
+		mod: 'gen9',
+		terrain: 'shortcircuitterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 40', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Factory Field",
+		mod: 'gen9',
+		terrain: 'factoryterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 40', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Forest Field",
+		mod: 'gen9',
+		terrain: 'forestfield',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 35', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Corrosive Mist Field",
+		mod: 'gen9',
+		terrain: 'corrosivemistterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 35', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Corrosive Field",
+		mod: 'gen9',
+		terrain: 'corrosiveterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 35', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Desert Field",
+		mod: 'gen9',
+		terrain: 'desertterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 25', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Electric Terrain",
+		mod: 'gen9',
+		terrain: 'electricterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 20', '+Unobtainable', '+Past'],
+	},
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 
@@ -55,6 +270,7 @@ export const Formats: FormatList = [
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
+	/*
 	{
 		name: "[Gen 9] Random Battle (Blitz)",
 
@@ -201,6 +417,7 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
 		banlist: [],
 	},
+	*/
 	{
 		name: "[Gen 9] Custom Game",
 
@@ -211,6 +428,7 @@ export const Formats: FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Moves Clause', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 50', 'Default Level = 50'],
 	},
+
 
 	// S/V Doubles
 	///////////////////////////////////////////////////////////////////
@@ -226,6 +444,7 @@ export const Formats: FormatList = [
 		team: 'random',
 		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
 	},
+	/*
 	{
 		name: "[Gen 9] Doubles OU",
 		threads: [
@@ -298,6 +517,7 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
 		banlist: [],
 	},
+	*/
 	{
 		name: "[Gen 9] Doubles Custom Game",
 
@@ -312,7 +532,7 @@ export const Formats: FormatList = [
 
 	// S/V Doubles
 	///////////////////////////////////////////////////////////////////
-
+	/*
 	{
 		section: "Unofficial Metagames",
 	},
@@ -497,7 +717,6 @@ export const Formats: FormatList = [
 
 	// Pet Mods
 	///////////////////////////////////////////////////////////////////
-
 	{
 		section: "Pet Mods",
 	},
@@ -542,7 +761,6 @@ export const Formats: FormatList = [
 
 	// Draft League
 	///////////////////////////////////////////////////////////////////
-
 	{
 		section: "Draft",
 		column: 1,
@@ -3296,7 +3514,6 @@ export const Formats: FormatList = [
 
 	// RoA Spotlight
 	///////////////////////////////////////////////////////////////////
-
 	{
 		section: "RoA Spotlight",
 		column: 4,
@@ -4801,7 +5018,6 @@ export const Formats: FormatList = [
 
 	// Past Generations
 	///////////////////////////////////////////////////////////////////
-
 	{
 		section: "Past Generations",
 		column: 4,
@@ -5082,13 +5298,5 @@ export const Formats: FormatList = [
 		battle: {trunc: Math.trunc},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
-	{
-		name: "[Gen 9] Mirror Arena",
-		mod: 'gen9',
-		searchShow: true,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Moves Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 50', 'Default Level = 50'],
-	}
+	*/
 ];
