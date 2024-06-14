@@ -738,7 +738,7 @@ export class BattleActions {
 				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
 					this.battle.boost({spe: 2}, pokemon);
 				}
-				this.battle.runEvent('Miss', target, pokemon, move, accuracy);
+				this.battle.runEvent('Miss', pokemon, target, move);
 				hitResults[i] = false;
 				continue;
 			}

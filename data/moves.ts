@@ -863,6 +863,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('icyterrain') || this.field.isTerrain('mirrorarenaterrain')) {
 				return true;
 			}
+			return false;
 		},
 		condition: {
 			duration: 5,
@@ -885,11 +886,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 					}
 				}
 			},
-			onAfterMove(source) {
-				if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
-					this.boost({ evasion: 1 }, source);
-				}
-			},
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Aurora Veil');
 			},
@@ -898,6 +894,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Aurora Veil');
 			},
+		},
+		onAfterMove(source) {
+			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+				this.boost({ evasion: 1 }, source);
+			}
 		},
 		secondary: null,
 		target: "allySide",
@@ -10958,11 +10959,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 					}
 				}
 			},
-			onAfterMove(source) {
-				if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
-					this.boost({ evasion: 1 }, source);
-				}
-			},
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
@@ -10971,6 +10967,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Light Screen');
 			},
+		},
+		onAfterMove(source) {
+			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+				this.boost({ evasion: 1 }, source);
+			}
 		},
 		secondary: null,
 		target: "allySide",
@@ -15897,11 +15898,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 					}
 				}
 			},
-			onAfterMove(source) {
-				if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
-					this.boost({ evasion: 1 }, source);
-				}
-			},
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
@@ -15910,6 +15906,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Reflect');
 			},
+		},
+		onAfterMove(source) {
+			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+				this.boost({ evasion: 1 }, source);
+			}
 		},
 		secondary: null,
 		target: "allySide",

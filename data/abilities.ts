@@ -2108,6 +2108,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 248,
 	},
 	icescales: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 2 }, pokemon);
+			}
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category === 'Special') {
 				return this.chainModify(0.5);

@@ -2783,16 +2783,10 @@ export class Battle {
 			this.midTurn = true;
 		}
 		let action;
-		if (this.turn === 0) {
-			if (this.gameType === 'doubles') {
-				this.field.startTerrain('wastelandterrain');
-				const lower_terrain = this.dex.conditions.get('wastelandterrain');
-				this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
-			} else {
-				this.field.startTerrain('mirrorarenaterrain');
-				const lower_terrain = this.dex.conditions.get('mirrorarenaterrain');
-				this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
-			}
+		if (this.turn === 0 && this.format.terrain) {
+			this.field.startTerrain(this.format.terrain);
+			const lower_terrain = this.dex.conditions.get(this.format.terrain);
+			this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
 		}
 		while ((action = this.queue.shift())) {
 			this.runAction(action);

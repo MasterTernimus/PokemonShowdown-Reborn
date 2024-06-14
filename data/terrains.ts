@@ -574,8 +574,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let boost = 0;
 				const targetacc = target.boosts.accuracy;
 				const targeteva = target.boosts.evasion;
-				const sourceacc = target.boosts.accuracy;
-				const sourceeva = target.boosts.evasion;
+				const sourceacc = source.boosts.accuracy;
+				const sourceeva = source.boosts.evasion;
 				if (targetacc < 0) {
 					boost += targetacc;
 				}
@@ -590,7 +590,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				return critRatio + boost;
 			},
-			onModifyMovePriority: 6,
+			onModifyMovePriority: -6,
 			onModifyMove(move, pokemon, target) {
 				let reflected = false;
 				const reflectedmoves = ['mirrorshot', 'aurorabeam', 'dazzlinggleam', 'flashcannon', 'doomdesire', 'lusterpurge', 'photongeyser', 'prismaticlaser', 'signalbeam', 'technoblast', 'lightthatburnsthesky']; 
@@ -627,9 +627,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onMiss(source, target, move) {
-				this.damage(source.baseMaxhp / 4, source);
-				if (source.boosts.evasion > 0) {
-					this.boost({ evasion: -1 }, source);
+				if (move.category === 'Physical' && move.flags.contact) {
+					this.damage(source.baseMaxhp / 4, source);
+					if (source.boosts.evasion > 0) {
+						this.boost({ evasion: -1 }, source);
+					}
 				}
 			},
 			onAfterMove(source, target, move) {
