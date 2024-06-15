@@ -12793,7 +12793,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Mirror Shot",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				move.boosts = {
+					accuracy: -1,
+				};
+			}
+		},
 		secondary: {
 			chance: 30,
 			boosts: {
