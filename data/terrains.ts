@@ -597,7 +597,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (target && target.boosts.evasion > 0) {
 					reflected = true;
 				}
-				if ((move.category === 'Special' && move.target === 'normal' && !move.flags.contact && reflected) || reflectedmoves.includes(move.id)) {
+				if ((move.category === 'Special' && (move.target === 'normal' || pokemon.foes().length === 1) && !move.flags.contact && reflected) || reflectedmoves.includes(move.id)) {
 					move.accuracy = true;
 				}
 			},
