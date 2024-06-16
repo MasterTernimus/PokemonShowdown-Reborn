@@ -1644,8 +1644,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	electricseed: {
-		name: "Electric Seed",
+	telluricseed: {
+		name: "Telluric Seed",
 		spritenum: 664,
 		fling: {
 			basePower: 10,
