@@ -2258,6 +2258,9 @@ const FormatsData = {
   castformsnowy: {
     isNonstandard: "Past"
   },
+  castformsandy: {
+    isNonstandard: "Past"
+  },
   kecleon: {
     isNonstandard: "Past",
     tier: "Illegal",

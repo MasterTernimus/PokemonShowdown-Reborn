@@ -199,6 +199,7 @@ const Aliases = {
   castformwater: "Castform-Rainy",
   castforms: "Castform-Sunny",
   castformfire: "Castform-Sunny",
+  castformsand: "Castform-Sandy",
   cherrims: "Cherrim-Sunshine",
   cherrimsunny: "Cherrim-Sunshine",
   darmanitanz: "Darmanitan-Zen",

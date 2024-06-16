@@ -247,7 +247,7 @@ class ModdedDex {
             break;
           }
           default:
-            totalTypeMod = totalTypeMod;
+            break;
         }
       }
     }
