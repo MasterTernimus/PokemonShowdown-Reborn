@@ -39,7 +39,7 @@ class Field {
     this.weather = "";
     this.weatherState = { id: "" };
     this.terrain = "";
-    this.terrainState = { id: "", Tchanges: [] };
+    this.terrainState = { id: "", Tchanges: [], prevterrain: "" };
     this.terrainStack = [];
     this.pseudoWeather = {};
   }
@@ -145,6 +145,7 @@ class Field {
     this.terrainState = {
       id: status.id,
       Tchanges: [],
+      duration: status.duration,
       turn: this.battle.turn
     };
     this.terrainStack.unshift(this.terrainState);
@@ -197,26 +198,18 @@ class Field {
     status = this.battle.dex.conditions.get(status);
     if (!sourceEffect && this.battle.effect)
       sourceEffect = this.battle.effect;
-    if (!source && this.battle.event && this.battle.event.target)
-      source = this.battle.event.target;
-    if (source === "debug")
-      source = this.battle.sides[0].active[0];
-    if (!source)
-      throw new Error(`changing terrain without a source`);
-    if (this.terrain === status.id)
+    if (this.isTerrain(status.id))
       return false;
     const prevTerrainState = this.terrainState;
     this.terrain = status.id;
     this.terrainState = {
       id: status.id,
-      source,
-      sourceSlot: source.getSlot(),
       Tchanges: [],
       duration: prevTerrainState.duration,
-      turn: this.battle.turn
+      turn: this.battle.turn,
+      prevterrain: prevTerrainState.id
     };
     this.battle.add("-fieldstart", status.name);
-    this.terrainStack.unshift(this.terrainState);
     this.battle.eachEvent("TerrainChange", sourceEffect);
   }
   setDuration(duration) {
@@ -241,7 +234,8 @@ class Field {
     if (isterrain) {
       this.terrain = this.terrainStack[0].id;
       this.terrainState = this.terrainStack[0];
-      this.battle.add("-fieldstart", this.terrain);
+      const current_terrain = this.battle.dex.conditions.get(this.terrain);
+      this.battle.add("-fieldstart", current_terrain.name);
     } else {
       this.terrain = "";
       this.terrainState = { id: "" };

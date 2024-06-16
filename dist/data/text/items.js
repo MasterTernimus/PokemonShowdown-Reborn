@@ -499,13 +499,13 @@ const ItemsText = {
     name: "Electric Memory",
     desc: "Holder's Multi-Attack is Electric type."
   },
-  electricseed: {
-    name: "Electric Seed",
-    desc: "If the terrain is Electric Terrain, raises holder's Defense by 1 stage. Single use."
-  },
   electriumz: {
     name: "Electrium Z",
     desc: "If holder has an Electric move, this item allows it to use an Electric Z-Move."
+  },
+  elementalseed: {
+    name: "Elemental Seed",
+    desc: "If the terrain is a Elemental Terrain, boosts the holder in a unique way. Single use."
   },
   enigmaberry: {
     name: "Enigma Berry",
@@ -727,10 +727,6 @@ const ItemsText = {
   grassiumz: {
     name: "Grassium Z",
     desc: "If holder has a Grass move, this item allows it to use a Grass Z-Move."
-  },
-  grassyseed: {
-    name: "Grassy Seed",
-    desc: "If the terrain is Grassy Terrain, raises holder's Defense by 1 stage. Single use."
   },
   greatball: {
     name: "Great Ball",
@@ -1056,6 +1052,10 @@ const ItemsText = {
     name: "Macho Brace",
     desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect."
   },
+  magicalseed: {
+    name: "Magical Seed",
+    desc: "If the terrain is a Magical Terrain, boosts the holder in a unique way. Single use."
+  },
   magmarizer: {
     name: "Magmarizer",
     desc: "Evolves Magmar into Magmortar when traded."
@@ -1194,10 +1194,6 @@ const ItemsText = {
     name: "Mirror Herb",
     desc: "When an opposing Pokemon raises a stat stage, the holder copies it. Single use.",
     activate: "  [POKEMON] used its Mirror Herb to mirror its opponent's stat changes!"
-  },
-  mistyseed: {
-    name: "Misty Seed",
-    desc: "If the terrain is Misty Terrain, raises holder's Sp. Def by 1 stage. Single use."
   },
   moonball: {
     name: "Moon Ball",
@@ -1419,10 +1415,6 @@ const ItemsText = {
   psychicmemory: {
     name: "Psychic Memory",
     desc: "Holder's Multi-Attack is Psychic type."
-  },
-  psychicseed: {
-    name: "Psychic Seed",
-    desc: "If the terrain is Psychic Terrain, raises holder's Sp. Def by 1 stage. Single use."
   },
   psychiumz: {
     name: "Psychium Z",
@@ -1785,6 +1777,10 @@ const ItemsText = {
     name: "Sweet Apple",
     desc: "Evolves Applin into Appletun when used."
   },
+  syntheticseed: {
+    name: "Synthetic Seed",
+    desc: "If the terrain is a Synthetic Terrain, boosts the holder in a unique way. Single use."
+  },
   syrupyapple: {
     name: "Syrupy Apple",
     desc: "Evolves Applin into Dipplin when used."
@@ -1804,6 +1800,10 @@ const ItemsText = {
   tartapple: {
     name: "Tart Apple",
     desc: "Evolves Applin into Flapple when used."
+  },
+  telluricseed: {
+    name: "Telluric Seed",
+    desc: "If the terrain is a Telluric Terrain, boosts the holder in a unique way. Single use."
   },
   terrainextender: {
     name: "Terrain Extender",

@@ -93,6 +93,9 @@ const Conditions = {
       pokemon.statusState.time--;
       if (pokemon.statusState.time <= 0) {
         pokemon.cureStatus();
+        if (pokemon.hasAbility("earlybird")) {
+          pokemon.heal(pokemon.maxhp * 0.25, pokemon);
+        }
         return;
       }
       this.add("cant", pokemon, "slp");
@@ -246,7 +249,10 @@ const Conditions = {
   partiallytrapped: {
     name: "partiallytrapped",
     duration: 5,
-    durationCallback(target, source) {
+    durationCallback(target, source, effect) {
+      if (effect?.id === "sandtomb" && this.field.isTerrain("desertterrain")) {
+        return 5;
+      }
       if (source?.hasItem("gripclaw"))
         return 8;
       return this.random(5, 7);
@@ -254,11 +260,14 @@ const Conditions = {
     onStart(pokemon, source, effect) {
       this.add("-activate", pokemon, "move: " + this.effectState.sourceEffect, "[of] " + source);
       this.effectState.boundDivisor = source.hasItem("bindingband") ? 6 : 8;
-      if (this.field.terrain === "burningterrain" && effect.id === "firespin") {
+      if (this.field.isTerrain("burningterrain") && effect.id === "firespin") {
         this.effectState.boundDivisor = 6;
       }
-      if ((this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain") && effect.id === "whirlpool") {
+      if ((this.field.isTerrain("watersurfaceterrain") || this.field.isTerrain("underwaterterrain")) && effect.id === "whirlpool") {
         pokemon.addVolatile("confusion");
+        this.effectState.boundDivisor = 6;
+      }
+      if (this.field.isTerrain("desertterrain") && effect.id === "sandtomb") {
         this.effectState.boundDivisor = 6;
       }
     },
@@ -266,10 +275,14 @@ const Conditions = {
     onResidual(pokemon) {
       const source = this.effectState.source;
       const gmaxEffect = ["gmaxcentiferno", "gmaxsandblast"].includes(this.effectState.sourceEffect.id);
-      if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
-        delete pokemon.volatiles["partiallytrapped"];
-        this.add("-end", pokemon, this.effectState.sourceEffect, "[partiallytrapped]", "[silent]");
-        return;
+      if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns && !gmaxEffect)) {
+        if (pokemon != source) {
+          delete pokemon.volatiles["partiallytrapped"];
+          this.add("-end", pokemon, this.effectState.sourceEffect, "[partiallytrapped]", "[silent]");
+          return;
+        } else {
+          return;
+        }
       }
       this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
     },
@@ -562,7 +575,7 @@ const Conditions = {
     effectType: "Weather",
     duration: 5,
     durationCallback(source, effect) {
-      if (source?.hasItem("heatrock")) {
+      if (source?.hasItem("heatrock") || this.field.isTerrain("desertterrain")) {
         return 8;
       }
       return 5;
@@ -662,7 +675,7 @@ const Conditions = {
     effectType: "Weather",
     duration: 5,
     durationCallback(source, effect) {
-      if (source?.hasItem("smoothrock")) {
+      if (source?.hasItem("smoothrock") || this.field.isTerrain("desertterrain") || this.field.isTerrain("ashenbeachterrain")) {
         return 8;
       }
       return 5;
@@ -759,6 +772,9 @@ const Conditions = {
       this.add("-weather", "Snow", "[upkeep]");
       if (this.field.isWeather("snow"))
         this.eachEvent("Weather");
+    },
+    onWeather(target) {
+      this.damage(target.baseMaxhp / 16);
     },
     onFieldEnd() {
       this.add("-weather", "none");

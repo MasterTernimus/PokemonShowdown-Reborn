@@ -22,10 +22,69 @@ __export(terrains_exports, {
 });
 module.exports = __toCommonJS(terrains_exports);
 const Terrains = {
+  ashenbeachterrain: {
+    name: "Ashen Beach Terrain",
+    condition: {
+      duration: 9999,
+      onBasePowerPriority: 6,
+      onAccuracy(accuracy, target, source, move) {
+        const noguard = ["owntempo", "purepower", "sandveil", "steadfast"];
+        if (!target.hasAbility("unnerve") && source.hasAbility(noguard)) {
+          if (move && target === this.effectState.target)
+            return true;
+        }
+        return accuracy;
+      },
+      onTryAddVolatile(status, target) {
+        if ((target.hasAbility("innerfocus") || target.types.includes("Fighting")) && status.id === "confusion") {
+          return false;
+        }
+      },
+      onBasePower(basePower, source, target, move) {
+        const uberboost = ["sandtomb", "mudbomb", "mudshot", "mudslap"];
+        const megaboost = ["hiddenpower", "landswrath", "muddywater", "strength", "surf", "thousandwaves", "clangoroussoulblaze"];
+        const miniboost = ["aurasphere", "focusblast", "storedpower", "zenheadbutt"];
+        const boost = ["psychic"];
+        let modifier = 1;
+        if (uberboost.includes(move.id)) {
+          modifier *= 2;
+        }
+        if (megaboost.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        if (miniboost.includes(move.id)) {
+          modifier *= 1.3;
+        }
+        if (boost.includes(move.id)) {
+          modifier *= 1.2;
+        }
+        return this.chainModify(modifier);
+      },
+      onAfterHit(source, target, move) {
+        const accuracy = ["firespin", "leaftornado", "razorwind", "twister", "whirlpool"];
+        if (accuracy.includes(move.id) || move.category === "Special" && move.type === "Flying") {
+          for (const pokemon of this.getAllActive()) {
+            this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
+          }
+        }
+      },
+      onResidual(pokemon) {
+        if (pokemon.volatiles["sandtomb"]) {
+          this.boost({ accuracy: -1 }, pokemon, null, this.dex.conditions.get("sandtomb"), false, false);
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Ashen Beach Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Ashen Beach Terrain");
+      }
+    }
+  },
   burningterrain: {
     name: "Burning Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       durationCallback(source, effect) {
         if (source.hasItem("terrainextender")) {
@@ -49,7 +108,7 @@ const Terrains = {
         if (smogfireMoves.includes(move.id)) {
           modifier *= 1.5;
         }
-        if (move.type === "Fire" && target.isGrounded()) {
+        if (move.type === "Fire" && source.isGrounded()) {
           modifier *= 1.5;
         }
         if (move.type === "Grass" && target.isGrounded()) {
@@ -66,13 +125,17 @@ const Terrains = {
       onAfterMove(source, target, move) {
         const terrainEndMoves = ["defog", "gust", "hurricane", "muddywater", "sandtomb", "razorwind", "sludgewave", "sparklingaria", "surf", "waterpledge", "watersport", "waterspout", "hydrovortex", "tailwind", "twister", "whirlwind", "oceanicoperatta", "continentalcrush", "supersonicskystrike"];
         if (terrainEndMoves.includes(move.id)) {
-          this.field.clearTerrain();
+          if (this.field.terrainState.prevterrain !== "") {
+            this.field.changeTerrain(this.field.terrainState.prevterrain);
+          } else {
+            this.field.clearTerrain();
+          }
         }
       },
       onResidual(pokemon) {
         const immune = ["flamebody", "flareboost", "flashfire", "heatproof", "magmaarmor", "waterbubble", "waterveil"];
         const weak = ["leafguard", "fluffy", "grasspelt", "icebody"];
-        if (!immune.includes(pokemon.ability) || !pokemon.volatiles["aquaring"] || !pokemon.hasType("Fire")) {
+        if (!(immune.includes(pokemon.ability) || pokemon.volatiles["aquaring"] || pokemon.hasType("Fire")) && pokemon.isGrounded()) {
           let typeMod = this.clampIntRange(this.dex.getEffectiveness("Fire", pokemon.types), -6, 6);
           let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
           if (weak.includes(pokemon.ability)) {
@@ -81,8 +144,18 @@ const Terrains = {
             this.damage(damage, pokemon);
           }
         }
-        if (this.field.weather === "rain" || this.field.weather === "sandstorm")
-          this.field.clearTerrain();
+        if (pokemon.moveThisTurn === "burnup") {
+          pokemon.setType(pokemon.getTypes(true).map((type) => type === "???" ? "Fire" : type));
+        }
+      },
+      onFieldResidual() {
+        if (this.field.weather === "rain" || this.field.weather === "sandstorm") {
+          if (this.field.terrainState.prevterrain !== "") {
+            this.field.changeTerrain(this.field.terrainState.prevterrain);
+          } else {
+            this.field.clearTerrain();
+          }
+        }
       },
       onFieldStart() {
         this.add("-fieldstart", "Burning Terrain");
@@ -95,7 +168,7 @@ const Terrains = {
   corrosiveterrain: {
     name: "Corrosive Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       onModifyMove(move) {
         let poisonedMoves = ["mudbomb", "mudshot", "mudslap", "muddywater", "smackdown", "whirlpool", "thousandarrows"];
@@ -107,8 +180,8 @@ const Terrains = {
         }
       },
       onSwitchIn(pokemon) {
-        let immune = ["immunity, magicguard, poisonheal, toxicboost, wonderguard"];
-        if (!immune.includes(pokemon.ability) && pokemon.isGrounded() && !(pokemon.types.includes("Poison") || !pokemon.types.includes("Steel"))) {
+        let immune = ["immunity", "magicguard", "poisonheal", "toxicboost", "wonderguard"];
+        if (!immune.includes(pokemon.ability) && pokemon.isGrounded() && !(pokemon.types.includes("Poison") || pokemon.types.includes("Steel"))) {
           let typeMod = this.dex.getEffectiveness("Poison", pokemon.types);
           typeMod = this.clampIntRange(typeMod, -6, 6);
           this.damage(pokemon.baseMaxhp / 4 * Math.pow(2, typeMod), pokemon);
@@ -124,8 +197,8 @@ const Terrains = {
         }
       },
       onResidual(pokemon) {
-        let immune = ["immunity, magicguard, poisonheal, toxicboost, wonderguard"];
-        if (!immune.includes(pokemon.ability) && !(pokemon.types.includes("Poison") || !pokemon.types.includes("Steel"))) {
+        let immune = ["immunity", "magicguard", "poisonheal", "toxicboost", "wonderguard"];
+        if (!immune.includes(pokemon.ability) && !(pokemon.types.includes("Poison") || pokemon.types.includes("Steel"))) {
           if (pokemon.status === "slp" || pokemon.hasAbility("comatose")) {
             this.damage(pokemon.baseMaxhp / 16, pokemon);
           }
@@ -142,7 +215,7 @@ const Terrains = {
   corrosivemistterrain: {
     name: "Corrosive Mist Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       onModifyMove(move) {
         const poisonedMoves = ["bubblebeam", "bubble", "sparklingaria", "energyball"];
@@ -175,8 +248,9 @@ const Terrains = {
         const igniteMoves = ["eruption", "explosion", "firepledge", "flameburst", "heatwave", "incinerate", "lavaplume", "mindblown", "searingshot", "selfdestruct", "infernooverdrive"];
         if (igniteMoves.includes(move.id)) {
           for (const pokemon of this.getAllActive()) {
-            if (pokemon.hasAbility("damp"))
+            if (pokemon.hasAbility("damp")) {
               return;
+            }
           }
           this.add("-message", "The toxic mist combusted!");
           for (const pokemon of this.getAllActive()) {
@@ -211,10 +285,74 @@ const Terrains = {
       }
     }
   },
+  desertterrain: {
+    name: "Desert Terrain",
+    condition: {
+      duration: 9999,
+      onBasePowerPriority: 6,
+      onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        const sandified = ["burnup", "dig", "heatwave", "needlearm", "pinmissile", "sandtomb", "solarbeam", "solarblade", "thousandwaves", "searingsunrazesmash"];
+        if (move.type === "Water" && source.isGrounded()) {
+          modifier *= 0.5;
+        }
+        if (move.type === "Electric" && target.isGrounded()) {
+          modifier *= 0.5;
+        }
+        if (sandified.includes(move.id)) {
+          modifier *= 1.5;
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Desert Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Desert Terrain");
+      }
+    }
+  },
+  factoryterrain: {
+    name: "Factory Terrain",
+    condition: {
+      duration: 9999,
+      onBasePowerPriority: 6,
+      onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        const quakemoves = ["bulldoze", "earthquake", "explosion", "fissure", "magnitude", "selfdestruct", "lightthatburnsthesky", "tectonicrage", "discharge", "risingvoltage"];
+        const uberboost = ["flashcannon", "geargrind", "gyroball", "magnetbomb"];
+        const boost = ["steamroller", "technoblast", "doubleironbash"];
+        if (move.type === "Electric") {
+          modifier *= 1.5;
+        }
+        if (uberboost.includes(move.id)) {
+          modifier *= 2;
+        }
+        if (boost.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        if (quakemoves.includes(move.id)) {
+          modifier *= 5325 / 4096;
+        }
+        return this.chainModify(modifier);
+      },
+      onAfterMove(source, target, move) {
+        const quakemoves = ["bulldoze", "earthquake", "explosion", "fissure", "magnitude", "selfdestruct", "lightthatburnsthesky", "tectonicrage", "discharge", "risingvoltage"];
+        if (quakemoves.includes(move.id)) {
+          this.field.changeTerrain("shortcircuitterrain");
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Factory Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Factory Terrain");
+      }
+    }
+  },
   fairytaleterrain: {
     name: "Fairy Tale Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       onModifyMove(move) {
         if (move.type === "Fire") {
@@ -222,13 +360,19 @@ const Terrains = {
           move.types = [move.type, "Dragon"];
         }
       },
+      onModifyType(move, pokemon) {
+        if (["cut", "sacredsword", "secretsword", "slash"].includes(move.id)) {
+          move.type === "Steel";
+        }
+      },
       onEffectiveness(typeMod, target, type, move) {
         const types = move.types !== void 0 ? move.types : [move.type];
-        if (type === "Dragon" && types.includes("Steel"))
+        if (type === "Dragon" && types.includes("Steel")) {
           return 1;
+        }
       },
       onBasePower(basePower, source, target, move) {
-        const strengthenedMoves = ["airslash", "ancientpower", "fleurcannon", "leafblade", "magicalleaf", "moongeistbeam", "mysticalfire", "nightslash", "psychocut", "smartstrike", "solarblade", "sparklingaria", "menacingmoonrazemaelstorm", "oceanicoperetta"];
+        const strengthenedMoves = ["airslash", "ancientpower", "fleurcannon", "leafblade", "magicalleaf", "moongeistbeam", "mysticalfire", "nightslash", "psychocut", "relicsong", "smartstrike", "solarblade", "sparklingaria", "menacingmoonrazemaelstorm", "oceanicoperetta"];
         let modifier = 1;
         if (move.type === "Dragon") {
           this.add("-message", "The draconic energy was strengthened by the dead princesses on the field!");
@@ -246,7 +390,7 @@ const Terrains = {
           this.add("-message", "The move was strengthened by the terrain!");
           modifier *= 1.5;
         }
-        if (move.id === "draining kiss") {
+        if (move.id === "drainingkiss") {
           this.add("-message", "The move was strengthened by the terrain!");
           modifier *= 2;
         }
@@ -260,10 +404,55 @@ const Terrains = {
       }
     }
   },
+  forestterrain: {
+    name: "Forest Terrain",
+    condition: {
+      duration: 9999,
+      onBasePowerPriority: 6,
+      onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        const igniteMoves = ["eruption", "firepledge", "flameburst", "heatwave", "incinerate", "lavaplume", "mindblown", "searingshot", "infernooverdrive"];
+        const boosted = ["attackorder", "cut", "electroweb", "drumbeating", "skittersmack", "pounce"];
+        const nerfed = ["muddywater", "surf"];
+        if (move.type === "Grass") {
+          modifier *= 1.5;
+        }
+        if (move.type === "Bug" && move.category === "Special") {
+          modifier *= 1.5;
+        }
+        if (boosted.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        if (nerfed.includes(move.id)) {
+          modifier *= 0.5;
+        }
+        if (move.id === "cut" && target.types.includes("Grass")) {
+          modifier *= 2;
+        }
+        if (igniteMoves.includes(move.id)) {
+          modifier *= 1.3;
+        }
+        return this.chainModify(modifier);
+      },
+      onAfterMove(source, target, move) {
+        const igniteMoves = ["eruption", "firepledge", "flameburst", "heatwave", "incinerate", "lavaplume", "mindblown", "searingshot", "infernooverdrive"];
+        if (igniteMoves.includes(move.id) && (this.field.weather !== "raindance" || !this.field.getPseudoWeather("watersport"))) {
+          this.field.changeTerrain("burningterrain");
+          return;
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Forest Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Forest Terrain");
+      }
+    }
+  },
   glitchterrain: {
     name: "Glitch Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       durationCallback(source, effect) {
         if (source.hasItem("terrainextender")) {
@@ -325,7 +514,7 @@ const Terrains = {
   icyterrain: {
     name: "Icy Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       onModifyDef(def, pokemon) {
         if (pokemon.types.includes("Ice") && this.field.isWeather("hail")) {
@@ -333,7 +522,7 @@ const Terrains = {
         }
       },
       onModifyMove(move, pokemon) {
-        const speedMoves = ["accelerock", "aquajet", "bulletpunch", "extremespeed", "fakeout", "firstimpression", "machpunch", "quickattack", "shadowsneak", "suckerpunch", "feint", "lunge", "rollout", "steamroller"];
+        const speedMoves = ["accelerock", "aquajet", "bulletpunch", "extremespeed", "fakeout", "firstimpression", "machpunch", "quickattack", "shadowsneak", "suckerpunch", "defemsecurl", "feint", "lunge", "rollout", "steamroller"];
         if (speedMoves.includes(move.id) && pokemon.isGrounded()) {
           move.boosts = {
             spe: 1
@@ -371,7 +560,7 @@ const Terrains = {
           this.field.changeTerrain("watersurfaceterrain");
           return;
         }
-        if (watersurfaceMoves.includes(move.id)) {
+        if (watersurfaceMoves.includes(move.id) && this.field.terrainStack[1]?.id !== "watersurfaceterrain") {
           for (const sides of this.sides) {
             sides.addSideCondition("spikes");
           }
@@ -385,14 +574,113 @@ const Terrains = {
       }
     }
   },
+  mirrorarenaterrain: {
+    name: "Mirror Arena Terrain",
+    condition: {
+      duration: 9999,
+      onBasePowerPriority: 6,
+      onSwitchIn(pokemon) {
+        if (pokemon.hasItem("brightpowder") || pokemon.hasItem("laxincense")) {
+          this.boost({ evasion: 1 }, pokemon);
+        }
+        if (pokemon.hasItem("zoomlens") || pokemon.hasItem("widelens")) {
+          this.boost({ accuracy: 1 }, pokemon);
+          pokemon.addVolatile("laserfocus");
+        }
+      },
+      onModifyCritRatio(critRatio, source, target) {
+        let boost = 0;
+        const targetacc = target.boosts.accuracy;
+        const targeteva = target.boosts.evasion;
+        const sourceacc = source.boosts.accuracy;
+        const sourceeva = source.boosts.evasion;
+        if (targetacc < 0) {
+          boost += targetacc;
+        }
+        if (targeteva < 0) {
+          boost += targeteva;
+        }
+        if (sourceacc > 0) {
+          boost += sourceacc;
+        }
+        if (sourceeva > 0) {
+          boost += sourceeva;
+        }
+        return critRatio + boost;
+      },
+      onModifyMovePriority: -6,
+      onModifyMove(move, pokemon, target) {
+        let reflected = false;
+        const reflectedmoves = ["mirrorshot", "aurorabeam", "dazzlinggleam", "flashcannon", "doomdesire", "lusterpurge", "photongeyser", "prismaticlaser", "signalbeam", "technoblast", "lightthatburnsthesky"];
+        if (target && target.boosts.evasion > 0) {
+          reflected = true;
+        }
+        if (move.category === "Special" && (move.target === "normal" || pokemon.foes().length === 1) && !move.flags.contact && reflected || reflectedmoves.includes(move.id)) {
+          move.accuracy = true;
+        }
+      },
+      onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        let isevasion = false;
+        const evasionshredder = ["bubblebeam", "chargebeam", "fleurcannon", "hyperbeam", "icebeam", "originpulse", "moongeistbeam", "psybeam", "solarbeam", "triattack"];
+        const minievasionshredder = ["aurorabeam", "dazzlinggleam", "flashcannon", "doomdesire", "lusterpurge", "photongeyser", "prismaticlaser", "signalbeam", "technoblast", "lightthatburnsthesky"];
+        const mirrorbreak = ["boomburst", "bulldoze", "earthquake", "explosion", "fissure", "hypervoice", "magnitude", "selfdestruct", "tectonicrage"];
+        if (target.boosts.evasion > 0) {
+          isevasion = true;
+        }
+        if (isevasion && evasionshredder.includes(move.id)) {
+          modifier *= 2;
+        }
+        if (move.id === "mirrorshot") {
+          this.add("-message", "The mirrors strengthened the attack!");
+          modifier *= 2;
+        }
+        if (minievasionshredder.includes(move.id)) {
+          this.add("-message", "The reflected light was blinding!");
+          modifier *= 1.5;
+        }
+        if (mirrorbreak.includes(move.id)) {
+          modifier *= 1.3;
+        }
+        return this.chainModify(modifier);
+      },
+      onMiss(source, target, move) {
+        if (move.category === "Physical" && move.flags.contact) {
+          this.damage(source.baseMaxhp / 4, source);
+          if (source.boosts.evasion > 0) {
+            this.boost({ evasion: -1 }, source);
+          }
+        }
+      },
+      onAfterMove(source, target, move) {
+        const mirrorbreak = ["boomburst", "bulldoze", "earthquake", "explosion", "fissure", "hypervoice", "magnitude", "selfdestruct", "tectonicrage"];
+        if (mirrorbreak.includes(move.id)) {
+          for (const side of this.sides) {
+            for (const pokemon of side.active) {
+              if (!pokemon.isSemiInvulnerable() && !(pokemon.hasAbility("shellarmor") || pokemon.hasAbility("battlearmor")) && !(pokemon.isProtected() || pokemon.volatiles["wideguard"] || pokemon.volatiles["endure"])) {
+                this.damage(pokemon.baseMaxhp / 2, pokemon);
+              }
+            }
+          }
+          this.field.clearTerrain();
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Mirror Arena Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Mirror Arena Terrain");
+      }
+    }
+  },
   murkwatersurfaceterrain: {
     name: "Murkwater Surface Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       onModifySpe(spe, pokemon) {
         let immune = ["surgesurfer", "swiftswim"];
-        if (!pokemon.types.includes("Poison") || !immune.includes(pokemon.ability)) {
+        if (!pokemon.types.includes("Water") || !immune.includes(pokemon.ability)) {
           return this.chainModify(0.75);
         }
       },
@@ -410,8 +698,9 @@ const Terrains = {
         }
       },
       onTryMove(source, target, move) {
-        if (move.type === "Ground" && !(move.category === "Status" && move.id !== "sandattack"))
+        if (move.type === "Ground" && move.category !== "Status" || move.id === "sandattack") {
           return false;
+        }
       },
       onBasePower(basePower, source, target, move) {
         let modifier = 1;
@@ -448,11 +737,12 @@ const Terrains = {
       onResidual(pokemon) {
         const immune = ["immunity", "magicguard", "poisonheal", "toxicboost", "wondergaurd"];
         const weak = ["dryskin", "flamebody", "magmaarmor", "waterabsorb"];
-        if (!immune.includes(pokemon.ability) || !(pokemon.types.includes("Poison") || pokemon.types.includes("Steel")) && pokemon.isGrounded()) {
+        if (!immune.includes(pokemon.ability) && !(pokemon.types.includes("Poison") || pokemon.types.includes("Steel")) && pokemon.isGrounded()) {
           let typeMod = this.clampIntRange(this.dex.getEffectiveness("Poison", pokemon.types), -6, 6);
           let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
-          if (pokemon.volatiles["dive"])
+          if (pokemon.volatiles["dive"]) {
             damage *= 4;
+          }
           if (weak.includes(pokemon.ability)) {
             this.damage(damage * 2, pokemon);
           } else {
@@ -461,9 +751,9 @@ const Terrains = {
         }
       },
       onFieldStart() {
-        if (this.field.terrainState[1].id === "underwaterterrain") {
+        if (this.field.terrainState[1].id === "underwaterterrain" && this.field.terrainState[1].Tchanges?.includes("sludgewave")) {
           for (const pokemon of this.getAllActive()) {
-            if (!(pokemon.types.includes("Steel") || pokemon.types.includes("Poison")) || pokemon.isSemiInvulnerable()) {
+            if (!(pokemon.types.includes("Steel") || pokemon.types.includes("Poison")) && !pokemon.isSemiInvulnerable()) {
               pokemon.faint();
             }
           }
@@ -478,7 +768,7 @@ const Terrains = {
   rainbowterrain: {
     name: "Rainbow Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       durationCallback(target, source, effect) {
         if (source.hasItem("terrainextender") && (effect?.name !== "sunnyday" && effect?.name !== "raindance")) {
@@ -534,7 +824,7 @@ const Terrains = {
   rockyterrain: {
     name: "Rocky Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       onModifyMove(move) {
         const rockymoves = ["bulldoze", "earthquake", "magnitude", "rockclimb", "strength"];
@@ -574,7 +864,7 @@ const Terrains = {
         return this.chainModify(modifier);
       },
       onAfterMove(source, target, move) {
-        if (move.success === false && move.category === "Physical" && !source.hasAbility("rockhead")) {
+        if (move.success === false && move.flags["contact"] && !source.hasAbility("rockhead")) {
           this.add("-message", "The pokemon kept going and crashed into the rocks!");
           this.damage(source.baseMaxhp / 8, source, source);
         }
@@ -587,10 +877,67 @@ const Terrains = {
       }
     }
   },
+  shortcircuitterrain: {
+    name: "Short-Circuit Terrain",
+    condition: {
+      duration: 9999,
+      onBasePowerPriority: 6,
+      onModifyMove(move) {
+        const electrified = ["flashcannon", "geargrind", "gyroball", "magnetbomb", "muddywater", "surf", "steelbeam", "doubleironbash"];
+        if (electrified.includes(move.id)) {
+          move.types = [move.type, "Electric"];
+        }
+      },
+      onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        const multiplier = [0.8, 1.5, 0.5, 4915 / 4096, 2];
+        const text = ["Bzzt", "Bzzapp!", "Bzt...", "Bzap!", "BZZZAPP!"];
+        const electrified = ["flashcannon", "geargrind", "gyroball", "magnetbomb", "muddywater", "surf"];
+        const boosted = ["dazzlinggleam", "hydrovortex", "infernalparade"];
+        const shadow = ["darkpulse", "nightdaze", "nightslash", "shadowball", "shadowbone", "shadowclaw", "shadowforce", "shadowpunch", "shadowsneak"];
+        const nerfed = ["lightthatburnsthesky"];
+        const fieldchange = ["chargebeam", "discharge", "iondeluge", "paraboliccharge", "wildcharge", "gigavolthavoc", "risingvoltage"];
+        if (electrified.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        if (boosted.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        if (shadow.includes(move.id)) {
+          modifier *= 5325 / 4096;
+        }
+        if (nerfed.includes(move.id)) {
+          modifier *= 0.5;
+        }
+        if (fieldchange.includes(move.id)) {
+          modifier *= 5325 / 4096;
+        }
+        if (move.type === "Electric") {
+          modifier *= multiplier[this.ShortCircuitCounter];
+          this.add("-message", text[this.ShortCircuitCounter]);
+          this.ShortCircuitCounter += 1;
+          this.ShortCircuitCounter = this.ShortCircuitCounter % 5;
+        }
+        return this.chainModify(modifier);
+      },
+      onAfterMove(source, target, move) {
+        const fieldchange = ["discharge", "chargebeam", "iondeluge", "paraboliccharge", "wildcharge", "gigavolthavoc", "risingvoltage"];
+        if (fieldchange.includes(move.id) && !(this.lastMoveMissed && target.isSemiInvulnerable())) {
+          this.field.changeTerrain("factoryterrain");
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Short-Circuit Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Short-Circuit Terrain");
+      }
+    }
+  },
   swampterrain: {
     name: "Swamp Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       durationCallback(source, effect) {
         if (source.hasItem("terrainextender")) {
@@ -645,11 +992,11 @@ const Terrains = {
   underwaterterrain: {
     name: "Underwater Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       onModifySpe(spe, pokemon) {
         const immune = ["swiftswim", "steelworker"];
-        if (pokemon.isGrounded() && !pokemon.getTypes().includes("Water") && !immune.includes(pokemon.ability)) {
+        if (!pokemon.getTypes().includes("Water") && !immune.includes(pokemon.ability)) {
           return this.chainModify(0.5);
         }
       },
@@ -662,16 +1009,26 @@ const Terrains = {
         if (move.type === "Ground") {
           move.types = [move.type, "Water"];
         }
+        if (move.type === "Electric" && typeof move.accuracy === "number") {
+          return true;
+        }
       },
       onEffectiveness(typeMod, target, type, move) {
-        const types = move.types !== void 0 ? move.types : [move.type];
-        if (type === "Water" || types.includes("Water"))
-          return 0 + this.dex.getEffectiveness(move.type, type);
+        const move_types = move.types !== void 0 ? move.types : [move.type];
+        if (type === "Water" && move_types.includes("Water")) {
+          if (!move.types) {
+            return 0;
+          }
+          return 0 + this.dex.getEffectiveness(move_types.splice(move_types.indexOf("Water", 1)), type);
+        }
       },
       onBasePower(basePower, source, target, move) {
         let modifier = 1;
         const change = ["bounce", "dive", "skydrop", "fly", "aciddownpour"];
-        if (move.type === "Electric" || move.id === "anchorshot") {
+        if (move.type === "Electric") {
+          modifier *= 2;
+        }
+        if (move.id === "anchorshot") {
           modifier *= 2;
         }
         if (move.id === "waterpulse") {
@@ -680,7 +1037,7 @@ const Terrains = {
         if (move.type === "Water") {
           modifier *= 1.5;
         }
-        if (move.category === "Physical" && !source.hasAbility("steelworker")) {
+        if (move.category === "Physical" && move.type !== "Water" && !source.hasAbility("steelworker")) {
           modifier *= 0.5;
         }
         if (change.includes(move.id) || this.field.terrainState.Tchanges?.includes("sludgewave") && move.id === "sludgewave") {
@@ -706,30 +1063,115 @@ const Terrains = {
       onResidual(pokemon) {
         let immune = ["magicguard", "swiftswim"];
         let weak = ["flamebody", "magmaarmor"];
-        if (!pokemon.types.includes("Water") && !immune.includes(pokemon.ability)) {
+        if (!immune.includes(pokemon.ability)) {
           let typeMod = this.clampIntRange(this.dex.getEffectiveness("Water", pokemon.types), -6, 6);
           let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * Math.pow(2, typeMod), 1);
           if (typeMod > 0) {
             if (weak.includes(pokemon.ability)) {
-              this.damage(damage, pokemon);
+              this.damage(damage * 2, pokemon);
             } else {
               this.damage(damage, pokemon);
             }
           }
         }
       },
-      onFieldStart() {
-        this.add("-fieldstart", "Underwater Terrain");
+      onFieldStart(field, source, effect) {
+        this.field.clearWeather();
+        if (effect?.effectType === "Ability") {
+          this.add("-fieldstart", "Underwater Terrain", "[from] ability: " + effect, "[of] " + source);
+        } else {
+          this.add("-fieldstart", "Underwater Terrain");
+        }
       },
       onFieldEnd() {
         this.add("-fieldend", "Underwater Terrain");
       }
     }
   },
+  wastelandterrain: {
+    name: "Wasteland Terrain",
+    condition: {
+      duration: 9999,
+      onBasePowerPriority: 6,
+      onModifyMove(move) {
+        const poisoned = ["mudbomb", "mudshot", "mudslap"];
+        if (poisoned.includes(move.id)) {
+          move.types = [move.type, "Poison"];
+        }
+      },
+      onBasePower(basePower, source, pokemon, move) {
+        let modifier = 1;
+        const boost = ["mudbomb", "mudshot", "mudslap", "powerwhip", "vinewhip"];
+        const miniboost = ["gunkshot", "octazooka", "sludge", "sludgebomb", "sludgewave"];
+        const weak = ["bulldoze", "earthquake", "magnitude"];
+        if (boost.includes(move.id)) {
+          this.add("-message", "The waste joined the attack!");
+          modifier *= 1.5;
+        }
+        if (miniboost.includes(move.id)) {
+          this.add("-message", "The waste did it for the vine!");
+          modifier *= 1.2;
+        }
+        if (weak.includes(move.id)) {
+          this.add("-message", "Wibble-wibble wobble-wobb...");
+          modifier *= 0.25;
+        }
+        if (move.id === "spitup") {
+          this.add("-message", "BLEAAARGGGGH!");
+          modifier *= 2;
+        }
+        return this.chainModify(modifier);
+      },
+      onResidual(pokemon) {
+        if (this.field.terrainState.toxicspikes.includes(pokemon.side.id)) {
+          this.add("-message", "...Poison needles shot up from the ground!");
+          if (!(pokemon.hasType("Steel") || pokemon.hasType("Poison")) && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+            pokemon.trySetStatus("psn");
+            this.damage(pokemon.baseMaxhp / 8, pokemon);
+          }
+        }
+        if (this.field.terrainState.spikes.includes(pokemon.side.id)) {
+          this.add("-message", "...Stalagmites burst up from the ground!");
+          if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+            this.damage(pokemon.baseMaxhp / 3, pokemon);
+          }
+        }
+        if (this.field.terrainState.stickyweb.includes(pokemon.side.id)) {
+          this.add("-message", "...Sticky string shot out of the ground!");
+          if (!pokemon.isSemiInvulnerable()) {
+            this.boost({ spe: -4 }, pokemon);
+          }
+        }
+        if (this.field.terrainState.stealthrock.includes(pokemon.side.id)) {
+          this.add("-message", "...Rocks spewed out from the ground below!");
+          if (!pokemon.isSemiInvulnerable()) {
+            const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove("stealthrock")), -6, 6);
+            this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4, pokemon);
+          }
+        }
+      },
+      onFieldResidual(source) {
+        this.field.terrainState.toxicspikes = [];
+        this.field.terrainState.spikes = [];
+        this.field.terrainState.stickyweb = [];
+        this.field.terrainState.stealthrock = [];
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Wasteland Terrain");
+        this.field.terrainState.toxicspikes = [];
+        this.field.terrainState.spikes = [];
+        this.field.terrainState.stickyweb = [];
+        this.field.terrainState.stealthrock = [];
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Wasteland Terrain");
+      }
+    }
+  },
   watersurfaceterrain: {
     name: "Water Surface Terrain",
     condition: {
-      duration: 5,
+      duration: 9999,
       onBasePowerPriority: 6,
       onModifySpe(spe, pokemon) {
         const immune = ["swiftswim", "surgesurfer"];
@@ -738,8 +1180,9 @@ const Terrains = {
         }
       },
       onTryMove(source, target, move) {
-        if (move.type === "Ground" && !(move.category === "Status" && move.id !== "sandattack"))
+        if (move.type === "Ground" && move.category !== "Status" || move.id === "sandattack") {
           return false;
+        }
       },
       onBasePower(basePower, source, target, move) {
         let modifier = 1;

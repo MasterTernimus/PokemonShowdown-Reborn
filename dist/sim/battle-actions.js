@@ -519,6 +519,12 @@ class BattleActions {
     const hitResult = this.battle.singleEvent("Try", move, null, pokemon, targets[0], move) && this.battle.singleEvent("PrepareHit", move, {}, targets[0], pokemon, move) && this.battle.runEvent("PrepareHit", pokemon, targets[0], move);
     if (!hitResult) {
       if (hitResult === false) {
+        if (move.category === "Physical" && move.flags.contact && this.battle.field.isTerrain("mirrorarenaterrain")) {
+          this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
+          if (pokemon.boosts.evasion > 0) {
+            this.battle.boost({ evasion: -1 }, pokemon);
+          }
+        }
         this.battle.add("-fail", pokemon);
         this.battle.attrLastMove("[still]");
       }
@@ -566,6 +572,12 @@ class BattleActions {
           this.battle.add("-miss", pokemon, target);
         }
       }
+      if (move.category === "Physical" && move.flags.contact && this.battle.field.isTerrain("mirrorarenaterrain") && hitResults[i] === false) {
+        this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
+        if (pokemon.boosts.evasion > 0) {
+          this.battle.boost({ evasion: -1 }, pokemon);
+        }
+      }
     }
     return hitResults;
   }
@@ -576,6 +588,12 @@ class BattleActions {
       this.battle.attrLastMove("[still]");
     }
     for (const i of targets.keys()) {
+      if (move.category === "Physical" && move.flags.contact && this.battle.field.isTerrain("mirrorarenaterrain") && hitResults[i] === false) {
+        this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
+        if (pokemon.boosts.evasion > 0) {
+          this.battle.boost({ evasion: -1 }, pokemon);
+        }
+      }
       if (hitResults[i] !== this.battle.NOT_FAIL)
         hitResults[i] = hitResults[i] || false;
     }
@@ -668,9 +686,11 @@ class BattleActions {
         if (!move.ohko && pokemon.hasItem("blunderpolicy") && pokemon.useItem()) {
           this.battle.boost({ spe: 2 }, pokemon);
         }
+        this.battle.runEvent("Miss", pokemon, target, move);
         hitResults[i] = false;
         continue;
       }
+      this.battle.lastMoveMissed = false;
       hitResults[i] = true;
     }
     return hitResults;
@@ -1218,9 +1238,9 @@ class BattleActions {
         continue;
       const secondaries = this.battle.runEvent("ModifySecondaries", target, source, moveData, moveData.secondaries.slice());
       for (const secondary of secondaries) {
-        const secondaryRoll = this.battle.random(100);
+        const secondaryRoll = this.battle.random(1e3);
         const secondaryOverflow = (secondary.boosts || secondary.self) && this.battle.gen <= 8;
-        if (typeof secondary.chance === "undefined" || secondaryRoll < (secondaryOverflow ? secondary.chance % 256 : secondary.chance)) {
+        if (typeof secondary.chance === "undefined" || secondaryRoll < (secondaryOverflow ? secondary.chance % 256 * 10 : secondary.chance * 10)) {
           this.moveHit(target, source, move, secondary, true, isSelf);
         }
       }

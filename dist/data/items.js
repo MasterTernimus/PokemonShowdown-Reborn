@@ -1701,36 +1701,6 @@ const Items = {
     gen: 7,
     isNonstandard: "Past"
   },
-  electricseed: {
-    name: "Electric Seed",
-    spritenum: 664,
-    fling: {
-      basePower: 10
-    },
-    onStart(pokemon) {
-      if (!pokemon.ignoringItem() && (this.field.isTerrain("swampterrain") || this.field.isTerrain("rockyterrain"))) {
-        pokemon.useItem();
-      }
-    },
-    onUseItem(item, pokemon) {
-      if (this.field.terrain === "swampterrain") {
-        this.boost({ def: 1, spd: 1 });
-        pokemon.addVolatile("ingrain");
-      }
-      if (this.field.terrain === "rockyterrain") {
-        this.boost({ def: 1 });
-        const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove("stealthrock")), -6, 6);
-        this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
-      }
-    },
-    onTerrainChange(pokemon) {
-      if (this.field.isTerrain("swampterrain") || this.field.isTerrain("rockyterrain")) {
-        pokemon.useItem();
-      }
-    },
-    num: 881,
-    gen: 7
-  },
   electriumz: {
     name: "Electrium Z",
     spritenum: 634,
@@ -1742,6 +1712,67 @@ const Items = {
     num: 779,
     gen: 7,
     isNonstandard: "Past"
+  },
+  elementalseed: {
+    name: "Elemental Seed",
+    spritenum: 667,
+    fling: {
+      basePower: 10
+    },
+    onStart(pokemon) {
+      const fields = ["grassyterrain", "electricterrain", "mistyterrain", "burningterrain", "corrosivemistterrain", "watersurfaceterrain", "underwaterterrain", "icyterrain"];
+      if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
+        pokemon.useItem();
+      }
+    },
+    onUseItem(item, pokemon) {
+      if (this.field.isTerrain("electricterrain")) {
+        this.boost({ spe: 1 });
+        pokemon.addVolatile("charge");
+      }
+      if (this.field.isTerrain("grassyterrain")) {
+        this.boost({ def: 1 });
+        pokemon.addVolatile("ingrain");
+      }
+      if (this.field.isTerrain("mistyterrain")) {
+        this.boost({ spd: 1 });
+        this.actions.useMove("wish", pokemon, pokemon);
+      }
+      if (this.field.isTerrain("burningterrain")) {
+        this.boost({ atk: 1, spa: 1, spe: 1 });
+        pokemon.addVolatile("partiallytrapped");
+        pokemon.volatiles["partiallytrapped"].duration = 4;
+      }
+      if (this.field.isTerrain("corrosivemistterrain")) {
+        this.boost({ atk: 1, spa: 1 });
+        pokemon.trySetStatus("tox");
+      }
+      if (this.field.terrain === "watersurfaceterrain") {
+        this.boost({ spd: 1 });
+        pokemon.addVolatile("aquaring");
+      }
+      if (this.field.terrain === "underwaterterrain") {
+        this.boost({ spe: 1 });
+        this.actions.useMove("soak", pokemon, pokemon);
+      }
+      if (this.field.terrain === "murkwatersurfaceterrain") {
+        this.boost({ spe: 1 });
+        pokemon.addVolatile("aquaring");
+      }
+      if (this.field.terrain === "icyterrain") {
+        this.boost({ spe: 2 });
+        const damageAmounts = [0, 3, 4, 6];
+        this.damage(damageAmounts[pokemon.side.sideConditions["spikes"] !== void 0 ? pokemon.side.sideConditions["spikes"].layers : 1] * pokemon.maxhp / 24);
+      }
+    },
+    onTerrainChange(pokemon) {
+      const fields = ["grassyterrain", "electricterrain", "mistyterrain", "burningterrain", "corrosivemistterrain", "watersurfaceterrain", "underwaterterrain", "icyterrain"];
+      if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
+        pokemon.useItem();
+      }
+    },
+    num: 884,
+    gen: 7
   },
   enigmaberry: {
     name: "Enigma Berry",
@@ -2406,65 +2437,6 @@ const Items = {
     num: 780,
     gen: 7,
     isNonstandard: "Past"
-  },
-  grassyseed: {
-    name: "Grassy Seed",
-    spritenum: 667,
-    fling: {
-      basePower: 10
-    },
-    onStart(pokemon) {
-      if (!pokemon.ignoringItem() && this.field.isTerrain("grassyterrain") || this.field.isTerrain("elecricterrain") || this.field.isTerrain("mistyterrain") || this.field.isTerrain("burningterrain") || this.field.isTerrain("corrosivemistterrain") || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain" || this.field.terrain === "murkwatersurfaceterrain" || this.field.terrain === "icyterrain") {
-        pokemon.useItem();
-      }
-    },
-    onUseItem(item, pokemon) {
-      if (this.field.isTerrain("electricterrain")) {
-        this.boost({ spe: 1 });
-        pokemon.addVolatile("charge");
-      }
-      if (this.field.isTerrain("grassyterrain")) {
-        this.boost({ def: 1 });
-        pokemon.addVolatile("ingrain");
-      }
-      if (this.field.isTerrain("mistyterrain")) {
-        this.boost({ spd: 1 });
-        this.actions.useMove("wish", pokemon, pokemon);
-      }
-      if (this.field.isTerrain("burningterrain")) {
-        this.boost({ atk: 1, spa: 1, spe: 1 });
-        pokemon.addVolatile("partiallytrapped");
-        pokemon.volatiles["partiallytrapped"].duration = 4;
-      }
-      if (this.field.isTerrain("corrosivemistterrain")) {
-        this.boost({ atk: 1, spa: 1 });
-        pokemon.trySetStatus("tox");
-      }
-      if (this.field.terrain === "watersurfaceterrain") {
-        this.boost({ spd: 1 });
-        pokemon.addVolatile("aquaring");
-      }
-      if (this.field.terrain === "underwaterterrain") {
-        this.boost({ spe: 1 });
-        this.actions.useMove("soak", pokemon, pokemon);
-      }
-      if (this.field.terrain === "murkwatersurfaceterrain") {
-        this.boost({ spe: 1 });
-        pokemon.addVolatile("aquaring");
-      }
-      if (this.field.terrain === "icyterrain") {
-        this.boost({ spe: 2 });
-        const damageAmounts = [0, 3, 4, 6];
-        this.damage(damageAmounts[pokemon.side.sideConditions["spikes"] !== void 0 ? pokemon.side.sideConditions["spikes"].layers : 1] * pokemon.maxhp / 24);
-      }
-    },
-    onTerrainChange(pokemon) {
-      if (this.field.isTerrain("grassyterrain") || this.field.isTerrain("elecricterrain") || this.field.isTerrain("mistyterrain") || this.field.isTerrain("burningterrain") || this.field.isTerrain("corrosivemistterrain") || this.field.terrain === "watersurfaceterrain" || this.field.terrain === "underwaterterrain" || this.field.terrain === "murkwatersurfaceterrain" || this.field.terrain === "icyterrain") {
-        pokemon.useItem();
-      }
-    },
-    num: 884,
-    gen: 7
   },
   greatball: {
     name: "Great Ball",
@@ -3513,6 +3485,38 @@ const Items = {
     gen: 3,
     isNonstandard: "Past"
   },
+  magicalseed: {
+    name: "Magical Seed",
+    spritenum: 666,
+    fling: {
+      basePower: 10
+    },
+    onStart(pokemon) {
+      if (!pokemon.ignoringItem() && (this.field.isTerrain("psychicterrain") || this.field.isTerrain("rainbowterrain") || this.field.isTerrain("fairytaleterrain"))) {
+        pokemon.useItem();
+      }
+    },
+    onUseItem(item, pokemon) {
+      if (this.field.isTerrain("psychicterrain")) {
+        this.boost({ spa: 2 });
+        pokemon.addVolatile("confusion");
+      }
+      if (this.field.isTerrain("rainbowterrain")) {
+        this.boost({ spa: 1 });
+        this.actions.useMove("wish", pokemon, pokemon);
+      }
+      if (this.field.isTerrain("fairytaleterrain")) {
+        pokemon.addVolatile("kingsshield");
+      }
+    },
+    onTerrainChange(pokemon) {
+      if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("rainbowterrain") || this.field.isTerrain("fairytaleterrain")) {
+        pokemon.useItem();
+      }
+    },
+    num: 883,
+    gen: 7
+  },
   magmarizer: {
     name: "Magmarizer",
     spritenum: 272,
@@ -3988,38 +3992,6 @@ const Items = {
     },
     num: 1883,
     gen: 9
-  },
-  mistyseed: {
-    name: "Misty Seed",
-    spritenum: 666,
-    fling: {
-      basePower: 10
-    },
-    onStart(pokemon) {
-      if (!pokemon.ignoringItem() && (this.field.isTerrain("psychicterrain") || this.field.isTerrain("rainbowterrain") || this.field.isTerrain("fairytaleterrain"))) {
-        pokemon.useItem();
-      }
-    },
-    onUseItem(item, pokemon) {
-      if (this.field.isTerrain("psychicterrain")) {
-        this.boost({ spa: 2 });
-        pokemon.addVolatile("confusion");
-      }
-      if (this.field.isTerrain("rainbowterrain")) {
-        this.boost({ spa: 1 });
-        this.actions.useMove("wish", pokemon, pokemon);
-      }
-      if (this.field.isTerrain("fairytaleterrain")) {
-        pokemon.addVolatile("kingsshield");
-      }
-    },
-    onTerrainChange(pokemon) {
-      if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("rainbowterrain") || this.field.isTerrain("fairytaleterrain")) {
-        pokemon.useItem();
-      }
-    },
-    num: 883,
-    gen: 7
   },
   moonball: {
     name: "Moon Ball",
@@ -4716,31 +4688,6 @@ const Items = {
     gen: 7,
     isNonstandard: "Past"
   },
-  psychicseed: {
-    name: "Psychic Seed",
-    spritenum: 665,
-    fling: {
-      basePower: 10
-    },
-    onStart(pokemon) {
-      if (!pokemon.ignoringItem() && this.field.isTerrain("glitchterrain")) {
-        pokemon.useItem();
-      }
-    },
-    onTerrainChange(pokemon) {
-      if (this.field.isTerrain("glitchterrain")) {
-        pokemon.useItem();
-      }
-    },
-    onUseItem(item, pokemon) {
-      pokemon.setType("???");
-    },
-    boosts: {
-      def: 1
-    },
-    num: 882,
-    gen: 7
-  },
   psychiumz: {
     name: "Psychium Z",
     spritenum: 641,
@@ -4763,7 +4710,7 @@ const Items = {
     onBasePower(basePower, attacker, defender, move) {
       if (move.flags["punch"]) {
         this.debug("Punching Glove boost");
-        return this.chainModify([4506, 4096]);
+        return this.chainModify([5734, 4096]);
       }
     },
     onModifyMovePriority: 1,
@@ -5422,7 +5369,11 @@ const Items = {
     onAfterMoveSecondarySelfPriority: -1,
     onAfterMoveSecondarySelf(pokemon, target, move) {
       if (move.totalDamage && !pokemon.forceSwitchFlag) {
-        this.heal(move.totalDamage / 8, pokemon);
+        if (this.field.isTerrain("ashenbeachterrain")) {
+          this.heal(move.totalDamage / 4, pokemon);
+        } else {
+          this.heal(move.totalDamage / 8, pokemon);
+        }
       }
     },
     num: 253,
@@ -5937,6 +5888,45 @@ const Items = {
     num: 1116,
     gen: 8
   },
+  syntheticseed: {
+    name: "Synthetic Seed",
+    spritenum: 665,
+    fling: {
+      basePower: 10
+    },
+    onStart(pokemon) {
+      if (!pokemon.ignoringItem() && (this.field.isTerrain("glitchterrain") || this.field.isTerrain("shortcircuitterrain") || this.field.isTerrain("factoryterrain") || this.field.isTerrain("mirrorarenaterrain"))) {
+        pokemon.useItem();
+      }
+    },
+    onTerrainChange(pokemon) {
+      if (!pokemon.ignoringItem() && (this.field.isTerrain("glitchterrain") || this.field.isTerrain("shortcircuitterrain") || this.field.isTerrain("factoryterrain") || this.field.isTerrain("mirrorarenaterrain"))) {
+        pokemon.useItem();
+      }
+    },
+    onUseItem(item, pokemon) {
+      if (this.field.isTerrain("glitchterrain")) {
+        pokemon.setType("???");
+        return;
+      }
+      if (this.field.isTerrain("shortcircuitterrain")) {
+        this.boost({ spd: 1 }, pokemon, pokemon, item, false, true);
+        pokemon.addVolatile("magnetrise");
+      }
+      if (this.field.isTerrain("factoryterrain")) {
+        this.boost({ spa: 1 }, pokemon, pokemon, item, false, true);
+        pokemon.addVolatile("laserfocus", null, item);
+      }
+      if (this.field.isTerrain("mirrorarenaterrain")) {
+        this.add("-activate", pokemon, item, "[consumed]");
+        this.add("-message", pokemon.name + " shrouded itself with Magic Coat!");
+        this.boost({ evasion: 1 }, pokemon, pokemon, item, false, true);
+        pokemon.addVolatile("mirrorcoat", null, item);
+      }
+    },
+    num: 882,
+    gen: 7
+  },
   syrupyapple: {
     name: "Syrupy Apple",
     spritenum: 755,
@@ -6002,6 +5992,61 @@ const Items = {
     },
     num: 1117,
     gen: 8
+  },
+  telluricseed: {
+    name: "Telluric Seed",
+    spritenum: 664,
+    fling: {
+      basePower: 10
+    },
+    onStart(pokemon) {
+      const fields = ["corrosiveterrain", "swampterrain", "rockyterrain", "desertterrain", "forestterrain", "ashenbeachterrain", "wastelandterrain"];
+      if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
+        pokemon.useItem();
+      }
+    },
+    onUseItem(item, pokemon) {
+      if (this.field.isTerrain("corrosiveterrain")) {
+        pokemon.addVolatile("banefulbunker");
+        return;
+      }
+      if (this.field.terrain === "swampterrain") {
+        this.boost({ def: 1, spd: 1 });
+        pokemon.addVolatile("ingrain");
+        return;
+      }
+      if (this.field.terrain === "rockyterrain") {
+        this.boost({ def: 1 });
+        const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove("stealthrock")), -6, 6);
+        this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+        return;
+      }
+      if (this.field.isTerrain("desertterrain")) {
+        this.boost({ def: 1, spd: 1, spe: 1 });
+        pokemon.addVolatile("partiallytrapped", pokemon, this.dex.moves.get("sandtomb"));
+        return;
+      }
+      if (this.field.isTerrain("forestterrain")) {
+        pokemon.addVolatile("spikyshield");
+      }
+      if (this.field.isTerrain("ashenbeachterrain")) {
+        pokemon.addVolatile("focusenergy");
+      }
+      if (this.field.isTerrain("wastelandterrain")) {
+        this.boost({ atk: 1, spa: 1 }, pokemon);
+        for (const side of this.sides) {
+          side.addSideCondition("stealthrock");
+        }
+      }
+    },
+    onTerrainChange(pokemon) {
+      const fields = ["corrosiveterrain", "swampterrain", "rockyterrain", "desertterrain", "ashenbeachterrain"];
+      if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
+        pokemon.useItem();
+      }
+    },
+    num: 881,
+    gen: 7
   },
   terrainextender: {
     name: "Terrain Extender",

@@ -130,9 +130,11 @@ class Battle {
     this.lastMove = null;
     this.lastMoveLine = -1;
     this.lastSuccessfulMoveThisTurn = null;
+    this.lastMoveMissed = true;
     this.lastDamage = 0;
     this.abilityOrder = 0;
     this.quickClawRoll = false;
+    this.ShortCircuitCounter = 0;
     this.teamGenerator = null;
     this.hints = /* @__PURE__ */ new Set();
     this.NOT_FAIL = "";
@@ -2455,6 +2457,11 @@ class Battle {
       this.midTurn = true;
     }
     let action;
+    if (this.turn === 0 && this.format.terrain) {
+      this.field.startTerrain(this.format.terrain);
+      const lower_terrain = this.dex.conditions.get(this.format.terrain);
+      this.field.terrainStack.push({ id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn });
+    }
     while (action = this.queue.shift()) {
       this.runAction(action);
       if (this.requestState || this.ended)

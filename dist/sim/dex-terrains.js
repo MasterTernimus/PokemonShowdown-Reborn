@@ -53,20 +53,13 @@ class DexTerrains {
       }
       return terrain;
     }
-    if (id.startsWith("hiddenpower")) {
-      id = /([a-z]*)([0-9]*)/.exec(id)[1];
-    }
     if (id && this.dex.data.Terrains.hasOwnProperty(id)) {
       const terrainData = this.dex.data.Terrains[id];
-      const terrainTextData = this.dex.getDescs("Terrains", id, terrainData);
       terrain = new DataTerrain({
         name: id,
-        ...terrainData,
-        ...terrainTextData
+        ...terrainData
+        //...terrainTextData,
       });
-      if (terrain.gen > this.dex.gen) {
-        terrain.isNonstandard = "Future";
-      }
     } else {
       terrain = new DataTerrain({
         name: id,
