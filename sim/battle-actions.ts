@@ -587,6 +587,12 @@ export class BattleActions {
 			this.battle.runEvent('PrepareHit', pokemon, targets[0], move);
 		if (!hitResult) {
 			if (hitResult === false) {
+				if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain')) {
+					this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
+					if (pokemon.boosts.evasion > 0) {
+						this.battle.boost({ evasion: -1 }, pokemon);
+					}
+				}
 				this.battle.add('-fail', pokemon);
 				this.battle.attrLastMove('[still]');
 			}
@@ -631,6 +637,12 @@ export class BattleActions {
 					this.battle.add('-miss', pokemon, target);
 				}
 			}
+			if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain') && hitResults[i] === false) {
+				this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
+				if (pokemon.boosts.evasion > 0) {
+					this.battle.boost({ evasion: -1 }, pokemon);
+				}
+			}
 		}
 		return hitResults;
 	}
@@ -641,6 +653,12 @@ export class BattleActions {
 			this.battle.attrLastMove('[still]');
 		}
 		for (const i of targets.keys()) {
+			if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain') && hitResults[i] === false) {
+				this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
+				if (pokemon.boosts.evasion > 0) {
+					this.battle.boost({ evasion: -1 }, pokemon);
+				}
+			}
 			if (hitResults[i] !== this.battle.NOT_FAIL) hitResults[i] = hitResults[i] || false;
 		}
 		return hitResults;

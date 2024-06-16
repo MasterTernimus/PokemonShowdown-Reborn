@@ -483,9 +483,9 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Electric Memory",
 		desc: "Holder's Multi-Attack is Electric type.",
 	},
-	electricseed: {
-		name: "Electric Seed",
-		desc: "If the terrain is Electric Terrain, raises holder's Defense by 1 stage. Single use.",
+	telluricseed: {
+		name: "Telluric Seed",
+		desc: "If the terrain is a Telluric Terrain, boosts the holder in some way",
 	},
 	electriumz: {
 		name: "Electrium Z",
