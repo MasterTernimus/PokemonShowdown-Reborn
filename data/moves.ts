@@ -1016,6 +1016,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				move.self = {
+					boosts: {
+						evasion: 1,
+					},
+					sideCondition: 'reflect',
+				};
+			}
+		},
 		self: {
 			sideCondition: 'reflect',
 		},
@@ -7087,7 +7097,17 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Glitzy Glow",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				move.self = {
+					boosts: {
+						evasion: 1,
+					},
+					sideCondition: 'lightscreen',
+				};
+			}
+		},
 		self: {
 			sideCondition: 'lightscreen',
 		},
