@@ -519,8 +519,7 @@ export class BattleActions {
 			move.success = move.success === undefined ? false : true;
 			this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return false;
-		}
-		else {
+		} else {
 			move.success = true;
 		}
 
@@ -587,12 +586,6 @@ export class BattleActions {
 			this.battle.runEvent('PrepareHit', pokemon, targets[0], move);
 		if (!hitResult) {
 			if (hitResult === false) {
-				if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain')) {
-					this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
-					if (pokemon.boosts.evasion > 0) {
-						this.battle.boost({ evasion: -1 }, pokemon);
-					}
-				}
 				this.battle.add('-fail', pokemon);
 				this.battle.attrLastMove('[still]');
 			}
@@ -656,7 +649,7 @@ export class BattleActions {
 			if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain') && hitResults[i] === false) {
 				this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
 				if (pokemon.boosts.evasion > 0) {
-					this.battle.boost({ evasion: -1 }, pokemon);
+					this.battle.boost({evasion: -1}, pokemon);
 				}
 			}
 			if (hitResults[i] !== this.battle.NOT_FAIL) hitResults[i] = hitResults[i] || false;
