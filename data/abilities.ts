@@ -4613,7 +4613,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	snowwarning: {
 		onStart(source) {
-			this.field.setWeather('snow');
+			this.field.setWeather('hail');
 		},
 		flags: {},
 		name: "Snow Warning",
