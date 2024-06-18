@@ -2549,7 +2549,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {},
 		// TODO show prepare message before the "POKEMON used MOVE!" message
 		// This happens even before sleep shows its "POKEMON is fast asleep." message
-		weather: 'snow',
+		weather: 'hail',
 		selfSwitch: true,
 		secondary: null,
 		target: "all",
