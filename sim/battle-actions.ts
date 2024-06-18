@@ -633,7 +633,7 @@ export class BattleActions {
 			if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain') && hitResults[i] === false) {
 				this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
 				if (pokemon.boosts.evasion > 0) {
-					this.battle.boost({ evasion: -1 }, pokemon);
+					this.battle.boost({evasion: -1}, pokemon);
 				}
 			}
 		}
