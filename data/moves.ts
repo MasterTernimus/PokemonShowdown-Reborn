@@ -2248,7 +2248,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('ashenbeachterrain')) {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('chessboardterrain')) {
 				move.boosts = {
 					spa: 2,
 					spd: 2,
@@ -2283,7 +2283,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				newType = 'Grass';
 			} else if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain')) {
 				newType = 'Fairy';
-			} else if (this.field.isTerrain('psychicterrain')) {
+			} else if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain')) {
 				newType = 'Psychic';
 			} else if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain')) {
 				newType = 'Poison';
@@ -10533,7 +10533,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect'] || (move.category === 'Status' && !(this.field.terrain === 'fairytaleterrain'))) {
+				if (!move.flags['protect'] || (move.category === 'Status' && !(this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')))) {
 					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
 					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
@@ -10551,10 +10551,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 					}
 				}
 				if (this.checkMoveMakesContact(move, source, target)) {
-					if (this.field.terrain === 'fairytaleterrain') {
+					if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')) {
 						this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 					}
-					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
+					this.boost({atk: -1}, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 				return this.NOT_FAIL;
 			},
@@ -13382,10 +13382,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.terrain === 'psychicterrain')
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain')) {
 				move.boosts = {
 					spa: 3,
 				};
+			}
 		},
 		boosts: {
 			spa: 2,
@@ -13488,6 +13489,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'gunkshot';
 			} else if (this.field.isTerrain('mirrorarenaterrain')) {
 				move = 'mirrorshot';
+			} else if (this.field.isTerrain('chessboardterrain')) {
+				move = 'ancientpower';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -17108,9 +17111,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 				})
 			} else if (this.field.isTerrain('wastelandterrain')) {
 				move.secondaries.push({
-						chance: 7.5,
-						status: 'brn'
-					},
+					chance: 7.5,
+					status: 'brn'
+				},
 					{
 						chance: 7.5,
 						status: 'par'
@@ -17128,6 +17131,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 30,
 					boosts: {
 						evasion: -1
+					},
+				});
+			} else if (this.field.isTerrain('chessboardterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					boosts: {
+						def: -1,
 					},
 				});
 			}
@@ -21586,7 +21596,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.terrain === 'psychicterrain' || source.hasItem('terrainextender'))
+				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || source.hasItem('terrainextender'))
 					return 8;
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');

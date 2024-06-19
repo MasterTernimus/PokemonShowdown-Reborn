@@ -5772,16 +5772,17 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('chessboardterrain'))) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('chessboardterrain'))) {
 				pokemon.useItem();
 			}
 		},
 		onUseItem(item, pokemon) {
+			this.add('-activate', pokemon, item, '[consumed]');
 			if (this.field.isTerrain('glitchterrain')) {
 				pokemon.setType('???');
 				return;
@@ -5795,10 +5796,14 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.addVolatile('laserfocus', null, item);
 			}
 			if (this.field.isTerrain('mirrorarenaterrain')) {
-				this.add('-activate', pokemon, item, '[consumed]');
 				this.add('-message', pokemon.name + ' shrouded itself with Magic Coat!');
 				this.boost({ evasion: 1 }, pokemon, pokemon, item, false, true);
-				pokemon.addVolatile('mirrorcoat', null, item);
+				pokemon.addVolatile('magiccoat', null, item);
+			}
+			if (this.field.isTerrain('chessboardterrain')) {
+				this.add('-message', pokemon.name + ' shrouded itself with Magic Coat!');
+				this.boost({ spa: 1 }, pokemon, pokemon, item, false, true);
+				pokemon.addVolatile('magiccoat', null, item);
 			}
 		},
 		num: 882,
