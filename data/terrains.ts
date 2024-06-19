@@ -183,10 +183,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 						leftoverRoles[2] = '';
 					}
 				}
-
-				for (const pokemon of side.pokemon) {
-					this.add('-message', pokemon.Role + " " + pokemon.species.id);
-				}
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.Role === 'Rook' || pokemon.Role === 'Queen') {
