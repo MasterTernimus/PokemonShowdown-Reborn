@@ -25,6 +25,24 @@ export const Formats: FormatList = [
 		section: "AllGen Singles",
 	},
 	{
+		name: "[Gen 9] Chess Board",
+		mod: 'gen9',
+		terrain: 'chessboardterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 50', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Grassy Terrain",
+		mod: 'gen9',
+		terrain: 'grassyterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 50', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] Mirror Arena",
 		mod: 'gen9',
 		terrain: 'mirrorarenaterrain',
@@ -126,6 +144,26 @@ export const Formats: FormatList = [
 
 	{
 		section: "AllGen Doubles",
+	},
+	{
+		name: "[Gen 9] Doubles Chess Board",
+		mod: 'gen9',
+		terrain: 'chessboardterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 50', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Grassy Terrain",
+		mod: 'gen9',
+		terrain: 'grassyterrain',
+		gameType: "doubles",
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 50', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles Mirror Arena",
