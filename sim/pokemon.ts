@@ -30,6 +30,8 @@ interface Attacker {
 	damageValue?: (number | boolean | undefined);
 }
 
+type Roles = 'Queen' | 'King' | 'Pawn' | 'Bishop' | 'Knight' | 'Rook' | 'UsedPawn';
+
 export interface EffectState {
 	Tchanges?: string[];
 	// TODO: set this to be an actual number after converting data/ to .ts
@@ -288,6 +290,8 @@ export class Pokemon {
 		[key: string]: any,
 	};
 
+	//Chess field specific
+	Role?: Roles;
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
 		this.battle = side.battle;

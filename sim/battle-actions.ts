@@ -152,7 +152,6 @@ export class BattleActions {
 			this.battle.queue.insertChoice({choice: 'runUnnerve', pokemon});
 			this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}
-
 		return true;
 	}
 	dragIn(side: Side, pos: number) {
@@ -176,7 +175,11 @@ export class BattleActions {
 		}
 
 		this.battle.runEvent('EntryHazard', pokemon);
-
+		if (this.battle.turn === 0) {
+			if (!pokemon.Role) {
+				pokemon.Role = 'Pawn';
+			}
+		}
 		if (this.battle.gen <= 4) {
 			this.battle.runEvent('SwitchIn', pokemon);
 		}

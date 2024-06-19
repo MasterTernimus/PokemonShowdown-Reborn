@@ -174,6 +174,8 @@ export class Battle {
 	lastDamage: number;
 	abilityOrder: number;
 	quickClawRoll: boolean;
+
+	//Terrain global variables
 	ShortCircuitCounter: number;
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
@@ -263,6 +265,7 @@ export class Battle {
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
 		this.quickClawRoll = false;
+
 		this.ShortCircuitCounter = 0;
 
 		this.teamGenerator = null;
@@ -708,6 +711,7 @@ export class Battle {
 		eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
 		sourceEffect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean
 	) {
+		//this.add('-message', eventid + " Run Event");
 		// if (Battle.eventCounter) {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
 		// 	Battle.eventCounter[eventid]++;
@@ -1597,7 +1601,6 @@ export class Battle {
 				this.add('-center');
 			}
 		}
-
 		this.add('turn', this.turn);
 		if (this.gameType === 'multi') {
 			for (const side of this.sides) {
@@ -2782,15 +2785,22 @@ export class Battle {
 			this.queue.addChoice({choice: 'residual'});
 			this.midTurn = true;
 		}
-		let action;
 		if (this.turn === 0 && this.format.terrain) {
 			this.field.startTerrain(this.format.terrain);
 			const lower_terrain = this.dex.conditions.get(this.format.terrain);
-			this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
+			this.field.terrainStack.push({ id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn });
 		}
+		//Chess Roles
+		for (const side of this.sides) {
+			side.pokemon[side.pokemon.length - 1].Role = 'Queen';
+		}
+		let action;
 		while ((action = this.queue.shift())) {
 			this.runAction(action);
 			if (this.requestState || this.ended) return;
+		}
+		for (const side of this.sides) {
+			this.runEvent('BattleStart', side); 
 		}
 		this.nextTurn();
 		this.midTurn = false;

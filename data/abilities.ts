@@ -3870,8 +3870,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 282,
 	},
 	queenlymajesty: {
-		onModifyDamage() {
-			if (this.field.terrain === 'fairytaleterrain') {
+		onModifyDamage(damage, source) {
+			if (this.field.isTerrain('fairytaleterrain')) {
+				return this.chainModify(1.5);
+			}
+			if (this.field.isTerrain('chessboardterrain') && source.Role !== 'Queen') {
 				return this.chainModify(1.5);
 			}
 		},
