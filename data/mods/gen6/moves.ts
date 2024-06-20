@@ -131,7 +131,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+				if (source?.hasItem('amplifieldrock')) {
 					return 8;
 				}
 				return 5;

@@ -400,7 +400,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	terrainextender: {
+	amplifieldrock: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
