@@ -261,6 +261,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	amplifieldrock: {
+		name: "Amplifield Rock",
+		spritenum: 662,
+		fling: {
+			basePower: 60,
+		},
+		num: 879,
+		gen: 7,
+	},
 	apicotberry: {
 		name: "Apicot Berry",
 		spritenum: 10,
@@ -5927,15 +5936,6 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		num: 881,
-		gen: 7,
-	},
-	terrainextender: {
-		name: "Terrain Extender",
-		spritenum: 662,
-		fling: {
-			basePower: 60,
-		},
-		num: 879,
 		gen: 7,
 	},
 	thickclub: {

@@ -70,6 +70,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Ampharosite",
 		desc: "If held by an Ampharos, this item allows it to Mega Evolve in battle.",
 	},
+	amplifieldrock: {
+		name: "Amplifield Rock",
+		desc: "Holder's use of...a lot of things really...have a boosted duration",
+	},
 	apicotberry: {
 		name: "Apicot Berry",
 		desc: "Raises holder's Sp. Def by 1 stage when at 1/4 max HP or less. Single use.",
@@ -1801,10 +1805,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 	telluricseed: {
 		name: "Telluric Seed",
 		desc: "If the terrain is a Telluric Terrain, boosts the holder in a unique way. Single use.",
-	},
-	terrainextender: {
-		name: "Terrain Extender",
-		desc: "Holder's use of Electric/Grassy/Misty/Psychic Terrain lasts 8 turns instead of 5.",
 	},
 	thickclub: {
 		name: "Thick Club",
