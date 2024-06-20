@@ -4809,11 +4809,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			durationCallback(source, effect) {
 				let terrainMoves = ['stokedsparksurfer', 'iondeluge', 'plasmafists'];
 				if (terrainMoves.includes(this.activeMove !== null ? this.activeMove.id : '')) {
-					if (source?.hasItem('terrainextender'))
+					if (source?.hasItem('amplifieldrock'))
 						return 6
 					return 3
 				}
-				if (source?.hasItem('terrainextender')) {
+				if (source?.hasItem('amplifieldrock')) {
 					return 8;
 				}
 				return 5;
@@ -5744,7 +5744,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onAfterMove(source, target, move) {
 			if (this.field.terrain === 'burningterrain' || this.field.terrain === 'rainbowterrain') {
-				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
 			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
 				this.field.setTerrain('rainbowterrain');
@@ -8038,7 +8038,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onAfterMove(source) {
 			if (this.field.terrain === 'burningterrain' || this.field.terrain === 'swampterrain') {
-				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
 			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
 				this.field.setTerrain('swampterrain');
@@ -8111,7 +8111,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			durationCallback(source, effect) {
 				if (this.activeMove?.id === 'bloomdoom')
 					return 3;
-				if (source?.hasItem('terrainextender')) {
+				if (source?.hasItem('amplifieldrock')) {
 					return 8;
 				}
 				return 5;
@@ -8218,7 +8218,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.terrain === 'psychicterrain' || source.hasItem('terrainextender'))
+				if (this.field.terrain === 'psychicterrain' || source.hasItem('amplifieldrock'))
 					return 8
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
@@ -11417,7 +11417,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.terrain === 'psychicterrain' || source.hasItem('terrainextender'))
+				if (this.field.terrain === 'psychicterrain' || source.hasItem('amplifieldrock'))
 					return 8
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
@@ -12930,11 +12930,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (this.effect.id === 'mist') {
-					if (source.hasItem('terrainextender'))
+					if (source.hasItem('amplifieldrock'))
 						return 6;
 					return 3;
 				}
-				if (source?.hasItem('terrainextender')) {
+				if (source?.hasItem('amplifieldrock')) {
 					return 8;
 				}
 				return 5;
@@ -15148,7 +15148,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender') && this.activeMove?.id !== 'genesissupernova') {
+				if (source?.hasItem('amplifieldrock') && this.activeMove?.id !== 'genesissupernova') {
 					return 8;
 				}
 				return 5;
@@ -21596,7 +21596,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || source.hasItem('terrainextender'))
+				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || source.hasItem('amplifieldrock'))
 					return 8;
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
@@ -22201,7 +22201,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onAfterMove(source) {
 			if (this.field.terrain === 'swampterrain' || this.field.terrain === 'rainbowterrain') {
-				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('terrainextender') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
 			if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
 				this.field.setTerrain('swampterrain');
@@ -22635,7 +22635,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.terrain === 'psychicterrain' || source.hasItem('terrainextender'))
+				if (this.field.terrain === 'psychicterrain' || source.hasItem('amplifieldrock'))
 					return 8
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Wonder Room');

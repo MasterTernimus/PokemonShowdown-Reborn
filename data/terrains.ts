@@ -64,7 +64,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
-				if (source.hasItem('terrainextender')) {
+				if (source.hasItem('amplifieldrock')) {
 					return 7;
 				}
 				return 4;
@@ -542,7 +542,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
-				if (source.hasItem('terrainextender')) {
+				if (source.hasItem('amplifieldrock')) {
 					return 8;
 				}
 				return 5;
@@ -859,7 +859,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(target, source, effect) {
-				if (source.hasItem('terrainextender') && (effect?.name !== 'sunnyday' && effect?.name !== 'raindance')) {
+				if (source.hasItem('amplifieldrock') && (effect?.name !== 'sunnyday' && effect?.name !== 'raindance')) {
 					return 7;
 				}
 				else if (effect?.name !== 'sunnyday' && effect?.name !== 'raindance') {
@@ -1028,7 +1028,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
-				if (source.hasItem('terrainextender')) {
+				if (source.hasItem('amplifieldrock')) {
 					return 7;
 				}
 				return 4;
