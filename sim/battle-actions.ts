@@ -649,7 +649,7 @@ export class BattleActions {
 			this.battle.attrLastMove('[still]');
 		}
 		for (const i of targets.keys()) {
-			if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain') && hitResults[i] === false) {
+			if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain') && (hitResults[i] === false || hitResults[i] === this.battle.NOT_FAIL)) {
 				this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
 				if (pokemon.boosts.evasion > 0) {
 					this.battle.boost({evasion: -1}, pokemon);
