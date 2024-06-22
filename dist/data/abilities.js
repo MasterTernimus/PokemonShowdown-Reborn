@@ -3981,8 +3981,11 @@ const Abilities = {
     num: 282
   },
   queenlymajesty: {
-    onModifyDamage() {
-      if (this.field.terrain === "fairytaleterrain") {
+    onModifyDamage(damage, source) {
+      if (this.field.isTerrain("fairytaleterrain")) {
+        return this.chainModify(1.5);
+      }
+      if (this.field.isTerrain("chessboardterrain") && source.Role !== "Queen") {
         return this.chainModify(1.5);
       }
     },
@@ -4768,7 +4771,7 @@ const Abilities = {
   },
   snowwarning: {
     onStart(source) {
-      this.field.setWeather("snow");
+      this.field.setWeather("hail");
     },
     flags: {},
     name: "Snow Warning",

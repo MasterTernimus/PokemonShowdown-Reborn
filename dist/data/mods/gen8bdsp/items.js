@@ -424,7 +424,7 @@ const Items = {
     inherit: true,
     isNonstandard: "Past"
   },
-  terrainextender: {
+  amplifieldrock: {
     inherit: true,
     isNonstandard: "Past"
   },

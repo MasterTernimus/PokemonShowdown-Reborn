@@ -12784,19 +12784,17 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Mirror Move",
 		pp: 20,
 		priority: 0,
-		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
+		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onTryHit(target, pokemon) {
 			const move = target.lastMove;
 			if (!move?.flags['mirror'] || move.isZ || move.isMax) {
 				return false;
 			}
 			this.actions.useMove(move.id, pokemon, target);
-			return null;
-		},
-		onAfterMove(source) {
-			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
-				this.boost({ atk: 1, spa: 1, evasion: 1 }, source);
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ atk: 1, spa: 1, evasion: 1 }, pokemon);
 			}
+			return null;
 		},
 		secondary: null,
 		target: "normal",
@@ -20720,7 +20718,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			}
 		},
 		onModifyMove(move) {
-			if (this.field.terrain === 'psychicterrain') {
+			if (this.field.isTerrain('psychicterrain')) {
 				move.boosts = {
 					accuracy: -2,
 					spd: -2,
