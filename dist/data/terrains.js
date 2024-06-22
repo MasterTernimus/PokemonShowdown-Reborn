@@ -87,7 +87,7 @@ const Terrains = {
       duration: 9999,
       onBasePowerPriority: 6,
       durationCallback(source, effect) {
-        if (source.hasItem("terrainextender")) {
+        if (source.hasItem("amplifieldrock")) {
           return 7;
         }
         return 4;
@@ -162,6 +162,109 @@ const Terrains = {
       },
       onFieldEnd() {
         this.add("-fieldend", "Burning Terrain");
+      }
+    }
+  },
+  chessboardterrain: {
+    name: "Chess Board Terrain",
+    condition: {
+      duration: 9999,
+      onBattleStart(side) {
+        let new_pokemon = side.pokemon.filter((newpokemon) => !newpokemon.Role);
+        let king = null;
+        let min = 9999;
+        for (const pokemon of new_pokemon) {
+          if (min > pokemon.baseMaxhp) {
+            min = pokemon.baseMaxhp;
+            king = pokemon;
+          }
+          if (pokemon.hasItem("kingsrock")) {
+            king = pokemon;
+            break;
+          }
+        }
+        if (king) {
+          king.Role = "King";
+        }
+        let leftoverRoles = ["Rook", "Bishop", "Knight"];
+        for (const pokemon of new_pokemon) {
+          if ((pokemon.getBestStat() === "def" || pokemon.getBestStat() === "spd") && !pokemon.Role && leftoverRoles[0] != "") {
+            pokemon.Role = "Rook";
+            leftoverRoles[0] = "";
+          }
+          if ((pokemon.getBestStat() === "atk" || pokemon.getBestStat() === "spa") && !pokemon.Role && leftoverRoles[1] != "") {
+            pokemon.Role = "Bishop";
+            leftoverRoles[1] = "";
+          }
+          if (pokemon.getBestStat() === "spe" && !pokemon.Role && leftoverRoles[2] != "") {
+            pokemon.Role = "Knight";
+            leftoverRoles[2] = "";
+          }
+        }
+      },
+      onSwitchIn(pokemon) {
+        if (pokemon.Role === "Rook" || pokemon.Role === "Queen") {
+          this.boost({ def: 1, spd: 1 }, pokemon);
+        }
+        if (pokemon.Role === "Bishop") {
+          this.boost({ atk: 1, spa: 1 }, pokemon);
+        }
+      },
+      onModifyPriority(priority, source, target, move) {
+        if (source.Role === "King") {
+          return priority + 1;
+        }
+      },
+      onModifyMove(move) {
+        const chessMoves = ["ancientpower", "psychic", "secretpower", "strength", "continentalcrush", "shatteredpsyche"];
+        if (chessMoves.includes(move.id)) {
+          move.types = [move.type, "Rock"];
+        }
+      },
+      onBasePowerPriority: 6,
+      onBasePower(basePower, source, target, move) {
+        let modifier = 1;
+        const chessMoves = ["ancientpower", "psychic", "secretpower", "strength", "continentalcrush", "shatteredpsyche"];
+        const boost = ["fakeout", "feint", "firstimpression", "shadowsneak", "smartstrike", "suckerpunch"];
+        const dumbAbilities = ["unaware", "simple", "klutz", "oblivious"];
+        const smartAbilities = ["adaptability", "synchronize", "anticipation", "telepathy"];
+        if (chessMoves.includes(move.id)) {
+          if (dumbAbilities.includes(target.ability)) {
+            modifier *= 2;
+          }
+          if (smartAbilities.includes(target.ability)) {
+            modifier *= 0.5;
+          }
+          modifier *= 1.5;
+        }
+        if (boost.includes(move.id)) {
+          modifier *= 1.5;
+        }
+        if (source.Role === "Queen") {
+          modifier *= 1.5;
+        }
+        if (source.Role === "Knight") {
+          if (target.Role === "Queen") {
+            modifier *= 3;
+          }
+          if (move.target === "allAdjacent" || move.target === "allAdjacentFoes" || move.target === "all") {
+            modifier *= 1.25;
+          }
+        }
+        return this.chainModify(modifier);
+      },
+      onDamagePriority: -45,
+      onDamage(damage, target, source, effect) {
+        if (target.Role === "Pawn" && target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === "Move") {
+          target.Role = "UsedPawn";
+          return target.hp - 1;
+        }
+      },
+      onFieldStart() {
+        this.add("-fieldstart", "Chess Board Terrain");
+      },
+      onFieldEnd() {
+        this.add("-fieldend", "Chess Board Terrain");
       }
     }
   },
@@ -455,7 +558,7 @@ const Terrains = {
       duration: 9999,
       onBasePowerPriority: 6,
       durationCallback(source, effect) {
-        if (source.hasItem("terrainextender")) {
+        if (source.hasItem("amplifieldrock")) {
           return 8;
         }
         return 5;
@@ -771,7 +874,7 @@ const Terrains = {
       duration: 9999,
       onBasePowerPriority: 6,
       durationCallback(target, source, effect) {
-        if (source.hasItem("terrainextender") && (effect?.name !== "sunnyday" && effect?.name !== "raindance")) {
+        if (source.hasItem("amplifieldrock") && (effect?.name !== "sunnyday" && effect?.name !== "raindance")) {
           return 7;
         } else if (effect?.name !== "sunnyday" && effect?.name !== "raindance") {
           return effect?.duration !== void 0 ? effect.duration : 5;
@@ -940,7 +1043,7 @@ const Terrains = {
       duration: 9999,
       onBasePowerPriority: 6,
       durationCallback(source, effect) {
-        if (source.hasItem("terrainextender")) {
+        if (source.hasItem("amplifieldrock")) {
           return 7;
         }
         return 4;

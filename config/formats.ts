@@ -31,7 +31,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 50', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 55', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Grassy Terrain",
@@ -40,7 +40,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 50', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 55', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Mirror Arena",

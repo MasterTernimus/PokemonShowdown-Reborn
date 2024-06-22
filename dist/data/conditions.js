@@ -715,10 +715,16 @@ const Conditions = {
     effectType: "Weather",
     duration: 5,
     durationCallback(source, effect) {
-      if (source?.hasItem("icyrock") || this.field.terrain === "icyterrain") {
+      if (source?.hasItem("icyrock") || this.field.isTerrain("icyterrain")) {
         return 8;
       }
       return 5;
+    },
+    onModifyDefPriority: 10,
+    onModifyDef(def, pokemon) {
+      if (pokemon.hasType("Ice") && this.field.isWeather("hail")) {
+        return this.modify(def, 1.5);
+      }
     },
     onFieldStart(field, source, effect) {
       if (effect?.effectType === "Ability") {

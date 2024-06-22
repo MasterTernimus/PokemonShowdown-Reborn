@@ -2296,7 +2296,7 @@ const Moves = {
     priority: 0,
     flags: { snatch: 1, metronome: 1 },
     onModifyMove(move) {
-      if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("ashenbeachterrain")) {
+      if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("ashenbeachterrain") || this.field.isTerrain("chessboardterrain")) {
         move.boosts = {
           spa: 2,
           spd: 2
@@ -2331,7 +2331,7 @@ const Moves = {
         newType = "Grass";
       } else if (this.field.isTerrain("mistyterrain") || this.field.isTerrain("fairytaleterrain")) {
         newType = "Fairy";
-      } else if (this.field.isTerrain("psychicterrain")) {
+      } else if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("chessboardterrain")) {
         newType = "Psychic";
       } else if (this.field.isTerrain("corrosivemistterrain") || this.field.isTerrain("corrosiveterrain")) {
         newType = "Poison";
@@ -2607,7 +2607,7 @@ const Moves = {
     flags: {},
     // TODO show prepare message before the "POKEMON used MOVE!" message
     // This happens even before sleep shows its "POKEMON is fast asleep." message
-    weather: "snow",
+    weather: "hail",
     selfSwitch: true,
     secondary: null,
     target: "all",
@@ -4938,11 +4938,11 @@ const Moves = {
       durationCallback(source, effect) {
         let terrainMoves = ["stokedsparksurfer", "iondeluge", "plasmafists"];
         if (terrainMoves.includes(this.activeMove !== null ? this.activeMove.id : "")) {
-          if (source?.hasItem("terrainextender"))
+          if (source?.hasItem("amplifieldrock"))
             return 6;
           return 3;
         }
-        if (source?.hasItem("terrainextender")) {
+        if (source?.hasItem("amplifieldrock")) {
           return 8;
         }
         return 5;
@@ -5878,7 +5878,7 @@ const Moves = {
     },
     onAfterMove(source, target, move) {
       if (this.field.terrain === "burningterrain" || this.field.terrain === "rainbowterrain") {
-        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("amplifieldrock") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
       }
       if (this.field.terrainState.Tchanges?.includes("waterpledge")) {
         this.field.setTerrain("rainbowterrain");
@@ -8202,7 +8202,7 @@ const Moves = {
     },
     onAfterMove(source) {
       if (this.field.terrain === "burningterrain" || this.field.terrain === "swampterrain") {
-        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("amplifieldrock") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
       }
       if (this.field.terrainState.Tchanges?.includes("waterpledge")) {
         this.field.setTerrain("swampterrain");
@@ -8273,7 +8273,7 @@ const Moves = {
       durationCallback(source, effect) {
         if (this.activeMove?.id === "bloomdoom")
           return 3;
-        if (source?.hasItem("terrainextender")) {
+        if (source?.hasItem("amplifieldrock")) {
           return 8;
         }
         return 5;
@@ -8380,7 +8380,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (this.field.terrain === "psychicterrain" || source.hasItem("terrainextender"))
+        if (this.field.terrain === "psychicterrain" || source.hasItem("amplifieldrock"))
           return 8;
         if (source?.hasAbility("persistent")) {
           this.add("-activate", source, "ability: Persistent", "[move] Gravity");
@@ -10684,7 +10684,7 @@ const Moves = {
       },
       onTryHitPriority: 3,
       onTryHit(target, source, move) {
-        if (!move.flags["protect"] || move.category === "Status" && !(this.field.terrain === "fairytaleterrain")) {
+        if (!move.flags["protect"] || move.category === "Status" && !(this.field.isTerrain("fairytaleterrain") || this.field.isTerrain("chessboardterrain"))) {
           if (["gmaxoneblow", "gmaxrapidflow"].includes(move.id))
             return;
           if (move.isZ || move.isMax)
@@ -10703,10 +10703,10 @@ const Moves = {
           }
         }
         if (this.checkMoveMakesContact(move, source, target)) {
-          if (this.field.terrain === "fairytaleterrain") {
+          if (this.field.isTerrain("fairytaleterrain") || this.field.isTerrain("chessboardterrain")) {
             this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
           }
-          this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
+          this.boost({ atk: -1 }, source, target, this.dex.getActiveMove("King's Shield"));
         }
         return this.NOT_FAIL;
       },
@@ -11579,7 +11579,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (this.field.terrain === "psychicterrain" || source.hasItem("terrainextender"))
+        if (this.field.terrain === "psychicterrain" || source.hasItem("amplifieldrock"))
           return 8;
         if (source?.hasAbility("persistent")) {
           this.add("-activate", source, "ability: Persistent", "[move] Magic Room");
@@ -13028,12 +13028,10 @@ const Moves = {
         return false;
       }
       this.actions.useMove(move.id, pokemon, target);
-      return null;
-    },
-    onAfterMove(source) {
-      if (this.field.isTerrain("mirrorarenaterrain") && this.lastSuccessfulMoveThisTurn != null) {
-        this.boost({ atk: 1, spa: 1, evasion: 1 }, source);
+      if (this.field.isTerrain("mirrorarenaterrain")) {
+        this.boost({ atk: 1, spa: 1, evasion: 1 }, pokemon);
       }
+      return null;
     },
     secondary: null,
     target: "normal",
@@ -13168,11 +13166,11 @@ const Moves = {
       duration: 5,
       durationCallback(source, effect) {
         if (this.effect.id === "mist") {
-          if (source.hasItem("terrainextender"))
+          if (source.hasItem("amplifieldrock"))
             return 6;
           return 3;
         }
-        if (source?.hasItem("terrainextender")) {
+        if (source?.hasItem("amplifieldrock")) {
           return 8;
         }
         return 5;
@@ -13635,10 +13633,11 @@ const Moves = {
     priority: 0,
     flags: { snatch: 1, metronome: 1 },
     onModifyMove(move) {
-      if (this.field.terrain === "psychicterrain")
+      if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("chessboardterrain")) {
         move.boosts = {
           spa: 3
         };
+      }
     },
     boosts: {
       spa: 2
@@ -13745,6 +13744,8 @@ const Moves = {
         move = "gunkshot";
       } else if (this.field.isTerrain("mirrorarenaterrain")) {
         move = "mirrorshot";
+      } else if (this.field.isTerrain("chessboardterrain")) {
+        move = "ancientpower";
       }
       this.actions.useMove(move, pokemon, target);
       return null;
@@ -15415,7 +15416,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (source?.hasItem("terrainextender") && this.activeMove?.id !== "genesissupernova") {
+        if (source?.hasItem("amplifieldrock") && this.activeMove?.id !== "genesissupernova") {
           return 8;
         }
         return 5;
@@ -17414,6 +17415,13 @@ const Moves = {
           chance: 30,
           boosts: {
             evasion: -1
+          }
+        });
+      } else if (this.field.isTerrain("chessboardterrain")) {
+        move.secondaries.push({
+          chance: 30,
+          boosts: {
+            def: -1
           }
         });
       }
@@ -21059,7 +21067,7 @@ const Moves = {
       }
     },
     onModifyMove(move) {
-      if (this.field.terrain === "psychicterrain") {
+      if (this.field.isTerrain("psychicterrain")) {
         move.boosts = {
           accuracy: -2,
           spd: -2,
@@ -21950,7 +21958,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (this.field.terrain === "psychicterrain" || source.hasItem("terrainextender"))
+        if (this.field.isTerrain("psychicterrain") || this.field.isTerrain("chessboardterrain") || source.hasItem("amplifieldrock"))
           return 8;
         if (source?.hasAbility("persistent")) {
           this.add("-activate", source, "ability: Persistent", "[move] Trick Room");
@@ -22557,7 +22565,7 @@ const Moves = {
     },
     onAfterMove(source) {
       if (this.field.terrain === "swampterrain" || this.field.terrain === "rainbowterrain") {
-        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("terrainextender") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+        this.field.terrainState.duration = this.field.getTerrain() !== void 0 ? source.hasItem("amplifieldrock") ? 7 : 4 : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
       }
       if (this.field.terrainState.Tchanges?.includes("grasspledge")) {
         this.field.setTerrain("swampterrain");
@@ -22994,7 +23002,7 @@ const Moves = {
     condition: {
       duration: 5,
       durationCallback(source, effect) {
-        if (this.field.terrain === "psychicterrain" || source.hasItem("terrainextender"))
+        if (this.field.terrain === "psychicterrain" || source.hasItem("amplifieldrock"))
           return 8;
         if (source?.hasAbility("persistent")) {
           this.add("-activate", source, "ability: Persistent", "[move] Wonder Room");
