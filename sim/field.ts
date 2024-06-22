@@ -138,7 +138,7 @@ export class Field {
 		this.terrainState = {
 			id: status.id,
 			Tchanges: [],
-			duration: status.duration,
+			duration: 9999,
 			turn: this.battle.turn,
 		};
 		this.terrainStack.unshift(this.terrainState);
