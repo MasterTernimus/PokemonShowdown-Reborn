@@ -154,8 +154,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 					side.pokemon[0].Role = 'Pawn';
 				}
 				else if (this.gameType == 'doubles') {
-					side.pokemon[0].Role == 'Pawn';
-					side.pokemon[1].Role == 'Pawn';
+					side.pokemon[0].Role = 'Pawn';
+					side.pokemon[1].Role = 'Pawn';
 				}
 				side.pokemon[side.pokemon.length - 1].Role = 'Queen';
 				let new_pokemon = side.pokemon.filter(newpokemon => !newpokemon.Role);
@@ -167,7 +167,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						king = pokemon;
 					}
 					if (pokemon.hasItem('kingsrock')) {
-						pokemon.Role == 'King';
+						pokemon.Role = 'King';
 						king = null;
 					}
 					if (!pokemon.Role) {
