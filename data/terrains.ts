@@ -150,8 +150,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			duration: 9999,
 			onBattleStart(side) {
+				if (this.gameType == 'singles') {
+					side.pokemon[0].Role = 'Pawn';
+				}
+				else if (this.gameType == 'doubles') {
+					side.pokemon[0].Role == 'Pawn';
+					side.pokemon[1].Role == 'Pawn';
+				}
+				side.pokemon[side.pokemon.length - 1].Role = 'Queen';
 				let new_pokemon = side.pokemon.filter(newpokemon => !newpokemon.Role);
-
 				let king = null;
 				let min = 9999;
 				for (const pokemon of new_pokemon) {
@@ -160,35 +167,49 @@ export const Terrains: { [k: string]: TerrainData } = {
 						king = pokemon;
 					}
 					if (pokemon.hasItem('kingsrock')) {
-						king = pokemon;
-						break;
+						pokemon.Role == 'King';
+						king = null;
+					}
+					if (!pokemon.Role) {
+						switch (pokemon.getBestStat()) {
+							case "atk":
+							case "spa":
+								pokemon.Role = 'Bishop';
+								break;
+							case "def":
+							case "spd":
+								pokemon.Role = 'Rook';
+								break;
+							case "spe":
+								pokemon.Role = 'Knight';
+								break;
+						}
 					}
 				}
 				if (king) {
 					king.Role = 'King';
 				}
-
-				let leftoverRoles = ['Rook', 'Bishop', 'Knight'];
-				for (const pokemon of new_pokemon) {
-					if ((pokemon.getBestStat() === 'def' || pokemon.getBestStat() === 'spd') && !pokemon.Role && leftoverRoles[0] != '') {
-						pokemon.Role = 'Rook';
-						leftoverRoles[0] = '';
-					}
-					if ((pokemon.getBestStat() === 'atk' || pokemon.getBestStat() === 'spa') && !pokemon.Role && leftoverRoles[1] != '') {
-						pokemon.Role = 'Bishop';
-						leftoverRoles[1] = '';
-					}
-					if (pokemon.getBestStat() === 'spe' && !pokemon.Role && leftoverRoles[2] != '') {
-						pokemon.Role = 'Knight';
-						leftoverRoles[2] = '';
-					}
-				}
 			},
 			onSwitchIn(pokemon) {
-				if (pokemon.Role === 'Rook' || pokemon.Role === 'Queen') {
+				if (pokemon.Role === 'Pawn') {
+					this.add('-message', pokemon.name + ' became a Pawn and stormed up the board!');
+				}
+				if (pokemon.Role === 'King') {
+					this.add('-message', pokemon.name + ' became a King and exposed itself!');
+				}
+				if (pokemon.Role === 'Knight') {
+					this.add('-message', pokemon.name + ' became a Knight and readied its position!');
+				}
+				if (pokemon.Role === 'Rook') {
+					this.add('-message', pokemon.name + ' became a Rook and took the open file!');
+					this.boost({ def: 1, spd: 1 }, pokemon);
+				}
+				if (pokemon.Role === 'Queen') {
+					this.add('-message', pokemon.name + ' became a Queen and was placed on the center of the board!');
 					this.boost({ def: 1, spd: 1 }, pokemon);
 				}
 				if (pokemon.Role === 'Bishop') {
+					this.add('-message', pokemon.name + ' became a Bishop and took the diagonal!');
 					this.boost({ atk: 1, spa: 1 }, pokemon);
 				}
 			},
@@ -210,7 +231,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const boost = ['fakeout', 'feint', 'firstimpression', 'shadowsneak', 'smartstrike', 'suckerpunch'];
 				const dumbAbilities = ['unaware', 'simple', 'klutz', 'oblivious'];
 				const smartAbilities = ['adaptability', 'synchronize', 'anticipation', 'telepathy'];
+				const breakMoves = ['stompingtantrum', 'tectonicrage'];
 				if (chessMoves.includes(move.id)) {
+					this.add('-message', 'En Passant!');
 					if (dumbAbilities.includes(target.ability)) {
 						modifier *= 2;
 					}
@@ -229,23 +252,36 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (target.Role === 'Queen') {
 						modifier *= 3;
 					}
-					if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes' || move.target === 'all') {
+					if (move.target === 'allAdjacentFoes') {
+						this.add('-message', 'The knight forked the opponents!');
 						modifier *= 1.25;
 					}
+				}
+				if (breakMoves.includes(move.id)) {
+					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
 			},
 			onDamagePriority: -45,
 			onDamage(damage, target, source, effect) {
 				if (target.Role === 'Pawn' && target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+					this.add('-message', target.name + " hung onto the edge of the board");
 					target.Role = 'UsedPawn';
 					return target.hp - 1;
 				}
 			},
+			onAfterMove(source, target, move) {
+				const breakMoves = ['stompingtantrum', 'tectonicrage'];
+				if (breakMoves.includes(move.id)) {
+					this.field.clearTerrain();
+				}
+			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Chess Board Terrain');
+				this.add('-message', 'Opening variation set');
 			},
 			onFieldEnd() {
+				this.add('-message', 'The board was destroyed!');
 				this.add('-fieldend', 'Chess Board Terrain');
 			},
 		}
