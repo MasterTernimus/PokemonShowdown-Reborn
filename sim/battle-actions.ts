@@ -175,11 +175,6 @@ export class BattleActions {
 		}
 
 		this.battle.runEvent('EntryHazard', pokemon);
-		if (this.battle.turn === 0) {
-			if (!pokemon.Role) {
-				pokemon.Role = 'Pawn';
-			}
-		}
 		if (this.battle.gen <= 4) {
 			this.battle.runEvent('SwitchIn', pokemon);
 		}

@@ -2542,6 +2542,7 @@ export class Battle {
 						side.active[i].fainted = true;
 						side.active[i].hp = 0;
 					} else {
+						this.runEvent('BattleStart', side);
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
@@ -2790,17 +2791,10 @@ export class Battle {
 			const lower_terrain = this.dex.conditions.get(this.format.terrain);
 			this.field.terrainStack.push({ id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn });
 		}
-		//Chess Roles
-		for (const side of this.sides) {
-			side.pokemon[side.pokemon.length - 1].Role = 'Queen';
-		}
 		let action;
 		while ((action = this.queue.shift())) {
 			this.runAction(action);
 			if (this.requestState || this.ended) return;
-		}
-		for (const side of this.sides) {
-			this.runEvent('BattleStart', side); 
 		}
 		this.nextTurn();
 		this.midTurn = false;
