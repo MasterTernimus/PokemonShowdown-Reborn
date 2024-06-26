@@ -5811,6 +5811,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				return null;
 			}
 		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('burningterrain')) {
+				this.boost({ def: 2 }, pokemon);
+			}
+		},
 		flags: { breakable: 1 },
 		name: "Well-Baked Body",
 		rating: 3.5,

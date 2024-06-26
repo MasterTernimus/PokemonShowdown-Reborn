@@ -175,7 +175,7 @@ export class Battle {
 	abilityOrder: number;
 	quickClawRoll: boolean;
 
-	//Terrain global variables
+	/** Terrain global variables */
 	ShortCircuitCounter: number;
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
@@ -463,7 +463,6 @@ export class Battle {
 	 * Runs an event with no source on each Pokémon on the field, in Speed order.
 	 */
 	eachEvent(eventid: string, effect?: Effect | null, relayVar?: boolean) {
-
 		const actives = this.getAllActive();
 		if (!effect && this.effect) effect = this.effect;
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
@@ -2789,7 +2788,7 @@ export class Battle {
 		if (this.turn === 0 && this.format.terrain) {
 			this.field.startTerrain(this.format.terrain);
 			const lower_terrain = this.dex.conditions.get(this.format.terrain);
-			this.field.terrainStack.push({ id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn });
+			this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
 		}
 		let action;
 		while ((action = this.queue.shift())) {
