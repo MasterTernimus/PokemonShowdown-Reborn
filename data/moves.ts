@@ -1843,7 +1843,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
-		drain: [1, 2],
+		drain: [1, 1],
 		secondary: null,
 		target: "normal",
 		type: "Water",
@@ -20532,6 +20532,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (move.type !== 'Fire') return;
 				if (!target) return;
 				if (type !== target.getTypes()[0]) return;
+				if (this.field.isTerrain('burningterrain')) {
+					return typeMod + 2;
+				}
 				return typeMod + 1;
 			},
 		},
