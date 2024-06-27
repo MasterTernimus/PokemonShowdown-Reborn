@@ -166,9 +166,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 						min = pokemon.baseMaxhp;
 						king = pokemon;
 					}
-					if (pokemon.hasItem('kingsrock')) {
+					if (pokemon.item === 'kingsrock') {
 						pokemon.Role = 'King';
 						king = null;
+						continue;
 					}
 					if (!pokemon.Role) {
 						switch (pokemon.getBestStat()) {
