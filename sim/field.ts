@@ -195,6 +195,7 @@ export class Field {
 		this.terrainState = {
 			id: status.id,
 			Tchanges: [],
+			origin: sourceEffect,
 			duration: prevTerrainState.duration,
 			turn: this.battle.turn,
 			prevterrain: prevTerrainState.id,
