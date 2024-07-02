@@ -3410,7 +3410,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain'))) {
 				pokemon.useItem();
 			}
 		},
@@ -3426,9 +3426,17 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				pokemon.addVolatile('kingsshield');
 			}
+			if (this.field.isTerrain('darkcrystalcavernterrain')) {
+				this.boost({ spd: 1 }, pokemon)
+				pokemon.addVolatile('magiccoat', null, item);
+			}
+			if (this.field.isTerrain('crystalcavernterrain')) {
+				this.boost({ spa: 1 }, pokemon)
+				pokemon.addVolatile('magiccoat', null, item);
+			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain')) {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain')) {
 				pokemon.useItem();
 			}
 		},
@@ -5890,7 +5898,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain', 'wastelandterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain', 'wastelandterrain', 'caveterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -5900,12 +5908,12 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.addVolatile('banefulbunker');
 				return;
 			}
-			if (this.field.terrain === 'swampterrain') {
+			if (this.field.isTerrain('swampterrain')) {
 				this.boost({ def: 1, spd: 1 });
 				pokemon.addVolatile('ingrain');
 				return;
 			}
-			if (this.field.terrain === 'rockyterrain') {
+			if (this.field.isTerrain('rockyterrain')) {
 				this.boost({ def: 1 });
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
@@ -5917,20 +5925,25 @@ export const Items: {[itemid: string]: ItemData} = {
 				return;
 			}
 			if (this.field.isTerrain('forestterrain')) {
-				pokemon.addVolatile('spikyshield');
+				pokemon.addVolatile('spikyshield', null, item);
 			}
 			if (this.field.isTerrain('ashenbeachterrain')) {
-				pokemon.addVolatile('focusenergy')
+				pokemon.addVolatile('focusenergy', null, item)
 			}
 			if (this.field.isTerrain('wastelandterrain')) {
-				this.boost({ atk: 1, spa: 1 }, pokemon);
+				this.boost({ atk: 1, spa: 1 }, pokemon, null, item);
 				for (const side of this.sides) {
 					side.addSideCondition('stealthrock');
 				}
 			}
+			if (this.field.isTerrain('caveterrain')) {
+				this.boost({ def: 2 }, pokemon, null, item);
+				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4, pokemon, null, item);
+			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'ashenbeachterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'ashenbeachterrain', 'caveterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}

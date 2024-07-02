@@ -145,6 +145,70 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	caveterrain: {
+		name: "Cave Terrain",
+		condition: {
+			duration: 9999,
+			onEffectiveness(typeMod, target, type, move) {
+				if (type === 'Ground' && target && !target.isGrounded()) {
+					return 0;
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const cavern = ['powergem', 'diamondstorm'];
+				if (move.id === 'rocktomb') {
+					modifier *= 1.5;
+				}
+				if (move.type === 'Rock') {
+					modifier *= 1.5;
+				}
+				if (move.flags.sound) {
+					modifier *= 1.5;
+				}
+				if (move.type === 'Flying' && !move.flags.contact) {
+					modifier *= 0.5;
+				}
+				if (cavern.includes(move.id)) {
+					modifier *= 1.3;
+				}
+			},
+			onAfterMove(source, target, move) {
+				const cavern = ['powergem', 'diamondstorm'];
+				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				if (this.field.terrainState.Tchanges?.includes('collapse') && cavecollapse.includes(move.id)) {
+					this.field.terrainState.Tchanges.filter(newchanges => newchanges !== 'collapse');
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility('rockhead') || pokemon.hasAbility('bulletproof')) {
+							continue;
+						}
+						if (pokemon.hasAbility('prismarmor') || pokemon.hasAbility('solidrock')) {
+							this.damage(pokemon.baseMaxhp / 3, pokemon)
+						}
+						if (pokemon.hasAbility('battlearmor') || pokemon.hasAbility('shellarmor')) {
+							this.damage(pokemon.baseMaxhp / 2, pokemon);
+						}
+						if (pokemon.hasAbility('sturdy') && pokemon.baseMaxhp === pokemon.hp) {
+							this.damage(pokemon.baseMaxhp - 1, pokemon);
+						}
+					}
+				}
+				else if (cavecollapse.includes(move.id)) {
+					this.field.terrainState.Tchanges?.push('collapse');
+				}
+				if (cavern.includes(move.id)) {
+					this.field.changeTerrain('crystalcavernterrain', source, move);
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Cave Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Cave Terrain');
+			},
+		}
+	},
 	chessboardterrain: {
 		name: "Chess Board Terrain",
 		condition: {
@@ -406,6 +470,143 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldEnd() {
 				this.add('-fieldend', 'Corrosive Mist Terrain')
 			}
+		}
+	},
+	crystalcavernterrain: {
+		name: "Crystal Cavern Terrain",
+		condition: {
+			duration: 9999,
+			onModifyMove(move) {
+				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
+				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
+				if (move.category != 'Status' && (move.type == 'Rock' || crystalBoost.includes(move.id))) {
+					move.types = [move.type, counter[this.CrystalCavernCounter]];
+				}
+			},
+			onTypeImmunity(source, target, move) {
+				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
+				if (move.category != 'Status' && (move.type == 'Rock' || crystalBoost.includes(move.id))) {
+					this.CrystalCavernCounter++;
+					this.CrystalCavernCounter = this.CrystalCavernCounter % 4;
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				//I hate this
+				let modifier = 1;
+				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength'];
+				const boost = ['ancientpower', 'diamondstorm', 'powergem', 'rocksmash', 'rocktomb'];
+				const weakboost = ['aurorabeam', 'doomdesire', 'dazzlinggleam', 'flashcannon', 'lusterpurge', 'mirrorshot', 'moongeistbeam', 'photongeyser', 'signalbeam', 'technoblast', 'menacingmoonrazemaelstorm'];
+				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				const dark = ['darkpulse', 'darkvoid', 'nightdaze', 'lightthatburnsthesky'];
+				if (move.type == 'Rock' || move.type == 'Dragon') {
+					modifier *= 1.5;
+				}
+				if (crystalBoost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (weakboost.includes(move.id)) {
+					modifier *= 1.3;
+				}
+				if (terrainbreak.includes(move.id)) {
+					modifier *= 1.3;
+				}
+				if (dark.includes('move.id')) {
+					modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
+			},
+			onHit(target, source, move) {
+				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
+				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
+				if (move.category != 'Status' && (move.type == 'Rock' || crystalBoost.includes(move.id))) {
+					this.CrystalCavernCounter++;
+					this.CrystalCavernCounter = this.CrystalCavernCounter % 4;
+					move.types = [move.type, counter[this.CrystalCavernCounter]];
+				}
+			},
+			onAfterMove(source, target, move) {
+				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				const dark = ['darkpulse', 'darkvoid', 'nightdaze', 'lightthatburnsthesky'];
+				if (terrainbreak.includes(move.id)) {
+					this.field.changeTerrain('caveterrain', source, move);
+				}
+				if (dark.includes(move.id)) {
+					this.field.changeTerrain('darkcrystalcavernterrain', source, move);
+				}
+			},
+			onFieldResidual() {
+				const source = this.field.terrainState.origin;
+				if (source && source.name) {
+					if (source.name == 'SunnyDay' && this.field.getWeather().name != 'SunnyDay') {
+						this.field.changeTerrain('darkcrystalcavernterrain');
+					}
+				}			
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Crystal Cavern Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Crystal Cavern Terrain');
+			},
+		}
+	},
+	darkcrystalcavernterrain: {
+		name: "Dark Crystal Cavern Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onModifyDefPriority: 10,
+			onModifyDef(def, pokemon) {
+				if (pokemon.hasType('Dark') || pokemon.hasType('Ghost')) {
+					return this.modify(def, 1.5);
+				}
+			},
+			onModifySpDPriority: 10,
+			onModifySpD(spd, pokemon) {
+				if (pokemon.hasType('Dark') || pokemon.hasType('Ghost')) {
+					return this.modify(spd, 1.5);
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const superboost = ['prismaticlaser', 'blackholeeclipse'];
+				const boost = ['aurorabeam', 'darkpulse', 'dazzlinggleam', 'diamondstorm', 'doomdesire', 'flashcannon', 'lusterpurge', 'mirrorshot', 'moongeistbeam', 'nightdaze', 'nightslash', 'photongeyser', 'powergem', 'shadowball', 'shadowbone', 'shadowclaw', 'shadowforce', 'shadowsneak', 'signalbeam', 'technoblast', 'menacingmoonrazemaelstorm', 'ceaselessedge'];
+				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				if (superboost.includes(move.id)) {
+					modifier *= 2;
+				}
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (move.id == 'lightthatburnsthesky') {
+					modifier *= 0.5;
+				}
+				if (terrainbreak.includes(move.id)) {
+					modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				if (terrainbreak.includes(move.id)) {
+					this.field.changeTerrain('caveterrain', source, move);
+				}
+			},
+			onFieldResidual() {
+				if (this.field.weather == 'sunnyday') {
+					this.field.changeTerrain('crystalcavernterrain', null, this.field.getWeather());
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Dark Crystal Cavern Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Dark Crystal Cavern Terrain');
+			},
 		}
 	},
 	desertterrain: {

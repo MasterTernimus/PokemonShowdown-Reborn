@@ -3628,7 +3628,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	prismarmor: {
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod > 0) {
+			if (target.getMoveHitData(move).typeMod > 0 || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain')) {
 				this.debug('Prism Armor neutralize');
 				return this.chainModify(0.75);
 			}
@@ -4345,6 +4345,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (target.hp >= target.maxhp) {
 				this.debug('Shadow Shield weaken');
 				return this.chainModify(0.5);
+			}
+			if (target.getMoveHitData(move).typeMod > 0 && this.field.isTerrain('darkcrystalcavernterrain')) {
+				this.debug('Shadow Shield Armor neutralize');
+				return this.chainModify(0.75);
 			}
 		},
 		flags: {},

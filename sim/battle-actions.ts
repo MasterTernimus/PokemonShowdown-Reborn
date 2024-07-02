@@ -663,6 +663,9 @@ export class BattleActions {
 		for (const i of targets.keys()) {
 			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) ||
 				targets[i].runImmunity(move.types !== undefined ? move.types : move.type, !move.smartTarget);
+			if (hitResults[i] == false) {
+				this.battle.runEvent('TypeImmunity', pokemon, targets[i], move);
+			}
 		}
 
 		return hitResults;
@@ -1605,6 +1608,7 @@ export class BattleActions {
 
 		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
 			if (!target.runImmunity(move.types !== undefined ? move.types : move.type, !suppressMessages)) {
+				this.battle.runEvent('TypeImmunity', source, target, move);
 				return false;
 			}
 		}
