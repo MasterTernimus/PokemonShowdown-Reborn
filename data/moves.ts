@@ -4816,17 +4816,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 		terrain: 'electricterrain',
 		condition: {
 			duration: 5,
-			durationCallback(source, effect) {
+			durationCallback(source, target, effect) {
 				let terrainMoves = ['stokedsparksurfer', 'iondeluge', 'plasmafists'];
-				if (terrainMoves.includes(this.activeMove !== null ? this.activeMove.id : '')) {
-					if (source?.hasItem('amplifieldrock'))
-						return 6
-					return 3
+				let duration = 5;
+				if (effect && (source.hasAbility(effect.id) || terrainMoves.includes(effect.id))) {
+					duration = 3;
 				}
 				if (source?.hasItem('amplifieldrock')) {
-					return 8;
+					return duration + 3;
 				}
-				return 5;
+				return duration;
 			},
 			onSetStatus(status, target, source, effect) {
 				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
@@ -8123,13 +8122,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		terrain: 'grassyterrain',
 		condition: {
 			duration: 5,
-			durationCallback(source, effect) {
-				if (this.activeMove?.id === 'bloomdoom')
-					return 3;
-				if (source?.hasItem('amplifieldrock')) {
-					return 8;
+			durationCallback(source, target, effect) {
+				let duration = 5;
+				if (effect && (source.hasAbility(effect.id) || effect.id === 'bloomdoom')) {
+					duration = 3;
 				}
-				return 5;
+				if (source?.hasItem('amplifieldrock')) {
+					return duration + 3;
+				}
+				return duration;
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
@@ -12941,16 +12942,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		terrain: 'mistyterrain',
 		condition: {
 			duration: 5,
-			durationCallback(source, effect) {
-				if (this.effect.id === 'mist') {
-					if (source.hasItem('amplifieldrock'))
-						return 6;
-					return 3;
+			durationCallback(source, target, effect) {
+				let duration = 5;
+				if (effect && (source.hasAbility(effect.id) || effect.id === 'mist')) {
+						duration = 3;
 				}
-				if (source?.hasItem('amplifieldrock')) {
-					return 8;
+				if (source.hasItem('amplifieldrock')) {
+					return duration + 3;
 				}
-				return 5;
+				return duration;
 			},
 			onTryMove(target, source, effect) {
 				if (['explosion', 'mindblown', 'selfdestruct'].includes(effect.id)) {
@@ -15171,11 +15171,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		terrain: 'psychicterrain',
 		condition: {
 			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('amplifieldrock') && this.activeMove?.id !== 'genesissupernova') {
-					return 8;
+			durationCallback(source, target,  effect) {
+				let duration = 5;
+				if (effect && source.hasAbility(effect.id)) {
+					duration = 3;
 				}
-				return 5;
+				if (source?.hasItem('amplifieldrock')) {
+					return duration + 3;
+				}
+				return duration;
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
@@ -18085,7 +18089,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					return null;
 				}
 				if (this.field.isTerrain('caveterrain')){
-					this.add('-fail', attacker, move, '[from] Dark Crystal Cavern');
+					this.add('-fail', target, move, '[from] Dark Crystal Cavern');
 					return null;
 				}
 

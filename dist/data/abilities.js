@@ -3729,7 +3729,7 @@ const Abilities = {
   },
   prismarmor: {
     onSourceModifyDamage(damage, source, target, move) {
-      if (target.getMoveHitData(move).typeMod > 0) {
+      if (target.getMoveHitData(move).typeMod > 0 || this.field.isTerrain("darkcrystalcavernterrain") || this.field.isTerrain("crystalcavernterrain")) {
         this.debug("Prism Armor neutralize");
         return this.chainModify(0.75);
       }
@@ -4490,6 +4490,10 @@ const Abilities = {
       if (target.hp >= target.maxhp) {
         this.debug("Shadow Shield weaken");
         return this.chainModify(0.5);
+      }
+      if (target.getMoveHitData(move).typeMod > 0 && this.field.isTerrain("darkcrystalcavernterrain")) {
+        this.debug("Shadow Shield Armor neutralize");
+        return this.chainModify(0.75);
       }
     },
     flags: {},
@@ -5996,6 +6000,11 @@ const Abilities = {
           this.add("-immune", target, "[from] ability: Well-Baked Body");
         }
         return null;
+      }
+    },
+    onResidual(pokemon) {
+      if (this.field.isTerrain("burningterrain")) {
+        this.boost({ def: 2 }, pokemon);
       }
     },
     flags: { breakable: 1 },
