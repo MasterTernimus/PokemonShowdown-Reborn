@@ -145,7 +145,7 @@ class Field {
     this.terrainState = {
       id: status.id,
       Tchanges: [],
-      duration: status.duration,
+      duration: 9999,
       turn: this.battle.turn
     };
     this.terrainStack.unshift(this.terrainState);
@@ -205,6 +205,7 @@ class Field {
     this.terrainState = {
       id: status.id,
       Tchanges: [],
+      origin: sourceEffect,
       duration: prevTerrainState.duration,
       turn: this.battle.turn,
       prevterrain: prevTerrainState.id

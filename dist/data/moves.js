@@ -886,7 +886,7 @@ const Moves = {
     flags: { snatch: 1, metronome: 1 },
     sideCondition: "auroraveil",
     onTry() {
-      if (this.field.isWeather(["hail", "snow"]) || this.field.isTerrain("rainbowterrain") || this.field.isTerrain("icyterrain") || this.field.isTerrain("mirrorarenaterrain")) {
+      if (this.field.isWeather(["hail", "snow"]) || this.field.isTerrain("rainbowterrain") || this.field.isTerrain("icyterrain") || this.field.isTerrain("mirrorarenaterrain") || this.field.isTerrain("darkcrystalcavernterrain") || this.field.isTerrain("crystalcavernterrain")) {
         return true;
       }
       return false;
@@ -1850,6 +1850,11 @@ const Moves = {
         return;
       }
       this.add("-prepare", attacker, move.name);
+      if (this.field.isTerrain("caveterrain")) {
+        this.attrLastMove("[still]");
+        this.addMove("-anim", attacker, move.name, defender);
+        return;
+      }
       if (!this.runEvent("ChargeMove", attacker, defender, move)) {
         return;
       }
@@ -1888,7 +1893,7 @@ const Moves = {
     pp: 20,
     priority: 0,
     flags: { protect: 1, mirror: 1, heal: 1 },
-    drain: [1, 2],
+    drain: [1, 1],
     secondary: null,
     target: "normal",
     type: "Water",
@@ -2345,12 +2350,17 @@ const Moves = {
         newType = "Ice";
       } else if (this.field.isTerrain("glitchterrain")) {
         newType = "???";
-      } else if (this.field.isTerrain("rockyterrain")) {
+      } else if (this.field.isTerrain("rockyterrain") || this.field.isTerrain("caveterrain")) {
         newType = "Rock";
       } else if (this.field.isTerrain("desertterrain") || this.field.isTerrain("ashenbeachterrain")) {
         newType = "Ground";
       } else if (this.field.isTerrain("factoryterrain") || this.field.isTerrain("mirrorarenaterrain")) {
         newType = "Steel";
+      } else if (this.field.isTerrain("darkcrystalcavernterrain")) {
+        newType = "Dark";
+      } else if (this.field.isTerrain("crystalcavernterrain")) {
+        const counter = ["Fire", "Water", "Grass", "Psychic"];
+        newType = counter[this.CrystalCavernCounter];
       }
       if (target.getTypes().join() === newType || !target.setType(newType))
         return false;
@@ -4935,17 +4945,16 @@ const Moves = {
     terrain: "electricterrain",
     condition: {
       duration: 5,
-      durationCallback(source, effect) {
+      durationCallback(source, target, effect) {
         let terrainMoves = ["stokedsparksurfer", "iondeluge", "plasmafists"];
-        if (terrainMoves.includes(this.activeMove !== null ? this.activeMove.id : "")) {
-          if (source?.hasItem("amplifieldrock"))
-            return 6;
-          return 3;
+        let duration = 5;
+        if (effect && (source.hasAbility(effect.id) || terrainMoves.includes(effect.id))) {
+          duration = 3;
         }
         if (source?.hasItem("amplifieldrock")) {
-          return 8;
+          return duration + 3;
         }
-        return 5;
+        return duration;
       },
       onSetStatus(status, target, source, effect) {
         if (status.id === "slp" && target.isGrounded() && !target.isSemiInvulnerable()) {
@@ -6128,7 +6137,7 @@ const Moves = {
     priority: 0,
     flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
     onModifyMove(move) {
-      if (this.field.isTerrain("shortcircuitterrain") || this.field.isTerrain("mirrorarenaterrain")) {
+      if (this.field.isTerrain("shortcircuitterrain") || this.field.isTerrain("mirrorarenaterrain") || this.field.isTerrain("darkcrystalcavernterrain")) {
         move.boosts = {
           accuracy: -2
         };
@@ -6395,6 +6404,11 @@ const Moves = {
         return;
       }
       this.add("-prepare", attacker, move.name);
+      if (this.field.isTerrain("caveterrain")) {
+        this.attrLastMove("[still]");
+        this.addMove("-anim", attacker, move.name, defender);
+        return;
+      }
       if (!this.runEvent("ChargeMove", attacker, defender, move)) {
         return;
       }
@@ -8270,13 +8284,15 @@ const Moves = {
     terrain: "grassyterrain",
     condition: {
       duration: 5,
-      durationCallback(source, effect) {
-        if (this.activeMove?.id === "bloomdoom")
-          return 3;
-        if (source?.hasItem("amplifieldrock")) {
-          return 8;
+      durationCallback(source, target, effect) {
+        let duration = 5;
+        if (effect && (source.hasAbility(effect.id) || effect.id === "bloomdoom")) {
+          duration = 3;
         }
-        return 5;
+        if (source?.hasItem("amplifieldrock")) {
+          return duration + 3;
+        }
+        return duration;
       },
       onBasePowerPriority: 6,
       onBasePower(basePower, attacker, defender, move) {
@@ -13164,16 +13180,15 @@ const Moves = {
     terrain: "mistyterrain",
     condition: {
       duration: 5,
-      durationCallback(source, effect) {
-        if (this.effect.id === "mist") {
-          if (source.hasItem("amplifieldrock"))
-            return 6;
-          return 3;
+      durationCallback(source, target, effect) {
+        let duration = 5;
+        if (effect && (source.hasAbility(effect.id) || effect.id === "mist")) {
+          duration = 3;
         }
-        if (source?.hasItem("amplifieldrock")) {
-          return 8;
+        if (source.hasItem("amplifieldrock")) {
+          return duration + 3;
         }
-        return 5;
+        return duration;
       },
       onTryMove(target, source, effect) {
         if (["explosion", "mindblown", "selfdestruct"].includes(effect.id)) {
@@ -13330,6 +13345,11 @@ const Moves = {
         case "hail":
         case "snow":
           factor = 0.25;
+          break;
+        default:
+          if (this.field.isTerrain("darkcrystalcavernterrain")) {
+            factor = 0.75;
+          }
           break;
       }
       const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -13746,6 +13766,12 @@ const Moves = {
         move = "mirrorshot";
       } else if (this.field.isTerrain("chessboardterrain")) {
         move = "ancientpower";
+      } else if (this.field.isTerrain("darkcrystalcavernterrain")) {
+        move = "darkpulse";
+      } else if (this.field.isTerrain("crystalcavernterrain")) {
+        move = "powergem";
+      } else if (this.field.isTerrain("caveterrain")) {
+        move = "rocktomb";
       }
       this.actions.useMove(move, pokemon, target);
       return null;
@@ -15415,11 +15441,15 @@ const Moves = {
     terrain: "psychicterrain",
     condition: {
       duration: 5,
-      durationCallback(source, effect) {
-        if (source?.hasItem("amplifieldrock") && this.activeMove?.id !== "genesissupernova") {
-          return 8;
+      durationCallback(source, target, effect) {
+        let duration = 5;
+        if (effect && source.hasAbility(effect.id)) {
+          duration = 3;
         }
-        return 5;
+        if (source?.hasItem("amplifieldrock")) {
+          return duration + 3;
+        }
+        return duration;
       },
       onTryHitPriority: 4,
       onTryHit(target, source, effect) {
@@ -16591,9 +16621,16 @@ const Moves = {
     priority: 0,
     flags: { snatch: 1, metronome: 1 },
     onModifyMove(move) {
-      if (this.field.terrain === "rockyterrain") {
+      if (this.field.isTerrain("rockyterrain")) {
         move.boosts = {
           spe: 3
+        };
+      }
+      if (this.field.isTerrain("crystalcavernterrain")) {
+        move.boosts = {
+          spe: 2,
+          atk: 1,
+          spa: 1
         };
       }
     },
@@ -17379,12 +17416,12 @@ const Moves = {
           chance: 30,
           status: "frz"
         });
-      } else if (this.field.isTerrain("rockyterrain")) {
+      } else if (this.field.isTerrain("rockyterrain") || this.field.isTerrain("caveterrain")) {
         move.secondaries.push({
           chance: 30,
           volatileStatus: "flinch"
         });
-      } else if (this.field.isTerrain("desertterrain") || this.field.isTerrain("ashenbeachterrain")) {
+      } else if (this.field.isTerrain("desertterrain") || this.field.isTerrain("ashenbeachterrain") || this.field.isTerrain("darkcrystalcavernterrain")) {
         move.secondaries.push({
           chance: 30,
           boosts: {
@@ -17424,6 +17461,21 @@ const Moves = {
             def: -1
           }
         });
+      } else if (this.field.isTerrain("crystalcavernterrain")) {
+        move.secondaries.push(
+          {
+            chance: 10,
+            volatileStatus: "confusion"
+          },
+          {
+            chance: 10,
+            status: "frz"
+          },
+          {
+            chance: 10,
+            status: "slp"
+          }
+        );
       }
     },
     secondary: {
@@ -17680,7 +17732,7 @@ const Moves = {
     priority: 0,
     flags: {},
     onModifyMove(move) {
-      if (this.field.terrain === "psychicterrain") {
+      if (this.field.isTerrain("psychicterrain")) {
         move.secondaries?.push({
           chance: 100,
           volatileStatus: "confusion"
@@ -18346,6 +18398,10 @@ const Moves = {
           this.add("-fail", target, "move: Sky Drop", "[heavy]");
           return null;
         }
+        if (this.field.isTerrain("caveterrain")) {
+          this.add("-fail", target, move, "[from] Dark Crystal Cavern");
+          return null;
+        }
         this.add("-prepare", source, move.name, target);
         source.addVolatile("twoturnmove", target);
         return null;
@@ -18958,11 +19014,17 @@ const Moves = {
     priority: 0,
     flags: { charge: 1, protect: 1, mirror: 1, metronome: 1, nosleeptalk: 1, failinstruct: 1 },
     onTryMove(attacker, defender, move) {
+      if (this.field.isTerrain("darkcrystalcavernterrain")) {
+        this.debug("Dark Crystal Cavern sun suppress");
+        this.add("-fail", attacker, move, "[from] Dark Crystal Cavern");
+        this.attrLastMove("[still]");
+        return null;
+      }
       if (attacker.removeVolatile(move.id)) {
         return;
       }
       this.add("-prepare", attacker, move.name);
-      if (["sunnyday", "desolateland"].includes(attacker.effectiveWeather()) || this.field.terrain === "rainbowterrain") {
+      if (["sunnyday", "desolateland"].includes(attacker.effectiveWeather()) || this.field.isTerrain("rainbowterrain")) {
         this.attrLastMove("[still]");
         this.addMove("-anim", attacker, move.name, defender);
         return;
@@ -18995,11 +19057,17 @@ const Moves = {
     priority: 0,
     flags: { contact: 1, charge: 1, protect: 1, mirror: 1, metronome: 1, nosleeptalk: 1, failinstruct: 1, slicing: 1 },
     onTryMove(attacker, defender, move) {
+      if (this.field.isTerrain("darkcrystalcavernterrain")) {
+        this.debug("Dark Crystal Cavern sun suppress");
+        this.add("-fail", attacker, move, "[from] Dark Crystal Cavern");
+        this.attrLastMove("[still]");
+        return null;
+      }
       if (attacker.removeVolatile(move.id)) {
         return;
       }
       this.add("-prepare", attacker, move.name);
-      if (["sunnyday", "desolateland"].includes(attacker.effectiveWeather())) {
+      if (["sunnyday", "desolateland"].includes(attacker.effectiveWeather()) || this.field.isTerrain("rainbowterrain")) {
         this.attrLastMove("[still]");
         this.addMove("-anim", attacker, move.name, defender);
         return;
@@ -19609,10 +19677,19 @@ const Moves = {
         }
       },
       onEntryHazard(pokemon) {
+        const counter = ["Fire", "Water", "Grass", "Psychic"];
         if (pokemon.hasItem("heavydutyboots"))
           return;
-        const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove("stealthrock")), -6, 6);
-        if (this.field.isTerrain("rockyterrain")) {
+        if (!pokemon.runImmunity(counter[this.CrystalCavernCounter]))
+          return;
+        let typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove("stealthrock")), -6, 6);
+        if (this.field.isTerrain("crystalcavernterrain")) {
+          typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove("stealthrock")), -6, 6);
+          typeMod += this.dex.getEffectiveness(counter[this.CrystalCavernCounter], pokemon.getTypes());
+          this.CrystalCavernCounter++;
+          this.CrystalCavernCounter = this.CrystalCavernCounter % 4;
+        }
+        if (this.field.isTerrain("rockyterrain") || this.field.isTerrain("caveterrain")) {
           this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
         } else {
           this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
@@ -20656,6 +20733,11 @@ const Moves = {
         case "snow":
           factor = 0.25;
           break;
+        default:
+          if (this.field.isTerrain("darkcrystalcavernterrain")) {
+            factor = 0.75;
+          }
+          break;
       }
       const success = !!this.heal(this.modify(pokemon.maxhp, factor));
       if (!success) {
@@ -20881,6 +20963,9 @@ const Moves = {
           return;
         if (type !== target.getTypes()[0])
           return;
+        if (this.field.isTerrain("burningterrain")) {
+          return typeMod + 2;
+        }
         return typeMod + 1;
       }
     },

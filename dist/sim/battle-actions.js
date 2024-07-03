@@ -178,11 +178,6 @@ class BattleActions {
       this.battle.runEvent("SwitchIn", pokemon);
     }
     this.battle.runEvent("EntryHazard", pokemon);
-    if (this.battle.turn === 0) {
-      if (!pokemon.Role) {
-        pokemon.Role = "Pawn";
-      }
-    }
     if (this.battle.gen <= 4) {
       this.battle.runEvent("SwitchIn", pokemon);
     }
@@ -605,6 +600,9 @@ class BattleActions {
     const hitResults = [];
     for (const i of targets.keys()) {
       hitResults[i] = move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type]) || targets[i].runImmunity(move.types !== void 0 ? move.types : move.type, !move.smartTarget);
+      if (hitResults[i] == false) {
+        this.battle.runEvent("TypeImmunity", pokemon, targets[i], move);
+      }
     }
     return hitResults;
   }
@@ -1470,6 +1468,7 @@ class BattleActions {
     }
     if (!move.ignoreImmunity || move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]) {
       if (!target.runImmunity(move.types !== void 0 ? move.types : move.type, !suppressMessages)) {
+        this.battle.runEvent("TypeImmunity", source, target, move);
         return false;
       }
     }

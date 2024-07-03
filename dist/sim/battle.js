@@ -135,6 +135,7 @@ class Battle {
     this.abilityOrder = 0;
     this.quickClawRoll = false;
     this.ShortCircuitCounter = 0;
+    this.CrystalCavernCounter = 0;
     this.teamGenerator = null;
     this.hints = /* @__PURE__ */ new Set();
     this.NOT_FAIL = "";
@@ -2216,6 +2217,7 @@ class Battle {
               side.active[i].fainted = true;
               side.active[i].hp = 0;
             } else {
+              this.runEvent("BattleStart", side);
               this.actions.switchIn(side.pokemon[i], i);
             }
           }
@@ -2457,21 +2459,15 @@ class Battle {
       this.midTurn = true;
     }
     if (this.turn === 0 && this.format.terrain) {
-      this.field.startTerrain(this.format.terrain);
+      this.field.startTerrain("darkcrystalcavernterrain");
       const lower_terrain = this.dex.conditions.get(this.format.terrain);
       this.field.terrainStack.push({ id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn });
-    }
-    for (const side of this.sides) {
-      side.pokemon[side.pokemon.length - 1].Role = "Queen";
     }
     let action;
     while (action = this.queue.shift()) {
       this.runAction(action);
       if (this.requestState || this.ended)
         return;
-    }
-    for (const side of this.sides) {
-      this.runEvent("BattleStart", side);
     }
     this.nextTurn();
     this.midTurn = false;
