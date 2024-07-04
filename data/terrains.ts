@@ -192,6 +192,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 						if (pokemon.hasAbility('sturdy') && pokemon.baseMaxhp === pokemon.hp) {
 							this.damage(pokemon.baseMaxhp - 1, pokemon);
 						}
+						else {
+							this.damage(pokemon.baseMaxhp, pokemon);
+						}
 					}
 				}
 				else if (cavecollapse.includes(move.id)) {
