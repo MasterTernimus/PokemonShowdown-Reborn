@@ -13,6 +13,8 @@ npm-debug.log
 .eslintcache-no-types
 /tools/set-import/sets
 databases/*.db*
+*.js
+*.map
 *.o
 *.o.dSYM
 # Typescript build artifacts
@@ -73,3 +75,4 @@ pip-log.txt
 *.rdb
 *.js
 *.map
+dist/data/mods/pokebilities/abilities.js
