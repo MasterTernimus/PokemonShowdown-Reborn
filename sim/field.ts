@@ -200,7 +200,9 @@ export class Field {
 			turn: this.battle.turn,
 			prevterrain: prevTerrainState.id,
 		};
-		this.terrainStack[0] = this.terrainState;
+		if (this.terrainState.duration > 10) {
+			this.terrainStack[0] = this.terrainState;
+		}
 		this.battle.add('-fieldstart', status.name);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 	}
