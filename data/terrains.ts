@@ -159,15 +159,18 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const cavern = ['powergem', 'diamondstorm'];
 				if (move.id === 'rocktomb') {
+					this.add('message', '...Piled on!');
 					modifier *= 1.5;
 				}
 				if (move.type === 'Rock') {
+					this.add('-message', 'The cavern strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (move.flags.sound) {
 					modifier *= 1.5;
 				}
 				if (move.type === 'Flying' && !move.flags.contact) {
+					this.add('-message', 'The cave choked out the air!');
 					modifier *= 0.5;
 				}
 				if (cavern.includes(move.id)) {
@@ -178,6 +181,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const cavern = ['powergem', 'diamondstorm'];
 				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				if (this.field.terrainState.Tchanges?.includes('collapse') && cavecollapse.includes(move.id)) {
+					this.add('-message', 'The quake collapsed the ceiling!');
 					this.field.terrainState.Tchanges.filter(newchanges => newchanges !== 'collapse');
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility('rockhead') || pokemon.hasAbility('bulletproof')) {
@@ -198,14 +202,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 				}
 				else if (cavecollapse.includes(move.id)) {
+					this.add('-message', 'Bits of rock fell from the crumbling ceiling!');
 					this.field.terrainState.Tchanges?.push('collapse');
 				}
 				if (cavern.includes(move.id)) {
+					this.add('-message', 'The cave was littered with crystals!');
 					this.field.changeTerrain('crystalcavernterrain', source, move);
 				}
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Cave Terrain');
+				this.add('-message', 'The cave echoes dully...');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Cave Terrain');
@@ -502,13 +509,20 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const weakboost = ['aurorabeam', 'doomdesire', 'dazzlinggleam', 'flashcannon', 'lusterpurge', 'mirrorshot', 'moongeistbeam', 'photongeyser', 'signalbeam', 'technoblast', 'menacingmoonrazemaelstorm'];
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				const dark = ['darkpulse', 'darkvoid', 'nightdaze', 'lightthatburnsthesky'];
-				if (move.type == 'Rock' || move.type == 'Dragon') {
+				if (move.type == 'Rock') {
+					this.add('-message', 'The crystals charged the attack!');
+					modifier *= 1.5;
+				}
+				if (move.type == 'Dragon') {
+					this.add('-message', 'The crystal energy strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (crystalBoost.includes(move.id)) {
+					this.add('-message', 'The crystals strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (boost.includes(move.id)) {
+					this.add('-message', 'The crystals\' light strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (weakboost.includes(move.id)) {
@@ -535,9 +549,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				const dark = ['darkpulse', 'darkvoid', 'nightdaze', 'lightthatburnsthesky'];
 				if (terrainbreak.includes(move.id)) {
+					this.add('-message', 'The crystals were broken up!');
 					this.field.changeTerrain('caveterrain', source, move);
 				}
 				if (dark.includes(move.id)) {
+					this.add('-message', 'The crystals\' light was warped by the darkness!');
 					this.field.changeTerrain('darkcrystalcavernterrain', source, move);
 				}
 			},
@@ -551,6 +567,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Crystal Cavern Terrain');
+				this.add('-message', 'The cave is littered with crystals.');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Crystal Cavern Terrain');
@@ -580,20 +597,26 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const boost = ['aurorabeam', 'darkpulse', 'dazzlinggleam', 'diamondstorm', 'doomdesire', 'flashcannon', 'lusterpurge', 'mirrorshot', 'moongeistbeam', 'nightdaze', 'nightslash', 'photongeyser', 'powergem', 'shadowball', 'shadowbone', 'shadowclaw', 'shadowforce', 'shadowsneak', 'signalbeam', 'technoblast', 'menacingmoonrazemaelstorm', 'ceaselessedge'];
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				if (superboost.includes(move.id)) {
+					this.add('-message', 'The field super charged the attack');
 					modifier *= 2;
 				}
 				if (boost.includes(move.id)) {
+					this.add('-message', 'The field strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (move.id == 'lightthatburnsthesky') {
 					modifier *= 0.5;
 				}
 				if (terrainbreak.includes(move.id)) {
+					this.add('-message', 'The dark crystals were shattered!');
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
+				if (move.id === 'sunnyday') {
+					this.add('-message', 'The sun lit up the crystal cavern!');
+				}
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				if (terrainbreak.includes(move.id)) {
 					this.field.changeTerrain('caveterrain', source, move);
@@ -606,6 +629,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Dark Crystal Cavern Terrain');
+				this.add('-message', 'The darkness is gathering...');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Dark Crystal Cavern Terrain');

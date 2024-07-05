@@ -9991,12 +9991,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onAfterHit(target, source) {
 			if (source.hp) {
-				this.field.clearTerrain();
+				this.field.breakTerrains();
 			}
 		},
 		onAfterSubDamage(damage, target, source) {
 			if (source.hp) {
-				this.field.clearTerrain();
+				this.field.breakTerrains();
 			}
 		},
 		secondary: null,
@@ -18089,7 +18089,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					return null;
 				}
 				if (this.field.isTerrain('caveterrain')){
-					this.add('-fail', target, move, '[from] Dark Crystal Cavern');
+					this.add('message', 'The cave\'s low ceiling makes flying high impossible!');
 					return null;
 				}
 
@@ -18696,7 +18696,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {charge: 1, protect: 1, mirror: 1, metronome: 1, nosleeptalk: 1, failinstruct: 1},
 		onTryMove(attacker, defender, move) {
-			if (this.field.isTerrain('darkcrystalcavernterrain')) {
+			if (this.field.isTerrain('darkcrystalcavernterrain') && !this.field.isWeather('sunnyday')) {
 				this.debug('Dark Crystal Cavern sun suppress');
 				this.add('-fail', attacker, move, '[from] Dark Crystal Cavern');
 				this.attrLastMove('[still]');
@@ -19445,13 +19445,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onTry() {
-			return !this.field.isTerrain('');
+			return !(this.field.terrainState.duration > 10);
 		},
 		onHit() {
-			this.field.clearTerrain();
+			this.field.breakTerrains();
 		},
 		onAfterSubDamage() {
-			this.field.clearTerrain();
+			this.field.breakTerrains();
 		},
 		secondary: null,
 		target: "normal",

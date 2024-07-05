@@ -1208,6 +1208,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				return null;
 			}
 		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('caveterrain') || this.field.isTerrain('desertterrain')) {
+				this.add('-message', pokemon + ' swallowed the rocks!');
+				this.heal(pokemon.baseMaxhp / 16, pokemon);
+			}
+		},
 		flags: { breakable: 1 },
 		name: "Earth Eater",
 		rating: 3.5,
