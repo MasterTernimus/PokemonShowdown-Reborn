@@ -208,8 +208,36 @@ export class Field {
 		this.terrainState.duration = duration;
 	}
 
+	breakTerrains() {
+		if (this.isTerrain('')) return false;
+		const prevTerrain = this.getTerrain();
+		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
+		let isterrain = false;
+		this.terrainStack.shift();
+		for (const terrainState of this.terrainStack) {
+			console.log(terrainState.duration);
+			if (terrainState.duration < 10) {
+				this.terrainStack.shift() //Yes I know this is a hack. I just don't think I've added source effect for all user created terrains. Will do as I come across it
+			} else {
+				isterrain = true;
+				break;
+			}
+		}
+		if (isterrain) {
+			this.terrain = this.terrainStack[0].id;
+			this.terrainState = this.terrainStack[0];
+			const current_terrain = this.battle.dex.conditions.get(this.terrain);
+			this.battle.add('-fieldstart', current_terrain.name);
+		} else {
+			this.terrain = '';
+			this.terrainState = { id: '' };
+		}
+		this.battle.eachEvent('TerrainChange');
+		return true;
+	}
+
 	clearTerrain() {
-		if (!this.terrain) return false;
+		if (!this.isTerrain('')) return false;
 		const prevTerrain = this.getTerrain();
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 		this.terrainStack.shift();
