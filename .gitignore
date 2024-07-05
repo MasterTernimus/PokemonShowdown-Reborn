@@ -1,5 +1,4 @@
-/config/*
-!/config/formats.ts
+!/config/*
 /logs/*
 /test/modlogs
 /test/replays/*.html
@@ -13,7 +12,7 @@ npm-debug.log
 .eslintcache-no-types
 /tools/set-import/sets
 databases/*.db*
-*.js
+/dist
 *.map
 *.o
 *.o.dSYM
