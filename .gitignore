@@ -1,4 +1,3 @@
-!/config/*
 /logs/*
 /test/modlogs
 /test/replays/*.html
@@ -74,4 +73,4 @@ pip-log.txt
 *.rdb
 *.js
 *.map
-dist/data/mods/pokebilities/abilities.js
+!/config/*
