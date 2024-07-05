@@ -237,7 +237,7 @@ export class Field {
 	}
 
 	clearTerrain() {
-		if (!this.isTerrain('')) return false;
+		if (this.isTerrain('')) return false;
 		const prevTerrain = this.getTerrain();
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 		this.terrainStack.shift();
