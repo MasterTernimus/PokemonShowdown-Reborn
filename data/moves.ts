@@ -5751,7 +5751,21 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return this.chainModify([5325, 4096]);
 			}
 		},
-		onAfterMove(source, target, move) {
+		onAfterHit(target, source) {
+			if (this.field.terrain === 'burningterrain' || this.field.terrain === 'rainbowterrain') {
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+			}
+			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+				this.field.setTerrain('rainbowterrain');
+			}
+			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
+				this.field.setTerrain('burningterrain');
+			}
+			else if (!this.field.terrainState.Tchanges?.includes('firepledge')) {
+				this.field.terrainState.Tchanges?.push('firepledge');
+			}
+		},
+		onAfterSubDamage(damage, target, source) {
 			if (this.field.terrain === 'burningterrain' || this.field.terrain === 'rainbowterrain') {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
@@ -8050,7 +8064,21 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return this.chainModify([5325, 4096]);
 			}
 		},
-		onAfterMove(source) {
+		onAfterHit(target, source) {
+			if (this.field.terrain === 'burningterrain' || this.field.terrain === 'swampterrain') {
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+			}
+			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+				this.field.setTerrain('swampterrain');
+			}
+			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
+				this.field.setTerrain('burningterrain');
+			}
+			else if (!this.field.terrainState.Tchanges?.includes('grasspledge')) {
+				this.field.terrainState.Tchanges?.push('grasspledge');
+			}
+		},
+		onAfterSubDamage(damage, target, source) {
 			if (this.field.terrain === 'burningterrain' || this.field.terrain === 'swampterrain') {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
@@ -22280,7 +22308,21 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return this.chainModify([5325, 4096]);
 			}
 		},
-		onAfterMove(source) {
+		onAfterSubDamage(damage, target, source) {
+			if (this.field.terrain === 'swampterrain' || this.field.terrain === 'rainbowterrain') {
+				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
+			}
+			if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
+				this.field.setTerrain('swampterrain');
+			}
+			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
+				this.field.setTerrain('rainbowterrain');
+			}
+			else if (!this.field.terrainState.Tchanges?.includes('waterpledge')) {
+				this.field.terrainState.Tchanges?.push('waterpledge');
+			}
+		},
+		onAfterHit(target, source) {
 			if (this.field.terrain === 'swampterrain' || this.field.terrain === 'rainbowterrain') {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
