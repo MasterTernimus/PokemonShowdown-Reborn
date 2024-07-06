@@ -214,9 +214,14 @@ export class Field {
 	breakTerrains() {
 		if (this.isTerrain('')) return false;
 		const prevTerrain = this.getTerrain();
+		if (this.terrainState.duration < 10) {
+			this.terrainStack.shift();
+		}
+		else {
+			return false;
+		}
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 		let isterrain = false;
-		this.terrainStack.shift();
 		for (const terrainState of this.terrainStack) {
 			console.log(terrainState.duration);
 			if (terrainState.duration < 10) {
