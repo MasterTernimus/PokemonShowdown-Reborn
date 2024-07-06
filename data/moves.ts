@@ -8256,13 +8256,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {nonsky: 1, metronome: 1},
 		pseudoWeather: 'gravity',
 		onAfterMove() {
-			if (this.field.terrain === 'corrosivemistterrain')
+			if (this.field.isTerrain('corrosivemistterrain'))
 				this.field.changeTerrain('corrosiveterrain');
 		},
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.terrain === 'psychicterrain' || source.hasItem('amplifieldrock'))
+				if (this.field.isTerrain('psychicterrain') || source.hasItem('amplifieldrock'))
 					return 8
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');

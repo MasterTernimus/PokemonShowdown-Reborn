@@ -149,6 +149,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		name: "Cave Terrain",
 		condition: {
 			duration: 9999,
+			onEffectivenessPriority: -30,
 			onEffectiveness(typeMod, target, type, move) {
 				if (type === 'Ground' && target && !target.isGrounded()) {
 					return 0;
@@ -182,7 +183,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				if (this.field.terrainState.Tchanges?.includes('collapse') && cavecollapse.includes(move.id)) {
 					this.add('-message', 'The quake collapsed the ceiling!');
-					this.field.terrainState.Tchanges.filter(newchanges => newchanges !== 'collapse');
+					this.field.terrainState.Tchanges = this.field.terrainState.Tchanges.filter(newchanges => newchanges !== 'collapse');
+					for (const Tchanges of this.field.terrainState.Tchanges) {
+						console.log(Tchanges);
+					}
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility('rockhead') || pokemon.hasAbility('bulletproof')) {
 							continue;
