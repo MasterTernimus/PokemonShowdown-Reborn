@@ -168,6 +168,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.5;
 				}
 				if (move.flags.sound) {
+					this.add('-message', 'Echo-Echo-Echo');
 					modifier *= 1.5;
 				}
 				if (move.type === 'Flying' && !move.flags.contact) {
@@ -177,6 +178,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (cavern.includes(move.id)) {
 					modifier *= 1.3;
 				}
+				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
 				const cavern = ['powergem', 'diamondstorm'];
