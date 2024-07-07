@@ -74,7 +74,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
 				if (pokemon.hasAbility('earlybird')) {
-					pokemon.heal(pokemon.maxhp * 0.25, pokemon);
+					pokemon.heal(pokemon.baseMaxhp/4, pokemon);
 				}
 				return;
 			}
