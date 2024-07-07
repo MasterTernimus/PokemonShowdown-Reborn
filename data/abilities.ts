@@ -363,7 +363,19 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onAfterBoost(boost, target, source, effect) {
-			//CALL
+			if (!source || target.isAlly(source)) {
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({ def: 1 }, target, target, null, false, true);
+			}
 		},
 		name: "Battle Armor",
 		rating: 1,
@@ -782,7 +794,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 					this.add('-ability', target, 'Cotton Down');
 					activated = true;
 				}
-				this.boost({ spe: -1 }, pokemon, target, null, true);
+				if (this.field.isTerrain('grassyterrain')) {
+					this.boost({ spe: -3 }, pokemon, target, null, true);
+				} else {
+					this.boost({ spe: -1 }, pokemon, target, null, true);
+				}
 			}
 		},
 		flags: {},
@@ -1594,6 +1610,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, '[of] ' + warnTarget);
 		},
+		onModifySpe(spe, pokemon) {
+			if (this.field.isTerrain('psychicterrain')) {
+				return this.chainModify(2);
+			}
+		},
 		flags: {},
 		name: "Forewarn",
 		rating: 0.5,
@@ -1951,6 +1972,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyWeightPriority: 1,
 		onModifyWeight(weighthg) {
 			return weighthg * 2;
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect?.effectType === 'Move' && effect.category === 'Physical') {
+				return this.chainModify(0.5);
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Heavy Metal",
@@ -2448,6 +2474,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyWeight(weighthg) {
 			return this.trunc(weighthg / 2);
 		},
+		onModifySpe(spe, pokemon) {
+			if (!pokemon.status) {
+				return this.chainModify(1.25);
+			}
+		},
 		flags: { breakable: 1 },
 		name: "Light Metal",
 		rating: 1,
@@ -2492,6 +2523,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 			return false;
 		},
+		
 		flags: { breakable: 1 },
 		name: "Limber",
 		rating: 2,
@@ -2696,7 +2728,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	marvelscale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
-			if (pokemon.status || this.field.terrain === 'mistyterrain' || this.field.terrain === 'fairytaleterrain') {
+			if (pokemon.status || this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -4181,7 +4213,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	sandspit: {
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('sandstorm');
-			if (this.field.isTerrain('desertterrain')) {
+			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeach')) {
 				target.boostBy({ accuracy: -1 });
 			}
 		},
@@ -4448,7 +4480,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				}
 			}
 			if (statsLowered) {
-				this.boost({ spd: 2 }, target, target, null, false, true);
+				this.boost({ spd: 1 }, target, target, null, false, true);
 			}
 		},
 		name: "Shell Armor",
@@ -4545,7 +4577,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
 		onResidual(pokemon) {
-			if (this.field.terrain === 'electricterrain') {
+			if (this.field.isTerrain('electricterrain')) {
 				pokemon.volatiles['slowstart'].duration--;
 				if (pokemon.volatiles['slowstart'].duratio == 0) {
 					delete pokemon.volatiles['slowstart'];
@@ -4554,7 +4586,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		condition: {
-			duration: 5,
+			duration: 3,
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
 			onStart(target) {
@@ -4562,7 +4594,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				return this.chainModify(0.5);
+				return this.chainModify(0.65);
 			},
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(0.5);
@@ -4808,6 +4840,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			if (['Water', 'Fire'].includes(move.type)) {
 				this.boost({ spe: 6 });
+			}
+		},
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('burningterrain')) {
+				this.boost({spe: 6}, pokemon);
 			}
 		},
 		flags: {},
@@ -5923,6 +5960,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 					this.add('-immune', target, '[from] ability: Wonder Guard');
 				}
 				return null;
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (pokemon.species.id === 'shedinja') {
+				return this.chainModify(2);
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, failskillswap: 1, breakable: 1 },

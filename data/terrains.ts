@@ -584,7 +584,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 		name: "Dark Crystal Cavern Terrain",
 		condition: {
 			duration: 9999,
-			onBasePowerPriority: 6,
 			onModifyDefPriority: 10,
 			onModifyDef(def, pokemon) {
 				if (pokemon.hasType('Dark') || pokemon.hasType('Ghost')) {
@@ -597,6 +596,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return this.modify(spd, 1.5);
 				}
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const superboost = ['prismaticlaser', 'blackholeeclipse'];
