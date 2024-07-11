@@ -92,6 +92,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 				}
 			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Big Top Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Big Top Terrain');
+			},
 		}
 	},
 	burningterrain: {
