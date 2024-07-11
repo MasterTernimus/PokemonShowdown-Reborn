@@ -2218,6 +2218,44 @@ export class Battle {
 		return tr(tr(baseDamage * (100 - this.random(16))) / 100);
 	}
 
+	/*
+	For big top
+	*/
+	StrikerBonus(source: Pokemon) : number {
+		const strikerabilities = ['guts', 'sheerforce', 'hugepower', 'purepower', 'punkrock'];
+		const noabilityodds = [[7, 13], [6, 12, 13], [5, 11, 13], [4, 10, 13], [3, 9, 13], [2, 8, 12, 13], [1, 7, 11, 13], [0, 6, 10, 12, 13], [-1, 5, 9, 11, 13], [-1, 4, 8, 10, 13], [-1, 3, 7, 9, 13], [-1, 2, 6, 8, 13], [-1, 1, 5, 7, 13]];
+		const abilityodds = [[-1, 7, 13], [-1, -1, 13], [-1, -1, 7, 13], [-1, -1, -1, 13], [-1, -1, -1, 7, 13], [-1, -1, -1, -1, 13]];
+		let boost = source.boosts.atk;
+		const chance = this.random(13);
+		boost += 6;
+		let bonus = 0;
+		console.log(chance + " " + source.species.id);
+		if (source.hasAbility(strikerabilities)) {
+			if (boost > 6) {
+				boost = 5;
+			}
+			if (boost > 0 && boost < 4) {
+				boost = 1;
+			}
+			if (boost >= 4 && boost < 7) {
+				boost -= 2;
+			}
+			for (let i = 0; i < abilityodds[boost].length; i++) {
+				if (abilityodds[boost][i] >= chance) {
+					bonus = i;
+					break;
+				}
+			}
+		} else {
+			for (let i = 0; i < noabilityodds[boost].length; i++) {
+				if (noabilityodds[boost][i] >= chance) {
+					bonus = i;
+					break;
+				}
+			}
+		}
+		return bonus;
+	}
 	/**
 	 * Returns whether a proposed target for a move is valid.
 	 */
@@ -2788,7 +2826,7 @@ export class Battle {
 			this.midTurn = true;
 		}
 		if (this.turn === 0 && this.format.terrain) {
-			this.field.startTerrain('darkcrystalcavernterrain');
+			this.field.startTerrain(this.format.terrain);
 			const lower_terrain = this.dex.conditions.get(this.format.terrain);
 			this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
 		}

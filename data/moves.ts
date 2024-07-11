@@ -152,7 +152,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		accuracy: 100,
 		basePower: 55,
 		basePowerCallback(pokemon, target, move) {
-			if (!pokemon.item) {
+			if (!pokemon.item || this.field.isTerrain('bigtopterrain')) {
 				this.debug("BP doubled for no item");
 				return move.basePower * 2;
 			}
@@ -1290,6 +1290,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			}
 			this.directDamage(target.maxhp / 2);
 			this.boost({ atk: 12 }, target);
+			if (this.field.isTerrain('bigtopterrain')) {
+				this.boost({ def: 1, spd: 1 }, target);
+			}
 		},
 		secondary: null,
 		target: "self",
@@ -2313,6 +2316,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 			} else if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				newType = counter[this.CrystalCavernCounter];
+			} else if (this.field.isTerrain('bigtopterrain')) {
+				newType = 'Normal';
 			}
 			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
@@ -4390,7 +4395,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Dragon Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1, dance: 1, metronome: 1},
+		flags: { snatch: 1, dance: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('bigtopterrain')) {
+				move.boosts = {
+					atk: 2,
+					spe: 2,
+				};
+			}
+		},
 		boosts: {
 			atk: 1,
 			spe: 1,
@@ -5085,6 +5098,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.effectState.duration++;
 				}
 			},
+			durationCallback() {
+				if (this.field.isTerrain('bigtopterrain')) {
+					return 6;
+				}
+				else {
+					return 3;
+				}
+			},
 			onOverrideAction(pokemon, target, move) {
 				if (move.id !== this.effectState.move) return this.effectState.move;
 			},
@@ -5515,7 +5536,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Feather Dance",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, dance: 1, allyanim: 1, metronome: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, dance: 1, allyanim: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('bigtopterrain')) {
+				move.boosts = {
+					atk: -3,
+				};
+			}
+		},
 		boosts: {
 			atk: -2,
 		},
@@ -13543,6 +13571,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'powergem';
 			} else if (this.field.isTerrain('caveterrain')) {
 				move = 'rocktomb';
+			} else if (this.field.isTerrain('bigtopterrain')) {
+				move = 'acrobatics';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -15626,7 +15656,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Quiver Dance",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1, dance: 1, metronome: 1},
+		flags: { snatch: 1, dance: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('bigtopterrain')) {
+				move.boosts = {
+					spa: 2,
+					spd: 2,
+					spe: 2,
+				};
+			}
+		},
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -17217,6 +17256,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 						status: 'slp'
 					}
 				);
+			} else if (this.field.isTerrain('bigtopterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					boosts: {
+						spd: -1
+					}
+				});
 			}
 		},
 		secondary: {
@@ -17871,7 +17917,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Sing",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('bigtopterrain')) {
+				move.accuracy = 100;
+			}
+		},
 		status: 'slp',
 		secondary: null,
 		target: "normal",
@@ -19325,6 +19376,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onFoeRedirectTargetPriority: 2,
 			onFoeRedirectTarget(target, source, source2, move) {
 				if (this.validTarget(this.effectState.target, source, move.target)) {
+					this.boost({ atk: 1, spa: 1 }, this.effectState.target);
+					this.boost({ atk: 1, spa: 1 }, source);
 					this.debug("Spotlight redirected target of move");
 					return this.effectState.target;
 				}
@@ -20358,7 +20411,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, dance: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.terrain === 'fairytaleterrain') {
+			if (this.field.isTerrain('fairytaleterrain' || this.field.isTerrain('bigtopterrain'))) {
 				move.boosts = {
 					atk: 3,
 				};

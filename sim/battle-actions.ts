@@ -337,6 +337,9 @@ export class BattleActions {
 				if (this.battle.faintMessages()) break;
 				if (dancer.fainted) continue;
 				this.battle.add('-activate', dancer, 'ability: Dancer');
+				if (this.battle.field.isTerrain('bigtopterrain')) {
+					this.battle.boost({ spa: 1, atk: 1 }, dancer, dancer, null, false, true);
+				}
 				const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
 					targetOf1stDance :
 					pokemon;

@@ -25,13 +25,22 @@ export const Formats: FormatList = [
 		section: "AllGen Singles",
 	},
 	{
+		name: "[Gen 9] Big Top Arena",
+		mod: 'gen9',
+		terrain: 'bigtopterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 70', 'Default Level = 70', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] Dark Crystal Cavern",
 		mod: 'gen9',
 		terrain: 'darkcrystalcavernterrain',
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 65', 'Default Level = 65', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 65', 'Default Level = 65', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Chess Board",
@@ -40,7 +49,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Picked Team Size = 6', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 60', 'Default Level = 60', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Picked Team Size = 6', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 60', 'Default Level = 60', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Grassy Terrain",
@@ -49,7 +58,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 55', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 55', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Mirror Arena",
@@ -155,6 +164,16 @@ export const Formats: FormatList = [
 		section: "AllGen Doubles",
 	},
 	{
+		name: "[Gen 9] Doubles Big Top Arena",
+		mod: 'gen9',
+		terrain: 'bigtopterrain',
+		gameType: 'doubles',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Sleep Clause Mod', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 70', 'Default Level = 70', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] Doubles Dark Crystal Cavern",
 		mod: 'gen9',
 		terrain: 'darkcrystalcavernterrain',
@@ -182,7 +201,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 55', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Evasion Clause', 'Sleep Clause Mod', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 55', 'Default Level = 55', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles Mirror Arena",

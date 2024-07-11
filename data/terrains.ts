@@ -58,6 +58,42 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	bigtopterrain: {
+		name: "Big Top Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const boost = ['acrobatics', 'fierydance', 'firelash', 'firstimpression', 'fly', 'petaldance', 'powerwhip', 'revelationdance', 'vinewhip'];
+				if (move.id === 'payday') {
+					modifier *= 2;
+				}
+				if (move.flags.sound) {
+					modifier *= 1.5;
+				}
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (move.id === 'skittersmack' || move.id === 'bodypress') {
+					modifier *= 1.2
+				}
+				return this.chainModify(modifier);
+			},
+			onDamage(damage, target, source, effect) {
+				const strikermoves = ['blazekick', 'bodyslam', 'bounce', 'brutalswing', 'bulldoze', 'crabhammer', 'dragonhammer', 'dragonrush', 'dualchop', 'earthquake', 'gigaimpact', 'heatcrash', 'heavyslam', 'highhorsepower', 'icehammer', 'iciclecrash', 'irontail', 'magnitude', 'meteormash', 'pound', 'skydrop', 'slam', 'smackdown', 'stomp', 'stompingtantrum', 'strength', 'woodhammer'];
+				if (effect?.effectType && effect.effectType === 'Move') {
+					if (strikermoves.includes(effect.id) || (effect.category === 'Physical' && effect.type === 'Fighting')) {
+						const text = ['Weak!', 'Ok!', 'Nice!', 'Powerful!', 'OVER 9000!'];
+						const multiplier = [0.5, 1, 1.5, 2, 3];
+						const position = this.StrikerBonus(source);
+						this.add('-message', text[position]);
+						return this.chainModify(multiplier[position]);
+					}
+				}
+			},
+		}
+	},
 	burningterrain: {
 		name: "Burning Terrain",
 		condition: {
@@ -629,7 +665,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldResidual() {
-				if (this.field.weather == 'sunnyday') {
+				if (this.field.weather === 'sunnyday') {
 					this.field.changeTerrain('crystalcavernterrain', null, this.field.getWeather());
 				}
 			},

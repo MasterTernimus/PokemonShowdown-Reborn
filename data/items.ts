@@ -5789,12 +5789,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('chessboardterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('chessboardterrain') || this.field.isTerrain('bigtopterrain'))) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('chessboardterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('chessboardterrain') || this.field.isTerrain('bigtopterrain'))) {
 				pokemon.useItem();
 			}
 		},
@@ -5821,6 +5821,10 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.add('-message', pokemon.name + ' shrouded itself with Magic Coat!');
 				this.boost({ spa: 1 }, pokemon, pokemon, item, false, true);
 				pokemon.addVolatile('magiccoat', null, item);
+			}
+			if (this.field.isTerrain('bigtopterrain')) {
+				this.boost({ atk: 1 }, pokemon, pokemon, item, false, true);
+				pokemon.addVolatile('helpinghand', null, item);
 			}
 		},
 		num: 882,
