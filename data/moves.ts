@@ -21049,6 +21049,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			case 'psychicterrain':
 				move.type = 'Psychic';
 				break;
+			case 'bigtopterrain':
+				move.type = 'Fighting';
+				break;
 			}
 		},
 		onModifyMove(move, pokemon) {
