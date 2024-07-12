@@ -1291,7 +1291,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			this.directDamage(target.maxhp / 2);
 			this.boost({ atk: 12 }, target);
 			if (this.field.isTerrain('bigtopterrain')) {
-				this.boost({ def: 1, spd: 1 }, target);
+				this.boost({ def: 1, spd: 1 }, target, target, this.field.getTerrain());
 			}
 		},
 		secondary: null,
@@ -20411,7 +20411,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, dance: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('fairytaleterrain' || this.field.isTerrain('bigtopterrain'))) {
+			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('bigtopterrain')) {
 				move.boosts = {
 					atk: 3,
 				};
@@ -21817,6 +21817,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		num: 813,
 		accuracy: 90,
 		basePower: 20,
+		onModifyMove(move) {
+			if (this.field.isTerrain('bigtopterrain')) {
+				move.accuracy = 100;
+			}
+		},
 		basePowerCallback(pokemon, target, move) {
 			return 20 * move.hit;
 		},
@@ -22205,7 +22210,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Victory Dance",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, dance: 1, metronome: 1},
+		flags: { snatch: 1, dance: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('bigtopterrain')) {
+				move.boosts = {
+					atk: 2,
+					def: 2,
+					spe: 2,
+				}
+			}
+		},
 		boosts: {
 			atk: 1,
 			def: 1,

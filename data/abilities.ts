@@ -5198,7 +5198,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	tangledfeet: {
 		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('mirrorarenaterrain')) {
+			if (this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('bigtopterrain')) {
 				this.boost({ evasion: 1 }, pokemon);
 			}
 		},

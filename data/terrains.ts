@@ -80,6 +80,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				return this.chainModify(modifier);
 			},
+			onDamagePriority: 100,
 			onDamage(damage, target, source, effect) {
 				const strikermoves = ['blazekick', 'bodyslam', 'bounce', 'brutalswing', 'bulldoze', 'crabhammer', 'dragonhammer', 'dragonrush', 'dualchop', 'earthquake', 'gigaimpact', 'heatcrash', 'heavyslam', 'highhorsepower', 'icehammer', 'iciclecrash', 'irontail', 'magnitude', 'meteormash', 'pound', 'skydrop', 'slam', 'smackdown', 'stomp', 'stompingtantrum', 'strength', 'woodhammer'];
 				if (effect?.effectType && effect.effectType === 'Move') {
@@ -88,7 +89,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						const multiplier = [0.5, 1, 1.5, 2, 3];
 						const position = this.StrikerBonus(source);
 						this.add('-message', text[position]);
-						return this.chainModify(multiplier[position]);
+						return damage * multiplier[position];
 					}
 				}
 			},
