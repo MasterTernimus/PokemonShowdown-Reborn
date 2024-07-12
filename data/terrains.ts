@@ -63,6 +63,35 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			duration: 9999,
 			onBasePowerPriority: 6,
+			onTryMove(source, target, move) {
+				const beast = ['firelash', 'vinewhip', 'powerwhip'];
+				const dance = ['fierydance', 'petaldance', 'revelationdance'];
+				const air = ['acrobatics', 'fly'];
+				const multi = ['tripleaxel', 'triplekick'];
+				const flat = ['skittersmack', 'bodypress'];
+				const pay = ['payday', 'makeitrain'];
+				if (beast.includes(move.id)) {
+					this.add('-message', 'Back, foul beast!');
+				}
+				if (dance.includes(move.id)) {
+					this.add('-message', 'What grace!');
+				}
+				if (air.includes(move.id)) {
+					this.add('-message', 'An extravagant aerial finish!');
+				}
+				if (move.id === 'firstimpression') {
+					this.add('-message', 'And what an entrance it is!');
+				}
+				if (multi.includes(move.id)) {
+					this.add('-message', 'And A-One, and A-Two!');
+				}
+				if (flat.includes(move.id)) {
+					this.add('-message', 'A flattening performance!');
+				}
+				if (pay.includes(move.id)) {
+					this.add('-message', 'And a little extra for you, darling!');
+				}
+			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const boost = ['acrobatics', 'fierydance', 'firelash', 'firstimpression', 'fly', 'petaldance', 'powerwhip', 'revelationdance', 'vinewhip'];
@@ -95,6 +124,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Big Top Terrain');
+				this.add('-message', 'Now presenting!');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Big Top Terrain');
