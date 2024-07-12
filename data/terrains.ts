@@ -95,7 +95,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const boost = ['acrobatics', 'fierydance', 'firelash', 'firstimpression', 'fly', 'petaldance', 'powerwhip', 'revelationdance', 'vinewhip'];
-				if (move.id === 'payday') {
+				if (move.id === 'payday' || move.id === 'makeitrain') {
 					modifier *= 2;
 				}
 				if (move.flags.sound) {
