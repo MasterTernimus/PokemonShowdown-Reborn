@@ -113,7 +113,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onDamage(damage, target, source, effect) {
 				const strikermoves = ['blazekick', 'bodyslam', 'bounce', 'brutalswing', 'bulldoze', 'crabhammer', 'dragonhammer', 'dragonrush', 'dualchop', 'earthquake', 'gigaimpact', 'heatcrash', 'heavyslam', 'highhorsepower', 'icehammer', 'iciclecrash', 'irontail', 'magnitude', 'meteormash', 'pound', 'skydrop', 'slam', 'smackdown', 'stomp', 'stompingtantrum', 'strength', 'woodhammer'];
 				if (effect?.effectType && effect.effectType === 'Move') {
-					if (strikermoves.includes(effect.id) || (effect.category === 'Physical' && effect.type === 'Fighting')) {
+					if (strikermoves.includes(effect.id) || (effect.category === 'Physical' && effect.type === 'Fighting' && (effect.id !== 'seismictoss' && effect.id !== 'counter'))) {
 						const text = ['Weak!', 'Ok!', 'Nice!', 'Powerful!', 'OVER 9000!'];
 						const multiplier = [0.5, 1, 1.5, 2, 3];
 						const position = this.StrikerBonus(source);
