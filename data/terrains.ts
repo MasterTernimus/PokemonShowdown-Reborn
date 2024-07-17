@@ -1366,6 +1366,69 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		},
 	},
+	superheatedterrain: {
+		name: "Super-Heated Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier: number = 0;
+				const scald = ['scald', 'steameruption'];
+				const steam = ['muddywater', 'sparklingaria', 'surf', 'waterpledge', 'waterspout', 'hydrovortex', 'oceanicoperetta'];
+				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
+				if (move.type === 'Fire') {
+					modifier *= 1.1;
+				}
+				if (move.type === 'Ice') {
+					modifier *= 0.5;
+				}
+				if (move.type === 'Water' && !(scald.includes(move.id) || steam.includes(move.id))) {
+					modifier *= 0.9;
+				}
+				if (scald.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (steam.includes(move.id)) {
+					modifier *= 0.5625;
+				}
+				if (igniteMoves.includes(move.id)) {
+					modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, pokemon, move) {
+				const steam = ['muddywater', 'sparklingaria', 'surf', 'waterpledge', 'waterspout', 'watersport', 'hydrovortex', 'oceanicoperetta'];
+				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
+				const freeze = ['blizzard', 'glaciate', 'subzeroslammer'];
+				if (steam.includes(move.id)) {
+					for (const pokemon of this.getAllActive()) {
+						if (!pokemon.isSemiInvulnerable()) {
+							this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
+						}
+					}
+				}
+				if (igniteMoves.includes(move.id) && !(this.field.isWeather('rain') || this.field.getPseudoWeather('watersport'))) {
+					this.field.changeTerrain('burningterrain');
+					return;
+				}
+				if (freeze.includes(move.id)) {
+					this.field.clearTerrain();
+					return;
+				}
+			},
+			onFieldResidual() {
+				if (this.field.isWeather('hail') || this.field.isWeather('snow')) {
+					this.field.clearWeather();
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Super-Heated Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Super-Heated Terrain');
+			},
+		}
+	},
 	swampterrain: {
 		name: "Swamp Terrain",
 		condition: {

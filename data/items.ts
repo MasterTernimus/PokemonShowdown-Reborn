@@ -5902,7 +5902,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain', 'wastelandterrain', 'caveterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain', 'wastelandterrain', 'caveterrain', 'burningterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -5945,9 +5945,13 @@ export const Items: {[itemid: string]: ItemData} = {
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4, pokemon, null, item);
 			}
+			if (this.field.isTerrain('superheatedterrain')) {
+				this.boost({ def: 1 }, pokemon, pokemon, item);
+				pokemon.addVolatile('shelltrap', pokemon, item);
+			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'ashenbeachterrain', 'caveterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'ashenbeachterrain', 'caveterrain', 'burningterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
