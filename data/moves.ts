@@ -2295,7 +2295,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				newType = 'Psychic';
 			} else if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain')) {
 				newType = 'Poison';
-			} else if (this.field.isTerrain('burningterrain')) {
+			} else if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
 				newType = 'Fire';
 			} else if (this.field.isTerrain('swampterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.terrain === 'underwaterterrain' || this.field.isTerrain("murkwatersurfaceterrain")) {
 				newType = 'Water';
@@ -13573,6 +13573,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move = 'rocktomb';
 			} else if (this.field.isTerrain('bigtopterrain')) {
 				move = 'acrobatics';
+			} else if (this.field.isTerrain('superheatedterrain')) {
+				move = 'heatwave';
 			}
 			this.actions.useMove(move, pokemon, target);
 			return null;
@@ -14093,7 +14095,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			volatileStatus: 'lockedmove',
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+			if (pokemon.volatiles['lockedmove'] && (pokemon.volatiles['lockedmove'].duration === 1 || this.field.isTerrain('superheatedterrain'))) {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
@@ -14338,7 +14340,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			volatileStatus: 'lockedmove',
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+			if (pokemon.volatiles['lockedmove'] && (pokemon.volatiles['lockedmove'].duration === 1 || this.field.isTerrain('superheatedterrain'))) {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
@@ -17165,7 +17167,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 30,
 					status: 'psn',
 				});
-			} else if (this.field.isTerrain('burningterrain')) {
+			} else if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					status: 'brn',
@@ -21153,7 +21155,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			volatileStatus: 'lockedmove',
 		},
 		onAfterMove(pokemon) {
-			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+			if (pokemon.volatiles['lockedmove'] && (pokemon.volatiles['lockedmove'].duration === 1 || this.field.isTerrain('superheatedterrain'))) {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},

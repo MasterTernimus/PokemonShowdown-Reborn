@@ -4843,7 +4843,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('burningterrain')) {
+			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
 				this.boost({spe: 6}, pokemon);
 			}
 		},
@@ -5346,6 +5346,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.add('-immune', target, '[from] ability: Thermal Exchange');
 			}
 			return false;
+		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('superheatedterrain')) {
+				this.add('-activate', pokemon, 'ability: Thermal Exchange');
+				this.boost({ atk: 1 });
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Thermal Exchange",
@@ -5859,7 +5865,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('burningterrain')) {
+			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
 				this.boost({ def: 2 }, pokemon);
 			}
 		},
