@@ -25,6 +25,15 @@ export const Formats: FormatList = [
 		section: "AllGen Singles",
 	},
 	{
+		name: "[Gen 9] Super-Heated Terrain",
+		mod: 'gen9',
+		terrain: 'superheatedterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level = 50', 'VGC Timer', 'Picked Team Size = 4', 'Cancel Mod', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] Big Top Arena",
 		mod: 'gen9',
 		terrain: 'bigtopterrain',
@@ -162,6 +171,16 @@ export const Formats: FormatList = [
 
 	{
 		section: "AllGen Doubles",
+	},
+	{
+		name: "[Gen 9] Doubles Super-Heated Terrain",
+		mod: 'gen9',
+		terrain: 'superheatedterrain',
+		gameType: 'doubles',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level = 50', 'VGC Timer', 'Picked Team Size = 4', 'Cancel Mod', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles Big Top Arena",
