@@ -1376,22 +1376,29 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const scald = ['scald', 'steameruption'];
 				const steam = ['muddywater', 'sparklingaria', 'surf', 'waterpledge', 'waterspout', 'hydrovortex', 'oceanicoperetta'];
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
+				const freeze = ['blizzard', 'glaciate', 'subzeroslammer'];
 				if (move.type === 'Fire') {
+					this.add('-message', 'The attack was super-heated!');
 					modifier *= 1.1;
 				}
 				if (move.type === 'Ice') {
+					this.add('-message', 'The extreme heat softened the attack...');
 					modifier *= 0.5;
 				}
 				if (move.type === 'Water' && !(scald.includes(move.id) || steam.includes(move.id))) {
+					this.add('-message', 'The extreme heat softened the attack...');
 					modifier *= 0.9;
 				}
 				if (scald.includes(move.id)) {
+					this.add('-message', 'The field super-heated the attack!');
 					modifier *= 1.5;
 				}
 				if (steam.includes(move.id)) {
+					this.add('-message', 'Steam shot up from the field!');
 					modifier *= 0.5625;
 				}
-				if (igniteMoves.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || freeze.includes(move.id)) {
+					igniteMoves.includes(move.id) ? this.add('-message', 'The field combusted!') : this.add('-message', 'The field cooled off!');
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);

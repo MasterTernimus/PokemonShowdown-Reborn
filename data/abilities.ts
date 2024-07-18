@@ -4844,6 +4844,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
+				this.add('-message', 'The heat activates' + pokemon.name + '\'s Steam Engine!');
 				this.boost({spe: 6}, pokemon);
 			}
 		},
