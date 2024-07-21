@@ -188,7 +188,7 @@ export class Field {
 	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (this.isTerrain(status.id))
+		if (this.terrain === status.id)
 			return false;
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
@@ -212,14 +212,8 @@ export class Field {
 	}
 
 	breakTerrains() {
-		if (this.isTerrain('')) return false;
+		if (this.terrain === '' || this.terrainState.duration > 10) return false;
 		const prevTerrain = this.getTerrain();
-		if (this.terrainState.duration < 10) {
-			this.terrainStack.shift();
-		}
-		else {
-			return false;
-		}
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 		let isterrain = false;
 		for (const terrainState of this.terrainStack) {
