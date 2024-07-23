@@ -5804,6 +5804,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			this.add('-activate', pokemon, item, '[consumed]');
 			if (this.field.isTerrain('glitchterrain')) {
 				this.add('-message', pokemon + ' was corrupted by the rogue data!');
+				this.boost({ def: 1 }, pokemon, pokemon, item);
 				pokemon.setType('???');
 				return;
 			}
