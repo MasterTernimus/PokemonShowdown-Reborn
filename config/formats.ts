@@ -25,6 +25,15 @@ export const Formats: FormatList = [
 		section: "AllGen Singles",
 	},
 	{
+		name: "[Gen 9] Glitch Terrain",
+		mod: 'gen9',
+		terrain: 'glitchterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 75', 'Default Level = 75', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] Super-Heated Terrain",
 		mod: 'gen9',
 		terrain: 'superheatedterrain',
@@ -171,6 +180,16 @@ export const Formats: FormatList = [
 
 	{
 		section: "AllGen Doubles",
+	},
+	{
+		name: "[Gen 9] Doubles Glitch Terrain",
+		mod: 'gen9',
+		terrain: 'glitchterrain',
+		gameType: 'doubles',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 75', 'Default Level = 75', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles Super-Heated Terrain",
