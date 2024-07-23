@@ -12584,7 +12584,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		onHit(target, source, effect) {
 			let moves;
-			if (this.field.terrain === 'glitchterrain') {
+			if (this.field.isTerrain('glitchterrain')) {
 				moves = this.dex.moves.all().filter(move => (
 					(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
 					(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
@@ -15716,7 +15716,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			},
 			onBeforeMovePriority: 100,
 			onLockMove(pokemon) {
-				if (this.field.terrain === 'glitchterrain') {
+				if (this.field.isTerrain('glitchterrain')) {
 					return 'rage';
 				}
 			},
