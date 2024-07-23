@@ -5789,18 +5789,21 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('chessboardterrain') || this.field.isTerrain('bigtopterrain'))) {
+			const terrains = ['glitchterrain', 'shortcircuitterrain', 'factoryterrain', 'mirrorarenaterrain', 'chessboardterrain', 'bigtopterrain'];
+			if (!pokemon.ignoringItem() && (terrains.includes(this.field.terrain) && this.field.isTerrain(this.field.terrain))) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('glitchterrain') || this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('chessboardterrain') || this.field.isTerrain('bigtopterrain'))) {
+			const terrains = ['glitchterrain', 'shortcircuitterrain', 'factoryterrain', 'mirrorarenaterrain', 'chessboardterrain', 'bigtopterrain'];
+			if (!pokemon.ignoringItem() && (terrains.includes(this.field.terrain) && this.field.isTerrain(this.field.terrain))) {
 				pokemon.useItem();
 			}
 		},
 		onUseItem(item, pokemon) {
 			this.add('-activate', pokemon, item, '[consumed]');
 			if (this.field.isTerrain('glitchterrain')) {
+				this.add('-message', pokemon + ' was corrupted by the rogue data!');
 				pokemon.setType('???');
 				return;
 			}

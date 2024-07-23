@@ -931,11 +931,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				if (move.type === 'Psychic') {
-					return this.chainModify(4915, 4096);
+					this.add('-message', '.0P pl$ nerf!-//');
+					return this.chainModify(1.2);
 				}
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Glitch Terrain');
+				this.add('-message', '1n!taliz3 .b//////attl3');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Glitch Terrain');
