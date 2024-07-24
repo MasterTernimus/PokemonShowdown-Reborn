@@ -899,14 +899,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const Special = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Ice', 'Dragon', 'Psychic'];
 				const Physical = ['Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', '???'];
 				const nonexistant = ['Dark', 'Steel', 'Fairy'];
-				if (nonexistant.includes(move.type)) {
-					move.type = 'Normal';
-				}
-				if (Special.includes(move.type)) {
-					move.category = 'Special';
-				}
-				if (Physical.includes(move.type)) {
-					move.category = 'Physical';
+				if (move.category != 'Status') {
+					if (nonexistant.includes(move.type)) {
+						move.type = 'Normal';
+					}
+					if (Special.includes(move.type)) {
+						move.category = 'Special';
+					}
+					if (Physical.includes(move.type)) {
+						move.category = 'Physical';
+					}
 				}
 			},
 			onTryHit(target, source, move) {
