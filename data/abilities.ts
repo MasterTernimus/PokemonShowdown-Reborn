@@ -4576,15 +4576,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			delete pokemon.volatiles['slowstart'];
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
-		onResidual(pokemon) {
-			if (this.field.isTerrain('electricterrain')) {
-				pokemon.volatiles['slowstart'].duration--;
-				if (pokemon.volatiles['slowstart'].duration == 0) {
-					delete pokemon.volatiles['slowstart'];
-					this.add('-end', pokemon, 'Slow Start', '[silent]');
-				}
-			}
-		},
 		condition: {
 			duration: 3,
 			onResidualOrder: 28,
@@ -4598,6 +4589,15 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			},
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(0.5);
+			},
+			onResidual(pokemon) {
+				if (this.field.isTerrain('electricterrain')) {
+					pokemon.volatiles['slowstart'].duration--;
+					if (pokemon.volatiles['slowstart'].duration == 0) {
+						delete pokemon.volatiles['slowstart'];
+						this.add('-end', pokemon, 'Slow Start');
+					}
+				}
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Slow Start');
