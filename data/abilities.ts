@@ -60,7 +60,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move && move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Flying';
 				move.typeChangerBoosted = this.effect;
@@ -486,14 +486,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	blaze: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire' && (attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'burningterrain')) {
+			if (move && move && move.type === 'Fire' && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('burningterrain'))) {
 				this.debug('Blaze boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fire' && (attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'burningterrain')) {
+			if (move && move && move.type === 'Fire' && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('burningterrain'))) {
 				this.debug('Blaze boost');
 				return this.chainModify(1.5);
 			}
@@ -1119,14 +1119,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Dragon') {
+			if (move && move && move.type === 'Dragon') {
 				this.debug('Dragon\'s Maw boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Dragon') {
+			if (move && move && move.type === 'Dragon') {
 				this.debug('Dragon\'s Maw boost');
 				return this.chainModify(1.5);
 			}
@@ -1173,7 +1173,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onSourceBasePowerPriority: 17,
 		onSourceBasePower(basePower, attacker, defender, move) {
-			if (move.type === 'Fire') {
+			if (move && move && move.type === 'Fire') {
 				return this.chainModify(1.25);
 			}
 		},
@@ -1217,7 +1217,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	eartheater: {
 		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Ground') {
+			if (target !== source && move && move && move.type === 'Ground') {
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Earth Eater');
 				}
@@ -1442,14 +1442,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
-				if (move.type === 'Fire' && attacker.hasAbility('flashfire')) {
+				if (move && move && move.type === 'Fire' && attacker.hasAbility('flashfire')) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(atk, attacker, defender, move) {
-				if (move.type === 'Fire' && attacker.hasAbility('flashfire')) {
+				if (move && move && move.type === 'Fire' && attacker.hasAbility('flashfire')) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
@@ -1541,7 +1541,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	fluffy: {
 		onSourceModifyDamage(damage, source, target, move) {
 			let mod = 1;
-			if (move.type === 'Fire') mod *= 2;
+			if (move && move && move.type === 'Fire') mod *= 2;
 			if (move.flags['contact']) mod /= 2;
 			return this.chainModify(mod);
 		},
@@ -1690,7 +1690,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move && move && move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Electric';
 				move.typeChangerBoosted = this.effect;
@@ -1946,14 +1946,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	heatproof: {
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
+			if (move && move.type === 'Fire') {
 				this.debug('Heatproof Atk weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
+			if (move && move.type === 'Fire') {
 				this.debug('Heatproof SpA weaken');
 				return this.chainModify(0.5);
 			}
@@ -2386,7 +2386,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	justified: {
 		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Dark') {
+			if (move && move.type === 'Dark') {
 				this.boost({ atk: 1 });
 			}
 		},
@@ -2687,14 +2687,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Water') {
+			if (move && move.type === 'Water') {
 				this.debug('Magma Armor weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ice') {
+			if (move && move.type === 'Ice') {
 				this.debug('Magma Armor weaken');
 				return this.chainModify(0.5);
 			}
@@ -2825,12 +2825,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	minus: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon, target, move) {
-			if (move.type === 'Electric') {
+			if (move && move.type === 'Electric') {
 				return this.chainModify(1.3);
 			}
 		},
 		onModifyAtk(atk, pokemon, target, move) {
-			if (move.type === 'Electric') {
+			if (move && move.type === 'Electric') {
 				return this.chainModify(1.3);
 			}
 		},
@@ -3292,14 +3292,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	overgrow: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if ((move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
+			if ((move && move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
 				this.debug('Overgrow boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if ((move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
+			if ((move && move.type === 'Grass' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
 				this.debug('Overgrow boost');
 				return this.chainModify(1.5);
 			}
@@ -3463,7 +3463,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move && move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fairy';
 				move.typeChangerBoosted = this.effect;
@@ -3486,12 +3486,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	plus: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon, target, move) {
-			if (move.type === 'Electric') {
+			if (move && move.type === 'Electric') {
 				return this.chainModify(1.3);
 			}
 		},
 		onModifyAtk(atk, pokemon, target, move) {
-			if (move.type === 'Electric') {
+			if (move && move.type === 'Electric') {
 				return this.chainModify(1.3);
 			}
 		},
@@ -3825,14 +3825,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ghost') {
+			if (move && move.type === 'Ghost') {
 				this.debug('Purifying Salt weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(spa, attacker, defender, move) {
-			if (move.type === 'Ghost') {
+			if (move && move.type === 'Ghost') {
 				this.debug('Purifying Salt weaken');
 				return this.chainModify(0.5);
 			}
@@ -4019,7 +4019,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move && move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Ice';
 				move.typeChangerBoosted = this.effect;
@@ -4143,14 +4143,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	rockypayload: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Rock') {
+			if (move && move.type === 'Rock') {
 				this.debug('Rocky Payload boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Rock') {
+			if (move && move.type === 'Rock') {
 				this.debug('Rocky Payload boost');
 				return this.chainModify(1.5);
 			}
@@ -4182,7 +4182,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
-				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
+				if (move && move.type === 'Rock' || move && move.type === 'Ground' || move && move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([5325, 4096]);
 				}
@@ -4265,7 +4265,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onAllyTryHitSide(target, source, move) {
 			if (source === this.effectState.target || !target.isAlly(source)) return;
-			if (move.type === 'Grass') {
+			if (move && move.type === 'Grass') {
 				this.boost({ atk: 1 }, this.effectState.target);
 			}
 		},
@@ -4856,12 +4856,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	steelworker: {
 		onModifyAtkPriority: 5,
 		onModifyMove(move) {
-			if (move.type === 'Steel' && this.field.isTerrain('shortcircuitterrain')) {
+			if (move && move.type === 'Steel' && this.field.isTerrain('shortcircuitterrain')) {
 				move.types = ['Steel', 'Electric'];
 			}
 		},
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Steel') {
+			if (move && move.type === 'Steel') {
 				this.debug('Steelworker boost');
 				if (this.field.isTerrain('factoryterrain')) {
 					return this.chainModify(2);
@@ -4873,7 +4873,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Steel') {
+			if (move && move.type === 'Steel') {
 				this.debug('Steelworker boost');
 				return this.chainModify(1.5);
 			}
@@ -4886,7 +4886,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	steelyspirit: {
 		onAllyBasePowerPriority: 22,
 		onAllyBasePower(basePower, attacker, defender, move) {
-			if (move.type === 'Steel') {
+			if (move && move.type === 'Steel') {
 				this.debug('Steely Spirit boost');
 				return this.chainModify(1.5);
 			}
@@ -5076,14 +5076,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	swarm: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if ((move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
+			if ((move && move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
 				this.debug('Swarm boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if ((move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
+			if ((move && move.type === 'Bug' && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
 				this.debug('Swarm boost');
 				return this.chainModify(1.5);
 			}
@@ -5331,7 +5331,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	thermalexchange: {
 		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Fire') {
+			if (move && move.type === 'Fire') {
 				this.boost({ atk: 1 });
 			}
 		},
@@ -5362,14 +5362,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	thickfat: {
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ice' || move.type === 'Fire') {
+			if (move && move.type === 'Ice' || move && move.type === 'Fire') {
 				this.debug('Thick Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ice' || move.type === 'Fire') {
+			if (move && move.type === 'Ice' || move && move.type === 'Fire') {
 				this.debug('Thick Fat weaken');
 				return this.chainModify(0.5);
 			}
@@ -5394,14 +5394,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	torrent: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
+			if (move && move.type === 'Water' && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
 				this.debug('Torrent boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Water' && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
+			if (move && move.type === 'Water' && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
 				this.debug('Torrent boost');
 				return this.chainModify(1.5);
 			}
@@ -5502,7 +5502,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
 				boost = 8192;
 			}
-			if (move.type === 'Electric') {
+			if (move && move.type === 'Electric') {
 				this.debug('Transistor boost');
 				return this.chainModify([boost, 4096]);
 			}
@@ -5513,7 +5513,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
 				boost = 8192;
 			}
-			if (move.type === 'Electric') {
+			if (move && move.type === 'Electric') {
 				this.debug('Transistor boost');
 				return this.chainModify([boost, 4096]);
 			}
@@ -5757,23 +5757,23 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	waterbubble: {
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
+			if (move && move.type === 'Fire') {
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
+			if (move && move.type === 'Fire') {
 				return this.chainModify(0.5);
 			}
 		},
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Water') {
+			if (move && move.type === 'Water') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Water') {
+			if (move && move.type === 'Water') {
 				return this.chainModify(2);
 			}
 		},
@@ -5802,7 +5802,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Water') {
+			if (move && move.type === 'Water') {
 				if (this.field.isTerrain('ashenbeachterrain')) {
 					this.boost({ spd: 2 });
 				}
@@ -5858,7 +5858,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	wellbakedbody: {
 		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Fire') {
+			if (target !== source && move && move.type === 'Fire') {
 				if (!this.boost({ def: 2 })) {
 					this.add('-immune', target, '[from] ability: Well-Baked Body');
 				}
@@ -5957,7 +5957,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	wonderguard: {
 		onTryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
+			if (target === source || move.category === 'Status' || move && move.type === '???' || move.id === 'struggle') return;
 			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (target.runEffectiveness(move) <= 0) {
@@ -6065,7 +6065,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onTryHit(target, source, move) {
-			if (move.type === 'Rock' && !target.activeTurns) {
+			if (move && move.type === 'Rock' && !target.activeTurns) {
 				this.add('-immune', target, '[from] ability: Mountaineer');
 				return null;
 			}

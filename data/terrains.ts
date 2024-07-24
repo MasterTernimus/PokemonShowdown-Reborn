@@ -935,6 +935,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return this.chainModify(1.2);
 				}
 			},
+			onAfterMove(source, target, move) {
+				if (!target.hp && move.flags['recharge']) {
+					this.add('-message', 'The glitched terrain allowed the move to recharge from the fallen pokemon');
+					source.removeVolatile('mustrecharge')
+				}
+			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Glitch Terrain');
 				this.add('-message', '1n!taliz3 .b//////attl3');
