@@ -4579,7 +4579,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onResidual(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.volatiles['slowstart'].duration--;
-				if (pokemon.volatiles['slowstart'].duratio == 0) {
+				if (pokemon.volatiles['slowstart'].duration == 0) {
 					delete pokemon.volatiles['slowstart'];
 					this.add('-end', pokemon, 'Slow Start', '[silent]');
 				}
