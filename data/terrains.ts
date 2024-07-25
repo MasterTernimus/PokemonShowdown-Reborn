@@ -895,6 +895,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (source.getStat('spe', true, true) > target.getStat('spe', true, true))
 					return critRatio + 1;
 			},
+			onNegateImmunity(pokemon, type) {
+				if (type === 'Dragon' && pokemon.hasType('Fairy')) {
+					return false;
+				}
+			},
 			onModifyMove(move) {
 				const Special = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Ice', 'Dragon', 'Psychic'];
 				const Physical = ['Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', '???'];
