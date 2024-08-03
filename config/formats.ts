@@ -229,7 +229,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Picked Team Size = 6', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 60', 'Default Level = 60', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Picked Team Size = 6', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 75', 'Default Level = 75', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles Grassy Terrain",
