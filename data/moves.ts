@@ -1465,16 +1465,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 			return move.basePower;
 		},
 		secondary: {
-			chance: 100,
-			boosts: {
-				atk: -1,
-			},
-			onHit(target, source) {
-				const result = this.random(10);
-				if (result < 3) {
-					target.trySetStatus('frz', source);
-				}
-			},
+			chance: 30,
+			status: 'frz'
 		},
 		target: "normal",
 		type: "Ghost",
