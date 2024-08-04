@@ -315,13 +315,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let king = null;
 				let min = 9999;
 				for (const pokemon of new_pokemon) {
-					if (min > pokemon.baseMaxhp) {
+					if (min > pokemon.baseMaxhp && !king) {
 						min = pokemon.baseMaxhp;
 						king = pokemon;
 					}
 					if (pokemon.item === 'kingsrock') {
 						pokemon.Role = 'King';
-						king = null;
+						king = pokemon;
 						continue;
 					}
 					if (!pokemon.Role) {
