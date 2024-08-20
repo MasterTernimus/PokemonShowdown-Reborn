@@ -2825,9 +2825,15 @@ export class Battle {
 			this.midTurn = true;
 		}
 		if (this.turn === 0 && this.format.terrain) {
-			this.field.startTerrain(this.format.terrain);
-			const lower_terrain = this.dex.conditions.get(this.format.terrain);
-			this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
+			if (this.format.terrain == 'adrienterrain') {
+				this.field.startTerrain('mistyterrain');
+				this.field.terrainStack.push({ id: 'fairytaleterrain', Tchanges: [], duration: 9999, turn: this.turn });
+			}
+			else {
+				this.field.startTerrain(this.format.terrain);
+				const lower_terrain = this.dex.conditions.get(this.format.terrain);
+				this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
+			}
 		}
 		let action;
 		while ((action = this.queue.shift())) {
