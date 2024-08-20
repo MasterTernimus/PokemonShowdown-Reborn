@@ -228,6 +228,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 71,
 	},
 	armortail: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.boost({ def: 1, spd: 1 });
+			}
+		},
 		onFoeTryMove(target, source, move) {
 			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
 			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
@@ -2840,6 +2845,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 58,
 	},
 	mirrorarmor: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.boost({ def: 1, spd: 1 });
+			}
+		},
 		onTryBoost(boost, target, source, effect) {
 			// Don't bounce self stat changes, or boosts that have already bounced
 			if (!source || target === source || !boost || effect.name === 'Mirror Armor') return;

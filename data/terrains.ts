@@ -802,7 +802,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onBasePower(basePower, source, target, move) {
-				const strengthenedMoves = ['airslash', 'ancientpower', 'fleurcannon', 'leafblade', 'magicalleaf', 'moongeistbeam', 'mysticalfire', 'nightslash', 'psychocut', 'relicsong', 'smartstrike', 'solarblade', 'sparklingaria', 'menacingmoonrazemaelstorm', 'oceanicoperetta'];
+				const strengthenedMoves = ['airslash', 'ancientpower', 'fleurcannon', 'leafblade', 'magicalleaf', 'moongeistbeam', 'mysticalfire', 'nightslash', 'psychocut', 'relicsong', 'smartstrike', 'solarblade', 'sparklingaria', 'menacingmoonrazemaelstorm', 'oceanicoperetta', 'kowtowcleave'];
 				let modifier = 1;
 				if (move.type === 'Dragon') {
 					this.add('-message', 'The draconic energy was strengthened by the dead princesses on the field!');
