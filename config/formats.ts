@@ -194,6 +194,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] Doubles Misty Terrain (Adrienn)",
 		mod: 'gen9',
 		terrain: 'adriennterrain',
+		gameType: 'doubles',
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
