@@ -200,7 +200,7 @@ export const Formats: FormatList = [
 		section: "AllGen Doubles",
 	},
 	{
-		name: "[Gen 9] Fairy Tale Terrain",
+		name: "[Gen 9] Doubles Fairy Tale Terrain",
 		mod: 'gen9',
 		terrain: 'fairytaleterrain',
 		gameType: 'doubles',
