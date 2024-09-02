@@ -1555,7 +1555,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		itemUser: ["Eevee"],
+		itemUser: ["Eevee", 'Eevee-Starter'],
 		num: 805,
 		gen: 7,
 		isNonstandard: "Past",
@@ -4275,7 +4275,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		itemUser: ["Pikachu"],
+		itemUser: ["Pikachu, Pikachu-Starter"],
 		num: 794,
 		gen: 7,
 		isNonstandard: "Past",
