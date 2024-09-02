@@ -1544,17 +1544,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		zMove: "Extreme Evoboost",
 		zMoveFrom: "Last Resort",
 		onModifyDefPriority: 2,
-		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Eevee') {
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpDPriority: 2,
-		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Eevee') {
-				return this.chainModify(1.5);
-			}
-		},
 		itemUser: ["Eevee", 'Eevee-Starter'],
 		num: 805,
 		gen: 7,
@@ -4264,17 +4253,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		zMove: "Catastropika",
 		zMoveFrom: "Volt Tackle",
 		onModifyDefPriority: 2,
-		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpDPriority: 2,
-		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
-				return this.chainModify(1.5);
-			}
-		},
 		itemUser: ["Pikachu, Pikachu-Starter"],
 		num: 794,
 		gen: 7,
