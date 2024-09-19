@@ -25,6 +25,15 @@ export const Formats: FormatList = [
 		section: "AllGen Singles",
 	},
 	{
+		name: "[Gen 9] Water Surface Terrain",
+		mod: 'gen9',
+		terrain: 'watersurfaceterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] Fairy Tale Terrain",
 		mod: 'gen9',
 		terrain: 'fairytaleterrain',
@@ -198,6 +207,16 @@ export const Formats: FormatList = [
 
 	{
 		section: "AllGen Doubles",
+	},
+	{
+		name: "[Gen 9] Doubles Water Surface Terrain",
+		mod: 'gen9',
+		terrain: 'watersurfaceterrain',
+		gameType: 'doubles',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles Fairy Tale Terrain",

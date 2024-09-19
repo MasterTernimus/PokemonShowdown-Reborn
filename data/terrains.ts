@@ -1150,7 +1150,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const strengthenedMoves = ['mudbomb', 'mudshot', 'mudslap', 'thousandwaves', 'acid', 'acidspray', 'brine', 'smackdown'];
+				const strengthenedMoves = ['mudbomb', 'mudshot', 'mudslap', 'thousandwaves', 'acid', 'acidspray', 'brine', 'smackdown', 'wavecrash'];
 				const change = ['whirlpool', 'blizzard', 'subzeroslammer', 'glaciate'];
 				if (move.type === 'Water') {
 					modifier *= 1.5;
@@ -1527,6 +1527,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 					move.types = [move.type, 'Water'];
 					
 				}
+			},
+			onAccuracy(accuracy, target, source, move) {
 				if (move.type === 'Electric' && typeof move.accuracy === 'number') {
 					return true;
 				}
@@ -1708,16 +1710,24 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const change = ['dive', 'gravity', 'aciddownpour', 'blizzard', 'subzeroslammer', 'glaciate'];
 				const strengthenedMoves = ['dive', 'muddywater', 'surf', 'whirlpool', 'hydrovortex'];
 				if (move.type === 'Water') {
+					this.add('-message', 'The water strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (strengthenedMoves.includes(move.id)) {
+					this.add('-message', 'The attack rode the current!');
 					modifier *= 1.5;
 				}
 				if (target.isGrounded() && move.type === 'Electric') {
+					this.add('-message', 'The water conducted the attack!');
 					modifier *= 1.5;
 				}
 				if (target.isGrounded() && move.type === 'Fire') {
+					this.add('-message', 'The water deluged the attack...');
 					modifier *= 0.5;
+				}
+				if (move.id === 'wavecrash') {
+					this.add('-message', 'The attack rode the current!');
+					modifier *= 2;
 				}
 				if (change.includes(move.id) || (this.field.terrainState.Tchanges?.includes('sludgewave') && move.id === 'sludgewave')) {
 					modifier *= 5325 / 4096;
@@ -1729,25 +1739,23 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const murkwater = ['sludgewave', 'aciddownpour'];
 				const icy = ['blizzard', 'subzeroslammer', 'glaciate'];
 				if (underwater.includes(move.id)) {
+					this.add('-message', move.id === 'gravity' ? 'The battle sank into the depths!' : 'The battle was pulled underwater!');
 					this.field.changeTerrain('underwaterterrain');
 					return;
 				}
 				if (murkwater.includes(move.id) && (move.id === 'aciddownpour' || this.field.terrainState.Tchanges?.includes('sludgewave'))) {
+					this.add('-message', 'The water was polluted!');
 					this.field.changeTerrain('murkwatersurfaceterrain');
 					return;
 				}
 				if (move.id === 'sludgewave') {
+					this.add('-message', 'Poison spread through the water!');
 					this.field.terrainState.Tchanges?.push('sludgewave');
 				}
 				if (icy.includes(move.id)) {
+					this.add('-message', 'The water froze over!');
 					this.field.changeTerrain('icyterrain');
 					return;
-				}
-				if (this.field.terrainState.Tchanges?.includes('sludgewave')) {
-					this.field.terrainState.Tchanges = ['sludgewave'];
-				}
-				else {
-					this.field.terrainState.Tchanges = [];
 				}
 			},
 			onFieldStart() {
