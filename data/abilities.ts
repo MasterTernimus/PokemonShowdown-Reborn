@@ -1876,7 +1876,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.ts
 		onSourceTryPrimaryHit(target, source, effect) {
 			if (effect?.id === 'surf' && source.hasAbility('gulpmissile') && source.species.name === 'Cramorant') {
-				const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
+				let forme = '';
+				if (source.hp <= source.maxhp / 2 || this.field.isTerrain('electricterrains') || this.field.isTerrain('factoryterrain')) {
+					forme = 'cramorantgorging';
+				}
+				else if (source.hp > source.maxhp / 2 || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain')) {
+					forme = 'cramorantgulping';
+				}
 				source.formeChange(forme, effect);
 			}
 		},
@@ -3691,6 +3697,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyMove(move) {
 			// most of the implementation is in Battle#getTarget
 			move.tracksTarget = move.target !== 'scripted';
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')){
+				return this.chainModify(2);
+			}
 		},
 		flags: {},
 		name: "Propeller Tail",
@@ -5747,7 +5758,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	waterabsorb: {
 		onTryHit(target, source, move) {
-			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Water') || this.field.terrain === 'underwaterterrain') {
+			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Water') || this.field.isTerrain('underwaterterrain')) {
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Water Absorb');
 				}
