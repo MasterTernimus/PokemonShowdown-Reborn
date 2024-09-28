@@ -5276,7 +5276,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onModifySpe() {
-			if (this.field.terrain === 'psychicterrains')
+			if (this.field.isTerrain('psychicterrain'))
 				return this.chainModify(2);
 		},
 		flags: { breakable: 1 },
