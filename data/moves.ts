@@ -21043,23 +21043,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {protect: 1, mirror: 1, metronome: 1, pulse: 1},
 		onModifyType(move, pokemon) {
 			if (!pokemon.isGrounded()) return;
-			switch (this.field.terrain) {
-			case 'electricterrain':
-				move.type = 'Electric';
-				break;
-			case 'grassyterrain':
-				move.type = 'Grass';
-				break;
-			case 'mistyterrain':
-				move.type = 'Fairy';
-				break;
-			case 'psychicterrain':
-				move.type = 'Psychic';
-				break;
-			case 'bigtopterrain':
-				move.type = 'Fighting';
-				break;
+			let newType = 'Normal';
+			let terrains = ['electric', 'ashenbeach', 'bigtop', 'burning', 'cave', 'chessboard', 'corrosive', 'corrosivemist', 'crystalcavern', 'darkcrystalcavern', 'desert', 'factory', 'fairytale', 'forest', 'grassy', 'glitch', 'icy', 'mirrorarena', 'mistyterrain', 'murkwatersurface', 'psychic', 'rainbow', 'rocky', 'shortcircuit', 'superheated', 'swamp', 'underwater', 'wasteland', 'watersurface']
+			let types = ['Electric', 'Fighting', 'Fighting', 'Fire', 'Ground', 'Psychic', 'Poison', 'Poison', 'Rock', 'Dark', 'Ground', 'Steel', 'Fairy', 'Grass', 'Grassy', '???', 'Ice', 'Ice', 'Fairy', 'Water', 'Psychic', 'Fairy', 'Rock', 'Ghost', 'Fire', 'Normal', 'Water', 'Poison', 'Water'];
+			for (let i = 0; i < terrains.length; i++) {
+				terrains[i] = terrains[i] + 'terrain';
 			}
+			if (terrains.find(this.field.getTerrain().id)) {
+
+			}
+
 		},
 		onModifyMove(move, pokemon) {
 			if (this.field.terrain && pokemon.isGrounded()) {
