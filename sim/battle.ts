@@ -2827,7 +2827,7 @@ export class Battle {
 		if (this.turn === 0 && this.format.terrain) {
 			if (this.format.terrain === 'adriennterrain') {
 				this.field.startTerrain('mistyterrain');
-				this.field.terrainStack.push({id: 'fairytaleterrain', Tchanges: [], duration: 9999, turn: this.turn});
+				this.field.terrainStack.push({id: 'fairytaleterrain', isBase: true, Tchanges: [], duration: 9999, turn: this.turn});
 			}
 			else {
 				this.field.startTerrain(this.format.terrain);

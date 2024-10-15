@@ -5,9 +5,9 @@
  * @license MIT
  */
 
-import {State} from './state';
-import {EffectState} from './pokemon';
-import {toID} from './dex';
+import { toID } from './dex';
+import { EffectState } from './pokemon';
+import { State } from './state';
 
 export class Field {
 	readonly battle: Battle;
@@ -136,6 +136,7 @@ export class Field {
 		status = this.battle.dex.conditions.get(status);
 		this.terrain = status.id;
 		this.terrainState = {
+			isBase: true,
 			id: status.id,
 			Tchanges: [],
 			duration: 9999,
@@ -147,14 +148,14 @@ export class Field {
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		let TempTerrains = ['rainbowterrain', 'glitchterrain', 'inverseterrain', 'swampterrain', 'burningterrain'];
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
-
 		if (this.terrain === status.id) return false;
-		if (this.terrain === 'underwaterterrain') {
+		if (this.isTerrain('underwaterterrain')) {
 			this.battle.add('-message', 'The field was annihilated by the crushing weight of the ocean!');
 			return false;
 		}
@@ -165,6 +166,7 @@ export class Field {
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
 		this.terrainState = {
+			isBase: false,
 			id: status.id,
 			source,
 			sourceSlot: source.getSlot(),
@@ -180,7 +182,9 @@ export class Field {
 			this.terrainState = prevTerrainState;
 			return false;
 		}
-		this.terrainStack.unshift(this.terrainState);
+		if (!TempTerrains.includes(this.terrain)){
+			this.terrainStack.unshift(this.terrainState);
+		}
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		return true;
 	}
@@ -193,6 +197,7 @@ export class Field {
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
 		this.terrainState = {
+			isBase: false
 			id: status.id,
 			Tchanges: [],
 			origin: sourceEffect,
@@ -200,7 +205,7 @@ export class Field {
 			turn: this.battle.turn,
 			prevterrain: prevTerrainState.id,
 		};
-		if (this.terrainState.duration > 10) {
+		if (this.terrainState.isBase) {
 			this.terrainStack[0] = this.terrainState;
 		}
 		this.battle.add('-fieldstart', status.name);
@@ -212,14 +217,14 @@ export class Field {
 	}
 
 	breakTerrains() {
-		if (this.terrain === '' || this.terrainState.duration > 10) return false;
+		if (this.terrain === '' || this.terrainState.isBase) return false;
 		const prevTerrain = this.getTerrain();
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 		let isterrain = false;
 		for (const terrainState of this.terrainStack) {
 			console.log(terrainState.duration);
-			if (terrainState.duration < 10) {
-				this.terrainStack.shift() //Yes I know this is a hack. I just don't think I've added source effect for all user created terrains. Will do as I come across it
+			if (!terrainState.isBase) {
+				this.terrainStack.shift()
 			} else {
 				isterrain = true;
 				break;
