@@ -363,7 +363,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
 		onSwitchIn() {
-			if (this.field.terrain === 'fairytaleterrain') {
+			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1 });
 			}
 		},
@@ -1190,17 +1190,17 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}
 		},
-		onResidual(target) {
+		onResidual(pokemon) {
 			if (!this.field.isWeather('raindance') || !this.field.isWeather('sunnyday')) {
-				if (this.field.isTerrain('mistyterrain') || (this.field.isTerrain('watersurfaceterrain') && target.isGrounded()) || this.field.isTerrain('underwaterterrain') || (this.field.isTerrain('murkwatersurfaceterrain') && target.isGrounded() && target.types.includes('Poison'))) {
-					this.heal(target.baseMaxhp / 16);
+				if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison') || this.field.isTerrain('underwaterterrain'))) {
+					this.heal(pokemon.baseMaxhp / 16);
 				}
-				if (this.field.terrain === 'corrosivemistterrain') {
-					if (target.types.includes("Poison")) {
-						this.heal(target.baseMaxhp / 8);
+				if (this.field.isTerrain('corrosivemistterrain')) {
+					if (pokemon.types.includes("Poison")) {
+						this.heal(pokemon.baseMaxhp / 8);
 					}
-					else if (!target.types.includes("Steel")) {
-						this.damage(target.baseMaxhp / 8, target, target);
+					else if (!pokemon.types.includes("Steel")) {
+						this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
 					}
 				}
 				if (this.field.isTerrain('desertterrain')) {
@@ -1370,7 +1370,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
 		onModifyMove(move) {
-			if (this.field.terrain === 'fairytaleterrain')
+			if (this.field.isTerrain('fairytaleterrain'))
 				move.accuracy = true;
 		},
 		onAnyBasePowerPriority: 20,
@@ -2054,7 +2054,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
-			if (pokemon.status && ['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
+			if (pokemon.status && ['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) {
 				this.debug('hydration');
 				this.add('-activate', pokemon, 'ability: Hydration');
 				pokemon.cureStatus();
@@ -2610,7 +2610,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	magicbounce: {
 		onTryHitPriority: 1,
 		onSwitchIn(pokemon) {
-			if (this.field.terrain === 'fairytaleterrain') {
+			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ spd: 1 }, pokemon);
 			}
 			if (this.field.isTerrain('mirrorarenaterrain')) {
@@ -4303,7 +4303,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	schooling: {
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed) return;
-			if (pokemon.hp > pokemon.maxhp / 4 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+			if (pokemon.hp > pokemon.maxhp / 4 || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
 				if (pokemon.species.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
 				}
@@ -5766,7 +5766,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.terrain === 'watersurfaceterrain' && pokemon.isGrounded() || (this.field.terrain === 'murkwatersurfaceterrain' && pokemon.isGrounded() && pokemon.types.includes('Poison'))) {
+			if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison') || this.field.isTerrain('underwaterterrain'))) {
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},

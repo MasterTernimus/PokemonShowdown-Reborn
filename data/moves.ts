@@ -485,10 +485,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 			},
 			onResidualOrder: 6,
 			onResidual(pokemon) {
-				if (this.field.terrain === 'mistyterrain' || this.field.terrain === 'swampterrain' || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
+				if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('swampterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) {
 					this.heal(pokemon.baseMaxhp / 8);
 				}
-				if (this.field.terrain === 'corrosivemistterrain' && (!(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))))
+				if (this.field.isTerrain('corrosivemistterrain') && (!(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))))
 					this.damage(pokemon.baseMaxhp / 16);
 				else
 					this.heal(pokemon.baseMaxhp / 16);
@@ -8924,15 +8924,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		selfdestruct: "ifHit",
 		slotCondition: 'healingwish',
 		condition: {
-			onSwap(target) {
+			onSwap(target, source) {
 				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
 					target.heal(target.maxhp);
 					target.clearStatus();
-					if (this.field.terrain === 'fairytaleterrain') {
-						target.setBoost({atk: 1, spa: 1});
-					}
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSlotCondition(target, 'healingwish');
+				}
+				if (this.field.isTerrain('fairytaleterrain')) {
+					this.boost({ atk: 1, spa: 1 }, target, source);
 				}
 			},
 		},
@@ -19085,6 +19085,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers = 1;
 				if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
+					this.add('-message', '...The spikes sank into the water and vanished!');
 					this.add('-sideend', side, 'Spikes');
 					side.removeSideCondition('spikes');
 				}
@@ -21550,6 +21551,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers = 1;
 				if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
+					this.add('-message', '...The spikes sank into the water and vanished!');
 					this.add('-sideend', side, 'move: Toxic Spikes');
 					side.removeSideCondition('toxicspikes');
 				}
