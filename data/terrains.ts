@@ -1702,6 +1702,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onTryMove(source, target, move) {
 				if ((move.type === 'Ground' && move.category !== 'Status') || move.id === 'sandattack') {
+					this.add('-message', '...But there was no solid ground to attack from!');
 					return false;
 				}
 			},
@@ -1760,6 +1761,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Water Surface Terrain');
+				this.add('-message', 'The water\'s surface is calm.');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Water Surface Terrain');
