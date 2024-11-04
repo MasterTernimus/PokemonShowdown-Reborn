@@ -53,7 +53,7 @@ export class Field {
 				return false;
 			}
 		}
-		if (this.terrain === 'underwaterterrain') {
+		if (this.isTerrain('underwaterterrain')) {
 			this.battle.add('-message', 'The weather was annihilated by the crushing weight of the ocean!');
 			return false;
 		}

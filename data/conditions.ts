@@ -14,7 +14,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		// Damage reduction is handled directly in the sim/battle.js damage function
 		onResidualOrder: 10,
 		onResidual(pokemon) {
-			if (this.field.terrain === 'icyterrain')
+			if (this.field.isTerrain('icyterrain'))
 				this.damage(pokemon.baseMaxhp / 32);
 			else
 				this.damage(pokemon.baseMaxhp / 16);
