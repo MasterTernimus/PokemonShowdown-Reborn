@@ -970,8 +970,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifyMove(move, pokemon) {
 				const speedMoves = ['accelerock', 'aquajet', 'bulletpunch', 'extremespeed', 'fakeout', 'firstimpression', 'machpunch', 'quickattack', 'shadowsneak', 'suckerpunch', 'defemsecurl', 'feint', 'lunge', 'rollout', 'steamroller'];
 				if (speedMoves.includes(move.id) && pokemon.isGrounded()) {
-					move.boosts = {
-						spe: 1
+					move.selfBoost = {
+						boosts: {
+							spe: 1
+						}
 					};
 				}
 				if (move.type === 'Rock') {
@@ -1601,7 +1603,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
-				let immune = ['magicguard', 'swiftswim'];
+				let immune = ['magicguard', 'swiftswim', 'waterabsorb'];
 				let weak = ['flamebody', 'magmaarmor'];
 				if (!immune.includes(pokemon.ability)) {
 					let typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', pokemon.types), -6, 6);
