@@ -5758,7 +5758,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	waterabsorb: {
 		onTryHit(target, source, move) {
-			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Water') || this.field.isTerrain('underwaterterrain')) {
+			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Water')) {
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Water Absorb');
 				}

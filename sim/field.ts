@@ -197,7 +197,7 @@ export class Field {
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
 		this.terrainState = {
-			isBase: false,
+			isBase: prevTerrainState.isBase,
 			id: status.id,
 			Tchanges: [],
 			origin: sourceEffect,
