@@ -1102,7 +1102,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'psn' || target.status === 'tox') {
+			if (target.status === 'psn' || target.status === 'tox' || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('wastelandterrain') || this.field.isTerrain('wastelandterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -6618,6 +6618,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
+			if (this.field.isTerrain('icyterrain')) {
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+				return;
+			}
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -9955,6 +9960,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
+			if (this.field.isTerrain('icyterrain')) {
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+				return;
+			}
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -13267,7 +13277,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Mountain Gale",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('icyterrain')) {
+				move.accuracy = 100;
+			}
+		}, 
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -18690,7 +18705,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Snipe Shot",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('icyterrain')) {
+				move.types = [move.type, 'Ice'];
+			}
+		},
 		critRatio: 2,
 		tracksTarget: true,
 		secondary: null,

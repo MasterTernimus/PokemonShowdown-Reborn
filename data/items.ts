@@ -1661,7 +1661,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -1688,19 +1688,19 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ atk: 1, spa: 1 });
 				pokemon.trySetStatus('tox');
 			}
-			if (this.field.terrain === 'watersurfaceterrain') {
+			if (this.field.isTerrain('watersurfaceterrain')) {
 				this.boost({ spd: 1 });
 				pokemon.addVolatile('aquaring');
 			}
-			if (this.field.terrain === 'underwaterterrain') {
+			if (this.field.isTerrain('underwaterterrain')) {
 				this.boost({ spe: 1 });
 				this.actions.useMove('soak', pokemon, pokemon);
 			}
-			if (this.field.terrain === 'murkwatersurfaceterrain') {
+			if (this.field.isTerrain('murkwatersurfaceterrain')) {
 				this.boost({ spe: 1 });
 				pokemon.addVolatile('aquaring');
 			}
-			if (this.field.terrain === 'icyterrain') {
+			if (this.field.isTerrain('icyterrain')) {
 				this.boost({ spe: 2 });
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[pokemon.side.sideConditions['spikes'] !== undefined ? pokemon.side.sideConditions['spikes'].layers : 1] * pokemon.maxhp / 24);

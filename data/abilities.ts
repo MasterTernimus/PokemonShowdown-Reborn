@@ -5766,7 +5766,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual(pokemon) {
-			if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison') || this.field.isTerrain('underwaterterrain'))) {
+			if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison')) || this.field.isTerrain('underwaterterrain')) {
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
@@ -5831,7 +5831,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual() {
-			if (this.field.isTerrain('underwaterterrain') || this.field.isTerrain('waterterrain')) {
+			if (this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain')) {
 				this.boost({ def: 2 });
 			}
 		},
@@ -6019,7 +6019,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
+			if ((pokemon.hp <= pokemon.maxhp / 2 || this.field.isTerrain('icyterrain')) && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
 				pokemon.addVolatile('zenmode');
 			} else if (pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
