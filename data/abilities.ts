@@ -4969,7 +4969,8 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			if (move.type !== 'Water' || move.flags['pledgecombo']) return;
+			let seeds = ['elementalseed', 'magicseed', 'telluricseed', 'syntheticseed'];
+			if (move.type !== 'Water' || move.flags['pledgecombo'] || (seeds.includes(move.sourceEffect) && target===source)) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
