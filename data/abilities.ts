@@ -4641,7 +4641,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	slushrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.terrain === 'icyterrain') {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('icyterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -4677,7 +4677,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather(['hail', 'snow']) || this.field.terrain === 'icyterrain') {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('icyterrain')) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -5149,7 +5149,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	swiftswim: {
 		onModifySpe(spe, pokemon) {
-			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) || this.field.isTerrain('watersurfaceterrain') || this.field.terrain === 'underwaterterrain' || this.field.terrain === 'murkwatersurfaceterrain') {
 				return this.chainModify(2);
 			}
 		},
