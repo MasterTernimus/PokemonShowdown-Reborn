@@ -2290,39 +2290,42 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {snatch: 1, metronome: 1},
 		onHit(target) {
 			let newType = 'Normal';
-			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('shortcircuitterrain')) {
-				newType = 'Electric';
-			} else if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('forestterrain')) {
-				newType = 'Grass';
-			} else if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain')) {
-				newType = 'Fairy';
-			} else if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain')) {
-				newType = 'Psychic';
-			} else if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain')) {
-				newType = 'Poison';
-			} else if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
-				newType = 'Fire';
-			} else if (this.field.isTerrain('swampterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.terrain === 'underwaterterrain' || this.field.isTerrain("murkwatersurfaceterrain")) {
-				newType = 'Water';
-			} else if (this.field.isTerrain('rainbowterrain')) {
-				newType = 'Dragon';
-			} else if (this.field.isTerrain('icyterrain')) {
-				newType = 'Ice';
-			} else if (this.field.isTerrain('glitchterrain')) {
-				newType = '???';
-			} else if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('caveterrain')) {
-				newType = 'Rock';
-			} else if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
-				newType = 'Ground';
-			} else if (this.field.isTerrain('factoryterrain') || this.field.isTerrain('mirrorarenaterrain')) {
-				newType = 'Steel';
-			} else if (this.field.isTerrain('darkcrystalcavernterrain')) {
-				newType = 'Dark';
-			} else if (this.field.isTerrain('crystalcavernterrain')) {
+			const terrainTypeMap = new Map<string, string>([
+				['electricterrain', 'Electric'],
+				['shortcircuitterrain', 'Electric'],
+				['grassyterrain', 'Grass'],
+				['forestterrain', 'Grass'],
+				['mistyterrain', 'Fairy'],
+				['fairytaleterrain', 'Fairy'],
+				['psychicterrain', 'Psychic'],
+				['chessboardterrain', 'Psychic'],
+				['corrosivemistterrain', 'Poison'],
+				['corrosiveterrain', 'Poison'],
+				['burningterrain', 'Fire'],
+				['superheatedterrain', 'Fire'],
+				['swampterrain', 'Water'],
+				['watersurfaceterrain', 'Water'],
+				['underwaterterrain', 'Water'],
+				['murkwatersurfaceterrain', 'Water'],
+				['rainbowterrain', 'Dragon'],
+				['icyterrain', 'Ice'],
+				['glitchterrain', '???'],
+				['rockyterrain', 'Rock'],
+				['caveterrain', 'Rock'],
+				['desertterrain', 'Ground'],
+				['ashenbeachterrain', 'Ground'],
+				['factoryterrain', 'Steel'],
+				['mirrorarenaterrain', 'Steel'],
+				['darkcrystalcavernterrain', 'Dark'],
+				['bigtopterrain', 'Normal']
+			]);
+			if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				newType = counter[this.CrystalCavernCounter];
-			} else if (this.field.isTerrain('bigtopterrain')) {
-				newType = 'Normal';
+			}
+			else {
+				let possibleType = terrainTypeMap.get(this.field.getTerrain().id);
+				newType = possibleType !== undefined ? possibleType : newType;
 			}
 			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
@@ -13537,65 +13540,39 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		onTryHit(target, pokemon) {
 			let move = 'triattack';
-			if (this.field.isTerrain('electricterrain')) {
-				move = 'thunderbolt';
-			} else if (this.field.isTerrain('grassyterrain')) {
-				move = 'energyball';
-			} else if (this.field.isTerrain('mistyterrain')) {
-				move = 'mistball';
-			} else if (this.field.isTerrain('psychicterrain')) {
-				move = 'psychic';
-			} else if (this.field.isTerrain('corrosivemistterrain')) {
-				move = 'venoshock';
-			} else if (this.field.isTerrain('corrosiveterrain')) {
-				move = 'acidspray';
-			} else if (this.field.isTerrain('burningterrain')) {
-				move = 'flamethrower';
-			} else if (this.field.isTerrain('swampterrain')) {
-				move = 'muddywater';
-			} else if (this.field.isTerrain('rainbowterrain')) {
-				move = 'aurorabeam';
-			} else if (this.field.isTerrain('fairytaleterrain')) {
-				move = 'secretsword';
-			} else if (this.field.isTerrain('watersurfaceterrain')) {
-				move = 'whirlpool';
-			} else if (this.field.isTerrain('underwaterterrain')) {
-				move = 'waterpulse';
-			} else if (this.field.isTerrain('murkwatersurfaceterrain')) {
-				move = 'sludgewave';
-			} else if (this.field.isTerrain('icyterrain')) {
-				move = 'icebeam';
-			} else if (this.field.isTerrain('glitchterrain')) {
-				move = 'metronome';
-			} else if (this.field.isTerrain('rockyterrain')) {
-				move = 'rocksmash';
-			} else if (this.field.isTerrain('desertterrain')) {
-				move = 'sandtomb';
-			} else if (this.field.isTerrain('forestterrain')) {
-				move = 'woodhammer';
-			} else if (this.field.isTerrain('shortcircuitterrain')) {
-				move = 'discharge';
-			} else if (this.field.isTerrain('factoryterrain')) {
-				move = 'geargrind';
-			} else if (this.field.isTerrain('ashenbeachterrain')) {
-				move = 'meditate';
-			} else if (this.field.isTerrain('wastelandterrain')) {
-				move = 'gunkshot';
-			} else if (this.field.isTerrain('mirrorarenaterrain')) {
-				move = 'mirrorshot';
-			} else if (this.field.isTerrain('chessboardterrain')) {
-				move = 'ancientpower';
-			} else if (this.field.isTerrain('darkcrystalcavernterrain')) {
-				move = 'darkpulse';
-			} else if (this.field.isTerrain('crystalcavernterrain')) {
-				move = 'powergem';
-			} else if (this.field.isTerrain('caveterrain')) {
-				move = 'rocktomb';
-			} else if (this.field.isTerrain('bigtopterrain')) {
-				move = 'acrobatics';
-			} else if (this.field.isTerrain('superheatedterrain')) {
-				move = 'heatwave';
-			}
+			const terrainMoveMap = new Map<string, string>([
+				['electricterrain', 'thunderbolt'],
+				['grassyterrain', 'energyball'],
+				['mistyterrain', 'mistball'],
+				['psychicterrain', 'psychic'],
+				['corrosivemistterrain', 'venoshock'],
+				['corrosiveterrain', 'acidspray'],
+				['burningterrain', 'flamethrower'],
+				['swampterrain', 'muddywater'],
+				['rainbowterrain', 'aurorabeam'],
+				['fairytaleterrain', 'secretsword'],
+				['watersurfaceterrain', 'whirlpool'],
+				['underwaterterrain', 'waterpulse'],
+				['murkwatersurfaceterrain', 'sludgewave'],
+				['icyterrain', 'icebeam'],
+				['glitchterrain', 'metronome'],
+				['rockyterrain', 'rocksmash'],
+				['desertterrain', 'sandtomb'],
+				['forestterrain', 'woodhammer'],
+				['shortcircuitterrain', 'discharge'],
+				['factoryterrain', 'geargrind'],
+				['ashenbeachterrain', 'meditate'],
+				['wastelandterrain', 'gunkshot'],
+				['mirrorarenaterrain', 'mirrorshot'],
+				['chessboardterrain', 'ancientpower'],
+				['darkcrystalcavernterrain', 'darkpulse'],
+				['crystalcavernterrain', 'powergem'],
+				['caveterrain', 'rocktomb'],
+				['bigtopterrain', 'acrobatics'],
+				['superheatedterrain', 'heatwave']
+			]);
+			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
+			move = newMove !== undefined ? newMove : move;
 			this.actions.useMove(move, pokemon, target);
 			return null;
 		},
@@ -21064,16 +21041,39 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {protect: 1, mirror: 1, metronome: 1, pulse: 1},
 		onModifyType(move, pokemon) {
 			if (!pokemon.isGrounded()) return;
-			let newType = 'Normal';
-			let terrains = ['electric', 'ashenbeach', 'bigtop', 'burning', 'cave', 'chessboard', 'corrosive', 'corrosivemist', 'crystalcavern', 'darkcrystalcavern', 'desert', 'factory', 'fairytale', 'forest', 'grassy', 'glitch', 'icy', 'mirrorarena', 'mistyterrain', 'murkwatersurface', 'psychic', 'rainbow', 'rocky', 'shortcircuit', 'superheated', 'swamp', 'underwater', 'wasteland', 'watersurface']
-			let types = ['Electric', 'Fighting', 'Fighting', 'Fire', 'Ground', 'Psychic', 'Poison', 'Poison', 'Rock', 'Dark', 'Ground', 'Steel', 'Fairy', 'Grass', 'Grassy', '???', 'Ice', 'Ice', 'Fairy', 'Water', 'Psychic', 'Fairy', 'Rock', 'Ghost', 'Fire', 'Normal', 'Water', 'Poison', 'Water'];
-			for (let i = 0; i < terrains.length; i++) {
-				terrains[i] = terrains[i] + 'terrain';
-			}
-			if (terrains.find(this.field.getTerrain().id)) {
-
-			}
-
+			const terrainTypeMap = new Map<string, string>([
+				['electricterrain', 'Electric'],
+				['ashenbeachterrain', 'Fighting'],
+				['bigtopterrain', 'Fighting'],
+				['burningterrain', 'Fire'],
+				['caveterrain', 'Ground'],
+				['chessboardterrain', 'Psychic'],
+				['corrosiveterrain', 'Poison'],
+				['corrosivimisterrain', 'Poison'],
+				['crystalcavernterrain', 'Rock'],
+				['darkcrystalcavernterrain', 'Dark'],
+				['desertterrain', 'Ground'],
+				['factoryterrain', 'Steel'],
+				['fairytaleterrain', 'Fairy'],
+				['forestterrain', 'Grass'],
+				['grassyterrain', 'Grass'],
+				['glitchterrain', '???'],
+				['icyterrain', 'Ice'],
+				['mirrorarenaterrain', 'Ice'],
+				['mistyterrainterrain', 'Fairy'],
+				['murkwatersurfaceterrain', 'Water'],
+				['psychicterrain', 'Psychic'],
+				['rainbowterrain', 'Fairy'],
+				['rockyterrain', 'Rock'],
+				['shortcircuitterrain', 'Ghost'],
+				['superheatedterrain', 'Fire'],
+				['swampterrain', 'Normal'],
+				['underwaterrain', 'Water'],
+				['wastelandterrain', 'Poison'],
+				['watersurfaceterrain', 'Water']
+			]);
+			let newType = terrainTypeMap.get(this.field.getTerrain().id);
+			move.type = newType !== undefined ? newType : "Normal";
 		},
 		onModifyMove(move, pokemon) {
 			if (this.field.terrain && pokemon.isGrounded()) {
