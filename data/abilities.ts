@@ -4165,13 +4165,23 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move && move.type === 'Rock') {
-				this.debug('Rocky Payload boost');
-				return this.chainModify(1.5);
+				if (this.field.isTerrain('rockyterrain')) {
+					this.debug('Rocky Payload double boost');
+					return this.chainModify(2);
+				}
+				else {
+					this.debug('Rocky Payload boost');
+					return this.chainModify(1.5);
+				}
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move && move.type === 'Rock') {
+			if (this.field.isTerrain('rockyterrain')) {
+				this.debug('Rocky Payload double boost');
+				return this.chainModify(2);
+			}
+			else {
 				this.debug('Rocky Payload boost');
 				return this.chainModify(1.5);
 			}

@@ -1298,6 +1298,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onTryAddVolatile(status, pokemon) {
 				if (status.id === 'flinch' && pokemon.boosts.def > 0) {
+					this.add('-message', pokemon.name + ' won\'t flinch because of its bolstered Defenses!')
 					return null;
 				}
 			},
@@ -1317,12 +1318,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const rockymoves = ['bulldoze', 'earthquake', 'magnitude', 'rockclimb', 'strength', 'accelerock'];
 				if (move.type === 'Rock') {
+					this.add('-message', 'The field strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (move.id === 'rocksmash') {
+					this.add('-message', 'SMASH\'D!');
 					modifier *= 2;
 				}
 				if (rockymoves.includes(move.id)) {
+					this.add('-message', 'The rocks strengthened the attack!');
 					modifier *= 1.5;
 				}
 				return this.chainModify(modifier);
