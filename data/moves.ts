@@ -2317,7 +2317,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['factoryterrain', 'Steel'],
 				['mirrorarenaterrain', 'Steel'],
 				['darkcrystalcavernterrain', 'Dark'],
-				['bigtopterrain', 'Normal']
+				['bigtopterrain', 'Normal'],
+				['dragonsdenterrain', 'Dragon']
 			]);
 			if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
@@ -4400,7 +4401,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, dance: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('bigtopterrain')) {
+			if (this.field.isTerrain('bigtopterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				move.boosts = {
 					atk: 2,
 					spe: 2,
@@ -13564,7 +13565,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['crystalcavernterrain', 'powergem'],
 				['caveterrain', 'rocktomb'],
 				['bigtopterrain', 'acrobatics'],
-				['superheatedterrain', 'heatwave']
+				['superheatedterrain', 'heatwave'],
+				['dragonsdenterrain', 'dragonpulse']
 			]);
 			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
@@ -13723,7 +13725,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.terrain === 'fairytaleterrain') {
+			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				move.boosts = {
 					atk: -2,
 					spa: -2
@@ -17159,7 +17161,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 30,
 					status: 'psn',
 				});
-			} else if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
+			} else if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					status: 'brn',
