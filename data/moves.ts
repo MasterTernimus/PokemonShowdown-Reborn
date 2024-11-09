@@ -23048,9 +23048,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		onModifyMove(move) {
-			move.accuracy = 80;
-		},
 		secondary: {
 			chance: 100,
 			status: 'par',
