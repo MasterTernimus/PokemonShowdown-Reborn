@@ -17765,7 +17765,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.add('-fail', pokemon, 'heal');
 				return this.NOT_FAIL;
 			} else {
-				if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('murkwatersurfaceterrain)') {
+				if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
 					if (pokemon.hasAbility('watercompaction')) {
 						this.boost({ def: 2 });
 					}
