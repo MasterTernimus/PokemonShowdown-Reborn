@@ -247,6 +247,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.isTerrain('desertterrain') && effect.id === 'sandtomb') {
 				this.effectState.boundDivisor = 6;
 			}
+			if (this.field.isTerrain('dragonsdenterrain') && effect.id === 'magmastorm') {
+				this.effectState.boundDivisor = 6;
+			}
 		},
 		onResidualOrder: 13,
 		onResidual(pokemon) {

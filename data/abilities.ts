@@ -1126,7 +1126,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move && move && move.type === 'Dragon') {
 				this.debug('Dragon\'s Maw boost');
-				return this.chainModify(1.5);
+				if (this.field.isTerrain('dragonsdenterrain')) {
+					return this.chainModify(2);
+				}
+				else {
+					return this.chainModify(1.5);
+				}
 			}
 		},
 		onModifySpAPriority: 5,
@@ -2696,6 +2701,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				pokemon.cureStatus();
 			}
 		},
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Fire') && this.field.isTerrain('dragonsdenterrain')) {
+				move.accuracy = true;
+				if (!target.addVolatile('magmaarmor')) {
+					this.add('-immune', target, '[from] ability: Magma Armor');
+				}
+				return null;
+			}
+		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move && move.type === 'Water') {
@@ -2739,7 +2758,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	marvelscale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
-			if (pokemon.status || this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain')) {
+			if (pokemon.status || this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -2968,6 +2987,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 153,
 	},
 	multiscale: {
+		onEffectiveness(typeMod, target, type, move) {
+			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Dragon' && typeMod > 0) {
+				this.add('-message', 'The luminous scales were supercharged by the field and blunted the attack!');
+				return 0;
+			}
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp >= target.maxhp) {
 				this.debug('Multiscale weaken');
@@ -4460,10 +4485,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
-			if (pokemon.hp && pokemon.status && this.randomChance(33, 100)) {
+			if (pokemon.hp && pokemon.status && (this.randomChance(33, 100) || this.field.isTerrain('dragonsdenterrain'))) {
 				this.debug('shed skin');
 				this.add('-activate', pokemon, 'ability: Shed Skin');
 				pokemon.cureStatus();
+				if (this.field.isTerrain('dragonsdenterrain')) {
+					this.boost({ spa: 1, spe: 1, def: -1, spd: -1 }, pokemon, pokemon);
+					this.heal(pokemon.maxhp / 4, pokemon, pokemon);
+				}
 			}
 		},
 		flags: {},
@@ -5381,7 +5410,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			return false;
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('superheatedterrain')) {
+			if (this.field.isTerrain('superheatedterrain') || this.field.isTerrain('dragonsdenterrain') || this.field.isTerrain('burningterrain')) {
 				this.add('-activate', pokemon, 'ability: Thermal Exchange');
 				this.boost({ atk: 1 });
 			}
@@ -5898,7 +5927,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
+			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				this.boost({ def: 2 }, pokemon);
 			}
 		},

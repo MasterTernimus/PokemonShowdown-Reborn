@@ -741,6 +741,87 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	dragonsdenterrain: {
+		name: "Dragon's Den Terrain",
+		condition: {
+			duration: 9999,
+			onModifyDef(def, pokemon) {
+				if (pokemon.hasType('Dragon')) {
+					return this.chainModify(1.3);
+				}
+			},
+			onModifySpD(spd, pokemon) {
+				if (pokemon.hasType('dragon')) {
+					return this.chainModify(1.3);
+				}
+			},
+			onBasePowerPriority: 6,
+			onModifyMove(move) {
+				const fire_moves = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage'];
+				if (fire_moves.includes(move.id)) {
+					move.types = [move.type, 'Fire'];
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const uberboost = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage', 'dragonascent', 'payday'];
+				const boost = ['lavaplume', 'magmastorm', 'megakick', 'makeitrain'];
+				const terrain_change = ['glaciate', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer'];
+				const terrain_change2 = ['muddywater', 'sparklingaria', 'surf'];
+				if (move.type === 'Dragon' || move.type === 'Fire') {
+					this.add('-message', 'The ambient dragon fire boosted the attack!')
+					modifier *= 1.5;
+				}
+				if (move.type === 'Ice' || move.type === 'Water') {
+					this.add('-message', 'The lava\'s heat softened the attack...');
+					modifier *= 0.5;
+				}
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (uberboost.includes(move.id)) {
+					modifier *= 2;
+				}
+				if (terrain_change.includes(move.id) || (this.field.terrainState.Tchanges?.includes(move.id) && terrain_change2.includes(move.id))) {
+					modifier *= 1.3;
+				}
+				const moveMessages = new Map<string, string>([
+					['megakick', 'Trial of the Dragon!!!'],
+					['magmastorm', 'The lava strengthened the attack!'],
+					['lavaplume', 'The lava strengthened the attack!'],
+					['dragonascent', 'The draconic energy boosted the attack!'],
+					['payday', 'money money money money money mothafucka'],
+					['makeitrain', 'money money money money money mothafucka'],
+				]);
+				if (moveMessages.has(move.id)) {
+					this.add('-message', moveMessages.get(move.id)!);
+				}
+				if (move.id === 'smackdown' || move.id === 'thousandarrows') {
+					this.add('-message', target.name + ' was knocked into the lava!')
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				const terrain_change = ['glaciate', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer'];
+				const terrain_change2 = ['muddywater', 'sparklingaria', 'surf'];
+				if (terrain_change.includes(move.id) || (this.field.terrainState.Tchanges?.includes(move.id) && terrain_change2.includes(move.id))) {
+					this.add('-message', 'The lava solidified!');
+					this.field.changeTerrain('caveterrain');
+				}
+				else if (terrain_change2.includes(move.id)) {
+					this.add('-message', 'The lava began to harden!');
+					this.field.terrainState.Tchanges?.push(move.id);
+				}
+			},
+			onFieldStart() {
+				this.add('-message', 'If you wish to slay a dragon...');
+				this.add('-fieldstart', 'Dragons Den Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Dragons Den Terrain');
+			}
+		}
+	},
 	factoryterrain: {
 		name: "Factory Terrain",
 		condition: {

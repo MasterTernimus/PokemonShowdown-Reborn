@@ -1661,7 +1661,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -1704,6 +1704,11 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ spe: 2 });
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[pokemon.side.sideConditions['spikes'] !== undefined ? pokemon.side.sideConditions['spikes'].layers : 1] * pokemon.maxhp / 24);
+			}
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				this.add('-message', pokemon.name + ' raised its Fire power!');
+				this.boost({ spa: 1 });
+				pokemon.addVolatile('flashfire', pokemon, item);
 			}
 		},
 		onTerrainChange(pokemon) {
@@ -5591,6 +5596,11 @@ export const Items: {[itemid: string]: ItemData} = {
 	starsweet: {
 		name: "Star Sweet",
 		spritenum: 709,
+		onSetStatus(condition, target, source, effect) {
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				return false;
+			}
+		},
 		fling: {
 			basePower: 10,
 		},
