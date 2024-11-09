@@ -1217,7 +1217,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				let immune = ['surgesurfer', 'swiftswim'];
-				if (!pokemon.types.includes('Water') || !immune.includes(pokemon.ability)) {
+				if (!pokemon.hasType('Water') || !immune.includes(pokemon.ability)) {
 					return this.chainModify(0.75);
 				}
 			},
