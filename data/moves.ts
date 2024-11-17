@@ -13459,6 +13459,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			self: {
 				boosts: {
 					spa: 1,
+					spd: 1,
 				},
 			},
 		},
