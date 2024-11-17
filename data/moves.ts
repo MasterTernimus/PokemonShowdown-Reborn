@@ -1102,7 +1102,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'psn' || target.status === 'tox' || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('wastelandterrain') || this.field.isTerrain('wastelandterrain')) {
+			if (target.status || target.hasAbility('comatose') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('wastelandterrain') || this.field.isTerrain('wastelandterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -2398,6 +2398,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				}
 			}
 		},
+		critRatio: 2,
 		secondary: {}, // Sheer Force-boosted
 		target: "normal",
 		type: "Dark",
@@ -17697,7 +17698,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {snatch: 1, metronome: 1},
 		boosts: {
-			def: 2,
+			def: 1,
+			spd: 1,
 		},
 		secondary: null,
 		target: "self",
@@ -19732,6 +19734,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				}
 			}
 		},
+		critRatio: 2,
 		secondary: {}, // Sheer Force-boosted
 		target: "normal",
 		type: "Rock",
