@@ -8399,7 +8399,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Psychic", "Fighting"],
 		gender: "M",
 		baseStats: {hp: 68, atk: 165, def: 95, spa: 65, spd: 115, spe: 110},
-		abilities: {0: "Inner Focus"},
+		abilities: {0: "Sharpness"},
 		heightm: 1.6,
 		weightkg: 56.4,
 		color: "White",
