@@ -19309,10 +19309,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {},
 		onHit() {
-			this.field.clearTerrain();
+			this.field.removeTerrain();
 		},
 		onAfterSubDamage() {
-			this.field.clearTerrain();
+			this.field.removeTerrain();
 		},
 		isZ: "lycaniumz",
 		secondary: null,
