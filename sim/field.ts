@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-spacing */
 /**
  * Simulator Field
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -148,6 +149,7 @@ export class Field {
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		const TempTerrains = ['rainbowterrain', 'glitchterrain', 'inverseterrain', 'swampterrain', 'burningterrain'];
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -222,7 +224,6 @@ export class Field {
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 		let isterrain = false;
 		for (const terrainState of this.terrainStack) {
-			console.log(terrainState.duration);
 			if (!terrainState.isBase) {
 				this.terrainStack.shift();
 			} else {
@@ -276,8 +277,12 @@ export class Field {
 		if (this.isTerrain('') || this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) return false;
 		const prevTerrain = this.getTerrain();
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-		this.terrain = '';
-		this.terrainState = {id: ''};
+		if (this.terrainState.isBase) {
+			this.terrain = '';
+			this.terrainState = { id: '' };
+		} else {
+			this.clearTerrain();
+		}
 		this.battle.eachEvent('TerrainChange');
 		return true;
 	}
