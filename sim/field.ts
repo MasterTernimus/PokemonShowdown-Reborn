@@ -27,9 +27,9 @@ export class Field {
 		this.id = '';
 
 		this.weather = '';
-		this.weatherState = {id: ''};
+		this.weatherState = { id: '' };
 		this.terrain = '';
-		this.terrainState = {id: '', Tchanges: [], prevterrain: ''};
+		this.terrainState = { id: '', Tchanges: [], prevterrain: '' };
 		this.terrainStack = [];
 		this.pseudoWeather = {};
 	}
@@ -73,7 +73,7 @@ export class Field {
 		const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
-		this.weatherState = {id: status.id};
+		this.weatherState = { id: status.id };
 		if (source) {
 			this.weatherState.source = source;
 			this.weatherState.sourceSlot = source.getSlot();
@@ -99,7 +99,7 @@ export class Field {
 		const prevWeather = this.getWeather();
 		this.battle.singleEvent('FieldEnd', prevWeather, this.weatherState, this);
 		this.weather = '';
-		this.weatherState = {id: ''};
+		this.weatherState = { id: '' };
 		this.battle.eachEvent('WeatherChange');
 		return true;
 	}
@@ -148,7 +148,6 @@ export class Field {
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-		let TempTerrains = ['rainbowterrain', 'glitchterrain', 'inverseterrain', 'swampterrain', 'burningterrain'];
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -182,7 +181,7 @@ export class Field {
 			this.terrainState = prevTerrainState;
 			return false;
 		}
-		if (!TempTerrains.includes(this.terrain)){
+		if (!TempTerrains.includes(this.terrain)) {
 			this.terrainStack.unshift(this.terrainState);
 		}
 		this.battle.eachEvent('TerrainChange', sourceEffect);
@@ -192,8 +191,9 @@ export class Field {
 	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (this.terrain === status.id)
+		if (this.terrain === status.id) {
 			return false;
+		}
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
 		this.terrainState = {
@@ -224,7 +224,7 @@ export class Field {
 		for (const terrainState of this.terrainStack) {
 			console.log(terrainState.duration);
 			if (!terrainState.isBase) {
-				this.terrainStack.shift()
+				this.terrainStack.shift();
 			} else {
 				isterrain = true;
 				break;
@@ -266,8 +266,18 @@ export class Field {
 			this.battle.add('-fieldstart', current_terrain.name);
 		} else {
 			this.terrain = '';
-			this.terrainState = {id: ''};
+			this.terrainState = { id: '' };
 		}
+		this.battle.eachEvent('TerrainChange');
+		return true;
+	}
+
+	removeTerrain() {
+		if (this.isTerrain('') || this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) return false;
+		const prevTerrain = this.getTerrain();
+		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
+		this.terrain = '';
+		this.terrainState = {id: ''};
 		this.battle.eachEvent('TerrainChange');
 		return true;
 	}
