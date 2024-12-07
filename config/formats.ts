@@ -85,7 +85,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level = 50', 'VGC Timer', 'Picked Team Size = 4', 'Cancel Mod', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level = 100', 'VGC Timer', 'Picked Team Size = 4', 'Cancel Mod', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Big Top Arena",
@@ -344,7 +344,7 @@ export const Formats: FormatList = [
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Moves Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 50', 'Default Level = 100', '+Unobtainable', '+Past'],
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Moves Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles Wasteland Field",
