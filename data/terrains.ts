@@ -529,7 +529,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 					this.add('-message', 'The toxic mist combusted!');
 					for (const pokemon of this.getAllActive()) {
-						if (pokemon.hasAbility('flashfire') || pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.side.sideConditions['wideguard'])
+						if (pokemon.hasAbility('flashfire') || pokemon.hasAbility('wellbakedbody') || pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.side.sideConditions['wideguard'])
 							continue;
 						if (pokemon.hasAbility('sturdy') || pokemon.volatiles['endure'] !== undefined) {
 							this.damage(this.runEvent('Damage', pokemon, null, move, pokemon.baseMaxhp - 1), pokemon);
