@@ -2988,7 +2988,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	multiscale: {
 		onEffectiveness(typeMod, target, type, move) {
-			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Dragon' && typeMod > 0) {
+			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Dragon' && typeMod > 0 && this.field.isTerrain('dragonsdenterrain')) {
 				this.add('-message', 'The luminous scales were supercharged by the field and blunted the attack!');
 				return 0;
 			}
