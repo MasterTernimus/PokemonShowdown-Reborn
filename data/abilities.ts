@@ -6059,9 +6059,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if ((pokemon.hp <= pokemon.maxhp / 2 || this.field.isTerrain('icyterrain')) && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
+			let transform = (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || (this.field.isTerrain('ashenbeachterrain') && pokemon.species.id === 'darmanitan') || (this.field.isTerrain('icyterrain') && pokemon.baseSpecies.id === 'darmanitangalar');
+			if (transform) {
 				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
+			} else {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
