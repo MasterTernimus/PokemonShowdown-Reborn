@@ -1317,14 +1317,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(target, source, effect) {
-				if (source.hasItem('amplifieldrock') && (effect?.name !== 'sunnyday' && effect?.name !== 'raindance')) {
-					return 7;
+				if (effect?.id.includes("pledge")) {
+					if (source.hasItem('amplifieldrock'))
+						return 7;
+					else
+						return 4;
 				}
-				else if (effect?.name !== 'sunnyday' && effect?.name !== 'raindance') {
+				else {
 					return effect?.duration !== undefined ? effect.duration : 5;
 				}
-				else
-					return 4;
 			},
 			onModifyMove(move, pokemon) {
 				if (move.secondaries && move.id !== 'secretpower' && !pokemon.hasAbility('serenegrace')) {

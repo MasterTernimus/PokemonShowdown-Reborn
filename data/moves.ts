@@ -10062,12 +10062,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onAfterHit(target, source) {
 			if (source.hp) {
-				this.field.breakTerrains();
+				this.field.clearTerrain("mid");
 			}
 		},
 		onAfterSubDamage(damage, target, source) {
 			if (source.hp) {
-				this.field.breakTerrains();
+				this.field.clearTerrain("mid");
 			}
 		},
 		secondary: null,
@@ -17276,11 +17276,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, slicing: 1 },
-		onModifyMove(move) {
-			if (this.field.isTerrain('fairytaleterrain')) {
-				move.type = 'Steel';
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -19304,10 +19299,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {},
 		onHit() {
-			this.field.removeTerrain();
+			this.field.clearTerrain("9000");
 		},
 		onAfterSubDamage() {
-			this.field.removeTerrain();
+			this.field.clearTerrain("9000");
 		},
 		isZ: "lycaniumz",
 		secondary: null,
@@ -19524,10 +19519,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 			return !(this.field.terrainState.duration > 10);
 		},
 		onHit() {
-			this.field.breakTerrains();
+			this.field.clearTerrain("mid");
 		},
 		onAfterSubDamage() {
-			this.field.breakTerrains();
+			this.field.clearTerrain("mid");
 		},
 		secondary: null,
 		target: "normal",

@@ -584,7 +584,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			this.eachEvent('WeatherChange', this.effect);
 		},
 		onResidual(pokemon) {
-			if (this.field.terrain === 'rainbowterrain') {
+			if (this.field.isTerrain('rainbowterrain')) {
 				let stats: BoostID[] = [];
 				const boost: SparseBoostsTable = {};
 				let statPlus: BoostID;

@@ -2827,12 +2827,12 @@ export class Battle {
 		if (this.turn === 0 && this.format.terrain) {
 			if (this.format.terrain === 'adriennterrain') {
 				this.field.startTerrain('mistyterrain');
-				this.field.terrainStack.push({id: 'fairytaleterrain', isBase: true, Tchanges: [], duration: 9999, turn: this.turn});
+				this.field.terrainStack.push({id: 'fairytaleterrain', terrain_type: "Base", Tchanges: [], duration: 9999, turn: this.turn});
 			}
 			else {
 				this.field.startTerrain(this.format.terrain);
 				const lower_terrain = this.dex.conditions.get(this.format.terrain);
-				this.field.terrainStack.push({id: lower_terrain.id, Tchanges: [], duration: lower_terrain.duration, turn: this.turn});
+				this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: [], duration: 9999, turn: this.turn});
 			}
 		}
 		let action;

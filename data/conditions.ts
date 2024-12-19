@@ -489,6 +489,18 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'RainDance',
 		effectType: 'Weather',
 		duration: 5,
+		onSetWeather(target, source, weather) {
+			if (weather.id === 'sunnyday') {
+				if (this.field.isTerrain('rainbowterrain')) {
+					new Promise((resolve) => {
+						setTimeout(() => resolve(this.field.weatherState.duration), 200);
+					}).then(duration => this.field.terrainState.duration = duration);
+				}
+				else {
+					this.field.setTerrain('rainbowterrain', source, weather);
+				}
+			}
+		},
 		durationCallback(source, effect) {
 			if (source?.hasItem('damprock') || this.field.isTerrain('bigtopterrain')) {
 				return 8;
@@ -507,15 +519,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			if (this.field.terrainState.Tchanges?.includes('sunnyday') && !this.field.isTerrain('rainbowterrain')) {
-				this.field.setTerrain('rainbowterrain', source, effect);
-			}
-			else if (this.field.isTerrain('rainbowterrain') && this.field.terrainState.Tchanges?.includes('sunnyday')) {
-				this.field.setDuration(this.effectState.duration);
-			}
-			if (!this.field.terrainState.Tchanges?.includes('raindance')) {
-				this.field.terrainState.Tchanges?.push('raindance');
-			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, '[of] ' + source);
@@ -528,12 +531,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-weather', 'RainDance', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onFieldEnd() {
-			if (this.field.terrainState.Tchanges?.includes('raindance')){
-				this.field.terrainState.Tchanges = this.field.terrainState.Tchanges?.filter(item => item !== 'raindance');
-			}
-			this.add('-weather', 'none');
-		}
 	},
 	primordialsea: {
 		name: 'PrimordialSea',
@@ -571,6 +568,18 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'SunnyDay',
 		effectType: 'Weather',
 		duration: 5,
+		onSetWeather(target, source, weather) {
+			if (weather.id === 'raindance') {
+				if (this.field.isTerrain('rainbowterrain')) {
+					new Promise((resolve) => {
+						setTimeout(() => resolve(this.field.weatherState.duration), 200);
+					}).then(duration => this.field.terrainState.duration = duration);
+				}
+				else {
+					this.field.setTerrain('rainbowterrain', source, weather);
+				}
+			}
+		},
 		durationCallback(source, effect) {
 			if (source?.hasItem('heatrock') || this.field.isTerrain('desertterrain')) {
 				return 8;
@@ -593,15 +602,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(battle, source, effect) {
-			if (this.field.terrainState.Tchanges?.includes('raindance') && !this.field.isTerrain('rainbowterrain')) {
-				this.field.setTerrain('rainbowterrain', source, effect);
-			}
-			else if (this.field.isTerrain('rainbowterrain') && this.field.terrainState.Tchanges?.includes('raindance')) {
-				this.field.setDuration(this.effectState.duration);
-			}
-			if (!this.field.terrainState.Tchanges?.includes('sunnyday')) {
-				this.field.terrainState.Tchanges?.push('sunnyday');
-			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, '[of] ' + source);
@@ -689,6 +689,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
+			if (this.field.isTerrain('rainbowterrain')) {
+				this.field.clearTerrain();
+			}
 			this.add('-weather', 'Sandstorm', '[upkeep]');
 			if (this.field.isWeather('sandstorm')) this.eachEvent('Weather');
 		},
@@ -725,6 +728,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
+			if (this.field.isTerrain('rainbowterrain')) {
+				this.field.clearTerrain();
+			}
 			this.add('-weather', 'Hail', '[upkeep]');
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
