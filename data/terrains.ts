@@ -872,8 +872,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyType(move, pokemon) {
-				if (['cut', 'sacredsword', 'secretsword', 'slash'].includes(move.id)) {
-					move.type === "Steel";
+				let steelify = ['cut', 'sacredsword', 'secretsword', 'slash'];
+				if(steelify.includes(move.id)) {
+					move.type = "Steel";
 				}
 			},
 			onEffectiveness(typeMod, target, type, move) {
