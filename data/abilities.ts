@@ -6055,6 +6055,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	zenmode: {
 		onResidualOrder: 29,
+		onSwitchIn(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
+				return;
+			}
+			if ((this.field.isTerrain('ashenbeachterrain') && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || (this.field.isTerrain('icyterrain') && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+				pokemon.addVolatile('zenmode');
+			}
+		},
 		onResidual(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
