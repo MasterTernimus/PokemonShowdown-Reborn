@@ -137,19 +137,18 @@ export class Field {
 		status = this.battle.dex.conditions.get(status);
 		this.terrain = status.id;
 		this.terrainState = {
-			isBase: true,
 			id: status.id,
+			terrain_type: "Base",
 			Tchanges: [],
 			duration: 9999,
 			turn: this.battle.turn,
 		};
-		this.terrainStack.unshift(this.terrainState);
+		this.terrainStack.push(this.terrainState);
 		this.battle.singleEvent('FieldStart', status, this.terrainState, this);
 		this.battle.eachEvent('TerrainChange');
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-		const TempTerrains = ['rainbowterrain', 'glitchterrain', 'inverseterrain', 'swampterrain', 'burningterrain'];
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -160,15 +159,21 @@ export class Field {
 			this.battle.add('-message', 'The field was annihilated by the crushing weight of the ocean!');
 			return false;
 		}
-		if (this.terrain !== '') {
-			this.terrainState.Tchanges = [];
+		let new_terrain_type = "";
+		const core_terrains = ["mistyterrain", "psychicterrain", "grassyterrain", "electrictterrain"];
+		if (core_terrains.includes(status.id)) {
+			new_terrain_type = "Core";
 		}
+		if (status.id === 'rainbowterrain' && (sourceEffect?.id === 'raindance' || sourceEffect?.id === 'sunnyday')) {
+			new_terrain_type = "Temp"
+		}
+		this.terrainState.Tchanges = [];
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
 		this.terrainState = {
-			isBase: false,
 			id: status.id,
+			terrain_type: new_terrain_type,
 			source,
 			sourceSlot: source.getSlot(),
 			Tchanges: [],
@@ -183,9 +188,10 @@ export class Field {
 			this.terrainState = prevTerrainState;
 			return false;
 		}
-		if (!TempTerrains.includes(this.terrain)) {
-			this.terrainStack.unshift(this.terrainState);
+		if (prevTerrainState.terrain_type === 'Temp') {
+			this.terrainStack.pop();
 		}
+		this.terrainStack.push(this.terrainState);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		return true;
 	}
@@ -199,9 +205,9 @@ export class Field {
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
 		this.terrainState = {
-			isBase: prevTerrainState.isBase,
 			id: status.id,
 			Tchanges: [],
+			terrain_type: prevTerrainState.terrain_type,
 			origin: sourceEffect,
 			duration: prevTerrainState.duration,
 			turn: this.battle.turn,
@@ -214,24 +220,41 @@ export class Field {
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 	}
 
-	setDuration(duration: number) {
-		this.terrainState.duration = duration;
-	}
-
-	breakTerrains() {
-		if (this.terrain === '' || this.terrainState.isBase) return false;
-		const prevTerrain = this.getTerrain();
-		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-		let isterrain = false;
-		for (const terrainState of this.terrainStack) {
-			if (!terrainState.isBase) {
-				this.terrainStack.shift();
-			} else {
-				isterrain = true;
-				break;
+	clearTerrain(power: string | null = null) {
+		if (this.isTerrain('') || this.isTerrain('underwaterterrain')) return false;
+		if (power === '9000') {
+			const prevTerrain = this.getTerrain();
+			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
+			this.terrainStack.pop();
+		}
+		if (power === 'mid') {
+			if (this.terrainState?.terrain_type === 'Core') {
+				const prevTerrain = this.getTerrain();
+				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
+				while (this.terrainStack[this.terrainStack.length-1]?.terrain_type !== "Base") {
+					this.terrainStack.pop();
+				}
+			}
+			else {
+				return false;
 			}
 		}
-		if (isterrain) {
+		else {
+			const prevTerrain = this.getTerrain();
+			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
+			this.terrainStack.pop();
+			for (const terrainState of this.terrainStack) {
+				if (terrainState.duration <= (this.battle.turn - this.terrainState.turn)) {
+					this.terrainStack.pop();
+				}
+				else {
+					this.terrainStack[0].duration -= (this.battle.turn - this.terrainState.turn);
+					break;
+				}
+			}
+		}
+
+		if (this.terrainStack) {
 			this.terrain = this.terrainStack[0].id;
 			this.terrainState = this.terrainStack[0];
 			const current_terrain = this.battle.dex.conditions.get(this.terrain);
@@ -239,49 +262,6 @@ export class Field {
 		} else {
 			this.terrain = '';
 			this.terrainState = { id: '' };
-		}
-		this.battle.eachEvent('TerrainChange');
-		return true;
-	}
-
-	clearTerrain() {
-		if (this.isTerrain('')) return false;
-		const prevTerrain = this.getTerrain();
-		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-		this.terrainStack.shift();
-		let isterrain = false;
-		for (const terrainState of this.terrainStack) {
-			if (terrainState.duration <= (this.battle.turn - this.terrainState.turn)) {
-				this.terrainStack.shift();
-			} else {
-				this.terrainStack[0].duration -= (this.battle.turn - this.terrainState.turn);
-				isterrain = true;
-				break;
-			}
-		}
-
-		if (isterrain) {
-			this.terrain = this.terrainStack[0].id;
-			this.terrainState = this.terrainStack[0];
-			const current_terrain = this.battle.dex.conditions.get(this.terrain);
-			this.battle.add('-fieldstart', current_terrain.name);
-		} else {
-			this.terrain = '';
-			this.terrainState = { id: '' };
-		}
-		this.battle.eachEvent('TerrainChange');
-		return true;
-	}
-
-	removeTerrain() {
-		if (this.isTerrain('') || this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) return false;
-		const prevTerrain = this.getTerrain();
-		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-		if (this.terrainState.isBase) {
-			this.terrain = '';
-			this.terrainState = { id: '' };
-		} else {
-			this.clearTerrain();
 		}
 		this.battle.eachEvent('TerrainChange');
 		return true;
