@@ -1209,7 +1209,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 					}
 				}
 				if (this.field.isTerrain('desertterrain')) {
-					this.damage(target.baseMaxhp / 8, target, target);
+					this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
 				}
 			}
 		},
@@ -6059,10 +6059,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			let transform = (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || (this.field.isTerrain('ashenbeachterrain') && pokemon.species.id === 'darmanitan') || (this.field.isTerrain('icyterrain') && pokemon.baseSpecies.id === 'darmanitangalar');
-			if (transform) {
+			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || (this.field.isTerrain('ashenbeachterrain') && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || (this.field.isTerrain('icyterrain') && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
 				pokemon.addVolatile('zenmode');
-			} else {
+			} else if ((pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) && !(this.field.isTerrain('ashenbeachterrain') && pokemon.species.id === 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') && !(this.field.isTerrain('icyterrain') && pokemon.species.id === 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')){
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
