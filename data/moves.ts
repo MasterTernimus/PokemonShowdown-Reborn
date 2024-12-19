@@ -16770,11 +16770,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
-		onModifyMove(move) {
-			if (this.field.terrain === 'fairytaleterrain') {
-				move.type = 'Steel';
-			}
-		},
 		ignoreEvasion: true,
 		ignoreDefensive: true,
 		secondary: null,
