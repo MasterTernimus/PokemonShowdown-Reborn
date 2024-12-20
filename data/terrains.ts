@@ -1638,12 +1638,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onEffectiveness(typeMod, target, type, move) {
+				console.log(typeMod, target?.name, type, move.types);
 				const move_types = move.types !== undefined ? move.types : [move.type];
 				if (type === 'Water' && move_types.includes('Water')) {
-					if (!move.types) {
+					if (move.types === undefined) {
 						return 0;
 					}
-					return 0 + this.dex.getEffectiveness(move_types.splice(move_types.indexOf('Water', 1)), type);
+					return 0 + this.dex.getEffectiveness(move_types.filter(type => type !== 'Water'), type);
 				}
 			},
 			onBasePower(basePower, source, target, move) {
