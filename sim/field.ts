@@ -143,7 +143,7 @@ export class Field {
 			duration: 9999,
 			turn: this.battle.turn,
 		};
-		this.terrainStack.push(this.terrainState);
+		this.terrainStack.unshift(this.terrainState);
 		this.battle.singleEvent('FieldStart', status, this.terrainState, this);
 		this.battle.eachEvent('TerrainChange');
 	}
@@ -189,9 +189,9 @@ export class Field {
 			return false;
 		}
 		if (prevTerrainState.terrain_type === 'Temp') {
-			this.terrainStack.pop();
+			this.terrainStack.shift();
 		}
-		this.terrainStack.push(this.terrainState);
+		this.terrainStack.unshift(this.terrainState);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		return true;
 	}
@@ -225,14 +225,14 @@ export class Field {
 		if (power === '9000') {
 			const prevTerrain = this.getTerrain();
 			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-			this.terrainStack.pop();
+			this.terrainStack.shift();
 		}
 		if (power === 'mid') {
 			if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-				while (this.terrainStack[this.terrainStack.length-1]?.terrain_type !== "Base") {
-					this.terrainStack.pop();
+				while (this.terrainStack[0]?.terrain_type !== "Base") {
+					this.terrainStack.shift();
 				}
 			}
 			else {
@@ -242,10 +242,10 @@ export class Field {
 		else {
 			const prevTerrain = this.getTerrain();
 			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-			this.terrainStack.pop();
+			this.terrainStack.shift();
 			for (const terrainState of this.terrainStack) {
 				if (terrainState.duration <= (this.battle.turn - this.terrainState.turn)) {
-					this.terrainStack.pop();
+					this.terrainStack.shift();
 				}
 				else {
 					this.terrainStack[0].duration -= (this.battle.turn - this.terrainState.turn);
