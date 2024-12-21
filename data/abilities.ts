@@ -557,6 +557,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			let showMsg = false;
 			let i: BoostID;
 			for (i in boost) {
+				this.add('-message', boost[i]);
 				if (boost[i]! < 0) {
 					delete boost[i];
 					showMsg = true;
@@ -914,6 +915,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		flags: {},
 		name: "Dancer",
 		// implemented in runMove in scripts.js
+		onTryBoost(boost, target, source, effect) {
+			if (effect?.sourceEffect !== 'dancer' || !this.field.isTerrain('bigtopterrain')) return;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					delete boost[i];
+				}
+			}
+		},
+		onAfterMove(source, target, move){
+			if (move.flags.dance && this.field.isTerrain('bigtopterrain')) {
+				this.boost({ spa: 1, atk: 1 }, source, source, null, false, true);
+			}
+		},
 		rating: 1.5,
 		num: 216,
 	},
