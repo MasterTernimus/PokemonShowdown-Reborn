@@ -546,7 +546,7 @@ export class Battle {
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Infinite loop");
 		}
-		// this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
+		//this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		let hasRelayVar = true;
 		if (relayVar === undefined) {
 			relayVar = true;
