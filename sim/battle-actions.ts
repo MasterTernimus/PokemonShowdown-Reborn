@@ -1775,7 +1775,7 @@ export class BattleActions {
 		if (type !== '???') {
 			let stab: number | [number, number] = 1;
 
-			const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type);
+			const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type) || (move.types !== undefined ? pokemon.hasType(move.types[1]) : false);
 			if (isSTAB) {
 				stab = 1.5;
 			}

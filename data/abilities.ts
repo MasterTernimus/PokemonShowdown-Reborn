@@ -861,7 +861,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	cursedbody: {
 		onDamagingHit(damage, target, source, move) {
 			if (source.volatiles['disable']) return;
-			if (!move.isMax && !move.flags['futuremove'] && move.id !== 'struggle') {
+			if (!move.isMax && !move.flags['futuremove'] && move.id !== 'struggle' && !this.field.isTerrain('holyterrain')) {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('disable', this.effectState.target);
 				}
@@ -2418,7 +2418,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	justified: {
 		onDamagingHit(damage, target, source, move) {
 			if (move && move.type === 'Dark') {
-				this.boost({ atk: 1 });
+				if (this.field.isTerrain('holyterrain')) {
+					this.boost({ atk: 2 });
+				}
+				else {
+					this.boost({ atk: 1 });
+				}
 			}
 		},
 		flags: {},
@@ -4167,17 +4172,8 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	rkssystem: {
 		// RKS System's type-changing itself is implemented in statuses.js
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
-		onSwitchIn(pokemon) {
-			if (this.field.terrain === 'glitchterrain') {
-				const newType = '???';
-				pokemon.types = (typeof newType === 'string' ? [newType] : newType);
-				pokemon.addedType = '';
-				pokemon.knownType = true;
-				pokemon.apparentType = pokemon.types.join('/');
-			}
-		},
 		onResidual(pokemon) {
-			if (this.field.terrain === 'glitchterrain') {
+			if (this.field.isTerrain('glitchterrain')) {
 				const newType = '???';
 				pokemon.types = (typeof newType === 'string' ? [newType] : newType);
 				pokemon.addedType = '';
@@ -4646,6 +4642,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	slowstart: {
 		onStart(pokemon) {
 			pokemon.addVolatile('slowstart');
+			if (this.field.isTerrain('holyterrain')) {
+				this.add('-message', 'Divine energy courses through ' + pokemon.name);
+			}
+		},
+		onModifyDef(def, pokemon) {
+			if (this.field.isTerrain('holyterrain') && pokemon.species.id === 'regigigas') {
+				return this.chainModify(1.5);
+			}
 		},
 		onEnd(pokemon) {
 			delete pokemon.volatiles['slowstart'];
@@ -4660,10 +4664,19 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				return this.chainModify(0.65);
+				if (!this.field.isTerrain('holyterrain')) {
+					return this.chainModify(0.65);
+				}
 			},
 			onModifySpe(spe, pokemon) {
-				return this.chainModify(0.5);
+				if (!this.field.isTerrain('holyterrain')) {
+					return this.chainModify(0.5);
+				}
+			},
+			onModifyDef(def, pokemon) {
+				if (!this.field.isTerrain('holyterrain') && pokemon.species.id === 'regigigas') {
+					return this.chainModify(2);
+				}
 			},
 			onResidual(pokemon) {
 				if (this.field.isTerrain('electricterrain')) {

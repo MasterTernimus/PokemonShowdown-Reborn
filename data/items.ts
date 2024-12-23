@@ -3424,7 +3424,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ spd: 1 }, pokemon)
 				pokemon.addVolatile('magiccoat', null, item);
 			}
-			if (this.field.isTerrain('crystalcavernterrain')) {
+			if (this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain')) {
 				this.boost({ spa: 1 }, pokemon)
 				pokemon.addVolatile('magiccoat', null, item);
 			}

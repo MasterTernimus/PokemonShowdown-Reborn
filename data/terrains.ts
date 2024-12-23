@@ -1039,6 +1039,71 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	holyterrain: {
+		name: "Holy Terrain",
+		condition: {
+			duration: 9999,
+			onModifyMove(move) {
+				if (!move.ignoreImmunity) move.ignoreImmunity = {};
+				if (move.ignoreImmunity !== true && move.type === 'Normal') {
+					move.ignoreImmunity['Normal'] = true;
+				}
+			},
+			onEffectiveness(typeMod, target ,type, move) {
+				const move_types = move.types !== undefined ? move.types : [move.type];
+				if ((type === 'Ghost' || type === 'Dark') && move_types.includes('Normal')) {
+					if (move.types === undefined) {
+						return 1;
+					}
+					return 1 + this.dex.getEffectiveness(move_types.filter(type => type !== 'Normal'), type);
+				}
+			},
+			onTryHit(target, source, move) {
+				if (target !== source && target.isAlly(source) && move.category !== 'Status') {
+					return null;
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const strong_boost = ["mysticalfire", "magicalleaf", "ancientpower", "judgment", "sacredfire", "extremespeed", "sacredsword", "return"];
+				const boost = ["psystrike", "aeroblast", "originpulse", "doomdummy", "mistball", "crushgrip", "lusterpurge", "secretsword", "psychoboost", "relicsong", "spacialrend", "hyperspacehole", "roaroftime", "landswrath", "precipiceblades", "dragonascent", "moongeistbeam", "sunsteelstrike", "prismaticlaser", "fleurcannon", "diamondstorm", "genesissupernova", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
+				if ((move.type === 'Fairy' || move.type === 'Normal') && move.category === 'Special') {
+					this.add('-message', 'The holy energy resonated with the attack!');
+					modifier *= 1.5;
+				}
+				if (move.type === 'Dragon' || move.type === 'Psychic') {
+					this.add('-message', 'The legendary energy resonated with the attack!');
+					modifier *= 1.2;
+				}
+				if (move.type === 'Ghost' || (move.category === 'Special' && move.type === 'Dark')) {
+					this.add('-message', 'The attack was cleansed...');
+					modifier *= 0.5;
+				}
+				if (strong_boost.includes(move.id)) {
+					if (move.id === 'extremespeed') {
+						this.add('-message', 'Godspeed!');
+					}
+					else {
+						this.add('-message', 'The holy energy resonated with the attack!');
+					}
+					modifier *= 1.5;
+				}
+				if (boost.includes(move.id)) {
+					this.add('-message', 'Legendary power accelerated the attack!');
+					modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Holy Terrain');
+				this.add('-message', 'Benedictus Sanctus Spiritus...');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Holy Terrain');
+			}
+		},
+	},
 	icyterrain: {
 		name: "Icy Terrain",
 		condition: {
@@ -1317,6 +1382,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(target, source, effect) {
+				console.log(effect?.id);
 				if (effect?.id.includes("pledge")) {
 					if (source.hasItem('amplifieldrock'))
 						return 7;
@@ -1638,7 +1704,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onEffectiveness(typeMod, target, type, move) {
-				console.log(typeMod, target?.name, type, move.types);
 				const move_types = move.types !== undefined ? move.types : [move.type];
 				if (type === 'Water' && move_types.includes('Water')) {
 					if (move.types === undefined) {

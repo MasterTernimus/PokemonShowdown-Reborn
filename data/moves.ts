@@ -2318,7 +2318,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['mirrorarenaterrain', 'Steel'],
 				['darkcrystalcavernterrain', 'Dark'],
 				['bigtopterrain', 'Normal'],
-				['dragonsdenterrain', 'Dragon']
+				['dragonsdenterrain', 'Dragon'],
+				['holyterrain', 'Normal']
 			]);
 			if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
@@ -3152,7 +3153,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain')) {
+			if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('holyterrain')) {
 				move.boosts = {
 					def: 2,
 					spd: 2
@@ -3536,6 +3537,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onResidualOrder: 12,
 			onResidual(pokemon) {
 				this.damage(pokemon.baseMaxhp / 4);
+				if (this.field.isTerrain('holyterrain')) {
+					pokemon.removeVolatile('curse');
+				}
 			},
 		},
 		secondary: null,
@@ -5786,9 +5790,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onAfterHit(target, source, move) {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) {
+				console.log("Present");
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
 				this.field.setTerrain('rainbowterrain', null, move);
 			}
 			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
@@ -5802,7 +5807,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
 				this.field.setTerrain('rainbowterrain', null, move);
 			}
 			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
@@ -8106,7 +8111,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('swampterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
 				this.field.setTerrain('swampterrain', null, move);
 			}
 			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
@@ -8120,7 +8125,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('swampterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
 				this.field.setTerrain('swampterrain', null, move);
 			}
 			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
@@ -11099,6 +11104,18 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyMove(move, pokemon) {
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 		},
+		onHit() {
+			if (this.field.isTerrain('holyterrain')) {
+				this.add('-message', 'The holy light was consumed!');
+				this.field.clearTerrain();
+			}
+		},
+		onAfterSubDamage() {
+			if (this.field.isTerrain('holyterrain')) {
+				this.add('-message', 'The holy light was consumed!');
+				this.field.clearTerrain();
+			}
+		},
 		ignoreAbility: true,
 		isZ: "ultranecroziumz",
 		secondary: null,
@@ -12788,7 +12805,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (target.volatiles['foresight']) return false;
 		},
 		onHit() {
-			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('fairytaleterrain')) {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('holyterrain')) {
 				this.boost({ spa: 2 });
 			}
 		},
@@ -13418,7 +13435,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onModifyType(move, pokemon) {
 			if (pokemon.ignoringItem()) return;
-			move.type = this.runEvent('Memory', pokemon, null, move, 'Normal');
+			if (pokemon.species.id === 'silvally') {
+				move.type = pokemon.types[0];
+			}
+			else {
+				move.type = this.runEvent('Memory', pokemon, null, move, 'Normal');
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -13568,7 +13590,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['caveterrain', 'rocktomb'],
 				['bigtopterrain', 'acrobatics'],
 				['superheatedterrain', 'heatwave'],
-				['dragonsdenterrain', 'dragonpulse']
+				['dragonsdenterrain', 'dragonpulse'],
+				['holyterrain', 'judgment']
 			]);
 			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
@@ -13588,6 +13611,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('forestterrain')) {
 				return this.clampIntRange(Math.floor(target.getUndynamaxedHP() *3 / 4), 1);
 
+			}
+			else if (this.field.isTerrain('holyterrain')) {
+				return this.clampIntRange(Math.floor(target.getUndynamaxedHP() * 2 / 3), 1);
 			}
 			else {
 				return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
@@ -17139,7 +17165,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 30,
 					status: 'slp',
 				});
-			} else if (this.field.isTerrain('mistyterrain')) {
+			} else if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('holyterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					boosts: {
@@ -19299,10 +19325,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {},
 		onHit() {
-			this.field.clearTerrain("9000");
+			this.field.clearTerrain();
 		},
 		onAfterSubDamage() {
-			this.field.clearTerrain("9000");
+			this.field.clearTerrain();
 		},
 		isZ: "lycaniumz",
 		secondary: null,
@@ -22390,7 +22416,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('swampterrain') || this.field.isTerrain('rainbowterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
+			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
 				this.field.setTerrain('swampterrain', null, move);
 			}
 			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
@@ -22404,7 +22430,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('swampterrain') || this.field.isTerrain('rainbowterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
+			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
 				this.field.setTerrain('swampterrain', null, move);
 			}
 			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
@@ -22784,7 +22810,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source) {
-				if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain'))
+				if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('holyterrain'))
 					this.effectState.hp = source.maxhp * 3 / 4;
 				else
 					this.effectState.hp = source.maxhp / 2;
