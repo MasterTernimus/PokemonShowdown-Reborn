@@ -919,16 +919,32 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'Silvally',
 		onTypePriority: 1,
 		onType(types, pokemon) {
-			if (pokemon.transformed || pokemon.ability !== 'rkssystem' && this.gen >= 8) return types;
+			if (pokemon.transformed || pokemon.ability !== 'rkssystem' && this.gen >= 8 || !(this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain'))) return types;
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
-				type = pokemon.getItem().onMemory;
+				if (this.field.isTerrain('glitchterrain')) {
+					type = '???';
+				}
+				else if (this.field.isTerrain('holyterrain')) {
+					type = 'Dark';
+				}
+				else {
+					type = pokemon.getItem().onMemory;
+				}
 				if (!type) {
 					type = 'Normal';
 				}
 			}
 			return [type];
 		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('glitchterrain') && pokemon.ability === 'rkssystem' && pokemon.types[0] !== '???') {
+				pokemon.setType('???', true);
+			}
+			else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem' && pokemon.getItem().onMemory !== undefined) {
+				pokemon.setType(pokemon.getItem().onMemory!, true);
+			}
+		}
 	},
 	rolloutstorage: {
 		name: 'rolloutstorage',

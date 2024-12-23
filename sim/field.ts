@@ -222,11 +222,6 @@ export class Field {
 
 	clearTerrain(power: string | null = null) {
 		if (this.isTerrain('') || this.isTerrain('underwaterterrain')) return false;
-		if (power === '9000') {
-			const prevTerrain = this.getTerrain();
-			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-			this.terrainStack.shift();
-		}
 		if (power === 'mid') {
 			if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();
@@ -253,7 +248,6 @@ export class Field {
 				}
 			}
 		}
-
 		if (this.terrainStack) {
 			this.terrain = this.terrainStack[0].id;
 			this.terrainState = this.terrainStack[0];
