@@ -68,11 +68,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) {
-				if (this.field.isTerrain('mountainterrain')) {
-					return this.chainModify(1.5);
-				}
-			} return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		flags: {},
 		name: "Aerilate",
@@ -1706,7 +1702,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp >= 0.75*pokemon.maxhp || (this.field.isTerrain('mountainterrain') && this.field.weather === 'deltastream')) return priority + 1;
+			if (move?.type === 'Flying' && pokemon.hp >= 0.75*pokemon.maxhp) return priority + 1;
 		},
 		flags: {},
 		name: "Gale Wings",
@@ -2630,11 +2626,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				move.accuracy = 90;
 			}
 			delete move.flags['contact'];
-		},
-		onBasePower() {
-			if (this.field.isTerrain('mountainterrain')) {
-				return this.chainModify(1.5);
-			}
 		},
 		flags: {},
 		name: "Long Reach",
@@ -5576,6 +5567,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
+
 			const possibleTargets = pokemon.adjacentFoes().filter(
 				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
 			);

@@ -581,7 +581,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		durationCallback(source, effect) {
-			if (source?.hasItem('heatrock') || this.field.isTerrain('desertterrain') || this.field.isTerrain('mountainterrain')) {
+			if (source?.hasItem('heatrock') || this.field.isTerrain('desertterrain')) {
 				return 8;
 			}
 			return 5;
@@ -745,7 +745,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'Snow',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source) {
+		durationCallback(source, effect) {
 			if (source?.hasItem('icyrock')) {
 				return 8;
 			}
@@ -781,12 +781,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'DeltaStream',
 		effectType: 'Weather',
 		duration: 0,
-		durationCallback(target, source, effect) {
-			if (effect?.id === 'tailwind') {
-				return 6;
-			}
-			return 0;
-		},
 		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
