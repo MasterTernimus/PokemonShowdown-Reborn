@@ -1699,6 +1699,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (this.field.isTerrain('murkwatersurfaceterrain')) {
 				this.boost({ spe: 1 });
 				pokemon.addVolatile('aquaring');
+				pokemon.trySetStatus('tox', pokemon, item);
 			}
 			if (this.field.isTerrain('icyterrain')) {
 				this.boost({ spe: 2 });
