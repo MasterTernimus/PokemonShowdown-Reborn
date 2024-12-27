@@ -1276,50 +1276,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
-	mountainterrain: {
-		name: "Mountain Terrain",
-		condition: {
-			duration: 9999,
-			onBasePowerPriority: 6,
-			onBasePower(basePower, source, target, move) {
-				let modifier = 1;
-				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "thunder", "eruption", "avalanche", "hypervoice", "mountaingale"];
-				const wind_boost = ["ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "gust", "bleakwindstorm", "sandsearstorm", "wildboltstorm"];
-				if (move.type === 'Rock' || move.type === 'Flying') {
-					modifier *= 1.5;
-				}
-				if (boost.includes(move.id)) {
-					modifier *= 1.5;
-				}
-				if (this.field.weather === 'deltastream') {
-					if (wind_boost.includes(move.id)) {
-						modifier *= 1.5;
-					}
-					if (move.category === 'Special' && move.type === 'Flying') {
-						modifier *= 1.5;
-					}  
-				}
-				return this.chainModify(modifier);
-			},
-			onAfterMove(source, target, move) {
-				const snow = ['blizzard', 'glaciate', 'subzeroslammer'];
-				if (snow.includes(move.id)){
-					this.field.changeTerrain('snowymountainterrain');
-				}
-			},
-			onResidual(pokemon) {
-				if (this.field.weather === 'hail') {
-					this.field.terrainState.hail === undefined ? this.field.terrainState.hail = 0 : this.field.terrainState.hail += 1;
-				}
-				else {
-					this.field.terrainState.hail = 0;
-				}
-				if (this.field.terrainState?.hail === 2) {
-					this.field.changeTerrain('snowymountainterrain');
-				}
-			},
-		}
-	},
 	murkwatersurfaceterrain: {
 		name: "Murkwater Surface Terrain",
 		condition: {
@@ -1594,13 +1550,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				this.add('-fieldend', 'Short-Circuit Terrain');
 			},
 		},
-	},
-	snowymountainterrain: {
-		name: "Snowy Mountain Terrain",
-		condition: {
-			duration: 9999,
-
-		}
 	},
 	superheatedterrain: {
 		name: "Super-Heated Terrain",

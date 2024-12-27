@@ -948,9 +948,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		num: 419,
 		accuracy: 100,
 		basePower: 60,
-		onEffectiveness(typeMod, target, type, move) {
-			let pokemon = this.activePokemon;
-		},
 		basePowerCallback(pokemon, target, move) {
 			const damagedByTarget = pokemon.attackedBy.some(
 				p => p.source === target && p.damage > 0 && p.thisTurn
@@ -2315,7 +2312,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['glitchterrain', '???'],
 				['rockyterrain', 'Rock'],
 				['caveterrain', 'Rock'],
-				['mountainterrain', 'Rock'],
 				['desertterrain', 'Ground'],
 				['ashenbeachterrain', 'Ground'],
 				['factoryterrain', 'Steel'],
@@ -13300,11 +13296,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('mountainterrain')) {
+			if (this.field.isTerrain('icyterrain')) {
 				move.accuracy = 100;
-			}
-			if (this.field.isTerrain('mountainterrain')) {
-				move.types = ['Ice', 'Rock'];
 			}
 		}, 
 		secondary: {
@@ -13598,8 +13591,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['bigtopterrain', 'acrobatics'],
 				['superheatedterrain', 'heatwave'],
 				['dragonsdenterrain', 'dragonpulse'],
-				['holyterrain', 'judgment'],
-				['mountainterrain', 'rockslide']
+				['holyterrain', 'judgment']
 			]);
 			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
@@ -15978,11 +15970,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('mountainterrain')) {
-				this.attrLastMove('[still]');
-				this.addMove('-anim', attacker, move.name, defender);
-				return;
-			}
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -17231,7 +17218,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 30,
 					status: 'frz'
 				});
-			} else if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('caveterrain') || this.field.isTerrain('mountainterrain')) {
+			} else if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('caveterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					volatileStatus: 'flinch'
@@ -20640,15 +20627,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {snatch: 1, metronome: 1, wind: 1},
 		sideCondition: 'tailwind',
-		onAfterMove(source, target, move) {
-			if (this.field.isTerrain('mountainterrain')) {
-				this.field.setWeather('deltastream');
-			}
-		},
 		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
-				if (source?.hasAbility('persistent') || this.field.isTerrain('mountainterrain')) {
+				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 6;
 				}
@@ -21273,17 +21255,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		onModifyMove(move, pokemon, target) {
 			switch (target?.effectiveWeather()) {
-				case 'raindance':
-				case 'primordialsea':
-					move.accuracy = true;
-					break;
-				case 'sunnyday':
-				case 'desolateland':
-					move.accuracy = 50;
-					break;
-				case 'deltastream':
-					if (this.field.isTerrain('mountainterrain')) move.accuracy = true;
-					break;
+			case 'raindance':
+			case 'primordialsea':
+				move.accuracy = true;
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				move.accuracy = 50;
+				break;
 			}
 		},
 		secondary: {
