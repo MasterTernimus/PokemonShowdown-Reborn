@@ -5895,7 +5895,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain', 'wastelandterrain', 'caveterrain', 'burningterrain', 'superheatedterrain', 'mountainterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain', 'wastelandterrain', 'caveterrain', 'burningterrain', 'superheatedterrain', 'mountainterrain', 'snowymountainterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -5945,9 +5945,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (this.field.isTerrain('mountainterrain')) {
 				this.boost({ atk: 2, accuracy: -1 }, pokemon, pokemon, item);
 			}
+			if (this.field.isTerrain('snowymountainterrain')) {
+				this.boost({ spa: 2, accuracy: -1 }, pokemon, pokemon, item);
+			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'ashenbeachterrain', 'caveterrain', 'burningterrain', 'superheatedterrain', 'mountainterrain'];
+			const fields = ['corrosiveterrain', 'swampterrain', 'rockyterrain', 'desertterrain', 'forestterrain', 'ashenbeachterrain', 'wastelandterrain', 'caveterrain', 'burningterrain', 'superheatedterrain', 'mountainterrain', 'snowymountainterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
