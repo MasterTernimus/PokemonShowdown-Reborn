@@ -68,7 +68,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) {
+				if (this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
+					return this.chainModify(1.5);
+				}
+			} return this.chainModify([4915, 4096]);
 		},
 		flags: {},
 		name: "Aerilate",
@@ -1702,7 +1706,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp >= 0.75*pokemon.maxhp) return priority + 1;
+			if (move?.type === 'Flying' && pokemon.hp >= 0.75 * pokemon.maxhp || ((this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) && this.field.weather === 'deltastream')) return priority + 1;
 		},
 		flags: {},
 		name: "Gale Wings",
@@ -2102,7 +2106,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	icebody: {
 		onWeather(target, source, effect) {
-			if (effect.id === 'hail' || effect.id === 'snow' || this.field.terrain === 'icyterrain') {
+			if (effect.id === 'hail' || effect.id === 'snow' || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) {
 				this.heal(target.baseMaxhp / 16);
 			}
 		},
@@ -2626,6 +2630,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				move.accuracy = 90;
 			}
 			delete move.flags['contact'];
+		},
+		onBasePower() {
+			if (this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
+				return this.chainModify(1.5);
+			}
 		},
 		flags: {},
 		name: "Long Reach",
@@ -4094,7 +4103,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) {
-				if (this.field.terrain === 'icyterrain')
+				if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain'))
 					return this.chainModify(1.5);
 				else {
 					return this.chainModify([4915, 4096]);
@@ -4698,7 +4707,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	slushrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('icyterrain')) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -4734,7 +4743,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('icyterrain')) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -5567,7 +5576,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
-
 			const possibleTargets = pokemon.adjacentFoes().filter(
 				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
 			);
@@ -6087,7 +6095,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if ((this.field.isTerrain('ashenbeachterrain') && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || (this.field.isTerrain('icyterrain') && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+			if ((this.field.isTerrain('ashenbeachterrain') && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
 				pokemon.addVolatile('zenmode');
 			}
 		},
@@ -6095,9 +6103,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || (this.field.isTerrain('ashenbeachterrain') && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || (this.field.isTerrain('icyterrain') && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || (this.field.isTerrain('ashenbeachterrain') && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('snowymountainterrain')  || this.field.isTerrain('icyterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
 				pokemon.addVolatile('zenmode');
-			} else if ((pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) && !(this.field.isTerrain('ashenbeachterrain') && pokemon.species.id === 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') && !(this.field.isTerrain('icyterrain') && pokemon.species.id === 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')){
+			} else if ((pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) && !(this.field.isTerrain('ashenbeachterrain') && pokemon.species.id === 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') && !((this.field.isTerrain('snowymountainterrain')  || this.field.isTerrain('icyterrain')) && pokemon.species.id === 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')){
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}

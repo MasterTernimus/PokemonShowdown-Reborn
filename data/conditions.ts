@@ -581,7 +581,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		durationCallback(source, effect) {
-			if (source?.hasItem('heatrock') || this.field.isTerrain('desertterrain')) {
+			if (source?.hasItem('heatrock') || this.field.isTerrain('desertterrain') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
 				return 8;
 			}
 			return 5;
@@ -707,7 +707,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('icyrock') || this.field.isTerrain('icyterrain')) {
+			if (source?.hasItem('icyrock') || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) {
 				return 8;
 			}
 			return 5;
@@ -715,7 +715,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
 			if (pokemon.hasType('Ice') && this.field.isWeather('hail')) {
-				return this.modify(def, 1.5);
+				if (this.field.isTerrain('snowymountainterrain')) {
+					return this.modify(def, 2.25);
+				}
+				else {
+					return this.modify(def, 1.5);
+				}
 			}
 		},
 		onFieldStart(field, source, effect) {
@@ -745,7 +750,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'Snow',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
+		durationCallback(source) {
 			if (source?.hasItem('icyrock')) {
 				return 8;
 			}
@@ -781,6 +786,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'DeltaStream',
 		effectType: 'Weather',
 		duration: 0,
+		durationCallback(target, source, effect) {
+			if (effect?.id === 'tailwind') {
+				return 6;
+			}
+			return 0;
+		},
 		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {

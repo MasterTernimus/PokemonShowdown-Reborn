@@ -25,6 +25,24 @@ export const Formats: FormatList = [
 		section: "AllGen Singles",
 	},
 	{
+		name: "[Gen 9] Snowy Mountain Terrain",
+		mod: 'gen9',
+		terrain: 'snowymountainterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Mountain Terrain",
+		mod: 'gen9',
+		terrain: 'mountainterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] Holy Terrain",
 		mod: 'gen9',
 		terrain: 'holyterrain',
@@ -234,6 +252,25 @@ export const Formats: FormatList = [
 
 	{
 		section: "AllGen Doubles",
+	},
+	{
+		name: "[Gen 9] Doubles Snowy Mountain Terrain",
+		mod: 'gen9',
+		terrain: 'snowymountainterrain',
+		gameType: 'doubles',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
+	}, {
+		name: "[Gen 9] Doubles Mountain Terrain",
+		mod: 'gen9',
+		terrain: 'mountainterrain',
+		gameType: 'doubles',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles Holy Terrain",

@@ -1276,6 +1276,78 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	mountainterrain: {
+		name: "Mountain Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				const moveToMessageMap: Map<string, string> = new Map([
+					["vitalthrow", target.name + " was thrown partway down the mountain!"],
+					["circlethrow", target.name + " was thrown partway down the mountain!"],
+					["stormthrow", target.name + " was thrown partway down the mountain!"],
+					["mountaingale", "The whole mountain is moving!"],
+					["thunder", "The mountain strengthened the attack!"],
+					["eruption", "The mountain strengthened the attack!"],
+					["avalanche", "The mountain strengthened the attack!"],
+					["hypervoice", "Yodelayheehoo~"],
+				]);
+				if (moveToMessageMap.has(move.id)) {
+					this.add('-message', moveToMessageMap.get(move.id));
+				}
+				let modifier = 1;
+				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "thunder", "eruption", "avalanche", "hypervoice", "mountaingale"];
+				const wind_boost = ["ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "gust", "bleakwindstorm", "sandsearstorm", "wildboltstorm"];
+				const snow = ['blizzard', 'glaciate', 'subzeroslammer'];
+				if (move.type === 'Rock' || move.type === 'Flying') {
+					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
+					modifier *= 1.5;
+				}
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (this.field.weather === 'deltastream') {
+					if (wind_boost.includes(move.id)) {
+						this.add('-message', 'The wind strengthened the attack!');
+						modifier *= 1.5;
+					}
+					if (move.category === 'Special' && move.type === 'Flying') {
+						modifier *= 1.5;
+					}
+				}
+				if (snow.includes(move.id)) {
+						modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				const snow = ['blizzard', 'glaciate', 'subzeroslammer'];
+				if (snow.includes(move.id)) {
+					this.add('-message', 'The mountain was covered in snow!');
+					this.field.changeTerrain('snowymountainterrain');
+				}
+			},
+			onResidual(pokemon) {
+				if (this.field.weather === 'hail') {
+					this.field.terrainState.hail === undefined ? this.field.terrainState.hail = 0 : this.field.terrainState.hail += 1;
+				}
+				else {
+					this.field.terrainState.hail = 0;
+				}
+				if (this.field.terrainState?.hail === 2) {
+					this.add('-message', 'The mountain was covered in snow!');
+					this.field.changeTerrain('snowymountainterrain');
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Mountain Terrain');
+				this.add('-message', 'Adieu to disappointment and spleen; What are men to rocks and mountains?')
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Mountain Terrain');
+			},
+		}
+	},
 	murkwatersurfaceterrain: {
 		name: "Murkwater Surface Terrain",
 		condition: {
@@ -1550,6 +1622,83 @@ export const Terrains: { [k: string]: TerrainData } = {
 				this.add('-fieldend', 'Short-Circuit Terrain');
 			},
 		},
+	},
+	snowymountainterrain: {
+		name: "Snowy Mountain Terrain",
+		condition: {
+			duration: 9999,
+			onModifyMove(move) {
+				if (move.type === 'Rock') {
+					move.types = ['Rock', 'Ice'];
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				const moveToMessageMap: Map<string, string> = new Map([
+					["vitalthrow", "{1} was thrown partway down the mountain!"],
+					["circlethrow", "{1} was thrown partway down the mountain!"],
+					["stormthrow", "{1} was thrown partway down the mountain!"],
+					["avalanche", "The snow strengthened the attack!"],
+					["powdersnow", "The snow strengthened the attack!"],
+					["icywind", "The frigid wind strengthened the attack!"],
+					["hypervoice", "Yodelayheehoo~"],
+				]);
+				if (moveToMessageMap.has(move.id)) {
+					this.add('-message', moveToMessageMap.get(move.id));
+				}
+				let modifier = 1;
+				const boost_types = ['Rock', 'Ice', 'Flying'];
+				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "silverwind", "twister", "razorwind", "fairywind", "avalanche", "powdersnow", "hypervoice", "glaciate"];
+				const wind_boost = ["ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "gust", "bleakwindstorm", "sandsearstorm", "wildboltstorm"];
+				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
+				if (boost_types.includes(move.type)) {
+					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
+					modifier *= 1.5;
+				}
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (move.type === 'Fire') {
+					this.add('-message', 'The cold softened the attack');
+					modifier *= 0.5;
+				}
+				if (move.id === 'scald' || move.id === 'steameruption' || move.id === 'hydrosteam') {
+					this.add('-message', 'The cold softened the attack...');
+					modifier *= 0.5;
+				}
+				if (igniteMoves.includes(move.id)) {
+					modifier *= 1.3;
+				}
+				if (this.field.weather === 'deltastream') {
+					if (wind_boost.includes(move.id)) {
+						this.add('-message', 'The wind strengthened the attack!');
+						modifier *= 1.5;
+					}
+					if (move.category === 'Special' && move.type === 'Flying') {
+						this.add('-message', 'The wind strengthened the attack!');
+						modifier *= 1.5;
+					}
+				}
+				if (move.id === 'icywind') {
+					modifier *= 2;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
+				if (igniteMoves.includes(move.id)) {
+					this.add('-message', 'The snow melted away!');
+					this.field.changeTerrain('mountainterrain');
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Snowy Mountain Terrain');
+				this.add('-message', 'The snow glows white on the mountain...');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Snowy Mountain Terrain');
+			},
+		}
 	},
 	superheatedterrain: {
 		name: "Super-Heated Terrain",
