@@ -21283,10 +21283,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				case 'desolateland':
 					move.accuracy = 50;
 					break;
-				case 'deltastream':
-					if (this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) move.accuracy = true;
-					break;
 			}
+			if (this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) move.accuracy = true;
 		},
 		secondary: {
 			chance: 30,

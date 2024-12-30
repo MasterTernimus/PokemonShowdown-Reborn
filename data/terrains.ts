@@ -1327,7 +1327,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('snowymountainterrain');
 				}
 			},
-			onResidual(pokemon) {
+			onFieldResidual() {
 				if (this.field.weather === 'hail') {
 					this.field.terrainState.hail === undefined ? this.field.terrainState.hail = 0 : this.field.terrainState.hail += 1;
 				}
