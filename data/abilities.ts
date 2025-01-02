@@ -2074,6 +2074,25 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		rating: 3.5,
 		num: 55,
 	},
+	hydrabond: {
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+			move.multihit = 3;
+			move.multihitType = 'parentalbond';
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		flags: {},
+		name: "Hydra Bond",
+		rating: 4.5,
+		num: 10000
+	},
 	hydration: {
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
