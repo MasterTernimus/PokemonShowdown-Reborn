@@ -699,7 +699,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	hydrabond: {
 		name: "Hydra Bond",
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit thrice. The second hit has its damage quartered, as does the third. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
-		shortDesc: "This Pokemon's damaging moves hit twice. The second and third hit have their damage quartered.",
+		shortDesc: "This Pokemon's damaging moves hit twice. The 2nd and 3rd hits are quartered",
 	},
 	hypercutter: {
 		name: "Hyper Cutter",
