@@ -471,6 +471,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return this.chainModify(1.5);
 				}
 			},
+			onAfterMove(source, target, move) {
+				if (move.id === 'gravity')
+					this.field.changeTerrain('corrosiveterrain');
+			},
 			onResidual(pokemon) {
 				let immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
 				if (!immune.includes(pokemon.ability) && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
@@ -1448,6 +1452,64 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	newworldterrain: {
+		name: "New World Terrain",
+		condition: {
+			onModifySpe(spe, pokemon) {
+				if (pokemon.isGrounded()) {
+					return this.chainModify(0.75);
+				}
+			},
+			onModifyDef(def, pokemon) {
+				if (!pokemon.isGrounded()) {
+					return this.chainModify(0.9);
+				}
+			},
+			onModifySpD(spd, pokemon) {
+				if (!pokemon.isGrounded()) {
+					return this.chainModify(0.9);
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const boost: string[] = ["aurorabeam", "signalbeam", "flashcannon", "dazzlinggleam", "mirrorshot", "photongeyser", "psystrike", "aeroblast", "sacredfire", "mistball", "lusterpurge", "originpulse", "precipiceblades", "dragonascent", "psychoboost", "roaroftime", "magmastorm", "crushgrip", "judgment", "seedflare", "shadowforce", "searingshot", "vcreate", "secretsword", "sacredsword", "relicsong", "fusionbolt", "fusionflare", "iceburn", "freezeshock", "boltstrike", "blueflare", "technoblast", "oblivionwing", "landswrath", "thousandarrows", "thousandwaves", "diamondstorm", "steameruption", "coreenforcer", "fleurcannon", "prismaticlaser", "sunsteelstrike", "spectralthief", "moongeistbeam", "multiattack", "mindblown", "plasmafists", "earthpower", "powergem", "eruption", "continentalcrush", "genesissupernova", "soulstealing7starstrike", "searingsunrazesmash", "menacingmoonrazemaelstrom", "astralbarrage", "behemothbash", "behemothblade", "collisioncourse", "doubleironbash", "dragonenergy", "dynamaxcannon", "electrodrift", "eternabeam", "fierywrath", "glaciallance", "ruination", "freezingglare", "terastarstorm", "surgingstrikes", "malignantchain", "tachyoncutter", "mightycleave", "hydrosteam", "thunderclap", "ivycudgel", "psyblade", "sandsearstorm", "wildboltstorm", "springtidestorm", "thundercage", "thunderouskick", "wickedblow"];
+				const strong_boost: string[] = ["vacuumwave", "dracometeor", "meteormash", "moonblast", "cometpunch", "swift", "meteorbeam", "hyperspacehole", "spacialrend", "hyperspacefury", "ancientpower", "futuredummy", "blackholeeclipse"];
+				const weak_nerf = ['bulldoze', 'earthquake', 'magnitude'];
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (strong_boost.includes(move.id)) {
+					modifier *= 2;
+				}
+				if (move.id === 'doomdesire') {
+					modifier *= 4;
+				}
+				if (weak_nerf.includes(move.id)) {
+					modifier *= 0.25;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				if (move.id === 'gravity' || move.id === 'geomancy') {
+					this.field.changeTerrain('starlightarenaterrain', source, move);
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (this.field.weather !== '') {
+					this.field.clearWeather();
+				}
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'New World Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'New World Terrain');
+				}
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'New World Terrain');
+			},
+		}
+	},
 	rainbowterrain: {
 		name: "Rainbow Terrain",
 		condition: {
@@ -1700,6 +1762,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	starlightarenaterrain: {
+		name: "Starlight Arena Terrain",
+		condition: {
+			
+		}
+	},
 	superheatedterrain: {
 		name: "Super-Heated Terrain",
 		condition: {
@@ -1921,6 +1989,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldStart(field, source, effect) {
+				if (this.field.weather !== '') {
+					this.field.clearWeather();
+				}
 				if (effect?.effectType === 'Ability') {
 					this.add('-fieldstart', 'Underwater Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {

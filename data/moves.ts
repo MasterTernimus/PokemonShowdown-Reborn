@@ -2330,6 +2330,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				newType = counter[this.CrystalCavernCounter];
 			}
+			else if (this.field.isTerrain('newworldterrain')) {
+				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+				newType = this.sample(types);
+			}
 			else {
 				let possibleType = terrainTypeMap.get(this.field.getTerrain().id);
 				newType = possibleType !== undefined ? possibleType : newType;
@@ -3158,7 +3162,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('holyterrain')) {
+			if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) {
 				move.boosts = {
 					def: 2,
 					spd: 2
@@ -3612,6 +3616,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 		status: 'slp',
+		onModifyMove(move) {
+			if (this.field.isTerrain('newworldterrain')) {
+				move.accuracy = 85;
+			}
+		},
 		onTry(source, target, move) {
 			if (source.species.name === 'Darkrai' || move.hasBounced) {
 				return;
@@ -4138,7 +4147,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Doom Desire",
 		pp: 5,
 		priority: 0,
-		flags: {metronome: 1, futuremove: 1},
+		flags: { metronome: 1, futuremove: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('newworldterrain')) {
+				move.types = [move.type, 'Fire'];
+			}
+		},
 		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
@@ -5002,7 +5016,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			}
 			this.add('-prepare', attacker, move.name);
 			this.boost({spa: 1}, attacker, attacker, move);
-			if (['raindance', 'primordialsea'].includes(attacker.effectiveWeather())) {
+			if (['raindance', 'primordialsea'].includes(attacker.effectiveWeather()) || this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -5909,7 +5923,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Fissure",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		onTryMove() {
+			if (this.field.isTerrain('newworldterrain')) {
+				this.add('-message', 'The unformed land diffused the attack...');
+				return false;
+			}
+		},
 		ohko: true,
 		secondary: null,
 		target: "normal",
@@ -6062,7 +6082,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('darkcrystalcavernterrain')) {
+			if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain')) {
 				move.boosts = {
 					accuracy: -2,
 				};
@@ -8303,10 +8323,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {nonsky: 1, metronome: 1},
 		pseudoWeather: 'gravity',
-		onAfterMove() {
-			if (this.field.isTerrain('corrosivemistterrain'))
-				this.field.changeTerrain('corrosiveterrain');
-		},
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
@@ -8381,6 +8397,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onFieldResidualSubOrder: 2,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Gravity');
+				if (this.field.terrainState?.sourceEffect.id === 'gravity' && this.field.isTerrain('starlightarenaterrain')) {
+					this.field.changeTerrain('newworldterrain');
+				}
 			},
 		},
 		secondary: null,
@@ -9050,6 +9069,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 			source.setBoost(targetBoosts);
 
 			this.add('-swapboost', source, target, '[from] move: Heart Swap');
+			if (this.field.isTerrain('newworldterrain')) {
+				const targetHP = target.getUndynamaxedHP();
+				const averagehp = Math.floor((targetHP + source.hp) / 2) || 1;
+				const targetChange = targetHP - averagehp;
+				target.sethp(target.hp - targetChange);
+				this.add('-sethp', target, target.getHealth, '[from] move: Heart Swap', '[silent]');
+				source.sethp(averagehp);
+				this.add('-sethp', source, source.getHealth, '[from] move: Heart Swap');
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -11329,7 +11357,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Lunar Dance",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, dance: 1, heal: 1, metronome: 1},
+		flags: { snatch: 1, dance: 1, heal: 1, metronome: 1 },
 		onTryHit(source) {
 			if (!this.canSwitch(source.side)) {
 				this.attrLastMove('[still]');
@@ -11341,6 +11369,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 		slotCondition: 'lunardance',
 		condition: {
 			onSwap(target) {
+				if ((!target.fainted || target.moveSlots.some(moveSlot => moveSlot.pp < moveSlot.maxpp)) && this.field.isTerrain('newworldterrain')) {
+					this.boost({ atk: 1, spa: 1, def: 1, spd: 1, spe: 1 }, target);
+				}
 				if (
 					!target.fainted && (
 						target.hp < target.maxhp ||
@@ -11526,7 +11557,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.terrain === 'psychicterrain' || source.hasItem('amplifieldrock'))
+				if (this.field.terrain === 'psychicterrain' || source.hasItem('amplifieldrock') || this.field.isTerrain('newworldterrain'))
 					return 8
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
@@ -12559,13 +12590,18 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Meteor Beam",
 		pp: 10,
 		priority: 0,
-		flags: {charge: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { charge: 1, protect: 1, mirror: 1, metronome: 1 },
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			this.boost({spa: 1}, attacker, attacker, move);
+			this.boost({ spa: 1 }, attacker, attacker, move);
+			if (this.field.isTerrain('newworldterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('starlightarenaterrain')) {
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+				return;
+			}
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -13188,7 +13224,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				factor = 0.25;
 					break;
 			default:
-				if (this.field.isTerrain('darkcrystalcavernterrain')) {
+				if (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain')) {
 					factor = 0.75;
 				}
 				break;
@@ -13601,7 +13637,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['dragonsdenterrain', 'dragonpulse'],
 				['holyterrain', 'judgment'],
 				['mountainterrain', 'rockslide'],
-				['snowymountainterrain', 'avalanche']
+				['snowymountainterrain', 'avalanche'],
+				['newworldterrain', 'spacialrend']
 			]);
 			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
@@ -13618,7 +13655,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('forestterrain')) {
+			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('forestterrain') || this.field.isTerrain('newworldterrain')) {
 				return this.clampIntRange(Math.floor(target.getUndynamaxedHP() *3 / 4), 1);
 
 			}
@@ -16773,6 +16810,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 		accuracy: 90,
 		basePower: 0,
 		damageCallback(pokemon, target) {
+			if (this.field.isTerrain('newworldterrain')) {
+				return this.clampIntRange(Math.floor(target.getUndynamaxedHP() * 0.66));
+			}
 			return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 2), 1);
 		},
 		category: "Special",
@@ -17295,6 +17335,17 @@ export const Moves: { [moveid: string]: MoveData } = {
 					chance: 30,
 					boosts: {
 						spd: -1
+					}
+				});
+			} else if (this.field.isTerrain('newworldterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					boosts: {
+						spa: -1,
+						spe: -1,
+						spd: -1,
+						atk: -1,
+						def: -1
 					}
 				});
 			}
@@ -20701,9 +20752,15 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Take Heart",
 		pp: 15,
 		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
 		onHit(pokemon) {
-			const success = !!this.boost({spa: 1, spd: 1});
+			let success;
+			if (this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain') || this.field.isTerrain('psychicterrain')) {
+				success = !!this.boost({ spa: 2, spd: 2 });
+			}
+			else {
+				success = !!this.boost({ spa: 1, spd: 1 });
+			}
 			return pokemon.cureStatus() || success;
 		},
 		secondary: null,
@@ -21074,35 +21131,43 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyType(move, pokemon) {
 			if (!pokemon.isGrounded()) return;
 			const terrainTypeMap = new Map<string, string>([
-				['electricterrain', 'Electric'],
-				['ashenbeachterrain', 'Fighting'],
-				['bigtopterrain', 'Fighting'],
-				['burningterrain', 'Fire'],
-				['caveterrain', 'Ground'],
-				['chessboardterrain', 'Psychic'],
-				['corrosiveterrain', 'Poison'],
-				['corrosivimisterrain', 'Poison'],
-				['crystalcavernterrain', 'Rock'],
-				['darkcrystalcavernterrain', 'Dark'],
-				['desertterrain', 'Ground'],
-				['factoryterrain', 'Steel'],
-				['fairytaleterrain', 'Fairy'],
-				['forestterrain', 'Grass'],
-				['grassyterrain', 'Grass'],
-				['glitchterrain', '???'],
-				['icyterrain', 'Ice'],
-				['mirrorarenaterrain', 'Ice'],
-				['mistyterrainterrain', 'Fairy'],
-				['murkwatersurfaceterrain', 'Water'],
-				['psychicterrain', 'Psychic'],
-				['rainbowterrain', 'Fairy'],
-				['rockyterrain', 'Rock'],
-				['shortcircuitterrain', 'Ghost'],
-				['superheatedterrain', 'Fire'],
-				['swampterrain', 'Normal'],
-				['underwaterrain', 'Water'],
-				['wastelandterrain', 'Poison'],
-				['watersurfaceterrain', 'Water']
+				["holyterrain", "Normal"],
+				["inverseterrain", "Normal"],
+				["electricterrain", "Electric"],
+				["burningterrain", "Fire"],
+				["superheatedterrain", "Fire"],
+				["watersurfaceterrain", "Water"],
+				["underwaterterrain", "Water"],
+				["murkwatersurfaceterrain", "Water"],
+				["icyterrain", "Ice"],
+				["mirrorarenaterrain", "Ice"],
+				["snowymountainterrain", "Ice"],
+				["snowyterrain", "Ice"],
+				["grassterrain", "Grass"],
+				["forestterrain", "Grass"],
+				["flowergardenterrain", "Grass"],
+				["ashenbeachterrain", "Fighting"],
+				["bigtopterrain", "Fighting"],
+				["psychicterrain", "Psychic"],
+				["chessboardterrain", "Psychic"],
+				["darkcrystalterrain", "Dark"],
+				["starlightarenaterrain", "Dark"],
+				["shortcircuitterrain", "Ghost"],
+				["factoryterrain", "Steel"],
+				["corrosiveterrain", "Poison"],
+				["corrosivemistterrain", "Poison"],
+				["wastelandsurface", "Poison"],
+				["mountainterrain", "Flying"],
+				["caveterrain", "Ground"],
+				["desertterrain", "Ground"],
+				["rockyterrain", "Rock"],
+				["crystalcavernterrain", "Rock"],
+				["dragonsdenterrain", "Dragon"],
+				["rainbowterrain", "Fairy"],
+				["fairytaleterrain", "Fairy"],
+				["mistyterrain", "Fairy"],
+				["glitchterrain", "???"],
+				["newworldterrain", "???"],
 			]);
 			let newType = terrainTypeMap.get(this.field.getTerrain().id);
 			move.type = newType !== undefined ? newType : "Normal";
@@ -21816,7 +21881,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || source.hasItem('amplifieldrock'))
+				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || source.hasItem('amplifieldrock') || this.field.isTerrain('newworldterrain'))
 					return 8;
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
@@ -22883,7 +22948,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.isTerrain('psychicterrain') || source.hasItem('amplifieldrock'))
+				if (this.field.isTerrain('psychicterrain') || source.hasItem('amplifieldrock') || this.field.isTerrain('newworldterrain'))
 					return 8
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Wonder Room');

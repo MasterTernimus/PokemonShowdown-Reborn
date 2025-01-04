@@ -918,12 +918,24 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (pokemon.transformed || pokemon.ability !== 'multitype' && this.gen >= 8) return types;
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'multitype') {
-				type = pokemon.getItem().onPlate;
+				if (this.field.isTerrain('newworldterrain')) {
+					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+					type = this.sample(types);
+				}
+				else {
+					type = pokemon.getItem().onPlate;
+				}
 				if (!type) {
 					type = 'Normal';
 				}
 			}
 			return [type];
+		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('newworldterrain')) {
+				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+				pokemon.setType(this.sample(types), true);
+			}
 		},
 	},
 	silvally: {
@@ -939,6 +951,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 				else if (this.field.isTerrain('holyterrain')) {
 					type = 'Dark';
 				}
+				else if (this.field.isTerrain('newworldterrain')) {
+					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+					type = this.sample(types);
+				}
 				else {
 					type = pokemon.getItem().onMemory;
 				}
@@ -949,11 +965,17 @@ export const Conditions: {[k: string]: ConditionData} = {
 			return [type];
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('glitchterrain') && pokemon.ability === 'rkssystem' && pokemon.types[0] !== '???') {
-				pokemon.setType('???', true);
-			}
-			else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem' && pokemon.getItem().onMemory !== undefined) {
-				pokemon.setType(pokemon.getItem().onMemory!, true);
+			if (pokemon.ability === 'rkssystem') {
+				if (this.field.isTerrain('glitchterrain') && pokemon.types[0] !== '???') {
+					pokemon.setType('???', true);
+				}
+				else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem' && pokemon.getItem().onMemory !== undefined) {
+					pokemon.setType(pokemon.getItem().onMemory!, true);
+				}
+				else if (this.field.isTerrain('newworldterrain')) {
+					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+					pokemon.setType(this.sample(types), true);
+				}
 			}
 		}
 	},
