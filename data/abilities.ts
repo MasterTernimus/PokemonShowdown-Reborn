@@ -928,7 +928,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				}
 			}
 		},
-		onAfterMove(source, target, move){
+		onAfterMove(source, target, move) {
 			if (move.flags.dance && this.field.isTerrain('bigtopterrain')) {
 				this.boost({ spa: 1, atk: 1 }, source, source, null, false, true);
 			}
@@ -1727,7 +1727,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			let modifier = 4915/4096;
+			let modifier = 4915 / 4096;
 			if (this.field.isTerrain('shortcircuitterrain')) {
 				modifier = 2;
 			}
@@ -2582,7 +2582,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 			return false;
 		},
-		
+
 		flags: { breakable: 1 },
 		name: "Limber",
 		rating: 2,
@@ -2612,7 +2612,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			const canOoze = ['drain', 'leechseed', 'strengthsap'];
 			if (canOoze.includes(effect.id)) {
 				if (this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain')) {
-					this.damage(damage*2);
+					this.damage(damage * 2);
 
 				}
 				else {
@@ -3772,7 +3772,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			move.tracksTarget = move.target !== 'scripted';
 		},
 		onModifySpe(spe, pokemon) {
-			if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')){
+			if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -4189,7 +4189,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				if (attacker.gender === defender.gender) {
 					this.debug('Rivalry boost');
 					return this.chainModify(1.25);
-				} 
+				}
 			}
 		},
 		flags: {},
@@ -4200,15 +4200,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	rkssystem: {
 		// RKS System's type-changing itself is implemented in statuses.js
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
-		onResidual(pokemon) {
-			if (this.field.isTerrain('glitchterrain')) {
-				const newType = '???';
-				pokemon.types = (typeof newType === 'string' ? [newType] : newType);
-				pokemon.addedType = '';
-				pokemon.knownType = true;
-				pokemon.apparentType = pokemon.types.join('/');
-			}
-		},
 		name: "RKS System",
 		rating: 4,
 		num: 225,
@@ -4479,7 +4470,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.debug('Shadow Shield weaken');
 				return this.chainModify(0.5);
 			}
-			if (target.getMoveHitData(move).typeMod > 0 && this.field.isTerrain('darkcrystalcavernterrain')) {
+			if (target.getMoveHitData(move).typeMod > 0 && (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain'))) {
 				this.debug('Shadow Shield Armor neutralize');
 				return this.chainModify(0.75);
 			}
@@ -4961,7 +4952,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
 				this.add('-message', 'The heat activates' + pokemon.name + '\'s Steam Engine!');
-				this.boost({spe: 6}, pokemon);
+				this.boost({ spe: 6 }, pokemon);
 			}
 		},
 		flags: {},
@@ -5032,7 +5023,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 						volatileStatus: 'flinch',
 					});
 				}
-				
+
 			}
 		},
 		flags: {},
@@ -5065,7 +5056,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
 			let seeds = ['elementalseed', 'magicseed', 'telluricseed', 'syntheticseed'];
-			if (move.type !== 'Water' || move.flags['pledgecombo'] || (seeds.includes(move.sourceEffect) && target===source)) return;
+			if (move.type !== 'Water' || move.flags['pledgecombo'] || (seeds.includes(move.sourceEffect) && target === source)) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
@@ -5778,6 +5769,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onAnyModifyAccuracy(accuracy, target, source) {
 			if (source.isAlly(this.effectState.target) && typeof accuracy === 'number') {
 				return this.chainModify([4506, 4096]);
+			}
+		},
+		onAllyDamage(damage) {
+			if (this.field.isTerrain('newworldterrain')) {
+				return this.chainModify(1.5);
 			}
 		},
 		flags: {},

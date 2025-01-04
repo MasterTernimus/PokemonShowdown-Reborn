@@ -54,8 +54,8 @@ export class Field {
 				return false;
 			}
 		}
-		if (this.isTerrain('underwaterterrain')) {
-			this.battle.add('-message', 'The weather was annihilated by the crushing weight of the ocean!');
+		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) {
+			this.battle.add('-message', 'The weather was annihilated by the crushing weight of the field!');
 			return false;
 		}
 		if (source) {
@@ -155,8 +155,8 @@ export class Field {
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
-		if (this.isTerrain('underwaterterrain')) {
-			this.battle.add('-message', 'The field was annihilated by the crushing weight of the ocean!');
+		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) {
+			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
 			return false;
 		}
 		let new_terrain_type = "";
@@ -221,7 +221,7 @@ export class Field {
 	}
 
 	clearTerrain(power: string | null = null) {
-		if (this.isTerrain('') || this.isTerrain('underwaterterrain')) return false;
+		if (this.isTerrain('') || this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) return false;
 		if (power === 'mid') {
 			if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();

@@ -3405,7 +3405,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain'))) {
 				pokemon.useItem();
 			}
 		},
@@ -3429,9 +3429,13 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ spa: 1 }, pokemon)
 				pokemon.addVolatile('magiccoat', null, item);
 			}
+			if (this.field.isTerrain('newworldterrain')) {
+				this.boost({ atk: 1, spa: 1, def: 1, spd: 1, spe: 1 }, pokemon, pokemon, item);
+				pokemon.addVolatile('mustrecharge');
+			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain')) {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) {
 				pokemon.useItem();
 			}
 		},
