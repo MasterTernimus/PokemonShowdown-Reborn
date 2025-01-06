@@ -16017,7 +16017,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('mountainterrain')) {
+			if (this.field.isTerrain('mountainterrain') || this.field.isWeather('deltastream')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
