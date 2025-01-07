@@ -1765,7 +1765,45 @@ export const Terrains: { [k: string]: TerrainData } = {
 	starlightarenaterrain: {
 		name: "Starlight Arena Terrain",
 		condition: {
-			
+			onModifyMove(move) {
+				if (move.type === 'Dark') {
+					move.types = ['Dark', 'Fairy'];
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const boost: string[] = ["aurorabeam", "signalbeam", "flashcannon", "lusterpurge", "dazzlinggleam", "mirrorshot", "technoblast", "solarbeam", "photongeyser", "moonblast", "meteorbeam"];
+				const strong_boost: string[] = ["dracometeor", "meteormash", "cometpunch", "spacialrend", "swift", "hyperspacehole", "hyperspacefury", "moongeistbeam", "sunsteelstrike", "blackholeeclipse", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
+				if (this.field.weather === '') {
+					if (move.type === 'Dark' || move.type === 'Psychic') {
+						modifier *= 1.5;
+					}
+					if (move.type === 'Fairy') {
+						modifier *= 1.3;
+					}
+					if (move.id === 'doomdesire') {
+						modifier *= 4;
+					}
+					if (boost.includes(move.id)) {
+						modifier *= 1.5;
+					}
+					if (strong_boost.includes(move.id)) {
+						modifier *= 2;
+					}
+					return this.chainModify(modifier);
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Starlight Arena Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'Starlight Arena Terrain');
+				}
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Starlight Arena Terrain');
+			},
 		}
 	},
 	superheatedterrain: {
