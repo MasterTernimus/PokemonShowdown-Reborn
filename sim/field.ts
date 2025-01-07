@@ -216,6 +216,9 @@ export class Field {
 		if (this.terrainState.isBase) {
 			this.terrainStack[0] = this.terrainState;
 		}
+		else {
+			this.terrainStack.unshift(this.terrainState);
+		}
 		this.battle.add('-fieldstart', status.name);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 	}
