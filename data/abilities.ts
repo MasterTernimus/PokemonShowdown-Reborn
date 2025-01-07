@@ -2216,6 +2216,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 					this.boost({ accuracy: -1 }, foe);
 				}
 			}
+			if (this.field.isTerrain('starlightarenaterrain')) {
+				this.boost({ spa: 2 }, pokemon, pokemon);
+			}
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
@@ -2806,7 +2809,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	marvelscale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
-			if (pokemon.status || this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('dragonsdenterrain')) {
+			if (pokemon.status || this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('dragonsdenterrain') || this.field.isTerrain('starlightarenaterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -4470,7 +4473,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.debug('Shadow Shield weaken');
 				return this.chainModify(0.5);
 			}
-			if (target.getMoveHitData(move).typeMod > 0 && (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain'))) {
+			if (target.getMoveHitData(move).typeMod > 0 && (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain'))) {
 				this.debug('Shadow Shield Armor neutralize');
 				return this.chainModify(0.75);
 			}
@@ -5771,8 +5774,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				return this.chainModify([4506, 4096]);
 			}
 		},
-		onAllyDamage(damage) {
-			if (this.field.isTerrain('newworldterrain')) {
+		onFoeDamage(damage) {
+			this.add('-message', 'Happened');
+			if (this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
