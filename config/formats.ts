@@ -25,6 +25,15 @@ export const Formats: FormatList = [
 		section: "AllGen Singles",
 	},
 	{
+		name: "[Gen 9] Starlight Arena Terrain",
+		mod: 'gen9',
+		terrain: 'starlightarenaterrain',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] New World Terrain",
 		mod: 'gen9',
 		terrain: 'newworldterrain',
@@ -261,6 +270,16 @@ export const Formats: FormatList = [
 
 	{
 		section: "AllGen Doubles",
+	},
+		{
+		name: "[Gen 9] Doubles Starlight Arena Terrain",
+		mod: 'gen9',
+		terrain: 'starlightarenaterrain',
+		gameType: 'doubles',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Doubles New World Terrain",
