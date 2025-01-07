@@ -8403,7 +8403,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onFieldResidualSubOrder: 2,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Gravity');
-				if (this.field.terrainState?.sourceEffect.id === 'gravity' && this.field.isTerrain('starlightarenaterrain')) {
+				if (this.field.terrainState?.origin.id === 'gravity' && this.field.isTerrain('starlightarenaterrain')) {
 					this.field.changeTerrain('newworldterrain');
 				}
 			},
