@@ -11150,13 +11150,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onHit() {
 			if (this.field.isTerrain('holyterrain') || this.field.isTerrain('starlightarenaterrain')) {
-				this.add('-message', 'The holy light was consumed!');
+				this.add('-message', 'The light was consumed!');
 				this.field.clearTerrain();
 			}
 		},
 		onAfterSubDamage() {
 			if (this.field.isTerrain('holyterrain') || this.field.isTerrain('starlightarenaterrain')) {
-				this.add('-message', 'The holy light was consumed!');
+				this.add('-message', 'The light was consumed!');
 				this.field.clearTerrain();
 			}
 		},
@@ -19415,6 +19415,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onBasePower() {
+			if (this.field.terrain !== '') {
+				return this.chainModify(1.3);
+			}
+		},
 		onHit() {
 			this.field.clearTerrain();
 		},
