@@ -1477,21 +1477,30 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const strong_boost: string[] = ["vacuumwave", "dracometeor", "meteormash", "moonblast", "cometpunch", "swift", "meteorbeam", "hyperspacehole", "spacialrend", "hyperspacefury", "ancientpower", "futuredummy", "blackholeeclipse"];
 				const weak_nerf = ['bulldoze', 'earthquake', 'magnitude'];
 				if (boost.includes(move.id)) {
+					this.add('-message', 'The ethereal energy strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (strong_boost.includes(move.id)) {
+					this.add('-message', 'The light shone through the infinite darkness!');
 					modifier *= 2;
 				}
 				if (move.id === 'doomdesire') {
+					this.add('-message', 'A star came crashing down on ' + target.name);
 					modifier *= 4;
 				}
 				if (weak_nerf.includes(move.id)) {
+					this.add('-message', 'The unformed land diffused the attack...');
 					modifier *= 0.25;
+				}
+				if (move.type === 'Dark') {
+					modifier *= 1.5;
+					this.add('-message', 'Infinity boosted the attack!');
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
 				if (move.id === 'gravity' || move.id === 'geomancy') {
+					this.add('-message', 'The world\'s matter reformed!');
 					this.field.changeTerrain('starlightarenaterrain', source, move);
 				}
 			},
@@ -1504,6 +1513,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				} else {
 					this.add('-fieldstart', 'New World Terrain');
 				}
+				this.add('-message', 'From darkness, from stardust. From memories of eons past and visions yet to come...')
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'New World Terrain');
@@ -1777,18 +1787,23 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const strong_boost: string[] = ["dracometeor", "meteormash", "cometpunch", "spacialrend", "swift", "hyperspacehole", "hyperspacefury", "moongeistbeam", "sunsteelstrike", "blackholeeclipse", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
 				if (this.field.weather === '') {
 					if (move.type === 'Dark' || move.type === 'Psychic') {
+						this.add('-message', 'The field strengthened the attack!');
 						modifier *= 1.5;
 					}
 					if (move.type === 'Fairy') {
+						this.add('-message', 'Starlight supercharged the attack!');
 						modifier *= 1.3;
 					}
 					if (move.id === 'doomdesire') {
+						this.add('-message', 'A star came crashing down!');
 						modifier *= 4;
 					}
 					if (boost.includes(move.id)) {
+						this.add('-message', 'Starlight surged through the attack!');
 						modifier *= 1.5;
 					}
 					if (strong_boost.includes(move.id)) {
+						this.add('-message', 'The astral energy boosted the attack!');
 						modifier *= 2;
 					}
 					return this.chainModify(modifier);
@@ -1800,6 +1815,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				} else {
 					this.add('-fieldstart', 'Starlight Arena Terrain');
 				}
+				this.add('-message', 'Starlight fills the battlefield.');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Starlight Arena Terrain');
