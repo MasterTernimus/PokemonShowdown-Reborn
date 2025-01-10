@@ -12605,6 +12605,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 10,
 		priority: 0,
 		flags: { charge: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('starlightarenaterrain')){
+				move.types = [move.type, 'Dark'];
+			}
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
