@@ -165,7 +165,7 @@ export class Field {
 			new_terrain_type = "Core";
 		}
 		if (status.id === 'rainbowterrain' && (sourceEffect?.id === 'raindance' || sourceEffect?.id === 'sunnyday')) {
-			new_terrain_type = "Temp"
+			new_terrain_type = "Temp";
 		}
 		this.terrainState.Tchanges = [];
 		const prevTerrain = this.terrain;
@@ -215,8 +215,7 @@ export class Field {
 		};
 		if (this.terrainState.isBase) {
 			this.terrainStack[0] = this.terrainState;
-		}
-		else {
+		} else {
 			this.terrainStack.unshift(this.terrainState);
 		}
 		this.battle.add('-fieldstart', status.name);
@@ -229,15 +228,23 @@ export class Field {
 			if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-				while (this.terrainStack[0]?.terrain_type !== "Base") {
+				while (this.terrainStack[0] && this.terrainStack[0]?.terrain_type !== "Base") {
 					this.terrainStack.shift();
 				}
-			}
-			else {
+			} else {
 				return false;
 			}
-		}
-		else {
+		} else if (power === '9001' && this.terrainState?.terrain_type === 'Base') {
+			const prevTerrain = this.getTerrain();
+			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
+			this.terrainStack.shift();
+			while (this.terrainStack[0]?.terrain_type === 'Base' && this.terrainStack[0].id === this.battle.format.terrain) {
+				this.terrainStack.shift();
+				if (this.terrainStack.length === 0) {
+					break;
+				}
+			}
+		} else {
 			const prevTerrain = this.getTerrain();
 			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 			this.terrainStack.shift();
@@ -251,7 +258,8 @@ export class Field {
 				}
 			}
 		}
-		if (this.terrainStack) {
+		console.log(this.terrainStack);
+		if (this.terrainStack.length !== 0) {
 			this.terrain = this.terrainStack[0].id;
 			this.terrainState = this.terrainStack[0];
 			const current_terrain = this.battle.dex.conditions.get(this.terrain);
