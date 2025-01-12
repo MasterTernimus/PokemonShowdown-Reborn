@@ -3009,7 +3009,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 			const type = this.dex.moves.get(target.moveSlots[0].id).type;
 			if (target.hasType(type) || !target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
-			if(!this.field.terrainState.Tchanges?.includes('conversion'))
+		},
+		onAfterMove(source, target, move) {
+			if (this.field.isTerrain('glitchterrain')) {
+				this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
+			}
+			else if (!this.field.terrainState.Tchanges?.includes('conversion'))
 				this.field.terrainState.Tchanges?.push('conversion');
 		},
 		secondary: null,
@@ -3049,14 +3054,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 			this.add('-start', source, 'typechange', randomType);
 		},
 		onAfterMove(source, target, move) {
-			if (this.field.terrainState.Tchanges?.includes('conversion')) {
-				if (this.field.isTerrain('glitchterrain')) {
+			if (this.field.isTerrain('glitchterrain')) {
 					this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
-				}
 			}
-			else {
+			else if (this.field.terrainState.Tchanges?.includes('conversion')) {
 				this.field.setTerrain('glitchterrain');
 			}
+			else if (!this.field.terrainState.Tchanges?.includes('conversion2'))
+				this.field.terrainState.Tchanges?.push('conversion2');
 		},
 		secondary: null,
 		target: "normal",
