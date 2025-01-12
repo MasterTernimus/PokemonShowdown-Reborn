@@ -492,9 +492,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onSetWeather(target, source, weather) {
 			if (weather.id === 'sunnyday') {
 				if (this.field.isTerrain('rainbowterrain')) {
-					new Promise((resolve) => {
-						setTimeout(() => resolve(this.field.weatherState.duration), 200);
-					}).then(duration => this.field.terrainState.duration = duration);
+					this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, weather);
 				}
 				else {
 					this.field.setTerrain('rainbowterrain', source, weather);
@@ -571,9 +569,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onSetWeather(target, source, weather) {
 			if (weather.id === 'raindance') {
 				if (this.field.isTerrain('rainbowterrain')) {
-					new Promise((resolve) => {
-						setTimeout(() => resolve(this.field.weatherState.duration), 200);
-					}).then(duration => this.field.terrainState.duration = duration);
+					this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, weather);
 				}
 				else {
 					this.field.setTerrain('rainbowterrain', source, weather);
