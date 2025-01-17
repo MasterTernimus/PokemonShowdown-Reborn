@@ -910,8 +910,16 @@ export const Conditions: {[k: string]: ConditionData} = {
 	arceus: {
 		name: 'Arceus',
 		onTypePriority: 1,
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('newworldterrain') && pokemon.ability === 'multitype') {
+				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+				const new_type = this.sample(types)
+				pokemon.setType(new_type, true);
+				this.add('-start', pokemon, 'typechange', new_type);
+			}
+		},
 		onType(types, pokemon) {
-			if (pokemon.transformed || pokemon.ability !== 'multitype' && this.gen >= 8) return types;
+			if (pokemon.transformed || pokemon.ability !== 'multitype' && this.gen >= 8 || this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) return types;
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'multitype') {
 				if (this.field.isTerrain('newworldterrain')) {
@@ -930,30 +938,38 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onResidual(pokemon) {
 			if (this.field.isTerrain('newworldterrain')) {
 				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
-				pokemon.setType(this.sample(types), true);
+				const new_type = this.sample(types)
+				pokemon.setType(new_type, true);
+				this.add('-start', pokemon, 'typechange', new_type);
 			}
 		},
 	},
 	silvally: {
 		name: 'Silvally',
 		onTypePriority: 1,
-		onType(types, pokemon) {
-			if (pokemon.transformed || pokemon.ability !== 'rkssystem' && this.gen >= 8 || !(this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain'))) return types;
-			let type: string | undefined = 'Normal';
+		onSwitchIn(pokemon) {
 			if (pokemon.ability === 'rkssystem') {
 				if (this.field.isTerrain('glitchterrain')) {
-					type = '???';
+					pokemon.setType('???', true);
+					this.add('-start', pokemon, 'typechange', '???');
 				}
 				else if (this.field.isTerrain('holyterrain')) {
-					type = 'Dark';
+					pokemon.setType('Dark', true);
+					this.add('-start', pokemon, 'typechange', 'Dark');
 				}
 				else if (this.field.isTerrain('newworldterrain')) {
 					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
-					type = this.sample(types);
+					const new_type = this.sample(types)
+					pokemon.setType(new_type, true);
+					this.add('-start', pokemon, 'typechange', new_type);
 				}
-				else {
-					type = pokemon.getItem().onMemory;
-				}
+			}
+		},
+		onType(types, pokemon) {
+			if (pokemon.transformed || pokemon.ability !== 'rkssystem' && this.gen >= 8 || this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) return types;
+			let type: string | undefined = 'Normal';
+			if (pokemon.ability === 'rkssystem') {
+				type = pokemon.getItem().onMemory;
 				if (!type) {
 					type = 'Normal';
 				}
@@ -964,13 +980,19 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (pokemon.ability === 'rkssystem') {
 				if (this.field.isTerrain('glitchterrain') && pokemon.types[0] !== '???') {
 					pokemon.setType('???', true);
+					this.add('-start', pokemon, 'typechange', '???');
 				}
 				else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem' && pokemon.getItem().onMemory !== undefined) {
 					pokemon.setType(pokemon.getItem().onMemory!, true);
+					if (pokemon.getItem().onMemory !== pokemon.getTypes()[0] && pokemon.getTypes().length === 1) {
+						this.add('-start', pokemon, 'typechange', pokemon.getItem().onMemory);
+					}
 				}
 				else if (this.field.isTerrain('newworldterrain')) {
 					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
-					pokemon.setType(this.sample(types), true);
+					const new_type = this.sample(types)
+					pokemon.setType(new_type, true);
+					this.add('-start', pokemon, 'typechange', new_type);
 				}
 			}
 		}
