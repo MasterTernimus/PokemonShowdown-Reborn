@@ -249,7 +249,7 @@ export class Field {
 			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 			this.terrainStack.shift();
 			for (const terrainState of this.terrainStack) {
-				if (terrainState.duration <= (this.battle.turn - this.terrainState.turn)) {
+				if (terrainState.duration <= (this.battle.turn - this.terrainState.turn + 1)) {
 					this.terrainStack.shift();
 				}
 				else {
@@ -258,7 +258,6 @@ export class Field {
 				}
 			}
 		}
-		console.log(this.terrainStack);
 		if (this.terrainStack.length !== 0) {
 			this.terrain = this.terrainStack[0].id;
 			this.terrainState = this.terrainStack[0];
