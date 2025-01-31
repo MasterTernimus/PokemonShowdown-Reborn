@@ -8231,7 +8231,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			duration: 5,
 			durationCallback(source, target, effect) {
 				let duration = 5;
-				if (effect && (source.hasAbility(effect.id) || effect.id === 'bloomdoom')) {
+				if (effect && ((source.hasAbility(effect.id) && effect.id != 'seedsower') || effect.id === 'bloomdoom')) {
 					duration = 3;
 				}
 				if (source?.hasItem('amplifieldrock')) {
