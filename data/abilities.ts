@@ -6052,6 +6052,11 @@ else
 				pokemon.addVolatile('charge');
 			}
 		},
+		onResidual(pokemon) {
+			if (this.field.isWeather('deltastream')) {
+				this.boost({ spa: 1 });
+			}
+		},
 		flags: {},
 		name: "Wind Power",
 		rating: 1,
@@ -6075,6 +6080,11 @@ else
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
 				this.boost({ atk: 1 }, pokemon, pokemon);
+			}
+		},
+		onResidual(pokemon) {
+			if (this.field.isWeather('deltastream')){
+				this.boost({ atk: 1 });
 			}
 		},
 		flags: { breakable: 1 },
