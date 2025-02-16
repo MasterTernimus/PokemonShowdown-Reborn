@@ -23,20 +23,12 @@ export const Formats: FormatList = [
 	///////////////////////////////////////////////////////////////////
 	{
 		section: "AllGen Singles",
+		column: 1,
 	},
 	{
 		name: "[Gen 9] Random Terrain",
 		mod: 'gen9',
 		terrain: 'randomterrain',
-		searchShow: true,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
-	},
-	{
-		name: "[Gen 9] Swamp Terrain",
-		mod: 'gen9',
-		terrain: 'swampterrain',
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -374,14 +366,26 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 
-	//AllGen 
-	//////////////////////////////////////////////////////////////
+
+	//All Gen Doubles
+	///////////////////////////////////////////////////////////////////////////////////////////////////
 
 	{
 		section: "AllGen Doubles",
+		column: 2,
 	},
 	{
-		name: "[Gen 9] Doubles Swamp Terrain",
+		name: "[Gen 9] Doubles Random Field",
+		mod: 'gen9',
+		terrain: 'randomterrain',
+		gameType: 'doubles',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
+	},
+	{
+		name: "[Gen 9] Doubles Swamp Field",
 		mod: 'gen9',
 		terrain: 'swampterrain',
 		gameType: 'doubles',
@@ -411,7 +415,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Crystal Cavern Terrain",
+		name: "[Gen 9] Doubles Crystal Cavern",
 		mod: 'gen9',
 		terrain: 'crystalcavernterrain',
 		gameType: 'doubles',
@@ -421,7 +425,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Rainbow Terrain",
+		name: "[Gen 9] Doubles Rainbow Field",
 		mod: 'gen9',
 		terrain: 'rainbowterrain',
 		gameType: 'doubles',
@@ -431,7 +435,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Inverse Terrain",
+		name: "[Gen 9] Doubles Inverse Field",
 		mod: 'gen9',
 		terrain: 'inverseterrain',
 		gameType: 'doubles',
@@ -451,7 +455,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Burning Terrain",
+		name: "[Gen 9] Doubles Burning Field",
 		mod: 'gen9',
 		terrain: 'burningterrain',
 		gameType: 'doubles',
@@ -461,7 +465,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Icy Terrain",
+		name: "[Gen 9] Doubles Icy Field",
 		mod: 'gen9',
 		terrain: 'icyterrain',
 		gameType: 'doubles',
@@ -471,7 +475,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Underwater Terrain",
+		name: "[Gen 9] Doubles Underwater",
 		mod: 'gen9',
 		terrain: 'underwaterterrain',
 		gameType: 'doubles',
@@ -481,18 +485,17 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Murkwater Terrain",
+		name: "[Gen 9] Doubles Murkwater Surface",
 		mod: 'gen9',
-		terrain: 'murkwaterterrain',
+		terrain: 'murkwatersurfaceterrain',
 		gameType: 'doubles',
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
-
 	{
-		name: "[Gen 9] Doubles Starlight Arena Terrain",
+		name: "[Gen 9] Doubles Starlight Arena",
 		mod: 'gen9',
 		terrain: 'starlightarenaterrain',
 		gameType: 'doubles',
@@ -502,7 +505,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles New World Terrain",
+		name: "[Gen 9] Doubles New World",
 		mod: 'gen9',
 		terrain: 'newworldterrain',
 		gameType: 'doubles',
@@ -512,7 +515,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Snowy Mountain Terrain",
+		name: "[Gen 9] Doubles Snowy Mountain",
 		mod: 'gen9',
 		terrain: 'snowymountainterrain',
 		gameType: 'doubles',
@@ -522,7 +525,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Mountain Terrain",
+		name: "[Gen 9] Doubles Mountain",
 		mod: 'gen9',
 		terrain: 'mountainterrain',
 		gameType: 'doubles',
@@ -532,7 +535,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Holy Terrain",
+		name: "[Gen 9] Doubles Holy Field",
 		mod: 'gen9',
 		terrain: 'holyterrain',
 		gameType: 'doubles',
@@ -542,7 +545,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Dragon's Den Terrain",
+		name: "[Gen 9] Doubles Dragon's Den",
 		mod: 'gen9',
 		terrain: 'dragonsdenterrain',
 		gameType: 'doubles',
@@ -552,7 +555,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Rocky Terrain",
+		name: "[Gen 9] Doubles Rocky Field",
 		mod: 'gen9',
 		terrain: 'rockyterrain',
 		gameType: 'doubles',
@@ -562,7 +565,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Water Surface Terrain",
+		name: "[Gen 9] Doubles Water Surface",
 		mod: 'gen9',
 		terrain: 'watersurfaceterrain',
 		gameType: 'doubles',
@@ -572,7 +575,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Fairy Tale Terrain",
+		name: "[Gen 9] Doubles Fairy Tale Field",
 		mod: 'gen9',
 		terrain: 'fairytaleterrain',
 		gameType: 'doubles',
@@ -592,7 +595,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Glitch Terrain",
+		name: "[Gen 9] Doubles Glitch Field",
 		mod: 'gen9',
 		terrain: 'glitchterrain',
 		gameType: 'doubles',
@@ -602,7 +605,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Super-Heated Terrain",
+		name: "[Gen 9] Doubles Super-Heated Field",
 		mod: 'gen9',
 		terrain: 'superheatedterrain',
 		gameType: 'doubles',
@@ -758,7 +761,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 
-	// S/V Singles
+	/* S/V Singles
 	///////////////////////////////////////////////////////////////////
 
 	{
@@ -794,13 +797,14 @@ export const Formats: FormatList = [
 		rated: false,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
-
+	*/
 	// 6/4 All Gen Doubles
 	{
-		section: "All Gen 6/4 Doubles"
+		section: "AllGen 6/4 Doubles",
+		column: 3,
 	},
 	{
-		name: "[Gen 9] Doubles Swamp Terrain",
+		name: "[Gen 9] 6/4 Doubles Swamp Field",
 		mod: 'gen9',
 		terrain: 'swampterrain',
 		gameType: 'doubles',
@@ -810,7 +814,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Misty Terrain",
+		name: "[Gen 9] 6/4 Doubles Misty Terrain",
 		mod: 'gen9',
 		terrain: 'mistyterrain',
 		gameType: 'doubles',
@@ -820,7 +824,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Cave Terrain",
+		name: "[Gen 9] 6/4 Doubles Cave Field",
 		mod: 'gen9',
 		terrain: 'caveterrain',
 		gameType: 'doubles',
@@ -830,7 +834,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Crystal Cavern Terrain",
+		name: "[Gen 9] 6/4 Doubles Crystal Cavern Field",
 		mod: 'gen9',
 		terrain: 'crystalcavernterrain',
 		gameType: 'doubles',
@@ -840,7 +844,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Rainbow Terrain",
+		name: "[Gen 9] 6/4 Doubles Rainbow Field",
 		mod: 'gen9',
 		terrain: 'rainbowterrain',
 		gameType: 'doubles',
@@ -850,7 +854,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Inverse Terrain",
+		name: "[Gen 9] 6/4 Doubles Inverse Field",
 		mod: 'gen9',
 		terrain: 'inverseterrain',
 		gameType: 'doubles',
@@ -860,7 +864,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Psychic Terrain",
+		name: "[Gen 9] 6/4 Doubles Psychic Terrain",
 		mod: 'gen9',
 		terrain: 'psychicterrain',
 		gameType: 'doubles',
@@ -870,7 +874,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Burning Terrain",
+		name: "[Gen 9] 6/4 Doubles Burning Field",
 		mod: 'gen9',
 		terrain: 'burningterrain',
 		gameType: 'doubles',
@@ -880,7 +884,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Icy Terrain",
+		name: "[Gen 9] 6/4 Doubles Icy Field",
 		mod: 'gen9',
 		terrain: 'icyterrain',
 		gameType: 'doubles',
@@ -890,7 +894,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Underwater Terrain",
+		name: "[Gen 9] 6/4 Doubles Underwater",
 		mod: 'gen9',
 		terrain: 'underwaterterrain',
 		gameType: 'doubles',
@@ -900,9 +904,9 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Murkwater Terrain",
+		name: "[Gen 9] 6/4 Doubles Murkwater Surface",
 		mod: 'gen9',
-		terrain: 'murkwaterterrain',
+		terrain: 'murkwatersurfaceterrain',
 		gameType: 'doubles',
 		searchShow: true,
 		debug: true,
@@ -911,7 +915,7 @@ export const Formats: FormatList = [
 	},
 
 	{
-		name: "[Gen 9] Doubles Starlight Arena Terrain",
+		name: "[Gen 9] 6/4 Doubles Starlight Arena",
 		mod: 'gen9',
 		terrain: 'starlightarenaterrain',
 		gameType: 'doubles',
@@ -921,7 +925,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles New World Terrain",
+		name: "[Gen 9] 6/4 Doubles New World",
 		mod: 'gen9',
 		terrain: 'newworldterrain',
 		gameType: 'doubles',
@@ -931,7 +935,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Snowy Mountain Terrain",
+		name: "[Gen 9] 6/4 Doubles Snowy Mountain",
 		mod: 'gen9',
 		terrain: 'snowymountainterrain',
 		gameType: 'doubles',
@@ -941,7 +945,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Mountain Terrain",
+		name: "[Gen 9] 6/4 Doubles Mountain",
 		mod: 'gen9',
 		terrain: 'mountainterrain',
 		gameType: 'doubles',
@@ -951,7 +955,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Holy Terrain",
+		name: "[Gen 9] 6/4 Doubles Holy Field",
 		mod: 'gen9',
 		terrain: 'holyterrain',
 		gameType: 'doubles',
@@ -961,7 +965,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Dragon's Den Terrain",
+		name: "[Gen 9] 6/4 Doubles Dragon's Den",
 		mod: 'gen9',
 		terrain: 'dragonsdenterrain',
 		gameType: 'doubles',
@@ -971,7 +975,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Rocky Terrain",
+		name: "[Gen 9] 6/4 Doubles Rocky Field",
 		mod: 'gen9',
 		terrain: 'rockyterrain',
 		gameType: 'doubles',
@@ -981,7 +985,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Water Surface Terrain",
+		name: "[Gen 9] 6/4 Doubles Water Surface",
 		mod: 'gen9',
 		terrain: 'watersurfaceterrain',
 		gameType: 'doubles',
@@ -991,7 +995,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Fairy Tale Terrain",
+		name: "[Gen 9] 6/4 Doubles Fairy Tale Field",
 		mod: 'gen9',
 		terrain: 'fairytaleterrain',
 		gameType: 'doubles',
@@ -1001,7 +1005,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Misty Terrain (Adrienn)",
+		name: "[Gen 9] 6/4 Doubles Misty Terrain (Adrienn)",
 		mod: 'gen9',
 		terrain: 'adriennterrain',
 		gameType: 'doubles',
@@ -1011,7 +1015,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Glitch Terrain",
+		name: "[Gen 9] 6/4 Doubles Glitch Field",
 		mod: 'gen9',
 		terrain: 'glitchterrain',
 		gameType: 'doubles',
@@ -1021,7 +1025,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Super-Heated Terrain",
+		name: "[Gen 9] 6/4 Doubles Super-Heated Field",
 		mod: 'gen9',
 		terrain: 'superheatedterrain',
 		gameType: 'doubles',
@@ -1031,7 +1035,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Big Top Arena",
+		name: "[Gen 9] 6/4 Doubles Big Top Arena",
 		mod: 'gen9',
 		terrain: 'bigtopterrain',
 		gameType: 'doubles',
@@ -1041,7 +1045,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Dark Crystal Cavern",
+		name: "[Gen 9] 6/4 Doubles Dark Crystal Cavern",
 		mod: 'gen9',
 		terrain: 'darkcrystalcavernterrain',
 		gameType: "doubles",
@@ -1051,7 +1055,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Grassy Terrain",
+		name: "[Gen 9] 6/4 Doubles Grassy Terrain",
 		mod: 'gen9',
 		terrain: 'grassyterrain',
 		gameType: "doubles",
@@ -1061,7 +1065,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Mirror Arena",
+		name: "[Gen 9] 6/4 Doubles Mirror Arena",
 		mod: 'gen9',
 		terrain: 'mirrorarenaterrain',
 		gameType: "doubles",
@@ -1071,7 +1075,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Wasteland Field",
+		name: "[Gen 9] 6/4 Doubles Wasteland Field",
 		mod: 'gen9',
 		terrain: 'wastelandterrain',
 		gameType: "doubles",
@@ -1081,7 +1085,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Ashen Beach Field",
+		name: "[Gen 9] 6/4 Doubles Ashen Beach Field",
 		mod: 'gen9',
 		terrain: 'ashenbeachterrain',
 		gameType: "doubles",
@@ -1091,7 +1095,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Short-Circuit Field",
+		name: "[Gen 9] 6/4 Doubles Short-Circuit Field",
 		mod: 'gen9',
 		terrain: 'shortcircuitterrain',
 		gameType: "doubles",
@@ -1101,7 +1105,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Factory Field",
+		name: "[Gen 9] 6/4 Doubles Factory Field",
 		mod: 'gen9',
 		terrain: 'factoryterrain',
 		gameType: "doubles",
@@ -1112,7 +1116,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Forest Field",
+		name: "[Gen 9] 6/4 Doubles Forest Field",
 		mod: 'gen9',
 		terrain: 'forestfield',
 		gameType: "doubles",
@@ -1123,7 +1127,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Corrosive Mist Field",
+		name: "[Gen 9] 6/4 Doubles Corrosive Mist Field",
 		mod: 'gen9',
 		terrain: 'corrosivemistterrain',
 		gameType: "doubles",
@@ -1134,7 +1138,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Corrosive Field",
+		name: "[Gen 9] 6/4 Doubles Corrosive Field",
 		mod: 'gen9',
 		terrain: 'corrosiveterrain',
 		gameType: "doubles",
@@ -1145,7 +1149,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Desert Field",
+		name: "[Gen 9] 6/4 Doubles Desert Field",
 		mod: 'gen9',
 		terrain: 'desertterrain',
 		gameType: "doubles",
@@ -1156,7 +1160,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Electric Terrain",
+		name: "[Gen 9] 6/4 Doubles Electric Terrain",
 		mod: 'gen9',
 		terrain: 'electricterrain',
 		gameType: "doubles",
@@ -1315,30 +1319,22 @@ export const Formats: FormatList = [
 	},
 	*/
 	{
-		name: "[Gen 9] Custom Game",
+		section: "AllGen No Terrain Battles",
+		column: 4,
+	},
+	{
+		name: "[Gen 9] No Terrain Singles Game",
 
 		mod: 'gen9',
-		searchShow: false,
-		debug: true,
 		battle: {trunc: Math.trunc},
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Moves Clause', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 100', 'Default Level = 100'],
-	},
-
-
-	// S/V Doubles
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "S/V Doubles",
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Random Doubles Battle",
+		name: "[Gen 9] No Terrain Doubles Battle",
 
 		mod: 'gen9',
 		gameType: 'doubles',
-		team: 'random',
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	/*
 	{
@@ -1414,18 +1410,6 @@ export const Formats: FormatList = [
 		banlist: [],
 	},
 	*/
-	{
-		name: "[Gen 9] Doubles Custom Game",
-
-		mod: 'gen9',
-		gameType: 'doubles',
-		searchShow: false,
-		battle: {trunc: Math.trunc},
-		debug: true,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Gravity Sleep Clause', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 100', 'Default Level = 100'],
-	},
-
 	// S/V Doubles
 	///////////////////////////////////////////////////////////////////
 	/*

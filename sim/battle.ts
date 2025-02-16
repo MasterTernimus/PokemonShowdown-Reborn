@@ -2867,9 +2867,11 @@ export class Battle {
 					"",
 				];
 				const new_terrain = this.sample(all_terrains);
-				this.field.startTerrain(new_terrain);
-				const lower_terrain = this.dex.conditions.get(new_terrain);
-				this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: [], duration: 9999, turn: this.turn});
+				if (new_terrain !== "") {
+					this.field.startTerrain(new_terrain);
+					const lower_terrain = this.dex.conditions.get(new_terrain);
+					this.field.terrainStack.push({ id: lower_terrain.id, terrain_type: "Base", Tchanges: [], duration: 9999, turn: this.turn });
+				}
 			} else {
 				this.field.startTerrain(this.format.terrain);
 				const lower_terrain = this.dex.conditions.get(this.format.terrain);
