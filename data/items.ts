@@ -4610,7 +4610,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Punching Glove boost');
-				return this.chainModify([5734, 4096]);
+				return this.chainModify(1.4);
 			}
 		},
 		onModifyMovePriority: 1,
