@@ -1418,7 +1418,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	punchingglove: {
 		name: "Punching Glove",
-		desc: "Holder's punch-based attacks have 1.1x power and do not make contact.",
+		desc: "Holder's punch-based attacks have 1.4x power and do not make contact.",
 	},
 	qualotberry: {
 		name: "Qualot Berry",
