@@ -2230,13 +2230,13 @@ export class Battle {
 		boost += 6;
 		let bonus = 0;
 		if (source.hasAbility(strikerabilities)) {
-			if (boost > 6) {
+			if (boost >= 7) {
 				boost = 5;
 			}
-			if (boost > 0 && boost < 4) {
+			else if (boost > 0 && boost < 4) {
 				boost = 1;
 			}
-			if (boost >= 4 && boost < 7) {
+			else if (boost >= 4 && boost < 7) {
 				boost -= 2;
 			}
 			for (let i = 0; i < abilityodds[boost].length; i++) {
