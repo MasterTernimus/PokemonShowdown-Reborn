@@ -728,12 +728,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const sandified = ['burnup', 'dig', 'heatwave', 'needlearm', 'pinmissile', 'sandtomb', 'solarbeam', 'solarblade', 'thousandwaves', 'searingsunrazesmash'];
 				if (move.type === 'Water' && source.isGrounded()) {
+					this.add('-message', 'The intense desert heat blunted the attack!')
 					modifier *= 0.5;
 				}
 				if (move.type === 'Electric' && target.isGrounded()) {
+					this.add('-message', 'The floating sand particles partially grounded the attack!')
 					modifier *= 0.5;
 				}
 				if (sandified.includes(move.id)) {
+					this.add('-message', 'The harsh desert heat augmented the attack!')
 					modifier *= 1.5;
 				}
 			},
