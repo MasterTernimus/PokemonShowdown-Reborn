@@ -17617,10 +17617,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {},
 		onModifyMove(move) {
 			if (this.field.isTerrain('psychicterrain')) {
-				move.secondaries?.push({
-					chance: 100,
-					volatileStatus: 'confusion',
-				});
+				move.secondaries = [
+					{
+						chance: 100,
+						volatileStatus: "confusion"
+					}
+				]
 			}
 		},
 		isZ: "psychiumz",
