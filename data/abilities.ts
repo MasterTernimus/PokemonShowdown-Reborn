@@ -927,14 +927,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! > 0) {
-					delete boost[i];
+					return;
 				}
 			}
-		},
-		onAfterMove(source, target, move) {
-			if (move.flags.dance && this.field.isTerrain('bigtopterrain')) {
-				this.boost({ spa: 1, atk: 1 }, source, source, null, false, true);
-			}
+			this.boost({ spa: 1, atk: 1 }, source, source, null, false, true);
 		},
 		rating: 1.5,
 		num: 216,

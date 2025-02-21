@@ -259,9 +259,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (this.field.terrainState.Tchanges?.includes('collapse') && cavecollapse.includes(move.id)) {
 					this.add('-message', 'The quake collapsed the ceiling!');
 					this.field.terrainState.Tchanges = this.field.terrainState.Tchanges.filter(newchanges => newchanges !== 'collapse');
-					for (const Tchanges of this.field.terrainState.Tchanges) {
-						console.log(Tchanges);
-					}
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility('rockhead') || pokemon.hasAbility('bulletproof')) {
 							continue;
@@ -1529,7 +1526,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(target, source, effect) {
-				console.log(effect?.id);
 				if (effect?.id.includes("pledge")) {
 					if (source.hasItem('amplifieldrock'))
 						return 7;

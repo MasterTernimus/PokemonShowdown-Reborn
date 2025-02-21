@@ -21977,6 +21977,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyMove(move) {
 			if (this.field.isTerrain('bigtopterrain')) {
 				move.accuracy = 100;
+				move.multiaccuracy = false;
 			}
 		},
 		basePowerCallback(pokemon, target, move) {
