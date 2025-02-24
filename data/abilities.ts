@@ -922,7 +922,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		flags: {},
 		name: "Dancer",
 		// implemented in runMove in scripts.js
-		onTryBoost(boost, target, source, effect) {
+		onAfterBoost(boost, target, source, effect) {
 			if (effect?.sourceEffect !== 'dancer' || !this.field.isTerrain('bigtopterrain')) return;
 			let i: BoostID;
 			for (i in boost) {
@@ -931,6 +931,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				}
 			}
 			this.boost({ spa: 1, atk: 1 }, source, source, null, false, true);
+		},
+		onAfterMove(source, target, move) {
+			if (move.flags.dance && source.hasAbility('dancer') && move.sourceEffect !== 'dancer') {
+				this.boost({ spa: 1, atk: 1 }, source, source, null, false, true);
+			}
 		},
 		rating: 1.5,
 		num: 216,
