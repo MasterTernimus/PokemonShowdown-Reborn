@@ -934,7 +934,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onAfterMove(source, target, move) {
 			if (move.flags.dance && source.hasAbility('dancer') && move.sourceEffect !== 'dancer') {
-				this.boost({ spa: 1, atk: 1 }, source, source, null, false, true);
+				this.boost({ spa: 1, spe: 1 }, source, source, null, false, true);
 			}
 		},
 		rating: 1.5,
@@ -2710,7 +2710,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	magicguard: {
 		onSwitchIn() {
-			if (this.field.terrain === 'fairytaleterrain') {
+			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ spd: 1 });
 			}
 		},
