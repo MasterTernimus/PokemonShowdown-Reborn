@@ -201,7 +201,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldResidual() {
-				if (this.field.weather === 'rain' || this.field.weather === 'sandstorm') {
+				if (this.field.weather === 'raindance' || this.field.weather === 'sandstorm') {
 					if (this.field.terrainState.prevterrain !== '') {
 						this.field.changeTerrain(this.field.terrainState.prevterrain);
 					}
