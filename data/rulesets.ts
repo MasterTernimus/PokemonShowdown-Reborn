@@ -1263,14 +1263,21 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onBegin() {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
-		onSetStatus(status, target, source) {
+		onSetStatus(status, target, source, effect) {
 			if (source && source.isAlly(target)) {
 				return;
 			}
 			if (status.id === 'slp') {
+				let darkvoid = false;
+				if (effect.id === 'darkvoid') {
+					darkvoid = true;
+				}
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)) {
+						if (darkvoid && pokemon.isActive) {
+							darkvoid = false;
+						}
+						else if(!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)){
 							this.add('-message', 'Sleep Clause Mod activated.');
 							this.hint("Sleep Clause Mod prevents players from putting more than one of their opponent's Pokémon to sleep at a time");
 							return false;
