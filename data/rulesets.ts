@@ -1274,7 +1274,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				}
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (darkvoid && pokemon.isActive) {
+						if (darkvoid && pokemon.isActive && pokemon.statusState.source?.id === 'darkvoid' && pokemon.statusState.startTime === pokemon.statusState.time) {
 							darkvoid = false;
 						}
 						else if(!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)){
