@@ -959,8 +959,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	dauntlessshield: {
 		onStart(pokemon) {
-			if (pokemon.shieldBoost) return;
-			pokemon.shieldBoost = true;
 			this.boost({ def: 1 }, pokemon);
 		},
 		flags: {},
@@ -2411,8 +2409,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	intrepidsword: {
 		onStart(pokemon) {
-			if (pokemon.swordBoost) return;
-			pokemon.swordBoost = true;
 			this.boost({ atk: 1 }, pokemon);
 		},
 		flags: {},
