@@ -3626,6 +3626,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('newworldterrain')) {
 				move.accuracy = 85;
 			}
+			if (this.field.isTerrain('darkcrystalcavernterrain')) {
+				move.accuracy = 100;
+			}
+			
 		},
 		noSketch: true,
 		secondary: null,
