@@ -1202,7 +1202,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 3', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
-	}
+	},
 	/*
 	{
 		name: "[Gen 9] Random Battle (Blitz)",
