@@ -1197,7 +1197,6 @@ export const Formats: FormatList = [
 		name: "[Gen 9] 6/3 Random Terrain",
 		mod: 'gen9',
 		terrain: 'randomterrain',
-		gameType: "doubles",
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -1206,8 +1205,6 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] 6/3 No Terrain",
 		mod: 'gen9',
-		terrain: 'electricterrain',
-		gameType: "doubles",
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
