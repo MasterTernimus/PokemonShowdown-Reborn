@@ -1181,6 +1181,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 			}
 		}
 	},
+	inverseterrain: {
+		name: "Inverse Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+
+		}
+	},
 	mirrorarenaterrain: {
 		name: "Mirror Arena Terrain",
 		condition: {
