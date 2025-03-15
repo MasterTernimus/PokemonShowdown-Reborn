@@ -1390,6 +1390,26 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		rating: 1,
 		num: 194,
 	},
+	eternalflower: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Grass') {
+				this.debug('Eternal Flower boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Grass') {
+				this.debug('Eternal Flower boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Eternal Flower",
+		rating: 3.5,
+		num: 276,
+	}
 	fairyaura: {
 		onStart(pokemon) {
 			if (this.suppressingAbility(pokemon)) return;
@@ -4235,13 +4255,15 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (this.field.isTerrain('rockyterrain')) {
-				this.debug('Rocky Payload double boost');
-				return this.chainModify(2);
-			}
-			else {
-				this.debug('Rocky Payload boost');
-				return this.chainModify(1.5);
+			if (move && move.type === 'Rock') {
+				if (this.field.isTerrain('rockyterrain')) {
+					this.debug('Rocky Payload double boost');
+					return this.chainModify(2);
+				}
+				else {
+					this.debug('Rocky Payload boost');
+					return this.chainModify(1.5);
+				}
 			}
 		},
 		flags: {},
