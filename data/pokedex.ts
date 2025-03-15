@@ -11924,7 +11924,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: {hp: 74, atk: 65, def: 67, spa: 125, spd: 128, spe: 92},
-		abilities: {0: "Flower Veil", 1: "Eternal Flower"},
+		abilities: {0: "Flower Veil", H: "Eternal Flower"},
 		heightm: 0.2,
 		weightkg: 0.9,
 		color: "White",
