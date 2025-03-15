@@ -1421,7 +1421,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		name: "Eternal Flower",
 		rating: 3.5,
 		num: 276,
-	}
+	},
 	fairyaura: {
 		onStart(pokemon) {
 			if (this.suppressingAbility(pokemon)) return;
