@@ -1394,15 +1394,27 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move && move.type === 'Grass') {
-				this.debug('Eternal Flower boost');
-				return this.chainModify(1.5);
+				if (this.field.isTerrain('fairytaleterrain')) {
+					this.debug('Eternal Flower double boost');
+					return this.chainModify(2);
+				}
+				else {
+					this.debug('Eternal Flower boost');
+					return this.chainModify(1.5);
+				}
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move && move.type === 'Grass') {
-				this.debug('Eternal Flower boost');
-				return this.chainModify(1.5);
+				if (this.field.isTerrain('fairytaleterrain')) {
+					this.debug('Eternal Flower double boost');
+					return this.chainModify(2);
+				}
+				else {
+					this.debug('Eternal Flower boost');
+					return this.chainModify(1.5);
+				}
 			}
 		},
 		flags: {},
