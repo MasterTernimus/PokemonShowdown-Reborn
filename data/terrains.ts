@@ -1940,7 +1940,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onResidual(pokemon) {
 				let immune = ['quickfeet', 'swiftswim', 'clearbody', 'whitesmoke'];
 				if (pokemon.isGrounded() && !immune.includes(pokemon.ability)) {
-					pokemon.setBoost({ spe: -1 });
+					this.boost({ spe: -1 }, pokemon);
 				}
 				if (pokemon.status === 'slp' || pokemon.hasAbility('comatose') && !(pokemon.hasAbility('magicguard'))) {
 					this.damage(pokemon.baseMaxhp / 16, pokemon);
