@@ -3796,7 +3796,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	floetteeternal: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "Unreleased",
+		natDexTier: "Uber",
 	},
 	florges: {
 		tier: "NU",
