@@ -37,8 +37,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				return this.chainModify(modifier);
 			},
-			onAfterHit(source, target, move) {
+			onAfterMove(source, target, move) {
 				const accuracy = ['firespin', 'leaftornado', 'razorwind', 'twister', 'whirlpool'];
+				this.add('-message', move.category);
 				if (accuracy.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')){
 					for (const pokemon of this.getAllActive()) {
 						this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
