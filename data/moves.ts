@@ -3014,6 +3014,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('glitchterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
 			}
+			else if (this.field.terrainState.Tchanges?.includes('conversion2')) {
+				this.field.setTerrain('glitchterrain');
+			}
 			else if (!this.field.terrainState.Tchanges?.includes('conversion'))
 				this.field.terrainState.Tchanges?.push('conversion');
 		},
