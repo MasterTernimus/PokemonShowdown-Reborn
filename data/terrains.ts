@@ -39,7 +39,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const accuracy = ['firespin', 'leaftornado', 'razorwind', 'twister', 'whirlpool'];
-				this.add('-message', move.category);
 				if (accuracy.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')){
 					for (const pokemon of this.getAllActive()) {
 						this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
@@ -386,16 +385,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const smartAbilities = ['adaptability', 'synchronize', 'anticipation', 'telepathy'];
 				const breakMoves = ['stompingtantrum', 'tectonicrage'];
 				if (chessMoves.includes(move.id)) {
-					this.add('-message', 'En Passant!');
 					if (dumbAbilities.includes(target.ability)) {
 						modifier *= 2;
 					}
 					if (smartAbilities.includes(target.ability)) {
 						modifier *= 0.5;
 					}
+					this.add('-message', 'The chess piece slammed forward!');
 					modifier *= 1.5;
 				}
 				if (boost.includes(move.id)) {
+					this.add('-message', 'En Passant!');
 					modifier *= 1.5;
 				}
 				if (source.Role === 'Queen') {
@@ -426,6 +426,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const breakMoves = ['stompingtantrum', 'tectonicrage'];
 				if (breakMoves.includes(move.id)) {
+					this.add('-message', 'The board was destroyed!');
 					this.field.clearTerrain();
 				}
 			},
