@@ -399,10 +399,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.5;
 				}
 				if (source.Role === 'Queen') {
+					this.add('-message', 'The Queen is dominating the board!');
 					modifier *= 1.5;
 				}
 				if (source.Role === 'Knight') {
 					if (target.Role === 'Queen') {
+						this.add('-message', 'An unblockable attack on the Queen!');
 						modifier *= 3;
 					}
 					if (move.target === 'allAdjacentFoes') {
