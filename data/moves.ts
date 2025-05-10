@@ -16209,17 +16209,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 			chance: 10,
 			status: 'slp',
 		},
-		onHit(target, pokemon, move) {
-			if (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {
-				move.willChangeForme = true;
-			}
-		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.willChangeForme) {
-				const meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';
-				pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '[msg]');
-			}
-		},
 		target: "allAdjacentFoes",
 		type: "Normal",
 		contestType: "Beautiful",
