@@ -161,7 +161,6 @@ export class Field {
 		}
 		let new_terrain_type = "";
 		const core_terrains = ["mistyterrain", "psychicterrain", "grassyterrain", "electricterrain"];
-		console.log(status.id);
 		if (core_terrains.includes(status.id)) {
 			new_terrain_type = "Core";
 		}
@@ -227,7 +226,6 @@ export class Field {
 		if (this.isTerrain('') || this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) return false;
 		if (power === 'mid') {
 			if (this.terrainState?.terrain_type === 'Core') {
-				console.log("Here");
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 				while (this.terrainStack[0] && this.terrainStack[0]?.terrain_type !== "Base") {

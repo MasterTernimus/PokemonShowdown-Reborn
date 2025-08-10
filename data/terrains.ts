@@ -1190,8 +1190,37 @@ export const Terrains: { [k: string]: TerrainData } = {
 		name: "Inverse Terrain",
 		condition: {
 			duration: 9999,
-			onBasePowerPriority: 6,
-
+			durationCallback(target, source, effect) {
+				if (effect?.id.includes("topsy")) {
+					if (source.hasItem('amplifieldrock'))
+						return 6;
+					else
+						return 3;
+				}
+				else{
+					this.add("Not sure how this happened, please let Ternimus know");
+					return 5;
+				}
+			},
+			onNegateImmunity(pokemon, type) {
+				if(pokemon.hasType('Ground') && this.activeMove?.id === 'thunderwave'){
+					return true;
+				}
+				return false;	
+			},
+			onEffectivenessPriority: 1,
+			onEffectiveness(typeMod, target, type, move) {
+				// The effectiveness of Freeze Dry on Water isn't reverted
+				if (move && move.id === 'freezedry' && type === 'Water') return;
+				if (move && !this.dex.getImmunity(move, type)) return 1;
+				return -typeMod;
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Inverse Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Inverse Terrain');
+			},
 		}
 	},
 	mirrorarenaterrain: {
