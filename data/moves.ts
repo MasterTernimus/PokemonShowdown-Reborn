@@ -2325,7 +2325,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['dragonsdenterrain', 'Dragon'],
 				['holyterrain', 'Normal'],
 				['snowymountainterrain', 'Ice'],
-				['starlightarenaterrain', 'Dark']
+				['starlightarenaterrain', 'Dark'],
+				['inverseterrain', 'Normal']
 			]);
 			if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
@@ -5814,7 +5815,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		onAfterHit(target, source, move) {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) {
-				console.log("Present");
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
 			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
@@ -13662,7 +13662,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['mountainterrain', 'rockslide'],
 				['snowymountainterrain', 'avalanche'],
 				['newworldterrain', 'spacialrend'],
-				['starlightarenaterrain', 'moonblast']
+				['starlightarenaterrain', 'moonblast'],
+				['inverseterrain', 'trickroom']
 			]);
 			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
@@ -17360,6 +17361,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 						atk: -1,
 						def: -1
 					}
+				});
+			} else if (this.field.isTerrain('inverseterrain')){
+				move.secondaries.push({
+					chance: 30,
+					volatileStatus: 'confusion',
 				});
 			}
 		},
@@ -21592,15 +21598,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1},
 		onHit(target) {
-			let success = false;
 			let i: BoostID;
 			for (i in target.boosts) {
 				if (target.boosts[i] === 0) continue;
 				target.boosts[i] = -target.boosts[i];
-				success = true;
 			}
-			if (!success) return false;
 			this.add('-invertboost', target, '[from] move: Topsy-Turvy');
+		},
+		onAfterMove(source, target, move) {
+			this.field.setTerrain('inverseterrain');
+			this.field.terrainState.duration = this.field.terrain === 'inverseterrain' ? (source.hasItem('amplifieldrock') ? 6 : 3) : this.field.terrainState.duration;
 		},
 		secondary: null,
 		target: "normal",

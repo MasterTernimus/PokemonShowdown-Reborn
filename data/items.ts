@@ -3405,7 +3405,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain'))) {
+			if (!pokemon.ignoringItem() && (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain') || this.field.isTerrain('inverseterrain'))) {
 				pokemon.useItem();
 			}
 		},
@@ -3437,9 +3437,13 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ spa: 1 });
 				this.actions.useMove('wish', pokemon, pokemon);
 			}
+			if(this.field.isTerrain('inverseterrain')){
+				this.boost({ atk: 1, spa: 1, def: 1, spd: 1, spe: 1 }, pokemon, pokemon, item);
+				pokemon.addVolatile('mustrecharge');
+			}
 		},
 		onTerrainChange(pokemon) {
-			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain')) {
+			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain') || this.field.isTerrain('inverseterrain')) {
 				pokemon.useItem();
 			}
 		},
