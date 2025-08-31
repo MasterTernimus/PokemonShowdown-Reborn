@@ -2827,10 +2827,10 @@ export class Battle {
 		if (this.turn === 0 && this.format.terrain) {
 			if (this.format.terrain === 'adriennterrain') {
 				this.field.startTerrain('mistyterrain');
-				this.field.terrainStack.push({id: 'fairytaleterrain', terrain_type: "Base", Tchanges: [], duration: 9999, turn: this.turn});
+				this.field.terrainStack.push({id: 'fairytaleterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
 			} else if (this.format.terrain === 'corrosivemistterrain') {
 				this.field.startTerrain('corrosivemistterrain');
-				this.field.terrainStack.push({id: 'corrosiveterrainterrain', terrain_type: "Base", Tchanges: [], duration: 9999, turn: this.turn});
+				this.field.terrainStack.push({id: 'corrosiveterrainterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
 			} else if (this.format.terrain === 'randomterrain') {
 				const all_terrains: string[] = [
 					"ashenbeachterrain",
@@ -2873,12 +2873,12 @@ export class Battle {
 				if (new_terrain !== "") {
 					this.field.startTerrain(new_terrain);
 					const lower_terrain = this.dex.conditions.get(new_terrain);
-					this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: [], duration: 9999, turn: this.turn});
+					this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
 				}
 			} else {
 				this.field.startTerrain(this.format.terrain);
 				const lower_terrain = this.dex.conditions.get(this.format.terrain);
-				this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: [], duration: 9999, turn: this.turn});
+				this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
 			}
 		}
 		let action;

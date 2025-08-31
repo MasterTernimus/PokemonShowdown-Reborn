@@ -256,9 +256,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const cavern = ['powergem', 'diamondstorm'];
 				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
-				if (this.field.terrainState.Tchanges?.includes('collapse') && cavecollapse.includes(move.id)) {
+				if (this.field.terrainState.Tchanges?.get('collapse') == 1 && cavecollapse.includes(move.id)) {
 					this.add('-message', 'The quake collapsed the ceiling!');
-					this.field.terrainState.Tchanges = this.field.terrainState.Tchanges.filter(newchanges => newchanges !== 'collapse');
+					this.field.terrainState.Tchanges?.set('collapse', 0);
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility('rockhead') || pokemon.hasAbility('bulletproof')) {
 							continue;
@@ -279,7 +279,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				else if (cavecollapse.includes(move.id)) {
 					this.add('-message', 'Bits of rock fell from the crumbling ceiling!');
-					this.field.terrainState.Tchanges?.push('collapse');
+					this.field.terrainState.Tchanges?.set('collapse', 1);
 				}
 				if (cavern.includes(move.id)) {
 					this.add('-message', 'The cave was littered with crystals!');
@@ -791,7 +791,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (uberboost.includes(move.id)) {
 					modifier *= 2;
 				}
-				if (terrain_change.includes(move.id) || (this.field.terrainState.Tchanges?.includes(move.id) && terrain_change2.includes(move.id))) {
+				if (terrain_change.includes(move.id) || (this.field.terrainState.Tchanges?.get(move.id) == 1 && terrain_change2.includes(move.id))) {
 					modifier *= 1.3;
 				}
 				const moveMessages = new Map<string, string>([
@@ -813,13 +813,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const terrain_change = ['glaciate', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer'];
 				const terrain_change2 = ['muddywater', 'sparklingaria', 'surf'];
-				if (terrain_change.includes(move.id) || (this.field.terrainState.Tchanges?.includes(move.id) && terrain_change2.includes(move.id))) {
+				if (terrain_change.includes(move.id) || (this.field.terrainState.Tchanges?.get(move.id) == 1 && terrain_change2.includes(move.id))) {
 					this.add('-message', 'The lava solidified!');
 					this.field.changeTerrain('caveterrain');
 				}
 				else if (terrain_change2.includes(move.id)) {
 					this.add('-message', 'The lava began to harden!');
-					this.field.terrainState.Tchanges?.push(move.id);
+					this.field.terrainState.Tchanges?.set(move.id, 1);
 				}
 			},
 			onFieldStart() {
@@ -1151,7 +1151,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.id === 'scald' || move.id === 'steameruption' || move.id === 'hydrosteam') {
 					this.add('-message', 'The cold softened the attack...');
 					modifier *= 0.5;
-					if (this.field.terrainState.Tchanges?.includes('watersurfaceterrain')) {
+					if (this.field.terrainState.Tchanges?.get('watersurfaceterrain') == 1) {
 						modifier *= 1.3;
 					}
 				}
@@ -1568,14 +1568,18 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(target, source, effect) {
+				console.log(effect);
 				if (effect?.id.includes("pledge")) {
 					if (source.hasItem('amplifieldrock'))
 						return 7;
 					else
 						return 4;
 				}
-				else {
-					return effect?.duration !== undefined ? effect.duration : 5;
+				else if(effect?.id == 'raindance' || effect?.id == 'sunnyday'){
+					return this.field.weatherState.duration ?? 5;
+				}
+				else{
+					return 5;
 				}
 			},
 			onModifyMove(move, pokemon) {
@@ -2042,7 +2046,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.category === 'Physical' && move.type !== 'Water' && !source.hasAbility('steelworker')) {
 					modifier *= 0.5;
 				}
-				if (change.includes(move.id) || (this.field.terrainState.Tchanges?.includes('sludgewave') && move.id === 'sludgewave')) {
+				if (change.includes(move.id) || (this.field.terrainState.Tchanges?.get('sludgewave') == 1 && move.id === 'sludgewave')) {
 					modifier *= 5325 / 4096;
 				}
 				return this.chainModify(modifier);
@@ -2054,7 +2058,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('watersurfaceterrain');
 					return;
 				}
-				if (murkwater.includes(move.id) && (move.id === 'aciddownpour' || this.field.terrainState.Tchanges?.includes('sludgewave'))) {
+				if (murkwater.includes(move.id) && (move.id === 'aciddownpour' || this.field.terrainState.Tchanges?.get('sludgewave') == 1)) {
 					for (const pokemon of this.getAllActive()) {
 						if (!(pokemon.types.includes('Steel') || pokemon.types.includes('Poison')) && !pokemon.isSemiInvulnerable()) {
 							pokemon.faint();
@@ -2064,7 +2068,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return;
 				}
 				if (move.id === 'sludgewave') {
-					this.field.terrainState.Tchanges?.push('sludgewave');
+					this.field.terrainState.Tchanges?.set('sludgewave', 1);
 				}
 			},
 			onResidual(pokemon) {
@@ -2219,7 +2223,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The attack rode the current!');
 					modifier *= 2;
 				}
-				if (change.includes(move.id) || (this.field.terrainState.Tchanges?.includes('sludgewave') && move.id === 'sludgewave')) {
+				if (change.includes(move.id) || (this.field.terrainState.Tchanges?.get('sludgewave') == 1 && move.id === 'sludgewave')) {
 					modifier *= 5325 / 4096;
 				}
 				return this.chainModify(modifier);
@@ -2234,14 +2238,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('underwaterterrain');
 					return;
 				}
-				if (murkwater.includes(move.id) && (move.id === 'aciddownpour' || this.field.terrainState.Tchanges?.includes('sludgewave'))) {
+				if (murkwater.includes(move.id) && (move.id === 'aciddownpour' || this.field.terrainState.Tchanges?.get('sludgewave') == 1)) {
 					this.add('-message', 'The water was polluted!');
 					this.field.changeTerrain('murkwatersurfaceterrain');
 					return;
 				}
 				if (move.id === 'sludgewave') {
 					this.add('-message', 'Poison spread through the water!');
-					this.field.terrainState.Tchanges?.push('sludgewave');
+					this.field.terrainState.Tchanges?.set('sludgewave', 1);
 				}
 				if (icy.includes(move.id)) {
 					this.add('-message', 'The water froze over!');

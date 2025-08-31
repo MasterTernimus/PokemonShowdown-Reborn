@@ -3015,11 +3015,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('glitchterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
 			}
-			else if (this.field.terrainState.Tchanges?.includes('conversion2')) {
+			else if (this.field.terrainState.Tchanges?.get('glitchterrain') == 1) {
 				this.field.setTerrain('glitchterrain');
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('conversion'))
-				this.field.terrainState.Tchanges?.push('conversion');
 		},
 		secondary: null,
 		target: "self",
@@ -3061,11 +3059,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('glitchterrain')) {
 					this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
 			}
-			else if (this.field.terrainState.Tchanges?.includes('conversion')) {
+			else if (this.field.terrainState.Tchanges?.get('glitchterrain') == 1) {
 				this.field.setTerrain('glitchterrain');
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('conversion2'))
-				this.field.terrainState.Tchanges?.push('conversion2');
 		},
 		secondary: null,
 		target: "normal",
@@ -5809,7 +5805,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 		onBasePower() {
-			if (this.field.terrainState.Tchanges?.includes('waterpledge') || this.field.terrainState.Tchanges?.includes('grasspledge')) {
+			if (this.field.terrainState.Tchanges?.get('waterpledge') == 1 || this.field.terrainState.Tchanges?.get('grasspledge') == 1) {
 				return this.chainModify([5325, 4096]);
 			}
 		},
@@ -5817,29 +5813,26 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+			else if (this.field.terrainState.Tchanges?.get('waterpledge') == 1) {
 				this.field.setTerrain('rainbowterrain', null, move);
 			}
-			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
+			else if (this.field.terrainState.Tchanges?.get('grasspledge') == 1) {
 				this.field.setTerrain('burningterrain', null, move);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('firepledge')) {
-				this.field.terrainState.Tchanges?.push('firepledge');
-			}
+			this.field.terrainState.Tchanges?.set('firepledge', 1);
 		},
 		onAfterSubDamage(damage, target, source, move) {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+			else if (this.field.terrainState.Tchanges?.get('waterpledge') == 1) {
 				this.field.setTerrain('rainbowterrain', null, move);
 			}
-			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
+			else if (this.field.terrainState.Tchanges?.get('grasspledge') == 1) {
 				this.field.setTerrain('burningterrain', null, move);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('firepledge')) {
-				this.field.terrainState.Tchanges?.push('firepledge');
-			}
+			this.field.terrainState.Tchanges?.set('firepledge', 1);
+
 		},
 		secondary: null,
 		target: "normal",
@@ -8138,7 +8131,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1},
 		onBasePower() {
-			if (this.field.terrainState.Tchanges?.includes('waterpledge') || this.field.terrainState.Tchanges?.includes('firepledge')) {
+			if (this.field.terrainState.Tchanges?.get('waterpledge') == 1 || this.field.terrainState.Tchanges?.get('firepledge') == 1) {
 				return this.chainModify([5325, 4096]);
 			}
 		},
@@ -8146,29 +8139,25 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('swampterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+			else if (this.field.terrainState.Tchanges?.get('waterpledge') == 1) {
 				this.field.setTerrain('swampterrain', null, move);
 			}
-			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
+			else if (this.field.terrainState.Tchanges?.get('firepledge') == 1) {
 				this.field.setTerrain('burningterrain', null, move);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('grasspledge')) {
-				this.field.terrainState.Tchanges?.push('grasspledge');
-			}
+			this.field.terrainState.Tchanges?.set('grasspledge', 1);
 		},
 		onAfterSubDamage(damage, target, source, move) {
 			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('swampterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			else if (this.field.terrainState.Tchanges?.includes('waterpledge')) {
+			else if (this.field.terrainState.Tchanges?.get('waterpledge') == 1) {
 				this.field.setTerrain('swampterrain', null, move);
 			}
-			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
+			else if (this.field.terrainState.Tchanges?.get('firepledge') == 1) {
 				this.field.setTerrain('burningterrain', null, move);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('grasspledge')) {
-				this.field.terrainState.Tchanges?.push('grasspledge');
-			}
+			this.field.terrainState.Tchanges?.set('grasspledge', 1);
 		},
 		secondary: null,
 		target: "normal",
@@ -8259,7 +8248,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (igniteMoves.includes(move.id) && this.field.weather !== 'rain' && !this.field.pseudoWeather['watersport']) {
 					modifier *= 5325 / 4096;
 				}
-				if (this.field.terrainState.Tchanges?.includes('sludgewave') && move.id === 'sludgewave' || move.id === 'aciddownpour')
+				if (this.field.terrainState.Tchanges?.get('sludgewave') == 1 && move.id === 'sludgewave' || move.id === 'aciddownpour')
 					modifier *= 5325/4096
 				return this.chainModify(modifier);
 			},
@@ -13150,7 +13139,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (move.id === 'mistyexplosion') {
 					modifier *= 2;
 				}
-				if ((terrainMoves.includes(move.id) && this.field.terrainState.Tchanges?.includes('corrosivemistterrain')) || move.id === 'aciddownpour') {
+				if ((terrainMoves.includes(move.id) && this.field.terrainState.Tchanges?.get('corrosivemistterrain') == 1) || move.id === 'aciddownpour') {
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
@@ -13159,11 +13148,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 				const terrainChangeMoves = ['smog', 'clearsmog', 'poisongas', 'aciddownpour'];
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike'];
 				if (terrainChangeMoves.includes(move.id)) {
-					if (this.field.terrainState.Tchanges?.includes('corrosivemistterrain') || move.id === 'aciddownpour') {
+					if (this.field.terrainState.Tchanges?.get('corrosivemistterrain') == 1 || move.id === 'aciddownpour') {
 						this.field.changeTerrain('corrosivemistterrain');
 					}
 					else {
-						this.field.terrainState.Tchanges?.push('corrosivemistterrain')
+						this.field.terrainState.Tchanges?.set('corrosivemistterrain', 1)
 					}
 				}
 				if (terrainEndMoves.includes(move.id)) {
@@ -15925,14 +15914,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 5,
 		priority: 0,
 		flags: { metronome: 1 },
-		onAfterMove(source, target, move) {
-			if (this.field.terrainState.Tchanges?.includes('sunnyday')) {
-				this.field.setTerrain('rainbowterrain', source, move);
-			}
-			else if (!this.field.terrainState.Tchanges?.includes('raindance')) {
-				this.field.terrainState.Tchanges?.push('raindance');
-			}
-		},
 		weather: 'RainDance',
 		secondary: null,
 		target: "all",
@@ -22532,7 +22513,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1},
 		onBasePower() {
-			if (this.field.terrainState.Tchanges?.includes('grasspledge') || this.field.terrainState.Tchanges?.includes('firepledge')) {
+			if (this.field.terrainState.Tchanges?.get('grasspledge') == 1 || this.field.terrainState.Tchanges?.get('firepledge') == 1) {
 				return this.chainModify([5325, 4096]);
 			}
 		},
@@ -22540,29 +22521,25 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('swampterrain') || this.field.isTerrain('rainbowterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
+			else if (this.field.terrainState.Tchanges?.get('grasspledge') == 1) {
 				this.field.setTerrain('swampterrain', null, move);
 			}
-			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
+			else if (this.field.terrainState.Tchanges?.get('firepledge') == 1) {
 				this.field.setTerrain('rainbowterrain', null, move);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('waterpledge')) {
-				this.field.terrainState.Tchanges?.push('waterpledge');
-			}
+			this.field.terrainState.Tchanges?.set('waterpledge', 1);
 		},
 		onAfterHit(target, source, move) {
 			if (this.field.isTerrain('swampterrain') || this.field.isTerrain('rainbowterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain() !== undefined ? (source.hasItem('amplifieldrock') ? 7 : 4) : this.hint("WHAT THE FUCK. PLEASE REPORT TO TERNIMUS");
 			}
-			else if (this.field.terrainState.Tchanges?.includes('grasspledge')) {
+			else if (this.field.terrainState.Tchanges?.get('grasspledge') == 1) {
 				this.field.setTerrain('swampterrain', null, move);
 			}
-			else if (this.field.terrainState.Tchanges?.includes('firepledge')) {
+			else if (this.field.terrainState.Tchanges?.get('firepledge') == 1) {
 				this.field.setTerrain('rainbowterrain', null, move);
 			}
-			else if (!this.field.terrainState.Tchanges?.includes('waterpledge')) {
-				this.field.terrainState.Tchanges?.push('waterpledge');
-			}
+			this.field.terrainState.Tchanges?.set('waterpledge', 1);
 		},
 		secondary: null,
 		target: "normal",
