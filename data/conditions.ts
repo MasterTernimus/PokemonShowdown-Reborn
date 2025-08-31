@@ -489,16 +489,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'RainDance',
 		effectType: 'Weather',
 		duration: 5,
-		onSetWeather(target, source, weather) {
-			if (weather.id === 'sunnyday') {
-				if (this.field.isTerrain('rainbowterrain')) {
-					this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, weather);
-				}
-				else {
-					this.field.setTerrain('rainbowterrain', source, weather);
-				}
-			}
-		},
 		durationCallback(source, effect) {
 			if (source?.hasItem('damprock') || this.field.isTerrain('bigtopterrain')) {
 				return 8;
@@ -517,12 +507,27 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
+			if (this.field.terrainState.Tchanges?.get('sunnyday') == 1) {
+				if (this.field.isTerrain('rainbowterrain')) {
+					this.field.terrainState.duration = this.field.weatherState.duration;
+				}
+				else {
+					this.field.setTerrain('rainbowterrain', source, effect);
+				}
+				this.field.terrainState.Tchanges?.set('sunnyday', 0);
+			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'RainDance');
 			}
+			this.field.terrainState.Tchanges?.set('raindance', 1);
+
+		},
+		onFieldEnd() {
+			this.field.terrainState.Tchanges?.set('raindance', 0);
+			this.add('-weather', 'none');
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -566,16 +571,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'SunnyDay',
 		effectType: 'Weather',
 		duration: 5,
-		onSetWeather(target, source, weather) {
-			if (weather.id === 'raindance') {
-				if (this.field.isTerrain('rainbowterrain')) {
-					this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, weather);
-				}
-				else {
-					this.field.setTerrain('rainbowterrain', source, weather);
-				}
-			}
-		},
 		durationCallback(source, effect) {
 			if (source?.hasItem('heatrock') || this.field.isTerrain('desertterrain') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
 				return 8;
@@ -598,12 +593,22 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onFieldStart(battle, source, effect) {
+			if (this.field.terrainState.Tchanges?.get('raindance') == 1) {
+				if (this.field.isTerrain('rainbowterrain')) {
+					this.field.terrainState.duration = this.field.weatherState.duration;
+				}
+				else {
+					this.field.setTerrain('rainbowterrain', source, effect);
+					this.field.terrainState.Tchanges?.set('raindance', 0);
+				}
+			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'SunnyDay');
 			}
+			this.field.terrainState.Tchanges?.set('sunnyday', 1);
 		},
 		onImmunity(type, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
@@ -615,9 +620,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			if (this.field.terrainState.Tchanges?.includes('raindance')) {
-				this.field.terrainState.Tchanges = this.field.terrainState.Tchanges?.filter(item => item !== 'raindance');
-			}
+			this.field.terrainState.Tchanges?.set('sunnyday', 0);
 			this.add('-weather', 'none');
 		},
 	},

@@ -33,7 +33,7 @@ interface Attacker {
 type Roles = 'Queen' | 'King' | 'Pawn' | 'Bishop' | 'Knight' | 'Rook' | 'UsedPawn';
 
 export interface EffectState {
-	Tchanges?: string[];
+	Tchanges?: Map<string, number>;
 	// TODO: set this to be an actual number after converting data/ to .ts
 	duration?: number | any;
 	[k: string]: any;
