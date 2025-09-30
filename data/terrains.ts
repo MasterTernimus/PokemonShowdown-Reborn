@@ -1833,8 +1833,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyMove(move) {
-				const icyMoves = ['bulldoze', 'earthquake', 'magnitude', 'mudbomb', 'mudshot', 'mudslap', 'sandtomb']
-				if (move.type === 'Steel' || icyMoves.includes(move.id)) {
+				const slushMoves = ['bulldoze', 'earthquake', 'magnitude', 'mudbomb', 'mudshot', 'mudslap', 'sandtomb']
+				if ((move.type === 'Steel' && move.category === 'Physical') || slushMoves.includes(move.id)) {
 					move.types = [move.type, 'Ice'];
 				}
 			},
@@ -1844,20 +1844,18 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const weak:string[] = ['scald', 'eruption', 'hydrosteam'];
 				const boost: string[] = ["blizzard", "fairywind", "gust", "icywind", "ominouswind", "razorwind", "powdersnow", "silverwind", "twister", "mudslap", "mudshot", "mudbomb", 'chillingwater'];
 				const secondBoost: string[] = ["aeroblast", "aircutter", "airslash", "bleakwindstorm", "chillingwater", "fairywind", "glaciate", "gust", "hurricane", "ominouswind", "razorwind", "silverwind", "twister"];
-				if (this.field.weather === '') {
-					if(weak.includes(move.id) || move.type === 'Fire'){
-						modifier *= 0.5;
-					}
-					if (boost.includes(move.id) || (move.category === 'Special' && move.type == 'Flying')) {
-						this.add('-message', 'The snowy terrain charged up the attack!');
-						modifier *= 1.5;
-					}
-					if(secondBoost.includes(move.id)){
-						this.add('-message', 'The snowy terrain charged up the attack!');						
-						modifier *= 1.5;
-					}
-					return this.chainModify(modifier);
+				if(weak.includes(move.id) || move.type === 'Fire'){
+					modifier *= 0.5;
 				}
+				if (boost.includes(move.id) || (move.category === 'Special' && move.type == 'Flying')) {
+					this.add('-message', 'The snowy terrain charged up the attack!');
+					modifier *= 1.5;
+				}
+				if(secondBoost.includes(move.id)){
+					this.add('-message', 'The snowy terrain charged up the attack!');						
+					modifier *= 1.5;
+				}
+				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move){
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
@@ -1886,14 +1884,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'Starlight Arena Terrain', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'Snowy Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
-					this.add('-fieldstart', 'Starlight Arena Terrain');
+					this.add('-fieldstart', 'Snowy Terrain');
 				}
-				this.add('-message', 'Starlight fills the battlefield.');
+				this.add('-message', 'Snow swirls around the pokemon');
 			},
 			onFieldEnd() {
-				this.add('-fieldend', 'Starlight Arena Terrain');
+				this.add('-fieldend', 'Snowy Terrain');
 			},
 		}
 	},
