@@ -795,7 +795,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		effectType: 'Weather',
 		duration: 0,
 		durationCallback(target, source, effect) {
-			if (effect?.id === 'tailwind' && (this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowyterrain')) && !(this.field.weather !== 'desolateland' || this.field.weather !== 'primordialocean')) {
+			if (effect?.id === 'tailwind') {
 				return 6;
 			}
 			return 0;

@@ -101,16 +101,18 @@ export class Field {
 		if (this.weather === status.id) {
 			return false;
 		}
+		const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
 		this.weatherState = {
 			id: status.id,
 			terrain_type: this.weatherState.terrain_type,
 			origin: sourceEffect,
-			duration: this.weatherState.duration,
+			duration: prevWeatherState.duration,
 			turn: this.battle.turn,
-			prevterrain: this.weatherState.id,
+			prevterrain: prevWeatherState.id,
 		};
+		this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)
 		this.battle.add('-fieldstart', status.name);
 		this.battle.eachEvent('WeatherChange', sourceEffect);
 	}
