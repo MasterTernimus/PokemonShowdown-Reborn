@@ -2567,8 +2567,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move) {
 			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('snowyterrain')) {
-				move.boosts = {
-					atk: -2,
+				move.secondary = {
+					boosts: {
+						atk: -2,
+					}
 				};
 			}
 		},
@@ -8258,6 +8260,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
+				const blizzardMoves = ['blizzard', 'avalanche', 'subzeroslammer', 'powdersnow']
 				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
 				let strengthenedMoves = ['fairywind, silverwind'];
 				let modifier = 1;
@@ -8273,7 +8276,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.debug('grassy terrain boost');
 					modifier *= 1.5;
 				}
-				if (igniteMoves.includes(move.id) && this.field.weather !== 'rain' && !this.field.pseudoWeather['watersport']) {
+				if ((igniteMoves.includes(move.id) && this.field.weather !== 'rain' && !this.field.pseudoWeather['watersport']) || blizzardMoves.includes(move.id)) {
 					modifier *= 5325 / 4096;
 				}
 				if (this.field.terrainState.Tchanges?.get('sludgewave') == 1 && move.id === 'sludgewave' || move.id === 'aciddownpour')
@@ -13686,7 +13689,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['newworldterrain', 'spacialrend'],
 				['starlightarenaterrain', 'moonblast'],
 				['inverseterrain', 'trickroom'],
-				['snowyterrian', 'icywind']
+				['snowyterrain', 'icywind']
 			]);
 			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
@@ -18837,7 +18840,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		weather: 'snow',
+		terrain: "snowyterrain",
 		secondary: null,
 		target: "all",
 		type: "Ice",
@@ -20754,14 +20757,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {snatch: 1, metronome: 1, wind: 1},
 		sideCondition: 'tailwind',
 		onAfterMove(source, target, move) {
-			if ((this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) && (this.field.weather !== 'desolateland' && this.field.weather !== 'primordialsea')) {
+			if ((this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) && (this.field.weather !== 'desolateland' && this.field.weather !== 'primordialsea')) {
 				this.field.setWeather('deltastream');
 			}
 		},
 		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
-				if (source?.hasAbility('persistent') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
+				if (source?.hasAbility('persistent') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 6;
 				}
