@@ -2867,6 +2867,7 @@ export class Battle {
 					"underwaterrain",
 					"wastelandterrain",
 					"newworldterrain",
+					"snowyterrain",
 					"",
 				];
 				const new_terrain = this.sample(all_terrains);
