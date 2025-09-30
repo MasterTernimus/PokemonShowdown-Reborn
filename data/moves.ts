@@ -2837,6 +2837,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move){
+			if(this.field.isTerrain('snowyterrain')){
+				move.accuracy = 100;
+			}
+		},
 		status: 'frz',
 		secondary: null,
 		target: "normal",
