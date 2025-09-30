@@ -105,8 +105,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 				pokemon.cureStatus();
 				return;
 			}
-			this.add('cant', pokemon, 'frz');
-			return false;
 		},
 		onModifyMove(move, pokemon) {
 			if (move.flags['defrost']) {
@@ -124,6 +122,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 				target.cureStatus();
 			}
 		},
+		onResidual(pokemon){
+			this.damage(pokemon.baseMaxhp / 16);
+		}
 	},
 	psn: {
 		name: 'psn',
@@ -706,7 +707,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('icyrock') || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) {
+			if (source?.hasItem('icyrock') || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) {
 				return 8;
 			}
 			return 5;
@@ -719,6 +720,14 @@ export const Conditions: {[k: string]: ConditionData} = {
 				}
 				else {
 					return this.modify(def, 1.5);
+				}
+			}
+		},
+		onModifyMove(move){
+			if (move.secondaries) {
+				this.debug('doubling frostbite chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance && secondary.status === 'frz') secondary.chance *= 2;
 				}
 			}
 		},
@@ -786,7 +795,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		effectType: 'Weather',
 		duration: 0,
 		durationCallback(target, source, effect) {
-			if (effect?.id === 'tailwind') {
+			if (effect?.id === 'tailwind' && (this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowyterrain')) && !(this.field.weather !== 'desolateland' || this.field.weather !== 'primordialocean')) {
 				return 6;
 			}
 			return 0;

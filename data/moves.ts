@@ -860,7 +860,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'auroraveil',
 		onTry() {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('icyterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('starlightarenaterrain')) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('icyterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('starlightarenaterrain') || this.field.isTerrain('snowyterrain')) {
 				return true;
 			}
 			return false;
@@ -1119,7 +1119,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	barrage: {
 		num: 140,
 		accuracy: 85,
-		basePower: 25,
+		basePower: 20,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Barrage",
@@ -1578,7 +1578,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move) {
-			if (this.field.isWeather(['hail', 'snow'])) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('snowyterrain')) {
 				move.accuracy = true;
 			}
 			else {
@@ -2565,6 +2565,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		onModifyMove(move) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('snowyterrain')) {
+				move.boosts = {
+					atk: -2,
+				};
+			}
+		},
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -2821,6 +2828,22 @@ export const Moves: { [moveid: string]: MoveData } = {
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Tough",
 	},
+	coldsnap: {
+		num: 1200,
+		accuracy: 85,
+		basePower: 0,
+		category: "Status",
+		name: "Cold Snap",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		status: 'frz',
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+		zMove: {boost: {spa: 1}},
+		contestType: "Beautiful",
+	},
 	collisioncourse: {
 		num: 878,
 		accuracy: 100,
@@ -2864,8 +2887,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	cometpunch: {
 		num: 4,
-		accuracy: 85,
-		basePower: 18,
+		accuracy: 95,
+		basePower: 20,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Comet Punch",
@@ -4197,7 +4220,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	doublehit: {
 		num: 458,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 35,
 		category: "Physical",
 		name: "Double Hit",
@@ -6805,8 +6828,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	furyswipes: {
 		num: 154,
-		accuracy: 80,
-		basePower: 18,
+		accuracy: 95,
+		basePower: 20,
 		category: "Physical",
 		name: "Fury Swipes",
 		pp: 15,
@@ -7763,7 +7786,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
 			onEntryHazard(pokemon) {
-				if (pokemon.hasItem('heavydutyboots')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
 				// They don't get typed damage from Steelsurge because Steelsurge doesn't,
@@ -10154,6 +10177,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
+		onModifyMove(move) {
+			if (this.field.isTerrain('snowyterrain')) {
+				move.accuracy = true;
+			}
+		},
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -13652,7 +13680,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['snowymountainterrain', 'avalanche'],
 				['newworldterrain', 'spacialrend'],
 				['starlightarenaterrain', 'moonblast'],
-				['inverseterrain', 'trickroom']
+				['inverseterrain', 'trickroom'],
+				['snowyterrian', 'icywind']
 			]);
 			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
@@ -15664,7 +15693,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			this.add('-activate', target, 'move: Quash');
 		},
 		boosts: {
-			accuracy: -1,
+			accuracy: -2,
 		},
 		target: "normal",
 		type: "Dark",
@@ -16433,7 +16462,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	rockblast: {
 		num: 350,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 25,
 		category: "Physical",
 		name: "Rock Blast",
@@ -16536,7 +16565,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	rockthrow: {
 		num: 88,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
 		name: "Rock Throw",
@@ -18355,7 +18384,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	slam: {
 		num: 21,
-		accuracy: 75,
+		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
 		name: "Slam",
@@ -18818,13 +18847,22 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1},
 		onHit(target) {
+			if(this.field.isTerrain('snowyterrain') && (target.getTypes().join() === 'Ice' || !target.setType('Ice'))){
+				this.add('-fail', target);
+				return null;
+			}
 			if (target.getTypes().join() === 'Water' || !target.setType('Water')) {
 				// Soak should animate even when it fails.
 				// Returning false would suppress the animation.
 				this.add('-fail', target);
 				return null;
 			}
-			this.add('-start', target, 'typechange', 'Water');
+			if(this.field.isTerrain('snowyterrainn')){
+				this.add('-start', target, 'typechange', 'Ice');
+			}
+			else{
+				this.add('-start', target, 'typechange', 'Ice');
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -19188,7 +19226,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.effectState.layers++;
 			},
 			onEntryHazard(pokemon) {
-				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
@@ -19533,7 +19571,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			},
 			onEntryHazard(pokemon) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
-				if (pokemon.hasItem('heavydutyboots')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				if (!pokemon.runImmunity(counter[this.CrystalCavernCounter])) return;
 				let typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				if (this.field.isTerrain('crystalcavernterrain')) {
@@ -19639,8 +19677,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	steelwing: {
 		num: 211,
-		accuracy: 90,
-		basePower: 70,
+		accuracy: 100,
+		basePower: 90,
 		category: "Physical",
 		name: "Steel Wing",
 		pp: 25,
@@ -19679,7 +19717,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				}
 			},
 			onEntryHazard(pokemon) {
-				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				if (this.field.isTerrain('forestterrain')) {
 					this.boost({ spe: -2 }, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
@@ -20057,8 +20095,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	submission: {
 		num: 66,
-		accuracy: 80,
-		basePower: 80,
+		accuracy: 100,
+		basePower: 90,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Submission",
@@ -20667,7 +20705,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	tailslap: {
 		num: 541,
-		accuracy: 85,
+		accuracy: 95,
 		basePower: 25,
 		category: "Physical",
 		name: "Tail Slap",
@@ -20748,7 +20786,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 	},
 	takedown: {
 		num: 36,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
 		name: "Take Down",
@@ -21708,7 +21746,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (pokemon.hasType('Poison') && !this.field.isTerrain('corrosiveterrain')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
+				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) {
 					return;
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);

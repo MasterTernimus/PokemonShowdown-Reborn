@@ -1400,8 +1400,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
-				let immune = ['surgesurfer', 'swiftswim'];
-				if (!pokemon.hasType('Water') || !immune.includes(pokemon.ability)) {
+				let immune = ['surgesurfer', 'swiftswim', 'limber'];
+				if ((!pokemon.hasType('Water') || !immune.includes(pokemon.ability)) && pokemon.isGrounded()) {
 					return this.chainModify(0.75);
 				}
 			},
@@ -1498,7 +1498,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		name: "New World Terrain",
 		condition: {
 			onModifySpe(spe, pokemon) {
-				if (pokemon.isGrounded()) {
+				if (pokemon.isGrounded() && !pokemon.hasAbility('limber')) {
 					return this.chainModify(0.75);
 				}
 			},
@@ -1546,6 +1546,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('starlightarenaterrain', source, move);
 				}
 			},
+
 			onFieldStart(field, source, effect) {
 				if (this.field.weather !== '') {
 					this.field.clearWeather();
@@ -1817,6 +1818,85 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	snowyterrain: {
+		name: "Snowy Terrain",
+		condition: {
+			onModifySpe(spe, pokemon){
+				const immuneAbiltiy = ['slushrush', 'icebody', 'snowcloak', 'limber']; 
+				if((!pokemon.hasType('Ice') || !immuneAbiltiy.includes(pokemon.ability)) && pokemon.isGrounded()){
+					return this.chainModify(0.75);
+				}
+			},
+			onModifySpD(def, pokemon) {
+				if (pokemon.hasType('Ice') && this.field.isWeather('hail')) {
+					return this.chainModify(1.5);
+				}
+			},
+			onModifyMove(move) {
+				const icyMoves = ['bulldoze', 'earthquake', 'magnitude', 'mudbomb', 'mudshot', 'mudslap', 'sandtomb']
+				if (move.type === 'Steel' || icyMoves.includes(move.id)) {
+					move.types = [move.type, 'Ice'];
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const weak:string[] = ['scald', 'eruption', 'hydrosteam'];
+				const boost: string[] = ["blizzard", "fairywind", "gust", "icywind", "ominouswind", "razorwind", "powdersnow", "silverwind", "twister", "mudslap", "mudshot", "mudbomb", 'chillingwater'];
+				const secondBoost: string[] = ["aeroblast", "aircutter", "airslash", "bleakwindstorm", "chillingwater", "fairywind", "glaciate", "gust", "hurricane", "ominouswind", "razorwind", "silverwind", "twister"];
+				if (this.field.weather === '') {
+					if(weak.includes(move.id) || move.type === 'Fire'){
+						modifier *= 0.5;
+					}
+					if (boost.includes(move.id) || (move.category === 'Special' && move.type == 'Flying')) {
+						this.add('-message', 'The snowy terrain charged up the attack!');
+						modifier *= 1.5;
+					}
+					if(secondBoost.includes(move.id)){
+						this.add('-message', 'The snowy terrain charged up the attack!');						
+						modifier *= 1.5;
+					}
+					return this.chainModify(modifier);
+				}
+			},
+			onAfterMove(source, target, move){
+				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
+				if(igniteMoves.includes(move.id)){
+					this.field.clearTerrain();
+				}
+				if (move.id == 'powdersnow' ||(move.category === 'Special' && move.type === 'Flying')){
+					for (const pokemon of this.getAllActive()) {
+						this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
+					}
+				}
+				
+			},
+			onResidual(){
+				if(this.field.weather === 'raindance'){
+					this.field.changeWeather('hail');
+				}
+				if(this.field.weather === 'sunnyday' || this.field.weather === 'desolateland'){
+					if(this.field.terrainState?.Tchanges?.get('sun') == 1){
+						this.field.clearTerrain();
+					}
+					else{
+						this.field.terrainState?.Tchanges?.set('sun', 1);
+					}
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'Starlight Arena Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'Starlight Arena Terrain');
+				}
+				this.add('-message', 'Starlight fills the battlefield.');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Starlight Arena Terrain');
+			},
+		}
+	},
 	starlightarenaterrain: {
 		name: "Starlight Arena Terrain",
 		condition: {
@@ -1999,7 +2079,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				const immune = ['swiftswim', 'steelworker'];
-				if (!pokemon.getTypes().includes('Water') && !immune.includes(pokemon.ability)) {
+				if (!pokemon.getTypes().includes('Water') && !immune.includes(pokemon.ability) || !(pokemon.hasAbility('limber') && pokemon.isGrounded())) {
 					return this.chainModify(0.5);
 				}
 			},
@@ -2188,7 +2268,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
-				const immune = ['swiftswim', 'surgesurfer'];
+				const immune = ['swiftswim', 'surgesurfer', 'limber'];
 				if (pokemon.isGrounded() && !pokemon.getTypes().includes('Water') && !immune.includes(pokemon.ability)) {
 					return this.chainModify(0.75);
 				}

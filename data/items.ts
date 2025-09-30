@@ -538,7 +538,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.baseMaxhp / 16);
+				if(pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony){
+					this.heal(pokemon.baseMaxhp / 8);
+				}
+				else{
+					this.heal(pokemon.baseMaxhp / 16);
+				}
 			} else {
 				this.damage(pokemon.baseMaxhp / 8);
 			}
@@ -1661,7 +1666,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'snowyterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -1711,9 +1716,14 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ spa: 1 });
 				pokemon.addVolatile('flashfire', pokemon, item);
 			}
+			if(this.field.isTerrain('snowyterrain')){
+				this.add('-message', pokemon.name + ' is protected by the snow!');
+				this.boost({evasion: 1, spd: 1});
+				pokemon.side.addSideCondition('safeguard');
+			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'snowyterrain'];
 			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
@@ -3077,7 +3087,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 16);
+			if(pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony){
+				this.heal(pokemon.baseMaxhp / 8);
+			}
+			else{
+				this.heal(pokemon.baseMaxhp / 16);
+			}
 		},
 		num: 234,
 		gen: 2,
