@@ -98,14 +98,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 				target.formeChange('Shaymin', this.effect, true);
 			}
 		},
-		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
-			if (move.flags['defrost']) return;
-			if (this.randomChance(1, 5)) {
-				pokemon.cureStatus();
-				return;
-			}
-		},
 		onModifyMove(move, pokemon) {
 			if (move.flags['defrost']) {
 				this.add('-curestatus', pokemon, 'frz', '[from] move: ' + move);
