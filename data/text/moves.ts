@@ -959,6 +959,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Raises the target's Attack and Defense by 1 stage. Fails if there is no ally adjacent to the user.",
 		shortDesc: "Raises an ally's Attack and Defense by 1.",
 	},
+	coldsnap: {
+		name: "Cold Snap",
+		desc: "Applies frostbite",
+		shortDesc: "Applies frostbite",
+	},
 	coil: {
 		name: "Coil",
 		desc: "Raises the user's Attack, Defense, and accuracy by 1 stage.",
