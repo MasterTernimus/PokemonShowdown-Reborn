@@ -95,6 +95,26 @@ export class Field {
 		return true;
 	}
 
+	changeWeather(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		status = this.battle.dex.conditions.get(status);
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (this.weather === status.id) {
+			return false;
+		}
+		const prevWeatherState = this.weatherState;
+		this.weather = status.id;
+		this.weatherState = {
+			id: status.id,
+			terrain_type: this.weatherState.terrain_type,
+			origin: sourceEffect,
+			duration: this.weatherState.duration,
+			turn: this.battle.turn,
+			prevterrain: this.weatherState.id,
+		};
+		this.battle.add('-fieldstart', status.name);
+		this.battle.eachEvent('WeatherChange', sourceEffect);
+	}
+
 	clearWeather() {
 		if (!this.weather) return false;
 		const prevWeather = this.getWeather();
