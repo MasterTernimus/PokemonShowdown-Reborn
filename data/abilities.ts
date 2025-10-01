@@ -378,8 +378,8 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.boost({ def: 1 });
 			}
 		},
-		onAfterBoost(boost, target, source, effect) {
-			if (!source || target.isAlly(source)) {
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source) {
 				return;
 			}
 			let statsLowered = false;
@@ -699,7 +699,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	competitive: {
 		onAfterEachBoost(boost, target, source, effect) {
-			if (!source || target.isAlly(source)) {
+			if (target.isAlly(source)) {
 				return;
 			}
 			let statsLowered = false;
@@ -1017,7 +1017,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	defiant: {
 		onAfterEachBoost(boost, target, source, effect) {
-			if (!source || target.isAlly(source)) {
+			if (target.isAlly(source)) {
 				return;
 			}
 			let statsLowered = false;
@@ -4633,12 +4633,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
 		onSwitchIn() {
-			if (this.field.terrain === 'fairytaleterrain') {
+			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1 });
 			}
 		},
 		onAfterEachBoost(boost, target, source, effect) {
-			if (!source || target.isAlly(source)) {
+			if (target.isAlly(source)) {
 				return;
 			}
 			let statsLowered = false;
