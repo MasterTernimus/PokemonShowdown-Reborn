@@ -2046,19 +2046,21 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.5;
 				}
 				if (strengthenedMoves.includes(move.id)) {
+					this.add('-message', 'The murk strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (weakenedMoves.includes(move.id)) {
+					this.add('-message', 'The attack dissipated in the soggy ground...');
 					modifier *= 0.25;
 				}
 				return this.chainModify(modifier);
 			},
 			onResidual(pokemon) {
-				let immune = ['quickfeet', 'swiftswim', 'clearbody', 'whitesmoke'];
+				let immune = ['quickfeet', 'swiftswim', 'clearbody', 'whitesmoke', 'fullmetalbody', 'myceliummight'];
 				if (pokemon.isGrounded() && !immune.includes(pokemon.ability)) {
 					this.boost({ spe: -1 }, pokemon);
 				}
-				if (pokemon.status === 'slp' || pokemon.hasAbility('comatose') && !(pokemon.hasAbility('magicguard'))) {
+				if ((pokemon.status === 'slp' || pokemon.hasAbility('comatose')) && !(pokemon.hasAbility('magicguard'))) {
 					this.damage(pokemon.baseMaxhp / 16, pokemon);
 				}
 			},

@@ -1230,7 +1230,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onResidual(pokemon) {
 			if (!this.field.isWeather('raindance') || !this.field.isWeather('sunnyday')) {
-				if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison') || this.field.isTerrain('underwaterterrain'))) {
+				if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison') || this.field.isTerrain('underwaterterrain')) || this.field.isTerrain('swampterrain')) {
 					this.heal(pokemon.baseMaxhp / 16);
 				}
 				if (this.field.isTerrain('corrosivemistterrain')) {
@@ -1819,7 +1819,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Gooey');
-				if (this.field.isTerrain('murkwatersurfaceterrain')) {
+				if (this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('swampterrain')) {
 					this.boost({ spe: -2 }, source, target, null, true);
 				}
 				else if (this.field.isTerrain('wastelandterrain')) {
@@ -1953,7 +1953,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				if (source.hp <= source.maxhp / 2 || this.field.isTerrain('electricterrains') || this.field.isTerrain('factoryterrain')) {
 					forme = 'cramorantgorging';
 				}
-				else if (source.hp > source.maxhp / 2 || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain')) {
+				else if (source.hp > source.maxhp / 2 || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('swampterrain')) {
 					forme = 'cramorantgulping';
 				}
 				source.formeChange(forme, effect);
@@ -3159,6 +3159,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyMove(move) {
 			if (move.category === 'Status') {
 				move.ignoreAbility = true;
+			}
+		},
+		onResidual(pokemon){
+			if(this.field.isTerrain('swampterrain')){
+				this.boost({spd: 1, def: 1});
 			}
 		},
 		flags: {},
@@ -6010,7 +6015,7 @@ else
 			}
 		},
 		onResidual() {
-			if (this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain')) {
+			if (this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('swampterrain')) {
 				this.boost({ def: 2 });
 			}
 		},
