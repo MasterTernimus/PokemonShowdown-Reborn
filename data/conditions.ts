@@ -605,7 +605,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onImmunity(type, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
-			if (type === 'frz') return false;
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {

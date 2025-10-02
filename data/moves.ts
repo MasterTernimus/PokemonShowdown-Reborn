@@ -2567,11 +2567,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move) {
 			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('snowyterrain')) {
-				move.secondary = {
+				move.secondaries = [];
+				move.secondaries.push({
+					chance: 100,
 					boosts: {
 						atk: -2,
 					}
-				};
+				});
 			}
 		},
 		secondary: {
@@ -2840,7 +2842,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move){
-			if(this.field.isTerrain('snowyterrain')){
+			if(this.field.isTerrain('snowyterrain') || this.field.isWeather(['hail', 'snow'])){
 				move.accuracy = 100;
 			}
 		},
