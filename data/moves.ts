@@ -17306,7 +17306,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 						atk: -1,
 					}
 				});
-			} else if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) {
+			} else if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					status: 'frz'
