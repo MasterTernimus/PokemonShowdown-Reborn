@@ -379,7 +379,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onAfterEachBoost(boost, target, source, effect) {
-			if (!source) {
+			if (target.isAlly(source)) {
 				return;
 			}
 			let statsLowered = false;
