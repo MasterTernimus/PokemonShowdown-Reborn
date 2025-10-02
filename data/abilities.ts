@@ -2174,8 +2174,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	icebody: {
 		onWeather(target, source, effect) {
-			if (effect.id === 'hail' || effect.id === 'snow' || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) {
+			if (effect.id === 'hail' || effect.id === 'snow') {
 				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		onResidual(pokemon){
+			if((this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) && !(this.field.isWeather(['hail', 'snow']))){
+				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		onImmunity(type, pokemon) {
