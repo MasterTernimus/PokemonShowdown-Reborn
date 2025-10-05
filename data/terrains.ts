@@ -1823,7 +1823,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			onModifySpe(spe, pokemon){
 				const immuneAbiltiy = ['slushrush', 'icebody', 'snowcloak', 'limber']; 
-				if((!pokemon.hasType('Ice') || !immuneAbiltiy.includes(pokemon.ability)) && pokemon.isGrounded()){
+				if(!(pokemon.hasType('Ice') || immuneAbiltiy.includes(pokemon.ability)) && pokemon.isGrounded()){
 					return this.chainModify(0.75);
 				}
 			},
@@ -1844,8 +1844,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const weak:string[] = ['scald', 'eruption', 'hydrosteam'];
 				const boost: string[] = ["blizzard", "fairywind", "gust", "icywind", "ominouswind", "razorwind", "powdersnow", "silverwind", "twister", "mudslap", "mudshot", "mudbomb", 'chillingwater'];
 				const secondBoost: string[] = ["aeroblast", "aircutter", "airslash", "bleakwindstorm", "chillingwater", "fairywind", "glaciate", "gust", "hurricane", "ominouswind", "razorwind", "silverwind", "twister"];
+				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				if(weak.includes(move.id) || move.type === 'Fire'){
+					this.add('-message', "The fire was doused by the snow!");
 					modifier *= 0.5;
+				}
+				if(igniteMoves.includes(move.id)){
+					modifier*= 1.3;
 				}
 				if (boost.includes(move.id) || (move.category === 'Special' && move.type == 'Flying')) {
 					this.add('-message', 'The snowy terrain charged up the attack!');
@@ -1859,7 +1864,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move){
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
-				if(igniteMoves.includes(move.id)){
+				if(igniteMoves.includes(move.id) && !this.field.getPseudoWeather('watersport')){
 					this.field.clearTerrain();
 				}
 				if (move.id == 'powdersnow' ||(move.category === 'Special' && move.type === 'Flying')){
@@ -1873,7 +1878,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if(this.field.weather === 'raindance'){
 					this.field.changeWeather('hail');
 				}
-				if(this.field.weather === 'sunnyday' || this.field.weather === 'desolateland'){
+				if((this.field.weather === 'sunnyday' || this.field.weather === 'desolateland') && !this.field.getPseudoWeather('watersport')){
 					if(this.field.terrainState?.Tchanges?.get('sun') == 1){
 						this.field.clearTerrain();
 					}

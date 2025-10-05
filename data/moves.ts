@@ -8289,7 +8289,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				const blizzardMoves = ['blizzard', 'avalanche', 'subzeroslammer', 'powdersnow'];
 				if(blizzardMoves.includes(move.id)){
-					this.field.changeTerrain('grassyterrain');
+					this.field.changeTerrain('snowyterrain');
 				}
 				if (igniteMoves.includes(move.id) && this.field.weather !== 'rain' && !this.field.pseudoWeather['watersport']) {
 					this.field.changeTerrain('burningterrain');
