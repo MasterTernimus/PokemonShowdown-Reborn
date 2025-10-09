@@ -1561,9 +1561,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		secondary: {
 			chance: 30,
-			boosts: {
-				spe: -1,
-			},
+			status: 'frz',
 		},
 		target: "allAdjacentFoes",
 		type: "Flying",
