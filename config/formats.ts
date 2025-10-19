@@ -336,7 +336,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Forest Field",
 		mod: 'gen9',
-		terrain: 'forestfield',
+		terrain: 'forestterrain',
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
@@ -736,7 +736,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Doubles Forest Field",
 		mod: 'gen9',
-		terrain: 'forestfield',
+		terrain: 'forestterrain',
 		gameType: "doubles",
 		searchShow: true,
 		debug: true,
@@ -1166,7 +1166,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] 6/4 Doubles Forest Field",
 		mod: 'gen9',
-		terrain: 'forestfield',
+		terrain: 'forestterrain',
 		gameType: "doubles",
 		searchShow: true,
 		debug: true,
