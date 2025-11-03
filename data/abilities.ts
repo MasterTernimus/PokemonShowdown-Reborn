@@ -970,7 +970,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 186,
 	},
 	dauntlessshield: {
-		onStart(pokemon) {
+		onSwitchIn(pokemon) {
 			this.boost({ def: 1 }, pokemon);
 		},
 		flags: {},
@@ -2469,7 +2469,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 22,
 	},
 	intrepidsword: {
-		onStart(pokemon) {
+		onSwitchIn(pokemon) {
 			this.boost({ atk: 1 }, pokemon);
 		},
 		flags: {},
