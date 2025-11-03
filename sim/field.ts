@@ -250,7 +250,7 @@ export class Field {
 			if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-				while (this.terrainStack[0] && this.terrainStack[0]?.terrain_type !== "Base") {
+				while (this.terrainStack.length > 0 && this.terrainStack[0]?.terrain_type !== "Base") {
 					this.terrainStack.shift();
 				}
 			} else {
@@ -260,10 +260,16 @@ export class Field {
 			const prevTerrain = this.getTerrain();
 			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 			this.terrainStack.shift();
-			while (this.terrainStack[0]?.terrain_type === 'Base' && this.terrainStack[0].id === this.battle.format.terrain) {
+			while (this.terrainStack.length > 0 && this.terrainStack[0]?.terrain_type === 'Base' && this.terrainStack[0].id === this.battle.format.terrain) {
 				this.terrainStack.shift();
-				if (this.terrainStack.length === 0) {
-					break;
+			}
+		} else if(power == 'terraform'){
+			const user_terrains = ['mistyterrain', 'corrosivemistterrain', 'corrosiveterrain', 'psychicterrain', 'grassyterrain', 'burningterrain', 'snowyterrain', 'inverseterrain', 'glitchterrain', 'rainbowterrain', 'swampterrain'];
+			if(user_terrains.includes(this.terrain)){
+				const prevTerrain = this.getTerrain();
+				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
+				while (this.terrainStack.length > 0 && user_terrains.includes(this.terrainStack[0].id)) {
+					this.terrainStack.shift();
 				}
 			}
 		} else {
