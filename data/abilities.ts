@@ -1251,6 +1251,23 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		rating: 3,
 		num: 87,
 	},
+	duskilate: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move && move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Dark';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		flags: {},
+		name: "Duskilate",
+		rating: 4,
+		num: 400,
+	},
 	earlybird: {
 		flags: {},
 		name: "Early Bird",

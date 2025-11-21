@@ -270,7 +270,7 @@ export class Field {
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 				while (this.terrainStack.length > 0 && user_terrains.includes(this.terrainStack[0].id)) {
 					this.terrainStack.shift();
-				}
+				} 
 			}
 		} else {
 			const prevTerrain = this.getTerrain();
