@@ -4906,7 +4906,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	soulheart: {
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
-			this.boost({ spa: 1 }, this.effectState.target);
+			this.boost({ spa: 1, spd: 1 }, this.effectState.target);
 		},
 		flags: {},
 		name: "Soul-Heart",
