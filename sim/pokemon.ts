@@ -290,7 +290,7 @@ export class Pokemon {
 		[key: string]: any,
 	};
 
-	//Chess field specific
+	// Chess field specific
 	Role?: Roles;
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
@@ -2038,7 +2038,6 @@ export class Pokemon {
 		if ('gravity' in this.battle.field.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
-		if (this.battle.field.isTerrain('caveterrain')) return true;
 		const item = (this.ignoringItem() ? '' : this.item);
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
@@ -2105,16 +2104,16 @@ export class Pokemon {
 	runImmunity(type: string | string[], message?: string | boolean) {
 		if (!type || type === '???') return true;
 		const sourceTypes: string[] = Array.isArray(type) ? type : [type];
-		for (const type of sourceTypes) {
-			if (!this.battle.dex.types.isName(type)) {
-				throw new Error("Use runStatusImmunity for " + type);
+		for (const individualType of sourceTypes) {
+			if (!this.battle.dex.types.isName(individualType)) {
+				throw new Error("Use runStatusImmunity for " + individualType);
 			}
 			if (this.fainted) return false;
 
-			const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
-			const notImmune = type === 'Ground' ?
+			const negateImmunity = !this.battle.runEvent('NegateImmunity', this, individualType);
+			const notImmune = individualType === 'Ground' ?
 				this.isGrounded(negateImmunity) :
-				negateImmunity || this.battle.dex.getImmunity(type, this);
+				negateImmunity || this.battle.dex.getImmunity(individualType, this);
 			if (notImmune) {
 				continue;
 			}

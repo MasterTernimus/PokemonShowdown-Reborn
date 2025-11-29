@@ -7,7 +7,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAccuracy(accuracy, target, source, move) {
 				const noguard = ['owntempo', 'purepower', 'sandveil', 'steadfast'];
 				if (!target.hasAbility('unnerve') && source.hasAbility(noguard)) {
-					if(move && target === this.effectState.target)
+					if (move && target === this.effectState.target)
 						return true;
 				}
 				return accuracy;
@@ -39,7 +39,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const accuracy = ['firespin', 'leaftornado', 'razorwind', 'twister', 'whirlpool'];
-				if (accuracy.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')){
+				if (accuracy.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')) {
 					for (const pokemon of this.getAllActive()) {
 						this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
 					}
@@ -55,6 +55,85 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Ashen Beach Terrain');
+			},
+		}
+	},
+	bewitchedwoodsterrain: {
+		name: "Bewitched Woods Terrain",
+		condition: {
+			onEffectiveness(typeMod, target, type, move) {
+				const types = move.types !== undefined ? move.types : [move.type];
+				if (type === 'Steel' && types.includes('Fairy')) {
+					return 1;
+				}
+				if (type === 'Dark' && types.includes('Fairy')) {
+					return 0;
+				}
+				if (type === 'Green' && types.includes('Poison')) {
+					return 0;
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const boostMoves = ['hex', 'mysticalfire', 'spiritbreak'];
+				const weakerboostMoves = ["aurorabeam", "bubblebeam", "chargebeam", "flashcannon", "hyperbeam", "icebeam", "magicalleaf", "mirrorbeam", "psybeam", "signalbeam"];
+				const weakBoost: string[] = ["darkpulse", "moonblast", "nightdaze"];
+				const blessedMoves = ['judgement', 'originpulse', 'purify', 'sacredfire', 'dazzlinggleam', 'flash'];
+
+				if (move.type === 'Fairy') {
+					modifier *= 1.5;
+					this.add('-message', 'The fairy aura amplified the attack\'s power!');
+				}
+				if (move.type === 'Grassy') {
+					modifier *= 1.5;
+					this.add('-message', 'Flourish!');
+				}
+				if (move.type === 'Dark') {
+					modifier *= 1.3;
+					this.add('-message', 'The dark aura amplified the attack\'s power!');
+				}
+				if (boostMoves.includes(move.id)) {
+					modifier *= 1.5;
+					this.add('-message', 'Mystical aura amplified the attack!');
+				}
+				if (weakerboostMoves.includes(move.id)) {
+					modifier *= 1.4;
+					this.add('-message', 'Magic aura amplified the attack!');
+				}
+				if (weakBoost.includes(move.id)) {
+					modifier *= 1.2;
+					this.add('-message', 'The forest is cursed with nightfall!');
+				}
+				if (blessedMoves.includes(move.id)) {
+					modifier *= 1.3;
+					this.add('-message', 'The evil spirits have been exorcised!');
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				const blessedMoves = ['judgement', 'originpulse', 'purify', 'sacredfire', 'dazzlinggleam', 'flash'];
+				if (blessedMoves.includes(move.id)) {
+					this.field.changeTerrain('forestterrain');
+				}
+			},
+			onResidual(pokemon) {
+				if (pokemon.getStatus().id == 'slp') {
+					this.damage(pokemon.baseMaxhp / 16, pokemon);
+					this.add('-message', pokemon.name + "'s dream is corrupted by the evil spirits!")
+				}
+				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable() && pokemon.hasType('Grass')) {
+					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+					this.add('-message', 'The woods healed the grass Pokémon on the field.');
+				} else {
+					this.debug(`Pokemon semi-invuln or not grounded; Bewitched Terrain skipped`);
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Bewitched Woods Terrain');
+				this.add('-message', 'Evil spirits gathered!');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Bewitched Woods Terrain');
 			},
 		}
 	},
@@ -222,13 +301,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 		name: "Cave Terrain",
 		condition: {
 			duration: 9999,
-			onEffectivenessPriority: -30,
-			onEffectiveness(typeMod, target, type, move) {
-				if (type === 'Ground' && target && !target.isGrounded()) {
-					return 0;
-				}
+			onNegateImmunity(pokemon, type) {
+				if (!pokemon.isGrounded() && type === 'Ground') return false;
 			},
-			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const cavern = ['powergem', 'diamondstorm'];
@@ -935,6 +1010,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const boosted = ['attackorder', 'cut', 'electroweb', 'drumbeating', 'skittersmack', 'pounce'];
+				const hauntedMoves = ['ominouswind, phantomforce, shadowforce, trickortreat'];
 				const nerfed = ['muddywater', 'surf'];
 				if (move.type === 'Grass') {
 					modifier *= 1.5;
@@ -954,14 +1030,21 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (igniteMoves.includes(move.id)) {
 					modifier *= 1.3;
 				}
+				if (hauntedMoves.includes(move.id)) {
+					modifier *= 1.3;
+				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
+				const hauntedMoves = ['ominouswind, phantomforce, shadowforce, spectralscream, trickortreat'];
 				if (igniteMoves.includes(move.id) && (this.field.weather !== 'raindance' || !this.field.getPseudoWeather('watersport'))){
 					this.field.changeTerrain('burningterrain');
 					return;
-				} 
+				}
+				if (hauntedMoves.includes(move.id)) {
+					this.field.changeTerrain('bewitchedwoodsterrain');
+				}
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Forest Terrain');
@@ -1048,6 +1131,66 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
+	hauntedterrain:{
+		name: "Haunted Terrain",
+		condition: {
+			onEffectiveness(typeMod, target ,type, move) {
+				const move_types = move.types !== undefined ? move.types : [move.type];
+				if (type === 'Normal' && move_types.includes('Ghost')) {
+					if (move.types === undefined) {
+						return 0;
+					}
+					return 0 + this.dex.getEffectiveness(move_types.filter(type => type !== 'Normal'), type);
+				}
+			},
+			onBasePower(basePower, source, target, move){
+				let modifier = 1;
+				const wispMoves = ['firespin', 'flameburst', 'flamecharge', 'inferno'];
+				const booMoves = ['astonish', 'boneclub', 'bonerush', 'bonemerang'];
+				const blessedMoves = ['judgement', 'originpulse', 'purify', 'sacredfire', 'dazzlinggleam', 'flash'];
+				if(move.type === 'Ghost'){
+					modifier *= 1.5;
+					this.add('-message', 'The evil aura powered up the attack!');
+				}				
+				if(wispMoves.includes(move.id)){
+					modifier *= 1.5;
+					this.add('-message', 'Will-o\'-wisps joined the attack...');
+				}
+				if(booMoves.includes(move.id)){
+					modifier *= 1.5;
+					this.add('-message', 'Boo!');
+				}
+				if(blessedMoves.includes(move.id)){
+					modifier *= 1.3;
+				}
+				if(move.id === 'shadowbone'){
+					modifier *= 1.2;
+					this.add('-message', 'Spooky scary skeletons!');
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move){
+				const blessedMoves = ['judgement', 'originpulse', 'purify', 'sacredfire', 'dazzlinggleam', 'flash'];
+				if(blessedMoves.includes(move.id)){
+					this.field.changeTerrain('holyterrain');
+					this.add('-message', 'The evil spirits have been exorcised!');
+				}
+			},
+			onResidual(pokemon) {
+				if (pokemon.getStatus().id == 'slp') {
+					this.damage(pokemon.baseMaxhp / 16, pokemon);
+					this.add('-message', pokemon.name + "'s dream is corrupted by the evil spirits!")
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Haunted Terrain');
+				this.add('-message', 'Evil spirits gathered!');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Haunted Terrain');
+			}
+		}
+	},
 	holyterrain: {
 		name: "Holy Terrain",
 		condition: {
@@ -1077,6 +1220,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const strong_boost = ["mysticalfire", "magicalleaf", "ancientpower", "judgment", "sacredfire", "extremespeed", "sacredsword", "return"];
 				const boost = ["psystrike", "aeroblast", "originpulse", "doomdummy", "mistball", "crushgrip", "lusterpurge", "secretsword", "psychoboost", "relicsong", "spacialrend", "hyperspacehole", "roaroftime", "landswrath", "precipiceblades", "dragonascent", "moongeistbeam", "sunsteelstrike", "prismaticlaser", "fleurcannon", "diamondstorm", "genesissupernova", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
+				const hauntedMoves = ['ominouswind, phantomforce, shadowforce, spectralscream, trickortreat'];
 				if ((move.type === 'Fairy' || move.type === 'Normal') && move.category === 'Special') {
 					this.add('-message', 'The holy energy resonated with the attack!');
 					modifier *= 1.5;
@@ -1098,11 +1242,20 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 					modifier *= 1.5;
 				}
+				if(hauntedMoves.includes(move.id) || (move.id === 'curse' && source.types.includes('Ghost'))){
+					modifier *= 1.3;
+				}
 				if (boost.includes(move.id)) {
 					this.add('-message', 'Legendary power accelerated the attack!');
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move){
+				const hauntedMoves = ['ominouswind, phantomforce, shadowforce, spectralscream, trickortreat'];
+				if(hauntedMoves.includes(move.id) || (move.id === 'curse' && source.types.includes('Ghost'))){
+					this.field.changeTerrain('hauntedterrain');
+				}
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Holy Terrain');

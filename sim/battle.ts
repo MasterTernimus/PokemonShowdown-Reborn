@@ -546,7 +546,7 @@ export class Battle {
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Infinite loop");
 		}
-		//this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
+		// this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		let hasRelayVar = true;
 		if (relayVar === undefined) {
 			relayVar = true;
@@ -712,7 +712,7 @@ export class Battle {
 		eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
 		sourceEffect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean
 	) {
-		//this.add('-message', eventid + " Run Event");
+		// this.add('-message', eventid + " Run Event");
 		// if (Battle.eventCounter) {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
 		// 	Battle.eventCounter[eventid]++;
@@ -941,6 +941,7 @@ export class Battle {
 			}
 			target = target.side;
 		}
+		// this.add('-message', source?.name + " " + eventName);
 		if (source && prefixedHandlers) {
 			handlers.push(...this.findPokemonEventHandlers(source, `onSource${eventName}`));
 		}
