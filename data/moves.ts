@@ -20141,7 +20141,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, heal: 1, metronome: 1},
 		onHit(target, source) {
-			if (target.boosts.atk === -6 || (this.field.isTerrain('forestterrain') && target.boosts.spa === -6) return false;
+			if (target.boosts.atk === -6 || (this.field.isTerrain('forestterrain') && target.boosts.spa === -6)) return false;
 			const atk = target.getStat('atk', false, true);
 			let success;
 			if (this.field.isTerrain('betwitchedwoodsterrain')) {
