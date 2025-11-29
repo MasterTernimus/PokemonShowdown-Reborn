@@ -230,7 +230,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onStart(pokemon, source, effect) {
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, '[of] ' + source);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
-			if (this.field.isTerrain('burningterrain') && effect.id === 'firespin') {
+			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('hauntedterrain')) && effect.id === 'firespin') {
 				this.effectState.boundDivisor = 6;
 			}
 			if ((this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) && effect.id === 'whirlpool') {
