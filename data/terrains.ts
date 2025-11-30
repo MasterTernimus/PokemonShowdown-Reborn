@@ -1010,7 +1010,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const boosted = ['attackorder', 'cut', 'electroweb', 'drumbeating', 'skittersmack', 'pounce'];
-				const hauntedMoves = ['ominouswind, phantomforce, shadowforce, trickortreat'];
+				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'trickortreat'];
 				const nerfed = ['muddywater', 'surf'];
 				if (move.type === 'Grass') {
 					modifier *= 1.5;
@@ -1037,7 +1037,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
-				const hauntedMoves = ['ominouswind, phantomforce, shadowforce, spectralscream, trickortreat'];
+				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'trickortreat'];
 				if (igniteMoves.includes(move.id) && (this.field.weather !== 'raindance' || !this.field.getPseudoWeather('watersport'))){
 					this.field.changeTerrain('burningterrain');
 					return;
@@ -1220,7 +1220,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const strong_boost = ["mysticalfire", "magicalleaf", "ancientpower", "judgment", "sacredfire", "extremespeed", "sacredsword", "return"];
 				const boost = ["psystrike", "aeroblast", "originpulse", "doomdummy", "mistball", "crushgrip", "lusterpurge", "secretsword", "psychoboost", "relicsong", "spacialrend", "hyperspacehole", "roaroftime", "landswrath", "precipiceblades", "dragonascent", "moongeistbeam", "sunsteelstrike", "prismaticlaser", "fleurcannon", "diamondstorm", "genesissupernova", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
-				const hauntedMoves = ['ominouswind, phantomforce, shadowforce, spectralscream, trickortreat'];
+				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
 				if ((move.type === 'Fairy' || move.type === 'Normal') && move.category === 'Special') {
 					this.add('-message', 'The holy energy resonated with the attack!');
 					modifier *= 1.5;
@@ -1252,7 +1252,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move){
-				const hauntedMoves = ['ominouswind, phantomforce, shadowforce, spectralscream, trickortreat'];
+				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
 				if(hauntedMoves.includes(move.id) || (move.id === 'curse' && source.types.includes('Ghost'))){
 					this.field.changeTerrain('hauntedterrain');
 				}
