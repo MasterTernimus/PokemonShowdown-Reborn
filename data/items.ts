@@ -3457,7 +3457,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ atk: 1, spa: 1, def: 1, spd: 1, spe: 1 }, pokemon, pokemon, item);
 				pokemon.addVolatile('mustrecharge');
 			}
-			if (this.field.isTerrain('hauntedterrain') || this.field.isTerrain('bewitchedwoodsterrain')) {
+			if (this.field.isTerrain('hauntedterrain')) {
 				this.boost({ spd: 1, def: 1 }, pokemon, pokemon, item);
 				pokemon.trySetStatus('brn', pokemon);
 			}
