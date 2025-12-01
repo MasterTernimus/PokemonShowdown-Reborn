@@ -6714,7 +6714,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('icyterrain')) {
+			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowyterrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -10073,7 +10073,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('icyterrain')) {
+			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('icyterrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
