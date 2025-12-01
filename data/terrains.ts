@@ -183,7 +183,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (boost.includes(move.id)) {
 					modifier *= 1.5;
 				}
-				if (move.id === 'skittersmack' || move.id === 'bodypress') {
+				if (move.id === 'skittersmack' || move.id === 'bodypress' || move.id === 'tripleaxel') {
 					modifier *= 1.2
 				}
 				return this.chainModify(modifier);
