@@ -9,7 +9,7 @@ export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
 }
 
-export type FormatList = (FormatData | {section: string, column?: number})[];
+export type FormatList = (FormatData | { section?: string, subsection?: string, column?: number })[];
 export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
@@ -413,6 +413,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		skipSets?: {[name: string]: {[key: string]: boolean}},
 	}) => string[] | void;
 	declare readonly section?: string;
+	declare readonly subsection?: string;
 	declare readonly column?: number;
 
 	constructor(data: AnyObject) {
@@ -442,9 +443,9 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 function mergeFormatLists(main: FormatList, custom: FormatList | undefined): FormatList {
 	// interface for the builder.
 	interface FormatSection {
-		section: string;
+		section?: string;
 		column?: number;
-		formats: FormatData[];
+		subsections: Array<{ subsectionName: string, formats: FormatData[] }>;
 	}
 
 	// result that is return and makes the actual list for formats.
@@ -454,21 +455,23 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 	const build: FormatSection[] = [];
 
 	// used to track current section to keep formats under their sections.
-	let current: FormatSection | undefined = {section: "", formats: []};
-
+	let current: FormatSection | undefined = { section: "",  subsections: []};
 	// populates the original sections and formats easily
 	// there should be no repeat sections at this point.
 	for (const element of main) {
 		if (element.section) {
-			current = {section: element.section, column: element.column, formats: []};
+			current = {section: element.section, column: element.column, subsections: [{subsectionName: "", formats: []}] };
 			build.push(current);
+		} else if (element.subsection) {
+			current.subsections.push({ subsectionName: element.subsection, formats: [] });
 		} else if ((element as FormatData).name) {
-			current.formats.push((element as FormatData));
+			current.subsections[current.subsections.length - 1].formats.push(element as FormatData);
 		}
 	}
 
 	// merges the second list the hard way. Accounts for repeats.
 	if (custom !== undefined) {
+		let subsectionIndex = 0;
 		for (const element of custom) {
 			// finds the section and makes it if it doesn't exist.
 			if (element.section) {
@@ -476,11 +479,19 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 
 				// if it's new it makes a new entry.
 				if (current === undefined) {
-					current = {section: element.section, column: element.column, formats: []};
+					current = { section: element.section, column: element.column, subsections: [{ subsectionName: "", formats: [] }] };
 					build.push(current);
 				}
-			} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
-				current.formats.push(element as FormatData);
+			} else if (element.subsection) {
+				let findValue = current.subsections.find(e => e.subsectionName === element.subsection);
+				if (findValue === undefined) {
+					current.subsections.push({ subsectionName: element.subsection, formats: [] });
+					subsectionIndex = current.subsections.length - 1;
+				} else {
+					subsectionIndex = current.subsections.indexOf(findValue);
+				}
+			} else if ((element as FormatData).name) {
+				current.subsections[subsectionIndex].formats.push(element as FormatData);
 			}
 		}
 	}
@@ -488,7 +499,14 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 	// builds the final result.
 	for (const element of build) {
 		// adds the section to the list.
-		result.push({section: element.section, column: element.column}, ...element.formats);
+		result.push({ section: element.section, column: element.column });
+		for (const subsection of element.subsections) {
+			if (subsection.subsectionName !== "") {
+				result.push({ subsection: subsection.subsectionName }, ...subsection.formats);
+			} else {
+				result.push(...subsection.formats);
+			}
+		}
 	}
 
 	return result;
@@ -531,15 +549,21 @@ export class DexFormats {
 
 		let section = '';
 		let column = 1;
+		let subsection = '';
 		for (const [i, format] of Formats.entries()) {
 			const id = toID(format.name);
-			if (format.section) section = format.section;
+			if (format.section) {
+				section = format.section;
+				subsection = '';
+			}
+			if (format.subsection) subsection = format.subsection;
 			if (format.column) column = format.column;
-			if (!format.name && format.section) continue;
+			if (!format.name && (format.section || format.subsection)) continue;
 			if (!id) {
 				throw new RangeError(`Format #${i + 1} must have a name with alphanumeric characters, not '${format.name}'`);
 			}
 			if (!format.section) format.section = section;
+			if(!format.subsection && subsection !== '') format.subsection = subsection
 			if (!format.column) format.column = column;
 			if (this.rulesetCache.has(id)) throw new Error(`Format #${i + 1} has a duplicate ID: '${id}'`);
 			format.effectType = 'Format';
