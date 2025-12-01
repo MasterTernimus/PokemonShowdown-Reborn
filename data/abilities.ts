@@ -1265,6 +1265,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				move.typeChangerBoosted = this.effect;
 			}
 		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		flags: {},
 		name: "Duskilate",
 		rating: 4,
