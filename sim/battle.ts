@@ -178,6 +178,7 @@ export class Battle {
 	/** Terrain global variables */
 	ShortCircuitCounter: number;
 	CrystalCavernCounter: number;
+	RandomTerrain: string;
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
 
@@ -318,6 +319,49 @@ export class Battle {
 				this.setPlayer(side, options[side]!);
 			}
 		}
+
+		const all_terrains: string[] = [
+			"ashenbeachterrain",
+			"bigtopterrain",
+			"burningterrain",
+			"caveterrain",
+			"corrosiveterrain",
+			"corrosivemistterrain",
+			"crystalcavernterrain",
+			"darkcrystalcavernterrain",
+			"desertterrain",
+			"dragonsdenterrain",
+			"electricterrain",
+			"factoryterrain",
+			"fairytaleterrain",
+			"forestterrain",
+			"grassyterrain",
+			"glitchterrain",
+			"holyterrain",
+			"icyterrain",
+			"mirrorarenaterrain",
+			"mistyterrain",
+			"mountainterrain",
+			"murkwatersurfaceterrain",
+			"psychicterrain",
+			"rainbowterrain",
+			"rockyterrain",
+			"watersurfaceterrain",
+			"shortcircuitterrain",
+			"snowymountainterrain",
+			"starlightarenaterrain",
+			"superheatedterrain",
+			"swampterrain",
+			"underwaterterrain",
+			"wastelandterrain",
+			"newworldterrain",
+			"snowyterrain",
+			"bewitchedwoodsterrain",
+			"hauntedterrain",
+			"",
+		];
+		this.RandomTerrain = this.sample(all_terrains);
+		this.add('-message', "You are soon entering: " + this.dex.conditions.get(this.RandomTerrain).name);
 	}
 
 	toJSON(): AnyObject {
@@ -2831,51 +2875,11 @@ export class Battle {
 				this.field.terrainStack.push({id: 'fairytaleterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
 			} else if (this.format.terrain === 'corrosivemistterrain') {
 				this.field.startTerrain('corrosivemistterrain');
-				this.field.terrainStack.push({id: 'corrosiveterrainterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
+				this.field.terrainStack.push({id: 'corrosiveterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
 			} else if (this.format.terrain === 'randomterrain') {
-				const all_terrains: string[] = [
-					"ashenbeachterrain",
-					"bigtopterrain",
-					"burningterrain",
-					"caveterrain",
-					"corrosiveterrain",
-					"corrosivemistterrain",
-					"crystalcavernterrain",
-					"darkcrystalcavernterrain",
-					"desertterrain",
-					"dragonsdenterrain",
-					"electricterrain",
-					"factoryterrain",
-					"fairytaleterrain",
-					"forestterrain",
-					"grassyterrain",
-					"glitchterrain",
-					"holyterrain",
-					"icyterrain",
-					"mirrorarenaterrain",
-					"mistyterrain",
-					"mountainterrain",
-					"murkwatersurfaceterrain",
-					"psychicterrain",
-					"rainbowterrain",
-					"rockyterrain",
-					"watersurfaceterrain",
-					"shortcircuitterrain",
-					"snowymountainterrain",
-					"starlightarenaterrain",
-					"superheatedterrain",
-					"swampterrain",
-					"underwaterrain",
-					"wastelandterrain",
-					"newworldterrain",
-					"snowyterrain",
-					"",
-				];
-				const new_terrain = this.sample(all_terrains);
-				this.add('-message', "You are soon entering: " + new_terrain);
-				if (new_terrain !== "") {
-					this.field.startTerrain(new_terrain);
-					const lower_terrain = this.dex.conditions.get(new_terrain);
+				if (this.RandomTerrain !== "") {
+					this.field.startTerrain(this.RandomTerrain);
+					const lower_terrain = this.dex.conditions.get(this.RandomTerrain);
 					this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
 				}
 			} else {
