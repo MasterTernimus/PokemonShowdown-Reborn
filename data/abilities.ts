@@ -1268,7 +1268,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify(1.3);
 			}
 		},
 		flags: {},
@@ -3726,7 +3726,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				if (this.field.terrain === 'mistyterrain')
 					return this.chainModify(1.5);
 				else
-					return this.chainModify([4915, 4096]);
+					return this.chainModify(1.2);
 			}
 		},
 		flags: {},
