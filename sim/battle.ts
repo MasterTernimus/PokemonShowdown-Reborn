@@ -2872,6 +2872,7 @@ export class Battle {
 					"",
 				];
 				const new_terrain = this.sample(all_terrains);
+				this.add('-message', "You are soon entering: " + new_terrain);
 				if (new_terrain !== "") {
 					this.field.startTerrain(new_terrain);
 					const lower_terrain = this.dex.conditions.get(new_terrain);
