@@ -14,7 +14,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onTryAddVolatile(status, target) {
 				if ((target.hasAbility('innerfocus') || target.types.includes('Fighting')) && status.id === 'confusion') {
-					return false;
+					return null;
 				}
 			},
 			onBasePower(basePower, source, target, move) {
