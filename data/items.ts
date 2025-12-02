@@ -1519,6 +1519,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 80,
 		},
+		megaStone: "Gardevoir Void-Mega",
+		megaEvolves: "Gardevoir",
+		itemUser: ["Gardevoir"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
 		num: 108,
 		gen: 4,
 	},
