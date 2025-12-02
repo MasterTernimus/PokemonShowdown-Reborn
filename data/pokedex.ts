@@ -5349,8 +5349,8 @@ export const Pokedex: { [speciesid: string]: SpeciesData } = {
 		color: "White",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Gardevoirite",
-	},/*
-	voidgardevoir: {
+	},
+	voidgardevoirmega: {
 		num: 282,
 		name: "Void Gardevoir",
 		baseSpecies: "Gardevoir",
@@ -5364,7 +5364,6 @@ export const Pokedex: { [speciesid: string]: SpeciesData } = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Dusk Stone",
 	},
-	*/
 	surskit: {
 		num: 283,
 		name: "Surskit",
