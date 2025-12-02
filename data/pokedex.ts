@@ -5350,9 +5350,9 @@ export const Pokedex: { [speciesid: string]: SpeciesData } = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Gardevoirite",
 	},
-	voidgardevoirmega: {
+	gardevoirvoidmega: {
 		num: 282,
-		name: "Void Gardevoir-Mega",
+		name: "Gardevoir Void-Mega",
 		baseSpecies: "Gardevoir",
 		forme: "Mega",
 		types: ["Fairy", "Dark"],
@@ -8485,7 +8485,7 @@ export const Pokedex: { [speciesid: string]: SpeciesData } = {
 		types: ["Electric", "Fire"],
 		gender: "N",
 		baseStats: {hp: 50, atk: 65, def: 107, spa: 105, spd: 107, spe: 86},
-		abilities: {0: "Levitate", 1: "Flame Body"},
+		abilities: {0: "Levitate", 1: "Duskilate"},
 		heightm: 0.3,
 		weightkg: 0.3,
 		color: "Red",
