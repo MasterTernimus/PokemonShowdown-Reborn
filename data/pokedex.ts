@@ -5352,7 +5352,7 @@ export const Pokedex: { [speciesid: string]: SpeciesData } = {
 	},
 	voidgardevoirmega: {
 		num: 282,
-		name: "Void Gardevoir",
+		name: "Void Gardevoir-Mega",
 		baseSpecies: "Gardevoir",
 		forme: "Mega",
 		types: ["Fairy", "Dark"],
