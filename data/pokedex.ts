@@ -5333,8 +5333,8 @@ export const Pokedex: { [speciesid: string]: SpeciesData } = {
 		prevo: "Kirlia",
 		evoLevel: 30,
 		eggGroups: ["Human-Like", "Amorphous"],
-		otherFormes: ["Gardevoir-Mega"],
-		formeOrder: ["Gardevoir", "Gardevoir-Mega"],
+		otherFormes: ["Gardevoir-Mega", "Gardevoir Void-Mega"],
+		formeOrder: ["Gardevoir", "Gardevoir-Mega", "Gardevoir Void-Mega"],
 	},
 	gardevoirmega: {
 		num: 282,
