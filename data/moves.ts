@@ -2864,6 +2864,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		status: 'frz',
 		secondary: null,
+		desc: 'Freezes the opposing pokemon',
+		shortDesc: 'Inflicts freeze',
 		target: "normal",
 		type: "Ice",
 		zMove: { boost: { spa: 1 } },
