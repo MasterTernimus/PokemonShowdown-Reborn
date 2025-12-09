@@ -357,7 +357,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.terrainState.Tchanges?.set('collapse', 1);
 				}
 				if (cavern.includes(move.id)) {
-					this.add('-message', 'The cave was littered with crystals!');
 					this.field.changeTerrain('crystalcavernterrain', source, move);
 				}
 			},
@@ -691,7 +690,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (terrainbreak.includes(move.id)) {
 					modifier *= 1.3;
 				}
-				if (dark.includes('move.id')) {
+				if (dark.includes('move.id') && this.field.weather !== 'sunnyday') {
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
@@ -712,7 +711,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The crystals were broken up!');
 					this.field.changeTerrain('caveterrain', source, move);
 				}
-				if (dark.includes(move.id)) {
+				if (dark.includes(move.id) && this.field.weather !== 'sunnyday') {
 					this.add('-message', 'The crystals\' light was warped by the darkness!');
 					this.field.changeTerrain('darkcrystalcavernterrain', source, move);
 				}
@@ -720,7 +719,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldResidual() {
 				const source = this.field.terrainState.origin;
 				if (source && source.name) {
-					if (source.name == 'SunnyDay' && this.field.getWeather().name != 'SunnyDay') {
+					if (source.name == 'SunnyDay' && this.field.weather !== 'sunnyday') {
 						this.field.changeTerrain('darkcrystalcavernterrain');
 					}
 				}			
@@ -816,6 +815,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The harsh desert heat augmented the attack!')
 					modifier *= 1.5;
 				}
+				return this.chainModify(modifier);
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Desert Terrain');

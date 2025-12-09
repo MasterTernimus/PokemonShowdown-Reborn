@@ -4479,8 +4479,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('sandstorm');
 			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeach')) {
-				target.boostBy({ accuracy: -1 });
-			}
+				for (const foes of target.side.pokemon) {
+					this.boost({ accuracy: -1 }, target, source);
+					this.add('-ability', target, 'Sand Spit');
+				}			}
 		},
 		flags: {},
 		name: "Sand Spit",
