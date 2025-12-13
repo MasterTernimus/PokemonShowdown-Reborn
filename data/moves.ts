@@ -19011,18 +19011,17 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.add('-fail', target);
 				return null;
 			}
-			if (target.getTypes().join() === 'Water' || !target.setType('Water')) {
+			let changeType = 'Water';
+			if (this.field.isTerrain('snowyterrain')) {
+				changeType = 'Ice'
+			}
+			if (target.getTypes().join() === changeType || !target.setType(changeType)) {
 				// Soak should animate even when it fails.
 				// Returning false would suppress the animation.
 				this.add('-fail', target);
 				return null;
 			}
-			if(this.field.isTerrain('snowyterrainn')){
-				this.add('-start', target, 'typechange', 'Ice');
-			}
-			else{
-				this.add('-start', target, 'typechange', 'Ice');
-			}
+			this.add('-start', target, 'typechange', changeType);
 		},
 		secondary: null,
 		target: "normal",
