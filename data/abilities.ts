@@ -5114,7 +5114,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				if (this.field.isTerrain('shortcircuitterrain')) {
 					chance = 6;
 				}
-				if (this.randomChance(6, 10)) {
+				if (this.randomChance(chance, 10)) {
 					source.trySetStatus('par', target);
 				}
 			}

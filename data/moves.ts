@@ -4960,7 +4960,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onBasePower(basePower, attacker, defender, move) {
 				let modifier = 1;
 				let electrified = ['explosion', 'hurricane', 'muddywater', 'selfdestruct', 'smackdown', 'thousandarrows', 'surf', 'psyblade', 'overdrive'];
-				if ((move.type === 'Electric' || move.types?.includes('Electric')) && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					modifier *= 1.5;
 				}
@@ -8322,7 +8322,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if ((igniteMoves.includes(move.id) && this.field.weather !== 'rain' && !this.field.pseudoWeather['watersport']) || blizzardMoves.includes(move.id)) {
 					modifier *= 5325 / 4096;
 				}
-				if (this.field.terrainState.Tchanges?.get('sludgewave') == 1 && move.id === 'sludgewave' || move.id === 'aciddownpour')
+				if (move.id === 'sludgewave' || move.id === 'aciddownpour')
 					modifier *= 5325/4096
 				return this.chainModify(modifier);
 			},
