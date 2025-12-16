@@ -1134,6 +1134,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 	hauntedterrain:{
 		name: "Haunted Terrain",
 		condition: {
+			onNegateImmunity(pokemon, type) {
+				if (pokemon.hasType('Normal') && type === 'Ghost') return false;
+			},
 			onEffectiveness(typeMod, target ,type, move) {
 				const move_types = move.types !== undefined ? move.types : [move.type];
 				if (type === 'Normal' && move_types.includes('Ghost')) {
