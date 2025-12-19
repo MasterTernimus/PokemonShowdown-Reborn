@@ -10388,7 +10388,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onResidualOrder: 7,
 			onResidual(pokemon) {
 				if (this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('swampterrain')) {
-					if (pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))
+					if (pokemon.hasType(['Poison', 'Steel']))
 						this.heal(pokemon.baseMaxhp / 16);
 					else
 						this.damage(pokemon.baseMaxhp / 16);
