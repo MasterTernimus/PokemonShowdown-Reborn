@@ -277,6 +277,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (pokemon.moveThisTurn === 'burnup') {
 					pokemon.setType(pokemon.getTypes(true).map(type => type === "???" ? "Fire" : type));
+					this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), 'from Burning Terrain');
 				}
 			},
 			onFieldResidual() {
