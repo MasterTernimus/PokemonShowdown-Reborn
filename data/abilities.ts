@@ -5788,8 +5788,9 @@ else
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Teravolt');
 		},
-		onNegateImmunity(pokemon, type) {
-			if (type === 'Ground') return false;
+		onFoeNegateImmunity(pokemon, type) {
+			console.log(type, pokemon);
+			if (type === 'Electric' && pokemon.hasType('Ground') && this.field.isTerrain('electricterrain')) return false;
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;

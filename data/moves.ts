@@ -2487,8 +2487,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
 					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
 				} else if (effect && effect.id === 'elementalseed') {
-					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] Elemental Seed: ');
-
+					this.add('-start', pokemon, 'Charge', 'Battle', '[from] Elemental Seed: ');
 				} else {
 					this.add('-start', pokemon, 'Charge');
 				}
@@ -5033,6 +5032,18 @@ export const Moves: { [moveid: string]: MoveData } = {
 		volatileStatus: 'electrify',
 		onTryHit(target) {
 			if (!this.queue.willMove(target) && target.activeTurns) return false;
+		},
+		onHit(target) {
+			if (this.field.isTerrain('electricterrain')) {
+				const changeType = 'Electric';
+				if (target.getTypes().join() === changeType || !target.setType(changeType)) {
+					// Soak should animate even when it fails.
+					// Returning false would suppress the animation.
+					this.add('-fail', target);
+					return null;
+				}
+				this.add('-start', target, 'typechange', changeType);
+			}
 		},
 		condition: {
 			duration: 1,
@@ -8386,9 +8397,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 				}
 				if (move.id === 'sludgewave' || move.id === 'aciddownpour')
 					modifier *= 1.3;
-				if ((this.field.terrainState?.get('swampterrain') >= 1 && move.id === 'muddywater') || (this.field.terrainState?.get('swampterrain') >= 2 && move.id === 'surf')) {
-					modifier *= 1.3;
-					this.add('-message', 'The ground became waterlogged...');
+				if (move.id === 'muddywater' || move.id === 'surf') {
+					const marshCounter = move.id === 'muddywater' ? 2 : 1;
+					const currentCounter = this.field.terrainState.Tchanges?.get('swampterrain') ?? 0;
+					if (currentCounter + marshCounter >= 3) {
+						modifier *= 1.3;
+					}
 				}
 				if (move.id === 'sludgewave' || move.id === 'aciddownpour')
 					modifier *= 5325/4096
@@ -8397,10 +8411,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onAfterMove(target, source, move) {
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				const blizzardMoves = ['blizzard', 'avalanche', 'subzeroslammer'];
-				const swampyMoves = ['muddywater', 'surf'];
+				const swampMoves = ['surf', 'muddywater'];
+				const currentCounter = this.field.terrainState.Tchanges?.get('swampterrain') ?? 0;
 				if (move.id === 'powdersnow') {
 					if (!('snowyterrain' in this.field.terrainState)) {
-						this.field.terrainState.set('snowyterrain', 1);
+						this.field.terrainState.Tchanges?.set('snowyterrain', 1);
 					}
 					else {
 						this.field.changeTerrain('snowyterrain');						
@@ -8415,16 +8430,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if (move.id === 'sludgewave' || move.id === 'aciddownpour') {
 					this.field.changeTerrain('corrosiveterrain');
 				}
-				if (swampyMoves.includes(move.id)){
-					if (!('swampterrain' in this.field.terrainState)) {
-						this.field.terrainState.set('swampterrain', move.id === 'muddywater' ? 2 : 1);
-					}
-					else {
-						this.field.terrainState['swampterrain'] += move.id === 'muddywater' ? 2 : 1;
-					}
-					if (this.field.terrainState.get('swampterrain') >= 3) {
+				if (swampMoves.includes(move.id)) {
+					const marshCounter = move.id === 'muddywater' ? 2 : 1;
+					this.field.terrainState.Tchanges?.set('swampterrain', currentCounter + marshCounter);
+					if (currentCounter + marshCounter >= 3) {
 						this.add('-message', 'The grassy terrain became marshy!');
 						this.field.changeTerrain('swampterrain');
+					} else {
+						this.add('-message', 'The ground became waterlogged...');
 					}
 				}
 			},
@@ -19590,9 +19603,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.effectState.layers++;
 			},
 			onEntryHazard(pokemon) {
-				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
+				if ((!pokemon.isGrounded() && !this.field.isTerrain('electricterrain')) || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				let typeMod = 1;
 				if (this.field.isTerrain('electricterrain')) {
+					if (!pokemon.runImmunity('Electric')) {
+						return;
+					}
 					typeMod += this.dex.getEffectiveness('Electric', pokemon.getTypes());
 				}
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
@@ -19787,9 +19803,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: { gravity: 1, metronome: 1 },
 		onModifyMove(move) {
 			if (this.field.isTerrain('watersurfaceterrain')) {
-				move.boosts = {
-					accuracy: -1,
-				};
+				move.secondaries = [];
+				move.secondaries = [{
+					chance: 100,
+					boosts: {
+						accuracy: -1
+					}
+				}];
 			}
 		},
 		onTry(source, target, move) {
@@ -19961,7 +19981,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					this.CrystalCavernCounter = this.CrystalCavernCounter % 4;
 				}
 				else if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('caveterrain')) {
-					this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+					typeMod * 2;
 				}
 				else if (this.field.isTerrain('dragonsdenterrain')) {
 					if (!pokemon.runImmunity('Fire')) {
@@ -19971,9 +19991,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 					typeMod = this.clampIntRange(typeMod, -6, 6);
 					this.add('-message', '[Pokémon] was hurt by the molten stealth rocks!');
 				}
-				else {
-					this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
-				}
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},
 		},
 		secondary: null,
