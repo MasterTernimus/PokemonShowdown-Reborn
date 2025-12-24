@@ -277,6 +277,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (pokemon.moveThisTurn === 'burnup') {
 					pokemon.setType(pokemon.getTypes(true).map(type => type === "???" ? "Fire" : type));
+					this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), 'from Burning Terrain');
 				}
 			},
 			onFieldResidual() {
@@ -724,7 +725,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (terrainbreak.includes(move.id) && (this.field.terrainState.Tchanges?.get('caveterrain') === 1 || move.id === 'tectonicrage')) {
 					modifier *= 1.3;
 				}
-				if (dark.includes('move.id')) {
+				if (dark.includes('move.id') && this.field.weather !== 'sunnyday') {
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
@@ -751,7 +752,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.field.terrainState.Tchanges?.set('caveterrain', 1);
 					}
 				}
-				if (dark.includes(move.id)) {
+				if (dark.includes(move.id) && this.field.weather !== 'sunnyday') {
 					this.add('-message', 'The crystals\' light was warped by the darkness!');
 					this.field.changeTerrain('darkcrystalcavernterrain', source, move);
 				}
@@ -759,7 +760,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldResidual() {
 				const source = this.field.terrainState.origin;
 				if (source && source.id) {
-					if (source.id == 'sunnyday' && this.field.getWeather().name !== 'sunnyday') {
+					if (source.id == 'sunnyday' && this.field.weather !== 'sunnyday') {
 						this.field.changeTerrain('darkcrystalcavernterrain');
 					}
 				}			
@@ -1254,6 +1255,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 	hauntedterrain:{
 		name: "Haunted Terrain",
 		condition: {
+			onNegateImmunity(pokemon, type) {
+				if (pokemon.hasType('Normal') && type === 'Ghost') return false;
+			},
 			onEffectiveness(typeMod, target ,type, move) {
 				const move_types = move.types !== undefined ? move.types : [move.type];
 				if (type === 'Normal' && move_types.includes('Ghost')) {

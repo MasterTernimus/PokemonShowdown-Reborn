@@ -2883,6 +2883,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 		},
 		status: 'frz',
 		secondary: null,
+		desc: 'Freezes the opposing pokemon',
+		shortDesc: 'Inflicts freeze',
 		target: "normal",
 		type: "Ice",
 		zMove: { boost: { spa: 1 } },
@@ -8388,7 +8390,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 					modifier *= 1.3;
 					this.add('-message', 'The ground became waterlogged...');
 				}
-					
+				if (move.id === 'sludgewave' || move.id === 'aciddownpour')
+					modifier *= 5325/4096
 				return this.chainModify(modifier);
 			},
 			onAfterMove(target, source, move) {
@@ -10478,7 +10481,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onResidualOrder: 7,
 			onResidual(pokemon) {
 				if (this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('swampterrain')) {
-					if (pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))
+					if (pokemon.hasType(['Poison', 'Steel']))
 						this.heal(pokemon.baseMaxhp / 16);
 					else
 						this.damage(pokemon.baseMaxhp / 16);
@@ -19213,18 +19216,17 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.add('-fail', target);
 				return null;
 			}
-			if (target.getTypes().join() === 'Water' || !target.setType('Water')) {
+			let changeType = 'Water';
+			if (this.field.isTerrain('snowyterrain')) {
+				changeType = 'Ice'
+			}
+			if (target.getTypes().join() === changeType || !target.setType(changeType)) {
 				// Soak should animate even when it fails.
 				// Returning false would suppress the animation.
 				this.add('-fail', target);
 				return null;
 			}
-			if(this.field.isTerrain('snowyterrainn')){
-				this.add('-start', target, 'typechange', 'Ice');
-			}
-			else{
-				this.add('-start', target, 'typechange', 'Ice');
-			}
+			this.add('-start', target, 'typechange', changeType);
 		},
 		secondary: null,
 		target: "normal",
