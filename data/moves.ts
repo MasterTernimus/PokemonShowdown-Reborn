@@ -13619,9 +13619,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move.secondaries = [{
 					chance: 100,
 					boosts: {
-						spe: -2;
+						spe: -2
 					}
-				}]
+				}];
 			}
 		},
 		secondary: {
@@ -20446,7 +20446,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move.secondaries = [{
 					chance: 100,
 					boosts: {
-						spa: -2;
+						spa: -2
 					}
 				}]
 			}
