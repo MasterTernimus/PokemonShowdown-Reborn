@@ -307,6 +307,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
+				const icy = ['blizzard', 'subzeroslammer'];
 				const cavern = ['powergem', 'diamondstorm'];
 				if (move.id === 'rocktomb') {
 					this.add('message', '...Piled on!');
@@ -327,13 +328,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (cavern.includes(move.id)) {
 					modifier *= 1.3;
 				}
-				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || (move.id === 'dragonpulse' && this.field.terrainState?.get('dragonsdenterrain') === 1)) {
+				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || (move.id === 'dragonpulse' && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
+					modifier *= 1.3;
+				}
+				if (icy.includes(move.id)) {
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
 				const cavern = ['powergem', 'diamondstorm'];
+				const icy = ['blizzard', 'subzeroslammer'];
 				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				if (this.field.terrainState.Tchanges?.get('collapse') == 1 && cavecollapse.includes(move.id)) {
 					this.add('-message', 'The quake collapsed the ceiling!');
@@ -364,12 +369,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The cave was littered with crystals!');
 					this.field.changeTerrain('crystalcavernterrain', source, move);
 				}
-				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || (move.id === 'dragonpulse' && this.field.terrainState?.get('dragonsdenterrain') === 1)) {
+				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || (move.id === 'dragonpulse' && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
 					this.field.changeTerrain('dragonsdenterrain');
 					this.add('-message', 'The draconic energy mutated the field');
 				} else if (move.id === 'dragonpulse') {
-					this.field.terrainState.set('dragonsdenterrain', 1);
+					this.field.terrainState.Tchanges?.set('dragonsdenterrain', 1);
 					this.add('-message', 'Draconic energy seeps in...');
+				}
+				if (icy.includes(move.id)) {
+					this.field.changeTerrain('icyterrain');
+					this.add('-message', 'The cave froze over!');
 				}
 			},
 			onFieldStart() {
@@ -974,7 +983,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				else if (move.id === 'mistball') {
 					this.add('-message', 'The mist-ical energy altered the surroundings!');
-					this.field.changeTerrain('mistyterrain');
+					this.field.changeTerrain('fairytaleterrain');
 				}
 			},
 			onFieldStart() {
@@ -1108,9 +1117,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					const currentCounter = this.field.terrainState.Tchanges?.get('swampterrain') ?? 0;
 					if (currentCounter + marshCounter >= 3) {
 						modifier *= 1.3;
-						this.field.terrainState.Tchanges?.set('swampterrain', currentCounter + marshCounter); 
 					}
-					this.add('-message', 'The ground became waterlogged...');
 				}
 				if (move.id === 'cut') {
 					this.add('-message', 'A tree slammed down!');
@@ -1134,6 +1141,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'trickortreat'];
+				const swampMoves = ['surf', 'muddywater']
 				const currentCounter = this.field.terrainState.Tchanges?.get('swampterrain') ?? 0;
 				if (igniteMoves.includes(move.id) && (this.field.weather !== 'raindance' || !this.field.getPseudoWeather('watersport'))){
 					this.field.changeTerrain('burningterrain');
@@ -1142,9 +1150,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (hauntedMoves.includes(move.id)) {
 					this.field.changeTerrain('bewitchedwoodsterrain');
 				}
-				if (currentCounter > 3) {
-					this.add('-message', 'The forest became marshy!');
-					this.field.changeTerrain('swampterrain');
+				if (swampMoves.includes(move.id)) {
+					const marshCounter = move.id === 'muddywater' ? 2 : 1;
+					this.field.terrainState.Tchanges?.set('swampterrain', currentCounter + marshCounter);
+					if (currentCounter + marshCounter >= 3) {
+						this.add('-message', 'The forest floor became marshy!');
+						this.field.changeTerrain('swampterrain');
+					} else {
+						this.add('-message', 'The ground became waterlogged...');
+					}
 				}
 			},
 			onFieldStart() {
@@ -2385,20 +2399,26 @@ export const Terrains: { [k: string]: TerrainData } = {
 					const currentCounter = this.field.terrainState.Tchanges?.get('revertTerrain') ?? 0;
 					if (currentCounter + revertCounter >= 3) {
 						modifier *= 1.3;
-						this.field.terrainState.Tchanges?.set('revertTerrain', currentCounter + revertCounter);
 					}
-					this.add('-message', 'The swamp is drying up...');
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
+				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const currentCounter = this.field.terrainState.Tchanges?.get('revertTerrain') ?? 0;
-				if (currentCounter >= 3) {
-					if (this.field.terrainState?.prevTerrain !== undefined) {
-						this.field.changeTerrain(this.field.terrainState.prevTerrain);
-					}
-					else {
-						this.field.clearTerrain();
+				if (igniteMoves.includes(move.id)) {
+					const revertCounter = move.id === 'infernooverdrive' ? 2 : 1;
+					this.field.terrainState.Tchanges?.set('revertTerrain', currentCounter + revertCounter);
+					if (currentCounter + revertCounter >= 3) {
+						this.add('-message', 'The swamp tried up!');
+						if (this.field.terrainState?.prevTerrain !== undefined) {
+							this.field.changeTerrain(this.field.terrainState.prevTerrain);
+						}
+						else {
+							this.field.clearTerrain();
+						}
+					} else {
+						this.add('-message', 'The swamp is drying up...');
 					}
 				}
 			},
@@ -2430,7 +2450,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					const currentCounter = this.field.terrainState.Tchanges?.get('revertTerrain') ?? 0;
 					const revertCounter = this.field.weather === 'sunnyday' ? 1 : 3;
 					this.field.terrainState.Tchanges?.set('revertTerrain', currentCounter + revertCounter);
-					if (currentCounter >= 3) {
+					if (currentCounter + revertCounter >= 3) {
 						if (this.field.terrainState?.prevTerrain !== undefined) {
 							this.field.changeTerrain(this.field.terrainState.prevTerrain);
 						}
