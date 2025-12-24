@@ -246,6 +246,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.isTerrain('forestterrain') && effect.id === 'infestation') {
 				this.effectState.boundDivisor = 6;
 			}
+			if (this.field.isTerrain('electricterrain') && effect.id === 'thundercage') {
+				this.effectState.boundDivisor = 6;
+			}
+			if (this.field.isTerrain('grassyterrain') && effect.id === 'snaptrap') {
+				this.effectState.boundDivisor = 6;
+			}
 		},
 		onResidualOrder: 13,
 		onResidual(pokemon) {
@@ -690,7 +696,11 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.isWeather('sandstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
-			this.damage(target.baseMaxhp / 16);
+			if (this.field.isTerrain('desertterrain')) {
+				this.damage(target.baseMaxhp / 8);
+			} else {
+				this.damage(target.baseMaxhp / 16);
+			}
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
