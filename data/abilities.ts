@@ -362,6 +362,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (attacker !== this.effectState.target && move.category === 'Special') {
 				this.debug('Battery boost');
+				if (this.field.isTerrain('electricterrain')) {
+					return this.chainModify(1.5);
+				}
 				return this.chainModify([5325, 4096]);
 			}
 		},
@@ -446,6 +449,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 224,
 	},
 	berserk: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				this.boost({ spa: 2 }, pokemon, pokemon);
+			}
+		},
 		onDamage(damage, target, source, effect) {
 			if (
 				effect.effectType === "Move" &&
@@ -699,7 +707,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	competitive: {
 		onAfterEachBoost(boost, target, source, effect) {
-			if (target.isAlly(source)) {
+			if (target.isAlly(source) || this.field.isTerrain('chessboardterrain')) {
 				return;
 			}
 			let statsLowered = false;
@@ -711,6 +719,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 			if (statsLowered) {
 				this.boost({ spa: 2 }, target, target, null, false, true);
+			}
+		},
+		onBasePower(basePower, source) {
+			if (this.field.isTerrain('chessboardterrain')) {
+				return this.chainModify(Math.max(1, Math.min((1 - source.hp / source.baseMaxhp)/0.8 + 1, 2)));
 			}
 		},
 		flags: {},
@@ -814,9 +827,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 					this.add('-ability', target, 'Cotton Down');
 					activated = true;
 				}
-				if (this.field.isTerrain('grassyterrain')) {
-					this.boost({ spe: -3 }, pokemon, target, null, true);
-				} else if (this.field.isTerrain('bewitchedwoodsterrain')) {
+				if (this.field.isTerrain('bewitchedwoodsterrain') || this.field.isTerrain('grassyterrain')) {
 					this.boost({ spe: -2 }, pokemon, target, null, true);
 				} else {
 					this.boost({ spe: -1 }, pokemon, target, null, true);
@@ -876,7 +887,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	cursedbody: {
 		onDamagingHit(damage, target, source, move) {
-			if (source.volatiles['disable']) return;
+			if (source.volatiles['disable'] || this.field.isTerrain('holyterrain')) return;
 			if (!move.isMax && !move.flags['futuremove'] && move.id !== 'struggle' && !this.field.isTerrain('holyterrain')) {
 				if (this.randomChance(3, 10) || this.field.isTerrain('hauntedterrain')) {
 					source.addVolatile('disable', this.effectState.target);
@@ -973,7 +984,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	dauntlessshield: {
 		onSwitchIn(pokemon) {
-			this.boost({ def: 1 }, pokemon);
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.boost({ def: 1, spd: 1 }, pokemon);
+			}
+			else {
+				this.boost({ def: 1 }, pokemon);
+			}
 		},
 		flags: {},
 		name: "Dauntless Shield",
@@ -1141,6 +1157,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (this.field.isTerrain('factoryterrain')) {
 				boost = 2;
 			}
+			if (this.field.isTerrain('glitchterrain')) {
+				this.boost({ spa: 1, atk: 1 });
+				return;
+			}
 			for (const target of pokemon.foes()) {
 				totaldef += target.getStat('def', false, true);
 				totalspd += target.getStat('spd', false, true);
@@ -1232,7 +1252,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onResidual(pokemon) {
 			if (!this.field.isWeather('raindance') || !this.field.isWeather('sunnyday')) {
-				if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison') || this.field.isTerrain('underwaterterrain')) || this.field.isTerrain('swampterrain')) {
+				if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('swampterrain')) {
 					this.heal(pokemon.baseMaxhp / 16);
 				}
 				if (this.field.isTerrain('corrosivemistterrain')) {
@@ -1245,6 +1265,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				}
 				if (this.field.isTerrain('desertterrain')) {
 					this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
+				}
+				if (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison')) {
+					this.heal(pokemon.baseMaxhp / 8);
+
 				}
 			}
 		},
@@ -1864,6 +1888,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onStart(pokemon) {
 			pokemon.abilityState.choiceLock = "";
 		},
+		
 		onBeforeMove(pokemon, target, move) {
 			if (move.isZOrMaxPowered || move.id === 'struggle') return;
 			if (pokemon.abilityState.choiceLock && pokemon.abilityState.choiceLock !== move.id) {
@@ -1885,6 +1910,16 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			// PLACEHOLDER
 			this.debug('Gorilla Tactics Atk Boost');
 			return this.chainModify(1.5);
+		},
+		onSourceModifyCritRatio(critRatio) {
+			if (this.field.isTerrain('chessboardterrain')) {
+				return critRatio + 1;
+			}
+		},
+		onBasePower(basePower, source, target, move) {
+			if (this.field.isTerrain('chessboardterrain')) {
+				return this.chainModify(1.2);
+			}
 		},
 		onDisableMove(pokemon) {
 			if (!pokemon.abilityState.choiceLock) return;
@@ -1962,7 +1997,15 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			if (!source.hp || !source.isActive || target.isSemiInvulnerable()) return;
 			if (['cramorantgulping', 'cramorantgorging'].includes(target.species.id)) {
-				this.damage(source.baseMaxhp / 4, source, target);
+				if (this.field.isTerrain('underwaterterrain')) {
+					if (!source.runImmunity('Water')) {
+						const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', source), -6, 6);
+						this.damage(source.baseMaxhp / 4 * typeMod, source, target);
+					}
+				}
+				else {
+					this.damage(source.baseMaxhp / 4, source, target);
+				}
 				if (target.species.id === 'cramorantgulping') {
 					this.boost({ def: -1 }, source, target, null, true);
 				} else {
@@ -2023,7 +2066,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.randomChance(1, 2)) {
+			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.field.isTerrain('grassyterrain') || this.randomChance(1, 2)) {
 				if (pokemon.hp && !pokemon.item && this.dex.items.get(pokemon.lastItem).isBerry) {
 					pokemon.setItem(pokemon.lastItem);
 					pokemon.lastItem = '';
@@ -2197,6 +2240,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		rating: 1.5,
 		num: 52,
 	},
+	iceabsorb: {
+		onTryHit(target, source, move) {
+			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Ice')) {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Ice Absorb');
+				}
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Ice Absorb",
+		rating: 3.5,
+		num: 11,
+	},
 	icebody: {
 		onWeather(target, source, effect) {
 			if (effect.id === 'hail' || effect.id === 'snow') {
@@ -2302,6 +2359,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 			if (this.field.isTerrain('starlightarenaterrain')) {
 				this.boost({ spa: 2 }, pokemon, pokemon);
+				this.add('-message', pokemon.name + '\'s Illuminate flared up with starlight!')
+				if (this.activePerHalf !== 1) {
+					this.add('-message', pokemon.name + '\'s dazzling shine put a spotlight on its partner!');
+					pokemon.adjacentAllies()[0].addVolatile('spotlight');
+				}
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
@@ -2340,6 +2402,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 					}
 					break;
 				}
+			}
+		},
+		onBasePower(basePower, source, target, move) {
+			if (source.illusion != null) {
+				return this.chainModify(1.2);
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
@@ -2495,7 +2562,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	intrepidsword: {
 		onSwitchIn(pokemon) {
-			this.boost({ atk: 1 }, pokemon);
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.boost({ atk: 1, spa: 1 }, pokemon);
+			} else {
+				this.boost({ atk: 1 }, pokemon);
+			}
 		},
 		flags: {},
 		name: "Intrepid Sword",
@@ -2572,6 +2643,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onStart(pokemon) {
 			this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 		},
+		onTryMove(source, target, move) {
+			const chessMoves = ['ancientpower', 'psychic', 'secretpower', 'strength', 'continentalcrush', 'shatteredpsyche', 'barrage'];
+			if (this.field.isTerrain('chessboardterrain') && chessMoves.includes(move.id)) {
+				this.add('-message', 'It was too much a klutz to move the pieces!');
+				return false;
+			}
+		},
 		flags: {},
 		name: "Klutz",
 		rating: -1,
@@ -2579,7 +2657,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	leafguard: {
 		onSetStatus(status, target, source, effect) {
-			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather()) || this.field.isTerrain('forestterrain')) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather()) || this.field.isTerrain('forestterrain') || this.field.isTerrain('grassyterrain')) {
 				if ((effect as Move)?.status) {
 					this.add('-immune', target, '[from] ability: Leaf Guard');
 				}
@@ -2587,7 +2665,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onTryAddVolatile(status, target) {
-			if (status.id === 'yawn' && (['sunnyday', 'desolateland'].includes(target.effectiveWeather()) || this.field.isTerrain('forestterrain'))) {
+			if (status.id === 'yawn' && (['sunnyday', 'desolateland'].includes(target.effectiveWeather()) || this.field.isTerrain('forestterrain') || this.field.isTerrain('grassyterrain'))) {
 				this.add('-immune', target, '[from] ability: Leaf Guard');
 				return null;
 			}
@@ -2633,6 +2711,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 135,
 	},
 	lightningrod: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('electricterrain')) {
+				this.boost({ spa: 1 });
+			}
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Electric')) {
 				if (!this.boost({ spa: 1, atk: 1 })) {
@@ -2928,8 +3011,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	merciless: {
 		onModifyCritRatio(critRatio, source, target) {
+			let modifier = 0;
+			if (this.field.isTerrain('chessboardterrain')) {
+				modifier += this.clampIntRange((1 - target.hp / target.baseMaxhp) / 0.2, 0, 3);
+			}
 			if (target && ['psn', 'tox'].includes(target.status) || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain'))
-				return 5;
+				modifier += 5;
+			return modifier;
 		},
 		flags: {},
 		name: "Merciless",
@@ -3033,9 +3121,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	minus: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon, target, move) {
-			if (move && move.type === 'Electric') {
-				return this.chainModify(1.3);
+			let modifier = 1;
+			if (this.field.isTerrain('electrictterrain')) {
+					modifier * 1.5;
 			}
+			if (move && move.type === 'Electric') {
+				modifier * 1.3;
+			}
+			return this.chainModify(modifier);
 		},
 		onModifyAtk(atk, pokemon, target, move) {
 			if (move && move.type === 'Electric') {
@@ -3054,6 +3147,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 			if (this.field.isTerrain('snowyterrain')) {
 				this.boost({ evasion: 1 });
+			}
+		},
+		onFoeTryMove(target, source, move) {
+			if (this.field.isTerrain('starlightarenaterrain')) {
+				const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+				if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+					return;
+				}
+				const dazzlingHolder = this.effectState.target;
+				if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
+					this.attrLastMove('[still]');
+					this.add('cant', dazzlingHolder, 'ability: Mirror Armor', move, '[of] ' + target);
+					return false;
+				}
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
@@ -3590,6 +3697,25 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				}
 			}
 		},
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.boost({ spd: 1 });
+			}
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Poison' && (this.field.isTerrain('mistyterrain') || this.field.isTerrain('rainbowterrain'))) {
+				this.debug('Pastel Veil weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Poison' && (this.field.isTerrain('mistyterrain') || this.field.isTerrain('rainbowterrain'))) {
+				this.debug('Pastel Veil weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target || move.category === 'Status' || !this.field.isTerrain('bewitchedwoodsterrain')) return;
 			const types = move.types !== undefined ? move.types : [move.type];
@@ -3631,7 +3757,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
-			if (!this.checkMoveMakesContact(move, source, target)) return;
+			if (!this.checkMoveMakesContact(move, source, target) || this.field.isTerrain('holyterrain')) return;
 
 			let announced = false;
 			for (const pokemon of [target, source]) {
@@ -3737,9 +3863,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	plus: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon, target, move) {
-			if (move && move.type === 'Electric') {
-				return this.chainModify(1.3);
+			let modifier = 1;
+			if (this.field.isTerrain('electrictterrain')) {
+				modifier * 1.5;
 			}
+			if (move && move.type === 'Electric') {
+				modifier * 1.3;
+			}
+			return this.chainModify(modifier);
 		},
 		onModifyAtk(atk, pokemon, target, move) {
 			if (move && move.type === 'Electric') {
@@ -3836,7 +3967,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	powerofalchemy: {
 		onSwitchIn() {
-			if (this.field.terrain === 'fairytaleterrain') {
+			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ spd: 1, def: 1 });
 			}
 		},
@@ -3857,8 +3988,8 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onAllyBasePowerPriority: 22,
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (attacker !== this.effectState.target) {
-				if (this.field.isTerrain('hauntedterrain') || this.field.isTerrain('bewitchedwoodsterrain')) {
-					this.debug('Power Spot boost under haunted terrain');
+				if (this.field.isTerrain('hauntedterrain') || this.field.isTerrain('bewitchedwoodsterrain') || this.field.isTerrain('holyterrain')) {
+					this.debug('Power Spot boost under terrain');
 					return this.chainModify(1.5);
 				} else {
 					this.debug('Power Spot boost');
@@ -4215,7 +4346,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	quickfeet: {
 		onModifySpe(spe, pokemon) {
-			if (pokemon.status) {
+			if (pokemon.status || this.field.isTerrain('electricterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -4238,7 +4369,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	rattled: {
 		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('hauntedterrain')) {
+			if (this.field.isTerrain('hauntedterrain') || this.field.isTerrain('swampterrain')) {
 				this.boost({ spe: 1 }, pokemon);
 			}
 		},
@@ -4273,11 +4404,21 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	reckless: {
 		onBasePowerPriority: 23,
-		onBasePower(basePower, attacker, defender, move) {
+		onSourceModifyCritRatio(critRatio) {
+			if (this.field.isTerrain('chessboardterrain')) {
+				return critRatio + 1;
+			}
+		},
+		onBasePower(basePower, source, target, move) {
+			let modifier = 1;
+			if (this.field.isTerrain('chessboardterrain')) {
+				modifier *= 1.2
+			}
 			if (move.recoil || move.hasCrashDamage) {
 				this.debug('Reckless boost');
-				return this.chainModify([4915, 4096]);
+				modifier *= 1.2;
 			}
+			return this.chainModify(modifier);
 		},
 		flags: {},
 		name: "Reckless",
@@ -4479,7 +4620,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('sandstorm');
 			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeach')) {
-				target.boostBy({ accuracy: -1 });
+				for (const foes of target.side.pokemon) {
+					this.boost({ accuracy: -1 }, target, source);
+					this.add('-ability', target, 'Sand Spit');
+				}
 			}
 		},
 		flags: {},
@@ -4537,6 +4681,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onResidual(pokemon) {
 			if (this.field.isTerrain('forestterrain')) {
 				this.heal(pokemon.baseMaxhp / 8);
+			}
+			if (this.field.isTerrain('grassyterrain')) {
+				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		flags: { breakable: 1 },
@@ -4742,7 +4889,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
 		onSwitchIn() {
-			if (this.field.isTerrain('fairytaleterrain')) {
+			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				this.boost({ def: 1 });
 			}
 		},
@@ -4993,7 +5140,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	soulheart: {
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
-			this.boost({ spa: 1, spd: 1 }, this.effectState.target);
+			if (this.field.isTerrain('mistyterrain')) {
+				this.boost({ spa: 1, spd: 2 }, this.effectState.target);
+			}
+			else {
+				this.boost({ spa: 1, spd: 1 }, this.effectState.target);
+			}
 		},
 		flags: {},
 		name: "Soul-Heart",
@@ -5053,6 +5205,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	stall: {
 		onFractionalPriority: -0.1,
 		flags: {},
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('chessboardterrain')) {
+				this.add('-message', pokemon.name + ' is stalling and playing defensively!');
+				this.boost({ def: 1 });
+			}
+		},
 		name: "Stall",
 		rating: -1,
 		num: 100,
@@ -5080,7 +5238,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	stancechange: {
 		onModifyMovePriority: 1,
 		onSwitchIn() {
-			if (this.field.terrain === 'fairytaleterrain') {
+			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')) {
 				this.boost({ def: 1 });
 			}
 		},
@@ -5089,7 +5247,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
 			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) {
-				if (this.field.terrain === 'fairytaleterrain') {
+				if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')) {
 					if (targetForme === 'Aegislash') {
 						this.boost({ def: 1, atk: -1 });
 					}
@@ -5109,10 +5267,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
 				let chance = 3;
-				if (this.field.isTerrain('shortcircuitterrain')) {
+				if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('electricterrain')) {
 					chance = 6;
 				}
-				if (this.randomChance(6, 10)) {
+				if (this.randomChance(chance, 10)) {
 					source.trySetStatus('par', target);
 				}
 			}
@@ -5123,6 +5281,10 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 9,
 	},
 	steadfast: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('electricterrain'))
+				this.boost({ spe: 1 });
+		},
 		onFlinch(pokemon) {
 			this.boost({ spe: 1 });
 		},
@@ -5183,6 +5345,9 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (move && move.type === 'Steel') {
 				this.debug('Steely Spirit boost');
+				if (this.field.isTerrain('fairytaleterrain')) {
+					return this.chainModify(2);
+				}
 				return this.chainModify(1.5);
 			}
 		},
@@ -5623,8 +5788,14 @@ else
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Teravolt');
 		},
+		onNegateImmunity(pokemon, type) {
+			if (type === 'Ground') return false;
+		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
+			if (this.field.isTerrain('electricterrain') && move.type === 'Electric') {
+				move.basePower *= 1.5;
+			}
 		},
 		flags: {},
 		name: "Teravolt",
@@ -5798,25 +5969,38 @@ else
 	},
 	transistor: {
 		onModifyAtkPriority: 5,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Ground') {
+				this.debug('Transistor weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Ground') {
+				this.debug('Transistor weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		onModifyAtk(atk, attacker, defender, move) {
-			let boost = 5325;
+			let boost = 1.3;
 			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
-				boost = 8192;
+				boost = 2;
 			}
 			if (move && move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify([boost, 4096]);
+				return this.chainModify(1.3);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			let boost = 5325;
+			let boost = 1.3;
 			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
-				boost = 8192;
+				boost = 2;
 			}
 			if (move && move.type === 'Electric') {
 				this.debug('Transistor boost');
-				return this.chainModify([boost, 4096]);
+				return this.chainModify(1.3);
 			}
 		},
 		flags: {},
@@ -6018,7 +6202,7 @@ else
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('shortcircuitterrain')) {
+			if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('electricterrain')) {
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
@@ -6029,7 +6213,7 @@ else
 	},
 	wanderingspirit: {
 		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('hauntedterrain')) {
+			if (this.field.isTerrain('hauntedterrain') || this.field.isTerrain('desertterrain')) {
 				this.boost({ spe: -1 }, pokemon);
 			}
 		},
@@ -6047,6 +6231,11 @@ else
 					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', '[of] ' + source);
 				}
 				target.setAbility(sourceAbility);
+			}
+		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('desertterrain')) {
+				this.boost({ spe: -1 }, pokemon);
 			}
 		},
 		flags: {},

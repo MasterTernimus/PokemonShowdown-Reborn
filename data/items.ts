@@ -751,6 +751,11 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('electricterrain')) {
+				pokemon.useItem();
+			}
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Electric') {
 				target.useItem();
@@ -1681,7 +1686,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onUseItem(item, pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				this.boost({ spe: 1 });
-				pokemon.addVolatile('charge');
+				pokemon.addVolatile('charge', pokemon, item);
 			}
 			if (this.field.isTerrain('grassyterrain')) {
 				this.boost({ def: 1 });
@@ -5950,8 +5955,11 @@ export const Items: {[itemid: string]: ItemData} = {
 				return;
 			}
 			if (this.field.isTerrain('swampterrain')) {
-				this.boost({ def: 1, spd: 1 });
-				pokemon.addVolatile('ingrain');
+				this.boost({ def: 1 });
+				const immune = ['wonderguard', 'multitype', 'illusion', 'stancechange', 'schooling', 'comatose', 'shieldsdown', 'disguise', 'rkssystem', 'battlebond', 'powerconstruct', 'iceface', 'gulpmissile', 'neutralizinggas', 'asone', 'zerotohero', 'commander', 'protosynthesis', 'quarkdrive', 'orichalcumpulse', 'hadronengine', 'poisonpuppeteer'];
+				if (!pokemon.hasAbility(immune)) {
+					pokemon.setAbility('clearbody');
+				}
 				return;
 			}
 			if (this.field.isTerrain('rockyterrain')) {
