@@ -1,3 +1,5 @@
+import { types } from "util";
+
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 export const Moves: { [moveid: string]: MoveData } = {
 	"10000000voltthunderbolt": {
@@ -2332,7 +2334,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['swampterrain', 'Water'],
 				['watersurfaceterrain', 'Water'],
 				['underwaterterrain', 'Water'],
-				['murkwatersurfaceterrain', 'Water'],
+				['murkwatersurfaceterrain', 'Poison'],
 				['rainbowterrain', 'Dragon'],
 				['icyterrain', 'Ice'],
 				['glitchterrain', '???'],
@@ -2351,7 +2353,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['starlightarenaterrain', 'Dark'],
 				['inverseterrain', 'Normal'],
 				['hauntedterrain', 'Ghost'],
-				['bewitchedwoodsterrain', 'Fairy']
+				['bewitchedwoodsterrain', 'Fairy'], 
 			]);
 			if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
@@ -3708,10 +3710,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		status: 'slp',
 		onModifyMove(move) {
-			if (this.field.isTerrain('newworldterrain')) {
-				move.accuracy = 85;
-			}
-			if (this.field.isTerrain('darkcrystalcavernterrain')) {
+			if (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain')) {
 				move.accuracy = 100;
 			}
 
@@ -6710,7 +6709,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onHit(target) {
 			if (target.hasType('Grass')) return false;
 			if (!target.setType('Grass')) return false;
-			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('forestterrain') || this.field.isTerrain('betwitchedwoodsterrain')) {
+			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('forestterrain') || this.field.isTerrain('bewitchedwoodsterrain')) {
 				if (!target.volatiles['curse']) {
 					target.addVolatile('curse');
 				}
@@ -8304,7 +8303,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('grassyterrain')) {
 				move.accuracy = 80;
 			}
-			if (this.field.isTerrain('betwitchedwoodsterrain')) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) {
 				move.accuracy = 85;
 			}
 		},
@@ -13470,7 +13469,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				factor = 0.25;
 					break;
 			default:
-					if (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain') || this.field.isTerrain('betwitchedwoodsterrain')) {
+					if (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain') || this.field.isTerrain('bewitchedwoodsterrain')) {
 					factor = 0.75;
 				}
 				break;
@@ -14960,7 +14959,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyMove(move) {
 			if (this.field.isTerrain('corrosiveterrain'))
 				move.accuracy = 100;
-			if (this.field.isTerrain('betwitchedwoodsterrain')) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) {
 				move.accuracy = 85;
 			}
 		},
@@ -18115,56 +18114,50 @@ export const Moves: { [moveid: string]: MoveData } = {
 				this.add('-singleturn', target, 'move: Shelter');
 			},
 			onAnyModifyDamage(damage, source, target, move) {
+				const terrainTypeMap = new Map<string, string>([
+					["holyterrain", "Normal"],
+					["inverseterrain", "Normal"],
+					["electricterrain", "Electric"],
+					["burningterrain", "Fire"],
+					["superheatedterrain", "Fire"],
+					["watersurfaceterrain", "Water"],
+					["underwaterterrain", "Water"],
+					["murkwatersurfaceterrain", "Poison"],
+					["icyterrain", "Ice"],
+					["mirrorarenaterrain", "Ice"],
+					["snowymountainterrain", "Ice"],
+					["snowyterrain", "Ice"],
+					["grassterrain", "Grass"],
+					["forestterrain", "Bug"],
+					["flowergardenterrain", "Grass"],
+					["ashenbeachterrain", "Fighting"],
+					["bigtopterrain", "Fighting"],
+					["psychicterrain", "Psychic"],
+					["chessboardterrain", "Psychic"],
+					["darkcrystalterrain", "Dark"],
+					["starlightarenaterrain", "Dark"],
+					["shortcircuitterrain", "Ghost"],
+					["factoryterrain", "Steel"],
+					["corrosiveterrain", "Poison"],
+					["corrosivemistterrain", "Poison"],
+					["wastelandsurface", "Poison"],
+					["mountainterrain", "Flying"],
+					["caveterrain", "Ground"],
+					["desertterrain", "Ground"],
+					["rockyterrain", "Rock"],
+					["crystalcavernterrain", "Rock"],
+					["dragonsdenterrain", "Dragon"],
+					["rainbowterrain", "Dragon"],
+					["fairytaleterrain", "Fairy"],
+					["mistyterrain", "Fairy"],
+					["glitchterrain", "???"],
+					["newworldterrain", "Dark"],
+					['hauntedterrain', 'Ghost'],
+					['bewitchedwoodsterrain', 'Fairy'],
+					['swampterrain', 'Water']
+				]);
 				if (target !== source && this.effectState.target.hasAlly(target)) {
-					if (this.field.isTerrain('hauntedterrain') && move.type === 'Ghost') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if ((this.field.isTerrain('bewitchedwoodsterrain') || this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain'))&& move.type === 'Fairy') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if (this.field.isTerrain('desertterrain') && move.type === 'Ground') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if (this.field.isTerrain('forestterrain') && move.type === 'Bug') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if (this.field.isTerrain('electricterrain') && move.type === 'Electric') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if (this.field.isTerrain('chessterrain') && move.type === 'Psychic') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if ((this.field.isTerrain('dragonsdenterrain') || this.field.isTerrain('rainbowterrain')) && move.type === 'Dragon') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if ((this.field.isTerrain('swampterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) && move.type === 'Water') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if (this.field.isTerrain('glitchterrain') && move.type === '???') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if ((this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('murkwatersurfaceterrain'))&& move.type === 'Poison') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if (this.field.isTerrain('icyterrain') && move.type === 'Ice') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if ((this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('starlightarenaterrain')) && move.type === 'Dark') {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-					if (this.field.isTerrain('holyterrain') && move.type === 'Normal') {
+					if (move.type === terrainTypeMap.get(this.field.terrain)) {
 						this.debug('Shelter weaken');
 						return this.chainModify(0.5);
 					}
@@ -18789,7 +18782,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyMove(move) {
 			if (this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('swampterrain'))
 				move.accuracy = 100;
-			if (this.field.isTerrain('betwitchedwoodsterrain')) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) {
 				move.accuracy = 85;
 			}
 		},
@@ -20389,7 +20382,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (target.boosts.atk === -6 || (this.field.isTerrain('forestterrain') && target.boosts.spa === -6)) return false;
 			const atk = target.getStat('atk', false, true);
 			let success;
-			if (this.field.isTerrain('betwitchedwoodsterrain')) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) {
 				success = this.boost({ atk: -1, spa: -1 }, target, source, null, false, true);
 			} else {
 				success = this.boost({ atk: -1 }, target, source, null, false, true);
@@ -20514,7 +20507,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		onModifyMove(move) {
 			if (this.field.isTerrain('corrosiveterrain'))
 				move.accuracy = 100;
-			if (this.field.isTerrain('betwitchedwoodsterrain')) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) {
 				move.accuracy = 85;
 			}
 		},
@@ -21633,7 +21626,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, pulse: 1},
 		onModifyType(move, pokemon) {
-			if (!pokemon.isGrounded()) return;
 			const terrainTypeMap = new Map<string, string>([
 				["holyterrain", "Normal"],
 				["inverseterrain", "Normal"],
@@ -21642,7 +21634,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				["superheatedterrain", "Fire"],
 				["watersurfaceterrain", "Water"],
 				["underwaterterrain", "Water"],
-				["murkwatersurfaceterrain", "Water"],
+				["murkwatersurfaceterrain", "Poison"],
 				["icyterrain", "Ice"],
 				["mirrorarenaterrain", "Ice"],
 				["snowymountainterrain", "Ice"],
@@ -21671,18 +21663,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 				["fairytaleterrain", "Fairy"],
 				["mistyterrain", "Fairy"],
 				["glitchterrain", "???"],
-				["newworldterrain", "???"],
+				["newworldterrain", "Random"],
 				['hauntedterrain', 'Ghost'],
-				['bewitchedwoodsterrain', 'Fairy']
+				['bewitchedwoodsterrain', 'Fairy'],
+				['swampterrain', 'Water']
 			]);
 			let newType = terrainTypeMap.get(this.field.getTerrain().id);
-			move.type = newType !== undefined ? newType : "Normal";
-		},
-		onModifyMove(move, pokemon) {
-			if (this.field.terrain && pokemon.isGrounded()) {
-				move.basePower *= 2;
-				this.debug('BP doubled in Terrain');
+			if (newType === 'Random') {
+				newType = this.sample(['Water', 'Fire', 'Grass', 'Steel', 'Ground', 'Rock', 'Bug', 'Ice', 'Ghost', 'Fairy', 'Dark', 'Electric', 'Normal', 'Fighting', 'Flying', 'Psychic', 'Dragon', 'Poison']);
 			}
+			move.type = newType !== undefined ? newType : "Normal";
 		},
 		secondary: null,
 		target: "normal",

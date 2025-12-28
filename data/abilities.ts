@@ -3047,7 +3047,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				['swampterrain', 'Water'],
 				['watersurfaceterrain', 'Water'],
 				['underwaterterrain', 'Water'],
-				['murkwatersurfaceterrain', 'Water'],
+				['murkwatersurfaceterrain', 'Poison'],
 				['rainbowterrain', 'Dragon'],
 				['icyterrain', 'Ice'],
 				['glitchterrain', '???'],
