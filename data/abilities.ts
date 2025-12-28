@@ -618,6 +618,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				}
 				let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 				if (randomStat) boost[randomStat] = 1;
+				this.boost(boost);
 			}
 		},
 		onEnd(pokemon) {
