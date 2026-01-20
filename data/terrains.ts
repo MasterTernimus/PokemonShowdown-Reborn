@@ -170,6 +170,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (pay.includes(move.id)) {
 					this.add('-message', 'And a little extra for you, darling!');
 				}
+				if (move.flags.sound || move.id === 'drumbeating') {
+					this.add('-message', 'Loud and Clear!');
+				}
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
@@ -887,7 +890,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onResidual(pokemon) {
-				if (pokemon.hasType(['Water', 'Grass']) && !(pokemon.hasAbility('chlorophyll') || pokemon.hasAbility('solarpower'))) {
+				if (pokemon.hasType(['Water', 'Grass']) && !(pokemon.hasAbility('chlorophyll') || pokemon.hasAbility('solarpower')) && this.field.isWeather(['sunnyday', 'desolateland'])) {
 					this.damage(pokemon.baseMaxhp / 8);
 					this.add('-message', pokemon.name + " was hurt by the sunlight!");
 				}
@@ -1095,6 +1098,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			duration: 9999,
 			onBasePowerPriority: 6,
+			onModifyMove(move) {
+				const grassymoves = ['aircutter', 'airslash', 'breakingswipe', 'furycutter', 'psychocut', 'slash', 'cut'];
+				if (grassymoves.includes(move.id)) {
+					move.types = [move.type, 'Grass'];
+				}
+			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];

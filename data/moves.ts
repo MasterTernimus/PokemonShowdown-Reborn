@@ -2729,21 +2729,33 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { snatch: 1, sound: 1, dance: 1 },
 		onTry(source) {
+			if (this.field.isTerrain('bigtopterrain') && source.hp <= (source.maxhp * 50 / 100)) return false;
 			if (source.hp <= (source.maxhp * 33 / 100) || source.maxhp === 1) return false;
+		},
+		onModifyMove(move) {
+			if (this.field.isTerrain('bigtopterrain')) {
+				move.secondaries = [];
+				move.secondaries.push({
+					boosts: {
+						atk: 2,
+						def: 2,
+						spa: 2,
+						spd: 2,
+						spe: 2,
+					},
+				})
+			}
 		},
 		onTryHit(pokemon, target, move) {
 			if (!this.boost(move.boosts as SparseBoostsTable)) return null;
 			delete move.boosts;
 		},
 		onHit(pokemon) {
-			this.directDamage(pokemon.maxhp * 33 / 100);
-		},
-		boosts: {
-			atk: 1,
-			def: 1,
-			spa: 1,
-			spd: 1,
-			spe: 1,
+			if (this.field.isTerrain('bigtopterrain')) {
+				this.directDamage(pokemon.maxhp * 50 / 100);
+			} else {
+				this.directDamage(pokemon.maxhp * 33 / 100);
+			}
 		},
 		secondary: null,
 		target: "self",
@@ -3656,11 +3668,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 30,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
-		onModifyMove(move) {
-			if (this.field.isTerrain('forestterrain')) {
-				move.types = [move.type, 'Grass'];
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -4623,6 +4630,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				move.accuracy = 100;
+			}
+		},
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch',
@@ -5422,6 +5434,17 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		critRatio: 2,
+		onModifyMove(move) {
+			if (this.field.isTerrain('psychicterrain')) {
+				move.secondaries = [];
+				move.secondaries.push({
+					chance: 100,
+					boosts: {
+						spe: 2
+					},
+				});
+			}
+		},
 		secondary: {
 			chance: 100,
 			self: {
@@ -10180,7 +10203,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('icyterrain')) {
+			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowyterrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -13777,7 +13800,18 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Mystical Power",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('psychicterrain')) {
+				move.secondaries = [];
+				move.secondaries.push({
+					chance: 100,
+					boosts: {
+						spa: 2
+					},
+				});
+			}
+		},
 		secondary: {
 			chance: 100,
 			self: {
@@ -15741,7 +15775,19 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Psyshield Bash",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('psychicterrain')) {
+				move.secondaries = [];
+				move.secondaries.push({
+					chance: 100,
+					boosts: {
+						def: 1,
+						spd: 1
+					},
+				});
+			}
+		},
 		secondary: {
 			chance: 100,
 			self: {
@@ -18108,62 +18154,62 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move.volatileStatus = "shelter";
 			}
 		},
-		condition: {
-			duration: 1,
-			onStart(target) {
-				this.add('-singleturn', target, 'move: Shelter');
-			},
-			onAnyModifyDamage(damage, source, target, move) {
-				const terrainTypeMap = new Map<string, string>([
-					["holyterrain", "Normal"],
-					["inverseterrain", "Normal"],
-					["electricterrain", "Electric"],
-					["burningterrain", "Fire"],
-					["superheatedterrain", "Fire"],
-					["watersurfaceterrain", "Water"],
-					["underwaterterrain", "Water"],
-					["murkwatersurfaceterrain", "Poison"],
-					["icyterrain", "Ice"],
-					["mirrorarenaterrain", "Ice"],
-					["snowymountainterrain", "Ice"],
-					["snowyterrain", "Ice"],
-					["grassterrain", "Grass"],
-					["forestterrain", "Bug"],
-					["flowergardenterrain", "Grass"],
-					["ashenbeachterrain", "Fighting"],
-					["bigtopterrain", "Fighting"],
-					["psychicterrain", "Psychic"],
-					["chessboardterrain", "Psychic"],
-					["darkcrystalterrain", "Dark"],
-					["starlightarenaterrain", "Dark"],
-					["shortcircuitterrain", "Ghost"],
-					["factoryterrain", "Steel"],
-					["corrosiveterrain", "Poison"],
-					["corrosivemistterrain", "Poison"],
-					["wastelandsurface", "Poison"],
-					["mountainterrain", "Flying"],
-					["caveterrain", "Ground"],
-					["desertterrain", "Ground"],
-					["rockyterrain", "Rock"],
-					["crystalcavernterrain", "Rock"],
-					["dragonsdenterrain", "Dragon"],
-					["rainbowterrain", "Dragon"],
-					["fairytaleterrain", "Fairy"],
-					["mistyterrain", "Fairy"],
-					["glitchterrain", "???"],
-					["newworldterrain", "Dark"],
-					['hauntedterrain', 'Ghost'],
-					['bewitchedwoodsterrain', 'Fairy'],
-					['swampterrain', 'Water']
-				]);
-				if (target !== source && this.effectState.target.hasAlly(target)) {
-					if (move.type === terrainTypeMap.get(this.field.terrain)) {
-						this.debug('Shelter weaken');
-						return this.chainModify(0.5);
-					}
-				}
-			},
-		},
+		//condition: {
+		//	duration: 1,
+		//	onStart(target) {
+		//		this.add('-singleturn', target, 'move: Shelter');
+		//	},
+		//	onAnyModifyDamage(damage, source, target, move) {
+		//		const terrainTypeMap = new Map<string, string>([
+		//			["holyterrain", "Normal"],
+		//			["inverseterrain", "Normal"],
+		//			["electricterrain", "Electric"],
+		//			["burningterrain", "Fire"],
+		//			["superheatedterrain", "Fire"],
+		//			["watersurfaceterrain", "Water"],
+		//			["underwaterterrain", "Water"],
+		//			["murkwatersurfaceterrain", "Poison"],
+		//			["icyterrain", "Ice"],
+		//			["mirrorarenaterrain", "Ice"],
+		//			["snowymountainterrain", "Ice"],
+		//			["snowyterrain", "Ice"],
+		//			["grassterrain", "Grass"],
+		//			["forestterrain", "Bug"],
+		//			["flowergardenterrain", "Grass"],
+		//			["ashenbeachterrain", "Fighting"],
+		//			["bigtopterrain", "Fighting"],
+		//			["psychicterrain", "Psychic"],
+		//			["chessboardterrain", "Psychic"],
+		//			["darkcrystalterrain", "Dark"],
+		//			["starlightarenaterrain", "Dark"],
+		//			["shortcircuitterrain", "Ghost"],
+		//			["factoryterrain", "Steel"],
+		//			["corrosiveterrain", "Poison"],
+		//			["corrosivemistterrain", "Poison"],
+		//			["wastelandsurface", "Poison"],
+		//			["mountainterrain", "Flying"],
+		//			["caveterrain", "Ground"],
+		//			["desertterrain", "Ground"],
+		//			["rockyterrain", "Rock"],
+		//			["crystalcavernterrain", "Rock"],
+		//			["dragonsdenterrain", "Dragon"],
+		//			["rainbowterrain", "Dragon"],
+		//			["fairytaleterrain", "Fairy"],
+		//			["mistyterrain", "Fairy"],
+		//			["glitchterrain", "???"],
+		//			["newworldterrain", "Dark"],
+		//			['hauntedterrain', 'Ghost'],
+		//			['bewitchedwoodsterrain', 'Fairy'],
+		//			['swampterrain', 'Water']
+		//		]);
+		//		if (target !== source && this.effectState.target.hasAlly(target)) {
+		//			if (move.type === terrainTypeMap.get(this.field.terrain)) {
+		//				this.debug('Shelter weaken');
+		//				return this.chainModify(0.5);
+		//			}
+		//		}
+		//	},
+		//},
 		boosts: {
 			def: 1,
 			spd: 1,
@@ -23199,7 +23245,16 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Whirlpool",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) {
+				move.secondaries = [];
+				move.secondaries?.push({
+					chance: 100,
+					volatileStatus: 'confusion'
+				});
+			}
+		},
 		volatileStatus: 'partiallytrapped',
 		secondary: null,
 		target: "normal",
