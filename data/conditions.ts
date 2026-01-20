@@ -234,7 +234,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.effectState.boundDivisor = 6;
 			}
 			if ((this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) && effect.id === 'whirlpool') {
-				pokemon.addVolatile('confusion');
 				this.effectState.boundDivisor = 6;
 			}
 			if (this.field.isTerrain('desertterrain') && effect.id === 'sandtomb') {
