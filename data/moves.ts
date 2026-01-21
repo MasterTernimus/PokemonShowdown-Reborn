@@ -4117,10 +4117,28 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [];
+				move.secondaries.push({
+					chance: 100,
+					onHit(target, source) {
+						let result = this.random(3);
+						if (result === 0) {
+							target.trySetStatus('psn', source);
+						} else if (result === 1) {
+							target.trySetStatus('par', source);
+						} else {
+							target.trySetStatus('slp', source);
+						}
+					},
+				});
+			}
+		},
 		secondary: {
 			chance: 50,
 			onHit(target, source) {
-				const result = this.random(3);
+				let result = this.random(3);
 				if (result === 0) {
 					target.trySetStatus('psn', source);
 				} else if (result === 1) {
@@ -17355,7 +17373,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Sand Tomb",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		volatileStatus: 'partiallytrapped',
 		secondary: null,
 		target: "normal",
@@ -19882,11 +19900,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return this.chainModify(1.3);
 			}
 		},
-		onHit() {
-			this.field.clearTerrain('9001');
-		},
-		onAfterSubDamage() {
-			this.field.clearTerrain('9001');
+		onAfterMove() {
+			this.field.setTerrain('rockyterrain');
+			this.add('-message', 'The field was devastated!');
 		},
 		isZ: "lycaniumz",
 		secondary: null,
@@ -20085,12 +20101,25 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		mindBlownRecoil: true,
+		onModifyMove(move) {
+			if (this.field.isTerrain('shortcircuitterrain')) {
+				move.selfdestruct === 'always';
+			}
+		},
 		onAfterMove(pokemon, target, move) {
 			if (move.mindBlownRecoil && !move.multihit) {
 				const hpBeforeRecoil = pokemon.hp;
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Steel Beam'), true);
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon, pokemon);
+				if (this.field.isTerrain('factoryterrain')) {
+					this.damage(Math.round(pokemon.maxhp / 4), pokemon, pokemon, this.dex.conditions.get('Steel Beam'), true);
+					if (pokemon.hp <= pokemon.maxhp / 4 && hpBeforeRecoil > pokemon.maxhp / 4) {
+						this.runEvent('EmergencyExit', pokemon, pokemon);
+					}
+				}
+				else {
+					this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Steel Beam'), true);
+					if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
+						this.runEvent('EmergencyExit', pokemon, pokemon);
+					}
 				}
 			}
 		},
@@ -20382,12 +20411,22 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
-		onModifyMove(move) {
-			move.secondaries = [];
-			move.secondaries = [{
-				chance: 100,
-				volatileStatus: 'confusion',
-			}]
+		onModifyMove(move, source, target) {
+			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('mistyterrain')) {
+				move.secondaries = [];
+				move.secondaries = [{
+					chance: 100,
+					volatileStatus: 'confusion',
+				}]
+			}
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (!this.activeTarget) return;
+			console.log(move.type);
+			console.log(this.dex.getEffectiveness(move.type, this.activeTarget.getTypes()))
+			if (this.dex.getEffectiveness(move.type, this.activeTarget.getTypes()) > 0) {
+				return priority + 1;
+			}
 		},
 		secondary: {
 			chance: 20,

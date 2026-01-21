@@ -178,7 +178,7 @@ export class Battle {
 	/** Terrain global variables */
 	ShortCircuitCounter: number;
 	CrystalCavernCounter: number;
-	RandomTerrain: string;
+	RandomTerrain!: string;
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
 
@@ -591,7 +591,6 @@ export class Battle {
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Infinite loop");
 		}
-		// this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		let hasRelayVar = true;
 		if (relayVar === undefined) {
 			relayVar = true;
@@ -762,6 +761,7 @@ export class Battle {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
 		// 	Battle.eventCounter[eventid]++;
 		// }
+
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -795,7 +795,7 @@ export class Battle {
 		}
 		let hasRelayVar = 1;
 		const args = [target, source, sourceEffect];
-		// console.log('Event: ' + eventid + ' (depth ' + this.eventDepth + ') t:' + target.id + ' s:' + (!source || source.id) + ' e:' + effect.id);
+
 		if (relayVar === undefined || relayVar === null) {
 			relayVar = true;
 			hasRelayVar = 0;
@@ -2548,7 +2548,7 @@ export class Battle {
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.moves.get(move.id).priority;
 			// Grassy Glide priority
-			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, null, priority);
+			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, null, move, priority);
 			priority = this.runEvent('ModifyPriority', action.pokemon, null, move, priority);
 			action.priority = priority + action.fractionalPriority;
 			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
