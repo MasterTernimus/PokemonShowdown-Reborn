@@ -792,6 +792,11 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (this.field.terrain === 'corrosivemistterrain' || this.field.terrain === 'corrosiveterrain')
 				this.chainModify(1.5);
 		},
+		onSourceAfterSetStatus(status, target) {
+			if (status.id === 'tox' || status.id === 'psn') {
+				this.boost({ def: -1, spd: -1 }, target);
+			}
+		},
 		rating: 2.5,
 		num: 212,
 	},
@@ -930,8 +935,17 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				}
 			}
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type.includes("Fire")) {
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Fire') {
+				this.debug('Magma Armor weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Fire') {
+				this.debug('Magma Armor weaken');
 				return this.chainModify(0.5);
 			}
 		},
@@ -1160,6 +1174,16 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				boost = 2;
 			}
 			if (this.field.isTerrain('glitchterrain')) {
+				const mapItemtoAbility = new Map<string, string>([
+					['dousedrive', 'waterabsorb'],
+					['shockdrive', 'motordrive'],
+					['burndrive', 'flashfire'],
+					['chilldrive', 'iceabsorb'],
+				])
+				if (pokemon.hasItem(['dousedrive', 'chilldrive', 'shockdrive', 'burndrive']) && pokemon.baseSpecies.id === 'genesect') {
+					this.boost({ spa: 1, atk: 1 });
+					pokemon.setAbility(mapItemtoAbility.get(pokemon.item) ?? pokemon.ability);
+				}
 				this.boost({ spa: 1, atk: 1 });
 				return;
 			}
@@ -1840,7 +1864,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			let modifier = 4915 / 4096;
+			let modifier = 1.2;
 			if (this.field.isTerrain('shortcircuitterrain')) {
 				modifier = 2;
 			}
@@ -2137,6 +2161,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	heavymetal: {
 		onModifyWeightPriority: 1,
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('factoryterrain')) {
+				this.boost({ def: 1, spe: -1 }, pokemon);
+				this.add('-message', pokemon.name + '\'s heavy body is sturdy and unmoving!')
+			}
+		},
 		onModifyWeight(weighthg) {
 			return weighthg * 2;
 		},
@@ -2348,6 +2378,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 2 }, pokemon);
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (this.field.isTerrain('icyterrain') && move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Ice' && typeMod > 0) {
+				this.add('-fieldactivate', 'Ice Scales');
+				return 0;
 			}
 		},
 		onModifyDef(def, pokemon) {
@@ -2712,6 +2748,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 236,
 	},
 	lightmetal: {
+		onSwitchIn(pokemon) {
+			if (this.field.isTerrain('factoryterrain')) {
+				this.boost({ spe: 1 }, pokemon);
+				this.add('-message', pokemon.name + '\'s light body made it nimble')
+			}
+		},
 		onModifyWeight(weighthg) {
 			return this.trunc(weighthg / 2);
 		},
@@ -2975,7 +3017,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move && move.type === 'Ice') {
+			if (move && move.type === 'Water') {
 				this.debug('Magma Armor weaken');
 				return this.chainModify(0.5);
 			}
@@ -3146,13 +3188,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (this.field.isTerrain('electrictterrain')) {
 					modifier * 1.5;
 			}
-			if (move && move.type === 'Electric') {
+			if (move && (move.type === 'Electric' || move.type === 'Steel')) {
 				modifier * 1.5;
 			}
 			return this.chainModify(modifier);
 		},
 		onModifyAtk(atk, pokemon, target, move) {
-			if (move && move.type === 'Electric') {
+			if (move && (move.type === 'Electric' || move.type === 'Steel')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -3265,7 +3307,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onTryHit(target, source, move) {
 			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Electric')) {
 				let boost = 1;
-				if (this.field.isTerrain('shortcircuitterrain')) {
+				if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('factoryterrain')) {
 					boost = 2;
 				}
 				if (!this.boost({ spe: boost })) {
@@ -3275,7 +3317,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual() {
-			if (this.field.terrain === 'electricterrain') {
+			if (this.field.isTerrain('electricterrain')) {
 				this.boost({ spe: 1 });
 			}
 		},
@@ -3888,13 +3930,13 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (this.field.isTerrain('electrictterrain')) {
 				modifier * 1.5;
 			}
-			if (move && move.type === 'Electric') {
+			if (move && (move.type === 'Electric' || move.type === 'Steel')) {
 				modifier * 1.5;
 			}
 			return this.chainModify(modifier);
 		},
 		onModifyAtk(atk, pokemon, target, move) {
-			if (move && move.type === 'Electric') {
+			if (move && (move.type === 'Electric' || move.type === 'Steel')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -4199,7 +4241,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['sound']) {
 				this.debug('Punk Rock boost');
-				if (this.field.isTerrain('bigtopterrain')) {
+				if (this.field.isTerrain('bigtopterrain') || this.field.isTerrain('caveterrain')) {
 					return this.chainModify(1.5);
 				} else {
 					return this.chainModify(1.3);
@@ -4647,7 +4689,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	sandspit: {
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('sandstorm');
-			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeach')) {
+			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				for (const foes of target.side.pokemon) {
 					this.boost({ accuracy: -1 }, target, source);
 					this.add('-ability', target, 'Sand Spit');

@@ -592,6 +592,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				let disinfectMoves = ['purify', 'seedflare'];
 				if (disinfectMoves.includes(move.id)) {
+					this.add('-message', 'The polluted field was purified!');
 					this.field.changeTerrain('grassyterrain');
 				}
 			},
@@ -1006,12 +1007,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge', 'risingvoltage']
-				const uberboost = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb'];
+				const uberboost = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb', 'doubleironbash'];
 				const boost = ['steamroller', 'technoblast', 'doubleironbash'];
 				if (move.type === 'Electric') {
 					modifier *= 1.5;
 				}
 				if (uberboost.includes(move.id)) {
+					this.add('-message', 'ATTACK SEQUENCE INITIATE.')
 					modifier *= 2;
 				}
 				if (boost.includes(move.id)) {
@@ -1188,17 +1190,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return 8;
 				}
 				return 5;
-			},
-			onSwitchIn(pokemon) {
-				const mapItemtoAbility = new Map<string, string>([
-					['dousedrive', 'waterabsorb'],
-					['shockdrive', 'motordrive'],
-					['burndrive', 'flashfire'],
-					['chilldrive', 'iceabsorb'],
-				])
-				if (pokemon.hasItem(['dousedrive', 'chilldrive', 'shockdrive', 'burndrive'])) {
-					pokemon.setAbility(mapItemtoAbility.get(pokemon.item) ?? pokemon.ability);
-				}
 			},
 			onModifyCritRatio(critRatio, source, target) {
 				if (source.getStat('spe', true, true) > target.getStat('spe', true, true))
@@ -2010,8 +2001,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const electrified = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb', 'muddywater', 'surf'];
 				const boosted = ['dazzlinggleam', 'hydrovortex', 'infernalparade'];
 				const shadow = ['darkpulse', 'nightdaze', 'nightslash', 'shadowball', 'shadowbone', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak'];
-				const nerfed = ['lightthatburnsthesky']
-				const fieldchange = ['chargebeam', 'discharge', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage']
+				const nerfed = ['lightthatburnsthesky'];
+				const fieldchange = ['chargebeam', 'discharge', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage'];
+				if (move.id === 'steelbeam') {
+					modifier *= 1.666666;
+				}
 				if (electrified.includes(move.id)) {
 					modifier *= 1.5;
 				}
@@ -2025,7 +2019,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 0.5;
 				}
 				if (fieldchange.includes(move.id)) {
-					modifier *= 5325 / 4096;
+					modifier *= 1.3;
 				}
 				if (move.type === 'Electric') {
 					modifier *= multiplier[this.ShortCircuitCounter];
