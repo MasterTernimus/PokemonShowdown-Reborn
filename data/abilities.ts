@@ -4067,7 +4067,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	prankster: {
 		onNegateImmunity(pokemon, type) {
-			if (type === 'Dark' && this.field.isTerrain('bewitchedwoodsterrain')) {
+			if (type === 'Dark' && !this.field.isTerrain('bewitchedwoodsterrain')) {
 				return false;
 			}
 		},
