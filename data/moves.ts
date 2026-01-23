@@ -5457,9 +5457,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 				move.secondaries = [];
 				move.secondaries.push({
 					chance: 100,
-					boosts: {
-						spe: 2
-					},
+					self: {
+						boosts: {
+							spe: 2
+						},
+					}
 				});
 			}
 		},
