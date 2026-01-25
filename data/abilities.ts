@@ -999,12 +999,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 186,
 	},
 	dauntlessshield: {
+		onStart(pokemon) {
+			this.boost({ def: 1 }, pokemon);
+		},
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1, spd: 1 }, pokemon);
-			}
-			else {
-				this.boost({ def: 1 }, pokemon);
 			}
 		},
 		flags: {},
@@ -2612,11 +2612,12 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 22,
 	},
 	intrepidsword: {
+		onStart(pokemon) {
+			this.boost({ atk: 1 }, pokemon);
+		},
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ atk: 1, spa: 1 }, pokemon);
-			} else {
-				this.boost({ atk: 1 }, pokemon);
 			}
 		},
 		flags: {},
