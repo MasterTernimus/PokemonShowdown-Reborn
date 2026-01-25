@@ -1927,6 +1927,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 		name: "Rocky Terrain",
 		condition: {
 			duration: 9999,
+			durationCallback(target, source, effect) {
+				if (effect?.id === 'splinteredstormshards') {
+					return 2;
+				}
+				return 9999;
+			},
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
 				const rockymoves = ['bulldoze', 'earthquake', 'magnitude', 'rockclimb', 'strength'];
