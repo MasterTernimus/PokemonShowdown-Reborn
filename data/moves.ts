@@ -3097,8 +3097,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('glitchterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
 			}
-			else if (this.field.terrainState.Tchanges?.get('glitchterrain') == 1) {
+			else if (this.field.terrainState.Tchanges?.get('glitchterrain') === 1) {
 				this.field.setTerrain('glitchterrain');
+			} else {
+				this.field.terrainState.Tchanges?.set('glitchterrain', 1);
 			}
 		},
 		secondary: null,
@@ -3141,8 +3143,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 			if (this.field.isTerrain('glitchterrain')) {
 				this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
 			}
-			else if (this.field.terrainState.Tchanges?.get('glitchterrain') == 1) {
+			else if (this.field.terrainState.Tchanges?.get('glitchterrain') === 1) {
 				this.field.setTerrain('glitchterrain');
+			} else {
+				this.field.terrainState.Tchanges?.set('glitchterrain', 1);
 			}
 		},
 		secondary: null,
@@ -19898,7 +19902,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: {},
 		onBasePower() {
-			if (this.field.terrain !== '') {
+			if (this.field.isTerrain(['newworldterrrain', 'underwaterterrain'])) {
 				return this.chainModify(1.3);
 			}
 		},

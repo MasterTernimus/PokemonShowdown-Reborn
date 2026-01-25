@@ -1679,7 +1679,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onStart(pokemon) {
 			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'snowyterrain'];
-			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
 		},
@@ -1736,7 +1736,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onTerrainChange(pokemon) {
 			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'snowyterrain'];
-			if (!pokemon.ignoringItem() && fields.includes(this.field.terrain)) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
 		},
