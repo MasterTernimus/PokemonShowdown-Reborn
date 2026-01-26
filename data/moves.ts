@@ -871,7 +871,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'auroraveil',
 		onTry() {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('icyterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('starlightarenaterrain') || this.field.isTerrain('snowyterrain')) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['rainbowterrain', 'icyterrain', 'mirrorarenaterrain', 'darkcrystalcavernterrain', 'crystalcavernterrain', 'snowymountainterrain', 'starlightarenaterrain', 'coldeclipseterrain'])) {
 				return true;
 			}
 			return false;
@@ -1582,7 +1582,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather()) || this.field.isTerrain('coldeclipseterrain'))) {
 				move.accuracy = true;
 			}
 		},
@@ -1603,7 +1603,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move) {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('snowyterrain')) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('coldeclipseterrain')) {
 				move.accuracy = true;
 			}
 			else {
@@ -2353,7 +2353,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['starlightarenaterrain', 'Dark'],
 				['inverseterrain', 'Normal'],
 				['hauntedterrain', 'Ghost'],
-				['bewitchedwoodsterrain', 'Fairy'], 
+				['bewitchedwoodsterrain', 'Fairy'],
+				['coldeclipseterrain', 'Ice'],
 			]);
 			if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
@@ -2602,7 +2603,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
 		onModifyMove(move) {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('snowyterrain')) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('coldeclipseterrain')) {
 				move.secondaries = [];
 				move.secondaries.push({
 					chance: 100,
@@ -2889,8 +2890,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
-		onModifyMove(move) {
-			if (this.field.isTerrain('snowyterrain') || this.field.isWeather(['hail', 'snow'])) {
+		onModifyMove(move, source, target) {
+			if (target && (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('coldeclipseterrain'))) {
 				move.accuracy = 100;
 			}
 		},
@@ -3721,7 +3722,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		status: 'slp',
 		onModifyMove(move) {
-			if (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain')) {
+			if (target && (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('coldeclipseterrain'))) {
 				move.accuracy = 100;
 			}
 
@@ -4638,6 +4639,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				move.damage = 140;
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -6818,7 +6824,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowyterrain')) {
+			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('coldeclipseterrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -8438,9 +8444,6 @@ export const Moves: { [moveid: string]: MoveData } = {
 				if ((igniteMoves.includes(move.id) && this.field.weather !== 'rain' && !this.field.pseudoWeather['watersport'])) {
 					modifier *= 1.3;
 				}
-				if (('snowyterrain' in this.field.terrainState && move.id === 'powdersnow') || blizzardMoves.includes(move.id)) {
-					modifier *= 1.3;
-				}
 				if (move.id === 'sludgewave' || move.id === 'aciddownpour')
 					modifier *= 1.3;
 				if (move.id === 'muddywater' || move.id === 'surf') {
@@ -8456,20 +8459,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 			},
 			onAfterMove(target, source, move) {
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
-				const blizzardMoves = ['blizzard', 'avalanche', 'subzeroslammer'];
 				const swampMoves = ['surf', 'muddywater'];
 				const currentCounter = this.field.terrainState.Tchanges?.get('swampterrain') ?? 0;
-				if (move.id === 'powdersnow') {
-					if (!('snowyterrain' in this.field.terrainState)) {
-						this.field.terrainState.Tchanges?.set('snowyterrain', 1);
-					}
-					else {
-						this.field.changeTerrain('snowyterrain');						
-					}
-				}
-				if(blizzardMoves.includes(move.id)){
-					this.field.changeTerrain('snowyterrain');
-				}
 				if (igniteMoves.includes(move.id) && this.field.weather !== 'rain' && !this.field.pseudoWeather['watersport']) {
 					this.field.changeTerrain('burningterrain');
 				}
@@ -10227,7 +10218,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowyterrain')) {
+			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('coldeclipseterrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -10384,8 +10375,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
-		onModifyMove(move) {
-			if (this.field.isTerrain('snowyterrain')) {
+		onModifyMove(move, source, target) {
+			if (target && (this.field.isTerrain('coldeclipseterrain'))) {
 				move.accuracy = true;
 			}
 		},
@@ -13516,7 +13507,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				factor = 0.25;
 					break;
 			default:
-					if (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain') || this.field.isTerrain('bewitchedwoodsterrain')) {
+					if (this.field.isTerrain(['darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'bewitchedwoodsterrain', 'coldeclipseterrain'])) {
 					factor = 0.75;
 				}
 				break;
@@ -13557,6 +13548,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 			case 'snow':
 				factor = 0.25;
 				break;
+			}
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				factor = 0.25;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
 			if (!success) {
@@ -13956,9 +13950,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 				['newworldterrain', 'spacialrend'],
 				['starlightarenaterrain', 'moonblast'],
 				['inverseterrain', 'trickroom'],
-				['snowyterrain', 'icywind'],
 				['hauntedterrain', 'phantomforce'],
-				['bewitchedwoodsterrain', 'dazzlinggleam']
+				['bewitchedwoodsterrain', 'dazzlinggleam'],
+				['coldeclipseterrain', 'icywind']
 			]);
 			let newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
@@ -15374,7 +15368,11 @@ export const Moves: { [moveid: string]: MoveData } = {
 		accuracy: 100,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
-			const bp = move.basePower + 20 * pokemon.positiveBoosts();
+			let modifier = 1;
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				modifier = 2;
+			}
+			const bp = move.basePower + 20 * modifier * pokemon.positiveBoosts();
 			this.debug('BP: ' + bp);
 			return bp;
 		},
@@ -16143,6 +16141,17 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			move.basePower = 60;
+			move.type = 'Dark';
+			move.secondaries?.push({
+				self: {
+					boosts: {
+						atk: 1
+					}
+				}
+			});
+		},
 		self: {
 			volatileStatus: 'rage',
 		},
@@ -17645,7 +17654,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 						atk: -1,
 					}
 				});
-			} else if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) {
+			} else if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					status: 'frz'
@@ -17725,16 +17734,21 @@ export const Moves: { [moveid: string]: MoveData } = {
 						def: -1
 					}
 				});
-			} else if (this.field.isTerrain('inverseterrain')){
+			} else if (this.field.isTerrain('inverseterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					volatileStatus: 'confusion',
 				});
-			} else if(this.field.isTerrain('hauntedterrain')){
+			} else if (this.field.isTerrain('hauntedterrain')) {
 				move.secondaries.push({
 					chance: 30,
 					volatileStatus: 'curse',
-				});			
+				});
+			} else if (this.field.isTerrain('coldeclipseterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					status: 'frz'
+				});
 			}
 		},
 		secondary: {
@@ -19168,7 +19182,18 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Snarl",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1 },
+		onModifyMove(move) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('coldeclipseterrain')) {
+				move.secondaries = [];
+				move.secondaries.push({
+					chance: 100,
+					boosts: {
+						spa: -2,
+					}
+				});
+			}
+		},
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -19264,7 +19289,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		terrain: "snowyterrain",
+		terrain: "coldeclipseterrain",
 		secondary: null,
 		target: "all",
 		type: "Ice",
@@ -19288,12 +19313,8 @@ export const Moves: { [moveid: string]: MoveData } = {
 			}
 		},
 		onHit(target) {
-			if(this.field.isTerrain('snowyterrain') && (target.getTypes().join() === 'Ice' || !target.setType('Ice'))){
-				this.add('-fail', target);
-				return null;
-			}
 			let changeType = 'Water';
-			if (this.field.isTerrain('snowyterrain')) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
 				changeType = 'Ice'
 			}
 			if (target.getTypes().join() === changeType || !target.setType(changeType)) {
@@ -20050,7 +20071,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 					}
 					typeMod = this.dex.getEffectiveness('Fire', pokemon.getTypes());
 					typeMod = this.clampIntRange(typeMod, -6, 6);
-					this.add('-message', '[Pokémon] was hurt by the molten stealth rocks!');
+					this.add('-message', '[Pokémon] was hurt by the molten rocks!');
+				} else if (this.field.isTerrain('coldeclipseterrain')) {
+					if (!pokemon.runImmunity('Ice')) {
+						return;
+					}
+					typeMod = this.dex.getEffectiveness('Ice', pokemon.getTypes());
+					typeMod = this.clampIntRange(typeMod, -6, 6);
+					this.add('-message', '[Pokémon] was hurt by the frozen rocks!');
 				}
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},
@@ -21132,6 +21160,9 @@ export const Moves: { [moveid: string]: MoveData } = {
 				}
 				break;
 			}
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				factor = 0.25;
+			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
 			if (!success) {
 				this.add('-fail', pokemon, 'heal');
@@ -21270,14 +21301,14 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: {snatch: 1, metronome: 1, wind: 1},
 		sideCondition: 'tailwind',
 		onAfterMove(source, target, move) {
-			if ((this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) && (this.field.weather !== 'desolateland' && this.field.weather !== 'primordialsea')) {
+			if ((this.field.isTerrain(['mountainterrain', 'snowymountainterrain', 'coldeclipseterrain'])) && (this.field.weather !== 'desolateland' && this.field.weather !== 'primordialsea')) {
 				this.field.setWeather('deltastream');
 			}
 		},
 		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
-				if (source?.hasAbility('persistent') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) {
+				if (source?.hasAbility('persistent') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 6;
 				}
@@ -21729,7 +21760,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 				["icyterrain", "Ice"],
 				["mirrorarenaterrain", "Ice"],
 				["snowymountainterrain", "Ice"],
-				["snowyterrain", "Ice"],
+				["coldeclipseterrain", "Ice"],
 				["grassterrain", "Grass"],
 				["forestterrain", "Bug"],
 				["flowergardenterrain", "Grass"],

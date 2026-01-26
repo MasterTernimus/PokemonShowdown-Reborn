@@ -514,14 +514,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	blaze: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move && move && move.type === 'Fire' && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('burningterrain'))) {
+			if (move && move && move.type === 'Fire' && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('burningterrain')) && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Blaze boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move && move && move.type === 'Fire' && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('burningterrain'))) {
+			if (move && move && move.type === 'Fire' && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('burningterrain')) && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Blaze boost');
 				return this.chainModify(1.5);
 			}
@@ -1544,7 +1544,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	flamebody: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
+			if (this.checkMoveMakesContact(move, source, target) && !this.field.isTerrain('coldeclipseterrain')) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('brn', target);
 				}
@@ -1558,7 +1558,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	flareboost: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if ((attacker.status === 'brn' || this.field.terrain === 'burningterrain') && move.category === 'Special') {
+			if ((attacker.status === 'brn' || this.field.isTerrain('burningterrain')) && move.category === 'Special' && !this.field.isTerrain('coldeclipseterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1569,7 +1569,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	flashfire: {
 		onTryHit(target, source, move) {
-			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Fire')) {
+			if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Fire') && !this.field.isTerrain('coldeclipseterrain')) {
 				move.accuracy = true;
 				if (!target.addVolatile('flashfire')) {
 					this.add('-immune', target, '[from] ability: Flash Fire');
@@ -1578,7 +1578,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.terrain === 'burningterrain') {
+			if (this.field.isTerrain('burningterrain')) {
 				pokemon.addVolatile('flashfire');
 			}
 		},
@@ -1812,6 +1812,30 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 119,
 	},
 	fullmetalbody: {
+		onModifyDef(def, pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				return this.chainModify(1.2);
+			}
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Ice' && this.field.isTerrain('coldeclipseterrain')) {
+				this.debug('Turbloblaze weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Ice' && this.field.isTerrain('coldeclipseterrain')) {
+				this.debug('Turboblaze weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
@@ -1843,7 +1867,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp >= 0.75 * pokemon.maxhp || ((this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) && this.field.weather === 'deltastream')) return priority + 1;
+			if (move?.type === 'Flying' && pokemon.hp >= 0.75 * pokemon.maxhp || ((this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) && this.field.weather === 'deltastream')) return priority + 1;
 		},
 		flags: {},
 		name: "Gale Wings",
@@ -2306,7 +2330,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onResidual(pokemon) {
-			if ((this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) && !(this.field.isWeather(['hail', 'snow']))) {
+			if ((this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipse'])) && !(this.field.isWeather(['hail', 'snow']))) {
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
@@ -2328,7 +2352,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (effect?.effectType === 'Move' && effect.category === 'Physical' && target.species.id === 'eiscue') {
+			if (effect?.effectType === 'Move' && (effect.category === 'Physical' || this.field.isTerrain('coldeclipseterrain')) && target.species.id === 'eiscue') {
 				this.add('-activate', target, 'ability: Ice Face');
 				this.effectState.busted = true;
 				return 0;
@@ -2336,14 +2360,14 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onCriticalHit(target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue') return;
+			if ((move.category !== 'Physical' || this.field.isTerrain('coldeclipseterrain')) || target.species.id !== 'eiscue') return;
 			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
 			if (!target.runImmunity(move.types !== undefined ? move.types : move.type)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue') return;
+			if ((move.category !== 'Physical' || this.field.isTerrain('coldeclipseterrain')) || target.species.id !== 'eiscue') return;
 
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
@@ -2387,7 +2411,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			}
 		},
 		onModifyDef(def, pokemon) {
-			if (this.field.isTerrain('snowyterrain')) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -2883,7 +2907,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	longreach: {
 		onModifyMove(move) {
-			if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('grassyterrain') || this.field.isTerrain('snowyterrain')) {
+			if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('grassyterrain')) {
 				if (move.accuracy !== true) {
 					move.accuracy = move.accuracy * 0.9;
 				}
@@ -3011,20 +3035,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move && move.type === 'Water') {
+			if (move && move.type === 'Water' && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Magma Armor weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move && move.type === 'Water') {
+			if (move && move.type === 'Water' && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Magma Armor weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'frz') return false;
+			if (type === 'frz' && !this.field.isTerrain('coldeclipseterrain')) return false;
 		},
 		flags: { breakable: 1 },
 		name: "Magma Armor",
@@ -3208,9 +3232,6 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1, spd: 1 });
-			}
-			if (this.field.isTerrain('snowyterrain')) {
-				this.boost({ evasion: 1 });
 			}
 		},
 		onFoeTryMove(target, source, move) {
@@ -4085,6 +4106,20 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	pressure: {
 		onStart(pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				let activated = false;
+				for (const target of pokemon.foes()) {
+					if (!activated) {
+						this.add('-ability', pokemon, 'Pressure', 'boost');
+						activated = true;
+					}
+					if (target.volatiles['substitute']) {
+						this.add('-immune', target);
+					} else {
+						this.boost({ spd: -1, def: -1 }, target, pokemon, null, true);
+					}
+				}
+			}
 			this.add('-ability', pokemon, 'Pressure');
 		},
 		onDeductPP(target, source) {
@@ -4121,6 +4156,16 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		num: 189,
 	},
 	prismarmor: {
+		onModifyDef(def, pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				return this.chainModify(1.333333);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				return this.chainModify(1.333333);
+			}
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0 || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain')) {
 				this.debug('Prism Armor neutralize');
@@ -4511,7 +4556,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) {
-				if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain'))
+				if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain'))
 					return this.chainModify(1.5);
 				else {
 					return this.chainModify([4915, 4096]);
@@ -4867,7 +4912,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 				this.debug('Shadow Shield weaken');
 				return this.chainModify(0.5);
 			}
-			if (target.getMoveHitData(move).typeMod > 0 && (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain'))) {
+			if (target.getMoveHitData(move).typeMod > 0 && (this.field.isTerrain(['darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'coldeclipseterrain']))) {
 				this.debug('Shadow Shield Armor neutralize');
 				return this.chainModify(0.75);
 			}
@@ -5123,7 +5168,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 	},
 	slushrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipse'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -5159,7 +5204,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipse'])) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -6114,6 +6159,30 @@ else
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Turboblaze');
 		},
+		onModifyDef(def, pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				return this.chainModify(1.2);
+			}
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Ice' && this.field.isTerrain('coldeclipseterrain')) {
+				this.debug('Turbloblaze weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Ice' && this.field.isTerrain('coldeclipseterrain')) {
+				this.debug('Turboblaze weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
 		},
@@ -6172,6 +6241,20 @@ else
 			this.effectState.unnerved = true;
 		},
 		onStart(pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				let activated = false;
+				for (const target of pokemon.foes()) {
+					if (!activated) {
+						this.add('-ability', pokemon, 'Unnerve', 'boost');
+						activated = true;
+					}
+					if (target.volatiles['substitute']) {
+						this.add('-immune', target);
+					} else {
+						this.boost({ spe: -1 }, target, pokemon, null, true);
+					}
+				}
+			}
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
@@ -6588,7 +6671,7 @@ else
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('snowyterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+			if (((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
 				pokemon.addVolatile('zenmode');
 			}
 		},
@@ -6596,9 +6679,9 @@ else
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || ((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('snowymountainterrain')  || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowyterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || ((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('snowymountainterrain')  || this.field.isTerrain('icyterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
 				pokemon.addVolatile('zenmode');
-			} else if ((pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) && !((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id === 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') && !((this.field.isTerrain('snowymountainterrain')  || this.field.isTerrain('icyterrain') || this.field.isTerrain('snowyterrain')) && pokemon.species.id === 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')){
+			} else if ((pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) && !((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id === 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') && !((this.field.isTerrain('snowymountainterrain')  || this.field.isTerrain('icyterrain')) && pokemon.species.id === 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')){
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}

@@ -355,7 +355,7 @@ export class Battle {
 				"underwaterterrain",
 				"wastelandterrain",
 				"newworldterrain",
-				"snowyterrain",
+				"coldeclipseterrain",
 				"bewitchedwoodsterrain",
 				"hauntedterrain",
 				"",
