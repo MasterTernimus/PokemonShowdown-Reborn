@@ -713,9 +713,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.clearTerrain();
 				}
 				if (move.id === 'geomancy') {
-					this.field.clearTerrain();
 					this.add('-message', 'Starlight began to shine!');
-					this.field.setTerrain('starlightarenaterrain');
+					this.field.changeTerrain('starlightarenaterrain');
 				}
 			},
 			onImmunity(type, pokemon) {
@@ -740,7 +739,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldStart() {
+				const failMoves = ['trickroom', 'wonderroom', 'gravity', 'magicroom'];
 				this.add('-fieldstart', "Cold Eclipse Terrain");
+				for (const pseudoWeather of failMoves) {
+					this.field.removePseudoWeather(pseudoWeather);
+				}
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Cold Eclipse Terrain')
