@@ -552,64 +552,199 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		}
 	},
-	corrosiveterrain: {
-		name: "Corrosive Terrain",
+	coldeclipseterrain: {
+		name: "Cold Eclipse Terrain",
 		condition: {
 			duration: 9999,
-			onBasePowerPriority: 6,
-			onModifyMove(move) {
-				let poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows'];
-				if (move.type === 'Grass') {
-					move.types = [move.type, 'Poison'];
+			durationCallback(target, source, effect) {
+				if (effect && effect?.id === 'snowscape') {
+					if (source.hasItem('amplifieldrock')) {
+						return 8
+					}
 				}
-				if (poisonedMoves.includes(move.id)) {
-					move.types = [move.type, 'Poison'];
-				}
+				return 5;
 			},
-			onSwitchIn(pokemon) {
-				let immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
-				if (!immune.includes(pokemon.ability) && pokemon.isGrounded() && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
-					let typeMod = this.dex.getEffectiveness('Poison', pokemon.types);
-					typeMod = this.clampIntRange(typeMod, -6, 6);
-					this.damage(pokemon.baseMaxhp / 4 * Math.pow(2, typeMod), pokemon);
-				}
-			},
-			onBasePower(basePower, source, target, move) {
+			onModifyDef(def, pokemon) {
 				let modifier = 1;
-				let superStrong = ['acid', 'acidspray', 'grassknot'];
-				let poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows'];
-				if (superStrong.includes(move.id)) {
-					modifier *= 2;
+				if (pokemon.hasType('Ice') && !this.field.isWeather('hail')) {
+					modifier *= 1.2;
 				}
-				if (poisonedMoves.includes(move.id)) {
-					modifier *= 1.5;
+				if (pokemon.hasType('Ghost')) {
+					modifier *= 1.2;
 				}
-				if (move.id === 'seedflare') {
-					modifier *= 1.3;
+				if (pokemon.hasType('Fire')) {
+					modifier *= 0.8;
 				}
 				return this.chainModify(modifier);
 			},
+			onModifySpD(spd, pokemon) {
+				let modifier = 1;
+				if (pokemon.hasType('Ghost')) {
+					modifier *= 1.2;
+				}
+				if (pokemon.hasType('Fire')) {
+					modifier *= 0.8;
+				}
+				if (pokemon.hasType('Ice')) {
+					if (this.field.isWeather('hail')) {
+						modifier *= 1.5;
+					} else {
+						modifier *= 1.2;
+					}
+				}
+				return this.chainModify(modifier);
+			},
+			onModifySpe(spe, pokemon) {
+				const immune = ['slushrush', 'icebody', 'snowcloak', 'illusion'];
+				if (pokemon.hasAbility(immune) || !pokemon.isGrounded() || pokemon.hasType('Ice')) {
+					return this.chainModify(0.75);
+				}
+			},
+			onTryMove(source, target, move) {
+				const failMoves = ['trickroom', 'wonderroom', 'gravity', 'magicroom'];
+				if (failMoves.includes(move.id)) {
+					this.add('-message', 'The cold reality did not change');
+					return null;
+				}
+				if (['solarbeam', 'solarblade'].includes(move.id) && !this.field.isWeather(['sunnyday', 'desolateland'])) {
+					this.add('-message', 'The cold eclipse swallowed the sunlight!');
+					return null;
+				}
+			},
+			onModifyMovePriority: -1,
+			onModifyMove(move) {
+				const slush = ['mudslap', 'mudshot', 'mudbomb', 'darkpulse', 'nightslash'];
+				const notSlush = ['brine', 'steameruption', 'scald', 'hydrosteam', 'chillingwater'];
+				const sun = ['sunsteelstrike', 'searingsunrazesmash'];
+				const groundTypes = ['Rock', 'Steel', 'Ground'];
+				if (slush.includes(move.id) || (move.type === 'Water' && move.category === 'Special' && !notSlush.includes(move.id)) || (groundTypes.includes(move.type) && !sun.includes(move.id))) {
+					if (groundTypes.includes(move.type)) {
+						this.add('-message', 'Frost covered the attack!');
+					}
+					move.types = [move.type, 'Ice'];
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const notSlush = ['brine', 'steameruption', 'scald', 'hydrosteam', 'chillingwater']
+				const steamNerf = ['hydrosteam', 'scald', 'steameruption'];
+				const mudBoost = ['mudslap', 'mudshot', 'mudbomb'];
+				const gustBoost = ['aeroblast', 'bleakwindstorm', 'brine', 'gust', 'razorwind', 'silverwind', 'omniouswind', 'blizzard', 'freezeshock', 'iceburn'];
+				const icyUberboost = ['icywind', 'fairywind', 'twister', 'powdersnow', 'chillingwater', 'glaciate', 'subzeroslammer'];
+				const iceburnBoost = ['bittermalice', 'fierywrath', 'freezingglare', 'nightdaze', 'moongeistbeam', 'rage', 'roaroftime', 'menacingmoonrazemaelstrom'];
+				const infernoMoves = ['heatwave', 'eruption', 'searingshot', 'searingsunrazesmash', 'flameburst', 'lavaplume', 'firepledge', 'mindblown', 'incinerate', 'infernooverdrive'];
+				if (move.type === 'Dark') {
+					modifier *= 1.5;
+				}
+				if (move.type === 'Flying' && move.category === 'Special') {
+					this.add('-message', 'The attack was carried by the glacial currents');
+					modifier *= 1.5;
+				}
+				if (move.type === 'Water' && move.category === 'Special' && !notSlush.includes(move.id)) {
+					this.add('-message', 'Glacial energy seeped into the water!');
+					modifier *= 1.2;
+				}
+				if (move.type === 'Ice') {
+					if (this.field.isWeather('hail')) {
+						modifier *= 1.5;
+					} else {
+						modifier *= 1.2;
+					}
+				}
+				if (move.type === 'Fire') {
+					if (source.hasAbility(['fullmetalbody', 'turboblaze'])) {
+						modifier *= 2;
+						this.add('-message', source.name + '\'s ' + source.ability + ' defies the frozen night!');
+					}
+					this.add('-message', 'The heat swallowed by the frozen night!');
+					modifier *= 0.5;
+				}
+				if (steamNerf.includes(move.id)) {
+					this.add('-message', 'The heat swallowed by the frozen night!');
+					modifier *= 0.5;
+				}
+				if (mudBoost.includes(move.id)) {
+					this.add('-message', 'The attack was carried by the glacial currents');
+					modifier *= 1.5;
+				}
+				if (gustBoost.includes(move.id)) {
+					modifier *= 1.5;
+					if (['freezeshock', 'iceburn'].includes(move.id)) {
+						this.add('-message', 'The cold deepened to absolute zero!');
+					} else if (['aeroblast', 'bleakwindstorm', 'blizzard', 'razorwind'].includes(move.id)) {
+						this.add('-message', 'The blizzard howled under the eclipsed sky');
+					} else {
+						this.add('-message', 'The Cold Eclipse magnified the attack!');
+					}
+				}
+				if (icyUberboost.includes(move.id)) {
+					modifier *= 2;
+					if (['subzeroslammer', 'glaciate'].includes(move.id)) {
+						this.add('-message', 'The Moonlit frost tore through the field');
+					} else {
+						this.add('-message', 'The Cold Eclipse turned the attack lethal!');
+					}
+				}
+				if (iceburnBoost.includes(move.id)) {
+					modifier *= 1.5;
+					if (move.id === 'roaroftime') {
+						this.add('-message', 'Echo of time was magnified under the eclipsed sky!');
+					} else {
+						this.add('-message', 'The cold atmosphere fed the darkness!');
+					}
+				}
+				if (['darkpulse, nightslash'].includes(move.id)) {
+					modifier *= 1.2;
+					this.add('-message', 'The attack took power from the cold malice!');
+				}
+				if (move.id === 'lightthatburnsthesky') {
+					modifier *= 0.5;
+					this.add('-message', 'The eclipsed sky dulled the blinding light!');
+				}
+				if (infernoMoves.includes(move.id) && !this.field.pseudoWeather['watersport']) {
+					modifier *= 1.3;
+					this.add('-message', 'The burning heat chased off the cold night!');
+				}
+			},
 			onAfterMove(source, target, move) {
-				let disinfectMoves = ['purify', 'seedflare'];
-				if (disinfectMoves.includes(move.id)) {
-					this.add('-message', 'The polluted field was purified!');
-					this.field.changeTerrain('grassyterrain');
+				const infernoMoves = ['heatwave', 'eruption', 'searingshot', 'searingsunrazesmash', 'flameburst', 'lavaplume', 'firepledge', 'mindblown', 'incinerate', 'infernooverdrive'];
+				if (infernoMoves.includes(move.id) && !this.field.pseudoWeather['watersport']) {
+					this.field.clearTerrain();
+				}
+				if (move.id === 'geomancy') {
+					this.field.clearTerrain();
+					this.add('-message', 'Starlight began to shine!');
+					this.field.setTerrain('starlightarenaterrain');
+				}
+			},
+			onImmunity(type, pokemon) {
+				const immuneHail = ['fullmetalbody', 'illusion', 'prismarmor', 'shadowshield'];
+				if (type === 'hail' && pokemon.hasAbility(immuneHail)) {
+					return false;
 				}
 			},
 			onResidual(pokemon) {
-				let immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
-				if (!immune.includes(pokemon.ability) && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
-					if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
-						this.damage(pokemon.baseMaxhp / 16, pokemon);
-					}
+				if (this.field.isWeather('raindance')) {
+					this.field.changeWeather('hail');
+				}
+				if (this.field.isWeather('primordealsea')) {
+					this.add('-message', 'The heavy rain refused to freeze!');
+				}
+				if (this.field.isWeather('desolateland') || (this.field.isWeather('sunnyday') && this.field.terrainState.Tchanges?.get('sunnyday') === 1)) {
+					this.add('-message', 'The morning has arrived!');
+					this.field.clearTerrain();
+				}
+				else if (this.field.isWeather('sunnyday')) {
+					this.field.terrainState.Tchanges?.set('sunnyday', 1);
 				}
 			},
 			onFieldStart() {
-				this.add('-fieldstart', 'Corrosive Terrain');
+				this.add('-fieldstart', "Cold Eclipse Terrain");
 			},
 			onFieldEnd() {
-				this.add('-fieldend', 'Corrosive Terrain');
-			},
+				this.add('-fieldend', 'Cold Eclipse Terrain')
+			}
 		}
 	},
 	corrosivemistterrain: {
@@ -687,6 +822,67 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldEnd() {
 				this.add('-fieldend', 'Corrosive Mist Terrain')
 			}
+
+		}
+	},
+	corrosiveterrain: {
+		name: "Corrosive Terrain",
+		condition: {
+			duration: 9999,
+			onBasePowerPriority: 6,
+			onModifyMove(move) {
+				let poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows'];
+				if (move.type === 'Grass') {
+					move.types = [move.type, 'Poison'];
+				}
+				if (poisonedMoves.includes(move.id)) {
+					move.types = [move.type, 'Poison'];
+				}
+			},
+			onSwitchIn(pokemon) {
+				let immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
+				if (!immune.includes(pokemon.ability) && pokemon.isGrounded() && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
+					let typeMod = this.dex.getEffectiveness('Poison', pokemon.types);
+					typeMod = this.clampIntRange(typeMod, -6, 6);
+					this.damage(pokemon.baseMaxhp / 4 * Math.pow(2, typeMod), pokemon);
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				let superStrong = ['acid', 'acidspray', 'grassknot'];
+				let poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows'];
+				if (superStrong.includes(move.id)) {
+					modifier *= 2;
+				}
+				if (poisonedMoves.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (move.id === 'seedflare') {
+					modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				let disinfectMoves = ['purify', 'seedflare'];
+				if (disinfectMoves.includes(move.id)) {
+					this.add('-message', 'The polluted field was purified!');
+					this.field.changeTerrain('grassyterrain');
+				}
+			},
+			onResidual(pokemon) {
+				let immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
+				if (!immune.includes(pokemon.ability) && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
+					if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
+						this.damage(pokemon.baseMaxhp / 16, pokemon);
+					}
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Corrosive Terrain');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Corrosive Terrain');
+			},
 		}
 	},
 	crystalcavernterrain: {

@@ -1678,7 +1678,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'snowyterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
@@ -1728,14 +1728,14 @@ export const Items: {[itemid: string]: ItemData} = {
 				this.boost({ spa: 1 });
 				pokemon.addVolatile('flashfire', pokemon, item);
 			}
-			if(this.field.isTerrain('snowyterrain')){
-				this.add('-message', pokemon.name + ' is protected by the snow!');
-				this.boost({evasion: 1, spd: 1});
-				pokemon.side.addSideCondition('safeguard');
+			if(this.field.isTerrain('coldeclipseterrain')){
+				this.add('-message', pokemon.name + ' is imbued and sped up by the icy surface!');
+				this.boost({spe: 1});
+				this.actions.useMove('soak', pokemon, pokemon, item);
 			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'snowyterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
