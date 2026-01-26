@@ -13507,10 +13507,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 				factor = 0.25;
 					break;
 			default:
-					if (this.field.isTerrain(['darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'bewitchedwoodsterrain', 'coldeclipseterrain'])) {
+				if (this.field.isTerrain(['darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'bewitchedwoodsterrain'])) {
 					factor = 0.75;
 				}
 				break;
+			}
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				factor = 0.75;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
 			if (!success) {

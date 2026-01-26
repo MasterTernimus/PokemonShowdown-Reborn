@@ -3251,4 +3251,19 @@ export class Battle {
 		// in case the garbage collector really sucks, at least deallocate the log
 		(this as any).log = [];
 	}
+
+	movehasType(move: ActiveMove, searchTypes: string | string[]) : boolean {
+		const types = move.types !== undefined ? move.types : [move.type];
+		if (Array.isArray(searchTypes)) {
+			for (const type of searchTypes) {
+				if (types.includes(type)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		else {
+			return types.includes(searchTypes);
+		}
+	}
 }
