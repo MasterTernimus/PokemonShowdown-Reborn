@@ -706,6 +706,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.3;
 					this.add('-message', 'The burning heat chased off the cold night!');
 				}
+				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
 				const infernoMoves = ['heatwave', 'eruption', 'searingshot', 'searingsunrazesmash', 'flameburst', 'lavaplume', 'firepledge', 'mindblown', 'incinerate', 'infernooverdrive'];
