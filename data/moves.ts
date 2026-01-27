@@ -3721,11 +3721,10 @@ export const Moves: { [moveid: string]: MoveData } = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		status: 'slp',
-		onModifyMove(move) {
+		onModifyMove(move, source, target) {
 			if (target && (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('coldeclipseterrain'))) {
 				move.accuracy = 100;
 			}
-
 		},
 		noSketch: true,
 		secondary: null,
