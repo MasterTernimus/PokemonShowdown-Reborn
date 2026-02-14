@@ -1892,7 +1892,7 @@ export const Abilities: { [abilityid: string]: AbilityData } = {
 			if (this.field.isTerrain('shortcircuitterrain')) {
 				modifier = 2;
 			}
-			else if (this.field.isTerrain('factoryterrain')) {
+			else if (this.field.isTerrain(['factoryterrain', 'electricterrain'])) {
 				modifier = 1.5;
 			}
 			if (move.typeChangerBoosted === this.effect)
@@ -6105,7 +6105,7 @@ else
 			}
 			if (move && this.movehasType(move, 'Electric')) {
 				this.debug('Transistor boost');
-				return this.chainModify(1.3);
+				return this.chainModify(boost);
 			}
 		},
 		onModifySpAPriority: 5,
@@ -6116,7 +6116,7 @@ else
 			}
 			if (move && this.movehasType(move, 'Electric')) {
 				this.debug('Transistor boost');
-				return this.chainModify(1.3);
+				return this.chainModify(boost);
 			}
 		},
 		flags: {},
@@ -6337,9 +6337,19 @@ else
 				return null;
 			}
 		},
-		onBasePower(basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || !this.movehasType(move, 'Fighting')) return;
-			return this.chainModify([5448, 4096]);
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if ((move && this.movehasType(move, 'Fighting'))) {
+				this.debug('Vital Spirit boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if ((move && this.movehasType(move, 'Fighting'))) {
+				this.debug('Vital Spirit boost');
+				return this.chainModify(1.5);
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Vital Spirit",
