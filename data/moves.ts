@@ -4929,6 +4929,13 @@ export const Moves: { [moveid: string]: MoveData } = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('electricterrain')) {
+				move.boosts = {
+					spa: -3,
+				}
+			}
+		},
 		boosts: {
 			spa: -2,
 		},
@@ -5025,7 +5032,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				let modifier = 1;
-				let electrified = ['explosion', 'hurricane', 'muddywater', 'selfdestruct', 'smackdown', 'thousandarrows', 'surf', 'psyblade', 'overdrive'];
+				let electrified = ['explosion', 'hurricane', 'muddywater', 'selfdestruct', 'smackdown', 'thousandarrows', 'surf', 'overdrive', 'wildboltstorm'];
 				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					modifier *= 1.5;
@@ -11907,11 +11914,24 @@ export const Moves: { [moveid: string]: MoveData } = {
 				ally.hasAbility(['plus', 'minus']) &&
 				(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
 			));
-			if (!targets.length) return false;
-
 			let didSomething = false;
+			if (!targets.length) {
+				if (this.field.isTerrain('electricterrain')) {
+					for (const target of targets) {
+						didSomething = this.boost({ def: 1, spd: 1 }, target, source, move, false, true) || didSomething;
+					}
+				}
+				else {
+					return false;
+				}
+				return didSomething;
+			} 
 			for (const target of targets) {
-				didSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;
+				if (this.field.isTerrain('electricterrain')) {
+					didSomething = this.boost({ def: 2, spd: 2 }, target, source, move, false, true) || didSomething;
+				} else {
+					didSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;
+				}
 			}
 			return didSomething;
 		},
@@ -14881,7 +14901,7 @@ export const Moves: { [moveid: string]: MoveData } = {
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
 		onBasePower() {
 			if (this.field.setTerrain('electricterrain'))
-				return this.chainModify([5325, 4096]);
+				return this.chainModify(1.3);
 		},
 		pseudoWeather: 'iondeluge',
 		secondary: null,
@@ -20016,7 +20036,12 @@ export const Moves: { [moveid: string]: MoveData } = {
 		name: "Springtide Storm",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, wind: 1},
+		flags: { protect: 1, mirror: 1, wind: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('mistyterrain')) {
+				move.accuracy = true;
+			}
+		},
 		secondary: {
 			chance: 30,
 			boosts: {
