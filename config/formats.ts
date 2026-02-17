@@ -17,9 +17,11 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
+import { type FormatList } from "../sim/dex-formats";
+
 export const Formats: FormatList = [
 
-	//All Gen Reborn
+	// All Gen Reborn
 	///////////////////////////////////////////////////////////////////
 	{
 		section: "AllGen Singles",
@@ -380,9 +382,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 
-
-
-	//All Gen Doubles
+	// All Gen Doubles
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 
 	{
@@ -523,7 +523,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		subsection: "Magical"
+		subsection: "Magical",
 	},
 	{
 		name: "[Gen 9] Doubles Bewitched Woods",
@@ -710,7 +710,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
-	},	
+	},
 	{
 		name: "[Gen 9] Doubles Cave",
 		mod: 'gen9',
@@ -835,10 +835,10 @@ export const Formats: FormatList = [
 		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
-	
+
 	{
 		section: "[Gen 9] 6/3 Singles",
-		column: 5
+		column: 5,
 	},
 	{
 		name: "[Gen 9] 6/3 Random Field",
@@ -866,7 +866,7 @@ export const Formats: FormatList = [
 		name: "[Gen 9] No Field Singles Game",
 
 		mod: 'gen9',
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{

@@ -5876,7 +5876,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Teravolt');
 		},
 		onFoeNegateImmunity(pokemon, type) {
-			console.log(type, pokemon);
 			if (type === 'Electric' && pokemon.hasType('Ground') && this.field.isTerrain('electricterrain')) return false;
 		},
 		onModifyMove(move) {

@@ -687,7 +687,8 @@ export class DexConditions {
 		} else if (
 			(this.dex.data.Moves.hasOwnProperty(id) && (found = this.dex.data.Moves[id]).condition) ||
 			(this.dex.data.Abilities.hasOwnProperty(id) && (found = this.dex.data.Abilities[id]).condition) ||
-			(this.dex.data.Items.hasOwnProperty(id) && (found = this.dex.data.Items[id]).condition)
+			(this.dex.data.Items.hasOwnProperty(id) && (found = this.dex.data.Items[id]).condition) ||
+			(this.dex.data.Terrains.hasOwnProperty(id) && (found = this.dex.data.Terrains[id]).condition)
 		) {
 			condition = new Condition({ name: found.name || id, ...found.condition });
 		} else if (id === 'recoil') {
