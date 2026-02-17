@@ -634,12 +634,7 @@ export class BattleActions {
 					this.battle.add('-miss', pokemon, target);
 				}
 			}
-			if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain') && hitResults[i] === false) {
-				this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
-				if (pokemon.boosts.evasion > 0) {
-					this.battle.boost({evasion: -1}, pokemon);
-				}
-			}
+			this.battle.runEvent('Miss', pokemon, target, move);
 		}
 		return hitResults;
 	}
@@ -650,12 +645,7 @@ export class BattleActions {
 			this.battle.attrLastMove('[still]');
 		}
 		for (const i of targets.keys()) {
-			if (move.category === 'Physical' && move.flags.contact && this.battle.field.isTerrain('mirrorarenaterrain') && (hitResults[i] === false || hitResults[i] === this.battle.NOT_FAIL)) {
-				this.battle.damage(pokemon.baseMaxhp / 4, pokemon);
-				if (pokemon.boosts.evasion > 0) {
-					this.battle.boost({evasion: -1}, pokemon);
-				}
-			}
+			this.battle.runEvent('Miss', pokemon, targets[i], move);
 			if (hitResults[i] !== this.battle.NOT_FAIL) hitResults[i] = hitResults[i] || false;
 		}
 		return hitResults;
@@ -754,6 +744,7 @@ export class BattleActions {
 				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
 					this.battle.boost({ spe: 2 }, pokemon);
 				}
+				this.battle.runEvent('Miss', pokemon, target, move);
 				hitResults[i] = false;
 				continue;
 			}
@@ -1412,7 +1403,7 @@ export class BattleActions {
 			} else {
 				return Math.round(pokemon.maxhp / 2);
 			}
-		} 
+		}
 		return this.battle.clampIntRange(Math.round(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 	}
 
@@ -1726,9 +1717,9 @@ export class BattleActions {
 		attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
 		defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
 		if (this.battle.field.terrain === 'glitchterrain') {
-			if(attackStat === 'spa')
+			if (attackStat === 'spa')
 				attack = Math.max(attack, source.getStat('spd'));
-			if(defenseStat === 'spd')
+			if (defenseStat === 'spd')
 				defense = Math.max(defense, target.getStat('spa'));
 		}
 		if ((this.battle.gen <= 4 || this.battle.field.terrain === 'glitchterrain') && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {

@@ -1644,7 +1644,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		megaStone: {"Gardevoir": "Gardevoir Void-Mega"},
+		megaStone: { "Gardevoir": "Gardevoir Void-Mega" },
 		itemUser: ["Gardevoir"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
@@ -1847,7 +1847,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('mistyterrain')) {
 				this.boost({ spd: 1 });
-				this.actions.useMove('wish', pokemon, pokemon);
+				this.actions.useMove('wish', pokemon, { target: pokemon });
 			}
 			if (this.field.isTerrain('burningterrain')) {
 				this.boost({ atk: 1, spa: 1, spe: 1 });
@@ -1864,7 +1864,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('underwaterterrain')) {
 				this.boost({ spe: 1 });
-				this.actions.useMove('soak', pokemon, pokemon);
+				this.actions.useMove('soak', pokemon, { target: pokemon });
 			}
 			if (this.field.isTerrain('murkwatersurfaceterrain')) {
 				this.boost({ spe: 1 });
@@ -1881,10 +1881,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				this.boost({ spa: 1 });
 				pokemon.addVolatile('flashfire', pokemon, item);
 			}
-			if(this.field.isTerrain('coldeclipseterrain')){
+			if (this.field.isTerrain('coldeclipseterrain')) {
 				this.add('-message', pokemon.name + ' is imbued and sped up by the icy surface!');
-				this.boost({spe: 1});
-				this.actions.useMove('soak', pokemon, pokemon, item);
+				this.boost({ spe: 1 });
+				this.actions.useMove('soak', pokemon, { target: pokemon, sourceEffect: item });
 			}
 		},
 		onTerrainChange(pokemon) {
@@ -3722,17 +3722,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('rainbowterrain')) {
 				this.boost({ spa: 1 });
-				this.actions.useMove('wish', pokemon, pokemon);
+				this.actions.useMove('wish', pokemon, { target: pokemon });
 			}
 			if (this.field.isTerrain('fairytaleterrain')) {
 				pokemon.addVolatile('kingsshield');
 			}
 			if (this.field.isTerrain('darkcrystalcavernterrain')) {
-				this.boost({ spd: 1 }, pokemon)
+				this.boost({ spd: 1 }, pokemon);
 				pokemon.addVolatile('magiccoat', null, item);
 			}
 			if (this.field.isTerrain('crystalcavernterrain') || this.field.isTerrain('holyterrain')) {
-				this.boost({ spa: 1 }, pokemon)
+				this.boost({ spa: 1 }, pokemon);
 				pokemon.addVolatile('magiccoat', null, item);
 			}
 			if (this.field.isTerrain('newworldterrain')) {
@@ -3741,9 +3741,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('starlightarenaterrain')) {
 				this.boost({ spa: 1 });
-				this.actions.useMove('wish', pokemon, pokemon);
+				this.actions.useMove('wish', pokemon, { target: pokemon });
 			}
-			if(this.field.isTerrain('inverseterrain')){
+			if (this.field.isTerrain('inverseterrain')) {
 				this.boost({ atk: 1, spa: 1, def: 1, spd: 1, spe: 1 }, pokemon, pokemon, item);
 				pokemon.addVolatile('mustrecharge');
 			}
@@ -3752,7 +3752,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.trySetStatus('brn', pokemon);
 			}
 			if (this.field.isTerrain('bewitchedwoodsterrain')) {
-				this.boost({ spd: 1}, pokemon, pokemon, item);
+				this.boost({ spd: 1 }, pokemon, pokemon, item);
 				pokemon.addVolatile('ingrain');
 			}
 		},
@@ -5701,8 +5701,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (move.totalDamage && !pokemon.forceSwitchFlag) {
 				if (this.field.isTerrain('ashenbeachterrain')) {
 					this.heal(move.totalDamage / 4, pokemon);
-				}
-				else {
+				} else {
 					this.heal(move.totalDamage / 8, pokemon);
 				}
 			}
@@ -6260,7 +6259,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onUseItem(item, pokemon) {
 			this.add('-activate', pokemon, item, '[consumed]');
 			if (this.field.isTerrain('glitchterrain')) {
-				this.add('-message', pokemon + ' was corrupted by the rogue data!');
+				this.add('-message', `${pokemon} was corrupted by the rogue data!`);
 				this.boost({ def: 1 }, pokemon, pokemon, item);
 				pokemon.setType('???');
 				return;
@@ -6384,19 +6383,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (this.field.isTerrain('rockyterrain')) {
 				this.boost({ def: 1 });
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4);
+				this.damage(pokemon.maxhp * 2 ** typeMod / 4);
 				return;
 			}
 			if (this.field.isTerrain('desertterrain')) {
 				this.boost({ def: 1, spd: 1, spe: 1 });
-				pokemon.addVolatile('partiallytrapped', pokemon, this.dex.moves.get('sandtomb'));
+				pokemon.addVolatile('partiallytrapped', pokemon, this.dex.getActiveMove('sandtomb'));
 				return;
 			}
 			if (this.field.isTerrain('forestterrain')) {
 				pokemon.addVolatile('spikyshield', null, item);
 			}
 			if (this.field.isTerrain('ashenbeachterrain')) {
-				pokemon.addVolatile('focusenergy', null, item)
+				pokemon.addVolatile('focusenergy', null, item);
 			}
 			if (this.field.isTerrain('wastelandterrain')) {
 				this.boost({ atk: 1, spa: 1 }, pokemon, null, item);
@@ -6407,7 +6406,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (this.field.isTerrain('caveterrain')) {
 				this.boost({ def: 2 }, pokemon, null, item);
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 4, pokemon, null, item);
+				this.damage(pokemon.maxhp * 2 ** typeMod / 4, pokemon, null, item);
 			}
 			if (this.field.isTerrain('superheatedterrain')) {
 				this.boost({ def: 1 }, pokemon, pokemon, item);

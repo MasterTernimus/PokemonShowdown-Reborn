@@ -85,8 +85,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!target.hp && this.checkMoveMakesContact(move, source, target, true)) {
 				if (this.field.terrain === 'corrosivemistterrain') {
 					this.damage(source.baseMaxhp / 2, source, target);
-				}
-				else {
+				} else {
 					this.damage(source.baseMaxhp / 4, source, target);
 				}
 			}
@@ -143,7 +142,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onHit(target, source, move) {
 			if (!target.hp) return;
-			if (!source.abilityState.angerpoint && move.category != 'Status') {
+			if (!source.abilityState.angerpoint && move.category !== 'Status') {
 				source.abilityState.angerpoint = true;
 				this.boost({ atk: 1 }, target, target);
 			}
@@ -604,7 +603,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if (this.field.isTerrain('rainbowterrain')) {
-				let stats: BoostID[] = [];
+				const stats: BoostID[] = [];
 				const boost: SparseBoostsTable = {};
 				let statPlus: BoostID;
 				for (statPlus in pokemon.boosts) {
@@ -612,7 +611,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						stats.push(statPlus);
 					}
 				}
-				let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 				if (randomStat) boost[randomStat] = 1;
 				this.boost(boost);
 			}
@@ -731,7 +730,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePower(basePower, source) {
 			if (this.field.isTerrain('chessboardterrain')) {
-				return this.chainModify(Math.max(1, Math.min((1 - source.hp / source.baseMaxhp)/0.8 + 1, 2)));
+				return this.chainModify(Math.max(1, Math.min((1 - source.hp / source.baseMaxhp) / 0.8 + 1, 2)));
 			}
 		},
 		flags: {},
@@ -778,20 +777,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.secondaries = [
 				{
 					chance: 2.5,
-					status: 'frz'
+					status: 'frz',
 				},
 				{
 					chance: 2.5,
-					status: 'brn'
+					status: 'brn',
 				},
 				{
 					chance: 2.5,
-					status: 'par'
+					status: 'par',
 				},
 				{
 					chance: 2.5,
-					status: 'psn'
-				}
+					status: 'psn',
+				},
 			];
 		},
 		onBasePower() {
@@ -929,7 +928,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct'].includes(effect.id)) {
 				this.attrLastMove('[still]');
-				this.add('cant', this.effectState.target, 'ability: Damp', effect, '[of] ' + target);
+				this.add('cant', this.effectState.target, 'ability: Damp', effect, `[of] ${target}`);
 				return false;
 			}
 			if (this.field.isTerrain('corrosivemistterrain')) {
@@ -1183,7 +1182,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					['shockdrive', 'motordrive'],
 					['burndrive', 'flashfire'],
 					['chilldrive', 'iceabsorb'],
-				])
+				]);
 				if (pokemon.hasItem(['dousedrive', 'chilldrive', 'shockdrive', 'burndrive']) && pokemon.baseSpecies.id === 'genesect') {
 					this.boost({ spa: 1, atk: 1 });
 					pokemon.setAbility(mapItemtoAbility.get(pokemon.item) ?? pokemon.ability);
@@ -1213,8 +1212,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Dragon\'s Maw boost');
 				if (this.field.isTerrain('dragonsdenterrain')) {
 					return this.chainModify(2);
-				}
-				else {
+				} else {
 					return this.chainModify(1.5);
 				}
 			}
@@ -1282,8 +1280,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('corrosivemistterrain')) {
 					if (pokemon.types.includes("Poison")) {
 						this.heal(pokemon.baseMaxhp / 8);
-					}
-					else if (!pokemon.types.includes("Steel")) {
+					} else if (!pokemon.types.includes("Steel")) {
 						this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
 					}
 				}
@@ -1292,7 +1289,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				if (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison')) {
 					this.heal(pokemon.baseMaxhp / 8);
-
 				}
 			}
 		},
@@ -1342,7 +1338,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if (this.field.isTerrain('caveterrain') || this.field.isTerrain('desertterrain')) {
-				this.add('-message', pokemon + ' swallowed the rocks!');
+				this.add('-message', `${pokemon} swallowed the rocks!`);
 				this.heal(pokemon.baseMaxhp / 16, pokemon);
 			}
 		},
@@ -1363,8 +1359,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					} else if (r > 42 && r < 60) {
 						source.setStatus('psn', target);
 					}
-				}
-				else {
+				} else {
 					if (r < 11) {
 						source.setStatus('slp', target);
 					} else if (r < 21) {
@@ -1474,8 +1469,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('fairytaleterrain')) {
 					this.debug('Eternal Flower double boost');
 					return this.chainModify(2);
-				}
-				else {
+				} else {
 					this.debug('Eternal Flower boost');
 					return this.chainModify(1.5);
 				}
@@ -1487,8 +1481,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('fairytaleterrain')) {
 					this.debug('Eternal Flower double boost');
 					return this.chainModify(2);
-				}
-				else {
+				} else {
 					this.debug('Eternal Flower boost');
 					return this.chainModify(1.5);
 				}
@@ -1713,24 +1706,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
-				case 'sunnyday':
-				case 'desolateland':
-					if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
-					break;
-				case 'raindance':
-				case 'primordialsea':
-					if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
-					break;
-				case 'hail':
-				case 'snow':
-					if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
-					break;
-				case 'sandstorm':
-					if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
-					break;
-				default:
-					if (pokemon.species.id !== 'castform') forme = 'Castform';
-					break;
+			case 'sunnyday':
+			case 'desolateland':
+				if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
+				break;
+			case 'hail':
+			case 'snow':
+				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
+				break;
+			case 'sandstorm':
+				if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
+				break;
+			default:
+				if (pokemon.species.id !== 'castform') forme = 'Castform';
+				break;
 			}
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme, this.effect, false, '[msg]');
@@ -1763,7 +1756,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (!warnMoves.length) return;
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
-			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, '[of] ' + warnTarget);
+			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, `[of] ${warnTarget}`);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.chainModify(0.8);
@@ -1883,8 +1876,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let modifier = 1.2;
 			if (this.field.isTerrain('shortcircuitterrain')) {
 				modifier = 2;
-			}
-			else if (this.field.isTerrain(['factoryterrain', 'electricterrain'])) {
+			} else if (this.field.isTerrain(['factoryterrain', 'electricterrain'])) {
 				modifier = 1.5;
 			}
 			if (move.typeChangerBoosted === this.effect)
@@ -1925,11 +1917,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-ability', target, 'Gooey');
 				if (this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('swampterrain')) {
 					this.boost({ spe: -2 }, source, target, null, true);
-				}
-				else if (this.field.isTerrain('wastelandterrain')) {
+				} else if (this.field.isTerrain('wastelandterrain')) {
 					target.setStatus('psn', source);
-				}
-				else {
+				} else {
 					this.boost({ spe: -1 }, source, target, null, true);
 				}
 			}
@@ -2057,8 +2047,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', source), -6, 6);
 						this.damage(source.baseMaxhp / 4 * typeMod, source, target);
 					}
-				}
-				else {
+				} else {
 					this.damage(source.baseMaxhp / 4, source, target);
 				}
 				if (target.species.id === 'cramorantgulping') {
@@ -2075,8 +2064,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				let forme = '';
 				if (source.hp <= source.maxhp / 2 || this.field.isTerrain('electricterrains') || this.field.isTerrain('factoryterrain')) {
 					forme = 'cramorantgorging';
-				}
-				else if (source.hp > source.maxhp / 2 || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('swampterrain')) {
+				} else if (source.hp > source.maxhp / 2 || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('swampterrain')) {
 					forme = 'cramorantgulping';
 				}
 				source.formeChange(forme, effect);
@@ -2180,7 +2168,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('factoryterrain')) {
 				this.boost({ def: 1, spe: -1 }, pokemon);
-				this.add('-message', pokemon.name + '\'s heavy body is sturdy and unmoving!')
+				this.add('-message', pokemon.name + '\'s heavy body is sturdy and unmoving!');
 			}
 		},
 		onModifyWeight(weighthg) {
@@ -2270,7 +2258,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Hydra Bond",
 		rating: 4.5,
-		num: 10000
+		num: 10000,
 	},
 	hydration: {
 		onResidualOrder: 5,
@@ -2356,7 +2344,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!target) return;
 			if ((move.category !== 'Physical' || this.field.isTerrain('coldeclipseterrain')) || target.species.id !== 'eiscue') return;
 			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
-			if (!target.runImmunity(move.types !== undefined ? move.types : move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -2428,7 +2416,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (this.field.isTerrain('starlightarenaterrain')) {
 				this.boost({ spa: 2 }, pokemon, pokemon);
-				this.add('-message', pokemon.name + '\'s Illuminate flared up with starlight!')
+				this.add('-message', pokemon.name + '\'s Illuminate flared up with starlight!');
 				if (this.activePerHalf !== 1) {
 					this.add('-message', pokemon.name + '\'s dazzling shine put a spotlight on its partner!');
 					pokemon.adjacentAllies()[0].addVolatile('spotlight');
@@ -2667,8 +2655,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move && this.movehasType(move, 'Dark')) {
 				if (this.field.isTerrain('holyterrain')) {
 					this.boost({ atk: 2 });
-				}
-				else {
+				} else {
 					this.boost({ atk: 1 });
 				}
 			}
@@ -2769,7 +2756,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('factoryterrain')) {
 				this.boost({ spe: 1 }, pokemon);
-				this.add('-message', pokemon.name + '\'s light body made it nimble')
+				this.add('-message', pokemon.name + '\'s light body made it nimble');
 			}
 		},
 		onModifyWeight(weighthg) {
@@ -2834,7 +2821,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (boost.spe && boost.spe < 0) {
 				delete boost.spe;
 				if (!(effect as ActiveMove).secondaries) {
-					this.add("-fail", target, "unboost", "speed", "[from] ability: Limber", "[of] " + target);
+					this.add("-fail", target, "unboost", "speed", "[from] ability: Limber", `[of] ${target}`);
 				}
 			}
 		},
@@ -2860,14 +2847,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	liquidooze: {
 		onSourceTryHeal(damage, target, source, effect) {
-			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			this.debug(`Heal is occurring: ${target} <- ${source} :: ${effect.id}`);
 			const canOoze = ['drain', 'leechseed', 'strengthsap'];
 			if (canOoze.includes(effect.id)) {
 				if (this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain')) {
 					this.damage(damage * 2);
-
-				}
-				else {
+				} else {
 					this.damage(damage);
 				}
 				return 0;
@@ -2883,9 +2868,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyType(move, pokemon) {
 			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
 				if (this.field.isTerrain('icyterrain')) {
-					move.type = 'Ice'
-				}
-				else {
+					move.type = 'Ice';
+				} else {
 					move.type = 'Water';
 				}
 			}
@@ -2899,7 +2883,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('grassyterrain')) {
 				if (move.accuracy !== true) {
-					move.accuracy = move.accuracy * 0.9;
+					move.accuracy *= 0.9;
 				}
 			}
 			delete move.flags['contact'];
@@ -2931,7 +2915,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, target, source);
+			this.actions.useMove(newMove, target, { target: source });
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 1 }, source);
 			}
@@ -2992,7 +2976,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Magician', '[of] ' + target);
+				this.add('-item', source, yourItem, '[from] ability: Magician', `[of]  + ${target}`);
 			}
 		},
 		flags: {},
@@ -3142,18 +3126,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				['starlightarenaterrain', 'Dark'],
 				['inverseterrain', 'Normal'],
 				['hauntedterrain', 'Ghost'],
-				['bewitchedwoodsterrain', 'Fairy']
+				['bewitchedwoodsterrain', 'Fairy'],
 			]);
 			if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				newType = counter[this.CrystalCavernCounter];
-			}
-			else if (this.field.isTerrain('newworldterrain')) {
+			} else if (this.field.isTerrain('newworldterrain')) {
 				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
 				newType = this.sample(types);
-			}
-			else {
-				let possibleType = terrainTypeMap.get(this.field.getTerrain().id);
+			} else {
+				const possibleType = terrainTypeMap.get(this.field.getTerrain().id);
 				newType = possibleType !== undefined ? possibleType : newType;
 			}
 			const oldTypes = pokemon.getTypes();
@@ -3200,10 +3182,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpA(spa, pokemon, target, move) {
 			let modifier = 1;
 			if (this.field.isTerrain('electrictterrain')) {
-					modifier * 1.5;
+				modifier *= 1.5;
 			}
 			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
-				modifier * 1.5;
+				modifier *= 1.5;
 			}
 			return this.chainModify(modifier);
 		},
@@ -3232,7 +3214,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const dazzlingHolder = this.effectState.target;
 				if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 					this.attrLastMove('[still]');
-					this.add('cant', dazzlingHolder, 'ability: Mirror Armor', move, '[of] ' + target);
+					this.add('cant', dazzlingHolder, 'ability: Mirror Armor', move, `[of] ${target}`);
 					return false;
 				}
 			}
@@ -3394,9 +3376,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.ignoreAbility = true;
 			}
 		},
-		onResidual(pokemon){
-			if(this.field.isTerrain('swampterrain')){
-				this.boost({spd: 1, def: 1});
+		onResidual(pokemon) {
+			if (this.field.isTerrain('swampterrain')) {
+				this.boost({ spd: 1, def: 1 });
 			}
 		},
 		flags: {},
@@ -3961,10 +3943,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpA(spa, pokemon, target, move) {
 			let modifier = 1;
 			if (this.field.isTerrain('electrictterrain')) {
-				modifier * 1.5;
+				modifier *= 1.5;
 			}
 			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
-				modifier * 1.5;
+				modifier *= 1.5;
 			}
 			return this.chainModify(modifier);
 		},
@@ -4534,7 +4516,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			let modifier = 1;
 			if (this.field.isTerrain('chessboardterrain')) {
-				modifier *= 1.2
+				modifier *= 1.2;
 			}
 			if (move.recoil || move.hasCrashDamage) {
 				this.debug('Reckless boost');
@@ -4663,8 +4645,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('rockyterrain')) {
 					this.debug('Rocky Payload double boost');
 					return this.chainModify(2);
-				}
-				else {
+				} else {
 					this.debug('Rocky Payload boost');
 					return this.chainModify(1.5);
 				}
@@ -4676,8 +4657,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('rockyterrain')) {
 					this.debug('Rocky Payload double boost');
 					return this.chainModify(2);
-				}
-				else {
+				} else {
 					this.debug('Rocky Payload boost');
 					return this.chainModify(1.5);
 				}
@@ -4742,8 +4722,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('sandstorm');
 			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
-				for (const foes of target.side.pokemon) {
-					this.boost({ accuracy: -1 }, target, source);
+				for (const foe of target.side.pokemon) {
+					this.boost({ accuracy: -1 }, foe, source);
 					this.add('-ability', target, 'Sand Spit');
 				}
 			}
@@ -4933,7 +4913,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('hauntedterrain')) {
 				for (const target of pokemon.foes()) {
 					if (target.item) {
-						this.add('-item', target, target.getItem().name, '[from] ability: Shadow Tag', '[of] ' + pokemon, '[identify]');
+						this.add('-item', target, target.getItem().name, '[from] ability: Shadow Tag', `[of] ${target}`, '[identify]');
 					}
 				}
 			}
@@ -5157,8 +5137,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onResidual(pokemon) {
 				if (this.field.isTerrain('electricterrain')) {
-					pokemon.volatiles['slowstart']?.duration--;
-					if (pokemon.volatiles['slowstart'].duration == 0) {
+					if (pokemon.volatiles['slowstart']?.duration) {
+						pokemon.volatiles['slowstart'].duration--;
+					}
+					if (pokemon.volatiles['slowstart'].duration === 0) {
 						delete pokemon.volatiles['slowstart'];
 						this.add('-end', pokemon, 'Slow Start');
 					}
@@ -5265,8 +5247,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyFaint() {
 			if (this.field.isTerrain('mistyterrain')) {
 				this.boost({ spa: 1, spd: 2 }, this.effectState.target);
-			}
-			else {
+			} else {
 				this.boost({ spa: 1, spd: 1 }, this.effectState.target);
 			}
 		},
@@ -5373,8 +5354,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')) {
 					if (targetForme === 'Aegislash') {
 						this.boost({ def: 1, atk: -1 });
-					}
-					else {
+					} else {
 						this.boost({ def: -1, atk: 1 });
 					}
 				}
@@ -5445,8 +5425,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Steelworker boost');
 				if (this.field.isTerrain('factoryterrain')) {
 					return this.chainModify(2);
-				}
-				else {
+				} else {
 					return this.chainModify(1.5);
 				}
 			}
@@ -5499,7 +5478,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						volatileStatus: 'flinch',
 					});
 				}
-
 			}
 		},
 		flags: {},
@@ -5531,7 +5509,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			let seeds = ['elementalseed', 'magicseed', 'telluricseed', 'syntheticseed'];
+			const seeds = ['elementalseed', 'magicseed', 'telluricseed', 'syntheticseed'];
 			if (!this.movehasType(move, 'Water') || move.flags['pledgecombo'] || (seeds.includes(move.sourceEffect) && target === source)) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
@@ -5769,7 +5747,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!move.ruinedAtk) move.ruinedAtk = abilityHolder;
 			if (move.ruinedAtk !== abilityHolder) return;
 			this.debug('Tablets of Ruin Atk drop');
-			if(this.field.isTerrain('newworldterrain'))
+			if (this.field.isTerrain('newworldterrain'))
 				return this.chainModify(0.66);
 			else
 				return this.chainModify(0.75);
@@ -5815,10 +5793,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			let minimum = 60;
 			if (this.field.isTerrain('factoryterrain')) {
-				minimum = 80
+				minimum = 80;
 			}
 			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
-			this.debug('Base Power: ' + basePowerAfterMultiplier);
+			this.debug(`basePower: ${basePowerAfterMultiplier}`);
 			if (basePowerAfterMultiplier <= minimum) {
 				this.debug('Technician boost');
 				return this.chainModify(1.5);
@@ -5864,7 +5842,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!target || target.baseSpecies.name !== 'Terapagos-Terastal') return;
 			if (this.effectState.resisted) return -1; // all hits of multi-hit move should be not very effective
 			if (move.category === 'Status') return;
-			if (!target.runImmunity(move.types !== undefined ? move.types : move.type)) return; // immunity has priority
+			if (!target.runImmunity(move)) return; // immunity has priority
 			if (target.hp < target.maxhp) return;
 
 			this.add('-activate', target, 'ability: Tera Shell');
@@ -6384,9 +6362,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
 				if (target.isAlly(source)) {
-					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
+					this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
 				} else {
-					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', '[of] ' + source);
+					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
 				}
 				target.setAbility(sourceAbility);
 			}
@@ -6621,7 +6599,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.isWeather('deltastream')){
+			if (this.field.isWeather('deltastream')) {
 				this.boost({ atk: 1 });
 			}
 		},
@@ -6682,9 +6660,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || ((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('snowymountainterrain')  || this.field.isTerrain('icyterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || ((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('icyterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
 				pokemon.addVolatile('zenmode');
-			} else if ((pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) && !((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id === 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') && !((this.field.isTerrain('snowymountainterrain')  || this.field.isTerrain('icyterrain')) && pokemon.species.id === 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')){
+			} else if ((pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) && !((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id === 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') && !((this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('icyterrain')) && pokemon.species.id === 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
