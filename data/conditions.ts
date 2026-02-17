@@ -75,7 +75,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
 				if (pokemon.hasAbility('earlybird')) {
-					pokemon.heal(pokemon.baseMaxhp/4, pokemon);
+					pokemon.heal(pokemon.baseMaxhp / 4, pokemon);
 				}
 				return;
 			}
@@ -101,7 +101,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyMove(move, pokemon) {
 			if (move.flags['defrost']) {
-				this.add('-curestatus', pokemon, 'frz', '[from] move: ' + move);
+				this.add('-curestatus', pokemon, 'frz', `[from] move: ${move}`);
 				pokemon.clearStatus();
 			}
 		},
@@ -115,9 +115,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				target.cureStatus();
 			}
 		},
-		onResidual(pokemon){
+		onResidual(pokemon) {
 			this.damage(pokemon.baseMaxhp / 16);
-		}
+		},
 	},
 	psn: {
 		name: 'psn',
@@ -229,7 +229,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return this.random(5, 7);
 		},
 		onStart(pokemon, source, effect) {
-			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, '[of] ' + source);
+			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('hauntedterrain')) && effect.id === 'firespin') {
 				this.effectState.boundDivisor = 6;
@@ -259,12 +259,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
 			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
 			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns && !gmaxEffect)) {
-				if (pokemon != source) {
+				if (pokemon !== source) {
 					delete pokemon.volatiles['partiallytrapped'];
 					this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
 					return;
-				}
-				else {
+				} else {
 					return;
 				}
 			}
@@ -523,23 +522,21 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			if (this.field.terrainState.Tchanges?.get('sunnyday') == 1) {
+			if (this.field.terrainState.Tchanges?.get('sunnyday') === 1) {
 				if (this.field.isTerrain('rainbowterrain')) {
 					this.field.terrainState.duration = this.field.weatherState.duration;
-				}
-				else {
+				} else {
 					this.field.setTerrain('rainbowterrain', source, effect);
 				}
 				this.field.terrainState.Tchanges?.set('sunnyday', 0);
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'RainDance');
 			}
 			this.field.terrainState.Tchanges?.set('raindance', 1);
-
 		},
 		onFieldEnd() {
 			this.field.terrainState.Tchanges?.set('raindance', 0);
@@ -609,18 +606,17 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onFieldStart(battle, source, effect) {
-			if (this.field.terrainState.Tchanges?.get('raindance') == 1) {
+			if (this.field.terrainState.Tchanges?.get('raindance') === 1) {
 				if (this.field.isTerrain('rainbowterrain')) {
 					this.field.terrainState.duration = this.field.weatherState.duration;
-				}
-				else {
+				} else {
 					this.field.setTerrain('rainbowterrain', source, effect);
 					this.field.terrainState.Tchanges?.set('raindance', 0);
 				}
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'SunnyDay');
 			}
@@ -735,13 +731,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (pokemon.hasType('Ice') && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);
-				}
-				else {
+				} else {
 					return this.modify(def, 1.5);
 				}
 			}
 		},
-		onModifyMove(move){
+		onModifyMove(move) {
 			if (move.secondaries) {
 				this.debug('doubling frostbite chance');
 				for (const secondary of move.secondaries) {
@@ -752,7 +747,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Hail', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'Hail', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'Hail');
 			}
@@ -944,7 +939,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('newworldterrain') && pokemon.ability === 'multitype') {
 				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
-				const new_type = this.sample(types)
+				const new_type = this.sample(types);
 				pokemon.setType(new_type, true);
 				this.add('-start', pokemon, 'typechange', new_type);
 			}
@@ -954,10 +949,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'multitype') {
 				if (this.field.isTerrain('newworldterrain')) {
-					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
-					type = this.sample(types);
-				}
-				else {
+					const existingTypes = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
+					type = this.sample(existingTypes);
+				} else {
 					type = pokemon.getItem().onPlate;
 				}
 				if (!type) {
@@ -969,7 +963,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onResidual(pokemon) {
 			if (this.field.isTerrain('newworldterrain')) {
 				const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
-				const new_type = this.sample(types)
+				const new_type = this.sample(types);
 				pokemon.setType(new_type, true);
 				this.add('-start', pokemon, 'typechange', new_type);
 			}
@@ -983,14 +977,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				if (this.field.isTerrain('glitchterrain')) {
 					pokemon.setType('???', true);
 					this.add('-start', pokemon, 'typechange', '???');
-				}
-				else if (this.field.isTerrain('holyterrain')) {
+				} else if (this.field.isTerrain('holyterrain')) {
 					pokemon.setType('Dark', true);
 					this.add('-start', pokemon, 'typechange', 'Dark');
-				}
-				else if (this.field.isTerrain('newworldterrain')) {
+				} else if (this.field.isTerrain('newworldterrain')) {
 					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
-					const new_type = this.sample(types)
+					const new_type = this.sample(types);
 					pokemon.setType(new_type, true);
 					this.add('-start', pokemon, 'typechange', new_type);
 				}
@@ -1012,21 +1004,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				if (this.field.isTerrain('glitchterrain') && pokemon.types[0] !== '???') {
 					pokemon.setType('???', true);
 					this.add('-start', pokemon, 'typechange', '???');
-				}
-				else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem' && pokemon.getItem().onMemory !== undefined) {
+				} else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem' && pokemon.getItem().onMemory !== undefined) {
 					pokemon.setType(pokemon.getItem().onMemory!, true);
 					if (pokemon.getItem().onMemory !== pokemon.getTypes()[0] && pokemon.getTypes().length === 1) {
 						this.add('-start', pokemon, 'typechange', pokemon.getItem().onMemory);
 					}
-				}
-				else if (this.field.isTerrain('newworldterrain')) {
+				} else if (this.field.isTerrain('newworldterrain')) {
 					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
-					const new_type = this.sample(types)
+					const new_type = this.sample(types);
 					pokemon.setType(new_type, true);
 					this.add('-start', pokemon, 'typechange', new_type);
 				}
 			}
-		}
+		},
 	},
 	rolloutstorage: {
 		name: 'rolloutstorage',

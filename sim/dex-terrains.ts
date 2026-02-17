@@ -1,5 +1,5 @@
-import {EventMethods} from "./dex-conditions";
-import {BasicEffect, toID} from './dex-data';
+import { type ConditionData, type EventMethods } from "./dex-conditions";
+import { BasicEffect, toID } from './dex-data';
 
 export class DataTerrain extends BasicEffect implements Readonly<BasicEffect> {
 	readonly condition: ConditionData;
@@ -24,7 +24,7 @@ export class DexTerrains {
 		this.dex = dex;
 	}
 
-	get(name: string | Terrain): Terrain {
+	get(name?: string | Terrain): Terrain {
 		if (name && typeof name !== 'string') return name;
 
 		name = (name || '').trim();
@@ -35,8 +35,8 @@ export class DexTerrains {
 	getByID(id: ID): Terrain {
 		let terrain = this.terrainCache.get(id);
 		if (terrain) return terrain;
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			terrain = this.get(this.dex.data.Aliases[id]);
+		if (this.dex.getAlias(id)) {
+			terrain = this.get(this.dex.getAlias(id));
 			if (terrain.exists) {
 				this.terrainCache.set(id, terrain);
 			}
@@ -44,11 +44,11 @@ export class DexTerrains {
 		}
 		if (id && this.dex.data.Terrains.hasOwnProperty(id)) {
 			const terrainData = this.dex.data.Terrains[id] as any;
-			//const terrainTextData = this.dex.getDescs('Terrains', id, terrainData);
+			// const terrainTextData = this.dex.getDescs('Terrains', id, terrainData);
 			terrain = new DataTerrain({
 				name: id,
 				...terrainData,
-				//...terrainTextData,
+				// ...terrainTextData,
 			});
 		} else {
 			terrain = new DataTerrain({

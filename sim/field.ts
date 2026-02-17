@@ -29,8 +29,9 @@ export class Field {
 		this.weather = '';
 		this.weatherState = this.battle.initEffectState({ id: '' });
 		this.terrain = '';
-		this.terrainState = { id: '', Tchanges:  new Map<string, number>(), prevterrain: '' };
+		this.terrainState = this.battle.initEffectState({ id: '', Tchanges: new Map<string, number>(), prevterrain: '' });
 		this.pseudoWeather = {};
+		this.terrainStack = [];
 	}
 
 	toJSON(): AnyObject {
@@ -99,18 +100,17 @@ export class Field {
 		if (this.weather === status.id) {
 			return false;
 		}
-		const prevWeather = this.weather;
+		// const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
-		this.weatherState = {
+		this.weatherState = this.battle.initEffectState({
 			id: status.id,
-			terrain_type: this.weatherState.terrain_type,
 			origin: sourceEffect,
-			duration: prevWeatherState.duration,
 			turn: this.battle.turn,
-			prevterrain: prevWeatherState.id,
-		};
-		this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)
+			prevWeather: prevWeatherState.id,
+			duration: prevWeatherState.duration,
+		});
+		this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect);
 		this.battle.add('-fieldstart', status.name);
 		this.battle.eachEvent('WeatherChange', sourceEffect);
 	}
@@ -157,13 +157,13 @@ export class Field {
 	startTerrain(status: string | Effect) {
 		status = this.battle.dex.conditions.get(status);
 		this.terrain = status.id;
-		this.terrainState = {
+		this.terrainState = this.battle.initEffectState({
 			id: status.id,
 			terrain_type: "Base",
 			Tchanges: new Map<string, number>(),
-			duration: 9999,
 			turn: this.battle.turn,
-		};
+			duration: 9999,
+		});
 		this.terrainStack.unshift(this.terrainState);
 		this.battle.singleEvent('FieldStart', status, this.terrainState, this);
 		this.battle.eachEvent('TerrainChange');
@@ -172,7 +172,7 @@ export class Field {
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
@@ -192,15 +192,15 @@ export class Field {
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
-		this.terrainState = {
+		this.terrainState = this.battle.initEffectState({
 			id: status.id,
 			terrain_type: new_terrain_type,
 			source,
 			sourceSlot: source.getSlot(),
 			Tchanges: new Map<string, number>(),
-			duration: status.duration,
 			turn: this.battle.turn,
-		};
+			duration: status.duration,
+		});
 		if (status.durationCallback) {
 			this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
@@ -225,7 +225,7 @@ export class Field {
 		}
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
-		this.terrainState = {
+		this.terrainState = this.battle.initEffectState({
 			id: status.id,
 			Tchanges: new Map<string, number>(),
 			terrain_type: prevTerrainState.terrain_type,
@@ -233,7 +233,7 @@ export class Field {
 			duration: prevTerrainState.duration,
 			turn: this.battle.turn,
 			prevterrain: prevTerrainState.id,
-		};
+		});
 		if (this.terrainState.isBase) {
 			this.terrainStack[0] = this.terrainState;
 		} else {
@@ -262,37 +262,38 @@ export class Field {
 			while (this.terrainStack.length > 0 && this.terrainStack[0]?.terrain_type === 'Base' && this.terrainStack[0].id === this.battle.format.terrain) {
 				this.terrainStack.shift();
 			}
-		} else if(power == 'terraform'){
+		} else if (power === 'terraform') {
 			const user_terrains = ['mistyterrain', 'corrosivemistterrain', 'corrosiveterrain', 'psychicterrain', 'grassyterrain', 'burningterrain', 'snowyterrain', 'inverseterrain', 'glitchterrain', 'rainbowterrain', 'swampterrain'];
-			if(user_terrains.includes(this.terrain)){
+			if (user_terrains.includes(this.terrain)) {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 				while (this.terrainStack.length > 0 && user_terrains.includes(this.terrainStack[0].id)) {
 					this.terrainStack.shift();
-				} 
+				}
 			}
 		} else {
 			const prevTerrain = this.getTerrain();
 			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 			this.terrainStack.shift();
 			for (const terrainState of this.terrainStack) {
-				if (terrainState.duration <= (this.battle.turn - this.terrainState.turn + 1)) {
-					this.terrainStack.shift();
-				}
-				else {
-					this.terrainStack[0].duration -= (this.battle.turn - this.terrainState.turn);
-					break;
+				if (terrainState.duration && this.terrainStack[0].duration) {
+					if (terrainState?.duration <= (this.battle.turn - this.terrainState.turn + 1)) {
+						this.terrainStack.shift();
+					} else {
+						this.terrainStack[0].duration -= (this.battle.turn - this.terrainState.turn);
+						break;
+					}
 				}
 			}
 		}
 		if (this.terrainStack.length !== 0) {
-			this.terrain = this.terrainStack[0].id;
+			this.terrain = this.terrainStack[0].id as ID;
 			this.terrainState = this.terrainStack[0];
 			const current_terrain = this.battle.dex.conditions.get(this.terrain);
 			this.battle.add('-fieldstart', current_terrain.name);
 		} else {
 			this.terrain = '';
-			this.terrainState = { id: '' };
+			this.terrainState = this.battle.initEffectState({ id: '' });
 		}
 		this.battle.eachEvent('TerrainChange');
 		return true;

@@ -269,7 +269,7 @@ export class Battle {
 		for (let i = 0; i < this.activePerHalf * 2; i++) {
 			this.speedOrder.push(i);
 		}
-		
+
 		this.ShortCircuitCounter = 0;
 		this.CrystalCavernCounter = 0;
 
@@ -318,7 +318,7 @@ export class Battle {
 		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
 		for (const side of sides) {
 			if (options[side]) {
-				this.setPlayer(side, options[side]!);
+				this.setPlayer(side, options[side]);
 			}
 		}
 		if (this.format.name.includes('randomterrain')) {
@@ -2453,11 +2453,9 @@ export class Battle {
 		if (source.hasAbility(strikerabilities)) {
 			if (boost >= 7) {
 				boost = 5;
-			}
-			else if (boost > 0 && boost < 4) {
+			} else if (boost > 0 && boost < 4) {
 				boost = 1;
-			}
-			else if (boost >= 4 && boost < 7) {
+			} else if (boost >= 4 && boost < 7) {
 				boost -= 2;
 			}
 			for (let i = 0; i < abilityodds[boost].length; i++) {
@@ -3067,20 +3065,20 @@ export class Battle {
 		if (this.turn === 0 && this.format.terrain) {
 			if (this.format.terrain === 'adriennterrain') {
 				this.field.startTerrain('mistyterrain');
-				this.field.terrainStack.push({id: 'fairytaleterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
+				this.field.terrainStack.push(this.initEffectState({ id: 'fairytaleterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 			} else if (this.format.terrain === 'corrosivemistterrain') {
 				this.field.startTerrain('corrosivemistterrain');
-				this.field.terrainStack.push({id: 'corrosiveterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
+				this.field.terrainStack.push(this.initEffectState({ id: 'corrosiveterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 			} else if (this.format.terrain === 'randomterrain') {
 				if (this.RandomTerrain !== "") {
 					this.field.startTerrain(this.RandomTerrain);
 					const lower_terrain = this.dex.conditions.get(this.RandomTerrain);
-					this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
+					this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 				}
 			} else {
 				this.field.startTerrain(this.format.terrain);
 				const lower_terrain = this.dex.conditions.get(this.format.terrain);
-				this.field.terrainStack.push({id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn});
+				this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 			}
 		}
 		let action;
@@ -3504,7 +3502,7 @@ export class Battle {
 		(this as any).log = [];
 	}
 
-	movehasType(move: ActiveMove, searchTypes: string | string[]) : boolean {
+	movehasType(move: ActiveMove, searchTypes: string | string[]): boolean {
 		const types = move.types !== undefined ? move.types : [move.type];
 		if (Array.isArray(searchTypes)) {
 			for (const type of searchTypes) {
@@ -3513,8 +3511,7 @@ export class Battle {
 				}
 			}
 			return false;
-		}
-		else {
+		} else {
 			return types.includes(searchTypes);
 		}
 	}

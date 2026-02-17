@@ -1,4 +1,6 @@
-export const FormatsData: {[k: string]: SpeciesFormatsData} = {
+import { type SpeciesFormatsData } from "../sim/dex-species";
+
+export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	bulbasaur: {
 		tier: "LC",
 	},

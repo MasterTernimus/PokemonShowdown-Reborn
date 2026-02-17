@@ -37,7 +37,7 @@ import { Ability, DexAbilities } from './dex-abilities';
 import { Species, DexSpecies } from './dex-species';
 import { Format, DexFormats } from './dex-formats';
 import { Utils } from '../lib/utils';
-import {DataTerrain, DexTerrains} from './dex-terrains';
+import { DataTerrain, DexTerrains } from './dex-terrains';
 
 const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
@@ -50,7 +50,7 @@ type DataType =
 	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart' | 'PokemonGoData' | 'Terrains';
 const DATA_TYPES: DataType[] = [
 	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
-	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData', 'Terrains'
+	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData', 'Terrains',
 ];
 
 const DATA_FILES = {
@@ -92,7 +92,6 @@ interface TextTableData {
 	Abilities: DexTable<AbilityText>;
 	Items: DexTable<ItemText>;
 	Moves: DexTable<MoveText>;
-	Terrains: DexTable<TerrainText>;
 	Pokedex: DexTable<PokedexText>;
 	Default: DexTable<DefaultText>;
 }
@@ -255,10 +254,10 @@ export class ModdedDex {
 
 	getEffectiveness(
 		source: { type: string } | string | string[],
-		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
 	): number {
 		const sourceTypes: string[] = (Array.isArray(source) ? source : (typeof source === 'string' ? [source] : [source.type]));
-		// @ts-ignore
+		// @ts-expect-error
 		const targetTyping: string[] = target.getTypes?.() || target.types || (typeof (target) === 'string' ? [target] : target);
 		let totalTypeMod = 0;
 		for (const sourceType of sourceTypes) {
@@ -505,7 +504,6 @@ export class ModdedDex {
 		dexes['base'].textCache = {
 			Pokedex: this.loadTextFile('pokedex', 'PokedexText') as DexTable<PokedexText>,
 			Moves: this.loadTextFile('moves', 'MovesText') as DexTable<MoveText>,
-			Terrains: this.loadTextFile('terrains', 'TerrainsText') as DexTable<TerrainText>,
 			Abilities: this.loadTextFile('abilities', 'AbilitiesText') as DexTable<AbilityText>,
 			Items: this.loadTextFile('items', 'ItemsText') as DexTable<ItemText>,
 			Default: this.loadTextFile('default', 'DefaultText') as DexTable<DefaultText>,

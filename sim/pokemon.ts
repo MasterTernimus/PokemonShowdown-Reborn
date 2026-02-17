@@ -2201,8 +2201,8 @@ export class Pokemon {
 	/** false = immune, true = not immune */
 	runImmunity(source: ActiveMove | string, message?: string | boolean) {
 		if (!source) return true;
-		const types: Array<string> = typeof source !== 'string' ? (source.types !== undefined ? [...source.types] : [source.type]) : [source];
-		for(const type of types){
+		const types: string[] = typeof source !== 'string' ? (source.types !== undefined ? [...source.types] : [source.type]) : [source];
+		for (const type of types) {
 			if (typeof source !== 'string') {
 				if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
 					return true;

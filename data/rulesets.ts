@@ -56,6 +56,56 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	assignroles: {
+		effectType: 'Rule',
+		name: 'Assign Roles',
+		desc: "Assign chess roles to pokemon",
+		onBattleStart(this) {
+			const sides = this.sides;
+			for (const side of sides) {
+				if (this.gameType === 'singles') {
+					side.pokemon[0].Role = 'Pawn';
+				} else if (this.gameType === 'doubles') {
+					side.pokemon[0].Role = 'Pawn';
+					side.pokemon[1].Role = 'Pawn';
+				}
+				side.pokemon[side.pokemon.length - 1].Role = 'Queen';
+				const new_pokemon = side.pokemon.filter(newpokemon => !newpokemon.Role);
+				let king = null;
+				let min = 9999;
+				for (const pokemon of new_pokemon) {
+					if (min > pokemon.baseMaxhp) {
+						min = pokemon.baseMaxhp;
+						king = pokemon;
+					}
+					if (pokemon.item === 'kingsrock') {
+						pokemon.Role = 'King';
+						king = null;
+						min = 0;
+						continue;
+					}
+					if (!pokemon.Role) {
+						switch (pokemon.getBestStat()) {
+						case "atk":
+						case "spa":
+							pokemon.Role = 'Bishop';
+							break;
+						case "def":
+						case "spd":
+							pokemon.Role = 'Rook';
+							break;
+						case "spe":
+							pokemon.Role = 'Knight';
+							break;
+						}
+					}
+				}
+				if (king != null) {
+					king.Role = 'King';
+				}
+			}
+		},
+	},
 	limitonerestricted: {
 		effectType: 'ValidatorRule',
 		name: 'Limit One Restricted',
@@ -1400,11 +1450,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						pokemon.status
-						if (darkvoid && pokemon.isActive && pokemon.statusState.source.moveThisTurn === 'darkvoid' && pokemon.statusState.source ===  source && pokemon.statusState.startTime === pokemon.statusState.time) {
+						pokemon.status;
+						if (darkvoid && pokemon.isActive && pokemon.statusState.source.moveThisTurn === 'darkvoid' && pokemon.statusState.source === source && pokemon.statusState.startTime === pokemon.statusState.time) {
 							darkvoid = false;
-						}
-						else if(!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)){
+						} else if (!pokemon.statusState.source?.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
 							this.hint("Sleep Clause Mod prevents players from putting more than one of their opponent's Pokémon to sleep at a time");
 							return false;
