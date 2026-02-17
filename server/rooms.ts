@@ -1472,17 +1472,23 @@ export class GlobalRoomState {
 		}
 		this.formatList = `|formats${Ladders.formatsListPrefix || ''}`;
 		let section = '';
+		let subsection = '';
 		let prevSection = '';
+		let prevSubsection = '';
 		let curColumn = 1;
 		for (const format of Dex.formats.all()) {
 			if (format.section) section = format.section;
+			if (format.subsection) subsection = format.subsection;
 			if (format.column) curColumn = format.column;
 			if (!format.name) continue;
 			if (!format.challengeShow && !format.searchShow && !format.tournamentShow) continue;
-
 			if (section !== prevSection) {
 				prevSection = section;
 				this.formatList += `|,${curColumn}|${section}`;
+			}
+			if (subsection !== prevSubsection) {
+				prevSubsection = subsection;
+				this.formatList += `|,${curColumn}.|${subsection}`;
 			}
 			this.formatList += `|${format.name}`;
 			let displayCode = 0;

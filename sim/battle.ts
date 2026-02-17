@@ -321,7 +321,7 @@ export class Battle {
 				this.setPlayer(side, options[side]);
 			}
 		}
-		if (this.format.name.includes('randomterrain')) {
+		if (this.format.terrain === 'randomterrain') {
 			const all_terrains: string[] = [
 				"ashenbeachterrain",
 				"bigtopterrain",

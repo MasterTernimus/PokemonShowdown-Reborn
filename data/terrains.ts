@@ -2712,13 +2712,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.clearWeather();
 				}
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Underwater Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
+					this.add('-fieldstart', 'Underwater Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
 				} else {
-					this.add('-fieldstart', 'move: Underwater Terrain');
+					this.add('-fieldstart', 'Underwater Terrain');
 				}
 			},
 			onFieldEnd() {
-				this.add('-fieldend', 'Move: Underwater Terrain');
+				this.add('-fieldend', 'Underwater Terrain');
 			},
 		},
 	},
