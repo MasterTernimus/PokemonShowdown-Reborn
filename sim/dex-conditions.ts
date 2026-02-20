@@ -608,6 +608,7 @@ export interface FieldEventMethods extends EventMethods {
 	onFieldStart?: (this: Battle, target: Field, source: Pokemon, sourceEffect: Effect) => void;
 	onFieldRestart?: (this: Battle, target: Field, source: Pokemon, sourceEffect: Effect) => void;
 	onFieldResidual?: (this: Battle, target: Field, source: Pokemon, effect: Effect) => void;
+	onTryTerrain?: (this: Battle, target: Field) => boolean;
 	onFieldEnd?: (this: Battle, target: Field) => void;
 	onFieldResidualOrder?: number;
 	onFieldResidualPriority?: number;

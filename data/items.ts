@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/max-len */
 export const Items: import('../sim/dex-items').ItemDataTable = {
 	abilityshield: {
 		name: "Ability Shield",
@@ -498,7 +499,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTryHeal(damage, target, source, effect) {
 			const heals = ['drain', 'leechseed', 'ingrain', 'aquaring', 'strengthsap'];
 			if (heals.includes(effect.id)) {
-				return this.chainModify([5324, 4096]);
+				if (this.field.isTerrain('grassyterrain')) {
+					return this.chainModify(1.6);
+				} else {
+					return this.chainModify(1.3);
+				}
 			}
 		},
 		num: 296,
@@ -1851,8 +1856,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('burningterrain')) {
 				this.boost({ atk: 1, spa: 1, spe: 1 });
-				pokemon.addVolatile('partiallytrapped');
-				pokemon.volatiles['partiallytrapped'].duration = 4;
+				this.actions.useMove('firespin', pokemon, { target: pokemon });
 			}
 			if (this.field.isTerrain('corrosivemistterrain')) {
 				this.boost({ atk: 1, spa: 1 });
