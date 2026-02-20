@@ -3786,13 +3786,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyDamage(damage, source, target, move) {
-			if (target !== source && this.movehasType('Poison') && this.field.isTerrain('mistyterrain')) {
+			if (target !== source && this.movehasType(move, 'Poison') && this.field.isTerrain('mistyterrain')) {
 				this.debug('Pastel Veil weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onAllyModifyDamage(damage, source, target, move) {
-			if (target !== source && this.movehasType('Poison') && this.field.isTerrain('mistyterrain')) {
+			if (target !== source && this.movehasType(move, 'Poison') && this.field.isTerrain('mistyterrain')) {
 				this.debug('Pastel Veil weaken');
 				return this.chainModify(0.5);
 			}
