@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/max-len */
 import { type TerrainData } from "../sim/dex-terrains";
 
 export const Terrains: { [k: string]: TerrainData } = {
@@ -227,22 +228,25 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return 4;
 			},
 			onModifyMove(move) {
-				const fireMoves = ['smackdown', 'thousandarrows', 'clearsmog', 'smog'];
+				const fireMoves = ['rockslide', 'smackdown', 'thousandarrows', 'clearsmog', 'smog'];
 				if (fireMoves.includes(move.id)) {
 					move.types = [move.type, 'Fire'];
 				}
 			},
+			onSetStatus(status) {
+				if (status.id === 'frz') {
+					return false;
+				}
+			},
 			onBasePower(basePower, source, target, move) {
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike'];
-				const rockfireMoves = ['smackdown', 'thousandarrows'];
+				const rockfireMoves = ['rockslide', 'smackdown', 'thousandarrows'];
 				const smogfireMoves = ['smog', 'clearsmog'];
 				let modifier = 1;
-				if (rockfireMoves.includes(move.id))
-					modifier *= 2;
-				if (smogfireMoves.includes(move.id)) {
+				if (move.type === 'Fire' && source.isGrounded()) {
 					modifier *= 1.5;
 				}
-				if (move.type === 'Fire' && source.isGrounded()) {
+				if (move.id === 'infernalparade') {
 					modifier *= 1.5;
 				}
 				if (move.type === 'Grass' && target.isGrounded()) {
@@ -251,8 +255,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.type === 'Ice') {
 					modifier *= 0.5;
 				}
+				if (rockfireMoves.includes(move.id)) {
+					modifier *= 2;
+				}
+				if (smogfireMoves.includes(move.id)) {
+					modifier *= 1.5;
+				}
 				if (terrainEndMoves.includes(move.id)) {
-					modifier *= 5325 / 4096;
+					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
 			},
@@ -272,7 +282,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (!(immune.includes(pokemon.ability) || pokemon.volatiles['aquaring'] || pokemon.hasType('Fire')) && pokemon.isGrounded()) {
 					const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', pokemon.types), -6, 6);
 					const damage = this.clampIntRange(pokemon.baseMaxhp / 8 * 2 ** typeMod, 1);
-					if (weak.includes(pokemon.ability)) {
+					if (weak.includes(pokemon.ability) || pokemon.volatiles['tarshot']) {
 						this.damage(damage * 2, pokemon);
 					} else {
 						this.damage(damage, pokemon);
@@ -281,6 +291,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (pokemon.moveThisTurn === 'burnup') {
 					pokemon.setType(pokemon.getTypes(true).map(type => type === "???" ? "Fire" : type));
 					this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), 'from Burning Terrain');
+				}
+				if (this.field.isWeather('hail')) {
+					this.field.clearWeather();
 				}
 			},
 			onFieldResidual() {
@@ -294,6 +307,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Burning Terrain');
+				if (this.field.isWeather('hail')) {
+					this.field.clearWeather();
+				}
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Burning Terrain');

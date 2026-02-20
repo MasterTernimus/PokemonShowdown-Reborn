@@ -169,6 +169,20 @@ export class Field {
 		this.battle.eachEvent('TerrainChange');
 	}
 
+	canSetTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		status = this.battle.dex.conditions.get(status);
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
+		if (source === 'debug') source = this.battle.sides[0].active[0];
+		if (!source) throw new Error(`setting terrain without a source`);
+		if (this.terrain === status.id) return false;
+		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain') || this.isTerrain('dragonsterrain')) {
+			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
+			return false;
+		}
+		return true;
+	}
+
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -178,6 +192,10 @@ export class Field {
 		if (this.terrain === status.id) return false;
 		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain') || this.isTerrain('dragonsterrain')) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
+			return false;
+		}
+		if (status.id === 'mistyterrain' && this.terrain === 'corrosivemistterrain') {
+			this.battle.add('-message', 'The additional mist also became toxic!');
 			return false;
 		}
 		let new_terrain_type = "";

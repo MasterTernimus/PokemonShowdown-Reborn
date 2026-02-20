@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/max-len */
 /**
  * Simulator Battle
  * Pokemon Showdown - http://pokemonshowdown.com/

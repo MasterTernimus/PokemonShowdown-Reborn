@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/max-len */
 /*
 
 Ratings and how they work:
@@ -367,7 +368,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('electricterrain')) {
 					return this.chainModify(1.5);
 				}
-				return this.chainModify([5325, 4096]);
+				return this.chainModify(1.3);
 			}
 		},
 		flags: {},
@@ -494,7 +495,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	bigpecks: {
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
-			if (boost.def && boost.def < 0) {
+			if (boost.def && boost.def < 0 || boost.spd && boost.spd < 0) {
 				delete boost.def;
 				if (!(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
 					this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", `[of] ${target}`);
@@ -1274,7 +1275,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if (!this.field.isWeather('raindance') || !this.field.isWeather('sunnyday')) {
-				if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('swampterrain')) {
+				if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('swampterrain') || this.field.isTerrain('mistyterrain')) {
 					this.heal(pokemon.baseMaxhp / 16);
 				}
 				if (this.field.isTerrain('corrosivemistterrain')) {
@@ -2584,7 +2585,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePower(basePower, source, target, move) {
 			if (target === source || move.category === 'Status' || !this.movehasType(move, 'Dark')) return;
-			return this.chainModify([5448, 4096]);
+			return this.chainModify(1.3);
 		},
 		flags: { breakable: 1 },
 		name: "Insomnia",
@@ -3048,7 +3049,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	marvelscale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
-			if (pokemon.status || this.field.isTerrain('mistyterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('dragonsdenterrain') || this.field.isTerrain('starlightarenaterrain')) {
+			if (pokemon.status || this.field.isTerrain(['mistyterrain', 'fairytaleterrain', 'dragonsdenterrain', 'starlightarenaterrain'])) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -3092,41 +3093,41 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTerrainChange(pokemon) {
 			let newType = 'Normal';
 			const terrainTypeMap = new Map<string, string>([
-				['electricterrain', 'Electric'],
-				['shortcircuitterrain', 'Electric'],
-				['grassyterrain', 'Grass'],
-				['forestterrain', 'Grass'],
-				['mistyterrain', 'Fairy'],
-				['fairytaleterrain', 'Fairy'],
-				['psychicterrain', 'Psychic'],
+				['ashenbeachterrain', 'Ground'],
+				['bewitchedwoodsterrain', 'Fairy'],
+				['bigtopterrain', 'Normal'],
+				['burningterrain', 'Fire'],
+				['caveterrain', 'Rock'],
 				['chessboardterrain', 'Psychic'],
 				['corrosivemistterrain', 'Poison'],
 				['corrosiveterrain', 'Poison'],
-				['burningterrain', 'Fire'],
-				['superheatedterrain', 'Fire'],
-				['swampterrain', 'Water'],
-				['watersurfaceterrain', 'Water'],
-				['underwaterterrain', 'Water'],
-				['murkwatersurfaceterrain', 'Poison'],
-				['rainbowterrain', 'Dragon'],
-				['icyterrain', 'Ice'],
-				['glitchterrain', '???'],
-				['rockyterrain', 'Rock'],
-				['caveterrain', 'Rock'],
-				['mountainterrain', 'Rock'],
-				['desertterrain', 'Ground'],
-				['ashenbeachterrain', 'Ground'],
-				['factoryterrain', 'Steel'],
-				['mirrorarenaterrain', 'Steel'],
 				['darkcrystalcavernterrain', 'Dark'],
-				['bigtopterrain', 'Normal'],
+				['desertterrain', 'Ground'],
 				['dragonsdenterrain', 'Dragon'],
+				['electricterrain', 'Electric'],
+				['factoryterrain', 'Steel'],
+				['fairytaleterrain', 'Fairy'],
+				['forestterrain', 'Grass'],
+				['glitchterrain', '???'],
+				['grassyterrain', 'Grass'],
+				['hauntedterrain', 'Ghost'],
 				['holyterrain', 'Normal'],
+				['icyterrain', 'Ice'],
+				['inverseterrain', 'Normal'],
+				['mirrorarenaterrain', 'Steel'],
+				['mistyterrain', 'Fairy'],
+				['mountainterrain', 'Rock'],
+				['murkwatersurfaceterrain', 'Poison'],
+				['psychicterrain', 'Psychic'],
+				['rainbowterrain', 'Dragon'],
+				['rockyterrain', 'Rock'],
+				['shortcircuitterrain', 'Electric'],
 				['snowymountainterrain', 'Ice'],
 				['starlightarenaterrain', 'Dark'],
-				['inverseterrain', 'Normal'],
-				['hauntedterrain', 'Ghost'],
-				['bewitchedwoodsterrain', 'Fairy'],
+				['superheatedterrain', 'Fire'],
+				['swampterrain', 'Water'],
+				['underwaterterrain', 'Water'],
+				['watersurfaceterrain', 'Water'],
 			]);
 			if (this.field.isTerrain('crystalcavernterrain')) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
@@ -3185,13 +3186,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				modifier *= 1.5;
 			}
 			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
-				modifier *= 1.5;
+				modifier *= 1.3;
 			}
 			return this.chainModify(modifier);
 		},
 		onModifyAtk(atk, pokemon, target, move) {
 			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 		},
 		flags: {},
@@ -3784,16 +3785,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ spd: 1 });
 			}
 		},
-		onSourceModifyAtkPriority: 6,
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move && this.movehasType(move, 'Poison') && (this.field.isTerrain('mistyterrain') || this.field.isTerrain('rainbowterrain'))) {
+		onModifyDamage(damage, source, target, move) {
+			if (target !== source && this.movehasType('Poison') && this.field.isTerrain('mistyterrain')) {
 				this.debug('Pastel Veil weaken');
 				return this.chainModify(0.5);
 			}
 		},
-		onSourceModifySpAPriority: 5,
-		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move && this.movehasType(move, 'Poison') && (this.field.isTerrain('mistyterrain') || this.field.isTerrain('rainbowterrain'))) {
+		onAllyModifyDamage(damage, source, target, move) {
+			if (target !== source && this.movehasType('Poison') && this.field.isTerrain('mistyterrain')) {
 				this.debug('Pastel Veil weaken');
 				return this.chainModify(0.5);
 			}
@@ -3946,13 +3945,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				modifier *= 1.5;
 			}
 			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
-				modifier *= 1.5;
+				modifier *= 1.3;
 			}
 			return this.chainModify(modifier);
 		},
 		onModifyAtk(atk, pokemon, target, move) {
 			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 		},
 		flags: {},
@@ -5621,7 +5620,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	surgesurfer: {
 		onModifySpe(spe) {
-			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('shortcircuitterrain')) {
+			if (this.field.isTerrain(['electricterrain', 'watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain', 'shortcircuitterrain'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -5761,6 +5760,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('bigtopterrain')) {
 				this.boost({ evasion: 1 }, pokemon);
+			}
+		},
+		onModifyCritRatio(critRatio, source) {
+			if (source.volatiles['confusion']) {
+				this.debug('Tangled Feet - decreasing accuracy');
+				return critRatio + 1;
 			}
 		},
 		onModifyAccuracyPriority: -1,
@@ -6058,7 +6063,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 36,
 	},
 	transistor: {
-		onModifyAtkPriority: 5,
+		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move && this.movehasType(move, 'Ground')) {
 				this.debug('Transistor weaken');
@@ -6072,6 +6077,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(0.5);
 			}
 		},
+		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			let boost = 1.3;
 			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
@@ -6312,14 +6318,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if ((move && this.movehasType(move, 'Fighting'))) {
 				this.debug('Vital Spirit boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if ((move && this.movehasType(move, 'Fighting'))) {
 				this.debug('Vital Spirit boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 		},
 		flags: { breakable: 1 },

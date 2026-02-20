@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/max-len */
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	brn: {
 		name: 'brn',
@@ -231,25 +232,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(pokemon, source, effect) {
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
-			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('hauntedterrain')) && effect.id === 'firespin') {
-				this.effectState.boundDivisor = 6;
-			}
-			if ((this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) && effect.id === 'whirlpool') {
-				this.effectState.boundDivisor = 6;
-			}
-			if (this.field.isTerrain('desertterrain') && effect.id === 'sandtomb') {
-				this.effectState.boundDivisor = 6;
-			}
-			if (this.field.isTerrain('dragonsdenterrain') && effect.id === 'magmastorm') {
-				this.effectState.boundDivisor = 6;
-			}
-			if (this.field.isTerrain('forestterrain') && effect.id === 'infestation') {
-				this.effectState.boundDivisor = 6;
-			}
-			if (this.field.isTerrain('electricterrain') && effect.id === 'thundercage') {
-				this.effectState.boundDivisor = 6;
-			}
-			if (this.field.isTerrain('grassyterrain') && effect.id === 'snaptrap') {
+			const moveBoosts: Record<string, readonly string[]> = {
+				firespin: ['burningterrain', 'hauntedterrain'],
+				whirlpool: ['watersurfaceterrain', 'underwaterterrain'],
+				sandtomb: ['desertterrain'],
+				magmastorm: ['dragonsdenterrain'],
+				infestation: ['forestterrain'],
+				thundercage: ['electricterrain'],
+				snaptrap: ['grassyterrain'],
+			};
+
+			const terrains = moveBoosts[effect.id];
+
+			if (terrains?.some(t => this.field.isTerrain(t))) {
 				this.effectState.boundDivisor = 6;
 			}
 		},
@@ -304,6 +299,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onEnd(target) {
 			if (this.effectState.trueDuration > 1) return;
+			if (this.field.isTerrain('burningterrain')) return;
 			target.addVolatile('confusion');
 		},
 		onLockMove(pokemon) {
