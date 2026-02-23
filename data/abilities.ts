@@ -84,7 +84,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp && this.checkMoveMakesContact(move, source, target, true)) {
-				if (this.field.terrain === 'corrosivemistterrain') {
+				if (this.field.isTerrain('corrosivemistterrain')) {
 					this.damage(source.baseMaxhp / 2, source, target);
 				} else {
 					this.damage(source.baseMaxhp / 4, source, target);
@@ -405,12 +405,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	battlebond: {
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType !== 'Move') return;
-			if (source.abilityState.battleBondTriggered) return;
-			if ((source.species.id === 'greninjabond' || source.species.id === 'greninja') && source.hp && !source.transformed && source.side.foePokemonLeft()) {
-				this.boost({ atk: 1, spa: 1, spe: 1 }, source, source, this.effect);
+			if (source.bondTriggered) return;
+			if (effect?.effectType !== 'Move') {
+				return;
+			}
+			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
-				source.abilityState.battleBondTriggered = true;
+				source.formeChange('Greninja-Ash', this.effect, true);
+				source.formeRegression = true;
+				source.bondTriggered = true;
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
@@ -794,8 +797,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				},
 			];
 		},
-		onBasePower() {
-			if (this.field.terrain === 'corrosivemistterrain' || this.field.terrain === 'corrosiveterrain')
+		onDamage() {
+			if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain'))
 				this.chainModify(1.5);
 		},
 		onSourceAfterSetStatus(status, target) {
@@ -1279,16 +1282,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.heal(pokemon.baseMaxhp / 16);
 				}
 				if (this.field.isTerrain('corrosivemistterrain')) {
-					if (pokemon.types.includes("Poison")) {
+					if (pokemon.hasType("Poison")) {
 						this.heal(pokemon.baseMaxhp / 8);
-					} else if (!pokemon.types.includes("Steel")) {
+					} else if (!pokemon.hasType("Steel")) {
 						this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
 					}
 				}
 				if (this.field.isTerrain('desertterrain')) {
 					this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
 				}
-				if (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison')) {
+				if (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.hasType('Poison')) {
 					this.heal(pokemon.baseMaxhp / 8);
 				}
 			}
@@ -1990,7 +1993,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.5);
 		},
 		onResidual(pokemon) {
-			if (this.field.terrain === 'corrosiveterrain') {
+			if (this.field.isTerrain('corrosiveterrain')) {
 				if (!(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
 					this.damage(pokemon.baseMaxhp / 8, pokemon);
 				}
@@ -2739,12 +2742,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	libero: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.libero) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.libero = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
 		},
@@ -3493,6 +3494,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
+			if (this.field.isTerrain('corrosiveterrain')) {
+				this.field.terrainState.Tchanges?.set('neutralizinggas', 1);
+			}
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			for (const target of this.getAllActive()) {
 				if (target.hasItem('Ability Shield')) {
@@ -3517,6 +3521,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(source) {
 			if (source.transformed) return;
+			if (this.field.isTerrain('corrosiveterrain')) {
+				this.field.terrainState.Tchanges?.delete('neutralizinggas');
+			}
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon !== source && pokemon.hasAbility('Neutralizing Gas')) {
 					return;
@@ -3968,7 +3975,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if ((this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('wastelandterrain')) && pokemon.isGrounded() || this.field.isTerrain('murkwatersurfaceterrain')) {
+			if ((this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('wastelandterrain')) && pokemon.isGrounded() || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
 				this.heal(pokemon.baseMaxhp / 8, pokemon);
 			}
 		},
@@ -4180,12 +4187,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	protean: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.protean) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
@@ -6354,7 +6359,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wanderingspirit: {
 		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('hauntedterrain') || this.field.isTerrain('desertterrain')) {
+			if (this.field.isTerrain('hauntedterrain')) {
 				this.boost({ spe: -1 }, pokemon);
 			}
 		},
