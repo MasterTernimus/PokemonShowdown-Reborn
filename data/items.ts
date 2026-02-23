@@ -6397,30 +6397,37 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('forestterrain')) {
 				pokemon.addVolatile('spikyshield', null, item);
+				return;
 			}
 			if (this.field.isTerrain('ashenbeachterrain')) {
 				pokemon.addVolatile('focusenergy', null, item);
+				return;
 			}
 			if (this.field.isTerrain('wastelandterrain')) {
 				this.boost({ atk: 1, spa: 1 }, pokemon, null, item);
 				for (const side of this.sides) {
 					side.addSideCondition('stealthrock');
+					return;
 				}
 			}
 			if (this.field.isTerrain('caveterrain')) {
 				this.boost({ def: 2 }, pokemon, null, item);
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * 2 ** typeMod / 4, pokemon, null, item);
+				return;
 			}
 			if (this.field.isTerrain('superheatedterrain')) {
 				this.boost({ def: 1 }, pokemon, pokemon, item);
 				pokemon.addVolatile('shelltrap', pokemon, item);
+				return;
 			}
 			if (this.field.isTerrain('mountainterrain')) {
 				this.boost({ atk: 2, accuracy: -1 }, pokemon, pokemon, item);
+				return;
 			}
 			if (this.field.isTerrain('snowymountainterrain')) {
 				this.boost({ spa: 2, accuracy: -1 }, pokemon, pokemon, item);
+				return;
 			}
 		},
 		onTerrainChange(pokemon) {

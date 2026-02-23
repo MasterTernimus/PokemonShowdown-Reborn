@@ -5,6 +5,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	ashenbeachterrain: {
 		name: "Ashen Beach Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onAccuracy(accuracy, target, source, move) {
@@ -64,6 +65,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	bewitchedwoodsterrain: {
 		name: "Bewitched Woods Terrain",
 		condition: {
+			effectType: "Terrain",
 			onEffectiveness(typeMod, target, type, move) {
 				const types = move.types !== undefined ? move.types : [move.type];
 				if (type === 'Steel' && types.includes('Fairy')) {
@@ -143,6 +145,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	bigtopterrain: {
 		name: "Big Top Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onTryMove(source, target, move) {
@@ -219,6 +222,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	burningterrain: {
 		name: "Burning Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
@@ -319,6 +323,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	caveterrain: {
 		name: "Cave Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onNegateImmunity(pokemon, type) {
 				if (!pokemon.isGrounded() && type === 'Ground') return false;
@@ -413,6 +418,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	chessboardterrain: {
 		name: "Chess Board Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onSwitchIn(pokemon) {
 				if (pokemon.Role === 'Pawn') {
@@ -525,6 +531,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	coldeclipseterrain: {
 		name: "Cold Eclipse Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			durationCallback(target, source, effect) {
 				if (effect && effect?.id === 'snowscape') {
@@ -723,10 +730,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 	corrosivemistterrain: {
 		name: "Corrosive Mist Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
-				const poisonedMoves = ['bubblebeam', 'bubble', 'sparklingaria', 'energyball'];
+				const poisonedMoves = ['appleacid', 'bubblebeam', 'bubble', 'sparklingaria', 'energyball'];
 				if (move.type === 'Flying' && move.category === 'Special') {
 					move.types = ['Flying', 'Poison'];
 				}
@@ -736,7 +744,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const poisonedMoves = ['bubblebeam', 'bubble', 'sparklingaria'];
+				const poisonedMoves = ['appleacid', 'bubble', 'bubblebeam', 'sparklingaria'];
 				const smogMoves = ['smog', 'clearsmog', 'acidspray'];
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'seedflare'];
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
@@ -748,7 +756,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (smogMoves.includes(move.id))
 					modifier *= 1.5;
 				if (terrainEndMoves.includes(move.id) || igniteMoves.includes(move.id))
-					modifier *= 5325 / 4096;
+					modifier *= 1.3;
+				if (move.id === 'seedflare')
+					modifier *= 1.3;
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
@@ -778,10 +788,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (terrainEndMoves.includes(move.id)) {
 					this.field.clearTerrain();
 				}
+				if (move.id === 'seedflare')
+					this.field.changeTerrain('mistyterrain');
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldResidual() {
+				if (this.field.terrainState.Tchanges?.get('neutralizinggas') === 1) return;
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.trySetStatus('psn')) {
 						this.damage(this.runEvent('Damage', pokemon, null, this.dex.conditions.get('psn'), pokemon.baseMaxhp / 8), pokemon);
@@ -800,10 +813,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 	corrosiveterrain: {
 		name: "Corrosive Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
-				const poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows'];
+				const powderMoves = ['poisonpowder', 'stunspore', 'sleeppowder', 'toxic'];
+				if (powderMoves.includes(move.id)) {
+					move.accuracy = 100;
+				}
+				const poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows', 'appleacid'];
 				if (move.type === 'Grass') {
 					move.types = [move.type, 'Poison'];
 				}
@@ -821,8 +839,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const superStrong = ['acid', 'acidspray', 'grassknot'];
-				const poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows'];
+				const superStrong = ['acid', 'acidspray', 'grassknot', 'snaptrap'];
+				const poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows', 'appleacid'];
 				if (superStrong.includes(move.id)) {
 					modifier *= 2;
 				}
@@ -860,6 +878,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	crystalcavernterrain: {
 		name: "Crystal Cavern Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onModifyMove(move) {
 				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
@@ -957,6 +976,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	darkcrystalcavernterrain: {
 		name: "Dark Crystal Cavern Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onModifyDefPriority: 10,
 			onModifyDef(def, pokemon) {
@@ -1024,21 +1044,38 @@ export const Terrains: { [k: string]: TerrainData } = {
 	desertterrain: {
 		name: "Desert Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
+			onTryMove(source, target, move) {
+				const evaporated = ['soak', 'aquaring', 'lifedew'];
+				if (evaporated.includes(move.id)) {
+					this.debug('Desert suppress');
+					this.add('-fail', source, move, '[from] Desert Terrain');
+					this.add('-message', 'the desert is too dry...');
+					this.attrLastMove('[still]');
+					return null;
+				}
+			},
 			onTryHit(target, source, move) {
-				if (target !== source && (move.types !== undefined ? move.types : [move.type]).includes('Water') && (target.hasType(['Water', 'Grass']))) {
+				if (target !== source && this.movehasType(move, 'Water') && (target.hasType(['Water', 'Grass']))) {
 					if (!this.heal(target.baseMaxhp / 4)) {
 						this.add('-immune', move.id, 'instead restored' + target.name + '\'s HP!');
 					}
-					return null;
+					return false;
+				}
+			},
+			onModifySpD(spd, pokemon) {
+				if (pokemon.hasType('Ground')) {
+					return this.chainModify(1.5);
 				}
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const sandified = ['burnup', 'dig', 'heatwave', 'needlearm', 'pinmissile', 'sandtomb', 'solarbeam', 'solarblade', 'thousandwaves', 'searingsunrazesmash'];
+				const sandified = ['burnup', 'dig', 'needlearm', 'heatwave', 'pinmissile', 'sandtomb', 'sandsearstorm', 'scald', 'scorchingsands', 'searingsunrazesmash', 'solarbeam', 'solarblade', 'steameruption', 'thousandwaves', 'hydrosteam'];
+				const steamMoves = ['steameruption', 'scald', 'hydrosteam'];
 				const boneBoost = ['bonemerang', 'boneclub', 'bonerush', 'shadowbone'];
-				if (move.type === 'Water' && source.isGrounded()) {
+				if (move.type === 'Water' && source.isGrounded() && !steamMoves.includes(move.id)) {
 					this.add('-message', 'The intense desert heat blunted the attack!');
 					modifier *= 0.5;
 				}
@@ -1057,7 +1094,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onResidual(pokemon) {
-				if (pokemon.hasType(['Water', 'Grass']) && !(pokemon.hasAbility('chlorophyll') || pokemon.hasAbility('solarpower')) && this.field.isWeather(['sunnyday', 'desolateland'])) {
+				if (pokemon.hasType(['Water', 'Grass']) && !(pokemon.hasAbility(['chlorophyll', 'solarpower'])) && this.field.isWeather(['sunnyday', 'desolateland'])) {
 					this.damage(pokemon.baseMaxhp / 8);
 					this.add('-message', pokemon.name + " was hurt by the sunlight!");
 				}
@@ -1073,6 +1110,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	dragonsdenterrain: {
 		name: "Dragon's Den Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onModifyDef(def, pokemon) {
 				if (pokemon.hasType('Dragon')) {
@@ -1166,6 +1204,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	factoryterrain: {
 		name: "Factory Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
@@ -1205,6 +1244,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	fairytaleterrain: {
 		name: "Fairy Tale Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
@@ -1262,6 +1302,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	forestterrain: {
 		name: "Forest Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
@@ -1274,7 +1315,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const boosted = ['attackorder', 'electroweb', 'drumbeating', 'skittersmack', 'pounce'];
-				const cutMoves: string[] = ["aircutter", "airslash", "breakingswipe", "furycutter", "psychocut", "slash"];
+				const cutMoves = ["aircutter", "airslash", "breakingswipe", "furycutter", "psychocut", "slash"];
 				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'trickortreat'];
 				const nerfed = ['muddywater', 'surf'];
 				if (move.type === 'Grass') {
@@ -1324,6 +1365,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (hauntedMoves.includes(move.id)) {
 					this.field.changeTerrain('bewitchedwoodsterrain');
+					return;
 				}
 				if (swampMoves.includes(move.id)) {
 					const marshCounter = move.id === 'muddywater' ? 2 : 1;
@@ -1334,6 +1376,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					} else {
 						this.add('-message', 'The ground became waterlogged...');
 					}
+					return;
 				}
 			},
 			onFieldStart() {
@@ -1347,6 +1390,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	glitchterrain: {
 		name: "Glitch Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
@@ -1433,6 +1477,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	hauntedterrain: {
 		name: "Haunted Terrain",
 		condition: {
+			effectType: "Terrain",
 			onNegateImmunity(pokemon, type) {
 				if (pokemon.hasType('Normal') && type === 'Ghost') return false;
 			},
@@ -1496,6 +1541,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	holyterrain: {
 		name: "Holy Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onModifyMove(move) {
 				if (!move.ignoreImmunity) move.ignoreImmunity = {};
@@ -1570,6 +1616,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	icyterrain: {
 		name: "Icy Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyDef(def, pokemon) {
@@ -1650,6 +1697,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	inverseterrain: {
 		name: "Inverse Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			durationCallback(target, source, effect) {
 				if (effect?.id.includes("topsy")) {
@@ -1686,6 +1734,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	mirrorarenaterrain: {
 		name: "Mirror Arena Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onSwitchIn(pokemon) {
@@ -1785,6 +1834,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	mountainterrain: {
 		name: "Mountain Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
@@ -1856,6 +1906,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	murkwatersurfaceterrain: {
 		name: "Murkwater Surface Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
@@ -1952,6 +2003,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	newworldterrain: {
 		name: "New World Terrain",
 		condition: {
+			effectType: "Terrain",
 			onModifySpe(spe, pokemon) {
 				if (pokemon.isGrounded() && !pokemon.hasAbility('limber')) {
 					return this.chainModify(0.75);
@@ -2021,10 +2073,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 	rainbowterrain: {
 		name: "Rainbow Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(target, source, effect) {
-				console.log(effect);
 				if (effect?.id.includes("pledge")) {
 					if (source.hasItem('amplifieldrock'))
 						return 7;
@@ -2081,6 +2133,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	rockyterrain: {
 		name: "Rocky Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			durationCallback(target, source, effect) {
 				if (effect?.id === 'splinteredstormshards') {
@@ -2147,6 +2200,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	shortcircuitterrain: {
 		name: "Short-Circuit Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
@@ -2207,6 +2261,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	snowymountainterrain: {
 		name: "Snowy Mountain Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onModifyMove(move) {
 				if (move.type === 'Rock') {
@@ -2284,6 +2339,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	snowyterrain: {
 		name: "Snowy Terrain",
 		condition: {
+			effectType: "Terrain",
 			onModifySpe(spe, pokemon) {
 				const immuneAbiltiy = ['slushrush', 'icebody', 'snowcloak', 'limber'];
 				if (!(pokemon.hasType('Ice') || immuneAbiltiy.includes(pokemon.ability)) && pokemon.isGrounded()) {
@@ -2364,6 +2420,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	starlightarenaterrain: {
 		name: "Starlight Arena Terrain",
 		condition: {
+			effectType: "Terrain",
 			onModifyMove(move) {
 				if (move.type === 'Dark') {
 					move.types = ['Dark', 'Fairy'];
@@ -2419,6 +2476,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	superheatedterrain: {
 		name: "Super-Heated Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
@@ -2489,6 +2547,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	swampterrain: {
 		name: "Swamp Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			durationCallback(source, effect) {
@@ -2527,7 +2586,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const strengthenedMoves = ['thousandarrows', 'smackdown', 'brine', 'gunkshot', 'mudbomb', 'mudshot', 'mudslap', 'muddywater', 'sludgewave', 'surf', 'hydrovortex'];
+				const strengthenedMoves = ['thousandarrows', 'smackdown', 'brine', 'gunkshot', 'hydrovortex', 'mudbarrage', 'mudbomb', 'mudshot', 'mudslap', 'muddywater', 'savagespinout', 'sludgewave'];
 				const weakenedMoves = ['bulldoze', 'earthquake', 'magnitude'];
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				if (move.type === 'Poison' && target.isGrounded()) {
@@ -2632,6 +2691,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	underwaterterrain: {
 		name: "Underwater Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
@@ -2741,6 +2801,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	wastelandterrain: {
 		name: "Wasteland Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
@@ -2821,6 +2882,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	watersurfaceterrain: {
 		name: "Water Surface Terrain",
 		condition: {
+			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
