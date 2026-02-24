@@ -1209,11 +1209,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge', 'risingvoltage'];
-				const uberboost = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb', 'doubleironbash'];
-				const boost = ['steamroller', 'technoblast', 'doubleironbash'];
+				const quakemoves = ['bulldoze', 'fissure', 'earthquake', 'explosion', 'magnitude', 'selfdestruct', 'tectonicrage', 'lightthatburnsthesky', 'aurawheel', 'discharge', 'gigavolthavoc', 'iondeluge', 'overdrive'];
+				const uberboost = ['doubleironbash', 'flashcannon', 'geargrind', 'gyroball', 'magnetbomb'];
+				const boost = ['steamroller', 'technoblast'];
 				if (move.type === 'Electric') {
-					modifier *= 1.5;
+					modifier *= 1.2;
 				}
 				if (uberboost.includes(move.id)) {
 					this.add('-message', 'ATTACK SEQUENCE INITIATE.');
@@ -1223,12 +1223,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.5;
 				}
 				if (quakemoves.includes(move.id)) {
-					modifier *= 5325 / 4096;
+					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const quakemoves = ['bulldoze', 'earthquake', 'explosion', 'fissure', 'magnitude', 'selfdestruct', 'lightthatburnsthesky', 'tectonicrage', 'discharge', 'risingvoltage'];
+				const quakemoves = ['bulldoze', 'fissure', 'earthquake', 'explosion', 'magnitude', 'selfdestruct', 'tectonicrage', 'lightthatburnsthesky', 'aurawheel', 'discharge', 'gigavolthavoc', 'iondeluge', 'overdrive'];
 				if (quakemoves.includes(move.id)) {
 					this.field.changeTerrain('shortcircuitterrain');
 				}
@@ -2208,16 +2208,19 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (electrified.includes(move.id)) {
 					move.types = [move.type, 'Electric'];
 				}
+				if (move.id === 'zapcannon') {
+					move.accuracy = 80;
+				}
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const multiplier = [0.8, 1.5, 0.5, 4915 / 4096, 2.0];
+				const multiplier = [0.8, 1.5, 0.5, 1.2, 2.0];
 				const text = ['Bzzt', 'Bzzapp!', 'Bzt...', 'Bzap!', 'BZZZAPP!'];
-				const electrified = ['flashcannon', 'geargrind', 'gyroball', 'magnetbomb', 'muddywater', 'surf'];
+				const electrified = ['geargrind', 'gyroball', 'hydrovortex', 'magnetbomb', 'muddywater', 'surf', 'flashcannon'];
 				const boosted = ['dazzlinggleam', 'hydrovortex', 'infernalparade'];
-				const shadow = ['darkpulse', 'nightdaze', 'nightslash', 'shadowball', 'shadowbone', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak'];
+				const shadow = ['darkpulse', 'nightdaze', 'nightslash', 'phantomforce', 'shadowball', 'shadowbone', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak'];
 				const nerfed = ['lightthatburnsthesky'];
-				const fieldchange = ['chargebeam', 'discharge', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage'];
+				const fieldchange = ['aurawheel', 'chargebeam', 'discharge', 'gigavolthavoc', 'iondeluge', 'overdrive', 'paraboliccharge', 'wildcharge', 'risingvoltage'];
 				if (move.id === 'steelbeam') {
 					modifier *= 1.666666;
 				}
@@ -2228,7 +2231,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.5;
 				}
 				if (shadow.includes(move.id)) {
-					modifier *= 5325 / 4096;
+					modifier *= 1.3;
 				}
 				if (nerfed.includes(move.id)) {
 					modifier *= 0.5;
@@ -2245,7 +2248,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const fieldchange = ['discharge', 'chargebeam', 'iondeluge', 'paraboliccharge', 'wildcharge', 'gigavolthavoc', 'risingvoltage'];
+				const fieldchange = ['aurawheel', 'chargebeam', 'discharge', 'gigavolthavoc', 'iondeluge', 'overdrive', 'paraboliccharge', 'wildcharge', 'risingvoltage'];
 				if (fieldchange.includes(move.id)) {
 					this.field.changeTerrain('factoryterrain');
 				}
@@ -2808,6 +2811,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const poisoned = ['mudbomb', 'mudshot', 'mudslap'];
 				if (poisoned.includes(move.id)) {
 					move.types = [move.type, 'Poison'];
+				}
+			},
+			onSetStatus(status, target, source, effect) {
+				const modified = ['octazooka', 'aciddownpour', 'sludgebomb', 'sludge', 'sludgewave', 'corrosion'];
+				const immune = ['immunity', 'toxicboost', 'poisonheal'];
+				if ((modified.includes(effect.id) || source.hasAbility(modified)) && (target.hasAbility(immune) || target.hasType(['Steel', 'Poison']))) {
+					return false;
 				}
 			},
 			onBasePower(basePower, source, pokemon, move) {

@@ -778,24 +778,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Corrosion",
 		onModifyMove(move) {
-			move.secondaries = [
-				{
-					chance: 2.5,
-					status: 'frz',
-				},
-				{
-					chance: 2.5,
-					status: 'brn',
-				},
-				{
-					chance: 2.5,
-					status: 'par',
-				},
-				{
-					chance: 2.5,
-					status: 'psn',
-				},
-			];
+			if (this.field.isTerrain('wastelandterrain')) {
+				move.secondaries = [
+					{
+						chance: 2.5,
+						status: 'frz',
+					},
+					{
+						chance: 2.5,
+						status: 'brn',
+					},
+					{
+						chance: 2.5,
+						status: 'par',
+					},
+					{
+						chance: 2.5,
+						status: 'psn',
+					},
+				];
+			}
 		},
 		onDamage() {
 			if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain'))
@@ -1191,6 +1193,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ spa: 1, atk: 1 });
 					pokemon.setAbility(mapItemtoAbility.get(pokemon.item) ?? pokemon.ability);
 				}
+				this.boost({ spa: 1, atk: 1 });
+				return;
+			}
+			if (this.field.isTerrain('shortcircuitterrain')) {
 				this.boost({ spa: 1, atk: 1 });
 				return;
 			}
@@ -2066,7 +2072,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceTryPrimaryHit(target, source, effect) {
 			if (effect?.id === 'surf' && source.hasAbility('gulpmissile') && source.species.name === 'Cramorant') {
 				let forme = '';
-				if (source.hp <= source.maxhp / 2 || this.field.isTerrain('electricterrains') || this.field.isTerrain('factoryterrain')) {
+				if (source.hp <= source.maxhp / 2 || this.field.isTerrain(['electricterrains', 'factoryterrain', 'shortcircuitterrain'])) {
 					forme = 'cramorantgorging';
 				} else if (source.hp > source.maxhp / 2 || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('swampterrain')) {
 					forme = 'cramorantgulping';
@@ -3077,7 +3083,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('chessboardterrain')) {
 				modifier += this.clampIntRange((1 - target.hp / target.baseMaxhp) / 0.2, 0, 3);
 			}
-			if (target && ['psn', 'tox'].includes(target.status) || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain'))
+			if (target && ['psn', 'tox'].includes(target.status) || this.field.isTerrain(['corrosivemistterrain', 'corrosiveterrain', 'murkwatersurfaceterrain', 'wastelandterrain']))
 				modifier += 5;
 			return modifier;
 		},
@@ -3975,7 +3981,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if ((this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('wastelandterrain')) && pokemon.isGrounded() || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
+			if ((this.field.isTerrain(['corrosiveterrain' ,'wastelandterrain'])) && pokemon.isGrounded() || this.field.isTerrain(['corrosivemistterrain', 'murkwatersurfaceterrain'])) {
 				this.heal(pokemon.baseMaxhp / 8, pokemon);
 			}
 		},
@@ -4002,6 +4008,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 38,
 	},
 	poisonpuppeteer: {
+		onSwitchIn() {
+			if (this.field.isTerrain('wastelandterrain')) {
+				this.boost({ accuracy: 1 });
+			}
+		},
 		onAnyAfterSetStatus(status, target, source, effect) {
 			if (source.baseSpecies.name !== "Pecharunt") return;
 			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
@@ -6006,6 +6017,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 137,
 	},
 	toxicchain: {
+		onBasePower(basePower, source, target, move) {
+			if (this.field.isTerrain('wastelandterrain') && this.movehasType(move, 'Poison')) {
+				return this.chainModify(1.3);
+			}
+		},
 		onSourceDamagingHit(damage, target, source, move) {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Toxic Chain's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
