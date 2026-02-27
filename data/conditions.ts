@@ -515,7 +515,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('damprock') || this.field.isTerrain('bigtopterrain')) {
+			if (source?.hasItem('damprock') || this.field.isTerrain(['bigtopterrain', 'coldeclipseterrain'])) {
 				return 8;
 			}
 			return 5;
