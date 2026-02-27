@@ -91,6 +91,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'frz',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			this.effectState.stage = 0;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {
@@ -117,7 +118,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			this.damage(pokemon.baseMaxhp / 16);
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				if (this.effectState.stage < 15) {
+					this.effectState.stage++;
+				}
+				this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
+			}
+			else {
+				this.damage(pokemon.baseMaxhp / 16);
+			}
 		},
 	},
 	psn: {
@@ -246,6 +255,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 
 			if (terrains?.some(t => this.field.isTerrain(t))) {
 				this.effectState.boundDivisor = 6;
+			}
+			if (this.field.isTerrain('ashenbeachterrain') && effect.id === 'sandtomb') {
+				pokemon.addVolatile('sandtomb');
 			}
 		},
 		onResidualOrder: 13,
