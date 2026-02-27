@@ -5894,9 +5894,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			const fields = ['coldeclipseterrain'];
+			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
+				pokemon.useItem();
+			}
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Ice') {
 				target.useItem();
+			}
+		},
+		onTerrainChange(pokemon) {
+			const fields = ['coldeclipseterrain'];
+			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
+				pokemon.useItem();
 			}
 		},
 		boosts: {

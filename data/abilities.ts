@@ -1845,6 +1845,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", `[of] ${target}`);
 			}
 		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
+		},
 		flags: {},
 		name: "Full Metal Body",
 		rating: 2,
@@ -1862,7 +1865,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp >= 0.75 * pokemon.maxhp || ((this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) && this.field.weather === 'deltastream')) return priority + 1;
+			if (move?.type === 'Flying' && pokemon.hp >= 0.75 * pokemon.maxhp || (this.field.isTerrain(['mountainterrain', 'snowymountainterrain', 'coldeclipseterrain']) && this.field.weather === 'deltastream')) return priority + 1;
 		},
 		flags: {},
 		name: "Gale Wings",
@@ -2321,7 +2324,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if ((this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipse'])) && !(this.field.isWeather(['hail', 'snow']))) {
+			if ((this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) && !(this.field.isWeather(['hail', 'snow']))) {
 				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
@@ -2495,6 +2498,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onFaint(pokemon) {
 			pokemon.illusion = null;
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1 },
 		name: "Illusion",
@@ -3108,6 +3114,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				['chessboardterrain', 'Psychic'],
 				['corrosivemistterrain', 'Poison'],
 				['corrosiveterrain', 'Poison'],
+				['coldeclipseterrain', 'Ice'],
 				['darkcrystalcavernterrain', 'Dark'],
 				['desertterrain', 'Ground'],
 				['dragonsdenterrain', 'Dragon'],
@@ -4118,8 +4125,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					}
 					if (target.volatiles['substitute']) {
 						this.add('-immune', target);
-					} else {
-						this.boost({ spd: -1, def: -1 }, target, pokemon, null, true);
+					}
+					this.boost({ spd: -1, def: -1 }, target, pokemon, null, true);
+				}
+			} else {
+				for (const target of pokemon.foes()) {
+					let activated = false;
+					if (!activated) {
+						this.add('-ability', pokemon, 'Pressure', 'boost');
+						activated = true;
+					}
+					if (target.volatiles['substitute']) {
+						this.add('-immune', target);
 					}
 				}
 			}
@@ -4174,6 +4191,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Prism Armor neutralize');
 				return this.chainModify(0.75);
 			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
 		},
 		flags: {},
 		name: "Prism Armor",
@@ -4771,7 +4791,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (typeof accuracy !== 'number') return;
 			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				this.debug('Sand Veil - decreasing accuracy');
-				return this.chainModify([3277, 4096]);
+				return this.chainModify(0.8);
 			}
 		},
 		flags: { breakable: 1 },
@@ -4909,14 +4929,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	shadowshield: {
 		onSourceModifyDamage(damage, source, target, move) {
+			let modifier = 1;
 			if (target.hp >= target.maxhp) {
 				this.debug('Shadow Shield weaken');
-				return this.chainModify(0.5);
+				modifier *= 0.5;
 			}
 			if (target.getMoveHitData(move).typeMod > 0 && (this.field.isTerrain(['darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'coldeclipseterrain']))) {
 				this.debug('Shadow Shield Armor neutralize');
-				return this.chainModify(0.75);
+				modifier *= 0.75;
 			}
+			return this.chainModify(modifier);
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
 		},
 		flags: {},
 		name: "Shadow Shield",
@@ -4953,7 +4978,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	sharpness: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['slicing']) {
+			if (move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Sharpness boost');
 				return this.chainModify(1.5);
 			}
@@ -5172,7 +5197,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	slushrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipse'])) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -5208,7 +5233,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipse'])) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -5230,12 +5255,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	solarpower: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) && !this.field.isTerrain('coldeclipseterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
 		onWeather(target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
+			if (target.hasItem('utilityumbrella') || this.field.isTerrain('coldeclipseterrain')) return;
 			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}

@@ -2326,7 +2326,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('chessboardterrain')) {
+			if (this.field.isTerrain(['psychicterrain', 'ashenbeachterrain', 'chessboardterrain'])) {
 				move.boosts = {
 					spa: 2,
 					spd: 2,
@@ -3889,7 +3889,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					success = true;
 				}
 			}
-			this.field.clearTerrain();
 			return success;
 		},
 		secondary: null,
@@ -6960,7 +6959,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon) {
-			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || 1;
+			return Math.floor(2550 / 25) || 1;
 		},
 		category: "Physical",
 		isNonstandard: "Past",
@@ -8518,14 +8517,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
 			onResidual(pokemon) {
-				if (this.field.weather === 'desolateland') {
-					this.add('-message', 'The extremely harsh sunlight dried out the meadow!');
-					this.field.changeTerrain('desertterrain');
-				}
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				} else {
 					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
+				}
+			},
+			onWeatherChange() {
+				if (this.field.weather === 'desolateland') {
+					this.add('-message', 'The extremely harsh sunlight dried out the meadow!');
+					this.field.changeTerrain('desertterrain');
+					if (this.field.terrainState?.duration) {
+						this.field.terrainState.duration = 9999;
+					}
 				}
 			},
 			onFieldResidualOrder: 27,
@@ -10421,7 +10425,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, source, target) {
-			if (target && (this.field.isTerrain('coldeclipseterrain'))) {
+			if (target && this.field.isTerrain('coldeclipseterrain')) {
 				move.accuracy = true;
 			}
 		},
@@ -13555,13 +13559,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'desolateland':
 				factor = 0.667;
 				break;
+			case 'snow':
+				factor = 0.25;
+				break;
 			case 'raindance':
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'hail':
-			case 'snow':
-				factor = 0.25;
-				break;
 			default:
 				if (this.field.isTerrain(['darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'bewitchedwoodsterrain'])) {
 					factor = 0.75;
@@ -14144,6 +14148,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				move.damage = 140;
+			}
+		},
 		onDamage(damage) {
 			if (this.field.isTerrain('hauntedterrain')) {
 				return this.chainModify(1.5);
@@ -16695,7 +16704,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon) {
-			return Math.floor((pokemon.happiness * 10) / 25) || 1;
+			return Math.floor(2550 / 25) || 1;
 		},
 		category: "Physical",
 		isNonstandard: "Past",
@@ -19054,7 +19063,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('burningterrain', 'corrosivemistterrain')) {
+			if (this.field.isTerrain(['burningterrain', 'corrosivemistterrain'])) {
 				move.boosts = {
 					accuracy: -2,
 				};
@@ -21652,7 +21661,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
 		onModifyType(move, pokemon) {
 			const terrainTypeMap = new Map<string, string>([
-				["ashenbeachterrain", "Fighting"],
+				["ashenbeachterrain", "Ground"],
 				["bewitchedwoodsterrain", "Fairy"],
 				["bigtopterrain", "Fighting"],
 				["burningterrain", "Fire"],
