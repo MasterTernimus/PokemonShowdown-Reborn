@@ -274,7 +274,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike'];
 				if (terrainEndMoves.includes(move.id)) {
-					if (this.field.terrainState.prevterrain !== '') {
+					if (this.field.terrainState.prevterrain) {
 						this.field.changeTerrain(this.field.terrainState.prevterrain);
 					} else {
 						this.field.clearTerrain();
@@ -303,7 +303,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldResidual() {
 				if (this.field.weather === 'raindance' || this.field.weather === 'sandstorm') {
-					if (this.field.terrainState.prevterrain !== '') {
+					if (this.field.terrainState.prevterrain) {
 						this.field.changeTerrain(this.field.terrainState.prevterrain);
 					} else {
 						this.field.clearTerrain();
@@ -2659,7 +2659,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.terrainState.Tchanges?.set('revertTerrain', currentCounter + revertCounter);
 					if (currentCounter + revertCounter >= 3) {
 						this.add('-message', 'The swamp tried up!');
-						if (this.field.terrainState?.prevTerrain !== undefined) {
+						if (this.field.terrainState?.prevTerrain) {
 							this.field.changeTerrain(this.field.terrainState.prevTerrain);
 						} else {
 							this.field.clearTerrain();
@@ -2698,7 +2698,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					const revertCounter = this.field.weather === 'sunnyday' ? 1 : 3;
 					this.field.terrainState.Tchanges?.set('revertTerrain', currentCounter + revertCounter);
 					if (currentCounter + revertCounter >= 3) {
-						if (this.field.terrainState?.prevTerrain !== undefined) {
+						if (this.field.terrainState?.prevTerrain) {
 							this.field.changeTerrain(this.field.terrainState.prevTerrain);
 						} else {
 							this.field.clearTerrain();

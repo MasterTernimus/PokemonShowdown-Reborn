@@ -504,7 +504,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onBasePowerPriority: 14,
 		onBasePower(basePower, user, target, move) {
 			this.debug('Gem Boost');
-			return this.chainModify([5325, 4096]);
+			return this.chainModify(1.3);
 		},
 	},
 
