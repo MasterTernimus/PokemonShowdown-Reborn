@@ -1776,10 +1776,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const sourceacc = source.boosts.accuracy;
 				const sourceeva = source.boosts.evasion;
 				if (targetacc < 0) {
-					boost += targetacc;
+					boost -= targetacc;
 				}
 				if (targeteva < 0) {
-					boost += targeteva;
+					boost -= targeteva;
 				}
 				if (sourceacc > 0) {
 					boost += sourceacc;
@@ -1803,13 +1803,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				let isevasion = false;
-				const evasionshredder = ['bubblebeam', 'chargebeam', 'fleurcannon', 'hyperbeam', 'icebeam', 'originpulse', 'moongeistbeam', 'psybeam', 'solarbeam', 'triattack'];
+				const evasionshredder = ["chargebeam", "solarbeam", "psybeam", "triattack", "icebeam", "hyperbeam", "bubblebeam", "originpulse", "fleurcannon", "moongeistbeam"];
 				const minievasionshredder = ['aurorabeam', 'dazzlinggleam', 'flashcannon', 'doomdesire', 'lusterpurge', 'photongeyser', 'prismaticlaser', 'signalbeam', 'technoblast', 'lightthatburnsthesky'];
 				const mirrorbreak = ['boomburst', 'bulldoze', 'earthquake', 'explosion', 'fissure', 'hypervoice', 'magnitude', 'selfdestruct', 'tectonicrage'];
 				if (target.boosts.evasion > 0) {
 					isevasion = true;
 				}
 				if (isevasion && evasionshredder.includes(move.id)) {
+					this.add('-message', 'The enemy\'s increased evasion concentrated the attack!');
 					modifier *= 2;
 				}
 				if (move.id === 'mirrorshot') {
@@ -1826,7 +1827,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onMiss(source, target, move) {
-				if (move.category === 'Physical' && move.flags.contact) {
+				const immune = ['shellarmor', 'battlearmor'];
+				if (move.category === 'Physical' && move.flags.contact && !source.isProtected() && !source.hasAbility(immune)) {
 					this.damage(source.baseMaxhp / 4, source);
 					if (source.boosts.evasion > 0) {
 						this.boost({ evasion: -1 }, source);

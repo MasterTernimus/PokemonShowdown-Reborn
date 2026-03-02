@@ -6262,13 +6262,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onStart(pokemon) {
 			const terrains = ['glitchterrain', 'shortcircuitterrain', 'factoryterrain', 'mirrorarenaterrain', 'chessboardterrain', 'bigtopterrain'];
-			if (!pokemon.ignoringItem() && (terrains.includes(this.field.terrain) && this.field.isTerrain(this.field.terrain))) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain(terrains)) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
 			const terrains = ['glitchterrain', 'shortcircuitterrain', 'factoryterrain', 'mirrorarenaterrain', 'chessboardterrain', 'bigtopterrain'];
-			if (!pokemon.ignoringItem() && (terrains.includes(this.field.terrain) && this.field.isTerrain(this.field.terrain))) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain(terrains)) {
 				pokemon.useItem();
 			}
 		},

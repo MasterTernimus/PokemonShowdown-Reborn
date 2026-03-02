@@ -6297,7 +6297,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('shortcircuitterrain') || this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain')) {
+			if (this.field.isTerrain(['shortcircuitterrain', 'mirrorarenaterrain', 'darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain'])) {
 				move.boosts = {
 					accuracy: -2,
 				};
@@ -11402,19 +11402,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 			},
-			onSideStart(side) {
+			onSideStart(side, source) {
 				this.add('-sidestart', side, 'move: Light Screen');
+				if (this.field.isTerrain('mirrorarenaterrain')) {
+					this.boost({ evasion: 1 }, source);
+				}
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 2,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Light Screen');
 			},
-		},
-		onAfterMove(source) {
-			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
-				this.boost({ evasion: 1 }, source);
-			}
 		},
 		secondary: null,
 		target: "allySide",
@@ -13215,7 +13213,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return pokemon.volatiles['mirrorcoat'].damage || 1;
 		},
 		onAfterMove(source) {
-			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
+			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn !== null) {
 				this.boost({ def: 1, spd: 1, evasion: 1 }, source);
 			}
 		},
@@ -13248,6 +13246,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (!source.isAlly(target) && this.getCategory(move) === 'Special') {
 					this.effectState.slot = source.getSlot();
 					this.effectState.damage = 2 * damage;
+					if (this.field.isTerrain('mirrorarenaterrain')) {
+						this.boost({ def: 1, spd: 1, evasion: 1 }, source);
+					}
 				}
 			},
 		},
@@ -16539,19 +16540,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 			},
-			onSideStart(side) {
+			onSideStart(side, source) {
 				this.add('-sidestart', side, 'Reflect');
+				if (this.field.isTerrain('mirrorarenaterrain')) {
+					this.boost({ evasion: 1 }, source);
+				}
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 1,
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Reflect');
 			},
-		},
-		onAfterMove(source) {
-			if (this.field.isTerrain('mirrorarenaterrain') && this.lastSuccessfulMoveThisTurn != null) {
-				this.boost({ evasion: 1 }, source);
-			}
 		},
 		secondary: null,
 		target: "allySide",
