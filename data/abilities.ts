@@ -2456,7 +2456,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	illusion: {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
-				this.boost({ evasion: 2 }, pokemon);
+				this.boost({ evasion: 1 }, pokemon);
 			}
 		},
 		onBeforeSwitchIn(pokemon) {

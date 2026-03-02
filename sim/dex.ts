@@ -253,10 +253,10 @@ export class ModdedDex {
 	}
 
 	getEffectiveness(
-		source: { type: string } | string | string[],
+		source: { type: string, types?: string[] } | string,
 		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
 	): number {
-		const sourceTypes: string[] = (Array.isArray(source) ? source : (typeof source === 'string' ? [source] : [source.type]));
+		const sourceTypes: string[] = typeof source === 'string' ? [source] : (source.types !== undefined ? [...source.types] : [source.type]);
 		// @ts-expect-error
 		const targetTyping: string[] = target.getTypes?.() || target.types || (typeof (target) === 'string' ? [target] : target);
 		let totalTypeMod = 0;
@@ -279,6 +279,7 @@ export class ModdedDex {
 				}
 			}
 		}
+		console.log("getEffectiveness typeMod: ", totalTypeMod);
 		return totalTypeMod;
 	}
 
