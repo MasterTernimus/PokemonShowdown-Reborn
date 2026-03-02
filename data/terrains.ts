@@ -1510,7 +1510,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (move.types === undefined) {
 						return 0;
 					}
-					return 0 + this.dex.getEffectiveness(move_types.filter(Movetype => Movetype !== 'Normal'), type);
+					return this.dex.getEffectiveness(move.types[1], type);
 				}
 			},
 			onBasePower(basePower, source, target, move) {
@@ -1578,7 +1578,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (move.types === undefined) {
 						return 1;
 					}
-					return 1 + this.dex.getEffectiveness(move_types.filter(Movetype => Movetype !== 'Normal'), type);
+					return 1 + this.dex.getEffectiveness(move.types[1], type);
 				}
 			},
 			onTryHit(target, source, move) {
@@ -2749,7 +2749,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (move.types === undefined) {
 						return 0;
 					}
-					return 0 + this.dex.getEffectiveness(move_types.filter(Movetype => Movetype !== 'Water'), type);
+					return 0 + this.dex.getEffectiveness(move.types[1], type);
 				}
 			},
 			onBasePower(basePower, source, target, move) {
