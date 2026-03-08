@@ -611,7 +611,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const boost: SparseBoostsTable = {};
 				let statPlus: BoostID;
 				for (statPlus in pokemon.boosts) {
-					if (pokemon.boosts[statPlus] < 6) {
+					if (pokemon.boosts[statPlus] < 6 && statPlus !== 'evasion') {
 						stats.push(statPlus);
 					}
 				}

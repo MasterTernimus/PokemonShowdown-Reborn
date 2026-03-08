@@ -1856,7 +1856,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('burningterrain')) {
 				this.boost({ atk: 1, spa: 1, spe: 1 });
-				this.actions.useMove('firespin', pokemon, { target: pokemon });
+				this.actions.useMove('firespin', pokemon, { target: pokemon, sourceEffect: item });
 			}
 			if (this.field.isTerrain('corrosivemistterrain')) {
 				this.boost({ atk: 1, spa: 1 });
@@ -6404,7 +6404,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('desertterrain')) {
 				this.boost({ def: 1, spd: 1, spe: 1 });
-				pokemon.addVolatile('partiallytrapped', pokemon, this.dex.getActiveMove('sandtomb'));
+				this.actions.useMove('sandtomb', pokemon, { target: pokemon, sourceEffect: item });
 				return;
 			}
 			if (this.field.isTerrain('forestterrain')) {
