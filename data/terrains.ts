@@ -2688,12 +2688,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.damage(pokemon.baseMaxhp / 16, pokemon);
 					}
 				}
-				if (trapMoves.includes(pokemon.volatiles['trapped']?.sourceEffect ?? '')) {
-					const chosenBoost: SparseBoostsTable = {};
-					const stats: BoostID[] = ['accuracy', 'evasion', 'spa', 'spe', 'spd', 'atk', 'def'];
-					const randomStat = this.sample(stats);
-					if (randomStat) chosenBoost[randomStat] = -1;
-					this.boost(chosenBoost, pokemon, pokemon);
+				for (const volatile in pokemon.volatiles) {
+					if (trapMoves.includes(pokemon.volatiles[volatile]?.sourceEffect.id)) {
+						const chosenBoost: SparseBoostsTable = {};
+						const stats: BoostID[] = ['accuracy', 'evasion', 'spa', 'spe', 'spd', 'atk', 'def'];
+						const randomStat = this.sample(stats);
+						if (randomStat) chosenBoost[randomStat] = -1;
+						this.boost(chosenBoost, pokemon, pokemon);
+						break;
+					}
 				}
 				if (this.field.weather === 'sunnyday' || this.field.weather === 'desolateland') {
 					const currentCounter = this.field.terrainState.Tchanges?.get('revertTerrain') ?? 0;

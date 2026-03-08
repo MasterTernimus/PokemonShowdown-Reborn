@@ -279,7 +279,6 @@ export class ModdedDex {
 				}
 			}
 		}
-		console.log("getEffectiveness typeMod: ", totalTypeMod);
 		return totalTypeMod;
 	}
 
