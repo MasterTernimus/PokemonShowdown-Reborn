@@ -450,7 +450,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyMove(move) {
-				const chessMoves = ['ancientpower', 'psychic', 'secretpower', 'strength', 'continentalcrush', 'shatteredpsyche'];
+				const chessMoves = ["ancientpower", "barrage", "continentalcrush", "psychic", "rockthrow", "secretpower", "shatteredpsyche", "strength"]; ;
 				const crazyMoves = ['stompingtantrum', 'outrage', 'thrash'];
 				if (chessMoves.includes(move.id)) {
 					move.types = [move.type, 'Rock'];
@@ -459,25 +459,32 @@ export const Terrains: { [k: string]: TerrainData } = {
 					move.critRatio = move.critRatio !== undefined ? move.critRatio + 1 : 1;
 				}
 			},
-			onModifyCritRatio(critRatio, move) {
+			onModifyCritRatio(critRatio, source, target, move) {
+				const reckless = ['reckless', 'gorillatactics'];
+				if (target.hasAbility(reckless)) {
+					return critRatio + 1;
+				}
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const chessMoves = ['ancientpower', 'psychic', 'secretpower', 'strength', 'continentalcrush', 'shatteredpsyche', 'barrage'];
-				const boost = ['fakeout', 'feint', 'firstimpression', 'shadowsneak', 'smartstrike', 'suckerpunch'];
-				const dumbAbilities = ['unaware', 'simple', 'klutz', 'oblivious'];
+				const chessMoves = ["ancientpower", "barrage", "continentalcrush", "psychic", "rockthrow", "secretpower", "shatteredpsyche", "strength"]; ;
+				const boost = ["fakeout", "feint", "feintattack", "firstimpression", "shadowsneak", "smartstrike", "suckerpunch"];;
+				const dumbAbilities = ['unaware', 'simple', 'klutz', 'oblivious', 'defeatist'];
 				const smartAbilities = ['adaptability', 'synchronize', 'anticipation', 'telepathy'];
 				const breakMoves = ['stompingtantrum', 'tectonicrage'];
 				if (move.id === 'barrage') {
 					modifier *= 2;
 				}
+
 				if (chessMoves.includes(move.id)) {
 					if (dumbAbilities.includes(target.ability)) {
-						modifier *= 2;
-					}
-					if (smartAbilities.includes(target.ability)) {
 						modifier *= 0.5;
+					}
+					if (target.volatiles['confusion']) {
+						modifier *= 2;
+					} else if (smartAbilities.includes(target.ability)) {
+						modifier *= 2;
 					}
 					this.add('-message', 'The chess piece slammed forward!');
 					modifier *= 1.5;
@@ -511,12 +518,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', target.name + " hung onto the edge of the board");
 					target.Role = 'UsedPawn';
 					return target.hp - 1;
-				}
-			},
-			onAfterMove(source, target, move) {
-				if (move.id === 'tectonicrage') {
-					this.add('-message', 'The board was destroyed!');
-					this.field.clearTerrain();
 				}
 			},
 			onFieldStart() {
