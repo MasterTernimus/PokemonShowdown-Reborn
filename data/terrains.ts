@@ -478,13 +478,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 
 				if (chessMoves.includes(move.id)) {
-					if (dumbAbilities.includes(target.ability)) {
-						modifier *= 0.5;
+					if (dumbAbilities.includes(target.ability) || target.volatiles['confusion']) {
+						this.add('-message', 'The complicated move made the pokemon cross-eyed!');
+						modifier *= 2;
 					}
-					if (target.volatiles['confusion']) {
-						modifier *= 2;
-					} else if (smartAbilities.includes(target.ability)) {
-						modifier *= 2;
+					if (smartAbilities.includes(target.ability)) {
+						this.add('-message', 'The complicated move was easily analyzed by the pokemon!');
+						modifier *= 0.5;
 					}
 					this.add('-message', 'The chess piece slammed forward!');
 					modifier *= 1.5;
