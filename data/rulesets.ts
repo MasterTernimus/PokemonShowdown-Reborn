@@ -70,20 +70,19 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					side.pokemon[1].Role = 'Pawn';
 				}
 				side.pokemon[side.pokemon.length - 1].Role = 'Queen';
-				const new_pokemon = side.pokemon.filter(newpokemon => !newpokemon.Role);
-				let king = null;
-				let min = 9999;
-				for (const pokemon of new_pokemon) {
-					if (min > pokemon.baseMaxhp) {
-						min = pokemon.baseMaxhp;
-						king = pokemon;
-					}
-					if (pokemon.item === 'kingsrock') {
+				const newPokemon = side.pokemon.filter(newpokemon => !newpokemon.Role);
+				const kingsRockHolder = newPokemon.find(p => p.item === 'kingsrock');
+				const king = kingsRockHolder ??
+					newPokemon.reduce((lowest, p) =>
+						p.baseMaxhp < lowest.baseMaxhp ? p : lowest
+					);
+
+				for (const pokemon of newPokemon) {
+					if (pokemon === king) {
 						pokemon.Role = 'King';
-						king = null;
-						min = 0;
 						continue;
 					}
+
 					if (!pokemon.Role) {
 						switch (pokemon.getBestStat()) {
 						case "atk":
@@ -99,9 +98,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							break;
 						}
 					}
-				}
-				if (king != null) {
-					king.Role = 'King';
 				}
 			}
 		},

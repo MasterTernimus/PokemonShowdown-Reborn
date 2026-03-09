@@ -1968,11 +1968,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.debug('Gorilla Tactics Atk Boost');
 			return this.chainModify(1.5);
 		},
-		onSourceModifyCritRatio(critRatio) {
-			if (this.field.isTerrain('chessboardterrain')) {
-				return critRatio + 1;
-			}
-		},
 		onBasePower(basePower, source, target, move) {
 			if (this.field.isTerrain('chessboardterrain')) {
 				return this.chainModify(1.2);
@@ -2475,7 +2470,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onBasePower(basePower, source, target, move) {
-			if (source.illusion != null) {
+			if (source.illusion != null && this.field.isTerrain('chessboardterrain')) {
 				return this.chainModify(1.2);
 			}
 		},
@@ -2714,7 +2709,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 		},
 		onTryMove(source, target, move) {
-			const chessMoves = ['ancientpower', 'psychic', 'secretpower', 'strength', 'continentalcrush', 'shatteredpsyche', 'barrage'];
+			const chessMoves = ["ancientpower", "barrage", "continentalcrush", "psychic", "rockthrow", "secretpower", "shatteredpsyche", "strength"];;
 			if (this.field.isTerrain('chessboardterrain') && chessMoves.includes(move.id)) {
 				this.add('-message', 'It was too much a klutz to move the pieces!');
 				return false;
