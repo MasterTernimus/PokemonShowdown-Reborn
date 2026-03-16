@@ -806,11 +806,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 
 					this.field.clearTerrain();
+					return;
 				}
 				if (move.id === 'gravity')
 					this.field.changeTerrain('corrosiveterrain');
 				if (terrainEndMoves.includes(move.id)) {
 					this.field.clearTerrain();
+					return;
 				}
 				if (move.id === 'seedflare')
 					this.field.changeTerrain('mistyterrain');
