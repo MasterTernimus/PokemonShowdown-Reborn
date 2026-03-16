@@ -3049,6 +3049,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		boosts: {
 			spa: -1,
 		},
+		pseudoWeather: 'trickroom',
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -21670,7 +21671,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["corrosivemistterrain", "Poison"],
 				["corrosiveterrain", "Poison"],
 				["crystalcavernterrain", "Rock"],
-				["darkcrystalterrain", "Dark"],
+				["darkcrystalcavernterrain", "Dark"],
 				["desertterrain", "Ground"],
 				["dragonsdenterrain", "Dragon"],
 				["electricterrain", "Electric"],
@@ -22410,7 +22411,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pseudoWeather: 'trickroom',
 		condition: {
 			duration: 5,
-			durationCallback(source, effect) {
+			durationCallback(source, target, effect) {
+				console.log(effect);
 				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || source.hasItem('amplifieldrock') || this.field.isTerrain('newworldterrain'))
 					return 8;
 				if (source?.hasAbility('persistent')) {
@@ -22441,6 +22443,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Psychic",
 		zMove: { boost: { accuracy: 1 } },
 		contestType: "Clever",
+	},
+	trickyreception: {
+		num: 1001,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Tricky Reception",
+		pp: 10,
+		priority: -7,
+		flags: { mirror: 1 },
+		pseudoWeather: 'trickroom',
+		selfSwitch: 'copyvolatile',
+		target: "all",
+		type: "Psychic",
 	},
 	triplearrows: {
 		num: 843,
