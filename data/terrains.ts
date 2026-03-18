@@ -352,7 +352,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (cavern.includes(move.id)) {
 					modifier *= 1.3;
 				}
-				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || (move.id === 'dragonpulse' && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
+				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || ((move.id === 'dragonpulse' || move.id === 'dragonenergy') && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
 					modifier *= 1.3;
 				}
 				if (icy.includes(move.id)) {
@@ -363,21 +363,21 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const cavern = ['powergem', 'diamondstorm'];
 				const icy = ['blizzard', 'subzeroslammer'];
-				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage', 'continentalcrush'];
 				if (this.field.terrainState.Tchanges?.get('collapse') === 1 && cavecollapse.includes(move.id)) {
 					this.add('-message', 'The quake collapsed the ceiling!');
 					this.field.terrainState.Tchanges?.set('collapse', 0);
 					for (const pokemon of this.getAllActive()) {
-						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility('rockhead') || pokemon.hasAbility('bulletproof')) {
+						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility(['rockhead', 'bulletproof', 'stalward'])) {
 							continue;
 						}
-						if (pokemon.hasAbility('prismarmor') || pokemon.hasAbility('solidrock')) {
+						if (pokemon.hasAbility(['prismarmor', 'solidrock'])) {
 							this.damage(pokemon.baseMaxhp / 3, pokemon);
 						}
-						if (pokemon.hasAbility('battlearmor') || pokemon.hasAbility('shellarmor')) {
+						if (pokemon.hasAbility(['battlearmor', 'shellarmor'])) {
 							this.damage(pokemon.baseMaxhp / 2, pokemon);
 						}
-						if (pokemon.hasAbility('sturdy') && pokemon.baseMaxhp === pokemon.hp) {
+						if ((pokemon.hasAbility('sturdy') || pokemon.getVolatile('endure')) && pokemon.baseMaxhp === pokemon.hp) {
 							this.damage(pokemon.baseMaxhp - 1, pokemon);
 						} else {
 							this.damage(pokemon.baseMaxhp, pokemon);
@@ -390,10 +390,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (cavern.includes(move.id)) {
 					this.add('-message', 'The cave was littered with crystals!');
 					this.field.changeTerrain('crystalcavernterrain', source, move);
+					return;
 				}
 				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || (move.id === 'dragonpulse' && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
 					this.field.changeTerrain('dragonsdenterrain');
 					this.add('-message', 'The draconic energy mutated the field');
+					return;
 				} else if (move.id === 'dragonpulse') {
 					this.field.terrainState.Tchanges?.set('dragonsdenterrain', 1);
 					this.add('-message', 'Draconic energy seeps in...');
@@ -401,6 +403,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (icy.includes(move.id)) {
 					this.field.changeTerrain('icyterrain');
 					this.add('-message', 'The cave froze over!');
+					return;
 				}
 			},
 			onFieldStart() {
@@ -469,7 +472,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const chessMoves = ["ancientpower", "barrage", "continentalcrush", "psychic", "rockthrow", "secretpower", "shatteredpsyche", "strength"]; ;
-				const boost = ["fakeout", "feint", "feintattack", "firstimpression", "shadowsneak", "smartstrike", "suckerpunch"];;
+				const boost = ["fakeout", "feint", "feintattack", "firstimpression", "shadowsneak", "smartstrike", "suckerpunch"];
 				const dumbAbilities = ['unaware', 'simple', 'klutz', 'oblivious', 'defeatist'];
 				const smartAbilities = ['adaptability', 'synchronize', 'anticipation', 'telepathy'];
 				const breakMoves = ['stompingtantrum', 'tectonicrage'];
@@ -910,23 +913,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				if (move.category !== 'Status' && (move.type === 'Rock' || crystalBoost.includes(move.id))) {
-					move.types = [move.type, counter[this.CrystalCavernCounter]];
-				}
-			},
-			onPrepareHit(source, target, move) {
-				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
-				if (move.category !== 'Status' && (move.type === 'Rock' || crystalBoost.includes(move.id))) {
-					this.CrystalCavernCounter++;
-					this.CrystalCavernCounter %= 4;
+					move.types = ['Rock', counter[this.CrystalCavernCounter]];
 				}
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				// I hate this
 				let modifier = 1;
-				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength'];
+				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
 				const boost = ['ancientpower', 'diamondstorm', 'powergem', 'rocksmash', 'rocktomb'];
-				const weakboost = ['aurorabeam', 'doomdesire', 'dazzlinggleam', 'flashcannon', 'lusterpurge', 'mirrorshot', 'moongeistbeam', 'photongeyser', 'signalbeam', 'technoblast', 'menacingmoonrazemaelstorm'];
+				const weakboost = ['aurorabeam', 'doomdesire', 'dazzlinggleam', 'flashcannon', 'mirrorbeam', 'lusterpurge', 'mirrorshot', 'moongeistbeam', 'photongeyser', 'signalbeam', 'technoblast', 'menacingmoonrazemaelstorm'];
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				const dark = ['darkpulse', 'darkvoid', 'nightdaze', 'lightthatburnsthesky'];
 				if (move.type === 'Rock') {
@@ -956,7 +952,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				return this.chainModify(modifier);
 			},
-			onHit(target, source, move) {
+			onDamage(damage, target, source, effect) {
+				let move;
+				if (effect.effectType === 'Move' && effect.category !== 'Status') {
+					move = effect;
+				} else {
+					return;
+				}
 				const crystalBoost = ['judgement', 'multiattack', 'rockclimb', 'strength', 'prismaticlaser'];
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				if (move.category !== 'Status' && (move.type === 'Rock' || crystalBoost.includes(move.id))) {
@@ -972,6 +974,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (this.field.terrainState.Tchanges?.get('caveterrain') === 1 || move.id === 'tectonicrage') {
 						this.add('-message', 'The crystals were shattered!');
 						this.field.changeTerrain('caveterrain', source, move);
+						return;
 					} else {
 						this.add('-message', 'The crystals were broken up...');
 						this.field.terrainState.Tchanges?.set('caveterrain', 1);
@@ -980,9 +983,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (dark.includes(move.id) && this.field.weather !== 'sunnyday') {
 					this.add('-message', 'The crystals\' light was warped by the darkness!');
 					this.field.changeTerrain('darkcrystalcavernterrain', source, move);
+					return;
 				}
 			},
-			onFieldResidual() {
+			onWeatherChange() {
 				const source = this.field.terrainState.origin;
 				if (source?.id) {
 					if (source.id === 'sunnyday' && this.field.weather !== 'sunnyday') {
@@ -1019,8 +1023,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const superboost = ['prismaticlaser', 'blackholeeclipse'];
-				const boost = ['aurorabeam', 'darkpulse', 'dazzlinggleam', 'diamondstorm', 'doomdesire', 'flashcannon', 'lusterpurge', 'mirrorshot', 'moongeistbeam', 'nightdaze', 'nightslash', 'photongeyser', 'powergem', 'shadowball', 'shadowbone', 'shadowclaw', 'shadowforce', 'shadowsneak', 'signalbeam', 'technoblast', 'menacingmoonrazemaelstorm', 'ceaselessedge'];
+				const superboost = ['prismaticlaser'];
+				const boost = ['ceaselessedge', 'blackholeeclipse', 'darkpulse', 'nightdaze', 'nightslash', 'menacingmoonrazemaelstrom', 'shadowball', 'shadowbone', 'shadowclaw', 'shadowforce', 'shadowpunch', 'shadowsneak', 'aurorabeam', 'dazzlinggleam', 'diamondstorm', 'doomdesire', 'flashcannon', 'lusterpurge', 'mirrorbeam', 'mirrorshot', 'moongeistbeam', 'photongeyser', 'powergem', 'signalbeam', 'technoblast'];
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				if (superboost.includes(move.id)) {
 					this.add('-message', 'The field super charged the attack');
@@ -1047,14 +1051,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (this.field.terrainState.Tchanges?.get('caveterrain') === 1) {
 						this.add('-message', 'The dark crystals were shattered!');
 						this.field.changeTerrain('caveterrain', source, move);
+						return;
 					} else {
 						this.add('-message', 'The dark crystals are starting to crack...');
 						this.field.terrainState.Tchanges?.set('caveterrain', 1);
 					}
 				}
 			},
-			onFieldResidual() {
+			onWeatherChange() {
 				if (this.field.weather === 'sunnyday') {
+					this.add('-message', 'The cavern brightened!');
 					this.field.changeTerrain('crystalcavernterrain', null, this.field.getWeather());
 				}
 			},
@@ -1148,6 +1154,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return this.chainModify(1.3);
 				}
 			},
+			onEffectivenessPriority: -1,
+			onEffectiveness(typeMod, target, type, move) {
+				if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Dragon' && typeMod > 0 && target?.hasAbility('multiscale')) {
+					this.add('-fieldactivate', 'Dragon\'s Den Stream');
+					return 0;
+				}
+			},
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
 				const fire_moves = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage', 'rockclimb', 'earthquake'];
@@ -1164,10 +1177,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const uberboost = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage', 'dragonascent', 'payday', 'lusterpurge', 'mistball'];
 				const boost = ['lavaplume', 'magmastorm', 'megakick', 'makeitrain', 'rockclimb', 'strength', 'diamondstorm', 'makeitrain', 'powergem', 'shelltrap', 'earthpower', 'stompingtantrum'];
 				const terrain_change = ['glaciate', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer', 'mistball'];
-				const terrain_change2 = ['muddywater', 'sparklingaria', 'surf'];
+				const terrain_change1 = ['muddywater', 'surf'];
+				const change = terrain_change1.includes(move.id) ? 1 : (move.id === 'sparklingaria' ? 2 : 0);
+				const current = this.field.terrainState.Tchanges?.get('caveterrain') ?? 0;
 				if (move.type === 'Dragon' || move.type === 'Fire') {
 					this.add('-message', 'The ambient dragon fire boosted the attack!');
 					modifier *= 1.5;
+				}
+				if (move.type === 'Rock') {
+					this.add('-message', 'The super hot rocks boosted the attack!');
+					modifier *= 1.3;
 				}
 				if (move.type === 'Ice' || move.type === 'Water') {
 					this.add('-message', 'The lava\'s heat softened the attack...');
@@ -1180,7 +1199,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The draconic energy boosted the attack!');
 					modifier *= 2;
 				}
-				if (terrain_change.includes(move.id) || (this.field.terrainState.Tchanges?.get(move.id) === 1 && terrain_change2.includes(move.id))) {
+				if (terrain_change.includes(move.id) || (current + change >= 3)) {
 					modifier *= 1.3;
 				}
 				const moveMessages = new Map<string, string>([
@@ -1204,23 +1223,38 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				return this.chainModify(modifier);
 			},
+			onDamage(damage, target, source, effect) {
+				const revert = ['dracometeor', 'dragonenergy', 'devastatingdrake'];
+				if (effect && effect.effectType === 'Move' && effect.category !== 'Status' && revert.includes(effect.id)) {
+					const move = effect;
+					const revert1 = ['dracometeor', 'dragonenergy'];
+					const backwardChange = revert1.includes(move.id) ? 1 : (move.id === 'devastatingdrake' ? 2 : 0);
+					const current = this.field.terrainState.Tchanges?.get('caveterrain') ?? 0;
+					this.field.terrainState.Tchanges?.set('caveterrain', current - backwardChange);
+				}
+			},
 			onAfterMove(source, target, move) {
 				const terrain_change = ['glaciate', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer'];
-				const terrain_change2 = ['muddywater', 'sparklingaria', 'surf'];
-				if (terrain_change.includes(move.id) || (this.field.terrainState.Tchanges?.get(move.id) === 1 && terrain_change2.includes(move.id))) {
+				const terrain_change1 = ['muddywater', 'surf'];
+				const forwardChange = terrain_change1.includes(move.id) ? 1 : (move.id === 'sparklingaria' ? 2 : 0);
+				const current = this.field.terrainState.Tchanges?.get('caveterrain') ?? 0;
+				if (terrain_change.includes(move.id) || (current + forwardChange >= 3)) {
 					this.add('-message', 'The lava solidified!');
 					this.field.changeTerrain('caveterrain');
-				} else if (terrain_change2.includes(move.id)) {
-					this.add('-message', 'The lava began to harden!');
-					this.field.terrainState.Tchanges?.set(move.id, 1);
+					return;
 				} else if (move.id === 'mistball') {
 					this.add('-message', 'The mist-ical energy altered the surroundings!');
 					this.field.changeTerrain('fairytaleterrain');
+					return;
 				}
+				this.field.terrainState.Tchanges?.set('caveterrain', current + forwardChange);
 			},
 			onFieldStart() {
 				this.add('-message', 'If you wish to slay a dragon...');
-				this.add('-fieldstart', 'Dragons Den Terrain');
+				this.add('-fieldstart', 'Dragon\'s Den Terrain');
+				if (this.field.isWeather('hail')) {
+					this.field.clearWeather();
+				}
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Dragons Den Terrain');
@@ -1650,9 +1684,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return this.chainModify(1.5);
 				}
 			},
+			onModifyMovePriority: 30,
 			onModifyMove(move, pokemon) {
-				const speedMoves = ['accelerock', 'aquajet', 'bulletpunch', 'extremespeed', 'fakeout', 'firstimpression', 'machpunch', 'quickattack', 'shadowsneak', 'suckerpunch', 'defemsecurl', 'feint', 'lunge', 'rollout', 'steamroller'];
-				if (speedMoves.includes(move.id) && pokemon.isGrounded()) {
+				const speedMoves = ['defensecurl', 'lunge', 'rollout', 'steamroller'];
+				if ((speedMoves.includes(move.id) || (move.priority > 0 && move.flags.contact && move.category === 'Physical')) && pokemon.isGrounded()) {
 					move.selfBoost = {
 						boosts: {
 							spe: 1,
@@ -1665,8 +1700,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
+				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'infernooverdrive', 'lavaplume', 'magmadrift', 'mindblown', 'ragingfury', 'searingshot'];
 				const watersurfaceMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				const waterTerrains = ['murkwatersurfaceterrain', 'watersurfaceterrain'];
 				if (move.type === 'Ice') {
 					this.add('-message', 'The cold strengthened the attack!');
 					modifier *= 1.5;
@@ -1678,7 +1714,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.id === 'scald' || move.id === 'steameruption' || move.id === 'hydrosteam') {
 					this.add('-message', 'The cold softened the attack...');
 					modifier *= 0.5;
-					if (this.field.terrainState.Tchanges?.get('watersurfaceterrain') === 1) {
+					if (this.field.terrainState.Tchanges?.get('previousTerrain') === 1) {
 						modifier *= 1.3;
 					}
 				}
@@ -1689,24 +1725,29 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.id === 'bittermalice') {
 					modifier *= 1.5;
 				}
-				if (igniteMoves.includes(move.id) || (this.field.terrainStack[1]?.id === 'watersurfaceterrain' && watersurfaceMoves.includes(move.id))) {
+				if (igniteMoves.includes(move.id) || (waterTerrains.includes(this.field.terrainStack[1]?.id) && watersurfaceMoves.includes(move.id))) {
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
+				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'infernooverdrive', 'lavaplume', 'magmadrift', 'mindblown', 'ragingfury', 'searingshot'];
 				const watersurfaceMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
-				if ((this.field.terrainStack[1]?.id === 'watersurfaceterrain' && watersurfaceMoves.includes(move.id))) {
+				const revertMoves = ['scald', 'steameruption', 'hydrosteam'];
+				const waterTerrains = ['murkwatersurfaceterrain', 'watersurfaceterrain'];
+				const currentCount = this.field.terrainState.Tchanges?.get('previousTerrain') ?? 0;
+				const revertCount = revertMoves.includes(move.id) ? 1 : 0;
+				this.field.terrainState.Tchanges?.set('previousTerrain', revertCount + currentCount);
+				if (waterTerrains.includes(this.field.terrainStack[1]?.id) && watersurfaceMoves.includes(move.id)) {
 					this.add('-message', 'The ice went away!');
 					this.field.changeTerrain('watersurfaceterrain');
 					return;
-				} else if (igniteMoves.includes(move.id)) {
+				} else if (igniteMoves.includes(move.id) || revertCount + currentCount >= 2) {
 					this.add('-message', 'The ice melted!');
 					this.field.changeTerrain(this.field.terrainState?.prevTerrain ?? 'watersurfaceterrain');
 					return;
 				}
-				if (watersurfaceMoves.includes(move.id) && this.field.terrainStack[1]?.id !== 'watersurfaceterrain') {
+				if (watersurfaceMoves.includes(move.id) && waterTerrains.includes(this.field.terrainStack[1]?.id)) {
 					for (const sides of this.sides) {
 						sides.addSideCondition('spikes');
 					}
@@ -2124,15 +2165,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 					if (move.self?.chance) move.self.chance *= 2;
 				}
-			},
-			onBasePower(basePower, source, target, move) {
-				let modifier = 1;
-				const strengthenedMoves = ['aurorabeam', 'dazzlinggleam', 'dragonpulse', 'firepledge', 'fleurcannon', 'grasspledge', 'heartstamp', 'hiddenpower', 'judgement', 'mistball', 'moonblast', 'mysticalfire', 'prismaticlaser', 'relicsong', 'sacredfire', 'secretpower', 'silverwind', 'solarbeam', 'solarblade', 'sparklingaria', 'triattack', 'waterpledge', 'weatherball', 'zenheadbutt', 'oceanicoperetta', 'twinkletackle'];
-				const weakenedMoves = ['darkpulse', 'nightdaze', 'neverendingnightmare', 'shadowball'];
 				if (move.type === 'Normal' && move.category === 'Special') {
 					this.add('-message', 'The rainbow augmented the boring, plain move and made it more interesting!');
 					const types = ['Normal', 'Water', 'Fire', 'Grass', 'Fighting', 'Psychic', 'Bug', 'Flying', 'Ground', 'Dark', 'Fairy', 'Poison', 'Electric', 'Steel', 'Ghost', 'Dragon', 'Ice', 'Rock'];
 					move.types = [move.type, this.sample(types)];
+				}
+			},
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const strengthenedMoves = ['aurorabeam', 'dazzlinggleam', 'dragonpulse', 'firepledge', 'fleurcannon', 'grasspledge', 'heartstamp', 'hiddenpower', 'judgment', 'mirrorbeam', 'mistball', 'moonblast', 'mysticalfire', 'oceanicoperetta', 'prismatictlaser', 'relicsong', 'sacredfire', 'secretpower', 'silverwind', 'solarbeam', 'solarblade', 'sparklingaria', 'triattack', 'twinkletackle', 'waterpledge', 'weatherball', 'zenheadbutt'];
+				const weakenedMoves = ['darkpulse', 'nightdaze', 'neverendingnightmare', 'shadowball'];
+				if (move.type === 'Normal' && move.category === 'Special') {
 					modifier *= 1.5;
 				}
 				if (strengthenedMoves.includes(move.id)) {
@@ -2143,11 +2186,24 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', ' The terrain weakened the attack!');
 					modifier *= 0.5;
 				}
+				if (move.id === 'lightthatburnsthesky') {
+					modifier *= 1.3;
+				}
 				return this.chainModify(modifier);
+			},
+			onAfterMove(source, target, move) {
+				if (move.id === 'lightthatburnsthesky') {
+					this.add('-message', 'The bright light pierced through the technicolor madness!');
+					this.field.clearTerrain();
+				}
 			},
 			onResidual(pokemon) {
 				if (pokemon.status === 'slp' || pokemon.hasAbility('comatose') && !(pokemon.hasAbility('magicguard'))) {
 					this.heal(pokemon.baseMaxhp / 16, pokemon);
+				}
+				if (this.field.isWeather(['hail', 'sandstorm'])) {
+					this.add('-message', 'The violent weather tore the field apart!');
+					this.field.clearTerrain();
 				}
 			},
 			onFieldStart() {

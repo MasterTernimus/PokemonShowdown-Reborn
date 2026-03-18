@@ -176,7 +176,7 @@ export class Field {
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
-		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain') || this.isTerrain('dragonsterrain')) {
+		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain') || this.isTerrain('dragonsdenterrain')) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
 			return false;
 		}
@@ -190,7 +190,7 @@ export class Field {
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
-		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain') || this.isTerrain('dragonsterrain')) {
+		if (this.isTerrain(['underwaterterrain', 'newworldterrain', 'dragonsdenterrain'])) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
 			return false;
 		}
