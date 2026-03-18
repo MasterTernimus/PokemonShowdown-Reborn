@@ -342,7 +342,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (!pokemon.hp) return;
+			if (!pokemon.hp || this.field.isTerrain('rainbowterrain')) return;
 			for (const target of pokemon.foes()) {
 				if (target.status === 'slp' || target.hasAbility('comatose')) {
 					this.damage(target.baseMaxhp / 8, target, pokemon);
@@ -2709,7 +2709,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 		},
 		onTryMove(source, target, move) {
-			const chessMoves = ["ancientpower", "barrage", "continentalcrush", "psychic", "rockthrow", "secretpower", "shatteredpsyche", "strength"];;
+			const chessMoves = ["ancientpower", "barrage", "continentalcrush", "psychic", "rockthrow", "secretpower", "shatteredpsyche", "strength"];
 			if (this.field.isTerrain('chessboardterrain') && chessMoves.includes(move.id)) {
 				this.add('-message', 'It was too much a klutz to move the pieces!');
 				return false;
@@ -3057,7 +3057,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	marvelscale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
-			if (pokemon.status || this.field.isTerrain(['mistyterrain', 'fairytaleterrain', 'dragonsdenterrain', 'starlightarenaterrain'])) {
+			if (pokemon.status || this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'dragonsdenterrain', 'starlightarenaterrain'])) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -3801,13 +3801,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyDamage(damage, source, target, move) {
-			if (target !== source && this.movehasType(move, 'Poison') && this.field.isTerrain('mistyterrain')) {
+			if (target !== source && this.movehasType(move, 'Poison') && this.field.isTerrain(['mistyterrain', 'rainbowterrain'])) {
 				this.debug('Pastel Veil weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onAllyModifyDamage(damage, source, target, move) {
-			if (target !== source && this.movehasType(move, 'Poison') && this.field.isTerrain('mistyterrain')) {
+			if (target !== source && this.movehasType(move, 'Poison') && this.field.isTerrain(['mistyterrain', 'rainbowterrain'])) {
 				this.debug('Pastel Veil weaken');
 				return this.chainModify(0.5);
 			}
@@ -3983,7 +3983,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if ((this.field.isTerrain(['corrosiveterrain' ,'wastelandterrain'])) && pokemon.isGrounded() || this.field.isTerrain(['corrosivemistterrain', 'murkwatersurfaceterrain'])) {
+			if ((this.field.isTerrain(['corrosiveterrain', 'wastelandterrain'])) && pokemon.isGrounded() || this.field.isTerrain(['corrosivemistterrain', 'murkwatersurfaceterrain'])) {
 				this.heal(pokemon.baseMaxhp / 8, pokemon);
 			}
 		},
@@ -4172,12 +4172,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	prismarmor: {
 		onModifyDef(def, pokemon) {
-			if (this.field.isTerrain('coldeclipseterrain')) {
+			if (this.field.isTerrain(['coldeclipseterrain', 'darkcrystalcavernterrain', 'rainbowterrain'])) {
 				return this.chainModify(1.333333);
 			}
 		},
 		onModifySpD(spd, pokemon) {
-			if (this.field.isTerrain('coldeclipseterrain')) {
+			if (this.field.isTerrain(['coldeclipseterrain', 'darkcrystalcavernterrain', 'rainbowterrain'])) {
 				return this.chainModify(1.333333);
 			}
 		},
@@ -5280,7 +5280,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	soulheart: {
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
-			if (this.field.isTerrain('mistyterrain')) {
+			if (this.field.isTerrain(['mistyterrain', 'rainbowterrain'])) {
 				this.boost({ spa: 1, spd: 2 }, this.effectState.target);
 			} else {
 				this.boost({ spa: 1, spd: 1 }, this.effectState.target);
@@ -5950,7 +5950,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return false;
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('superheatedterrain') || this.field.isTerrain('dragonsdenterrain') || this.field.isTerrain('burningterrain')) {
+			if (this.field.isTerrain(['superheatedterrain', 'dragonsdenterrain', 'burningterrain'])) {
 				this.add('-activate', pokemon, 'ability: Thermal Exchange');
 				this.boost({ atk: 1 });
 			}
@@ -6682,6 +6682,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	wonderskin: {
 		onModifyAccuracyPriority: 10,
 		onModifyAccuracy(accuracy, target, source, move) {
+			if (this.field.isTerrain('rainbowterrain') && move.category === 'Status') {
+				return 0;
+			}
 			if (move.category === 'Status' && typeof accuracy === 'number') {
 				this.debug('Wonder Skin - setting accuracy to 50');
 				return 50;

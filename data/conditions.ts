@@ -123,8 +123,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					this.effectState.stage++;
 				}
 				this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
-			}
-			else {
+			} else {
 				this.damage(pokemon.baseMaxhp / 16);
 			}
 		},

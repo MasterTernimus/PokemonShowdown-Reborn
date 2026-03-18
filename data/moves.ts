@@ -3299,7 +3299,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('psychicterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('starlightarenaterrain')) {
+			if (this.field.isTerrain(['mistyterrain', 'psychicterrain', 'rainbowterrain', 'holyterrain', 'newworldterrain', 'starlightarenaterrain'])) {
 				move.boosts = {
 					def: 2,
 					spd: 2,
@@ -4079,7 +4079,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 							target.trySetStatus('slp', source);
 						}
 					},
-				}]
+				}];
 			}
 		},
 		secondary: {
@@ -13614,7 +13614,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				factor = 0.25;
 				break;
 			}
-			if (this.field.isTerrain('coldeclipseterrain')) {
+			if (this.field.isTerrain(['coldeclipseterrain', 'darkcrystalcavernterrain'])) {
 				factor = 0.25;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -14120,7 +14120,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
-				if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose') || this.field.isTerrain('rainbowterrain')) {
+				if ((pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) || this.field.isTerrain('rainbowterrain')) {
 					return false;
 				}
 				this.add('-start', pokemon, 'Nightmare');
@@ -17671,9 +17671,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				corrosivemistterrain: [{ chance: 30, status: 'psn' }],
 				corrosiveterrain: [{ chance: 30, status: 'psn' }],
 				crystalcavernterrain: [
-					{ chance: 10, volatileStatus: 'confusion' },
-					{ chance: 10, status: 'frz' },
-					{ chance: 10, status: 'slp' },
+					{ chance: 7.5, volatileStatus: 'confusion' },
+					{ chance: 7.5, status: 'frz' },
+					{ chance: 7.5, status: 'slp' },
+					{ chance: 7.5, status: 'brn' },
 				],
 				darkcrystalcavernterrain: [{ chance: 30, boosts: { accuracy: -1 } }],
 				desertterrain: [{ chance: 30, boosts: { accuracy: -1 } }],
@@ -17698,10 +17699,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}],
 				psychicterrain: [{ chance: 30, boosts: { spe: -1 } }],
 				rainbowterrain: [
-					{ chance: 6, status: 'par' },
-					{ chance: 6, status: 'slp' },
-					{ chance: 6, status: 'frz' },
-					{ chance: 6, status: 'brn' },
+					{ chance: 7.5, status: 'par' },
+					{ chance: 7.5, status: 'slp' },
+					{ chance: 7.5, status: 'frz' },
+					{ chance: 7.5, status: 'brn' },
 				],
 				rockyterrain: [{ chance: 30, volatileStatus: 'flinch' }],
 				shortcircuitterrain: [{ chance: 30, status: 'par' }],
@@ -18168,7 +18169,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		//			["bigtopterrain", "Fighting"],
 		//			["psychicterrain", "Psychic"],
 		//			["chessboardterrain", "Psychic"],
-		//			["darkcrystalterrain", "Dark"],
+		//			["darkcrystalcavernterrain", "Dark"],
 		//			["starlightarenaterrain", "Dark"],
 		//			["shortcircuitterrain", "Ghost"],
 		//			["factoryterrain", "Steel"],
@@ -18622,7 +18623,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return !target.fainted;
 		},
 		onTryMove() {
-			if (this.field.isTerrain('dragonsdenterrain')) {
+			if (this.field.isTerrain(['dragonsdenterrain'])) {
 				return null;
 			}
 		},
@@ -19272,7 +19273,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onTryMove(attacker, defender, move) {
-			if (this.field.isTerrain('darkcrystalcavernterrain') && !this.field.isWeather('sunnyday')) {
+			if (this.field.isTerrain(['darkcrystalcavernterrain', 'rainbowterrain']) && !this.field.isWeather('sunnyday')) {
 				this.debug('Dark Crystal Cavern sun suppress');
 				this.add('-fail', attacker, move, '[from] Dark Crystal Cavern');
 				this.attrLastMove('[still]');
@@ -19320,7 +19321,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onTryMove(attacker, defender, move) {
-			if (this.field.isTerrain('darkcrystalcavernterrain')) {
+			if (this.field.isTerrain(['darkcrystalcavernterrain', 'rainbowterrain'])) {
 				this.debug('Dark Crystal Cavern sun suppress');
 				this.add('-fail', attacker, move, '[from] Dark Crystal Cavern');
 				this.attrLastMove('[still]');
@@ -21061,12 +21062,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				factor = 0.25;
 				break;
 			default:
-				if (this.field.isTerrain('darkcrystalcavernterrain')) {
-					factor = 0.75;
-				}
-				break;
 			}
-			if (this.field.isTerrain('coldeclipseterrain')) {
+			if (this.field.isTerrain(['darkcrystalcavernterrain', 'coldeclipseterrain'])) {
 				factor = 0.25;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -21665,12 +21662,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["bewitchedwoodsterrain", "Fairy"],
 				["bigtopterrain", "Fighting"],
 				["burningterrain", "Fire"],
-				["caveterrain", "Ground"],
+				["caveterrain", "Rock"],
 				["chessboardterrain", "Psychic"],
 				["coldeclipseterrain", "Ice"],
 				["corrosivemistterrain", "Poison"],
 				["corrosiveterrain", "Poison"],
-				["crystalcavernterrain", "Rock"],
 				["darkcrystalcavernterrain", "Dark"],
 				["desertterrain", "Ground"],
 				["dragonsdenterrain", "Dragon"],
@@ -21702,7 +21698,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["wastelandsurface", "Poison"],
 				["watersurfaceterrain", "Water"],
 			]);
-			let newType = terrainTypeMap.get(this.field.getTerrain().id);
+			let newType;
+			if (this.field.isTerrain('crystalcavernterrain')) {
+				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
+				newType = counter[this.CrystalCavernCounter];
+			} else {
+				newType = terrainTypeMap.get(this.field.getTerrain().id);
+			}
 			if (newType === 'Random') {
 				newType = this.sample(['Water', 'Fire', 'Grass', 'Steel', 'Ground', 'Rock', 'Bug', 'Ice', 'Ghost', 'Fairy', 'Dark', 'Electric', 'Normal', 'Fighting', 'Flying', 'Psychic', 'Dragon', 'Poison']);
 			}
@@ -22443,20 +22445,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Psychic",
 		zMove: { boost: { accuracy: 1 } },
 		contestType: "Clever",
-	},
-	trickyreception: {
-		num: 1001,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Tricky Reception",
-		pp: 10,
-		priority: -7,
-		flags: { mirror: 1 },
-		pseudoWeather: 'trickroom',
-		selfSwitch: 'copyvolatile',
-		target: "all",
-		type: "Psychic",
 	},
 	triplearrows: {
 		num: 843,
@@ -23227,6 +23215,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'snowscape':
 				move.basePower *= 2;
 				break;
+			default:
+				if (this.field.isTerrain('rainbowterrain')) {
+					move.basePower *= 2;
+					break;
+				}
 			}
 			this.debug(`BP: ${move.basePower}`);
 		},
@@ -23452,7 +23445,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source) {
-				if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('rainbowterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('starlightarenaterrain'))
+				if (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']))
 					this.effectState.hp = source.maxhp * 3 / 4;
 				else
 					this.effectState.hp = source.maxhp / 2;
