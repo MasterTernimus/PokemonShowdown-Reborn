@@ -558,8 +558,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
+			const glutton = pokemon.hasAbility('Gluttony') ? 2 : 1;
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.baseMaxhp / 16);
+				this.heal(pokemon.baseMaxhp * glutton / 16);
 			} else {
 				this.damage(pokemon.baseMaxhp / 8);
 			}
@@ -3378,7 +3379,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 16);
+			const glutton = pokemon.hasAbility('Gluttony') ? 2 : 1;
+			this.heal(pokemon.baseMaxhp*glutton / 16);
 		},
 		num: 234,
 		gen: 2,

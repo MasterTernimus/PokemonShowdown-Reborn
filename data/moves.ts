@@ -2358,7 +2358,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const terrainTypeMap = new Map<string, string>([
 				['ashenbeachterrain', 'Ground'],
 				['bewitchedwoodsterrain', 'Fairy'],
-				['bigtopterrain', 'Normal'],
+				['bigtopterrain', 'Fighting'],
 				['burningterrain', 'Fire'],
 				['caveterrain', 'Rock'],
 				['chessboardterrain', 'Psychic'],
@@ -2779,16 +2779,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onModifyMove(move) {
 			if (this.field.isTerrain('bigtopterrain')) {
-				move.secondaries = [];
-				move.secondaries.push({
-					boosts: {
-						atk: 2,
-						def: 2,
-						spa: 2,
-						spd: 2,
-						spe: 2,
-					},
-				});
+				move.boosts = {
+					atk: 2,
+					def: 2,
+					spa: 2,
+					spd: 2,
+					spe: 2,
+				};
 			}
 		},
 		onTryHit(pokemon, target, move) {
@@ -12124,7 +12121,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Mat Block",
 		pp: 10,
-		priority: 0,
+		priority: 1,
 		flags: { snatch: 1, nonsky: 1, noassist: 1, failcopycat: 1 },
 		stallingMove: true,
 		sideCondition: 'matblock',
@@ -19896,6 +19893,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 3,
 		flags: { protect: 1, reflectable: 1, allyanim: 1, noassist: 1, failcopycat: 1 },
 		volatileStatus: 'spotlight',
+		onModifyMove(move) {
+			if (this.field.isTerrain('bigtopterrain')) {
+				move.boosts = {
+					atk: 1,
+					spa: 1,
+				};
+				move.secondaries = [];
+				move.secondaries.push({
+					chance: 100,
+					self: {
+						boosts: {
+							atk: 1,
+							spa: 1,
+						},
+					},
+				});
+			}
+		},
 		onTryHit(target) {
 			if (this.activePerHalf === 1) return false;
 		},
