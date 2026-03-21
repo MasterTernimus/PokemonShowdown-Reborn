@@ -414,6 +414,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				source.formeChange('Greninja-Ash', this.effect, true);
 				source.formeRegression = true;
 				source.bondTriggered = true;
+			} else if (source.species.id === 'greninja') {
+				this.boost({ atk: 1, spa: 1, spe: 1 }, source, source, this.effect);
+				this.add('-activate', source, 'ability: Battle Bond');
+				source.bondTriggered = true;
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
@@ -1768,8 +1772,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, `[of] ${warnTarget}`);
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.chainModify(0.8);
+		onDamage(damage, source, target, effect) {
+			if (effect && effect.effectType === 'Move' && effect.category !== 'Status')
+				return this.chainModify(0.8);
 		},
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('psychicterrain')) {
@@ -2118,7 +2123,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
 			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.field.isTerrain('grassyterrain') || this.randomChance(1, 2)) {
-				if (pokemon.hp && !pokemon.item && this.dex.items.get(pokemon.lastItem).isBerry) {
+				if (pokemon.hp && !pokemon.item && (this.dex.items.get(pokemon.lastItem).isBerry || ['telluricseed', 'syntheticseed', 'elementalseed', 'magicalseed'].includes(pokemon.lastItem))) {
 					pokemon.setItem(pokemon.lastItem);
 					pokemon.lastItem = '';
 					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Harvest');
@@ -3103,7 +3108,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const terrainTypeMap = new Map<string, string>([
 				['ashenbeachterrain', 'Ground'],
 				['bewitchedwoodsterrain', 'Fairy'],
-				['bigtopterrain', 'Normal'],
+				['bigtopterrain', 'Fighting'],
 				['burningterrain', 'Fire'],
 				['caveterrain', 'Rock'],
 				['chessboardterrain', 'Psychic'],
@@ -4642,6 +4647,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.debug('Rivalry boost');
 					return this.chainModify(1.25);
 				}
+			}
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== this.effectState.target && target.isAlly(this.effectState.target) && source.gender && target.gender && source.gender !== target.gender) {
+				this.debug('Rivalry weaken');
+				return this.chainModify(0.75);
 			}
 		},
 		flags: {},
@@ -6278,6 +6289,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd() {
 			this.effectState.unnerved = false;
+		},
+		onFoeUseItem(item) {
+			if (['elementalseed', 'telluricseed', 'magicalseed', 'syntheticseed'].includes(item.id))
+				return !this.effectState.unnerved;
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
