@@ -349,51 +349,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "Ally Switch",
 		pp: 15,
-		priority: 2,
+		priority: -6,
 		flags: { metronome: 1 },
-		onPrepareHit(pokemon) {
-			return pokemon.addVolatile('allyswitch');
+		onTry(source) {
+			return !!this.canSwitch(source.side);
 		},
-		onHit(pokemon) {
-			let success = true;
-			// Fail in formats where you don't control allies
-			if (this.format.gameType !== 'doubles' && this.format.gameType !== 'triples') success = false;
-
-			// Fail in triples if the Pokemon is in the middle
-			if (pokemon.side.active.length === 3 && pokemon.position === 1) success = false;
-
-			const newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
-			if (!pokemon.side.active[newPosition]) success = false;
-			if (pokemon.side.active[newPosition].fainted) success = false;
-			if (!success) {
-				this.add('-fail', pokemon, 'move: Ally Switch');
-				this.attrLastMove('[still]');
-				return this.NOT_FAIL;
-			}
-			this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
-		},
-		condition: {
-			duration: 2,
-			counterMax: 729,
-			onStart() {
-				this.effectState.counter = 3;
-			},
-			onRestart(pokemon) {
-				// this.effectState.counter should never be undefined here.
-				// However, just in case, use 1 if it is undefined.
-				const counter = this.effectState.counter || 1;
-				this.debug(`Ally Switch success chance: ${Math.round(100 / counter)}%`);
-				const success = this.randomChance(1, counter);
-				if (!success) {
-					delete pokemon.volatiles['allyswitch'];
-					return false;
-				}
-				if (this.effectState.counter < (this.effect as Condition).counterMax!) {
-					this.effectState.counter *= 3;
-				}
-				this.effectState.duration = 2;
-			},
-		},
+		selfSwitch: true,
 		secondary: null,
 		target: "self",
 		type: "Psychic",
@@ -2262,7 +2223,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 100,
 			onHit(target, source, move) {
-				if (target?.statsRaisedThisTurn) {
+				if (target?.statsRaisedThisTurn || this.field.isTerrain('volcanicterrain')) {
 					target.trySetStatus('brn', source, move);
 				}
 			},
@@ -2391,6 +2352,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				['superheatedterrain', 'Fire'],
 				['swampterrain', 'Water'],
 				['underwaterterrain', 'Water'],
+				['volcanicterrain', 'Fire'],
 				['wastelandterrain', 'Poison'],
 				['watersurfaceterrain', 'Water'],
 			]);
@@ -6079,6 +6041,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (this.field.isTerrain('hauntedterrain')) {
 				move.target = "allAdjacentFoes";
 			}
+			if (this.field.isTerrain('volcanicterrain')) {
+				move.secondary = {
+					chance: 100,
+					status: 'brn',
+				};
+			}
 		},
 		volatileStatus: 'partiallytrapped',
 		secondary: null,
@@ -6197,13 +6165,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onHit(target, source, move) {
+			let damageDivisor = 16;
+			if (this.field.isTerrain('volcanicterrain')) {
+				damageDivisor = 8;
+			}
 			for (const ally of target.adjacentAllies()) {
-				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
+				this.damage(ally.baseMaxhp / damageDivisor, ally, source, this.dex.conditions.get('Flame Burst'));
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
+			let damageDivisor = 16;
+			if (this.field.isTerrain('volcanicterrain')) {
+				damageDivisor = 8;
+			}
 			for (const ally of target.adjacentAllies()) {
-				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
+				this.damage(ally.baseMaxhp / damageDivisor, ally, source, this.dex.conditions.get('Flame Burst'));
 			}
 		},
 		secondary: null,
@@ -10522,6 +10498,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain(['volcanicterrain'])) {
+				move.accuracy = 100;
+			}
+		},
 		secondary: {
 			chance: 100,
 			status: 'brn',
@@ -13023,7 +13004,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Milk Drink",
-		pp: 5,
+		pp: 16,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -13548,7 +13529,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Moonlight",
-		pp: 5,
+		pp: 16,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -14013,6 +13994,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				['superheatedterrain', 'heatwave'],
 				['swampterrain', 'muddywater'],
 				['underwaterterrain', 'waterpulse'],
+				['volcanicterrain', 'flamethrower'],
 				['wastelandterrain', 'gunkshot'],
 				['watersurfaceterrain', 'whirlpool'],
 			]);
@@ -16331,6 +16313,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain('volcanicterrain')) {
+				move.selfBoost = {
+					boosts: {
+						atk: 1,
+					},
+				};
+			}
+		},
 		self: {
 			volatileStatus: 'lockedmove',
 		},
@@ -16479,7 +16470,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Recover",
-		pp: 5,
+		pp: 16,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -17144,7 +17135,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Roost",
-		pp: 5,
+		pp: 16,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -17708,6 +17699,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				superheatedterrain: [{ chance: 30, status: 'brn' }],
 				swampterrain: [{ chance: 30, boosts: { spe: -1 } }],
 				underwaterterrain: [{ chance: 30, boosts: { atk: -1 } }],
+				volcanicterrain: [{ chance: 30, status: 'brn' }],
 				wastelandterrain: [
 					{ chance: 7.5, status: 'brn' },
 					{ chance: 7.5, status: 'par' },
@@ -18733,7 +18725,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Slack Off",
-		pp: 5,
+		pp: 16,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -19061,7 +19053,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain(['burningterrain', 'corrosivemistterrain'])) {
+			if (this.field.isTerrain(['burningterrain', 'corrosivemistterrain', 'volcanicterrain'])) {
 				move.boosts = {
 					accuracy: -2,
 				};
@@ -19206,6 +19198,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			if (this.field.isTerrain('volcanicterrain')) return null;
+		},
 		terrain: "coldeclipseterrain",
 		secondary: null,
 		target: "all",
@@ -19245,7 +19240,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Soft-Boiled",
-		pp: 5,
+		pp: 16,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -19996,7 +19991,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.CrystalCavernCounter %= 4;
 				} else if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('caveterrain')) {
 					typeMod *= 2;
-				} else if (this.field.isTerrain('dragonsdenterrain')) {
+				} else if (this.field.isTerrain(['dragonsdenterrain', 'volcanicterrain'])) {
 					if (!pokemon.runImmunity('Fire')) {
 						return;
 					}
@@ -21059,7 +21054,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Synthesis",
-		pp: 5,
+		pp: 16,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -21316,6 +21311,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						spe: -1,
 					},
 				}];
+			}
+			if (this.field.isTerrain('volcanicterrain')) {
+				move.boosts = {
+					spe: -2,
+				};
 			}
 		},
 		condition: {
@@ -21710,7 +21710,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["superheatedterrain", "Fire"],
 				["swampterrain", "Water"],
 				["underwaterterrain", "Water"],
-				["wastelandsurface", "Poison"],
+				['volcanicterrain', 'Fire'],
+				["wastelandsurfaceterrain", "Poison"],
 				["watersurfaceterrain", "Water"],
 			]);
 			let newType;
@@ -23419,7 +23420,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('burningterrain')) {
+			if (this.field.isTerrain(['burningterrain', 'volcanicterrain'])) {
 				move.accuracy = 100;
 			}
 			if (this.field.isTerrain('hauntedterrain')) {
