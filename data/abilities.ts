@@ -517,14 +517,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	blaze: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire') && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('burningterrain')) && !this.field.isTerrain('coldeclipseterrain')) {
+			if (this.movehasType(move, 'Fire') && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain(['burningterrain', 'volcanicterrain'])) && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Blaze boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire') && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('burningterrain')) && !this.field.isTerrain('coldeclipseterrain')) {
+			if (this.movehasType(move, 'Fire') && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain(['burningterrain', 'volcanicterrain'])) && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Blaze boost');
 				return this.chainModify(1.5);
 			}
@@ -1541,8 +1541,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	flamebody: {
 		onDamagingHit(damage, target, source, move) {
+			let probability = 3;
+			if (this.field.isTerrain('volcanicterrain')) {
+				probability = 6;
+			}
 			if (this.checkMoveMakesContact(move, source, target) && !this.field.isTerrain('coldeclipseterrain')) {
-				if (this.randomChance(3, 10)) {
+				if (this.randomChance(probability, 10)) {
 					source.trySetStatus('brn', target);
 				}
 			}
@@ -1555,7 +1559,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	flareboost: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if ((attacker.status === 'brn' || this.field.isTerrain('burningterrain')) && move.category === 'Special' && !this.field.isTerrain('coldeclipseterrain')) {
+			if ((attacker.status === 'brn' || this.field.isTerrain(['burningterrain', 'voclanicterrain'])) && move.category === 'Special' && !this.field.isTerrain('coldeclipseterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1575,7 +1579,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('burningterrain')) {
+			if (this.field.isTerrain('burningterrain') || (this.field.isTerrain('volcanicterrain') && pokemon.isGrounded())) {
 				pokemon.addVolatile('flashfire');
 			}
 		},
@@ -1803,6 +1807,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const target of pokemon.foes()) {
 				if (target.item) {
 					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
+					if (this.randomChance(3, 10)) {
+						target.addVolatile('embargo');
+					}
 				}
 			}
 		},
@@ -2339,6 +2346,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	iceface: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
+			if (this.field.isTerrain('volcanicterrain')) {
+				this.effectState.busted = true;
+				return;
+			}
 			if (this.field.isWeather(['hail', 'snowscape']) && pokemon.species.id === 'eiscuenoice') {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
@@ -3006,7 +3017,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('dragonsdenterrain')) {
+			if (this.field.isTerrain(['dragonsdenterrain', 'volcanicterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
 		},
@@ -3141,6 +3152,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				['superheatedterrain', 'Fire'],
 				['swampterrain', 'Water'],
 				['underwaterterrain', 'Water'],
+				['volcanicterrain', 'Fire'],
+				["wastelandsurfaceterrain", "Poison"],
 				['watersurfaceterrain', 'Water'],
 			]);
 			if (this.field.isTerrain('crystalcavernterrain')) {
@@ -5449,9 +5462,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain')) {
+			if (this.field.isTerrain(['burningterrain', 'superheatedterrain', 'volcanicterrain'])) {
 				this.add('-message', 'The heat activates' + pokemon.name + '\'s Steam Engine!');
 				this.boost({ spe: 6 }, pokemon);
+			}
+		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('volcanicterrain')) {
+				this.boost({ spe: 1 });
 			}
 		},
 		flags: {},
@@ -5961,7 +5979,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return false;
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain(['superheatedterrain', 'dragonsdenterrain', 'burningterrain'])) {
+			if (this.field.isTerrain(['superheatedterrain', 'dragonsdenterrain', 'burningterrain', 'volcanicterrain'])) {
 				this.add('-activate', pokemon, 'ability: Thermal Exchange');
 				this.boost({ atk: 1 });
 			}
@@ -6571,7 +6589,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('burningterrain') || this.field.isTerrain('superheatedterrain') || this.field.isTerrain('dragonsdenterrain')) {
+			if (this.field.isTerrain(['burningterrain', 'superheatedterrain', 'dragonsdenterrain', 'volcanicterrain'])) {
 				this.boost({ def: 2 }, pokemon);
 			}
 		},
@@ -6581,6 +6599,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 273,
 	},
 	whitesmoke: {
+		onSwitchIn() {
+			if (this.field.isTerrain('volcanicterrain')) {
+				this.boost({ atk: 1, spa: 1 });
+			}
+		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;

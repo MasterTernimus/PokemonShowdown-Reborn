@@ -15,10 +15,18 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		// Damage reduction is handled directly in the sim/battle.js damage function
 		onResidualOrder: 10,
 		onResidual(pokemon) {
-			if (this.field.isTerrain('icyterrain'))
-				this.damage(pokemon.baseMaxhp / 32);
-			else
-				this.damage(pokemon.baseMaxhp / 16);
+			let damageDivisor = 16;
+			switch (this.field.terrain) {
+			case 'icyterrain':
+				damageDivisor = 32;
+				break;
+			case 'volcanicterrain':
+				damageDivisor = 8;
+				break;
+			default:
+				break;
+			}
+			this.damage(pokemon.baseMaxhp / damageDivisor);
 		},
 	},
 	par: {
@@ -310,7 +318,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onEnd(target) {
 			if (this.effectState.trueDuration > 1) return;
-			if (this.field.isTerrain('burningterrain')) return;
+			if (this.field.isTerrain(['burningterrain', 'volcanicterrain']) && this.effectState.move === 'ragingfury') return;
 			target.addVolatile('confusion');
 		},
 		onLockMove(pokemon) {

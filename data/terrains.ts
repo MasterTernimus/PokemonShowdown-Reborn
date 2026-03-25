@@ -333,6 +333,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const icy = ['blizzard', 'subzeroslammer'];
 				const cavern = ['powergem', 'diamondstorm'];
+				const burning = ['heatwave', 'lavaplume', 'overheat', 'incinerate', 'inferno', 'flameburst', 'firepledge', 'sacredfire'];
+				const explosive = ['blastburn', 'eruption', 'infernooverdrive', 'fusionfame', 'mindblown', 'searingshot', 'burnup'];
 				if (move.id === 'rocktomb') {
 					this.add('message', '...Piled on!');
 					modifier *= 1.5;
@@ -352,7 +354,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (cavern.includes(move.id)) {
 					modifier *= 1.3;
 				}
-				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || ((move.id === 'dragonpulse' || move.id === 'dragonenergy') && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
+				if (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.Tchanges?.get('volcanicterrain') === 1)) {
 					modifier *= 1.3;
 				}
 				if (icy.includes(move.id)) {
@@ -361,9 +363,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
+				const burning = ['heatwave', 'lavaplume', 'overheat', 'incinerate', 'inferno', 'flameburst', 'firepledge', 'sacredfire'];
+				const explosive = ['blastburn', 'eruption', 'infernooverdrive', 'fusionfame', 'mindblown', 'searingshot', 'burnup'];
 				const cavern = ['powergem', 'diamondstorm'];
 				const icy = ['blizzard', 'subzeroslammer'];
 				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage', 'continentalcrush'];
+
 				if (this.field.terrainState.Tchanges?.get('collapse') === 1 && cavecollapse.includes(move.id)) {
 					this.add('-message', 'The quake collapsed the ceiling!');
 					this.field.terrainState.Tchanges?.set('collapse', 0);
@@ -392,18 +397,21 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('crystalcavernterrain', source, move);
 					return;
 				}
-				if (move.id === 'devastingdrake' || move.id === 'dracometeor' || (move.id === 'dragonpulse' && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
-					this.field.changeTerrain('dragonsdenterrain');
-					this.add('-message', 'The draconic energy mutated the field');
-					return;
-				} else if (move.id === 'dragonpulse') {
-					this.field.terrainState.Tchanges?.set('dragonsdenterrain', 1);
-					this.add('-message', 'Draconic energy seeps in...');
-				}
+
 				if (icy.includes(move.id)) {
 					this.field.changeTerrain('icyterrain');
 					this.add('-message', 'The cave froze over!');
 					return;
+				}
+
+				if (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.Tchanges?.get('volcanicterrain') === 1)) {
+					this.add('-message', 'The cave combusted!');
+					this.field.changeTerrain('volcanicterrain');
+					return;
+				}
+				if (burning.includes(move.id)) {
+					this.add('-message', 'The flames are reaching supercritical temperatures!');
+					this.field.terrainState.Tchanges?.set('volcanicterrain', 1);
 				}
 			},
 			onFieldStart() {
@@ -1238,13 +1246,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const terrain_change1 = ['muddywater', 'surf'];
 				const forwardChange = terrain_change1.includes(move.id) ? 1 : (move.id === 'sparklingaria' ? 2 : 0);
 				const current = this.field.terrainState.Tchanges?.get('caveterrain') ?? 0;
-				if (terrain_change.includes(move.id) || (current + forwardChange >= 3)) {
+				if ((current + forwardChange >= 3)) {
 					this.add('-message', 'The lava solidified!');
 					this.field.changeTerrain('caveterrain');
 					return;
 				} else if (move.id === 'mistball') {
 					this.add('-message', 'The mist-ical energy altered the surroundings!');
 					this.field.changeTerrain('fairytaleterrain');
+					return;
+				}
+				if (terrain_change.includes(move.id)) {
+					this.field.changeTerrain('volcanicterrain');
 					return;
 				}
 				this.field.terrainState.Tchanges?.set('caveterrain', current + forwardChange);
@@ -2885,6 +2897,141 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Underwater Terrain');
+			},
+		},
+	},
+	volcanicterrain: {
+		name: "Volcanic Terrain",
+		condition: {
+			onSetStatus(status) {
+				if (status.id === 'frz') {
+					return false;
+				}
+			},
+			onModifyMove(move) {
+				if (move.type === 'Rock' || ['clearsmog', 'smog', 'smackdown', 'thousandarrows', 'rockslide'].includes(move.id)) {
+					move.types = [move.type, 'Fire'];
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				const caveMoves = ['sandtomb', 'scorchingsands', 'sandsearstorm', 'defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'muddywater', 'sparklingaria', 'watersport', 'surf', 'waterpledge', 'sludgewave'];
+				const caveZMoves = ['continentalcrush', 'supersonicskystrike', 'hydrovortex', 'aciddownpour'];
+				const dragonMove = ['dragonpulse', 'dragonenergy'];
+				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
+				if (source.isGrounded() && move.type === 'Fire') {
+					this.add('-message', 'The blaze amplified the attack!');
+					modifier *= 1.5;
+				}
+				if (target.isGrounded() && move.type === 'Grass' || move.type === 'Ice') {
+					this.add('-message', 'The blaze softened the attack...');
+					modifier *= 0.5;
+				}
+				if (move.type === 'Water') {
+					this.add('-message', 'The attack evaporated!');
+					modifier *= 0.75;
+				}
+				if (['clearsmog', 'smog'].includes(move.id)) {
+					this.add('-message', 'The flames spread from the attack!');
+					modifier *= 2;
+				}
+				if (['rockslide', 'smackdown', 'thousandarrows'].includes(move.id)) {
+					this.add('-message', `${target.name} was knocked into the flames!`);
+					modifier *= 1.5;
+				}
+				if (move.id === 'infernalparade') {
+					this.add('-message', 'The flames spread from the attack!');
+					modifier *= 1.5;
+				}
+				if (caveZMoves.includes(move.id) || (caveMoves.includes(move.id) && this.field.terrainState.Tchanges?.get('caveterrain') === 1)) {
+					modifier *= 1.3;
+				}
+				if (dragonMove.includes(move.id) || (uberDragon.includes(move.id) && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
+					modifier *= 1.3;
+				}
+				return this.chainModify(modifier);
+			},
+			onAfterMove(target, source, move) {
+				const moveMessages = new Map<string, string>([
+					['sandtomb', 'The sand snuffed out the flame!'],
+					['scorchingsands', 'The sand snuffed out the flame!'],
+					['sandsearstorm', 'The sand snuffed out the flame!'],
+					['defog', 'The wind snuffed out the flame!'],
+					['gust', 'The wind snuffed out the flame!'],
+					['hurricane', 'The wind snuffed out the flame!'],
+					['razorwind', 'The wind snuffed out the flame!'],
+					['tailwind', 'The wind snuffed out the flame!'],
+					['twister', 'The wind snuffed out the flame!'],
+					['whirlwind', 'The wind snuffed out the flame!'],
+					['muddywater', 'The water snuffed out the flame!'],
+					['sparklingaria', 'The water snuffed out the flame!'],
+					['surf', 'The water snuffed out the flame!'],
+					['waterpledge', 'The water snuffed out the flame!'],
+					['watersport', 'The water snuffed out the flame!'],
+					['waterspout', 'The water snuffed out the flame!'],
+					['sludgewave', 'The grime snuffed out the flame!'],
+					['continentalcrush', 'The sand snuffed out the flame!'],
+					['supersonicskystrike', 'The wind snuffed out the flame!'],
+					['hydrovortex', 'The water snuffed out the flame!'],
+					['aciddownpour', 'The grime snuffed out the flame!'],
+				]);
+
+				const caveMoves = ['sandtomb', 'scorchingsands', 'sandsearstorm', 'defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'muddywater', 'sparklingaria', 'watersport', 'surf', 'waterpledge', 'sludgewave'];
+				const caveZMoves = ['continentalcrush', 'supersonicskystrike', 'hydrovortex', 'aciddownpour'];
+				const dragonMove = ['dragonpulse', 'dragonenergy'];
+				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
+				if (uberDragon.includes(move.id) || (dragonMove.includes(move.id) && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
+					this.field.changeTerrain('dragonsdenterrain');
+					this.add('-message', 'The draconic energy mutated the field');
+					return;
+				}
+				if (dragonMove.includes(move.id)) {
+					this.field.terrainState.Tchanges?.set('dragonsdenterrain', 1);
+					this.add('-message', 'Draconic energy seeps in...');
+				}
+				if (caveZMoves.includes(move.id) || (caveMoves.includes(move.id) && this.field.terrainState.Tchanges?.get('caveterrain') === 1)) {
+					this.field.changeTerrain('caveterrain');
+					this.add('-message', moveMessages.get(move.id));
+					return;
+				}
+				if (dragonMove.includes(move.id)) {
+					this.field.terrainState.Tchanges?.set('caveterrain', 1);
+					this.add('-message', 'The flames are wavering...');
+				}
+			},
+			onResidual(pokemon) {
+				const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil', 'wellbakedbody'];
+				const weak = ['leafguard', 'fluffy', 'grasspelt', 'icebody'];
+				if (!(immune.includes(pokemon.ability) || pokemon.volatiles['aquaring'] || pokemon.hasType('Fire')) && pokemon.isGrounded()) {
+					const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', pokemon.types), -6, 6);
+					const damage = this.clampIntRange(pokemon.baseMaxhp / 8 * 2 ** typeMod, 1);
+					if (weak.includes(pokemon.ability) || pokemon.volatiles['tarshot']) {
+						this.damage(damage * 2, pokemon);
+					} else {
+						this.damage(damage, pokemon);
+					}
+				}
+				if (pokemon.moveThisTurn === 'burnup') {
+					pokemon.setType(pokemon.getTypes(true).map(type => type === "???" ? "Fire" : type));
+					this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), 'from Burning Terrain');
+				}
+				if (this.field.isWeather('hail')) {
+					this.add('-message', 'The ice melted!');
+					this.field.clearWeather();
+				}
+				if (this.field.isWeather('raindance') || this.field.isWeather('sandstorm')) {
+					this.add('-message', 'The turbulent weather snuffed out the flames!');
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', 'Volcanic Terrain');
+				if (this.field.isWeather('hail')) {
+					this.field.clearWeather();
+				}
+			},
+			onFieldEnd() {
+				this.add('-fieldend', 'Volcanic Terrain');
 			},
 		},
 	},

@@ -1837,7 +1837,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
@@ -1890,6 +1890,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				this.add('-message', pokemon.name + ' is imbued and sped up by the icy surface!');
 				this.boost({ spe: 1 });
 				this.actions.useMove('soak', pokemon, { target: pokemon, sourceEffect: item });
+			}
+			if (this.field.isTerrain('burningterrain')) {
+				this.boost({ atk: 1, spa: 1, spe: 1 });
+				this.actions.useMove('firespin', pokemon, { target: pokemon, sourceEffect: item });
 			}
 		},
 		onTerrainChange(pokemon) {
