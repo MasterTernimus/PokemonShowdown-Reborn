@@ -1479,6 +1479,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (type === 'Dragon' && pokemon.hasType('Fairy')) {
 					return false;
 				}
+				if (type === 'Ghost' && pokemon.hasType('Psychic')) {
+					this.add('-message', 'Ghosts forgot how to beat Psychics!');
+					return true;
+				}
 			},
 			onModifyMove(move) {
 				const Special = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Ice', 'Dragon', 'Psychic', 'Dark'];

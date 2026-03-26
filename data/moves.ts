@@ -1601,10 +1601,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyMove(move) {
 			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('coldeclipseterrain')) {
 				move.accuracy = true;
-			} else {
-				if (this.field.isTerrain('glitchterrain')) {
-					move.accuracy = 90;
-				}
+			} else if (this.field.isTerrain('glitchterrain')) {
+				move.accuracy = 90;
 			}
 		},
 		secondary: {
@@ -16205,12 +16203,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onBeforeMovePriority: 100,
-			onLockMove(pokemon) {
-				if (this.field.isTerrain('glitchterrain')) {
-					return 'rage';
-				}
-			},
 			onBeforeMove(pokemon) {
+				if (this.field.isTerrain('glitchterrain')) return;
 				this.debug('removing Rage before attack');
 				pokemon.removeVolatile('rage');
 			},
@@ -16656,7 +16650,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onHit(target, source, move) {
 			const result = target.setStatus('slp', source, move);
-			if (!result) return result;
+			if (!result && (!this.field.isTerrain('glitchterrain') && target.status !== 'slp')) return result;
 			target.statusState.time = 3;
 			target.statusState.startTime = 3;
 			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
