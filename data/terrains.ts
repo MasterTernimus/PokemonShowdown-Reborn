@@ -373,6 +373,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const cavern = ['powergem', 'diamondstorm'];
 				const icy = ['blizzard', 'subzeroslammer'];
 				const cavecollapse = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage', 'continentalcrush'];
+				const dragonMove = ['dragonpulse', 'dragonenergy'];
+				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
 
 				if (this.field.terrainState.Tchanges?.get('collapse') === 1 && cavecollapse.includes(move.id)) {
 					this.add('-message', 'The quake collapsed the ceiling!');
@@ -417,6 +419,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (burning.includes(move.id)) {
 					this.add('-message', 'The flames are reaching supercritical temperatures!');
 					this.field.terrainState.Tchanges?.set('volcanicterrain', 1);
+				}
+				if (uberDragon.includes(move.id) || (dragonMove.includes(move.id) && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
+					this.field.changeTerrain('dragonsdenterrain');
+					this.add('-message', 'The draconic energy mutated the field');
+					return;
+				}
+				if (dragonMove.includes(move.id)) {
+					this.field.terrainState.Tchanges?.set('dragonsdenterrain', 1);
+					this.add('-message', 'Draconic energy seeps in...');
+					return;
 				}
 			},
 			onFieldStart() {
