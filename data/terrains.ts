@@ -2923,8 +2923,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 	},
 	volcanicterrain: {
 		name: "Volcanic Terrain",
-		duration: 9999,
 		condition: {
+			effectType: "Terrain",
+			duration: 9999,
+			onBasePowerPriority: 6,
 			onSetStatus(status) {
 				if (status.id === 'frz') {
 					return false;
