@@ -412,6 +412,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 
 				if (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.Tchanges?.get('volcanicterrain') === 1)) {
+					const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil', 'wellbakedbody'];
+					for (const pokemon of this.getAllActive()) {
+						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility(immune)) {
+							continue;
+						}
+						this.damage(pokemon.baseMaxhp / 2, pokemon);
+					}
 					this.add('-message', 'The cave combusted!');
 					this.field.changeTerrain('volcanicterrain');
 					return;
@@ -3045,6 +3052,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (this.field.isWeather('raindance') || this.field.isWeather('sandstorm')) {
 					this.add('-message', 'The turbulent weather snuffed out the flames!');
+					this.field.changeTerrain('caveterrain');
 				}
 			},
 			onFieldStart() {
