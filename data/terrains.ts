@@ -2923,6 +2923,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 	},
 	volcanicterrain: {
 		name: "Volcanic Terrain",
+		duration: 9999,
 		condition: {
 			onSetStatus(status) {
 				if (status.id === 'frz') {
@@ -3035,7 +3036,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (pokemon.moveThisTurn === 'burnup') {
 					pokemon.setType(pokemon.getTypes(true).map(type => type === "???" ? "Fire" : type));
-					this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), 'from Burning Terrain');
+					this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), 'from Volcanic Terrain');
 				}
 				if (this.field.isWeather('hail')) {
 					this.add('-message', 'The ice melted!');
@@ -3048,6 +3049,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldStart() {
 				this.add('-fieldstart', 'Volcanic Terrain');
 				if (this.field.isWeather('hail')) {
+					this.field.clearWeather();
+				}
+			},
+			onWeatherChange() {
+				if (this.field.isWeather('hail')) {
+					this.add('-message', 'The ice melted!');
 					this.field.clearWeather();
 				}
 			},
