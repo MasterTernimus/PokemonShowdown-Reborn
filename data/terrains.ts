@@ -335,6 +335,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const cavern = ['powergem', 'diamondstorm'];
 				const burning = ['heatwave', 'lavaplume', 'overheat', 'incinerate', 'inferno', 'flameburst', 'firepledge', 'sacredfire'];
 				const explosive = ['blastburn', 'eruption', 'infernooverdrive', 'fusionfame', 'mindblown', 'searingshot', 'burnup'];
+				const dragonMove = ['dragonpulse', 'dragonenergy'];
+				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
 				if (move.id === 'rocktomb') {
 					this.add('message', '...Piled on!');
 					modifier *= 1.5;
@@ -355,6 +357,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.3;
 				}
 				if (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.Tchanges?.get('volcanicterrain') === 1)) {
+					modifier *= 1.3;
+				}
+				if (dragonMove.includes(move.id) || (uberDragon.includes(move.id) && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
 					modifier *= 1.3;
 				}
 				if (icy.includes(move.id)) {
@@ -2993,15 +2998,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (dragonMove.includes(move.id)) {
 					this.field.terrainState.Tchanges?.set('dragonsdenterrain', 1);
 					this.add('-message', 'Draconic energy seeps in...');
+					return;
 				}
 				if (caveZMoves.includes(move.id) || (caveMoves.includes(move.id) && this.field.terrainState.Tchanges?.get('caveterrain') === 1)) {
 					this.field.changeTerrain('caveterrain');
 					this.add('-message', moveMessages.get(move.id));
 					return;
 				}
-				if (dragonMove.includes(move.id)) {
+				if (caveMoves.includes(move.id)) {
 					this.field.terrainState.Tchanges?.set('caveterrain', 1);
-					this.add('-message', 'The flames are wavering...');
 				}
 			},
 			onResidual(pokemon) {

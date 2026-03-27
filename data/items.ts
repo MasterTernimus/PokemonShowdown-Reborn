@@ -1891,13 +1891,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				this.boost({ spe: 1 });
 				this.actions.useMove('soak', pokemon, { target: pokemon, sourceEffect: item });
 			}
-			if (this.field.isTerrain('burningterrain')) {
+			if (this.field.isTerrain('volcanicterrain')) {
 				this.boost({ atk: 1, spa: 1, spe: 1 });
 				this.actions.useMove('firespin', pokemon, { target: pokemon, sourceEffect: item });
 			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
