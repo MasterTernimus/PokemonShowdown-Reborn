@@ -6040,10 +6040,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.target = "allAdjacentFoes";
 			}
 			if (this.field.isTerrain('volcanicterrain')) {
-				move.secondary = {
+				move.secondaries = [];
+				move.secondaries.push({
 					chance: 100,
 					status: 'brn',
-				};
+				});
 			}
 		},
 		volatileStatus: 'partiallytrapped',
@@ -19991,7 +19992,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					typeMod = this.dex.getEffectiveness('Fire', pokemon.getTypes());
 					typeMod = this.clampIntRange(typeMod, -6, 6);
-					this.add('-message', '[Pokémon] was hurt by the molten rocks!');
+					this.add('-message', `${pokemon.name} was hurt by the molten rocks!`);
 				} else if (this.field.isTerrain('coldeclipseterrain')) {
 					if (!pokemon.runImmunity('Ice')) {
 						return;
