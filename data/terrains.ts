@@ -274,8 +274,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike'];
 				if (terrainEndMoves.includes(move.id)) {
-					if (this.field.terrainState.prevterrain) {
-						this.field.changeTerrain(this.field.terrainState.prevterrain);
+					if (this.field.terrainState.prevTerrain) {
+						this.field.changeTerrain(this.field.terrainState.prevTerrain);
 					} else {
 						this.field.clearTerrain();
 					}
@@ -303,8 +303,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldResidual() {
 				if (this.field.weather === 'raindance' || this.field.weather === 'sandstorm') {
-					if (this.field.terrainState.prevterrain) {
-						this.field.changeTerrain(this.field.terrainState.prevterrain);
+					if (this.field.terrainState.prevTerrain) {
+						this.field.changeTerrain(this.field.terrainState.prevTerrain);
 					} else {
 						this.field.clearTerrain();
 					}

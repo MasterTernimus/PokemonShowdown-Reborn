@@ -29,7 +29,7 @@ export class Field {
 		this.weather = '';
 		this.weatherState = this.battle.initEffectState({ id: '' });
 		this.terrain = '';
-		this.terrainState = this.battle.initEffectState({ id: '', Tchanges: new Map<string, number>(), prevterrain: '' });
+		this.terrainState = this.battle.initEffectState({ id: '', Tchanges: new Map<string, number>(), prevTerrain: '' });
 		this.pseudoWeather = {};
 		this.terrainStack = [];
 	}
@@ -250,7 +250,7 @@ export class Field {
 			origin: sourceEffect,
 			duration: prevTerrainState.duration,
 			turn: this.battle.turn,
-			prevterrain: prevTerrainState.id,
+			prevTerrain: prevTerrainState.id,
 		});
 		if (this.terrainState.isBase) {
 			this.terrainStack[0] = this.terrainState;
