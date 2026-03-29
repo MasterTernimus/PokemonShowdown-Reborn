@@ -411,7 +411,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return;
 				}
 
-				if (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.Tchanges?.get('volcanicterrain') === 1)) {
+				if (explosive.includes(move.id)) {
 					const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil', 'wellbakedbody'];
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility(immune)) {
@@ -426,6 +426,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (burning.includes(move.id)) {
 					this.add('-message', 'The flames are reaching supercritical temperatures!');
 					this.field.terrainState.Tchanges?.set('volcanicterrain', 1);
+				}
+				if ((burning.includes(move.id) && this.field.terrainState.Tchanges?.get('volcanicterrain') === 1)) {
+					this.add('-message', 'The cave combusted!');
+					this.field.changeTerrain('volcanicterrain');
+					return;
 				}
 				if (uberDragon.includes(move.id) || (dragonMove.includes(move.id) && this.field.terrainState.Tchanges?.get('dragonsdenterrain') === 1)) {
 					this.field.changeTerrain('dragonsdenterrain');
