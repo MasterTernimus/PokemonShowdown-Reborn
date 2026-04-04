@@ -517,14 +517,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	blaze: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire') && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain(['burningterrain', 'volcanicterrain'])) && !this.field.isTerrain('coldeclipseterrain')) {
+			if (move && this.movehasType(move, 'Fire') && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain(['burningterrain', 'volcanicterrain'])) && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Blaze boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire') && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain(['burningterrain', 'volcanicterrain'])) && !this.field.isTerrain('coldeclipseterrain')) {
+			if (move && this.movehasType(move, 'Fire') && (attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain(['burningterrain', 'volcanicterrain'])) && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Blaze boost');
 				return this.chainModify(1.5);
 			}
@@ -1222,7 +1222,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move && move && this.movehasType(move, 'Dragon')) {
+			if (move && this.movehasType(move, 'Dragon')) {
 				this.debug('Dragon\'s Maw boost');
 				if (this.field.isTerrain('dragonsdenterrain')) {
 					return this.chainModify(2);
@@ -1233,7 +1233,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Dragon')) {
+			if (move && this.movehasType(move, 'Dragon')) {
 				this.debug('Dragon\'s Maw boost');
 				return this.chainModify(1.5);
 			}
@@ -1274,7 +1274,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceBasePowerPriority: 17,
 		onSourceBasePower(basePower, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire')) {
+			if (move && this.movehasType(move, 'Fire')) {
 				return this.chainModify(1.25);
 			}
 		},
@@ -1593,14 +1593,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
-				if (this.movehasType(move, 'Fire') && attacker.hasAbility('flashfire')) {
+				if (move && this.movehasType(move, 'Fire') && attacker.hasAbility('flashfire')) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(atk, attacker, defender, move) {
-				if (this.movehasType(move, 'Fire') && attacker.hasAbility('flashfire')) {
+				if (move && this.movehasType(move, 'Fire') && attacker.hasAbility('flashfire')) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
@@ -1706,7 +1706,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	fluffy: {
 		onSourceModifyDamage(damage, source, target, move) {
 			let mod = 1;
-			if (this.movehasType(move, 'Fire')) mod *= 2;
+			if (move && this.movehasType(move, 'Fire')) mod *= 2;
 			if (move.flags['contact']) mod /= 2;
 			return this.chainModify(mod);
 		},
@@ -2161,14 +2161,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	heatproof: {
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire')) {
+			if (move && this.movehasType(move, 'Fire')) {
 				this.debug('Heatproof Atk weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire')) {
+			if (move && this.movehasType(move, 'Fire')) {
 				this.debug('Heatproof SpA weaken');
 				return this.chainModify(0.5);
 			}
@@ -3212,13 +3212,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('electrictterrain')) {
 				modifier *= 1.5;
 			}
-			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
+			if (move && (move && this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
 				modifier *= 1.3;
 			}
 			return this.chainModify(modifier);
 		},
 		onModifyAtk(atk, pokemon, target, move) {
-			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
+			if (move && (move && this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
 				return this.chainModify(1.3);
 			}
 		},
@@ -3977,13 +3977,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('electrictterrain')) {
 				modifier *= 1.5;
 			}
-			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
+			if (move && (move && this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
 				modifier *= 1.3;
 			}
 			return this.chainModify(modifier);
 		},
 		onModifyAtk(atk, pokemon, target, move) {
-			if (move && (this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
+			if (move && (move && this.movehasType(move, 'Electric') || this.movehasType(move, 'Steel'))) {
 				return this.chainModify(1.3);
 			}
 		},
@@ -4372,14 +4372,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Ghost')) {
+			if (move && this.movehasType(move, 'Ghost')) {
 				this.debug('Purifying Salt weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(spa, attacker, defender, move) {
-			if (this.movehasType(move, 'Ghost')) {
+			if (move && this.movehasType(move, 'Ghost')) {
 				this.debug('Purifying Salt weaken');
 				return this.chainModify(0.5);
 			}
@@ -4528,7 +4528,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (this.movehasType(move, ['Bug', 'Dark', 'Ghost'])) {
+			if (move && this.movehasType(move, ['Bug', 'Dark', 'Ghost'])) {
 				this.boost({ spe: 1 });
 			}
 		},
@@ -4744,7 +4744,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.field.isWeather('sandstorm') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
-				if (move && (this.movehasType(move, 'Rock') || this.movehasType(move, 'Ground') || this.movehasType(move, 'Steel'))) {
+				if (move && (move && this.movehasType(move, 'Rock') || this.movehasType(move, 'Ground') || this.movehasType(move, 'Steel'))) {
 					this.debug('Sand Force boost');
 					return this.chainModify(1.3);
 				}
@@ -5457,7 +5457,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	steamengine: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.movehasType(move, ['Water', 'Fire'])) {
+			if (move && this.movehasType(move, ['Water', 'Fire'])) {
 				this.boost({ spe: 6 });
 			}
 		},
@@ -5496,7 +5496,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Steel')) {
+			if (move && this.movehasType(move, 'Steel')) {
 				this.debug('Steelworker boost');
 				return this.chainModify(1.5);
 			}
@@ -5509,7 +5509,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	steelyspirit: {
 		onAllyBasePowerPriority: 22,
 		onAllyBasePower(basePower, attacker, defender, move) {
-			if (this.movehasType(move, 'Steel')) {
+			if (move && this.movehasType(move, 'Steel')) {
 				this.debug('Steely Spirit boost');
 				if (this.field.isTerrain('fairytaleterrain')) {
 					return this.chainModify(2);
@@ -5961,7 +5961,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	thermalexchange: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.movehasType(move, 'Fire')) {
+			if (move && this.movehasType(move, 'Fire')) {
 				this.boost({ atk: 1 });
 			}
 		},
@@ -5992,14 +5992,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	thickfat: {
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire')) {
+			if (move && this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire')) {
 				this.debug('Thick Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire')) {
+			if (move && this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire')) {
 				this.debug('Thick Fat weaken');
 				return this.chainModify(0.5);
 			}
@@ -6024,14 +6024,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	torrent: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Water') && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
+			if (move && this.movehasType(move, 'Water') && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
 				this.debug('Torrent boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Water') && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
+			if (move && this.movehasType(move, 'Water') && attacker.hp <= attacker.maxhp / 3 || this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain') {
 				this.debug('Torrent boost');
 				return this.chainModify(1.5);
 			}
@@ -6480,23 +6480,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	waterbubble: {
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire')) {
+			if (move && this.movehasType(move, 'Fire')) {
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Fire')) {
+			if (move && this.movehasType(move, 'Fire')) {
 				return this.chainModify(0.5);
 			}
 		},
 		onModifyAtk(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Water')) {
+			if (move && this.movehasType(move, 'Water')) {
 				return this.chainModify(2);
 			}
 		},
-		onModifySpA(atk, attacker, defender, move) {
-			if (this.movehasType(move, 'Water')) {
+		onModifySpA(atk, defender, attacker, move) {
+			if (move && this.movehasType(move, 'Water')) {
 				return this.chainModify(2);
 			}
 		},

@@ -1565,7 +1565,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onAfterMove(source, target, move) {
-				if (!target.hp && move.flags['recharge']) {
+				if (target.fainted && move.flags['recharge']) {
 					this.add('-message', 'The glitched terrain allowed the move to recharge from the fallen pokemon');
 					source.removeVolatile('mustrecharge');
 				}
