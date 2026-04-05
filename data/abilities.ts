@@ -73,7 +73,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
 					return this.chainModify(1.5);
 				}
-			} return this.chainModify([4915, 4096]);
+			} return this.chainModify(1.2);
 		},
 		flags: {},
 		name: "Aerilate",
@@ -819,6 +819,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			const ally = pokemon.allies()[0];
+			if (this.field.isTerrain('ashenbeachterrain')) {
+				ally.addVolatile('helpinghand');
+				pokemon.addVolatile('helpinghand');
+			}
 			if (!ally) return;
 
 			let i: BoostID;
@@ -1017,7 +1021,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
-				this.boost({ def: 1, spd: 1 }, pokemon);
+				this.boost({ def: 1 }, pokemon);
 			}
 		},
 		flags: {},
@@ -1243,6 +1247,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 263,
 	},
+	dragonize: {
+		onModifyTypePriority: 1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !(move.isZ && move.category !== 'Status') &&
+				// TODO: Figure out actual interaction
+				(!noModifyType.includes(move.id) || this.activeMove?.isMax) && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Dragon';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify(1.2);
+		},
+		flags: {},
+		name: "Dragonize",
+		rating: 4,
+		num: 10001,
+	},
 	drizzle: {
 		onStart(source) {
 			if (source.species.id === 'kyogre' && source.item === 'blueorb') return;
@@ -1402,6 +1428,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			target.addVolatile('charge');
+			if (this.field.isTerrain(['factoryterrain', 'shortcircuitterrain'])) {
+				this.boost({ spd: 1 });
+			}
 		},
 		flags: {},
 		name: "Electromorphosis",
@@ -1926,9 +1955,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	goodasgold: {
 		onTryHit(target, source, move) {
-			if (move.category === 'Status' && target !== source) {
+			if (move.category === 'Status' && target !== source && !this.field.isTerrain('burningterrain')) {
 				this.add('-immune', target, '[from] ability: Good as Gold');
 				return null;
+			}
+		},
+		onBasePower(basePower, source) {
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				return this.chainModify(1.2);
 			}
 		},
 		flags: { breakable: 1 },
@@ -2275,6 +2309,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
 			}
 		},
+		onBasePower(basePower, source) {
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				return this.chainModify(1.2);
+			}
+		},
 		flags: {},
 		name: "Hydra Bond",
 		rating: 4.5,
@@ -2411,7 +2450,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEffectiveness(typeMod, target, type, move) {
-			if (this.field.isTerrain('icyterrain') && move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Ice' && typeMod > 0) {
+			if (this.field.isTerrain(['icyterrain', 'snowymountainterrain']) && move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Ice' && typeMod > 0) {
 				this.add('-fieldactivate', 'Ice Scales');
 				return 0;
 			}
@@ -2644,7 +2683,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
-				this.boost({ atk: 1, spa: 1 }, pokemon);
+				this.boost({ atk: 1 }, pokemon);
 			}
 		},
 		flags: {},
@@ -3094,6 +3133,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 178,
 	},
+	megasol: {
+		onEffectiveWeather(source, target, effect) {
+			if (source && effect && source.hasAbility('megasol') && effect.effectType === 'Move') {
+				return 'sunnyday';
+			}
+		},
+		flags: {},
+		name: "Mega Sol",
+		rating: 4,
+		num: 10002,
+	},
 	merciless: {
 		onModifyCritRatio(critRatio, source, target) {
 			let modifier = 0;
@@ -3231,6 +3281,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1, spd: 1 });
+			}
+			if (this.field.isTerrain('mirrorarmor')) {
+				this.boost({ evasion: 1 });
 			}
 		},
 		onFoeTryMove(target, source, move) {
@@ -4030,7 +4083,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	poisonpuppeteer: {
 		onSwitchIn() {
 			if (this.field.isTerrain('wastelandterrain')) {
-				this.boost({ accuracy: 1 });
+				this.boost({ spd: 2 });
+			}
+			if (this.field.isTerrain('corrosivemistterrain')) {
+				this.boost({ spd: 1 });
 			}
 		},
 		onAnyAfterSetStatus(status, target, source, effect) {
@@ -4592,10 +4648,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) {
-				if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain'))
+				if (this.field.isTerrain('icyterrain') || this.field.isTerrain('snowywinterrain'))
 					return this.chainModify(1.5);
 				else {
-					return this.chainModify([4915, 4096]);
+					return this.chainModify(1.2);
 				}
 			}
 		},
@@ -5468,7 +5524,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('volcanicterrain')) {
+			if (this.field.isTerrain(['volcanicterrain', 'underwaterterrain', 'watersurfaceterrain'])) {
 				this.boost({ spe: 1 });
 			}
 		},
@@ -5651,6 +5707,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				} else {
 					this.boost({ evasion: -1 }, target, pokemon, null, true);
 				}
+			}
+		},
+		onSwitchIn() {
+			if (this.field.isTerrain('mistyterrain')) {
+				this.boost({ accuracy: -1 });
 			}
 		},
 		flags: {},
@@ -6072,10 +6133,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceDamagingHit(damage, target, source, move) {
+			let chance = 3;
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Toxic Chain's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
-
-			if (this.randomChance(3, 10)) {
+			if (this.field.isTerrain(['corrosivemistterrain', 'wastelandterrain'])) chance = 6;
+			if (this.randomChance(chance, 10)) {
 				target.trySetStatus('tox', source);
 			}
 		},
@@ -6135,14 +6197,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	transistor: {
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move && this.movehasType(move, 'Ground')) {
+			if (move && this.movehasType(move, 'Ground') && this.field.isTerrain('electricterrain')) {
 				this.debug('Transistor weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move && this.movehasType(move, 'Ground')) {
+			if (move && this.movehasType(move, 'Ground') && this.field.isTerrain('electricterrain')) {
 				this.debug('Transistor weaken');
 				return this.chainModify(0.5);
 			}
@@ -6590,7 +6652,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if (this.field.isTerrain(['burningterrain', 'superheatedterrain', 'dragonsdenterrain', 'volcanicterrain'])) {
-				this.boost({ def: 2 }, pokemon);
+				this.boost({ def: 1 }, pokemon);
 			}
 		},
 		flags: { breakable: 1 },
@@ -6655,6 +6717,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			if (this.field.isWeather('deltastream')) {
 				this.boost({ spa: 1 });
+				if (this.field.isTerrain(['mountainterrain', 'snowymountainterrain')) {
+					this.boost({ atk: 1 });
+				}
 			}
 		},
 		flags: {},
@@ -6685,6 +6750,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			if (this.field.isWeather('deltastream')) {
 				this.boost({ atk: 1 });
+				if (this.field.isTerrain(['mountainterrain', 'snowymountainterrain'])) {
+					this.boost({ spa: 1 });
+				}
 			}
 		},
 		flags: { breakable: 1 },
@@ -6791,6 +6859,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSwitchIn(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
+			if (this.field.isTerrain(['murkwatersurfaceterrain', 'underwaterterrain', 'watersurfaceterrain'])) {
+				if (pokemon.species.forme !== 'Hero') {
+					pokemon.formeChange('Palafin-Hero', this.effect, true);
+					pokemon.heroMessageDisplayed = false;
+				}
+			}
 			if (!pokemon.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
 				pokemon.heroMessageDisplayed = true;

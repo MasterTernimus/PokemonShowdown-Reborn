@@ -1578,7 +1578,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, pokemon, target) {
-			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather()) || this.field.isTerrain('coldeclipseterrain'))) {
+			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather()) || this.field.isTerrain(['coldeclipseterrain', 'snowymountainterrain']))) {
 				move.accuracy = true;
 			}
 		},
@@ -2892,7 +2892,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, source, target) {
-			if (target && (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain('coldeclipseterrain'))) {
+			if (target && (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['coldeclipseterrain', 'icyterrain']))) {
 				move.accuracy = 100;
 			}
 		},
@@ -3573,7 +3573,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Crush Claw",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -4021,7 +4021,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Dire Claw",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		onModifyMove(move) {
 			if (this.field.isTerrain('wastelandterrain')) {
 				move.secondaries = [{
@@ -4532,7 +4532,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Dragon Claw",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -12837,7 +12837,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Metal Claw",
 		pp: 35,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		secondary: {
 			chance: 10,
 			self: {
@@ -13665,11 +13665,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
+			if (this.field.isTerrain(['icyterrain', 'mountainterrain', 'snowymountainterrain'])) {
 				move.accuracy = 100;
-			}
-			if (this.field.isTerrain('mountainterrain')) {
-				move.types = ['Ice', 'Rock'];
 			}
 		},
 		secondary: {
@@ -17839,7 +17836,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Shadow Claw",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		critRatio: 2,
 		secondary: null,
 		target: "normal",
@@ -21693,7 +21690,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["inverseterrain", "Normal"],
 				["mirrorarenaterrain", "Ice"],
 				["mistyterrain", "Fairy"],
-				["mountainterrain", "Flying"],
+				["mountainterrain", "Rock"],
 				["murkwatersurfaceterrain", "Poison"],
 				["newworldterrain", "Random"],
 				["psychicterrain", "Psychic"],
@@ -23374,7 +23371,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather() || this.field.isTerrain(['snowymountainterrain', 'mountainterrain'])))) {
 				move.accuracy = true;
 			}
 		},

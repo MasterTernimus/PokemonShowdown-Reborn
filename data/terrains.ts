@@ -205,7 +205,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (strikermoves.includes(effect.id) || (effect.category === 'Physical' && effect.type === 'Fighting' && (effect.id !== 'seismictoss' && effect.id !== 'counter'))) {
 						const text = ['Weak!', 'Ok!', 'Nice!', 'Powerful!', 'OVER 9000!'];
 						const multiplier = [0.5, 1, 1.5, 2, 3];
-						const position = this.StrikerBonus(source);
+						const position = this.StrikerBonus(source, effect);
 						this.add('-message', text[position]);
 						return damage * multiplier[position];
 					}
@@ -1770,6 +1770,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.id === 'bittermalice') {
 					modifier *= 1.5;
 				}
+				if (move.id === 'chillingwater') {
+					modifier *= 2;
+				}
 				if (igniteMoves.includes(move.id) || (waterTerrains.includes(this.field.terrainStack[1]?.id) && watersurfaceMoves.includes(move.id))) {
 					modifier *= 1.3;
 				}
@@ -1966,9 +1969,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', moveToMessageMap.get(move.id));
 				}
 				let modifier = 1;
-				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "thunder", "eruption", "avalanche", "hypervoice", "mountaingale"];
-				const wind_boost = ["ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "gust", "bleakwindstorm", "sandsearstorm", "wildboltstorm"];
-				const snow = ['blizzard', 'glaciate', 'subzeroslammer'];
+				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "thunder", "eruption", "avalanche", "hypervoice"];
+				const wind_boost = ['fairywind', 'gust', 'icywind', 'ominouswind', 'razorwind', 'silverwind', 'twister'];
+				const snow = ['blizzard', 'glaciate', 'subzeroslammer', 'mountaingale'];
 				if (move.type === 'Rock' || move.type === 'Flying') {
 					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
 					modifier *= 1.5;
@@ -1982,6 +1985,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						modifier *= 1.5;
 					}
 					if (move.category === 'Special' && move.type === 'Flying') {
+						this.add('-message', 'The wind strengthened the attack!');
 						modifier *= 1.5;
 					}
 				}
@@ -2416,21 +2420,21 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				let modifier = 1;
 				const boost_types = ['Rock', 'Ice', 'Flying'];
-				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "silverwind", "twister", "razorwind", "fairywind", "avalanche", "powdersnow", "hypervoice", "glaciate"];
+				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "silverwind", "twister", "razorwind", "fairywind", "avalanche", "powdersnow", "hypervoice", "glaciate", 'bittermalice'];
 				const wind_boost = ["ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "gust", "bleakwindstorm", "sandsearstorm", "wildboltstorm"];
-				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
+				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				if (boost_types.includes(move.type)) {
 					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
-					modifier *= 1.5;
-				}
-				if (boost.includes(move.id)) {
 					modifier *= 1.5;
 				}
 				if (move.type === 'Fire') {
 					this.add('-message', 'The cold softened the attack');
 					modifier *= 0.5;
 				}
-				if (move.id === 'scald' || move.id === 'steameruption' || move.id === 'hydrosteam') {
+				if (boost.includes(move.id)) {
+					modifier *= 1.5;
+				}
+				if (['scald', 'steameruption', 'hydrosteam'].includes(move.id)) {
 					this.add('-message', 'The cold softened the attack...');
 					modifier *= 0.5;
 				}
@@ -2453,10 +2457,21 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
+				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				if (igniteMoves.includes(move.id)) {
 					this.add('-message', 'The snow melted away!');
 					this.field.changeTerrain('mountainterrain');
+				}
+			},
+			onFieldResidual() {
+				if (this.field.weather === 'sunnyday') {
+					this.field.terrainState.sunnyday === undefined ? this.field.terrainState.sunnyday = 0 : this.field.terrainState.sunnyday += 1;
+				} else {
+					this.field.terrainState.sunnyday = 0;
+				}
+				if (this.field.terrainState?.sunnyday === 2) {
+					this.add('-message', 'The mountain was covered in snow!');
+					this.field.changeTerrain('snowymountainterrain');
 				}
 			},
 			onFieldStart() {
@@ -2877,6 +2892,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.category === 'Physical' && move.type !== 'Water' && !source.hasAbility('steelworker')) {
 					modifier *= 0.5;
 				}
+				if (source.hasAbility('propellertail') && move.priority > 0) {
+					modifier *= 1.5;
+				}
 				if (change.includes(move.id) || (this.field.terrainState.Tchanges?.get('sludgewave') === 1 && move.id === 'sludgewave')) {
 					modifier *= 1.3;
 				}
@@ -3206,6 +3224,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.id === 'wavecrash') {
 					this.add('-message', 'The attack rode the current!');
 					modifier *= 2;
+				}
+				if (source.hasAbility('propellertail') && move.priority > 0) {
+					modifier *= 1.5;
 				}
 				if (change.includes(move.id) || (this.field.terrainState.Tchanges?.get('sludgewave') === 1 && move.id === 'sludgewave')) {
 					modifier *= 5325 / 4096;

@@ -2443,15 +2443,16 @@ export class Battle {
 	/*
 	For big top
 	*/
-	StrikerBonus(source: Pokemon): number {
+	StrikerBonus(source: Pokemon, move: ActiveMove): number {
 		const strikerabilities = ['guts', 'sheerforce', 'hugepower', 'purepower', 'punkrock'];
+		const defensiveAbilities = ['bulletproof', 'sturdy', 'heavymetal', 'thickfat', 'solidrock'];
 		const noabilityodds = [[7, 13], [6, 12, 13], [5, 11, 13], [4, 10, 13], [3, 9, 13], [2, 8, 12, 13], [1, 7, 11, 13], [0, 6, 10, 12, 13], [-1, 5, 9, 11, 13], [-1, 4, 8, 10, 13], [-1, 3, 7, 9, 13], [-1, 2, 6, 8, 13], [-1, 1, 5, 7, 13]];
 		const abilityodds = [[-1, 7, 13], [-1, -1, 13], [-1, -1, 7, 13], [-1, -1, -1, 13], [-1, -1, -1, 7, 13], [-1, -1, -1, -1, 13]];
 		let boost = source.boosts.atk;
 		const chance = this.random(13);
 		boost += 6;
 		let bonus = 0;
-		if (source.hasAbility(strikerabilities)) {
+		if (source.hasAbility(strikerabilities) || (move.id === 'bodypress' && source.hasAbility(defensiveAbilities))) {
 			if (boost >= 7) {
 				boost = 5;
 			} else if (boost > 0 && boost < 4) {
