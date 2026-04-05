@@ -6717,7 +6717,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			if (this.field.isWeather('deltastream')) {
 				this.boost({ spa: 1 });
-				if (this.field.isTerrain(['mountainterrain', 'snowymountainterrain')) {
+				if (this.field.isTerrain(['mountainterrain', 'snowymountainterrain'])) {
 					this.boost({ atk: 1 });
 				}
 			}
