@@ -50,6 +50,7 @@ export interface EventMethods {
 	onDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
 	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon, source?: Pokemon, effect?: Effect) => void;
 	onEffectiveness?: MoveEventMethods['onEffectiveness'];
+	onEffectiveWeather?: (this: Battle, source?: Pokemon, target?: Pokemon, effect?: Effect) => string | void;
 	onEntryHazard?: (this: Battle, pokemon: Pokemon) => void;
 	onFaint?: CommonHandlers['VoidEffect'];
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;

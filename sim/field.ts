@@ -73,7 +73,7 @@ export class Field {
 		const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
-		this.weatherState = this.battle.initEffectState({ id: status.id });
+		this.weatherState = this.battle.initEffectState({ id: status.id, previousWeather: prevWeather });
 		if (source) {
 			this.weatherState.source = source;
 			this.weatherState.sourceSlot = source.getSlot();
@@ -126,8 +126,9 @@ export class Field {
 	}
 
 	effectiveWeather() {
-		if (this.suppressingWeather()) return '';
-		return this.weather;
+		const weather = this.battle.runEvent('EffectiveWeather');
+		if (this.suppressingWeather() && !weather) return '';
+		return weather ?? this.weather;
 	}
 
 	suppressingWeather() {
@@ -281,7 +282,7 @@ export class Field {
 				this.terrainStack.shift();
 			}
 		} else if (power === 'terraform') {
-			const user_terrains = ['mistyterrain', 'corrosivemistterrain', 'corrosiveterrain', 'psychicterrain', 'grassyterrain', 'burningterrain', 'snowyterrain', 'inverseterrain', 'glitchterrain', 'rainbowterrain', 'swampterrain'];
+			const user_terrains = ['mistyterrain', 'corrosivemistterrain', 'corrosiveterrain', 'psychicterrain', 'grassyterrain', 'burningterrain', 'inverseterrain', 'glitchterrain', 'coldeclipseterrain', 'rainbowterrain', 'swampterrain'];
 			if (user_terrains.includes(this.terrain)) {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);

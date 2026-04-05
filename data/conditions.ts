@@ -537,13 +537,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			if (this.field.terrainState.Tchanges?.get('sunnyday') === 1) {
+			if (this.field.weatherState?.previousWeather === 'sunnyday') {
 				if (this.field.isTerrain('rainbowterrain')) {
 					this.field.terrainState.duration = this.field.weatherState.duration;
 				} else {
 					this.field.setTerrain('rainbowterrain', source, effect);
 				}
-				this.field.terrainState.Tchanges?.set('sunnyday', 0);
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -600,7 +599,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('heatrock') || this.field.isTerrain('desertterrain') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
+			if (source?.hasItem('heatrock') || this.field.isTerrain(['desertterrain', 'mountainterrain', 'snowymountainterrain'])) {
 				return 8;
 			}
 			return 5;
@@ -621,12 +620,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onFieldStart(battle, source, effect) {
-			if (this.field.terrainState.Tchanges?.get('raindance') === 1) {
+			if (this.field.weatherState?.previousWeather === 'raindance') {
 				if (this.field.isTerrain('rainbowterrain')) {
 					this.field.terrainState.duration = this.field.weatherState.duration;
 				} else {
 					this.field.setTerrain('rainbowterrain', source, effect);
-					this.field.terrainState.Tchanges?.set('raindance', 0);
 				}
 			}
 			if (effect?.effectType === 'Ability') {
