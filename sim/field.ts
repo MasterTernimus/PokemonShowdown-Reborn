@@ -128,7 +128,7 @@ export class Field {
 	effectiveWeather() {
 		const weather = this.battle.runEvent('EffectiveWeather');
 		if (this.suppressingWeather() && !weather) return '';
-		return weather ?? this.weather;
+		return this.weather;
 	}
 
 	suppressingWeather() {
