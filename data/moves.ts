@@ -23371,7 +23371,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, pokemon, target) {
-			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather() || this.field.isTerrain(['snowymountainterrain', 'mountainterrain'])))) {
+			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather()) || this.field.isTerrain(['snowymountainterrain', 'mountainterrain']))) {
 				move.accuracy = true;
 			}
 		},
@@ -23760,21 +23760,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	zippyzap: {
 		num: 729,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 50,
 		category: "Physical",
 		isNonstandard: "LGPE",
 		name: "Zippy Zap",
 		pp: 10,
 		priority: 2,
 		flags: { contact: 1, protect: 1, mirror: 1 },
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {
-					evasion: 1,
-				},
-			},
-		},
+		critRatio: 3,
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
