@@ -1775,9 +1775,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.species.id !== 'castform') forme = 'Castform';
 				break;
 			}
-			if (pokemon.side.sideConditions['tailwind']) {
-				if (pokemon.species.id !== 'castformwindy') forme = 'Castform-Windy';
-			}
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme, this.effect, false, '[msg]');
 			}
