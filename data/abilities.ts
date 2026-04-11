@@ -1752,6 +1752,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
+			console.log(pokemon.effectiveWeather());
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
