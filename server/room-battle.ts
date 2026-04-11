@@ -23,7 +23,7 @@ import type { GameTimerSettings } from '../sim/dex-formats';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 export type PlayerIndex = 1 | 2 | 3 | 4;
-export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'tour';
+export type ChallengeType = 'rated' | 'unrated' | 'challenge' | 'challengeofficial' | 'tour';
 
 interface BattleRequestTracker {
 	rqid: number;
@@ -858,6 +858,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.room.settings.modjoin = '%';
 			this.room.setPrivate('hidden');
 		}
+		
 		this.room.update();
 
 		// so it stops showing up in the users' games list
@@ -915,6 +916,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			logData.p4rating = p4rating;
 		}
 		logData.endType = this.endType;
+		logData.official = this.options.challengeType === 'challengeofficial';
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
 		logData.timestamp = `${date}`;

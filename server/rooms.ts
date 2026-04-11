@@ -1924,6 +1924,7 @@ export class GameRoom extends BasicRoom {
 	 * 0 for unrated battles. 1 for unknown ratings.
 	 */
 	rated: number;
+	official: boolean;
 	declare battle: RoomBattle | null;
 	declare bestOf: BestOfGame | null;
 	declare game: RoomGame;
@@ -1950,6 +1951,7 @@ export class GameRoom extends BasicRoom {
 		this.p4 = options.players?.[3]?.user || null;
 
 		this.rated = options.rated === true ? 1 : options.rated || 0;
+		this.official = options.challengeType === 'challengeofficial';
 
 		this.battle = null;
 		this.bestOf = null;
