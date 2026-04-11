@@ -1768,9 +1768,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			case 'sandstorm':
 				if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
 				break;
+			case 'deltastream':
+				if (pokemon.species.id !== 'castformwindy') forme = 'Castform-Windy';
+				break;
 			default:
 				if (pokemon.species.id !== 'castform') forme = 'Castform';
 				break;
+			}
+			if (pokemon.side.sideConditions['tailwind']) {
+				if (pokemon.species.id !== 'castformwindy') forme = 'Castform-Windy';
 			}
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme, this.effect, false, '[msg]');
