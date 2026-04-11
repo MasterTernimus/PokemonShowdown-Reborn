@@ -6584,7 +6584,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	castformwindy: {
 		num: 351,
-		name: "Castform-Sandy",
+		name: "Castform-Windy",
 		baseSpecies: "Castform",
 		forme: "Windy",
 		types: ["Flying"],
@@ -6592,7 +6592,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		abilities: { 0: "Forecast" },
 		heightm: 0.3,
 		weightkg: 0.8,
-		color: "Brown",
+		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
 		requiredAbility: "Forecast",
 		battleOnly: "Castform",
