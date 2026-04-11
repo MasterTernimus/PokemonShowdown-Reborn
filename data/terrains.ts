@@ -75,7 +75,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (type === 'Dark' && types.includes('Fairy')) {
 					return 0;
 				}
-				if (type === 'Green' && types.includes('Poison')) {
+				if (type === 'Grass' && types.includes('Poison')) {
 					return 0;
 				}
 			},
@@ -2936,7 +2936,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldStart(field, source, effect) {
-				console.log("Test");
 				if (this.field.weather !== '') {
 					this.field.clearWeather();
 				}

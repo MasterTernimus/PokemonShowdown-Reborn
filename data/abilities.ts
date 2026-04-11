@@ -1656,7 +1656,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '[msg]');
 				}
 			} else {
-				if (pokemon.species.id === 'cherrimsunshine') {
+				if (pokemon.species.id === 'cherrimsunshine' && !this.field.isTerrain('bewitchedwoodsterrain')) {
 					pokemon.formeChange('Cherrim', this.effect, false, '[msg]');
 				}
 			}
@@ -6489,11 +6489,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10,
 	},
 	wanderingspirit: {
-		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('hauntedterrain')) {
-				this.boost({ spe: -1 }, pokemon);
-			}
-		},
 		onDamagingHit(damage, target, source, move) {
 			if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
 
@@ -6511,7 +6506,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('desertterrain')) {
+			if (this.field.isTerrain('desertterrain') || this.field.isTerrain('hauntedterrain')) {
 				this.boost({ spe: -1 }, pokemon);
 			}
 		},

@@ -13954,7 +13954,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let move = 'triattack';
 			const terrainMoveMap = new Map<string, string>([
 				['ashenbeachterrain', 'meditate'],
-				['bewitchedwoodsterrain', 'dazzlinggleam'],
+				['bewitchedwoodsterrain', 'alluringvoice'],
 				['bigtopterrain', 'acrobatics'],
 				['burningterrain', 'flamethrower'],
 				['caveterrain', 'rocktomb'],
@@ -17643,6 +17643,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			type Secondary = NonNullable<typeof move.secondaries>[number];
 			const terrainSecondaries: Record<string, Secondary[]> = {
 				ashenbeachterrain: [{ chance: 30, boosts: { accuracy: -1 } }],
+				bewitchedwoodsterrain: [
+					{ chance: 10, status: 'psn' },
+					{ chance: 10, status: 'slp' },
+					{ chance: 10, status: 'par' },
+				],
 				bigtopterrain: [{ chance: 30, boosts: { spd: -1 } }],
 				burningterrain: [{ chance: 30, status: 'brn' }],
 				caveterrain: [{ chance: 30, volatileStatus: 'flinch' }],
@@ -20373,8 +20378,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onModifyPriority(priority, source, target, move) {
 			if (!this.activeTarget) return;
-			console.log(move.type);
-			console.log(this.dex.getEffectiveness(move.type, this.activeTarget.getTypes()));
 			if (this.dex.getEffectiveness(move.type, this.activeTarget.getTypes()) > 0) {
 				return priority + 1;
 			}
@@ -22422,7 +22425,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, target, effect) {
-				console.log(effect);
 				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || source.hasItem('amplifieldrock') || this.field.isTerrain('newworldterrain'))
 					return 8;
 				if (source?.hasAbility('persistent')) {
