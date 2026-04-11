@@ -23206,6 +23206,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'snowscape':
 				move.type = 'Ice';
 				break;
+			case 'deltastream':
+				move.type = 'Flying';
+				break;
 			}
 		},
 		onModifyMove(move, pokemon) {
@@ -23223,6 +23226,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				break;
 			case 'hail':
 			case 'snowscape':
+				move.basePower *= 2;
+				break;
+			case 'deltastream':
 				move.basePower *= 2;
 				break;
 			default:
