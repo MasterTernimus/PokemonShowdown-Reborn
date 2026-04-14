@@ -123,7 +123,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
-				if (pokemon.getStatus().id === 'slp' && !pokemon.hasType('Ghost')) {
+				if (pokemon.getStatus().id === 'slp') {
 					this.damage(pokemon.baseMaxhp / 16, pokemon);
 					this.add('-message', pokemon.name + "'s dream is corrupted by the evil spirits!");
 				}
@@ -1629,7 +1629,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
-				if (pokemon.getStatus().id === 'slp') {
+				if (pokemon.getStatus().id === 'slp' && !pokemon.hasType('Ghost')) {
 					this.damage(pokemon.baseMaxhp / 16, pokemon);
 					this.add('-message', pokemon.name + "'s dream is corrupted by the evil spirits!");
 				}
