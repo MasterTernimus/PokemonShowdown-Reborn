@@ -36,7 +36,6 @@ type Roles = 'Queen' | 'King' | 'Pawn' | 'Bishop' | 'Knight' | 'Rook' | 'UsedPaw
 export interface EffectState {
 	id: string;
 	effectOrder: number;
-	Tchanges?: Map<string, number>;
 	// TODO: set this to be an actual number after converting data/ to .ts
 	duration?: number;
 	[k: string]: any;

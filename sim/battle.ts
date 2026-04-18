@@ -3067,20 +3067,20 @@ export class Battle {
 		if (this.turn === 0 && this.format.terrain) {
 			if (this.format.terrain === 'adriennterrain') {
 				this.field.startTerrain('mistyterrain');
-				this.field.terrainStack.push(this.initEffectState({ id: 'fairytaleterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
+				this.field.terrainStack.push(this.initEffectState({ id: 'fairytaleterrain', terrain_type: "Base", terrainChanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 			} else if (this.format.terrain === 'corrosivemistterrain') {
 				this.field.startTerrain('corrosivemistterrain');
-				this.field.terrainStack.push(this.initEffectState({ id: 'corrosiveterrain', terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
+				this.field.terrainStack.push(this.initEffectState({ id: 'corrosiveterrain', terrain_type: "Base", terrainChanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 			} else if (this.format.terrain === 'randomterrain') {
 				if (this.RandomTerrain !== "") {
 					this.field.startTerrain(this.RandomTerrain);
 					const lower_terrain = this.dex.conditions.get(this.RandomTerrain);
-					this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
+					this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", terrainChanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 				}
 			} else {
 				this.field.startTerrain(this.format.terrain);
 				const lower_terrain = this.dex.conditions.get(this.format.terrain);
-				this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", Tchanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
+				this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", terrainChanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 			}
 		}
 		let action;

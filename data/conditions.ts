@@ -550,10 +550,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			} else {
 				this.add('-weather', 'RainDance');
 			}
-			this.field.terrainState.Tchanges?.set('raindance', 1);
+			this.field.terrainState.terrainChanges?.set('raindance', 1);
 		},
 		onFieldEnd() {
-			this.field.terrainState.Tchanges?.set('raindance', 0);
+			this.field.terrainState.terrainChanges?.set('raindance', 0);
 			this.add('-weather', 'none');
 		},
 		onFieldResidualOrder: 1,
@@ -633,7 +633,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			} else {
 				this.add('-weather', 'SunnyDay');
 			}
-			this.field.terrainState.Tchanges?.set('sunnyday', 1);
+			this.field.terrainState.terrainChanges?.set('sunnyday', 1);
 		},
 		onImmunity(type, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
@@ -644,7 +644,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			this.field.terrainState.Tchanges?.set('sunnyday', 0);
+			this.field.terrainState.terrainChanges?.set('sunnyday', 0);
 			this.add('-weather', 'none');
 		},
 	},

@@ -29,7 +29,7 @@ export class Field {
 		this.weather = '';
 		this.weatherState = this.battle.initEffectState({ id: '' });
 		this.terrain = '';
-		this.terrainState = this.battle.initEffectState({ id: '', Tchanges: new Map<string, number>(), prevTerrain: '' });
+		this.terrainState = this.battle.initEffectState({ id: '', terrainChanges: new Map<string, number>(), prevTerrain: '' });
 		this.pseudoWeather = {};
 		this.terrainStack = [];
 	}
@@ -161,7 +161,7 @@ export class Field {
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
 			terrain_type: "Base",
-			Tchanges: new Map<string, number>(),
+			terrainChanges: new Map<string, number>(),
 			turn: this.battle.turn,
 			duration: 9999,
 		});
@@ -207,7 +207,7 @@ export class Field {
 		if (status.id === 'rainbowterrain' && (sourceEffect?.id === 'raindance' || sourceEffect?.id === 'sunnyday')) {
 			new_terrain_type = "Temp";
 		}
-		this.terrainState.Tchanges = new Map<string, number>();
+		this.terrainState.terrainChanges = new Map<string, number>();
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
@@ -216,7 +216,7 @@ export class Field {
 			terrain_type: new_terrain_type,
 			source,
 			sourceSlot: source.getSlot(),
-			Tchanges: new Map<string, number>(),
+			terrainChanges: new Map<string, number>(),
 			turn: this.battle.turn,
 			duration: status.duration,
 		});
@@ -246,7 +246,7 @@ export class Field {
 		this.terrain = status.id;
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
-			Tchanges: new Map<string, number>(),
+			terrainChanges: new Map<string, number>(),
 			terrain_type: prevTerrainState.terrain_type,
 			origin: sourceEffect,
 			duration: prevTerrainState.duration,

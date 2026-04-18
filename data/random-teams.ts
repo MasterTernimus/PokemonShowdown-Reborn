@@ -300,7 +300,7 @@ export class RandomTeams {
 	 * Check if user has directly tried to ban/unban/restrict things in a custom battle.
 	 * Doesn't count bans nested inside other formats/rules.
 	 */
-	private hasDirectCustomBanlistChanges() {
+	private hasDirectCustomBanlisterrainChanges() {
 		if (this.format.banlist.length || this.format.restricted.length || this.format.unbanlist.length) return true;
 		if (!this.format.customRules) return false;
 		for (const rule of this.format.customRules) {
@@ -314,8 +314,8 @@ export class RandomTeams {
 	/**
 	 * Inform user when custom bans are unsupported in a team generator.
 	 */
-	protected enforceNoDirectCustomBanlistChanges() {
-		if (this.hasDirectCustomBanlistChanges()) {
+	protected enforceNoDirectCustomBanlisterrainChanges() {
+		if (this.hasDirectCustomBanlisterrainChanges()) {
 			throw new Error(`Custom bans are not currently supported in ${this.format.name}.`);
 		}
 	}
@@ -1761,7 +1761,7 @@ export class RandomTeams {
 	randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-doubles-sets.json');
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		this.enforceNoDirectCustomBanlisterrainChanges();
 
 		const seed = this.prng.seed;
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -1941,7 +1941,7 @@ export class RandomTeams {
 	}
 
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
-		this.enforceNoDirectCustomBanlistChanges();
+		this.enforceNoDirectCustomBanlisterrainChanges();
 
 		const dex = this.dex;
 		const team = [];
@@ -2208,7 +2208,7 @@ export class RandomTeams {
 	}
 
 	randomHCTeam(): PokemonSet[] {
-		const hasCustomBans = this.hasDirectCustomBanlistChanges();
+		const hasCustomBans = this.hasDirectCustomBanlisterrainChanges();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const hasNonexistentBan = hasCustomBans && ruleTable.check('nonexistent');
 		const hasNonexistentWhitelist = hasCustomBans && (hasNonexistentBan === '');

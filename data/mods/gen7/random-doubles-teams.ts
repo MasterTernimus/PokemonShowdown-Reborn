@@ -1352,7 +1352,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 	}
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		this.enforceNoDirectCustomBanlisterrainChanges();
 
 		const seed = this.prng.seed;
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
