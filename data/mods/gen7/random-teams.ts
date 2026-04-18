@@ -1289,7 +1289,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 	}
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlistChanges();
+		this.enforceNoDirectCustomBanlisterrainChanges();
 
 		const seed = this.prng.seed;
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -1598,7 +1598,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 	}
 
 	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
-		this.enforceNoDirectCustomBanlistChanges();
+		this.enforceNoDirectCustomBanlisterrainChanges();
 
 		const forceResult = (depth >= 12);
 		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
@@ -1887,7 +1887,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 	}
 
 	randomBSSFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
-		this.enforceNoDirectCustomBanlistChanges();
+		this.enforceNoDirectCustomBanlisterrainChanges();
 
 		const forceResult = (depth >= 4);
 

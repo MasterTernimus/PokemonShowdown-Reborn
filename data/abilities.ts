@@ -3577,7 +3577,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			if (this.field.isTerrain('corrosiveterrain')) {
-				this.field.terrainState.Tchanges?.set('neutralizinggas', 1);
+				this.field.terrainState.terrainChanges?.set('neutralizinggas', 1);
 			}
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			for (const target of this.getAllActive()) {
@@ -3604,7 +3604,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onEnd(source) {
 			if (source.transformed) return;
 			if (this.field.isTerrain('corrosiveterrain')) {
-				this.field.terrainState.Tchanges?.delete('neutralizinggas');
+				this.field.terrainState.terrainChanges?.delete('neutralizinggas');
 			}
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon !== source && pokemon.hasAbility('Neutralizing Gas')) {
