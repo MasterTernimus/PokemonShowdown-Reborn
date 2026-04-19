@@ -13426,7 +13426,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onBasePower(basePower, attacker, defender, move) {
 				const strMoves = ['aurasphere', 'clearsmog', 'doomdesire', 'icywind', 'magicalleaf', 'mistball', 'moongeistbeam', 'mysticalfire', 'silverwind', 'smog', 'springtidestorm', 'steameruption', 'strangesteam'];
 				const weakMoves = ['shadowball', 'nightdaze', 'darkpulse'];
-				const corrosiveMoves = ['smog', 'clearsmog', 'poisongas'];
+				const corrosiveMoves = ['smog', 'clearsmog', 'poisongas', 'aciddownpour'];
 				const windyMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike'];
 				let modifier = 1;
 				if (move.type === 'Dragon') {
@@ -13456,11 +13456,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(target, source, move) {
-				const terrainChangeMoves = ['smog', 'clearsmog', 'poisongas'];
+				const terrainChangeMoves = ['smog', 'clearsmog', 'poisongas', 'aciddownpour'];
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike'];
 				if (terrainChangeMoves.includes(move.id)) {
 					if (this.field.terrainState.terrainChanges?.get('corrosivemistterrain') === 1 || move.id === 'aciddownpour') {
 						this.field.changeTerrain('corrosivemistterrain');
+						return;
 					} else {
 						this.field.terrainState.terrainChanges?.set('corrosivemistterrain', 1);
 					}
@@ -19262,7 +19263,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onTryMove(attacker, defender, move) {
-			if (this.field.isTerrain(['darkcrystalcavernterrain', 'rainbowterrain']) && !this.field.isWeather('sunnyday')) {
+			if (this.field.isTerrain(['darkcrystalcavernterrain']) && !this.field.isWeather('sunnyday')) {
 				this.debug('Dark Crystal Cavern sun suppress');
 				this.add('-fail', attacker, move, '[from] Dark Crystal Cavern');
 				this.attrLastMove('[still]');
@@ -19310,7 +19311,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onTryMove(attacker, defender, move) {
-			if (this.field.isTerrain(['darkcrystalcavernterrain', 'rainbowterrain'])) {
+			if (this.field.isTerrain(['darkcrystalcavernterrain']) && !this.field.isWeather('sunnyday')) {
 				this.debug('Dark Crystal Cavern sun suppress');
 				this.add('-fail', attacker, move, '[from] Dark Crystal Cavern');
 				this.attrLastMove('[still]');
