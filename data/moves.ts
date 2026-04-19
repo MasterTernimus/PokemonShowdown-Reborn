@@ -427,7 +427,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	appleacid: {
 		num: 787,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 90,
 		category: "Special",
 		name: "Apple Acid",
 		pp: 10,
@@ -3463,7 +3463,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	crabhammer: {
 		num: 152,
-		accuracy: 90,
+		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
 		name: "Crabhammer",
@@ -4040,7 +4040,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		secondary: {
-			chance: 50,
+			chance: 30,
 			onHit(target, source) {
 				const result = this.random(3);
 				if (result === 0) {
@@ -6056,7 +6056,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	firstimpression: {
 		num: 660,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 100,
 		category: "Physical",
 		name: "First Impression",
 		pp: 10,
@@ -8520,7 +8520,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	gravapple: {
 		num: 788,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 90,
 		category: "Physical",
 		name: "Grav Apple",
 		pp: 10,
@@ -10935,7 +10935,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onHit(target, source, move) {
 				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					if (this.field.terrain === 'fairytaleterrain') {
+					if (this.field.isTerrain('fairytaleterrain')) {
 						this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 					}
 					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
@@ -17351,7 +17351,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 13,
 			onResidual(pokemon) {
-				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Water', 'Steel']) ? 4 : 8));
+				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Water', 'Steel']) ? 8 : 16));
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Salt Cure');
@@ -22259,11 +22259,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
-		status: 'psn',
+		status: 'tox',
 		boosts: {
-			spe: -1,
+			spe: -2,
 		},
-		secondary: null,
 		target: "normal",
 		type: "Poison",
 		zMove: { boost: { spe: 1 } },
@@ -22544,7 +22543,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	tropkick: {
 		num: 688,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 85,
 		category: "Physical",
 		name: "Trop Kick",
 		pp: 15,
