@@ -208,8 +208,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					}
 				}
 			}
-		},
-		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('psychicterrain')) {
 				return this.boost({ spa: 2 });
 			}
@@ -239,7 +237,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 71,
 	},
 	armortail: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1, spd: 1 });
 			}
@@ -379,7 +377,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	battlearmor: {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
-		onSwitchIn() {
+		onStart() {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1 });
 			}
@@ -459,7 +457,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 224,
 	},
 	berserk: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('dragonsdenterrain')) {
 				this.boost({ spa: 2 }, pokemon, pokemon);
 			}
@@ -634,7 +632,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 13,
 	},
 	colorchange: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 1 }, pokemon);
 			}
@@ -747,7 +745,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 172,
 	},
 	compoundeyes: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ accuracy: 1 }, pokemon);
 				pokemon.addVolatile('laserfocus');
@@ -1018,8 +1016,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	dauntlessshield: {
 		onStart(pokemon) {
 			this.boost({ def: 1 }, pokemon);
-		},
-		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1 }, pokemon);
 			}
@@ -1807,15 +1803,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!warnMoves.length) return;
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, `[of] ${warnTarget}`);
+			if (this.field.isTerrain('psychicterrain')) {
+				return this.boost({ spa: 2 });
+			}
 		},
 		onDamage(damage, source, target, effect) {
 			if (effect && effect.effectType === 'Move' && effect.category !== 'Status')
 				return this.chainModify(0.8);
-		},
-		onSwitchIn(pokemon) {
-			if (this.field.isTerrain('psychicterrain')) {
-				return this.boost({ spa: 2 });
-			}
 		},
 		flags: {},
 		name: "Forewarn",
@@ -2222,7 +2216,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	heavymetal: {
 		onModifyWeightPriority: 1,
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('factoryterrain')) {
 				this.boost({ def: 1, spe: -1 }, pokemon);
 				this.add('-message', pokemon.name + '\'s heavy body is sturdy and unmoving!');
@@ -2447,7 +2441,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 248,
 	},
 	icescales: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 2 }, pokemon);
 			}
@@ -2474,7 +2468,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 246,
 	},
 	illuminate: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				for (const foe of pokemon.foes()) {
 					this.boost({ accuracy: -1 }, foe);
@@ -2507,7 +2501,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 35,
 	},
 	illusion: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 1 }, pokemon);
 			}
@@ -2683,8 +2677,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	intrepidsword: {
 		onStart(pokemon) {
 			this.boost({ atk: 1 }, pokemon);
-		},
-		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ atk: 1 }, pokemon);
 			}
@@ -2735,7 +2727,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 154,
 	},
 	keeneye: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ accuracy: 1 }, pokemon);
 				pokemon.addVolatile('laserfocus');
@@ -2820,7 +2812,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 236,
 	},
 	lightmetal: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('factoryterrain')) {
 				this.boost({ spe: 1 }, pokemon);
 				this.add('-message', pokemon.name + '\'s light body made it nimble');
@@ -2840,7 +2832,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 135,
 	},
 	lightningrod: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				this.boost({ spa: 1 });
 			}
@@ -2967,7 +2959,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	magicbounce: {
 		onTryHitPriority: 1,
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ spd: 1 }, pokemon);
 			}
@@ -3005,7 +2997,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 156,
 	},
 	magicguard: {
-		onSwitchIn() {
+		onStart() {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ spd: 1 });
 			}
@@ -3022,8 +3014,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 98,
 	},
 	magician: {
-		onSwitchIn() {
-			if (this.field.terrain === 'fairytaleterrain') {
+		onStart() {
+			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ spa: 1 });
 			}
 		},
@@ -3058,7 +3050,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.cureStatus();
 			}
 		},
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain(['dragonsdenterrain', 'volcanicterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
@@ -3281,7 +3273,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 58,
 	},
 	mirrorarmor: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1, spd: 1 });
 			}
@@ -3868,8 +3860,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					ally.cureStatus();
 				}
 			}
-		},
-		onSwitchIn(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ spd: 1 });
 			}
@@ -4084,7 +4074,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 38,
 	},
 	poisonpuppeteer: {
-		onSwitchIn() {
+		onStart() {
 			if (this.field.isTerrain('wastelandterrain')) {
 				this.boost({ spd: 2 });
 			}
@@ -4135,7 +4125,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 211,
 	},
 	powerofalchemy: {
-		onSwitchIn() {
+		onStart() {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ spd: 1, def: 1 });
 			}
@@ -4581,7 +4571,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 44,
 	},
 	rattled: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('hauntedterrain') || this.field.isTerrain('swampterrain')) {
 				this.boost({ spe: 1 }, pokemon);
 			}
@@ -4856,7 +4846,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 45,
 	},
 	sandveil: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 1 }, pokemon);
 			}
@@ -5108,7 +5098,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	shellarmor: {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
-		onSwitchIn() {
+		onStart() {
 			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				this.boost({ def: 1 });
 			}
@@ -5285,7 +5275,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 202,
 	},
 	sniper: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			this.boost({ accuracy: 1 }, pokemon, null);
 		},
 		onModifyDamage(damage, source, target, move) {
@@ -5300,7 +5290,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 97,
 	},
 	snowcloak: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 1 }, pokemon);
 			}
@@ -5427,7 +5417,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	stall: {
 		onFractionalPriority: -0.1,
 		flags: {},
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('chessboardterrain')) {
 				this.add('-message', pokemon.name + ' is stalling and playing defensively!');
 				this.boost({ def: 1 });
@@ -5459,7 +5449,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	stancechange: {
 		onModifyMovePriority: 1,
-		onSwitchIn() {
+		onStart() {
 			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')) {
 				this.boost({ def: 1 });
 			}
@@ -5502,7 +5492,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9,
 	},
 	steadfast: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('electricterrain'))
 				this.boost({ spe: 1 });
 		},
@@ -5520,7 +5510,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ spe: 6 });
 			}
 		},
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain(['burningterrain', 'superheatedterrain', 'volcanicterrain'])) {
 				this.add('-message', 'The heat activates' + pokemon.name + '\'s Steam Engine!');
 				this.boost({ spe: 6 }, pokemon);
@@ -5711,8 +5701,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ evasion: -1 }, target, pokemon, null, true);
 				}
 			}
-		},
-		onSwitchIn() {
 			if (this.field.isTerrain('mistyterrain')) {
 				this.boost({ accuracy: -1 });
 			}
@@ -5886,7 +5874,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 284,
 	},
 	tangledfeet: {
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mirrorarenaterrain') || this.field.isTerrain('bigtopterrain')) {
 				this.boost({ evasion: 1 }, pokemon);
 			}
@@ -6579,7 +6567,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 199,
 	},
 	watercompaction: {
-		onSwitchIn() {
+		onStart() {
 			if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
 				this.boost({ def: 2 });
 			}
@@ -6659,7 +6647,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 273,
 	},
 	whitesmoke: {
-		onSwitchIn() {
+		onStart() {
 			if (this.field.isTerrain('volcanicterrain')) {
 				this.boost({ atk: 1, spa: 1 });
 			}
