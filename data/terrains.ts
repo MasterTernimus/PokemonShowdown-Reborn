@@ -1359,7 +1359,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
 				if (move.type === 'Fire') {
-					this.add('-message', 'The fiery flames became draconified!');
 					move.types = [move.type, 'Dragon'];
 				}
 			},
@@ -1376,8 +1375,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onBasePower(basePower, source, target, move) {
-				const strengthenedMoves = ['airslash', 'ancientpower', 'fleurcannon', 'leafblade', 'magicalleaf', 'moongeistbeam', 'mysticalfire', 'nightslash', 'psychocut', 'relicsong', 'smartstrike', 'solarblade', 'sparklingaria', 'menacingmoonrazemaelstorm', 'oceanicoperetta', 'kowtowcleave', 'aquacutter', 'ceaselessedge', 'stoneaxe'];
-				let modifier = 1;
+				const strengthenedMoves = ['airslash', 'ancientpower', 'fleurcannon', 'leafblade', 'magicalleaf', 'moongeistbeam', 'mysticalfire', 'nightslash', 'psychocut', 'relicsong', 'smartstrike', 'solarblade', 'sparklingaria', 'menacingmoonrazemaelstorm', 'oceanicoperetta', 'kowtowcleave', 'aquacutter', 'ceaselessedge', 'stoneaxe', 'behemothblade', 'razorshell', 'behemothbash'];				let modifier = 1;
+				if (move.type === 'Fire') {
+					this.add('-message', 'The fiery flames became draconified!');
+				}
 				if (move.type === 'Dragon') {
 					this.add('-message', 'The draconic energy was strengthened by the dead princesses on the field!');
 					modifier *= 2;
@@ -1394,7 +1395,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The move was strengthened by the terrain!');
 					modifier *= 1.5;
 				}
-				if (move.id === 'drainingkiss') {
+				if (move.id === 'drainingkiss' || move.id === 'mistball') {
 					this.add('-message', 'The move was strengthened by the terrain!');
 
 					modifier *= 2;

@@ -1017,7 +1017,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.boost({ def: 1 }, pokemon);
 			if (this.field.isTerrain('fairytaleterrain')) {
-				this.boost({ def: 1 }, pokemon);
+				this.boost({ spd: 1, def: 1 }, pokemon);
 			}
 		},
 		flags: {},
@@ -2678,7 +2678,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.boost({ atk: 1 }, pokemon);
 			if (this.field.isTerrain('fairytaleterrain')) {
-				this.boost({ atk: 1 }, pokemon);
+				this.boost({ atk: 1, spa: 1 }, pokemon);
 			}
 		},
 		flags: {},
@@ -4505,11 +4505,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 282,
 	},
 	queenlymajesty: {
-		onModifyDamage(damage, source) {
-			if (this.field.isTerrain('fairytaleterrain')) {
+		onModifyDamage(damage, source, target, move) {
+			if (move && move.category !== 'Status' && this.field.isTerrain('fairytaleterrain')) {
 				return this.chainModify(1.5);
 			}
-			if (this.field.isTerrain('chessboardterrain') && source.Role !== 'Queen') {
+			if (move && move.category !== 'Status' && this.field.isTerrain('chessboardterrain') && source.Role !== 'Queen') {
 				return this.chainModify(1.5);
 			}
 		},
