@@ -3907,7 +3907,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Bellossom",
 		types: ["Grass"],
 		baseStats: { hp: 75, atk: 80, def: 95, spa: 90, spd: 100, spe: 50 },
-		abilities: { 0: "Chlorophyll", H: "Healer" },
+		abilities: { 0: "Chlorophyll", 1: "Costar" },
 		heightm: 0.4,
 		weightkg: 5.8,
 		color: "Green",
