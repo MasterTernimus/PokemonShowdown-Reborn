@@ -3129,9 +3129,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 178,
 	},
 	megasol: {
-		onEffectiveWeather(source, target, effect) {
-			if (source && effect && source.hasAbility('megasol') && effect.effectType === 'Move') {
-				return 'sunnyday';
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (this.field.weather !== 'sunnyday') {
+				(this.dex.conditions.getByID('sunnyday' as ID) as any).onWeatherModifyDamage
+					.call(this, damage, attacker, defender, move);
 			}
 		},
 		flags: {},
