@@ -6775,7 +6775,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1 },
 		onHit(target) {
-			if (target.hasType('Grass')) return false;
+			if (target.types[0] === 'Grass' && target.types.length === 1) return false;
 			if (!target.setType('Grass')) return false;
 			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('forestterrain') || this.field.isTerrain('bewitchedwoodsterrain')) {
 				if (!target.volatiles['curse']) {
@@ -22394,7 +22394,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1 },
 		onHit(target) {
-			if (target.hasType('Ghost')) return false;
+			if (target.types[0] === 'Ghost' && target.types.length === 1) return false;
 			if (!target.setType('Ghost')) return false;
 			this.add('-start', target, 'typechange', 'Ghost');
 
@@ -22425,7 +22425,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, target, effect) {
-				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || source.hasItem('amplifieldrock') || this.field.isTerrain('newworldterrain'))
+				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || this.field.isTerrain('newworldterrain'))
 					return 8;
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
