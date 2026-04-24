@@ -1698,6 +1698,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Extreme Evoboost",
 		zMoveFrom: "Last Resort",
 		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Eevee') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Eevee') {
+				return this.chainModify(1.5);
+			}
+		},
 		itemUser: ["Eevee", 'Eevee-Starter'],
 		num: 805,
 		gen: 7,
@@ -1829,6 +1840,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 779,
 		gen: 7,
 		isNonstandard: "Past",
+	},
+	emboarite: {
+		name: "Emboarite",
+		spritenum: 552,
+		megaStone: { "Emboar": "Emboar-Mega" },
+		itemUser: ["Emboar"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2569,
+		gen: 9,
 	},
 	elementalseed: {
 		name: "Elemental Seed",
@@ -4648,6 +4670,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Catastropika",
 		zMoveFrom: "Volt Tackle",
 		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
+				return this.chainModify(1.5);
+			}
+		},
 		itemUser: ["Pikachu, Pikachu-Starter"],
 		num: 794,
 		gen: 7,
@@ -6085,6 +6118,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 207,
 		gen: 3,
+	},
+	starminite: {
+		name: "Starminite",
+		spritenum: 546,
+		megaStone: { "Starmie": "Starmie-Mega" },
+		itemUser: ["Starmie"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2561,
+		gen: 9,
 	},
 	starsweet: {
 		name: "Star Sweet",
