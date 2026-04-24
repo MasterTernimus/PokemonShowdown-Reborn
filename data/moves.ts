@@ -1718,7 +1718,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	boltbeak: {
 		num: 754,
 		accuracy: 100,
-		basePower: 85,
+		basePower: 80,
 		basePowerCallback(pokemon, target, move) {
 			if (target.newlySwitched || this.queue.willMove(target)) {
 				this.debug('Bolt Beak damage boost');
@@ -1792,7 +1792,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	bonerush: {
 		num: 198,
 		accuracy: 90,
-		basePower: 25,
+		basePower: 30,
 		category: "Physical",
 		name: "Bone Rush",
 		pp: 10,
@@ -4602,7 +4602,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	dragonhammer: {
 		num: 692,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 100,
 		category: "Physical",
 		name: "Dragon Hammer",
 		pp: 15,
@@ -6076,7 +6076,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	fishiousrend: {
 		num: 755,
 		accuracy: 100,
-		basePower: 85,
+		basePower: 80,
 		basePowerCallback(pokemon, target, move) {
 			if (target.newlySwitched || this.queue.willMove(target)) {
 				this.debug('Fishious Rend damage boost');
@@ -7126,8 +7126,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	geargrind: {
 		num: 544,
-		accuracy: 85,
-		basePower: 50,
+		accuracy: 90,
+		basePower: 60,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Gear Grind",
@@ -10471,7 +10471,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	infernalparade: {
 		num: 844,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 65,
 		basePowerCallback(pokemon, target, move) {
 			if (target.status || target.hasAbility('comatose') || this.field.isTerrain('hauntedterrain')) return move.basePower * 2;
 			return move.basePower;
@@ -12044,7 +12044,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	makeitrain: {
 		num: 874,
-		accuracy: 100,
+		accuracy: 95,
 		basePower: 120,
 		category: "Special",
 		name: "Make It Rain",
@@ -15824,7 +15824,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	psyshieldbash: {
 		num: 828,
 		accuracy: 90,
-		basePower: 70,
+		basePower: 90,
 		category: "Physical",
 		name: "Psyshield Bash",
 		pp: 10,
@@ -16703,7 +16703,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	revelationdance: {
 		num: 686,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 100,
 		category: "Special",
 		name: "Revelation Dance",
 		pp: 15,
@@ -19149,7 +19149,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	snipeshot: {
 		num: 745,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 85,
 		category: "Special",
 		name: "Snipe Shot",
 		pp: 15,
@@ -19717,7 +19717,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	spiritshackle: {
 		num: 662,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 90,
 		category: "Physical",
 		name: "Spirit Shackle",
 		pp: 10,
@@ -21087,7 +21087,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	syrupbomb: {
 		num: 903,
-		accuracy: 85,
+		accuracy: 90,
 		basePower: 60,
 		category: "Special",
 		name: "Syrup Bomb",
