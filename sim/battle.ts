@@ -1567,8 +1567,28 @@ export class Battle {
 		return this.win();
 	}
 
+	draw() {
+		this.winner = '';
+		this.add('');
+		this.add('tie');
+		this.ended = true;
+		this.requestState = '';
+		for (const s of this.sides) {
+			if (s) s.activeRequest = null;
+		}
+	}
+
 	win(side?: SideID | '' | Side | null) {
 		if (this.ended) return false;
+		let left = 0;
+		for (side of this.sides) {
+			left += side.pokemonLeft;
+		}
+		if (left === 0) {
+			this.draw();
+			return false;
+		}
+
 		if (side && typeof side === 'string') {
 			side = this.getSide(side);
 		} else if (!side || !this.sides.includes(side)) {
