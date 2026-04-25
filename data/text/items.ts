@@ -1983,11 +1983,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Tart Apple",
 		desc: "Evolves Applin into Flapple when used.",
 	},
-<<<<<<< HEAD
 	telluricseed: {
 		name: "Telluric Seed",
 		desc: "If the terrain is a Telluric Terrain, boosts the holder in a unique way. Single use.",
-=======
+	},
 	tatsugirinite: {
 		name: "Tatsugirinite",
 		shortDesc: "If held by a Tatsugiri, this item allows it to Mega Evolve in battle.",
@@ -1995,7 +1994,6 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	terrainextender: {
 		name: "Terrain Extender",
 		shortDesc: "Holder's use of Electric/Grassy/Misty/Psychic Terrain lasts 8 turns instead of 5.",
->>>>>>> upstream/master
 	},
 	thickclub: {
 		name: "Thick Club",
