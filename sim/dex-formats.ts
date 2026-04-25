@@ -628,11 +628,8 @@ export class DexFormats {
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
 			if (format.bestOfDefault === undefined) format.bestOfDefault = false;
-<<<<<<< HEAD
-=======
 			if (format.teraPreviewDefault === undefined) format.teraPreviewDefault = false;
 			if (format.itemClauseDefault === undefined) format.itemClauseDefault = false;
->>>>>>> upstream/master
 			if (format.mod === undefined) format.mod = 'gen9';
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 
