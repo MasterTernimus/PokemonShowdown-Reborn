@@ -12736,7 +12736,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	furfroustar: {
 		num: 676,
 		name: "Furfrou-Star",
-		baseForme: "Furfrou",
+		baseSpecies: "Furfrou",
 		forme: "Star",
 		types: ["Normal", "Electric"],
 		baseStats: { hp: 75, atk: 100, def: 60, spa: 65, spd: 90, spe: 112 },
@@ -12749,7 +12749,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	furfroudiamond: {
 		num: 676,
 		name: "Furfrou-Diamond",
-		baseForme: "Furfrou",
+		baseSpecies: "Furfrou",
 		forme: "Diamond",
 		types: ["Normal", "Rock"],
 		baseStats: { hp: 75, atk: 100, def: 60, spa: 65, spd: 90, spe: 112 },
@@ -12762,7 +12762,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	furfroudebutante: {
 		num: 676,
 		name: "Furfrou-Debutante",
-		baseForme: "Furfrou",
+		baseSpecies: "Furfrou",
 		forme: "Debutante",
 		types: ["Normal", "Fairy"],
 		baseStats: { hp: 75, atk: 100, def: 60, spa: 65, spd: 90, spe: 112 },
@@ -12775,7 +12775,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	furfroumatron: {
 		num: 676,
 		name: "Furfrou-Matron",
-		baseForme: "Furfrou",
+		baseSpecies: "Furfrou",
 		forme: "Matron",
 		types: ["Normal", "Poison"],
 		baseStats: { hp: 75, atk: 100, def: 60, spa: 65, spd: 90, spe: 112 },
@@ -12788,7 +12788,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	furfroudandy: {
 		num: 676,
 		name: "Furfrou-Dandy",
-		baseForme: "Furfrou",
+		baseSpecies: "Furfrou",
 		forme: "Dandy",
 		types: ["Normal", "Dark"],
 		baseStats: { hp: 75, atk: 100, def: 60, spa: 65, spd: 90, spe: 112 },
@@ -12801,7 +12801,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	furfroulareine: {
 		num: 676,
 		name: "Furfrou-La Reine",
-		baseForme: "Furfrou",
+		baseSpecies: "Furfrou",
 		forme: "La Reine",
 		types: ["Normal", "Water"],
 		baseStats: { hp: 75, atk: 100, def: 60, spa: 65, spd: 90, spe: 112 },
@@ -12814,7 +12814,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	furfroukabuki: {
 		num: 676,
 		name: "Furfrou-Kabuki",
-		baseForme: "Furfrou",
+		baseSpecies: "Furfrou",
 		forme: "Kabuki",
 		types: ["Normal", "Fighting"],
 		baseStats: { hp: 75, atk: 100, def: 60, spa: 65, spd: 90, spe: 112 },
@@ -12827,7 +12827,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	furfroupharaoh: {
 		num: 676,
 		name: "Furfrou-Pharaoh",
-		baseForme: "Furfrou",
+		baseSpecies: "Furfrou",
 		forme: "Pharaoh",
 		types: ["Normal", "Ghost"],
 		baseStats: { hp: 75, atk: 100, def: 60, spa: 65, spd: 90, spe: 112 },
