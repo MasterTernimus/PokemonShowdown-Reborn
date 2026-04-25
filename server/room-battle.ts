@@ -530,7 +530,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	p4: RoomBattlePlayer = null!;
 	inviteOnlySetter: ID | null = null;
 	logData: AnyObject | null = null;
-	endType: 'forfeit' | 'forced' | 'normal' = 'normal';
+	endType: 'forfeit' | 'forced' | 'normal' | 'draw' = 'normal';
 	/**
 	 * If the battle is ended: an array of the number of Pokemon left for each side.
 	 */
@@ -843,6 +843,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			p1score = 1;
 		} else if (winnerid === this.p2.id) {
 			p1score = 0;
+		} else {
+			this.endType = 'draw';
 		}
 		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
 		if (this.room.rated && !this.options.isBestOfSubBattle) {
