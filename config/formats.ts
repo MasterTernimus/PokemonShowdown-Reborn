@@ -37,7 +37,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Misty Field(Adrienn)",
+		name: "[Gen 9] Misty Field [Adrienn]",
 		mod: 'gen9',
 		terrain: 'adriennterrain',
 		searchShow: true,
@@ -409,7 +409,7 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Doubles Misty Field (Adrienn)",
+		name: "[Gen 9] Doubles Misty Field [Adrienn]",
 		mod: 'gen9',
 		terrain: 'adriennterrain',
 		gameType: 'doubles',
