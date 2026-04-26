@@ -148,7 +148,7 @@ class Ladder extends LadderStore {
 		return null;
 	}
 
-	async makeChallenge(connection: Connection, targetUser: User) {
+	async makeChallenge(connection: Connection, targetUser: User, isOfficial: boolean) {
 		const user = connection.user;
 		if (targetUser === user) {
 			connection.popup(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
@@ -173,9 +173,9 @@ class Ladder extends LadderStore {
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;
 		}
-		if (Date.now() < user.lastChallenge + 10 * SECONDS && !Config.nothrottle) {
+		if (Date.now() < user.lastChallenge + 5 * SECONDS && !Config.nothrottle) {
 			// 10 seconds ago, probable misclick
-			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
+			connection.popup(`You challenged less than 5 seconds after your last challenge! It's cancelled in case it's a misclick.`);
 			return false;
 		}
 		const currentChallenges = Ladders.challenges.get(targetUser.id);
@@ -186,7 +186,7 @@ class Ladder extends LadderStore {
 			);
 			return false;
 		}
-		const ready = await this.prepBattle(connection, 'challenge');
+		const ready = await this.prepBattle(connection, isOfficial ? 'challengeofficial' : 'challenge');
 		if (!ready) return false;
 		// If our target is already challenging us in the same format,
 		// simply accept the pending challenge instead of creating a new one.
@@ -196,6 +196,7 @@ class Ladder extends LadderStore {
 				existingChall.from === targetUser.id &&
 				existingChall.to === user.id &&
 				existingChall.format === this.formatid &&
+				existingChall.official === isOfficial &&
 				existingChall.ready
 			) {
 				if (Ladders.challenges.remove(existingChall)) {
@@ -203,20 +204,20 @@ class Ladder extends LadderStore {
 					return true;
 				}
 			} else {
-				connection.popup(`There's already a challenge (${existingChall.format}) between you and ${targetUser.name}!`);
+				connection.popup(`There's already a challenge (${existingChall.format}, ${existingChall.official}) between you and ${targetUser.name}!`);
 				Ladders.challenges.update(user.id, targetUser.id);
 				return false;
 			}
 		}
-		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready));
+		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready, isOfficial));
 		Ladders.challenges.send(user.id, targetUser.id, `/log ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
-		Chat.runHandlers('onChallenge', user, targetUser, ready.formatid);
+		Chat.runHandlers('onChallenge', user, targetUser, ready.formatid, isOfficial);
 		return true;
 	}
 	static async acceptChallenge(connection: Connection, chall: BattleChallenge) {
 		const ladder = Ladders(chall.format);
-		const ready = await ladder.prepBattle(connection, 'challenge');
+		const ready = await ladder.prepBattle(connection, chall.official ? 'challengeofficial' : 'challenge');
 		if (!ready) return;
 		if (Ladders.challenges.remove(chall)) {
 			return Ladders.match([chall.ready, ready]);
