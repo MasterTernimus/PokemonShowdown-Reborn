@@ -857,8 +857,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
 			this.room.setPrivate('hidden');
-		}
-		
+		}		
 		this.room.update();
 
 		// so it stops showing up in the users' games list
@@ -930,6 +929,16 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		await Monitor.logPath(logpath).mkdirp();
 		await Monitor.logPath(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
+		if (logData.official) {
+			const response = await fetch("leaf-bot-production.up.railway.app/officialLogs", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: JSON.stringify(logData),
+			});
+			console.log(response);
+		}
 		// console.log(JSON.stringify(logData));
 	}
 	override onConnect(user: User, connection: Connection | null = null) {
