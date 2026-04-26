@@ -375,7 +375,6 @@ export const commands: Chat.ChatCommands = {
 			}
 			throw new Chat.ErrorMessage(`${targetUsername} is offline.`);
 		}
-
 		return this.parse(message);
 	},
 	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
@@ -1219,7 +1218,7 @@ export const commands: Chat.ChatCommands = {
 			const playerNames = battle.players.map(p => p.id && p.name).filter(Boolean).join(', ');
 			const ready = player.hasTeam ? battle.format : new Ladders.BattleReady(user.id, battle.format, user.battleSettings);
 			Ladders.challenges.add(
-				new Ladders.BattleInvite(user.id, targetUser.id, ready, {
+				new Ladders.BattleInvite(user.id, targetUser.id, ready, room.official, {
 					acceptCommand: `/acceptbattle ${user.id}`,
 					message: `You're invited to join a battle (with ${playerNames})`,
 					roomid: room.roomid,
@@ -1259,7 +1258,7 @@ export const commands: Chat.ChatCommands = {
 		let playerOpts = undefined;
 		if (!player.hasTeam) {
 			const ladder = Ladders(battle.format);
-			const ready = await ladder.prepBattle(connection, 'challenge');
+			const ready = await ladder.prepBattle(connection, chall.official ? 'challengeofficial' : 'challenge');
 			if (!ready) return;
 			playerOpts = ready.settings;
 		}
@@ -1492,7 +1491,11 @@ export const commands: Chat.ChatCommands = {
 
 	chall: 'challenge',
 	challenge(target, room, user, connection) {
-		const { targetUser, targetUsername, rest: formatName } = this.splitUser(target);
+		const { targetUser, targetUsername, rest: format } = this.splitUser(target);
+		const formatArgs = format.split(", ");
+		const formatName = formatArgs[0];
+
+		const isOfficial = formatArgs[1];
 		if (!targetUser?.connected) {
 			return this.popupReply(this.tr`The user '${targetUsername}' was not found.`);
 		}
@@ -1510,7 +1513,7 @@ export const commands: Chat.ChatCommands = {
 			this.popupReply(this.tr`This server requires you to be rank ${groupName} or higher to challenge users.`);
 			return false;
 		}
-		return Ladders(formatName).makeChallenge(connection, targetUser);
+		return Ladders(formatName).makeChallenge(connection, targetUser, isOfficial !== 'false');
 	},
 	challengehelp: [
 		`/challenge [user], [format] - Challenges the given [user] to a battle in the given [format].`,

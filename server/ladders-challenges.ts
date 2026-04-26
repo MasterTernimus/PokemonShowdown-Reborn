@@ -42,7 +42,8 @@ export abstract class AbstractChallenge {
 	acceptButton: string;
 	rejectButton: string;
 	roomid: RoomID;
-	constructor(from: ID, to: ID, ready: BattleReady | string, options: {
+	official: boolean;
+	constructor(from: ID, to: ID, ready: BattleReady | string, official?: boolean, options: {
 		acceptCommand?: string, rejectCommand?: string, roomid?: RoomID,
 		message?: string, acceptButton?: string, rejectButton?: string,
 	} = {}) {
@@ -55,6 +56,7 @@ export abstract class AbstractChallenge {
 		this.roomid = options.roomid || '';
 		this.acceptButton = options.acceptButton || '';
 		this.rejectButton = options.rejectButton || '';
+		this.official = official ?? false;
 	}
 	destroy(accepted?: boolean) {}
 }
@@ -217,7 +219,7 @@ export class Challenges extends Map<ID, Challenge[]> {
 	getUpdate(challenge: Challenge | null) {
 		if (!challenge) return `/challenge`;
 		const teambuilderFormat = challenge.ready ? challenge.ready.formatid : '';
-		return `/challenge ${challenge.format}|${teambuilderFormat}|${challenge.message}|${challenge.acceptButton}|${challenge.rejectButton}`;
+		return `/challenge ${challenge.format}|${teambuilderFormat}|${challenge.official}|${challenge.message}|${challenge.acceptButton}|${challenge.rejectButton}`;
 	}
 	update(userid1: ID, userid2: ID) {
 		const challenge = this.search(userid1, userid2);

@@ -87,7 +87,7 @@ interface Handlers {
 	) => void;
 	onRename: (user: User, oldID: ID, newID: ID) => void;
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
-	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
+	onChallenge: (user: User, targetUser: User, format: string | ID, official: boolean) => void;
 	onMessageOffline: (context: Chat.CommandContext, message: string, targetUserID: ID) => void;
 	onBattleJoin: (slot: string, user: User, battle: RoomBattle) => void;
 	onPunishUser: (type: string, user: User, room?: Room | null) => void;
