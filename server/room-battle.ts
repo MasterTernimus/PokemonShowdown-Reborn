@@ -932,14 +932,15 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		await Monitor.logPath(logpath).mkdirp();
 		await Monitor.logPath(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
 		if (logData.official) {
-			const response = await fetch("leaf-bot-production.up.railway.app/officialLogs", {
+			const response = await fetch("https://leaf-bot-production.up.railway.app/officialLogs", {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(logData),
 			});
-			console.log(response);
+
+			console.log(await response.text());
 		}
 		// console.log(JSON.stringify(logData));
 	}
