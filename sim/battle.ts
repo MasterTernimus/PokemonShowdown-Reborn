@@ -1581,8 +1581,8 @@ export class Battle {
 	win(side?: SideID | '' | Side | null) {
 		if (this.ended) return false;
 		let left = 0;
-		for (side of this.sides) {
-			left += side.pokemonLeft;
+		for (const activeSides of this.sides) {
+			left += activeSides.pokemonLeft;
 		}
 		if (left === 0) {
 			this.draw();

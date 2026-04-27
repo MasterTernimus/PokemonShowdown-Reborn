@@ -859,7 +859,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
 			this.room.setPrivate('hidden');
-		}		
+		}
 		this.room.update();
 
 		// so it stops showing up in the users' games list
