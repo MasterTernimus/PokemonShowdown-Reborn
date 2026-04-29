@@ -46,7 +46,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (accuracy.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')) {
 					for (const pokemon of this.getAllActive()) {
 						if (!pokemon.isSemiInvulnerable())
-							this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
+							this.boost({ accuracy: -1 }, pokemon, pokemon.side.foe.active[0], move, false, false);
 					}
 				}
 			},
@@ -2675,7 +2675,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (steam.includes(move.id)) {
 					for (const pokemon of this.getAllActive()) {
 						if (!pokemon.isSemiInvulnerable()) {
-							this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
+							this.boost({ accuracy: -1 }, pokemon, pokemon.side.foe.active[0], move, false, false);
 						}
 					}
 				}
@@ -2823,7 +2823,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						const stats: BoostID[] = ['accuracy', 'evasion', 'spa', 'spe', 'spd', 'atk', 'def'];
 						const randomStat = this.sample(stats);
 						if (randomStat) chosenBoost[randomStat] = -1;
-						this.boost(chosenBoost, pokemon, pokemon);
+						this.boost(chosenBoost, pokemon, pokemon.side.foe.active[0]);
 						break;
 					}
 				}
@@ -3163,7 +3163,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (this.field.terrainState.stickyweb.includes(pokemon.side.id)) {
 					this.add('-message', '...Sticky string shot out of the ground!');
 					if (!pokemon.isSemiInvulnerable()) {
-						this.boost({ spe: -4 }, pokemon);
+						this.boost({ spe: -4 }, pokemon, pokemon.side.foe.active[0]);
 					}
 				}
 				if (this.field.terrainState.stealthrock.includes(pokemon.side.id)) {
