@@ -2547,7 +2547,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		weather: 'hail',
 		selfSwitch: true,
-				condition: {
+		condition: {
 			duration: 1,
 			onBeforeMovePriority: 100,
 			onBeforeMove(source, target, move) {
@@ -2752,7 +2752,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				};
 			}
 		},
-				boosts: {
+		boosts: {
 			atk: 1,
 			def: 1,
 		},
@@ -2802,7 +2802,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		status: 'frz',
-				desc: 'Freezes the opposing pokemon',
+		desc: 'Freezes the opposing pokemon',
 		shortDesc: 'Inflicts freeze',
 		target: "normal",
 		type: "Ice",
@@ -3639,7 +3639,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { allyanim: 1 },
-				boosts: {
+		boosts: {
 			atk: 2,
 			spa: 2,
 		},
@@ -7582,6 +7582,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						this.add('-item', pokemon, this.dex.items.get(item), '[from] move: G-Max Replenish');
 						pokemon.setItem(item);
 					}
+					for (const moveSlot of pokemon.moveSlots) {
+						moveSlot.pp = Math.min(moveSlot.pp + 2, moveSlot.maxpp);
+					}
 				}
 			},
 		},
@@ -7994,7 +7997,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						success = true;
 					}
 				}
-				this.field.clearTerrain();
+				this.field.clearTerrain('Temp');
 				return success;
 			},
 		},
@@ -12584,7 +12587,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Milk Drink",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -12619,7 +12622,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.pp,
-		target: move.target,
+				target: move.target,
 				disabled: false,
 				used: false,
 				virtual: true,
@@ -13098,7 +13101,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Moonlight",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -15092,7 +15095,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
-				onBasePower(basePower, source) {
+		onBasePower(basePower, source) {
 			if (this.field.isTerrain('electricterrain')) {
 				this.debug('psyblade electric terrain boost');
 				return this.chainModify(1.5);
@@ -15938,7 +15941,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Recover",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -16577,7 +16580,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Roost",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -17427,7 +17430,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-				ohko: 'Ice',
+		ohko: 'Ice',
 		target: "normal",
 		type: "Ice",
 		zMove: { basePower: 180 },
@@ -17881,7 +17884,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.pp,
-		target: move.target,
+				target: move.target,
 				disabled: false,
 				used: false,
 			};
@@ -18127,7 +18130,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Slack Off",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -18628,7 +18631,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Soft-Boiled",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		heal: [1, 2],
@@ -20379,7 +20382,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Synthesis",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
