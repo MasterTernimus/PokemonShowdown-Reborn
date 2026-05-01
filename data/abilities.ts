@@ -795,7 +795,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain'))
 				this.chainModify(1.5);
 		},
-		onSourceAfterSetStatus(status, target) {
+		onFoeAfterSetStatus(status, target) {
 			if (status.id === 'tox' || status.id === 'psn') {
 				this.boost({ def: -1, spd: -1 }, target);
 			}
@@ -1223,7 +1223,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+			let modifier = 1.2;
+			if (this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain'])) modifier = 1.5;
+			if (move.typeChangerBoosted === this.effect) return this.chainModify(modifier);
 		},
 		flags: {},
 		name: "Dragonize",
@@ -1493,27 +1495,54 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	eternalflower: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move && this.movehasType(move, 'Grass')) {
-				if (this.field.isTerrain('fairytaleterrain')) {
-					this.debug('Eternal Flower double boost');
-					return this.chainModify(2);
-				} else {
-					this.debug('Eternal Flower boost');
-					return this.chainModify(1.5);
-				}
+			let modifier = 1;
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.debug('Eternal Flower double boost');
+				modifier = 2;
 			}
+			if (move && this.movehasType(move, 'Grass')) {
+				this.debug('Eternal Flower boost');
+				modifier *= 1.5;
+			}
+			return this.chainModify(modifier);
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move && this.movehasType(move, 'Grass')) {
-				if (this.field.isTerrain('fairytaleterrain')) {
-					this.debug('Eternal Flower double boost');
-					return this.chainModify(2);
-				} else {
-					this.debug('Eternal Flower boost');
-					return this.chainModify(1.5);
-				}
+			let modifier = 1;
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.debug('Eternal Flower double boost');
+				modifier = 2;
 			}
+			if (move && this.movehasType(move, 'Grass')) {
+				this.debug('Eternal Flower boost');
+				modifier *= 1.5;
+			}
+			return this.chainModify(modifier);
+		},
+		onFoeModifyAtk(atk, pokemon) {
+			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			this.debug('Eternal Flower drop');
+			return this.chainModify(0.8);
+		},
+		onFoeModifyDef(def, pokemon) {
+			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			this.debug('Eternal Flower drop');
+			return this.chainModify(0.8);
+		},
+		onFoeModifySpe(spe, pokemon) {
+			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			this.debug('Eternal Flower drop');
+			return this.chainModify(0.8);
+		},
+		onFoeModifySpA(spa, pokemon) {
+			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			this.debug('Eternal Flower drop');
+			return this.chainModify(0.8);
+		},
+		onFoeModifySpD(spd, pokemon) {
+			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			this.debug('Eternal Flower drop');
+			return this.chainModify(0.8);
 		},
 		flags: {},
 		name: "Eternal Flower",
@@ -2675,6 +2704,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Intrepid Sword",
 		rating: 4,
 		num: 234,
+	},
+	inversion: {
+		onStart(source) {
+			this.field.setTerrain('inverseterrain');
+		},
+		flags: {},
+		name: "Inversion",
+		rating: 4,
+		num: 10001,
 	},
 	ironbarbs: {
 		onDamagingHitOrder: 1,
@@ -4182,6 +4220,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 158,
 	},
+	predator: {
+		onBasePower(basePower, pokemon, target, move) {
+			if (target.newlySwitched || this.queue.willMove(target)) {
+				this.debug('Predator damage boost');
+				return this.chainModify(1.3);
+			}
+		},
+		flags: {},
+		name: "Predator",
+		rating: 4,
+		num: 10002,
+	},
 	pressure: {
 		onStart(pokemon) {
 			if (this.field.isTerrain('coldeclipseterrain')) {
@@ -4667,6 +4717,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Regenerator",
 		rating: 4.5,
 		num: 144,
+	},
+	relentlesshunt: {
+		onModifyPriority(priority, source, target, move) {
+			if (move.basePower <= 60) {
+				return priority + 1;
+			}
+		},
+		flags: {},
+		name: "Relentless Hunt",
+		rating: 4,
+		num: 10003,
 	},
 	ripen: {
 		onTryHeal(damage, target, source, effect) {
