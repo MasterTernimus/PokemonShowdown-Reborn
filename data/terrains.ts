@@ -386,7 +386,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.add('-message', 'The quake collapsed the ceiling!');
 						this.field.terrainState.terrainChanges?.set('collapse', 0);
 						for (const pokemon of this.getAllActive()) {
-							if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.hasAbility(['rockhead', 'bulletproof', 'stalward'])) {
+							if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.side.sideConditions['wideguard'] || pokemon.side.sideConditions['matblock'] || pokemon.hasAbility(['rockhead', 'bulletproof', 'stalward'])) {
 								continue;
 							}
 							if (pokemon.hasAbility(['prismarmor', 'solidrock'])) {
@@ -1375,7 +1375,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onBasePower(basePower, source, target, move) {
-				const strengthenedMoves = ['airslash', 'ancientpower', 'fleurcannon', 'leafblade', 'magicalleaf', 'moongeistbeam', 'mysticalfire', 'nightslash', 'psychocut', 'relicsong', 'smartstrike', 'solarblade', 'sparklingaria', 'menacingmoonrazemaelstorm', 'oceanicoperetta', 'kowtowcleave', 'aquacutter', 'ceaselessedge', 'stoneaxe', 'behemothblade', 'razorshell', 'behemothbash'];				let modifier = 1;
+				const strengthenedMoves = ['airslash', 'ancientpower', 'fleurcannon', 'leafblade', 'magicalleaf', 'moongeistbeam', 'mysticalfire', 'nightslash', 'psychocut', 'relicsong', 'smartstrike', 'solarblade', 'sparklingaria', 'menacingmoonrazemaelstorm', 'oceanicoperetta', 'kowtowcleave', 'aquacutter', 'ceaselessedge', 'stoneaxe', 'behemothblade', 'razorshell', 'behemothbash'];
+				let modifier = 1;
 				if (move.type === 'Fire') {
 					this.add('-message', 'The fiery flames became draconified!');
 				}
@@ -1831,7 +1832,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 					else
 						return 3;
 				} else {
-					this.add("Not sure how this happened, please let Ternimus know");
 					return 5;
 				}
 			},
