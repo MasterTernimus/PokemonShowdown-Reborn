@@ -300,7 +300,11 @@ export class BattleActions {
 				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
 			this.battle.add('-zpower', pokemon);
-			pokemon.side.zMoveUsed = true;
+			if (pokemon.side.gimmickCount >= 1) {
+				pokemon.side.zMoveUsed = true;
+			} else {
+				pokemon.side.gimmickCount++;
+			}
 		}
 
 		const oldActiveMove = move;
@@ -1527,6 +1531,7 @@ export class BattleActions {
 	}
 
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
+		if (!this.battle.useGimmick(pokemon, 'zMove')) this.battle.add('-message', 'Send this replay to Ternimus!');
 		const zPower = this.dex.conditions.get('zpower');
 		if (move.category !== 'Status') {
 			this.battle.attrLastMove('[zeffect]');
@@ -1920,20 +1925,10 @@ export class BattleActions {
 
 	runMegaEvo(pokemon: Pokemon) {
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid) return false;
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
-
-		// Limit one mega evolution
-		const wasMega = pokemon.canMegaEvo;
-		for (const ally of pokemon.side.pokemon) {
-			if (wasMega) {
-				ally.canMegaEvo = false;
-			} else {
-				ally.canUltraBurst = null;
-			}
-		}
-
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
 	}
@@ -1945,13 +1940,11 @@ export class BattleActions {
 	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
 
 	canTerastallize(pokemon: Pokemon) {
-		if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) {
-			return null;
-		}
 		return pokemon.teraType;
 	}
 
 	terastallize(pokemon: Pokemon) {
+		if (!this.battle.useGimmick(pokemon, 'Terastal')) return null;
 		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
 			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
 			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game crashes.", false, pokemon.side);
@@ -1965,9 +1958,6 @@ export class BattleActions {
 		const type = pokemon.teraType;
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
-		for (const ally of pokemon.side.pokemon) {
-			ally.canTerastallize = null;
-		}
 		pokemon.addedType = '';
 		pokemon.knownType = true;
 		pokemon.apparentType = type;

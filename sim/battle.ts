@@ -1695,11 +1695,6 @@ export class Battle {
 		this.lastSuccessfulMoveThisTurn = null;
 
 		const dynamaxEnding: Pokemon[] = [];
-		for (const pokemon of this.getAllActive()) {
-			if (pokemon.volatiles['dynamax']?.turns === 3) {
-				dynamaxEnding.push(pokemon);
-			}
-		}
 		if (dynamaxEnding.length > 1) {
 			this.updateSpeed();
 			this.speedSort(dynamaxEnding);
@@ -2848,9 +2843,7 @@ export class Battle {
 			this.actions.runMegaEvoY?.(action.pokemon);
 			break;
 		case 'runDynamax':
-			action.pokemon.addVolatile('dynamax');
-			action.pokemon.side.dynamaxUsed = true;
-			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
+			if (this.useGimmick(action.pokemon, 'Gigantamax')) action.pokemon.addVolatile('dynamax');
 			break;
 		case 'terastallize':
 			this.actions.terastallize(action.pokemon);
@@ -3344,7 +3337,7 @@ export class Battle {
 					ivs: null!,
 					level: set.level,
 				};
-				if (this.gen === 8 && !this.ruleTable.has('dynamaxclause')) newSet.gigantamax = set.gigantamax;
+				newSet.gigantamax = set.gigantamax;
 				if (this.gen === 9 && !this.ruleTable.has('terastalclause')) newSet.teraType = set.teraType;
 				// Only display Hidden Power type if the Pokemon has Hidden Power
 				// This is based on how team sheets were written in past VGC formats
@@ -3525,5 +3518,47 @@ export class Battle {
 		} else {
 			return types.includes(searchTypes);
 		}
+	}
+
+	useGimmick(pokemon: Pokemon, gimmick: Gimmick): boolean {
+		if (pokemon.side.gimmickCount >= 2) {
+			return false;
+		}
+		let outcome = false;
+		switch (gimmick) {
+		case 'Terastal':
+			outcome = !!pokemon.canTerastallize;
+			break;
+		case 'Gigantamax':
+			outcome = !!pokemon.canDynamax;
+			break;
+		case 'Mega':
+			outcome = !!pokemon.canMegaEvo;
+			break;
+		case 'Ultraburst':
+			outcome = !!pokemon.canUltraBurst;
+			break;
+		case 'zMove':
+			outcome = !!pokemon.side.zMoveUsed && !pokemon.terastallized && !pokemon.species.isMega && !pokemon.gigantamax;
+			break;
+		}
+		if (outcome) {
+			pokemon.canTerastallize = null;
+			pokemon.canMegaEvo = false;
+			pokemon.canUltraBurst = null;
+			pokemon.canDynamax = false;
+			pokemon.side.gimmickCount++;
+		}
+		if (pokemon.side.gimmickCount === 2) {
+			pokemon.side.dynamaxUsed = true;
+			if (pokemon.side.allySide) pokemon.side.allySide.dynamaxUsed = true;
+			for (const ally of pokemon.side.pokemon) {
+				ally.canMegaEvo = false;
+				ally.canUltraBurst = null;
+				ally.canTerastallize = null;
+			}
+			pokemon.side.zMoveUsed = false;
+		}
+		return outcome;
 	}
 }

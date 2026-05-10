@@ -277,6 +277,7 @@ export class Pokemon {
 	canMegaEvoX: string | false | null | undefined;
 	canMegaEvoY: string | false | null | undefined;
 	canUltraBurst: string | null | undefined;
+	canDynamax: true | false | undefined = true;
 	readonly canGigantamax: string | null;
 	/**
 	 * A Pokemon's Tera type if it can Terastallize, false if it is temporarily unable to tera and should have its
@@ -499,6 +500,7 @@ export class Pokemon {
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
+		this.canDynamax = !!this.getItem().zMove;
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -1057,10 +1059,9 @@ export class Pokemon {
 	getDynamaxRequest(skipChecks?: boolean) {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
-			if (!this.side.canDynamaxNow()) return;
+			if (!this.side.canDynamaxNow() || !this.canDynamax) return;
 			if (
-				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
-				this.getItem().zMove || this.canMegaEvo
+				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra"
 			) {
 				return;
 			}

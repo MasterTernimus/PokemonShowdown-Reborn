@@ -25,6 +25,7 @@ type IDEntry = Lowercase<string>;
 type PokemonSlot = '' | IDEntry & { __isSlot: true };
 interface AnyObject { [k: string]: any }
 
+type Gimmick = 'Terastal' | 'Mega' | 'Gigantamax' | 'Ultraburst' | 'zMove';
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
 type StatID = 'hp' | StatIDExceptHP;
