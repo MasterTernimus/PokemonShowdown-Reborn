@@ -871,6 +871,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldResidual() {
 				if (this.field.terrainState.terrainChanges?.get('neutralizinggas') === 1) return;
 				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasType('Poison')) {
+						continue;
+					}
 					if (pokemon.trySetStatus('psn')) {
 						this.damage(this.runEvent('Damage', pokemon, null, this.dex.conditions.get('psn'), pokemon.baseMaxhp / 8), pokemon);
 					}
@@ -2280,7 +2283,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			durationCallback(target, source, effect) {
 				if (effect?.id === 'splinteredstormshards') {
-					return 2;
+					return 3;
 				}
 				return 9999;
 			},

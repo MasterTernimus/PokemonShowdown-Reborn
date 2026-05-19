@@ -761,15 +761,9 @@ export class Side {
 		if (megay && !pokemon.canMegaEvoY) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve Y`);
 		}
-		if ((mega || megax || megay) && this.choice.mega && !mixandmega) {
-			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
-		}
 		const ultra = (event === 'ultra');
 		if (ultra && !pokemon.canUltraBurst) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't ultra burst`);
-		}
-		if (ultra && this.choice.ultra && !mixandmega) {
-			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
 		let dynamax = (event === 'dynamax');
 		const canDynamax = (this.activeRequest as MoveRequest)?.active[this.active.indexOf(pokemon)].canDynamax;
@@ -782,16 +776,12 @@ export class Side {
 				} else if (pokemon.side.allySide?.canDynamaxNow()) {
 					return this.emitChoiceError(`Can't move: It's your partner's turn to Dynamax.`);
 				}
-				return this.emitChoiceError(`Can't move: You can only Dynamax once per battle.`);
 			}
 		}
 		const terastallize = (event === 'terastallize');
 		if (terastallize && !pokemon.canTerastallize) {
 			// Make this work properly
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize.`);
-		}
-		if (terastallize && this.choice.terastallize) {
-			return this.emitChoiceError(`Can't move: You can only Terastallize once per battle.`);
 		}
 		if (terastallize && this.battle.gen !== 9) {
 			// Make this work properly
