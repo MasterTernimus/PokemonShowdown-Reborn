@@ -2907,7 +2907,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		boosts: {
 			spa: -1,
 		},
-		pseudoWeather: 'trickroom',
 		target: "normal",
 		type: "Normal",
 		zMove: { boost: { spd: 1 } },
