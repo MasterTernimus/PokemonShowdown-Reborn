@@ -156,7 +156,9 @@ export class BattleActions {
 		} else {
 			this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
 		}
-
+		if (pokemon.species.forme === 'Gmax') {
+			pokemon.addVolatile('dynamax');
+		}
 		return true;
 	}
 	dragIn(side: Side, pos: number) {
@@ -300,11 +302,6 @@ export class BattleActions {
 				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
 			this.battle.add('-zpower', pokemon);
-			if (pokemon.side.gimmickCount >= 1) {
-				pokemon.side.zMoveUsed = true;
-			} else {
-				pokemon.side.gimmickCount++;
-			}
 		}
 
 		const oldActiveMove = move;

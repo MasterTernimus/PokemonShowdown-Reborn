@@ -233,7 +233,7 @@ export class BattleQueue {
 						pokemon: action.pokemon,
 					}));
 				}
-				if (action.maxMove && !action.pokemon.volatiles['dynamax']) {
+				if ((action.maxMove || action.dynamax) && !action.pokemon.volatiles['dynamax']) {
 					actions.unshift(...this.resolveAction({
 						choice: 'runDynamax',
 						pokemon: action.pokemon,

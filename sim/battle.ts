@@ -2843,7 +2843,11 @@ export class Battle {
 			this.actions.runMegaEvoY?.(action.pokemon);
 			break;
 		case 'runDynamax':
-			if (this.useGimmick(action.pokemon, 'Gigantamax')) action.pokemon.addVolatile('dynamax');
+			const species = action.pokemon.canDynamax;
+			if (species && this.useGimmick(action.pokemon, 'Gigantamax')) {
+				action.pokemon.formeChange(species, null, true);
+				action.pokemon.addVolatile('dynamax');
+			}
 			break;
 		case 'terastallize':
 			this.actions.terastallize(action.pokemon);
@@ -3557,7 +3561,7 @@ export class Battle {
 				ally.canUltraBurst = null;
 				ally.canTerastallize = null;
 			}
-			pokemon.side.zMoveUsed = false;
+			pokemon.side.zMoveUsed = true;
 		}
 		return outcome;
 	}
