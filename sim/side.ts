@@ -40,6 +40,7 @@ export interface ChosenAction {
 	megax?: boolean | null; // true if megaing x
 	megay?: boolean | null; // true if megaing y
 	zmove?: string; // if zmoving, the name of the zmove
+	dynamax?: boolean | null; // if zmoving, the name of the zmove
 	maxMove?: string; // if dynamaxed, the name of the max move
 	terastallize?: string; // if terastallizing, tera type
 	priority?: number; // priority of the action
@@ -633,10 +634,10 @@ export class Side {
 
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
-		const maxMove = (event === 'dynamax' || pokemon.volatiles['dynamax']) ?
+		let maxMove = (event === 'dynamax' || pokemon.volatiles['dynamax']) ?
 			this.battle.actions.getMaxMove(move, pokemon) : undefined;
-		if (event === 'dynamax' && !maxMove) {
-			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
+		if (maxMove?.name !== pokemon.canGigantamax) {
+			maxMove = undefined;
 		}
 		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).target;
 
@@ -800,6 +801,7 @@ export class Side {
 			mega: mega || ultra,
 			megax,
 			megay,
+			dynamax,
 			zmove: zMove,
 			maxMove: maxMove ? maxMove.id : undefined,
 			terastallize: terastallize ? pokemon.teraType : undefined,
@@ -816,7 +818,6 @@ export class Side {
 		if (zMove) this.choice.zMove = true;
 		if (dynamax) this.choice.dynamax = true;
 		if (terastallize) this.choice.terastallize = true;
-
 		return true;
 	}
 

@@ -277,7 +277,7 @@ export class Pokemon {
 	canMegaEvoX: string | false | null | undefined;
 	canMegaEvoY: string | false | null | undefined;
 	canUltraBurst: string | null | undefined;
-	canDynamax: true | false | undefined = true;
+	canDynamax: string | false | undefined;
 	readonly canGigantamax: string | null;
 	/**
 	 * A Pokemon's Tera type if it can Terastallize, false if it is temporarily unable to tera and should have its
@@ -500,7 +500,7 @@ export class Pokemon {
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
-		this.canDynamax = !this.getItem().zMove;
+		this.canDynamax = !this.getItem().zMove ? this.baseSpecies.id + 'gmax' : false;
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
@@ -1058,7 +1058,7 @@ export class Pokemon {
 	getDynamaxRequest(skipChecks?: boolean) {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
-			if (!this.side.canDynamaxNow() || !this.canDynamax) return;
+			if (!this.side.canDynamaxNow() || !this.canDynamax || !this.canGigantamax) return;
 			if (
 				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra"
 			) {
@@ -1073,6 +1073,10 @@ export class Pokemon {
 			const move = this.battle.dex.moves.get(moveSlot.id);
 			const maxMove = this.battle.actions.getMaxMove(move, this);
 			if (maxMove) {
+				if (maxMove?.name !== this.canGigantamax) {
+					result.maxMoves.push({ move: move.id, target: move.target });
+					continue;
+				}
 				if (this.maxMoveDisabled(move)) {
 					result.maxMoves.push({ move: maxMove.id, target: maxMove.target, disabled: true });
 				} else {
@@ -1435,7 +1439,6 @@ export class Pokemon {
 		isPermanent?: boolean, abilitySlot = '0', message?: string
 	) {
 		const rawSpecies = this.battle.dex.species.get(speciesId);
-
 		const species = this.setSpecies(rawSpecies, source);
 		if (!species) return false;
 
