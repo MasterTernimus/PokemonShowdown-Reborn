@@ -281,11 +281,10 @@ export class Field {
 				this.terrainStack.shift();
 			}
 		} else if (power === 'terraform') {
-			const user_terrains = ['mistyterrain', 'corrosivemistterrain', 'corrosiveterrain', 'psychicterrain', 'grassyterrain', 'burningterrain', 'inverseterrain', 'glitchterrain', 'coldeclipseterrain', 'rainbowterrain', 'swampterrain'];
-			if (user_terrains.includes(this.terrain)) {
+			if (this.terrainState?.terrain_type !== 'Base') {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-				while (this.terrainStack.length > 0 && user_terrains.includes(this.terrainStack[0].id)) {
+				while (this.terrainStack.length > 0 && this.terrainState?.terrain_type !== 'Base') {
 					this.terrainStack.shift();
 				}
 			}

@@ -1179,23 +1179,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	beatup: {
 		num: 251,
 		accuracy: 100,
-		basePower: 0,
-		basePowerCallback(pokemon, target, move) {
-			const setSpecies = this.dex.species.get(move.allies!.shift()!.set.species);
-			const bp = 5 + Math.floor(setSpecies.baseStats.atk / 10);
-			this.debug(`BP for ${setSpecies.name} hit: ${bp}`);
-			return bp;
-		},
+		basePower: 25,
 		category: "Physical",
 		name: "Beat Up",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, allyanim: 1, metronome: 1 },
-		onModifyMove(move, pokemon) {
-			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || !ally.fainted && !ally.status);
-			move.multihit = move.allies.length;
-		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		multihit: [2, 5],
 		target: "normal",
+		zMove: { basePower: 140 },
+		maxMove: { basePower: 130 },
 		type: "Dark",
 		contestType: "Clever",
 	},
@@ -1464,14 +1457,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	blastburn: {
 		num: 307,
 		accuracy: 90,
-		basePower: 150,
+		basePower: 160,
 		category: "Special",
 		name: "Blast Burn",
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1 },
+		onAfterMove(source, target, move) {
+			if (target.fainted) {
+				source.removeVolatile('mustrecharge');
+			}
+		},
 		self: {
 			volatileStatus: 'mustrecharge',
+		},
+		secondary: {
+			chance: 60,
+			status: 'brn',
 		},
 		target: "normal",
 		type: "Fire",
@@ -2797,7 +2799,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, source, target) {
-			if (target && (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['coldeclipseterrain', 'icyterrain']))) {
+			if (target && (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['coldeclipseterrain', 'icyterrain']) || source.hasType('Ice')) {
 				move.accuracy = 100;
 			}
 		},
@@ -4595,13 +4597,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1 },
+		critRatio: 2,
 		target: "any",
 		type: "Flying",
 		contestType: "Cool",
 	},
 	drillrun: {
 		num: 529,
-		accuracy: 95,
+		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
 		name: "Drill Run",
@@ -5740,8 +5743,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	firefang: {
 		num: 424,
-		accuracy: 95,
-		basePower: 65,
+		accuracy: 100,
+		basePower: 70,
 		category: "Physical",
 		name: "Fire Fang",
 		pp: 15,
@@ -6682,15 +6685,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	frenzyplant: {
 		num: 338,
-		accuracy: 90,
-		basePower: 150,
+		accuracy: 100,
+		basePower: 160,
 		category: "Special",
 		name: "Frenzy Plant",
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		onAfterMove(source, target, move) {
+			if (target.fainted) {
+				source.removeVolatile('mustrecharge');
+			}
+		},
 		self: {
 			volatileStatus: 'mustrecharge',
+		},
+		secondary: {
+			chance: 80,
+			status: 'tox',
 		},
 		target: "normal",
 		type: "Grass",
@@ -7998,7 +8010,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						success = true;
 					}
 				}
-				this.field.clearTerrain('Temp');
+				this.field.clearTerrain('terraform');
 				return success;
 			},
 		},
@@ -8178,7 +8190,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					modifier *= 1.5;
 					this.add('-message', 'The wind picked up strength from the field!');
 				}
-				if ((igniteMoves.includes(move.id) && !this.field.isWeather(['raindance', 'primordealsea']) && !this.field.pseudoWeather['watersport'])) {
+				if ((igniteMoves.includes(move.id) && !this.field.isWeather(['raindance', 'primordealsea']) && !this.field.pseudoWeather['watersport']) || (move.isMax && move.type === 'Fire')) {
 					modifier *= 1.3;
 				}
 				if (move.id === 'sludgewave' || move.id === 'aciddownpour')
@@ -8196,7 +8208,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				const swampMoves = ['surf', 'muddywater'];
 				const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
-				if (igniteMoves.includes(move.id) && !this.field.isWeather(['raindance', 'primordealsea']) && !this.field.pseudoWeather['watersport']) {
+				if (igniteMoves.includes(move.id) && !this.field.isWeather(['raindance', 'primordealsea']) && !this.field.pseudoWeather['watersport'] || (move.isMax && move.type === 'Fire')) {
 					this.field.changeTerrain('burningterrain');
 				}
 				if (move.id === 'sludgewave' || move.id === 'aciddownpour') {
@@ -9621,15 +9633,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	hydrocannon: {
 		num: 308,
-		accuracy: 90,
-		basePower: 150,
+		accuracy: 100,
+		basePower: 160,
 		category: "Special",
 		name: "Hydro Cannon",
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1 },
+		onAfterMove(source, target, move) {
+			if (target.fainted) {
+				source.removeVolatile('mustrecharge');
+			}
+		},
 		self: {
 			volatileStatus: 'mustrecharge',
+		},
+		secondary: {
+			chance: 60,
+			status: 'frz',
 		},
 		target: "normal",
 		type: "Water",
@@ -9928,8 +9949,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	icefang: {
 		num: 423,
-		accuracy: 95,
-		basePower: 65,
+		accuracy: 100,
+		basePower: 70,
 		category: "Physical",
 		name: "Ice Fang",
 		pp: 15,
@@ -11163,7 +11184,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	lowsweep: {
 		num: 490,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 60,
 		category: "Physical",
 		name: "Low Sweep",
 		pp: 20,
@@ -12303,7 +12324,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	megadrain: {
 		num: 72,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Special",
 		name: "Mega Drain",
 		pp: 15,
@@ -12467,15 +12488,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	meteorassault: {
 		num: 794,
 		accuracy: 100,
-		basePower: 150,
+		basePower: 160,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Meteor Assault",
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, failinstruct: 1 },
+		onAfterMove(source, target, move) {
+			if (target.fainted) {
+				source.removeVolatile('mustrecharge');
+			}
+		},
 		self: {
 			volatileStatus: 'mustrecharge',
+		},
+		secondary: {
+			chance: 60,
+			status: 'par',
 		},
 		target: "normal",
 		type: "Fighting",
@@ -13002,7 +13032,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const strMoves = ['aurasphere', 'clearsmog', 'doomdesire', 'icywind', 'magicalleaf', 'mistball', 'moongeistbeam', 'mysticalfire', 'silverwind', 'smog', 'springtidestorm', 'steameruption', 'strangesteam'];
 				const weakMoves = ['shadowball', 'nightdaze', 'darkpulse'];
 				const corrosiveMoves = ['smog', 'clearsmog', 'poisongas', 'aciddownpour'];
-				const windyMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike'];
+				const windyMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'gmaxwindrage'];
 				let modifier = 1;
 				if (move.type === 'Dragon') {
 					this.debug('misty terrain weaken');
@@ -13032,7 +13062,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAfterMove(target, source, move) {
 				const terrainChangeMoves = ['smog', 'clearsmog', 'poisongas', 'aciddownpour'];
-				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike'];
+				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'gmaxwindrage'];
 				if (terrainChangeMoves.includes(move.id)) {
 					if (this.field.terrainState.terrainChanges?.get('corrosivemistterrain') === 1 || move.id === 'aciddownpour') {
 						this.field.changeTerrain('corrosivemistterrain');
@@ -13597,7 +13627,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	needlearm: {
 		num: 302,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 95,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Needle Arm",
@@ -14522,7 +14552,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	poisonfang: {
 		num: 305,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 85,
 		category: "Physical",
 		name: "Poison Fang",
 		pp: 15,
@@ -15019,8 +15049,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1 },
+		onAfterMove(source, target, move) {
+			if (target.fainted) {
+				source.removeVolatile('mustrecharge');
+			}
+		},
 		self: {
 			volatileStatus: 'mustrecharge',
+		},
+		secondary: {
+			chance: 50,
+			status: 'slp',
 		},
 		target: "normal",
 		type: "Psychic",
@@ -16397,7 +16436,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
-			chance: 30,
+			chance: 20,
 			volatileStatus: 'flinch',
 		},
 		target: "allAdjacentFoes",
@@ -16407,7 +16446,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	rocksmash: {
 		num: 249,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Physical",
 		name: "Rock Smash",
 		pp: 15,
@@ -17271,7 +17310,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	shadowclaw: {
 		num: 421,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 80,
 		category: "Physical",
 		name: "Shadow Claw",
 		pp: 15,
@@ -17319,7 +17358,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	shadowpunch: {
 		num: 325,
 		accuracy: true,
-		basePower: 60,
+		basePower: 80,
 		category: "Physical",
 		name: "Shadow Punch",
 		pp: 20,
@@ -17662,7 +17701,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Shore Up",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -17949,7 +17988,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			this.boost({ def: 1 }, attacker, attacker, move);
+			this.boost({ atk: 1, def: 1 }, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -21263,8 +21302,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	thunderfang: {
 		num: 422,
-		accuracy: 95,
-		basePower: 65,
+		accuracy: 100,
+		basePower: 70,
 		category: "Physical",
 		name: "Thunder Fang",
 		pp: 15,
@@ -21344,6 +21383,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, source, target) {
+			if (target && (source.hasType('Electric'))) {
+				move.accuracy = 100;
+			}
+		},
 		status: 'par',
 		ignoreImmunity: false,
 		target: "normal",
@@ -22679,12 +22723,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
-		onModifyMove(move) {
+		onModifyMove(move, source, target) {
 			if (this.field.isTerrain(['burningterrain', 'volcanicterrain'])) {
 				move.accuracy = 100;
 			}
 			if (this.field.isTerrain('hauntedterrain')) {
 				move.accuracy = 90;
+			}
+			if (target && (source.hasType('Fire'))) {
+				move.accuracy = 100;
 			}
 		},
 		status: 'brn',

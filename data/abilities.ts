@@ -791,6 +791,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				];
 			}
 		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Steel' && typeMod > 0) {
+				return 0;
+			}
+		},
 		onDamage() {
 			if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain'))
 				this.chainModify(1.5);
@@ -2379,6 +2384,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 11,
 	},
 	icebody: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				let chance = 3;
+				if (this.randomChance(chance, 10)) {
+					source.trySetStatus('frz', target);
+				}
+			}
+		},
 		onWeather(target, source, effect) {
 			if (effect.id === 'hail' || effect.id === 'snow') {
 				this.heal(target.baseMaxhp / 16);
@@ -2953,12 +2966,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	liquidvoice: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
-			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
+			if (move.flags['sound']) { // hardcode
 				if (this.field.isTerrain('icyterrain')) {
 					move.type = 'Ice';
 				} else {
 					move.type = 'Water';
 				}
+			}
+		},
+		onBasePower(basePower, source, target, move) {
+			if (move.flags.sound) {
+				return this.chainModify(1.2);
 			}
 		},
 		flags: {},
@@ -4671,7 +4689,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('chessboardterrain')) {
 				modifier *= 1.2;
 			}
-			if (move.recoil || move.hasCrashDamage) {
+			if (move.recoil || move.hasCrashDamage || ['explosion', 'selfdestruct', 'mistyexplosion'].includes(move.id)) {
 				this.debug('Reckless boost');
 				modifier *= 1.2;
 			}

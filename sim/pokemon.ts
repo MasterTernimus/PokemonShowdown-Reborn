@@ -1075,6 +1075,7 @@ export class Pokemon {
 			if (maxMove) {
 				if (maxMove?.name !== this.canGigantamax) {
 					result.maxMoves.push({ move: move.id, target: move.target });
+					atLeastOne = true;
 					continue;
 				}
 				if (this.maxMoveDisabled(move)) {
