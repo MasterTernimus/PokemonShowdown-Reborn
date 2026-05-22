@@ -247,7 +247,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onBasePower(basePower, source, target, move) {
-				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike'];
+				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
 				const rockfireMoves = ['rockslide', 'smackdown', 'thousandarrows'];
 				const smogfireMoves = ['smog', 'clearsmog'];
 				let modifier = 1;
@@ -275,7 +275,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike'];
+				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
 				if (terrainEndMoves.includes(move.id)) {
 					if (this.field.terrainState.prevTerrain) {
 						this.field.changeTerrain(this.field.terrainState.prevTerrain);
@@ -364,6 +364,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.terrainChanges?.get('volcanicterrain') === 1)) {
 					modifier *= 1.3;
 				}
+				if (move.isMax && (move.type === 'Dragon' || move.type === 'Fire')) {
+					modifier *= 1.3;
+				}
 				if (dragonMove.includes(move.id) || (uberDragon.includes(move.id) && this.field.terrainState.terrainChanges?.get('dragonsdenterrain') === 1)) {
 					modifier *= 1.3;
 				}
@@ -417,7 +420,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The cave froze over!');
 					return;
 				}
-
 				if (explosive.includes(move.id)) {
 					const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil', 'wellbakedbody'];
 					for (const pokemon of this.getAllActive()) {
@@ -430,7 +432,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('volcanicterrain');
 					return;
 				}
-
+				if (move.isMax && move.type === 'Fire') {
+					this.add('-message', 'The cave combusted!');
+					this.field.changeTerrain('volcanicterrain');
+					return;
+				}
 				if (burning.includes(move.id)) {
 					if (this.field.terrainState.terrainChanges?.get('volcanicterrain') >= 1) {
 						this.add('-message', 'The cave combusted!');
@@ -442,7 +448,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 				}
 
-				if (uberDragon.includes(move.id) || (dragonMove.includes(move.id) && this.field.terrainState.terrainChanges?.get('dragonsdenterrain') === 1)) {
+				if (uberDragon.includes(move.id) || (dragonMove.includes(move.id) && this.field.terrainState.terrainChanges?.get('dragonsdenterrain') === 1) || (move.isMax && move.type === 'Dragon')) {
 					this.field.changeTerrain('dragonsdenterrain');
 					this.add('-message', 'The draconic energy mutated the field');
 					return;
@@ -819,7 +825,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const poisonedMoves = ['appleacid', 'bubble', 'bubblebeam', 'sparklingaria'];
 				const smogMoves = ['smog', 'clearsmog', 'acidspray'];
-				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'seedflare'];
+				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'seedflare', 'gmaxwindrage'];
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				if (move.type === 'Fire') {
 					modifier *= 1.5;
@@ -828,16 +834,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.5;
 				if (smogMoves.includes(move.id))
 					modifier *= 1.5;
-				if (terrainEndMoves.includes(move.id) || igniteMoves.includes(move.id))
+				if (terrainEndMoves.includes(move.id) || igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire'))
 					modifier *= 1.3;
 				if (move.id === 'seedflare')
 					modifier *= 1.3;
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'seedflare'];
+				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'seedflare', 'gmaxwindrage'];
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
-				if (igniteMoves.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.hasAbility('damp')) {
 							return;
@@ -1442,6 +1448,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (boosted.includes(move.id)) {
 					modifier *= 1.5;
 				}
+				if (move.isMax && move.type === 'Water') {
+					modifier *= 1.3;
+				}
 				if (nerfed.includes(move.id)) {
 					modifier *= 0.5;
 					const marshCounter = move.id === 'surf' ? 1 : 2;
@@ -1457,7 +1466,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (cutMoves.includes(move.id)) {
 					modifier *= 1.5;
 				}
-				if (igniteMoves.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					modifier *= 1.3;
 				}
 				if (hauntedMoves.includes(move.id)) {
@@ -1474,13 +1483,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'trickortreat'];
 				const swampMoves = ['surf', 'muddywater'];
 				const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
-				if (igniteMoves.includes(move.id) && (this.field.weather !== 'raindance' || !this.field.getPseudoWeather('watersport'))) {
+				if (igniteMoves.includes(move.id) && (this.field.weather !== 'raindance' || !this.field.getPseudoWeather('watersport')) || (move.isMax && move.type === 'Fire')) {
 					this.field.changeTerrain('burningterrain');
 					return;
 				}
 				if (hauntedMoves.includes(move.id)) {
 					this.field.changeTerrain('bewitchedwoodsterrain');
 					return;
+				}
+				if (move.isMax && move.type === 'Water') {
+					this.add('-message', 'The forest floor became marshy!');
+					this.field.changeTerrain('swampterrain');
 				}
 				if (swampMoves.includes(move.id)) {
 					const marshCounter = move.id === 'muddywater' ? 2 : 1;
@@ -1787,7 +1800,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.id === 'chillingwater') {
 					modifier *= 2;
 				}
-				if (igniteMoves.includes(move.id) || (waterTerrains.includes(this.field.terrainStack[1]?.id) && watersurfaceMoves.includes(move.id))) {
+				if (igniteMoves.includes(move.id) || (waterTerrains.includes(this.field.terrainStack[1]?.id) && watersurfaceMoves.includes(move.id)) || (move.isMax && move.type === 'Fire')) {
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
@@ -1804,7 +1817,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The ice went away!');
 					this.field.changeTerrain('watersurfaceterrain');
 					return;
-				} else if (igniteMoves.includes(move.id) || revertCount + currentCount >= 2) {
+				} else if (igniteMoves.includes(move.id) || revertCount + currentCount >= 2 || (move.isMax && move.type === 'Fire')) {
 					this.add('-message', 'The ice melted!');
 					this.field.changeTerrain(this.field.terrainState?.prevTerrain ?? 'watersurfaceterrain');
 					return;
@@ -2451,7 +2464,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The cold softened the attack...');
 					modifier *= 0.5;
 				}
-				if (igniteMoves.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					modifier *= 1.3;
 				}
 				if (this.field.weather === 'deltastream') {
@@ -2471,7 +2484,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
-				if (igniteMoves.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					this.add('-message', 'The snow melted away!');
 					this.field.changeTerrain('mountainterrain');
 				}
@@ -2528,7 +2541,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', "The fire was doused by the snow!");
 					modifier *= 0.5;
 				}
-				if (igniteMoves.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					modifier *= 1.3;
 				}
 				if (boost.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')) {
@@ -2543,7 +2556,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
-				if (igniteMoves.includes(move.id) && !this.field.getPseudoWeather('watersport')) {
+				if (igniteMoves.includes(move.id) && !this.field.getPseudoWeather('watersport') || (move.isMax && move.type === 'Fire')) {
 					this.field.clearTerrain();
 				}
 				if (move.id === 'powdersnow' || (move.category === 'Special' && move.type === 'Flying')) {
@@ -2665,7 +2678,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'Steam shot up from the field!');
 					modifier *= 0.5625;
 				}
-				if (igniteMoves.includes(move.id) || freeze.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || freeze.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					igniteMoves.includes(move.id) ? this.add('-message', 'The field combusted!') : this.add('-message', 'The field cooled off!');
 					modifier *= 1.3;
 				}
@@ -2682,7 +2695,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						}
 					}
 				}
-				if (igniteMoves.includes(move.id) && !(this.field.isWeather('rain') || this.field.getPseudoWeather('watersport'))) {
+				if (igniteMoves.includes(move.id) && !(this.field.isWeather('rain') || this.field.getPseudoWeather('watersport')) || (move.isMax && move.type === 'Fire')) {
 					this.field.changeTerrain('burningterrain');
 					return;
 				}
@@ -2776,7 +2789,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The attack dissipated in the soggy ground...');
 					modifier *= 0.25;
 				}
-				if (igniteMoves.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					const revertCounter = move.id === 'infernooverdrive' ? 2 : 1;
 					const currentCounter = this.field.terrainState.terrainChanges?.get('revertTerrain') ?? 0;
 					if (currentCounter + revertCounter >= 3) {
@@ -2788,7 +2801,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const currentCounter = this.field.terrainState.terrainChanges?.get('revertTerrain') ?? 0;
-				if (igniteMoves.includes(move.id)) {
+				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					const revertCounter = move.id === 'infernooverdrive' ? 2 : 1;
 					this.field.terrainState.terrainChanges?.set('revertTerrain', currentCounter + revertCounter);
 					if (currentCounter + revertCounter >= 3) {
@@ -2981,7 +2994,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const caveMoves = ['sandtomb', 'scorchingsands', 'sandsearstorm', 'defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'muddywater', 'sparklingaria', 'watersport', 'surf', 'waterpledge', 'sludgewave'];
+				const caveMoves = ['sandtomb', 'scorchingsands', 'sandsearstorm', 'defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'muddywater', 'sparklingaria', 'watersport', 'surf', 'waterpledge', 'sludgewave', 'gmaxwindrage'];
 				const caveZMoves = ['continentalcrush', 'supersonicskystrike', 'hydrovortex', 'aciddownpour'];
 				const dragonMove = ['dragonpulse', 'dragonenergy'];
 				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
@@ -3029,6 +3042,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					['tailwind', 'The wind snuffed out the flame!'],
 					['twister', 'The wind snuffed out the flame!'],
 					['whirlwind', 'The wind snuffed out the flame!'],
+					['gmaxwindrage', 'The wind snuffed out the flame!'],
 					['muddywater', 'The water snuffed out the flame!'],
 					['sparklingaria', 'The water snuffed out the flame!'],
 					['surf', 'The water snuffed out the flame!'],
@@ -3042,7 +3056,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					['aciddownpour', 'The grime snuffed out the flame!'],
 				]);
 
-				const caveMoves = ['sandtomb', 'scorchingsands', 'sandsearstorm', 'defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'muddywater', 'sparklingaria', 'watersport', 'surf', 'waterpledge', 'sludgewave'];
+				const caveMoves = ['sandtomb', 'scorchingsands', 'sandsearstorm', 'defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'muddywater', 'sparklingaria', 'watersport', 'surf', 'waterpledge', 'sludgewave', 'gmaxwindrage'];
 				const caveZMoves = ['continentalcrush', 'supersonicskystrike', 'hydrovortex', 'aciddownpour'];
 				const dragonMove = ['dragonpulse', 'dragonenergy'];
 				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
