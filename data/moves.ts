@@ -2799,7 +2799,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, source, target) {
-			if (target && (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['coldeclipseterrain', 'icyterrain']) || source.hasType('Ice')) {
+			if (target && (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['coldeclipseterrain', 'icyterrain']) || source.hasType('Ice'))) {
 				move.accuracy = 100;
 			}
 		},
