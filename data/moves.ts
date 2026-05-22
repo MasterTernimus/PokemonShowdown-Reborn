@@ -266,7 +266,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	aircutter: {
 		num: 314,
 		accuracy: 95,
-		basePower: 60,
+		basePower: 75,
 		category: "Special",
 		name: "Air Cutter",
 		pp: 25,
@@ -539,7 +539,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	armthrust: {
 		num: 292,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 25,
 		category: "Physical",
 		name: "Arm Thrust",
 		pp: 20,
@@ -4502,7 +4502,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	dragonrush: {
 		num: 407,
-		accuracy: 75,
+		accuracy: 90,
 		basePower: 100,
 		category: "Physical",
 		name: "Dragon Rush",
@@ -4515,7 +4515,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		secondary: {
-			chance: 20,
+			chance: 30,
 			volatileStatus: 'flinch',
 		},
 		target: "normal",
@@ -9722,7 +9722,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	hyperdrill: {
 		num: 887,
 		accuracy: 100,
-		basePower: 100,
+		basePower: 120,
 		category: "Physical",
 		name: "Hyper Drill",
 		pp: 5,
@@ -21993,14 +21993,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	twister: {
 		num: 239,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Special",
 		name: "Twister",
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		secondary: {
-			chance: 20,
+			chance: 30,
 			volatileStatus: 'flinch',
 		},
 		target: "allAdjacentFoes",
