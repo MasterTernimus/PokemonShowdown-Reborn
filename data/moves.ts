@@ -16347,13 +16347,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	roaroftime: {
 		num: 459,
-		accuracy: 90,
-		basePower: 150,
+		accuracy: 100,
+		basePower: 160,
 		category: "Special",
 		name: "Roar of Time",
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1 },
+		onAfterMove(source, target, move) {
+			if (target.fainted) {
+				source.removeVolatile('mustrecharge');
+				target.side.removeSideCondition('tailwind');
+				this.field.removePseudoWeather('trickroom');
+				this.field.clearTerrain('terraform');
+			}
+		},
 		self: {
 			volatileStatus: 'mustrecharge',
 		},
@@ -16496,13 +16504,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	rockwrecker: {
 		num: 439,
-		accuracy: 90,
-		basePower: 150,
+		accuracy: 100,
+		basePower: 160,
 		category: "Physical",
 		name: "Rock Wrecker",
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		onAfterMove(source, target, move) {
+			if (target.fainted) {
+				source.removeVolatile('mustrecharge');
+				target.side.addSideCondition('stealthrock', source, move);
+			}
+		},
 		self: {
 			volatileStatus: 'mustrecharge',
 		},
