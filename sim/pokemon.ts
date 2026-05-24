@@ -1060,7 +1060,7 @@ export class Pokemon {
 		if (!skipChecks) {
 			if (!this.side.canDynamaxNow() || !this.canDynamax || !this.canGigantamax) return;
 			if (
-				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra"
+				this.species.forme === 'Mega'
 			) {
 				return;
 			}
@@ -1071,10 +1071,44 @@ export class Pokemon {
 		let atLeastOne = false;
 		for (const moveSlot of this.moveSlots) {
 			const move = this.battle.dex.moves.get(moveSlot.id);
+			let actualTarget = move.target;
+			switch (moveSlot.id) {
+			case 'curse':
+				if (!this.hasType('Ghost')) {
+					actualTarget = this.battle.dex.moves.get('curse').nonGhostTarget!;
+				}
+				break;
+			case 'pollenpuff':
+				// Heal Block only prevents Pollen Puff from targeting an ally when the user has Heal Block
+				if (this.volatiles['healblock']) {
+					actualTarget = 'adjacentFoe';
+				}
+				break;
+			case 'terastarstorm':
+				if (this.species.name === 'Terapagos-Stellar') {
+					actualTarget = 'allAdjacentFoes';
+				}
+				break;
+			case 'expandingforce':
+				if (this.battle.field.isTerrain('psychicterrain') && this.isGrounded()) {
+					actualTarget = 'allAdjacentFoes';
+				}
+				break;
+			case 'firespin':
+				if (this.battle.field.isTerrain('hauntedterrain')) {
+					actualTarget = 'allAdjacentFoes';
+				}
+				break;
+			case 'meanlook':
+				if (this.battle.field.isTerrain('hauntedterrain')) {
+					actualTarget = 'allAdjacentFoes';
+				}
+				break;
+			}
 			const maxMove = this.battle.actions.getMaxMove(move, this);
 			if (maxMove) {
 				if (maxMove?.name !== this.canGigantamax) {
-					result.maxMoves.push({ move: move.id, target: move.target });
+					result.maxMoves.push({ move: move.id, target: actualTarget });
 					atLeastOne = true;
 					continue;
 				}
