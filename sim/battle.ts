@@ -3340,6 +3340,7 @@ export class Battle {
 					evs: null!,
 					ivs: null!,
 					level: set.level,
+					gigantamax: true,
 				};
 				newSet.gigantamax = set.gigantamax;
 				if (this.gen === 9 && !this.ruleTable.has('terastalclause')) newSet.teraType = set.teraType;
@@ -3543,7 +3544,7 @@ export class Battle {
 			outcome = !!pokemon.canUltraBurst;
 			break;
 		case 'zMove':
-			outcome = !pokemon.side.zMoveUsed && !pokemon.terastallized && !pokemon.species.isMega && !pokemon.gigantamax;
+			outcome = !pokemon.side.zMoveUsed && !pokemon.terastallized && !(pokemon.species.forme === 'Mega') && !pokemon.gigantamax;
 			break;
 		}
 		if (outcome) {

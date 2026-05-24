@@ -1525,27 +1525,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.chainModify(modifier);
 		},
 		onFoeModifyAtk(atk, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.8);
 		},
 		onFoeModifyDef(def, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.8);
 		},
 		onFoeModifySpe(spe, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.8);
 		},
 		onFoeModifySpA(spa, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.8);
 		},
 		onFoeModifySpD(spd, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.isMega || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.8);
 		},
