@@ -1456,7 +1456,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	blastburn: {
 		num: 307,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 160,
 		category: "Special",
 		name: "Blast Burn",
@@ -2448,7 +2448,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	chargebeam: {
 		num: 451,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 50,
 		category: "Special",
 		name: "Charge Beam",
@@ -2456,7 +2456,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
-			chance: 70,
+			chance: 100,
 			self: {
 				boosts: {
 					spa: 1,
@@ -16357,6 +16357,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterMove(source, target, move) {
 			if (target.fainted) {
 				source.removeVolatile('mustrecharge');
+			} else {
 				target.side.removeSideCondition('tailwind');
 				this.field.removePseudoWeather('trickroom');
 				this.field.clearTerrain('terraform');
