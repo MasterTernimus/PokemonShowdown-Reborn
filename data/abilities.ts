@@ -2493,6 +2493,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(0.5);
 			}
 		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
 		flags: { breakable: 1 },
 		name: "Ice Scales",
 		rating: 4,
