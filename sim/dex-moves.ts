@@ -36,6 +36,7 @@ interface MoveFlags {
 	dance?: 1; // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
 	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.
 	distance?: 1; // Can target a Pokemon positioned anywhere in a Triple Battle.
+	drill?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Power Drill.
 	failcopycat?: 1; // Cannot be selected by Copycat.
 	failencore?: 1; // Encore fails if target used this move.
 	failinstruct?: 1; // Cannot be repeated by Instruct.
@@ -44,6 +45,7 @@ interface MoveFlags {
 	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
+	kick?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Striker.
 	metronome?: 1; // Can be selected by Metronome.
 	minimize?: 1; // Deals double damage if the user is minimized.
 	mirror?: 1; // Can be copied by Mirror Move.

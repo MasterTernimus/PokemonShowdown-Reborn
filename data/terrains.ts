@@ -600,6 +600,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onModifyDef(def, pokemon) {
 				let modifier = 1;
+				const eclispeAbilities = ['ironclad', 'darkaura', 'duskilate'];
 				if (pokemon.hasType('Ice') && !this.field.isWeather('hail')) {
 					modifier *= 1.2;
 				}
@@ -609,10 +610,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (pokemon.hasType('Fire')) {
 					modifier *= 0.8;
 				}
+				if (pokemon.hasAbility(eclispeAbilities)) {
+					modifier *= 1.2;
+				}
 				return this.chainModify(modifier);
 			},
 			onModifySpD(spd, pokemon) {
 				let modifier = 1;
+				const eclispeAbilities = ['ironclad', 'darkaura', 'duskilate'];
 				if (pokemon.hasType('Ghost')) {
 					modifier *= 1.2;
 				}
@@ -626,10 +631,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 						modifier *= 1.2;
 					}
 				}
+				if (pokemon.hasAbility(eclispeAbilities)) {
+					modifier *= 1.2;
+				}
 				return this.chainModify(modifier);
 			},
 			onModifySpe(spe, pokemon) {
-				const immune = ['slushrush', 'icebody', 'snowcloak', 'illusion'];
+				const immune = ['slushrush', 'icebody', 'snowcloak', 'illusion', 'duskilate', 'ironclad', 'darkaura'];
 				if (!pokemon.hasAbility(immune) || !pokemon.isGrounded() || pokemon.hasType('Ice')) {
 					return this.chainModify(0.75);
 				}
@@ -3127,6 +3135,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 			effectType: "Terrain",
 			duration: 9999,
 			onBasePowerPriority: 6,
+			durationCallback(target, source, effect) {
+				let duration = 0;
+				if (source.hasItem('amplifieldrock')) {
+					duration += 3;
+				}
+				if (effect?.effectType === 'Ability') {
+					return duration + 5;
+				}
+				return duration + 3;
+			},
 			onModifyMove(move) {
 				const poisoned = ['mudbomb', 'mudshot', 'mudslap'];
 				if (poisoned.includes(move.id)) {
