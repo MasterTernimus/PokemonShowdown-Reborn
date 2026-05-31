@@ -1069,8 +1069,11 @@ export class Pokemon {
 		}
 		const result: DynamaxOptions = { maxMoves: [] };
 		let atLeastOne = false;
+		const protectVolatiles = ['protect', 'detect', 'maxguard', 'kingsshield', 'spikyshield', 'banefulbunker', 'obstruct', 'silktrap', 'burningbulwark'];
 		for (const moveSlot of this.moveSlots) {
 			const move = this.battle.dex.moves.get(moveSlot.id);
+			let protectMove = false;
+			if (move.volatileStatus && protectVolatiles.includes(move.volatileStatus)) protectMove = true;
 			let actualTarget = move.target;
 			switch (moveSlot.id) {
 			case 'curse':
@@ -1108,8 +1111,8 @@ export class Pokemon {
 			const maxMove = this.battle.actions.getMaxMove(move, this);
 			if (maxMove) {
 				if (maxMove?.name !== this.canGigantamax) {
-					result.maxMoves.push({ move: move.id, target: actualTarget });
-					atLeastOne = true;
+					result.maxMoves.push({ move: move.id, target: actualTarget, disabled: protectMove });
+					atLeastOne = atLeastOne || !protectMove;
 					continue;
 				}
 				if (this.maxMoveDisabled(move)) {
