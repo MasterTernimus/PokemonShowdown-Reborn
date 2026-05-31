@@ -791,10 +791,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				];
 			}
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Steel' && typeMod > 0) {
-				return 0;
-			}
+		onNegateImmunity(pokemon, type) {
+			if (pokemon.hasType('Steel') && type === 'Poison') return false;
 		},
 		onDamage() {
 			if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain'))
@@ -859,6 +857,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Cotton Down",
 		rating: 2,
 		num: 238,
+	},
+	crumblingshell: {
+		onDamagingHit(damage, target, source, move) {
+			const side = source.isAlly(target) ? source.side.foe : source.side;
+			const stealthRocks = side.sideConditions['stealthrock'];
+			if (move.category === 'Physical' && !stealthRocks) {
+				this.add('-activate', target, 'ability: Crumbling Shell');
+				side.addSideCondition('stealthrock', target);
+			}
+		},
+		flags: {},
+		name: "Crumbling Shell",
+		rating: 2,
+		num: 10005,
 	},
 	cudchew: {
 		onEatItem(item, pokemon, source, effect) {
@@ -1002,6 +1014,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!move.auraBooster?.hasAbility('Dark Aura')) move.auraBooster = this.effectState.target;
 			if (move.auraBooster !== this.effectState.target) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
 		},
 		flags: {},
 		name: "Dark Aura",
@@ -1347,6 +1362,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.3);
 			}
 		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
+		},
 		flags: {},
 		name: "Duskilate",
 		rating: 4,
@@ -1378,6 +1396,40 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Earth Eater",
 		rating: 3.5,
 		num: 297,
+	},
+	echofiend: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['sound']) {
+				this.add('-immune', target, '[from] ability: Echo Fiend');
+				return null;
+			}
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (move.flags['sound']) {
+				this.add('-immune', this.effectState.target, '[from] ability: Echo Fiend');
+			}
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.flags.sound && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Flying';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) {
+				return this.chainModify(1.2);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Echo Fiend",
+		rating: 4,
+		num: 10006,
 	},
 	effectspore: {
 		onDamagingHit(damage, target, source, move) {
@@ -2479,7 +2531,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (this.field.isTerrain(['icyterrain', 'snowymountainterrain']) && move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Ice' && typeMod > 0) {
-				this.add('-fieldactivate', 'Ice Scales');
+				this.debug('Ice Scales effectiveness weaken');
 				return 0;
 			}
 		},
@@ -2741,6 +2793,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Iron Barbs",
 		rating: 2.5,
 		num: 160,
+	},
+	ironclad: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Steel';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) {
+				return this.chainModify(1.2);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
+		},
+		flags: {},
+		name: "Ironclad",
+		rating: 4,
+		num: 10004,
 	},
 	ironfist: {
 		onBasePowerPriority: 23,
@@ -4189,6 +4267,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 211,
 	},
+	powerdrill: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['drill']) {
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Power Drill",
+		rating: 3,
+		num: 10007,
+	},
 	powerofalchemy: {
 		onStart() {
 			if (this.field.isTerrain('fairytaleterrain')) {
@@ -5439,6 +5529,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 116,
 	},
+	soulfire: {
+		onNegateImmunity(pokemon, type) {
+			if (type === 'Fire') return false;
+		},
+		onFoeEffectiveness(typeMod, target, type, move) {
+			if (move && move.effectType === 'Move' && move.category !== 'Status' && move.type === 'Fire' && typeMod < 0) {
+				return 0;
+			}
+		},
+		onModifyMove(move) {
+			if (move.type === 'Fire') {
+				move.ignoreAbility = true;
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && (this.movehasType(move, 'Ghost') || move.id === 'willowisp')) {
+				if (!this.boost({ atk: 1, spa: 1, })) {
+					this.add('-immune', target, '[from] ability: Soul Fire');
+				}
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Soul Fire",
+		rating: 4,
+		num: 10008,
+	},
 	soulheart: {
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
@@ -5736,6 +5853,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Storm Drain",
 		rating: 3,
 		num: 114,
+	},
+	striker: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['kick']) {
+				this.debug('Striker boost');
+				return this.chainModify(1.4);
+			}
+		},
+		flags: {},
+		name: "Striker",
+		rating: 3,
+		num: 10009,
 	},
 	strongjaw: {
 		onBasePowerPriority: 19,
@@ -6231,6 +6361,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-activate', target, 'ability: Toxic Debris');
 				side.addSideCondition('toxicspikes', target);
 			}
+			if (this.checkMoveMakesContact(move, source, target)) {
+				this.damage(source.baseMaxhp / 6, source, target);
+			}
 		},
 		flags: {},
 		name: "Toxic Debris",
@@ -6591,6 +6724,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Wandering Spirit",
 		rating: 2.5,
 		num: 254,
+	},
+	wastingsurge: {
+		onStart(source) {
+			this.field.setTerrain('wastelandterrain');
+		},
+		flags: {},
+		name: "Wasting Surge",
+		rating: 4,
+		num: 10010,
 	},
 	waterabsorb: {
 		onTryHit(target, source, move) {
