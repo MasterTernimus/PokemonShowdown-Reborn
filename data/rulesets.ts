@@ -1431,12 +1431,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Sleep Clause Mod',
 		desc: "Prevents players from putting more than one of their opponent's Pok&eacute;mon to sleep at a time, and bans Mega Gengar from using Hypnosis",
-		banlist: ['Hypnosis + Gengarite'],
 		onBegin() {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
 		onSetStatus(status, target, source, effect) {
-			if (source && source.isAlly(target)) {
+			if (source?.isAlly(target)) {
 				return;
 			}
 			if (status.id === 'slp') {
@@ -1446,7 +1445,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						pokemon.status;
 						if (darkvoid && pokemon.isActive && pokemon.statusState.source.moveThisTurn === 'darkvoid' && pokemon.statusState.source === source && pokemon.statusState.startTime === pokemon.statusState.time) {
 							darkvoid = false;
 						} else if (!pokemon.statusState.source?.isAlly(pokemon)) {
