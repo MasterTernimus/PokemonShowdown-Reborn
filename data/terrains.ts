@@ -638,7 +638,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onModifySpe(spe, pokemon) {
 				const immune = ['slushrush', 'icebody', 'snowcloak', 'illusion', 'duskilate', 'ironclad', 'darkaura'];
-				if (!pokemon.hasAbility(immune) || !pokemon.isGrounded() || pokemon.hasType('Ice')) {
+				if (!(pokemon.hasAbility(immune) || !pokemon.isGrounded() || pokemon.hasType('Ice'))) {
 					return this.chainModify(0.75);
 				}
 			},
@@ -665,10 +665,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.add('-message', 'Frost covered the attack!');
 					}
 					move.types = [move.type, 'Ice'];
-				}
-				if (move.id === 'raindance') {
-					this.add('-message', 'The field became soaked!');
-					move.pseudoWeather = 'watersport';
 				}
 			},
 			onBasePowerPriority: 6,
@@ -796,6 +792,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (this.field.isWeather('desolateland')) {
 					this.add('-message', 'The morning has arrived!');
 					this.field.clearTerrain();
+				}
+				if (this.field.isWeather('raindance')) {
+					this.add('-message', 'The battlefield became wet!');
+					this.field.addPseudoWeather('watersport', this.field.weatherState.source, this.field.getWeather());
 				}
 			},
 			onFieldStart() {

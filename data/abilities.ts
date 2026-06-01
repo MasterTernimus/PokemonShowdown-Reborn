@@ -4369,7 +4369,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					}
 				}
 			}
-			this.add('-ability', pokemon, 'Pressure');
 		},
 		onDeductPP(target, source) {
 			if (target.isAlly(source)) return;
