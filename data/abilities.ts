@@ -5602,7 +5602,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	spicyspray: {
 		isNonstandard: "Future",
 		onDamagingHit(damage, target, source, move) {
-			source.trySetStatus('brn', target);
+			if (!source.trySetStatus('brn', target) && !source.status && source.hasType('Fire')) {
+				this.add('-immune', source);
+			}
 		},
 		flags: {},
 		name: "Spicy Spray",
