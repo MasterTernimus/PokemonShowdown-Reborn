@@ -18442,7 +18442,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Grass", "Fire"],
 		baseStats: { hp: 65, atk: 138, def: 85, spa: 138, spd: 85, spe: 75 },
-		abilities: { 0: "Spicy Extract" },
+		abilities: { 0: "Spicy Spray" },
 		heightm: 1.2,
 		weightkg: 22,
 		color: "Green",
