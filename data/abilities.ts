@@ -2438,7 +2438,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	icebody: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
-				let chance = 3;
+				const chance = 3;
 				if (this.randomChance(chance, 10)) {
 					source.trySetStatus('frz', target);
 				}
@@ -3690,6 +3690,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Neuroforce",
 		rating: 2.5,
 		num: 233,
+	},
+	neutralization: {
+		onSetStatus(status, target, source) {
+			if (target.getStat('atk', false, true) > target.getStat('spa', false, true)) {
+				this.boost({ spe: -1, atk: -1 }, target, source);
+			} else {
+				this.boost({ spa: -1, spe: -1 }, target, source);
+			}
+		},
+		flags: {},
+		name: "Neutralization",
+		rating: 3,
+		num: 10011,
 	},
 	neutralizinggas: {
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
@@ -5544,7 +5557,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && (this.movehasType(move, 'Ghost') || move.id === 'willowisp')) {
-				if (!this.boost({ atk: 1, spa: 1, })) {
+				if (!this.boost({ atk: 1, spa: 1 })) {
 					this.add('-immune', target, '[from] ability: Soul Fire');
 				}
 				return null;
@@ -6601,6 +6614,58 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Unseen Fist",
 		rating: 2,
 		num: 260,
+	},
+	ultraego: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Ultra Ego');
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move && move.category !== 'Status') {
+				this.boost({ atk: 1, spa: 1 }, target, target);
+				this.heal(target.baseMaxhp / 10, target, target);
+			}
+		},
+		flags: {},
+		name: "Ultra Ego",
+		rating: 3,
+		num: 10012,
+	},
+	ultrainstinct: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Ultra Ego');
+		},
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') return null;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Ultra Instinct', `[of] ${target}`);
+			}
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target) {
+			if (this.queue.willMove(target) || target.newlySwitched) {
+				this.debug('Ultra Instinct boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (source.moveThisTurnResult === undefined) {
+				this.debug('Ultra Instinct weaken');
+				return this.chainModify(0.75);
+			}
+		},
+		flags: {},
+		name: "Ultra Instinct",
+		rating: 3,
+		num: 10013,
 	},
 	vesselofruin: {
 		onStart(pokemon) {
