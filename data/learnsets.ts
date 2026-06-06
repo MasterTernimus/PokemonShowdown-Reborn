@@ -27706,6 +27706,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			seismictoss: ["9L1", "3T"],
 			shadowball: ["9M"],
 			shadowclaw: ["9M", "7M", "6M", "5M", "4M"],
+			sing: ["9M"];
          slash: ["9L1"], 
 			sleeptalk: ["9M", "7M", "7V", "6M", "5T", "4M", "3T"],
 			smokescreen: ["9L6", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
