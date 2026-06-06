@@ -703,6 +703,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		critRatio: 2,
+		secondary: {
+			chance: 50,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
 		target: "normal",
 		type: "Bug",
 		contestType: "Clever",
@@ -8968,7 +8976,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		heal: [1, 2],
-		target: "allySide",
+		target: "allies",
 		type: "Bug",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Clever",
@@ -13651,6 +13659,29 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Grass",
 		contestType: "Clever",
+	},
+	needlegun: {
+		num: 10000,
+		accuracy: 100,
+		basePower: 25,
+		category: "Physical",
+		name: "Needle Gun",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		multihit: 6,
+		secondary: {
+			chance: 5,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Grass",
+		zMove: { basePower: 140 },
+		maxMove: { basePower: 130 },
+		contestType: "Cute",
 	},
 	neverendingnightmare: {
 		num: 636,
