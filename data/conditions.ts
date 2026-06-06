@@ -94,6 +94,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			return false;
 		},
+
 	},
 	frz: {
 		name: 'frz',
@@ -1085,6 +1086,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			source.removeVolatile('rolloutstorage');
 			return bp;
+		},
+	},
+	tormented: {
+		name: "Tormented",
+		duration: 9999,
+		onResidual(target, source, effect) {
+			this.add('-message', 'Fell\'s Pokemon is feeling the same pain that he inflicted on Tern!');
+			this.damage(target.baseMaxhp / 24, target);
 		},
 	},
 };

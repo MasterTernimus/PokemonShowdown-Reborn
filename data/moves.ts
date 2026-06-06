@@ -17909,9 +17909,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
-		onModifyMove(move) {
+		onModifyMove(move, source, target) {
 			if (this.field.isTerrain('bigtopterrain')) {
 				move.accuracy = 100;
+			}
+			if (source.name === 'Typhlosion' && target?.name === 'Gliscor') {
+				move.volatileStatus = 'tormented';
 			}
 		},
 		status: 'slp',
