@@ -707,7 +707,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 50,
 			self: {
 				boosts: {
-					spe: 1,
+					atk: 1,
 				},
 			},
 		},
@@ -963,7 +963,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Axe Kick",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, kick: 1, mirror: 1, metronome: 1 },
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
@@ -13664,7 +13664,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 10000,
 		accuracy: 100,
 		basePower: 25,
-		category: "Physical",
+		category: "Special",
 		name: "Needle Gun",
 		pp: 10,
 		priority: 0,
