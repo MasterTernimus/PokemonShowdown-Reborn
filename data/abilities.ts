@@ -5542,9 +5542,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 116,
 	},
 	soulfire: {
-		onNegateImmunity(pokemon, type) {
-			if (type === 'Fire') return false;
-		},
 		onFoeEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && move.type === 'Fire' && typeMod < 0) {
 				return 0;
@@ -5553,6 +5550,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (move.type === 'Fire') {
 				move.ignoreAbility = true;
+				move.ignoreImmunity = true;
 			}
 		},
 		onTryHit(target, source, move) {
@@ -6635,7 +6633,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	ultrainstinct: {
 		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Ultra Ego');
+			this.add('-ability', pokemon, 'Ultra Instinct');
 		},
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'flinch') return null;
@@ -7087,7 +7085,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if (((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('icyterrain') || this.field.isTerrain('snowymountainterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+			const baseZenMode = (this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan';
+			const galarZenMode = this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar';
+			if (baseZenMode || galarZenMode) {
 				pokemon.addVolatile('zenmode');
 			}
 		},
@@ -7095,9 +7095,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
 				return;
 			}
-			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || ((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') || ((this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('icyterrain')) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+			const isBaseNotZen = pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan';
+			const isGalarNotZen = pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar';
+			const alwaysZen = this.field.isTerrain(['ashenbeachterrain', 'psychicterrain']);
+			const alwaysGalarZen = this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']);
+			const baseZenMode = alwaysZen && isBaseNotZen;
+			const galarZenMode = alwaysGalarZen && isGalarNotZen;
+			if ((pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) || baseZenMode || galarZenMode) {
 				pokemon.addVolatile('zenmode');
-			} else if ((pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) && !((this.field.isTerrain('ashenbeachterrain') || this.field.isTerrain('psychicterrain')) && pokemon.species.id === 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan') && !((this.field.isTerrain('snowymountainterrain') || this.field.isTerrain('icyterrain')) && pokemon.species.id === 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar')) {
+			} else if ((['Zen', 'Galar-Zen'].includes(pokemon.species.forme) && pokemon.hp > pokemon.maxhp / 2) && !(isGalarNotZen || alwaysGalarZen) && !(alwaysZen || isBaseNotZen)) {
 				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
 				pokemon.removeVolatile('zenmode');
 			}
