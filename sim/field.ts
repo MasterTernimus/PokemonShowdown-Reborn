@@ -281,7 +281,6 @@ export class Field {
 				this.terrainStack.shift();
 			}
 		} else if (power === 'terraform') {
-			console.log("Test");
 			if (this.terrainState?.terrain_type !== 'Base') {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);

@@ -4380,6 +4380,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					if (target.volatiles['substitute']) {
 						this.add('-immune', target);
 					}
+					this.boost({ spd: -1, def: -1 }, target, pokemon, null, true);
 				}
 			}
 		},
