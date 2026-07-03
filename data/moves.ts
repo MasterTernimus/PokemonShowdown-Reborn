@@ -1209,6 +1209,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, failcopycat: 1, failmimic: 1 },
+		overrideOffensiveStat: 'def',
 		target: "normal",
 		type: "Steel",
 	},
@@ -4649,7 +4650,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	dualchop: {
 		num: 530,
 		accuracy: 90,
-		basePower: 40,
+		basePower: 60,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Dual Chop",
@@ -5480,12 +5481,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	fairywind: {
 		num: 584,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Special",
 		name: "Fairy Wind",
 		pp: 30,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
 		target: "normal",
 		type: "Fairy",
 		contestType: "Beautiful",
@@ -8223,10 +8228,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				const swampMoves = ['surf', 'muddywater'];
 				const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
+				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbility('neutralization'));
 				if (igniteMoves.includes(move.id) && !this.field.isWeather(['raindance', 'primordealsea']) && !this.field.pseudoWeather['watersport'] || (move.isMax && move.type === 'Fire')) {
 					this.field.changeTerrain('burningterrain');
 				}
 				if (move.id === 'sludgewave' || move.id === 'aciddownpour') {
+					if (neutralizationActive) return;
 					this.field.changeTerrain('corrosiveterrain');
 				}
 				if (swampMoves.includes(move.id)) {
@@ -13081,7 +13088,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onAfterMove(target, source, move) {
 				const terrainChangeMoves = ['smog', 'clearsmog', 'poisongas', 'aciddownpour'];
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'gmaxwindrage'];
+				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbility('neutralization'));
 				if (terrainChangeMoves.includes(move.id)) {
+					if (neutralizationActive) return;
 					if (this.field.terrainState.terrainChanges?.get('corrosivemistterrain') === 1 || move.id === 'aciddownpour') {
 						this.field.changeTerrain('corrosivemistterrain');
 						return;
@@ -13090,6 +13099,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 				if (terrainEndMoves.includes(move.id)) {
+					if (neutralizationActive && move.category === 'Status') return;
 					this.field.clearTerrain();
 				}
 			},
@@ -13432,7 +13442,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	multiattack: {
 		num: 718,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 140,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Multi-Attack",
@@ -13669,8 +13679,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		critRatio: 2,
 		onModifyMove(move, pokemon) {
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+			if (this.field.isTerrain(['fairytaleterrain', 'factoryterrain'])) {
+				move.type = 'Steel';
+			}
+		},
+		onBasePower(basePower, pokemon, target, move) {
+			if (this.field.isTerrain('desertterrain')) return this.chainModify(2);
+			if (this.field.isTerrain(['fairytaleterrain', 'factoryterrain'])) return this.chainModify(1.5);
 		},
 		multihit: 6,
 		secondary: {
@@ -15061,6 +15079,32 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, pokemon, target) {
+			if (pokemon.hasAbility('evilsanta')) {
+				move.basePower = 120;
+				move.type = 'Dark';
+				move.target = 'allAdjacentFoes';
+				move.onAfterHit = function (target, source, move) {
+					const effects = ['damage', 'toxic', 'confusion', 'curse'];
+					while (effects.length) {
+						const index = this.random(effects.length);
+						const effect = effects.splice(index, 1)[0];
+						if (effect === 'damage') {
+							const damage = Math.floor(target.maxhp / 8);
+							if (damage > 0 && this.damage(damage, target, source, move)) return;
+						} else if (effect === 'toxic') {
+							if (target.setStatus('tox', source, move)) return;
+						} else if (effect === 'confusion') {
+							if (target.addVolatile('confusion', source, move)) {
+								target.volatiles['confusion'].time = 3;
+								return;
+							}
+						} else if (effect === 'curse') {
+							if (target.addVolatile('curse', source, move)) return;
+						}
+					}
+				};
+				return;
+			}
 			const rand = this.random(10);
 			if (rand < 2) {
 				move.heal = [1, 4];
@@ -17640,6 +17684,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
+		volatileStatus: 'shelter',
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'move: Shelter');
+			},
+			onAnyModifyDamage(damage, source, target, move) {
+				if (target !== this.effectState.target || !move || move.category === 'Status') return;
+				const moveTypes = move.types || [move.type];
+				if (this.field.isTerrain('coldeclipseterrain') && moveTypes.includes('Ice')) {
+					this.debug('Shelter weaken');
+					return this.chainModify(0.5);
+				}
+			},
+		},
 		// onModifyMove(move) {
 		//	if (this.field.terrain !== '') {
 		//		move.volatileStatus = "shelter";
@@ -18043,7 +18102,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			this.boost({ atk: 1, def: 1 }, attacker, attacker, move);
+			this.boost({ atk: 1, def: 1, spd: 1 }, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -18251,7 +18310,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	slash: {
 		num: 163,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 90,
 		category: "Physical",
 		name: "Slash",
 		pp: 20,
@@ -18688,7 +18747,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {},
 		onTryMove() {
-			if (this.field.isTerrain('volcanicterrain')) return null;
+			if (this.field.isTerrain('volcanicterrain') || this.field.isWeather('desolateland')) return null;
 		},
 		terrain: "coldeclipseterrain",
 		target: "all",

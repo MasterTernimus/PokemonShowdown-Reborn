@@ -100,6 +100,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'frz',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			if (this.field.isTerrain('coldeclipseterrain') && target.hasType('Dragon')) return false;
 			this.effectState.stage = 0;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
