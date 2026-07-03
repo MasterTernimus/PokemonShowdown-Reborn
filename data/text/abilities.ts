@@ -185,7 +185,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	bulletproof: {
 		name: "Bulletproof",
-		shortDesc: "This Pokemon is immune to bullet moves.",
+		shortDesc: "This Pokemon is immune to bullet moves and moves boosted by Mega Launcher.",
 	},
 	cheekpouch: {
 		name: "Cheek Pouch",
@@ -381,12 +381,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dragonize: {
 		name: "Dragonize",
-		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's Normal-type moves become Dragon type and have 1.2x power.",
+		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2, or 1.5 on Fairy Tale Field and Dragon's Den.",
+		shortDesc: "Normal moves become Dragon type; 1.2x power, 1.5x on Fairy Tale/Dragon's Den.",
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack.",
+		desc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack. On Fairy Tale Field and Dragon's Den, Dragon attacks are boosted by 2x and this Pokemon resists Fairy-type moves.",
+		shortDesc: "1.5x Dragon power; 2x and resists Fairy on Fairy Tale/Dragon's Den.",
 	},
 	drizzle: {
 		name: "Drizzle",
@@ -1204,18 +1205,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parentalbond: {
 		name: "Parental Bond",
-		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
-		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
-		gen8: {
-			desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, any two-turn move, or any Max Move.",
-		},
-		gen7: {
-			desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect Doom Desire, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, any two-turn move, or any Z-Move.",
-		},
-		gen6: {
-			desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect Doom Desire, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
-			shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
-		},
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
+		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
 	},
 	pastelveil: {
 		name: "Pastel Veil",
@@ -1849,8 +1840,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormdrain: {
 		name: "Storm Drain",
-		desc: "This Pokemon is immune to Water-type moves and raises its Special Attack by 1 stage when hit by a Water-type move. If this Pokemon is not the target of a single-target Water-type move used by another Pokemon, this Pokemon redirects that move to itself if it is within the range of that move. If multiple Pokemon could redirect with this Ability, it goes to the one with the highest Speed, or in the case of a tie to the one that has had this Ability active longer.",
-		shortDesc: "This Pokemon draws Water moves to itself to raise Sp. Atk by 1; Water immunity.",
+		desc: "This Pokemon is immune to Water-type moves and raises its Attack and Special Attack by 1 stage when hit by a Water-type move. If this Pokemon is not the target of a single-target Water-type move used by another Pokemon, this Pokemon redirects that move to itself if it is within the range of that move. If multiple Pokemon could redirect with this Ability, it goes to the one with the highest Speed, or in the case of a tie to the one that has had this Ability active longer.",
+		shortDesc: "This Pokemon draws Water moves to itself to raise Atk and Sp. Atk by 1; Water immunity.",
 		gen4: {
 			desc: "If this Pokemon is not the target of a single-target Water-type move used by another Pokemon, this Pokemon redirects that move to itself.",
 			shortDesc: "This Pokemon draws single-target Water moves to itself.",
@@ -2277,6 +2268,81 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form.",
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
+	},
+	battlefervor: {
+		name: "Battle Fervor",
+		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.5x damage. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it heals 10% when attacking and after being attacked, always takes 0.5x damage, cannot have stats lowered, and cannot flinch.",
+		shortDesc: "Fast attacks 1.3x; slow takes 0.5x; enemy hits raise Atk/SpA; also has Unnerve.",
+	},
+	duskilate: {
+		name: "Duskilate",
+		desc: "This Pokemon's Normal-type moves become Dark-type moves and have their power multiplied by 1.3. On Dark Crystal, New World, Starlight Arena, Cold Eclipse, Short Circuit, Haunted Field, and Bewitched Field, the boost is 1.5x. On Holy Field and Rainbow Field, affected moves become Fairy type and are boosted by 1.5x instead.",
+		shortDesc: "Normal moves become Dark and 1.3x; 1.5x or Fairy on matching fields.",
+	},
+	echofiend: {
+		name: "Echo Fiend",
+		desc: "This Pokemon is immune to sound moves. Its sound moves become Flying type and have 1.2x power. On Cave, Volcanic Cave, and Crystal Cave they are boosted by 2x; Volcanic Cave makes them Fire type, and Crystal Cave makes them Crystal type. On Mountain and Snowy Mountain they are boosted by 1.5x.",
+		shortDesc: "Immune to sound; sound moves change type/boost on matching fields.",
+	},
+	elevate: {
+		name: "Elevate",
+		desc: "This Pokemon is immune to Ground-type attacks and Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability. This Pokemon's highest stat is raised by 1 stage if it attacks and knocks out another Pokemon. Stat stage changes are not considered.",
+		shortDesc: "Ground immunity plus Beast Boost-style boost after KO.",
+	},
+	evilsanta: {
+		name: "Evil Santa",
+		desc: "This Pokemon's Present becomes a 120 Base Power Dark-type move that hits all opposing Pokemon. Delibird gets STAB on Dark-type moves. Present always applies one random extra effect that succeeds: damage equal to 1/8 of the target's max HP, bad poison, 3-turn confusion, or Curse.",
+		shortDesc: "Present becomes 120 BP Dark spread and applies a random successful extra effect.",
+	},
+	hydrabond: {
+		name: "Hydra Bond",
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits have their damage quartered.",
+		shortDesc: "Damaging moves hit three times; hits two and three deal 25% damage.",
+	},
+	inversion: {
+		name: "Inversion",
+		desc: "On switch-in, this Pokemon sets Inverse Field. Stat changes this Pokemon receives are inverted, except those from Z-Power effects.",
+		shortDesc: "Sets Inverse Field and inverts its stat changes.",
+	},
+	ironclad: {
+		name: "Ironclad",
+		desc: "This Pokemon's Normal-type moves become Steel-type moves and have their power multiplied by 1.2. On Factory, Short Circuit, Fairy Tale, Dragon's Den, Starlight Arena, New World, and Holy Field, the boost is 1.5x. On Cold Eclipse, it does not gain Ice subtyping.",
+		shortDesc: "Normal moves become Steel; 1.2x, or 1.5x on matching fields.",
+	},
+	neutralization: {
+		name: "Neutralization",
+		desc: "When this Pokemon is statused, it lowers Speed and its higher attacking stat. On Chess Field, it gains +1 Defense and +1 Special Defense on entry, and its attacks ignore enemy abilities. On Psychic Terrain, its Speed rises each turn and its attacks ignore enemy abilities. It prevents Poison and Z-Moves from creating Corrosive Mist on Misty Terrain, prevents non-damaging wind moves from removing Misty Terrain, prevents Corrosive Field from Grassy Terrain, prevents Murkwater and Wasting Surge on Water Surface and Underwater, prevents Haunted Field from Holy Field, and prevents Bewitched Woods from Forest Field.",
+		shortDesc: "Status lowers Speed/offense; blocks listed field conversions and empowers Chess/Psychic.",
+	},
+	powerdrill: {
+		name: "Power Drill",
+		desc: "This Pokemon's drill moves have 1.5x power. On Rocky Field, Mountain, Snowy Mountain, Cave, and Volcanic Cave, drill moves have 2x power and bypass protection.",
+		shortDesc: "Drill moves 1.5x; 2x and bypass protection on rocky/mountain/cave fields.",
+	},
+	predator: {
+		name: "Predator",
+		desc: "Stat changes this Pokemon receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, this Pokemon's attacks deal 1.3x damage. The boost is 2x on Mountain, Snowy Mountain, and Rocky Field, and 1.5x on Fairy Tale Field, Dragon's Den, and Big Top Arena.",
+		shortDesc: "Has Contrary; boosts attacks into slower/new targets.",
+	},
+	relentlesshunt: {
+		name: "Relentless Hunt",
+		desc: "This Pokemon's moves with 60 or less Base Power gain +1 priority. Its attacks are boosted by 2x on Fairy Tale Field, Big Top Arena, Dragon's Den, Mountain, and Snowy Mountain, and by 1.5x on Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, and New World.",
+		shortDesc: "Weak moves gain priority; attacks are boosted on listed fields.",
+	},
+	soulfire: {
+		name: "Soul Fire",
+		desc: "This Pokemon is immune to Ghost-type moves and Will-O-Wisp, raising Attack and Special Attack by 1 stage when hit by them. On Haunted, Burning, Volcanic, and Bewitched fields, this also works like Flash Fire and activates at the end of each turn.",
+		shortDesc: "Ghost/Wisp immunity boosts Atk/SpA; acts like Flash Fire on matching fields.",
+	},
+	ultraego: {
+		name: "Ultra Ego",
+		desc: "This Pokemon's moves ignore abilities. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/10 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, opposing hits heal 1/8 instead, raise Defense or Special Defense based on the incoming move category, and the first time it falls below half HP it heals 1/4 instead.",
+		shortDesc: "Only enemy hits raise Atk/SpA and heal; ally hits do not trigger it.",
+	},
+	ultrainstinct: {
+		name: "Ultra Instinct",
+		desc: "This Pokemon's moves ignore abilities, it cannot flinch, and it blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, damage is reduced by 25%. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 75% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena.",
+		shortDesc: "Fast attacks 1.5x; pre-move hits reduced. Stronger on key fields.",
 	},
 
 	// CAP

@@ -1755,10 +1755,10 @@ export class BattleActions {
 			const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
-		} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
-			// Parental Bond modifier
-			const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
-			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
+		} else if ((move.multihitType === 'parentalbond' || move.multihitType === 'hydrabond') && move.hit > 1) {
+			// Parental Bond / Hydra Bond modifier
+			const bondModifier = move.multihitType === 'hydrabond' ? 0.25 : 0.5;
+			this.battle.debug(`${move.multihitType} modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		}
 
