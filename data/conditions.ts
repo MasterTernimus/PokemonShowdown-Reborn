@@ -990,7 +990,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (pokemon.transformed || pokemon.ability !== 'rkssystem' && this.gen >= 8 || this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) return types;
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
-				type = pokemon.getItem().onMemory;
+				const item = pokemon.getItem();
+				type = item.onMemory || item.zMoveType;
 				if (!type) {
 					type = 'Normal';
 				}
@@ -1002,10 +1003,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				if (this.field.isTerrain('glitchterrain') && pokemon.types[0] !== '???') {
 					pokemon.setType('???', true);
 					this.add('-start', pokemon, 'typechange', '???');
-				} else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem' && pokemon.getItem().onMemory !== undefined) {
-					pokemon.setType(pokemon.getItem().onMemory!, true);
-					if (pokemon.getItem().onMemory !== pokemon.getTypes()[0] && pokemon.getTypes().length === 1) {
-						this.add('-start', pokemon, 'typechange', pokemon.getItem().onMemory);
+				} else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem') {
+					const itemType = pokemon.getItem().onMemory || pokemon.getItem().zMoveType;
+					if (itemType === undefined) return;
+					pokemon.setType(itemType, true);
+					if (itemType !== pokemon.getTypes()[0] && pokemon.getTypes().length === 1) {
+						this.add('-start', pokemon, 'typechange', itemType);
 					}
 				} else if (this.field.isTerrain('newworldterrain')) {
 					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];

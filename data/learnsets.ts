@@ -24869,6 +24869,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			powergem: [],
 			rage: ["7V"],
 			raindance: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
+			recover: ["9M"],
 			reflect: ["9M", "8V", "7V"],
 			rest: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			return: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
