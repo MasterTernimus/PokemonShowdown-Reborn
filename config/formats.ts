@@ -896,6 +896,16 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
+		name: "[Gen 9] Free-For-All Misty Field [Adrienn]",
+
+		mod: 'gen9',
+		terrain: 'adriennterrain',
+		gameType: 'freeforall',
+		searchShow: true,
+		challengeShow: true,
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 1', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
+	},
+	{
 		name: "[Gen 9] No Field 6/4 Doubles Battle",
 
 		mod: 'gen9',
