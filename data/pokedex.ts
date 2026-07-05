@@ -5524,7 +5524,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Gardevoir-Void",
 		baseSpecies: "Gardevoir",
 		forme: "Void",
-		types: ["Fairy", "Dark"],
+		types: ["Psychic", "Fairy"],
 		baseStats: { hp: 68, atk: 60, def: 65, spa: 125, spd: 115, spe: 100 },
 		abilities: { 0: "Trace", 1: "Queenly Majesty", H: "Telepathy" },
 		heightm: 1.6,
