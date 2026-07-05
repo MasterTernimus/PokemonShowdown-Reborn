@@ -858,6 +858,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
+				if (effect?.id === 'gmaxresonance') return 4;
 				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
 					return 8;
 				}
@@ -7735,6 +7736,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
 			onSwitchIn(pokemon) {
+				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
 				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
@@ -10618,7 +10620,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')) {
 						this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 					}
-					this.boost({ atk: -1 }, source, target, this.dex.getActiveMove("King's Shield"));
+					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 				return this.NOT_FAIL;
 			},
@@ -17426,6 +17428,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1 },
+		critRatio: 2,
 		breaksProtect: true,
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -19131,6 +19134,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.layers++;
 			},
 			onSwitchIn(pokemon) {
+				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
 				if ((!pokemon.isGrounded() && !this.field.isTerrain('electricterrain')) || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				let typeMod = 1;
 				if (this.field.isTerrain('electricterrain')) {
@@ -19252,6 +19256,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		critRatio: 2,
 		secondary: {
 			chance: 100,
 			onHit(target, source, move) {
@@ -19500,6 +19505,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
+				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
 				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				let typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				if (this.field.isTerrain('crystalcavernterrain')) {
@@ -19668,6 +19674,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSwitchIn(pokemon) {
+				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				if (this.field.isTerrain('forestterrain')) {
@@ -21689,6 +21696,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.layers++;
 			},
 			onSwitchIn(pokemon) {
+				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison') && !this.field.isTerrain('corrosiveterrain')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);

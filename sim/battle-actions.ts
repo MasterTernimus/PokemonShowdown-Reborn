@@ -1905,11 +1905,25 @@ export class BattleActions {
 		if (!item.megaStone) return null;
 		// TODO confirm with generation shift
 		let megaEvolution = item.megaStone[species.name];
-		if (megaEvolution && this.dex.species.get(megaEvolution).gen >= 9) return megaEvolution;
+		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
 		// FIXME: Change to species.name when champions comes
 		megaEvolution = item.megaStone[species.baseSpecies];
 		return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
+	}
+
+	canMegaEvoX(pokemon: Pokemon) {
+		if (pokemon.baseSpecies.name === 'Gardevoir-Void' && pokemon.getItem().id === 'gardevoirite') {
+			return 'Gardevoir-Mega-Z';
+		}
+		return null;
+	}
+
+	canMegaEvoY(pokemon: Pokemon) {
+		if (pokemon.baseSpecies.name === 'Gardevoir-Void' && pokemon.getItem().id === 'gardevoirite') {
+			return 'Gardevoir-Mega';
+		}
+		return null;
 	}
 
 	canUltraBurst(pokemon: Pokemon) {
@@ -1931,10 +1945,25 @@ export class BattleActions {
 	}
 
 	// Let's Go
-	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
-	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
+	runMegaEvoX(pokemon: Pokemon) {
+		const speciesid = pokemon.canMegaEvoX;
+		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
+		if (!speciesid) return false;
+
+		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		this.battle.runEvent('AfterMega', pokemon);
+		return true;
+	}
+
+	runMegaEvoY(pokemon: Pokemon) {
+		const speciesid = pokemon.canMegaEvoY;
+		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
+		if (!speciesid) return false;
+
+		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		this.battle.runEvent('AfterMega', pokemon);
+		return true;
+	}
 
 	canTerastallize(pokemon: Pokemon) {
 		return pokemon.teraType;

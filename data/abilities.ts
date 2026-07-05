@@ -3191,6 +3191,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 204,
 	},
 	longreach: {
+		onStart(pokemon) {
+			this.boost({ accuracy: 1 }, pokemon, pokemon);
+		},
 		onModifyMove(move) {
 			if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('grassyterrain')) {
 				if (move.accuracy !== true) {
@@ -3198,6 +3201,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			delete move.flags['contact'];
+			move.critModifier = 2.25;
 		},
 		onBasePower() {
 			if (this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
@@ -4151,6 +4155,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target !== source && this.movehasType(move, 'Poison') && this.field.isTerrain(['mistyterrain', 'rainbowterrain'])) {
 				this.debug('Pastel Veil weaken');
 				return this.chainModify(0.5);
+			}
+		},
+		onAnyTryMove(source, target, move) {
+			const holder = this.effectState.target;
+			if (source === holder || source.isAlly(holder)) return;
+			if (this.movehasType(move, 'Poison')) {
+				this.add('-activate', holder, 'ability: Pastel Veil');
+				this.boost({ atk: -1, spa: -1 }, source, holder, null, true);
 			}
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -5764,6 +5776,106 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 43,
 	},
+	solaridol: {
+		onStart(pokemon) {
+			if (this.field.isTerrain(['newworldterrain', 'starlightarenaterrain'])) {
+				this.boost({ def: 1 }, pokemon, pokemon);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'Ground') return false;
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fire') return this.chainModify(1.5);
+		},
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.effectiveWeather() === 'sunnyday') return this.chainModify(1.5);
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Grass') return -1;
+		},
+		flags: { breakable: 1 },
+		name: "Solar Idol",
+		rating: 4,
+		num: 10018,
+	},
+	lunaridol: {
+		onStart(pokemon) {
+			if (this.field.isTerrain(['newworldterrain', 'starlightarenaterrain'])) {
+				this.boost({ spd: 1 }, pokemon, pokemon);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'Ground' || type === 'hail') return false;
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Ice') return this.chainModify(1.5);
+		},
+		onModifySpA(spa, pokemon) {
+			if (pokemon.effectiveWeather() === 'hail' || pokemon.effectiveWeather() === 'snow') return this.chainModify(1.5);
+		},
+		flags: { breakable: 1 },
+		name: "Lunar Idol",
+		rating: 4,
+		num: 10019,
+	},
+	parasitism: {
+		onEffectiveness(typeMod, target, type, move) {
+			if (target.hp > target.maxhp / 2 && typeMod > 0) return 0;
+		},
+		flags: { breakable: 1 },
+		name: "Parasitism",
+		rating: 4,
+		num: 10021,
+	},
+	royaldecree: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Royal Decree');
+			for (const active of this.getAllActive()) {
+				active.clearBoosts();
+			}
+			for (const side of this.sides) {
+				for (const sideCondition of ['reflect', 'lightscreen', 'auroraveil']) {
+					if (side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Royal Decree', `[of] ${pokemon}`);
+					}
+				}
+			}
+			if (this.field.isTerrain('fairytaleterrain')) {
+				for (const target of pokemon.foes()) {
+					if (target.getStat('atk', false, true) >= target.getStat('spa', false, true)) {
+						this.boost({ def: 1 }, pokemon, pokemon);
+					} else {
+						this.boost({ spd: 1 }, pokemon, pokemon);
+					}
+				}
+			}
+		},
+		onModifyDef(def, pokemon) {
+			if (this.field.isTerrain('chessboardterrain')) return this.chainModify(1.5);
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain('chessboardterrain')) return this.chainModify(1.5);
+		},
+		flags: {},
+		name: "Royal Decree",
+		rating: 4,
+		num: 10020,
+	},
+	tremor: {
+		onModifyMove(move) {
+			if (move.flags['sound']) {
+				move.category = 'Physical';
+				move.ignoreAbility = true;
+			}
+		},
+		flags: {},
+		name: "Tremor",
+		rating: 4,
+		num: 10017,
+	},
 	speedboost: {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
@@ -5823,6 +5935,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 100,
 	},
 	stalwart: {
+		onStart(pokemon) {
+			if (this.field.isTerrain(['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'])) {
+				this.boost({ spa: 1 }, pokemon, pokemon);
+			}
+		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			// most of the implementation is in Battle#getTarget
@@ -5835,7 +5952,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	stamina: {
 		onDamagingHit(damage, target, source, effect) {
-			this.boost({ def: 1 });
+			if (!source || target.isAlly(source)) return;
+			this.boost({ def: 1 }, target, target);
+			this.heal(target.baseMaxhp / 10, target, target);
 		},
 		flags: {},
 		name: "Stamina",
@@ -6800,7 +6919,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			this.boost({ atk: 1, spa: 1 }, target, target);
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
-				this.boost(move.category === 'Physical' ? { def: 1 } : { spd: 1 }, target, target);
+				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
+					target.abilityState.ultraEgoDefBoosted = true;
+					this.boost({ def: 1 }, target, target);
+				}
+				if (move.category === 'Special' && !target.abilityState.ultraEgoSpDBoosted) {
+					target.abilityState.ultraEgoSpDBoosted = true;
+					this.boost({ spd: 1 }, target, target);
+				}
 				if (!target.abilityState.ultraEgoPinch && target.hp > 0 && target.hp <= target.maxhp / 2) {
 					target.abilityState.ultraEgoPinch = true;
 					this.heal(target.baseMaxhp / 4, target, target);
