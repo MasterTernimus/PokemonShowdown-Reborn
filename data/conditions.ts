@@ -777,6 +777,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
+			if (this.field.isTerrain('fairytaleterrain') && target.hasType('Steel')) return;
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				this.damage(target.baseMaxhp / 8);
 			} else {

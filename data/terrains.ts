@@ -384,7 +384,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const dragonMove = ['dragonpulse', 'dragonenergy'];
 				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
 
-				if (cavecollapse.includes(move.id)) {
+				if (cavecollapse.includes(move.id) || (move.flags['sound'] && source.hasAbility('tremor'))) {
 					if (this.field.terrainState.terrainChanges?.get('collapse') >= 1) {
 						this.add('-message', 'The quake collapsed the ceiling!');
 						this.field.terrainState.terrainChanges?.set('collapse', 0);
@@ -1010,6 +1010,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAfterMove(source, target, move) {
 				const dark = ['darkpulse', 'darkvoid', 'nightdaze', 'lightthatburnsthesky'];
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				if (move.flags['sound'] && source.hasAbility('tremor')) {
+					this.add('-message', 'The tremor shattered the crystals!');
+					this.field.changeTerrain('caveterrain', source, move);
+					return;
+				}
 				if (terrainbreak.includes(move.id)) {
 					if (this.field.terrainState.terrainChanges?.get('caveterrain') === 1 || move.id === 'tectonicrage') {
 						this.add('-message', 'The crystals were shattered!');
@@ -1087,6 +1092,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The sun lit up the crystal cavern!');
 				}
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				if (move.flags['sound'] && source.hasAbility('tremor')) {
+					this.add('-message', 'The tremor shattered the dark crystals!');
+					this.field.changeTerrain('caveterrain', source, move);
+					return;
+				}
 				if (terrainbreak.includes(move.id)) {
 					if (this.field.terrainState.terrainChanges?.get('caveterrain') === 1) {
 						this.add('-message', 'The dark crystals were shattered!');
@@ -1333,7 +1343,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const quakemoves = ['bulldoze', 'fissure', 'earthquake', 'explosion', 'magnitude', 'selfdestruct', 'tectonicrage', 'lightthatburnsthesky', 'aurawheel', 'discharge', 'gigavolthavoc', 'iondeluge', 'overdrive'];
-				if (quakemoves.includes(move.id)) {
+				if (quakemoves.includes(move.id) || (move.flags['sound'] && source.hasAbility('tremor'))) {
 					this.field.changeTerrain('shortcircuitterrain');
 				}
 			},

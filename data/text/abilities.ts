@@ -926,7 +926,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	longreach: {
 		name: "Long Reach",
-		shortDesc: "This Pokemon's attacks do not make contact with the target.",
+		desc: "On switch-in, this Pokemon's Accuracy is raised by 1 stage. Its attacks do not make contact with the target, and its critical hits deal 2.25x damage instead of 1.5x.",
+		shortDesc: "+1 Accuracy on switch-in; no contact; critical hits deal 2.25x.",
 	},
 	magicbounce: {
 		name: "Magic Bounce",
@@ -1210,8 +1211,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pastelveil: {
 		name: "Pastel Veil",
-		desc: "This Pokemon and its allies cannot be poisoned. Gaining this Ability while this Pokemon or its ally is poisoned cures them. If this Ability is being ignored during an effect that causes poison, this Pokemon is cured immediately but its ally is not.",
-		shortDesc: "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies.",
+		desc: "This Pokemon and its allies cannot be poisoned. Gaining this Ability while this Pokemon or its ally is poisoned cures them. Before an opposing Pokemon uses a Poison-type move, that Pokemon's Attack and Special Attack are lowered by 1 stage.",
+		shortDesc: "Prevents poison; opposing Poison move users lose Atk/SpA.",
 	},
 	perishbody: {
 		name: "Perish Body",
@@ -1754,6 +1755,31 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 		},
 	},
+	solaridol: {
+		name: "Solar Idol",
+		desc: "This Pokemon is immune to Ground-type attacks. Its Fire-type moves have 1.5x power, its Attack is 1.5x during sun, and Grass-type attacks are resisted. On New World and Starlight Arena, its Defense is raised by 1 stage on switch-in.",
+		shortDesc: "Levitate; Fire power 1.5x; Attack 1.5x in sun; resists Grass.",
+	},
+	lunaridol: {
+		name: "Lunar Idol",
+		desc: "This Pokemon is immune to Ground-type attacks and hail damage. Its Ice-type moves have 1.5x power, and its Special Attack is 1.5x during hail or snow. On New World and Starlight Arena, its Special Defense is raised by 1 stage on switch-in.",
+		shortDesc: "Levitate; immune to hail; Ice power 1.5x; Sp. Atk 1.5x in hail/snow.",
+	},
+	royaldecree: {
+		name: "Royal Decree",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. On Chess Field, this Pokemon's Defense and Special Defense are 1.5x. On Fairy Tale Field, it raises Defense or Special Defense by 1 stage for each opposing Pokemon based on that foe's higher attacking stat after clearing boosts.",
+		shortDesc: "On switch-in, resets stat stages and removes screens.",
+	},
+	parasitism: {
+		name: "Parasitism",
+		desc: "While this Pokemon has more than 50% HP, its weaknesses are neutralized and it is protected from entry hazards.",
+		shortDesc: "Above 50% HP, removes weaknesses and blocks entry hazards.",
+	},
+	tremor: {
+		name: "Tremor",
+		desc: "This Pokemon's sound-based moves become physical attacks and ignore sound-based Ability immunities such as Soundproof.",
+		shortDesc: "Sound moves become physical and ignore sound-based Ability immunities.",
+	},
 	speedboost: {
 		name: "Speed Boost",
 		desc: "This Pokemon's Speed is raised by 1 stage at the end of each full turn it has been on the field.",
@@ -1773,7 +1799,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stalwart: {
 		name: "Stalwart",
-		shortDesc: "This Pokemon's moves cannot be redirected to a different target by any effect.",
+		desc: "This Pokemon's moves cannot be redirected to a different target by any effect. On New World, Starlight Arena, Fairy Tale Field, and Chess Field, its Special Attack is raised by 1 stage on switch-in.",
+		shortDesc: "Cannot be redirected; +1 Sp. Atk on select fields.",
 	},
 	stamina: {
 		name: "Stamina",
@@ -2326,17 +2353,22 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relentlesshunt: {
 		name: "Relentless Hunt",
-		desc: "This Pokemon's moves with 60 or less Base Power gain +1 priority. Its attacks are boosted by 2x on Fairy Tale Field, Big Top Arena, Dragon's Den, Mountain, and Snowy Mountain, and by 1.5x on Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, and New World.",
-		shortDesc: "Weak moves gain priority; attacks are boosted on listed fields.",
+		desc: "This Pokemon's moves with 60 or less Base Power gain +1 priority. Its attacks deal 2x damage on Fairy Tale Field, Big Top Arena, Dragon's Den, Mountain, and Snowy Mountain, and 1.5x damage on Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, and New World.",
+		shortDesc: "60 BP or lower moves gain priority; field-dependent damage boost.",
 	},
 	soulfire: {
 		name: "Soul Fire",
 		desc: "This Pokemon is immune to Ghost-type moves and Will-O-Wisp, raising Attack and Special Attack by 1 stage when hit by them. On Haunted, Burning, Volcanic, and Bewitched fields, this also works like Flash Fire and activates at the end of each turn.",
 		shortDesc: "Ghost/Wisp immunity boosts Atk/SpA; acts like Flash Fire on matching fields.",
 	},
+	striker: {
+		name: "Striker",
+		desc: "This Pokemon's kicking moves have 1.4x power. This Ability also counts as a striker Ability for Big Top Arena interactions.",
+		shortDesc: "Kicking moves have 1.4x power.",
+	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/10 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, opposing hits heal 1/8 instead, raise Defense or Special Defense based on the incoming move category, and the first time it falls below half HP it heals 1/4 instead.",
+		desc: "This Pokemon's moves ignore abilities. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/10 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, opposing hits heal 1/8 instead and can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP it heals 1/4 instead.",
 		shortDesc: "Only enemy hits raise Atk/SpA and heal; ally hits do not trigger it.",
 	},
 	ultrainstinct: {
