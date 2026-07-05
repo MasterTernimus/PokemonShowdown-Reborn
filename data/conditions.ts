@@ -987,7 +987,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onType(types, pokemon) {
-			if (pokemon.transformed || pokemon.ability !== 'rkssystem' && this.gen >= 8 || this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) return types;
+			if (pokemon.transformed || pokemon.ability !== 'rkssystem' || this.field.isTerrain('glitchterrain') || this.field.isTerrain('holyterrain') || this.field.isTerrain('newworldterrain')) return types;
 			let type: string | undefined = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
 				const item = pokemon.getItem();
