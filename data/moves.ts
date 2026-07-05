@@ -13453,7 +13453,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyType(move, pokemon) {
 			if (pokemon.ignoringItem()) return;
-			move.type = this.runEvent('Memory', pokemon, null, move, 'Normal');
+			const item = pokemon.getItem();
+			move.type = item.onMemory || item.zMoveType || 'Normal';
 		},
 		target: "normal",
 		type: "Normal",
