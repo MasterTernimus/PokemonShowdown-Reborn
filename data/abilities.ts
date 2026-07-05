@@ -402,6 +402,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Battle Fervor');
 			this.effectState.unnerved = true;
+			pokemon.abilityState.battleFervorBoosted = false;
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				let activated = false;
 				for (const target of pokemon.foes()) {
@@ -470,7 +471,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
-			this.boost({ atk: 1, spa: 1 }, target, target);
+			if (!target.abilityState.battleFervorBoosted) {
+				target.abilityState.battleFervorBoosted = true;
+				this.boost({ atk: 1, spa: 1 }, target, target);
+			}
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.heal(target.baseMaxhp / 10, target, target);
 			}
@@ -6912,8 +6916,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Ultra Ego');
 		},
+		healUltraEgo(pokemon) {
+			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
+				if (!pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+					pokemon.abilityState.ultraEgoPinch = true;
+					this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+				} else {
+					this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+				}
+			} else {
+				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			}
+		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!move || move.category === 'Status') return;
+			this.effect.healUltraEgo(source);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
@@ -6927,15 +6947,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					target.abilityState.ultraEgoSpDBoosted = true;
 					this.boost({ spd: 1 }, target, target);
 				}
-				if (!target.abilityState.ultraEgoPinch && target.hp > 0 && target.hp <= target.maxhp / 2) {
-					target.abilityState.ultraEgoPinch = true;
-					this.heal(target.baseMaxhp / 4, target, target);
-				} else {
-					this.heal(target.baseMaxhp / 8, target, target);
-				}
-			} else {
-				this.heal(target.baseMaxhp / 10, target, target);
 			}
+			this.effect.healUltraEgo(target);
 		},
 		flags: {},
 		name: "Ultra Ego",
