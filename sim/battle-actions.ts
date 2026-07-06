@@ -1913,13 +1913,16 @@ export class BattleActions {
 	}
 
 	canMegaEvoX(pokemon: Pokemon) {
-		if (pokemon.baseSpecies.name === 'Gardevoir-Void' && pokemon.getItem().id === 'gardevoirite') {
+		if (['Gardevoir', 'Gardevoir-Void'].includes(pokemon.baseSpecies.name) && pokemon.getItem().id === 'gardevoirite') {
 			return 'Gardevoir-Mega-Z';
 		}
 		return null;
 	}
 
 	canMegaEvoY(pokemon: Pokemon) {
+		if (pokemon.baseSpecies.name === 'Gardevoir' && pokemon.getItem().id === 'gardevoirite') {
+			return 'Gardevoir-Void-Mega';
+		}
 		if (pokemon.baseSpecies.name === 'Gardevoir-Void' && pokemon.getItem().id === 'gardevoirite') {
 			return 'Gardevoir-Mega';
 		}
