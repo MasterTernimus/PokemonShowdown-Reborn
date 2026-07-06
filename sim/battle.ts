@@ -3535,7 +3535,7 @@ export class Battle {
 			outcome = !!pokemon.canTerastallize;
 			break;
 		case 'Gigantamax':
-			outcome = !!pokemon.canDynamax;
+			outcome = !!pokemon.canDynamax && !pokemon.side.allySide?.hasLivingGmax();
 			break;
 		case 'Mega':
 			outcome = !!pokemon.canMegaEvo;
@@ -3554,12 +3554,10 @@ export class Battle {
 			pokemon.side.gimmickCount++;
 			if (gimmick === 'Gigantamax') {
 				pokemon.side.dynamaxUsed = true;
-				if (pokemon.side.allySide) pokemon.side.allySide.dynamaxUsed = true;
 			}
 		}
 		if (pokemon.side.gimmickCount === 2) {
 			pokemon.side.dynamaxUsed = true;
-			if (pokemon.side.allySide) pokemon.side.allySide.dynamaxUsed = true;
 			for (const ally of pokemon.side.pokemon) {
 				ally.canMegaEvo = false;
 				ally.canUltraBurst = null;
