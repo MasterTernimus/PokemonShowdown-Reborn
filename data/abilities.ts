@@ -6933,7 +6933,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (!move || move.category === 'Status') return;
-			this.effect.healUltraEgo(source);
+			this.effect.healUltraEgo.call(this, source);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
@@ -6948,7 +6948,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ spd: 1 }, target, target);
 				}
 			}
-			this.effect.healUltraEgo(target);
+			this.effect.healUltraEgo.call(this, target);
 		},
 		flags: {},
 		name: "Ultra Ego",
