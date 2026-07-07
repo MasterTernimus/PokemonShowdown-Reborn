@@ -402,7 +402,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Battle Fervor');
 			this.effectState.unnerved = true;
-			pokemon.abilityState.battleFervorBoosted = false;
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				let activated = false;
 				for (const target of pokemon.foes()) {
@@ -471,8 +470,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
-			if (!target.abilityState.battleFervorBoosted) {
-				target.abilityState.battleFervorBoosted = true;
+			if (!target.battleFervorBoosted) {
+				target.battleFervorBoosted = true;
 				this.boost({ atk: 1, spa: 1 }, target, target);
 			}
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
@@ -1780,6 +1779,35 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 138,
 	},
+	ancientbloom: {
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
+			for (const ally of pokemon.adjacentAllies()) {
+				this.heal(ally.baseMaxhp / 4, ally, pokemon);
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.movehasType(move, 'Grass')) return this.chainModify(1.2);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyMove(move) {
+			if (move.category === 'Status') return;
+			if (!move.secondaries) move.secondaries = [];
+			move.secondaries.push({
+				chance: 50,
+				status: 'psn',
+			});
+		},
+		flags: { breakable: 1 },
+		name: "Ancient Bloom",
+		rating: 4.5,
+		num: 10024,
+	},
 	firemane: {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
@@ -1789,6 +1817,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Fire Mane",
 		rating: 3.5,
 		num: 10022,
+	},
+	fortressshell: {
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.movehasType(move, 'Water')) return this.chainModify(1.2);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status' && target.getMoveHitData(move).typeMod > 0) {
+				return this.chainModify(0.5);
+			}
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			const pokemon = this.effectState.target;
+			if (move.category !== 'Status' && (target === pokemon || target.isAlly(pokemon))) {
+				return this.chainModify(0.8);
+			}
+		},
+		onAnyCriticalHit(target, source, move) {
+			const pokemon = this.effectState.target;
+			if (target === pokemon || target.isAlly(pokemon)) return false;
+		},
+		flags: { breakable: 1 },
+		name: "Fortress Shell",
+		rating: 4.5,
+		num: 10025,
 	},
 	flashfire: {
 		onStart(pokemon) {
@@ -2815,6 +2868,45 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 151,
 	},
+	infernalpresence: {
+		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (target.hasItem('clearamulet')) {
+					this.add('-fail', target, 'unboost', '[from] item: Clear Amulet', `[of] ${target}`);
+					continue;
+				}
+				const lowered = target.boostBy({ atk: -1, spa: -1 });
+				if (lowered.atk) {
+					this.add('-unboost', target, 'atk', -lowered.atk, '[from] ability: Infernal Presence', `[of] ${pokemon}`);
+				}
+				if (lowered.spa) {
+					this.add('-unboost', target, 'spa', -lowered.spa, '[from] ability: Infernal Presence', `[of] ${pokemon}`);
+				}
+				if (lowered.atk || lowered.spa) target.statsLoweredThisTurn = true;
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.movehasType(move, 'Fire')) return this.chainModify(1.2);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyMove(move) {
+			if (this.movehasType(move, 'Fire') || this.movehasType(move, 'Dragon')) {
+				move.ignoreImmunity = true;
+				move.onEffectiveness = function () {
+					return 0;
+				};
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Infernal Presence",
+		rating: 4.5,
+		num: 10023,
+	},
 	innardsout: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
@@ -3836,6 +3928,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 233,
 	},
 	neutralization: {
+		lowerOffense(target, source) {
+			const boosts = target.getStat('atk', false, true) >= target.getStat('spa', false, true) ?
+				{ atk: -2, spe: -1 } : { spa: -2, spe: -1 };
+			this.boost(boosts, target, source);
+		},
 		onStart(pokemon) {
 			if (this.field.isTerrain('chessboardterrain')) this.boost({ def: 1, spd: 1 }, pokemon);
 		},
@@ -3845,12 +3942,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (move.category !== 'Status' && this.field.isTerrain(['chessboardterrain', 'psychicterrain'])) move.ignoreAbility = true;
 		},
-		onSetStatus(status, target, source) {
-			if (target.getStat('atk', false, true) > target.getStat('spa', false, true)) {
-				this.boost({ spe: -1, atk: -1 }, target, source);
-			} else {
-				this.boost({ spa: -1, spe: -1 }, target, source);
-			}
+		onSourceHit(target, source, move) {
+			if (!target || target === source || target.isAlly(source)) return;
+			this.effect.lowerOffense.call(this, target, source);
 		},
 		flags: {},
 		name: "Neutralization",
@@ -5748,6 +5842,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.ignoreAbility = true;
 				move.ignoreImmunity = true;
 			}
+			if (move.type === 'Ghost' || move.types?.includes('Ghost')) {
+				move.ignoreImmunity = true;
+				move.onEffectiveness = function () {
+					return 0;
+				};
+			}
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && (this.movehasType(move, 'Ghost') || move.id === 'willowisp' || (this.movehasType(move, 'Fire') && this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain'])))) {
@@ -6970,15 +7070,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	ultraego: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Ultra Ego');
+			pokemon.abilityState.ultraEgoDefBoosted = false;
+			pokemon.abilityState.ultraEgoSpDBoosted = false;
+			pokemon.abilityState.ultraEgoPinch = false;
 		},
-		healUltraEgo(pokemon) {
-			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
-				if (!pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
-					pokemon.abilityState.ultraEgoPinch = true;
-					this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
-				} else {
-					this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
-				}
+		boostedField() {
+			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
+		},
+		healUltraEgo(pokemon, source) {
+			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.abilityState.ultraEgoPinch = true;
+				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+				return;
+			}
+			if (source === 'attack') {
+				this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
 			} else {
 				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			}
@@ -6988,12 +7094,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (!move || move.category === 'Status') return;
-			this.effect.healUltraEgo.call(this, source);
+			this.effect.healUltraEgo.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			this.boost({ atk: 1, spa: 1 }, target, target);
-			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
+			if (this.effect.boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
 					this.boost({ def: 1 }, target, target);
@@ -7003,7 +7109,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ spd: 1 }, target, target);
 				}
 			}
-			this.effect.healUltraEgo.call(this, target);
+			this.effect.healUltraEgo.call(this, target, 'hit');
 		},
 		flags: {},
 		name: "Ultra Ego",
