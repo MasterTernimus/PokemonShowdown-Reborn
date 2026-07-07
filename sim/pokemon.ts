@@ -1061,11 +1061,6 @@ export class Pokemon {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
 			if (!this.side.canDynamaxNow() || !this.canDynamax || !this.canGigantamax) return;
-			if (
-				this.species.forme === 'Mega'
-			) {
-				return;
-			}
 			// Some pokemon species are unable to dynamax
 			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
 		}
@@ -1755,7 +1750,7 @@ export class Pokemon {
 		}
 
 		if (
-			!ignoreImmunities && status.id && !(source?.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))
+			!ignoreImmunities && status.id && !(source?.hasAbility(['corrosion', 'ancientbloom']) && ['tox', 'psn'].includes(status.id))
 		) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
