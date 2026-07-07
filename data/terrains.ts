@@ -672,6 +672,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (moveTypes.includes('Dragon')) {
 					modifier *= 1.5;
 				}
+				if (moveTypes.includes('Rock') || moveTypes.includes('Fighting')) {
+					modifier *= 0.5;
+				}
 				if (moveTypes.includes('Fire')) {
 					if (source.hasAbility(['fullmetalbody', 'turboblaze'])) {
 						modifier *= 2;

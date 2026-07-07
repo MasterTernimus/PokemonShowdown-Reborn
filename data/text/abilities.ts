@@ -2303,8 +2303,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlefervor: {
 		name: "Battle Fervor",
-		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.5x damage. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it heals 10% when attacking and after being attacked, always takes 0.5x damage, cannot have stats lowered, and cannot flinch.",
-		shortDesc: "Fast attacks 1.3x; slow takes 0.5x; enemy hits raise Atk/SpA; also has Unnerve.",
+		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.5x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it heals 10% when attacking and after being attacked, always takes 0.5x damage, cannot have stats lowered, and cannot flinch.",
+		shortDesc: "Fast attacks 1.3x; slow takes 0.5x; first enemy hit raises Atk/SpA; also has Unnerve.",
 	},
 	duskilate: {
 		name: "Duskilate",
@@ -2326,10 +2326,25 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Present becomes a 120 Base Power Dark-type move that hits all opposing Pokemon. Delibird gets STAB on Dark-type moves. Present always applies one random extra effect that succeeds: damage equal to 1/8 of the target's max HP, bad poison, 3-turn confusion, or Curse.",
 		shortDesc: "Present becomes 120 BP Dark spread and applies a random successful extra effect.",
 	},
+	ancientbloom: {
+		name: "Ancient Bloom",
+		desc: "On switch-in, this Pokemon restores 25% of each adjacent ally's maximum HP. This Pokemon takes 0.5x damage from super-effective attacks. Its Grass-type moves have 1.2x power, and its damaging moves have a 50% chance to poison the target.",
+		shortDesc: "Heals allies on entry; 0.5x SE damage; Grass moves 1.2x; damaging moves may poison.",
+	},
+	fortressshell: {
+		name: "Fortress Shell",
+		desc: "This Pokemon's Water-type moves have 1.2x power. This Pokemon takes 0.5x damage from super-effective attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits.",
+		shortDesc: "Water moves 1.2x; 0.5x SE damage; user/allies take 0.8x move damage and block crits.",
+	},
 	hydrabond: {
 		name: "Hydra Bond",
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits have their damage quartered.",
 		shortDesc: "Damaging moves hit three times; hits two and three deal 25% damage.",
+	},
+	infernalpresence: {
+		name: "Infernal Presence",
+		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon's Fire-type moves have 1.2x power. It takes 0.5x damage from super-effective attacks. Its Fire- and Dragon-type attacks ignore immunities and resistances, hitting neutrally.",
+		shortDesc: "Drops foes' Atk/SpA on entry; Fire 1.2x; 0.5x SE damage; Fire/Dragon hit neutrally.",
 	},
 	inversion: {
 		name: "Inversion",
@@ -2343,8 +2358,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neutralization: {
 		name: "Neutralization",
-		desc: "When this Pokemon is statused, it lowers Speed and its higher attacking stat. On Chess Field, it gains +1 Defense and +1 Special Defense on entry, and its attacks ignore enemy abilities. On Psychic Terrain, its Speed rises each turn and its attacks ignore enemy abilities. It prevents Poison and Z-Moves from creating Corrosive Mist on Misty Terrain, prevents non-damaging wind moves from removing Misty Terrain, prevents Corrosive Field from Grassy Terrain, prevents Murkwater and Wasting Surge on Water Surface and Underwater, prevents Haunted Field from Holy Field, and prevents Bewitched Woods from Forest Field.",
-		shortDesc: "Status lowers Speed/offense; blocks listed field conversions and empowers Chess/Psychic.",
+		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. While active, terrain effects are suppressed and field changes are neutralized.",
+		shortDesc: "Hits lower foe's higher offense by 2 and Speed by 1; suppresses terrain effects/changes.",
 	},
 	powerdrill: {
 		name: "Power Drill",
@@ -2363,8 +2378,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	soulfire: {
 		name: "Soul Fire",
-		desc: "This Pokemon is immune to Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by Ghost-type moves or Will-O-Wisp. On Haunted, Burning, Volcanic, and Bewitched fields, this also works like Flash Fire and activates at the end of each turn.",
-		shortDesc: "Ghost/Wisp/weather immunity; boosts Atk/SpA; Flash Fire on matching fields.",
+		desc: "This Pokemon is immune to Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by Ghost-type moves or Will-O-Wisp. Its Ghost-type moves ignore immunities and type resistances, hitting neutrally. On Haunted, Burning, Volcanic, and Bewitched fields, this also works like Flash Fire and activates at the end of each turn.",
+		shortDesc: "Ghost/Wisp/weather immunity; Ghost moves hit neutrally; Flash Fire on matching fields.",
 	},
 	striker: {
 		name: "Striker",
@@ -2373,8 +2388,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/10 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, opposing hits heal 1/8 instead and can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP it heals 1/4 instead.",
-		shortDesc: "Only enemy hits raise Atk/SpA and heal; ally hits do not trigger it.",
+		desc: "This Pokemon's moves ignore abilities. Its damaging attacks heal 1/10 max HP. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/16 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/4 max HP.",
+		shortDesc: "Mold Breaker; attacks heal 1/10; enemy hits boost Atk/SpA and heal 1/16.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",

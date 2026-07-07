@@ -192,6 +192,12 @@ export class Field {
 		return true;
 	}
 
+	neutralizingTerrainEffects() {
+		return this.battle.getAllActive().some(pokemon =>
+			pokemon?.isActive && !pokemon.fainted && pokemon.hasAbility('neutralization')
+		);
+	}
+
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -273,7 +279,8 @@ export class Field {
 	}
 
 	clearTerrain(power: string | null = null) {
-		if (this.isTerrain('') || this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) return false;
+		if (!this.terrain || this.terrain === 'underwaterterrain' || this.terrain === 'newworldterrain') return false;
+		if (this.neutralizeTerrainChange()) return false;
 		if (power === 'mid') {
 			if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();
@@ -329,6 +336,7 @@ export class Field {
 
 	effectiveTerrain(target?: Pokemon | Side | Battle) {
 		if (this.battle.event && !target) target = this.battle.event.target;
+		if (this.neutralizingTerrainEffects()) return '';
 		return this.battle.runEvent('TryTerrain', target) ? this.terrain : '';
 	}
 
