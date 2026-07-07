@@ -2328,13 +2328,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "On switch-in, this Pokemon restores 25% of each adjacent ally's maximum HP. This Pokemon takes 0.5x damage from super-effective attacks. Its Grass-type moves have 1.2x power, and its damaging moves have a 50% chance to poison the target.",
-		shortDesc: "Heals allies on entry; 0.5x SE damage; Grass moves 1.2x; damaging moves may poison.",
+		desc: "On switch-in, this Pokemon restores 25% of each adjacent ally's maximum HP. This Pokemon takes 0.5x damage from super-effective attacks. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. Its poison effects can affect Poison- and Steel-type Pokemon.",
+		shortDesc: "Heals allies; 0.5x SE damage; Grass 1.2x; 50% Effect Spore; has Corrosion.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. This Pokemon takes 0.5x damage from super-effective attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits.",
-		shortDesc: "Water moves 1.2x; 0.5x SE damage; user/allies take 0.8x move damage and block crits.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. Its damaging attacks heal 1/16 max HP. When hit by a damaging move, it heals 1/10 max HP. This Pokemon takes 0.5x damage from super-effective attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits.",
+		shortDesc: "Water 1.2x; heals on attacks/hits; 0.5x SE damage; allies take 0.8x and block crits.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",

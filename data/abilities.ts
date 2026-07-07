@@ -1795,13 +1795,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(0.5);
 			}
 		},
-		onModifyMove(move) {
-			if (move.category === 'Status') return;
-			if (!move.secondaries) move.secondaries = [];
-			move.secondaries.push({
-				chance: 50,
-				status: 'psn',
-			});
+		onDamagingHit(damage, target, source, move) {
+			if (!source?.hp || source === target || !source.runStatusImmunity('powder')) return;
+			const r = this.random(100);
+			if (r < 50) {
+				if (r < 17) {
+					source.setStatus('slp', target);
+				} else if (r < 34) {
+					source.setStatus('par', target);
+				} else {
+					source.setStatus('psn', target);
+				}
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Ancient Bloom",
@@ -1822,6 +1827,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.movehasType(move, 'Water')) return this.chainModify(1.2);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.category !== 'Status') this.heal(target.baseMaxhp / 10, target, target);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status' && target.getMoveHitData(move).typeMod > 0) {
