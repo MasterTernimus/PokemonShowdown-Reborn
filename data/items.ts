@@ -1650,8 +1650,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		megaStone: { "Gardevoir": "Gardevoir-Void-Mega" },
-		itemUser: ["Gardevoir"],
+		megaStone: { "Gardevoir": "Gardevoir-Void-Mega", "Gardevoir-Void": "Gardevoir-Void-Mega" },
+		itemUser: ["Gardevoir", "Gardevoir-Void"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
