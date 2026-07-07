@@ -494,6 +494,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "While this Pokemon is burned, the power of its special attacks is multiplied by 1.5.",
 		shortDesc: "While this Pokemon is burned, its special attacks have 1.5x power.",
 	},
+	firemane: {
+		name: "Fire Mane",
+		desc: "This Pokemon's Fire-type attacks have 1.5x power.",
+		shortDesc: "This Pokemon's Fire-type attacks have 1.5x power.",
+	},
 	flashfire: {
 		name: "Flash Fire",
 		desc: "This Pokemon is immune to Fire-type moves. The first time it is hit by a Fire-type move, its offensive stat is multiplied by 1.5 while using a Fire-type attack as long as it remains active and has this Ability. If this Pokemon is frozen, it cannot be defrosted by Fire-type attacks.",
@@ -1772,8 +1777,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "While this Pokemon has more than 50% HP, its weaknesses are neutralized and it is protected from entry hazards.",
-		shortDesc: "Above 50% HP, removes weaknesses and blocks entry hazards.",
+		desc: "This Pokemon always has Dry Skin's effects. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.75x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
+		shortDesc: "Has Dry Skin. Above 50% HP: 0.75x damage, no weaknesses/hazards/status/secondary effects.",
 	},
 	tremor: {
 		name: "Tremor",
@@ -1804,7 +1809,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stamina: {
 		name: "Stamina",
-		shortDesc: "This Pokemon's Defense is raised by 1 stage after it is damaged by a move.",
+		shortDesc: "Enemy hits raise Defense by 1 and heal 1/16 max HP.",
 	},
 	stancechange: {
 		name: "Stance Change",
@@ -2358,8 +2363,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	soulfire: {
 		name: "Soul Fire",
-		desc: "This Pokemon is immune to Ghost-type moves and Will-O-Wisp, raising Attack and Special Attack by 1 stage when hit by them. On Haunted, Burning, Volcanic, and Bewitched fields, this also works like Flash Fire and activates at the end of each turn.",
-		shortDesc: "Ghost/Wisp immunity boosts Atk/SpA; acts like Flash Fire on matching fields.",
+		desc: "This Pokemon is immune to Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by Ghost-type moves or Will-O-Wisp. On Haunted, Burning, Volcanic, and Bewitched fields, this also works like Flash Fire and activates at the end of each turn.",
+		shortDesc: "Ghost/Wisp/weather immunity; boosts Atk/SpA; Flash Fire on matching fields.",
 	},
 	striker: {
 		name: "Striker",

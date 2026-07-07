@@ -1780,6 +1780,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 138,
 	},
+	firemane: {
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fire') return this.chainModify(1.5);
+		},
+		flags: {},
+		name: "Fire Mane",
+		rating: 3.5,
+		num: 10022,
+	},
 	flashfire: {
 		onStart(pokemon) {
 			if (this.field.isTerrain('coldeclipseterrain')) {
@@ -5722,6 +5732,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
 		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
+		},
 		onResidual(pokemon) {
 			if (this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain'])) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
 		},
@@ -5828,6 +5841,48 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	parasitism: {
 		onEffectiveness(typeMod, target, type, move) {
 			if (target.hp > target.maxhp / 2 && typeMod > 0) return 0;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.hp > target.maxhp / 2) return this.chainModify(0.75);
+		},
+		onSourceBasePowerPriority: 17,
+		onSourceBasePower(basePower, attacker, defender, move) {
+			if (move && this.movehasType(move, 'Fire')) {
+				return this.chainModify(1.25);
+			}
+		},
+		onModifySecondaries(secondaries, target, source, move) {
+			if (target.hp > target.maxhp / 2) {
+				this.debug('Parasitism prevent secondary');
+				return secondaries.filter(effect => !!effect.self);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (target.hp > target.maxhp / 2 && effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target !== source && this.movehasType(move, 'Water')) {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Parasitism');
+				}
+				return null;
+			}
+			if (target.hp > target.maxhp / 2 && target !== source && target.foes().includes(source) && move.category === 'Status') {
+				this.add('-immune', target, '[from] ability: Parasitism');
+				return null;
+			}
+		},
+		onWeather(target, source, effect) {
+			if (target.effectiveWeather() !== effect.id) return;
+			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
+				this.heal(target.baseMaxhp / 8);
+			} else if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
+				this.damage(target.baseMaxhp / 8, target, target);
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Parasitism",
@@ -5958,7 +6013,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, effect) {
 			if (!source || target.isAlly(source)) return;
 			this.boost({ def: 1 }, target, target);
-			this.heal(target.baseMaxhp / 10, target, target);
+			this.heal(target.baseMaxhp / 16, target, target);
 		},
 		flags: {},
 		name: "Stamina",
