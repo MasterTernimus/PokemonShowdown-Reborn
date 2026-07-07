@@ -11691,7 +11691,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Hydreigon",
 		types: ["Dark", "Dragon"],
 		baseStats: { hp: 92, atk: 105, def: 90, spa: 125, spd: 90, spe: 98 },
-		abilities: { 0: "Levitate", H: "Hydra Bond" },
+		abilities: { 0: "Levitate", 1: "Dark Aura", H: "Hydra Bond" },
 		heightm: 1.8,
 		weightkg: 160,
 		color: "Blue",

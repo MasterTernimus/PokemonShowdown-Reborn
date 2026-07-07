@@ -1762,12 +1762,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	solaridol: {
 		name: "Solar Idol",
-		desc: "This Pokemon is immune to Ground-type attacks. Its Fire-type moves have 1.5x power, its Attack is 1.5x during sun, and Grass-type attacks are resisted. On New World and Starlight Arena, its Defense is raised by 1 stage on switch-in.",
+		desc: "This Pokemon has Levitate's Ground immunity. Its Fire-type moves have 1.5x power, its Attack is 1.5x during sun, and Grass-type attacks are resisted. On New World and Starlight Arena, its Defense is raised by 1 stage on switch-in.",
 		shortDesc: "Levitate; Fire power 1.5x; Attack 1.5x in sun; resists Grass.",
 	},
 	lunaridol: {
 		name: "Lunar Idol",
-		desc: "This Pokemon is immune to Ground-type attacks and hail damage. Its Ice-type moves have 1.5x power, and its Special Attack is 1.5x during hail or snow. On New World and Starlight Arena, its Special Defense is raised by 1 stage on switch-in.",
+		desc: "This Pokemon has Levitate's Ground immunity and is immune to hail damage. Its Ice-type moves have 1.5x power, and its Special Attack is 1.5x during hail or snow. On New World and Starlight Arena, its Special Defense is raised by 1 stage on switch-in.",
 		shortDesc: "Levitate; immune to hail; Ice power 1.5x; Sp. Atk 1.5x in hail/snow.",
 	},
 	royaldecree: {
