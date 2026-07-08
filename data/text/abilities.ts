@@ -145,8 +145,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "If this Pokemon is a Greninja, its Attack, Special Attack, and Speed are raised by 1 stage if it attacks and knocks out another Pokemon. This effect can only happen once per battle.",
-		shortDesc: "After KOing a Pokemon: raises Attack, Sp. Atk, Speed by 1 stage. Once per battle.",
+		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, moves that match this Pokemon's type have 1.3x power, this Pokemon takes 0.7x damage from attacks, and knocking out a target restores 25% of this Pokemon's maximum HP.",
+		shortDesc: "After a KO: transforms. Bond form: matching-type moves 1.3x, takes 0.7x damage, KO heals 25%.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -2326,6 +2326,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Present becomes a 120 Base Power Dark-type move that hits all opposing Pokemon. Delibird gets STAB on Dark-type moves. Present always applies one random extra effect that succeeds: damage equal to 1/8 of the target's max HP, bad poison, 3-turn confusion, or Curse.",
 		shortDesc: "Present becomes 120 BP Dark spread and applies a random successful extra effect.",
 	},
+	forestsurge: {
+		name: "Forest Surge",
+		desc: "On switch-in, this Pokemon sets Forest Terrain for 5 turns.",
+		shortDesc: "On switch-in, this Pokemon sets Forest Terrain for 5 turns.",
+	},
 	ancientbloom: {
 		name: "Ancient Bloom",
 		desc: "On switch-in, this Pokemon restores 25% of each adjacent ally's maximum HP. This Pokemon takes 0.5x damage from super-effective attacks. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. Its poison effects can affect Poison- and Steel-type Pokemon.",
@@ -2378,13 +2383,23 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	soulfire: {
 		name: "Soul Fire",
-		desc: "This Pokemon is immune to Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by Ghost-type moves or Will-O-Wisp. Its Ghost-type moves ignore immunities and type resistances, hitting neutrally. On Haunted, Burning, Volcanic, and Bewitched fields, this also works like Flash Fire and activates at the end of each turn.",
-		shortDesc: "Ghost/Wisp/weather immunity; Ghost moves hit neutrally; Flash Fire on matching fields.",
+		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Ghost-type moves ignore immunities and type resistances, hitting neutrally. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
+		shortDesc: "Draws in and absorbs Fire/Ghost moves; +1 Atk/SpA. Ghost moves hit neutrally.",
+	},
+	scopelock: {
+		name: "Scope Lock",
+		desc: "This Pokemon's Water-type moves have 1.2x power. Its attacks cannot miss unless the target is in the semi-invulnerable turn of a move. Its moves have +1 critical hit ratio against targets that have not moved yet this turn.",
+		shortDesc: "Water moves 1.2x; attacks cannot miss; +1 crit vs targets that have not moved.",
 	},
 	striker: {
 		name: "Striker",
 		desc: "This Pokemon's kicking moves have 1.4x power. This Ability also counts as a striker Ability for Big Top Arena interactions.",
 		shortDesc: "Kicking moves have 1.4x power.",
+	},
+	strikersmomentum: {
+		name: "Striker's Momentum",
+		desc: "When this Pokemon uses a damaging move, its type changes to match that move before attacking. Its kicking moves have 1.3x power. Once per switch-in, if this Pokemon knocks out a target with a kicking move, its Speed rises by 1 stage.",
+		shortDesc: "Damaging moves change user's type; kicking moves 1.3x; kick KO gives +1 Spe once.",
 	},
 	ultraego: {
 		name: "Ultra Ego",
