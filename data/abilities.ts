@@ -485,8 +485,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	battlebond: {
 		onSourceAfterFaint(length, target, source, effect) {
-			if (source.bondTriggered) return;
 			if (effect?.effectType !== 'Move') {
+				return;
+			}
+			if (['garchompbattlebond', 'greninjaash'].includes(source.species.id)) {
+				this.heal(source.baseMaxhp / 4, source, source);
+				return;
+			}
+			if (source.bondTriggered) return;
+			if (source.species.id === 'garchomp' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
+				this.add('-activate', source, 'ability: Battle Bond');
+				source.formeChange('Garchomp-Battle-Bond', this.effect, true);
+				source.formeRegression = true;
+				source.bondTriggered = true;
 				return;
 			}
 			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
@@ -499,6 +510,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.bondTriggered = true;
 			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target, move) {
+			if (!['garchompbattlebond', 'greninjaash'].includes(source.species.id)) return;
+			if (source.getTypes().some(type => this.movehasType(move, type))) {
+				this.debug('Battle Bond same-type boost');
+				return this.chainModify(1.3);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (!['garchompbattlebond', 'greninjaash'].includes(target.species.id)) return;
+			this.debug('Battle Bond transformed damage reduction');
+			return this.chainModify(0.7);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Battle Bond",
@@ -5861,11 +5885,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryHit(target, source, move) {
-			if (target !== source && (this.movehasType(move, 'Ghost') || move.id === 'willowisp' || (this.movehasType(move, 'Fire') && this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain'])))) {
+			if (target !== source && (this.movehasType(move, 'Fire') || this.movehasType(move, 'Ghost') || move.id === 'willowisp')) {
 				if (!this.boost({ atk: 1, spa: 1 })) {
 					this.add('-immune', target, '[from] ability: Soul Fire');
 				}
 				return null;
+			}
+		},
+		onAnyRedirectTarget(target, source, source2, move) {
+			if (!this.movehasType(move, 'Fire') && !this.movehasType(move, 'Ghost')) return;
+			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
+			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
+				if (move.smartTarget) move.smartTarget = false;
+				if (this.effectState.target !== target) {
+					this.add('-activate', this.effectState.target, 'ability: Soul Fire');
+				}
+				return this.effectState.target;
 			}
 		},
 		flags: { breakable: 1 },
@@ -5886,6 +5921,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Soul-Heart",
 		rating: 3.5,
 		num: 220,
+	},
+	scopelock: {
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.movehasType(move, 'Water')) return this.chainModify(1.2);
+		},
+		onModifyMove(move) {
+			if (move.category !== 'Status') move.accuracy = true;
+		},
+		onModifyCritRatio(critRatio, source, target) {
+			if (target?.newlySwitched || !target?.moveThisTurnResult) return critRatio + 1;
+		},
+		flags: { breakable: 1 },
+		name: "Scope Lock",
+		rating: 4.5,
+		num: 10028,
 	},
 	soundproof: {
 		onTryHit(target, source, move) {
@@ -5927,6 +5978,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Solar Idol",
 		rating: 4,
 		num: 10018,
+	},
+	forestsurge: {
+		onStart(source) {
+			if (this.field.setTerrain('forestterrain')) {
+				this.field.terrainState.duration = 5;
+			}
+		},
+		flags: {},
+		name: "Forest Surge",
+		rating: 4,
+		num: 10026,
 	},
 	lunaridol: {
 		onStart(pokemon) {
@@ -6334,6 +6396,36 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Striker",
 		rating: 3,
 		num: 10009,
+	},
+	strikersmomentum: {
+		onStart(pokemon) {
+			pokemon.abilityState.strikersMomentumBoosted = false;
+		},
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, "[from] ability: Striker's Momentum");
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['kick']) {
+				this.debug("Striker's Momentum boost");
+				return this.chainModify(1.3);
+			}
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (source.abilityState.strikersMomentumBoosted) return;
+			if (effect?.effectType !== 'Move' || !(effect as ActiveMove).flags?.['kick']) return;
+			source.abilityState.strikersMomentumBoosted = true;
+			this.boost({ spe: 1 }, source, source, this.effect);
+		},
+		flags: {},
+		name: "Striker's Momentum",
+		rating: 4,
+		num: 10027,
 	},
 	strongjaw: {
 		onBasePowerPriority: 19,
