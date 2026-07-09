@@ -4652,12 +4652,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 530,
 		accuracy: 90,
 		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.species.id === 'garchompbattlebond') return 80;
+			return move.basePower;
+		},
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Dual Chop",
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.id === 'garchompbattlebond') move.accuracy = true;
+		},
 		multihit: 2,
 		target: "normal",
 		type: "Dragon",
@@ -10408,6 +10415,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onBasePower(basePower, source) {
+			if (this.field.isTerrain('electricterrain')) return this.chainModify(2);
+		},
+		onModifyMove(move) {
+			if (this.field.isTerrain('electricterrain')) move.accuracy = true;
+		},
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -13162,7 +13175,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Moonlight",
-		pp: 10,
+		pp: 8,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -13206,7 +13219,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Morning Sun",
-		pp: 5,
+		pp: 8,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -20545,7 +20558,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Synthesis",
-		pp: 10,
+		pp: 8,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -22409,6 +22422,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		recoil: [33, 100],
+		onBasePower(basePower, source) {
+			if (this.field.isTerrain('electricterrain')) return this.chainModify(1.5);
+		},
+		onModifyMove(move) {
+			if (this.field.isTerrain('electricterrain')) delete move.recoil;
+		},
 		secondary: {
 			chance: 10,
 			status: 'par',
@@ -22533,7 +22552,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePowerCallback(pokemon, target, move) {
 			if (pokemon.species.name === 'Greninja-Ash' && pokemon.hasAbility('battlebond') &&
 				!pokemon.transformed) {
-				return move.basePower + 5;
+				return 25;
 			}
 			return move.basePower;
 		},
@@ -22543,6 +22562,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 1,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [2, 5],
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.name === 'Greninja-Ash' && pokemon.hasAbility('battlebond') && !pokemon.transformed) {
+				move.multihit = 3;
+				move.willCrit = true;
+			}
+		},
 		target: "normal",
 		type: "Water",
 		contestType: "Cool",
