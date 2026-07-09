@@ -1782,8 +1782,63 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	tremor: {
 		name: "Tremor",
-		desc: "This Pokemon's sound-based moves become physical attacks and ignore sound-based Ability immunities such as Soundproof.",
-		shortDesc: "Sound moves become physical and ignore sound-based Ability immunities.",
+		desc: "This Pokemon's sound-based moves become physical attacks, have 1.2x power, and ignore sound-based Ability immunities such as Soundproof.",
+		shortDesc: "Sound moves are physical, 1.2x, and ignore sound-based Ability immunities.",
+	},
+	verdantdrake: {
+		name: "Verdant Drake",
+		desc: "This Pokemon's Grass- and Dragon-type moves have 1.2x power. It takes 0.75x damage from Fire- and Ice-type attacks. When it switches out, it restores 33% of its maximum HP.",
+		shortDesc: "Grass/Dragon moves 1.2x; 0.75x Fire/Ice damage; restores 33% on switch-out.",
+	},
+	solarbloom: {
+		name: "Solar Bloom",
+		desc: "If sun is active, this Pokemon transforms into Cherrim-Sunshine and restores 1/8 of its maximum HP. While sun is active, its Speed is doubled.",
+		shortDesc: "In sun: becomes Sunshine, heals 1/8, and has doubled Speed.",
+	},
+	wrathshield: {
+		name: "Wrath Shield",
+		desc: "When this Pokemon is hit by an enemy attack, its Attack and Defense rise by 1 stage and it restores 1/16 of its maximum HP. It has Bulletproof's effect, blocks moves boosted by Mega Launcher, cannot be critically hit, and raises Defense and Special Defense by 1 stage when its stats are lowered.",
+		shortDesc: "On enemy hit: +1 Atk/Def and heals 1/16. Blocks bullets/launcher moves; no crits.",
+	},
+	shadowcurrent: {
+		name: "Shadow Current",
+		desc: "Before using a move, this Pokemon becomes the move's type. Its moves with less than 60 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power; if it moves after the target, it takes 0.5x damage from that target's attack.",
+		shortDesc: "Protean; weak moves 1.5x; faster attacks 1.3x; slower defense 0.5x.",
+	},
+	astralwitchcraft: {
+		name: "Astral Witchcraft",
+		desc: "This Pokemon is airborne, immune to Ground-type moves, only takes damage from direct attacks, and reflects most non-damaging moves back at the user.",
+		shortDesc: "Levitate + Magic Guard + Magic Bounce.",
+	},
+	blazingtempo: {
+		name: "Blazing Tempo",
+		desc: "At the end of each turn, this Pokemon's Speed rises by 1 stage. Its Fire- and Fighting-type moves have 1.2x power if its Speed has been raised.",
+		shortDesc: "Speed rises each turn; Fire/Fighting moves 1.2x if Speed is boosted.",
+	},
+	ragingcurrent: {
+		name: "Raging Current",
+		desc: "If rain is active, this Pokemon's Speed is doubled. It has Damp's effect, is immune to burns, and takes 0.5x damage from Fire-type moves.",
+		shortDesc: "Swift Swim + Damp; immune to burns; 0.5x Fire damage.",
+	},
+	toxicbloom: {
+		name: "Toxic Bloom",
+		desc: "This Pokemon takes 0.5x damage from Fire- and Ice-type attacks and restores 1/10 of its maximum HP at the end of each turn. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
+		shortDesc: "0.5x Fire/Ice; heals 1/10; absorbs Poison for +1 Atk/SpA.",
+	},
+	siegelauncher: {
+		name: "Siege Launcher",
+		desc: "This Pokemon's pulse, aura, beam, and cannon moves have 1.4x power and ignore Light Screen, Reflect, and Aurora Veil. Its moves cannot be redirected. It restores 1/10 of its maximum HP at the end of each turn.",
+		shortDesc: "Pulse/aura/beam/cannon 1.4x and bypass screens; Stalwart; heals 1/10.",
+	},
+	calderacore: {
+		name: "Caldera Core",
+		desc: "This Pokemon's Fire- and Ground-type moves have 1.2x power. It takes 0.5x damage from Water-type attacks. At the end of each turn, opposing Pokemon lose 1/16 max HP unless they are Fire, Ground, Rock, or airborne.",
+		shortDesc: "Fire/Ground moves 1.2x; 0.5x Water damage; chips vulnerable foes each turn.",
+	},
+	soultag: {
+		name: "Soul Tag",
+		desc: "This Pokemon has Soul Fire's effects and prevents adjacent opposing Pokemon from switching out.",
+		shortDesc: "Soul Fire + Shadow Tag.",
 	},
 	speedboost: {
 		name: "Speed Boost",
@@ -2333,13 +2388,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "On switch-in, this Pokemon restores 25% of each adjacent ally's maximum HP. This Pokemon takes 0.5x damage from super-effective attacks. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. Its poison effects can affect Poison- and Steel-type Pokemon.",
-		shortDesc: "Heals allies; 0.5x SE damage; Grass 1.2x; 50% Effect Spore; has Corrosion.",
+		desc: "On switch-in, this Pokemon restores 25% of each adjacent ally's maximum HP. This Pokemon takes 0.5x damage from super-effective attacks. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. Its poison effects can affect Poison- and Steel-type Pokemon. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
+		shortDesc: "Heals allies; 0.5x SE damage; Grass 1.2x; 50% Effect Spore; field boosts.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. Its damaging attacks heal 1/16 max HP. When hit by a damaging move, it heals 1/10 max HP. This Pokemon takes 0.5x damage from super-effective attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits.",
-		shortDesc: "Water 1.2x; heals on attacks/hits; 0.5x SE damage; allies take 0.8x and block crits.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. Its damaging attacks heal 1/16 max HP. When hit by a damaging move, it heals 1/10 max HP. This Pokemon takes 0.5x damage from super-effective attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
+		shortDesc: "Water 1.2x; heals; 0.5x SE damage; ally protection; field boosts.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
@@ -2348,8 +2403,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	infernalpresence: {
 		name: "Infernal Presence",
-		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon's Fire-type moves have 1.2x power. It takes 0.5x damage from super-effective attacks. Its Fire- and Dragon-type attacks ignore immunities and resistances, hitting neutrally.",
-		shortDesc: "Drops foes' Atk/SpA on entry; Fire 1.2x; 0.5x SE damage; Fire/Dragon hit neutrally.",
+		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power. It takes 0.5x damage from super-effective attacks. Its Fire- and Dragon-type attacks ignore immunities and resistances, hitting neutrally. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
+		shortDesc: "Airborne; drops foes' Atk/SpA; Fire 1.2x; 0.5x SE; field boosts.",
 	},
 	inversion: {
 		name: "Inversion",
@@ -2383,8 +2438,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	soulfire: {
 		name: "Soul Fire",
-		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Ghost-type moves ignore immunities and type resistances, hitting neutrally. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
-		shortDesc: "Draws in and absorbs Fire/Ghost moves; +1 Atk/SpA. Ghost moves hit neutrally.",
+		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Ghost-type moves cannot hit Normal-type Pokemon, but otherwise ignore type resistances and hit neutrally. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
+		shortDesc: "Draws in and absorbs Fire/Ghost moves; +1 Atk/SpA. Ghost ignores resistances.",
 	},
 	scopelock: {
 		name: "Scope Lock",
