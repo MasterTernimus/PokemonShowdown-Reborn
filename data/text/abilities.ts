@@ -397,6 +397,136 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Drought",
 		shortDesc: "On switch-in, this Pokemon summons Sunny Day.",
 	},
+	solargrace: {
+		name: "Solar Grace",
+		desc: "On switch-in or Mega Evolution, this Pokemon summons Sunny Day. Opposing Pokemon cannot lower this Pokemon's Speed or Special Attack. If this Pokemon moves before the target, its Fire- and Flying-type moves have 1.2x power. If this Pokemon has not moved yet, it takes 0.75x damage from attacks.",
+		shortDesc: "Sets Sun; blocks foe Speed/SpA drops; faster Fire/Flying 1.2x; before moving takes 0.75x.",
+	},
+	eternalflower: {
+		name: "Eternal Flower",
+		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. On Fairy Tale Field, this Pokemon's Attack and Special Attack are doubled. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.8x while this Pokemon is active.",
+		shortDesc: "Grass attacks use 1.5x offenses; Fairy Tale doubles offenses; weakens powered-up foes.",
+	},
+	burningspirit: {
+		name: "Burning Spirit",
+		desc: "This Pokemon cannot be frozen. Water-type attacks used against this Pokemon deal 0.5x damage. Contact moves used against this Pokemon deal 0.7x damage. This Pokemon's damaging moves have a 30% chance to burn the target.",
+		shortDesc: "Cannot be frozen; 0.5x Water; 0.7x contact; attacks have 30% burn chance.",
+	},
+	emperorsresolve: {
+		name: "Emperor's Resolve",
+		desc: "If this Pokemon has a stat lowered by an opposing Pokemon, its Special Attack rises by 2 stages. This Pokemon takes 0.75x damage from resisted moves and cannot flinch. Its Water- and Steel-type moves have 1.2x power.",
+		shortDesc: "Competitive for SpA; 0.75x resisted damage; no flinch; Water/Steel 1.2x.",
+	},
+	terraresolve: {
+		name: "Terra Resolve",
+		desc: "When this Pokemon's stats are lowered, its Attack rises by 1 stage. If either of its defensive stats is lowered, it takes 0.75x damage from attacks. It restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "Stat drops give +1 Atk; if Def/SpD lowered, takes 0.75x; heals 1/16 each turn.",
+	},
+	lastdraw: {
+		name: "Last Draw",
+		desc: "This Pokemon's arrow moves have 1.2x power. If this Pokemon has 1/3 or less of its maximum HP, its arrow moves gain +1 priority. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
+		shortDesc: "Arrow moves 1.2x; at <=1/3 HP +1 priority; 1.5x vs trapped targets.",
+	},
+	wickedsnare: {
+		name: "Wicked Snare",
+		desc: "On switch-in, this Pokemon reveals opposing held items and has a 30% chance to Embargo each revealed foe. Pokemon making contact with this Pokemon have their Speed lowered by 1 stage. This Pokemon deals 1.5x damage to targets that switched in this turn.",
+		shortDesc: "Frisk + Embargo chance; contact lowers Speed; 1.5x vs switched-in targets.",
+	},
+	crumblingshell: {
+		name: "Crumbling Shell",
+		desc: "When this Pokemon is hit by a Physical attack, Stealth Rock is set on the attacker's side of the field if that side does not already have Stealth Rock.",
+		shortDesc: "When hit by a Physical attack, sets Stealth Rock on the attacker's side.",
+	},
+	iceabsorb: {
+		name: "Ice Absorb",
+		desc: "This Pokemon is immune to Ice-type moves and restores 1/4 of its maximum HP when hit by an Ice-type move.",
+		shortDesc: "This Pokemon is immune to Ice and heals 1/4 when hit by Ice.",
+	},
+	wastingsurge: {
+		name: "Wasting Surge",
+		desc: "On switch-in, this Pokemon sets Wasteland Terrain. If Neutralization is active on Water Surface or Underwater, this effect fails.",
+		shortDesc: "On switch-in, sets Wasteland Terrain.",
+	},
+	sinoflust: {
+		name: "Sin of Lust",
+		desc: "This Pokemon has Magic Bounce, Queenly Majesty, and Magic Guard's effects.",
+		shortDesc: "Magic Bounce + Queenly Majesty + Magic Guard.",
+	},
+	corrosivescale: {
+		name: "Corrosive Scale",
+		desc: "This Pokemon has Marvel Scale's Defense boost. When this Pokemon poisons a target, that target becomes confused.",
+		shortDesc: "Marvel Scale; targets poisoned by this Pokemon become confused.",
+	},
+	corrosivedust: {
+		name: "Corrosive Dust",
+		desc: "Pokemon making contact with this Pokemon have a 30% chance to be poisoned. When this Pokemon poisons a target, that target becomes confused.",
+		shortDesc: "Contact has 30% poison chance; targets poisoned by this Pokemon become confused.",
+	},
+	sinofenvy: {
+		name: "Sin of Envy",
+		desc: "This Pokemon has No Guard, Bad Dreams, and Shadow Shield's effects.",
+		shortDesc: "No Guard + Bad Dreams + Shadow Shield.",
+	},
+	auroraresonance: {
+		name: "Aurora Resonance",
+		desc: "This Pokemon's sound-based moves have 1.2x power and become Water type. This Pokemon has Water Absorb's effect. If Rain is active, this Pokemon heals its status condition at the end of each turn.",
+		shortDesc: "Sound moves become Water and 1.2x; Water Absorb; cures status in rain.",
+	},
+	sinofgluttony: {
+		name: "Sin of Gluttony",
+		desc: "This Pokemon has Thick Fat, Gluttony, and Early Bird's effects.",
+		shortDesc: "Thick Fat + Gluttony + Early Bird.",
+	},
+	sinofpride: {
+		name: "Sin of Pride",
+		desc: "This Pokemon has Pressure and Unnerve's effects. In fields that boost Mirror Armor, this Pokemon reflects stat drops back at the source.",
+		shortDesc: "Pressure + Unnerve; Mirror Armor on boosted fields.",
+	},
+	sinofsloth: {
+		name: "Sin of Sloth",
+		desc: "This Pokemon has Prankster, Telepathy, and Frisk's effect, including Frisk's chance to Embargo opposing Pokemon.",
+		shortDesc: "Prankster + Telepathy + Frisk with Embargo chance.",
+	},
+	sinofgreed: {
+		name: "Sin of Greed",
+		desc: "This Pokemon has Heavy Metal, Filter, and Earth Eater's effects.",
+		shortDesc: "Heavy Metal + Filter + Earth Eater.",
+	},
+	sinofwrath: {
+		name: "Sin of Wrath",
+		desc: "This Pokemon has Ultra Ego and Scrappy's effects.",
+		shortDesc: "Ultra Ego + Scrappy.",
+	},
+	warship: {
+		name: "War Ship",
+		desc: "If Rain is active, this Pokemon's Speed is doubled. This Pokemon does not take recoil damage and ignores opposing stat boosts like Unaware.",
+		shortDesc: "Swift Swim + Rock Head + Unaware.",
+	},
+	furnaceengine: {
+		name: "Furnace Engine",
+		desc: "When this Pokemon is hit by a Water- or Fire-type move, its Speed is maximized. Water-type moves used against this Pokemon deal 0.5x damage. At the end of each turn, opposing Pokemon lose 1/16 max HP unless they are Fire, Rock, Ground, or airborne.",
+		shortDesc: "Hit by Water/Fire maxes Speed; 0.5x Water; chips vulnerable foes.",
+	},
+	deserttyrant: {
+		name: "Desert Tyrant",
+		desc: "On switch-in, this Pokemon summons Sandstorm. While Sandstorm is active, this Pokemon's Ground- and Rock-type moves have 1.2x power, Ground-type Pokemon have 1.5x Defense, and opposing Pokemon lose 1/16 max HP each turn unless they are Ground, Rock, Steel, or airborne.",
+		shortDesc: "Sets Sand; Ground/Rock 1.2x; Ground Def 1.5x; chips vulnerable foes.",
+	},
+	heatcoil: {
+		name: "Heat Coil",
+		desc: "At the end of each turn, this Pokemon's Speed rises by 1 stage. Contact moves used against this Pokemon deal 0.75x damage. If this Pokemon is hit by a contact move, the attacker loses 1/16 max HP.",
+		shortDesc: "+1 Speed each turn; 0.75x contact damage; contact attackers lose 1/16.",
+	},
+	sweetsanctuary: {
+		name: "Sweet Sanctuary",
+		desc: "This Pokemon has Friend Guard, Sweet Veil, and Aroma Veil's effects.",
+		shortDesc: "Friend Guard + Sweet Veil + Aroma Veil.",
+	},
+	riptideclaws: {
+		name: "Riptide Claws",
+		desc: "If Rain is active, this Pokemon's Speed is doubled. Its Water-type moves, slicing moves, and claw moves have 1.2x power. If this Pokemon hits a target with one of those moves during Rain, the target's Defense is lowered by 1 stage.",
+		shortDesc: "Swift Swim; Water/slicing/claw 1.2x; in rain these hits lower Defense.",
+	},
 	dryskin: {
 		name: "Dry Skin",
 		desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day. The weather effects are prevented if this Pokemon is holding a Utility Umbrella.",
@@ -2388,13 +2518,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "On switch-in, this Pokemon restores 25% of each adjacent ally's maximum HP. This Pokemon takes 0.5x damage from super-effective attacks. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. Its poison effects can affect Poison- and Steel-type Pokemon. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
-		shortDesc: "Heals allies; 0.5x SE damage; Grass 1.2x; 50% Effect Spore; field boosts.",
+		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. Its poison effects can affect Poison- and Steel-type Pokemon. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
+		shortDesc: "Heals self/allies 20%; takes 0.8x damage; Grass 1.2x; 50% Effect Spore.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. Its damaging attacks heal 1/16 max HP. When hit by a damaging move, it heals 1/10 max HP. This Pokemon takes 0.5x damage from super-effective attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
-		shortDesc: "Water 1.2x; heals; 0.5x SE damage; ally protection; field boosts.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. Its damaging attacks heal 1/16 max HP. When hit by a damaging move, it heals 1/10 max HP. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
+		shortDesc: "Water 1.2x; heals; takes 0.8x damage; ally protection; field boosts.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
@@ -2403,8 +2533,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	infernalpresence: {
 		name: "Infernal Presence",
-		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power. It takes 0.5x damage from super-effective attacks. Its Fire- and Dragon-type attacks ignore immunities and resistances, hitting neutrally. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
-		shortDesc: "Airborne; drops foes' Atk/SpA; Fire 1.2x; 0.5x SE; field boosts.",
+		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power and can hit through type immunities, but type effectiveness still applies. It takes 0.8x damage from attacks. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
+		shortDesc: "Airborne; drops foes' Atk/SpA; Fire 1.2x and ignores immunities; takes 0.8x damage.",
 	},
 	inversion: {
 		name: "Inversion",
