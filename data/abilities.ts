@@ -1180,13 +1180,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	defeatist: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
 				return this.chainModify(0.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
 				return this.chainModify(0.5);
 			}
 		},
@@ -1194,6 +1194,41 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Defeatist",
 		rating: -1,
 		num: 129,
+	},
+	ancientinstinct: {
+		onTryBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) return;
+			if (boost.atk && boost.atk < 0) delete boost.atk;
+			if (boost.spe && boost.spe < 0) delete boost.spe;
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (!target || target === source || move.category === 'Status') return;
+			if (!target.fainted) this.boost({ def: -1, spd: -1, spe: -1 }, source, source);
+		},
+		onMoveFail(target, source, move) {
+			if (move.category !== 'Status') this.damage(source.baseMaxhp / 4, source, source);
+		},
+		flags: { breakable: 1 },
+		name: "Ancient Instinct",
+		rating: 3,
+		num: 10064,
+	},
+	fossilfrenzy: {
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target) return;
+			this.boost({ atk: 1, spe: 1 }, target, target);
+			target.addVolatile('confusion', target, this.dex.abilities.get('fossilfrenzy'));
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect?.id === 'confused') {
+				this.damage(target.baseMaxhp / 8, target, target, this.dex.abilities.get('fossilfrenzy'));
+			}
+			if (source && source !== target && target.volatiles['confusion'] && effect?.effectType === 'Move') return this.chainModify(1.25);
+		},
+		flags: { breakable: 1 },
+		name: "Fossil Frenzy",
+		rating: 3.5,
+		num: 10065,
 	},
 	defiant: {
 		onAfterEachBoost(boost, target, source, effect) {
@@ -1531,6 +1566,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10042,
 	},
 	lastdraw: {
+		onModifyMove(move) {
+			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
+			if (arrowMoves.includes(move.id)) move.ignoreAbility = true;
+		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];

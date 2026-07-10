@@ -344,8 +344,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	defeatist: {
 		name: "Defeatist",
-		desc: "While this Pokemon has 1/2 or less of its maximum HP, its Attack and Special Attack are halved.",
-		shortDesc: "While this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
+		desc: "While this Pokemon has 1/4 or less of its maximum HP, its Attack and Special Attack are halved.",
+		shortDesc: "While this Pokemon has 1/4 or less of its max HP, its Attack and Sp. Atk are halved.",
+	},
+	ancientinstinct: {
+		name: "Ancient Instinct",
+		desc: "Opposing Pokemon cannot lower this Pokemon's Attack or Speed. If this Pokemon uses a damaging move and does not knock out the target, its Defense, Special Defense, and Speed are lowered by 1 stage. If this Pokemon misses a damaging move, it loses 1/4 of its maximum HP.",
+		shortDesc: "Foes cannot lower Atk/Spe; non-KO attacks drop Def/SpD/Spe; misses cost 1/4 HP.",
+	},
+	fossilfrenzy: {
+		name: "Fossil Frenzy",
+		desc: "When this Pokemon is hit by a damaging move, its Attack and Speed rise by 1 stage and it becomes confused. While confused, it takes 1.25x damage from attacks. This Pokemon has Klutz's effect. If it hits itself in confusion, it also loses 1/8 of its maximum HP.",
+		shortDesc: "Hit by attacks: +1 Atk/Spe and confusion; confused takes 1.25x; Klutz; self-hit costs 1/8.",
 	},
 	defiant: {
 		name: "Defiant",
@@ -424,8 +434,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lastdraw: {
 		name: "Last Draw",
-		desc: "This Pokemon's arrow moves have 1.2x power. If this Pokemon has 1/3 or less of its maximum HP, its arrow moves gain +1 priority. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
-		shortDesc: "Arrow moves 1.2x; at <=1/3 HP +1 priority; 1.5x vs trapped targets.",
+		desc: "This Pokemon's arrow moves ignore the target's Ability and have 1.2x power. If this Pokemon has 1/3 or less of its maximum HP, its arrow moves gain +1 priority. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
+		shortDesc: "Arrow moves ignore Abilities and are 1.2x; at <=1/3 HP +1 priority; 1.5x vs trapped.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",

@@ -2012,6 +2012,7 @@ export class Pokemon {
 			soultag: ['soulfire', 'shadowtag'],
 			deserttyrant: ['sandstream'],
 			riptideclaws: ['swiftswim'],
+			fossilfrenzy: ['klutz'],
 		};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id))) return false;
