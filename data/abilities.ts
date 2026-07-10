@@ -6536,7 +6536,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 220,
 	},
-	scopelock: {
+	highnoon: {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.movehasType(move, 'Water')) return this.chainModify(1.2);
@@ -6548,7 +6548,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target?.newlySwitched || !target?.moveThisTurnResult) return critRatio + 1;
 		},
 		flags: { breakable: 1 },
-		name: "Scope Lock",
+		name: "High Noon",
 		rating: 4.5,
 		num: 10028,
 	},

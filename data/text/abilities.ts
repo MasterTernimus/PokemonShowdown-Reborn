@@ -2571,8 +2571,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Ghost-type moves cannot hit Normal-type Pokemon, but otherwise ignore type resistances and hit neutrally. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
 		shortDesc: "Draws in and absorbs Fire/Ghost moves; +1 Atk/SpA. Ghost ignores resistances.",
 	},
-	scopelock: {
-		name: "Scope Lock",
+	highnoon: {
+		name: "High Noon",
 		desc: "This Pokemon's Water-type moves have 1.2x power. Its attacks cannot miss unless the target is in the semi-invulnerable turn of a move. Its moves have +1 critical hit ratio against targets that have not moved yet this turn.",
 		shortDesc: "Water moves 1.2x; attacks cannot miss; +1 crit vs targets that have not moved.",
 	},
