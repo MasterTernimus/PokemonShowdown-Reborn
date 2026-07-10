@@ -479,8 +479,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinofpride: {
 		name: "Sin of Pride",
-		desc: "This Pokemon has Pressure and Unnerve's effects. In fields that boost Mirror Armor, this Pokemon reflects stat drops back at the source.",
-		shortDesc: "Pressure + Unnerve; Mirror Armor on boosted fields.",
+		desc: "This Pokemon has Pressure, Unnerve, and Mirror Armor's effects. Field effects that boost or check for Mirror Armor also count this Ability as Mirror Armor.",
+		shortDesc: "Pressure + Unnerve + Mirror Armor; counts as Mirror Armor for field effects.",
 	},
 	sinofsloth: {
 		name: "Sin of Sloth",
