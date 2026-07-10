@@ -7456,7 +7456,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 84, atk: 86, def: 88, spa: 111, spd: 101, spe: 60 },
-		abilities: { 0: "Emperor's Resolve", 1: "Defiant", H: "Competitive" },
+		abilities: { 0: "Emperor's Resolve", 1: "Defiant", H: "Royal Decree" },
 		heightm: 1.7,
 		weightkg: 84.5,
 		color: "Blue",
