@@ -1993,11 +1993,28 @@ export class Pokemon {
 	}
 
 	hasAbility(ability: string | string[]) {
-		if (Array.isArray(ability)) {
-			if (!ability.map(toID).includes(this.ability)) return false;
-		} else {
-			if (toID(ability) !== this.ability) return false;
-		}
+		const abilityAliases: { [abilityid: string]: string[] } = {
+			sinofpride: ['pressure', 'unnerve', 'mirrorarmor'],
+			sinoflust: ['magicbounce', 'queenlymajesty', 'magicguard'],
+			sinofenvy: ['noguard', 'baddreams', 'shadowshield'],
+			sinofgluttony: ['thickfat', 'gluttony', 'earlybird'],
+			sinofsloth: ['prankster', 'telepathy', 'frisk'],
+			sinofgreed: ['heavymetal', 'filter', 'eartheater'],
+			sinofwrath: ['ultraego', 'scrappy'],
+			warship: ['swiftswim', 'rockhead', 'unaware'],
+			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil'],
+			auroraresonance: ['waterabsorb'],
+			wickedsnare: ['frisk'],
+			corrosivescale: ['marvelscale'],
+			astralwitchcraft: ['levitate', 'magicguard', 'magicbounce'],
+			ragingcurrent: ['swiftswim', 'damp'],
+			siegelauncher: ['stalwart'],
+			soultag: ['soulfire', 'shadowtag'],
+			deserttyrant: ['sandstream'],
+			riptideclaws: ['swiftswim'],
+		};
+		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
+		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id))) return false;
 		return !this.ignoringAbility();
 	}
 

@@ -1705,6 +1705,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Sin of Pride');
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.boost({ def: 1, spd: 1 }, pokemon);
+			}
+			if (this.field.isTerrain('mirrorarmor')) {
+				this.boost({ evasion: 1 }, pokemon);
+			}
 			this.effectState.unnerved = true;
 		},
 		onEnd() {
@@ -1720,14 +1726,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.isAlly(source)) return;
 			return 1;
 		},
+		onFoeTryMove(target, source, move) {
+			if (this.field.isTerrain('starlightarenaterrain')) {
+				const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+				if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+					return;
+				}
+				const prideHolder = this.effectState.target;
+				if ((source.isAlly(prideHolder) || move.target === 'all') && move.priority > 0.1) {
+					this.attrLastMove('[still]');
+					this.add('cant', prideHolder, 'ability: Sin of Pride', move, `[of] ${target}`);
+					return false;
+				}
+			}
+		},
 		onTryBoost(boost, target, source, effect) {
-			if (target === this.effectState.target || !source || target === source) return;
-			if (!this.field.isTerrain(['mirrorarenaterrain', 'factoryterrain', 'fairytaleterrain', 'newworldterrain', 'starlightarenaterrain'])) return;
+			if (!source || target === source || !boost || effect.name === 'Sin of Pride') return;
 			let b: BoostID;
 			for (b in boost) {
 				if (boost[b]! < 0) {
+					if (target.boosts[b] === -6) continue;
+					const negativeBoost: SparseBoostsTable = {};
+					negativeBoost[b] = boost[b];
 					delete boost[b];
-					this.boost({ [b]: -boost[b]! }, source, target, null, false, true);
+					if (source.hp) {
+						this.add('-ability', target, 'Sin of Pride');
+						this.boost(negativeBoost, source, target, null, true);
+					}
 				}
 			}
 		},
