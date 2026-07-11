@@ -2112,6 +2112,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.5);
 		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (!target || target === source || source.isAlly(target) || target.fainted) return;
+			if (move.id === 'futuresight' || move.flags['futuremove'] || move.callsMove) return;
+			if (!target.side.addSlotCondition(target, 'futuremove')) return;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				move: 'futuresight',
+				source,
+				moveData: {
+					id: 'futuresight',
+					name: "Future Sight",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+					ignoreImmunity: true,
+					effectType: 'Move',
+					type: 'Psychic',
+					onEffectiveness(typeMod: number) {
+						if (typeMod < 0) return 0;
+						return typeMod;
+					},
+				},
+				endingTurn: this.turn,
+			});
+			this.add('-start', source, 'move: Future Sight', '[from] ability: Perfect Foresight');
+		},
 		flags: { breakable: 1 },
 		name: "Perfect Foresight",
 		rating: 5,
