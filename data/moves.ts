@@ -6897,6 +6897,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					type: 'Psychic',
 				},
 			});
+			if (source.hasAbility('perfectforesight')) {
+				const futureMove = target.side.slotConditions[target.position]['futuremove'];
+				futureMove.endingTurn = this.turn;
+				futureMove.moveData.ignoreImmunity = true;
+				futureMove.moveData.onEffectiveness = function (typeMod) {
+					if (typeMod < 0) return 0;
+					return typeMod;
+				};
+			}
 			this.add('-start', source, 'move: Future Sight');
 			return this.NOT_FAIL;
 		},
@@ -22550,7 +22559,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 15,
 		basePowerCallback(pokemon, target, move) {
-			if (pokemon.species.name === 'Greninja-Ash' && pokemon.hasAbility('battlebond') &&
+			if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') &&
 				!pokemon.transformed) {
 				return 25;
 			}
@@ -22563,11 +22572,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [2, 5],
 		onModifyMove(move, pokemon) {
-			if (pokemon.species.name === 'Greninja-Ash' && pokemon.hasAbility('battlebond') && !pokemon.transformed) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+			if (pokemon.hasAbility('shadowcurrent')) {
+				move.multihit = 5;
+				move.willCrit = true;
+			} else if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed) {
 				move.multihit = 3;
 				move.willCrit = true;
 			}
 		},
+		tracksTarget: true,
 		target: "normal",
 		type: "Water",
 		contestType: "Cool",

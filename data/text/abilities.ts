@@ -439,8 +439,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
-		desc: "On switch-in, this Pokemon reveals opposing held items and has a 30% chance to Embargo each revealed foe. Pokemon making contact with this Pokemon have their Speed lowered by 1 stage. This Pokemon deals 1.5x damage to targets that switched in this turn.",
-		shortDesc: "Frisk + Embargo chance; contact lowers Speed; 1.5x vs switched-in targets.",
+		desc: "This Pokemon has Stakeout's effect. Opposing Pokemon that switch in have their Speed lowered by 1 stage. If this Pokemon knocks out a Pokemon that switched in this turn, it restores 1/4 of its maximum HP. Targets hit by this Pokemon become affected by Taunt.",
+		shortDesc: "Stakeout; switch-ins lose Speed; KO on switched-in target heals 1/4; hits Taunt.",
 	},
 	crumblingshell: {
 		name: "Crumbling Shell",
@@ -474,8 +474,118 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinofenvy: {
 		name: "Sin of Envy",
-		desc: "This Pokemon has No Guard, Bad Dreams, and Shadow Shield's effects.",
-		shortDesc: "No Guard + Bad Dreams + Shadow Shield.",
+		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/2 of its maximum HP, attacks deal 0.5x damage to it. When this Pokemon hits an enemy with an attack or status move, the target becomes cursed. Damage dealt by that Curse heals this Pokemon. If this Pokemon causes an opposing Pokemon to faint, it restores 1/4 of its maximum HP.",
+		shortDesc: "User's moves don't miss; above 1/2 HP takes 0.5x; hits Curse; Curse damage heals.",
+	},
+	alloycore: {
+		name: "Alloy Core",
+		desc: "This Pokemon can only be damaged by direct attacks and cannot have its stats lowered by opposing Pokemon. This Pokemon's moves ignore Substitute, Reflect, Light Screen, and Aurora Veil.",
+		shortDesc: "Magic Guard + Clear Body; moves ignore Substitute and screens.",
+	},
+	hellfireeclipse: {
+		name: "Hellfire Eclipse",
+		desc: "During harsh sunlight, this Pokemon's Attack and Special Attack are multiplied by 1.5. Its Fire-type moves ignore Fire immunities and resistances, and end weather other than Sun. If this Pokemon knocks out a target during harsh sunlight, the sunlight is extended by 1 turn.",
+		shortDesc: "In Sun: Atk/SpA 1.5x; Fire ignores Fire immunity/resists and clears other weather.",
+	},
+	sacrededge: {
+		name: "Sacred Edge",
+		desc: "This Pokemon has Sharpness and Inner Focus's effects. Its Fighting- and Psychic-type moves have 1.2x power. Its slicing moves ignore Substitute, Reflect, Light Screen, and Aurora Veil.",
+		shortDesc: "Sharpness + Inner Focus; Fighting/Psychic 1.2x; slicing moves ignore screens/Substitute.",
+	},
+	omenedge: {
+		name: "Omen Edge",
+		desc: "This Pokemon has Sharpness's effect. Its slicing moves have +1 critical hit ratio, and its critical hits deal 1.5x more damage like Sniper.",
+		shortDesc: "Sharpness; slicing moves +1 crit; critical hits are stronger.",
+	},
+	dreadmaw: {
+		name: "Dread Maw",
+		desc: "This Pokemon has Huge Power and Strong Jaw's effects.",
+		shortDesc: "Huge Power + Strong Jaw.",
+	},
+	cursedmarionette: {
+		name: "Cursed Marionette",
+		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon takes 0.5x damage from attacks.",
+		shortDesc: "Status moves +1 priority; status moves Curse foes; takes 0.5x attack damage.",
+	},
+	sandsovereign: {
+		name: "Sand Sovereign",
+		desc: "On switch-in, this Pokemon summons Sandstorm. During Sandstorm, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Rock, non-Ground, and non-Steel Pokemon lose 1/16 max HP, and opposing Pokemon that are not those types have their Speed lowered by 1 stage.",
+		shortDesc: "Sets Sand; in Sand moves 1.2x and takes 0.7x; chips and slows vulnerable foes.",
+	},
+	frostsovereign: {
+		name: "Frost Sovereign",
+		desc: "On switch-in, this Pokemon summons Hail. During Hail, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP, and opposing non-Ice Pokemon have their Speed lowered by 1 stage.",
+		shortDesc: "Sets Hail; in Hail moves 1.2x and takes 0.7x; chips and slows non-Ice foes.",
+	},
+	stormfright: {
+		name: "Storm Fright",
+		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by one. On Electric Terrain or during Rain, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "Intimidate + Lightning Rod; SpA 1.5x on Electric Terrain or in Rain.",
+	},
+	enlightenment: {
+		name: "Enlightenment",
+		desc: "This Pokemon's Attack is doubled and it has Inner Focus's effect. Its contact moves ignore Abilities. If this Pokemon hits a target with a damaging move and the target does not faint, this Pokemon restores 1/4 of its maximum HP.",
+		shortDesc: "Pure Power + Inner Focus; contact ignores Abilities; non-KO hits heal 1/4.",
+	},
+	relentlesslink: {
+		name: "Relentless Link",
+		desc: "This Pokemon has Skill Link, Guts, and Shield Dust's effects.",
+		shortDesc: "Skill Link + Guts + Shield Dust.",
+	},
+	nightmarecage: {
+		name: "Nightmare Cage",
+		desc: "Opposing adjacent Pokemon cannot switch out while this Pokemon is active. Trapped Pokemon deal 0.75x damage. If a trapped Pokemon faints from this Pokemon's move, this Pokemon restores 1/4 of its maximum HP.",
+		shortDesc: "Shadow Tag; trapped foes deal 0.75x; KO heals 1/4.",
+	},
+	mirrorgreed: {
+		name: "Mirror Greed",
+		desc: "This Pokemon has Magic Bounce and Cursed Body's effects. When this Pokemon reflects a move, it restores 1/8 of its maximum HP and lowers the original user's higher attacking stat by 1 stage.",
+		shortDesc: "Magic Bounce + Cursed Body; reflected moves heal 1/8 and lower foe's higher offense.",
+	},
+	uncheckedassault: {
+		name: "Unchecked Assault",
+		desc: "This Pokemon has Scrappy, Striker, and Opportunist's effects. Its kicking moves have 1.3x power.",
+		shortDesc: "Scrappy + Striker + Opportunist; kicking moves 1.3x.",
+	},
+	empatheticresonance: {
+		name: "Empathetic Resonance",
+		desc: "This Pokemon has Pixilate and Friend Guard's effects. Its Psychic- and Fairy-type moves have 1.2x power. If this Pokemon knocks out a target with a move, adjacent allies restore 1/8 of their maximum HP.",
+		shortDesc: "Pixilate + Friend Guard; Psychic/Fairy 1.2x; KO heals adjacent allies 1/8.",
+	},
+	perfectforesight: {
+		name: "Perfect Foresight",
+		desc: "On switch-in, this Pokemon identifies the Ability of the opposing Pokemon with the highest offensive stat. Attacks deal 0.5x damage to this Pokemon. Future Sight used by this Pokemon activates after 1 turn and ignores Dark-type immunity and resistances.",
+		shortDesc: "Scouts strongest foe's Ability; takes 0.5x; Future Sight is fast and ignores Dark/resists.",
+	},
+	heavenlychorus: {
+		name: "Heavenly Chorus",
+		desc: "This Pokemon has Pixilate's effect. When it uses a Fairy-type move, it restores 1/16 of its maximum HP and cures adjacent allies' status conditions. Once per switch-in, if this Pokemon would be knocked out from above 1/2 HP, it survives with 1 HP and its next move has +1 priority.",
+		shortDesc: "Pixilate; Fairy moves heal 1/16 and cure allies; once survives from >1/2 HP, next move +1.",
+	},
+	mourningsnow: {
+		name: "Mourning Snow",
+		desc: "On switch-in, this Pokemon summons Hail. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon can become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/4 of its maximum HP.",
+		shortDesc: "Sets Hail; Ice Body; Hail can frostbite foes; foe faint in Hail heals 1/4.",
+	},
+	venombastion: {
+		name: "Venom Bastion",
+		desc: "This Pokemon cannot be critically hit. Pokemon making contact with this Pokemon become poisoned. If an opposing Pokemon is poisoned, this Pokemon restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "No crits; contact poisons; heals 1/16 each turn if an opposing Pokemon is poisoned.",
+	},
+	avalanchebruiser: {
+		name: "Avalanche Bruiser",
+		desc: "This Pokemon has Iron Fist's effect. Attacks from faster Pokemon deal 0.5x damage to this Pokemon. This Pokemon's punching moves ignore Substitute, Reflect, Light Screen, Aurora Veil, and Abilities. If this Pokemon knocks out a target, it restores 1/4 of its maximum HP.",
+		shortDesc: "Iron Fist; faster attackers deal 0.5x; punching moves pierce; KO heals 1/4.",
+	},
+	streettyrant: {
+		name: "Street Tyrant",
+		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage and become affected by Taunt. This Pokemon's moves ignore Abilities. When this Pokemon lowers a target's stat, that target becomes affected by Taunt. Taunted Pokemon deal 0.75x damage to this Pokemon. If this Pokemon knocks out a taunted target, it restores 1/4 of its maximum HP. This Pokemon has Shed Skin's effect.",
+		shortDesc: "Intimidate + Mold Breaker + Shed Skin; stat drops Taunt; taunted foes deal 0.75x; KO heals.",
+	},
+	divineintervention: {
+		name: "Divine Intervention",
+		desc: "This Pokemon has Triage, Friend Guard, and Regenerator's effects.",
+		shortDesc: "Triage + Friend Guard + Regenerator.",
 	},
 	auroraresonance: {
 		name: "Aurora Resonance",
@@ -1912,8 +2022,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. On Chess Field, this Pokemon's Defense and Special Defense are 1.5x. On Fairy Tale Field, it raises Defense or Special Defense by 1 stage for each opposing Pokemon based on that foe's higher attacking stat after clearing boosts.",
-		shortDesc: "On switch-in, resets stat stages and removes screens.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 2 stages.",
+		shortDesc: "Switch-in Haze + screen clear; boosted fields give +2 Def/SpD.",
 	},
 	parasitism: {
 		name: "Parasitism",
@@ -2603,8 +2713,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "This Pokemon's moves ignore abilities, it cannot flinch, and it blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, damage is reduced by 25%. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 75% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena.",
-		shortDesc: "Fast attacks 1.5x; pre-move hits reduced. Stronger on key fields.",
+		desc: "This Pokemon's moves ignore abilities, bypass Substitute, Reflect, Light Screen, and Aurora Veil, and charge moves fire immediately. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, damage is reduced by 25%. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 75% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena.",
+		shortDesc: "Moves ignore abilities/screens and charge instantly. Fast attacks 1.5x; pre-move hits reduced.",
 	},
 
 	// CAP
