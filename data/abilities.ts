@@ -1646,7 +1646,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!target || target === source || source.isAlly(target) || target.fainted) return;
-			target.addVolatile('taunt', source, this.dex.abilities.get('wickedsnare'));
+			target.addVolatile('torment', source, this.dex.abilities.get('wickedsnare'));
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType === 'Move' && target?.newlySwitched) this.heal(source.baseMaxhp / 4, source, source);
@@ -2248,23 +2248,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				this.boost({ atk: -1 }, target, pokemon, null, true);
-				target.addVolatile('taunt', pokemon, this.dex.abilities.get('streettyrant'));
 			}
-		},
-		onAnyAfterBoost(boost, target, source, effect) {
-			if (source !== this.effectState.target || !target || target === source || source.isAlly(target)) return;
-			let lowered = false;
-			let i: BoostID;
-			for (i in boost) {
-				if (boost[i]! < 0) lowered = true;
-			}
-			if (lowered) target.addVolatile('taunt', source, this.dex.abilities.get('streettyrant'));
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (source.volatiles['taunt']) return this.chainModify(0.75);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (target?.volatiles['taunt']) this.heal(source.baseMaxhp / 4, source, source);
+			if (effect?.effectType === 'Move') this.boost({ atk: 1 }, source, source);
+		},
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
 		flags: { breakable: 1 },
 		name: "Street Tyrant",
