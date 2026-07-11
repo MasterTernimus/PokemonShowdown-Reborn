@@ -7319,7 +7319,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (this.field.isTerrain(['fairytaleterrain', 'chessboardterrain', 'newworldterrain', 'starlightarenaterrain'])) {
-				this.boost({ def: 2, spd: 2 }, pokemon, pokemon);
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
 		},
 		onModifyDef(def, pokemon) {

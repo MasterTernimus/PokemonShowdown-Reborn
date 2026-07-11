@@ -7696,7 +7696,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
-					pokemon.addVolatile('confusion', source);
+					if (this.randomChance(3, 10)) pokemon.addVolatile('confusion', source);
 				}
 			},
 		},
@@ -7717,12 +7717,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isMax: "Grimmsnarl",
 		onHit(target) {
 			if (target.status || !target.runStatusImmunity('slp')) return;
-			if (this.randomChance(1, 2)) return;
+			if (!this.randomChance(3, 10)) return;
 			target.addVolatile('yawn');
 		},
 		onAfterSubDamage(damage, target) {
 			if (target.status || !target.runStatusImmunity('slp')) return;
-			if (this.randomChance(1, 2)) return;
+			if (!this.randomChance(3, 10)) return;
 			target.addVolatile('yawn');
 		},
 		target: "adjacentFoe",
