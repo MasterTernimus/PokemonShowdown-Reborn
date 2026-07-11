@@ -2701,6 +2701,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Normal-type moves become Steel-type moves and have their power multiplied by 1.2. On Factory, Short Circuit, Fairy Tale, Dragon's Den, Starlight Arena, New World, and Holy Field, the boost is 1.5x. On Cold Eclipse, it does not gain Ice subtyping.",
 		shortDesc: "Normal moves become Steel; 1.2x, or 1.5x on matching fields.",
 	},
+	ironcognition: {
+		name: "Iron Cognition",
+		desc: "This Pokemon's damaging moves have 1.3x power. Its stats cannot be lowered by opposing Pokemon. If this Pokemon knocks out another Pokemon with a move, it restores 1/5 of its maximum HP.",
+		shortDesc: "Damaging moves 1.3x; stats cannot be lowered; KO heals 1/5.",
+	},
 	neutralization: {
 		name: "Neutralization",
 		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. While active, terrain effects are suppressed and field changes are neutralized.",
@@ -2725,6 +2730,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Soul Fire",
 		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Ghost-type moves cannot hit Normal-type Pokemon, but otherwise ignore type resistances and hit neutrally. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
 		shortDesc: "Draws in and absorbs Fire/Ghost moves; +1 Atk/SpA. Ghost ignores resistances.",
+	},
+	stormsovereign: {
+		name: "Storm Sovereign",
+		desc: "This Pokemon's moves cannot miss. Its Flying-type and wind-based moves have 1.2x power. Its wind-based moves ignore Substitute, Light Screen, and Aurora Veil.",
+		shortDesc: "Moves cannot miss; Flying/wind moves 1.2x; wind bypasses Sub/screens.",
 	},
 	highnoon: {
 		name: "High Noon",
