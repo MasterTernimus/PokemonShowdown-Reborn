@@ -2022,8 +2022,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 2 stages.",
-		shortDesc: "Switch-in Haze + screen clear; boosted fields give +2 Def/SpD.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
+		shortDesc: "Switch-in Haze + screen clear; boosted fields give +1 Def/SpD.",
 	},
 	parasitism: {
 		name: "Parasitism",

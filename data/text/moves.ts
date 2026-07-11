@@ -2617,13 +2617,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxsmite: {
 		name: "G-Max Smite",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes confused, even if they have a substitute.",
-		shortDesc: "Base move affects power. Foes: confused.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side has a 30% chance to become confused, even if they have a substitute.",
+		shortDesc: "Base move affects power. Foes: 30% confusion.",
 	},
 	gmaxsnooze: {
 		name: "G-Max Snooze",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 50% chance the effect of Yawn begins on the target, even if it has a substitute.",
-		shortDesc: "Base move affects power. Target: 50% Yawn.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 30% chance the effect of Yawn begins on the target, even if it has a substitute.",
+		shortDesc: "Base move affects power. Target: 30% Yawn.",
 	},
 	gmaxsteelsurge: {
 		name: "G-Max Steelsurge",
