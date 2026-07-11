@@ -439,8 +439,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
-		desc: "This Pokemon has Stakeout's effect. Opposing Pokemon that switch in have their Speed lowered by 1 stage. If this Pokemon knocks out a Pokemon that switched in this turn, it restores 1/4 of its maximum HP. Targets hit by this Pokemon become affected by Taunt.",
-		shortDesc: "Stakeout; switch-ins lose Speed; KO on switched-in target heals 1/4; hits Taunt.",
+		desc: "This Pokemon has Stakeout's effect. Opposing Pokemon that switch in have their Speed lowered by 1 stage. If this Pokemon knocks out a Pokemon that switched in this turn, it restores 1/4 of its maximum HP. Targets hit by this Pokemon become affected by Torment.",
+		shortDesc: "Stakeout; switch-ins lose Speed; KO on switched-in target heals 1/4; hits Torment.",
 	},
 	crumblingshell: {
 		name: "Crumbling Shell",
@@ -579,8 +579,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	streettyrant: {
 		name: "Street Tyrant",
-		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage and become affected by Taunt. When this Pokemon lowers a target's stat, that target becomes affected by Taunt. Taunted Pokemon deal 0.75x damage to this Pokemon. If this Pokemon knocks out a taunted target, it restores 1/4 of its maximum HP.",
-		shortDesc: "Intimidate; stat drops Taunt; taunted foes deal 0.75x; KO heals.",
+		desc: "This Pokemon has Intimidate, Regenerator, and Moxie's effects.",
+		shortDesc: "Intimidate + Regenerator + Moxie.",
 	},
 	divineintervention: {
 		name: "Divine Intervention",
