@@ -432,10 +432,45 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "When this Pokemon's stats are lowered, its Attack rises by 1 stage. If either of its defensive stats is lowered, it takes 0.75x damage from attacks. It restores 1/16 of its maximum HP at the end of each turn.",
 		shortDesc: "Stat drops give +1 Atk; if Def/SpD lowered, takes 0.75x; heals 1/16 each turn.",
 	},
-	lastdraw: {
-		name: "Last Draw",
+	fallenstar: {
+		name: "Fallen Star",
 		desc: "This Pokemon's arrow moves ignore the target's Ability and have 1.2x power. If this Pokemon has 1/3 or less of its maximum HP, its arrow moves gain +1 priority. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
 		shortDesc: "Arrow moves ignore Abilities and are 1.2x; at <=1/3 HP +1 priority; 1.5x vs trapped.",
+	},
+	eclipse: {
+		name: "Eclipse",
+		desc: "During weather, this Pokemon's attacks deal 1.5x damage. In clear weather, attacks deal 0.5x damage to this Pokemon. Its Psychic- and Dark-type moves hit neutrally, and it restores 1/4 max HP instead of taking damage from Psychic- or Dark-type moves.",
+		shortDesc: "In weather attacks 1.5x; clear weather takes 0.5x; absorbs Psychic/Dark.",
+	},
+	ragingstorm: {
+		name: "Raging Storm",
+		desc: "This Pokemon's attacks have Mold Breaker, ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. Slicing moves clear the target's positive stat changes. If this Pokemon gets a KO, it damages remaining foes for 25% of the last damage in multi battles, or raises Attack by 1 in singles.",
+		shortDesc: "Mold Breaker; attacks ignore screens/boosts; slicing clears positives; KO bonus.",
+	},
+	vanguard: {
+		name: "Vanguard",
+		desc: "Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. Once per battle, it endures a KO, heals toward 50%, and its next Extreme Speed is a critical hit.",
+		shortDesc: "Extreme Speed 1.5x, may become Fire; guards after use; once endures KO.",
+	},
+	royalcurrent: {
+		name: "Royal Current",
+		desc: "This Pokemon has Marvel Scale and Sniper's effects. During Rain, its moves have +1 critical hit ratio. When it lands a critical hit, its Speed rises by 1 stage.",
+		shortDesc: "Marvel Scale + Sniper; Rain gives +1 crit; crits raise Speed.",
+	},
+	grandmaster: {
+		name: "Grandmaster",
+		desc: "This Pokemon cannot flinch. After it uses Miracle Eye, it resists Dark-type moves. If it uses a status move, it takes 0.25x damage for the rest of the turn. If it moves before the target, its Psychic-type moves ignore resistances.",
+		shortDesc: "No flinch; Miracle Eye gives Dark resist; status moves guard; fast Psychic ignores resists.",
+	},
+	warpath: {
+		name: "War Path",
+		desc: "This Pokemon's Attack cannot be lowered, and its Attack is 1.5x while statused. When hit by a damaging move, its Attack rises by 1. Its Rock-, Fighting-, and Ground-type moves ignore Reflect, Light Screen, Aurora Veil, and defensive boosts. It cannot flinch, takes 0.75x damage from attacks, and ignores stat increases.",
+		shortDesc: "Atk can't drop; status Atk 1.5x; hit +1 Atk; STABs ignore screens/boosts; takes 0.75x.",
+	},
+	atrocity: {
+		name: "Atrocity",
+		desc: "When this Pokemon is hit by a damaging move, its Attack rises by 1 stage and it heals 1/10 max HP. It heals 30% of the damage it deals with attacks. Its attacks ignore Abilities, and this Pokemon cannot flinch.",
+		shortDesc: "Hit: +1 Atk and heal 1/10. Heals 30% damage dealt; ignores Abilities; no flinch.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -459,8 +494,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinoflust: {
 		name: "Sin of Lust",
-		desc: "This Pokemon has Magic Bounce, Queenly Majesty, and Magic Guard's effects.",
-		shortDesc: "Magic Bounce + Queenly Majesty + Magic Guard.",
+		desc: "This Pokemon has Magic Bounce and Queenly Majesty's effects.",
+		shortDesc: "Magic Bounce + Queenly Majesty.",
 	},
 	corrosivescale: {
 		name: "Corrosive Scale",
@@ -484,13 +519,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hellfireeclipse: {
 		name: "Hellfire Eclipse",
-		desc: "During harsh sunlight, this Pokemon's Attack and Special Attack are multiplied by 1.5. Its Fire-type moves ignore Fire immunities and resistances, and end weather other than Sun. If this Pokemon knocks out a target during harsh sunlight, the sunlight is extended by 1 turn.",
-		shortDesc: "In Sun: Atk/SpA 1.5x; Fire ignores Fire immunity/resists and clears other weather.",
+		desc: "During harsh sunlight, this Pokemon's Attack and Special Attack are multiplied by 1.5. Its Fire-type moves ignore Fire immunities and resistances. After this Pokemon uses a Fire-type move, it sets Sunny Day for 2 turns.",
+		shortDesc: "In Sun: Atk/SpA 1.5x; Fire ignores immunity/resists; Fire moves set 2-turn Sun.",
 	},
 	sacrededge: {
 		name: "Sacred Edge",
-		desc: "This Pokemon has Sharpness and Inner Focus's effects. Its Fighting- and Psychic-type moves have 1.2x power. Its slicing moves ignore Substitute, Reflect, Light Screen, and Aurora Veil.",
-		shortDesc: "Sharpness + Inner Focus; Fighting/Psychic 1.2x; slicing moves ignore screens/Substitute.",
+		desc: "This Pokemon has Sharpness's effect. Its slicing moves ignore Substitute, Reflect, Light Screen, and Aurora Veil.",
+		shortDesc: "Sharpness; slicing moves ignore screens/Substitute.",
 	},
 	omenedge: {
 		name: "Omen Edge",
@@ -509,23 +544,23 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
-		desc: "On switch-in, this Pokemon summons Sandstorm. During Sandstorm, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Rock, non-Ground, and non-Steel Pokemon lose 1/16 max HP, and opposing Pokemon that are not those types have their Speed lowered by 1 stage.",
-		shortDesc: "Sets Sand; in Sand moves 1.2x and takes 0.7x; chips and slows vulnerable foes.",
+		desc: "On switch-in, this Pokemon summons Sandstorm. During Sandstorm, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Rock, non-Ground, and non-Steel Pokemon lose 1/16 max HP.",
+		shortDesc: "Sets Sand; in Sand moves 1.2x and takes 0.7x; chips vulnerable Pokemon.",
 	},
 	frostsovereign: {
 		name: "Frost Sovereign",
-		desc: "On switch-in, this Pokemon summons Hail. During Hail, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP, and opposing non-Ice Pokemon have their Speed lowered by 1 stage.",
-		shortDesc: "Sets Hail; in Hail moves 1.2x and takes 0.7x; chips and slows non-Ice foes.",
+		desc: "On switch-in, this Pokemon summons Hail. During Hail, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP. During Cold Eclipse, it also has Snow Warning's 100% Cursed Body effect.",
+		shortDesc: "Sets Hail; in Hail moves 1.2x and takes 0.7x; Cold Eclipse Snow Warning effect.",
 	},
 	stormfright: {
 		name: "Storm Fright",
-		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by one. On Electric Terrain or during Rain, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "Intimidate + Lightning Rod; SpA 1.5x on Electric Terrain or in Rain.",
+		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by one.",
+		shortDesc: "Intimidate + Lightning Rod.",
 	},
 	enlightenment: {
 		name: "Enlightenment",
-		desc: "This Pokemon's Attack is doubled and it has Inner Focus's effect. Its contact moves ignore Abilities. If this Pokemon hits a target with a damaging move and the target does not faint, this Pokemon restores 1/4 of its maximum HP.",
-		shortDesc: "Pure Power + Inner Focus; contact ignores Abilities; non-KO hits heal 1/4.",
+		desc: "This Pokemon's Attack is doubled. Its contact moves ignore Abilities. If this Pokemon hits a target with a damaging move and the target does not faint, this Pokemon restores 1/4 of its maximum HP.",
+		shortDesc: "Pure Power; contact ignores Abilities; non-KO hits heal 1/4.",
 	},
 	relentlesslink: {
 		name: "Relentless Link",
@@ -559,13 +594,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heavenlychorus: {
 		name: "Heavenly Chorus",
-		desc: "This Pokemon has Pixilate's effect. When it uses a Fairy-type move, it restores 1/16 of its maximum HP and cures adjacent allies' status conditions. Once per switch-in, if this Pokemon would be knocked out from above 1/2 HP, it survives with 1 HP and its next move has +1 priority.",
-		shortDesc: "Pixilate; Fairy moves heal 1/16 and cure allies; once survives from >1/2 HP, next move +1.",
+		desc: "This Pokemon has Pixilate and Cloud Nine's effects. When it uses a Fairy-type move, it restores 1/16 of its maximum HP and cures adjacent allies' status conditions.",
+		shortDesc: "Pixilate + Cloud Nine; Fairy moves heal 1/16 and cure allies.",
 	},
 	mourningsnow: {
 		name: "Mourning Snow",
-		desc: "On switch-in, this Pokemon summons Hail. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon can become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/4 of its maximum HP.",
-		shortDesc: "Sets Hail; Ice Body; Hail can frostbite foes; foe faint in Hail heals 1/4.",
+		desc: "On switch-in, this Pokemon summons Hail. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon can become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/4 of its maximum HP. During Cold Eclipse, it also has Snow Warning's 100% Cursed Body effect.",
+		shortDesc: "Sets Hail; Ice Body; Hail can frostbite; Cold Eclipse Snow Warning effect.",
 	},
 	venombastion: {
 		name: "Venom Bastion",
@@ -579,13 +614,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	streettyrant: {
 		name: "Street Tyrant",
-		desc: "This Pokemon has Intimidate, Regenerator, and Moxie's effects.",
-		shortDesc: "Intimidate + Regenerator + Moxie.",
+		desc: "This Pokemon has Intimidate and Regenerator's effects.",
+		shortDesc: "Intimidate + Regenerator.",
 	},
 	divineintervention: {
 		name: "Divine Intervention",
-		desc: "This Pokemon has Triage, Friend Guard, and Regenerator's effects.",
-		shortDesc: "Triage + Friend Guard + Regenerator.",
+		desc: "This Pokemon has Friend Guard and Regenerator's effects.",
+		shortDesc: "Friend Guard + Regenerator.",
 	},
 	auroraresonance: {
 		name: "Aurora Resonance",
@@ -2022,8 +2057,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
-		shortDesc: "Switch-in Haze + screen clear; boosted fields give +1 Def/SpD.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, non-field stat changes fail. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
+		shortDesc: "Switch-in Haze + screen clear; blocks non-field stat changes; boosted fields +1 Def/SpD.",
 	},
 	parasitism: {
 		name: "Parasitism",
@@ -2708,8 +2743,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. Its damaging attacks heal 1/10 max HP. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/16 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/4 max HP.",
-		shortDesc: "Mold Breaker; attacks heal 1/10; enemy hits boost Atk/SpA and heal 1/16.",
+		desc: "This Pokemon's moves ignore abilities. Its damaging attacks heal 1/16 max HP. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/16 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/12 max HP.",
+		shortDesc: "Mold Breaker; attacks heal 1/16; enemy hits boost Atk/SpA and heal 1/16.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
