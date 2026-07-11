@@ -2514,7 +2514,7 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 		name: "Greninja-Bond",
 	},
 	greninjaash: {
-		name: "Greninja-Ash",
+		name: "Bond-Greninja",
 	},
 	bunnelby: {
 		name: "Bunnelby",

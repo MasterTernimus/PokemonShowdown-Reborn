@@ -733,7 +733,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onImmunity(type, pokemon) {
 				const immuneHail = ['fullmetalbody', 'illusion', 'prismarmor', 'shadowshield', 'darkaura', 'duskilate', 'ironclad'];
-				if (type === 'hail' && pokemon.hasAbility(immuneHail)) {
+				if (type === 'hail' && (pokemon.hasType('Dragon') || pokemon.hasAbility(immuneHail))) {
 					return false;
 				}
 			},
