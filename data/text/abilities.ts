@@ -579,8 +579,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	streettyrant: {
 		name: "Street Tyrant",
-		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage and become affected by Taunt. This Pokemon's moves ignore Abilities. When this Pokemon lowers a target's stat, that target becomes affected by Taunt. Taunted Pokemon deal 0.75x damage to this Pokemon. If this Pokemon knocks out a taunted target, it restores 1/4 of its maximum HP. This Pokemon has Shed Skin's effect.",
-		shortDesc: "Intimidate + Mold Breaker + Shed Skin; stat drops Taunt; taunted foes deal 0.75x; KO heals.",
+		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage and become affected by Taunt. When this Pokemon lowers a target's stat, that target becomes affected by Taunt. Taunted Pokemon deal 0.75x damage to this Pokemon. If this Pokemon knocks out a taunted target, it restores 1/4 of its maximum HP.",
+		shortDesc: "Intimidate; stat drops Taunt; taunted foes deal 0.75x; KO heals.",
 	},
 	divineintervention: {
 		name: "Divine Intervention",

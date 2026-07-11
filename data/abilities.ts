@@ -2224,9 +2224,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('taunt', pokemon, this.dex.abilities.get('streettyrant'));
 			}
 		},
-		onModifyMove(move) {
-			move.ignoreAbility = true;
-		},
 		onAnyAfterBoost(boost, target, source, effect) {
 			if (source !== this.effectState.target || !target || target === source || source.isAlly(target)) return;
 			let lowered = false;
@@ -2241,11 +2238,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (target?.volatiles['taunt']) this.heal(source.baseMaxhp / 4, source, source);
-		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			if (pokemon.hp && pokemon.status && this.randomChance(33, 100)) pokemon.cureStatus();
 		},
 		flags: { breakable: 1 },
 		name: "Street Tyrant",
