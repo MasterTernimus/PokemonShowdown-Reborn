@@ -8812,7 +8812,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ice", "Ghost"],
 		gender: "F",
 		baseStats: { hp: 70, atk: 80, def: 70, spa: 140, spd: 100, spe: 120 },
-		abilities: { 0: "Snow Warning" },
+		abilities: { 0: "Mourning Snow" },
 		heightm: 2.6,
 		weightkg: 29.6,
 		color: "White",
