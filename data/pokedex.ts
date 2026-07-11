@@ -12267,7 +12267,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	greninjaash: {
 		num: 658,
-		name: "Bond-Greninja",
+		name: "Greninja-Ash",
 		baseSpecies: "Greninja",
 		forme: "Ash",
 		types: ["Water", "Dark"],

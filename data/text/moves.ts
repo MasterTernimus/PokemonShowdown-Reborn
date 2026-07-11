@@ -4201,8 +4201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	miracleeye: {
 		name: "Miracle Eye",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
-		shortDesc: "Psychic hits Dark. Evasiveness ignored.",
+		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type. On Psychic Terrain, Fairy Tale Field, and Holy Field, the user's Special Attack rises by 2 stages. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
+		shortDesc: "Psychic hits Dark. Evasiveness ignored. On some fields, user gets +2 SpA.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type.",
 		},

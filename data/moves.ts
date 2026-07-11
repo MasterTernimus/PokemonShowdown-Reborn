@@ -12816,9 +12816,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTryHit(target) {
 			if (target.volatiles['foresight']) return false;
 		},
-		onHit() {
+		onHit(target, source) {
 			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('holyterrain')) {
-				this.boost({ spa: 2 });
+				this.boost({ spa: 2 }, source, source);
 			}
 		},
 		condition: {
