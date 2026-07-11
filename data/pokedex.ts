@@ -8732,7 +8732,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Gallade",
 		types: ["Psychic", "Fighting"],
 		gender: "M",
-		baseStats: { hp: 68, atk: 125, def: 65, spa: 55, spd: 115, spe: 90 },
+		baseStats: { hp: 68, atk: 125, def: 65, spa: 55, spd: 115, spe: 110 },
 		abilities: { 0: "Steadfast", 1: "Sharpness", H: "Battle Fervor" },
 		heightm: 1.6,
 		weightkg: 52,
