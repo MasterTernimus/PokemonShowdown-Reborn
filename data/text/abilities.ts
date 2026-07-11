@@ -469,8 +469,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "When this Pokemon is hit by a damaging move, its Attack rises by 1 stage and it heals 1/10 max HP. It heals 30% of the damage it deals with attacks. Its attacks ignore Abilities, and this Pokemon cannot flinch.",
-		shortDesc: "Hit: +1 Atk and heal 1/10. Heals 30% damage dealt; ignores Abilities; no flinch.",
+		desc: "When this Pokemon is hit by a damaging move, its Attack rises by 1 stage and it heals 1/10 max HP. Its Defense and Special Defense are 1.3x, and its Physical moves have 1.3x power. Its moves have +1 critical hit ratio. It heals 30% of the damage it deals with attacks, and this Pokemon cannot flinch.",
+		shortDesc: "Hit: +1 Atk/heal 1/10. Physical 1.3x; drains 30%; no flinch.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -634,8 +634,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinofpride: {
 		name: "Sin of Pride",
-		desc: "This Pokemon has Pressure, Unnerve, and Mirror Armor's effects. Field effects that boost or check for Mirror Armor also count this Ability as Mirror Armor.",
-		shortDesc: "Pressure + Unnerve + Mirror Armor; counts as Mirror Armor for field effects.",
+		desc: "On switch-in or G-Max activation, this Pokemon activates Pressure, Unnerve, and Mirror Armor's effects. Field effects that boost or check for Mirror Armor also count this Ability as Mirror Armor.",
+		shortDesc: "Activates Pressure + Unnerve + Mirror Armor; counts as Mirror Armor.",
 	},
 	sinofsloth: {
 		name: "Sin of Sloth",
@@ -2107,13 +2107,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "This Pokemon takes 0.5x damage from Fire- and Ice-type attacks and restores 1/10 of its maximum HP at the end of each turn. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
-		shortDesc: "0.5x Fire/Ice; heals 1/10; absorbs Poison for +1 Atk/SpA.",
+		desc: "This Pokemon takes 0.5x damage from Fire- and Ice-type attacks and restores 1/16 of its maximum HP at the end of each turn. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
+		shortDesc: "0.5x Fire/Ice; heals 1/16; absorbs Poison for +1 Atk/SpA.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon's pulse, aura, beam, and cannon moves have 1.4x power and ignore Light Screen, Reflect, and Aurora Veil. Its moves cannot be redirected. It restores 1/10 of its maximum HP at the end of each turn.",
-		shortDesc: "Pulse/aura/beam/cannon 1.4x and bypass screens; Stalwart; heals 1/10.",
+		desc: "This Pokemon's pulse, aura, beam, cannon, and bullet moves have 1.5x power. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. It restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "Pulse/aura/beam/cannon/bullet 1.5x, or 1.3x and bypass screens; heals 1/16.",
 	},
 	calderacore: {
 		name: "Caldera Core",
@@ -2673,13 +2673,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. Its poison effects can affect Poison- and Steel-type Pokemon. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
-		shortDesc: "Heals self/allies 20%; takes 0.8x damage; Grass 1.2x; 50% Effect Spore.",
+		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and restores 1/16 max HP when it attacks and at the end of each turn. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
+		shortDesc: "Heals self/allies 20%; takes 0.8x; heals 1/16; Grass 1.2x; 50% Effect Spore.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. Its damaging attacks heal 1/16 max HP. When hit by a damaging move, it heals 1/10 max HP. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
-		shortDesc: "Water 1.2x; heals; takes 0.8x damage; ally protection; field boosts.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. Its damaging attacks, being hit by damaging moves, and end of turn each heal 1/16 max HP. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
+		shortDesc: "Water 1.2x; heals 1/16 from attacks, being hit, and end turn; ally protection.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
@@ -2688,8 +2688,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	infernalpresence: {
 		name: "Infernal Presence",
-		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power and can hit through type immunities, but type effectiveness still applies. It takes 0.8x damage from attacks. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
-		shortDesc: "Airborne; drops foes' Atk/SpA; Fire 1.2x and ignores immunities; takes 0.8x damage.",
+		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power and can hit through type immunities, but type effectiveness still applies. It takes 0.8x damage from attacks and restores 1/16 max HP when it attacks and at the end of each turn. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
+		shortDesc: "Airborne; drops foes' Atk/SpA; Fire 1.2x ignores immunities; heals 1/16.",
 	},
 	inversion: {
 		name: "Inversion",

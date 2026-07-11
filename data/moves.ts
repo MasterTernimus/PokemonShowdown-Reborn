@@ -5427,6 +5427,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			spd: 2,
 			spe: 2,
 		},
+		onHit(target, source, move) {
+			this.heal(source.maxhp / 2, source, source, move);
+			source.side.addSlotCondition(source, 'Wish', source, move);
+		},
 		target: "self",
 		type: "Normal",
 		contestType: "Beautiful",

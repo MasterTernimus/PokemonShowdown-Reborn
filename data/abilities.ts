@@ -1832,7 +1832,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.heal(target.baseMaxhp / 10, target, target);
 		},
 		onModifyMove(move) {
-			move.ignoreAbility = true;
 			move.critRatio++;
 		},
 		onTryAddVolatile(status, pokemon) {
@@ -1840,13 +1839,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
-			if (this.movehasType(move, ['Fire', 'Dragon'])) return this.chainModify(1.3);
+			if (move.category === 'Physical') return this.chainModify(1.3);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (move.category !== 'Status') this.heal(Math.floor(damage * 0.3), source, source);
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.7);
+		onModifyDef(def, pokemon) {
+			return this.chainModify(1.3);
+		},
+		onModifySpD(spd, pokemon) {
+			return this.chainModify(1.3);
 		},
 		flags: {},
 		name: "Atrocity",
@@ -2501,6 +2503,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('mirrorarmor')) {
 				this.boost({ evasion: 1 }, pokemon);
 			}
+			const pressureDrop = this.field.isTerrain('coldeclipseterrain') ? -2 : -1;
+			let pressureActivated = false;
+			for (const target of pokemon.foes()) {
+				if (!pressureActivated) {
+					this.add('-ability', pokemon, 'Sin of Pride', 'boost');
+					pressureActivated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({ def: pressureDrop, spd: pressureDrop }, target, pokemon, null, true);
+				}
+			}
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				let unnerveActivated = false;
+				for (const target of pokemon.foes()) {
+					if (!unnerveActivated) {
+						this.add('-ability', pokemon, 'Sin of Pride', 'boost');
+						unnerveActivated = true;
+					}
+					if (target.volatiles['substitute']) {
+						this.add('-immune', target);
+					} else {
+						this.boost({ spe: -1 }, target, pokemon, null, true);
+					}
+				}
+			}
 			this.effectState.unnerved = true;
 		},
 		onEnd() {
@@ -3142,6 +3171,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.movehasType(move, 'Grass')) return this.chainModify(1.2);
 		},
 		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			if (this.field.isTerrain(['grassyterrain', 'forestterrain', 'bewitchedwoodsterrain', 'corrosiveterrain', 'corrosivemistterrain', 'wastelandterrain'])) {
 				this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
 				for (const ally of pokemon.adjacentAllies()) {
@@ -3221,7 +3251,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status') this.heal(target.baseMaxhp / 10, target, target);
+			if (move.category !== 'Status') this.heal(target.baseMaxhp / 16, target, target);
+		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
@@ -4310,8 +4343,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status') this.heal(target.baseMaxhp / 10, target, target);
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onModifyMove(move) {
 			if (this.movehasType(move, 'Fire')) {
@@ -5360,6 +5393,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceHit(target, source, move) {
 			if (!target || target === source || target.isAlly(source)) return;
+			if (move.spreadHit || !['normal', 'any', 'adjacentFoe'].includes(move.target)) return;
 			this.effect.lowerOffense.call(this, target, source);
 		},
 		flags: {},
@@ -7514,7 +7548,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (this.field.isTerrain(['fairytaleterrain', 'chessboardterrain', 'newworldterrain', 'starlightarenaterrain'])) {
-				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+				const boost: SparseBoostsTable = {};
+				for (const foe of pokemon.foes()) {
+					if (!foe || foe.fainted) continue;
+					const atk = foe.getStat('atk', false, true);
+					const spa = foe.getStat('spa', false, true);
+					if (atk >= spa) {
+						boost.def = this.gameType === 'singles' ? 2 : 1;
+					} else {
+						boost.spd = this.gameType === 'singles' ? 2 : 1;
+					}
+				}
+				if (boost.def || boost.spd) this.boost(boost, pokemon, pokemon);
 			}
 		},
 		onAnyTryBoost(boost, target, source, effect) {
@@ -7748,7 +7793,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.movehasType(move, ['Fire', 'Ice'])) return this.chainModify(0.5);
 		},
 		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && this.movehasType(move, 'Poison')) {
@@ -7776,7 +7821,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['pulse'] || move.flags['bullet'] || move.flags['beam'] || move.flags['cannon'] || move.flags['aura']) {
-				return this.chainModify(1.4);
+				if (defender?.side.getSideCondition('reflect') || defender?.side.getSideCondition('lightscreen') || defender?.side.getSideCondition('auroraveil')) {
+					return this.chainModify(1.3);
+				}
+				return this.chainModify(1.5);
 			}
 		},
 		onModifyMovePriority: 1,
@@ -7787,7 +7835,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.tracksTarget = move.target !== 'scripted';
 		},
 		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		flags: {},
 		name: "Siege Launcher",

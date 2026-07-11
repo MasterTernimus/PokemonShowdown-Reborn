@@ -38765,6 +38765,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			mudslap: ["9M", "4T", "3T"],
 			naturalgift: ["4M"],
 			naturepower: ["9M", "7M", "6M"],
+			nastyplot: ["9M"],
 			nightslash: ["9L1", "7L1", "6L1", "5L1", "4L1"],
 			outrage: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			pound: ["9L1", "8L1", "7L1", "6L1", "5L1", "4L1", "3L1"],

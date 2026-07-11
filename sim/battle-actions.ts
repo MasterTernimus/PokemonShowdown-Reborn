@@ -1423,6 +1423,9 @@ export class BattleActions {
 			if (!moveData?.pp) return;
 		}
 
+		if (item.id === 'snorliumz' && ['Giga Impact', 'Body Slam'].includes(move.name)) {
+			return item.zMove as string;
+		}
 		if (item.zMoveFrom) {
 			if (move.name === item.zMoveFrom) return item.zMove as string;
 		} else if (item.zMove === true) {
@@ -1439,6 +1442,11 @@ export class BattleActions {
 	getActiveZMove(move: Move, pokemon: Pokemon): ActiveMove {
 		if (pokemon) {
 			const item = pokemon.getItem();
+			if (item.id === 'snorliumz' && ['Giga Impact', 'Body Slam'].includes(move.name)) {
+				const zMove = this.dex.getActiveMove(item.zMove as string);
+				zMove.isZOrMaxPowered = true;
+				return zMove;
+			}
 			if (move.name === item.zMoveFrom) {
 				const zMove = this.dex.getActiveMove(item.zMove as string);
 				zMove.isZOrMaxPowered = true;
@@ -1530,6 +1538,21 @@ export class BattleActions {
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
 		if (!this.battle.useGimmick(pokemon, 'zMove')) this.battle.add('-message', 'Send this replay to Ternimus!');
 		const zPower = this.dex.conditions.get('zpower');
+		const zTerrains: { [moveid: string]: [string, number] } = {
+			oceanicoperetta: ['watersurfaceterrain', 4],
+			maliciousmoonsault: ['bigtopterrain', 4],
+			sinisterarrowraid: ['hauntedterrain', 4],
+			letssnuggleforever: ['bewitchedwoodsterrain', 4],
+			splinteredstormshards: ['rockyterrain', 4],
+			pulverizingpancake: ['holyterrain', 4],
+			tectonicrage: ['desertterrain', 3],
+			subzeroslammer: ['snowymountainterrain', 3],
+			continentalcrush: ['mountainterrain', 3],
+		};
+		const zTerrain = zTerrains[move.id];
+		if (zTerrain && this.battle.field.setTerrain(zTerrain[0], pokemon, move)) {
+			this.battle.field.terrainState.duration = zTerrain[1];
+		}
 		if (move.category !== 'Status') {
 			this.battle.attrLastMove('[zeffect]');
 		} else if (move.zMove?.boost) {
@@ -1909,7 +1932,13 @@ export class BattleActions {
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
 		// FIXME: Change to species.name when champions comes
 		megaEvolution = item.megaStone[species.baseSpecies];
-		return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
+		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;
+		const megaFormes = species.otherFormes?.filter(forme => this.dex.species.get(forme).isMega);
+		if (megaFormes?.length && item.megaStone) {
+			const fallbackMega = this.dex.species.get(megaFormes[0]);
+			if (fallbackMega.exists && fallbackMega.name !== species.name) return fallbackMega.name;
+		}
+		return null;
 	}
 
 	canMegaEvoX(pokemon: Pokemon) {
