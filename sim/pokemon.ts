@@ -502,7 +502,7 @@ export class Pokemon {
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
-		this.canDynamax = !this.getItem().zMove ? this.baseSpecies.id + 'gmax' : false;
+		this.canDynamax = this.baseSpecies.id + 'gmax';
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
@@ -2004,6 +2004,7 @@ export class Pokemon {
 			warship: ['swiftswim', 'rockhead', 'unaware'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil'],
 			auroraresonance: ['waterabsorb'],
+			parasitism: ['neutralization'],
 			wickedsnare: [],
 			corrosivescale: ['marvelscale'],
 			astralwitchcraft: ['levitate', 'magicguard', 'magicbounce'],
