@@ -2033,7 +2033,7 @@ export class Pokemon {
 			mourningsnow: ['snowwarning', 'icebody'],
 			venombastion: ['shellarmor'],
 			avalanchebruiser: ['ironfist'],
-			streettyrant: ['intimidate', 'moldbreaker', 'shedskin'],
+			streettyrant: ['intimidate'],
 			divineintervention: ['triage', 'friendguard', 'regenerator'],
 		};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
