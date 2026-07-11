@@ -9285,6 +9285,47 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 273,
 	},
+	stormsovereign: {
+		onModifyMove(move) {
+			move.accuracy = true;
+			if (move.flags['wind']) move.infiltrates = true;
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.movehasType(move, 'Flying') || move.flags['wind']) return this.chainModify(1.2);
+		},
+		flags: { breakable: 1 },
+		name: "Storm Sovereign",
+		rating: 4.5,
+		num: 10127,
+	},
+	ironcognition: {
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.category !== 'Status') return this.chainModify(1.3);
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Iron Cognition", `[of] ${target}`);
+			}
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 5, source, source);
+		},
+		flags: { breakable: 1 },
+		name: "Iron Cognition",
+		rating: 4.5,
+		num: 10128,
+	},
 	whitesmoke: {
 		onStart() {
 			if (this.field.isTerrain('volcanicterrain')) {
