@@ -449,8 +449,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vanguard: {
 		name: "Vanguard",
-		desc: "Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. Once per battle, it endures a KO, heals toward 50%, and its next Extreme Speed is a critical hit.",
-		shortDesc: "Extreme Speed 1.5x, may become Fire; guards after use; once endures KO.",
+		desc: "Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon's stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and heals toward 25%.",
+		shortDesc: "Extreme Speed 1.5x, may become Fire; guards after use; stats can't drop; once endures KO.",
+	},
+	apexcleave: {
+		name: "Apex Cleave",
+		desc: "This Pokemon's slicing moves have 1.5x power and ignore Substitute, Reflect, Light Screen, and Aurora Veil. During Sandstorm, this Pokemon's moves have +1 critical hit ratio.",
+		shortDesc: "Sharpness; slicing ignores Sub/screens/Veil; Sand gives +1 crit.",
+	},
+	aurainstinct: {
+		name: "Aura Instinct",
+		desc: "This Pokemon's moves ignore Abilities, and it cannot flinch. In Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it gains Ultra Instinct's field benefits. The first time this Pokemon would be knocked out, it survives with 1 HP.",
+		shortDesc: "Ignores Abilities; no flinch; Ultra Instinct field boosts; once endures KO.",
 	},
 	royalcurrent: {
 		name: "Royal Current",
@@ -536,6 +546,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Dread Maw",
 		desc: "This Pokemon has Huge Power and Strong Jaw's effects.",
 		shortDesc: "Huge Power + Strong Jaw.",
+	},
+	cursedkeepsake: {
+		name: "Cursed Keepsake",
+		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. This Pokemon restores HP equal to Curse damage dealt to cursed targets. If a target cursed by this Pokemon switches out, it loses 1/8 max HP before leaving. This Pokemon takes 0.8x damage from attacks.",
+		shortDesc: "Hit by foe: curses attacker; heals from Curse damage; takes 0.8x attack damage.",
 	},
 	cursedmarionette: {
 		name: "Cursed Marionette",
@@ -1496,8 +1511,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parentalbond: {
 		name: "Parental Bond",
-		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
-		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
+		desc: "This Pokemon has Friend Guard's effect. Its damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
+		shortDesc: "Friend Guard; damaging moves hit twice. The second hit has its damage halved.",
 	},
 	pastelveil: {
 		name: "Pastel Veil",

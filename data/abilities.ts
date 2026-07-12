@@ -1701,7 +1701,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	vanguard: {
 		onStart(pokemon) {
-			pokemon.abilityState.vanguardEndure = false;
 			pokemon.abilityState.vanguardCrit = false;
 		},
 		onPrepareHit(source, target, move) {
@@ -1714,6 +1713,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move, pokemon) {
 			if (move.id !== 'extremespeed') return;
+			move.critRatio += 2;
 			pokemon.abilityState.vanguardGuard = this.turn;
 			if (pokemon.abilityState.vanguardCrit) {
 				move.willCrit = true;
@@ -1728,16 +1728,84 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.abilityState.vanguardGuard === this.turn && move.category !== 'Status') return this.chainModify(0.25);
 		},
 		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move' || target.abilityState.vanguardEndure || damage < target.hp) return;
-			target.abilityState.vanguardEndure = true;
+			if (effect.effectType !== 'Move' || (target as any).vanguardEndureUsed || damage < target.hp) return;
+			(target as any).vanguardEndureUsed = true;
 			target.abilityState.vanguardCrit = true;
-			this.heal(target.baseMaxhp / 2, target, target);
+			this.heal(target.baseMaxhp / 4, target, target);
 			return target.hp - 1;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Vanguard", `[of] ${target}`);
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Vanguard",
 		rating: 4.5,
 		num: 10122,
+	},
+	apexcleave: {
+		onModifyMove(move) {
+			if (move.flags['slicing']) {
+				move.infiltrates = true;
+			}
+		},
+		onModifyCritRatio(critRatio, source, target, move) {
+			if (source.effectiveWeather() === 'sandstorm') return critRatio + 1;
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, source, target, move) {
+			if (move.flags['slicing']) return this.chainModify(1.5);
+		},
+		flags: {},
+		name: "Apex Cleave",
+		rating: 5,
+		num: 10129,
+	},
+	aurainstinct: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Aura Instinct');
+			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
+				this.boost({ accuracy: 1 }, pokemon, pokemon);
+			}
+		},
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') return null;
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target, move) {
+			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
+				this.debug('Aura Instinct field boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
+				this.debug('Aura Instinct field weaken');
+				return this.chainModify(0.25);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move' || (target as any).auraInstinctEndureUsed || damage < target.hp) return;
+			(target as any).auraInstinctEndureUsed = true;
+			return target.hp - 1;
+		},
+		flags: {},
+		name: "Aura Instinct",
+		rating: 5,
+		num: 10130,
 	},
 	royalcurrent: {
 		onModifyDefPriority: 6,
@@ -2076,6 +2144,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Dread Maw",
 		rating: 5,
 		num: 10103,
+	},
+	cursedkeepsake: {
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
+			source.addVolatile('curse', target, this.dex.abilities.get('cursedkeepsake'));
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status') return this.chainModify(0.8);
+		},
+		flags: { breakable: 1 },
+		name: "Cursed Keepsake",
+		rating: 4.5,
+		num: 10131,
 	},
 	cursedmarionette: {
 		onModifyPriority(priority, pokemon, target, move) {
@@ -5673,6 +5754,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 20,
 	},
 	parentalbond: {
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== this.effectState.target && target.isAlly(this.effectState.target)) {
+				this.debug('Parental Bond Friend Guard weaken');
+				return this.chainModify(0.75);
+			}
+		},
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
 				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;

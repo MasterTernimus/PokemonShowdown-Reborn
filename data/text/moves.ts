@@ -1238,8 +1238,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	curse: {
 		name: "Curse",
-		desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected.",
-		shortDesc: "Curses if Ghost, else -1 Spe, +1 Atk, +1 Def.",
+		desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/4 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. Cursed Keepsake and Cursed Marionette users pay no HP. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected.",
+		shortDesc: "Curses if Ghost, else -1 Spe, +1 Atk, +1 Def. Ghost cost is 1/4 HP.",
 		gen4: {
 			desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected or has a substitute.",
 		},
@@ -3694,8 +3694,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	luckychant: {
 		name: "Lucky Chant",
-		desc: "For 5 turns, the user and its party members cannot be struck by a critical hit. Fails if the effect is already active on the user's side.",
-		shortDesc: "For 5 turns, shields user's party from critical hits.",
+		desc: "For 4 turns, the user and its party members cannot be struck by a critical hit and their moves have +1 critical hit ratio. Fails if the effect is already active on the user's side.",
+		shortDesc: "For 4 turns, blocks crits against user's side and gives +1 crit.",
 
 		start: "  Lucky Chant shielded [TEAM] from critical hits!",
 		end: "  [TEAM]'s Lucky Chant wore off!",
@@ -4250,8 +4250,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mist: {
 		name: "Mist",
-		desc: "For 5 turns, the user and its party members are protected from having their stat stages lowered by other Pokemon. Fails if the effect is already active on the user's side.",
-		shortDesc: "For 5 turns, protects user's party from stat drops.",
+		desc: "For 5 turns, or 8 turns during Snow or Hail, the user and its party members are protected from stat drops by opposing Pokemon and opposing Abilities. Allies take 0.75x damage from spread moves, Ice-type allies restore 1/16 max HP each turn, and Misty Terrain is created for 3 turns. Fails if the effect is already active on the user's side.",
+		shortDesc: "Blocks stat drops; weakens spread damage; heals Ice allies; sets 3-turn Misty Terrain.",
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "While active, user is protected from stat drops.",
@@ -5002,8 +5002,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	punishment: {
 		name: "Punishment",
-		desc: "Power is equal to 60+(X*20), where X is the target's total stat stage changes that are greater than 0, but not more than 200 power.",
-		shortDesc: "60 power +20 for each of the target's stat boosts.",
+		desc: "Power is equal to 60+(X*20), where X is the target's total stat stage changes that are greater than 0, but not more than 160 power. This move ignores the target's stat boosts when calculating damage.",
+		shortDesc: "60 power +20 per target stat boost, max 160; ignores defensive boosts.",
 	},
 	purify: {
 		name: "Purify",
@@ -5078,8 +5078,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rage: {
 		name: "Rage",
-		desc: "Once this move is successfully used, the user's Attack is raised by 1 stage every time it is hit by another Pokemon's attack as long as this move is chosen for use.",
-		shortDesc: "Raises the user's Attack by 1 if hit during use.",
+		desc: "The user lashes out with built-up anger, becoming more dangerous each time it attacks. Raises the user's Attack by 1 stage after use. If the user was hit by a damaging move before it attacks this turn, this move's power is doubled.",
+		shortDesc: "Raises user's Attack by 1. Doubles power if hit before moving.",
 		gen3: {
 			desc: "Once this move is used and unless the target protected itself, the user's Attack is raised by 1 stage every time it is hit by another Pokemon's attack as long as this move is chosen for use.",
 		},
@@ -5094,8 +5094,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragefist: {
 		name: "Rage Fist",
-		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and does not reset upon switching out or fainting. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
-		shortDesc: "+50 power for each time user was hit. Max 6 hits.",
+		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6. Switching out halves the accumulated hit count. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
+		shortDesc: "+50 power per hit taken, max 6 hits. Switching halves the count.",
 	},
 	ragepowder: {
 		name: "Rage Powder",

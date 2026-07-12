@@ -3533,10 +3533,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			if (this.field.isTerrain('hauntedterrain')) {
+			if (!source.hasAbility(['cursedkeepsake', 'cursedmarionette'])) {
 				this.directDamage(source.maxhp / 4, source, source);
-			} else {
-				this.directDamage(source.maxhp / 2, source, source);
 			}
 		},
 		onAfterMove(source, target, move) {
@@ -3553,9 +3551,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 12,
 			onResidual(pokemon) {
-				this.damage(pokemon.baseMaxhp / 4);
+				const damage = this.damage(pokemon.baseMaxhp / 4);
+				const source = this.effectState.source;
+				if (damage && source?.hp && source.hasAbility('cursedkeepsake')) {
+					this.heal(damage, source, pokemon, this.dex.abilities.get('cursedkeepsake'));
+				}
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
+				}
+			},
+			onBeforeSwitchOut(pokemon) {
+				const source = this.effectState.source;
+				if (source?.hp && source.hasAbility('cursedkeepsake')) {
+					this.damage(pokemon.baseMaxhp / 8, pokemon, source, this.dex.abilities.get('cursedkeepsake'));
 				}
 			},
 		},
@@ -4519,6 +4527,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 90,
 		basePower: 100,
 		category: "Physical",
+		critRatio: 2,
 		name: "Dragon Rush",
 		pp: 10,
 		priority: 0,
@@ -11265,11 +11274,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'luckychant',
 		condition: {
-			duration: 5,
+			duration: 4,
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Lucky Chant'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
 			},
 			onCriticalHit: false,
+			onModifyCritRatio(critRatio, source) {
+				if (source.side === this.effectState.target) return critRatio + 1;
+			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 6,
 			onSideEnd(side) {
@@ -11277,7 +11289,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		target: "allySide",
-		type: "Normal",
+		type: "Fairy",
 		zMove: { boost: { evasion: 1 } },
 		contestType: "Cute",
 	},
@@ -12958,12 +12970,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
-		onAfterMove() {
-			this.field.setTerrain('mistyterrain');
+		onAfterMove(source, target, move) {
+			if (this.field.setTerrain('mistyterrain', source, move)) {
+				this.field.terrainState.duration = 3;
+			}
 		},
 		sideCondition: 'mist',
 		condition: {
 			duration: 5,
+			durationCallback(source) {
+				if (source?.effectiveWeather && ['hail', 'snow'].includes(source.effectiveWeather())) return 8;
+				return 5;
+			},
 			onTryBoost(boost, target, source, effect) {
 				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
 				if (source && target !== source) {
@@ -12980,11 +12998,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 			},
+			onSourceModifyDamage(damage, source, target, move) {
+				if (target.side === this.effectState.target && move.spreadHit) return this.chainModify(0.75);
+			},
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Mist');
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 4,
+			onSideResidual(side) {
+				for (const pokemon of side.active) {
+					if (pokemon?.hp && pokemon.hasType('Ice')) this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+				}
+			},
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Mist');
 			},
@@ -15567,10 +15593,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	punishment: {
 		num: 386,
 		accuracy: 100,
-		basePower: 0,
+		basePower: 60,
 		basePowerCallback(pokemon, target) {
 			let power = 60 + 20 * target.positiveBoosts();
-			if (power > 200) power = 200;
+			if (power > 160) power = 160;
 			this.debug(`BP: ${power}`);
 			return power;
 		},
@@ -15580,6 +15606,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		ignoreDefensive: true,
 		target: "normal",
 		type: "Dark",
 		zMove: { basePower: 160 },
@@ -15806,47 +15833,22 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	rage: {
 		num: 99,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 30,
+		basePowerCallback(pokemon) {
+			if (pokemon.hurtThisTurn) return 60;
+			return 30;
+		},
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rage",
-		pp: 20,
+		pp: 32,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onModifyMove(move) {
-			if (this.field.isTerrain('coldeclipseterrain')) {
-				move.basePower = 60;
-				move.type = 'Dark';
-				move.secondaries?.push({
-					self: {
-						boosts: {
-							atk: 1,
-						},
-					},
-				});
-			}
-		},
 		self: {
-			volatileStatus: 'rage',
-		},
-		condition: {
-			onStart(pokemon) {
-				this.add('-singlemove', pokemon, 'Rage');
-			},
-			onHit(target, source, move) {
-				if (target !== source && move.category !== 'Status') {
-					this.boost({ atk: 1 });
-				}
-			},
-			onBeforeMovePriority: 100,
-			onBeforeMove(pokemon) {
-				if (this.field.isTerrain('glitchterrain')) return;
-				this.debug('removing Rage before attack');
-				pokemon.removeVolatile('rage');
-			},
+			boosts: { atk: 1 },
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Dark",
 		contestType: "Tough",
 	},
 	ragefist: {
