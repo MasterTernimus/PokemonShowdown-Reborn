@@ -1423,6 +1423,9 @@ export class BattleActions {
 			if (!moveData?.pp) return;
 		}
 
+		if (item.id === 'snorliumz' && ['Giga Impact', 'Body Slam'].includes(move.name)) {
+			return item.zMove as string;
+		}
 		if (item.zMoveFrom) {
 			if (move.name === item.zMoveFrom) return item.zMove as string;
 		} else if (item.zMove === true) {
@@ -1439,6 +1442,11 @@ export class BattleActions {
 	getActiveZMove(move: Move, pokemon: Pokemon): ActiveMove {
 		if (pokemon) {
 			const item = pokemon.getItem();
+			if (item.id === 'snorliumz' && ['Giga Impact', 'Body Slam'].includes(move.name)) {
+				const zMove = this.dex.getActiveMove(item.zMove as string);
+				zMove.isZOrMaxPowered = true;
+				return zMove;
+			}
 			if (move.name === item.zMoveFrom) {
 				const zMove = this.dex.getActiveMove(item.zMove as string);
 				zMove.isZOrMaxPowered = true;
@@ -1530,6 +1538,21 @@ export class BattleActions {
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
 		if (!this.battle.useGimmick(pokemon, 'zMove')) this.battle.add('-message', 'Send this replay to Ternimus!');
 		const zPower = this.dex.conditions.get('zpower');
+		const zTerrains: { [moveid: string]: [string, number] } = {
+			oceanicoperetta: ['watersurfaceterrain', 4],
+			maliciousmoonsault: ['bigtopterrain', 4],
+			sinisterarrowraid: ['hauntedterrain', 4],
+			letssnuggleforever: ['bewitchedwoodsterrain', 4],
+			splinteredstormshards: ['rockyterrain', 4],
+			pulverizingpancake: ['holyterrain', 4],
+			tectonicrage: ['desertterrain', 3],
+			subzeroslammer: ['snowymountainterrain', 3],
+			continentalcrush: ['mountainterrain', 3],
+		};
+		const zTerrain = zTerrains[move.id];
+		if (zTerrain && this.battle.field.setTerrain(zTerrain[0], pokemon, move)) {
+			this.battle.field.terrainState.duration = zTerrain[1];
+		}
 		if (move.category !== 'Status') {
 			this.battle.attrLastMove('[zeffect]');
 		} else if (move.zMove?.boost) {
@@ -1752,13 +1775,13 @@ export class BattleActions {
 
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
-			const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
+			const spreadModifier = (move as any).hydraBondSpread ? 1 : this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
-		} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
-			// Parental Bond modifier
-			const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
-			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
+		} else if ((move.multihitType === 'parentalbond' || move.multihitType === 'hydrabond') && move.hit > 1) {
+			// Parental Bond / Hydra Bond modifier
+			const bondModifier = move.multihitType === 'hydrabond' ? 0.25 : 0.5;
+			this.battle.debug(`${move.multihitType} modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		}
 
@@ -1905,11 +1928,34 @@ export class BattleActions {
 		if (!item.megaStone) return null;
 		// TODO confirm with generation shift
 		let megaEvolution = item.megaStone[species.name];
-		if (megaEvolution && this.dex.species.get(megaEvolution).gen >= 9) return megaEvolution;
+		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
 		// FIXME: Change to species.name when champions comes
 		megaEvolution = item.megaStone[species.baseSpecies];
-		return megaEvolution && megaEvolution !== species.name ? megaEvolution : null;
+		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;
+		const megaFormes = species.otherFormes?.filter(forme => this.dex.species.get(forme).isMega);
+		if (megaFormes?.length && item.megaStone) {
+			const fallbackMega = this.dex.species.get(megaFormes[0]);
+			if (fallbackMega.exists && fallbackMega.name !== species.name) return fallbackMega.name;
+		}
+		return null;
+	}
+
+	canMegaEvoX(pokemon: Pokemon) {
+		if (['Gardevoir', 'Gardevoir-Void'].includes(pokemon.baseSpecies.name) && pokemon.getItem().id === 'gardevoirite') {
+			return 'Gardevoir-Mega-Z';
+		}
+		return null;
+	}
+
+	canMegaEvoY(pokemon: Pokemon) {
+		if (pokemon.baseSpecies.name === 'Gardevoir' && pokemon.getItem().id === 'gardevoirite') {
+			return 'Gardevoir-Void-Mega';
+		}
+		if (pokemon.baseSpecies.name === 'Gardevoir-Void' && pokemon.getItem().id === 'gardevoirite') {
+			return 'Gardevoir-Mega';
+		}
+		return null;
 	}
 
 	canUltraBurst(pokemon: Pokemon) {
@@ -1931,10 +1977,25 @@ export class BattleActions {
 	}
 
 	// Let's Go
-	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | null;
-	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
-	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
+	runMegaEvoX(pokemon: Pokemon) {
+		const speciesid = pokemon.canMegaEvoX;
+		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
+		if (!speciesid) return false;
+
+		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		this.battle.runEvent('AfterMega', pokemon);
+		return true;
+	}
+
+	runMegaEvoY(pokemon: Pokemon) {
+		const speciesid = pokemon.canMegaEvoY;
+		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
+		if (!speciesid) return false;
+
+		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		this.battle.runEvent('AfterMega', pokemon);
+		return true;
+	}
 
 	canTerastallize(pokemon: Pokemon) {
 		return pokemon.teraType;
