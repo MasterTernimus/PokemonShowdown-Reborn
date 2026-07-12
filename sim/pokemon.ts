@@ -259,6 +259,7 @@ export class Pokemon {
 	previouslySwitchedIn: number;
 	truantTurn: boolean;
 	bondTriggered: boolean;
+	battleFervorBoosted: boolean;
 	// Gen 9 only
 	heroMessageDisplayed: boolean;
 	swordBoost: boolean;
@@ -483,6 +484,7 @@ export class Pokemon {
 		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
 		this.bondTriggered = false;
+		this.battleFervorBoosted = false;
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.shieldBoost = false;
@@ -500,7 +502,7 @@ export class Pokemon {
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
-		this.canDynamax = !this.getItem().zMove ? this.baseSpecies.id + 'gmax' : false;
+		this.canDynamax = this.baseSpecies.id + 'gmax';
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
@@ -1059,11 +1061,6 @@ export class Pokemon {
 		// {gigantamax?: string, maxMoves: {[k: string]: string} | null}[]
 		if (!skipChecks) {
 			if (!this.side.canDynamaxNow() || !this.canDynamax || !this.canGigantamax) return;
-			if (
-				this.species.forme === 'Mega'
-			) {
-				return;
-			}
 			// Some pokemon species are unable to dynamax
 			if (this.species.cannotDynamax || this.illusion?.species.cannotDynamax) return;
 		}
@@ -1753,7 +1750,7 @@ export class Pokemon {
 		}
 
 		if (
-			!ignoreImmunities && status.id && !(source?.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))
+			!ignoreImmunities && status.id && !(source?.hasAbility(['corrosion', 'ancientbloom']) && ['tox', 'psn'].includes(status.id))
 		) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
@@ -1996,11 +1993,56 @@ export class Pokemon {
 	}
 
 	hasAbility(ability: string | string[]) {
-		if (Array.isArray(ability)) {
-			if (!ability.map(toID).includes(this.ability)) return false;
-		} else {
-			if (toID(ability) !== this.ability) return false;
-		}
+		const abilityAliases: { [abilityid: string]: string[] } = {
+			sinofpride: ['pressure', 'unnerve', 'mirrorarmor'],
+			sinoflust: ['magicbounce', 'queenlymajesty'],
+			sinofenvy: [],
+			sinofgluttony: ['thickfat', 'gluttony', 'earlybird'],
+			sinofsloth: ['prankster', 'telepathy', 'frisk'],
+			sinofgreed: ['heavymetal', 'filter', 'eartheater'],
+			sinofwrath: ['ultraego', 'scrappy'],
+			warship: ['swiftswim', 'rockhead', 'unaware'],
+			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil'],
+			auroraresonance: ['waterabsorb'],
+			parasitism: ['neutralization'],
+			wickedsnare: [],
+			corrosivescale: ['marvelscale'],
+			astralwitchcraft: ['levitate', 'magicguard', 'magicbounce'],
+			ragingcurrent: ['swiftswim', 'damp'],
+			siegelauncher: ['stalwart'],
+			soultag: ['soulfire', 'shadowtag'],
+			deserttyrant: ['sandstream'],
+			riptideclaws: ['swiftswim'],
+			fossilfrenzy: ['klutz'],
+			alloycore: ['magicguard', 'clearbody'],
+			hellfireeclipse: ['solarpower'],
+			sacrededge: ['sharpness'],
+			omenedge: ['sharpness', 'sniper'],
+			dreadmaw: ['hugepower', 'strongjaw'],
+			cursedmarionette: ['prankster'],
+			sandsovereign: ['sandstream'],
+			frostsovereign: ['snowwarning', 'icebody'],
+			stormfright: ['intimidate', 'lightningrod'],
+			enlightenment: ['purepower'],
+			relentlesslink: ['skilllink', 'guts', 'shielddust'],
+			nightmarecage: ['shadowtag'],
+			mirrorgreed: ['magicbounce', 'cursedbody'],
+			uncheckedassault: ['scrappy', 'striker', 'opportunist'],
+			empatheticresonance: ['pixilate', 'friendguard'],
+			perfectforesight: ['trace'],
+			heavenlychorus: ['pixilate', 'cloudnine'],
+			mourningsnow: ['snowwarning', 'icebody'],
+			venombastion: ['shellarmor'],
+			avalanchebruiser: ['ironfist'],
+			fallenstar: ['moldbreaker'],
+			ragingstorm: ['moldbreaker'],
+			royalcurrent: ['marvelscale', 'sniper'],
+			atrocity: ['moldbreaker'],
+			streettyrant: ['intimidate', 'regenerator'],
+			divineintervention: ['friendguard', 'regenerator'],
+		};
+		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
+		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id))) return false;
 		return !this.ignoringAbility();
 	}
 
@@ -2190,7 +2232,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.hasAbility('levitate') && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'infernalpresence', 'astralwitchcraft']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';

@@ -139,7 +139,7 @@ export const Repl = new class {
 		Repl.setupListeners(filename);
 
 		const server = net.createServer(socket => {
-			repl.start({
+			const replServer = repl.start({
 				input: socket,
 				output: socket,
 				eval(cmd, context, unusedFilename, callback) {
@@ -149,7 +149,16 @@ export const Repl = new class {
 						return callback(e, undefined);
 					}
 				},
-			}).on('exit', () => socket.end());
+			});
+			replServer.on('exit', () => socket.end());
+			replServer.on('error', (err: NodeJS.ErrnoException) => {
+				if (err.code === 'EPIPE' || err.code === 'ECONNRESET') {
+					socket.destroy();
+					return;
+				}
+				crashlogger(err, `REPL: ${filename}`);
+			});
+			socket.on('close', () => replServer.close());
 			socket.on('error', () => socket.destroy());
 		});
 

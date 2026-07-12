@@ -421,7 +421,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	behemothbash: {
 		name: "Behemoth Bash",
-		shortDesc: "No additional effect.",
+		shortDesc: "Uses user's Defense as the offensive stat.",
 		gen8: {
 			shortDesc: "Damage doubles if the target is Dynamaxed.",
 		},
@@ -2617,13 +2617,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxsmite: {
 		name: "G-Max Smite",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes confused, even if they have a substitute.",
-		shortDesc: "Base move affects power. Foes: confused.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side has a 30% chance to become confused, even if they have a substitute.",
+		shortDesc: "Base move affects power. Foes: 30% confusion.",
 	},
 	gmaxsnooze: {
 		name: "G-Max Snooze",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 50% chance the effect of Yawn begins on the target, even if it has a substitute.",
-		shortDesc: "Base move affects power. Target: 50% Yawn.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 30% chance the effect of Yawn begins on the target, even if it has a substitute.",
+		shortDesc: "Base move affects power. Target: 30% Yawn.",
 	},
 	gmaxsteelsurge: {
 		name: "G-Max Steelsurge",
@@ -4201,8 +4201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	miracleeye: {
 		name: "Miracle Eye",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
-		shortDesc: "Psychic hits Dark. Evasiveness ignored.",
+		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type. On Psychic Terrain, Fairy Tale Field, and Holy Field, the user's Special Attack rises by 2 stages. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
+		shortDesc: "Psychic hits Dark. Evasiveness ignored. On some fields, user gets +2 SpA.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type.",
 		},
@@ -4868,8 +4868,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	present: {
 		name: "Present",
-		desc: "If this move is successful, it deals damage or heals the target. 40% chance for 40 power, 30% chance for 80 power, 10% chance for 120 power, and 20% chance to heal the target by 1/4 of its maximum HP, rounded down.",
-		shortDesc: "40, 80, 120 power, or heals target 1/4 max HP.",
+		desc: "If this move is successful, it deals damage or heals the target. 40% chance for 40 power, 30% chance for 80 power, 10% chance for 120 power, and 20% chance to heal the target by 1/4 of its maximum HP, rounded down. If the user has Evil Santa, this move becomes a 120 Base Power Dark-type attack that targets all opposing Pokemon and applies one successful random extra effect.",
+		shortDesc: "Random power/heal; with Evil Santa, 120 BP Dark spread plus extra effect.",
 		gen2: {
 			desc: "If this move is successful, it deals damage or heals the target. 102/256 chance for 40 power, 76/256 chance for 80 power, 26/256 chance for 120 power, or 52/256 chance to heal the target by 1/4 of its maximum HP, rounded down. If this move deals damage, it uses an abnormal version of the damage formula by substituting certain values. The user's Attack stat is replaced with 10 times the effectiveness of this move against the target, the target's Defense stat is replaced with the index number of the user's secondary type, and the user's level is replaced with the index number of the target's secondary type. If a Pokemon does not have a secondary type, its primary type is used. The index numbers for each type are Normal: 0, Fighting: 1, Flying: 2, Poison: 3, Ground: 4, Rock: 5, Bug: 7, Ghost: 8, Steel: 9, Fire: 20, Water: 21, Grass: 22, Electric: 23, Psychic: 24, Ice: 25, Dragon: 26, Dark: 27. If at any point a division by 0 would happen in the damage formula, it divides by 1 instead.",
 		},
@@ -5854,8 +5854,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Raises user's Defense by 1 on turn 1. Hits turn 2.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Raises Atk, Defense, and Sp. Def by 1 on turn 1. Hits turn 2.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},

@@ -231,7 +231,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem: false,
 		zMove: "Stoked Sparksurfer",
 		zMoveFrom: "Thunderbolt",
-		itemUser: ["Raichu-Alola"],
+		itemUser: ["Raichu", "Raichu-Alola"],
 		num: 803,
 		gen: 7,
 		isNonstandard: "Past",
@@ -1355,7 +1355,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem: false,
 		zMove: "Sinister Arrow Raid",
 		zMoveFrom: "Spirit Shackle",
-		itemUser: ["Decidueye"],
+		itemUser: ["Decidueye", "Decidueye-Hisui"],
 		num: 798,
 		gen: 7,
 		isNonstandard: "Past",
@@ -1650,8 +1650,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		megaStone: { "Gardevoir": "Gardevoir Void-Mega" },
-		itemUser: ["Gardevoir"],
+		megaStone: { "Gardevoir": "Gardevoir-Void-Mega", "Gardevoir-Void": "Gardevoir-Void-Mega" },
+		itemUser: ["Gardevoir", "Gardevoir-Void"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -2514,8 +2514,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	gardevoirite: {
 		name: "Gardevoirite",
 		spritenum: 587,
-		megaStone: { "Gardevoir": "Gardevoir-Mega" },
-		itemUser: ["Gardevoir"],
+		megaStone: { "Gardevoir": "Gardevoir-Mega", "Gardevoir-Void": "Gardevoir-Void-Mega" },
+		itemUser: ["Gardevoir", "Gardevoir-Void"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -3376,6 +3376,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 241,
 		fling: {
 			basePower: 30,
+		},
+		megaStone: { "Flygon": "Flygon-Mega-Z" },
+		itemUser: ["Flygon"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		num: 85,
 		gen: 1,
@@ -5768,8 +5773,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		megaStone: { "Gardevoir": "Gardevoir Mega-Z" },
-		itemUser: ["Gardevoir"],
+		megaStone: { "Gardevoir": "Gardevoir-Mega-Z", "Gardevoir-Void": "Gardevoir-Mega-Z" },
+		itemUser: ["Gardevoir", "Gardevoir-Void"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -5936,7 +5941,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem: false,
 		zMove: "Pulverizing Pancake",
 		zMoveFrom: "Giga Impact",
-		itemUser: ["Snorlax"],
+		itemUser: ["Snorlax", "Snorlax-Gmax"],
 		num: 804,
 		gen: 7,
 		isNonstandard: "Past",
