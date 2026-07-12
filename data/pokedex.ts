@@ -19757,6 +19757,19 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		eggGroups: ["Undiscovered"],
 	},
+	raidboss: {
+		num: 10000,
+		name: "Raid Boss",
+		types: ["???"],
+		gender: "N",
+		baseStats: { hp: 999, atk: 1, def: 10, spa: 999, spd: 10, spe: 999 },
+		abilities: { 0: "Wonder Guard" },
+		heightm: 10,
+		weightkg: 1000,
+		color: "Red",
+		tags: ["Mythical"],
+		eggGroups: ["Undiscovered"]
+	},
 	missingno: {
 		num: 0,
 		name: "MissingNo.",
