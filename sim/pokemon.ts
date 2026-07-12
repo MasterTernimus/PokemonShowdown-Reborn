@@ -1550,6 +1550,9 @@ export class Pokemon {
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
+		if (includeSwitchFlags && this.timesAttacked > 0) {
+			this.timesAttacked = Math.floor(this.timesAttacked / 2);
+		}
 		this.boosts = {
 			atk: 0,
 			def: 0,
