@@ -15833,10 +15833,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	rage: {
 		num: 99,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 40,
 		basePowerCallback(pokemon) {
-			if (pokemon.hurtThisTurn) return 60;
-			return 30;
+			if (pokemon.hurtThisTurn) return 80;
+			return 40;
 		},
 		category: "Physical",
 		isNonstandard: "Past",
