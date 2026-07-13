@@ -2215,7 +2215,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Ghost", "Poison"],
 		baseStats: { hp: 60, atk: 65, def: 80, spa: 170, spd: 95, spe: 130 },
-		abilities: { 0: "Nightmare Cage" },
+		abilities: { 0: "Shadow Tag" },
 		heightm: 1.4,
 		weightkg: 40.5,
 		color: "Purple",
