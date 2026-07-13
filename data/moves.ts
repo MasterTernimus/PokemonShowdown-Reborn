@@ -13,7 +13,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {},
 		isZ: "pikashuniumz",
-		critRatio: 3,
+		critRatio: 2,
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
