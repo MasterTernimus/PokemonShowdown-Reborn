@@ -2171,6 +2171,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!target || target === source || source.isAlly(target) || target.fainted || move.category !== 'Status') return;
 			target.addVolatile('curse', source, this.dex.abilities.get('cursedmarionette'));
 		},
+		onAnyDamage(damage, target, source, effect) {
+			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedmarionette')) {
+				this.heal(damage, target.volatiles['curse'].source, target);
+			}
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.5);
 		},
