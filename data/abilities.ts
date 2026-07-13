@@ -7285,6 +7285,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.maybeTrapped = true;
 			}
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target === source || move.category === 'Status') return;
+			return this.chainModify(0.75);
+		},
 		flags: {},
 		name: "Shadow Tag",
 		rating: 5,

@@ -1923,8 +1923,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowtag: {
 		name: "Shadow Tag",
-		desc: "Prevents opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability.",
-		shortDesc: "Prevents foes from choosing to switch unless they also have this Ability.",
+		desc: "Prevents opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability. This Pokemon takes 0.75x damage from attacks.",
+		shortDesc: "Prevents foes from choosing to switch; takes 0.75x damage from attacks.",
 		gen6: {
 			desc: "Prevents adjacent opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability.",
 			shortDesc: "Prevents adjacent foes from choosing to switch unless they also have this Ability.",
