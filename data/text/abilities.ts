@@ -414,8 +414,38 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalflower: {
 		name: "Eternal Flower",
-		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. On Fairy Tale Field, this Pokemon's Attack and Special Attack are doubled. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.8x while this Pokemon is active.",
-		shortDesc: "Grass attacks use 1.5x offenses; Fairy Tale doubles offenses; weakens powered-up foes.",
+		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. On Fairy Tale Field, this Pokemon's Attack and Special Attack are doubled. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.4x while this Pokemon is active. This debuff does not affect allies.",
+		shortDesc: "Grass attacks use 1.5x offenses; Fairy Tale doubles offenses; enemy gimmicks to 0.4x.",
+	},
+	ange: {
+		name: "Ange",
+		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. It boosts Fairy-type moves like Fairy Aura, has Eternal Flower's Grass and Fairy Tale boosts, and reduces opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon's stats to 0.4x.",
+		shortDesc: "Eternal Flower + Fairy Aura; weakens opposing gimmick Pokemon to 0.4x.",
+	},
+	ascendance: {
+		name: "Ascendance",
+		desc: "This Pokemon gains a STAB damage bonus on moves that do not already match its type. Its damaging moves ignore type-based immunities, but not Ability immunities, and still respect resistances. Its Defense is doubled.",
+		shortDesc: "All moves get STAB if needed; hits type immunities; Fur Coat.",
+	},
+	mindfreeze: {
+		name: "Mind Freeze",
+		desc: "This Pokemon's Psychic-type moves have a 40% chance to cause frostbite. Its Physical Ice-type moves become Special.",
+		shortDesc: "Psychic moves 40% frostbite; Physical Ice moves become Special.",
+	},
+	riotamp: {
+		name: "Riot Amp",
+		desc: "This Pokemon has Punk Rock, Galvanize, and Technician's effects. Its Normal-type moves become Electric type and are boosted, sound moves are boosted, and moves with 60 or less Base Power are boosted.",
+		shortDesc: "Punk Rock + Galvanize + Technician.",
+	},
+	relicarmor: {
+		name: "Relic Armor",
+		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.75x damage from attacks, has Pressure's PP effect and field interactions, and its moves ignore Abilities.",
+		shortDesc: "No crits; stat drops give +1 Def/SpD; takes 0.75x; Pressure + Mold Breaker.",
+	},
+	windysurge: {
+		name: "Windy Surge",
+		desc: "On switch-in, this Pokemon sets Tailwind on its side for 4 turns.",
+		shortDesc: "On switch-in, sets Tailwind for 4 turns.",
 	},
 	burningspirit: {
 		name: "Burning Spirit",
@@ -439,8 +469,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eclipse: {
 		name: "Eclipse",
-		desc: "During weather, this Pokemon's attacks deal 1.5x damage. In clear weather, attacks deal 0.5x damage to this Pokemon. Its Psychic- and Dark-type moves hit neutrally, and it restores 1/4 max HP instead of taking damage from Psychic- or Dark-type moves.",
-		shortDesc: "In weather attacks 1.5x; clear weather takes 0.5x; absorbs Psychic/Dark.",
+		desc: "During weather, this Pokemon's attacks deal 1.5x damage. In clear weather, attacks deal 0.5x damage to this Pokemon. Its Psychic-type moves become Dark type if Dark would do more damage, and its Dark-type moves become Psychic type if Psychic would do more damage. It restores 1/4 max HP instead of taking damage from Psychic- or Dark-type moves.",
+		shortDesc: "Weather attacks 1.5x; clear weather takes 0.5x; Psychic/Dark pick better type; absorbs both.",
 	},
 	ragingstorm: {
 		name: "Raging Storm",
@@ -449,7 +479,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vanguard: {
 		name: "Vanguard",
-		desc: "Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon's stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and heals toward 25%.",
+		desc: "Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon's stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and survives at 1 HP.",
 		shortDesc: "Extreme Speed 1.5x, may become Fire; guards after use; stats can't drop; once endures KO.",
 	},
 	apexcleave: {
@@ -479,8 +509,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "When this Pokemon is hit by a damaging move, its Attack rises by 1 stage and it heals 1/10 max HP. Its Defense and Special Defense are 1.3x, and its Physical moves have 1.3x power. Its moves have +1 critical hit ratio. It heals 30% of the damage it deals with attacks, and this Pokemon cannot flinch.",
-		shortDesc: "Hit: +1 Atk/heal 1/10. Physical 1.3x; drains 30%; no flinch.",
+		desc: "When this Pokemon is hit by a damaging move, its Attack rises by 1 stage and it heals 1/10 max HP. Its Defense and Special Defense are 1.3x, and its Physical moves have 1.3x power. Its moves have +1 critical hit ratio. It heals 30% of the damage it deals with attacks, restores 1/16 max HP at the end of each turn, and this Pokemon cannot flinch.",
+		shortDesc: "Hit: +1 Atk/heal 1/10. Physical 1.3x; drains 30%; heals 1/16; no flinch.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -619,8 +649,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	venombastion: {
 		name: "Venom Bastion",
-		desc: "This Pokemon cannot be critically hit. Pokemon making contact with this Pokemon become poisoned. If an opposing Pokemon is poisoned, this Pokemon restores 1/16 of its maximum HP at the end of each turn.",
-		shortDesc: "No crits; contact poisons; heals 1/16 each turn if an opposing Pokemon is poisoned.",
+		desc: "This Pokemon cannot be critically hit. If this Pokemon has a stat lowered by an opposing Pokemon, its Special Defense rises by 2 stages. Its Bug-type moves have 1.5x power, and contact moves used against it deal 0.75x damage.",
+		shortDesc: "No crits; stat drops give +2 SpD; Bug moves 1.5x; takes 0.75x contact damage.",
 	},
 	avalanchebruiser: {
 		name: "Avalanche Bruiser",
@@ -791,8 +821,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flareboost: {
 		name: "Flare Boost",
-		desc: "While this Pokemon is burned, the power of its special attacks is multiplied by 1.5.",
-		shortDesc: "While this Pokemon is burned, its special attacks have 1.5x power.",
+		desc: "This Pokemon's Fire-type attacks have 1.5x power. While this Pokemon is burned, the power of its special attacks is also multiplied by 1.5.",
+		shortDesc: "Fire attacks have 1.5x power; burned special attacks also have 1.5x power.",
 	},
 	firemane: {
 		name: "Fire Mane",
@@ -1413,8 +1443,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	myceliummight: {
 		name: "Mycelium Might",
-		desc: "This Pokemon's Status moves ignore certain Abilities of other Pokemon, and go last among Pokemon using the same or greater priority moves.",
-		shortDesc: "This Pokemon's Status moves go last in their priority bracket and ignore Abilities.",
+		desc: "This Pokemon's status moves ignore the target's Ability and move last in their priority bracket. Before this Pokemon uses a status move, attacks deal 0.75x damage to it. When it successfully uses a status move, it restores 1/8 of its maximum HP.",
+		shortDesc: "Status moves ignore Abilities and move last; before status takes 0.75x; status heals 1/8.",
 	},
 	naturalcure: {
 		name: "Natural Cure",
@@ -2122,13 +2152,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "This Pokemon takes 0.5x damage from Fire- and Ice-type attacks and restores 1/16 of its maximum HP at the end of each turn. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
-		shortDesc: "0.5x Fire/Ice; heals 1/16; absorbs Poison for +1 Atk/SpA.",
+		desc: "This Pokemon takes 0.75x damage from Fire- and Ice-type attacks and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
+		shortDesc: "0.75x Fire/Ice; heals 1/16; Giga Drain 2x; absorbs Poison for +1 Atk/SpA.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon's pulse, aura, beam, cannon, and bullet moves have 1.5x power. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. It restores 1/16 of its maximum HP at the end of each turn.",
-		shortDesc: "Pulse/aura/beam/cannon/bullet 1.5x, or 1.3x and bypass screens; heals 1/16.",
+		desc: "This Pokemon's Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. It restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "Water Pulse 2x; other launcher moves 1.5x, or 1.3x and bypass screens; heals 1/16.",
 	},
 	calderacore: {
 		name: "Caldera Core",
@@ -2164,7 +2194,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stamina: {
 		name: "Stamina",
-		shortDesc: "Enemy hits raise Defense by 1 and heal 1/16 max HP.",
+		shortDesc: "Once per turn, enemy hits raise Defense by 1 and heal 1/16 max HP.",
 	},
 	stancechange: {
 		name: "Stance Change",
@@ -2658,7 +2688,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlefervor: {
 		name: "Battle Fervor",
-		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.5x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it heals 10% when attacking and after being attacked, always takes 0.5x damage, cannot have stats lowered, and cannot flinch.",
+		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.5x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always takes 0.5x damage, cannot have stats lowered, and cannot flinch.",
 		shortDesc: "Fast attacks 1.3x; slow takes 0.5x; first enemy hit raises Atk/SpA; also has Unnerve.",
 	},
 	duskilate: {
@@ -2693,8 +2723,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. Its damaging attacks, being hit by damaging moves, and end of turn each heal 1/16 max HP. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
-		shortDesc: "Water 1.2x; heals 1/16 from attacks, being hit, and end turn; ally protection.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. Once per turn, its damaging attacks restore 1/16 max HP, and once per turn being hit by a damaging move restores 1/16 max HP. It also restores 1/16 max HP at the end of each turn. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
+		shortDesc: "Water 1.2x; heals 1/16 once per turn from attacking/hit and end turn; ally protection.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
@@ -2743,8 +2773,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	soulfire: {
 		name: "Soul Fire",
-		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Ghost-type moves cannot hit Normal-type Pokemon, but otherwise ignore type resistances and hit neutrally. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
-		shortDesc: "Draws in and absorbs Fire/Ghost moves; +1 Atk/SpA. Ghost ignores resistances.",
+		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Fire- and Ghost-type moves cannot hit Normal-type Pokemon with Ghost-type attacks and are resisted by Steel- and Dark-type Pokemon, but otherwise ignore type resistances. Fire- and Ghost-type moves from this Ability deal 4x damage to opposing Soul Fire users. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
+		shortDesc: "Draws in and absorbs Fire/Ghost; Soul Fire attacks ignore most resists and hit Soul Fire 4x.",
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",
@@ -2768,8 +2798,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. Its damaging attacks heal 1/16 max HP. When hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/16 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/12 max HP.",
-		shortDesc: "Mold Breaker; attacks heal 1/16; enemy hits boost Atk/SpA and heal 1/16.",
+		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP. Once per turn when hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/16 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/8 max HP.",
+		shortDesc: "Mold Breaker; once per turn attacks heal; once per turn enemy hit boosts Atk/SpA and heals.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",

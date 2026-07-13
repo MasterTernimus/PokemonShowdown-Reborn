@@ -1415,6 +1415,7 @@ export class BattleActions {
 	getZMove(move: Move, pokemon: Pokemon, skipChecks?: boolean): string | undefined {
 		const item = pokemon.getItem();
 		if (!skipChecks) {
+			if (pokemon.gigantamax && pokemon.species.id === 'eeveegmax') return;
 			if (pokemon.side.zMoveUsed) return;
 			if (!item.zMove) return;
 			if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
@@ -1505,6 +1506,10 @@ export class BattleActions {
 	getMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.moves.get(move);
 		if (move.name === 'Struggle') return move;
+		if (pokemon.gigantamax && pokemon.species.id === 'eeveegmax') {
+			if (move.category === 'Status') return;
+			return this.dex.moves.get('gmaxcuddle');
+		}
 		if (pokemon.gigantamax && pokemon.canGigantamax && move.category !== 'Status') {
 			const gMaxMove = this.dex.moves.get(pokemon.canGigantamax);
 			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
@@ -1516,6 +1521,17 @@ export class BattleActions {
 	getActiveMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 		if (move.name === 'Struggle') return this.dex.getActiveMove(move);
+		if (pokemon.gigantamax && pokemon.species.id === 'eeveegmax') {
+			if (move.category === 'Status') return this.dex.getActiveMove(move);
+			const maxMove = this.dex.getActiveMove('gmaxcuddle');
+			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
+			maxMove.basePower = move.maxMove.basePower;
+			maxMove.category = move.category;
+			maxMove.baseMove = move.id;
+			maxMove.priority = move.priority;
+			maxMove.isZOrMaxPowered = true;
+			return maxMove;
+		}
 		let maxMove = this.dex.getActiveMove(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
 		if (move.category !== 'Status') {
 			if (pokemon.gigantamax && pokemon.canGigantamax) {

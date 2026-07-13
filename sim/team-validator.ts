@@ -707,7 +707,7 @@ export class TeamValidator {
 		}
 		if ((this.gen === 9 && dex.currentMod !== 'champions' && !ruleTable.has('terastalclause')) ||
 			ruleTable.has('bonustypemod')) {
-			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
+			const type = dex.types.get(set.teraType || species.requiredTeraType || 'Stellar');
 			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
 			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {

@@ -2535,8 +2535,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxcuddle: {
 		name: "G-Max Cuddle",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes infatuated, even if they have a substitute. This effect does not happen for a target if both it and the user are the same gender, if either is genderless, or if the target is already infatuated.",
-		shortDesc: "Base move affects power. Foes: infatuated.",
+		desc: "Power is equal to the base move's Max Move power. This move is Fairy type. If this move is successful, opposing Pokemon have their Attack and Special Attack lowered by 1 stage, and the user and its ally restore 1/8 of their maximum HP.",
+		shortDesc: "Fairy. Foes: -1 Atk/SpA. User and ally heal 1/8.",
 	},
 	gmaxdepletion: {
 		name: "G-Max Depletion",

@@ -723,7 +723,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.field.terrainState.terrainChanges?.set('coldEclipseHeat', count);
 					}
 				}
-				if (move.id === 'geomancy') {
+				if (move.id === 'geomancy' || move.id === 'lightofruin') {
 					this.add('-message', 'Starlight began to shine!');
 					this.field.changeTerrain('starlightarenaterrain');
 					if (this.field.terrainState?.duration) {
@@ -2194,7 +2194,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (move.id === 'gravity' || move.id === 'geomancy') {
+				if (move.id === 'gravity' || move.id === 'geomancy' || move.id === 'lightofruin') {
 					this.add('-message', 'The world\'s matter reformed!');
 					this.field.changeTerrain('starlightarenaterrain', source, move);
 				}

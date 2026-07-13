@@ -7377,12 +7377,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
-					pokemon.addVolatile('attract');
+					this.boost({ atk: -1, spa: -1 }, pokemon, source, this.dex.moves.get('gmaxcuddle'), true);
+				}
+				for (const ally of source.alliesAndSelf()) {
+					this.heal(ally.baseMaxhp / 8, ally, source);
 				}
 			},
 		},
 		target: "adjacentFoe",
-		type: "Normal",
+		type: "Fairy",
 		contestType: "Cool",
 	},
 	gmaxdepletion: {
