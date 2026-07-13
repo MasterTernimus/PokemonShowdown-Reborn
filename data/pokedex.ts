@@ -18972,7 +18972,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Farigiraf",
 		types: ["Normal", "Psychic"],
 		baseStats: { hp: 120, atk: 90, def: 70, spa: 110, spd: 70, spe: 60 },
-		abilities: { 0: "Gluttony", 1: "Armor Tail", H: "Sap Sipper" },
+		abilities: { 0: "Gluttony", 1: "Armor Tail", H: "Royal Decree" },
 		heightm: 3.2,
 		weightkg: 160,
 		color: "Brown",

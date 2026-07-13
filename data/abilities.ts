@@ -5397,6 +5397,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryBoost(boost, target, source, effect) {
 			// Don't bounce self stat changes, or boosts that have already bounced
 			if (!source || target === source || !boost || effect.name === 'Mirror Armor') return;
+			if (effect.id === 'neutralization') {
+				let showMsg = false;
+				let b: BoostID;
+				for (b in boost) {
+					if (boost[b]! < 0) {
+						delete boost[b];
+						showMsg = true;
+					}
+				}
+				if (showMsg) this.add("-fail", target, "unboost", "[from] ability: Mirror Armor", `[of] ${target}`);
+				return;
+			}
 			let b: BoostID;
 			for (b in boost) {
 				if (boost[b]! < 0) {
@@ -5674,9 +5686,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	neutralization: {
 		lowerOffense(target, source) {
+			if (target.hasAbility('neutralization')) return;
 			const boosts = target.getStat('atk', false, true) >= target.getStat('spa', false, true) ?
 				{ atk: -2, spe: -1 } : { spa: -2, spe: -1 };
-			this.boost(boosts, target, source);
+			const effect = this.dex.abilities.get('neutralization');
+			const allowedBoosts = this.runEvent('TryBoost', target, source, effect, { ...boosts });
+			if (!allowedBoosts) return;
+			const cappedBoosts = target.getCappedBoost(allowedBoosts);
+			let announced = false;
+			for (const statName in cappedBoosts) {
+				const stat = statName as BoostID;
+				if (!cappedBoosts[stat]) continue;
+				const boostBy = target.boostBy({ [stat]: cappedBoosts[stat] });
+				if (!boostBy) {
+					this.add('-unboost', target, stat, 0);
+					continue;
+				}
+				if (!announced) {
+					this.add('-ability', source, 'Neutralization');
+					announced = true;
+				}
+				this.add('-unboost', target, stat, -boostBy);
+			}
 		},
 		onStart(pokemon) {
 			if (this.field.isTerrain('chessboardterrain')) this.boost({ def: 1, spd: 1 }, pokemon);
@@ -7954,12 +7985,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wrathshield: {
 		onStart(pokemon) {
+			pokemon.abilityState.wrathShieldHitTriggered = false;
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain', 'chessboardterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
 		},
+		onAfterMove(source, target, move) {
+			if (move.category !== 'Status') source.abilityState.wrathShieldHitTriggered = false;
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (source && !source.isAlly(target)) {
+				if (target.abilityState.wrathShieldHitTriggered) return;
+				target.abilityState.wrathShieldHitTriggered = true;
 				this.boost({ atk: 1, def: 1 }, target, target);
 				this.heal(target.baseMaxhp / 16, target, target);
 			}
@@ -7973,9 +8010,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onCriticalHit: false,
 		onAfterEachBoost(boost, target, source, effect) {
 			if (target.isAlly(source)) return;
+			if (target.abilityState.wrathShieldDropTurn === this.turn) return;
 			for (const statName in boost) {
 				const stat = statName as BoostID;
 				if (boost[stat]! < 0) {
+					target.abilityState.wrathShieldDropTurn = this.turn;
 					this.boost({ def: 1, spd: 1 }, target, target, null, false, true);
 					return;
 				}

@@ -878,7 +878,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 			},
-			onSideStart(side) {
+			onSideStart(side, source) {
+				if (this.getAllActive().some(pokemon => pokemon.hasAbility('royaldecree'))) {
+					this.add('-fail', source, 'move: Aurora Veil', '[from] ability: Royal Decree');
+					return false;
+				}
 				this.add('-sidestart', side, 'move: Aurora Veil');
 			},
 			onSideResidualOrder: 26,
@@ -11097,6 +11101,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
+				if (this.getAllActive().some(pokemon => pokemon.hasAbility('royaldecree'))) {
+					this.add('-fail', source, 'move: Light Screen', '[from] ability: Royal Decree');
+					return false;
+				}
 				this.add('-sidestart', side, 'move: Light Screen');
 				if (this.field.isTerrain('mirrorarenaterrain')) {
 					this.boost({ evasion: 1 }, source);
@@ -16160,6 +16168,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
+				if (this.getAllActive().some(pokemon => pokemon.hasAbility('royaldecree'))) {
+					this.add('-fail', source, 'move: Reflect', '[from] ability: Royal Decree');
+					return false;
+				}
 				this.add('-sidestart', side, 'Reflect');
 				if (this.field.isTerrain('mirrorarenaterrain')) {
 					this.boost({ evasion: 1 }, source);
