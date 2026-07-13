@@ -579,13 +579,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedkeepsake: {
 		name: "Cursed Keepsake",
-		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. This Pokemon restores HP equal to Curse damage dealt to cursed targets. If a target cursed by this Pokemon switches out, it loses 1/8 max HP before leaving. This Pokemon takes 0.8x damage from attacks.",
-		shortDesc: "Hit by foe: curses attacker; heals from Curse damage; takes 0.8x attack damage.",
+		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. If a target cursed by this Pokemon switches out, it loses 1/8 max HP before leaving. This Pokemon takes 0.8x damage from attacks.",
+		shortDesc: "Hit by foe: curses attacker; takes 0.8x attack damage.",
 	},
 	cursedmarionette: {
 		name: "Cursed Marionette",
-		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon takes 0.5x damage from attacks.",
-		shortDesc: "Status moves +1 priority; status moves Curse foes; takes 0.5x attack damage.",
+		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon restores HP equal to Curse damage dealt to targets it cursed. This Pokemon takes 0.5x damage from attacks.",
+		shortDesc: "Status moves +1 priority; status moves Curse foes; heals from Curse damage; takes 0.5x.",
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
