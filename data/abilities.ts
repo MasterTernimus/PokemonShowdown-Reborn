@@ -9243,7 +9243,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
-			move.infiltrates = true;
 			delete move.flags['charge'];
 		},
 		onSourceDamagingHit(damage, target, source, move) {
