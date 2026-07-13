@@ -2017,14 +2017,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyDamage(damage, target, source, effect) {
 			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('sinofenvy')) {
-				this.heal(damage, target.volatiles['curse'].source, target);
+				this.heal(damage / 2, target.volatiles['curse'].source, target);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hp > target.maxhp / 2) return this.chainModify(0.5);
+			if (target.hp > target.maxhp / 4) return this.chainModify(0.5);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 4, source, source);
+			if (effect?.effectType === 'Move' || effect?.id === 'curse') this.heal(source.baseMaxhp / 4, source, source);
 		},
 		flags: { breakable: 1 },
 		name: "Sin of Envy",
@@ -2155,6 +2155,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
 			source.addVolatile('curse', target, this.dex.abilities.get('cursedkeepsake'));
 		},
+		onAnyDamage(damage, target, source, effect) {
+			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedkeepsake')) {
+				this.heal(damage / 2, target.volatiles['curse'].source, target);
+			}
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
@@ -2177,7 +2182,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyDamage(damage, target, source, effect) {
 			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedmarionette')) {
-				this.heal(damage, target.volatiles['curse'].source, target);
+				this.heal(damage / 2, target.volatiles['curse'].source, target);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -2300,8 +2305,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (source.maybeTrapped || source.trapped) return this.chainModify(0.75);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 4, source, source);
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (!target || target === source || source.isAlly(target) || target.fainted) return;
+			target.addVolatile('curse', source, this.dex.abilities.get('nightmarecage'));
 		},
 		flags: { breakable: 1 },
 		name: "Nightmare Cage",
@@ -2603,10 +2609,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Sin of Pride');
 			if (this.field.isTerrain('fairytaleterrain')) {
-				this.boost({ def: 1, spd: 1 }, pokemon);
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('sinofpride'));
 			}
 			if (this.field.isTerrain('mirrorarmor')) {
-				this.boost({ evasion: 1 }, pokemon);
+				this.boost({ evasion: 1 }, pokemon, pokemon, this.dex.abilities.get('sinofpride'));
 			}
 			const pressureDrop = this.field.isTerrain('coldeclipseterrain') ? -2 : -1;
 			let pressureActivated = false;
@@ -3338,6 +3344,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	relicarmor: {
 		onStart(pokemon) {
+			if (this.field.isTerrain(['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'])) {
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('relicarmor'));
+			}
 			const drop = this.field.isTerrain('coldeclipseterrain') ? -2 : -1;
 			let activated = false;
 			for (const target of pokemon.foes()) {
@@ -5365,10 +5374,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	mirrorarmor: {
 		onStart(pokemon) {
 			if (this.field.isTerrain('fairytaleterrain')) {
-				this.boost({ def: 1, spd: 1 });
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('mirrorarmor'));
 			}
 			if (this.field.isTerrain('mirrorarmor')) {
-				this.boost({ evasion: 1 });
+				this.boost({ evasion: 1 }, pokemon, pokemon, this.dex.abilities.get('mirrorarmor'));
 			}
 		},
 		onFoeTryMove(target, source, move) {
@@ -7856,6 +7865,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryBoost(boost, target, source, effect) {
 			if (!effect || effect.id === 'royaldecree') return;
+			const positiveBoost = Object.values(boost).some(value => value && value > 0);
+			if (positiveBoost && target === source && effect.effectType === 'Ability') {
+				const fieldAbilityBoosts: { [abilityid: string]: string[] } = {
+					stalwart: ['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'],
+					mirrorarmor: ['fairytaleterrain', 'mirrorarmor'],
+					sinofpride: ['fairytaleterrain', 'mirrorarmor'],
+					relicarmor: ['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'],
+				};
+				const allowedFields = fieldAbilityBoosts[effect.id];
+				if (allowedFields && this.field.isTerrain(allowedFields)) return;
+			}
 			const fieldEffect = effect.effectType === 'Field' || effect.effectType === 'Terrain';
 			if (fieldEffect) return;
 			let blocked = false;
@@ -8220,7 +8240,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	stalwart: {
 		onStart(pokemon) {
 			if (this.field.isTerrain(['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'])) {
-				this.boost({ spa: 1 }, pokemon, pokemon);
+				this.boost({ spa: 1 }, pokemon, pokemon, this.dex.abilities.get('stalwart'));
 			}
 		},
 		onModifyMovePriority: 1,
@@ -9229,6 +9249,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.abilityState.ultraEgoDefBoosted = false;
 			pokemon.abilityState.ultraEgoSpDBoosted = false;
 			pokemon.abilityState.ultraEgoPinch = false;
+			pokemon.abilityState.ultraEgoHitTriggered = false;
 		},
 		boostedField() {
 			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
@@ -9245,6 +9266,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.ignoreAbility = true;
 			delete move.flags['charge'];
 		},
+		onAfterMove(source, target, move) {
+			if (move.category !== 'Status') source.abilityState.ultraEgoHitTriggered = false;
+		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
@@ -9253,8 +9277,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
-			if (target.abilityState.ultraEgoHitTurn === this.turn) return;
-			target.abilityState.ultraEgoHitTurn = this.turn;
+			if (target.abilityState.ultraEgoHitTriggered) return;
+			target.abilityState.ultraEgoHitTriggered = true;
 			this.boost({ atk: 1, spa: 1 }, target, target);
 			if (this.effect.boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {

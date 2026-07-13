@@ -439,8 +439,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relicarmor: {
 		name: "Relic Armor",
-		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.75x damage from attacks, has Pressure's PP effect and field interactions, and its moves ignore Abilities.",
-		shortDesc: "No crits; stat drops give +1 Def/SpD; takes 0.75x; Pressure + Mold Breaker.",
+		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.75x damage from attacks, has Pressure's PP effect and field interactions, and its moves ignore Abilities. On Desert, Fairy Tale, Cave, Crystal Cavern, New World, and Volcanic fields, its Defense and Special Defense rise by 1 stage on switch-in.",
+		shortDesc: "No crits; stat drops +1 Def/SpD; takes 0.75x; Pressure + Mold Breaker; field Def/SpD.",
 	},
 	windysurge: {
 		name: "Windy Surge",
@@ -549,8 +549,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinofenvy: {
 		name: "Sin of Envy",
-		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/2 of its maximum HP, attacks deal 0.5x damage to it. When this Pokemon hits an enemy with an attack or status move, the target becomes cursed. Damage dealt by that Curse heals this Pokemon. If this Pokemon causes an opposing Pokemon to faint, it restores 1/4 of its maximum HP.",
-		shortDesc: "User's moves don't miss; above 1/2 HP takes 0.5x; hits Curse; Curse damage heals.",
+		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.5x damage to it. When this Pokemon hits an enemy with an attack or status move, the target becomes cursed. Damage dealt by that Curse heals this Pokemon for half the damage dealt. If this Pokemon causes an opposing Pokemon to faint with a move or Curse damage, it restores 1/4 of its maximum HP.",
+		shortDesc: "Moves don't miss; above 1/4 HP takes 0.5x; hits Curse; heals half Curse damage.",
 	},
 	alloycore: {
 		name: "Alloy Core",
@@ -579,13 +579,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedkeepsake: {
 		name: "Cursed Keepsake",
-		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. Curse applied by this Ability deals 1/8 max HP each turn and ends when the cursed Pokemon switches out. This Pokemon takes 0.8x damage from attacks.",
-		shortDesc: "Hit by foe: curses attacker for 1/8 per turn; takes 0.8x attack damage.",
+		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. Curse applied by this Ability deals 1/8 max HP each turn and heals this Pokemon for half the damage dealt. The Curse ends when the cursed Pokemon switches out. This Pokemon takes 0.8x damage from attacks.",
+		shortDesc: "Hit by foe: curses attacker for 1/8 per turn; heals half Curse damage; takes 0.8x.",
 	},
 	cursedmarionette: {
 		name: "Cursed Marionette",
-		desc: "This Pokemon's status moves have +1 priority. If this Pokemon is hit by an opposing damaging move or uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon restores HP equal to Curse damage dealt to targets it cursed. If a target cursed by this Ability switches out, it loses 1/16 max HP and this Pokemon heals that amount. This Pokemon takes 0.5x damage from Pokemon it cursed.",
-		shortDesc: "Status +1; hit/status Curse foes; heals from Curse; cursed targets deal 0.5x.",
+		desc: "This Pokemon's status moves have +1 priority. If this Pokemon is hit by an opposing damaging move or uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon restores HP equal to half of the Curse damage dealt to targets it cursed. If a target cursed by this Ability switches out, it loses 1/16 max HP and this Pokemon heals that amount. This Pokemon takes 0.5x damage from Pokemon it cursed.",
+		shortDesc: "Status +1; hit/status Curse foes; heals half Curse damage; cursed targets deal 0.5x.",
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
@@ -614,8 +614,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	nightmarecage: {
 		name: "Nightmare Cage",
-		desc: "Opposing adjacent Pokemon cannot switch out while this Pokemon is active. Trapped Pokemon deal 0.75x damage. If a trapped Pokemon faints from this Pokemon's move, this Pokemon restores 1/4 of its maximum HP.",
-		shortDesc: "Shadow Tag; trapped foes deal 0.75x; KO heals 1/4.",
+		desc: "Opposing adjacent Pokemon cannot switch out while this Pokemon is active. Trapped Pokemon deal 0.75x damage. This Pokemon's attacks and status moves curse opposing targets, and Curse from this Ability deals 1/8 max HP each turn.",
+		shortDesc: "Shadow Tag; trapped foes deal 0.75x; moves Curse for 1/8.",
 	},
 	mirrorgreed: {
 		name: "Mirror Greed",
@@ -2102,8 +2102,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, non-field stat changes fail. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
-		shortDesc: "Switch-in Haze + screen clear; blocks non-field stat changes; boosted fields +1 Def/SpD.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, stat changes fail unless they come from field effects or exact ability boosts granted by the current field, such as Stalwart, Mirror Armor, Sin of Pride, or Relic Armor field boosts. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
+		shortDesc: "Switch-in Haze + screen clear; blocks manual stat changes; allows field-granted boosts.",
 	},
 	parasitism: {
 		name: "Parasitism",
@@ -2798,8 +2798,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP. Once per turn when hit by an opposing damaging move, its Attack and Special Attack rise by 1 and it heals 1/16 max HP. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/8 max HP.",
-		shortDesc: "Mold Breaker; once per turn attacks heal; once per turn enemy hit boosts Atk/SpA and heals.",
+		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/8 max HP.",
+		shortDesc: "Mold Breaker; attacks heal; after attacking, next enemy hit boosts Atk/SpA and heals.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
