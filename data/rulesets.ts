@@ -849,6 +849,40 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	fightingclause: {
+		effectType: 'ValidatorRule',
+		name: 'Fighting Clause',
+		desc: "Prevents teams from having more than one Pokemon with Ultra Ego, Ultra Instinct, or Battle Fervor.",
+		onBegin() {
+			this.add('rule', 'Fighting Clause: Limit one Pokemon with Ultra Ego, Ultra Instinct, or Battle Fervor');
+		},
+		onValidateTeam(team) {
+			const restrictedAbilities = new Set(['ultraego', 'ultrainstinct', 'battlefervor']);
+			const restrictedPokemon: string[] = [];
+			for (const set of team) {
+				const abilities = new Set<ID>();
+				const setAbility = this.toID(set.ability);
+				if (setAbility) abilities.add(setAbility);
+				const species = this.dex.species.get(set.species);
+				const item = this.dex.items.get(set.item);
+				if (item.megaStone?.[species.name]) {
+					const megaSpecies = this.dex.species.get(item.megaStone[species.name]);
+					for (const ability of Object.values(megaSpecies.abilities)) {
+						abilities.add(this.toID(ability));
+					}
+				}
+				const restrictedAbility = [...abilities].find(ability => restrictedAbilities.has(ability));
+				if (!restrictedAbility) continue;
+				restrictedPokemon.push(`${set.name || set.species} (${this.dex.abilities.get(restrictedAbility).name})`);
+			}
+			if (restrictedPokemon.length > 1) {
+				return [
+					`You are limited to one Pokemon with Ultra Ego, Ultra Instinct, or Battle Fervor by Fighting Clause.`,
+					`(You have ${restrictedPokemon.join(', ')})`,
+				];
+			}
+		},
+	},
 	nicknameclause: {
 		effectType: 'ValidatorRule',
 		name: 'Nickname Clause',

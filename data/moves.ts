@@ -507,7 +507,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	aquatail: {
 		num: 401,
-		accuracy: 90,
+		accuracy: true,
 		basePower: 90,
 		category: "Physical",
 		name: "Aqua Tail",
@@ -866,6 +866,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target)) {
+					if (target.hasAbility('ultraego')) return;
 					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
 						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
@@ -3552,7 +3553,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 12,
 			onResidual(pokemon) {
 				const source = this.effectState.source;
-				const damageDivisor = source?.hasAbility('cursedkeepsake') ? 8 : 4;
+				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'nightmarecage']) ? 8 : 4;
 				this.damage(pokemon.baseMaxhp / damageDivisor);
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
@@ -7891,6 +7892,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('trapped', source, null, 'trapper');
+					if (source.hasAbility('sinofenvy')) {
+						pokemon.addVolatile('curse', source, this.dex.abilities.get('sinofenvy'));
+					}
 				}
 			},
 		},
@@ -11084,6 +11088,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
+					if (target.hasAbility('ultraego')) return;
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -16146,6 +16151,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
+					if (target.hasAbility('ultraego')) return;
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -22569,7 +22575,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePowerCallback(pokemon, target, move) {
 			if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') &&
 				!pokemon.transformed) {
-				return 25;
+				return 30;
 			}
 			return move.basePower;
 		},
@@ -22580,6 +22586,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [2, 5],
 		onModifyMove(move, pokemon) {
+			if (pokemon.hasAbility('shadowcurrent')) {
+				move.basePower = 20;
+			} else if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed) {
+				move.basePower = 30;
+			}
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.multihit = 5;

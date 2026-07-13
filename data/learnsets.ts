@@ -27761,6 +27761,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			burningjealousy: [],
 			burnup: ["9L47"], 
 			calmmind: [],
+			closecombat: [],
 			confuseray: [],
 			counter: [],
 		covet: [],
