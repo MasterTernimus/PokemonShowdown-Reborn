@@ -49586,6 +49586,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			feintattack: ["9L19", "7L19", "6L19", "5L22", "5S1", "4L28", "3L39", "3S0"],
 			flash: ["9M", "6M", "5M", "4M", "3M"],
 			fling: ["9M", "7M", "6M", "5M", "4M"],
+			followme: [],
 			foulplay: ["9M", "7T", "6T", "5T"],
 			frustration: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			gigaimpact: ["9M", "7M", "6M", "5M", "4M"],

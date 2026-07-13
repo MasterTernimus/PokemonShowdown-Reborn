@@ -3551,19 +3551,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 12,
 			onResidual(pokemon) {
-				const damage = this.damage(pokemon.baseMaxhp / 4);
 				const source = this.effectState.source;
-				if (damage && source?.hp && source.hasAbility('cursedkeepsake')) {
-					this.heal(damage, source, pokemon, this.dex.abilities.get('cursedkeepsake'));
-				}
+				const damageDivisor = source?.hasAbility('cursedkeepsake') ? 8 : 4;
+				this.damage(pokemon.baseMaxhp / damageDivisor);
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
 				}
 			},
 			onBeforeSwitchOut(pokemon) {
 				const source = this.effectState.source;
-				if (source?.hp && source.hasAbility('cursedkeepsake')) {
-					this.damage(pokemon.baseMaxhp / 8, pokemon, source, this.dex.abilities.get('cursedkeepsake'));
+				if (source?.hp && source.hasAbility('cursedmarionette')) {
+					const damage = this.damage(pokemon.baseMaxhp / 16, pokemon, source, this.dex.abilities.get('cursedmarionette'));
+					if (damage) this.heal(damage, source, pokemon, this.dex.abilities.get('cursedmarionette'));
 				}
 			},
 		},

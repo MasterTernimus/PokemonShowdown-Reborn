@@ -2167,6 +2167,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category === 'Status') return priority + 1;
 		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
+			source.addVolatile('curse', target, this.dex.abilities.get('cursedmarionette'));
+		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!target || target === source || source.isAlly(target) || target.fainted || move.category !== 'Status') return;
 			target.addVolatile('curse', source, this.dex.abilities.get('cursedmarionette'));
@@ -2177,7 +2181,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.5);
+			if (move.category !== 'Status' && source.volatiles['curse']?.source === target) return this.chainModify(0.5);
 		},
 		flags: { breakable: 1 },
 		name: "Cursed Marionette",
