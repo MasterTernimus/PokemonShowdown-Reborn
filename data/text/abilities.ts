@@ -2102,8 +2102,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, stat changes fail unless they come from field effects or exact ability boosts granted by the current field, such as Stalwart, Mirror Armor, Sin of Pride, or Relic Armor field boosts. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
-		shortDesc: "Switch-in Haze + screen clear; blocks manual stat changes; allows field-granted boosts.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, and stat changes fail unless they come from field effects or exact ability boosts granted by the current field, such as Stalwart, Mirror Armor, Sin of Pride, or Relic Armor field boosts. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
+		shortDesc: "Switch-in Haze + screen clear; blocks screens/manual stat changes; allows field boosts.",
 	},
 	parasitism: {
 		name: "Parasitism",
@@ -2127,8 +2127,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wrathshield: {
 		name: "Wrath Shield",
-		desc: "When this Pokemon is hit by an enemy attack, its Attack and Defense rise by 1 stage and it restores 1/16 of its maximum HP. It has Bulletproof's effect, blocks moves boosted by Mega Launcher, cannot be critically hit, and raises Defense and Special Defense by 1 stage when its stats are lowered.",
-		shortDesc: "On enemy hit: +1 Atk/Def and heals 1/16. Blocks bullets/launcher moves; no crits.",
+		desc: "After this Pokemon uses a damaging move, the next enemy attack that hits it raises its Attack and Defense by 1 stage and restores 1/16 of its maximum HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. It has Bulletproof's effect, blocks moves boosted by Mega Launcher, cannot be critically hit, and raises Defense and Special Defense by 1 stage the first time its stats are lowered each turn.",
+		shortDesc: "After attacking, next enemy hit gives +1 Atk/Def and heals; first stat drop each turn +Def/SpD.",
 	},
 	shadowcurrent: {
 		name: "Shadow Current",
@@ -2753,8 +2753,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neutralization: {
 		name: "Neutralization",
-		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. While active, terrain effects are suppressed and field changes are neutralized.",
-		shortDesc: "Hits lower foe's higher offense by 2 and Speed by 1; suppresses terrain effects/changes.",
+		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. This does not affect other Neutralization users or Pokemon immune to stat drops, and it does not trigger stat-drop reactive effects. While active, terrain effects are suppressed and field changes are neutralized.",
+		shortDesc: "Hits lower foe offense/Spe without reactive triggers; respects drop immunity.",
 	},
 	powerdrill: {
 		name: "Power Drill",
