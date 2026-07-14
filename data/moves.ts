@@ -4668,7 +4668,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 90,
 		basePower: 60,
 		basePowerCallback(pokemon, target, move) {
-			if (pokemon.species.id === 'garchompbattlebond') return 80;
+			if (pokemon.species.id === 'garchompbattlebond') return 60;
 			return move.basePower;
 		},
 		category: "Physical",
