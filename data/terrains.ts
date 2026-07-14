@@ -77,6 +77,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (type === 'Dark' && types.includes('Fairy')) {
 					return 0;
 				}
+				if (type === 'Poison' && types.includes('Fairy')) {
+					return 0;
+				}
+				if (type === 'Fairy' && types.includes('Poison')) {
+					return -1;
+				}
 				if (type === 'Grass' && types.includes('Poison')) {
 					return 0;
 				}
@@ -125,10 +131,22 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return;
 				}
 			},
+			onModifyDef(def, pokemon) {
+				if (pokemon.hasAbility(['eternalflower', 'ange'])) return this.chainModify(1.5);
+			},
+			onModifySpD(spd, pokemon) {
+				if (pokemon.hasAbility(['eternalflower', 'ange'])) return this.chainModify(1.5);
+			},
+			onSetStatus(status, target, source, effect) {
+				if (target.hasAbility(['eternalflower', 'ange'])) return false;
+			},
 			onResidual(pokemon) {
 				if (pokemon.getStatus().id === 'slp') {
 					this.damage(pokemon.baseMaxhp / 16, pokemon);
 					this.add('-message', pokemon.name + "'s dream is corrupted by the evil spirits!");
+				}
+				if (pokemon.hasAbility(['eternalflower', 'ange'])) {
+					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				}
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable() && pokemon.hasType('Grass')) {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
@@ -1435,7 +1453,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				const boosted = ['attackorder', 'electroweb', 'drumbeating', 'skittersmack', 'pounce'];
 				const cutMoves = ["aircutter", "airslash", "breakingswipe", "furycutter", "psychocut", "slash"];
-				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'trickortreat'];
+				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
 				const nerfed = ['muddywater', 'surf'];
 				if (move.type === 'Grass') {
 					modifier *= 1.5;
@@ -1467,7 +1485,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					modifier *= 1.3;
 				}
-				if (hauntedMoves.includes(move.id)) {
+				if (hauntedMoves.includes(move.id) || (move.id === 'curse' && source.types.includes('Ghost'))) {
 					modifier *= 1.3;
 				}
 				if (move.id === 'gravapple') {
@@ -1478,7 +1496,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
-				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'trickortreat'];
+				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
 				const swampMoves = ['surf', 'muddywater'];
 				const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
 				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbility('neutralization'));
@@ -1486,7 +1504,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('burningterrain');
 					return;
 				}
-				if (hauntedMoves.includes(move.id)) {
+				if (hauntedMoves.includes(move.id) || (move.id === 'curse' && source.types.includes('Ghost'))) {
 					if (neutralizationActive) return;
 					this.field.changeTerrain('bewitchedwoodsterrain');
 					return;

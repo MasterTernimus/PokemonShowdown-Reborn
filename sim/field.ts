@@ -209,6 +209,14 @@ export class Field {
 			this.battle.add('-message', 'The chessboard prevents a new field from being generated!');
 			return false;
 		}
+		const bewitchedBlockedTerrains = [
+			'electricterrain', 'grassyterrain', 'psychicterrain', 'mistyterrain',
+			'forestterrain', 'rainbowterrain', 'coldeclipseterrain',
+		];
+		if (this.terrain === 'bewitchedwoodsterrain' && bewitchedBlockedTerrains.includes(status.id)) {
+			this.battle.add('-message', 'The fields magic prevents it');
+			return false;
+		}
 		if (this.neutralizeTerrainChange()) return false;
 		if (this.isTerrain(['underwaterterrain', 'newworldterrain', 'dragonsdenterrain'])) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
@@ -263,6 +271,14 @@ export class Field {
 		}
 		if (this.terrain === 'chessboardterrain') {
 			this.battle.add('-message', 'The chessboard prevents a new field from being generated!');
+			return false;
+		}
+		const bewitchedBlockedTerrains = [
+			'electricterrain', 'grassyterrain', 'psychicterrain', 'mistyterrain',
+			'forestterrain', 'rainbowterrain', 'coldeclipseterrain',
+		];
+		if (this.terrain === 'bewitchedwoodsterrain' && bewitchedBlockedTerrains.includes(status.id)) {
+			this.battle.add('-message', 'The fields magic prevents it');
 			return false;
 		}
 		if (this.neutralizeTerrainChange()) return false;
