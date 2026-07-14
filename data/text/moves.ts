@@ -3621,8 +3621,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lightofruin: {
 		name: "Light of Ruin",
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 1/2 recoil.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP. On Bewitched Woods, the recoil is reduced to 1/4.",
+		shortDesc: "Has 1/2 recoil; 1/4 recoil on Bewitched Woods.",
 	},
 	lightscreen: {
 		name: "Light Screen",
@@ -4250,8 +4250,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mist: {
 		name: "Mist",
-		desc: "For 5 turns, or 8 turns during Snow or Hail, the user and its party members are protected from stat drops by opposing Pokemon and opposing Abilities. Allies take 0.75x damage from spread moves, Ice-type allies restore 1/16 max HP each turn, and Misty Terrain is created for 3 turns. Fails if the effect is already active on the user's side.",
-		shortDesc: "Blocks stat drops; weakens spread damage; heals Ice allies; sets 3-turn Misty Terrain.",
+		desc: "For 5 turns, or 8 turns during Snow or Hail, the user and its party members are protected from stat drops by opposing Pokemon and opposing Abilities. Allies take 0.75x damage from spread moves, Ice-type allies restore 1/16 max HP each turn, and Misty Terrain is created for 3 turns. On Bewitched Woods, this extends Bewitched Woods instead of creating Misty Terrain. Fails if the effect is already active on the user's side.",
+		shortDesc: "Blocks stat drops; weakens spread damage; heals Ice allies; sets Misty or extends Bewitched.",
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "While active, user is protected from stat drops.",

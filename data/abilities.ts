@@ -399,6 +399,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	battlefervor: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Battle Fervor');
 			this.effectState.unnerved = true;
@@ -421,19 +422,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.effectState.unnerved = false;
 		},
 		onFoeUseItem(item) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (['elementalseed', 'telluricseed', 'magicalseed', 'syntheticseed'].includes(item.id)) {
 				return !this.effectState.unnerved;
 			}
 		},
 		onFoeTryEatItem() {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			return !this.effectState.unnerved;
 		},
 		onTryAddVolatile(status, pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (status.id === 'flinch' && this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				return null;
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) return;
 			if (source && target.isAlly(source)) return;
 			let blocked = false;
@@ -448,6 +453,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (move.category === 'Status') return;
 			if (target && (this.queue.willMove(target) || target.newlySwitched)) {
 				this.debug('Battle Fervor boost');
@@ -455,6 +461,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!move || move.category === 'Status') return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Battle Fervor field weaken');
@@ -1978,7 +1985,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	corrosivescale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
-			if (pokemon.status || this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'dragonsdenterrain', 'starlightarenaterrain'])) {
+			if (pokemon.status || this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'dragonsdenterrain', 'starlightarenaterrain', 'bewitchedwoodsterrain'])) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -9322,6 +9329,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	ultraego: {
 		onStart(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			this.add('-ability', pokemon, 'Ultra Ego');
 			pokemon.abilityState.ultraEgoDefBoosted = false;
 			pokemon.abilityState.ultraEgoSpDBoosted = false;
@@ -9332,6 +9340,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
 		},
 		healUltraEgo(pokemon, source) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.ultraEgoPinch = true;
 				this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
@@ -9340,19 +9349,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onModifyMove(move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			move.ignoreAbility = true;
 			delete move.flags['charge'];
 		},
 		onAfterMove(source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (move.category !== 'Status') source.abilityState.ultraEgoHitTriggered = false;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
 			this.effect.healUltraEgo.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			if (target.abilityState.ultraEgoHitTriggered) return;
 			target.abilityState.ultraEgoHitTriggered = true;
@@ -9376,29 +9389,35 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	ultrainstinct: {
 		onStart(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			this.add('-ability', pokemon, 'Ultra Instinct');
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) this.boost({ accuracy: 1 }, pokemon, pokemon);
 		},
 		onTryAddVolatile(status, pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (status.id === 'flinch') return null;
 		},
 		onTryBoost(boost, target, source, effect) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Ultra Instinct', `[of] ${target}`);
 			}
 		},
 		onModifyMove(move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			move.ignoreAbility = true;
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain']) || this.queue.willMove(target) || target.newlySwitched) {
 				this.debug('Ultra Instinct boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Ultra Instinct field weaken');
 				return this.chainModify(0.25);

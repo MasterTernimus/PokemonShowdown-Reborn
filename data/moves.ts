@@ -3783,6 +3783,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						return;
 					}
 					this.add('-activate', target, 'move: Destiny Bond');
+					if (['banette', 'banettemega'].includes(target.species.id) && this.field.terrain === 'hauntedterrain') {
+						this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
+					}
 					source.faint();
 				}
 			},
@@ -8523,6 +8526,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
 							this.add('-activate', source, 'move: Grudge', move.name);
+							if (['banette', 'banettemega'].includes(target.species.id) && this.field.terrain === 'hauntedterrain') {
+								this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
+							}
 						}
 					}
 				}
@@ -8873,6 +8879,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		recoil: [1, 2],
+		onModifyMove(move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) move.recoil = [1, 4];
+		},
 		target: "normal",
 		type: "Rock",
 		contestType: "Tough",
@@ -13005,6 +13014,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onAfterMove(source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) {
+				this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
+				this.add('-message', 'The mist deepened the woods magic!');
+				return;
+			}
 			if (this.field.setTerrain('mistyterrain', source, move)) {
 				this.field.terrainState.duration = 3;
 			}

@@ -414,13 +414,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalflower: {
 		name: "Eternal Flower",
-		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. On Fairy Tale Field, this Pokemon's Attack and Special Attack are doubled. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.4x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
-		shortDesc: "Grass attacks use 1.5x offenses; enemy gimmicks to 0.4x; on faint creates Bewitched.",
+		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. On Fairy Tale Field, this Pokemon's Attack and Special Attack are doubled. On Bewitched Woods, this Pokemon's Defense and Special Defense are 1.5x, it cannot be statused, and it restores 1/16 max HP each turn. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.4x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Grass attacks use 1.5x offenses; Bewitched bulk/status/heal; enemy gimmicks to 0.4x.",
 	},
 	ange: {
 		name: "Ange",
-		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. It boosts Fairy-type moves like Fairy Aura, has Eternal Flower's Grass and Fairy Tale boosts, and reduces opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon's stats to 0.4x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
-		shortDesc: "Eternal Flower + Fairy Aura; weakens gimmicks; on faint creates Bewitched.",
+		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. It boosts Fairy-type moves like Fairy Aura, has Eternal Flower's Grass and Fairy Tale boosts, and on Bewitched Woods its Defense and Special Defense are 1.5x, it cannot be statused, and it restores 1/16 max HP each turn. It reduces opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon's stats to 0.4x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Eternal Flower + Fairy Aura; Bewitched bulk/status/heal; weakens gimmicks.",
 	},
 	ascendance: {
 		name: "Ascendance",
@@ -1315,7 +1315,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	marvelscale: {
 		name: "Marvel Scale",
-		shortDesc: "If this Pokemon has a non-volatile status condition, its Defense is multiplied by 1.5.",
+		shortDesc: "If statused or on Bewitched Woods, this Pokemon's Defense is multiplied by 1.5.",
 	},
 	megalauncher: {
 		name: "Mega Launcher",
@@ -2688,8 +2688,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlefervor: {
 		name: "Battle Fervor",
-		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.5x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always takes 0.5x damage, cannot have stats lowered, and cannot flinch.",
-		shortDesc: "Fast attacks 1.3x; slow takes 0.5x; first enemy hit raises Atk/SpA; also has Unnerve.",
+		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.5x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always takes 0.5x damage, cannot have stats lowered, and cannot flinch. This Ability is disabled on Bewitched Woods.",
+		shortDesc: "Fast attacks 1.3x; slow takes 0.5x; hit boosts once; disabled on Bewitched.",
 	},
 	duskilate: {
 		name: "Duskilate",
@@ -2798,13 +2798,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/8 max HP.",
-		shortDesc: "Mold Breaker; attacks heal; after attacking, next enemy hit boosts Atk/SpA and heals.",
+		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/8 max HP. This Ability is disabled on Bewitched Woods.",
+		shortDesc: "Mold Breaker; attacks heal; next enemy hit boosts/heals; disabled on Bewitched.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "This Pokemon's moves ignore abilities, bypass Substitute, Reflect, Light Screen, and Aurora Veil, and charge moves fire immediately. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, damage is reduced by 25%. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 75% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena.",
-		shortDesc: "Moves ignore abilities/screens and charge instantly. Fast attacks 1.5x; pre-move hits reduced.",
+		desc: "This Pokemon's moves ignore abilities, bypass Substitute, Reflect, Light Screen, and Aurora Veil, and charge moves fire immediately. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, damage is reduced by 25%. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 75% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena. This Ability is disabled on Bewitched Woods.",
+		shortDesc: "Moves ignore abilities/screens; fast attacks 1.5x; disabled on Bewitched.",
 	},
 
 	// CAP
