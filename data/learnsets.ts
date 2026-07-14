@@ -33556,6 +33556,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	granbull: {
 		learnset: {
+			ragingbull: [],
 			agility: [],
 			assurance: [],
 			attract: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -74612,6 +74613,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	hydreigon: {
 		learnset: {
+			rage: [],
 			acrobatics: ["9M", "8M", "7M", "6M", "5M"],
 			aquatail: ["9M", "7T", "6T", "5T"],
 			assurance: ["9L9", "8M", "8L16"],

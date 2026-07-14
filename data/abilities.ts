@@ -1855,15 +1855,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10124,
 	},
 	warpath: {
-		onTryBoost(boost, target, source, effect) {
-			if (source && source !== target && boost.atk && boost.atk < 0) delete boost.atk;
-		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.status) return this.chainModify(1.5);
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (source && source !== target) this.boost({ atk: 1 }, target, target);
+		onModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy !== 'number') return;
+			return this.chainModify([5325, 4096]);
+		},
+		onBasePower(basePower, source, target, move) {
+			if (move.category !== 'Status') return this.chainModify(1.3);
 		},
 		onModifyMove(move) {
 			if (this.movehasType(move, ['Rock', 'Fighting', 'Ground'])) {
