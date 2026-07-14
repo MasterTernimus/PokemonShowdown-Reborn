@@ -856,6 +856,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		noCopy: true,
 		onStart(pokemon) {
 			this.effectState.turns = 0;
+			if (pokemon.gigantamax || pokemon.species.forme === 'Gmax') {
+				(pokemon as any).gmaxOriginalMoveSlots = pokemon.moveSlots.map(slot => ({ pp: slot.pp, maxpp: slot.maxpp }));
+				for (const moveSlot of pokemon.moveSlots) {
+					moveSlot.pp = 8;
+					moveSlot.maxpp = 8;
+				}
+			}
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
@@ -883,6 +890,16 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onResidualPriority: -100,
 		onResidual() {
 			this.effectState.turns++;
+		},
+		onEnd(pokemon) {
+			const originalMoveSlots = (pokemon as any).gmaxOriginalMoveSlots;
+			if (!originalMoveSlots) return;
+			for (const [i, originalSlot] of originalMoveSlots.entries()) {
+				if (!pokemon.moveSlots[i]) continue;
+				pokemon.moveSlots[i].pp = originalSlot.pp;
+				pokemon.moveSlots[i].maxpp = originalSlot.maxpp;
+			}
+			delete (pokemon as any).gmaxOriginalMoveSlots;
 		},
 	},
 
