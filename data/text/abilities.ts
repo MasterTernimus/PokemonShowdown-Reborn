@@ -414,13 +414,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalflower: {
 		name: "Eternal Flower",
-		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. On Fairy Tale Field, this Pokemon's Attack and Special Attack are doubled. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.4x while this Pokemon is active. This debuff does not affect allies.",
-		shortDesc: "Grass attacks use 1.5x offenses; Fairy Tale doubles offenses; enemy gimmicks to 0.4x.",
+		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. On Fairy Tale Field, this Pokemon's Attack and Special Attack are doubled. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.4x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Grass attacks use 1.5x offenses; enemy gimmicks to 0.4x; on faint creates Bewitched.",
 	},
 	ange: {
 		name: "Ange",
-		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. It boosts Fairy-type moves like Fairy Aura, has Eternal Flower's Grass and Fairy Tale boosts, and reduces opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon's stats to 0.4x.",
-		shortDesc: "Eternal Flower + Fairy Aura; weakens opposing gimmick Pokemon to 0.4x.",
+		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. It boosts Fairy-type moves like Fairy Aura, has Eternal Flower's Grass and Fairy Tale boosts, and reduces opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon's stats to 0.4x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Eternal Flower + Fairy Aura; weakens gimmicks; on faint creates Bewitched.",
 	},
 	ascendance: {
 		name: "Ascendance",
@@ -529,8 +529,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wastingsurge: {
 		name: "Wasting Surge",
-		desc: "On switch-in, this Pokemon sets Wasteland Terrain. If Neutralization is active on Water Surface or Underwater, this effect fails.",
-		shortDesc: "On switch-in, sets Wasteland Terrain.",
+		desc: "On switch-in, this Pokemon sets Wasteland Terrain. On Water Surface or Underwater, it creates Murkwater Surface instead; from Underwater, non-Poison and non-Steel Pokemon that are not semi-invulnerable faint. If Neutralization is active on Water Surface or Underwater, this effect fails.",
+		shortDesc: "Sets Wasteland, or Murkwater on water fields; Underwater also KOs non-Poison/Steel.",
 	},
 	sinoflust: {
 		name: "Sin of Lust",
@@ -579,13 +579,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedkeepsake: {
 		name: "Cursed Keepsake",
-		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. Curse applied by this Ability deals 1/8 max HP each turn and heals this Pokemon for half the damage dealt. The Curse ends when the cursed Pokemon switches out. This Pokemon takes 0.8x damage from attacks.",
-		shortDesc: "Hit by foe: curses attacker for 1/8 per turn; heals half Curse damage; takes 0.8x.",
+		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. Curse applied by this Ability deals 1/8 max HP each turn. When this Pokemon faints, it creates Haunted Field for 5 turns.",
+		shortDesc: "Hit by foe: curses attacker for 1/8 per turn. On faint: Haunted Field for 5 turns.",
 	},
 	cursedmarionette: {
 		name: "Cursed Marionette",
-		desc: "This Pokemon's status moves have +1 priority. If this Pokemon is hit by an opposing damaging move or uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon restores HP equal to half of the Curse damage dealt to targets it cursed. If a target cursed by this Ability switches out, it loses 1/16 max HP and this Pokemon heals that amount. This Pokemon takes 0.5x damage from Pokemon it cursed.",
-		shortDesc: "Status +1; hit/status Curse foes; heals half Curse damage; cursed targets deal 0.5x.",
+		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon restores HP equal to 1/4 of the Curse damage dealt to targets it cursed. The first time this Pokemon falls below half HP, it creates Haunted Field for 3 turns. When this Pokemon faints, it creates Haunted Field for 5 turns, or extends active Haunted Field by 5 turns.",
+		shortDesc: "Status +1; status moves Curse foes; heals 1/4 Curse damage; creates Haunted Field.",
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
@@ -2753,7 +2753,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neutralization: {
 		name: "Neutralization",
-		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. This does not affect other Neutralization users or Pokemon immune to stat drops, and it does not trigger stat-drop reactive effects. While active, terrain effects are suppressed and field changes are neutralized.",
+		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. This does not affect other Neutralization users or Pokemon immune to stat drops, and it does not trigger stat-drop reactive effects. While active, terrain effects are suppressed, field changes are neutralized, and Rainbow Field ends automatically.",
 		shortDesc: "Hits lower foe offense/Spe without reactive triggers; respects drop immunity.",
 	},
 	powerdrill: {
@@ -2773,7 +2773,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	soulfire: {
 		name: "Soul Fire",
-		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Fire- and Ghost-type moves cannot hit Normal-type Pokemon with Ghost-type attacks and are resisted by Steel- and Dark-type Pokemon, but otherwise ignore type resistances. Fire- and Ghost-type moves from this Ability deal 4x damage to opposing Soul Fire users. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
+		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. On Haunted Field, its Defense and Special Defense rise by 1 stage on switch-in. Its Fire- and Ghost-type moves cannot hit Normal-type Pokemon with Ghost-type attacks and are resisted by Steel- and Dark-type Pokemon, but otherwise ignore type resistances. Fire- and Ghost-type moves from this Ability deal 4x damage to opposing Soul Fire users. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
 		shortDesc: "Draws in and absorbs Fire/Ghost; Soul Fire attacks ignore most resists and hit Soul Fire 4x.",
 	},
 	stormsovereign: {

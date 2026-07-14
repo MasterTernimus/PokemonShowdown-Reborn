@@ -2155,13 +2155,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
 			source.addVolatile('curse', target, this.dex.abilities.get('cursedkeepsake'));
 		},
-		onAnyDamage(damage, target, source, effect) {
-			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedkeepsake')) {
-				this.heal(damage / 2, target.volatiles['curse'].source, target);
+		onFaint(pokemon) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('cursedkeepsake'))) {
+				this.field.terrainState.duration = 5;
 			}
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
 		flags: { breakable: 1 },
 		name: "Cursed Keepsake",
@@ -2172,17 +2171,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category === 'Status') return priority + 1;
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
-			source.addVolatile('curse', target, this.dex.abilities.get('cursedmarionette'));
-		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!target || target === source || source.isAlly(target) || target.fainted || move.category !== 'Status') return;
 			target.addVolatile('curse', source, this.dex.abilities.get('cursedmarionette'));
 		},
+		onDamagingHit(damage, target, source, move) {
+			if ((target as any).cursedMarionetteHaunted || target.hp > target.maxhp / 2) return;
+			(target as any).cursedMarionetteHaunted = true;
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
+			} else if (this.field.setTerrain('hauntedterrain', target, this.dex.abilities.get('cursedmarionette'))) {
+				this.field.terrainState.duration = 3;
+			}
+		},
+		onFaint(pokemon) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 5;
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('cursedmarionette'))) {
+				this.field.terrainState.duration = 5;
+			}
+		},
 		onAnyDamage(damage, target, source, effect) {
 			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedmarionette')) {
-				this.heal(damage / 2, target.volatiles['curse'].source, target);
+				this.heal(damage / 4, target.volatiles['curse'].source, target);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -3191,6 +3202,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.4);
 		},
+		onFaint(pokemon) {
+			if (this.field.setTerrain('bewitchedwoodsterrain', pokemon, this.dex.abilities.get('eternalflower'))) {
+				this.field.terrainState.duration = 5;
+			}
+		},
 		flags: {},
 		name: "Eternal Flower",
 		rating: 3.5,
@@ -3244,6 +3260,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFoeModifySpD(spd, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			return this.chainModify(0.4);
+		},
+		onFaint(pokemon) {
+			if (this.field.setTerrain('bewitchedwoodsterrain', pokemon, this.dex.abilities.get('ange'))) {
+				this.field.terrainState.duration = 5;
+			}
 		},
 		flags: {},
 		name: "Ange",
@@ -5710,6 +5731,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onStart(pokemon) {
+			if (this.field.terrain === 'rainbowterrain') {
+				this.field.clearTerrain('neutralization');
+			}
 			if (this.field.isTerrain('chessboardterrain')) this.boost({ def: 1, spd: 1 }, pokemon);
 		},
 		onResidual(pokemon) {
@@ -7606,6 +7630,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
+			if (this.field.isTerrain('hauntedterrain')) {
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+			}
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail') return false;
@@ -7920,7 +7947,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				delete boost[stat];
 				blocked = true;
 			}
-			if (blocked) this.add('-fail', target, 'boost', '[from] ability: Royal Decree');
+			if (blocked) {
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility('royaldecree'));
+				if (decree) {
+					this.add('-fail', target, 'boost', '[from] ability: Royal Decree', `[of] ${decree}`);
+				} else {
+					this.add('-fail', target, 'boost', '[from] ability: Royal Decree');
+				}
+			}
 		},
 		onModifyDef(def, pokemon) {
 			if (this.field.isTerrain('chessboardterrain')) return this.chainModify(1.5);
@@ -9506,7 +9540,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	wastingsurge: {
 		onStart(source) {
 			const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbility('neutralization'));
-			if (neutralizationActive && this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) return;
+			if (neutralizationActive && ['watersurfaceterrain', 'underwaterterrain'].includes(this.field.terrain)) return;
+			if (this.field.terrain === 'underwaterterrain') {
+				for (const pokemon of this.getAllActive()) {
+					if (!(pokemon.types.includes('Steel') || pokemon.types.includes('Poison')) && !pokemon.isSemiInvulnerable()) {
+						pokemon.faint();
+					}
+				}
+				this.field.changeTerrain('murkwatersurfaceterrain', source, this.dex.abilities.get('wastingsurge'));
+				return;
+			}
+			if (this.field.terrain === 'watersurfaceterrain') {
+				this.field.changeTerrain('murkwatersurfaceterrain', source, this.dex.abilities.get('wastingsurge'));
+				return;
+			}
 			this.field.setTerrain('wastelandterrain');
 		},
 		flags: {},

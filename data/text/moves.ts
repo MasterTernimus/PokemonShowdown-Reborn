@@ -2612,13 +2612,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxsandblast: {
 		name: "G-Max Sandblast",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
-		shortDesc: "Base move affects power. Foes: bound 4-5 turns.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move. Creates Desert Field for 3 turns.",
+		shortDesc: "Base move affects power. Foes: bound; creates Desert Field for 3 turns.",
 	},
 	gmaxsmite: {
 		name: "G-Max Smite",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side has a 30% chance to become confused, even if they have a substitute.",
-		shortDesc: "Base move affects power. Foes: 30% confusion.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side has a 30% chance to become confused, even if they have a substitute. Creates Bewitched Field for 5 turns.",
+		shortDesc: "Base move affects power. Foes: 30% confusion; creates Bewitched Field.",
 	},
 	gmaxsnooze: {
 		name: "G-Max Snooze",
@@ -2656,8 +2656,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxterror: {
 		name: "G-Max Terror",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field. If used by a Pokemon with Sin of Envy, each opposing Pokemon also becomes cursed.",
-		shortDesc: "Base move affects power. Foes: trapped. With Sin of Envy: foes cursed.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field. If used by a Pokemon with Sin of Envy, each opposing Pokemon also becomes cursed. Creates Haunted Field for 3 turns.",
+		shortDesc: "Base move affects power. Foes trapped; creates Haunted Field for 3 turns.",
 	},
 	gmaxvinelash: {
 		name: "G-Max Vine Lash",
@@ -3767,8 +3767,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magicpowder: {
 		name: "Magic Powder",
-		desc: "Causes the target to become a Psychic type. Fails if the target is an Arceus or a Silvally, if the target is already purely Psychic type, or if the target is Terastallized.",
-		shortDesc: "Changes the target's type to Psychic.",
+		desc: "Causes the target to become a Psychic type and creates Bewitched Field for 5 turns. Fails if the target is an Arceus or a Silvally, if the target is already purely Psychic type, or if the target is Terastallized.",
+		shortDesc: "Changes the target's type to Psychic; creates Bewitched Field.",
 		gen8: {
 			desc: "Causes the target to become a Psychic type. Fails if the target is an Arceus or a Silvally, or if the target is already purely Psychic type.",
 		},
