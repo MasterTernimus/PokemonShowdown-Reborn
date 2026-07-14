@@ -145,8 +145,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, moves that match this Pokemon's type have 1.3x power, this Pokemon takes 0.7x damage from attacks, and knocking out a target restores 25% of this Pokemon's maximum HP.",
-		shortDesc: "After a KO: transforms. Bond form: matching-type moves 1.3x, takes 0.7x damage, KO heals 25%.",
+		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, moves that match this Pokemon's type have 1.3x power, and knocking out a target restores 1/8 of this Pokemon's maximum HP.",
+		shortDesc: "After a KO: transforms. Bond form: matching-type moves 1.3x, KO heals 1/8 max HP.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",

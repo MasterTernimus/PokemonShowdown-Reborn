@@ -504,7 +504,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			if (['garchompbattlebond', 'greninjaash'].includes(source.species.id)) {
-				this.heal(source.baseMaxhp / 4, source, source);
+				this.heal(source.baseMaxhp / 8, source, source);
 				return;
 			}
 			if (source.bondTriggered) return;
@@ -524,15 +524,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ atk: 1, spa: 1, spe: 1 }, source, source, this.effect);
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.bondTriggered = true;
-			}
-		},
-		onPrepareHit(source, target, move) {
-			if (source.species.id !== 'greninjaash') return;
-			if (move.category === 'Status' || move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
-			const type = move.type;
-			if (type && type !== '???' && source.getTypes().join() !== type) {
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Battle Bond');
 			}
 		},
 		onModifyMove(move, pokemon) {
@@ -557,7 +548,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hasAbility('battlebond') && ['garchomp', 'greninjabond'].includes(target.species.id)) {
 				this.debug('Battle Bond base damage reduction');
-				return this.chainModify(0.5);
+				return this.chainModify(0.8);
 			}
 			if (target.species.id === 'garchompbattlebond') {
 				if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
