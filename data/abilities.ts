@@ -1630,6 +1630,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
 			if (arrowMoves.includes(move.id) && pokemon.hp <= pokemon.maxhp / 3) return priority + 1;
 		},
+		onModifyCritRatio(critRatio) {
+			return critRatio + 1;
+		},
 		flags: { breakable: 1 },
 		name: "Fallen Star",
 		rating: 3.5,
@@ -1676,18 +1679,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.infiltrates = true;
 			move.ignoreDefensive = true;
 		},
+		onModifyCritRatio(critRatio) {
+			return critRatio + 1;
+		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (move.flags['slicing']) {
-				let cleared = false;
-				let boost: BoostID;
-				for (boost in target.boosts) {
-					if (target.boosts[boost] > 0) {
-						target.boosts[boost] = 0;
-						cleared = true;
-					}
-				}
-				if (cleared) this.add('-clearpositiveboost', target, '[from] ability: Raging Storm', `[of] ${source}`);
-			}
 			source.abilityState.ragingStormDamage = damage;
 			source.abilityState.ragingStormTarget = target;
 		},

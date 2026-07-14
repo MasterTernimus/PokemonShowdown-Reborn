@@ -474,8 +474,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingstorm: {
 		name: "Raging Storm",
-		desc: "This Pokemon's attacks have Mold Breaker, ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. Slicing moves clear the target's positive stat changes. If this Pokemon gets a KO, it damages remaining foes for 25% of the last damage in multi battles, or raises Attack by 1 in singles.",
-		shortDesc: "Mold Breaker; attacks ignore screens/boosts; slicing clears positives; KO bonus.",
+		desc: "This Pokemon's attacks have Mold Breaker, ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 25% of the last damage in multi battles, or raises Attack by 1 in singles.",
+		shortDesc: "Mold Breaker; attacks ignore screens/boosts; KO bonus.",
 	},
 	vanguard: {
 		name: "Vanguard",
