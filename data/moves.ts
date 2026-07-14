@@ -13261,7 +13261,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Moonlight",
-		pp: 8,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -13305,7 +13305,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Morning Sun",
-		pp: 8,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -15888,7 +15888,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rage",
-		pp: 32,
+		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		self: {
@@ -15973,6 +15973,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				break;
 			case 'Tauros-Paldea-Aqua':
 				move.type = 'Water';
+				break;
+			case 'Granbull':
+				move.type = 'Fairy';
 				break;
 			}
 		},
@@ -20626,7 +20629,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Synthesis",
-		pp: 8,
+		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {

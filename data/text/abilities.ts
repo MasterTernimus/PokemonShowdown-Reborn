@@ -504,8 +504,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	warpath: {
 		name: "War Path",
-		desc: "This Pokemon's Attack cannot be lowered, and its Attack is 1.5x while statused. When hit by a damaging move, its Attack rises by 1. Its Rock-, Fighting-, and Ground-type moves ignore Reflect, Light Screen, Aurora Veil, and defensive boosts. It cannot flinch, takes 0.75x damage from attacks, and ignores stat increases.",
-		shortDesc: "Atk can't drop; status Atk 1.5x; hit +1 Atk; STABs ignore screens/boosts; takes 0.75x.",
+		desc: "This Pokemon's Attack is 1.5x while statused. Its Rock-, Fighting-, and Ground-type moves ignore Reflect, Light Screen, Aurora Veil, and defensive boosts. It cannot flinch and ignores stat increases.",
+		shortDesc: "Status Atk 1.5x; Rock/Fighting/Ground ignore screens/boosts; no flinch.",
 	},
 	atrocity: {
 		name: "Atrocity",
