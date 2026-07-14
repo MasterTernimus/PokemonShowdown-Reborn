@@ -889,7 +889,15 @@ export class BattleActions {
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
-			if (targets.every(target => !target?.hp)) break;
+			(move as any).spilloverDamageModifier = undefined;
+			if (targets.every(target => !target?.hp)) {
+				const originalTarget = targets.find(target => !!target);
+				const spilloverTarget = originalTarget && this.getMultihitSpilloverTarget(originalTarget, pokemon, move, hit, targetHits);
+				if (!spilloverTarget) break;
+				targets = [spilloverTarget];
+				damage = [0];
+				move.smartTarget = false;
+			}
 			move.hit = hit;
 			move.lastHit = move.hit === targetHits;
 			if (move.smartTarget && targets.length > 1) {
@@ -1045,6 +1053,23 @@ export class BattleActions {
 
 		return damage;
 	}
+
+	getMultihitSpilloverTarget(originalTarget: Pokemon, pokemon: Pokemon, move: ActiveMove, hit: number, targetHits: number) {
+		if (hit > targetHits) return null;
+		const parentalLike = ['parentalbond', 'hydrabond'].includes(move.multihitType || '');
+		const spilloverMoves = [
+			'bonemerang', 'doublekick', 'bonerush', 'geargrind', 'doubleironbash',
+			'dualchop', 'tachyoncutter', 'needlegun', 'watershuriken',
+		];
+		if (!parentalLike && !spilloverMoves.includes(move.id)) return null;
+		const ally = originalTarget.side.active.find(target =>
+			target && target !== originalTarget && target.hp && !target.fainted && !target.isAlly(pokemon)
+		);
+		if (!ally) return null;
+		(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.6) : 0.3;
+		return ally;
+	}
+
 	spreadMoveHit(
 		targets: SpreadMoveTargets, pokemon: Pokemon, moveOrMoveName: ActiveMove,
 		hitEffect?: Dex.HitEffect, isSecondary?: boolean, isSelf?: boolean
@@ -1798,14 +1823,17 @@ export class BattleActions {
 
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
-			const spreadModifier = (move as any).hydraBondSpread ? 1 : this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
+			const spreadModifier = (move as any).fullDamageSpread || (move as any).hydraBondSpread ? 1 : this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if ((move.multihitType === 'parentalbond' || move.multihitType === 'hydrabond') && move.hit > 1) {
 			// Parental Bond / Hydra Bond modifier
-			const bondModifier = move.multihitType === 'hydrabond' ? 0.25 : 0.5;
+			const bondModifier = (move as any).spilloverDamageModifier || (move.multihitType === 'hydrabond' ? 0.3 : 0.6);
 			this.battle.debug(`${move.multihitType} modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
+		} else if ((move as any).spilloverDamageModifier) {
+			this.battle.debug(`Spillover modifier: ${(move as any).spilloverDamageModifier}`);
+			baseDamage = this.battle.modify(baseDamage, (move as any).spilloverDamageModifier);
 		}
 
 		// weather modifier

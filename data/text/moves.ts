@@ -1451,8 +1451,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dizzypunch: {
 		name: "Dizzy Punch",
-		desc: "Has a 20% chance to confuse the target.",
-		shortDesc: "20% chance to confuse the target.",
+		desc: "Has a 30% chance to confuse the target.",
+		shortDesc: "30% chance to confuse the target.",
 		gen1: {
 			desc: "No additional effect.",
 			shortDesc: "No additional effect.",
@@ -1492,8 +1492,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doublehit: {
 		name: "Double Hit",
-		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
-		shortDesc: "Hits 2 times in one turn.",
+		desc: "Hits all adjacent foes once without a spread damage penalty.",
+		shortDesc: "Hits all adjacent foes at full damage.",
 		gen4: {
 			desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -1578,8 +1578,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragondarts: {
 		name: "Dragon Darts",
-		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. In Double Battles, this move attempts to hit the targeted Pokemon and its ally once each. If hitting one of these Pokemon would be prevented by immunity, protection, semi-invulnerability, an Ability, or accuracy, it attempts to hit the other Pokemon twice instead. If this move is redirected, it hits that target twice.",
-		shortDesc: "Hits twice. Doubles: Tries to hit each foe once.",
+		desc: "Hits all adjacent foes once without a spread damage penalty.",
+		shortDesc: "Hits all adjacent foes at full damage.",
 	},
 	dragonenergy: {
 		name: "Dragon Energy",
@@ -7174,13 +7174,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twinbeam: {
 		name: "Twin Beam",
-		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
-		shortDesc: "Hits 2 times in one turn.",
+		desc: "Hits all adjacent foes once without a spread damage penalty.",
+		shortDesc: "Hits all adjacent foes at full damage.",
 	},
 	twineedle: {
 		name: "Twineedle",
-		desc: "Hits twice, with each hit having a 20% chance to poison the target. If the first hit breaks the target's substitute, it will take damage for the second hit.",
-		shortDesc: "Hits 2 times. Each hit has 20% chance to poison.",
+		desc: "Hits all adjacent foes once without a spread damage penalty and has a 20% chance to poison each target.",
+		shortDesc: "Hits all adjacent foes at full damage. 20% chance to poison.",
 		gen4: {
 			desc: "Hits twice, with each hit having a 20% chance to poison the target. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},

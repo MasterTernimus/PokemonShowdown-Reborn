@@ -1541,8 +1541,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parentalbond: {
 		name: "Parental Bond",
-		desc: "This Pokemon has Friend Guard's effect. Its damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
-		shortDesc: "Friend Guard; damaging moves hit twice. The second hit has its damage halved.",
+		desc: "This Pokemon has Friend Guard's effect. Its damaging moves become multi-hit moves that hit twice. The second hit deals 60% damage and retargets the foe's ally if the first target fainted. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
+		shortDesc: "Friend Guard; damaging moves hit twice; second hit has 60% power.",
 	},
 	pastelveil: {
 		name: "Pastel Veil",
@@ -2728,8 +2728,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hydrabond: {
 		name: "Hydra Bond",
-		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits have their damage quartered.",
-		shortDesc: "Damaging moves hit three times; hits two and three deal 25% damage.",
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, these moves hit all enemies once at full damage.",
+		shortDesc: "Damaging moves hit 3 times; hits two/three have 30% power. FFA: hits all foes once.",
 	},
 	infernalpresence: {
 		name: "Infernal Presence",
