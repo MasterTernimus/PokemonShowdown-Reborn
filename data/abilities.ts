@@ -8096,7 +8096,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move) {
 			if (move.id === 'watershuriken') {
-				move.multihit = 5;
 				move.willCrit = true;
 			}
 		},

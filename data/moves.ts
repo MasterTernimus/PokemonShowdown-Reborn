@@ -22641,7 +22641,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 			if (pokemon.hasAbility('shadowcurrent')) {
-				move.multihit = 5;
 				move.willCrit = true;
 			} else if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed) {
 				move.multihit = 3;
