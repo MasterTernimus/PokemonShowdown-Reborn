@@ -879,8 +879,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				if (this.getAllActive().some(pokemon => pokemon.hasAbility('royaldecree'))) {
-					this.add('-fail', source, 'move: Aurora Veil', '[from] ability: Royal Decree');
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility('royaldecree'));
+				if (decree) {
+					this.add('-fail', source, 'move: Aurora Veil', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
 				}
 				this.add('-sidestart', side, 'move: Aurora Veil');
@@ -3557,17 +3558,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 12,
 			onResidual(pokemon) {
 				const source = this.effectState.source;
-				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'nightmarecage']) ? 8 : 4;
+				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'nightmarecage']) ? 8 : 4;
 				this.damage(pokemon.baseMaxhp / damageDivisor);
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
-				}
-			},
-			onBeforeSwitchOut(pokemon) {
-				const source = this.effectState.source;
-				if (source?.hp && source.hasAbility('cursedmarionette')) {
-					const damage = this.damage(pokemon.baseMaxhp / 16, pokemon, source, this.dex.abilities.get('cursedmarionette'));
-					if (damage) this.heal(damage, source, pokemon, this.dex.abilities.get('cursedmarionette'));
 				}
 			},
 		},
@@ -3774,6 +3768,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
+				this.add('-message', `${pokemon.name} will now haunt the field`);
+				if (this.field.terrain === 'hauntedterrain') {
+					this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
+				} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.moves.get('destinybond'))) {
+					this.field.terrainState.duration = 3;
+				}
 			},
 			onFaint(target, source, effect) {
 				if (!source || !effect || target.isAlly(source)) return;
@@ -7696,6 +7696,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Sandblast'));
 				}
+				if (this.field.setTerrain('desertterrain', source, this.dex.moves.get('gmaxsandblast'))) {
+					this.field.terrainState.duration = 3;
+				}
 			},
 		},
 		target: "adjacentFoe",
@@ -7717,6 +7720,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
 					if (this.randomChance(3, 10)) pokemon.addVolatile('confusion', source);
+				}
+				if (this.field.setTerrain('bewitchedwoodsterrain', source, this.dex.moves.get('gmaxsmite'))) {
+					this.field.terrainState.duration = 5;
 				}
 			},
 		},
@@ -7899,6 +7905,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (source.hasAbility('sinofenvy')) {
 						pokemon.addVolatile('curse', source, this.dex.abilities.get('sinofenvy'));
 					}
+				}
+				if (this.field.setTerrain('hauntedterrain', source, this.dex.moves.get('gmaxterror'))) {
+					this.field.terrainState.duration = 3;
 				}
 			},
 		},
@@ -8497,6 +8506,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Grudge');
+				this.add('-message', `${pokemon.name} will now haunt the field`);
+				if (this.field.terrain === 'hauntedterrain') {
+					this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
+				} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.moves.get('grudge'))) {
+					this.field.terrainState.duration = 3;
+				}
 			},
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
@@ -11101,8 +11116,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				if (this.getAllActive().some(pokemon => pokemon.hasAbility('royaldecree'))) {
-					this.add('-fail', source, 'move: Light Screen', '[from] ability: Royal Decree');
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility('royaldecree'));
+				if (decree) {
+					this.add('-fail', source, 'move: Light Screen', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
 				}
 				this.add('-sidestart', side, 'move: Light Screen');
@@ -11543,9 +11559,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				});
 			}
 		},
-		onHit(target) {
+		onHit(target, source) {
 			if (target.getTypes().join() === 'Psychic' || !target.setType('Psychic')) return false;
 			this.add('-start', target, 'typechange', 'Psychic');
+			if (this.field.setTerrain('bewitchedwoodsterrain', source, this.dex.moves.get('magicpowder'))) {
+				this.field.terrainState.duration = 5;
+			}
 		},
 		target: "normal",
 		type: "Psychic",
@@ -16168,8 +16187,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				if (this.getAllActive().some(pokemon => pokemon.hasAbility('royaldecree'))) {
-					this.add('-fail', source, 'move: Reflect', '[from] ability: Royal Decree');
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility('royaldecree'));
+				if (decree) {
+					this.add('-fail', source, 'move: Reflect', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
 				}
 				this.add('-sidestart', side, 'Reflect');

@@ -205,6 +205,10 @@ export class Field {
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
+		if (this.terrain === 'chessboardterrain') {
+			this.battle.add('-message', 'The chessboard prevents a new field from being generated!');
+			return false;
+		}
 		if (this.neutralizeTerrainChange()) return false;
 		if (this.isTerrain(['underwaterterrain', 'newworldterrain', 'dragonsdenterrain'])) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
@@ -257,18 +261,27 @@ export class Field {
 		if (this.terrain === status.id) {
 			return false;
 		}
+		if (this.terrain === 'chessboardterrain') {
+			this.battle.add('-message', 'The chessboard prevents a new field from being generated!');
+			return false;
+		}
 		if (this.neutralizeTerrainChange()) return false;
 		const prevTerrainState = this.terrainState;
+		const zMoveTerrain = !!prevTerrainState.zMoveTerrain;
 		this.terrain = status.id;
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
 			terrainChanges: new Map<string, number>(),
 			terrain_type: prevTerrainState.terrain_type,
 			origin: sourceEffect,
-			duration: prevTerrainState.duration,
+			duration: prevTerrainState.zMoveExpired ? 1 : prevTerrainState.duration,
 			turn: this.battle.turn,
 			prevTerrain: prevTerrainState.id,
 		});
+		if (zMoveTerrain) {
+			this.terrainState.zMoveTerrain = true;
+			this.terrainState.zMoveExpired = !!prevTerrainState.zMoveExpired;
+		}
 		if (this.terrainState.isBase) {
 			this.terrainStack[0] = this.terrainState;
 		} else {
@@ -279,8 +292,12 @@ export class Field {
 	}
 
 	clearTerrain(power: string | null = null) {
-		if (!this.terrain || this.terrain === 'underwaterterrain' || this.terrain === 'newworldterrain') return false;
-		if (this.neutralizeTerrainChange()) return false;
+		if (!this.terrain || this.terrain === 'newworldterrain') return false;
+		if (this.terrain === 'underwaterterrain') {
+			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
+			return false;
+		}
+		if (power !== 'neutralization' && this.neutralizeTerrainChange()) return false;
 		if (power === 'mid') {
 			if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();
@@ -309,7 +326,13 @@ export class Field {
 		} else {
 			const prevTerrain = this.getTerrain();
 			this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
-			this.terrainStack.shift();
+			if (this.terrainState.zMoveTerrain) {
+				while (this.terrainStack.length > 0 && this.terrainStack[0]?.zMoveTerrain) {
+					this.terrainStack.shift();
+				}
+			} else {
+				this.terrainStack.shift();
+			}
 			for (const terrainState of this.terrainStack) {
 				if (terrainState.duration && this.terrainStack[0].duration) {
 					if (terrainState?.duration <= (this.battle.turn - this.terrainState.turn + 1)) {

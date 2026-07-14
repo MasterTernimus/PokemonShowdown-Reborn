@@ -1561,13 +1561,20 @@ export class BattleActions {
 			letssnuggleforever: ['bewitchedwoodsterrain', 4],
 			splinteredstormshards: ['rockyterrain', 4],
 			pulverizingpancake: ['holyterrain', 4],
-			tectonicrage: ['desertterrain', 3],
-			subzeroslammer: ['snowymountainterrain', 3],
-			continentalcrush: ['mountainterrain', 3],
+			tectonicrage: ['desertterrain', 4],
+			subzeroslammer: ['snowymountainterrain', 4],
+			continentalcrush: ['mountainterrain', 4],
 		};
 		const zTerrain = zTerrains[move.id];
-		if (zTerrain && this.battle.field.setTerrain(zTerrain[0], pokemon, move)) {
+		if (zTerrain && move.id === 'oceanicoperetta' && this.battle.field.terrain === 'underwaterterrain') {
+			this.battle.field.changeTerrain(zTerrain[0], pokemon, move);
+			if (this.battle.field.terrain === zTerrain[0]) {
+				this.battle.field.terrainState.duration = zTerrain[1];
+				this.battle.field.terrainState.zMoveTerrain = true;
+			}
+		} else if (zTerrain && this.battle.field.setTerrain(zTerrain[0], pokemon, move)) {
 			this.battle.field.terrainState.duration = zTerrain[1];
+			this.battle.field.terrainState.zMoveTerrain = true;
 		}
 		if (move.category !== 'Status') {
 			this.battle.attrLastMove('[zeffect]');
