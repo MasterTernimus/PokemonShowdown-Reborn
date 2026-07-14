@@ -534,8 +534,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinoflust: {
 		name: "Sin of Lust",
-		desc: "This Pokemon has Magic Bounce and Queenly Majesty's effects.",
-		shortDesc: "Magic Bounce + Queenly Majesty.",
+		desc: "This Pokemon has Magic Guard, Magic Bounce, and Queenly Majesty's effects.",
+		shortDesc: "Magic Guard + Magic Bounce + Queenly Majesty.",
 	},
 	corrosivescale: {
 		name: "Corrosive Scale",
