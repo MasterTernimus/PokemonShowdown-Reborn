@@ -928,6 +928,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 126,
 	},
+	queensguard: {
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let healedByContrary = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) healedByContrary = true;
+				boost[i]! *= -1;
+			}
+			if (healedByContrary) target.abilityState.queensGuardHeal = true;
+		},
+		onAfterBoost(boost, target, source, effect) {
+			if (!target.abilityState.queensGuardHeal) return;
+			delete target.abilityState.queensGuardHeal;
+			if (!target.hp) return;
+			if (Object.values(boost).some(value => value && value > 0)) {
+				this.heal(target.baseMaxhp / 16, target, target);
+			}
+		},
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') return null;
+		},
+		flags: { breakable: 1 },
+		name: "Queen's Guard",
+		rating: 4.5,
+		num: 10120,
+	},
 	corrosion: {
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
 		flags: {},
@@ -1998,7 +2025,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAnyAfterSetStatus(status, target, source, effect) {
-			if (source !== this.effectState.target || target === source) return;
 			if (status.id === 'psn' || status.id === 'tox') target.addVolatile('confusion');
 		},
 		flags: { breakable: 1 },
@@ -2203,6 +2229,42 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Cursed Marionette",
 		rating: 4.5,
 		num: 10104,
+	},
+	cursedarmament: {
+		onModifyMove(move, pokemon) {
+			if (move.id !== 'curse') return;
+			move.accuracy = 100;
+			move.basePower = 100;
+			move.category = 'Physical';
+			move.type = 'Ghost';
+			move.target = 'allAdjacentFoes';
+			move.flags = { protect: 1, mirror: 1, metronome: 1 };
+			delete move.volatileStatus;
+			delete move.self;
+			move.onTryHit = function () {};
+			move.onHit = function (target, source) {
+				target.addVolatile('curse', source, this.dex.abilities.get('cursedarmament'));
+			};
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category !== 'Status') this.heal(damage / 4, source, source);
+		},
+		onAnyDamage(damage, target, source, effect) {
+			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedarmament')) {
+				this.heal(damage / 4, target.volatiles['curse'].source, target);
+			}
+		},
+		onFaint(pokemon) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('cursedarmament'))) {
+				this.field.terrainState.duration = 5;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Cursed Armament",
+		rating: 4.5,
+		num: 10122,
 	},
 	sandsovereign: {
 		onStart(source) {
@@ -2427,7 +2489,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.5);
+			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
 		onAfterMove(source, target, move) {
 			if (move.id === 'futuresight' || move.flags['futuremove'] || move.callsMove) return;
@@ -2447,6 +2509,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						priority: 0,
 						flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 						ignoreImmunity: true,
+						perfectForesight: true,
 						effectType: 'Move',
 						type: 'Psychic',
 						onEffectiveness(typeMod: number) {
@@ -2548,25 +2611,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10117,
 	},
-	avalanchebruiser: {
+	rimeknuckle: {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
-			if (move.flags['punch']) return this.chainModify(1.2);
+			if (move.flags['punch']) return this.chainModify(1.4);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (source.getStat('spe', false, true) > target.getStat('spe', false, true)) return this.chainModify(0.5);
+			if (target.hp > target.maxhp / 2 && source.getStat('spe', false, true) > target.getStat('spe', false, true)) return this.chainModify(0.5);
 		},
 		onModifyMove(move) {
-			if (move.flags['punch']) {
-				move.infiltrates = true;
-				move.ignoreAbility = true;
-			}
+			if (move.category === 'Status') return;
+			if (!move.secondaries) move.secondaries = [];
+			move.secondaries.push({ chance: 40, status: 'frz' });
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 4, source, source);
 		},
 		flags: { breakable: 1 },
-		name: "Avalanche Bruiser",
+		name: "Rime Knuckle",
 		rating: 4,
 		num: 10118,
 	},
@@ -6689,6 +6751,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 272,
 	},
+	paradoxengine: {
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.field.isTerrain('electricterrain')) {
+				return this.chainModify(2);
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.type === 'Fighting' || move.type === 'Electric') return this.chainModify(1.5);
+		},
+		flags: {},
+		name: "Paradox Engine",
+		rating: 4,
+		num: 10119,
+	},
 	quarkdrive: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
@@ -7282,6 +7359,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Shadow Shield",
 		rating: 3.5,
 		num: 231,
+	},
+	shadowguard: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				const bestStat = source.getBestStat(true, true);
+				this.boost({ [bestStat]: length }, source);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			let modifier = 0.9;
+			if (target.hp >= target.maxhp) {
+				this.debug('Shadow Guard weaken');
+				modifier *= 0.5;
+			}
+			if (target.getMoveHitData(move).typeMod > 0 && this.field.isTerrain(['darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'coldeclipseterrain'])) {
+				this.debug('Shadow Guard Armor neutralize');
+				modifier *= 0.75;
+			}
+			return this.chainModify(modifier);
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
+		},
+		flags: {},
+		name: "Shadow Guard",
+		rating: 4,
+		num: 10121,
 	},
 	shadowtag: {
 		onStart(pokemon) {

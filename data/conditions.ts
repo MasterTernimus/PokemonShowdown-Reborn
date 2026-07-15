@@ -439,6 +439,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const data = this.effectState;
 			// time's up; time to hit! :D
 			const move = this.dex.moves.get(data.move);
+			if ((target.fainted || target === data.source) && data.moveData?.perfectForesight) {
+				const replacement = data.source.foes().find((foe: Pokemon) => foe && foe.hp && !foe.fainted && foe !== data.source);
+				if (replacement) target = replacement;
+			}
 			if (target.fainted || target === data.source) {
 				this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
 				return;

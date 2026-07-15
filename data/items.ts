@@ -1346,6 +1346,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		megaStone: { "Butterfree": "Butterfree-Mega" },
+		itemUser: ["Butterfree"],
 		num: 109,
 		gen: 4,
 	},
@@ -1650,8 +1652,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		megaStone: { "Gardevoir": "Gardevoir-Void-Mega", "Gardevoir-Void": "Gardevoir-Void-Mega" },
-		itemUser: ["Gardevoir", "Gardevoir-Void"],
+		megaStone: { "Gardevoir": "Gardevoir-Void-Mega", "Gardevoir-Void": "Gardevoir-Void-Mega", "Mismagius": "Mismagius-Mega" },
+		itemUser: ["Gardevoir", "Gardevoir-Void", "Mismagius"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -6577,6 +6579,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		megaStone: { "Serperior": "Serperior-Mega" },
+		itemUser: ["Serperior"],
 		num: 83,
 		gen: 1,
 	},

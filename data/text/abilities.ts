@@ -259,6 +259,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
 		},
 	},
+	queensguard: {
+		name: "Queen's Guard",
+		desc: "This Pokemon has Contrary's effect and cannot flinch. When Contrary causes this Pokemon's stats to be raised, it restores 1/16 of its maximum HP.",
+		shortDesc: "Contrary; no flinch; Contrary stat raises heal 1/16 max HP.",
+	},
 	corrosion: {
 		name: "Corrosion",
 		shortDesc: "This Pokemon can poison or badly poison a Pokemon regardless of its typing.",
@@ -544,8 +549,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	corrosivedust: {
 		name: "Corrosive Dust",
-		desc: "Pokemon making contact with this Pokemon have a 30% chance to be poisoned. When this Pokemon poisons a target, that target becomes confused.",
-		shortDesc: "Contact has 30% poison chance; targets poisoned by this Pokemon become confused.",
+		desc: "Pokemon making contact with this Pokemon have a 30% chance to be poisoned. While this Pokemon is active, Pokemon that become poisoned also become confused.",
+		shortDesc: "Contact has 30% poison chance; poisoned Pokemon become confused.",
 	},
 	sinofenvy: {
 		name: "Sin of Envy",
@@ -586,6 +591,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Cursed Marionette",
 		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon restores HP equal to 1/4 of the Curse damage dealt to targets it cursed. The first time this Pokemon falls below half HP, it creates Haunted Field for 3 turns. When this Pokemon faints, it creates Haunted Field for 5 turns, or extends active Haunted Field by 5 turns.",
 		shortDesc: "Status +1; status moves Curse foes; heals 1/4 Curse damage; creates Haunted Field.",
+	},
+	cursedarmament: {
+		name: "Cursed Armament",
+		desc: "Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. Curse from this Pokemon deals 1/8 max HP each turn. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon faints, it creates Haunted Field for 5 turns.",
+		shortDesc: "Curse becomes 100 BP spread Ghost attack; curses foes; heals 1/4 attack/Curse damage.",
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
@@ -634,8 +644,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
-		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight used by this Pokemon activates after 1 turn and ignores Dark-type immunity and resistances. If this Pokemon uses a move on an opposing Pokemon and that target's slot does not already have a future move queued, Future Sight is queued on that slot.",
-		shortDesc: "Gains strongest foe's Ability; enemy-targeting moves queue fast Future Sight.",
+		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight used by this Pokemon ignores Dark-type immunity and resistances. If this Pokemon uses a move on an opposing Pokemon and that target's slot does not already have a future move queued, Future Sight is queued on that slot.",
+		shortDesc: "Gains strongest foe's Ability; enemy-targeting moves queue Future Sight.",
 	},
 	heavenlychorus: {
 		name: "Heavenly Chorus",
@@ -652,10 +662,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon cannot be critically hit. If this Pokemon has a stat lowered by an opposing Pokemon, its Special Defense rises by 2 stages. Its Bug-type moves have 1.5x power, and contact moves used against it deal 0.75x damage.",
 		shortDesc: "No crits; stat drops give +2 SpD; Bug moves 1.5x; takes 0.75x contact damage.",
 	},
-	avalanchebruiser: {
-		name: "Avalanche Bruiser",
-		desc: "This Pokemon has Iron Fist's effect. Attacks from faster Pokemon deal 0.5x damage to this Pokemon. This Pokemon's punching moves ignore Substitute, Reflect, Light Screen, Aurora Veil, and Abilities. If this Pokemon knocks out a target, it restores 1/4 of its maximum HP.",
-		shortDesc: "Iron Fist; faster attackers deal 0.5x; punching moves pierce; KO heals 1/4.",
+	rimeknuckle: {
+		name: "Rime Knuckle",
+		desc: "This Pokemon's punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 0.5x damage to it. If this Pokemon knocks out a target, it restores 1/4 of its maximum HP.",
+		shortDesc: "Punching moves 1.4x; moves 40% frostbite; above 50% HP takes 0.5x from faster foes; KO heals 1/4.",
 	},
 	streettyrant: {
 		name: "Street Tyrant",
@@ -1729,6 +1739,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon cannot become affected by a non-volatile status condition or Yawn. If a Pokemon uses a Ghost-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
 		shortDesc: "Ghost damage to this Pokemon dealt with a halved offensive stat; can't be statused.",
 	},
+	paradoxengine: {
+		name: "Paradox Engine",
+		desc: "If Sun or Electric Terrain is active, this Pokemon's Speed is doubled. This Pokemon's Fighting-type and Electric-type moves have 1.5x power.",
+		shortDesc: "Sun/Electric Terrain: Speed 2x. Fighting/Electric moves have 1.5x power.",
+	},
 	quarkdrive: {
 		name: "Quark Drive",
 		desc: "If Electric Terrain is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Electric Terrain, a held Booster Energy will not activate and the effect ends when Electric Terrain is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
@@ -1920,6 +1935,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	shadowshield: {
 		name: "Shadow Shield",
 		shortDesc: "If this Pokemon is at full HP, damage taken from attacks is halved.",
+	},
+	shadowguard: {
+		name: "Shadow Guard",
+		desc: "This Pokemon has Shadow Shield and Elevate's effects.",
+		shortDesc: "Shadow Shield + Elevate.",
 	},
 	shadowtag: {
 		name: "Shadow Tag",
