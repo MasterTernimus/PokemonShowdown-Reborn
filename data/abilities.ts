@@ -2407,6 +2407,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	perfectforesight: {
 		onStart(pokemon) {
+			delete pokemon.m.perfectForesightAbility;
+			delete pokemon.m.perfectForesightAbilityState;
 			let best = null;
 			let bestStat = -1;
 			for (const target of pokemon.foes()) {
@@ -2416,36 +2418,45 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					bestStat = stat;
 				}
 			}
-			if (best) this.add('-ability', pokemon, best.getAbility().name, '[from] ability: Perfect Foresight');
+			if (best) {
+				const ability = best.getAbility();
+				pokemon.m.perfectForesightAbility = ability.id;
+				pokemon.m.perfectForesightAbilityState = this.initEffectState({ id: ability.id, target: pokemon });
+				this.add('-ability', pokemon, ability.name, '[from] ability: Perfect Foresight');
+				this.singleEvent('Start', ability, pokemon.m.perfectForesightAbilityState, pokemon, best, this.effect);
+			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.5);
 		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (!target || target === source || source.isAlly(target) || target.fainted) return;
+		onAfterMove(source, target, move) {
 			if (move.id === 'futuresight' || move.flags['futuremove'] || move.callsMove) return;
-			if (!target.side.addSlotCondition(target, 'futuremove')) return;
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				move: 'futuresight',
-				source,
-				moveData: {
-					id: 'futuresight',
-					name: "Future Sight",
-					accuracy: 100,
-					basePower: 120,
-					category: "Special",
-					priority: 0,
-					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
-					ignoreImmunity: true,
-					effectType: 'Move',
-					type: 'Psychic',
-					onEffectiveness(typeMod: number) {
-						if (typeMod < 0) return 0;
-						return typeMod;
+			const targets = move.hitTargets?.length ? move.hitTargets : target ? [target] : [];
+			for (const hitTarget of targets) {
+				if (!hitTarget || hitTarget === source || source.isAlly(hitTarget) || hitTarget.fainted) continue;
+				if (!hitTarget.side.addSlotCondition(hitTarget, 'futuremove')) continue;
+				Object.assign(hitTarget.side.slotConditions[hitTarget.position]['futuremove'], {
+					move: 'futuresight',
+					source,
+					moveData: {
+						id: 'futuresight',
+						name: "Future Sight",
+						accuracy: 100,
+						basePower: 120,
+						category: "Special",
+						priority: 0,
+						flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+						ignoreImmunity: true,
+						effectType: 'Move',
+						type: 'Psychic',
+						onEffectiveness(typeMod: number) {
+							if (typeMod < 0) return 0;
+							return typeMod;
+						},
 					},
-				},
-			});
-			this.add('-start', source, 'move: Future Sight', '[from] ability: Perfect Foresight');
+				});
+				this.add('-start', source, 'move: Future Sight', '[from] ability: Perfect Foresight');
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Perfect Foresight",
