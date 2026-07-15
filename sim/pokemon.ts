@@ -2045,7 +2045,11 @@ export class Pokemon {
 			divineintervention: ['friendguard', 'regenerator'],
 		};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
-		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id))) return false;
+		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
+			!(this.ability === 'perfectforesight' && this.m.perfectForesightAbility &&
+				abilityids.includes(this.m.perfectForesightAbility))) {
+			return false;
+		}
 		return !this.ignoringAbility();
 	}
 

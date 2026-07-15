@@ -634,8 +634,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
-		desc: "On switch-in, this Pokemon identifies the Ability of the opposing Pokemon with the highest offensive stat. Attacks deal 0.5x damage to this Pokemon. Future Sight used by this Pokemon activates after 1 turn and ignores Dark-type immunity and resistances. If this Pokemon uses a move on an opposing Pokemon and that target's slot does not already have a future move queued, Future Sight is queued on that slot.",
-		shortDesc: "Scouts strongest foe's Ability; takes 0.5x; enemy-targeting moves queue fast Future Sight.",
+		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight used by this Pokemon activates after 1 turn and ignores Dark-type immunity and resistances. If this Pokemon uses a move on an opposing Pokemon and that target's slot does not already have a future move queued, Future Sight is queued on that slot.",
+		shortDesc: "Gains strongest foe's Ability; enemy-targeting moves queue fast Future Sight.",
 	},
 	heavenlychorus: {
 		name: "Heavenly Chorus",
