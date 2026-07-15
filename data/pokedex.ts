@@ -8065,7 +8065,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Mismagius-Mega",
 		baseSpecies: "Mismagius",
 		forme: "Mega",
-		types: ["Ghost", "Fairy"],
+		types: ["Ghost", "Dark"],
 		baseStats: { hp: 60, atk: 60, def: 60, spa: 140, spd: 140, spe: 140 },
 		abilities: { 0: "Shadow Guard" },
 		heightm: 0.9,
