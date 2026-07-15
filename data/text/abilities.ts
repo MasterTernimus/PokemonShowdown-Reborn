@@ -748,8 +748,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	effectspore: {
 		name: "Effect Spore",
-		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep.",
-		shortDesc: "30% chance of poison/paralysis/sleep on others making contact with this Pokemon.",
+		desc: "30% chance a Pokemon hitting this Pokemon with a damaging move will be poisoned, paralyzed, or fall asleep.",
+		shortDesc: "30% chance of poison/paralysis/sleep on others hitting this Pokemon.",
 		gen4: {
 			desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -2718,13 +2718,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and restores 1/16 max HP when it attacks and at the end of each turn. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 50% chance to be poisoned, paralyzed, or put to sleep. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
-		shortDesc: "Heals self/allies 20%; takes 0.8x; heals 1/16; Grass 1.2x; 50% Effect Spore.",
+		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and restores 1/16 max HP when it attacks and at the end of each turn. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 30% chance to be poisoned, paralyzed, or put to sleep. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
+		shortDesc: "Heals self/allies 20%; takes 0.8x; heals 1/16; Grass 1.2x; 30% Effect Spore.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. Once per turn, its damaging attacks restore 1/16 max HP, and once per turn being hit by a damaging move restores 1/16 max HP. It also restores 1/16 max HP at the end of each turn. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
-		shortDesc: "Water 1.2x; heals 1/16 once per turn from attacking/hit and end turn; ally protection.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. Once per turn, its damaging attacks restore 1/16 max HP. It also restores 1/16 max HP at the end of each turn. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
+		shortDesc: "Water 1.2x; heals 1/16 from attacking and end turn; ally protection.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
