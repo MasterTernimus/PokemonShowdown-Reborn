@@ -2036,13 +2036,14 @@ export class Pokemon {
 			heavenlychorus: ['pixilate', 'cloudnine'],
 			mourningsnow: ['snowwarning', 'icebody'],
 			venombastion: ['shellarmor'],
-			avalanchebruiser: ['ironfist'],
+			rimeknuckle: ['ironfist'],
 			fallenstar: ['moldbreaker'],
 			ragingstorm: ['moldbreaker'],
 			royalcurrent: ['marvelscale', 'sniper'],
 			atrocity: ['moldbreaker'],
 			streettyrant: ['intimidate', 'regenerator'],
 			divineintervention: ['friendguard', 'regenerator'],
+			shadowguard: ['shadowshield', 'elevate'],
 		};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
@@ -2239,7 +2240,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'infernalpresence', 'astralwitchcraft']) && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'infernalpresence', 'astralwitchcraft', 'shadowguard']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';

@@ -1996,6 +1996,9 @@ export class BattleActions {
 		if (['Gardevoir', 'Gardevoir-Void'].includes(pokemon.baseSpecies.name) && pokemon.getItem().id === 'gardevoirite') {
 			return 'Gardevoir-Mega-Z';
 		}
+		if (pokemon.baseSpecies.name === 'Banette' && pokemon.getItem().id === 'banettite') {
+			return 'Banette-Mega-Z';
+		}
 		return null;
 	}
 

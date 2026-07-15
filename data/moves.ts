@@ -3558,7 +3558,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 12,
 			onResidual(pokemon) {
 				const source = this.effectState.source;
-				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'nightmarecage']) ? 8 : 4;
+				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'nightmarecage', 'cursedarmament']) ? 8 : 4;
 				this.damage(pokemon.baseMaxhp / damageDivisor);
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
@@ -6918,8 +6918,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			});
 			if (source.hasAbility('perfectforesight')) {
 				const futureMove = target.side.slotConditions[target.position]['futuremove'];
-				futureMove.endingTurn = this.turn;
 				futureMove.moveData.ignoreImmunity = true;
+				futureMove.moveData.perfectForesight = true;
 				futureMove.moveData.onEffectiveness = function (typeMod) {
 					if (typeMod < 0) return 0;
 					return typeMod;
