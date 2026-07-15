@@ -1972,6 +1972,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10044,
 	},
 	sinoflust: {
+		onStart(pokemon) {
+			if (this.field.setTerrain('bewitchedwoodsterrain', pokemon, this.dex.abilities.get('sinoflust'))) {
+				this.field.terrainState.duration = 5;
+			}
+		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (target === source || move.hasBounced || !move.flags['reflectable']) return;
@@ -1988,12 +1993,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if ((source.isAlly(holder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
 				this.add('cant', holder, 'ability: Sin of Lust', move, `[of] ${target}`);
-				return false;
-			}
-		},
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
 			}
 		},

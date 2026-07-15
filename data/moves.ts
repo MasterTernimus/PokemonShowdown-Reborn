@@ -7723,9 +7723,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				for (const pokemon of source.foes()) {
 					if (this.randomChance(3, 10)) pokemon.addVolatile('confusion', source);
 				}
-				if (this.field.setTerrain('bewitchedwoodsterrain', source, this.dex.moves.get('gmaxsmite'))) {
-					this.field.terrainState.duration = 5;
-				}
 			},
 		},
 		target: "adjacentFoe",

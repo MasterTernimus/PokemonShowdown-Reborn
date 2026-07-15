@@ -2617,8 +2617,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxsmite: {
 		name: "G-Max Smite",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side has a 30% chance to become confused, even if they have a substitute. Creates Bewitched Field for 5 turns.",
-		shortDesc: "Base move affects power. Foes: 30% confusion; creates Bewitched Field.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side has a 30% chance to become confused, even if they have a substitute.",
+		shortDesc: "Base move affects power. Foes: 30% confusion.",
 	},
 	gmaxsnooze: {
 		name: "G-Max Snooze",
