@@ -13055,7 +13055,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSideResidualSubOrder: 4,
 			onSideResidual(side) {
 				for (const pokemon of side.active) {
-					if (pokemon?.hp && pokemon.hasType('Ice')) this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+					if (pokemon?.hp && pokemon.hasType(['Ice', 'Fairy'])) this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				}
 			},
 			onSideEnd(side) {
