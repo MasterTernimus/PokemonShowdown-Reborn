@@ -4278,7 +4278,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 55,
 	},
 	hydrabond: {
-		onPrepareHit(source, target, move) {
+		onModifyMove(move, source) {
 			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
 				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
 			if (this.gameType === 'freeforall') {
@@ -4616,14 +4616,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-fail', target, 'unboost', '[from] item: Clear Amulet', `[of] ${target}`);
 					continue;
 				}
-				const lowered = target.boostBy({ atk: -1, spa: -1 });
-				if (lowered.atk) {
-					this.add('-unboost', target, 'atk', -lowered.atk, '[from] ability: Infernal Presence', `[of] ${pokemon}`);
+				const lowered = target.getCappedBoost({ atk: -1, spa: -1 });
+				let didLower = false;
+				for (const stat of ['atk', 'spa'] as BoostID[]) {
+					if (!lowered[stat]) continue;
+					const delta = target.boostBy({ [stat]: lowered[stat] });
+					if (!delta) continue;
+					this.add('-unboost', target, stat, -delta, '[from] ability: Infernal Presence', `[of] ${pokemon}`);
+					didLower = true;
 				}
-				if (lowered.spa) {
-					this.add('-unboost', target, 'spa', -lowered.spa, '[from] ability: Infernal Presence', `[of] ${pokemon}`);
-				}
-				if (lowered.atk || lowered.spa) target.statsLoweredThisTurn = true;
+				if (didLower) target.statsLoweredThisTurn = true;
 			}
 		},
 		onBasePowerPriority: 8,
