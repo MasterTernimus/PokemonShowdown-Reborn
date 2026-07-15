@@ -3043,24 +3043,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	effectspore: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target) && source.runStatusImmunity('powder')) {
+			if (source.runStatusImmunity('powder')) {
 				const r = this.random(100);
-				if (this.field.isTerrain('forestterrain') || this.field.isTerrain('wastelandterrain') || this.field.isTerrain('bewitchedwoodsterrain')) {
-					if (r > 0 && r < 22) {
-						source.setStatus('slp', target);
-					} else if (r > 22 && r < 42) {
-						source.setStatus('par', target);
-					} else if (r > 42 && r < 60) {
-						source.setStatus('psn', target);
-					}
-				} else {
-					if (r < 11) {
-						source.setStatus('slp', target);
-					} else if (r < 21) {
-						source.setStatus('par', target);
-					} else if (r < 30) {
-						source.setStatus('psn', target);
-					}
+				if (r < 10) {
+					source.setStatus('slp', target);
+				} else if (r < 20) {
+					source.setStatus('par', target);
+				} else if (r < 30) {
+					source.setStatus('psn', target);
 				}
 			}
 		},
@@ -3496,13 +3486,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status') this.heal(target.baseMaxhp / 10, target, target);
 			if (!source?.hp || source === target || !source.runStatusImmunity('powder')) return;
 			const r = this.random(100);
-			if (r < 50) {
-				if (r < 17) {
+			if (r < 30) {
+				if (r < 10) {
 					source.setStatus('slp', target);
-				} else if (r < 34) {
+				} else if (r < 20) {
 					source.setStatus('par', target);
 				} else {
 					source.setStatus('psn', target);
@@ -3561,12 +3550,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.category !== 'Status' && source.abilityState.fortressShellAttackHealTurn !== this.turn) {
 				source.abilityState.fortressShellAttackHealTurn = this.turn;
 				this.heal(source.baseMaxhp / 16, source, source);
-			}
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status' && target.abilityState.fortressShellHitHealTurn !== this.turn) {
-				target.abilityState.fortressShellHitHealTurn = this.turn;
-				this.heal(target.baseMaxhp / 16, target, target);
 			}
 		},
 		onResidual(pokemon) {
