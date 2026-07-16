@@ -2738,13 +2738,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 30% chance to be poisoned, paralyzed, or put to sleep. At the end of each turn, non-Grass Pokemon that are not seeded take pollen damage equal to 1/16 max HP, and this Pokemon heals the damage dealt. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
-		shortDesc: "Heals self/allies on entry; takes 0.8x; Grass 1.2x; Effect Spore; pollen drain.",
+		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 30% chance to be poisoned, paralyzed, or put to sleep. This Pokemon restores 1/16 max HP at the end of each turn. On certain fields it gains Defense and Special Defense or deals 1.5x damage.",
+		shortDesc: "Heals self/allies on entry; takes 0.8x; Grass 1.2x; Effect Spore; 1/16 recovery.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. At the end of each turn, non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP. This damage uses Water-type effectiveness. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
-		shortDesc: "Water 1.2x; ally protection; end-turn cycling Water chip.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. This Pokemon restores 1/16 max HP at the end of each turn. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
+		shortDesc: "Water 1.2x; ally protection; 1/16 recovery.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
@@ -2753,8 +2753,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	burningcrown: {
 		name: "Burning Crown",
-		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power and can hit through type immunities, but type effectiveness still applies. It takes 0.8x damage from attacks and restores 1/16 max HP at the end of each turn. At the end of each turn, non-Fire Pokemon lose 1/16 max HP, doubled if burned, Sun is active, or G-Max Wildfire is active. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
-		shortDesc: "Airborne; drops foes' offenses; Fire 1.2x ignores immunities; end-turn burn aura.",
+		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power and can hit through type immunities, but type effectiveness still applies. It takes 0.8x damage from attacks and restores 1/16 max HP at the end of each turn. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
+		shortDesc: "Airborne; drops foes' offenses; Fire 1.2x ignores immunities; 1/16 recovery.",
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
