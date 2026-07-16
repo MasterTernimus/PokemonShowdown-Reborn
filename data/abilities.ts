@@ -2674,10 +2674,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFractionalPriority(priority, pokemon) {
 			if (pokemon.status === 'slp') return priority - 0.1;
 		},
-		onBasePowerPriority: 8,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.category !== 'Status') return this.chainModify(1.3);
-		},
 		flags: { breakable: 1 },
 		name: "Sin of Gluttony",
 		rating: 4,

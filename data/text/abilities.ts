@@ -684,8 +684,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinofgluttony: {
 		name: "Sin of Gluttony",
-		desc: "This Pokemon has Thick Fat, Gluttony, Early Bird, and Frozen Summit's effects. It is immune to hail damage, takes reduced damage from Fire- and Ice-type attacks, and its damaging moves have 1.3x power.",
-		shortDesc: "Thick Fat + Gluttony + Early Bird + Frozen Summit.",
+		desc: "This Pokemon has Thick Fat, Gluttony, and Early Bird's effects. It is immune to hail damage and takes reduced damage from Fire- and Ice-type attacks.",
+		shortDesc: "Thick Fat + Gluttony + Early Bird.",
 	},
 	sinofpride: {
 		name: "Sin of Pride",
