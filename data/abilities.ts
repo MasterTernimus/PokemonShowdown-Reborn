@@ -2044,7 +2044,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyDamage(damage, target, source, effect) {
 			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('sinofenvy')) {
-				this.heal(damage / 2, target.volatiles['curse'].source, target);
+				this.heal(damage / 4, target.volatiles['curse'].source, target);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -9560,6 +9560,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (target?.side.getSideCondition('reflect') || target?.side.getSideCondition('lightscreen') || target?.side.getSideCondition('auroraveil')) {
+				this.debug('Ultra Instinct screen punish');
+				return this.chainModify(2);
+			}
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain']) || this.queue.willMove(target) || target.newlySwitched) {
 				this.debug('Ultra Instinct boost');
 				return this.chainModify(1.5);

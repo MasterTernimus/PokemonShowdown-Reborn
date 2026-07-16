@@ -559,8 +559,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinofenvy: {
 		name: "Sin of Envy",
-		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.7x damage to it. When this Pokemon hits an enemy with an attack or status move, the target becomes cursed. Damage dealt by that Curse heals this Pokemon for half the damage dealt. If this Pokemon causes an opposing Pokemon to faint with a move or Curse damage, it restores 1/8 of its maximum HP.",
-		shortDesc: "Moves don't miss; above 1/4 HP takes 0.7x; hits Curse; heals half Curse damage.",
+		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.7x damage to it. When this Pokemon hits an enemy with an attack or status move, the target becomes cursed. Damage dealt by that Curse heals this Pokemon for 1/4 of the damage dealt. If this Pokemon causes an opposing Pokemon to faint with a move or Curse damage, it restores 1/8 of its maximum HP.",
+		shortDesc: "Moves don't miss; above 1/4 HP takes 0.7x; hits Curse; heals 1/4 Curse damage.",
 	},
 	alloycore: {
 		name: "Alloy Core",
@@ -2823,8 +2823,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "This Pokemon's moves ignore abilities, bypass Substitute, Reflect, Light Screen, and Aurora Veil, and charge moves fire immediately. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage and once per battle can endure a KO from above 50% HP at 1 HP. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 66% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena. This Ability is disabled on Bewitched Woods.",
-		shortDesc: "Moves ignore abilities/screens; fast attacks 1.5x; pre-move guard/endure; disabled on Bewitched.",
+		desc: "This Pokemon's moves ignore abilities. Its attacks deal 2x damage against targets protected by Reflect, Light Screen, or Aurora Veil. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage and once per battle can endure a KO from above 50% HP at 1 HP. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 66% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena. This Ability is disabled on Bewitched Woods.",
+		shortDesc: "Moves ignore abilities; 2x vs screens/Veil; fast attacks 1.5x; pre-move guard/endure.",
 	},
 
 	// CAP
