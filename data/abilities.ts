@@ -1973,9 +1973,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10044,
 	},
-	sinoflust: {
+	bewitchingmajesty: {
 		onStart(pokemon) {
-			if (this.field.setTerrain('bewitchedwoodsterrain', pokemon, this.dex.abilities.get('sinoflust'))) {
+			if (this.field.setTerrain('bewitchedwoodsterrain', pokemon, this.dex.abilities.get('bewitchingmajesty'))) {
 				this.field.terrainState.duration = 5;
 			}
 		},
@@ -1994,12 +1994,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) return;
 			if ((source.isAlly(holder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', holder, 'ability: Sin of Lust', move, `[of] ${target}`);
+				this.add('cant', holder, 'ability: Bewitching Majesty', move, `[of] ${target}`);
 				return false;
 			}
 		},
 		flags: { breakable: 1 },
-		name: "Sin of Lust",
+		name: "Bewitching Majesty",
 		rating: 5,
 		num: 10045,
 	},
@@ -2033,28 +2033,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10047,
 	},
-	sinofenvy: {
+	souleater: {
 		onAnyAccuracy(accuracy, target, source, move) {
 			if (move && source === this.effectState.target) return true;
 			return accuracy;
 		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (!target || target === source || source.isAlly(target) || target.fainted) return;
-			target.addVolatile('curse', source, this.dex.abilities.get('sinofenvy'));
-		},
-		onAnyDamage(damage, target, source, effect) {
-			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('sinofenvy')) {
-				this.heal(damage / 4, target.volatiles['curse'].source, target);
+		onTryHit(target, source, move) {
+			if (target !== source && this.movehasType(move, 'Ghost')) {
+				if (!this.heal(target.baseMaxhp / 4)) this.add('-immune', target, '[from] ability: Soul Eater');
+				return null;
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp > target.maxhp / 4) return this.chainModify(0.7);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move' || effect?.id === 'curse') this.heal(source.baseMaxhp / 8, source, source);
-		},
-		flags: { breakable: 1 },
-		name: "Sin of Envy",
+		flags: { cantsuppress: 1 },
+		name: "Soul Eater",
 		rating: 5,
 		num: 10048,
 	},
@@ -2418,7 +2412,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10112,
 	},
-	empatheticresonance: {
+	royalvoice: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -2434,20 +2428,119 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect || this.movehasType(move, ['Psychic', 'Fairy'])) return this.chainModify(1.2);
 		},
-		onAnyModifyDamage(damage, source, target, move) {
-			const pokemon = this.effectState.target;
-			if (move.category !== 'Status' && target !== pokemon && target.isAlly(pokemon)) return this.chainModify(0.75);
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType !== 'Move') return;
-			for (const ally of source.adjacentAllies()) {
-				this.heal(ally.baseMaxhp / 8, ally, source);
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+			const holder = this.effectState.target;
+			if ((source.isAlly(holder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', holder, 'ability: Royal Voice', move, `[of] ${target}`);
+				return false;
 			}
 		},
 		flags: { breakable: 1 },
-		name: "Empathetic Resonance",
+		name: "Royal Voice",
 		rating: 5,
 		num: 10113,
+	},
+	memoryleak: {
+		onBoost(boost, target, source, effect) {
+			if (!target.hp || effect?.id === 'memoryleak') return;
+			const ally = target.adjacentAllies().find(pokemon => pokemon.hp && !pokemon.fainted);
+			if (!ally) return;
+			const passed: SparseBoostsTable = {};
+			let stat: BoostID;
+			for (stat in boost) {
+				if (boost[stat]! > 0) {
+					passed[stat] = boost[stat];
+					delete boost[stat];
+				}
+			}
+			if (Object.keys(passed).length) {
+				this.add('-ability', target, 'Memory Leak');
+				this.boost(passed, ally, target, this.dex.abilities.get('memoryleak'));
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Memory Leak",
+		rating: 3,
+		num: 10140,
+	},
+	defragment: {
+		onStart(pokemon) {
+			let foeAtk = 0;
+			let foeSpA = 0;
+			for (const foe of pokemon.foes()) {
+				if (!foe || foe.fainted) continue;
+				foeAtk += foe.getStat('atk', false, true);
+				foeSpA += foe.getStat('spa', false, true);
+			}
+			const strongFields = ['newworldterrain', 'factoryterrain', 'shortcircuitterrain', 'glitchterrain', 'starlightarenaterrain'];
+			const boostAmount = this.field.isTerrain(strongFields) ? 2 : 1;
+			if (this.field.isTerrain(['coldeclipseterrain', 'fairytaleterrain'])) {
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+			} else if (foeAtk >= foeSpA) {
+				this.boost({ def: boostAmount }, pokemon, pokemon);
+			} else {
+				this.boost({ spd: boostAmount }, pokemon, pokemon);
+			}
+		},
+		onAnyAccuracy(accuracy, target, source, move) {
+			if (source === this.effectState.target) return true;
+		},
+		flags: { breakable: 1 },
+		name: "Defragment",
+		rating: 3.5,
+		num: 10141,
+	},
+	temporalshift: {
+		onBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let stat: BoostID;
+			for (stat in boost) {
+				if (boost[stat]! < 0) delete boost[stat];
+			}
+		},
+		onResidual(pokemon) {
+			const targets = pokemon.foes().filter(target => target.hp && !target.fainted);
+			const target = targets.length ? this.sample(targets) : null;
+			if (!target || !target.side.addSlotCondition(target, 'futuremove')) return;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				move: 'hex',
+				source: pokemon,
+				moveData: {
+					id: 'hex',
+					name: "Hex",
+					accuracy: 100,
+					basePower: 130,
+					category: "Special",
+					priority: 0,
+					flags: { protect: 1, mirror: 1, futuremove: 1 },
+					effectType: 'Move',
+					type: 'Ghost',
+				},
+			});
+			this.add('-start', pokemon, 'move: Hex', '[from] ability: Temporal Shift');
+		},
+		flags: { breakable: 1 },
+		name: "Temporal Shift",
+		rating: 4,
+		num: 10142,
+	},
+	accumulation: {
+		onResidual(pokemon) {
+			if (!pokemon.activeTurns) return;
+			const lastMove = pokemon.lastMove?.id;
+			if (lastMove === 'spitup' || lastMove === 'swallow') return;
+			if (pokemon.volatiles['stockpile']?.layers >= 3) return;
+			pokemon.addVolatile('stockpile', pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Accumulation",
+		rating: 3,
+		num: 10143,
 	},
 	perfectforesight: {
 		onStart(pokemon) {
@@ -2649,7 +2742,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10120,
 	},
-	sinofgluttony: {
+	mountainhunger: {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
@@ -2675,25 +2768,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.status === 'slp') return priority - 0.1;
 		},
 		flags: { breakable: 1 },
-		name: "Sin of Gluttony",
+		name: "Mountain Hunger",
 		rating: 4,
 		num: 10050,
 	},
-	sinofpride: {
+	irondominion: {
 		onStart(pokemon) {
-			if (this.effectState.unnerved) return;
-			this.add('-ability', pokemon, 'Sin of Pride');
+			this.add('-ability', pokemon, 'Iron Dominion');
+			const healAmount = this.field.isTerrain('fairytaleterrain') ? 3 : 4;
+			for (const ally of pokemon.adjacentAllies()) {
+				if (!ally.hp || ally.fainted) continue;
+				this.add('-message', `${pokemon.name} shared its mead with ${ally.name}!`);
+				this.heal(ally.baseMaxhp / healAmount, ally, pokemon);
+			}
 			if (this.field.isTerrain('fairytaleterrain')) {
-				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('sinofpride'));
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('irondominion'));
 			}
 			if (this.field.isTerrain('mirrorarmor')) {
-				this.boost({ evasion: 1 }, pokemon, pokemon, this.dex.abilities.get('sinofpride'));
+				this.boost({ evasion: 1 }, pokemon, pokemon, this.dex.abilities.get('irondominion'));
 			}
 			const pressureDrop = this.field.isTerrain('coldeclipseterrain') ? -2 : -1;
 			let pressureActivated = false;
 			for (const target of pokemon.foes()) {
 				if (!pressureActivated) {
-					this.add('-ability', pokemon, 'Sin of Pride', 'boost');
+					this.add('-ability', pokemon, 'Iron Dominion', 'boost');
 					pressureActivated = true;
 				}
 				if (target.volatiles['substitute']) {
@@ -2702,30 +2800,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ def: pressureDrop, spd: pressureDrop }, target, pokemon, null, true);
 				}
 			}
-			if (this.field.isTerrain('coldeclipseterrain')) {
-				let unnerveActivated = false;
-				for (const target of pokemon.foes()) {
-					if (!unnerveActivated) {
-						this.add('-ability', pokemon, 'Sin of Pride', 'boost');
-						unnerveActivated = true;
-					}
-					if (target.volatiles['substitute']) {
-						this.add('-immune', target);
-					} else {
-						this.boost({ spe: -1 }, target, pokemon, null, true);
-					}
-				}
-			}
-			this.effectState.unnerved = true;
-		},
-		onEnd() {
-			this.effectState.unnerved = false;
-		},
-		onFoeTryEatItem() {
-			return !this.effectState.unnerved;
-		},
-		onFoeUseItem(item) {
-			if (['elementalseed', 'telluricseed', 'magicalseed', 'syntheticseed'].includes(item.id)) return !this.effectState.unnerved;
 		},
 		onDeductPP(target, source) {
 			if (target.isAlly(source)) return;
@@ -2740,13 +2814,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const prideHolder = this.effectState.target;
 				if ((source.isAlly(prideHolder) || move.target === 'all') && move.priority > 0.1) {
 					this.attrLastMove('[still]');
-					this.add('cant', prideHolder, 'ability: Sin of Pride', move, `[of] ${target}`);
+					this.add('cant', prideHolder, 'ability: Iron Dominion', move, `[of] ${target}`);
 					return false;
 				}
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (!source || target === source || !boost || effect.name === 'Sin of Pride') return;
+			if (!source || target === source || !boost || effect.name === 'Iron Dominion') return;
 			let b: BoostID;
 			for (b in boost) {
 				if (boost[b]! < 0) {
@@ -2755,22 +2829,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					negativeBoost[b] = boost[b];
 					delete boost[b];
 					if (source.hp) {
-						this.add('-ability', target, 'Sin of Pride');
+						this.add('-ability', target, 'Iron Dominion');
 						this.boost(negativeBoost, source, target, null, true);
 					}
 				}
 			}
 		},
 		flags: { breakable: 1 },
-		name: "Sin of Pride",
+		name: "Iron Dominion",
 		rating: 4,
 		num: 10051,
 	},
-	sinofsloth: {
+	astralwatcher: {
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				if (target.item) {
-					this.add('-item', target, target.getItem().name, '[from] ability: Sin of Sloth', `[of] ${pokemon}`);
+					this.add('-item', target, target.getItem().name, '[from] ability: Astral Watcher', `[of] ${pokemon}`);
 					if (this.randomChance(3, 10)) target.addVolatile('embargo');
 				}
 			}
@@ -2784,11 +2858,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		flags: { breakable: 1 },
-		name: "Sin of Sloth",
+		name: "Astral Watcher",
 		rating: 4,
 		num: 10052,
 	},
-	sinofgreed: {
+	treasuretitan: {
 		onModifyWeight(weighthg) {
 			return weighthg * 2;
 		},
@@ -2797,20 +2871,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && this.movehasType(move, 'Ground')) {
-				if (!this.heal(target.baseMaxhp / 4)) this.add('-immune', target, '[from] ability: Sin of Greed');
+				if (!this.heal(target.baseMaxhp / 4)) this.add('-immune', target, '[from] ability: Treasure Titan');
 				return null;
 			}
 		},
 		flags: { breakable: 1 },
-		name: "Sin of Greed",
+		name: "Treasure Titan",
 		rating: 4,
 		num: 10053,
 	},
-	sinofwrath: {
+	ragingfists: {
 		onTryHit(target, source, move) {
 			if (target !== source && this.movehasType(move, 'Ghost')) {
 				move.accuracy = true;
-				this.add('-immune', target, '[from] ability: Sin of Wrath');
+				this.add('-immune', target, '[from] ability: Raging Fists');
 				return null;
 			}
 		},
@@ -2826,7 +2900,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.type === 'Normal' || move.type === 'Fighting') move.ignoreImmunity = true;
 		},
 		flags: { breakable: 1 },
-		name: "Sin of Wrath",
+		name: "Raging Fists",
 		rating: 4.5,
 		num: 10054,
 	},
@@ -3579,15 +3653,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			for (const target of this.getAllActive()) {
+				if (!target || target.fainted || target === pokemon || target.hasType('Grass') || target.volatiles['leechseed']) continue;
+				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Grass', target.types), -6, 6);
+				const damage = this.clampIntRange(target.baseMaxhp / 16 * 2 ** typeMod, 1);
+				const dealt = this.damage(damage, target, pokemon);
+				if (dealt) this.heal(dealt, pokemon, pokemon);
+			}
 			if (this.field.isTerrain(['grassyterrain', 'forestterrain', 'bewitchedwoodsterrain', 'corrosiveterrain', 'corrosivemistterrain', 'wastelandterrain'])) {
 				this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
 				for (const ally of pokemon.adjacentAllies()) {
 					this.heal(ally.baseMaxhp / 10, ally, pokemon);
 				}
 			}
-		},
-		onSourceDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
@@ -3609,6 +3687,36 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Ancient Bloom",
 		rating: 4.5,
 		num: 10024,
+	},
+	pollenbloom: {
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && (this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire'))) return this.chainModify(0.5);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move && (this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire'))) return this.chainModify(0.5);
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.movehasType(move, 'Grass')) return this.chainModify(1.3);
+		},
+		onResidual(pokemon) {
+			for (const target of this.getAllActive()) {
+				if (!target || target.fainted || target === pokemon || target.hasType('Grass') || target.volatiles['leechseed']) continue;
+				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Grass', target.types), -6, 6);
+				const damage = this.clampIntRange(target.baseMaxhp / 16 * 2 ** typeMod, 1);
+				const dealt = this.damage(damage, target, pokemon);
+				if (dealt) this.heal(dealt, pokemon, pokemon);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Pollen Bloom",
+		rating: 4,
+		num: 10137,
 	},
 	firemane: {
 		onBasePowerPriority: 8,
@@ -3653,14 +3761,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.effectState.target;
 			}
 		},
-		onSourceDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status' && source.abilityState.fortressShellAttackHealTurn !== this.turn) {
-				source.abilityState.fortressShellAttackHealTurn = this.turn;
-				this.heal(source.baseMaxhp / 16, source, source);
-			}
-		},
 		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			const stage = ((pokemon.abilityState.fortressShellStage || 0) % 3) + 1;
+			pokemon.abilityState.fortressShellStage = stage;
+			for (const target of this.getAllActive()) {
+				if (!target || target.fainted || target.hasType('Water')) continue;
+				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', target.types), -6, 6);
+				const damage = this.clampIntRange(target.baseMaxhp * stage / 16 * 2 ** typeMod, 1);
+				this.damage(damage, target, pokemon);
+			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
@@ -3679,6 +3788,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Fortress Shell",
 		rating: 4.5,
 		num: 10025,
+	},
+	waterbarrage: {
+		onStart(pokemon) {
+			pokemon.addVolatile('aquaring');
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'brn' || type === 'hail') return false;
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.movehasType(move, 'Water')) return this.chainModify(1.3);
+		},
+		onResidual(pokemon) {
+			const stage = ((pokemon.abilityState.waterBarrageStage || 0) % 3) + 1;
+			pokemon.abilityState.waterBarrageStage = stage;
+			for (const target of this.getAllActive()) {
+				if (!target || target.fainted || target.hasType('Water')) continue;
+				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', target.types), -6, 6);
+				const damage = this.clampIntRange(target.baseMaxhp * stage / 16 * 2 ** typeMod, 1);
+				this.damage(damage, target, pokemon);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Water Barrage",
+		rating: 4,
+		num: 10138,
 	},
 	flashfire: {
 		onStart(pokemon) {
@@ -4281,6 +4416,41 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 0,
 		num: 131,
 	},
+	invigorate: {
+		onAnyTryHeal(damage, target, source, effect) {
+			const holder = this.effectState.target;
+			if (typeof damage !== 'number' || !target || target.fainted) return;
+			if (target === holder || target.isAlly(holder)) return this.modify(damage, 1.2);
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			for (const allyActive of pokemon.adjacentAllies()) {
+				if (allyActive.status && this.randomChance(1, 2)) {
+					this.add('-activate', pokemon, 'ability: Invigorate');
+					allyActive.cureStatus();
+				}
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Invigorate",
+		rating: 3,
+		num: 10144,
+	},
+	swornduty: {
+		onStart(pokemon) {
+			const healAmount = this.field.isTerrain('fairytaleterrain') ? 3 : 4;
+			for (const ally of pokemon.adjacentAllies()) {
+				if (!ally.hp || ally.fainted) continue;
+				this.add('-message', `${pokemon.name} shared its mead with ${ally.name}!`);
+				this.heal(ally.baseMaxhp / healAmount, ally, pokemon);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Sworn Duty",
+		rating: 3,
+		num: 10145,
+	},
 	heatproof: {
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
@@ -4710,7 +4880,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2.5,
 		num: 151,
 	},
-	infernalpresence: {
+	burningcrown: {
 		onStart(pokemon) {
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
@@ -4729,7 +4899,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					if (!lowered[stat]) continue;
 					const delta = target.boostBy({ [stat]: lowered[stat] });
 					if (!delta) continue;
-					this.add('-unboost', target, stat, -delta, '[from] ability: Infernal Presence', `[of] ${pokemon}`);
+					this.add('-unboost', target, stat, -delta, '[from] ability: Burning Crown', `[of] ${pokemon}`);
 					didLower = true;
 				}
 				if (didLower) target.statsLoweredThisTurn = true;
@@ -4748,11 +4918,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
-		onSourceDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
-		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			for (const target of this.getAllActive()) {
+				if (!target || target.fainted || target.hasType('Fire')) continue;
+				let multiplier = 1;
+				if (target.status === 'brn' || ['sunnyday', 'desolateland'].includes(target.effectiveWeather()) || target.volatiles['gmaxwildfire']) multiplier = 2;
+				this.damage(target.baseMaxhp * multiplier / 16, target, pokemon);
+			}
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
@@ -4761,9 +4934,42 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		flags: { breakable: 1 },
-		name: "Infernal Presence",
+		name: "Burning Crown",
 		rating: 4.5,
 		num: 10023,
+	},
+	wildfire: {
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (!this.movehasType(move, 'Fire')) return;
+			let modifier = 1.3;
+			if (['hail', 'snow', 'sunnyday', 'desolateland'].includes(attacker.effectiveWeather()) && defender?.getMoveHitData(move).typeMod < 0) {
+				modifier *= 2;
+			}
+			return this.chainModify(modifier);
+		},
+		onAfterMove(source, target, move) {
+			if (this.movehasType(move, 'Fire')) source.abilityState.wildFireUsedFire = this.turn;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.movehasType(move, 'Water')) return this.chainModify(0.5);
+		},
+		onResidual(pokemon) {
+			for (const target of this.getAllActive()) {
+				if (!target || target.fainted || target.hasType('Fire')) continue;
+				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', target.types), -6, 6);
+				const multiplier = target.status === 'brn' || pokemon.abilityState.wildFireUsedFire === this.turn ? 2 : 1;
+				const damage = this.clampIntRange(target.baseMaxhp * multiplier / 16 * 2 ** typeMod, 1);
+				this.damage(damage, target, pokemon);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Wild Fire",
+		rating: 4,
+		num: 10139,
 	},
 	innardsout: {
 		onDamagingHitOrder: 1,
@@ -7795,11 +8001,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
+			if (source?.hasAbility('souleater') && target.hasAbility('soulfire') && this.movehasType(move, 'Ghost')) {
+				return this.chainModify(2);
+			}
 			if (target.hasAbility('soulfire') && this.movehasType(move, ['Fire', 'Ghost'])) {
 				return this.chainModify(4);
 			}
 		},
 		onTryHit(target, source, move) {
+			if (source?.hasAbility('souleater') && this.movehasType(move, 'Ghost')) return;
 			if (source?.hasAbility('soulfire') && target.hasAbility('soulfire') && this.movehasType(move, ['Fire', 'Ghost'])) return;
 			if (target !== source && (this.movehasType(move, 'Fire') || this.movehasType(move, 'Ghost') || move.id === 'willowisp')) {
 				if (!this.boost({ atk: 1, spa: 1 })) {
@@ -7810,6 +8020,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
 			if (!this.movehasType(move, 'Fire') && !this.movehasType(move, 'Ghost')) return;
+			if (target?.hasAbility('souleater')) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
@@ -8080,7 +8291,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const fieldAbilityBoosts: { [abilityid: string]: string[] } = {
 					stalwart: ['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'],
 					mirrorarmor: ['fairytaleterrain', 'mirrorarmor'],
-					sinofpride: ['fairytaleterrain', 'mirrorarmor'],
+					irondominion: ['fairytaleterrain', 'mirrorarmor'],
 					relicarmor: ['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'],
 				};
 				const allowedFields = fieldAbilityBoosts[effect.id];

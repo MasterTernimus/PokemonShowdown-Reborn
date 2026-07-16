@@ -47,6 +47,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Raises the user's Defense by 2 stages.",
 		shortDesc: "Raises the user's Defense by 2.",
 	},
+	arenitewall: {
+		name: "Arenite Wall",
+		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during Sandstorm or on Desert Field, Rocky Field, Ashen Beach, or Cold Eclipse. If the user is holding Light Clay, or if used on Desert Field, Rocky Field, or Ashen Beach, the duration is 8 turns. Critical hits and moves that bypass screens ignore this effect.",
+		shortDesc: "For 5 turns, user's side takes 0.5x from super-effective attacks.",
+	},
 	aciddownpour: {
 		name: "Acid Downpour",
 		shortDesc: "Power is equal to the base move's Z-Power.",
@@ -2656,7 +2661,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxterror: {
 		name: "G-Max Terror",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field. If used by a Pokemon with Sin of Envy, each opposing Pokemon also becomes cursed. Creates Haunted Field for 3 turns.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field. If used by a Pokemon with Soul Eater, each opposing Pokemon also becomes cursed. Creates Haunted Field for 3 turns.",
 		shortDesc: "Base move affects power. Foes trapped; creates Haunted Field for 3 turns.",
 	},
 	gmaxvinelash: {

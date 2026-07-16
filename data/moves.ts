@@ -903,6 +903,51 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spe: 1 } },
 		contestType: "Beautiful",
 	},
+	arenitewall: {
+		num: 10101,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Arenite Wall",
+		pp: 10,
+		priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		sideCondition: 'arenitewall',
+		onTry(source) {
+			if (source.effectiveWeather() === 'sandstorm') return true;
+			if (this.field.isTerrain(['desertterrain', 'rockyterrain', 'ashenbeachterrain', 'coldeclipseterrain'])) return true;
+			return false;
+		},
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (source?.hasItem('lightclay') ||
+					this.field.isTerrain(['desertterrain', 'rockyterrain', 'ashenbeachterrain'])) {
+					return 8;
+				}
+				return 5;
+			},
+			onAnyModifyDamage(damage, source, target, move) {
+				if (target === source || !this.effectState.target.hasAlly(target)) return;
+				if (target.getMoveHitData(move).typeMod <= 0) return;
+				if (target.getMoveHitData(move).crit || move.infiltrates) return;
+				this.debug('Arenite Wall weaken');
+				return this.chainModify(0.5);
+			},
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Arenite Wall');
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 11,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'move: Arenite Wall');
+			},
+		},
+		target: "allySide",
+		type: "Ground",
+		zMove: { boost: { def: 1 } },
+		contestType: "Tough",
+	},
 	autotomize: {
 		num: 475,
 		accuracy: true,
@@ -1923,6 +1968,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			pokemon.side.removeSideCondition('reflect');
 			pokemon.side.removeSideCondition('lightscreen');
 			pokemon.side.removeSideCondition('auroraveil');
+			 pokemon.side.removeSideCondition('arenitewall');
 		},
 		target: "normal",
 		type: "Fighting",
@@ -3733,7 +3779,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
+			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
@@ -7906,8 +7952,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('trapped', source, null, 'trapper');
-					if (source.hasAbility('sinofenvy')) {
-						pokemon.addVolatile('curse', source, this.dex.abilities.get('sinofenvy'));
+					if (source.hasAbility('souleater')) {
+						pokemon.addVolatile('curse', source, this.dex.abilities.get('souleater'));
 					}
 				}
 				if (this.field.setTerrain('hauntedterrain', source, this.dex.moves.get('gmaxterror'))) {
@@ -8070,7 +8116,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(source) {
 				let success = false;
 				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-				const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
+				const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'safeguard', 'mist', ...removeAll];
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
 						if (!removeAll.includes(targetCondition)) continue;
@@ -15399,6 +15445,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			pokemon.side.removeSideCondition('reflect');
 			pokemon.side.removeSideCondition('lightscreen');
 			pokemon.side.removeSideCondition('auroraveil');
+			 pokemon.side.removeSideCondition('arenitewall');
 		},
 		target: "normal",
 		type: "Psychic",
@@ -15964,6 +16011,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			pokemon.side.removeSideCondition('reflect');
 			pokemon.side.removeSideCondition('lightscreen');
 			pokemon.side.removeSideCondition('auroraveil');
+			 pokemon.side.removeSideCondition('arenitewall');
 		},
 		onModifyType(move, pokemon) {
 			switch (pokemon.species.name) {
@@ -23374,3 +23422,5 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Beautiful",
 	},
 };
+
+
