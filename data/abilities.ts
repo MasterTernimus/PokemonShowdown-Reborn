@@ -465,11 +465,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!move || move.category === 'Status') return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Battle Fervor field weaken');
-				return this.chainModify(0.5);
+				return this.chainModify(0.7);
 			}
 			if (this.queue.willMove(target)) {
 				this.debug('Battle Fervor weaken');
-				return this.chainModify(0.5);
+				return this.chainModify(0.7);
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
@@ -1711,10 +1711,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ atk: 1 }, source, source);
 				return;
 			}
-			const damage = Math.max(1, Math.floor((source.abilityState.ragingStormDamage || target.baseMaxhp) / 4));
+			const damage = Math.max(1, Math.floor((source.abilityState.ragingStormDamage || target.baseMaxhp) / 2));
 			for (const foe of targets) {
 				this.damage(damage, foe, source, this.dex.abilities.get('ragingstorm'));
 			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.priority > 0) return this.chainModify(0.5);
 		},
 		flags: {},
 		name: "Raging Storm",
@@ -1964,7 +1967,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			target.addVolatile('torment', source, this.dex.abilities.get('wickedsnare'));
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move' && target?.newlySwitched) this.heal(source.baseMaxhp / 4, source, source);
+			if (effect?.effectType === 'Move' && target?.newlySwitched) this.heal(source.baseMaxhp / 8, source, source);
 		},
 		flags: { breakable: 1 },
 		name: "Wicked Snare",
@@ -2046,10 +2049,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hp > target.maxhp / 4) return this.chainModify(0.5);
+			if (target.hp > target.maxhp / 4) return this.chainModify(0.7);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move' || effect?.id === 'curse') this.heal(source.baseMaxhp / 4, source, source);
+			if (effect?.effectType === 'Move' || effect?.id === 'curse') this.heal(source.baseMaxhp / 8, source, source);
 		},
 		flags: { breakable: 1 },
 		name: "Sin of Envy",
@@ -2290,7 +2293,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	frostsovereign: {
 		onStart(source) {
-			this.field.setWeather('hail');
+			if (this.field.setWeather('hail', source, this.dex.abilities.get('frostsovereign'))) {
+				this.field.weatherState.duration = 8;
+			}
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
@@ -2364,27 +2369,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Relentless Link",
 		rating: 4.5,
 		num: 10109,
-	},
-	nightmarecage: {
-		onFoeTrapPokemon(pokemon) {
-			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target)) pokemon.tryTrap(true);
-		},
-		onFoeMaybeTrapPokemon(pokemon, source) {
-			if (!source) source = this.effectState.target;
-			if (!source || !pokemon.isAdjacent(source)) return;
-			if (!pokemon.hasAbility('shadowtag')) pokemon.maybeTrapped = true;
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (source.maybeTrapped || source.trapped) return this.chainModify(0.75);
-		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (!target || target === source || source.isAlly(target) || target.fainted) return;
-			target.addVolatile('curse', source, this.dex.abilities.get('nightmarecage'));
-		},
-		flags: { breakable: 1 },
-		name: "Nightmare Cage",
-		rating: 5,
-		num: 10110,
 	},
 	mirrorgreed: {
 		onTryHitPriority: 1,
@@ -2542,7 +2526,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify(1.2);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 4, source, source);
+			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 8, source, source);
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!this.movehasType(move, 'Fairy')) return;
@@ -2559,23 +2543,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	mourningsnow: {
 		onStart(source) {
-			this.field.setWeather('hail');
+			if (this.field.setWeather('hail', source, this.dex.abilities.get('mourningsnow'))) {
+				this.field.weatherState.duration = 8;
+			}
 		},
 		onResidual(pokemon) {
 			if (!['hail', 'snow'].includes(pokemon.effectiveWeather())) return;
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			for (const target of pokemon.foes()) {
-				if (!target.hasType('Ice') && this.randomChance(3, 10)) target.trySetStatus('frz', pokemon);
+				if (!target.hasType('Ice') && this.randomChance(2, 5)) target.trySetStatus('frz', pokemon);
 			}
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (['hail', 'snow'].includes(source.effectiveWeather())) this.heal(source.baseMaxhp / 4, source, source);
+			if (['hail', 'snow'].includes(source.effectiveWeather())) this.heal(source.baseMaxhp / 8, source, source);
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (!this.field.isTerrain('coldeclipseterrain') || !move || move.category === 'Status') return;
-			if (source.volatiles['disable'] || move.isMax || move.flags['futuremove'] || move.id === 'struggle') return;
-			this.add('-activate', target, 'ability: Mourning Snow');
-			source.addVolatile('disable', target);
+			if (!move || move.category === 'Status') return;
+			if (source && source !== target && this.checkMoveMakesContact(move, source, target)) {
+				source.addVolatile('curse', target, this.dex.abilities.get('mourningsnow'));
+			}
+			if (!source.volatiles['disable'] && !move.isMax && !move.flags['futuremove'] && move.id !== 'struggle') {
+				this.add('-activate', target, 'ability: Mourning Snow');
+				source.addVolatile('disable', target);
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Mourning Snow",
@@ -2616,7 +2606,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.flags['punch']) return this.chainModify(1.4);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hp > target.maxhp / 2 && source.getStat('spe', false, true) > target.getStat('spe', false, true)) return this.chainModify(0.5);
+			if (target.hp > target.maxhp / 2 && source.getStat('spe', false, true) > target.getStat('spe', false, true)) return this.chainModify(0.8);
 		},
 		onModifyMove(move) {
 			if (move.category === 'Status') return;
@@ -2624,7 +2614,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.secondaries.push({ chance: 40, status: 'frz' });
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 4, source, source);
+			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 10, source, source);
 		},
 		flags: { breakable: 1 },
 		name: "Rime Knuckle",
@@ -8026,6 +8016,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryBoost(boost, target, source, effect) {
 			if (!effect || effect.id === 'royaldecree') return;
+			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
+				!Object.values(boost).some(value => value && value > 0);
+			if (isOnlyDrops && source === target && target.hasAbility('royaldecree')) return;
 			const positiveBoost = Object.values(boost).some(value => value && value > 0);
 			if (positiveBoost && target === source && effect.effectType === 'Ability') {
 				const fieldAbilityBoosts: { [abilityid: string]: string[] } = {
@@ -8054,6 +8047,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-fail', target, 'boost', '[from] ability: Royal Decree');
 				}
 			}
+		},
+		onModifyMove(move) {
+			if (move.flags['charge']) delete move.flags['charge'];
 		},
 		onModifyDef(def, pokemon) {
 			if (this.field.isTerrain('chessboardterrain')) return this.chainModify(1.5);
@@ -8179,7 +8175,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (source.moveThisTurnResult !== undefined) return this.chainModify(0.5);
+			if (move.category !== 'Status') return this.chainModify(0.75);
 		},
 		onModifyCritRatio(critRatio) {
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain'])) return critRatio + 2;
@@ -9511,12 +9507,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Ultra Instinct field weaken');
-				return this.chainModify(0.25);
+				return this.chainModify(0.34);
 			}
 			if (source.moveThisTurnResult === undefined) {
 				this.debug('Ultra Instinct weaken');
-				return this.chainModify(0.75);
+				return this.chainModify(0.3);
 			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (effect?.effectType !== 'Move' || (target as any).ultraInstinctEndureUsed || target.hp <= target.maxhp / 2 || damage < target.hp) return;
+			(target as any).ultraInstinctEndureUsed = true;
+			return target.hp - 1;
 		},
 		flags: {},
 		name: "Ultra Instinct",
@@ -9845,7 +9847,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 5, source, source);
+			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 8, source, source);
 		},
 		flags: { breakable: 1 },
 		name: "Iron Cognition",

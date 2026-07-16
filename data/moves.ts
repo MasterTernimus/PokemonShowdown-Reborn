@@ -859,6 +859,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 5,
 			durationCallback(target, source, effect) {
 				if (effect?.id === 'gmaxresonance') return 4;
+				if (source?.hasAbility(['mourningsnow', 'frostsovereign'])) return 8;
 				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
 					return 8;
 				}
@@ -3558,7 +3559,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 12,
 			onResidual(pokemon) {
 				const source = this.effectState.source;
-				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'nightmarecage', 'cursedarmament']) ? 8 : 4;
+				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'mourningsnow', 'cursedarmament']) ? 8 : 4;
 				this.damage(pokemon.baseMaxhp / damageDivisor);
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');

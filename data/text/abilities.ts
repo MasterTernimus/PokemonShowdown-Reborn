@@ -479,7 +479,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingstorm: {
 		name: "Raging Storm",
-		desc: "This Pokemon's attacks have Mold Breaker, ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 25% of the last damage in multi battles, or raises Attack by 1 in singles.",
+		desc: "This Pokemon's attacks have Mold Breaker, ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 50% of the last damage in multi battles, or raises Attack by 1 in singles.",
 		shortDesc: "Mold Breaker; attacks ignore screens/boosts; KO bonus.",
 	},
 	vanguard: {
@@ -519,8 +519,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
-		desc: "This Pokemon has Stakeout's effect. Opposing Pokemon that switch in have their Speed lowered by 1 stage. If this Pokemon knocks out a Pokemon that switched in this turn, it restores 1/4 of its maximum HP. Targets hit by this Pokemon become affected by Torment.",
-		shortDesc: "Stakeout; switch-ins lose Speed; KO on switched-in target heals 1/4; hits Torment.",
+		desc: "This Pokemon has Stakeout's effect. Opposing Pokemon that switch in have their Speed lowered by 1 stage. If this Pokemon knocks out a Pokemon that switched in this turn, it restores 1/8 of its maximum HP. Targets hit by this Pokemon become affected by Torment.",
+		shortDesc: "Stakeout; switch-ins lose Speed; KO on switched-in target heals 1/8; hits Torment.",
 	},
 	crumblingshell: {
 		name: "Crumbling Shell",
@@ -554,8 +554,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinofenvy: {
 		name: "Sin of Envy",
-		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.5x damage to it. When this Pokemon hits an enemy with an attack or status move, the target becomes cursed. Damage dealt by that Curse heals this Pokemon for half the damage dealt. If this Pokemon causes an opposing Pokemon to faint with a move or Curse damage, it restores 1/4 of its maximum HP.",
-		shortDesc: "Moves don't miss; above 1/4 HP takes 0.5x; hits Curse; heals half Curse damage.",
+		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.7x damage to it. When this Pokemon hits an enemy with an attack or status move, the target becomes cursed. Damage dealt by that Curse heals this Pokemon for half the damage dealt. If this Pokemon causes an opposing Pokemon to faint with a move or Curse damage, it restores 1/8 of its maximum HP.",
+		shortDesc: "Moves don't miss; above 1/4 HP takes 0.7x; hits Curse; heals half Curse damage.",
 	},
 	alloycore: {
 		name: "Alloy Core",
@@ -604,8 +604,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	frostsovereign: {
 		name: "Frost Sovereign",
-		desc: "On switch-in, this Pokemon summons Hail. During Hail, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP. During Cold Eclipse, it also has Snow Warning's 100% Cursed Body effect.",
-		shortDesc: "Sets Hail; in Hail moves 1.2x and takes 0.7x; Cold Eclipse Snow Warning effect.",
+		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP. During Cold Eclipse, it also has Snow Warning's 100% Cursed Body effect.",
+		shortDesc: "Sets 8-turn Hail; 8-turn Aurora Veil; in Hail moves 1.2x and takes 0.7x.",
 	},
 	stormfright: {
 		name: "Storm Fright",
@@ -621,11 +621,6 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Relentless Link",
 		desc: "This Pokemon has Skill Link, Guts, and Shield Dust's effects.",
 		shortDesc: "Skill Link + Guts + Shield Dust.",
-	},
-	nightmarecage: {
-		name: "Nightmare Cage",
-		desc: "Opposing adjacent Pokemon cannot switch out while this Pokemon is active. Trapped Pokemon deal 0.75x damage. This Pokemon's attacks and status moves curse opposing targets, and Curse from this Ability deals 1/8 max HP each turn.",
-		shortDesc: "Shadow Tag; trapped foes deal 0.75x; moves Curse for 1/8.",
 	},
 	mirrorgreed: {
 		name: "Mirror Greed",
@@ -649,13 +644,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heavenlychorus: {
 		name: "Heavenly Chorus",
-		desc: "This Pokemon has Pixilate and Cloud Nine's effects. When it uses a Fairy-type move, it restores 1/16 of its maximum HP and cures adjacent allies' status conditions.",
-		shortDesc: "Pixilate + Cloud Nine; Fairy moves heal 1/16 and cure allies.",
+		desc: "This Pokemon has Pixilate and Cloud Nine's effects. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP. When it uses a Fairy-type move, it restores 1/16 of its maximum HP and cures adjacent allies' status conditions.",
+		shortDesc: "Pixilate + Cloud Nine; KO heals 1/8; Fairy moves heal 1/16 and cure allies.",
 	},
 	mourningsnow: {
 		name: "Mourning Snow",
-		desc: "On switch-in, this Pokemon summons Hail. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon can become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/4 of its maximum HP. During Cold Eclipse, it also has Snow Warning's 100% Cursed Body effect.",
-		shortDesc: "Sets Hail; Ice Body; Hail can frostbite; Cold Eclipse Snow Warning effect.",
+		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon have a 40% chance to become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/8 of its maximum HP. Pokemon making contact with this Pokemon become cursed, and Curse from this Ability deals 1/8 max HP each turn. This Pokemon has a 100% Cursed Body effect.",
+		shortDesc: "Sets 8-turn Hail; 8-turn Aurora Veil; Ice Body; frostbite; contact curses.",
 	},
 	venombastion: {
 		name: "Venom Bastion",
@@ -664,8 +659,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rimeknuckle: {
 		name: "Rime Knuckle",
-		desc: "This Pokemon's punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 0.5x damage to it. If this Pokemon knocks out a target, it restores 1/4 of its maximum HP.",
-		shortDesc: "Punching moves 1.4x; moves 40% frostbite; above 50% HP takes 0.5x from faster foes; KO heals 1/4.",
+		desc: "This Pokemon's punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 20% less damage to it. If this Pokemon knocks out a target, it restores 1/10 of its maximum HP.",
+		shortDesc: "Punching moves 1.4x; moves 40% frostbite; above 50% HP takes 20% less from faster foes; KO heals 1/10.",
 	},
 	streettyrant: {
 		name: "Street Tyrant",
@@ -2122,8 +2117,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, and stat changes fail unless they come from field effects or exact ability boosts granted by the current field, such as Stalwart, Mirror Armor, Sin of Pride, or Relic Armor field boosts. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
-		shortDesc: "Switch-in Haze + screen clear; blocks screens/manual stat changes; allows field boosts.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, and stat changes fail unless they come from field effects, exact ability boosts granted by the current field, or this Pokemon's own self-inflicted stat drops. Enemy-caused drops such as Intimidate and Parting Shot still fail. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
+		shortDesc: "Switch-in Haze/screen clear; blocks enemy drops/setup/screens; skips charge turns.",
 	},
 	parasitism: {
 		name: "Parasitism",
@@ -2152,8 +2147,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowcurrent: {
 		name: "Shadow Current",
-		desc: "Before using a move, this Pokemon becomes the move's type. Its moves with less than 60 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power; if it moves after the target, it takes 0.5x damage from that target's attack.",
-		shortDesc: "Protean; weak moves 1.5x; faster attacks 1.3x; slower defense 0.5x.",
+		desc: "Before using a move, this Pokemon becomes the move's type. Its moves with less than 60 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power. This Pokemon takes 0.75x damage from attacks.",
+		shortDesc: "Protean; weak moves 1.5x; faster attacks 1.3x; takes 0.75x damage.",
 	},
 	astralwitchcraft: {
 		name: "Astral Witchcraft",
@@ -2708,8 +2703,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlefervor: {
 		name: "Battle Fervor",
-		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.5x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always takes 0.5x damage, cannot have stats lowered, and cannot flinch. This Ability is disabled on Bewitched Woods.",
-		shortDesc: "Fast attacks 1.3x; slow takes 0.5x; hit boosts once; disabled on Bewitched.",
+		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.7x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always takes 0.7x damage, cannot have stats lowered, and cannot flinch. This Ability is disabled on Bewitched Woods.",
+		shortDesc: "Fast attacks 1.3x; slow takes 0.7x; hit boosts once; disabled on Bewitched.",
 	},
 	duskilate: {
 		name: "Duskilate",
@@ -2768,8 +2763,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ironcognition: {
 		name: "Iron Cognition",
-		desc: "This Pokemon's damaging moves have 1.3x power. Its stats cannot be lowered by opposing Pokemon. If this Pokemon knocks out another Pokemon with a move, it restores 1/5 of its maximum HP.",
-		shortDesc: "Damaging moves 1.3x; stats cannot be lowered; KO heals 1/5.",
+		desc: "This Pokemon's damaging moves have 1.3x power. Its stats cannot be lowered by opposing Pokemon. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP.",
+		shortDesc: "Damaging moves 1.3x; stats cannot be lowered; KO heals 1/8.",
 	},
 	neutralization: {
 		name: "Neutralization",
@@ -2823,8 +2818,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "This Pokemon's moves ignore abilities, bypass Substitute, Reflect, Light Screen, and Aurora Veil, and charge moves fire immediately. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, damage is reduced by 25%. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 75% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena. This Ability is disabled on Bewitched Woods.",
-		shortDesc: "Moves ignore abilities/screens; fast attacks 1.5x; disabled on Bewitched.",
+		desc: "This Pokemon's moves ignore abilities, bypass Substitute, Reflect, Light Screen, and Aurora Veil, and charge moves fire immediately. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage and once per battle can endure a KO from above 50% HP at 1 HP. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 66% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena. This Ability is disabled on Bewitched Woods.",
+		shortDesc: "Moves ignore abilities/screens; fast attacks 1.5x; pre-move guard/endure; disabled on Bewitched.",
 	},
 
 	// CAP
