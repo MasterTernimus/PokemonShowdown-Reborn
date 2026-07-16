@@ -3088,6 +3088,9 @@ export class Battle {
 				const lower_terrain = this.dex.conditions.get(this.format.terrain);
 				this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", terrainChanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
 			}
+			if (['coldeclipseterrain', 'fairytaleterrain'].includes(this.format.terrain)) {
+				this.field.setWeather('hail');
+			}
 		}
 		let action;
 		while ((action = this.queue.shift())) {

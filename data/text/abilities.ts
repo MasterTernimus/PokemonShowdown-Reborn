@@ -434,8 +434,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mindfreeze: {
 		name: "Mind Freeze",
-		desc: "This Pokemon's Psychic-type moves have a 40% chance to cause frostbite. Its Physical Ice-type moves become Special.",
-		shortDesc: "Psychic moves 40% frostbite; Physical Ice moves become Special.",
+		desc: "This Pokemon is immune to Ice-type attacks and restores 1/4 of its maximum HP when hit by one. It has Ice Body's healing and hail immunity. Its Psychic-type moves have a 40% chance to cause frostbite, and Freezing Glare's frostbite chance is doubled. Its Physical Ice-type moves become Special. In Cold Eclipse, if this Pokemon is not Ice-type, it gains the Ice-type defensive boost, Speed-drop immunity, hail immunity, and native hail recovery.",
+		shortDesc: "Absorbs Ice for 25%; Ice Body effects; Psychic moves frostbite; Physical Ice becomes Special.",
+	},
+	frozensummit: {
+		name: "Frozen Summit",
+		desc: "This Pokemon has Thick Fat's effect, is immune to hail damage, and its damaging moves have 1.3x power. In Hail and Cold Eclipse, if this Pokemon is not Ice-type, it gains the Ice-type defensive benefits. In Cold Eclipse, it also gains Speed-drop immunity and native hail recovery.",
+		shortDesc: "Thick Fat + hail immunity; damaging moves 1.3x; gains non-stacking Ice field benefits.",
 	},
 	riotamp: {
 		name: "Riot Amp",
@@ -514,8 +519,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "When this Pokemon is hit by a damaging move, its Attack rises by 1 stage and it heals 1/10 max HP. Its Defense and Special Defense are 1.3x, and its Physical moves have 1.3x power. Its moves have +1 critical hit ratio. It heals 30% of the damage it deals with attacks, restores 1/16 max HP at the end of each turn, and this Pokemon cannot flinch.",
-		shortDesc: "Hit: +1 Atk/heal 1/10. Physical 1.3x; drains 30%; heals 1/16; no flinch.",
+		desc: "This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, restores 1/16 max HP at the end of each turn, and cannot flinch.",
+		shortDesc: "Moves 1.3x and bypass abilities/defenses/screens; drains 30%; heals 1/16; no flinch.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -649,8 +654,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mourningsnow: {
 		name: "Mourning Snow",
-		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon have a 40% chance to become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/8 of its maximum HP. Pokemon making contact with this Pokemon become cursed, and Curse from this Ability deals 1/8 max HP each turn. This Pokemon has a 100% Cursed Body effect.",
-		shortDesc: "Sets 8-turn Hail; 8-turn Aurora Veil; Ice Body; frostbite; contact curses.",
+		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon have a 40% chance to become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/8 of its maximum HP. When this Pokemon faints, all opposing Pokemon become cursed. This Pokemon has a 100% Cursed Body effect.",
+		shortDesc: "Sets 8-turn Hail/Veil; Ice Body; frostbite; on faint curses foes; Cursed Body.",
 	},
 	venombastion: {
 		name: "Venom Bastion",
@@ -679,8 +684,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinofgluttony: {
 		name: "Sin of Gluttony",
-		desc: "This Pokemon has Thick Fat, Gluttony, and Early Bird's effects.",
-		shortDesc: "Thick Fat + Gluttony + Early Bird.",
+		desc: "This Pokemon has Thick Fat, Gluttony, Early Bird, and Frozen Summit's effects. It is immune to hail damage, takes reduced damage from Fire- and Ice-type attacks, and its damaging moves have 1.3x power.",
+		shortDesc: "Thick Fat + Gluttony + Early Bird + Frozen Summit.",
 	},
 	sinofpride: {
 		name: "Sin of Pride",
@@ -1045,8 +1050,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	icebody: {
 		name: "Ice Body",
-		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
-		shortDesc: "If Snow is active, this Pokemon heals 1/16 of its max HP each turn.",
+		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. In Cold Eclipse, if this Pokemon is not Ice-type, it gains the Ice-type defensive boost, Speed-drop immunity, hail immunity, and native hail recovery.",
+		shortDesc: "Heals in Snow; non-Ice users gain Cold Eclipse Ice benefits.",
 		gen8: {
 			desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail.",
 			shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn; immunity to Hail.",
@@ -2167,8 +2172,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "This Pokemon takes 0.75x damage from Fire- and Ice-type attacks and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
-		shortDesc: "0.75x Fire/Ice; heals 1/16; Giga Drain 2x; absorbs Poison for +1 Atk/SpA.",
+		desc: "This Pokemon takes 0.75x damage from Fire- and Ice-type attacks, is immune to hail damage, and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
+		shortDesc: "0.75x Fire/Ice; hail immune; heals 1/16; Giga Drain 2x; absorbs Poison.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
@@ -2450,8 +2455,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	thickfat: {
 		name: "Thick Fat",
-		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
-		shortDesc: "Fire-/Ice-type moves against this Pokemon deal damage with a halved offensive stat.",
+		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon is immune to hail damage. In Hail and Cold Eclipse, if this Pokemon is not Ice-type, it gains the Ice-type defensive benefits. In Cold Eclipse, it also gains Speed-drop immunity and native hail recovery.",
+		shortDesc: "Halves Fire/Ice damage stats; hail immune; gains non-stacking Ice field benefits.",
 		gen4: {
 			desc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",
 			shortDesc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",

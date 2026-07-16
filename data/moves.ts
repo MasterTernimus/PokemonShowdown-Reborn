@@ -1747,6 +1747,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: 2,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch',
+		},
 		target: "normal",
 		type: "Ground",
 		maxMove: { basePower: 130 },
@@ -3559,7 +3563,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 12,
 			onResidual(pokemon) {
 				const source = this.effectState.source;
-				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'mourningsnow', 'cursedarmament']) ? 8 : 4;
+				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'cursedarmament']) ? 8 : 4;
 				this.damage(pokemon.baseMaxhp / damageDivisor);
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
@@ -6702,7 +6706,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
 		secondary: {
-			chance: 10,
+			chance: 30,
 			status: 'frz',
 		},
 		target: "normal",

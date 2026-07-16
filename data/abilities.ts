@@ -1919,21 +1919,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10125,
 	},
 	atrocity: {
-		onDamagingHit(damage, target, source, move) {
-			if (!source || source === target || move.category === 'Status') return;
-			this.boost({ atk: 1 }, target, target);
-			this.heal(target.baseMaxhp / 10, target, target);
-		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
+			move.ignoreDefensive = true;
+			move.infiltrates = true;
 			move.critRatio++;
+			if (move.id === 'dragonrush') move.accuracy = true;
 		},
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'flinch') return null;
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
-			if (move.category === 'Physical') return this.chainModify(1.3);
+			if (move.id === 'dragonrush') return this.chainModify(1.95);
+			if (move.category !== 'Status') return this.chainModify(1.3);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (move.category !== 'Status') this.heal(Math.floor(damage * 0.3), source, source);
@@ -2556,12 +2555,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (['hail', 'snow'].includes(source.effectiveWeather())) this.heal(source.baseMaxhp / 8, source, source);
+			for (const foe of source.foes()) {
+				if (!foe.fainted) foe.addVolatile('curse', source, this.dex.abilities.get('mourningsnow'));
+			}
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!move || move.category === 'Status') return;
-			if (source && source !== target && this.checkMoveMakesContact(move, source, target)) {
-				source.addVolatile('curse', target, this.dex.abilities.get('mourningsnow'));
-			}
 			if (!source.volatiles['disable'] && !move.isMax && !move.flags['futuremove'] && move.id !== 'struggle') {
 				this.add('-activate', target, 'ability: Mourning Snow');
 				source.addVolatile('disable', target);
@@ -2651,6 +2650,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10120,
 	},
 	sinofgluttony: {
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move && this.movehasType(move, ['Fire', 'Ice'])) return this.chainModify(0.5);
@@ -2671,6 +2673,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFractionalPriorityPriority: -1,
 		onFractionalPriority(priority, pokemon) {
 			if (pokemon.status === 'slp') return priority - 0.1;
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.category !== 'Status') return this.chainModify(1.3);
 		},
 		flags: { breakable: 1 },
 		name: "Sin of Gluttony",
@@ -3376,8 +3382,35 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10131,
 	},
 	mindfreeze: {
+		onTryHit(target, source, move) {
+			if (target !== source && this.movehasType(move, 'Ice')) {
+				this.heal(target.baseMaxhp / 4, target, source);
+				return null;
+			}
+		},
+		onWeather(target, source, effect) {
+			if (effect.id === 'hail' || effect.id === 'snow') {
+				if (effect.id === 'hail' && this.field.isTerrain('coldeclipseterrain')) {
+					this.heal(target.baseMaxhp / 8);
+					return;
+				}
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		onResidual(pokemon) {
+			if ((this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) && !(this.field.isWeather(['hail', 'snow']))) {
+				this.heal(pokemon.baseMaxhp / 16);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
 		onModifyMove(move) {
-			if (this.movehasType(move, 'Psychic')) {
+			if (move.id === 'freezingglare') {
+				for (const secondary of move.secondaries || []) {
+					if (secondary.status === 'frz' && secondary.chance) secondary.chance *= 2;
+				}
+			} else if (this.movehasType(move, 'Psychic')) {
 				if (!move.secondaries) move.secondaries = [];
 				move.secondaries.push({ chance: 40, status: 'frz' });
 			}
@@ -3414,6 +3447,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Riot Amp",
 		rating: 5,
 		num: 10133,
+	},
+	frozensummit: {
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && (this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire'))) {
+				this.debug('Frozen Summit weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move && (this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire'))) {
+				this.debug('Frozen Summit weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.category !== 'Status') return this.chainModify(1.3);
+		},
+		flags: { breakable: 1 },
+		name: "Frozen Summit",
+		rating: 4.5,
+		num: 10136,
 	},
 	relicarmor: {
 		onStart(pokemon) {
@@ -8272,6 +8332,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10036,
 	},
 	toxicbloom: {
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (this.movehasType(move, ['Fire', 'Ice'])) return this.chainModify(0.75);
 		},
@@ -9062,6 +9125,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 270,
 	},
 	thickfat: {
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move && this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire')) {

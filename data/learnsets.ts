@@ -24092,6 +24092,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			flash: ["9M", "7V", "6M", "5M", "4M", "3M"],
 			flashcannon: ["9M"],
 			focusenergy: ["9L9", "8M"],
+			freezingglare: ["9M"],
 			frustration: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			futuresight: ["9L37", "8M", "8L50", "7L25", "6L25", "5L25", "4L43"],
 			gigaimpact: ["9M", "8M", "7M", "6M", "5M", "4M"],
