@@ -3634,6 +3634,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 138,
 	},
 	ancientbloom: {
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
+		},
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
@@ -3653,19 +3656,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
-			for (const target of this.getAllActive()) {
-				if (!target || target.fainted || target === pokemon || target.hasType('Grass') || target.volatiles['leechseed']) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Grass', target.types), -6, 6);
-				const damage = this.clampIntRange(target.baseMaxhp / 16 * 2 ** typeMod, 1);
-				const dealt = this.damage(damage, target, pokemon);
-				if (dealt) this.heal(dealt, pokemon, pokemon);
-			}
-			if (this.field.isTerrain(['grassyterrain', 'forestterrain', 'bewitchedwoodsterrain', 'corrosiveterrain', 'corrosivemistterrain', 'wastelandterrain'])) {
-				this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
-				for (const ally of pokemon.adjacentAllies()) {
-					this.heal(ally.baseMaxhp / 10, ally, pokemon);
-				}
-			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
@@ -3729,6 +3719,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10022,
 	},
 	fortressshell: {
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
+		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
@@ -3762,14 +3755,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			const stage = ((pokemon.abilityState.fortressShellStage || 0) % 3) + 1;
-			pokemon.abilityState.fortressShellStage = stage;
-			for (const target of this.getAllActive()) {
-				if (!target || target.fainted || target.hasType('Water')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', target.types), -6, 6);
-				const damage = this.clampIntRange(target.baseMaxhp * stage / 16 * 2 ** typeMod, 1);
-				this.damage(damage, target, pokemon);
-			}
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
@@ -4881,6 +4867,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 151,
 	},
 	burningcrown: {
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
+			if (type === 'Ground') return false;
+		},
 		onStart(pokemon) {
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
@@ -4912,20 +4902,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (this.movehasType(move, 'Fire')) return this.chainModify(1.2);
 		},
-		onImmunity(type, pokemon) {
-			if (type === 'Ground') return false;
-		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
-			for (const target of this.getAllActive()) {
-				if (!target || target.fainted || target.hasType('Fire')) continue;
-				let multiplier = 1;
-				if (target.status === 'brn' || ['sunnyday', 'desolateland'].includes(target.effectiveWeather()) || target.volatiles['gmaxwildfire']) multiplier = 2;
-				this.damage(target.baseMaxhp * multiplier / 16, target, pokemon);
-			}
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
