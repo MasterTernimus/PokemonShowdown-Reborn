@@ -1997,13 +1997,13 @@ export class Pokemon {
 
 	hasAbility(ability: string | string[]) {
 		const abilityAliases: { [abilityid: string]: string[] } = {
-			sinofpride: ['pressure', 'unnerve', 'mirrorarmor'],
-			sinoflust: ['magicbounce', 'queenlymajesty'],
-			sinofenvy: [],
-			sinofgluttony: ['thickfat', 'gluttony', 'earlybird'],
-			sinofsloth: ['prankster', 'telepathy', 'frisk'],
-			sinofgreed: ['heavymetal', 'filter', 'eartheater'],
-			sinofwrath: ['ultraego', 'scrappy'],
+			irondominion: ['pressure', 'swornduty', 'mirrorarmor'],
+			bewitchingmajesty: ['magicbounce', 'queenlymajesty'],
+			souleater: [],
+			mountainhunger: ['thickfat', 'gluttony', 'earlybird'],
+			astralwatcher: ['prankster', 'telepathy', 'frisk'],
+			treasuretitan: ['heavymetal', 'filter', 'eartheater'],
+			ragingfists: ['ultraego', 'scrappy'],
 			warship: ['swiftswim', 'rockhead', 'unaware'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil'],
 			auroraresonance: ['waterabsorb'],
@@ -2030,7 +2030,7 @@ export class Pokemon {
 			relentlesslink: ['skilllink', 'guts', 'shielddust'],
 			mirrorgreed: ['magicbounce', 'cursedbody'],
 			uncheckedassault: ['scrappy', 'striker', 'opportunist'],
-			empatheticresonance: ['pixilate', 'friendguard'],
+			royalvoice: ['pixilate', 'queenlymajesty'],
 			perfectforesight: ['trace'],
 			heavenlychorus: ['pixilate', 'cloudnine'],
 			mourningsnow: ['snowwarning', 'icebody'],
@@ -2239,7 +2239,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'infernalpresence', 'astralwitchcraft', 'shadowguard']) && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft', 'shadowguard']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';

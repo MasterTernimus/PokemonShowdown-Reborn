@@ -4902,6 +4902,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          tripleaxel: ["9M"], 
 			workup: ["9M", "8M"],
 			xscissor: ["9M", "8M", "8V", "7M", "6M", "5M", "4M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 12, gender: "M", nature: "Docile", ivs: {hp: 4, atk: 23, def: 8, spa: 31, spd: 1, spe: 25}, moves: ["scratch", "defensecurl", "sandattack", "poisonsting"], pokeball: "pokeball"},
@@ -5145,6 +5146,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			workup: ["9M", "8M"],
 			xscissor: ["9M", "8M", "8V", "7M", "6M", "5M", "4M"],
 			bonemerang: ["9M"],
+			arenitewall: ["9M"],
 		},
 		encounters: [
 			{generation: 2, level: 10},
@@ -8673,6 +8675,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["8V", "7M"],
 			uproar: ["8M"],
 			workup: ["8M", "7M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 7, level: 10, abilities: ["tanglinghair"], moves: ["mudslap", "astonish", "growl", "metalclaw"], pokeball: "cherishball"},
@@ -8777,6 +8780,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			triattack: ["9L1", "8M", "8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S0"],
 			uproar: ["9M", "8M", "5T"],
 			workup: ["9M", "8M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 40, moves: ["charm", "earthquake", "sandstorm", "triattack"]},
@@ -8876,6 +8880,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			triattack: ["9L1", "8M", "8L1", "8V", "7L1"],
 			uproar: ["8M"],
 			workup: ["8M", "7M"],
+			arenitewall: ["9M"],
 		},
 	},
 	meowth: {
@@ -10481,6 +10486,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderfang: [],
 			wildcharge: [],
 			willowisp: [],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 15, isHidden: true, nature: "Jolly", ivs: {hp: 31, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}, moves: ["flamewheel", "bite", "howl", "ember"], pokeball: "pokeball"},
@@ -10687,6 +10693,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderfang: [],
 			wildcharge: [],
 			willowisp: [],
+			arenitewall: ["9M"],
 		},
 	},
 	poliwag: {
@@ -12554,6 +12561,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wideguard: ["7E"],
 			wildcharge: [],
 			zapcannon: [],
+			arenitewall: ["9M"],
 		},
 	},
 	graveler: {
@@ -12756,6 +12764,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["8V", "7M"],
 			voltswitch: ["7M"],
 			wildcharge: [],
+			arenitewall: ["9M"],
 		},
 	},
 	golem: {
@@ -12977,6 +12986,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["8V", "7M"],
 			voltswitch: ["7M"],
 			wildcharge: ["7M"],
+			arenitewall: ["9M"],
 		},
 	},
 	ponyta: {
@@ -16344,6 +16354,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			twister: ["9M", "4T"],
 			wrap: ["9L8"],
+			arenitewall: ["9M"],
 		},
 	},
 	drowzee: {
@@ -17621,6 +17632,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M", "8M", "7T", "6T", "5T", "4T"],
          vitalthrow: ["9E"], 
 			watergun: ["7V"],
+			arenitewall: ["9M"],
 		},
 		encounters: [
 			{generation: 1, level: 16},
@@ -17761,7 +17773,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			watergun: ["7V"],
 			willowisp: ["9M"],
-			shadowforce: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 44, moves: ["sing", "earthquake", "swordsdance", "rockslide"]},
@@ -17898,7 +17910,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["8M", "7T"],
 			watergun: [],
 			willowisp: ["9L25", "8M", "8L36", "8V", "7M", "7L23"],
-			shadowforce: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	marowakalolatotem: {
@@ -19073,6 +19085,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			uproar: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			zapcannon: ["9M", "7V"],
+			arenitewall: ["9M"],
 		},
 		encounters: [
 			{generation: 1, level: 20},
@@ -19228,6 +19241,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			whirlpool: ["9M", "8M", "4M"],
 			wideguard: ["9M"],
 			zapcannon: ["9M", "7V"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 46, moves: ["helpinghand", "megahorn", "scaryface", "earthquake"]},
@@ -19395,6 +19409,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			whirlpool: ["9M", "8M", "4M"],
 			wideguard: ["9M"],
 			zapcannon: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	happiny: {
@@ -21097,6 +21112,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wonderroom: ["9M", "8M", "7T", "6T", "5T"],
 			zapcannon: ["9M", "7V"],
 			zenheadbutt: ["9L42", "8M", "7T", "6T", "5T", "4T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 42, abilities: ["soundproof"], moves: ["followme", "psychic", "encore", "thunderpunch"]},
@@ -25035,6 +25051,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
 			whirlpool: ["9M", "8M", "7V", "4M"],
 			withdraw: ["9L1", "8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
+			arenitewall: ["9M"],
 		},
 	},
 	kabuto: {
@@ -25129,6 +25146,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
 			whirlpool: ["8M", "4M"],
 			wringout: ["9L40", "7L50", "6L50", "5L51", "4L51"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 15, gender: "M", abilities: ["battlearmor"], moves: ["confuseray", "dig", "scratch", "harden"], pokeball: "cherishball"},
@@ -25248,6 +25266,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			whirlpool: ["9M", "8M", "7V", "4M"],
 			wringout: ["9L40", "7L63", "6L63", "5L63", "4L63"],
 			xscissor: ["9M", "8M", "8V", "7M", "6M", "5M", "4M"],
+			arenitewall: ["9M"],
 		},
 	},
 	aerodactyl: {
@@ -25359,6 +25378,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			whirlwind: ["9E", "8E", "7E", "7V", "6E", "5E", "4E", "3E"],
 			wideguard: ["9E", "8E", "7E", "7S1", "6E"],
 			wingattack: ["9L17", "8L10", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 15, gender: "M", abilities: ["pressure"], moves: ["steelwing", "icefang", "firefang", "thunderfang"], pokeball: "cherishball"},
@@ -30842,6 +30862,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trailblaze: ["9M"],
 			uproar: ["9M", "8M"],
 			woodhammer: ["9L1", "8L1", "7L1", "6L1", "5L1", "4L1"],
+			arenitewall: ["9M"],
 		},
 	},
 	hoppip: {
@@ -32986,6 +33007,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			venoshock: ["9M", "7M", "6M", "5M"],
 			voltswitch: ["9M", "7M", "6M", "5M"],
 			zapcannon: ["9L60", "7L1", "6L1", "5L64", "4L62", "3L31"],
+			arenitewall: ["9M"],
 		},
 		encounters: [
 			{generation: 6, level: 30},
@@ -34207,6 +34229,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			venoshock: ["9M", "8M", "7M", "6M", "5M"],
 			withdraw: ["9L1", "8L1", "7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S0"],
 			wrap: ["9L5", "8L1", "7L9", "7V", "6L9", "5L9", "4L22", "3L9", "3S0"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, gender: "M", abilities: ["sturdy"], moves: ["constrict", "withdraw", "wrap"], pokeball: "pokeball"},
@@ -35404,6 +35427,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          triattack: ["9E"], 
 			willowisp: ["9M", "7M", "6M", "5M", "4M"],
 			yawn: ["9L1", "7L1", "6L1", "5L1", "4L1", "3L1"],
+			arenitewall: ["9M"],
 		},
 	},
 	magcargo: {
@@ -35496,6 +35520,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			willowisp: ["9M", "7M", "6M", "5M", "4M"],
 			yawn: ["9L1", "7L1", "6L1", "5L1", "4L1", "3L1"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 38, moves: ["refresh", "heatwave", "earthquake", "flamethrower"]},
@@ -35901,6 +35926,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9E", "8E", "7T", "7E", "6T", "6E", "5E", "4M", "3M"],
 			whirlpool: ["9M", "8M", "7V", "4M"],
 			willowisp: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 5, shiny: 1, moves: ["tackle", "mudsport"], pokeball: "pokeball", emeraldEventEgg: true},
@@ -36692,6 +36718,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			whirlwind: ["9L17", "8E", "7E", "7V", "6E", "5E", "4E", "3E"],
 			wingattack: ["9L24", "8L20"],
 			xscissor: ["9M", "8M", "7M", "6M", "5M", "4M"],
+			arenitewall: ["9M"],
 		},
 	},
 	houndour: {
@@ -37924,6 +37951,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
          twister: ["9E"], 
 			uproar: ["9M", "8M", "7T", "6T", "5T", "4T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 20, moves: ["sandstorm", "dragondance", "bite", "outrage"], pokeball: "pokeball"},
@@ -38020,6 +38048,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			torment: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			toxic: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			uproar: ["9M", "8M", "7T", "6T", "5T", "4T"],
+			arenitewall: ["9M"],
 		},
 	},
 	tyranitar: {
@@ -38170,6 +38199,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
 			whirlpool: ["9M", "8M", "4M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 70, moves: ["thrash", "scaryface", "crunch", "earthquake"], pokeball: "pokeball"},
@@ -43606,6 +43636,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		voltswitch: ["9M", "7M", "6M", "5M"],
 			wideguard: ["9E", "7E", "6E"],
 			zapcannon: ["9L61", "7L43", "6L43", "5L50", "4L61", "3L43"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 26, moves: ["helpinghand", "thunderbolt", "thunderwave", "rockslide"]},
@@ -43713,6 +43744,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			voltswitch: ["9M", "7M", "6M", "5M"],
 			wideguard: ["9L1", "7L1", "6L1"],
 			zapcannon: ["9L61", "7L43", "6L43", "5L50", "4L61"],
+			arenitewall: ["9M"],
 		},
 	},
 	skitty: {
@@ -44307,6 +44339,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			uproar: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
+			arenitewall: ["9M"],
 		},
 	},
 	lairon: {
@@ -44390,6 +44423,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			uproar: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
+			arenitewall: ["9M"],
 		},
 	},
 	aggron: {
@@ -44530,6 +44564,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
 			wavecrash: ["9M"],
 			whirlpool: ["9M", "8M", "4M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 100, moves: ["irontail", "protect", "metalsound", "doubleedge"], pokeball: "pokeball"},
@@ -46314,6 +46349,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			willowisp: ["9M", "7M", "6M", "5M", "4M"],
 			yawn: ["9L15", "7L36", "7E", "6L36", "6E", "5L36", "5E", "4E"],
 			zenheadbutt: [],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 14, abilities: ["oblivious"], moves: ["charm", "takedown", "dig", "ember"]},
@@ -46423,6 +46459,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			willowisp: ["9M", "7M", "6M", "5M", "4M"],
 			yawn: ["9L15", "7L39", "6L39", "6S0", "5L39"],
 			zenheadbutt: [],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 6, level: 43, gender: "M", perfectIVs: 2, abilities: ["solidrock"], moves: ["curse", "takedown", "rockslide", "yawn"], pokeball: "cherishball"},
@@ -47070,6 +47107,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			twister: ["9L1", "4T"],
 			uproar: ["9L47", "8M", "8L50", "7T", "7L40", "6T", "6L40"],
 			uturn: ["9M", "8M", "7M", "6M", "5M", "4M"],
+			arenitewall: ["9M"],
 		},
 	},
 	flygon: {
@@ -47198,6 +47236,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uturn: ["9M", "8M", "7M", "6M", "5M", "4M", "4S1"],
 			vacuumwave: ["9M"],
 			wingattack: ["9L1"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 45, moves: ["sandtomb", "crunch", "dragonbreath", "screech"], pokeball: "pokeball"},
@@ -47312,6 +47351,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trailblaze: ["9M"],
 			venoshock: ["9M", "7M", "6M", "5M"],
 			worryseed: ["9E", "7T", "7E", "6T", "6E", "5T", "5E", "4T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 5, shiny: 1, moves: ["poisonsting", "leer", "absorb", "encore"], pokeball: "pokeball", emeraldEventEgg: true},
@@ -47459,6 +47499,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["9M"],
 			worryseed: ["9M", "7T", "6T", "5T", "4T"],
 			zenheadbutt: [],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 45, moves: ["ingrain", "feintattack", "spikes", "needlearm"], pokeball: "pokeball"},
@@ -48104,6 +48145,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["9M", "8M"],
 			wideguard: ["9M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T", "5T", "4T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, moves: ["tackle", "harden", "confusion"], pokeball: "pokeball"},
@@ -48230,6 +48272,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			willowisp: ["9M", "8M", "7M", "6M", "5M", "4M"],
 			wonderroom: ["9L29", "8M", "8L45", "7T", "7L49", "6T", "6L1", "5T", "5L53"],
 			zenheadbutt: ["9L36", "8M", "8L20", "7T", "6T", "5T", "5D", "4T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, moves: ["tackle", "harden", "confusion"], pokeball: "pokeball"},
@@ -48716,6 +48759,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trickroom: ["9M", "8M", "7M", "6M", "5M", "4M"],
 			wonderroom: ["9M", "8M", "7T", "6T", "5T"],
 			zenheadbutt: ["9M", "8M", "7T", "6T", "5T", "5D", "4T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 17, moves: ["refresh", "rocktomb", "mudslap", "psybeam"]},
@@ -48827,6 +48871,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			vacuumwave: ["9M"],
 			wonderroom: ["9M", "8M", "7T", "6T", "5T"],
 			zenheadbutt: ["9M", "8M", "7T", "6T", "5T", "4T"],
+			arenitewall: ["9M"],
 		},
 	},
 	lileep: {
@@ -48906,6 +48951,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			worryseed: ["9E", "7T", "6T", "5T", "4T"],
 			wrap: ["9L5", "8L1"],
 			wringout: ["9L29", "7L52", "7E", "6L52", "6E", "5L64", "5E", "4L64", "4E"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 15, gender: "M", moves: ["recover", "rockslide", "constrict", "acid"], pokeball: "cherishball"},
@@ -49005,6 +49051,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			worryseed: ["9M", "7T", "6T", "5T", "4T"],
 			wrap: ["9L5", "8L1"],
 			wringout: ["9L29", "7L1", "6L1", "5L76", "4L76"],
+			arenitewall: ["9M"],
 		},
 	},
 	anorith: {
@@ -49078,6 +49125,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			watergun: ["9L10", "8L4", "7L7", "6L7", "5L13", "5S0", "4L13", "3L19"],
 			waterpulse: ["9E", "8E", "7T", "7E", "6T", "6E", "5E", "4M", "3M"],
 			xscissor: ["9L43", "8M", "8L44", "7M", "7L44", "6M", "6L44", "5M", "5L61", "4M", "4L61"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 15, gender: "M", moves: ["harden", "mudsport", "watergun", "crosspoison"], pokeball: "cherishball"},
@@ -49179,6 +49227,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			watergun: ["9L10", "8L1", "7L1", "6L1", "5L1", "4L1", "3L1"],
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
 			xscissor: ["9L43", "8M", "8L48", "7M", "7L46", "6M", "6L46", "5M", "5L73", "4M", "4L73"],
+			arenitewall: ["9M"],
 		},
 	},
 	feebas: {
@@ -52165,6 +52214,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderwave: ["9M", "8M", "7M", "6M", "5M", "4M", "3T"],
 			toxic: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			zapcannon: ["9L43", "8L66", "7L55", "7S6", "6L1", "5L65", "5S3", "4L65", "3L49"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 40, shiny: 1, moves: ["rockthrow", "curse", "superpower", "ancientpower"]},
@@ -53644,6 +53694,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			worryseed: ["9M", "7T", "6T", "5T", "4T"],
 			zenheadbutt: [],
 			matblock: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 100, gender: "M", moves: ["woodhammer", "earthquake", "outrage", "stoneedge"], pokeball: "cherishball"},
@@ -55264,6 +55315,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M", "7T", "6T", "5T", "4T"],
 			whirlwind: ["9E", "7E", "6E", "5E", "4E"],
 			zenheadbutt: ["9L45", "7T", "7L37", "6T", "6L37", "5T", "5L37", "4T", "4L33"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 15, gender: "M", moves: ["pursuit", "takedown", "crunch", "headbutt"], pokeball: "cherishball"},
@@ -55380,6 +55432,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M", "7T", "6T", "5T", "4T"],
 			whirlpool: ["9M", "4M"],
 			zenheadbutt: ["9L45", "7T", "7L43", "6T", "6L43", "5T", "5L43", "4T", "4L36"],
+			arenitewall: ["9M"],
 		},
 	},
 	shieldon: {
@@ -55463,6 +55516,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "7M", "6M", "5M", "4M"],
 			trailblaze: [],
 			wideguard: ["9E", "7E", "6E", "5E"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 15, gender: "M", moves: ["metalsound", "takedown", "bodyslam", "protect"], pokeball: "cherishball"},
@@ -55568,6 +55622,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trailblaze: [],
 			wideguard: [],
 			matblock: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	burmy: {
@@ -57632,6 +57687,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trickroom: ["9M", "8M", "7M", "6M", "5M", "4M"],
 			wonderroom: ["9M", "8M", "7T", "6T", "5T"],
 			zenheadbutt: [],
+			arenitewall: ["9M"],
 		},
 	},
 	bronzong: {
@@ -57740,6 +57796,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			zenheadbutt: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			healbell: ["9M"],
 			recover: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 50, nature: "Relaxed", ivs: {hp: 31, atk: 31, def: 31, spa: 22, spd: 31, spe: 0}, moves: ["bodypress", "irondefense", "protect", "trickroom"], pokeball: "cherishball"},
@@ -58016,6 +58073,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderfang: [],
 			toxic: ["9M", "7M", "6M", "5M", "4M"],
 			twister: ["9L5", "8E", "7E", "6E", "5E", "4T", "4E"],
+			arenitewall: ["9M"],
 		},
 	},
 	gabite: {
@@ -58105,6 +58163,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderfang: [],
 			toxic: ["9M", "7M", "6M", "5M", "4M"],
 			twister: ["9L5", "4T"],
+			arenitewall: ["9M"],
 		},
 	},
 	garchomp: {
@@ -58214,6 +58273,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			twister: ["9L5", "4T"],
 			vacuumwave: ["9M"],
 			whirlpool: ["9M", "8M", "4M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 100, gender: "M", moves: ["outrage", "earthquake", "swordsdance", "stoneedge"], pokeball: "cherishball"},
@@ -58551,6 +58611,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["9M", "8M"],
 			whirlwind: ["9E", "8E", "7E", "6E", "5E"],
 			yawn: ["9L7", "8L8", "7L13", "6L13", "5L13", "4L13"],
+			arenitewall: ["9M"],
 		},
 	},
 	hippowdon: {
@@ -58627,6 +58688,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9M", "7T", "6T", "4M"],
 			weatherball: ["9M", "8M"],
 			yawn: ["9L7", "8L1", "7L1", "6L1", "5L1", "4L1"],
+			arenitewall: ["9M"],
 		},
 	},
 	skorupi: {
@@ -61362,6 +61424,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			workup: ["9M", "7M", "5M"],
 			xscissor: ["9M", "7M", "6M", "5M", "4M"],
 			zenheadbutt: ["9M", "7T", "6T", "5T", "4T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 4, level: 100, moves: ["judgment", "roaroftime", "spacialrend", "shadowforce"], pokeball: "cherishball"},
@@ -62868,6 +62931,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M", "8M", "7T", "6T", "5T"],
 			wildcharge: ["9M", "8M", "7M", "6M", "5M"],
 			workup: ["9L15", "8M", "8L1", "7M", "7L20", "6L20", "5M", "5L20"],
+			arenitewall: ["9M"],
 		},
 		encounters: [
 			{generation: 5, level: 23},
@@ -64200,6 +64264,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			takedown: ["9E", "8E", "7E", "6E", "5E"],
 			toxic: ["9M", "7M", "6M", "5M"],
 			wideguard: ["9E", "8E", "7E", "6E"],
+			arenitewall: ["9M"],
 		},
 	},
 	boldore: {
@@ -64256,6 +64321,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			tackle: ["9L1", "8L1", "7L1", "6L1", "5L1"],
          takedown: ["9M"], 
 			toxic: ["9M", "7M", "6M", "5M"],
+			arenitewall: ["9M"],
 		},
 		encounters: [
 			{generation: 5, level: 24},
@@ -64325,6 +64391,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			throatchop: ["9M", "8M", "7T"],
 			toxic: ["9M", "7M", "6M", "5M"],
 			weatherball: ["9M", "8M"],
+			arenitewall: ["9M"],
 		},
 	},
 	woobat: {
@@ -67389,6 +67456,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["9M", "8M"],
 			woodhammer: ["9E", "8E", "7E", "6E", "5E"],
 			worryseed: ["9E", "8E", "7T", "7E", "6T", "6E", "5T", "5E"],
+			arenitewall: ["9M"],
 		},
 	},
 	dwebble: {
@@ -67457,6 +67525,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wideguard: ["9E", "8E", "7E", "6E"],
 			withdraw: ["9L7", "8L4", "7L7", "6L7", "5L7"],
 			xscissor: ["9L37", "8M", "8L36", "7M", "7L35", "6M", "6L35", "5M", "5L35"],
+			arenitewall: ["9M"],
 		},
 	},
 	crustle: {
@@ -67533,6 +67602,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			headlongrush: ["9M"],
 			shoreup: ["9M"],
 			firstimpression: ["9M"],
+			arenitewall: ["9M"],
 		},
 		encounters: [
 			{generation: 6, level: 33, maxEggMoves: 1},
@@ -71261,6 +71331,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderwave: ["9M", "8M", "7M", "6M", "5M"],
 			toxic: ["9M", "8E", "7M", "6M", "5M"],
 			worryseed: ["9E", "7T", "7E", "6T", "6E", "5T", "5E"],
+			arenitewall: ["9M"],
 		},
 	},
 	ferrothorn: {
@@ -71345,6 +71416,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderwave: ["9M", "8M", "7M", "6M", "5M"],
 			toxic: ["9M", "7M", "6M", "5M"],
 			worryseed: ["9M", "7T", "6T", "5T"],
+			arenitewall: ["9M"],
 		},
 	},
 	klink: {
@@ -75089,6 +75161,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			workup: ["9L25", "8M", "8L1", "7M", "7L49", "6L1", "5M", "5L61", "5S2"],
 			xscissor: ["9M", "8M", "7M", "6M", "5M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T", "5T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 42, shiny: 1, moves: ["helpinghand", "retaliate", "ironhead", "sacredsword"]},
@@ -75183,6 +75256,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			workup: ["9L25", "8M", "8L1", "7M", "7L49", "6L1", "5M", "5L61", "5S2"],
 			xscissor: ["9M", "8M", "7M", "6M", "5M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T", "5T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 42, shiny: 1, moves: ["helpinghand", "retaliate", "rockslide", "sacredsword"]},
@@ -75845,6 +75919,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          twister: ["9L13"], 
 			uturn: ["9M", "8M", "7M", "6M", "6S3", "5M"],
 			weatherball: ["9M", "8M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 5, level: 70, shiny: 1, moves: ["rockslide", "earthquake", "sandstorm", "fissure"]},
@@ -80977,6 +81052,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderfang: ["9E", "8M", "7E", "6E"],
 			toxic: ["9M", "7M", "6M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 6, level: 10, isHidden: true, moves: ["tailwhip", "tackle", "roar", "stomp"], pokeball: "cherishball"},
@@ -81070,6 +81146,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thunderfang: ["9M", "8M"],
 			toxic: ["9M", "7M", "6M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T"],
+			arenitewall: ["9M"],
 		},
 	},
 	amaura: {
@@ -81158,6 +81235,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9E", "7T", "6T"],
 			weatherball: ["9M", "8M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 6, level: 10, isHidden: true, moves: ["growl", "powdersnow", "thunderwave", "rockthrow"], pokeball: "cherishball"},
@@ -81256,6 +81334,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9M", "7T", "6T"],
 			weatherball: ["9M", "8M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T"],
+			arenitewall: ["9M"],
 		},
 	},
 	sylveon: {
@@ -81658,6 +81737,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "7M", "6M"],
 			trickroom: ["9M", "8M", "7M", "6M"],
 			wonderroom: ["9M", "8M", "7T", "6T"],
+			arenitewall: ["9M"],
 		},
 	},
 	goomy: {
@@ -83180,6 +83260,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thousandwaves: ["9L72", "8L1", "7T"],
 			toxic: ["9M", "7M", "6M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 6, level: 70, moves: ["crunch", "earthquake", "camouflage", "dragonpulse"]},
@@ -83318,6 +83399,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["9M", "7M", "6M"],
 			trickroom: ["9L55", "8M", "7M", "7L46", "6M", "6L46"],
 			wonderroom: ["9M", "8M", "7T", "6T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 6, level: 50, moves: ["diamondstorm", "reflect", "return", "moonblast"], pokeball: "cherishball"},
@@ -85949,6 +86031,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M"],
 			zenheadbutt: ["9M", "8M", "7T"],
 			shadowbone: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	lycanrocmidnight: {
@@ -86062,6 +86145,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M", "8M", "7T"],
 			zenheadbutt: ["9M", "8M", "7T"],
 			shadowbone: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 7, level: 50, isHidden: true, moves: ["stoneedge", "firefang", "suckerpunch", "swordsdance"], pokeball: "cherishball"},
@@ -86162,6 +86246,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			workup: ["8M"],
 			zenheadbutt: ["9M", "8M", "7T"],
 			shadowbone: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	wishiwashi: {
@@ -86452,6 +86537,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			takedown: ["9M"],
 			terablast: [],
 			toxic: ["9M", "7M"],
+			arenitewall: ["9M"],
 		},
 	},
 	mudsdale: {
@@ -86523,6 +86609,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			takedown: ["9M"],
 			terablast: [],
 			toxic: ["9M", "7M"],
+			arenitewall: ["9M"],
 		},
 		encounters: [
 			{generation: 7, level: 29},
@@ -88270,6 +88357,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: [],
 			toxic: ["9M", "7M"],
 			trick: ["9M", "8M", "7T"],
+			arenitewall: ["9M"],
 		},
 	},
 	palossand: {
@@ -88360,6 +88448,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terrainpulse: ["9M", "8T"],
 			toxic: ["9M", "7M"],
 			trick: ["9M", "8M", "7T"],
+			arenitewall: ["9M"],
 		},
 	},
 	pyukumuku: {
@@ -91095,6 +91184,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trickroom: ["9M", "8M", "7M"],
 			wringout: ["9L19", "7L67", "7S0"],
 			xscissor: ["9M", "8M", "7M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 7, level: 75, moves: ["stealthrock", "irondefense", "wringout", "prismaticlaser"]},
@@ -91645,6 +91735,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wideguard: ["9L43", "8L30", "7L53", "7S0"],
 			wonderroom: ["9M", "8M", "7T"],
 			zenheadbutt: ["9M", "8M", "7T"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 7, level: 60, shiny: 1, moves: ["irondefense", "ironhead", "rockblast", "wideguard"]},
@@ -99289,6 +99380,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          toxic: ["9M"], 
 			weatherball: ["9E"],
 			xscissor: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	rabsca: {
@@ -99363,6 +99455,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wideguard: ["9M"],
 			xscissor: ["9M"],
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	greavard: {
@@ -99432,6 +99525,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trick: ["9M"],
 			uproar: [],
 			yawn: ["9E"],
+			arenitewall: ["9M"],
 		},
 	},
 	houndstone: {
@@ -99492,6 +99586,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trick: ["9M"],
 			uproar: [],
 			willowisp: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	flittle: {
@@ -100833,6 +100928,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: [],
          toxic: ["9M"], 
 			wrap: ["9L1"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 29, gender: "M", nature: "Quirky", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["irontail", "headbutt", "wrap", "sandstorm"]},
@@ -101953,6 +102049,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uturn: ["9M"],
 			whirlwind: ["9L16"],
 			wingattack: ["9L20"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 20, gender: "F", nature: "Jolly", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, isHidden: true, moves: ["rockthrow", "wingattack", "pluck", "torment"]},
@@ -102179,6 +102276,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          vicegrip: ["9L1"], 
 			visegrip: [],
 			xscissor: ["9L37"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 16, gender: "F", nature: "Gentle", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, abilities: ["angershell"], moves: ["visegrip", "rocksmash", "block", "rocktomb"]},
@@ -102237,6 +102335,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: [],
          toxic: ["9M"], 
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	naclstack: {
@@ -102297,6 +102396,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: [],
          toxic: ["9M"], 
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	garganacl: {
@@ -102374,6 +102474,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          toxic: ["9M"], 
 			wideguard: ["9L45"],
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 50, gender: "M", nature: "Careful", ivs: {hp: 31, atk: 31, def: 31, spa: 22, spd: 31, spe: 31}, moves: ["saltcure", "recover", "wideguard", "protect"], pokeball: "cherishball"},
@@ -102507,6 +102608,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxicspikes: ["9L1"],
          venomdrench: ["9M"], 
 			venoshock: ["9L26"],
+			arenitewall: ["9M"],
 		},
 	},
 	shroodle: {
@@ -103006,6 +103108,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thief: ["9M"],
          toxic: ["9M"], 
 			trailblaze: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	brambleghast: {
@@ -103068,6 +103171,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			thief: ["9M"],
          toxic: ["9M"], 
 			trailblaze: ["9M"],
+			arenitewall: ["9M"],
 		},
 	},
 	gimmighoul: {
@@ -103250,6 +103354,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          toxic: ["9M"], 
          workup: ["9M"], 
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 45, nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["rapidspin", "brickbreak", "knockoff", "stompingtantrum"]},
@@ -103414,6 +103519,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			voltswitch: ["9M"],
 			wildcharge: ["9M"],
 			zapcannon: ["9L91"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 52, shiny: 1, moves: ["screech", "heavyslam", "metalsound", "triattack"]},
@@ -103860,6 +103966,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wildcharge: ["9L49"],
          workup: ["9M"], 
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 45, nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["rapidspin", "ironhead", "knockoff", "stompingtantrum"]},
@@ -104298,6 +104405,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9M"],
          wavecrash: ["9M"], 
 			whirlpool: ["9L14"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 52, shiny: 1, moves: ["drillpeck", "helpinghand", "freezedry", "flipturn"]},
@@ -104473,6 +104581,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          toxic: ["9M"], 
 			whirlwind: ["9L20"],
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 60, moves: ["stompingtantrum", "ruination", "throatchop", "rockslide"]},
@@ -104801,6 +104910,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uturn: ["9M"],
 			wildcharge: ["9M"],
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 68, nature: "Quirky", ivs: {hp: 31, atk: 31, def: 28, spa: 31, spd: 28, spe: 31}, moves: ["flamethrower", "collisioncourse", "endure", "terablast"], pokeball: "pokeball"},
@@ -106728,6 +106838,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wildcharge: ["9M"],
 			withdraw: ["9L1"],
 			zenheadbutt: ["9M"],
+			arenitewall: ["9M"],
 		},
 		eventData: [
 			{generation: 9, level: 85, gender: "M", nature: "Hardy", ivs: {hp: 31, atk: 15, def: 31, spa: 31, spd: 31, spe: 31}, moves: ["terastarstorm", "zenheadbutt", "earthpower", "waterpulse"]},

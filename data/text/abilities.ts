@@ -542,8 +542,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "On switch-in, this Pokemon sets Wasteland Terrain. On Water Surface or Underwater, it creates Murkwater Surface instead; from Underwater, non-Poison and non-Steel Pokemon that are not semi-invulnerable faint. If Neutralization is active on Water Surface or Underwater, this effect fails.",
 		shortDesc: "Sets Wasteland, or Murkwater on water fields; Underwater also KOs non-Poison/Steel.",
 	},
-	sinoflust: {
-		name: "Sin of Lust",
+	bewitchingmajesty: {
+		name: "Bewitching Majesty",
 		desc: "On switch-in, this Pokemon creates Bewitched Woods for 5 turns. This Pokemon has Magic Bounce and Queenly Majesty's effects.",
 		shortDesc: "Sets Bewitched Woods for 5 turns. Magic Bounce + Queenly Majesty.",
 	},
@@ -557,10 +557,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Pokemon making contact with this Pokemon have a 30% chance to be poisoned. While this Pokemon is active, Pokemon that become poisoned also become confused.",
 		shortDesc: "Contact has 30% poison chance; poisoned Pokemon become confused.",
 	},
-	sinofenvy: {
-		name: "Sin of Envy",
-		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.7x damage to it. When this Pokemon hits an enemy with an attack or status move, the target becomes cursed. Damage dealt by that Curse heals this Pokemon for 1/4 of the damage dealt. If this Pokemon causes an opposing Pokemon to faint with a move or Curse damage, it restores 1/8 of its maximum HP.",
-		shortDesc: "Moves don't miss; above 1/4 HP takes 0.7x; hits Curse; heals 1/4 Curse damage.",
+	souleater: {
+		name: "Soul Eater",
+		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.7x damage to it. This Pokemon is immune to Ghost-type moves and restores 1/4 max HP when hit by one. Soul Fire cannot redirect or bypass this immunity, and this Ability cannot be ignored or suppressed by Mold Breaker-style effects.",
+		shortDesc: "One-sided No Guard; above 1/4 HP takes 0.7x; unbreakable Ghost/Soul Fire drain.",
 	},
 	alloycore: {
 		name: "Alloy Core",
@@ -637,10 +637,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Scrappy, Striker, and Opportunist's effects. Its kicking moves have 1.3x power.",
 		shortDesc: "Scrappy + Striker + Opportunist; kicking moves 1.3x.",
 	},
-	empatheticresonance: {
-		name: "Empathetic Resonance",
-		desc: "This Pokemon has Pixilate and Friend Guard's effects. Its Psychic- and Fairy-type moves have 1.2x power. If this Pokemon knocks out a target with a move, adjacent allies restore 1/8 of their maximum HP.",
-		shortDesc: "Pixilate + Friend Guard; Psychic/Fairy 1.2x; KO heals adjacent allies 1/8.",
+	royalvoice: {
+		name: "Royal Voice",
+		desc: "This Pokemon has Pixilate and Queenly Majesty's effects. Its Normal-type moves become Fairy type and have 1.2x power. Its Psychic- and Fairy-type moves have 1.2x power.",
+		shortDesc: "Pixilate + Queenly Majesty; Psychic/Fairy moves 1.2x.",
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
@@ -682,28 +682,28 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's sound-based moves have 1.2x power and become Water type. This Pokemon has Water Absorb's effect. If Rain is active, this Pokemon heals its status condition at the end of each turn.",
 		shortDesc: "Sound moves become Water and 1.2x; Water Absorb; cures status in rain.",
 	},
-	sinofgluttony: {
-		name: "Sin of Gluttony",
+	mountainhunger: {
+		name: "Mountain Hunger",
 		desc: "This Pokemon has Thick Fat, Gluttony, and Early Bird's effects. It is immune to hail damage and takes reduced damage from Fire- and Ice-type attacks.",
 		shortDesc: "Thick Fat + Gluttony + Early Bird.",
 	},
-	sinofpride: {
-		name: "Sin of Pride",
-		desc: "On switch-in or G-Max activation, this Pokemon activates Pressure, Unnerve, and Mirror Armor's effects. Field effects that boost or check for Mirror Armor also count this Ability as Mirror Armor.",
-		shortDesc: "Activates Pressure + Unnerve + Mirror Armor; counts as Mirror Armor.",
+	irondominion: {
+		name: "Iron Dominion",
+		desc: "On switch-in or G-Max activation, this Pokemon activates Pressure and Mirror Armor's effects and heals its ally like Sworn Duty. Field effects that boost or check for Mirror Armor also count this Ability as Mirror Armor.",
+		shortDesc: "Pressure + Mirror Armor + Sworn Duty; counts as Mirror Armor.",
 	},
-	sinofsloth: {
-		name: "Sin of Sloth",
+	astralwatcher: {
+		name: "Astral Watcher",
 		desc: "This Pokemon has Prankster, Telepathy, and Frisk's effect, including Frisk's chance to Embargo opposing Pokemon.",
 		shortDesc: "Prankster + Telepathy + Frisk with Embargo chance.",
 	},
-	sinofgreed: {
-		name: "Sin of Greed",
+	treasuretitan: {
+		name: "Treasure Titan",
 		desc: "This Pokemon has Heavy Metal, Filter, and Earth Eater's effects.",
 		shortDesc: "Heavy Metal + Filter + Earth Eater.",
 	},
-	sinofwrath: {
-		name: "Sin of Wrath",
+	ragingfists: {
+		name: "Raging Fists",
 		desc: "This Pokemon has Ultra Ego and Scrappy's effects.",
 		shortDesc: "Ultra Ego + Scrappy.",
 	},
@@ -2738,23 +2738,68 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and restores 1/16 max HP when it attacks and at the end of each turn. Its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 30% chance to be poisoned, paralyzed, or put to sleep. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
-		shortDesc: "Heals self/allies 20%; takes 0.8x; heals 1/16; Grass 1.2x; 30% Effect Spore.",
+		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 30% chance to be poisoned, paralyzed, or put to sleep. At the end of each turn, non-Grass Pokemon that are not seeded take pollen damage equal to 1/16 max HP, and this Pokemon heals the damage dealt. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or heals itself and allies each turn.",
+		shortDesc: "Heals self/allies on entry; takes 0.8x; Grass 1.2x; Effect Spore; pollen drain.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. Once per turn, its damaging attacks restore 1/16 max HP. It also restores 1/16 max HP at the end of each turn. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
-		shortDesc: "Water 1.2x; heals 1/16 from attacking and end turn; ally protection.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. At the end of each turn, non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP. This damage uses Water-type effectiveness. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
+		shortDesc: "Water 1.2x; ally protection; end-turn cycling Water chip.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, these moves hit all enemies once at full damage.",
 		shortDesc: "Damaging moves hit 3 times; hits two/three have 30% power. FFA: hits all foes once.",
 	},
-	infernalpresence: {
-		name: "Infernal Presence",
-		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power and can hit through type immunities, but type effectiveness still applies. It takes 0.8x damage from attacks and restores 1/16 max HP when it attacks and at the end of each turn. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
-		shortDesc: "Airborne; drops foes' Atk/SpA; Fire 1.2x ignores immunities; heals 1/16.",
+	burningcrown: {
+		name: "Burning Crown",
+		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power and can hit through type immunities, but type effectiveness still applies. It takes 0.8x damage from attacks and restores 1/16 max HP at the end of each turn. At the end of each turn, non-Fire Pokemon lose 1/16 max HP, doubled if burned, Sun is active, or G-Max Wildfire is active. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
+		shortDesc: "Airborne; drops foes' offenses; Fire 1.2x ignores immunities; end-turn burn aura.",
+	},
+	pollenbloom: {
+		name: "Pollen Bloom",
+		desc: "This Pokemon has Thick Fat's Fire- and Ice-type resistance benefits, and its Grass-type moves have 1.3x power. At the end of each turn, non-Grass Pokemon that are not seeded take pollen damage equal to 1/16 max HP, and this Pokemon heals the damage dealt. This damage uses Grass-type effectiveness.",
+		shortDesc: "Thick Fat; Grass 1.3x; end-turn pollen drain.",
+	},
+	waterbarrage: {
+		name: "Water Barrage",
+		desc: "This Pokemon's Water-type moves have 1.3x power. On switch-in, it gains Aqua Ring. At the end of each turn, non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP. This damage uses Water-type effectiveness.",
+		shortDesc: "Water 1.3x; Aqua Ring; cycling Water chip.",
+	},
+	wildfire: {
+		name: "Wild Fire",
+		desc: "This Pokemon's Fire-type moves have 1.3x power. This Pokemon takes 0.5x damage from Water-type moves. If Sun or Hail is active, resisted Fire-type moves used by this Pokemon are boosted like Tinted Lens. At the end of each turn, non-Fire Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire-type move this turn. This damage uses Fire-type effectiveness.",
+		shortDesc: "Fire 1.3x; 0.5x Water; weather Tinted Lens; end-turn fire chip.",
+	},
+	memoryleak: {
+		name: "Memory Leak",
+		desc: "Positive stat boosts this Pokemon would receive are passed to an adjacent ally instead.",
+		shortDesc: "Passes its positive stat boosts to an adjacent ally.",
+	},
+	defragment: {
+		name: "Defragment",
+		desc: "On switch-in, this Pokemon compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. The boost is normally 1 stage, but is 2 stages on New World, Factory, Short Circuit, Glitch, and Starlight Arena. On Cold Eclipse and Fairy Tale, both defensive stats rise by 1 stage instead. This Pokemon's moves cannot miss.",
+		shortDesc: "Entry defensive boost based on foes' offenses; moves cannot miss.",
+	},
+	temporalshift: {
+		name: "Temporal Shift",
+		desc: "This Pokemon's stats cannot be lowered by opposing Pokemon. At the end of each turn, it queues a delayed double-power Hex against a random valid opposing target.",
+		shortDesc: "Stats cannot be lowered; each turn queues delayed double-power Hex.",
+	},
+	accumulation: {
+		name: "Accumulation",
+		desc: "At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow.",
+		shortDesc: "After one turn out, gains Stockpile each turn up to 3.",
+	},
+	invigorate: {
+		name: "Invigorate",
+		desc: "Healing received by this Pokemon and its allies is multiplied by 1.2. At the end of each turn, this Pokemon has a 50% chance to cure each adjacent ally's status condition.",
+		shortDesc: "User/allies receive 1.2x healing; 50% to cure ally status each turn.",
+	},
+	swornduty: {
+		name: "Sworn Duty",
+		desc: "On switch-in, this Pokemon heals its adjacent ally by 1/4 max HP. On Fairy Tale Field, it heals 1/3 max HP instead.",
+		shortDesc: "On entry, heals ally 1/4 max HP, or 1/3 on Fairy Tale.",
 	},
 	inversion: {
 		name: "Inversion",
