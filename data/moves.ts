@@ -5582,6 +5582,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 3,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions > 0) pokemon.disableMove('fakeout');
+		},
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
 				this.hint("Fake Out only works on your first turn out.");
@@ -20679,7 +20682,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Synthesis",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
