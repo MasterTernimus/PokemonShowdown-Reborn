@@ -883,6 +883,46 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	authorityclause: {
+		effectType: 'ValidatorRule',
+		name: 'Authority Clause',
+		desc: "Prevents teams from having more than one Pokemon with Neutralization and more than one Pokemon with Royal Decree.",
+		onBegin() {
+			this.add('rule', 'Authority Clause: Limit one Neutralization and one Royal Decree user per team');
+		},
+		onValidateTeam(team) {
+			const limitedAbilities = new Set(['neutralization', 'royaldecree']);
+			const seen: Partial<Record<'neutralization' | 'royaldecree', string[]>> = {};
+			for (const set of team) {
+				const abilities = new Set<ID>();
+				const setAbility = this.toID(set.ability);
+				if (setAbility) abilities.add(setAbility);
+				const species = this.dex.species.get(set.species);
+				const item = this.dex.items.get(set.item);
+				if (item.megaStone?.[species.name]) {
+					const megaSpecies = this.dex.species.get(item.megaStone[species.name]);
+					for (const ability of Object.values(megaSpecies.abilities)) {
+						abilities.add(this.toID(ability));
+					}
+				}
+				for (const ability of abilities) {
+					if (!limitedAbilities.has(ability)) continue;
+					const id = ability as 'neutralization' | 'royaldecree';
+					if (!seen[id]) seen[id] = [];
+					seen[id]!.push(`${set.name || set.species} (${this.dex.abilities.get(id).name})`);
+				}
+			}
+			const problems: string[] = [];
+			for (const id of ['neutralization', 'royaldecree'] as const) {
+				const pokemon = seen[id];
+				if (pokemon && pokemon.length > 1) {
+					problems.push(`You are limited to one Pokemon with ${this.dex.abilities.get(id).name} by Authority Clause.`);
+					problems.push(`(You have ${pokemon.join(', ')})`);
+				}
+			}
+			return problems.length ? problems : undefined;
+		},
+	},
 	nicknameclause: {
 		effectType: 'ValidatorRule',
 		name: 'Nickname Clause',

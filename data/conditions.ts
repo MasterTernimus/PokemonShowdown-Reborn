@@ -740,7 +740,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'Hail',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
+		durationCallback(source, target, effect) {
+			if (effect?.id === 'mourningsnow' || effect?.id === 'frostsovereign') return 8;
 			if (source?.hasItem('icyrock') || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
 				return 8;
 			}
