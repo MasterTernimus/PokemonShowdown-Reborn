@@ -82,8 +82,7 @@ export class Field {
 			this.weatherState.duration = status.duration;
 		}
 		if (status.durationCallback) {
-			if (!source) throw new Error(`setting weather without a source`);
-			this.weatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			this.weatherState.duration = status.durationCallback.call(this.battle, source as Pokemon, source as Pokemon, sourceEffect);
 		}
 		if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)) {
 			this.weather = prevWeather;
@@ -122,7 +121,18 @@ export class Field {
 		this.weather = '';
 		this.battle.clearEffectState(this.weatherState);
 		this.battle.eachEvent('WeatherChange');
+		this.restoreFormatHail();
 		return true;
+	}
+
+	restoreFormatHail() {
+		if (this.shouldRestoreFormatHail() && this.weather !== 'hail') {
+			this.setWeather('hail');
+		}
+	}
+
+	shouldRestoreFormatHail() {
+		return ['coldeclipseterrain', 'fairytaleterrain'].includes(this.terrain);
 	}
 
 	effectiveWeather() {
@@ -167,6 +177,7 @@ export class Field {
 		this.terrainStack.unshift(this.terrainState);
 		this.battle.singleEvent('FieldStart', status, this.terrainState, this);
 		this.battle.eachEvent('TerrainChange');
+		this.restoreFormatHail();
 	}
 
 	canSetTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
@@ -260,6 +271,7 @@ export class Field {
 		}
 		this.terrainStack.unshift(this.terrainState);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
+		this.restoreFormatHail();
 		return true;
 	}
 
@@ -305,6 +317,7 @@ export class Field {
 		}
 		this.battle.add('-fieldstart', status.name);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
+		this.restoreFormatHail();
 	}
 
 	clearTerrain(power: string | null = null) {
@@ -370,6 +383,7 @@ export class Field {
 			this.terrainState = this.battle.initEffectState({ id: '' });
 		}
 		this.battle.eachEvent('TerrainChange');
+		this.restoreFormatHail();
 		return true;
 	}
 
