@@ -901,7 +901,6 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		terrain: 'adriennterrain',
 		gameType: 'freeforall',
-		playerCount: 3,
 		searchShow: true,
 		challengeShow: true,
 		onTeamPreview() {

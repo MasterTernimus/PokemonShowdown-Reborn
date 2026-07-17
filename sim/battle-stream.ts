@@ -87,6 +87,9 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			const [slot, optionsText] = Utils.splitFirst(message, ' ');
 			this.battle!.setPlayer(slot as SideID, JSON.parse(optionsText));
 			break;
+		case 'startplayers':
+			this.battle!.startWithCurrentPlayers();
+			break;
 		case 'p1':
 		case 'p2':
 		case 'p3':
