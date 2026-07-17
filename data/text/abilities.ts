@@ -519,8 +519,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, restores 1/16 max HP at the end of each turn, and cannot flinch.",
-		shortDesc: "Moves 1.3x and bypass abilities/defenses/screens; drains 30%; heals 1/16; no flinch.",
+		desc: "This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks and restores 1/16 max HP at the end of each turn.",
+		shortDesc: "Moves 1.3x and bypass abilities/defenses/screens; drains 30%; heals 1/16.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",

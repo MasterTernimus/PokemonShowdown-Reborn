@@ -845,7 +845,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Raichu",
 		forme: "Mega-X",
 		types: ["Electric"],
-		baseStats: { hp: 60, atk: 150, def: 95, spa: 75, spd: 95, spe: 120 },
+		baseStats: { hp: 60, atk: 140, def: 95, spa: 85, spd: 95, spe: 120 },
 		abilities: { 0: "Electric Surge" },
 		heightm: 1.2,
 		weightkg: 38,
