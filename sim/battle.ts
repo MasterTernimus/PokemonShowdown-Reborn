@@ -122,7 +122,7 @@ export class Battle {
 	 */
 	readonly activePerHalf: 1 | 2 | 3;
 	readonly field: Field;
-	readonly sides: [Side, Side] | [Side, Side, Side, Side];
+	readonly sides: Side[];
 	readonly prngSeed: PRNGSeed;
 	dex: ModdedDex;
 	gen: number;
@@ -3403,6 +3403,20 @@ export class Battle {
 
 		// Start the battle if it's ready to start
 		if (this.sides.every(playerSide => !!playerSide) && !this.started) this.start();
+	}
+
+	startWithCurrentPlayers() {
+		if (this.started) return;
+		if (this.gameType !== 'freeforall') {
+			throw new Error(`Manual partial start is only supported for Free-for-All battles.`);
+		}
+		const joinedSides = this.sides.filter(playerSide => !!playerSide);
+		if (joinedSides.length < 3) {
+			throw new Error(`Free-for-All battles need at least 3 players to start.`);
+		}
+		(this as any).sides = joinedSides;
+		this.inputLog.push(`>startplayers`);
+		this.start();
 	}
 
 	/** @deprecated */

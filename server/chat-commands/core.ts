@@ -1240,6 +1240,19 @@ export const commands: Chat.ChatCommands = {
 		`/addplayer [username], [p1|p2|p3|p4] - Invites the player to join your current battle.`,
 	],
 
+	startbattle(target, room, user) {
+		room = this.requireRoom();
+		if (!room.battle) throw new Chat.ErrorMessage(this.tr`You can only do this in battle rooms.`);
+		this.checkCan('joinbattle', null, room);
+		if (!room.battle.startWithCurrentPlayers) {
+			throw new Chat.ErrorMessage(this.tr`This battle cannot be manually started.`);
+		}
+		room.battle.startWithCurrentPlayers(user);
+	},
+	startbattlehelp: [
+		`/startbattle - Starts a Free-for-All battle once at least 3 players have joined. Requires: ${Users.PLAYER_SYMBOL} ~`,
+	],
+
 	async acceptbattle(target, room, user, connection) {
 		const chall = Ladders.challenges.resolveAcceptCommand(this);
 
