@@ -1926,9 +1926,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.critRatio++;
 			if (move.id === 'dragonrush') move.accuracy = true;
 		},
-		onTryAddVolatile(status, pokemon) {
-			if (status.id === 'flinch') return null;
-		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
 			if (move.id === 'dragonrush') return this.chainModify(1.95);

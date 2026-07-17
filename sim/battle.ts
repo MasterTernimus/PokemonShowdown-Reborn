@@ -1987,13 +1987,13 @@ export class Battle {
 			// sync side conditions
 			this.sides[2]!.sideConditions = this.sides[0].sideConditions;
 			this.sides[3]!.sideConditions = this.sides[1].sideConditions;
+		} else if (this.gameType === 'freeforall') {
+			for (let i = 0; i < this.sides.length; i++) {
+				this.sides[i].foe = this.sides[(i + 1) % this.sides.length];
+			}
 		} else {
 			this.sides[1].foe = this.sides[0];
 			this.sides[0].foe = this.sides[1];
-			if (this.sides.length > 2) { // ffa
-				this.sides[2]!.foe = this.sides[3]!;
-				this.sides[3]!.foe = this.sides[2]!;
-			}
 		}
 
 		this.add('gen', this.gen);
