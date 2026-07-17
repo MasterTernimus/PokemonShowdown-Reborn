@@ -10522,7 +10522,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('electricterrain')) return this.chainModify(2);
+			if (this.field.isTerrain('electricterrain')) return this.chainModify(1.5);
 		},
 		onModifyMove(move) {
 			if (this.field.isTerrain('electricterrain')) move.accuracy = true;
