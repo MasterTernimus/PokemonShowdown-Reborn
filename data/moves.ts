@@ -3831,12 +3831,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
-				this.add('-message', `${pokemon.name} will now haunt the field`);
-				if (this.field.terrain === 'hauntedterrain') {
-					this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
-				} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.moves.get('destinybond'))) {
-					this.field.terrainState.duration = 3;
-				}
 			},
 			onFaint(target, source, effect) {
 				if (!source || !effect || target.isAlly(source)) return;
@@ -3846,10 +3840,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						return;
 					}
 					this.add('-activate', target, 'move: Destiny Bond');
-					if (['banette', 'banettemega'].includes(target.species.id) && this.field.terrain === 'hauntedterrain') {
-						this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
-					}
 					source.faint();
+					this.add('-message', `${target.name} will now haunt the field`);
+					if (this.field.terrain === 'hauntedterrain') {
+						this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
+						if (['banette', 'banettemega'].includes(target.species.id)) {
+							this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
+						}
+					} else if (this.field.setTerrain('hauntedterrain', target, this.dex.moves.get('destinybond'))) {
+						this.field.terrainState.duration = ['banette', 'banettemega'].includes(target.species.id) ? 6 : 3;
+					}
 				}
 			},
 			onBeforeMovePriority: -1,
@@ -8582,12 +8582,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Grudge');
-				this.add('-message', `${pokemon.name} will now haunt the field`);
-				if (this.field.terrain === 'hauntedterrain') {
-					this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
-				} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.moves.get('grudge'))) {
-					this.field.terrainState.duration = 3;
-				}
 			},
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
@@ -8595,14 +8589,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					let move: Move = source.lastMove;
 					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
+					let activated = false;
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
 							this.add('-activate', source, 'move: Grudge', move.name);
-							if (['banette', 'banettemega'].includes(target.species.id) && this.field.terrain === 'hauntedterrain') {
-								this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
-							}
+							activated = true;
 						}
+					}
+					if (!activated) return;
+					this.add('-message', `${target.name} will now haunt the field`);
+					if (this.field.terrain === 'hauntedterrain') {
+						this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
+						if (['banette', 'banettemega'].includes(target.species.id)) {
+							this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
+						}
+					} else if (this.field.setTerrain('hauntedterrain', target, this.dex.moves.get('grudge'))) {
+						this.field.terrainState.duration = ['banette', 'banettemega'].includes(target.species.id) ? 6 : 3;
 					}
 				}
 			},
