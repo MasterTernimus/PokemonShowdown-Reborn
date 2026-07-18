@@ -1711,7 +1711,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
-		itemUser: ["Eevee", 'Eevee-Starter'],
+		itemUser: ["Eevee", 'Eevee-Starter', 'Eevee-Gmax'],
 		num: 805,
 		gen: 7,
 		isNonstandard: "Past",

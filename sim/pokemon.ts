@@ -1121,7 +1121,7 @@ export class Pokemon {
 			}
 		}
 		if (!atLeastOne) return;
-		if (this.canGigantamax && this.gigantamax) result.gigantamax = this.canGigantamax;
+		if (this.canGigantamax && this.canDynamax) result.gigantamax = this.canGigantamax;
 		return result;
 	}
 
@@ -1752,8 +1752,15 @@ export class Pokemon {
 			return false;
 		}
 
+		const soulFireBurn = status.id === 'brn' && !!source?.hasAbility('soulfire') && !!(sourceEffect as any)?.soulFireBurn;
+		const soulFireBypassedBurnBlock = soulFireBurn && (
+			!this.runStatusImmunity('brn') ||
+			!!this.side.sideConditions['mist'] ||
+			(this.battle.field.isTerrain('mistyterrain') && this.isGrounded() && !this.isSemiInvulnerable()) ||
+			this.hasAbility(['comatose', 'purifyingsalt', 'ragingcurrent', 'thermalexchange', 'waterbubble', 'waterveil'])
+		);
 		if (
-			!ignoreImmunities && status.id && !(source?.hasAbility(['corrosion', 'ancientbloom']) && ['tox', 'psn'].includes(status.id))
+			!ignoreImmunities && !soulFireBurn && status.id && !(source?.hasAbility(['corrosion', 'ancientbloom']) && ['tox', 'psn'].includes(status.id))
 		) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
@@ -1767,11 +1774,12 @@ export class Pokemon {
 		const prevStatus = this.status;
 		const prevStatusState = this.statusState;
 		if (status.id) {
-			const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+			const result: boolean = soulFireBurn || this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
 			if (!result) {
 				this.battle.debug('set status [' + status.id + '] interrupted');
 				return result;
 			}
+			if (soulFireBypassedBurnBlock) this.battle.add('-message', 'Soul Fire haunted wisp burned');
 		}
 
 		this.status = status.id;
@@ -2232,6 +2240,7 @@ export class Pokemon {
 	}
 
 	isGrounded(negateImmunity = false) {
+		if (this.hasAbility('lunarorbit') && !this.battle.suppressingAbility(this)) return null;
 		if ('gravity' in this.battle.field.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
@@ -2297,6 +2306,10 @@ export class Pokemon {
 		} else {
 			for (const type of this.getTypes()) {
 				let typeMod = this.battle.dex.getEffectiveness(move, type);
+				if (move.flags['bone'] && ((move.type === 'Ground' && type === 'Flying') ||
+					(move.type === 'Ghost' && type === 'Normal'))) {
+					typeMod = 0;
+				}
 				typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
 				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 			}
@@ -2324,6 +2337,9 @@ export class Pokemon {
 		for (const type of types) {
 			if (typeof source !== 'string') {
 				if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
+					return true;
+				}
+				if (source.flags['bone'] && (type === 'Ground' || type === 'Ghost')) {
 					return true;
 				}
 			}

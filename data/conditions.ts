@@ -15,6 +15,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		// Damage reduction is handled directly in the sim/battle.js damage function
 		onResidualOrder: 10,
 		onResidual(pokemon) {
+			if (pokemon.hasAbility('sinisterblaze')) {
+				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+				return;
+			}
 			let damageDivisor = 16;
 			switch (this.field.terrain) {
 			case 'icyterrain':
@@ -741,6 +745,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, target, effect) {
+			if (this.field.isTerrain('fairytaleterrain')) return 0;
 			if (effect?.id === 'mourningsnow' || effect?.id === 'frostsovereign') return 8;
 			if (source?.hasItem('icyrock') || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
 				return 8;
@@ -783,7 +788,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
-			if (this.field.isTerrain('fairytaleterrain') && target.hasType('Steel')) return;
+			if (this.field.isTerrain('fairytaleterrain') && target.hasType(['Steel', 'Dragon', 'Fire'])) return;
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				this.damage(target.baseMaxhp / 8);
 			} else {

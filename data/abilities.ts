@@ -457,7 +457,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.category === 'Status') return;
 			if (target && (this.queue.willMove(target) || target.newlySwitched)) {
 				this.debug('Battle Fervor boost');
-				return this.chainModify(1.3);
+				return this.chainModify(1.2);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -465,11 +465,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!move || move.category === 'Status') return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Battle Fervor field weaken');
-				return this.chainModify(0.7);
+				return this.chainModify(0.8);
 			}
 			if (this.queue.willMove(target)) {
 				this.debug('Battle Fervor weaken');
-				return this.chainModify(0.7);
+				return this.chainModify(0.8);
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
@@ -829,6 +829,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Comatose",
 		rating: 4,
 		num: 213,
+	},
+	conductivity: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['sound']) {
+				this.add('-immune', target, '[from] ability: Conductivity');
+				return null;
+			}
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (move.flags['sound']) {
+				this.add('-immune', this.effectState.target, '[from] ability: Conductivity');
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.type === 'Electric' && type === 'Steel') return 1;
+		},
+		flags: { breakable: 1 },
+		name: "Conductivity",
+		rating: 3.5,
+		num: 10067,
 	},
 	commander: {
 		onAnySwitchInPriority: -2,
@@ -1711,10 +1731,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ atk: 1 }, source, source);
 				return;
 			}
-			const damage = Math.max(1, Math.floor((source.abilityState.ragingStormDamage || target.baseMaxhp) / 2));
+			const damage = Math.max(1, Math.floor((source.abilityState.ragingStormDamage || target.baseMaxhp) * 0.75));
+			let dealtDamage = false;
 			for (const foe of targets) {
-				this.damage(damage, foe, source, this.dex.abilities.get('ragingstorm'));
+				if (foe.hasAbility('magicguard')) continue;
+				if (this.damage(damage, foe, source, this.dex.abilities.get('ragingstorm'))) dealtDamage = true;
 			}
+			if (!dealtDamage) this.boost({ atk: 1 }, source, source);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.priority > 0) return this.chainModify(0.5);
@@ -4875,21 +4898,44 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain(['hauntedterrain', 'burningterrain', 'superheatedterrain', 'volcanicterrain', 'dragonsdenterrain'])) {
 				this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
 			}
-			for (const target of pokemon.foes()) {
-				if (target.hasItem('clearamulet')) {
-					this.add('-fail', target, 'unboost', '[from] item: Clear Amulet', `[of] ${target}`);
-					continue;
+		},
+		onTryBoost(boost, target, source, effect) {
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
 				}
-				const lowered = target.getCappedBoost({ atk: -1, spa: -1 });
-				let didLower = false;
-				for (const stat of ['atk', 'spa'] as BoostID[]) {
-					if (!lowered[stat]) continue;
-					const delta = target.boostBy({ [stat]: lowered[stat] });
-					if (!delta) continue;
-					this.add('-unboost', target, stat, -delta, '[from] ability: Burning Crown', `[of] ${pokemon}`);
-					didLower = true;
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add('-block', target, 'ability: Burning Crown');
+			}
+		},
+		onAllyTryBoost(boost, target, source, effect) {
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
 				}
-				if (didLower) target.statsLoweredThisTurn = true;
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				const effectHolder = this.effectState.target;
+				this.add('-block', target, 'ability: Burning Crown', '[of] ' + effectHolder);
+			}
+		},
+		onAnyFaintPriority: 1,
+		onAnyFaint() {
+			const holder = this.effectState.target;
+			if (!holder || holder.fainted) return;
+			const candidates = [holder, ...holder.allies()].filter(pokemon => pokemon && !pokemon.fainted);
+			for (const candidate of candidates) {
+				const atk = candidate.getStat('atk', false, true);
+				const spa = candidate.getStat('spa', false, true);
+				const stat = atk >= spa ? 'atk' : 'spa';
+				this.boost({ [stat]: 1 }, candidate, holder);
 			}
 		},
 		onBasePowerPriority: 8,
@@ -4898,6 +4944,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.5);
 			}
 			if (this.movehasType(move, 'Fire')) return this.chainModify(1.2);
+		},
+		onAllyBasePowerPriority: 22,
+		onAllyBasePower(basePower, attacker, defender, move) {
+			if (attacker !== this.effectState.target && this.movehasType(move, 'Fire')) {
+				return this.chainModify(1.2);
+			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
@@ -4916,7 +4968,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10023,
 	},
-	wildfire: {
+	wildfirecore: {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
@@ -4945,7 +4997,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		flags: { breakable: 1 },
-		name: "Wild Fire",
+		name: "Wildfire Core",
 		rating: 4,
 		num: 10139,
 	},
@@ -5400,6 +5452,40 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 156,
 	},
+	lunarorbit: {
+		onStart(pokemon) {
+			this.field.addPseudoWeather('gravity', pokemon, this.effect);
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, target, { target: source });
+			if (this.field.isTerrain('mirrorarenaterrain')) {
+				this.boost({ evasion: 1 }, source);
+			}
+			return null;
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true;
+			return null;
+		},
+		flags: { breakable: 1 },
+		name: "Lunar Orbit",
+		rating: 4.5,
+		num: 10140,
+	},
 	magicguard: {
 		onStart() {
 			if (this.field.isTerrain('fairytaleterrain')) {
@@ -5418,9 +5504,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 98,
 	},
 	magician: {
-		onStart() {
-			if (this.field.isTerrain('fairytaleterrain')) {
-				this.boost({ spa: 1 });
+		onStart(pokemon) {
+			if (this.field.isTerrain(['fairytaleterrain', 'bewitchedwoodsterrain', 'hauntedterrain', 'mistyterrain', 'newworldterrain'])) {
+				this.boost({ spa: 1 }, pokemon, pokemon, this.effect);
 			}
 		},
 		onModifyAccuracy(accuracy, target, source, move) {
@@ -6483,6 +6569,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	piercingdrill: {
 		isNonstandard: "Future",
+		onModifyMove(move) {
+			if (move.flags['drill'] && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['drill']) {
+				if (this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) return this.chainModify(2);
+				return this.chainModify(1.5);
+			}
+		},
 		onHitProtect(source, target, move) {
 			if (move.flags['contact']) {
 				target.getMoveHitData(move).bypassProtect = this.effect;
@@ -7664,15 +7760,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
-			if (pokemon.hp && pokemon.status && (this.randomChance(33, 100) || this.field.isTerrain('dragonsdenterrain'))) {
-				this.debug('shed skin');
-				this.add('-activate', pokemon, 'ability: Shed Skin');
-				pokemon.cureStatus();
-				if (this.field.isTerrain('dragonsdenterrain')) {
-					this.boost({ spa: 1, spe: 1, def: -1, spd: -1 }, pokemon, pokemon);
-					this.heal(pokemon.maxhp / 4, pokemon, pokemon);
+			if (!pokemon.hp) return;
+			const removableVolatiles = [
+				'attract', 'confusion', 'curse', 'disable', 'encore', 'healblock', 'leechseed',
+				'nightmare', 'taunt', 'torment', 'yawn',
+			];
+			const hasNegativeVolatile = removableVolatiles.some(volatile => pokemon.volatiles[volatile]);
+			const hasNegativeBoost = Object.values(pokemon.boosts).some(boost => boost < 0);
+			const canActivate = pokemon.status || hasNegativeVolatile || hasNegativeBoost || pokemon.hp <= pokemon.maxhp / 2;
+			if (!canActivate) return;
+			if (!this.field.isTerrain('dragonsdenterrain') && !this.randomChance(1, 2)) return;
+			this.debug('shed skin');
+			this.add('-activate', pokemon, 'ability: Shed Skin');
+			if (pokemon.status) pokemon.cureStatus();
+			for (const volatile of removableVolatiles) {
+				if (pokemon.volatiles[volatile]) pokemon.removeVolatile(volatile);
+			}
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				const atk = pokemon.getStat('atk', false, true);
+				const spa = pokemon.getStat('spa', false, true);
+				this.boost(atk >= spa ? { atk: 1 } : { spa: 1 }, pokemon, pokemon);
+				this.heal(pokemon.maxhp / 2, pokemon, pokemon);
+				return;
+			}
+			let clearedBoost = false;
+			let stat: BoostID;
+			for (stat in pokemon.boosts) {
+				if (pokemon.boosts[stat] < 0) {
+					pokemon.boosts[stat] = 0;
+					clearedBoost = true;
 				}
 			}
+			if (clearedBoost) this.add('-clearnegativeboost', pokemon, '[from] ability: Shed Skin');
+			this.heal(pokemon.maxhp / 3, pokemon, pokemon);
 		},
 		flags: {},
 		name: "Shed Skin",
@@ -7954,12 +8074,44 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 116,
 	},
+	sinisterblaze: {
+		onStart(pokemon) {
+			if (pokemon.status !== 'brn') {
+				if (pokemon.status) pokemon.clearStatus();
+				pokemon.setStatus('brn', pokemon, this.effect, true);
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status !== 'brn') {
+				if (pokemon.status) pokemon.clearStatus();
+				pokemon.setStatus('brn', pokemon, this.effect, true);
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id === 'brn') return;
+			this.add('-immune', target, '[from] ability: Sinister Blaze');
+			return false;
+		},
+		onResidualOrder: 10,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.status !== 'brn') return;
+			for (const foe of pokemon.foes()) {
+				if (!foe || foe.fainted) continue;
+				this.damage(foe.baseMaxhp / 8, foe, pokemon, this.effect);
+			}
+		},
+		flags: { cantsuppress: 1, failroleplay: 1, failskillswap: 1, noentrain: 1, notrace: 1 },
+		name: "Sinister Blaze",
+		rating: 4,
+		num: 10068,
+	},
 	soulfire: {
 		onStart(pokemon) {
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
-			if (this.field.isTerrain('hauntedterrain')) {
+			if (this.field.isTerrain(['hauntedterrain', 'coldeclipseterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
 		},
@@ -7967,16 +8119,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'sandstorm' || type === 'hail') return false;
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain'])) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
+			if (this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain', 'coldeclipseterrain'])) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
 		},
 		onModifyMove(move) {
 			if (this.movehasType(move, ['Fire', 'Ghost'])) {
+				(move as any).soulFireBurn = true;
 				move.onEffectiveness = function (typeMod, target, type) {
 					if (move.type === 'Ghost' && type === 'Normal') return typeMod;
 					if (type === 'Steel' || type === 'Dark') return -1;
 					return 0;
 				};
 			}
+			if (move.id === 'willowisp') (move as any).soulFireBurn = true;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (source?.hasAbility('souleater') && target.hasAbility('soulfire') && this.movehasType(move, 'Ghost')) {
@@ -8271,6 +8425,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					mirrorarmor: ['fairytaleterrain', 'mirrorarmor'],
 					irondominion: ['fairytaleterrain', 'mirrorarmor'],
 					relicarmor: ['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'],
+					magician: ['fairytaleterrain', 'bewitchedwoodsterrain', 'hauntedterrain', 'mistyterrain', 'newworldterrain'],
 				};
 				const allowedFields = fieldAbilityBoosts[effect.id];
 				if (allowedFields && this.field.isTerrain(allowedFields)) return;
@@ -8306,6 +8461,78 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Royal Decree",
 		rating: 4,
 		num: 10020,
+	},
+	royalsun: {
+		onStart(pokemon) {
+			this.field.setWeather('sunnyday', pokemon);
+			this.add('-ability', pokemon, 'Royal Decree');
+			this.add('-clearallboost');
+			for (const active of this.getAllActive()) {
+				active.clearBoosts();
+			}
+			for (const side of this.sides) {
+				for (const sideCondition of ['reflect', 'lightscreen', 'auroraveil']) {
+					if (side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Royal Sun', `[of] ${pokemon}`);
+					}
+				}
+			}
+			if (this.field.isTerrain(['fairytaleterrain', 'chessboardterrain', 'newworldterrain', 'starlightarenaterrain'])) {
+				const boost: SparseBoostsTable = {};
+				for (const foe of pokemon.foes()) {
+					if (!foe || foe.fainted) continue;
+					const atk = foe.getStat('atk', false, true);
+					const spa = foe.getStat('spa', false, true);
+					if (atk >= spa) {
+						boost.def = this.gameType === 'singles' ? 2 : 1;
+					} else {
+						boost.spd = this.gameType === 'singles' ? 2 : 1;
+					}
+				}
+				if (boost.def || boost.spd) this.boost(boost, pokemon, pokemon);
+			}
+		},
+		onAnyTryBoost(boost, target, source, effect) {
+			if (!effect || effect.id === 'royalsun') return;
+			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
+				!Object.values(boost).some(value => value && value > 0);
+			if (isOnlyDrops && source === target && target.hasAbility('royalsun')) return;
+			const positiveBoost = Object.values(boost).some(value => value && value > 0);
+			if (positiveBoost && target === source && effect.effectType === 'Ability') {
+				const fieldAbilityBoosts: { [abilityid: string]: string[] } = {
+					stalwart: ['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'],
+					mirrorarmor: ['fairytaleterrain', 'mirrorarmor'],
+					irondominion: ['fairytaleterrain', 'mirrorarmor'],
+					relicarmor: ['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'],
+					magician: ['fairytaleterrain', 'bewitchedwoodsterrain', 'hauntedterrain', 'mistyterrain', 'newworldterrain'],
+				};
+				const allowedFields = fieldAbilityBoosts[effect.id];
+				if (allowedFields && this.field.isTerrain(allowedFields)) return;
+			}
+			const fieldEffect = effect.effectType === 'Field' || effect.effectType === 'Terrain';
+			if (fieldEffect) return;
+			let blocked = false;
+			let stat: BoostID;
+			for (stat in boost) {
+				if (!boost[stat]) continue;
+				delete boost[stat];
+				blocked = true;
+			}
+			if (blocked) this.add('-fail', target, 'boost', '[from] ability: Royal Sun', `[of] ${this.effectState.target}`);
+		},
+		onModifyMove(move) {
+			if (move.flags['charge']) delete move.flags['charge'];
+		},
+		onModifyDef(def, pokemon) {
+			if (this.field.isTerrain('chessboardterrain')) return this.chainModify(1.5);
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain('chessboardterrain')) return this.chainModify(1.5);
+		},
+		flags: {},
+		name: "Royal Sun",
+		rating: 4.5,
+		num: 10142,
 	},
 	tremor: {
 		onBasePowerPriority: 8,
@@ -8900,6 +9127,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!source.setType(type)) return;
 				this.add('-start', source, 'typechange', type, "[from] ability: Striker's Momentum");
 			}
+		},
+		onModifyMove(move) {
+			move.accuracy = true;
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
@@ -9500,6 +9730,51 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Transistor",
 		rating: 3.5,
 		num: 262,
+	},
+	railguncircuit: {
+		onSourceModifyAtkPriority: 5,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && this.movehasType(move, 'Ground') && this.field.isTerrain('electricterrain')) {
+				this.debug('Railgun Circuit weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move && this.movehasType(move, 'Ground') && this.field.isTerrain('electricterrain')) {
+				this.debug('Railgun Circuit weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			let boost = 1.3;
+			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
+				boost = 2;
+			}
+			if (move && this.movehasType(move, 'Electric')) {
+				this.debug('Railgun Circuit boost');
+				return this.chainModify(boost);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			let boost = 1.3;
+			if (this.field.isTerrain('electricterrain') || this.field.isTerrain('factoryterrain')) {
+				boost = 2;
+			}
+			if (move && this.movehasType(move, 'Electric')) {
+				this.debug('Railgun Circuit boost');
+				return this.chainModify(boost);
+			}
+		},
+		onModifyMove(move) {
+			if (move.category !== 'Status') move.accuracy = true;
+		},
+		flags: {},
+		name: "Railgun Circuit",
+		rating: 4,
+		num: 10141,
 	},
 	triage: {
 		onModifyPriority(priority, pokemon, target, move) {
@@ -10154,13 +10429,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (move.flags['wind']) {
-				target.addVolatile('charge');
+				this.boost({ spa: 1 }, target, target);
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['wind']) {
+				if (!this.boost({ spa: 1 }, target, target)) {
+					this.add('-immune', target, '[from] ability: Wind Power');
+				}
+				return null;
 			}
 		},
 		onSideConditionStart(side, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
-				pokemon.addVolatile('charge');
+				this.boost({ spa: 1 }, pokemon, pokemon);
 			}
 		},
 		onResidual(pokemon) {

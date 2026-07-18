@@ -484,7 +484,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingstorm: {
 		name: "Raging Storm",
-		desc: "This Pokemon's attacks have Mold Breaker, ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 50% of the last damage in multi battles, or raises Attack by 1 in singles.",
+		desc: "This Pokemon's attacks have Mold Breaker, ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 75% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
 		shortDesc: "Mold Breaker; attacks ignore screens/boosts; KO bonus.",
 	},
 	vanguard: {
@@ -1284,6 +1284,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		move: "#magiccoat",
 	},
+	lunarorbit: {
+		name: "Lunar Orbit",
+		desc: "This Pokemon has Magic Bounce. On switch-in, it sets Gravity for 5 turns. This Pokemon is immune to Gravity's negative effects: it is not grounded, its Ground immunity is not removed, and it can still use moves normally restricted by Gravity.",
+		shortDesc: "Magic Bounce; sets Gravity; ignores Gravity's drawbacks.",
+	},
 	magicguard: {
 		name: "Magic Guard",
 		desc: "This Pokemon can only be damaged by direct attacks. Curse and Substitute on use, Belly Drum, Pain Split, Struggle recoil, and confusion damage are considered direct damage.",
@@ -1295,8 +1300,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magician: {
 		name: "Magician",
-		desc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack. Does not affect Doom Desire and Future Sight. If multiple targets are hit by an attack the item is stolen from the fastest Pokemon, while considering the effect of Trick Room and prioritizing opposing Pokemon before allies.",
-		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack.",
+		desc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack. Does not affect Doom Desire and Future Sight. If multiple targets are hit by an attack the item is stolen from the fastest Pokemon, while considering the effect of Trick Room and prioritizing opposing Pokemon before allies. On Fairy Tale Field, Bewitched Woods, Haunted Field, Misty Terrain, and New World, this Pokemon's Special Attack is raised by 1 stage on switch-in.",
+		shortDesc: "Steals items on hit; +1 Sp. Atk on Fairy Tale, Bewitched, Haunted, Misty, and New World.",
 	},
 	magmaarmor: {
 		name: "Magma Armor",
@@ -1587,7 +1592,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	piercingdrill: {
 		name: "Piercing Drill",
-		shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
+		desc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage. This Pokemon also has Power Drill's effect: drill moves have 1.5x power, or 2x power and bypass protection on Rocky Field, Mountain, Snowy Mountain, Cave, and Volcanic Cave.",
+		shortDesc: "Contact pierces protection. Has Power Drill.",
 	},
 	pixilate: {
 		name: "Pixilate",
@@ -1967,8 +1973,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shedskin: {
 		name: "Shed Skin",
-		desc: "This Pokemon has a 33% chance to have its non-volatile status condition cured at the end of each turn.",
-		shortDesc: "This Pokemon has a 33% chance to have its status cured at the end of each turn.",
+		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects, reset its negative stat stages to 0, and restore 1/3 max HP. This can also activate while below half HP. On Dragon's Den, this always activates, does not reset negative stat stages, raises Attack or Special Attack by 1 stage based on the higher stat, and restores 1/2 max HP.",
+		shortDesc: "50% chance to cleanse negatives and heal 1/3; on Dragon's Den boosts offense and heals 1/2.",
 	},
 	sheerforce: {
 		name: "Sheer Force",
@@ -2110,6 +2116,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 		},
 	},
+	conductivity: {
+		name: "Conductivity",
+		desc: "This Pokemon is immune to sound-based moves. Its Electric-type moves hit Steel-type Pokemon super effectively.",
+		shortDesc: "Sound immunity; Electric moves hit Steel super effectively.",
+	},
 	solaridol: {
 		name: "Solar Idol",
 		desc: "This Pokemon has Levitate's Ground immunity. Its Fire-type moves have 1.5x power, its Attack is 1.5x during sun, and Grass-type attacks are resisted. On New World and Starlight Arena, its Defense is raised by 1 stage on switch-in.",
@@ -2124,6 +2135,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Royal Decree",
 		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, and stat changes fail unless they come from field effects, exact ability boosts granted by the current field, or this Pokemon's own self-inflicted stat drops. Enemy-caused drops such as Intimidate and Parting Shot still fail. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
 		shortDesc: "Switch-in Haze/screen clear; blocks enemy drops/setup/screens; skips charge turns.",
+	},
+	royalsun: {
+		name: "Royal Sun",
+		desc: "On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects.",
+		shortDesc: "Drought + Royal Decree.",
 	},
 	parasitism: {
 		name: "Parasitism",
@@ -2529,6 +2545,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.",
 		},
 	},
+	railguncircuit: {
+		name: "Railgun Circuit",
+		desc: "This Pokemon has Transistor's effects. Moves used by this Pokemon never miss. Moves used against this Pokemon do not gain this accuracy effect.",
+		shortDesc: "Transistor effects; this Pokemon's moves never miss.",
+	},
 	triage: {
 		name: "Triage",
 		shortDesc: "This Pokemon's healing moves have their priority increased by 3.",
@@ -2661,10 +2682,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	windpower: {
 		name: "Wind Power",
-		desc: "This Pokemon gains the Charge effect when it takes a hit from a wind move or when Tailwind begins on this Pokemon's side.",
-		shortDesc: "This Pokemon gains the Charge effect when hit by a wind move or Tailwind begins.",
-
-		start: "#electromorphosis",
+		desc: "This Pokemon is immune to wind moves and raises its Special Attack by 1 stage when hit by a wind move or when Tailwind begins on this Pokemon's side.",
+		shortDesc: "Sp. Atk raised by 1 if hit by a wind move or Tailwind begins. Wind move immunity.",
 	},
 	windrider: {
 		name: "Wind Rider",
@@ -2708,8 +2727,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlefervor: {
 		name: "Battle Fervor",
-		desc: "If this Pokemon moves before its target, its attacks deal 1.3x damage. If it would move after the attacker, damaging attacks against it deal 0.7x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always takes 0.7x damage, cannot have stats lowered, and cannot flinch. This Ability is disabled on Bewitched Woods.",
-		shortDesc: "Fast attacks 1.3x; slow takes 0.7x; hit boosts once; disabled on Bewitched.",
+		desc: "If this Pokemon moves before its target, its attacks deal 1.2x damage. If it would move after the attacker, damaging attacks against it deal 0.8x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always takes 0.8x damage, cannot have stats lowered, and cannot flinch. This Ability is disabled on Bewitched Woods.",
+		shortDesc: "Fast attacks 1.2x; slow takes 0.8x; hit boosts once; disabled on Bewitched.",
 	},
 	duskilate: {
 		name: "Duskilate",
@@ -2753,8 +2772,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	burningcrown: {
 		name: "Burning Crown",
-		desc: "On switch-in, opposing Pokemon have their Attack and Special Attack lowered by 1 stage. This ignores Ability-based immunity to stat drops and does not activate Defiant, Competitive, or Contrary, but item protection still applies. This Pokemon is airborne and immune to Ground-type moves. Its Fire-type moves have 1.2x power and can hit through type immunities, but type effectiveness still applies. It takes 0.8x damage from attacks and restores 1/16 max HP at the end of each turn. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
-		shortDesc: "Airborne; drops foes' offenses; Fire 1.2x ignores immunities; 1/16 recovery.",
+		desc: "This Pokemon and its ally cannot have their stats lowered. When a Pokemon faints, this Pokemon and its ally each gain +1 Attack or Special Attack, whichever is higher for that Pokemon. Fire-type moves used by this Pokemon and its ally have 1.2x power. This Pokemon is airborne and immune to Ground-type moves, takes 0.8x damage from attacks, and restores 1/16 max HP at the end of each turn. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
+		shortDesc: "User/ally block stat drops; faint boosts higher offense; side Fire 1.2x.",
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
@@ -2766,8 +2785,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Water-type moves have 1.3x power. On switch-in, it gains Aqua Ring. At the end of each turn, non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP. This damage uses Water-type effectiveness.",
 		shortDesc: "Water 1.3x; Aqua Ring; cycling Water chip.",
 	},
-	wildfire: {
-		name: "Wild Fire",
+	wildfirecore: {
+		name: "Wildfire Core",
 		desc: "This Pokemon's Fire-type moves have 1.3x power. This Pokemon takes 0.5x damage from Water-type moves. If Sun or Hail is active, resisted Fire-type moves used by this Pokemon are boosted like Tinted Lens. At the end of each turn, non-Fire Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire-type move this turn. This damage uses Fire-type effectiveness.",
 		shortDesc: "Fire 1.3x; 0.5x Water; weather Tinted Lens; end-turn fire chip.",
 	},
@@ -2838,8 +2857,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	soulfire: {
 		name: "Soul Fire",
-		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. On Haunted Field, its Defense and Special Defense rise by 1 stage on switch-in. Its Fire- and Ghost-type moves cannot hit Normal-type Pokemon with Ghost-type attacks and are resisted by Steel- and Dark-type Pokemon, but otherwise ignore type resistances. Fire- and Ghost-type moves from this Ability deal 4x damage to opposing Soul Fire users. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
-		shortDesc: "Draws in and absorbs Fire/Ghost; Soul Fire attacks ignore most resists and hit Soul Fire 4x.",
+		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. On Haunted Field, its Defense and Special Defense rise by 1 stage on switch-in. Its Fire- and Ghost-type moves cannot hit Normal-type Pokemon with Ghost-type attacks and are resisted by Steel- and Dark-type Pokemon, but otherwise ignore type resistances. Burns caused by this Pokemon's Fire- and Ghost-type moves or Will-O-Wisp bypass burn immunities, Misty Terrain, and Mist. Fire- and Ghost-type moves from this Ability deal 4x damage to opposing Soul Fire users. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
+		shortDesc: "Draws in and absorbs Fire/Ghost; burns bypass immunities; attacks ignore most resists.",
+	},
+	sinisterblaze: {
+		name: "Sinister Blaze",
+		desc: "This Pokemon is always burned and its burn can overwrite other status conditions. Burn heals this Pokemon instead of damaging it. While this Pokemon is burned, opposing Pokemon lose doubled burn damage each turn. This Ability cannot be Skill Swapped, suppressed, copied by Role Play, given by Entrainment, or Traced.",
+		shortDesc: "Always burned; burn heals user and burns foes down; cannot be copied/suppressed.",
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",
@@ -2858,8 +2882,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	strikersmomentum: {
 		name: "Striker's Momentum",
-		desc: "When this Pokemon uses a damaging move, its type changes to match that move before attacking. Its kicking moves have 1.3x power. Once per switch-in, if this Pokemon knocks out a target with a kicking move, its Speed rises by 1 stage.",
-		shortDesc: "Damaging moves change user's type; kicking moves 1.3x; kick KO gives +1 Spe once.",
+		desc: "This Pokemon's moves cannot miss. When this Pokemon uses a damaging move, its type changes to match that move before attacking. Its kicking moves have 1.3x power. Once per switch-in, if this Pokemon knocks out a target with a kicking move, its Speed rises by 1 stage.",
+		shortDesc: "Moves never miss; damaging moves change user's type; kicking moves 1.3x; kick KO gives +1 Spe once.",
 	},
 	ultraego: {
 		name: "Ultra Ego",
