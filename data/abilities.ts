@@ -7773,15 +7773,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.debug('shed skin');
 			this.add('-activate', pokemon, 'ability: Shed Skin');
 			if (pokemon.status) pokemon.cureStatus();
-			for (const volatile of removableVolatiles) {
-				if (pokemon.volatiles[volatile]) pokemon.removeVolatile(volatile);
-			}
 			if (this.field.isTerrain('dragonsdenterrain')) {
 				const atk = pokemon.getStat('atk', false, true);
 				const spa = pokemon.getStat('spa', false, true);
-				this.boost(atk >= spa ? { atk: 1 } : { spa: 1 }, pokemon, pokemon);
+				this.boost(atk >= spa ? { atk: 1, def: -1, spd: -1 } : { spa: 1, def: -1, spd: -1 }, pokemon, pokemon);
 				this.heal(pokemon.maxhp / 2, pokemon, pokemon);
 				return;
+			}
+			for (const volatile of removableVolatiles) {
+				if (pokemon.volatiles[volatile]) pokemon.removeVolatile(volatile);
 			}
 			let clearedBoost = false;
 			let stat: BoostID;

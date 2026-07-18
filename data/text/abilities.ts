@@ -1973,8 +1973,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shedskin: {
 		name: "Shed Skin",
-		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects, reset its negative stat stages to 0, and restore 1/3 max HP. This can also activate while below half HP. On Dragon's Den, this always activates, does not reset negative stat stages, raises Attack or Special Attack by 1 stage based on the higher stat, and restores 1/2 max HP.",
-		shortDesc: "50% chance to cleanse negatives and heal 1/3; on Dragon's Den boosts offense and heals 1/2.",
+		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects, reset its negative stat stages to 0, and restore 1/3 max HP. This can also activate while below half HP. On Dragon's Den, this always activates, only cures non-volatile status, raises Attack or Special Attack by 1 stage based on the higher stat, lowers Defense and Special Defense by 1 stage, and restores 1/2 max HP.",
+		shortDesc: "50% chance to cleanse negatives and heal 1/3; on Dragon's Den status cure, offense up, defenses down.",
 	},
 	sheerforce: {
 		name: "Sheer Force",
