@@ -2467,7 +2467,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10113,
 	},
 	memoryleak: {
-		onBoost(boost, target, source, effect) {
+		onTryBoost(boost, target, source, effect) {
 			if (!target.hp || effect?.id === 'memoryleak') return;
 			const ally = target.adjacentAllies().find(pokemon => pokemon.hp && !pokemon.fainted);
 			if (!ally) return;
@@ -2481,6 +2481,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (Object.keys(passed).length) {
 				this.add('-ability', target, 'Memory Leak');
+				// Self-boosts and outside boosts aimed at the holder are redirected to the ally.
 				this.boost(passed, ally, target, this.dex.abilities.get('memoryleak'));
 			}
 		},
@@ -2591,10 +2592,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.id === 'futuresight' || move.flags['futuremove'] || move.callsMove) return;
 			let targets = move.hitTargets?.length ? [...move.hitTargets] : target ? [target] : [];
 			if (['allAdjacentFoes', 'allFoes', 'foeSide'].includes(move.target)) {
-				targets = source.foes().filter(foe => foe && !foe.fainted);
+				targets = source.foes().filter(foe => foe);
 			}
 			for (const hitTarget of targets) {
-				if (!hitTarget || hitTarget === source || source.isAlly(hitTarget) || hitTarget.fainted) continue;
+				if (!hitTarget || hitTarget === source || source.isAlly(hitTarget)) continue;
 				if (!hitTarget.side.addSlotCondition(hitTarget, 'futuremove')) continue;
 				Object.assign(hitTarget.side.slotConditions[hitTarget.position]['futuremove'], {
 					move: 'futuresight',
@@ -2607,13 +2608,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						category: "Special",
 						priority: 0,
 						flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+						ignoreAbility: true,
+						ignoreDefensive: true,
 						ignoreImmunity: true,
+						infiltrates: true,
 						perfectForesight: true,
 						effectType: 'Move',
 						type: 'Psychic',
 						onEffectiveness(typeMod: number) {
-							if (typeMod < 0) return 0;
-							return typeMod;
+							return 0;
 						},
 					},
 				});

@@ -6971,11 +6971,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			});
 			if (source.hasAbility('perfectforesight')) {
 				const futureMove = target.side.slotConditions[target.position]['futuremove'];
+				futureMove.moveData.ignoreAbility = true;
+				futureMove.moveData.ignoreDefensive = true;
 				futureMove.moveData.ignoreImmunity = true;
+				futureMove.moveData.infiltrates = true;
 				futureMove.moveData.perfectForesight = true;
 				futureMove.moveData.onEffectiveness = function (typeMod) {
-					if (typeMod < 0) return 0;
-					return typeMod;
+					return 0;
 				};
 			}
 			this.add('-start', source, 'move: Future Sight');
