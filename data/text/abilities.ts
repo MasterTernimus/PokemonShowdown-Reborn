@@ -489,8 +489,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vanguard: {
 		name: "Vanguard",
-		desc: "Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon's stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and survives at 1 HP.",
-		shortDesc: "Extreme Speed 1.5x, may become Fire; guards after use; stats can't drop; once endures KO.",
+		desc: "Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon can only be damaged by direct attacks. Its stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and survives at 1 HP.",
+		shortDesc: "Extreme Speed 1.5x, may become Fire; Magic Guard; stats can't drop; once endures KO.",
 	},
 	apexcleave: {
 		name: "Apex Cleave",
@@ -644,8 +644,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
-		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight used by this Pokemon ignores Dark-type immunity and resistances. If this Pokemon uses a move on an opposing Pokemon and that target's slot does not already have a future move queued, Future Sight is queued on that slot.",
-		shortDesc: "Gains strongest foe's Ability; enemy-targeting moves queue Future Sight.",
+		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight used by this Pokemon ignores Dark-type immunity and resistances. If this Pokemon uses a move on opposing Pokemon and their slots do not already have future moves queued, Future Sight is queued on those slots. Spread moves queue Future Sight on all enemies.",
+		shortDesc: "Gains strongest foe's Ability; enemy-targeting/spread moves queue Future Sight.",
 	},
 	heavenlychorus: {
 		name: "Heavenly Chorus",

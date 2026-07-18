@@ -1014,9 +1014,6 @@ export const commands: Chat.ChatCommands = {
 		if (room.tour) {
 			throw new Chat.ErrorMessage(this.tr`You can't offer ties in tournaments.`);
 		}
-		if (battle.turn < 100) {
-			throw new Chat.ErrorMessage(this.tr`It's too early to tie, please play until turn 100.`);
-		}
 		this.checkCan('roomvoice', null, room);
 		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
 			throw new Chat.ErrorMessage(this.tr`No other player is requesting a tie right now. It was probably canceled.`);
@@ -1053,7 +1050,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 	},
-	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Can only be used after 100+ turns have passed. Requires: \u2606 @ # ~`],
+	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Requires: \u2606 @ # ~`],
 
 	rejectdraw: 'rejecttie',
 	rejecttie(target, room, user) {

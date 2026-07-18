@@ -135,6 +135,12 @@ export class Field {
 		return this.terrain === 'coldeclipseterrain';
 	}
 
+	restoreMistyFairyTaleHail(previousTerrain?: ID) {
+		if (previousTerrain === 'mistyterrain' && this.terrain === 'fairytaleterrain' && this.weather !== 'hail') {
+			this.setWeather('hail');
+		}
+	}
+
 	effectiveWeather() {
 		if (this.suppressingWeather()) return '';
 		return this.weather;
@@ -271,6 +277,7 @@ export class Field {
 		}
 		this.terrainStack.unshift(this.terrainState);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
+		this.restoreMistyFairyTaleHail(prevTerrain);
 		this.restoreFormatHail();
 		return true;
 	}
@@ -317,11 +324,13 @@ export class Field {
 		}
 		this.battle.add('-fieldstart', status.name);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
+		this.restoreMistyFairyTaleHail(prevTerrainState.id as ID);
 		this.restoreFormatHail();
 	}
 
 	clearTerrain(power: string | null = null) {
 		if (!this.terrain || this.terrain === 'newworldterrain') return false;
+		const clearedTerrain = this.terrain;
 		if (this.terrain === 'underwaterterrain') {
 			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
 			return false;
@@ -383,6 +392,7 @@ export class Field {
 			this.terrainState = this.battle.initEffectState({ id: '' });
 		}
 		this.battle.eachEvent('TerrainChange');
+		this.restoreMistyFairyTaleHail(clearedTerrain);
 		this.restoreFormatHail();
 		return true;
 	}
