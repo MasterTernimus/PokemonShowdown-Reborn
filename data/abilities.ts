@@ -1776,7 +1776,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.abilityState.vanguardGuard === this.turn && move.category !== 'Status') return this.chainModify(0.25);
 		},
 		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move' || (target as any).vanguardEndureUsed || damage < target.hp) return;
+			if (effect.effectType !== 'Move') return false;
+			if ((target as any).vanguardEndureUsed || damage < target.hp) return;
 			(target as any).vanguardEndureUsed = true;
 			target.abilityState.vanguardCrit = true;
 			return target.hp - 1;
@@ -2588,7 +2589,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAfterMove(source, target, move) {
 			if (move.id === 'futuresight' || move.flags['futuremove'] || move.callsMove) return;
-			const targets = move.hitTargets?.length ? move.hitTargets : target ? [target] : [];
+			let targets = move.hitTargets?.length ? [...move.hitTargets] : target ? [target] : [];
+			if (['allAdjacentFoes', 'allFoes', 'foeSide'].includes(move.target)) {
+				targets = source.foes().filter(foe => foe && !foe.fainted);
+			}
 			for (const hitTarget of targets) {
 				if (!hitTarget || hitTarget === source || source.isAlly(hitTarget) || hitTarget.fainted) continue;
 				if (!hitTarget.side.addSlotCondition(hitTarget, 'futuremove')) continue;
@@ -5525,7 +5529,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Magician', `[of]  + ${target}`);
+				this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${target}`);
 			}
 		},
 		flags: {},
