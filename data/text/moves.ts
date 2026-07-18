@@ -630,13 +630,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	boneclub: {
 		name: "Bone Club",
-		desc: "Has a 10% chance to make the target flinch.",
-		shortDesc: "10% chance to make the target flinch.",
+		desc: "Has a 10% chance to make the target flinch. As a Bone move, this move hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "10% flinch chance. Hits airborne targets neutrally.",
 	},
 	bonemerang: {
 		name: "Bonemerang",
-		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
-		shortDesc: "Hits 2 times in one turn.",
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. As a Bone move, this move hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "Hits 2 times. Hits airborne targets neutrally.",
 		gen4: {
 			desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -649,8 +649,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bonerush: {
 		name: "Bone Rush",
-		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 4-5 times.",
-		shortDesc: "Hits 2-5 times in one turn.",
+		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 4-5 times. As a Bone move, this move hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "Hits 2-5 times. Hits airborne targets neutrally.",
 		gen8: {
 			desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -5664,8 +5664,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowbone: {
 		name: "Shadow Bone",
-		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "20% chance to lower the target's Defense by 1.",
+		desc: "Has a 20% chance to lower the target's Defense by 1 stage. As a Bone move, this move hits Normal-type Pokemon for neutral damage.",
+		shortDesc: "20% chance to lower Defense. Hits Normal neutrally.",
 	},
 	shadowclaw: {
 		name: "Shadow Claw",

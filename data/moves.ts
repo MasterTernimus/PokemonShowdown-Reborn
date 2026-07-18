@@ -867,7 +867,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target)) {
-					if (target.hasAbility('ultraego')) return;
 					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
 						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
@@ -880,7 +879,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility('royaldecree'));
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']));
 				if (decree) {
 					this.add('-fail', source, 'move: Aurora Veil', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
@@ -1772,7 +1771,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Bone Club",
 		pp: 20,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, bone: 1 },
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch',
@@ -1790,7 +1789,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Bonemerang",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, bone: 1 },
 		multihit: 2,
 		secondary: {
 			chance: 30,
@@ -1809,7 +1808,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Bone Rush",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, bone: 1 },
 		multihit: [2, 5],
 		target: "normal",
 		type: "Ground",
@@ -8469,6 +8468,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.chainModify([6840, 4096]);
 			},
 			onDisableMove(pokemon) {
+				if (pokemon.hasAbility('lunarorbit')) return;
 				for (const moveSlot of pokemon.moveSlots) {
 					if (this.dex.moves.get(moveSlot.id).flags['gravity']) {
 						pokemon.disableMove(moveSlot.id);
@@ -8478,12 +8478,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
+				if (pokemon.hasAbility('lunarorbit')) return;
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
 				}
 			},
 			onModifyMove(move, pokemon, target) {
+				if (pokemon.hasAbility('lunarorbit')) return;
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
@@ -11166,7 +11168,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
-					if (target.hasAbility('ultraego')) return;
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -11175,7 +11176,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility('royaldecree'));
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']));
 				if (decree) {
 					this.add('-fail', source, 'move: Light Screen', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
@@ -16247,7 +16248,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
-					if (target.hasAbility('ultraego')) return;
 					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -16256,7 +16256,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility('royaldecree'));
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']));
 				if (decree) {
 					this.add('-fail', source, 'move: Reflect', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
@@ -17532,7 +17532,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Shadow Bone",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, bone: 1 },
 		secondary: {
 			chance: 20,
 			boosts: {

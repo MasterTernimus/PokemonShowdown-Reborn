@@ -1531,7 +1531,8 @@ export class BattleActions {
 	getMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.moves.get(move);
 		if (move.name === 'Struggle') return move;
-		if (pokemon.gigantamax && pokemon.species.id === 'eeveegmax') {
+		const isEeveeGmax = pokemon.species.id === 'eeveegmax' || pokemon.canDynamax === 'eeveegmax';
+		if (isEeveeGmax) {
 			if (move.category === 'Status') return;
 			return this.dex.moves.get('gmaxcuddle');
 		}
@@ -1546,7 +1547,8 @@ export class BattleActions {
 	getActiveMaxMove(move: Move, pokemon: Pokemon) {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 		if (move.name === 'Struggle') return this.dex.getActiveMove(move);
-		if (pokemon.gigantamax && pokemon.species.id === 'eeveegmax') {
+		const isEeveeGmax = pokemon.species.id === 'eeveegmax' || pokemon.canDynamax === 'eeveegmax';
+		if (isEeveeGmax) {
 			if (move.category === 'Status') return this.dex.getActiveMove(move);
 			const maxMove = this.dex.getActiveMove('gmaxcuddle');
 			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);

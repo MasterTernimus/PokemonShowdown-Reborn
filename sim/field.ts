@@ -132,7 +132,7 @@ export class Field {
 	}
 
 	shouldRestoreFormatHail() {
-		return ['coldeclipseterrain', 'fairytaleterrain'].includes(this.terrain);
+		return this.terrain === 'coldeclipseterrain';
 	}
 
 	effectiveWeather() {

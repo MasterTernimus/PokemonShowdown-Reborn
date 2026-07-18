@@ -891,7 +891,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Authority Clause: Limit one Neutralization and one Royal Decree user per team');
 		},
 		onValidateTeam(team) {
-			const limitedAbilities = new Set(['neutralization', 'royaldecree']);
+			const limitedAbilities = new Set(['neutralization', 'royaldecree', 'royalsun']);
 			const seen: Partial<Record<'neutralization' | 'royaldecree', string[]>> = {};
 			for (const set of team) {
 				const abilities = new Set<ID>();
@@ -907,7 +907,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				for (const ability of abilities) {
 					if (!limitedAbilities.has(ability)) continue;
-					const id = ability as 'neutralization' | 'royaldecree';
+					const id = (ability === 'royalsun' ? 'royaldecree' : ability) as 'neutralization' | 'royaldecree';
 					if (!seen[id]) seen[id] = [];
 					seen[id]!.push(`${set.name || set.species} (${this.dex.abilities.get(id).name})`);
 				}
