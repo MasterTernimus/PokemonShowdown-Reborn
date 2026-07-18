@@ -454,8 +454,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	windysurge: {
 		name: "Windy Surge",
-		desc: "On switch-in, this Pokemon sets Tailwind on its side for 4 turns.",
-		shortDesc: "On switch-in, sets Tailwind for 4 turns.",
+		desc: "On switch-in, this Pokemon sets Tailwind on its side for 4 turns. On Mountain, Snowy Mountain, and Cold Eclipse fields, it also creates Strong Winds without using the Tailwind move.",
+		shortDesc: "On switch-in, sets Tailwind; creates Strong Winds on matching fields.",
 	},
 	burningspirit: {
 		name: "Burning Spirit",
@@ -509,8 +509,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	grandmaster: {
 		name: "Grandmaster",
-		desc: "This Pokemon cannot flinch. After it uses Miracle Eye, it resists Dark-type moves. If it uses a status move, it takes 0.25x damage for the rest of the turn. If it moves before the target, its Psychic-type moves ignore resistances.",
-		shortDesc: "No flinch; Miracle Eye gives Dark resist; status moves guard; fast Psychic ignores resists.",
+		desc: "This Pokemon cannot flinch. After it uses Miracle Eye, it resists Dark-type moves. If it uses a status move, it takes 0.25x damage for the rest of the turn. If it moves before the target, its Psychic-type moves ignore resistances. When this Pokemon faints, Future Sight is queued on all opposing slots; existing delayed moves on those slots are pushed farther ahead instead.",
+		shortDesc: "No flinch; status guard; fast Psychic ignores resists; faints into Future Sight.",
 	},
 	warpath: {
 		name: "War Path",
@@ -519,8 +519,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks and restores 1/16 max HP at the end of each turn.",
-		shortDesc: "Moves 1.3x and bypass abilities/defenses/screens; drains 30%; heals 1/16.",
+		desc: "This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, up to 25% of its max HP per hit, and restores 1/16 max HP at the end of each turn.",
+		shortDesc: "Moves 1.3x and bypass abilities/defenses/screens; drains up to 25%; heals 1/16.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -664,8 +664,53 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rimeknuckle: {
 		name: "Rime Knuckle",
-		desc: "This Pokemon's punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 20% less damage to it. If this Pokemon knocks out a target, it restores 1/10 of its maximum HP.",
-		shortDesc: "Punching moves 1.4x; moves 40% frostbite; above 50% HP takes 20% less from faster foes; KO heals 1/10.",
+		desc: "This Pokemon's punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 33% less damage to it. If this Pokemon knocks out a target, it restores 1/10 of its maximum HP.",
+		shortDesc: "Punching moves 1.4x; moves 40% frostbite; above 50% HP takes 33% less from faster foes; KO heals 1/10.",
+	},
+	razorcurrent: {
+		name: "Razor Current",
+		desc: "This Pokemon's Steel-type moves have 1.5x power. At the end of each turn, its Speed rises by 1 stage.",
+		shortDesc: "Steel moves 1.5x; Speed rises by 1 each turn.",
+	},
+	guardiantempest: {
+		name: "Guardian Tempest",
+		desc: "On switch-in, this Pokemon summons Rain. This Pokemon has Berserk and Friend Guard's effects.",
+		shortDesc: "Drizzle + Berserk + Friend Guard.",
+	},
+	toxicrenewal: {
+		name: "Toxic Renewal",
+		desc: "This Pokemon has Adaptability, Regenerator, and Merciless's effects.",
+		shortDesc: "Adaptability + Regenerator + Merciless.",
+	},
+	stormcircuit: {
+		name: "Storm Circuit",
+		desc: "On switch-in, this Pokemon creates Electric Terrain. During Rain, its Speed is doubled.",
+		shortDesc: "Electric Surge + Swift Swim.",
+	},
+	surgeconduit: {
+		name: "Surge Conduit",
+		desc: "On switch-in, this Pokemon creates Electric Terrain. This Pokemon draws Electric-type moves to itself to raise its Attack and Special Attack by 1 stage, and is immune to Electric-type moves.",
+		shortDesc: "Electric Surge + Lightning Rod.",
+	},
+	solartrap: {
+		name: "Solar Trap",
+		desc: "This Pokemon has Simple, Corrosion, and Innards Out's effects.",
+		shortDesc: "Simple + Corrosion + Innards Out.",
+	},
+	soaringspirit: {
+		name: "Soaring Spirit",
+		desc: "When this Pokemon knocks out an opposing Pokemon, its Speed and higher attacking stat rise by 1 stage, and the next attack that hits it deals 25% less damage.",
+		shortDesc: "KO: +1 Speed and higher offense; next hit deals 25% less.",
+	},
+	vendetta: {
+		name: "Vendetta",
+		desc: "When this Pokemon is hit by a damaging move, its Attack rises by 1 stage. The first time it would be knocked out by damage, it survives with 1 HP. If a Pokemon damaged this Pokemon this turn, this Pokemon's Dark- and Ground-type moves ignore that target's defensive boosts and screens. If it knocks out that attacker, it restores 1/4 max HP.",
+		shortDesc: "Hit: +1 Atk; once endures; retaliatory Dark/Ground bypass defenses and can heal.",
+	},
+	orchardbond: {
+		name: "Orchard Bond",
+		desc: "This Pokemon has Hydra Bond and Harvest's effects.",
+		shortDesc: "Hydra Bond + Harvest.",
 	},
 	streettyrant: {
 		name: "Street Tyrant",
@@ -2682,8 +2727,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	windpower: {
 		name: "Wind Power",
-		desc: "This Pokemon is immune to wind moves and raises its Special Attack by 1 stage when hit by a wind move or when Tailwind begins on this Pokemon's side.",
-		shortDesc: "Sp. Atk raised by 1 if hit by a wind move or Tailwind begins. Wind move immunity.",
+		desc: "This Pokemon is immune to wind moves and raises its Special Attack by 1 stage when hit by a wind move, when Tailwind begins on this Pokemon's side, or when it switches in while Tailwind is active.",
+		shortDesc: "Wind move immunity; +1 Sp. Atk from wind moves or allied Tailwind.",
 	},
 	windrider: {
 		name: "Wind Rider",

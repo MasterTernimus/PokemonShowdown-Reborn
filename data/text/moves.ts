@@ -361,8 +361,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barrage: {
 		name: "Barrage",
-		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
-		shortDesc: "Hits 2-5 times in one turn.",
+		desc: "Hits three to five times. This move uses the user's higher attacking stat. Each hit has a 20% chance to lower the target's Special Defense by 1 stage. If this move hits five times, the final hit is a critical hit.",
+		shortDesc: "Hits 3-5 times. Uses higher Atk/SpA. 20% SpD drop/hit; 5th hit crits.",
 		gen4: {
 			desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -1719,7 +1719,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eggbomb: {
 		name: "Egg Bomb",
-		shortDesc: "No additional effect.",
+		desc: "This move becomes the user's primary type. Has a 30% chance to confuse the target.",
+		shortDesc: "Becomes user's primary type. 30% confusion.",
 	},
 	electricterrain: {
 		name: "Electric Terrain",

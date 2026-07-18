@@ -1147,17 +1147,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	barrage: {
 		num: 140,
-		accuracy: 85,
-		basePower: 20,
+		accuracy: 100,
+		basePower: 35,
 		category: "Physical",
-		isNonstandard: "Past",
 		name: "Barrage",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.category = "Special";
+			}
+		},
+		onModifyCritRatio(critRatio, source, target, move) {
+			if (move.hit === 5) return 5;
+		},
+		secondary: {
+			chance: 20,
+			boosts: {
+				spd: -1,
+			},
+		},
 		target: "normal",
-		type: "Normal",
+		type: "Grass",
 		contestType: "Cute",
 	},
 	barrier: {
@@ -4900,14 +4913,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	eggbomb: {
 		num: 121,
-		accuracy: 75,
+		accuracy: 100,
 		basePower: 100,
-		category: "Physical",
-		isNonstandard: "Past",
+		category: "Special",
 		name: "Egg Bomb",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		onModifyType(move, pokemon) {
+			move.type = pokemon.getTypes()[0];
+		},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion',
+		},
 		target: "normal",
 		type: "Normal",
 		contestType: "Cute",

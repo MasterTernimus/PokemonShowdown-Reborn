@@ -67,6 +67,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				target.useItem();
 			}
 		},
+		onStart(pokemon) {
+			if (this.field.isTerrain(['mistyterrain', 'watersurfaceterrain', 'underwaterterrain'])) {
+				pokemon.useItem();
+			}
+		},
 		boosts: {
 			spa: 1,
 		},

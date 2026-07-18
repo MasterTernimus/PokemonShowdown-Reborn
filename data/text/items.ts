@@ -19,7 +19,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	absorbbulb: {
 		name: "Absorb Bulb",
-		shortDesc: "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use.",
+		shortDesc: "Raises Sp. Atk by 1 if hit by Water or on Misty/Water Surface/Underwater. Single use.",
 	},
 	adamantcrystal: {
 		name: "Adamant Crystal",
