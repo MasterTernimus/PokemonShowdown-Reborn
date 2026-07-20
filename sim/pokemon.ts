@@ -2043,6 +2043,7 @@ export class Pokemon {
 			uncheckedassault: ['scrappy', 'striker', 'opportunist'],
 			royalvoice: ['pixilate', 'queenlymajesty'],
 			perfectforesight: ['trace'],
+			hydrabreaker: ['hydrabond', 'moldbreaker'],
 			heavenlychorus: ['pixilate', 'cloudnine'],
 			mourningsnow: ['snowwarning', 'icebody'],
 			venombastion: ['shellarmor'],

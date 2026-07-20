@@ -396,13 +396,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dragonize: {
 		name: "Dragonize",
-		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2, or 1.5 on Fairy Tale Field and Dragon's Den.",
-		shortDesc: "Normal moves become Dragon type; 1.2x power, 1.5x on Fairy Tale/Dragon's Den.",
+		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2.",
+		shortDesc: "Normal moves become Dragon type and have 1.2x power.",
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
-		desc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack. On Fairy Tale Field and Dragon's Den, Dragon attacks are boosted by 2x and this Pokemon resists Fairy-type moves.",
-		shortDesc: "1.5x Dragon power; 2x and resists Fairy on Fairy Tale/Dragon's Den.",
+		desc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack.",
+		shortDesc: "This Pokemon's Dragon-type attacks have 1.5x power.",
 	},
 	drizzle: {
 		name: "Drizzle",
@@ -419,13 +419,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalflower: {
 		name: "Eternal Flower",
-		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. On Fairy Tale Field, this Pokemon's Attack and Special Attack are doubled. On Bewitched Woods, this Pokemon's Defense and Special Defense are 1.5x, it cannot be statused, and it restores 1/16 max HP each turn. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.4x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
-		shortDesc: "Grass attacks use 1.5x offenses; Bewitched bulk/status/heal; enemy gimmicks to 0.4x.",
+		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.4x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Grass attacks use 1.5x offenses; opposing gimmick Pokemon have stats reduced to 0.4x.",
 	},
 	ange: {
 		name: "Ange",
-		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. It boosts Fairy-type moves like Fairy Aura, has Eternal Flower's Grass and Fairy Tale boosts, and on Bewitched Woods its Defense and Special Defense are 1.5x, it cannot be statused, and it restores 1/16 max HP each turn. It reduces opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon's stats to 0.4x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
-		shortDesc: "Eternal Flower + Fairy Aura; Bewitched bulk/status/heal; weakens gimmicks.",
+		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have their stats reduced to 0.4x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Eternal Flower + Fairy Aura; boosts Grass/Fairy pressure and weakens opposing gimmicks.",
 	},
 	ascendance: {
 		name: "Ascendance",
@@ -434,13 +434,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mindfreeze: {
 		name: "Mind Freeze",
-		desc: "This Pokemon is immune to Ice-type attacks and restores 1/4 of its maximum HP when hit by one. It has Ice Body's healing and hail immunity. Its Psychic-type moves have a 40% chance to cause frostbite, and Freezing Glare's frostbite chance is doubled. Its Physical Ice-type moves become Special. In Cold Eclipse, if this Pokemon is not Ice-type, it gains the Ice-type defensive boost, Speed-drop immunity, hail immunity, and native hail recovery.",
+		desc: "This Pokemon is immune to Ice-type attacks and restores 1/4 of its maximum HP when hit by one. It has Ice Body's healing and hail immunity. Its Psychic-type moves have a 40% chance to cause frostbite, and Freezing Glare's frostbite chance is doubled. Its Physical Ice-type moves become Special.",
 		shortDesc: "Absorbs Ice for 25%; Ice Body effects; Psychic moves frostbite; Physical Ice becomes Special.",
 	},
 	frozensummit: {
 		name: "Frozen Summit",
-		desc: "This Pokemon has Thick Fat's effect, is immune to hail damage, and its damaging moves have 1.3x power. In Hail and Cold Eclipse, if this Pokemon is not Ice-type, it gains the Ice-type defensive benefits. In Cold Eclipse, it also gains Speed-drop immunity and native hail recovery.",
-		shortDesc: "Thick Fat + hail immunity; damaging moves 1.3x; gains non-stacking Ice field benefits.",
+		desc: "This Pokemon has Thick Fat's effect, is immune to hail damage, and its damaging moves have 1.3x power.",
+		shortDesc: "Thick Fat + hail immunity; damaging moves have 1.3x power.",
 	},
 	riotamp: {
 		name: "Riot Amp",
@@ -449,13 +449,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relicarmor: {
 		name: "Relic Armor",
-		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.75x damage from attacks, has Pressure's PP effect and field interactions, and its moves ignore Abilities. On Desert, Fairy Tale, Cave, Crystal Cavern, New World, and Volcanic fields, its Defense and Special Defense rise by 1 stage on switch-in.",
-		shortDesc: "No crits; stat drops +1 Def/SpD; takes 0.75x; Pressure + Mold Breaker; field Def/SpD.",
+		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.75x damage from attacks, has Pressure's PP effect, and its moves ignore Abilities.",
+		shortDesc: "No crits; stat drops +1 Def/SpD; takes 0.75x; Pressure + Mold Breaker.",
 	},
 	windysurge: {
 		name: "Windy Surge",
-		desc: "On switch-in, this Pokemon sets Tailwind on its side for 4 turns. On Mountain, Snowy Mountain, and Cold Eclipse fields, it also creates Strong Winds without using the Tailwind move.",
-		shortDesc: "On switch-in, sets Tailwind; creates Strong Winds on matching fields.",
+		desc: "On switch-in, this Pokemon sets Tailwind on its side for 4 turns.",
+		shortDesc: "On switch-in, sets Tailwind on this Pokemon's side for 4 turns.",
 	},
 	burningspirit: {
 		name: "Burning Spirit",
@@ -484,8 +484,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingstorm: {
 		name: "Raging Storm",
-		desc: "This Pokemon's attacks have Mold Breaker, ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 75% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
-		shortDesc: "Mold Breaker; attacks ignore screens/boosts; KO bonus.",
+		desc: "This Pokemon's attacks have Mold Breaker, remove the target's stat changes before damage, and ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 75% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
+		shortDesc: "Mold Breaker; attacks clear target stats and ignore screens/boosts; KO bonus.",
 	},
 	vanguard: {
 		name: "Vanguard",
@@ -494,23 +494,23 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	apexcleave: {
 		name: "Apex Cleave",
-		desc: "This Pokemon's slicing moves have 1.5x power and ignore Substitute, Reflect, Light Screen, and Aurora Veil. During Sandstorm, this Pokemon's moves have +1 critical hit ratio.",
-		shortDesc: "Sharpness; slicing ignores Sub/screens/Veil; Sand gives +1 crit.",
+		desc: "This Pokemon's slicing moves have 1.5x power and ignore Substitute, Reflect, Light Screen, and Aurora Veil.",
+		shortDesc: "Sharpness; slicing moves ignore Substitute, screens, and Aurora Veil.",
 	},
 	aurainstinct: {
 		name: "Aura Instinct",
-		desc: "This Pokemon's moves ignore Abilities, and it cannot flinch. In Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it gains Ultra Instinct's field benefits. The first time this Pokemon would be knocked out, it survives with 1 HP.",
-		shortDesc: "Ignores Abilities; no flinch; Ultra Instinct field boosts; once endures KO.",
+		desc: "This Pokemon's moves ignore Abilities, and it cannot flinch. The first time this Pokemon would be knocked out, it survives with 1 HP.",
+		shortDesc: "Moves ignore Abilities; cannot flinch; once per battle endures a KO.",
 	},
 	royalcurrent: {
 		name: "Royal Current",
-		desc: "This Pokemon has Marvel Scale and Sniper's effects. During Rain, its moves have +1 critical hit ratio. When it lands a critical hit, its Speed rises by 1 stage.",
-		shortDesc: "Marvel Scale + Sniper; Rain gives +1 crit; crits raise Speed.",
+		desc: "This Pokemon has Marvel Scale and Sniper's effects. When it lands a critical hit, its Speed rises by 1 stage.",
+		shortDesc: "Marvel Scale + Sniper; critical hits raise Speed by 1.",
 	},
 	grandmaster: {
 		name: "Grandmaster",
-		desc: "This Pokemon cannot flinch. After it uses Miracle Eye, it resists Dark-type moves. If it uses a status move, it takes 0.25x damage for the rest of the turn. If it moves before the target, its Psychic-type moves ignore resistances. When this Pokemon faints, Future Sight is queued on all opposing slots; existing delayed moves on those slots are pushed farther ahead instead.",
-		shortDesc: "No flinch; status guard; fast Psychic ignores resists; faints into Future Sight.",
+		desc: "This Pokemon cannot flinch. After it uses Miracle Eye, it resists Dark-type moves. If it uses a status move, it takes 0.25x damage for the rest of the turn. If it moves before the target, its Psychic-type moves ignore resistances. When this Pokemon is damaged by an opposing attack, Future Sight is queued on that attacker's slot. When this Pokemon faints, Future Sight is queued on all opposing slots. Existing delayed moves on those slots are pushed farther ahead instead.",
+		shortDesc: "No flinch; status guard; damage/faint queues Future Sight.",
 	},
 	warpath: {
 		name: "War Path",
@@ -609,7 +609,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	frostsovereign: {
 		name: "Frost Sovereign",
-		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP. During Cold Eclipse, it also has Snow Warning's 100% Cursed Body effect.",
+		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP.",
 		shortDesc: "Sets 8-turn Hail; 8-turn Aurora Veil; in Hail moves 1.2x and takes 0.7x.",
 	},
 	stormfright: {
@@ -644,8 +644,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
-		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight used by this Pokemon ignores Dark-type immunity and resistances. If this Pokemon uses a move on opposing Pokemon and their slots do not already have future moves queued, Future Sight is queued on those slots. Spread moves queue Future Sight on all enemies.",
-		shortDesc: "Gains strongest foe's Ability; enemy-targeting/spread moves queue Future Sight.",
+		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight queued by this Ability has 60 BP, ignores defensive boosts, screens, and Abilities, and hits Dark-type Pokemon neutrally. If this Pokemon uses a move on opposing Pokemon, or is damaged by an opposing attack, Future Sight is queued on the affected opposing slots. Spread moves queue Future Sight on all enemies. Existing delayed moves on those slots are pushed farther ahead instead.",
+		shortDesc: "Gains strongest foe's Ability; queues 60 BP Future Sight on enemy slots.",
 	},
 	heavenlychorus: {
 		name: "Heavenly Chorus",
@@ -734,8 +734,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	irondominion: {
 		name: "Iron Dominion",
-		desc: "On switch-in or G-Max activation, this Pokemon activates Pressure and Mirror Armor's effects and heals its ally like Sworn Duty. Field effects that boost or check for Mirror Armor also count this Ability as Mirror Armor.",
-		shortDesc: "Pressure + Mirror Armor + Sworn Duty; counts as Mirror Armor.",
+		desc: "On switch-in or G-Max activation, this Pokemon activates Pressure and Mirror Armor's effects and heals its ally like Sworn Duty.",
+		shortDesc: "Pressure + Mirror Armor + Sworn Duty.",
 	},
 	astralwatcher: {
 		name: "Astral Watcher",
@@ -1095,8 +1095,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	icebody: {
 		name: "Ice Body",
-		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. In Cold Eclipse, if this Pokemon is not Ice-type, it gains the Ice-type defensive boost, Speed-drop immunity, hail immunity, and native hail recovery.",
-		shortDesc: "Heals in Snow; non-Ice users gain Cold Eclipse Ice benefits.",
+		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from hail.",
+		shortDesc: "Heals 1/16 in Snow and is immune to hail damage.",
 		gen8: {
 			desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail.",
 			shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn; immunity to Hail.",
@@ -1345,8 +1345,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magician: {
 		name: "Magician",
-		desc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack. Does not affect Doom Desire and Future Sight. If multiple targets are hit by an attack the item is stolen from the fastest Pokemon, while considering the effect of Trick Room and prioritizing opposing Pokemon before allies. On Fairy Tale Field, Bewitched Woods, Haunted Field, Misty Terrain, and New World, this Pokemon's Special Attack is raised by 1 stage on switch-in.",
-		shortDesc: "Steals items on hit; +1 Sp. Atk on Fairy Tale, Bewitched, Haunted, Misty, and New World.",
+		desc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack. Does not affect Doom Desire and Future Sight. If multiple targets are hit by an attack the item is stolen from the fastest Pokemon, while considering the effect of Trick Room and prioritizing opposing Pokemon before allies.",
+		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon it hits.",
 	},
 	magmaarmor: {
 		name: "Magma Armor",
@@ -1375,7 +1375,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	marvelscale: {
 		name: "Marvel Scale",
-		shortDesc: "If statused or on Bewitched Woods, this Pokemon's Defense is multiplied by 1.5.",
+		shortDesc: "If this Pokemon is statused, its Defense is multiplied by 1.5.",
 	},
 	megalauncher: {
 		name: "Mega Launcher",
@@ -1637,7 +1637,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	piercingdrill: {
 		name: "Piercing Drill",
-		desc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage. This Pokemon also has Power Drill's effect: drill moves have 1.5x power, or 2x power and bypass protection on Rocky Field, Mountain, Snowy Mountain, Cave, and Volcanic Cave.",
+		desc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage. This Pokemon also has Power Drill's effect, boosting drill moves by 1.5x.",
 		shortDesc: "Contact pierces protection. Has Power Drill.",
 	},
 	pixilate: {
@@ -1952,8 +1952,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	schooling: {
 		name: "Schooling",
-		desc: "On switch-in, if this Pokemon is a Wishiwashi that is level 20 or above and has more than 1/4 of its maximum HP left, it changes to School Form. If it is in School Form and its HP drops to 1/4 of its maximum HP or less, it changes to Solo Form at the end of the turn. If it is in Solo Form and its HP is greater than 1/4 its maximum HP at the end of the turn, it changes to School Form.",
-		shortDesc: "If user is Wishiwashi, changes to School Form if it has > 1/4 max HP, else Solo Form.",
+		desc: "On switch-in, if this Pokemon is a Wishiwashi that is level 20 or above and has more than 1/4 of its maximum HP left, it changes to School Form. If it is in School Form and its HP drops to 1/4 of its maximum HP or less, it changes to Solo Form at the end of the turn. If it is in Solo Form and its HP is greater than 1/4 its maximum HP at the end of the turn, it changes to School Form. While in School Form, it has Hydra Bond's effect.",
+		shortDesc: "Wishiwashi changes forms by HP; School Form has Hydra Bond.",
 
 		transform: "[POKEMON] formed a school!",
 		transformEnd: "[POKEMON] stopped schooling!",
@@ -2018,8 +2018,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shedskin: {
 		name: "Shed Skin",
-		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects, reset its negative stat stages to 0, and restore 1/3 max HP. This can also activate while below half HP. On Dragon's Den, this always activates, only cures non-volatile status, raises Attack or Special Attack by 1 stage based on the higher stat, lowers Defense and Special Defense by 1 stage, and restores 1/2 max HP.",
-		shortDesc: "50% chance to cleanse negatives and heal 1/3; on Dragon's Den status cure, offense up, defenses down.",
+		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects, reset its negative stat stages to 0, and restore 1/3 max HP. This can also activate while below half HP.",
+		shortDesc: "50% chance to cleanse negatives, reset negative stat stages, and heal 1/3.",
 	},
 	sheerforce: {
 		name: "Sheer Force",
@@ -2168,17 +2168,17 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	solaridol: {
 		name: "Solar Idol",
-		desc: "This Pokemon has Levitate's Ground immunity. Its Fire-type moves have 1.5x power, its Attack is 1.5x during sun, and Grass-type attacks are resisted. On New World and Starlight Arena, its Defense is raised by 1 stage on switch-in.",
+		desc: "This Pokemon has Levitate's Ground immunity. Its Fire-type moves have 1.5x power, its Attack is 1.5x during sun, and Grass-type attacks are resisted.",
 		shortDesc: "Levitate; Fire power 1.5x; Attack 1.5x in sun; resists Grass.",
 	},
 	lunaridol: {
 		name: "Lunar Idol",
-		desc: "This Pokemon has Levitate's Ground immunity and is immune to hail damage. Its Ice-type moves have 1.5x power, and its Special Attack is 1.5x during hail or snow. On New World and Starlight Arena, its Special Defense is raised by 1 stage on switch-in.",
+		desc: "This Pokemon has Levitate's Ground immunity and is immune to hail damage. Its Ice-type moves have 1.5x power, and its Special Attack is 1.5x during hail or snow.",
 		shortDesc: "Levitate; immune to hail; Ice power 1.5x; Sp. Atk 1.5x in hail/snow.",
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, and stat changes fail unless they come from field effects, exact ability boosts granted by the current field, or this Pokemon's own self-inflicted stat drops. Enemy-caused drops such as Intimidate and Parting Shot still fail. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge. On Fairy Tale Field, Chess Field, New World, and Starlight Arena, this Pokemon's Defense and Special Defense rise by 1 stage.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, and enemy-caused stat drops fail. This Pokemon's own self-inflicted stat drops still work. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge.",
 		shortDesc: "Switch-in Haze/screen clear; blocks enemy drops/setup/screens; skips charge turns.",
 	},
 	royalsun: {
@@ -2270,8 +2270,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stalwart: {
 		name: "Stalwart",
-		desc: "This Pokemon's moves cannot be redirected to a different target by any effect. On New World, Starlight Arena, Fairy Tale Field, and Chess Field, its Special Attack is raised by 1 stage on switch-in.",
-		shortDesc: "Cannot be redirected; +1 Sp. Atk on select fields.",
+		desc: "This Pokemon's moves cannot be redirected to a different target by any effect.",
+		shortDesc: "This Pokemon's moves cannot be redirected to a different target.",
 	},
 	stamina: {
 		name: "Stamina",
@@ -2516,8 +2516,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	thickfat: {
 		name: "Thick Fat",
-		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon is immune to hail damage. In Hail and Cold Eclipse, if this Pokemon is not Ice-type, it gains the Ice-type defensive benefits. In Cold Eclipse, it also gains Speed-drop immunity and native hail recovery.",
-		shortDesc: "Halves Fire/Ice damage stats; hail immune; gains non-stacking Ice field benefits.",
+		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon is immune to hail damage.",
+		shortDesc: "Halves Fire/Ice damage stats and is immune to hail damage.",
 		gen4: {
 			desc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",
 			shortDesc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",
@@ -2772,18 +2772,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlefervor: {
 		name: "Battle Fervor",
-		desc: "If this Pokemon moves before its target, its attacks deal 1.2x damage. If it would move after the attacker, damaging attacks against it deal 0.8x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. On Cold Eclipse, foes also lose 1 Speed on switch-in. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always takes 0.8x damage, cannot have stats lowered, and cannot flinch. This Ability is disabled on Bewitched Woods.",
-		shortDesc: "Fast attacks 1.2x; slow takes 0.8x; hit boosts once; disabled on Bewitched.",
+		desc: "If this Pokemon moves before its target, its attacks deal 1.2x damage. Once per switch-in, if it would move after the attacker, damaging attacks against it deal 0.8x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented.",
+		shortDesc: "Fast attacks 1.2x; once per switch-in slow takes 0.8x; hit boosts once; blocks Berries.",
 	},
 	duskilate: {
 		name: "Duskilate",
-		desc: "This Pokemon's Normal-type moves become Dark-type moves and have their power multiplied by 1.3. On Dark Crystal, New World, Starlight Arena, Cold Eclipse, Short Circuit, Haunted Field, and Bewitched Field, the boost is 1.5x. On Holy Field and Rainbow Field, affected moves become Fairy type and are boosted by 1.5x instead.",
-		shortDesc: "Normal moves become Dark and 1.3x; 1.5x or Fairy on matching fields.",
+		desc: "This Pokemon's Normal-type moves become Dark-type moves and have their power multiplied by 1.3.",
+		shortDesc: "Normal moves become Dark type and have 1.3x power.",
 	},
 	echofiend: {
 		name: "Echo Fiend",
-		desc: "This Pokemon is immune to sound moves. Its sound moves become Flying type and have 1.2x power. On Cave, Volcanic Cave, and Crystal Cave they are boosted by 2x; Volcanic Cave makes them Fire type, and Crystal Cave makes them Crystal type. On Mountain and Snowy Mountain they are boosted by 1.5x.",
-		shortDesc: "Immune to sound; sound moves change type/boost on matching fields.",
+		desc: "This Pokemon is immune to sound moves. Its sound moves become Flying type and have 1.2x power.",
+		shortDesc: "Immune to sound moves; its sound moves become Flying type and have 1.2x power.",
 	},
 	elevate: {
 		name: "Elevate",
@@ -2802,22 +2802,27 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 30% chance to be poisoned, paralyzed, or put to sleep. This Pokemon restores 1/16 max HP at the end of each turn. On certain fields it gains Defense and Special Defense or deals 1.5x damage.",
+		desc: "On switch-in, this Pokemon restores 20% of its own maximum HP and 20% of each adjacent ally's maximum HP. This Pokemon takes 0.8x damage from attacks and its Grass-type moves have 1.2x power. When this Pokemon is hit by a damaging attack, the attacker has a 30% chance to be poisoned, paralyzed, or put to sleep. This Pokemon restores 1/16 max HP at the end of each turn.",
 		shortDesc: "Heals self/allies on entry; takes 0.8x; Grass 1.2x; Effect Spore; 1/16 recovery.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks. While this Pokemon is active, it and its allies take 0.8x damage from moves and cannot be hit by critical hits. This Pokemon restores 1/16 max HP at the end of each turn. On certain fields it gains Defense and Special Defense, deals 1.5x damage, or gains Lightning Rod's effect.",
-		shortDesc: "Water 1.2x; ally protection; 1/16 recovery.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks, and its allies take 0.8x damage from attacks. While this Pokemon is active, it and its allies cannot be hit by critical hits. This Pokemon restores 1/16 max HP at the end of each turn.",
+		shortDesc: "Water 1.2x; self/allies take 0.8x; side blocks crits; 1/16 recovery.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, these moves hit all enemies once at full damage.",
 		shortDesc: "Damaging moves hit 3 times; hits two/three have 30% power. FFA: hits all foes once.",
 	},
+	hydrabreaker: {
+		name: "Hydra Breaker",
+		desc: "This Pokemon has Hydra Bond and Mold Breaker's effects. Its damaging moves become three-hit attacks, with the second and third hits dealing 30% damage, and its moves ignore Abilities.",
+		shortDesc: "Hydra Bond + Mold Breaker.",
+	},
 	burningcrown: {
 		name: "Burning Crown",
-		desc: "This Pokemon and its ally cannot have their stats lowered. When a Pokemon faints, this Pokemon and its ally each gain +1 Attack or Special Attack, whichever is higher for that Pokemon. Fire-type moves used by this Pokemon and its ally have 1.2x power. This Pokemon is airborne and immune to Ground-type moves, takes 0.8x damage from attacks, and restores 1/16 max HP at the end of each turn. On certain fields it gains offensive or defensive boosts and deals 1.5x damage.",
+		desc: "This Pokemon and its ally cannot have their stats lowered. When a Pokemon faints, this Pokemon and its ally each gain +1 Attack or Special Attack, whichever is higher for that Pokemon. Fire-type moves used by this Pokemon and its ally have 1.2x power. This Pokemon is airborne and immune to Ground-type moves, takes 0.8x damage from attacks, and restores 1/16 max HP at the end of each turn.",
 		shortDesc: "User/ally block stat drops; faint boosts higher offense; side Fire 1.2x.",
 	},
 	pollenbloom: {
@@ -2842,7 +2847,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	defragment: {
 		name: "Defragment",
-		desc: "On switch-in, this Pokemon compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. The boost is normally 1 stage, but is 2 stages on New World, Factory, Short Circuit, Glitch, and Starlight Arena. On Cold Eclipse and Fairy Tale, both defensive stats rise by 1 stage instead. This Pokemon's moves cannot miss.",
+		desc: "On switch-in, this Pokemon compares the opposing side's combined Attack and Special Attack. If Attack is higher or tied, its Defense rises; otherwise its Special Defense rises. This Pokemon's moves cannot miss.",
 		shortDesc: "Entry defensive boost based on foes' offenses; moves cannot miss.",
 	},
 	temporalshift: {
@@ -2862,8 +2867,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	swornduty: {
 		name: "Sworn Duty",
-		desc: "On switch-in, this Pokemon heals its adjacent ally by 1/4 max HP. On Fairy Tale Field, it heals 1/3 max HP instead.",
-		shortDesc: "On entry, heals ally 1/4 max HP, or 1/3 on Fairy Tale.",
+		desc: "On switch-in, this Pokemon heals its adjacent ally by 1/4 max HP.",
+		shortDesc: "On entry, heals an adjacent ally by 1/4 max HP.",
 	},
 	inversion: {
 		name: "Inversion",
@@ -2872,8 +2877,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ironclad: {
 		name: "Ironclad",
-		desc: "This Pokemon's Normal-type moves become Steel-type moves and have their power multiplied by 1.2. On Factory, Short Circuit, Fairy Tale, Dragon's Den, Starlight Arena, New World, and Holy Field, the boost is 1.5x. On Cold Eclipse, it does not gain Ice subtyping.",
-		shortDesc: "Normal moves become Steel; 1.2x, or 1.5x on matching fields.",
+		desc: "This Pokemon's Normal-type moves become Steel-type moves and have their power multiplied by 1.2.",
+		shortDesc: "Normal moves become Steel type and have 1.2x power.",
 	},
 	ironcognition: {
 		name: "Iron Cognition",
@@ -2887,22 +2892,22 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	powerdrill: {
 		name: "Power Drill",
-		desc: "This Pokemon's drill moves have 1.5x power. On Rocky Field, Mountain, Snowy Mountain, Cave, and Volcanic Cave, drill moves have 2x power and bypass protection.",
-		shortDesc: "Drill moves 1.5x; 2x and bypass protection on rocky/mountain/cave fields.",
+		desc: "This Pokemon's drill moves have 1.5x power.",
+		shortDesc: "Drill moves have 1.5x power.",
 	},
 	predator: {
 		name: "Predator",
-		desc: "Stat changes this Pokemon receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, this Pokemon's attacks deal 1.3x damage. The boost is 2x on Mountain, Snowy Mountain, and Rocky Field, and 1.5x on Fairy Tale Field, Dragon's Den, and Big Top Arena.",
+		desc: "Stat changes this Pokemon receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, this Pokemon's attacks deal 1.3x damage.",
 		shortDesc: "Has Contrary; boosts attacks into slower/new targets.",
 	},
 	relentlesshunt: {
 		name: "Relentless Hunt",
-		desc: "This Pokemon's moves with 60 or less Base Power gain +1 priority. Its attacks deal 2x damage on Fairy Tale Field, Big Top Arena, Dragon's Den, Mountain, and Snowy Mountain, and 1.5x damage on Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, and New World.",
-		shortDesc: "60 BP or lower moves gain priority; field-dependent damage boost.",
+		desc: "This Pokemon's moves with 60 or less Base Power gain +1 priority.",
+		shortDesc: "Moves with 60 or less Base Power gain +1 priority.",
 	},
 	soulfire: {
 		name: "Soul Fire",
-		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. On Haunted Field, its Defense and Special Defense rise by 1 stage on switch-in. Its Fire- and Ghost-type moves cannot hit Normal-type Pokemon with Ghost-type attacks and are resisted by Steel- and Dark-type Pokemon, but otherwise ignore type resistances. Burns caused by this Pokemon's Fire- and Ghost-type moves or Will-O-Wisp bypass burn immunities, Misty Terrain, and Mist. Fire- and Ghost-type moves from this Ability deal 4x damage to opposing Soul Fire users. On Haunted, Burning, Volcanic, and Bewitched fields, this also activates at the end of each turn.",
+		desc: "This Pokemon draws in Fire- and Ghost-type moves to itself and is immune to Fire-type moves, Ghost-type moves, Will-O-Wisp, and damaging weather conditions, raising Attack and Special Attack by 1 stage when hit by them. Its Fire- and Ghost-type moves cannot hit Normal-type Pokemon with Ghost-type attacks and are resisted by Steel- and Dark-type Pokemon, but otherwise ignore type resistances. Burns caused by this Pokemon's Fire- and Ghost-type moves or Will-O-Wisp bypass burn immunities, Misty Terrain, and Mist. Fire- and Ghost-type moves from this Ability deal 4x damage to opposing Soul Fire users.",
 		shortDesc: "Draws in and absorbs Fire/Ghost; burns bypass immunities; attacks ignore most resists.",
 	},
 	sinisterblaze: {
@@ -2922,7 +2927,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	striker: {
 		name: "Striker",
-		desc: "This Pokemon's kicking moves have 1.4x power. This Ability also counts as a striker Ability for Big Top Arena interactions.",
+		desc: "This Pokemon's kicking moves have 1.4x power.",
 		shortDesc: "Kicking moves have 1.4x power.",
 	},
 	strikersmomentum: {
@@ -2932,12 +2937,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. Ally hits never trigger the boost or healing. On Ashen Beach, New World, Starlight Arena, Holy Field, Cold Eclipse, and Fairy Tale Field, opposing hits can raise Defense once per switch-in for physical hits and Special Defense once per switch-in for special hits. The first time it falls below half HP while active on those fields, it heals 1/8 max HP. This Ability is disabled on Bewitched Woods.",
-		shortDesc: "Mold Breaker; attacks heal; next enemy hit boosts/heals; disabled on Bewitched.",
+		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. Ally hits never trigger the boost or healing.",
+		shortDesc: "Mold Breaker; attacks heal once per turn; next enemy hit boosts Atk/SpA and heals.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "This Pokemon's moves ignore abilities. Its attacks deal 2x damage against targets protected by Reflect, Light Screen, or Aurora Veil. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage and once per battle can endure a KO from above 50% HP at 1 HP. On Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it always deals 1.5x damage, always takes 66% less damage, and gains +1 Accuracy on entry. It counts as a Striker ability on Big Top Arena. This Ability is disabled on Bewitched Woods.",
+		desc: "This Pokemon's moves ignore abilities. Its attacks deal 2x damage against targets protected by Reflect, Light Screen, or Aurora Veil. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage and once per battle can endure a KO from above 50% HP at 1 HP.",
 		shortDesc: "Moves ignore abilities; 2x vs screens/Veil; fast attacks 1.5x; pre-move guard/endure.",
 	},
 

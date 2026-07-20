@@ -437,15 +437,24 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onResidualOrder: 3,
 		onResidual(target: Pokemon) {
 			if (this.getOverflowedTurnCount() < this.effectState.endingTurn) return;
+			const slotTarget = this.getAtSlot(this.effectState.targetSlot);
+			if (slotTarget.fainted && (this.effectState.moveData?.perfectForesight || this.effectState.moveData?.grandmasterForesight)) {
+				this.effectState.endingTurn = this.turn + 1;
+				this.add('-message', `${this.effectState.moveData.name} has no target and was delayed to turn ${this.effectState.endingTurn}.`);
+				return;
+			}
 			target.side.removeSlotCondition(this.getAtSlot(this.effectState.targetSlot), 'futuremove');
 		},
 		onEnd(target) {
 			const data = this.effectState;
 			// time's up; time to hit! :D
 			const move = this.dex.moves.get(data.move);
-			if ((target.fainted || target === data.source) && data.moveData?.perfectForesight) {
-				const replacement = data.source.foes().find((foe: Pokemon) => foe && foe.hp && !foe.fainted && foe !== data.source);
-				if (replacement) target = replacement;
+			if ((target.fainted || target === data.source) && (data.moveData?.perfectForesight || data.moveData?.grandmasterForesight)) {
+				data.endingTurn = this.turn + 1;
+				this.add('-message', `${move.name} has no target and was delayed to turn ${data.endingTurn}.`);
+				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
+				return;
 			}
 			if (target.fainted || target === data.source) {
 				this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
@@ -465,6 +474,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			if (data.moveData?.perfectForesight && data.perfectForesightQueued > 1) {
+				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+					...data,
+					endingTurn: this.turn + 1,
+					perfectForesightQueued: data.perfectForesightQueued - 1,
+				});
+				this.add('-message', `${move.name} will strike again on turn ${this.turn + 1}.`);
+			}
 			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
 				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
 			}
@@ -867,12 +885,16 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		noCopy: true,
 		onStart(pokemon) {
 			this.effectState.turns = 0;
-			if (pokemon.gigantamax || pokemon.species.forme === 'Gmax') {
+			if (pokemon.gigantamax || pokemon.species.forme?.includes('Gmax')) {
 				(pokemon as any).gmaxOriginalMoveSlots = pokemon.moveSlots.map(slot => ({ pp: slot.pp, maxpp: slot.maxpp }));
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.pp = 8;
 					moveSlot.maxpp = 8;
 				}
+				for (const volatile of Object.keys(pokemon.volatiles)) {
+					if (volatile !== 'dynamax') pokemon.removeVolatile(volatile);
+				}
+				this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
 			}
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
