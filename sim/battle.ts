@@ -3435,32 +3435,40 @@ export class Battle {
 		this.sentLogPos = this.log.length;
 
 		if (!this.sentEnd && this.ended) {
-			const log = {
+			const log: {
+				winner: string | undefined,
+				seed: PRNGSeed,
+				turns: number,
+				p1: string,
+				p2: string,
+				p3?: string,
+				p4?: string,
+				p1team: PokemonSet[],
+				p2team: PokemonSet[],
+				p3team?: PokemonSet[],
+				p4team?: PokemonSet[],
+				score: number[],
+				inputLog: string[],
+			} = {
 				winner: this.winner,
 				seed: this.prngSeed,
 				turns: this.turn,
 				p1: this.sides[0].name,
 				p2: this.sides[1].name,
-				p3: this.sides[2]?.name,
-				p4: this.sides[3]?.name,
 				p1team: this.sides[0].team,
 				p2team: this.sides[1].team,
-				p3team: this.sides[2]?.team,
-				p4team: this.sides[3]?.team,
 				score: [this.sides[0].pokemonLeft, this.sides[1].pokemonLeft],
 				inputLog: this.inputLog,
 			};
 			if (this.sides[2]) {
+				log.p3 = this.sides[2].name;
+				log.p3team = this.sides[2].team;
 				log.score.push(this.sides[2].pokemonLeft);
-			} else {
-				delete log.p3;
-				delete log.p3team;
 			}
 			if (this.sides[3]) {
+				log.p4 = this.sides[3].name;
+				log.p4team = this.sides[3].team;
 				log.score.push(this.sides[3].pokemonLeft);
-			} else {
-				delete log.p4;
-				delete log.p4team;
 			}
 			this.send('end', JSON.stringify(log));
 			this.sentEnd = true;
