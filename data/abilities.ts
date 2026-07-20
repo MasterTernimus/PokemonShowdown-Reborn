@@ -2205,15 +2205,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpA(spa, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) return this.chainModify(1.5);
 		},
-		onModifyMove(move) {
-			if (this.movehasType(move, 'Fire')) {
-				move.ignoreImmunity = true;
-				move.onEffectiveness = function (typeMod) {
-					if (typeMod < 0) return 0;
-					return typeMod;
-				};
-			}
-		},
 		onAfterMove(source, target, move) {
 			if (!this.movehasType(move, 'Fire')) return;
 			if (this.field.setWeather('sunnyday', source, this.dex.abilities.get('hellfireeclipse'))) {
@@ -8336,7 +8327,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (source?.hasAbility('souleater') && target.hasAbility('soulfire') && this.movehasType(move, 'Ghost')) {
 				return this.chainModify(2);
 			}
-			if (target.hasAbility('soulfire') && this.movehasType(move, ['Fire', 'Ghost'])) {
+			if (source?.hasAbility('soulfire') && target.hasAbility('soulfire') && this.movehasType(move, ['Fire', 'Ghost'])) {
 				return this.chainModify(4);
 			}
 		},
@@ -10333,7 +10324,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.ultraEgoPinch = true;
-				this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 				return;
 			}
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
