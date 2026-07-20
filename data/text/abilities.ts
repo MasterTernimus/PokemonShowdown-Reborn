@@ -569,8 +569,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hellfireeclipse: {
 		name: "Hellfire Eclipse",
-		desc: "During harsh sunlight, this Pokemon's Attack and Special Attack are multiplied by 1.5. Its Fire-type moves ignore Fire immunities and resistances. After this Pokemon uses a Fire-type move, it sets Sunny Day for 2 turns.",
-		shortDesc: "In Sun: Atk/SpA 1.5x; Fire ignores immunity/resists; Fire moves set 2-turn Sun.",
+		desc: "During harsh sunlight, this Pokemon's Attack and Special Attack are multiplied by 1.5. After this Pokemon uses a Fire-type move, it sets Sunny Day for 2 turns.",
+		shortDesc: "In Sun: Atk/SpA 1.5x; Fire moves set 2-turn Sun.",
 	},
 	sacrededge: {
 		name: "Sacred Edge",

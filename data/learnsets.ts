@@ -138,7 +138,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			vinewhip: ["9L11", "8L3", "8V", "7L7", "7V", "6L9", "6S4", "5L9", "5S2", "4L9", "3L10", "3S1"],
 			weatherball: ["9M", "8M", "5S3"],
          whirlwind: ["9E"], 
-         withdraw: ["9E"], 
+         withdraw: ["9E"],
+         shelter: ["9E"],
+ 
 			workup: ["9M", "8M", "7M"],
 			worryseed: ["9L35", "8L30", "7T", "7L31", "6T", "6L31", "5T", "5L31", "4T", "4L31"],
 		},
@@ -903,6 +905,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["9M", "8M"],
 			whirlpool: ["9M", "8M", "7V", "4M"],
 			withdraw: ["9L11", "8L6", "8V", "7L10", "7V", "6L10", "6S3", "5L10", "5S1", "4L10", "3L10", "3S0"],
+			shelter: ["9L11", "8L6", "8V", "7L10", "7V", "6L10", "6S3", "5L10", "5S1", "4L10", "3L10", "3S0"],
+
 			workup: ["9M", "8M", "7M"],
 			yawn: ["9E", "8E", "7E", "6E", "5E", "4E", "3E"],
          zapcannon: ["9E"], 
@@ -921,7 +925,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	wartortle: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L11", "8L1", "8V", "7L10", "7V", "6L10", "5L10", "4L10", "3L10"],
 			aquatail: ["9L33", "8L30", "7T", "7L33", "6T", "6L32", "5T", "5L32", "4T", "4L32"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			aurasphere: ["9M", "8M"],
@@ -1028,7 +1032,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	blastoise: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L11", "8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			acid: ["9L1"],
 			aquajet: ["9L1", "8V"],
 			aquatail: ["9L33", "8L30", "7T", "7L33", "6T", "6L32", "5T", "5L32", "4T", "4L32"],
@@ -13556,7 +13560,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	slowbro: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1", "8V", "7L1", "7V", "6L37", "5L37", "4L37", "3L37"],
 			aerialace: ["9M", "7M", "6M", "5M"],
 			afteryou: ["9M", "7T", "6T", "5T"],
 			amnesia: ["9L44", "8M", "8L27", "8V", "7L43", "7V", "6L43", "5L43", "4L47", "3L36"],
@@ -13726,7 +13730,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	slowbrogalar: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1"],
 			acid: ["9L6", "8L1"],
 			acidspray: [],
 			amnesia: ["9L42", "8M", "8L27"],
@@ -13849,7 +13853,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	slowking: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1"],
 			acidspray: ["9M"],
 			afteryou: ["9M", "7T", "6T", "5T"],
 			allyswitch: ["9L1", "7T"],
@@ -15565,7 +15569,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	shellder: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L4", "8V", "7L4", "7V", "6L4", "5L4", "5D", "4L4", "3L1", "3S0", "3S1"],
 			aquaring: ["9E", "8E", "7E", "6E", "5E"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			aurorabeam: ["9L20", "8L24", "8V", "7L37", "7V", "6L37", "5L37", "4L32", "3L17", "3S0", "3S2"],
@@ -15663,7 +15667,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	cloyster: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			aurorabeam: ["9L20", "8L1", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			avalanche: ["9M", "8M", "4M"],
@@ -16726,7 +16730,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			watergun: ["9L1", "8L1", "7V"],
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
 			whirlpool: ["9M", "8M", "7V", "4M"],
-         withdraw: ["9E"], 
+         withdraw: ["9E"],
+         shelter: ["9E"],
+ 
 			xscissor: ["9M", "8M", "8V", "7M", "6M", "5M", "4M"],
 		},
 		encounters: [
@@ -24941,7 +24947,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	omanyte: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1", "8V", "7L1", "7V", "6L1", "5L1", "5S0", "4L1", "3L1"],
          acid: ["9E"], 
 			ancientpower: ["9L31", "8L30", "7L37", "7V", "6L37", "5L37", "4T", "4L37", "3L49"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -25039,7 +25045,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	omastar: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			ancientpower: ["9L31", "8L30", "7L37", "7V", "6L37", "5L37", "4T", "4L37", "3L55"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			aurasphere: ["9M"],
@@ -29593,7 +29599,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			uproar: ["9M", "8M", "7T", "6T", "5T", "5D", "4T"],
 			waterpulse: ["9M", "7T", "6T", "4M", "3M"],
 			wish: ["9L41", "8L52", "7L29", "6L29", "5L29", "4L28", "3L29"],
-         withdraw: ["9L5"], 
+         withdraw: ["9L5"],
+         shelter: ["9L5"],
+ 
 			workup: ["9M", "8M", "7M", "5M"],
 			yawn: ["9L19", "8L20", "7L13", "6L13", "5L13", "4L15", "3L13", "3S0"],
 			zapcannon: ["9M", "7V"],
@@ -29606,7 +29614,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	togetic: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L5"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			afteryou: ["9L37", "8L28", "7T", "7L53", "6T", "6L53", "5T", "5L53"],
          agility: ["9L1"], 
@@ -29742,7 +29750,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	togekiss: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L5"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M"],
 			aeroblast: ["9M"],
 			afteryou: ["9L37", "8L1", "7T", "7L1", "6T", "6L1"],
@@ -34316,6 +34324,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          triattack: ["9E"], 
 			venoshock: ["9M", "8M", "7M", "6M", "5M"],
 			withdraw: ["9L1", "8L1", "7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S0"],
+			shelter: ["9L1", "8L1", "7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S0"],
+
 			wrap: ["9L5", "8L1", "7L9", "7V", "6L9", "5L9", "4L22", "3L9", "3S0"],
 			arenitewall: ["9M"],
 		},
@@ -46658,6 +46668,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["9M", "8M"],
 			willowisp: ["9M", "8M", "7M", "6M", "5M", "4M"],
 			withdraw: ["9L10", "8L4", "7L7", "6L7", "5L7", "4L7"],
+			shelter: ["9L10", "8L4", "7L7", "6L7", "5L7", "4L7"],
+
 			yawn: ["9E", "8E", "8S0", "7E", "6E", "5E", "4E", "3E"],
 			zenheadbutt: [],
 		},
@@ -53588,6 +53600,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trailblaze: [],
 			wideguard: ["9E", "7E", "6E", "5E"],
 			withdraw: ["9L1", "7L5", "6L5", "5L5", "5S0", "5S1", "4L5"],
+			shelter: ["9L1", "7L5", "6L5", "5L5", "5S0", "5S1", "4L5"],
+
 			workup: ["9M", "7M"],
 			worryseed: ["9E", "7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 			zenheadbutt: [],
@@ -53600,7 +53614,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	grotle: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "7L1", "6L1", "5L1", "4L1"],
 			absorb: ["9L6", "7L1", "6L9", "5L9", "4L9"],
 			amnesia: ["9M"],
 			attract: ["9M", "7M", "6M", "5M", "4M"],
@@ -53684,7 +53698,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	torterra: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "7L1", "6L1", "5L1", "4L1"],
 			absorb: ["9L6", "7L1", "6L1", "5L1", "4L1"],
 			amnesia: ["9M"],
 			attract: ["9M", "7M", "6M", "5M", "4M"],
@@ -67561,7 +67575,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	dwebble: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L7", "8L4", "7L7", "6L7", "5L7"],
 			aerialace: ["9M", "7M", "6M", "5M"],
 			attract: ["9M", "8M", "7M", "6M", "5M"],
 			block: ["9E", "8E", "7T", "7E", "6T", "6E", "5T", "5E"],
@@ -67630,7 +67644,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	crustle: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L7", "8L1", "7L1", "6L1", "5L1"],
 			aerialace: ["9M", "7M", "6M", "5M"],
 			attract: ["9M", "8M", "7M", "6M", "5M"],
 			block: ["9M", "7T", "6T", "5T"],
@@ -68385,7 +68399,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	tirtouga: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1", "7L1", "6L1", "5L1"],
 			ancientpower: ["9L25", "8L12", "7L18", "6L18", "5L18"],
 			aquajet: ["9L11", "8L6", "7L15", "6L15", "5L15", "5S0"],
 			aquatail: ["9L41", "8L36", "7T", "7L41", "6T", "6L41", "5T", "5L41"],
@@ -68465,7 +68479,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	carracosta: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1", "7L1", "6L1", "5L1"],
 			ancientpower: ["9L25", "8L12", "7L18", "6L18", "5L18"],
 			aquajet: ["9L11", "8L1", "7L15", "6L15", "5L15"],
 			aquatail: ["9L41", "8L36", "7T", "7L45", "6T", "6L45", "5T", "5L45"],
@@ -80432,12 +80446,14 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			waterpulse: ["9E", "7T", "6T"],
 			watersport: ["9E", "7E", "6E"],
 			withdraw: ["9L1", "8L4", "7L7", "6L7"],
+			shelter: ["9L1", "8L4", "7L7", "6L7"],
+
 			xscissor: ["9M", "8M", "7M", "6M"],
 		},
 	},
 	barbaracle: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1", "7L7", "6L7"],
 			aerialace: ["9M", "7M", "6M"],
 			ancientpower: ["9L20", "8L20", "7L28", "6L28"],
          aquacutter: ["9L37"], 
@@ -90115,6 +90131,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			voltswitch: ["9M", "8M", "7M", "7S2"],
 			wildcharge: ["9L58", "8M", "8L60", "7M", "7L32"],
 			withdraw: ["9L5", "8L5", "7L1"],
+			shelter: ["9L5", "8L5", "7L1"],
+
 			workup: ["9M", "8M", "7M"],
 				zapcannon: ["9M"],
 },
@@ -90128,7 +90146,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	tapulele: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L5", "8L5", "7L1"],
 			allyswitch: ["9M", "8M", "7T"],
 			aromatherapy: ["9L45", "8L10", "7L1"],
 			aromaticmist: ["9L30", "8L30", "7L1"],
@@ -90217,7 +90235,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	tapubulu: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L5", "8L5", "7L1"],
 			brickbreak: ["9M", "8M", "7M"],
 			brutalswing: ["9M", "8M", "7M"],
 			bulkup: ["9M", "8M", "7M"],
@@ -90316,7 +90334,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	tapufini: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L5", "8L5", "7L1"],
 			aquaring: ["9L53", "8L15", "7L53", "7S0", "7S1"],
 			blizzard: ["9M", "8M", "7M"],
 			brine: ["9L32", "8M", "8L25", "8S2", "7L32"],
@@ -93961,7 +93979,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	applin: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1"],
          appleacid: ["9E"], 
 			astonish: ["9L1", "8L1"],
 			attract: ["9E", "8M"],
@@ -93982,7 +94000,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	flapple: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1"],
 			acidspray: ["9L12", "8L4"],
 			acrobatics: ["9L24", "8M", "8L8"],
 			aerialace: [],
@@ -94049,7 +94067,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	appletun: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1"],
 			amnesia: ["9M", "8M"],
 			appleacid: ["9L28", "8L28"],
 			astonish: ["9L1", "8L1"],
@@ -94884,7 +94902,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	sinistea: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1"],
 			allyswitch: ["9M", "8M"],
 			aromatherapy: ["9L20", "8L30"],
 			aromaticmist: ["9L5", "8L6"],
@@ -94993,7 +95011,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	polteageist: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1", "8L1"],
 			allyswitch: ["9M", "8M"],
 			aromatherapy: ["9L20", "8L30"],
 			aromaticmist: ["9L5", "8L1"],
@@ -105881,11 +105899,13 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: [],
          toxic: ["9M"], 
 			withdraw: ["9L1"],
+			shelter: ["9L1"],
+
 		},
 	},
 	poltchageist: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1"],
 			absorb: ["9L6"],
 			astonish: ["9L1"],
 			calmmind: ["9M"],
@@ -105982,7 +106002,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	sinistcha: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1"],
 			absorb: ["9L6"],
 			astonish: ["9L1"],
 			calmmind: ["9M"],
@@ -106507,7 +106527,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	hydrapple: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1"],
 			astonish: ["9L1"],
 			bodypress: ["9M"],
 			bodyslam: ["9M"],
@@ -106953,6 +106973,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["9M"],
 			wildcharge: ["9M"],
 			withdraw: ["9L1"],
+			shelter: ["9L1"],
+
 			zenheadbutt: ["9M"],
 			arenitewall: ["9M"],
 		},
@@ -106963,7 +106985,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	pecharunt: {
 		learnset: {
-			shelter: [],
+			shelter: ["9L1"],
 			acidspray: ["9M"],
 			astonish: ["9L1"],
          confide: ["9M"], 
@@ -109511,7 +109533,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	mollux: {
 		learnset: {
-			shelter: [],
+			shelter: ["8L1", "7L9", "5L9"],
 			acid: ["8L4", "7L4", "5L4"],
 			acidarmor: ["8L32", "7L33", "5L28"],
 			acidspray: ["8L12", "7L12", "5L12"],
@@ -110718,7 +110740,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	crucibelle: {
 		learnset: {
-			shelter: [],
+			shelter: ["8L1", "7L1", "6L1"],
 			acidarmor: ["8L40", "7L32", "6L32"],
 			acidspray: [],
 			assurance: ["8M"],
@@ -112523,6 +112545,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			venomdrench: ["8M"],
 			venoshock: ["8M", "8L20"],
 			withdraw: ["8L5"],
+			shelter: ["8L5"],
+
 		},
 	},
 	saharascal: {
