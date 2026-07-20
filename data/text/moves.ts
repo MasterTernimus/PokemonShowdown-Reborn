@@ -7619,8 +7619,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	zippyzap: {
 		name: "Zippy Zap",
-		desc: "Has a 100% chance to raise the user's evasion by 1 stage.",
-		shortDesc: "Goes first. Raises user's evasion by 1.",
+		desc: "Usually moves before other attacks. This move will always result in a critical hit.",
+		shortDesc: "Usually moves first. Always crits.",
 		gen7: {
 			desc: "Will always result in a critical hit.",
 			shortDesc: "Nearly always goes first. Always crits.",

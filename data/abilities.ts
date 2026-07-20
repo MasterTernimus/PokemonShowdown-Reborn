@@ -354,13 +354,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 237,
 	},
 	battery: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.category !== 'Special') return;
+			let modifier = 1.3;
+			if (this.field.isTerrain('electricterrain') || this.field.effectiveWeather() === 'raindance') {
+				modifier *= 1.5;
+			}
+			this.debug('Battery boost');
+			return this.chainModify(modifier);
+		},
 		onAllyBasePowerPriority: 22,
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (attacker !== this.effectState.target && move.category === 'Special') {
 				this.debug('Battery boost');
-				if (this.field.isTerrain('electricterrain')) {
-					return this.chainModify(1.5);
-				}
 				return this.chainModify(1.3);
 			}
 		},
@@ -567,6 +574,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!['garchompbattlebond', 'greninjaash'].includes(target.species.id)) return;
 			this.debug('Battle Bond transformed damage reduction');
 			return this.chainModify(0.7);
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect?.effectType !== 'Move') return;
+			if (!target.hasAbility('battlebond')) return;
+			if (target.abilityState.battleBondEndured) return;
+			if (target.hp <= target.maxhp / 2 || damage < target.hp) return;
+			target.abilityState.battleBondEndured = true;
+			return target.hp - 1;
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Battle Bond",
@@ -7713,6 +7728,47 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Sand Veil",
 		rating: 1.5,
 		num: 8,
+	},
+	safeharbor: {
+		onTryHit(target, source, move) {
+			if (target !== source && (this.movehasType(move, 'Water') || this.movehasType(move, 'Ice'))) {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Safe Harbor');
+				}
+				return null;
+			}
+		},
+		onWeather(target, source, effect) {
+			if (effect.id === 'hail' || effect.id === 'snow') {
+				if (effect.id === 'hail' && this.field.isTerrain('coldeclipseterrain')) {
+					this.heal(target.baseMaxhp / 8);
+					return;
+				}
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if ((this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) && !(this.field.isWeather(['hail', 'snow']))) {
+				this.heal(pokemon.baseMaxhp / 16);
+			}
+			if (pokemon.status && (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain'))) {
+				this.debug('safe harbor hydration');
+				this.add('-activate', pokemon, 'ability: Safe Harbor');
+				pokemon.cureStatus();
+			}
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			if (target !== this.effectState.target && target.isAlly(this.effectState.target)) {
+				this.debug('Safe Harbor Friend Guard weaken');
+				return this.chainModify(0.75);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Safe Harbor",
+		rating: 4,
+		num: 10196,
 	},
 	sapsipper: {
 		onTryHitPriority: 1,

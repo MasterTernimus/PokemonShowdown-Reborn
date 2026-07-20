@@ -137,7 +137,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battery: {
 		name: "Battery",
-		shortDesc: "This Pokemon's allies have the power of their special attacks multiplied by 1.3.",
+		shortDesc: "This Pokemon and its allies have their special attacks boosted by 1.3x.",
 	},
 	battlearmor: {
 		name: "Battle Armor",
@@ -1944,6 +1944,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Sand Veil",
 		desc: "If Sandstorm is active, the accuracy of moves used against this Pokemon is multiplied by 0.8. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "If Sandstorm is active, this Pokemon's evasiveness is 1.25x; immunity to Sandstorm.",
+	},
+	safeharbor: {
+		name: "Safe Harbor",
+		desc: "This Pokemon absorbs Water- and Ice-type attacks to restore 1/4 of its maximum HP. It also has Ice Body and Hydration's effects.",
+		shortDesc: "Absorbs Water/Ice moves; Ice Body + Hydration.",
 	},
 	sapsipper: {
 		name: "Sap Sipper",
