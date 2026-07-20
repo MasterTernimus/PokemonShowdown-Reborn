@@ -400,6 +400,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			pokemon.abilityState.battleFervorDamageReduced = false;
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Battle Fervor');
 			this.effectState.unnerved = true;
@@ -463,12 +464,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!move || move.category === 'Status') return;
+			if (target.abilityState.battleFervorDamageReduced) return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Battle Fervor field weaken');
+				target.abilityState.battleFervorDamageReduced = true;
 				return this.chainModify(0.8);
 			}
 			if (this.queue.willMove(target)) {
 				this.debug('Battle Fervor weaken');
+				target.abilityState.battleFervorDamageReduced = true;
 				return this.chainModify(0.8);
 			}
 		},
@@ -1717,6 +1721,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.infiltrates = true;
 			move.ignoreDefensive = true;
 		},
+		onTryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			const boosts: SparseBoostsTable = {};
+			let changed = false;
+			let stat: BoostID;
+			for (stat in target.boosts) {
+				if (target.boosts[stat]) {
+					boosts[stat] = 0;
+					changed = true;
+				}
+			}
+			if (changed) {
+				target.setBoost(boosts);
+				this.add('-clearboost', target, '[from] ability: Raging Storm', `[of] ${source}`);
+			}
+		},
 		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
 		},
@@ -1891,6 +1911,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.abilityState.grandmasterGuard === this.turn && move.category !== 'Status') return this.chainModify(0.25);
 		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target || target.isAlly(source) || move.flags['futuremove']) return;
+			const slotCondition = source.side.slotConditions[source.position]['futuremove'];
+			if (slotCondition) {
+				slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+				this.add('-start', target, 'move: Future Sight', '[from] ability: Grandmaster', '[silent]');
+				return;
+			}
+			if (!source.side.addSlotCondition(source, 'futuremove', target, this.dex.abilities.get('grandmaster'))) return;
+			Object.assign(source.side.slotConditions[source.position]['futuremove'], {
+				move: 'futuresight',
+				source: target,
+				moveData: {
+					id: 'futuresight',
+					name: "Future Sight",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+					grandmasterForesight: true,
+					effectType: 'Move',
+					type: 'Psychic',
+				},
+			});
+			this.add('-start', target, 'move: Future Sight', '[from] ability: Grandmaster');
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (type === 'Dark' && target.abilityState.grandmasterMiracleEye) return typeMod - 1;
 		},
@@ -1915,6 +1962,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						category: "Special",
 						priority: 0,
 						flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+						grandmasterForesight: true,
 						effectType: 'Move',
 						type: 'Psychic',
 					},
@@ -2616,6 +2664,49 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target || target.isAlly(source) || move.flags['futuremove']) return;
+			const slotCondition = source.side.slotConditions[source.position]['futuremove'];
+			if (slotCondition) {
+				this.add('-start', target, 'move: Future Sight', '[from] ability: Perfect Foresight', '[silent]');
+				if (slotCondition.moveData?.perfectForesight) {
+					slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
+					this.add('-message', `Perfect Foresight queued another Future Sight after turn ${slotCondition.endingTurn}.`);
+				} else {
+					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+					this.add('-message', `Perfect Foresight delayed Future Sight to turn ${slotCondition.endingTurn}.`);
+				}
+				return;
+			}
+			if (!source.side.addSlotCondition(source, 'futuremove')) return;
+			Object.assign(source.side.slotConditions[source.position]['futuremove'], {
+				move: 'futuresight',
+				source: target,
+				moveData: {
+					id: 'futuresight',
+					name: "Future Sight",
+					accuracy: 100,
+					basePower: 60,
+					category: "Special",
+					priority: 0,
+					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+					ignoreAbility: true,
+					ignoreDefensive: true,
+					ignoreImmunity: true,
+					infiltrates: true,
+					perfectForesight: true,
+					effectType: 'Move',
+					type: 'Psychic',
+					onEffectiveness(typeMod: number, target: Pokemon, type: string) {
+						if (type === 'Dark') return 0;
+						return typeMod;
+					},
+				},
+				perfectForesightQueued: 1,
+			});
+			this.add('-start', target, 'move: Future Sight', '[from] ability: Perfect Foresight');
+			this.add('-message', `Perfect Foresight's Future Sight will strike on turn ${source.side.slotConditions[source.position]['futuremove'].endingTurn}.`);
+		},
 		onAfterMove(source, target, move) {
 			if (move.id === 'futuresight' || move.flags['futuremove'] || move.callsMove) return;
 			let targets = move.hitTargets?.length ? [...move.hitTargets] : target ? [target] : [];
@@ -2626,8 +2717,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!hitTarget || hitTarget === source || source.isAlly(hitTarget)) continue;
 				const slotCondition = hitTarget.side.slotConditions[hitTarget.position]['futuremove'];
 				if (slotCondition) {
-					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
 					this.add('-start', source, 'move: Future Sight', '[from] ability: Perfect Foresight', '[silent]');
+					if (slotCondition.moveData?.perfectForesight) {
+						slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
+						this.add('-message', `Perfect Foresight queued another Future Sight after turn ${slotCondition.endingTurn}.`);
+					} else {
+						slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+						this.add('-message', `Perfect Foresight delayed Future Sight to turn ${slotCondition.endingTurn}.`);
+					}
 					continue;
 				}
 				if (!hitTarget.side.addSlotCondition(hitTarget, 'futuremove')) continue;
@@ -2638,7 +2735,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						id: 'futuresight',
 						name: "Future Sight",
 						accuracy: 100,
-						basePower: 120,
+						basePower: 60,
 						category: "Special",
 						priority: 0,
 						flags: { allyanim: 1, metronome: 1, futuremove: 1 },
@@ -2649,12 +2746,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						perfectForesight: true,
 						effectType: 'Move',
 						type: 'Psychic',
-						onEffectiveness(typeMod: number) {
-							return 0;
+						onEffectiveness(typeMod: number, target: Pokemon, type: string) {
+							if (type === 'Dark') return 0;
+							return typeMod;
 						},
 					},
 				});
+				hitTarget.side.slotConditions[hitTarget.position]['futuremove'].perfectForesightQueued = 1;
 				this.add('-start', source, 'move: Future Sight', '[from] ability: Perfect Foresight');
+				this.add('-message', `Perfect Foresight's Future Sight will strike on turn ${hitTarget.side.slotConditions[hitTarget.position]['futuremove'].endingTurn}.`);
 			}
 		},
 		flags: { breakable: 1 },
@@ -3827,7 +3927,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyModifyDamage(damage, source, target, move) {
 			const pokemon = this.effectState.target;
-			if (move.category !== 'Status' && (target === pokemon || target.isAlly(pokemon))) {
+			if (move.category !== 'Status' && target.isAlly(pokemon)) {
 				return this.chainModify(0.8);
 			}
 		},
@@ -4641,6 +4741,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Hydra Bond",
 		rating: 4.5,
 		num: 10000,
+	},
+	hydrabreaker: {
+		onModifyMove(move, source) {
+			move.ignoreAbility = true;
+			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source);
+		},
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			return this.dex.abilities.get('hydrabond').onSourceModifySecondaries?.call(this, secondaries, target, source, move);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('hydrabond').onBasePower?.call(this, basePower, source, target, move);
+		},
+		flags: {},
+		name: "Hydra Breaker",
+		rating: 5,
+		num: 10147,
 	},
 	orchardbond: {
 		onModifyMove(move, source) {
@@ -7637,6 +7753,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 157,
 	},
 	schooling: {
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.id !== 'wishiwashischool') return;
+			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, pokemon);
+		},
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (source.species.id !== 'wishiwashischool') return;
+			return this.dex.abilities.get('hydrabond').onSourceModifySecondaries?.call(this, secondaries, target, source, move);
+		},
+		onBasePower(basePower, source, target, move) {
+			if (source.species.id !== 'wishiwashischool') return;
+			return this.dex.abilities.get('hydrabond').onBasePower?.call(this, basePower, source, target, move);
+		},
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 4 || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {

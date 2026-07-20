@@ -1257,7 +1257,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cut: {
 		name: "Cut",
-		shortDesc: "No additional effect.",
+		desc: "Steel-type slicing move with a high critical hit ratio. Before damage, removes the target's Defense boosts. If the target has no Defense boosts, this move has a 30% chance to lower Defense by 1 stage.",
+		shortDesc: "High crit. Removes Defense boosts, or 30% chance to lower Defense.",
 	},
 	darkestlariat: {
 		name: "Darkest Lariat",
@@ -2215,8 +2216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fly: {
 		name: "Fly",
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Flies up on first turn, then strikes the next turn.",
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids most attacks. If Tailwind is active on the user's side, this move attacks immediately and has a high critical hit ratio.",
+		shortDesc: "Charges, then hits. During Tailwind, attacks immediately with +1 crit.",
 		gen5: {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -2275,8 +2276,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	followme: {
 		name: "Follow Me",
-		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal. This effect is ignored while the user is under the effect of Sky Drop.",
-		shortDesc: "The foes' moves target the user on the turn used.",
+		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, this redirects attacks from only one opponent, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
+		shortDesc: "Redirects foes' moves. FFA: one opponent, 0.75x redirected damage, 2+ redirects heal.",
 		gen6: {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double or Triple Battle. This effect is ignored while the user is under the effect of Sky Drop.",
 		},
@@ -2737,8 +2738,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gravity: {
 		name: "Gravity",
-		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
-		shortDesc: "5 turns: no Ground immunities, 1.67x accuracy.",
+		desc: "For 5 turns, grounded Pokemon that are not Psychic or Fairy type have 0.75x Speed, and Ground-type moves have 1.2x power. Evasiveness of all active Pokemon is multiplied by 0.6. Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately. During the effect, airborne immunities are removed and certain airborne moves fail.",
+		shortDesc: "5 turns: no Ground immunities, 1.67x accuracy; grounded non-Psychic/Fairy -Speed.",
 		gen7: {
 			desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
 		},
@@ -5105,8 +5106,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragepowder: {
 		name: "Rage Powder",
-		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal. This effect is ignored while the user is under the effect of Sky Drop.",
-		shortDesc: "The foes' moves target the user on the turn used.",
+		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, this redirects attacks from only one opponent, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
+		shortDesc: "Redirects foes' moves. FFA: one opponent, 0.75x redirected damage, 2+ redirects heal.",
 		gen6: {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double or Triple Battle. This effect is ignored while the user is under the effect of Sky Drop.",
 		},
@@ -5360,8 +5361,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockclimb: {
 		name: "Rock Climb",
-		desc: "Has a 20% chance to confuse the target.",
-		shortDesc: "20% chance to confuse the target.",
+		desc: "Has a 30% chance to confuse the target. If this move hits a confused target, the user's Attack and Speed rise by 1 stage. On Mountain, Rocky, Cave, and Desert fields, this move has a high critical hit ratio.",
+		shortDesc: "30% confuse; hitting confused targets raises Atk/Spe. +1 crit on rocky fields.",
 	},
 	rockpolish: {
 		name: "Rock Polish",
@@ -5382,8 +5383,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rocksmash: {
 		name: "Rock Smash",
-		desc: "Has a 50% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "50% chance to lower the target's Defense by 1.",
+		desc: "Has a 50% chance to lower the target's Defense by 1 stage. If this lowers Defense, the user's next Fighting-, Rock-, or Ground-type move against that target deals 1.3x damage. If the target already has lowered Defense, this move hits twice.",
+		shortDesc: "50% -1 Def and marks target; hits twice if Defense is already lowered.",
 	},
 	rockthrow: {
 		name: "Rock Throw",
@@ -6438,7 +6439,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strength: {
 		name: "Strength",
-		shortDesc: "No additional effect.",
+		desc: "This Fighting-type move ignores the target's Defense boosts and cannot be weakened by Reflect, Aurora Veil, or Arenite Wall.",
+		shortDesc: "Ignores Defense boosts, Reflect, Aurora Veil, and Arenite Wall.",
 	},
 	strengthsap: {
 		name: "Strength Sap",

@@ -1854,10 +1854,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
 			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
 		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.side.sideConditions['tailwind']) move.critRatio++;
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
+			if (attacker.side.sideConditions['tailwind']) return;
 			this.add('-prepare', attacker, move.name);
 			if (this.field.isTerrain('caveterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				this.attrLastMove('[still]');
@@ -3636,16 +3640,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	cut: {
 		num: 15,
-		accuracy: 95,
-		basePower: 50,
+		accuracy: 100,
+		basePower: 75,
 		category: "Physical",
 		isNonstandard: "Unobtainable",
 		name: "Cut",
-		pp: 30,
+		pp: 24,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		critRatio: 2,
+		onTryHit(target, source, move) {
+			if (target.boosts.def > 0) {
+				target.setBoost({ def: 0 });
+				this.add('-clearpositiveboost', target, source, 'move: Cut');
+			} else {
+				move.secondaries = [{ chance: 30, boosts: { def: -1 } }];
+			}
+		},
 		target: "normal",
-		type: "Normal",
+		type: "Steel",
 		contestType: "Cool",
 	},
 	darkestlariat: {
@@ -3831,6 +3844,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
+				this.effectState.zPowered = !!this.activeMove?.isZOrMaxPowered;
 			},
 			onFaint(target, source, effect) {
 				if (!source || !effect || target.isAlly(source)) return;
@@ -3841,6 +3855,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					this.add('-activate', target, 'move: Destiny Bond');
 					source.faint();
+					if (this.effectState.zPowered) return;
 					this.add('-message', `${target.name} will now haunt the field`);
 					if (this.field.terrain === 'hauntedterrain') {
 						this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
@@ -6329,8 +6344,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	floatyfall: {
 		num: 731,
-		accuracy: 95,
-		basePower: 90,
+		accuracy: 100,
+		basePower: 95,
 		category: "Physical",
 		isNonstandard: "LGPE",
 		name: "Floaty Fall",
@@ -6611,9 +6626,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget(target, source, source2, move) {
 				if (!this.effectState.target.isSkyDropped() && this.validTarget(this.effectState.target, source, move.target)) {
+					if (this.gameType === 'freeforall') {
+						if (this.effectState.ffaSourceSide === undefined) this.effectState.ffaSourceSide = source.side.n;
+						if (this.effectState.ffaSourceSide !== source.side.n) return;
+					}
 					if (move.smartTarget) move.smartTarget = false;
 					this.debug("Follow Me redirected target of move");
+					if (this.gameType === 'freeforall') {
+						this.effectState.redirectedHits = (this.effectState.redirectedHits || 0) + 1;
+					}
 					return this.effectState.target;
+				}
+			},
+			onSourceModifyDamage(damage, source, target, move) {
+				if (this.gameType !== 'freeforall' || move.category === 'Status') return;
+				if (this.effectState.ffaSourceSide === source.side.n) return this.chainModify(0.75);
+			},
+			onEnd(pokemon) {
+				if (this.gameType === 'freeforall' && this.effectState.redirectedHits >= 2) {
+					this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 				}
 			},
 		},
@@ -6990,14 +7021,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			});
 			if (source.hasAbility('perfectforesight')) {
 				const futureMove = target.side.slotConditions[target.position]['futuremove'];
+				futureMove.moveData.basePower = 60;
 				futureMove.moveData.ignoreAbility = true;
 				futureMove.moveData.ignoreDefensive = true;
 				futureMove.moveData.ignoreImmunity = true;
 				futureMove.moveData.infiltrates = true;
 				futureMove.moveData.perfectForesight = true;
-				futureMove.moveData.onEffectiveness = function (typeMod) {
-					return 0;
+				futureMove.moveData.onEffectiveness = function (typeMod, target, type) {
+					if (type === 'Dark') return 0;
+					return typeMod;
 				};
+				this.add('-message', `Perfect Foresight's Future Sight will strike on turn ${futureMove.endingTurn}.`);
 			}
 			this.add('-start', source, 'move: Future Sight');
 			return this.NOT_FAIL;
@@ -8435,7 +8469,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Gravity",
-		pp: 5,
+		pp: 8,
 		priority: 0,
 		flags: { nonsky: 1, metronome: 1 },
 		pseudoWeather: 'gravity',
@@ -8487,6 +8521,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onModifyAccuracy(accuracy) {
 				if (typeof accuracy !== 'number') return;
 				return this.chainModify([6840, 4096]);
+			},
+			onModifySpePriority: -1,
+			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('lunarorbit') || pokemon.hasType(['Psychic', 'Fairy']) || !pokemon.isGrounded()) return;
+				return this.chainModify(0.75);
+			},
+			onBasePower(basePower, attacker, defender, move) {
+				if (this.movehasType(move, 'Ground')) return this.chainModify(1.2);
 			},
 			onDisableMove(pokemon) {
 				if (pokemon.hasAbility('lunarorbit')) return;
@@ -8582,6 +8624,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Grudge');
+				this.effectState.zPowered = !!this.activeMove?.isZOrMaxPowered;
 			},
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
@@ -8598,6 +8641,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						}
 					}
 					if (!activated) return;
+					if (this.effectState.zPowered) return;
 					this.add('-message', `${target.name} will now haunt the field`);
 					if (this.field.terrain === 'hauntedterrain') {
 						this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
@@ -15965,7 +16009,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rage",
-		pp: 15,
+		pp: 16,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		self: {
@@ -16014,9 +16058,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (ragePowderUser.isSkyDropped()) return;
 
 				if (source.runStatusImmunity('powder') && this.validTarget(ragePowderUser, source, move.target)) {
+					if (this.gameType === 'freeforall') {
+						if (this.effectState.ffaSourceSide === undefined) this.effectState.ffaSourceSide = source.side.n;
+						if (this.effectState.ffaSourceSide !== source.side.n) return;
+					}
 					if (move.smartTarget) move.smartTarget = false;
 					this.debug("Rage Powder redirected target of move");
+					if (this.gameType === 'freeforall') {
+						this.effectState.redirectedHits = (this.effectState.redirectedHits || 0) + 1;
+					}
 					return ragePowderUser;
+				}
+			},
+			onSourceModifyDamage(damage, source, target, move) {
+				if (this.gameType !== 'freeforall' || move.category === 'Status') return;
+				if (this.effectState.ffaSourceSide === source.side.n) return this.chainModify(0.75);
+			},
+			onEnd(pokemon) {
+				if (this.gameType === 'freeforall' && this.effectState.redirectedHits >= 2) {
+					this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 				}
 			},
 		},
@@ -16633,16 +16693,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	rockclimb: {
 		num: 431,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rock Climb",
-		pp: 20,
+		pp: 16,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.field.isTerrain(['mountainterrain', 'rockyterrain', 'caveterrain', 'desertterrain'])) {
+				move.critRatio++;
+			}
+		},
+		onHit(target, source) {
+			if (target.volatiles['confusion']) this.boost({ atk: 1, spe: 1 }, source, source);
+		},
 		secondary: {
-			chance: 20,
+			chance: 30,
 			volatileStatus: 'confusion',
 		},
 		target: "normal",
@@ -16700,16 +16768,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	rocksmash: {
 		num: 249,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 50,
 		category: "Physical",
 		name: "Rock Smash",
-		pp: 15,
+		pp: 24,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		secondary: {
-			chance: 50,
-			boosts: {
-				def: -1,
+		onModifyMove(move, pokemon, target) {
+			if (target?.boosts.def < 0) move.multihit = 2;
+		},
+		onAfterMoveSecondary(target, source, move) {
+			if (!target || target.fainted || target === source) return;
+			if (this.randomChance(1, 2) && this.boost({ def: -1 }, target, source, move)) {
+				target.addVolatile('rocksmash', source);
+			}
+		},
+		condition: {
+			onStart(target, source) {
+				this.effectState.source = source;
+			},
+			onSourceModifyDamage(damage, source, target, move) {
+				if (source !== this.effectState.source || move.category === 'Status') return;
+				if (!this.movehasType(move, ['Fighting', 'Rock', 'Ground'])) return;
+				target.removeVolatile('rocksmash');
+				return this.chainModify(1.3);
 			},
 		},
 		target: "normal",
@@ -20076,19 +20158,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	strength: {
 		num: 70,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 90,
 		category: "Physical",
 		name: "Strength",
-		pp: 15,
+		pp: 16,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		ignoreDefensive: true,
+		infiltrates: true,
 		onModifyMove(move) {
+			move.ignoreDefensive = true;
+			move.infiltrates = true;
 			if (this.field.isTerrain('ashenbeachterrain')) {
 				move.types = ['Fighting', 'Psychic'];
 			}
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Fighting",
 		contestType: "Tough",
 	},
 	strengthsap: {
