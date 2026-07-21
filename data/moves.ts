@@ -7031,6 +7031,32 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 		ignoreImmunity: true,
 		onTry(source, target) {
+			const existingFutureMove = target.side.slotConditions[target.position]['futuremove'];
+			if (existingFutureMove && source.hasAbility(['perfectforesight', 'grandmaster', 'doomwarning'])) {
+				if (source.hasAbility('perfectforesight') && existingFutureMove.moveData?.perfectForesight) {
+					existingFutureMove.perfectForesightQueued = (existingFutureMove.perfectForesightQueued || 1) + 1;
+					this.add('-start', source, 'move: Future Sight', '[from] ability: Perfect Foresight', '[silent]');
+					this.add('-message', `Perfect Foresight queued another Future Sight after turn ${existingFutureMove.endingTurn}.`);
+					return this.NOT_FAIL;
+				}
+				if (source.hasAbility('grandmaster') && existingFutureMove.moveData?.grandmasterForesight) {
+					existingFutureMove.perfectForesightQueued = (existingFutureMove.perfectForesightQueued || 1) + 1;
+					this.add('-start', source, 'move: Future Sight', '[from] ability: Grandmaster', '[silent]');
+					this.add('-message', `Grandmaster queued another Future Sight after turn ${existingFutureMove.endingTurn}.`);
+					return this.NOT_FAIL;
+				}
+				if (source.hasAbility('doomwarning') && existingFutureMove.moveData?.perfectForesight) {
+					existingFutureMove.perfectForesightQueued = (existingFutureMove.perfectForesightQueued || 1) + 1;
+					const queuedTurn = existingFutureMove.endingTurn + existingFutureMove.perfectForesightQueued - 1;
+					this.add('-start', source, 'move: Future Sight', '[from] ability: Doom Warning', '[silent]');
+					this.add('-message', `Doom Warning queued another Future Sight for turn ${queuedTurn}.`);
+					return this.NOT_FAIL;
+				}
+				existingFutureMove.endingTurn = (existingFutureMove.endingTurn || this.turn) + 2;
+				this.add('-start', source, 'move: Future Sight', '[silent]');
+				this.add('-message', `Future Sight was delayed to turn ${existingFutureMove.endingTurn}.`);
+				return this.NOT_FAIL;
+			}
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				move: 'futuresight',
@@ -7048,7 +7074,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					type: 'Psychic',
 				},
 			});
-			if (source.hasAbility('perfectforesight')) {
+			if (source.hasAbility(['perfectforesight', 'doomwarning'])) {
 				const futureMove = target.side.slotConditions[target.position]['futuremove'];
 				futureMove.moveData.basePower = 60;
 				futureMove.moveData.ignoreAbility = true;
@@ -7060,7 +7086,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (type === 'Dark') return 0;
 					return typeMod;
 				};
-				this.add('-message', `Perfect Foresight's Future Sight will strike on turn ${futureMove.endingTurn}.`);
+				futureMove.perfectForesightQueued = 1;
+				this.add('-message', `${source.hasAbility('doomwarning') ? 'Doom Warning' : 'Perfect Foresight'}'s Future Sight will strike on turn ${futureMove.endingTurn}.`);
+			} else if (source.hasAbility('grandmaster')) {
+				const futureMove = target.side.slotConditions[target.position]['futuremove'];
+				futureMove.moveData.grandmasterForesight = true;
+				futureMove.perfectForesightQueued = 1;
+				this.add('-message', `Grandmaster's Future Sight will strike on turn ${futureMove.endingTurn}.`);
 			}
 			this.add('-start', source, 'move: Future Sight');
 			return this.NOT_FAIL;

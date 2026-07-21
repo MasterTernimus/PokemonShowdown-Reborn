@@ -438,7 +438,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onResidual(target: Pokemon) {
 			if (this.getOverflowedTurnCount() < this.effectState.endingTurn) return;
 			const slotTarget = this.getAtSlot(this.effectState.targetSlot);
-			if (slotTarget.fainted && (this.effectState.moveData?.perfectForesight || this.effectState.moveData?.grandmasterForesight)) {
+			if (slotTarget.fainted && (this.effectState.moveData?.perfectForesight || this.effectState.moveData?.grandmasterForesight || this.effectState.moveData?.temporalShiftHex)) {
 				this.effectState.endingTurn = this.turn + 1;
 				this.add('-message', `${this.effectState.moveData.name} has no target and was delayed to turn ${this.effectState.endingTurn}.`);
 				return;
@@ -449,7 +449,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const data = this.effectState;
 			// time's up; time to hit! :D
 			const move = this.dex.moves.get(data.move);
-			if ((target.fainted || target === data.source) && (data.moveData?.perfectForesight || data.moveData?.grandmasterForesight)) {
+			if (data.moveData?.temporalShiftHex && data.source && (target === data.source || target.isAlly(data.source))) {
+				const enemies = data.source.foes().filter(foe => foe.hp && !foe.fainted && foe !== data.source && !foe.isAlly(data.source));
+				if (!enemies.length) {
+					data.endingTurn = this.turn + 1;
+					this.add('-message', `${move.name} has no enemy target and was delayed to turn ${data.endingTurn}.`);
+					target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+					Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
+					return;
+				}
+				target = this.sample(enemies);
+				this.add('-message', `${move.name} shifted to ${target.name}.`);
+			}
+			if ((target.fainted || target === data.source) && (data.moveData?.perfectForesight || data.moveData?.grandmasterForesight || data.moveData?.temporalShiftHex)) {
 				data.endingTurn = this.turn + 1;
 				this.add('-message', `${move.name} has no target and was delayed to turn ${data.endingTurn}.`);
 				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
@@ -474,7 +486,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
-			if (data.moveData?.perfectForesight && data.perfectForesightQueued > 1) {
+			if ((data.moveData?.perfectForesight || data.moveData?.grandmasterForesight || data.moveData?.temporalShiftHex) && data.perfectForesightQueued > 1) {
 				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					...data,
@@ -806,6 +818,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
+			if (target.hasType('Ghost')) return;
 			if (this.field.isTerrain('fairytaleterrain') && target.hasType(['Steel', 'Dragon', 'Fire'])) return;
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				this.damage(target.baseMaxhp / 8);
@@ -894,7 +907,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				for (const volatile of Object.keys(pokemon.volatiles)) {
 					if (volatile !== 'dynamax') pokemon.removeVolatile(volatile);
 				}
-				this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
+				if (!(pokemon as any).gmaxTransformHealed) {
+					(pokemon as any).gmaxTransformHealed = true;
+					this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
+				}
 			}
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');

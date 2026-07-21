@@ -1058,6 +1058,14 @@ export class BattleActions {
 		if (hit > targetHits) return null;
 		const parentalLike = ['parentalbond', 'hydrabond'].includes(move.multihitType || '');
 		if (!parentalLike && !move.multihit) return null;
+		if (this.battle.gameType === 'freeforall') {
+			const targets = pokemon.foes().filter(target =>
+				target && target !== originalTarget && target.hp && !target.fainted
+			);
+			if (!targets.length) return null;
+			(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.6) : 0.3;
+			return this.battle.sample(targets);
+		}
 		const ally = originalTarget.side.active.find(target =>
 			target && target !== originalTarget && target.hp && !target.fainted && !target.isAlly(pokemon)
 		);

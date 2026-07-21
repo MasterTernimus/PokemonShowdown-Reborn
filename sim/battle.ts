@@ -2846,6 +2846,14 @@ export class Battle {
 			const species = action.pokemon.canDynamax;
 			if (species && this.useGimmick(action.pokemon, 'Gigantamax')) {
 				action.pokemon.formeChange(species, null, true);
+				const gmaxClearedVolatiles = [
+					'aquaring', 'attract', 'confusion', 'curse', 'disable', 'embargo', 'encore',
+					'gastroacid', 'healblock', 'leechseed', 'nightmare', 'partiallytrapped',
+					'taunt', 'torment', 'yawn',
+				];
+				for (const volatile of gmaxClearedVolatiles) {
+					if (action.pokemon.volatiles[volatile]) action.pokemon.removeVolatile(volatile);
+				}
 				action.pokemon.addVolatile('dynamax');
 			}
 			break;

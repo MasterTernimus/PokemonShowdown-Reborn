@@ -579,7 +579,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (effect?.effectType !== 'Move') return;
 			if (!target.hasAbility('battlebond')) return;
 			if (target.abilityState.battleBondEndured) return;
-			if (target.hp <= target.maxhp / 2 || damage < target.hp) return;
+			if (target.hp <= target.maxhp / 3 || damage < target.hp) return;
 			target.abilityState.battleBondEndured = true;
 			return target.hp - 1;
 		},
@@ -1952,6 +1952,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'flinch') return null;
 		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
+		},
 		onModifyMove(move, pokemon) {
 			if (move.category === 'Status') pokemon.abilityState.grandmasterGuard = this.turn;
 			if (move.id === 'miracleeye') pokemon.abilityState.grandmasterMiracleEye = true;
@@ -1969,8 +1972,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || source === target || target.isAlly(source) || move.flags['futuremove']) return;
 			const slotCondition = source.side.slotConditions[source.position]['futuremove'];
 			if (slotCondition) {
-				slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
 				this.add('-start', target, 'move: Future Sight', '[from] ability: Grandmaster', '[silent]');
+				if (slotCondition.moveData?.grandmasterForesight) {
+					slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
+					const queuedTurn = slotCondition.endingTurn + slotCondition.perfectForesightQueued - 1;
+					this.add('-message', `Grandmaster queued another Future Sight for turn ${queuedTurn}.`);
+				} else {
+					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+					this.add('-message', `Grandmaster delayed Future Sight to turn ${slotCondition.endingTurn}.`);
+				}
 				return;
 			}
 			if (!source.side.addSlotCondition(source, 'futuremove', target, this.dex.abilities.get('grandmaster'))) return;
@@ -1989,8 +1999,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					effectType: 'Move',
 					type: 'Psychic',
 				},
+				perfectForesightQueued: 1,
 			});
 			this.add('-start', target, 'move: Future Sight', '[from] ability: Grandmaster');
+			this.add('-message', `Grandmaster's Future Sight will strike on turn ${source.side.slotConditions[source.position]['futuremove'].endingTurn}.`);
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (type === 'Dark' && target.abilityState.grandmasterMiracleEye) return typeMod - 1;
@@ -2000,8 +2012,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const target of foes) {
 				const slotCondition = target.side.slotConditions[target.position]['futuremove'];
 				if (slotCondition) {
-					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
 					this.add('-start', pokemon, 'move: Future Sight', '[from] ability: Grandmaster', '[silent]');
+					if (slotCondition.moveData?.grandmasterForesight) {
+						slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
+						const queuedTurn = slotCondition.endingTurn + slotCondition.perfectForesightQueued - 1;
+						this.add('-message', `Grandmaster queued another Future Sight for turn ${queuedTurn}.`);
+					} else {
+						slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+						this.add('-message', `Grandmaster delayed Future Sight to turn ${slotCondition.endingTurn}.`);
+					}
 					continue;
 				}
 				if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('grandmaster'))) continue;
@@ -2020,8 +2039,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						effectType: 'Move',
 						type: 'Psychic',
 					},
+					perfectForesightQueued: 1,
 				});
 				this.add('-start', pokemon, 'move: Future Sight', '[from] ability: Grandmaster');
+				this.add('-message', `Grandmaster's Future Sight will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
 			}
 		},
 		flags: { breakable: 1 },
@@ -2643,6 +2664,45 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10141,
 	},
 	temporalshift: {
+		queueTemporalHex(pokemon, abilityName = 'Temporal Shift') {
+			const primaryType = pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal';
+			const targets = pokemon.foes().filter(target => target.hp && !target.fainted && target !== pokemon && !target.isAlly(pokemon));
+			const target = targets.length ? this.sample(targets) : null;
+			if (!target) return;
+			const slotCondition = target.side.slotConditions[target.position]['futuremove'];
+			if (slotCondition) {
+				this.add('-start', pokemon, 'move: Future Sight', `[from] ability: ${abilityName}`, '[silent]');
+				if (slotCondition.moveData?.temporalShiftHex) {
+					slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
+					const queuedTurn = slotCondition.endingTurn + slotCondition.perfectForesightQueued - 1;
+					this.add('-message', `${abilityName} queued another ${primaryType}-type Future Sight for turn ${queuedTurn}.`);
+				} else {
+					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+					this.add('-message', `${abilityName} delayed Future Sight to turn ${slotCondition.endingTurn}.`);
+				}
+				return;
+			}
+			if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('temporalshift'))) return;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				move: 'futuresight',
+				source: pokemon,
+				moveData: {
+					id: 'futuresight',
+					name: "Future Sight",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+					temporalShiftHex: true,
+					effectType: 'Move',
+					type: primaryType,
+				},
+				perfectForesightQueued: 1,
+			});
+			this.add('-start', pokemon, 'move: Future Sight', `[from] ability: ${abilityName}`);
+			this.add('-message', `${abilityName}'s ${primaryType}-type Future Sight will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
+		},
 		onBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let stat: BoostID;
@@ -2651,25 +2711,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			const targets = pokemon.foes().filter(target => target.hp && !target.fainted);
-			const target = targets.length ? this.sample(targets) : null;
-			if (!target || !target.side.addSlotCondition(target, 'futuremove')) return;
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				move: 'hex',
-				source: pokemon,
-				moveData: {
-					id: 'hex',
-					name: "Hex",
-					accuracy: 100,
-					basePower: 130,
-					category: "Special",
-					priority: 0,
-					flags: { protect: 1, mirror: 1, futuremove: 1 },
-					effectType: 'Move',
-					type: 'Ghost',
-				},
-			});
-			this.add('-start', pokemon, 'move: Hex', '[from] ability: Temporal Shift');
+			this.effect.queueTemporalHex.call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Temporal Shift",
@@ -2810,6 +2852,176 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Perfect Foresight",
 		rating: 5,
 		num: 10114,
+	},
+	doomwarning: {
+		queueDoomFutureSight(source, target) {
+			const slotCondition = target.side.slotConditions[target.position]['futuremove'];
+			if (slotCondition) {
+				this.add('-start', source, 'move: Future Sight', '[from] ability: Doom Warning', '[silent]');
+				if (slotCondition.moveData?.perfectForesight) {
+					slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
+					const queuedTurn = slotCondition.endingTurn + slotCondition.perfectForesightQueued - 1;
+					this.add('-message', `Doom Warning queued another Future Sight for turn ${queuedTurn}.`);
+				} else {
+					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+					this.add('-message', `Doom Warning delayed Future Sight to turn ${slotCondition.endingTurn}.`);
+				}
+				return;
+			}
+			if (!target.side.addSlotCondition(target, 'futuremove')) return;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				move: 'futuresight',
+				source,
+				moveData: {
+					id: 'futuresight',
+					name: "Future Sight",
+					accuracy: 100,
+					basePower: 60,
+					category: "Special",
+					priority: 0,
+					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+					ignoreAbility: true,
+					ignoreDefensive: true,
+					ignoreImmunity: true,
+					infiltrates: true,
+					perfectForesight: true,
+					effectType: 'Move',
+					type: 'Psychic',
+					onEffectiveness(typeMod: number, target: Pokemon, type: string) {
+						if (type === 'Dark') return 0;
+						return typeMod;
+					},
+				},
+				perfectForesightQueued: 1,
+			});
+			this.add('-start', source, 'move: Future Sight', '[from] ability: Doom Warning');
+			this.add('-message', `Doom Warning's Future Sight will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
+		},
+		onAfterMove(source, target, move) {
+			if (move.category === 'Status' || move.id === 'futuresight' || move.flags['futuremove'] || move.callsMove) return;
+			let targets = move.hitTargets?.length ? [...move.hitTargets] : target ? [target] : [];
+			if (['allAdjacentFoes', 'allFoes', 'foeSide'].includes(move.target)) {
+				targets = source.foes().filter(foe => foe);
+			}
+			for (const hitTarget of targets) {
+				if (!hitTarget || hitTarget === source || source.isAlly(hitTarget)) continue;
+				this.effect.queueDoomFutureSight.call(this, source, hitTarget);
+			}
+		},
+		onFaint(pokemon) {
+			this.add('-message', `${pokemon.name} has warned you of doom.`);
+			for (const target of pokemon.foes()) {
+				if (!target || target.fainted) continue;
+				const slotCondition = target.side.slotConditions[target.position]['futuremove'];
+				if (slotCondition) {
+					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+					this.add('-message', `Doom Warning delayed Doom Desire to turn ${slotCondition.endingTurn}.`);
+					continue;
+				}
+				if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('doomwarning'))) continue;
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+					move: 'doomdesire',
+					source: pokemon,
+					moveData: {
+						id: 'doomdesire',
+						name: "Doom Desire",
+						accuracy: 100,
+						basePower: 140,
+						category: "Special",
+						priority: 0,
+						flags: { metronome: 1, futuremove: 1 },
+						effectType: 'Move',
+						type: 'Steel',
+					},
+				});
+				this.add('-start', pokemon, 'Doom Desire', '[from] ability: Doom Warning');
+				this.add('-message', `Doom Warning's Doom Desire will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Doom Warning",
+		rating: 5,
+		num: 10115,
+	},
+	perfectego: {
+		onStart(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			this.add('-ability', pokemon, 'Perfect Ego');
+			pokemon.abilityState.ultraEgoDefBoosted = false;
+			pokemon.abilityState.ultraEgoSpDBoosted = false;
+			pokemon.abilityState.ultraEgoPinch = false;
+			pokemon.abilityState.ultraEgoHitTriggered = false;
+			pokemon.abilityState.battleFervorDamageReduced = false;
+		},
+		boostedField() {
+			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
+		},
+		healUltraEgo(pokemon, source) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.abilityState.ultraEgoPinch = true;
+				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+				return;
+			}
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		onAnyAccuracy(accuracy, target, source, move) {
+			if (source === this.effectState.target) return true;
+		},
+		onModifyMove(move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			move.ignoreAbility = true;
+			delete move.flags['charge'];
+		},
+		onAfterMove(source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (move.category !== 'Status') source.abilityState.ultraEgoHitTriggered = false;
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (move.category === 'Status') return;
+			if (target && (this.queue.willMove(target) || target.newlySwitched)) return this.chainModify(1.2);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (!move || move.category === 'Status') return;
+			if (target.abilityState.battleFervorDamageReduced) return;
+			target.abilityState.battleFervorDamageReduced = true;
+			return this.chainModify(0.8);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (!move || move.category === 'Status') return;
+			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
+			source.abilityState.ultraEgoAttackHealTurn = this.turn;
+			this.effect.healUltraEgo.call(this, source, 'attack');
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
+			if (target.abilityState.ultraEgoHitTriggered) {
+				this.heal(target.baseMaxhp / 20, target, target);
+				return;
+			}
+			target.abilityState.ultraEgoHitTriggered = true;
+			this.boost({ atk: 1, spa: 1 }, target, target);
+			if (this.effect.boostedField.call(this)) {
+				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
+					target.abilityState.ultraEgoDefBoosted = true;
+					this.boost({ def: 1 }, target, target);
+				}
+				if (move.category === 'Special' && !target.abilityState.ultraEgoSpDBoosted) {
+					target.abilityState.ultraEgoSpDBoosted = true;
+					this.boost({ spd: 1 }, target, target);
+				}
+			}
+			this.effect.healUltraEgo.call(this, target, 'hit');
+		},
+		flags: {},
+		name: "Perfect Ego",
+		rating: 5,
+		num: 10116,
 	},
 	heavenlychorus: {
 		onModifyTypePriority: -1,
@@ -8484,6 +8696,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if (this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain'])) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
+			this.dex.abilities.get('temporalshift').queueTemporalHex.call(this, pokemon, 'Soul Tag');
 		},
 		onFoeEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && move.type === 'Fire' && typeMod < 0) {
@@ -10465,7 +10678,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
-			if (target.abilityState.ultraEgoHitTriggered) return;
+			if (target.abilityState.ultraEgoHitTriggered) {
+				this.heal(target.baseMaxhp / 20, target, target);
+				return;
+			}
 			target.abilityState.ultraEgoHitTriggered = true;
 			this.boost({ atk: 1, spa: 1 }, target, target);
 			if (this.effect.boostedField.call(this)) {
