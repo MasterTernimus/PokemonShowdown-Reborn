@@ -2047,6 +2047,7 @@ export class Pokemon {
 			heavenlychorus: ['pixilate', 'cloudnine'],
 			mourningsnow: ['snowwarning', 'icebody'],
 			venombastion: ['shellarmor'],
+			draconicforce: ['dragonize', 'sheerforce', 'guts'],
 			rimeknuckle: ['ironfist'],
 			fallenstar: ['moldbreaker'],
 			ragingstorm: ['moldbreaker'],

@@ -707,26 +707,14 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	canStartWithCurrentPlayers() {
-		if (this.gameType !== 'freeforall') return false;
-		return this.players.filter(player => player.id).length >= 3;
+		return false;
 	}
 	startWithCurrentPlayers(user?: User) {
 		if (this.started) {
 			user?.popup(`This battle has already started.`);
 			return false;
 		}
-		if (!this.canStartWithCurrentPlayers()) {
-			user?.popup(`Free-for-All battles need at least 3 players to start.`);
-			return false;
-		}
-		this.players = this.players.filter(player => player.id);
-		this.playerCap = this.players.length;
-		const users = this.players.map(player => player.getUser()).filter(Boolean) as User[];
-		Rooms.global.onCreateBattleRoom(users, this.room, { rated: this.rated });
-		void this.stream.write(`>startplayers`);
-		this.started = true;
-		this.room.add(`|uhtmlchange|invites|`);
-		this.room.update();
+		user?.popup(`Use the dedicated 3-player or 4-player Free-for-All format instead.`);
 		return true;
 	}
 	override leaveGame(user: User) {
@@ -1279,11 +1267,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (this.gameType === 'multi') {
 			[playerForms[1], playerForms[2]] = [playerForms[2], playerForms[1]];
 			playerForms.splice(2, 0, '&mdash; vs &mdash;');
-		}
-		if (this.canStartWithCurrentPlayers()) {
-			playerForms.push(
-				`<form data-submitsend="/msgroom ${this.roomid},/startbattle"><button class="button notifying" type="submit">Start Battle with ${this.players.filter(player => player.id).length} Players</button></form>`
-			);
 		}
 		connection.sendTo(
 			this.room,

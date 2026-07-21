@@ -5042,6 +5042,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	sandslash: {
 		learnset: {
+			spikecannon: ["9M"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			agility: ["9L49", "8M"],
 			amnesia: ["9M", "8M"],
@@ -5181,6 +5182,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	sandslashalola: {
 		learnset: {
+			spikecannon: ["9M"],
 			aerialace: ["7M"],
 			agility: ["8M"],
 			amnesia: ["8M"],
@@ -5475,6 +5477,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	nidoqueen: {
 		learnset: {
+			spikecannon: ["9M"],
 			acid: ["9L1"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			aquatail: ["9M", "7T", "6T", "5T", "4T"],
@@ -5828,6 +5831,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	nidoking: {
 		learnset: {
+			spikecannon: ["9M"],
 			acid: ["9L1"],
 			amnesia: ["9M", "8M"],
 			aquatail: ["9M", "7T", "7S0", "6T", "5T", "4T"],
@@ -15587,6 +15591,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	shellder: {
 		learnset: {
+			spikecannon: ["9M"],
 			shelter: ["9L1", "8L4", "8V", "7L4", "7V", "6L4", "5L4", "5D", "4L4", "3L1", "3S0", "3S1"],
 			aquaring: ["9E", "8E", "7E", "6E", "5E"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -18939,6 +18944,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	rhyhorn: {
 		learnset: {
+			spikecannon: ["9M"],
 			ancientpower: ["9E", "4T"],
 			aquatail: ["9M", "7T", "6T", "5T", "4T"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -19061,6 +19067,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	rhydon: {
 		learnset: {
+			spikecannon: ["9M"],
 			accelerock: ["9M"],
 			ancientpower: ["9M", "4T"],
 			aquatail: ["9M", "7T", "6T", "5T", "4T"],
@@ -19223,6 +19230,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	rhyperior: {
 		learnset: {
+			spikecannon: ["9M"],
 			accelerock: ["9M"],
 			ancientpower: ["9M", "4T"],
 			aquatail: ["9M", "7T", "6T", "5T", "4T"],
@@ -23873,6 +23881,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	jolteon: {
 		learnset: {
+			spikecannon: ["9M"],
 			agility: ["9L39", "8M", "8L45", "8V", "7L29", "7V", "6L29", "5L29", "4L64", "3L47"],
 			alluringvoice: ["9M"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -28273,6 +28282,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	feraligatr: {
 		learnset: {
+			cometpunch: ["9M"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			agility: ["9L1", "7L1", "6L30", "5L30", "4L30"],
 			ancientpower: ["9M", "4T"],
@@ -32089,6 +32099,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	clodsire: {
 		learnset: {
+			spikecannon: ["9M"],
 			acidspray: ["9M"],
 			afteryou: [],
 		amnesia: ["9M"],
@@ -33862,6 +33873,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	qwilfish: {
 		learnset: {
+			spikecannon: ["9M"],
 			acidspray: ["9E", "8E", "7E", "6E", "5E"],
 			acupressure: ["9L57", "8L60"],
 			agility: [],
@@ -33987,6 +33999,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	qwilfishhisui: {
 		learnset: {
+			spikecannon: ["9M"],
 			acidspray: [],
 			acupressure: [],
 			agility: [],
@@ -34079,6 +34092,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	overqwil: {
 		learnset: {
+			spikecannon: ["9M"],
 			acidspray: ["9M"],
 			acupressure: ["9L1"],
 			agility: [],
@@ -34800,6 +34814,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	sneasler: {
 		learnset: {
+			spikecannon: ["9M"],
 			acidspray: [],
 			acrobatics: ["9M"],
 			aerialace: ["9M"],
@@ -36065,6 +36080,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	cursola: {
 		learnset: {
+			spikecannon: ["9M"],
 			amnesia: ["9M", "8M"],
 			ancientpower: ["9L25", "8L20"],
 			astonish: ["9L1", "8L1"],
@@ -44325,6 +44341,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	aron: {
 		learnset: {
+			spikecannon: ["9M"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			ancientpower: ["9E", "4T"],
 			attract: ["9M", "8M", "7M", "6M", "5M", "4M", "3M"],
@@ -44406,6 +44423,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	lairon: {
 		learnset: {
+			spikecannon: ["9M"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			ancientpower: ["9M", "4T"],
 			attract: ["9M", "8M", "7M", "6M", "5M", "4M", "3M"],
@@ -44490,6 +44508,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	aggron: {
 		learnset: {
+			spikecannon: ["9M"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			ancientpower: ["9M", "4T"],
 			aquatail: ["9M", "7T", "6T", "5T", "4T"],
@@ -45662,6 +45681,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	roserade: {
 		learnset: {
+			spikecannon: ["9M"],
 			absorb: ["9L1", "8L1"],
 			airslash: ["9M"],
 			ancientpower: ["9M"],
@@ -67441,6 +67461,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	maractus: {
 		learnset: {
+			spikecannon: ["9M"],
 			absorb: ["9L1", "8L1", "7L1", "6L1", "5L1"],
 			acupressure: ["9L33", "8L52", "7L29", "6L29", "5L29"],
 			aerialace: ["9M", "7M", "6M", "5M"],
@@ -71340,6 +71361,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	ferroseed: {
 		learnset: {
+			spikecannon: ["9M"],
 			acidspray: ["9E", "8E", "7E", "6E"],
 			assurance: ["9M", "8M"],
 			attract: ["8M"],
@@ -71408,6 +71430,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	ferrothorn: {
 		learnset: {
+			spikecannon: ["9M"],
          acidspray: ["9M"], 
 			aerialace: ["9M", "7M", "6M", "5M"],
 			assurance: ["9M", "8M"],
@@ -76873,6 +76896,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	chesnaught: {
 		learnset: {
+			spikecannon: ["9M"],
 			aerialace: ["9M", "7M", "6M"],
 			attract: ["9M", "7M", "6M"],
 			bellydrum: ["9L52", "7L1", "6L1"],
@@ -80775,6 +80799,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	clawitzer: {
 		learnset: {
+			electroshot: ["9M"],
 			aquajet: ["9L20", "8L15", "7L49", "6L47"],
 			aquatail: ["9M", "7T", "6T"],
 			attract: ["9M", "8M", "7M", "6M"],
@@ -82004,6 +82029,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	goodra: {
 		learnset: {
+			hypervoice: ["9M"],
 			absorb: ["9L1", "8L1", "7L1", "6L5"],
 			acidarmor: ["9L38"],
 			acidspray: ["9L25", "8L1"],
@@ -82110,6 +82136,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	goodrahisui: {
 		learnset: {
+			hypervoice: ["9M"],
 			absorb: ["9L1"],
 			acidarmor: ["9L38"], 
 			acidspray: ["9L25"],
@@ -88904,6 +88931,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	turtonator: {
 		learnset: {
+			spikecannon: ["9M"],
 			attract: ["9M", "8M", "7M"],
 			block: ["9E", "7T"],
 			bodypress: ["9M", "8M"],
@@ -89006,6 +89034,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	togedemaru: {
 		learnset: {
+			spikecannon: ["9M"],
 			afteryou: ["9E", "7T"],
 			agility: ["9M", "8M"],
 			assurance: ["9M", "8M"],
@@ -89537,6 +89566,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	dhelmise: {
 		learnset: {
+			spikecannon: ["9M"],
 			absorb: ["9L1", "8L1", "7L1"],
 			aerialace: ["9M", "7M"],
 			allyswitch: ["9M", "8M", "7T"],
@@ -93850,6 +93880,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	coalossal: {
 		learnset: {
+			spikecannon: ["9M"],
 			hydrosteam: [],
 			burningbulwark: [],
 			ancientpower: ["9L27", "8L20"],
@@ -95632,6 +95663,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	pincurchin: {
 		learnset: {
+			spikecannon: ["9M"],
 			acupressure: ["9L35", "8L55"],
 			assurance: ["9M", "8M"],
 			attract: ["9M", "8M"],
@@ -102629,6 +102661,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	glimmora: {
 		learnset: {
+			spikecannon: ["9M"],
 			acidarmor: ["9L37"],
 			acidspray: ["9L7"],
 			ancientpower: ["9L22"],
@@ -103199,6 +103232,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	brambleghast: {
 		learnset: {
+			spikecannon: ["9M"],
 			absorb: ["9L5"],
 			astonish: ["9L1"],
          attract: ["9M"], 
@@ -104319,6 +104353,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	ironthorns: {
 		learnset: {
+			spikecannon: ["9M"],
 			bite: ["9L14"],
 			blizzard: ["9M"],
 			bodypress: ["9M"],
@@ -106314,6 +106349,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	ogerpon: {
 		learnset: {
+			spikecannon: ["9M"],
          attract: ["9M"], 
 			brickbreak: ["9M"],
 			bulletseed: ["9M"],
@@ -106407,6 +106443,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	archaludon: {
 		learnset: {
+			spikecannon: ["9M"],
          attract: ["9M"], 
 			aurasphere: [],
 			bodypress: ["9M"],

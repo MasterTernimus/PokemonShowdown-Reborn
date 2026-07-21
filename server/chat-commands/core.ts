@@ -1247,7 +1247,7 @@ export const commands: Chat.ChatCommands = {
 		room.battle.startWithCurrentPlayers(user);
 	},
 	startbattlehelp: [
-		`/startbattle - Starts a Free-for-All battle once at least 3 players have joined. Requires: ${Users.PLAYER_SYMBOL} ~`,
+		`/startbattle - Manual Free-for-All starts are disabled. Use a dedicated 3-player or 4-player Free-for-All format instead.`,
 	],
 
 	async acceptbattle(target, room, user, connection) {

@@ -1516,6 +1516,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 312,
 	},
+	draconicforce: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			this.dex.abilities.get('dragonize').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			let modifier = 1;
+			if (move.hasSheerForce || move.hasSheerForceBoost) modifier *= 1.3;
+			if (move.typeChangerBoosted === this.effect) {
+				modifier *= this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 1.5 : 1.2;
+			} else if (this.field.isTerrain('dragonsdenterrain')) {
+				modifier *= 1.2;
+			}
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onModifyMove(move) {
+			this.dex.abilities.get('sheerforce').onModifyMove?.call(this, move);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.status) return this.chainModify(1.5);
+		},
+		flags: {},
+		name: "Draconic Force",
+		rating: 4.5,
+		num: 10177,
+	},
 	dragonsmaw: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
@@ -1736,13 +1764,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.infiltrates = true;
 			move.ignoreDefensive = true;
 		},
-		onTryHit(target, source, move) {
+		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			const boosts: SparseBoostsTable = {};
 			let changed = false;
 			let stat: BoostID;
 			for (stat in target.boosts) {
-				if (target.boosts[stat]) {
+				if (target.boosts[stat] > 0) {
 					boosts[stat] = 0;
 					changed = true;
 				}
@@ -1766,7 +1794,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ atk: 1 }, source, source);
 				return;
 			}
-			const damage = Math.max(1, Math.floor((source.abilityState.ragingStormDamage || target.baseMaxhp) * 0.75));
+			const damage = Math.max(1, Math.floor((source.abilityState.ragingStormDamage || target.baseMaxhp) * 0.6));
 			let dealtDamage = false;
 			for (const foe of targets) {
 				if (foe.hasAbility('magicguard')) continue;
@@ -1781,6 +1809,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Raging Storm",
 		rating: 4.5,
 		num: 10121,
+	},
+	voltagevolley: {
+		onModifyMove(move) {
+			if (!move.multihit) return;
+			move.category = 'Special';
+			move.overrideOffensiveStat = 'spa';
+		},
+		flags: {},
+		name: "Voltage Volley",
+		rating: 3.5,
+		num: 10178,
 	},
 	vanguard: {
 		onStart(pokemon) {
@@ -2004,6 +2043,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move) {
 			if (this.movehasType(move, ['Rock', 'Fighting', 'Ground'])) {
+				move.infiltrates = true;
+				move.ignoreDefensive = true;
+			}
+			if (move.flags['drill']) {
 				move.infiltrates = true;
 				move.ignoreDefensive = true;
 			}
@@ -2810,7 +2853,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!['hail', 'snow'].includes(pokemon.effectiveWeather())) return;
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			for (const target of pokemon.foes()) {
-				if (!target.hasType('Ice') && this.randomChance(2, 5)) target.trySetStatus('frz', pokemon);
+				if (!target.hasType('Ice') && this.randomChance(3, 10)) target.trySetStatus('frz', pokemon);
 			}
 		},
 		onSourceAfterFaint(length, target, source, effect) {
@@ -6603,6 +6646,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.multihit = 2;
 			move.multihitType = 'parentalbond';
 		},
+		onModifyMove(move) {
+			if (this.gameType !== 'freeforall' || move.category === 'Status' || !move.multihit || move.spreadHit ||
+				move.flags['noparentalbond'] || move.flags['charge'] || move.flags['futuremove'] || move.isZ || move.isMax) return;
+			move.target = 'allAdjacentFoes';
+			(move as any).parentalBondSpread = true;
+		},
 		// Damage modifier implemented in BattleActions#modifyDamage()
 		onSourceModifySecondaries(secondaries, target, source, move) {
 			if (['parentalbond', 'hydrabond'].includes(move.multihitType) && move.id === 'secretpower' && move.hit < 2) {
@@ -8636,7 +8685,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Royal Decree');
 			this.add('-clearallboost');
 			for (const active of this.getAllActive()) {
+				const stockpileLayers = active.volatiles['stockpile']?.layers || 0;
 				active.clearBoosts();
+				if (stockpileLayers) {
+					active.boosts.def = Math.max(active.boosts.def, stockpileLayers);
+					active.boosts.spd = Math.max(active.boosts.spd, stockpileLayers);
+				}
 			}
 			for (const side of this.sides) {
 				for (const sideCondition of ['reflect', 'lightscreen', 'auroraveil']) {
@@ -8662,6 +8716,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryBoost(boost, target, source, effect) {
 			if (!effect || effect.id === 'royaldecree') return;
+			if (effect.id === 'stockpile' || effect.id === 'accumulation') return;
 			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
 				!Object.values(boost).some(value => value && value > 0);
 			if (isOnlyDrops && source === target && target.hasAbility('royaldecree')) return;
@@ -8715,7 +8770,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-ability', pokemon, 'Royal Decree');
 			this.add('-clearallboost');
 			for (const active of this.getAllActive()) {
+				const stockpileLayers = active.volatiles['stockpile']?.layers || 0;
 				active.clearBoosts();
+				if (stockpileLayers) {
+					active.boosts.def = Math.max(active.boosts.def, stockpileLayers);
+					active.boosts.spd = Math.max(active.boosts.spd, stockpileLayers);
+				}
 			}
 			for (const side of this.sides) {
 				for (const sideCondition of ['reflect', 'lightscreen', 'auroraveil']) {
@@ -8741,6 +8801,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryBoost(boost, target, source, effect) {
 			if (!effect || effect.id === 'royalsun') return;
+			if (effect.id === 'stockpile' || effect.id === 'accumulation') return;
 			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
 				!Object.values(boost).some(value => value && value > 0);
 			if (isOnlyDrops && source === target && target.hasAbility('royalsun')) return;
@@ -10727,6 +10788,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-immune', target, '[from] ability: Water Veil');
 			}
 			return false;
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
 		},
 		onResidual(pokemon) {
 			if (this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain')

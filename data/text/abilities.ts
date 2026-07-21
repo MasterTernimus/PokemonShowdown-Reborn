@@ -399,6 +399,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2.",
 		shortDesc: "Normal moves become Dragon type and have 1.2x power.",
 	},
+	draconicforce: {
+		name: "Draconic Force",
+		desc: "This Pokemon has Dragonize, Sheer Force, and Guts's effects.",
+		shortDesc: "Dragonize + Sheer Force + Guts.",
+	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
 		desc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Dragon-type attack.",
@@ -484,8 +489,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingstorm: {
 		name: "Raging Storm",
-		desc: "This Pokemon's attacks have Mold Breaker, remove the target's stat changes before damage, and ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 75% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
-		shortDesc: "Mold Breaker; attacks clear target stats and ignore screens/boosts; KO bonus.",
+		desc: "This Pokemon's attacks have Mold Breaker, remove the target's positive stat changes before damage, and ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 60% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
+		shortDesc: "Mold Breaker; attacks clear target boosts and ignore screens/boosts; KO bonus.",
+	},
+	voltagevolley: {
+		name: "Voltage Volley",
+		desc: "This Pokemon's multi-hit moves become special attacks and use its Special Attack.",
+		shortDesc: "Multi-hit moves become special and use Sp. Atk.",
 	},
 	vanguard: {
 		name: "Vanguard",
@@ -654,7 +664,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mourningsnow: {
 		name: "Mourning Snow",
-		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon have a 40% chance to become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/8 of its maximum HP. When this Pokemon faints, all opposing Pokemon become cursed. This Pokemon has a 100% Cursed Body effect.",
+		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon have a 30% chance to become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/8 of its maximum HP. When this Pokemon faints, all opposing Pokemon become cursed. This Pokemon has a 100% Cursed Body effect.",
 		shortDesc: "Sets 8-turn Hail/Veil; Ice Body; frostbite; on faint curses foes; Cursed Body.",
 	},
 	venombastion: {
@@ -2705,7 +2715,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	waterveil: {
 		name: "Water Veil",
-		shortDesc: "This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		desc: "This Pokemon cannot be burned and is immune to Hail and Sandstorm damage. Gaining this Ability while burned cures it. On switch-in, it gains Aqua Ring.",
+		shortDesc: "Cannot be burned; immune to Hail/Sandstorm; gains Aqua Ring.",
 	},
 	weakarmor: {
 		name: "Weak Armor",
