@@ -1804,6 +1804,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bone: 1 },
 		multihit: 2,
+		onModifyCritRatio(critRatio) {
+			return critRatio + 1;
+		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -1815,14 +1818,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	bonerush: {
 		num: 198,
-		accuracy: 90,
+		accuracy: 95,
 		basePower: 30,
 		category: "Physical",
 		name: "Bone Rush",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bone: 1 },
-		multihit: [2, 5],
+		multihit: [2, 6],
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasItem('thickclub')) move.multihit = this.sample([4, 6]);
+		},
+		secondary: {
+			chance: 10,
+			boosts: {
+				def: -1,
+			},
+		},
 		target: "normal",
 		type: "Ground",
 		zMove: { basePower: 140 },
@@ -2939,7 +2951,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	cometpunch: {
 		num: 4,
-		accuracy: 95,
+		accuracy: 100,
 		basePower: 20,
 		category: "Physical",
 		isNonstandard: "Past",
@@ -2947,7 +2959,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
+		basePowerCallback(pokemon, target, move) {
+			return move.lastHit ? 40 : 20;
+		},
+		onModifyCritRatio(critRatio, source, target, move) {
+			if (move.lastHit) return 5;
+		},
 		target: "normal",
 		type: "Normal",
 		maxMove: { basePower: 100 },
@@ -4367,8 +4385,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	doubleslap: {
 		num: 3,
-		accuracy: 85,
-		basePower: 15,
+		accuracy: 100,
+		basePower: 20,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Double Slap",
@@ -4376,8 +4394,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		multihit: [2, 5],
+		secondary: {
+			chance: 10,
+			boosts: {
+				atk: -1,
+			},
+		},
 		target: "normal",
-		type: "Normal",
+		type: "Fairy",
 		contestType: "Cute",
 	},
 	doubleteam: {
@@ -6893,16 +6917,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	furyattack: {
 		num: 31,
-		accuracy: 85,
-		basePower: 15,
+		accuracy: 100,
+		basePower: 20,
 		category: "Physical",
 		name: "Fury Attack",
 		pp: 20,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		flags: { contact: 1, protect: 1, mirror: 1, drill: 1, metronome: 1, bone: 1 },
+		multihit: [3, 5],
+		onAfterHit(target, source, move) {
+			if (!move.lastHit || !source.lastDamage) return;
+			this.heal(source.lastDamage, source, target);
+			if (target.fainted) this.heal(source.baseMaxhp / 4, source, target);
+		},
 		target: "normal",
-		type: "Normal",
+		type: "Ground",
 		contestType: "Cool",
 	},
 	furycutter: {
@@ -9758,8 +9787,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 25,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, drill: 1, metronome: 1 },
+		secondary: {
+			chance: 50,
+			boosts: {
+				def: -1,
+			},
+		},
 		target: "normal",
-		type: "Normal",
+		type: "Rock",
 		contestType: "Cool",
 	},
 	horndrill: {
@@ -19339,9 +19374,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
+		critRatio: 2,
 		target: "normal",
-		type: "Normal",
+		type: "Steel",
 		maxMove: { basePower: 120 },
 		contestType: "Cool",
 	},
@@ -20476,7 +20512,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	supercellslam: {
 		num: 916,
 		accuracy: 95,
-		basePower: 100,
+		basePower: 120,
 		category: "Physical",
 		name: "Supercell Slam",
 		pp: 15,
@@ -22649,7 +22685,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	volttackle: {
 		num: 344,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 140,
 		category: "Physical",
 		name: "Volt Tackle",
 		pp: 15,
@@ -23089,7 +23125,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	wildcharge: {
 		num: 528,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 120,
 		category: "Physical",
 		name: "Wild Charge",
 		pp: 15,

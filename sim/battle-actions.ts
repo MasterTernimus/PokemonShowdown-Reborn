@@ -1057,11 +1057,7 @@ export class BattleActions {
 	getMultihitSpilloverTarget(originalTarget: Pokemon, pokemon: Pokemon, move: ActiveMove, hit: number, targetHits: number) {
 		if (hit > targetHits) return null;
 		const parentalLike = ['parentalbond', 'hydrabond'].includes(move.multihitType || '');
-		const spilloverMoves = [
-			'bonemerang', 'doublekick', 'bonerush', 'geargrind', 'doubleironbash',
-			'dualchop', 'tachyoncutter', 'needlegun', 'watershuriken',
-		];
-		if (!parentalLike && !spilloverMoves.includes(move.id)) return null;
+		if (!parentalLike && !move.multihit) return null;
 		const ally = originalTarget.side.active.find(target =>
 			target && target !== originalTarget && target.hp && !target.fainted && !target.isAlly(pokemon)
 		);
@@ -1126,10 +1122,14 @@ export class BattleActions {
 		}
 
 		// 2. call to this.battle.spreadDamage
+		const calculatedDamage = damage.slice();
 		damage = this.battle.spreadDamage(damage, targets, pokemon, move);
 
 		for (const i of targets.keys()) {
 			if (damage[i] === false) targets[i] = false;
+		}
+		if (!isSecondary && !isSelf) {
+			this.spreadKOSpillover(calculatedDamage, damage, targets, pokemon, move);
 		}
 
 		// 3. onHit event happens here
@@ -1184,6 +1184,35 @@ export class BattleActions {
 		}
 
 		return [damage, targets];
+	}
+	spreadKOSpillover(
+		calculatedDamage: SpreadMoveDamage, appliedDamage: SpreadMoveDamage,
+		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove
+	) {
+		if (!move.spreadHit || move.category === 'Status') return;
+		let leftoverDamage = 0;
+		const knockedOut = new Set<Pokemon>();
+		for (const [i, target] of targets.entries()) {
+			if (!target || target === false) continue;
+			const calculated = calculatedDamage[i];
+			const applied = appliedDamage[i];
+			if (typeof calculated !== 'number' || typeof applied !== 'number') continue;
+			if (target.hp) continue;
+			const leftover = calculated - applied;
+			if (leftover <= 0) continue;
+			leftoverDamage += leftover;
+			knockedOut.add(target);
+		}
+		if (!leftoverDamage) return;
+		const spilloverTargets = targets.filter((target): target is Pokemon => (
+			!!target && target !== false && !knockedOut.has(target) &&
+			!!target.hp && !target.fainted && !target.isAlly(source)
+		));
+		if (!spilloverTargets.length) return;
+		const damage = Math.max(1, Math.floor(leftoverDamage / spilloverTargets.length));
+		for (const target of spilloverTargets) {
+			this.battle.damage(damage, target, source, move);
+		}
 	}
 	tryPrimaryHitEvent(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon,
@@ -1810,7 +1839,8 @@ export class BattleActions {
 
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
-			const spreadModifier = (move as any).fullDamageSpread || (move as any).hydraBondSpread ? 1 : this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
+			const spreadModifier = (move as any).fullDamageSpread || (move as any).hydraBondSpread || (move as any).parentalBondSpread ?
+				1 : this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if ((move.multihitType === 'parentalbond' || move.multihitType === 'hydrabond') && move.hit > 1) {
