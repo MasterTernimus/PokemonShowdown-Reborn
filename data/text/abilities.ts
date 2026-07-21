@@ -519,8 +519,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	grandmaster: {
 		name: "Grandmaster",
-		desc: "This Pokemon cannot flinch. After it uses Miracle Eye, it resists Dark-type moves. If it uses a status move, it takes 0.25x damage for the rest of the turn. If it moves before the target, its Psychic-type moves ignore resistances. When this Pokemon is damaged by an opposing attack, Future Sight is queued on that attacker's slot. When this Pokemon faints, Future Sight is queued on all opposing slots. Existing delayed moves on those slots are pushed farther ahead instead.",
-		shortDesc: "No flinch; status guard; damage/faint queues Future Sight.",
+		desc: "This Pokemon cannot flinch and has Overcoat's immunity to powder, Hail, and Sandstorm. After it uses Miracle Eye, it resists Dark-type moves. If it uses a status move, it takes 0.25x damage for the rest of the turn. If it moves before the target, its Psychic-type moves ignore resistances. When this Pokemon is damaged by an opposing attack, uses Future Sight, or faints, Future Sight is queued on opposing slots. Existing Grandmaster delayed attacks stack instead of blocking new ones.",
+		shortDesc: "Overcoat; no flinch; status guard; repeatedly queues Future Sight.",
 	},
 	warpath: {
 		name: "War Path",
@@ -654,8 +654,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
-		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight queued by this Ability has 60 BP, ignores defensive boosts, screens, and Abilities, and hits Dark-type Pokemon neutrally. If this Pokemon uses a move on opposing Pokemon, or is damaged by an opposing attack, Future Sight is queued on the affected opposing slots. Spread moves queue Future Sight on all enemies. Existing delayed moves on those slots are pushed farther ahead instead.",
-		shortDesc: "Gains strongest foe's Ability; queues 60 BP Future Sight on enemy slots.",
+		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight queued by this Ability has 60 BP, ignores defensive boosts, screens, and Abilities, and hits Dark-type Pokemon neutrally. If this Pokemon uses a move on opposing Pokemon, is damaged by an opposing attack, or uses Future Sight, Future Sight is queued on the affected opposing slots. Spread moves queue Future Sight on all enemies, and existing Perfect Foresight delayed attacks stack instead of blocking new ones.",
+		shortDesc: "Gains strongest foe's Ability; repeatedly queues 60 BP Future Sight.",
+	},
+	doomwarning: {
+		name: "Doom Warning",
+		desc: "Future Sight used by this Pokemon behaves like Perfect Foresight. This Pokemon's damaging attacks queue Future Sight on opposing targets they hit. When this Pokemon faints, Doom Desire is cast on all opposing Pokemon.",
+		shortDesc: "Attacks queue Future Sight; on faint casts Doom Desire on foes.",
+	},
+	perfectego: {
+		name: "Perfect Ego",
+		desc: "This Pokemon has Ultra Ego and Battle Fervor's effects. Its moves cannot miss.",
+		shortDesc: "Ultra Ego + Battle Fervor; moves cannot miss.",
 	},
 	heavenlychorus: {
 		name: "Heavenly Chorus",
@@ -2263,8 +2273,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	soultag: {
 		name: "Soul Tag",
-		desc: "This Pokemon has Soul Fire's effects and prevents adjacent opposing Pokemon from switching out.",
-		shortDesc: "Soul Fire + Shadow Tag.",
+		desc: "This Pokemon has Soul Fire and Temporal Shift's effects, and prevents adjacent opposing Pokemon from switching out.",
+		shortDesc: "Soul Fire + Temporal Shift + Shadow Tag.",
 	},
 	speedboost: {
 		name: "Speed Boost",
@@ -2868,8 +2878,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	temporalshift: {
 		name: "Temporal Shift",
-		desc: "This Pokemon's stats cannot be lowered by opposing Pokemon. At the end of each turn, it queues a delayed double-power Hex against a random valid opposing target.",
-		shortDesc: "Stats cannot be lowered; each turn queues delayed double-power Hex.",
+		desc: "This Pokemon's stats cannot be lowered by opposing Pokemon. At the end of each turn, it queues a Future Sight matching the user's primary type against a random valid opposing target; multiple attacks can be queued and announce their strike turns.",
+		shortDesc: "Stats cannot be lowered; queues stackable primary-type Future Sight.",
 	},
 	accumulation: {
 		name: "Accumulation",
