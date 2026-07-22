@@ -424,12 +424,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalflower: {
 		name: "Eternal Flower",
-		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.4x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
-		shortDesc: "Grass attacks use 1.5x offenses; opposing gimmick Pokemon have stats reduced to 0.4x.",
+		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.6x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Grass attacks use 1.5x offenses; opposing gimmick Pokemon have stats reduced to 0.6x.",
 	},
 	ange: {
 		name: "Ange",
-		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have their stats reduced to 0.4x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have their stats reduced to 0.6x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
 		shortDesc: "Eternal Flower + Fairy Aura; boosts Grass/Fairy pressure and weakens opposing gimmicks.",
 	},
 	ascendance: {
@@ -674,8 +674,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mourningsnow: {
 		name: "Mourning Snow",
-		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon has Ice Body's effect, opposing non-Ice Pokemon have a 30% chance to become frostbitten at the end of the turn, and if an opposing Pokemon faints, this Pokemon restores 1/8 of its maximum HP. When this Pokemon faints, all opposing Pokemon become cursed. This Pokemon has a 100% Cursed Body effect.",
-		shortDesc: "Sets 8-turn Hail/Veil; Ice Body; frostbite; on faint curses foes; Cursed Body.",
+		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon has Ice Body's effect and opposing non-Ice Pokemon have a 30% chance to become frostbitten at the end of the turn. When another Pokemon faints, this Pokemon restores 1/8 max HP, or 1/4 if the faint was caused by an Ice move, Hail, Snow, or Curse. When this Pokemon faints, all opposing Pokemon become cursed. This Pokemon has a 100% Cursed Body effect.",
+		shortDesc: "Sets 8-turn Hail/Veil; heals when others faint; frostbite; Cursed Body.",
 	},
 	venombastion: {
 		name: "Venom Bastion",
@@ -2213,8 +2213,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon always has Dry Skin's effects. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.75x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
-		shortDesc: "Has Dry Skin. Above 50% HP: 0.75x damage, no weaknesses/hazards/status/secondary effects.",
+		desc: "This Pokemon always has Dry Skin's effects. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
+		shortDesc: "Has Dry Skin. Above 50% HP: 0.8x damage, no weaknesses/hazards/status/secondary effects.",
 	},
 	tremor: {
 		name: "Tremor",
