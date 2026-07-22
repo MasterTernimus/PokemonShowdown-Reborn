@@ -1406,6 +1406,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Mega Sol",
 		shortDesc: "This Pokemon's moves are used as if the effects of Sunny Day were active.",
 	},
+	bloomingsun: {
+		name: "Blooming Sun",
+		desc: "This Pokemon has Mega Sol, Flower Gift, Flower Veil, and Leaf Guard's effects. Leaf Guard is always active.",
+		shortDesc: "Mega Sol + Flower Gift + Flower Veil; always-active Leaf Guard.",
+	},
 	merciless: {
 		name: "Merciless",
 		shortDesc: "This Pokemon's attacks are critical hits if the target is poisoned.",

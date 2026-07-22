@@ -3487,7 +3487,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 80, atk: 92, def: 115, spa: 143, spd: 115, spe: 80 },
-		abilities: { 0: "Mega Sol" },
+		abilities: { 0: "Blooming Sun" },
 		heightm: 2.4,
 		weightkg: 201,
 		color: "Green",

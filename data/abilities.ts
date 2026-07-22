@@ -6099,6 +6099,78 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 315,
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 	},
+	bloomingsun: {
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (this.field.weather !== 'sunnyday') {
+				(this.dex.conditions.getByID('sunnyday' as ID) as any).onWeatherModifyDamage
+					.call(this, damage, attacker, defender, move);
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Blooming Sun');
+			}
+			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.add('-immune', target, '[from] ability: Blooming Sun');
+				return null;
+			}
+		},
+		onAllyModifyAtkPriority: 3,
+		onAllyModifyAtk(atk, pokemon) {
+			const holder = this.effectState.target;
+			if (['sunnyday', 'desolateland'].includes(holder.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAllyModifySpDPriority: 4,
+		onAllyModifySpD(spd, pokemon) {
+			const holder = this.effectState.target;
+			if (['sunnyday', 'desolateland'].includes(holder.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAllyTryBoost(boost, target, source, effect) {
+			if ((source && target === source) || (!target.hasType('Grass') && !this.field.isTerrain('bewitchedwoodsterrain'))) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries) {
+				const effectHolder = this.effectState.target;
+				this.add('-block', target, 'ability: Blooming Sun', '[of] ' + effectHolder);
+			}
+		},
+		onAllySetStatus(status, target, source, effect) {
+			if ((target.hasType('Grass') || this.field.isTerrain('bewitchedwoodsterrain')) && source && target !== source && effect && effect.id !== 'yawn') {
+				this.debug('interrupting setStatus with Blooming Sun');
+				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					const effectHolder = this.effectState.target;
+					this.add('-block', target, 'ability: Blooming Sun', '[of] ' + effectHolder);
+				}
+				return null;
+			}
+		},
+		onAllyTryAddVolatile(status, target) {
+			if ((target.hasType('Grass') || this.field.isTerrain('bewitchedwoodsterrain')) && status.id === 'yawn') {
+				this.debug('Blooming Sun blocking yawn');
+				const effectHolder = this.effectState.target;
+				this.add('-block', target, 'ability: Blooming Sun', '[of] ' + effectHolder);
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Blooming Sun",
+		rating: 4,
+		num: 10182,
+		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
+	},
 	merciless: {
 		onModifyCritRatio(critRatio, source, target) {
 			let modifier = 0;
