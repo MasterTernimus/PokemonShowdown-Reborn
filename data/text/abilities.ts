@@ -434,8 +434,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ascendance: {
 		name: "Ascendance",
-		desc: "This Pokemon gains a STAB damage bonus on moves that do not already match its type. Its damaging moves ignore type-based immunities, but not Ability immunities, and still respect resistances. Its Defense is doubled.",
-		shortDesc: "All moves get STAB if needed; hits type immunities; Fur Coat.",
+		desc: "This Pokemon gains a STAB damage bonus on moves that do not already match its type. Its damaging moves ignore type-based immunities, but not Ability immunities, and still respect resistances. Its Defense is doubled, and it has Overcoat's effects.",
+		shortDesc: "All moves get STAB if needed; hits type immunities; Fur Coat + Overcoat.",
 	},
 	mindfreeze: {
 		name: "Mind Freeze",
