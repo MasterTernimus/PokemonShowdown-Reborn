@@ -5861,8 +5861,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. When it attacks, the user restores 1/8 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Turn 1 +1 Atk/Def/SpD; attacks turn 2 and heals 1/8.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. When it attacks, the user restores 1/16 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Turn 1 +1 Atk/Def/SpD; attacks turn 2 and heals 1/16.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},

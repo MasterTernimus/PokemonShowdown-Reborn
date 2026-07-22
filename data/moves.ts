@@ -12836,7 +12836,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (pokemon.hp) this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon, move);
+			if (pokemon.hp) this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon, move);
 		},
 		target: "normal",
 		type: "Rock",
