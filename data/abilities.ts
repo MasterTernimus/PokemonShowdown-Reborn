@@ -3068,9 +3068,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!target.hasType('Ice') && this.randomChance(3, 10)) target.trySetStatus('frz', pokemon);
 			}
 		},
-		onSourceAfterFaint(length, target, source, effect) {
-			for (const foe of source.foes()) {
-				if (!foe.fainted) foe.addVolatile('curse', source, this.dex.abilities.get('mourningsnow'));
+		onFaint(pokemon) {
+			for (const foe of pokemon.foes()) {
+				if (!foe.fainted) foe.addVolatile('curse', pokemon, this.dex.abilities.get('mourningsnow'));
 			}
 		},
 		onAnyFaint(target, source, effect) {
