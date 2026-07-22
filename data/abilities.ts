@@ -3069,10 +3069,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (['hail', 'snow'].includes(source.effectiveWeather())) this.heal(source.baseMaxhp / 8, source, source);
 			for (const foe of source.foes()) {
 				if (!foe.fainted) foe.addVolatile('curse', source, this.dex.abilities.get('mourningsnow'));
 			}
+		},
+		onAnyFaint(target, source, effect) {
+			const pokemon = this.effectState.target;
+			if (!pokemon || pokemon === target || pokemon.fainted) return;
+			const doubled =
+				effect?.id === 'hail' ||
+				effect?.id === 'snow' ||
+				effect?.id === 'curse' ||
+				(effect?.effectType === 'Move' && this.movehasType(effect, 'Ice'));
+			this.heal(pokemon.baseMaxhp / (doubled ? 4 : 8), pokemon, pokemon);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!move || move.category === 'Status') return;
@@ -3730,27 +3739,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFoeModifyAtk(atk, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFoeModifyDef(def, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFoeModifySpe(spe, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFoeModifySpA(spa, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFoeModifySpD(spd, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFaint(pokemon) {
 			if (this.field.setTerrain('bewitchedwoodsterrain', pokemon, this.dex.abilities.get('eternalflower'))) {
@@ -3793,23 +3802,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onFoeModifyAtk(atk, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFoeModifyDef(def, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFoeModifySpe(spe, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFoeModifySpA(spa, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFoeModifySpD(spd, pokemon) {
 			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
-			return this.chainModify(0.4);
+			return this.chainModify(0.6);
 		},
 		onFaint(pokemon) {
 			if (this.field.setTerrain('bewitchedwoodsterrain', pokemon, this.dex.abilities.get('ange'))) {
@@ -8847,7 +8856,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.hp > target.maxhp / 2 && typeMod > 0) return 0;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hp > target.maxhp / 2) return this.chainModify(0.75);
+			if (target.hp > target.maxhp / 2) return this.chainModify(0.8);
 		},
 		onSourceBasePowerPriority: 17,
 		onSourceBasePower(basePower, attacker, defender, move) {

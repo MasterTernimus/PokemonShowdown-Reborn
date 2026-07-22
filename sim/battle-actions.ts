@@ -1197,7 +1197,7 @@ export class BattleActions {
 		calculatedDamage: SpreadMoveDamage, appliedDamage: SpreadMoveDamage,
 		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove
 	) {
-		if (!move.spreadHit || move.category === 'Status') return;
+		if (!move.spreadHit || move.category === 'Status' || !(move as any).allowSpreadKOSpillover) return;
 		let leftoverDamage = 0;
 		const knockedOut = new Set<Pokemon>();
 		for (const [i, target] of targets.entries()) {
