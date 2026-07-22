@@ -1063,14 +1063,14 @@ export class BattleActions {
 				target && target !== originalTarget && target.hp && !target.fainted
 			);
 			if (!targets.length) return null;
-			(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.6) : 0.3;
+			(move as any).spilloverDamageModifier = move.multihitType === 'parentalbond' ? 0.8 : 0.5;
 			return this.battle.sample(targets);
 		}
 		const ally = originalTarget.side.active.find(target =>
 			target && target !== originalTarget && target.hp && !target.fainted && !target.isAlly(pokemon)
 		);
 		if (!ally) return null;
-		(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.6) : 0.3;
+		(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.8) : 0.3;
 		return ally;
 	}
 
@@ -1571,7 +1571,7 @@ export class BattleActions {
 		const isGigantamax = pokemon.gigantamax || pokemon.species.forme?.includes('Gmax');
 		if (isGigantamax && pokemon.canGigantamax && move.category !== 'Status') {
 			const gMaxMove = this.dex.moves.get(pokemon.canGigantamax);
-			if (gMaxMove.exists && gMaxMove.type === move.type) return gMaxMove;
+			if (gMaxMove.exists && (gMaxMove.id === 'gmaxcuddle' ? move.type === 'Normal' : gMaxMove.type === move.type)) return gMaxMove;
 		}
 		const maxMove = this.dex.moves.get(this.MAX_MOVES[move.category === 'Status' ? move.category : move.type]);
 		if (maxMove.exists) return maxMove;
@@ -1585,7 +1585,7 @@ export class BattleActions {
 			const isGigantamax = pokemon.gigantamax || pokemon.species.forme?.includes('Gmax');
 			if (isGigantamax && pokemon.canGigantamax) {
 				const gMaxMove = this.dex.getActiveMove(pokemon.canGigantamax);
-				if (gMaxMove.exists && gMaxMove.type === move.type) maxMove = gMaxMove;
+				if (gMaxMove.exists && (gMaxMove.id === 'gmaxcuddle' ? move.type === 'Normal' : gMaxMove.type === move.type)) maxMove = gMaxMove;
 			}
 			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
 			if (!['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe'].includes(maxMove.id)) {
@@ -1853,7 +1853,7 @@ export class BattleActions {
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if ((move.multihitType === 'parentalbond' || move.multihitType === 'hydrabond') && move.hit > 1) {
 			// Parental Bond / Hydra Bond modifier
-			const bondModifier = (move as any).spilloverDamageModifier || (move.multihitType === 'hydrabond' ? 0.3 : 0.6);
+			const bondModifier = (move as any).spilloverDamageModifier || (move.multihitType === 'hydrabond' ? 0.3 : 0.8);
 			this.battle.debug(`${move.multihitType} modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		} else if ((move as any).spilloverDamageModifier) {

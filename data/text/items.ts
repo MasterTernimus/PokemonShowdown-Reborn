@@ -511,7 +511,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	eeviumz: {
 		name: "Eevium Z",
-		shortDesc: "If held by an Eevee with Last Resort, it can use Extreme Evoboost.",
+		shortDesc: "Eevee forms: Def/SpD 1.5x. If Eevee has Last Resort, enables Extreme Evoboost.",
 	},
 	ejectbutton: {
 		name: "Eject Button",

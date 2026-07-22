@@ -3864,6 +3864,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 111,
 	},
 	ascendance: {
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (move.flags['powder'] && target !== source && this.dex.getImmunity('powder', target)) {
+				this.add('-immune', target, '[from] ability: Ascendance');
+				return null;
+			}
+		},
 		onModifyMove(move, pokemon) {
 			if (move.category !== 'Status') move.ignoreImmunity = true;
 		},
