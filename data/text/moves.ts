@@ -1258,7 +1258,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	cut: {
 		name: "Cut",
 		desc: "Steel-type slicing move with a high critical hit ratio. Before damage, removes the target's Defense boosts. If the target has no Defense boosts, this move has a 30% chance to lower Defense by 1 stage.",
-		shortDesc: "High crit. Removes Defense boosts, or 30% chance to lower Defense.",
+		shortDesc: "+1 crit; clears Defense boosts or 30% -1 Def.",
 	},
 	darkestlariat: {
 		name: "Darkest Lariat",
@@ -2217,7 +2217,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	fly: {
 		name: "Fly",
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids most attacks. If Tailwind is active on the user's side, this move attacks immediately and has a high critical hit ratio.",
-		shortDesc: "Charges, then hits. During Tailwind, attacks immediately with +1 crit.",
+		shortDesc: "Charges first; instant with +1 crit in Tailwind.",
 		gen5: {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -2739,7 +2739,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gravity: {
 		name: "Gravity",
 		desc: "For 5 turns, grounded Pokemon that are not Psychic or Fairy type have 0.75x Speed, and Ground-type moves have 1.2x power. Evasiveness of all active Pokemon is multiplied by 0.6. Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately. During the effect, airborne immunities are removed and certain airborne moves fail.",
-		shortDesc: "5 turns: no Ground immunities, 1.67x accuracy; grounded non-Psychic/Fairy -Speed.",
+		shortDesc: "5 turns: grounds foes; +accuracy; non-Psychic/Fairy grounded Spe down.",
 		gen7: {
 			desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
 		},
@@ -5362,7 +5362,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rockclimb: {
 		name: "Rock Climb",
 		desc: "Has a 30% chance to confuse the target. If this move hits a confused target, the user's Attack and Speed rise by 1 stage. On Mountain, Rocky, Cave, and Desert fields, this move has a high critical hit ratio.",
-		shortDesc: "30% confuse; hitting confused targets raises Atk/Spe. +1 crit on rocky fields.",
+		shortDesc: "30% confuse; vs confused: +1 Atk/Spe. +crit on rocky fields.",
 	},
 	rockpolish: {
 		name: "Rock Polish",
@@ -5384,7 +5384,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rocksmash: {
 		name: "Rock Smash",
 		desc: "Has a 50% chance to lower the target's Defense by 1 stage. If this lowers Defense, the user's next Fighting-, Rock-, or Ground-type move against that target deals 1.3x damage. If the target already has lowered Defense, this move hits twice.",
-		shortDesc: "50% -1 Def and marks target; hits twice if Defense is already lowered.",
+		shortDesc: "50% -1 Def; marks for 1.3x. Hits twice if Def is down.",
 	},
 	rockthrow: {
 		name: "Rock Throw",
@@ -5861,8 +5861,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Raises Atk, Defense, and Sp. Def by 1 on turn 1. Hits turn 2.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. When it attacks, the user restores 1/8 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Turn 1 +1 Atk/Def/SpD; attacks turn 2 and heals 1/8.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},
@@ -6440,7 +6440,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	strength: {
 		name: "Strength",
 		desc: "This Fighting-type move ignores the target's Defense boosts and cannot be weakened by Reflect, Aurora Veil, or Arenite Wall.",
-		shortDesc: "Ignores Defense boosts, Reflect, Aurora Veil, and Arenite Wall.",
+		shortDesc: "Ignores Defense boosts, Reflect, Veil, and Arenite Wall.",
 	},
 	strengthsap: {
 		name: "Strength Sap",

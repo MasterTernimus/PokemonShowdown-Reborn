@@ -3663,7 +3663,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		isNonstandard: "Unobtainable",
 		name: "Cut",
-		pp: 24,
+		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		critRatio: 2,
@@ -6472,7 +6472,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 90,
 		category: "Physical",
 		name: "Fly",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: {
 			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
@@ -8530,7 +8530,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Gravity",
-		pp: 8,
+		pp: 5,
 		priority: 0,
 		flags: { nonsky: 1, metronome: 1 },
 		pseudoWeather: 'gravity',
@@ -12835,6 +12835,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (pokemon.hp) this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon, move);
+		},
 		target: "normal",
 		type: "Rock",
 	},
@@ -16765,7 +16768,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rock Climb",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
@@ -16838,7 +16841,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 50,
 		category: "Physical",
 		name: "Rock Smash",
-		pp: 24,
+		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, pokemon, target) {
@@ -20229,7 +20232,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 90,
 		category: "Physical",
 		name: "Strength",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		ignoreDefensive: true,
