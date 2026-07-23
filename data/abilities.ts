@@ -2824,9 +2824,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.singleEvent('Start', ability, pokemon.m.perfectForesightAbilityState, pokemon, best, this.effect);
 			}
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.8);
-		},
 		onAnyTryBoost(boost, target, source, effect) {
 			const holder = this.effectState.target;
 			if (!holder?.m?.perfectForesightAbility || holder.m.perfectForesightAbility !== 'royaldecree') return;
