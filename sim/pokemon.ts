@@ -899,8 +899,8 @@ export class Pokemon {
 		if (this.battle.gen >= 5 && !this.isActive) return true;
 		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
 		// check Fling first to avoid infinite recursion
-		if (isFling) return this.battle.gen >= 5 && this.hasAbility('klutz');
-		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
+		if (isFling) return this.battle.gen >= 5 && this.hasAbility(['klutz', 'fossilfrenzy']);
+		return !this.getItem().ignoreKlutz && this.hasAbility(['klutz', 'fossilfrenzy']);
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -2030,7 +2030,7 @@ export class Pokemon {
 			fossilfrenzy: ['klutz'],
 			alloycore: ['magicguard', 'clearbody'],
 			hellfireeclipse: ['solarpower'],
-			sacrededge: ['sharpness'],
+			sacrededge: ['sharpness', 'swornduty'],
 			omenedge: ['sharpness', 'sniper'],
 			dreadmaw: ['hugepower', 'strongjaw'],
 			cursedmarionette: ['prankster'],
@@ -2041,13 +2041,15 @@ export class Pokemon {
 			relentlesslink: ['skilllink', 'guts', 'shielddust'],
 			mirrorgreed: ['magicbounce', 'cursedbody'],
 			uncheckedassault: ['scrappy', 'striker', 'opportunist'],
-			royalvoice: ['pixilate', 'queenlymajesty'],
+			royalvoice: ['pixilate', 'queenlymajesty', 'swornduty'],
 			perfectforesight: ['trace'],
 			hydrabreaker: ['hydrabond', 'moldbreaker'],
 			heavenlychorus: ['pixilate', 'cloudnine'],
 			mourningsnow: ['snowwarning', 'icebody'],
 			venombastion: ['shellarmor'],
 			draconicforce: ['dragonize', 'sheerforce', 'guts'],
+			ironmountain: ['filter', 'stamina', 'heavymetal'],
+			woolyconductor: ['furcoat', 'moldbreaker', 'static'],
 			rimeknuckle: ['ironfist'],
 			fallenstar: ['moldbreaker'],
 			ragingstorm: ['moldbreaker'],
