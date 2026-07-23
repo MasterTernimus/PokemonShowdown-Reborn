@@ -2827,6 +2827,37 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
+		onAnyTryBoost(boost, target, source, effect) {
+			const holder = this.effectState.target;
+			if (!holder?.m?.perfectForesightAbility || holder.m.perfectForesightAbility !== 'royaldecree') return;
+			if (!effect || effect.id === 'royaldecree') return;
+			if (effect.id === 'stockpile' || effect.id === 'accumulation' || effect.id === 'relicinstinct') return;
+			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
+				!Object.values(boost).some(value => value && value > 0);
+			if (isOnlyDrops && source === target && target === holder) return;
+			const positiveBoost = Object.values(boost).some(value => value && value > 0);
+			if (positiveBoost && target === source && effect.effectType === 'Ability') {
+				const fieldAbilityBoosts: { [abilityid: string]: string[] } = {
+					stalwart: ['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'],
+					mirrorarmor: ['fairytaleterrain', 'mirrorarmor'],
+					irondominion: ['fairytaleterrain', 'mirrorarmor'],
+					relicarmor: ['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'],
+					magician: ['fairytaleterrain', 'bewitchedwoodsterrain', 'hauntedterrain', 'mistyterrain', 'newworldterrain'],
+				};
+				const allowedFields = fieldAbilityBoosts[effect.id];
+				if (allowedFields && this.field.isTerrain(allowedFields)) return;
+			}
+			const fieldEffect = effect.effectType === 'Field' || effect.effectType === 'Terrain';
+			if (fieldEffect) return;
+			let blocked = false;
+			let stat: BoostID;
+			for (stat in boost) {
+				if (!boost[stat]) continue;
+				delete boost[stat];
+				blocked = true;
+			}
+			if (blocked) this.add('-fail', target, 'boost', '[from] ability: Royal Decree', `[of] ${holder}`);
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source === target || target.isAlly(source) || move.flags['futuremove']) return;
 			const slotCondition = source.side.slotConditions[source.position]['futuremove'];
@@ -4096,6 +4127,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
+		},
+		onDeductPP(target, source) {
+			if (target.isAlly(source)) return;
+			return 1;
 		},
 		flags: {},
 		name: "Relic Armor",
@@ -10841,6 +10876,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Unseen Fist",
 		rating: 2,
 		num: 260,
+	},
+	phantomfist: {
+		onModifyMove(move) {
+			if (move.flags['contact']) delete move.flags['protect'];
+			if (move.flags['punch'] && move.type === 'Ghost') move.ignoreImmunity = true;
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, source, target, move) {
+			if (move.flags['punch']) return this.chainModify(1.3);
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move?.flags['punch'] && move.type === 'Ghost' && typeMod < 0) return 0;
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!move.flags['punch']) return;
+			const shieldMoves = ['protect', 'detect', 'spikyshield', 'banefulbunker', 'kingsshield', 'obstruct'];
+			if (shieldMoves.some(id => target.volatiles[id])) this.boost({ atk: 1 }, source, source);
+		},
+		flags: {},
+		name: "Phantom Fist",
+		rating: 4,
+		num: 10193,
 	},
 	ultraego: {
 		onStart(pokemon) {
