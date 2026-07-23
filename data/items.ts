@@ -3769,7 +3769,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				this.actions.useMove('wish', pokemon, { target: pokemon });
 			}
 			if (this.field.isTerrain('fairytaleterrain')) {
-				pokemon.addVolatile('kingsshield');
+				pokemon.addVolatile('kingsshield', pokemon, item);
+				pokemon.addVolatile('stall');
 			}
 			if (this.field.isTerrain('darkcrystalcavernterrain')) {
 				this.boost({ spd: 1 }, pokemon);

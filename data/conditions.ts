@@ -899,8 +899,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(pokemon) {
 			this.effectState.turns = 0;
 			if (pokemon.gigantamax || pokemon.species.forme?.includes('Gmax')) {
-				(pokemon as any).gmaxOriginalMoveSlots = pokemon.moveSlots.map(slot => ({ pp: slot.pp, maxpp: slot.maxpp }));
-				for (const moveSlot of pokemon.moveSlots) {
+				(pokemon as any).gmaxOriginalMoveSlots = pokemon.moveSlots.map(slot => ({ pp: slot.pp, maxpp: slot.maxpp, gmaxpp: null as number | null }));
+				for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
+					const move = this.dex.moves.get(moveSlot.id);
+					const maxMove = this.actions.getMaxMove(move, pokemon);
+					if (maxMove?.name !== pokemon.canGigantamax) continue;
+					(pokemon as any).gmaxOriginalMoveSlots[i].gmaxpp = 8;
 					moveSlot.pp = 8;
 					moveSlot.maxpp = 8;
 				}
@@ -945,8 +949,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (!originalMoveSlots) return;
 			for (const [i, originalSlot] of originalMoveSlots.entries()) {
 				if (!pokemon.moveSlots[i]) continue;
-				pokemon.moveSlots[i].pp = originalSlot.pp;
+				if (originalSlot.gmaxpp === null) continue;
+				const spentPP = this.clampIntRange(originalSlot.gmaxpp - pokemon.moveSlots[i].pp, 0, originalSlot.gmaxpp);
+				const restoredPP = this.clampIntRange(originalSlot.pp - spentPP, 0, originalSlot.maxpp);
+				pokemon.moveSlots[i].pp = restoredPP;
 				pokemon.moveSlots[i].maxpp = originalSlot.maxpp;
+				if (pokemon.baseMoveSlots[i]) {
+					pokemon.baseMoveSlots[i].pp = restoredPP;
+					pokemon.baseMoveSlots[i].maxpp = originalSlot.maxpp;
+				}
 			}
 			delete (pokemon as any).gmaxOriginalMoveSlots;
 		},

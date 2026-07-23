@@ -352,10 +352,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "While this Pokemon has 1/4 or less of its maximum HP, its Attack and Special Attack are halved.",
 		shortDesc: "While this Pokemon has 1/4 or less of its max HP, its Attack and Sp. Atk are halved.",
 	},
-	ancientinstinct: {
-		name: "Ancient Instinct",
-		desc: "Opposing Pokemon cannot lower this Pokemon's Attack or Speed. If this Pokemon uses a damaging move and does not knock out the target, its Defense, Special Defense, and Speed are lowered by 1 stage. If this Pokemon misses a damaging move, it loses 1/4 of its maximum HP.",
-		shortDesc: "Foes cannot lower Atk/Spe; non-KO attacks drop Def/SpD/Spe; misses cost 1/4 HP.",
+	relicinstinct: {
+		name: "Relic Instinct",
+		desc: "If this Pokemon has more than 50% HP, its Rock- and Flying-type moves have 1.3x power and its moves ignore opposing Abilities. If this Pokemon has 50% or less HP, its Rock- and Flying-type moves have 1.1x power, it takes 0.75x damage from attacks, cannot be critically hit, restores 1/16 max HP each turn, and its Attack and Special Attack are halved. Once, when it reaches 25% HP or less, it heals 25% max HP, clears its negative stat stages, and lowers its Defense and Special Defense by 2 stages.",
+		shortDesc: ">50%: Rock/Flying 1.3x + Mold Breaker. <=50%: defensive mode; <=25% pinch heal.",
 	},
 	fossilfrenzy: {
 		name: "Fossil Frenzy",
@@ -454,8 +454,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relicarmor: {
 		name: "Relic Armor",
-		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.75x damage from attacks, has Pressure's PP effect, and its moves ignore Abilities.",
-		shortDesc: "No crits; stat drops +1 Def/SpD; takes 0.75x; Pressure + Mold Breaker.",
+		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.8x damage from attacks, does not take recoil damage except Struggle, and its moves ignore Abilities.",
+		shortDesc: "No crits; stat drops +1 Def/SpD; takes 0.8x; Rock Head + Mold Breaker.",
 	},
 	windysurge: {
 		name: "Windy Surge",
@@ -529,8 +529,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, up to 25% of its max HP per hit, and restores 1/16 max HP at the end of each turn.",
-		shortDesc: "Moves 1.3x and bypass abilities/defenses/screens; drains up to 25%; heals 1/16.",
+		desc: "This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit, and restores 1/16 max HP at the end of each turn.",
+		shortDesc: "Moves 1.3x and bypass defenses/screens; drains up to 33%; heals 1/16.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -584,8 +584,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sacrededge: {
 		name: "Sacred Edge",
-		desc: "This Pokemon has Sharpness's effect. Its slicing moves ignore Substitute, Reflect, Light Screen, and Aurora Veil.",
-		shortDesc: "Sharpness; slicing moves ignore screens/Substitute.",
+		desc: "This Pokemon has Sharpness and Sworn Duty's effects. Its slicing moves ignore Substitute, Reflect, Light Screen, and Aurora Veil. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
+		shortDesc: "Sharpness + Sworn Duty; slicing moves ignore screens/Substitute.",
 	},
 	omenedge: {
 		name: "Omen Edge",
@@ -649,8 +649,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalvoice: {
 		name: "Royal Voice",
-		desc: "This Pokemon has Pixilate and Queenly Majesty's effects. Its Normal-type moves become Fairy type and have 1.2x power. Its Psychic- and Fairy-type moves have 1.2x power.",
-		shortDesc: "Pixilate + Queenly Majesty; Psychic/Fairy moves 1.2x.",
+		desc: "This Pokemon has Pixilate, Queenly Majesty, and Sworn Duty's effects. Its Normal-type moves become Fairy type and have 1.2x power. Its Psychic- and Fairy-type moves have 1.2x power. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
+		shortDesc: "Pixilate + Queenly Majesty + Sworn Duty; Psychic/Fairy moves 1.2x.",
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
@@ -706,6 +706,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Storm Circuit",
 		desc: "On switch-in, this Pokemon creates Electric Terrain. During Rain, its Speed is doubled.",
 		shortDesc: "Electric Surge + Swift Swim.",
+	},
+	ironmountain: {
+		name: "Iron Mountain",
+		desc: "This Pokemon has Filter, Stamina, and Heavy Metal's effects. Super-effective attacks deal 0.75x damage to it. Once per turn when hit by an opposing damaging move, its Defense rises by 1 stage and it restores 1/16 max HP. Its weight is doubled.",
+		shortDesc: "Filter + Stamina + Heavy Metal.",
+	},
+	woolyconductor: {
+		name: "Wooly Conductor",
+		desc: "This Pokemon has Fur Coat, Mold Breaker, and Static's effects. Its Defense is doubled, its moves ignore opposing Abilities, and contact moves used against it may paralyze the attacker.",
+		shortDesc: "Fur Coat + Mold Breaker + Static.",
 	},
 	surgeconduit: {
 		name: "Surge Conduit",
@@ -2858,18 +2868,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
-		desc: "This Pokemon has Thick Fat's Fire- and Ice-type resistance benefits, and its Grass-type moves have 1.3x power. At the end of each turn, non-Grass Pokemon that are not seeded take pollen damage equal to 1/16 max HP, and this Pokemon heals the damage dealt. This damage uses Grass-type effectiveness.",
-		shortDesc: "Thick Fat; Grass 1.3x; end-turn pollen drain.",
+		desc: "This Pokemon has Thick Fat's Fire- and Ice-type resistance benefits, and its Grass-type moves have 1.3x power. At the end of each turn, opposing non-Grass Pokemon that are not seeded take pollen damage equal to 1/16 max HP, and this Pokemon heals the damage dealt. This damage uses Grass-type effectiveness.",
+		shortDesc: "Thick Fat; Grass 1.3x; drains opposing non-Grass foes.",
 	},
 	waterbarrage: {
 		name: "Water Barrage",
-		desc: "This Pokemon's Water-type moves have 1.3x power. On switch-in, it gains Aqua Ring. At the end of each turn, non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP. This damage uses Water-type effectiveness.",
-		shortDesc: "Water 1.3x; Aqua Ring; cycling Water chip.",
+		desc: "This Pokemon's Water-type moves have 1.3x power. On switch-in, it gains Aqua Ring. At the end of each turn, opposing non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP. This damage uses Water-type effectiveness.",
+		shortDesc: "Water 1.3x; Aqua Ring; cycling Water chip to non-Water foes.",
 	},
 	wildfirecore: {
 		name: "Wildfire Core",
-		desc: "This Pokemon's Fire-type moves have 1.3x power. This Pokemon takes 0.5x damage from Water-type moves. If Sun or Hail is active, resisted Fire-type moves used by this Pokemon are boosted like Tinted Lens. At the end of each turn, non-Fire Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire-type move this turn. This damage uses Fire-type effectiveness.",
-		shortDesc: "Fire 1.3x; 0.5x Water; weather Tinted Lens; end-turn fire chip.",
+		desc: "This Pokemon's Fire-type moves have 1.3x power. This Pokemon takes 0.5x damage from Water-type moves. If Sun or Hail is active, resisted Fire-type moves used by this Pokemon are boosted like Tinted Lens. At the end of each turn, opposing non-Fire Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire-type move this turn. This damage uses Fire-type effectiveness.",
+		shortDesc: "Fire 1.3x; 0.5x Water; weather Tinted Lens; fire chip to foes.",
 	},
 	memoryleak: {
 		name: "Memory Leak",
@@ -2968,8 +2978,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. Ally hits never trigger the boost or healing.",
-		shortDesc: "Mold Breaker; attacks heal once per turn; next enemy hit boosts Atk/SpA and heals.",
+		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP, and if one of its moves knocks out a Pokemon it heals 1/10 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. Ally hits never trigger the boost or healing.",
+		shortDesc: "Mold Breaker; attacks heal; move KOs heal 1/10; next enemy hit boosts Atk/SpA.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
