@@ -6478,10 +6478,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
 			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
 		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.side.sideConditions['tailwind']) move.critRatio++;
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
+			if (attacker.side.sideConditions['tailwind']) return;
 			this.add('-prepare', attacker, move.name);
 			if (this.field.isTerrain('caveterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				this.attrLastMove('[still]');

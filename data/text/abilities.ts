@@ -454,8 +454,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relicarmor: {
 		name: "Relic Armor",
-		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.8x damage from attacks, does not take recoil damage except Struggle, and its moves ignore Abilities.",
-		shortDesc: "No crits; stat drops +1 Def/SpD; takes 0.8x; Rock Head + Mold Breaker.",
+		desc: "This Pokemon cannot be critically hit. If an opposing Pokemon lowers its stats, its Defense and Special Defense rise by 1 stage. It takes 0.8x damage from attacks, does not take recoil damage except Struggle, has Pressure's PP effect, and its moves ignore Abilities.",
+		shortDesc: "No crits; stat drops +1 Def/SpD; takes 0.8x; Rock Head + Pressure + Mold Breaker.",
 	},
 	windysurge: {
 		name: "Windy Surge",
@@ -2690,6 +2690,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	unseenfist: {
 		name: "Unseen Fist",
 		shortDesc: "This Pokemon's contact moves ignore the target's protection, except Max Guard.",
+	},
+	phantomfist: {
+		name: "Phantom Fist",
+		desc: "This Pokemon has Unseen Fist's effect. Its punching moves have 1.3x power. Its Ghost-type punching moves ignore immunities and resistances. If this Pokemon hits through Protect, Detect, Spiky Shield, Baneful Bunker, King's Shield, or Obstruct with a punching move, its Attack rises by 1 stage.",
+		shortDesc: "Unseen Fist; punching moves 1.3x; Ghost punches ignore immunities/resists.",
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",
