@@ -550,11 +550,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Battle Bond Ultra Instinct boost');
 				return this.chainModify(1.5);
 			}
-			if (!['garchompbattlebond', 'greninjaash'].includes(source.species.id)) return;
-			if (source.getTypes().some(type => this.movehasType(move, type))) {
-				this.debug('Battle Bond same-type boost');
-				return this.chainModify(1.3);
-			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hasAbility('battlebond') && ['garchomp', 'greninjabond'].includes(target.species.id)) {
@@ -568,8 +563,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				if (source.moveThisTurnResult === undefined) {
 					this.debug('Battle Bond Ultra Instinct weaken');
-					return this.chainModify(0.75);
+					return this.chainModify(0.8);
 				}
+			}
+			if (target.species.id === 'garchompbattlebond') {
+				this.debug('Battle Bond transformed damage reduction');
+				return this.chainModify(0.8);
 			}
 			if (!['garchompbattlebond', 'greninjaash'].includes(target.species.id)) return;
 			this.debug('Battle Bond transformed damage reduction');
@@ -11568,6 +11567,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
 				pokemon.heroMessageDisplayed = true;
+			}
+			if (pokemon.species.forme === 'Hero') {
+				for (const ally of pokemon.alliesAndSelf()) {
+					if (ally.fainted) continue;
+					this.heal(ally.baseMaxhp * (ally.hp <= ally.maxhp / 2 ? 1 / 4 : 1 / 8), ally, pokemon, this.dex.abilities.get('zerotohero'));
+					if (ally.status) ally.cureStatus();
+				}
+			}
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			const pokemon = this.effectState.target;
+			if (pokemon.species.forme !== 'Hero') return;
+			if (target !== pokemon && target.isAlly(pokemon)) {
+				this.debug('Zero to Hero Friend Guard weaken');
+				return this.chainModify(0.75);
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },

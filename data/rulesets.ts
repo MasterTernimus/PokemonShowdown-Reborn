@@ -886,13 +886,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	authorityclause: {
 		effectType: 'ValidatorRule',
 		name: 'Authority Clause',
-		desc: "Prevents teams from having more than one Pokemon with Neutralization and more than one Pokemon with Royal Decree.",
+		desc: "Prevents teams from having more than one Pokemon with Neutralization or Royal Decree combined.",
 		onBegin() {
-			this.add('rule', 'Authority Clause: Limit one Neutralization and one Royal Decree user per team');
+			this.add('rule', 'Authority Clause: Limit one Neutralization or Royal Decree user per team');
 		},
 		onValidateTeam(team) {
 			const limitedAbilities = new Set(['neutralization', 'royaldecree', 'royalsun']);
-			const seen: Partial<Record<'neutralization' | 'royaldecree', string[]>> = {};
+			const seen: string[] = [];
 			for (const set of team) {
 				const abilities = new Set<ID>();
 				const setAbility = this.toID(set.ability);
@@ -907,20 +907,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				for (const ability of abilities) {
 					if (!limitedAbilities.has(ability)) continue;
-					const id = (ability === 'royalsun' ? 'royaldecree' : ability) as 'neutralization' | 'royaldecree';
-					if (!seen[id]) seen[id] = [];
-					seen[id]!.push(`${set.name || set.species} (${this.dex.abilities.get(id).name})`);
+					const id = ability === 'royalsun' ? 'royaldecree' : ability;
+					seen.push(`${set.name || set.species} (${this.dex.abilities.get(id).name})`);
 				}
 			}
-			const problems: string[] = [];
-			for (const id of ['neutralization', 'royaldecree'] as const) {
-				const pokemon = seen[id];
-				if (pokemon && pokemon.length > 1) {
-					problems.push(`You are limited to one Pokemon with ${this.dex.abilities.get(id).name} by Authority Clause.`);
-					problems.push(`(You have ${pokemon.join(', ')})`);
-				}
+			if (seen.length > 1) {
+				return [
+					`You are limited to one Pokemon with Neutralization or Royal Decree by Authority Clause.`,
+					`(You have ${seen.join(', ')})`,
+				];
 			}
-			return problems.length ? problems : undefined;
 		},
 	},
 	nicknameclause: {

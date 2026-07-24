@@ -862,14 +862,13 @@ export class BattleActions {
 		pokemon.lastDamage = 0;
 		let targetHits = move.multihit || 1;
 		if (Array.isArray(targetHits)) {
+			if (pokemon.hasItem('loadeddice')) {
+				targetHits = 5 + this.battle.random(2);
 			// yes, it's hardcoded... meh
-			if (targetHits[0] === 2 && targetHits[1] === 5) {
+			} else if (targetHits[0] === 2 && targetHits[1] === 5) {
 				if (this.battle.gen >= 5) {
 					// 35-35-15-15 out of 100 for 2-3-4-5 hits
 					targetHits = this.battle.sample([2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5]);
-					if (targetHits < 4 && pokemon.hasItem('loadeddice')) {
-						targetHits = 5 - this.battle.random(2);
-					}
 				} else {
 					targetHits = this.battle.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 				}
@@ -877,10 +876,11 @@ export class BattleActions {
 				targetHits = this.battle.random(targetHits[0], targetHits[1] + 1);
 			}
 		}
-		if (targetHits === 10 && pokemon.hasItem('loadeddice')) targetHits -= this.battle.random(7);
+		if (targetHits === 10 && pokemon.hasItem('loadeddice')) targetHits = 5 + this.battle.random(2);
 		targetHits = Math.floor(targetHits);
 		let nullDamage = true;
 		let moveDamage: (number | boolean | undefined)[] = [];
+		const originalMultihitTarget = targets.find(target => !!target) || null;
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 
@@ -891,8 +891,7 @@ export class BattleActions {
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			(move as any).spilloverDamageModifier = undefined;
 			if (targets.every(target => !target?.hp)) {
-				const originalTarget = targets.find(target => !!target);
-				const spilloverTarget = originalTarget && this.getMultihitSpilloverTarget(originalTarget, pokemon, move, hit, targetHits);
+				const spilloverTarget = originalMultihitTarget && this.getMultihitSpilloverTarget(originalMultihitTarget, pokemon, move, hit, targetHits);
 				if (!spilloverTarget) break;
 				targets = [spilloverTarget];
 				damage = [0];
@@ -2115,3 +2114,4 @@ export class BattleActions {
 
 	// #endregion
 }
+

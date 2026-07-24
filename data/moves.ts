@@ -545,7 +545,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		target: "normal",
 		type: "Fighting",
 		contestType: "Tough",
@@ -1258,7 +1258,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		target: "normal",
 		zMove: { basePower: 140 },
 		maxMove: { basePower: 130 },
@@ -1777,18 +1777,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	boneclub: {
 		num: 125,
-		accuracy: 85,
-		basePower: 65,
+		accuracy: 100,
+		basePower: 50,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Bone Club",
 		pp: 20,
-		priority: 0,
+		priority: 1,
 		flags: { protect: 1, mirror: 1, metronome: 1, bone: 1 },
-		secondary: {
-			chance: 10,
-			volatileStatus: 'flinch',
-		},
 		target: "normal",
 		type: "Ground",
 		contestType: "Tough",
@@ -1827,7 +1823,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1, bone: 1 },
 		multihit: [2, 6],
 		onModifyMove(move, pokemon) {
-			if (pokemon.hasItem('thickclub')) move.multihit = this.sample([4, 6]);
+			if (pokemon.hasItem('thickclub')) move.multihit = this.sample([5, 6]);
 		},
 		secondary: {
 			chance: 10,
@@ -2174,7 +2170,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		target: "normal",
 		type: "Grass",
 		zMove: { basePower: 140 },
@@ -2952,7 +2948,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	cometpunch: {
 		num: 4,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 30,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Comet Punch",
@@ -2961,7 +2957,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		multihit: [3, 5],
 		basePowerCallback(pokemon, target, move) {
-			return move.lastHit ? 40 : 20;
+			return move.lastHit ? 60 : 30;
 		},
 		onModifyCritRatio(critRatio, source, target, move) {
 			if (move.lastHit) return 5;
@@ -4393,7 +4389,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -6463,6 +6459,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		willCrit: true,
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.overrideOffensiveStat = 'spa';
+			}
+		},
 		target: "normal",
 		type: "Grass",
 	},
@@ -6980,7 +6981,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		target: "normal",
 		type: "Normal",
 		maxMove: { basePower: 100 },
@@ -10346,7 +10347,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		target: "normal",
 		type: "Ice",
 		zMove: { basePower: 140 },
@@ -14812,7 +14813,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		target: "normal",
 		type: "Bug",
 		zMove: { basePower: 140 },
@@ -16758,7 +16759,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		target: "normal",
 		type: "Rock",
 		zMove: { basePower: 140 },
@@ -17399,7 +17400,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		selfBoost: {
 			boosts: {
 				def: -1,
@@ -18430,13 +18431,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onAfterMove(source, target, move) {
+			if (move.totalDamage) this.heal(source.baseMaxhp / 16, source, source);
+		},
+		condition: {
+			onDamagingHit(damage, target, source, move) {
+				this.heal(target.baseMaxhp / 16, target, target);
+			},
+		},
 		target: "normal",
 		type: "Normal",
 		contestType: "Tough",
 	},
 	skyattack: {
 		num: 143,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 140,
 		category: "Physical",
 		name: "Sky Attack",
@@ -18444,20 +18453,48 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { charge: 1, protect: 1, mirror: 1, distance: 1, metronome: 1, nosleeptalk: 1, failinstruct: 1 },
 		critRatio: 2,
+		onModifyMove(move, pokemon) {
+			if (pokemon.volatiles['skyattack']) {
+				move.ignoreEvasion = true;
+				move.infiltrates = true;
+			} else if (pokemon.side.sideConditions['tailwind']) {
+				move.basePower = 90;
+				move.critRatio = 3;
+			}
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
+			if (attacker.side.sideConditions['tailwind']) return;
 			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
+			this.boost({ spe: 1 }, attacker, attacker, move);
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
+		},
+		onAfterMove(source, target, move) {
+			if (move.totalDamage) this.boost({ spe: 1 }, source, source, move);
 		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
+		},
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Sky-Charged');
+			},
+			onTryBoost(boost, target, source, effect) {
+				if (boost.spe && boost.spe < 0) {
+					delete boost.spe;
+					this.add('-fail', target, 'unboost', 'Speed', '[from] move: Sky Attack', '[of] ' + target);
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Sky-Charged', '[silent]');
+			},
 		},
 		target: "any",
 		type: "Flying",
@@ -20991,7 +21028,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		target: "normal",
 		type: "Normal",
 		zMove: { basePower: 140 },
@@ -22870,7 +22907,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 1,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [2, 5],
+		multihit: [3, 5],
 		onModifyMove(move, pokemon) {
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.basePower = 20;
@@ -23610,5 +23647,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Beautiful",
 	},
 };
+
 
 
