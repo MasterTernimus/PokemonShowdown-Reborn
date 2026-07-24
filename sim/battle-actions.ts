@@ -1942,7 +1942,7 @@ export class BattleActions {
 			}
 		}
 		if (target.terastallized === 'Stellar' && (sourceIsGmax || sourceIsMega)) {
-			baseDamage = this.battle.modify(baseDamage, 0.8);
+			baseDamage = this.battle.modify(baseDamage, 0.9);
 		}
 		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
 		if (this.battle.gen === 5 && !baseDamage) baseDamage = 1;
