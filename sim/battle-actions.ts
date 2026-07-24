@@ -1885,21 +1885,9 @@ export class BattleActions {
 				stab = 1.5;
 			}
 
-			// The Stellar tera type makes this incredibly confusing
-			// If the move's type does not match one of the user's base types,
-			// the Stellar tera type applies a one-time 1.2x damage boost for that type.
-			//
-			// If the move's type does match one of the user's base types,
-			// then the Stellar tera type applies a one-time 2x STAB boost for that type,
-			// and then goes back to using the regular 1.5x STAB boost for those types.
 			if (pokemon.terastallized === 'Stellar') {
-				if (!pokemon.stellarBoostedTypes.includes(type) || move.stellarBoosted) {
-					stab = isSTAB ? 2 : [4915, 4096];
-					move.stellarBoosted = true;
-					if (pokemon.species.name !== 'Terapagos-Stellar') {
-						pokemon.stellarBoostedTypes.push(type);
-					}
-				}
+				stab = isSTAB ? 2 : [4915, 4096];
+				move.stellarBoosted = true;
 			} else {
 				if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
 					stab = 2;
@@ -1941,6 +1929,20 @@ export class BattleActions {
 			if (this.battle.gen < 6 || move.id !== 'facade') {
 				baseDamage = this.battle.modify(baseDamage, 0.5);
 			}
+		}
+		const targetIsGmax = !!(target.gigantamax || target.species.forme?.includes('Gmax'));
+		const targetIsMega = !!(target.species.isMega || target.species.forme === 'Mega');
+		const sourceIsGmax = !!(pokemon.gigantamax || pokemon.species.forme?.includes('Gmax'));
+		const sourceIsMega = !!(pokemon.species.isMega || pokemon.species.forme === 'Mega');
+		if (pokemon.terastallized === 'Stellar') {
+			if (targetIsGmax) {
+				baseDamage = this.battle.modify(baseDamage, 1.5);
+			} else if (targetIsMega) {
+				baseDamage = this.battle.modify(baseDamage, 1.3);
+			}
+		}
+		if (target.terastallized === 'Stellar' && (sourceIsGmax || sourceIsMega)) {
+			baseDamage = this.battle.modify(baseDamage, 0.8);
 		}
 		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
 		if (this.battle.gen === 5 && !baseDamage) baseDamage = 1;
@@ -2073,12 +2075,12 @@ export class BattleActions {
 	}
 
 	canTerastallize(pokemon: Pokemon) {
-		return pokemon.teraType;
+		return pokemon.species.baseSpecies === 'Ogerpon' ? pokemon.teraType : 'Stellar';
 	}
 
 	terastallize(pokemon: Pokemon) {
 		if (!this.battle.useGimmick(pokemon, 'Terastal')) return null;
-		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
+		if (pokemon.species.baseSpecies === 'Ogerpon' && pokemon.teraType !== 'Stellar' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
 			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
 			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game crashes.", false, pokemon.side);
 			return;
@@ -2088,13 +2090,14 @@ export class BattleActions {
 			this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 		}
 
-		const type = pokemon.teraType;
+		const type = pokemon.species.baseSpecies === 'Ogerpon' ? pokemon.teraType : 'Stellar';
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
 		pokemon.addedType = '';
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
-		if (pokemon.species.baseSpecies === 'Ogerpon') {
+		if (type === 'Stellar') pokemon.addVolatile('stellarhealing');
+		if (pokemon.species.baseSpecies === 'Ogerpon' && ['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType)) {
 			let ogerponSpecies = toID(pokemon.species.battleOnly || pokemon.species.id);
 			ogerponSpecies += ogerponSpecies === 'ogerpon' ? 'tealtera' : 'tera';
 			pokemon.formeChange(ogerponSpecies, null, true);

@@ -443,6 +443,7 @@ export interface EventMethods {
 	onAnyModifyAccuracyPriority?: number;
 	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
+	onAnyRedirectTargetPriority?: number;
 	onAnySwitchInPriority?: number;
 	onAnySwitchInSubOrder?: number;
 	onAllyBasePowerPriority?: number;
