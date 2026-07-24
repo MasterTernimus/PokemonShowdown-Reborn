@@ -145,8 +145,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, moves that match this Pokemon's type have 1.3x power, and knocking out a target restores 1/8 of this Pokemon's maximum HP.",
-		shortDesc: "After a KO: transforms. Bond form: matching-type moves 1.3x, KO heals 1/8 max HP.",
+		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, knocking out a target restores 1/8 of this Pokemon's maximum HP.",
+		shortDesc: "After a KO: transforms. Bond form: KO heals 1/8 max HP.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -2812,7 +2812,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	zerotohero: {
 		name: "Zero to Hero",
-		shortDesc: "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form.",
+		desc: "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form. While in Hero Form, it has Friend Guard's effect. When it switches in as Hero Form, it and its ally restore 1/8 max HP and are cured of status, or restore 1/4 max HP if below half HP.",
+		shortDesc: "Switches out into Hero Form. Hero: Friend Guard; on switch-in heals/cures self and ally.",
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
