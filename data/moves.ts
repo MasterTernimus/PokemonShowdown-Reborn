@@ -6656,7 +6656,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onFoeRedirectTarget(target, source, source2, move) {
 				if (!this.effectState.target.isSkyDropped() && this.validTarget(this.effectState.target, source, move.target)) {
 					if (this.gameType === 'freeforall') {
-						if (this.effectState.ffaSourceSide === undefined) this.effectState.ffaSourceSide = source.side.n;
+						if (this.effectState.ffaSourceSide === undefined) {
+							const selectedTarget = this.effectState.target.getAtLoc(this.effectState.target.lastMoveTargetLoc || 0);
+							this.effectState.ffaSourceSide = selectedTarget?.side.n ?? source.side.n;
+						}
 						if (this.effectState.ffaSourceSide !== source.side.n) return;
 					}
 					if (move.smartTarget) move.smartTarget = false;
@@ -16134,7 +16137,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 
 				if (source.runStatusImmunity('powder') && this.validTarget(ragePowderUser, source, move.target)) {
 					if (this.gameType === 'freeforall') {
-						if (this.effectState.ffaSourceSide === undefined) this.effectState.ffaSourceSide = source.side.n;
+						if (this.effectState.ffaSourceSide === undefined) {
+							const selectedTarget = ragePowderUser.getAtLoc(ragePowderUser.lastMoveTargetLoc || 0);
+							this.effectState.ffaSourceSide = selectedTarget?.side.n ?? source.side.n;
+						}
 						if (this.effectState.ffaSourceSide !== source.side.n) return;
 					}
 					if (move.smartTarget) move.smartTarget = false;
@@ -19798,11 +19804,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Spotlight');
 			},
-			onFoeRedirectTargetPriority: 2,
-			onFoeRedirectTarget(target, source, source2, move) {
-				if (this.validTarget(this.effectState.target, source, move.target)) {
+			onAnyRedirectTargetPriority: 2,
+			onAnyRedirectTarget(target, source, source2, move) {
+				const spotlightUser = this.effectState.source;
+				const spotlightTarget = this.effectState.target;
+				if (target === spotlightUser && this.validTarget(spotlightTarget, source, move.target)) {
 					this.debug("Spotlight redirected target of move");
-					return this.effectState.target;
+					return spotlightTarget;
 				}
 			},
 		},

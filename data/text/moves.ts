@@ -2276,8 +2276,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	followme: {
 		name: "Follow Me",
-		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, this redirects attacks from only one opponent, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
-		shortDesc: "Redirects foes' moves. FFA: one opponent, 0.75x redirected damage, 2+ redirects heal.",
+		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, the user must choose one opponent; only that opponent's attacks are redirected, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
+		shortDesc: "Redirects foes' moves. FFA: choose one foe; 0.75x redirected damage; 2+ redirects heal.",
 		gen6: {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double or Triple Battle. This effect is ignored while the user is under the effect of Sky Drop.",
 		},
@@ -5106,8 +5106,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragepowder: {
 		name: "Rage Powder",
-		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, this redirects attacks from only one opponent, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
-		shortDesc: "Redirects foes' moves. FFA: one opponent, 0.75x redirected damage, 2+ redirects heal.",
+		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, the user must choose one opponent; only that opponent's attacks are redirected, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
+		shortDesc: "Redirects foes' moves. FFA: choose one foe; 0.75x redirected damage; 2+ redirects heal.",
 		gen6: {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double or Triple Battle. This effect is ignored while the user is under the effect of Sky Drop.",
 		},
@@ -6302,8 +6302,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spotlight: {
 		name: "Spotlight",
-		desc: "Until the end of the turn, all single-target attacks from opponents of the target are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal.",
-		shortDesc: "Target's foes' moves are redirected to it this turn.",
+		desc: "Until the end of the turn, single-target attacks aimed at the user are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal.",
+		shortDesc: "Attacks aimed at the user redirect to the target this turn.",
 
 		start: "#followme",
 		startFromZEffect: "#followme",

@@ -1,5 +1,14 @@
 /* eslint-disable @stylistic/max-len */
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	stellarhealing: {
+		name: 'Stellar Healing',
+		onResidualOrder: 9,
+		onResidual(pokemon) {
+			if (pokemon.terastallized === 'Stellar') {
+				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			}
+		},
+	},
 	brn: {
 		name: 'brn',
 		effectType: 'Status',

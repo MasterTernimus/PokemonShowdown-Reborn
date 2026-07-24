@@ -459,7 +459,7 @@ export class Pokemon {
 		this.knownType = true;
 		this.apparentType = this.baseSpecies.types.join('/');
 		// Every Pokemon has a Terastal type
-		this.teraType = this.set.teraType || this.types[0];
+		this.teraType = this.baseSpecies.baseSpecies === 'Ogerpon' ? this.set.teraType || this.types[0] : 'Stellar';
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;

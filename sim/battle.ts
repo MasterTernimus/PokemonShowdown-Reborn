@@ -3577,12 +3577,12 @@ export class Battle {
 			outcome = !!pokemon.canUltraBurst;
 			break;
 		case 'zMove':
-			outcome = !pokemon.side.zMoveUsed && !pokemon.terastallized && !(pokemon.species.forme === 'Mega');
+			outcome = !pokemon.side.zMoveUsed && (!pokemon.terastallized || pokemon.terastallized === 'Stellar') && !(pokemon.species.forme === 'Mega');
 			break;
 		}
 		if (outcome) {
 			pokemon.canTerastallize = null;
-			pokemon.canMegaEvo = false;
+			if (gimmick !== 'Gigantamax') pokemon.canMegaEvo = false;
 			pokemon.canUltraBurst = null;
 			pokemon.side.gimmickCount++;
 			if (gimmick === 'Gigantamax') {
