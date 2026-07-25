@@ -1826,8 +1826,42 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move, pokemon) {
 			if (pokemon.hp >= pokemon.maxhp * 3 / 4 && this.movehasType(move, 'Dark')) move.forceSTAB = true;
 		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
 		onResidual(pokemon) {
-			if (this.randomChance(1, 3)) pokemon.cureStatus();
+			if (!pokemon.hp) return;
+			const removableVolatiles = [
+				'attract', 'confusion', 'curse', 'disable', 'encore', 'healblock', 'leechseed',
+				'nightmare', 'taunt', 'torment', 'yawn',
+			];
+			const hasNegativeVolatile = removableVolatiles.some(volatile => pokemon.volatiles[volatile]);
+			const hasNegativeBoost = Object.values(pokemon.boosts).some(boost => boost < 0);
+			const canActivate = pokemon.status || hasNegativeVolatile || hasNegativeBoost || pokemon.hp <= pokemon.maxhp / 2;
+			if (!canActivate) return;
+			if (!this.field.isTerrain('dragonsdenterrain') && !this.randomChance(1, 2)) return;
+			this.debug('first venom shed skin');
+			this.add('-activate', pokemon, 'ability: First Venom');
+			if (pokemon.status) pokemon.cureStatus();
+			if (this.field.isTerrain('dragonsdenterrain')) {
+				const atk = pokemon.getStat('atk', false, true);
+				const spa = pokemon.getStat('spa', false, true);
+				this.boost(atk >= spa ? { atk: 1, def: -1, spd: -1 } : { spa: 1, def: -1, spd: -1 }, pokemon, pokemon);
+				this.heal(pokemon.maxhp / 2, pokemon, pokemon);
+				return;
+			}
+			for (const volatile of removableVolatiles) {
+				if (pokemon.volatiles[volatile]) pokemon.removeVolatile(volatile);
+			}
+			let clearedBoost = false;
+			let stat: BoostID;
+			for (stat in pokemon.boosts) {
+				if (pokemon.boosts[stat] < 0) {
+					pokemon.boosts[stat] = 0;
+					clearedBoost = true;
+				}
+			}
+			if (clearedBoost) this.add('-clearnegativeboost', pokemon, '[from] ability: First Venom');
+			this.heal(pokemon.maxhp / 3, pokemon, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "First Venom",
