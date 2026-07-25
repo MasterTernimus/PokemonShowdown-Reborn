@@ -9,6 +9,33 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 	},
+	illusioncopy: {
+		name: 'Illusion Copy',
+		onModifyMove(move, pokemon) {
+			if (pokemon.illusion && pokemon.illusion.getTypes().some(type => this.movehasType(move, type))) {
+				move.forceSTAB = true;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (target.illusion) target.removeVolatile('illusioncopy');
+		},
+		onEnd(pokemon) {
+			const originalAbility = this.effectState.originalAbility;
+			if (originalAbility && pokemon.ability !== originalAbility) {
+				pokemon.setAbility(originalAbility, pokemon, this.dex.abilities.get('illusion'), true);
+			}
+			if (pokemon.illusion && !pokemon.beingCalledBack) {
+				this.debug('illusion cleared');
+				pokemon.illusion = null;
+				const details = pokemon.getUpdatedDetails();
+				this.add('replace', pokemon, details);
+				this.add('-end', pokemon, 'Illusion');
+				if (this.ruleTable.has('illusionlevelmod')) {
+					this.hint("Illusion Level Mod is active, so this Pokemon's true level was hidden.", true);
+				}
+			}
+		},
+	},
 	brn: {
 		name: 'brn',
 		effectType: 'Status',

@@ -464,18 +464,43 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	burningspirit: {
 		name: "Burning Spirit",
-		desc: "This Pokemon cannot be frozen. Water-type attacks used against this Pokemon deal 0.5x damage. Contact moves used against this Pokemon deal 0.7x damage. This Pokemon's damaging moves have a 30% chance to burn the target.",
-		shortDesc: "Cannot be frozen; 0.5x Water; 0.7x contact; attacks have 30% burn chance.",
+		desc: "This Pokemon cannot be frozen or frostbitten. Water-type attacks used against this Pokemon deal 0.5x damage, and contact moves used against it deal 0.7x damage. This Pokemon's damaging moves have a 30% chance to burn the target. It restores 1/16 of its max HP at the end of each turn, and its Fire-type moves have 1.5x power at 1/2 max HP or less. Once per battle, if this Pokemon would be knocked out, it survives with 1 HP and gains Magic Guard's effect.",
+		shortDesc: "0.5x Water; 0.7x contact; 30% burn; heals 1/16; low HP Fire boost; one-time endure.",
 	},
 	emperorsresolve: {
 		name: "Emperor's Resolve",
-		desc: "If this Pokemon has a stat lowered by an opposing Pokemon, its Special Attack rises by 2 stages. This Pokemon takes 0.75x damage from resisted moves and cannot flinch. Its Water- and Steel-type moves have 1.2x power.",
-		shortDesc: "Competitive for SpA; 0.75x resisted damage; no flinch; Water/Steel 1.2x.",
+		desc: "If this Pokemon has a stat lowered by an opposing Pokemon, its Special Attack rises by 2 stages. This Pokemon takes 0.75x damage from resisted moves and cannot flinch. Its Water- and Steel-type moves have 1.2x power. Its Ice-type moves gain STAB, its Speed is doubled in hail or snow, and it is immune to hail and snow damage.",
+		shortDesc: "SpA +2 on foe stat drop; 0.75x resisted; Water/Steel 1.2x; Ice STAB; Slush Rush.",
 	},
 	terraresolve: {
 		name: "Terra Resolve",
-		desc: "When this Pokemon's stats are lowered, its Attack rises by 1 stage. If either of its defensive stats is lowered, it takes 0.75x damage from attacks. It restores 1/16 of its maximum HP at the end of each turn.",
-		shortDesc: "Stat drops give +1 Atk; if Def/SpD lowered, takes 0.75x; heals 1/16 each turn.",
+		desc: "When this Pokemon's stats are lowered by an opposing Pokemon, its Attack rises by 1 stage. If its Defense or Special Defense is lowered, it takes 0.75x damage from attacks until the end of the next turn. It takes 0.75x damage from super-effective attacks, restores 1/16 of its max HP at the end of each turn, and restores HP equal to 1/8 of the damage dealt by its damaging moves.",
+		shortDesc: "Foe stat drops +1 Atk; 0.75x super-effective; heals 1/16 and drains 1/8 damage.",
+	},
+	eclipsevision: {
+		name: "Eclipse Vision",
+		desc: "This Pokemon's Special Attack is multiplied by 1.3. Before it uses a Psychic-type or Dark-type move, it becomes that type and remains that type. If this Pokemon is Psychic type, it restores 1/16 of its max HP at the end of each turn. If this Pokemon is Dark type, its damaging moves restore HP equal to 1/4 of the damage dealt.",
+		shortDesc: "SpA 1.3x; Psychic/Dark moves change user's type; Psychic heals; Dark drains.",
+	},
+	venomrush: {
+		name: "Venom Rush",
+		desc: "This Pokemon has Toxic Boost's effect. If it is poisoned or badly poisoned, its physical moves have 1.5x power, and poison damage restores 1/8 of its max HP instead of damaging it.",
+		shortDesc: "Toxic Boost; poison heals 1/8 instead of damaging.",
+	},
+	firstvenom: {
+		name: "First Venom",
+		desc: "This Pokemon has Shed Skin's effect. While it has at least 75% of its max HP, its damaging Poison- and Dark-type moves have +1 priority, and its Dark-type moves have 1.5x power and gain STAB.",
+		shortDesc: "Shed Skin; at >=75% HP Poison/Dark attacks +1 priority; Dark 1.5x + STAB.",
+	},
+	noseformation: {
+		name: "Nose Formation",
+		desc: "This Pokemon has Elevate's effect. After this Pokemon hits with a damaging move, Mini-Noses strike the target three times with a 30 Base Power special attack that chooses Steel, Electric, or Rock, whichever would deal the most damage.",
+		shortDesc: "Elevate; damaging hits trigger 3 Mini-Nose follow-up hits.",
+	},
+	mourningvessel: {
+		name: "Mourning Vessel",
+		desc: "This Pokemon's damaging moves deal 20% more damage for each fainted ally. At the end of each turn, this Pokemon restores 5% of its max HP for each fainted opposing Pokemon.",
+		shortDesc: "Damage +20% per fainted ally; heals 5% per fainted foe each turn.",
 	},
 	fallenstar: {
 		name: "Fallen Star",
@@ -953,8 +978,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	forecast: {
 		name: "Forecast",
-		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm. This effect is prevented if this Pokemon is holding a Utility Umbrella and the weather is Rain Dance or Sunny Day.",
-		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
+		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, including Sandstorm. Sunny Form has Solar Power and Flame Body effects. Rainy Form has Dry Skin, Rain Dish, and Hydration effects. Snowy Form has Slush Rush, Ice Body, and hail immunity. Sandy Form has Sand Rush, Earth Eater, and sand immunity. This effect is prevented if this Pokemon is holding a Utility Umbrella and the weather is Rain Dance or Sunny Day.",
+		shortDesc: "Castform changes form in weather and gains form-based bonus effects.",
 		gen7: {
 			desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm.",
 		},
@@ -1156,8 +1181,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	illusion: {
 		name: "Illusion",
-		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
-		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
+		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack. While disguised, it copies the disguised Pokemon's Ability and gains STAB on moves matching the disguised Pokemon's types, but keeps its own defensive typing. The copied Ability is removed when the disguise breaks.",
+		shortDesc: "Disguises itself, copies Ability, and gains STAB from the disguised Pokemon's types.",
 
 		end: "  [POKEMON]'s illusion wore off!",
 	},
@@ -1921,7 +1946,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rkssystem: {
 		name: "RKS System",
-		shortDesc: "If this Pokemon is a Silvally, its type changes to match its held Memory.",
+		desc: "If this Pokemon is a Silvally memory form and is holding the matching Memory, its Ability becomes the custom effect tied to that Memory. Silvally without a Memory uses Scrappy instead.",
+		shortDesc: "Matching Silvally Memory forms gain that Memory's custom Ability.",
 	},
 	rockhead: {
 		name: "Rock Head",
@@ -2421,8 +2447,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
-		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
-		shortDesc: "This Pokemon's moves have 10% more power for each fainted ally, up to 5 allies.",
+		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, including its partner's side in multi battles, and X cannot be greater than 5.",
+		shortDesc: "Moves gain 10% power per fainted ally, counting partner allies in multi battles, up to 5.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
