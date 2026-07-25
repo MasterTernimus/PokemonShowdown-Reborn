@@ -2943,6 +2943,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Hydra Bond and Mold Breaker's effects. Its damaging moves become three-hit attacks, with the second and third hits dealing 30% damage, and its moves ignore Abilities.",
 		shortDesc: "Hydra Bond + Mold Breaker.",
 	},
+	hydratyrant: {
+		name: "Hydra Tyrant",
+		desc: "This Pokemon has Hydra Bond's effects. Its damaging moves become three-hit attacks, with the second and third hits dealing 30% damage. Its super-effective attacks deal 1.3x damage. When this Pokemon gets a KO, it raises either Speed or the offensive stat used for the KO by 1 stage, whichever is lower.",
+		shortDesc: "Hydra Bond; super-effective hits 1.3x; KO boosts lower of Speed/offense used.",
+	},
 	burningcrown: {
 		name: "Burning Crown",
 		desc: "This Pokemon and its ally cannot have their stats lowered. When a Pokemon faints, this Pokemon and its ally each gain +1 Attack or Special Attack, whichever is higher for that Pokemon. Fire-type moves used by this Pokemon and its ally have 1.2x power. This Pokemon is airborne and immune to Ground-type moves, takes 0.8x damage from attacks, and restores 1/16 max HP at the end of each turn.",

@@ -1767,13 +1767,16 @@ export class BattleActions {
 
 		const dexMove = this.dex.moves.get(move.id);
 		const battleBondStellar = source.terastallized === 'Stellar' && source.hasAbility('battlebond');
+		if (source.terastallized === 'Stellar' && dexMove.multihit) {
+			basePower = Math.floor(basePower * 1.5);
+		}
 		if (source.terastallized && (source.terastallized === 'Stellar' ?
 			(battleBondStellar || !source.stellarBoostedTypes.includes(move.type)) : source.hasType(move.type)) &&
-			basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
+			basePower < (battleBondStellar ? 80 : 60) && dexMove.priority <= 0 && !dexMove.multihit &&
 			// Hard move.basePower check for moves like Dragon Energy that have variable BP
 			!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
 		) {
-			basePower = 60;
+			basePower = battleBondStellar ? 80 : 60;
 		}
 
 		const level = source.level;
@@ -1845,6 +1848,7 @@ export class BattleActions {
 
 		baseDamage += 2;
 
+		let ffaFollowUpAttack = false;
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
 			const spreadModifier = (move as any).fullDamageSpread || (move as any).hydraBondSpread || (move as any).parentalBondSpread ?
@@ -1856,9 +1860,25 @@ export class BattleActions {
 			const bondModifier = (move as any).spilloverDamageModifier || (move.multihitType === 'hydrabond' ? 0.3 : 0.8);
 			this.battle.debug(`${move.multihitType} modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
+			ffaFollowUpAttack = this.battle.gameType === 'freeforall';
 		} else if ((move as any).spilloverDamageModifier) {
 			this.battle.debug(`Spillover modifier: ${(move as any).spilloverDamageModifier}`);
 			baseDamage = this.battle.modify(baseDamage, (move as any).spilloverDamageModifier);
+			ffaFollowUpAttack = this.battle.gameType === 'freeforall';
+		} else if (this.battle.gameType === 'freeforall' && move.hit > 1) {
+			ffaFollowUpAttack = true;
+		}
+		if (ffaFollowUpAttack) {
+			const targetIsMega = !!(target.species.isMega || target.species.forme === 'Mega');
+			const targetIsGmax = !!(target.gigantamax || target.species.forme?.includes('Gmax'));
+			if (targetIsMega || targetIsGmax || target.terastallized === 'Stellar' || target.hasAbility('ultraego')) {
+				this.battle.debug('FFA gimmick follow-up damage reduction');
+				baseDamage = this.battle.modify(baseDamage, 0.9);
+			}
+		}
+		if (move.flags['bone'] && target.hasAbility('soulfire')) {
+			this.battle.debug('Bone move vs Soul Fire boost');
+			baseDamage = this.battle.modify(baseDamage, 4);
 		}
 
 		// weather modifier

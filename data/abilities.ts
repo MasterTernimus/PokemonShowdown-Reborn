@@ -463,6 +463,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (move.category === 'Status') return;
+			if (this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
+				this.debug('Battle Fervor Royal Decree boost');
+				return this.chainModify(1.3);
+			}
 			if (target && (this.queue.willMove(target) || target.newlySwitched)) {
 				this.debug('Battle Fervor boost');
 				return this.chainModify(1.2);
@@ -471,6 +475,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!move || move.category === 'Status') return;
+			if (this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
+				this.debug('Battle Fervor Royal Decree weaken');
+				return this.chainModify(0.7);
+			}
 			if (target.abilityState.battleFervorDamageReduced) return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Battle Fervor field weaken');
@@ -2358,8 +2366,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
-			if (move.id === 'dragonrush') return this.chainModify(1.95);
-			if (move.category !== 'Status') return this.chainModify(1.3);
+			if (move.category === 'Status') return;
+			let modifier = 1.3;
+			if (move.id === 'dragonrush') modifier *= 1.5;
+			if (this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
+				modifier *= 1.3;
+			}
+			return this.chainModify(modifier);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move && move.category !== 'Status' && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
+				return this.chainModify(0.7);
+			}
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (move.category === 'Status') return;
@@ -2938,10 +2956,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	temporalshift: {
 		queueTemporalHex(pokemon, abilityName = 'Temporal Shift') {
+			if (pokemon.abilityState.temporalShiftLastCastTurn === this.turn - 1) return;
 			const primaryType = pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal';
 			const targets = pokemon.foes().filter(target => target.hp && !target.fainted && target !== pokemon && !target.isAlly(pokemon));
 			const target = targets.length ? this.sample(targets) : null;
 			if (!target) return;
+			pokemon.abilityState.temporalShiftLastCastTurn = this.turn;
 			const slotCondition = target.side.slotConditions[target.position]['futuremove'];
 			if (slotCondition) {
 				this.add('-start', pokemon, 'move: Future Sight', `[from] ability: ${abilityName}`, '[silent]');
@@ -3517,11 +3537,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (move.category === 'Status') return;
+			if (this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) return this.chainModify(1.3);
 			if (target && (this.queue.willMove(target) || target.newlySwitched)) return this.chainModify(1.2);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!move || move.category === 'Status') return;
+			if (this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) return this.chainModify(0.7);
 			if (target.abilityState.battleFervorDamageReduced) return;
 			target.abilityState.battleFervorDamageReduced = true;
 			return this.chainModify(0.8);
@@ -5715,6 +5737,36 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Hydra Breaker",
 		rating: 5,
 		num: 10147,
+	},
+	hydratyrant: {
+		onModifyMove(move, source) {
+			if (move.category !== 'Status') move.critRatio++;
+			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source);
+		},
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			return this.dex.abilities.get('hydrabond').onSourceModifySecondaries?.call(this, secondaries, target, source, move);
+		},
+		onBasePower(basePower, source, target, move) {
+			let modifier = 1;
+			if (this.field.isTerrain('dragonsdenterrain')) modifier *= 1.2;
+			if (target.getMoveHitData(move).typeMod > 0) modifier *= 1.3;
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.hasAbility('hydratyrant')) return this.chainModify(0.9);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType !== 'Move') return;
+			const move = effect as ActiveMove;
+			const offense = this.getCategory(move) === 'Physical' ? 'atk' : 'spa';
+			const speed = source.getStat('spe', false, true);
+			const offensiveStat = source.getStat(offense, false, true);
+			this.boost(speed <= offensiveStat ? { spe: 1 } : { [offense]: 1 }, source, source, this.effect);
+		},
+		flags: {},
+		name: "Hydra Tyrant",
+		rating: 5,
+		num: 10179,
 	},
 	orchardbond: {
 		onModifyMove(move, source) {
@@ -11658,6 +11710,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			move.ignoreAbility = true;
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (move.category !== 'Status' && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
+				this.debug('Ultra Ego Royal Decree boost');
+				return this.chainModify(1.3);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (move && move.category !== 'Status' && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
+				this.debug('Ultra Ego Royal Decree weaken');
+				return this.chainModify(0.7);
+			}
 		},
 		onAfterMove(source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;

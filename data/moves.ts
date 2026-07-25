@@ -18454,11 +18454,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterMove(source, target, move) {
-			if (move.totalDamage) this.heal(source.baseMaxhp / 16, source, source);
+			if (move.totalDamage) this.heal(source.baseMaxhp / 8, source, source);
 		},
 		condition: {
+			onSourceModifyDamage(damage, source, target, move) {
+				if (target !== source && move.category !== 'Status') return this.chainModify(0.7);
+			},
 			onDamagingHit(damage, target, source, move) {
-				this.heal(target.baseMaxhp / 16, target, target);
+				this.heal(target.baseMaxhp / 8, target, target);
 			},
 		},
 		target: "normal",
@@ -22166,6 +22169,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move) {
+			if (this.gameType === 'freeforall') {
+				move.target = 'allAdjacentFoes';
+				(move as any).fullDamageSpread = true;
+			}
+		},
 		secondary: {
 			chance: 20,
 			onHit(target, source) {
