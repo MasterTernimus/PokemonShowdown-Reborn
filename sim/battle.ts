@@ -2763,6 +2763,7 @@ export class Battle {
 			// take priority from the base move, so abilities like Prankster only apply once
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.moves.get(move.id).priority;
+			if (move.id === 'skullbash' && !action.pokemon.volatiles['twoturnmove']) priority++;
 			// Grassy Glide priority
 			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
 			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, target, null, priority);

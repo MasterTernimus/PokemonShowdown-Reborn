@@ -5861,8 +5861,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. When it attacks, the user restores 1/16 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges: +Atk/Def/SpD. Hit heals 1/16.",
+		desc: "This attack charges with +1 priority on the first turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks and restores 1/8 max HP when hit by a damaging move. When it attacks, the user restores 1/8 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "+1 charge: +Atk/Def/SpD, 0.7x damage. Hit heals 1/8.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},
@@ -7098,8 +7098,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triattack: {
 		name: "Tri Attack",
-		desc: "Has a 20% chance to either burn, freeze, or paralyze the target.",
-		shortDesc: "20% chance to paralyze or burn or freeze target.",
+		desc: "Has a 20% chance to either burn, freeze, or paralyze the target. In Free-for-All battles, this move hits all adjacent foes at full power.",
+		shortDesc: "20% status. FFA: hits all adjacent foes at full power.",
 		gen2: {
 			desc: "This move selects burn, freeze, or paralysis at random, and has a 20% chance to inflict the target with that status. If the target is frozen and burn was selected, it thaws out.",
 		},
