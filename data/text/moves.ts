@@ -1882,8 +1882,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	explosion: {
 		name: "Explosion",
-		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		shortDesc: "Hits adjacent Pokemon. The user faints.",
+		desc: "The user faints after using this move, even if this move fails for having no target. This move uses the user's higher attacking stat and halves the matching defensive stat during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
+		shortDesc: "Uses higher Atk/SpA; halves matching defense; user faints.",
 		gen4: {
 			desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 			shortDesc: "Target's Def halved during damage. User faints.",
@@ -5643,8 +5643,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	selfdestruct: {
 		name: "Self-Destruct",
-		desc: "The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		shortDesc: "Hits adjacent Pokemon. The user faints.",
+		desc: "The user faints after using this move, even if this move fails for having no target. This move uses the user's higher attacking stat and halves the matching defensive stat during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
+		shortDesc: "Uses higher Atk/SpA; halves matching defense; user faints.",
 		gen4: {
 			desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 			shortDesc: "Target's Def halved during damage. User faints.",
@@ -7071,8 +7071,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxicthread: {
 		name: "Toxic Thread",
-		desc: "Lowers the target's Speed by 1 stage and poisons it.",
-		shortDesc: "Lowers the target's Speed by 1 and poisons it.",
+		desc: "Poisons all adjacent foes and lowers their Speed by 2 stages.",
+		shortDesc: "Poisons all adjacent foes and lowers their Speed by 2.",
 	},
 	trailblaze: {
 		name: "Trailblaze",

@@ -631,7 +631,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (modifier !== 1) return this.chainModify(modifier);
 			},
 			onModifySpe(spe, pokemon) {
-				const immune = ['slushrush', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom', 'frozensummit', 'illusion', 'duskilate', 'ironclad'];
+				const immune = ['slushrush', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom', 'frozensummit', 'illusion', 'duskilate', 'ironclad', 'webassassin'];
 				if (!(pokemon.hasAbility(immune) || !pokemon.isGrounded() || pokemon.hasType(['Ice', 'Dragon']))) {
 					return this.chainModify(0.75);
 				}
@@ -2083,7 +2083,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
-				const immune = ['surgesurfer', 'swiftswim', 'limber'];
+				const immune = ['surgesurfer', 'swiftswim', 'limber', 'webassassin'];
 				if ((!pokemon.hasType('Water') || !immune.includes(pokemon.ability)) && pokemon.isGrounded()) {
 					return this.chainModify(0.75);
 				}
@@ -2178,7 +2178,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			effectType: "Terrain",
 			onModifySpe(spe, pokemon) {
-				if (pokemon.isGrounded() && !pokemon.hasAbility('limber')) {
+				if (pokemon.isGrounded() && !pokemon.hasAbility(['limber', 'webassassin'])) {
 					return this.chainModify(0.75);
 				}
 			},
@@ -2543,7 +2543,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			effectType: "Terrain",
 			onModifySpe(spe, pokemon) {
-				const immuneAbiltiy = ['slushrush', 'icebody', 'snowcloak', 'limber'];
+				const immuneAbiltiy = ['slushrush', 'icebody', 'snowcloak', 'limber', 'webassassin'];
 				if (!(pokemon.hasType('Ice') || immuneAbiltiy.includes(pokemon.ability)) && pokemon.isGrounded()) {
 					return this.chainModify(0.75);
 				}
@@ -2900,6 +2900,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('webassassin')) return;
 				const immune = ['swiftswim', 'steelworker'];
 				if (!pokemon.getTypes().includes('Water') && !immune.includes(pokemon.ability) || !(pokemon.hasAbility('limber') && pokemon.isGrounded())) {
 					return this.chainModify(0.5);
@@ -3258,7 +3259,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
-				const immune = ['swiftswim', 'surgesurfer', 'limber'];
+				const immune = ['swiftswim', 'surgesurfer', 'limber', 'webassassin'];
 				if (pokemon.isGrounded() && !pokemon.getTypes().includes('Water') && !immune.includes(pokemon.ability)) {
 					return this.chainModify(0.75);
 				}

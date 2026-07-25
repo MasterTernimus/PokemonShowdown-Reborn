@@ -145,8 +145,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, knocking out a target restores 1/8 of this Pokemon's maximum HP.",
-		shortDesc: "After a KO: transforms. Bond form: KO heals 1/8 max HP.",
+		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, this Pokemon's moves deal 1.3x damage if they match its typing, and knocking out a target restores 1/8 of this Pokemon's maximum HP.",
+		shortDesc: "After a KO: transforms. Bond form: same-type moves 1.3x; KO heals 1/8.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -939,6 +939,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Fire-type attacks have 1.5x power.",
 		shortDesc: "This Pokemon's Fire-type attacks have 1.5x power.",
 	},
+	blazingmane: {
+		name: "Blazing Mane",
+		desc: "This Pokemon has Fire Mane's effect. Its damaging moves hit twice, and the second hit deals 30% of the original damage and can trigger additional secondary effects. If this Pokemon has 1/4 or less of its max HP, its Fire-type attacks have +1 priority.",
+		shortDesc: "Fire 1.5x; damaging moves hit twice, second hit 30%; low HP Fire attacks +1 priority.",
+	},
 	flashfire: {
 		name: "Flash Fire",
 		desc: "This Pokemon is immune to Fire-type moves. The first time it is hit by a Fire-type move, its offensive stat is multiplied by 1.5 while using a Fire-type attack as long as it remains active and has this Ability. If this Pokemon is frozen, it cannot be defrosted by Fire-type attacks.",
@@ -998,6 +1003,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	friendguard: {
 		name: "Friend Guard",
 		shortDesc: "This Pokemon's allies receive 3/4 damage from other Pokemon's attacks.",
+	},
+	verdanthospitality: {
+		name: "Verdant Hospitality",
+		desc: "This Pokemon has Friend Guard's effect. On switch-in, it restores 1/8 of its ally's max HP. At the end of each turn, this Pokemon restores 1/8 of its max HP and its ally restores 1/16 of its max HP.",
+		shortDesc: "Friend Guard; heals ally on switch-in; heals self and ally each turn.",
 	},
 	frisk: {
 		name: "Frisk",
@@ -1641,6 +1651,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "This Pokemon is immune to damage from Sandstorm or Hail.",
 		},
 	},
+	adaptivecell: {
+		name: "Adaptive Cell",
+		desc: "This Pokemon has Overcoat's effect. Before using a physical move, it becomes Fighting type; before using a special move, it becomes Psychic type. If its Special Attack is higher than its Attack, its physical moves may use Special Attack for damage calculation while still targeting Defense.",
+		shortDesc: "Overcoat; physical moves turn it Fighting and can use SpA; special moves turn it Psychic.",
+	},
 	overgrow: {
 		name: "Overgrow",
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Grass-type attack.",
@@ -2125,6 +2140,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "This Pokemon is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause this Pokemon to flinch, or cause this Pokemon's stat stages to be lowered. The secondary effect added by King's Rock is also prevented against this Pokemon.",
 		},
 	},
+	starboxer: {
+		name: "Star Boxer",
+		desc: "This Pokemon's punching moves hit four times and have 1.5x power. Each hit is full power, but secondary effects only occur on the first two hits.",
+		shortDesc: "Punching moves hit 4 times at full power and 1.5x; secondaries only on hits 1-2.",
+	},
 	shieldsdown: {
 		name: "Shields Down",
 		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP, and changes to Meteor Form if it has more than 1/2 its maximum HP. This check is done on switch-in and at the end of each turn. While in its Meteor Form, it cannot become affected by a non-volatile status condition or Yawn.",
@@ -2181,6 +2201,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	sniper: {
 		name: "Sniper",
 		shortDesc: "If this Pokemon strikes with a critical hit, the damage is multiplied by 1.5.",
+	},
+	webassassin: {
+		name: "Web Assassin",
+		desc: "This Pokemon's Speed is doubled and cannot be lowered. This Pokemon has Sniper's effect. Its attacks are always critical hits against targets that are poisoned or have lowered Speed.",
+		shortDesc: "Speed doubled and cannot drop; Sniper; always crits poisoned or Speed-lowered targets.",
 	},
 	snowcloak: {
 		name: "Snow Cloak",
@@ -2773,6 +2798,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Water Veil",
 		desc: "This Pokemon cannot be burned and is immune to Hail and Sandstorm damage. Gaining this Ability while burned cures it. On switch-in, it gains Aqua Ring.",
 		shortDesc: "Cannot be burned; immune to Hail/Sandstorm; gains Aqua Ring.",
+	},
+	riptidejaw: {
+		name: "Riptide Jaw",
+		desc: "This Pokemon has Water Veil and Strong Jaw's effects. It cannot be burned, creates Aqua Ring on switch-in, and its biting moves have 1.5x power. The first damaging move this Pokemon uses after switching in has +1 priority.",
+		shortDesc: "Water Veil + Aqua Ring + Strong Jaw; first damaging move after switch-in has +1 priority.",
 	},
 	weakarmor: {
 		name: "Weak Armor",
