@@ -5507,6 +5507,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
 		selfdestruct: "always",
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.overrideOffensiveStat = 'spa';
+				move.overrideDefensiveStat = 'spd';
+			} else {
+				move.overrideDefensiveStat = 'def';
+			}
+		},
 		target: "allAdjacent",
 		type: "Normal",
 		contestType: "Beautiful",
@@ -17687,6 +17695,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
 		selfdestruct: "always",
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.overrideOffensiveStat = 'spa';
+				move.overrideDefensiveStat = 'spd';
+			} else {
+				move.overrideDefensiveStat = 'def';
+			}
+		},
 		target: "allAdjacent",
 		type: "Normal",
 		contestType: "Beautiful",
@@ -22096,7 +22112,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		boosts: {
 			spe: -2,
 		},
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Poison",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Tough",

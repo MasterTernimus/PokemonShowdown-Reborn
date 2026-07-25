@@ -1766,8 +1766,9 @@ export class BattleActions {
 		}
 
 		const dexMove = this.dex.moves.get(move.id);
+		const battleBondStellar = source.terastallized === 'Stellar' && source.hasAbility('battlebond');
 		if (source.terastallized && (source.terastallized === 'Stellar' ?
-			!source.stellarBoostedTypes.includes(move.type) : source.hasType(move.type)) &&
+			(battleBondStellar || !source.stellarBoostedTypes.includes(move.type)) : source.hasType(move.type)) &&
 			basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
 			// Hard move.basePower check for moves like Dragon Energy that have variable BP
 			!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
@@ -1822,7 +1823,7 @@ export class BattleActions {
 			if (defenseStat === 'spd')
 				defense = Math.max(defense, target.getStat('spa'));
 		}
-		if ((this.battle.gen <= 4 || this.battle.field.terrain === 'glitchterrain') && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
+		if (['explosion', 'selfdestruct'].includes(move.id) && ['def', 'spd'].includes(defenseStat)) {
 			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
 		}
 
