@@ -3680,7 +3680,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	ledian: {
 		num: 166,
 		name: "Ledian",
-		types: ["Bug", "Normal"],
+		types: ["Bug", "Flying"],
 		baseStats: { hp: 70, atk: 70, def: 50, spa: 62, spd: 112, spe: 111 },
 		abilities: { 0: "Dazzling", 1: "Star Boxer", H: "Unaware" },
 		heightm: 1.4,
