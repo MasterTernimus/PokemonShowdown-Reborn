@@ -2050,6 +2050,7 @@ export class BattleActions {
 		if (!speciesid) return false;
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
 	}
@@ -2061,6 +2062,7 @@ export class BattleActions {
 		if (!speciesid) return false;
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
 	}
@@ -2071,6 +2073,7 @@ export class BattleActions {
 		if (!speciesid) return false;
 
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
 	}

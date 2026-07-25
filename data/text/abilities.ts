@@ -1656,6 +1656,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Overcoat's effect. Before using a physical move, it becomes Fighting type; before using a special move, it becomes Psychic type. If its Special Attack is higher than its Attack, its physical moves may use Special Attack for damage calculation while still targeting Defense.",
 		shortDesc: "Overcoat; physical moves turn it Fighting and can use SpA; special moves turn it Psychic.",
 	},
+	voidveil: {
+		name: "Void Veil",
+		desc: "This Pokemon has Telepathy and Temporal Shift's effects. Its delayed Future Sight becomes Fairy type if that would hit the target harder. It is immune to Gravity and its negative effects. This Pokemon and its allies cannot have their Speed lowered. At the end of each turn, this Pokemon and its ally restore 1/16 max HP. Once per switch-in, if an ally is at 25% HP or lower at the end of the turn, that ally heals 1/4 max HP, is cured of status, and is sheltered until the end of the next turn.",
+		shortDesc: "Telepathy + Temporal Shift; side blocks Speed drops; end-turn ally healing/shelter.",
+	},
+	knightsguard: {
+		name: "Knight's Guard",
+		desc: "This Pokemon has Inner Focus and Steadfast's effects. Its ally takes 25% less damage from priority moves. Once per switch-in, if its ally is at 25% HP or lower at the end of the turn, this Pokemon's Attack and Speed rise by 1 and its ally takes 25% less damage from attacks until the end of the next turn. The first time this Pokemon would be knocked out by a move, it survives with 1 HP.",
+		shortDesc: "Inner Focus + Steadfast; ally resists priority; low-HP ally triggers Last Stand.",
+	},
 	relicbeam: {
 		name: "Relic Beam",
 		desc: "This Pokemon's Sp. Atk becomes equal to its Defense, and Special Attack stat stages use Defense stages instead. Beam and cannon moves used by this Pokemon have 1.5x power.",

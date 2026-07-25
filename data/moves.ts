@@ -8601,14 +8601,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onModifySpePriority: -1,
 			onModifySpe(spe, pokemon) {
-				if (pokemon.hasAbility('lunarorbit') || pokemon.hasType(['Psychic', 'Fairy']) || !pokemon.isGrounded()) return;
+				if (pokemon.hasAbility(['lunarorbit', 'voidveil']) || pokemon.hasType(['Psychic', 'Fairy']) || !pokemon.isGrounded()) return;
 				return this.chainModify(0.75);
 			},
 			onBasePower(basePower, attacker, defender, move) {
 				if (this.movehasType(move, 'Ground')) return this.chainModify(1.2);
 			},
 			onDisableMove(pokemon) {
-				if (pokemon.hasAbility('lunarorbit')) return;
+				if (pokemon.hasAbility(['lunarorbit', 'voidveil'])) return;
 				for (const moveSlot of pokemon.moveSlots) {
 					if (this.dex.moves.get(moveSlot.id).flags['gravity']) {
 						pokemon.disableMove(moveSlot.id);
@@ -8618,14 +8618,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
-				if (pokemon.hasAbility('lunarorbit')) return;
+				if (pokemon.hasAbility(['lunarorbit', 'voidveil'])) return;
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
 				}
 			},
 			onModifyMove(move, pokemon, target) {
-				if (pokemon.hasAbility('lunarorbit')) return;
+				if (pokemon.hasAbility(['lunarorbit', 'voidveil'])) return;
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;

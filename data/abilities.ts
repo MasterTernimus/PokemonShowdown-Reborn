@@ -2991,6 +2991,193 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10142,
 	},
+	voidveil: {
+		getVoidFutureType(pokemon, target) {
+			if (!pokemon.hasType('Fairy')) return pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal';
+			const psychicMod = this.clampIntRange(this.dex.getEffectiveness('Psychic', target.getTypes()), -6, 6);
+			const fairyMod = this.clampIntRange(this.dex.getEffectiveness('Fairy', target.getTypes()), -6, 6);
+			return fairyMod > psychicMod ? 'Fairy' : (pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal');
+		},
+		queueVoidFutureSight(pokemon) {
+			const targets = pokemon.foes().filter(target => target.hp && !target.fainted && target !== pokemon && !target.isAlly(pokemon));
+			const target = targets.length ? this.sample(targets) : null;
+			if (!target) return;
+			const moveType = this.effect.getVoidFutureType.call(this, pokemon, target);
+			const slotCondition = target.side.slotConditions[target.position]['futuremove'];
+			if (slotCondition) {
+				this.add('-start', pokemon, 'move: Future Sight', '[from] ability: Void Veil', '[silent]');
+				if (slotCondition.moveData?.voidVeilFutureSight) {
+					slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
+					const queuedTurn = slotCondition.endingTurn + slotCondition.perfectForesightQueued - 1;
+					this.add('-message', `Void Veil queued another ${moveType}-type Future Sight for turn ${queuedTurn}.`);
+				} else {
+					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+					this.add('-message', `Void Veil delayed Future Sight to turn ${slotCondition.endingTurn}.`);
+				}
+				return;
+			}
+			if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('voidveil'))) return;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				move: 'futuresight',
+				source: pokemon,
+				moveData: {
+					id: 'futuresight',
+					name: "Future Sight",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+					voidVeilFutureSight: true,
+					effectType: 'Move',
+					type: moveType,
+				},
+				perfectForesightQueued: 1,
+			});
+			this.add('-start', pokemon, 'move: Future Sight', '[from] ability: Void Veil');
+			this.add('-message', `Void Veil's ${moveType}-type Future Sight will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
+		},
+		queueVoidDoomDesire(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (!target || target.fainted) continue;
+				const slotCondition = target.side.slotConditions[target.position]['futuremove'];
+				if (slotCondition) {
+					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+					this.add('-message', `Void Veil delayed Doom Desire to turn ${slotCondition.endingTurn}.`);
+					continue;
+				}
+				if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('voidveil'))) continue;
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+					move: 'doomdesire',
+					source: pokemon,
+					moveData: {
+						id: 'doomdesire',
+						name: "Doom Desire",
+						accuracy: 100,
+						basePower: 280,
+						category: "Special",
+						priority: 0,
+						flags: { metronome: 1, futuremove: 1 },
+						effectType: 'Move',
+						type: 'Steel',
+					},
+				});
+				this.add('-start', pokemon, 'Doom Desire', '[from] ability: Void Veil');
+				this.add('-message', `Void Veil's Doom Desire will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
+			}
+		},
+		onStart(pokemon) {
+			pokemon.abilityState.voidShelterUsed = false;
+			pokemon.abilityState.voidShelterDoom = false;
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && target.isAlly(source) && move.category !== 'Status') {
+				this.add('-activate', target, 'ability: Void Veil');
+				return null;
+			}
+		},
+		onAnyBoost(boost, target, source, effect) {
+			const pokemon = this.effectState.target;
+			if (target === pokemon || target.isAlly(pokemon)) {
+				if (boost.spe && boost.spe < 0) delete boost.spe;
+			}
+		},
+		onBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let stat: BoostID;
+			for (stat in boost) {
+				if (boost[stat]! < 0) delete boost[stat];
+			}
+		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			for (const ally of pokemon.adjacentAllies()) {
+				this.heal(ally.baseMaxhp / 16, ally, pokemon);
+				if (!pokemon.abilityState.voidShelterUsed && ally.hp > 0 && ally.hp <= ally.maxhp / 4) {
+					pokemon.abilityState.voidShelterUsed = true;
+					this.heal(ally.baseMaxhp / 4, ally, pokemon);
+					ally.cureStatus();
+					ally.addVolatile('voidshelter', pokemon);
+				}
+			}
+			this.effect.queueVoidFutureSight.call(this, pokemon);
+		},
+		onFaint(pokemon) {
+			if (this.gameType === 'freeforall' || this.gameType !== 'singles' && pokemon.abilityState.voidShelterDoom) {
+				this.effect.queueVoidDoomDesire.call(this, pokemon);
+			}
+		},
+		condition: {
+			duration: 2,
+			onStart(target, source) {
+				this.add('-start', target, 'ability: Void Veil');
+			},
+			onSetStatus(status, target, source, effect) {
+				this.add('-immune', target, '[from] ability: Void Veil');
+				return false;
+			},
+			onAnyRedirectTargetPriority: 3,
+			onAnyRedirectTarget(target, source, source2, move) {
+				if (move.category === 'Status') return;
+				const sheltered = this.effectState.target;
+				const guardian = this.effectState.source;
+				if (!guardian || guardian.fainted || target !== sheltered || sheltered.isAlly(source)) return;
+				if (!this.validTarget(guardian, source, move.target)) return;
+				guardian.abilityState.voidShelterDoom = true;
+				this.debug("Void Shelter redirected target of move");
+				return guardian;
+			},
+		},
+		flags: { breakable: 1 },
+		name: "Void Veil",
+		rating: 4.5,
+		num: 10167,
+	},
+	knightsguard: {
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') return null;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', "[from] ability: Knight's Guard", `[of] ${target}`);
+			}
+		},
+		onAfterBoost(boost, target, source, effect) {
+			if (target === this.effectState.target && source && target !== source && boost.spe && boost.spe < 0) {
+				this.boost({ spe: 1 });
+			}
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			const pokemon = this.effectState.target;
+			if (target !== pokemon && target.isAlly(pokemon) && move.priority > 0 && move.category !== 'Status') {
+				return this.chainModify(0.75);
+			}
+			if (target !== pokemon && target.isAlly(pokemon) && pokemon.abilityState.knightsGuardLastStandTurn === this.turn && move.category !== 'Status') {
+				return this.chainModify(0.75);
+			}
+		},
+		onResidual(pokemon) {
+			if (pokemon.abilityState.knightsGuardLastStandUsed) return;
+			for (const ally of pokemon.adjacentAllies()) {
+				if (ally.hp > 0 && ally.hp <= ally.maxhp / 4) {
+					pokemon.abilityState.knightsGuardLastStandUsed = true;
+					pokemon.abilityState.knightsGuardLastStandTurn = this.turn + 1;
+					this.boost({ atk: 1, spe: 1 }, pokemon, pokemon);
+					break;
+				}
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect?.effectType !== 'Move' || target.abilityState.knightsGuardEndureUsed || damage < target.hp) return;
+			target.abilityState.knightsGuardEndureUsed = true;
+			return target.hp - 1;
+		},
+		flags: { breakable: 1 },
+		name: "Knight's Guard",
+		rating: 4,
+		num: 10168,
+	},
 	accumulation: {
 		onResidual(pokemon) {
 			if (!pokemon.activeTurns) return;

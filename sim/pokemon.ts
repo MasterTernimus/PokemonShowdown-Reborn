@@ -2249,7 +2249,7 @@ export class Pokemon {
 	}
 
 	isGrounded(negateImmunity = false) {
-		if (this.hasAbility('lunarorbit') && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility(['lunarorbit', 'voidveil']) && !this.battle.suppressingAbility(this)) return null;
 		if ('gravity' in this.battle.field.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
