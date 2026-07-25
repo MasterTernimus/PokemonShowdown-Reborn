@@ -50,7 +50,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	arenitewall: {
 		name: "Arenite Wall",
 		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during Sandstorm or on Desert Field, Rocky Field, Ashen Beach, or Cold Eclipse. If the user is holding Light Clay, or if used on Desert Field, Rocky Field, or Ashen Beach, the duration is 8 turns. Critical hits and moves that bypass screens ignore this effect.",
-		shortDesc: "For 5 turns, user's side takes 0.5x from super-effective attacks.",
+		shortDesc: "5 turns: side takes 0.5x from super-effective hits.",
 	},
 	aciddownpour: {
 		name: "Acid Downpour",
@@ -362,7 +362,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	barrage: {
 		name: "Barrage",
 		desc: "Hits three to five times. This move uses the user's higher attacking stat. Each hit has a 20% chance to lower the target's Special Defense by 1 stage. If this move hits five times, the final hit is a critical hit.",
-		shortDesc: "Hits 3-5 times. Uses higher Atk/SpA. 20% SpD drop/hit; 5th hit crits.",
+		shortDesc: "Hits 3-5. Uses higher Atk/SpA. 20% -SpD/hit.",
 		gen4: {
 			desc: "Hits three to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -1258,7 +1258,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	cut: {
 		name: "Cut",
 		desc: "Steel-type slicing move with a high critical hit ratio. Before damage, removes the target's Defense boosts. If the target has no Defense boosts, this move has a 30% chance to lower Defense by 1 stage.",
-		shortDesc: "+1 crit; clears Defense boosts or 30% -1 Def.",
+		shortDesc: "+crit. Clears Def boosts; else 30% -1 Def.",
 	},
 	darkestlariat: {
 		name: "Darkest Lariat",
@@ -1883,7 +1883,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	explosion: {
 		name: "Explosion",
 		desc: "The user faints after using this move, even if this move fails for having no target. This move uses the user's higher attacking stat and halves the matching defensive stat during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		shortDesc: "Uses higher Atk/SpA; halves matching defense; user faints.",
+		shortDesc: "Uses higher Atk/SpA; halves defense; user faints.",
 		gen4: {
 			desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 			shortDesc: "Target's Def halved during damage. User faints.",
@@ -2217,7 +2217,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	fly: {
 		name: "Fly",
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids most attacks. If Tailwind is active on the user's side, this move attacks immediately and has a high critical hit ratio.",
-		shortDesc: "Charges first; instant with +1 crit in Tailwind.",
+		shortDesc: "Charges. Tailwind: instant and +crit.",
 		gen5: {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -2277,7 +2277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	followme: {
 		name: "Follow Me",
 		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, the user must choose one opponent; only that opponent's attacks are redirected, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
-		shortDesc: "Redirects foes' moves. FFA: choose one foe; 0.75x redirected damage; 2+ redirects heal.",
+		shortDesc: "Redirects moves. FFA: pick foe; 0.75x damage, 2+ heals.",
 		gen6: {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double or Triple Battle. This effect is ignored while the user is under the effect of Sky Drop.",
 		},
@@ -2620,7 +2620,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gmaxsandblast: {
 		name: "G-Max Sandblast",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move. Creates Desert Field for 3 turns.",
-		shortDesc: "Base move affects power. Foes: bound; creates Desert Field for 3 turns.",
+		shortDesc: "Max BP. Binds foes; creates Desert Field 3 turns.",
 	},
 	gmaxsmite: {
 		name: "G-Max Smite",
@@ -2664,7 +2664,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gmaxterror: {
 		name: "G-Max Terror",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field. If used by a Pokemon with Soul Eater, each opposing Pokemon also becomes cursed. Creates Haunted Field for 3 turns.",
-		shortDesc: "Base move affects power. Foes trapped; creates Haunted Field for 3 turns.",
+		shortDesc: "Max BP. Traps foes; creates Haunted Field 3 turns.",
 	},
 	gmaxvinelash: {
 		name: "G-Max Vine Lash",
@@ -2739,7 +2739,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gravity: {
 		name: "Gravity",
 		desc: "For 5 turns, grounded Pokemon that are not Psychic or Fairy type have 0.75x Speed, and Ground-type moves have 1.2x power. Evasiveness of all active Pokemon is multiplied by 0.6. Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately. During the effect, airborne immunities are removed and certain airborne moves fail.",
-		shortDesc: "5 turns: grounds foes; +accuracy; non-Psychic/Fairy grounded Spe down.",
+		shortDesc: "5 turns: grounds all; +accuracy; slows most grounded foes.",
 		gen7: {
 			desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
 		},
@@ -3702,7 +3702,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	luckychant: {
 		name: "Lucky Chant",
 		desc: "For 4 turns, the user and its party members cannot be struck by a critical hit and their moves have +1 critical hit ratio. Fails if the effect is already active on the user's side.",
-		shortDesc: "For 4 turns, blocks crits against user's side and gives +1 crit.",
+		shortDesc: "4 turns: blocks crits; user's side gets +crit.",
 
 		start: "  Lucky Chant shielded [TEAM] from critical hits!",
 		end: "  [TEAM]'s Lucky Chant wore off!",
@@ -4258,7 +4258,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mist: {
 		name: "Mist",
 		desc: "For 5 turns, or 8 turns during Snow or Hail, the user and its party members are protected from stat drops by opposing Pokemon and opposing Abilities. Allies take 0.75x damage from spread moves, Ice- and Fairy-type allies restore 1/16 max HP each turn, and Misty Terrain is created for 3 turns. On Bewitched Woods, this extends Bewitched Woods instead of creating Misty Terrain. Fails if the effect is already active on the user's side.",
-		shortDesc: "Blocks stat drops; weakens spread damage; heals Ice/Fairy allies; sets Misty or extends Bewitched.",
+		shortDesc: "Blocks stat drops; weakens spread; heals Ice/Fairy allies.",
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "While active, user is protected from stat drops.",
@@ -4876,7 +4876,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	present: {
 		name: "Present",
 		desc: "If this move is successful, it deals damage or heals the target. 40% chance for 40 power, 30% chance for 80 power, 10% chance for 120 power, and 20% chance to heal the target by 1/4 of its maximum HP, rounded down. If the user has Evil Santa, this move becomes a 120 Base Power Dark-type attack that targets all opposing Pokemon and applies one successful random extra effect.",
-		shortDesc: "Random power/heal; with Evil Santa, 120 BP Dark spread plus extra effect.",
+		shortDesc: "Random power/heal. Evil Santa: 120 BP Dark spread.",
 		gen2: {
 			desc: "If this move is successful, it deals damage or heals the target. 102/256 chance for 40 power, 76/256 chance for 80 power, 26/256 chance for 120 power, or 52/256 chance to heal the target by 1/4 of its maximum HP, rounded down. If this move deals damage, it uses an abnormal version of the damage formula by substituting certain values. The user's Attack stat is replaced with 10 times the effectiveness of this move against the target, the target's Defense stat is replaced with the index number of the user's secondary type, and the user's level is replaced with the index number of the target's secondary type. If a Pokemon does not have a secondary type, its primary type is used. The index numbers for each type are Normal: 0, Fighting: 1, Flying: 2, Poison: 3, Ground: 4, Rock: 5, Bug: 7, Ghost: 8, Steel: 9, Fire: 20, Water: 21, Grass: 22, Electric: 23, Psychic: 24, Ice: 25, Dragon: 26, Dark: 27. If at any point a division by 0 would happen in the damage formula, it divides by 1 instead.",
 		},
@@ -5010,7 +5010,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	punishment: {
 		name: "Punishment",
 		desc: "Power is equal to 60+(X*20), where X is the target's total stat stage changes that are greater than 0, but not more than 160 power. This move ignores the target's stat boosts when calculating damage.",
-		shortDesc: "60 power +20 per target stat boost, max 160; ignores defensive boosts.",
+		shortDesc: "60 BP +20 per target boost, max 160. Ignores boosts.",
 	},
 	purify: {
 		name: "Purify",
@@ -5086,7 +5086,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rage: {
 		name: "Rage",
 		desc: "The user lashes out with built-up anger, becoming more dangerous each time it attacks. Raises the user's Attack by 1 stage after use. If the user was hit by a damaging move before it attacks this turn, this move's power is doubled.",
-		shortDesc: "Raises user's Attack by 1. Doubles power if hit before moving.",
+		shortDesc: "+1 Atk after use. 2x power if hit first.",
 		gen3: {
 			desc: "Once this move is used and unless the target protected itself, the user's Attack is raised by 1 stage every time it is hit by another Pokemon's attack as long as this move is chosen for use.",
 		},
@@ -5102,12 +5102,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ragefist: {
 		name: "Rage Fist",
 		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6. Switching out halves the accumulated hit count. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
-		shortDesc: "+50 power per hit taken, max 6 hits. Switching halves the count.",
+		shortDesc: "+50 BP per hit taken, max 6. Switching halves count.",
 	},
 	ragepowder: {
 		name: "Rage Powder",
 		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, the user must choose one opponent; only that opponent's attacks are redirected, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
-		shortDesc: "Redirects foes' moves. FFA: choose one foe; 0.75x redirected damage; 2+ redirects heal.",
+		shortDesc: "Redirects moves. FFA: pick foe; 0.75x damage, 2+ heals.",
 		gen6: {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double or Triple Battle. This effect is ignored while the user is under the effect of Sky Drop.",
 		},
@@ -5362,7 +5362,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rockclimb: {
 		name: "Rock Climb",
 		desc: "Has a 30% chance to confuse the target. If this move hits a confused target, the user's Attack and Speed rise by 1 stage. On Mountain, Rocky, Cave, and Desert fields, this move has a high critical hit ratio.",
-		shortDesc: "30% confuse; vs confused: +1 Atk/Spe. +crit on rocky fields.",
+		shortDesc: "30% confuse. Vs confused: +Atk/Spe. +crit on rough fields.",
 	},
 	rockpolish: {
 		name: "Rock Polish",
@@ -5384,7 +5384,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rocksmash: {
 		name: "Rock Smash",
 		desc: "Has a 50% chance to lower the target's Defense by 1 stage. If this lowers Defense, the user's next Fighting-, Rock-, or Ground-type move against that target deals 1.3x damage. If the target already has lowered Defense, this move hits twice.",
-		shortDesc: "50% -1 Def; marks for 1.3x. Hits twice if Def is down.",
+		shortDesc: "50% -1 Def; next hit 1.3x. Hits twice if Def is down.",
 	},
 	rockthrow: {
 		name: "Rock Throw",
@@ -5644,7 +5644,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	selfdestruct: {
 		name: "Self-Destruct",
 		desc: "The user faints after using this move, even if this move fails for having no target. This move uses the user's higher attacking stat and halves the matching defensive stat during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		shortDesc: "Uses higher Atk/SpA; halves matching defense; user faints.",
+		shortDesc: "Uses higher Atk/SpA; halves defense; user faints.",
 		gen4: {
 			desc: "The user faints after using this move, unless this move has no target. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 			shortDesc: "Target's Def halved during damage. User faints.",
@@ -5862,7 +5862,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skullbash: {
 		name: "Skull Bash",
 		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. When it attacks, the user restores 1/16 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Turn 1 +1 Atk/Def/SpD; attacks turn 2 and heals 1/16.",
+		shortDesc: "Charges: +Atk/Def/SpD. Hit heals 1/16.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},
@@ -5876,7 +5876,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyattack: {
 		name: "Sky Attack",
 		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil, and raises the user's Speed by 1 stage after damage. If Tailwind is active on the user's side, this move attacks immediately with 90 Base Power and an even higher critical hit ratio.",
-		shortDesc: "Charges. +Spe on charge and hit. Tailwind: 90 BP instant, +2 crit.",
+		shortDesc: "Charges: +Spe. Tailwind: 90 BP instant, +2 crit.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
@@ -6303,7 +6303,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spotlight: {
 		name: "Spotlight",
 		desc: "Until the end of the turn, single-target attacks aimed at the user are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal.",
-		shortDesc: "Attacks aimed at the user redirect to the target this turn.",
+		shortDesc: "Moves aimed at user redirect to target this turn.",
 
 		start: "#followme",
 		startFromZEffect: "#followme",
@@ -6440,7 +6440,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	strength: {
 		name: "Strength",
 		desc: "This Fighting-type move ignores the target's Defense boosts and cannot be weakened by Reflect, Aurora Veil, or Arenite Wall.",
-		shortDesc: "Ignores Defense boosts, Reflect, Veil, and Arenite Wall.",
+		shortDesc: "Ignores Def boosts, Reflect, Veil, Arenite Wall.",
 	},
 	strengthsap: {
 		name: "Strength Sap",
@@ -7188,7 +7188,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	twineedle: {
 		name: "Twineedle",
 		desc: "Hits all adjacent foes once without a spread damage penalty and has a 20% chance to poison each target.",
-		shortDesc: "Hits all adjacent foes at full damage. 20% chance to poison.",
+		shortDesc: "Hits adjacent foes at full damage. 20% poison.",
 		gen4: {
 			desc: "Hits twice, with each hit having a 20% chance to poison the target. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
