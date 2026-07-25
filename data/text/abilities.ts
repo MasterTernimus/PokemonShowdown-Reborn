@@ -499,8 +499,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mourningvessel: {
 		name: "Mourning Vessel",
-		desc: "This Pokemon's damaging moves deal 20% more damage for each fainted ally. At the end of each turn, this Pokemon restores 5% of its max HP for each fainted opposing Pokemon.",
-		shortDesc: "Damage +20% per fainted ally; heals 5% per fainted foe each turn.",
+		desc: "This Pokemon's damaging moves deal 20% more damage for each fainted ally. At the end of each turn, this Pokemon restores 5% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
+		shortDesc: "Damage +20% per fainted ally; heals 5% per fainted foe from all opposing sides.",
 	},
 	fallenstar: {
 		name: "Fallen Star",
@@ -2447,8 +2447,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
-		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, including its partner's side in multi battles, and X cannot be greater than 5.",
-		shortDesc: "Moves gain 10% power per fainted ally, counting partner allies in multi battles, up to 5.",
+		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, including its partner's side in multi battles.",
+		shortDesc: "Moves gain 10% power per fainted ally, counting partner allies in multi battles.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
