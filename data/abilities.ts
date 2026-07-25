@@ -3032,6 +3032,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10163,
 	},
+	relicbeam: {
+		onModifySpA(spa, pokemon) {
+			return pokemon.getStat('def', false, true);
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			const beamMoves = [
+				'aurorabeam', 'bubblebeam', 'chargebeam', 'dynamaxcannon', 'eternabeam',
+				'flashcannon', 'fleurcannon', 'icebeam', 'lusterpurge', 'meteorbeam',
+				'moongeistbeam', 'psybeam', 'signalbeam', 'solarbeam', 'steelbeam',
+			];
+			if (beamMoves.includes(move.id)) {
+				this.debug('Relic Beam boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Relic Beam",
+		rating: 4,
+		num: 10164,
+	},
 	perfectforesight: {
 		onStart(pokemon) {
 			delete pokemon.m.perfectForesightAbility;
@@ -5936,14 +5957,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			this.dex.abilities.get('dragonize').onModifyType?.call(this, move, pokemon);
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.type === 'Dragon' && !source.hasType('Dragon')) return 1.5;
+		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
-			if (!this.movehasType(move, 'Fire')) return;
-			let modifier = 1.3;
-			if (['hail', 'snow', 'sunnyday', 'desolateland'].includes(attacker.effectiveWeather()) && defender?.getMoveHitData(move).typeMod < 0) {
-				modifier *= 2;
+			let modifier = 1;
+			if (this.movehasType(move, 'Fire')) {
+				modifier *= 1.3;
+				if (['hail', 'snow', 'sunnyday', 'desolateland'].includes(attacker.effectiveWeather()) && defender?.getMoveHitData(move).typeMod < 0) {
+					modifier *= 2;
+				}
 			}
-			return this.chainModify(modifier);
+			if (move.typeChangerBoosted === this.dex.abilities.get('dragonize')) {
+				modifier *= this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 1.5 : 1.2;
+			}
+			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onAfterMove(source, target, move) {
 			if (this.movehasType(move, 'Fire')) source.abilityState.wildFireUsedFire = this.turn;
@@ -8876,6 +8909,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 292,
 	},
+	blademastery: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain')) {
+				this.debug('Blade Mastery boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyCritRatio(critRatio, source, target, move) {
+			if (move.flags['slicing']) return 5;
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.type === 'Fighting' && !source.hasType('Fighting')) return 1.5;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Bug' || type === 'Dark' || type === 'Rock') return typeMod - 1;
+		},
+		flags: { breakable: 1 },
+		name: "Blade Mastery",
+		rating: 4,
+		num: 10165,
+	},
 	starboxer: {
 		onPrepareHit(source, target, move) {
 			if (!move.flags['punch'] || move.category === 'Status' || move.flags['charge'] || move.flags['futuremove'] || move.isZ || move.isMax) return;
@@ -11488,6 +11543,73 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Ultra Instinct",
 		rating: 3,
 		num: 10013,
+	},
+	duskdrive: {
+		onStart(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			this.add('-ability', pokemon, 'Dusk Drive');
+			pokemon.abilityState.duskDrivePinch = false;
+			pokemon.abilityState.duskDriveHitTriggered = false;
+		},
+		boostedField() {
+			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain']);
+		},
+		healDuskDrive(pokemon, source) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.duskDrivePinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.abilityState.duskDrivePinch = true;
+				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+				return;
+			}
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		onAfterMove(source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (move.category !== 'Status') source.abilityState.duskDriveHitTriggered = false;
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (!move || move.category === 'Status') return;
+			if (source.abilityState.duskDriveAttackHealTurn === this.turn) return;
+			source.abilityState.duskDriveAttackHealTurn = this.turn;
+			this.effect.healDuskDrive.call(this, source, 'attack');
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
+			if (target.abilityState.duskDriveHitTriggered) {
+				this.heal(target.baseMaxhp / 20, target, target);
+				return;
+			}
+			target.abilityState.duskDriveHitTriggered = true;
+			this.boost({ atk: 1, spa: 1 }, target, target);
+			this.effect.healDuskDrive.call(this, target, 'hit');
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (this.effect.boostedField.call(this) || this.queue.willMove(target) || target.newlySwitched) {
+				this.debug('Dusk Drive boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (source.moveThisTurnResult === undefined) {
+				this.debug('Dusk Drive weaken');
+				return this.chainModify(0.3);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (effect?.effectType !== 'Move' || (target as any).duskDriveEndureUsed || target.hp <= target.maxhp / 2 || damage < target.hp) return;
+			(target as any).duskDriveEndureUsed = true;
+			return target.hp - 1;
+		},
+		flags: {},
+		name: "Dusk Drive",
+		rating: 4,
+		num: 10166,
 	},
 	vesselofruin: {
 		onStart(pokemon) {

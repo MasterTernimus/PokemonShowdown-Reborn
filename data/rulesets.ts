@@ -852,12 +852,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	fightingclause: {
 		effectType: 'ValidatorRule',
 		name: 'Fighting Clause',
-		desc: "Prevents teams from having more than one Pokemon with Ultra Ego, Ultra Instinct, or Battle Fervor.",
+		desc: "Prevents teams from having more than one Pokemon with Ultra Ego, Ultra Instinct, Battle Fervor, or Dusk Drive.",
 		onBegin() {
-			this.add('rule', 'Fighting Clause: Limit one Pokemon with Ultra Ego, Ultra Instinct, or Battle Fervor');
+			this.add('rule', 'Fighting Clause: Limit one Pokemon with Ultra Ego, Ultra Instinct, Battle Fervor, or Dusk Drive');
 		},
 		onValidateTeam(team) {
-			const restrictedAbilities = new Set(['ultraego', 'ultrainstinct', 'battlefervor']);
+			const restrictedAbilities = new Set(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive']);
 			const restrictedPokemon: string[] = [];
 			for (const set of team) {
 				const abilities = new Set<ID>();
@@ -877,7 +877,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			if (restrictedPokemon.length > 1) {
 				return [
-					`You are limited to one Pokemon with Ultra Ego, Ultra Instinct, or Battle Fervor by Fighting Clause.`,
+					`You are limited to one Pokemon with Ultra Ego, Ultra Instinct, Battle Fervor, or Dusk Drive by Fighting Clause.`,
 					`(You have ${restrictedPokemon.join(', ')})`,
 				];
 			}

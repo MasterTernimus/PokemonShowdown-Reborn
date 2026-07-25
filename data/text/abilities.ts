@@ -1656,6 +1656,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Overcoat's effect. Before using a physical move, it becomes Fighting type; before using a special move, it becomes Psychic type. If its Special Attack is higher than its Attack, its physical moves may use Special Attack for damage calculation while still targeting Defense.",
 		shortDesc: "Overcoat; physical moves turn it Fighting and can use SpA; special moves turn it Psychic.",
 	},
+	relicbeam: {
+		name: "Relic Beam",
+		desc: "This Pokemon's Sp. Atk becomes equal to its Defense, and Special Attack stat stages use Defense stages instead. Beam and cannon moves used by this Pokemon have 1.5x power.",
+		shortDesc: "SpA equals Defense using Def stages; beam and cannon moves have 1.5x power.",
+	},
 	overgrow: {
 		name: "Overgrow",
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Grass-type attack.",
@@ -2096,6 +2101,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	sharpness: {
 		name: "Sharpness",
 		shortDesc: "This Pokemon's slicing moves have their power multiplied by 1.5.",
+	},
+	blademastery: {
+		name: "Blade Mastery",
+		desc: "This Pokemon has Sharpness's effect. Its slicing moves always result in a critical hit. This Pokemon gains STAB on Fighting-type moves and has Fighting-type resistances.",
+		shortDesc: "Sharpness; slicing moves always crit; gains Fighting STAB and resistances.",
 	},
 	shedskin: {
 		name: "Shed Skin",
@@ -2940,8 +2950,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wildfirecore: {
 		name: "Wildfire Core",
-		desc: "This Pokemon's Fire-type moves have 1.3x power. This Pokemon takes 0.5x damage from Water-type moves. If Sun or Hail is active, resisted Fire-type moves used by this Pokemon are boosted like Tinted Lens. At the end of each turn, opposing non-Fire Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire-type move this turn. This damage uses Fire-type effectiveness.",
-		shortDesc: "Fire 1.3x; 0.5x Water; weather Tinted Lens; fire chip to foes.",
+		desc: "This Pokemon has Dragonize's effect. If it is not Dragon type, it gains STAB on Dragon-type moves. Its Fire-type moves have 1.3x power. This Pokemon takes 0.5x damage from Water-type moves. If Sun or Hail is active, resisted Fire-type moves used by this Pokemon are boosted like Tinted Lens. At the end of each turn, opposing non-Fire Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire-type move this turn. This damage uses Fire-type effectiveness.",
+		shortDesc: "Dragonize + Dragon STAB; Fire 1.3x; 0.5x Water; fire chip to foes.",
 	},
 	memoryleak: {
 		name: "Memory Leak",
@@ -3047,6 +3057,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Ultra Instinct",
 		desc: "This Pokemon's moves ignore abilities. Its attacks deal 2x damage against targets protected by Reflect, Light Screen, or Aurora Veil. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage and once per battle can endure a KO from above 50% HP at 1 HP.",
 		shortDesc: "Moves ignore abilities; 2x vs screens/Veil; fast attacks 1.5x; pre-move guard/endure.",
+	},
+	duskdrive: {
+		name: "Dusk Drive",
+		desc: "Once per turn, this Pokemon's damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. If it moves before the target or is in a boosted field, its attacks deal 1.5x damage. If attacked before moving, it takes 30% damage.",
+		shortDesc: "Attacks heal; next enemy hit boosts Atk/SpA; fast attacks 1.5x; pre-move guard.",
 	},
 
 	// CAP
