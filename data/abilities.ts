@@ -10198,9 +10198,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const totalFainted = pokemon.side.totalFainted + (pokemon.side.allySide?.totalFainted || 0);
 			if (totalFainted) {
 				this.add('-activate', pokemon, 'ability: Supreme Overlord');
-				const fallen = Math.min(totalFainted, 5);
-				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
-				this.effectState.fallen = fallen;
+				this.add('-start', pokemon, `fallen${totalFainted}`, '[silent]');
+				this.effectState.fallen = totalFainted;
 			}
 		},
 		onEnd(pokemon) {
@@ -10209,9 +10208,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.effectState.fallen) {
-				const powMod = [4096, 4506, 4915, 5325, 5734, 6144];
-				this.debug(`Supreme Overlord boost: ${powMod[this.effectState.fallen]}/4096`);
-				return this.chainModify([powMod[this.effectState.fallen], 4096]);
+				const multiplier = 1 + 0.1 * this.effectState.fallen;
+				this.debug(`Supreme Overlord boost: ${multiplier}x`);
+				return this.chainModify(multiplier);
 			}
 		},
 		flags: {},
