@@ -25,6 +25,8 @@ import { Pokemon, type EffectState } from './pokemon';
 import { State } from './state';
 import { toID } from './dex';
 
+type MoveEvent = 'mega' | 'megax' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | 'zmove-terastallize' | '';
+
 /** A single action that can be chosen. Choices will have one Action for each pokemon. */
 export interface ChosenAction {
 	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass';// action type
@@ -542,7 +544,7 @@ export class Side {
 	chooseMove(
 		moveText?: string | number,
 		targetLoc = 0,
-		event: 'mega' | 'megax' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = ''
+		event: MoveEvent = ''
 	) {
 		if (this.requestState !== 'move') {
 			return this.emitChoiceError(`Can't move: You need a ${this.requestState} response`);
@@ -595,7 +597,7 @@ export class Side {
 					}
 				}
 			}
-			if (!targetType && ['', 'zmove'].includes(event) && request.canZMove) {
+			if (!targetType && ['', 'zmove', 'zmove-terastallize'].includes(event) && request.canZMove) {
 				for (const [i, moveRequest] of request.canZMove.entries()) {
 					if (!moveRequest) continue;
 					if (moveid === toID(moveRequest.move)) {
@@ -628,8 +630,9 @@ export class Side {
 		const move = this.battle.dex.moves.get(moveid);
 
 		// Z-move
-		const zMove = event === 'zmove' ? this.battle.actions.getZMove(move, pokemon) : undefined;
-		if (event === 'zmove' && !zMove) {
+		const wantsZMove = event === 'zmove' || event === 'zmove-terastallize';
+		const zMove = wantsZMove ? this.battle.actions.getZMove(move, pokemon) : undefined;
+		if (wantsZMove && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
 		if (zMove && this.choice.zMove) {
@@ -790,7 +793,7 @@ export class Side {
 				}
 			}
 		}
-		const terastallize = (event === 'terastallize');
+		const terastallize = (event === 'terastallize' || event === 'zmove-terastallize');
 		if (terastallize && !pokemon.canTerastallize) {
 			// Make this work properly
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't Terastallize.`);
@@ -1178,7 +1181,21 @@ export class Side {
 				const original = data;
 				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
 				let targetLoc: number | undefined;
-				let event: 'mega' | 'megax' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = '';
+				let event: MoveEvent = '';
+				const addEvent = (nextEvent: Exclude<MoveEvent, '' | 'zmove-terastallize'>) => {
+					if (!event) {
+						event = nextEvent;
+						return true;
+					}
+					if (
+						(event === 'zmove' && nextEvent === 'terastallize') ||
+						(event === 'terastallize' && nextEvent === 'zmove')
+					) {
+						event = 'zmove-terastallize';
+						return true;
+					}
+					return false;
+				};
 				while (true) {
 					// If data ends with a number, treat it as a target location.
 					// We need to special case 'Conversion 2' so it doesn't get
@@ -1189,44 +1206,34 @@ export class Side {
 						targetLoc = parseInt(data.slice(-2));
 						data = data.slice(0, -2).trim();
 					} else if (data.endsWith(' mega')) {
-						if (event) return error();
-						event = 'mega';
+						if (!addEvent('mega')) return error();
 						data = data.slice(0, -5);
 					} else if (data.endsWith(' megax')) {
-						if (event) return error();
-						event = 'megax';
+						if (!addEvent('megax')) return error();
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' megay')) {
-						if (event) return error();
-						event = 'megay';
+						if (!addEvent('megay')) return error();
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' zmove')) {
-						if (event) return error();
-						event = 'zmove';
+						if (!addEvent('zmove')) return error();
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' ultra')) {
-						if (event) return error();
-						event = 'ultra';
+						if (!addEvent('ultra')) return error();
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' dynamax')) {
-						if (event) return error();
-						event = 'dynamax';
+						if (!addEvent('dynamax')) return error();
 						data = data.slice(0, -8);
 					} else if (data.endsWith(' gigantamax')) {
-						if (event) return error();
-						event = 'dynamax';
+						if (!addEvent('dynamax')) return error();
 						data = data.slice(0, -11);
 					} else if (data.endsWith(' max')) {
-						if (event) return error();
-						event = 'dynamax';
+						if (!addEvent('dynamax')) return error();
 						data = data.slice(0, -4);
 					} else if (data.endsWith(' terastal')) {
-						if (event) return error();
-						event = 'terastallize';
+						if (!addEvent('terastallize')) return error();
 						data = data.slice(0, -9);
 					} else if (data.endsWith(' terastallize')) {
-						if (event) return error();
-						event = 'terastallize';
+						if (!addEvent('terastallize')) return error();
 						data = data.slice(0, -13);
 					} else {
 						break;

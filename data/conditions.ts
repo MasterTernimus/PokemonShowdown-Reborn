@@ -22,7 +22,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onEnd(pokemon) {
 			const originalAbility = this.effectState.originalAbility;
 			if (originalAbility && pokemon.ability !== originalAbility) {
-				pokemon.setAbility(originalAbility, pokemon, this.dex.abilities.get('illusion'), true);
+				const copiedAbility = pokemon.getAbility();
+				this.singleEvent('End', copiedAbility, pokemon.abilityState, pokemon, pokemon);
+				pokemon.ability = originalAbility;
+				pokemon.abilityState = this.initEffectState({ id: originalAbility, target: pokemon });
 			}
 			if (pokemon.illusion && !pokemon.beingCalledBack) {
 				this.debug('illusion cleared');

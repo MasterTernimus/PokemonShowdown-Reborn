@@ -2299,8 +2299,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon always has Dry Skin's effects. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
-		shortDesc: "Has Dry Skin. Above 50% HP: 0.8x damage, no weaknesses/hazards/status/secondary effects.",
+		desc: "This Pokemon always has Dry Skin's effects. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
+		shortDesc: "Dry Skin + 50% spore on hit. Above 50% HP: 0.8x damage, no weaknesses/hazards/status.",
 	},
 	tremor: {
 		name: "Tremor",

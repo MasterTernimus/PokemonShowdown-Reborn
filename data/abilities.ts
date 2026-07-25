@@ -5956,7 +5956,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					if (pokemon.volatiles['illusioncopy']) {
 						pokemon.volatiles['illusioncopy'].originalAbility = pokemon.ability;
 					}
-					pokemon.setAbility(copiedAbility.id, pokemon, this.effect, true);
+					pokemon.ability = copiedAbility.id;
+					pokemon.abilityState = this.initEffectState({ id: copiedAbility.id, target: pokemon });
+					this.singleEvent('Start', copiedAbility, pokemon.abilityState, pokemon, pokemon);
 				}
 			}
 		},
@@ -5992,6 +5994,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
+			if (pokemon.volatiles['illusioncopy']) {
+				pokemon.removeVolatile('illusioncopy');
+			}
 			if (pokemon.illusion && !pokemon.beingCalledBack) {
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
@@ -9742,6 +9747,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	parasitism: {
 		onEffectiveness(typeMod, target, type, move) {
 			if (target.hp > target.maxhp / 2 && typeMod > 0) return 0;
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target || !move || move.category === 'Status') return;
+			if (!source.runStatusImmunity('powder')) return;
+			if (!this.randomChance(1, 2)) return;
+			const status = ['slp', 'par', 'psn'][this.random(3)];
+			source.setStatus(status, target);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (!target || target.isAlly(pokemon) || move.category === 'Status') return;
+			move.ignoreDefensive = true;
+			move.infiltrates = true;
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (target && !target.isAlly(source) && move.category !== 'Status') return this.chainModify(1.3);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp > target.maxhp / 2) return this.chainModify(0.8);

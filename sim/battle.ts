@@ -3587,6 +3587,8 @@ export class Battle {
 			pokemon.side.gimmickCount++;
 			if (gimmick === 'Gigantamax') {
 				pokemon.side.dynamaxUsed = true;
+			} else if (gimmick === 'zMove') {
+				pokemon.side.zMoveUsed = true;
 			}
 		}
 		if (pokemon.side.gimmickCount === 2) {
@@ -3596,7 +3598,6 @@ export class Battle {
 				ally.canUltraBurst = null;
 				ally.canTerastallize = null;
 			}
-			pokemon.side.zMoveUsed = true;
 		}
 		return outcome;
 	}
