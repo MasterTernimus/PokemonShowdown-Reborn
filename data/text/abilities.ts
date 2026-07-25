@@ -489,8 +489,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	firstvenom: {
 		name: "First Venom",
-		desc: "This Pokemon has Shed Skin's effect. While it has at least 75% of its max HP, its damaging Poison- and Dark-type moves have +1 priority, and its Dark-type moves have 1.5x power and gain STAB.",
-		shortDesc: "Shed Skin; at >=75% HP Poison/Dark attacks +1 priority; Dark 1.5x + STAB.",
+		desc: "This Pokemon has the custom Shed Skin effect, giving it a 50% chance at the end of each turn to cure status, remove common negative effects, reset negative stat stages, and restore 1/3 max HP when it has a negative condition or is at 1/2 HP or less. While it has at least 75% of its max HP, its damaging Poison- and Dark-type moves have +1 priority, and its Dark-type moves have 1.5x power and gain STAB.",
+		shortDesc: "Custom Shed Skin; at >=75% HP Poison/Dark attacks +1 priority; Dark 1.5x + STAB.",
 	},
 	noseformation: {
 		name: "Nose Formation",
