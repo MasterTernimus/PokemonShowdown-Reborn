@@ -3216,7 +3216,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					id: 'futuresight',
 					name: "Future Sight",
 					accuracy: 100,
-					basePower: 120,
+					basePower: 60,
 					category: "Special",
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
