@@ -2066,6 +2066,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon absorbs Water- and Ice-type attacks to restore 1/4 of its maximum HP. It also has Ice Body and Hydration's effects.",
 		shortDesc: "Absorbs Water/Ice moves; Ice Body + Hydration.",
 	},
+	seablessing: {
+		name: "Sea Blessing",
+		desc: "This Pokemon's Defense and Special Defense are multiplied by 1.5. On switch-in, this Pokemon and its adjacent allies restore 1/4 max HP, and this Pokemon gains Aqua Ring. This Pokemon has Hydration, Water Veil, and Rain Dish's effects.",
+		shortDesc: "1.5x Def/SpD; entry heals self/allies 1/4; Hydration + Water Veil + Rain Dish.",
+	},
 	sapsipper: {
 		name: "Sap Sipper",
 		desc: "This Pokemon is immune to Grass-type moves and raises its Attack by 1 stage when hit by a Grass-type move.",

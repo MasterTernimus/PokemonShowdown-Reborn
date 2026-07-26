@@ -9142,7 +9142,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water"],
 		gender: "N",
 		baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 80 },
-		abilities: { 0: "Hydration" },
+		abilities: { 0: "Sea Blessing" },
 		heightm: 0.4,
 		weightkg: 3.1,
 		color: "Blue",
