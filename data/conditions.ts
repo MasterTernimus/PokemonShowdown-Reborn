@@ -524,7 +524,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
-			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			const hitResult = this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			if (!hitResult && data.moveData?.temporalShiftHex) {
+				data.endingTurn = this.turn + 1;
+				this.add('-message', `${move.name} failed to hit and was delayed to turn ${data.endingTurn}.`);
+				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
+				return;
+			}
 			if ((data.moveData?.perfectForesight || data.moveData?.grandmasterForesight || data.moveData?.temporalShiftHex) && data.perfectForesightQueued > 1) {
 				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {

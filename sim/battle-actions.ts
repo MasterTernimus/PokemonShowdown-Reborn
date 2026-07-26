@@ -924,6 +924,7 @@ export class BattleActions {
 			} else {
 				targetsCopy = targets.slice(0);
 			}
+			const targetsHadHP = targetsCopy.map(target => !!target && target.hp > 0);
 			const target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
 			if (target && typeof move.smartTarget === 'boolean') {
 				if (hit > 1) {
@@ -998,6 +999,14 @@ export class BattleActions {
 				}
 			}
 			this.battle.eachEvent('Update');
+			if ((move as any).shadowCurrentExtraHit && !(move as any).shadowCurrentExtraHitUsed) {
+				const gotKO = targetsCopy.some((target, i) => targetsHadHP[i] && target && !target.hp);
+				if (gotKO) {
+					(move as any).shadowCurrentExtraHitUsed = true;
+					targetHits++;
+					move.lastHit = false;
+				}
+			}
 			if (!pokemon.hp && targets.length === 1) {
 				hit++; // report the correct number of hits for multihit moves
 				break;
