@@ -3005,8 +3005,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	temporalshift: {
 		name: "Temporal Shift",
-		desc: "This Pokemon's stats cannot be lowered by opposing Pokemon. Every other turn, it queues a 60 BP Future Sight matching the user's primary type against a random valid opposing target; multiple attacks can be queued and announce their strike turns.",
-		shortDesc: "Stats cannot be lowered; every other turn queues a 60 BP primary-type Future Sight.",
+		desc: "This Pokemon's stats cannot be lowered by opposing Pokemon. After one turn out, every other turn it queues a 60 BP Future Sight matching the user's primary type against a random valid opposing target; multiple attacks can be queued and announce their strike turns.",
+		shortDesc: "Stats cannot be lowered; after one turn, queues 60 BP Future Sight every other turn.",
 	},
 	accumulation: {
 		name: "Accumulation",
