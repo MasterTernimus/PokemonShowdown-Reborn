@@ -190,6 +190,7 @@ export class Side {
 	 */
 	dynamaxUsed: boolean;
 	gimmickCount: number;
+	megaEvoCount: number;
 
 	faintedLastTurn: Pokemon | null;
 	faintedThisTurn: Pokemon | null;
@@ -253,6 +254,7 @@ export class Side {
 		this.zMoveUsed = false;
 		this.dynamaxUsed = false;
 		this.gimmickCount = 0;
+		this.megaEvoCount = 0;
 
 		this.sideConditions = {};
 		this.slotConditions = [];

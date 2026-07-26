@@ -2329,8 +2329,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	freezeshock: {
 		name: "Freeze Shock",
-		desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges turn 1. Hits turn 2. 30% paralyze.",
+		desc: "Has a 60% chance to paralyze the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Charges turn 1. Hits turn 2. 60% paralyze.",
 
 		prepare: "  [POKEMON] became cloaked in a freezing light!",
 	},
@@ -3253,8 +3253,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iceburn: {
 		name: "Ice Burn",
-		desc: "Has a 30% chance to burn the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges turn 1. Hits turn 2. 30% burn.",
+		desc: "Has a 60% chance to burn the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Charges turn 1. Hits turn 2. 60% burn.",
 
 		prepare: "  [POKEMON] became cloaked in freezing air!",
 	},

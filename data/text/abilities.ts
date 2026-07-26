@@ -109,6 +109,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "As One (Spectrier)",
 		shortDesc: "Combination of the Unnerve and Grim Neigh Abilities.",
 	},
+	aquashell: {
+		name: "Aqua Shell",
+		desc: "This Pokemon has Water Bubble, Water Veil, Tough Claws, and Shell Armor built in. Its Water-type attacks are doubled, Fire-type attacks used against it are halved, contact moves are boosted by 1.3x, it cannot be burned or critically hit, it is immune to Hail and Sandstorm damage, and it gains Aqua Ring on switch-in.",
+		shortDesc: "Water Bubble + Water Veil + Tough Claws + Shell Armor.",
+	},
 	aurabreak: {
 		name: "Aura Break",
 		desc: "While this Pokemon is active, the effects of the Dark Aura and Fairy Aura Abilities are reversed, multiplying the power of Dark- and Fairy-type moves, respectively, by 3/4 instead of 1.33.",
@@ -524,8 +529,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vanguard: {
 		name: "Vanguard",
-		desc: "Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon can only be damaged by direct attacks. Its stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and survives at 1 HP.",
-		shortDesc: "Extreme Speed 1.5x, may become Fire; Magic Guard; stats can't drop; once endures KO.",
+		desc: "This Pokemon has Intimidate built in. Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon can only be damaged by direct attacks. Its stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and survives at 1 HP.",
+		shortDesc: "Intimidate; Extreme Speed 1.5x, may become Fire; Magic Guard; stats can't drop.",
 	},
 	apexcleave: {
 		name: "Apex Cleave",
@@ -614,8 +619,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	omenedge: {
 		name: "Omen Edge",
-		desc: "This Pokemon has Sharpness's effect. Its slicing moves have +1 critical hit ratio, and its critical hits deal 1.5x more damage like Sniper.",
-		shortDesc: "Sharpness; slicing moves +1 crit; critical hits are stronger.",
+		desc: "This Pokemon has Sharpness's effect. Its slicing moves have +1 critical hit ratio, and its critical hits deal 1.5x more damage like Sniper. When this Pokemon faints, it casts a physical Doom Desire on each opposing Pokemon.",
+		shortDesc: "Sharpness; slicing +1 crit; stronger crits. On faint: physical Doom Desire on foes.",
 	},
 	dreadmaw: {
 		name: "Dread Maw",
@@ -642,10 +647,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "On switch-in, this Pokemon summons Sandstorm. During Sandstorm, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Rock, non-Ground, and non-Steel Pokemon lose 1/16 max HP.",
 		shortDesc: "Sets Sand; in Sand moves 1.2x and takes 0.7x; chips vulnerable Pokemon.",
 	},
+	dunetyrant: {
+		name: "Dune Tyrant",
+		desc: "This Pokemon has Sand Stream and Strong Jaw built in. On switch-in, it summons Sandstorm. During Sandstorm, its Defense is boosted by 1.5x and attacks deal 0.8x damage to it.",
+		shortDesc: "Sand Stream + Strong Jaw; in Sand, Def 1.5x and takes 0.8x.",
+	},
 	frostsovereign: {
 		name: "Frost Sovereign",
 		desc: "On switch-in, this Pokemon summons Hail for 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Hail, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP.",
 		shortDesc: "Sets 8-turn Hail; 8-turn Aurora Veil; in Hail moves 1.2x and takes 0.7x.",
+	},
+	freezerburn: {
+		name: "Freezer Burn",
+		desc: "This Pokemon has Refrigerate and Snow Warning built in. Normal-type moves become Ice-type and have 1.2x power. Fire-type moves used by this Pokemon have 1.2x power. This Pokemon's charge moves execute immediately.",
+		shortDesc: "Refrigerate + Snow Warning; Fire moves 1.2x; charge moves fire instantly.",
 	},
 	stormfright: {
 		name: "Storm Fright",
@@ -781,6 +796,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Aurora Resonance",
 		desc: "This Pokemon's sound-based moves have 1.2x power and become Water type. This Pokemon has Water Absorb's effect. If Rain is active, this Pokemon heals its status condition at the end of each turn.",
 		shortDesc: "Sound moves become Water and 1.2x; Water Absorb; cures status in rain.",
+	},
+	auroracurrent: {
+		name: "Aurora Current",
+		desc: "This Pokemon has Snow Warning built in. On switch-in, it summons Snow. It gains STAB on Electric-type moves. During Snow, its Electric-type moves cannot miss and its Defense and Special Defense are boosted by 1.5x.",
+		shortDesc: "Snow Warning; Electric STAB; in Snow, Electric never misses and Def/SpD 1.5x.",
 	},
 	mountainhunger: {
 		name: "Mountain Hunger",
@@ -933,6 +953,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Flare Boost",
 		desc: "This Pokemon's Fire-type attacks have 1.5x power. While this Pokemon is burned, the power of its special attacks is also multiplied by 1.5.",
 		shortDesc: "Fire attacks have 1.5x power; burned special attacks also have 1.5x power.",
+	},
+	falsedevotion: {
+		name: "False Devotion",
+		desc: "This Pokemon has Serene Grace and Natural Cure's effects. Status moves used by this Pokemon have +1 priority if they target an opposing Pokemon. If this Pokemon successfully poisons, badly poisons, puts to sleep, paralyzes, or confuses a target, it restores 1/8 of its max HP.",
+		shortDesc: "Serene Grace + Natural Cure. Foe-targeting status moves +1 priority; status/confuse heals 1/8.",
 	},
 	firemane: {
 		name: "Fire Mane",
@@ -3025,8 +3050,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	predator: {
 		name: "Predator",
-		desc: "Stat changes this Pokemon receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, this Pokemon's attacks deal 1.3x damage.",
-		shortDesc: "Has Contrary; boosts attacks into slower/new targets.",
+		desc: "Stat changes this Pokemon receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, this Pokemon's attacks deal 1.3x damage. Attacks deal 2x damage to targets with Neutralization or Royal Decree.",
+		shortDesc: "Has Contrary; boosts attacks into slower/new targets; 2x into authority abilities.",
+	},
+	royalarmament: {
+		name: "Royal Armament",
+		desc: "This Pokemon gains STAB on Steel-type moves, has Power Drill built in, and has Steel-type resistances without gaining Steel-type weaknesses.",
+		shortDesc: "Steel STAB; Power Drill; Steel resistances without Steel weaknesses.",
 	},
 	relentlesshunt: {
 		name: "Relentless Hunt",
