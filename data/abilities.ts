@@ -1223,6 +1223,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
+		onFaint(pokemon) {
+			for (const foe of pokemon.foes()) {
+				if (!foe.fainted) foe.addVolatile('curse', pokemon, this.dex.abilities.get('cursedbody'));
+			}
+		},
 		flags: {},
 		name: "Cursed Body",
 		rating: 2,
@@ -4289,6 +4294,79 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 400,
 	},
+	execution: {
+		queueExecutionDoomDesire(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (!target || target.fainted) continue;
+				const slotCondition = target.side.slotConditions[target.position]['futuremove'];
+				if (slotCondition) {
+					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
+					this.add('-message', `Execution delayed Doom Desire to turn ${slotCondition.endingTurn}.`);
+					continue;
+				}
+				if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('execution'))) continue;
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+					move: 'doomdesire',
+					source: pokemon,
+					moveData: {
+						id: 'doomdesire',
+						name: "Doom Desire",
+						accuracy: 100,
+						basePower: 140,
+						category: "Special",
+						priority: 0,
+						flags: { metronome: 1, futuremove: 1 },
+						effectType: 'Move',
+						type: 'Steel',
+					},
+				});
+				this.add('-start', pokemon, 'Doom Desire', '[from] ability: Execution');
+				this.add('-message', `Execution's Doom Desire will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
+			}
+		},
+		onStart(pokemon) {
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			this.dex.abilities.get('duskilate').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			let modifier = 1;
+			if (move.typeChangerBoosted === this.effect) {
+				modifier *= this.field.isTerrain(['darkcrystalcavernterrain', 'newworldterrain', 'starlightarenaterrain', 'coldeclipseterrain', 'shortcircuitterrain', 'hauntedterrain', 'bewitchedwoodsterrain', 'holyterrain', 'rainbowterrain']) ? 1.5 : 1.3;
+			}
+			if (target && target.hp > 0 && target.hp <= target.maxhp / 2) modifier *= 2;
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onTryBoost(boost, target, source, effect) {
+			for (const stat of ['atk', 'spa'] as BoostID[]) {
+				if (!boost[stat] || boost[stat]! >= 0) continue;
+				const minDrop = -1 - target.boosts[stat];
+				if (minDrop >= 0) {
+					delete boost[stat];
+				} else if (boost[stat]! < minDrop) {
+					boost[stat] = minDrop;
+				}
+			}
+			if (this.field.terrain && boost.spe && boost.spe < 0) delete boost.spe;
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType !== 'Move') return;
+			this.heal(source.baseMaxhp / 8 * length, source, source);
+		},
+		onFaint(pokemon) {
+			this.effect.queueExecutionDoomDesire.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
+		},
+		flags: { breakable: 1 },
+		name: "Execution",
+		rating: 4.5,
+		num: 10198,
+	},
 	earlybird: {
 		flags: {},
 		name: "Early Bird",
@@ -6628,6 +6706,40 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Ironclad",
 		rating: 4,
 		num: 10004,
+	},
+	argentdevotion: {
+		onStart(pokemon) {
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			this.dex.abilities.get('ironclad').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			let modifier = 1;
+			if (move.typeChangerBoosted === this.effect) {
+				modifier *= this.field.isTerrain(['factoryterrain', 'shortcircuitterrain', 'fairytaleterrain', 'dragonsdenterrain', 'starlightarenaterrain', 'newworldterrain', 'holyterrain']) ? 1.5 : 1.2;
+			}
+			if (move.type === 'Steel' || move.type === 'Fairy' || move.types?.includes('Steel') || move.types?.includes('Fairy')) {
+				modifier *= 1.2;
+			}
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType !== 'Move') return;
+			this.heal(source.baseMaxhp / 8 * length, source, source);
+			for (const ally of source.adjacentAllies()) {
+				this.heal(ally.baseMaxhp / 8 * length, ally, source);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
+		},
+		flags: { breakable: 1 },
+		name: "Argent Devotion",
+		rating: 4.5,
+		num: 10199,
 	},
 	ironfist: {
 		onBasePowerPriority: 23,

@@ -292,8 +292,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedbody: {
 		name: "Cursed Body",
-		desc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets disabled unless one of the attacker's moves is already disabled.",
-		shortDesc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets disabled.",
+		desc: "If this Pokemon is hit by an attack, there is a 30% chance that move gets disabled unless one of the attacker's moves is already disabled. When this Pokemon faints, all opposing Pokemon become cursed.",
+		shortDesc: "30% disables moves that hit this Pokemon; on faint, curses all foes.",
 	},
 	cutecharm: {
 		name: "Cute Charm",
@@ -2933,6 +2933,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Normal-type moves become Dark-type moves and have their power multiplied by 1.3.",
 		shortDesc: "Normal moves become Dark type and have 1.3x power.",
 	},
+	execution: {
+		name: "Execution",
+		desc: "Deals more damage the lower the target's HP is and built in Duskilate. This Pokemon has Sworn Duty's effect. If the target is at 50% HP or lower, this Pokemon's attacks deal 2x damage. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP per target knocked out. Its Attack and Special Attack cannot be lowered below -1, and fields prevent its Speed from being lowered. When this Pokemon faints, Doom Desire is cast on all opposing Pokemon.",
+		shortDesc: "Built-in Duskilate + Sworn Duty; 2x vs targets at 50% HP or lower; KO heals.",
+	},
 	echofiend: {
 		name: "Echo Fiend",
 		desc: "This Pokemon is immune to sound moves. Its sound moves become Flying type and have 1.2x power.",
@@ -3037,6 +3042,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Ironclad",
 		desc: "This Pokemon's Normal-type moves become Steel-type moves and have their power multiplied by 1.2.",
 		shortDesc: "Normal moves become Steel type and have 1.2x power.",
+	},
+	argentdevotion: {
+		name: "Argent Devotion",
+		desc: "This Pokemon has built-in Ironclad and Sworn Duty. Steel-type and Fairy-type moves used by this Pokemon deal 1.2x damage. If this Pokemon knocks out another Pokemon with a move, it and its adjacent allies restore 1/8 max HP per target knocked out.",
+		shortDesc: "Ironclad + Sworn Duty; Steel/Fairy moves 1.2x; KO heals user/allies.",
 	},
 	ironcognition: {
 		name: "Iron Cognition",
