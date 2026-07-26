@@ -3560,7 +3560,8 @@ export class Battle {
 	}
 
 	useGimmick(pokemon: Pokemon, gimmick: Gimmick): boolean {
-		if (pokemon.side.gimmickCount >= 2) {
+		const maxGimmicks = this.gameType === 'freeforall' ? 3 : 2;
+		if (pokemon.side.gimmickCount >= maxGimmicks) {
 			return false;
 		}
 		let outcome = false;
@@ -3572,7 +3573,7 @@ export class Battle {
 			outcome = !!pokemon.canDynamax && !pokemon.side.allySide?.hasLivingGmax();
 			break;
 		case 'Mega':
-			outcome = !!pokemon.canMegaEvo;
+			outcome = !!pokemon.canMegaEvo && (this.gameType !== 'freeforall' || pokemon.side.megaEvoCount < 2);
 			break;
 		case 'Ultraburst':
 			outcome = !!pokemon.canUltraBurst;
@@ -3588,11 +3589,18 @@ export class Battle {
 			pokemon.side.gimmickCount++;
 			if (gimmick === 'Gigantamax') {
 				pokemon.side.dynamaxUsed = true;
+			} else if (gimmick === 'Mega') {
+				pokemon.side.megaEvoCount++;
 			} else if (gimmick === 'zMove') {
 				pokemon.side.zMoveUsed = true;
 			}
 		}
-		if (pokemon.side.gimmickCount === 2) {
+		if (this.gameType === 'freeforall' && pokemon.side.megaEvoCount >= 2) {
+			for (const ally of pokemon.side.pokemon) {
+				ally.canMegaEvo = false;
+			}
+		}
+		if (pokemon.side.gimmickCount === maxGimmicks) {
 			pokemon.side.dynamaxUsed = true;
 			for (const ally of pokemon.side.pokemon) {
 				ally.canMegaEvo = false;

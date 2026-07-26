@@ -6803,7 +6803,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	freezeshock: {
 		num: 553,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 140,
 		category: "Physical",
 		name: "Freeze Shock",
@@ -6827,7 +6827,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		secondary: {
-			chance: 30,
+			chance: 60,
 			status: 'par',
 		},
 		target: "normal",
@@ -10209,7 +10209,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	iceburn: {
 		num: 554,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 140,
 		category: "Special",
 		name: "Ice Burn",
@@ -10233,7 +10233,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		secondary: {
-			chance: 30,
+			chance: 60,
 			status: 'brn',
 		},
 		target: "normal",
