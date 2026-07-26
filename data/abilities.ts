@@ -2214,6 +2214,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	aurainstinct: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Aura Instinct');
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.boost({ accuracy: 1 }, pokemon, pokemon);
 			}
@@ -3481,7 +3482,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				delete boost[stat];
 				blocked = true;
 			}
-			if (blocked) this.add('-fail', target, 'boost', '[from] ability: Royal Decree', `[of] ${holder}`);
+			if (blocked) this.add('-message', `${holder.name}'s Royal Decree prevented the stat changes.`);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source === target || target.isAlly(source) || move.flags['futuremove']) return;
@@ -10121,7 +10122,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const active of this.getAllActive()) {
 				if (protectedSides.has(active.side)) continue;
 				const stockpileLayers = active.volatiles['stockpile']?.layers || 0;
+				const preservedBoosts: SparseBoostsTable = {};
+				const preservePositiveBoosts = (...stats: BoostID[]) => {
+					for (const stat of stats) {
+						if (active.boosts[stat] > 0) preservedBoosts[stat] = active.boosts[stat];
+					}
+				};
+				if (this.field.isTerrain('fairytaleterrain') && active.hasAbility(['mirrorarmor', 'irondominion', 'royaldecree', 'royalsun'])) {
+					preservePositiveBoosts('def', 'spd');
+				}
+				if (this.field.isTerrain('mirrorarmor') && active.hasAbility(['mirrorarmor', 'irondominion'])) {
+					preservePositiveBoosts('evasion');
+				}
+				if (this.field.isTerrain(['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain']) && active.hasAbility('relicarmor')) {
+					preservePositiveBoosts('def', 'spd');
+				}
+				if (this.field.isTerrain(['fairytaleterrain', 'bewitchedwoodsterrain', 'hauntedterrain', 'mistyterrain', 'newworldterrain']) && active.hasAbility('magician')) {
+					preservePositiveBoosts('spa');
+				}
+				if (this.field.isTerrain(['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain']) && active.hasAbility('stalwart')) {
+					preservePositiveBoosts('spa');
+				}
 				active.clearBoosts();
+				for (const stat in preservedBoosts) {
+					active.boosts[stat as BoostID] = preservedBoosts[stat as BoostID]!;
+				}
 				if (protectedSides.size) this.add('-clearboost', active, '[from] ability: Royal Decree', `[of] ${pokemon}`);
 				if (stockpileLayers) {
 					active.boosts.def = Math.max(active.boosts.def, stockpileLayers);
@@ -10181,9 +10206,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (blocked) {
 				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility('royaldecree'));
 				if (decree) {
-					this.add('-fail', target, 'boost', '[from] ability: Royal Decree', `[of] ${decree}`);
+					this.add('-message', `${decree.name}'s Royal Decree prevented the stat changes.`);
 				} else {
-					this.add('-fail', target, 'boost', '[from] ability: Royal Decree');
+					this.add('-message', `Royal Decree prevented the stat changes.`);
 				}
 			}
 		},
@@ -10215,7 +10240,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const active of this.getAllActive()) {
 				if (protectedSides.has(active.side)) continue;
 				const stockpileLayers = active.volatiles['stockpile']?.layers || 0;
+				const preservedBoosts: SparseBoostsTable = {};
+				const preservePositiveBoosts = (...stats: BoostID[]) => {
+					for (const stat of stats) {
+						if (active.boosts[stat] > 0) preservedBoosts[stat] = active.boosts[stat];
+					}
+				};
+				if (this.field.isTerrain('fairytaleterrain') && active.hasAbility(['mirrorarmor', 'irondominion', 'royaldecree', 'royalsun'])) {
+					preservePositiveBoosts('def', 'spd');
+				}
+				if (this.field.isTerrain('mirrorarmor') && active.hasAbility(['mirrorarmor', 'irondominion'])) {
+					preservePositiveBoosts('evasion');
+				}
+				if (this.field.isTerrain(['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain']) && active.hasAbility('relicarmor')) {
+					preservePositiveBoosts('def', 'spd');
+				}
+				if (this.field.isTerrain(['fairytaleterrain', 'bewitchedwoodsterrain', 'hauntedterrain', 'mistyterrain', 'newworldterrain']) && active.hasAbility('magician')) {
+					preservePositiveBoosts('spa');
+				}
+				if (this.field.isTerrain(['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain']) && active.hasAbility('stalwart')) {
+					preservePositiveBoosts('spa');
+				}
 				active.clearBoosts();
+				for (const stat in preservedBoosts) {
+					active.boosts[stat as BoostID] = preservedBoosts[stat as BoostID]!;
+				}
 				if (protectedSides.size) this.add('-clearboost', active, '[from] ability: Royal Sun', `[of] ${pokemon}`);
 				if (stockpileLayers) {
 					active.boosts.def = Math.max(active.boosts.def, stockpileLayers);
@@ -10344,6 +10393,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wrathshield: {
 		onStart(pokemon) {
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
 			pokemon.abilityState.wrathShieldHitTriggered = false;
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain', 'chessboardterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
@@ -10385,6 +10435,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10032,
 	},
 	shadowcurrent: {
+		onStart(pokemon) {
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
+		},
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
@@ -10418,6 +10471,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	astralwitchcraft: {
 		onStart(pokemon) {
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain'])) {
 				this.boost({ spa: 1, spd: 1 }, pokemon, pokemon);
 			}
