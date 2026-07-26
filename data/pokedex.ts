@@ -14625,7 +14625,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Poison", "Fire"],
 		gender: "F",
 		baseStats: { hp: 68, atk: 64, def: 60, spa: 111, spd: 60, spe: 117 },
-		abilities: { 0: "Corrosion", 1: "Queenly Majesty", H: "Aroma Veil" },
+		abilities: { 0: "Corrosion", 1: "Sweet Veil", H: "Aroma Veil" },
 		heightm: 1.2,
 		weightkg: 22.2,
 		color: "Black",
