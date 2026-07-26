@@ -1683,8 +1683,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	voidveil: {
 		name: "Void Veil",
-		desc: "This Pokemon has Telepathy and Temporal Shift's effects. Its delayed Future Sight becomes Fairy type if that would hit the target harder. It is immune to Gravity and its negative effects. This Pokemon and its allies cannot have their Speed lowered. At the end of each turn, this Pokemon and its ally restore 1/16 max HP. Once per switch-in, if an ally is at 25% HP or lower at the end of the turn, that ally heals 1/4 max HP, is cured of status, and is sheltered until the end of the next turn.",
-		shortDesc: "Telepathy + Temporal Shift; side blocks Speed drops; end-turn ally healing/shelter.",
+		desc: "This Pokemon has Telepathy and Temporal Shift's effects. Its delayed Future Sight becomes Fairy type if that would hit the target harder. It is immune to Gravity and its negative effects. This Pokemon and its allies cannot have their Speed lowered. At the end of each turn, this Pokemon and its ally restore 1/16 max HP. If an opposing attack would knock out this Pokemon's ally while this Pokemon is above 25% HP, this Pokemon takes that damage instead. Once per switch-in, if an ally is at 25% HP or lower at the end of the turn, that ally heals 1/4 max HP, is cured of status, and is sheltered until the end of the next turn.",
+		shortDesc: "Telepathy + Temporal Shift; protects allies from lethal hits; end-turn healing/shelter.",
 	},
 	knightsguard: {
 		name: "Knight's Guard",

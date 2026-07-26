@@ -3281,6 +3281,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (boost[stat]! < 0) delete boost[stat];
 			}
 		},
+		onAnyDamage(damage, target, source, effect) {
+			const pokemon = this.effectState.target;
+			if (!pokemon || pokemon.fainted || pokemon.hp <= pokemon.maxhp / 4) return;
+			if (!target || target === pokemon || !target.isAlly(pokemon) || !source || target.isAlly(source)) return;
+			if (effect?.effectType !== 'Move' || typeof damage !== 'number' || damage < target.hp) return;
+			this.add('-activate', pokemon, 'ability: Void Veil');
+			pokemon.abilityState.voidShelterDoom = true;
+			this.damage(damage, pokemon, source, effect);
+			return false;
+		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			for (const ally of pokemon.adjacentAllies()) {
