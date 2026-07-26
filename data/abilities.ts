@@ -3178,7 +3178,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (boost[stat]! < 0) delete boost[stat];
 			}
 		},
+		onStart(pokemon) {
+			pokemon.abilityState.temporalShiftStartTurn = this.turn;
+		},
 		onResidual(pokemon) {
+			if (this.gameType !== 'freeforall' && pokemon.abilityState.temporalShiftStartTurn === this.turn) return;
 			this.effect.queueTemporalHex.call(this, pokemon);
 		},
 		flags: { breakable: 1 },
