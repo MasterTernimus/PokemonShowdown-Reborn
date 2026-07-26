@@ -2243,6 +2243,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			(target as any).auraInstinctEndureUsed = true;
 			return target.hp - 1;
 		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
 		flags: {},
 		name: "Aura Instinct",
 		rating: 5,
@@ -3155,7 +3158,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					id: 'futuresight',
 					name: "Future Sight",
 					accuracy: 100,
-					basePower: 120,
+					basePower: 60,
 					category: "Special",
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
@@ -3261,6 +3264,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			pokemon.abilityState.voidShelterUsed = false;
 			pokemon.abilityState.voidShelterDoom = false;
+			pokemon.abilityState.voidVeilStartTurn = this.turn;
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && target.isAlly(source) && move.category !== 'Status') {
@@ -3302,7 +3306,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					ally.addVolatile('voidshelter', pokemon);
 				}
 			}
+			if (pokemon.abilityState.voidVeilStartTurn === this.turn) return;
+			if (pokemon.abilityState.voidVeilLastCastTurn === this.turn - 1) return;
 			this.effect.queueVoidFutureSight.call(this, pokemon);
+			pokemon.abilityState.voidVeilLastCastTurn = this.turn;
 		},
 		onFaint(pokemon) {
 			if (this.gameType === 'freeforall' || this.gameType !== 'singles' && pokemon.abilityState.voidShelterDoom) {
@@ -12068,6 +12075,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			this.effect.healUltraEgo.call(this, target, 'hit');
 		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
 		flags: {},
 		name: "Ultra Ego",
 		rating: 3,
@@ -12123,6 +12134,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			(target as any).ultraInstinctEndureUsed = true;
 			return target.hp - 1;
 		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
 		flags: {},
 		name: "Ultra Instinct",
 		rating: 3,
@@ -12136,7 +12151,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.abilityState.duskDriveHitTriggered = false;
 		},
 		boostedField() {
-			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain']);
+			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
 		},
 		healDuskDrive(pokemon, source) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
@@ -12179,6 +12194,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (this.effect.boostedField.call(this)) {
+				this.debug('Dusk Drive field weaken');
+				return this.chainModify(0.25);
+			}
 			if (source.moveThisTurnResult === undefined) {
 				this.debug('Dusk Drive weaken');
 				return this.chainModify(0.3);
@@ -12189,6 +12208,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (effect?.effectType !== 'Move' || (target as any).duskDriveEndureUsed || target.hp <= target.maxhp / 2 || damage < target.hp) return;
 			(target as any).duskDriveEndureUsed = true;
 			return target.hp - 1;
+		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		flags: {},
 		name: "Dusk Drive",

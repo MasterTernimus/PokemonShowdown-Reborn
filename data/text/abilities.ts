@@ -539,8 +539,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aurainstinct: {
 		name: "Aura Instinct",
-		desc: "This Pokemon has Sworn Duty's effect. Its moves ignore Abilities, and it cannot flinch. The first time this Pokemon would be knocked out, it survives with 1 HP.",
-		shortDesc: "Sworn Duty; moves ignore Abilities; cannot flinch; once endures a KO.",
+		desc: "This Pokemon has Sworn Duty's effect. Its moves ignore Abilities, and it cannot flinch. At the end of each turn, it restores 1/16 max HP. On Ashen Beach, New World, Starlight Arena, Holy, or Cold Eclipse fields, its Accuracy is raised by 1 on switch-in, its attacks deal 1.5x damage, and it takes 0.25x damage from attacks. The first time this Pokemon would be knocked out, it survives with 1 HP.",
+		shortDesc: "Sworn Duty; heals 1/16; field boosts offense/defense; endures once.",
 	},
 	royalcurrent: {
 		name: "Royal Current",
@@ -1683,8 +1683,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	voidveil: {
 		name: "Void Veil",
-		desc: "This Pokemon has Telepathy and Temporal Shift's effects. Its delayed Future Sight becomes Fairy type if that would hit the target harder. It is immune to Gravity and its negative effects. This Pokemon and its allies cannot have their Speed lowered. At the end of each turn, this Pokemon and its ally restore 1/16 max HP. If an opposing attack would knock out this Pokemon's ally while this Pokemon is above 25% HP, this Pokemon takes that damage instead. Once per switch-in, if an ally is at 25% HP or lower at the end of the turn, that ally heals 1/4 max HP, is cured of status, and is sheltered until the end of the next turn.",
-		shortDesc: "Telepathy + Temporal Shift; protects allies from lethal hits; end-turn healing/shelter.",
+		desc: "This Pokemon has Telepathy and Temporal Shift's effects, but its delayed Future Sight starts after one turn out and queues every other turn. Its delayed Future Sight becomes Fairy type if that would hit the target harder. It is immune to Gravity and its negative effects. This Pokemon and its allies cannot have their Speed lowered. At the end of each turn, this Pokemon and its ally restore 1/16 max HP. If an opposing attack would knock out this Pokemon's ally while this Pokemon is above 25% HP, this Pokemon takes that damage instead. Once per switch-in, if an ally is at 25% HP or lower at the end of the turn, that ally heals 1/4 max HP, is cured of status, and is sheltered until the end of the next turn.",
+		shortDesc: "Telepathy + delayed Void Future Sight; protects allies; end-turn healing/shelter.",
 	},
 	knightsguard: {
 		name: "Knight's Guard",
@@ -3095,18 +3095,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. Once per turn, its damaging attacks heal 1/16 max HP, and if one of its moves knocks out a Pokemon it heals 1/10 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. Ally hits never trigger the boost or healing.",
-		shortDesc: "Mold Breaker; attacks heal; move KOs heal 1/10; next enemy hit boosts Atk/SpA.",
+		desc: "This Pokemon's moves ignore abilities. At the end of each turn, it restores 1/16 max HP. Once per turn, its damaging attacks heal 1/16 max HP, and if one of its moves knocks out a Pokemon it heals 1/10 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. Ally hits never trigger the boost or healing.",
+		shortDesc: "Mold Breaker; heals each turn/attack; next enemy hit boosts Atk/SpA.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "This Pokemon's moves ignore abilities. Its attacks deal 2x damage against targets protected by Reflect, Light Screen, or Aurora Veil. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage and once per battle can endure a KO from above 50% HP at 1 HP.",
-		shortDesc: "Moves ignore abilities; 2x vs screens/Veil; fast attacks 1.5x; pre-move guard/endure.",
+		desc: "This Pokemon's moves ignore abilities. At the end of each turn, it restores 1/16 max HP. Its attacks deal 2x damage against targets protected by Reflect, Light Screen, or Aurora Veil. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage and once per battle can endure a KO from above 50% HP at 1 HP.",
+		shortDesc: "Heals 1/16; ignores abilities; 2x vs screens; fast attacks/pre-move guard.",
 	},
 	duskdrive: {
 		name: "Dusk Drive",
-		desc: "Once per turn, this Pokemon's damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. If it moves before the target or is in a boosted field, its attacks deal 1.5x damage. If attacked before moving, it takes 30% damage.",
-		shortDesc: "Attacks heal; next enemy hit boosts Atk/SpA; fast attacks 1.5x; pre-move guard.",
+		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. If it moves before the target or is in a boosted field, its attacks deal 1.5x damage. If attacked before moving, it takes 30% damage; in a boosted field, it takes 25% damage instead.",
+		shortDesc: "Heals each turn/attack; next enemy hit boosts; fast/field offense and guard.",
 	},
 
 	// CAP
