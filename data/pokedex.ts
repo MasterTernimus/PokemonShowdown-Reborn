@@ -14412,7 +14412,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Dusk",
 		types: ["Rock", "Fighting"],
 		baseStats: { hp: 75, atk: 125, def: 70, spa: 45, spd: 70, spe: 115 },
-		abilities: { 0: "Tough Claws", 1: "Inner Focus", H: "Battle Fervor" },
+		abilities: { 0: "Tough Claws", 1: "Inner Focus", H: "Dusk Drive" },
 		heightm: 0.8,
 		weightkg: 25,
 		color: "Brown",
