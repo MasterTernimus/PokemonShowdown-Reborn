@@ -614,6 +614,24 @@ export class BattleActions {
 		if (move.spreadHit) this.battle.attrLastMove('[spread] ' + hitSlot.join(','));
 		return moveResult;
 	}
+	waterShurikenTargetHasWaterImmunity(target: Pokemon) {
+		return target.hasAbility([
+			'auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb',
+		]);
+	}
+	redirectWaterShurikenFromProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
+		if (move.id !== 'watershuriken') return;
+		for (const [i, target] of targets.entries()) {
+			if (!target?.isProtected() || this.waterShurikenTargetHasWaterImmunity(target)) continue;
+			const candidates = pokemon.foes().filter(foe =>
+				foe && foe.hp && !foe.fainted && foe !== target && this.battle.validTarget(foe, pokemon, move.target)
+			);
+			if (!candidates.length) continue;
+			const newTarget = this.battle.sample(candidates);
+			this.battle.add('-message', `${move.name} slipped past Protect toward ${newTarget.name}!`);
+			targets[i] = newTarget;
+		}
+	}
 	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		if (move.id === 'helpinghand') return new Array(targets.length).fill(true);
 		const hitResults: boolean[] = [];
@@ -638,6 +656,7 @@ export class BattleActions {
 		return hitResults;
 	}
 	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
+		this.redirectWaterShurikenFromProtect(targets, pokemon, move);
 		const hitResults = this.battle.runEvent('TryHit', targets, pokemon, move);
 		if (!hitResults.includes(true) && hitResults.includes(false)) {
 			this.battle.add('-fail', pokemon);

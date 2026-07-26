@@ -539,8 +539,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aurainstinct: {
 		name: "Aura Instinct",
-		desc: "This Pokemon's moves ignore Abilities, and it cannot flinch. The first time this Pokemon would be knocked out, it survives with 1 HP.",
-		shortDesc: "Moves ignore Abilities; cannot flinch; once per battle endures a KO.",
+		desc: "This Pokemon has Sworn Duty's effect. Its moves ignore Abilities, and it cannot flinch. The first time this Pokemon would be knocked out, it survives with 1 HP.",
+		shortDesc: "Sworn Duty; moves ignore Abilities; cannot flinch; once endures a KO.",
 	},
 	royalcurrent: {
 		name: "Royal Current",
@@ -2344,18 +2344,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wrathshield: {
 		name: "Wrath Shield",
-		desc: "After this Pokemon uses a damaging move, the next enemy attack that hits it raises its Attack and Defense by 1 stage and restores 1/16 of its maximum HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. It has Bulletproof's effect, blocks moves boosted by Mega Launcher, cannot be critically hit, and raises Defense and Special Defense by 1 stage the first time its stats are lowered each turn.",
-		shortDesc: "After attacking, next enemy hit gives +1 Atk/Def and heals; first stat drop each turn +Def/SpD.",
+		desc: "This Pokemon has Sworn Duty's effect. After this Pokemon uses a damaging move, the next enemy attack that hits it raises its Attack and Defense by 1 stage and restores 1/16 of its maximum HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. It has Bulletproof's effect, blocks moves boosted by Mega Launcher, cannot be critically hit, and raises Defense and Special Defense by 1 stage the first time its stats are lowered each turn.",
+		shortDesc: "Sworn Duty; after attacking, next enemy hit gives +1 Atk/Def and heals.",
 	},
 	shadowcurrent: {
 		name: "Shadow Current",
-		desc: "Before using a move, this Pokemon becomes the move's type. Its moves with less than 60 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power. This Pokemon takes 0.75x damage from attacks.",
-		shortDesc: "Protean; weak moves 1.5x; faster attacks 1.3x; takes 0.75x damage.",
+		desc: "This Pokemon has Sworn Duty's effect. Before using a move, this Pokemon becomes the move's type. Its moves with less than 60 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power. This Pokemon takes 0.75x damage from attacks.",
+		shortDesc: "Sworn Duty; Protean; weak moves 1.5x; faster attacks 1.3x.",
 	},
 	astralwitchcraft: {
 		name: "Astral Witchcraft",
-		desc: "This Pokemon is airborne, immune to Ground-type moves, only takes damage from direct attacks, and reflects most non-damaging moves back at the user.",
-		shortDesc: "Levitate + Magic Guard + Magic Bounce.",
+		desc: "This Pokemon has Sworn Duty's effect. It is airborne, immune to Ground-type moves, only takes damage from direct attacks, and reflects most non-damaging moves back at the user.",
+		shortDesc: "Sworn Duty + Levitate + Magic Guard + Magic Bounce.",
 	},
 	blazingtempo: {
 		name: "Blazing Tempo",
