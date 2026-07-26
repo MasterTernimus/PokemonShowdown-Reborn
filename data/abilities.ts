@@ -9188,6 +9188,60 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10196,
 	},
+	seablessing: {
+		onStart(pokemon) {
+			this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+			for (const ally of pokemon.adjacentAllies()) {
+				this.heal(ally.baseMaxhp / 4, ally, pokemon);
+			}
+		},
+		onSwitchIn(pokemon) {
+			pokemon.addVolatile('aquaring');
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def) {
+			return this.chainModify(1.5);
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd) {
+			return this.chainModify(1.5);
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'brn') {
+				this.add('-activate', pokemon, 'ability: Sea Blessing');
+				pokemon.cureStatus();
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'brn') return;
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Sea Blessing');
+			}
+			return false;
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
+		},
+		onWeather(target, source, effect) {
+			if (target.effectiveWeather() !== effect.id) return;
+			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (pokemon.status && (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain'))) {
+				this.debug('sea blessing hydration');
+				this.add('-activate', pokemon, 'ability: Sea Blessing');
+				pokemon.cureStatus();
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Sea Blessing",
+		rating: 4.5,
+		num: 10197,
+	},
 	sapsipper: {
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
