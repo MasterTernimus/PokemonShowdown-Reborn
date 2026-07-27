@@ -562,6 +562,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, distance: 1, metronome: 1 },
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
+			this.heal(source.baseMaxhp / 2, source, source);
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
@@ -4519,6 +4520,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		critRatio: 2,
+		secondary: {
+			chance: 30,
+			boosts: {
+				def: -1,
+			},
+		},
 		target: "normal",
 		type: "Dragon",
 		contestType: "Cool",
@@ -4602,6 +4609,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1, pulse: 1 },
+		secondary: {
+			chance: 30,
+			boosts: {
+				spd: -1,
+			},
+		},
 		target: "any",
 		type: "Dragon",
 		contestType: "Beautiful",
@@ -9094,6 +9107,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
+			this.heal(source.baseMaxhp / 2, source, source);
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
@@ -9243,6 +9257,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (this.field.isTerrain('forestterrain')) {
 				move.heal = [2, 3];
 			}
+		},
+		onHit(target, source, move) {
+			this.add('-activate', source, 'move: Heal Bell');
+			let success = false;
+			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (ally !== source && !this.suppressingAbility(ally)) {
+					if (ally.hasAbility('soundproof')) {
+						this.add('-immune', ally, '[from] ability: Soundproof');
+						continue;
+					}
+					if (ally.hasAbility('goodasgold')) {
+						this.add('-immune', ally, '[from] ability: Good as Gold');
+						continue;
+					}
+				}
+				if (ally.cureStatus()) success = true;
+			}
+			return success || !!move.heal;
 		},
 		heal: [1, 2],
 		target: "allies",
@@ -12655,6 +12688,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, drill: 1, metronome: 1 },
+		secondary: {
+			chance: 10,
+			volatileStatus: 'flinch',
+		},
 		target: "normal",
 		type: "Bug",
 		contestType: "Cool",
@@ -16117,6 +16154,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
+		onModifyMove(move) {
+			if (this.gameType === 'freeforall') {
+				move.target = 'allAdjacentFoes';
+				(move as any).fullDamageSpread = true;
+			}
+		},
 		target: "normal",
 		type: "Ghost",
 	},
@@ -18499,9 +18542,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.boost({ spe: 1 }, attacker, attacker, move);
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
-		},
-		onAfterMove(source, target, move) {
-			if (move.totalDamage) this.boost({ spe: 1 }, source, source, move);
 		},
 		secondary: {
 			chance: 30,

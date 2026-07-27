@@ -201,8 +201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromatherapy: {
 		name: "Aromatherapy",
-		desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Sap Sipper Ability are not cured, unless they are the user.",
-		shortDesc: "Cures the user's party of all status conditions.",
+		desc: "The user restores 1/2 of its maximum HP. Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Sap Sipper Ability are not cured, unless they are the user.",
+		shortDesc: "Heals the user 50% and cures the user's party of status.",
 		gen5: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
 		},
@@ -1575,7 +1575,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonclaw: {
 		name: "Dragon Claw",
-		shortDesc: "No additional effect.",
+		shortDesc: "30% chance to lower the target's Defense by 1.",
 	},
 	dragondance: {
 		name: "Dragon Dance",
@@ -1598,7 +1598,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonpulse: {
 		name: "Dragon Pulse",
-		shortDesc: "No additional effect.",
+		shortDesc: "30% chance to lower the target's Sp. Def by 1.",
 	},
 	dragonrage: {
 		name: "Dragon Rage",
@@ -2916,8 +2916,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healbell: {
 		name: "Heal Bell",
-		desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
-		shortDesc: "Cures the user's party of all status conditions.",
+		desc: "The user restores 1/2 of its maximum HP. Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
+		shortDesc: "Heals the user 50% and cures the user's party of status.",
 		gen7: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured.",
 		},
@@ -2972,8 +2972,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healorder: {
 		name: "Heal Order",
-		desc: "The user restores 1/2 of its maximum HP, rounded half up.",
-		shortDesc: "Heals the user by 50% of its max HP.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up, and every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
+		shortDesc: "Heals the user by 50% and cures the user's party of status.",
 		gen4: {
 			desc: "The user restores 1/2 of its maximum HP, rounded down.",
 		},
@@ -4020,7 +4020,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	megahorn: {
 		name: "Megahorn",
-		shortDesc: "No additional effect.",
+		shortDesc: "10% chance to make the target flinch.",
 	},
 	megakick: {
 		name: "Mega Kick",
@@ -5880,7 +5880,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyattack: {
 		name: "Sky Attack",
-		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil, and raises the user's Speed by 1 stage after damage. If Tailwind is active on the user's side, this move attacks immediately with 90 Base Power and an even higher critical hit ratio.",
+		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil. If Tailwind is active on the user's side, this move attacks immediately with 90 Base Power and an even higher critical hit ratio.",
 		shortDesc: "Charges: +Spe. Tailwind: 90 BP instant, +2 crit.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
@@ -7598,7 +7598,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	xscissor: {
 		name: "X-Scissor",
-		shortDesc: "No additional effect.",
+		shortDesc: "High critical hit ratio.",
 	},
 	yawn: {
 		name: "Yawn",

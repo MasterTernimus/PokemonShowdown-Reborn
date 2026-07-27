@@ -8,6 +8,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5.",
 		shortDesc: "This Pokemon's same-type attack bonus (STAB) is 2 instead of 1.5.",
 	},
+	spiralevolution: {
+		name: "Spiral Evolution",
+		desc: "This Pokemon has built-in Adaptability, cannot flinch, takes half damage from priority moves, and its damaging moves hit through protection for half damage. In Trick Room, its non-priority moves act before other non-priority moves. Twineedle has double power and a 50% chance to be a critical hit; in multi battles it hits all adjacent foes once, and if only some foes protected, it focuses on foes that did not protect.",
+		shortDesc: "Adaptability; pierces Protect; no flinch; resists priority; Twineedle is empowered.",
+	},
 	aerilate: {
 		name: "Aerilate",
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
@@ -629,18 +634,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedkeepsake: {
 		name: "Cursed Keepsake",
-		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. Curse applied by this Ability deals 1/8 max HP each turn. When this Pokemon faints, it creates Haunted Field for 5 turns.",
-		shortDesc: "Hit by foe: curses attacker for 1/8 per turn. On faint: Haunted Field for 5 turns.",
+		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization.",
+		shortDesc: "Hit by foe curses attacker. On faint: curses foes and sets Haunted Field.",
 	},
 	cursedmarionette: {
 		name: "Cursed Marionette",
-		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, that target becomes cursed. This Pokemon restores HP equal to 1/4 of the Curse damage dealt to targets it cursed. The first time this Pokemon falls below half HP, it creates Haunted Field for 3 turns. When this Pokemon faints, it creates Haunted Field for 5 turns, or extends active Haunted Field by 5 turns.",
-		shortDesc: "Status +1; status moves Curse foes; heals 1/4 Curse damage; creates Haunted Field.",
+		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, hits an opposing Pokemon with a damaging move, or is hit by an opposing damaging move, that opposing Pokemon becomes cursed. This Pokemon restores HP equal to 1/4 of the damage dealt by its attacks and all Curse damage dealt to targets it cursed. The first time this Pokemon falls below half HP, it creates Haunted Field for 3 turns, ignoring Neutralization. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, or extends active Haunted Field by 5 turns, ignoring Neutralization.",
+		shortDesc: "Status +1; curses foes on status/attacking/being hit/faint; drains attacks and Curse.",
 	},
 	cursedarmament: {
 		name: "Cursed Armament",
-		desc: "Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. Curse from this Pokemon deals 1/8 max HP each turn. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon faints, it creates Haunted Field for 5 turns.",
-		shortDesc: "Curse becomes 100 BP spread Ghost attack; curses foes; heals 1/4 attack/Curse damage.",
+		desc: "Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization.",
+		shortDesc: "Curse is a 100 BP spread attack; on faint curses foes and sets Haunted Field.",
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
@@ -784,8 +789,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	streettyrant: {
 		name: "Street Tyrant",
-		desc: "This Pokemon has Intimidate and Regenerator's effects.",
-		shortDesc: "Intimidate + Regenerator.",
+		desc: "This Pokemon has Intimidate, Regenerator, and Mold Breaker's effects.",
+		shortDesc: "Intimidate + Regenerator + Mold Breaker.",
 	},
 	divineintervention: {
 		name: "Divine Intervention",
@@ -1565,6 +1570,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
 		shortDesc: "This Pokemon's Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
 	},
+	wickedcommand: {
+		name: "Wicked Command",
+		desc: "This Pokemon has Insomnia and Super Luck's effects and takes 20% less damage from other Pokemon's damaging moves. If this Pokemon knocks out an enemy with a move, its higher attacking stat is raised by 1 stage, with Attack chosen on a tie. It also restores 1/4 of its maximum HP and removes entry hazards from its side.",
+		shortDesc: "Insomnia + Super Luck; takes 0.8x damage; KO boosts higher offense, heals 1/4, clears hazards.",
+	},
 	multiscale: {
 		name: "Multiscale",
 		shortDesc: "If this Pokemon is at full HP, damage taken from attacks is halved.",
@@ -1868,6 +1878,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	prismarmor: {
 		name: "Prism Armor",
 		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
+	},
+	ironwill: {
+		name: "Iron Will",
+		desc: "This Pokemon has Prism Armor, Heatproof, and Sand Force's effects. It restores 1/16 of its maximum HP after it hits with a damaging move and after it is hit by a damaging move. Once per battle, it survives a KO from a move at 1 HP.",
+		shortDesc: "Prism Armor + Heatproof + Sand Force; heals 1/16 on attacking/being hit; endures once.",
 	},
 	propellertail: {
 		name: "Propeller Tail",
@@ -2329,8 +2344,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, and enemy-caused stat drops fail. This Pokemon's own self-inflicted stat drops still work. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge.",
-		shortDesc: "Switch-in Haze/screen clear; blocks enemy drops/setup/screens; skips charge turns.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, and enemy-caused stat drops fail. This Pokemon's own self-inflicted stat drops still work. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge. Neutralization disables these Royal Decree effects while active.",
+		shortDesc: "Haze/screen clear; blocks setup/screens; skips charge turns. Disabled by Neutralization.",
 	},
 	royalhive: {
 		name: "Royal Hive",
@@ -2339,8 +2354,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalsun: {
 		name: "Royal Sun",
-		desc: "On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects.",
-		shortDesc: "Drought + Royal Decree.",
+		desc: "On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects. Neutralization disables the Royal Decree effects while active.",
+		shortDesc: "Drought + Royal Decree; Royal Decree effects are disabled by Neutralization.",
 	},
 	parasitism: {
 		name: "Parasitism",
@@ -2440,8 +2455,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stancechange: {
 		name: "Stance Change",
-		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before using an attacking move, and changes to Shield Forme before using King's Shield. This Pokemon restores 1/16 of its maximum HP at the end of each turn.",
-		shortDesc: "Aegislash changes Forme before attacks/King's Shield; heals 1/16 each turn.",
+		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before using an attacking move, and changes to Shield Forme before using King's Shield. This Pokemon restores 1/16 of its maximum HP at the end of each turn. Aegislash takes 20% less damage in Shield Forme, and in Free-For-All, consecutive hits against Shield Forme in the same turn deal 30% less damage. Aegislash-Blade's damaging moves deal 1.2x damage.",
+		shortDesc: "Changes Forme; heals 1/16. Shield takes less damage; Blade deals 1.2x.",
 		gen6: {
 			desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield.",
 		},
@@ -3075,8 +3090,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neutralization: {
 		name: "Neutralization",
-		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. This does not affect other Neutralization users or Pokemon immune to stat drops, and it does not trigger stat-drop reactive effects. While active, terrain effects are suppressed, field changes are neutralized, and Rainbow Field ends automatically.",
-		shortDesc: "Hits lower foe offense/Spe without reactive triggers; respects drop immunity.",
+		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. This does not affect other Neutralization users or Pokemon immune to stat drops, and it does not trigger stat-drop reactive effects. While active, field changes are neutralized, and Rainbow Field ends automatically.",
+		shortDesc: "Hits lower foe offense/Spe; neutralizes field changes, not active field effects.",
 	},
 	powerdrill: {
 		name: "Power Drill",
