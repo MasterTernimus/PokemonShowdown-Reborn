@@ -7919,7 +7919,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
-					if (this.randomChance(3, 10)) pokemon.addVolatile('confusion', source);
+					pokemon.addVolatile('confusion', source);
 				}
 			},
 		},
@@ -17053,6 +17053,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, failinstruct: 1, noparentalbond: 1 },
 		onModifyMove(move, pokemon, target) {
+			if (pokemon.hasAbility('rollingassault')) return;
 			if (pokemon.volatiles['rollout'] || pokemon.status === 'slp' || !target) return;
 			pokemon.addVolatile('rollout');
 			if (move.sourceEffect) pokemon.lastMoveTargetLoc = pokemon.getLocOf(target);

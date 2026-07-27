@@ -1570,6 +1570,46 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Attack is raised by 1 stage if it attacks and knocks out another Pokemon.",
 		shortDesc: "This Pokemon's Attack is raised by 1 stage if it attacks and KOes another Pokemon.",
 	},
+	requiem: {
+		name: "Requiem",
+		desc: "When this Pokemon faints, it creates Haunted Field for 5 turns, ignoring Neutralization. If it faints from direct damage and has at most 2 fainted allies, the attacker also faints. If this Pokemon used Destiny Bond and faints, all opposing Pokemon faint.",
+		shortDesc: "On faint: Haunted Field. Direct KO trades if <=2 allies fainted; Destiny Bond takes all foes.",
+	},
+	moonlitwings: {
+		name: "Moonlit Wings",
+		desc: "This Pokemon has Serene Grace and Shield Dust's effects, gains STAB on Fairy-type moves, takes half damage from Fire-type attacks, and is immune to status, Yawn, and confusion.",
+		shortDesc: "Fairy STAB + Serene Grace + Shield Dust; takes 0.5x Fire damage; immune to status.",
+	},
+	terastaladaptability: {
+		name: "Terastal Adaptability",
+		desc: "This Pokemon has Adaptability's effect for Rock- and Poison-type moves. Its non-STAB damaging moves deal 1.5x damage. After it uses a damaging move, it gains that type's resistances until it uses another damaging move.",
+		shortDesc: "Rock/Poison Adaptability; non-STAB 1.5x; gains last move type's resistances.",
+	},
+	shellprison: {
+		name: "Shell Prison",
+		desc: "This Pokemon has Shell Armor and Ice Body's effects. When hit by an attack, it automatically uses Clamp on the attacker; this Clamp traps through the turn it triggers and the next turn. This Pokemon restores 1/16 max HP at the end of each turn.",
+		shortDesc: "Shell Armor + Ice Body; hit by attack uses short Clamp; heals 1/16.",
+	},
+	rollingassault: {
+		name: "Rolling Assault",
+		desc: "This Pokemon has Filter's effect. Rollout starts at 50 Base Power, does not lock the user into the move, and permanently gains 30 Base Power each time this Pokemon uses it. When this Pokemon uses Rollout, Rolling Kick, or Rapid Spin, its Speed rises by 1 stage.",
+		shortDesc: "Filter; Rollout scales by +30 without lock; rolling/Rapid Spin gives +1 Spe.",
+	},
+	paradoxwheel: {
+		name: "Paradox Wheel",
+		desc: "This Pokemon gains STAB on Steel- and Electric-type moves.",
+		shortDesc: "Gains Steel/Electric STAB.",
+	},
+	paradoxpower: {
+		name: "Paradox Power",
+		desc: "This Pokemon has Sheer Force's effect and gains STAB on Electric-type moves.",
+		shortDesc: "Sheer Force; gains Electric STAB.",
+	},
+	paradoxpull: {
+		name: "Paradox Pull",
+		desc: "This Pokemon has Magnet Pull's effect. Its Steel typing only contributes resistances and immunities, not weaknesses.",
+		shortDesc: "Magnet Pull; ignores Steel weaknesses.",
+	},
 	wickedcommand: {
 		name: "Wicked Command",
 		desc: "This Pokemon has Insomnia and Super Luck's effects and takes 20% less damage from other Pokemon's damaging moves. If this Pokemon knocks out an enemy with a move, its higher attacking stat is raised by 1 stage, with Attack chosen on a tie. It also restores 1/4 of its maximum HP and removes entry hazards from its side.",

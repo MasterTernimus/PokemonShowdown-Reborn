@@ -5871,6 +5871,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 275,
 	},
 	gulpmissile: {
+		onStart(pokemon) {
+			if (pokemon.species.id === 'cramorant') pokemon.formeChange('cramorantgulping', this.effect, true);
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source.hp || !source.isActive || target.isSemiInvulnerable()) return;
 			if (['cramorantgulping', 'cramorantgorging'].includes(target.species.id)) {
@@ -7674,6 +7677,168 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Moxie",
 		rating: 3,
 		num: 153,
+	},
+	requiem: {
+		onFaint(pokemon, source, effect) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('requiem'), true)) {
+				this.field.terrainState.duration = 5;
+			}
+			if (pokemon.volatiles['destinybond']) {
+				this.add('-activate', pokemon, 'ability: Requiem');
+				for (const foe of pokemon.foes()) {
+					if (!foe || foe.fainted) continue;
+					foe.faint();
+				}
+				return;
+			}
+			if (!source || source === pokemon || pokemon.isAlly(source) || effect?.effectType !== 'Move') return;
+			const faintedAllies = pokemon.side.pokemon.filter(ally => ally !== pokemon && ally.fainted).length;
+			if (faintedAllies >= 3) return;
+			this.add('-activate', pokemon, 'ability: Requiem');
+			source.faint();
+		},
+		flags: {},
+		name: "Requiem",
+		rating: 4,
+		num: 10208,
+	},
+	moonlitwings: {
+		onModifyMove(move, pokemon) {
+			this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move, pokemon);
+			if (this.movehasType(move, 'Fairy')) move.forceSTAB = true;
+		},
+		onModifySecondaries(secondaries) {
+			return this.dex.abilities.get('shielddust').onModifySecondaries?.call(this, secondaries);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.movehasType(move, 'Fire')) return this.chainModify(0.5);
+		},
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) this.add('-immune', target, '[from] ability: Moonlit Wings');
+			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn' || status.id === 'confusion') {
+				this.add('-immune', target, '[from] ability: Moonlit Wings');
+				return null;
+			}
+		},
+		flags: {},
+		name: "Moonlit Wings",
+		rating: 4,
+		num: 10209,
+	},
+	terastaladaptability: {
+		onModifySTAB(stab, source, target, move) {
+			if (this.movehasType(move, ['Rock', 'Poison'])) {
+				return this.dex.abilities.get('adaptability').onModifySTAB?.call(this, stab, source, target, move);
+			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target, move) {
+			if (move.category !== 'Status' && !source.hasType(move.type)) return this.chainModify(1.5);
+		},
+		onAfterMove(source, target, move) {
+			if (move.type && move.type !== '???') source.abilityState.terastalAdaptabilityType = move.type;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			const storedType = target.abilityState.terastalAdaptabilityType;
+			if (!storedType || !move || move.category === 'Status') return;
+			if (this.dex.getEffectiveness(move.type, storedType) < 0) return this.chainModify(0.5);
+		},
+		flags: {},
+		name: "Terastal Adaptability",
+		rating: 4.5,
+		num: 10210,
+	},
+	shellprison: {
+		onCriticalHit: false,
+		onStart(pokemon) {
+			this.dex.abilities.get('icebody').onStart?.call(this, pokemon);
+		},
+		onWeather(target, source, effect) {
+			this.dex.abilities.get('icebody').onWeather?.call(this, target, source, effect);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target || target.isAlly(source) || move.category === 'Status' || source.fainted) return;
+			this.actions.useMove('clamp', target, source);
+			if (source.volatiles['partiallytrapped']?.source === target) {
+				source.volatiles['partiallytrapped'].duration = 2;
+			}
+		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		flags: {},
+		name: "Shell Prison",
+		rating: 4,
+		num: 10211,
+	},
+	rollingassault: {
+		onBasePower(basePower, source, target, move) {
+			if (move.id === 'rollout') {
+				const bp = source.abilityState.rollingAssaultPower || 50;
+				return bp;
+			}
+		},
+		onModifyMove(move) {
+			if (move.id === 'rollout') delete move.volatileStatus;
+		},
+		onSourceAfterMoveSecondarySelf(source, target, move) {
+			if (move.id === 'rollout') {
+				source.abilityState.rollingAssaultPower = (source.abilityState.rollingAssaultPower || 50) + 30;
+			}
+			if (move.id === 'rollout' || move.id === 'rapidspin' || move.id === 'rollingkick') {
+				this.boost({ spe: 1 }, source, source);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		flags: {},
+		name: "Rolling Assault",
+		rating: 4,
+		num: 10212,
+	},
+	paradoxwheel: {
+		onModifyMove(move) {
+			if (this.movehasType(move, ['Steel', 'Electric'])) move.forceSTAB = true;
+		},
+		flags: {},
+		name: "Paradox Wheel",
+		rating: 4,
+		num: 10213,
+	},
+	paradoxpower: {
+		onModifyMove(move, pokemon) {
+			this.dex.abilities.get('sheerforce').onModifyMove?.call(this, move, pokemon);
+			if (this.movehasType(move, 'Electric')) move.forceSTAB = true;
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			return this.dex.abilities.get('sheerforce').onBasePower?.call(this, basePower, pokemon, target, move);
+		},
+		flags: {},
+		name: "Paradox Power",
+		rating: 4,
+		num: 10214,
+	},
+	paradoxpull: {
+		onFoeTrapPokemon(pokemon) {
+			return this.dex.abilities.get('magnetpull').onFoeTrapPokemon?.call(this, pokemon);
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			return this.dex.abilities.get('magnetpull').onFoeMaybeTrapPokemon?.call(this, pokemon, source);
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Steel' && typeMod > 0) return 0;
+		},
+		flags: {},
+		name: "Paradox Pull",
+		rating: 4,
+		num: 10215,
 	},
 	wickedcommand: {
 		onUpdate(pokemon) {
