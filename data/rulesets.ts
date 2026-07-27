@@ -857,7 +857,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Fighting Clause: Limit one Pokemon with Ultra Ego, Ultra Instinct, Battle Fervor, or Dusk Drive');
 		},
 		onValidateTeam(team) {
-			const restrictedAbilities = new Set(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive']);
+			const restrictedAbilities = new Set<ID>(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive'] as ID[]);
+			const compositeRestrictedAbilities: { [abilityid: string]: ID[] } = {
+				perfectego: ['ultraego', 'battlefervor'] as ID[],
+				ragingfists: ['ultraego'] as ID[],
+			};
 			const restrictedPokemon: string[] = [];
 			for (const set of team) {
 				const abilities = new Set<ID>();
@@ -871,9 +875,22 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						abilities.add(this.toID(ability));
 					}
 				}
-				const restrictedAbility = [...abilities].find(ability => restrictedAbilities.has(ability));
+				let restrictedAbility = '';
+				for (const ability of abilities) {
+					if (restrictedAbilities.has(ability)) {
+						restrictedAbility = this.dex.abilities.get(ability).name;
+						break;
+					}
+					const compositeAbilities = compositeRestrictedAbilities[ability];
+					if (compositeAbilities) {
+						restrictedAbility = `${this.dex.abilities.get(ability).name}: ${
+							compositeAbilities.map(id => this.dex.abilities.get(id).name).join(' + ')
+						}`;
+						break;
+					}
+				}
 				if (!restrictedAbility) continue;
-				restrictedPokemon.push(`${set.name || set.species} (${this.dex.abilities.get(restrictedAbility).name})`);
+				restrictedPokemon.push(`${set.name || set.species} (${restrictedAbility})`);
 			}
 			if (restrictedPokemon.length > 1) {
 				return [

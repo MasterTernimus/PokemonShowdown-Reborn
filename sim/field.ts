@@ -215,7 +215,7 @@ export class Field {
 		);
 	}
 
-	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, ignoreNeutralization = false) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
@@ -234,7 +234,11 @@ export class Field {
 			this.battle.add('-message', 'The fields magic prevents it');
 			return false;
 		}
-		if (this.neutralizeTerrainChange()) return false;
+		if (ignoreNeutralization) {
+			if (this.neutralizingTerrainEffects()) this.battle.add('-message', 'you cant neutralize this evil spirit');
+		} else if (this.neutralizeTerrainChange()) {
+			return false;
+		}
 		if (this.isTerrain(['underwaterterrain', 'newworldterrain', 'dragonsdenterrain'])) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
 			return false;
@@ -399,7 +403,6 @@ export class Field {
 
 	effectiveTerrain(target?: Pokemon | Side | Battle) {
 		if (this.battle.event && !target) target = this.battle.event.target;
-		if (this.neutralizingTerrainEffects()) return '';
 		return this.battle.runEvent('TryTerrain', target) ? this.terrain : '';
 	}
 

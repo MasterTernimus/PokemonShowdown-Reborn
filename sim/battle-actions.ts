@@ -632,6 +632,14 @@ export class BattleActions {
 			targets[i] = newTarget;
 		}
 	}
+	focusTwineedleFromProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
+		if (move.id !== 'twineedle' || !pokemon.hasAbility('spiralevolution')) return;
+		const hasUnprotectedTarget = targets.some(target => target?.hp && !target.fainted && !target.isProtected());
+		if (!hasUnprotectedTarget) return;
+		for (let i = targets.length - 1; i >= 0; i--) {
+			if (targets[i]?.isProtected()) targets.splice(i, 1);
+		}
+	}
 	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		if (move.id === 'helpinghand') return new Array(targets.length).fill(true);
 		const hitResults: boolean[] = [];
@@ -657,6 +665,7 @@ export class BattleActions {
 	}
 	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		this.redirectWaterShurikenFromProtect(targets, pokemon, move);
+		this.focusTwineedleFromProtect(targets, pokemon, move);
 		const hitResults = this.battle.runEvent('TryHit', targets, pokemon, move);
 		if (!hitResults.includes(true) && hitResults.includes(false)) {
 			this.battle.add('-fail', pokemon);
@@ -772,8 +781,16 @@ export class BattleActions {
 	}
 	hitStepBreakProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		if (move.breaksProtect) {
+			const spiralMove = move as ActiveMove & {
+				spiralEvolutionBreaksProtect?: boolean,
+				spiralEvolutionProtectedTargets?: Pokemon[],
+			};
 			for (const target of targets) {
 				let broke = false;
+				if (spiralMove.spiralEvolutionBreaksProtect && target.isProtected()) {
+					if (!spiralMove.spiralEvolutionProtectedTargets) spiralMove.spiralEvolutionProtectedTargets = [];
+					spiralMove.spiralEvolutionProtectedTargets.push(target);
+				}
 				for (const effectid of [
 					'banefulbunker', 'burningbulwark', 'kingsshield', 'obstruct', 'protect', 'silktrap', 'spikyshield',
 				]) {
