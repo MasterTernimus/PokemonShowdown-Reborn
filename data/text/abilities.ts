@@ -429,12 +429,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalflower: {
 		name: "Eternal Flower",
-		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.6x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.6x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
 		shortDesc: "Grass attacks use 1.5x offenses; opposing gimmick Pokemon have stats reduced to 0.6x.",
 	},
 	ange: {
 		name: "Ange",
-		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, and Ultra Beast Pokemon have their stats reduced to 0.6x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.6x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
 		shortDesc: "Eternal Flower + Fairy Aura; boosts Grass/Fairy pressure and weakens opposing gimmicks.",
 	},
 	ascendance: {
@@ -579,8 +579,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wastingsurge: {
 		name: "Wasting Surge",
-		desc: "On switch-in, this Pokemon sets Wasteland Terrain. On Water Surface or Underwater, it creates Murkwater Surface instead; from Underwater, non-Poison and non-Steel Pokemon that are not semi-invulnerable faint. If Neutralization is active on Water Surface or Underwater, this effect fails.",
-		shortDesc: "Sets Wasteland, or Murkwater on water fields; Underwater also KOs non-Poison/Steel.",
+		desc: "On switch-in, this Pokemon sets Wasteland Terrain. On Water Surface or Underwater, it creates Murkwater Surface instead; from Underwater, non-Poison and non-Steel Pokemon that are not semi-invulnerable faint. If Neutralization is active on Water Surface or Underwater, this effect fails. This Pokemon also has Byxbysion Touch's effects.",
+		shortDesc: "Sets Wasteland/Murkwater; Underwater KOs non-Poison/Steel; Byxbysion Touch.",
 	},
 	bewitchingmajesty: {
 		name: "Bewitching Majesty",
@@ -724,8 +724,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rimeknuckle: {
 		name: "Rime Knuckle",
-		desc: "This Pokemon's punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 33% less damage to it. If this Pokemon knocks out a target, it restores 1/10 of its maximum HP.",
-		shortDesc: "Punching moves 1.4x; moves 40% frostbite; above 50% HP takes 33% less from faster foes; KO heals 1/10.",
+		desc: "This Pokemon's Defense and Special Defense are multiplied by 1.25 while above 50% HP, or 1.5 while at 50% HP or lower. Its punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 33% less damage to it. If this Pokemon knocks out a target, it restores 1/10 of its maximum HP, or 1/2 if the target was Mega, G-Max, Stellar, or holding a Z-Move item.",
+		shortDesc: "Def/SpD scale by HP; punching moves 1.4x; KO heals 1/10 or 1/2 vs gimmicks.",
 	},
 	razorcurrent: {
 		name: "Razor Current",
@@ -937,6 +937,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	filter: {
 		name: "Filter",
 		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
+	},
+	byxbysiontouch: {
+		name: "Byxbysion Touch",
+		desc: "This Pokemon's Poison-type damaging moves and damaging moves that can poison heal the user for 50% of the damage dealt. Ground-type moves deal 1/4 damage to this Pokemon. When an opposing Pokemon loses HP from poison or toxic poison, this Pokemon restores HP equal to the HP lost.",
+		shortDesc: "Poison/poisoning attacks drain 50%; Ground damage is 1/4; drains foes' poison damage.",
 	},
 	flamebody: {
 		name: "Flame Body",
@@ -1478,8 +1483,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	bloomingsun: {
 		name: "Blooming Sun",
-		desc: "This Pokemon has Mega Sol, Flower Gift, Flower Veil, and Leaf Guard's effects. Leaf Guard is always active.",
-		shortDesc: "Mega Sol + Flower Gift + Flower Veil; always-active Leaf Guard.",
+		desc: "This Pokemon has Mega Sol, Flower Gift, Flower Veil, and Leaf Guard's effects. Flower Gift and Leaf Guard are always active.",
+		shortDesc: "Mega Sol + always-active Flower Gift, Flower Veil, and Leaf Guard.",
 	},
 	merciless: {
 		name: "Merciless",
@@ -2109,6 +2114,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "This Pokemon's moves have their secondary effect chance doubled.",
 		},
 	},
+	seasonalstride: {
+		name: "Seasonal Stride",
+		desc: "This Pokemon's Normal-type moves become the type matching its primary type and have 1.2x power. Its kicking moves have 1.4x power. This Pokemon has Chlorophyll's effect. At the end of the turn, it changes forme to match the weather: Spring in rain, Summer in sun, Autumn in sandstorm, and Winter in hail or snow.",
+		shortDesc: "Normal moves become primary type at 1.2x; kicks 1.4x; Chlorophyll; weather changes forme.",
+	},
 	shadowshield: {
 		name: "Shadow Shield",
 		shortDesc: "If this Pokemon is at full HP, damage taken from attacks is halved.",
@@ -2322,6 +2332,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, and enemy-caused stat drops fail. This Pokemon's own self-inflicted stat drops still work. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge.",
 		shortDesc: "Switch-in Haze/screen clear; blocks enemy drops/setup/screens; skips charge turns.",
 	},
+	royalhive: {
+		name: "Royal Hive",
+		desc: "On switch-in, this Pokemon starts in Attack Stance and raises its Attack and Special Attack by 1 stage. After it uses a status move, it changes to Defense Stance, lowering its Attack and Special Attack by 1 stage and raising its Defense and Special Defense by 1 stage. After it uses a damaging move while in Defense Stance, it changes back to Attack Stance, lowering its Defense and Special Defense by 1 stage and raising its Attack and Special Attack by 1 stage. While in Defense Stance, it restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "Starts +1 Atk/SpA; status moves swap to +1 Def/SpD and heal 1/16; attacks swap back.",
+	},
 	royalsun: {
 		name: "Royal Sun",
 		desc: "On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects.",
@@ -2334,8 +2349,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	tremor: {
 		name: "Tremor",
-		desc: "This Pokemon's sound-based moves become physical attacks, have 1.2x power, and ignore sound-based Ability immunities such as Soundproof.",
-		shortDesc: "Sound moves are physical, 1.2x, and ignore sound-based Ability immunities.",
+		desc: "On switch-in, this Pokemon summons Sandstorm. This Pokemon is immune to Ground-type moves. Sound-based moves used by this Pokemon become physical, use Attack, have 1.5x power, and ignore sound-based Ability immunities. Sound-based moves used by this Pokemon's allies have 1.5x power and use the user's higher offensive stat. This Pokemon's side is immune to its own damaging sound-based moves.",
+		shortDesc: "Sand Stream + Levitate; side sound moves 1.5x; user sound moves physical/use Atk.",
+	},
+	resonanceforce: {
+		name: "Resonance Force",
+		desc: "Sound-based moves used by this Pokemon's side deal 1.5x damage. This Pokemon's side is immune to its own damaging sound-based moves. Sound-based moves used by this Pokemon use Attack instead of their usual attacking stat.",
+		shortDesc: "Side's sound moves 1.5x; allies avoid own damaging sound moves; user's sound moves use Atk.",
 	},
 	verdantdrake: {
 		name: "Verdant Drake",
@@ -2420,8 +2440,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stancechange: {
 		name: "Stance Change",
-		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before using an attacking move, and changes to Shield Forme before using King's Shield.",
-		shortDesc: "If Aegislash, changes Forme to Blade before attacks and Shield before King's Shield.",
+		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before using an attacking move, and changes to Shield Forme before using King's Shield. This Pokemon restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "Aegislash changes Forme before attacks/King's Shield; heals 1/16 each turn.",
 		gen6: {
 			desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield.",
 		},

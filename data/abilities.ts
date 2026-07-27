@@ -3884,6 +3884,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10117,
 	},
 	rimeknuckle: {
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			return this.chainModify(pokemon.hp > pokemon.maxhp / 2 ? 1.25 : 1.5);
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			return this.chainModify(pokemon.hp > pokemon.maxhp / 2 ? 1.25 : 1.5);
+		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
 			if (move.flags['punch']) return this.chainModify(1.4);
@@ -3897,7 +3905,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.secondaries.push({ chance: 40, status: 'frz' });
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 10, source, source);
+			if (effect?.effectType !== 'Move') return;
+			const targetIsMega = !!(target.species.isMega || target.species.forme === 'Mega');
+			const targetIsGmax = !!(target.gigantamax || target.species.forme?.includes('Gmax'));
+			const targetIsStellar = target.terastallized === 'Stellar' || target.species.forme === 'Stellar';
+			const targetHasZMove = !!target.getItem().zMove;
+			this.heal(source.baseMaxhp / (targetIsMega || targetIsGmax || targetIsStellar || targetHasZMove ? 2 : 10) * length, source, source);
 		},
 		flags: { breakable: 1 },
 		name: "Rime Knuckle",
@@ -4570,27 +4583,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.chainModify(modifier);
 		},
 		onFoeModifyAtk(atk, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.forme === 'Stellar' || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.6);
 		},
 		onFoeModifyDef(def, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.forme === 'Stellar' || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.6);
 		},
 		onFoeModifySpe(spe, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.forme === 'Stellar' || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.6);
 		},
 		onFoeModifySpA(spa, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.forme === 'Stellar' || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.6);
 		},
 		onFoeModifySpD(spd, pokemon) {
-			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.tags.includes("Ultra Beast"))) return;
+			if (!(pokemon.gigantamax || pokemon.species.forme === 'Mega' || pokemon.terastallized || pokemon.species.forme === 'Stellar' || pokemon.species.tags.includes("Ultra Beast"))) return;
 			this.debug('Eternal Flower drop');
 			return this.chainModify(0.6);
 		},
@@ -4695,6 +4708,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Filter",
 		rating: 3,
 		num: 111,
+	},
+	byxbysiontouch: {
+		onModifyMove(move) {
+			if (move.category === 'Status') return;
+			const canPoison = move.status === 'psn' || move.status === 'tox' ||
+				move.secondaries?.some(secondary => secondary.status === 'psn' || secondary.status === 'tox');
+			if (this.movehasType(move, 'Poison') || canPoison) {
+				move.drain = [1, 2];
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.movehasType(move, 'Ground')) {
+				this.debug('Byxbysion Touch weaken');
+				return this.chainModify(0.25);
+			}
+		},
+		onAnyDamage(damage, target, source, effect) {
+			const pokemon = this.effectState.target;
+			if (!pokemon || pokemon.fainted || !target || target.isAlly(pokemon)) return;
+			if (!effect || !['psn', 'tox'].includes(effect.id)) return;
+			this.heal(Math.min(damage, target.hp), pokemon, target);
+		},
+		flags: { breakable: 1 },
+		name: "Byxbysion Touch",
+		rating: 4,
+		num: 10203,
 	},
 	ascendance: {
 		onImmunity(type, pokemon) {
@@ -7248,17 +7287,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
-			const holder = this.effectState.target;
-			if (['sunnyday', 'desolateland'].includes(holder.effectiveWeather())) {
-				return this.chainModify(1.5);
-			}
+			return this.chainModify(1.5);
 		},
 		onAllyModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
-			const holder = this.effectState.target;
-			if (['sunnyday', 'desolateland'].includes(holder.effectiveWeather())) {
-				return this.chainModify(1.5);
-			}
+			return this.chainModify(1.5);
 		},
 		onAllyTryBoost(boost, target, source, effect) {
 			if ((source && target === source) || (!target.hasType('Grass') && !this.field.isTerrain('bewitchedwoodsterrain'))) return;
@@ -9495,6 +9528,60 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 32,
 	},
+	seasonalstride: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = pokemon.getTypes()[0];
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			let modifier = 1;
+			if (move.typeChangerBoosted === this.effect) modifier *= 1.2;
+			if (move.flags['kick']) modifier *= 1.4;
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onModifySpe(spe, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(2);
+			}
+		},
+		onResidual(pokemon) {
+			if (pokemon.baseSpecies.num !== 586 || pokemon.transformed) return;
+			let forme: string | null = null;
+			switch (pokemon.effectiveWeather()) {
+			case 'raindance':
+			case 'primordialsea':
+				if (pokemon.species.id !== 'sawsbuck') forme = 'Sawsbuck';
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				if (pokemon.species.id !== 'sawsbucksummer') forme = 'Sawsbuck-Summer';
+				break;
+			case 'sandstorm':
+				if (pokemon.species.id !== 'sawsbuckautumn') forme = 'Sawsbuck-Autumn';
+				break;
+			case 'hail':
+			case 'snow':
+			case 'snowscape':
+				if (pokemon.species.id !== 'sawsbuckwinter') forme = 'Sawsbuck-Winter';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+		flags: {},
+		name: "Seasonal Stride",
+		rating: 4,
+		num: 10202,
+	},
 	shadowshield: {
 		onSourceModifyDamage(damage, source, target, move) {
 			let modifier = 1;
@@ -10413,6 +10500,35 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10020,
 	},
+	royalhive: {
+		onStart(pokemon) {
+			pokemon.m.royalHiveStance = 'attack';
+			this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
+		},
+		onAfterMove(pokemon, target, move) {
+			if (!pokemon.hp) return;
+			if (move.category === 'Status') {
+				if (pokemon.m.royalHiveStance === 'defense') return;
+				pokemon.m.royalHiveStance = 'defense';
+				this.add('-message', 'Changed to Defense Stance!');
+				this.boost({ atk: -1, spa: -1, def: 1, spd: 1 }, pokemon, pokemon);
+				return;
+			}
+			if (pokemon.m.royalHiveStance !== 'defense') return;
+			pokemon.m.royalHiveStance = 'attack';
+			this.add('-message', 'Changed to Attack Stance!');
+			this.boost({ def: -1, spd: -1, atk: 1, spa: 1 }, pokemon, pokemon);
+		},
+		onResidual(pokemon) {
+			if (pokemon.m.royalHiveStance === 'defense') {
+				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			}
+		},
+		flags: {},
+		name: "Royal Hive",
+		rating: 4,
+		num: 10201,
+	},
 	royalsun: {
 		onStart(pokemon) {
 			this.field.setWeather('sunnyday', pokemon);
@@ -10525,20 +10641,68 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10142,
 	},
 	tremor: {
+		onStart(source) {
+			this.field.setWeather('sandstorm');
+		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['sound']) return this.chainModify(1.2);
+			if (move.flags['sound']) return this.chainModify(1.5);
 		},
-		onModifyMove(move) {
-			if (move.flags['sound']) {
+		onAllyBasePowerPriority: 8,
+		onAllyBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) return this.chainModify(1.5);
+		},
+		onModifyMove(move, pokemon) {
+			if (move.flags['sound'] && move.category !== 'Status') {
 				move.category = 'Physical';
+				move.overrideOffensiveStat = 'atk';
 				move.ignoreAbility = true;
 			}
+		},
+		onAllyModifyMove(move, pokemon) {
+			if (!move.flags['sound'] || move.category === 'Status') return;
+			move.overrideOffensiveStat = pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true) ? 'atk' : 'spa';
+		},
+		onAnyTryHit(target, source, move) {
+			const pokemon = this.effectState.target;
+			if (!target || !source || !move.flags['sound'] || move.category === 'Status') return;
+			if (source.isAlly(pokemon) && target.isAlly(pokemon) && target !== source) {
+				this.add('-immune', target, '[from] ability: Tremor');
+				return null;
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'Ground') return false;
 		},
 		flags: {},
 		name: "Tremor",
 		rating: 4,
 		num: 10017,
+	},
+	resonanceforce: {
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) return this.chainModify(1.5);
+		},
+		onAllyBasePowerPriority: 8,
+		onAllyBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) return this.chainModify(1.5);
+		},
+		onModifyMove(move) {
+			if (move.flags['sound'] && move.category !== 'Status') move.overrideOffensiveStat = 'atk';
+		},
+		onAnyTryHit(target, source, move) {
+			const pokemon = this.effectState.target;
+			if (!target || !source || !move.flags['sound'] || move.category === 'Status') return;
+			if (source.isAlly(pokemon) && target.isAlly(pokemon) && target !== source) {
+				this.add('-immune', target, '[from] ability: Resonance Force');
+				return null;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Resonance Force",
+		rating: 4.5,
+		num: 10200,
 	},
 	verdantdrake: {
 		onBasePowerPriority: 8,
@@ -10928,6 +11092,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				attacker.formeChange(targetForme);
 			}
+		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Stance Change",
@@ -12530,6 +12697,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			this.field.setTerrain('wastelandterrain');
+		},
+		onModifyMove(move, pokemon) {
+			this.dex.abilities.get('byxbysiontouch').onModifyMove?.call(this, move, pokemon);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('byxbysiontouch').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onAnyDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('byxbysiontouch').onAnyDamage?.call(this, damage, target, source, effect);
 		},
 		flags: {},
 		name: "Wasting Surge",

@@ -4450,6 +4450,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
 	},
+	needlegun: {
+		name: "Needle Gun",
+		desc: "Hits 6 times. This move becomes Physical if the user's Attack is higher than its Special Attack. It has a higher chance for a critical hit and each hit has a 5% chance to make the target flinch. In Desert Field, this move's power is doubled. In Fairy Tale or Factory Field, this move becomes Steel type and has 1.5x power.",
+		shortDesc: "Hits 6 times. Physical if Atk > SpA. High crit. 5% flinch per hit.",
+	},
 	neverendingnightmare: {
 		name: "Never-Ending Nightmare",
 		shortDesc: "Power is equal to the base move's Z-Power.",
