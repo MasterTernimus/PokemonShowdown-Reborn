@@ -1780,10 +1780,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (!move || move.category === 'Status') return;
+			let modifier = 1;
 			if (this.queue.willMove(target)) {
 				this.debug('Solar Grace weaken');
-				return this.chainModify(0.75);
+				modifier *= 0.75;
 			}
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category === 'Status') return;
+			const gmaxTarget = target.volatiles['dynamax'] && (target.gigantamax || target.species.forme?.includes('Gmax'));
+			const drain = gmaxTarget ? 0.6 : 0.3;
+			this.heal(Math.min(Math.floor(damage * drain), Math.floor(source.baseMaxhp / 3)), source, source);
 		},
 		flags: { breakable: 1 },
 		name: "Solar Grace",
@@ -2052,7 +2060,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (side === pokemon.side || side === pokemon.side.allySide) continue;
 				fallenFoes += side.totalFainted;
 			}
-			if (fallenFoes) this.heal(pokemon.baseMaxhp * fallenFoes / 20, pokemon, pokemon);
+			if (fallenFoes) this.heal(pokemon.baseMaxhp * fallenFoes * 0.35, pokemon, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Mourning Vessel",
@@ -3493,8 +3501,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.activeTurns) return;
 			const lastMove = pokemon.lastMove?.id;
 			if (lastMove === 'spitup' || lastMove === 'swallow') return;
-			if (pokemon.volatiles['stockpile']?.layers >= 3) return;
-			pokemon.addVolatile('stockpile', pokemon);
+			if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) pokemon.addVolatile('stockpile', pokemon);
+			const target = this.sample(pokemon.foes().filter(foe => !foe.fainted));
+			if (target) this.actions.useMove('belch', pokemon, { target });
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (move.id !== 'belch' || !target || target.fainted) return;
+			this.actions.useMove('spitup', source, { target });
 		},
 		flags: { breakable: 1 },
 		name: "Accumulation",
@@ -5846,6 +5859,47 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Gorilla Tactics",
 		rating: 4.5,
 		num: 255,
+	},
+	primaltactics: {
+		onStart(pokemon) {
+			pokemon.abilityState.choiceLock = "";
+		},
+		onBeforeMove(pokemon, target, move) {
+			if (move.isZOrMaxPowered || move.id === 'struggle') return;
+			if (pokemon.abilityState.choiceLock && pokemon.abilityState.choiceLock !== move.id) {
+				this.addMove('move', pokemon, move.name);
+				this.attrLastMove('[still]');
+				this.debug("Disabled by Primal Tactics");
+				this.add('-fail', pokemon);
+				return false;
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.abilityState.choiceLock || move.isZOrMaxPowered || move.id === 'struggle') return;
+			pokemon.abilityState.choiceLock = move.id;
+		},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.volatiles['dynamax']) return;
+			this.debug('Primal Tactics SpA Boost');
+			return this.chainModify(1.5);
+		},
+		onDisableMove(pokemon) {
+			if (!pokemon.abilityState.choiceLock) return;
+			if (pokemon.volatiles['dynamax']) return;
+			for (const moveSlot of pokemon.moveSlots) {
+				if (moveSlot.id !== pokemon.abilityState.choiceLock) {
+					pokemon.disableMove(moveSlot.id, false, this.effectState.sourceEffect);
+				}
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.abilityState.choiceLock = "";
+		},
+		flags: {},
+		name: "Primal Tactics",
+		rating: 4.5,
+		num: 10206,
 	},
 	grasspelt: {
 		onModifyDefPriority: 6,
@@ -11150,6 +11204,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.heal(target.baseMaxhp / 16, target, target);
 			}
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status') return this.chainModify(0.8);
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && (move.flags['bullet'] || move.flags['pulse'])) {
 				this.add('-immune', target, '[from] ability: Wrath Shield');
@@ -11164,7 +11221,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const stat = statName as BoostID;
 				if (boost[stat]! < 0) {
 					target.abilityState.wrathShieldDropTurn = this.turn;
-					this.boost({ def: 1, spd: 1 }, target, target, null, false, true);
+					this.boost({ spd: 1 }, target, target, null, false, true);
+					this.heal(target.baseMaxhp / 16, target, target);
 					return;
 				}
 			}
@@ -11189,7 +11247,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			let modifier = 1;
-			if (move.basePower && move.basePower < 60) modifier *= 1.5;
+			if (move.basePower && move.basePower < 80) modifier *= 1.5;
 			if (this.queue.willMove(defender) || defender.newlySwitched) modifier *= 1.3;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
@@ -11296,7 +11354,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'hail') return false;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (this.movehasType(move, ['Fire', 'Ice'])) return this.chainModify(0.75);
+			let modifier = 0.9;
+			if (this.movehasType(move, ['Fire', 'Ice'])) modifier *= 0.75;
+			return this.chainModify(modifier);
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
@@ -11304,6 +11364,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category === 'Status') return;
+			const gmaxTarget = target.volatiles['dynamax'] && (target.gigantamax || target.species.forme?.includes('Gmax'));
+			const drain = gmaxTarget ? 0.6 : 0.3;
+			this.heal(Math.min(Math.floor(damage * drain), Math.floor(source.baseMaxhp / 3)), source, source);
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && this.movehasType(move, 'Poison')) {
@@ -11328,6 +11394,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10037,
 	},
 	siegelauncher: {
+		onCriticalHit: false,
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['pulse'] || move.flags['bullet'] || move.flags['beam'] || move.flags['cannon'] || move.flags['aura']) {
@@ -11347,6 +11414,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status') return this.chainModify(0.8);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category === 'Status') return;
+			const gmaxTarget = target.volatiles['dynamax'] && (target.gigantamax || target.species.forme?.includes('Gmax'));
+			const drain = gmaxTarget ? 0.6 : 0.3;
+			this.heal(Math.min(Math.floor(damage * drain), Math.floor(source.baseMaxhp / 3)), source, source);
 		},
 		flags: {},
 		name: "Siege Launcher",

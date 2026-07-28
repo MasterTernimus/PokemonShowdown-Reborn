@@ -4532,8 +4532,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	octolock: {
 		name: "Octolock",
-		desc: "Prevents the target from switching out. At the end of each turn during effect, the target's Defense and Special Defense are lowered by 1 stage. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
-		shortDesc: "Traps target, lowers Def and SpD by 1 each turn.",
+		desc: "Prevents the target from switching out. At the end of each turn during effect, the target's Defense, Special Defense, and Speed are lowered by 1 stage. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		shortDesc: "Traps target, lowers Def, SpD, and Spe by 1 each turn.",
 
 		start: "  [POKEMON] can no longer escape because of Octolock!",
 	},

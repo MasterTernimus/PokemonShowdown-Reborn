@@ -2115,11 +2115,18 @@ export class BattleActions {
 		return null;
 	}
 
+	clearDynamaxForMega(pokemon: Pokemon) {
+		if (!pokemon.volatiles['dynamax']) return;
+		pokemon.removeVolatile('dynamax');
+		pokemon.updateMaxHp();
+	}
+
 	runMegaEvo(pokemon: Pokemon) {
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid) return false;
 
+		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
 		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
@@ -2132,6 +2139,7 @@ export class BattleActions {
 		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid) return false;
 
+		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
 		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
@@ -2143,6 +2151,7 @@ export class BattleActions {
 		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid) return false;
 
+		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
 		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
