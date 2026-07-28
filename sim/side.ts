@@ -663,8 +663,7 @@ export class Side {
 			}
 		} else {
 			if (this.battle.gameType === 'freeforall' && ['followme', 'ragepowder'].includes(move.id)) {
-				if (!targetLoc) return this.emitChoiceError(`Can't move: ${move.name} needs a target in Free-for-All`);
-				if (!this.battle.validTargetLoc(targetLoc, pokemon, 'normal')) {
+				if (targetLoc && !this.battle.validTargetLoc(targetLoc, pokemon, 'normal')) {
 					return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 				}
 			} else
