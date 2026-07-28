@@ -367,9 +367,6 @@ export class Pokemon {
 			}
 			const ppUps = move.noPPBoosts || move.id === 'trumpcard' ? 0 : 3;
 			let basePP = this.battle.calculatePP(move, ppUps);
-			if ((this.gigantamax || this.species.forme === 'Gmax') && move.heal) {
-				basePP = this.battle.calculatePP({ ...move, pp: 5 } as Move, ppUps);
-			}
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,

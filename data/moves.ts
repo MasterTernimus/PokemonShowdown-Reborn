@@ -1301,6 +1301,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onDisableMove(pokemon) {
+			if (pokemon.hasAbility('accumulation')) return;
 			if (!pokemon.ateBerry) pokemon.disableMove('belch');
 		},
 		target: "normal",
@@ -14438,7 +14439,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
 					return;
 				}
-				this.boost({ def: -1, spd: -1 }, pokemon, source, this.dex.getActiveMove('octolock'));
+				this.boost({ def: -1, spd: -1, spe: -1 }, pokemon, source, this.dex.getActiveMove('octolock'));
 			},
 			onTrapPokemon(pokemon) {
 				if (this.effectState.source?.isActive) pokemon.tryTrap();

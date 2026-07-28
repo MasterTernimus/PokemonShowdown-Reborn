@@ -429,8 +429,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	solargrace: {
 		name: "Solar Grace",
-		desc: "On switch-in or Mega Evolution, this Pokemon summons Sunny Day. Opposing Pokemon cannot lower this Pokemon's Speed or Special Attack. If this Pokemon moves before the target, its Fire- and Flying-type moves have 1.2x power. If this Pokemon has not moved yet, it takes 0.75x damage from attacks.",
-		shortDesc: "Sets Sun; blocks foe Speed/SpA drops; faster Fire/Flying 1.2x; before moving takes 0.75x.",
+		desc: "On switch-in or Mega Evolution, this Pokemon summons Sunny Day. Opposing Pokemon cannot lower this Pokemon's Speed or Special Attack. If this Pokemon moves before the target, its Fire- and Flying-type moves have 1.2x power. If this Pokemon has not moved yet, it takes 0.75x damage from attacks. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit.",
+		shortDesc: "Sets Sun; faster Fire/Flying 1.2x; before moving takes 0.75x; drains attacks.",
 	},
 	eternalflower: {
 		name: "Eternal Flower",
@@ -509,8 +509,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mourningvessel: {
 		name: "Mourning Vessel",
-		desc: "This Pokemon's damaging moves deal 20% more damage for each fainted ally. At the end of each turn, this Pokemon restores 5% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
-		shortDesc: "Damage +20% per fainted ally; heals 5% per fainted foe from all opposing sides.",
+		desc: "This Pokemon's damaging moves deal 20% more damage for each fainted ally. At the end of each turn, this Pokemon restores 35% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
+		shortDesc: "Damage +20% per fainted ally; heals 35% per fainted foe from all opposing sides.",
 	},
 	fallenstar: {
 		name: "Fallen Star",
@@ -1091,6 +1091,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Gorilla Tactics",
 		desc: "This Pokemon's Attack is multiplied by 1.5, but it can only select the first move it executes. These effects are prevented while this Pokemon is Dynamaxed.",
 		shortDesc: "This Pokemon's Attack is 1.5x, but it can only select the first move it executes.",
+	},
+	primaltactics: {
+		name: "Primal Tactics",
+		desc: "This Pokemon's Special Attack is multiplied by 1.5, but it can only select the first move it executes. These effects are prevented while this Pokemon is Dynamaxed.",
+		shortDesc: "This Pokemon's Sp. Atk is 1.5x, but it can only select the first move it executes.",
 	},
 	grasspelt: {
 		name: "Grass Pelt",
@@ -2424,13 +2429,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wrathshield: {
 		name: "Wrath Shield",
-		desc: "This Pokemon has Sworn Duty's effect. After this Pokemon uses a damaging move, the next enemy attack that hits it raises its Attack and Defense by 1 stage and restores 1/16 of its maximum HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. It has Bulletproof's effect, blocks moves boosted by Mega Launcher, cannot be critically hit, and raises Defense and Special Defense by 1 stage the first time its stats are lowered each turn.",
-		shortDesc: "Sworn Duty; after attacking, next enemy hit gives +1 Atk/Def and heals.",
+		desc: "This Pokemon has Sworn Duty's effect. After this Pokemon uses a damaging move, the next enemy attack that hits it raises its Attack and Defense by 1 stage and restores 1/16 of its maximum HP. Additional hits do not trigger this again until this Pokemon uses another damaging move. It takes 0.8x damage from attacks. It has Bulletproof's effect, blocks moves boosted by Mega Launcher, cannot be critically hit, and raises Special Defense by 1 stage and restores 1/16 max HP the first time its stats are lowered each turn.",
+		shortDesc: "Sworn Duty; takes 0.8x; after attacking, next enemy hit gives +1 Atk/Def and heals.",
 	},
 	shadowcurrent: {
 		name: "Shadow Current",
-		desc: "This Pokemon has Sworn Duty's effect. Before using a move, this Pokemon becomes the move's type. Its moves with less than 60 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power. This Pokemon takes 0.75x damage from attacks.",
-		shortDesc: "Sworn Duty; Protean; weak moves 1.5x; faster attacks 1.3x.",
+		desc: "This Pokemon has Sworn Duty's effect. Before using a move, this Pokemon becomes the move's type. Its moves with less than 80 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power. This Pokemon takes 0.75x damage from attacks.",
+		shortDesc: "Sworn Duty; Protean; moves under 80 BP 1.5x; faster attacks 1.3x.",
 	},
 	astralwitchcraft: {
 		name: "Astral Witchcraft",
@@ -2449,13 +2454,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "This Pokemon takes 0.75x damage from Fire- and Ice-type attacks, is immune to hail damage, and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
-		shortDesc: "0.75x Fire/Ice; hail immune; heals 1/16; Giga Drain 2x; absorbs Poison.",
+		desc: "This Pokemon takes 0.9x damage from attacks and 0.75x additional damage from Fire- and Ice-type attacks, is immune to hail damage, and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
+		shortDesc: "Takes 0.9x; extra 0.75x Fire/Ice; heals/drains; Giga Drain 2x; absorbs Poison.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon's Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. It restores 1/16 of its maximum HP at the end of each turn.",
-		shortDesc: "Water Pulse 2x; other launcher moves 1.5x, or 1.3x and bypass screens; heals 1/16.",
+		desc: "This Pokemon has Shell Armor's effect and takes 0.8x damage from attacks. Its Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "Shell Armor; takes 0.8x; launcher moves boosted; heals/drains.",
 	},
 	calderacore: {
 		name: "Caldera Core",
@@ -3095,8 +3100,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow.",
-		shortDesc: "After one turn out, gains Stockpile each turn up to 3.",
+		desc: "At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. It then automatically uses Belch on a random foe. This Pokemon can use Belch without eating a Berry, and when it uses Belch, it immediately follows up with Spit Up on the same target.",
+		shortDesc: "Gains Stockpile each turn, auto-Belches; Belch is followed by Spit Up.",
 	},
 	invigorate: {
 		name: "Invigorate",
