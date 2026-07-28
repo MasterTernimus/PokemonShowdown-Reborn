@@ -6664,9 +6664,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 2,
 		flags: { noassist: 1, failcopycat: 1 },
-		volatileStatus: 'followme',
 		onTry(source) {
 			return this.activePerHalf > 1;
+		},
+		onHit(target, source, move) {
+			return source.addVolatile('followme', source, move);
 		},
 		condition: {
 			duration: 1,
@@ -6682,7 +6684,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (!this.effectState.target.isSkyDropped() && this.validTarget(this.effectState.target, source, move.target)) {
 					if (this.gameType === 'freeforall') {
 						if (this.effectState.ffaSourceSide === undefined) {
-							const selectedTarget = this.effectState.target.getAtLoc(this.effectState.target.lastMoveTargetLoc || 0);
+							const targetLoc = this.effectState.target.lastMoveTargetLoc || 0;
+							const selectedTarget = targetLoc ? this.effectState.target.getAtLoc(targetLoc) : null;
 							this.effectState.ffaSourceSide = selectedTarget?.side.n ?? source.side.n;
 						}
 						if (this.effectState.ffaSourceSide !== source.side.n) return;
@@ -6705,7 +6708,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 		},
-		target: "self",
+		target: "normal",
 		type: "Normal",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cute",
@@ -16176,9 +16179,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 2,
 		flags: { noassist: 1, failcopycat: 1, powder: 1 },
-		volatileStatus: 'ragepowder',
 		onTry(source) {
 			return this.activePerHalf > 1;
+		},
+		onHit(target, source, move) {
+			return source.addVolatile('ragepowder', source, move);
 		},
 		condition: {
 			duration: 1,
@@ -16193,7 +16198,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (source.runStatusImmunity('powder') && this.validTarget(ragePowderUser, source, move.target)) {
 					if (this.gameType === 'freeforall') {
 						if (this.effectState.ffaSourceSide === undefined) {
-							const selectedTarget = ragePowderUser.getAtLoc(ragePowderUser.lastMoveTargetLoc || 0);
+							const targetLoc = ragePowderUser.lastMoveTargetLoc || 0;
+							const selectedTarget = targetLoc ? ragePowderUser.getAtLoc(targetLoc) : null;
 							this.effectState.ffaSourceSide = selectedTarget?.side.n ?? source.side.n;
 						}
 						if (this.effectState.ffaSourceSide !== source.side.n) return;
@@ -16216,7 +16222,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 		},
-		target: "self",
+		target: "normal",
 		type: "Bug",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Clever",
