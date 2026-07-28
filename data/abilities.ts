@@ -2053,23 +2053,49 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10157,
 	},
 	fallenstar: {
-		onModifyMove(move) {
+		onModifyMove(move, pokemon) {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
-			if (arrowMoves.includes(move.id)) move.ignoreAbility = true;
+			if (!arrowMoves.includes(move.id)) return;
+			move.ignoreAbility = true;
+			move.breaksProtect = true;
+			(move as any).fallenStarBreaksProtect = true;
+			move.tracksTarget = move.target !== 'scripted';
+			if (this.gameType === 'freeforall') move.target = 'allAdjacentFoes';
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
 			if (!arrowMoves.includes(move.id)) return;
-			if (target.trapped || target.maybeTrapped || target.volatiles['trapped']) return this.chainModify(1.5);
-			return this.chainModify(1.2);
+			let modifier = (move as any).fallenStarFollowUp ? 0.5 : 1;
+			if ((move as any).fallenStarProtectedTargets?.includes(target)) modifier *= move.crit ? 2 : 0.5;
+			modifier *= target.trapped || target.maybeTrapped || target.volatiles['trapped'] ? 1.5 : 1.2;
+			return this.chainModify(modifier);
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
-			if (arrowMoves.includes(move.id) && pokemon.hp <= pokemon.maxhp / 3) return priority + 1;
+			if (arrowMoves.includes(move.id) && pokemon.hp <= pokemon.maxhp / 2) return priority + 2;
 		},
 		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
+		},
+		onSourceAfterMoveSecondarySelf(source, target, move) {
+			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
+			if (arrowMoves.includes(move.id)) source.abilityState.fallenStarGuardTurn = this.turn;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.abilityState.fallenStarGuardTurn === this.turn) return this.chainModify(0.25);
+			if (target.hp <= target.maxhp / 2) return this.chainModify(0.5);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
+			if (!effect || effect.effectType !== 'Move' || !arrowMoves.includes(effect.id)) return;
+			if ((effect as any).fallenStarFollowUp) return;
+			const followTarget = source.foes().find(foe => foe && !foe.fainted);
+			if (!followTarget) return;
+			const newMove = this.dex.getActiveMove(effect.id);
+			(newMove as any).fallenStarFollowUp = true;
+			this.add('-activate', source, 'ability: Fallen Star');
+			this.actions.useMove(newMove, source, { target: followTarget, sourceEffect: this.dex.abilities.get('fallenstar') });
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
@@ -5977,7 +6003,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyTryHeal(damage, target, source, effect) {
 			const holder = this.effectState.target;
 			if (typeof damage !== 'number' || !target || target.fainted) return;
-			if (target === holder || target.isAlly(holder)) return this.modify(damage, 1.2);
+			if (target === holder || target.isAlly(holder)) return this.modify(damage, 1.3);
 		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
@@ -7679,25 +7705,54 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 153,
 	},
 	requiem: {
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.basePower <= 60) {
+				this.debug('Requiem Technician boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onAnyTryHeal(damage, target, source, effect) {
+			const holder = this.effectState.target;
+			if (typeof damage !== 'number' || !target || target.fainted) return;
+			if (target === holder || target.isAlly(holder)) return this.modify(damage, 1.3);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!target || target.fainted || target.volatiles['perishsong']) return;
+			target.addVolatile('perishsong');
+			this.add('-start', target, 'perish3', '[silent]');
+			this.add('-activate', source, 'ability: Requiem');
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source.fainted || source.volatiles['perishsong']) return;
+			source.addVolatile('perishsong');
+			this.add('-start', source, 'perish3', '[silent]');
+			this.add('-activate', target, 'ability: Requiem');
+		},
 		onFaint(pokemon, source, effect) {
 			if (this.field.terrain === 'hauntedterrain') {
 				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
 			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('requiem'), true)) {
 				this.field.terrainState.duration = 5;
 			}
-			if (pokemon.volatiles['destinybond']) {
-				this.add('-activate', pokemon, 'ability: Requiem');
-				for (const foe of pokemon.foes()) {
-					if (!foe || foe.fainted) continue;
-					foe.faint();
-				}
-				return;
-			}
-			if (!source || source === pokemon || pokemon.isAlly(source) || effect?.effectType !== 'Move') return;
-			const faintedAllies = pokemon.side.pokemon.filter(ally => ally !== pokemon && ally.fainted).length;
-			if (faintedAllies >= 3) return;
 			this.add('-activate', pokemon, 'ability: Requiem');
-			source.faint();
+			let applied = false;
+			for (const foe of pokemon.foes()) {
+				if (!foe || foe.fainted || foe.volatiles['perishsong']) continue;
+				foe.addVolatile('perishsong');
+				this.add('-start', foe, 'perish3', '[silent]');
+				applied = true;
+			}
+			if (applied) this.add('-fieldactivate', 'move: Perish Song');
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			for (const allyActive of pokemon.adjacentAllies()) {
+				if (allyActive.status && this.randomChance(1, 2)) {
+					this.add('-activate', pokemon, 'ability: Requiem');
+					allyActive.cureStatus();
+				}
+			}
 		},
 		flags: {},
 		name: "Requiem",
@@ -10650,6 +10705,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move && this.movehasType(move, 'Fire')) {
 				return this.chainModify(1.25);
 			}
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onModifySecondaries(secondaries, target, source, move) {
 			if (target.hp > target.maxhp / 2) {

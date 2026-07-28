@@ -1605,7 +1605,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, pokemon, target) {
-			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather()) || this.field.isTerrain(['coldeclipseterrain', 'snowymountainterrain']))) {
+			if (target && (['raindance', 'primordialsea', 'hail', 'snow'].includes(target.effectiveWeather()) || this.field.isTerrain(['coldeclipseterrain', 'snowymountainterrain']))) {
 				move.accuracy = true;
 			}
 		},
@@ -2894,13 +2894,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, source, target) {
+			if (source.hasType('Ghost')) {
+				move.accuracy = true;
+				return;
+			}
 			if (target && (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['coldeclipseterrain', 'icyterrain']) || source.hasType('Ice'))) {
 				move.accuracy = 100;
 			}
 		},
 		status: 'frz',
-		desc: 'Freezes the opposing pokemon',
-		shortDesc: 'Inflicts freeze',
+		desc: 'Freezes the opposing Pokemon. This move does not check accuracy if used by a Ghost-type Pokemon.',
+		shortDesc: 'Freezes the target. Ghost users never miss.',
 		target: "normal",
 		type: "Ice",
 		zMove: { boost: { spa: 1 } },
@@ -17358,7 +17362,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+			if (target && ['raindance', 'primordialsea', 'sandstorm'].includes(target.effectiveWeather())) {
 				move.accuracy = true;
 			}
 		},
@@ -23263,7 +23267,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onModifyMove(move, pokemon, target) {
-			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather()) || this.field.isTerrain(['snowymountainterrain', 'mountainterrain']))) {
+			if (target && (['raindance', 'primordialsea'].includes(target.effectiveWeather()) || this.field.isTerrain(['electricterrain', 'snowymountainterrain', 'mountainterrain']))) {
 				move.accuracy = true;
 			}
 		},
@@ -23303,6 +23307,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, source, target) {
+			if (source.hasType('Ghost')) {
+				move.accuracy = true;
+				return;
+			}
 			if (this.field.isTerrain(['burningterrain', 'volcanicterrain'])) {
 				move.accuracy = 100;
 			}

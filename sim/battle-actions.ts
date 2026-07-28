@@ -784,12 +784,18 @@ export class BattleActions {
 			const spiralMove = move as ActiveMove & {
 				spiralEvolutionBreaksProtect?: boolean,
 				spiralEvolutionProtectedTargets?: Pokemon[],
+				fallenStarBreaksProtect?: boolean,
+				fallenStarProtectedTargets?: Pokemon[],
 			};
 			for (const target of targets) {
 				let broke = false;
 				if (spiralMove.spiralEvolutionBreaksProtect && target.isProtected()) {
 					if (!spiralMove.spiralEvolutionProtectedTargets) spiralMove.spiralEvolutionProtectedTargets = [];
 					spiralMove.spiralEvolutionProtectedTargets.push(target);
+				}
+				if (spiralMove.fallenStarBreaksProtect && target.isProtected()) {
+					if (!spiralMove.fallenStarProtectedTargets) spiralMove.fallenStarProtectedTargets = [];
+					spiralMove.fallenStarProtectedTargets.push(target);
 				}
 				for (const effectid of [
 					'banefulbunker', 'burningbulwark', 'kingsshield', 'obstruct', 'protect', 'silktrap', 'spikyshield',
