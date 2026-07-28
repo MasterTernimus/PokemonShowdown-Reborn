@@ -401,8 +401,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	download: {
 		name: "Download",
-		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower.",
-		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
+		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower. This Pokemon's first damaging move after switching in is a critical hit.",
+		shortDesc: "On switch-in, boosts Atk/SpA from all foes' defenses; first damaging move crits.",
 	},
 	dragonize: {
 		name: "Dragonize",
@@ -1504,8 +1504,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mindseye: {
 		name: "Mind's Eye",
-		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves. Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage.",
-		shortDesc: "Fighting, Normal moves hit Ghost. Accuracy can't be lowered, ignores evasiveness.",
+		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves. Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage, takes 20% less damage from damaging moves, and restores 1/16 max HP after its damaging moves hit.",
+		shortDesc: "Normal/Fighting hit Ghost; ignores evasion; takes 0.8x move damage; heals 1/16 on hit.",
 	},
 	minus: {
 		name: "Minus",
@@ -2912,8 +2912,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	waterbubble: {
 		name: "Water Bubble",
-		desc: "This Pokemon's offensive stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
-		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
+		desc: "This Pokemon's offensive stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon has Water Veil's effects: it cannot be burned, gaining this Ability while burned cures it, it is immune to Hail and Sandstorm damage, and it gains Aqua Ring on switch-in.",
+		shortDesc: "Water power 2x; Fire power against it halved; Water Veil + Aqua Ring.",
 	},
 	watercompaction: {
 		name: "Water Compaction",
@@ -2993,8 +2993,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	zerotohero: {
 		name: "Zero to Hero",
-		desc: "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form. While in Hero Form, it has Friend Guard's effect. When it switches in as Hero Form, it and its ally restore 1/8 max HP and are cured of status, or restore 1/4 max HP if below half HP.",
-		shortDesc: "Switches out into Hero Form. Hero: Friend Guard; on switch-in heals/cures self and ally.",
+		desc: "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form. This Pokemon gains STAB on Fighting-type moves and gains Fighting's Bug-, Dark-, and Rock-type resistances. Once per battle, if this Pokemon would be knocked out, it survives at 1 HP. While in Hero Form, it has Friend Guard's effect. When it switches in as Hero Form, it and its ally restore 1/8 max HP and are cured of status, or restore 1/4 max HP if below half HP.",
+		shortDesc: "Switches out into Hero. Fighting STAB/resists; once survives at 1 HP. Hero: Friend Guard + heal.",
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
