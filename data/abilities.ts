@@ -1611,6 +1611,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	download: {
 		onStart(pokemon) {
+			pokemon.abilityState.downloadFirstHit = true;
 			let totaldef = 0;
 			let totalspd = 0;
 			let boost = 1;
@@ -1636,6 +1637,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			for (const target of pokemon.foes()) {
+				if (!target || target.fainted) continue;
 				totaldef += target.getStat('def', false, true);
 				totalspd += target.getStat('spd', false, true);
 			}
@@ -1644,6 +1646,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			} else if (totalspd) {
 				this.boost({ atk: boost });
 			}
+		},
+		onModifyMove(move, pokemon) {
+			if (move.category === 'Status' || !pokemon.abilityState.downloadFirstHit) return;
+			move.willCrit = true;
+			pokemon.abilityState.downloadFirstHit = false;
 		},
 		flags: {},
 		name: "Download",
@@ -7513,6 +7520,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 250,
 	},
 	mindseye: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status') return this.chainModify(0.8);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
+		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost.accuracy && boost.accuracy < 0) {
@@ -13128,6 +13141,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 11,
 	},
 	waterbubble: {
+		onStart(pokemon) {
+			pokemon.addVolatile('aquaring');
+		},
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move && this.movehasType(move, 'Fire')) {
@@ -13162,6 +13178,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-immune', target, '[from] ability: Water Bubble');
 			}
 			return false;
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
 		},
 		flags: { breakable: 1 },
 		name: "Water Bubble",
@@ -13497,6 +13516,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 161,
 	},
 	zerotohero: {
+		onModifySTAB(stab, source, target, move) {
+			if (this.movehasType(move, 'Fighting') && !source.hasType('Fighting')) return 1.5;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Bug' || type === 'Dark' || type === 'Rock') return typeMod - 1;
+		},
 		onSwitchOut(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (pokemon.species.forme !== 'Hero') {
@@ -13531,6 +13556,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Zero to Hero Friend Guard weaken');
 				return this.chainModify(0.75);
 			}
+		},
+		onDamage(damage, target, source, effect) {
+			if ((target as any).zeroToHeroEndureUsed || damage < target.hp || target.hp <= 1) return;
+			(target as any).zeroToHeroEndureUsed = true;
+			this.add('-activate', target, 'ability: Zero to Hero');
+			return target.hp - 1;
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
 		name: "Zero to Hero",

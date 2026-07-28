@@ -18774,7 +18774,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Palafin",
 		forme: "Hero",
 		types: ["Water"],
-		baseStats: { hp: 100, atk: 160, def: 97, spa: 106, spd: 87, spe: 100 },
+		baseStats: { hp: 100, atk: 160, def: 107, spa: 106, spd: 97, spe: 100 },
 		abilities: { 0: "Zero to Hero" },
 		heightm: 1.8,
 		weightkg: 97.4,
