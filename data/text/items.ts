@@ -158,7 +158,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	blacksludge: {
 		name: "Black Sludge",
-		shortDesc: "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not.",
+		shortDesc: "Each turn, Poison types or Parasitism holders heal 1/16 max HP; others lose 1/8.",
 
 		heal: "  [POKEMON] restored a little HP using its Black Sludge!",
 	},

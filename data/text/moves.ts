@@ -556,8 +556,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bleakwindstorm: {
 		name: "Bleakwind Storm",
-		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
-		shortDesc: "30% to lower foe(s) Speed by 1. Rain: can't miss.",
+		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the weather is Primordial Sea, Rain Dance, Hail, or Snow, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		shortDesc: "30% to lower foe(s) Speed by 1. Rain/Hail/Snow: can't miss.",
 	},
 	blizzard: {
 		name: "Blizzard",
@@ -4287,8 +4287,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mistyterrain: {
 		name: "Misty Terrain",
-		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a non-volatile status condition nor confusion. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
-		shortDesc: "5 turns. Can't status,-Dragon power vs grounded.",
+		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, Fairy-type attacks are boosted without requiring the user to be grounded, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5, and grounded Pokemon cannot be inflicted with a non-volatile status condition nor confusion. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
+		shortDesc: "5 turns. Fairy moves boosted; grounded Pokemon resist Dragon/status.",
 		gen6: {
 			desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a non-volatile status condition. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
 		},
@@ -5514,8 +5514,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandsearstorm: {
 		name: "Sandsear Storm",
-		desc: "Has a 20% chance to burn the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
-		shortDesc: "20% chance to burn foe(s). Can't miss in rain.",
+		desc: "Has a 20% chance to burn the target. If the weather is Primordial Sea, Rain Dance, or Sandstorm, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		shortDesc: "20% chance to burn foe(s). Can't miss in rain/sand.",
 	},
 	sandstorm: {
 		name: "Sandstorm",
@@ -6315,8 +6315,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	springtidestorm: {
 		name: "Springtide Storm",
-		desc: "Has a 30% chance to lower the target's Attack by 1 stage.",
-		shortDesc: "30% chance to lower the foe(s) Attack by 1.",
+		desc: "Has a 30% chance to lower the target's Attack by 1 stage. This move does not check accuracy in Misty Terrain.",
+		shortDesc: "30% chance to lower foe(s) Attack by 1. Misty Terrain: can't miss.",
 	},
 	stealthrock: {
 		name: "Stealth Rock",
@@ -7488,8 +7488,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wildboltstorm: {
 		name: "Wildbolt Storm",
-		desc: "Has a 20% chance to paralyze the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
-		shortDesc: "20% chance to paralyze foe(s). Rain: can't miss.",
+		desc: "Has a 20% chance to paralyze the target. If the weather is Primordial Sea or Rain Dance, or if Electric Terrain is active, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		shortDesc: "20% chance to paralyze foe(s). Rain/Electric Terrain: can't miss.",
 	},
 	wildcharge: {
 		name: "Wild Charge",
@@ -7498,8 +7498,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	willowisp: {
 		name: "Will-O-Wisp",
-		desc: "Burns the target.",
-		shortDesc: "Burns the target.",
+		desc: "Burns the target. This move does not check accuracy if used by a Ghost-type Pokemon.",
+		shortDesc: "Burns the target. Ghost users never miss.",
 	},
 	wingattack: {
 		name: "Wing Attack",

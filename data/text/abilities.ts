@@ -514,8 +514,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Pokemon's arrow moves ignore the target's Ability and have 1.2x power. If this Pokemon has 1/3 or less of its maximum HP, its arrow moves gain +1 priority. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
-		shortDesc: "Arrow moves ignore Abilities and are 1.2x; at <=1/3 HP +1 priority; 1.5x vs trapped.",
+		desc: "This Pokemon's arrow moves ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.2x power. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
+		shortDesc: "Arrow moves ignore Ability/redirect/Protect, +2 at <=1/2 HP, hit all foes in FFA; arrow KOs fire again.",
 	},
 	eclipse: {
 		name: "Eclipse",
@@ -1572,8 +1572,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "When this Pokemon faints, it creates Haunted Field for 5 turns, ignoring Neutralization. If it faints from direct damage and has at most 2 fainted allies, the attacker also faints. If this Pokemon used Destiny Bond and faints, all opposing Pokemon faint.",
-		shortDesc: "On faint: Haunted Field. Direct KO trades if <=2 allies fainted; Destiny Bond takes all foes.",
+		desc: "This Pokemon has Technician and Invigorate's effects, with healing increased by 1.3x. When this Pokemon faints, it creates Haunted Field for 5 turns and applies Perish Song to opposing Pokemon. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon has Perish Song applied to it.",
+		shortDesc: "Technician + 1.3x Invigorate; on faint: Haunted Field + Perish Song foes; attacks mark Perish Song.",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
@@ -2399,8 +2399,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon always has Dry Skin's effects. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
-		shortDesc: "Dry Skin + 50% spore on hit. Above 50% HP: 0.8x damage, no weaknesses/hazards/status.",
+		desc: "This Pokemon always has Dry Skin's effects and restores 1/16 max HP at the end of each turn. It is healed by Black Sludge. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
+		shortDesc: "Dry Skin + 1/16 heal + Black Sludge heal + 50% spore. Above 50%: bulky immunities.",
 	},
 	tremor: {
 		name: "Tremor",

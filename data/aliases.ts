@@ -1344,6 +1344,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	se: "Stone Edge",
 	sideshellarm: "Shell Side Arm",
 	spin: "Rapid Spin",
+	springtide: "Springtide Storm",
 	sr: "Stealth Rock",
 	ssa: "Shell Side Arm",
 	starstorm: "Tera Starstorm",
