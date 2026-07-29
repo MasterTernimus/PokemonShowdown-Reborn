@@ -2409,8 +2409,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon always has Dry Skin and Rain Dish's effects, is immune to powder moves, and restores 1/16 max HP at the end of each turn. It is healed by Black Sludge. This Ability cannot be suppressed or ignored and is immune to Neutralization's stat drops and Royal Decree's stat control. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
-		shortDesc: "Dry Skin + Rain Dish + powder immunity; ignores Neutralization/Royal Decree.",
+		desc: "This Pokemon always has Dry Skin and Rain Dish's effects, gains Grass-type resistances without Grass-type weaknesses, is immune to powder moves, and restores 1/16 max HP at the end of each turn. It is healed by Black Sludge. This Ability cannot be suppressed or ignored and is immune to Neutralization's stat drops and Royal Decree's stat control. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
+		shortDesc: "Dry Skin + Rain Dish + Grass resistances; ignores Neutralization/Royal Decree.",
 	},
 	pendulumswing: {
 		name: "Pendulum Swing",
