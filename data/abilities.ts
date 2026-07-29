@@ -4683,13 +4683,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) {
+			if (move.flags['sound']) {
 				if (this.field.isTerrain(['caveterrain', 'volcanicterrain', 'crystalcavernterrain'])) return this.chainModify(2);
 				if (this.field.isTerrain(['mountainterrain', 'snowymountainterrain'])) return this.chainModify(1.5);
-				return this.chainModify(1.2);
+				return this.chainModify(1.5);
 			}
 		},
-		flags: { breakable: 1 },
+		onAnyTryHit(target, source, move) {
+			const pokemon = this.effectState.target;
+			if (!target || !source || !move.flags['sound'] || move.category === 'Status') return;
+			if (source.isAlly(pokemon) && target.isAlly(pokemon) && target !== source) {
+				this.add('-immune', target, '[from] ability: Echo Fiend');
+				return null;
+			}
+		},
+		flags: { cantsuppress: 1 },
 		name: "Echo Fiend",
 		rating: 4,
 		num: 10006,
@@ -11948,6 +11956,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move, attacker, defender) {
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
+			if (attacker.species.id === 'aegislashgmax') return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
 			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) {
