@@ -1,5 +1,18 @@
 /* eslint-disable @stylistic/max-len */
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	shadowforceguard: {
+		name: 'Shadow Force Guard',
+		duration: 2,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Shadow Force Guard');
+		},
+		onDamage(damage, target, source, effect) {
+			return this.modify(damage, 0.7);
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Shadow Force Guard');
+		},
+	},
 	stellarhealing: {
 		name: 'Stellar Healing',
 		onResidualOrder: 9,
