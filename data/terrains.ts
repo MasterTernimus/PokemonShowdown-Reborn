@@ -2088,10 +2088,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyMove(move) {
-				const waterpoisonMoves = ['mudbomb', 'mudshot', 'mudslap', 'thousandwaves'];
+				const waterpoisonMoves = ['mudbomb', 'mudshot', 'thousandwaves'];
 				if (move.type === 'Water' || waterpoisonMoves.includes(move.id)) {
 					move.types = ['Water', 'Poison'];
 					move.type = 'Water';
+				}
+				if (move.id === 'mudslap') {
+					move.type = 'Water';
+					delete move.types;
 				}
 				if (move.id === 'smackdown' || move.id === 'appleacid') {
 					move.types = [move.type, 'Poison'];

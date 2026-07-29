@@ -4380,8 +4380,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mudslap: {
 		name: "Mud-Slap",
-		desc: "Has a 100% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "100% chance to lower the target's accuracy by 1.",
+		desc: "Hits two to five times. On Murkwater Surface, this move becomes Water type.",
+		shortDesc: "Hits 2-5 times. Water type on Murkwater Surface.",
 	},
 	mudsport: {
 		name: "Mud Sport",
