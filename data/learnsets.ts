@@ -1258,6 +1258,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			poisongas: ["9M"],
 			poisonpowder: ["9L14", "8L12", "8V", "7L13", "7V", "6L12", "5L12", "4L12", "3L13"],
 			pollenpuff: ["9M", "8M"],
+			powder: ["9M"],
 			protect: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			psybeam: ["9L24", "8L16", "8V", "7L17", "7V", "6L24", "5L24", "4L24", "3L34"],
 			psychic: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M", "3S0"],
@@ -45781,6 +45782,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			leechseed: ["9L1", "8L1"],
 			magicalleaf: ["9L28", "8M", "8L1", "7L1", "6L1", "5L1", "4L1"],
 			megadrain: ["9L13", "8L1", "7L1", "6L1", "5L1", "4L1"],
+			metronome: ["9M"],
 			mimic: ["9M"],
 			mortalspin: ["9M"],
 			mudslap: ["9M", "4T"],
@@ -50905,6 +50907,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		learnset: {
 			astonish: ["9L4", "8L1"],
 			attract: ["9M", "8M", "7M", "6M", "5M", "4M", "3M"],
+			auroraveil: ["9M"],
 			avalanche: ["9M", "8M", "4M"],
 			bite: ["9L10", "8L35", "7L19", "6L1", "5L1", "4L1", "3L1"],
 			blizzard: ["9L53", "8M", "8L68", "7M", "7L48", "6M", "6L48", "5M", "5L51", "4M", "4L51", "3M", "3L53"],

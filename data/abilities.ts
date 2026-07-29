@@ -730,10 +730,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
 			let modifier = 1;
-			if (['garchompbattlebond', 'greninjaash'].includes(source.species.id) && source.hasType(move.type)) {
-				this.debug('Battle Bond same-type boost');
-				modifier *= 1.3;
-			}
 			if (target?.hasAbility(['royaldecree', 'neutralization'])) {
 				this.debug('Battle Bond authority breaker boost');
 				modifier *= 1.3;
@@ -3628,13 +3624,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.activeTurns) return;
 			const lastMove = pokemon.lastMove?.id;
 			if (lastMove === 'spitup' || lastMove === 'swallow') return;
-			if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) pokemon.addVolatile('stockpile', pokemon);
+			if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) {
+				pokemon.addVolatile('stockpile', pokemon);
+				if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) return;
+			}
 			const target = this.sample(pokemon.foes().filter(foe => !foe.fainted));
-			if (target) this.actions.useMove('belch', pokemon, { target });
+			if (target) {
+				pokemon.abilityState.accumulationBelchTarget = target;
+				this.actions.useMove('belch', pokemon, { target });
+				pokemon.abilityState.accumulationBelchTarget = null;
+			}
 		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (move.id !== 'belch' || !target || target.fainted) return;
-			this.actions.useMove('spitup', source, { target });
+		onAfterMove(source, target, move) {
+			if (move.id !== 'belch') return;
+			const canRelease = source.abilityState.accumulationSwallowBelch || (source.volatiles['stockpile']?.layers || 0) >= 3;
+			source.abilityState.accumulationSwallowBelch = false;
+			if (!canRelease) return;
+			const spitTarget = source.abilityState.accumulationBelchTarget || target;
+			source.abilityState.accumulationBelchTarget = null;
+			if (!spitTarget || spitTarget.fainted) return;
+			this.actions.useMove('spitup', source, { target: spitTarget });
 		},
 		flags: { breakable: 1 },
 		name: "Accumulation",
@@ -5211,22 +5220,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 138,
 	},
 	falsedevotion: {
-		onBeforeMove(pokemon, target, move) {
-			if (!target || target === pokemon || target.isAlly(pokemon)) return;
-			pokemon.abilityState.falseDevotionTarget = target;
-			pokemon.abilityState.falseDevotionStatus = target.status;
-			pokemon.abilityState.falseDevotionConfusion = !!target.volatiles['confusion'];
-		},
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.category === 'Status' && target && target !== pokemon && !target.isAlly(pokemon)) {
-				return priority + 1;
-			}
+			if (move?.category === 'Status') return priority + 1;
+		},
+		onCheckShow(pokemon) {
+			return !!pokemon.status;
+		},
+		onSwitchOut(pokemon) {
+			pokemon.cureStatus();
 		},
 		onModifyMovePriority: -2,
 		onModifyMove(move) {
-			if (move.flags['charge']) delete move.flags['charge'];
-			if (move.id === 'grasswhistle') move.accuracy = 70;
-			if (typeof move.accuracy === 'number') move.accuracy *= 1.1;
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
@@ -5234,26 +5238,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (move.self?.chance) move.self.chance *= 2;
-		},
-		onAfterMove(pokemon, target, move) {
-			const storedTarget = pokemon.abilityState.falseDevotionTarget;
-			if (!storedTarget || storedTarget !== target || target.fainted) return;
-			const oldStatus = pokemon.abilityState.falseDevotionStatus;
-			const oldConfusion = pokemon.abilityState.falseDevotionConfusion;
-			delete pokemon.abilityState.falseDevotionTarget;
-			delete pokemon.abilityState.falseDevotionStatus;
-			delete pokemon.abilityState.falseDevotionConfusion;
-			const inflictedStatus = !oldStatus && ['psn', 'tox', 'slp', 'par'].includes(target.status);
-			const inflictedConfusion = !oldConfusion && !!target.volatiles['confusion'];
-			if (inflictedStatus || inflictedConfusion) {
-				this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon, this.effect);
-			}
-		},
-		onCheckShow(pokemon) {
-			return !!pokemon.status;
-		},
-		onSwitchOut(pokemon) {
-			pokemon.cureStatus();
 		},
 		flags: {},
 		name: "False Devotion",
@@ -5346,6 +5330,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10022,
 	},
 	blazingmane: {
+		onStart(pokemon) {
+			if (this.field.isTerrain('burningterrain')) this.boost({ spe: 1 }, pokemon, pokemon);
+		},
+		onTerrainChange(pokemon) {
+			if (this.field.isTerrain('burningterrain')) this.boost({ spe: 1 }, pokemon, pokemon);
+		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
 			let modifier = 1;
@@ -8394,6 +8384,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure', '[silent]');
 			pokemon.clearStatus();
+			this.heal(pokemon.baseMaxhp / 3, pokemon, pokemon);
 
 			// only reset .showCure if it's false
 			// (once you know a Pokemon has Natural Cure, its cures are always known)
@@ -11760,12 +11751,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
-		onSourceDamagingHit(damage, target, source, move) {
-			if (move.category === 'Status') return;
-			const gmaxTarget = target.volatiles['dynamax'] && (target.gigantamax || target.species.forme?.includes('Gmax'));
-			const drain = gmaxTarget ? 0.6 : 0.3;
-			this.heal(Math.min(Math.floor(damage * drain), Math.floor(source.baseMaxhp / 3)), source, source);
-		},
 		onTryHit(target, source, move) {
 			if (target !== source && this.movehasType(move, 'Poison')) {
 				if (!this.boost({ atk: 1, spa: 1 }, target, target)) {
@@ -11937,10 +11922,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	stamina: {
 		onDamagingHit(damage, target, source, effect) {
 			if (!source || target.isAlly(source)) return;
-			if (target.abilityState.staminaHitTurn === this.turn) return;
-			target.abilityState.staminaHitTurn = this.turn;
-			this.boost({ def: 1 }, target, target);
-			this.heal(target.baseMaxhp / 16, target, target);
+			if (effect.category === 'Special' && !target.abilityState.staminaSpecialHit) {
+				target.abilityState.staminaSpecialHit = true;
+				this.boost({ spd: 1 }, target, target);
+				this.heal(target.baseMaxhp / 16, target, target);
+			}
+			if (target.abilityState.staminaHitTurn !== this.turn) {
+				target.abilityState.staminaHitTurn = this.turn;
+				this.boost({ def: 1 }, target, target);
+				this.heal(target.baseMaxhp / 16, target, target);
+			}
+			if (target.hp <= target.maxhp / 2 && !target.abilityState.staminaHalfHeal) {
+				target.abilityState.staminaHalfHeal = true;
+				this.heal(target.baseMaxhp / 4, target, target);
+			}
 		},
 		flags: {},
 		name: "Stamina",

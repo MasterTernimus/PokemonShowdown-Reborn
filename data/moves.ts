@@ -632,6 +632,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
 			this.heal(source.baseMaxhp / 2, source, source);
+			target.side.addSideCondition('safeguard', source, move);
+			target.side.allySide?.addSideCondition('safeguard', source, move);
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
@@ -648,7 +650,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				if (ally.cureStatus()) success = true;
 			}
-			return success;
+			return success || this.NOT_FAIL;
 		},
 		target: "allyTeam",
 		type: "Grass",
@@ -3910,7 +3912,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					success = true;
 				}
 			}
-			return success;
+			return success || this.NOT_FAIL;
 		},
 		target: "normal",
 		type: "Flying",
@@ -9253,9 +9255,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
-		onHit(target, source) {
+		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Heal Bell');
 			this.heal(source.baseMaxhp / 2, source, source);
+			target.side.addSideCondition('safeguard', source, move);
+			target.side.allySide?.addSideCondition('safeguard', source, move);
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
@@ -11693,7 +11697,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Lucky Chant",
 		pp: 30,
-		priority: 0,
+		priority: 4,
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'luckychant',
 		condition: {
@@ -12752,21 +12756,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 40,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
-		onModifyMove(move) {
+		onHit(pokemon, source, move) {
+			const boosts: SparseBoostsTable = { spe: 1 };
+			const atk = pokemon.getStat('atk', false, true);
+			const spa = pokemon.getStat('spa', false, true);
 			if (this.field.isTerrain('psychicterrain')) {
-				move.boosts = {
-					atk: 2,
-					spa: 2,
-				};
+				boosts.atk = 2;
+				boosts.spa = 2;
+			} else if (this.field.isTerrain('rainbowterrain') || this.field.isTerrain('ashenbeachterrain')) {
+				if (atk >= spa) boosts.atk = 3;
+				else boosts.spa = 3;
+			} else {
+				if (atk >= spa) boosts.atk = 1;
+				else boosts.spa = 1;
 			}
-			if (this.field.isTerrain('rainbowterrain') || this.field.isTerrain('ashenbeachterrain')) {
-				move.boosts = {
-					atk: 3,
-				};
-			}
-		},
-		boosts: {
-			atk: 1,
+			this.boost(boosts, pokemon, pokemon, move);
 		},
 		target: "self",
 		type: "Psychic",
@@ -13088,6 +13092,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
+				const foe = this.sample(pokemon.foes().filter(foe => !foe.fainted));
+				const shouldFocus = foe && (pokemon.hasAbility('serenegrace') || pokemon.hp <= pokemon.maxhp / 4) &&
+					this.randomChance(3, 4);
+				if (shouldFocus) {
+					const focusedMoves = moves.filter(move => {
+						if (move.category === 'Status' || !move.basePower || move.basePower < 90) return false;
+						const activeMove = this.dex.getActiveMove(move.id);
+						if (!foe.runImmunity(activeMove)) return false;
+						return foe.runEffectiveness(activeMove) > 0;
+					});
+					if (focusedMoves.length) moves = focusedMoves;
+				}
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
@@ -15306,16 +15322,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, powder: 1 },
 		volatileStatus: 'powder',
 		condition: {
-			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'Powder');
+				this.add('-start', target, 'Powder');
 			},
 			onTryMovePriority: -1,
 			onTryMove(pokemon, target, move) {
 				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'move: Powder');
-					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
+					for (const active of pokemon.side.active) {
+						if (active?.hp) this.damage(this.clampIntRange(Math.round(active.maxhp / 4), 1), active, this.effectState.source);
+					}
 					this.attrLastMove('[still]');
+					pokemon.removeVolatile('powder');
 					return false;
 				}
 			},
@@ -16280,7 +16298,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		self: {
-			boosts: { atk: 1 },
+			onHit(source) {
+				if (source.hurtThisTurn) this.boost({ atk: 1 }, source, source);
+			},
 		},
 		target: "normal",
 		type: "Dark",
@@ -16538,7 +16558,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
+			if (attacker.side.sideConditions['tailwind']) {
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+				return;
+			}
 			this.add('-prepare', attacker, move.name);
+			attacker.side.addSideCondition('tailwind', attacker, move);
 			if (this.field.isTerrain('mountainterrain') || this.field.isWeather('deltastream') || this.field.isTerrain('grassyterrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
@@ -16683,8 +16709,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onHit(pokemon) {
-			if (['', 'slp', 'frz'].includes(pokemon.status)) return false;
-			pokemon.cureStatus();
+			if (pokemon.status) {
+				pokemon.cureStatus();
+				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+				return;
+			}
+			this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		},
 		target: "self",
 		type: "Normal",
@@ -17408,18 +17438,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Safeguard",
-		pp: 25,
-		priority: 0,
+		pp: 8,
+		priority: 2,
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'safeguard',
 		condition: {
-			duration: 5,
-			durationCallback(target, source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Safeguard');
-					return 7;
-				}
-				return 5;
+			duration: 3,
+			durationCallback(target, source) {
+				if (source?.hasAbility('invigorate')) return 5;
+				return 3;
 			},
 			onSetStatus(status, target, source, effect) {
 				if (!effect || !source) return;
@@ -17441,16 +17468,38 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return null;
 				}
 			},
-			onSideStart(side, source) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-sidestart', side, 'Safeguard', '[persistent]');
-				} else {
-					this.add('-sidestart', side, 'Safeguard');
+			onTryBoost(boost, target, source, effect) {
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if (!source || target === source) return;
+				let showMsg = false;
+				let i: BoostID;
+				for (i in boost) {
+					if (boost[i]! < 0) {
+						delete boost[i];
+						showMsg = true;
+					}
 				}
+				if (showMsg && !(effect as ActiveMove).secondaries) {
+					this.add('-activate', target, 'move: Safeguard');
+				}
+			},
+			onSourceModifyDamage(damage, source, target, move) {
+				if (target.side === this.effectState.target && move.category !== 'Status') return this.chainModify(0.9);
+			},
+			onSideStart(side, source) {
+				this.add('-sidestart', side, 'Safeguard');
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 3,
+			onSideResidual(side) {
+				for (const pokemon of side.active) {
+					if (pokemon?.hp) this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+				}
+			},
 			onSideEnd(side) {
+				for (const pokemon of side.active) {
+					if (pokemon?.hp) this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+				}
 				this.add('-sideend', side, 'Safeguard');
 			},
 		},
@@ -19876,6 +19925,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, metronome: 1 },
+		onModifyMove(move, pokemon) {
+			if ((pokemon.volatiles['stockpile']?.layers || 0) >= 3) {
+				move.breaksProtect = true;
+				(move as any).spitUpBreaksProtect = true;
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if ((move as any).spitUpProtectedTargets?.includes(target)) return this.chainModify(0.5);
+		},
 		onTry(source) {
 			return !!source.volatiles['stockpile'];
 		},
@@ -20338,6 +20396,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (this.effectState.def !== this.effectState.layers * -1 || this.effectState.spd !== this.effectState.layers * -1) {
 					this.hint("In Gen 7, Stockpile keeps track of how many times it successfully altered each stat individually.");
 				}
+			},
+			onResidualOrder: 6,
+			onResidual(pokemon) {
+				this.heal(pokemon.baseMaxhp * this.effectState.layers / 16, pokemon, pokemon);
 			},
 		},
 		target: "self",
@@ -20975,14 +21037,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(pokemon) {
 			const healAmount = [0.25, 0.5, 1];
 			let modifier = 1;
+			if (pokemon.volatiles['stockpile'].layers === 3) {
+				pokemon.cureStatus();
+			}
 			if (this.field.isTerrain('wastelandterrain')) {
 				modifier *= 2;
-				if (pokemon.volatiles['stockpile'].layers === 3) {
-					pokemon.cureStatus();
-				}
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp * modifier, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			if (!success) this.add('-fail', pokemon, 'heal');
+			if (pokemon.hasAbility('accumulation')) {
+				const target = this.sample(pokemon.foes().filter(foe => !foe.fainted));
+				if (target) {
+					pokemon.abilityState.accumulationSwallowBelch = true;
+					pokemon.abilityState.accumulationBelchTarget = target;
+					this.actions.useMove('belch', pokemon, { target });
+					pokemon.abilityState.accumulationSwallowBelch = false;
+					pokemon.abilityState.accumulationBelchTarget = null;
+				}
+			}
 			pokemon.removeVolatile('stockpile');
 			return success || this.NOT_FAIL;
 		},
@@ -21317,11 +21389,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
+				const baseDuration = effect?.id === 'razorwind' ? 2 : 4;
 				if (source?.hasAbility('persistent') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 6;
 				}
-				return 4;
+				return baseDuration;
 			},
 			onSideStart(side, source) {
 				if (source?.hasAbility('persistent')) {
@@ -22594,9 +22667,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	triplekick: {
 		num: 167,
 		accuracy: 90,
-		basePower: 10,
+		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
-			return 10 * move.hit;
+			return 20 * move.hit;
 		},
 		category: "Physical",
 		name: "Triple Kick",
@@ -23165,17 +23238,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [3, 5],
 		onModifyMove(move, pokemon) {
+			const isAshGreninja = pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed;
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.basePower = 20;
 				move.multihit = [3, 7];
 				(move as any).shadowCurrentExtraHit = true;
-			} else if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed) {
+			} else if (isAshGreninja) {
 				move.basePower = 30;
 			}
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.willCrit = true;
-			} else if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed) {
+			} else if (isAshGreninja) {
 				move.multihit = 3;
 				move.willCrit = true;
 			}

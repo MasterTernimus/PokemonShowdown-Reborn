@@ -165,8 +165,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, this Pokemon's moves deal 1.3x damage if they match its typing, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization.",
-		shortDesc: "Heals 1/16; Bond form same-type moves 1.3x; resists Fighting Clause abilities.",
+		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. When this Pokemon knocks out another Pokemon, it transforms into its Bond form, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization.",
+		shortDesc: "Heals 1/16; Bond form KO heals; resists Fighting Clause abilities.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -976,8 +976,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	falsedevotion: {
 		name: "False Devotion",
-		desc: "This Pokemon has Serene Grace and Natural Cure's effects. Status moves used by this Pokemon have +1 priority if they target an opposing Pokemon. If this Pokemon successfully poisons, badly poisons, puts to sleep, paralyzes, or confuses a target, it restores 1/8 of its max HP.",
-		shortDesc: "Serene Grace + Natural Cure. Foe-targeting status moves +1 priority; status/confuse heals 1/8.",
+		desc: "This Pokemon has Serene Grace, Natural Cure, and Prankster's effects.",
+		shortDesc: "Built-in Serene Grace, Natural Cure, and Prankster.",
 	},
 	firemane: {
 		name: "Fire Mane",
@@ -986,8 +986,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	blazingmane: {
 		name: "Blazing Mane",
-		desc: "This Pokemon has Fire Mane's effect. Its damaging moves hit twice, and the second hit deals 30% of the original damage and can trigger additional secondary effects. If this Pokemon has 1/4 or less of its max HP, its Fire-type attacks have +1 priority.",
-		shortDesc: "Fire 1.5x; damaging moves hit twice, second hit 30%; low HP Fire attacks +1 priority.",
+		desc: "This Pokemon has Fire Mane's effect. Its Speed is raised by 1 stage on entry if Burning Terrain is active, and whenever Burning Terrain starts while it is active. Its damaging moves hit twice, and the second hit deals 30% of the original damage and can trigger additional secondary effects. If this Pokemon has 1/4 or less of its max HP, its Fire-type attacks have +1 priority.",
+		shortDesc: "Fire 1.5x; +1 Spe on Burning Terrain; damaging moves hit twice; low HP Fire +1 priority.",
 	},
 	flashfire: {
 		name: "Flash Fire",
@@ -1673,7 +1673,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	naturalcure: {
 		name: "Natural Cure",
-		shortDesc: "This Pokemon has its non-volatile status condition cured when it switches out.",
+		desc: "This Pokemon has its non-volatile status condition cured when it switches out. If a status is cured this way, it restores 1/3 of its maximum HP.",
+		shortDesc: "On switch out, cures status and heals 1/3 max HP if cured.",
 
 		activate: "  ([POKEMON] is cured by its Natural Cure!)",
 	},
@@ -2469,8 +2470,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "This Pokemon takes 0.9x damage from attacks and 0.75x additional damage from Fire- and Ice-type attacks, is immune to hail damage, and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
-		shortDesc: "Takes 0.9x; extra 0.75x Fire/Ice; heals/drains; Giga Drain 2x; absorbs Poison.",
+		desc: "This Pokemon takes 0.9x damage from attacks and 0.75x additional damage from Fire- and Ice-type attacks, is immune to hail damage, and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
+		shortDesc: "Takes 0.9x; extra 0.75x Fire/Ice; heals; Giga Drain 2x; absorbs Poison.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
@@ -2511,7 +2512,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stamina: {
 		name: "Stamina",
-		shortDesc: "Once per turn, enemy hits raise Defense by 1 and heal 1/16 max HP.",
+		shortDesc: "Enemy hits raise Def + heal 1/16 once/turn; first special hit raises SpD + heals; first below-half hit heals 25%.",
 	},
 	stancechange: {
 		name: "Stance Change",
@@ -3125,8 +3126,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. It then automatically uses Belch on a random foe. This Pokemon can use Belch without eating a Berry, and when it uses Belch, it immediately follows up with Spit Up on the same target.",
-		shortDesc: "Gains Stockpile each turn, auto-Belches; Belch is followed by Spit Up.",
+		desc: "At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, it automatically uses Belch on a random foe, then follows up with Spit Up on the same target even if Belch is immune or otherwise deals no damage. If this Pokemon uses Swallow, it also uses Belch and then Spit Up before its Stockpile stacks are cleared. This Pokemon can use Belch without eating a Berry.",
+		shortDesc: "Auto-builds Stockpile; at 3 or after Swallow, Belch follows with Spit Up.",
 	},
 	invigorate: {
 		name: "Invigorate",

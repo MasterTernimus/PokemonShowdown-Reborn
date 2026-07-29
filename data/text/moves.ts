@@ -201,8 +201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromatherapy: {
 		name: "Aromatherapy",
-		desc: "The user restores 1/2 of its maximum HP. Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Sap Sipper Ability are not cured, unless they are the user.",
-		shortDesc: "Heals the user 50% and cures the user's party of status.",
+		desc: "The user restores 1/2 of its maximum HP, applies Safeguard to its side, and cures every Pokemon in the user's party of its non-volatile status condition. Active Pokemon with the Sap Sipper Ability are not cured, unless they are the user.",
+		shortDesc: "Heals 50%, applies Safeguard, and cures party status.",
 		gen5: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
 		},
@@ -2926,8 +2926,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healbell: {
 		name: "Heal Bell",
-		desc: "The user restores 1/2 of its maximum HP. Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
-		shortDesc: "Heals the user 50% and cures the user's party of status.",
+		desc: "The user restores 1/2 of its maximum HP, applies Safeguard to its side, and cures every Pokemon in the user's party of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
+		shortDesc: "Heals 50%, applies Safeguard, and cures party status.",
 		gen7: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured.",
 		},
@@ -3711,8 +3711,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	luckychant: {
 		name: "Lucky Chant",
-		desc: "For 4 turns, the user and its party members cannot be struck by a critical hit and their moves have +1 critical hit ratio. Fails if the effect is already active on the user's side.",
-		shortDesc: "4 turns: blocks crits; user's side gets +crit.",
+		desc: "This move has +4 priority. For 4 turns, the user and its party members cannot be struck by a critical hit and their moves have +1 critical hit ratio. Fails if the effect is already active on the user's side.",
+		shortDesc: "+4 priority. 4 turns: blocks crits; user's side gets +crit.",
 
 		start: "  Lucky Chant shielded [TEAM] from critical hits!",
 		end: "  [TEAM]'s Lucky Chant wore off!",
@@ -3994,8 +3994,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	meditate: {
 		name: "Meditate",
-		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Raises the user's Attack by 1.",
+		desc: "Raises the user's Speed and higher offensive stat by 1 stage. In Psychic Terrain, raises Attack and Special Attack by 2 stages and Speed by 1 stage. In Rainbow Terrain or Ashen Beach Terrain, raises the user's higher offensive stat by 3 stages and Speed by 1 stage.",
+		shortDesc: "Raises Speed and the user's higher attacking stat.",
 	},
 	mefirst: {
 		name: "Me First",
@@ -4098,8 +4098,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	metronome: {
 		name: "Metronome",
-		desc: "A random move is selected for use, other than After You, Apple Acid, Armor Cannon, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Blazing Torque, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Chilling Water, Chilly Reception, Clangorous Soul, Collision Course, Combat Torque, Comeuppance, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Doodle, Double Iron Bash, Double Shock, Dragon Ascent, Dragon Energy, Drum Beating, Dynamax Cannon, Electro Drift, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fillet Away, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyper Drill, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jet Punch, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Magical Torque, Make It Rain, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Noxious Torque, Obstruct, Order Up, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Population Bomb, Pounce, Power Shift, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Fist, Rage Powder, Raging Bull, Raging Fury, Relic Song, Revival Blessing, Ruination, Salt Cure, Secret Sword, Shed Tail, Shell Trap, Silk Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Snowscape, Spectral Thief, Spicy Extract, Spiky Shield, Spirit Break, Spotlight, Springtide Storm, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Tera Starstorm, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Tidy Up, Trailblaze, Transform, Trick, Twin Beam, V-create, Wicked Blow, Wicked Torque, or Wide Guard.",
-		shortDesc: "Picks a random move.",
+		desc: "A random move is selected for use. If the user has Serene Grace or has 1/4 HP or less, it has a high chance to prefer powerful damaging moves that are super effective against a random foe, but it can still choose a completely random move.",
+		shortDesc: "Picks a random move; low HP/Serene Grace favors strong SE moves.",
 		gen8: {
 			desc: "A random move is selected for use, other than After You, Apple Acid, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Clangorous Soul, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Double Iron Bash, Dragon Ascent, Dragon Energy, Dragon Hammer, Drum Beating, Dynamax Cannon, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Obstruct, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spirit Break, Spotlight, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Transform, Trick, V-create, Wicked Blow, or Wide Guard.",
 		},
@@ -4820,10 +4820,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powder: {
 		name: "Powder",
-		desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect does not happen if the Fire-type move is prevented by Primordial Sea.",
-		shortDesc: "If using a Fire move, target loses 1/4 max HP.",
+		desc: "The target is covered in powder. If it later tries to use a Fire-type move, the move is prevented and each active Pokemon on that target's side loses 1/4 of its maximum HP, rounded half up. This effect does not happen if the Fire-type move is prevented by Primordial Sea.",
+		shortDesc: "+1 priority. Fire move fails; active side loses 1/4 HP.",
 		gen6: {
-			desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
+			desc: "The target is covered in powder. If it later tries to use a Fire-type move, the move is prevented and each active Pokemon on that target's side loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
 		},
 
 		start: "  [POKEMON] is covered in powder!",
@@ -5100,8 +5100,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rage: {
 		name: "Rage",
-		desc: "The user lashes out with built-up anger, becoming more dangerous each time it attacks. Raises the user's Attack by 1 stage after use. If the user was hit by a damaging move before it attacks this turn, this move's power is doubled.",
-		shortDesc: "+1 Atk after use. 2x power if hit first.",
+		desc: "If the user was hit by a damaging move before it attacks this turn, this move's power is doubled and the user's Attack is raised by 1 stage after it attacks.",
+		shortDesc: "If hit before use: 2x power and +1 Atk after attacking.",
 		gen3: {
 			desc: "Once this move is used and unless the target protected itself, the user's Attack is raised by 1 stage every time it is hit by another Pokemon's attack as long as this move is chosen for use.",
 		},
@@ -5183,8 +5183,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	razorwind: {
 		name: "Razor Wind",
-		desc: "Has a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges, then hits foe(s) turn 2. High crit ratio.",
+		desc: "Has a higher chance for a critical hit. This attack charges on the first turn and executes on the second. On the charge turn, it creates Tailwind for 2 turns, with normal field interactions. If Tailwind is already active on the user's side, the move completes in one turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Charges with 2-turn Tailwind; fires immediately in Tailwind.",
 		gen4: {
 			desc: "Has a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
@@ -5268,8 +5268,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	refresh: {
 		name: "Refresh",
-		desc: "The user cures its burn, poison, or paralysis. Fails if the user is not burned, poisoned, or paralyzed.",
-		shortDesc: "User cures its burn, poison, or paralysis.",
+		desc: "The user cures its non-volatile status condition. If a status was cured, the user restores 1/4 of its maximum HP. If the user was not statused, it restores 1/8 of its maximum HP instead.",
+		shortDesc: "Cures status and heals 1/4; no status heals 1/8.",
 	},
 	relicsong: {
 		name: "Relic Song",
@@ -5496,8 +5496,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	safeguard: {
 		name: "Safeguard",
-		desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. It is removed from the user's side if the user or an ally is successfully hit by Defog. Fails if the effect is already active on the user's side.",
-		shortDesc: "For 5 turns, protects user's party from status.",
+		desc: "For 3 turns, or 5 turns if used by a Pokemon with Invigorate, the user and its party members cannot have non-volatile status conditions, confusion, or stat drops inflicted on them by other Pokemon. Pokemon on the user's side take 0.9x damage from attacks and restore 1/16 max HP each turn. When Safeguard ends, active Pokemon on the user's side restore 1/8 max HP. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. It is removed from the user's side if the user or an ally is successfully hit by Defog. Fails if the effect is already active on the user's side.",
+		shortDesc: "3 turns, Invigorate 5: status/stat-drop block, 0.9x damage, healing.",
 		gen3: {
 			desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. Fails if the effect is already active on the user's side.",
 		},
@@ -6286,8 +6286,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spitup: {
 		name: "Spit Up",
-		desc: "Power is equal to 100 times the user's Stockpile count. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
-		shortDesc: "More power with more uses of Stockpile.",
+		desc: "Power is equal to 100 times the user's Stockpile count. At 3 Stockpile counts, this move hits through protection for half damage. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
+		shortDesc: "More power with Stockpile; at 3 hits through Protect at 1/2.",
 		gen4: {
 			desc: "Power is equal to 100 times the user's Stockpile count. This move does not apply damage variance. Fails if the user's Stockpile count is 0. Unless there is no target, whether or not this move is successful the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
 		},
@@ -6387,8 +6387,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stockpile: {
 		name: "Stockpile",
-		desc: "Raises the user's Defense and Special Defense by 1 stage. The user's Stockpile count increases by 1. Fails if the user's Stockpile count is 3. The user's Stockpile count is reset to 0 when it is no longer active.",
-		shortDesc: "Raises user's Defense, Sp. Def by 1. Max 3 uses.",
+		desc: "Raises the user's Defense and Special Defense by 1 stage. The user's Stockpile count increases by 1, up to 3. At the end of each turn, the user restores 1/16 of its maximum HP for each Stockpile count. The user's Stockpile count is reset to 0 when it is no longer active.",
+		shortDesc: "Raises Def/SpD; heals 1/16 per stack each turn. Max 3.",
 		gen3: {
 			desc: "The user's Stockpile count increases by 1. Fails if the user's Stockpile count is 3. The user's Stockpile count is reset to 0 when it is no longer active.",
 			shortDesc: "Raises user's Stockpile count by 1. Max 3 uses.",
@@ -6640,8 +6640,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swallow: {
 		name: "Swallow",
-		desc: "The user restores its HP based on its Stockpile count. Restores 1/4 of its maximum HP if it's 1, 1/2 of its maximum HP if it's 2, both rounded half down, and all of its HP if it's 3. Fails if the user's Stockpile count is 0. The user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
-		shortDesc: "Heals the user based on uses of Stockpile.",
+		desc: "The user restores its HP based on its Stockpile count. Restores 1/4 of its maximum HP if it's 1, 1/2 of its maximum HP if it's 2, both rounded half down, and all of its HP if it's 3. At 3 Stockpile counts, this also cures the user's status. Fails if the user's Stockpile count is 0. The user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
+		shortDesc: "Heals by Stockpile count; at 3 also cures status.",
 		gen4: {
 			desc: "The user restores its HP based on its Stockpile count. Restores 1/4 of its maximum HP if it's 1, 1/2 of its maximum HP if it's 2, both rounded down, and all of its HP if it's 3. Fails if the user's Stockpile count is 0. The user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
 		},
@@ -7172,16 +7172,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triplekick: {
 		name: "Triple Kick",
-		desc: "Hits three times. Power increases to 20 for the second hit and 30 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
+		desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
 		shortDesc: "Hits 3 times. Each hit can miss, but power rises.",
 		gen4: {
-			desc: "Hits three times. Power increases to 20 for the second hit and 30 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
+			desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
 		gen3: {
-			desc: "Hits three times. Power increases to 20 for the second hit and 30 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits.",
+			desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits.",
 		},
 		gen2: {
-			desc: "Hits one to three times, at random. Power increases to 20 for the second hit and 30 for the third.",
+			desc: "Hits one to three times, at random. Power increases to 40 for the second hit and 60 for the third.",
 			shortDesc: "Hits 1-3 times. Power rises with each hit.",
 		},
 	},
@@ -7378,7 +7378,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watershuriken: {
 		name: "Water Shuriken",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is an Ash-Greninja with the Battle Bond Ability, this move has a power of 20 and always hits three times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user has Shadow Current, this move always crits, hits 3 to 7 times, has 90 power on the first hit, and has 20 power on later hits. If the user is an Ash-Greninja with the Battle Bond Ability, this move has 30 power, always hits three times, and always results in a critical hit. If the user is holding Loaded Dice, this move will hit 5-6 times.",
 		shortDesc: "Usually goes first. Hits 3-5 times in one turn.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
