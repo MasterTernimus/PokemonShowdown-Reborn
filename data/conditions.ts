@@ -139,9 +139,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
-				if (pokemon.hasAbility('earlybird')) {
-					pokemon.heal(pokemon.baseMaxhp / 4, pokemon);
-				}
+				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 				return;
 			}
 			this.add('cant', pokemon, 'slp');
