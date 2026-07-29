@@ -7811,7 +7811,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	requiem: {
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.basePower <= 60) {
+			if (move.basePower <= 80) {
 				this.debug('Requiem Technician boost');
 				return this.chainModify(1.5);
 			}
@@ -7822,10 +7822,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target === holder || target.isAlly(holder)) return this.modify(damage, 1.3);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!target || target.fainted || target.volatiles['perishsong']) return;
-			target.addVolatile('perishsong');
-			this.add('-start', target, 'perish3', '[silent]');
-			this.add('-activate', source, 'ability: Requiem');
+			if (target && !target.fainted && !target.volatiles['perishsong']) {
+				target.addVolatile('perishsong');
+				this.add('-start', target, 'perish3', '[silent]');
+				this.add('-activate', source, 'ability: Requiem');
+			}
+			const gmaxTarget = target.volatiles['dynamax'] && (target.gigantamax || target.species.forme?.includes('Gmax'));
+			const drain = gmaxTarget ? 0.6 : 0.3;
+			this.heal(Math.min(Math.floor(damage * drain), Math.floor(source.baseMaxhp / 3)), source, source);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source.fainted || source.volatiles['perishsong']) return;

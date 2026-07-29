@@ -1582,8 +1582,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon has Technician and Invigorate's effects, with healing increased by 1.3x. When this Pokemon faints, it creates Haunted Field for 5 turns and applies Perish Song to opposing Pokemon. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon has Perish Song applied to it.",
-		shortDesc: "Technician + 1.3x Invigorate; on faint: Haunted Field + Perish Song foes; attacks mark Perish Song.",
+		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's effects, with healing increased by 1.3x. When this Pokemon faints, it creates Haunted Field for 5 turns and applies Perish Song to opposing Pokemon. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon has Perish Song applied to it. This Pokemon restores HP from its damaging attacks like Atrocity.",
+		shortDesc: "80 BP-and-below moves 1.5x; attacks drain HP and mark Perish Song.",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
