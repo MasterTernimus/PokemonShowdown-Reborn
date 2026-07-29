@@ -19847,11 +19847,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		isNonstandard: "Past",
 		name: "Spotlight",
-		pp: 15,
+		pp: 5,
 		priority: 3,
 		flags: { protect: 1, reflectable: 1, allyanim: 1, noassist: 1, failcopycat: 1 },
 		volatileStatus: 'spotlight',
 		onModifyMove(move) {
+			if (this.gameType === 'freeforall') move.breaksProtect = true;
 			if (this.field.isTerrain('bigtopterrain')) {
 				move.boosts = {
 					atk: 1,
@@ -19872,6 +19873,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTryHit(target) {
 			if (this.activePerHalf === 1) return false;
 		},
+		onHitProtect(target, source, move) {
+			if (this.gameType === 'freeforall') return false;
+		},
 		condition: {
 			duration: 1,
 			noCopy: true, // doesn't get copied by Baton Pass
@@ -19882,7 +19886,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onAnyRedirectTarget(target, source, source2, move) {
 				const spotlightUser = this.effectState.source;
 				const spotlightTarget = this.effectState.target;
-				if (target === spotlightUser && this.validTarget(spotlightTarget, source, move.target)) {
+				if (move.hit > 1 || move.multihitType === 'hydrabond' || (move as any).spilloverDamageModifier) return;
+				if (source !== spotlightTarget && target === spotlightUser && this.validTarget(spotlightTarget, source, move.target)) {
 					this.debug("Spotlight redirected target of move");
 					return spotlightTarget;
 				}

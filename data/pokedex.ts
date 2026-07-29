@@ -2281,7 +2281,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Hypno",
 		types: ["Psychic", "Dark"],
 		baseStats: { hp: 90, atk: 70, def: 105, spa: 80, spd: 110, spe: 45 },
-		abilities: { 0: "No Guard", 1: "Neutralizing Gas", H: "Neutralization" },
+		abilities: { 0: "Pendulum Swing", 1: "Neutralizing Gas", H: "Neutralization" },
 		heightm: 1.6,
 		weightkg: 75.6,
 		color: "Yellow",

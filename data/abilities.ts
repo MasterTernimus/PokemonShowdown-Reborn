@@ -2874,6 +2874,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category === 'Status') return priority + 1;
 		},
+		onSourceHit(target, source, move) {
+			if (!target || target === source || target.isAlly(source) || target.fainted) return;
+			target.addVolatile('curse', source, this.dex.abilities.get('cursedmarionette'));
+		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!target || target === source || source.isAlly(target) || target.fainted || move.category !== 'Status') return;
 			target.addVolatile('curse', source, this.dex.abilities.get('cursedmarionette'));
@@ -10857,6 +10861,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Parasitism",
 		rating: 4,
 		num: 10021,
+	},
+	pendulumswing: {
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy === 'number') return this.chainModify(1.5);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa) {
+			return this.chainModify(1.5);
+		},
+		flags: {},
+		name: "Pendulum Swing",
+		rating: 4.5,
+		num: 10256,
 	},
 	royaldecree: {
 		onStart(pokemon) {
