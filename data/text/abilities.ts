@@ -2412,6 +2412,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon always has Dry Skin and Rain Dish's effects, is immune to powder moves, and restores 1/16 max HP at the end of each turn. It is healed by Black Sludge. This Ability cannot be suppressed or ignored and is immune to Neutralization's stat drops and Royal Decree's stat control. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
 		shortDesc: "Dry Skin + Rain Dish + powder immunity; ignores Neutralization/Royal Decree.",
 	},
+	pendulumswing: {
+		name: "Pendulum Swing",
+		desc: "This Pokemon's accuracy is multiplied by 1.5, and its Special Attack is multiplied by 1.5.",
+		shortDesc: "1.5x accuracy and 1.5x Sp. Atk.",
+	},
 	tremor: {
 		name: "Tremor",
 		desc: "On switch-in, this Pokemon summons Sandstorm. This Pokemon is immune to Ground-type moves. Sound-based moves used by this Pokemon become physical, use Attack, have 1.5x power, and ignore sound-based Ability immunities. Sound-based moves used by this Pokemon's allies have 1.5x power and use the user's higher offensive stat. This Pokemon's side is immune to its own damaging sound-based moves.",

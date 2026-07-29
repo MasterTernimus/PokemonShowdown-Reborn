@@ -6307,8 +6307,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spotlight: {
 		name: "Spotlight",
-		desc: "Until the end of the turn, single-target attacks aimed at the user are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal.",
-		shortDesc: "Moves aimed at user redirect to target this turn.",
+		desc: "Until the end of the turn, single-target attacks aimed at the user are redirected to the target. In Free-for-All battles, this move ignores Protect. It cannot make the target hit itself, and it does not redirect Hydra Bond or multi-hit follow-up attacks that chain to another target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal.",
+		shortDesc: "Moves aimed at user redirect to target; FFA ignores Protect.",
 
 		start: "#followme",
 		startFromZEffect: "#followme",
