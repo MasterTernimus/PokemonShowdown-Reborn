@@ -215,6 +215,13 @@ export class Field {
 		);
 	}
 
+	canBypassNeutralizationForTerrainChange(statusid: ID) {
+		const waterDepthTerrains = ['watersurfaceterrain', 'underwaterterrain'];
+		if (waterDepthTerrains.includes(this.terrain) && waterDepthTerrains.includes(statusid)) return true;
+		if (statusid === 'bewitchedwoodsterrain') return true;
+		return false;
+	}
+
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, ignoreNeutralization = false) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -304,7 +311,7 @@ export class Field {
 			this.battle.add('-message', 'The fields magic prevents it');
 			return false;
 		}
-		if (this.neutralizeTerrainChange()) return false;
+		if (!this.canBypassNeutralizationForTerrainChange(status.id as ID) && this.neutralizeTerrainChange()) return false;
 		const prevTerrainState = this.terrainState;
 		const zMoveTerrain = !!prevTerrainState.zMoveTerrain;
 		this.terrain = status.id;

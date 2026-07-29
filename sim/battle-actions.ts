@@ -1902,8 +1902,14 @@ export class BattleActions {
 		let ffaFollowUpAttack = false;
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
-			const spreadModifier = (move as any).fullDamageSpread || (move as any).hydraBondSpread || (move as any).parentalBondSpread ?
-				1 : this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
+			let spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
+			if ((move as any).fullDamageSpread || (move as any).parentalBondSpread) {
+				spreadModifier = 1;
+			} else if ((move as any).hydraBondSingleTargetSpread) {
+				spreadModifier = 1.3;
+			} else if ((move as any).hydraBondSpread) {
+				spreadModifier = move.hit > 1 ? 0.3 : 1;
+			}
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if ((move.multihitType === 'parentalbond' || move.multihitType === 'hydrabond') && move.hit > 1) {

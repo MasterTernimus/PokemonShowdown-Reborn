@@ -92,6 +92,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10206,
 	},
+	alchemicsurge: {
+		onStart(pokemon) {
+			this.dex.abilities.get('psychicsurge').onStart?.call(this, pokemon);
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('competitive').onAfterEachBoost?.call(this, boost, target, source, effect);
+		},
+		onModifyMove(move, source) {
+			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move, source);
+			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source);
+		},
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			return this.dex.abilities.get('hydrabond').onSourceModifySecondaries?.call(this, secondaries, target, source, move);
+		},
+		onBasePower(basePower, source, target, move) {
+			const competitiveMod = this.dex.abilities.get('competitive').onBasePower?.call(this, basePower, source, target, move);
+			const hydraMod = this.dex.abilities.get('hydrabond').onBasePower?.call(this, basePower, source, target, move);
+			return hydraMod || competitiveMod;
+		},
+		flags: {},
+		name: "Alchemic Surge",
+		rating: 5,
+		num: 10255,
+	},
 	aerilate: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
@@ -6201,16 +6225,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	hydrabond: {
 		onModifyMove(move, source) {
 			if (move.category === 'Status' || move.flags['noparentalbond'] || move.flags['charge'] ||
-				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+				move.flags['futuremove'] || move.isZ || move.isMax) return;
+			const spreadTargets = ['allAdjacent', 'allAdjacentFoes', 'foeSide'];
+			if (this.gameType !== 'freeforall' && (move.spreadHit || spreadTargets.includes(move.target))) return;
 			if (this.gameType === 'freeforall') {
+				const wasSpreadMove = move.spreadHit || spreadTargets.includes(move.target);
 				move.target = 'allAdjacentFoes';
 				(move as any).hydraBondSpread = true;
+				if (!wasSpreadMove && !move.multihit) {
+					(move as any).hydraBondSingleTargetSpread = true;
+					return;
+				}
+				move.multihitType = 'hydrabond';
 				if (move.multihit) {
 					if (Array.isArray(move.multihit)) {
 						move.multihit = [Math.max(3, move.multihit[0]), Math.max(3, move.multihit[1])];
 					} else {
 						move.multihit = Math.max(3, move.multihit);
 					}
+				} else {
+					move.multihit = 3;
 				}
 				return;
 			}
@@ -8164,7 +8198,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	neutralization: {
 		lowerOffense(target, source) {
-			if (target.hasAbility('neutralization')) return;
+			if (target.hasAbility(['neutralization', 'parasitism'])) return;
 			const boosts = target.getStat('atk', false, true) >= target.getStat('spa', false, true) ?
 				{ atk: -2, spe: -1 } : { spa: -2, spe: -1 };
 			const effect = this.dex.abilities.get('neutralization');
@@ -10746,6 +10780,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10019,
 	},
 	parasitism: {
+		onImmunity(type, pokemon) {
+			if (type === 'powder') return false;
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (target.hp > target.maxhp / 2 && typeMod > 0) return 0;
 		},
@@ -10792,6 +10829,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
+			if (move.flags['powder'] && target !== source && this.dex.getImmunity('powder', target)) {
+				this.add('-immune', target, '[from] ability: Parasitism');
+				return null;
+			}
 			if (target !== source && this.movehasType(move, 'Water')) {
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Parasitism');
@@ -10807,11 +10848,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.effectiveWeather() !== effect.id) return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 8);
+				this.heal(target.baseMaxhp / 16);
 			} else if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
 				this.damage(target.baseMaxhp / 8, target, target);
 			}
 		},
-		flags: { breakable: 1 },
+		flags: { breakable: 1, cantsuppress: 1 },
 		name: "Parasitism",
 		rating: 4,
 		num: 10021,
@@ -10829,6 +10871,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!protectedSides.size) this.add('-clearallboost');
 			for (const active of this.getAllActive()) {
 				if (protectedSides.has(active.side)) continue;
+				if (active.hasAbility('parasitism')) continue;
 				const stockpileLayers = active.volatiles['stockpile']?.layers || 0;
 				const preservedBoosts: SparseBoostsTable = {};
 				const preservePositiveBoosts = (...stats: BoostID[]) => {
@@ -10886,6 +10929,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryBoost(boost, target, source, effect) {
 			if (this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization'))) return;
+			if (target.hasAbility('parasitism')) return;
 			if (!effect || effect.id === 'royaldecree') return;
 			if (effect.id === 'stockpile' || effect.id === 'accumulation' || effect.id === 'relicinstinct' || effect.id === 'neutralization') return;
 			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
@@ -11247,7 +11291,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			let modifier = 1;
-			if (move.basePower && move.basePower < 80) modifier *= 1.5;
+			if (basePower && basePower < 80) modifier *= 1.5;
 			if (this.queue.willMove(defender) || defender.newlySwitched) modifier *= 1.3;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},

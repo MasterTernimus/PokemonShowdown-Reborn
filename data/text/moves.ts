@@ -1272,8 +1272,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	darkvoid: {
 		name: "Dark Void",
-		desc: "Causes the target to fall asleep. This move cannot be used successfully unless the user's current form, while considering Transform, is Darkrai.",
-		shortDesc: "Darkrai: Causes the foe(s) to fall asleep.",
+		desc: "Causes the target to fall asleep.",
+		shortDesc: "Causes the foe(s) to fall asleep.",
 		gen6: {
 			desc: "Causes the target to fall asleep.",
 			shortDesc: "Causes the foe(s) to fall asleep.",
@@ -5866,8 +5866,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges with +1 priority on the first turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks and restores 1/8 max HP when hit by a damaging move. When it attacks, the user restores 1/8 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "+1 charge: +Atk/Def/SpD, 0.7x damage. Hit heals 1/8.",
+		desc: "This attack charges with +4 priority on the first turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks and restores 1/8 max HP when hit by a damaging move. When it attacks, the user restores 1/8 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "+4 charge: +Atk/Def/SpD, 0.7x damage. Hit heals 1/8.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},
@@ -5880,8 +5880,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyattack: {
 		name: "Sky Attack",
-		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil. If Tailwind is active on the user's side, this move attacks immediately with 90 Base Power and an even higher critical hit ratio.",
-		shortDesc: "Charges: +Spe. Tailwind: 90 BP instant, +2 crit.",
+		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges with +4 priority on the first turn and executes at normal priority on the second turn. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil. If Tailwind is active on the user's side, this move attacks immediately with 90 Base Power and an even higher critical hit ratio.",
+		shortDesc: "+4 charge: +Spe. Tailwind: 90 BP instant, +2 crit.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},

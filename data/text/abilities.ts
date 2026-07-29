@@ -13,6 +13,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has built-in Adaptability, cannot flinch, takes half damage from priority moves, and its damaging moves hit through protection for half damage. In Trick Room, its non-priority moves act before other non-priority moves. Twineedle has double power and a 50% chance to be a critical hit; in multi battles it hits all adjacent foes once, and if only some foes protected, it focuses on foes that did not protect.",
 		shortDesc: "Adaptability; pierces Protect; no flinch; resists priority; Twineedle is empowered.",
 	},
+	alchemicsurge: {
+		name: "Alchemic Surge",
+		desc: "This Pokemon has Competitive, Psychic Surge, Hydra Bond, and Infiltrator. On entry, it sets Psychic Terrain. If any of its stats are lowered by a foe, its Sp. Atk is raised by 2 stages. Its damaging moves use Hydra Bond's effects, and its moves bypass substitutes, screens, Safeguard, and Mist.",
+		shortDesc: "Competitive + Psychic Surge + Hydra Bond + Infiltrator.",
+	},
 	aerilate: {
 		name: "Aerilate",
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
@@ -2404,8 +2409,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon always has Dry Skin's effects and restores 1/16 max HP at the end of each turn. It is healed by Black Sludge. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
-		shortDesc: "Dry Skin + 1/16 heal + Black Sludge heal + 50% spore. Above 50%: bulky immunities.",
+		desc: "This Pokemon always has Dry Skin and Rain Dish's effects, is immune to powder moves, and restores 1/16 max HP at the end of each turn. It is healed by Black Sludge. This Ability cannot be suppressed or ignored and is immune to Neutralization's stat drops and Royal Decree's stat control. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
+		shortDesc: "Dry Skin + Rain Dish + powder immunity; ignores Neutralization/Royal Decree.",
 	},
 	tremor: {
 		name: "Tremor",
@@ -2434,8 +2439,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowcurrent: {
 		name: "Shadow Current",
-		desc: "This Pokemon has Sworn Duty's effect. Before using a move, this Pokemon becomes the move's type. Its moves with less than 80 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power. This Pokemon takes 0.75x damage from attacks.",
-		shortDesc: "Sworn Duty; Protean; moves under 80 BP 1.5x; faster attacks 1.3x.",
+		desc: "This Pokemon has Sworn Duty's effect. Before using a move, this Pokemon becomes the move's type. Its moves with less than 80 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power. This Pokemon takes 0.75x damage from attacks. Water Shuriken's first hit is 90 Base Power, followed by 2 to 6 weaker hits that still receive the low-power boost.",
+		shortDesc: "Sworn Duty; Protean; <80 BP 1.5x; Water Shuriken opens at 90 BP.",
 	},
 	astralwitchcraft: {
 		name: "Astral Witchcraft",
@@ -3050,8 +3055,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hydrabond: {
 		name: "Hydra Bond",
-		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, these moves hit all enemies once at full damage.",
-		shortDesc: "Damaging moves hit 3 times; hits two/three have 30% power. FFA: hits all foes once.",
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power.",
+		shortDesc: "Damaging moves hit 3 times; hits 2/3 have 30% power. FFA: single-target hits all foes at 1.3x.",
 	},
 	hydrabreaker: {
 		name: "Hydra Breaker",

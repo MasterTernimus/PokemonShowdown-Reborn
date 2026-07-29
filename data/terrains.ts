@@ -1508,7 +1508,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return;
 				}
 				if (hauntedMoves.includes(move.id) || (move.id === 'curse' && source.types.includes('Ghost'))) {
-					if (neutralizationActive) return;
 					this.field.changeTerrain('bewitchedwoodsterrain');
 					return;
 				}
