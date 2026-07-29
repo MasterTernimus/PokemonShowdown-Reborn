@@ -637,9 +637,6 @@ export class Side {
 		if (wantsZMove && !zMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
-		if (zMove && this.choice.zMove) {
-			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
-		}
 		if (zMove) targetType = this.battle.dex.moves.get(zMove).target;
 
 		// Dynamax
@@ -805,6 +802,16 @@ export class Side {
 		}
 		if (moveSlot === undefined) {
 			throw new Error(`moveSlot should have been set by this point`);
+		}
+		const maxGimmicks = this.battle.gameType === 'freeforall' ? 3 : 2;
+		const pendingGimmicks = this.choice.actions.reduce((total, action) => {
+			return total + (action.mega ? 1 : 0) + (action.dynamax ? 1 : 0) +
+				(action.zmove ? 1 : 0) + (action.terastallize ? 1 : 0);
+		}, 0);
+		const requestedGimmicks = (mega || megax || megay || ultra ? 1 : 0) + (dynamax ? 1 : 0) +
+			(zMove ? 1 : 0) + (terastallize ? 1 : 0);
+		if (requestedGimmicks && pokemon.side.gimmickCount + pendingGimmicks + requestedGimmicks > maxGimmicks) {
+			return this.emitChoiceError(`Can't move: You don't have enough gimmick uses left`);
 		}
 
 		this.choice.actions.push({

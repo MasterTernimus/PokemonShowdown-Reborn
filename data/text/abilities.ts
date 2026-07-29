@@ -160,8 +160,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, this Pokemon's moves deal 1.3x damage if they match its typing, and knocking out a target restores 1/8 of this Pokemon's maximum HP.",
-		shortDesc: "After a KO: transforms. Bond form: same-type moves 1.3x; KO heals 1/8.",
+		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. When this Pokemon knocks out another Pokemon, it transforms into its Bond form. While transformed, this Pokemon's moves deal 1.3x damage if they match its typing, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization.",
+		shortDesc: "Heals 1/16; Bond form same-type moves 1.3x; resists Fighting Clause abilities.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -519,7 +519,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Pokemon's arrow moves ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.2x power. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
+		desc: "This Ability cannot be suppressed. This Pokemon's arrow moves ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.2x power. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
 		shortDesc: "Arrow moves ignore Ability/redirect/Protect, +2 at <=1/2 HP, hit all foes in FFA; arrow KOs fire again.",
 	},
 	eclipse: {
@@ -529,8 +529,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingstorm: {
 		name: "Raging Storm",
-		desc: "This Pokemon's attacks have Mold Breaker, remove the target's positive stat changes before damage, and ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 60% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
-		shortDesc: "Mold Breaker; attacks clear target boosts and ignore screens/boosts; KO bonus.",
+		desc: "This Ability cannot be suppressed. This Pokemon's attacks have Mold Breaker, remove the target's positive stat changes before damage, and ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 60% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
+		shortDesc: "Cannot be suppressed; Mold Breaker; attacks clear boosts/ignore screens; KO bonus.",
 	},
 	voltagevolley: {
 		name: "Voltage Volley",
@@ -539,8 +539,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vanguard: {
 		name: "Vanguard",
-		desc: "This Pokemon has Intimidate built in. Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon can only be damaged by direct attacks. Its stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and survives at 1 HP.",
-		shortDesc: "Intimidate; Extreme Speed 1.5x, may become Fire; Magic Guard; stats can't drop.",
+		desc: "This Pokemon has Intimidate built in. Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. This Pokemon heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon can only be damaged by direct attacks. Its stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and survives at 1 HP.",
+		shortDesc: "Intimidate; Extreme Speed 1.5x; drains damage; Magic Guard; stats can't drop.",
 	},
 	apexcleave: {
 		name: "Apex Cleave",
@@ -564,13 +564,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	warpath: {
 		name: "War Path",
-		desc: "This Pokemon's Attack is 1.5x while statused. Its Rock-, Fighting-, and Ground-type moves ignore Reflect, Light Screen, Aurora Veil, and defensive boosts. It cannot flinch and ignores stat increases.",
-		shortDesc: "Status Atk 1.5x; Rock/Fighting/Ground ignore screens/boosts; no flinch.",
+		desc: "This Pokemon has Overcoat's immunity to powder, Hail, and Sandstorm. Its Attack is 1.5x while statused. Its Rock-, Fighting-, and Ground-type moves ignore Reflect, Light Screen, Aurora Veil, and defensive boosts. It cannot flinch and ignores stat increases.",
+		shortDesc: "Overcoat; status Atk 1.5x; Rock/Fighting/Ground ignore screens/boosts; no flinch.",
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit, and restores 1/16 max HP at the end of each turn.",
-		shortDesc: "Moves 1.3x and bypass defenses/screens; drains up to 33%; heals 1/16.",
+		desc: "This Ability cannot be suppressed. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit, and restores 1/16 max HP at the end of each turn.",
+		shortDesc: "Cannot be suppressed; moves 1.3x and bypass defenses; drains; heals 1/16.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -609,8 +609,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	souleater: {
 		name: "Soul Eater",
-		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.7x damage to it. This Pokemon is immune to Ghost-type moves and restores 1/4 max HP when hit by one. Soul Fire cannot redirect or bypass this immunity, and this Ability cannot be ignored or suppressed by Mold Breaker-style effects.",
-		shortDesc: "One-sided No Guard; above 1/4 HP takes 0.7x; unbreakable Ghost/Soul Fire drain.",
+		desc: "This Pokemon's moves ignore accuracy checks. While this Pokemon has more than 1/4 of its maximum HP, attacks deal 0.7x damage to it. This Pokemon is immune to Ghost-type moves and restores 1/4 max HP when hit by one. Soul Fire cannot redirect or bypass this immunity. When this Pokemon faints, it creates Haunted Field for 5 turns, ignoring Neutralization. This Ability cannot be ignored or suppressed by Mold Breaker-style effects.",
+		shortDesc: "One-sided No Guard; 0.7x damage above 1/4 HP; on faint creates Haunted Field.",
 	},
 	alloycore: {
 		name: "Alloy Core",
@@ -709,8 +709,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	doomwarning: {
 		name: "Doom Warning",
-		desc: "Future Sight used by this Pokemon behaves like Perfect Foresight. This Pokemon's damaging attacks queue Future Sight on opposing targets they hit. When this Pokemon faints, Doom Desire is cast on all opposing Pokemon.",
-		shortDesc: "Attacks queue Future Sight; on faint casts Doom Desire on foes.",
+		desc: "This Pokemon has Magic Bounce. Future Sight used by this Pokemon behaves like Perfect Foresight. This Pokemon's damaging attacks queue Future Sight on opposing targets they hit. When this Pokemon faints, Doom Desire is cast on all opposing Pokemon.",
+		shortDesc: "Magic Bounce; attacks queue Future Sight; on faint casts Doom Desire on foes.",
 	},
 	perfectego: {
 		name: "Perfect Ego",
@@ -2195,8 +2195,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowtag: {
 		name: "Shadow Tag",
-		desc: "Prevents opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability. This Pokemon takes 0.75x damage from attacks.",
-		shortDesc: "Prevents foes from choosing to switch; takes 0.75x damage from attacks.",
+		desc: "Prevents opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability. This Pokemon takes 0.75x damage from attacks. When this Pokemon faints, it creates Haunted Field for 5 turns, ignoring Neutralization. This Ability cannot be suppressed.",
+		shortDesc: "Traps foes; takes 0.75x damage; on faint creates Haunted Field.",
 		gen6: {
 			desc: "Prevents adjacent opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability.",
 			shortDesc: "Prevents adjacent foes from choosing to switch unless they also have this Ability.",
@@ -3095,8 +3095,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	memoryleak: {
 		name: "Memory Leak",
-		desc: "Positive stat boosts this Pokemon would receive are passed to an adjacent ally instead.",
-		shortDesc: "Passes its positive stat boosts to an adjacent ally.",
+		desc: "This Pokemon's two-turn charge moves no longer require a charging turn. Positive stat boosts this Pokemon would receive are passed to an adjacent ally instead.",
+		shortDesc: "Skips charge turns; passes positive stat boosts to an adjacent ally.",
 	},
 	defragment: {
 		name: "Defragment",

@@ -1,6 +1,75 @@
 /* eslint-disable @stylistic/max-len */
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
+function useHigherOffensiveStat(source: Pokemon, move: ActiveMove) {
+	if (source.getStat('atk', false, true) > source.getStat('spa', false, true)) {
+		move.category = 'Physical';
+		move.overrideOffensiveStat = 'atk';
+		move.overrideDefensiveStat = 'def';
+	} else {
+		move.category = 'Special';
+		move.overrideOffensiveStat = 'spa';
+		move.overrideDefensiveStat = 'spd';
+	}
+}
+
+function getRoarOfTimeFutureMoveData() {
+	return {
+		id: 'roaroftime',
+		name: "Roar of Time",
+		accuracy: 100,
+		basePower: 160,
+		category: "Special",
+		priority: 0,
+		flags: { futuremove: 1 },
+		ignoreImmunity: { 'Fairy': true },
+		effectType: 'Move',
+		type: 'Dragon',
+		roarOfTimeFuture: true,
+		onPrepareHit(target: Pokemon, source: Pokemon, move: ActiveMove) {
+			useHigherOffensiveStat(source, move);
+		},
+		onEffectiveness(typeMod: number, target: Pokemon, type: string) {
+			if (type === 'Fairy') return -1;
+			return typeMod;
+		},
+	};
+}
+
+function queueRoarOfTimeFuture(battle: Battle, source: Pokemon, target: Pokemon) {
+	const existingFutureMove = target.side.slotConditions[target.position]['futuremove'];
+	if (existingFutureMove?.moveData?.roarOfTimeFuture) {
+		existingFutureMove.roarOfTimeQueued = (existingFutureMove.roarOfTimeQueued || 1) + 1;
+		battle.add('-start', source, 'move: Roar of Time', '[silent]');
+		battle.add('-message', `Roar of Time queued another strike after turn ${existingFutureMove.endingTurn}.`);
+		return true;
+	}
+	if (existingFutureMove) {
+		const pendingRoar = existingFutureMove.pendingRoarOfTime || {
+			source,
+			moveData: getRoarOfTimeFutureMoveData(),
+			count: 0,
+		};
+		pendingRoar.source = source;
+		pendingRoar.moveData = getRoarOfTimeFutureMoveData();
+		pendingRoar.count++;
+		existingFutureMove.pendingRoarOfTime = pendingRoar;
+		battle.add('-start', source, 'move: Roar of Time', '[silent]');
+		battle.add('-message', `Roar of Time will strike after the current delayed attack.`);
+		return true;
+	}
+	if (!target.side.addSlotCondition(target, 'futuremove', source, battle.dex.conditions.get('futuremove'))) return false;
+	Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+		move: 'roaroftime',
+		source,
+		moveData: getRoarOfTimeFutureMoveData(),
+		roarOfTimeQueued: 1,
+	});
+	battle.add('-start', source, 'move: Roar of Time');
+	battle.add('-message', `Roar of Time will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
+	return true;
+}
+
 export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	"10000000voltthunderbolt": {
 		num: 719,
@@ -8113,9 +8182,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (source.hasAbility('souleater')) {
 						pokemon.addVolatile('curse', source, this.dex.abilities.get('souleater'));
 					}
-				}
-				if (this.field.setTerrain('hauntedterrain', source, this.dex.moves.get('gmaxterror'))) {
-					this.field.terrainState.duration = 3;
 				}
 			},
 		},
@@ -16805,10 +16871,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, cantusetwice: 1 },
+		ignoreImmunity: { 'Fairy': true },
+		breaksProtect: true,
+		onModifyPriority(priority, pokemon, target, move) {
+			if (this.field.getPseudoWeather('trickroom')) return priority + 3;
+		},
+		onPrepareHit(target, source, move) {
+			useHigherOffensiveStat(source, move);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Fairy') return -1;
+			return typeMod;
+		},
 		onAfterMove(source, target, move) {
 			if (target.fainted) {
 				source.removeVolatile('mustrecharge');
 			} else {
+				if (move.hitTargets?.includes(target)) {
+					queueRoarOfTimeFuture(this, source, target);
+				}
 				target.side.removeSideCondition('tailwind');
 				this.field.removePseudoWeather('trickroom');
 				this.field.clearTerrain('terraform');
@@ -17829,6 +17910,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1 },
 		critRatio: 2,
 		breaksProtect: true,
+		onPrepareHit(target, source, move) {
+			useHigherOffensiveStat(source, move);
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -19368,14 +19452,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	spacialrend: {
 		num: 460,
-		accuracy: 95,
+		accuracy: true,
 		basePower: 100,
 		category: "Special",
 		name: "Spacial Rend",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { mirror: 1, metronome: 1 },
+		breaksProtect: true,
 		critRatio: 2,
+		tracksTarget: true,
+		onPrepareHit(target, source, move) {
+			useHigherOffensiveStat(source, move);
+		},
 		target: "normal",
 		type: "Dragon",
 		contestType: "Beautiful",

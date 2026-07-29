@@ -2663,7 +2663,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxterror: {
 		name: "G-Max Terror",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field. If used by a Pokemon with Soul Eater, each opposing Pokemon also becomes cursed. Creates Haunted Field for 3 turns.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching out, even if they have a substitute. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field. If used by a Pokemon with Soul Eater, each opposing Pokemon also becomes cursed.",
 		shortDesc: "Max BP. Traps foes; creates Haunted Field 3 turns.",
 	},
 	gmaxvinelash: {
@@ -5347,8 +5347,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roaroftime: {
 		name: "Roar of Time",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "This move uses the user's higher offensive stat between Attack and Special Attack. Fairy-type targets are hit as a resisted Dragon-type hit instead of being immune. If this move is successful and does not knock out the target, the target is also struck by Roar of Time two turns later. If a delayed Roar of Time misses, it is sent further into the future. In Trick Room, this move has +3 priority. If this move knocks out the target, the user's recharge is removed.",
+		shortDesc: "Uses user's higher offense. Non-KO queues future hit. Fairies resist. +3 in Trick Room.",
 	},
 	rockblast: {
 		name: "Rock Blast",
@@ -5681,8 +5681,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowforce: {
 		name: "Shadow Force",
-		desc: "If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. On a successful hit, the user's Attack rises by 1 stage and it takes 30% less damage from all sources on the next turn. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Disappears turn 1. On hit: +1 Atk, next turn takes 0.7x damage.",
+		desc: "This move uses the user's higher offensive stat between Attack and Special Attack. If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. On a successful hit, the user's Attack rises by 1 stage and it takes 30% less damage from all sources on the next turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Uses user's higher offense. Disappears turn 1. On hit: +1 Atk, next turn 0.7x damage.",
 		gen6: {
 			desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		},
@@ -6135,8 +6135,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spacialrend: {
 		name: "Spacial Rend",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "This move uses the user's higher offensive stat between Attack and Special Attack, does not check accuracy, breaks through protection, cannot be redirected to a different target by any effect, and has a higher chance for a critical hit.",
+		shortDesc: "Uses user's higher offense. Never misses. Ignores Protect/redirection. High crit.",
 	},
 	spark: {
 		name: "Spark",

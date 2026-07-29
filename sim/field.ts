@@ -346,7 +346,13 @@ export class Field {
 			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
 			return false;
 		}
-		if (power !== 'neutralization' && this.neutralizeTerrainChange()) return false;
+		if (power !== 'neutralization' && this.neutralizeTerrainChange()) {
+			if (this.terrainState.zMoveTerrain) {
+				this.terrainState.zMoveExpired = true;
+				this.terrainState.duration = 1;
+			}
+			return false;
+		}
 		if (power === 'mid') {
 			if (this.terrainState?.terrain_type === 'Core') {
 				const prevTerrain = this.getTerrain();

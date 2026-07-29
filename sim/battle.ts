@@ -3580,7 +3580,7 @@ export class Battle {
 			outcome = !!pokemon.canUltraBurst;
 			break;
 		case 'zMove':
-			outcome = !pokemon.side.zMoveUsed && (!pokemon.terastallized || pokemon.terastallized === 'Stellar') && !(pokemon.species.forme === 'Mega');
+			outcome = (!pokemon.terastallized || pokemon.terastallized === 'Stellar') && !(pokemon.species.forme === 'Mega');
 			break;
 		}
 		if (outcome) {
@@ -3592,8 +3592,6 @@ export class Battle {
 				pokemon.side.dynamaxUsed = true;
 			} else if (gimmick === 'Mega') {
 				pokemon.side.megaEvoCount++;
-			} else if (gimmick === 'zMove') {
-				pokemon.side.zMoveUsed = true;
 			}
 		}
 		if (this.gameType === 'freeforall' && pokemon.side.megaEvoCount >= 2) {
