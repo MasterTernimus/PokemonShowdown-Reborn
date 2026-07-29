@@ -1014,11 +1014,13 @@ export const commands: Chat.ChatCommands = {
 		if (room.tour) {
 			throw new Chat.ErrorMessage(this.tr`You can't offer ties in tournaments.`);
 		}
-		this.checkCan('roomvoice', null, room);
-		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
+		const player = battle.playerTable[user.id];
+		const isFreeForAllPlayerDraw =
+			battle.gameType === 'freeforall' && battle.players.length >= 3 && battle.players.length <= 4 && !!player;
+		if (!isFreeForAllPlayerDraw) this.checkCan('roomvoice', null, room);
+		if ((cmd === 'accepttie' || cmd === 'acceptdraw') && !battle.players.some(player => player.wantsTie)) {
 			throw new Chat.ErrorMessage(this.tr`No other player is requesting a tie right now. It was probably canceled.`);
 		}
-		const player = battle.playerTable[user.id];
 		if (!battle.players.some(curPlayer => curPlayer.wantsTie)) {
 			this.add(this.tr`${user.name} is offering a tie.`);
 			room.update();
@@ -1050,7 +1052,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 	},
-	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Requires: \u2606 @ # ~`],
+	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Requires: \u2606 @ # ~, or being a player in a 3p/4p Free-for-All battle.`],
 
 	rejectdraw: 'rejecttie',
 	rejecttie(target, room, user) {

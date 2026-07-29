@@ -3035,8 +3035,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	echofiend: {
 		name: "Echo Fiend",
-		desc: "This Pokemon is immune to sound moves. Its sound moves become Flying type and have 1.2x power.",
-		shortDesc: "Immune to sound moves; its sound moves become Flying type and have 1.2x power.",
+		desc: "This Pokemon is immune to sound moves, and this immunity cannot be suppressed. Its sound moves become Flying type and have 1.5x power. This Pokemon's side is immune to its own damaging sound-based moves.",
+		shortDesc: "Unsuppressible sound immunity; sound moves become Flying and have 1.5x power; allies avoid own sound damage.",
 	},
 	elevate: {
 		name: "Elevate",

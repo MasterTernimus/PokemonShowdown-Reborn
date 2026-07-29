@@ -2848,6 +2848,12 @@ export class Battle {
 			const species = action.pokemon.canDynamax;
 			if (species && this.useGimmick(action.pokemon, 'Gigantamax')) {
 				action.pokemon.formeChange(species, null, true);
+				const gmaxSpecies = this.dex.species.get(species);
+				const gmaxAbility = gmaxSpecies.abilities['0'];
+				if (gmaxAbility) {
+					action.pokemon.setAbility(gmaxAbility, null, null, true);
+					action.pokemon.baseAbility = toID(gmaxAbility);
+				}
 				const gmaxClearedVolatiles = [
 					'aquaring', 'attract', 'confusion', 'curse', 'disable', 'embargo', 'encore',
 					'gastroacid', 'healblock', 'leechseed', 'nightmare', 'partiallytrapped',
