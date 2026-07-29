@@ -1528,7 +1528,8 @@ export class BattleActions {
 		const item = pokemon.getItem();
 		if (!skipChecks) {
 			if (pokemon.gigantamax && pokemon.species.id === 'eeveegmax') return;
-			if (pokemon.side.zMoveUsed) return;
+			const maxGimmicks = this.battle.gameType === 'freeforall' ? 3 : 2;
+			if (pokemon.side.gimmickCount >= maxGimmicks) return;
 			if (!item.zMove) return;
 			if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
 			const moveData = pokemon.getMoveData(move);
@@ -1583,7 +1584,8 @@ export class BattleActions {
 	}
 
 	canZMove(pokemon: Pokemon) {
-		if (pokemon.side.zMoveUsed ||
+		const maxGimmicks = this.battle.gameType === 'freeforall' ? 3 : 2;
+		if (pokemon.side.gimmickCount >= maxGimmicks ||
 			(pokemon.transformed &&
 				(pokemon.species.forme === 'Mega' || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))
 		) return;
@@ -1663,6 +1665,7 @@ export class BattleActions {
 			tectonicrage: ['desertterrain', 4],
 			subzeroslammer: ['snowymountainterrain', 4],
 			continentalcrush: ['mountainterrain', 4],
+			infernooverdrive: ['burningterrain', 3],
 		};
 		const zTerrain = zTerrains[move.id];
 		if (zTerrain && move.id === 'oceanicoperetta' && this.battle.field.terrain === 'underwaterterrain') {

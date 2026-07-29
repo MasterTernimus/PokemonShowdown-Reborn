@@ -33,6 +33,26 @@ Ratings and how they work:
 
 */
 
+function isFightingClauseAbility(pokemon: Pokemon) {
+	return pokemon.hasAbility(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive', 'perfectego', 'ragingfists']);
+}
+
+function speedUpAbilityFutureSights(battle: Battle, pokemon: Pokemon, foresightFlag: 'grandmasterForesight' | 'perfectForesight') {
+	let spedUp = false;
+	for (const side of battle.sides) {
+		for (const slotConditions of side.slotConditions) {
+			const futureMove = slotConditions['futuremove'];
+			if (!futureMove || futureMove.source !== pokemon || !futureMove.moveData?.[foresightFlag]) continue;
+			const oldTurn = futureMove.endingTurn || battle.turn;
+			const newTurn = Math.max(battle.turn, oldTurn - 1);
+			if (newTurn >= oldTurn) continue;
+			futureMove.endingTurn = newTurn;
+			spedUp = true;
+		}
+	}
+	if (spedUp) battle.add('-message', `${pokemon.name}'s Future Sight countdown sped up!`);
+}
+
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	noability: {
 		isNonstandard: "Past",
@@ -582,6 +602,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (move.category === 'Status') return;
+			if (target?.hasAbility('battlebond')) return;
 			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
 				this.debug('Battle Fervor Royal Decree boost');
 				return this.chainModify(1.3);
@@ -678,6 +699,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Battle Bond same-type boost');
 				modifier *= 1.3;
 			}
+			if (target?.hasAbility(['royaldecree', 'neutralization'])) {
+				this.debug('Battle Bond authority breaker boost');
+				modifier *= 1.3;
+			}
 			if (source.species.id === 'garchompbattlebond' && (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain']) || this.queue.willMove(target) || target.newlySwitched)) {
 				this.debug('Battle Bond Ultra Instinct boost');
 				modifier *= 1.5;
@@ -685,6 +710,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
+			if (target.hasAbility('battlebond') && source && isFightingClauseAbility(source)) {
+				this.debug('Battle Bond Fighting Clause damage reduction');
+				return this.chainModify(0.7);
+			}
 			if (target.hasAbility('battlebond') && ['garchomp', 'greninjabond'].includes(target.species.id)) {
 				this.debug('Battle Bond base damage reduction');
 				return this.chainModify(0.8);
@@ -714,6 +743,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.hp <= target.maxhp / 3 || damage < target.hp) return;
 			target.abilityState.battleBondEndured = true;
 			return target.hp - 1;
+		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Battle Bond",
@@ -2139,7 +2171,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		flags: { breakable: 1 },
+		flags: { breakable: 1, cantsuppress: 1 },
 		name: "Fallen Star",
 		rating: 3.5,
 		num: 10043,
@@ -2229,7 +2261,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		flags: {},
+		flags: { cantsuppress: 1 },
 		name: "Raging Storm",
 		rating: 4.5,
 		num: 10121,
@@ -2273,6 +2305,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.abilityState.vanguardGuard === this.turn && move.category !== 'Status') return this.chainModify(0.25);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category === 'Status') return;
+			const gmaxTarget = target.volatiles['dynamax'] && (target.gigantamax || target.species.forme?.includes('Gmax'));
+			const drain = gmaxTarget ? 0.6 : 0.3;
+			this.heal(Math.min(Math.floor(damage * drain), Math.floor(source.baseMaxhp / 3)), source, source);
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') return false;
@@ -2474,6 +2512,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-message', `Grandmaster's Future Sight will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
 			}
 		},
+		onAnyFaint(fainted) {
+			const pokemon = this.effectState.target;
+			if (!pokemon || pokemon.fainted || fainted === pokemon) return;
+			speedUpAbilityFutureSights(this, pokemon, 'grandmasterForesight');
+		},
 		flags: { breakable: 1 },
 		name: "Grandmaster",
 		rating: 4,
@@ -2488,8 +2531,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (typeof accuracy !== 'number') return;
 			return this.chainModify([5325, 4096]);
 		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
+		},
 		onBasePower(basePower, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(1.3);
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (move.flags['powder'] && target !== source && this.dex.getImmunity('powder', target)) {
+				this.add('-immune', target, '[from] ability: War Path');
+				return null;
+			}
 		},
 		onModifyMove(move) {
 			if (this.movehasType(move, ['Rock', 'Fighting', 'Ground'])) {
@@ -2567,7 +2620,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		flags: {},
+		flags: { cantsuppress: 1 },
 		name: "Atrocity",
 		rating: 5,
 		num: 10126,
@@ -2667,6 +2720,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp > target.maxhp / 4) return this.chainModify(0.7);
+		},
+		onFaint(pokemon) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('souleater'), true)) {
+				this.field.terrainState.duration = 5;
+			}
 		},
 		flags: { cantsuppress: 1 },
 		name: "Soul Eater",
@@ -3212,6 +3272,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10113,
 	},
 	memoryleak: {
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (move.flags['charge']) delete move.flags['charge'];
+		},
 		onTryBoost(boost, target, source, effect) {
 			if (!target.hp || effect?.id === 'memoryleak') return;
 			const ally = target.adjacentAllies().find(pokemon => pokemon.hp && !pokemon.fainted);
@@ -3737,12 +3801,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-message', `Perfect Foresight's Future Sight will strike on turn ${hitTarget.side.slotConditions[hitTarget.position]['futuremove'].endingTurn}.`);
 			}
 		},
+		onAnyFaint(fainted) {
+			const pokemon = this.effectState.target;
+			if (!pokemon || pokemon.fainted || fainted === pokemon) return;
+			speedUpAbilityFutureSights(this, pokemon, 'perfectForesight');
+		},
 		flags: { breakable: 1 },
 		name: "Perfect Foresight",
 		rating: 5,
 		num: 10114,
 	},
 	doomwarning: {
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('magicbounce').onTryHit?.call(this, target, source, move);
+		},
+		onAllyTryHitSide(target, source, move) {
+			return this.dex.abilities.get('magicbounce').onAllyTryHitSide?.call(this, target, source, move);
+		},
 		queueDoomFutureSight(source, target) {
 			const slotCondition = target.side.slotConditions[target.position]['futuremove'];
 			if (slotCondition) {
@@ -3869,6 +3945,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (move.category === 'Status') return;
+			if (target?.hasAbility('battlebond')) return;
 			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) return this.chainModify(1.3);
 			if (target && (this.queue.willMove(target) || target.newlySwitched)) return this.chainModify(1.2);
 		},
@@ -10126,7 +10203,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target === source || move.category === 'Status') return;
 			return this.chainModify(0.75);
 		},
-		flags: {},
+		onFaint(pokemon) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('shadowtag'), true)) {
+				this.field.terrainState.duration = 5;
+			}
+		},
+		flags: { cantsuppress: 1 },
 		name: "Shadow Tag",
 		rating: 5,
 		num: 23,
@@ -12919,6 +13003,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (target?.hasAbility('battlebond')) return;
 			if (move.category !== 'Status' && !this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
 				this.debug('Ultra Ego Royal Decree boost');
 				return this.chainModify(1.3);
@@ -12996,6 +13081,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (target?.hasAbility('battlebond')) return;
 			if (target?.side.getSideCondition('reflect') || target?.side.getSideCondition('lightscreen') || target?.side.getSideCondition('auroraveil')) {
 				this.debug('Ultra Instinct screen punish');
 				return this.chainModify(2);
@@ -13075,6 +13161,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (target?.hasAbility('battlebond')) return;
 			if (this.effect.boostedField.call(this) || this.queue.willMove(target) || target.newlySwitched) {
 				this.debug('Dusk Drive boost');
 				return this.chainModify(1.5);

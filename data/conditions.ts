@@ -538,12 +538,30 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
 			const hitResult = this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
+			if (!hitResult && data.moveData?.roarOfTimeFuture) {
+				data.endingTurn = this.turn + 2;
+				this.add('-message', `${move.name} missed and was sent further into the future, to turn ${data.endingTurn}.`);
+				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
+				return;
+			}
 			if (!hitResult && data.moveData?.temporalShiftHex) {
 				data.endingTurn = this.turn + 1;
 				this.add('-message', `${move.name} failed to hit and was delayed to turn ${data.endingTurn}.`);
 				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], data);
 				return;
+			}
+			let requeuedFutureMove = false;
+			if (data.moveData?.roarOfTimeFuture && data.roarOfTimeQueued > 1) {
+				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+					...data,
+					endingTurn: this.turn + 1,
+					roarOfTimeQueued: data.roarOfTimeQueued - 1,
+				});
+				requeuedFutureMove = true;
+				this.add('-message', `${move.name} will strike again on turn ${this.turn + 1}.`);
 			}
 			if ((data.moveData?.perfectForesight || data.moveData?.grandmasterForesight || data.moveData?.temporalShiftHex) && data.perfectForesightQueued > 1) {
 				target.side.addSlotCondition(target, 'futuremove', data.source, this.dex.conditions.get('futuremove'));
@@ -552,7 +570,24 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					endingTurn: this.turn + 1,
 					perfectForesightQueued: data.perfectForesightQueued - 1,
 				});
+				requeuedFutureMove = true;
 				this.add('-message', `${move.name} will strike again on turn ${this.turn + 1}.`);
+			}
+			if (data.pendingRoarOfTime) {
+				if (requeuedFutureMove) {
+					const requeued = target.side.slotConditions[target.position]['futuremove'];
+					if (requeued) requeued.pendingRoarOfTime = data.pendingRoarOfTime;
+				} else {
+					target.side.addSlotCondition(target, 'futuremove', data.pendingRoarOfTime.source, this.dex.conditions.get('futuremove'));
+					Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+						move: 'roaroftime',
+						source: data.pendingRoarOfTime.source,
+						moveData: data.pendingRoarOfTime.moveData,
+						endingTurn: this.turn + 1,
+						roarOfTimeQueued: data.pendingRoarOfTime.count,
+					});
+					this.add('-message', `Roar of Time will strike on turn ${this.turn + 1}.`);
+				}
 			}
 			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
 				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
