@@ -18,6 +18,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Competitive, Psychic Surge, Hydra Bond, and Infiltrator. On entry, it sets Psychic Terrain. If any of its stats are lowered by a foe, its Sp. Atk is raised by 2 stages. Its damaging moves use Hydra Bond's effects, and its moves bypass substitutes, screens, Safeguard, and Mist.",
 		shortDesc: "Competitive + Psychic Surge + Hydra Bond + Infiltrator.",
 	},
+	joyride: {
+		name: "Joyride",
+		desc: "This Pokemon has Aerilate and Infiltrator's effects. Its Normal-type moves become Flying-type and have 1.2x power, and its moves bypass substitutes, screens, Safeguard, and Mist. When this Pokemon uses a damaging Flying-type move, its Attack or Speed, whichever is lower, rises by 1 stage. If this Pokemon knocks out a target with a Flying-type move, it restores 25% of its maximum HP for each target knocked out.",
+		shortDesc: "Aerilate + Infiltrator; Flying moves boost lower Atk/Spe; Flying KOs heal 25%.",
+	},
 	aerilate: {
 		name: "Aerilate",
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
@@ -2071,8 +2076,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rkssystem: {
 		name: "RKS System",
-		desc: "If this Pokemon is a Silvally memory form and is holding the matching Memory, its Ability becomes the custom effect tied to that Memory. Silvally without a Memory uses Scrappy instead.",
-		shortDesc: "Matching Silvally Memory forms gain that Memory's custom Ability.",
+		desc: "If this Pokemon is Silvally, it gains the custom effects tied to its held Memory, even if its current form does not match that Memory, and restores 1/16 of its maximum HP at the end of each turn. Silvally without a Memory uses Scrappy's effect instead.",
+		shortDesc: "Silvally gains its Memory effects and heals 1/16; no Memory gives Scrappy.",
 	},
 	rockhead: {
 		name: "Rock Head",
@@ -2469,8 +2474,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon has Shell Armor's effect and takes 0.8x damage from attacks. Its Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It restores 1/16 of its maximum HP at the end of each turn.",
-		shortDesc: "Shell Armor; takes 0.8x; launcher moves boosted; heals/drains.",
+		desc: "This Pokemon has Shell Armor's effect and ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. It takes 0.8x damage from attacks. Its Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "Shell Armor; no Steel weaknesses; takes 0.8x; launcher moves boosted; drains.",
 	},
 	calderacore: {
 		name: "Caldera Core",
@@ -2612,8 +2617,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
-		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, including its partner's side in multi battles.",
-		shortDesc: "Moves gain 10% power per fainted ally, counting partner allies in multi battles.",
+		desc: "This Pokemon has Sharpness's effect. For each fainted ally, this Pokemon's moves deal 1.1x damage and it takes 5% less damage from attacks, with no limit; in Free-for-All, fainted allies count twice. This updates even while this Pokemon is active. At 1 or more fainted allies, its Attack cannot be lowered. At 2 or more, it cannot flinch. At 3 or more, it takes 25% less damage from super effective attacks and once per battle endures at 1 HP if it would be knocked out from above half HP. At 4 or more, its Dark- and Steel-type moves ignore screens. At 5 fainted allies, it gains Magic Guard's effect and its Attack rises by 1 stage. If this Pokemon knocks out a target, it restores 1/8 max HP per target. It restores 1/16 max HP at the end of each turn and takes 10% less damage from gimmick Pokemon.",
+		shortDesc: "Sharpness; fallen allies boost/reduce damage; doubled in FFA; 5 gives Magic Guard.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
@@ -3055,13 +3060,23 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon's Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks, and its allies take 0.8x damage from attacks. While this Pokemon is active, it and its allies cannot be hit by critical hits. This Pokemon restores 1/16 max HP at the end of each turn.",
-		shortDesc: "Water 1.2x; self/allies take 0.8x; side blocks crits; 1/16 recovery.",
+		desc: "This Pokemon ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. Its Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks, and its allies take 0.8x damage from attacks. While this Pokemon is active, it and its allies cannot be hit by critical hits. This Pokemon restores 1/16 max HP at the end of each turn.",
+		shortDesc: "No Steel weaknesses; Water 1.2x; self/allies take 0.8x; side blocks crits.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power.",
 		shortDesc: "Damaging moves hit 3 times; hits 2/3 have 30% power. FFA: single-target hits all foes at 1.3x.",
+	},
+	imperialmandate: {
+		name: "Imperial Mandate",
+		desc: "At 50% HP or higher, this Pokemon's damage dealt is doubled. Below 50% HP, its Speed is doubled instead. It also deals 1.2x damage, takes 0.8x damage from attacks, and restores 1/16 max HP at the end of each turn. In Fairy Tale, Cold Eclipse, and New World, it raises Defense and Special Defense by 1 and deals 1.5x damage.",
+		shortDesc: "High HP doubles damage; low HP doubles Speed; 0.8x taken; 1/16 recovery.",
+	},
+	phantombarrage: {
+		name: "Phantom Barrage",
+		desc: "This Pokemon has Clear Body, Infiltrator, Levitate, and Hydra Bond's effects, and restores 1/16 max HP at the end of each turn. Dragon Darts and G-Max Spirit Volley use this Pokemon's higher offensive stat. In Free-for-All battles, Dragon Darts and G-Max Spirit Volley hit all opposing Pokemon twice.",
+		shortDesc: "Clear Body + Infiltrator + Levitate + Hydra Bond; heals 1/16.",
 	},
 	hydrabreaker: {
 		name: "Hydra Breaker",
@@ -3212,6 +3227,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Dusk Drive",
 		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. If it moves before the target or is in a boosted field, its attacks deal 1.5x damage. If attacked before moving, it takes 30% damage; in a boosted field, it takes 25% damage instead.",
 		shortDesc: "Heals each turn/attack; next enemy hit boosts; fast/field offense and guard.",
+	},
+	burningego: {
+		name: "Burning Ego",
+		desc: "This Pokemon has Ultra Ego, Reckless, and Moxie's effects. Its moves ignore abilities, it restores 1/16 max HP at the end of each turn, and once per turn its damaging attacks heal 1/16 max HP. After it uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP; additional hits before it attacks again heal 1/20 max HP. Recoil, crash, Explosion, Self-Destruct, and Misty Explosion are boosted by 1.2x. If this Pokemon takes recoil damage, its Attack rises by 1 stage. If it knocks out a target with a move, its Attack rises by 1 stage.",
+		shortDesc: "Ultra Ego + Reckless + Moxie; recoil damage gives +1 Atk.",
 	},
 
 	// CAP

@@ -37,6 +37,13 @@ function isFightingClauseAbility(pokemon: Pokemon) {
 	return pokemon.hasAbility(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive', 'perfectego', 'ragingfists']);
 }
 
+function removeSteelWeaknesses(typeMod: number, type: string) {
+	if (['Fire', 'Fighting', 'Ground'].includes(type)) {
+		return typeMod - 1;
+	}
+	return typeMod;
+}
+
 function speedUpAbilityFutureSights(battle: Battle, pokemon: Pokemon, foresightFlag: 'grandmasterForesight' | 'perfectForesight') {
 	let spedUp = false;
 	for (const side of battle.sides) {
@@ -135,6 +142,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Alchemic Surge",
 		rating: 5,
 		num: 10255,
+	},
+	joyride: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			this.dex.abilities.get('aerilate').onModifyType?.call(this, move, pokemon);
+		},
+		onModifyMove(move) {
+			move.infiltrates = true;
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			return this.dex.abilities.get('aerilate').onBasePower?.call(this, basePower, pokemon, target, move);
+		},
+		onAfterMove(source, target, move) {
+			if (move.category === 'Status' || !this.movehasType(move, 'Flying')) return;
+			const atk = source.getStat('atk', false, true);
+			const spe = source.getStat('spe', false, true);
+			this.boost({ [spe < atk ? 'spe' : 'atk']: 1 }, source, source);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType === 'Move' && this.movehasType(effect, 'Flying')) {
+				this.heal(source.baseMaxhp / 4 * length, source, source);
+			}
+		},
+		flags: {},
+		name: "Joyride",
+		rating: 4.5,
+		num: 10257,
 	},
 	aerilate: {
 		onModifyTypePriority: -1,
@@ -5371,6 +5406,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail') return false;
 		},
+		onTryHit(target, source, move) {
+			if (target !== source && this.movehasType(move, 'Poison')) {
+				this.add('-immune', target, '[from] ability: Fortress Shell');
+				return null;
+			}
+			if (target !== source && this.movehasType(move, 'Electric') && this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) {
+				if (!this.boost({ spa: 1, atk: 1 }, target, target)) {
+					this.add('-immune', target, '[from] ability: Fortress Shell');
+				}
+				return null;
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id === 'psn' || status.id === 'tox') {
+				this.add('-immune', target, '[from] ability: Fortress Shell');
+				return false;
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.category === 'Status') return;
+			return removeSteelWeaknesses(typeMod, type);
+		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
@@ -5381,14 +5438,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
-			}
-		},
-		onTryHit(target, source, move) {
-			if (target !== source && this.movehasType(move, 'Electric') && this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) {
-				if (!this.boost({ spa: 1, atk: 1 }, target, target)) {
-					this.add('-immune', target, '[from] ability: Fortress Shell');
-				}
-				return null;
 			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
@@ -6349,6 +6398,89 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Hydra Bond",
 		rating: 4.5,
 		num: 10000,
+	},
+	imperialmandate: {
+		checkMode(pokemon) {
+			const mode = pokemon.hp >= pokemon.maxhp / 2 ? 'power' : 'speed';
+			if (pokemon.abilityState.imperialMandateMode === mode) return;
+			pokemon.abilityState.imperialMandateMode = mode;
+			this.add('-message', mode === 'power' ?
+				'Imperial Mandate empowers its attacks!' :
+				'Imperial Mandate quickens its command!');
+		},
+		boostedField() {
+			return this.field.isTerrain(['fairytaleterrain', 'coldeclipseterrain', 'newworldterrain']);
+		},
+		onStart(pokemon) {
+			this.effect.checkMode.call(this, pokemon);
+			if (this.effect.boostedField.call(this)) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+		},
+		onTerrainChange(pokemon) {
+			if (this.effect.boostedField.call(this)) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+		},
+		onModifySpe(spe, pokemon) {
+			if (pokemon.hp < pokemon.maxhp / 2) return this.chainModify(2);
+		},
+		onBasePower(basePower, source, target, move) {
+			if (move.category === 'Status') return;
+			this.effect.checkMode.call(this, source);
+			let modifier = 1.2;
+			if (source.hp >= source.maxhp / 2) modifier *= 2;
+			if (this.effect.boostedField.call(this)) modifier *= 1.5;
+			return this.chainModify(modifier);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status') return this.chainModify(0.8);
+		},
+		onResidual(pokemon) {
+			this.effect.checkMode.call(this, pokemon);
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		flags: {},
+		name: "Imperial Mandate",
+		rating: 5,
+		num: 10258,
+	},
+	phantombarrage: {
+		onModifyMove(move, pokemon) {
+			move.infiltrates = true;
+			if (['dragondarts', 'gmaxspiritvolley'].includes(move.id)) {
+				if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+					move.category = 'Special';
+					move.overrideOffensiveStat = 'spa';
+				} else {
+					move.category = 'Physical';
+					move.overrideOffensiveStat = 'atk';
+				}
+			}
+			if (this.gameType === 'freeforall' && move.id === 'dragondarts') {
+				move.multihit = 2;
+				move.multihitType = 'hydrabond';
+				move.target = 'allAdjacentFoes';
+				delete move.flags['noparentalbond'];
+			} else {
+				this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, pokemon);
+			}
+		},
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			return this.dex.abilities.get('hydrabond').onSourceModifySecondaries?.call(this, secondaries, target, source, move);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('hydrabond').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('clearbody').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'Ground') return false;
+		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		flags: {},
+		name: "Phantom Barrage",
+		rating: 5,
+		num: 10259,
 	},
 	hydrabreaker: {
 		onModifyMove(move, source) {
@@ -9671,30 +9803,135 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	rkssystem: {
 		// RKS System's type-changing itself is implemented in statuses.js
-		onStart(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Silvally') return;
-			const memoryAbilities: { [item: string]: [string, string] } = {
-				bugmemory: ['silvallybug', 'tintedlens'],
-				darkmemory: ['silvallydark', 'pressure'],
-				dragonmemory: ['silvallydragon', 'multiscale'],
-				electricmemory: ['silvallyelectric', 'transistor'],
-				fairymemory: ['silvallyfairy', 'unaware'],
-				fightingmemory: ['silvallyfighting', 'defiant'],
-				firememory: ['silvallyfire', 'moxie'],
-				flyingmemory: ['silvallyflying', 'galewings'],
-				ghostmemory: ['silvallyghost', 'soulfire'],
-				grassmemory: ['silvallygrass', 'hospitality'],
-				groundmemory: ['silvallyground', 'sheerforce'],
-				icememory: ['silvallyice', 'icebody'],
-				poisonmemory: ['silvallypoison', 'regenerator'],
-				psychicmemory: ['silvallypsychic', 'magicbounce'],
-				rockmemory: ['silvallyrock', 'purifyingsalt'],
-				steelmemory: ['silvallysteel', 'heatproof'],
-				watermemory: ['silvallywater', 'marvelscale'],
+		memoryAbilities(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Silvally') return [];
+			const memoryAbilities: { [item: string]: string[] } = {
+				bugmemory: ['tintedlens'],
+				darkmemory: ['pressure', 'defiant'],
+				dragonmemory: ['marvelscale'],
+				electricmemory: ['transistor'],
+				fairymemory: ['invigorate', 'friendguard'],
+				fightingmemory: ['defiant'],
+				firememory: ['moxie', 'soulfire'],
+				flyingmemory: ['galewings'],
+				ghostmemory: ['soulfire', 'shadowshield'],
+				grassmemory: ['hospitality', 'chlorophyll'],
+				groundmemory: ['sandrush', 'stamina'],
+				icememory: ['icebody', 'slushrush'],
+				poisonmemory: ['regenerator', 'corrosion'],
+				psychicmemory: ['magicbounce', 'magicguard'],
+				rockmemory: ['purifyingsalt', 'solidrock'],
+				steelmemory: ['swornduty', 'mirrorarmor'],
+				watermemory: ['swiftswim', 'waterveil'],
 			};
-			const memory = memoryAbilities[pokemon.item];
-			if (!memory || pokemon.species.id !== memory[0]) return;
-			pokemon.setAbility(memory[1], pokemon, this.effect, true);
+			return memoryAbilities[pokemon.item] || ['scrappy'];
+		},
+		callMemoryAbility(pokemon, eventName, ...args) {
+			for (const abilityid of this.effect.memoryAbilities.call(this, pokemon)) {
+				const handler = this.dex.abilities.get(abilityid)[eventName];
+				const result = handler?.call(this, ...args);
+				if (result !== undefined) return result;
+			}
+		},
+		onStart(pokemon) {
+			this.effect.callMemoryAbility.call(this, pokemon, 'onStart', pokemon);
+		},
+		onSwitchOut(pokemon) {
+			this.effect.callMemoryAbility.call(this, pokemon, 'onSwitchOut', pokemon);
+		},
+		onModifyMovePriority: -5,
+		onModifyMove(move, pokemon) {
+			this.effect.callMemoryAbility.call(this, pokemon, 'onModifyMove', move, pokemon);
+		},
+		onModifySpe(spe, pokemon) {
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onModifySpe', spe, pokemon);
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onModifyPriority', priority, pokemon, target, move);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			return this.effect.callMemoryAbility.call(this, attacker, 'onModifyAtk', atk, attacker, defender, move);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, attacker, defender, move) {
+			return this.effect.callMemoryAbility.call(this, attacker, 'onModifySpA', spa, attacker, defender, move);
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onModifyDef', def, pokemon);
+		},
+		onSourceModifyAtkPriority: 5,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			return this.effect.callMemoryAbility.call(this, defender, 'onSourceModifyAtk', atk, attacker, defender, move);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			return this.effect.callMemoryAbility.call(this, defender, 'onSourceModifySpA', spa, attacker, defender, move);
+		},
+		onTryBoostPriority: 2,
+		onTryBoost(boost, target, source, effect) {
+			return this.effect.callMemoryAbility.call(this, target, 'onTryBoost', boost, target, source, effect);
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			this.effect.callMemoryAbility.call(this, target, 'onAfterEachBoost', boost, target, source, effect);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.effect.callMemoryAbility.call(this, target, 'onSetStatus', status, target, source, effect);
+		},
+		onUpdate(pokemon) {
+			this.effect.callMemoryAbility.call(this, pokemon, 'onUpdate', pokemon);
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			return this.effect.callMemoryAbility.call(this, target, 'onTryHit', target, source, move);
+		},
+		onAllyTryHitSide(target, source, move) {
+			const pokemon = this.effectState.target;
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onAllyTryHitSide', target, source, move);
+		},
+		onAnyTryHeal(damage, target, source, effect) {
+			const pokemon = this.effectState.target;
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onAnyTryHeal', damage, target, source, effect);
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			const pokemon = this.effectState.target;
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onAnyModifyDamage', damage, source, target, move);
+		},
+		onModifyDamage(damage, source, target, move) {
+			return this.effect.callMemoryAbility.call(this, source, 'onModifyDamage', damage, source, target, move);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.effect.callMemoryAbility.call(this, target, 'onSourceModifyDamage', damage, source, target, move);
+		},
+		onDeductPP(target, source) {
+			const pokemon = this.effectState.target;
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onDeductPP', target, source);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.effect.callMemoryAbility.call(this, target, 'onDamage', damage, target, source, effect);
+		},
+		onDamagingHit(damage, target, source, effect) {
+			this.effect.callMemoryAbility.call(this, target, 'onDamagingHit', damage, target, source, effect);
+		},
+		onImmunity(type, pokemon) {
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onImmunity', type, pokemon);
+		},
+		onNegateImmunity(pokemon, type) {
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onNegateImmunity', pokemon, type);
+		},
+		onFoeAfterSetStatus(status, target, source, effect) {
+			const pokemon = this.effectState.target;
+			return this.effect.callMemoryAbility.call(this, pokemon, 'onFoeAfterSetStatus', status, target, source, effect);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			this.effect.callMemoryAbility.call(this, source, 'onSourceAfterFaint', length, target, source, effect);
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			this.effect.callMemoryAbility.call(this, pokemon, 'onResidual', pokemon);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "RKS System",
@@ -11545,6 +11782,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	siegelauncher: {
 		onCriticalHit: false,
+		onTryHit(target, source, move) {
+			if (target !== source && this.movehasType(move, 'Poison')) {
+				this.add('-immune', target, '[from] ability: Siege Launcher');
+				return null;
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id === 'psn' || status.id === 'tox') {
+				this.add('-immune', target, '[from] ability: Siege Launcher');
+				return false;
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.category === 'Status') return;
+			return removeSteelWeaknesses(typeMod, type);
+		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['pulse'] || move.flags['bullet'] || move.flags['beam'] || move.flags['cannon'] || move.flags['aura']) {
@@ -12019,24 +12272,99 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 306,
 	},
 	supremeoverlord: {
-		onStart(pokemon) {
+		fallen(pokemon) {
 			const totalFainted = pokemon.side.totalFainted + (pokemon.side.allySide?.totalFainted || 0);
+			return this.gameType === 'freeforall' ? totalFainted * 2 : totalFainted;
+		},
+		isGimmick(pokemon) {
+			return !!(pokemon.gigantamax || pokemon.volatiles['dynamax'] || pokemon.species.isMega || pokemon.species.forme === 'Mega' ||
+				pokemon.terastallized || pokemon.species.forme === 'Stellar' || pokemon.species.tags.includes("Ultra Beast"));
+		},
+		onStart(pokemon) {
+			const totalFainted = this.effect.fallen.call(this, pokemon);
 			if (totalFainted) {
 				this.add('-activate', pokemon, 'ability: Supreme Overlord');
 				this.add('-start', pokemon, `fallen${totalFainted}`, '[silent]');
 				this.effectState.fallen = totalFainted;
 			}
+			if (totalFainted >= 5 && !pokemon.abilityState.supremeOverlordAttackBoosted) {
+				pokemon.abilityState.supremeOverlordAttackBoosted = true;
+				this.boost({ atk: 1 }, pokemon, pokemon);
+			}
 		},
 		onEnd(pokemon) {
-			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+			if (this.effectState.fallen) this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onAnyFaint() {
+			const pokemon = this.effectState.target;
+			if (!pokemon?.hp) return;
+			const totalFainted = this.effect.fallen.call(this, pokemon);
+			if (totalFainted !== this.effectState.fallen) {
+				if (this.effectState.fallen) this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+				this.effectState.fallen = totalFainted;
+				this.add('-activate', pokemon, 'ability: Supreme Overlord');
+				this.add('-start', pokemon, `fallen${totalFainted}`, '[silent]');
+			}
+			if (totalFainted >= 5 && !pokemon.abilityState.supremeOverlordAttackBoosted) {
+				pokemon.abilityState.supremeOverlordAttackBoosted = true;
+				this.boost({ atk: 1 }, pokemon, pokemon);
+			}
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.effectState.fallen) {
-				const multiplier = 1 + 0.1 * this.effectState.fallen;
-				this.debug(`Supreme Overlord boost: ${multiplier}x`);
-				return this.chainModify(multiplier);
+			const fallen = this.effect.fallen.call(this, attacker);
+			let modifier = 1;
+			if (fallen) {
+				modifier *= 1 + 0.1 * fallen;
+				this.debug(`Supreme Overlord boost: ${modifier}x`);
 			}
+			if (move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain')) {
+				modifier *= 1.5;
+				this.debug('Supreme Overlord Sharpness boost');
+			}
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onModifyMove(move, pokemon) {
+			const fallen = this.effect.fallen.call(this, pokemon);
+			if (fallen >= 4 && this.movehasType(move, ['Dark', 'Steel'])) move.infiltrates = true;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			if (this.effect.fallen.call(this, target) >= 1 && boost.atk && boost.atk < 0) {
+				delete boost.atk;
+				this.add("-fail", target, "unboost", "Attack", "[from] ability: Supreme Overlord", `[of] ${target}`);
+			}
+		},
+		onFlinch(pokemon) {
+			if (this.effect.fallen.call(this, pokemon) >= 2) return false;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (!move || move.category === 'Status') return;
+			const fallen = this.effect.fallen.call(this, target);
+			let modifier = Math.max(0, 1 - 0.05 * fallen);
+			if (fallen >= 3 && target.getMoveHitData(move).typeMod > 0) modifier *= 0.75;
+			if (this.effect.isGimmick.call(this, source)) modifier *= 0.9;
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onDamage(damage, target, source, effect) {
+			if (this.effect.fallen.call(this, target) >= 5) {
+				const magicGuardResult = this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
+				if (magicGuardResult !== undefined) return magicGuardResult;
+			}
+			if (effect?.effectType !== 'Move') return;
+			if (this.effect.fallen.call(this, target) < 3) return;
+			if (target.abilityState.supremeOverlordEndured) return;
+			if (target.hp <= target.maxhp / 2) return;
+			if (damage < target.hp) return;
+			target.abilityState.supremeOverlordEndured = true;
+			this.add('-activate', target, 'ability: Supreme Overlord');
+			return target.hp - 1;
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 8 * length, source, source);
+		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		flags: {},
 		name: "Supreme Overlord",
@@ -13192,6 +13520,102 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Dusk Drive",
 		rating: 4,
 		num: 10166,
+	},
+	burningego: {
+		onStart(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			this.add('-ability', pokemon, 'Burning Ego');
+			pokemon.abilityState.ultraEgoDefBoosted = false;
+			pokemon.abilityState.ultraEgoSpDBoosted = false;
+			pokemon.abilityState.ultraEgoPinch = false;
+			pokemon.abilityState.ultraEgoHitTriggered = false;
+		},
+		boostedField() {
+			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
+		},
+		healUltraEgo(pokemon, source) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.abilityState.ultraEgoPinch = true;
+				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+				return;
+			}
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		onModifyMove(move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			move.ignoreAbility = true;
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (move.category === 'Status') return;
+			let modifier = 1;
+			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
+				this.debug('Burning Ego Royal Decree boost');
+				modifier *= 1.3;
+			}
+			if (move.recoil || move.hasCrashDamage || ['explosion', 'selfdestruct', 'mistyexplosion'].includes(move.id)) {
+				this.debug('Burning Ego Reckless boost');
+				modifier *= 1.2;
+			}
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (move && move.category !== 'Status' && !this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
+				this.debug('Burning Ego Royal Decree weaken');
+				return this.chainModify(0.7);
+			}
+		},
+		onAfterMove(source, target, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (move.category !== 'Status') source.abilityState.ultraEgoHitTriggered = false;
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (!move || move.category === 'Status') return;
+			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
+			source.abilityState.ultraEgoAttackHealTurn = this.turn;
+			this.effect.healUltraEgo.call(this, source, 'attack');
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
+			if (target.abilityState.ultraEgoHitTriggered) {
+				this.heal(target.baseMaxhp / 20, target, target);
+				return;
+			}
+			target.abilityState.ultraEgoHitTriggered = true;
+			this.boost({ atk: 1, spa: 1 }, target, target);
+			if (this.effect.boostedField.call(this)) {
+				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
+					target.abilityState.ultraEgoDefBoosted = true;
+					this.boost({ def: 1 }, target, target);
+				}
+				if (move.category === 'Special' && !target.abilityState.ultraEgoSpDBoosted) {
+					target.abilityState.ultraEgoSpDBoosted = true;
+					this.boost({ spd: 1 }, target, target);
+				}
+			}
+			this.effect.healUltraEgo.call(this, target, 'hit');
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect?.id === 'recoil') {
+				this.boost({ atk: 1 }, target, target);
+			}
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType === 'Move') this.boost({ atk: length }, source, source);
+		},
+		onResidual(pokemon) {
+			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+		},
+		flags: {},
+		name: "Burning Ego",
+		rating: 4,
+		num: 10256,
 	},
 	vesselofruin: {
 		onStart(pokemon) {

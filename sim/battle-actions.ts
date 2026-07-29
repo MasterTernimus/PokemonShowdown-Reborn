@@ -1640,7 +1640,7 @@ export class BattleActions {
 				if (gMaxMove.exists && (gMaxMove.id === 'gmaxcuddle' ? move.type === 'Normal' : gMaxMove.type === move.type)) maxMove = gMaxMove;
 			}
 			if (!move.maxMove?.basePower) throw new Error(`${move.name} doesn't have a maxMove basePower`);
-			if (!['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe'].includes(maxMove.id)) {
+			if (!['gmaxdrumsolo', 'gmaxfireball', 'gmaxhydrosnipe', 'gmaxfinalverdict', 'gmaxspiritvolley'].includes(maxMove.id)) {
 				maxMove.basePower = move.maxMove.basePower;
 			}
 			maxMove.category = move.category;

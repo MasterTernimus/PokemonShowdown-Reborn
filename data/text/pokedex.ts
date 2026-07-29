@@ -2600,6 +2600,9 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	aegislashblade: {
 		name: "Aegislash-Blade",
 	},
+	aegislashgmax: {
+		name: "Aegislash-Gmax",
+	},
 	spritzee: {
 		name: "Spritzee",
 	},
@@ -3460,6 +3463,9 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	},
 	dragapult: {
 		name: "Dragapult",
+	},
+	dragapultgmax: {
+		name: "Dragapult-Gmax",
 	},
 	zacian: {
 		name: "Zacian",
