@@ -17845,6 +17845,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onAfterHit(target, source, move) {
+			this.boost({ atk: 1 }, source, source, move);
+			source.addVolatile('shadowforceguard', source, move);
+		},
 		condition: {
 			duration: 2,
 			onInvulnerability: false,
