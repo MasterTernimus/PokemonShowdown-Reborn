@@ -2700,6 +2700,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effects of Electric Terrain, Grassy Terrain, Misty Terrain, and Psychic Terrain end, the effects of Reflect, Light Screen, Aurora Veil, Safeguard, Mist, G-Max Steelsurge, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the target's side, and the effects of G-Max Steelsurge, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web end for the user's side.",
 		shortDesc: "Base move affects power. Ends Terrain, hazards.",
 	},
+	gmaxfinalverdict: {
+		name: "G-Max Final Verdict",
+		desc: "This Steel-type move has 130 Base Power. If this move is successful, all opposing Pokemon at or below 20% HP faint.",
+		shortDesc: "130 BP Steel; foes at or below 20% HP faint.",
+	},
+	gmaxspiritvolley: {
+		name: "G-Max Spirit Volley",
+		desc: "This Ghost-type move has 150 Base Power and uses the user's higher offensive stat. If this move is successful, all opposing Pokemon take damage equal to half the original damage dealt.",
+		shortDesc: "150 BP Ghost; foes take extra damage equal to half the original hit.",
+	},
 	grassknot: {
 		name: "Grass Knot",
 		desc: "This move's power is 20 if the target weighs less than 10 kg, 40 if less than 25 kg, 60 if less than 50 kg, 80 if less than 100 kg, 100 if less than 200 kg, and 120 if greater than or equal to 200 kg.",

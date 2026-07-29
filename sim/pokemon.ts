@@ -1071,6 +1071,7 @@ export class Pokemon {
 			const move = this.battle.dex.moves.get(moveSlot.id);
 			let protectMove = false;
 			if (move.volatileStatus && protectVolatiles.includes(move.volatileStatus)) protectMove = true;
+			if (this.species.id === 'aegislashgmax' && move.id === 'kingsshield') protectMove = false;
 			let actualTarget = move.target;
 			switch (moveSlot.id) {
 			case 'curse':
@@ -2036,6 +2037,7 @@ export class Pokemon {
 			omenedge: ['sharpness', 'sniper'],
 			dreadmaw: ['hugepower', 'strongjaw'],
 			cursedmarionette: ['prankster'],
+			phantombarrage: ['clearbody', 'infiltrator', 'levitate', 'hydrabond'],
 			sandsovereign: ['sandstream'],
 			frostsovereign: ['snowwarning', 'icebody'],
 			freezerburn: ['refrigerate', 'snowwarning'],
@@ -2264,7 +2266,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft', 'shadowguard']) && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft', 'shadowguard', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';

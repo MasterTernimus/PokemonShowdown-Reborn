@@ -4642,6 +4642,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.category = 'Special';
+				move.overrideOffensiveStat = 'spa';
+			} else {
+				move.category = 'Physical';
+				move.overrideOffensiveStat = 'atk';
+			}
+		},
 		fullDamageSpread: true,
 		target: "allAdjacentFoes",
 		type: "Dragon",
@@ -8360,6 +8369,68 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "adjacentFoe",
 		type: "Flying",
+		contestType: "Cool",
+	},
+	gmaxfinalverdict: {
+		num: 1000,
+		accuracy: true,
+		basePower: 130,
+		category: "Physical",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Final Verdict",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Aegislash",
+		onAfterHit(target, source, move) {
+			for (const pokemon of source.foes()) {
+				if (!pokemon.hp || pokemon.fainted) continue;
+				if (pokemon.hp <= pokemon.maxhp / 5) pokemon.faint(source, move);
+			}
+		},
+		target: "adjacentFoe",
+		type: "Steel",
+		contestType: "Cool",
+	},
+	gmaxspiritvolley: {
+		num: 1000,
+		accuracy: true,
+		basePower: 150,
+		category: "Physical",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Spirit Volley",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Dragapult",
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.category = 'Special';
+				move.overrideOffensiveStat = 'spa';
+			} else {
+				move.category = 'Physical';
+				move.overrideOffensiveStat = 'atk';
+			}
+			if (this.gameType === 'freeforall') {
+				move.multihit = 2;
+				move.multihitType = 'hydrabond';
+				move.target = 'allAdjacentFoes';
+			} else {
+				move.multihit = 3;
+				move.multihitType = 'hydrabond';
+			}
+		},
+		onAfterHit(target, source, move) {
+			if (move.hit && move.hit > 1) return;
+			if (!source.lastDamage) return;
+			const damage = Math.max(1, Math.floor(source.lastDamage / 2));
+			for (const pokemon of source.foes()) {
+				if (!pokemon.hp || pokemon.fainted) continue;
+				this.damage(damage, pokemon, source, move);
+			}
+		},
+		target: "adjacentFoe",
+		type: "Ghost",
 		contestType: "Cool",
 	},
 	grassknot: {

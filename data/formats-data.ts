@@ -3899,6 +3899,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	aegislashblade: {
 		isNonstandard: "Past",
 	},
+	aegislashgmax: {
+		isNonstandard: "Gigantamax",
+		tier: "Illegal",
+	},
 	spritzee: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -5092,6 +5096,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "OU",
 		doublesTier: "DUU",
 		natDexTier: "Uber",
+	},
+	dragapultgmax: {
+		isNonstandard: "Gigantamax",
+		tier: "Illegal",
 	},
 	zacian: {
 		tier: "Uber",

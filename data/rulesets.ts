@@ -903,12 +903,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	authorityclause: {
 		effectType: 'ValidatorRule',
 		name: 'Authority Clause',
-		desc: "Prevents teams from having more than one Pokemon with Neutralization or Royal Decree combined.",
+		desc: "Prevents teams from having more than one Pokemon with Neutralization, Royal Decree, Royal Sun, Burning Ego, or Perfect Ego combined.",
 		onBegin() {
-			this.add('rule', 'Authority Clause: Limit one Neutralization or Royal Decree user per team');
+			this.add('rule', 'Authority Clause: Limit one Neutralization, Royal Decree, Royal Sun, Burning Ego, or Perfect Ego user per team');
 		},
 		onValidateTeam(team) {
-			const limitedAbilities = new Set(['neutralization', 'royaldecree', 'royalsun']);
+			const limitedAbilities = new Set(['neutralization', 'royaldecree', 'royalsun', 'burningego', 'perfectego']);
 			const seen: string[] = [];
 			for (const set of team) {
 				const abilities = new Set<ID>();
@@ -930,7 +930,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			if (seen.length > 1) {
 				return [
-					`You are limited to one Pokemon with Neutralization or Royal Decree by Authority Clause.`,
+					`You are limited to one Pokemon with Neutralization, Royal Decree, Royal Sun, Burning Ego, or Perfect Ego by Authority Clause.`,
 					`(You have ${seen.join(', ')})`,
 				];
 			}
