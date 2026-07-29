@@ -3715,7 +3715,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	darkvoid: {
 		num: 464,
-		accuracy: 50,
+		accuracy: 80,
 		basePower: 0,
 		category: "Status",
 		name: "Dark Void",
@@ -3724,6 +3724,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		status: 'slp',
 		onModifyMove(move, source, target) {
+			if (source.species.id === 'banettemega' && source.hasAbility('cursedmarionette')) {
+				move.accuracy = 90;
+			}
 			if (target && (this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('newworldterrain') || this.field.isTerrain('coldeclipseterrain'))) {
 				move.accuracy = 100;
 			}
@@ -11814,7 +11817,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source) {
 			if (target.getTypes().join() === 'Psychic' || !target.setType('Psychic')) return false;
 			this.add('-start', target, 'typechange', 'Psychic');
-			if (this.field.setTerrain('bewitchedwoodsterrain', source, this.dex.moves.get('magicpowder'))) {
+			if (this.field.setTerrain('bewitchedwoodsterrain', source, this.dex.moves.get('magicpowder'), true)) {
 				this.field.terrainState.duration = 5;
 			}
 		},
@@ -22981,6 +22984,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 15,
 		basePowerCallback(pokemon, target, move) {
+			if (pokemon.hasAbility('shadowcurrent')) {
+				return move.hit === 1 ? 90 : 20;
+			}
 			if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') &&
 				!pokemon.transformed) {
 				return 30;
@@ -22996,7 +23002,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyMove(move, pokemon) {
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.basePower = 20;
-				move.multihit = [2, 6];
+				move.multihit = [3, 7];
 				(move as any).shadowCurrentExtraHit = true;
 			} else if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed) {
 				move.basePower = 30;
