@@ -10792,6 +10792,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'powder') return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
+			if (['Water', 'Electric', 'Grass', 'Ground'].includes(type)) return typeMod - 1;
 			if (target.hp > target.maxhp / 2 && typeMod > 0) return 0;
 		},
 		onDamagingHit(damage, target, source, move) {
