@@ -1172,6 +1172,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's weight is doubled. This effect is calculated after the effect of Autotomize, and before the effect of Float Stone.",
 		shortDesc: "This Pokemon's weight is doubled.",
 	},
+	hyperdrill: {
+		name: "Hyper Drill",
+		desc: "This Pokemon has Power Drill built in. Its Rock-type moves receive a same-type attack bonus.",
+		shortDesc: "Power Drill; Rock moves get STAB.",
+	},
 	honeygather: {
 		name: "Honey Gather",
 		shortDesc: "No competitive use.",
@@ -3061,8 +3066,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. Its Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks, and its allies take 0.8x damage from attacks. While this Pokemon is active, it and its allies cannot be hit by critical hits. This Pokemon restores 1/16 max HP at the end of each turn.",
-		shortDesc: "No Steel weaknesses; Water 1.2x; self/allies take 0.8x; side blocks crits.",
+		desc: "This Pokemon ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. Its Water-type moves have 1.2x power. This Pokemon takes 0.8x damage from attacks, and its allies take 0.8x damage from attacks. While this Pokemon is active, it and its allies cannot be hit by critical hits. This Pokemon restores 1/16 max HP at the end of each turn. Fairy Tale, New World, Cold Eclipse, and Starlight Arena give this Pokemon +1 Defense and +1 Special Defense once per active terrain.",
+		shortDesc: "No Steel weaknesses; Water 1.2x; 0.8x damage; side blocks crits; field +Def/SpD.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
@@ -3126,8 +3131,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, it automatically uses Belch on a random foe, then follows up with Spit Up on the same target even if Belch is immune or otherwise deals no damage. If this Pokemon uses Swallow, it also uses Belch and then Spit Up before its Stockpile stacks are cleared. This Pokemon can use Belch without eating a Berry.",
-		shortDesc: "Auto-builds Stockpile; at 3 or after Swallow, Belch follows with Spit Up.",
+		desc: "This Pokemon has Thick Fat's effect and is immune to sandstorm and hail damage. At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, it automatically uses Belch on a random foe, then follows up with Spit Up on the same target even if Belch is immune or otherwise deals no damage. If this Pokemon uses Swallow, it also uses Belch and then Spit Up before its Stockpile stacks are cleared. This Pokemon can use Belch without eating a Berry.",
+		shortDesc: "Thick Fat; sand/hail immune. Auto-builds Stockpile; at 3 or after Swallow, Belch -> Spit Up.",
 	},
 	invigorate: {
 		name: "Invigorate",

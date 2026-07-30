@@ -8384,6 +8384,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {},
 		isMax: "Aegislash",
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.category = 'Special';
+				move.overrideOffensiveStat = 'spa';
+			} else {
+				move.category = 'Physical';
+				move.overrideOffensiveStat = 'atk';
+			}
+		},
 		onAfterHit(target, source, move) {
 			for (const pokemon of source.foes()) {
 				if (!pokemon.hp || pokemon.fainted) continue;
@@ -17438,7 +17447,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Safeguard",
-		pp: 8,
+		pp: 5,
 		priority: 2,
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'safeguard',
