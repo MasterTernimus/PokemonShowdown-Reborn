@@ -3567,7 +3567,7 @@ export class Battle {
 	}
 
 	useGimmick(pokemon: Pokemon, gimmick: Gimmick): boolean {
-		const maxGimmicks = this.gameType === 'freeforall' ? 3 : 2;
+		const maxGimmicks = 2;
 		if (pokemon.side.gimmickCount >= maxGimmicks) {
 			return false;
 		}

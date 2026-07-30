@@ -3620,6 +3620,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10168,
 	},
 	accumulation: {
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail') return false;
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move && (this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire'))) {
+				this.debug('Accumulation Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			if (move && (this.movehasType(move, 'Ice') || this.movehasType(move, 'Fire'))) {
+				this.debug('Accumulation Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		onResidual(pokemon) {
 			if (!pokemon.activeTurns) return;
 			const lastMove = pokemon.lastMove?.id;
@@ -3631,12 +3648,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const target = this.sample(pokemon.foes().filter(foe => !foe.fainted));
 			if (target) {
 				pokemon.abilityState.accumulationBelchTarget = target;
+				pokemon.abilityState.accumulationAutoBelch = true;
 				this.actions.useMove('belch', pokemon, { target });
+				pokemon.abilityState.accumulationAutoBelch = false;
+				if ((pokemon.volatiles['stockpile']?.layers || 0) >= 3 && !target.fainted) {
+					this.actions.useMove('spitup', pokemon, { target });
+				}
 				pokemon.abilityState.accumulationBelchTarget = null;
 			}
 		},
 		onAfterMove(source, target, move) {
 			if (move.id !== 'belch') return;
+			if (source.abilityState.accumulationAutoBelch) return;
 			const canRelease = source.abilityState.accumulationSwallowBelch || (source.volatiles['stockpile']?.layers || 0) >= 3;
 			source.abilityState.accumulationSwallowBelch = false;
 			if (!canRelease) return;
@@ -5433,11 +5456,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (this.movehasType(move, 'Water')) return this.chainModify(1.2);
 		},
-		onStart(pokemon) {
-			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
-				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
-			}
-		},
 		onAnyRedirectTarget(target, source, source2, move) {
 			if (!this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) return;
 			if (!this.movehasType(move, 'Electric')) return;
@@ -6292,6 +6310,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Heavy Metal",
 		rating: 0,
 		num: 134,
+	},
+	hyperdrill: {
+		onModifyMove(move) {
+			if (move.flags['drill'] && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			let modifier = 1;
+			if (move.flags['drill']) {
+				modifier *= this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain']) ? 2 : 1.5;
+			}
+			if (move && this.movehasType(move, 'Rock')) modifier *= 1.5;
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		flags: {},
+		name: "Hyper Drill",
+		rating: 4,
+		num: 10039,
 	},
 	honeygather: {
 		flags: {},

@@ -309,6 +309,18 @@ export class BattleActions {
 		const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
 		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 		if (this.battle.activeMove) move = this.battle.activeMove;
+		const pendingZTerrain = (move as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain ||
+			(oldActiveMove as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain;
+		if (moveDidSomething && pendingZTerrain) {
+			const [terrain, duration] = pendingZTerrain;
+			const terrainSet = move.id === 'oceanicoperetta' && this.battle.field.terrain === 'underwaterterrain' ?
+				(this.battle.field.changeTerrain(terrain, pokemon, move), this.battle.field.terrain === terrain) :
+				this.battle.field.setTerrain(terrain, pokemon, move);
+			if (terrainSet) {
+				this.battle.field.terrainState.duration = duration;
+				this.battle.field.terrainState.zMoveTerrain = true;
+			}
+		}
 		this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.battle.runEvent('AfterMove', pokemon, target, move);
 		if (move.flags['cantusetwice'] && pokemon.removeVolatile(move.id)) {
@@ -1534,7 +1546,7 @@ export class BattleActions {
 		const item = pokemon.getItem();
 		if (!skipChecks) {
 			if (pokemon.gigantamax && pokemon.species.id === 'eeveegmax') return;
-			const maxGimmicks = this.battle.gameType === 'freeforall' ? 3 : 2;
+			const maxGimmicks = 2;
 			if (pokemon.side.gimmickCount >= maxGimmicks) return;
 			if (!item.zMove) return;
 			if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
@@ -1543,11 +1555,10 @@ export class BattleActions {
 			if (!moveData?.pp) return;
 		}
 
-		if (item.id === 'snorliumz' && ['Giga Impact', 'Body Slam'].includes(move.name)) {
-			return item.zMove as string;
-		}
 		if (item.zMoveFrom) {
 			if (move.name === item.zMoveFrom) return item.zMove as string;
+		} else if (item.zMove !== true && item.zMoveType) {
+			if (move.type === item.zMoveType) return item.zMove as string;
 		} else if (item.zMove === true) {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
@@ -1562,12 +1573,12 @@ export class BattleActions {
 	getActiveZMove(move: Move, pokemon: Pokemon): ActiveMove {
 		if (pokemon) {
 			const item = pokemon.getItem();
-			if (item.id === 'snorliumz' && ['Giga Impact', 'Body Slam'].includes(move.name)) {
+			if (move.name === item.zMoveFrom) {
 				const zMove = this.dex.getActiveMove(item.zMove as string);
 				zMove.isZOrMaxPowered = true;
 				return zMove;
 			}
-			if (move.name === item.zMoveFrom) {
+			if (item.zMove !== true && item.zMoveType && move.type === item.zMoveType) {
 				const zMove = this.dex.getActiveMove(item.zMove as string);
 				zMove.isZOrMaxPowered = true;
 				return zMove;
@@ -1590,7 +1601,7 @@ export class BattleActions {
 	}
 
 	canZMove(pokemon: Pokemon) {
-		const maxGimmicks = this.battle.gameType === 'freeforall' ? 3 : 2;
+		const maxGimmicks = 2;
 		if (pokemon.side.gimmickCount >= maxGimmicks ||
 			(pokemon.transformed &&
 				(pokemon.species.forme === 'Mega' || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))
@@ -1674,16 +1685,7 @@ export class BattleActions {
 			infernooverdrive: ['burningterrain', 3],
 		};
 		const zTerrain = zTerrains[move.id];
-		if (zTerrain && move.id === 'oceanicoperetta' && this.battle.field.terrain === 'underwaterterrain') {
-			this.battle.field.changeTerrain(zTerrain[0], pokemon, move);
-			if (this.battle.field.terrain === zTerrain[0]) {
-				this.battle.field.terrainState.duration = zTerrain[1];
-				this.battle.field.terrainState.zMoveTerrain = true;
-			}
-		} else if (zTerrain && this.battle.field.setTerrain(zTerrain[0], pokemon, move)) {
-			this.battle.field.terrainState.duration = zTerrain[1];
-			this.battle.field.terrainState.zMoveTerrain = true;
-		}
+		if (zTerrain) (move as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain = zTerrain;
 		if (move.category !== 'Status') {
 			this.battle.attrLastMove('[zeffect]');
 		} else if (move.zMove?.boost) {

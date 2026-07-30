@@ -803,7 +803,7 @@ export class Side {
 		if (moveSlot === undefined) {
 			throw new Error(`moveSlot should have been set by this point`);
 		}
-		const maxGimmicks = this.battle.gameType === 'freeforall' ? 3 : 2;
+		const maxGimmicks = 2;
 		const pendingGimmicks = this.choice.actions.reduce((total, action) => {
 			return total + (action.mega ? 1 : 0) + (action.dynamax ? 1 : 0) +
 				(action.zmove ? 1 : 0) + (action.terastallize ? 1 : 0);

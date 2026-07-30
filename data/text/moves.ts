@@ -2702,8 +2702,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxfinalverdict: {
 		name: "G-Max Final Verdict",
-		desc: "This Steel-type move has 130 Base Power. If this move is successful, all opposing Pokemon at or below 20% HP faint.",
-		shortDesc: "130 BP Steel; foes at or below 20% HP faint.",
+		desc: "This Steel-type move has 130 Base Power and uses the user's higher offensive stat. If this move is successful, all opposing Pokemon at or below 20% HP faint.",
+		shortDesc: "130 BP Steel; uses higher offense; foes at or below 20% HP faint.",
 	},
 	gmaxspiritvolley: {
 		name: "G-Max Spirit Volley",
@@ -5496,8 +5496,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	safeguard: {
 		name: "Safeguard",
-		desc: "For 3 turns, or 5 turns if used by a Pokemon with Invigorate, the user and its party members cannot have non-volatile status conditions, confusion, or stat drops inflicted on them by other Pokemon. Pokemon on the user's side take 0.9x damage from attacks and restore 1/16 max HP each turn. When Safeguard ends, active Pokemon on the user's side restore 1/8 max HP. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. It is removed from the user's side if the user or an ally is successfully hit by Defog. Fails if the effect is already active on the user's side.",
-		shortDesc: "3 turns, Invigorate 5: status/stat-drop block, 0.9x damage, healing.",
+		desc: "This move has 5 base PP. For 3 turns, or 5 turns if used by a Pokemon with Invigorate, the user and its party members cannot have non-volatile status conditions, confusion, or stat drops inflicted on them by other Pokemon. Pokemon on the user's side take 0.9x damage from attacks and restore 1/16 max HP each turn. When Safeguard ends, active Pokemon on the user's side restore 1/8 max HP. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. It is removed from the user's side if the user or an ally is successfully hit by Defog. Fails if the effect is already active on the user's side.",
+		shortDesc: "5 PP. 3 turns, Invigorate 5: status/stat-drop block, 0.9x damage, healing.",
 		gen3: {
 			desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. Fails if the effect is already active on the user's side.",
 		},

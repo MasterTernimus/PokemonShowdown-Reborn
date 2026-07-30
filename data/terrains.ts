@@ -809,6 +809,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				for (const pseudoWeather of failMoves) {
 					this.field.removePseudoWeather(pseudoWeather);
 				}
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'coldeclipseterrain') continue;
+					pokemon.abilityState.fortressShellBoostedTerrain = 'coldeclipseterrain';
+					this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
+				}
+			},
+			onSwitchIn(pokemon) {
+				if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'coldeclipseterrain') return;
+				pokemon.abilityState.fortressShellBoostedTerrain = 'coldeclipseterrain';
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Cold Eclipse Terrain');
@@ -1433,6 +1443,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Fairy Tale Terrain');
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'fairytaleterrain') continue;
+					pokemon.abilityState.fortressShellBoostedTerrain = 'fairytaleterrain';
+					this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
+				}
+			},
+			onSwitchIn(pokemon) {
+				if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'fairytaleterrain') return;
+				pokemon.abilityState.fortressShellBoostedTerrain = 'fairytaleterrain';
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Fairy Tale Terrain');
@@ -2240,6 +2260,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-fieldstart', 'New World Terrain');
 				}
 				this.add('-message', 'From darkness, from stardust. From memories of eons past and visions yet to come...');
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'newworldterrain') continue;
+					pokemon.abilityState.fortressShellBoostedTerrain = 'newworldterrain';
+					this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
+				}
+			},
+			onSwitchIn(pokemon) {
+				if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'newworldterrain') return;
+				pokemon.abilityState.fortressShellBoostedTerrain = 'newworldterrain';
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'New World Terrain');
@@ -2672,6 +2702,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-fieldstart', 'Starlight Arena Terrain');
 				}
 				this.add('-message', 'Starlight fills the battlefield.');
+				for (const pokemon of this.getAllActive()) {
+					if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'starlightarenaterrain') continue;
+					pokemon.abilityState.fortressShellBoostedTerrain = 'starlightarenaterrain';
+					this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
+				}
+			},
+			onSwitchIn(pokemon) {
+				if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'starlightarenaterrain') return;
+				pokemon.abilityState.fortressShellBoostedTerrain = 'starlightarenaterrain';
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Starlight Arena Terrain');
