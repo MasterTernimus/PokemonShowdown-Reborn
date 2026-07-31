@@ -23258,7 +23258,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const isAshGreninja = pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed;
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.basePower = 20;
-				move.multihit = [3, 7];
+				move.multihit = [2, 7];
 				(move as any).shadowCurrentExtraHit = true;
 			} else if (isAshGreninja) {
 				move.basePower = 30;

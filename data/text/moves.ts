@@ -7383,8 +7383,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watershuriken: {
 		name: "Water Shuriken",
-		desc: "This move has +1 priority and hits three to five times. Skill Link makes it hit five times, and Loaded Dice makes it hit five to six times. With Shadow Current, it always crits, hits three to seven times, has 90 Base Power on the first hit, and has 20 Base Power on later hits. Ash-Greninja with Battle Bond uses 30 Base Power, hits exactly three times, and always crits.",
-		shortDesc: "+1 priority. Hits 3-5. Shadow Current: 90 BP first hit, then 20 BP, always crit.",
+		desc: "This move has +1 priority and hits three to five times. Skill Link makes it hit five times, and Loaded Dice makes it hit five to six times. With Shadow Current, it always crits, has 90 Base Power on the first hit, then hits one to six more times at 20 Base Power. Ash-Greninja with Battle Bond uses 30 Base Power, hits exactly three times, and always crits.",
+		shortDesc: "+1 priority. Hits 3-5. Shadow Current: 90 BP first hit, then 1-6 hits at 20 BP.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
