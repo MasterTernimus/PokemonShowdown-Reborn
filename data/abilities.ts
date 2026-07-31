@@ -8857,9 +8857,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 8 * length, source, source);
-		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (target.species.id !== 'kangaskhanmega' || effect?.effectType !== 'Move' || damage < target.hp) return;
