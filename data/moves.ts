@@ -16311,12 +16311,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rage",
-		pp: 16,
+		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		self: {
 			onHit(source) {
-				if (source.hurtThisTurn) this.boost({ atk: 1 }, source, source);
+				this.boost({ atk: 1 }, source, source);
 			},
 		},
 		target: "normal",
