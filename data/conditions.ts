@@ -1,5 +1,14 @@
 /* eslint-disable @stylistic/max-len */
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	parentalbondmotherguard: {
+		name: 'Mother Guard',
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Mother Guard');
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') return false;
+		},
+	},
 	shadowforceguard: {
 		name: 'Shadow Force Guard',
 		duration: 2,

@@ -399,8 +399,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	disguise: {
 		name: "Disguise",
-		desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken, it changes to Busted Form, and it loses 1/8 of its max HP. Confusion damage also breaks the disguise.",
-		shortDesc: "(Mimikyu only) The first hit it takes is blocked, and it takes 1/8 HP damage instead.",
+		desc: "If this Pokemon is a Mimikyu, its status moves have +1 priority while its disguise is intact. The first hit it takes in battle deals 0 neutral damage, curses the attacker, breaks the disguise, changes it to Busted Form, raises its highest stat by 1 stage, and makes it lose 1/8 of its max HP. After its disguise is broken, attackers that hit it with damaging moves become cursed. Confusion damage also breaks the disguise.",
+		shortDesc: "Intact: status +1. First hit is blocked/curses/raises best stat; busted hit curses foes.",
 		gen7: {
 			desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Busted Form. Confusion damage also breaks the disguise.",
 			shortDesc: "(Mimikyu only) First hit deals 0 damage, breaks disguise.",
@@ -644,18 +644,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedkeepsake: {
 		name: "Cursed Keepsake",
-		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization.",
-		shortDesc: "Hit by foe curses attacker. On faint: curses foes and sets Haunted Field.",
+		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. Cursed Pokemon deal 0.5x damage to this Pokemon. This Pokemon restores HP equal to 1/2 of Curse damage it caused. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization.",
+		shortDesc: "Curses attackers; cursed foes deal 0.5x; heals 1/2 Curse damage.",
 	},
 	cursedmarionette: {
 		name: "Cursed Marionette",
-		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, hits an opposing Pokemon with a damaging move, or is hit by an opposing damaging move, that opposing Pokemon becomes cursed. This Pokemon restores HP equal to 1/4 of the damage dealt by its attacks and all Curse damage dealt to targets it cursed. The first time this Pokemon falls below half HP, it creates Haunted Field for 3 turns, ignoring Neutralization. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, or extends active Haunted Field by 5 turns, ignoring Neutralization.",
-		shortDesc: "Status +1; curses foes on status/attacking/being hit/faint; drains attacks and Curse.",
+		desc: "This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, hits an opposing Pokemon with a damaging move, or is hit by an opposing damaging move, that opposing Pokemon becomes cursed. Cursed Pokemon deal 0.5x damage to this Pokemon. This Pokemon restores HP equal to 1/2 of Curse damage it caused. The first time this Pokemon falls below half HP, it creates Haunted Field for 3 turns, ignoring Neutralization. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, or extends active Haunted Field by 5 turns, ignoring Neutralization.",
+		shortDesc: "Status +1; curses foes; cursed foes deal 0.5x; heals 1/2 Curse damage.",
 	},
 	cursedarmament: {
 		name: "Cursed Armament",
-		desc: "Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization.",
-		shortDesc: "Curse is a 100 BP spread attack; on faint curses foes and sets Haunted Field.",
+		desc: "Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. Cursed Pokemon deal 0.5x damage to this Pokemon. This Pokemon restores HP equal to 1/2 of Curse damage it caused. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization.",
+		shortDesc: "Curse is a 100 BP spread attack; cursed foes deal 0.5x; heals Curse damage.",
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
@@ -1592,8 +1592,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's effects, with healing increased by 1.3x. When this Pokemon faints, it creates Haunted Field for 5 turns and applies Perish Song to opposing Pokemon. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon has Perish Song applied to it. This Pokemon restores HP from its damaging attacks like Atrocity.",
-		shortDesc: "80 BP-and-below moves 1.5x; attacks drain HP and mark Perish Song.",
+		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's healing boost. When this Pokemon faints, it creates Haunted Field for 5 turns and applies Perish Song to opposing Pokemon. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon has Perish Song applied to it. This Pokemon restores HP equal to 15% of the damage dealt by its attacks, capped at 1/4 max HP.",
+		shortDesc: "80 BP-and-below moves 1.5x; attacks drain 15% and mark Perish Song.",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
@@ -1764,8 +1764,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	knightsguard: {
 		name: "Knight's Guard",
-		desc: "This Pokemon has Inner Focus and Steadfast's effects. Its ally takes 25% less damage from priority moves. Once per switch-in, if its ally is at 25% HP or lower at the end of the turn, this Pokemon's Attack and Speed rise by 1 and its ally takes 25% less damage from attacks until the end of the next turn. The first time this Pokemon would be knocked out by a move, it survives with 1 HP.",
-		shortDesc: "Inner Focus + Steadfast; ally resists priority; low-HP ally triggers Last Stand.",
+		desc: "This Pokemon cannot flinch, and a blocked flinch raises its Speed by 1 stage. Its ally takes 25% less damage from priority moves. Once per switch-in, if its ally is at 25% HP or lower at the end of the turn, this Pokemon's Attack and Speed rise by 1 and its ally takes 25% less damage from attacks until the end of the next turn. The first time this Pokemon would be knocked out by a move, it survives with 1 HP.",
+		shortDesc: "Blocks flinch and gains Speed from it; ally resists priority; low-HP ally triggers Last Stand.",
 	},
 	relicbeam: {
 		name: "Relic Beam",
@@ -1792,8 +1792,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parentalbond: {
 		name: "Parental Bond",
-		desc: "This Pokemon has Friend Guard's effect. Its damaging moves become multi-hit moves that hit twice. The second hit deals 60% damage and retargets the foe's ally if the first target fainted. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
-		shortDesc: "Friend Guard; damaging moves hit twice; second hit has 60% power.",
+		desc: "Cannot be suppressed. This Pokemon has Friend Guard's effect. Its damaging moves become multi-hit moves that hit twice; the second hit deals 60% damage and retargets the foe's ally if the first target fainted. After using a damaging move, this Pokemon heals 1/16 max HP. If it gets a KO with a move, it heals 1/8 max HP per target KO'd. Once, if Mega Kangaskhan would faint from a move, it becomes regular Kangaskhan, survives at 1 HP, gains a Magic Guard effect, cannot Mega Evolve again, and immediately uses Retaliate on the attacker. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, existing multi-hit moves, multi-target moves, or two-turn moves.",
+		shortDesc: "Unsuppressable. Friend Guard; hits twice; heals on attacks/KOs; Mega Kanga endures once.",
 	},
 	pastelveil: {
 		name: "Pastel Veil",
@@ -2405,8 +2405,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, and enemy-caused stat drops fail. This Pokemon's own self-inflicted stat drops still work. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge. Neutralization disables these Royal Decree effects while active.",
-		shortDesc: "Haze/screen clear; blocks setup/screens; skips charge turns. Disabled by Neutralization.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, except Pokemon on a side protected by Safeguard, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, and enemy-caused stat drops fail. This Pokemon's own self-inflicted stat drops still work. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge. Neutralization disables these Royal Decree effects while active.",
+		shortDesc: "Haze/screen clear; Safeguard blocks reset; blocks setup/screens; skips charge turns.",
 	},
 	royalhive: {
 		name: "Royal Hive",
@@ -2415,13 +2415,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalsun: {
 		name: "Royal Sun",
-		desc: "On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects. Neutralization disables the Royal Decree effects while active.",
-		shortDesc: "Drought + Royal Decree; Royal Decree effects are disabled by Neutralization.",
+		desc: "On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects. Safeguard protects a side from Royal Decree's switch-in stat reset. Neutralization disables the Royal Decree effects while active.",
+		shortDesc: "Drought + Royal Decree; Safeguard blocks the reset; disabled by Neutralization.",
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon always has Dry Skin and Rain Dish's effects, gains Grass-type resistances without Grass-type weaknesses, is immune to powder moves, and restores 1/16 max HP at the end of each turn. It is healed by Black Sludge. This Ability cannot be suppressed or ignored and is immune to Neutralization's stat drops and Royal Decree's stat control. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
-		shortDesc: "Dry Skin + Rain Dish + Grass resistances; ignores Neutralization/Royal Decree.",
+		desc: "This Pokemon always has Dry Skin's effects, gains Grass-type resistances without Grass-type weaknesses, is immune to powder moves, and is healed by Black Sludge. This Ability cannot be suppressed or ignored and is immune to Neutralization's stat drops and Royal Decree's stat control. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
+		shortDesc: "Dry Skin + Grass resistances; ignores Neutralization/Royal Decree.",
 	},
 	pendulumswing: {
 		name: "Pendulum Swing",
@@ -3005,8 +3005,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	zenmode: {
 		name: "Zen Mode",
-		desc: "If this Pokemon is a Darmanitan or Galarian Darmanitan, it changes to Zen Mode if it has 1/2 or less of its maximum HP at the end of a turn. If Darmanitan's HP is above 1/2 of its maximum HP at the end of a turn, it changes back to Standard Mode.",
-		shortDesc: "If Darmanitan, at end of turn changes Mode to Standard if > 1/2 max HP, else Zen.",
+		desc: "If this Pokemon is a Darmanitan or Galarian Darmanitan, it changes to Zen Mode if it has 1/2 or less of its maximum HP at the end of a turn. Standard Darmanitan is also Zen Mode in Ashen Beach or Psychic Terrain. Galarian Darmanitan is also Zen Mode in Icy Terrain, Snowy Mountain, or Cold Eclipse. If Darmanitan's HP is above 1/2 of its maximum HP and the matching field is not active, it changes back to Standard Mode.",
+		shortDesc: "Darmanitan goes Zen at <=1/2 HP; fields force matching Zen formes.",
 		gen7: {
 			desc: "If this Pokemon is a Darmanitan, it changes to Zen Mode if it has 1/2 or less of its maximum HP at the end of a turn. If Darmanitan's HP is above 1/2 of its maximum HP at the end of a turn, it changes back to Standard Mode.",
 		},

@@ -8299,7 +8299,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			secretpower: ["9M", "6M", "4M", "3M"],
 			seedbomb: ["9M", "7T", "6T", "5T", "4T"],
 			skittersmack: [],
-			skullbash: ["7V"],
 			slam: [],
 			slash: ["9L32", "8V", "7L29", "7V", "6L29", "5L29", "4L22", "3L35"],
 			sleeppowder: ["9L6", "8V"],

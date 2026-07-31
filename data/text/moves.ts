@@ -201,8 +201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromatherapy: {
 		name: "Aromatherapy",
-		desc: "The user restores 1/2 of its maximum HP, applies Safeguard to its side, and cures every Pokemon in the user's party of its non-volatile status condition. Active Pokemon with the Sap Sipper Ability are not cured, unless they are the user.",
-		shortDesc: "Heals 50%, applies Safeguard, and cures party status.",
+		desc: "The user heals 1/2 max HP, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Sap Sipper are not cured unless they are the user.",
+		shortDesc: "Heals 50%, starts Safeguard, and cures party status.",
 		gen5: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
 		},
@@ -999,6 +999,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Raises the user's Attack, Defense, and accuracy by 1 stage.",
 		shortDesc: "Raises user's Attack, Defense, accuracy by 1.",
 	},
+	coldsnap: {
+		name: "Cold Snap",
+		desc: "Freezes the target. Ghost-type users do not check accuracy. In hail, snow, Cold Eclipse, Icy Terrain, or when used by an Ice-type Pokemon, this move has 100% accuracy.",
+		shortDesc: "Freezes the target. Ghost users never miss.",
+	},
 	collisioncourse: {
 		name: "Collision Course",
 		desc: "Damage is multiplied by 1.3333 if this move is super effective against the target.",
@@ -1272,8 +1277,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	darkvoid: {
 		name: "Dark Void",
-		desc: "Causes the target to fall asleep.",
-		shortDesc: "Causes the foe(s) to fall asleep.",
+		desc: "Has 80% accuracy and causes the target to fall asleep. If used by Mega Banette with its custom Ability, this move has 90% accuracy.",
+		shortDesc: "80% sleep; Mega Banette custom Ability: 90%.",
 		gen6: {
 			desc: "Causes the target to fall asleep.",
 			shortDesc: "Causes the foe(s) to fall asleep.",
@@ -2276,8 +2281,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	followme: {
 		name: "Follow Me",
-		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, the user must choose one opponent; only that opponent's attacks are redirected, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
-		shortDesc: "Redirects moves. FFA: pick foe; 0.75x damage, 2+ heals.",
+		desc: "Until the end of the turn, opposing single-target attacks are redirected to the user. In Free-for-All battles, this targets one opponent and redirects only that opponent's attacks. The user takes 0.75x damage from redirected moves and heals 1/8 max HP if it redirects 2 or more attacks. This effect is ignored during Sky Drop.",
+		shortDesc: "Redirects attacks. FFA: pick one foe; 0.75x damage, 2+ heals.",
 		gen6: {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double or Triple Battle. This effect is ignored while the user is under the effect of Sky Drop.",
 		},
@@ -2702,13 +2707,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxfinalverdict: {
 		name: "G-Max Final Verdict",
-		desc: "This Steel-type move has 130 Base Power and uses the user's higher offensive stat. If this move is successful, all opposing Pokemon at or below 20% HP faint.",
-		shortDesc: "130 BP Steel; uses higher offense; foes at or below 20% HP faint.",
+		desc: "Steel-type, 130 Base Power. This move uses the user's higher offensive stat. After it hits, all opposing Pokemon at or below 20% HP faint.",
+		shortDesc: "130 BP Steel. Uses higher offense. Then executes foes at 20% HP or less.",
 	},
 	gmaxspiritvolley: {
 		name: "G-Max Spirit Volley",
-		desc: "This Ghost-type move has 150 Base Power and uses the user's higher offensive stat. If this move is successful, all opposing Pokemon take damage equal to half the original damage dealt.",
-		shortDesc: "150 BP Ghost; foes take extra damage equal to half the original hit.",
+		desc: "Ghost-type, 150 Base Power. This move uses the user's higher offensive stat. After it hits, all opposing Pokemon take extra damage equal to half of the original hit's damage.",
+		shortDesc: "150 BP Ghost. Uses higher offense. Foes take half-hit splash damage.",
 	},
 	grassknot: {
 		name: "Grass Knot",
@@ -2926,8 +2931,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healbell: {
 		name: "Heal Bell",
-		desc: "The user restores 1/2 of its maximum HP, applies Safeguard to its side, and cures every Pokemon in the user's party of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
-		shortDesc: "Heals 50%, applies Safeguard, and cures party status.",
+		desc: "The user heals 1/2 max HP, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Soundproof are not cured unless they are the user.",
+		shortDesc: "Heals 50%, starts Safeguard, and cures party status.",
 		gen7: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured.",
 		},
@@ -2982,8 +2987,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healorder: {
 		name: "Heal Order",
-		desc: "The user restores 1/2 of its maximum HP, rounded half up, and every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured, unless they are the user.",
-		shortDesc: "Heals the user by 50% and cures the user's party of status.",
+		desc: "The user heals 1/2 max HP and cures non-volatile status from its party, like Heal Bell. Active Pokemon with Soundproof are not cured unless they are the user.",
+		shortDesc: "Heals 50% and cures party status.",
 		gen4: {
 			desc: "The user restores 1/2 of its maximum HP, rounded down.",
 		},
@@ -4098,8 +4103,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	metronome: {
 		name: "Metronome",
-		desc: "A random move is selected for use. If the user has Serene Grace or has 1/4 HP or less, it has a high chance to prefer powerful damaging moves that are super effective against a random foe, but it can still choose a completely random move.",
-		shortDesc: "Picks a random move; low HP/Serene Grace favors strong SE moves.",
+		desc: "A random move is selected for use.",
+		shortDesc: "Picks a random move.",
 		gen8: {
 			desc: "A random move is selected for use, other than After You, Apple Acid, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Clangorous Soul, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Double Iron Bash, Dragon Ascent, Dragon Energy, Dragon Hammer, Drum Beating, Dynamax Cannon, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Obstruct, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spirit Break, Spotlight, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Transform, Trick, V-create, Wicked Blow, or Wide Guard.",
 		},
@@ -4380,8 +4385,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mudslap: {
 		name: "Mud-Slap",
-		desc: "Hits two to five times. On Murkwater Surface, this move becomes Water type.",
-		shortDesc: "Hits 2-5 times. Water type on Murkwater Surface.",
+		desc: "Special Ground-type attack with 25 Base Power and 95% accuracy. Hits two to five times. On Murkwater Surface, the field changes this move to Water type.",
+		shortDesc: "25 BP special Ground. Hits 2-5 times. Water on Murkwater Surface.",
 	},
 	mudsport: {
 		name: "Mud Sport",
@@ -4462,8 +4467,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	needlegun: {
 		name: "Needle Gun",
-		desc: "Hits 6 times. This move becomes Physical if the user's Attack is higher than its Special Attack. It has a higher chance for a critical hit and each hit has a 5% chance to make the target flinch. In Desert Field, this move's power is doubled. In Fairy Tale or Factory Field, this move becomes Steel type and has 1.5x power.",
-		shortDesc: "Hits 6 times. Physical if Atk > SpA. High crit. 5% flinch per hit.",
+		desc: "Hits 6 times. Uses Physical damage if the user's Attack is higher than its Special Attack. Has a high critical hit ratio, and each hit has a 5% chance to flinch. Desert Field doubles its power. Fairy Tale and Factory Field make it Steel type and 1.5x power.",
+		shortDesc: "Hits 6 times. Uses higher offense. High crit; 5% flinch per hit.",
 	},
 	neverendingnightmare: {
 		name: "Never-Ending Nightmare",
@@ -4820,8 +4825,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powder: {
 		name: "Powder",
-		desc: "The target is covered in powder. If it later tries to use a Fire-type move, the move is prevented and each active Pokemon on that target's side loses 1/4 of its maximum HP, rounded half up. This effect does not happen if the Fire-type move is prevented by Primordial Sea.",
-		shortDesc: "+1 priority. Fire move fails; active side loses 1/4 HP.",
+		desc: "This move has +1 priority. The target is covered in powder until it tries to use a Fire-type move. When triggered, the Fire move is prevented and each active Pokemon on that target's side loses 1/4 max HP. This effect does not happen if Primordial Sea prevents the Fire move first.",
+		shortDesc: "+1 priority. Fire move fails; target's active side loses 1/4 HP.",
 		gen6: {
 			desc: "The target is covered in powder. If it later tries to use a Fire-type move, the move is prevented and each active Pokemon on that target's side loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
 		},
@@ -5121,8 +5126,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragepowder: {
 		name: "Rage Powder",
-		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. In Free-for-All battles, the user must choose one opponent; only that opponent's attacks are redirected, the user takes 0.75x damage from redirected moves, and if it redirects 2 or more attacks, it restores 1/8 max HP. This effect is ignored while the user is under the effect of Sky Drop.",
-		shortDesc: "Redirects moves. FFA: pick foe; 0.75x damage, 2+ heals.",
+		desc: "Until the end of the turn, opposing single-target attacks are redirected to the user. In Free-for-All battles, this targets one opponent and redirects only that opponent's attacks. The user takes 0.75x damage from redirected moves and heals 1/8 max HP if it redirects 2 or more attacks. This effect is ignored during Sky Drop.",
+		shortDesc: "Redirects attacks. FFA: pick one foe; 0.75x damage, 2+ heals.",
 		gen6: {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user if they are in range. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double or Triple Battle. This effect is ignored while the user is under the effect of Sky Drop.",
 		},
@@ -5357,8 +5362,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roaroftime: {
 		name: "Roar of Time",
-		desc: "This move uses the user's higher offensive stat between Attack and Special Attack. Fairy-type targets are hit as a resisted Dragon-type hit instead of being immune. If this move is successful and does not knock out the target, the target is also struck by Roar of Time two turns later. If a delayed Roar of Time misses, it is sent further into the future. In Trick Room, this move has +3 priority. If this move knocks out the target, the user's recharge is removed.",
-		shortDesc: "Uses user's higher offense. Non-KO queues future hit. Fairies resist. +3 in Trick Room.",
+		desc: "Uses the user's higher offensive stat. Fairy-type targets are hit as resisted Dragon damage instead of being immune. If this hits and does not KO, another Roar of Time hits that target two turns later. A missed delayed hit is sent further into the future. In Trick Room, this move has +3 priority. If this move KOs, the user's recharge is removed.",
+		shortDesc: "Uses higher offense. Non-KO queues future hit. Fairies resist. +3 in Trick Room.",
 	},
 	rockblast: {
 		name: "Rock Blast",
@@ -5496,8 +5501,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	safeguard: {
 		name: "Safeguard",
-		desc: "This move has 5 base PP. For 3 turns, or 5 turns if used by a Pokemon with Invigorate, the user and its party members cannot have non-volatile status conditions, confusion, or stat drops inflicted on them by other Pokemon. Pokemon on the user's side take 0.9x damage from attacks and restore 1/16 max HP each turn. When Safeguard ends, active Pokemon on the user's side restore 1/8 max HP. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. It is removed from the user's side if the user or an ally is successfully hit by Defog. Fails if the effect is already active on the user's side.",
-		shortDesc: "5 PP. 3 turns, Invigorate 5: status/stat-drop block, 0.9x damage, healing.",
+		desc: "This move has 5 base PP. For 3 turns, or 5 turns if used by a Pokemon with Invigorate, the user's side blocks opposing status, confusion, Yawn, and stat drops. Active Pokemon on that side take 0.9x damage from attacks and heal 1/16 max HP each turn. When Safeguard ends, they heal 1/8 max HP. Defog removes this effect. Fails if already active.",
+		shortDesc: "5 PP. 3 turns, Invigorate 5: blocks status/stat drops, 0.9x damage, heals.",
 		gen3: {
 			desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. Fails if the effect is already active on the user's side.",
 		},
@@ -5691,8 +5696,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowforce: {
 		name: "Shadow Force",
-		desc: "This move uses the user's higher offensive stat between Attack and Special Attack. If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. On a successful hit, the user's Attack rises by 1 stage and it takes 30% less damage from all sources on the next turn. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Uses user's higher offense. Disappears turn 1. On hit: +1 Atk, next turn 0.7x damage.",
+		desc: "Uses the user's higher offensive stat. The user vanishes turn 1 and attacks turn 2. This move breaks protection. On a successful hit, the user's Attack rises by 1 stage and it takes 0.7x damage from all sources next turn. Power Herb makes it attack immediately.",
+		shortDesc: "Uses higher offense. Vanishes, breaks Protect. On hit: +1 Atk, next turn 0.7x damage.",
 		gen6: {
 			desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		},
@@ -6145,8 +6150,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spacialrend: {
 		name: "Spacial Rend",
-		desc: "This move uses the user's higher offensive stat between Attack and Special Attack, does not check accuracy, breaks through protection, cannot be redirected to a different target by any effect, and has a higher chance for a critical hit.",
-		shortDesc: "Uses user's higher offense. Never misses. Ignores Protect/redirection. High crit.",
+		desc: "Uses the user's higher offensive stat. This move never misses, ignores protection, cannot be redirected, and has a high critical hit ratio.",
+		shortDesc: "Uses higher offense. Never misses. Ignores Protect/redirection. High crit.",
 	},
 	spark: {
 		name: "Spark",
@@ -6317,8 +6322,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spotlight: {
 		name: "Spotlight",
-		desc: "Until the end of the turn, single-target attacks aimed at the user are redirected to the target. In Free-for-All battles, this move ignores Protect. It cannot make the target hit itself, and it does not redirect Hydra Bond or multi-hit follow-up attacks that chain to another target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal.",
-		shortDesc: "Moves aimed at user redirect to target; FFA ignores Protect.",
+		desc: "Until the end of the turn, single-target attacks aimed at the user are redirected to the target. In Free-for-All battles, this move ignores Protect. It cannot make the target hit itself, and it does not redirect Hydra Bond or multi-hit follow-up attacks that chain to another target. Fails outside Double Battle or Free-for-All formats.",
+		shortDesc: "Attacks aimed at user redirect to target. FFA: ignores Protect.",
 
 		start: "#followme",
 		startFromZEffect: "#followme",
@@ -6387,8 +6392,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stockpile: {
 		name: "Stockpile",
-		desc: "Raises the user's Defense and Special Defense by 1 stage. The user's Stockpile count increases by 1, up to 3. At the end of each turn, the user restores 1/16 of its maximum HP for each Stockpile count. The user's Stockpile count is reset to 0 when it is no longer active.",
-		shortDesc: "Raises Def/SpD; heals 1/16 per stack each turn. Max 3.",
+		desc: "Raises the user's Defense and Special Defense by 1 stage and adds 1 Stockpile count, up to 3. At the end of each turn, the user heals 1/16 max HP for each Stockpile count. The count resets when the user leaves the field.",
+		shortDesc: "+1 Def/SpD and Stockpile. Heals 1/16 per stack each turn. Max 3.",
 		gen3: {
 			desc: "The user's Stockpile count increases by 1. Fails if the user's Stockpile count is 3. The user's Stockpile count is reset to 0 when it is no longer active.",
 			shortDesc: "Raises user's Stockpile count by 1. Max 3 uses.",
@@ -6640,8 +6645,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swallow: {
 		name: "Swallow",
-		desc: "The user restores its HP based on its Stockpile count. Restores 1/4 of its maximum HP if it's 1, 1/2 of its maximum HP if it's 2, both rounded half down, and all of its HP if it's 3. At 3 Stockpile counts, this also cures the user's status. Fails if the user's Stockpile count is 0. The user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
-		shortDesc: "Heals by Stockpile count; at 3 also cures status.",
+		desc: "The user spends its Stockpile count to heal: 1 stack heals 1/4 max HP, 2 stacks heal 1/2, and 3 stacks fully heal and cure the user's status. Fails at 0 stacks. The user's Stockpile Defense and Special Defense boosts are removed, and the count resets to 0.",
+		shortDesc: "Spends Stockpile to heal; at 3 fully heals and cures status.",
 		gen4: {
 			desc: "The user restores its HP based on its Stockpile count. Restores 1/4 of its maximum HP if it's 1, 1/2 of its maximum HP if it's 2, both rounded down, and all of its HP if it's 3. Fails if the user's Stockpile count is 0. The user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
 		},
@@ -7172,8 +7177,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triplekick: {
 		name: "Triple Kick",
-		desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
-		shortDesc: "Hits 3 times. Each hit can miss, but power rises.",
+		desc: "Hits up to three times with 20, 40, then 60 Base Power. Each hit checks accuracy, and the attack ends if a hit misses. If the user has Skill Link, this move always hits three times.",
+		shortDesc: "Hits up to 3 times: 20/40/60 BP. Each hit can miss.",
 		gen4: {
 			desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -7378,8 +7383,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watershuriken: {
 		name: "Water Shuriken",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user has Shadow Current, this move always crits, hits 3 to 7 times, has 90 power on the first hit, and has 20 power on later hits. If the user is an Ash-Greninja with the Battle Bond Ability, this move has 30 power, always hits three times, and always results in a critical hit. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Usually goes first. Hits 3-5 times in one turn.",
+		desc: "This move has +1 priority and hits three to five times. Skill Link makes it hit five times, and Loaded Dice makes it hit five to six times. With Shadow Current, it always crits, hits three to seven times, has 90 Base Power on the first hit, and has 20 Base Power on later hits. Ash-Greninja with Battle Bond uses 30 Base Power, hits exactly three times, and always crits.",
+		shortDesc: "+1 priority. Hits 3-5. Shadow Current: 90 BP first hit, then 20 BP, always crit.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
