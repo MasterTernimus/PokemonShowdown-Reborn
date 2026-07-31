@@ -399,8 +399,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	disguise: {
 		name: "Disguise",
-		desc: "If this Pokemon is a Mimikyu, its status moves have +1 priority while its disguise is intact. The first hit it takes in battle deals 0 neutral damage, curses the attacker, breaks the disguise, changes it to Busted Form, raises its highest stat by 1 stage, and makes it lose 1/8 of its max HP. After its disguise is broken, attackers that hit it with damaging moves become cursed. Confusion damage also breaks the disguise.",
-		shortDesc: "Intact: status +1. First hit is blocked/curses/raises best stat; busted hit curses foes.",
+		desc: "If this Pokemon is a Mimikyu, its status moves have +1 priority while its disguise is intact. The first hit it takes in battle deals 0 neutral damage, curses the attacker, breaks the disguise, changes it to Busted Form, and makes it lose 1/8 of its max HP. Curse inflicted by Disguise deals 1/8 max HP each turn. After its disguise is broken, attackers that hit it with damaging moves become cursed. Confusion damage also breaks the disguise.",
+		shortDesc: "Intact: status +1. First hit is blocked/curses; busted hit curses foes for 1/8.",
 		gen7: {
 			desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Busted Form. Confusion damage also breaks the disguise.",
 			shortDesc: "(Mimikyu only) First hit deals 0 damage, breaks disguise.",

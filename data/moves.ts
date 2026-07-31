@@ -3724,7 +3724,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 12,
 			onResidual(pokemon) {
 				const source = this.effectState.source;
-				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'cursedarmament']) ? 8 : 4;
+				const damageDivisor = source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'cursedarmament', 'disguise']) ? 8 : 4;
 				this.damage(pokemon.baseMaxhp / damageDivisor);
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
