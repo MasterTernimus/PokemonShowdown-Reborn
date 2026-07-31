@@ -1,4 +1,6 @@
 /* eslint-disable @stylistic/max-len */
+import { toID } from '../sim/dex';
+
 function speciesZCrystalResidual(this: any, pokemon: import('../sim/pokemon').Pokemon) {
 	const item = pokemon.getItem();
 	if (!item.itemUser?.length) return;
