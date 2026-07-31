@@ -127,7 +127,7 @@ export class Field {
 
 	restoreFormatHail() {
 		if (this.shouldRestoreFormatHail() && this.weather !== 'hail') {
-			this.setWeather('hail');
+			if (this.setWeather('hail')) this.weatherState.fieldStartedTerrain = 'coldeclipseterrain';
 		}
 	}
 
@@ -135,9 +135,16 @@ export class Field {
 		return this.terrain === 'coldeclipseterrain';
 	}
 
-	restoreMistyFairyTaleHail(previousTerrain?: ID) {
-		if (previousTerrain === 'mistyterrain' && this.terrain === 'fairytaleterrain' && this.weather !== 'hail') {
-			this.setWeather('hail');
+	clearFieldStartedWeather(previousTerrain?: ID) {
+		if (!previousTerrain || !this.weather) return;
+		if (this.weatherState.fieldStartedTerrain !== previousTerrain) return;
+		if (this.terrain === previousTerrain) return;
+		this.clearWeather();
+	}
+
+	startFieldWeather(weather: string | Condition, terrain: ID) {
+		if (this.setWeather(weather)) {
+			this.weatherState.fieldStartedTerrain = terrain;
 		}
 	}
 
@@ -288,7 +295,7 @@ export class Field {
 		}
 		this.terrainStack.unshift(this.terrainState);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
-		this.restoreMistyFairyTaleHail(prevTerrain);
+		this.clearFieldStartedWeather(prevTerrain);
 		this.restoreFormatHail();
 		return true;
 	}
@@ -335,7 +342,7 @@ export class Field {
 		}
 		this.battle.add('-fieldstart', status.name);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
-		this.restoreMistyFairyTaleHail(prevTerrainState.id as ID);
+		this.clearFieldStartedWeather(prevTerrainState.id as ID);
 		this.restoreFormatHail();
 	}
 
@@ -409,7 +416,7 @@ export class Field {
 			this.terrainState = this.battle.initEffectState({ id: '' });
 		}
 		this.battle.eachEvent('TerrainChange');
-		this.restoreMistyFairyTaleHail(clearedTerrain);
+		this.clearFieldStartedWeather(clearedTerrain);
 		this.restoreFormatHail();
 		return true;
 	}
