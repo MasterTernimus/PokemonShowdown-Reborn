@@ -1655,7 +1655,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (effect?.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.species.id)) {
 				this.add('-activate', target, 'ability: Disguise');
 				this.effectState.busted = true;
+				if (source && source !== target && !source.isAlly(target)) {
+					source.addVolatile('curse', target, this.dex.abilities.get('disguise'));
+				}
 				return 0;
+			}
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status' && ['mimikyu', 'mimikyutotem'].includes(pokemon.species.id)) {
+				return priority + 1;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
+			if (['mimikyubusted', 'mimikyubustedtotem'].includes(target.species.id)) {
+				source.addVolatile('curse', target, this.dex.abilities.get('disguise'));
 			}
 		},
 		onCriticalHit(target, source, move) {
@@ -1685,6 +1699,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
+				const bestStat = pokemon.getBestStat(false, true);
+				this.boost({ [bestStat]: 1 }, pokemon, pokemon, this.dex.abilities.get('disguise'));
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
 			}
 		},
@@ -2945,6 +2961,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
 			source.addVolatile('curse', target, this.dex.abilities.get('cursedkeepsake'));
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (source.volatiles['curse']) return this.chainModify(0.5);
+		},
+		onAnyDamage(damage, target, source, effect) {
+			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedkeepsake')) {
+				this.heal(damage / 2, target.volatiles['curse'].source, target);
+			}
+		},
 		onFaint(pokemon) {
 			for (const foe of pokemon.foes()) {
 				if (!foe || foe.fainted) continue;
@@ -2998,7 +3022,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyDamage(damage, target, source, effect) {
 			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedmarionette')) {
-				this.heal(damage, target.volatiles['curse'].source, target);
+				this.heal(damage / 2, target.volatiles['curse'].source, target);
 			}
 		},
 		onSourceDamagingHit(damage, target, source, move) {
@@ -3006,10 +3030,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target && target !== source && !target.isAlly(source) && !target.fainted) {
 				target.addVolatile('curse', source, this.dex.abilities.get('cursedmarionette'));
 			}
-			this.heal(damage / 4, source, source);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status' && source.volatiles['curse']?.source === target) return this.chainModify(0.5);
+			if (source.volatiles['curse']) return this.chainModify(0.5);
 		},
 		flags: { breakable: 1 },
 		name: "Cursed Marionette",
@@ -3032,13 +3055,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('curse', source, this.dex.abilities.get('cursedarmament'));
 			};
 		},
-		onSourceDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status') this.heal(damage / 4, source, source);
-		},
 		onAnyDamage(damage, target, source, effect) {
 			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedarmament')) {
-				this.heal(damage / 4, target.volatiles['curse'].source, target);
+				this.heal(damage / 2, target.volatiles['curse'].source, target);
 			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (source.volatiles['curse']) return this.chainModify(0.5);
 		},
 		onFaint(pokemon) {
 			for (const foe of pokemon.foes()) {
@@ -3576,17 +3599,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	knightsguard: {
 		onTryAddVolatile(status, pokemon) {
-			if (status.id === 'flinch') return null;
+			if (status.id === 'flinch') {
+				this.boost({ spe: 1 }, pokemon, pokemon, this.effect);
+				return null;
+			}
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', "[from] ability: Knight's Guard", `[of] ${target}`);
-			}
-		},
-		onAfterBoost(boost, target, source, effect) {
-			if (target === this.effectState.target && source && target !== source && boost.spe && boost.spe < 0) {
-				this.boost({ spe: 1 });
 			}
 		},
 		onAnyModifyDamage(damage, source, target, move) {
@@ -8070,9 +8091,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-start', target, 'perish3', '[silent]');
 				this.add('-activate', source, 'ability: Requiem');
 			}
-			const gmaxTarget = target.volatiles['dynamax'] && (target.gigantamax || target.species.forme?.includes('Gmax'));
-			const drain = gmaxTarget ? 0.6 : 0.3;
-			this.heal(Math.min(Math.floor(damage * drain), Math.floor(source.baseMaxhp / 3)), source, source);
+			this.heal(Math.min(Math.floor(damage * 0.15), Math.floor(source.baseMaxhp / 4)), source, source);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source.fainted || source.volatiles['perishsong']) return;
@@ -8095,16 +8114,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				applied = true;
 			}
 			if (applied) this.add('-fieldactivate', 'move: Perish Song');
-		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			for (const allyActive of pokemon.adjacentAllies()) {
-				if (allyActive.status && this.randomChance(1, 2)) {
-					this.add('-activate', pokemon, 'ability: Requiem');
-					allyActive.cureStatus();
-				}
-			}
 		},
 		flags: {},
 		name: "Requiem",
@@ -8773,6 +8782,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(0.75);
 			}
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType === 'Move') this.heal(source.baseMaxhp / 8 * length, source, source);
+		},
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			if (target.species.id !== 'kangaskhanmega' || effect?.effectType !== 'Move' || damage < target.hp) return;
+			if (!source || source === target || source.fainted) return;
+			this.add('-activate', target, 'ability: Parental Bond');
+			this.add('-message', 'A Mother will protect its child');
+			target.canMegaEvo = false;
+			target.formeChange('Kangaskhan', this.effect, true);
+			target.addVolatile('parentalbondmotherguard', target);
+			const retaliate = this.dex.getActiveMove('retaliate');
+			this.actions.useMove(retaliate, target, { target: source, sourceEffect: this.effect });
+			return target.hp - 1;
+		},
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
 				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
@@ -8792,7 +8820,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
 			}
 		},
-		flags: {},
+		flags: { cantsuppress: 1 },
 		name: "Parental Bond",
 		rating: 4.5,
 		num: 185,
@@ -11163,9 +11191,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.ignoreDefensive = true;
 			move.infiltrates = true;
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (target && !target.isAlly(source) && move.category !== 'Status') return this.chainModify(1.3);
-		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp > target.maxhp / 2) return this.chainModify(0.8);
 		},
@@ -11174,11 +11199,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move && this.movehasType(move, 'Fire')) {
 				return this.chainModify(1.25);
 			}
-		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onModifySecondaries(secondaries, target, source, move) {
 			if (target.hp > target.maxhp / 2) {
@@ -11245,6 +11265,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!active.hasAbility('neutralization')) continue;
 				protectedSides.add(active.side);
 				if (active.side.allySide) protectedSides.add(active.side.allySide);
+			}
+			for (const side of this.sides) {
+				if (side.sideConditions['safeguard']) protectedSides.add(side);
 			}
 			if (!protectedSides.size) this.add('-clearallboost');
 			for (const active of this.getAllActive()) {
@@ -11399,6 +11422,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!active.hasAbility('neutralization')) continue;
 				protectedSides.add(active.side);
 				if (active.side.allySide) protectedSides.add(active.side.allySide);
+			}
+			for (const side of this.sides) {
+				if (side.sideConditions['safeguard']) protectedSides.add(side);
 			}
 			if (!protectedSides.size) this.add('-clearallboost');
 			for (const active of this.getAllActive()) {
@@ -14162,6 +14188,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const galarZenMode = this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar';
 			if (baseZenMode || galarZenMode) {
 				pokemon.addVolatile('zenmode');
+			}
+		},
+		onTerrainChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
+				return;
+			}
+			const baseZenMode = this.field.isTerrain(['ashenbeachterrain', 'psychicterrain']) && pokemon.species.id !== 'darmanitanzen' && pokemon.baseSpecies.id === 'darmanitan';
+			const galarZenMode = this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']) && pokemon.species.id !== 'darmanitangalarzen' && pokemon.baseSpecies.id === 'darmanitangalar';
+			if (baseZenMode || galarZenMode) {
+				pokemon.addVolatile('zenmode');
+			} else if (['Zen', 'Galar-Zen'].includes(pokemon.species.forme) && pokemon.hp > pokemon.maxhp / 2) {
+				pokemon.addVolatile('zenmode');
+				pokemon.removeVolatile('zenmode');
 			}
 		},
 		onResidual(pokemon) {

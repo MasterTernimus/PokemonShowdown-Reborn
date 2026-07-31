@@ -1689,10 +1689,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onModifyDef(def, pokemon) {
-				if (pokemon.hasType('Ghost')) return this.chainModify(1.25);
+				if (pokemon.hasType('Ghost')) return this.chainModify(1.3);
 			},
 			onModifySpD(spd, pokemon) {
-				if (pokemon.hasType('Ghost')) return this.chainModify(1.25);
+				if (pokemon.hasType('Ghost')) return this.chainModify(1.3);
 			},
 			onAfterMove(source, target, move) {
 				const blessedMoves = ['judgement', 'originpulse', 'purify', 'sacredfire', 'dazzlinggleam', 'flash'];
