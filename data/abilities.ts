@@ -8123,14 +8123,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('perishsong');
 				this.add('-start', target, 'perish3', '[silent]');
 				this.add('-activate', source, 'ability: Requiem');
+			} else if (target && !target.fainted && !target.volatiles['curse']) {
+				target.addVolatile('curse', source, this.dex.abilities.get('requiem'));
+				this.add('-activate', source, 'ability: Requiem');
+			} else if (target && !target.fainted && !target.volatiles['trapped']) {
+				target.addVolatile('trapped', source, this.dex.abilities.get('requiem'), 'trapper');
+				this.add('-activate', source, 'ability: Requiem');
 			}
 			this.heal(Math.min(Math.floor(damage * 0.15), Math.floor(source.baseMaxhp / 4)), source, source);
 		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType !== 'Move') return;
+			const marked = !!target?.volatiles['perishsong'] || !!target?.volatiles['curse'];
+			this.heal(source.baseMaxhp / (marked ? 4 : 8) * length, source, source);
+		},
 		onDamagingHit(damage, target, source, move) {
-			if (!source || source.fainted || source.volatiles['perishsong']) return;
-			source.addVolatile('perishsong');
-			this.add('-start', source, 'perish3', '[silent]');
-			this.add('-activate', target, 'ability: Requiem');
+			if (!source || source.fainted) return;
+			if (!source.volatiles['perishsong']) {
+				source.addVolatile('perishsong');
+				this.add('-start', source, 'perish3', '[silent]');
+				this.add('-activate', target, 'ability: Requiem');
+			} else if (!source.volatiles['curse']) {
+				source.addVolatile('curse', target, this.dex.abilities.get('requiem'));
+				this.add('-activate', target, 'ability: Requiem');
+			} else if (!source.volatiles['trapped']) {
+				source.addVolatile('trapped', target, this.dex.abilities.get('requiem'), 'trapper');
+				this.add('-activate', target, 'ability: Requiem');
+			}
 		},
 		onFaint(pokemon, source, effect) {
 			if (this.field.terrain === 'hauntedterrain') {
@@ -8139,14 +8158,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.field.terrainState.duration = 5;
 			}
 			this.add('-activate', pokemon, 'ability: Requiem');
-			let applied = false;
-			for (const foe of pokemon.foes()) {
-				if (!foe || foe.fainted || foe.volatiles['perishsong']) continue;
-				foe.addVolatile('perishsong');
-				this.add('-start', foe, 'perish3', '[silent]');
-				applied = true;
+			if (!source || source === pokemon || source.fainted || effect?.effectType !== 'Move') return;
+			if (!source.volatiles['perishsong']) {
+				source.addVolatile('perishsong');
+				this.add('-start', source, 'perish3', '[silent]');
+			} else if (!source.volatiles['curse']) {
+				source.addVolatile('curse', pokemon, this.dex.abilities.get('requiem'));
+			} else if (!source.volatiles['trapped']) {
+				source.addVolatile('trapped', pokemon, this.dex.abilities.get('requiem'), 'trapper');
 			}
-			if (applied) this.add('-fieldactivate', 'move: Perish Song');
 		},
 		flags: {},
 		name: "Requiem",
@@ -8927,19 +8947,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
+			if (!source || source.fainted || source.isAlly(target)) return;
 			if (!this.checkMoveMakesContact(move, source, target) || this.field.isTerrain('holyterrain')) return;
 
-			let announced = false;
-			for (const pokemon of [target, source]) {
-				if (pokemon.volatiles['perishsong']) continue;
-				if (!announced) {
-					this.add('-ability', target, 'Perish Body');
-					announced = true;
+			this.add('-ability', target, 'Perish Body');
+			let applied = false;
+			for (const foe of target.foes()) {
+				if (!foe || foe.fainted) continue;
+				const perishSong = foe.volatiles['perishsong'];
+				if (perishSong) {
+					perishSong.duration = Math.max(1, perishSong.duration - 1);
+				} else {
+					foe.addVolatile('perishsong');
+					this.add('-start', foe, 'perish3', '[silent]');
+					applied = true;
 				}
-				pokemon.addVolatile('perishsong');
-				if (this.field.isTerrain('hauntedterrain')) {
-					pokemon.addVolatile('perishbody');
-				}
+			}
+			if (applied) this.add('-fieldactivate', 'move: Perish Song');
+			if (this.field.isTerrain('hauntedterrain')) {
+				target.addVolatile('perishbody', target);
 			}
 		},
 		condition: {
