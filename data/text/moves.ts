@@ -1221,8 +1221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crosspoison: {
 		name: "Cross Poison",
-		desc: "Has a 10% chance to poison the target and a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio. 10% chance to poison.",
+		desc: "Has a high critical hit ratio and a 50% chance to badly poison the target. If the target is poisoned or badly poisoned, this move has 1.3x power and ignores the target's positive Defense boosts.",
+		shortDesc: "High crit. 50% toxic. 1.3x vs poisoned; ignores Def boosts.",
 	},
 	crunch: {
 		name: "Crunch",
@@ -4498,8 +4498,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightslash: {
 		name: "Night Slash",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "Has 80 Base Power and a higher chance for a critical hit.",
+		shortDesc: "80 BP. High critical hit ratio.",
 	},
 	nobleroar: {
 		name: "Noble Roar",
@@ -5881,8 +5881,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges with +4 priority on the first turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks and restores 1/8 max HP when hit by a damaging move. When it attacks, the user restores 1/8 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "+4 charge: +Atk/Def/SpD, 0.7x damage. Hit heals 1/8.",
+		desc: "This attack charges with +4 priority on the first turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks and restores 1/16 max HP when hit by a damaging move. When it attacks, the user restores 1/16 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "+4 charge: +Atk/Def/SpD, 0.7x damage. Heals 1/16.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},

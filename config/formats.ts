@@ -19,6 +19,121 @@ The column value will be ignored for repeat sections.
 
 import { type FormatList } from "../sim/dex-formats";
 
+const ALLGEN_FIELD_RULESET = [
+	'Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause',
+	'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past',
+];
+const ALLGEN_FFA_RULESET = [
+	'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod',
+	'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past',
+];
+const ALLGEN_MULTI_RULESET = [
+	'Team Preview', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod',
+	'Max Team Size = 6', 'Picked Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100',
+	'+Unobtainable', '+Past',
+];
+
+const allGenFfaTeamPreview = function (this: any) {
+	this.add('clearpoke');
+	for (const pokemon of this.getAllPokemon()) {
+		let details = pokemon.details.replace(', shiny', '')
+			.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*');
+		if (!this.ruleTable.has('speciesrevealclause')) {
+			details = details
+				.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*');
+		}
+		this.addSplit(pokemon.side.id, ['poke', pokemon.side.id, details, '']);
+	}
+	this.makeRequest('teampreview');
+};
+
+const FIELD_GROUPS = [
+	{
+		subsection: "Elemental",
+		fields: [
+			["Misty Field [Adrienn]", "adriennterrain"],
+			["Cold Eclipse", "coldeclipseterrain"],
+			["Dragon's Den", "dragonsdenterrain"],
+			["Water Surface", "watersurfaceterrain"],
+		],
+	},
+	{
+		subsection: "Magical",
+		fields: [
+			["Crystal Cave", "crystalcavernterrain"],
+			["Bewitched Woods", "bewitchedwoodsterrain"],
+			["Holy Field", "holyterrain"],
+			["Haunted Field", "hauntedterrain"],
+			["New World", "newworldterrain"],
+			["Starlight Arena", "starlightarenaterrain"],
+		],
+	},
+	{
+		subsection: "Synthetic",
+		fields: [
+			["Big Top Arena", "bigtopterrain"],
+			["Chess Board", "chessboardterrain"],
+			["Factory Field", "factoryterrain"],
+			["Glitch Field", "glitchterrain"],
+		],
+	},
+	{
+		subsection: "Telluric",
+		fields: [
+			["Mountain", "mountainterrain"],
+			["Snowy Mountain", "snowymountainterrain"],
+			["Ashen Beach", "ashenbeachterrain"],
+			["Wasteland Field", "wastelandterrain"],
+		],
+	},
+] as const;
+
+function fieldRuleset(baseRuleset: readonly string[], terrain: string) {
+	return terrain === 'chessboardterrain' ? ['Assign Roles', ...baseRuleset] : [...baseRuleset];
+}
+
+function makeFfaFieldFormats(): FormatList {
+	const formats: FormatList = [{ section: "All Gen FFAs", column: 4 }];
+	for (const group of FIELD_GROUPS) {
+		formats.push({ subsection: group.subsection });
+		for (const [fieldName, terrain] of group.fields) {
+			for (const playerCount of [4, 3]) {
+				formats.push({
+					name: `[Gen 9] Free-For-All ${playerCount}P ${fieldName}`,
+					mod: 'gen9',
+					terrain,
+					gameType: 'freeforall',
+					playerCount,
+					searchShow: true,
+					challengeShow: true,
+					onTeamPreview: allGenFfaTeamPreview,
+					ruleset: fieldRuleset(ALLGEN_FFA_RULESET, terrain),
+				});
+			}
+		}
+	}
+	return formats;
+}
+
+function makeMultiFieldFormats(): FormatList {
+	const formats: FormatList = [{ section: "Multi Battles", column: 5 }];
+	for (const group of FIELD_GROUPS) {
+		formats.push({ subsection: group.subsection });
+		for (const [fieldName, terrain] of group.fields) {
+			formats.push({
+				name: `[Gen 9] Multi ${fieldName}`,
+				mod: 'gen9',
+				terrain,
+				gameType: 'multi',
+				searchShow: true,
+				challengeShow: true,
+				ruleset: fieldRuleset(ALLGEN_MULTI_RULESET, terrain),
+			});
+		}
+	}
+	return formats;
+}
+
 export const Formats: FormatList = [
 
 	// All Gen Reborn
@@ -896,68 +1011,12 @@ export const Formats: FormatList = [
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
 	{
-		name: "[Gen 9] Free-For-All 4P Misty Field [Adrienn]",
-
-		mod: 'gen9',
-		terrain: 'adriennterrain',
-		gameType: 'freeforall',
-		playerCount: 4,
-		searchShow: true,
-		challengeShow: true,
-		onTeamPreview() {
-			this.add('clearpoke');
-			for (const pokemon of this.getAllPokemon()) {
-				let details = pokemon.details.replace(', shiny', '')
-					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*');
-				if (!this.ruleTable.has('speciesrevealclause')) {
-					details = details
-						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*');
-				}
-				this.addSplit(pokemon.side.id, ['poke', pokemon.side.id, details, '']);
-			}
-			this.makeRequest('teampreview');
-		},
-		ruleset: ['Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
-	},
-	{
-		name: "[Gen 9] Free-For-All 3P Misty Field [Adrienn]",
-
-		mod: 'gen9',
-		terrain: 'adriennterrain',
-		gameType: 'freeforall',
-		playerCount: 3,
-		searchShow: true,
-		challengeShow: true,
-		onTeamPreview() {
-			this.add('clearpoke');
-			for (const pokemon of this.getAllPokemon()) {
-				let details = pokemon.details.replace(', shiny', '')
-					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*');
-				if (!this.ruleTable.has('speciesrevealclause')) {
-					details = details
-						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*');
-				}
-				this.addSplit(pokemon.side.id, ['poke', pokemon.side.id, details, '']);
-			}
-			this.makeRequest('teampreview');
-		},
-		ruleset: ['Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
-	},
-	{
-		name: "[Gen 9] Multi Misty Field [Adrienn]",
-
-		mod: 'gen9',
-		terrain: 'adriennterrain',
-		gameType: 'multi',
-		searchShow: true,
-		challengeShow: true,
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
-	},
-	{
 		name: "[Gen 9] No Field 6/4 Doubles Battle",
 
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod', 'Max Team Size = 6', 'Picked Team Size = 4', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
+	...makeFfaFieldFormats(),
+	...makeMultiFieldFormats(),
 ];

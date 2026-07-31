@@ -3592,15 +3592,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	crosspoison: {
 		num: 440,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 100,
 		category: "Physical",
 		name: "Cross Poison",
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		onModifyMove(move, pokemon, target) {
+			if (target && ['psn', 'tox'].includes(target.status) && target.boosts.def > 0) {
+				move.ignoreDefensive = true;
+			}
+		},
+		onBasePower(basePower, pokemon, target) {
+			if (['psn', 'tox'].includes(target.status)) return this.chainModify(1.3);
+		},
 		secondary: {
-			chance: 10,
-			status: 'psn',
+			chance: 50,
+			status: 'tox',
 		},
 		critRatio: 2,
 		target: "normal",
@@ -14309,7 +14317,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	nightslash: {
 		num: 400,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 80,
 		category: "Physical",
 		name: "Night Slash",
 		pp: 15,
@@ -18725,14 +18733,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterMove(source, target, move) {
-			if (move.totalDamage) this.heal(source.baseMaxhp / 8, source, source);
+			if (move.totalDamage) this.heal(source.baseMaxhp / 16, source, source);
 		},
 		condition: {
 			onSourceModifyDamage(damage, source, target, move) {
 				if (target !== source && move.category !== 'Status') return this.chainModify(0.7);
 			},
 			onDamagingHit(damage, target, source, move) {
-				this.heal(target.baseMaxhp / 8, target, target);
+				this.heal(target.baseMaxhp / 16, target, target);
 			},
 		},
 		target: "normal",

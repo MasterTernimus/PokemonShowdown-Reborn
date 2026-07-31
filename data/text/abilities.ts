@@ -524,7 +524,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon's arrow moves ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.2x power. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, and Magical Leaf.",
+		desc: "This Ability cannot be suppressed. This Pokemon's arrow moves ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.2x power. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Barrage, Scale Shot, Psycho Cut, and Ceaseless Edge.",
 		shortDesc: "Arrow moves ignore Ability/redirect/Protect, +2 at <=1/2 HP, hit all foes in FFA; arrow KOs fire again.",
 	},
 	eclipse: {
@@ -1496,6 +1496,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	marvelscale: {
 		name: "Marvel Scale",
 		shortDesc: "If this Pokemon is statused, its Defense is multiplied by 1.5.",
+	},
+	prismscale: {
+		name: "Prism Scale",
+		desc: "This Pokemon has Marvel Scale, Water Veil, and Dragonize's effects. Its Defense is 1.5x while statused or in boosted fields, it cannot be burned, it gains Aqua Ring on switch-in, it is immune to hail and sandstorm damage, and its Normal-type moves become Dragon type and have 1.2x power.",
+		shortDesc: "Marvel Scale + Water Veil + Dragonize.",
 	},
 	megalauncher: {
 		name: "Mega Launcher",
