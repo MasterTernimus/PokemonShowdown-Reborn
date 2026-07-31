@@ -3041,7 +3041,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	execution: {
 		name: "Execution",
-		desc: "Deals more damage the lower the target's HP is and built in Duskilate. This Pokemon has Sworn Duty's effect. If the target is at 50% HP or lower, this Pokemon's attacks deal 2x damage. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP per target knocked out. Its Attack and Special Attack cannot be lowered below -1, and fields prevent its Speed from being lowered. When this Pokemon faints, Doom Desire is cast on all opposing Pokemon.",
+		desc: "Deals more damage the lower the target's HP is and built in Duskilate. This Pokemon has Sworn Duty's effect. If the target is at 50% HP or lower, this Pokemon's attacks deal 2x damage. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP per target knocked out. Its Attack and Special Attack cannot be lowered below -1, and fields prevent its Speed from being lowered. When this Pokemon faints, double-power Doom Desire is cast on all opposing Pokemon.",
 		shortDesc: "Built-in Duskilate + Sworn Duty; 2x vs targets at 50% HP or lower; KO heals.",
 	},
 	echofiend: {
@@ -3136,8 +3136,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "This Pokemon has Thick Fat's effect and is immune to sandstorm and hail damage. At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, it automatically uses Belch on a random foe, then follows up with Spit Up on the same target even if Belch is immune or otherwise deals no damage. If this Pokemon uses Swallow, it also uses Belch and then Spit Up before its Stockpile stacks are cleared. This Pokemon can use Belch without eating a Berry.",
-		shortDesc: "Thick Fat; sand/hail immune. Auto-builds Stockpile; at 3 or after Swallow, Belch -> Spit Up.",
+		desc: "This Pokemon has Thick Fat's effect and is immune to sandstorm and hail damage. Belch used by this Pokemon has double power and can be used without eating a Berry. At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, it chooses the foe and whether doubled Belch or Spit Up would deal more damage, uses that move, then follows with the other move on the same target. Spit Up used automatically by this Ability does not consume Stockpile stacks. If this Pokemon uses Belch or Spit Up, it follows with the other move on the same target.",
+		shortDesc: "Thick Fat; Belch 2x/no Berry; auto-builds Stockpile; combos Belch + Spit Up.",
 	},
 	invigorate: {
 		name: "Invigorate",
