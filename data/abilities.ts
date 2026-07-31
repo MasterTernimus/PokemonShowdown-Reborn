@@ -4155,21 +4155,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10116,
 	},
 	venombastion: {
-		onCriticalHit() {
-			return false;
-		},
-		onAfterBoost(boost, target, source, effect) {
-			if (!source || source === target) return;
-			let lowered = false;
-			let i: BoostID;
-			for (i in boost) {
-				if (boost[i]! < 0) {
-					lowered = true;
-					break;
-				}
-			}
-			if (lowered) this.boost({ spd: 2 }, target, target, null, false, true);
-		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
 			if (this.movehasType(move, 'Bug')) return this.chainModify(1.5);
@@ -11755,7 +11740,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			let modifier = 1;
 			if (basePower && basePower < 80) modifier *= 1.5;
-			if (this.queue.willMove(defender) || defender.newlySwitched) modifier *= 1.3;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -11765,6 +11749,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain'])) return critRatio + 2;
 		},
 		onModifyMove(move) {
+			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move, this.effectState.target);
 			if (move.id === 'watershuriken') {
 				move.willCrit = true;
 			}
