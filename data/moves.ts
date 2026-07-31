@@ -1375,6 +1375,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (pokemon.hasAbility('accumulation')) return;
 			if (!pokemon.ateBerry) pokemon.disableMove('belch');
 		},
+		onAfterMove(source, target, move) {
+			if (!source.hasAbility('accumulation')) return;
+			if (source.abilityState.accumulationScriptedReleaseTurn === this.turn) return;
+			if (['accumulation', 'swallow'].includes(move.sourceEffect)) return;
+			if (source.abilityState.accumulationSuppressMoveChain) return;
+			source.abilityState.accumulationReleasedTurn = this.turn;
+			source.abilityState.accumulationAutoBelch = false;
+			source.abilityState.accumulationBelchTarget = null;
+			if (source.abilityState.accumulationNoSpitUpAfterBelch) {
+				source.abilityState.accumulationNoSpitUpAfterBelch = false;
+				return;
+			}
+			if (!target || target.fainted || (source.volatiles['stockpile']?.layers || 0) < 1) return;
+			source.abilityState.accumulationAutoSpitUp = true;
+			source.abilityState.accumulationNoBelchAfterSpitUp = true;
+			this.actions.useMove('spitup', source, { target });
+			source.abilityState.accumulationAutoSpitUp = false;
+			source.abilityState.accumulationNoBelchAfterSpitUp = false;
+		},
 		target: "normal",
 		type: "Poison",
 		contestType: "Tough",
@@ -13112,8 +13131,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
 				const foe = this.sample(pokemon.foes().filter(foe => !foe.fainted));
-				const shouldFocus = foe && (pokemon.hasAbility('serenegrace') || pokemon.hp <= pokemon.maxhp / 4) &&
-					this.randomChance(3, 4);
+				const shouldFocus = foe && (pokemon.hasAbility(['serenegrace', 'falsedevotion', 'moonlitwings']) ||
+					pokemon.hp <= pokemon.maxhp / 4) &&
+					this.randomChance(9, 10);
 				if (shouldFocus) {
 					const focusedMoves = moves.filter(move => {
 						if (move.category === 'Status' || !move.basePower || move.basePower < 90) return false;
@@ -19956,7 +19976,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTry(source) {
 			return !!source.volatiles['stockpile'];
 		},
-		onAfterMove(pokemon) {
+		onAfterMove(pokemon, target, move) {
+			if (pokemon.hasAbility('accumulation')) {
+				if (pokemon.abilityState.accumulationScriptedReleaseTurn === this.turn) {
+					return;
+				}
+				if (['accumulation', 'swallow'].includes(move.sourceEffect)) {
+					if (pokemon.abilityState.accumulationAutoSpitUp) return;
+				}
+				if (pokemon.abilityState.accumulationSuppressMoveChain) {
+					if (pokemon.abilityState.accumulationAutoSpitUp) return;
+				}
+				pokemon.abilityState.accumulationReleasedTurn = this.turn;
+				if (pokemon.abilityState.accumulationNoBelchAfterSpitUp) {
+					pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
+					return;
+				}
+				if (target && !target.fainted) {
+					pokemon.abilityState.accumulationAutoBelch = true;
+					pokemon.abilityState.accumulationNoSpitUpAfterBelch = true;
+					this.actions.useMove('belch', pokemon, { target });
+					pokemon.abilityState.accumulationAutoBelch = false;
+					pokemon.abilityState.accumulationNoSpitUpAfterBelch = false;
+				}
+			}
 			if (pokemon.abilityState.accumulationAutoSpitUp) return;
 			pokemon.removeVolatile('stockpile');
 		},
@@ -21081,8 +21124,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-activate', pokemon, 'ability: Accumulation');
 					pokemon.abilityState.accumulationAutoBelch = best.moveid === 'belch';
 					pokemon.abilityState.accumulationAutoSpitUp = best.moveid === 'spitup';
-					pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
+					pokemon.abilityState.accumulationNoBelchAfterSpitUp = best.moveid === 'spitup';
+					pokemon.abilityState.accumulationNoSpitUpAfterBelch = best.moveid === 'belch';
+					pokemon.abilityState.accumulationReleasedTurn = this.turn;
+					pokemon.abilityState.accumulationScriptedReleaseTurn = this.turn;
+					pokemon.abilityState.accumulationSuppressMoveChain = true;
 					this.actions.useMove(best.moveid, pokemon, { target: best.target });
+					if (!best.target.fainted) {
+						if (best.moveid === 'belch' && (pokemon.volatiles['stockpile']?.layers || 0) >= 1) {
+							pokemon.abilityState.accumulationAutoSpitUp = true;
+							pokemon.abilityState.accumulationNoBelchAfterSpitUp = true;
+							this.actions.useMove('spitup', pokemon, { target: best.target });
+						} else if (best.moveid === 'spitup') {
+							pokemon.abilityState.accumulationAutoBelch = true;
+							pokemon.abilityState.accumulationNoSpitUpAfterBelch = true;
+							this.actions.useMove('belch', pokemon, { target: best.target });
+						}
+					}
+					pokemon.abilityState.accumulationSuppressMoveChain = false;
 					pokemon.abilityState.accumulationAutoBelch = false;
 					pokemon.abilityState.accumulationAutoSpitUp = false;
 					pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;

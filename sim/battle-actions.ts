@@ -187,6 +187,9 @@ export class BattleActions {
 
 		for (const poke of switchersIn) {
 			if (!poke.hp) continue;
+			if (poke.terastallized === 'Stellar' && !poke.volatiles['stellarhealing']) {
+				poke.addVolatile('stellarhealing');
+			}
 			poke.isStarted = true;
 			poke.draggedIn = null;
 		}
@@ -1128,7 +1131,8 @@ export class BattleActions {
 		if (!parentalLike && !move.multihit) return null;
 		if (this.battle.gameType === 'freeforall') {
 			const targets = pokemon.foes().filter(target =>
-				target && target !== originalTarget && target.hp && !target.fainted && !target.isProtected()
+				target && target !== originalTarget && target.hp && !target.fainted && !target.isProtected() &&
+				!target.isSemiInvulnerable()
 			);
 			if (!targets.length) return null;
 			(move as any).spilloverDamageModifier = move.multihitType === 'parentalbond' ? 0.8 : 0.5;
@@ -1136,7 +1140,7 @@ export class BattleActions {
 		}
 		const ally = originalTarget.side.active.find(target =>
 			target && target !== originalTarget && target.hp && !target.fainted && !target.isProtected() &&
-			!target.isAlly(pokemon)
+			!target.isSemiInvulnerable() && !target.isAlly(pokemon)
 		);
 		if (!ally) return null;
 		(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.8) : 0.3;

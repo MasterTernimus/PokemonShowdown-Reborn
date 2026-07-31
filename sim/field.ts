@@ -126,13 +126,22 @@ export class Field {
 	}
 
 	restoreFormatHail() {
-		if (this.shouldRestoreFormatHail() && this.weather !== 'hail') {
-			if (this.setWeather('hail')) this.weatherState.fieldStartedTerrain = 'coldeclipseterrain';
+		const terrain = this.getFormatHailTerrain();
+		if (terrain && this.weather !== 'hail') {
+			if (this.setWeather('hail')) {
+				this.weatherState.fieldStartedTerrain = terrain;
+				if (terrain === 'fairytaleterrain') (this.battle as any).adriennFairyTaleHailStarted = true;
+			}
 		}
 	}
 
-	shouldRestoreFormatHail() {
-		return this.terrain === 'coldeclipseterrain';
+	getFormatHailTerrain() {
+		if (this.terrain === 'coldeclipseterrain') return 'coldeclipseterrain';
+		if (this.battle.format.terrain === 'adriennterrain' && this.terrain === 'fairytaleterrain' &&
+			!(this.battle as any).adriennFairyTaleHailStarted) {
+			return 'fairytaleterrain';
+		}
+		return '';
 	}
 
 	clearFieldStartedWeather(previousTerrain?: ID) {
