@@ -1597,7 +1597,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's healing boost. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon is marked by Requiem: first it gets Perish Song, then Curse if already under Perish Song, then Mean Look if already under Perish Song and Curse. This Pokemon restores HP equal to 15% of the damage dealt by its attacks, capped at 1/4 max HP. If this Pokemon knocks out a target with a move, it restores 1/8 max HP, or 1/4 max HP if the target had Perish Song or Curse. When this Pokemon faints, it creates Haunted Field for 5 turns and marks its direct attacker.",
+		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's healing boost. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon is marked by Requiem: first it gets Perish Song, then Curse if already under Perish Song, then Mean Look if already under Perish Song and Curse. Curse applied by Requiem deals 1/8 max HP each turn. This Pokemon restores HP equal to 15% of the damage dealt by its attacks, capped at 1/4 max HP. If this Pokemon knocks out a target with a move, it restores 1/8 max HP, or 1/4 max HP if the target had Perish Song or Curse. When this Pokemon faints, it creates Haunted Field for 5 turns and marks its direct attacker.",
 		shortDesc: "80 BP-and-below moves 1.5x; marks foes Perish Song -> Curse -> Mean Look; harvest heals.",
 	},
 	moonlitwings: {
