@@ -1797,8 +1797,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parentalbond: {
 		name: "Parental Bond",
-		desc: "Cannot be suppressed. This Pokemon has Friend Guard's effect. Its damaging moves become multi-hit moves that hit twice; the second hit deals 60% damage and retargets the foe's ally if the first target fainted. After using a damaging move, this Pokemon heals 1/16 max HP. If it gets a KO with a move, it heals 1/8 max HP per target KO'd. Once, if Mega Kangaskhan would faint from a move, it becomes regular Kangaskhan, survives at 1 HP, gains a Magic Guard effect, cannot Mega Evolve again, and immediately uses Retaliate on the attacker. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, existing multi-hit moves, multi-target moves, or two-turn moves.",
-		shortDesc: "Unsuppressable. Friend Guard; hits twice; heals on attacks/KOs; Mega Kanga endures once.",
+		desc: "Cannot be suppressed. This Pokemon has Friend Guard's effect. Its damaging moves become multi-hit moves that hit twice; the second hit deals 60% damage and retargets the foe's ally if the first target fainted. After using a damaging move, this Pokemon heals 1/16 max HP. Once, if Mega Kangaskhan would faint from a move, it becomes regular Kangaskhan, survives at 1 HP, gains a Magic Guard effect, cannot Mega Evolve again, and immediately uses Retaliate on the attacker. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, existing multi-hit moves, multi-target moves, or two-turn moves.",
+		shortDesc: "Unsuppressable. Friend Guard; hits twice; heals on attacks; Mega Kanga endures once.",
 	},
 	pastelveil: {
 		name: "Pastel Veil",
