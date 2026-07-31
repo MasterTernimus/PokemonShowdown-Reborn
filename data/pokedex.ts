@@ -1118,7 +1118,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ice", "Fairy"],
 		genderRatio: { M: 0.25, F: 0.75 },
 		baseStats: { hp: 73, atk: 67, def: 75, spa: 101, spd: 110, spe: 119 },
-		abilities: { 0: "Magic Bounce", 1: "Serene Grace", H: "Mourning Snow" },
+		abilities: { 0: "Magic Bounce", 1: "Serene Grace", H: "Snow Warning" },
 		heightm: 1.1,
 		weightkg: 19.9,
 		color: "Blue",
