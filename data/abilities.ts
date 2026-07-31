@@ -44,6 +44,24 @@ function removeSteelWeaknesses(typeMod: number, type: string) {
 	return typeMod;
 }
 
+function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
+	const targets = pokemon.foes().filter(foe => foe && !foe.fainted);
+	if (!targets.length) return null;
+	const moveids = ['belch'];
+	if ((pokemon.volatiles['stockpile']?.layers || 0) >= 3) moveids.push('spitup');
+	let best: { moveid: string, target: Pokemon, damage: number } | null = null;
+	for (const target of targets) {
+		for (const moveid of moveids) {
+			const move = battle.dex.getActiveMove(moveid);
+			if (moveid === 'belch') move.basePower *= 2;
+			const damage = battle.actions.getDamage(pokemon, target, move, true);
+			if (typeof damage !== 'number') continue;
+			if (!best || damage > best.damage) best = { moveid, target, damage };
+		}
+	}
+	return best || { moveid: 'belch', target: battle.sample(targets), damage: 0 };
+}
+
 function speedUpAbilityFutureSights(battle: Battle, pokemon: Pokemon, foresightFlag: 'grandmasterForesight' | 'perfectForesight') {
 	let spedUp = false;
 	for (const side of battle.sides) {
@@ -3656,6 +3674,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(0.5);
 			}
 		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.id === 'belch') return this.chainModify(2);
+		},
 		onResidual(pokemon) {
 			if (!pokemon.activeTurns) return;
 			const lastMove = pokemon.lastMove?.id;
@@ -3664,28 +3686,42 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.addVolatile('stockpile', pokemon);
 				if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) return;
 			}
-			const target = this.sample(pokemon.foes().filter(foe => !foe.fainted));
-			if (target) {
-				pokemon.abilityState.accumulationBelchTarget = target;
-				pokemon.abilityState.accumulationAutoBelch = true;
-				this.actions.useMove('belch', pokemon, { target });
-				pokemon.abilityState.accumulationAutoBelch = false;
-				if ((pokemon.volatiles['stockpile']?.layers || 0) >= 3 && !target.fainted) {
-					this.actions.useMove('spitup', pokemon, { target });
-				}
-				pokemon.abilityState.accumulationBelchTarget = null;
-			}
+			const release = chooseAccumulationRelease(this, pokemon);
+			if (!release) return;
+			this.add('-activate', pokemon, 'ability: Accumulation');
+			pokemon.abilityState.accumulationAutoBelch = release.moveid === 'belch';
+			pokemon.abilityState.accumulationAutoSpitUp = release.moveid === 'spitup';
+			pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
+			this.actions.useMove(release.moveid, pokemon, { target: release.target });
+			pokemon.abilityState.accumulationAutoBelch = false;
+			pokemon.abilityState.accumulationAutoSpitUp = false;
+			pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
+			pokemon.abilityState.accumulationNoSpitUpAfterBelch = false;
+			pokemon.abilityState.accumulationBelchTarget = null;
 		},
 		onAfterMove(source, target, move) {
-			if (move.id !== 'belch') return;
-			if (source.abilityState.accumulationAutoBelch) return;
-			const canRelease = source.abilityState.accumulationSwallowBelch || (source.volatiles['stockpile']?.layers || 0) >= 3;
-			source.abilityState.accumulationSwallowBelch = false;
-			if (!canRelease) return;
-			const spitTarget = source.abilityState.accumulationBelchTarget || target;
-			source.abilityState.accumulationBelchTarget = null;
-			if (!spitTarget || spitTarget.fainted) return;
-			this.actions.useMove('spitup', source, { target: spitTarget });
+			if (move.id === 'belch') {
+				source.abilityState.accumulationAutoBelch = false;
+				source.abilityState.accumulationBelchTarget = null;
+				if (source.abilityState.accumulationNoSpitUpAfterBelch) {
+					source.abilityState.accumulationNoSpitUpAfterBelch = false;
+					return;
+				}
+				if (!target || target.fainted || (source.volatiles['stockpile']?.layers || 0) < 1) return;
+				source.abilityState.accumulationAutoSpitUp = true;
+				source.abilityState.accumulationNoBelchAfterSpitUp = true;
+				this.actions.useMove('spitup', source, { target });
+				source.abilityState.accumulationAutoSpitUp = false;
+				source.abilityState.accumulationNoBelchAfterSpitUp = false;
+			} else if (move.id === 'spitup') {
+				if (source.abilityState.accumulationNoBelchAfterSpitUp) return;
+				if (!target || target.fainted) return;
+				source.abilityState.accumulationAutoBelch = true;
+				source.abilityState.accumulationNoSpitUpAfterBelch = true;
+				this.actions.useMove('belch', source, { target });
+				source.abilityState.accumulationAutoBelch = false;
+				source.abilityState.accumulationNoSpitUpAfterBelch = false;
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Accumulation",
@@ -4610,7 +4646,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						id: 'doomdesire',
 						name: "Doom Desire",
 						accuracy: 100,
-						basePower: 140,
+						basePower: 280,
 						category: "Special",
 						priority: 0,
 						flags: { metronome: 1, futuremove: 1 },

@@ -19955,6 +19955,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return !!source.volatiles['stockpile'];
 		},
 		onAfterMove(pokemon) {
+			if (pokemon.abilityState.accumulationAutoSpitUp) return;
 			pokemon.removeVolatile('stockpile');
 		},
 		target: "normal",
@@ -21063,13 +21064,27 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const success = !!this.heal(this.modify(pokemon.maxhp * modifier, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			if (!success) this.add('-fail', pokemon, 'heal');
 			if (pokemon.hasAbility('accumulation')) {
-				const target = this.sample(pokemon.foes().filter(foe => !foe.fainted));
-				if (target) {
-					pokemon.abilityState.accumulationSwallowBelch = true;
-					pokemon.abilityState.accumulationBelchTarget = target;
-					this.actions.useMove('belch', pokemon, { target });
-					pokemon.abilityState.accumulationSwallowBelch = false;
-					pokemon.abilityState.accumulationBelchTarget = null;
+				const targets = pokemon.foes().filter(foe => foe && !foe.fainted);
+				let best: { moveid: string, target: Pokemon, damage: number } | null = null;
+				for (const target of targets) {
+					for (const moveid of ['belch', 'spitup']) {
+						const move = this.dex.getActiveMove(moveid);
+						if (moveid === 'belch') move.basePower *= 2;
+						const damage = this.actions.getDamage(pokemon, target, move, true);
+						if (typeof damage !== 'number') continue;
+						if (!best || damage > best.damage) best = { moveid, target, damage };
+					}
+				}
+				if (best) {
+					this.add('-activate', pokemon, 'ability: Accumulation');
+					pokemon.abilityState.accumulationAutoBelch = best.moveid === 'belch';
+					pokemon.abilityState.accumulationAutoSpitUp = best.moveid === 'spitup';
+					pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
+					this.actions.useMove(best.moveid, pokemon, { target: best.target });
+					pokemon.abilityState.accumulationAutoBelch = false;
+					pokemon.abilityState.accumulationAutoSpitUp = false;
+					pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
+					pokemon.abilityState.accumulationNoSpitUpAfterBelch = false;
 				}
 			}
 			pokemon.removeVolatile('stockpile');
