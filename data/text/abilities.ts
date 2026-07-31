@@ -1597,8 +1597,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's healing boost. When this Pokemon faints, it creates Haunted Field for 5 turns and applies Perish Song to opposing Pokemon. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon has Perish Song applied to it. This Pokemon restores HP equal to 15% of the damage dealt by its attacks, capped at 1/4 max HP.",
-		shortDesc: "80 BP-and-below moves 1.5x; attacks drain 15% and mark Perish Song.",
+		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's healing boost. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon is marked by Requiem: first it gets Perish Song, then Curse if already under Perish Song, then Mean Look if already under Perish Song and Curse. This Pokemon restores HP equal to 15% of the damage dealt by its attacks, capped at 1/4 max HP. If this Pokemon knocks out a target with a move, it restores 1/8 max HP, or 1/4 max HP if the target had Perish Song or Curse. When this Pokemon faints, it creates Haunted Field for 5 turns and marks its direct attacker.",
+		shortDesc: "80 BP-and-below moves 1.5x; marks foes Perish Song -> Curse -> Mean Look; harvest heals.",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
@@ -1807,10 +1807,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perishbody: {
 		name: "Perish Body",
-		desc: "Making contact with this Pokemon starts the Perish Song effect for it and the attacker. This effect does not happen for this Pokemon if the attacker already has a perish count.",
-		shortDesc: "Making contact with this Pokemon starts the Perish Song effect for it and the attacker.",
+		desc: "If an enemy hits this Pokemon with a contact move, all opposing Pokemon get Perish Song. If an affected opposing Pokemon already has Perish Song, its countdown is reduced by 1 instead. During Haunted Field, affected foes are trapped while adjacent to this Pokemon. This effect is blocked by Holy Field and does not trigger from allies.",
+		shortDesc: "Enemy contact gives foes Perish Song; repeat hits reduce the count; traps in Haunted Field.",
 
-		start: "  Both Pok\u00E9mon will faint in three turns!",
+		start: "  The opposing Pok\u00E9mon will faint in three turns!",
 	},
 	pickpocket: {
 		name: "Pickpocket",
