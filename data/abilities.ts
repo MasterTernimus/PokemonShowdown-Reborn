@@ -2172,7 +2172,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	fallenstar: {
 		onModifyMove(move, pokemon) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
+			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'barrage', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			if (!arrowMoves.includes(move.id)) return;
 			move.ignoreAbility = true;
 			move.breaksProtect = true;
@@ -2182,7 +2182,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
+			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'barrage', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			if (!arrowMoves.includes(move.id)) return;
 			let modifier = (move as any).fallenStarFollowUp ? 0.5 : 1;
 			if ((move as any).fallenStarProtectedTargets?.includes(target)) modifier *= move.crit ? 2 : 0.5;
@@ -2190,14 +2190,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.chainModify(modifier);
 		},
 		onModifyPriority(priority, pokemon, target, move) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
+			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'barrage', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			if (arrowMoves.includes(move.id) && pokemon.hp <= pokemon.maxhp / 2) return priority + 2;
 		},
 		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
 		},
 		onSourceAfterMoveSecondarySelf(source, target, move) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
+			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'barrage', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			if (arrowMoves.includes(move.id)) source.abilityState.fallenStarGuardTurn = this.turn;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -2205,7 +2205,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.hp <= target.maxhp / 2) return this.chainModify(0.5);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf'];
+			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'barrage', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			if (!effect || effect.effectType !== 'Move' || !arrowMoves.includes(effect.id)) return;
 			if ((effect as any).fallenStarFollowUp) return;
 			const followTarget = source.foes().find(foe => foe && !foe.fainted);
@@ -7695,6 +7695,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Marvel Scale",
 		rating: 2.5,
 		num: 63,
+	},
+	prismscale: {
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			return this.dex.abilities.get('marvelscale').onModifyDef?.call(this, def, pokemon);
+		},
+		onUpdate(pokemon) {
+			return this.dex.abilities.get('waterveil').onUpdate?.call(this, pokemon);
+		},
+		onSwitchIn(pokemon) {
+			return this.dex.abilities.get('waterveil').onSwitchIn?.call(this, pokemon);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('waterveil').onSetStatus?.call(this, status, target, source, effect);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('waterveil').onImmunity?.call(this, type, pokemon);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('waterveil').onResidual?.call(this, pokemon);
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			return this.dex.abilities.get('dragonize').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			return this.dex.abilities.get('dragonize').onBasePower?.call(this, basePower, pokemon, target, move);
+		},
+		flags: { breakable: 1 },
+		name: "Prism Scale",
+		rating: 4,
+		num: 10257,
 	},
 	megalauncher: {
 		onBasePowerPriority: 19,
