@@ -1597,7 +1597,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's healing boost. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon is marked by Requiem: first it gets Perish Song, then Curse if already under Perish Song, then Mean Look if already under Perish Song and Curse. Curse applied by Requiem deals 1/8 max HP each turn. This Pokemon restores HP equal to 15% of the damage dealt by its attacks, capped at 1/4 max HP. If this Pokemon knocks out a target with a move, it restores 1/8 max HP, or 1/4 max HP if the target had Perish Song or Curse. When this Pokemon faints, it creates Haunted Field for 5 turns and marks its direct attacker.",
+		desc: "This Pokemon boosts its moves with 80 or less Base Power by 1.5x and has Invigorate's healing boost. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon is marked by Requiem: first it gets Perish Song, then Curse if already under Perish Song, then Mean Look if already under Perish Song and Curse. Curse applied by Requiem deals 1/8 max HP each turn. If this Pokemon knocks out a target with a move, it restores 1/8 max HP per target knocked out. When this Pokemon faints, it creates Haunted Field for 5 turns and marks its direct attacker.",
 		shortDesc: "80 BP-and-below moves 1.5x; marks foes Perish Song -> Curse -> Mean Look; harvest heals.",
 	},
 	moonlitwings: {
@@ -2206,8 +2206,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowguard: {
 		name: "Shadow Guard",
-		desc: "This Pokemon has Shadow Shield and Elevate's effects.",
-		shortDesc: "Shadow Shield + Elevate.",
+		desc: "This Pokemon has Shadow Shield and Elevate's effects. It also queues a full-power Temporal Shift Future Sight every turn, using whichever of Ghost, Dark, or Fairy would hit the target best.",
+		shortDesc: "Shadow Shield + Elevate; every turn queues full-power Ghost/Dark/Fairy Temporal Shift.",
 	},
 	shadowtag: {
 		name: "Shadow Tag",
@@ -2235,8 +2235,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	blademastery: {
 		name: "Blade Mastery",
-		desc: "This Pokemon has Sharpness's effect. Its slicing moves always result in a critical hit. This Pokemon gains STAB on Fighting-type moves and has Fighting-type resistances.",
-		shortDesc: "Sharpness; slicing moves always crit; gains Fighting STAB and resistances.",
+		desc: "This Pokemon has Sharpness's effect. This Pokemon gains STAB on Fighting-type moves and has Fighting-type resistances.",
+		shortDesc: "Sharpness; gains Fighting STAB and resistances.",
 	},
 	shedskin: {
 		name: "Shed Skin",

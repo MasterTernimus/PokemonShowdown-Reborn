@@ -3397,12 +3397,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10141,
 	},
 	temporalshift: {
-		queueTemporalHex(pokemon, abilityName = 'Temporal Shift') {
-			if (pokemon.abilityState.temporalShiftLastCastTurn === this.turn - 1) return;
+		queueTemporalHex(pokemon, abilityName = 'Temporal Shift', everyTurn = false, typePool = null, basePower = 60) {
+			if (!everyTurn && pokemon.abilityState.temporalShiftLastCastTurn === this.turn - 1) return;
 			const primaryType = pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal';
 			const targets = pokemon.foes().filter(target => target.hp && !target.fainted && target !== pokemon && !target.isAlly(pokemon));
 			const target = targets.length ? this.sample(targets) : null;
 			if (!target) return;
+			let moveType = primaryType;
+			if (typePool?.length) {
+				let bestMod = -10;
+				for (const candidateType of typePool) {
+					const typeMod = this.clampIntRange(this.dex.getEffectiveness(candidateType, target.getTypes()), -6, 6);
+					if (typeMod > bestMod) {
+						bestMod = typeMod;
+						moveType = candidateType;
+					}
+				}
+			}
 			pokemon.abilityState.temporalShiftLastCastTurn = this.turn;
 			const slotCondition = target.side.slotConditions[target.position]['futuremove'];
 			if (slotCondition) {
@@ -3410,7 +3421,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (slotCondition.moveData?.temporalShiftHex) {
 					slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
 					const queuedTurn = slotCondition.endingTurn + slotCondition.perfectForesightQueued - 1;
-					this.add('-message', `${abilityName} queued another ${primaryType}-type Future Sight for turn ${queuedTurn}.`);
+					this.add('-message', `${abilityName} queued another ${moveType}-type Future Sight for turn ${queuedTurn}.`);
 				} else {
 					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
 					this.add('-message', `${abilityName} delayed Future Sight to turn ${slotCondition.endingTurn}.`);
@@ -3425,18 +3436,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					id: 'futuresight',
 					name: "Future Sight",
 					accuracy: 100,
-					basePower: 60,
+					basePower,
 					category: "Special",
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 					temporalShiftHex: true,
 					effectType: 'Move',
-					type: primaryType,
+					type: moveType,
 				},
 				perfectForesightQueued: 1,
 			});
 			this.add('-start', pokemon, 'move: Future Sight', `[from] ability: ${abilityName}`);
-			this.add('-message', `${abilityName}'s ${primaryType}-type Future Sight will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
+			this.add('-message', `${abilityName}'s ${moveType}-type Future Sight will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
 		},
 		onBoost(boost, target, source, effect) {
 			if (source && target === source) return;
@@ -3680,6 +3691,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if (!pokemon.activeTurns) return;
+			if (pokemon.abilityState.accumulationReleasedTurn === this.turn) return;
 			const lastMove = pokemon.lastMove?.id;
 			if (lastMove === 'spitup' || lastMove === 'swallow') return;
 			if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) {
@@ -3691,37 +3703,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-activate', pokemon, 'ability: Accumulation');
 			pokemon.abilityState.accumulationAutoBelch = release.moveid === 'belch';
 			pokemon.abilityState.accumulationAutoSpitUp = release.moveid === 'spitup';
-			pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
+			pokemon.abilityState.accumulationNoBelchAfterSpitUp = release.moveid === 'spitup';
+			pokemon.abilityState.accumulationNoSpitUpAfterBelch = release.moveid === 'belch';
+			pokemon.abilityState.accumulationReleasedTurn = this.turn;
+			pokemon.abilityState.accumulationScriptedReleaseTurn = this.turn;
+			pokemon.abilityState.accumulationSuppressMoveChain = true;
 			this.actions.useMove(release.moveid, pokemon, { target: release.target });
+			if (!release.target.fainted) {
+				if (release.moveid === 'belch' && (pokemon.volatiles['stockpile']?.layers || 0) >= 1) {
+					pokemon.abilityState.accumulationAutoSpitUp = true;
+					pokemon.abilityState.accumulationNoBelchAfterSpitUp = true;
+					this.actions.useMove('spitup', pokemon, { target: release.target });
+				} else if (release.moveid === 'spitup') {
+					pokemon.abilityState.accumulationAutoBelch = true;
+					pokemon.abilityState.accumulationNoSpitUpAfterBelch = true;
+					this.actions.useMove('belch', pokemon, { target: release.target });
+				}
+			}
+			pokemon.abilityState.accumulationSuppressMoveChain = false;
 			pokemon.abilityState.accumulationAutoBelch = false;
 			pokemon.abilityState.accumulationAutoSpitUp = false;
 			pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
 			pokemon.abilityState.accumulationNoSpitUpAfterBelch = false;
 			pokemon.abilityState.accumulationBelchTarget = null;
-		},
-		onAfterMove(source, target, move) {
-			if (move.id === 'belch') {
-				source.abilityState.accumulationAutoBelch = false;
-				source.abilityState.accumulationBelchTarget = null;
-				if (source.abilityState.accumulationNoSpitUpAfterBelch) {
-					source.abilityState.accumulationNoSpitUpAfterBelch = false;
-					return;
-				}
-				if (!target || target.fainted || (source.volatiles['stockpile']?.layers || 0) < 1) return;
-				source.abilityState.accumulationAutoSpitUp = true;
-				source.abilityState.accumulationNoBelchAfterSpitUp = true;
-				this.actions.useMove('spitup', source, { target });
-				source.abilityState.accumulationAutoSpitUp = false;
-				source.abilityState.accumulationNoBelchAfterSpitUp = false;
-			} else if (move.id === 'spitup') {
-				if (source.abilityState.accumulationNoBelchAfterSpitUp) return;
-				if (!target || target.fainted) return;
-				source.abilityState.accumulationAutoBelch = true;
-				source.abilityState.accumulationNoSpitUpAfterBelch = true;
-				this.actions.useMove('belch', source, { target });
-				source.abilityState.accumulationAutoBelch = false;
-				source.abilityState.accumulationNoSpitUpAfterBelch = false;
-			}
 		},
 		flags: { breakable: 1 },
 		name: "Accumulation",
@@ -6457,12 +6461,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.multihitType = 'hydrabond';
 		},
 		// Damage modifier implemented in BattleActions#modifyDamage()
-		onSourceModifySecondaries(secondaries, target, source, move) {
-			if (['parentalbond', 'hydrabond'].includes(move.multihitType) && move.id === 'secretpower' && move.hit < 2) {
-				// hack to prevent accidentally suppressing King's Rock/Razor Fang
-				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
-			}
-		},
 		onBasePower(basePower, source) {
 			if (this.field.isTerrain('dragonsdenterrain')) {
 				return this.chainModify(1.2);
@@ -8149,12 +8147,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('trapped', source, this.dex.abilities.get('requiem'), 'trapper');
 				this.add('-activate', source, 'ability: Requiem');
 			}
-			this.heal(Math.min(Math.floor(damage * 0.15), Math.floor(source.baseMaxhp / 4)), source, source);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
-			const marked = !!target?.volatiles['perishsong'] || !!target?.volatiles['curse'];
-			this.heal(source.baseMaxhp / (marked ? 4 : 8) * length, source, source);
+			this.heal(source.baseMaxhp / 8 * length, source, source);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source.fainted) return;
@@ -8883,12 +8879,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			(move as any).parentalBondSpread = true;
 		},
 		// Damage modifier implemented in BattleActions#modifyDamage()
-		onSourceModifySecondaries(secondaries, target, source, move) {
-			if (['parentalbond', 'hydrabond'].includes(move.multihitType) && move.id === 'secretpower' && move.hit < 2) {
-				// hack to prevent accidentally suppressing King's Rock/Razor Fang
-				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
-			}
-		},
 		flags: { cantsuppress: 1 },
 		name: "Parental Bond",
 		rating: 4.5,
@@ -10547,6 +10537,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
 		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('temporalshift').queueTemporalHex.call(this, pokemon, 'Shadow Guard', true, ['Ghost', 'Dark', 'Fairy'], 120);
+		},
 		flags: {},
 		name: "Shadow Guard",
 		rating: 4,
@@ -10610,9 +10603,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Blade Mastery boost');
 				return this.chainModify(1.5);
 			}
-		},
-		onModifyCritRatio(critRatio, source, target, move) {
-			if (move.flags['slicing']) return 5;
 		},
 		onModifySTAB(stab, source, target, move) {
 			if (move.type === 'Fighting' && !source.hasType('Fighting')) return 1.5;
