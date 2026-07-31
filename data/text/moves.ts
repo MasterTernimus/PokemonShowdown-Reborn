@@ -5105,8 +5105,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rage: {
 		name: "Rage",
-		desc: "If the user was hit by a damaging move before it attacks this turn, this move's power is doubled and the user's Attack is raised by 1 stage after it attacks.",
-		shortDesc: "If hit before use: 2x power and +1 Atk after attacking.",
+		desc: "Raises the user's Attack by 1 stage after it hits. If the user was hit by a damaging move before it attacks this turn, this move's power is doubled.",
+		shortDesc: "Raises user's Attack by 1 on hit. 2x power if user was hit first.",
 		gen3: {
 			desc: "Once this move is used and unless the target protected itself, the user's Attack is raised by 1 stage every time it is hit by another Pokemon's attack as long as this move is chosen for use.",
 		},
