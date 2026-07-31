@@ -734,8 +734,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	venombastion: {
 		name: "Venom Bastion",
-		desc: "This Pokemon cannot be critically hit. If this Pokemon has a stat lowered by an opposing Pokemon, its Special Defense rises by 2 stages. Its Bug-type moves have 1.5x power, and contact moves used against it deal 0.75x damage.",
-		shortDesc: "No crits; stat drops give +2 SpD; Bug moves 1.5x; takes 0.75x contact damage.",
+		desc: "This Pokemon has Shell Armor's effect. Its Bug-type moves have 1.5x power, and contact moves used against it deal 0.75x damage.",
+		shortDesc: "Shell Armor; Bug moves 1.5x; takes 0.75x contact damage.",
 	},
 	rimeknuckle: {
 		name: "Rime Knuckle",
@@ -2460,8 +2460,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowcurrent: {
 		name: "Shadow Current",
-		desc: "This Pokemon has Sworn Duty's effect. Before using a move, this Pokemon becomes the move's type. Its moves with less than 80 Base Power have 1.5x power. If it moves before the target, its moves have 1.3x power. This Pokemon takes 0.75x damage from attacks. Water Shuriken's first hit is 90 Base Power, followed by 2 to 6 weaker hits that still receive the low-power boost.",
-		shortDesc: "Sworn Duty; Protean; <80 BP 1.5x; Water Shuriken opens at 90 BP.",
+		desc: "This Pokemon has Sworn Duty and Infiltrator's effects. Before using a move, this Pokemon becomes the move's type. Its moves with less than 80 Base Power have 1.5x power. This Pokemon takes 0.75x damage from attacks. Water Shuriken's first hit is 90 Base Power, followed by 1 to 6 weaker hits that still receive the low-power boost.",
+		shortDesc: "Sworn Duty + Infiltrator; Protean; <80 BP 1.5x; Water Shuriken opens at 90 BP.",
 	},
 	astralwitchcraft: {
 		name: "Astral Witchcraft",
@@ -2475,8 +2475,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingcurrent: {
 		name: "Raging Current",
-		desc: "If rain is active, this Pokemon's Speed is doubled. It has Damp's effect, is immune to burns, and takes 0.5x damage from Fire-type moves.",
-		shortDesc: "Swift Swim + Damp; immune to burns; 0.5x Fire damage.",
+		desc: "If rain is active, this Pokemon's Speed is doubled. It has Damp and Water Veil's effects, and takes 0.5x damage from Fire-type moves.",
+		shortDesc: "Swift Swim + Damp + Water Veil; 0.5x Fire damage.",
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
