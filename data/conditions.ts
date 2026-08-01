@@ -31,6 +31,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 	},
+	gmaxhealing: {
+		name: 'G-Max Healing',
+	},
 	illusioncopy: {
 		name: 'Illusion Copy',
 		onModifyMove(move, pokemon) {

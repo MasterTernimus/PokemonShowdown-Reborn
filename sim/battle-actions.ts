@@ -1949,6 +1949,10 @@ export class BattleActions {
 				baseDamage = this.battle.modify(baseDamage, 0.9);
 			}
 		}
+		if (move.multihit && move.hit > 1 && move.multihitType !== 'hydrabond' && !pokemon.hasAbility('battlebond')) {
+			this.battle.debug('Multi-hit follow-up damage reduction');
+			baseDamage = this.battle.modify(baseDamage, 0.7);
+		}
 		if (move.flags['bone'] && target.hasAbility('soulfire')) {
 			this.battle.debug('Bone move vs Soul Fire boost');
 			baseDamage = this.battle.modify(baseDamage, 4);
@@ -2043,6 +2047,9 @@ export class BattleActions {
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+		if (target.species.forme === 'Gmax' || target.species.id.endsWith('gmax')) {
+			baseDamage = this.battle.modify(baseDamage, 0.9);
+		}
 
 		const bypassProtect = target.getMoveHitData(move).bypassProtect;
 		if (bypassProtect) {

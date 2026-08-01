@@ -4830,6 +4830,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	sandshrew: {
 		learnset: {
+			accelerock: ["9M"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			agility: ["9L49", "8M", "8L27"],
 			amnesia: ["9M", "8M"],
@@ -38284,6 +38285,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			secretpower: ["9M", "6M", "4M", "3M"],
 			seismictoss: ["9L1", "5S2", "3T"],
 			shadowclaw: ["9M", "8M", "7M", "6M", "5M", "4M"],
+			shelter: ["9M"],
 			shockwave: ["9M", "7T", "6T", "4M", "3M"],
 			skullbash: ["9L1"],
 			slam: [],
@@ -38292,6 +38294,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			smackdown: ["9L28", "7M", "6M", "5M"],
 			snarl: ["9M", "8M", "7M", "6M", "5M"],
 			snore: ["9M", "8M", "7T", "7V", "6T", "5T", "4T", "3T"],
+			shoreup: ["9M"],
 			spite: ["9M", "7T", "6T", "5T", "4T"],
 			stealthrock: ["9M", "8M", "7T", "6T", "5T", "4M"],
 			stompingtantrum: ["9L32", "8M", "8L18", "7T"],

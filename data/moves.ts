@@ -13138,12 +13138,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					pokemon.hp <= pokemon.maxhp / 4) &&
 					this.randomChance(9, 10);
 				if (shouldFocus) {
-					const focusedMoves = moves.filter(move => {
+					const scoredMoves = moves.map(move => {
 						if (move.category === 'Status' || !move.basePower || move.basePower < 90) return false;
 						const activeMove = this.dex.getActiveMove(move.id);
 						if (!foe.runImmunity(activeMove)) return false;
-						return foe.runEffectiveness(activeMove) > 0;
-					});
+						const effectiveness = foe.runEffectiveness(activeMove);
+						if (effectiveness <= 0) return false;
+						const attackStat = activeMove.category === 'Physical' ?
+							pokemon.getStat('atk', false, true) : pokemon.getStat('spa', false, true);
+						const defenseStat = activeMove.category === 'Physical' ?
+							foe.getStat('def', false, true) : foe.getStat('spd', false, true);
+						const score = move.basePower * attackStat / Math.max(1, defenseStat) * Math.pow(2, effectiveness);
+						return { move, score };
+					}).filter(Boolean) as { move: Move; score: number }[];
+					const bestScore = scoredMoves.reduce((best, entry) => Math.max(best, entry.score), 0);
+					const focusedMoves = scoredMoves.filter(entry => entry.score >= bestScore * 0.8).map(entry => entry.move);
 					if (focusedMoves.length) moves = focusedMoves;
 				}
 				randomMove = this.sample(moves).id;
@@ -23341,7 +23350,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const isAshGreninja = pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed;
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.basePower = 20;
-				move.multihit = [2, 7];
+				move.multihit = this.gameType === 'freeforall' ? [3, 6] : [2, 5];
 				(move as any).shadowCurrentExtraHit = true;
 			} else if (isAshGreninja) {
 				move.basePower = 30;

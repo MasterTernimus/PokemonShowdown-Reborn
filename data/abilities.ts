@@ -3217,6 +3217,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
+		onFoeNegateImmunity(pokemon, type) {
+			return this.dex.abilities.get('teravolt').onFoeNegateImmunity?.call(this, pokemon, type);
+		},
+		onModifyMove(move) {
+			this.dex.abilities.get('teravolt').onModifyMove?.call(this, move);
+		},
 		flags: { breakable: 1 },
 		name: "Storm Fright",
 		rating: 4.5,
@@ -4274,6 +4280,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10120,
 	},
 	mountainhunger: {
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('sapsipper').onTryHit?.call(this, target, source, move);
+		},
+		onAllyTryHitSide(target, source, move) {
+			return this.dex.abilities.get('sapsipper').onAllyTryHitSide?.call(this, target, source, move);
+		},
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
@@ -4294,9 +4307,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const healingItems = ['aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry'];
 			return !healingItems.includes(item.id) || pokemon.hp <= pokemon.maxhp / 2 || this.effectState.gluttony;
 		},
-		onFractionalPriorityPriority: -1,
-		onFractionalPriority(priority, pokemon) {
-			if (pokemon.status === 'slp') return priority - 0.1;
+		onResidual(pokemon) {
+			this.dex.abilities.get('sapsipper').onResidual?.call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Mountain Hunger",
@@ -4312,7 +4324,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-message', `${pokemon.name} shared its mead with ${ally.name}!`);
 				this.heal(ally.baseMaxhp / healAmount, ally, pokemon);
 			}
-			if (this.field.isTerrain('fairytaleterrain')) {
+			if (this.field.isTerrain('fairytaleterrain') && !pokemon.abilityState.ironDominionFairyTaleBoosted) {
+				pokemon.abilityState.ironDominionFairyTaleBoosted = true;
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('irondominion'));
 			}
 			if (this.field.isTerrain('mirrorarmor')) {
@@ -4924,6 +4937,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Ange');
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
 		},
 		onModifyMove(move) {
 			if (this.field.isTerrain('fairytaleterrain')) move.accuracy = true;
@@ -5982,13 +5998,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Gooey');
-				if (this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('swampterrain')) {
-					this.boost({ spe: -2 }, source, target, null, true);
-				} else if (this.field.isTerrain('wastelandterrain')) {
-					target.setStatus('psn', source);
-				} else {
-					this.boost({ spe: -1 }, source, target, null, true);
-				}
+				const speedWasLowered = source.boosts.spe < 0;
+				const bestStat = source.getStat('atk', false, true) >= source.getStat('spa', false, true) ? 'atk' : 'spa';
+				this.boost({ spe: -2, [bestStat]: -1 }, source, target, null, true);
+				this.heal(target.baseMaxhp / (speedWasLowered ? 8 : 16), target, target);
 			}
 		},
 		flags: {},
@@ -8212,6 +8225,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.dex.abilities.get('icebody').onStart?.call(this, pokemon);
 		},
+		onModifyDef(def, pokemon) {
+			if (this.field.isTerrain(['fairytaleterrain', 'watersurfaceterrain', 'underwaterterrain', 'coldeclipseterrain', 'ashenbeachterrain'])) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain(['fairytaleterrain', 'watersurfaceterrain', 'underwaterterrain', 'coldeclipseterrain', 'ashenbeachterrain'])) {
+				return this.chainModify(1.5);
+			}
+		},
 		onWeather(target, source, effect) {
 			this.dex.abilities.get('icebody').onWeather?.call(this, target, source, effect);
 		},
@@ -8229,6 +8252,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Shell Prison",
 		rating: 4,
 		num: 10211,
+	},
+	shelltrap: {
+		onCriticalHit: false,
+		onStart(pokemon) {
+			this.dex.abilities.get('shellprison').onStart?.call(this, pokemon);
+		},
+		onModifyDef(def, pokemon) {
+			return this.dex.abilities.get('shellprison').onModifyDef?.call(this, def, pokemon);
+		},
+		onModifySpD(spd, pokemon) {
+			return this.dex.abilities.get('shellprison').onModifySpD?.call(this, spd, pokemon);
+		},
+		onWeather(target, source, effect) {
+			this.dex.abilities.get('shellprison').onWeather?.call(this, target, source, effect);
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('shellprison').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('shellprison').onResidual?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
+		},
+		flags: {},
+		name: "Shell Trap",
+		rating: 4.5,
+		num: 10225,
 	},
 	rollingassault: {
 		onBasePower(basePower, source, target, move) {

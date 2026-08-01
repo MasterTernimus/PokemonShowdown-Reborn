@@ -1970,7 +1970,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Water", "Psychic"],
 		baseStats: { hp: 95, atk: 75, def: 180, spa: 130, spd: 80, spe: 30 },
-		abilities: { 0: "Shell Armor" },
+		abilities: { 0: "Shell Trap" },
 		heightm: 2,
 		weightkg: 120,
 		color: "Pink",

@@ -449,8 +449,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ange: {
 		name: "Ange",
-		desc: "This Pokemon has Eternal Flower and Fairy Aura's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.6x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
-		shortDesc: "Eternal Flower + Fairy Aura; boosts Grass/Fairy pressure and weakens opposing gimmicks.",
+		desc: "This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.6x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Eternal Flower + Fairy Aura + Magic Guard; weakens opposing gimmicks.",
 	},
 	ascendance: {
 		name: "Ascendance",
@@ -679,8 +679,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormfright: {
 		name: "Storm Fright",
-		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by one.",
-		shortDesc: "Intimidate + Lightning Rod.",
+		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by one. This Pokemon has Teravolt's effect.",
+		shortDesc: "Intimidate + Lightning Rod + Teravolt.",
 	},
 	enlightenment: {
 		name: "Enlightenment",
@@ -819,8 +819,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mountainhunger: {
 		name: "Mountain Hunger",
-		desc: "This Pokemon has Thick Fat, Gluttony, and Early Bird's effects. It is immune to hail damage and takes reduced damage from Fire- and Ice-type attacks.",
-		shortDesc: "Thick Fat + Gluttony + Early Bird.",
+		desc: "This Pokemon has Thick Fat, Gluttony, and Sap Sipper's effects. It is immune to hail damage and takes reduced damage from Fire- and Ice-type attacks.",
+		shortDesc: "Thick Fat + Gluttony + Sap Sipper.",
 	},
 	irondominion: {
 		name: "Iron Dominion",
@@ -1095,7 +1095,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	gooey: {
 		name: "Gooey",
-		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
+		desc: "When this Pokemon is hit by a contact move, the attacker's Speed is lowered by 2 stages and its highest offensive stat is lowered by 1 stage. This Pokemon restores 1/16 max HP, or 1/8 max HP if the attacker's Speed was already lowered.",
+		shortDesc: "Contact: attacker -2 Spe and -1 highest offense; heals 1/16, or 1/8 if Spe already lowered.",
 	},
 	gorillatactics: {
 		name: "Gorilla Tactics",
@@ -1612,8 +1613,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shellprison: {
 		name: "Shell Prison",
-		desc: "This Pokemon has Shell Armor and Ice Body's effects. When hit by an attack, it automatically uses Clamp on the attacker; this Clamp traps through the turn it triggers and the next turn. This Pokemon restores 1/16 max HP at the end of each turn.",
-		shortDesc: "Shell Armor + Ice Body; hit by attack uses short Clamp; heals 1/16.",
+		desc: "This Pokemon has Shell Armor and Ice Body's effects. When hit by an attack, it automatically uses Clamp on the attacker; this Clamp traps through the turn it triggers and the next turn. This Pokemon restores 1/16 max HP at the end of each turn. Its Defense and Special Defense are 1.5x in Fairy Tale, Water Surface, Underwater, Cold Eclipse, and Ashen Beach.",
+		shortDesc: "Shell Armor + Ice Body; hit uses short Clamp; heals; field Def/SpD 1.5x.",
+	},
+	shelltrap: {
+		name: "Shell Trap",
+		desc: "This Pokemon has Shell Prison, Regenerator, and Shell Armor's effects. When hit by an attack, it automatically uses Clamp on the attacker; this Clamp traps through the turn it triggers and the next turn. This Pokemon restores 1/16 max HP at the end of each turn and restores 1/3 max HP when it switches out. Its Defense and Special Defense are 1.5x in Fairy Tale, Water Surface, Underwater, Cold Eclipse, and Ashen Beach.",
+		shortDesc: "Shell Prison + Regenerator + Shell Armor; field Def/SpD 1.5x.",
 	},
 	rollingassault: {
 		name: "Rolling Assault",
