@@ -104,7 +104,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySTAB(stab, source, target, move) {
 			return this.dex.abilities.get('adaptability').onModifySTAB?.call(this, stab, source, target, move);
 		},
-		onModifyMove(move) {
+		onModifyMove(move, source) {
+			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source);
 			if (move.category !== 'Status') {
 				move.breaksProtect = true;
 				(move as typeof move & { spiralEvolutionBreaksProtect?: boolean }).spiralEvolutionBreaksProtect = true;
@@ -121,6 +122,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let modifier = 1;
 			if (move.id === 'twineedle') modifier *= 2;
 			if (spiralMove.spiralEvolutionProtectedTargets?.includes(target)) modifier *= 0.5;
+			if (this.field.isTerrain('dragonsdenterrain')) modifier *= 1.2;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onTryAddVolatile(status) {
@@ -4633,35 +4635,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 400,
 	},
 	execution: {
-		queueExecutionDoomDesire(pokemon) {
-			for (const target of pokemon.foes()) {
-				if (!target || target.fainted) continue;
-				const slotCondition = target.side.slotConditions[target.position]['futuremove'];
-				if (slotCondition) {
-					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
-					this.add('-message', `Execution delayed Doom Desire to turn ${slotCondition.endingTurn}.`);
-					continue;
-				}
-				if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('execution'))) continue;
-				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-					move: 'doomdesire',
-					source: pokemon,
-					moveData: {
-						id: 'doomdesire',
-						name: "Doom Desire",
-						accuracy: 100,
-						basePower: 280,
-						category: "Special",
-						priority: 0,
-						flags: { metronome: 1, futuremove: 1 },
-						effectType: 'Move',
-						type: 'Steel',
-					},
-				});
-				this.add('-start', pokemon, 'Doom Desire', '[from] ability: Execution');
-				this.add('-message', `Execution's Doom Desire will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
-			}
-		},
 		onStart(pokemon) {
 			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
 		},
@@ -4693,9 +4666,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
 			this.heal(source.baseMaxhp / 8 * length, source, source);
-		},
-		onFaint(pokemon) {
-			this.effect.queueExecutionDoomDesire.call(this, pokemon);
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
@@ -10799,6 +10769,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.multiaccuracy) {
 				delete move.multiaccuracy;
 			}
+		},
+		onBasePower(basePower, source, target, move) {
+			if (move.multihit) return this.chainModify(1.5);
 		},
 		flags: {},
 		name: "Skill Link",
