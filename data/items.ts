@@ -196,10 +196,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 2)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp / 3);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
 			}
@@ -2170,10 +2170,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 2)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp / 3);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
@@ -3015,10 +3015,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 2)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp / 3);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
 			}
@@ -3885,10 +3885,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 2)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp / 3);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
 			}
@@ -8034,10 +8034,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 2)) return false;
 		},
 		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp / 3);
+			this.heal(pokemon.baseMaxhp / 2);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
 			}
