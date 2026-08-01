@@ -10,8 +10,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	spiralevolution: {
 		name: "Spiral Evolution",
-		desc: "This Pokemon has built-in Adaptability, cannot flinch, takes half damage from priority moves, and its damaging moves hit through protection for half damage. In Trick Room, its non-priority moves act before other non-priority moves. Twineedle has double power and a 50% chance to be a critical hit; in multi battles it hits all adjacent foes once, and if only some foes protected, it focuses on foes that did not protect.",
-		shortDesc: "Adaptability; pierces Protect; no flinch; resists priority; Twineedle is empowered.",
+		desc: "This Pokemon has built-in Adaptability and Hydra Bond, cannot flinch, takes half damage from priority moves, and its damaging moves hit through protection for half damage. In Trick Room, its non-priority moves act before other non-priority moves. Twineedle has double power and a 50% chance to be a critical hit; in multi battles it hits all adjacent foes once, and if only some foes protected, it focuses on foes that did not protect.",
+		shortDesc: "Adaptability + Hydra Bond; pierces Protect; no flinch; resists priority; Twineedle is empowered.",
 	},
 	alchemicsurge: {
 		name: "Alchemic Surge",
@@ -2310,8 +2310,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	skilllink: {
 		name: "Skill Link",
-		desc: "This Pokemon's multi-hit attacks always hit the maximum number of times. Triple Kick and Triple Axel do not check accuracy for the second and third hits.",
-		shortDesc: "This Pokemon's multi-hit attacks always hit the maximum number of times.",
+		desc: "This Pokemon's multi-hit attacks always hit the maximum number of times and have 1.5x power. Triple Kick and Triple Axel do not check accuracy for the second and third hits.",
+		shortDesc: "Multi-hit attacks always hit max times and have 1.5x power.",
 		gen7: {
 			desc: "This Pokemon's multi-hit attacks always hit the maximum number of times. Triple Kick does not check accuracy for the second and third hits.",
 		},
@@ -3041,7 +3041,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	execution: {
 		name: "Execution",
-		desc: "Deals more damage the lower the target's HP is and built in Duskilate. This Pokemon has Sworn Duty's effect. If the target is at 50% HP or lower, this Pokemon's attacks deal 2x damage. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP per target knocked out. Its Attack and Special Attack cannot be lowered below -1, and fields prevent its Speed from being lowered. When this Pokemon faints, double-power Doom Desire is cast on all opposing Pokemon.",
+		desc: "Deals more damage the lower the target's HP is and built in Duskilate. This Pokemon has Sworn Duty's effect. If the target is at 50% HP or lower, this Pokemon's attacks deal 2x damage. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP per target knocked out. Its Attack and Special Attack cannot be lowered below -1, and fields prevent its Speed from being lowered.",
 		shortDesc: "Built-in Duskilate + Sworn Duty; 2x vs targets at 50% HP or lower; KO heals.",
 	},
 	echofiend: {
