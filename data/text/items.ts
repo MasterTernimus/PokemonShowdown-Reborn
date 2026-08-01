@@ -43,7 +43,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	aguavberry: {
 		name: "Aguav Berry",
-		shortDesc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
+		shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
 		gen7: {
 			shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpD Nature. Single use.",
 		},
@@ -612,7 +612,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	figyberry: {
 		name: "Figy Berry",
-		shortDesc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
+		shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
 		gen7: {
 			shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Atk Nature. Single use.",
 		},
@@ -914,7 +914,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	iapapaberry: {
 		name: "Iapapa Berry",
-		shortDesc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
+		shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
 		gen7: {
 			shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Def Nature. Single use.",
 		},
@@ -1179,7 +1179,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	magoberry: {
 		name: "Mago Berry",
-		shortDesc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
+		shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 		gen7: {
 			shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -Spe Nature. Single use.",
 		},
@@ -2529,7 +2529,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	wikiberry: {
 		name: "Wiki Berry",
-		shortDesc: "Restores 1/3 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
+		shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 		gen7: {
 			shortDesc: "Restores 1/2 max HP at 1/4 max HP or less; confuses if -SpA Nature. Single use.",
 		},
