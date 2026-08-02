@@ -8568,6 +8568,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 233,
 	},
 	neutralization: {
+		boostedField() {
+			return this.field.isTerrain(['chessboardterrain', 'psychicterrain']);
+		},
 		lowerOffense(target, source) {
 			if (target.hasAbility(['neutralization', 'parasitism'])) return;
 			const boosts = target.getStat('atk', false, true) >= target.getStat('spa', false, true) ?
@@ -8598,15 +8601,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (this.field.isTerrain('chessboardterrain')) this.boost({ def: 1, spd: 1 }, pokemon);
 		},
+		onEnd(pokemon) {
+			this.field.releaseNeutralizedTerrain(pokemon);
+		},
+		onFaint(pokemon) {
+			this.field.releaseNeutralizedTerrain(pokemon);
+		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('psychicterrain')) this.boost({ spe: 1 }, pokemon);
+			if (!this.effect.boostedField.call(this)) return;
+			const boosts = pokemon.getStat('atk', false, true) >= pokemon.getStat('spa', false, true) ?
+				{ atk: 1, spe: 1 } : { spa: 1, spe: 1 };
+			if (this.field.getPseudoWeather('trickroom')) delete boosts.spe;
+			this.boost(boosts, pokemon, pokemon);
 		},
 		onModifyMove(move) {
-			if (move.category !== 'Status' && this.field.isTerrain(['chessboardterrain', 'psychicterrain'])) move.ignoreAbility = true;
+			if (move.category !== 'Status' && this.effect.boostedField.call(this)) move.ignoreAbility = true;
 		},
 		onSourceHit(target, source, move) {
 			if (!target || target === source || target.isAlly(source)) return;
-			if (move.spreadHit || !['normal', 'any', 'adjacentFoe'].includes(move.target)) return;
+			const boostedField = this.effect.boostedField.call(this);
+			if (move.spreadHit && !boostedField) return;
+			if (!move.spreadHit && !['normal', 'any', 'adjacentFoe'].includes(move.target)) return;
 			this.effect.lowerOffense.call(this, target, source);
 		},
 		flags: {},

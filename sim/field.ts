@@ -231,6 +231,18 @@ export class Field {
 		);
 	}
 
+	neutralizingTerrainEffectsExcept(excluded: Pokemon) {
+		return this.battle.getAllActive().some(pokemon =>
+			pokemon !== excluded && pokemon?.isActive && !pokemon.fainted && pokemon.hasAbility('neutralization')
+		);
+	}
+
+	releaseNeutralizedTerrain(excluded: Pokemon) {
+		if (!this.terrain || !this.terrainState.neutralizationHeldExpired) return false;
+		if (this.neutralizingTerrainEffectsExcept(excluded)) return false;
+		return this.clearTerrain('neutralization');
+	}
+
 	canBypassNeutralizationForTerrainChange(statusid: ID) {
 		const waterDepthTerrains = ['watersurfaceterrain', 'underwaterterrain'];
 		if (waterDepthTerrains.includes(this.terrain) && waterDepthTerrains.includes(statusid)) return true;
@@ -363,10 +375,9 @@ export class Field {
 			return false;
 		}
 		if (power !== 'neutralization' && this.neutralizeTerrainChange()) {
-			if (this.terrainState.zMoveTerrain) {
-				this.terrainState.zMoveExpired = true;
-				this.terrainState.duration = 1;
-			}
+			this.terrainState.neutralizationHeldExpired = true;
+			this.terrainState.duration = 1;
+			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
 			return false;
 		}
 		if (power === 'mid') {

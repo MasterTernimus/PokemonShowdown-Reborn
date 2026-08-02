@@ -480,9 +480,17 @@ export class BattleActions {
 			return false;
 		}
 
+		const originalTarget = target;
 		const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
 		if (targets.length) {
 			target = targets[targets.length - 1]; // in case of redirection
+		}
+		if (
+			this.battle.gameType !== 'freeforall' && move.multihit && targets.length > 1 &&
+			['allAdjacent', 'allAdjacentFoes'].includes(move.target)
+		) {
+			const selectedTarget = targets.includes(originalTarget) ? originalTarget : target;
+			targets.splice(0, targets.length, selectedTarget);
 		}
 
 		const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
