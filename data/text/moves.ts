@@ -356,8 +356,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barbbarrage: {
 		name: "Barb Barrage",
-		desc: "Has a 50% chance to poison the target. Power doubles if the target is already poisoned.",
-		shortDesc: "50% psn. 2x power if target already poisoned.",
+		desc: "Has a 50% chance to poison the target. Power doubles if the target has a non-volatile status condition.",
+		shortDesc: "50% psn. 2x power if target is statused.",
 	},
 	barrage: {
 		name: "Barrage",
@@ -440,8 +440,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	belch: {
 		name: "Belch",
-		desc: "This move cannot be selected until the user eats a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one.",
-		shortDesc: "Cannot be selected until the user eats a Berry.",
+		desc: "This move cannot be selected until the user eats a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one. Pokemon with Accumulation can use this move without eating a Berry.",
+		shortDesc: "Requires eating a Berry, unless the user has Accumulation.",
 	},
 	bellydrum: {
 		name: "Belly Drum",
@@ -532,8 +532,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bittermalice: {
 		name: "Bitter Malice",
-		desc: "Has a 100% chance to lower the target's Attack by 1 stage.",
-		shortDesc: "100% chance to lower the target's Attack by 1.",
+		desc: "Power doubles if the target has a non-volatile status condition. Has a 30% chance to freeze the target. In Haunted Field, this move instead has a 100% chance to lower the target's Special Attack by 1 stage and a 30% chance to freeze.",
+		shortDesc: "2x if target is statused. 30% freeze.",
 	},
 	blackholeeclipse: {
 		name: "Black Hole Eclipse",
@@ -862,8 +862,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ceaselessedge: {
 		name: "Ceaseless Edge",
-		desc: "If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. A maximum of three layers may be set, and opponents lose 1/8 of their maximum HP with one layer, 1/6 of their maximum HP with two layers, and 1/4 of their maximum HP with three layers, all rounded down. Can be removed from the opposing side if any Pokemon uses Tidy Up, or if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog.",
-		shortDesc: "Sets a layer of Spikes on the opposing side.",
+		desc: "If this move is successful, it sets up a layer of Spikes on the opposing side and gives the hit target Splinter for 3 turns. Splinter deals residual damage based on a 25 Base Power Dark-type physical attack from the original user, applying type effectiveness but no random damage variance.",
+		shortDesc: "Sets Spikes. Target takes 3 turns of Splinter.",
 	},
 	celebrate: {
 		name: "Celebrate",
@@ -3355,8 +3355,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	infernalparade: {
 		name: "Infernal Parade",
-		desc: "Has a 30% chance to burn the target. Power doubles if the target has a non-volatile status condition.",
-		shortDesc: "30% burn. 2x power if target is already statused.",
+		desc: "Has a 30% chance to burn the target. Power doubles if the target has a non-volatile status condition, or if the user has Soul Fire or Sinister Blaze.",
+		shortDesc: "30% burn. 2x if statused or Soul Fire/Sinister Blaze.",
 	},
 	inferno: {
 		name: "Inferno",
@@ -4459,8 +4459,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	needlearm: {
 		name: "Needle Arm",
-		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch. If this move hits, the target takes Splinter residual damage for 3 turns based on a 25 Base Power Grass-type physical attack from the original user, applying type effectiveness but no random damage variance.",
+		shortDesc: "30% flinch. Target takes 3 turns of Splinter.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
@@ -4712,8 +4712,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pinmissile: {
 		name: "Pin Missile",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits three to five times. If this move hits, the target takes Splinter residual damage for 3 turns based on a 25 Base Power Bug-type physical attack from the original user, applying type effectiveness but no random damage variance. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 3-5 times. Target takes 3 turns of Splinter.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -5770,8 +5770,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shelter: {
 		name: "Shelter",
-		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Raises the user's Defense by 2.",
+		desc: "Raises the user's Defense by 2 stages. After use, the user takes 20% less damage from the next damaging hit this turn.",
+		shortDesc: "+2 Def; next hit this turn deals 20% less.",
 	},
 	shiftgear: {
 		name: "Shift Gear",
@@ -6056,8 +6056,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snipeshot: {
 		name: "Snipe Shot",
-		desc: "Has a higher chance for a critical hit. This move cannot be redirected to a different target by any effect.",
-		shortDesc: "High critical hit ratio. Cannot be redirected.",
+		desc: "Has a higher chance for a critical hit. This move cannot be redirected to a different target by any effect. This move uses Attack instead of Special Attack if the user's Attack is higher than its Special Attack.",
+		shortDesc: "High crit; cannot be redirected; uses higher offense.",
 	},
 	snore: {
 		name: "Snore",
@@ -6206,7 +6206,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikecannon: {
 		name: "Spike Cannon",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
+		desc: "Power is 30. Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		shortDesc: "Hits 3-5 times in one turn.",
 		gen4: {
 			desc: "Hits three to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
@@ -6291,7 +6291,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spitup: {
 		name: "Spit Up",
-		desc: "Power is equal to 100 times the user's Stockpile count. At 3 Stockpile counts, this move hits through protection for half damage. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
+		desc: "Power is equal to 100 times the user's Stockpile count. At 3 Stockpile counts, this move hits through protection for half damage, unless it was used automatically by Accumulation. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0. If used by a Pokemon with Accumulation, it is followed by Belch on the same target.",
 		shortDesc: "More power with Stockpile; at 3 hits through Protect at 1/2.",
 		gen4: {
 			desc: "Power is equal to 100 times the user's Stockpile count. This move does not apply damage variance. Fails if the user's Stockpile count is 0. Unless there is no target, whether or not this move is successful the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
@@ -6434,8 +6434,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stoneaxe: {
 		name: "Stone Axe",
-		desc: "If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any Pokemon uses Tidy Up, or if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog.",
-		shortDesc: "Sets Stealth Rock on the target's side.",
+		desc: "If this move is successful, it sets Stealth Rock on the opposing side and gives the hit target Splinter for 3 turns. Splinter deals residual damage based on a 25 Base Power Rock-type physical attack from the original user, applying type effectiveness but no random damage variance.",
+		shortDesc: "Sets Stealth Rock. Target takes Splinter.",
 	},
 	stoneedge: {
 		name: "Stone Edge",
@@ -7162,8 +7162,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triplearrows: {
 		name: "Triple Arrows",
-		desc: "Has a 50% chance to lower the target's Defense by 1 stage, a 30% chance to make it flinch, and a higher chance for a critical hit.",
-		shortDesc: "High crit. Target: 50% -1 Defense, 30% flinch.",
+		desc: "Has a 50% chance to lower the target's Defense by 1 stage, a 30% chance to make it flinch, and a higher chance for a critical hit. Each use raises the critical-hit ratio of the user's side by 1 stage, like G-Max Chi Strike.",
+		shortDesc: "High crit. 50% -1 Def, 30% flinch; +1 ally crit.",
 	},
 	tripleaxel: {
 		name: "Triple Axel",

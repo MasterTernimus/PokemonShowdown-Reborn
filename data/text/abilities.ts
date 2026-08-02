@@ -10,13 +10,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	spiralevolution: {
 		name: "Spiral Evolution",
-		desc: "This Pokemon has built-in Adaptability and Hydra Bond, cannot flinch, takes half damage from priority moves, and its damaging moves hit through protection for half damage. In Trick Room, its non-priority moves act before other non-priority moves. Twineedle has double power and a 50% chance to be a critical hit; in multi battles it hits all adjacent foes once, and if only some foes protected, it focuses on foes that did not protect.",
-		shortDesc: "Adaptability + Hydra Bond; pierces Protect; no flinch; resists priority; Twineedle is empowered.",
+		desc: "This Pokemon has built-in Adaptability and Hydra Bond, cannot flinch, takes half damage from priority moves, and its damaging moves hit through protection for half damage. In Trick Room, its non-priority moves act before other non-priority moves. Twineedle has double power and a 50% chance to be a critical hit; in multi battles it hits all adjacent foes once, and if Twineedle or Double Hit have some targets protected, protected hits focus into unprotected foes like Dragon Darts.",
+		shortDesc: "Adaptability + Hydra Bond; reduced Protect-pierce; no flinch; Twineedle/Double Hit focus.",
 	},
 	alchemicsurge: {
 		name: "Alchemic Surge",
 		desc: "This Pokemon has Competitive, Psychic Surge, Hydra Bond, and Infiltrator. On entry, it sets Psychic Terrain. If any of its stats are lowered by a foe, its Sp. Atk is raised by 2 stages. Its damaging moves use Hydra Bond's effects, and its moves bypass substitutes, screens, Safeguard, and Mist.",
 		shortDesc: "Competitive + Psychic Surge + Hydra Bond + Infiltrator.",
+	},
+	astralcore: {
+		name: "Astral Core",
+		desc: "This Pokemon has Natural Cure, Pure Power, Illuminate, and Defragment's effects.",
+		shortDesc: "Natural Cure + Pure Power + Illuminate + Defragment.",
 	},
 	joyride: {
 		name: "Joyride",
@@ -524,8 +529,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon's arrow moves ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.2x power. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Barrage, Scale Shot, Psycho Cut, and Ceaseless Edge.",
-		shortDesc: "Arrow moves ignore Ability/redirect/Protect, +2 at <=1/2 HP, hit all foes in FFA; arrow KOs fire again.",
+		desc: "This Ability cannot be suppressed. This Pokemon restores 1/16 max HP at the end of each turn. Its arrow moves ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.2x power. Snipe Shot gets an additional 1.5x power boost. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Barrage, Scale Shot, Psycho Cut, and Ceaseless Edge.",
+		shortDesc: "Heals 1/16; arrow moves ignore Ability/redirect/Protect, +2 at <=1/2 HP, hit all foes in FFA.",
 	},
 	eclipse: {
 		name: "Eclipse",
@@ -839,8 +844,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingfists: {
 		name: "Raging Fists",
-		desc: "This Pokemon has Ultra Ego and Scrappy's effects.",
-		shortDesc: "Ultra Ego + Scrappy.",
+		desc: "This Pokemon has Scrappy, Hydra Bond, Unseen Fist, and Skill Link's effects.",
+		shortDesc: "Scrappy + Hydra Bond + Unseen Fist + Skill Link.",
 	},
 	warship: {
 		name: "War Ship",
@@ -1452,8 +1457,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lunarorbit: {
 		name: "Lunar Orbit",
-		desc: "This Pokemon has Magic Bounce. On switch-in, it sets Gravity for 5 turns. This Pokemon is immune to Gravity's negative effects: it is not grounded, its Ground immunity is not removed, and it can still use moves normally restricted by Gravity.",
-		shortDesc: "Magic Bounce; sets Gravity; ignores Gravity's drawbacks.",
+		desc: "This Pokemon has Magic Bounce and Serene Grace. On switch-in, it sets Gravity for 5 turns. This Pokemon is immune to Gravity's negative effects: it is not grounded, its Ground immunity is not removed, and it can still use moves normally restricted by Gravity. This Pokemon also benefits from Metronome's focused mode.",
+		shortDesc: "Magic Bounce + Serene Grace; sets Gravity; benefits from focused Metronome.",
 	},
 	magicguard: {
 		name: "Magic Guard",
@@ -2634,8 +2639,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
-		desc: "This Pokemon has Sharpness's effect. For each fainted ally, this Pokemon's moves deal 1.1x damage and it takes 5% less damage from attacks, with no limit; in Free-for-All, fainted allies count twice. This updates even while this Pokemon is active. At 1 or more fainted allies, its Attack cannot be lowered. At 2 or more, it cannot flinch. At 3 or more, it takes 25% less damage from super effective attacks and once per battle endures at 1 HP if it would be knocked out from above half HP. At 4 or more, its Dark- and Steel-type moves ignore screens. At 5 fainted allies, it gains Magic Guard's effect and its Attack rises by 1 stage. If this Pokemon knocks out a target, it restores 1/8 max HP per target. It restores 1/16 max HP at the end of each turn and takes 10% less damage from gimmick Pokemon.",
-		shortDesc: "Sharpness; fallen allies boost/reduce damage; doubled in FFA; 5 gives Magic Guard.",
+		desc: "For each fainted ally, this Pokemon's moves deal 1.1x damage and it takes 5% less damage from attacks, with no limit; in Free-for-All, fainted allies count twice. This Pokemon also takes 10% less damage from all damaging moves. This updates even while this Pokemon is active. At 1 or more fainted allies, its Attack cannot be lowered. At 2 or more, it cannot flinch. At 3 or more, it takes 25% less damage from super effective attacks and once per battle endures at 1 HP if it would be knocked out from above half HP. At 4 or more, its Dark- and Steel-type moves ignore screens. At 5 fainted allies, it gains Magic Guard's effect and its Attack rises by 1 stage. It restores 1/16 max HP at the end of each turn.",
+		shortDesc: "Fallen allies boost/reduce damage; doubled in FFA; 10% less damage; 5 gives Magic Guard.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
@@ -3142,8 +3147,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "This Pokemon has Thick Fat's effect and is immune to sandstorm and hail damage. Belch used by this Pokemon has double power and can be used without eating a Berry. At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, it chooses the foe and whether doubled Belch or Spit Up would deal more damage, uses that move, then follows with the other move on the same target. Spit Up used automatically by this Ability does not consume Stockpile stacks. If this Pokemon uses Belch or Spit Up, it follows with the other move on the same target.",
-		shortDesc: "Thick Fat; Belch 2x/no Berry; auto-builds Stockpile; combos Belch + Spit Up.",
+		desc: "This Pokemon has Thick Fat's effect and is immune to sandstorm and hail damage. Belch used by this Pokemon can be used without eating a Berry. At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, every other turn it chooses the foe and whether Belch or Spit Up would deal more damage, then uses only that move. Automatically used Spit Up respects protection and invulnerability. If this Pokemon uses Spit Up, it follows with Belch on the same target and consumes its Stockpile. If this Pokemon uses Belch, it does not follow with Spit Up. If this Pokemon uses Swallow, it also uses Spit Up and Belch on the best target before consuming its Stockpile.",
+		shortDesc: "Thick Fat; Belch needs no Berry; auto-builds Stockpile; Spit Up/Swallow combo into Belch.",
 	},
 	invigorate: {
 		name: "Invigorate",
