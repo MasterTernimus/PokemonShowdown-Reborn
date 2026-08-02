@@ -1,22 +1,4 @@
 /* eslint-disable @stylistic/max-len */
-import { toID } from '../sim/dex';
-
-function speciesZCrystalResidual(this: any, pokemon: import('../sim/pokemon').Pokemon) {
-	const item = pokemon.getItem();
-	if (!item.itemUser?.length) return;
-	const speciesid = pokemon.species.id;
-	const baseSpeciesid = pokemon.baseSpecies.id;
-	const baseSpeciesNameid = toID(pokemon.baseSpecies.baseSpecies);
-	for (const user of item.itemUser) {
-		for (const userPart of user.split(',')) {
-			const userid = toID(userPart);
-			if (speciesid === userid || baseSpeciesid === userid || baseSpeciesNameid === userid) {
-				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon, item);
-				return;
-			}
-		}
-	}
-}
 
 export const Items: import('../sim/dex-items').ItemDataTable = {
 	abilityshield: {
@@ -256,7 +238,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Stoked Sparksurfer",
 		zMoveType: "Electric",
 		itemUser: ["Raichu", "Raichu-Alola"],
-		onResidual: speciesZCrystalResidual,
 		num: 803,
 		gen: 7,
 		isNonstandard: "Past",
@@ -1383,7 +1364,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Sinister Arrow Raid",
 		zMoveFrom: "Spirit Shackle",
 		itemUser: ["Decidueye", "Decidueye-Hisui"],
-		onResidual: speciesZCrystalResidual,
 		num: 798,
 		gen: 7,
 		isNonstandard: "Past",
@@ -1738,7 +1718,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		itemUser: ["Eevee", 'Eevee-Starter', 'Eevee-Gmax'],
-		onResidual: speciesZCrystalResidual,
 		num: 805,
 		gen: 7,
 		isNonstandard: "Past",
@@ -2715,10 +2694,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	greninjite: {
 		name: "Greninjite",
 		spritenum: 560,
-		megaStone: { "Greninja": "Greninja-Mega" },
-		itemUser: ["Greninja"],
+		megaStone: { "Greninja": "Greninja-Mega", "Greninja-Bond": "Greninja-Mega" },
+		itemUser: ["Greninja", "Greninja-Bond"],
 		onTakeItem(item, source) {
-			// TODO: Figure out if this works on Greninja-Bond
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		num: 2577,
@@ -3113,7 +3091,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Malicious Moonsault",
 		zMoveFrom: "Darkest Lariat",
 		itemUser: ["Incineroar"],
-		onResidual: speciesZCrystalResidual,
 		num: 799,
 		gen: 7,
 		isNonstandard: "Past",
@@ -3327,7 +3304,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Clangorous Soulblaze",
 		zMoveFrom: "Clanging Scales",
 		itemUser: ["Kommo-o", "Kommo-o-Totem"],
-		onResidual: speciesZCrystalResidual,
 		num: 926,
 		gen: 7,
 		isNonstandard: "Past",
@@ -3692,7 +3668,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Menacing Moonraze Maelstrom",
 		zMoveFrom: "Moongeist Beam",
 		itemUser: ["Lunala", "Necrozma-Dawn-Wings"],
-		onResidual: speciesZCrystalResidual,
 		num: 922,
 		gen: 7,
 		isNonstandard: "Past",
@@ -3754,7 +3729,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Splintered Stormshards",
 		zMoveType: "Rock",
 		itemUser: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
-		onResidual: speciesZCrystalResidual,
 		num: 925,
 		gen: 7,
 		isNonstandard: "Past",
@@ -3979,7 +3953,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Soul-Stealing 7-Star Strike",
 		zMoveFrom: "Spectral Thief",
 		itemUser: ["Marshadow"],
-		onResidual: speciesZCrystalResidual,
 		num: 802,
 		gen: 7,
 		isNonstandard: "Past",
@@ -4211,7 +4184,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Genesis Supernova",
 		zMoveFrom: "Psychic",
 		itemUser: ["Mew"],
-		onResidual: speciesZCrystalResidual,
 		num: 806,
 		gen: 7,
 		isNonstandard: "Past",
@@ -4279,7 +4251,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Let's Snuggle Forever",
 		zMoveFrom: "Play Rough",
 		itemUser: ["Mimikyu", "Mimikyu-Busted", "Mimikyu-Totem", "Mimikyu-Busted-Totem"],
-		onResidual: speciesZCrystalResidual,
 		num: 924,
 		isNonstandard: "Past",
 		gen: 7,
@@ -4734,7 +4705,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		itemUser: ["Pikachu", "Pikachu-Starter"],
-		onResidual: speciesZCrystalResidual,
 		num: 794,
 		gen: 7,
 		isNonstandard: "Past",
@@ -4746,7 +4716,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "10,000,000 Volt Thunderbolt",
 		zMoveFrom: "Thunderbolt",
 		itemUser: ["Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner"],
-		onResidual: speciesZCrystalResidual,
 		num: 836,
 		isNonstandard: "Past",
 		gen: 7,
@@ -5001,7 +4970,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Oceanic Operetta",
 		zMoveFrom: "Sparkling Aria",
 		itemUser: ["Primarina"],
-		onResidual: speciesZCrystalResidual,
 		num: 800,
 		gen: 7,
 		isNonstandard: "Past",
@@ -5982,7 +5950,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Pulverizing Pancake",
 		zMoveType: "Normal",
 		itemUser: ["Snorlax", "Snorlax-Gmax"],
-		onResidual: speciesZCrystalResidual,
 		num: 804,
 		gen: 7,
 		isNonstandard: "Past",
@@ -6038,7 +6005,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Searing Sunraze Smash",
 		zMoveFrom: "Sunsteel Strike",
 		itemUser: ["Solgaleo", "Necrozma-Dusk-Mane"],
-		onResidual: speciesZCrystalResidual,
 		num: 921,
 		gen: 7,
 		isNonstandard: "Past",
@@ -6469,7 +6435,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Guardian of Alola",
 		zMoveFrom: "Nature's Madness",
 		itemUser: ["Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini"],
-		onResidual: speciesZCrystalResidual,
 		num: 801,
 		gen: 7,
 		isNonstandard: "Past",
@@ -7708,7 +7673,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMove: "Light That Burns the Sky",
 		zMoveFrom: "Photon Geyser",
 		itemUser: ["Necrozma-Ultra"],
-		onResidual: speciesZCrystalResidual,
 		num: 923,
 		gen: 7,
 		isNonstandard: "Past",

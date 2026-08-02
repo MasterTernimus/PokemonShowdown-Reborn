@@ -647,12 +647,12 @@ export class BattleActions {
 			targets[i] = newTarget;
 		}
 	}
-	focusTwineedleFromProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
-		if (move.id !== 'twineedle' || !pokemon.hasAbility('spiralevolution')) return;
-		const hasUnprotectedTarget = targets.some(target => target?.hp && !target.fainted && !target.isProtected());
-		if (!hasUnprotectedTarget) return;
-		for (let i = targets.length - 1; i >= 0; i--) {
-			if (targets[i]?.isProtected()) targets.splice(i, 1);
+	focusSpiralEvolutionSpreadFromProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
+		if (!['twineedle', 'doublehit'].includes(move.id) || !pokemon.hasAbility('spiralevolution')) return;
+		const unprotectedTargets = targets.filter(target => target?.hp && !target.fainted && !target.isProtected());
+		if (!unprotectedTargets.length) return;
+		for (const [i, target] of targets.entries()) {
+			if (target?.isProtected()) targets[i] = this.battle.sample(unprotectedTargets);
 		}
 	}
 	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
@@ -680,7 +680,7 @@ export class BattleActions {
 	}
 	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		this.redirectWaterShurikenFromProtect(targets, pokemon, move);
-		this.focusTwineedleFromProtect(targets, pokemon, move);
+		this.focusSpiralEvolutionSpreadFromProtect(targets, pokemon, move);
 		const hitResults = this.battle.runEvent('TryHit', targets, pokemon, move);
 		if (!hitResults.includes(true) && hitResults.includes(false)) {
 			this.battle.add('-fail', pokemon);
@@ -1968,7 +1968,7 @@ export class BattleActions {
 		}
 
 		// random factor - also not a modifier
-		baseDamage = this.battle.randomizer(baseDamage);
+		if (!move.noDamageVariance) baseDamage = this.battle.randomizer(baseDamage);
 
 		// STAB
 		// The "???" type never gets STAB

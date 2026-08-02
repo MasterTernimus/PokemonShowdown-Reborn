@@ -1383,16 +1383,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			source.abilityState.accumulationReleasedTurn = this.turn;
 			source.abilityState.accumulationAutoBelch = false;
 			source.abilityState.accumulationBelchTarget = null;
-			if (source.abilityState.accumulationNoSpitUpAfterBelch) {
-				source.abilityState.accumulationNoSpitUpAfterBelch = false;
-				return;
-			}
-			if (!target || target.fainted || (source.volatiles['stockpile']?.layers || 0) < 1) return;
-			source.abilityState.accumulationAutoSpitUp = true;
-			source.abilityState.accumulationNoBelchAfterSpitUp = true;
-			this.actions.useMove('spitup', source, { target });
-			source.abilityState.accumulationAutoSpitUp = false;
-			source.abilityState.accumulationNoBelchAfterSpitUp = false;
 		},
 		target: "normal",
 		type: "Poison",
@@ -2528,6 +2518,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1, reflectable: 1 },
 		onAfterHit(target, source, move) {
+			target.addVolatile('splinter', source, move);
 			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('spikes');
@@ -2535,6 +2526,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
+			target.addVolatile('splinter', source, move);
 			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('spikes');
@@ -10674,7 +10666,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback(pokemon, target, move) {
-			if (target.status || target.hasAbility('comatose') || this.field.isTerrain('hauntedterrain')) return move.basePower * 2;
+			if (
+				target.status || target.hasAbility('comatose') ||
+				this.field.isTerrain('hauntedterrain') ||
+				pokemon.hasAbility(['soulfire', 'sinisterblaze'])
+			) return move.basePower * 2;
 			return move.basePower;
 		},
 		category: "Special",
@@ -10883,6 +10879,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onDamagingHit(damage, target, source, move) {
+			target.addVolatile('splinter', source, move);
+		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -13131,34 +13130,53 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				));
 			}
 			let randomMove = '';
+			let focusedTarget: Pokemon | null = null;
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
-				const foe = this.sample(pokemon.foes().filter(foe => !foe.fainted));
-				const shouldFocus = foe && (pokemon.hasAbility(['serenegrace', 'falsedevotion', 'moonlitwings']) ||
+				const foes = pokemon.foes().filter(foe => !foe.fainted);
+				const shouldFocus = foes.length && (pokemon.hasAbility(['serenegrace', 'falsedevotion', 'moonlitwings', 'lunarorbit']) ||
 					pokemon.hp <= pokemon.maxhp / 4) &&
 					this.randomChance(9, 10);
 				if (shouldFocus) {
 					const scoredMoves = moves.map(move => {
 						if (move.category === 'Status' || !move.basePower || move.basePower < 90) return false;
 						const activeMove = this.dex.getActiveMove(move.id);
-						if (!foe.runImmunity(activeMove)) return false;
-						const effectiveness = foe.runEffectiveness(activeMove);
-						if (effectiveness <= 0) return false;
 						const attackStat = activeMove.category === 'Physical' ?
 							pokemon.getStat('atk', false, true) : pokemon.getStat('spa', false, true);
-						const defenseStat = activeMove.category === 'Physical' ?
-							foe.getStat('def', false, true) : foe.getStat('spd', false, true);
-						const score = move.basePower * attackStat / Math.max(1, defenseStat) * Math.pow(2, effectiveness);
-						return { move, score };
-					}).filter(Boolean) as { move: Move; score: number }[];
+						const spreadTargets = ['allAdjacent', 'allAdjacentFoes', 'all'].includes(activeMove.target);
+						let bestTarget: Pokemon | null = null;
+						let score = 0;
+						for (const foe of foes) {
+							if (!spreadTargets && !this.validTarget(foe, pokemon, activeMove.target)) continue;
+							if (!foe.runImmunity(activeMove)) continue;
+							const effectiveness = foe.runEffectiveness(activeMove);
+							if (effectiveness <= 0) continue;
+							const defenseStat = activeMove.category === 'Physical' ?
+								foe.getStat('def', false, true) : foe.getStat('spd', false, true);
+							const targetScore = move.basePower * attackStat / Math.max(1, defenseStat) * Math.pow(2, effectiveness);
+							if (spreadTargets) {
+								score += targetScore;
+								bestTarget ||= foe;
+							} else if (targetScore > score) {
+								score = targetScore;
+								bestTarget = foe;
+							}
+						}
+						if (!score || !bestTarget) return false;
+						return { move, target: bestTarget, score };
+					}).filter(Boolean) as { move: Move; target: Pokemon; score: number }[];
 					const bestScore = scoredMoves.reduce((best, entry) => Math.max(best, entry.score), 0);
-					const focusedMoves = scoredMoves.filter(entry => entry.score >= bestScore * 0.8).map(entry => entry.move);
-					if (focusedMoves.length) moves = focusedMoves;
+					const focusedMoves = scoredMoves.filter(entry => entry.score >= bestScore * 0.8);
+					if (focusedMoves.length) {
+						const focusedMove = this.sample(focusedMoves);
+						randomMove = focusedMove.move.id;
+						focusedTarget = focusedMove.target;
+					}
 				}
-				randomMove = this.sample(moves).id;
+				if (!randomMove) randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
-			this.actions.useMove(randomMove, pokemon);
+			this.actions.useMove(randomMove, pokemon, focusedTarget ? { target: focusedTarget } : undefined);
 		},
 		callsMove: true,
 		target: "self",
@@ -15073,6 +15091,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [3, 5],
+		onDamagingHit(damage, target, source, move) {
+			target.addVolatile('splinter', source, move);
+		},
 		target: "normal",
 		type: "Bug",
 		zMove: { basePower: 140 },
@@ -18351,6 +18372,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== this.effectState.target || !move || move.category === 'Status') return;
+				this.effectState.target.removeVolatile('shelter');
+				this.debug('Shelter guard');
+				return this.chainModify(0.8);
+			},
+			onAnyBasePower(basePower, source, target, move) {
+				if (target !== this.effectState.target || !move || move.category === 'Status') return;
 				const moveTypes = move.types || [move.type];
 				if (this.field.isTerrain('coldeclipseterrain') && moveTypes.includes('Ice')) {
 					this.debug('Shelter weaken');
@@ -19406,6 +19433,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.types = [move.type, 'Ice'];
 			}
 		},
+		onModifyType(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
 		critRatio: 2,
 		tracksTarget: true,
 		target: "normal",
@@ -19979,7 +20009,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
-			if ((pokemon.volatiles['stockpile']?.layers || 0) >= 3) {
+			if ((pokemon.volatiles['stockpile']?.layers || 0) >= 3 &&
+				!pokemon.abilityState.accumulationAutoSpitUp &&
+				!pokemon.abilityState.accumulationSuppressMoveChain) {
 				move.breaksProtect = true;
 				(move as any).spitUpBreaksProtect = true;
 			}
@@ -19993,20 +20025,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterMove(pokemon, target, move) {
 			if (pokemon.hasAbility('accumulation')) {
 				if (pokemon.abilityState.accumulationScriptedReleaseTurn === this.turn) {
+					pokemon.removeVolatile('stockpile');
 					return;
-				}
-				if (['accumulation', 'swallow'].includes(move.sourceEffect)) {
-					if (pokemon.abilityState.accumulationAutoSpitUp) return;
-				}
-				if (pokemon.abilityState.accumulationSuppressMoveChain) {
-					if (pokemon.abilityState.accumulationAutoSpitUp) return;
 				}
 				pokemon.abilityState.accumulationReleasedTurn = this.turn;
-				if (pokemon.abilityState.accumulationNoBelchAfterSpitUp) {
-					pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
-					return;
-				}
-				if (target && !target.fainted) {
+				if (!pokemon.abilityState.accumulationSuppressMoveChain && target && !target.fainted) {
 					pokemon.abilityState.accumulationAutoBelch = true;
 					pokemon.abilityState.accumulationNoSpitUpAfterBelch = true;
 					this.actions.useMove('belch', pokemon, { target });
@@ -20555,6 +20578,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1, reflectable: 1 },
 		onAfterHit(target, source, move) {
+			target.addVolatile('splinter', source, move);
 			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('stealthrock');
@@ -20562,6 +20586,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
+			target.addVolatile('splinter', source, move);
 			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('stealthrock');
@@ -21124,36 +21149,26 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!success) this.add('-fail', pokemon, 'heal');
 			if (pokemon.hasAbility('accumulation')) {
 				const targets = pokemon.foes().filter(foe => foe && !foe.fainted);
-				let best: { moveid: string, target: Pokemon, damage: number } | null = null;
+				let best: { target: Pokemon, damage: number } | null = null;
 				for (const target of targets) {
-					for (const moveid of ['belch', 'spitup']) {
-						const move = this.dex.getActiveMove(moveid);
-						if (moveid === 'belch') move.basePower *= 2;
-						const damage = this.actions.getDamage(pokemon, target, move, true);
-						if (typeof damage !== 'number') continue;
-						if (!best || damage > best.damage) best = { moveid, target, damage };
-					}
+					const spitUp = this.dex.getActiveMove('spitup');
+					const belch = this.dex.getActiveMove('belch');
+					const spitUpDamage = this.actions.getDamage(pokemon, target, spitUp, true);
+					const belchDamage = this.actions.getDamage(pokemon, target, belch, true);
+					const damage = (typeof spitUpDamage === 'number' ? spitUpDamage : 0) +
+						(typeof belchDamage === 'number' ? belchDamage : 0);
+					if (!best || damage > best.damage) best = { target, damage };
 				}
 				if (best) {
 					this.add('-activate', pokemon, 'ability: Accumulation');
-					pokemon.abilityState.accumulationAutoBelch = best.moveid === 'belch';
-					pokemon.abilityState.accumulationAutoSpitUp = best.moveid === 'spitup';
-					pokemon.abilityState.accumulationNoBelchAfterSpitUp = best.moveid === 'spitup';
-					pokemon.abilityState.accumulationNoSpitUpAfterBelch = best.moveid === 'belch';
+					pokemon.abilityState.accumulationAutoSpitUp = true;
 					pokemon.abilityState.accumulationReleasedTurn = this.turn;
 					pokemon.abilityState.accumulationScriptedReleaseTurn = this.turn;
 					pokemon.abilityState.accumulationSuppressMoveChain = true;
-					this.actions.useMove(best.moveid, pokemon, { target: best.target });
+					this.actions.useMove('spitup', pokemon, { target: best.target });
 					if (!best.target.fainted) {
-						if (best.moveid === 'belch' && (pokemon.volatiles['stockpile']?.layers || 0) >= 1) {
-							pokemon.abilityState.accumulationAutoSpitUp = true;
-							pokemon.abilityState.accumulationNoBelchAfterSpitUp = true;
-							this.actions.useMove('spitup', pokemon, { target: best.target });
-						} else if (best.moveid === 'spitup') {
-							pokemon.abilityState.accumulationAutoBelch = true;
-							pokemon.abilityState.accumulationNoSpitUpAfterBelch = true;
-							this.actions.useMove('belch', pokemon, { target: best.target });
-						}
+						pokemon.abilityState.accumulationAutoBelch = true;
+						this.actions.useMove('belch', pokemon, { target: best.target });
 					}
 					pokemon.abilityState.accumulationSuppressMoveChain = false;
 					pokemon.abilityState.accumulationAutoBelch = false;
@@ -22720,6 +22735,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, kick: 1, metronome: 1 },
 		critRatio: 2,
+		self: {
+			sideCondition: 'gmaxchistrike',
+		},
 		secondaries: [
 			{
 				chance: 50,
@@ -22775,7 +22793,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	triplekick: {
 		num: 167,
 		accuracy: 90,
-		basePower: 20,
+		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			return 20 * move.hit;
 		},
