@@ -8606,7 +8606,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 464,
 		name: "Rhyperior",
 		types: ["Ground", "Steel"],
-		baseStats: { hp: 120, atk: 180, def: 160, spa: 35, spd: 75, spe: 30 },
+		baseStats: { hp: 120, atk: 160, def: 150, spa: 55, spd: 85, spe: 30 },
 		abilities: { 0: "Lightning Rod", 1: "Solid Rock", H: "Hyper Drill" },
 		heightm: 2.4,
 		weightkg: 282.8,
