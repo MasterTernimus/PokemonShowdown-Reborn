@@ -3935,7 +3935,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				'flashcannon', 'fleurcannon', 'icebeam', 'lusterpurge', 'meteorbeam',
 				'moongeistbeam', 'psybeam', 'signalbeam', 'solarbeam', 'steelbeam',
 			];
-			if (beamMoves.includes(move.id)) {
+			if (beamMoves.includes(move.id) || move.flags['pulse'] || move.flags['bullet']) {
 				this.debug('Relic Beam boost');
 				return this.chainModify(1.5);
 			}
@@ -4393,9 +4393,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (effect?.effectType !== 'Move') return;
 			const targetIsMega = !!(target.species.isMega || target.species.forme?.includes('Mega'));
 			const targetIsGmax = !!(target.gigantamax || target.species.forme?.includes('Gmax'));
-			const targetIsStellar = target.terastallized === 'Stellar' || target.species.forme === 'Stellar';
+			const targetIsTera = !!target.terastallized || target.species.forme === 'Stellar';
 			const targetHasZMove = !!target.getItem().zMove;
-			this.heal(source.baseMaxhp / (targetIsMega || targetIsGmax || targetIsStellar || targetHasZMove ? 2 : 10) * length, source, source);
+			const targetWasGimmick = !!(target as any).wasGimmickOnFaint || targetIsMega || targetIsGmax || targetIsTera || targetHasZMove;
+			this.heal(source.baseMaxhp / (targetWasGimmick ? 2 : 10) * length, source, source);
 		},
 		flags: { breakable: 1 },
 		name: "Rime Knuckle",
