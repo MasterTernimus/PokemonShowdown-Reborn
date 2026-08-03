@@ -49,6 +49,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				category: 'Physical',
 				type: this.effectState.moveType || 'Normal',
 				accuracy: true,
+				flags: {},
 				willCrit: false,
 				noDamageVariance: true,
 			});

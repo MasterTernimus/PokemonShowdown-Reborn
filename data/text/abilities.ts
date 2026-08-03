@@ -10,13 +10,53 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	spiralevolution: {
 		name: "Spiral Evolution",
-		desc: "This Pokemon has built-in Adaptability and Hydra Bond, cannot flinch, takes half damage from priority moves, and its damaging moves hit through protection for half damage. In Trick Room, its non-priority moves act before other non-priority moves. Twineedle has double power and a 50% chance to be a critical hit; in multi battles it hits all adjacent foes once, and if Twineedle or Double Hit have some targets protected, protected hits focus into unprotected foes like Dragon Darts.",
-		shortDesc: "Adaptability + Hydra Bond; reduced Protect-pierce; no flinch; Twineedle/Double Hit focus.",
+		desc: "This Pokemon has built-in Adaptability, Hydra Bond, and Levitate, cannot flinch, takes half damage from priority moves, and its damaging moves hit through protection for half damage. In Trick Room, its non-priority moves act before other non-priority moves. Twineedle has double power and a 50% chance to be a critical hit; in multi battles it hits all adjacent foes once, and if Twineedle or Double Hit have some targets protected, protected hits focus into unprotected foes like Dragon Darts.",
+		shortDesc: "Adaptability + Hydra Bond + Levitate; reduced Protect-pierce; no flinch; Twineedle focus.",
 	},
 	alchemicsurge: {
 		name: "Alchemic Surge",
 		desc: "This Pokemon has Competitive, Psychic Surge, Hydra Bond, and Infiltrator. On entry, it sets Psychic Terrain. If any of its stats are lowered by a foe, its Sp. Atk is raised by 2 stages. Its damaging moves use Hydra Bond's effects, and its moves bypass substitutes, screens, Safeguard, and Mist.",
 		shortDesc: "Competitive + Psychic Surge + Hydra Bond + Infiltrator.",
+	},
+	auramaster: {
+		name: "Aura Master",
+		desc: "This Pokemon has Mega Launcher and Inner Focus's effects, and takes 35% less damage from damaging moves.",
+		shortDesc: "Mega Launcher + Inner Focus; takes 0.65x damage.",
+	},
+	patternshift: {
+		name: "Pattern Shift",
+		desc: "This Pokemon has Shed Skin, Protean, and Merciless's effects.",
+		shortDesc: "Shed Skin + Protean + Merciless.",
+	},
+	bonewarrior: {
+		name: "Bone Warrior",
+		desc: "This Pokemon has Technician, Battle Armor, and Skill Link's effects.",
+		shortDesc: "Technician + Battle Armor + Skill Link.",
+	},
+	technicalspecialist: {
+		name: "Technical Specialist",
+		desc: "This Pokemon has Technician, Shed Skin, and Shell Armor's effects.",
+		shortDesc: "Technician + Shed Skin + Shell Armor.",
+	},
+	dualwield: {
+		name: "Dual Wield",
+		desc: "Moves that would be boosted by Sharpness or Mega Launcher, plus arrow moves, hit twice, with each hit dealing 70% damage.",
+		shortDesc: "Sharpness/Mega Launcher/arrow moves hit twice at 70%.",
+	},
+	apexpredator: {
+		name: "Apex Predator",
+		desc: "This Pokemon has Relic Armor's effects. Its super-effective moves never miss. If it knocks out a target with a move, it restores 1/4 max HP per target knocked out.",
+		shortDesc: "Relic Armor; super-effective moves never miss; KO heals 1/4.",
+	},
+	violentrush: {
+		name: "Violent Rush",
+		desc: "On this Pokemon's first active turn, its Speed is 1.5x and its Attack is 1.2x.",
+		shortDesc: "First active turn: 1.5x Spe and 1.2x Atk.",
+	},
+	unleashedego: {
+		name: "Unleashed Ego",
+		desc: "This Pokemon has Ultra Ego, Levitate, and Raging Storm's effects.",
+		shortDesc: "Ultra Ego + Levitate + Raging Storm.",
 	},
 	astralcore: {
 		name: "Astral Core",
@@ -426,8 +466,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	draconicforce: {
 		name: "Draconic Force",
-		desc: "This Pokemon has Dragonize, Sheer Force, and Guts's effects.",
-		shortDesc: "Dragonize + Sheer Force + Guts.",
+		desc: "This Pokemon has Dragonize, Strong Jaw, Sheer Force, and Guts's effects.",
+		shortDesc: "Dragonize + Strong Jaw + Sheer Force + Guts.",
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
@@ -484,8 +524,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	windysurge: {
 		name: "Windy Surge",
-		desc: "On switch-in, this Pokemon sets Tailwind on its side for 4 turns.",
-		shortDesc: "On switch-in, sets Tailwind on this Pokemon's side for 4 turns.",
+		desc: "On switch-in, this Pokemon sets Tailwind on its side for 2 turns.",
+		shortDesc: "On switch-in, sets 2-turn Tailwind on this Pokemon's side.",
 	},
 	burningspirit: {
 		name: "Burning Spirit",
@@ -529,8 +569,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon restores 1/16 max HP at the end of each turn. Its arrow moves ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.2x power. Snipe Shot gets an additional 1.5x power boost. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Barrage, Scale Shot, Psycho Cut, and Ceaseless Edge.",
-		shortDesc: "Heals 1/16; arrow moves ignore Ability/redirect/Protect, +2 at <=1/2 HP, hit all foes in FFA.",
+		desc: "This Ability cannot be suppressed. This Pokemon restores 1/16 max HP at the end of each turn. Its arrow moves trigger Dual Wield, ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.3x power. Snipe Shot gets an additional 1.5x power boost. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Barrage, Scale Shot, Psycho Cut, and Ceaseless Edge.",
+		shortDesc: "Heals 1/16; arrow moves Dual Wield, ignore Ability/redirect/Protect, +2 at <=1/2 HP, FFA spread.",
 	},
 	eclipse: {
 		name: "Eclipse",
@@ -634,8 +674,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sacrededge: {
 		name: "Sacred Edge",
-		desc: "This Pokemon has Sharpness and Sworn Duty's effects. Its slicing moves ignore Substitute, Reflect, Light Screen, and Aurora Veil. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
-		shortDesc: "Sharpness + Sworn Duty; slicing moves ignore screens/Substitute.",
+		desc: "This Pokemon has Sharpness, Dual Wield, and Sworn Duty's effects. Its slicing moves have 1.5x power, and moves boosted by Sharpness or Mega Launcher hit twice at 70% damage each. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
+		shortDesc: "Sharpness + Dual Wield + Sworn Duty.",
 	},
 	omenedge: {
 		name: "Omen Edge",
@@ -699,13 +739,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mirrorgreed: {
 		name: "Mirror Greed",
-		desc: "This Pokemon has Magic Bounce and Cursed Body's effects. When this Pokemon reflects a move, it restores 1/8 of its maximum HP and lowers the original user's higher attacking stat by 1 stage.",
-		shortDesc: "Magic Bounce + Cursed Body; reflected moves heal 1/8 and lower foe's higher offense.",
+		desc: "This Pokemon has Magic Bounce, Prankster, Stall, and Analytic's effects.",
+		shortDesc: "Magic Bounce + Prankster + Stall + Analytic.",
 	},
 	uncheckedassault: {
 		name: "Unchecked Assault",
-		desc: "This Pokemon has Scrappy, Striker, and Opportunist's effects. Its kicking moves have 1.3x power.",
-		shortDesc: "Scrappy + Striker + Opportunist; kicking moves 1.3x.",
+		desc: "This Pokemon has Scrappy, Limber, and Opportunist's effects.",
+		shortDesc: "Scrappy + Limber + Opportunist.",
 	},
 	royalvoice: {
 		name: "Royal Voice",
@@ -729,8 +769,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heavenlychorus: {
 		name: "Heavenly Chorus",
-		desc: "This Pokemon has Pixilate and Cloud Nine's effects. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP. When it uses a Fairy-type move, it restores 1/16 of its maximum HP and cures adjacent allies' status conditions.",
-		shortDesc: "Pixilate + Cloud Nine; KO heals 1/8; Fairy moves heal 1/16 and cure allies.",
+		desc: "This Pokemon has Pixilate, Cloud Nine, Fluffy, and Natural Cure's effects.",
+		shortDesc: "Pixilate + Cloud Nine + Fluffy + Natural Cure.",
 	},
 	mourningsnow: {
 		name: "Mourning Snow",
@@ -874,8 +914,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	riptideclaws: {
 		name: "Riptide Claws",
-		desc: "If Rain is active, this Pokemon's Speed is doubled. Its Water-type moves, slicing moves, and claw moves have 1.2x power. If this Pokemon hits a target with one of those moves during Rain, the target's Defense is lowered by 1 stage.",
-		shortDesc: "Swift Swim; Water/slicing/claw 1.2x; in rain these hits lower Defense.",
+		desc: "This Pokemon has Swift Swim, Technician, Shell Armor, and Anger Shell's effects.",
+		shortDesc: "Swift Swim + Technician + Shell Armor + Anger Shell.",
 	},
 	dryskin: {
 		name: "Dry Skin",
@@ -1535,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mindseye: {
 		name: "Mind's Eye",
-		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves. Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage, takes 20% less damage from damaging moves, and restores 1/16 max HP after its damaging moves hit.",
-		shortDesc: "Normal/Fighting hit Ghost; ignores evasion; takes 0.8x move damage; heals 1/16 on hit.",
+		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves, gains STAB on Fairy- and Dark-type moves, and prevents other Pokemon from lowering its accuracy. This Pokemon ignores a target's evasiveness, takes 20% less damage from damaging moves, and restores 1/16 max HP after its damaging moves hit.",
+		shortDesc: "Normal/Fighting hit Ghost; Fairy/Dark STAB; takes 0.8x; heals on hit.",
 	},
 	minus: {
 		name: "Minus",
@@ -1808,8 +1848,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parentalbond: {
 		name: "Parental Bond",
-		desc: "Cannot be suppressed. This Pokemon has Friend Guard's effect. Its damaging moves become multi-hit moves that hit twice; the second hit deals 60% damage and retargets the foe's ally if the first target fainted. After using a damaging move, this Pokemon heals 1/16 max HP. Once, if Mega Kangaskhan would faint from a move, it becomes regular Kangaskhan, survives at 1 HP, gains a Magic Guard effect, cannot Mega Evolve again, and immediately uses Retaliate on the attacker. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, existing multi-hit moves, multi-target moves, or two-turn moves.",
-		shortDesc: "Unsuppressable. Friend Guard; hits twice; heals on attacks; Mega Kanga endures once.",
+		desc: "Cannot be suppressed. This Pokemon has Parental Bond, Tough Claws, Scrappy, and Friend Guard's effects. Its damaging moves become multi-hit moves that hit twice; the second hit deals reduced damage. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, existing multi-hit moves, multi-target moves, or two-turn moves.",
+		shortDesc: "Unsuppressable. Parental Bond + Tough Claws + Scrappy + Friend Guard.",
 	},
 	pastelveil: {
 		name: "Pastel Veil",
@@ -2496,13 +2536,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon has Shell Armor's effect and ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. It takes 0.8x damage from attacks. Its Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It restores 1/16 of its maximum HP at the end of each turn.",
-		shortDesc: "Shell Armor; no Steel weaknesses; takes 0.8x; launcher moves boosted; drains.",
+		desc: "This Pokemon has Shell Armor's effect and ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. It takes 0.8x damage from attacks. Its Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power and trigger Dual Wield. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It restores 1/16 of its maximum HP at the end of each turn.",
+		shortDesc: "Shell Armor; no Steel weaknesses; takes 0.8x; launcher moves boosted + Dual Wield; drains.",
 	},
 	calderacore: {
 		name: "Caldera Core",
-		desc: "This Pokemon's Fire- and Ground-type moves have 1.2x power. It takes 0.5x damage from Water-type attacks. At the end of each turn, opposing Pokemon lose 1/16 max HP unless they are Fire, Ground, Rock, or airborne.",
-		shortDesc: "Fire/Ground moves 1.2x; 0.5x Water damage; chips vulnerable foes each turn.",
+		desc: "This Pokemon has Thick Fat's effect. Its Fire- and Ground-type moves have 1.2x power. It takes 0.5x damage from Water-type attacks. At the end of each turn, opposing Pokemon lose 1/16 max HP unless they are Fire, Ground, Rock, or airborne.",
+		shortDesc: "Thick Fat; Fire/Ground moves 1.2x; 0.5x Water; chips vulnerable foes.",
 	},
 	soultag: {
 		name: "Soul Tag",
@@ -3177,12 +3217,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ironcognition: {
 		name: "Iron Cognition",
-		desc: "This Pokemon's damaging moves have 1.3x power. Its stats cannot be lowered by opposing Pokemon. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP.",
-		shortDesc: "Damaging moves 1.3x; stats cannot be lowered; KO heals 1/8.",
+		desc: "This Pokemon has Tough Claws, Full Metal Body, and Prism Armor's effects.",
+		shortDesc: "Tough Claws + Full Metal Body + Prism Armor.",
 	},
 	neutralization: {
 		name: "Neutralization",
-		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. This does not affect other Neutralization users or Pokemon immune to stat drops, and it does not trigger stat-drop reactive effects. While active, field changes are neutralized, and Rainbow Field ends automatically.",
+		desc: "When this Pokemon hits an opposing Pokemon with a damaging or status move, or inflicts status on an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. This does not affect other Neutralization users or Pokemon immune to stat drops, and it does not trigger stat-drop reactive effects. While active, field changes are neutralized, and Rainbow Field ends automatically. Ice Spinner and Steel Roller still remove terrain normally.",
 		shortDesc: "Hits lower foe offense/Spe; neutralizes field changes, not active field effects.",
 	},
 	powerdrill: {
@@ -3222,8 +3262,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	highnoon: {
 		name: "High Noon",
-		desc: "This Pokemon's Water-type moves have 1.2x power. Its attacks cannot miss unless the target is in the semi-invulnerable turn of a move. Its moves have +1 critical hit ratio against targets that have not moved yet this turn.",
-		shortDesc: "Water moves 1.2x; attacks cannot miss; +1 crit vs targets that have not moved.",
+		desc: "This Pokemon's Water-type moves have 1.2x power. Its attacks cannot miss unless the target is in the semi-invulnerable turn of a move. Moves that would be boosted by Sharpness or Mega Launcher, plus arrow moves, trigger Dual Wield. Its moves have +1 critical hit ratio against targets that have not moved yet this turn.",
+		shortDesc: "Water moves 1.2x; attacks cannot miss; Dual Wield; +1 crit vs unmoved targets.",
 	},
 	striker: {
 		name: "Striker",

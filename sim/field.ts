@@ -374,7 +374,7 @@ export class Field {
 			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
 			return false;
 		}
-		if (power !== 'neutralization' && this.neutralizeTerrainChange()) {
+		if (power !== 'neutralization' && power !== 'mid' && this.neutralizeTerrainChange()) {
 			this.terrainState.neutralizationHeldExpired = true;
 			this.terrainState.duration = 1;
 			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
