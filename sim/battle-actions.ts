@@ -312,6 +312,12 @@ export class BattleActions {
 		const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
 		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 		if (this.battle.activeMove) move = this.battle.activeMove;
+		if (
+			moveDidSomething && pokemon.terastallized === 'Stellar' && move.category !== 'Status' &&
+			move.type && move.type !== '???' && !pokemon.stellarBoostedTypes.includes(move.type)
+		) {
+			pokemon.stellarBoostedTypes.push(move.type);
+		}
 		const pendingZTerrain = (move as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain ||
 			(oldActiveMove as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain;
 		if (moveDidSomething && pendingZTerrain) {
@@ -1842,7 +1848,8 @@ export class BattleActions {
 
 		const dexMove = this.dex.moves.get(move.id);
 		const battleBondStellar = source.terastallized === 'Stellar' && source.hasAbility('battlebond');
-		if (source.terastallized === 'Stellar' && dexMove.multihit) {
+		const stellarTypeBoostAvailable = source.terastallized === 'Stellar' && !source.stellarBoostedTypes.includes(move.type);
+		if (stellarTypeBoostAvailable && dexMove.multihit) {
 			basePower = Math.floor(basePower * 1.5);
 		}
 		if (source.terastallized && (source.terastallized === 'Stellar' ?
@@ -1992,8 +1999,8 @@ export class BattleActions {
 			}
 
 			if (pokemon.terastallized === 'Stellar') {
-				stab = isSTAB ? 2 : [4915, 4096];
-				move.stellarBoosted = true;
+				stab = isSTAB ? 1.5 : (pokemon.stellarBoostedTypes.includes(type) ? 1 : [4915, 4096]);
+				if (!isSTAB && !pokemon.stellarBoostedTypes.includes(type)) move.stellarBoosted = true;
 			} else {
 				if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
 					stab = 2;
