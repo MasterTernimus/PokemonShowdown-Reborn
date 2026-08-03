@@ -3576,7 +3576,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10141,
 	},
 	temporalshift: {
-		queueTemporalHex(pokemon, abilityName = 'Temporal Shift', everyTurn = false, typePool = null, basePower = 60) {
+		queueTemporalHex(pokemon, abilityName = 'Temporal Shift', everyTurn = false, typePool = null, basePower = 120) {
 			if (!everyTurn && pokemon.abilityState.temporalShiftLastCastTurn === this.turn - 1) return;
 			const primaryType = pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal';
 			const targets = pokemon.foes().filter(target => target.hp && !target.fainted && target !== pokemon && !target.isAlly(pokemon));
