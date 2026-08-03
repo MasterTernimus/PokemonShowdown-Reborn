@@ -1952,7 +1952,7 @@ export class BattleActions {
 		if (ffaFollowUpAttack) {
 			const targetIsMega = !!(target.species.isMega || target.species.forme === 'Mega');
 			const targetIsGmax = !!(target.gigantamax || target.species.forme?.includes('Gmax'));
-			if (targetIsMega || targetIsGmax || target.terastallized === 'Stellar' || target.hasAbility('ultraego')) {
+			if (targetIsMega || targetIsGmax || (target.terastallized === 'Stellar' && !move.isZ) || target.hasAbility('ultraego')) {
 				this.battle.debug('FFA gimmick follow-up damage reduction');
 				baseDamage = this.battle.modify(baseDamage, 0.9);
 			}
@@ -2047,7 +2047,7 @@ export class BattleActions {
 				baseDamage = this.battle.modify(baseDamage, 1.3);
 			}
 		}
-		if (target.terastallized === 'Stellar' && (sourceIsGmax || sourceIsMega)) {
+		if (target.terastallized === 'Stellar' && (sourceIsGmax || sourceIsMega) && !move.isZ) {
 			baseDamage = this.battle.modify(baseDamage, 0.9);
 		}
 		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers

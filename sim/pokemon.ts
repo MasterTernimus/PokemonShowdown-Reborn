@@ -1022,6 +1022,13 @@ export class Pokemon {
 				}
 				break;
 			}
+			const move = this.battle.dex.moves.get(moveSlot.id);
+			if (
+				this.battle.gameType !== 'freeforall' && move.multihit &&
+				['allAdjacent', 'allAdjacentFoes'].includes(target)
+			) {
+				target = 'normal';
+			}
 			let disabled = moveSlot.disabled;
 			if (this.volatiles['dynamax']) {
 				// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
@@ -1105,6 +1112,12 @@ export class Pokemon {
 					actualTarget = 'allAdjacentFoes';
 				}
 				break;
+			}
+			if (
+				this.battle.gameType !== 'freeforall' && move.multihit &&
+				['allAdjacent', 'allAdjacentFoes'].includes(actualTarget)
+			) {
+				actualTarget = 'normal';
 			}
 			const maxMove = this.battle.actions.getMaxMove(move, this);
 			if (maxMove) {

@@ -2681,6 +2681,12 @@ export class Battle {
 					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
 					pokemon.baseAbility = toID(pokemon.set.ability);
 				}
+				(pokemon as any).wasGimmickOnFaint = !!(
+					pokemon.species.isMega || pokemon.species.forme?.includes('Mega') ||
+					pokemon.gigantamax || pokemon.species.forme?.includes('Gmax') ||
+					pokemon.terastallized || pokemon.species.forme === 'Stellar' ||
+					pokemon.getItem().zMove
+				);
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
 				pokemon.illusion = null;

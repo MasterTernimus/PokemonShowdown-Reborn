@@ -784,7 +784,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rimeknuckle: {
 		name: "Rime Knuckle",
-		desc: "This Pokemon's Defense and Special Defense are multiplied by 1.25 while above 50% HP, or 1.5 while at 50% HP or lower. Its punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 33% less damage to it. If this Pokemon knocks out a target, it restores 1/10 of its maximum HP, or 1/2 if the target was Mega, G-Max, Stellar, or holding a Z-Move item.",
+		desc: "This Pokemon's Defense and Special Defense are multiplied by 1.25 while above 50% HP, or 1.5 while at 50% HP or lower. Its punching moves have 1.4x power. Its moves have a 40% chance to cause frostbite. If this Pokemon is above 50% HP, attacks from faster Pokemon deal 33% less damage to it. If this Pokemon knocks out a target, it restores 1/10 of its maximum HP, or 1/2 if the target was Mega, G-Max, Terastallized, Stellar, or holding a Z-Move item.",
 		shortDesc: "Def/SpD scale by HP; punching moves 1.4x; KO heals 1/10 or 1/2 vs gimmicks.",
 	},
 	razorcurrent: {
@@ -1825,8 +1825,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relicbeam: {
 		name: "Relic Beam",
-		desc: "This Pokemon's Sp. Atk becomes equal to its Defense, and Special Attack stat stages use Defense stages instead. Beam and cannon moves used by this Pokemon have 1.5x power.",
-		shortDesc: "SpA equals Defense using Def stages; beam and cannon moves have 1.5x power.",
+		desc: "This Pokemon's Sp. Atk becomes equal to its Defense, and Special Attack stat stages use Defense stages instead. Beam moves and moves boosted by Mega Launcher have 1.5x power.",
+		shortDesc: "SpA equals Defense using Def stages; beam/Mega Launcher moves have 1.5x power.",
 	},
 	overgrow: {
 		name: "Overgrow",
