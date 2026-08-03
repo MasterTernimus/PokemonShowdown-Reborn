@@ -15921,6 +15921,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
+				if (effect && ['followme', 'ragepowder', 'spotlight'].includes(effect.id)) return;
 				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
 					return;
 				}
