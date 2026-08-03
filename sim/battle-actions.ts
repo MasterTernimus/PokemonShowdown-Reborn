@@ -1957,7 +1957,7 @@ export class BattleActions {
 				baseDamage = this.battle.modify(baseDamage, 0.9);
 			}
 		}
-		if (move.multihit && move.hit > 1 && move.multihitType !== 'hydrabond' && !pokemon.hasAbility('battlebond')) {
+		if (move.multihit && move.hit > 1 && !['hydrabond', 'dualwield'].includes(move.multihitType || '') && !pokemon.hasAbility('battlebond')) {
 			this.battle.debug('Multi-hit follow-up damage reduction');
 			baseDamage = this.battle.modify(baseDamage, 0.7);
 		}

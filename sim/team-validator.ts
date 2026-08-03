@@ -1788,6 +1788,9 @@ export class TeamValidator {
 		if (!tierSpecies.canGigantamax && set.gigantamax) {
 			return `${tierSpecies.name} cannot Gigantamax but is flagged as being able to.`;
 		}
+		if (set.gigantamax && !['doubles', 'multi', 'freeforall'].includes(this.format.gameType || 'singles')) {
+			return `${tierSpecies.name} can only Gigantamax in Doubles, Multi, or Free-For-All battles.`;
+		}
 
 		let banReason = ruleTable.check('pokemon:' + species.id);
 		if (banReason) {

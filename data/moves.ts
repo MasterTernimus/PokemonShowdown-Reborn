@@ -7861,7 +7861,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "G-Max Hydrosnipe",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: { bullet: 1 },
 		isMax: "Inteleon",
 		ignoreAbility: true,
 		target: "adjacentFoe",
