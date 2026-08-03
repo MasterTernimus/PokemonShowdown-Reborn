@@ -2552,6 +2552,11 @@ export class Battle {
 
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon) {
 		move = this.dex.moves.get(move);
+		if (['followme', 'ragepowder'].includes(move.id)) {
+			if (this.gameType !== 'freeforall') return pokemon;
+			const selectedTarget = pokemon.getAtLoc(targetLoc);
+			return selectedTarget && !selectedTarget.fainted ? selectedTarget : pokemon;
+		}
 
 		let tracksTarget = move.tracksTarget;
 		// Stalwart sets trackTarget in ModifyMove, but ModifyMove happens after getTarget, so
