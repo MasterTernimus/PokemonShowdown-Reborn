@@ -210,8 +210,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. When this Pokemon knocks out another Pokemon, it transforms into its Bond form, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 0.75x damage from attacks, takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. Once per battle, if a move would knock it out from above 1/3 max HP, it survives with 1 HP. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization.",
-		shortDesc: "Heals 1/16; KO heals; 0.75x from attacks; one-time 1 HP clutch.",
+		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. When this Pokemon knocks out another Pokemon, it transforms into its Bond form, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 0.75x damage from attacks, takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. Once per battle, if a move would knock it out from above 1/3 max HP, it survives with 1 HP. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization. In Cold Eclipse, its attacks deal 1.3x damage and it takes 0.6x damage from attacks.",
+		shortDesc: "Heals 1/16; 0.75x from attacks; Cold Eclipse: 1.3x damage, 0.6x taken.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -619,8 +619,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "This Ability cannot be suppressed. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit, and restores 1/16 max HP at the end of each turn.",
-		shortDesc: "Cannot be suppressed; moves 1.3x and bypass defenses; drains; heals 1/16.",
+		desc: "This Ability cannot be suppressed. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit, and restores 1/16 max HP at the end of each turn. In Cold Eclipse, its damaging moves gain another 1.3x boost, and its Defense and Special Defense become 1.5x.",
+		shortDesc: "Cannot be suppressed; moves 1.3x; drains. Cold Eclipse: stronger damage/defense/healing.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -1575,8 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mindseye: {
 		name: "Mind's Eye",
-		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves, gains STAB on Fairy- and Dark-type moves, and prevents other Pokemon from lowering its accuracy. This Pokemon ignores a target's evasiveness, takes 20% less damage from damaging moves, and restores 1/16 max HP after its damaging moves hit.",
-		shortDesc: "Normal/Fighting hit Ghost; Fairy/Dark STAB; takes 0.8x; heals on hit.",
+		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves, gains STAB on Fairy- and Dark-type moves, and prevents other Pokemon from lowering its accuracy. This Pokemon ignores a target's evasiveness, takes 20% less damage from damaging moves, and restores 1/16 max HP after its damaging moves hit. In Cold Eclipse, its damaging moves have 1.3x power, it takes 0.7x damage from damaging moves, and its hit healing becomes 1/8 max HP.",
+		shortDesc: "Normal/Fighting hit Ghost; Fairy/Dark STAB; takes 0.8x. Cold Eclipse strengthens it.",
 	},
 	minus: {
 		name: "Minus",
@@ -1815,8 +1815,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	voidveil: {
 		name: "Void Veil",
-		desc: "This Pokemon has Telepathy and Temporal Shift's effects, but its delayed Future Sight starts after one turn out and queues every other turn. Its delayed Future Sight becomes Fairy type if that would hit the target harder. It is immune to Gravity and its negative effects. This Pokemon and its allies cannot have their Speed lowered. At the end of each turn, this Pokemon and its ally restore 1/16 max HP. If an opposing attack would knock out this Pokemon's ally while this Pokemon is above 25% HP, this Pokemon takes that damage instead. Once per switch-in, if an ally is at 25% HP or lower at the end of the turn, that ally heals 1/4 max HP, is cured of status, and is sheltered until the end of the next turn.",
-		shortDesc: "Telepathy + delayed Void Future Sight; protects allies; end-turn healing/shelter.",
+		desc: "This Pokemon has Telepathy and Temporal Shift's effects, but its delayed Future Sight starts after one turn out and queues every other turn. Its delayed Future Sight becomes Fairy type if that would hit the target harder. In Cold Eclipse, this delayed Future Sight is 90 Base Power instead of 60. It is immune to Gravity and its negative effects. This Pokemon and its allies cannot have their Speed lowered. At the end of each turn, this Pokemon and its ally restore 1/16 max HP. If an opposing attack would knock out this Pokemon's ally while this Pokemon is above 25% HP, this Pokemon takes that damage instead. Once per switch-in, if an ally is at 25% HP or lower at the end of the turn, that ally heals 1/4 max HP, is cured of status, and is sheltered until the end of the next turn.",
+		shortDesc: "Telepathy + delayed Void Future Sight; Cold Eclipse makes it 90 BP; protects allies.",
 	},
 	knightsguard: {
 		name: "Knight's Guard",
@@ -3243,8 +3243,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relentlesshunt: {
 		name: "Relentless Hunt",
-		desc: "This Pokemon's moves with 60 or less Base Power gain +1 priority.",
-		shortDesc: "Moves with 60 or less Base Power gain +1 priority.",
+		desc: "This Pokemon's moves with 60 or less Base Power gain +1 priority. In Fairy Tale, Big Top, Dragon's Den, Mountain, Snowy Mountain, or Cold Eclipse, its damaging moves deal 2x damage. In Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, or New World, its damaging moves deal 1.5x damage.",
+		shortDesc: "Moves <=60 BP gain +1 priority; boosted fields give 1.5x or 2x damage.",
 	},
 	soulfire: {
 		name: "Soul Fire",
@@ -3288,8 +3288,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	duskdrive: {
 		name: "Dusk Drive",
-		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. If it moves before the target or is in a boosted field, its attacks deal 1.5x damage. If attacked before moving, it takes 30% damage; in a boosted field, it takes 25% damage instead.",
-		shortDesc: "Heals each turn/attack; next enemy hit boosts; fast/field offense and guard.",
+		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. Once per turn, its damaging attacks heal 1/16 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. If it moves before the target, its attacks deal 1.5x damage. In a boosted field, its attacks deal 1.3x damage. If attacked before moving, it takes 50% damage; in a boosted field, it takes 60% damage instead.",
+		shortDesc: "Heals each turn/attack; next enemy hit boosts; fast 1.5x; field 1.3x/0.6x taken.",
 	},
 	burningego: {
 		name: "Burning Ego",

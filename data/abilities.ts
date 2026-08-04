@@ -913,6 +913,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Battle Bond authority breaker boost');
 				modifier *= 1.3;
 			}
+			if (this.field.isTerrain('coldeclipseterrain')) {
+				this.debug('Battle Bond Cold Eclipse boost');
+				modifier *= 1.3;
+			}
 			if (source.species.id === 'garchompbattlebond' && (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain']) || this.queue.willMove(target) || target.newlySwitched)) {
 				this.debug('Battle Bond Ultra Instinct boost');
 				modifier *= 1.5;
@@ -926,7 +930,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (target.hasAbility('battlebond') && move.category !== 'Status') {
 				this.debug('Battle Bond Shadow Current damage reduction');
-				return this.chainModify(0.75);
+				return this.chainModify(this.field.isTerrain('coldeclipseterrain') ? 0.6 : 0.75);
 			}
 		},
 		onDamage(damage, target, source, effect) {
@@ -2807,6 +2811,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (move.category === 'Status') return;
 			let modifier = 1.3;
+			if (this.field.isTerrain('coldeclipseterrain')) modifier *= 1.3;
 			if (move.id === 'dragonrush') modifier *= 1.5;
 			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
 				modifier *= 1.3;
@@ -2828,9 +2833,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onModifyDef(def, pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) return this.chainModify(1.5);
 			return this.chainModify(1.3);
 		},
 		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain('coldeclipseterrain')) return this.chainModify(1.5);
 			return this.chainModify(1.3);
 		},
 		onImmunity(type, pokemon) {
@@ -3668,7 +3675,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					id: 'futuresight',
 					name: "Future Sight",
 					accuracy: 100,
-					basePower: 60,
+					basePower: this.field.isTerrain('coldeclipseterrain') ? 90 : 60,
 					category: "Special",
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
@@ -8091,10 +8098,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if ((move.type === 'Fairy' || move.type === 'Dark') && !source.hasType(move.type)) return 1.5;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.8);
+			if (move.category !== 'Status') return this.chainModify(this.field.isTerrain('coldeclipseterrain') ? 0.7 : 0.8);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (move.category !== 'Status') this.heal(source.baseMaxhp / 16, source, source);
+			if (move.category !== 'Status') this.heal(source.baseMaxhp / (this.field.isTerrain('coldeclipseterrain') ? 8 : 16), source, source);
+		},
+		onBasePower(basePower, source, target, move) {
+			if (move.category !== 'Status' && this.field.isTerrain('coldeclipseterrain')) return this.chainModify(1.3);
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
@@ -10056,7 +10066,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onBasePower(basePower, pokemon, target, move) {
-			if (this.field.isTerrain(['fairytaleterrain', 'bigtopterrain', 'dragonsdenterrain', 'mountainterrain', 'snowymountainterrain'])) return this.chainModify(2);
+			if (this.field.isTerrain(['fairytaleterrain', 'bigtopterrain', 'dragonsdenterrain', 'mountainterrain', 'snowymountainterrain', 'coldeclipseterrain'])) return this.chainModify(2);
 			if (this.field.isTerrain(['desertterrain', 'rockyterrain', 'forestterrain', 'burningterrain', 'superheatedterrain', 'ashenbeachterrain', 'watersurfaceterrain', 'caveterrain', 'starlightarenaterrain', 'newworldterrain'])) return this.chainModify(1.5);
 		},
 		flags: {},
@@ -13824,7 +13834,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			if (target.abilityState.duskDriveHitTriggered) {
-				this.heal(target.baseMaxhp / 20, target, target);
 				return;
 			}
 			target.abilityState.duskDriveHitTriggered = true;
@@ -13835,7 +13844,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (target?.hasAbility('battlebond')) return;
-			if ((this.dex.abilities.get('duskdrive') as any).boostedField.call(this) || this.queue.willMove(target) || target.newlySwitched) {
+			if ((this.dex.abilities.get('duskdrive') as any).boostedField.call(this)) {
+				this.debug('Dusk Drive boost');
+				return this.chainModify(1.3);
+			}
+			if (this.queue.willMove(target) || target.newlySwitched) {
 				this.debug('Dusk Drive boost');
 				return this.chainModify(1.5);
 			}
@@ -13844,11 +13857,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if ((this.dex.abilities.get('duskdrive') as any).boostedField.call(this)) {
 				this.debug('Dusk Drive field weaken');
-				return this.chainModify(0.25);
+				return this.chainModify(0.6);
 			}
 			if (source.moveThisTurnResult === undefined) {
 				this.debug('Dusk Drive weaken');
-				return this.chainModify(0.3);
+				return this.chainModify(0.5);
 			}
 		},
 		onDamage(damage, target, source, effect) {
