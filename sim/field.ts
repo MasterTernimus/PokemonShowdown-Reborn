@@ -261,6 +261,10 @@ export class Field {
 			this.battle.add('-message', 'The chessboard prevents a new field from being generated!');
 			return false;
 		}
+		if (this.terrain === 'glitchterrain') {
+			this.battle.add('-message', 'The glitch prevents a new field from being generated!');
+			return false;
+		}
 		const bewitchedBlockedTerrains = [
 			'electricterrain', 'grassyterrain', 'psychicterrain', 'mistyterrain',
 			'forestterrain', 'rainbowterrain', 'coldeclipseterrain',
@@ -329,6 +333,10 @@ export class Field {
 		}
 		if (this.terrain === 'chessboardterrain') {
 			this.battle.add('-message', 'The chessboard prevents a new field from being generated!');
+			return false;
+		}
+		if (this.terrain === 'glitchterrain') {
+			this.battle.add('-message', 'The glitch prevents a new field from being generated!');
 			return false;
 		}
 		const bewitchedBlockedTerrains = [
