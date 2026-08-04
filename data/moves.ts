@@ -13,6 +13,27 @@ function useHigherOffensiveStat(source: Pokemon, move: ActiveMove) {
 	}
 }
 
+function consumeStockpileLayer(pokemon: Pokemon, battle: Battle) {
+	const stockpile = pokemon.volatiles['stockpile'];
+	if (!stockpile?.layers) return;
+	const boosts: SparseBoostsTable = {};
+	if (stockpile.def < 0) {
+		boosts.def = -1;
+		stockpile.def++;
+	}
+	if (stockpile.spd < 0) {
+		boosts.spd = -1;
+		stockpile.spd++;
+	}
+	if (boosts.def || boosts.spd) battle.boost(boosts, pokemon, pokemon);
+	stockpile.layers--;
+	if (stockpile.layers > 0) {
+		battle.add('-start', pokemon, 'stockpile' + stockpile.layers);
+	} else {
+		pokemon.removeVolatile('stockpile');
+	}
+}
+
 function getRoarOfTimeFutureMoveData() {
 	return {
 		id: 'roaroftime',
@@ -4675,8 +4696,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.overrideOffensiveStat = 'atk';
 			}
 		},
-		fullDamageSpread: true,
-		target: "allAdjacentFoes",
+		multihit: 2,
+		smartTarget: true,
+		target: "normal",
 		type: "Dragon",
 		maxMove: { basePower: 130 },
 	},
@@ -8009,6 +8031,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Sandblast'));
 				}
+				if (this.field.isTerrain(['caveterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain'])) return;
 				if (this.field.setTerrain('desertterrain', source, this.dex.moves.get('gmaxsandblast'))) {
 					this.field.terrainState.duration = 3;
 				}
@@ -18121,7 +18144,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterHit(target, source, move) {
-			this.boost({ atk: 1 }, source, source, move);
 			source.addVolatile('shadowforceguard', source, move);
 		},
 		condition: {
@@ -20025,10 +20047,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterMove(pokemon, target, move) {
 			if (pokemon.hasAbility('accumulation')) {
-				if (pokemon.abilityState.accumulationScriptedReleaseTurn === this.turn) {
-					pokemon.removeVolatile('stockpile');
-					return;
-				}
 				pokemon.abilityState.accumulationReleasedTurn = this.turn;
 				if (!pokemon.abilityState.accumulationSuppressMoveChain && target && !target.fainted) {
 					pokemon.abilityState.accumulationAutoBelch = true;
@@ -20037,8 +20055,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					pokemon.abilityState.accumulationAutoBelch = false;
 					pokemon.abilityState.accumulationNoSpitUpAfterBelch = false;
 				}
+				consumeStockpileLayer(pokemon, this);
+				return;
 			}
-			if (pokemon.abilityState.accumulationAutoSpitUp) return;
 			pokemon.removeVolatile('stockpile');
 		},
 		target: "normal",

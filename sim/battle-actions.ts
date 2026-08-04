@@ -493,7 +493,7 @@ export class BattleActions {
 		}
 		if (
 			this.battle.gameType !== 'freeforall' && move.multihit && targets.length > 1 &&
-			['allAdjacent', 'allAdjacentFoes'].includes(move.target)
+			move.multihitType !== 'dualwield' && ['allAdjacent', 'allAdjacentFoes'].includes(move.target)
 		) {
 			const selectedTarget = targets.includes(originalTarget) ? originalTarget : target;
 			targets.splice(0, targets.length, selectedTarget);
@@ -669,7 +669,20 @@ export class BattleActions {
 			if (target?.isProtected()) targets[i] = this.battle.sample(unprotectedTargets);
 		}
 	}
+	focusSmartTargetFromProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
+		if (!move.smartTarget || targets.length < 2) return;
+		const unprotectedTargets = targets.filter(target =>
+			target?.hp && !target.fainted && !target.isProtected() && !target.isSemiInvulnerable()
+		);
+		if (!unprotectedTargets.length) return;
+		for (const [i, target] of targets.entries()) {
+			if (target?.isProtected() || target?.isSemiInvulnerable()) {
+				targets[i] = this.battle.sample(unprotectedTargets);
+			}
+		}
+	}
 	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
+		this.focusSmartTargetFromProtect(targets, pokemon, move);
 		if (move.id === 'helpinghand') return new Array(targets.length).fill(true);
 		const hitResults: boolean[] = [];
 		for (const [i, target] of targets.entries()) {
@@ -1577,7 +1590,10 @@ export class BattleActions {
 		if (item.zMoveFrom) {
 			if (move.name === item.zMoveFrom) return item.zMove as string;
 		} else if (item.zMove !== true && item.zMoveType) {
-			if (move.type === item.zMoveType) return item.zMove as string;
+			if (move.type === item.zMoveType) {
+				if (move.category === "Status") return move.name;
+				if (move.zMove?.basePower) return item.zMove as string;
+			}
 		} else if (item.zMove === true) {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
@@ -1599,6 +1615,15 @@ export class BattleActions {
 			}
 			if (item.zMove !== true && item.zMoveType && move.type === item.zMoveType) {
 				const zMove = this.dex.getActiveMove(item.zMove as string);
+				if (move.category === 'Status') {
+					const statusZMove = this.dex.getActiveMove(move);
+					statusZMove.isZ = true;
+					statusZMove.isZOrMaxPowered = true;
+					return statusZMove;
+				}
+				zMove.basePower = move.zMove!.basePower!;
+				zMove.category = move.category;
+				zMove.priority = move.priority;
 				zMove.isZOrMaxPowered = true;
 				return zMove;
 			}
@@ -1703,7 +1728,19 @@ export class BattleActions {
 			continentalcrush: ['mountainterrain', 4],
 			infernooverdrive: ['burningterrain', 3],
 		};
-		const zTerrain = zTerrains[move.id];
+		let zTerrain = zTerrains[move.id];
+		const caveTerrains = ['caveterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain'];
+		if (this.battle.field.isTerrain('coldeclipseterrain') && ['subzeroslammer', 'continentalcrush'].includes(move.id)) {
+			zTerrain = undefined;
+		} else if (this.battle.field.isTerrain(caveTerrains) && move.id === 'tectonicrage') {
+			zTerrain = undefined;
+		} else if (move.id === 'infernooverdrive') {
+			if (this.battle.field.isTerrain('volcanicterrain')) {
+				zTerrain = undefined;
+			} else if (this.battle.field.isTerrain(caveTerrains)) {
+				zTerrain = ['volcanicterrain', 3];
+			}
+		}
 		if (zTerrain) (move as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain = zTerrain;
 		if (move.category !== 'Status') {
 			this.battle.attrLastMove('[zeffect]');
@@ -2135,17 +2172,24 @@ export class BattleActions {
 	}
 
 	canMegaEvoX(pokemon: Pokemon) {
-		if (['Gardevoir', 'Gardevoir-Void'].includes(pokemon.baseSpecies.name) && pokemon.getItem().id === 'gardevoirite') {
+		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void', 'Gardevoir-Void-Mega'];
+		if (
+			gardevoirFormes.includes(pokemon.baseSpecies.name) &&
+			pokemon.getItem().id === 'gardevoirite' &&
+			pokemon.baseSpecies.name !== 'Gardevoir-Mega-Z'
+		) {
 			return 'Gardevoir-Mega-Z';
 		}
 		return null;
 	}
 
 	canMegaEvoY(pokemon: Pokemon) {
-		if (pokemon.baseSpecies.name === 'Gardevoir' && pokemon.getItem().id === 'gardevoirite') {
+		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void', 'Gardevoir-Void-Mega'];
+		if (!gardevoirFormes.includes(pokemon.baseSpecies.name) || pokemon.getItem().id !== 'gardevoirite') return null;
+		if (['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z'].includes(pokemon.baseSpecies.name)) {
 			return 'Gardevoir-Void-Mega';
 		}
-		if (pokemon.baseSpecies.name === 'Gardevoir-Void' && pokemon.getItem().id === 'gardevoirite') {
+		if (['Gardevoir-Void', 'Gardevoir-Void-Mega'].includes(pokemon.baseSpecies.name)) {
 			return 'Gardevoir-Mega';
 		}
 		return null;

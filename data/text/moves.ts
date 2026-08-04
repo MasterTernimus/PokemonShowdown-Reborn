@@ -5696,8 +5696,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowforce: {
 		name: "Shadow Force",
-		desc: "Uses the user's higher offensive stat. The user vanishes turn 1 and attacks turn 2. This move breaks protection. On a successful hit, the user's Attack rises by 1 stage and it takes 0.7x damage from all sources next turn. Power Herb makes it attack immediately.",
-		shortDesc: "Uses higher offense. Vanishes, breaks Protect. On hit: +1 Atk, next turn 0.7x damage.",
+		desc: "Uses the user's higher offensive stat. The user vanishes turn 1 and attacks turn 2. This move breaks protection. On a successful hit, the user takes 0.7x damage from all sources next turn. Power Herb makes it attack immediately.",
+		shortDesc: "Uses higher offense. Vanishes, breaks Protect. On hit: next turn 0.7x damage.",
 		gen6: {
 			desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		},
@@ -6291,8 +6291,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spitup: {
 		name: "Spit Up",
-		desc: "Power is equal to 100 times the user's Stockpile count. At 3 Stockpile counts, this move hits through protection for half damage, unless it was used automatically by Accumulation. Fails if the user's Stockpile count is 0. Whether or not this move is successful, the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0. If used by a Pokemon with Accumulation, it is followed by Belch on the same target.",
-		shortDesc: "More power with Stockpile; at 3 hits through Protect at 1/2.",
+		desc: "Power is equal to 100 times the user's Stockpile count. At 3 Stockpile counts, this move hits through protection for half damage, unless it was used automatically by Accumulation. Fails if the user's Stockpile count is 0. Normally, this move consumes all Stockpile stacks and removes their Defense and Special Defense boosts. If used by a Pokemon with Accumulation, it is followed by Belch on the same target and consumes only 1 Stockpile stack.",
+		shortDesc: "More power with Stockpile; Accumulation consumes only 1 stack.",
 		gen4: {
 			desc: "Power is equal to 100 times the user's Stockpile count. This move does not apply damage variance. Fails if the user's Stockpile count is 0. Unless there is no target, whether or not this move is successful the user's Defense and Special Defense decrease by as many stages as Stockpile had increased them, and the user's Stockpile count resets to 0.",
 		},

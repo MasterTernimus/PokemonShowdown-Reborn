@@ -40,8 +40,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dualwield: {
 		name: "Dual Wield",
-		desc: "Moves that would be boosted by Sharpness or Mega Launcher, plus arrow moves, hit twice, with each hit dealing 70% damage.",
-		shortDesc: "Sharpness/Mega Launcher/arrow moves hit twice at 70%.",
+		desc: "Moves that would be boosted by Sharpness or Mega Launcher, plus arrow moves, hit twice, with each hit dealing 70% damage. Spread moves keep their spread targeting.",
+		shortDesc: "Sharpness/Mega Launcher/arrow moves hit twice at 70%; spread stays spread.",
 	},
 	apexpredator: {
 		name: "Apex Predator",
@@ -206,12 +206,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlearmor: {
 		name: "Battle Armor",
-		shortDesc: "This Pokemon cannot be struck by a critical hit.",
+		shortDesc: "Cannot be crit; takes 0.8x damage from attacks.",
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. When this Pokemon knocks out another Pokemon, it transforms into its Bond form, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization.",
-		shortDesc: "Heals 1/16; Bond form KO heals; resists Fighting Clause abilities.",
+		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. When this Pokemon knocks out another Pokemon, it transforms into its Bond form, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 0.75x damage from attacks, takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. Once per battle, if a move would knock it out from above 1/3 max HP, it survives with 1 HP. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization.",
+		shortDesc: "Heals 1/16; KO heals; 0.75x from attacks; one-time 1 HP clutch.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -674,7 +674,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sacrededge: {
 		name: "Sacred Edge",
-		desc: "This Pokemon has Sharpness, Dual Wield, and Sworn Duty's effects. Its slicing moves have 1.5x power, and moves boosted by Sharpness or Mega Launcher hit twice at 70% damage each. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
+		desc: "This Pokemon has Sharpness, Dual Wield, and Sworn Duty's effects. Its slicing moves have 1.5x power. When Dual Wield applies to one of those slicing moves, the first hit keeps the 1.5x Sharpness boost and the second hit deals 30% of that boosted damage. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
 		shortDesc: "Sharpness + Dual Wield + Sworn Duty.",
 	},
 	omenedge: {
@@ -996,7 +996,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	filter: {
 		name: "Filter",
-		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
+		shortDesc: "Takes 0.8x damage from attacks; super-effective hits are also 0.75x.",
 	},
 	byxbysiontouch: {
 		name: "Byxbysion Touch",
@@ -1994,7 +1994,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	prismarmor: {
 		name: "Prism Armor",
-		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
+		shortDesc: "Takes 0.8x damage from attacks; super-effective hits are also 0.75x.",
 	},
 	ironwill: {
 		name: "Iron Will",
@@ -2310,7 +2310,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shellarmor: {
 		name: "Shell Armor",
-		shortDesc: "This Pokemon cannot be struck by a critical hit.",
+		shortDesc: "Cannot be crit; takes 0.8x damage from attacks.",
 	},
 	shielddust: {
 		name: "Shield Dust",
@@ -2372,7 +2372,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	slowstart: {
 		name: "Slow Start",
-		shortDesc: "On switch-in, this Pokemon's Attack and Speed are halved for 5 turns.",
+		desc: "On switch-in, this Pokemon's Attack is 0.65x and Speed is 0.5x for 3 turns, and its Defense is doubled. On Holy Field, the Attack and Speed drops are removed and its Defense is 1.5x instead.",
+		shortDesc: "3 turns: Atk 0.65x, Spe 0.5x, Def 2x; Holy removes drops and gives Def 1.5x.",
 		gen7: {
 			desc: "On switch-in, this Pokemon's Attack and Speed are halved for 5 turns. During the effect, if this Pokemon uses a generic Z-Move based on a special move, its Special Attack is halved during damage calculation.",
 		},
@@ -2425,7 +2426,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	solidrock: {
 		name: "Solid Rock",
-		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
+		shortDesc: "Takes 0.8x damage from attacks; super-effective hits are also 0.75x.",
 	},
 	soulheart: {
 		name: "Soul-Heart",
@@ -2536,7 +2537,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon has Shell Armor's effect and ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. It takes 0.8x damage from attacks. Its Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power and trigger Dual Wield. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. Its moves cannot be redirected. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It restores 1/16 of its maximum HP at the end of each turn.",
+		desc: "This Pokemon has Shell Armor's effect and ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. It takes 0.8x damage from attacks. Its Water Pulse has 2x power. Its other pulse, aura, beam, cannon, and bullet moves have 1.5x power and trigger Dual Wield. If the target is protected by Reflect, Light Screen, or Aurora Veil, those moves have 1.3x power instead and ignore those effects. When Dual Wield applies to these launcher moves, the first hit keeps the full launcher boost and the second hit deals 30% of that boosted damage. Its moves cannot be redirected. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit. It restores 1/16 of its maximum HP at the end of each turn.",
 		shortDesc: "Shell Armor; no Steel weaknesses; takes 0.8x; launcher moves boosted + Dual Wield; drains.",
 	},
 	calderacore: {
@@ -2577,8 +2578,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stancechange: {
 		name: "Stance Change",
-		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before using an attacking move, and changes to Shield Forme before using King's Shield. This Pokemon restores 1/16 of its maximum HP at the end of each turn. Aegislash takes 20% less damage in Shield Forme, and in Free-For-All, consecutive hits against Shield Forme in the same turn deal 30% less damage. Aegislash-Blade's damaging moves deal 1.2x damage.",
-		shortDesc: "Changes Forme; heals 1/16. Shield takes less damage; Blade deals 1.2x.",
+		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before using an attacking move, and changes to Shield Forme before using King's Shield. This Pokemon has Dual Wield's effect and restores 1/16 of its maximum HP at the end of each turn. Aegislash takes 20% less damage in Shield Forme, and in Free-For-All, consecutive hits against Shield Forme in the same turn deal 30% less damage. Aegislash-Blade's damaging moves deal 1.2x damage.",
+		shortDesc: "Changes Forme; Dual Wield; heals 1/16. Shield bulkier; Blade deals 1.2x.",
 		gen6: {
 			desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield.",
 		},
@@ -3187,7 +3188,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "This Pokemon has Thick Fat's effect and is immune to sandstorm and hail damage. Belch used by this Pokemon can be used without eating a Berry. At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, every other turn it chooses the foe and whether Belch or Spit Up would deal more damage, then uses only that move. Automatically used Spit Up respects protection and invulnerability. If this Pokemon uses Spit Up, it follows with Belch on the same target and consumes its Stockpile. If this Pokemon uses Belch, it does not follow with Spit Up. If this Pokemon uses Swallow, it also uses Spit Up and Belch on the best target before consuming its Stockpile.",
+		desc: "This Pokemon has Thick Fat's effect and is immune to sandstorm and hail damage. Belch used by this Pokemon can be used without eating a Berry. At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, every other turn it chooses the foe and whether Belch or Spit Up would deal more damage, then uses only that move. Automatically used Spit Up respects protection and invulnerability. If this Pokemon uses Spit Up, it follows with Belch on the same target and loses 1 Stockpile stack. If this Pokemon uses Belch, it does not follow with Spit Up. If this Pokemon uses Swallow, it also uses Spit Up and Belch on the best target before consuming its Stockpile.",
 		shortDesc: "Thick Fat; Belch needs no Berry; auto-builds Stockpile; Spit Up/Swallow combo into Belch.",
 	},
 	invigorate: {
@@ -3252,8 +3253,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinisterblaze: {
 		name: "Sinister Blaze",
-		desc: "This Pokemon is always burned and its burn can overwrite other status conditions. Burn heals this Pokemon instead of damaging it. While this Pokemon is burned, opposing Pokemon lose doubled burn damage each turn. This Ability cannot be Skill Swapped, suppressed, copied by Role Play, given by Entrainment, or Traced.",
-		shortDesc: "Always burned; burn heals user and burns foes down; cannot be copied/suppressed.",
+		desc: "This Pokemon is always burned and its burn can overwrite other status conditions. Burn heals this Pokemon instead of damaging it. While this Pokemon is burned, opposing Pokemon lose doubled burn damage each turn, and this Pokemon heals the damage dealt to each foe this way. This Ability cannot be Skill Swapped, suppressed, copied by Role Play, given by Entrainment, or Traced.",
+		shortDesc: "Always burned; burn heals user; foes lose burn damage and heal it; cannot be copied/suppressed.",
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",

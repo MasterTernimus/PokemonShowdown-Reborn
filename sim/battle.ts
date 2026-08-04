@@ -1352,6 +1352,10 @@ export class Battle {
 	}
 
 	checkMoveBypassesProtect(move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus = true) {
+		if (move.breaksProtect) {
+			defender.getMoveHitData(move).bypassProtect = true;
+			return true;
+		}
 		if ((move.category !== 'Status' || blockStatus) && move.flags['protect'] &&
 			this.runEvent('HitProtect', attacker, defender, move)) {
 			return false;
@@ -3597,7 +3601,8 @@ export class Battle {
 			outcome = !!pokemon.canDynamax && !pokemon.side.allySide?.hasLivingGmax();
 			break;
 		case 'Mega':
-			outcome = !!pokemon.canMegaEvo && (this.gameType !== 'freeforall' || pokemon.side.megaEvoCount < 2);
+			outcome = !!(pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY) &&
+				(this.gameType !== 'freeforall' || pokemon.side.megaEvoCount < 2);
 			break;
 		case 'Ultraburst':
 			outcome = !!pokemon.canUltraBurst;
@@ -3620,12 +3625,16 @@ export class Battle {
 		if (this.gameType === 'freeforall' && pokemon.side.megaEvoCount >= 2) {
 			for (const ally of pokemon.side.pokemon) {
 				ally.canMegaEvo = false;
+				ally.canMegaEvoX = false;
+				ally.canMegaEvoY = false;
 			}
 		}
 		if (pokemon.side.gimmickCount === maxGimmicks) {
 			pokemon.side.dynamaxUsed = true;
 			for (const ally of pokemon.side.pokemon) {
 				ally.canMegaEvo = false;
+				ally.canMegaEvoX = false;
+				ally.canMegaEvoY = false;
 				ally.canUltraBurst = null;
 				ally.canTerastallize = null;
 			}

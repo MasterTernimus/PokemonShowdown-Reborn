@@ -729,6 +729,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	battlearmor: {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.chainModify(0.8);
+		},
 		onStart() {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1 });
@@ -921,27 +924,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Battle Bond Fighting Clause damage reduction');
 				return this.chainModify(0.7);
 			}
-			if (target.hasAbility('battlebond') && ['garchomp', 'greninjabond'].includes(target.species.id)) {
-				this.debug('Battle Bond base damage reduction');
-				return this.chainModify(0.8);
+			if (target.hasAbility('battlebond') && move.category !== 'Status') {
+				this.debug('Battle Bond Shadow Current damage reduction');
+				return this.chainModify(0.75);
 			}
-			if (target.species.id === 'garchompbattlebond') {
-				if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
-					this.debug('Battle Bond Ultra Instinct field weaken');
-					return this.chainModify(0.25);
-				}
-				if (source.moveThisTurnResult === undefined) {
-					this.debug('Battle Bond Ultra Instinct weaken');
-					return this.chainModify(0.8);
-				}
-			}
-			if (target.species.id === 'garchompbattlebond') {
-				this.debug('Battle Bond transformed damage reduction');
-				return this.chainModify(0.8);
-			}
-			if (!['garchompbattlebond', 'greninjaash'].includes(target.species.id)) return;
-			this.debug('Battle Bond transformed damage reduction');
-			return this.chainModify(0.7);
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
@@ -2286,6 +2272,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				source.foes().filter(foe => foe && !foe.fainted) :
 				[target];
 			for (const foe of targets) {
+				if (!foe.hp || foe.fainted || foe.isProtected() || foe.isSemiInvulnerable()) continue;
 				for (let i = 0; i < 3; i++) {
 					let bestDamage = 0;
 					let bestMove: ActiveMove | null = null;
@@ -3072,8 +3059,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			const dualWieldMod = this.dex.abilities.get('dualwield').onBasePower?.call(this, basePower, attacker, defender, move);
-			if (dualWieldMod) return dualWieldMod;
+			if (move.multihitType === 'dualwield' && move.flags['slicing']) {
+				return this.chainModify(move.hit > 1 ? 0.45 : 1.5);
+			}
 			if (move.flags['slicing']) return this.chainModify(1.5);
 		},
 		flags: { breakable: 1 },
@@ -4213,7 +4201,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		healUltraEgo(pokemon, source) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+			if (source === 'hit' && (this.dex.abilities.get('ultraego') as any).boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.ultraEgoPinch = true;
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 				return;
@@ -4252,7 +4240,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
-			this.effect.healUltraEgo.call(this, source, 'attack');
+			(this.dex.abilities.get('ultraego') as any).healUltraEgo.call(this, source, 'attack');
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
@@ -4267,7 +4255,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			target.abilityState.ultraEgoHitTriggered = true;
 			this.boost({ atk: 1, spa: 1 }, target, target);
-			if (this.effect.boostedField.call(this)) {
+			if ((this.dex.abilities.get('ultraego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
 					this.boost({ def: 1 }, target, target);
@@ -4277,7 +4265,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ spd: 1 }, target, target);
 				}
 			}
-			this.effect.healUltraEgo.call(this, target, 'hit');
+			(this.dex.abilities.get('ultraego') as any).healUltraEgo.call(this, target, 'hit');
 		},
 		flags: {},
 		name: "Perfect Ego",
@@ -5172,10 +5160,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	filter: {
 		onSourceModifyDamage(damage, source, target, move) {
+			let modifier = 0.8;
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Filter neutralize');
-				return this.chainModify(0.75);
+				modifier *= 0.75;
 			}
+			return this.chainModify(modifier);
 		},
 		flags: { breakable: 1 },
 		name: "Filter",
@@ -6623,10 +6613,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onStart(pokemon) {
 			this.effect.checkMode.call(this, pokemon);
-			if (this.effect.boostedField.call(this)) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+			if ((this.dex.abilities.get('imperialmandate') as any).boostedField.call(this)) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 		},
 		onTerrainChange(pokemon) {
-			if (this.effect.boostedField.call(this)) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+			if ((this.dex.abilities.get('imperialmandate') as any).boostedField.call(this)) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 		},
 		onModifySpe(spe, pokemon) {
 			if (pokemon.hp < pokemon.maxhp / 2) return this.chainModify(2);
@@ -6636,7 +6626,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.effect.checkMode.call(this, source);
 			let modifier = 1.2;
 			if (source.hp >= source.maxhp / 2) modifier *= 2;
-			if (this.effect.boostedField.call(this)) modifier *= 1.5;
+			if ((this.dex.abilities.get('imperialmandate') as any).boostedField.call(this)) modifier *= 1.5;
 			return this.chainModify(modifier);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -8743,7 +8733,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const boosts = target.getStat('atk', false, true) >= target.getStat('spa', false, true) ?
 				{ atk: -2, spe: -1 } : { spa: -2, spe: -1 };
 			const effect = this.dex.abilities.get('neutralization');
-			const allowedBoosts = this.runEvent('TryBoost', target, source, effect, { ...boosts });
+			const changedBoosts = this.runEvent('ChangeBoost', target, source, effect, { ...boosts });
+			const allowedBoosts = this.runEvent('TryBoost', target, source, effect, { ...target.getCappedBoost(changedBoosts) });
 			if (!allowedBoosts) return;
 			const cappedBoosts = target.getCappedBoost(allowedBoosts);
 			let announced = false;
@@ -8751,6 +8742,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const stat = statName as BoostID;
 				if (!cappedBoosts[stat]) continue;
 				const boostBy = target.boostBy({ [stat]: cappedBoosts[stat] });
+				const message = cappedBoosts[stat]! < 0 || target.boosts[stat] === -6 ? '-unboost' : '-boost';
+				const amount = message === '-unboost' ? -boostBy : boostBy;
 				if (!boostBy) {
 					this.add('-unboost', target, stat, 0);
 					continue;
@@ -8759,7 +8752,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-ability', source, 'Neutralization');
 					announced = true;
 				}
-				this.add('-unboost', target, stat, -boostBy);
+				this.add(message, target, stat, amount);
 			}
 		},
 		onStart(pokemon) {
@@ -9581,10 +9574,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
+			let modifier = 0.8;
 			if (target.getMoveHitData(move).typeMod > 0 || this.field.isTerrain('darkcrystalcavernterrain') || this.field.isTerrain('crystalcavernterrain')) {
 				this.debug('Prism Armor neutralize');
-				return this.chainModify(0.75);
+				modifier *= 0.75;
 			}
+			return this.chainModify(modifier);
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
@@ -10899,6 +10894,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	shellarmor: {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.chainModify(0.8);
+		},
 		onStart() {
 			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				this.boost({ def: 1 });
@@ -11016,7 +11014,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyDef(def, pokemon) {
-			if (this.field.isTerrain('holyterrain') && pokemon.species.id === 'regigigas') {
+			if (this.field.isTerrain('holyterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -11043,7 +11041,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			},
 			onModifyDef(def, pokemon) {
-				if (!this.field.isTerrain('holyterrain') && pokemon.species.id === 'regigigas') {
+				if (!this.field.isTerrain('holyterrain')) {
 					return this.chainModify(2);
 				}
 			},
@@ -11169,10 +11167,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	solidrock: {
 		onSourceModifyDamage(damage, source, target, move) {
+			let modifier = 0.8;
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Solid Rock neutralize');
-				return this.chainModify(0.75);
+				modifier *= 0.75;
 			}
+			return this.chainModify(modifier);
 		},
 		flags: { breakable: 1 },
 		name: "Solid Rock",
@@ -11203,7 +11203,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.status !== 'brn') return;
 			for (const foe of pokemon.foes()) {
 				if (!foe || foe.fainted) continue;
-				this.damage(foe.baseMaxhp / 8, foe, pokemon, this.effect);
+				const damage = this.damage(foe.baseMaxhp / 8, foe, pokemon, this.effect);
+				if (typeof damage === 'number' && damage > 0) {
+					this.heal(damage, pokemon, pokemon, this.effect);
+				}
 			}
 		},
 		flags: { cantsuppress: 1, failroleplay: 1, failskillswap: 1, noentrain: 1, notrace: 1 },
@@ -12128,7 +12131,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			let modifier = 1;
-			if (move.flags['pulse'] || move.flags['bullet'] || move.flags['beam'] || move.flags['cannon'] || move.flags['aura']) {
+			const launcherMove = move.flags['pulse'] || move.flags['bullet'] || move.flags['beam'] || move.flags['cannon'] || move.flags['aura'];
+			if (launcherMove) {
 				if (move.id === 'waterpulse') {
 					modifier *= 2;
 				} else if (defender?.side.getSideCondition('reflect') || defender?.side.getSideCondition('lightscreen') || defender?.side.getSideCondition('auroraveil')) {
@@ -12137,7 +12141,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					modifier *= 1.5;
 				}
 			}
-			if (move.multihitType === 'dualwield') modifier *= 0.7;
+			if (move.multihitType === 'dualwield') modifier *= launcherMove ? (move.hit > 1 ? 0.3 : 1) : 0.7;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMovePriority: 1,
@@ -12312,6 +12316,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				attacker.formeChange(targetForme);
 			}
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, attacker);
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
@@ -13657,7 +13662,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		healUltraEgo(pokemon, source) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+			if (source === 'hit' && (this.dex.abilities.get('burningego') as any).boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.ultraEgoPinch = true;
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 				return;
@@ -13693,7 +13698,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
-			this.effect.healUltraEgo.call(this, source, 'attack');
+			(this.dex.abilities.get('burningego') as any).healUltraEgo.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
@@ -13704,7 +13709,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			target.abilityState.ultraEgoHitTriggered = true;
 			this.boost({ atk: 1, spa: 1 }, target, target);
-			if (this.effect.boostedField.call(this)) {
+			if ((this.dex.abilities.get('burningego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
 					this.boost({ def: 1 }, target, target);
@@ -13714,7 +13719,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ spd: 1 }, target, target);
 				}
 			}
-			this.effect.healUltraEgo.call(this, target, 'hit');
+			(this.dex.abilities.get('burningego') as any).healUltraEgo.call(this, target, 'hit');
 		},
 		onResidual(pokemon) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
@@ -13797,7 +13802,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		healDuskDrive(pokemon, source) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.duskDrivePinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+			if (source === 'hit' && (this.dex.abilities.get('duskdrive') as any).boostedField.call(this) && !pokemon.abilityState.duskDrivePinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.duskDrivePinch = true;
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 				return;
@@ -13813,7 +13818,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.duskDriveAttackHealTurn === this.turn) return;
 			source.abilityState.duskDriveAttackHealTurn = this.turn;
-			this.effect.healDuskDrive.call(this, source, 'attack');
+			(this.dex.abilities.get('duskdrive') as any).healDuskDrive.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
@@ -13824,20 +13829,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			target.abilityState.duskDriveHitTriggered = true;
 			this.boost({ atk: 1, spa: 1 }, target, target);
-			this.effect.healDuskDrive.call(this, target, 'hit');
+			(this.dex.abilities.get('duskdrive') as any).healDuskDrive.call(this, target, 'hit');
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (target?.hasAbility('battlebond')) return;
-			if (this.effect.boostedField.call(this) || this.queue.willMove(target) || target.newlySwitched) {
+			if ((this.dex.abilities.get('duskdrive') as any).boostedField.call(this) || this.queue.willMove(target) || target.newlySwitched) {
 				this.debug('Dusk Drive boost');
 				return this.chainModify(1.5);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			if (this.effect.boostedField.call(this)) {
+			if ((this.dex.abilities.get('duskdrive') as any).boostedField.call(this)) {
 				this.debug('Dusk Drive field weaken');
 				return this.chainModify(0.25);
 			}
@@ -13875,7 +13880,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		healUltraEgo(pokemon, source) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			if (source === 'hit' && this.effect.boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
+			if (source === 'hit' && (this.dex.abilities.get('perfectego') as any).boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.ultraEgoPinch = true;
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 				return;
@@ -13917,7 +13922,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
-			this.effect.healUltraEgo.call(this, source, 'attack');
+			(this.dex.abilities.get('perfectego') as any).healUltraEgo.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
@@ -13928,7 +13933,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			target.abilityState.ultraEgoHitTriggered = true;
 			this.boost({ atk: 1, spa: 1 }, target, target);
-			if (this.effect.boostedField.call(this)) {
+			if ((this.dex.abilities.get('perfectego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
 					this.boost({ def: 1 }, target, target);
@@ -13938,7 +13943,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.boost({ spd: 1 }, target, target);
 				}
 			}
-			this.effect.healUltraEgo.call(this, target, 'hit');
+			(this.dex.abilities.get('perfectego') as any).healUltraEgo.call(this, target, 'hit');
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect?.id === 'recoil') {

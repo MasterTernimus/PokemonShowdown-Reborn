@@ -7935,7 +7935,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Gastrodon",
 		baseForme: "West",
 		types: ["Water", "Ground"],
-		baseStats: { hp: 111, atk: 83, def: 68, spa: 92, spd: 82, spe: 39 },
+		baseStats: { hp: 111, atk: 83, def: 78, spa: 97, spd: 92, spe: 39 },
 		abilities: { 0: "Sticky Hold", 1: "Storm Drain", H: "Poison Heal" },
 		heightm: 0.9,
 		weightkg: 29.9,
