@@ -56,6 +56,23 @@ export class BattleActions {
 		if (battle.format.actions) Object.assign(this, battle.format.actions);
 	}
 
+	getZMoveBasePower(move: Move) {
+		if (move.zMove?.basePower) return move.zMove.basePower;
+		let basePower = move.basePower;
+		if (Array.isArray(move.multihit)) basePower *= 3;
+		if (!basePower) return 100;
+		if (basePower >= 140) return 200;
+		if (basePower >= 130) return 195;
+		if (basePower >= 120) return 190;
+		if (basePower >= 110) return 185;
+		if (basePower >= 100) return 180;
+		if (basePower >= 90) return 175;
+		if (basePower >= 80) return 160;
+		if (basePower >= 70) return 140;
+		if (basePower >= 60) return 120;
+		return 100;
+	}
+
 	// #region SWITCH
 	// ==================================================================
 
@@ -1592,13 +1609,13 @@ export class BattleActions {
 		} else if (item.zMove !== true && item.zMoveType) {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") return move.name;
-				if (move.zMove?.basePower) return item.zMove as string;
+				if (this.getZMoveBasePower(move)) return item.zMove as string;
 			}
 		} else if (item.zMove === true) {
 			if (move.type === item.zMoveType) {
 				if (move.category === "Status") {
 					return move.name;
-				} else if (move.zMove?.basePower) {
+				} else if (this.getZMoveBasePower(move)) {
 					return this.Z_MOVES[move.type];
 				}
 			}
@@ -1621,9 +1638,11 @@ export class BattleActions {
 					statusZMove.isZOrMaxPowered = true;
 					return statusZMove;
 				}
-				zMove.basePower = move.zMove!.basePower!;
+				zMove.basePower = this.getZMoveBasePower(move);
 				zMove.category = move.category;
 				zMove.priority = move.priority;
+				zMove.baseMove = move.id;
+				zMove.baseMoveName = move.name;
 				zMove.isZOrMaxPowered = true;
 				return zMove;
 			}
@@ -1636,10 +1655,12 @@ export class BattleActions {
 			return zMove;
 		}
 		const zMove = this.dex.getActiveMove(this.Z_MOVES[move.type]);
-		zMove.basePower = move.zMove!.basePower!;
+		zMove.basePower = this.getZMoveBasePower(move);
 		zMove.category = move.category;
 		// copy the priority for Quick Guard
 		zMove.priority = move.priority;
+		zMove.baseMove = move.id;
+		zMove.baseMoveName = move.name;
 		zMove.isZOrMaxPowered = true;
 		return zMove;
 	}
