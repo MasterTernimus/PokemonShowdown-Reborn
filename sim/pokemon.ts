@@ -331,6 +331,7 @@ export class Pokemon {
 			throw new Error(`Unidentified species: ${this.baseSpecies.name}`);
 		}
 		this.set = set as PokemonSet;
+		if (this.baseSpecies.baseSpecies === 'Silvally') this.set.shiny = true;
 
 		this.species = this.baseSpecies;
 		if (set.name === set.species || !set.name) {

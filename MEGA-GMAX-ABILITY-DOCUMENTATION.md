@@ -1,0 +1,181 @@
+# Mega and Gmax Ability Reference
+
+This is the current server-side reference for every Mega and Gmax profile in `data/pokedex.ts`. Standard abilities keep their normal Pokemon Showdown behavior. Custom abilities and modified abilities are summarized below; the authoritative implementation is in `data/abilities.ts` and the client-facing text is in `data/text/abilities.ts`.
+
+## Mega Profiles
+
+- Venusaur-Mega: Toxic Bloom
+- Charizard-Mega-X: Atrocity
+- Charizard-Mega-Y: Solar Grace
+- Beedrill-Mega: Spiral Evolution
+- Pidgeot-Mega: Storm Sovereign
+- Clefable-Mega: Lunar Orbit
+- Alakazam-Mega: Perfect Foresight
+- Victreebel-Mega: Solar Trap
+- Slowbro-Mega: Shell Trap
+- Gengar-Mega: Cruel Tag
+- Kangaskhan-Mega: Parental Bond
+- Starmie-Mega: Astral Core
+- Pinsir-Mega: Joyride
+- Gyarados-Mega: Unleashed Ego
+- Aerodactyl-Mega: Apex Predator
+- Dragonite-Mega: Celestial Heart
+- Feraligatr-Mega: Draconic Force
+- Steelix-Mega: Iron Will
+- Scizor-Mega: Technical Specialist
+- Heracross-Mega: Relentless Link
+- Skarmory-Mega: Good as Gold
+- Houndoom-Mega: Hellfire Eclipse
+- Tyranitar-Mega: Sand Sovereign
+- Sceptile-Mega: Verdant Drake
+- Blaziken-Mega: Blazing Tempo
+- Swampert-Mega: Raging Current
+- Gardevoir-Mega: Royal Voice
+- Gardevoir-Mega-Z: Argent Devotion
+- Gardevoir-Void-Mega: Execution
+- Sableye-Mega: Mirror Greed
+- Mawile-Mega: Dread Maw
+- Aggron-Mega: Iron Mountain
+- Medicham-Mega: Enlightenment
+- Manectric-Mega: Storm Fright
+- Sharpedo-Mega: Razor Current
+- Camerupt-Mega: Caldera Core
+- Flygon-Mega-Z: Tremor
+- Altaria-Mega: Heavenly Chorus
+- Banette-Mega: Cursed Marionette
+- Chimecho-Mega: Ironclad
+- Absol-Mega: Doom Warning
+- Absol-Mega-Z: Omen Edge
+- Glalie-Mega: Freezer Burn
+- Salamence-Mega: Aerilate
+- Metagross-Mega: Iron Cognition
+- Latias-Mega: Levitate
+- Latios-Mega: Levitate
+- Rayquaza-Mega: Delta Stream
+- Staraptor-Mega: Predator
+- Lopunny-Mega: Unchecked Assault
+- Mismagius-Mega: Shadow Guard
+- Garchomp-Mega: Apex Cleave
+- Garchomp-Mega-Z: Relentless Hunt
+- Lucario-Mega: Aura Instinct
+- Lucario-Mega-Z: Aura Master
+- Abomasnow-Mega: Frost Sovereign
+- Gallade-Mega: Sacred Edge
+- Froslass-Mega: Mourning Snow
+- Heatran-Mega: Magma Armor
+- Darkrai-Mega: Dark Aura
+- Serperior-Mega: Queen's Guard
+- Emboar-Mega: Burning Ego
+- Excadrill-Mega: Piercing Drill
+- Audino-Mega: Divine Intervention
+- Scolipede-Mega: Venom Bastion
+- Scrafty-Mega: Street Tyrant
+- Eelektross-Mega: Storm Circuit
+- Chandelure-Mega: Soul Tag
+- Golurk-Mega: Phantom Fist
+- Chesnaught-Mega: Wrath Shield
+- Delphox-Mega: Astral Witchcraft
+- Greninja-Mega: Shadow Current
+- Pyroar-Mega: Royal Sun
+- Floette-Mega: Ange
+- Malamar-Mega: Inversion
+- Barbaracle-Mega: Hydra Breaker
+- Dragalge-Mega: Toxic Renewal
+- Hawlucha-Mega: Perfect Ego
+- Zygarde-Mega: Aura Break
+- Diancie-Mega: Magic Bounce
+- Crabominable-Mega: Rime Knuckle
+- Golisopod-Mega: Aqua Shell
+- Drampa-Mega: Guardian Tempest
+- Magearna-Mega: Soul-Heart
+- Zeraora-Mega: Volt Absorb
+- Falinks-Mega: Hydra Bond
+- Scovillain-Mega: Spicy Spray
+- Glimmora-Mega: Terastal Adaptability
+- Baxcalibur-Mega: Thermal Exchange
+- Crucibelle-Mega: Magic Guard
+
+## Gmax Profiles
+
+- Venusaur-Gmax: Ancient Bloom
+- Charizard-Gmax: Burning Crown
+- Blastoise-Gmax: Fortress Shell
+- Butterfree-Gmax: Corrosive Scale
+- Pikachu-Gmax: Static / Lightning Rod
+- Meowth-Gmax: Pickup / Technician / Unnerve
+- Machamp-Gmax: Raging Fists
+- Gengar-Gmax: Soul Eater
+- Kingler-Gmax: Riptide Claws
+- Lapras-Gmax: Aurora Resonance
+- Eevee-Gmax: Ascendance
+- Snorlax-Gmax: Mountain Hunger
+- Garbodor-Gmax: Wasting Surge
+- Aegislash-Gmax: Imperial Mandate
+- Melmetal-Gmax: Sheer Force
+- Rillaboom-Gmax: Forest Surge
+- Cinderace-Gmax: Striker's Momentum
+- Inteleon-Gmax: High Noon
+- Corviknight-Gmax: Iron Dominion
+- Orbeetle-Gmax: Astral Watcher
+- Drednaw-Gmax: War Ship
+- Coalossal-Gmax: Furnace Engine
+- Flapple-Gmax: Hustle
+- Appletun-Gmax: Well-Baked Body
+- Sandaconda-Gmax: Dune Terror
+- Toxtricity-Gmax: Riot Amp
+- Centiskorch-Gmax: Heat Coil
+- Hatterene-Gmax: Bewitching Majesty
+- Grimmsnarl-Gmax: Wicked Snare
+- Alcremie-Gmax: Sweet Sanctuary
+- Copperajah-Gmax: Treasure Titan
+- Duraludon-Gmax: Alloy Core
+- Dragapult-Gmax: Phantom Barrage
+- Urshifu-Gmax: Guts
+
+## Custom Ability Summaries
+
+- **Atrocity:** Its own general 1.3x damaging-move multiplier, life-steal behavior, stronger Cold Eclipse effects, and custom field/target effects. It does **not** have Mega Launcher.
+- **Spiral Evolution:** Adaptability, Levitate, and Dual Wield. It has the custom reduced-damage protection-piercing behavior; Twin Needle follows the same paired-hit logic as Dragon Darts and does not use the removed Hydra Bond/flinch/focus effects.
+- **Aura Master:** Mega Launcher and Inner Focus, with 20% damage reduction.
+- **Apex Predator:** Relic Armor, Precision, and Tough Claws. Super-effective moves do not miss and gain the custom critical-hit effect.
+- **Celestial Heart:** Multiscale, Serene Grace, and Soul Heart.
+- **Cruel Tag:** Shadow Tag, Infiltrator, and Precision; on fainting it creates Haunted Field for five turns.
+- **Joyride:** Aerilate, Infiltrator, and Violent Rush.
+- **Technical Specialist:** Technician, Shed Skin, and Shell Armor.
+- **Astral Core:** Illuminate, Pure Power, and Defragment.
+- **Enlightenment:** Pure Power, Inner Focus, and Precision.
+- **Iron Will:** Prism Armor, Second Wind, and Strong Jaw.
+- **Second Wind:** The first KO that would occur in an allowed format leaves the user at 1 HP.
+- **Freezer Burn:** Slush Rush, Refrigerate, and Ice Body. Normal moves become Ice moves with the established Refrigerate behavior.
+- **Frost Sovereign:** Snow Warning, Ice Body, and the established eight-turn hail/veil behavior.
+- **Burning Crown:** White Smoke, Fire moves deal 1.2x damage, Fire damage taken is reduced by 20%, and a KO raises the higher offensive stat.
+- **Burning Ego:** Ultra Ego, Brute Force, and Magma Armor.
+- **Burning Spirit:** Self Sufficient, Opportunist, and Magma Armor.
+- **Brute Force:** Reckless power behavior without recoil damage, including the custom recoil-move handling.
+- **Self Sufficient:** Restores 1/16 max HP at the end of each turn.
+- **Precision:** Super-effective moves cannot miss and receive a higher critical-hit ratio.
+- **Rapid Response:** Speed is multiplied by 1.5 and Special Attack by 1.2 until the first damaging move is used.
+- **Violent Rush:** Speed is multiplied by 1.5 and Attack by 1.2 until the first damaging move is used.
+- **Dusk Drive:** Precision, Opportunist, and Battle Fervor.
+- **Queen's Guard:** Contrary, Shed Skin, and Multiscale.
+- **Raging Current:** Swift Swim, Regenerator, and Stamina.
+- **Storm Circuit:** Electric Surge, Lightning Rod, and Levitate.
+- **Terra Resolve:** Stamina, Rocky Payload, and Self Sufficient.
+- **Venom Bastion:** Dauntless Shield, Self Sufficient, and Bug-type STAB behavior.
+- **Wicked Snare:** Stakeout, Intimidate, and Tangling Hair.
+- **Royal Sun:** Royal Decree, Drought, and Fire Mane's Fire-move power effect.
+- **Sand Sovereign:** Eight-turn Sand Stream, Battle Armor, and Solid Rock.
+- **Tyrant Stream:** Brute Force, Sand Stream, and Strong Jaw.
+- **Dune Terror:** Sand Stream, Shed Skin, and Ground-effect residual chip that scales with weakness.
+- **Caldera Core:** Solid Rock, Magma Armor, and Fire-effect residual chip.
+- **Hellfire Eclipse:** Flash Fire plus its established Sun/Fire behavior.
+- **Requiem:** Attacking or being attacked marks the other Pokemon with Perish Song, then Curse, then Mean Look on repeated interactions. Requiem Curse deals 1/8 max HP, KOs heal the user 1/8 per target, and fainting creates Haunted Field for five turns.
+- **Phantom Barrage:** Infiltrator, Levitate, Hydra Bond, and the Dragapult higher-offensive-stat logic. Its old Clear Body and passive healing are removed.
+- **Imperial Mandate:** At or above half HP, damage dealt is doubled; below half, Speed is doubled. It also has its 20% reduction/bonus, Fairy Tale-Cold Eclipse-New World boosts, and the Gmax Aegislash King's Shield exception.
+- **Siege Launcher:** Shell Armor and its established launcher effects, including 20% damage reduction and end-of-turn healing.
+- **Fortress Shell:** Blastoise Gmax defensive effects, including its established field interaction and Shell Armor-style protection.
+- **Rime Knuckle:** Its custom gimmick-aware KO healing and Crabominable field effects.
+- **Dual Wield:** Moves boosted by Sharpness, Mega Launcher, or Arrow classification produce a full first hit and a second hit at 30% damage. It stacks with the relevant move boost.
+- **G-Max universal rule:** The global 1/16 Gmax end-of-turn heal has been removed. Gmax profiles only heal when their own ability says so.
+
+For any ability not listed in the custom summaries, use the standard ability description shown by the client or the matching entry in `data/text/abilities.ts`.

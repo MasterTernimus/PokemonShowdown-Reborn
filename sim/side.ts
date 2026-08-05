@@ -305,6 +305,7 @@ export class Side {
 	}
 
 	canDynamaxNow(): boolean {
+		if (!['doubles', 'multi', 'freeforall'].includes(this.battle.gameType)) return false;
 		// In multi battles, players on a team are alternatingly given the option to dynamax each turn
 		// Starting on turn 2, players alternate. On turn 1, all players can Gigantamax immediately.
 		if (this.battle.gameType === 'multi' && this.battle.turn > 1 && this.battle.turn % 2 !== [1, 1, 0, 0][this.n]) return false;

@@ -1087,6 +1087,14 @@ export class BattleActions {
 				}
 			}
 			this.battle.eachEvent('Update');
+			if (hit < targetHits && targets.every(target => !target?.hp)) {
+				const spilloverTarget = originalMultihitTarget && this.getMultihitSpilloverTarget(originalMultihitTarget, pokemon, move, hit + 1, targetHits);
+				if (spilloverTarget) {
+					targets = [spilloverTarget];
+					damage = [0];
+					move.smartTarget = false;
+				}
+			}
 			if ((move as any).shadowCurrentExtraHit && !(move as any).shadowCurrentExtraHitUsed) {
 				const gotKO = targetsCopy.some((target, i) => targetsHadHP[i] && target && !target.hp);
 				if (gotKO) {
@@ -2237,6 +2245,9 @@ export class BattleActions {
 
 		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		if (speciesid === 'gardevoirvoidmega') {
+			this.battle.add('-message', 'The Angel of Death has descended!');
+		}
 		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
