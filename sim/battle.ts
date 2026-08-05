@@ -2970,12 +2970,6 @@ export class Battle {
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
-			for (const pokemon of this.getAllActive()) {
-				if (!pokemon.hp || pokemon.fainted) continue;
-				if (pokemon.species.forme === 'Gmax' || pokemon.species.id.endsWith('gmax')) {
-					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon, this.dex.conditions.get('gmaxhealing'));
-				}
-			}
 			if (!this.ended) this.add('upkeep');
 			break;
 		}

@@ -2712,8 +2712,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxspiritvolley: {
 		name: "G-Max Spirit Volley",
-		desc: "Ghost-type, 150 Base Power. This move uses the user's higher offensive stat. After it hits, all opposing Pokemon take extra damage equal to half of the original hit's damage.",
-		shortDesc: "150 BP Ghost. Uses higher offense. Foes take half-hit splash damage.",
+		desc: "Ghost-type, 100 Base Power. This move uses the user's higher offensive stat. After it hits, all opposing Pokemon take extra damage equal to half of the original hit's damage.",
+		shortDesc: "100 BP Ghost. Uses higher offense. Foes take half-hit splash damage.",
 	},
 	grassknot: {
 		name: "Grass Knot",

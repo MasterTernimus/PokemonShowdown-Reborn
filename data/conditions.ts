@@ -1190,20 +1190,34 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	},
 	silvally: {
 		name: 'Silvally',
+		updateSilvallyForme(pokemon, type) {
+			if (pokemon.transformed || pokemon.terastallized) return;
+			const typeid = type === '???' ? 'unknown' : toID(type);
+			const forme = typeid === 'normal' || typeid === 'unknown' ? 'Silvally' : `Silvally-${type}`;
+			if (pokemon.species.name !== forme && this.dex.species.get(forme).exists) {
+				pokemon.formeChange(forme, this.dex.conditions.get('silvally'), false, '[silent]');
+			}
+		},
 		onTypePriority: 1,
 		onSwitchIn(pokemon) {
 			if (pokemon.ability === 'rkssystem') {
 				if (this.field.isTerrain('glitchterrain')) {
 					pokemon.setType('???', true);
 					this.add('-start', pokemon, 'typechange', '???');
+					this.effect.updateSilvallyForme.call(this, pokemon, '???');
 				} else if (this.field.isTerrain('holyterrain')) {
 					pokemon.setType('Dark', true);
 					this.add('-start', pokemon, 'typechange', 'Dark');
+					this.effect.updateSilvallyForme.call(this, pokemon, 'Dark');
 				} else if (this.field.isTerrain('newworldterrain')) {
 					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
 					const new_type = this.sample(types);
 					pokemon.setType(new_type, true);
 					this.add('-start', pokemon, 'typechange', new_type);
+					this.effect.updateSilvallyForme.call(this, pokemon, new_type);
+				} else {
+					const itemType = pokemon.getItem().onMemory || pokemon.getItem().zMoveType || 'Normal';
+					this.effect.updateSilvallyForme.call(this, pokemon, itemType);
 				}
 			}
 		},
@@ -1224,18 +1238,24 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				if (this.field.isTerrain('glitchterrain') && pokemon.types[0] !== '???') {
 					pokemon.setType('???', true);
 					this.add('-start', pokemon, 'typechange', '???');
-				} else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem') {
-					const itemType = pokemon.getItem().onMemory || pokemon.getItem().zMoveType;
-					if (itemType === undefined) return;
-					pokemon.setType(itemType, true);
-					if (itemType !== pokemon.getTypes()[0] && pokemon.getTypes().length === 1) {
-						this.add('-start', pokemon, 'typechange', itemType);
-					}
+					this.effect.updateSilvallyForme.call(this, pokemon, '???');
 				} else if (this.field.isTerrain('newworldterrain')) {
 					const types = ['Grass', 'Fire', 'Water', 'Electric', 'Ice', 'Dragon', 'Psychic', 'Normal', 'Fighting', 'Ghost', 'Poison', 'Bug', 'Flying', 'Ground', 'Rock', 'Dark', 'Steel', 'Fairy'];
 					const new_type = this.sample(types);
 					pokemon.setType(new_type, true);
 					this.add('-start', pokemon, 'typechange', new_type);
+					this.effect.updateSilvallyForme.call(this, pokemon, new_type);
+				} else if (!this.field.isTerrain('holyterrain') && pokemon.ability === 'rkssystem') {
+					const itemType = pokemon.getItem().onMemory || pokemon.getItem().zMoveType;
+					if (itemType === undefined) {
+						this.effect.updateSilvallyForme.call(this, pokemon, 'Normal');
+						return;
+					}
+					pokemon.setType(itemType, true);
+					if (itemType !== pokemon.getTypes()[0] && pokemon.getTypes().length === 1) {
+						this.add('-start', pokemon, 'typechange', itemType);
+					}
+					this.effect.updateSilvallyForme.call(this, pokemon, itemType);
 				}
 			}
 		},

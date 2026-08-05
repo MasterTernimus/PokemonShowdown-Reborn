@@ -8451,7 +8451,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	gmaxspiritvolley: {
 		num: 1000,
 		accuracy: true,
-		basePower: 150,
+		basePower: 100,
 		category: "Physical",
 		isNonstandard: "Gigantamax",
 		name: "G-Max Spirit Volley",

@@ -2255,6 +2255,18 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	sawsbuck: {
 		name: "Sawsbuck",
 	},
+	sawsbuckspring: {
+		name: "Sawsbuck-Spring",
+	},
+	sawsbucksummer: {
+		name: "Sawsbuck-Summer",
+	},
+	sawsbuckautumn: {
+		name: "Sawsbuck-Autumn",
+	},
+	sawsbuckwinter: {
+		name: "Sawsbuck-Winter",
+	},
 	emolga: {
 		name: "Emolga",
 	},
