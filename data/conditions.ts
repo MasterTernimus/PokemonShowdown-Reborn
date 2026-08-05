@@ -1,4 +1,5 @@
 /* eslint-disable @stylistic/max-len */
+import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	parentalbondmotherguard: {
 		name: 'Mother Guard',
