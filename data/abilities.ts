@@ -13380,13 +13380,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(0.3);
 			}
 		},
-		onDamage(damage, target, source, effect) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			if (!['doubles', 'multi', 'freeforall'].includes(this.gameType)) return;
-			if (effect?.effectType !== 'Move' || (target as any).ultraInstinctEndureUsed || target.hp <= target.maxhp / 2 || damage < target.hp) return;
-			(target as any).ultraInstinctEndureUsed = true;
-			return target.hp - 1;
-		},
 		flags: {},
 		name: "Ultra Instinct",
 		rating: 3,
