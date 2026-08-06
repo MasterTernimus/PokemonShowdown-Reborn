@@ -3579,8 +3579,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyDamage(damage, target, source, effect) {
 			const pokemon = this.effectState.target;
 			if (!pokemon || pokemon.fainted || pokemon.hp <= pokemon.maxhp / 4) return;
-			if (!target || target === pokemon || !target.isAlly(pokemon) || !source || target.isAlly(source)) return;
-			if (effect?.effectType !== 'Move' || typeof damage !== 'number' || damage < target.hp) return;
+			if (!target || target === pokemon || !target.isAlly(pokemon) || !source || source === pokemon || source.isAlly(pokemon)) return;
+			if (effect?.effectType !== 'Move' || typeof damage !== 'number' || target.hp <= 0 || damage < target.hp) return;
 			this.add('-activate', pokemon, 'ability: Void Veil');
 			pokemon.abilityState.voidShelterDoom = true;
 			this.damage(damage, pokemon, source, effect);
@@ -3588,9 +3588,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
-			for (const ally of pokemon.adjacentAllies()) {
+			for (const ally of pokemon.allies()) {
+				const shouldShelter = !pokemon.abilityState.voidShelterUsed && ally.hp > 0 && ally.hp <= ally.maxhp / 4;
 				this.heal(ally.baseMaxhp / 16, ally, pokemon);
-				if (!pokemon.abilityState.voidShelterUsed && ally.hp > 0 && ally.hp <= ally.maxhp / 4) {
+				if (shouldShelter) {
 					pokemon.abilityState.voidShelterUsed = true;
 					this.heal(ally.baseMaxhp / 4, ally, pokemon);
 					ally.cureStatus();
@@ -13688,10 +13689,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.accuracy = true;
 		},
 		onStart(pokemon) {
+			this.dex.abilities.get('windpower').onStart?.call(this, pokemon);
 			this.field.setWeather('deltastream', pokemon, this.dex.abilities.get('stormsovereign'));
 			if (this.field.isWeather('deltastream')) this.field.weatherState.duration = 5;
 		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('windpower').onTryHit?.call(this, target, source, move);
+		},
+		onSideConditionStart(side, source, sideCondition) {
+			return this.dex.abilities.get('windpower').onSideConditionStart?.call(this, side, source, sideCondition);
+		},
 		onResidual(pokemon) {
+			this.dex.abilities.get('windpower').onResidual?.call(this, pokemon);
 			for (const target of pokemon.foes()) {
 				if (!target || target.fainted) continue;
 				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Flying', target.getTypes()), -6, 6);
