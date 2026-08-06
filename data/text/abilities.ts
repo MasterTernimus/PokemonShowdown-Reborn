@@ -786,8 +786,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rainsovereign: {
 		name: "Rain Sovereign",
-		desc: "On switch-in, this Pokemon sets Rain for 5 turns. Electric-, Water-, and Flying-type moves used by this Pokemon receive STAB. At the end of each turn, foes take Water-type damage equal to 1/16 max HP, scaled by type effectiveness.",
-		shortDesc: "5-turn Rain; Electric/Water/Flying STAB; Water-type scaling chip.",
+		desc: "On switch-in, this Pokemon sets Rain for 5 turns. Electric-, Water-, and Flying-type moves used by this Pokemon receive STAB. At the end of each turn, foes take Water-type damage equal to 1/16 max HP, scaled by type effectiveness. Water Absorb, Storm Drain, and Dry Skin prevent this damage.",
+		shortDesc: "5-turn Rain; Electric/Water/Flying STAB; Water-type scaling chip respects immunities.",
 	},
 	toxicrenewal: {
 		name: "Toxic Renewal",

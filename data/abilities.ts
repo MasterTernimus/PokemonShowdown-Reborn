@@ -3127,7 +3127,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) { return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move); },
 		onResidual(pokemon) {
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted) continue;
+				if (!target || target.fainted || !target.runImmunity('Rock')) continue;
 				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Rock', target.getTypes()), -6, 6);
 				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
 			}
@@ -3169,7 +3169,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			this.dex.abilities.get('icebody').onResidual?.call(this, pokemon);
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted) continue;
+				if (!target || target.fainted || !target.runImmunity('Ice')) continue;
 				this.damage(target.baseMaxhp / 16, target, pokemon);
 			}
 		},
@@ -4454,7 +4454,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) { return this.dex.abilities.get('steamengine').onStart?.call(this, pokemon); },
 		onResidual(pokemon) {
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted) continue;
+				if (!target || target.fainted || !target.runImmunity('Water') || target.hasAbility(['waterabsorb', 'stormdrain', 'dryskin'])) continue;
 				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', target.getTypes()), -6, 6);
 				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
 			}
@@ -12805,7 +12805,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted) continue;
+				if (!target || target.fainted || !target.runImmunity('Flying')) continue;
 				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', target.getTypes()), -6, 6);
 				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
 			}
