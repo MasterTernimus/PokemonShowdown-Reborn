@@ -1966,13 +1966,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
 		},
 		onModifyMove(move, pokemon) {
-			if (pokemon.side.sideConditions['tailwind']) move.critRatio++;
+			if (pokemon.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')) move.critRatio++;
 		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			if (attacker.side.sideConditions['tailwind']) return;
+			if (attacker.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')) return;
 			this.add('-prepare', attacker, move.name);
 			if (this.field.isTerrain('caveterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				this.attrLastMove('[still]');
@@ -3759,7 +3759,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const source = this.effectState.source;
 				const sourceEffect = this.effectState.sourceEffect;
 				const damageDivisor = sourceEffect?.effectType === 'Ability' ||
-					source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'cursedarmament', 'disguise']) ? 8 : 4;
+						source?.hasAbility(['cursedkeepsake', 'cursedmarionette', 'disguise']) ? 8 : 4;
 				this.damage(pokemon.baseMaxhp / damageDivisor);
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
@@ -6633,13 +6633,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
 		},
 		onModifyMove(move, pokemon) {
-			if (pokemon.side.sideConditions['tailwind']) move.critRatio++;
+			if (pokemon.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')) move.critRatio++;
 		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			if (attacker.side.sideConditions['tailwind']) return;
+			if (attacker.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')) return;
 			this.add('-prepare', attacker, move.name);
 			if (this.field.isTerrain('caveterrain') || this.field.isTerrain('dragonsdenterrain')) {
 				this.attrLastMove('[still]');
@@ -13176,7 +13176,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 							if (effectiveness <= 0) continue;
 							const defenseStat = activeMove.category === 'Physical' ?
 								foe.getStat('def', false, true) : foe.getStat('spd', false, true);
-							const targetScore = move.basePower * attackStat / Math.max(1, defenseStat) * Math.pow(2, effectiveness);
+							const targetScore = move.basePower * attackStat / Math.max(1, defenseStat) * 2 ** effectiveness;
 							if (spreadTargets) {
 								score += targetScore;
 								bestTarget ||= foe;
@@ -13187,7 +13187,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						}
 						if (!score || !bestTarget) return false;
 						return { move, target: bestTarget, score };
-					}).filter(Boolean) as { move: Move; target: Pokemon; score: number }[];
+					}).filter(Boolean) as { move: Move, target: Pokemon, score: number }[];
 					const bestScore = scoredMoves.reduce((best, entry) => Math.max(best, entry.score), 0);
 					const focusedMoves = scoredMoves.filter(entry => entry.score >= bestScore * 0.8);
 					if (focusedMoves.length) {
@@ -13199,7 +13199,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (!randomMove) randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
+			const calledMove = this.dex.moves.get(randomMove);
+			const foeHPBefore = new Map(
+				pokemon.foes().map(foe => [foe, foe.hp] as const)
+			);
 			this.actions.useMove(randomMove, pokemon, focusedTarget ? { target: focusedTarget } : undefined);
+			// The generated move runs through Metronome's inner move path, so its
+			// normal AfterMove cleanup does not receive the actual defeated target.
+			// Preserve recharge moves' KO exception for Metronome-called moves.
+			if (calledMove.flags['recharge'] && [...foeHPBefore].some(([foe, hp]) => hp > 0 && foe.hp <= 0)) {
+				pokemon.removeVolatile('mustrecharge');
+			}
 		},
 		callsMove: true,
 		target: "self",
@@ -15114,7 +15124,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [3, 5],
-		onDamagingHit(damage, target, source, move) {
+		onAfterHit(target, source, move) {
+			target.addVolatile('splinter', source, move);
+		},
+		onAfterSubDamage(damage, target, source, move) {
 			target.addVolatile('splinter', source, move);
 		},
 		target: "normal",
@@ -16654,7 +16667,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			if (attacker.side.sideConditions['tailwind']) {
+			if (attacker.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -17342,7 +17355,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, failinstruct: 1, noparentalbond: 1 },
 		onModifyMove(move, pokemon, target) {
-			if (pokemon.hasAbility('rollingassault')) return;
 			if (pokemon.volatiles['rollout'] || pokemon.status === 'slp' || !target) return;
 			pokemon.addVolatile('rollout');
 			if (move.sourceEffect) pokemon.lastMoveTargetLoc = pokemon.getLocOf(target);
@@ -18825,9 +18837,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSourceModifyDamage(damage, source, target, move) {
 				if (target !== source && move.category !== 'Status') return this.chainModify(0.7);
 			},
-			onDamagingHit(damage, target, source, move) {
-				this.heal(target.baseMaxhp / 16, target, target);
-			},
 		},
 		target: "normal",
 		type: "Normal",
@@ -18847,7 +18856,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (pokemon.volatiles['skyattack']) {
 				move.ignoreEvasion = true;
 				move.infiltrates = true;
-			} else if (pokemon.side.sideConditions['tailwind']) {
+			} else if (pokemon.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')) {
 				move.basePower = 90;
 				move.critRatio = 3;
 			}
@@ -18856,7 +18865,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			if (attacker.side.sideConditions['tailwind']) return;
+			if (attacker.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')) return;
 			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
@@ -20519,7 +20528,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 6,
 			onResidual(pokemon) {
-				this.heal(pokemon.baseMaxhp * this.effectState.layers / 16, pokemon, pokemon);
+				this.heal(pokemon.baseMaxhp * this.effectState.layers / 32, pokemon, pokemon);
 			},
 		},
 		target: "self",
