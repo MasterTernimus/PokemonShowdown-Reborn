@@ -3245,8 +3245,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",
-		desc: "On switch-in, this Pokemon sets Strong Winds for 5 turns; the weather can be changed normally. This Pokemon's moves cannot miss and it has Speed Boost's effect. At the end of each turn, foes take Flying-type damage equal to 1/16 max HP, scaled by type effectiveness.",
-		shortDesc: "5-turn Strong Winds; moves cannot miss; Speed Boost; Flying-type scaling chip.",
+		desc: "On switch-in, this Pokemon sets Strong Winds for 5 turns; the weather can be changed normally. This Pokemon's moves cannot miss. At the end of each turn, foes take Flying-type damage equal to 1/16 max HP, scaled by type effectiveness.",
+		shortDesc: "5-turn Strong Winds; moves cannot miss; Flying-type scaling chip.",
 	},
 	highnoon: {
 		name: "High Noon",
