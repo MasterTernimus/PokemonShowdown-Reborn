@@ -489,10 +489,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Drought",
 		shortDesc: "On switch-in, this Pokemon summons Sunny Day.",
 	},
-	solargrace: {
-		name: "Solar Grace",
-		desc: "On switch-in or Mega Evolution, this Pokemon summons Sunny Day. Opposing Pokemon cannot lower this Pokemon's Speed or Special Attack. If this Pokemon moves before the target, its Fire- and Flying-type moves have 1.2x power. If this Pokemon has not moved yet, it takes 0.75x damage from attacks. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit.",
-		shortDesc: "Sets Sun; faster Fire/Flying 1.2x; before moving takes 0.75x; drains attacks.",
+	sunsovereign: {
+		name: "Sun Sovereign",
+		desc: "This Pokemon has Drought and Wildfire Core's effects. Its sun lasts 5 turns.",
+		shortDesc: "Drought + Wildfire Core; 5-turn Sun.",
 	},
 	eternalflower: {
 		name: "Eternal Flower",
@@ -556,8 +556,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	noseformation: {
 		name: "Nose Formation",
-		desc: "This Pokemon has Elevate's effect. After this Pokemon hits with a damaging move, Mini-Noses strike the target three times with a 20 Base Power special attack that chooses Steel, Electric, or Rock, whichever would deal the most damage.",
-		shortDesc: "Elevate; damaging hits trigger 3 Mini-Nose follow-up hits.",
+		desc: "This Pokemon has Elevate's effect. After this Pokemon hits with a damaging move, three Mini-Noses strike each valid target with 25 Base Power special attacks using the single best type between Steel, Electric, and Rock.",
+		shortDesc: "Elevate; damaging hits trigger 3 organized 25 BP Mini-Nose attacks.",
 	},
 	mourningvessel: {
 		name: "Mourning Vessel",
@@ -566,8 +566,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon restores 1/16 max HP at the end of each turn. Its arrow moves trigger Dual Wield, ignore the target's Ability, cannot be redirected, hit through protection at 50% power, or double damage if the hit is critical, and have 1.3x power. Snipe Shot gets an additional 1.5x power boost. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Barrage, Scale Shot, Psycho Cut, and Ceaseless Edge.",
-		shortDesc: "Heals 1/16; arrow moves Dual Wield, ignore Ability/redirect/Protect, +2 at <=1/2 HP, FFA spread.",
+		desc: "This Ability cannot be suppressed. This Pokemon restores 1/16 max HP at the end of each turn. Its arrow moves trigger Dual Wield, ignore the target's Ability, and have 1.3x power. Snipe Shot gets an additional 1.5x power boost. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Scale Shot, Psycho Cut, and Ceaseless Edge.",
+		shortDesc: "Heals 1/16; arrow moves Dual Wield, ignore Ability, +2 at <=1/2 HP, FFA spread.",
 	},
 	eclipse: {
 		name: "Eclipse",
@@ -596,8 +596,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aurainstinct: {
 		name: "Aura Instinct",
-		desc: "This Pokemon has Sworn Duty and Adaptability's effects. Its moves ignore Abilities, and it cannot flinch. At the end of each turn, it restores 1/16 max HP. On Ashen Beach, New World, Starlight Arena, Holy, or Cold Eclipse fields, its Accuracy is raised by 1 on switch-in, its attacks deal 1.5x damage, and it takes 0.25x damage from attacks. In Doubles, Multi, or Free-For-All, the first time this Pokemon would be knocked out, it survives with 1 HP.",
-		shortDesc: "Sworn Duty + Adaptability; field boosts; heals 1/16; endures once.",
+		desc: "This Pokemon has Sworn Duty and Adaptability's effects. Its moves ignore Abilities, and it cannot flinch. On Ashen Beach, New World, Starlight Arena, Holy, or Cold Eclipse fields, its Accuracy is raised by 1 on switch-in, its attacks deal 1.5x damage, and it takes 0.25x damage from attacks. In Doubles, Multi, or Free-For-All, the first time this Pokemon would be knocked out, it survives with 1 HP.",
+		shortDesc: "Sworn Duty + Adaptability; field boosts; endures once.",
 	},
 	royalcurrent: {
 		name: "Royal Current",
@@ -696,18 +696,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
-		desc: "On switch-in, this Pokemon summons Sandstorm. During Sandstorm, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Rock, non-Ground, and non-Steel Pokemon lose 1/16 max HP.",
-		shortDesc: "Sets Sand; in Sand moves 1.2x and takes 0.7x; chips vulnerable Pokemon.",
+		desc: "On switch-in, this Pokemon sets Sandstorm for 5 turns. This Pokemon has Filter and Battle Armor's effects. At the end of each turn, foes take Rock-type damage equal to 1/16 max HP, scaled by type effectiveness.",
+		shortDesc: "5-turn Sand; Filter + Battle Armor; Rock-type scaling chip.",
 	},
-	dunetyrant: {
+	tyrantstream: {
 		name: "Tyrant Stream",
 		desc: "This Pokemon has Brute Force, Sand Stream, and Strong Jaw's effects.",
 		shortDesc: "Brute Force + Sand Stream + Strong Jaw.",
 	},
 	frostsovereign: {
 		name: "Frost Sovereign",
-		desc: "This Pokemon has Snow Warning, Ice Body, and Natural Cure's effects. Its Snow lasts 8 turns, and Aurora Veil used by this Pokemon lasts 8 turns. During Snow, its moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Ice Pokemon lose 1/16 max HP.",
-		shortDesc: "Snow Warning + Ice Body + Natural Cure; 8-turn Snow and Veil.",
+		desc: "On switch-in, this Pokemon sets Snow for 5 turns and Aurora Veil for 8 turns. This Pokemon has Ice Body's effect. At the end of each turn, foes take Ice-type damage equal to 1/16 max HP.",
+		shortDesc: "5-turn Snow + 8-turn Veil; Ice Body; Ice-type scaling chip.",
 	},
 	freezerburn: {
 		name: "Freezer Burn",
@@ -784,10 +784,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Steel-type moves have 1.5x power. At the end of each turn, its Speed rises by 1 stage.",
 		shortDesc: "Steel moves 1.5x; Speed rises by 1 each turn.",
 	},
-	guardiantempest: {
-		name: "Guardian Tempest",
-		desc: "On switch-in, this Pokemon summons Rain. This Pokemon has Berserk and Friend Guard's effects.",
-		shortDesc: "Drizzle + Berserk + Friend Guard.",
+	rainsovereign: {
+		name: "Rain Sovereign",
+		desc: "On switch-in, this Pokemon sets Rain for 5 turns. Electric-, Water-, and Flying-type moves used by this Pokemon receive STAB. At the end of each turn, foes take Water-type damage equal to 1/16 max HP, scaled by type effectiveness.",
+		shortDesc: "5-turn Rain; Electric/Water/Flying STAB; Water-type scaling chip.",
 	},
 	toxicrenewal: {
 		name: "Toxic Renewal",
@@ -1650,18 +1650,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shellprison: {
 		name: "Shell Prison",
-		desc: "This Pokemon has Shell Armor and Ice Body's effects. When hit by an attack, it automatically uses Clamp on the attacker; this Clamp traps through the turn it triggers and the next turn. This Pokemon restores 1/16 max HP at the end of each turn. Its Defense and Special Defense are 1.5x in Fairy Tale, Water Surface, Underwater, Cold Eclipse, and Ashen Beach.",
-		shortDesc: "Shell Armor + Ice Body; hit uses short Clamp; heals; field Def/SpD 1.5x.",
+		desc: "This Pokemon has Shell Armor and Ice Body's effects. When hit by an attack, it automatically uses Clamp on the attacker; this Clamp traps through the turn it triggers and the next turn. Its Defense and Special Defense are 1.5x in Fairy Tale, Water Surface, Underwater, Cold Eclipse, and Ashen Beach.",
+		shortDesc: "Shell Armor + Ice Body; hit uses short Clamp; field Def/SpD 1.5x.",
+	},
+	frozenfortress: {
+		name: "Frozen Fortress",
+		desc: "This Pokemon has Shell Armor, Ice Body, and Crumbling Shell's effects.",
+		shortDesc: "Shell Armor + Ice Body + Crumbling Shell.",
 	},
 	shelltrap: {
 		name: "Shell Trap",
-		desc: "This Pokemon has Shell Prison, Regenerator, and Shell Armor's effects. When hit by an attack, it automatically uses Clamp on the attacker; this Clamp traps through the turn it triggers and the next turn. This Pokemon restores 1/16 max HP at the end of each turn and restores 1/3 max HP when it switches out. Its Defense and Special Defense are 1.5x in Fairy Tale, Water Surface, Underwater, Cold Eclipse, and Ashen Beach.",
+		desc: "This Pokemon has Shell Prison, Regenerator, and Shell Armor's effects. When hit by an attack, it automatically uses Clamp on the attacker; this Clamp traps through the turn it triggers and the next turn. This Pokemon restores 1/3 max HP when it switches out. Its Defense and Special Defense are 1.5x in Fairy Tale, Water Surface, Underwater, Cold Eclipse, and Ashen Beach.",
 		shortDesc: "Shell Prison + Regenerator + Shell Armor; field Def/SpD 1.5x.",
-	},
-	rollingassault: {
-		name: "Rolling Assault",
-		desc: "This Pokemon has Filter's effect. Rollout starts at 50 Base Power, does not lock the user into the move, and permanently gains 30 Base Power each time this Pokemon uses it. When this Pokemon uses Rollout, Rolling Kick, or Rapid Spin, its Speed rises by 1 stage.",
-		shortDesc: "Filter; Rollout scales by +30 without lock; rolling/Rapid Spin gives +1 Spe.",
 	},
 	paradoxwheel: {
 		name: "Paradox Wheel",
@@ -2192,8 +2192,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	safeharbor: {
 		name: "Safe Harbor",
-		desc: "This Pokemon absorbs Water- and Ice-type attacks to restore 1/4 of its maximum HP. It also has Ice Body and Hydration's effects.",
-		shortDesc: "Absorbs Water/Ice moves; Ice Body + Hydration.",
+		desc: "This Pokemon absorbs Water- and Ice-type attacks to restore 1/4 of its maximum HP. It also has Ice Body, Hydration, and Self Sufficient's effects.",
+		shortDesc: "Absorbs Water/Ice moves; Ice Body + Hydration + Self Sufficient.",
 	},
 	seablessing: {
 		name: "Sea Blessing",
@@ -2524,13 +2524,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "This Pokemon takes 0.9x damage from attacks and 0.75x additional damage from Fire- and Ice-type attacks, is immune to hail damage, and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.",
-		shortDesc: "Takes 0.9x; extra 0.75x Fire/Ice; heals; Giga Drain 2x; absorbs Poison.",
+		desc: "This Pokemon has Thick Fat and Self Sufficient's effects. It absorbs Poison-type moves and raises Attack and Special Attack by 1 stage when hit by one. Its Grass-type moves have 1.5x power.",
+		shortDesc: "Thick Fat + Self Sufficient; absorbs Poison and gains Atk/SpA; Grass moves 1.5x.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon has Shell Armor's effect and ignores Steel's Fire-, Fighting-, and Ground-type weaknesses. It takes 0.8x damage from attacks. Its launcher moves are boosted and trigger Dual Wield. It restores 1/16 of its maximum HP at the end of each turn.",
-		shortDesc: "Shell Armor; no Steel weaknesses; takes 0.8x; launcher moves boosted + Dual Wield; heals 1/16.",
+		desc: "This Pokemon has Mega Launcher's, Dual Wield's, Self Sufficient's, and Shell Armor's effects. Its Water-type moves have 1.5x power.",
+		shortDesc: "Mega Launcher + Dual Wield + Self Sufficient + Shell Armor; Water moves 1.5x.",
 	},
 	calderacore: {
 		name: "Caldera Core",
@@ -2566,7 +2566,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stamina: {
 		name: "Stamina",
-		shortDesc: "Enemy hits raise Def and heal 1/16; first special hit also raises SpD.",
+		shortDesc: "Enemy hits raise Def and heal 1/16.",
 	},
 	stancechange: {
 		name: "Stance Change",
@@ -3245,8 +3245,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",
-		desc: "This Pokemon's moves cannot miss and it has Wind Power and Speed Boost built in.",
-		shortDesc: "Moves cannot miss; Wind Power + Speed Boost.",
+		desc: "On switch-in, this Pokemon sets Strong Winds for 5 turns; the weather can be changed normally. This Pokemon's moves cannot miss and it has Speed Boost's effect. At the end of each turn, foes take Flying-type damage equal to 1/16 max HP, scaled by type effectiveness.",
+		shortDesc: "5-turn Strong Winds; moves cannot miss; Speed Boost; Flying-type scaling chip.",
 	},
 	highnoon: {
 		name: "High Noon",

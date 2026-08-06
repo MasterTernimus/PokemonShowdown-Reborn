@@ -921,7 +921,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		duration: 5,
 		durationCallback(source, target, effect) {
 			if (this.field.isTerrain('fairytaleterrain')) return 0;
-			if (effect?.id === 'mourningsnow' || effect?.id === 'frostsovereign') return 8;
+			if (effect?.id === 'mourningsnow') return 8;
 			if (source?.hasItem('icyrock') || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
 				return 8;
 			}
@@ -929,7 +929,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'frozensummit', 'execution', 'argentdevotion', 'pollenbloom', 'wildfirecore', 'waterbarrage', 'atrocity', 'solargrace', 'siegelauncher', 'fortressshell']));
+			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'frozensummit', 'execution', 'argentdevotion', 'pollenbloom', 'wildfirecore', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
 			if (iceBeneficiary && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);

@@ -5881,7 +5881,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges with +4 priority on the first turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks and restores 1/16 max HP when hit by a damaging move. When it attacks, the user restores 1/16 of its maximum HP. If the user is holding a Power Herb, the move completes in one turn.",
+		desc: "This attack charges with +4 priority on its actual charge turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks. When it attacks, the user restores 1/16 of its maximum HP. If the charge is skipped, including by Power Herb, it executes without the charge-turn priority.",
 		shortDesc: "+4 charge: +Atk/Def/SpD, 0.7x damage. Heals 1/16.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
@@ -5895,7 +5895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyattack: {
 		name: "Sky Attack",
-		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges with +4 priority on the first turn and executes at normal priority on the second turn. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil. If Tailwind is active on the user's side, this move attacks immediately with 90 Base Power and an even higher critical hit ratio.",
+		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges with +4 priority on its actual charge turn and executes at normal priority on the second turn. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil. If Tailwind is active on the user's side, this move attacks immediately with 90 Base Power and an even higher critical hit ratio, without charge-turn priority.",
 		shortDesc: "+4 charge: +Spe. Tailwind: 90 BP instant, +2 crit.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
@@ -6392,8 +6392,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stockpile: {
 		name: "Stockpile",
-		desc: "Raises the user's Defense and Special Defense by 1 stage and adds 1 Stockpile count, up to 3. At the end of each turn, the user heals 1/16 max HP for each Stockpile count. The count resets when the user leaves the field.",
-		shortDesc: "+1 Def/SpD and Stockpile. Heals 1/16 per stack each turn. Max 3.",
+		desc: "Raises the user's Defense and Special Defense by 1 stage and adds 1 Stockpile count, up to 3. At the end of each turn, the user heals 1/32 max HP for each Stockpile count. The count resets when the user leaves the field.",
+		shortDesc: "+1 Def/SpD and Stockpile. Heals 1/32 per stack each turn. Max 3.",
 		gen3: {
 			desc: "The user's Stockpile count increases by 1. Fails if the user's Stockpile count is 3. The user's Stockpile count is reset to 0 when it is no longer active.",
 			shortDesc: "Raises user's Stockpile count by 1. Max 3 uses.",
