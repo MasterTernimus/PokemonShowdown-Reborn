@@ -1739,7 +1739,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Grass", "Poison"],
 		baseStats: { hp: 80, atk: 125, def: 85, spa: 135, spd: 95, spe: 70 },
-		abilities: { 0: "Accumulation", 1: "Corrosion", H: "Innards Out" },
+		abilities: { 0: "Solar Trap" },
 		heightm: 4.5,
 		weightkg: 125.5,
 		color: "Green",
