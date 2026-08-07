@@ -2248,13 +2248,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.effectState.fallen) return this.chainModify(1 + 0.2 * this.effectState.fallen);
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target !== this.effectState.target) return;
+			let fallen = target.side.totalFainted;
+			if (target.side.allySide) fallen += target.side.allySide.totalFainted;
+			for (const side of this.sides) {
+				if (side === target.side || side === target.side.allySide) continue;
+				fallen += side.totalFainted;
+			}
+			if (fallen) return this.chainModify(Math.max(0.1, 1 - 0.02 * fallen));
+		},
 		onResidual(pokemon) {
 			let fallenFoes = 0;
 			for (const side of this.sides) {
 				if (side === pokemon.side || side === pokemon.side.allySide) continue;
 				fallenFoes += side.totalFainted;
 			}
-			if (fallenFoes) this.heal(pokemon.baseMaxhp * fallenFoes * 0.35, pokemon, pokemon);
+			if (fallenFoes) this.heal(pokemon.baseMaxhp * Math.min(fallenFoes * 0.1, 0.4), pokemon, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Mourning Vessel",
@@ -4181,8 +4191,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10116,
 	},
 	venombastion: {
-		onModifyDef(def, pokemon) { return this.dex.abilities.get('dauntlessshield').onModifyDef?.call(this, def, pokemon); },
-		onModifySpD(spd, pokemon) { return this.dex.abilities.get('dauntlessshield').onModifySpD?.call(this, spd, pokemon); },
+		onStart(pokemon) { return this.dex.abilities.get('dauntlessshield').onStart?.call(this, pokemon); },
 		onBasePower(basePower, source, target, move) { if (this.movehasType(move, 'Bug')) return this.chainModify(1.5); },
 		onResidual(pokemon) { this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
 		flags: { breakable: 1 },
