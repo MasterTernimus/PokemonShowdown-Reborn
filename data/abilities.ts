@@ -61,6 +61,27 @@ function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
 	return best || { moveid: 'belch', target: battle.sample(targets), damage: 0 };
 }
 
+function consumeAccumulationStockpileLayer(battle: Battle, pokemon: Pokemon) {
+	const stockpile = pokemon.volatiles['stockpile'];
+	if (!stockpile?.layers) return;
+	const boosts: SparseBoostsTable = {};
+	if (stockpile.def < 0) {
+		boosts.def = -1;
+		stockpile.def++;
+	}
+	if (stockpile.spd < 0) {
+		boosts.spd = -1;
+		stockpile.spd++;
+	}
+	if (boosts.def || boosts.spd) battle.boost(boosts, pokemon, pokemon);
+	stockpile.layers--;
+	if (stockpile.layers > 0) {
+		battle.add('-start', pokemon, 'stockpile' + stockpile.layers);
+	} else {
+		pokemon.removeVolatile('stockpile');
+	}
+}
+
 function speedUpAbilityFutureSights(battle: Battle, pokemon: Pokemon, foresightFlag: 'grandmasterForesight' | 'perfectForesight') {
 	let spedUp = false;
 	for (const side of battle.sides) {
@@ -2248,6 +2269,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.effectState.fallen) return this.chainModify(1 + 0.2 * this.effectState.fallen);
 		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') return priority + 1;
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target !== this.effectState.target) return;
 			let fallen = target.side.totalFainted;
@@ -3726,6 +3750,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.abilityState.accumulationScriptedReleaseTurn = this.turn;
 			pokemon.abilityState.accumulationSuppressMoveChain = true;
 			this.actions.useMove(release.moveid, pokemon, { target: release.target });
+			if (release.moveid === 'spitup') {
+				pokemon.removeVolatile('stockpile');
+			} else {
+				consumeAccumulationStockpileLayer(this, pokemon);
+			}
 			pokemon.abilityState.accumulationSuppressMoveChain = false;
 			pokemon.abilityState.accumulationAutoBelch = false;
 			pokemon.abilityState.accumulationAutoSpitUp = false;
