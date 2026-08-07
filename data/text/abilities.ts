@@ -548,18 +548,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	burningspirit: {
 		name: "Burning Spirit",
-		desc: "This Pokemon has Self Sufficient, Opportunist, and Magma Armor's effects.",
-		shortDesc: "Self Sufficient + Opportunist + Magma Armor.",
+		desc: "This Pokemon has Self Sufficient, Sheer Force, Opportunist, and Magma Armor.",
+		shortDesc: "Self Sufficient + Sheer Force + Opportunist + Magma Armor.",
 	},
 	emperorsresolve: {
 		name: "Emperor's Resolve",
-		desc: "If this Pokemon has a stat lowered by an opposing Pokemon, its Special Attack rises by 2 stages. It cannot flinch, gains STAB on Ice-type moves, has doubled Speed in hail or snow, and is immune to hail and snow damage.",
-		shortDesc: "SpA +2 on foe stat drop; no flinch; Ice STAB; doubled Speed in hail/snow.",
+		desc: "This Pokemon has Competitive, Slush Rush, Ice STAB, and Inner Focus.",
+		shortDesc: "Competitive + Slush Rush + Ice STAB + Inner Focus.",
 	},
 	terraresolve: {
 		name: "Terra Resolve",
-		desc: "This Pokemon has Stamina, Rocky Payload, and Self Sufficient's effects.",
-		shortDesc: "Stamina + Rocky Payload + Self Sufficient.",
+		desc: "This Pokemon has Stamina, Rocky Payload, Shell Armor, and Self Sufficient.",
+		shortDesc: "Stamina + Rocky Payload + Shell Armor + Self Sufficient.",
 	},
 	eclipsevision: {
 		name: "Eclipse Vision",
@@ -3291,13 +3291,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "This Pokemon's moves ignore abilities. At the end of each turn, it restores 1/16 max HP. Once per turn, its damaging attacks heal 1/16 max HP, and if one of its moves knocks out a Pokemon it heals 1/10 max HP. After this Pokemon uses a damaging move, the next opposing damaging hit raises its Attack and Special Attack by 1 and heals 1/16 max HP. Additional hits before it attacks again heal 1/20 max HP. Ally hits never trigger the boost or healing.",
-		shortDesc: "Mold Breaker; heals each turn/attack; next enemy hit boosts Atk/SpA.",
+		desc: "Moves ignore abilities; it heals each turn and after attacks. KOs heal more, and the first enemy hit boosts Attack and Sp. Atk.",
+		shortDesc: "Mold Breaker; heals each turn/attack; KOs heal more; first enemy hit boosts Atk/SpA.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "This Pokemon's moves ignore abilities. Its attacks deal 2x damage against targets protected by Reflect, Light Screen, or Aurora Veil. It cannot flinch and blocks Intimidate. If it moves before the target, its attacks deal 1.5x damage; if attacked before it moves, it takes 30% damage.",
-		shortDesc: "Ignores abilities; 2x vs screens; fast attacks/pre-move guard.",
+		desc: "Ignores abilities; blocks flinching and Intimidate; deals 2x damage through screens, 1.5x when moving first, and takes 30% damage if hit first.",
+		shortDesc: "Ignores abilities; 2x vs screens; 1.5x when first; takes 30% if hit first.",
 	},
 	duskdrive: {
 		name: "Dusk Drive",
