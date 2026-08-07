@@ -561,8 +561,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mourningvessel: {
 		name: "Mourning Vessel",
-		desc: "This Pokemon's damaging moves deal 20% more damage for each fainted ally, and it takes 2% less damage per fainted ally or enemy. At the end of each turn, it restores 10% of its max HP per fainted opposing Pokemon, up to 40%, counting every opposing side in Free-For-All battles.",
-		shortDesc: "Damage +20% per fainted ally; takes 2% less per faint; heals 10% per foe, capped at 40%.",
+		desc: "This Pokemon has Prankster's effect. Its damaging moves deal 20% more damage for each fainted ally, and it takes 2% less damage per fainted ally or enemy. At the end of each turn, it restores 10% of its max HP per fainted opposing Pokemon, up to 40%, counting every opposing side in Free-For-All battles.",
+		shortDesc: "Prankster; damage +20% per fainted ally; takes 2% less per faint; heals 10% per foe, capped at 40%.",
 	},
 	fallenstar: {
 		name: "Fallen Star",
