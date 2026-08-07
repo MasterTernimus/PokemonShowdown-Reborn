@@ -2187,6 +2187,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10039,
 	},
 	burningspirit: {
+		onModifyMove(move, pokemon) { return this.dex.abilities.get('sheerforce').onModifyMove?.call(this, move, pokemon); },
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) { return this.dex.abilities.get('sheerforce').onBasePower?.call(this, basePower, pokemon, target, move); },
 		onResidual(pokemon) { this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
 		onAfterEachBoost(boost, target, source, effect) { return this.dex.abilities.get('opportunist').onAfterEachBoost?.call(this, boost, target, source, effect); },
 		onUpdate(pokemon) { return this.dex.abilities.get('magmaarmor').onUpdate?.call(this, pokemon); },
@@ -2198,38 +2201,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10040,
 	},
 	emperorsresolve: {
-		onAfterEachBoost(boost, target, source, effect) {
-			if (target.isAlly(source)) return;
-			let statsLowered = false;
-			let i: BoostID;
-			for (i in boost) {
-				if (boost[i]! < 0) statsLowered = true;
-			}
-			if (statsLowered) this.boost({ spa: 2 }, target, target, null, false, true);
-		},
-		onTryAddVolatile(status, pokemon) {
-			if (status.id === 'flinch') return null;
-		},
+		onAfterEachBoost(boost, target, source, effect) { return this.dex.abilities.get('competitive').onAfterEachBoost?.call(this, boost, target, source, effect); },
+		onTryAddVolatile(status, pokemon) { return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon); },
+		onTryBoost(boost, target, source, effect) { return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect); },
 		onModifyMove(move) {
 			if (this.movehasType(move, 'Ice')) move.forceSTAB = true;
 		},
-		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
-				return this.chainModify(2);
-			}
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
-		},
+		onModifySpe(spe, pokemon) { return this.dex.abilities.get('slushrush').onModifySpe?.call(this, spe, pokemon); },
 		flags: { breakable: 1 },
 		name: "Emperor's Resolve",
 		rating: 4,
 		num: 10041,
 	},
 	terraresolve: {
+		onStart(pokemon) { return this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon); },
 		onDamagingHit(damage, target, source, move) { return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, move); },
+		onCriticalHit: false,
+		onAfterEachBoost(boost, target, source, effect) { return this.dex.abilities.get('shellarmor').onAfterEachBoost?.call(this, boost, target, source, effect); },
 		onModifyAtk(atk, attacker, defender, move) { return this.dex.abilities.get('rockypayload').onModifyAtk?.call(this, atk, attacker, defender, move); },
 		onModifySpA(spa, attacker, defender, move) { return this.dex.abilities.get('rockypayload').onModifySpA?.call(this, spa, attacker, defender, move); },
+		onSourceModifyDamage(damage, source, target, move) { return this.dex.abilities.get('shellarmor').onSourceModifyDamage?.call(this, damage, source, target, move); },
 		onResidual(pokemon) { return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
 		flags: { breakable: 1 },
 		name: "Terra Resolve",
