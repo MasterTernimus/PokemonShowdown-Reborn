@@ -389,19 +389,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10283,
 	},
 	dualwield: {
-		onModifyMove(move) {
+		onModifyMove(move, source) {
 			if (move.category === 'Status' || move.multihit || move.flags['charge'] || move.flags['futuremove'] || move.isZ || move.isMax) return;
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			if (!(move.flags['slicing'] || move.flags['pulse'] || move.flags['bullet'] || move.flags['horn'] || move.flags['drill'] || arrowMoves.includes(move.id))) return;
 			move.multihit = 2;
 			move.multihitType = 'dualwield';
+			if (['apexcleave', 'sacrededge', 'omenedge', 'auramaster', 'hyperdrill'].includes(source?.getAbility?.().id)) {
+				(move as any).dualWieldBoosted = true;
+			}
 		},
 		onBasePowerPriority: 20,
 		onBasePower(basePower, source, target, move) {
-			if (move.multihitType === 'dualwield') return this.chainModify(0.3);
+			if (move.multihitType === 'dualwield' && (move as any).dualWieldBoosted && move.hit > 1) return this.chainModify(0.3);
+			if (move.multihitType === 'dualwield') return this.chainModify(0.7);
 		},
 		flags: {},
 		name: "Dual Wield",
+		shortDesc: "Eligible moves hit twice at 70% power. With Sharpness, Mega Launcher, or Power Drill, the second hit is 30% of the unboosted move.",
 		rating: 4,
 		num: 10284,
 	},
@@ -2351,6 +2356,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			if (!arrowMoves.includes(move.id)) return;
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move);
+			this.dex.abilities.get('skilllink').onModifyMove?.call(this, move);
+			move.tracksTarget = true;
 			move.ignoreAbility = true;
 			if (this.gameType === 'freeforall') move.target = 'allAdjacentFoes';
 		},
@@ -2360,7 +2367,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!arrowMoves.includes(move.id)) return;
 			let modifier = (move as any).fallenStarFollowUp ? 0.5 : 1;
 			modifier *= 1.3;
-			if (move.multihitType === 'dualwield') modifier *= 0.3;
+			if (move.multihit) modifier *= 1.5;
 			modifier *= target.trapped || target.maybeTrapped || target.volatiles['trapped'] ? 1.5 : 1.2;
 			if (move.id === 'snipeshot') modifier *= 1.5;
 			return this.chainModify(modifier);
@@ -2561,7 +2568,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	apexcleave: {
 		onModifyMove(move, source) { this.dex.abilities.get('sharpness').onModifyMove?.call(this, move, source); this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source); },
 		onBasePower(basePower, source, target, move) {
-			if (move.flags['slicing']) return this.chainModify(move.multihitType === 'dualwield' && move.hit > 1 ? 0.3 : 1.5);
+			if (move.flags['slicing']) return this.chainModify(move.multihitType === 'dualwield' && move.hit > 1 ? 1 : 1.5);
 		},
 		onSourceAfterFaint(length, target, source, effect) { return this.dex.abilities.get('moxie').onSourceAfterFaint?.call(this, length, target, source, effect); },
 		flags: {},
@@ -3055,13 +3062,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.heal(ally.baseMaxhp / healAmount, ally, pokemon);
 			}
 		},
-		onModifyMove(move) {
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move);
+		onModifyMove(move, source) {
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.multihitType === 'dualwield' && move.flags['slicing']) {
-				return this.chainModify(move.hit > 1 ? 0.3 : 1.5);
+				return this.chainModify(move.hit > 1 ? 1 : 1.5);
 			}
 			if (move.flags['slicing']) return this.chainModify(1.5);
 		},
@@ -3071,14 +3078,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10101,
 	},
 	omenedge: {
-		onModifyMove(move) {
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move);
+		onModifyMove(move, source) {
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
 			this.dex.abilities.get('sniper').onModifyMove?.call(this, move);
 			if (move.flags['slicing']) move.critRatio++;
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['slicing']) return this.chainModify(move.multihitType === 'dualwield' && move.hit > 1 ? 0.3 : 1.5);
+			if (move.flags['slicing']) return this.chainModify(move.multihitType === 'dualwield' && move.hit > 1 ? 1 : 1.5);
 		},
 		onModifyDamage(damage, source, target, move) {
 			if (move.crit) return this.chainModify(1.5);
@@ -5413,7 +5420,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyPriority(priority, pokemon, target, move) {
-			if (pokemon.hp <= pokemon.maxhp / 4 && this.movehasType(move, 'Fire') && move.category !== 'Status') {
+			if (pokemon.hp <= pokemon.maxhp / 2 && this.movehasType(move, 'Fire') && move.category !== 'Status') {
 				return priority + 1;
 			}
 		},
@@ -5459,11 +5466,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
 				modifier *= 1.5;
 			}
-			if (move.multihitType === 'dualwield') modifier *= 0.3;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
-		onModifyMove(move) {
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move);
+		onModifyMove(move, source) {
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
 			if (!this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) return;
@@ -5512,8 +5518,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
-		onModifyMove(move) {
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move);
+		onModifyMove(move, source) {
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
 		},
 		onResidual(pokemon) {
 			this.dex.abilities.get('waterveil').onResidual?.call(this, pokemon);
@@ -6325,8 +6331,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 134,
 	},
 	hyperdrill: {
-		onModifyMove(move) {
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move);
+		onModifyMove(move, source) {
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
 			if (move.flags['drill'] && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
 		},
 		onBasePowerPriority: 19,
@@ -6335,7 +6341,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.flags['drill']) {
 				modifier *= this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain']) ? 2 : 1.5;
 			}
-			if (move.multihitType === 'dualwield') modifier *= 0.3;
 			if (move && this.movehasType(move, 'Rock')) modifier *= 1.5;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
@@ -11085,7 +11090,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			let modifier = 1;
 			if (this.movehasType(move, 'Water')) modifier *= 1.2;
-			if (move.multihitType === 'dualwield') modifier *= 0.3;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMove(move) {
@@ -11600,7 +11604,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			let modifier = 1;
 			if (move.category !== 'Status' && attacker.hasType(move.type)) modifier *= 1.2;
-			if (move.multihitType === 'dualwield') modifier *= 0.3;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMove(move, pokemon) {
@@ -11815,7 +11818,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let modifier = 1;
 			if (move.category !== 'Status' && attacker.hasType(move.type)) modifier *= 1.2;
 			if (move.flags['pulse'] || move.flags['bullet']) modifier *= 1.5;
-			if (move.multihitType === 'dualwield') modifier *= 0.3;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMovePriority: 1,
