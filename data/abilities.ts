@@ -11329,7 +11329,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization'))) return;
 			if (target.hasAbility('parasitism')) return;
 			if (!effect || effect.id === 'royaldecree') return;
-			if (effect.id === 'stockpile' || effect.id === 'accumulation' || effect.id === 'relicinstinct' || effect.id === 'neutralization') return;
+			if (effect.id === 'relicinstinct' || effect.id === 'neutralization') return;
 			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
 				!Object.values(boost).some(value => value && value > 0);
 			if (isOnlyDrops && source === target && target.hasAbility('royaldecree')) return;
