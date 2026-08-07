@@ -6,7 +6,7 @@ Generated from the current server ability descriptions.
 This Pokemon takes 0.9x damage from attacks and 0.75x additional damage from Fire- and Ice-type attacks, is immune to hail damage, and restores 1/16 of its maximum HP at the end of each turn. Its Giga Drain has 2x power. It draws in Poison-type moves, is immune to them, and raises Attack and Special Attack by 1 stage when hit by one.
 
 ## Charizard-Mega-X - Atrocity
-This Ability cannot be suppressed. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit, and restores 1/16 max HP at the end of each turn. In Cold Eclipse, its damaging moves gain another 1.3x boost, and its Defense and Special Defense become 1.5x.
+This Ability cannot be suppressed and has Wildfire Core, Self Sufficient, and draining attacks. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit. In Cold Eclipse, its damaging moves gain another 1.3x boost, and its Defense and Special Defense become 1.5x.
 
 ## Charizard-Mega-Y - Solar Grace
 On switch-in or Mega Evolution, this Pokemon summons Sunny Day. Opposing Pokemon cannot lower this Pokemon's Speed or Special Attack. If this Pokemon moves before the target, its Fire- and Flying-type moves have 1.2x power. If this Pokemon has not moved yet, it takes 0.75x damage from attacks. Its attacks heal 30% of the damage dealt, doubled against G-Max Pokemon, up to 33% of its max HP per hit.
@@ -72,7 +72,7 @@ During harsh sunlight, this Pokemon's Attack and Special Attack are multiplied b
 On switch-in, this Pokemon summons Sandstorm. During Sandstorm, this Pokemon's moves have 1.2x power and attacks deal 0.7x damage to it. At the end of each turn, non-Rock, non-Ground, and non-Steel Pokemon lose 1/16 max HP.
 
 ## Sceptile-Mega - Verdant Drake
-This Pokemon's Grass- and Dragon-type moves have 1.2x power. It takes 0.75x damage from Fire- and Ice-type attacks. When it switches out, it restores 33% of its maximum HP.
+This Pokemon has Proficient, Regenerator, and Dual Wield's effects. Its STAB moves have 1.2x power, it restores 1/3 max HP when it switches out, and moves boosted by Sharpness or Mega Launcher, plus arrow moves, hit twice for reduced damage.
 
 ## Blaziken-Mega - Blazing Tempo
 At the end of each turn, this Pokemon's Speed rises by 1 stage. Its Fire- and Fighting-type moves have 1.2x power if its Speed has been raised.

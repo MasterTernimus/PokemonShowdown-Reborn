@@ -1895,7 +1895,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	bonemerang: {
 		num: 155,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 50,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Bonemerang",
@@ -18831,7 +18831,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterMove(source, target, move) {
-			if (move.totalDamage) this.heal(source.baseMaxhp / 16, source, source);
+			if (move.totalDamage) this.heal(source.baseMaxhp / 4, source, source);
 		},
 		condition: {
 			onSourceModifyDamage(damage, source, target, move) {
@@ -20411,7 +20411,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onTry() {
-			return !(this.field.terrainState?.duration && this.field.terrainState?.duration > 10);
+			return !!this.field.terrain && !(this.field.terrainState?.duration && this.field.terrainState?.duration > 10);
 		},
 		onHit() {
 			this.field.clearTerrain("mid");

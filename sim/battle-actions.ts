@@ -1187,7 +1187,7 @@ export class BattleActions {
 				!target.isSemiInvulnerable()
 			);
 			if (!targets.length) return null;
-			(move as any).spilloverDamageModifier = move.multihitType === 'parentalbond' ? 0.8 : 0.5;
+			(move as any).spilloverDamageModifier = move.multihitType === 'parentalbond' ? 0.8 : 0.7;
 			return this.battle.sample(targets);
 		}
 		const ally = originalTarget.side.active.find(target =>
@@ -1195,7 +1195,7 @@ export class BattleActions {
 			!target.isSemiInvulnerable() && !target.isAlly(pokemon)
 		);
 		if (!ally) return null;
-		(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.8) : 0.3;
+		(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.8) : 0.7;
 		return ally;
 	}
 
@@ -2029,10 +2029,6 @@ export class BattleActions {
 				this.battle.debug('FFA gimmick follow-up damage reduction');
 				baseDamage = this.battle.modify(baseDamage, 0.9);
 			}
-		}
-		if (move.multihit && move.hit > 1 && !['hydrabond', 'dualwield'].includes(move.multihitType || '') && !pokemon.hasAbility('battlebond')) {
-			this.battle.debug('Multi-hit follow-up damage reduction');
-			baseDamage = this.battle.modify(baseDamage, 0.7);
 		}
 		if (move.flags['bone'] && target.hasAbility('soulfire')) {
 			this.battle.debug('Bone move vs Soul Fire boost');

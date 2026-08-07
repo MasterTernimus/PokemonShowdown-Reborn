@@ -1559,7 +1559,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	punchingglove: {
 		name: "Punching Glove",
-		shortDesc: "Holder's punch-based attacks have 1.1x power and do not make contact.",
+		shortDesc: "Holder's punch-based attacks have 1.4x power and do not make contact.",
 	},
 	pyroarite: {
 		name: "Pyroarite",
