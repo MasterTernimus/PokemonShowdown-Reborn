@@ -3546,7 +3546,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Hisui",
 		types: ["Fire", "Ghost"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 105, def: 80, spa: 133, spd: 65, spe: 95 },
+		baseStats: { hp: 83, atk: 105, def: 80, spa: 137, spd: 65, spe: 95 },
 		abilities: { 0: "Blazing Mane", 1: "Soul Fire", H: "Sinister Blaze" },
 		heightm: 1.6,
 		weightkg: 69.8,
