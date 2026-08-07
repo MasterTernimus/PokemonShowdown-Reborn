@@ -8010,7 +8010,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!target || target.fainted) return;
 			if (!target.volatiles['perishsong']) target.addVolatile('perishsong', source, this.dex.abilities.get('requiem'));
 			else if (!target.volatiles['curse']) target.addVolatile('curse', source, this.dex.abilities.get('requiem'));
-			else target.addVolatile('meanlook', source, this.dex.abilities.get('requiem'));
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
@@ -8020,7 +8019,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || source.fainted) return;
 			if (!source.volatiles['perishsong']) source.addVolatile('perishsong', target, this.dex.abilities.get('requiem'));
 			else if (!source.volatiles['curse']) source.addVolatile('curse', target, this.dex.abilities.get('requiem'));
-			else source.addVolatile('meanlook', target, this.dex.abilities.get('requiem'));
 			this.dex.abilities.get('cursedbody').onDamagingHit?.call(this, damage, target, source, move);
 		},
 		onFaint(pokemon) {
