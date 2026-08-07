@@ -20,15 +20,15 @@ The column value will be ignored for repeat sections.
 import { type FormatList } from "../sim/dex-formats";
 
 const ALLGEN_FIELD_RULESET = [
-	'Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause',
+	'Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Item Clause = 1',
 	'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past',
 ];
 const ALLGEN_FFA_RULESET = [
-	'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod',
+	'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod', 'Item Clause = 1',
 	'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past',
 ];
 const ALLGEN_MULTI_RULESET = [
-	'Team Preview', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod',
+	'Team Preview', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Evasion Clause', 'Cancel Mod', 'Item Clause = 1',
 	'Max Team Size = 6', 'Picked Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100',
 	'+Unobtainable', '+Past',
 ];
@@ -134,7 +134,7 @@ function makeMultiFieldFormats(): FormatList {
 	return formats;
 }
 
-export const Formats: FormatList = [
+const FORMAT_LIST: FormatList = [
 
 	// All Gen Reborn
 	///////////////////////////////////////////////////////////////////
@@ -1020,3 +1020,10 @@ export const Formats: FormatList = [
 	...makeFfaFieldFormats(),
 	...makeMultiFieldFormats(),
 ];
+
+for (const format of FORMAT_LIST) {
+	if (!format.ruleset || format.ruleset.some(rule => rule.startsWith('Item Clause = '))) continue;
+	format.ruleset.push('Item Clause = 1');
+}
+
+export const Formats: FormatList = FORMAT_LIST;
