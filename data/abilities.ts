@@ -262,6 +262,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.dex.abilities.get('psychicsurge').onStart?.call(this, pokemon);
 		},
+		onSwitchIn(pokemon) {
+			this.dex.abilities.get('psychicsurge').onStart?.call(this, pokemon);
+		},
 		onAfterEachBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('competitive').onAfterEachBoost?.call(this, boost, target, source, effect);
 		},
@@ -10878,6 +10881,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (this.movehasType(move, ['Fire', 'Ghost'])) {
 				(move as any).soulFireBurn = true;
+				// Soul Fire's attacks bypass type immunities, including Fairy Tale's
+				// field-added Dragon typing on Fire moves.
+				move.ignoreImmunity = true;
 				move.onEffectiveness = function (typeMod, target, type) {
 					if (move.type === 'Ghost' && type === 'Normal') return typeMod;
 					if (type === 'Steel' || type === 'Dark') return -1;
