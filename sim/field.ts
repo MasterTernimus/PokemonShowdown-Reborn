@@ -301,6 +301,7 @@ export class Field {
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
 			terrain_type: new_terrain_type,
+			origin: sourceEffect,
 			source,
 			sourceSlot: source.getSlot(),
 			terrainChanges: new Map<string, number>(),
@@ -393,6 +394,20 @@ export class Field {
 				const prevTerrain = this.getTerrain();
 				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 				while (this.terrainStack.length > 0 && this.terrainStack[0]?.terrain_type !== "Base") {
+					this.terrainStack.shift();
+				}
+			} else if (this.terrainState?.zMoveTerrain || (
+				typeof this.terrainState?.duration === 'number' &&
+				this.terrainState.duration < 9999 &&
+				this.terrainState.terrain_type !== 'Base'
+			)) {
+				const prevTerrain = this.getTerrain();
+				this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
+				if (this.terrainState.zMoveTerrain) {
+					while (this.terrainStack.length > 0 && this.terrainStack[0]?.zMoveTerrain) {
+						this.terrainStack.shift();
+					}
+				} else {
 					this.terrainStack.shift();
 				}
 			} else {

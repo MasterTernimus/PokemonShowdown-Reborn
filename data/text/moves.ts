@@ -541,8 +541,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blastburn: {
 		name: "Blast Burn",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "This 160-power Fire move uses Attack or Special Attack, whichever is higher. It has a 60% chance to burn. The user must recharge after a successful hit unless the target faints.",
+		shortDesc: "160 BP; higher Atk/SpA; 60% burn; recharge unless it KOs.",
 	},
 	blazekick: {
 		name: "Blaze Kick",
@@ -2351,8 +2351,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	frenzyplant: {
 		name: "Frenzy Plant",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "This 160-power Grass move uses Attack or Special Attack, whichever is higher. It has an 80% chance to badly poison. The user must recharge after a successful hit unless the target faints.",
+		shortDesc: "160 BP; higher Atk/SpA; 80% bad poison; recharge unless it KOs.",
 	},
 	frostbreath: {
 		name: "Frost Breath",
@@ -3186,8 +3186,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hydrocannon: {
 		name: "Hydro Cannon",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "This 160-power Water move uses Attack or Special Attack, whichever is higher. It has a 60% chance to freeze. The user must recharge after a successful hit unless the target faints.",
+		shortDesc: "160 BP; higher Atk/SpA; 60% freeze; recharge unless it KOs.",
 	},
 	hydropump: {
 		name: "Hydro Pump",
@@ -3295,8 +3295,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icespinner: {
 		name: "Ice Spinner",
-		desc: "Ends the effects of Electric Terrain, Grassy Terrain, Misty Terrain, and Psychic Terrain.",
-		shortDesc: "Ends the effects of terrain.",
+		desc: "After a successful hit, ends Core terrain and temporary fields created by Z moves or abilities. Permanent fields remain.",
+		shortDesc: "Clears Core and temporary Z/ability fields.",
 	},
 	iciclecrash: {
 		name: "Icicle Crash",
@@ -6370,8 +6370,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	steelroller: {
 		name: "Steel Roller",
-		desc: "Fails if there is no terrain active. Ends the effects of Electric Terrain, Grassy Terrain, Misty Terrain, and Psychic Terrain.",
-		shortDesc: "Fails if there is no terrain active. Ends the terrain.",
+		desc: "Fails if there is no terrain or if the field lasts more than 10 turns. After a successful hit, ends Core terrain and temporary Z/ability fields. Permanent fields remain.",
+		shortDesc: "Clears Core and temporary Z/ability fields; fails on long fields.",
 	},
 	steelwing: {
 		name: "Steel Wing",

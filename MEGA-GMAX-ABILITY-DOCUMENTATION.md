@@ -134,7 +134,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 
 ## Custom Ability Summaries
 
-- **Atrocity:** Its own general 1.3x damaging-move multiplier, life-steal behavior, stronger Cold Eclipse effects, and custom field/target effects. It does **not** have Mega Launcher.
+- **Atrocity:** Wildfire Core, Self Sufficient, and draining attacks, plus its own 1.3x damaging-move multiplier, piercing behavior, stronger Cold Eclipse effects, and custom field/target effects.
 - **Spiral Evolution:** Adaptability, Levitate, and Dual Wield. It has the custom reduced-damage protection-piercing behavior; Twin Needle follows the same paired-hit logic as Dragon Darts and does not use the removed Hydra Bond/flinch/focus effects.
 - **Aura Master:** Mega Launcher and Inner Focus, with 20% damage reduction.
 - **Apex Predator:** Relic Armor, Precision, and Tough Claws. Super-effective moves do not miss and gain the custom critical-hit effect.
