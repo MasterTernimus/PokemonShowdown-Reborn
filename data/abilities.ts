@@ -2258,9 +2258,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10153,
 	},
 	venomrush: {
-		onBasePowerPriority: 8,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.category === 'Physical' && ['psn', 'tox'].includes(pokemon.status)) return this.chainModify(1.5);
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if ((attacker.status === 'psn' || attacker.status === 'tox' || this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('murkwatersurfaceterrain') || this.field.isTerrain('wastelandterrain')) && move.category === 'Physical') {
+				return this.chainModify(1.5);
+			}
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect?.id === 'psn' || effect?.id === 'tox') {
@@ -4049,6 +4051,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10114,
 	},
 	doomwarning: {
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
+		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			return this.dex.abilities.get('magicbounce').onTryHit?.call(this, target, source, move);
@@ -13241,6 +13246,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (move.flags['contact']) delete move.flags['protect'];
 		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('ironfist').onBasePower?.call(this, basePower, source, target, move);
+		},
 		flags: {},
 		name: "Unseen Fist",
 		rating: 2,
@@ -13248,22 +13256,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	phantomfist: {
 		onModifyMove(move) {
-			if (move.flags['contact']) delete move.flags['protect'];
-			if (move.flags['punch'] && move.type === 'Ghost') move.ignoreImmunity = true;
+			move.accuracy = true;
+			this.dex.abilities.get('unseenfist').onModifyMove?.call(this, move);
 		},
-		onBasePowerPriority: 8,
-		onBasePower(basePower, source, target, move) {
-			if (move.flags['punch']) return this.chainModify(1.56);
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (move?.flags['punch'] && move.type === 'Ghost' && typeMod < 0) return 0;
-		},
-		onSourceDamagingHit(damage, target, source, move) {
-			if (!move.flags['punch']) return;
-			const shieldMoves = ['protect', 'detect', 'spikyshield', 'banefulbunker', 'kingsshield', 'obstruct'];
-			if (shieldMoves.some(id => target.volatiles[id])) this.boost({ atk: 1 }, source, source);
-		},
-		onDamage(damage, target, source, effect) { return this.dex.abilities.get('bruteforce').onDamage?.call(this, damage, target, source, effect); },
 		onResidual(pokemon) {
 			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},

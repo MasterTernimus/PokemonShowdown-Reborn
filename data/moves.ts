@@ -4465,7 +4465,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	doublekick: {
 		num: 24,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 45,
 		category: "Physical",
 		name: "Double Kick",
 		pp: 30,
@@ -6755,6 +6755,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: -3,
 		flags: {
 			contact: 1, protect: 1, punch: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1,
+		},
+		onModifyMove(move) {
+			delete move.flags['protect'];
+		},
+		onBasePower(basePower, source, target) {
+			if (!target?.volatiles['protect']) return this.chainModify(1 / 3);
 		},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('focuspunch');
