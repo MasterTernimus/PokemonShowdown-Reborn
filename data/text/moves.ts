@@ -2270,8 +2270,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	focuspunch: {
 		name: "Focus Punch",
-		desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move.",
-		shortDesc: "Fails if the user takes damage before it hits.",
+		desc: "The user loses its focus if hit before moving. This move bypasses Protect at full power; otherwise, it deals 50 base power.",
+		shortDesc: "Bypasses Protect at full power; otherwise 50 BP.",
 		gen4: {
 			desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move, but it still loses PP.",
 		},

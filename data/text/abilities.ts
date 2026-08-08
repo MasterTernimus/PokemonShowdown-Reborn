@@ -62,8 +62,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dualwield: {
 		name: "Dual Wield",
-		desc: "Moves that would be boosted by Sharpness, Mega Launcher, Horn, Drill, or Arrow effects hit twice. The first hit receives the boost and the second hit deals 30% of the move's unboosted power. Spread moves keep their spread targeting.",
-		shortDesc: "Boosted Horn/Drill/Sharpness/Mega Launcher/Arrow moves hit twice; second hit is 30% unboosted.",
+		desc: "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 70% power. When combined with Sharpness, Mega Launcher, or Power Drill, the first hit receives that boost and the second hit deals 30% of the move's unboosted power. Existing multi-hit moves are not given an additional Dual Wield pair.",
+		shortDesc: "Eligible moves hit twice at 70%; boosted combinations use a 30% unboosted second hit.",
 	},
 	apexpredator: {
 		name: "Apex Predator",
@@ -568,8 +568,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	venomrush: {
 		name: "Venom Rush",
-		desc: "This Pokemon has Toxic Boost's effect. If it is poisoned or badly poisoned, its physical moves have 1.5x power, and poison damage restores 1/8 of its max HP instead of damaging it.",
-		shortDesc: "Toxic Boost; poison heals 1/8 instead of damaging.",
+		desc: "While poisoned or badly poisoned, or while Corrosive, Murkwater Surface, or Wasteland is active, this Pokemon's physical moves have 1.5x power. Poison damage heals it for 1/8 of its maximum HP instead.",
+		shortDesc: "Physical moves 1.5x while poisoned or in toxic fields; poison damage heals 1/8.",
 	},
 	noseformation: {
 		name: "Nose Formation",
@@ -583,8 +583,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon restores 1/16 max HP at the end of each turn. Its arrow moves trigger Dual Wield, ignore the target's Ability, and have 1.3x power. Snipe Shot gets an additional 1.5x power boost. If this Pokemon has 1/2 or less of its maximum HP, its arrow moves gain +2 priority and this Pokemon takes 50% less damage. If an arrow move targets a Pokemon that cannot switch out, it has 1.5x power instead. After this Pokemon uses an arrow move, it takes 75% less damage for the rest of the turn. If this Pokemon KOes a target with an arrow move, it uses that move again at 50% power. In Free-For-All battles, arrow moves hit all foes. Arrow moves are Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Scale Shot, Psycho Cut, and Ceaseless Edge.",
-		shortDesc: "Heals 1/16; arrow moves Dual Wield, ignore Ability, +2 at <=1/2 HP, FFA spread.",
+		desc: "This Ability cannot be suppressed. This Pokemon restores 1/16 max HP at the end of each turn. Its arrow moves ignore the target's Ability and have 1.3x power; Snipe Shot gets an additional 1.5x boost. Single-hit Arrow moves use Dual Wield, while existing multi-hit Arrow moves use Skill Link and keep their normal full-power hits. If this Pokemon has 1/2 or less of its maximum HP, its Arrow moves gain +2 priority and it takes 50% less damage. After using an Arrow move, it takes 75% less damage for the rest of the turn. If an Arrow move KOes a target, it uses that move again at 50% power. In Free-for-All battles, Arrow moves hit all foes.",
+		shortDesc: "Arrow moves 1.3x; Skill Link on multi-hit Arrows; Dual Wield on others; low-HP priority and damage reduction.",
 	},
 	eclipse: {
 		name: "Eclipse",
@@ -768,8 +768,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	doomwarning: {
 		name: "Doom Warning",
-		desc: "This Pokemon has Magic Bounce. Future Sight used by this Pokemon behaves like Perfect Foresight. This Pokemon's damaging attacks queue Future Sight on opposing targets they hit. When this Pokemon faints, Doom Desire is cast on all opposing Pokemon.",
-		shortDesc: "Magic Bounce; attacks queue Future Sight; on faint casts Doom Desire on foes.",
+		desc: "This Pokemon has Magic Bounce and Magic Guard. Future Sight used by this Pokemon behaves like Perfect Foresight. Its damaging attacks queue Future Sight on targets they hit. On faint, Doom Desire is cast on all foes.",
+		shortDesc: "Magic Bounce + Magic Guard; attacks queue Future Sight; on faint casts Doom Desire.",
 	},
 	perfectego: {
 		name: "Perfect Ego",
@@ -1040,8 +1040,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	blazingmane: {
 		name: "Blazing Mane",
-		desc: "This Pokemon has Fire Mane's effect. Its Speed is raised by 1 stage on entry if Burning Terrain is active, and whenever Burning Terrain starts while it is active. Its damaging moves hit twice, and the second hit deals 30% of the original damage and can trigger additional secondary effects. If this Pokemon has 1/4 or less of its max HP, its Fire-type attacks have +1 priority.",
-		shortDesc: "Fire 1.5x; +1 Spe on Burning Terrain; damaging moves hit twice; low HP Fire +1 priority.",
+		desc: "This Pokemon has Fire Mane's effect. Its Speed is raised by 1 stage on entry if Burning Terrain is active, and whenever Burning Terrain starts while it is active. Its damaging moves hit twice, and the second hit deals 30% of the original damage and can trigger additional secondary effects. If this Pokemon has 1/2 or less of its max HP, its Fire-type attacks have +1 priority.",
+		shortDesc: "Fire 1.5x; +1 Spe on Burning Terrain; damaging moves hit twice; at half HP, Fire moves gain priority.",
 	},
 	flashfire: {
 		name: "Flash Fire",
@@ -2960,12 +2960,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	unseenfist: {
 		name: "Unseen Fist",
-		shortDesc: "This Pokemon's contact moves ignore the target's protection, except Max Guard.",
+		desc: "This Pokemon's contact moves ignore the target's protection, except Max Guard, and its punching moves have Iron Fist's power boost.",
+		shortDesc: "Contact moves ignore protection; punching moves have Iron Fist's boost.",
 	},
 	phantomfist: {
 		name: "Phantom Fist",
-		desc: "This Pokemon has Unseen Fist, Iron Fist, Self Sufficient, and Shadow Shield's effects. Its punching moves have 1.56x power, and Ghost-type punching moves ignore immunities and resistances.",
-		shortDesc: "Unseen Fist + Iron Fist + Self Sufficient + Shadow Shield.",
+		desc: "This Pokemon's moves cannot miss and it has Filter, Self Sufficient, and Unseen Fist's effects.",
+		shortDesc: "Moves cannot miss + Filter + Self Sufficient + Unseen Fist.",
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",
