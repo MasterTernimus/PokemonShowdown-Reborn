@@ -38,6 +38,7 @@ interface MoveFlags {
 	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.
 	distance?: 1; // Can target a Pokemon positioned anywhere in a Triple Battle.
 	drill?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Power Drill.
+	horn?: 1; // Eligible for Power Drill and Dual Wield's horn-move effects.
 	failcopycat?: 1; // Cannot be selected by Copycat.
 	failencore?: 1; // Encore fails if target used this move.
 	failinstruct?: 1; // Cannot be repeated by Instruct.
@@ -254,7 +255,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	ignorePositiveEvasion?: boolean;
 	multiaccuracy?: boolean;
 	multihit?: number | number[];
-	multihitType?: 'parentalbond' | 'hydrabond';
+	multihitType?: 'parentalbond' | 'hydrabond' | 'dualwield' | 'blazingmane' | 'starboxer';
 	noDamageVariance?: boolean;
 	nonGhostTarget?: MoveTarget;
 	spreadModifier?: number;
@@ -277,6 +278,22 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	isConfusionSelfHit?: boolean;
 	stallingMove?: boolean;
 	baseMove?: ID;
+	baseMoveName?: string;
+	allowSpreadKOSpillover?: boolean;
+	dualWieldBoosted?: boolean;
+	fallenStarFollowUp?: boolean;
+	fullDamageSpread?: boolean;
+	hydraBondSingleTargetSpread?: boolean;
+	hydraBondSpread?: boolean;
+	parentalBondSpread?: boolean;
+	pendingZTerrain?: [string, number];
+	shadowCurrentExtraHit?: boolean;
+	shadowCurrentExtraHitUsed?: boolean;
+	soulFireBurn?: boolean;
+	spilloverDamageModifier?: number;
+	spitUpBreaksProtect?: boolean;
+	spitUpProtectedTargets?: Set<Pokemon>;
+	noseFormationActivated?: boolean;
 }
 
 export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {

@@ -22018,7 +22018,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["swampterrain", "Water"],
 				["underwaterterrain", "Water"],
 				['volcanicterrain', 'Fire'],
-				["wastelandsurfaceterrain", "Poison"],
+				["wastelandterrain", "Poison"],
 				["watersurfaceterrain", "Water"],
 			]);
 			let newType;

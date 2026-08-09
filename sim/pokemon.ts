@@ -2072,7 +2072,7 @@ export class Pokemon {
 			royalvoice: ['pixilate', 'queenlymajesty', 'swornduty'],
 			perfectforesight: ['trace'],
 			hydrabreaker: ['hydrabond', 'moldbreaker'],
-			hydratyrant: ['hydrabond'],
+			hydratyrant: ['hydrabond', 'selfsufficient', 'precision'],
 			heavenlychorus: ['pixilate', 'cloudnine'],
 			mourningsnow: ['snowwarning', 'icebody'],
 			venombastion: ['shellarmor'],

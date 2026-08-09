@@ -365,7 +365,7 @@ export class Field {
 			this.terrainState.zMoveTerrain = true;
 			this.terrainState.zMoveExpired = !!prevTerrainState.zMoveExpired;
 		}
-		if (this.terrainState.isBase) {
+		if (prevTerrainState.terrain_type === 'Base') {
 			this.terrainStack[0] = this.terrainState;
 		} else {
 			this.terrainStack.unshift(this.terrainState);
@@ -379,6 +379,7 @@ export class Field {
 	clearTerrain(power: string | null = null) {
 		if (!this.terrain || this.terrain === 'newworldterrain') return false;
 		const clearedTerrain = this.terrain;
+		const clearedTerrainState = this.terrainState;
 		if (this.terrain === 'underwaterterrain') {
 			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
 			return false;
@@ -438,15 +439,16 @@ export class Field {
 			} else {
 				this.terrainStack.shift();
 			}
-			for (const terrainState of this.terrainStack) {
-				if (terrainState.duration && this.terrainStack[0].duration) {
-					if (terrainState?.duration <= (this.battle.turn - this.terrainState.turn + 1)) {
-						this.terrainStack.shift();
-					} else {
-						this.terrainStack[0].duration -= (this.battle.turn - this.terrainState.turn);
-						break;
-					}
+			const elapsedTurns = this.battle.turn - clearedTerrainState.turn;
+			while (this.terrainStack.length) {
+				const terrainState = this.terrainStack[0];
+				if (!terrainState.duration) break;
+				if (terrainState.duration <= elapsedTurns + 1) {
+					this.terrainStack.shift();
+					continue;
 				}
+				terrainState.duration -= elapsedTurns;
+				break;
 			}
 		}
 		if (this.terrainStack.length !== 0) {
