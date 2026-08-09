@@ -3,7 +3,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "No Ability",
 		shortDesc: "Does nothing.",
 	},
-	selfsufficient: { name: "Self Sufficient", desc: "Restores 1/16 of this Pokemon's maximum HP at the end of each turn.", shortDesc: "Restores 1/16 HP each turn." },
+	selfsufficient: { name: "Self Sufficient", desc: "Restores 1/16 of this Pokemon's maximum HP at the end of each turn and is immune to Sandstorm and Hail damage.", shortDesc: "Heals 1/16 each turn; immune to Sandstorm and Hail." },
 	bruteforce: { name: "Brute Force", desc: "This Pokemon has Reckless and Rock Head's effects.", shortDesc: "Reckless + Rock Head." },
 	precision: { name: "Precision", desc: "Super-effective moves used by this Pokemon cannot miss and have an increased critical-hit ratio.", shortDesc: "Super-effective moves never miss; boosted critical-hit ratio." },
 	secondwind: { name: "Second Wind", desc: "Endures the first attack that would knock it out at 1 HP.", shortDesc: "Endures the first KO at 1 HP." },
@@ -558,8 +558,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	terraresolve: {
 		name: "Terra Resolve",
-		desc: "This Pokemon has Stamina, Rocky Payload, Shell Armor, and Self Sufficient.",
-		shortDesc: "Stamina + Rocky Payload + Shell Armor + Self Sufficient.",
+		desc: "This Pokemon has Stamina, Rocky Payload, Solid Rock, and Self Sufficient.",
+		shortDesc: "Stamina + Rocky Payload + Solid Rock + Self Sufficient.",
 	},
 	eclipsevision: {
 		name: "Eclipse Vision",
@@ -578,13 +578,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mourningvessel: {
 		name: "Mourning Vessel",
-		desc: "This Pokemon has Prankster's effect. Its damaging moves deal 10% more damage for each fainted ally. At the end of each turn, it restores 5% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
-		shortDesc: "Prankster; damaging moves +10% per fainted ally; heals 5% per fainted foe each turn.",
+		desc: "This Pokemon has Prankster's effect. Its damaging moves deal 20% more damage for each fainted ally, up to 2x damage. At the end of each turn, it restores 5% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
+		shortDesc: "Prankster; damaging moves +20% per fainted ally, capped at 2x; heals 5% per fainted foe each turn.",
+	},
+	mightyjaw: {
+		name: "Mighty Jaw",
+		desc: "This Pokemon has Strong Jaw and Intimidate's effects. Until it takes its first action after switching in, its moves have 2 higher priority.",
+		shortDesc: "Strong Jaw + Intimidate; first action after switch-in has +2 priority.",
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon restores 1/16 max HP at the end of each turn. Its arrow moves ignore the target's Ability and have 1.3x power; Snipe Shot gets an additional 1.5x boost. Single-hit Arrow moves use Dual Wield, while existing multi-hit Arrow moves use Skill Link and keep their normal full-power hits. If this Pokemon has 1/2 or less of its maximum HP, its Arrow moves gain +2 priority and it takes 50% less damage. After using an Arrow move, it takes 75% less damage for the rest of the turn. If an Arrow move KOes a target, it uses that move again at 50% power. In Free-for-All battles, Arrow moves hit all foes.",
-		shortDesc: "Arrow moves 1.3x; Skill Link on multi-hit Arrows; Dual Wield on others; low-HP priority and damage reduction.",
+		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker, Dual Wield, and Self Sufficient's effects. Single-hit Arrow moves use Dual Wield, while existing multi-hit Arrow moves retain their enhanced multi-hit behavior. If this Pokemon has 1/2 or less of its maximum HP, its Arrow moves gain +2 priority and it takes 50% less damage. After using an Arrow move, it takes 75% less damage for the rest of the turn. If an Arrow move KOes a target, it uses that move again at 50% power. In Free-for-All battles, Arrow moves hit all foes.",
+		shortDesc: "Mold Breaker + Dual Wield + Self Sufficient; under half HP, Arrow moves gain +2 priority.",
 	},
 	eclipse: {
 		name: "Eclipse",
@@ -613,8 +618,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aurainstinct: {
 		name: "Aura Instinct",
-		desc: "This Pokemon has Sworn Duty, Adaptability, Technician, and Second Wind's effects.",
-		shortDesc: "Sworn Duty + Adaptability + Technician + Second Wind.",
+		desc: "This Pokemon has Sworn Duty, Adaptability, Technician, Dual Wield, and Second Wind's effects.",
+		shortDesc: "Sworn Duty + Adaptability + Technician + Dual Wield + Second Wind.",
 	},
 	royalcurrent: {
 		name: "Royal Current",
@@ -713,8 +718,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
-		desc: "On switch-in, this Pokemon sets Sandstorm for 5 turns. This Pokemon has Filter and Battle Armor's effects. At the end of each turn, foes take Rock-type damage equal to 1/16 max HP, scaled by type effectiveness.",
-		shortDesc: "5-turn Sand; Filter + Battle Armor; Rock-type scaling chip.",
+		desc: "On switch-in, this Pokemon sets Sandstorm for 5 turns. This Pokemon has Filter and Battle Armor's effects. At the end of each turn, foes take Rock-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Rock immunities.",
+		shortDesc: "5-turn Sand; Filter + Battle Armor; Rock chip respects immunities.",
 	},
 	tyrantstream: {
 		name: "Tyrant Stream",
@@ -723,8 +728,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	frostsovereign: {
 		name: "Frost Sovereign",
-		desc: "On switch-in, this Pokemon sets Snow for 5 turns and Aurora Veil for 8 turns. This Pokemon has Ice Body and Filter. At the end of each turn, foes take Ice-type damage equal to 1/16 max HP, scaled by effectiveness; Ice-type Pokemon are immune.",
-		shortDesc: "5-turn Snow + 8-turn Veil; Ice Body + Filter; Ice scaling chip.",
+		desc: "On switch-in, this Pokemon sets Snow for 5 turns and Aurora Veil for 8 turns. This Pokemon has Ice Body and Filter. At the end of each turn, foes take Ice-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Ice immunities.",
+		shortDesc: "5-turn Snow + 8-turn Veil; Ice Body + Filter; Ice chip respects immunities.",
 	},
 	freezerburn: {
 		name: "Freezer Burn",
@@ -798,8 +803,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	razorcurrent: {
 		name: "Razor Current",
-		desc: "This Pokemon has Speed Boost, Steelworker, and Strong Jaw's effects.",
-		shortDesc: "Speed Boost + Steelworker + Strong Jaw.",
+		desc: "This Pokemon has Drizzle, Speed Boost, Steelworker, and Strong Jaw's effects.",
+		shortDesc: "Drizzle + Speed Boost + Steelworker + Strong Jaw.",
 	},
 	rainsovereign: {
 		name: "Rain Sovereign",
@@ -833,8 +838,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	solartrap: {
 		name: "Solar Trap",
-		desc: "This Pokemon has Simple, Corrosion, and Innards Out's effects.",
-		shortDesc: "Simple + Corrosion + Innards Out.",
+		desc: "This Pokemon has Accumulation, Corrosion, Innards Out, and Solar Power's effects. In Sun, Solar Power boosts Special Attack by 1.5x and deals 1/8 max HP damage at the end of each turn.",
+		shortDesc: "Accumulation + Corrosion + Innards Out + Solar Power.",
 	},
 	soaringspirit: {
 		name: "Soaring Spirit",
@@ -903,13 +908,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	furnaceengine: {
 		name: "Furnace Engine",
-		desc: "When this Pokemon is hit by a Water- or Fire-type move, its Speed is maximized. Water-type moves used against this Pokemon deal 0.5x damage. At the end of each turn, opposing Pokemon lose 1/16 max HP unless they are Fire, Rock, Ground, or airborne.",
-		shortDesc: "Hit by Water/Fire maxes Speed; 0.5x Water; chips vulnerable foes.",
+		desc: "When this Pokemon is hit by a Water- or Fire-type move, its Speed is maximized. Water-type moves used against this Pokemon deal 0.5x damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Fire immunities.",
+		shortDesc: "Hit by Water/Fire maxes Speed; 0.5x Water; Fire scaling chip respects immunities.",
 	},
 	duneterror: {
 		name: "Dune Terror",
-		desc: "This Pokemon has Sand Stream and custom Shed Skin's effects. During Sandstorm, grounded foes take residual damage based on their Ground-type weakness.",
-		shortDesc: "Sand Stream + custom Shed Skin; Ground-effectiveness-scaled chip.",
+		desc: "This Pokemon has Sand Stream and custom Shed Skin's effects. During Sandstorm, grounded foes take Ground-type residual damage based on effectiveness, blocked by Ground immunities.",
+		shortDesc: "Sand Stream + custom Shed Skin; Ground chip respects immunities.",
 	},
 	heatcoil: {
 		name: "Heat Coil",
@@ -1152,6 +1157,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Gooey",
 		desc: "When this Pokemon is hit by a contact move, the attacker's Speed is lowered by 2 stages and its highest offensive stat is lowered by 1 stage. This Pokemon restores 1/16 max HP, or 1/8 max HP if the attacker's Speed was already lowered.",
 		shortDesc: "Contact: attacker -2 Spe and -1 highest offense; heals 1/16, or 1/8 if Spe already lowered.",
+	},
+	fluffycraft: {
+		name: "Fluffy Craft",
+		desc: "This Pokemon has Fluffy and Technician's effects.",
+		shortDesc: "Fluffy + Technician.",
 	},
 	gorillatactics: {
 		name: "Gorilla Tactics",
@@ -1494,8 +1504,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	longreach: {
 		name: "Long Reach",
-		desc: "On switch-in, this Pokemon's Accuracy is raised by 1 stage. Its attacks do not make contact with the target, and its critical hits deal 2.25x damage instead of 1.5x.",
-		shortDesc: "+1 Accuracy on switch-in; no contact; critical hits deal 2.25x.",
+		desc: "On switch-in, this Pokemon's Accuracy is raised by 1 stage. Its attacks do not make contact with the target, and its critical hits deal 3x damage.",
+		shortDesc: "+1 Accuracy on switch-in; no contact; critical hits deal 3x.",
 	},
 	magicbounce: {
 		name: "Magic Bounce",
@@ -1588,8 +1598,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mindseye: {
 		name: "Mind's Eye",
-		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves, gains STAB on Fairy- and Dark-type moves, and prevents other Pokemon from lowering its accuracy. This Pokemon ignores a target's evasiveness, takes 20% less damage from damaging moves, and restores 1/16 max HP after its damaging moves hit. In Cold Eclipse, its damaging moves have 1.3x power, it takes 0.7x damage from damaging moves, and its hit healing becomes 1/8 max HP.",
-		shortDesc: "Normal/Fighting hit Ghost; Fairy/Dark STAB; takes 0.8x. Cold Eclipse strengthens it.",
+		desc: "This Pokemon has Self Sufficient, can hit Ghost types with Normal- and Fighting-type moves, gains Fairy- and Dark-type STAB, ignores evasiveness, and cannot have its accuracy lowered. It takes 20% less damage and heals 1/16 after damaging moves hit. Cold Eclipse strengthens these effects.",
+		shortDesc: "Self Sufficient; Ghost-piercing Normal/Fighting; Fairy/Dark STAB; 20% damage reduction.",
 	},
 	minus: {
 		name: "Minus",
@@ -2160,7 +2170,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rockypayload: {
 		name: "Rocky Payload",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Rock-type attack.",
+		desc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Rock-type attack, or 2x in Rocky Terrain. It gains Rock-type resistances without gaining Rock-type weaknesses.",
+		shortDesc: "Rock attacks 1.5x, or 2x in Rocky Terrain; gains Rock resistances, not weaknesses.",
 	},
 	roughskin: {
 		name: "Rough Skin",
@@ -2298,10 +2309,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Sharpness's effect and gains STAB on Fighting-type moves.",
 		shortDesc: "Sharpness; gains Fighting STAB.",
 	},
-	shedskin: {
+	 shedskin: {
 		name: "Shed Skin",
-		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects, reset its negative stat stages to 0, and restore 1/3 max HP. This can also activate while below half HP.",
-		shortDesc: "50% chance to cleanse negatives, reset negative stat stages, and heal 1/3.",
+		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects, reset its negative stat stages to 0, and restore 1/4 max HP. This can also activate while below half HP.",
+		shortDesc: "50% chance to cleanse negatives, reset negative stat stages, and heal 1/4.",
 	},
 	sheerforce: {
 		name: "Sheer Force",
@@ -2549,12 +2560,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	siegelauncher: {
 		name: "Siege Launcher",
 		desc: "This Pokemon has Water Barrage, Mega Launcher, Self Sufficient, and Stalwart's effects. Moves boosted by Mega Launcher are used twice through Dual Wield; the second hit deals 30% of the move's unboosted power.",
-		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; second Dual Wield hit is 30% unboosted.",
+		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves get a 30% second hit.",
 	},
 	calderacore: {
 		name: "Caldera Core",
-		desc: "This Pokemon has Solid Rock and Magma Armor's effects. At the end of each turn, grounded foes take Fire-type residual damage based on their Fire-type effectiveness.",
-		shortDesc: "Solid Rock + Magma Armor; Fire-effectiveness-scaled chip.",
+		desc: "This Pokemon has Magma Armor, Solid Rock, Sheer Force, and Drought's effects. At the end of each turn, grounded foes take Fire-type residual damage equal to 1/16 max HP, scaled by effectiveness and blocked by Fire immunities.",
+		shortDesc: "Magma Armor + Solid Rock + Sheer Force + Drought; Fire scaling chip respects immunities.",
 	},
 	soultag: {
 		name: "Soul Tag",
@@ -2590,8 +2601,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stancechange: {
 		name: "Stance Change",
-		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before using an attacking move, and changes to Shield Forme before using King's Shield. This Pokemon has Dual Wield's effect and restores 1/16 of its maximum HP at the end of each turn. Aegislash takes 20% less damage in Shield Forme, and in Free-For-All, consecutive hits against Shield Forme in the same turn deal 30% less damage. Aegislash-Blade's damaging moves deal 1.2x damage.",
-		shortDesc: "Changes Forme; Dual Wield; heals 1/16. Shield bulkier; Blade deals 1.2x.",
+		desc: "This Pokemon has Self Sufficient and Dual Wield. Aegislash changes to Blade Forme before attacking and Shield Forme before King's Shield. Shield Forme takes 20% less damage; consecutive Free-for-All hits deal 30% less damage. Blade Forme deals 1.2x damage.",
+		shortDesc: "Self Sufficient + Dual Wield; Shield: 20% less damage; Blade: 1.2x damage.",
 		gen6: {
 			desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield.",
 		},
@@ -2621,7 +2632,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	steelworker: {
 		name: "Steelworker",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Steel-type attack.",
+		desc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Steel-type attack, or 2x in Factory Terrain. It gains Steel-type resistances and Poison immunity without gaining Steel-type weaknesses.",
+		shortDesc: "Steel attacks 1.5x, or 2x in Factory Terrain; gains Steel resistances and Poison immunity, not weaknesses.",
 	},
 	steelyspirit: {
 		name: "Steely Spirit",
@@ -2692,10 +2704,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
-		desc: "For each fainted ally, this Pokemon's moves deal 1.1x damage, with no limit; in Free-for-All, fainted allies count twice. At 1 or more fainted allies, it has Clear Body and Self Sufficient. At 2 or more, it has Inner Focus. At 3 or more, it has Filter and Second Wind; in Doubles, Multi, or Free-For-All, Second Wind can endure a KO at 1 HP once per battle. At 4 or more, it has Infiltrator. At 5 or more, it has Magic Guard and its Attack and Sp. Atk rise by 1 stage.",
-		shortDesc: "Fallen allies boost damage; 1+ Clear Body/Self Sufficient; 2+ Inner Focus; 5+ Magic Guard/+1 Atk/SpA.",
+		desc: "This Pokemon has Self Sufficient. Each fainted ally gives its moves 1.1x damage; in Free-for-All, allies count twice. At 1+, it has Clear Body; 2+, Inner Focus; 3+, Filter and Second Wind; 4+, Infiltrator; 5+, Magic Guard and +1 Attack/Sp. Atk.",
+		shortDesc: "Self Sufficient; fallen allies boost damage and unlock defensive effects and stat boosts.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
+	},
+	blackfang: {
+		name: "Black Fang",
+		desc: "This Pokemon has Strong Jaw and Insomnia's effects.",
+		shortDesc: "Strong Jaw + Insomnia.",
 	},
 	surgesurfer: {
 		name: "Surge Surfer",
@@ -3085,8 +3102,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	zerotohero: {
 		name: "Zero to Hero",
-		desc: "If this Pokemon is a Palafin in Zero Form, switching out has it change to Hero Form. This Pokemon gains STAB on Fighting-type moves and gains Fighting's Bug-, Dark-, and Rock-type resistances. In Doubles, Multi, or Free-For-All, once per battle, if this Pokemon would be knocked out, it survives at 1 HP. While in Hero Form, it has Friend Guard's effect. When it switches in as Hero Form, it and its ally restore 1/8 max HP and are cured of status, or restore 1/4 max HP if below half HP.",
-		shortDesc: "Switches out into Hero. Fighting STAB/resists; once survives at 1 HP. Hero: Friend Guard + heal.",
+		desc: "This Pokemon has Self Sufficient and gains Fighting-type STAB. Palafin changes to Hero Form after switching out or entering in Water fields. In Doubles, Multi, or Free-for-All, it survives one KO at 1 HP. Hero Form grants Friend Guard and heals active allies on entry.",
+		shortDesc: "Self Sufficient; Palafin becomes Hero; Fighting STAB; Hero: Friend Guard + entry healing.",
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
@@ -3167,18 +3184,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
-		desc: "This Pokemon has Thick Fat, Proficient, and Invigorate's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by type effectiveness, and this Pokemon heals the damage dealt.",
-		shortDesc: "Thick Fat + Proficient + Invigorate; Grass scaling chip heals the user.",
+		desc: "This Pokemon has Thick Fat, Proficient, and Invigorate's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Grass immunities; this Pokemon heals the damage dealt.",
+		shortDesc: "Thick Fat + Proficient + Invigorate; Grass scaling chip respects immunities and heals the user.",
 	},
 	waterbarrage: {
 		name: "Water Barrage",
-		desc: "This Pokemon has Proficient, Water Veil, and Dual Wield's effects. On switch-in, it gains Aqua Ring. It is immune to burn, sand, and hail. At the end of each turn, opposing non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, scaled by type effectiveness.",
-		shortDesc: "Proficient + Water Veil + Dual Wield; Aqua Ring; cycling Water chip.",
+		desc: "This Pokemon has Proficient, Water Veil, and Dual Wield's effects. On switch-in, it gains Aqua Ring. It is immune to burn, sand, and hail. At the end of each turn, opposing non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, scaled by effectiveness and blocked by Water immunities.",
+		shortDesc: "Proficient + Water Veil + Dual Wield; Aqua Ring; Water scaling chip respects immunities.",
 	},
 	wildfirecore: {
 		name: "Wildfire Core",
-		desc: "This Pokemon has Dragonize, Magma Armor, and Proficient's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage uses Fire-type effectiveness and still deals damage to Fire-immune targets.",
-		shortDesc: "Dragonize + Magma Armor + Proficient; Fire chip ignores Fire immunity.",
+		desc: "This Pokemon has Dragonize, Magma Armor, and Proficient's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage uses Fire-type effectiveness and is blocked by Fire immunities.",
+		shortDesc: "Dragonize + Magma Armor + Proficient; Fire scaling chip respects immunities.",
 	},
 	memoryleak: {
 		name: "Memory Leak",
@@ -3272,8 +3289,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",
-		desc: "On switch-in, this Pokemon sets Strong Winds for 5 turns; the weather can be changed normally. This Pokemon has Wind Power and Speed Boost's effects, its moves cannot miss, and foes take 1/16 Flying-type scaling damage at the end of each turn.",
-		shortDesc: "Wind Power + Speed Boost; 5-turn Strong Winds; moves cannot miss; Flying scaling chip.",
+		desc: "On switch-in, this Pokemon sets Strong Winds for 5 turns; the weather can be changed normally. This Pokemon has Wind Power and Speed Boost's effects, its moves cannot miss, and foes take 1/16 Flying-type scaling damage at the end of each turn, blocked by Flying immunities.",
+		shortDesc: "Wind Power + Speed Boost; 5-turn Strong Winds; moves cannot miss; Flying chip respects immunities.",
 	},
 	highnoon: {
 		name: "High Noon",
