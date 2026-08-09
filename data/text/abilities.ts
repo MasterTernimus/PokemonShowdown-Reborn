@@ -3179,8 +3179,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hydratyrant: {
 		name: "Hydra Tyrant",
-		desc: "This Pokemon has Hydra Bond's effects. Its damaging moves become three-hit attacks, with the second and third hits dealing 30% damage. Its super-effective attacks deal 1.3x damage. When this Pokemon gets a KO, it raises either Speed or the offensive stat used for the KO by 1 stage, whichever is lower.",
-		shortDesc: "Hydra Bond; super-effective hits 1.3x; KO boosts lower of Speed/offense used.",
+		desc: "This Pokemon has Hydra Bond, Self Sufficient, and Precision's effects.",
+		shortDesc: "Hydra Bond + Self Sufficient + Precision.",
 	},
 	burningcrown: {
 		name: "Burning Crown",
