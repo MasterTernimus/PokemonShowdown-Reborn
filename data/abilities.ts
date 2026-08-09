@@ -289,6 +289,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10283,
 	},
+	greatmarsh: {
+		onTryHit(target, source, move) { return this.dex.abilities.get('dryskin').onTryHit?.call(this, target, source, move); },
+		onSourceBasePowerPriority: 17,
+		onSourceBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('dryskin').onSourceBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onWeather(target, source, effect) { return this.dex.abilities.get('dryskin').onWeather?.call(this, target, source, effect); },
+		onModifySTAB(stab, source, target, move) {
+			return this.dex.abilities.get('adaptability').onModifySTAB?.call(this, stab, source, target, move);
+		},
+		flags: {},
+		name: "Great Marsh",
+		rating: 4,
+		num: 10335,
+	},
 	phalanxform: {
 		onModifyMove(move, source) { this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source); },
 		onSourceModifySecondaries(secondaries, target, source, move) { return this.dex.abilities.get('hydrabond').onSourceModifySecondaries?.call(this, secondaries, target, source, move); },

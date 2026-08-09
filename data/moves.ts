@@ -3636,9 +3636,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.ignoreDefensive = true;
 			}
 		},
-		onBasePower(basePower, pokemon, target) {
-			if (['psn', 'tox'].includes(target.status)) return this.chainModify(1.3);
-		},
 		secondary: {
 			chance: 50,
 			status: 'tox',
