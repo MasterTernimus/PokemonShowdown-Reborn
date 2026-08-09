@@ -778,12 +778,21 @@ export class Pokemon {
 	}
 
 	getAtLoc(targetLoc: number) {
+		if (this.battle.gameType === 'freeforall') {
+			for (const side of this.battle.sides) {
+				for (const target of side.active) {
+					if (target && this.getLocOf(target) === targetLoc) return target;
+				}
+			}
+			return undefined;
+		}
 		let side = this.battle.sides[targetLoc < 0 ? this.side.n % 2 : (this.side.n + 1) % 2];
 		targetLoc = Math.abs(targetLoc);
 		if (targetLoc > side.active.length) {
 			targetLoc -= side.active.length;
 			side = this.battle.sides[side.n + 2];
 		}
+		if (!side) return undefined;
 		return side.active[targetLoc - 1];
 	}
 

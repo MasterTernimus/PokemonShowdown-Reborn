@@ -8032,8 +8032,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {},
 		isMax: "Sandaconda",
-		self: {
-			onHit(source) {
+			self: {
+				onHit(source) {
 				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Sandblast'));
 				}

@@ -11,6 +11,7 @@
 import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
 import type { FormatData } from '../../sim/dex-formats';
+import type { Move } from '../../sim/dex-moves';
 import { TeamValidator } from '../../sim/team-validator';
 import { Chat } from '../chat';
 
@@ -72,7 +73,44 @@ function toListString(arr: string[]) {
 	return `${arr.slice(0, -1).join(", ")}, and ${arr.slice(-1)[0]}`;
 }
 
+const ARROW_MOVE_IDS = [
+	"spiritshackle",
+	"thousandarrows",
+	"triplearrows",
+	"snipeshot",
+	"razorleaf",
+	"magicalleaf",
+	"spikecannon",
+	"pinmissile",
+	"iciclespear",
+	"rockblast",
+	"bulletseed",
+	"scaleshot",
+	"psychocut",
+	"ceaselessedge",
+];
+
+function customMoveList(title: string, predicate: (move: Move) => boolean) {
+	const moves = Dex.moves.all()
+		.filter(move => move.exists && predicate(move))
+		.sort((a, b) => a.name.localeCompare(b.name));
+	const links = moves.map(move => `<a href="https://${Config.routes.dex}/moves/${move.id}" target="_blank">${move.name}</a>`);
+	return `<strong>${title}</strong><br>${links.join(", ") || "None"}`;
+}
+
 export const commands: Chat.ChatCommands = {
+	arrow(target, room, user) {
+		this.checkBroadcast();
+		this.sendReplyBox(customMoveList("Arrow moves", move => ARROW_MOVE_IDS.includes(move.id)));
+	},
+	arrowhelp: ["/arrow - Lists all Arrow moves."],
+	horn: 'drill',
+	drill(target, room, user) {
+		this.checkBroadcast();
+		const drillMoves = (move: Move) => !!(move.flags as { [flag: string]: boolean | undefined }).drill;
+		this.sendReplyBox(customMoveList("Power Drill moves", drillMoves));
+	},
+	drillhelp: ["/drill or /horn - Lists all moves boosted by Power Drill."],
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
 	ds2: 'dexsearch',
