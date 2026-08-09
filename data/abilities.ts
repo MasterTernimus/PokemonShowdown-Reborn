@@ -1493,7 +1493,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	contrary: {
 		onChangeBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('contrary').onChangeBoost?.call(this, boost, target, source, effect);
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= -1;
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Contrary",
