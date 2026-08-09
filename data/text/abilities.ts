@@ -30,6 +30,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Friend Guard, Invigorate, and Serene Grace's effects.",
 		shortDesc: "Friend Guard + Invigorate + Serene Grace.",
 	},
+	greatmarsh: {
+		name: "Great Marsh",
+		desc: "This Pokemon has Dry Skin and Adaptability's effects.",
+		shortDesc: "Dry Skin + Adaptability.",
+	},
 	phalanxform: {
 		name: "Phalanx Form",
 		desc: "This Pokemon has Hydra Bond, Friend Guard, and Battle Armor's effects.",
