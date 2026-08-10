@@ -14283,32 +14283,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	needlegun: {
 		num: 10000,
 		accuracy: 100,
-		basePower: 25,
+		basePower: 30,
 		category: "Special",
 		name: "Needle Gun",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		critRatio: 2,
-		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
-			if (this.field.isTerrain(['fairytaleterrain', 'factoryterrain'])) {
-				move.type = 'Steel';
-			}
-		},
-		onBasePower(basePower, pokemon, target, move) {
-			if (this.field.isTerrain('desertterrain')) return this.chainModify(2);
-			if (this.field.isTerrain(['fairytaleterrain', 'factoryterrain'])) return this.chainModify(1.5);
-		},
 		multihit: 6,
-		secondary: {
-			chance: 5,
-			volatileStatus: 'flinch',
-		},
 		target: "normal",
-		type: "Grass",
-		zMove: { basePower: 140 },
-		maxMove: { basePower: 130 },
+		type: "Steel",
+		zMove: { basePower: 100 },
+		maxMove: { basePower: 90 },
 		contestType: "Cute",
 	},
 	neverendingnightmare: {
@@ -18834,7 +18819,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterMove(source, target, move) {
-			if (move.totalDamage) this.heal(source.baseMaxhp / 4, source, source);
+			if (move.totalDamage) this.heal(source.baseMaxhp / 8, source, source);
 		},
 		condition: {
 			onSourceModifyDamage(damage, source, target, move) {
@@ -19850,15 +19835,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	spikecannon: {
 		num: 131,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 25,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Spike Cannon",
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
-		critRatio: 2,
+		multihit: [2, 5],
 		target: "normal",
 		type: "Steel",
 		maxMove: { basePower: 120 },
@@ -23384,7 +23368,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	watershuriken: {
 		num: 594,
 		accuracy: 100,
-		basePower: 15,
+		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
 			if (pokemon.hasAbility('shadowcurrent')) {
 				return move.hit === 1 ? 90 : 20;
@@ -23400,7 +23384,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 1,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 6],
+		critRatio: 2,
 		onModifyMove(move, pokemon) {
 			const isAshGreninja = pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed;
 			if (pokemon.hasAbility('shadowcurrent')) {

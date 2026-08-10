@@ -2029,6 +2029,17 @@ export class Pokemon {
 
 	hasAbility(ability: string | string[]) {
 		const abilityAliases: { [abilityid: string]: string[] } = {
+			bonewarrior: ['battlearmor', 'bruteforce', 'reckless', 'rockhead', 'selfsufficient', 'cursedbody'],
+			seafiend: ['toxicdebris', 'merciless', 'waterbubble', 'waterveil'],
+			hisuianoath: ['swornduty', 'toughclaws', 'corrosion'],
+			hisuianvanguard: ['rapidresponse', 'swornduty', 'windpower'],
+			unovavanguard: ['violentrush', 'swornduty', 'windrider'],
+			hisuianresolve: ['bruteforce', 'reckless', 'rockhead', 'magmaarmor', 'solidrock'],
+			nobleconduit: ['battery', 'solarpower', 'aftermath'],
+			nobledance: ['dancer', 'hospitality', 'owntempo'],
+			noblearmor: ['prismarmor', 'icebody', 'selfsufficient', 'technician'],
+			noblerider: ['swiftswim', 'adaptability', 'shadowshield'],
+			gooey: ['selfsufficient', 'hydration', 'sapsipper'],
 			irondominion: ['pressure', 'swornduty', 'mirrorarmor'],
 			bewitchingmajesty: ['magicbounce', 'queenlymajesty'],
 			souleater: [],

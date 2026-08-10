@@ -8,6 +8,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	precision: { name: "Precision", desc: "Super-effective moves used by this Pokemon cannot miss and have an increased critical-hit ratio.", shortDesc: "Super-effective moves never miss; boosted critical-hit ratio." },
 	secondwind: { name: "Second Wind", desc: "Endures the first attack that would knock it out at 1 HP.", shortDesc: "Endures the first KO at 1 HP." },
 	rapidresponse: { name: "Rapid Response", desc: "Until this Pokemon uses its first damaging move, its Speed is 1.5x and its Sp. Atk is 1.2x.", shortDesc: "Before first damaging move: 1.5x Speed and 1.2x Sp. Atk." },
+	seafiend: { name: "Sea Fiend", desc: "This Pokemon has Toxic Debris, Merciless, and Water Bubble's effects.", shortDesc: "Toxic Debris + Merciless + Water Bubble." },
+	hisuianoath: { name: "Hisuian Oath", desc: "This Pokemon has Sworn Duty, Tough Claws, and Corrosion's effects.", shortDesc: "Sworn Duty + Tough Claws + Corrosion." },
+	hisuianvanguard: { name: "Hisuian Vanguard", desc: "This Pokemon has Rapid Response, Sworn Duty, and Wind Power's effects.", shortDesc: "Rapid Response + Sworn Duty + Wind Power." },
+	unovavanguard: { name: "Unova Vanguard", desc: "This Pokemon has Violent Rush, Sworn Duty, and Wind Rider's effects.", shortDesc: "Violent Rush + Sworn Duty + Wind Rider." },
+	hisuianresolve: { name: "Hisuian Resolve", desc: "This Pokemon has Brute Force, Magma Armor, and Solid Rock's effects.", shortDesc: "Brute Force + Magma Armor + Solid Rock." },
+	nobleconduit: { name: "Noble Conduit", desc: "This Pokemon has Battery, Solar Power, and Aftermath's effects.", shortDesc: "Battery + Solar Power + Aftermath." },
+	nobledance: { name: "Noble Dance", desc: "This Pokemon has Dancer, Hospitality, and Own Tempo's effects.", shortDesc: "Dancer + Hospitality + Own Tempo." },
+	noblearmor: { name: "Noble Armor", desc: "This Pokemon has Prism Armor, Ice Body, Self Sufficient, and Technician's effects.", shortDesc: "Prism Armor + Ice Body + Self Sufficient + Technician." },
+	noblerider: { name: "Noble Rider", desc: "This Pokemon has Swift Swim, Adaptability, and Shadow Shield's effects.", shortDesc: "Swift Swim + Adaptability + Shadow Shield." },
 	celestialheart: { name: "Celestial Heart", desc: "This Pokemon has Multiscale, Serene Grace, and Soul-Heart's effects.", shortDesc: "Multiscale + Serene Grace + Soul Heart." },
 	crueltag: { name: "Cruel Tag", desc: "This Pokemon has Shadow Tag, Infiltrator, and Precision's effects. When it faints, Haunted Field starts for 5 turns.", shortDesc: "Shadow Tag + Infiltrator + Precision; faint summons Haunted Field." },
 	adaptability: {
@@ -57,8 +66,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	bonewarrior: {
 		name: "Bone Warrior",
-		desc: "This Pokemon has Technician, Battle Armor, Skill Link, and Rock Head's effects.",
-		shortDesc: "Technician + Battle Armor + Skill Link + Rock Head.",
+		desc: "This Pokemon has Battle Armor, Brute Force, Self Sufficient, and Cursed Body's effects.",
+		shortDesc: "Battle Armor + Brute Force + Self Sufficient + Cursed Body.",
 	},
 	technicalspecialist: {
 		name: "Technical Specialist",
@@ -584,7 +593,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	mourningvessel: {
 		name: "Mourning Vessel",
 		desc: "This Pokemon has Prankster's effect. Its damaging moves deal 20% more damage for each fainted ally, up to 2x damage. At the end of each turn, it restores 5% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
-		shortDesc: "Prankster; damaging moves +20% per fainted ally, capped at 2x; heals 5% per fainted foe each turn.",
+		shortDesc: "Prankster; +20% damage per fainted ally (max 2x); heals 5% per fainted foe each turn.",
 	},
 	mightyjaw: {
 		name: "Mighty Jaw",
@@ -593,7 +602,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker, Dual Wield, and Self Sufficient's effects. Single-hit Arrow moves use Dual Wield, while existing multi-hit Arrow moves retain their enhanced multi-hit behavior. If this Pokemon has 1/2 or less of its maximum HP, its Arrow moves gain +2 priority and it takes 50% less damage. After using an Arrow move, it takes 75% less damage for the rest of the turn. If an Arrow move KOes a target, it uses that move again at 50% power. In Free-for-All battles, Arrow moves hit all foes.",
+		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker, Dual Wield, Skill Link, and Self Sufficient's effects. Its multi-hit Arrow moves have 1.5x power, and its Arrow moves have 1.5x power against trapped targets. At 1/2 HP or less, Arrow moves gain +2 priority and this Pokemon takes 50% less damage. After using an Arrow move, it takes 75% less damage for the rest of the turn. If an Arrow move KOes a target, it uses that move again at 50% power. In Free-for-All battles, Arrow moves hit all foes.",
 		shortDesc: "Mold Breaker + Dual Wield + Self Sufficient; under half HP, Arrow moves gain +2 priority.",
 	},
 	eclipse: {
@@ -698,13 +707,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sacrededge: {
 		name: "Sacred Edge",
-		desc: "This Pokemon has Sharpness, Dual Wield, and Sworn Duty's effects. Its slicing moves have 1.5x power. When Dual Wield applies to one of those slicing moves, the first hit keeps the 1.5x Sharpness boost and the second hit deals 30% of that boosted damage. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
+		desc: "This Pokemon has Sharpness, Dual Wield, and Sworn Duty's effects. Its slicing moves have 1.5x power. When Dual Wield applies to one of those slicing moves, the first hit keeps the 1.5x Sharpness boost and the second hit has 30% of the move's unboosted power. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
 		shortDesc: "Sharpness + Dual Wield + Sworn Duty.",
 	},
 	omenedge: {
 		name: "Omen Edge",
-		desc: "This Pokemon has Sharpness's effect. Its slicing moves have +1 critical hit ratio, and its critical hits deal 1.5x more damage like Sniper. When this Pokemon faints, it casts a physical Doom Desire on each opposing Pokemon.",
-		shortDesc: "Sharpness; slicing +1 crit; stronger crits. On faint: physical Doom Desire on foes.",
+		desc: "This Pokemon has Sharpness, Dual Wield, and Sniper's effects. Its slicing moves have +1 critical hit ratio. When this Pokemon faints, it casts a physical Doom Desire on each opposing Pokemon.",
+		shortDesc: "Sharpness + Dual Wield + Sniper; slicing +1 crit; on faint: Doom Desire on foes.",
 	},
 	dreadmaw: {
 		name: "Dread Maw",
@@ -813,8 +822,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rainsovereign: {
 		name: "Rain Sovereign",
-		desc: "On switch-in, this Pokemon sets Rain for 5 turns. Electric-, Water-, and Flying-type moves used by this Pokemon receive STAB. At the end of each turn, foes take Water-type damage equal to 1/16 max HP, scaled by type effectiveness. Water Absorb, Storm Drain, and Dry Skin prevent this damage.",
-		shortDesc: "5-turn Rain; Electric/Water/Flying STAB; Water-type scaling chip respects immunities.",
+		desc: "On switch-in, this Pokemon sets Rain for 5 turns. It has Berserk's effect, and its Electric-, Water-, and Flying-type moves receive STAB. At the end of each turn, foes take Water-type damage equal to 1/16 max HP, scaled by type effectiveness and blocked by Water immunities.",
+		shortDesc: "5-turn Rain + Berserk; Electric/Water/Flying STAB; Water chip respects immunities.",
 	},
 	toxicrenewal: {
 		name: "Toxic Renewal",
@@ -913,8 +922,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	furnaceengine: {
 		name: "Furnace Engine",
-		desc: "When this Pokemon is hit by a Water- or Fire-type move, its Speed is maximized. Water-type moves used against this Pokemon deal 0.5x damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Fire immunities.",
-		shortDesc: "Hit by Water/Fire maxes Speed; 0.5x Water; Fire scaling chip respects immunities.",
+		desc: "This Pokemon has Steam Engine and Flame Body's effects. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Fire immunities.",
+		shortDesc: "Steam Engine + Flame Body; Fire chip respects effectiveness and immunities.",
 	},
 	duneterror: {
 		name: "Dune Terror",
@@ -1051,7 +1060,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	blazingmane: {
 		name: "Blazing Mane",
 		desc: "This Pokemon has Fire Mane's effect. Its Speed is raised by 1 stage on entry if Burning Terrain is active, and whenever Burning Terrain starts while it is active. Its damaging moves hit twice, and the second hit deals 30% of the original damage and can trigger additional secondary effects. If this Pokemon has 1/2 or less of its max HP, its Fire-type attacks have +1 priority.",
-		shortDesc: "Fire 1.5x; +1 Spe on Burning Terrain; damaging moves hit twice; at half HP, Fire moves gain priority.",
+		shortDesc: "Fire 1.5x; +1 Spe in Burning Terrain; attacks hit twice; Fire gains priority at half HP.",
 	},
 	flashfire: {
 		name: "Flash Fire",
@@ -1160,8 +1169,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	gooey: {
 		name: "Gooey",
-		desc: "When this Pokemon is hit by a contact move, the attacker's Speed is lowered by 2 stages and its highest offensive stat is lowered by 1 stage. This Pokemon restores 1/16 max HP, or 1/8 max HP if the attacker's Speed was already lowered.",
-		shortDesc: "Contact: attacker -2 Spe and -1 highest offense; heals 1/16, or 1/8 if Spe already lowered.",
+		desc: "When this Pokemon is hit by an opposing damaging move, the attacker's Speed is lowered by 2 stages and its highest offensive stat is lowered by 1 stage. This Pokemon also has Self Sufficient, Hydration, and Sap Sipper's effects.",
+		shortDesc: "Any damaging hit: attacker -2 Spe/-1 offense; Self Sufficient + Hydration + Sap Sipper.",
 	},
 	fluffycraft: {
 		name: "Fluffy Craft",
@@ -1672,7 +1681,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	requiem: {
 		name: "Requiem",
 		desc: "This Pokemon has Cursed Body's effect. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon gains Perish Song, then Curse, then Taunt, then Torment from repeated hits. Curse applied by Requiem deals 1/8 max HP each turn. If this Pokemon knocks out a target with a move, it restores 1/8 max HP per target knocked out. When this Pokemon faints, it creates Haunted Field for 5 turns, and this Ability cannot be suppressed.",
-		shortDesc: "Repeated hits apply Perish Song, Curse, Taunt, then Torment; KO healing; Haunted Field on faint.",
+		shortDesc: "Hits progress Perish Song -> Curse -> Taunt -> Torment; KO heals; faint sets Haunted.",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
@@ -2569,8 +2578,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	calderacore: {
 		name: "Caldera Core",
-		desc: "This Pokemon has Magma Armor, Solid Rock, Sheer Force, and Drought's effects. At the end of each turn, grounded foes take Fire-type residual damage equal to 1/16 max HP, scaled by effectiveness and blocked by Fire immunities.",
-		shortDesc: "Magma Armor + Solid Rock + Sheer Force + Drought; Fire scaling chip respects immunities.",
+		desc: "This Pokemon has Magma Armor, Sheer Force, and Drought's effects. At the end of each turn, foes take Fire-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Fire immunities.",
+		shortDesc: "Magma Armor + Sheer Force + Drought; Fire chip respects effectiveness and immunities.",
 	},
 	soultag: {
 		name: "Soul Tag",
@@ -3130,7 +3139,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	echofiend: {
 		name: "Echo Fiend",
 		desc: "This Pokemon is immune to sound moves, and this immunity cannot be suppressed. Its sound moves become Flying type and have 1.5x power. This Pokemon's side is immune to its own damaging sound-based moves.",
-		shortDesc: "Unsuppressible sound immunity; sound moves become Flying and have 1.5x power; allies avoid own sound damage.",
+		shortDesc: "Unsuppressible sound immunity; sound becomes Flying and 1.5x; allies avoid sound damage.",
 	},
 	elevate: {
 		name: "Elevate",
@@ -3295,7 +3304,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	stormsovereign: {
 		name: "Storm Sovereign",
 		desc: "On switch-in, this Pokemon sets Strong Winds for 5 turns; the weather can be changed normally. This Pokemon has Wind Power and Speed Boost's effects, its moves cannot miss, and foes take 1/16 Flying-type scaling damage at the end of each turn, blocked by Flying immunities.",
-		shortDesc: "Wind Power + Speed Boost; 5-turn Strong Winds; moves cannot miss; Flying chip respects immunities.",
+		shortDesc: "Wind Power + Speed Boost; 5-turn Strong Winds; no misses; immunity-aware Flying chip.",
 	},
 	highnoon: {
 		name: "High Noon",
