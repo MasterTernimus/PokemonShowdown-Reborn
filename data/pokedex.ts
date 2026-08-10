@@ -5751,9 +5751,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	hariyama: {
 		num: 297,
 		name: "Hariyama",
-		types: ["Fighting", "Ghost"],
+		types: ["Fighting"],
 		genderRatio: { M: 0.75, F: 0.25 },
-		baseStats: { hp: 144, atk: 130, def: 70, spa: 40, spd: 70, spe: 50 },
+		baseStats: { hp: 144, atk: 130, def: 88, spa: 40, spd: 88, spe: 50 },
 		abilities: { 0: "Thick Fat", 1: "Stamina", H: "Paradox Power" },
 		heightm: 2.3,
 		weightkg: 253.8,
