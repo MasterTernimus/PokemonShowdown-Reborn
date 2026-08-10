@@ -635,8 +635,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bonemerang: {
 		name: "Bonemerang",
-		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. As a Bone move, this move hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
-		shortDesc: "Hits 2 times. Hits airborne targets neutrally.",
+		desc: "Hits twice. This move has a higher critical-hit ratio, and each hit has a 30% chance to make the target flinch. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "Hits twice; high critical-hit ratio; each hit has 30% flinch; hits airborne neutrally.",
 		gen4: {
 			desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -649,8 +649,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bonerush: {
 		name: "Bone Rush",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times. As a Bone move, this move hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
-		shortDesc: "Hits 3-5 times. Hits airborne targets neutrally.",
+		desc: "Hits two to six times. Each hit has a 10% chance to lower the target's Defense by 1 stage. If the user holds a Thick Club, this move hits five or six times. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "Hits 2-6 times; each hit can lower Defense; Thick Club: 5-6; hits airborne neutrally.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -1537,8 +1537,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleslap: {
 		name: "Double Slap",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits three to five times. Each hit has a 10% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "Hits 3-5 times; each hit has a 10% chance to lower Attack by 1.",
 		gen4: {
 			desc: "Hits three to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -2366,8 +2366,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	furyattack: {
 		name: "Fury Attack",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits three to five times. After the final hit, the user restores HP equal to the damage dealt by that hit. If the target fainted, the user also restores 1/4 max HP. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "Hits 3-5 times; final hit drains; KO heals 1/4; hits airborne neutrally.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -3145,7 +3145,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hornattack: {
 		name: "Horn Attack",
-		shortDesc: "No additional effect.",
+		desc: "Has a 50% chance to lower the target's Defense by 1 stage. This move is boosted by Power Drill and Dual Wield.",
+		shortDesc: "50% chance to lower Defense by 1. Boosted by Power Drill and Dual Wield.",
 	},
 	horndrill: {
 		name: "Horn Drill",
@@ -4467,8 +4468,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	needlegun: {
 		name: "Needle Gun",
-		desc: "Hits 6 times. Uses Physical damage if the user's Attack is higher than its Special Attack. Has a high critical hit ratio, and each hit has a 5% chance to flinch. Desert Field doubles its power. Fairy Tale and Factory Field make it Steel type and 1.5x power.",
-		shortDesc: "Hits 6 times. Uses higher offense. High crit; 5% flinch per hit.",
+		desc: "A 30 Base Power Steel-type special attack that hits exactly six times.",
+		shortDesc: "Steel type. Hits exactly 6 times.",
 	},
 	neverendingnightmare: {
 		name: "Never-Ending Nightmare",
@@ -5881,8 +5882,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges with +4 priority on its actual charge turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks. When it attacks, the user restores 1/16 of its maximum HP. If the charge is skipped, including by Power Herb, it executes without the charge-turn priority.",
-		shortDesc: "+4 charge: +Atk/Def/SpD, 0.7x damage. Heals 1/16.",
+		desc: "This attack charges with +4 priority on its actual charge turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks. After a successful hit, the user restores 1/8 of its maximum HP. If the charge is skipped, including by Power Herb, it executes without the charge-turn priority.",
+		shortDesc: "+4 charge: +Atk/Def/SpD, 0.7x damage. Hit heals 1/8.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},
@@ -6206,8 +6207,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikecannon: {
 		name: "Spike Cannon",
-		desc: "Power is 30. Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "A 25 Base Power Steel-type attack that hits two to five times. If one of the hits breaks the target's substitute, it takes damage from the remaining hits. Skill Link makes this move hit five times.",
+		shortDesc: "25 BP Steel move. Hits 2-5 times.",
 		gen4: {
 			desc: "Hits three to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -7383,8 +7384,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watershuriken: {
 		name: "Water Shuriken",
-		desc: "This move has +1 priority and hits three to five times. Skill Link makes it hit five times, and Loaded Dice makes it hit five to six times. With Shadow Current, it always crits, has 90 Base Power on the first hit, then hits one to six more times at 20 Base Power. Ash-Greninja with Battle Bond uses 30 Base Power, hits exactly three times, and always crits.",
-		shortDesc: "+1 priority. Hits 3-5. Shadow Current: 90 BP first hit, then 1-6 hits at 20 BP.",
+		desc: "This 20 Base Power move has +1 priority, an increased critical-hit ratio, and hits two to six times. With Shadow Current, it always critically hits: the first hit has 90 Base Power, followed by one to four 20 Base Power hits, or two to five follow-up hits in Free-For-All. Ash-Greninja with Battle Bond uses 30 Base Power, hits exactly three times, and always critically hits.",
+		shortDesc: "+1 priority. 20 BP, high crit, hits 2-6. Greninja forms have special patterns.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},

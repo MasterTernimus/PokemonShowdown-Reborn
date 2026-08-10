@@ -31280,7 +31280,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			silverwind: ["4M"],
          slam: ["9L25"], 
 			sleeppowder: ["9L16", "7L16", "7V", "6L16", "5L16", "5S0", "4L16", "3L17"],
-			spore: [],
+			spore: ["9M"],
 			sleeptalk: ["9M", "7M", "7V", "6M", "5T", "4M", "3T"],
 			snore: ["9M", "7T", "7V", "6T", "5T", "4T", "3T"],
 			solarbeam: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -32079,6 +32079,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	quagsire: {
 		learnset: {
+			landswrath: ["9M"],
 			acidspray: ["9M"],
 			afteryou: ["9M", "7T", "6T", "5T"],
 			amnesia: ["9L31", "8M", "8L40", "7L24", "7V", "6L24", "5L24", "4L24", "3L23"],
@@ -32193,7 +32194,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	clodsire: {
 		learnset: {
-			landwrath: ["9M"],
+			landswrath: ["9M"],
+			eerieimpulse: ["9M"],
+			infestation: ["9M"],
 			spikecannon: ["9M"],
 			acidspray: ["9M"],
 			afteryou: [],
