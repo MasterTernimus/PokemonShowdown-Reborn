@@ -1892,8 +1892,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perishbody: {
 		name: "Perish Body",
-		desc: "If an enemy hits this Pokemon with a contact move, all opposing Pokemon get Perish Song. If an affected opposing Pokemon already has Perish Song, its countdown is reduced by 1 instead. During Haunted Field, affected foes are trapped while adjacent to this Pokemon. This effect is blocked by Holy Field and does not trigger from allies.",
-		shortDesc: "Enemy contact gives foes Perish Song; repeat hits reduce the count; traps in Haunted Field.",
+		desc: "If an enemy hits this Pokemon with a damaging move, all opposing Pokemon get Perish Song. If an affected opposing Pokemon already has Perish Song, its countdown is reduced by 1 instead. During Haunted Field, affected foes are trapped while adjacent to this Pokemon. This effect is blocked by Holy Field and does not trigger from allies.",
+		shortDesc: "Any enemy hit gives foes Perish Song; repeat hits reduce the count; traps in Haunted Field.",
 
 		start: "  The opposing Pok\u00E9mon will faint in three turns!",
 	},
