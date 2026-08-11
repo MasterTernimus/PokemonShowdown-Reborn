@@ -4,6 +4,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "Does nothing.",
 	},
 	selfsufficient: { name: "Self Sufficient", desc: "Restores 1/16 of this Pokemon's maximum HP at the end of each turn and is immune to Sandstorm and Hail damage.", shortDesc: "Heals 1/16 each turn; immune to Sandstorm and Hail." },
+	selfrepair: { name: "Self Repair", desc: "This Pokemon has Self Sufficient and Natural Cure's effects.", shortDesc: "Self Sufficient + Natural Cure." },
+	scarecrow: { name: "Scarecrow", desc: "This Pokemon has Wind Rider, Steelworker, and Stakeout's effects.", shortDesc: "Wind Rider + Steelworker + Stakeout." },
 	bruteforce: { name: "Brute Force", desc: "This Pokemon has Reckless and Rock Head's effects.", shortDesc: "Reckless + Rock Head." },
 	precision: { name: "Precision", desc: "Super-effective moves used by this Pokemon cannot miss and have an increased critical-hit ratio.", shortDesc: "Super-effective moves never miss; boosted critical-hit ratio." },
 	secondwind: { name: "Second Wind", desc: "Endures the first attack that would knock it out at 1 HP.", shortDesc: "Endures the first KO at 1 HP." },
@@ -527,12 +529,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalflower: {
 		name: "Eternal Flower",
-		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.6x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
-		shortDesc: "Grass attacks use 1.5x offenses; opposing gimmick Pokemon have stats reduced to 0.6x.",
+		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.7x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Grass attacks use 1.5x offenses; opposing gimmick Pokemon have stats reduced to 0.7x.",
 	},
 	ange: {
 		name: "Ange",
-		desc: "This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.6x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		desc: "This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.7x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
 		shortDesc: "Eternal Flower + Fairy Aura + Magic Guard; weakens opposing gimmicks.",
 	},
 	ascendance: {
@@ -902,8 +904,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	astralwatcher: {
 		name: "Astral Watcher",
-		desc: "This Pokemon has Prankster, Telepathy, and Defragment's effects.",
-		shortDesc: "Prankster + Telepathy + Defragment.",
+		desc: "This Pokemon has Prankster, Telepathy, Defragment, and Power Spot's effects.",
+		shortDesc: "Prankster + Telepathy + Defragment + Power Spot.",
 	},
 	treasuretitan: {
 		name: "Treasure Titan",
@@ -1582,8 +1584,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	prismscale: {
 		name: "Prism Scale",
-		desc: "This Pokemon has Marvel Scale, Water Veil, and Dragonize's effects. Its Defense is 1.5x while statused or in boosted fields, it cannot be burned, it gains Aqua Ring on switch-in, it is immune to hail and sandstorm damage, its Normal-type moves become Dragon type and have 1.2x power, and it gains STAB on Dragon-type moves.",
-		shortDesc: "Marvel Scale + Water Veil + Dragonize.",
+		desc: "This Pokemon has Marvel Scale, Water Veil, Dragonize, and Self Sufficient's effects.",
+		shortDesc: "Marvel Scale + Water Veil + Dragonize + Self Sufficient.",
 	},
 	megalauncher: {
 		name: "Mega Launcher",
@@ -1977,8 +1979,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	powerofalchemy: {
 		name: "Power of Alchemy",
-		desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are As One, Battle Bond, Comatose, Commander, Disguise, Embody Aspect, Flower Gift, Forecast, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Poison Puppeteer, Power Construct, Power of Alchemy, Protosynthesis, Quark Drive, Receiver, RKS System, Schooling, Shields Down, Stance Change, Tera Shell, Tera Shift, Teraform Zero, Trace, Wonder Guard, Zen Mode, and Zero to Hero.",
-		shortDesc: "This Pokemon copies the Ability of an ally that faints.",
+		desc: "This Pokemon has Self Sufficient and Regenerator's effects. It copies a fainted ally's Ability while retaining both built-in effects until it switches out.",
+		shortDesc: "Self Sufficient + Regenerator; copies a fainted ally's Ability and retains both.",
 		gen8: {
 			desc: "This Pokemon copies the Ability of an ally that faints. Abilities that cannot be copied are As One, Battle Bond, Comatose, Disguise, Flower Gift, Forecast, Gulp Missile, Hunger Switch, Ice Face, Illusion, Imposter, Multitype, Neutralizing Gas, Power Construct, Power of Alchemy, Receiver, RKS System, Schooling, Shields Down, Stance Change, Trace, Wonder Guard, and Zen Mode.",
 		},
@@ -2184,8 +2186,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rockypayload: {
 		name: "Rocky Payload",
-		desc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Rock-type attack, or 2x in Rocky Terrain. It gains Rock-type resistances without gaining Rock-type weaknesses.",
-		shortDesc: "Rock attacks 1.5x, or 2x in Rocky Terrain; gains Rock resistances, not weaknesses.",
+		desc: "This Pokemon gains Rock STAB. Its offensive stat is multiplied by 1.5 while using a Rock-type attack, or 2x in Rocky Terrain. It gains Rock-type resistances without gaining Rock-type weaknesses.",
+		shortDesc: "Rock STAB; Rock attacks 1.5x, or 2x in Rocky Terrain; gains Rock resistances.",
 	},
 	roughskin: {
 		name: "Rough Skin",
@@ -2568,8 +2570,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "This Pokemon has Pollen Bloom, Self Sufficient, and Byxbysion Touch's effects. Poison-type moves drain 1/2 of their damage, and Poison moves can poison attackers that make contact.",
-		shortDesc: "Pollen Bloom + Self Sufficient + Poison drain.",
+		desc: "This Pokemon has Pollen Bloom, Self Sufficient, and Byxbysion Touch's effects. Poison-type moves drain 1/2 of their damage, and attacks that make contact with this Pokemon can poison the attacker.",
+		shortDesc: "Pollen Bloom + Self Sufficient + Poison drain + Poison Touch.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
@@ -2641,13 +2643,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	steamengine: {
 		name: "Steam Engine",
-		desc: "This Pokemon's Speed is raised by 6 stages after it is damaged by a Fire- or Water-type move.",
-		shortDesc: "This Pokemon's Speed is raised by 6 stages after it is damaged by Fire/Water moves.",
+		desc: "This Pokemon has Self Sufficient and Magma Armor. Fire- or Water-type hits raise its Speed by 6 stages; heat fields activate it on entry, and Water Surface, Underwater, or Volcanic Terrain raises Speed each turn.",
+		shortDesc: "Self Sufficient + Magma Armor; Fire/Water hits raise Speed by 6.",
 	},
 	steelworker: {
 		name: "Steelworker",
-		desc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Steel-type attack, or 2x in Factory Terrain. It gains Steel-type resistances and Poison immunity without gaining Steel-type weaknesses.",
-		shortDesc: "Steel attacks 1.5x, or 2x in Factory Terrain; gains Steel resistances and Poison immunity, not weaknesses.",
+		desc: "This Pokemon gains Steel STAB. Its offensive stat is multiplied by 1.5 while using a Steel-type attack, or 2x in Factory Terrain. It gains Steel-type resistances and Poison immunity without gaining Steel-type weaknesses.",
+		shortDesc: "Steel STAB; Steel attacks 1.5x, or 2x in Factory; gains Steel defensive traits.",
 	},
 	steelyspirit: {
 		name: "Steely Spirit",
@@ -2996,8 +2998,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	phantomfist: {
 		name: "Phantom Fist",
-		desc: "This Pokemon's moves cannot miss and it has Filter, Self Sufficient, and Unseen Fist's effects.",
-		shortDesc: "Moves cannot miss + Filter + Self Sufficient + Unseen Fist.",
+		desc: "This Pokemon's moves cannot miss and it has Filter, Self Repair, and Unseen Fist's effects.",
+		shortDesc: "Moves cannot miss + Filter + Self Repair + Unseen Fist.",
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",
@@ -3040,12 +3042,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	waterbubble: {
 		name: "Water Bubble",
-		desc: "This Pokemon's offensive stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon has Water Veil's effects: it cannot be burned, gaining this Ability while burned cures it, it is immune to Hail and Sandstorm damage, and it gains Aqua Ring on switch-in.",
-		shortDesc: "Water power 2x; Fire power against it halved; Water Veil + Aqua Ring.",
+		desc: "This Pokemon gains Water STAB, and its offensive stat is doubled while using Water attacks. Fire attacks against it use half the attacker's offensive stat. It cannot be burned, is immune to Hail and Sandstorm damage, and gains Aqua Ring on entry.",
+		shortDesc: "Water STAB and 2x offenses; halves Fire offenses; Water Veil + Aqua Ring.",
 	},
 	watercompaction: {
 		name: "Water Compaction",
-		shortDesc: "This Pokemon's Defense is raised 2 stages after it is damaged by a Water-type move.",
+		desc: "Damage from Water-type attacks is halved. After this Pokemon is damaged by a Water-type move, its Defense rises by 2 stages.",
+		shortDesc: "Halves Water damage; taking Water damage raises Defense by 2.",
 	},
 	waterveil: {
 		name: "Water Veil",
@@ -3198,8 +3201,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
-		desc: "This Pokemon has Thick Fat, Proficient, and Invigorate's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Grass immunities; this Pokemon heals the damage dealt.",
-		shortDesc: "Thick Fat + Proficient + Invigorate; Grass scaling chip respects immunities and heals the user.",
+		desc: "This Pokemon has Thick Fat and Proficient's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Grass immunities; this Pokemon heals the damage dealt by that chip.",
+		shortDesc: "Thick Fat + Proficient; Grass scaling chip heals the user for damage dealt.",
 	},
 	waterbarrage: {
 		name: "Water Barrage",
@@ -3233,8 +3236,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "This Pokemon has Thick Fat's effect and is immune to sandstorm and hail damage. Belch used by this Pokemon can be used without eating a Berry. At the end of each turn after this Pokemon has been out for at least one turn, it gains a Stockpile stack, up to 3. This does not happen if its last move was Spit Up or Swallow. Once it reaches 3 Stockpile stacks, every other turn it chooses the foe and whether Belch or Spit Up would deal more damage, then uses only that move. Automatically used Spit Up respects protection and invulnerability. If this Pokemon uses Spit Up, it follows with Belch on the same target and loses 1 Stockpile stack. If this Pokemon uses Belch, it does not follow with Spit Up. If this Pokemon uses Swallow, it also uses Spit Up and Belch on the best target before consuming its Stockpile.",
-		shortDesc: "Thick Fat; Belch needs no Berry; auto-builds Stockpile; Spit Up/Swallow combo into Belch.",
+		desc: "This Pokemon has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile each turn. After reaching 3 Stockpiles, it waits one full turn before automatically choosing Belch or Spit Up, then can release every other turn. Its established Spit Up and Swallow combinations still apply.",
+		shortDesc: "Thick Fat; auto-Stockpiles; at 3 waits one turn, then auto-releases every other turn.",
 	},
 	invigorate: {
 		name: "Invigorate",

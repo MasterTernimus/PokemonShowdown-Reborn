@@ -410,8 +410,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	beatup: {
 		name: "Beat Up",
-		desc: "Hits one time for the user and one time for each unfainted Pokemon without a non-volatile status condition in the user's party. The power of each hit is equal to 5+(X/10), where X is each participating Pokemon's base Attack; each hit is considered to come from the user.",
-		shortDesc: "All healthy allies aid in damaging the target.",
+		desc: "Hits two to six times. Each hit has 30 base power.",
+		shortDesc: "Hits 2-6 times. Each hit has 30 power.",
 		gen4: {
 			desc: "Deals typeless damage. Hits one time for the user and one time for each unfainted Pokemon without a non-volatile status condition in the user's party. For each hit, the damage formula uses the participating Pokemon's base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense; each hit is considered to come from the user.",
 		},
@@ -5896,8 +5896,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyattack: {
 		name: "Sky Attack",
-		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges with +4 priority on its actual charge turn and executes at normal priority on the second turn. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil. If Tailwind is active on the user's side, this move attacks immediately with 90 Base Power and an even higher critical hit ratio, without charge-turn priority.",
-		shortDesc: "+4 charge: +Spe. Tailwind: 90 BP instant, +2 crit.",
+		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges with +4 priority on its actual charge turn and executes at normal priority on the second turn. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil. If used instantly through Tailwind, Strong Winds, Power Herb, or another charge-skipping effect, it retains its boosted critical-hit ratio.",
+		shortDesc: "+4 charge: +Spe. Instant use keeps its boosted critical-hit ratio.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
@@ -6207,8 +6207,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikecannon: {
 		name: "Spike Cannon",
-		desc: "A 25 Base Power Steel-type attack that hits two to five times. If one of the hits breaks the target's substitute, it takes damage from the remaining hits. Skill Link makes this move hit five times.",
-		shortDesc: "25 BP Steel move. Hits 2-5 times.",
+		desc: "A 25 Base Power Water-type attack that hits two to five times. If one of the hits breaks the target's substitute, it takes damage from the remaining hits. Skill Link makes this move hit five times.",
+		shortDesc: "25 BP Water move. Hits 2-5 times.",
 		gen4: {
 			desc: "Hits three to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},

@@ -1,6 +1,18 @@
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	powerofalchemycore: {
+		name: 'Power of Alchemy Core',
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
+		},
+	},
 	parentalbondmotherguard: {
 		name: 'Mother Guard',
 		onStart(pokemon) {
