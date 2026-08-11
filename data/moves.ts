@@ -1345,13 +1345,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	beatup: {
 		num: 251,
 		accuracy: 100,
-		basePower: 25,
+		basePower: 30,
 		category: "Physical",
 		name: "Beat Up",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 6],
 		target: "normal",
 		zMove: { basePower: 140 },
 		maxMove: { basePower: 130 },
@@ -3772,7 +3772,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	cut: {
 		num: 15,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 60,
 		category: "Physical",
 		isNonstandard: "Unobtainable",
 		name: "Cut",
@@ -18856,6 +18856,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (attacker.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')) return;
 			this.add('-prepare', attacker, move.name);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				move.critRatio = Math.max(move.critRatio || 1, 3);
 				return;
 			}
 			this.boost({ spe: 1 }, attacker, attacker, move);
@@ -19844,7 +19845,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [2, 5],
 		target: "normal",
-		type: "Steel",
+		type: "Water",
 		maxMove: { basePower: 120 },
 		contestType: "Cool",
 	},
