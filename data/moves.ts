@@ -13154,57 +13154,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				));
 			}
 			let randomMove = '';
-			let focusedTarget: Pokemon | null = null;
-			if (moves.length) {
-				moves.sort((a, b) => a.num - b.num);
-				const foes = pokemon.foes().filter(foe => !foe.fainted);
-				const shouldFocus = foes.length && (pokemon.hasAbility(['serenegrace', 'falsedevotion', 'moonlitwings', 'lunarorbit']) ||
-					pokemon.hp <= pokemon.maxhp / 4) &&
-					this.randomChance(9, 10);
-				if (shouldFocus) {
-					const scoredMoves = moves.map(move => {
-						if (move.category === 'Status' || !move.basePower || move.basePower < 90) return false;
-						const activeMove = this.dex.getActiveMove(move.id);
-						const attackStat = activeMove.category === 'Physical' ?
-							pokemon.getStat('atk', false, true) : pokemon.getStat('spa', false, true);
-						const spreadTargets = ['allAdjacent', 'allAdjacentFoes', 'all'].includes(activeMove.target);
-						let bestTarget: Pokemon | null = null;
-						let score = 0;
-						for (const foe of foes) {
-							if (!spreadTargets && !this.validTarget(foe, pokemon, activeMove.target)) continue;
-							if (!foe.runImmunity(activeMove)) continue;
-							const effectiveness = foe.runEffectiveness(activeMove);
-							if (effectiveness <= 0) continue;
-							const defenseStat = activeMove.category === 'Physical' ?
-								foe.getStat('def', false, true) : foe.getStat('spd', false, true);
-							const targetScore = move.basePower * attackStat / Math.max(1, defenseStat) * 2 ** effectiveness;
-							if (spreadTargets) {
-								score += targetScore;
-								bestTarget ||= foe;
-							} else if (targetScore > score) {
-								score = targetScore;
-								bestTarget = foe;
-							}
-						}
-						if (!score || !bestTarget) return false;
-						return { move, target: bestTarget, score };
-					}).filter(Boolean) as { move: Move, target: Pokemon, score: number }[];
-					const bestScore = scoredMoves.reduce((best, entry) => Math.max(best, entry.score), 0);
-					const focusedMoves = scoredMoves.filter(entry => entry.score >= bestScore * 0.8);
-					if (focusedMoves.length) {
-						const focusedMove = this.sample(focusedMoves);
-						randomMove = focusedMove.move.id;
-						focusedTarget = focusedMove.target;
-					}
-				}
-				if (!randomMove) randomMove = this.sample(moves).id;
-			}
-			if (!randomMove) return false;
+			if (!moves.length) return false;
+			randomMove = this.sample(moves).id;
 			const calledMove = this.dex.moves.get(randomMove);
 			const foeHPBefore = new Map(
 				pokemon.foes().map(foe => [foe, foe.hp] as const)
 			);
-			this.actions.useMove(randomMove, pokemon, focusedTarget ? { target: focusedTarget } : undefined);
+			this.actions.useMove(randomMove, pokemon);
 			// The generated move runs through Metronome's inner move path, so its
 			// normal AfterMove cleanup does not receive the actual defeated target.
 			// Preserve recharge moves' KO exception for Metronome-called moves.
