@@ -452,8 +452,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move);
 		},
-		onAfterEachBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('soulheart').onAfterEachBoost?.call(this, boost, target, source, effect);
+		onAnyFaintPriority: 1,
+		onAnyFaint() {
+			return this.dex.abilities.get('soulheart').onAnyFaint?.call(this);
 		},
 		flags: {},
 		name: "Celestial Heart",
@@ -9274,7 +9275,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source.fainted || source.isAlly(target)) return;
-			if (!this.checkMoveMakesContact(move, source, target) || this.field.isTerrain('holyterrain')) return;
+			if (this.field.isTerrain('holyterrain')) return;
 
 			this.add('-ability', target, 'Perish Body');
 			let applied = false;
