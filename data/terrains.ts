@@ -335,9 +335,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Burning Terrain');
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon?.hasAbility('blazingmane')) this.boost({ spe: 1 }, pokemon, pokemon);
+				}
 				if (this.field.isWeather('hail')) {
 					this.field.clearWeather();
 				}
+			},
+			onSwitchIn(pokemon) {
+				if (pokemon.hasAbility('blazingmane')) this.boost({ spe: 1 }, pokemon, pokemon);
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Burning Terrain');
@@ -3182,9 +3188,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Volcanic Terrain');
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon?.hasAbility('blazingmane')) this.boost({ spe: 1 }, pokemon, pokemon);
+				}
 				if (this.field.isWeather('hail')) {
 					this.field.clearWeather();
 				}
+			},
+			onSwitchIn(pokemon) {
+				if (pokemon.hasAbility('blazingmane')) this.boost({ spe: 1 }, pokemon, pokemon);
 			},
 			onWeatherChange() {
 				if (this.field.isWeather('hail')) {

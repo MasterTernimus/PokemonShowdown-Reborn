@@ -1013,7 +1013,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (source?.hasItem('lightclay') ||
+				if (source?.hasAbility('sandsovereign') || source?.hasItem('lightclay') ||
 					this.field.isTerrain(['desertterrain', 'rockyterrain', 'ashenbeachterrain'])) {
 					return 8;
 				}
