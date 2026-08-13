@@ -11556,7 +11556,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source === target || !move || move.category === 'Status') return;
-			if (!this.randomChance(1, 2)) return;
+			if (!this.randomChance(3, 10)) return;
 			const status = ['slp', 'par', 'psn'][this.random(3)];
 			source.setStatus(status, target);
 		},

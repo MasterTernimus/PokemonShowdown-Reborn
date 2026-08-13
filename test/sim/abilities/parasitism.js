@@ -50,7 +50,7 @@ describe('Parasitism and Resuscitation', function () {
 		assert.equal(before - parasect.hp, Math.floor(parasect.maxhp / 8));
 	});
 
-	it('should apply its 50% Effect Spore behavior to non-contact damaging attacks', function () {
+	it('should apply its 30% Effect Spore behavior to non-contact damaging attacks', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', forceRandomChance: true}, [[
 			{species: 'Parasect', ability: 'parasitism', moves: ['splash']},
 		], [

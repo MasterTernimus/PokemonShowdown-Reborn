@@ -2510,8 +2510,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon has Dry Skin and a strengthened Effect Spore: every damaging hit has a 50% chance to inflict sleep, paralysis, or poison on the attacker. While above 50% HP, weaknesses are neutralized, incoming damage is reduced to 0.8x, Magic Guard is active, opposing status moves fail, and opposing attack secondary effects are blocked. The first time Parasect would faint, it fake-faints at 1 HP, then becomes Parasect-Parasite at the end of the turn, revives at full HP, and immediately uses its strongest damaging move. This Ability cannot be suppressed and is immune to Neutralization.",
-		shortDesc: "Dry Skin + 50% Effect Spore; above half: defenses + Magic Guard; first KO triggers Resuscitation.",
+		desc: "This Pokemon has Dry Skin and Effect Spore: every damaging hit has a 30% chance to inflict sleep, paralysis, or poison on the attacker. While above 50% HP, weaknesses are neutralized, incoming damage is reduced to 0.8x, Magic Guard is active, opposing status moves fail, and opposing attack secondary effects are blocked. The first time Parasect would faint, it fake-faints at 1 HP, then becomes Parasect-Parasite at the end of the turn, revives at full HP, and immediately uses its strongest damaging move. This Ability cannot be suppressed and is immune to Neutralization.",
+		shortDesc: "Dry Skin + 30% Effect Spore; above half: defenses + Magic Guard; first KO triggers Resuscitation.",
 	},
 	resuscitation: {
 		name: "Resuscitation",
