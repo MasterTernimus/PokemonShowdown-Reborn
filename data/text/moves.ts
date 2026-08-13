@@ -247,8 +247,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	astonish: {
 		name: "Astonish",
-		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to make the target flinch.",
+		desc: "Has a 100% chance to make the target flinch. Fails unless it is the user's first turn on the field.",
+		shortDesc: "Ghost-type Fake Out. First turn out only; 100% flinch.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
@@ -862,8 +862,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ceaselessedge: {
 		name: "Ceaseless Edge",
-		desc: "If this move is successful, it sets up a layer of Spikes on the opposing side and gives the hit target Splinter for 3 turns. Splinter deals residual damage based on a 25 Base Power Dark-type physical attack from the original user, applying type effectiveness but no random damage variance.",
-		shortDesc: "Sets Spikes. Target takes 3 turns of Splinter.",
+		desc: "If this move is successful, it sets up a layer of Spikes on the opposing side.",
+		shortDesc: "Sets Spikes on the opposing side.",
 	},
 	celebrate: {
 		name: "Celebrate",
@@ -4099,8 +4099,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	meteormash: {
 		name: "Meteor Mash",
-		desc: "Has a 20% chance to raise the user's Attack by 1 stage.",
-		shortDesc: "20% chance to raise the user's Attack by 1.",
+		desc: "Has a 30% chance to raise the user's Attack by 1 stage.",
+		shortDesc: "30% chance to raise the user's Attack by 1.",
 	},
 	metronome: {
 		name: "Metronome",
@@ -4460,8 +4460,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	needlearm: {
 		name: "Needle Arm",
-		desc: "Has a 30% chance to make the target flinch. If this move hits, the target takes Splinter residual damage for 3 turns based on a 25 Base Power Grass-type physical attack from the original user, applying type effectiveness but no random damage variance.",
-		shortDesc: "30% flinch. Target takes 3 turns of Splinter.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
@@ -4713,8 +4713,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pinmissile: {
 		name: "Pin Missile",
-		desc: "Hits three to five times. If this move hits, the target takes Splinter residual damage for 3 turns based on a 25 Base Power Bug-type physical attack from the original user, applying type effectiveness but no random damage variance. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times. Target takes 3 turns of Splinter.",
+		desc: "Hits three to five times. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 3-5 times.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -6435,8 +6435,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stoneaxe: {
 		name: "Stone Axe",
-		desc: "If this move is successful, it sets Stealth Rock on the opposing side and gives the hit target Splinter for 3 turns. Splinter deals residual damage based on a 25 Base Power Rock-type physical attack from the original user, applying type effectiveness but no random damage variance.",
-		shortDesc: "Sets Stealth Rock. Target takes Splinter.",
+		desc: "If this move is successful, it sets Stealth Rock on the opposing side.",
+		shortDesc: "Sets Stealth Rock on the opposing side.",
 	},
 	stoneedge: {
 		name: "Stone Edge",

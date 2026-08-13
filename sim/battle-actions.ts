@@ -1326,7 +1326,7 @@ export class BattleActions {
 		let leftoverDamage = 0;
 		const knockedOut = new Set<Pokemon>();
 		for (const [i, target] of targets.entries()) {
-			if (!target || target === false) continue;
+			if (!target) continue;
 			const calculated = calculatedDamage[i];
 			const applied = appliedDamage[i];
 			if (typeof calculated !== 'number' || typeof applied !== 'number') continue;
@@ -1338,7 +1338,7 @@ export class BattleActions {
 		}
 		if (!leftoverDamage) return;
 		const spilloverTargets = targets.filter((target): target is Pokemon => (
-			!!target && target !== false && !knockedOut.has(target) &&
+			!!target && !knockedOut.has(target) &&
 			!!target.hp && !target.fainted && !target.isAlly(source)
 		));
 		if (!spilloverTargets.length) return;
@@ -1757,7 +1757,7 @@ export class BattleActions {
 			continentalcrush: ['mountainterrain', 4],
 			infernooverdrive: ['burningterrain', 3],
 		};
-		let zTerrain = zTerrains[move.id];
+		let zTerrain: [string, number] | undefined = zTerrains[move.id];
 		const caveTerrains = ['caveterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain'];
 		if (this.battle.field.isTerrain('coldeclipseterrain') && ['subzeroslammer', 'continentalcrush'].includes(move.id)) {
 			zTerrain = undefined;
@@ -2234,6 +2234,14 @@ export class BattleActions {
 		pokemon.updateMaxHp();
 	}
 
+	refreshMegaOptions(pokemon: Pokemon) {
+		const canUseAnotherGimmick = pokemon.side.gimmickCount < 2 &&
+			(this.battle.gameType !== 'freeforall' || pokemon.side.megaEvoCount < 2);
+		pokemon.canMegaEvo = canUseAnotherGimmick ? this.canMegaEvo(pokemon) : false;
+		pokemon.canMegaEvoX = canUseAnotherGimmick ? this.canMegaEvoX(pokemon) : false;
+		pokemon.canMegaEvoY = canUseAnotherGimmick ? this.canMegaEvoY(pokemon) : false;
+	}
+
 	runMegaEvo(pokemon: Pokemon) {
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
@@ -2241,11 +2249,12 @@ export class BattleActions {
 
 		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
-		if (speciesid === 'gardevoirvoidmega') {
+		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
 		}
 		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
+		this.refreshMegaOptions(pokemon);
 		return true;
 	}
 
@@ -2257,8 +2266,12 @@ export class BattleActions {
 
 		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		if (toID(speciesid) === 'gardevoirvoidmega') {
+			this.battle.add('-message', 'The Angel of Death has descended!');
+		}
 		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
+		this.refreshMegaOptions(pokemon);
 		return true;
 	}
 
@@ -2269,8 +2282,12 @@ export class BattleActions {
 
 		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		if (toID(speciesid) === 'gardevoirvoidmega') {
+			this.battle.add('-message', 'The Angel of Death has descended!');
+		}
 		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 		this.battle.runEvent('AfterMega', pokemon);
+		this.refreshMegaOptions(pokemon);
 		return true;
 	}
 

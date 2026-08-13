@@ -9,7 +9,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	bruteforce: { name: "Brute Force", desc: "This Pokemon has Reckless and Rock Head's effects.", shortDesc: "Reckless + Rock Head." },
 	precision: { name: "Precision", desc: "Super-effective moves used by this Pokemon cannot miss and have an increased critical-hit ratio.", shortDesc: "Super-effective moves never miss; boosted critical-hit ratio." },
 	secondwind: { name: "Second Wind", desc: "Endures the first attack that would knock it out at 1 HP.", shortDesc: "Endures the first KO at 1 HP." },
-	rapidresponse: { name: "Rapid Response", desc: "Until this Pokemon uses its first damaging move, its Speed is 1.5x and its Sp. Atk is 1.2x.", shortDesc: "Before first damaging move: 1.5x Speed and 1.2x Sp. Atk." },
+	rapidresponse: { name: "Rapid Response", desc: "On this Pokemon's first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x.", shortDesc: "First active turn: 1.5x Spe and 1.2x Sp. Atk." },
 	seafiend: { name: "Sea Fiend", desc: "This Pokemon has Toxic Debris and Water Bubble's effects.", shortDesc: "Toxic Debris + Water Bubble." },
 	hisuianoath: { name: "Hisuian Oath", desc: "This Pokemon has Sworn Duty, Tough Claws, and Corrosion's effects.", shortDesc: "Sworn Duty + Tough Claws + Corrosion." },
 	hisuianvanguard: { name: "Hisuian Vanguard", desc: "This Pokemon has Rapid Response and Wind Power's effects.", shortDesc: "Rapid Response + Wind Power." },
@@ -249,8 +249,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "At the end of each turn, this Pokemon restores 1/16 max HP. When this Pokemon knocks out another Pokemon, it transforms into its Bond form, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 0.75x damage from attacks, takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. In Doubles, Multi, or Free-For-All, once per battle, if a move would knock it out from above 1/3 max HP, it survives with 1 HP. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization. In Cold Eclipse, its attacks deal 1.3x damage and it takes 0.6x damage from attacks.",
-		shortDesc: "Heals 1/16; 0.75x from attacks; Cold Eclipse: 1.3x damage, 0.6x taken.",
+		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 0.75x damage from attacks, takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. In Doubles, Multi, or Free-For-All, once per battle, if a move would knock it out from above 1/3 max HP, it survives with 1 HP. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization. In Cold Eclipse, its attacks deal 1.3x damage and it takes 0.6x damage from attacks.",
+		shortDesc: "0.75x damage from attacks; KO transforms/heals; Cold Eclipse boosts offense and defense.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
@@ -944,8 +944,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	riptideclaws: {
 		name: "Riptide Claws",
-		desc: "This Pokemon has Swift Swim and Technician's effects.",
-		shortDesc: "Swift Swim + Technician.",
+		desc: "This Pokemon has Swift Swim, Tough Claws, and Shell Armor's effects.",
+		shortDesc: "Swift Swim + Tough Claws + Shell Armor.",
 	},
 	dryskin: {
 		name: "Dry Skin",
@@ -1682,8 +1682,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon has Cursed Body's effect. When this Pokemon damages a target, or is damaged by an attack, the other Pokemon gains Perish Song, then Curse, then Taunt, then Torment from repeated hits. Curse applied by Requiem deals 1/8 max HP each turn. If this Pokemon knocks out a target with a move, it restores 1/8 max HP per target knocked out. When this Pokemon faints, it creates Haunted Field for 5 turns, and this Ability cannot be suppressed.",
-		shortDesc: "Hits progress Perish Song -> Curse -> Taunt -> Torment; KO heals; faint sets Haunted.",
+		desc: "This Pokemon has Cursed Body's effect. Each direct damaging interaction with an opposing Pokemon progresses that target through Perish Song, Curse, then Spite. Each target has its own progression, which clears when it switches out. Curse applied by Requiem deals 1/8 max HP each turn. Whenever another Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns and curses every active Pokemon; weaker Ability-applied Curses are upgraded to the standard 1/4 max HP Curse. This Ability cannot be suppressed.",
+		shortDesc: "Cursed Body; KO Heals; Faints set Haunted; Hits Progress Perish -> Curse -> Spite",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
@@ -2510,8 +2510,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon always has Dry Skin's effects, gains Grass-type resistances without Grass-type weaknesses, is immune to powder moves, and is healed by Black Sludge. This Ability cannot be suppressed or ignored and is immune to Neutralization's stat drops and Royal Decree's stat control. When hit by a damaging move, there is a 50% chance to inflict sleep, paralysis, or poison on the attacker. While it has more than 50% HP, its weaknesses are neutralized, incoming damage is reduced to 0.8x, it is protected from indirect damage including entry hazards, opposing status moves fail against it, and secondary effects from attacks are blocked.",
-		shortDesc: "Dry Skin + Grass resistances; ignores Neutralization/Royal Decree.",
+		desc: "This Pokemon has Dry Skin and a strengthened Effect Spore: every damaging hit has a 50% chance to inflict sleep, paralysis, or poison on the attacker. While above 50% HP, weaknesses are neutralized, incoming damage is reduced to 0.8x, Magic Guard is active, opposing status moves fail, and opposing attack secondary effects are blocked. The first time Parasect would faint, it fake-faints at 1 HP, then becomes Parasect-Parasite at the end of the turn, revives at full HP, and immediately uses its strongest damaging move. This Ability cannot be suppressed and is immune to Neutralization.",
+		shortDesc: "Dry Skin + 50% Effect Spore; above half: defenses + Magic Guard; first KO triggers Resuscitation.",
+	},
+	resuscitation: {
+		name: "Resuscitation",
+		desc: "After Parasect revives as Parasect-Parasite, this Ability has Magic Guard, Self Repair, and Shadow Shield's effects.",
+		shortDesc: "Magic Guard + Self Repair + Shadow Shield.",
 	},
 	pendulumswing: {
 		name: "Pendulum Swing",
@@ -2612,8 +2617,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stancechange: {
 		name: "Stance Change",
-		desc: "This Pokemon has Self Sufficient and Dual Wield. Aegislash changes to Blade Forme before attacking and Shield Forme before King's Shield. Shield Forme takes 20% less damage; consecutive Free-for-All hits deal 30% less damage. Blade Forme deals 1.2x damage.",
-		shortDesc: "Self Sufficient + Dual Wield; Shield: 20% less damage; Blade: 1.2x damage.",
+		desc: "This Pokemon has Dual Wield. Aegislash changes to Blade Forme before attacking and Shield Forme before King's Shield. Shield Forme takes 20% less damage; consecutive Free-for-All hits deal 30% less damage. Blade Forme deals 1.2x damage.",
+		shortDesc: "Dual Wield; Shield: 20% less damage; Blade: 1.2x damage.",
 		gen6: {
 			desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield.",
 		},
@@ -3114,8 +3119,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	zerotohero: {
 		name: "Zero to Hero",
-		desc: "This Pokemon has Self Sufficient and gains Fighting-type STAB. Palafin changes to Hero Form after switching out or entering in Water fields. In Doubles, Multi, or Free-for-All, it survives one KO at 1 HP. Hero Form grants Friend Guard and heals active allies on entry.",
-		shortDesc: "Self Sufficient; Palafin becomes Hero; Fighting STAB; Hero: Friend Guard + entry healing.",
+		desc: "This Pokemon gains Fighting-type STAB. Palafin changes to Hero Form after switching out or entering in Water fields. In Doubles, Multi, or Free-for-All, it survives one KO at 1 HP. Hero Form grants Friend Guard and heals active allies on entry.",
+		shortDesc: "Palafin becomes Hero; Fighting STAB; Hero: Friend Guard + entry healing.",
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
@@ -3326,8 +3331,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "Ignores abilities; blocks flinching and Intimidate; deals 2x damage through screens, 1.5x when moving first, and takes 30% damage if hit first.",
-		shortDesc: "Ignores abilities; 2x vs screens; 1.5x when first; takes 30% if hit first.",
+		desc: "This Pokemon has Mold Breaker and Inner Focus. It deals 2x damage through screens and 1.5x damage when moving first. In Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it gains 1 Accuracy on entry, deals 1.5x damage, and takes 50% less damage. Outside those fields, it takes 70% less damage when hit before its attacker has moved. Bewitched Woods disables these effects.",
+		shortDesc: "Mold Breaker + Inner Focus; 2x vs screens; 1.5x moving first; boosted fields halve damage.",
 	},
 	duskdrive: {
 		name: "Dusk Drive",

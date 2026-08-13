@@ -1035,7 +1035,7 @@ export class Pokemon {
 			const move = this.battle.dex.moves.get(moveSlot.id);
 			if (
 				this.battle.gameType !== 'freeforall' && move.multihit &&
-				['allAdjacent', 'allAdjacentFoes'].includes(target)
+				target && ['allAdjacent', 'allAdjacentFoes'].includes(target)
 			) {
 				target = 'normal';
 			}
@@ -2063,7 +2063,7 @@ export class Pokemon {
 			emperorsresolve: ['competitive', 'slushrush'],
 			execution: ['duskilate'],
 			fallenstar: ['moldbreaker', 'dualwield', 'skilllink', 'selfsufficient'],
-			parasitism: [],
+			parasitism: ['dryskin', 'effectspore'],
 			wickedsnare: [],
 			corrosivescale: ['marvelscale'],
 			aurainstinct: ['adaptability', 'dualwield', 'secondwind'],
@@ -2074,7 +2074,7 @@ export class Pokemon {
 			siegelauncher: ['stalwart'],
 			soultag: ['soulfire', 'shadowtag'],
 			deserttyrant: ['sandstream'],
-			riptideclaws: ['swiftswim', 'technician'],
+			riptideclaws: ['swiftswim', 'toughclaws', 'shellarmor'],
 			fossilfrenzy: ['klutz'],
 			phantomfist: ['unseenfist'],
 			alloycore: ['magicguard', 'clearbody'],
@@ -2138,6 +2138,9 @@ export class Pokemon {
 			streettyrant: ['intimidate', 'regenerator'],
 			divineintervention: ['friendguard', 'regenerator'],
 			shadowguard: ['shadowshield', 'elevate'],
+			requiem: ['cursedbody'],
+			ultrainstinct: ['moldbreaker', 'innerfocus'],
+			resuscitation: ['magicguard', 'selfrepair', 'shadowshield'],
 		};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
