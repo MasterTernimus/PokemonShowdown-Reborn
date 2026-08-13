@@ -3612,7 +3612,15 @@ export class Battle {
 		}
 		if (outcome) {
 			pokemon.canTerastallize = null;
-			if (gimmick !== 'Gigantamax') pokemon.canMegaEvo = false;
+			// A Pokemon may use two different gimmicks in this format. Do not
+			// consume its Mega option just because it used its first gimmick;
+			// Mega choices are cleared when Mega itself is used, or when the
+			// side reaches the overall gimmick limit below.
+			if (gimmick === 'Mega') {
+				pokemon.canMegaEvo = false;
+				pokemon.canMegaEvoX = false;
+				pokemon.canMegaEvoY = false;
+			}
 			pokemon.canUltraBurst = null;
 			pokemon.side.gimmickCount++;
 			if (gimmick === 'Gigantamax') {
