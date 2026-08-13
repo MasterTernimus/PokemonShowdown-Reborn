@@ -67,6 +67,7 @@ function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
 			const move = battle.dex.getActiveMove(moveid);
 			const damage = battle.actions.getDamage(pokemon, target, move, true);
 			if (typeof damage !== 'number') continue;
+			if (moveid === 'belch' && damage >= target.hp) return { moveid, target, damage };
 			if (!best || damage > best.damage) best = { moveid, target, damage };
 		}
 	}
@@ -205,6 +206,155 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Brute Force",
 		rating: 4,
 		num: 10289,
+	},
+	burningrage: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, source, target, move) {
+			let result = this.dex.abilities.get('bruteforce').onBasePower?.call(this, basePower, source, target, move);
+			return this.dex.abilities.get('ironfist').onBasePower?.call(this, result ?? basePower, source, target, move);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('bruteforce').onDamage?.call(this, damage, target, source, effect);
+		},
+		onModifyMove(move) {
+			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+		},
+		flags: {},
+		name: "Burning Rage",
+		rating: 4,
+		num: 10349,
+	},
+	emperorspride: {
+		onAfterEachBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('defiant').onAfterEachBoost?.call(this, boost, target, source, effect);
+		},
+		onModifySpe(spe, pokemon) {
+			return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon);
+		},
+		onModifyMove(move) {
+			if (move.type === 'Flying') move.forceSTAB = true;
+		},
+		flags: {},
+		name: "Emperor's Pride",
+		rating: 4,
+		num: 10350,
+	},
+	fightingfiend: {
+		onModifyMove(move) {
+			this.dex.abilities.get('unseenfist').onModifyMove?.call(this, move);
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, source, target, move) {
+			let result = this.dex.abilities.get('unseenfist').onBasePower?.call(this, basePower, source, target, move);
+			return this.dex.abilities.get('striker').onBasePower?.call(this, result ?? basePower, source, target, move);
+		},
+		flags: {},
+		name: "Fighting Fiend",
+		rating: 4,
+		num: 10351,
+	},
+	kickfiend: {
+		onModifySpe(spe, pokemon) {
+			return this.dex.abilities.get('violentrush').onModifySpe?.call(this, spe, pokemon);
+		},
+		onModifyAtk(atk, pokemon) {
+			return this.dex.abilities.get('violentrush').onModifyAtk?.call(this, atk, pokemon);
+		},
+		onAfterMove(source, target, move) {
+			return this.dex.abilities.get('violentrush').onAfterMove?.call(this, source, target, move);
+		},
+		onUpdate(pokemon) {
+			return this.dex.abilities.get('limber').onUpdate?.call(this, pokemon);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('limber').onSetStatus?.call(this, status, target, source, effect);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('limber').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('striker').onBasePower?.call(this, basePower, source, target, move);
+		},
+		flags: {},
+		name: "Kick Fiend",
+		rating: 4,
+		num: 10352,
+	},
+	neurotoxin: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			return this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('shedskin').onSetStatus?.call(this, status, target, source, effect);
+		},
+		flags: { breakable: 1 },
+		name: "Neurotoxin",
+		rating: 4,
+		num: 10353,
+	},
+	punchfiend: {
+		onModifyMove(move) {
+			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+		},
+		onTryAddVolatile(status, pokemon) {
+			return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('ironfist').onBasePower?.call(this, basePower, source, target, move);
+		},
+		flags: {},
+		name: "Punch Fiend",
+		rating: 4,
+		num: 10354,
+	},
+	spinfiend: {
+		onCriticalHit: false,
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('battlearmor').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('technician').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onUpdate(pokemon) {
+			return this.dex.abilities.get('vitalspirit').onUpdate?.call(this, pokemon);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('vitalspirit').onSetStatus?.call(this, status, target, source, effect);
+		},
+		flags: { breakable: 1 },
+		name: "Spin Fiend",
+		rating: 4,
+		num: 10355,
+	},
+	terragift: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('hospitality').onStart?.call(this, pokemon);
+		},
+		onAnyModifyBoost(boosts, pokemon) {
+			return this.dex.abilities.get('unaware').onAnyModifyBoost?.call(this, boosts, pokemon);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		flags: { breakable: 1 },
+		name: "Terra Gift",
+		rating: 4,
+		num: 10356,
 	},
 	precision: {
 		onModifyMove(move, source, target) {
@@ -2572,6 +2722,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10156,
 	},
 	mourningvessel: {
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
+		},
 		onStart(pokemon) {
 			let fallen = pokemon.side.totalFainted;
 			if (pokemon.side.allySide) fallen += pokemon.side.allySide.totalFainted;
@@ -3625,6 +3778,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, target, { target: source });
 			return null;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		flags: { breakable: 1 },
 		name: "Mirror Greed",
@@ -4700,9 +4856,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	ragingfists: {
 		onModifyMove(move, pokemon) {
-			this.dex.abilities.get('skilllink').onModifyMove?.call(this, move, pokemon);
+			this.dex.abilities.get('fightingfiend').onModifyMove?.call(this, move, pokemon);
 			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, pokemon);
-			this.dex.abilities.get('unseenfist').onModifyMove?.call(this, move, pokemon);
+			this.dex.abilities.get('scrappy').onModifyMove?.call(this, move, pokemon);
 		},
 		onSourceModifySecondaries(secondaries, target, source, move) {
 			return this.dex.abilities.get('hydrabond').onSourceModifySecondaries?.call(this, secondaries, target, source, move);
@@ -5027,7 +5183,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (source.runStatusImmunity('powder')) {
 				const r = this.random(100);
 				if (r < 10) {
-					source.setStatus('slp', target);
+					const sleepClauseActive = this.ruleTable.has('sleepclausemod') || this.ruleTable.has('stadiumsleepclause');
+					const hasClauseSleep = source.side.pokemon.some(pokemon =>
+						pokemon.hp && pokemon.status === 'slp' && !pokemon.statusState.source?.isAlly(pokemon)
+					);
+					if (!source.setStatus('slp', target) && sleepClauseActive && hasClauseSleep) {
+						// Sleep Clause rejected the roll: reroll the Effect Spore outcome without Sleep.
+						const reroll = this.random(9);
+						if (reroll === 0) source.setStatus('par', target);
+						else if (reroll === 1) source.setStatus('psn', target);
+					}
 				} else if (r < 20) {
 					source.setStatus('par', target);
 				} else if (r < 30) {
@@ -8316,6 +8481,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			(this.effect as any).advanceRequiem.call(this, target, source);
 		},
+		onAnyAfterSetStatus(status, target, source) {
+			const holder = this.effectState.target;
+			if (!holder || source !== holder || target === holder || target.isAlly(holder)) return;
+			(this.effect as any).advanceRequiem.call(this, target, holder);
+		},
 		onAnyFaint(fainted) {
 			const pokemon = this.effectState.target;
 			if (!pokemon || pokemon.fainted || fainted === pokemon) return;
@@ -10763,7 +10933,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.hp) return;
 			const removableVolatiles = [
 				'attract', 'confusion', 'curse', 'disable', 'encore', 'healblock', 'leechseed',
-				'nightmare', 'taunt', 'torment', 'yawn',
+				'nightmare', 'perishsong', 'taunt', 'torment', 'yawn',
 			];
 			const hasNegativeVolatile = removableVolatiles.some(volatile => pokemon.volatiles[volatile]);
 			const hasNegativeBoost = Object.values(pokemon.boosts).some(boost => boost < 0);
@@ -11478,10 +11648,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpA(spa) {
 			return this.chainModify(1.5);
 		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('magicbounce').onTryHit?.call(this, target, source, move);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
 		flags: {},
 		name: "Pendulum Swing",
 		rating: 4.5,
 		num: 10256,
+	},
+	lunarspirit: {
+		onModifyMove(move) {
+			if (move.type === 'Psychic' || move.type === 'Normal') move.forceSTAB = true;
+		},
+		flags: {},
+		name: "Lunar Spirit",
+		rating: 3,
+		num: 10348,
 	},
 	royaldecree: {
 		onStart(pokemon) {
@@ -13642,10 +13828,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryBoost(boost, target, source, effect) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
-		},
-		onModifyMove(move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {

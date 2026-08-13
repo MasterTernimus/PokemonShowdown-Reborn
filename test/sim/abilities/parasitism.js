@@ -100,11 +100,18 @@ describe('Parasitism and Resuscitation', function () {
 		battle.makeChoices('team 1', 'team 1');
 		const parasect = battle.p1.active[0];
 		parasect.sethp(1);
+		parasect.setStatus('brn');
+		parasect.addVolatile('confusion');
+		parasect.boost({atk: 2, def: -1});
 		battle.makeChoices('move splash', 'move aerialace');
 
 		assert.species(parasect, 'Parasect-Parasite');
 		assert.equal(parasect.ability, 'resuscitation');
 		assert.fullHP(parasect);
+		assert.equal(parasect.boosts.atk, 0, 'Resuscitation should clear positive stat boosts');
+		assert.equal(parasect.boosts.def, 0, 'Resuscitation should clear negative stat boosts');
+		assert.equal(parasect.status, '', 'Resuscitation should cure the revived Pokemon');
+		assert.false(parasect.volatiles.confusion, 'Resuscitation should clear copied volatiles');
 		assert(battle.log.some(line => line.includes('|Giga Impact|')), 'Resuscitation should select Giga Impact');
 		assert.false.fullHP(battle.p2.active[0]);
 		assert(parasect.hasAbility('magicguard'));
@@ -131,5 +138,28 @@ describe('Parasitism and Resuscitation', function () {
 		assert.species(parasect, 'Parasect-Parasite');
 		assert.fullHP(parasect);
 		assert.false.fainted(parasect);
+	});
+
+	it('should clear Shadow Force state when residual damage triggers resuscitation', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Parasect', ability: 'parasitism', moves: ['shadowforce', 'tackle']},
+		], [
+			{species: 'Tyranitar', ability: 'sandstream', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const parasect = battle.p1.active[0];
+		parasect.sethp(1);
+
+		battle.makeChoices('move shadowforce', 'move splash');
+
+		assert.species(parasect, 'Parasect-Parasite');
+		assert.fullHP(parasect);
+		assert(parasect.volatiles['twoturnmove'], 'The revival auto-move may create a fresh two-turn charge');
+		assert(!battle.log.some(line => line.includes('|move|p1a: Parasect|Shadow Force||[still]')),
+			'Revival should not inherit Shadow Force\'s old charge');
+
+		battle.makeChoices('auto', 'move splash');
+		assert(battle.log.some(line => line.includes('|move|p1a: Parasect|Shadow Force|')),
+			'Revived Parasect should complete a fresh Shadow Force charge');
 	});
 });

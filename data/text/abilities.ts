@@ -594,8 +594,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mourningvessel: {
 		name: "Mourning Vessel",
-		desc: "This Pokemon has Prankster's effect. Its damaging moves deal 20% more damage for each fainted ally, up to 2x damage. At the end of each turn, it restores 5% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
-		shortDesc: "Prankster; +20% damage per fainted ally (max 2x); heals 5% per fainted foe each turn.",
+		desc: "This Pokemon has Prankster's and Magic Guard's effects. Its damaging moves deal 20% more damage for each fainted ally, up to 2x damage. At the end of each turn, it restores 5% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
+		shortDesc: "Prankster + Magic Guard; +20% damage per fainted ally (max 2x); heals 5% per fainted foe each turn.",
 	},
 	mightyjaw: {
 		name: "Mighty Jaw",
@@ -749,8 +749,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	freezerburn: {
 		name: "Freezer Burn",
-		desc: "This Pokemon has Slush Rush, Ice Body, and Refrigerate. Refrigerate-converted moves have 1.2x power, and charge moves skip their charge turn.",
-		shortDesc: "Slush Rush + Ice Body + Refrigerate; skips charge turns.",
+		desc: "This Pokemon has Slush Rush, Ice Body, and Refrigerate. Refrigerate-converted moves have 1.2x power.",
+		shortDesc: "Slush Rush + Ice Body + Refrigerate; converted moves have 1.2x power.",
 	},
 	stormfright: {
 		name: "Storm Fright",
@@ -769,8 +769,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mirrorgreed: {
 		name: "Mirror Greed",
-		desc: "This Pokemon has Magic Bounce and Analytic's effects.",
-		shortDesc: "Magic Bounce + Analytic.",
+		desc: "This Pokemon has Magic Bounce, Analytic, and Filter's effects.",
+		shortDesc: "Magic Bounce + Analytic + Filter.",
 	},
 	uncheckedassault: {
 		name: "Unchecked Assault",
@@ -1682,8 +1682,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon has Cursed Body's effect. Each direct damaging interaction with an opposing Pokemon progresses that target through Perish Song, Curse, then Spite. Each target has its own progression, which clears when it switches out. Curse applied by Requiem deals 1/8 max HP each turn. Whenever another Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns and curses every active Pokemon; weaker Ability-applied Curses are upgraded to the standard 1/4 max HP Curse. This Ability cannot be suppressed.",
-		shortDesc: "Cursed Body; KO Heals; Faints set Haunted; Hits Progress Perish -> Curse -> Spite",
+		desc: "This Pokemon has Cursed Body's effect. Each direct damaging interaction or successful status effect against an opposing Pokemon progresses that target through Perish Song, Curse, then Spite. Each target has its own progression, which clears when it switches out. Curse applied by Requiem deals 1/8 max HP each turn. Whenever another Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns and curses every active Pokemon; weaker Ability-applied Curses are upgraded to the standard 1/4 max HP Curse. This Ability cannot be suppressed.",
+		shortDesc: "Cursed Body; KO Heals; Faints set Haunted; Hits/statuses progress Perish -> Curse -> Spite",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
@@ -2322,8 +2322,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	 shedskin: {
 		name: "Shed Skin",
-		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects, reset its negative stat stages to 0, and restore 1/4 max HP. This can also activate while below half HP.",
-		shortDesc: "50% chance to cleanse negatives, reset negative stat stages, and heal 1/4.",
+		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects including Curse and Perish Song, reset its negative stat stages to 0, and restore 1/4 max HP. This can also activate while below half HP.",
+		shortDesc: "50% chance to cleanse negatives including Curse, reset negative stat stages, and heal 1/4.",
 	},
 	sheerforce: {
 		name: "Sheer Force",
@@ -2520,8 +2520,53 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pendulumswing: {
 		name: "Pendulum Swing",
-		desc: "This Pokemon's accuracy is multiplied by 1.5, and its Special Attack is multiplied by 1.5.",
-		shortDesc: "1.5x accuracy and 1.5x Sp. Atk.",
+		desc: "This Pokemon has Magic Bounce and Filter's effects. Its accuracy and Special Attack are multiplied by 1.5.",
+		shortDesc: "Magic Bounce + Filter; 1.5x accuracy and 1.5x Sp. Atk.",
+	},
+	lunarspirit: {
+		name: "Lunar Spirit",
+		desc: "This Pokemon has STAB on Psychic- and Normal-type moves.",
+		shortDesc: "Psychic- and Normal-type moves get STAB.",
+	},
+	kickfiend: {
+		name: "Kick Fiend",
+		desc: "This Pokemon has Striker, Violent Rush, and Limber's effects.",
+		shortDesc: "Striker + Violent Rush + Limber.",
+	},
+	punchfiend: {
+		name: "Punch Fiend",
+		desc: "This Pokemon has Iron Fist, Inner Focus, and Mold Breaker's effects.",
+		shortDesc: "Iron Fist + Inner Focus + Mold Breaker.",
+	},
+	spinfiend: {
+		name: "Spin Fiend",
+		desc: "This Pokemon has Battle Armor, Technician, and Vital Spirit's effects.",
+		shortDesc: "Battle Armor + Technician + Vital Spirit.",
+	},
+	fightingfiend: {
+		name: "Fighting Fiend",
+		desc: "This Pokemon has Unseen Fist, Iron Fist, and Striker's effects.",
+		shortDesc: "Unseen Fist + Iron Fist + Striker.",
+	},
+	emperorspride: {
+		name: "Emperor's Pride",
+		desc: "This Pokemon has Defiant and Swift Swim's effects. Its Flying-type moves receive STAB.",
+		shortDesc: "Defiant + Swift Swim; Flying moves get STAB.",
+	},
+	terragift: {
+		name: "Terra Gift",
+		desc: "This Pokemon has Hospitality, Unaware, and Solid Rock's effects.",
+		shortDesc: "Hospitality + Unaware + Solid Rock.",
+	},
+	burningrage: {
+		name: "Burning Rage",
+		desc: "This Pokemon has Brute Force, Iron Fist, and Turboblaze's effects.",
+		shortDesc: "Brute Force + Iron Fist + Turboblaze.",
+	},
+	neurotoxin: {
+		name: "Neurotoxin",
+		desc: "This Pokemon has Intimidate, Strong Jaw, and Shed Skin's effects.",
+		shortDesc: "Intimidate + Strong Jaw + Shed Skin.",
 	},
 	tremor: {
 		name: "Tremor",

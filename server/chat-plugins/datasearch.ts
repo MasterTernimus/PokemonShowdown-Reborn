@@ -111,6 +111,16 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(customMoveList("Power Drill moves", drillMoves));
 	},
 	drillhelp: ["/drill or /horn - Lists all moves boosted by Power Drill."],
+	striker(target, room, user) {
+		this.checkBroadcast();
+		this.sendReplyBox(customMoveList("Striker moves", move => !!move.flags['kick']));
+	},
+	strikerhelp: ["/striker - Lists all moves boosted by Striker."],
+	fist(target, room, user) {
+		this.checkBroadcast();
+		this.sendReplyBox(customMoveList("Iron Fist moves", move => !!move.flags['punch']));
+	},
+	fisthelp: ["/fist - Lists all moves boosted by Iron Fist."],
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
 	ds2: 'dexsearch',
