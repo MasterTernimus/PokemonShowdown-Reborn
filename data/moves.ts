@@ -3644,7 +3644,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		secondary: {
-			chance: 50,
+			chance: 30,
 			status: 'tox',
 		},
 		critRatio: 2,
@@ -15246,17 +15246,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	poisontail: {
 		num: 342,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 85,
 		category: "Physical",
 		name: "Poison Tail",
 		pp: 25,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1, metronome: 1 },
 		critRatio: 2,
 		secondary: {
-			chance: 10,
+			chance: 50,
 			status: 'psn',
 		},
+		drain: [1, 2],
 		target: "normal",
 		type: "Poison",
 		contestType: "Clever",

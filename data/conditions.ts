@@ -21,7 +21,13 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				return;
 			}
 
+			// A revival must not inherit a two-turn move's charge or invulnerability.
+			pokemon.removeVolatile('twoturnmove');
+			pokemon.removeVolatile('shadowforce');
 			pokemon.removeVolatile('resuscitationpending');
+			pokemon.cureStatus();
+			for (const volatile of Object.keys(pokemon.volatiles)) pokemon.removeVolatile(volatile);
+			pokemon.clearBoosts();
 			pokemon.formeChange('Parasect-Parasite', this.dex.abilities.get('parasitism'), true);
 			this.add('-message', `${pokemon.name} was fully revived as Parasect-Parasite!`);
 			this.heal(pokemon.maxhp, pokemon, pokemon, this.dex.abilities.get('resuscitation'));

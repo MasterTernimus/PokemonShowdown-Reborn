@@ -1221,8 +1221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crosspoison: {
 		name: "Cross Poison",
-		desc: "Has a high critical hit ratio and a 50% chance to badly poison the target. If the target is poisoned or badly poisoned, this move ignores the target's positive Defense boosts.",
-		shortDesc: "High crit. 50% toxic; ignores positive Def boosts vs poisoned targets.",
+		desc: "Has a high critical hit ratio and a 30% chance to badly poison the target. If the target is poisoned or badly poisoned, this move ignores the target's positive Defense boosts.",
+		shortDesc: "High crit. 30% toxic; ignores positive Def boosts vs poisoned targets.",
 	},
 	crunch: {
 		name: "Crunch",
@@ -4791,8 +4791,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisontail: {
 		name: "Poison Tail",
-		desc: "Has a 10% chance to poison the target and a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio. 10% chance to poison.",
+		desc: "Has a high critical-hit ratio, a 50% chance to poison the target, and restores 50% of the damage dealt.",
+		shortDesc: "High critical-hit ratio; 50% chance to poison; heals 1/2 damage dealt.",
 	},
 	polarflare: {
 		name: "Polar Flare",
