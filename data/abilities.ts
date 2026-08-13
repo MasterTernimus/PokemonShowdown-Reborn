@@ -8472,7 +8472,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-start', target, 'perish3', '[from] ability: Requiem', `[of] ${source}`);
 				}
 			} else if (stage === 1) {
-				if (!target.volatiles['curse']) target.addVolatile('curse', source, this.dex.abilities.get('requiem'));
+				// Cursed Body is the replacement for Requiem's former Curse stage.
 			} else if (stage === 2) {
 				this.dex.moves.get('spite').onHit?.call(this, target, source, this.dex.getActiveMove('spite'));
 			}
@@ -8497,12 +8497,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('cursedbody').onDamagingHit?.call(this, damage, target, source, move);
 		},
 		onFaint(pokemon) {
-			for (const target of this.getAllActive()) {
-				if (target === pokemon || target.fainted) continue;
-				const curseState = target.volatiles['curse'];
-				if (curseState?.sourceEffect?.effectType === 'Ability') target.removeVolatile('curse');
-				if (!target.volatiles['curse']) target.addVolatile('curse', pokemon, this.dex.moves.get('curse'));
-			}
 			if (this.field.terrain === 'hauntedterrain') {
 				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
 			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('requiem'), true)) {
@@ -11561,7 +11555,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			source.setStatus(status, target);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hp > target.maxhp / 2) return this.chainModify(0.8);
+			if (target.hp > target.maxhp / 2) return this.chainModify(0.9);
 		},
 		onStart(pokemon) {
 			if (pokemon.hp > pokemon.maxhp / 2) {

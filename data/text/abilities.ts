@@ -1682,8 +1682,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon has Cursed Body's effect. Each direct damaging interaction or successful status effect against an opposing Pokemon progresses that target through Perish Song, Curse, then Spite. Each target has its own progression, which clears when it switches out. Curse applied by Requiem deals 1/8 max HP each turn. Whenever another Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns and curses every active Pokemon; weaker Ability-applied Curses are upgraded to the standard 1/4 max HP Curse. This Ability cannot be suppressed.",
-		shortDesc: "Cursed Body; KO Heals; Faints set Haunted; Hits/statuses progress Perish -> Curse -> Spite",
+		desc: "This Pokemon has Cursed Body's effect. Each direct damaging interaction or successful status effect against an opposing Pokemon progresses that target through Perish Song, Cursed Body, then Spite. Each target has its own progression, which clears when it switches out. Whenever another Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns. This Ability cannot be suppressed.",
+		shortDesc: "Cursed Body; KO Heals; Faints set Haunted; Hits/statuses progress Perish -> Cursed Body -> Spite",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
