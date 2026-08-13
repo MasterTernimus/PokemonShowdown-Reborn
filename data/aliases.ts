@@ -1,4 +1,9 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
+	// Custom cosmetic sprite variants
+	weavilealt: "Weavile",
+	dusknoiralt: "Dusknoir",
+	spiritombalt: "Spiritomb",
+
 	// formats
 	randbats: "[Gen 9] Random Battle",
 	randbat: "[Gen 9] Random Battle",

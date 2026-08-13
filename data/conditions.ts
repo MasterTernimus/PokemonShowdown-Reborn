@@ -1,6 +1,65 @@
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	resuscitationpending: {
+		name: 'Resuscitation Pending',
+		noCopy: true,
+		onDamage() {
+			return false;
+		},
+		onTryHit(target, source) {
+			if (target !== source) return null;
+		},
+		onBeforeMove(pokemon) {
+			this.add('cant', pokemon, 'ability: Parasitism');
+			return false;
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!pokemon.hp || pokemon.baseSpecies.id !== 'parasect') {
+				pokemon.removeVolatile('resuscitationpending');
+				return;
+			}
+
+			pokemon.removeVolatile('resuscitationpending');
+			pokemon.formeChange('Parasect-Parasite', this.dex.abilities.get('parasitism'), true);
+			this.add('-message', `${pokemon.name} was fully revived as Parasect-Parasite!`);
+			this.heal(pokemon.maxhp, pokemon, pokemon, this.dex.abilities.get('resuscitation'));
+
+			const foes = pokemon.foes().filter(foe => foe && !foe.fainted && foe.hp);
+			const candidates = pokemon.moveSlots
+				.filter(slot => slot.pp > 0)
+				.map(slot => this.dex.getActiveMove(slot.id))
+				.filter(move => move.category !== 'Status');
+			let bestMove = candidates[0];
+			let bestTarget = foes[0];
+			let bestScore = -1;
+			for (const move of candidates) {
+				for (const foe of foes) {
+					const probe = this.dex.getActiveMove(move.id);
+					probe.noDamageVariance = true;
+					probe.willCrit = false;
+					const damage = this.actions.getDamage(pokemon, foe, probe, true);
+					if (typeof damage !== 'number') continue;
+					const hits = typeof move.multihit === 'number' ? move.multihit :
+						Array.isArray(move.multihit) ? move.multihit[1] : 1;
+					const score = damage * hits;
+					if (score > bestScore) {
+						bestScore = score;
+						bestMove = move;
+						bestTarget = foe;
+					}
+				}
+			}
+			if (bestMove && bestTarget && !bestTarget.fainted) {
+				this.add('-activate', pokemon, 'ability: Resuscitation');
+				this.actions.useMove(bestMove.id, pokemon, {
+					target: bestTarget,
+					sourceEffect: this.dex.abilities.get('resuscitation'),
+				});
+			}
+		},
+	},
 	powerofalchemycore: {
 		name: 'Power of Alchemy Core',
 		onImmunity(type, pokemon) {
@@ -33,46 +92,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Shadow Force Guard');
-		},
-	},
-	splinter: {
-		name: 'Splinter',
-		duration: 3,
-		onStart(target, source, effect) {
-			this.effectState.source = source;
-			this.effectState.moveType = effect?.type || 'Normal';
-			this.effectState.moveName = effect?.name || 'Splinter';
-			this.add('-start', target, 'Splinter');
-		},
-		onRestart(target, source, effect) {
-			this.effectState.duration = 3;
-			this.effectState.source = source;
-			this.effectState.moveType = effect?.type || this.effectState.moveType || 'Normal';
-			this.effectState.moveName = effect?.name || this.effectState.moveName || 'Splinter';
-			this.add('-start', target, 'Splinter', '[silent]');
-		},
-		onResidualOrder: 11,
-		onResidual(target) {
-			const source = this.effectState.source;
-			if (!source) return;
-			const move = this.dex.getActiveMove({
-				name: this.effectState.moveName || 'Splinter',
-				id: 'splinter',
-				basePower: 25,
-				category: 'Physical',
-				type: this.effectState.moveType || 'Normal',
-				accuracy: true,
-				flags: {},
-				willCrit: false,
-				noDamageVariance: true,
-			});
-			const damage = this.actions.getDamage(source, target, move, true);
-			if (typeof damage === 'number' && damage > 0) {
-				this.damage(damage, target, source, this.dex.conditions.get('splinter'));
-			}
-		},
-		onEnd(target) {
-			this.add('-end', target, 'Splinter');
 		},
 	},
 	stellarhealing: {

@@ -760,14 +760,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	astonish: {
 		num: 310,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 40,
 		category: "Physical",
 		name: "Astonish",
-		pp: 15,
-		priority: 0,
+		pp: 10,
+		priority: 3,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions > 0) pokemon.disableMove('astonish');
+		},
+		onTry(source) {
+			if (source.activeMoveActions > 1) {
+				this.hint("Astonish only works on your first turn out.");
+				return false;
+			}
+		},
 		secondary: {
-			chance: 30,
+			chance: 100,
 			volatileStatus: 'flinch',
 		},
 		target: "normal",
@@ -2539,7 +2548,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1, reflectable: 1 },
 		onAfterHit(target, source, move) {
-			target.addVolatile('splinter', source, move);
 			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('spikes');
@@ -2547,7 +2555,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
-			target.addVolatile('splinter', source, move);
 			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('spikes');
@@ -10903,9 +10910,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onDamagingHit(damage, target, source, move) {
-			target.addVolatile('splinter', source, move);
-		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -13113,14 +13117,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	meteormash: {
 		num: 309,
 		accuracy: 90,
-		basePower: 90,
+		basePower: 100,
 		category: "Physical",
 		name: "Meteor Mash",
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		secondary: {
-			chance: 20,
+			chance: 30,
 			self: {
 				boosts: {
 					atk: 1,
@@ -14219,7 +14223,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	needlearm: {
 		num: 302,
 		accuracy: 100,
-		basePower: 95,
+		basePower: 100,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Needle Arm",
@@ -15066,12 +15070,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [3, 5],
-		onAfterHit(target, source, move) {
-			target.addVolatile('splinter', source, move);
-		},
-		onAfterSubDamage(damage, target, source, move) {
-			target.addVolatile('splinter', source, move);
-		},
 		target: "normal",
 		type: "Bug",
 		zMove: { basePower: 140 },
@@ -20553,7 +20551,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1, reflectable: 1 },
 		onAfterHit(target, source, move) {
-			target.addVolatile('splinter', source, move);
 			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('stealthrock');
@@ -20561,7 +20558,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
-			target.addVolatile('splinter', source, move);
 			if (!move.hasSheerForce && source.hp) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('stealthrock');

@@ -292,7 +292,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	soulFireBurn?: boolean;
 	spilloverDamageModifier?: number;
 	spitUpBreaksProtect?: boolean;
-	spitUpProtectedTargets?: Set<Pokemon>;
+	spitUpProtectedTargets?: Pokemon[];
 	noseFormationActivated?: boolean;
 }
 

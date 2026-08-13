@@ -235,13 +235,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	rapidresponse: {
 		onModifySpe(spe, pokemon) {
-			if (!pokemon.abilityState.rapidResponseUsed) return this.chainModify(1.5);
+			if (pokemon.activeTurns <= 1) return this.chainModify(1.5);
 		},
 		onModifySpA(spa, pokemon) {
-			if (!pokemon.abilityState.rapidResponseUsed) return this.chainModify(1.2);
-		},
-		onAfterMove(source, target, move) {
-			if (move.category !== 'Status') source.abilityState.rapidResponseUsed = true;
+			if (pokemon.activeTurns <= 1) return this.chainModify(1.2);
 		},
 		flags: {},
 		name: "Rapid Response",
@@ -698,13 +695,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	violentrush: {
 		onModifySpe(spe, pokemon) {
-			if (!pokemon.abilityState.violentRushUsed) return this.chainModify(1.5);
+			if (pokemon.activeTurns <= 1) return this.chainModify(1.5);
 		},
 		onModifyAtk(atk, pokemon) {
-			if (!pokemon.abilityState.violentRushUsed) return this.chainModify(1.2);
-		},
-		onAfterMove(source, target, move) {
-			if (move.category !== 'Status') source.abilityState.violentRushUsed = true;
+			if (pokemon.activeTurns <= 1) return this.chainModify(1.2);
 		},
 		flags: {},
 		name: "Violent Rush",
@@ -1350,9 +1344,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.hp <= target.maxhp / 3 || damage < target.hp) return;
 			target.abilityState.battleBondEndured = true;
 			return target.hp - 1;
-		},
-		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Battle Bond",
@@ -4826,7 +4817,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) return this.chainModify(2);
 		},
 		onBasePower(basePower, source, target, move) {
-			return this.dex.abilities.get('technician').onBasePower?.call(this, basePower, source, target, move);
+			return this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onCriticalHit() {
+			return false;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('shellarmor').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onStart(pokemon) {
+			return this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon);
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('shellarmor').onAfterEachBoost?.call(this, boost, target, source, effect);
 		},
 		flags: { breakable: 1 },
 		name: "Riptide Claws",
@@ -8291,33 +8294,57 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 153,
 	},
 	requiem: {
-		onSourceDamagingHit(damage, target, source, move) {
-			if (!target || target.fainted) return;
-			if (!target.volatiles['perishsong']) target.addVolatile('perishsong', source, this.dex.abilities.get('requiem'));
-			else if (!target.volatiles['curse']) target.addVolatile('curse', source, this.dex.abilities.get('requiem'));
-			else if (!target.volatiles['taunt']) target.addVolatile('taunt', source, this.dex.abilities.get('requiem'));
-			else if (!target.volatiles['torment']) target.addVolatile('torment', source, this.dex.abilities.get('requiem'));
+		advanceRequiem(target, source) {
+			if (!target || target.fainted || !source || target.isAlly(source)) return;
+			if (!target.volatiles['requiem']) {
+				target.addVolatile('requiem', source, this.dex.abilities.get('requiem'));
+			}
+			const requiemState = target.volatiles['requiem'];
+			if (!requiemState) return;
+			const stage = requiemState.stage || 0;
+			if (stage === 0) {
+				if (!target.volatiles['perishsong'] && target.addVolatile('perishsong', source, this.dex.abilities.get('requiem'))) {
+					this.add('-start', target, 'perish3', '[from] ability: Requiem', `[of] ${source}`);
+				}
+			} else if (stage === 1) {
+				if (!target.volatiles['curse']) target.addVolatile('curse', source, this.dex.abilities.get('requiem'));
+			} else if (stage === 2) {
+				this.dex.moves.get('spite').onHit?.call(this, target, source, this.dex.getActiveMove('spite'));
+			}
+			requiemState.stage = Math.min(stage + 1, 3);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType !== 'Move') return;
-			this.heal(source.baseMaxhp / 8 * length, source, source);
+		onSourceDamagingHit(damage, target, source, move) {
+			(this.effect as any).advanceRequiem.call(this, target, source);
+		},
+		onAnyFaint(fainted) {
+			const pokemon = this.effectState.target;
+			if (!pokemon || pokemon.fainted || fainted === pokemon) return;
+			this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source.fainted) return;
-			if (!source.volatiles['perishsong']) source.addVolatile('perishsong', target, this.dex.abilities.get('requiem'));
-			else if (!source.volatiles['curse']) source.addVolatile('curse', target, this.dex.abilities.get('requiem'));
-			else if (!source.volatiles['taunt']) source.addVolatile('taunt', target, this.dex.abilities.get('requiem'));
-			else if (!source.volatiles['torment']) source.addVolatile('torment', target, this.dex.abilities.get('requiem'));
+			(this.effect as any).advanceRequiem.call(this, source, target);
 			this.dex.abilities.get('cursedbody').onDamagingHit?.call(this, damage, target, source, move);
 		},
 		onFaint(pokemon) {
+			for (const target of this.getAllActive()) {
+				if (target === pokemon || target.fainted) continue;
+				const curseState = target.volatiles['curse'];
+				if (curseState?.sourceEffect?.effectType === 'Ability') target.removeVolatile('curse');
+				if (!target.volatiles['curse']) target.addVolatile('curse', pokemon, this.dex.moves.get('curse'));
+			}
 			if (this.field.terrain === 'hauntedterrain') {
 				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
 			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('requiem'), true)) {
 				this.field.terrainState.duration = 5;
 			}
 		},
-		onTryAddVolatile(status, pokemon) { return this.dex.abilities.get('cursedbody').onTryAddVolatile?.call(this, status, pokemon); },
+		condition: {
+			noCopy: true,
+			onStart() {
+				this.effectState.stage = 0;
+			},
+		},
 		flags: { cantsuppress: 1 },
 		name: "Requiem",
 		rating: 4,
@@ -11354,33 +11381,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10019,
 	},
 	parasitism: {
-		onImmunity(type, pokemon) {
-			if (type === 'powder') return false;
-		},
 		onEffectiveness(typeMod, target, type, move) {
-			if (['Water', 'Electric', 'Grass', 'Ground'].includes(type)) return typeMod - 1;
 			if (target.hp > target.maxhp / 2 && typeMod > 0) return 0;
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source === target || !move || move.category === 'Status') return;
-			if (!source.runStatusImmunity('powder')) return;
 			if (!this.randomChance(1, 2)) return;
 			const status = ['slp', 'par', 'psn'][this.random(3)];
 			source.setStatus(status, target);
 		},
-		onModifyMove(move, pokemon, target) {
-			if (!target || target.isAlly(pokemon) || move.category === 'Status') return;
-			move.ignoreDefensive = true;
-			move.infiltrates = true;
-		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp > target.maxhp / 2) return this.chainModify(0.8);
 		},
+		onStart(pokemon) {
+			if (pokemon.hp > pokemon.maxhp / 2) {
+				this.dex.abilities.get('magicguard').onStart?.call(this, pokemon);
+			}
+			if (pokemon.species.id === 'parasect') {
+				pokemon.formeChange('Parasect-Parasitism', this.effect, false, '0', '[silent]');
+			}
+		},
 		onSourceBasePowerPriority: 17,
 		onSourceBasePower(basePower, attacker, defender, move) {
-			if (move && this.movehasType(move, 'Fire')) {
-				return this.chainModify(1.25);
-			}
+			return this.dex.abilities.get('dryskin').onSourceBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onModifySecondaries(secondaries, target, source, move) {
 			if (target.hp > target.maxhp / 2) {
@@ -11389,41 +11412,63 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onDamage(damage, target, source, effect) {
-			if (target.hp > target.maxhp / 2 && effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
+			if (target.volatiles['resuscitationpending']) return false;
+			if (target.hp > target.maxhp / 2) {
+				const magicGuardResult = this.dex.abilities.get('magicguard').onDamage?.call(
+					this, damage, target, source, effect
+				);
+				if (magicGuardResult !== undefined) return magicGuardResult;
+			}
+			if (damage >= target.hp && target.baseSpecies.id === 'parasect') {
+				target.addVolatile('resuscitationpending', target, this.dex.abilities.get('parasitism'));
+				this.add('-activate', target, 'ability: Parasitism');
+				this.add('-message', `${target.name} fake-fainted! Resuscitation will begin at the end of the turn!`);
+				return Math.max(0, target.hp - 1);
 			}
 		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
-			if (move.flags['powder'] && target !== source && this.dex.getImmunity('powder', target)) {
-				this.add('-immune', target, '[from] ability: Parasitism');
-				return null;
-			}
-			if (target !== source && this.movehasType(move, 'Water')) {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Parasitism');
-				}
-				return null;
-			}
+			const drySkinResult = this.dex.abilities.get('dryskin').onTryHit?.call(this, target, source, move);
+			if (drySkinResult !== undefined) return drySkinResult;
 			if (target.hp > target.maxhp / 2 && target !== source && target.foes().includes(source) && move.category === 'Status') {
 				this.add('-immune', target, '[from] ability: Parasitism');
 				return null;
 			}
 		},
 		onWeather(target, source, effect) {
-			if (target.effectiveWeather() !== effect.id) return;
-			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
-				this.heal(target.baseMaxhp / 8);
-				this.heal(target.baseMaxhp / 16);
-			} else if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
-				this.damage(target.baseMaxhp / 8, target, target);
-			}
+			return this.dex.abilities.get('dryskin').onWeather?.call(this, target, source, effect);
 		},
-		flags: { breakable: 1, cantsuppress: 1 },
+		onResidual(pokemon) {
+			return this.dex.abilities.get('dryskin').onResidual?.call(this, pokemon);
+		},
+		flags: { cantsuppress: 1 },
 		name: "Parasitism",
 		rating: 4,
 		num: 10021,
+	},
+	resuscitation: {
+		onCheckShow(pokemon) {
+			this.dex.abilities.get('selfrepair').onCheckShow?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			this.dex.abilities.get('selfrepair').onSwitchOut?.call(this, pokemon);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('selfrepair').onResidual?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('shadowshield').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		flags: {},
+		name: "Resuscitation",
+		rating: 5,
+		num: 10347,
 	},
 	pendulumswing: {
 		onModifyAccuracy(accuracy) {
@@ -11454,7 +11499,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!protectedSides.size) this.add('-clearallboost');
 			for (const active of this.getAllActive()) {
 				if (protectedSides.has(active.side)) continue;
-				if (active.hasAbility('parasitism')) continue;
 				const preservedBoosts: SparseBoostsTable = {};
 				const preservePositiveBoosts = (...stats: BoostID[]) => {
 					for (const stat of stats) {
@@ -11507,7 +11551,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryBoost(boost, target, source, effect) {
 			if (this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization'))) return;
-			if (target.hasAbility('parasitism')) return;
 			if (!effect || effect.id === 'royaldecree') return;
 			if (effect.id === 'relicinstinct' || effect.id === 'neutralization') return;
 			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
@@ -12148,9 +12191,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.gameType === 'freeforall' && move.category !== 'Status') {
 				target.abilityState.stanceChangeShieldHitTurn = this.turn;
 			}
-		},
-		onResidual(pokemon) {
-			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Stance Change",
@@ -13597,18 +13637,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onTryAddVolatile(status, pokemon) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			if (status.id === 'flinch') return null;
+			return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon);
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			if (effect.name === 'Intimidate' && boost.atk) {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Ultra Instinct', `[of] ${target}`);
-			}
+			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
 		},
 		onModifyMove(move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
-			move.ignoreAbility = true;
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
@@ -13627,7 +13664,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Ultra Instinct field weaken');
-				return this.chainModify(0.34);
+				return this.chainModify(0.5);
 			}
 			if (source.moveThisTurnResult === undefined) {
 				this.debug('Ultra Instinct weaken');
@@ -14323,9 +14360,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					if (ally.status) ally.cureStatus();
 				}
 			}
-		},
-		onResidual(pokemon) {
-			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		onAnyModifyDamage(damage, source, target, move) {
 			const pokemon = this.effectState.target;
