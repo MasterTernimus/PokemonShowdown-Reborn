@@ -17018,19 +17018,26 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, cantusetwice: 1 },
-		ignoreImmunity: { 'Fairy': true },
-		breaksProtect: true,
+		onModifyMove(move, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Dialga') return;
+			move.ignoreImmunity = { 'Fairy': true };
+			move.breaksProtect = true;
+			(move as any).dialgaBonus = true;
+		},
 		onModifyPriority(priority, pokemon, target, move) {
-			if (this.field.getPseudoWeather('trickroom')) return priority + 3;
+			if (pokemon.baseSpecies.baseSpecies === 'Dialga' && this.field.getPseudoWeather('trickroom')) {
+				return priority + 3;
+			}
 		},
 		onPrepareHit(target, source, move) {
 			useHigherOffensiveStat(source, move);
 		},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Fairy') return -1;
+		onEffectiveness(typeMod, target, type, move) {
+			if ((move as any).dialgaBonus && type === 'Fairy') return -1;
 			return typeMod;
 		},
 		onAfterMove(source, target, move) {
+			if (source.baseSpecies.baseSpecies !== 'Dialga') return;
 			if (target.fainted) {
 				source.removeVolatile('mustrecharge');
 			} else {
@@ -18097,7 +18104,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterHit(target, source, move) {
-			source.addVolatile('shadowforceguard', source, move);
+			if (source.baseSpecies.baseSpecies === 'Giratina') {
+				source.addVolatile('shadowforceguard', source, move);
+			}
 		},
 		condition: {
 			duration: 2,
@@ -19625,16 +19634,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	spacialrend: {
 		num: 460,
-		accuracy: true,
+		accuracy: 95,
 		basePower: 100,
 		category: "Special",
 		name: "Spacial Rend",
 		pp: 5,
 		priority: 0,
-		flags: { mirror: 1, metronome: 1 },
-		breaksProtect: true,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		critRatio: 2,
-		tracksTarget: true,
+		onModifyMove(move, pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Palkia') return;
+			move.accuracy = true;
+			move.breaksProtect = true;
+			move.tracksTarget = true;
+		},
 		onPrepareHit(target, source, move) {
 			useHigherOffensiveStat(source, move);
 		},

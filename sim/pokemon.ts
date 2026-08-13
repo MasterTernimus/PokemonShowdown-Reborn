@@ -2063,7 +2063,7 @@ export class Pokemon {
 			emperorsresolve: ['competitive', 'slushrush'],
 			execution: ['duskilate'],
 			fallenstar: ['moldbreaker', 'dualwield', 'skilllink', 'selfsufficient'],
-			parasitism: ['dryskin', 'effectspore'],
+			parasitism: ['dryskin'],
 			wickedsnare: [],
 			corrosivescale: ['marvelscale'],
 			aurainstinct: ['adaptability', 'dualwield', 'secondwind'],
@@ -2140,7 +2140,7 @@ export class Pokemon {
 			shadowguard: ['shadowshield', 'elevate'],
 			requiem: ['cursedbody'],
 			ultrainstinct: ['moldbreaker', 'innerfocus'],
-			resuscitation: ['magicguard', 'selfrepair', 'shadowshield'],
+			resuscitation: ['selfrepair', 'shadowshield'],
 		};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&

@@ -31,39 +31,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			pokemon.formeChange('Parasect-Parasite', this.dex.abilities.get('parasitism'), true);
 			this.add('-message', `${pokemon.name} was fully revived as Parasect-Parasite!`);
 			this.heal(pokemon.maxhp, pokemon, pokemon, this.dex.abilities.get('resuscitation'));
-
-			const foes = pokemon.foes().filter(foe => foe && !foe.fainted && foe.hp);
-			const candidates = pokemon.moveSlots
-				.filter(slot => slot.pp > 0)
-				.map(slot => this.dex.getActiveMove(slot.id))
-				.filter(move => move.category !== 'Status');
-			let bestMove = candidates[0];
-			let bestTarget = foes[0];
-			let bestScore = -1;
-			for (const move of candidates) {
-				for (const foe of foes) {
-					const probe = this.dex.getActiveMove(move.id);
-					probe.noDamageVariance = true;
-					probe.willCrit = false;
-					const damage = this.actions.getDamage(pokemon, foe, probe, true);
-					if (typeof damage !== 'number') continue;
-					const hits = typeof move.multihit === 'number' ? move.multihit :
-						Array.isArray(move.multihit) ? move.multihit[1] : 1;
-					const score = damage * hits;
-					if (score > bestScore) {
-						bestScore = score;
-						bestMove = move;
-						bestTarget = foe;
-					}
-				}
-			}
-			if (bestMove && bestTarget && !bestTarget.fainted) {
-				this.add('-activate', pokemon, 'ability: Resuscitation');
-				this.actions.useMove(bestMove.id, pokemon, {
-					target: bestTarget,
-					sourceEffect: this.dex.abilities.get('resuscitation'),
-				});
-			}
 		},
 	},
 	powerofalchemycore: {

@@ -5363,8 +5363,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roaroftime: {
 		name: "Roar of Time",
-		desc: "Uses the user's higher offensive stat. Fairy-type targets are hit as resisted Dragon damage instead of being immune. If this hits and does not KO, another Roar of Time hits that target two turns later. A missed delayed hit is sent further into the future. In Trick Room, this move has +3 priority. If this move KOs, the user's recharge is removed.",
-		shortDesc: "Uses higher offense. Non-KO queues future hit. Fairies resist. +3 in Trick Room.",
+		desc: "Uses the user's higher offensive stat. When used by Dialga, Fairy-type targets take resisted Dragon damage instead of being immune, the move breaks protection, has +3 priority in Trick Room, and a non-KO hit queues another Roar of Time two turns later. A missed delayed hit is sent further into the future. If Dialga KOs, its recharge is removed.",
+		shortDesc: "Uses higher offense. Dialga: breaks Protect, future hit, Fairies resist, +3 in Trick Room.",
 	},
 	rockblast: {
 		name: "Rock Blast",
@@ -5697,8 +5697,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowforce: {
 		name: "Shadow Force",
-		desc: "Uses the user's higher offensive stat. The user vanishes turn 1 and attacks turn 2. This move breaks protection. On a successful hit, the user takes 0.7x damage from all sources next turn. Power Herb makes it attack immediately.",
-		shortDesc: "Uses higher offense. Vanishes, breaks Protect. On hit: next turn 0.7x damage.",
+		desc: "Uses the user's higher offensive stat. The user vanishes turn 1 and attacks turn 2. This move breaks protection. When used by Giratina, a successful hit also makes it take 0.7x damage from all sources next turn. Power Herb makes it attack immediately.",
+		shortDesc: "Uses higher offense. Vanishes; breaks Protect. Giratina gains 0.7x damage guard on hit.",
 		gen6: {
 			desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		},
@@ -6151,8 +6151,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spacialrend: {
 		name: "Spacial Rend",
-		desc: "Uses the user's higher offensive stat. This move never misses, ignores protection, cannot be redirected, and has a high critical hit ratio.",
-		shortDesc: "Uses higher offense. Never misses. Ignores Protect/redirection. High crit.",
+		desc: "Uses the user's higher offensive stat and has a high critical-hit ratio. When used by Palkia, this move never misses, ignores protection, and cannot be redirected.",
+		shortDesc: "Uses higher offense; high crit. Palkia: never misses; ignores Protect/redirection.",
 	},
 	spark: {
 		name: "Spark",

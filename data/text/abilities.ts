@@ -1682,8 +1682,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	requiem: {
 		name: "Requiem",
-		desc: "This Pokemon has Cursed Body's effect. Each direct damaging interaction or successful status effect against an opposing Pokemon progresses that target through Perish Song, Cursed Body, then Spite. Each target has its own progression, which clears when it switches out. Whenever another Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns. This Ability cannot be suppressed.",
-		shortDesc: "Cursed Body; KO Heals; Faints set Haunted; Hits/statuses progress Perish -> Cursed Body -> Spite",
+		desc: "This Pokemon has Cursed Body's effect. The first direct damaging interaction with an opposing Pokemon applies Perish Song to that target; the second applies an Ability-based Curse that deals 1/8 max HP each turn. Each target has its own progression, which clears when it switches out. Whenever another Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns. This Ability cannot be suppressed.",
+		shortDesc: "Cursed Body; KO heals 1/4; faint sets Haunted; hits progress Perish Song -> Curse.",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
@@ -2510,13 +2510,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parasitism: {
 		name: "Parasitism",
-		desc: "This Pokemon has Dry Skin and Effect Spore: every damaging hit has a 30% chance to inflict sleep, paralysis, or poison on the attacker. While above 50% HP, weaknesses are neutralized, incoming damage is reduced to 0.8x, Magic Guard is active, opposing status moves fail, and opposing attack secondary effects are blocked. The first time Parasect would faint, it fake-faints at 1 HP, then becomes Parasect-Parasite at the end of the turn, revives at full HP, and immediately uses its strongest damaging move. This Ability cannot be suppressed and is immune to Neutralization.",
-		shortDesc: "Dry Skin + 30% Effect Spore; above half: defenses + Magic Guard; first KO triggers Resuscitation.",
+		desc: "This Pokemon has Dry Skin. While above 50% HP, its weaknesses are neutralized, Magic Guard is active, opposing status moves fail, and opposing attack secondary effects are blocked. The first time Parasect would faint, it fake-faints at 1 HP, then becomes Parasect-Parasite at the end of the turn and revives at full HP. This Ability cannot be suppressed and is immune to Neutralization.",
+		shortDesc: "Dry Skin; above half: defensive protection; first KO triggers Resuscitation.",
 	},
 	resuscitation: {
 		name: "Resuscitation",
-		desc: "After Parasect revives as Parasect-Parasite, this Ability has Magic Guard, Self Repair, and Shadow Shield's effects.",
-		shortDesc: "Magic Guard + Self Repair + Shadow Shield.",
+		desc: "After Parasect revives as Parasect-Parasite, this Ability has Self Repair and Shadow Shield's effects.",
+		shortDesc: "Self Repair + Shadow Shield.",
 	},
 	pendulumswing: {
 		name: "Pendulum Swing",
