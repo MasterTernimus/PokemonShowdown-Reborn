@@ -16,7 +16,7 @@ describe('Parasitism and Resuscitation', function () {
 		const parasite = battle.dex.species.get('Parasect-Parasite');
 		assert.equal(parasect.baseStats.spe, 40);
 		assert.deepEqual(parasite.types, ['Ghost', 'Poison']);
-		assert.deepEqual(parasite.baseStats, {hp: 90, atk: 150, def: 65, spa: 50, spd: 65, spe: 130});
+		assert.deepEqual(parasite.baseStats, {hp: 90, atk: 130, def: 40, spa: 130, spd: 40, spe: 120});
 		assert.equal(Object.values(parasite.baseStats).reduce((sum, stat) => sum + stat, 0), 550);
 	});
 
@@ -50,7 +50,7 @@ describe('Parasitism and Resuscitation', function () {
 		assert.equal(before - parasect.hp, Math.floor(parasect.maxhp / 8));
 	});
 
-	it('should apply its 30% Effect Spore behavior to non-contact damaging attacks', function () {
+	it('should not inflict status when struck by a damaging attack', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', forceRandomChance: true}, [[
 			{species: 'Parasect', ability: 'parasitism', moves: ['splash']},
 		], [
@@ -58,7 +58,7 @@ describe('Parasitism and Resuscitation', function () {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices();
-		assert(battle.p2.active[0].status, 'A non-contact damaging move should trigger Parasitism\'s Effect Spore');
+		assert.equal(battle.p2.active[0].status, '');
 	});
 
 	it('should only provide Magic Guard while above half HP', function () {
@@ -91,7 +91,7 @@ describe('Parasitism and Resuscitation', function () {
 		assert.statStage(battle.p1.active[0], 'atk', 0);
 	});
 
-	it('should fake-faint once, fully revive, transform, and immediately use its strongest move', function () {
+	it('should fake-faint once, fully revive, and transform without attacking', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Parasect', ability: 'parasitism', moves: ['gigaimpact', 'tackle', 'splash']},
 		], [
@@ -102,7 +102,7 @@ describe('Parasitism and Resuscitation', function () {
 		parasect.sethp(1);
 		parasect.setStatus('brn');
 		parasect.addVolatile('confusion');
-		parasect.boost({atk: 2, def: -1});
+		battle.boost({atk: 2, def: -1}, parasect, parasect);
 		battle.makeChoices('move splash', 'move aerialace');
 
 		assert.species(parasect, 'Parasect-Parasite');
@@ -112,9 +112,9 @@ describe('Parasitism and Resuscitation', function () {
 		assert.equal(parasect.boosts.def, 0, 'Resuscitation should clear negative stat boosts');
 		assert.equal(parasect.status, '', 'Resuscitation should cure the revived Pokemon');
 		assert.false(parasect.volatiles.confusion, 'Resuscitation should clear copied volatiles');
-		assert(battle.log.some(line => line.includes('|Giga Impact|')), 'Resuscitation should select Giga Impact');
-		assert.false.fullHP(battle.p2.active[0]);
-		assert(parasect.hasAbility('magicguard'));
+		assert(!battle.log.some(line => line.includes('|Giga Impact|')), 'Resuscitation should not select a move');
+		assert.fullHP(battle.p2.active[0]);
+		assert.false(parasect.hasAbility('magicguard'));
 		assert(parasect.hasAbility('selfrepair'));
 		assert(parasect.hasAbility('shadowshield'));
 
@@ -152,14 +152,10 @@ describe('Parasitism and Resuscitation', function () {
 
 		battle.makeChoices('move shadowforce', 'move splash');
 
-		assert.species(parasect, 'Parasect-Parasite');
-		assert.fullHP(parasect);
-		assert(parasect.volatiles['twoturnmove'], 'The revival auto-move may create a fresh two-turn charge');
-		assert(!battle.log.some(line => line.includes('|move|p1a: Parasect|Shadow Force||[still]')),
-			'Revival should not inherit Shadow Force\'s old charge');
-
+		assert(parasect.volatiles['resuscitationpending'], 'Residual damage should schedule the revival');
 		battle.makeChoices('auto', 'move splash');
-		assert(battle.log.some(line => line.includes('|move|p1a: Parasect|Shadow Force|')),
-			'Revived Parasect should complete a fresh Shadow Force charge');
+		assert.species(parasect, 'Parasect-Parasite');
+		assert.false(parasect.volatiles['resuscitationpending'], 'Residual damage should not leave a pending revival stuck');
+		assert.false(parasect.volatiles['twoturnmove'], 'Residual handling should clear the old charge state');
 	});
 });

@@ -8472,19 +8472,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-start', target, 'perish3', '[from] ability: Requiem', `[of] ${source}`);
 				}
 			} else if (stage === 1) {
-				// Cursed Body is the replacement for Requiem's former Curse stage.
-			} else if (stage === 2) {
-				this.dex.moves.get('spite').onHit?.call(this, target, source, this.dex.getActiveMove('spite'));
+				target.addVolatile('curse', source, this.dex.abilities.get('requiem'));
 			}
-			requiemState.stage = Math.min(stage + 1, 3);
+			requiemState.stage = Math.min(stage + 1, 2);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			(this.effect as any).advanceRequiem.call(this, target, source);
-		},
-		onAnyAfterSetStatus(status, target, source) {
-			const holder = this.effectState.target;
-			if (!holder || source !== holder || target === holder || target.isAlly(holder)) return;
-			(this.effect as any).advanceRequiem.call(this, target, holder);
 		},
 		onAnyFaint(fainted) {
 			const pokemon = this.effectState.target;
@@ -11548,15 +11541,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onEffectiveness(typeMod, target, type, move) {
 			if (target.hp > target.maxhp / 2 && typeMod > 0) return 0;
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (!source || source === target || !move || move.category === 'Status') return;
-			if (!this.randomChance(3, 10)) return;
-			const status = ['slp', 'par', 'psn'][this.random(3)];
-			source.setStatus(status, target);
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hp > target.maxhp / 2) return this.chainModify(0.9);
-		},
 		onStart(pokemon) {
 			if (pokemon.hp > pokemon.maxhp / 2) {
 				this.dex.abilities.get('magicguard').onStart?.call(this, pokemon);
@@ -11622,9 +11606,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onImmunity(type, pokemon) {
 			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
-		},
-		onDamage(damage, target, source, effect) {
-			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('shadowshield').onSourceModifyDamage?.call(this, damage, source, target, move);

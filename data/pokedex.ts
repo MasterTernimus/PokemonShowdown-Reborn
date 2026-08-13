@@ -1254,7 +1254,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Parasect",
 		forme: "Parasite",
 		types: ["Ghost", "Poison"],
-		baseStats: { hp: 90, atk: 150, def: 65, spa: 50, spd: 65, spe: 130 },
+		baseStats: { hp: 90, atk: 130, def: 40, spa: 130, spd: 40, spe: 120 },
 		abilities: { 0: "Resuscitation" },
 		heightm: 1,
 		weightkg: 29.5,
