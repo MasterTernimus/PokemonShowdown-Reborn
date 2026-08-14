@@ -11,6 +11,12 @@ describe('Custom battle data updates', function () {
 	});
 
 	it('should let Gardevoir shift between Mega forms while a gimmick remains', function () {
+		const gardevoir = Dex.species.get('Gardevoir');
+		assert.deepEqual(gardevoir.formeOrder, [
+			'Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Void-Mega', 'Gardevoir-Mega-Z',
+		]);
+		assert.false(Dex.species.get('Gardevoir-Void').exists);
+
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Gardevoir', ability: 'trace', item: 'gardevoirite', moves: ['splash']},
 		], [
@@ -18,19 +24,19 @@ describe('Custom battle data updates', function () {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 
-		const gardevoir = battle.p1.active[0];
-		assert.equal(gardevoir.canMegaEvoX, 'Gardevoir-Mega-Z');
+		const activeGardevoir = battle.p1.active[0];
+		assert.equal(activeGardevoir.canMegaEvoX, 'Gardevoir-Mega-Z');
 		battle.makeChoices('move splash megax', 'move splash');
-		assert.species(gardevoir, 'Gardevoir-Mega-Z');
-		assert.equal(gardevoir.side.gimmickCount, 1);
-		assert.equal(gardevoir.canMegaEvoY, 'Gardevoir-Void-Mega');
+		assert.species(activeGardevoir, 'Gardevoir-Mega-Z');
+		assert.equal(activeGardevoir.side.gimmickCount, 1);
+		assert.equal(activeGardevoir.canMegaEvoY, 'Gardevoir-Void-Mega');
 
 		battle.makeChoices('move splash megay', 'move splash');
-		assert.species(gardevoir, 'Gardevoir-Void-Mega');
-		assert.equal(gardevoir.side.gimmickCount, 2);
-		assert.false(gardevoir.canMegaEvo);
-		assert.false(gardevoir.canMegaEvoX);
-		assert.false(gardevoir.canMegaEvoY);
+		assert.species(activeGardevoir, 'Gardevoir-Void-Mega');
+		assert.equal(activeGardevoir.side.gimmickCount, 2);
+		assert.false(activeGardevoir.canMegaEvo);
+		assert.false(activeGardevoir.canMegaEvoX);
+		assert.false(activeGardevoir.canMegaEvoY);
 	});
 
 	it('should keep Rapid Response and Violent Rush for the entire first active turn only', function () {
