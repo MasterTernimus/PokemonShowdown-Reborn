@@ -6038,7 +6038,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Fire Blast",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
 		secondary: {
 			chance: 10,
 			status: 'brn',
@@ -10176,7 +10176,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Hydro Cannon",
 		pp: 5,
 		priority: 0,
-		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, cantusetwice: 1 },
+		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, cantusetwice: 1, pulse: 1 },
 		onModifyMove(move, pokemon) {
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 		},
@@ -15750,12 +15750,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	psybeam: {
 		num: 60,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 70,
 		category: "Special",
+		critRatio: 2,
 		name: "Psybeam",
 		pp: 20,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
 		secondary: {
 			chance: 10,
 			volatileStatus: 'confusion',

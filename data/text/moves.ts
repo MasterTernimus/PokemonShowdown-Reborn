@@ -2028,8 +2028,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fireblast: {
 		name: "Fire Blast",
-		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the target.",
+		desc: "Has a 10% chance to burn the target. This move is boosted by Mega Launcher and Dual Wield.",
+		shortDesc: "10% burn chance. Boosted by Mega Launcher and Dual Wield.",
 		gen1: {
 			desc: "Has a 30% chance to burn the target.",
 			shortDesc: "30% chance to burn the target.",
@@ -3187,8 +3187,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hydrocannon: {
 		name: "Hydro Cannon",
-		desc: "This 160-power Water move uses Attack or Special Attack, whichever is higher. It has a 60% chance to freeze. The user must recharge after a successful hit unless the target faints.",
-		shortDesc: "160 BP; higher Atk/SpA; 60% freeze; recharge unless it KOs.",
+		desc: "This 160-power Water move uses Attack or Special Attack, whichever is higher. It has a 60% chance to freeze and is boosted by Mega Launcher and Dual Wield. The user must recharge after a successful hit unless the target faints.",
+		shortDesc: "160 BP; higher offense; 60% freeze; launcher/Dual Wield boost; recharge.",
 	},
 	hydropump: {
 		name: "Hydro Pump",
@@ -4938,8 +4938,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psybeam: {
 		name: "Psybeam",
-		desc: "Has a 10% chance to confuse the target.",
-		shortDesc: "10% chance to confuse the target.",
+		desc: "Has a high critical-hit ratio and a 10% chance to confuse the target. This move is boosted by Mega Launcher and Dual Wield.",
+		shortDesc: "High critical-hit ratio; 10% confusion; launcher/Dual Wield boost.",
 	},
 	psyblade: {
 		name: "Psyblade",

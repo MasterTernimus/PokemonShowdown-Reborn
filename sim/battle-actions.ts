@@ -515,6 +515,10 @@ export class BattleActions {
 			const selectedTarget = targets.includes(originalTarget) ? originalTarget : target;
 			targets.splice(0, targets.length, selectedTarget);
 		}
+		if (this.battle.gameType === 'freeforall' && move.multihitType === 'dualwield' && targets.length > 1) {
+			const selectedTarget = targets.includes(originalTarget) ? originalTarget : target;
+			targets.splice(0, targets.length, selectedTarget);
+		}
 
 		const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
 		if (!sourceEffect || callerMoveForPressure || sourceEffect.id === 'pursuit') {
@@ -986,6 +990,7 @@ export class BattleActions {
 		if (targetHits === 10 && pokemon.hasItem('loadeddice')) targetHits = 5 + this.battle.random(2);
 		targetHits = Math.floor(targetHits);
 		let nullDamage = true;
+		let successfulDualWieldHits = 0;
 		let moveDamage: (number | boolean | undefined)[] = [];
 		const originalMultihitTarget = targets.find(target => !!target) || null;
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
@@ -997,6 +1002,14 @@ export class BattleActions {
 			if (damage.includes(false)) break;
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			(move as any).spilloverDamageModifier = undefined;
+			if (hit > 1 && move.dualWieldFullPower) {
+				const livingFoes = pokemon.foes().filter(foe => foe?.hp && !foe.fainted);
+				if (!livingFoes.length) break;
+				const otherFoes = livingFoes.filter(foe => foe !== originalMultihitTarget);
+				targets = [this.battle.sample(otherFoes.length ? otherFoes : livingFoes)];
+				damage = [0];
+				move.smartTarget = false;
+			}
 			if (targets.every(target => !target?.hp)) {
 				const spilloverTarget = originalMultihitTarget && this.getMultihitSpilloverTarget(originalMultihitTarget, pokemon, move, hit, targetHits);
 				if (!spilloverTarget) break;
@@ -1014,6 +1027,15 @@ export class BattleActions {
 			}
 			const targetsHadHP = targetsCopy.map(target => !!target && target.hp > 0);
 			const target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
+			if (target && hit > 1 && move.dualWieldFullPower && target !== originalMultihitTarget) {
+				if (this.battle.runEvent('Invulnerability', target, pokemon, move) === false) {
+					this.battle.add('-miss', pokemon, target);
+					this.battle.runEvent('Miss', pokemon, target, move);
+					continue;
+				}
+				const tryHit = this.battle.runEvent('TryHit', [target], pokemon, move)[0];
+				if (!tryHit || !target.runImmunity(move, true)) continue;
+			}
 			if (target && typeof move.smartTarget === 'boolean') {
 				if (hit > 1) {
 					this.battle.addMove('-anim', pokemon, move.name, target);
@@ -1022,9 +1044,10 @@ export class BattleActions {
 				}
 			}
 
-			// like this (Triple Kick)
-			if (target && move.multiaccuracy && hit > 1) {
-				let accuracy = move.accuracy;
+			// Triple Kick checks after its first hit; Dual Wield checks both hits independently.
+			const dualWieldAccuracyCheck = move.multihitType === 'dualwield' && move.dualWieldAccuracy !== undefined;
+			if (target && ((move.multiaccuracy && hit > 1) || dualWieldAccuracyCheck)) {
+				let accuracy = dualWieldAccuracyCheck ? move.dualWieldAccuracy! : move.accuracy;
 				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
@@ -1049,7 +1072,15 @@ export class BattleActions {
 				accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 				if (!move.alwaysHit) {
 					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-					if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
+					if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
+						if (!dualWieldAccuracyCheck) break;
+						this.battle.add('-miss', pokemon, target);
+						if (pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
+							this.battle.boost({ spe: 2 }, pokemon);
+						}
+						this.battle.runEvent('Miss', pokemon, target, move);
+						continue;
+					}
 				}
 			}
 
@@ -1069,6 +1100,7 @@ export class BattleActions {
 
 			if (!moveDamage.some(val => val !== false)) break;
 			nullDamage = false;
+			if (move.multihitType === 'dualwield') successfulDualWieldHits++;
 
 			for (const [i, md] of moveDamage.entries()) {
 				if (move.smartTarget && i !== hit - 1) continue;
@@ -1112,8 +1144,9 @@ export class BattleActions {
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
 		this.battle.faintMessages(false, false, !pokemon.hp);
-		if (move.multihit && typeof move.smartTarget !== 'boolean') {
-			this.battle.add('-hitcount', targets[0], hit - 1);
+		if (move.multihit && typeof move.smartTarget !== 'boolean' && !move.dualWieldFullPower) {
+			const hitCount = move.multihitType === 'dualwield' ? successfulDualWieldHits : hit - 1;
+			if (hitCount) this.battle.add('-hitcount', targets[0], hitCount);
 		}
 
 		if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
@@ -1147,7 +1180,8 @@ export class BattleActions {
 			if (target && pokemon !== target) {
 				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
 				if (typeof moveDamage[i] === 'number') {
-					target.timesAttacked += move.smartTarget ? 1 : hit - 1;
+					target.timesAttacked += move.smartTarget ? 1 :
+						(move.multihitType === 'dualwield' ? successfulDualWieldHits : hit - 1);
 				}
 			}
 		}
