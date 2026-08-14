@@ -1658,8 +1658,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		megaStone: { "Gardevoir": "Gardevoir-Void-Mega", "Gardevoir-Void": "Gardevoir-Void-Mega", "Mismagius": "Mismagius-Mega" },
-		itemUser: ["Gardevoir", "Gardevoir-Void", "Mismagius"],
+		megaStone: { "Gardevoir": "Gardevoir-Void-Mega", "Mismagius": "Mismagius-Mega" },
+		itemUser: ["Gardevoir", "Mismagius"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -2522,8 +2522,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	gardevoirite: {
 		name: "Gardevoirite",
 		spritenum: 587,
-		megaStone: { "Gardevoir": "Gardevoir-Mega", "Gardevoir-Void": "Gardevoir-Void-Mega" },
-		itemUser: ["Gardevoir", "Gardevoir-Void"],
+		megaStone: { "Gardevoir": "Gardevoir-Mega" },
+		itemUser: ["Gardevoir"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -5781,8 +5781,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		megaStone: { "Gardevoir": "Gardevoir-Mega-Z", "Gardevoir-Void": "Gardevoir-Mega-Z" },
-		itemUser: ["Gardevoir", "Gardevoir-Void"],
+		megaStone: { "Gardevoir": "Gardevoir-Mega-Z" },
+		itemUser: ["Gardevoir"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},

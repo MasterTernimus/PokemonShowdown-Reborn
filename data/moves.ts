@@ -925,12 +925,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	aurorabeam: {
 		num: 62,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 80,
 		category: "Special",
 		name: "Aurora Beam",
 		pp: 20,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
 		secondary: {
 			chance: 10,
 			boosts: {

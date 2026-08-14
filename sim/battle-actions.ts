@@ -2231,7 +2231,7 @@ export class BattleActions {
 	}
 
 	canMegaEvoX(pokemon: Pokemon) {
-		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void', 'Gardevoir-Void-Mega'];
+		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (
 			gardevoirFormes.includes(pokemon.baseSpecies.name) &&
 			pokemon.getItem().id === 'gardevoirite' &&
@@ -2243,12 +2243,12 @@ export class BattleActions {
 	}
 
 	canMegaEvoY(pokemon: Pokemon) {
-		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void', 'Gardevoir-Void-Mega'];
+		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (!gardevoirFormes.includes(pokemon.baseSpecies.name) || pokemon.getItem().id !== 'gardevoirite') return null;
 		if (['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z'].includes(pokemon.baseSpecies.name)) {
 			return 'Gardevoir-Void-Mega';
 		}
-		if (['Gardevoir-Void', 'Gardevoir-Void-Mega'].includes(pokemon.baseSpecies.name)) {
+		if (pokemon.baseSpecies.name === 'Gardevoir-Void-Mega') {
 			return 'Gardevoir-Mega';
 		}
 		return null;
