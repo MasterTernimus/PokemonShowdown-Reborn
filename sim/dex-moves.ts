@@ -256,6 +256,8 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multiaccuracy?: boolean;
 	multihit?: number | number[];
 	multihitType?: 'parentalbond' | 'hydrabond' | 'dualwield' | 'blazingmane' | 'starboxer';
+	dualWieldAccuracy?: number | true;
+	dualWieldFullPower?: boolean;
 	noDamageVariance?: boolean;
 	nonGhostTarget?: MoveTarget;
 	spreadModifier?: number;

@@ -52,8 +52,9 @@ function isImmuneToScalingChip(target: Pokemon, type: TypeName) {
 
 function getDualWieldModifier(move: ActiveMove, componentBoost = 1) {
 	if (move.multihitType !== 'dualwield') return componentBoost;
-	if (componentBoost !== 1) return move.hit > 1 ? 0.3 : componentBoost;
-	return 0.7;
+	if (move.dualWieldFullPower) return componentBoost;
+	if (componentBoost !== 1) return move.hit > 1 ? 0.2 : componentBoost;
+	return 0.65;
 }
 
 function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
@@ -810,6 +811,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!(move.flags['slicing'] || move.flags['pulse'] || move.flags['bullet'] || move.flags['horn'] || move.flags['drill'] || arrowMoves.includes(move.id))) return;
 			move.multihit = 2;
 			move.multihitType = 'dualwield';
+			move.dualWieldAccuracy = move.accuracy;
+			move.dualWieldFullPower = this.gameType === 'freeforall';
+			move.accuracy = true;
 		},
 		onBasePowerPriority: 20,
 		onBasePower(basePower, source, target, move) {
@@ -817,7 +821,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Dual Wield",
-		shortDesc: "Eligible moves hit twice at 70% power. With Sharpness, Mega Launcher, or Power Drill, the second hit is 30% of the unboosted move.",
+		shortDesc: "Two 65% independent rolls; boosting pairs: full +20%; FFA: two full-power targets.",
 		rating: 4,
 		num: 10284,
 	},

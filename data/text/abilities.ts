@@ -78,8 +78,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dualwield: {
 		name: "Dual Wield",
-		desc: "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 70% power. When combined with Sharpness, Mega Launcher, or Power Drill, the first hit receives that boost and the second hit deals 30% of the move's unboosted power. Existing multi-hit moves are not given an additional Dual Wield pair.",
-		shortDesc: "Eligible moves hit twice at 70%; boosted combinations use a 30% unboosted second hit.",
+		desc: "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 65% power, with an independent accuracy check for each hit. When combined with Sharpness, Mega Launcher, or Power Drill, the first hit receives that boost and the second hit deals 20% of the move's unboosted power. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair.",
+		shortDesc: "Two 65% independent rolls; boosting pairs: full +20%; FFA: two full-power targets.",
 	},
 	apexpredator: {
 		name: "Apex Predator",
@@ -629,7 +629,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	apexcleave: {
 		name: "Apex Cleave",
-		desc: "This Pokemon has Sharpness, Dual Wield, and Moxie's effects. Slicing moves use a second Dual Wield hit at 30% of their unboosted power.",
+		desc: "This Pokemon has Sharpness, Dual Wield, and Moxie's effects. Slicing moves use a second Dual Wield hit at 20% of their unboosted power.",
 		shortDesc: "Sharpness + Dual Wield + Moxie.",
 	},
 	aurainstinct: {
@@ -709,7 +709,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sacrededge: {
 		name: "Sacred Edge",
-		desc: "This Pokemon has Sharpness, Dual Wield, and Sworn Duty's effects. Its slicing moves have 1.5x power. When Dual Wield applies to one of those slicing moves, the first hit keeps the 1.5x Sharpness boost and the second hit has 30% of the move's unboosted power. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
+		desc: "This Pokemon has Sharpness, Dual Wield, and Sworn Duty's effects. Its slicing moves have 1.5x power. When Dual Wield applies to one of those slicing moves, the first hit keeps the 1.5x Sharpness boost and the second hit has 20% of the move's unboosted power. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.",
 		shortDesc: "Sharpness + Dual Wield + Sworn Duty.",
 	},
 	omenedge: {
@@ -1256,7 +1256,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 		hyperdrill: {
 		name: "Hyper Drill",
-		desc: "This Pokemon has Power Drill and Dual Wield's effects. Drill moves are used twice; the first hit receives Power Drill and the second hit deals 30% of the move's unboosted power. Its Rock-type moves receive a same-type attack bonus.",
+		desc: "This Pokemon has Power Drill and Dual Wield's effects. Drill moves are used twice; the first hit receives Power Drill and the second hit deals 20% of the move's unboosted power. Its Rock-type moves receive a same-type attack bonus.",
 		shortDesc: "Power Drill + Dual Wield; Rock moves get STAB.",
 	},
 	honeygather: {
@@ -2620,8 +2620,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon has Water Barrage, Mega Launcher, Self Sufficient, and Stalwart's effects. Moves boosted by Mega Launcher are used twice through Dual Wield; the second hit deals 30% of the move's unboosted power.",
-		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves get a 30% second hit.",
+		desc: "This Pokemon has Water Barrage, Mega Launcher, Self Sufficient, and Stalwart's effects. Moves boosted by Mega Launcher are used twice through Dual Wield; the second hit deals 20% of the move's unboosted power.",
+		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves get a 20% second hit.",
 	},
 	calderacore: {
 		name: "Caldera Core",

@@ -2054,6 +2054,7 @@ export class Pokemon {
 			warship: ['swiftswim', 'rockhead', 'unaware'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil'],
 			auroraresonance: ['liquidvoice', 'waterabsorb', 'hydration'],
+			windchime: ['ironclad', 'windpower', 'levitate'],
 			auramaster: ['megalauncher', 'dualwield', 'innerfocus'],
 			bloomingsun: ['megasol', 'invigorate', 'naturalcure'],
 			burningcrown: ['whitesmoke', 'filter', 'selfsufficient'],
