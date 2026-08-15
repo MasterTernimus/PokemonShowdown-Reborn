@@ -491,6 +491,14 @@ export class Field {
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		status = this.battle.dex.conditions.get(status);
+		if (['trickroom', 'magicroom', 'wonderroom'].includes(status.id)) {
+			const neutralizer = this.battle.getAllActive().find(pokemon => pokemon?.hasAbility('neutralization'));
+			if (neutralizer) {
+				this.battle.add('-ability', neutralizer, 'Neutralization');
+				this.battle.add('-message', `${status.name} was neutralized!`);
+				return false;
+			}
+		}
 
 		let state = this.pseudoWeather[status.id];
 		if (state) {

@@ -8243,8 +8243,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(source) {
 				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('trapped', source, null, 'trapper');
-					if (source.hasAbility('souleater')) {
-						pokemon.addVolatile('curse', source, this.dex.abilities.get('souleater'));
+					if (source.hasAbility('soulstrike')) {
+						pokemon.addVolatile('curse', source, this.dex.abilities.get('soulstrike'));
 					}
 				}
 			},

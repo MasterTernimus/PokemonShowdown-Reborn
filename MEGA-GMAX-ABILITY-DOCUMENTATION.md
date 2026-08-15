@@ -104,7 +104,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - Pikachu-Gmax: Static / Lightning Rod
 - Meowth-Gmax: Pickup / Technician / Unnerve
 - Machamp-Gmax: Raging Fists
-- Gengar-Gmax: Soul Eater
+- Gengar-Gmax: Soul Strike
 - Kingler-Gmax: Riptide Claws
 - Lapras-Gmax: Aurora Resonance
 - Eevee-Gmax: Ascendance
