@@ -14,10 +14,10 @@ describe('Parasitism and Resuscitation', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const parasect = battle.dex.species.get('Parasect');
 		const parasite = battle.dex.species.get('Parasect-Parasite');
-		assert.equal(parasect.baseStats.spe, 40);
+		assert.equal(parasect.baseStats.spe, 20);
 		assert.deepEqual(parasite.types, ['Ghost', 'Poison']);
-		assert.deepEqual(parasite.baseStats, {hp: 90, atk: 130, def: 40, spa: 130, spd: 40, spe: 120});
-		assert.equal(Object.values(parasite.baseStats).reduce((sum, stat) => sum + stat, 0), 550);
+		assert.deepEqual(parasite.baseStats, {hp: 90, atk: 130, def: 70, spa: 30, spd: 70, spe: 110});
+		assert.equal(Object.values(parasite.baseStats).reduce((sum, stat) => sum + stat, 0), 500);
 	});
 
 	it('should use the Parasitism battle appearance and Dry Skin rain recovery', function () {
@@ -102,6 +102,7 @@ describe('Parasitism and Resuscitation', function () {
 		parasect.sethp(1);
 		parasect.setStatus('brn');
 		parasect.addVolatile('confusion');
+		parasect.addVolatile('taunt');
 		battle.boost({atk: 2, def: -1}, parasect, parasect);
 		battle.makeChoices('move splash', 'move aerialace');
 
@@ -110,13 +111,17 @@ describe('Parasitism and Resuscitation', function () {
 		assert.fullHP(parasect);
 		assert.equal(parasect.boosts.atk, 0, 'Resuscitation should clear positive stat boosts');
 		assert.equal(parasect.boosts.def, 0, 'Resuscitation should clear negative stat boosts');
+		assert(battle.log.some(line => line.startsWith('|-clearboost|p1a: Parasect')),
+			'Resuscitation should tell clients to clear displayed stat boosts');
 		assert.equal(parasect.status, '', 'Resuscitation should cure the revived Pokemon');
 		assert.false(parasect.volatiles.confusion, 'Resuscitation should clear copied volatiles');
+		assert.false(parasect.volatiles.taunt, 'Resuscitation should clear move-restricting volatiles');
+		assert.equal(parasect.lastMove, null, 'Resuscitation should clear the previous move state');
 		assert(!battle.log.some(line => line.includes('|Giga Impact|')), 'Resuscitation should not select a move');
 		assert.fullHP(battle.p2.active[0]);
-		assert.false(parasect.hasAbility('magicguard'));
+		assert(parasect.hasAbility('magicguard'));
 		assert(parasect.hasAbility('selfrepair'));
-		assert(parasect.hasAbility('shadowshield'));
+		assert.false(parasect.hasAbility('shadowshield'));
 
 		parasect.sethp(1);
 		battle.makeChoices('auto', 'move aerialace');
