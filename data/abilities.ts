@@ -3800,6 +3800,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			this.dex.abilities.get('teravolt').onModifyMove?.call(this, move);
 		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		flags: { breakable: 1 },
 		name: "Storm Fright",
 		rating: 4.5,
@@ -4284,6 +4288,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.category === 'Physical' && pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
 				move.overrideOffensiveStat = 'spa';
 			}
+		},
+		onModifySpA(spa) {
+			return this.chainModify(1.3);
 		},
 		flags: { breakable: 1 },
 		name: "Adaptive Cell",
@@ -13562,7 +13569,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	triage: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.flags['heal']) return priority + 3;
+			if (move?.flags['heal'] || ['aromatherapy', 'healbell', 'junglehealing', 'purify', 'refresh'].includes(move?.id || '')) {
+				return priority + 3;
+			}
 		},
 		flags: {},
 		name: "Triage",
@@ -14641,5 +14650,54 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Persistent",
 		rating: 3,
 		num: -3,
+	},
+	islandcurrent: {
+		onModifySpe(spe, pokemon) {
+			return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon);
+		},
+		onStart(pokemon) {
+			return this.dex.abilities.get('windrider').onStart?.call(this, pokemon);
+		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('windrider').onTryHit?.call(this, target, source, move);
+		},
+		onSideConditionStart(side, source, sideCondition) {
+			return this.dex.abilities.get('windrider').onSideConditionStart?.call(this, side, source, sideCondition);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('windrider').onResidual?.call(this, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Island Current",
+		rating: 4,
+		num: 10220,
+	},
+	oceanicwings: {
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('waterabsorb').onTryHit?.call(this, target, source, move);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('hydration').onResidual?.call(this, pokemon);
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move);
+		},
+		flags: { breakable: 1 },
+		name: "Oceanic Wings",
+		rating: 4,
+		num: 10221,
+	},
+	ruinjaw: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('eartheater').onTryHit?.call(this, target, source, move);
+		},
+		flags: { breakable: 1 },
+		name: "Ruin Jaw",
+		rating: 4,
+		num: 10222,
 	},
 };

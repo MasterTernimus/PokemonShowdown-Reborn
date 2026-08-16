@@ -761,8 +761,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormfright: {
 		name: "Storm Fright",
-		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by one. This Pokemon has Teravolt's effect.",
-		shortDesc: "Intimidate + Lightning Rod + Teravolt.",
+		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by one. This Pokemon has Teravolt and Strong Jaw's effects.",
+		shortDesc: "Intimidate + Lightning Rod + Teravolt + Strong Jaw.",
 	},
 	enlightenment: {
 		name: "Enlightenment",
@@ -1856,8 +1856,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	adaptivecell: {
 		name: "Adaptive Cell",
-		desc: "This Pokemon has Overcoat's effect. Before using a physical move, it becomes Fighting type; before using a special move, it becomes Psychic type. If its Special Attack is higher than its Attack, its physical moves may use Special Attack for damage calculation while still targeting Defense.",
-		shortDesc: "Overcoat; physical moves turn it Fighting and can use SpA; special moves turn it Psychic.",
+		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Before using a physical move, it becomes Fighting type; before using a special move, it becomes Psychic type. If its Special Attack is higher than its Attack, its physical moves may use Special Attack while still targeting Defense.",
+		shortDesc: "Overcoat; SpA 1.3x; physical moves become Fighting; special moves become Psychic; physical moves may use SpA.",
 	},
 	voidveil: {
 		name: "Void Veil",
@@ -2998,7 +2998,22 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	triage: {
 		name: "Triage",
-		shortDesc: "This Pokemon's healing moves have their priority increased by 3.",
+		shortDesc: "Healing and status-cleansing moves have their priority increased by 3.",
+	},
+	islandcurrent: {
+		name: "Island Current",
+		desc: "This Pokemon has Swift Swim and Wind Rider's effects.",
+		shortDesc: "Swift Swim + Wind Rider.",
+	},
+	oceanicwings: {
+		name: "Oceanic Wings",
+		desc: "This Pokemon has Water Absorb, Hydration, and Friend Guard's effects.",
+		shortDesc: "Water Absorb + Hydration + Friend Guard.",
+	},
+	ruinjaw: {
+		name: "Ruin Jaw",
+		desc: "This Pokemon has Strong Jaw and Earth Eater's effects.",
+		shortDesc: "Strong Jaw + Earth Eater.",
 	},
 	truant: {
 		name: "Truant",

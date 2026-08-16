@@ -21534,4 +21534,67 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 };
 
+const latestSpeciesUpdates: {[id: string]: any} = {
+	breloom: {
+		baseStats: {hp: 80, atk: 150, def: 100, spa: 50, spd: 90, spe: 70},
+		abilities: {0: "Technician", 1: "Poison Heal", H: "Guts"},
+	},
+	azumarill: {
+		baseStats: {hp: 100, atk: 70, def: 115, spa: 100, spd: 115, spe: 60},
+		abilities: {0: "Huge Power", 1: "Sap Sipper", H: "Mold Breaker"},
+	},
+	pikachu: {
+		canGigantamax: "G-Max Volt Crash",
+	},
+	pikachucosplay: {types: ["Electric", "Ice"], baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120}, abilities: {0: "Serene Grace"}, canGigantamax: "G-Max Volt Crash"},
+	pikachurockstar: {types: ["Electric", "Steel"], baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120}, abilities: {0: "No Guard"}, canGigantamax: "G-Max Volt Crash"},
+	pikachubelle: {types: ["Electric", "Ice"], baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120}, abilities: {0: "Serene Grace"}, canGigantamax: "G-Max Volt Crash"},
+	pikachupopstar: {types: ["Electric", "Fairy"], baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120}, abilities: {0: "Costar"}, canGigantamax: "G-Max Volt Crash"},
+	pikachuphd: {types: ["Electric", "Psychic"], baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120}, abilities: {0: "Neutralization"}, canGigantamax: "G-Max Volt Crash"},
+	pikachulibre: {types: ["Electric", "Fighting"], baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120}, abilities: {0: "Moxie"}, canGigantamax: "G-Max Volt Crash"},
+	pikachupartner: {types: ["Electric"], baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120}, abilities: {0: "Mold Breaker"}, canGigantamax: "G-Max Volt Crash"},
+	pikachustarter: {types: ["Electric"], baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120}, abilities: {0: "Static", H: "Lightning Rod"}, canGigantamax: "G-Max Volt Crash"},
+	pikachugmax: {
+		baseStats: {hp: 90, atk: 80, def: 50, spa: 75, spd: 60, spe: 120},
+		abilities: {0: "Static", H: "Lightning Rod"},
+	},
+	quagsire: {
+		baseStats: {hp: 105, atk: 95, def: 95, spa: 75, spd: 95, spe: 45},
+	},
+	clodsire: {
+		baseStats: {hp: 140, atk: 95, def: 70, spa: 75, spd: 110, spe: 20},
+	},
+	murkrow: {baseStats: {hp: 60, atk: 85, def: 52, spa: 85, spd: 52, spe: 101}},
+	octillery: {baseStats: {hp: 90, atk: 60, def: 100, spa: 125, spd: 105, spe: 60}},
+	mantine: {
+		baseStats: {hp: 95, atk: 95, def: 80, spa: 100, spd: 115, spe: 65},
+		abilities: {0: "Island Current", 1: "Regenerator", H: "Oceanic Wings"},
+	},
+	masquerain: {baseStats: {hp: 70, atk: 60, def: 72, spa: 100, spd: 82, spe: 90}},
+	volbeat: {baseStats: {spa: 90}},
+	illumise: {baseStats: {spa: 90}},
+	grumpig: {
+		baseStats: {hp: 120, atk: 65, def: 65, spa: 110, spd: 130, spe: 60},
+		abilities: {0: "Thick Fat", 1: "Magic Bounce", H: "Own Tempo"},
+	},
+	hippowdon: {
+		baseStats: {hp: 118, atk: 127},
+		abilities: {0: "Sand Stream", 1: "Ruin Jaw", H: "Sand Force"},
+	},
+	garchompbattlebond: {baseStats: {spe: 112}},
+	gourgeist: {isNonstandard: "Unobtainable", tier: "Illegal"},
+	gourgeistsmall: {isNonstandard: null, tier: "RU"},
+	gourgeistlarge: {isNonstandard: "Unobtainable", tier: "Illegal"},
+	gourgeistsuper: {isNonstandard: null, tier: "RU"},
+	manectric: {abilities: {0: "Strong Jaw", 1: "Competitive", H: "Lightning Rod"}},
+};
+
+for (const [id, update] of Object.entries(latestSpeciesUpdates)) {
+	const species = (Pokedex as any)[id];
+	if (!species) continue;
+	Object.assign(species, update);
+	if (update.baseStats) species.baseStats = {...species.baseStats, ...update.baseStats};
+	if (update.abilities) species.abilities = {...update.abilities};
+}
+
 

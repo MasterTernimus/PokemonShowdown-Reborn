@@ -6133,3 +6133,24 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "Illegal",
 	},
 };
+
+const latestFormatUpdates: {[id: string]: any} = {
+	pikachucosplay: {isNonstandard: null, tier: "ZU"},
+	pikachurockstar: {isNonstandard: null, tier: "ZU"},
+	pikachubelle: {isNonstandard: null, tier: "ZU"},
+	pikachupopstar: {isNonstandard: null, tier: "ZU"},
+	pikachuphd: {isNonstandard: null, tier: "ZU"},
+	pikachulibre: {isNonstandard: null, tier: "ZU"},
+	pikachupartner: {isNonstandard: null, tier: "ZU"},
+	pikachustarter: {isNonstandard: null, tier: "ZU"},
+	pikachugmax: {isNonstandard: null, tier: "ZU"},
+	gourgeist: {isNonstandard: "Unobtainable", tier: "Illegal"},
+	gourgeistsmall: {isNonstandard: null, tier: "RU"},
+	gourgeistlarge: {isNonstandard: "Unobtainable", tier: "Illegal"},
+	gourgeistsuper: {isNonstandard: null, tier: "RU"},
+};
+
+for (const [id, update] of Object.entries(latestFormatUpdates)) {
+	if (!(FormatsData as any)[id]) (FormatsData as any)[id] = {};
+	Object.assign((FormatsData as any)[id], update);
+}

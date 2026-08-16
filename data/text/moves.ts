@@ -5418,8 +5418,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockwrecker: {
 		name: "Rock Wrecker",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "If this move fails to KO its target, Stealth Rock is set on the target's side. If successful, the user must recharge on the following turn and cannot select a move.",
+		shortDesc: "If it fails to KO, sets Stealth Rock; user must recharge.",
 	},
 	roleplay: {
 		name: "Role Play",
