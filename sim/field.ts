@@ -213,6 +213,13 @@ export class Field {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
 			return false;
 		}
+		const hauntedBlockedTerrains = [
+			'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'coldeclipseterrain',
+		];
+		if (this.terrain === 'hauntedterrain' && hauntedBlockedTerrains.includes(status.id)) {
+			this.battle.add('-message', 'The evil spirits prevent the new field from forming!');
+			return false;
+		}
 		return true;
 	}
 
@@ -271,6 +278,13 @@ export class Field {
 		];
 		if (this.terrain === 'bewitchedwoodsterrain' && bewitchedBlockedTerrains.includes(status.id)) {
 			this.battle.add('-message', 'The fields magic prevents it');
+			return false;
+		}
+		const hauntedBlockedTerrains = [
+			'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'coldeclipseterrain',
+		];
+		if (this.terrain === 'hauntedterrain' && hauntedBlockedTerrains.includes(status.id)) {
+			this.battle.add('-message', 'The evil spirits prevent the new field from forming!');
 			return false;
 		}
 		if (ignoreNeutralization) {
@@ -346,6 +360,13 @@ export class Field {
 		];
 		if (this.terrain === 'bewitchedwoodsterrain' && bewitchedBlockedTerrains.includes(status.id)) {
 			this.battle.add('-message', 'The fields magic prevents it');
+			return false;
+		}
+		const hauntedBlockedTerrains = [
+			'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'coldeclipseterrain',
+		];
+		if (this.terrain === 'hauntedterrain' && hauntedBlockedTerrains.includes(status.id)) {
+			this.battle.add('-message', 'The evil spirits prevent the new field from forming!');
 			return false;
 		}
 		if (!this.canBypassNeutralizationForTerrainChange(status.id as ID) && this.neutralizeTerrainChange()) return false;
