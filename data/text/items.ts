@@ -74,6 +74,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ampharosite",
 		shortDesc: "If held by an Ampharos, this item allows it to Mega Evolve in battle.",
 	},
+	amplifieldrock: {
+		name: "Amplifield Rock",
+		shortDesc: "Extends temporary terrains and room effects created by the holder, usually by 3 turns.",
+	},
 	apicotberry: {
 		name: "Apicot Berry",
 		shortDesc: "Raises holder's Sp. Def by 1 stage when at 1/4 max HP or less. Single use.",
@@ -1900,9 +1904,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Starminite",
 		shortDesc: "If held by a Starmie, this item allows it to Mega Evolve in battle.",
 	},
-	starsweet: {
-		name: "Star Sweet",
-		shortDesc: "Evolves Milcery into Alcremie when held and spun around.",
+	amuletcoin: {
+		name: "Amulet Coin",
+		shortDesc: "In Dragon's Den, the holder cannot be afflicted with a status condition.",
 	},
 	steelgem: {
 		name: "Steel Gem",
@@ -2630,3 +2634,15 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
 	},
 };
+
+const redundantItemTextIds = [
+	'berserkgene',
+	'berry', 'bitterberry', 'burntberry', 'goldberry', 'iceberry',
+	'mintberry', 'miracleberry', 'mysteryberry', 'przcureberry', 'psncureberry',
+	'belueberry', 'blukberry', 'cornnberry', 'durinberry', 'grepaberry',
+	'hondewberry', 'kelpsyberry', 'magostberry', 'nanabberry', 'nomelberry',
+	'pamtreberry', 'pinapberry', 'pomegberry', 'qualotberry', 'rabutaberry',
+	'razzberry', 'spelonberry', 'tamatoberry', 'watmelberry', 'wepearberry',
+] as IDEntry[];
+
+for (const itemId of redundantItemTextIds) delete ItemsText[itemId];

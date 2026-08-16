@@ -17223,9 +17223,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1, cantusetwice: 1 },
 		onAfterMove(source, target, move) {
+			if (!target.fainted && target.hp > 0) {
+				target.side.addSideCondition('stealthrock', source, move);
+			}
 			if (target.fainted) {
 				source.removeVolatile('mustrecharge');
-				target.side.addSideCondition('stealthrock', source, move);
 			}
 		},
 		self: {

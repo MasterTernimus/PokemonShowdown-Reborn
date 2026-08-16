@@ -6158,8 +6158,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 2561,
 		gen: 9,
 	},
-	starsweet: {
-		name: "Star Sweet",
+	amuletcoin: {
+		name: "Amulet Coin",
 		spritenum: 709,
 		onSetStatus(condition, target, source, effect) {
 			if (this.field.isTerrain('dragonsdenterrain')) {
@@ -8428,3 +8428,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		isNonstandard: "CAP",
 	},
 };
+
+const redundantItemIds = [
+	'berserkgene',
+	'berry', 'bitterberry', 'burntberry', 'goldberry', 'iceberry',
+	'mintberry', 'miracleberry', 'mysteryberry', 'przcureberry', 'psncureberry',
+	'belueberry', 'blukberry', 'cornnberry', 'durinberry', 'grepaberry',
+	'hondewberry', 'kelpsyberry', 'magostberry', 'nanabberry', 'nomelberry',
+	'pamtreberry', 'pinapberry', 'pomegberry', 'qualotberry', 'rabutaberry',
+	'razzberry', 'spelonberry', 'tamatoberry', 'watmelberry', 'wepearberry',
+] as ID[];
+
+for (const itemId of redundantItemIds) delete Items[itemId];

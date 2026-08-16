@@ -113502,3 +113502,50 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		],
 	},
 }
+
+const latestLearnsetAdditions: {[id: string]: string[]} = {
+	azumarill: ['aurasphere', 'moonblast', 'muddywater', 'perishsong', 'focusblast', 'dazzlinggleam', 'drainingkiss'],
+	slowking: ['auroraveil'],
+	slowkinggalar: ['auroraveil'],
+	walrein: ['auroraveil'],
+	avalugg: ['auroraveil'],
+	avalugghisui: ['auroraveil'],
+	crabominable: ['auroraveil'],
+	deoxys: ['auroraveil'],
+	deoxysattack: ['auroraveil'],
+	deoxysdefense: ['auroraveil'],
+	deoxysspeed: ['auroraveil'],
+	quagsire: ['acidspray', 'mudbomb', 'encore', 'wavecrash', 'flipturn', 'haze'],
+	clodsire: ['megahorn', 'barbbarrage', 'banefulbunker', 'gunkshot', 'liquidation', 'hydropump', 'flipturn'],
+	mantine: ['liquidation', 'wavecrash', 'aquacutter', 'dualwingbeat', 'bravebird', 'flipturn', 'aquajet'],
+	grumpig: ['snatch', 'instruct', 'aurasphere', 'teleport'],
+	hippowdon: ['shoreup', 'psychicfangs'],
+};
+
+const pikachuSharedForms = [
+	'pikachucosplay', 'pikachurockstar', 'pikachubelle', 'pikachupopstar',
+	'pikachuphd', 'pikachulibre', 'pikachupartner', 'pikachustarter',
+];
+const pikachuExtraMoves = ['freezedry', 'iciclecrash', 'flashcannon', 'meteormash', 'eeriespell', 'heartstamp', 'drainingkiss', 'playrough', 'flyingpress', 'vacuumwave'];
+const pikachuLearnset = (Learnsets as any).pikachu?.learnset || {};
+for (const id of pikachuSharedForms) {
+	const learnset = (Learnsets as any)[id]?.learnset;
+	if (!learnset) continue;
+	for (const [move, sources] of Object.entries(pikachuLearnset)) learnset[move] ??= sources;
+	for (const move of pikachuExtraMoves) learnset[move] ??= ['9M'];
+}
+
+for (const [id, moves] of Object.entries(latestLearnsetAdditions)) {
+	const learnset = (Learnsets as any)[id]?.learnset;
+	if (!learnset) continue;
+	for (const move of moves) learnset[move] ??= ['9M'];
+}
+
+const latestLearnsetRemovals: {[id: string]: string[]} = {
+	pidgeot: ['bleakwindstorm', 'windbolt', 'searingshot', 'springtidestorm'],
+};
+for (const [id, moves] of Object.entries(latestLearnsetRemovals)) {
+	const learnset = (Learnsets as any)[id]?.learnset;
+	if (!learnset) continue;
+	for (const move of moves) delete learnset[move];
+}
