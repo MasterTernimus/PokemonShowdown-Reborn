@@ -556,8 +556,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relicarmor: {
 		name: "Relic Armor",
-		desc: "On switch-in, this Pokemon lowers each foe's Defense and Special Defense by 1, or by 2 in Cold Eclipse. In Desert, Fairy Tale, Cave, Crystal Cavern, New World, or Volcanic Field, its Defense and Special Defense rise by 1. It cannot be critically hit, takes 0.8x damage from attacks, and raises its Defense and Special Defense by 1 after an opposing Pokemon lowers one of its stats.",
-		shortDesc: "Entry drops foes' Def/SpD; no crits; takes 0.8x damage; reacts to stat drops.",
+		desc: "On switch-in, this Pokemon lowers each foe's Defense and Special Defense by 1, or by 2 in Cold Eclipse. In Desert, Fairy Tale, Cave, Crystal Cavern, New World, or Volcanic Field, its Defense and Special Defense rise by 1. It cannot be critically hit, takes 0.8x damage from attacks, has no Rock weakness, and has Self Sufficient's effects. After an opposing Pokemon lowers one of its stats, its Defense and Special Defense rise by 1.",
+		shortDesc: "Entry drops Def/SpD; no crits; 0.8x damage; no Rock weakness; Self Sufficient; reacts to drops.",
+	},
+	relicmishap: {
+		name: "Relic Mishap",
+		desc: "This Pokemon takes 0.9x damage from attacks and has Self Sufficient, Water Absorb, and Volt Absorb. It restores 1/16 max HP each turn and is immune to Sandstorm and Hail damage. During Sandstorm, its Special Defense is multiplied by 1.5. During Hail or Snow, its Defense is multiplied by 1.5.",
+		shortDesc: "0.9x damage; heals 1/16; Water/Volt Absorb; weather chip immune; Sand: 1.5x SpD; Hail/Snow: 1.5x Def.",
 	},
 	windysurge: {
 		name: "Windy Surge",
@@ -931,8 +936,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	duneterror: {
 		name: "Dune Terror",
-		desc: "This Pokemon has Sand Stream and custom Shed Skin's effects. During Sandstorm, grounded foes take Ground-type residual damage based on effectiveness, blocked by Ground immunities.",
-		shortDesc: "Sand Stream + custom Shed Skin; Ground chip respects immunities.",
+		desc: "This Pokemon has Sand Stream and Shed Skin's effects. During Sandstorm, grounded foes take Ground-type residual damage based on effectiveness, blocked by Ground immunities.",
+		shortDesc: "Sand Stream + Shed Skin; Ground chip respects immunities.",
 	},
 	heatcoil: {
 		name: "Heat Coil",
@@ -2327,10 +2332,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Sharpness's effect and gains STAB on Fighting-type moves.",
 		shortDesc: "Sharpness; gains Fighting STAB.",
 	},
-	 shedskin: {
+	shedskin: {
 		name: "Shed Skin",
-		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects including Curse and Perish Song, reset its negative stat stages to 0, and restore 1/4 max HP. This can also activate while below half HP.",
-		shortDesc: "50% chance to cleanse negatives including Curse, reset negative stat stages, and heal 1/4.",
+		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects including Curse and Perish Song, reset its negative stat stages to 0, and restore 1/4 max HP. This can also activate while at or below half HP. In Dragon's Den, activation is guaranteed; it instead raises the higher offensive stat by 1, lowers Defense and Special Defense by 1, and restores 1/4 max HP.",
+		shortDesc: "50% to cleanse status/effects and stat drops, then heal 1/4; altered and guaranteed in Dragon's Den.",
 	},
 	sheerforce: {
 		name: "Sheer Force",
@@ -3178,8 +3183,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlefervor: {
 		name: "Battle Fervor",
-		desc: "If this Pokemon moves before its target, its attacks deal 1.2x damage. Once per switch-in, if it would move after the attacker, damaging attacks against it deal 0.8x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented.",
-		shortDesc: "Fast attacks 1.2x; once per switch-in slow takes 0.8x; hit boosts once; blocks Berries.",
+		desc: "If this Pokemon moves before its target, its attacks deal 1.2x damage. Once per switch-in, if it would move after the attacker, damaging attacks against it deal 0.8x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. Bewitched Woods, Haunted, and Holy Field disable these effects.",
+		shortDesc: "Fast attacks 1.2x; slow hit 0.8x once; first hit boosts; inactive in Bewitched/Haunted/Holy.",
 	},
 	duskilate: {
 		name: "Duskilate",
@@ -3378,13 +3383,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ultraego: {
 		name: "Ultra Ego",
-		desc: "Moves ignore abilities; it heals each turn and after attacks. KOs heal more, and the first enemy hit boosts Attack and Sp. Atk.",
-		shortDesc: "Mold Breaker; heals each turn/attack; KOs heal more; first enemy hit boosts Atk/SpA.",
+		desc: "Moves ignore abilities; it heals each turn and after attacks. KOs heal more, and the first enemy hit boosts Attack and Sp. Atk. Bewitched Woods, Haunted, and Holy Field disable these effects.",
+		shortDesc: "Mold Breaker; heals and boosts from combat; inactive in Bewitched/Haunted/Holy.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",
-		desc: "This Pokemon has Mold Breaker and Inner Focus. It deals 2x damage through screens and 1.5x damage when moving first. In Ashen Beach, New World, Starlight Arena, Holy Field, and Cold Eclipse, it gains 1 Accuracy on entry, deals 1.5x damage, and takes 50% less damage. Outside those fields, it takes 70% less damage when hit before its attacker has moved. Bewitched Woods disables these effects.",
-		shortDesc: "Mold Breaker + Inner Focus; 2x vs screens; 1.5x moving first; boosted fields halve damage.",
+		desc: "This Pokemon has Mold Breaker and Inner Focus. It deals 2x damage through screens and 1.5x damage when moving first. In Ashen Beach, New World, Starlight Arena, and Cold Eclipse, it gains 1 Accuracy on entry, deals 1.5x damage, and takes 50% less damage. Outside those fields, it takes 70% less damage when hit before its attacker has moved. Bewitched Woods, Haunted, and Holy Field disable these effects.",
+		shortDesc: "Mold Breaker + Inner Focus; speed-based offense/guard; inactive in Bewitched/Haunted/Holy.",
 	},
 	duskdrive: {
 		name: "Dusk Drive",

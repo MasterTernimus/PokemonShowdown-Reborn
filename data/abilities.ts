@@ -37,6 +37,10 @@ function isFightingClauseAbility(pokemon: Pokemon) {
 	return pokemon.hasAbility(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive', 'perfectego']);
 }
 
+function isUltraSuppressedTerrain(battle: Battle) {
+	return battle.field.isTerrain(['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain']);
+}
+
 const SCALING_CHIP_IMMUNITIES: Partial<Record<TypeName, string[]>> = {
 	Fire: ['flashfire', 'soulfire', 'wellbakedbody'],
 	Grass: ['sapsipper'],
@@ -1359,7 +1363,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	battlefervor: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			pokemon.abilityState.battleFervorDamageReduced = false;
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Battle Fervor');
@@ -1383,23 +1387,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.effectState.unnerved = false;
 		},
 		onFoeUseItem(item) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (['elementalseed', 'telluricseed', 'magicalseed', 'syntheticseed'].includes(item.id)) {
 				return !this.effectState.unnerved;
 			}
 		},
 		onFoeTryEatItem() {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			return !this.effectState.unnerved;
 		},
 		onTryAddVolatile(status, pokemon) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (status.id === 'flinch' && this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				return null;
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) return;
 			if (source && target.isAlly(source)) return;
 			let blocked = false;
@@ -1414,7 +1418,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (move.category === 'Status') return;
 			if (target?.hasAbility('battlebond')) return;
 			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
@@ -1427,7 +1431,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
 			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
 				this.debug('Battle Fervor Royal Decree weaken');
@@ -1446,6 +1450,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			if (!target.battleFervorBoosted) {
 				target.battleFervorBoosted = true;
@@ -4510,7 +4515,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	perfectego: {
 		onStart(pokemon) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			this.add('-ability', pokemon, 'Perfect Ego');
 			pokemon.abilityState.ultraEgoDefBoosted = false;
 			pokemon.abilityState.ultraEgoSpDBoosted = false;
@@ -4521,7 +4526,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
 		},
 		healUltraEgo(pokemon, source) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (source === 'hit' && (this.dex.abilities.get('ultraego') as any).boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.ultraEgoPinch = true;
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
@@ -4533,36 +4538,36 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (source === this.effectState.target) return true;
 		},
 		onModifyMove(move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			move.ignoreAbility = true;
 		},
 		onAfterMove(source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (move.category !== 'Status') source.abilityState.ultraEgoHitTriggered = false;
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (move.category === 'Status') return;
 			if (target?.hasAbility('battlebond')) return;
 			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) return this.chainModify(1.3);
 			if (target && (this.queue.willMove(target) || target.newlySwitched)) return this.chainModify(1.2);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
 			if (!this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) return this.chainModify(0.7);
 			return;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
 			(this.dex.abilities.get('ultraego') as any).healUltraEgo.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);
@@ -5599,6 +5604,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onCriticalHit() {
 			return false;
 		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.type === 'Rock' && typeMod > 0) return 0;
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
+		},
 		onAfterBoost(boost, target, source, effect) {
 			if (!source || source === target || source.isAlly(target)) return;
 			let lowered = false;
@@ -5615,6 +5629,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Relic Armor",
 		rating: 5,
 		num: 10134,
+	},
+	relicmishap: {
+		onTryHit(target, source, move) {
+			const waterResult = this.dex.abilities.get('waterabsorb').onTryHit?.call(this, target, source, move);
+			if (waterResult !== undefined) return waterResult;
+			return this.dex.abilities.get('voltabsorb').onTryHit?.call(this, target, source, move);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status') return this.chainModify(0.9);
+		},
+		onModifyDef(def, pokemon) {
+			if (this.field.isWeather(['hail', 'snow'])) return this.chainModify(1.5);
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isWeather('sandstorm')) return this.chainModify(1.5);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
+			this.dex.abilities.get('waterabsorb').onResidual?.call(this, pokemon);
+			this.dex.abilities.get('voltabsorb').onResidual?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Relic Mishap",
+		rating: 4,
+		num: 10358,
 	},
 	windysurge: {
 		onStart(pokemon) {
@@ -13712,7 +13754,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	ultraego: {
 		onStart(pokemon) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			this.add('-ability', pokemon, 'Ultra Ego');
 			pokemon.abilityState.ultraEgoDefBoosted = false;
 			pokemon.abilityState.ultraEgoSpDBoosted = false;
@@ -13723,7 +13765,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
 		},
 		healUltraEgo(pokemon, source) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (source === 'hit' && (this.dex.abilities.get('burningego') as any).boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.ultraEgoPinch = true;
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
@@ -13732,12 +13774,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onModifyMove(move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			move.ignoreAbility = true;
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (target?.hasAbility('battlebond')) return;
 			if (move.category !== 'Status' && !this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
 				this.debug('Ultra Ego Royal Decree boost');
@@ -13745,25 +13787,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (move && move.category !== 'Status' && !this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')) && this.getAllActive().some(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']))) {
 				this.debug('Ultra Ego Royal Decree weaken');
 				return this.chainModify(0.7);
 			}
 		},
 		onAfterMove(source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (move.category !== 'Status') source.abilityState.ultraEgoHitTriggered = false;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
 			(this.dex.abilities.get('burningego') as any).healUltraEgo.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);
@@ -13784,7 +13826,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			(this.dex.abilities.get('burningego') as any).healUltraEgo.call(this, target, 'hit');
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		flags: {},
@@ -13794,21 +13836,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	ultrainstinct: {
 		onStart(pokemon) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			this.add('-ability', pokemon, 'Ultra Instinct');
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) this.boost({ accuracy: 1 }, pokemon, pokemon);
 		},
 		onTryAddVolatile(status, pokemon) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon);
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (target?.hasAbility('battlebond')) return;
 			if (target?.side.getSideCondition('reflect') || target?.side.getSideCondition('lightscreen') || target?.side.getSideCondition('auroraveil')) {
 				this.debug('Ultra Instinct screen punish');
@@ -13820,7 +13862,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain'])) {
 				this.debug('Ultra Instinct field weaken');
 				return this.chainModify(0.5);
@@ -13853,7 +13895,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	burningego: {
 		onStart(pokemon) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			this.add('-ability', pokemon, 'Burning Ego');
 			pokemon.abilityState.ultraEgoDefBoosted = false;
 			pokemon.abilityState.ultraEgoSpDBoosted = false;
@@ -13864,7 +13906,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.field.isTerrain(['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'holyterrain', 'coldeclipseterrain', 'fairytaleterrain']);
 		},
 		healUltraEgo(pokemon, source) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (source === 'hit' && (this.dex.abilities.get('perfectego') as any).boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.abilityState.ultraEgoPinch = true;
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
@@ -13873,21 +13915,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 		},
 		onModifyMove(move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 		},
 		onAfterMove(source, target, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (move.category !== 'Status') source.abilityState.ultraEgoHitTriggered = false;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!move || move.category === 'Status') return;
 			if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;
 			source.abilityState.ultraEgoAttackHealTurn = this.turn;
 			(this.dex.abilities.get('perfectego') as any).healUltraEgo.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (this.field.isTerrain('bewitchedwoodsterrain')) return;
+			if (isUltraSuppressedTerrain(this)) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);

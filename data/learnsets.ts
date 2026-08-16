@@ -8344,7 +8344,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			worryseed: ["9M", "7T", "6T", "5T", "4T"],
 			xscissor: ["9L40", "8V", "7M", "7L66", "6M", "6L66", "5M", "5L66", "4M", "4L55"],
 			forestscurse: ["9M"],
-			shadowforce: ["9M"],
 			shadowsneak: ["9M"],
 			partingshot: [],
 		},
@@ -18137,7 +18136,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	hitmonlee: {
 		learnset: {
-			accelrock: ["9M"],
+			accelerock: ["9M"],
 			followme: ["9M"],
 			rockwrecker: ["9M"],
 			aquastep: ["9M"],
@@ -28151,7 +28150,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			aurasphere: ["9M"],
 			bitterblade: ["9M"],
 			drainpunch: ["9M"],
-			shadowforce: ["9M"],
 			shadowsneak: ["9M"],
 			bulkup: ["9M"],
 		},
@@ -38271,6 +38269,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	tyranitar: {
 		learnset: {
+			knockoff: ["9M"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			ancientpower: ["9M", "4T"],
 			aquatail: ["9M", "7T", "6T", "5T", "4T"],
@@ -38339,7 +38338,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			irondefense: ["9L1", "8M", "8L1", "7T", "6T", "5T"],
 			ironhead: ["9M", "8M", "7T", "6T", "5T", "4T"],
 			irontail: ["9M", "8M", "7T", "7V", "6T", "5T", "4M", "3M"],
-			knockoff: [],
 			lashout: ["9M", "8T"],
 			leer: ["9L1", "8L1", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			lowkick: ["9M", "8M", "7T", "6T", "6S5", "6S6", "5T", "4T"],
@@ -57154,6 +57152,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	drifblim: {
 		learnset: {
+			flamethrower: ["9M"],
 			acrobatics: ["9M", "8M", "7M", "6M", "5M"],
 			aerialace: [],
 			aircutter: ["9M", "4T"],
@@ -57187,7 +57186,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			facade: ["9M", "8M", "7M", "6M", "5M", "4M"],
 			fakeout: ["9M"],
 			firepledge: [],
-			flamethrower: [],
 			flash: ["9M", "6M", "5M", "4M"],
 			fling: [],
 			fly: ["9M", "8M", "7M", "6M", "5M", "4M"],
