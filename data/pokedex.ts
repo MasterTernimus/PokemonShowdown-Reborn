@@ -21581,7 +21581,7 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 		baseStats: {hp: 118, atk: 127},
 		abilities: {0: "Sand Stream", 1: "Ruin Jaw", H: "Sand Force"},
 	},
-	garchompbattlebond: {baseStats: {spe: 112}},
+	garchompbattlebond: {baseStats: {spe: 122}},
 	gourgeist: {isNonstandard: "Unobtainable", tier: "Illegal"},
 	gourgeistsmall: {isNonstandard: null, tier: "RU"},
 	gourgeistlarge: {isNonstandard: "Unobtainable", tier: "Illegal"},

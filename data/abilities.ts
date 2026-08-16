@@ -1658,7 +1658,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	bulletproof: {
 		onTryHit(pokemon, target, move) {
-			if (move.flags['bullet'] || move.flags['pulse']) {
+			// Mega Launcher boosts the same pulse and bullet move classes blocked here.
+			const isMegaLauncherBoosted = move.flags['bullet'] || move.flags['pulse'];
+			if (isMegaLauncherBoosted) {
 				this.add('-immune', pokemon, '[from] ability: Bulletproof');
 				return null;
 			}

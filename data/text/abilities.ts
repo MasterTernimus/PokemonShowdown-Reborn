@@ -290,8 +290,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	bulletproof: {
 		name: "Bulletproof",
-		desc: "This Pokemon is immune to bullet and pulse moves and takes 20% less damage from attacks.",
-		shortDesc: "Immune to bullet/pulse moves; takes 0.8x damage from attacks.",
+		desc: "This Pokemon is immune to bullet, pulse, and all Mega Launcher-boosted moves and takes 20% less damage from attacks.",
+		shortDesc: "Immune to bullet/pulse/Mega Launcher moves; takes 0.8x damage.",
 	},
 	cheekpouch: {
 		name: "Cheek Pouch",
