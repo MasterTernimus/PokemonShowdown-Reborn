@@ -635,7 +635,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		target: "normal",
 		type: "Fighting",
 		contestType: "Tough",
@@ -1256,7 +1256,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		onModifyMove(move, pokemon) {
 			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
 				move.category = "Special";
@@ -2282,7 +2282,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		fullDamageSpread: true,
 		target: "normal",
 		type: "Grass",
@@ -3072,7 +3072,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		basePowerCallback(pokemon, target, move) {
 			return move.lastHit ? 60 : 30;
 		},
@@ -4514,7 +4514,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -7096,7 +7096,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, drill: 1, metronome: 1, bone: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		onAfterHit(target, source, move) {
 			if (!move.lastHit || !source.lastDamage) return;
 			this.heal(source.lastDamage, source, target);
@@ -7148,7 +7148,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		target: "normal",
 		type: "Normal",
 		maxMove: { basePower: 100 },
@@ -10606,7 +10606,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		fullDamageSpread: true,
 		target: "normal",
 		type: "Ice",
@@ -15069,7 +15069,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		target: "normal",
 		type: "Bug",
 		zMove: { basePower: 140 },
@@ -17066,7 +17066,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		fullDamageSpread: true,
 		target: "normal",
 		type: "Rock",
@@ -17729,7 +17729,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		selfBoost: {
 			boosts: {
 				def: -1,
@@ -21457,7 +21457,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		multihit: [3, 5],
+		multihit: [2, 5],
 		target: "normal",
 		type: "Normal",
 		zMove: { basePower: 140 },
@@ -22867,7 +22867,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	twinbeam: {
 		num: 888,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 60,
 		category: "Special",
 		name: "Twin Beam",
 		pp: 10,
