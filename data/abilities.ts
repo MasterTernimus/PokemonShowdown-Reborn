@@ -5322,9 +5322,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			let modifier = 1;
-			if (this.field.isTerrain('fairytaleterrain')) {
-				this.debug('Eternal Flower double boost');
+			if (this.field.isTerrain(['fairytaleterrain', 'coldeclipseterrain'])) {
+				this.debug('Eternal Flower strong field boost');
 				modifier = 2;
+			} else if (this.field.isTerrain(['starlightarenaterrain', 'newworldterrain', 'bewitchedwoodsterrain'])) {
+				this.debug('Eternal Flower field boost');
+				modifier = 1.5;
 			}
 			if (move && this.movehasType(move, 'Grass')) {
 				this.debug('Eternal Flower boost');
@@ -5335,9 +5338,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			let modifier = 1;
-			if (this.field.isTerrain('fairytaleterrain')) {
-				this.debug('Eternal Flower double boost');
+			if (this.field.isTerrain(['fairytaleterrain', 'coldeclipseterrain'])) {
+				this.debug('Eternal Flower strong field boost');
 				modifier = 2;
+			} else if (this.field.isTerrain(['starlightarenaterrain', 'newworldterrain', 'bewitchedwoodsterrain'])) {
+				this.debug('Eternal Flower field boost');
+				modifier = 1.5;
 			}
 			if (move && this.movehasType(move, 'Grass')) {
 				this.debug('Eternal Flower boost');
