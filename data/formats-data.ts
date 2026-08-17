@@ -32,10 +32,18 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	charizardalt: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
 	charizardmegax: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "UUBL",
+	},
+	charizardmegaxalt: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
 	},
 	charizardmegay: {
 		isNonstandard: "Past",
