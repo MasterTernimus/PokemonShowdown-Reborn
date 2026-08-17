@@ -2207,6 +2207,8 @@ export class BattleActions {
 		const species = pokemon.baseSpecies;
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
+		if (species.id === 'charizardmegaxalt') return null;
+		if (species.id === 'charizardalt' && item.id === 'charizarditex') return 'Charizard-Mega-X-Alt';
 		// Mega Rayquaza
 		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
 			this.battle.ruleTable.has('+pokemontag:future')) &&
