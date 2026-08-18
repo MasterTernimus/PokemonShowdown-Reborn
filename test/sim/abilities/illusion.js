@@ -10,6 +10,18 @@ describe('Illusion', function () {
 		battle.destroy();
 	});
 
+	it(`should disguise as the ally with the strongest known pressure`, function () {
+		battle = common.gen(9).createBattle([[
+			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
+			{species: "Garchomp", moves: ['earthquake']},
+			{species: "Blissey", moves: ['softboiled']},
+		], [
+			{species: "Heatran", moves: ['protect']},
+		]]);
+
+		assert.equal(battle.p1.pokemon[0].illusion.species.baseSpecies, 'Garchomp');
+	});
+
 	it(`should not instantly wear off before Dynamaxing`, function () {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},

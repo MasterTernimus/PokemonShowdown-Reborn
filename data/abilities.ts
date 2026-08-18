@@ -54,6 +54,42 @@ function isImmuneToScalingChip(target: Pokemon, type: TypeName) {
 	return !!immunityAbilities?.length && target.hasAbility(immunityAbilities);
 }
 
+function getIllusionThreatScore(battle: Battle, candidate: Pokemon, foes: Pokemon[]) {
+	let score = 0;
+	for (const foe of foes) {
+		if (!foe || foe.fainted || !foe.hp) continue;
+		let bestPressure = 0;
+		for (const moveSlot of candidate.moveSlots) {
+			const move = battle.dex.moves.get(moveSlot.id);
+			if (!move.id || move.category === 'Status' || !move.basePower || !foe.runImmunity(move)) continue;
+			const attackStat = move.category === 'Physical' ? 'atk' : 'spa';
+			const defenseStat = move.category === 'Physical' ? 'def' : 'spd';
+			const attack = candidate.getStat(attackStat, false, false);
+			const defense = foe.getStat(defenseStat, false, false);
+			const effectiveness = battle.dex.getEffectiveness(move, foe);
+			let pressure = move.basePower * attack / Math.max(1, defense) * Math.pow(2, effectiveness);
+			if (candidate.hasType(move.type)) pressure *= 1.5;
+			if (effectiveness > 0 && candidate.hasType(move.type)) pressure *= 1.25;
+			if (candidate.getStat('spe', false, false) >= foe.getStat('spe', false, false)) pressure *= 1.1;
+			bestPressure = Math.max(bestPressure, pressure);
+		}
+		score += bestPressure;
+
+		for (const moveSlot of foe.moveSlots) {
+			const move = battle.dex.moves.get(moveSlot.id);
+			if (!move.id || move.category === 'Status' || !move.basePower) continue;
+			if (!candidate.runImmunity(move)) {
+				score += 16;
+				continue;
+			}
+			const effectiveness = battle.dex.getEffectiveness(move, candidate);
+			if (effectiveness < 0) score += -effectiveness * 8;
+			if (effectiveness > 0) score -= effectiveness * 8;
+		}
+	}
+	return score;
+}
+
 function getDualWieldModifier(move: ActiveMove, componentBoost = 1) {
 	if (move.multihitType !== 'dualwield') return componentBoost;
 	if (move.dualWieldFullPower) return componentBoost;
@@ -7284,16 +7320,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBeforeSwitchIn(pokemon) {
 			pokemon.illusion = null;
-			// yes, you can Illusion an active pokemon but only if it's to your right
-			for (let i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
-				const possibleTarget = pokemon.side.pokemon[i];
-				if (!possibleTarget.fainted) {
-					// If Ogerpon is in the last slot while the Illusion Pokemon is Terastallized
-					// Illusion will not disguise as anything
-					if (!pokemon.terastallized || !['Ogerpon', 'Terapagos'].includes(possibleTarget.species.baseSpecies)) {
+			const possibleTargets = pokemon.side.pokemon.filter(possibleTarget =>
+				possibleTarget !== pokemon && !possibleTarget.fainted && possibleTarget.hp &&
+				(!pokemon.terastallized || !['Ogerpon', 'Terapagos'].includes(possibleTarget.species.baseSpecies))
+			);
+			const foes = pokemon.side.foes();
+			if (foes.length && possibleTargets.length) {
+				let bestScore = -Infinity;
+				for (const possibleTarget of possibleTargets) {
+					const score = getIllusionThreatScore(this, possibleTarget, foes);
+					if (score > bestScore) {
+						bestScore = score;
 						pokemon.illusion = possibleTarget;
 					}
-					break;
+				}
+			}
+			if (!pokemon.illusion) {
+				// During the opening switch-in, opposing active Pokemon may not exist yet.
+				for (let i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
+					const possibleTarget = pokemon.side.pokemon[i];
+					if (!possibleTarget.fainted && possibleTarget.hp) {
+						pokemon.illusion = possibleTarget;
+						break;
+					}
 				}
 			}
 		},
