@@ -27,6 +27,7 @@ export type MoveTarget =
 /** Possible move flags. */
 interface MoveFlags {
 	allyanim?: 1; // The move plays its animation when used on an ally.
+	arrow?: 1; // Eligible for Fallen Star and Dual Wield's arrow-move effects.
 	bypasssub?: 1; // Ignores a target's substitute.
 	bite?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
 	bone?: 1; // Bone moves ignore certain type immunities.

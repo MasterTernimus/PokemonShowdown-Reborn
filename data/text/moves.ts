@@ -50,7 +50,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	arenitewall: {
 		name: "Arenite Wall",
 		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during Sandstorm or on Desert Field, Rocky Field, Ashen Beach, or Cold Eclipse. If the user is holding Light Clay, or if used on Desert Field, Rocky Field, or Ashen Beach, the duration is 8 turns. Critical hits and moves that bypass screens ignore this effect.",
-		shortDesc: "5 turns: side takes 0.5x from super-effective hits.",
+		shortDesc: "5 turns (8 when extended): side takes 0.5x from super-effective hits.",
 	},
 	aciddownpour: {
 		name: "Acid Downpour",
@@ -187,8 +187,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	armthrust: {
 		name: "Arm Thrust",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits two to five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5 times in one turn.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -361,8 +361,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barrage: {
 		name: "Barrage",
-		desc: "Hits three to five times. This move uses the user's higher attacking stat. Each hit has a 20% chance to lower the target's Special Defense by 1 stage. If this move hits five times, the final hit is a critical hit.",
-		shortDesc: "Hits 3-5. Uses higher Atk/SpA. 20% -SpD/hit.",
+		desc: "Hits two to five times. This move uses the user's higher attacking stat. Each hit has a 20% chance to lower the target's Special Defense by 1 stage. If this move hits five times, the final hit is a critical hit.",
+		shortDesc: "Hits 2-5; uses higher Atk/SpA; 20% -SpD per hit.",
 		gen4: {
 			desc: "Hits three to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -790,8 +790,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bulletseed: {
 		name: "Bullet Seed",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits two to five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5 times in one turn.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -1016,8 +1016,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cometpunch: {
 		name: "Comet Punch",
-		desc: "Hits three to five times. Each hit has 30 Base Power, and the final hit has 60 Base Power and is always a critical hit. Counts as a punching move.",
-		shortDesc: "Hits 3-5 times. Final hit is 60 BP and always crits.",
+		desc: "Hits two to five times. Each hit has 30 Base Power, and the final hit has 60 Base Power and is always a critical hit. Counts as a punching move.",
+		shortDesc: "Hits 2-5 times. Final hit is 60 BP and always crits.",
 		gen4: {
 			desc: "Hits three to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -1537,8 +1537,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleslap: {
 		name: "Double Slap",
-		desc: "Hits three to five times. Each hit has a 10% chance to lower the target's Attack by 1 stage.",
-		shortDesc: "Hits 3-5 times; each hit has a 10% chance to lower Attack by 1.",
+		desc: "Hits two to five times. Each hit has a 10% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "Hits 2-5; each hit has a 10% chance to lower Attack by 1.",
 		gen4: {
 			desc: "Hits three to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -2366,8 +2366,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	furyattack: {
 		name: "Fury Attack",
-		desc: "Hits three to five times. After the final hit, the user restores HP equal to the damage dealt by that hit. If the target fainted, the user also restores 1/4 max HP. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
-		shortDesc: "Hits 3-5 times; final hit drains; KO heals 1/4; hits airborne neutrally.",
+		desc: "Hits two to five times. After the final hit, the user restores HP equal to the damage dealt by that hit. If the target fainted, the user also restores 1/4 max HP. As a Bone move, it hits Flying-type Pokemon and Pokemon with Levitate for neutral damage.",
+		shortDesc: "Hits 2-5; final hit drains; KO heals 1/4; hits airborne neutrally.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -2388,8 +2388,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	furyswipes: {
 		name: "Fury Swipes",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits two to five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5 times in one turn.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -3306,8 +3306,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iciclespear: {
 		name: "Icicle Spear",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits two to five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5 times in one turn.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -4468,8 +4468,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	needlegun: {
 		name: "Needle Gun",
-		desc: "A 30 Base Power Steel-type special attack that hits exactly six times.",
-		shortDesc: "Steel type. Hits exactly 6 times.",
+		desc: "A 30 Base Power physical Steel-type attack that hits exactly six times. It uses whichever is higher, the user's Attack or Special Attack, against whichever is lower, the target's Defense or Special Defense.",
+		shortDesc: "30 BP physical Steel; hits 6 times; higher Atk/SpA vs lower Def/SpD.",
 	},
 	neverendingnightmare: {
 		name: "Never-Ending Nightmare",
@@ -4713,8 +4713,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pinmissile: {
 		name: "Pin Missile",
-		desc: "Hits three to five times. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times.",
+		desc: "Hits two to five times. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5 times.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -5368,8 +5368,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockblast: {
 		name: "Rock Blast",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits two to five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5 times in one turn.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
@@ -5591,8 +5591,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scaleshot: {
 		name: "Scale Shot",
-		desc: "Hits three to five times. Lowers the user's Defense by 1 stage and raises the user's Speed by 1 stage after the last hit. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times. User: -1 Def, +1 Spe after last hit.",
+		desc: "Hits two to five times. Lowers the user's Defense by 1 stage and raises the user's Speed by 1 stage after the last hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5. User: -1 Def, +1 Spe after last hit.",
 	},
 	scaryface: {
 		name: "Scary Face",
@@ -6756,8 +6756,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailslap: {
 		name: "Tail Slap",
-		desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 3-5 times in one turn.",
+		desc: "Hits two to five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5 times in one turn.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
 		},
