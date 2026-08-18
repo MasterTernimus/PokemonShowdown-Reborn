@@ -1341,8 +1341,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	illusion: {
 		name: "Illusion",
-		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack. While disguised, it copies the disguised Pokemon's Ability and gains STAB on moves matching the disguised Pokemon's types, but keeps its own defensive typing. The copied Ability is removed when the disguise breaks.",
-		shortDesc: "Disguises itself, copies Ability, and gains STAB from the disguised Pokemon's types.",
+		desc: "On switch-in, this Pokemon disguises itself as the ally judged most threatening to the opposing active Pokemon using matchups, Speed, STAB, and damaging moves. It copies that ally's Ability and gains STAB from its types while keeping its own defensive typing. The disguise ends when it takes direct damage.",
+		shortDesc: "Disguises as the ally with the best matchup; copies its Ability and STAB until directly damaged.",
 
 		end: "  [POKEMON]'s illusion wore off!",
 	},
