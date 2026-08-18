@@ -2841,7 +2841,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			if ((move as any).fallenStarFollowUp) modifier *= 0.5;
-			if (move.multihit) modifier *= 1.5;
 			if (target.trapped || target.maybeTrapped || target.volatiles['trapped']) modifier *= 1.5;
 			return this.chainModify(modifier);
 		},
@@ -3213,7 +3212,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.infiltrates = true;
 				move.ignoreDefensive = true;
 			}
-			if (move.flags['drill']) {
+			if (move.flags['drill'] || move.flags['horn']) {
 				move.infiltrates = true;
 				move.ignoreDefensive = true;
 			}
@@ -3300,9 +3299,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (move.category === 'Status') return;
-			const gmaxTarget = target.volatiles['dynamax'] && (target.gigantamax || target.species.forme?.includes('Gmax'));
-			const drain = gmaxTarget ? 0.6 : 0.3;
-			this.heal(Math.min(Math.floor(damage * drain), Math.floor(source.baseMaxhp / 3)), source, source);
+			this.heal(Math.floor(damage / 4), source, source);
 		},
 		onResidual(pokemon) {
 			this.dex.abilities.get('wildfirecore').onResidual?.call(this, pokemon);
@@ -3688,15 +3685,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sandsovereign: {
 		onStart(source) {
-			this.field.setWeather('sandstorm', source, this.dex.abilities.get('sandsovereign'));
+			this.dex.abilities.get('sandstream').onStart?.call(this, source);
 			if (this.field.isWeather('sandstorm')) this.field.weatherState.duration = 8;
+			this.dex.abilities.get('dauntlessshield').onStart?.call(this, source);
 			this.dex.abilities.get('battlearmor').onStart?.call(this, source);
 		},
 		onCriticalHit: false,
 		onSourceModifyDamage(damage, source, target, move) {
-			let modifier = 0.8 * 0.8;
-			if (target.getMoveHitData(move).typeMod > 0) modifier *= 0.75;
-			return this.chainModify(modifier);
+			return this.dex.abilities.get('battlearmor').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onAfterEachBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('battlearmor').onAfterEachBoost?.call(this, boost, target, source, effect);
@@ -3772,12 +3768,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.typeChangerBoosted === this.effect) {
 				return this.chainModify(1.2);
 			}
-		},
-		onChargeMove(pokemon, target, move) {
-			this.debug('Freezer Burn - remove charge turn for ' + move.id);
-			this.attrLastMove('[still]');
-			this.addMove('-anim', pokemon, move.name, target);
-			return false;
 		},
 		flags: {},
 		name: "Freezer Burn",
@@ -5488,7 +5478,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (move.category === 'Status') return;
 			if (this.movehasType(move, 'Poison')) {
-				move.drain = [1, 2];
+				move.drain = [1, 4];
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -5946,6 +5936,35 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10138,
 	},
+	livinglegend: {
+		onStart(pokemon) {
+			this.dex.abilities.get('flashfire').onStart?.call(this, pokemon);
+			this.dex.abilities.get('download').onStart?.call(this, pokemon);
+		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('flashfire').onTryHit?.call(this, target, source, move);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('flashfire').onResidual?.call(this, pokemon);
+		},
+		onEnd(pokemon) {
+			return this.dex.abilities.get('flashfire').onEnd?.call(this, pokemon);
+		},
+		onModifyMove(move, pokemon) {
+			this.dex.abilities.get('sheerforce').onModifyMove?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			let modifier = 1;
+			if (move.hasSheerForce || move.hasSheerForceBoost) modifier *= 5325 / 4096;
+			if (move.id === 'extremespeed') modifier *= 1.5;
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		flags: { breakable: 1 },
+		name: "Living Legend",
+		rating: 4,
+		num: 10311,
+	},
 	flashfire: {
 		onStart(pokemon) {
 			if (this.field.isTerrain('coldeclipseterrain')) {
@@ -5976,14 +5995,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
-				if (move && this.movehasType(move, 'Fire') && attacker.hasAbility('flashfire')) {
+				if (move && this.movehasType(move, 'Fire') && attacker.hasAbility(['flashfire', 'livinglegend'])) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(atk, attacker, defender, move) {
-				if (move && this.movehasType(move, 'Fire') && attacker.hasAbility('flashfire')) {
+				if (move && this.movehasType(move, 'Fire') && attacker.hasAbility(['flashfire', 'livinglegend'])) {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
@@ -6752,11 +6771,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	hyperdrill: {
 		onModifyMove(move, source) {
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
-			if (move.flags['drill'] && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
+			if ((move.flags['drill'] || move.flags['horn']) && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			const drillBoost = move.flags['drill'] ?
+			const drillBoost = move.flags['drill'] || move.flags['horn'] ?
 				(this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain']) ? 2 : 1.5) : 1;
 			let modifier = getDualWieldModifier(move, drillBoost);
 			if (move && this.movehasType(move, 'Rock')) modifier *= 1.5;
@@ -7504,7 +7523,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onBasePower(basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || !this.movehasType(move, 'Dark')) return;
+			if (target === source || move.category === 'Status' || !this.movehasType(move, ['Dark', 'Ghost'])) return;
 			return this.chainModify(1.3);
 		},
 		flags: { breakable: 1 },
@@ -9409,11 +9428,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
-			if (move.flags['drill'] && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
+			if ((move.flags['drill'] || move.flags['horn']) && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['drill']) {
+			if (move.flags['drill'] || move.flags['horn']) {
 				if (this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) return this.chainModify(2);
 				return this.chainModify(1.5);
 			}
@@ -9566,11 +9585,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	powerdrill: {
 		onModifyMove(move) {
-			if (move.flags['drill'] && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
+			if ((move.flags['drill'] || move.flags['horn']) && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['drill']) {
+			if (move.flags['drill'] || move.flags['horn']) {
 				if (this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) return this.chainModify(2);
 				return this.chainModify(1.5);
 			}
@@ -11377,7 +11396,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.status !== 'brn') return;
 			for (const foe of pokemon.foes()) {
 				if (!foe || foe.fainted) continue;
-				const damage = this.damage(foe.baseMaxhp / 8, foe, pokemon, this.effect);
+				const damage = this.damage(foe.baseMaxhp * (foe.status === 'brn' ? 1 / 4 : 1 / 8), foe, pokemon, this.effect);
 				if (typeof damage === 'number' && damage > 0) {
 					this.heal(damage, pokemon, pokemon, this.effect);
 				}
@@ -11700,19 +11719,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10347,
 	},
 	pendulumswing: {
-		onModifyAccuracy(accuracy) {
-			if (typeof accuracy === 'number') return this.chainModify(1.5);
+		onUpdate(pokemon) {
+			this.dex.abilities.get('insomnia').onUpdate?.call(this, pokemon);
 		},
-		onModifySpAPriority: 5,
-		onModifySpA(spa) {
-			return this.chainModify(1.5);
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('insomnia').onSetStatus?.call(this, status, target, source, effect);
 		},
-		onTryHitPriority: 1,
-		onTryHit(target, source, move) {
-			return this.dex.abilities.get('magicbounce').onTryHit?.call(this, target, source, move);
+		onTryAddVolatile(status, target) {
+			return this.dex.abilities.get('insomnia').onTryAddVolatile?.call(this, status, target);
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('insomnia').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onModifyMove(move) {
+			move.accuracy = true;
 		},
 		flags: {},
 		name: "Pendulum Swing",

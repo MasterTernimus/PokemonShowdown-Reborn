@@ -29,8 +29,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	spiralevolution: {
 		name: "Spiral Evolution",
-		desc: "This Pokemon has Adaptability, Levitate, and Dual Wield. Its damaging moves pierce protection for reduced damage, and its non-priority moves act first in Trick Room.",
-		shortDesc: "Adaptability + Levitate + Dual Wield; protection pierce; acts first in Trick Room.",
+		desc: "This Pokemon has Adaptability, Levitate, and Dual Wield. Its damaging moves pierce protection for reduced damage, its non-priority moves act first in Trick Room, it takes 0.8x damage, and it has a raised critical-hit ratio.",
+		shortDesc: "Adaptability + Levitate + Dual Wield; protection pierce; Trick Room priority; takes 0.8x.",
 	},
 	alchemistsurge: {
 		name: "Alchemist Surge",
@@ -241,7 +241,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battery: {
 		name: "Battery",
-		shortDesc: "This Pokemon and its allies have their special attacks boosted by 1.3x.",
+		desc: "This Pokemon and its allies have 1.3x power on Special attacks. The user's Special attacks get an additional 1.5x multiplier in Electric Terrain or Rain.",
+		shortDesc: "Self/ally Special attacks 1.3x; user gets extra 1.5x in Electric Terrain/Rain.",
 	},
 	battlearmor: {
 		name: "Battle Armor",
@@ -373,7 +374,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	corrosion: {
 		name: "Corrosion",
 		desc: "This Pokemon's Poison moves and status can affect normally immune targets. In Wasteland, its moves can add status; Corrosive fields amplify its damage; poisoned foes lose 1 Defense and Sp. Def.",
-		shortDesc: "Poison bypasses immunity; Wasteland adds status; Corrosive fields boost damage; poisoned foes lose Def/SpD.",
+		shortDesc: "Poison bypasses immunity; Wasteland/Corrosive effects; poison lowers Def/SpD.",
 	},
 	costar: {
 		name: "Costar",
@@ -467,7 +468,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	fossilfrenzy: {
 		name: "Fossil Frenzy",
 		desc: "When this Pokemon is hit by a damaging move, its Attack and Speed rise by 1 stage and it becomes confused. While confused, it takes 1.25x damage from attacks. This Pokemon has Klutz's effect. If it hits itself in confusion, it also loses 1/8 of its maximum HP.",
-		shortDesc: "Hit by attacks: +1 Atk/Spe and confusion; confused takes 1.25x; Klutz; self-hit costs 1/8.",
+		shortDesc: "Hit: +1 Atk/Spe and confusion; confusion takes 1.25x; Klutz; self-hit costs 1/8.",
 	},
 	defiant: {
 		name: "Defiant",
@@ -500,6 +501,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Download",
 		desc: "In Singles, this Pokemon's Attack and Special Attack rise by 1 stage on switch-in. In other battle types, one offensive stat rises based on the opposing side's weaker combined defensive stat. Its first damaging move after switching in is a critical hit.",
 		shortDesc: "Singles: +1 Atk/SpA; otherwise checks all foes' defenses; first damaging move crits.",
+	},
+	livinglegend: {
+		name: "Living Legend",
+		desc: "This Pokemon has Flash Fire, Download, and Sheer Force. Hidden effect: Extreme Speed has 1.5x power.",
+		shortDesc: "Flash Fire + Download + Sheer Force; Extreme Speed 1.5x.",
 	},
 	dragonize: {
 		name: "Dragonize",
@@ -547,7 +553,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	mindfreeze: {
 		name: "Mind Freeze",
 		desc: "This Pokemon is immune to Ice-type attacks and restores 1/4 of its maximum HP when hit by one. It has Ice Body's healing and hail immunity. Its Psychic-type moves have a 40% chance to cause frostbite, and Freezing Glare's frostbite chance is doubled. Its Physical Ice-type moves become Special.",
-		shortDesc: "Absorbs Ice for 25%; Ice Body effects; Psychic moves frostbite; Physical Ice becomes Special.",
+		shortDesc: "Ice immunity heals 1/4; Ice Body; Psychic may frostbite; physical Ice becomes special.",
 	},
 	riotamp: {
 		name: "Riot Amp",
@@ -557,12 +563,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	relicarmor: {
 		name: "Relic Armor",
 		desc: "On switch-in, this Pokemon lowers each foe's Defense and Special Defense by 1, or by 2 in Cold Eclipse. In Desert, Fairy Tale, Cave, Crystal Cavern, New World, or Volcanic Field, its Defense and Special Defense rise by 1. It cannot be critically hit, takes 0.8x damage from attacks, has no Rock weakness, and has Self Sufficient's effects. After an opposing Pokemon lowers one of its stats, its Defense and Special Defense rise by 1.",
-		shortDesc: "Entry drops Def/SpD; no crits; 0.8x damage; no Rock weakness; Self Sufficient; reacts to drops.",
+		shortDesc: "Entry drops Def/SpD; no crits; 0.8x damage; no Rock weakness; Self Sufficient.",
 	},
 	relicmishap: {
 		name: "Relic Mishap",
 		desc: "This Pokemon takes 0.9x damage from attacks and has Self Sufficient, Water Absorb, and Volt Absorb. It restores 1/16 max HP each turn and is immune to Sandstorm and Hail damage. During Sandstorm, its Special Defense is multiplied by 1.5. During Hail or Snow, its Defense is multiplied by 1.5.",
-		shortDesc: "0.9x damage; heals 1/16; Water/Volt Absorb; weather chip immune; Sand: 1.5x SpD; Hail/Snow: 1.5x Def.",
+		shortDesc: "0.9x damage; Self Sufficient; Water/Volt Absorb; Sand +SpD; Hail/Snow +Def.",
 	},
 	windysurge: {
 		name: "Windy Surge",
@@ -602,7 +608,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	mourningvessel: {
 		name: "Mourning Vessel",
 		desc: "This Pokemon has Prankster's and Magic Guard's effects. Its damaging moves deal 20% more damage for each fainted ally, up to 2x damage. At the end of each turn, it restores 5% of its max HP for each fainted opposing Pokemon, counting every opposing side in Free-For-All battles.",
-		shortDesc: "Prankster + Magic Guard; +20% damage per fainted ally (max 2x); heals 5% per fainted foe each turn.",
+		shortDesc: "Prankster + Magic Guard; fallen allies boost damage; foes fainted heal 5% each turn.",
 	},
 	mightyjaw: {
 		name: "Mighty Jaw",
@@ -611,13 +617,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker, Dual Wield, Skill Link, and Self Sufficient. Multi-hit Arrow moves have 1.5x power and Arrow moves have 1.5x power against trapped targets. At half HP or less, Arrow moves gain +1 priority and this Pokemon takes half damage. After an Arrow move, it takes 0.25x damage for the turn. An Arrow KO repeats the move at half power; in Free-for-All, Arrows hit all foes.",
+		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker, Dual Wield, Skill Link, and Self Sufficient. Existing multi-hit Arrow moves keep their normal power and use Skill Link instead of gaining an extra Dual Wield hit. Arrow moves deal 1.5x damage to trapped targets. At half HP or less, Arrow moves gain +1 priority and this Pokemon takes half damage. After an Arrow move, it takes 0.25x damage for the turn. An Arrow KO repeats the move at half power; in Free-for-All, Arrows hit all foes.",
 		shortDesc: "Mold Breaker + Dual Wield + Self Sufficient; at half HP, Arrows gain +1 priority.",
 	},
 	eclipse: {
 		name: "Eclipse",
 		desc: "During weather, this Pokemon's attacks deal 1.5x damage. In clear weather, attacks deal 0.5x damage to this Pokemon. Its Psychic-type moves become Dark type if Dark would do more damage, and its Dark-type moves become Psychic type if Psychic would do more damage. It restores 1/4 max HP instead of taking damage from Psychic- or Dark-type moves.",
-		shortDesc: "Weather attacks 1.5x; clear weather takes 0.5x; Psychic/Dark pick better type; absorbs both.",
+		shortDesc: "Weather attacks 1.5x; clear damage halved; Psychic/Dark choose type; absorbs both.",
 	},
 	ragingstorm: {
 		name: "Raging Storm",
@@ -631,8 +637,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vanguard: {
 		name: "Vanguard",
-		desc: "This Pokemon has Intimidate built in. Extreme Speed has 1.5x power and becomes Fire-type if Fire would deal more damage. This Pokemon heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit. After using Extreme Speed, this Pokemon takes 0.25x damage until the end of the turn. This Pokemon can only be damaged by direct attacks. Its stats cannot be lowered by opposing Pokemon. Once per battle, it endures a KO and survives at 1 HP.",
-		shortDesc: "Intimidate; Extreme Speed 1.5x; drains damage; Magic Guard; stats can't drop.",
+		desc: "This Pokemon has Intimidate built in. Extreme Speed has 1.5x power, +2 critical-hit ratio, and becomes Fire-type if Fire would deal more damage. After Extreme Speed, this Pokemon takes 0.25x damage from attacks for the rest of the turn. Its next Extreme Speed is guaranteed to crit after its one-time Endure activates. Opposing Pokemon cannot lower its stats, and non-move damage cannot affect it. Once per battle, it survives a direct-move KO at 1 HP.",
+		shortDesc: "Intimidate; Extreme Speed 1.5x/+2 crit; post-ES 0.25x damage; one-time 1 HP Endure.",
 	},
 	apexcleave: {
 		name: "Apex Cleave",
@@ -661,8 +667,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "This Ability cannot be suppressed and has Wildfire Core, Self Sufficient, and draining attacks. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities, ignore defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. It heals 30% of the damage it deals with attacks, doubled against G-Max Pokemon, up to 33% of its max HP per hit. In Cold Eclipse, its damaging moves gain another 1.3x boost, and its Defense and Special Defense become 1.5x.",
-		shortDesc: "Wildfire Core + Self Sufficient + draining attacks.",
+		desc: "This Ability cannot be suppressed and has Wildfire Core and Self Sufficient's effects. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities and defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. Each damaging hit restores 1/4 of the damage dealt, with no per-hit cap. In Cold Eclipse, its damaging moves gain another 1.3x boost, and its Defense and Special Defense become 1.5x.",
+		shortDesc: "Wildfire Core + Self Sufficient; damaging hits heal 1/4 damage.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -741,8 +747,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
-		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Filter and Battle Armor. Manually used Arenite Wall lasts 8 turns. Each turn, foes take immunity-aware Rock damage equal to 1/16 max HP, scaled by effectiveness.",
-		shortDesc: "8-turn Sand; Filter + Battle Armor; manual Arenite Wall lasts 8 turns; Rock chip.",
+		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Dauntless Shield and Battle Armor. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, foes take immunity-aware Rock damage equal to 1/16 max HP, scaled by effectiveness.",
+		shortDesc: "8-turn Sand; Dauntless Shield + Battle Armor; Arenite Wall 5/8 turns; Rock chip.",
 	},
 	tyrantstream: {
 		name: "Tyrant Stream",
@@ -756,8 +762,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	freezerburn: {
 		name: "Freezer Burn",
-		desc: "This Pokemon has Slush Rush and Refrigerate. Refrigerate-converted moves have 1.2x power, and two-turn moves skip their charge turn.",
-		shortDesc: "Slush Rush + Refrigerate; 1.2x conversion; skips charges.",
+		desc: "This Pokemon has Slush Rush and Refrigerate. Refrigerate-converted moves have 1.2x power.",
+		shortDesc: "Slush Rush + Refrigerate; converted moves have 1.2x power.",
 	},
 	stormfright: {
 		name: "Storm Fright",
@@ -1037,8 +1043,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	byxbysiontouch: {
 		name: "Byxbysion Touch",
-		desc: "This Pokemon's Poison-type damaging moves and damaging moves that can poison heal the user for 50% of the damage dealt. Ground-type moves deal 1/4 damage to this Pokemon. When an opposing Pokemon loses HP from poison or toxic poison, this Pokemon restores HP equal to the HP lost.",
-		shortDesc: "Poison/poisoning attacks drain 50%; Ground damage is 1/4; drains foes' poison damage.",
+		desc: "This Pokemon's Poison-type damaging moves restore 1/4 of the damage dealt. Ground-type moves deal 1/2 damage to this Pokemon. It has Poison Touch's effect.",
+		shortDesc: "Poison attacks drain 1/4; Ground damage halved; Poison Touch.",
 	},
 	flamebody: {
 		name: "Flame Body",
@@ -1069,7 +1075,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	blazingmane: {
 		name: "Blazing Mane",
 		desc: "Fire attacks have 1.5x power and damaging moves hit twice, with the second hit at 30% power. At half HP or less, Fire attacks gain +1 priority. Burning and Volcanic Fields raise its Speed by 1 on entry or when the field starts.",
-		shortDesc: "Fire 1.5x; attacks hit twice; Fire gains priority at half HP; fire fields grant +1 Speed.",
+		shortDesc: "Fire 1.5x; second hit 30%; half-HP Fire +1 priority; fire fields +1 Spe.",
 	},
 	flashfire: {
 		name: "Flash Fire",
@@ -1380,8 +1386,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	insomnia: {
 		name: "Insomnia",
-		desc: "This Pokemon cannot fall asleep. Gaining this Ability while asleep cures it. Its Dark-type damaging moves have 1.3x power.",
-		shortDesc: "Cannot sleep; Dark damaging moves have 1.3x power.",
+		desc: "This Pokemon cannot fall asleep. Gaining this Ability while asleep cures it. Its Dark- and Ghost-type damaging moves have 1.3x power.",
+		shortDesc: "Cannot sleep; Dark/Ghost damaging moves have 1.3x power.",
 	},
 	intimidate: {
 		name: "Intimidate",
@@ -1562,7 +1568,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	magmaarmor: {
 		name: "Magma Armor",
 		desc: "This Pokemon cannot be frozen outside Cold Eclipse and cures freeze when it gains this Ability. In Dragon's Den, Volcanic, or Cold Eclipse, it gains 1 Def and Sp. Def on entry. Water/Ice attacks use 0.5x attacking stats; Dragon's Den absorbs Fire moves.",
-		shortDesc: "No freeze outside Cold Eclipse; field +Def/SpD; halves Water/Ice stats; Dragon's Den absorbs Fire.",
+		shortDesc: "No freeze; field +Def/SpD; halves Water/Ice; Dragon's Den absorbs Fire.",
 	},
 	magnetpull: {
 		name: "Magnet Pull",
@@ -1690,7 +1696,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	requiem: {
 		name: "Requiem",
 		desc: "This Pokemon has Cursed Body's effect. Its first direct damaging interaction with each opposing Pokemon applies Perish Song to that foe. The mark clears when the foe switches out. Whenever an opposing Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns. This Ability cannot be suppressed.",
-		shortDesc: "Cursed Body; first interaction marks foe with Perish Song; foe KO heals 1/4; faint sets Haunted.",
+		shortDesc: "Cursed Body; first hit marks foes with Perish Song; foe KO heals 1/4; faint sets Haunted.",
 	},
 	reapersgrip: {
 		name: "Reaper's Grip",
@@ -1735,7 +1741,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	wickedcommand: {
 		name: "Wicked Command",
 		desc: "This Pokemon has Insomnia and Super Luck's effects and takes 20% less damage from other Pokemon's damaging moves. If this Pokemon knocks out an enemy with a move, its higher attacking stat is raised by 1 stage, with Attack chosen on a tie. It also restores 1/4 of its maximum HP and removes entry hazards from its side.",
-		shortDesc: "Insomnia + Super Luck; takes 0.8x damage; KO boosts higher offense, heals 1/4, clears hazards.",
+		shortDesc: "Insomnia + Super Luck; takes 0.8x; KO boosts offense, heals 1/4, clears hazards.",
 	},
 	multiscale: {
 		name: "Multiscale",
@@ -1776,7 +1782,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	myceliummight: {
 		name: "Mycelium Might",
 		desc: "This Pokemon's status moves ignore the target's Ability and move last in their priority bracket. Before this Pokemon uses a status move, attacks deal 0.75x damage to it. When it successfully uses a status move, it restores 1/8 of its maximum HP.",
-		shortDesc: "Status moves ignore Abilities and move last; before status takes 0.75x; status heals 1/8.",
+		shortDesc: "Status ignores Abilities and moves last; takes 0.75x before status; heals 1/8.",
 	},
 	naturalcure: {
 		name: "Natural Cure",
@@ -1857,7 +1863,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	adaptivecell: {
 		name: "Adaptive Cell",
 		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Before using a physical move, it becomes Fighting type; before using a special move, it becomes Psychic type. If its Special Attack is higher than its Attack, its physical moves may use Special Attack while still targeting Defense.",
-		shortDesc: "Overcoat; SpA 1.3x; physical moves become Fighting; special moves become Psychic; physical moves may use SpA.",
+		shortDesc: "Overcoat; SpA 1.3x; physical -> Fighting; special -> Psychic; physical may use SpA.",
 	},
 	voidveil: {
 		name: "Void Veil",
@@ -1900,7 +1906,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	perishbody: {
 		name: "Perish Body",
 		desc: "If an enemy hits this Pokemon with a damaging move, all opposing Pokemon get Perish Song. If an affected opposing Pokemon already has Perish Song, its countdown is reduced by 1 instead. During Haunted Field, affected foes are trapped while adjacent to this Pokemon. This effect is blocked by Holy Field and does not trigger from allies.",
-		shortDesc: "Any enemy hit gives foes Perish Song; repeat hits reduce the count; traps in Haunted Field.",
+		shortDesc: "Enemy hit: foes get Perish Song; repeat hits lower the count; Haunted traps.",
 
 		start: "  The opposing Pok\u00E9mon will faint in three turns!",
 	},
@@ -1926,7 +1932,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	piercingdrill: {
 		name: "Piercing Drill",
 		desc: "This Pokemon has Mold Breaker's effect. Its contact moves ignore a target's protection and deal 1/4 the usual damage. It also has Power Drill's effect, boosting drill moves by 1.5x, or 2x in Rocky, Mountain, Snowy Mountain, Cave, and Volcanic fields.",
-		shortDesc: "Mold Breaker; contact pierces protection for 1/4 damage; drill moves 1.5x, or 2x in listed fields.",
+		shortDesc: "Mold Breaker; contact pierces Protect at 1/4; drill moves 1.5x, or 2x in fields.",
 	},
 	pixilate: {
 		name: "Pixilate",
@@ -2292,7 +2298,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	seasonalstride: {
 		name: "Seasonal Stride",
 		desc: "Normal moves become this Pokemon's primary type and have 1.2x power. Kicking moves have 1.4x power. It has Chlorophyll and changes forme with weather: Spring in rain, Summer in sun, Autumn in sand, Winter in snow.",
-		shortDesc: "Normal moves become primary type at 1.2x; kicks 1.4x; Chlorophyll; weather changes forme.",
+		shortDesc: "Normal -> primary type 1.2x; kicks 1.4x; Chlorophyll; weather forms.",
 	},
 	shadowshield: {
 		name: "Shadow Shield",
@@ -2335,7 +2341,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	shedskin: {
 		name: "Shed Skin",
 		desc: "At the end of each turn, this Pokemon has a 50% chance to cure its non-volatile status, remove common negative effects including Curse and Perish Song, reset its negative stat stages to 0, and restore 1/4 max HP. This can also activate while at or below half HP. In Dragon's Den, activation is guaranteed; it instead raises the higher offensive stat by 1, lowers Defense and Special Defense by 1, and restores 1/4 max HP.",
-		shortDesc: "50% to cleanse status/effects and stat drops, then heal 1/4; altered and guaranteed in Dragon's Den.",
+		shortDesc: "50% to cure effects, reset drops, and heal 1/4; guaranteed in Dragon's Den.",
 	},
 	sheerforce: {
 		name: "Sheer Force",
@@ -2532,8 +2538,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pendulumswing: {
 		name: "Pendulum Swing",
-		desc: "This Pokemon has Magic Bounce and Filter's effects. Its accuracy and Special Attack are multiplied by 1.5.",
-		shortDesc: "Magic Bounce + Filter; 1.5x accuracy and 1.5x Sp. Atk.",
+		desc: "This Pokemon has Insomnia's effect, and its moves cannot miss.",
+		shortDesc: "Insomnia; moves cannot miss.",
 	},
 	lunarspirit: {
 		name: "Lunar Spirit",
@@ -2588,7 +2594,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	resonanceforce: {
 		name: "Resonance Force",
 		desc: "Sound-based moves used by this Pokemon's side deal 1.5x damage. This Pokemon's side is immune to its own damaging sound-based moves. Sound-based moves used by this Pokemon use Attack instead of their usual attacking stat.",
-		shortDesc: "Side's sound moves 1.5x; allies avoid own damaging sound moves; user's sound moves use Atk.",
+		shortDesc: "Side sound moves 1.5x; allies avoid own sound damage; user sound uses Atk.",
 	},
 	verdantdrake: {
 		name: "Verdant Drake",
@@ -2612,8 +2618,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	astralwitchcraft: {
 		name: "Astral Witchcraft",
-		desc: "This Pokemon has Sworn Duty, Levitate, and Magic Guard's effects.",
-		shortDesc: "Sworn Duty + Levitate + Magic Guard.",
+		desc: "This Pokemon has Sworn Duty, Levitate, and Magic Guard's effects. In Fairy Tale or New World, its Special Attack and Special Defense rise by 1 on entry.",
+		shortDesc: "Sworn Duty + Levitate + Magic Guard; Fairy Tale/New World: +1 SpA/SpD.",
 	},
 	blazingtempo: {
 		name: "Blazing Tempo",
@@ -2627,13 +2633,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
-		desc: "This Pokemon has Pollen Bloom and Self Sufficient. Its Poison-type attacks drain half the damage they deal.",
-		shortDesc: "Pollen Bloom + Self Sufficient + Poison drain.",
+		desc: "This Pokemon has Pollen Bloom and Self Sufficient. Its Poison-type attacks restore 1/4 of the damage they deal.",
+		shortDesc: "Pollen Bloom + Self Sufficient; Poison attacks heal 1/4 damage.",
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
 		desc: "This Pokemon has Water Barrage, Mega Launcher, Self Sufficient, and Stalwart's effects. Moves boosted by Mega Launcher are used twice through Dual Wield; the second hit deals 20% of the move's unboosted power.",
-		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves get a 20% second hit.",
+		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves add 20% hit.",
 	},
 	calderacore: {
 		name: "Caldera Core",
@@ -2778,7 +2784,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	supremeoverlord: {
 		name: "Supreme Overlord",
 		desc: "This Pokemon has Self Sufficient. Each fainted ally gives its moves 1.1x damage; in Free-for-All, allies count twice. At 1+, it has Clear Body; 2+, Inner Focus; 3+, Filter and Second Wind; 4+, Infiltrator; 5+, Magic Guard and +1 Attack/Sp. Atk.",
-		shortDesc: "Self Sufficient; fallen allies boost damage and unlock defensive effects and stat boosts.",
+		shortDesc: "Self Sufficient; fallen allies boost damage; thresholds grant defenses and stat boosts.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
@@ -3199,7 +3205,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	battlefervor: {
 		name: "Battle Fervor",
 		desc: "If this Pokemon moves before its target, its attacks deal 1.2x damage. Once per switch-in, if it would move after the attacker, damaging attacks against it deal 0.8x damage. The first time per battle it is hit by an opposing damaging move, its Attack and Special Attack rise by 1 stage. Foes cannot eat Berries while this Pokemon is active, and Seed items are prevented. Bewitched Woods, Haunted, and Holy Field disable these effects.",
-		shortDesc: "Fast attacks 1.2x; slow hit 0.8x once; first hit boosts; inactive in Bewitched/Haunted/Holy.",
+		shortDesc: "Fast attacks 1.2x; slow-hit guard once; first hit +Atk/SpA; blocks Berries/Seeds.",
 	},
 	duskilate: {
 		name: "Duskilate",
@@ -3214,7 +3220,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	echofiend: {
 		name: "Echo Fiend",
 		desc: "This Pokemon is immune to sound moves, and this immunity cannot be suppressed. Its sound moves become Flying type and have 1.5x power. This Pokemon's side is immune to its own damaging sound-based moves.",
-		shortDesc: "Unsuppressible sound immunity; sound becomes Flying and 1.5x; allies avoid sound damage.",
+		shortDesc: "Unsuppressible sound immunity; sound -> Flying 1.5x; allies avoid own sound damage.",
 	},
 	elevate: {
 		name: "Elevate",
@@ -3244,7 +3250,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	hydrabond: {
 		name: "Hydra Bond",
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power.",
-		shortDesc: "Damaging moves hit 3 times; hits 2/3 have 30% power. FFA: single-target hits all foes at 1.3x.",
+		shortDesc: "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x.",
 	},
 	imperialmandate: {
 		name: "Imperial Mandate",
@@ -3278,7 +3284,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	waterbarrage: {
 		name: "Water Barrage",
-		desc: "This Pokemon has Proficient and Dual Wield's effects. At the end of each turn, opposing non-Water Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, scaled by effectiveness and blocked by Water immunities.",
+		desc: "This Pokemon has Proficient and Dual Wield's effects. At the end of each turn, opposing Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, scaled by effectiveness and blocked by Water immunities.",
 		shortDesc: "Proficient + Dual Wield; cycling Water chip respects effectiveness and immunities.",
 	},
 	wildfirecore: {
@@ -3373,8 +3379,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinisterblaze: {
 		name: "Sinister Blaze",
-		desc: "This Pokemon is always burned and its burn can overwrite other status conditions. Burn heals this Pokemon instead of damaging it. While this Pokemon is burned, opposing Pokemon lose doubled burn damage each turn, and this Pokemon heals the damage dealt to each foe this way. This Ability cannot be Skill Swapped, suppressed, copied by Role Play, given by Entrainment, or Traced.",
-		shortDesc: "Always burned; burn heals user; foes lose burn damage and heal it; cannot be copied/suppressed.",
+		desc: "This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. Burn heals this Pokemon instead of damaging it, and its physical attacks are not weakened by burn. While this Pokemon is burned, opposing Pokemon take damage equal to 1/8 of their max HP each turn, doubled to 1/4 if they are burned, and this Pokemon heals the damage dealt. This Ability cannot be Skill Swapped, suppressed, copied by Role Play, given by Entrainment, or Traced.",
+		shortDesc: "Misty-bypassing burn; no burn penalty; foes take 1/8, or 1/4 if burned; heals damage.",
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",
@@ -3404,7 +3410,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	ultrainstinct: {
 		name: "Ultra Instinct",
 		desc: "This Pokemon has Mold Breaker and Inner Focus. It deals 2x damage through screens and 1.5x damage when moving first. In Ashen Beach, New World, Starlight Arena, and Cold Eclipse, it gains 1 Accuracy on entry, deals 1.5x damage, and takes 50% less damage. Outside those fields, it takes 70% less damage when hit before its attacker has moved. Bewitched Woods, Haunted, and Holy Field disable these effects.",
-		shortDesc: "Mold Breaker + Inner Focus; speed-based offense/guard; inactive in Bewitched/Haunted/Holy.",
+		shortDesc: "Mold Breaker + Inner Focus; screens 2x; acts-first 1.5x; field bonuses.",
 	},
 	duskdrive: {
 		name: "Dusk Drive",
