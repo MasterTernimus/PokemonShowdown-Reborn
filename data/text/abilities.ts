@@ -82,6 +82,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 65% power, with an independent accuracy check for each hit. When combined with Sharpness, Mega Launcher, or Power Drill, the first hit receives that boost and the second hit deals 20% of the move's unboosted power. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair.",
 		shortDesc: "Two 65% independent rolls; boosting pairs: full +20%; FFA: two full-power targets.",
 	},
+	apexvenom: {
+		name: "Apex Venom",
+		desc: "This Pokemon has Dual Wield. Its Poison-type moves are super effective against Poison- and Steel-type Pokemon. Its Dark-type moves gain STAB against targets that resist Dark but are not weak to it. If it faints a Steel-type target, it restores half of its maximum HP.",
+		shortDesc: "Dual Wield; Poison hits Poison/Steel super effectively; Dark STAB vs resists; Steel KO heals 1/2.",
+	},
 	apexpredator: {
 		name: "Apex Predator",
 		desc: "This Pokemon has Relic Armor, Precision, and Wind Rider's effects.",
@@ -562,8 +567,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relicarmor: {
 		name: "Relic Armor",
-		desc: "On switch-in, this Pokemon lowers each foe's Defense and Special Defense by 1, or by 2 in Cold Eclipse. In Desert, Fairy Tale, Cave, Crystal Cavern, New World, or Volcanic Field, its Defense and Special Defense rise by 1. It cannot be critically hit, takes 0.8x damage from attacks, has no Rock weakness, and has Self Sufficient's effects. After an opposing Pokemon lowers one of its stats, its Defense and Special Defense rise by 1.",
-		shortDesc: "Entry drops Def/SpD; no crits; 0.8x damage; no Rock weakness; Self Sufficient.",
+		desc: "In Desert, Fairy Tale, Cave, Crystal Cavern, New World, or Volcanic Field, this Pokemon's Defense and Special Defense rise by 1. Its Rock typing does not add weaknesses to Fighting, Ground, Steel, Water, or Grass. It cannot be critically hit, takes 0.8x damage from attacks, and has Self Sufficient's effects. After an opposing Pokemon lowers one of its stats, its Defense and Special Defense rise by 1.",
+		shortDesc: "Rock weaknesses removed; field +1 Def/SpD; no crits; 0.8x damage; Self Sufficient.",
 	},
 	relicmishap: {
 		name: "Relic Mishap",
@@ -677,8 +682,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	crumblingshell: {
 		name: "Crumbling Shell",
-		desc: "When this Pokemon is hit by a Physical attack, Stealth Rock is set on the attacker's side of the field if that side does not already have Stealth Rock.",
-		shortDesc: "When hit by a Physical attack, sets Stealth Rock on the attacker's side.",
+		desc: "When this Pokemon is hit by a Physical attack, Stealth Rock is set on the attacker's side unless a water field is active or that side already has Stealth Rock.",
+		shortDesc: "Physical hits set Stealth Rock, except in water fields.",
 	},
 	iceabsorb: {
 		name: "Ice Absorb",
@@ -2306,8 +2311,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowguard: {
 		name: "Shadow Guard",
-		desc: "This Pokemon has Shadow Shield and Elevate's effects. It also queues a full-power Temporal Shift Future Sight every turn, using whichever of Ghost, Dark, or Fairy would hit the target best.",
-		shortDesc: "Shadow Shield + Elevate; every turn queues full-power Ghost/Dark/Fairy Temporal Shift.",
+		desc: "This Pokemon has Shadow Tag, Shadow Shield, and Elevate's effects. It also queues a full-power Temporal Shift Future Sight every turn, using whichever of Ghost, Dark, or Fairy would hit the target best. Shadow Tag's faint effect also applies.",
+		shortDesc: "Shadow Tag + Shadow Shield + Elevate; every turn queues Ghost/Dark/Fairy Temporal Shift.",
 	},
 	shadowtag: {
 		name: "Shadow Tag",

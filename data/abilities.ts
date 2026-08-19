@@ -898,6 +898,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10284,
 	},
+	apexvenom: {
+		onModifyMove(move, source) {
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
+		},
+		onBasePowerPriority: 20,
+		onBasePower(basePower, source, target, move) {
+			if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move));
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.type !== 'Dark' || !target || source.hasType('Dark')) return;
+			const typeMod = this.dex.getEffectiveness('Dark', target);
+			if (typeMod < 0 && typeMod > -6) return 1.5;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Poison' && move?.category !== 'Status' && (target.hasType('Poison') || target.hasType('Steel'))) return 1;
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType === 'Move' && target.hasType('Steel')) this.heal(source.baseMaxhp / 2, source, source);
+		},
+		flags: { breakable: 1 },
+		name: "Apex Venom",
+		rating: 5,
+		num: 10361,
+	},
 	apexpredator: {
 		onStart(pokemon) {
 			this.dex.abilities.get('relicarmor').onStart?.call(this, pokemon);
@@ -2080,6 +2104,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	crumblingshell: {
 		onDamagingHit(damage, target, source, move) {
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain', 'swampterrain'])) return;
 			const side = source.isAlly(target) ? source.side.foe : source.side;
 			const stealthRocks = side.sideConditions['stealthrock'];
 			if (move.category === 'Physical' && !stealthRocks) {
@@ -5632,21 +5657,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain(['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('relicarmor'));
 			}
-			const drop = this.field.isTerrain('coldeclipseterrain') ? -2 : -1;
-			let activated = false;
-			for (const target of pokemon.foes()) {
-				if (!activated) {
-					this.add('-ability', pokemon, 'Relic Armor', 'boost');
-					activated = true;
-				}
-				this.boost({ def: drop, spd: drop }, target, pokemon, null, true);
-			}
 		},
 		onCriticalHit() {
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
-			if (move.type === 'Rock' && typeMod > 0) return 0;
+			if (type === 'Rock' && typeMod > 0 && ['Fighting', 'Ground', 'Steel', 'Water', 'Grass'].includes(move.type)) return 0;
 		},
 		onImmunity(type, pokemon) {
 			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
@@ -5988,6 +6004,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move, pokemon) {
 			this.dex.abilities.get('sheerforce').onModifyMove?.call(this, move, pokemon);
+			if (move.id === 'extremespeed') {
+				move.critRatio = (move.critRatio || 1) + 2;
+			}
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon, target, move) {
@@ -10948,6 +10967,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 231,
 	},
 	shadowguard: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('shadowtag').onStart?.call(this, pokemon);
+		},
+		onFoeTrapPokemon(pokemon) {
+			return this.dex.abilities.get('shadowtag').onFoeTrapPokemon?.call(this, pokemon);
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			return this.dex.abilities.get('shadowtag').onFoeMaybeTrapPokemon?.call(this, pokemon, source);
+		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				const bestStat = source.getBestStat(true, true);
@@ -10964,6 +10992,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('Shadow Guard Armor neutralize');
 				modifier *= 0.75;
 			}
+			if (target !== source && move.category !== 'Status') modifier *= 0.75;
 			return this.chainModify(modifier);
 		},
 		onImmunity(type, pokemon) {
@@ -10972,7 +11001,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			this.dex.abilities.get('temporalshift').queueTemporalHex.call(this, pokemon, 'Shadow Guard', true, ['Ghost', 'Dark', 'Fairy'], 120);
 		},
-		flags: {},
+		onFaint(pokemon) {
+			return this.dex.abilities.get('shadowtag').onFaint?.call(this, pokemon);
+		},
+		flags: { cantsuppress: 1 },
 		name: "Shadow Guard",
 		rating: 4,
 		num: 10121,

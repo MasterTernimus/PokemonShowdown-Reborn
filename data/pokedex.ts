@@ -1730,7 +1730,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Alakazam",
 		types: ["Psychic"],
 		genderRatio: { M: 0.75, F: 0.25 },
-		baseStats: { hp: 80, atk: 50, def: 60, spa: 135, spd: 95, spe: 130 },
+		baseStats: { hp: 80, atk: 48, def: 60, spa: 135, spd: 95, spe: 132 },
 		abilities: { 0: "Neuroforce", 1: "Grandmaster", H: "Magic Guard" },
 		heightm: 1.5,
 		weightkg: 48,
@@ -1748,7 +1748,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Psychic"],
 		genderRatio: { M: 0.75, F: 0.25 },
-		baseStats: { hp: 80, atk: 60, def: 70, spa: 175, spd: 105, spe: 160 },
+		baseStats: { hp: 80, atk: 58, def: 70, spa: 175, spd: 105, spe: 162 },
 		abilities: { 0: "Perfect Foresight" },
 		heightm: 1.2,
 		weightkg: 48,
@@ -2018,7 +2018,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 78,
 		name: "Rapidash",
 		types: ["Fire", "Fairy"],
-		baseStats: { hp: 80, atk: 110, def: 70, spa: 80, spd: 80, spe: 130 },
+		baseStats: { hp: 80, atk: 115, def: 70, spa: 80, spd: 80, spe: 125 },
 		abilities: { 0: "Fire Mane", 1: "Speed Boost", H: "Rapid Response" },
 		heightm: 1.7,
 		weightkg: 95,
@@ -2035,7 +2035,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Rapidash",
 		forme: "Galar",
 		types: ["Psychic", "Fairy"],
-		baseStats: { hp: 80, atk: 110, def: 70, spa: 80, spd: 80, spe: 130 },
+		baseStats: { hp: 80, atk: 115, def: 70, spa: 80, spd: 80, spe: 125 },
 		abilities: { 0: "Pastel Veil", 1: "Speed Boost", H: "Rapid Response" },
 		heightm: 1.7,
 		weightkg: 80,
@@ -2188,7 +2188,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 85,
 		name: "Dodrio",
 		types: ["Ground", "Flying"],
-		baseStats: { hp: 90, atk: 130, def: 85, spa: 40, spd: 75, spe: 130 },
+		baseStats: { hp: 90, atk: 135, def: 85, spa: 40, spd: 75, spe: 125 },
 		abilities: { 0: "Hydra Bond", 1: "Speed Boost", H: "Striker" },
 		heightm: 1.8,
 		weightkg: 85.2,
@@ -6305,7 +6305,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Sharpedo",
 		types: ["Water", "Dark"],
 		baseStats: { hp: 70, atk: 120, def: 45, spa: 115, spd: 45, spe: 105 },
-		abilities: { 0: "Rough Skin", 1: "Strong Jaw", H: "Speed Boost" },
+		abilities: { 0: "Rapid Response", 1: "Strong Jaw", H: "Speed Boost" },
 		heightm: 1.8,
 		weightkg: 88.8,
 		color: "Blue",
@@ -6321,7 +6321,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Sharpedo",
 		forme: "Mega",
 		types: ["Water", "Dark"],
-		baseStats: { hp: 70, atk: 150, def: 70, spa: 110, spd: 65, spe: 135 },
+		baseStats: { hp: 70, atk: 150, def: 70, spa: 120, spd: 65, spe: 125 },
 		abilities: { 0: "Razor Current" },
 		heightm: 2.5,
 		weightkg: 130.3,
@@ -6595,8 +6595,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 336,
 		name: "Seviper",
 		types: ["Poison", "Dragon"],
-		baseStats: { hp: 75, atk: 120, def: 75, spa: 110, spd: 75, spe: 95 },
-		abilities: { 0: "Dual Wield", 1: "Rapid Response", H: "Accumulation" },
+		baseStats: { hp: 75, atk: 120, def: 85, spa: 110, spd: 85, spe: 95 },
+		abilities: { 0: "Apex Venom", 1: "Rapid Response", H: "Accumulation" },
 		heightm: 2.7,
 		weightkg: 52.5,
 		color: "Black",
@@ -6790,6 +6790,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Milotic-Alt",
 		baseSpecies: "Milotic",
 		forme: "Alt",
+		otherFormes: ["Milotic-Aevian"],
+		formeOrder: ["Milotic", "Milotic-Alt", "Milotic-Aevian"],
 		types: ["Water", "Fairy"],
 		baseStats: { hp: 95, atk: 89, def: 90, spa: 115, spd: 130, spe: 81 },
 		abilities: { 0: "Prism Scale", 1: "Competitive", H: "Queenly Majesty" },
@@ -6804,6 +6806,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Milotic-Aevian",
 		baseSpecies: "Milotic",
 		forme: "Aevian",
+		otherFormes: ["Milotic-Alt"],
+		formeOrder: ["Milotic", "Milotic-Alt", "Milotic-Aevian"],
 		types: ["Water", "Fairy"],
 		baseStats: { hp: 95, atk: 89, def: 90, spa: 115, spd: 130, spe: 81 },
 		abilities: { 0: "Prism Scale", 1: "Competitive", H: "Queenly Majesty" },
@@ -7811,7 +7815,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 398,
 		name: "Staraptor",
 		types: ["Normal", "Flying"],
-		baseStats: { hp: 85, atk: 120, def: 70, spa: 50, spd: 60, spe: 100 },
+		baseStats: { hp: 85, atk: 120, def: 80, spa: 50, spd: 70, spe: 105 },
 		abilities: { 0: "Brute Force", 1: "Scrappy", H: "Intimidate" },
 		heightm: 1.2,
 		weightkg: 24.9,
@@ -7828,7 +7832,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Staraptor",
 		forme: "Mega",
 		types: ["Fighting", "Flying"],
-		baseStats: { hp: 85, atk: 140, def: 100, spa: 60, spd: 90, spe: 110 },
+		baseStats: { hp: 85, atk: 140, def: 110, spa: 60, spd: 100, spe: 115 },
 		abilities: { 0: "Predator" },
 		heightm: 1.9,
 		weightkg: 50,
@@ -7925,6 +7929,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Luxio",
 		evoLevel: 30,
 		eggGroups: ["Field"],
+		cosmeticFormes: ["Luxray-Alt"],
+		formeOrder: ["Luxray", "Luxray-Alt"],
+	},
+	luxrayalt: {
+		isCosmeticForme: true,
+		name: "Luxray-Alt",
+		baseSpecies: "Luxray",
+		forme: "Alt",
+		color: "Blue",
+		isNonstandard: "Custom",
 	},
 	budew: {
 		num: 406,
@@ -8351,7 +8365,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Mismagius",
 		types: ["Ghost", "Fairy"],
 		baseStats: { hp: 60, atk: 60, def: 60, spa: 110, spd: 105, spe: 115 },
-		abilities: { 0: "Levitate", 1: "Temporal Shift", H: "Shadow Shield" },
+		abilities: { 0: "Levitate", 1: "Temporal Shift", H: "Shadow Tag" },
 		heightm: 0.9,
 		weightkg: 4.4,
 		color: "Purple",
@@ -8665,7 +8679,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fighting", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 80, atk: 115, def: 75, spa: 125, spd: 75, spe: 100 },
-		abilities: { 0: "Dual Wield", 1: "Sworn Duty", H: "Ironclad" },
+		abilities: { 0: "Mind's Eye", 1: "Sworn Duty", H: "Ironclad" },
 		heightm: 1.2,
 		weightkg: 54,
 		color: "Blue",
@@ -9109,8 +9123,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "useItem",
 		evoItem: "Dawn Stone",
 		eggGroups: ["Human-Like", "Amorphous"],
-		otherFormes: ["Gallade-Mega"],
-		formeOrder: ["Gallade", "Gallade-Mega"],
+		otherFormes: ["Gallade-Mega", "Gallade-Azzy", "Gallade-Mega-Azzy"],
+		cosmeticFormes: ["Gallade-Azzy"],
+		formeOrder: ["Gallade", "Gallade-Mega", "Gallade-Azzy", "Gallade-Mega-Azzy"],
+	},
+	galladeazzy: {
+		isCosmeticForme: true,
+		name: "Gallade-Azzy",
+		baseSpecies: "Gallade",
+		forme: "Azzy",
+		color: "White",
+		isNonstandard: "Custom",
 	},
 	gallademega: {
 		num: 475,
@@ -9126,6 +9149,24 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		eggGroups: ["Amorphous"],
 		requiredItem: "Galladite",
+	},
+	gallademegaazzy: {
+		num: 475,
+		name: "Gallade-Mega-Azzy",
+		baseSpecies: "Gallade",
+		forme: "Mega-Azzy",
+		types: ["Psychic", "Fighting"],
+		gender: "M",
+		baseStats: { hp: 75, atk: 165, def: 95, spa: 65, spd: 125, spe: 115 },
+		abilities: { 0: "Sacred Edge" },
+		heightm: 1.6,
+		weightkg: 56.4,
+		color: "White",
+		eggGroups: ["Amorphous"],
+		requiredItem: "Galladite",
+		battleOnly: "Gallade-Azzy",
+		changesFrom: "Gallade-Azzy",
+		isNonstandard: "Custom",
 	},
 	probopass: {
 		num: 476,
@@ -9904,8 +9945,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Servine",
 		evoLevel: 36,
 		eggGroups: ["Field", "Grass"],
-		otherFormes: ["Serperior-Mega"],
-		formeOrder: ["Serperior", "Serperior-Mega"],
+		otherFormes: ["Serperior-Mega", "Serperior-Azzy"],
+		cosmeticFormes: ["Serperior-Azzy"],
+		formeOrder: ["Serperior", "Serperior-Mega", "Serperior-Azzy"],
+	},
+	serperiorazzy: {
+		isCosmeticForme: true,
+		name: "Serperior-Azzy",
+		baseSpecies: "Serperior",
+		forme: "Azzy",
+		color: "Green",
+		isNonstandard: "Custom",
 	},
 	serperiormega: {
 		num: 497,
@@ -10016,7 +10066,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 95, atk: 100, def: 100, spa: 100, spd: 85, spe: 70 },
-		abilities: { 0: "Sworn Duty", 1: "Blade Mastery", H: "Shell Armor" },
+		abilities: { 0: "Swift Swim", 1: "Blade Mastery", H: "Shell Armor" },
 		heightm: 1.5,
 		weightkg: 94.6,
 		color: "Blue",
@@ -10034,7 +10084,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Dark"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 90, atk: 120, def: 80, spa: 105, spd: 70, spe: 85 },
-		abilities: { 0: "Sworn Duty", 1: "Blade Mastery", H: "Mold Breaker" },
+		abilities: { 0: "Lightning Rod", 1: "Blade Mastery", H: "Mold Breaker" },
 		heightm: 1.5,
 		weightkg: 58.2,
 		color: "Blue",
@@ -10416,7 +10466,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Audino",
 		types: ["Normal", "Fairy"],
 		baseStats: { hp: 103, atk: 60, def: 96, spa: 80, spd: 96, spe: 50 },
-		abilities: { 0: "Invigorate", 1: "Regenerator", H: "Sworn Duty" },
+		abilities: { 0: "Invigorate", 1: "Regenerator", H: "Triage" },
 		heightm: 1.1,
 		weightkg: 31,
 		color: "Pink",
@@ -10620,21 +10670,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Whirlipede",
 		evoLevel: 30,
 		eggGroups: ["Bug"],
-		otherFormes: ["Scolipede-Alt", "Scolipede-Mega"],
-		formeOrder: ["Scolipede", "Scolipede-Alt", "Scolipede-Mega"],
+		otherFormes: ["Scolipede-Azzy", "Scolipede-Mega", "Scolipede-Mega-Azzy"],
+		cosmeticFormes: ["Scolipede-Azzy"],
+		formeOrder: ["Scolipede", "Scolipede-Azzy", "Scolipede-Mega", "Scolipede-Mega-Azzy"],
 	},
-	scolipedealt: {
-		num: 545,
-		name: "Scolipede-Alt",
+	scolipedeazzy: {
+		isCosmeticForme: true,
+		name: "Scolipede-Azzy",
 		baseSpecies: "Scolipede",
-		forme: "Alt",
-		types: ["Bug", "Poison"],
-		baseStats: { hp: 90, atk: 100, def: 96, spa: 55, spd: 69, spe: 115 },
-		abilities: { 0: "Poison Point", 1: "Swarm", H: "Speed Boost" },
-		heightm: 2.5,
-		weightkg: 200.5,
-		color: "Red",
-		eggGroups: ["Bug"],
+		forme: "Azzy",
+		color: "Brown",
 		isNonstandard: "Custom",
 	},
 	scolipedemega: {
@@ -10651,6 +10696,23 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Bug"],
 		requiredItem: "Scolipite",
 		gen: 9,
+	},
+	scolipedemegaazzy: {
+		num: 545,
+		name: "Scolipede-Mega-Azzy",
+		baseSpecies: "Scolipede",
+		forme: "Mega-Azzy",
+		types: ["Poison", "Steel"],
+		baseStats: { hp: 90, atk: 140, def: 159, spa: 75, spd: 99, spe: 62 },
+		abilities: { 0: "Venom Bastion" },
+		heightm: 3.2,
+		weightkg: 230.5,
+		color: "Brown",
+		eggGroups: ["Bug"],
+		requiredItem: "Scolipite",
+		battleOnly: "Scolipede-Azzy",
+		changesFrom: "Scolipede-Azzy",
+		isNonstandard: "Custom",
 	},
 	cottonee: {
 		num: 546,
@@ -14173,7 +14235,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 715,
 		name: "Noivern",
 		types: ["Flying", "Dragon"],
-		baseStats: { hp: 85, atk: 60, def: 80, spa: 100, spd: 80, spe: 130 },
+		baseStats: { hp: 85, atk: 60, def: 80, spa: 105, spd: 80, spe: 125 },
 		abilities: { 0: "Dragonize", 1: "Wind Power", H: "Echo Fiend" },
 		heightm: 1.5,
 		weightkg: 85,
@@ -14427,7 +14489,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 98, atk: 122, def: 85, spa: 85, spd: 85, spe: 95 },
-		abilities: { 0: "Fallen Star", 1: "Striker", H: "Scrappy" },
+		abilities: { 0: "Fallen Star", 1: "Unburden", H: "Scrappy" },
 		heightm: 1.6,
 		weightkg: 37,
 		color: "Brown",
@@ -14659,8 +14721,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 738,
 		name: "Vikavolt",
 		types: ["Bug", "Electric"],
-		baseStats: { hp: 77, atk: 95, def: 99, spa: 145, spd: 75, spe: 79 },
-		abilities: { 0: "Levitate", 1: "Shield Dust", H: "Battery" },
+		baseStats: { hp: 77, atk: 103, def: 107, spa: 145, spd: 75, spe: 43 },
+		abilities: { 0: "Levitate", 1: "Speed Boost", H: "Battery" },
 		heightm: 1.5,
 		weightkg: 45,
 		color: "Blue",
@@ -16237,7 +16299,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	marshadow: {
 		num: 802,
 		name: "Marshadow",
-		types: ["Fighting", "Ghost"],
+		types: ["Fighting", "Steel"],
 		gender: "N",
 		baseStats: { hp: 90, atk: 125, def: 80, spa: 90, spd: 90, spe: 125 },
 		abilities: { 0: "Technician" },
@@ -17576,7 +17638,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Falinks-Mega",
 		baseSpecies: "Falinks",
 		forme: "Mega",
-		types: ["Fighting", "Ghost"],
+		types: ["Fighting", "Steel"],
 		gender: "N",
 		baseStats: { hp: 65, atk: 135, def: 135, spa: 70, spd: 65, spe: 100 },
 		abilities: { 0: "Phalanx Form" },
@@ -18967,7 +19029,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Bramblin",
 		types: ["Grass", "Ghost"],
 		baseStats: { hp: 40, atk: 65, def: 30, spa: 45, spd: 35, spe: 60 },
-		abilities: { 0: "Wind Rider", H: "Infiltrator" },
+		abilities: { 0: "Wind Rider", 1: "Infiltrator", H: "Sand Rush" },
 		heightm: 0.6,
 		weightkg: 0.6,
 		color: "Brown",
@@ -18979,7 +19041,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Brambleghast",
 		types: ["Grass", "Ghost"],
 		baseStats: { hp: 55, atk: 115, def: 70, spa: 80, spd: 70, spe: 90 },
-		abilities: { 0: "Wind Rider", H: "Infiltrator" },
+		abilities: { 0: "Wind Rider", 1: "Infiltrator", H: "Sand Rush" },
 		heightm: 1.2,
 		weightkg: 6,
 		color: "Brown",
@@ -19583,22 +19645,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "other",
 		evoCondition: "Defeat 3 Bisharp leading Pawniard and level-up",
 		eggGroups: ["Human-Like"],
-		otherFormes: ["Kingambit-Alt"],
-		formeOrder: ["Kingambit", "Kingambit-Alt"],
-	},
-	kingambitalt: {
-		num: 983,
-		name: "Kingambit-Alt",
-		baseSpecies: "Kingambit",
-		forme: "Alt",
-		types: ["Dark", "Steel"],
-		baseStats: { hp: 110, atk: 145, def: 130, spa: 60, spd: 105, spe: 50 },
-		abilities: { 0: "Defiant", 1: "Supreme Overlord", H: "Royal Decree" },
-		heightm: 2,
-		weightkg: 120,
-		color: "Black",
-		eggGroups: ["Human-Like"],
-		isNonstandard: "Custom",
 	},
 	greattusk: {
 		num: 984,
@@ -21830,6 +21876,63 @@ for (const [id, update] of Object.entries(latestSpeciesUpdates)) {
 	Object.assign(species, update);
 	if (update.baseStats) species.baseStats = {...baseStats, ...update.baseStats};
 	if (update.abilities) species.abilities = {...update.abilities};
+}
+
+const customVisualFormes = new Set(['Alt', 'Aevian', 'East-Aevian', 'Pulse', 'Azzy', 'Spring', 'Summer', 'Autumn', 'Winter']);
+const customVisualBaseAliases: {[id: string]: string} = {
+	charizardmegaxalt: 'charizard',
+	decidueyehisuialt: 'decidueyehisui',
+	gastrodoneastaevian: 'gastrodon',
+};
+const customVisualGroups: {[baseId: string]: {ids: string[], names: Set<string>}} = {};
+const normalizePokedexId = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, '');
+for (const [id, rawSpecies] of Object.entries(Pokedex)) {
+	const species = rawSpecies as any;
+	if (species.isNonstandard !== 'Custom') continue;
+	if (typeof species.forme !== 'string' ||
+		(!customVisualFormes.has(species.forme) && !species.forme.endsWith('-Alt'))) continue;
+	const baseId = customVisualBaseAliases[id] || normalizePokedexId(species.baseSpecies || '');
+	if (!baseId || !(Pokedex as any)[baseId]) continue;
+	const group = customVisualGroups[baseId] || (customVisualGroups[baseId] = {ids: [], names: new Set()});
+	group.ids.push(id);
+	group.names.add(species.name);
+	for (const forme of species.otherFormes || []) group.names.add(forme);
+}
+for (const [baseId, group] of Object.entries(customVisualGroups)) {
+	const base = (Pokedex as any)[baseId];
+	const baseName = base.name || baseId;
+	const formeOrder: string[] = [];
+	const addFormes = (formes: unknown) => {
+		if (!Array.isArray(formes)) return;
+		for (const forme of formes) {
+			if (typeof forme === 'string' && !formeOrder.includes(forme)) formeOrder.push(forme);
+		}
+	};
+	formeOrder.push(baseName);
+	addFormes(base.formeOrder);
+	addFormes(base.otherFormes);
+	addFormes(base.cosmeticFormes);
+	for (const id of group.ids) {
+		const species = (Pokedex as any)[id];
+		addFormes(species.formeOrder);
+		addFormes(species.otherFormes);
+		if (!formeOrder.includes(species.name)) formeOrder.push(species.name);
+	}
+	for (const name of group.names) {
+		if (!formeOrder.includes(name)) formeOrder.push(name);
+	}
+	const cosmeticFormes = new Set(base.cosmeticFormes || []);
+	for (const name of group.names) {
+		if (name !== baseName) cosmeticFormes.add(name);
+	}
+	base.cosmeticFormes = [...cosmeticFormes];
+	base.formeOrder = formeOrder;
+	for (const id of group.ids) {
+		const species = (Pokedex as any)[id];
+		species.otherFormes = formeOrder.filter((forme: string) => forme !== species.name);
+		species.cosmeticFormes = [...cosmeticFormes];
+		species.formeOrder = formeOrder;
+	}
 }
 
 
