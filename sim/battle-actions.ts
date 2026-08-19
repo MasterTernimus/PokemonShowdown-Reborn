@@ -2209,6 +2209,10 @@ export class BattleActions {
 		const item = pokemon.getItem();
 		if (species.id === 'charizardmegaxalt') return null;
 		if (species.id === 'charizardalt' && item.id === 'charizarditex') return 'Charizard-Mega-X-Alt';
+		if (species.id === 'gallademegaazzy') return null;
+		if (species.id === 'galladeazzy' && item.id === 'galladite') return 'Gallade-Mega-Azzy';
+		if (species.id === 'scolipedemegaazzy') return null;
+		if (species.id === 'scolipedeazzy' && item.id === 'scolipite') return 'Scolipede-Mega-Azzy';
 		// Mega Rayquaza
 		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
 			this.battle.ruleTable.has('+pokemontag:future')) &&

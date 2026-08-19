@@ -5512,6 +5512,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	nidoqueen: {
 		learnset: {
 			spikecannon: ["9M"],
+			calmmind: ["9M"],
 			acid: ["9L1"],
 			aerialace: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			aquatail: ["9M", "7T", "6T", "5T", "4T"],
@@ -5866,6 +5867,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	nidoking: {
 		learnset: {
 			spikecannon: ["9M"],
+			bulkup: ["9M"],
 			acid: ["9L1"],
 			amnesia: ["9M", "8M"],
 			aquatail: ["9M", "7T", "7S0", "6T", "5T", "4T"],
@@ -25434,7 +25436,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			bide: ["7V"],
 			bite: ["9L1", "8L1", "8V", "7L1", "7V", "6L1", "5L1", "5D", "4L1", "3L15"],
-			bravebird: ["9M"],
 			brutalswing: ["9M", "8M", "7M"],
 			bulldoze: ["9M", "8M", "7M", "6M", "5M"],
 			captivate: ["4M"],
@@ -83456,7 +83457,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			absorb: ["9L5", "8L1", "7L1"],
 			acrobatics: ["9M", "8M", "7M", "6M"],
 			aerialace: ["9M", "7M", "6M"],
-			aeroblast: ["9M"],
 			agility: ["9L43", "8M", "7L18", "6L18"],
 			aircutter: ["9L27", "8L24", "7L23", "6L23"],
 			airslash: ["9L50", "8M", "8L36", "7L53", "6L53"],
