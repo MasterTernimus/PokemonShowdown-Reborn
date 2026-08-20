@@ -84,8 +84,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	apexvenom: {
 		name: "Apex Venom",
-		desc: "This Pokemon has Dual Wield. Its Poison-type moves are super effective against Poison- and Steel-type Pokemon. Its Dark-type moves gain STAB against targets that resist Dark but are not weak to it. If it faints a Steel-type target, it restores half of its maximum HP.",
-		shortDesc: "Dual Wield; Poison hits Poison/Steel super effectively; Dark STAB vs resists; Steel KO heals 1/2.",
+		desc: "This Pokemon has Strong Jaw and Shed Skin's effects. Poison-type moves are super effective against Poison- and Steel-type Pokemon. Biting moves gain STAB and apply Poison-type effectiveness in addition to their normal type effectiveness. Poison Fang is Dragon-type and has 2x power.",
+		shortDesc: "Strong Jaw + Shed Skin; Poison hits Poison/Steel; bites add Poison effectiveness; Poison Fang is Dragon/2x.",
 	},
 	apexpredator: {
 		name: "Apex Predator",
@@ -722,8 +722,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hellfireeclipse: {
 		name: "Hellfire Eclipse",
-		desc: "During harsh sunlight, this Pokemon's Attack and Special Attack are multiplied by 1.5. After this Pokemon uses a Fire-type move, it sets Sunny Day for 2 turns.",
-		shortDesc: "In Sun: Atk/SpA 1.5x; Fire moves set 2-turn Sun.",
+		desc: "This Pokemon has Flash Fire and Dark Aura's effects. During harsh sunlight, its Attack and Special Attack are multiplied by 1.5. After it uses a Fire-type move, it sets Sunny Day for 2 turns.",
+		shortDesc: "Flash Fire + Dark Aura; Sun: Atk/SpA 1.5x; Fire moves set 2-turn Sun.",
 	},
 	sacrededge: {
 		name: "Sacred Edge",
@@ -744,6 +744,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Cursed Keepsake",
 		desc: "When this Pokemon is hit by an opposing damaging move, the attacker becomes cursed. Cursed Pokemon deal 0.5x damage to this Pokemon. This Pokemon restores HP equal to 1/2 of Curse damage it caused. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization.",
 		shortDesc: "Curses attackers; cursed foes deal 0.5x; heals 1/2 Curse damage.",
+	},
+	curseddoll: {
+		name: "Cursed Doll",
+		desc: "This Pokemon has Tough Claws and Shadow Shield's effects. Its damaging moves curse the foes they hurt. When it faints, it creates Haunted Field for 5 turns.",
+		shortDesc: "Tough Claws + Shadow Shield; damaging moves curse; faint sets Haunted.",
 	},
 	cursedmarionette: {
 		name: "Cursed Marionette",
@@ -827,8 +832,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	venombastion: {
 		name: "Venom Bastion",
-		desc: "This Pokemon has Dauntless Shield's effect, raising its Defense by 1 stage on entry. In Fairy Tale, it also raises Defense and Special Defense by 1 stage. Its Bug-type moves have 1.5x power, and it restores 1/16 of its max HP at the end of each turn.",
-		shortDesc: "Dauntless Shield; Bug moves 1.5x; heals 1/16 each turn.",
+		desc: "This Pokemon has Stamina's effect: when hit by an opposing attack, its Defense rises by 1 stage once per turn and it restores 1/16 max HP. Its Bug-type moves have 1.5x power.",
+		shortDesc: "Stamina + Bug moves 1.5x; hit: +1 Def once/turn and heals 1/16.",
 	},
 	rimeknuckle: {
 		name: "Rime Knuckle",
@@ -862,8 +867,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	woolyconductor: {
 		name: "Wooly Conductor",
-		desc: "This Pokemon has Fur Coat, Mold Breaker, and Static's effects. Its Defense is doubled, its moves ignore opposing Abilities, and contact moves used against it may paralyze the attacker.",
-		shortDesc: "Fur Coat + Mold Breaker + Static.",
+		desc: "This Pokemon has Fluffy, Mold Breaker, and Static's effects. It takes half damage from contact moves, but takes double damage from Fire moves. Its moves ignore opposing Abilities, and contact moves used against it may paralyze the attacker.",
+		shortDesc: "Fluffy + Mold Breaker + Static.",
 	},
 	surgeconduit: {
 		name: "Surge Conduit",
@@ -1705,8 +1710,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	reapersgrip: {
 		name: "Reaper's Grip",
-		desc: "This Pokemon has Iron Fist and Pressure's effects. Punch-based attacks have 1.4x power. Its foes lose 1 extra PP when targeting it. On entry, it lowers opposing Defense and Special Defense by 1 stage, or 2 stages in Cold Eclipse.",
-		shortDesc: "Iron Fist + Pressure; entry lowers opposing Def/SpD, doubled in Cold Eclipse.",
+		desc: "This Pokemon has Unaware and Pressure's effects. Its foes lose 1 extra PP when targeting it. When it faints, it creates Haunted Field for 5 turns.",
+		shortDesc: "Unaware + Pressure; foes lose 1 extra PP; faint sets 5-turn Haunted Field.",
 	},
 	moonlitwings: {
 		name: "Moonlit Wings",
@@ -2269,8 +2274,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	schooling: {
 		name: "Schooling",
-		desc: "On switch-in, if this Pokemon is a Wishiwashi that is level 20 or above and has more than 1/4 of its maximum HP left, it changes to School Form. If it is in School Form and its HP drops to 1/4 of its maximum HP or less, it changes to Solo Form at the end of the turn. If it is in Solo Form and its HP is greater than 1/4 its maximum HP at the end of the turn, it changes to School Form. While in School Form, it has Hydra Bond's effect.",
-		shortDesc: "Wishiwashi changes forms by HP; School Form has Hydra Bond.",
+		desc: "On switch-in, if this Pokemon is a Wishiwashi that is level 20 or above and has more than 1/4 of its maximum HP left, it changes to School Form. If it is in School Form and its HP drops to 1/4 of its maximum HP or less, it changes to Solo Form at the end of the turn. If it is in Solo Form and its HP is greater than 1/4 its maximum HP at the end of the turn, it changes to School Form. While in School Form, it has Hydra Bond's effect and Self Repair's effects.",
+		shortDesc: "Wishiwashi changes forms by HP; School Form has Hydra Bond + Self Repair.",
 
 		transform: "[POKEMON] formed a school!",
 		transformEnd: "[POKEMON] stopped schooling!",
@@ -2543,8 +2548,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pendulumswing: {
 		name: "Pendulum Swing",
-		desc: "This Pokemon has Insomnia's effect, and its moves cannot miss.",
-		shortDesc: "Insomnia; moves cannot miss.",
+		desc: "This Pokemon has Insomnia and Filter's effects. Its moves cannot miss.",
+		shortDesc: "Insomnia + Filter; moves cannot miss.",
 	},
 	lunarspirit: {
 		name: "Lunar Spirit",
@@ -2613,8 +2618,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wrathshield: {
 		name: "Wrath Shield",
-		desc: "This Pokemon has Bulletproof, Filter, and Self Repair's effects. It is immune to bullet and pulse moves, takes their combined damage reductions from other attacks, heals 1/16 each turn, is immune to Sandstorm and Hail damage, and Natural Cure heals it when curing status on switch-out.",
-		shortDesc: "Bulletproof + Filter + Self Repair.",
+		desc: "This Pokemon has Bulletproof, Dauntless Shield, and Self Repair's effects. It gains 1 Defense stage on entry, plus 1 Special Defense stage in Cold Eclipse, New World, Starlight Arena, or Fairy Tale. It is immune to bullet and pulse moves and restores HP through Self Repair.",
+		shortDesc: "Bulletproof + Dauntless Shield + Self Repair; boosted fields also give +1 SpD.",
 	},
 	shadowcurrent: {
 		name: "Shadow Current",
@@ -3384,8 +3389,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinisterblaze: {
 		name: "Sinister Blaze",
-		desc: "This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. Burn heals this Pokemon instead of damaging it, and its physical attacks are not weakened by burn. While this Pokemon is burned, opposing Pokemon take damage equal to 1/8 of their max HP each turn, doubled to 1/4 if they are burned, and this Pokemon heals the damage dealt. This Ability cannot be Skill Swapped, suppressed, copied by Role Play, given by Entrainment, or Traced.",
-		shortDesc: "Misty-bypassing burn; no burn penalty; foes take 1/8, or 1/4 if burned; heals damage.",
+		desc: "This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, or Superheated Field, its Defense and Special Defense rise by 1 stage on entry. Its burn damage becomes healing and deals the same damage to each foe. It does not heal from that generated damage, but heals from real burn damage dealt to foes. Its physical attacks are not weakened by burn. This Ability cannot be Skill Swapped, suppressed, copied by Role Play, given by Entrainment, or Traced.",
+		shortDesc: "Burn becomes healing + equal foe damage; heals from foe burns; no burn penalty.",
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",

@@ -900,22 +900,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	apexvenom: {
 		onModifyMove(move, source) {
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
+			if (move.id === 'poisonfang') move.type = 'Dragon';
+			if (move.flags['bite']) move.forceSTAB = true;
+			if (this.movehasType(move, 'Poison')) {
+				this.dex.abilities.get('corrosion').onModifyMove?.call(this, move, source);
+			}
 		},
 		onBasePowerPriority: 20,
 		onBasePower(basePower, source, target, move) {
-			if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move));
-		},
-		onModifySTAB(stab, source, target, move) {
-			if (move.type !== 'Dark' || !target || source.hasType('Dark')) return;
-			const typeMod = this.dex.getEffectiveness('Dark', target);
-			if (typeMod < 0 && typeMod > -6) return 1.5;
+			if (move.id === 'poisonfang') return this.chainModify(2);
+			if (move.flags['bite']) return this.chainModify(1.5);
 		},
 		onEffectiveness(typeMod, target, type, move) {
-			if (type === 'Poison' && move?.category !== 'Status' && (target.hasType('Poison') || target.hasType('Steel'))) return 1;
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move' && target.hasType('Steel')) this.heal(source.baseMaxhp / 2, source, source);
+			if (!move || move.category === 'Status') return;
+			if (this.movehasType(move, 'Poison') && ['Poison', 'Steel'].includes(type)) return 1;
+			if (move.flags['bite']) {
+				const poisonTypeMod = ['Poison', 'Steel'].includes(type) ? 1 : this.dex.getEffectiveness('Poison', type);
+				return typeMod + poisonTypeMod;
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Apex Venom",
@@ -3560,6 +3562,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10066,
 	},
 	hellfireeclipse: {
+		onStart(pokemon) {
+			this.dex.abilities.get('darkaura').onStart?.call(this, pokemon);
+		},
+		onAnyBasePowerPriority: 20,
+		onAnyBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('darkaura').onAnyBasePower?.call(this, basePower, source, target, move);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('darkaura').onImmunity?.call(this, type, pokemon);
+		},
 		onTryHit(target, source, move) { return this.dex.abilities.get('flashfire').onTryHit?.call(this, target, source, move); },
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
@@ -3689,6 +3701,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Cursed Keepsake",
 		rating: 4.5,
 		num: 10131,
+	},
+	curseddoll: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('shadowshield').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('shadowshield').onImmunity?.call(this, type, pokemon);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!damage || !target || target.fainted || !source || target === source || target.isAlly(source) || move.category === 'Status') return;
+			target.addVolatile('curse', source, this.dex.abilities.get('curseddoll'));
+		},
+		onFaint(pokemon) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('curseddoll'), true)) {
+				this.field.terrainState.duration = 5;
+			}
+		},
+		flags: {},
+		name: "Cursed Doll",
+		rating: 4,
+		num: 10362,
 	},
 	cursedmarionette: {
 		onModifyPriority(priority, pokemon, target, move) {
@@ -4718,7 +4757,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10116,
 	},
 	venombastion: {
-		onStart(pokemon) { return this.dex.abilities.get('dauntlessshield').onStart?.call(this, pokemon); },
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, move);
+		},
 		onBasePower(basePower, source, target, move) { if (this.movehasType(move, 'Bug')) return this.chainModify(1.5); },
 		onResidual(pokemon) { this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
 		flags: { breakable: 1 },
@@ -7391,6 +7432,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const details = pokemon.getUpdatedDetails();
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
+				this.add('-damage', pokemon, pokemon.getHealth, '[silent]');
 				if (this.ruleTable.has('illusionlevelmod')) {
 					this.hint("Illusion Level Mod is active, so this Pok\u00e9mon's true level was hidden.", true);
 				}
@@ -8654,29 +8696,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	reapersgrip: {
 		onStart(pokemon) {
-			const coldEclipse = this.field.isTerrain('coldeclipseterrain');
-			let activated = false;
-			for (const target of pokemon.foes()) {
-				if (!activated) {
-					this.add('-ability', pokemon, "Reaper's Grip", 'boost');
-					activated = true;
-				}
-				if (target.volatiles['substitute']) this.add('-immune', target);
-				this.boost({ def: coldEclipse ? -2 : -1, spd: coldEclipse ? -2 : -1 }, target, pokemon, null, true);
-			}
+			this.dex.abilities.get('pressure').onStart?.call(this, pokemon);
 		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['punch']) {
-				this.debug("Reaper's Grip Iron Fist boost");
-				return this.chainModify(1.4);
-			}
+		onAnyModifyBoost(boosts, pokemon) {
+			return this.dex.abilities.get('unaware').onAnyModifyBoost?.call(this, boosts, pokemon);
 		},
 		onDeductPP(target, source) {
-			if (target.isAlly(source)) return;
-			return 1;
+			return this.dex.abilities.get('pressure').onDeductPP?.call(this, target, source);
 		},
-		flags: {},
+		onFaint(pokemon) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('reapersgrip'), true)) {
+				this.field.terrainState.duration = 5;
+			}
+		},
+		flags: { cantsuppress: 1 },
 		name: "Reaper's Grip",
 		rating: 4,
 		num: 10357,
@@ -11459,6 +11494,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.status) pokemon.clearStatus();
 				pokemon.setStatus('brn', pokemon, this.effect, true);
 			}
+			if (this.field.isTerrain([
+				'fairytaleterrain', 'starlightarenaterrain', 'newworldterrain',
+				'burningterrain', 'volcanicterrain', 'superheatedterrain',
+			])) {
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.effect);
+			}
 		},
 		onUpdate(pokemon) {
 			if (pokemon.status !== 'brn') {
@@ -11470,18 +11511,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (status.id === 'brn') return;
 			this.add('-immune', target, '[from] ability: Sinister Blaze');
 			return false;
-		},
-		onResidualOrder: 10,
-		onResidualSubOrder: 1,
-		onResidual(pokemon) {
-			if (pokemon.status !== 'brn') return;
-			for (const foe of pokemon.foes()) {
-				if (!foe || foe.fainted) continue;
-				const damage = this.damage(foe.baseMaxhp * (foe.status === 'brn' ? 1 / 4 : 1 / 8), foe, pokemon, this.effect);
-				if (typeof damage === 'number' && damage > 0) {
-					this.heal(damage, pokemon, pokemon, this.effect);
-				}
-			}
 		},
 		flags: { cantsuppress: 1, failroleplay: 1, failskillswap: 1, noentrain: 1, notrace: 1 },
 		name: "Sinister Blaze",
@@ -11811,6 +11840,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePower(basePower, source, target, move) {
 			return this.dex.abilities.get('insomnia').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onModifyMove(move) {
 			move.accuracy = true;
@@ -12205,6 +12237,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10031,
 	},
 	wrathshield: {
+		onStart(pokemon) {
+			if (this.field.isTerrain(['coldeclipseterrain', 'newworldterrain', 'starlightarenaterrain', 'fairytaleterrain'])) {
+				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('wrathshield'));
+			} else {
+				this.boost({ def: 1 }, pokemon, pokemon, this.dex.abilities.get('wrathshield'));
+			}
+		},
 		onCheckShow(pokemon) {
 			this.dex.abilities.get('selfrepair').onCheckShow?.call(this, pokemon);
 		},
@@ -12215,10 +12254,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category === 'Status') return;
-			let modifier = 0.8 * 0.8;
-			if (target.getMoveHitData(move).typeMod > 0) modifier *= 0.75;
-			return this.chainModify(modifier);
+			return this.dex.abilities.get('bulletproof').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onResidual(pokemon) {
 			return this.dex.abilities.get('selfrepair').onResidual?.call(this, pokemon);
@@ -13575,9 +13611,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10191,
 	},
 	woolyconductor: {
-		onModifyDefPriority: 6,
-		onModifyDef(def) {
-			return this.chainModify(2);
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('fluffy').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
