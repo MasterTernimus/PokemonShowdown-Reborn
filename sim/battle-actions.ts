@@ -1581,11 +1581,15 @@ export class BattleActions {
 	}
 	secondaries(targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSelf?: boolean) {
 		if (!moveData.secondaries) return;
+		const hydraBondFollowUp = move.multihitType === 'hydrabond' && move.hit > 1;
 		for (const target of targets) {
 			if (target === false) continue;
 			const secondaries: Dex.SecondaryEffect[] =
 				this.battle.runEvent('ModifySecondaries', target, source, moveData, moveData.secondaries.slice());
 			for (const secondary of secondaries) {
+				// Hydra Bond repeats stat-boost effects with their normal chance, but not other effects.
+				const repeatsOnHydraFollowUp = secondary.boosts || secondary.self?.boosts;
+				if (hydraBondFollowUp && !repeatsOnHydraFollowUp) continue;
 				const secondaryRoll = this.battle.random(100);
 				// User stat boosts or target stat drops can possibly overflow if it goes beyond 256 in Gen 8 or prior
 				const secondaryOverflow = (secondary.boosts || secondary.self) && this.battle.gen <= 8;

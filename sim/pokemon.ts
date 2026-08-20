@@ -2077,7 +2077,7 @@ export class Pokemon {
 			wickedsnare: [],
 			corrosivescale: ['marvelscale'],
 			aurainstinct: ['adaptability', 'dualwield', 'secondwind'],
-			wrathshield: ['swornduty'],
+			wrathshield: ['bulletproof', 'dauntlessshield', 'selfrepair'],
 			shadowcurrent: ['protean', 'technician', 'swornduty', 'infiltrator'],
 			astralwitchcraft: ['levitate', 'magicguard', 'swornduty'],
 			ragingcurrent: ['swiftswim', 'damp', 'waterveil'],
@@ -2088,7 +2088,7 @@ export class Pokemon {
 			fossilfrenzy: ['klutz'],
 			phantomfist: ['unseenfist'],
 			alloycore: ['magicguard', 'selfsufficient'],
-			hellfireeclipse: ['solarpower'],
+			hellfireeclipse: ['solarpower', 'darkaura'],
 			sacrededge: ['sharpness', 'swornduty'],
 			omenedge: ['sharpness', 'dualwield'],
 			dreadmaw: ['hugepower', 'strongjaw'],
@@ -2122,7 +2122,7 @@ export class Pokemon {
 			rainsovereign: ['drizzle'],
 			riotamp: ['punkrock', 'galvanize', 'resonanceforce'],
 			mourningsnow: ['snowwarning', 'icebody'],
-			venombastion: ['shellarmor'],
+			venombastion: ['stamina'],
 			draconicforce: ['dragonize', 'strongjaw'],
 			vanguard: ['intimidate'],
 			royalarmament: ['powerdrill'],
@@ -2141,7 +2141,7 @@ export class Pokemon {
 			auroracurrent: ['snowwarning'],
 			dunetyrant: ['sandstream', 'strongjaw'],
 			ironmountain: ['filter', 'stamina', 'heavymetal'],
-			woolyconductor: ['furcoat', 'moldbreaker', 'static'],
+			woolyconductor: ['fluffy', 'moldbreaker', 'static'],
 			rimeknuckle: ['ironfist'],
 			ragingstorm: ['moldbreaker'],
 			abysssniper: ['sniper', 'stalwart'],
@@ -2150,10 +2150,14 @@ export class Pokemon {
 			divineintervention: ['friendguard', 'regenerator'],
 			shadowguard: ['shadowshield', 'elevate'],
 			requiem: ['cursedbody'],
-			reapersgrip: ['ironfist', 'pressure'],
+			reapersgrip: ['unaware', 'pressure'],
+			pendulumswing: ['insomnia', 'filter'],
+			curseddoll: ['toughclaws', 'shadowshield'],
+			apexvenom: ['strongjaw', 'shedskin'],
 			ultrainstinct: ['moldbreaker', 'innerfocus'],
-			resuscitation: ['selfrepair', 'magicguard'],
-		};
+				resuscitation: ['selfrepair', 'magicguard'],
+				schooling: ['selfrepair'],
+			};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
 			!(this.ability === 'perfectforesight' && this.m.perfectForesightAbility &&
@@ -2262,7 +2266,9 @@ export class Pokemon {
 		}
 	}
 
-	getHealth = () => {
+	getHealth = (useIllusion = true) => {
+		// Illusion copies the disguise's visible HP and status without changing the user's real battle state.
+		if (useIllusion && this.illusion && this.illusion !== this) return this.illusion.getHealth(false);
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
 		let secret = `${this.hp}/${this.maxhp}`;
 		let shared;

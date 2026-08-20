@@ -453,7 +453,13 @@ export class DexSpecies {
 			} else {
 				species = this.get(alias);
 				if (this.dex.data.Pokedex?.[id]?.isCosmeticForme) {
-					const cosmeticForme = this.dex.data.Pokedex[id];
+					const cosmeticForme = {...this.dex.data.Pokedex[id]};
+					if (
+						cosmeticForme.canGigantamax === undefined && species.canGigantamax &&
+						!String(cosmeticForme.forme || '').toLowerCase().includes('mega')
+					) {
+						cosmeticForme.canGigantamax = species.canGigantamax;
+					}
 					species = new Species({
 						...species,
 						...cosmeticForme,

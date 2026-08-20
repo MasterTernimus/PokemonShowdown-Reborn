@@ -888,8 +888,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	chargebeam: {
 		name: "Charge Beam",
-		desc: "Has a 70% chance to raise the user's Special Attack by 1 stage.",
-		shortDesc: "70% chance to raise the user's Sp. Atk by 1.",
+		desc: "Raises the user's Special Attack by 1 stage.",
+		shortDesc: "Raises the user's Sp. Atk by 1.",
 	},
 	charm: {
 		name: "Charm",

@@ -2784,7 +2784,8 @@ export class Battle {
 				!action.pokemon.hasItem('powerherb') &&
 				!action.pokemon.hasAbility('freezerburn') &&
 				!(move.id === 'skyattack' && (action.pokemon.side.sideConditions['tailwind'] || this.field.isWeather('deltastream')));
-			if (['skullbash', 'skyattack'].includes(move.id) && hasRealChargeTurn) priority += 4;
+			if (move.id === 'skullbash' && hasRealChargeTurn) priority += 2;
+			if (move.id === 'skyattack' && hasRealChargeTurn) priority += 4;
 			// Grassy Glide priority
 			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
 			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, target, null, priority);

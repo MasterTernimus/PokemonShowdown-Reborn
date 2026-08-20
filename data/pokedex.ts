@@ -1516,7 +1516,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 53,
 		name: "Persian",
 		types: ["Normal", "Fairy"],
-		baseStats: { hp: 70, atk: 95, def: 65, spa: 90, spd: 65, spe: 115 },
+		baseStats: { hp: 70, atk: 100, def: 65, spa: 105, spd: 65, spe: 120 },
 		abilities: { 0: "Competitive", 1: "Technician", H: "Unnerve" },
 		heightm: 1,
 		weightkg: 32,
@@ -1533,7 +1533,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Persian",
 		forme: "Alola",
 		types: ["Dark", "Psychic"],
-		baseStats: { hp: 70, atk: 90, def: 65, spa: 95, spd: 65, spe: 115 },
+		baseStats: { hp: 70, atk: 105, def: 65, spa: 100, spd: 65, spe: 120 },
 		abilities: { 0: "Fur Coat", 1: "Technician", H: "Stakeout" },
 		heightm: 1.1,
 		weightkg: 33,
@@ -1730,7 +1730,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Alakazam",
 		types: ["Psychic"],
 		genderRatio: { M: 0.75, F: 0.25 },
-		baseStats: { hp: 80, atk: 48, def: 60, spa: 135, spd: 95, spe: 132 },
+		baseStats: { hp: 80, atk: 60, def: 60, spa: 135, spd: 95, spe: 120 },
 		abilities: { 0: "Neuroforce", 1: "Grandmaster", H: "Magic Guard" },
 		heightm: 1.5,
 		weightkg: 48,
@@ -2404,7 +2404,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 97,
 		name: "Hypno",
 		types: ["Psychic", "Ghost"],
-		baseStats: { hp: 60, atk: 60, def: 105, spa: 115, spd: 125, spe: 70 },
+		baseStats: { hp: 85, atk: 60, def: 105, spa: 115, spd: 125, spe: 70 },
 		abilities: { 0: "Pendulum Swing", 1: "Neutralizing Gas", H: "Neutralization" },
 		heightm: 1.6,
 		weightkg: 75.6,
@@ -2421,7 +2421,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Hypno",
 		forme: "Pulse",
 		types: ["Psychic", "Ghost"],
-		baseStats: { hp: 60, atk: 60, def: 105, spa: 115, spd: 125, spe: 70 },
+		baseStats: { hp: 85, atk: 60, def: 105, spa: 115, spd: 125, spe: 70 },
 		abilities: { 0: "Pendulum Swing", 1: "Neutralizing Gas", H: "Neutralization" },
 		heightm: 1.6,
 		weightkg: 75.6,
@@ -6933,7 +6933,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Banette",
 		types: ["Ghost", "Normal"],
 		baseStats: { hp: 84, atk: 125, def: 85, spa: 65, spd: 83, spe: 98 },
-		abilities: { 0: "Cursed Keepsake", 1: "Intimidate", H: "Shadow Shield" },
+		abilities: { 0: "Cursed Keepsake", 1: "Intimidate", H: "Cursed Doll" },
 		heightm: 1.1,
 		weightkg: 12.5,
 		color: "Black",
@@ -8907,7 +8907,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 461,
 		name: "Weavile",
 		types: ["Dark", "Ice"],
-		baseStats: { hp: 85, atk: 130, def: 80, spa: 30, spd: 90, spe: 135 },
+		baseStats: { hp: 85, atk: 135, def: 80, spa: 30, spd: 90, spe: 130 },
 		abilities: { 0: "Violent Rush", 1: "Pressure", H: "Technician" },
 		heightm: 1.1,
 		weightkg: 34,
@@ -9938,7 +9938,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 75, atk: 75, def: 95, spa: 75, spd: 95, spe: 113 },
-		abilities: { 0: "Shed Skin", 1: "Royal Decree", H: "Contrary" },
+		abilities: { 0: "Multiscale", 1: "Royal Decree", H: "Contrary" },
 		heightm: 3.3,
 		weightkg: 63,
 		color: "Green",
@@ -11217,7 +11217,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Zoroark",
 		types: ["Dark", "Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 55, atk: 100, def: 60, spa: 125, spd: 60, spe: 110 },
+		baseStats: { hp: 60, atk: 110, def: 70, spa: 135, spd: 70, spe: 110 },
 		abilities: { 0: "Illusion", 1: "Opportunist", H: "Pixilate" },
 		heightm: 1.6,
 		weightkg: 81.1,
@@ -11262,7 +11262,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Cinccino",
 		types: ["Normal", "Fairy"],
 		genderRatio: { M: 0.25, F: 0.75 },
-		baseStats: { hp: 85, atk: 95, def: 110, spa: 60, spd: 105, spe: 115 },
+		baseStats: { hp: 85, atk: 110, def: 100, spa: 60, spd: 100, spe: 115 },
 		abilities: { 0: "Pixilate", 1: "Skill Link", H: "Fluffy Craft" },
 		heightm: 0.5,
 		weightkg: 7.5,
@@ -11281,7 +11281,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Alt",
 		types: ["Normal", "Fairy"],
 		genderRatio: { M: 0.25, F: 0.75 },
-		baseStats: { hp: 85, atk: 95, def: 110, spa: 60, spd: 105, spe: 115 },
+		baseStats: { hp: 85, atk: 110, def: 100, spa: 60, spd: 100, spe: 115 },
 		abilities: { 0: "Pixilate", 1: "Skill Link", H: "Fluffy Craft" },
 		heightm: 0.5,
 		weightkg: 7.5,
@@ -12663,7 +12663,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 88, atk: 107, def: 122, spa: 74, spd: 75, spe: 64 },
-		abilities: { 0: "Sworn Duty", 1: "Royal Decree", H: "Bulletproof" },
+		abilities: { 0: "Friend Guard", 1: "Royal Decree", H: "Bulletproof" },
 		heightm: 1.6,
 		weightkg: 90,
 		color: "Green",
@@ -12783,7 +12783,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Dark"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 72, atk: 100, def: 67, spa: 103, spd: 71, spe: 122 },
-		abilities: { 0: "Sworn Duty", H: "Protean", S: "Battle Bond" },
+		abilities: { 0: "Technician", H: "Protean", S: "Battle Bond" },
 		heightm: 1.5,
 		weightkg: 40,
 		color: "Blue",
@@ -14541,7 +14541,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Dark"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 95, atk: 115, def: 90, spa: 80, spd: 90, spe: 60 },
-		abilities: { 0: "Ultra Ego", 1: "Moxie", H: "Intimidate" },
+		abilities: { 0: "Ultra Ego", 1: "Tough Claws", H: "Intimidate" },
 		heightm: 1.8,
 		weightkg: 83,
 		color: "Red",
@@ -14593,7 +14593,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 80, atk: 74, def: 74, spa: 126, spd: 116, spe: 60 },
-		abilities: { 0: "Pixilate", 1: "Marvel Scale", H: "Liquid Voice" },
+		abilities: { 0: "Serene Grace", 1: "Marvel Scale", H: "Liquid Voice" },
 		heightm: 1.8,
 		weightkg: 44,
 		color: "Blue",
@@ -14865,7 +14865,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 743,
 		name: "Ribombee",
 		types: ["Bug", "Fairy"],
-		baseStats: { hp: 60, atk: 55, def: 60, spa: 90, spd: 105, spe: 130 },
+		baseStats: { hp: 65, atk: 55, def: 60, spa: 90, spd: 105, spe: 125 },
 		abilities: { 0: "Shield Dust", 1: "Sweet Veil", H: "Friend Guard" },
 		heightm: 0.2,
 		weightkg: 0.5,
@@ -18494,7 +18494,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Ghost"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 104, atk: 75, def: 100, spa: 110, spd: 75, spe: 66 },
-		abilities: { 0: "Soul Fire", 1: "Punk Rock", H: "Unaware" },
+		abilities: { 0: "Soul Fire", 1: "Unnerve", H: "Unaware" },
 		heightm: 1.6,
 		weightkg: 326.5,
 		color: "Red",
@@ -18938,7 +18938,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Bellibolt",
 		types: ["Electric"],
 		baseStats: { hp: 109, atk: 64, def: 101, spa: 123, spd: 103, spe: 45 },
-		abilities: { 0: "Electromorphosis", 1: "Static", H: "Damp" },
+		abilities: { 0: "Electromorphosis", 1: "Static", H: "Levitate" },
 		heightm: 1.2,
 		weightkg: 113,
 		color: "Green",
@@ -21893,6 +21893,19 @@ for (const [id, rawSpecies] of Object.entries(Pokedex)) {
 		(!customVisualFormes.has(species.forme) && !species.forme.endsWith('-Alt'))) continue;
 	const baseId = customVisualBaseAliases[id] || normalizePokedexId(species.baseSpecies || '');
 	if (!baseId || !(Pokedex as any)[baseId]) continue;
+	const base = (Pokedex as any)[baseId];
+	// Cosmetic forms are alternate artwork, not separate species. Preserve any
+	// explicit custom overrides while inheriting the base species' battle data.
+	species.baseStats = {...(base.baseStats || {}), ...(species.baseStats || {})};
+	species.abilities = {...(base.abilities || {}), ...(species.abilities || {})};
+	species.isCosmeticForme = true;
+	if (!species.canGigantamax && base.canGigantamax && !String(species.forme || '').toLowerCase().includes('mega')) {
+		species.canGigantamax = base.canGigantamax;
+	}
+	if (!species.types) species.types = [...(base.types || [])];
+	for (const key of ['genderRatio', 'heightm', 'weightkg', 'color', 'eggGroups']) {
+		if (species[key] === undefined && base[key] !== undefined) species[key] = base[key];
+	}
 	const group = customVisualGroups[baseId] || (customVisualGroups[baseId] = {ids: [], names: new Set()});
 	group.ids.push(id);
 	group.names.add(species.name);
