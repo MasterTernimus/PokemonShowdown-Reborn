@@ -174,4 +174,42 @@ describe('Custom battle data updates', function () {
 			battle = null;
 		}
 	});
+
+	it('should only add Mind Freeze frostbite to damaging Psychic moves', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Espeon', ability: 'mindfreeze', moves: ['calmmind', 'psychic']},
+		], [
+			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const espeon = battle.p1.active[0];
+		const ability = battle.dex.abilities.get('mindfreeze');
+
+		const calmMind = battle.dex.getActiveMove('calmmind');
+		battle.singleEvent('ModifyMove', ability, espeon.abilityState, calmMind, espeon, espeon);
+		assert.false(!!calmMind.secondaries?.some(secondary => secondary.status === 'frz'));
+
+		const psychic = battle.dex.getActiveMove('psychic');
+		battle.singleEvent('ModifyMove', ability, espeon.abilityState, psychic, espeon, battle.p2.active[0]);
+		assert(psychic.secondaries?.some(secondary => secondary.status === 'frz'));
+	});
+
+	it('should cure Palafin on switch-out before Toxic Spikes can apply on re-entry', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Palafin', ability: 'zerotohero', moves: ['splash']},
+			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+		], [
+			{species: 'Feebas', ability: 'swiftswim', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1, 2', 'team 1');
+		const palafin = battle.p1.active[0];
+		palafin.setStatus('brn');
+		battle.p1.addSideCondition('toxicspikes', battle.p2.active[0], battle.dex.moves.get('toxicspikes'));
+
+		battle.makeChoices('switch 2', 'move splash');
+		assert.equal(palafin.status, '');
+
+		battle.makeChoices('switch 1', 'move splash');
+		assert.equal(palafin.status, 'psn');
+	});
 });
