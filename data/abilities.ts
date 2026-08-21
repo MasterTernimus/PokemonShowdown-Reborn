@@ -4146,91 +4146,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10142,
 	},
-	voidveil: {
-		getVoidFutureType(pokemon, target) {
-			if (!pokemon.hasType('Fairy')) return pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal';
-			const psychicMod = this.clampIntRange(this.dex.getEffectiveness('Psychic', target.getTypes()), -6, 6);
-			const fairyMod = this.clampIntRange(this.dex.getEffectiveness('Fairy', target.getTypes()), -6, 6);
-			return fairyMod > psychicMod ? 'Fairy' : (pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal');
-		},
-		queueVoidFutureSight(pokemon) {
-			const targets = pokemon.foes().filter(target => target.hp && !target.fainted && target !== pokemon && !target.isAlly(pokemon));
-			const target = targets.length ? this.sample(targets) : null;
-			if (!target) return;
-			const moveType = this.effect.getVoidFutureType.call(this, pokemon, target);
-			const slotCondition = target.side.slotConditions[target.position]['futuremove'];
-			if (slotCondition) {
-				this.add('-start', pokemon, 'move: Future Sight', '[from] ability: Void Veil', '[silent]');
-				if (slotCondition.moveData?.voidVeilFutureSight) {
-					slotCondition.perfectForesightQueued = (slotCondition.perfectForesightQueued || 1) + 1;
-					const queuedTurn = slotCondition.endingTurn + slotCondition.perfectForesightQueued - 1;
-					this.add('-message', `Void Veil queued another ${moveType}-type Future Sight for turn ${queuedTurn}.`);
-				} else {
-					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
-					this.add('-message', `Void Veil delayed Future Sight to turn ${slotCondition.endingTurn}.`);
-				}
-				return;
-			}
-			if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('voidveil'))) return;
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				move: 'futuresight',
-				source: pokemon,
-				moveData: {
-					id: 'futuresight',
-					name: "Future Sight",
-					accuracy: 100,
-					basePower: this.field.isTerrain('coldeclipseterrain') ? 90 : 60,
-					category: "Special",
-					priority: 0,
-					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
-					voidVeilFutureSight: true,
-					effectType: 'Move',
-					type: moveType,
-				},
-				perfectForesightQueued: 1,
-			});
-			this.add('-start', pokemon, 'move: Future Sight', '[from] ability: Void Veil');
-			this.add('-message', `Void Veil's ${moveType}-type Future Sight will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
-		},
-		queueVoidDoomDesire(pokemon) {
-			for (const target of pokemon.foes()) {
-				if (!target || target.fainted) continue;
-				const slotCondition = target.side.slotConditions[target.position]['futuremove'];
-				if (slotCondition) {
-					slotCondition.endingTurn = (slotCondition.endingTurn || this.turn) + 2;
-					this.add('-message', `Void Veil delayed Doom Desire to turn ${slotCondition.endingTurn}.`);
-					continue;
-				}
-				if (!target.side.addSlotCondition(target, 'futuremove', pokemon, this.dex.abilities.get('voidveil'))) continue;
-				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-					move: 'doomdesire',
-					source: pokemon,
-					moveData: {
-						id: 'doomdesire',
-						name: "Doom Desire",
-						accuracy: 100,
-						basePower: 280,
-						category: "Special",
-						priority: 0,
-						flags: { metronome: 1, futuremove: 1 },
-						effectType: 'Move',
-						type: 'Steel',
-					},
-				});
-				this.add('-start', pokemon, 'Doom Desire', '[from] ability: Void Veil');
-				this.add('-message', `Void Veil's Doom Desire will strike on turn ${target.side.slotConditions[target.position]['futuremove'].endingTurn}.`);
-			}
-		},
+	dreamsickness: {
 		onStart(pokemon) {
-			pokemon.abilityState.voidShelterUsed = false;
-			pokemon.abilityState.voidShelterDoom = false;
-			pokemon.abilityState.voidVeilStartTurn = this.turn;
+			pokemon.abilityState.dreamShelterUsed = false;
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && target.isAlly(source) && move.category !== 'Status') {
-				this.add('-activate', target, 'ability: Void Veil');
+				this.add('-activate', target, 'ability: Dream Sickness');
 				return null;
 			}
+		},
+		onModifySpe(spe, pokemon) {
+			return this.dex.abilities.get('telepathy').onModifySpe?.call(this, spe, pokemon);
 		},
 		onAnyBoost(boost, target, source, effect) {
 			const pokemon = this.effectState.target;
@@ -4250,40 +4178,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon || pokemon.fainted || pokemon.hp <= pokemon.maxhp / 4) return;
 			if (!target || target === pokemon || !target.isAlly(pokemon) || !source || source === pokemon || source.isAlly(pokemon)) return;
 			if (effect?.effectType !== 'Move' || typeof damage !== 'number' || target.hp <= 0 || damage < target.hp) return;
-			this.add('-activate', pokemon, 'ability: Void Veil');
-			pokemon.abilityState.voidShelterDoom = true;
+			this.add('-activate', pokemon, 'ability: Dream Sickness');
 			this.damage(damage, pokemon, source, effect);
 			return false;
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			for (const ally of pokemon.allies()) {
-				const shouldShelter = !pokemon.abilityState.voidShelterUsed && ally.hp > 0 && ally.hp <= ally.maxhp / 4;
+				const shouldShelter = !pokemon.abilityState.dreamShelterUsed && ally.hp > 0 && ally.hp <= ally.maxhp / 4;
 				this.heal(ally.baseMaxhp / 16, ally, pokemon);
 				if (shouldShelter) {
-					pokemon.abilityState.voidShelterUsed = true;
+					pokemon.abilityState.dreamShelterUsed = true;
 					this.heal(ally.baseMaxhp / 4, ally, pokemon);
 					ally.cureStatus();
-					ally.addVolatile('voidshelter', pokemon);
+					ally.addVolatile('dreamsickness', pokemon);
 				}
-			}
-			if (pokemon.abilityState.voidVeilStartTurn === this.turn) return;
-			if (pokemon.abilityState.voidVeilLastCastTurn === this.turn - 1) return;
-			this.effect.queueVoidFutureSight.call(this, pokemon);
-			pokemon.abilityState.voidVeilLastCastTurn = this.turn;
-		},
-		onFaint(pokemon) {
-			if (this.gameType === 'freeforall' || this.gameType !== 'singles' && pokemon.abilityState.voidShelterDoom) {
-				this.effect.queueVoidDoomDesire.call(this, pokemon);
 			}
 		},
 		condition: {
 			duration: 2,
 			onStart(target, source) {
-				this.add('-start', target, 'ability: Void Veil');
+				this.add('-start', target, 'ability: Dream Sickness');
 			},
 			onSetStatus(status, target, source, effect) {
-				this.add('-immune', target, '[from] ability: Void Veil');
+				this.add('-immune', target, '[from] ability: Dream Sickness');
 				return false;
 			},
 			onAnyRedirectTargetPriority: 3,
@@ -4293,14 +4211,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const guardian = this.effectState.source;
 				if (!guardian || guardian.fainted || target !== sheltered || sheltered.isAlly(source)) return;
 				if (!this.validTarget(guardian, source, move.target)) return;
-				guardian.abilityState.voidShelterDoom = true;
-				this.debug("Void Shelter redirected target of move");
+				this.debug("Dream Sickness redirected target of move");
 				return guardian;
 			},
 		},
 		flags: { breakable: 1 },
-		name: "Void Veil",
+		name: "Dream Sickness",
 		rating: 4.5,
+		num: 10262,
+	},
+	voidveil: {
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
+			if (!pokemon.allies()[0]) return;
+			this.dex.abilities.get('costar').onStart?.call(this, pokemon);
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move);
+		},
+		flags: { breakable: 1 },
+		name: "Void Veil",
+		rating: 4,
 		num: 10167,
 	},
 	accumulation: {
@@ -4435,39 +4366,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.m.perfectForesightAbilityState = this.initEffectState({ id: ability.id, target: pokemon });
 				this.add('-ability', pokemon, ability.name, '[from] ability: Perfect Foresight');
 				this.singleEvent('Start', ability, pokemon.m.perfectForesightAbilityState, pokemon, best, this.effect);
+				if (ability.onSwitchIn) {
+					this.singleEvent(
+						'SwitchIn', ability, pokemon.m.perfectForesightAbilityState, pokemon, best, this.effect,
+						undefined, ability.onSwitchIn
+					);
+				}
 			}
 		},
-		onAnyTryBoost(boost, target, source, effect) {
-			const holder = this.effectState.target;
-			if (!holder?.m?.perfectForesightAbility || holder.m.perfectForesightAbility !== 'royaldecree') return;
-			if (this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization'))) return;
-			if (!effect || effect.id === 'royaldecree') return;
-			if (effect.id === 'relicinstinct' || effect.id === 'neutralization') return;
-			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
-				!Object.values(boost).some(value => value && value > 0);
-			if (isOnlyDrops && source === target && target === holder) return;
-			const positiveBoost = Object.values(boost).some(value => value && value > 0);
-			if (positiveBoost && target === source && effect.effectType === 'Ability') {
-				const fieldAbilityBoosts: { [abilityid: string]: string[] } = {
-					stalwart: ['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'],
-					mirrorarmor: ['fairytaleterrain', 'mirrorarmor'],
-					irondominion: ['fairytaleterrain', 'mirrorarmor'],
-					relicarmor: ['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'],
-					magician: ['fairytaleterrain', 'bewitchedwoodsterrain', 'hauntedterrain', 'mistyterrain', 'newworldterrain'],
-				};
-				const allowedFields = fieldAbilityBoosts[effect.id];
-				if (allowedFields && this.field.isTerrain(allowedFields)) return;
+		onEnd(pokemon) {
+			const copiedAbility = this.dex.abilities.get(pokemon.m.perfectForesightAbility);
+			if (copiedAbility.exists && copiedAbility.id !== 'perfectforesight') {
+				this.singleEvent('End', copiedAbility, pokemon.m.perfectForesightAbilityState, pokemon);
 			}
-			const fieldEffect = effect.effectType === 'Field' || effect.effectType === 'Terrain';
-			if (fieldEffect) return;
-			let blocked = false;
-			let stat: BoostID;
-			for (stat in boost) {
-				if (!boost[stat]) continue;
-				delete boost[stat];
-				blocked = true;
-			}
-			if (blocked) this.add('-message', `${holder.name}'s Royal Decree prevented the stat changes.`);
+			delete pokemon.m.perfectForesightAbility;
+			delete pokemon.m.perfectForesightAbilityState;
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source === target || target.isAlly(source) || move.flags['futuremove']) return;
@@ -7785,6 +7698,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Justified",
 		rating: 2.5,
 		num: 154,
+	},
+	knightsguard: {
+		onStart(pokemon) {
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
+			this.dex.abilities.get('steadfast').onStart?.call(this, pokemon);
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('justified').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onFlinch(pokemon) {
+			this.dex.abilities.get('steadfast').onFlinch?.call(this, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Knight's Guard",
+		rating: 4,
+		num: 10263,
 	},
 	keeneye: {
 		onStart(pokemon) {

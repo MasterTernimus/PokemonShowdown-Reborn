@@ -580,7 +580,15 @@ export class Battle {
 			if (handler.state?.target instanceof Pokemon) {
 				let expectedStateLocation;
 				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
-					expectedStateLocation = handler.state.target.abilityState;
+					const stateTarget = handler.state.target;
+					if (
+						stateTarget.ability === 'perfectforesight' &&
+						stateTarget.m.perfectForesightAbility === effect.id
+					) {
+						expectedStateLocation = stateTarget.m.perfectForesightAbilityState;
+					} else {
+						expectedStateLocation = stateTarget.abilityState;
+					}
 				} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
 					expectedStateLocation = handler.state.target.itemState;
 				} else if (effect.effectType === 'Status') {
@@ -1174,6 +1182,19 @@ export class Battle {
 			handlers.push(this.resolvePriority({
 				effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
 			}, callbackName));
+		}
+		if (
+			ability.id === 'perfectforesight' && callbackName !== 'onSwitchIn' &&
+			pokemon.m.perfectForesightAbility && pokemon.m.perfectForesightAbility !== 'perfectforesight'
+		) {
+			const copiedAbility = this.dex.abilities.get(pokemon.m.perfectForesightAbility);
+			const copiedState = pokemon.m.perfectForesightAbilityState;
+			callback = this.getCallback(pokemon, copiedAbility, callbackName);
+			if (callback !== undefined || (getKey && copiedState?.[getKey])) {
+				handlers.push(this.resolvePriority({
+					effect: copiedAbility, callback, state: copiedState, end: null, effectHolder: pokemon,
+				}, callbackName));
+			}
 		}
 		const item = pokemon.getItem();
 		callback = this.getCallback(pokemon, item, callbackName);

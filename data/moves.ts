@@ -6889,6 +6889,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTryHit(target) {
 			if (target.volatiles['miracleeye']) return false;
 		},
+		onHit(target, source) {
+			source.addVolatile('ghostresistance', source, this.dex.moves.get('foresight'));
+		},
 		condition: {
 			noCopy: true,
 			onStart(pokemon) {
@@ -8835,14 +8838,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onModifySpePriority: -1,
 			onModifySpe(spe, pokemon) {
-				if (pokemon.hasAbility(['lunarorbit', 'voidveil']) || pokemon.hasType(['Psychic', 'Fairy']) || !pokemon.isGrounded()) return;
+				if (pokemon.isGravityImmune() || pokemon.hasType(['Psychic', 'Fairy']) || !pokemon.isGrounded()) return;
 				return this.chainModify(0.75);
 			},
 			onBasePower(basePower, attacker, defender, move) {
 				if (this.movehasType(move, 'Ground')) return this.chainModify(1.2);
 			},
+			onTryHeal(damage, target, source, effect) {
+				if (effect?.effectType !== 'Move') return;
+				const move = effect as Move;
+				if (move.category === 'Status' && move.flags['heal']) return this.chainModify(0.75);
+			},
 			onDisableMove(pokemon) {
-				if (pokemon.hasAbility(['lunarorbit', 'voidveil'])) return;
+				if (pokemon.isGravityImmune()) return;
 				for (const moveSlot of pokemon.moveSlots) {
 					if (this.dex.moves.get(moveSlot.id).flags['gravity']) {
 						pokemon.disableMove(moveSlot.id);
@@ -8852,14 +8860,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
-				if (pokemon.hasAbility(['lunarorbit', 'voidveil'])) return;
+				if (pokemon.isGravityImmune()) return;
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
 				}
 			},
 			onModifyMove(move, pokemon, target) {
-				if (pokemon.hasAbility(['lunarorbit', 'voidveil'])) return;
+				if (pokemon.isGravityImmune()) return;
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
@@ -13354,6 +13362,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.volatiles['foresight']) return false;
 		},
 		onHit(target, source) {
+			source.addVolatile('ghostresistance', source, this.dex.moves.get('miracleeye'));
 			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('holyterrain')) {
 				this.boost({ spa: 2 }, source, source);
 			}
@@ -14673,6 +14682,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'foresight',
 		onTryHit(target) {
 			if (target.volatiles['miracleeye']) return false;
+		},
+		onHit(target, source) {
+			source.addVolatile('ghostresistance', source, this.dex.moves.get('odorsleuth'));
 		},
 		target: "normal",
 		type: "Normal",
