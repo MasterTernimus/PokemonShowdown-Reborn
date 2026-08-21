@@ -802,8 +802,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalvoice: {
 		name: "Royal Voice",
-		desc: "This Pokemon has Pixilate, Queenly Majesty, and Sworn Duty's effects.",
-		shortDesc: "Pixilate + Queenly Majesty + Sworn Duty.",
+		desc: "This Pokemon has Pixilate, Queenly Majesty, and Sworn Duty's effects. It is immune to Gravity and its negative effects.",
+		shortDesc: "Pixilate + Queenly Majesty + Sworn Duty; Gravity immune.",
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
@@ -1441,6 +1441,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Justified",
 		shortDesc: "This Pokemon's Attack is raised by 1 stage after it is damaged by a Dark-type move.",
 	},
+	knightsguard: {
+		name: "Knight's Guard",
+		desc: "This Pokemon has Sworn Duty, Justified, and Steadfast's effects.",
+		shortDesc: "Sworn Duty + Justified + Steadfast.",
+	},
 	keeneye: {
 		name: "Keen Eye",
 		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage.",
@@ -1875,10 +1880,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Before using a physical move, it becomes Fighting type; before using a special move, it becomes Psychic type. If its Special Attack is higher than its Attack, its physical moves may use Special Attack while still targeting Defense.",
 		shortDesc: "Overcoat; SpA 1.3x; physical -> Fighting; special -> Psychic; physical may use SpA.",
 	},
+	dreamsickness: {
+		name: "Dream Sickness",
+		desc: "This Pokemon has Telepathy and Sworn Duty. It is immune to Gravity and its negative effects. Its stats cannot be lowered, and its allies' Speed cannot be lowered. At the end of each turn, this Pokemon and its allies restore 1/16 max HP. If an opposing attack would knock out an ally while this Pokemon is above 25% HP, this Pokemon takes the damage instead. Once per switch-in, an ally at 25% HP or lower heals 1/4 max HP, is cured of status, and is sheltered through the next turn.",
+		shortDesc: "Telepathy + Sworn Duty; Gravity immune; heals and protects allies.",
+	},
 	voidveil: {
 		name: "Void Veil",
-		desc: "This Pokemon has Telepathy and Temporal Shift's effects, but its delayed Future Sight starts after one turn out and queues every other turn. Its delayed Future Sight becomes Fairy type if that would hit the target harder. In Cold Eclipse, this delayed Future Sight is 90 Base Power instead of 60. It is immune to Gravity and its negative effects. This Pokemon and its allies cannot have their Speed lowered. At the end of each turn, this Pokemon and its ally restore 1/16 max HP. If an opposing attack would knock out this Pokemon's ally while this Pokemon is above 25% HP, this Pokemon takes that damage instead. Once per switch-in, if an ally is at 25% HP or lower at the end of the turn, that ally heals 1/4 max HP, is cured of status, and is sheltered until the end of the next turn.",
-		shortDesc: "Telepathy + delayed Void Future Sight; Cold Eclipse makes it 90 BP; protects allies.",
+		desc: "This Pokemon has Levitate, Friend Guard, and Costar's effects. It is immune to Gravity and its negative effects.",
+		shortDesc: "Levitate + Friend Guard + Costar; Gravity immune.",
 	},
 	relicbeam: {
 		name: "Relic Beam",
@@ -3224,8 +3234,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	execution: {
 		name: "Execution",
-		desc: "This Pokemon has Duskilate. Its attacks deal double damage to targets at half HP or less, move KOs heal 1/8 max HP per target, Attack and Special Attack cannot fall below -1, and fields cannot lower its Speed.",
-		shortDesc: "Duskilate; 2x vs targets at half HP or less; move KOs heal 1/8.",
+		desc: "This Pokemon has Duskilate. Its attacks deal double damage to targets at half HP or less, move KOs heal 1/8 max HP per target, Attack and Special Attack cannot fall below -1, fields cannot lower its Speed, and it is immune to Gravity and its negative effects.",
+		shortDesc: "Duskilate; 2x vs low HP; KO heals 1/8; Gravity immune.",
 	},
 	echofiend: {
 		name: "Echo Fiend",
@@ -3349,8 +3359,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	argentdevotion: {
 		name: "Argent Devotion",
-		desc: "This Pokemon has Ironclad and Sworn Duty's effects.",
-		shortDesc: "Ironclad + Sworn Duty.",
+		desc: "This Pokemon has Ironclad and Sworn Duty's effects. It is immune to Gravity and its negative effects.",
+		shortDesc: "Ironclad + Sworn Duty; Gravity immune.",
 	},
 	ironcognition: {
 		name: "Iron Cognition",

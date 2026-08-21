@@ -1,6 +1,14 @@
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	ghostresistance: {
+		name: 'Ghost Resistance',
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status' && this.movehasType(move, 'Ghost')) {
+				return this.chainModify(0.5);
+			}
+		},
+	},
 	resuscitationpending: {
 		name: 'Resuscitation Pending',
 		noCopy: true,

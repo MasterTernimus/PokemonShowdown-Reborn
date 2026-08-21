@@ -2105,6 +2105,9 @@ export class Pokemon {
 			uncheckedassault: ['scrappy', 'striker', 'opportunist'],
 			royalvoice: ['pixilate', 'queenlymajesty', 'swornduty'],
 			perfectforesight: ['trace'],
+			dreamsickness: ['telepathy', 'swornduty'],
+			voidveil: ['levitate', 'friendguard', 'costar'],
+			knightsguard: ['swornduty', 'justified', 'steadfast'],
 			hydrabreaker: ['hydrabond', 'moldbreaker'],
 			hydratyrant: ['hydrabond', 'berserk', 'selfsufficient'],
 			hisuianpath: ['sapsipper', 'innerfocus', 'fluffy'],
@@ -2266,7 +2269,7 @@ export class Pokemon {
 		}
 	}
 
-	getHealth = (useIllusion = true) => {
+	getHealth = (useIllusion = true): { side: SideID; secret: string; shared: string } => {
 		// Illusion copies the disguise's visible HP and status without changing the user's real battle state.
 		if (useIllusion && this.illusion && this.illusion !== this) return this.illusion.getHealth(false);
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
@@ -2347,8 +2350,14 @@ export class Pokemon {
 		return types;
 	}
 
+	isGravityImmune() {
+		return this.hasAbility([
+			'lunarorbit', 'dreamsickness', 'voidveil', 'royalvoice', 'argentdevotion', 'execution',
+		]);
+	}
+
 	isGrounded(negateImmunity = false) {
-		if (this.hasAbility(['lunarorbit', 'voidveil']) && !this.battle.suppressingAbility(this)) return null;
+		if (this.isGravityImmune()) return null;
 		if ('gravity' in this.battle.field.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;

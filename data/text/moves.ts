@@ -2303,8 +2303,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	foresight: {
 		name: "Foresight",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type. Fails if the target is already affected, or affected by Miracle Eye or Odor Sleuth.",
-		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
+		desc: "As long as the target remains active, its positive evasiveness stat stage is ignored and Normal- and Fighting-type attacks can hit it if it is a Ghost type. The user also takes half damage from Ghost-type attacks until it switches out. Fails if the target is already affected, or affected by Miracle Eye or Odor Sleuth.",
+		shortDesc: "Normal/Fighting hit Ghost; ignores Evasion; user resists Ghost.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
 		},
@@ -2753,8 +2753,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gravity: {
 		name: "Gravity",
-		desc: "For 5 turns, grounded Pokemon that are not Psychic or Fairy type have 0.75x Speed, and Ground-type moves have 1.2x power. Evasiveness of all active Pokemon is multiplied by 0.6. Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately. During the effect, airborne immunities are removed and certain airborne moves fail.",
-		shortDesc: "5 turns: grounds all; +accuracy; slows most grounded foes.",
+		desc: "For 5 turns, grounded Pokemon that are not Psychic or Fairy type have 0.75x Speed, Ground-type moves have 1.2x power, and status-category recovery moves restore 25% less HP. Evasiveness of all active Pokemon is multiplied by 0.6. Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately. During the effect, airborne immunities are removed and certain airborne moves fail.",
+		shortDesc: "5 turns: grounds all; +accuracy; slows grounded foes; recovery is 0.75x.",
 		gen7: {
 			desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
 		},
@@ -4224,8 +4224,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	miracleeye: {
 		name: "Miracle Eye",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type. On Psychic Terrain, Fairy Tale Field, and Holy Field, the user's Special Attack rises by 2 stages. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
-		shortDesc: "Psychic hits Dark. Evasiveness ignored. On some fields, user gets +2 SpA.",
+		desc: "As long as the target remains active, its positive evasiveness stat stage is ignored and Psychic-type attacks can hit it if it is a Dark type. The user also takes half damage from Ghost-type attacks until it switches out. On Psychic Terrain, Fairy Tale Field, and Holy Field, the user's Special Attack rises by 2 stages. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
+		shortDesc: "Psychic hits Dark; ignores Evasion; user resists Ghost; field +2 SpA.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type.",
 		},
@@ -4555,8 +4555,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	odorsleuth: {
 		name: "Odor Sleuth",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type. Fails if the target is already affected, or affected by Foresight or Miracle Eye.",
-		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
+		desc: "As long as the target remains active, its positive evasiveness stat stage is ignored and Normal- and Fighting-type attacks can hit it if it is a Ghost type. The user also takes half damage from Ghost-type attacks until it switches out. Fails if the target is already affected, or affected by Foresight or Miracle Eye.",
+		shortDesc: "Normal/Fighting hit Ghost; ignores Evasion; user resists Ghost.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
 		},

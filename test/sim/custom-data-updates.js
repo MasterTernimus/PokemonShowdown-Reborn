@@ -79,4 +79,99 @@ describe('Custom battle data updates', function () {
 		assert.false(dex.species.getLearnsetData('decidueye').learnset.ceaselessedge);
 		assert.false(dex.species.getLearnsetData('decidueyehisui').learnset.ceaselessedge);
 	});
+
+	it('should let Perfect Foresight retain arbitrary copied ability effects', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Alakazam-Mega', ability: 'perfectforesight', moves: ['protect']},
+		], [
+			{species: 'Blaziken', ability: 'speedboost', moves: ['protect']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const alakazam = battle.p1.active[0];
+		assert.equal(alakazam.m.perfectForesightAbility, 'speedboost');
+
+		battle.makeChoices('move protect', 'move protect');
+		assert.equal(alakazam.boosts.spe, 1);
+		battle.destroy();
+
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Alakazam-Mega', ability: 'perfectforesight', moves: ['splash']},
+		], [
+			{species: 'Lapras', ability: 'waterabsorb', moves: ['surf']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const absorber = battle.p1.active[0];
+		const startingHP = absorber.hp;
+		assert.equal(absorber.m.perfectForesightAbility, 'waterabsorb');
+
+		battle.makeChoices('move splash', 'move surf');
+		assert.equal(absorber.hp, startingHP);
+		battle.destroy();
+
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Alakazam-Mega', ability: 'perfectforesight', nature: 'Relaxed', ivs: {spe: 0}, moves: ['icywind']},
+		], [
+			{species: 'Garchomp-Mega-Z', ability: 'relentlesshunt', nature: 'Jolly', evs: {spe: 252}, moves: ['dragonpulse']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move icywind', 'move dragonpulse');
+		const usedMoves = battle.log.filter(line => line.startsWith('|move|'));
+		assert.match(usedMoves[0], /Alakazam.*Icy Wind/);
+	});
+
+	it('should make Void Veil and every Gardevoir Mega ability immune to Gravity', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Gardevoir', ability: 'voidveil', moves: ['splash']},
+		], [
+			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const gardevoir = battle.p1.active[0];
+		battle.field.addPseudoWeather('gravity', gardevoir, battle.dex.moves.get('gravity'));
+
+		for (const ability of ['voidveil', 'royalvoice', 'argentdevotion', 'execution']) {
+			gardevoir.setAbility(ability);
+			assert.equal(gardevoir.isGrounded(), null, `${ability} should ignore Gravity`);
+		}
+	});
+
+	it('should reduce status recovery moves to 0.75x healing during Gravity', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Blissey', ability: 'naturalcure', moves: ['recover']},
+		], [
+			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const blissey = battle.p1.active[0];
+		blissey.hp = Math.floor(blissey.maxhp / 4);
+		const startingHP = blissey.hp;
+		battle.field.addPseudoWeather('gravity', blissey, battle.dex.moves.get('gravity'));
+
+		battle.makeChoices('move recover', 'move splash');
+		assert.equal(blissey.hp - startingHP, Math.floor(blissey.maxhp * 3 / 8));
+	});
+
+	it('should grant Ghost resistance after Foresight, Miracle Eye, or Odor Sleuth', function () {
+		for (const [move, target] of [
+			['foresight', 'Gengar'],
+			['miracleeye', 'Umbreon'],
+			['odorsleuth', 'Gengar'],
+		]) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Alakazam', ability: 'synchronize', moves: [move]},
+			], [
+				{species: target, ability: 'synchronize', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			battle.makeChoices(`move ${move}`, 'move splash');
+			const user = battle.p1.active[0];
+			const foe = battle.p2.active[0];
+			assert(user.volatiles.ghostresistance, `${move} should grant Ghost resistance`);
+
+			const shadowBall = battle.dex.getActiveMove('shadowball');
+			assert.equal(battle.runEvent('ModifyDamage', foe, user, shadowBall, 100), 50);
+			battle.destroy();
+			battle = null;
+		}
+	});
 });
