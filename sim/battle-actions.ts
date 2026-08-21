@@ -2012,6 +2012,10 @@ export class BattleActions {
 			if (defenseStat === 'spd')
 				defense = Math.max(defense, target.getStat('spa'));
 		}
+		if (['explosion', 'selfdestruct'].includes(move.id) && ['def', 'spd'].includes(defenseStat)) {
+			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
+		}
+
 		const tr = this.battle.trunc;
 
 		// int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
