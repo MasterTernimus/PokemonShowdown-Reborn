@@ -5567,7 +5567,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				for (const secondary of move.secondaries || []) {
 					if (secondary.status === 'frz' && secondary.chance) secondary.chance *= 2;
 				}
-			} else if (this.movehasType(move, 'Psychic')) {
+			} else if (move.category !== 'Status' && this.movehasType(move, 'Psychic')) {
 				if (!move.secondaries) move.secondaries = [];
 				move.secondaries.push({ chance: 40, status: 'frz' });
 			}
@@ -14624,6 +14624,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSwitchOut(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
+			this.dex.abilities.get('naturalcure').onSwitchOut?.call(this, pokemon);
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
 				pokemon.heroMessageDisplayed = false;
@@ -14645,7 +14646,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				for (const ally of pokemon.alliesAndSelf()) {
 					if (ally.fainted) continue;
 					this.heal(ally.baseMaxhp * (ally.hp <= ally.maxhp / 2 ? 1 / 4 : 1 / 8), ally, pokemon, this.dex.abilities.get('zerotohero'));
-					if (ally.status) ally.cureStatus();
 				}
 			}
 		},
