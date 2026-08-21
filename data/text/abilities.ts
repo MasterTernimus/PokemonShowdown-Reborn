@@ -19,7 +19,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	nobleconduit: { name: "Noble Conduit", desc: "This Pokemon has Battery, Solar Power, and Aftermath's effects.", shortDesc: "Battery + Solar Power + Aftermath." },
 	nobledance: { name: "Noble Dance", desc: "This Pokemon has Dancer, Hospitality, and Own Tempo's effects.", shortDesc: "Dancer + Hospitality + Own Tempo." },
 	noblearmor: { name: "Noble Armor", desc: "This Pokemon has Prism Armor and Ice Body's effects.", shortDesc: "Prism Armor + Ice Body." },
-	noblerider: { name: "Noble Rider", desc: "This Pokemon has Swift Swim and Adaptability's effects.", shortDesc: "Swift Swim + Adaptability." },
+	noblerider: { name: "Noble Rider", desc: "This Pokemon has Swift Swim and Mold Breaker's effects.", shortDesc: "Swift Swim + Mold Breaker." },
 	celestialheart: { name: "Celestial Heart", desc: "This Pokemon has Multiscale and Soul-Heart's effects.", shortDesc: "Multiscale + Soul Heart." },
 	crueltag: { name: "Cruel Tag", desc: "This Pokemon has Shadow Tag and Infiltrator's effects. When it faints, Haunted Field starts for 5 turns.", shortDesc: "Shadow Tag + Infiltrator; faint summons Haunted Field." },
 	adaptability: {
@@ -642,8 +642,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vanguard: {
 		name: "Vanguard",
-		desc: "This Pokemon has Intimidate built in. Extreme Speed has 1.5x power, +2 critical-hit ratio, and becomes Fire-type if Fire would deal more damage. After Extreme Speed, this Pokemon takes 0.25x damage from attacks for the rest of the turn. Its next Extreme Speed is guaranteed to crit after its one-time Endure activates. Opposing Pokemon cannot lower its stats, and non-move damage cannot affect it. Once per battle, it survives a direct-move KO at 1 HP.",
-		shortDesc: "Intimidate; Extreme Speed 1.5x/+2 crit; post-ES 0.25x damage; one-time 1 HP Endure.",
+		desc: "This Pokemon has Intimidate built in. Extreme Speed has 1.5x power and a higher critical-hit ratio. It becomes Fire-type if Fire would deal more damage. After Extreme Speed, this Pokemon takes 0.25x damage from attacks for the rest of the turn. Its next Extreme Speed is guaranteed to crit after its one-time Endure activates. Opposing Pokemon cannot lower its stats, and non-move damage cannot affect it. Once per battle, it survives a direct-move KO at 1 HP.",
+		shortDesc: "Intimidate; Extreme Speed 1.5x and higher crit rate; 0.25x post-ES damage; one-time 1 HP Endure.",
 	},
 	apexcleave: {
 		name: "Apex Cleave",

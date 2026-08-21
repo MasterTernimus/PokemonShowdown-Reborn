@@ -18330,7 +18330,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Ghost"],
 		gender: "M",
 		baseStats: { hp: 120, atk: 112, def: 75, spa: 80, spd: 85, spe: 78 },
-		abilities: { 0: "Noble Rider", 1: "Supreme Overlord", H: "Mold Breaker" },
+		abilities: { 0: "Noble Rider", 1: "Supreme Overlord", H: "Adaptability" },
 		heightm: 3,
 		weightkg: 110,
 		color: "Green",
