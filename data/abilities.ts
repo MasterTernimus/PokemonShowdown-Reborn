@@ -632,8 +632,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	noblerider: {
 		onModifySpe(spe, pokemon) { return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon); },
-		onModifySTAB(stab, source, target, move) {
-			return this.dex.abilities.get('adaptability').onModifySTAB?.call(this, stab, source, target, move);
+		onModifyMove(move) {
+			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
 		},
 		flags: { breakable: 1 },
 		name: "Noble Rider",
@@ -3055,9 +3055,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const fire = target.runEffectiveness(fireMove);
 			if (fire > normal) move.type = 'Fire';
 		},
-		onModifyMove(move, pokemon) {
+		onModifyMove(move, pokemon, target) {
 			if (move.id !== 'extremespeed') return;
-			move.critRatio = (move.critRatio || 1) + 2;
+			const targetIsGimmick = !!target && (
+				target.species.isMega || target.species.forme?.includes('Mega') ||
+				target.gigantamax || target.species.forme?.includes('Gmax') ||
+				!!target.terastallized || target.species.forme === 'Stellar' ||
+				!!target.getItem().zMove
+			);
+			move.critRatio = (move.critRatio || 1) + (targetIsGimmick ? 2 : 1);
 			pokemon.abilityState.vanguardGuard = this.turn;
 			if (pokemon.abilityState.vanguardCrit) {
 				move.willCrit = true;

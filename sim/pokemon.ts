@@ -2050,7 +2050,7 @@ export class Pokemon {
 			nobleconduit: ['battery', 'solarpower', 'aftermath'],
 			nobledance: ['dancer', 'hospitality', 'owntempo'],
 			noblearmor: ['prismarmor', 'icebody'],
-			noblerider: ['swiftswim', 'adaptability'],
+			noblerider: ['swiftswim', 'moldbreaker'],
 			gooey: ['hydration', 'sapsipper'],
 			irondominion: ['pressure', 'swornduty', 'mirrorarmor'],
 			bewitchingmajesty: ['magicbounce', 'queenlymajesty'],
