@@ -10116,7 +10116,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	paradoxengine: {
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.field.isTerrain('electricterrain')) {
-				return this.chainModify(2);
+				return this.chainModify(1.5);
 			}
 		},
 		onBasePowerPriority: 23,
