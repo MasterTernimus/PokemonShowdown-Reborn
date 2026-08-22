@@ -2077,7 +2077,7 @@ export class BattleActions {
 		if (ffaFollowUpAttack) {
 			const targetIsMega = !!(target.species.isMega || target.species.forme === 'Mega');
 			const targetIsGmax = !!(target.gigantamax || target.species.forme?.includes('Gmax'));
-			if (targetIsMega || targetIsGmax || (target.terastallized === 'Stellar' && !move.isZ) || target.hasAbility('ultraego')) {
+			if (!move.isZ && (targetIsMega || targetIsGmax || target.terastallized === 'Stellar' || target.hasAbility('ultraego'))) {
 				this.battle.debug('FFA gimmick follow-up damage reduction');
 				baseDamage = this.battle.modify(baseDamage, 0.9);
 			}
@@ -2168,6 +2168,10 @@ export class BattleActions {
 				baseDamage = this.battle.modify(baseDamage, 1.3);
 			}
 		}
+		if (move.isZ && targetIsGmax && pokemon.terastallized !== 'Stellar') {
+			this.battle.debug('Z move Gmax damage boost');
+			baseDamage = this.battle.modify(baseDamage, 1.3);
+		}
 		if (target.terastallized === 'Stellar' && (sourceIsGmax || sourceIsMega) && !move.isZ) {
 			baseDamage = this.battle.modify(baseDamage, 0.9);
 		}
@@ -2176,7 +2180,7 @@ export class BattleActions {
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
-		if (target.species.forme === 'Gmax' || target.species.id.endsWith('gmax')) {
+		if (!move.isZ && (target.species.forme === 'Gmax' || target.species.id.endsWith('gmax'))) {
 			baseDamage = this.battle.modify(baseDamage, 0.9);
 		}
 

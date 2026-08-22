@@ -868,6 +868,8 @@ export class Battle {
 		const parentEvent = this.event;
 		this.event = { id: eventid, target, source, effect: sourceEffect, modifier: 1 };
 		this.eventDepth++;
+		const zMoveDamageModifier = eventid.endsWith('ModifyDamage') &&
+			sourceEffect?.effectType === 'Move' && !!(sourceEffect as any).isZ;
 
 		let targetRelayVars = [];
 		if (Array.isArray(target)) {
@@ -956,6 +958,7 @@ export class Battle {
 				continue;
 			}
 			let returnVal;
+			const previousModifier = this.event.modifier;
 			if (typeof handler.callback === 'function') {
 				const parentEffect = this.effect;
 				const parentEffectState = this.effectState;
@@ -969,6 +972,10 @@ export class Battle {
 				this.effectState = parentEffectState;
 			} else {
 				returnVal = handler.callback;
+			}
+			if (zMoveDamageModifier && effect.effectType === 'Ability' && this.event.modifier < previousModifier) {
+				this.debug(`${eventid} ability damage reduction bypassed by Z move: ${effect.name}`);
+				this.event.modifier = previousModifier;
 			}
 
 			if (returnVal !== undefined) {
