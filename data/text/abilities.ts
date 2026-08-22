@@ -2360,8 +2360,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	blademastery: {
 		name: "Blade Mastery",
-		desc: "This Pokemon has Sharpness's effect and gains STAB on Fighting-type moves.",
-		shortDesc: "Sharpness; gains Fighting STAB.",
+		desc: "This Pokemon has Sharpness, Dual Wield, and Mold Breaker. Below half HP, its slicing moves have their critical-hit ratio raised by 1 stage.",
+		shortDesc: "Sharpness + Dual Wield + Mold Breaker; below half HP, slicing moves gain +1 crit.",
 	},
 	shedskin: {
 		name: "Shed Skin",

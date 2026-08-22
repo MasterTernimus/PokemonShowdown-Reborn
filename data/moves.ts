@@ -2549,7 +2549,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	ceaselessedge: {
 		num: 845,
-		accuracy: 90,
+		accuracy: 95,
 		basePower: 65,
 		category: "Physical",
 		name: "Ceaseless Edge",

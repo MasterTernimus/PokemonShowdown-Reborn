@@ -29,7 +29,7 @@ Custom-numbered entries: 233
 - **Battle Fervor** (`battlefervor`): Fast attacks 1.2x; once per switch-in slow takes 0.8x; hit boosts once; blocks Berries. **Users:** Aerodactyl, Floatzel, Toxicroak
 - **Bewitching Majesty** (`bewitchingmajesty`): Sets Bewitched Woods for 5 turns. Magic Bounce + Queenly Majesty. **Users:** Hatterene-Gmax
 - **Black Fang** (`blackfang`): Strong Jaw + Insomnia. **Users:** Mightyena
-- **Blade Mastery** (`blademastery`): Sharpness; gains Fighting STAB. **Users:** Samurott, Samurott-Hisui
+- **Blade Mastery** (`blademastery`): Sharpness + Dual Wield + Mold Breaker; below half HP, slicing moves gain +1 critical-hit ratio. **Users:** Samurott, Samurott-Hisui
 - **Blazing Mane** (`blazingmane`): Fire 1.5x; attacks hit twice; Fire gains priority at half HP; fire fields grant +1 Speed. **Users:** Typhlosion, Typhlosion-Hisui
 - **Blazing Tempo** (`blazingtempo`): Speed Boost + Striker + Proficient. **Users:** Blaziken-Mega
 - **Blooming Sun** (`bloomingsun`): Mega Sol + Invigorate + Natural Cure. **Users:** Meganium-Mega
