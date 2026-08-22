@@ -322,4 +322,41 @@ describe('Custom battle data updates', function () {
 			battle = null;
 		}
 	});
+
+	it('should give Eevium Z and Light Ball owner-only Leftovers recovery', function () {
+		for (const [species, ability, item] of [
+			['Eevee-Starter', 'protean', 'Eevium Z'],
+			['Pikachu-Starter', 'static', 'Light Ball'],
+		]) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species, ability, item, moves: ['Splash']},
+			], [
+				{species: 'Blissey', ability: 'naturalcure', moves: ['Splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			const holder = battle.p1.active[0];
+			holder.hp -= 100;
+			const hpBefore = holder.hp;
+			battle.makeChoices('move splash', 'move splash');
+			assert.equal(holder.hp - hpBefore, Math.floor(holder.baseMaxhp / 16));
+			battle.destroy();
+			battle = null;
+		}
+
+		for (const item of ['Eevium Z', 'Light Ball']) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Mew', ability: 'synchronize', item, moves: ['Splash']},
+			], [
+				{species: 'Blissey', ability: 'naturalcure', moves: ['Splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			const holder = battle.p1.active[0];
+			holder.hp -= 100;
+			const hpBefore = holder.hp;
+			battle.makeChoices('move splash', 'move splash');
+			assert.equal(holder.hp, hpBefore, `${item} should not heal an unrelated holder`);
+			battle.destroy();
+			battle = null;
+		}
+	});
 });

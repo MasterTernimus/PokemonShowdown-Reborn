@@ -515,7 +515,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	eeviumz: {
 		name: "Eevium Z",
-		shortDesc: "Eevee, Starter Eevee, and G-Max Eevee: Def/SpD 1.5x; enables Extreme Evoboost.",
+		shortDesc: "Eevee forms: Def/SpD 1.5x; heals 1/16 each turn; enables Extreme Evoboost.",
 	},
 	ejectbutton: {
 		name: "Eject Button",
@@ -1079,7 +1079,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lightball: {
 		name: "Light Ball",
-		shortDesc: "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
+		shortDesc: "Pikachu forms: Atk/SpA 2x, Def/SpD 1.5x; heals 1/16 each turn.",
 		gen4: {
 			shortDesc: "If held by a Pikachu, its attacks have their power doubled.",
 		},
