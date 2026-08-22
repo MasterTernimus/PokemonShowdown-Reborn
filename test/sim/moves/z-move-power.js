@@ -40,4 +40,20 @@ describe('Z-Move power conversion', function () {
 		assert.equal(zMove.name, 'Splintered Stormshards');
 		assert.equal(zMove.basePower, baseMove.zMove.basePower);
 	});
+
+	it('should scale fixed-count multihit moves by their combined base power', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Lucario', ability: 'steadfast', item: 'steeliumz', moves: ['needlegun']},
+		], [
+			{species: 'Shuckle', ability: 'sturdy', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const pokemon = battle.p1.active[0];
+		const baseMove = battle.dex.moves.get('needlegun');
+		const zMove = battle.actions.getActiveZMove(baseMove, pokemon);
+
+		assert.equal(baseMove.multihit, 6);
+		assert.equal(zMove.name, 'Corkscrew Crash');
+		assert.equal(zMove.basePower, 200);
+	});
 });

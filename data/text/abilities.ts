@@ -5,6 +5,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	selfsufficient: { name: "Self Sufficient", desc: "Restores 1/16 of this Pokemon's maximum HP at the end of each turn and is immune to Sandstorm and Hail damage.", shortDesc: "Heals 1/16 each turn; immune to Sandstorm and Hail." },
 	selfrepair: { name: "Self Repair", desc: "This Pokemon has Self Sufficient and Natural Cure's effects.", shortDesc: "Self Sufficient + Natural Cure." },
+	unstableevo: {
+		name: "Unstable Evo",
+		desc: "Before using a Let's Go partner move, Eevee-Starter becomes its matching evolution and uses that evolution's stats, typing, and Speed for the action. It keeps Unstable Evo and gains the evolution's listed built-in Ability effects. Switching out restores Eevee-Starter. It cannot use battle gimmicks or hold Eevium Z.",
+		shortDesc: "Let's Go moves change form before acting; gains its Ability; cannot use gimmicks.",
+	},
 	hisuianpath: { name: "Hisuian Path", desc: "This Pokemon has Sap Sipper, Inner Focus, and Fluffy's effects.", shortDesc: "Sap Sipper + Inner Focus + Fluffy." },
 	scarecrow: { name: "Scarecrow", desc: "This Pokemon has Wind Rider, Steelworker, and Stakeout's effects.", shortDesc: "Wind Rider + Steelworker + Stakeout." },
 	bruteforce: { name: "Brute Force", desc: "This Pokemon has Reckless and Rock Head's effects.", shortDesc: "Reckless + Rock Head." },
@@ -802,8 +807,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalvoice: {
 		name: "Royal Voice",
-		desc: "This Pokemon has Pixilate, Queenly Majesty, and Sworn Duty's effects. It is immune to Gravity and its negative effects.",
-		shortDesc: "Pixilate + Queenly Majesty + Sworn Duty; Gravity immune.",
+		desc: "This Pokemon has Pixilate, Queenly Majesty, and Sworn Duty's effects.",
+		shortDesc: "Pixilate + Queenly Majesty + Sworn Duty.",
 	},
 	perfectforesight: {
 		name: "Perfect Foresight",
@@ -1563,8 +1568,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lunarorbit: {
 		name: "Lunar Orbit",
-		desc: "This Pokemon has Magic Bounce and Serene Grace. On switch-in, it sets Gravity for 5 turns. This Pokemon is immune to Gravity's negative effects: it is not grounded, its Ground immunity is not removed, and it can still use moves normally restricted by Gravity.",
-		shortDesc: "Magic Bounce + Serene Grace; sets Gravity and ignores Gravity's negative effects.",
+		desc: "This Pokemon has Magic Bounce and Serene Grace. On switch-in, it sets Gravity for 5 turns.",
+		shortDesc: "Magic Bounce + Serene Grace; sets Gravity for 5 turns.",
 	},
 	magicguard: {
 		name: "Magic Guard",
@@ -1882,13 +1887,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dreamsickness: {
 		name: "Dream Sickness",
-		desc: "This Pokemon has Telepathy and Sworn Duty. It is immune to Gravity and its negative effects. Its stats cannot be lowered, and its allies' Speed cannot be lowered. At the end of each turn, this Pokemon and its allies restore 1/16 max HP. If an opposing attack would knock out an ally while this Pokemon is above 25% HP, this Pokemon takes the damage instead. Once per switch-in, an ally at 25% HP or lower heals 1/4 max HP, is cured of status, and is sheltered through the next turn.",
-		shortDesc: "Telepathy + Sworn Duty; Gravity immune; heals and protects allies.",
+		desc: "This Pokemon has Telepathy and Sworn Duty. Its stats cannot be lowered, and its allies' Speed cannot be lowered. At the end of each turn, this Pokemon and its allies restore 1/16 max HP. If an opposing attack would knock out an ally while this Pokemon is above 25% HP, this Pokemon takes the damage instead. Once per switch-in, an ally at 25% HP or lower heals 1/4 max HP, is cured of status, and is sheltered through the next turn.",
+		shortDesc: "Telepathy + Sworn Duty; heals and protects allies.",
 	},
 	voidveil: {
 		name: "Void Veil",
-		desc: "This Pokemon has Levitate, Friend Guard, and Costar's effects. It is immune to Gravity and its negative effects.",
-		shortDesc: "Levitate + Friend Guard + Costar; Gravity immune.",
+		desc: "This Pokemon has Levitate, Friend Guard, and Costar's effects.",
+		shortDesc: "Levitate + Friend Guard + Costar.",
 	},
 	relicbeam: {
 		name: "Relic Beam",
@@ -3217,8 +3222,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	zerotohero: {
 		name: "Zero to Hero",
-		desc: "This Pokemon gains Fighting-type STAB and has Natural Cure's switch-out effect. Palafin changes to Hero Form after switching out or entering in Water fields. In Doubles, Multi, or Free-for-All, it survives one KO at 1 HP. Hero Form grants Friend Guard and heals active allies on entry.",
-		shortDesc: "Natural Cure; becomes Hero; Fighting STAB; Hero: Friend Guard + entry healing.",
+		desc: "This Pokemon gains Fighting-type STAB. Palafin changes to Hero Form after switching out or entering in Water fields. In Doubles, Multi, or Free-for-All, it survives one KO at 1 HP. Hero Form grants Friend Guard and heals active allies on entry.",
+		shortDesc: "Palafin becomes Hero; Fighting STAB; Hero: Friend Guard + entry healing.",
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
@@ -3234,8 +3239,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	execution: {
 		name: "Execution",
-		desc: "This Pokemon has Duskilate. Its attacks deal double damage to targets at half HP or less, move KOs heal 1/8 max HP per target, Attack and Special Attack cannot fall below -1, fields cannot lower its Speed, and it is immune to Gravity and its negative effects.",
-		shortDesc: "Duskilate; 2x vs low HP; KO heals 1/8; Gravity immune.",
+		desc: "This Pokemon has Duskilate. Its attacks deal double damage to targets at half HP or less, move KOs heal 1/8 max HP per target, Attack and Special Attack cannot fall below -1, and fields cannot lower its Speed.",
+		shortDesc: "Duskilate; 2x vs low HP; KO heals 1/8.",
 	},
 	echofiend: {
 		name: "Echo Fiend",
@@ -3359,8 +3364,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	argentdevotion: {
 		name: "Argent Devotion",
-		desc: "This Pokemon has Ironclad and Sworn Duty's effects. It is immune to Gravity and its negative effects.",
-		shortDesc: "Ironclad + Sworn Duty; Gravity immune.",
+		desc: "This Pokemon has Ironclad and Sworn Duty's effects.",
+		shortDesc: "Ironclad + Sworn Duty.",
 	},
 	ironcognition: {
 		name: "Iron Cognition",

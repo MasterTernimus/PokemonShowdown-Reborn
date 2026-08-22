@@ -1060,6 +1060,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		isNonstandard: "LGPE",
 		tier: "Illegal",
 	},
+	eeveestarteralt: {
+		isNonstandard: "Custom",
+		tier: "Illegal",
+	},
 	eeveegmax: {
 		isNonstandard: "Past",
 		tier: "Illegal",

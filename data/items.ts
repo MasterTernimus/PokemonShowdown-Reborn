@@ -1707,17 +1707,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		zMoveFrom: "Last Resort",
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Eevee') {
+			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Eevee') {
+			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
 				return this.chainModify(1.5);
 			}
 		},
-		itemUser: ["Eevee", 'Eevee-Starter', 'Eevee-Gmax'],
+		itemUser: ["Eevee", 'Eevee-Starter', 'Eevee-Starter-Alt', 'Eevee-Gmax'],
 		num: 805,
 		gen: 7,
 		isNonstandard: "Past",

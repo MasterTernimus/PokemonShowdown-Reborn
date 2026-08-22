@@ -3609,6 +3609,10 @@ export class Battle {
 	}
 
 	useGimmick(pokemon: Pokemon, gimmick: Gimmick): boolean {
+		if (
+			['eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) &&
+			pokemon.ability === 'unstableevo'
+		) return false;
 		const maxGimmicks = 2;
 		if (pokemon.side.gimmickCount >= maxGimmicks) {
 			return false;

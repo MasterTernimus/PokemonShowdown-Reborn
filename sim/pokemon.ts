@@ -504,8 +504,18 @@ export class Pokemon {
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
 		const pikachuGmaxForms = ['pikachu', 'pikachucosplay', 'pikachurockstar', 'pikachubelle', 'pikachupopstar', 'pikachuphd', 'pikachulibre', 'pikachupartner', 'pikachustarter'];
-		this.canDynamax = this.baseSpecies.id === 'eeveestarter' ? 'eeveegmax' :
+		this.canDynamax = this.baseSpecies.id === 'machampalt' ? 'machampgmaxalt' :
+			['eeveestarter', 'eeveestarteralt'].includes(this.baseSpecies.id) ? 'eeveegmax' :
 			pikachuGmaxForms.includes(this.baseSpecies.id) ? 'pikachugmax' : this.baseSpecies.id + 'gmax';
+		if (['eeveestarter', 'eeveestarteralt'].includes(this.baseSpecies.id) && this.ability === 'unstableevo') {
+			this.canMegaEvo = false;
+			this.canMegaEvoX = false;
+			this.canMegaEvoY = false;
+			this.canUltraBurst = null;
+			this.canGigantamax = null;
+			this.canDynamax = false;
+			this.canTerastallize = null;
+		}
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
@@ -2350,14 +2360,7 @@ export class Pokemon {
 		return types;
 	}
 
-	isGravityImmune() {
-		return this.hasAbility([
-			'lunarorbit', 'dreamsickness', 'voidveil', 'royalvoice', 'argentdevotion', 'execution',
-		]);
-	}
-
 	isGrounded(negateImmunity = false) {
-		if (this.isGravityImmune()) return null;
 		if ('gravity' in this.battle.field.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;

@@ -57,9 +57,13 @@ export class BattleActions {
 	}
 
 	getZMoveBasePower(move: Move) {
-		if (move.zMove?.basePower) return move.zMove.basePower;
 		let basePower = move.basePower;
-		if (Array.isArray(move.multihit)) basePower *= 3;
+		if (typeof move.multihit === 'number') {
+			basePower *= move.multihit;
+		} else {
+			if (move.zMove?.basePower) return move.zMove.basePower;
+			if (Array.isArray(move.multihit)) basePower *= 3;
+		}
 		if (!basePower) return 100;
 		if (basePower >= 140) return 200;
 		if (basePower >= 130) return 195;
@@ -1644,7 +1648,7 @@ export class BattleActions {
 			const maxGimmicks = 2;
 			if (pokemon.side.gimmickCount >= maxGimmicks) return;
 			if (!item.zMove) return;
-			if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
+			if (!this.isValidItemUser(pokemon, item.itemUser)) return;
 			const moveData = pokemon.getMoveData(move);
 			// Draining the PP of the base move prevents the corresponding Z-move from being used.
 			if (!moveData?.pp) return;
@@ -1712,6 +1716,10 @@ export class BattleActions {
 	}
 
 	canZMove(pokemon: Pokemon) {
+		if (
+			['eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) &&
+			pokemon.ability === 'unstableevo'
+		) return;
 		const maxGimmicks = 2;
 		if (pokemon.side.gimmickCount >= maxGimmicks ||
 			(pokemon.transformed &&
@@ -1719,7 +1727,7 @@ export class BattleActions {
 		) return;
 		const item = pokemon.getItem();
 		if (!item.zMove) return;
-		if (item.itemUser && !item.itemUser.includes(pokemon.species.name)) return;
+		if (!this.isValidItemUser(pokemon, item.itemUser)) return;
 		let atLeastOne = false;
 		let mustStruggle = true;
 		const zMoves: ZMoveOptions = [];
@@ -1743,6 +1751,12 @@ export class BattleActions {
 			if (zMoveName) atLeastOne = true;
 		}
 		if (atLeastOne && !mustStruggle) return zMoves;
+	}
+
+	private isValidItemUser(pokemon: Pokemon, itemUsers?: string[]) {
+		if (!itemUsers) return true;
+		if (itemUsers.includes(pokemon.species.name)) return true;
+		return !!pokemon.species.isCosmeticForme && itemUsers.includes(pokemon.species.baseSpecies);
 	}
 
 	getMaxMove(move: Move, pokemon: Pokemon) {
