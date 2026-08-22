@@ -12237,7 +12237,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	makeitrain: {
 		num: 874,
-		accuracy: 95,
+		accuracy: 90,
 		basePower: 120,
 		category: "Special",
 		name: "Make It Rain",
