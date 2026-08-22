@@ -11106,20 +11106,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 292,
 	},
 	blademastery: {
+		onModifyMove(move, source) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source);
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
+		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain')) {
-				this.debug('Blade Mastery boost');
-				return this.chainModify(1.5);
-			}
+			const sharpnessBoost = move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain') ? 1.5 : 1;
+			const modifier = getDualWieldModifier(move, sharpnessBoost);
+			if (modifier !== 1) return this.chainModify(modifier);
 		},
-		onModifySTAB(stab, source, target, move) {
-			if (move.type === 'Fighting' && !source.hasType('Fighting')) return 1.5;
+		onModifyCritRatio(critRatio, source, target, move) {
+			if (source.hp * 2 < source.maxhp && move.flags['slicing']) return critRatio + 1;
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (type === 'Bug' || type === 'Dark' || type === 'Rock') return typeMod - 1;
-		},
-		flags: { breakable: 1 },
+		flags: {},
 		name: "Blade Mastery",
 		rating: 4,
 		num: 10165,

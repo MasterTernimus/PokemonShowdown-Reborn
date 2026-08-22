@@ -113560,8 +113560,16 @@ for (const [id, moves] of Object.entries(latestLearnsetAdditions)) {
 	for (const move of moves) learnset[move] ??= ['9M'];
 }
 
+const samurottLearnset = (Learnsets as any).samurott?.learnset;
+const hisuianSamurottLearnset = (Learnsets as any).samurotthisui?.learnset;
+if (samurottLearnset && hisuianSamurottLearnset) {
+	Object.assign(hisuianSamurottLearnset, samurottLearnset);
+}
+
 const latestLearnsetRemovals: {[id: string]: string[]} = {
 	pidgeot: ['bleakwindstorm', 'windbolt', 'searingshot', 'springtidestorm'],
+	samurott: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
+	samurotthisui: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 };
 for (const [id, moves] of Object.entries(latestLearnsetRemovals)) {
 	const learnset = (Learnsets as any)[id]?.learnset;
