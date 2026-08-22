@@ -1717,6 +1717,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
+				this.heal(pokemon.baseMaxhp / 16);
+			}
+		},
 		itemUser: ["Eevee", 'Eevee-Starter', 'Eevee-Starter-Alt', 'Eevee-Gmax'],
 		num: 805,
 		gen: 7,
@@ -3521,6 +3528,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifySpA(spa, pokemon) {
 			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
 				return this.chainModify(2);
+			}
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Pikachu') {
+				this.heal(pokemon.baseMaxhp / 16);
 			}
 		},
 		itemUser: ["Pikachu", "Pikachu-Cosplay", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter", "Pikachu-World"],
