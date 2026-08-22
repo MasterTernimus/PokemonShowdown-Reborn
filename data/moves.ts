@@ -14276,8 +14276,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	nightdaze: {
 		num: 539,
-		accuracy: 95,
-		basePower: 85,
+		accuracy: 90,
+		basePower: 90,
 		category: "Special",
 		name: "Night Daze",
 		pp: 10,
