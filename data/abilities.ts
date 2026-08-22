@@ -191,6 +191,81 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10346,
 	},
+	unstableevo: {
+		onModifyPriority(priority, pokemon, target, move) {
+			if (!['eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id)) return;
+			const forme = UNSTABLE_EVO_FORMES[move?.id];
+			if (!forme || pokemon.species.id === this.dex.species.get(forme).id) return;
+			if (pokemon.species.id === 'flareon') pokemon.removeVolatile('flashfire');
+			pokemon.formeChange(forme, this.effect, false, '[msg]');
+			for (const id of unstableEvoComponents(pokemon)) {
+				this.dex.abilities.get(id).onStart?.call(this, pokemon);
+			}
+		},
+		onSwitchOut(pokemon) {
+			pokemon.removeVolatile('flashfire');
+		},
+		onTryHit(target, source, move) {
+			for (const id of unstableEvoComponents(target)) {
+				const result = this.dex.abilities.get(id).onTryHit?.call(this, target, source, move);
+				if (result !== undefined) return result;
+			}
+		},
+		onBasePower(basePower, source, target, move) {
+			if (source.species.id === 'umbreon' || source.species.id === 'espeon') {
+				return this.dex.abilities.get('eclipse').onBasePower?.call(this, basePower, source, target, move);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.species.id === 'umbreon' || target.species.id === 'espeon') {
+				return this.dex.abilities.get('eclipse').onSourceModifyDamage?.call(this, damage, source, target, move);
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			for (const id of unstableEvoComponents(pokemon)) {
+				this.dex.abilities.get(id).onModifyMove?.call(this, move, pokemon, target);
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (pokemon.species.id === 'leafeon') {
+				return this.dex.abilities.get('chlorophyll').onModifySpe?.call(this, spe, pokemon);
+			}
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			if (target.species.id === 'sylveon') {
+				this.dex.abilities.get('competitive').onAfterEachBoost?.call(this, boost, target, source, effect);
+			}
+		},
+		onWeather(target, source, effect) {
+			if (['espeon', 'glaceon'].includes(target.species.id)) {
+				return this.dex.abilities.get('mindfreeze').onWeather?.call(this, target, source, effect);
+			}
+		},
+		onResidual(pokemon) {
+			for (const id of unstableEvoComponents(pokemon)) {
+				this.dex.abilities.get(id).onResidual?.call(this, pokemon);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (['espeon', 'glaceon'].includes(pokemon.species.id)) {
+				return this.dex.abilities.get('mindfreeze').onImmunity?.call(this, type, pokemon);
+			}
+		},
+		onModifyAtk(atk, pokemon, target, move) {
+			if (pokemon.species.id === 'flareon' && pokemon.volatiles['flashfire'] && this.movehasType(move, 'Fire')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpA(spa, pokemon, target, move) {
+			if (pokemon.species.id === 'flareon' && pokemon.volatiles['flashfire'] && this.movehasType(move, 'Fire')) {
+				return this.chainModify(1.5);
+			}
+		},
+		flags: { breakable: 1, failroleplay: 1, noentrain: 1, notrace: 1 },
+		name: "Unstable Evo",
+		rating: 5,
+		num: 10363,
+	},
 	hisuianpath: {
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
@@ -14624,7 +14699,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSwitchOut(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
-			this.dex.abilities.get('naturalcure').onSwitchOut?.call(this, pokemon);
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
 				pokemon.heroMessageDisplayed = false;
@@ -14780,3 +14854,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10222,
 	},
 };
+
+const UNSTABLE_EVO_FORMES: Partial<Record<ID, string>> = {
+	baddybad: 'Umbreon',
+	bouncybubble: 'Vaporeon',
+	buzzybuzz: 'Jolteon',
+	freezyfrost: 'Glaceon',
+	glitzyglow: 'Espeon',
+	sappyseed: 'Leafeon',
+	sizzlyslide: 'Flareon',
+	sparklyswirl: 'Sylveon',
+};
+
+function unstableEvoComponents(pokemon: Pokemon): ID[] {
+	switch (pokemon.species.id) {
+	case 'flareon': return ['flashfire'];
+	case 'jolteon': return ['voltabsorb'];
+	case 'vaporeon': return ['waterabsorb'];
+	case 'umbreon': return ['eclipse'];
+	case 'espeon': return ['eclipse', 'mindfreeze'];
+	case 'sylveon': return ['competitive'];
+	case 'leafeon': return ['chlorophyll'];
+	case 'glaceon': return ['mindfreeze'];
+	default: return [];
+	}
+}

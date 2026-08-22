@@ -435,7 +435,7 @@ export class TeamValidator {
 				setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
 			}
 
-			if (set.species === 'Pikachu-Starter' || set.species === 'Eevee-Starter') {
+			if (set.species === 'Pikachu-Starter' || ['Eevee-Starter', 'Eevee-Starter-Alt'].includes(set.species)) {
 				lgpeStarterCount++;
 				if (lgpeStarterCount === 2 && ruleTable.isBanned('nonexistent')) {
 					problems.push(`You can only have one of Pikachu-Starter or Eevee-Starter on a team.`);
@@ -593,6 +593,12 @@ export class TeamValidator {
 		set.item = item.name;
 		let ability = dex.abilities.get(Utils.getString(set.ability));
 		set.ability = ability.name;
+		if (
+			['eeveestarter', 'eeveestarteralt'].includes(species.id) &&
+			ability.id === 'unstableevo' && item.id === 'eeviumz'
+		) {
+			problems.push(`${species.name} cannot hold Eevium Z while using Unstable Evo.`);
+		}
 		let nature = dex.natures.get(Utils.getString(set.nature));
 		set.nature = nature.name;
 		if (!Array.isArray(set.moves)) set.moves = [];

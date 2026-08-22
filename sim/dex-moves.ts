@@ -576,10 +576,17 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 				}
 			}
 		}
-		if (this.category !== 'Status' && !data.zMove && !this.isZ && !this.isMax && this.id !== 'struggle') {
+		if (
+			this.category !== 'Status' && (!data.zMove || typeof data.multihit === 'number') &&
+			!this.isZ && !this.isMax && this.id !== 'struggle'
+		) {
 			let basePower = this.basePower;
 			this.zMove = {};
-			if (Array.isArray(data.multihit)) basePower *= 3;
+			if (typeof data.multihit === 'number') {
+				basePower *= data.multihit;
+			} else if (Array.isArray(data.multihit)) {
+				basePower *= 3;
+			}
 			if (!basePower) {
 				this.zMove.basePower = 100;
 			} else if (basePower >= 140) {

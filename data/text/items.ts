@@ -515,7 +515,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	eeviumz: {
 		name: "Eevium Z",
-		shortDesc: "Eevee forms: Def/SpD 1.5x. If Eevee has Last Resort, enables Extreme Evoboost.",
+		shortDesc: "Eevee, Starter Eevee, and G-Max Eevee: Def/SpD 1.5x; enables Extreme Evoboost.",
 	},
 	ejectbutton: {
 		name: "Eject Button",

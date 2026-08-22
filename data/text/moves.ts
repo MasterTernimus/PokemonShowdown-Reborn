@@ -2753,8 +2753,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gravity: {
 		name: "Gravity",
-		desc: "For 5 turns, grounded Pokemon that are not Psychic or Fairy type have 0.75x Speed, Ground-type moves have 1.2x power, and status-category recovery moves restore 25% less HP. Evasiveness of all active Pokemon is multiplied by 0.6. Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately. During the effect, airborne immunities are removed and certain airborne moves fail.",
-		shortDesc: "5 turns: grounds all; +accuracy; slows grounded foes; recovery is 0.75x.",
+		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
+		shortDesc: "5 turns: no Ground immunities, 1.67x accuracy.",
 		gen7: {
 			desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
 		},

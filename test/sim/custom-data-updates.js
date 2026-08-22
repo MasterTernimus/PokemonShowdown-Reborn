@@ -119,23 +119,7 @@ describe('Custom battle data updates', function () {
 		assert.match(usedMoves[0], /Alakazam.*Icy Wind/);
 	});
 
-	it('should make Void Veil and every Gardevoir Mega ability immune to Gravity', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Gardevoir', ability: 'voidveil', moves: ['splash']},
-		], [
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-		]]);
-		battle.makeChoices('team 1', 'team 1');
-		const gardevoir = battle.p1.active[0];
-		battle.field.addPseudoWeather('gravity', gardevoir, battle.dex.moves.get('gravity'));
-
-		for (const ability of ['voidveil', 'royalvoice', 'argentdevotion', 'execution']) {
-			gardevoir.setAbility(ability);
-			assert.equal(gardevoir.isGrounded(), null, `${ability} should ignore Gravity`);
-		}
-	});
-
-	it('should reduce status recovery moves to 0.75x healing during Gravity', function () {
+	it('should use standard Gravity grounding and recovery behavior', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Blissey', ability: 'naturalcure', moves: ['recover']},
 		], [
@@ -145,10 +129,13 @@ describe('Custom battle data updates', function () {
 		const blissey = battle.p1.active[0];
 		blissey.hp = Math.floor(blissey.maxhp / 4);
 		const startingHP = blissey.hp;
+		const startingSpeed = blissey.getStat('spe');
 		battle.field.addPseudoWeather('gravity', blissey, battle.dex.moves.get('gravity'));
 
+		assert.true(blissey.isGrounded());
+		assert.equal(blissey.getStat('spe'), startingSpeed);
 		battle.makeChoices('move recover', 'move splash');
-		assert.equal(blissey.hp - startingHP, Math.floor(blissey.maxhp * 3 / 8));
+		assert.equal(blissey.hp - startingHP, Math.round(blissey.maxhp / 2));
 	});
 
 	it('should grant Ghost resistance after Foresight, Miracle Eye, or Odor Sleuth', function () {
@@ -194,7 +181,7 @@ describe('Custom battle data updates', function () {
 		assert(psychic.secondaries?.some(secondary => secondary.status === 'frz'));
 	});
 
-	it('should cure Palafin on switch-out before Toxic Spikes can apply on re-entry', function () {
+	it('should not cure Palafin when it switches out or re-enters', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Palafin', ability: 'zerotohero', moves: ['splash']},
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
@@ -204,12 +191,135 @@ describe('Custom battle data updates', function () {
 		battle.makeChoices('team 1, 2', 'team 1');
 		const palafin = battle.p1.active[0];
 		palafin.setStatus('brn');
-		battle.p1.addSideCondition('toxicspikes', battle.p2.active[0], battle.dex.moves.get('toxicspikes'));
-
 		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(palafin.status, '');
+		assert.equal(palafin.status, 'brn');
 
 		battle.makeChoices('switch 1', 'move splash');
-		assert.equal(palafin.status, 'psn');
+		assert.equal(palafin.status, 'brn');
+	});
+
+	it('should allow cosmetic starter forms to use their signature Z-Moves', function () {
+		for (const [species, item, move, zMove] of [
+			['Primarina-Alt', 'Primarium Z', 'Sparkling Aria', 'Oceanic Operetta'],
+			['Decidueye-Alt', 'Decidium Z', 'Spirit Shackle', 'Sinister Arrow Raid'],
+			['Decidueye-Hisui-Alt', 'Decidium Z', 'Spirit Shackle', 'Sinister Arrow Raid'],
+			['Incineroar-Alt', 'Incinium Z', 'Darkest Lariat', 'Malicious Moonsault'],
+		]) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species, item, moves: [move]},
+			], [
+				{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			const zMoves = battle.actions.canZMove(battle.p1.active[0]);
+			assert(zMoves?.some(option => option?.move === zMove), `${species} should be offered ${zMove}`);
+			battle.destroy();
+			battle = null;
+		}
+	});
+
+	it("should evolve Eevee-Starter before Let's Go moves and reset it on switch", function () {
+		const transformations = [
+			['baddybad', 'Umbreon'],
+			['bouncybubble', 'Vaporeon'],
+			['buzzybuzz', 'Jolteon'],
+			['freezyfrost', 'Glaceon'],
+			['glitzyglow', 'Espeon'],
+			['sappyseed', 'Leafeon'],
+			['sizzlyslide', 'Flareon'],
+			['sparklyswirl', 'Sylveon'],
+		];
+		for (const [move, forme] of transformations) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Eevee-Starter', ability: 'unstableevo', moves: [move, 'splash']},
+				{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			], [
+				{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1, 2', 'team 1');
+			const eevee = battle.p1.active[0];
+			battle.makeChoices(`move ${move}`, 'move splash');
+			assert.species(eevee, forme);
+			assert.equal(eevee.ability, 'unstableevo');
+
+			battle.makeChoices('switch 2', 'move splash');
+			assert.species(eevee, 'Eevee-Starter');
+			battle.destroy();
+			battle = null;
+		}
+	});
+
+	it('should use the evolved Speed tier and built-in Ability effects from Unstable Evo', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Eevee-Starter-Alt', ability: 'unstableevo', item: 'firiumz', moves: ['buzzybuzz', 'bouncybubble', 'splash']},
+		], [
+			{species: 'Mew', ability: 'synchronize', moves: ['splash', 'surf']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const eevee = battle.p1.active[0];
+		assert.false(eevee.canDynamax);
+		assert.equal(eevee.canTerastallize, null);
+		assert.false(battle.actions.canZMove(eevee));
+		battle.makeChoices('move buzzybuzz', 'move splash');
+		const moves = battle.log.filter(line => line.startsWith('|move|'));
+		assert.match(moves[0], /Eevee.*Buzzy Buzz/);
+		assert.species(eevee, 'Jolteon');
+
+		battle.makeChoices('move bouncybubble', 'move surf');
+		assert.species(eevee, 'Vaporeon');
+		assert.equal(eevee.hp, eevee.maxhp, 'Water Absorb should block Surf after the Vaporeon change');
+	});
+
+	it('should reject Eevium Z specifically when Eevee-Starter uses Unstable Evo', function () {
+		const baseSet = {
+			species: 'Eevee-Starter-Alt', ability: 'Unstable Evo', moves: ['Buzzy Buzz'],
+		};
+		assert.legalTeam([{...baseSet}], 'gen9nofieldsinglesgame');
+		assert.false.legalTeam([{...baseSet, item: 'Eevium Z'}], 'gen9nofieldsinglesgame');
+	});
+
+	it('should give Starter Eevee the Eviolite boost from Eevium Z before and during G-Max', function () {
+		battle = common.createBattle({formatid: 'gen9doublesmistyfieldadrienn'}, [[
+			{species: 'Eevee-Starter', ability: 'protean', item: 'Eevium Z', gigantamax: true, moves: ['tackle']},
+			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+		], [
+			{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1, 2', 'team 1, 2');
+		const eevee = battle.p1.active[0];
+		const assertEeviumBoost = () => {
+			assert.equal(eevee.getStat('def'), battle.modify(eevee.getStat('def', true, true), 1.5));
+			assert.equal(eevee.getStat('spd'), battle.modify(eevee.getStat('spd', true, true), 1.5));
+		};
+
+		assertEeviumBoost();
+		battle.makeChoices('move tackle +1 dynamax, move splash', 'move splash, move splash');
+		assert.species(eevee, 'Eevee-Gmax');
+		assertEeviumBoost();
+	});
+
+	it('should let Eevee and Starter Eevee use Eevium Z with Last Resort', function () {
+		for (const species of ['Eevee', 'Eevee-Starter', 'Eevee-Starter-Alt']) {
+			const ability = species === 'Eevee' ? 'runaway' : 'protean';
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species, ability, item: 'Eevium Z', moves: ['Last Resort']},
+			], [
+				{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			const eevee = battle.p1.active[0];
+			const zMoves = battle.actions.canZMove(eevee);
+
+			assert.equal(eevee.getStat('def'), battle.modify(eevee.getStat('def', true, true), 1.5));
+			assert.equal(eevee.getStat('spd'), battle.modify(eevee.getStat('spd', true, true), 1.5));
+			assert(zMoves?.some(option => option?.move === 'Extreme Evoboost'));
+			battle.makeChoices('move lastresort zmove', 'move splash');
+			for (const stat of ['atk', 'def', 'spa', 'spd', 'spe']) {
+				assert.equal(eevee.boosts[stat], 2, `${species} should receive the full Extreme Evoboost`);
+			}
+			battle.destroy();
+			battle = null;
+		}
 	});
 });
