@@ -57,6 +57,23 @@ describe('Illusion', function () {
 		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
+	it(`should apply direct damage to Zoroark when Illusion breaks`, function () {
+		battle = common.gen(9).createBattle({formatid: 'gen9ubers', preview: false}, [[
+			{species: "Zoroark", ability: 'illusion', moves: ['tackle']},
+			{species: "Garchomp", moves: ['tackle']},
+		], [
+			{species: "Pikachu", moves: ['tackle']},
+		]]);
+
+		const zoroark = battle.p1.active[0];
+		const hpBefore = zoroark.hp;
+		battle.makeChoices('move tackle', 'move tackle');
+
+		assert(zoroark.hp < hpBefore, 'Zoroark should take the damage that breaks Illusion');
+		assert(!zoroark.illusion, 'Illusion should be cleared after direct damage');
+		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
+	});
+
 	it(`should Illusion as the regular Dynamax version of G-Max Pokemon while Dynamaxed`, function () {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},

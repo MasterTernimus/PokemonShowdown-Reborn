@@ -92,7 +92,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (target.illusion) target.removeVolatile('illusioncopy');
+			if (target.illusion) {
+				// The copied ability owns this volatile, so explicitly run Illusion's
+				// cleanup hook to reveal the real Pokemon and preserve the damage dealt.
+				this.singleEvent('End', this.dex.abilities.get('illusion'), target.abilityState, target, source, move);
+			}
 		},
 		onEnd(pokemon) {
 			const originalAbility = this.effectState.originalAbility;

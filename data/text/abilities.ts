@@ -628,7 +628,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fallenstar: {
 		name: "Fallen Star",
-		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker, Dual Wield, Skill Link, and Self Sufficient. Existing multi-hit Arrow moves keep their normal power and use Skill Link instead of gaining an extra Dual Wield hit. Arrow moves deal 1.5x damage to trapped targets. At half HP or less, Arrow moves gain +1 priority and this Pokemon takes half damage. After an Arrow move, it takes 0.25x damage for the turn. An Arrow KO repeats the move at half power; in Free-for-All, Arrows hit all foes.",
+		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker, Dual Wield, Skill Link, and Self Sufficient. Existing multi-hit Arrow moves use Skill Link normally. Arrow moves deal 1.5x damage to trapped targets. At half HP or less, Arrow moves gain +1 priority and this Pokemon takes half damage. After an Arrow move, it takes 0.25x damage for the turn. An Arrow KO repeats the move at half power. In Free-for-All, Arrow moves hit every foe twice at full power.",
 		shortDesc: "Mold Breaker + Dual Wield + Self Sufficient; at half HP, Arrows gain +1 priority.",
 	},
 	eclipse: {
@@ -1745,7 +1745,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "Shell Armor + Ice Body + Crumbling Shell.",
 	},
 	shelltrap: {
-		name: "Shell Trap",
+		name: "Shell Tempo",
 		desc: "This Pokemon has Regenerator and Shell Armor's effects.",
 		shortDesc: "Regenerator + Shell Armor.",
 	},
