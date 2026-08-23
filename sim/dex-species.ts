@@ -231,7 +231,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** True if a pokemon is primal. */
 	declare readonly isPrimal?: boolean;
 	/** Name of its Gigantamax move, if a pokemon is capable of gigantamaxing. */
-	readonly canGigantamax?: string;
+	readonly canGigantamax?: string | null;
 	/** If this Pokemon can gigantamax, is its gigantamax released? */
 	readonly gmaxUnreleased?: boolean;
 	/** True if a Pokemon species is incapable of dynamaxing */

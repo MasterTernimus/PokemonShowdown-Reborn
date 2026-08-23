@@ -956,7 +956,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'auroraveil',
-		onTry() {
+		onTry(source) {
+			if (source?.hasAbility('protectiveward')) return true;
 			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['rainbowterrain', 'icyterrain', 'mirrorarenaterrain', 'darkcrystalcavernterrain', 'crystalcavernterrain', 'snowymountainterrain', 'starlightarenaterrain', 'coldeclipseterrain'])) {
 				return true;
 			}
@@ -1020,6 +1021,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'arenitewall',
 		onTry(source) {
+			if (source?.hasAbility('protectiveward')) return true;
 			if (source.effectiveWeather() === 'sandstorm') return true;
 			if (this.field.isTerrain(['desertterrain', 'rockyterrain', 'ashenbeachterrain', 'coldeclipseterrain'])) return true;
 			return false;
@@ -16584,6 +16586,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Grass",
 		contestType: "Cool",
 	},
+	radiantclaw: {
+		num: 10002,
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		name: "Radiant Claw",
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		critRatio: 2,
+		recoil: [1, 4],
+		target: "normal",
+		type: "Fairy",
+		contestType: "Cool",
+	},
 	razorshell: {
 		num: 534,
 		accuracy: 100,
@@ -18083,6 +18100,45 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Cool",
+	},
+	hexingslash: {
+		num: 10003,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		name: "Hexing Slash",
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		critRatio: 2,
+		drain: [1, 2],
+		onModifyMove(move, pokemon) {
+			move.overrideOffensiveStat = pokemon.getStat('atk', false, true) >= pokemon.getStat('spa', false, true) ? 'atk' : 'spa';
+		},
+		secondary: {
+			chance: 30,
+			status: "psn",
+		},
+		target: "normal",
+		type: "Ghost",
+		contestType: "Cool",
+	},
+	etherealtempest: {
+		num: 10004,
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		name: "Ethereal Tempest",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1, wind: 1 },
+		secondaries: [
+			{chance: 30, status: "par"},
+			{chance: 10, volatileStatus: "flinch"},
+		],
+		target: "normal",
+		type: "Flying",
+		contestType: "Beautiful",
 	},
 	shadowforce: {
 		num: 467,
@@ -22898,6 +22954,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		fullDamageSpread: true,
 		multihit: 2,
+		critRatio: 2,
 		secondary: {
 			chance: 20,
 			status: 'psn',

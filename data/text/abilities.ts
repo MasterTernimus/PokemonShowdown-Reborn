@@ -7,8 +7,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	selfrepair: { name: "Self Repair", desc: "This Pokemon has Self Sufficient and Natural Cure's effects.", shortDesc: "Self Sufficient + Natural Cure." },
 	unstableevo: {
 		name: "Unstable Evo",
-		desc: "Before using a Let's Go partner move, Eevee-Starter becomes its matching evolution and uses that evolution's stats, typing, and Speed for the action. It keeps Unstable Evo and gains the evolution's listed built-in Ability effects. Switching out restores Eevee-Starter. It cannot use battle gimmicks or hold Eevium Z.",
-		shortDesc: "Let's Go moves change form before acting; gains its Ability; cannot use gimmicks.",
+		desc: "Eevee-Starter enters battle with 252 EVs in every stat; its IVs carry through form changes. Before using a Let's Go move, it changes into the matching evolution and uses that form's stats, typing, and Speed. It keeps Unstable Evo, Filter, and Self Sufficient, and gains the evolution's listed Ability effects. Switching out restores Eevee-Starter. It cannot use battle gimmicks or hold Eevium Z.",
+		shortDesc: "252 EVs in every stat; Filter + Self Sufficient; Let's Go moves change form; no gimmicks.",
 	},
 	hisuianpath: { name: "Hisuian Path", desc: "This Pokemon has Sap Sipper, Inner Focus, and Fluffy's effects.", shortDesc: "Sap Sipper + Inner Focus + Fluffy." },
 	scarecrow: { name: "Scarecrow", desc: "This Pokemon has Wind Rider, Steelworker, and Stakeout's effects.", shortDesc: "Wind Rider + Steelworker + Stakeout." },
@@ -18,6 +18,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	rapidresponse: { name: "Rapid Response", desc: "On this Pokemon's first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x.", shortDesc: "First active turn: 1.5x Spe and 1.2x Sp. Atk." },
 	seafiend: { name: "Sea Fiend", desc: "This Pokemon has Toxic Debris and Water Bubble's effects.", shortDesc: "Toxic Debris + Water Bubble." },
 	hisuianoath: { name: "Hisuian Oath", desc: "This Pokemon has Sworn Duty, Tough Claws, and Corrosion's effects.", shortDesc: "Sworn Duty + Tough Claws + Corrosion." },
+	aevianoath: { name: "Aevian Oath", desc: "This Pokemon has Sworn Duty, Dual Wield, and Battle Armor's effects.", shortDesc: "Sworn Duty + Dual Wield + Battle Armor." },
 	hisuianvanguard: { name: "Hisuian Vanguard", desc: "This Pokemon has Rapid Response and Wind Power's effects.", shortDesc: "Rapid Response + Wind Power." },
 	unovavanguard: { name: "Unova Vanguard", desc: "This Pokemon has Violent Rush and Wind Rider's effects.", shortDesc: "Violent Rush + Wind Rider." },
 	hisuianresolve: { name: "Hisuian Resolve", desc: "This Pokemon has Brute Force and Magma Armor's effects.", shortDesc: "Brute Force + Magma Armor." },
@@ -567,8 +568,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	riotamp: {
 		name: "Riot Amp",
-		desc: "This Pokemon has Punk Rock, Galvanize, and Resonance Force's effects.",
-		shortDesc: "Punk Rock + Galvanize + Resonance Force.",
+		desc: "This Pokemon has Punk Rock and Galvanize's effects.",
+		shortDesc: "Punk Rock + Galvanize.",
 	},
 	relicarmor: {
 		name: "Relic Armor",
@@ -762,8 +763,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
-		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Dauntless Shield and Battle Armor. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, foes take immunity-aware Rock damage equal to 1/16 max HP, scaled by effectiveness.",
-		shortDesc: "8-turn Sand; Dauntless Shield + Battle Armor; Arenite Wall 5/8 turns; Rock chip.",
+		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Dauntless Shield and Solid Rock. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, foes take immunity-aware Rock damage equal to 1/16 max HP, scaled by effectiveness.",
+		shortDesc: "8-turn Sand; Dauntless Shield + Solid Rock; Arenite Wall 5/8 turns; Rock chip.",
 	},
 	tyrantstream: {
 		name: "Tyrant Stream",
@@ -1175,6 +1176,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	furcoat: {
 		name: "Fur Coat",
 		shortDesc: "This Pokemon's Defense is doubled.",
+	},
+	layeredcoat: {
+		name: "Layered Coat",
+		desc: "This Pokemon has Fur Coat and Overcoat's effects.",
+		shortDesc: "Fur Coat + Overcoat.",
 	},
 	galewings: {
 		name: "Gale Wings",
@@ -1617,8 +1623,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	prismscale: {
 		name: "Prism Scale",
-		desc: "This Pokemon has Marvel Scale, Dragonize, and Self Sufficient's effects.",
-		shortDesc: "Marvel Scale + Dragonize + Self Sufficient.",
+		desc: "This Pokemon has Marvel Scale and Dragonize's effects.",
+		shortDesc: "Marvel Scale + Dragonize.",
 	},
 	megalauncher: {
 		name: "Mega Launcher",
@@ -2116,8 +2122,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	paradoxengine: {
 		name: "Paradox Engine",
-		desc: "If Sun or Electric Terrain is active, this Pokemon's Speed is doubled. This Pokemon's Fighting-type and Electric-type moves have 1.5x power.",
-		shortDesc: "Sun/Electric Terrain: Speed 2x. Fighting/Electric moves have 1.5x power.",
+		desc: "If Sun or Electric Terrain is active, this Pokemon's Speed is multiplied by 1.5. Its Fighting- and Electric-type moves have 1.5x power.",
+		shortDesc: "Sun/Electric Terrain: Speed 1.5x; Fighting/Electric moves 1.5x.",
 	},
 	quarkdrive: {
 		name: "Quark Drive",
@@ -2578,18 +2584,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	punchfiend: {
 		name: "Punch Fiend",
-		desc: "This Pokemon has Iron Fist, Inner Focus, and Mold Breaker's effects.",
-		shortDesc: "Iron Fist + Inner Focus + Mold Breaker.",
+		desc: "This Pokemon has Iron Fist, Inner Focus, and Unseen Fist's effects.",
+		shortDesc: "Iron Fist + Inner Focus + Unseen Fist.",
 	},
 	spinfiend: {
 		name: "Spin Fiend",
-		desc: "This Pokemon has Battle Armor, Technician, and Vital Spirit's effects.",
-		shortDesc: "Battle Armor + Technician + Vital Spirit.",
+		desc: "This Pokemon has Technician and Vital Spirit's effects.",
+		shortDesc: "Technician + Vital Spirit.",
 	},
 	fightingfiend: {
 		name: "Fighting Fiend",
-		desc: "This Pokemon has Unseen Fist, Iron Fist, and Striker's effects.",
-		shortDesc: "Unseen Fist + Iron Fist + Striker.",
+		desc: "This Pokemon has Vital Spirit and Multiscale's effects, and its moves cannot miss.",
+		shortDesc: "Vital Spirit + Multiscale; moves cannot miss.",
 	},
 	emperorspride: {
 		name: "Emperor's Pride",
@@ -2618,8 +2624,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	resonanceforce: {
 		name: "Resonance Force",
-		desc: "Sound-based moves used by this Pokemon's side deal 1.5x damage. This Pokemon's side is immune to its own damaging sound-based moves. Sound-based moves used by this Pokemon use Attack instead of their usual attacking stat.",
-		shortDesc: "Side sound moves 1.5x; allies avoid own sound damage; user sound uses Atk.",
+		desc: "Sound-based moves used by this Pokemon's side deal 1.5x damage. This Pokemon's side is immune to its own damaging sound-based moves. Sound-based moves used by this Pokemon use its higher offensive stat.",
+		shortDesc: "Side sound moves 1.5x; allies avoid own sound damage; sound uses higher offense.",
 	},
 	verdantdrake: {
 		name: "Verdant Drake",
@@ -2668,8 +2674,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	calderacore: {
 		name: "Caldera Core",
-		desc: "This Pokemon has Magma Armor, Sheer Force, and Drought's effects. At the end of each turn, foes take Fire-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Fire immunities.",
-		shortDesc: "Magma Armor + Sheer Force + Drought; Fire chip respects effectiveness and immunities.",
+		desc: "This Pokemon has Magma Armor and Drought's effects.",
+		shortDesc: "Magma Armor + Drought.",
 	},
 	soultag: {
 		name: "Soul Tag",
@@ -2773,6 +2779,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		activate: "#lightningrod",
+	},
+	protectiveward: {
+		name: "Protective Ward",
+		desc: "This Pokemon is immune to Hail and has Liquid Voice and Storm Drain's effects. It can use Arenite Wall and Aurora Veil regardless of weather or field. In Hail and Ice fields, it is treated as an Ice-type Pokemon.",
+		shortDesc: "Liquid Voice + Storm Drain; ignores Arenite Wall/Aurora Veil conditions; Hail immune; Ice in Ice fields.",
+	},
+	amethystglow: {
+		name: "Amethyst Glow",
+		desc: "This Pokemon's moves cannot miss and it has Ice Body and Refrigerate's effects. It is treated as an Ice-type Pokemon in Hail and Ice fields.",
+		shortDesc: "Moves cannot miss; Ice Body + Refrigerate; Ice in Ice fields.",
 	},
 	strongjaw: {
 		name: "Strong Jaw",

@@ -5182,6 +5182,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "High critical hit ratio.",
 		},
 	},
+	radiantclaw: {
+		name: "Radiant Claw",
+		desc: "A 120-power Fairy-type slicing move with a high critical-hit ratio. Makes contact and deals one quarter of its normal recoil to the user.",
+		shortDesc: "120 BP; slicing; high crit; 1/4 recoil; contact.",
+	},
 	razorshell: {
 		name: "Razor Shell",
 		desc: "Has a 50% chance to lower the target's Defense by 1 stage.",
@@ -5694,6 +5699,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Shadow Claw",
 		desc: "Has a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio.",
+	},
+	hexingslash: {
+		name: "Hexing Slash",
+		desc: "A 90-power Ghost-type physical slicing move with a high critical-hit ratio. It uses the user's higher offensive stat, has a 30% chance to poison, makes contact, and restores half the damage dealt to the user.",
+		shortDesc: "90 BP; higher offense; slicing; high crit; 30% poison; drains 1/2 damage.",
+	},
+	etherealtempest: {
+		name: "Ethereal Tempest",
+		desc: "A 100-power Flying-type special move with a 30% chance to paralyze and a 10% chance to flinch the target.",
+		shortDesc: "100 BP; 30% paralysis; 10% flinch.",
 	},
 	shadowforce: {
 		name: "Shadow Force",
@@ -7208,8 +7223,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twineedle: {
 		name: "Twineedle",
-		desc: "Hits all adjacent foes once without a spread damage penalty and has a 20% chance to poison each target.",
-		shortDesc: "Hits adjacent foes at full damage. 20% poison.",
+		desc: "Hits one target twice. Each hit has a 20% chance to poison the target and a high critical-hit ratio.",
+		shortDesc: "Hits twice; high critical-hit ratio; 20% poison per hit.",
 		gen4: {
 			desc: "Hits twice, with each hit having a 20% chance to poison the target. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},

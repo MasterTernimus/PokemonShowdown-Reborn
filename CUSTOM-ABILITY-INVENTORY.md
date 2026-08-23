@@ -67,7 +67,7 @@ Custom-numbered entries: 233
 - **Execution** (`execution`): Duskilate; 2x vs targets at half HP or less; move KOs heal 1/8. **Users:** Gardevoir-Void-Mega
 - **Fallen Star** (`fallenstar`): Mold Breaker + Dual Wield + Self Sufficient; at half HP, Arrows gain +1 priority. **Users:** Decidueye, Decidueye-Hisui
 - **False Devotion** (`falsedevotion`): Built-in Serene Grace, Natural Cure, and Prankster. **Users:** Roserade
-- **Fighting Fiend** (`fightingfiend`): Unseen Fist + Iron Fist + Striker. **Users:** Machamp, Machamp-Gmax
+- **Fighting Fiend** (`fightingfiend`): Vital Spirit + Multiscale; moves cannot miss. **Users:** Machamp, Machamp-Gmax
 - **Fire Mane** (`firemane`): This Pokemon's Fire-type attacks have 1.5x power. **Users:** Pyroar, Rapidash
 - **Fluffy Craft** (`fluffycraft`): Fluffy + Technician. **Users:** Cinccino
 - **Forest Surge** (`forestsurge`): On switch-in, this Pokemon sets Forest Terrain for 5 turns. **Users:** Rillaboom-Gmax
@@ -141,7 +141,7 @@ Custom-numbered entries: 233
 - **Primal Tactics** (`primaltactics`): This Pokemon's Sp. Atk is 1.5x, but it can only select the first move it executes. **Users:** Oranguru, Simipour, Simisage, Simisear
 - **Prism Scale** (`prismscale`): Marvel Scale + Dragonize + Self Sufficient. **Users:** Milotic, Milotic-Alt
 - **Proficient** (`proficient`): STAB moves have 1.2x power. **Users:** None directly assigned.
-- **Punch Fiend** (`punchfiend`): Iron Fist + Inner Focus + Mold Breaker. **Users:** Hitmonchan
+- **Punch Fiend** (`punchfiend`): Iron Fist + Inner Focus + Unseen Fist. **Users:** Hitmonchan
 - **Queen's Guard** (`queensguard`): Contrary + Shed Skin + Intimidate. **Users:** Serperior-Mega
 - **Raging Current** (`ragingcurrent`): Swift Swim + Regenerator + Stamina. **Users:** Swampert-Mega
 - **Raging Fists** (`ragingfists`): Hydra Bond + Unseen Fist + Skill Link. **Users:** None directly assigned.
@@ -189,7 +189,7 @@ Custom-numbered entries: 233
 - **Soul Fire** (`soulfire`): Draws in and absorbs Fire/Ghost; burns bypass immunities; attacks ignore most resists. **Users:** Ceruledge, Chandelure, Gourgeist, Gourgeist-Large, Gourgeist-Small, Gourgeist-Super, Marowak-Alola, Ninetales, Skeledirge, Typhlosion-Hisui
 - **Soul Strike** (`soulstrike`): Moves never miss; absorbs Ghost moves; faint creates Haunted Field. **Users:** Gengar-Gmax
 - **Soul Tag** (`soultag`): Soul Fire + Shadow Tag. **Users:** Chandelure-Mega
-- **Spin Fiend** (`spinfiend`): Battle Armor + Technician + Vital Spirit. **Users:** Hitmontop
+- **Spin Fiend** (`spinfiend`): Technician + Vital Spirit. **Users:** Hitmontop
 - **Spiral Evolution** (`spiralevolution`): Adaptability + Levitate + Dual Wield; protection pierce; acts first in Trick Room. **Users:** Beedrill-Mega
 - **Star Boxer** (`starboxer`): Punching moves hit 4 times at full power and 1.5x; secondaries only on hits 1-2. **Users:** Ledian
 - **Storm Circuit** (`stormcircuit`): Electric Surge + Swift Swim + Elevate. **Users:** Eelektross-Mega

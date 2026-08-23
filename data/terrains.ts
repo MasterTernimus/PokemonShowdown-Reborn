@@ -621,7 +621,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onModifyDef(def, pokemon) {
 				let modifier = 1;
-				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'frozensummit']));
+				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom']));
 				if (iceBeneficiary || pokemon.hasType(['Ghost', 'Fire', 'Steel', 'Dragon']) || pokemon.hasAbility(['duskilate', 'ironclad'])) {
 					modifier *= 1.5;
 				}
@@ -630,14 +630,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onModifySpD(spd, pokemon) {
 				let modifier = 1;
-				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'frozensummit']));
+				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom']));
 				if (iceBeneficiary || pokemon.hasType(['Ghost', 'Fire', 'Steel', 'Dragon']) || pokemon.hasAbility(['duskilate', 'ironclad'])) {
 					modifier *= 1.5;
 				}
 				if (modifier !== 1) return this.chainModify(modifier);
 			},
 			onModifySpe(spe, pokemon) {
-				const immune = ['slushrush', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom', 'frozensummit', 'illusion', 'duskilate', 'ironclad', 'webassassin'];
+				const immune = ['slushrush', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom', 'illusion', 'duskilate', 'ironclad', 'webassassin'];
 				if (!(pokemon.hasAbility(immune) || !pokemon.isGrounded() || pokemon.hasType(['Ice', 'Dragon']))) {
 					return this.chainModify(0.75);
 				}
@@ -758,7 +758,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onImmunity(type, pokemon) {
-				const immuneHail = ['fullmetalbody', 'illusion', 'prismarmor', 'shadowshield', 'darkaura', 'duskilate', 'ironclad', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom', 'frozensummit'];
+				const immuneHail = ['fullmetalbody', 'illusion', 'prismarmor', 'shadowshield', 'darkaura', 'duskilate', 'ironclad', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom'];
 				if (type === 'hail' && (pokemon.hasType('Dragon') || pokemon.hasAbility(immuneHail))) {
 					return false;
 				}
@@ -783,7 +783,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
-				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'frozensummit']));
+				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom']));
 				if (this.field.isWeather('hail') && iceBeneficiary) {
 					this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
 				}
@@ -3029,7 +3029,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
-				const immune = ['magicguard', 'swiftswim', 'waterabsorb'];
+				const immune = ['magicguard', 'protectiveward', 'swiftswim', 'stormdrain', 'waterabsorb'];
 				const weak = ['flamebody', 'magmaarmor'];
 				if (!immune.includes(pokemon.ability)) {
 					const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', pokemon.types), -6, 6);

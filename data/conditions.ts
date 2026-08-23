@@ -952,7 +952,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'frozensummit', 'execution', 'argentdevotion', 'pollenbloom', 'wildfirecore', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
+			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'execution', 'argentdevotion', 'pollenbloom', 'wildfirecore', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
 			if (iceBeneficiary && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);

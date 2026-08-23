@@ -192,6 +192,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10346,
 	},
 	unstableevo: {
+		onStart(pokemon) {
+			if (!['eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id)) return;
+			for (const stat of ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const) {
+				pokemon.set.evs[stat] = 252;
+			}
+			// Recalculate the active form with the forced battle EV spread. IVs are
+			// intentionally left untouched and therefore carry across form changes.
+			pokemon.setSpecies(pokemon.species, this.effect);
+			pokemon.updateMaxHp();
+		},
 		onModifyPriority(priority, pokemon, target, move) {
 			if (!['eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id)) return;
 			const forme = UNSTABLE_EVO_FORMES[move?.id];
@@ -218,8 +228,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.species.id === 'umbreon' || target.species.id === 'espeon') {
-				return this.dex.abilities.get('eclipse').onSourceModifyDamage?.call(this, damage, source, target, move);
+				damage = this.dex.abilities.get('eclipse').onSourceModifyDamage?.call(this, damage, source, target, move) ?? damage;
 			}
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onModifyMove(move, pokemon, target) {
 			for (const id of unstableEvoComponents(pokemon)) {
@@ -242,11 +253,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
+			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 			for (const id of unstableEvoComponents(pokemon)) {
 				this.dex.abilities.get(id).onResidual?.call(this, pokemon);
 			}
 		},
 		onImmunity(type, pokemon) {
+			const selfSufficient = this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+			if (selfSufficient !== undefined) return selfSufficient;
 			if (['espeon', 'glaceon'].includes(pokemon.species.id)) {
 				return this.dex.abilities.get('mindfreeze').onImmunity?.call(this, type, pokemon);
 			}
@@ -382,15 +396,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	fightingfiend: {
 		onModifyMove(move) {
-			this.dex.abilities.get('unseenfist').onModifyMove?.call(this, move);
-			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+			move.accuracy = true;
 		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, source, target, move) {
-			let result = this.dex.abilities.get('unseenfist').onBasePower?.call(this, basePower, source, target, move);
-			return this.dex.abilities.get('striker').onBasePower?.call(this, result ?? basePower, source, target, move);
+		onUpdate(pokemon) {
+			return this.dex.abilities.get('vitalspirit').onUpdate?.call(this, pokemon);
 		},
-		flags: {},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('vitalspirit').onSetStatus?.call(this, status, target, source, effect);
+		},
+		onTryAddVolatile(status, target) {
+			return this.dex.abilities.get('vitalspirit').onTryAddVolatile?.call(this, status, target);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			return this.dex.abilities.get('vitalspirit').onModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, attacker, defender, move) {
+			return this.dex.abilities.get('vitalspirit').onModifySpA?.call(this, spa, attacker, defender, move);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			const vitalSpiritDamage = this.dex.abilities.get('vitalspirit').onSourceModifyDamage?.call(this, damage, source, target, move);
+			return this.dex.abilities.get('multiscale').onSourceModifyDamage?.call(
+				this, vitalSpiritDamage ?? damage, source, target, move
+			);
+		},
+		flags: { breakable: 1 },
 		name: "Fighting Fiend",
 		rating: 4,
 		num: 10351,
@@ -446,7 +477,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	punchfiend: {
 		onModifyMove(move) {
-			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+			this.dex.abilities.get('unseenfist').onModifyMove?.call(this, move);
 		},
 		onTryAddVolatile(status, pokemon) {
 			return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon);
@@ -458,16 +489,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			return this.dex.abilities.get('ironfist').onBasePower?.call(this, basePower, source, target, move);
 		},
-		flags: {},
+		flags: { breakable: 1 },
 		name: "Punch Fiend",
 		rating: 4,
 		num: 10354,
 	},
 	spinfiend: {
-		onCriticalHit: false,
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('battlearmor').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
 		onBasePower(basePower, source, target, move) {
 			return this.dex.abilities.get('technician').onBasePower?.call(this, basePower, source, target, move);
 		},
@@ -586,6 +613,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Hisuian Oath",
 		rating: 5,
 		num: 10337,
+	},
+	aevianoath: {
+		onStart(pokemon) {
+			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
+			this.dex.abilities.get('battlearmor').onStart?.call(this, pokemon);
+		},
+		onModifyMove(move, source) {
+			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
+		},
+		onBasePowerPriority: 20,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('dualwield').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('battlearmor').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('battlearmor').onAfterEachBoost?.call(this, boost, target, source, effect);
+		},
+		onCriticalHit: false,
+		flags: { breakable: 1 },
+		name: "Aevian Oath",
+		rating: 5,
+		num: 10363,
 	},
 	hisuianvanguard: {
 		onStart(pokemon) {
@@ -3582,9 +3633,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	auroraresonance: {
 		onBasePowerPriority: 8,
-		onBasePower(basePower, source, target, move) {
-			return this.dex.abilities.get('liquidvoice').onBasePower?.call(this, basePower, source, target, move);
-		},
+			onBasePower(basePower, source, target, move) {
+				return this.dex.abilities.get('liquidvoice').onBasePower?.call(this, basePower, source, target, move);
+			},
+			onType(types, pokemon) {
+				if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
+					if (!types.includes('Ice')) return [...types, 'Ice'];
+				}
+			},
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			return this.dex.abilities.get('liquidvoice').onModifyType?.call(this, move, pokemon);
@@ -3869,14 +3925,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('sandstream').onStart?.call(this, source);
 			if (this.field.isWeather('sandstorm')) this.field.weatherState.duration = 8;
 			this.dex.abilities.get('dauntlessshield').onStart?.call(this, source);
-			this.dex.abilities.get('battlearmor').onStart?.call(this, source);
+			this.dex.abilities.get('solidrock').onStart?.call(this, source);
 		},
-		onCriticalHit: false,
 		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('battlearmor').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
-		onAfterEachBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('battlearmor').onAfterEachBoost?.call(this, boost, target, source, effect);
+			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onResidual(pokemon) {
 			for (const target of pokemon.foes()) {
@@ -5666,21 +5718,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.type = 'Electric';
 				move.typeChangerBoosted = this.effect;
 			}
-			this.dex.abilities.get('resonanceforce').onModifyMove?.call(this, move);
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) modifier *= 1.2;
-			if (move.flags['sound']) modifier *= 1.3 * 1.5;
+			if (move.flags['sound']) modifier *= 1.3;
 			if (modifier !== 1) return this.chainModify(modifier);
-		},
-		onAllyBasePowerPriority: 8,
-		onAllyBasePower(basePower, attacker, defender, move) {
-			return this.dex.abilities.get('resonanceforce').onAllyBasePower?.call(this, basePower, attacker, defender, move);
-		},
-		onAnyTryHit(target, source, move) {
-			return this.dex.abilities.get('resonanceforce').onAnyTryHit?.call(this, target, source, move);
 		},
 		flags: {},
 		name: "Riot Amp",
@@ -5701,6 +5745,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onImmunity(type, pokemon) {
 			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+		},
+		onType(types, pokemon) {
+			if (pokemon.species.id === 'laprasaevian' &&
+				(this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']))) {
+				if (!types.includes('Ice')) return [...types, 'Ice'];
+			}
 		},
 		onResidual(pokemon) {
 			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
@@ -8231,12 +8281,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
 			return this.dex.abilities.get('marvelscale').onModifyDef?.call(this, def, pokemon);
-		},
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
-		},
-		onResidual(pokemon) {
-			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
@@ -12190,8 +12234,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (move.flags['sound']) return this.chainModify(1.5);
 		},
-		onModifyMove(move) {
-			if (move.flags['sound'] && move.category !== 'Status') move.overrideOffensiveStat = 'atk';
+		onModifyMove(move, pokemon) {
+			if (move.flags['sound'] && move.category !== 'Status') {
+				move.overrideOffensiveStat = pokemon.getStat('atk') >= pokemon.getStat('spa') ? 'atk' : 'spa';
+			}
 		},
 		onAnyTryHit(target, source, move) {
 			const pokemon = this.effectState.target;
@@ -12411,16 +12457,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyAtk(atk, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifyAtk?.call(this, atk, attacker, defender, move); },
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(spa, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifySpA?.call(this, spa, attacker, defender, move); },
-		onModifyMove(move, pokemon) { return this.dex.abilities.get('sheerforce').onModifyMove?.call(this, move, pokemon); },
-		onBasePowerPriority: 21,
-		onBasePower(basePower, attacker, defender, move) { return this.dex.abilities.get('sheerforce').onBasePower?.call(this, basePower, attacker, defender, move); },
-		onResidual(pokemon) {
-			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToScalingChip(target, 'Fire')) continue;
-				const fire = this.clampIntRange(this.dex.getEffectiveness('Fire', target.getTypes()), -6, 6);
-				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** fire), target, pokemon);
-			}
-		},
 		flags: { breakable: 1 },
 		name: "Caldera Core",
 		rating: 4.5,
@@ -12751,6 +12787,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				return this.effectState.target;
 			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'Water' && this.field.isTerrain('underwaterterrain')) return false;
 		},
 		flags: { breakable: 1 },
 		name: "Storm Drain",
@@ -14803,6 +14842,88 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Persistent",
 		rating: 3,
 		num: -3,
+	},
+	layeredcoat: {
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			return this.dex.abilities.get('furcoat').onModifyDef?.call(this, def, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('overcoat').onImmunity?.call(this, type, pokemon);
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('overcoat').onTryHit?.call(this, target, source, move);
+		},
+		flags: {breakable: 1},
+		name: "Layered Coat",
+		rating: 4,
+		num: 10252,
+	},
+	protectiveward: {
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('stormdrain').onTryHit?.call(this, target, source, move);
+		},
+		onAnyRedirectTarget(target, source, source2, move) {
+			return this.dex.abilities.get('stormdrain').onAnyRedirectTarget?.call(this, target, source, source2, move);
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			return this.dex.abilities.get('liquidvoice').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('liquidvoice').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onType(types, pokemon) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
+				if (!types.includes('Ice')) return [...types, 'Ice'];
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Protective Ward",
+		rating: 4,
+		num: 10250,
+	},
+	amethystglow: {
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('icebody').onTryHit?.call(this, target, source, move);
+		},
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('icebody').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onWeather(target, source, effect) {
+			return this.dex.abilities.get('icebody').onWeather?.call(this, target, source, effect);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('icebody').onResidual?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('icebody').onImmunity?.call(this, type, pokemon);
+		},
+		onModifyMove(move) {
+			if (move.accuracy !== true) move.accuracy = true;
+			return this.dex.abilities.get('refrigerate').onModifyType?.call(this, move);
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			return this.dex.abilities.get('refrigerate').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('refrigerate').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onType(types, pokemon) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
+				if (!types.includes('Ice')) return [...types, 'Ice'];
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Amethyst Glow",
+		rating: 4,
+		num: 10251,
 	},
 	islandcurrent: {
 		onModifySpe(spe, pokemon) {
