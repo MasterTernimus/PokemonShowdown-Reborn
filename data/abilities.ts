@@ -11574,9 +11574,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	soulfire: {
 		onStart(pokemon) {
-			if (this.field.isTerrain('coldeclipseterrain')) {
-				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
-			}
 			if (this.field.isTerrain(['hauntedterrain', 'coldeclipseterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
