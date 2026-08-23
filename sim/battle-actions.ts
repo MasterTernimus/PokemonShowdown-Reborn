@@ -519,7 +519,7 @@ export class BattleActions {
 			const selectedTarget = targets.includes(originalTarget) ? originalTarget : target;
 			targets.splice(0, targets.length, selectedTarget);
 		}
-		if (this.battle.gameType === 'freeforall' && move.multihitType === 'dualwield' && targets.length > 1) {
+		if (this.battle.gameType === 'freeforall' && move.multihitType === 'dualwield' && targets.length > 1 && !(move as any).fallenStarSpread) {
 			const selectedTarget = targets.includes(originalTarget) ? originalTarget : target;
 			targets.splice(0, targets.length, selectedTarget);
 		}
@@ -1006,7 +1006,14 @@ export class BattleActions {
 			if (damage.includes(false)) break;
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			(move as any).spilloverDamageModifier = undefined;
-			if (hit > 1 && move.dualWieldFullPower) {
+			if (hit > 1 && move.multihitType === 'dualwield' && !move.dualWieldFullPower && !(move as any).fallenStarSpread) {
+				const livingFoes = pokemon.foes().filter(foe => foe?.hp && !foe.fainted);
+				if (!livingFoes.length) break;
+				targets = [this.battle.sample(livingFoes)];
+				damage = [0];
+				move.smartTarget = false;
+			}
+			if (hit > 1 && move.dualWieldFullPower && !(move as any).fallenStarSpread) {
 				const livingFoes = pokemon.foes().filter(foe => foe?.hp && !foe.fainted);
 				if (!livingFoes.length) break;
 				const otherFoes = livingFoes.filter(foe => foe !== originalMultihitTarget);
@@ -1226,6 +1233,15 @@ export class BattleActions {
 			);
 			if (!targets.length) return null;
 			(move as any).spilloverDamageModifier = move.multihitType === 'parentalbond' ? 0.8 : 0.7;
+			return this.battle.sample(targets);
+		}
+		if (this.battle.gameType === 'multi') {
+			const targets = pokemon.foes().filter(target =>
+				target && target !== originalTarget && target.hp && !target.fainted && !target.isProtected() &&
+				!target.isSemiInvulnerable()
+			);
+			if (!targets.length) return null;
+			(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.8) : 0.7;
 			return this.battle.sample(targets);
 		}
 		const ally = originalTarget.side.active.find(target =>

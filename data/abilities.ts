@@ -1027,24 +1027,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	apexvenom: {
 		onModifyMove(move, source) {
+			const poisonEffectiveness = move.id === 'poisonfang' || this.movehasType(move, 'Poison');
+			if (poisonEffectiveness) (move as any).apexVenomPoisonEffectiveness = true;
 			if (move.id === 'poisonfang') move.type = 'Dragon';
 			if (move.flags['bite']) move.forceSTAB = true;
-			if (this.movehasType(move, 'Poison')) {
+			if (poisonEffectiveness) {
 				this.dex.abilities.get('corrosion').onModifyMove?.call(this, move, source);
 			}
+			if ((move as any).apexVenomEffectivenessApplied) return;
+			(move as any).apexVenomEffectivenessApplied = true;
+			const originalEffectiveness = move.onEffectiveness;
+			move.onEffectiveness = function (typeMod, target, type, activeMove) {
+				const originalMod = originalEffectiveness?.call(this, typeMod, target, type, activeMove);
+				if (originalMod !== undefined) typeMod = originalMod;
+				if (!activeMove || activeMove.category === 'Status') return typeMod;
+				if ((activeMove as any).apexVenomPoisonEffectiveness && ['Poison', 'Steel'].includes(type)) return 1;
+				if (activeMove.flags['bite']) {
+					if (['Poison', 'Steel'].includes(type)) return Math.max(1, typeMod + 1);
+					return typeMod + this.dex.getEffectiveness('Poison', type);
+				}
+				return typeMod;
+			};
 		},
 		onBasePowerPriority: 20,
 		onBasePower(basePower, source, target, move) {
 			if (move.id === 'poisonfang') return this.chainModify(2);
 			if (move.flags['bite']) return this.chainModify(1.5);
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (!move || move.category === 'Status') return;
-			if (this.movehasType(move, 'Poison') && ['Poison', 'Steel'].includes(type)) return 1;
-			if (move.flags['bite']) {
-				const poisonTypeMod = ['Poison', 'Steel'].includes(type) ? 1 : this.dex.getEffectiveness('Poison', type);
-				return typeMod + poisonTypeMod;
-			}
 		},
 		flags: { breakable: 1 },
 		name: "Apex Venom",
@@ -3020,7 +3028,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('skilllink').onModifyMove?.call(this, move, pokemon);
 			move.tracksTarget = true;
 			move.ignoreAbility = true;
-			if (this.gameType === 'freeforall') move.target = 'allAdjacentFoes';
+			if (this.gameType === 'freeforall') {
+				move.target = 'allAdjacentFoes';
+				move.multihit = 2;
+				move.multihitType = 'dualwield';
+				move.dualWieldAccuracy = move.accuracy;
+				move.dualWieldFullPower = true;
+				move.accuracy = true;
+				(move as any).fallenStarSpread = true;
+				(move as any).fullDamageSpread = true;
+			}
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
@@ -7425,6 +7442,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBeforeSwitchIn(pokemon) {
 			pokemon.illusion = null;
+			const lastSlot = pokemon.side.pokemon[pokemon.side.pokemon.length - 1];
+			if (pokemon.previouslySwitchedIn === 0 && lastSlot && lastSlot !== pokemon && !lastSlot.fainted && lastSlot.hp) {
+				pokemon.illusion = lastSlot;
+				return;
+			}
 			const possibleTargets = pokemon.side.pokemon.filter(possibleTarget =>
 				possibleTarget !== pokemon && !possibleTarget.fainted && possibleTarget.hp &&
 				(!pokemon.terastallized || !['Ogerpon', 'Terapagos'].includes(possibleTarget.species.baseSpecies))
@@ -8827,7 +8849,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
 		},
 		flags: {},
-		name: "Shell Trap",
+		name: "Shell Tempo",
 		rating: 4.5,
 		num: 10225,
 	},
@@ -11582,7 +11604,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'sandstorm' || type === 'hail') return false;
 		},
 		onResidual(pokemon) {
-			if (this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain', 'coldeclipseterrain'])) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
+			if (this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain'])) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
 		},
 		onModifyMove(move) {
 			if (this.movehasType(move, ['Fire', 'Ghost'])) {
@@ -12184,8 +12206,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	tremor: {
 		onStart(source) {
-			this.dex.abilities.get('snowwarning').onStart?.call(this, source);
-			this.dex.abilities.get('icebody').onStart?.call(this, source);
 			this.field.setWeather('sandstorm');
 		},
 		onBasePowerPriority: 8,

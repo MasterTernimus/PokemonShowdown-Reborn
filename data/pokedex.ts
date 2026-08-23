@@ -18584,7 +18584,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 903,
 		name: "Sneasler-Aevian",
 		types: ["Fighting", "Fairy"],
-		baseStats: { hp: 80, atk: 125, def: 80, spa: 80, spd: 60, spe: 135 },
+		baseStats: { hp: 90, atk: 120, def: 80, spa: 80, spd: 60, spe: 130 },
 		abilities: { 0: "Wind Rider", 1: "Inner Focus", H: "Aevian Oath" },
 		heightm: 1.3,
 		weightkg: 43,
