@@ -821,6 +821,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move, source) {
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
+			move.critModifier = 3;
 			if (move.category !== 'Status') {
 				move.breaksProtect = true;
 				(move as typeof move & { spiralEvolutionBreaksProtect?: boolean }).spiralEvolutionBreaksProtect = true;
@@ -11441,7 +11442,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).crit) {
 				this.debug('Sniper boost');
-				return this.chainModify(3);
+				return this.chainModify(2.25);
 			}
 		},
 		flags: {},

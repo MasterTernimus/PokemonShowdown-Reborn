@@ -35,7 +35,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	spiralevolution: {
 		name: "Spiral Evolution",
-		desc: "This Pokemon has Adaptability, Levitate, and Dual Wield. Its damaging moves pierce protection for reduced damage, its non-priority moves act first in Trick Room, it takes 0.8x damage, and it has a raised critical-hit ratio.",
+		desc: "This Pokemon has Adaptability, Levitate, and Dual Wield. Its damaging moves pierce protection for reduced damage, its non-priority moves act first in Trick Room, and it takes 0.8x damage.",
 		shortDesc: "Adaptability + Levitate + Dual Wield; protection pierce; Trick Room priority; takes 0.8x.",
 	},
 	alchemistsurge: {
@@ -2474,8 +2474,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sniper: {
 		name: "Sniper",
-		desc: "This Pokemon gains 1 Accuracy on entry. Its critical hits deal 3x damage instead of 1.5x.",
-		shortDesc: "+1 Accuracy on entry; critical hits deal 3x damage.",
+		desc: "This Pokemon gains 1 Accuracy on entry. Its critical hits deal 2.25x damage instead of 1.5x.",
+		shortDesc: "+1 Accuracy on entry; critical hits deal 2.25x damage.",
 	},
 	webassassin: {
 		name: "Web Assassin",
