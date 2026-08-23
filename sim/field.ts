@@ -136,7 +136,7 @@ export class Field {
 	}
 
 	getFormatHailTerrain() {
-		if (this.terrain === 'coldeclipseterrain') return 'coldeclipseterrain';
+		if (this.terrain === 'coldeclipseterrain' && this.terrainState.startingField) return 'coldeclipseterrain';
 		if (this.battle.format.terrain === 'adriennterrain' && this.terrain === 'fairytaleterrain' &&
 			!(this.battle as any).adriennFairyTaleHailStarted) {
 			return 'fairytaleterrain';
@@ -191,6 +191,7 @@ export class Field {
 		this.terrain = status.id;
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
+			startingField: true,
 			terrain_type: "Base",
 			terrainChanges: new Map<string, number>(),
 			turn: this.battle.turn,
