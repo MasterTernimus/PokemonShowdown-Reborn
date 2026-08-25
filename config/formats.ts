@@ -1021,9 +1021,10 @@ const FORMAT_LIST: FormatList = [
 	...makeMultiFieldFormats(),
 ];
 
-for (const format of FORMAT_LIST) {
-	if (!format.ruleset || format.ruleset.some(rule => rule.startsWith('Item Clause = '))) continue;
-	format.ruleset.push('Item Clause = 1');
+for (const format of FORMAT_LIST as any[]) {
+	if (!format.ruleset) continue;
+	if (!format.ruleset.includes('+Custom')) format.ruleset.push('+Custom');
+	if (!format.ruleset.some((rule: string) => rule.startsWith('Item Clause = '))) format.ruleset.push('Item Clause = 1');
 }
 
 export const Formats: FormatList = FORMAT_LIST;

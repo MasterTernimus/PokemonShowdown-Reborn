@@ -2003,7 +2003,7 @@ export class TeamValidator {
 			const species = dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
 				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
-				.map(key => species.abilities[key as "0" | "1" | "H" | "S"]);
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S" | "E" | "F"]);
 
 			if (ability.id !== this.toID(species.abilities['S'])) {
 				for (const abilityName of unSeenAbilities) {

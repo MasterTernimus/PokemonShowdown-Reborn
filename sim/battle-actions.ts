@@ -1732,8 +1732,9 @@ export class BattleActions {
 	}
 
 	canZMove(pokemon: Pokemon) {
+		const originalSpecies = toID(pokemon.set.species);
 		if (
-			['eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) &&
+			['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) &&
 			pokemon.ability === 'unstableevo'
 		) return;
 		const maxGimmicks = 2;
