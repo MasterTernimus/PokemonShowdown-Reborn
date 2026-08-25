@@ -10731,7 +10731,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source) {
 			if (target !== source) target.trySetStatus('brn', source, this.effect);
 		},
-		target: "all",
+		target: "allAdjacent",
 		type: "Fire",
 	},
 	inferno: {

@@ -270,6 +270,35 @@ describe('Custom battle data updates', function () {
 		assert.equal(eevee.hp, eevee.maxhp, 'Water Absorb should block Surf after the Vaporeon change');
 	});
 
+	it('should shift Starter Eevee to Abysseon and keep Searing Void off the user', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Eevee-Starter', ability: 'sinisterblaze', moves: ['Searing Void']},
+		], [
+			{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const abysseon = battle.p1.active[0];
+		assert.species(abysseon, 'Abysseon');
+		assert.equal(abysseon.status, 'brn');
+
+		battle.destroy();
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Eevee-Starter', ability: 'protean', moves: ['Searing Void']},
+		], [
+			{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const eevee = battle.p1.active[0];
+		const maxHP = eevee.hp;
+		battle.makeChoices('move searingvoid', 'move splash');
+		assert.equal(eevee.hp, maxHP, 'Searing Void should not damage its user');
+		assert.equal(eevee.status, '', 'Searing Void should not burn its user');
+		assert.equal(battle.p2.active[0].status, 'brn');
+		assert.equal(battle.dex.moves.get('searingvoid').target, 'allAdjacent');
+		battle.destroy();
+		battle = null;
+	});
+
 	it('should reject Eevium Z specifically when Eevee-Starter uses Unstable Evo', function () {
 		const baseSet = {
 			species: 'Eevee-Starter-Alt', ability: 'Unstable Evo', moves: ['Buzzy Buzz'],

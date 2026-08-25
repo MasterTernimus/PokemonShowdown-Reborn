@@ -2255,8 +2255,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	roughscale: {
 		name: "Rough Scale",
-		desc: "This Pokemon has Rough Skin, Tough Claws, and Brute Force's effects.",
-		shortDesc: "Rough Skin + Tough Claws + Brute Force.",
+		desc: "This Pokemon has Rough Skin and Tough Claws' effects.",
+		shortDesc: "Rough Skin + Tough Claws.",
 	},
 	caverndrake: {
 		name: "Cavern Drake",
