@@ -10810,11 +10810,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
-			const result = this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, source, target, move);
-			return this.dex.abilities.get('bruteforce').onBasePower?.call(this, result ?? basePower, source, target, move);
-		},
-		onDamage(damage, target, source, effect) {
-			return this.dex.abilities.get('bruteforce').onDamage?.call(this, damage, target, source, effect);
+			return this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, source, target, move);
 		},
 		flags: { breakable: 1 },
 		name: "Rough Scale",
