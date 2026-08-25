@@ -621,7 +621,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onModifyDef(def, pokemon) {
 				let modifier = 1;
-				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom']));
+				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'sinisterblaze']));
 				if (iceBeneficiary || pokemon.hasType(['Ghost', 'Fire', 'Steel', 'Dragon']) || pokemon.hasAbility(['duskilate', 'ironclad'])) {
 					modifier *= 1.5;
 				}
@@ -630,7 +630,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onModifySpD(spd, pokemon) {
 				let modifier = 1;
-				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom']));
+				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'sinisterblaze']));
 				if (iceBeneficiary || pokemon.hasType(['Ghost', 'Fire', 'Steel', 'Dragon']) || pokemon.hasAbility(['duskilate', 'ironclad'])) {
 					modifier *= 1.5;
 				}
@@ -783,7 +783,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
-				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom']));
+				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'sinisterblaze']));
 				if (this.field.isWeather('hail') && iceBeneficiary) {
 					this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
 				}

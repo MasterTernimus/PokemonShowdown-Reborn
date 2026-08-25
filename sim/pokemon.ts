@@ -156,6 +156,9 @@ export class Pokemon {
 	knownType: boolean;
 	/** Keeps track of what type the client sees for this Pokemon. */
 	apparentType: string;
+	/** Battle-local visual state used by Z Protean; it never changes the saved species. */
+	zProteanForme?: number;
+	zProteanVisualSpecies?: string;
 
 	/**
 	 * If the switch is called by an effect with a special switch
@@ -504,10 +507,11 @@ export class Pokemon {
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
 		const pikachuGmaxForms = ['pikachu', 'pikachucosplay', 'pikachurockstar', 'pikachubelle', 'pikachupopstar', 'pikachuphd', 'pikachulibre', 'pikachupartner', 'pikachustarter'];
+		const originalSpecies = toID(this.set.species);
 		this.canDynamax = this.baseSpecies.id === 'machampalt' ? 'machampgmaxalt' :
-			['eeveestarter', 'eeveestarteralt'].includes(this.baseSpecies.id) ? 'eeveegmax' :
+			['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) ? 'eeveegmax' :
 			pikachuGmaxForms.includes(this.baseSpecies.id) ? 'pikachugmax' : this.baseSpecies.id + 'gmax';
-		if (['eeveestarter', 'eeveestarteralt'].includes(this.baseSpecies.id) && this.ability === 'unstableevo') {
+		if (['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) && this.ability === 'unstableevo') {
 			this.canMegaEvo = false;
 			this.canMegaEvoX = false;
 			this.canMegaEvoY = false;
@@ -1602,6 +1606,8 @@ export class Pokemon {
 		this.moveSlots = this.baseMoveSlots.slice();
 
 		this.transformed = false;
+		this.zProteanForme = undefined;
+		this.zProteanVisualSpecies = undefined;
 		this.ability = this.baseAbility;
 		this.hpType = this.baseHpType;
 		this.hpPower = this.baseHpPower;
@@ -2043,7 +2049,7 @@ export class Pokemon {
 		const abilityAliases: { [abilityid: string]: string[] } = {
 			apexpredator: ['relicarmor', 'precision', 'windrider'],
 			argentdevotion: ['ironclad', 'swornduty'],
-			ascendance: ['overcoat'],
+			fluffyevo: ['overcoat'],
 			bonewarrior: ['battlearmor', 'selfsufficient'],
 			seafiend: ['toxicdebris', 'waterbubble', 'waterveil'],
 			hisuianoath: ['swornduty', 'toughclaws', 'corrosion'],

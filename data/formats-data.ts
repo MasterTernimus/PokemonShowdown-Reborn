@@ -1057,12 +1057,12 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "LC",
 	},
 	eeveestarter: {
-		isNonstandard: "LGPE",
-		tier: "Illegal",
+		isNonstandard: "Custom",
+		tier: "OU",
 	},
 	eeveestarteralt: {
 		isNonstandard: "Custom",
-		tier: "Illegal",
+		tier: "OU",
 	},
 	eeveegmax: {
 		isNonstandard: "Past",

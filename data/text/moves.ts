@@ -201,8 +201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromatherapy: {
 		name: "Aromatherapy",
-		desc: "The user heals 1/2 max HP, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Sap Sipper are not cured unless they are the user.",
-		shortDesc: "Heals 50%, starts Safeguard, and cures party status.",
+		desc: "The user heals 1/4 max HP, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Sap Sipper are not cured unless they are the user.",
+		shortDesc: "Heals 25%, starts Safeguard, and cures party status.",
 		gen5: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
 		},
@@ -2931,8 +2931,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healbell: {
 		name: "Heal Bell",
-		desc: "The user heals 1/2 max HP, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Soundproof are not cured unless they are the user.",
-		shortDesc: "Heals 50%, starts Safeguard, and cures party status.",
+		desc: "The user heals 1/4 max HP, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Soundproof are not cured unless they are the user.",
+		shortDesc: "Heals 25%, starts Safeguard, and cures party status.",
 		gen7: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured.",
 		},
@@ -5710,6 +5710,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "A 100-power Flying-type special move with a 30% chance to paralyze and a 10% chance to flinch the target.",
 		shortDesc: "100 BP; 30% paralysis; 10% flinch.",
 	},
+	searingvoid: {
+		name: "Searing Void",
+		desc: "A 40-power Fire-type special move that hits all active Pokemon except the user and burns each target.",
+		shortDesc: "40 BP; burns all active Pokemon except the user.",
+	},
 	shadowforce: {
 		name: "Shadow Force",
 		desc: "Uses the user's higher offensive stat. The user vanishes turn 1 and attacks turn 2. This move breaks protection. When used by Giratina, a successful hit also makes it take 0.7x damage from all sources next turn. Power Herb makes it attack immediately.",
@@ -7485,6 +7490,56 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "No competitive use.",
 			shortDesc: "No competitive use.",
 		},
+	},
+	punchypummel: {
+		name: "Punchy Pummel",
+		desc: "Lowers the target's Defense and Speed by 1 stage after a successful hit.",
+		shortDesc: "Lowers Defense and Speed by 1 after a successful hit.",
+	},
+	twirlytwister: {
+		name: "Twirly Twister",
+		desc: "After a successful hit, removes entry hazards from both sides and all active Substitutes.",
+		shortDesc: "After hitting, clears hazards and active Substitutes.",
+	},
+	rockyrampage: {
+		name: "Rocky Rampage",
+		desc: "After a successful hit, sets Stealth Rock on the target's side if it is not already active.",
+		shortDesc: "After hitting, sets Stealth Rock on the target's side.",
+	},
+	dustydrift: {
+		name: "Dusty Drift",
+		desc: "After a successful hit, starts Sandstorm if it is not already active. Sandstorm lasts 8 turns with Smooth Rock or on certain desert fields.",
+		shortDesc: "After hitting, starts Sandstorm; may last 8 turns.",
+	},
+	steelystrike: {
+		name: "Steely Strike",
+		desc: "Ignores and removes Reflect, Light Screen, Aurora Veil, and Arenite Wall from the target's side. 1.5x power in Fairy Tale Field.",
+		shortDesc: "Removes screens and Arenite Wall; 1.5x in Fairy Tale.",
+	},
+	stabbyswarm: {
+		name: "Stabby Swarm",
+		desc: "Traps opposing Pokemon for 4-5 turns and damages them each turn. In Forest Field, power is 1.5x and Defense falls by 1. Grip Claw extends the trap to 7 turns.",
+		shortDesc: "Traps foes; 1.5x and -1 Def in Forest; Grip Claw extends it.",
+	},
+	ickyinjection: {
+		name: "Icky Injection",
+		desc: "Poisons the target. Badly poisons on Corrosive, Corrosive Mist, Murkwater Surface, and Wasteland fields.",
+		shortDesc: "Poisons; badly poisons in toxic fields.",
+	},
+	spookyspell: {
+		name: "Spooky Spell",
+		desc: "Applies Curse to the damaged target if it is not already cursed.",
+		shortDesc: "Damaging a target applies Curse.",
+	},
+	scalyscorn: {
+		name: "Scaly Scorn",
+		desc: "Raises the user's Special Attack by 1 stage after a successful hit, or by 2 in Dragon's Den or Fairy Tale Field.",
+		shortDesc: "After hitting, raises Sp. Atk by 1; +2 in Dragon's Den/Fairy Tale.",
+	},
+	glitchygraphics: {
+		name: "Glitchy Graphics",
+		desc: "Creates Glitch Field for 5 turns. If Glitch Field is active, randomizes each opposing active Pokemon's type.",
+		shortDesc: "Creates Glitch Field; while active, randomizes opposing types.",
 	},
 	wickedblow: {
 		name: "Wicked Blow",

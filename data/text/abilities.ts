@@ -7,8 +7,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	selfrepair: { name: "Self Repair", desc: "This Pokemon has Self Sufficient and Natural Cure's effects.", shortDesc: "Self Sufficient + Natural Cure." },
 	unstableevo: {
 		name: "Unstable Evo",
-		desc: "Eevee-Starter enters battle with 252 EVs in every stat; its IVs carry through form changes. Before using a Let's Go move, it changes into the matching evolution and uses that form's stats, typing, and Speed. It keeps Unstable Evo, Filter, and Self Sufficient, and gains the evolution's listed Ability effects. Switching out restores Eevee-Starter. It cannot use battle gimmicks or hold Eevium Z.",
-		shortDesc: "252 EVs in every stat; Filter + Self Sufficient; Let's Go moves change form; no gimmicks.",
+		desc: "Eevee-Starter's IVs carry through form changes. Before using a Let's Go move, it changes into the matching evolution and uses that form's stats, typing, and Speed. It keeps Unstable Evo, Filter, and Self Sufficient, and gains the evolution's listed Ability effects. Switching out restores Eevee-Starter. It cannot use battle gimmicks or hold Eevium Z.",
+		shortDesc: "Filter + Self Sufficient; Let's Go moves change form; no gimmicks.",
 	},
 	hisuianpath: { name: "Hisuian Path", desc: "This Pokemon has Sap Sipper, Inner Focus, and Fluffy's effects.", shortDesc: "Sap Sipper + Inner Focus + Fluffy." },
 	scarecrow: { name: "Scarecrow", desc: "This Pokemon has Wind Rider, Steelworker, and Stakeout's effects.", shortDesc: "Wind Rider + Steelworker + Stakeout." },
@@ -28,6 +28,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	noblerider: { name: "Noble Rider", desc: "This Pokemon has Swift Swim and Mold Breaker's effects.", shortDesc: "Swift Swim + Mold Breaker." },
 	celestialheart: { name: "Celestial Heart", desc: "This Pokemon has Multiscale and Soul-Heart's effects.", shortDesc: "Multiscale + Soul Heart." },
 	crueltag: { name: "Cruel Tag", desc: "This Pokemon has Shadow Tag and Infiltrator's effects. When it faints, Haunted Field starts for 5 turns.", shortDesc: "Shadow Tag + Infiltrator; faint summons Haunted Field." },
+	cruelshell: { name: "Cruel Shell", desc: "This Pokemon has Hyper Cutter, Shell Armor, and Anger Shell's effects.", shortDesc: "Hyper Cutter + Shell Armor + Anger Shell." },
 	adaptability: {
 		name: "Adaptability",
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5.",
@@ -556,15 +557,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.7x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
 		shortDesc: "Eternal Flower + Fairy Aura + Magic Guard; weakens opposing gimmicks.",
 	},
-	ascendance: {
-		name: "Ascendance",
+	fluffyevo: {
+		name: "Fluffy Evo",
 		desc: "Moves that do not match this Pokemon's type gain STAB. Its damaging moves ignore type immunities while respecting resistances, and it has Overcoat's effects.",
 		shortDesc: "Off-type moves gain STAB; hits type immunities; Overcoat.",
 	},
 	mindfreeze: {
 		name: "Mind Freeze",
-		desc: "This Pokemon is immune to Ice-type attacks and restores 1/4 of its maximum HP when hit by one. It has Ice Body's healing and hail immunity. Its damaging Psychic-type moves have a 40% chance to cause frostbite, and Freezing Glare's frostbite chance is doubled. Its Physical Ice-type moves become Special.",
-		shortDesc: "Ice immunity heals 1/4; Ice Body; damaging Psychic may frostbite; physical Ice becomes special.",
+		desc: "This Pokemon cannot have this Ability suppressed. It is immune to Ice-type attacks and restores 1/4 of its maximum HP when hit by one. It has Ice Body's healing and hail immunity. Its damaging Psychic-type moves have a 40% chance to cause frostbite, and Freezing Glare's frostbite chance is doubled. Its Physical Ice-type moves become Special.",
+		shortDesc: "Cannot be suppressed; Ice immunity heals 1/4; Ice Body; Psychic may frostbite.",
 	},
 	riotamp: {
 		name: "Riot Amp",
@@ -603,8 +604,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eclipsevision: {
 		name: "Eclipse Vision",
-		desc: "This Pokemon's Special Attack is multiplied by 1.5. Before it uses any Psychic-type or Dark-type move, it becomes that type and remains that type. If this Pokemon is Psychic type, it restores 1/8 of its max HP at the end of each turn. If this Pokemon is Dark type, its damaging moves restore HP equal to 1/4 of the damage dealt.",
-		shortDesc: "SpA 1.5x; any Psychic/Dark move changes type; Psychic heals 1/8; Dark drains.",
+		desc: "This Pokemon's Special Attack is multiplied by 1.5. Its first Psychic- or Dark-type move sets its opening battle type, and each later Psychic- or Dark-type move changes it to that type. If this Pokemon is Psychic type, it restores 1/8 of its max HP at the end of each turn. If this Pokemon is Dark type, its damaging moves restore HP equal to 1/4 of the damage dealt.",
+		shortDesc: "SpA 1.5x; first Psychic/Dark move sets type, later moves switch it; Psychic heals; Dark drains.",
 	},
 	venomrush: {
 		name: "Venom Rush",
@@ -633,8 +634,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eclipse: {
 		name: "Eclipse",
-		desc: "During weather, this Pokemon's attacks deal 1.5x damage. In clear weather, attacks deal 0.5x damage to this Pokemon. Its Psychic-type moves become Dark type if Dark would do more damage, and its Dark-type moves become Psychic type if Psychic would do more damage. It restores 1/4 max HP instead of taking damage from Psychic- or Dark-type moves.",
-		shortDesc: "Weather attacks 1.5x; clear damage halved; Psychic/Dark choose type; absorbs both.",
+		desc: "This Ability cannot be suppressed. During weather, this Pokemon's attacks deal 1.5x damage. In clear weather, attacks deal 0.5x damage to this Pokemon. Its Psychic-type moves become Dark type if Dark would do more damage, and its Dark-type moves become Psychic type if Psychic would do more damage. It restores 1/4 max HP instead of taking damage from Psychic- or Dark-type moves.",
+		shortDesc: "Cannot be suppressed; weather attacks 1.5x; clear damage halved; Psychic/Dark choose type.",
 	},
 	ragingstorm: {
 		name: "Raging Storm",
@@ -1888,8 +1889,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	adaptivecell: {
 		name: "Adaptive Cell",
-		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Before using a physical move, it becomes Fighting type; before using a special move, it becomes Psychic type. If its Special Attack is higher than its Attack, its physical moves may use Special Attack while still targeting Defense.",
-		shortDesc: "Overcoat; SpA 1.3x; physical -> Fighting; special -> Psychic; physical may use SpA.",
+		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Its first damaging move sets its opening type: Fighting for physical moves or Psychic for special moves. Each later damaging move changes its type to match its category. Physical moves use its boosted Special Attack as Attack; special moves use its boosted Special Attack normally.",
+		shortDesc: "Overcoat; SpA 1.3x; physical -> Fighting using SpA; special -> Psychic using SpA.",
 	},
 	dreamsickness: {
 		name: "Dream Sickness",
@@ -2092,6 +2093,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
 		},
 	},
+	zprotean: {
+		name: "Z Protean",
+		desc: "Before each attack other than Struggle, this Pokemon changes to the move's type and gains STAB. If it is Eevee-Starter, its battle sprite shifts to the matching Eeveelution until it leaves battle.",
+		shortDesc: "Before each attack, changes type and battle sprite to match its move.",
+	},
 	protosynthesis: {
 		name: "Protosynthesis",
 		desc: "If Sunny Day is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Sunny Day, a held Booster Energy will not activate and the effect ends when Sunny Day is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
@@ -2246,6 +2252,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		damage: "  [POKEMON] was hurt!",
+	},
+	roughscale: {
+		name: "Rough Scale",
+		desc: "This Pokemon has Rough Skin, Tough Claws, and Brute Force's effects.",
+		shortDesc: "Rough Skin + Tough Claws + Brute Force.",
+	},
+	caverndrake: {
+		name: "Cavern Drake",
+		desc: "This Pokemon has Earth Eater, Solid Rock, and Mold Breaker's effects.",
+		shortDesc: "Earth Eater + Solid Rock + Mold Breaker.",
 	},
 	runaway: {
 		name: "Run Away",
@@ -2506,6 +2522,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "If Sunny Day is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn.",
 		},
 	},
+	solarrecharge: {
+		name: "Solar Recharge",
+		desc: "This Pokemon's Fire-type moves have STAB. It is immune to Fire-type moves and restores 1/4 of its maximum HP when hit by one. In Sun, it restores 1/8 of its maximum HP at the end of each turn.",
+		shortDesc: "Fire STAB; Fire immunity heals 1/4; heals 1/8 each turn in Sun.",
+	},
 	solidrock: {
 		name: "Solid Rock",
 		shortDesc: "Takes 0.8x damage from attacks; super-effective hits are also 0.75x.",
@@ -2546,6 +2567,36 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Royal Decree",
 		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, except Pokemon on a side protected by Safeguard, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, and enemy-caused stat drops fail. This Pokemon's own self-inflicted stat drops still work. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge. Neutralization disables these Royal Decree effects while active.",
 		shortDesc: "Haze/screen clear; Safeguard blocks reset; blocks setup/screens; skips charge turns.",
+	},
+	empress: {
+		name: "Empress",
+		desc: "This Pokemon has Queenly Majesty and Royal Decree's effects.",
+		shortDesc: "Queenly Majesty + Royal Decree.",
+	},
+	imperialprincess: {
+		name: "Imperial Princess",
+		desc: "This Pokemon has Striker, Vital Spirit, and Moxie's effects.",
+		shortDesc: "Striker + Vital Spirit + Moxie.",
+	},
+	loyalguard: {
+		name: "Loyal Guard",
+		desc: "This Pokemon has Friend Guard, Guard Dog, and Intimidate's effects.",
+		shortDesc: "Friend Guard + Guard Dog + Intimidate.",
+	},
+	abysslure: {
+		name: "Abyss Lure",
+		desc: "This Pokemon has Lightning Rod, Storm Drain, and Illuminate's effects.",
+		shortDesc: "Lightning Rod + Storm Drain + Illuminate.",
+	},
+	bogbody: {
+		name: "Bog Body",
+		desc: "This Pokemon has Dry Skin, Thick Fat, and Unaware's effects.",
+		shortDesc: "Dry Skin + Thick Fat + Unaware.",
+	},
+	frostsiren: {
+		name: "Frost Siren",
+		desc: "This Pokemon has Refrigerate, Forewarn, and Dry Skin's effects.",
+		shortDesc: "Refrigerate + Forewarn + Dry Skin.",
 	},
 	royalhive: {
 		name: "Royal Hive",
@@ -3420,8 +3471,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinisterblaze: {
 		name: "Sinister Blaze",
-		desc: "This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, or Superheated Field, its Defense and Special Defense rise by 1 stage on entry. Its burn damage becomes healing and deals the same damage to each foe. It does not heal from that generated damage, but heals from real burn damage dealt to foes. Its physical attacks are not weakened by burn. This Ability cannot be Skill Swapped, suppressed, copied by Role Play, given by Entrainment, or Traced.",
-		shortDesc: "Burn becomes healing + equal foe damage; heals from foe burns; no burn penalty.",
+		desc: "This Ability cannot be suppressed, copied, or transferred. This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, Superheated Field, or Cold Eclipse, its Defense and Special Defense rise by 1 stage on entry. Its burn damage becomes healing and deals the same damage to each foe. It does not heal from that generated damage, but heals from real burn damage dealt to foes. Its physical attacks are not weakened by burn. It is immune to hail and sandstorm damage and counts as Ice type in hail, snow, and ice fields.",
+		shortDesc: "Cannot be suppressed; burn heals user/damages foes; no burn penalty; hail/sand immune; Cold Eclipse +Def/SpD.",
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",

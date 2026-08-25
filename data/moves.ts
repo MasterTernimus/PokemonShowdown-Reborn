@@ -657,7 +657,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, distance: 1, metronome: 1 },
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
-			this.heal(source.baseMaxhp / 2, source, source);
+			this.heal(source.baseMaxhp / 4, source, source);
 			target.side.addSideCondition('safeguard', source, move);
 			target.side.allySide?.addSideCondition('safeguard', source, move);
 			let success = false;
@@ -9322,7 +9322,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Heal Bell');
-			this.heal(source.baseMaxhp / 2, source, source);
+			this.heal(source.baseMaxhp / 4, source, source);
 			target.side.addSideCondition('safeguard', source, move);
 			target.side.allySide?.addSideCondition('safeguard', source, move);
 			let success = false;
@@ -10718,6 +10718,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		target: "normal",
 		type: "Ghost",
+	},
+	searingvoid: {
+		num: 10091,
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		name: "Searing Void",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onHit(target, source) {
+			if (target !== source) target.trySetStatus('brn', source, this.effect);
+		},
+		target: "all",
+		type: "Fire",
 	},
 	inferno: {
 		num: 517,
@@ -18848,11 +18863,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterMove(source, target, move) {
-			if (move.totalDamage) this.heal(source.baseMaxhp / 8, source, source);
+			if (move.totalDamage) this.heal(source.baseMaxhp / 10, source, source);
 		},
 		condition: {
 			onSourceModifyDamage(damage, source, target, move) {
-				if (target !== source && move.category !== 'Status') return this.chainModify(0.7);
+				if (target !== source && move.category !== 'Status') return this.chainModify(0.8);
 			},
 		},
 		target: "normal",
@@ -24096,6 +24111,210 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
+	},
+
+	punchypummel: {
+		num: 10020,
+		accuracy: 95,
+		basePower: 90,
+		category: "Physical",
+		name: "Punchy Pummel",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onAfterHit(target, source, move) {
+			if ((target.getMoveHitData(move) as {damage?: number}).damage! > 0) this.boost({def: -1, spe: -1}, target, source, move);
+		},
+		target: "normal",
+		type: "Fighting",
+	},
+	twirlytwister: {
+		num: 10021,
+		accuracy: 95,
+		basePower: 80,
+		category: "Special",
+		name: "Twirly Twister",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
+		onAfterHit(target, source, move) {
+			if (!((target.getMoveHitData(move) as {damage?: number}).damage! > 0)) return;
+			const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			for (const side of [source.side, ...source.side.foeSidesWithConditions()]) {
+				for (const hazard of hazards) {
+					if (side.removeSideCondition(hazard)) this.add('-sideend', side, this.dex.conditions.get(hazard).name, '[from] move: Twirly Twister', `[of] ${source}`);
+				}
+			}
+			for (const pokemon of this.getAllActive()) pokemon.removeVolatile('substitute');
+		},
+		target: "normal",
+		type: "Flying",
+	},
+	rockyrampage: {
+		num: 10022,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		name: "Rocky Rampage",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onAfterHit(target, source, move) {
+			if ((target.getMoveHitData(move) as {damage?: number}).damage! > 0 && !target.side.getSideCondition('stealthrock')) {
+				target.side.addSideCondition('stealthrock', source, move);
+			}
+		},
+		target: "normal",
+		type: "Rock",
+	},
+	dustydrift: {
+		num: 10023,
+		accuracy: 95,
+		basePower: 80,
+		category: "Physical",
+		name: "Dusty Drift",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onAfterHit(target, source, move) {
+			if (!((target.getMoveHitData(move) as {damage?: number}).damage! > 0) || this.field.isWeather('sandstorm')) return;
+			if (this.field.setWeather('sandstorm', source, move)) {
+				if (source.hasItem('smoothrock') || this.field.isTerrain(['desertterrain', 'ashenbeachterrain', 'skyterrain'])) {
+					this.field.weatherState.duration = 8;
+				}
+			}
+		},
+		target: "normal",
+		type: "Ground",
+	},
+	steelystrike: {
+		num: 10024,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Steely Strike",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
+		onBasePower() {
+			if (this.field.isTerrain('fairytaleterrain')) {
+				this.add('-message', 'The blade cuts true!');
+				return this.chainModify(1.5);
+			}
+		},
+		onTryHit(target) {
+			for (const condition of ['reflect', 'lightscreen', 'auroraveil', 'arenitewall']) target.side.removeSideCondition(condition);
+		},
+		target: "normal",
+		type: "Steel",
+	},
+	stabbyswarm: {
+		num: 10025,
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		name: "Stabby Swarm",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		onModifyMove() {
+			if (this.field.isTerrain('forestterrain')) this.add('-message', "They're coming out of the woodwork!");
+		},
+		onBasePower() {
+			if (this.field.isTerrain('forestterrain')) return this.chainModify(1.5);
+		},
+		onAfterHit(target, source, move) {
+			if ((target.getMoveHitData(move) as {damage?: number}).damage! > 0 && this.field.isTerrain('forestterrain')) {
+				this.boost({def: -1}, target, source, move);
+			}
+		},
+		volatileStatus: 'partiallytrapped',
+		target: "allAdjacentFoes",
+		type: "Bug",
+	},
+	ickyinjection: {
+		num: 10026,
+		accuracy: 95,
+		basePower: 100,
+		category: "Physical",
+		name: "Icky Injection",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onAfterHit(target, source, move) {
+			if (!((target.getMoveHitData(move) as {damage?: number}).damage! > 0)) return;
+			const badlyPoison = this.field.isTerrain(['corrosiveterrain', 'corrosivemistterrain', 'murkwatersurfaceterrain', 'wastelandterrain']);
+			target.trySetStatus(badlyPoison ? 'tox' : 'psn', source, move);
+		},
+		target: "normal",
+		type: "Poison",
+	},
+	spookyspell: {
+		num: 10027,
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		name: "Spooky Spell",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		onAfterHit(target, source, move) {
+			if (!((target.getMoveHitData(move) as {damage?: number}).damage! > 0) || target.volatiles['curse']) return;
+			target.addVolatile('curse', source, move);
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+	scalyscorn: {
+		num: 10028,
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		name: "Scaly Scorn",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		onAfterHit(target, source, move) {
+			if (!((target.getMoveHitData(move) as {damage?: number}).damage! > 0)) return;
+			const amount = this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 2 : 1;
+			this.boost({spa: amount}, source, source, move);
+		},
+		target: "normal",
+		type: "Dragon",
+	},
+	glitchygraphics: {
+		num: 10029,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Glitchy Graphics",
+		pp: 10,
+		priority: 0,
+		flags: {metronome: 1},
+		onHit(source, _, move) {
+			if (!this.field.isTerrain('glitchterrain')) {
+				if (!this.field.setTerrain('glitchterrain', source, move)) return false;
+				this.field.terrainState.duration = 5;
+				return;
+			}
+			const types = this.dex.types.names().filter(type => type !== '???');
+			let changed = false;
+			for (const target of source.foes()) {
+				const id = target.species.id;
+				if (!target.hp || target.hasAbility(['multitype', 'rkssystem']) ||
+					(id.startsWith('ogerpon') && id.endsWith('tera')) || (id.startsWith('terapagos') && id !== 'terapagos')) continue;
+				const possible = types.filter(type => !target.hasType(type));
+				if (!possible.length) continue;
+				const type = this.sample(possible);
+				if (target.setType(type)) {
+					this.add('-start', target, 'typechange', type, '[from] move: Glitchy Graphics');
+					changed = true;
+				}
+			}
+			return changed || this.NOT_FAIL;
+		},
+		target: "self",
+		type: "???",
 	},
 
 	// CAP moves
