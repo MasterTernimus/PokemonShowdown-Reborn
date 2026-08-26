@@ -5267,7 +5267,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflecttype: {
 		name: "Reflect Type",
 		desc: "Causes the user's types to become the same as the current types of the target. If the target's current types include typeless and a non-added type, typeless is ignored. If the target's current types include typeless and an added type from Forest's Curse or Trick-or-Treat, typeless is copied as the Normal type instead. Fails if the user is an Arceus or a Silvally, if the user is Terastallized, or if the target's current type is typeless alone.",
-		shortDesc: "User becomes the same type as the target.",
+		shortDesc: "User becomes the target's types; Reflector refreshes copied types without replacing its typing.",
 		gen8: {
 			desc: "Causes the user's types to become the same as the current types of the target. If the target's current types include typeless and a non-added type, typeless is ignored. If the target's current types include typeless and an added type from Forest's Curse or Trick-or-Treat, typeless is copied as the Normal type instead. Fails if the user is an Arceus or a Silvally, or if the target's current type is typeless alone.",
 		},
@@ -5707,8 +5707,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	etherealtempest: {
 		name: "Ethereal Tempest",
-		desc: "A 100-power Flying-type special move with a 30% chance to paralyze and a 10% chance to flinch the target.",
-		shortDesc: "100 BP; 30% paralysis; 10% flinch.",
+		desc: "A 100-power Flying-type special move with a 30% chance to paralyze and a 10% chance to flinch the target. It is 1.5x in Volcanic Terrain, Mountain, and Snowy Mountain, and 0.5x in Cave.",
+		shortDesc: "100 BP; 30% paralysis; 10% flinch; field-modified.",
+	},
+	mirrorbeam: {
+		name: "Mirror Beam",
+		desc: "Uses the best damage type from Steel and the user's reflected types; field boosts apply.",
+		shortDesc: "90 BP; best Steel/reflected type; field boosts.",
 	},
 	searingvoid: {
 		name: "Searing Void",
@@ -7685,6 +7690,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	xscissor: {
 		name: "X-Scissor",
 		shortDesc: "High critical hit ratio.",
+	},
+	cauterize: {
+		name: "Cauterize",
+		desc: "Deals Fire-type damage to foes. When used on an ally, it deals no damage and restores 50% of that ally's maximum HP.",
+		shortDesc: "Fire damage; heals an ally for 50% max HP instead.",
 	},
 	yawn: {
 		name: "Yawn",

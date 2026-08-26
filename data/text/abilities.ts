@@ -1289,6 +1289,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's weight is doubled. In Factory, it gains 1 Defense and loses 1 Speed; physical attacks against it deal 0.5x damage.",
 		shortDesc: "Weight doubled; Factory +1 Def/-1 Spe; takes 0.5x physical damage.",
 	},
+	reflector: {
+		name: "Reflector",
+		desc: "On entry, copies the active foe's types and adds them to this Pokemon's typing. Matching attacks deal half damage unless this Pokemon is immune. Reflect Type refreshes the copied types.",
+		shortDesc: "Copies foe types; adds them to its typing; matching attacks deal 0.5x unless immune.",
+	},
 		hyperdrill: {
 		name: "Hyper Drill",
 		desc: "This Pokemon has Power Drill and Dual Wield's effects. Drill moves are used twice; the first hit receives Power Drill and the second hit deals 20% of the move's unboosted power. Its Rock-type moves receive a same-type attack bonus.",
@@ -2613,6 +2618,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Dry Skin. While above 50% HP, its weaknesses are neutralized, Magic Guard is active, opposing status moves fail, and opposing attack secondary effects are blocked. The first time Parasect would faint, it fake-faints at 1 HP, then becomes Parasect-Parasite at the end of the turn and revives at full HP. This Ability cannot be suppressed and is immune to Neutralization.",
 		shortDesc: "Dry Skin; above half: defensive protection; first KO triggers Resuscitation.",
 	},
+	venomheal: {
+		name: "Venom Heal",
+		desc: "This Pokemon has Hyper Cutter, Poison Heal, and Poison Point's effects. Its Poison-type moves have 1.5x STAB.",
+		shortDesc: "Hyper Cutter + Poison Heal + Poison Point; Poison moves get 1.5x STAB.",
+	},
 	resuscitation: {
 		name: "Resuscitation",
 		desc: "When Parasect revives as Parasect-Parasite, its status, stat stages, and volatile effects are cleared and it returns to full HP. Afterward, this Ability has Self Repair and Magic Guard's effects.",
@@ -3523,6 +3533,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Burning Ego",
 		desc: "This Pokemon has Ultra Ego and Magma Armor's effects.",
 		shortDesc: "Ultra Ego + Magma Armor.",
+	},
+	rebornflower: {
+		name: "Reborn Flower",
+		desc: "This Pokemon has Invigorate and Flower Veil's effects. It permanently becomes Florges-Reborn when it enters battle.",
+		shortDesc: "Invigorate + Flower Veil; permanently becomes Florges-Reborn on entry.",
 	},
 
 	// CAP
