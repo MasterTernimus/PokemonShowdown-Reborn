@@ -47,14 +47,13 @@ describe('Composite ability cleanup', function () {
 		assert(battle.dex.abilities.get('mirrorarmor').onSourceModifyDamage);
 	});
 
-	it('should switch Eclipse Vision with status moves and heal Psychic mode by 1/8', function () {
+	it('should set Eclipse Vision from the first move slot and switch types later', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
-			{species: 'Gothitelle', ability: 'eclipsevision', moves: ['taunt', 'calmmind']},
+			{species: 'Gothitelle', ability: 'eclipsevision', moves: ['darkpulse', 'calmmind']},
 		], [
 			{species: 'Mew', ability: 'noguard', moves: ['counter']},
 		]]);
 		battle.makeChoices('team 1', 'team 1');
-		battle.makeChoices('move taunt', 'move counter');
 		const gothitelle = battle.p1.active[0];
 		assert.deepEqual(gothitelle.getTypes(), ['Dark']);
 		battle.directDamage(80, gothitelle);
@@ -62,6 +61,19 @@ describe('Composite ability cleanup', function () {
 		battle.makeChoices('move calmmind', 'move counter');
 		assert.deepEqual(gothitelle.getTypes(), ['Psychic']);
 		assert.equal(gothitelle.hp - hpBefore, Math.floor(gothitelle.baseMaxhp / 8));
+	});
+
+	it('should set Adaptive Cell from the first move slot and switch by category later', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Reuniclus', ability: 'adaptivecell', moves: ['drainpunch', 'psychic']},
+		], [
+			{species: 'Mew', ability: 'noguard', moves: ['counter']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const reuniclus = battle.p1.active[0];
+		assert.deepEqual(reuniclus.getTypes(), ['Fighting']);
+		battle.makeChoices('move psychic', 'move counter');
+		assert.deepEqual(reuniclus.getTypes(), ['Psychic']);
 	});
 
 	it('should remove Pressure from Relic Armor and expose Abyss Sniper under its new ID', function () {

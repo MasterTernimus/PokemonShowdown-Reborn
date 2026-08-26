@@ -22769,7 +22769,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			dualwingbeat: [],
 			earthquake: ["9M", "8M", "8V", "7M", "6M", "6S1", "6S2", "5M", "4M", "3M"],
 			endure: ["9L11", "8M", "7V", "4M", "3T"],
-			extremespeed: ["9M"],
 			facade: ["9M", "8M", "8V", "7M", "6M", "5M", "4M", "3M"],
 			falseswipe: ["9M", "8M", "7M", "6M", "5M", "4M", "4E", "3E", "3S0"],
 			feint: ["9E", "8E", "7E", "6E", "6S2", "5E", "4E"],
@@ -114062,3 +114061,35 @@ if (toxtricityLearnset && toxtricityLowKeyLearnset) {
 		Object.assign(learnset, sharedToxtricityMoves);
 	}
 }
+
+// Starter Eevee's Sinister Blaze event pool is intentionally the only pool
+// exposed by the team builder for this profile.
+const starterEeveeSinisterBlazeLevelUp = [
+	'sing', 'searingvoid', 'tackle', 'helpinghand', 'tailwhip', 'sandattack', 'batonpass',
+	'strengthsap', 'torment', 'pursuit', 'moonlight', 'poisonfang', 'lovelykiss', 'punishment',
+	'willowisp', 'spiritbreak', 'bittermalice', 'infernalparade', 'destinybond', 'dreameater',
+	'memento', 'darkpulse', 'eeriespell', 'perishsong', 'blueflare', 'doomdesire',
+];
+const starterEeveeSinisterBlazeTutor = [
+	'alluringvoice', 'attract', 'aurasphere', 'batonpass', 'bodyslam', 'burningjealousy', 'calmmind',
+	'celebrate', 'charm', 'confuseray', 'curse', 'darkpulse', 'dig', 'dreameater', 'echoedvoice',
+	'faketears', 'feintattack', 'firefang', 'firepledge', 'firespin', 'flail', 'flamethrower', 'flash',
+	'focusenergy', 'foulplay', 'haze', 'headbutt', 'healbell', 'healblock', 'hiddenpower', 'hex',
+	'hypervoice', 'icefang', 'icywind', 'irontail', 'laserfocus', 'leechlife', 'lightscreen', 'mimic',
+	'mudslap', 'mysticalfire', 'nightmare', 'nightshade', 'ominouswind', 'painsplit', 'payday', 'pursuit',
+	'raindance', 'reflect', 'retaliate', 'round', 'scorchingsands', 'shadowball', 'snarl', 'storedpower',
+	'sunnyday', 'swagger', 'terrainpulse', 'thunderwave', 'torment', 'uturn', 'weatherball', 'willowisp',
+	'workup', 'lastresort',
+];
+const starterEeveeSinisterBlazeEvent = [
+	'babydolleyes', 'baddybad', 'bite', 'bouncybubble', 'buzzybuzz', 'captivate', 'copycat', 'covet',
+	'detect', 'doubleedge', 'doublekick', 'dustydrift', 'endure', 'freezyfrost', 'glitzyglow', 'growl',
+	'ickyinjection', 'naturalgift', 'naturepower', 'punchypummel', 'quickattack', 'rockyrampage', 'sappyseed',
+	'scalyscorn', 'sizzlyslide', 'sparklyswirl', 'spookyspell', 'stabbyswarm', 'steelystrike', 'swift',
+	'synchronoise', 'takedown', 'tickle', 'trailblaze', 'twirlytwister', 'veeveevolley', 'wish', 'yawn',
+];
+const starterEeveeSinisterBlazeLearnset: {[moveid: string]: string[]} = {};
+for (const move of starterEeveeSinisterBlazeLevelUp) starterEeveeSinisterBlazeLearnset[move] = ['9L1'];
+for (const move of starterEeveeSinisterBlazeTutor) starterEeveeSinisterBlazeLearnset[move] = ['9M'];
+for (const move of starterEeveeSinisterBlazeEvent) starterEeveeSinisterBlazeLearnset[move] = ['8V'];
+(Learnsets as any).eeveestarter.learnset = starterEeveeSinisterBlazeLearnset;

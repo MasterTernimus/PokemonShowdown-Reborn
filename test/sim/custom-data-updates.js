@@ -299,6 +299,23 @@ describe('Custom battle data updates', function () {
 		battle = null;
 	});
 
+	it('should activate Z Protean before the attack without changing move priority', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Eevee-Starter', ability: 'zprotean', moves: ['tackle']},
+		], [
+			{species: 'Crobat', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const eevee = battle.p1.active[0];
+
+		battle.makeChoices('move tackle', 'move splash');
+		const moves = battle.log.filter(line => line.startsWith('|move|'));
+		assert.match(moves[0], /Crobat.*Splash/);
+		assert.match(moves[1], /Eevee-Starter.*Tackle/);
+		assert.species(eevee, 'Eevee-Starter-Alt');
+		assert(eevee.hasType('Normal'));
+	});
+
 	it('should reject Eevium Z specifically when Eevee-Starter uses Unstable Evo', function () {
 		const baseSet = {
 			species: 'Eevee-Starter-Alt', ability: 'Unstable Evo', moves: ['Buzzy Buzz'],

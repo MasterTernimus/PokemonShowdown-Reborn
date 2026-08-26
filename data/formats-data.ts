@@ -6147,6 +6147,16 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 };
 
 const latestFormatUpdates: {[id: string]: any} = {
+	// Aevian profiles are custom species, but are legal in the mod's standard formats.
+	laprasaevian: {isNonstandard: "Custom", tier: "OU"},
+	miloticaevian: {isNonstandard: "Custom", tier: "OU"},
+	gastrodonaevian: {isNonstandard: "Custom", tier: "OU"},
+	gastrodoneastaevian: {isNonstandard: "Custom", tier: "OU"},
+	mismagiusaevian: {isNonstandard: "Custom", tier: "OU"},
+	drapionaevian: {isNonstandard: "Custom", tier: "OU"},
+	volcaronaaevian: {isNonstandard: "Custom", tier: "OU"},
+	toxtricityaevian: {isNonstandard: "Custom", tier: "OU"},
+	sneasleraevian: {isNonstandard: "Custom", tier: "OU"},
 	pikachucosplay: {isNonstandard: null, tier: "ZU"},
 	pikachurockstar: {isNonstandard: null, tier: "ZU"},
 	pikachubelle: {isNonstandard: null, tier: "ZU"},
