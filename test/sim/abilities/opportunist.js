@@ -40,4 +40,17 @@ describe("Opportunist", () => {
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', -1 + 6);
 	});
+
+	it("should copy every positive No Retreat boost through composite abilities", () => {
+		battle = common.createBattle([[
+			{species: 'Infernape', ability: 'Burning Spirit', moves: ['sleeptalk']},
+		], [
+			{species: 'Falinks', moves: ['noretreat']},
+		]]);
+		battle.makeChoices('move sleeptalk', 'move noretreat');
+		const infernape = battle.p1.active[0];
+		for (const stat of ['atk', 'def', 'spa', 'spd', 'spe']) {
+			assert.statStage(infernape, stat, 1);
+		}
+	});
 });

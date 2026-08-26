@@ -79673,6 +79673,14 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			trick: [],
 			wish: ["9L43", "7L1", "6L1"],
 			worryseed: ["9M", "7T", "6T"],
+			tackle: ["9L1"],
+			ember: ["9L1"],
+			fairywind: ["9L1"],
+			flamewheel: ["9L1"],
+			incinerate: ["9L1"],
+			mysticalfire: ["9L1"],
+			morningsun: ["9L1"],
+			cauterize: ["9L1"],
 		},
 	},
 	skiddo: {
@@ -113952,6 +113960,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 }
 
 const latestLearnsetAdditions: {[id: string]: string[]} = {
+	gligar: ['barbbarrage'],
+	gliscor: ['barbbarrage', 'poisonfang', 'toxicthread', 'sludgewave', 'clearsmog', 'poisonjab', 'poisontail', 'venomdrench'],
+	alakazam: ['darkpulse', 'snarl'],
 	misdreavus: ['drainingkiss'],
 	granbull: ['highhorsepower', 'spiritbreak', 'stompingtantrum', 'suckerpunch', 'partingshot', 'closecombat', 'smellingsalts', 'brickbreak', 'leechlife', 'poweruppunch', 'wideguard'],
 	furfrou: [
@@ -114026,11 +114037,23 @@ const latestLearnsetRemovals: {[id: string]: string[]} = {
 	samurott: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 	samurotthisui: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 };
+
+const alakazamLearnset = (Learnsets as any).alakazam?.learnset;
+if (alakazamLearnset) {
+	(Learnsets as any).alakazamalt = {learnset: {...alakazamLearnset}};
+	(Learnsets as any).alakazammegaalt = {learnset: {...alakazamLearnset}};
+}
+
 for (const [id, moves] of Object.entries(latestLearnsetRemovals)) {
 	const learnset = (Learnsets as any)[id]?.learnset;
 	if (!learnset) continue;
 	for (const move of moves) delete learnset[move];
 }
+
+const gligarLearnset = (Learnsets as any).gligar?.learnset;
+const gliscorLearnset = (Learnsets as any).gliscor?.learnset;
+if (gligarLearnset) (Learnsets as any).gligaralt = {learnset: {...gligarLearnset}};
+if (gliscorLearnset) (Learnsets as any).gliscoralt = {learnset: {...gliscorLearnset}};
 
 const basculegionLearnset = (Learnsets as any).basculegion?.learnset;
 const basculegionFemaleLearnset = (Learnsets as any).basculegionf?.learnset;
@@ -114087,9 +114110,32 @@ const starterEeveeSinisterBlazeEvent = [
 	'ickyinjection', 'naturalgift', 'naturepower', 'punchypummel', 'quickattack', 'rockyrampage', 'sappyseed',
 	'scalyscorn', 'sizzlyslide', 'sparklyswirl', 'spookyspell', 'stabbyswarm', 'steelystrike', 'swift',
 	'synchronoise', 'takedown', 'tickle', 'trailblaze', 'twirlytwister', 'veeveevolley', 'wish', 'yawn',
+	'glitchygraphics',
 ];
 const starterEeveeSinisterBlazeLearnset: {[moveid: string]: string[]} = {};
 for (const move of starterEeveeSinisterBlazeLevelUp) starterEeveeSinisterBlazeLearnset[move] = ['9L1'];
 for (const move of starterEeveeSinisterBlazeTutor) starterEeveeSinisterBlazeLearnset[move] = ['9M'];
 for (const move of starterEeveeSinisterBlazeEvent) starterEeveeSinisterBlazeLearnset[move] = ['8V'];
 (Learnsets as any).eeveestarter.learnset = starterEeveeSinisterBlazeLearnset;
+
+const bronzongRejuvLevelUp = [
+	'flash', 'nightshade', 'mirrorshot', 'magiccoat', 'mimic', 'signalbeam',
+	'reflecttype', 'mefirst', 'flashcannon', 'healblock', 'mirrorcoat', 'synchronoise',
+];
+const bronzongRejuvTutor = [
+	'afteryou', 'assurance', 'aurasphere', 'darkpulse', 'dazzlinggleam', 'eerieimpulse',
+	'icebeam', 'magicroom', 'magicalleaf', 'mysticalfire', 'rocksmash', 'roleplay',
+	'selfdestruct', 'shockwave', 'snatch', 'terrainpulse', 'thunderwave', 'thunderbolt',
+	'torment', 'triattack', 'waterpulse', 'snowscape', 'mirrorbeam',
+];
+const bronzongRejuvLearnset: {[moveid: string]: string[]} = {};
+for (const move of bronzongRejuvLevelUp) bronzongRejuvLearnset[move] = ['9L1'];
+for (const move of bronzongRejuvTutor) bronzongRejuvLearnset[move] = ['9M'];
+(Learnsets as any).bronzong.learnset = bronzongRejuvLearnset;
+(Learnsets as any).bronzongrejuv = {learnset: {...bronzongRejuvLearnset}};
+
+const rebornFlowerMoves = ['tackle', 'ember', 'fairywind', 'flamewheel', 'wish', 'incinerate', 'sunnyday', 'mysticalfire', 'morningsun', 'cauterize', 'revivalblessing'];
+for (const move of rebornFlowerMoves) {
+	if (!(Learnsets as any).florges.learnset[move]) (Learnsets as any).florges.learnset[move] = ['9L1'];
+}
+(Learnsets as any).florgesreborn = {learnset: {...(Learnsets as any).florges.learnset}};

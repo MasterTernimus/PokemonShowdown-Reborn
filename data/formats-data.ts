@@ -1478,6 +1478,16 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "(DUU)",
 		natDexTier: "OU",
 	},
+	gligaralt: {
+		tier: "NU",
+		doublesTier: "NFE",
+		natDexTier: "NFE",
+	},
+	gliscoralt: {
+		tier: "OU",
+		doublesTier: "(DUU)",
+		natDexTier: "OU",
+	},
 	snubbull: {
 		tier: "LC",
 	},
@@ -2685,6 +2695,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "LC",
 	},
 	bronzong: {
+		tier: "PU",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
+	bronzongrejuv: {
 		tier: "PU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
@@ -6147,6 +6162,8 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 };
 
 const latestFormatUpdates: {[id: string]: any} = {
+	alakazamalt: {isNonstandard: "Custom", tier: "OU"},
+	alakazammegaalt: {isNonstandard: "Custom", tier: "OU"},
 	// Aevian profiles are custom species, but are legal in the mod's standard formats.
 	laprasaevian: {isNonstandard: "Custom", tier: "OU"},
 	miloticaevian: {isNonstandard: "Custom", tier: "OU"},

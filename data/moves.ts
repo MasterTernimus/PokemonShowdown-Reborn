@@ -15320,6 +15320,37 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Bug",
 		contestType: "Cute",
 	},
+	cauterize: {
+		num: 10011,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Cauterize",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, allyanim: 1, metronome: 1},
+		onTryHit(target, source, move) {
+			if (source.isAlly(target)) {
+				move.basePower = 0;
+				move.infiltrates = true;
+			}
+		},
+		onTryMove(source, target, move) {
+			if (source.isAlly(target) && source.volatiles['healblock']) {
+				this.attrLastMove('[still]');
+				this.add('cant', source, 'move: Heal Block', move);
+				return false;
+			}
+		},
+		onHit(target, source) {
+			if (source.isAlly(target) && !this.heal(Math.floor(target.baseMaxhp * 0.5), target, source)) {
+				return this.NOT_FAIL;
+			}
+		},
+		target: "normal",
+		type: "Fire",
+		contestType: "Beautiful",
+	},
 	poltergeist: {
 		num: 809,
 		accuracy: 90,
@@ -16769,7 +16800,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source) {
 			if (source.species && (source.species.num === 493 || source.species.num === 773)) return false;
 			if (source.terastallized) return false;
-			const oldApparentType = source.apparentType;
 			let newBaseTypes = target.getTypes(true).filter(type => type !== '???');
 			if (!newBaseTypes.length) {
 				if (target.addedType) {
@@ -16778,6 +16808,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return false;
 				}
 			}
+			if (source.hasAbility('reflector') && !this.suppressingAbility(source)) {
+				source.abilityState.reflectedTypes = [...new Set(newBaseTypes)];
+				this.add('-activate', source, 'ability: Reflector');
+				return;
+			}
+			const oldApparentType = source.apparentType;
 			this.add('-start', source, 'typechange', '[from] move: Reflect Type', `[of] ${target}`);
 			source.setType(newBaseTypes);
 			source.addedType = target.addedType;
@@ -18146,13 +18182,41 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Ethereal Tempest",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1, wind: 1 },
+		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1 },
 		secondaries: [
 			{chance: 30, status: "par"},
 			{chance: 10, volatileStatus: "flinch"},
 		],
 		target: "normal",
 		type: "Flying",
+		contestType: "Beautiful",
+	},
+	mirrorbeam: {
+		num: 10010,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Mirror Beam",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit(target, source, move) {
+			const reflectedTypes = source.abilityState.reflectedTypes || [];
+			const types = [...new Set([...reflectedTypes, 'Steel'])];
+			let bestType = 'Steel';
+			let bestMod = this.dex.getEffectiveness('Steel', target.getTypes());
+			for (const type of types) {
+				const typeMod = this.dex.getEffectiveness(type, target.getTypes());
+				if (typeMod > bestMod) {
+					bestType = type;
+					bestMod = typeMod;
+				}
+			}
+			move.type = bestType;
+			move.types = [bestType];
+		},
+		target: "normal",
+		type: "Steel",
 		contestType: "Beautiful",
 	},
 	shadowforce: {

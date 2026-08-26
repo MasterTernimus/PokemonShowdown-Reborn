@@ -2967,8 +2967,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10039,
 	},
 	burningspirit: {
-		onResidual(pokemon) { this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
-		onAfterEachBoost(boost, target, source, effect) { return this.dex.abilities.get('opportunist').onAfterEachBoost?.call(this, boost, target, source, effect); },
+		onFoeAfterEachBoost(boost, target, source) {
+			return (this.dex.abilities.get('opportunist') as any).onFoeAfterEachBoost?.call(this, boost, target, source);
+		},
+		onAnySwitchInPriority: -3,
+		onAnySwitchIn() { return (this.dex.abilities.get('opportunist') as any).onAnySwitchIn?.call(this); },
+		onAnyAfterMega() { return (this.dex.abilities.get('opportunist') as any).onAnyAfterMega?.call(this); },
+		onAnyAfterTerastallization() { return (this.dex.abilities.get('opportunist') as any).onAnyAfterTerastallization?.call(this); },
+		onAnyAfterMove() { return (this.dex.abilities.get('opportunist') as any).onAnyAfterMove?.call(this); },
+		onResidual(pokemon) {
+			(this.dex.abilities.get('opportunist') as any).onResidual?.call(this, pokemon);
+			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
+		},
+		onEnd() { return (this.dex.abilities.get('opportunist') as any).onEnd?.call(this); },
 		onStart(pokemon) { return this.dex.abilities.get('magmaarmor').onStart?.call(this, pokemon); },
 		onUpdate(pokemon) { return this.dex.abilities.get('magmaarmor').onUpdate?.call(this, pokemon); },
 		onTryHit(target, source, move) { return this.dex.abilities.get('magmaarmor').onTryHit?.call(this, target, source, move); },
@@ -4236,8 +4247,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			return this.dex.abilities.get('technician').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
-		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.name === 'Unchecked Assault' || effect?.name === 'Mirror Herb') return;
+		onFoeAfterEachBoost(boost, target, source) {
 			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
 			const boostPlus = this.effectState.boosts;
 			let i: BoostID;
@@ -9460,8 +9470,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 12,
 	},
 	opportunist: {
-		onFoeAfterBoost(boost, target, source, effect) {
-			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
+		onFoeAfterEachBoost(boost, target, source) {
 			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
 			const boostPlus = this.effectState.boosts;
 			let i: BoostID;
@@ -12124,6 +12133,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10021,
 	},
+	venomheal: {
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('hypercutter').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('poisonheal').onDamage?.call(this, damage, target, source, effect);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('poisonheal').onResidual?.call(this, pokemon);
+		},
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('poisonpoint').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (this.movehasType(move, 'Poison')) return 1.5;
+		},
+		flags: {},
+		name: "Venom Heal",
+		rating: 4,
+		num: 10367,
+	},
 	resuscitation: {
 		onCheckShow(pokemon) {
 			this.dex.abilities.get('selfrepair').onCheckShow?.call(this, pokemon);
@@ -14390,7 +14421,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyCritRatio(critRatio, source, target, move) {
 			return this.dex.abilities.get('precision').onModifyCritRatio?.call(this, critRatio, source, target, move);
 		},
-		onAfterEachBoost(boost, target, source, effect) { return this.dex.abilities.get('opportunist').onAfterEachBoost?.call(this, boost, target, source, effect); },
+		onFoeAfterEachBoost(boost, target, source) {
+			return (this.dex.abilities.get('opportunist') as any).onFoeAfterEachBoost?.call(this, boost, target, source);
+		},
+		onAnySwitchInPriority: -3,
+		onAnySwitchIn() { return (this.dex.abilities.get('opportunist') as any).onAnySwitchIn?.call(this); },
+		onAnyAfterMega() { return (this.dex.abilities.get('opportunist') as any).onAnyAfterMega?.call(this); },
+		onAnyAfterTerastallization() { return (this.dex.abilities.get('opportunist') as any).onAnyAfterTerastallization?.call(this); },
+		onAnyAfterMove() { return (this.dex.abilities.get('opportunist') as any).onAnyAfterMove?.call(this); },
+		onResidual(pokemon) { return (this.dex.abilities.get('opportunist') as any).onResidual?.call(this, pokemon); },
+		onEnd() { return (this.dex.abilities.get('opportunist') as any).onEnd?.call(this); },
 		onModifyAtk(atk, pokemon, target, move) { return this.dex.abilities.get('battlefervor').onModifyAtk?.call(this, atk, pokemon, target, move); },
 		flags: {},
 		name: "Dusk Drive",
@@ -15538,6 +15578,64 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Venom Veil",
 		rating: 4,
 		num: 10302,
+	},
+	reflector: {
+		onStart(pokemon) {
+			const foe = pokemon.foes().find(foe => foe && !foe.fainted);
+			const reflectedTypes = foe ? foe.getTypes(true).filter(type => type !== '???') : [];
+			pokemon.abilityState.reflectedTypes = [...new Set(reflectedTypes)];
+			if (pokemon.species.baseSpecies === 'Bronzong' && pokemon.species.id !== 'bronzongrejuv') {
+				pokemon.formeChange('Bronzong-Rejuv', this.effect, false);
+			}
+		},
+		onType(types, pokemon) {
+			if (this.suppressingAbility(pokemon)) {
+				delete pokemon.abilityState.reflectedTypes;
+				return;
+			}
+			const reflectedTypes = pokemon.abilityState.reflectedTypes;
+			if (!reflectedTypes?.length) return;
+			return [...new Set([...types, ...reflectedTypes])];
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			const reflectedTypes = target.abilityState.reflectedTypes;
+			if (this.suppressingAbility(target) || !reflectedTypes?.length || move.category === 'Status') return;
+			if (!reflectedTypes.includes(move.type) || target.getMoveHitData(move).typeMod === -6) return;
+			return this.chainModify(0.5);
+		},
+		onEnd(pokemon) {
+			delete pokemon.abilityState.reflectedTypes;
+		},
+		flags: {breakable: 1},
+		name: "Reflector",
+		rating: 3,
+		num: 10303,
+	},
+	rebornflower: {
+		onStart(pokemon) {
+			if (pokemon.species.baseSpecies === 'Florges' && pokemon.species.id !== 'florgesreborn') {
+				pokemon.formeChange('Florges-Reborn', this.effect, true);
+			}
+		},
+		onAnyTryHeal(damage, target, source, effect) {
+			return this.dex.abilities.get('invigorate').onAnyTryHeal?.call(this, damage, target, source, effect);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('invigorate').onResidual?.call(this, pokemon);
+		},
+		onAllyTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('flowerveil').onAllyTryBoost?.call(this, boost, target, source, effect);
+		},
+		onAllySetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('flowerveil').onAllySetStatus?.call(this, status, target, source, effect);
+		},
+		onAllyTryAddVolatile(status, target) {
+			return this.dex.abilities.get('flowerveil').onAllyTryAddVolatile?.call(this, status, target);
+		},
+		flags: {breakable: 1},
+		name: "Reborn Flower",
+		rating: 4,
+		num: 10304,
 	},
 };
 
