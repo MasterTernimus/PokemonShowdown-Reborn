@@ -3866,7 +3866,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Dark"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 100, atk: 120, def: 110, spa: 40, spd: 95, spe: 70 },
-		abilities: { 0: "Strong Jaw", 1: "Mighty Jaw", H: "Sheer Force" },
+		abilities: { 0: "Water Veil", 1: "Mighty Jaw", H: "Sheer Force" },
 		heightm: 2.3,
 		weightkg: 88.8,
 		color: "Blue",
