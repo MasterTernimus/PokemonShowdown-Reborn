@@ -604,8 +604,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eclipsevision: {
 		name: "Eclipse Vision",
-		desc: "This Pokemon's Special Attack is multiplied by 1.5. Its first Psychic- or Dark-type move sets its opening battle type, and each later Psychic- or Dark-type move changes it to that type. If this Pokemon is Psychic type, it restores 1/8 of its max HP at the end of each turn. If this Pokemon is Dark type, its damaging moves restore HP equal to 1/4 of the damage dealt.",
-		shortDesc: "SpA 1.5x; first Psychic/Dark move sets type, later moves switch it; Psychic heals; Dark drains.",
+		desc: "This Pokemon's Special Attack is multiplied by 1.5. Its first move slot sets its opening type if Psychic or Dark, and each later Psychic- or Dark-type move changes it to that type. If this Pokemon is Psychic type, it restores 1/8 of its max HP at the end of each turn. If this Pokemon is Dark type, its damaging moves restore HP equal to 1/4 of the damage dealt.",
+		shortDesc: "SpA 1.5x; first move slot sets Psychic/Dark type; later moves switch it; Psychic heals; Dark drains.",
 	},
 	venomrush: {
 		name: "Venom Rush",
@@ -1889,8 +1889,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	adaptivecell: {
 		name: "Adaptive Cell",
-		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Its first damaging move sets its opening type: Fighting for physical moves or Psychic for special moves. Each later damaging move changes its type to match its category. Physical moves use its boosted Special Attack as Attack; special moves use its boosted Special Attack normally.",
-		shortDesc: "Overcoat; SpA 1.3x; physical -> Fighting using SpA; special -> Psychic using SpA.",
+		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Its first move slot sets its opening type: Fighting for physical moves or Psychic for special moves. Each later damaging move changes its type to match its category. Physical moves use its boosted Special Attack as Attack; special moves use its boosted Special Attack normally.",
+		shortDesc: "Overcoat; SpA 1.3x; first move slot sets Fighting/Psychic; later moves switch type.",
 	},
 	dreamsickness: {
 		name: "Dream Sickness",
@@ -2353,8 +2353,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowguard: {
 		name: "Shadow Guard",
-		desc: "This Pokemon has Shadow Tag, Shadow Shield, and Elevate's effects. It also queues a full-power Temporal Shift Future Sight every turn, using whichever of Ghost, Dark, or Fairy would hit the target best. Shadow Tag's faint effect also applies.",
-		shortDesc: "Shadow Tag + Shadow Shield + Elevate; every turn queues Ghost/Dark/Fairy Temporal Shift.",
+		desc: "This Pokemon has Shadow Tag, Shadow Shield, and Elevate's effects. On the turn after it uses a damaging move, it queues a 100 BP Temporal Shift Future Sight using whichever of Ghost, Dark, or Fairy would hit the target best. Shadow Tag's faint effect also applies.",
+		shortDesc: "Shadow Tag + Shadow Shield + Elevate; after attacking, queues 100 BP Ghost/Dark/Fairy Temporal Shift.",
 	},
 	shadowtag: {
 		name: "Shadow Tag",
@@ -2382,8 +2382,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	blademastery: {
 		name: "Blade Mastery",
-		desc: "This Pokemon has Sharpness, Dual Wield, and Mold Breaker. Below half HP, its slicing moves have their critical-hit ratio raised by 1 stage.",
-		shortDesc: "Sharpness + Dual Wield + Mold Breaker; below half HP, slicing moves gain +1 crit.",
+		desc: "This Pokemon has Sharpness and Super Luck. Below half HP, its slicing moves have +1 priority.",
+		shortDesc: "Sharpness + Super Luck; below half HP, slicing moves gain +1 priority.",
 	},
 	shedskin: {
 		name: "Shed Skin",
@@ -2565,13 +2565,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, except Pokemon on a side protected by Safeguard, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, and enemy-caused stat drops fail. This Pokemon's own self-inflicted stat drops still work. This Pokemon's charge moves fire immediately without charge turns, but recharge moves still require recharge. Neutralization disables these Royal Decree effects while active.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, except Pokemon on a side protected by Safeguard, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, enemy-caused stat drops fail, and charge moves fire immediately. This Pokemon's own self-inflicted stat drops still work. Neutralization disables these Royal Decree effects while active.",
 		shortDesc: "Haze/screen clear; Safeguard blocks reset; blocks setup/screens; skips charge turns.",
 	},
 	empress: {
 		name: "Empress",
-		desc: "This Pokemon has Queenly Majesty and Royal Decree's effects.",
-		shortDesc: "Queenly Majesty + Royal Decree.",
+		desc: "This Pokemon has Queenly Majesty and Royal Decree's effects, gains STAB on Fighting-type moves, and Steel-type attacks deal neutral damage instead of exploiting its Fairy typing.",
+		shortDesc: "Queenly Majesty + Royal Decree; Fighting STAB; removes Steel weakness.",
 	},
 	imperialprincess: {
 		name: "Imperial Princess",
@@ -3401,8 +3401,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	temporalshift: {
 		name: "Temporal Shift",
-		desc: "This Pokemon's stats cannot be lowered by opposing Pokemon. After one turn out, every other turn it queues a 120 BP Future Sight matching the user's primary type against a random valid opposing target; multiple attacks can be queued and announce their strike turns.",
-		shortDesc: "Stats cannot be lowered; after one turn, queues 120 BP Future Sight every other turn.",
+		desc: "This Pokemon's stats cannot be lowered by opposing Pokemon. On the turn after it uses a damaging move, it queues a 100 BP Future Sight matching its primary type against a random valid opposing target; multiple attacks can be queued and announce their strike turns.",
+		shortDesc: "Stats cannot be lowered; after attacking, queues 100 BP Temporal Shift Future Sight.",
 	},
 	accumulation: {
 		name: "Accumulation",
@@ -3498,6 +3498,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Ultra Ego",
 		desc: "Moves ignore abilities; it heals each turn and after attacks. KOs heal more, and the first enemy hit boosts Attack and Sp. Atk. Bewitched Woods, Haunted, and Holy Field disable these effects.",
 		shortDesc: "Mold Breaker; heals and boosts from combat; inactive in Bewitched/Haunted/Holy.",
+	},
+	territorial: {
+		name: "Territorial",
+		desc: "This Pokemon has Unnerve, Unaware, and Tough Claws's effects.",
+		shortDesc: "Unnerve + Unaware + Tough Claws.",
+	},
+	lunardread: {
+		name: "Lunar Dread",
+		desc: "This Pokemon has Intimidate, Magic Guard, and Pressure's effects.",
+		shortDesc: "Intimidate + Magic Guard + Pressure.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",

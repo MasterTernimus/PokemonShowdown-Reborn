@@ -2232,7 +2232,11 @@ export class Battle {
 
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
 			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
-			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
+			if (source && effect.effectType === 'Move') {
+				source.lastDamage = targetDamage;
+				const hitData = target.getMoveHitData(effect as ActiveMove);
+				hitData.damage = Math.max(hitData.damage || 0, targetDamage);
+			}
 
 			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
 			switch (effect.id) {

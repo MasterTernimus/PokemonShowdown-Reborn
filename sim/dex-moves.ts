@@ -327,6 +327,8 @@ interface MoveHitData {
 		 * (does 0.25x regular damage)
 		 */
 		bypassProtect: boolean | Effect,
+		/** The greatest damage dealt by this move hit sequence to the target. */
+		damage?: number,
 	};
 }
 

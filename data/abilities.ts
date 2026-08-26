@@ -83,6 +83,22 @@ function isStarterEeveePokemon(pokemon: Pokemon) {
 		['eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id);
 }
 
+function applyZProteanForm(battle: Battle, source: Pokemon, move: ActiveMove, effect: Effect) {
+	if (!isStarterEeveePokemon(source) || move.id === 'struggle' || move.hasBounced ||
+		move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
+	const type = move.type;
+	const forme = Z_PROTEAN_FORMES[type];
+	if (!forme) return;
+	if (source.getTypes().join() !== type) {
+		if (!source.setType(type)) return;
+		battle.add('-start', source, 'typechange', type, '[from] ability: Z Protean');
+	}
+	if (source.zProteanForme === forme.id && source.zProteanVisualSpecies === forme.species) return;
+	source.zProteanForme = forme.id;
+	source.zProteanVisualSpecies = forme.species;
+	battle.add('-formechange', source, forme.species, '[from] ability: Z Protean');
+}
+
 function getIllusionThreatScore(battle: Battle, candidate: Pokemon, foes: Pokemon[]) {
 	let score = 0;
 	for (const foe of foes) {
@@ -2993,6 +3009,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpA(spa) {
 			return this.chainModify(1.5);
 		},
+		onStart(pokemon) {
+			const firstMove = pokemon.moveSlots[0] && this.dex.moves.get(pokemon.moveSlots[0].id);
+			if (!firstMove || !['Psychic', 'Dark'].includes(firstMove.type)) return;
+			if (!pokemon.hasType(firstMove.type) && pokemon.setType(firstMove.type)) {
+				this.add('-start', pokemon, 'typechange', firstMove.type, '[from] ability: Eclipse Vision');
+			}
+		},
 		onBeforeMove(pokemon, target, move) {
 			if (!move) return;
 			let newType = '';
@@ -4325,8 +4348,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10141,
 	},
 	temporalshift: {
-		queueTemporalHex(pokemon, abilityName = 'Temporal Shift', everyTurn = false, typePool = null, basePower = 120) {
-			if (!everyTurn && pokemon.abilityState.temporalShiftLastCastTurn === this.turn - 1) return;
+		queueTemporalHex(pokemon, abilityName = 'Temporal Shift', typePool = null, basePower = 100) {
+			const pendingTurns = pokemon.abilityState.temporalShiftPendingTurns as number[] | undefined;
+			const pendingTurnIndex = pendingTurns?.indexOf(this.turn - 1) ?? -1;
+			if (pendingTurnIndex < 0) return;
+			pendingTurns!.splice(pendingTurnIndex, 1);
 			const primaryType = pokemon.getTypes()[0] || pokemon.species.types[0] || 'Normal';
 			const targets = pokemon.foes().filter(target => target.hp && !target.fainted && target !== pokemon && !target.isAlly(pokemon));
 			const target = targets.length ? this.sample(targets) : null;
@@ -4386,6 +4412,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onStart(pokemon) {
 			pokemon.abilityState.temporalShiftStartTurn = this.turn;
+			pokemon.abilityState.temporalShiftPendingTurns = [];
+		},
+		onAfterMove(source, target, move) {
+			if (move.category === 'Status' || move.flags['futuremove'] || move.callsMove) return;
+			const pendingTurns = source.abilityState.temporalShiftPendingTurns ||= [];
+			if (!pendingTurns.includes(this.turn)) pendingTurns.push(this.turn);
 		},
 		onResidual(pokemon) {
 			if (this.gameType !== 'freeforall' && pokemon.abilityState.temporalShiftStartTurn === this.turn) return;
@@ -4546,6 +4578,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10143,
 	},
 	adaptivecell: {
+		onStart(pokemon) {
+			const firstMove = pokemon.moveSlots[0] && this.dex.moves.get(pokemon.moveSlots[0].id);
+			if (!firstMove || !['Physical', 'Special'].includes(firstMove.category)) return;
+			const newType = firstMove.category === 'Physical' ? 'Fighting' : 'Psychic';
+			if (!pokemon.hasType(newType) && pokemon.setType(newType)) {
+				this.add('-start', pokemon, 'typechange', newType, '[from] ability: Adaptive Cell');
+			}
+		},
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
@@ -10167,20 +10207,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!isStarterEeveePokemon(pokemon)) return;
 			setStarterEeveeBattleEVs(pokemon, this.effect);
 		},
+		onModifyPriority(priority, pokemon, target, move) {
+			// Run during move ordering so the type and visual form are ready before the attack,
+			// while returning no priority value keeps the move's normal priority.
+			applyZProteanForm(this, pokemon, move, this.effect);
+		},
 		onPrepareHit(source, target, move) {
-			if (move.id === 'struggle' || move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
-			const type = move.type;
-			const forme = Z_PROTEAN_FORMES[type];
-			if (!forme) return;
-			if (source.getTypes().join() !== type) {
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Z Protean');
-			}
-			if (!isStarterEeveePokemon(source)) return;
-			if (source.zProteanForme === forme.id && source.zProteanVisualSpecies === forme.species) return;
-			source.zProteanForme = forme.id;
-			source.zProteanVisualSpecies = forme.species;
-			this.add('-formechange', source, forme.species, '[from] ability: Z Protean');
+			applyZProteanForm(this, source, move, this.effect);
 		},
 		onSwitchOut(pokemon) {
 			pokemon.zProteanForme = undefined;
@@ -11253,7 +11286,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	shadowguard: {
 		onStart(pokemon) {
+			pokemon.abilityState.temporalShiftPendingTurns = [];
 			return this.dex.abilities.get('shadowtag').onStart?.call(this, pokemon);
+		},
+		onAfterMove(source, target, move) {
+			if (move.category === 'Status' || move.flags['futuremove'] || move.callsMove) return;
+			const pendingTurns = source.abilityState.temporalShiftPendingTurns ||= [];
+			if (!pendingTurns.includes(this.turn)) pendingTurns.push(this.turn);
 		},
 		onFoeTrapPokemon(pokemon) {
 			return this.dex.abilities.get('shadowtag').onFoeTrapPokemon?.call(this, pokemon);
@@ -11284,7 +11323,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
 		},
 		onResidual(pokemon) {
-			this.dex.abilities.get('temporalshift').queueTemporalHex.call(this, pokemon, 'Shadow Guard', true, ['Ghost', 'Dark', 'Fairy'], 120);
+			this.dex.abilities.get('temporalshift').queueTemporalHex.call(this, pokemon, 'Shadow Guard', ['Ghost', 'Dark', 'Fairy'], 100);
 		},
 		onFaint(pokemon) {
 			return this.dex.abilities.get('shadowtag').onFaint?.call(this, pokemon);
@@ -11346,18 +11385,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 292,
 	},
 	blademastery: {
-		onModifyMove(move, source) {
-			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source);
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
-		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			const sharpnessBoost = move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain') ? 1.5 : 1;
-			const modifier = getDualWieldModifier(move, sharpnessBoost);
-			if (modifier !== 1) return this.chainModify(modifier);
+			return this.dex.abilities.get('sharpness').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
-		onModifyCritRatio(critRatio, source, target, move) {
-			if (source.hp * 2 < source.maxhp && move.flags['slicing']) return critRatio + 1;
+		onModifyCritRatio(critRatio) {
+			return this.dex.abilities.get('superluck').onModifyCritRatio?.call(this, critRatio);
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (source.hp * 2 < source.maxhp && move.flags['slicing']) return priority + 1;
 		},
 		flags: {},
 		name: "Blade Mastery",
@@ -12244,6 +12280,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-message', `Royal Decree prevented the stat changes.`);
 				}
 			}
+		},
+		onChargeMove(attacker) {
+			if (this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization'))) return;
+			if (attacker.hasAbility(['royaldecree', 'empress'])) return false;
 		},
 		onModifyMove(move) {
 			if (this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization'))) return;
@@ -14257,6 +14297,47 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 10012,
 	},
+	territorial: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('unnerve').onStart?.call(this, pokemon);
+		},
+		onEnd() {
+			return this.dex.abilities.get('unnerve').onEnd?.call(this);
+		},
+		onFoeUseItem(item) {
+			return this.dex.abilities.get('unnerve').onFoeUseItem?.call(this, item);
+		},
+		onFoeTryEatItem() {
+			return this.dex.abilities.get('unnerve').onFoeTryEatItem?.call(this);
+		},
+		onAnyModifyBoost(boosts, pokemon) {
+			return this.dex.abilities.get('unaware').onAnyModifyBoost?.call(this, boosts, pokemon);
+		},
+		onBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		flags: {},
+		name: "Territorial",
+		rating: 4,
+		num: 10264,
+	},
+	lunardread: {
+		onStart(pokemon) {
+			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
+			this.dex.abilities.get('magicguard').onStart?.call(this, pokemon);
+			this.dex.abilities.get('pressure').onStart?.call(this, pokemon);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
+		},
+		onDeductPP(target, source) {
+			return this.dex.abilities.get('pressure').onDeductPP?.call(this, target, source);
+		},
+		flags: {},
+		name: "Lunar Dread",
+		rating: 4,
+		num: 10265,
+	},
 	ultrainstinct: {
 		onStart(pokemon) {
 			if (isUltraSuppressedTerrain(this)) return;
@@ -15085,6 +15166,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('queenlymajesty').onModifyDamage?.call(this, damage, source, target, move);
 		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Steel') return typeMod - 1;
+		},
 		onFoeTryMove(target, source, move) {
 			return this.dex.abilities.get('queenlymajesty').onFoeTryMove?.call(this, target, source, move);
 		},
@@ -15095,7 +15179,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('royaldecree').onAnyTryBoost?.call(this, boost, target, source, effect);
 		},
 		onModifyMove(move) {
-			return this.dex.abilities.get('royaldecree').onModifyMove?.call(this, move);
+			if (move && this.movehasType(move, 'Fighting')) move.forceSTAB = true;
 		},
 		onModifyDef(def, pokemon) {
 			return this.dex.abilities.get('royaldecree').onModifyDef?.call(this, def, pokemon);
