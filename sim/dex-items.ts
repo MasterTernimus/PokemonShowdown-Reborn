@@ -70,7 +70,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	 * holder to know to use its Z move.
 	 * undefined, if not a species-specific Z crystal
 	 */
-	readonly zMoveFrom?: string;
+	readonly zMoveFrom?: string | readonly string[];
 	/**
 	 * If this is a species-specific Z crystal: An array of the
 	 * species of Pokemon that can use this crystal's Z move.

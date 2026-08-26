@@ -267,7 +267,7 @@ describe('Custom battle data updates', function () {
 
 		battle.makeChoices('move bouncybubble', 'move surf');
 		assert.species(eevee, 'Vaporeon');
-		assert.equal(eevee.hp, eevee.maxhp, 'Water Absorb should block Surf after the Vaporeon change');
+		assert.equal(eevee.hp, eevee.maxhp, 'Storm Drain should block Surf after the Vaporeon change');
 	});
 
 	it('should shift Starter Eevee to Abysseon and keep Searing Void off the user', function () {

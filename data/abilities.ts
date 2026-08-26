@@ -221,28 +221,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10346,
 	},
 	unstableevo: {
+		onTryHitPriority: 1,
 		onStart(pokemon) {
 			if (!isStarterEeveePokemon(pokemon)) return;
-			for (const stat of ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const) {
-				pokemon.set.evs[stat] = 252;
-			}
-			// Recalculate the active form with the forced battle EV spread. IVs are
-			// intentionally left untouched and therefore carry across form changes.
-			pokemon.setSpecies(pokemon.species, this.effect);
-			pokemon.updateMaxHp();
+			setStarterEeveeBattleEVs(pokemon, this.effect);
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			if (!isStarterEeveePokemon(pokemon)) return;
 			const forme = UNSTABLE_EVO_FORMES[move?.id];
 			if (!forme || pokemon.species.id === this.dex.species.get(forme).id) return;
-			if (pokemon.species.id === 'flareon') pokemon.removeVolatile('flashfire');
 			pokemon.formeChange(forme, this.effect, false, '[msg]');
 			for (const id of unstableEvoComponents(pokemon)) {
 				this.dex.abilities.get(id).onStart?.call(this, pokemon);
 			}
 		},
 		onSwitchOut(pokemon) {
-			pokemon.removeVolatile('flashfire');
+			for (const id of unstableEvoComponents(pokemon)) {
+				this.dex.abilities.get(id).onSwitchOut?.call(this, pokemon);
+			}
 		},
 		onTryHit(target, source, move) {
 			for (const id of unstableEvoComponents(target)) {
@@ -250,16 +246,35 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (result !== undefined) return result;
 			}
 		},
-		onBasePower(basePower, source, target, move) {
-			if (source.species.id === 'umbreon' || source.species.id === 'espeon') {
-				return this.dex.abilities.get('eclipse').onBasePower?.call(this, basePower, source, target, move);
+		onAnyRedirectTarget(target, source, source2, move) {
+			for (const id of unstableEvoComponents(this.effectState.target)) {
+				const result = this.dex.abilities.get(id).onAnyRedirectTarget?.call(this, target, source, source2, move);
+				if (result !== undefined) return result;
 			}
 		},
+		onBasePower(basePower, source, target, move) {
+			let modified = false;
+			for (const id of unstableEvoComponents(source)) {
+				const result = this.dex.abilities.get(id).onBasePower?.call(this, basePower, source, target, move);
+				if (result !== undefined) {
+					basePower = result;
+					modified = true;
+				}
+			}
+			return modified ? basePower : undefined;
+		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.species.id === 'umbreon' || target.species.id === 'espeon') {
-				damage = this.dex.abilities.get('eclipse').onSourceModifyDamage?.call(this, damage, source, target, move) ?? damage;
+			for (const id of unstableEvoComponents(target)) {
+				const result = this.dex.abilities.get(id).onSourceModifyDamage?.call(this, damage, source, target, move);
+				if (result !== undefined) damage = result;
 			}
 			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onAnyModifyDamage(damage, source, target, move) {
+			for (const id of unstableEvoComponents(this.effectState.target)) {
+				const result = this.dex.abilities.get(id).onAnyModifyDamage?.call(this, damage, source, target, move);
+				if (result !== undefined) return result;
+			}
 		},
 		onModifyMove(move, pokemon, target) {
 			for (const id of unstableEvoComponents(pokemon)) {
@@ -267,18 +282,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifySpe(spe, pokemon) {
-			if (pokemon.species.id === 'leafeon') {
-				return this.dex.abilities.get('chlorophyll').onModifySpe?.call(this, spe, pokemon);
+			let modified = false;
+			for (const id of unstableEvoComponents(pokemon)) {
+				const result = this.dex.abilities.get(id).onModifySpe?.call(this, spe, pokemon);
+				if (result !== undefined) {
+					spe = result;
+					modified = true;
+				}
 			}
+			return modified ? spe : undefined;
 		},
 		onAfterEachBoost(boost, target, source, effect) {
-			if (target.species.id === 'sylveon') {
-				this.dex.abilities.get('competitive').onAfterEachBoost?.call(this, boost, target, source, effect);
+			for (const id of unstableEvoComponents(target)) {
+				this.dex.abilities.get(id).onAfterEachBoost?.call(this, boost, target, source, effect);
 			}
 		},
 		onWeather(target, source, effect) {
-			if (['espeon', 'glaceon'].includes(target.species.id)) {
-				return this.dex.abilities.get('mindfreeze').onWeather?.call(this, target, source, effect);
+			for (const id of unstableEvoComponents(target)) {
+				const result = this.dex.abilities.get(id).onWeather?.call(this, target, source, effect);
+				if (result !== undefined) return result;
 			}
 		},
 		onResidual(pokemon) {
@@ -290,18 +312,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			const selfSufficient = this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
 			if (selfSufficient !== undefined) return selfSufficient;
-			if (['espeon', 'glaceon'].includes(pokemon.species.id)) {
-				return this.dex.abilities.get('mindfreeze').onImmunity?.call(this, type, pokemon);
+			for (const id of unstableEvoComponents(pokemon)) {
+				const result = this.dex.abilities.get(id).onImmunity?.call(this, type, pokemon);
+				if (result !== undefined) return result;
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			for (const id of unstableEvoComponents(target)) {
+				const result = this.dex.abilities.get(id).onEffectiveness?.call(this, typeMod, target, type, move);
+				if (result !== undefined) return result;
+			}
+		},
+		onModifyDef(def, pokemon) {
+			for (const id of unstableEvoComponents(pokemon)) {
+				const result = this.dex.abilities.get(id).onModifyDef?.call(this, def, pokemon);
+				if (result !== undefined) return result;
 			}
 		},
 		onModifyAtk(atk, pokemon, target, move) {
-			if (pokemon.species.id === 'flareon' && pokemon.volatiles['flashfire'] && this.movehasType(move, 'Fire')) {
-				return this.chainModify(1.5);
+			for (const id of unstableEvoComponents(pokemon)) {
+				const result = this.dex.abilities.get(id).onModifyAtk?.call(this, atk, pokemon, target, move);
+				if (result !== undefined) return result;
 			}
 		},
 		onModifySpA(spa, pokemon, target, move) {
-			if (pokemon.species.id === 'flareon' && pokemon.volatiles['flashfire'] && this.movehasType(move, 'Fire')) {
-				return this.chainModify(1.5);
+			for (const id of unstableEvoComponents(pokemon)) {
+				const result = this.dex.abilities.get(id).onModifySpA?.call(this, spa, pokemon, target, move);
+				if (result !== undefined) return result;
+			}
+		},
+		onDeductPP(target, source) {
+			for (const id of unstableEvoComponents(this.effectState.target)) {
+				const result = this.dex.abilities.get(id).onDeductPP?.call(this, target, source);
+				if (result !== undefined) return result;
 			}
 		},
 		flags: { breakable: 1, failroleplay: 1, noentrain: 1, notrace: 1 },
@@ -10120,6 +10163,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 168,
 	},
 	zprotean: {
+		onStart(pokemon) {
+			if (!isStarterEeveePokemon(pokemon)) return;
+			setStarterEeveeBattleEVs(pokemon, this.effect);
+		},
 		onPrepareHit(source, target, move) {
 			if (move.id === 'struggle' || move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
@@ -15423,14 +15470,23 @@ const UNSTABLE_EVO_FORMES: Partial<Record<ID, string>> = {
 
 function unstableEvoComponents(pokemon: Pokemon): ID[] {
 	switch (pokemon.species.id) {
-	case 'flareon': return ['flashfire'];
-	case 'jolteon': return ['voltabsorb'];
-	case 'vaporeon': return ['waterabsorb'];
-	case 'umbreon': return ['eclipse'];
-	case 'espeon': return ['eclipse', 'mindfreeze'];
-	case 'sylveon': return ['competitive'];
-	case 'leafeon': return ['chlorophyll'];
-	case 'glaceon': return ['mindfreeze'];
+	case 'jolteon': return ['lightningrod'];
+	case 'flareon': return ['soulfire'];
+	case 'vaporeon': return ['stormdrain'];
+	case 'umbreon': return ['pressure'];
+	case 'espeon': return ['magicbounce'];
+	case 'glaceon': return ['icescales'];
+	case 'leafeon': return ['chlorophyll', 'regenerator'];
+	case 'sylveon': return ['friendguard', 'competitive'];
 	default: return [];
 	}
+}
+
+function setStarterEeveeBattleEVs(pokemon: Pokemon, effect: Effect) {
+	for (const stat of ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const) {
+		pokemon.set.evs[stat] = 252;
+	}
+	// Recalculate only the battle copy; IVs and the saved team data remain unchanged.
+	pokemon.setSpecies(pokemon.species, effect);
+	pokemon.updateMaxHp();
 }

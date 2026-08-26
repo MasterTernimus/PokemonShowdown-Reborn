@@ -3471,8 +3471,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sinisterblaze: {
 		name: "Sinister Blaze",
-		desc: "This Ability cannot be suppressed, copied, or transferred. This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, Superheated Field, or Cold Eclipse, its Defense and Special Defense rise by 1 stage on entry. Its burn damage becomes healing and deals the same damage to each foe. It does not heal from that generated damage, but heals from real burn damage dealt to foes. Its physical attacks are not weakened by burn. It is immune to hail and sandstorm damage and counts as Ice type in hail, snow, and ice fields.",
-		shortDesc: "Cannot be suppressed; burn heals user/damages foes; no burn penalty; hail/sand immune; Cold Eclipse +Def/SpD.",
+		desc: "This Ability cannot be suppressed, copied, or transferred. This Pokemon is burned on switch-in, even through Misty Terrain, and its burn can overwrite other status conditions. In Fairy Tale, Starlight Arena, New World, Burning Field, Volcanic Field, Superheated Field, or Cold Eclipse, its Defense and Special Defense rise by 1 stage on entry. Its burn damage becomes healing; foes take 1/8 max HP each turn, or 1/4 if already burned. It does not heal from this generated damage, but heals from real burn damage dealt to foes. Its physical attacks are not weakened by burn. It is immune to hail and sandstorm damage and counts as Ice type in hail, snow, and ice fields.",
+		shortDesc: "Burn heals user; foes take 1/8, or 1/4 if burned; no burn penalty; hail/sand immune.",
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",

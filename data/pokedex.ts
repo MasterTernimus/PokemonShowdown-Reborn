@@ -22318,8 +22318,8 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	samurotthisui: {baseStats: {hp: 90, atk: 110, def: 75, spa: 105, spd: 65, spe: 95}},
 	samurottalt: {baseStats: {hp: 95, atk: 110, def: 90, spa: 120, spd: 80, spe: 75}},
 	samurotthisuialt: {baseStats: {hp: 90, atk: 110, def: 75, spa: 105, spd: 65, spe: 95}},
-	toxicroak: {baseStats: {hp: 98, atk: 131, def: 70, spa: 121, spd: 70, spe: 80}},
-	toxicroakalt: {baseStats: {hp: 98, atk: 126, def: 70, spa: 116, spd: 70, spe: 80}},
+	toxicroak: {baseStats: {hp: 98, atk: 126, def: 70, spa: 116, spd: 70, spe: 90}},
+	toxicroakalt: {baseStats: {hp: 98, atk: 121, def: 70, spa: 111, spd: 70, spe: 90}},
 	alakazam: {baseStats: {hp: 80, atk: 50, def: 50, spa: 135, spd: 95, spe: 120}},
 	alakazammega: {baseStats: {hp: 80, atk: 48, def: 60, spa: 175, spd: 105, spe: 162}},
 	dodrio: {

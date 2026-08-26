@@ -23857,7 +23857,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			shoreup: ["9M"],
 			earthquake: ["9M"],
 			sandtomb: ["9M"],
-			accelrock: ["9M"],
+			accelerock: ["9M"],
 			stoneedge: ["9M"],
 			rockblast: ["9M"],
 			rockslide: ["9M"],
@@ -74110,7 +74110,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	druddigon: {
 		learnset: {
-			accelrock: ["9M"],
+			accelerock: ["9M"],
 			aerialace: ["9M", "7M", "6M", "5M"],
 			aquatail: ["9E", "7T", "6T", "5T"],
 			attract: ["9M", "8M", "7M", "6M", "5M"],
@@ -113954,6 +113954,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 }
 
 const latestLearnsetAdditions: {[id: string]: string[]} = {
+	misdreavus: ['drainingkiss'],
 	granbull: ['highhorsepower', 'spiritbreak', 'stompingtantrum', 'suckerpunch', 'partingshot', 'closecombat', 'smellingsalts', 'brickbreak', 'leechlife', 'poweruppunch', 'wideguard'],
 	furfrou: [
 		'tailslap', 'nuzzle', 'volttackle', 'heartstamp', 'psyshieldbash', 'shadowbone',
