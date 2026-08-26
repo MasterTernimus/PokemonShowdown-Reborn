@@ -3440,7 +3440,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Rock", "Flying"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 80, atk: 105, def: 85, spa: 70, spd: 80, spe: 130 },
-		abilities: { 0: "Rock Head", 1: "Battle Fervor", H: "Relic Armor" },
+		abilities: { 0: "Rock Head", 1: "Dragonize", H: "Relic Armor" },
 		heightm: 1.8,
 		weightkg: 59,
 		color: "Purple",
