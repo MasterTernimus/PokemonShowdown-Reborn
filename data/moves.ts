@@ -17264,7 +17264,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1, cantusetwice: 1 },
 		onAfterMove(source, target, move) {
 			if (!target.fainted && target.hp > 0) {
-				target.side.addSideCondition('stealthrock', source, move);
+				if (this.randomChance(60, 100)) target.trySetStatus('par', source, move);
 			}
 			if (target.fainted) {
 				source.removeVolatile('mustrecharge');
