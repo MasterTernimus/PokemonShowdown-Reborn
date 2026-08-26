@@ -1704,7 +1704,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 657,
 		onTakeItem: false,
 		zMove: "Extreme Evoboost",
-		zMoveFrom: "Last Resort",
+		zMoveFrom: ["Last Resort", "Veevee Volley"],
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
 			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {

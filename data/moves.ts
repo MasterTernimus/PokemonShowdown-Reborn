@@ -10732,7 +10732,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target !== source) target.trySetStatus('brn', source, this.effect);
 		},
 		target: "allAdjacent",
-		type: "Fire",
+		type: "???",
 	},
 	inferno: {
 		num: 517,
@@ -23150,6 +23150,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const bp = Math.floor((pokemon.happiness * 10) / 25) || 1;
 			this.debug(`BP: ${bp}`);
 			return bp;
+		},
+		onPrepareHit(source, target, move) {
+			useHigherOffensiveStat(source, move);
 		},
 		category: "Physical",
 		isNonstandard: "LGPE",

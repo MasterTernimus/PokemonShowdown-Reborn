@@ -5712,7 +5712,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	searingvoid: {
 		name: "Searing Void",
-		desc: "A 40-power Fire-type special move that hits all active Pokemon except the user and burns each target.",
+		desc: "A 40-power typeless special move that hits all active Pokemon except the user and burns each target.",
 		shortDesc: "40 BP; burns all active Pokemon except the user.",
 	},
 	shadowforce: {
@@ -7313,8 +7313,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	veeveevolley: {
 		name: "Veevee Volley",
-		desc: "Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1.",
-		shortDesc: "Max happiness: 102 power. Can't miss.",
+		desc: "Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1. Uses the user's higher offensive stat.",
+		shortDesc: "Max happiness: 102 power; uses higher Atk or SpA; can't miss.",
 	},
 	venomdrench: {
 		name: "Venom Drench",

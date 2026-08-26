@@ -806,7 +806,8 @@ export const commands: Chat.ChatCommands = {
 							details["Z-Crystal"] = zCrystal.name;
 							if (zCrystal.itemUser) {
 								details["User"] = zCrystal.itemUser.join(", ");
-								details["Required Move"] = dex.items.get(move.isZ).zMoveFrom!;
+								const zMoveFrom = dex.items.get(move.isZ).zMoveFrom!;
+							details["Required Move"] = typeof zMoveFrom === "string" ? zMoveFrom : zMoveFrom.join(" / ");
 							}
 						} else {
 							details["Z-Effect"] = "None";

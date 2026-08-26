@@ -150,7 +150,10 @@ export class ExhaustiveRunner {
 				for (const user of item.itemUser) {
 					const pokemon = toID(user);
 					const combo: { item: string, move?: string } = { item: id };
-					if (item.zMoveFrom) combo.move = toID(item.zMoveFrom);
+					if (item.zMoveFrom) {
+						const zMoveFrom = Array.isArray(item.zMoveFrom) ? item.zMoveFrom[0] : item.zMoveFrom;
+						combo.move = toID(zMoveFrom);
+					}
 					let combos = signatures.get(pokemon);
 					if (!combos) {
 						combos = [];
