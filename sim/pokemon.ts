@@ -509,6 +509,7 @@ export class Pokemon {
 		const pikachuGmaxForms = ['pikachu', 'pikachucosplay', 'pikachurockstar', 'pikachubelle', 'pikachupopstar', 'pikachuphd', 'pikachulibre', 'pikachupartner', 'pikachustarter'];
 		const originalSpecies = toID(this.set.species);
 		this.canDynamax = this.baseSpecies.id === 'machampalt' ? 'machampgmaxalt' :
+			this.baseSpecies.id === 'grimmsnarlazzy' ? 'grimmsnarlgmaxazzy' :
 			['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) ? 'eeveegmax' :
 			pikachuGmaxForms.includes(this.baseSpecies.id) ? 'pikachugmax' : this.baseSpecies.id + 'gmax';
 		if (['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) && this.ability === 'unstableevo') {
@@ -2054,6 +2055,7 @@ export class Pokemon {
 			bonewarrior: ['battlearmor', 'selfsufficient'],
 			seafiend: ['toxicdebris', 'waterbubble', 'waterveil'],
 			hisuianoath: ['swornduty', 'toughclaws', 'corrosion'],
+			abysslure: ['lightningrod', 'stormdrain', 'voltabsorb', 'waterabsorb', 'illuminate'],
 			celestialheart: ['multiscale', 'soulheart'],
 			phalanxform: ['hydrabond', 'friendguard', 'battlearmor'],
 			astralcore: ['purepower', 'naturalcure', 'illuminate'],
@@ -2175,6 +2177,8 @@ export class Pokemon {
 			curseddoll: ['toughclaws', 'shadowshield'],
 			apexvenom: ['strongjaw', 'shedskin'],
 			ultrainstinct: ['moldbreaker', 'innerfocus'],
+			unovawing: ['superluck', 'competitive', 'unburden'],
+			aevianwing: ['scrappy', 'rockhead', 'defiant'],
 				resuscitation: ['selfrepair', 'magicguard'],
 				schooling: ['selfrepair'],
 			};

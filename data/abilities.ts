@@ -760,6 +760,96 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10339,
 	},
+	unovawing: {
+		onModifyCritRatio(critRatio) {
+			return critRatio + 1;
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			if (target.isAlly(source) || this.field.isTerrain('chessboardterrain')) return;
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) statsLowered = true;
+			}
+			if (statsLowered) this.boost({spa: 2}, target, target, null, false, true);
+		},
+		onAfterUseItem(item, pokemon) {
+			if (pokemon !== this.effectState.target) return;
+			pokemon.addVolatile('unburden');
+		},
+		onTakeItem(item, pokemon) {
+			pokemon.addVolatile('unburden');
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('unburden');
+		},
+		condition: {
+			onModifySpe(spe, pokemon) {
+				if (!pokemon.item && !pokemon.ignoringAbility()) return this.chainModify(2);
+			},
+		},
+		flags: {
+			failroleplay: 1,
+			noreceiver: 1,
+			noentrain: 1,
+			notrace: 1,
+			failskillswap: 1,
+			cantsuppress: 1,
+			notransform: 1,
+		},
+		name: "Unova Wing",
+		rating: 5,
+		num: 10364,
+	},
+	aevianwing: {
+		onStart(pokemon) {
+			if (pokemon.species.id !== 'unfezant' || pokemon.abilityState.aevianWingTransformed) return;
+			pokemon.abilityState.aevianWingTransformed = true;
+			if (!pokemon.formeChange('Unfezant-Rejuv', this.effect, true, '1')) return;
+			this.add('-formechange', pokemon, pokemon.species.name, '[from] ability: Aevian Wing');
+		},
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'recoil') {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (this.activeMove.id !== 'struggle') return null;
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', `[of] ${target}`);
+			}
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) return;
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) statsLowered = true;
+			}
+			if (statsLowered) this.boost({atk: 2}, target, target, null, false, true);
+		},
+		flags: {
+			failroleplay: 1,
+			noreceiver: 1,
+			noentrain: 1,
+			notrace: 1,
+			failskillswap: 1,
+			cantsuppress: 1,
+			notransform: 1,
+		},
+		name: "Aevian Wing",
+		rating: 5,
+		num: 10365,
+	},
 	hisuianresolve: {
 		onStart(pokemon) { this.dex.abilities.get('magmaarmor').onStart?.call(this, pokemon); },
 		onUpdate(pokemon) { this.dex.abilities.get('magmaarmor').onUpdate?.call(this, pokemon); },
@@ -1001,6 +1091,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10283,
 	},
 	greatmarsh: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('anticipation').onStart?.call(this, pokemon);
+		},
 		onTryHit(target, source, move) { return this.dex.abilities.get('dryskin').onTryHit?.call(this, target, source, move); },
 		onSourceBasePowerPriority: 17,
 		onSourceBasePower(basePower, attacker, defender, move) {
@@ -1009,6 +1102,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onWeather(target, source, effect) { return this.dex.abilities.get('dryskin').onWeather?.call(this, target, source, effect); },
 		onModifySTAB(stab, source, target, move) {
 			return this.dex.abilities.get('adaptability').onModifySTAB?.call(this, stab, source, target, move);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('poisontouch').onSourceDamagingHit?.call(this, damage, target, source, move);
 		},
 		flags: {},
 		name: "Great Marsh",
@@ -1404,6 +1500,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	anticipation: {
 		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (target.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'ability');
+				}
+			}
 			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.moves.get(moveSlot.move);
@@ -6541,6 +6642,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	forewarn: {
 		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (target.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'ability');
+				}
+			}
 			let warnMoves: (Move | Pokemon)[][] = [];
 			let warnBp = 1;
 			for (const target of pokemon.foes()) {
@@ -6613,6 +6719,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	frisk: {
 		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (target.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'ability');
+				}
+			}
 			for (const target of pokemon.foes()) {
 				if (target.item) {
 					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
@@ -11409,6 +11520,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10165,
 	},
+	goldentalons: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('stalwart').onStart?.call(this, pokemon);
+		},
+		onModifyMovePriority: 1,
+		onModifyMove(move) {
+			this.dex.abilities.get('stalwart').onModifyMove?.call(this, move);
+		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('goodasgold').onTryHit?.call(this, target, source, move);
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, source, target, move) {
+			const goodAsGold = this.dex.abilities.get('goodasgold').onBasePower?.call(this, basePower, source, target, move);
+			return this.dex.abilities.get('sharpness').onBasePower?.call(this, goodAsGold ?? basePower, source, target, move);
+		},
+		flags: { breakable: 1 },
+		name: "Golden Talons",
+		rating: 5,
+		num: 10368,
+	},
 	starboxer: {
 		onPrepareHit(source, target, move) {
 			if (!move.flags['punch'] || move.category === 'Status' || move.flags['charge'] || move.flags['futuremove'] || move.isZ || move.isMax) return;
@@ -13158,6 +13290,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSetStatus(status, target, source, effect) {
 			return this.dex.abilities.get('insomnia').onSetStatus?.call(this, status, target, source, effect);
 		},
+		onSourceAfterFaint(length, target, source, effect) {
+			return this.dex.abilities.get('moxie').onSourceAfterFaint?.call(this, length, target, source, effect);
+		},
 		flags: {},
 		name: "Black Fang",
 		rating: 3.5,
@@ -14125,6 +14260,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 163,
 	},
 	unaware: {
+		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (target.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'ability');
+				}
+			}
+		},
 		onAnyModifyBoost(boosts, pokemon) {
 			const unawareUser = this.effectState.target;
 			if (unawareUser === pokemon) return;
@@ -15207,7 +15349,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('queenlymajesty').onModifyDamage?.call(this, damage, source, target, move);
 		},
 		onEffectiveness(typeMod, target, type, move) {
-			if (type === 'Steel') return typeMod - 1;
+			if (type === 'Fairy' && move && ['Poison', 'Steel'].includes(move.type)) return typeMod - 1;
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.type === 'Fighting' && stab === 1) return 1.5;
 		},
 		onFoeTryMove(target, source, move) {
 			return this.dex.abilities.get('queenlymajesty').onFoeTryMove?.call(this, target, source, move);
@@ -15217,9 +15362,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnyTryBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('royaldecree').onAnyTryBoost?.call(this, boost, target, source, effect);
-		},
-		onModifyMove(move) {
-			if (move && this.movehasType(move, 'Fighting')) move.forceSTAB = true;
 		},
 		onModifyDef(def, pokemon) {
 			return this.dex.abilities.get('royaldecree').onModifyDef?.call(this, def, pokemon);
@@ -15236,6 +15378,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			return this.dex.abilities.get('striker').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Fairy' && move && ['Poison', 'Steel'].includes(move.type)) return typeMod - 1;
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.type === 'Fighting' && stab === 1) return 1.5;
 		},
 		onUpdate(pokemon) {
 			return this.dex.abilities.get('vitalspirit').onUpdate?.call(this, pokemon);
@@ -15291,9 +15439,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('illuminate').onStart?.call(this, pokemon);
 		},
 		onTryHit(target, source, move) {
-			const electric = this.dex.abilities.get('lightningrod').onTryHit?.call(this, target, source, move);
-			if (electric === null) return null;
-			return this.dex.abilities.get('stormdrain').onTryHit?.call(this, target, source, move);
+			if (target === source) return;
+			if (this.movehasType(move, 'Electric')) {
+				this.boost({ spa: 1, atk: 1 });
+				return this.dex.abilities.get('voltabsorb').onTryHit?.call(this, target, source, move);
+			}
+			if (this.movehasType(move, 'Water')) {
+				this.boost({ spa: 1, atk: 1 });
+				return this.dex.abilities.get('waterabsorb').onTryHit?.call(this, target, source, move);
+			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
 			const electric = this.dex.abilities.get('lightningrod').onAnyRedirectTarget?.call(this, target, source, source2, move);
@@ -15306,8 +15460,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			return this.dex.abilities.get('illuminate').onModifyMove?.call(this, move);
 		},
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('stormdrain').onImmunity?.call(this, type, pokemon);
+		onResidual(pokemon) {
+			this.dex.abilities.get('waterabsorb').onResidual?.call(this, pokemon);
+			this.dex.abilities.get('voltabsorb').onResidual?.call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Abyss Lure",
@@ -15319,7 +15474,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('dryskin').onTryHit?.call(this, target, source, move);
 		},
 		onSourceBasePowerPriority: 17,
-		onSourceBasePower(basePower, attacker, defender, move) {
+		 onSourceBasePower(basePower, attacker, defender, move) {
 			return this.dex.abilities.get('dryskin').onSourceBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onWeather(target, source, effect) {

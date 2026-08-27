@@ -316,6 +316,22 @@ describe('Custom battle data updates', function () {
 		assert(eevee.hasType('Normal'));
 	});
 
+	it('should preserve the Grimmsnarl-Azzy skin when Gigantamaxing', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Grimmsnarl-Azzy', ability: 'prankster', gigantamax: true, moves: ['splash']},
+			{species: 'Magikarp', moves: ['splash']},
+		], [
+			{species: 'Blissey', moves: ['splash']},
+			{species: 'Magikarp', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const grimmsnarl = battle.p1.active[0];
+		assert.equal(grimmsnarl.canDynamax, 'grimmsnarlgmaxazzy');
+
+		battle.makeChoices('move splash dynamax', 'move splash');
+		assert.species(grimmsnarl, 'Grimmsnarl-Gmax-Azzy');
+	});
+
 	it('should reject Eevium Z specifically when Eevee-Starter uses Unstable Evo', function () {
 		const baseSet = {
 			species: 'Eevee-Starter-Alt', ability: 'Unstable Evo', moves: ['Buzzy Buzz'],
