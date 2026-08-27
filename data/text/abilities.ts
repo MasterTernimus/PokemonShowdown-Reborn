@@ -21,6 +21,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	aevianoath: { name: "Aevian Oath", desc: "This Pokemon has Sworn Duty, Dual Wield, and Battle Armor's effects.", shortDesc: "Sworn Duty + Dual Wield + Battle Armor." },
 	hisuianvanguard: { name: "Hisuian Vanguard", desc: "This Pokemon has Rapid Response and Wind Power's effects.", shortDesc: "Rapid Response + Wind Power." },
 	unovavanguard: { name: "Unova Vanguard", desc: "This Pokemon has Violent Rush and Wind Rider's effects.", shortDesc: "Violent Rush + Wind Rider." },
+	unovawing: {
+		name: "Unova Wing",
+		desc: "This Pokemon has Super Luck, Competitive, and Unburden's effects.",
+		shortDesc: "+1 critical-hit stage; opposing stat drops give +2 Sp. Atk; item loss doubles Speed.",
+	},
+	aevianwing: {
+		name: "Aevian Wing",
+		desc: "This Pokemon has Scrappy, Rock Head, and Defiant's effects. It changes into Unfezant-Rejuv once when it enters battle.",
+		shortDesc: "Transforms once; Scrappy + Rock Head + Defiant.",
+	},
 	hisuianresolve: { name: "Hisuian Resolve", desc: "This Pokemon has Brute Force and Magma Armor's effects.", shortDesc: "Brute Force + Magma Armor." },
 	nobleconduit: { name: "Noble Conduit", desc: "This Pokemon has Battery, Solar Power, and Aftermath's effects.", shortDesc: "Battery + Solar Power + Aftermath." },
 	nobledance: { name: "Noble Dance", desc: "This Pokemon has Dancer, Hospitality, and Own Tempo's effects.", shortDesc: "Dancer + Hospitality + Own Tempo." },
@@ -51,8 +61,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	greatmarsh: {
 		name: "Great Marsh",
-		desc: "This Pokemon has Dry Skin and Adaptability's effects.",
-		shortDesc: "Dry Skin + Adaptability.",
+		desc: "This Pokemon has Dry Skin, Adaptability, Poison Touch, and Anticipation's effects. On switch-in, it removes foe Illusions.",
+		shortDesc: "Dry Skin + Adaptability + Poison Touch + Anticipation; removes foe Illusions on entry.",
 	},
 	phalanxform: {
 		name: "Phalanx Form",
@@ -164,8 +174,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	anticipation: {
 		name: "Anticipation",
-		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attacking move with a type that is super effective against this Pokemon, or any OHKO move. This effect considers Hidden Power to be its determined type, and every other move to be its original type.",
-		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
+		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has a super-effective or OHKO move, and foe Illusions are removed.",
+		shortDesc: "Warns of super-effective/OHKO moves; removes foe Illusions on entry.",
 		gen5: {
 			desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attacking move with a type that is super effective against this Pokemon, or any OHKO move. This effect considers moves to be their original type.",
 		},
@@ -1141,8 +1151,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	forewarn: {
 		name: "Forewarn",
-		desc: "On switch-in, this Pokemon reveals a random strongest move known by an opposing Pokemon. In Psychic Terrain, it gains 2 Sp. Atk and takes 0.8x damage from moves.",
-		shortDesc: "Reveals a strongest foe move; Psychic Terrain +2 SpA; takes 0.8x move damage.",
+		desc: "On switch-in, this Pokemon reveals a strongest move known by an opposing Pokemon and removes foe Illusions. In Psychic Terrain, it gains 2 Sp. Atk and takes 0.8x damage from moves.",
+		shortDesc: "Reveals strongest foe move; removes Illusions; Psychic Terrain +2 SpA; takes 0.8x damage.",
 		gen4: {
 			desc: "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon. This effect considers OHKO moves to have 150 power, Counter, Mirror Coat, and Metal Burst to have 120 power, and every other attacking move with an unspecified power to have 80 power.",
 		},
@@ -1161,8 +1171,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	frisk: {
 		name: "Frisk",
-		desc: "On switch-in, this Pokemon identifies the held items of all opposing Pokemon. Each revealed foe has a 30% chance to be Embargoed.",
-		shortDesc: "Reveals all foes' items; each foe has a 30% chance to be Embargoed.",
+		desc: "On switch-in, this Pokemon identifies the held items of all opposing Pokemon, removes foe Illusions, and each revealed foe has a 30% chance to be Embargoed.",
+		shortDesc: "Reveals items; removes Illusions; foes have a 30% Embargo chance.",
 		gen5: {
 			shortDesc: "On switch-in, this Pokemon identifies the held item of a random opposing Pokemon.",
 		},
@@ -2575,13 +2585,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	empress: {
 		name: "Empress",
-		desc: "This Pokemon has Queenly Majesty and Royal Decree's effects, gains STAB on Fighting-type moves, and Steel-type attacks deal neutral damage instead of exploiting its Fairy typing.",
-		shortDesc: "Queenly Majesty + Royal Decree; Fighting STAB; removes Steel weakness.",
+		desc: "This Pokemon has Queenly Majesty and Royal Decree's effects, gains normal STAB on Fighting-type moves, and ignores the Fairy-type component of Poison- and Steel-type weaknesses.",
+		shortDesc: "Queenly Majesty + Royal Decree; Fighting STAB; ignores Fairy's Poison/Steel weakness.",
 	},
 	imperialprincess: {
 		name: "Imperial Princess",
-		desc: "This Pokemon has Striker, Vital Spirit, and Moxie's effects.",
-		shortDesc: "Striker + Vital Spirit + Moxie.",
+		desc: "This Pokemon has Striker, Vital Spirit, and Moxie's effects, gains normal STAB on Fighting-type moves, and ignores the Fairy-type component of Poison- and Steel-type weaknesses.",
+		shortDesc: "Striker + Vital Spirit + Moxie; Fighting STAB; ignores Fairy's Poison/Steel weakness.",
 	},
 	loyalguard: {
 		name: "Loyal Guard",
@@ -2590,8 +2600,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	abysslure: {
 		name: "Abyss Lure",
-		desc: "This Pokemon has Lightning Rod, Storm Drain, and Illuminate's effects.",
-		shortDesc: "Lightning Rod + Storm Drain + Illuminate.",
+		desc: "This Pokemon redirects Electric- and Water-type moves to itself, is immune to them, restores 1/4 of its maximum HP, and raises its Attack and Special Attack by 1 stage. It also has Illuminate's effect.",
+		shortDesc: "Redirects Electric/Water; heals 1/4; +1 Atk/SpA; Illuminate.",
 	},
 	bogbody: {
 		name: "Bog Body",
@@ -2892,8 +2902,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	blackfang: {
 		name: "Black Fang",
-		desc: "This Pokemon has Strong Jaw and Insomnia's effects.",
-		shortDesc: "Strong Jaw + Insomnia.",
+		desc: "This Pokemon has Strong Jaw, Insomnia, and Moxie's effects.",
+		shortDesc: "Strong Jaw + Insomnia + Moxie.",
 	},
 	surgesurfer: {
 		name: "Surge Surfer",
@@ -3156,8 +3166,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	unaware: {
 		name: "Unaware",
-		desc: "This Pokemon ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",
-		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
+		desc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage, and removes foe Illusions on switch-in.",
+		shortDesc: "Ignores foe stat stages; removes foe Illusions on entry.",
 	},
 	unburden: {
 		name: "Unburden",

@@ -27757,7 +27757,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			grassyglide: [],
 			grassyterrain: ["9M"],
 			growl: ["9L1", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
-         growth: ["9L6"], 
 			headbutt: ["9M", "7V", "4T"],
 			helpinghand: [],
 			hiddenpower: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -114014,6 +114013,21 @@ for (const [id, moves] of Object.entries(latestLearnsetAdditions)) {
 	for (const move of moves) learnset[move] ??= ['9M'];
 }
 
+// Current official TM learnsets that were missing or disabled in this fork.
+const bodyPressLearnsetAdditions = [
+	'jigglypuff', 'wigglytuff', 'graveler', 'golemalola', 'slowbrogalar', 'hypno',
+	'rhyhorn', 'taurospaldeacombat', 'taurospaldeablaze', 'taurospaldeaaqua', 'meganium',
+	'wooperpaldea', 'quagsire', 'ursaluna', 'ursalunabloodmoon', 'makuhita', 'numel',
+	'grumpig', 'regice', 'torterra', 'rampardos', 'hippopotas', 'abomasnow', 'emboar',
+	'eelektross', 'cubchoo', 'cobalion', 'goodrahisui', 'avalugghisui', 'crabominable',
+	'falinks', 'oinkolognef', 'scratchet', 'tomohawk', 'cresceidon', 'ramnarok', 'obliteryx',
+];
+for (const id of bodyPressLearnsetAdditions) {
+	const species = (Learnsets as any)[id] ??= {learnset: {}};
+	const learnset = species.learnset ??= {};
+	if (!learnset.bodypress?.length) learnset.bodypress = ['9M'];
+}
+
 const arcanineLearnset = (Learnsets as any).arcanine?.learnset;
 const hisuianArcanineLearnset = (Learnsets as any).arcaninehisui?.learnset;
 if (arcanineLearnset && hisuianArcanineLearnset) {
@@ -114048,6 +114062,54 @@ for (const [id, moves] of Object.entries(latestLearnsetRemovals)) {
 	const learnset = (Learnsets as any)[id]?.learnset;
 	if (!learnset) continue;
 	for (const move of moves) delete learnset[move];
+}
+
+// Official Gen 8/9 learnset entries missing from this fork. Keep the exact
+// source records so the team builder and validator can distinguish them from
+// the custom additions above.
+const officialGen8Gen9LearnsetAdditions: {[id: string]: {[move: string]: string[]}} = {
+	orbeetle: {leechlife: ['8M']},
+	thievul: {
+		foulplay: ['8M', '8L46'], lashout: ['8T'], mudshot: ['8M'], protect: ['8M'],
+		round: ['8M'], uturn: ['8M'],
+	},
+	boltund: {firefang: ['8M'], nuzzle: ['8L1']},
+	cramorant: {dive: ['9L28', '8M', '8L28'], raindance: ['9M', '8M']},
+	sinisteaantique: {payback: ['8M'], round: ['8M'], snore: ['8M'], wonderroom: ['8M']},
+	polteageistantique: {
+		allyswitch: ['8M'], aromatherapy: ['8L30'], aromaticmist: ['9L1', '8L1'], astonish: ['9L1', '8L1'],
+		batonpass: ['9M', '8M'], calmmind: ['9M'], confuseray: ['9M'], curse: ['9M', '9L66', '8L66'],
+		darkpulse: ['9M', '8M'], endure: ['9M', '8M'], facade: ['9M', '8M'], foulplay: ['9M', '8M'],
+		gigadrain: ['9M', '9L36', '8M', '8L36'], gigaimpact: ['9M', '8M'], hex: ['9M', '8M'],
+		hyperbeam: ['9M', '8M'], imprison: ['9M', '8M'], lightscreen: ['9M', '8M'], magicalleaf: ['9M'],
+		megadrain: ['9L1', '8L1'], memento: ['9L54', '8L54'], metronome: ['9M', '8M'],
+		nastyplot: ['9M', '9L42', '8M', '8L42'], nightshade: ['9M'], painsplit: ['9M'], payback: ['8M'],
+		phantomforce: ['9M', '8M'], poltergeist: ['9M', '8T'], protect: ['9M', '9L18', '8M', '8L18'],
+		psybeam: ['9M'], psychic: ['9M', '8M'], psyshock: ['9M', '8M'], reflect: ['9M', '8M'], rest: ['9M', '8M'],
+		round: ['8M'], selfdestruct: ['8M'], shadowball: ['9M', '9L48', '8M', '8L48'],
+		shellsmash: ['9L60', '8L60'], skillswap: ['9M'], sleeptalk: ['9M', '8M'], snore: ['8M'], spite: ['9M'],
+		storedpower: ['9M', '8M'], strengthsap: ['9L1', '8L1'], substitute: ['9M', '8M'], suckerpunch: ['9L24', '8L24'],
+		sweetscent: ['9L30'], teatime: ['9L0', '8L0'], terablast: ['9M'], trick: ['9M', '8M'], trickroom: ['9M'],
+		willowisp: ['9M', '8M'], withdraw: ['9L1', '8L1'], wonderroom: ['8M'],
+	},
+	tandemaus: {celebrate: ['9S0']},
+	toedscool: {celebrate: ['9S0']},
+	houndstone: {bite: ['9L6'], shadowball: ['9M'], sleeptalk: ['9M']},
+	tatsugiristretchy: {
+		batonpass: ['9M', '9E'], chillingwater: ['9M'], counter: ['9E'], dragoncheer: ['9M'], dragondance: ['9M'],
+		dragonpulse: ['9M', '9L52'], endure: ['9M'], facade: ['9M'], gigaimpact: ['9M'], harden: ['9L6'],
+		hydropump: ['9M'], hyperbeam: ['9M'], icywind: ['9M'], lunge: ['9M'], memento: ['9L34'], mirrorcoat: ['9L47'],
+		nastyplot: ['9M', '9L43'], outrage: ['9M'], protect: ['9M'], raindance: ['9M'], rapidspin: ['9E'], rest: ['9M'],
+		sleeptalk: ['9M'], soak: ['9L23'], splash: ['9L1'], substitute: ['9M'], surf: ['9M'], takedown: ['9M'],
+		taunt: ['9M', '9L28'], terablast: ['9M'], watergun: ['9L1'], waterpulse: ['9M', '9L17'], whirlpool: ['9M'],
+	},
+	annihilape: {helpinghand: ['9M']},
+	poltchageistartisan: {curse: ['9M'], painsplit: ['9M'], psychup: ['9M']},
+};
+for (const [id, moves] of Object.entries(officialGen8Gen9LearnsetAdditions)) {
+	const species = (Learnsets as any)[id] ??= {learnset: {}};
+	const learnset = species.learnset ??= {};
+	for (const [move, sources] of Object.entries(moves)) learnset[move] ??= sources;
 }
 
 const gligarLearnset = (Learnsets as any).gligar?.learnset;
@@ -114139,3 +114201,18 @@ for (const move of rebornFlowerMoves) {
 	if (!(Learnsets as any).florges.learnset[move]) (Learnsets as any).florges.learnset[move] = ['9L1'];
 }
 (Learnsets as any).florgesreborn = {learnset: {...(Learnsets as any).florges.learnset}};
+
+// Unfezant-Rejuv is a battle-only form, so both Wing abilities use the base
+// Unfezant learnset and retain the selected moves when the form changes.
+const unfezantLearnsetAdditions = [
+	'focusblast', 'calmmind', 'hypervoice', 'extrasensory', 'rockthrow', 'harden',
+	'rockslide', 'brickbreak', 'stealthrock', 'closecombat', 'rockblast', 'blazekick', 'stoneedge',
+	'bulkup', 'rocktomb', 'knockoff', 'sandstorm', 'smackdown', 'dig', 'payback',
+	'rockpolish', 'mudslap', 'rockclimb', 'retaliate', 'lowkick', 'batonpass',
+	'endeavor', 'stompingtantrum', 'superpower', 'ironhead', 'mudshot', 'megakick',
+	'honeclaws', 'arenitewall', 'lowsweep', 'tripleaxel',
+];
+const unfezantLearnset = (Learnsets as any).unfezant?.learnset;
+if (unfezantLearnset) {
+	for (const move of unfezantLearnsetAdditions) unfezantLearnset[move] ??= ['9M'];
+}

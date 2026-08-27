@@ -149,6 +149,22 @@ describe('Composite ability cleanup', function () {
 		assert.deepEqual(battle.dex.species.get('Empoleon-Alt').abilities, expected);
 	});
 
+	it('should give Empress and Imperial Princess native Fighting STAB and suppress only Fairy weakness components', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const source = battle.dex.species.get('Tsareena');
+		const target = battle.dex.species.get('Mew');
+		const fightingMove = battle.dex.moves.get('focusblast');
+		const poisonMove = battle.dex.moves.get('sludgebomb');
+
+		for (const id of ['empress', 'imperialprincess']) {
+			const ability = battle.dex.abilities.get(id);
+			assert.equal(ability.onModifySTAB.call(battle, 1, source, target, fightingMove), 1.5);
+			assert.equal(ability.onModifySTAB.call(battle, 1.5, source, target, fightingMove), undefined);
+			assert.equal(ability.onEffectiveness.call(battle, 1, target, 'Fairy', poisonMove), 0);
+			assert.equal(ability.onEffectiveness.call(battle, 1, target, 'Grass', poisonMove), undefined);
+		}
+	});
+
 	it('should replace Sandaconda\'s Sand Veil with Shed Skin', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		assert.deepEqual(battle.dex.species.get('Sandaconda').abilities, {
@@ -167,8 +183,8 @@ describe('Composite ability cleanup', function () {
 		battle.makeChoices('team 1', 'team 1');
 		const aerodactyl = battle.p1.active[0];
 		const mew = battle.p2.active[0];
-		assert.statStage(mew, 'def', -1);
-		assert.statStage(mew, 'spd', -1);
+		assert.statStage(mew, 'def', 0);
+		assert.statStage(mew, 'spd', 0);
 		const hp = aerodactyl.hp;
 		battle.makeChoices('move splash', 'move gust');
 		assert.equal(aerodactyl.hp, hp);

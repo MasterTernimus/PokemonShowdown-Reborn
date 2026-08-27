@@ -153,6 +153,14 @@ export class BattleActions {
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
 		}
+		// Unfezant-Rejuv is only a valid battle form with Aevian Wing. This
+		// also protects custom/direct battle inputs that bypass team validation.
+		if (pokemon.species.id === 'unfezantrejuv' && pokemon.ability !== 'aevianwing') {
+			const baseSpecies = this.dex.species.get('Unfezant');
+			pokemon.baseSpecies = baseSpecies;
+			pokemon.setSpecies(baseSpecies);
+			pokemon.details = pokemon.getUpdatedDetails();
+		}
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
