@@ -1027,7 +1027,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move, source) {
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
-			move.critModifier = 3;
+			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move, source);
 			if (move.category !== 'Status') {
 				move.breaksProtect = true;
 				(move as typeof move & { spiralEvolutionBreaksProtect?: boolean }).spiralEvolutionBreaksProtect = true;
@@ -1039,17 +1039,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let modifier = getDualWieldModifier(move);
 			if (move.id === 'twineedle') modifier *= 2;
 			if (spiralMove.spiralEvolutionProtectedTargets?.includes(target)) modifier *= 0.5;
-			if (this.field.isTerrain('dragonsdenterrain')) modifier *= 1.2;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onFractionalPriority(priority, pokemon, target, move) {
-			if (priority === 0 && move.priority === 0 && this.field.getPseudoWeather('trickroom')) return 0.1;
+			// This is an action-order override, not real move priority. The move's
+			// priority remains unchanged, so anti-priority effects do not block it.
+			if (priority === 0 && move.priority === 0 && this.field.getPseudoWeather('trickroom')) return 10000;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.chainModify(0.8);
-		},
-		onModifyCritRatio(critRatio) {
-			return critRatio + 1;
 		},
 		flags: {},
 		name: "Spiral Evolution",
@@ -2471,6 +2469,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 10005,
 	},
+	witheringshell: {
+		onCheckShow(pokemon) {
+			this.dex.abilities.get('selfrepair').onCheckShow?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			this.dex.abilities.get('selfrepair').onSwitchOut?.call(this, pokemon);
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('crumblingshell').onDamagingHit?.call(this, damage, target, source, move);
+			this.dex.abilities.get('weakarmor').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('selfrepair').onResidual?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
+		},
+		flags: {},
+		name: "Withering Shell",
+		rating: 4.5,
+		num: 10369,
+	},
 	cudchew: {
 		onEatItem(item, pokemon, source, effect) {
 			if (item.isBerry && (!effect || !['bugbite', 'pluck'].includes(effect.id))) {
@@ -2919,10 +2939,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (this.field.isTerrain('shortcircuitterrain')) {
 				this.boost({ spa: 1, atk: 1 });
-				return;
-			}
-			if (this.gameType === 'singles') {
-				this.boost({ atk: boost, spa: boost }, pokemon, pokemon);
 				return;
 			}
 			for (const target of pokemon.foes()) {
@@ -4726,6 +4742,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Adaptive Cell",
 		rating: 4,
 		num: 10163,
+	},
+	adaptivewaste: {
+		onPrepareHit(source, target, move) {
+			return this.dex.abilities.get('protean').onPrepareHit?.call(this, source, target, move);
+		},
+		onSwitchOut(pokemon) {
+			return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
+		},
+		flags: {},
+		name: "Adaptive Waste",
+		rating: 4.5,
+		num: 10373,
 	},
 	relicbeam: {
 		onModifySpA(spa, pokemon) {
@@ -6803,6 +6831,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Gale Wings",
 		rating: 1.5,
 		num: 177,
+	},
+	wingedwraith: {
+		onModifyMove(move) {
+			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move);
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			return this.dex.abilities.get('galewings').onModifyPriority?.call(this, priority, pokemon, target, move);
+		},
+		flags: {},
+		name: "Winged Wraith",
+		rating: 4,
+		num: 10370,
 	},
 	galvanize: {
 		onModifyTypePriority: -1,
@@ -11218,6 +11258,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 157,
 	},
 	schooling: {
+		onCheckShow(pokemon) {
+			if (pokemon.species.id !== 'wishiwashischool') return;
+			this.dex.abilities.get('selfrepair').onCheckShow?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.species.id !== 'wishiwashischool') return;
+			this.dex.abilities.get('selfrepair').onSwitchOut?.call(this, pokemon);
+		},
 		onModifyMove(move, pokemon) {
 			if (pokemon.species.id !== 'wishiwashischool') return;
 			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, pokemon);
@@ -11230,9 +11278,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (source.species.id !== 'wishiwashischool') return;
 			return this.dex.abilities.get('hydrabond').onBasePower?.call(this, basePower, source, target, move);
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.species.id !== 'wishiwashischool') return;
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onImmunity(type, pokemon) {
+			if (pokemon.species.id !== 'wishiwashischool') return;
+			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
+		},
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed) return;
-			if (pokemon.hp > pokemon.maxhp / 4 || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
+			if (pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
 				}
@@ -11256,6 +11312,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.species.id === 'wishiwashischool') {
 					pokemon.formeChange('Wishiwashi');
 				}
+			}
+			if (pokemon.species.id === 'wishiwashischool') {
+				this.dex.abilities.get('selfrepair').onResidual?.call(this, pokemon);
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
@@ -14496,7 +14555,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	lunardread: {
 		onStart(pokemon) {
-			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
 			this.dex.abilities.get('magicguard').onStart?.call(this, pokemon);
 			this.dex.abilities.get('pressure').onStart?.call(this, pokemon);
 		},
@@ -14510,6 +14568,41 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Lunar Dread",
 		rating: 4,
 		num: 10265,
+	},
+	ragingbeast: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
+		},
+		onModifyMove(move) {
+			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			return this.dex.abilities.get('guts').onModifyAtk?.call(this, atk, pokemon);
+		},
+		flags: {},
+		name: "Raging Beast",
+		rating: 4,
+		num: 10374,
+	},
+	scavenger: {
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('overcoat').onImmunity?.call(this, type, pokemon);
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('overcoat').onTryHit?.call(this, target, source, move);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('bigpecks').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onSwitchOut(pokemon) {
+			return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
+		},
+		flags: {breakable: 1},
+		name: "Scavenger",
+		rating: 4,
+		num: 10375,
 	},
 	ultrainstinct: {
 		onStart(pokemon) {
@@ -14556,7 +14649,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	duskdrive: {
 		onStart(pokemon) { return this.dex.abilities.get('battlefervor').onStart?.call(this, pokemon); },
-		onEnd() { return this.dex.abilities.get('battlefervor').onEnd?.call(this); },
+		onEnd() {
+			this.dex.abilities.get('battlefervor').onEnd?.call(this);
+			return (this.dex.abilities.get('opportunist') as any).onEnd?.call(this);
+		},
 		onTryAddVolatile(status, pokemon) { return this.dex.abilities.get('battlefervor').onTryAddVolatile?.call(this, status, pokemon); },
 		onTryBoost(boost, target, source, effect) { return this.dex.abilities.get('battlefervor').onTryBoost?.call(this, boost, target, source, effect); },
 		onModifyMove(move, source) { this.dex.abilities.get('precision').onModifyMove?.call(this, move, source); },
@@ -14572,7 +14668,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyAfterTerastallization() { return (this.dex.abilities.get('opportunist') as any).onAnyAfterTerastallization?.call(this); },
 		onAnyAfterMove() { return (this.dex.abilities.get('opportunist') as any).onAnyAfterMove?.call(this); },
 		onResidual(pokemon) { return (this.dex.abilities.get('opportunist') as any).onResidual?.call(this, pokemon); },
-		onEnd() { return (this.dex.abilities.get('opportunist') as any).onEnd?.call(this); },
 		onModifyAtk(atk, pokemon, target, move) { return this.dex.abilities.get('battlefervor').onModifyAtk?.call(this, atk, pokemon, target, move); },
 		flags: {},
 		name: "Dusk Drive",
@@ -15502,6 +15597,61 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10315,
 	},
+	toxicsink: {
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('effectspore').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && this.movehasType(move, 'Poison')) {
+				if (!this.boost({spa: 1, atk: 1})) {
+					this.add('-immune', target, '[from] ability: Toxic Sink');
+				}
+				return null;
+			}
+		},
+		onAnyRedirectTarget(target, source, source2, move) {
+			if (!this.movehasType(move, 'Poison') || move.flags['pledgecombo']) return;
+			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
+			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
+				if (move.smartTarget) move.smartTarget = false;
+				if (this.effectState.target !== target) {
+					this.add('-activate', this.effectState.target, 'ability: Toxic Sink');
+				}
+				return this.effectState.target;
+			}
+		},
+		onAnyTryHeal(damage, target, source, effect) {
+			return this.dex.abilities.get('invigorate').onAnyTryHeal?.call(this, damage, target, source, effect);
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			return this.dex.abilities.get('invigorate').onResidual?.call(this, pokemon);
+		},
+		flags: {breakable: 1},
+		name: "Toxic Sink",
+		rating: 4,
+		num: 10371,
+	},
+	toxicmess: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('gluttony').onStart?.call(this, pokemon);
+		},
+		onDamage(item, pokemon) {
+			return this.dex.abilities.get('gluttony').onDamage?.call(this, item, pokemon);
+		},
+		onModifyMovePriority: -1,
+		onModifyMove(move) {
+			return this.dex.abilities.get('stench').onModifyMove?.call(this, move);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('poisontouch').onSourceDamagingHit?.call(this, damage, target, source, move);
+		},
+		flags: {},
+		name: "Toxic Mess",
+		rating: 3.5,
+		num: 10372,
+	},
 	frostsiren: {
 		onStart(pokemon) {
 			this.dex.abilities.get('forewarn').onStart?.call(this, pokemon);
@@ -15791,6 +15941,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Reborn Flower",
 		rating: 4,
 		num: 10304,
+	},
+	toxicspines: {
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('toxicdebris').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onModifyMove(move, source) {
+			this.dex.abilities.get('corrosion').onModifyMove?.call(this, move, source);
+		},
+		onNegateImmunity(pokemon, type) {
+			return this.dex.abilities.get('corrosion').onNegateImmunity?.call(this, pokemon, type);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('corrosion').onDamage?.call(this, damage, target, source, effect);
+		},
+		onFoeAfterSetStatus(status, target, source, effect) {
+			this.dex.abilities.get('corrosion').onFoeAfterSetStatus?.call(this, status, target, source, effect);
+		},
+		onModifyCritRatio(critRatio, source, target) {
+			return this.dex.abilities.get('merciless').onModifyCritRatio?.call(this, critRatio, source, target);
+		},
+		flags: {},
+		name: "Toxic Spines",
+		rating: 5,
+		num: 10376,
 	},
 };
 

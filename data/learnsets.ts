@@ -1,3 +1,5 @@
+import {Gen8Gen9NatDexLearnsets} from './natdex-gen8-gen9-learnsets';
+
 export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	missingno: {
 		learnset: {
@@ -230,6 +232,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
          slash: ["9L29"], 
 			sleeppowder: ["9L17", "8L15", "8V", "7L13", "7V", "6L13", "5L13", "4L13", "3L15"],
 			sleeptalk: ["9M", "8M", "7M", "7V", "6M", "5T", "4M", "3T"],
+			soak: ["9M"],
          sludge: ["9M"], 
 			sludgebomb: ["9M", "8M", "8V", "7M", "6M", "5M", "4M", "3M"],
 			snore: ["9M", "8M", "7T", "7V", "6T", "5T", "4T", "3T"],
@@ -75170,6 +75173,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			block: ["9M", "7T", "6T", "5T"],
 			bonerush: ["9L1", "8L0", "7L1", "6L1", "5L51"],
 			bravebird: ["9L72", "8M", "8L80", "7L1", "6L1", "5L63"],
+			bulkup: ["9M"],
 			confide: ["9M", "7M", "6M"],
          curse: ["9M"], 
 			cut: ["9M", "6M", "5M"],
@@ -75196,6 +75200,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hurricane: [],
 			hyperbeam: ["9M", "8M", "7M", "6M", "5M"],
 			incinerate: ["6M", "5M"],
+			icywind: ["9M"],
 			irondefense: ["9L30", "8M", "8L30", "7T", "5T"],
 			knockoff: ["9L48", "8L24", "7T", "6T", "5T"],
 			lashout: ["9M", "8T"],
@@ -75225,6 +75230,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			snarl: ["9M", "8M", "7M", "6M", "5M"],
 			snatch: ["9M", "7T", "6T", "5T"],
 			snore: ["9M", "8M", "7T", "6T", "5T"],
+			spikes: ["9M"],
 			spite: [],
 			steelwing: ["9M", "8M", "7M", "6M"],
 			substitute: ["9M", "8M", "7M", "6M", "5M"],
@@ -87247,6 +87253,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			aquatail: ["9L33", "8L32", "7T", "7L38"],
 			attract: ["9M", "8M", "7M"],
 			beatup: ["9L17", "8M", "8L8", "7L33"],
+			bounce: ["9M"],
 			bouncybubble: ["9M"],
 			brine: ["9L20", "8M", "8L12", "7L14"],
 			bulldoze: ["9M", "8M", "7M"],
@@ -87270,6 +87277,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hiddenpower: ["9M", "7M"],
 			hydropump: ["9L38", "8M", "8L44", "7L54"],
 			icebeam: ["9M", "8M", "7M"],
+			icefang: ["9M"],
+			ironhead: ["9M"],
 			irontail: ["9M", "8M", "7T"],
 			liquidation: ["9M", "8M"],
 			mimic: ["9M"],
@@ -87277,6 +87286,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			muddywater: ["9E", "8M", "7E"],
 			mudshot: ["9M", "8M"],
 			protect: ["9M", "8M", "7M"],
+			psychicfangs: ["9M"],
 			raindance: ["9M", "8M", "7M"],
 			recover: ["9M"],
 			rest: ["9M", "8M", "7M"],
@@ -87292,15 +87302,18 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			substitute: ["9M", "8M", "7M"],
 			surf: ["9M", "8M", "7M"],
 			swagger: ["9M", "7M"],
+			strength: ["9M"],
 			takedown: ["9L14", "8E", "7L25"],
 			tearfullook: ["9L9", "8L16", "7L22"],
 			toxic: ["9M", "7M"],
+			tripledive: ["9M"],
 			uproar: ["9L25", "8M", "8L28"],
 			uturn: ["9M", "8M", "7M"],
 			waterfall: ["9M", "8M", "7M"],
 			watergun: ["9L1", "8L1", "7L1"],
 			waterpulse: ["9E", "8E", "7T", "7E"],
 			watersport: ["9E", "7E"],
+			wavecrash: ["9M"],
 			whirlpool: ["9E", "8M", "7E"],
 		},
 	},
@@ -114013,6 +114026,37 @@ for (const [id, moves] of Object.entries(latestLearnsetAdditions)) {
 	for (const move of moves) learnset[move] ??= ['9M'];
 }
 
+function mergeLearnsetData(
+	target: import('../sim/dex-species').LearnsetData,
+	source: import('../sim/dex-species').LearnsetData
+) {
+	const targetLearnset = target.learnset ??= {};
+	for (const [move, sources] of Object.entries(source.learnset || {})) {
+		const currentSources = targetLearnset[move] ?? [];
+		targetLearnset[move] = [...new Set([...currentSources, ...sources])];
+	}
+
+	for (const key of ['eventData', 'encounters'] as const) {
+		const sourceEvents = source[key];
+		if (!sourceEvents?.length) continue;
+		const targetEvents = target[key] ??= [];
+		const knownEvents = new Set(targetEvents.map(event => JSON.stringify(event)));
+		for (const event of sourceEvents) {
+			const serializedEvent = JSON.stringify(event);
+			if (knownEvents.has(serializedEvent)) continue;
+			targetEvents.push(event);
+			knownEvents.add(serializedEvent);
+		}
+	}
+}
+
+// Add every official Generation 8/9 NatDex source without replacing custom
+// moves or source records already present in this fork.
+for (const [id, officialData] of Object.entries(Gen8Gen9NatDexLearnsets)) {
+	const localData = (Learnsets as any)[id] ??= {learnset: {}};
+	mergeLearnsetData(localData, officialData);
+}
+
 // Current official TM learnsets that were missing or disabled in this fork.
 const bodyPressLearnsetAdditions = [
 	'jigglypuff', 'wigglytuff', 'graveler', 'golemalola', 'slowbrogalar', 'hypno',
@@ -114031,23 +114075,60 @@ for (const id of bodyPressLearnsetAdditions) {
 const arcanineLearnset = (Learnsets as any).arcanine?.learnset;
 const hisuianArcanineLearnset = (Learnsets as any).arcaninehisui?.learnset;
 if (arcanineLearnset && hisuianArcanineLearnset) {
-	for (const [move, sources] of Object.entries(arcanineLearnset)) hisuianArcanineLearnset[move] ??= sources;
+	mergeLearnsetData((Learnsets as any).arcaninehisui, (Learnsets as any).arcanine);
 }
 
 const goodraLearnset = (Learnsets as any).goodra?.learnset;
 const hisuianGoodraLearnset = (Learnsets as any).goodrahisui?.learnset;
 if (goodraLearnset && hisuianGoodraLearnset) {
-	for (const [move, sources] of Object.entries(goodraLearnset)) hisuianGoodraLearnset[move] ??= sources;
+	mergeLearnsetData((Learnsets as any).goodrahisui, (Learnsets as any).goodra);
 }
 
 const samurottLearnset = (Learnsets as any).samurott?.learnset;
 const hisuianSamurottLearnset = (Learnsets as any).samurotthisui?.learnset;
 if (samurottLearnset && hisuianSamurottLearnset) {
-	Object.assign(hisuianSamurottLearnset, samurottLearnset);
+	mergeLearnsetData((Learnsets as any).samurotthisui, (Learnsets as any).samurott);
 }
 
-const latestLearnsetRemovals: {[id: string]: string[]} = {
+export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	pidgeot: ['bleakwindstorm', 'windbolt', 'searingshot', 'springtidestorm'],
+	claydol: ['lightofruin', 'shoreup', 'lusterpurge'], chimecho: ['lightofruin'],
+	gyarados: ['dragonascent'], archeops: ['dragonascent'], aerodactyl: ['dragonascent'],
+	exploud: ['torchsong'], delphox: ['torchsong'], ninetales: ['torchsong'],
+	chikorita: ['growth'], bayleef: ['growth'], meganium: ['growth'],
+	lycanroc: ['precipiceblades', 'shoreup'], lycanrocmidnight: ['precipiceblades', 'shoreup'],
+	lycanrocdusk: ['precipiceblades', 'shoreup'], arcanine: ['mightycleave'],
+	donphan: ['mightycleave', 'shoreup'], druddigon: ['mightycleave', 'partingshot'],
+	feraligatr: ['mightycleave', 'shoreup'], marowak: ['mightycleave', 'shoreup'],
+	marowakalola: ['mightycleave', 'shoreup'], solrock: ['mightycleave', 'diamondstorm'],
+	lucario: ['tachyoncutter', 'meteorassault'], sceptile: ['tachyoncutter'],
+	gallade: ['tachyoncutter', 'bitterblade', 'triplearrows'],
+	gardevoir: ['tachyoncutter', 'psychoboost', 'lunarwish', 'lunardance', 'psyblade'],
+	empoleon: ['tachyoncutter'], starmie: ['diamondstorm'], lunatone: ['diamondstorm'],
+	dodrio: ['triplearrows'], kabutops: ['ceaselessedge'], weavile: ['ceaselessedge'],
+	drapion: ['ceaselessedge'], clawitzer: ['originpulse'],
+	wailord: ['originpulse', 'sparklingaria', 'slackoff'], staraptor: ['thunderouskick'],
+	garchomp: ['spacialrend', 'roaroftime'], dragonite: ['roaroftime'], kommoo: ['roaroftime'],
+	altaria: ['roaroftime'], goodra: ['roaroftime', 'slackoff'],
+	goodrahisui: ['roaroftime', 'slackoff'], salamence: ['roaroftime'], flygon: ['roaroftime'],
+	hydreigon: ['roaroftime'], pangoro: ['ragefist'], hitmonchan: ['ragefist'],
+	rhydon: ['saltcure'], rhyperior: ['saltcure'], crobat: ['direclaw'],
+	toxicroak: ['direclaw', 'partingshot'], seviper: ['direclaw', 'partingshot'],
+	mienshao: ['meteorassault'], escavalier: ['doubleironbash'], mawile: ['doubleironbash'],
+	arcaninehisui: ['accelerock', 'shoreup'], volcanion: ['hydrosteam'],
+	musharna: ['partingshot'], noivern: ['partingshot'], umbreon: ['partingshot'],
+	abomasnow: ['partingshot'], cradily: ['sappyseed'], vespiquen: ['partingshot'], muk: ['partingshot'],
+	mukalola: ['partingshot'], spiritomb: ['partingshot'], liepard: ['partingshot'],
+	manectric: ['partingshot'], nidoking: ['partingshot'], kecleon: ['partingshot'],
+	parasect: ['partingshot'], dusknoir: ['partingshot'], absol: ['partingshot'],
+	granbull: ['partingshot'], zangoose: ['partingshot'], scyther: ['sacredsword'],
+	scizor: ['sacredsword'], kleavor: ['sacredsword'], espeon: ['fierydance', 'lusterpurge'],
+	reuniclus: ['lusterpurge'], sawsbuck: ['shoreup'], seismitoad: ['shoreup'],
+	crustle: ['shoreup'], stoutland: ['shoreup'], armaldo: ['shoreup'], machamp: ['shoreup'],
+	omastar: ['shoreup'], simipour: ['slackoff'], simisage: ['slackoff'], simisear: ['slackoff'],
+	lapras: ['bouncybubble'], milotic: ['bouncybubble'],
+	oshawott: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
+	dewott: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 	samurott: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 	samurotthisui: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 };
@@ -114058,7 +114139,7 @@ if (alakazamLearnset) {
 	(Learnsets as any).alakazammegaalt = {learnset: {...alakazamLearnset}};
 }
 
-for (const [id, moves] of Object.entries(latestLearnsetRemovals)) {
+for (const [id, moves] of Object.entries(CustomLearnsetRemovals)) {
 	const learnset = (Learnsets as any)[id]?.learnset;
 	if (!learnset) continue;
 	for (const move of moves) delete learnset[move];
@@ -114117,6 +114198,15 @@ const gliscorLearnset = (Learnsets as any).gliscor?.learnset;
 if (gligarLearnset) (Learnsets as any).gligaralt = {learnset: {...gligarLearnset}};
 if (gliscorLearnset) (Learnsets as any).gliscoralt = {learnset: {...gliscorLearnset}};
 
+const corsolaLearnset = (Learnsets as any).corsola?.learnset;
+if (corsolaLearnset) (Learnsets as any).corsolaalt = {learnset: {...corsolaLearnset}};
+
+const crobatLearnset = (Learnsets as any).crobat?.learnset;
+if (crobatLearnset) (Learnsets as any).crobatalt = {learnset: {...crobatLearnset}};
+
+const mukLearnset = (Learnsets as any).muk?.learnset;
+if (mukLearnset) (Learnsets as any).mukpulse = {learnset: {...mukLearnset}};
+
 const basculegionLearnset = (Learnsets as any).basculegion?.learnset;
 const basculegionFemaleLearnset = (Learnsets as any).basculegionf?.learnset;
 if (basculegionLearnset && basculegionFemaleLearnset) {
@@ -114129,8 +114219,7 @@ const toxtricityLearnset = (Learnsets as any).toxtricity?.learnset;
 const toxtricityLowKeyLearnset = (Learnsets as any).toxtricitylowkey?.learnset;
 if (toxtricityLearnset && toxtricityLowKeyLearnset) {
 	const toxtricityAevianLearnset = {...toxtricityLowKeyLearnset};
-	for (const move of Object.keys(toxtricityLowKeyLearnset)) delete toxtricityLowKeyLearnset[move];
-	Object.assign(toxtricityLowKeyLearnset, toxtricityLearnset);
+	mergeLearnsetData((Learnsets as any).toxtricitylowkey, (Learnsets as any).toxtricity);
 	(Learnsets as any).toxtricityaevian = {learnset: toxtricityAevianLearnset};
 	const sharedToxtricityMoves = {
 		snarl: ["9M"],
@@ -114143,7 +114232,7 @@ if (toxtricityLearnset && toxtricityLowKeyLearnset) {
 		voltswitch: ["9M"],
 	};
 	for (const learnset of [toxtricityLearnset, toxtricityLowKeyLearnset, toxtricityAevianLearnset]) {
-		Object.assign(learnset, sharedToxtricityMoves);
+		mergeLearnsetData({learnset}, {learnset: sharedToxtricityMoves});
 	}
 }
 
@@ -114178,7 +114267,7 @@ const starterEeveeSinisterBlazeLearnset: {[moveid: string]: string[]} = {};
 for (const move of starterEeveeSinisterBlazeLevelUp) starterEeveeSinisterBlazeLearnset[move] = ['9L1'];
 for (const move of starterEeveeSinisterBlazeTutor) starterEeveeSinisterBlazeLearnset[move] = ['9M'];
 for (const move of starterEeveeSinisterBlazeEvent) starterEeveeSinisterBlazeLearnset[move] = ['8V'];
-(Learnsets as any).eeveestarter.learnset = starterEeveeSinisterBlazeLearnset;
+mergeLearnsetData((Learnsets as any).eeveestarter, {learnset: starterEeveeSinisterBlazeLearnset});
 
 const bronzongRejuvLevelUp = [
 	'flash', 'nightshade', 'mirrorshot', 'magiccoat', 'mimic', 'signalbeam',
@@ -114193,8 +114282,8 @@ const bronzongRejuvTutor = [
 const bronzongRejuvLearnset: {[moveid: string]: string[]} = {};
 for (const move of bronzongRejuvLevelUp) bronzongRejuvLearnset[move] = ['9L1'];
 for (const move of bronzongRejuvTutor) bronzongRejuvLearnset[move] = ['9M'];
-(Learnsets as any).bronzong.learnset = bronzongRejuvLearnset;
-(Learnsets as any).bronzongrejuv = {learnset: {...bronzongRejuvLearnset}};
+mergeLearnsetData((Learnsets as any).bronzong, {learnset: bronzongRejuvLearnset});
+(Learnsets as any).bronzongrejuv = {learnset: {...(Learnsets as any).bronzong.learnset}};
 
 const rebornFlowerMoves = ['tackle', 'ember', 'fairywind', 'flamewheel', 'wish', 'incinerate', 'sunnyday', 'mysticalfire', 'morningsun', 'cauterize', 'revivalblessing'];
 for (const move of rebornFlowerMoves) {
@@ -114215,4 +114304,12 @@ const unfezantLearnsetAdditions = [
 const unfezantLearnset = (Learnsets as any).unfezant?.learnset;
 if (unfezantLearnset) {
 	for (const move of unfezantLearnsetAdditions) unfezantLearnset[move] ??= ['9M'];
+}
+
+// Intentional balance removals are authoritative and must run after every
+// official and custom additive merge above.
+for (const [id, moves] of Object.entries(CustomLearnsetRemovals)) {
+	const learnset = (Learnsets as any)[id]?.learnset;
+	if (!learnset) continue;
+	for (const move of moves) delete learnset[move];
 }

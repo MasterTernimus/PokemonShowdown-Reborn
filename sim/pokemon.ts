@@ -2050,6 +2050,15 @@ export class Pokemon {
 	hasAbility(ability: string | string[]) {
 		const abilityAliases: { [abilityid: string]: string[] } = {
 			apexpredator: ['relicarmor', 'precision', 'windrider'],
+				wingedwraith: ['infiltrator', 'galewings'],
+				toxicsink: ['effectspore', 'invigorate'],
+			toxicmess: ['stench', 'poisontouch', 'gluttony'],
+			adaptivewaste: ['protean', 'regenerator'],
+			ragingbeast: ['guts', 'moldbreaker'],
+			lunardread: ['magicguard', 'pressure'],
+			scavenger: ['overcoat', 'bigpecks', 'regenerator'],
+			toxicspines: ['toxicdebris', 'corrosion', 'merciless'],
+			witheringshell: ['crumblingshell', 'selfrepair', 'weakarmor'],
 			argentdevotion: ['ironclad', 'swornduty'],
 			fluffyevo: ['overcoat'],
 			bonewarrior: ['battlearmor', 'selfsufficient'],
@@ -2180,7 +2189,7 @@ export class Pokemon {
 			unovawing: ['superluck', 'competitive', 'unburden'],
 			aevianwing: ['scrappy', 'rockhead', 'defiant'],
 				resuscitation: ['selfrepair', 'magicguard'],
-				schooling: ['selfrepair'],
+				schooling: ['hydrabond', 'selfrepair', 'filter'],
 			};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&

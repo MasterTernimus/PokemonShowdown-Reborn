@@ -337,6 +337,7 @@ export class BattleActions {
 		}
 
 		const oldActiveMove = move;
+		const terrainBeforeMove = this.battle.field.terrain;
 
 		const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
 		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
@@ -349,7 +350,9 @@ export class BattleActions {
 		}
 		const pendingZTerrain = (move as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain ||
 			(oldActiveMove as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain;
-		if (moveDidSomething && pendingZTerrain) {
+		const preserveNativeSubzeroTerrain = pendingZTerrain?.[0] === 'snowymountainterrain' &&
+			['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(terrainBeforeMove);
+		if (moveDidSomething && pendingZTerrain && !preserveNativeSubzeroTerrain) {
 			const [terrain, duration] = pendingZTerrain;
 			const terrainSet = move.id === 'oceanicoperetta' && this.battle.field.terrain === 'underwaterterrain' ?
 				(this.battle.field.changeTerrain(terrain, pokemon, move), this.battle.field.terrain === terrain) :

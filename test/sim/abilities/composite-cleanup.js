@@ -209,7 +209,7 @@ describe('Composite ability cleanup', function () {
 		assert(['psn', 'tox'].includes(registeel.status));
 	});
 
-	it('should make Download boost both offenses in Singles', function () {
+	it('should make Download boost only the offense targeting the foe\'s weaker defense', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Porygon2', ability: 'download', moves: ['tackle']},
 		], [
@@ -217,11 +217,34 @@ describe('Composite ability cleanup', function () {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const porygon = battle.p1.active[0];
-		assert.statStage(porygon, 'atk', 1);
+		assert.statStage(porygon, 'atk', 0);
 		assert.statStage(porygon, 'spa', 1);
 		assert.equal(porygon.abilityState.downloadFirstHit, true);
 		battle.makeChoices('move tackle', 'move splash');
 		assert.equal(porygon.abilityState.downloadFirstHit, false);
+		assert(battle.log.some(line => line.includes('|-crit|')), 'Download should make the first damaging move crit');
+	});
+
+	it('should make Download and Defragment mirror each other in Doubles', function () {
+		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
+			{species: 'Porygon2', ability: 'download', moves: ['splash']},
+			{species: 'Porygon-Z', ability: 'defragment', moves: ['zapcannon']},
+		], [
+			{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+			{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 12', 'team 12');
+		const download = battle.p1.active[0];
+		const defragment = battle.p1.active[1];
+		assert.statStage(download, 'atk', 1);
+		assert.statStage(download, 'spa', 0);
+		assert.statStage(defragment, 'def', 0);
+		assert.statStage(defragment, 'spd', 1);
+
+		const accuracy = battle.runEvent(
+			'Accuracy', battle.p2.active[0], defragment, battle.dex.moves.get('zapcannon'), 50
+		);
+		assert.equal(accuracy, true, 'Defragment should make its moves unable to miss');
 	});
 
 	it('should keep Phalanx Form untrapped and grant Steel STAB', function () {

@@ -2109,7 +2109,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				const immune = ['surgesurfer', 'swiftswim', 'limber', 'webassassin'];
-				if ((!pokemon.hasType('Water') || !immune.includes(pokemon.ability)) && pokemon.isGrounded()) {
+				if (!pokemon.hasType('Water') && !immune.includes(pokemon.ability) && pokemon.isGrounded()) {
 					return this.chainModify(0.75);
 				}
 			},
@@ -2152,7 +2152,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					if (move.id === 'wavecrash') {
-						this.add('-mesage', 'A toxic wave crashes down!');
+						this.add('-message', 'A toxic wave crashes down!');
 					} else if (move.id === 'brine') {
 						this.add('-message', 'Stinging!');
 					} else {
@@ -2951,7 +2951,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifySpe(spe, pokemon) {
 				if (pokemon.hasAbility('webassassin')) return;
 				const immune = ['swiftswim', 'steelworker'];
-				if (!pokemon.getTypes().includes('Water') && !immune.includes(pokemon.ability) || !(pokemon.hasAbility('limber') && pokemon.isGrounded())) {
+				if (
+					!pokemon.getTypes().includes('Water') &&
+					!immune.includes(pokemon.ability) &&
+					!(pokemon.hasAbility('limber') && pokemon.isGrounded())
+				) {
 					return this.chainModify(0.5);
 				}
 			},
@@ -2986,6 +2990,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 2;
 				}
 				if (move.id === 'anchorshot' || move.id === 'dragondarts') {
+					this.add('-message', 'From the depths!!');
 					modifier *= 2;
 				}
 				if (move.id === 'waterpulse') {
@@ -2994,7 +2999,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.type === 'Water') {
 					modifier *= 1.5;
 				}
-				if (move.category === 'Physical' && move.type !== 'Water' && !source.hasAbility('steelworker')) {
+				if (
+					move.category === 'Physical' &&
+					move.type !== 'Water' &&
+					!source.hasAbility('steelworker') &&
+					!source.hasAbility('swiftswim')
+				) {
 					modifier *= 0.5;
 				}
 				if (source.hasAbility('propellertail') && move.priority > 0) {
@@ -3331,11 +3341,15 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const change = ['dive', 'gravity', 'aciddownpour', 'blizzard', 'subzeroslammer', 'glaciate', 'gravapple', 'anchorshot'];
+				const change = ['dive', 'gravity', 'aciddownpour', 'blizzard', 'subzeroslammer', 'glaciate', 'gravapple'];
 				const strengthenedMoves = ['dive', 'muddywater', 'surf', 'whirlpool', 'hydrovortex'];
 				if (move.type === 'Water') {
 					this.add('-message', 'The water strengthened the attack!');
 					modifier *= 1.5;
+				}
+				if (move.id === 'anchorshot' || move.id === 'dragondarts') {
+					this.add('-message', 'From the depths!!');
+					modifier *= 2;
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					this.add('-message', 'The attack rode the current!');

@@ -3,6 +3,9 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	dusknoiralt: "Dusknoir",
 	spiritombalt: "Spiritomb",
 	richard: "Jellicent-Azzy",
+	mightyenaalt: "Mightyena-Deso",
+	toxicroakalt: "Toxicroak-Deso",
+	cinccinoalt: "Cinccino-Deso",
 
 	// formats
 	randbats: "[Gen 9] Random Battle",

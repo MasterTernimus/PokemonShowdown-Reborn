@@ -10,17 +10,17 @@ describe('Focus Punch', function () {
 		battle.destroy();
 	});
 
-	it(`should cause the user to lose focus if hit by an attacking move`, function () {
+	it(`should use its 50 BP fallback if hit by an attacking move`, function () {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
 			{species: 'Venusaur', moves: ['magicalleaf']},
 		]]);
 		battle.makeChoices();
-		assert.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not cause the user to lose focus if hit by a status move`, function () {
+	it(`should not lose focus to a status move`, function () {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -30,7 +30,7 @@ describe('Focus Punch', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not cause the user to lose focus if hit while behind a substitute`, function () {
+	it(`should not lose focus when the hit is absorbed by a substitute`, function () {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['substitute', 'focuspunch']},
 		], [
@@ -41,39 +41,39 @@ describe('Focus Punch', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should cause the user to lose focus if hit by a move called by Nature Power`, function () {
+	it(`should use its fallback if hit by a move called by Nature Power`, function () {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
 			{species: 'Venusaur', moves: ['naturepower']},
 		]]);
 		battle.makeChoices();
-		assert.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not cause the user to lose focus on later uses of Focus Punch if hit`, function () {
+	it(`should use full power on later uses after an interrupted Focus Punch`, function () {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
 			{species: 'Venusaur', moves: ['magicalleaf', 'growl']},
 		]]);
 		battle.makeChoices();
-		assert.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[0]);
 		battle.makeChoices('auto', 'move growl');
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should cause the user to lose focus if hit by an attacking move followed by a status move in one turn`, function () {
+	it(`should still hit after being interrupted in doubles`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}, {species: 'Blissey', ability: 'naturalcure', moves: ['softboiled']}],
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['toxic']}],
 		]);
 		battle.makeChoices('move focuspunch 1, move softboiled', 'move magicalleaf 1, move toxic 1');
 		assert.equal(battle.p1.active[0].status, 'tox');
-		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert(battle.p2.active[0].hp < battle.p2.active[0].maxhp);
 	});
 
-	it(`should not deduct PP if the user lost focus`, function () {
+	it(`should deduct PP when Focus Punch is interrupted`, function () {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -81,7 +81,7 @@ describe('Focus Punch', function () {
 		]]);
 		const move = battle.p1.active[0].getMoveData(Dex.moves.get('focuspunch'));
 		battle.makeChoices();
-		assert.equal(move.pp, move.maxpp);
+		assert.equal(move.pp, move.maxpp - 1);
 		battle.makeChoices('auto', 'move growl');
 		assert.equal(move.pp, move.maxpp - 1);
 	});

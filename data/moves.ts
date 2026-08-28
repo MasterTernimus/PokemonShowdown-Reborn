@@ -4704,9 +4704,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
 				move.category = 'Special';
 				move.overrideOffensiveStat = 'spa';
+				move.overrideDefensiveStat = 'spd';
 			} else {
 				move.category = 'Physical';
 				move.overrideOffensiveStat = 'atk';
+				move.overrideDefensiveStat = 'def';
 			}
 		},
 		multihit: 2,
@@ -6773,13 +6775,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			delete move.flags['protect'];
 		},
 		onBasePower(basePower, source, target) {
-			if (!target?.volatiles['protect']) return this.chainModify(1 / 3);
+			if (source.volatiles['focuspunch']?.lostFocus && !target?.volatiles['protect']) {
+				return this.chainModify(1 / 3);
+			}
 		},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('focuspunch');
 		},
 		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['focuspunch']?.lostFocus || this.field.isTerrain('electricterrain')) {
+			if (this.field.isTerrain('electricterrain')) {
 				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
 				return true;
 			}
