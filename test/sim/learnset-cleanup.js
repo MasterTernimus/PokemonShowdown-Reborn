@@ -2,12 +2,14 @@
 
 const assert = require('./../assert');
 const {Dex} = require('./../../dist/sim/dex');
+const {CustomLearnsetRemovals} = require('./../../dist/data/learnsets');
 
 describe('Custom learnset cleanup', function () {
-	const removals = {
+	const requestedRemovals = {
 		claydol: ['lightofruin', 'shoreup', 'lusterpurge'], chimecho: ['lightofruin'],
 		gyarados: ['dragonascent'], archeops: ['dragonascent'], aerodactyl: ['dragonascent'],
 		exploud: ['torchsong'], delphox: ['torchsong'], ninetales: ['torchsong'],
+		chikorita: ['growth'], bayleef: ['growth'], meganium: ['growth'],
 		lycanroc: ['precipiceblades', 'shoreup'], lycanrocmidnight: ['precipiceblades', 'shoreup'],
 		lycanrocdusk: ['precipiceblades', 'shoreup'], arcanine: ['mightycleave'],
 		donphan: ['mightycleave', 'shoreup'], druddigon: ['mightycleave', 'partingshot'],
@@ -40,6 +42,7 @@ describe('Custom learnset cleanup', function () {
 		omastar: ['shoreup'], simipour: ['slackoff'], simisage: ['slackoff'], simisear: ['slackoff'],
 		lapras: ['bouncybubble'], milotic: ['bouncybubble'],
 	};
+	const removals = {...CustomLearnsetRemovals, ...requestedRemovals};
 
 	function canLearn(species, move) {
 		return Dex.species.getFullLearnset(species).some(data => data.learnset[move]?.length);

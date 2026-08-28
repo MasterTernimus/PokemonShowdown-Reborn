@@ -1589,8 +1589,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragondarts: {
 		name: "Dragon Darts",
-		desc: "Hits all adjacent foes once without a spread damage penalty.",
-		shortDesc: "Hits all adjacent foes at full damage.",
+		desc: "Hits twice. Uses the user's higher Attack or Special Attack, including the matching defensive stat.",
+		shortDesc: "Hits twice; uses higher Atk or SpA.",
 	},
 	dragonenergy: {
 		name: "Dragon Energy",
@@ -2270,8 +2270,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	focuspunch: {
 		name: "Focus Punch",
-		desc: "The user loses its focus if hit before moving. This move bypasses Protect at full power; otherwise, it deals 50 base power.",
-		shortDesc: "Bypasses Protect at full power; otherwise 50 BP.",
+		desc: "If the user is hit by a damaging move before it moves, this move's power is reduced to 50. It bypasses Protect at full power.",
+		shortDesc: "50 BP if interrupted; bypasses Protect at full power.",
 		gen4: {
 			desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move, but it still loses PP.",
 		},

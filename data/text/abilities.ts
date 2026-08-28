@@ -46,8 +46,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	spiralevolution: {
 		name: "Spiral Evolution",
-		desc: "This Pokemon has Adaptability, Levitate, and Dual Wield. Its damaging moves pierce protection for reduced damage, its non-priority moves act first in Trick Room, and it takes 0.8x damage.",
-		shortDesc: "Adaptability + Levitate + Dual Wield; protection pierce; Trick Room priority; takes 0.8x.",
+		desc: "This Pokemon has Adaptability, Levitate, Dual Wield, and Infiltrator. Its damaging moves pierce protection for reduced damage, its normal-priority moves act first in Trick Room without gaining priority, and it takes 0.8x damage.",
+		shortDesc: "Adaptability + Levitate + Dual Wield + Infiltrator; protection pierce; first in Trick Room; takes 0.8x.",
 	},
 	alchemistsurge: {
 		name: "Alchemist Surge",
@@ -521,8 +521,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	download: {
 		name: "Download",
-		desc: "In Singles, this Pokemon's Attack and Special Attack rise by 1 stage on switch-in. In other battle types, one offensive stat rises based on the opposing side's weaker combined defensive stat. Its first damaging move after switching in is a critical hit.",
-		shortDesc: "Singles: +1 Atk/SpA; otherwise checks all foes' defenses; first damaging move crits.",
+		desc: "On switch-in, this Pokemon compares the opposing side's combined Defense and Special Defense. If Defense is lower, its Attack rises; otherwise its Special Attack rises. Its first damaging move after switching in is a critical hit.",
+		shortDesc: "Boosts the offense targeting foes' weaker defense; first damaging move crits.",
 	},
 	livinglegend: {
 		name: "Living Legend",
@@ -701,6 +701,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Crumbling Shell",
 		desc: "When this Pokemon is hit by a Physical attack, Stealth Rock is set on the attacker's side unless a water field is active or that side already has Stealth Rock.",
 		shortDesc: "Physical hits set Stealth Rock, except in water fields.",
+	},
+	witheringshell: {
+		name: "Withering Shell",
+		desc: "This Pokemon has Crumbling Shell, Self Repair, and Weak Armor's effects. Physical hits set Stealth Rock on the attacker's side except in water fields, lower this Pokemon's Defense by 1, and raise its Speed by 2. It restores 1/16 max HP each turn, is immune to Hail and Sandstorm damage, and cures status while restoring 1/3 max HP when switching out.",
+		shortDesc: "Crumbling Shell + Self Repair + Weak Armor.",
 	},
 	iceabsorb: {
 		name: "Ice Absorb",
@@ -1907,6 +1912,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Its first move slot sets its opening type: Fighting for physical moves or Psychic for special moves. Each later damaging move changes its type to match its category. Physical moves use its boosted Special Attack as Attack; special moves use its boosted Special Attack normally.",
 		shortDesc: "Overcoat; SpA 1.3x; first move slot sets Fighting/Psychic; later moves switch type.",
 	},
+	adaptivewaste: {
+		name: "Adaptive Waste",
+		desc: "This Pokemon has Protean and Regenerator's effects.",
+		shortDesc: "Protean + Regenerator.",
+	},
 	dreamsickness: {
 		name: "Dream Sickness",
 		desc: "This Pokemon has Telepathy and Sworn Duty. Its stats cannot be lowered, and its allies' Speed cannot be lowered. At the end of each turn, this Pokemon and its allies restore 1/16 max HP. If an opposing attack would knock out an ally while this Pokemon is above 25% HP, this Pokemon takes the damage instead. Once per switch-in, an ally at 25% HP or lower heals 1/4 max HP, is cured of status, and is sheltered through the next turn.",
@@ -2107,6 +2117,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
 			shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
 		},
+	},
+	wingedwraith: {
+		name: "Winged Wraith",
+		desc: "This Pokemon has Infiltrator and Gale Wings' effects.",
+		shortDesc: "Infiltrator + Gale Wings.",
 	},
 	zprotean: {
 		name: "Z Protean",
@@ -2326,11 +2341,21 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	schooling: {
 		name: "Schooling",
-		desc: "On switch-in, if this Pokemon is a Wishiwashi that is level 20 or above and has more than 1/4 of its maximum HP left, it changes to School Form. If it is in School Form and its HP drops to 1/4 of its maximum HP or less, it changes to Solo Form at the end of the turn. If it is in Solo Form and its HP is greater than 1/4 its maximum HP at the end of the turn, it changes to School Form. While in School Form, it has Hydra Bond's effect and Self Repair's effects.",
-		shortDesc: "Wishiwashi changes forms by HP; School Form has Hydra Bond + Self Repair.",
+		desc: "A level 20 or higher Wishiwashi changes to School Form above 1/4 maximum HP and returns to Solo Form at or below 1/4 maximum HP. While in School Form, it has Hydra Bond, Self Repair, and Filter's effects.",
+		shortDesc: "Changes form by HP; School: Hydra Bond + Self Repair + Filter.",
 
 		transform: "[POKEMON] formed a school!",
 		transformEnd: "[POKEMON] stopped schooling!",
+	},
+	toxicsink: {
+		name: "Toxic Sink",
+		desc: "This Pokemon has Effect Spore and Invigorate. It redirects and absorbs Poison-type moves, raising its Attack and Special Attack by 1.",
+		shortDesc: "Effect Spore + Invigorate; absorbs Poison moves for +1 Atk/SpA.",
+	},
+	toxicmess: {
+		name: "Toxic Mess",
+		desc: "This Pokemon has Stench, Poison Touch, and Gluttony's effects.",
+		shortDesc: "Stench + Poison Touch + Gluttony.",
 	},
 	scrappy: {
 		name: "Scrappy",
@@ -3526,8 +3551,23 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lunardread: {
 		name: "Lunar Dread",
-		desc: "This Pokemon has Intimidate, Magic Guard, and Pressure's effects.",
-		shortDesc: "Intimidate + Magic Guard + Pressure.",
+		desc: "This Pokemon has Magic Guard and Pressure's effects.",
+		shortDesc: "Magic Guard + Pressure.",
+	},
+	ragingbeast: {
+		name: "Raging Beast",
+		desc: "This Pokemon has Guts and Mold Breaker's effects.",
+		shortDesc: "Guts + Mold Breaker.",
+	},
+	scavenger: {
+		name: "Scavenger",
+		desc: "This Pokemon has Overcoat, Big Pecks, and Regenerator's effects.",
+		shortDesc: "Overcoat + Big Pecks + Regenerator.",
+	},
+	toxicspines: {
+		name: "Toxic Spines",
+		desc: "This Pokemon has Toxic Debris, Corrosion, and Merciless's effects.",
+		shortDesc: "Toxic Debris + Corrosion + Merciless.",
 	},
 	ultrainstinct: {
 		name: "Ultra Instinct",

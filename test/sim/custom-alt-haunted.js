@@ -10,20 +10,31 @@ describe('Custom alts and Haunted field rules', function () {
 		battle?.destroy();
 	});
 
-	it('should expose the new alts as data-identical cosmetic forms', function () {
+	it('should expose the renamed Deso cosmetics with their base battle identity', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		for (const [baseName, altName] of [
-			['Mightyena', 'Mightyena-Alt'],
-			['Toxicroak', 'Toxicroak-Alt'],
-			['Cinccino', 'Cinccino-Alt'],
+			['Mightyena', 'Mightyena-Deso'],
+			['Toxicroak', 'Toxicroak-Deso'],
+			['Cinccino', 'Cinccino-Deso'],
 		]) {
 			const base = battle.dex.species.get(baseName);
 			const alt = battle.dex.species.get(altName);
 			assert(base.otherFormes.includes(altName));
-			assert.deepEqual(alt.baseStats, base.baseStats);
+			assert.equal(alt.baseSpecies, baseName);
+			assert.equal(alt.forme, 'Deso');
 			assert.deepEqual(alt.types, base.types);
 			assert.deepEqual(alt.abilities, base.abilities);
 		}
+		assert.equal(battle.dex.species.get('Mightyena-Alt').name, 'Mightyena-Deso');
+		assert.equal(battle.dex.species.get('Toxicroak-Alt').name, 'Toxicroak-Deso');
+		assert.equal(battle.dex.species.get('Cinccino-Alt').name, 'Cinccino-Deso');
+	});
+
+	it('should replace Regenerator on Blastoise with Bulletproof', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const abilities = battle.dex.species.get('Blastoise').abilities;
+		assert.equal(abilities[1], 'Bulletproof');
+		assert.false(Object.values(abilities).includes('Regenerator'));
 	});
 
 	it('should apply the requested ability and learnset updates', function () {

@@ -20,6 +20,33 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[0], 'def', 2);
 	});
 
+	it(`should use the user's higher attacking stat`, function () {
+		let categories = [];
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame@@@!teampreview'}, [[
+			{species: "Dragapult", evs: {atk: 0, spa: 252}, moves: ['dragondarts']},
+		], [
+			{species: "Mew", moves: ['splash']},
+		]]);
+		battle.onEvent('ModifyMove', battle.format, function (move, pokemon) {
+			if (move.id === 'dragondarts' && pokemon.species.id === 'dragapult') categories.push(move.category);
+		});
+		battle.makeChoices('move dragondarts', 'move splash');
+		assert.deepEqual(categories, ['Special']);
+
+		battle.destroy();
+		categories = [];
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame@@@!teampreview'}, [[
+			{species: "Dragapult", evs: {atk: 252, spa: 0}, moves: ['dragondarts']},
+		], [
+			{species: "Mew", moves: ['splash']},
+		]]);
+		battle.onEvent('ModifyMove', battle.format, function (move, pokemon) {
+			if (move.id === 'dragondarts' && pokemon.species.id === 'dragapult') categories.push(move.category);
+		});
+		battle.makeChoices('move dragondarts', 'move splash');
+		assert.deepEqual(categories, ['Physical']);
+	});
+
 	it(`should hit each foe once in doubles`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", moves: ['dragondarts']},
