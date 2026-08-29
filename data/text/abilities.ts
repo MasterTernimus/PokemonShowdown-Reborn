@@ -31,6 +31,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Scrappy, Rock Head, and Defiant's effects. It changes into Unfezant-Rejuv once when it enters battle.",
 		shortDesc: "Transforms once; Scrappy + Rock Head + Defiant.",
 	},
+	ascendance: {
+		name: "Ascendance",
+		desc: "All damaging moves deal 1.5x damage, can hit type immunities, and gain a 1.5x STAB-style boost when they do not match this Pokemon's type. On Holy Field, this Pokemon's Attack and Special Attack are raised by 1 on entry. Eevee-Starter and Umbreon transform into Divineon on entry; Umbreon uses Umbreon-Perfect's appearance while retaining Umbreon's full movepool.",
+		shortDesc: "Damaging moves deal 1.5x, bypass immunities, and gain off-type STAB; transforms Eevee-Starter/Umbreon into Divineon.",
+	},
 	hisuianresolve: { name: "Hisuian Resolve", desc: "This Pokemon has Brute Force and Magma Armor's effects.", shortDesc: "Brute Force + Magma Armor." },
 	nobleconduit: { name: "Noble Conduit", desc: "This Pokemon has Battery, Solar Power, and Aftermath's effects.", shortDesc: "Battery + Solar Power + Aftermath." },
 	nobledance: { name: "Noble Dance", desc: "This Pokemon has Dancer, Hospitality, and Own Tempo's effects.", shortDesc: "Dancer + Hospitality + Own Tempo." },
@@ -273,10 +278,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "When this Pokemon knocks out another Pokemon, it transforms into its Bond form, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 0.75x damage from attacks, takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. In Doubles, Multi, or Free-For-All, once per battle, if a move would knock it out from above 1/3 max HP, it survives with 1 HP. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization. In Cold Eclipse, its attacks deal 1.3x damage and it takes 0.6x damage from attacks.",
-		shortDesc: "0.75x damage from attacks; KO transforms/heals; Cold Eclipse boosts offense and defense.",
+		desc: "When this Pokemon is a Greninja or Greninja-Bond, it transforms into Ash-Greninja after it knocks out another Pokemon, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 0.75x damage from attacks, takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. In Doubles, Multi, or Free-For-All, once per battle, if a move would knock it out from above 1/3 max HP, it survives with 1 HP. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization. In Cold Eclipse, its attacks deal 1.3x damage and it takes 0.6x damage from attacks.",
+		shortDesc: "After a KO, Greninja or Greninja-Bond becomes Ash-Greninja; 0.75x damage from attacks; KO healing.",
 		gen8: {
-			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
+			desc: "If this Pokemon is a Greninja or Greninja-Bond, it transforms into Ash-Greninja after attacking and knocking out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
 			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
 		},
 		activate: "  [POKEMON] became fully charged due to its bond with its Trainer!",
@@ -819,8 +824,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	uncheckedassault: {
 		name: "Unchecked Assault",
-		desc: "This Pokemon has Scrappy, Technician, and Opportunist's effects.",
-		shortDesc: "Scrappy + Technician + Opportunist.",
+		desc: "This Pokemon has Scrappy, Technician, Opportunist, and Limber's effects.",
+		shortDesc: "Scrappy + Technician + Opportunist + Limber.",
 	},
 	royalvoice: {
 		name: "Royal Voice",
@@ -3451,7 +3456,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "This Pokemon has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile each turn. After reaching 3 Stockpiles, it waits one full turn before automatically choosing Belch or Spit Up, then can release every other turn. Its established Spit Up and Swallow combinations still apply.",
+		desc: "This Pokemon has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile each turn. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply.",
 		shortDesc: "Thick Fat; auto-Stockpiles; at 3 waits one turn, then auto-releases every other turn.",
 	},
 	invigorate: {
@@ -3488,6 +3493,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Neutralization",
 		desc: "Once per target per move, when this Pokemon directly hits an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. Spread hits do not trigger this effect. This does not affect other Neutralization users or Pokemon immune to stat drops. While active, field changes are neutralized; Trick Room, Magic Room, and Wonder Room are ended and cannot start; and Rainbow Field ends automatically. Ice Spinner and Steel Roller still remove terrain normally.",
 		shortDesc: "Hits lower foe offense/Spe; blocks field changes and Trick/Magic/Wonder Room.",
+	},
+	aeviandream: {
+		name: "Aevian Dream",
+		desc: "This Pokemon has Bad Dreams, Shed Skin, and Tough Claws's effects. When it enters battle as Musharna, it transforms into Musharna-Rejuv.",
+		shortDesc: "Bad Dreams + Shed Skin + Tough Claws; transforms Musharna into Musharna-Rejuv.",
 	},
 	powerdrill: {
 		name: "Power Drill",

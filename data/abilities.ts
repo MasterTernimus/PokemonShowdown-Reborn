@@ -41,6 +41,19 @@ function isUltraSuppressedTerrain(battle: Battle) {
 	return battle.field.isTerrain(['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain']);
 }
 
+const STATUS_DISPLAY_NAMES: Record<string, string> = {
+	brn: 'burn',
+	par: 'paralysis',
+	slp: 'sleep',
+	frz: 'freeze',
+	psn: 'poison',
+	tox: 'bad poison',
+};
+
+function getStatusDisplayName(status: string) {
+	return STATUS_DISPLAY_NAMES[status] || status;
+}
+
 const Z_PROTEAN_FORMES: Record<string, { id: number, species: string }> = {
 	Normal: { id: 0, species: 'Eevee-Starter-Alt' },
 	Fighting: { id: 1, species: 'Braveon' },
@@ -145,19 +158,8 @@ function getDualWieldModifier(move: ActiveMove, componentBoost = 1) {
 function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
 	const targets = pokemon.foes().filter(foe => foe && !foe.fainted);
 	if (!targets.length) return null;
-	const moveids = ['belch'];
-	if ((pokemon.volatiles['stockpile']?.layers || 0) > 0) moveids.push('spitup');
-	let best: { moveid: string, target: Pokemon, damage: number } | null = null;
-	for (const target of targets) {
-		for (const moveid of moveids) {
-			const move = battle.dex.getActiveMove(moveid);
-			const damage = battle.actions.getDamage(pokemon, target, move, true);
-			if (typeof damage !== 'number') continue;
-			if (moveid === 'belch' && damage >= target.hp) return { moveid, target, damage };
-			if (!best || damage > best.damage) best = { moveid, target, damage };
-		}
-	}
-	return best || { moveid: 'belch', target: battle.sample(targets), damage: 0 };
+	const moveid = battle.sample(['belch', 'spitup']);
+	return { moveid, target: battle.sample(targets) };
 }
 
 function consumeAccumulationStockpileLayer(battle: Battle, pokemon: Pokemon) {
@@ -849,6 +851,57 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Aevian Wing",
 		rating: 5,
 		num: 10365,
+	},
+	aeviandream: {
+		onStart(pokemon) {
+			if (pokemon.species.id !== 'musharna' || pokemon.abilityState.aevianDreamTransformed) return;
+			pokemon.abilityState.aevianDreamTransformed = true;
+			pokemon.formeChange('Musharna-Rejuv', this.effect, true, '0');
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			(this.dex.abilities.get('shedskin') as any).onResidual?.call(this, pokemon);
+			(this.dex.abilities.get('baddreams') as any).onResidual?.call(this, pokemon);
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			return (this.dex.abilities.get('toughclaws') as any).onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		flags: {breakable: 1},
+		name: "Aevian Dream",
+		rating: 5,
+		num: 10377,
+	},
+	ascendance: {
+		onStart(pokemon) {
+			const sourceSpecies = pokemon.species.id;
+			if (['eeveestarter', 'eeveestarteralt', 'umbreon'].includes(sourceSpecies)) {
+				const visualSpecies = sourceSpecies === 'umbreon' ? 'Umbreon-Perfect' : undefined;
+				pokemon.formeChange('Divineon', this.effect, false, '0', undefined, visualSpecies);
+			}
+			if (this.field.isTerrain('holyterrain')) {
+				this.boost({atk: 1, spa: 1}, pokemon, pokemon, this.effect);
+				this.add('-message', `Holy light empowered ${pokemon.name}'s Ascendance, raising its offenses!`);
+			}
+		},
+		onModifyMove(move) {
+			if (move.category !== 'Status') move.ignoreImmunity = true;
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, source, target, move) {
+			if (move.category !== 'Status') {
+				const modifier = move.type === '???' && source.hasType('???') ? 2.25 : 1.5;
+				return this.chainModify(modifier);
+			}
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.category !== 'Status' && !source.hasType(move.type)) return 1.5;
+		},
+		flags: {breakable: 1},
+		name: "Ascendance",
+		rating: 5,
+		num: 10378,
 	},
 	hisuianresolve: {
 		onStart(pokemon) { this.dex.abilities.get('magmaarmor').onStart?.call(this, pokemon); },
@@ -1905,14 +1958,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				source.bondTriggered = true;
 				return;
 			}
-			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
+			if (['greninjabond', 'greninja'].includes(source.species.id) && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
 				source.formeRegression = true;
-				source.bondTriggered = true;
-			} else if (source.species.id === 'greninja') {
-				this.boost({ atk: 1, spa: 1, spe: 1 }, source, source, this.effect);
-				this.add('-activate', source, 'ability: Battle Bond');
 				source.bondTriggered = true;
 			}
 		},
@@ -4356,6 +4405,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10111,
 	},
 	uncheckedassault: {
+		onUpdate(pokemon) {
+			return this.dex.abilities.get('limber').onUpdate?.call(this, pokemon);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('limber').onSetStatus?.call(this, status, target, source, effect);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('limber').onTryBoost?.call(this, boost, target, source, effect);
+		},
 		onModifyMove(move) {
 			if (move.type === 'Normal' || move.type === 'Fighting') move.ignoreImmunity = true;
 			this.dex.abilities.get('technician').onModifyMove?.call(this, move);
@@ -5126,7 +5184,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (move.category === 'Status') return;
 			if (!move.secondaries) move.secondaries = [];
-			move.secondaries.push({ chance: 40, status: 'frz' });
+			const chance = this.field.isTerrain('icyterrain') ? 80 : 40;
+			move.secondaries.push({ chance, status: 'frz' });
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
@@ -5456,6 +5515,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	dryskin: {
 		onTryHit(target, source, move) {
 			if (target !== source && this.movehasType(move, 'Water')) {
+				this.add('-message', `${target.name} absorbed some of the water!`);
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Dry Skin');
 				}
@@ -5479,7 +5539,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			if (!this.field.isWeather('raindance') || !this.field.isWeather('sunnyday')) {
 				if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('swampterrain') || this.field.isTerrain('mistyterrain')) {
-					this.heal(pokemon.baseMaxhp / 16);
+					const healed = this.heal(pokemon.baseMaxhp / 16);
+					if (healed && this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) {
+						this.add('-message', `${pokemon.name} absorbed some of the water!`);
+					}
 				}
 				if (this.field.isTerrain('corrosivemistterrain')) {
 					if (pokemon.hasType("Poison")) {
@@ -5492,7 +5555,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
 				}
 				if (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.hasType('Poison')) {
-					this.heal(pokemon.baseMaxhp / 8);
+					const healed = this.heal(pokemon.baseMaxhp / 8);
+					if (healed) this.add('-message', `${pokemon.name} is healed by the poisoned water!`);
 				}
 			}
 		},
@@ -6008,7 +6072,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if ((this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) && !(this.field.isWeather(['hail', 'snow']))) {
-				this.heal(pokemon.baseMaxhp / 16);
+				const healed = this.heal(pokemon.baseMaxhp / 16);
+				if (healed && this.field.isTerrain('icyterrain')) {
+					this.add('-message', `${pokemon.name}'s Ice Body restored its HP a little!`);
+				}
 			}
 		},
 		onImmunity(type, pokemon) {
@@ -6906,7 +6973,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
 			this.add('-ability', target, 'Gooey');
 			const bestStat = source.getStat('atk', false, true) >= source.getStat('spa', false, true) ? 'atk' : 'spa';
-			this.boost({ spe: -2, [bestStat]: -1 }, source, target, null, true);
+			const speedDrop = this.field.isTerrain('murkwatersurfaceterrain') ? 4 : 2;
+			const offensiveDrop = this.field.isTerrain('murkwatersurfaceterrain') ? 2 : 1;
+			this.add('-message', `${target.name}'s Gooey ${source.hasAbility('contrary') ? 'sharply boosted' : 'harshly lowered'} ${source.name}'s Speed!`);
+			this.boost({ spe: -speedDrop, [bestStat]: -offensiveDrop }, source, target, null, true);
 		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
@@ -7072,8 +7142,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 275,
 	},
 	gulpmissile: {
-		onStart(pokemon) {
-			if (pokemon.species.id === 'cramorant') pokemon.formeChange('cramorantgulping', this.effect, true);
+			onStart(pokemon) {
+			if (pokemon.species.id !== 'cramorantgulping' &&
+				(pokemon.species.id === 'cramorant' ||
+					(this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain']) && pokemon.species.baseSpecies === 'Cramorant'))) {
+				pokemon.formeChange('cramorantgulping', this.effect, true);
+			}
+		},
+		onTerrainChange(pokemon) {
+			if (pokemon.transformed || !['cramorant', 'cramorantgulping', 'cramorantgorging'].includes(pokemon.species.id)) return;
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain']) && pokemon.species.id !== 'cramorantgulping') {
+				pokemon.formeChange('cramorantgulping', this.effect, true);
+			}
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (!source.hp || !source.isActive || target.isSemiInvulnerable()) return;
@@ -7098,7 +7178,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceTryPrimaryHit(target, source, effect) {
 			if (effect?.id === 'surf' && source.hasAbility('gulpmissile') && source.species.name === 'Cramorant') {
 				let forme = '';
-				if (source.hp <= source.maxhp / 2 || this.field.isTerrain(['electricterrains', 'factoryterrain', 'shortcircuitterrain'])) {
+				if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) {
+					forme = 'cramorantgulping';
+				} else if (source.hp <= source.maxhp / 2 || this.field.isTerrain(['electricterrains', 'factoryterrain', 'shortcircuitterrain'])) {
 					forme = 'cramorantgorging';
 				} else if (source.hp > source.maxhp / 2 || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('swampterrain')) {
 					forme = 'cramorantgulping';
@@ -7546,9 +7628,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
-			if (pokemon.status && ['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) {
+			const waterField = this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain']);
+			if (pokemon.status && (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) || waterField)) {
 				this.debug('hydration');
 				this.add('-activate', pokemon, 'ability: Hydration');
+				if (waterField) {
+					this.add('-message', `${pokemon.name}'s Hydration cured its ${getStatusDisplayName(pokemon.status)} problem!`);
+				}
 				pokemon.cureStatus();
 			}
 		},
@@ -10363,10 +10449,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 168,
 	},
 	zprotean: {
-		onStart(pokemon) {
-			if (!isStarterEeveePokemon(pokemon)) return;
-			setStarterEeveeBattleEVs(pokemon, this.effect);
-		},
 		onModifyPriority(priority, pokemon, target, move) {
 			// Run during move ordering so the type and visual form are ready before the attack,
 			// while returning no priority value keeps the move's normal priority.
@@ -13122,6 +13204,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	steamengine: {
 		onDamagingHit(damage, target, source, move) {
 			if (move && this.movehasType(move, ['Water', 'Fire'])) {
+				this.add('-message', `${target.name}'s Steam Engine raised its Speed!`);
 				this.boost({ spe: 6 });
 			}
 		},
@@ -13134,6 +13217,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if (this.field.isTerrain(['volcanicterrain', 'underwaterterrain', 'watersurfaceterrain'])) {
+				if (this.field.isTerrain(['underwaterterrain', 'watersurfaceterrain', 'murkwatersurfaceterrain'])) {
+					this.add('-message', `${pokemon.name}'s Steam Engine raised its Speed!`);
+				}
 				this.boost({ spe: 1 });
 			}
 		},
@@ -14901,6 +14987,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	waterabsorb: {
 		onTryHit(target, source, move) {
 			if (target !== source && this.movehasType(move, 'Water')) {
+				this.add('-message', `${target.name} absorbed some of the water!`);
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Water Absorb');
 				}
@@ -14909,7 +14996,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if ((this.field.isTerrain('watersurfaceterrain') && pokemon.isGrounded()) || (this.field.isTerrain('murkwatersurfaceterrain') && pokemon.isGrounded() && pokemon.types.includes('Poison')) || this.field.isTerrain('underwaterterrain')) {
-				this.heal(pokemon.baseMaxhp / 16);
+				const murkwater = this.field.isTerrain('murkwatersurfaceterrain');
+				const healed = this.heal(pokemon.baseMaxhp / 16);
+				if (healed) {
+					this.add('-message', murkwater ? `${pokemon.name} is healed by the poisoned water!` : `${pokemon.name} absorbed some of the water!`);
+				}
 			}
 		},
 		flags: { breakable: 1 },
@@ -14964,21 +15055,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 199,
 	},
 	watercompaction: {
-		onStart() {
+		onStart(pokemon) {
 			if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
+				if (this.field.isTerrain('murkwatersurfaceterrain')) {
+					this.add('-message', `${pokemon.name}'s Water Compaction sharply raised its defense!`);
+				}
 				this.boost({ def: 2 });
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move && this.movehasType(move, 'Water')) {
+				this.debug('Water Compaction weaken');
+				return this.chainModify(0.5);
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move && this.movehasType(move, 'Water')) {
+				this.add('-message', `${target.name}'s Water Compaction sharply raised its defense!`);
 				if (this.field.isTerrain('ashenbeachterrain')) {
 					this.boost({ spd: 2 });
 				}
 				this.boost({ def: 2 });
 			}
 		},
-		onResidual() {
-			if (this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('swampterrain')) {
+		onResidual(pokemon) {
+			if (this.field.isTerrain(['underwaterterrain', 'watersurfaceterrain', 'murkwatersurfaceterrain', 'swampterrain'])) {
+				if (this.field.isTerrain(['underwaterterrain', 'watersurfaceterrain', 'murkwatersurfaceterrain'])) {
+					this.add('-message', `${pokemon.name}'s Water Compaction sharply raised its defense!`);
+				}
 				this.boost({ def: 2 });
 			}
 		},
@@ -15008,8 +15112,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (type === 'sandstorm' || type === 'hail') return false;
 		},
 		onResidual(pokemon) {
-			if (this.field.terrain === 'watersurfaceterrain' || this.field.terrain === 'underwaterterrain')
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain']) && pokemon.status) {
+				this.add('-message', `${pokemon.name}'s Water Veil cured its ${getStatusDisplayName(pokemon.status)} problem!`);
 				pokemon.cureStatus();
+			}
 		},
 		flags: { breakable: 1 },
 		name: "Water Veil",

@@ -284,6 +284,7 @@ interface ModdedBattlePokemon {
 	formeChange?: (
 		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string,
 		message?: string,
+		visualSpecies?: string,
 	) => boolean;
 	hasType?: (this: Pokemon, type: string | string[]) => boolean;
 	getAbility?: (this: Pokemon) => Ability;

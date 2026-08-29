@@ -146,7 +146,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			const burnDamage = pokemon.baseMaxhp / damageDivisor;
 			if (pokemon.hasAbility('sinisterblaze')) {
-				this.heal(burnDamage, pokemon, pokemon, this.dex.abilities.get('sinisterblaze'));
+				const healed = this.heal(burnDamage, pokemon, pokemon, this.dex.abilities.get('sinisterblaze'));
+				if (healed && this.field.isTerrain('icyterrain')) {
+					this.add('-message', `${pokemon.name} is healed by the flames!`);
+				}
 				for (const foe of pokemon.foes()) {
 					if (!foe.fainted && foe.hp) {
 						// Sinister Blaze's reflected burn is 1/8 max HP, doubled for already-burned foes.
@@ -161,7 +164,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (typeof damage === 'number' && damage > 0) {
 				for (const foe of pokemon.foes()) {
 					if (!foe.fainted && foe.hp && foe.hasAbility('sinisterblaze')) {
-						this.heal(damage, foe, pokemon, this.dex.abilities.get('sinisterblaze'));
+						const healed = this.heal(damage, foe, pokemon, this.dex.abilities.get('sinisterblaze'));
+						if (healed && this.field.isTerrain('icyterrain')) {
+							this.add('-message', `${foe.name} is healed by the flames!`);
+						}
 					}
 				}
 			}

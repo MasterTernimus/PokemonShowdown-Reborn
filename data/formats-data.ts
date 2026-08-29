@@ -6164,6 +6164,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 const latestFormatUpdates: {[id: string]: any} = {
 	unfezant: {isNonstandard: "Custom", tier: "OU", natDexTier: "RU"},
 	unfezantrejuv: {isNonstandard: "Custom", tier: "OU", natDexTier: "RU"},
+	musharnarejuv: {isNonstandard: "Custom", tier: "OU", natDexTier: "RU"},
+	palossandrocky: {isNonstandard: "Custom", tier: "NU"},
+	palossandfiery: {isNonstandard: "Custom", tier: "NU"},
+	palossandicy: {isNonstandard: "Custom", tier: "NU"},
 	alakazamalt: {isNonstandard: "Custom", tier: "OU"},
 	alakazammegaalt: {isNonstandard: "Custom", tier: "OU"},
 	// Aevian profiles are custom species, but are legal in the mod's standard formats.

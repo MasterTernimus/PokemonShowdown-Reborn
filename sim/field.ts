@@ -6,8 +6,15 @@
  */
 
 import { State } from './state';
-import { type EffectState } from './pokemon';
+import { type EffectState, type Pokemon } from './pokemon';
 import { toID } from './dex';
+
+const WATER_FIELD_START_MESSAGES: { [id: string]: string } = {
+	watersurfaceterrain: "The water's surface is calm.",
+	underwaterterrain: 'Blub blub...',
+	murkwatersurfaceterrain: 'The water is tainted...',
+	icyterrain: 'The field is covered in ice.',
+};
 
 export class Field {
 	readonly battle: Battle;
@@ -203,6 +210,16 @@ export class Field {
 		this.restoreFormatHail();
 	}
 
+	applyIcySpikesDamage(pokemon: Pokemon) {
+		if (this.terrain !== 'icyterrain' || !pokemon.isGrounded() ||
+			pokemon.hasAbility('magicguard')) return false;
+		const layers = Math.min(pokemon.side.sideConditions.spikes?.layers ?? 0, 3);
+		const damageFractions = [1 / 8, 1 / 8, 1 / 6, 1 / 4];
+		const damage = pokemon.maxhp * damageFractions[layers];
+		this.battle.add('-message', `${pokemon.name} was hurt by icy Spikes!`);
+		return this.battle.damage(damage, pokemon, pokemon, this.battle.effect);
+	}
+
 	canSetTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -336,6 +353,7 @@ export class Field {
 		}
 		this.terrainStack.unshift(this.terrainState);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
+		this.clearWaterHazards();
 		this.clearFieldStartedWeather(prevTerrain);
 		this.restoreFormatHail();
 		return true;
@@ -370,9 +388,11 @@ export class Field {
 			this.battle.add('-message', 'The evil spirits prevent the new field from forming!');
 			return false;
 		}
-		if (!this.canBypassNeutralizationForTerrainChange(status.id as ID) && this.neutralizeTerrainChange()) return false;
+		if (!this.canBypassNeutralizationForTerrainChange(status.id) && this.neutralizeTerrainChange()) return false;
 		const prevTerrainState = this.terrainState;
 		const zMoveTerrain = !!prevTerrainState.zMoveTerrain;
+		const underlyingTerrain = status.id === 'icyterrain' &&
+			['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain) ? this.terrain : undefined;
 		this.terrain = status.id;
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
@@ -382,6 +402,7 @@ export class Field {
 			duration: prevTerrainState.zMoveExpired ? 1 : prevTerrainState.duration,
 			turn: this.battle.turn,
 			prevTerrain: prevTerrainState.id,
+			...(underlyingTerrain ? { underlyingTerrain } : {}),
 		});
 		if (zMoveTerrain) {
 			this.terrainState.zMoveTerrain = true;
@@ -392,10 +413,24 @@ export class Field {
 		} else {
 			this.terrainStack.unshift(this.terrainState);
 		}
-		this.battle.add('-fieldstart', status.name);
+		this.battle.add('-fieldstart', status.id === 'icyterrain' ? 'Icy Field' : status.name);
+		const fieldStartMessage = WATER_FIELD_START_MESSAGES[status.id];
+		if (fieldStartMessage) this.battle.add('-message', fieldStartMessage);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
+		this.clearWaterHazards();
 		this.clearFieldStartedWeather(prevTerrainState.id as ID);
 		this.restoreFormatHail();
+	}
+
+	private clearWaterHazards() {
+		if (!['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain)) return;
+		for (const side of this.battle.sides) {
+			for (const sideCondition of ['spikes', 'toxicspikes']) {
+				if (!side.removeSideCondition(sideCondition)) continue;
+				this.battle.add('-message', '...The spikes sank into the water and vanished!');
+				this.battle.add('-sideend', side, this.battle.dex.conditions.get(sideCondition).name);
+			}
+		}
 	}
 
 	clearTerrain(power: string | null = null) {
@@ -477,7 +512,7 @@ export class Field {
 			this.terrain = this.terrainStack[0].id as ID;
 			this.terrainState = this.terrainStack[0];
 			const current_terrain = this.battle.dex.conditions.get(this.terrain);
-			this.battle.add('-fieldstart', current_terrain.name);
+			this.battle.add('-fieldstart', current_terrain.id === 'icyterrain' ? 'Icy Field' : current_terrain.name);
 		} else {
 			this.terrain = '';
 			this.terrainState = this.battle.initEffectState({ id: '' });
