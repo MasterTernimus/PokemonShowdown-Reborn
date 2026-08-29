@@ -3646,7 +3646,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	crosspoison: {
 		num: 440,
 		accuracy: 100,
-		basePower: 100,
+		basePower: 85,
 		category: "Physical",
 		name: "Cross Poison",
 		pp: 20,
@@ -3659,7 +3659,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		secondary: {
 			chance: 30,
-			status: 'tox',
+			status: 'psn',
 		},
 		critRatio: 2,
 		target: "normal",
