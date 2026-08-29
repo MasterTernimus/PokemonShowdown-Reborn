@@ -1221,8 +1221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crosspoison: {
 		name: "Cross Poison",
-		desc: "Has a high critical hit ratio and a 30% chance to badly poison the target. If the target is poisoned or badly poisoned, this move ignores the target's positive Defense boosts.",
-		shortDesc: "High crit. 30% toxic; ignores positive Def boosts vs poisoned targets.",
+		desc: "Has a high critical hit ratio and a 30% chance to poison the target. If the target is poisoned or badly poisoned, this move ignores the target's positive Defense boosts.",
+		shortDesc: "High crit. 30% poison; ignores positive Def boosts vs poisoned targets.",
 	},
 	crunch: {
 		name: "Crunch",
