@@ -161,6 +161,14 @@ export class BattleActions {
 			pokemon.setSpecies(baseSpecies);
 			pokemon.details = pokemon.getUpdatedDetails();
 		}
+		// Musharna-Rejuv is only a valid battle form with Aevian Dream. This
+		// also protects custom/direct battle inputs that bypass team validation.
+		if (pokemon.species.id === 'musharnarejuv' && pokemon.ability !== 'aeviandream') {
+			const baseSpecies = this.dex.species.get('Musharna');
+			pokemon.baseSpecies = baseSpecies;
+			pokemon.setSpecies(baseSpecies);
+			pokemon.details = pokemon.getUpdatedDetails();
+		}
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;

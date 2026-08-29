@@ -71,4 +71,28 @@ describe('Toxic Sink custom effects', () => {
 		assert.equal(mew.status, 'par');
 		assert(vileplume.hp - hpBefore > vileplume.maxhp / 2, 'Invigorate should amplify Recover');
 	});
+
+	it('should let poison field-changing moves pollute water through Toxic Sink', () => {
+		for (const testCase of [
+			{terrain: 'watersurfaceterrain', move: 'sludgewave', choice: 'move sludgewave', turns: 2},
+			{terrain: 'underwaterterrain', move: 'sludgewave', choice: 'move sludgewave', turns: 2},
+			{terrain: 'watersurfaceterrain', move: 'aciddownpour', choice: 'move sludgebomb zmove', turns: 1},
+			{terrain: 'underwaterterrain', move: 'aciddownpour', choice: 'move sludgebomb zmove', turns: 1},
+		]) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Mew', item: testCase.move === 'aciddownpour' ? 'Poisonium Z' : undefined, moves: ['sludgewave', 'sludgebomb', 'splash']},
+			], [
+				{species: 'Vileplume', ability: 'Toxic Sink', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			const source = battle.p1.active[0];
+			battle.field.changeTerrain(testCase.terrain, source);
+			for (let turn = 0; turn < testCase.turns; turn++) {
+				battle.makeChoices(testCase.choice, 'move splash');
+			}
+			assert.equal(battle.field.terrain, 'murkwatersurfaceterrain', `${testCase.move} should pollute ${testCase.terrain}`);
+			battle.destroy();
+			battle = null;
+		}
+	});
 });

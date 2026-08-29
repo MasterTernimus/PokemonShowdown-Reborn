@@ -1513,7 +1513,7 @@ export class Pokemon {
 	 */
 	formeChange(
 		speciesId: string | Species, source: Effect | null = this.battle.effect,
-		isPermanent?: boolean, abilitySlot = '0', message?: string
+		isPermanent?: boolean, abilitySlot = '0', message?: string, visualSpecies?: string
 	) {
 		const rawSpecies = this.battle.dex.species.get(speciesId);
 		const species = this.setSpecies(rawSpecies, source);
@@ -1557,10 +1557,11 @@ export class Pokemon {
 				this.battle.add('-formechange', this, species.name, message);
 			}
 		} else {
+			const clientSpecies = visualSpecies || species.name;
 			if (source?.effectType === 'Ability') {
-				this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
+				this.battle.add('-formechange', this, clientSpecies, message, `[from] ability: ${source.name}`);
 			} else {
-				this.battle.add('-formechange', this, this.illusion ? this.illusion.species.name : species.name, message);
+				this.battle.add('-formechange', this, this.illusion ? this.illusion.species.name : clientSpecies, message);
 			}
 		}
 		if (isPermanent && (!source || !['disguise', 'iceface'].includes(source.id))) {
@@ -2050,6 +2051,7 @@ export class Pokemon {
 	hasAbility(ability: string | string[]) {
 		const abilityAliases: { [abilityid: string]: string[] } = {
 			apexpredator: ['relicarmor', 'precision', 'windrider'],
+			aeviandream: ['baddreams', 'shedskin', 'toughclaws'],
 				wingedwraith: ['infiltrator', 'galewings'],
 				toxicsink: ['effectspore', 'invigorate'],
 			toxicmess: ['stench', 'poisontouch', 'gluttony'],
@@ -2130,7 +2132,7 @@ export class Pokemon {
 			relentlesslink: ['skilllink', 'battlearmor', 'moldbreaker'],
 			mirrorgreed: ['magicbounce', 'analytic'],
 			moonlitwings: ['serenegrace'],
-			uncheckedassault: ['scrappy', 'striker', 'opportunist'],
+			uncheckedassault: ['scrappy', 'striker', 'opportunist', 'limber'],
 			royalvoice: ['pixilate', 'queenlymajesty', 'swornduty'],
 			perfectforesight: ['trace'],
 			dreamsickness: ['telepathy', 'swornduty'],

@@ -1001,7 +1001,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	coldsnap: {
 		name: "Cold Snap",
-		desc: "Freezes the target. Ghost-type users do not check accuracy. In hail, snow, Cold Eclipse, Icy Terrain, or when used by an Ice-type Pokemon, this move has 100% accuracy.",
+		desc: "Freezes the target. Ghost-type users do not check accuracy. In hail, snow, Cold Eclipse, Icy Field, or when used by an Ice-type Pokemon, this move has 100% accuracy.",
 		shortDesc: "Freezes the target. Ghost users never miss.",
 	},
 	collisioncourse: {
@@ -3677,6 +3677,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Light That Burns the Sky",
 		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. This move and its effects ignore the Abilities of other Pokemon.",
 		shortDesc: "Physical if user's Atk > Sp. Atk. Ignores Abilities.",
+	},
+	radiantassault: {
+		name: "Radiant Assault",
+		desc: "Hits all opposing Pokemon. Uses the user's higher offensive stat, including stat stages and field modifiers. If it does not knock out at least one target, the user must recharge next turn.",
+		shortDesc: "Hits all foes; uses higher offense; recharges unless it gets a KO.",
 	},
 	liquidation: {
 		name: "Liquidation",

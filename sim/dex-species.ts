@@ -9,6 +9,7 @@ interface SpeciesAbility {
 	S?: string;
 	E?: string;
 	F?: string;
+	G?: string;
 }
 
 type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Ultra Beast" | "Paradox";

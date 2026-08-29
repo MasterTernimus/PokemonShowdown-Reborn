@@ -311,9 +311,25 @@ describe('Custom battle data updates', function () {
 		battle.makeChoices('move tackle', 'move splash');
 		const moves = battle.log.filter(line => line.startsWith('|move|'));
 		assert.match(moves[0], /Crobat.*Splash/);
-		assert.match(moves[1], /Eevee-Starter.*Tackle/);
-		assert.species(eevee, 'Eevee-Starter-Alt');
+		assert.match(moves[1], /Eevee.*Tackle/);
+		assert.species(eevee, 'Eevee-Starter');
+		assert.equal(eevee.zProteanVisualSpecies, 'Eevee-Starter-Alt');
 		assert(eevee.hasType('Normal'));
+	});
+
+	it('should send custom Z Protean sprite formes to the client', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Eevee-Starter', ability: 'zprotean', moves: ['poisonjab']},
+		], [
+			{species: 'Blissey', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const eevee = battle.p1.active[0];
+
+		battle.makeChoices('move poisonjab', 'move splash');
+		assert.equal(eevee.zProteanVisualSpecies, 'Toxeon');
+		assert(eevee.hasType('Poison'));
+		assert(battle.log.includes('|-formechange|p1a: Eevee|Toxeon|[from] ability: Z Protean'));
 	});
 
 	it('should preserve the Grimmsnarl-Azzy skin when Gigantamaxing', function () {

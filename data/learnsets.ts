@@ -114145,6 +114145,40 @@ for (const [id, moves] of Object.entries(CustomLearnsetRemovals)) {
 	for (const move of moves) delete learnset[move];
 }
 
+const musharnaLevelUpMoves = [
+	'drainingkiss', 'leer', 'scratch', 'yawn', 'assurance', 'nightmare', 'moonlight', 'hypnosis',
+	'nightslash', 'slash', 'playrough', 'shadowclaw', 'honeclaws', 'throatchop', 'lovelykiss', 'glare',
+];
+const musharnaEggMoves = [
+	'assist', 'curse', 'disable', 'encore', 'meanlook', 'memento', 'nightshade', 'snore', 'sonicboom',
+];
+const musharnaCompatibleMoves = [
+	'aerialace', 'amnesia', 'assurance', 'aurasphere', 'batonpass', 'beatup', 'block', 'bodypress',
+	'bodyslam', 'breakingswipe', 'brutalswing', 'chargebeam', 'crosspoison', 'cut', 'darkestlariat',
+	'darkpulse', 'dazzlinggleam', 'drainingkiss', 'dreameater', 'dualchop', 'eerieimpulse', 'encore',
+	'explosion', 'faketears', 'falseswipe', 'fling', 'fly', 'foulplay', 'futuresight', 'gastroacid',
+	'gigaimpact', 'gravity', 'gyroball', 'honeclaws', 'hyperbeam', 'knockoff', 'laserfocus', 'lashout',
+	'leechlife', 'magiccoat', 'magicroom', 'mistyterrain', 'painsplit', 'payback', 'phantomforce',
+	'playrough', 'poisonjab', 'powergem', 'powerswap', 'psychic', 'psychocut', 'psychup', 'quash',
+	'rockclimb', 'rockslide', 'rocksmash', 'rocktomb', 'sandstorm', 'scaryface', 'screech',
+	'selfdestruct', 'shadowball', 'shadowclaw', 'skillswap', 'smackdown', 'snarl', 'snatch', 'spite',
+	'storedpower', 'strength', 'swordsdance', 'suckerpunch', 'taunt', 'throatchop', 'torment', 'trick',
+	'trickroom', 'uproar', 'venomdrench', 'waterpulse', 'willowisp', 'wonderroom', 'workup', 'worryseed',
+	'xscissor', 'zenheadbutt', 'snowscape',
+];
+const musharnaRelearnerMoves = [
+	'assurance', 'nightmare', 'moonlight', 'hypnosis', 'nightslash', 'slash', 'playrough', 'shadowclaw',
+	'honeclaws', 'throatchop', 'lovelykiss', 'glare', 'mistyterrain',
+];
+const musharnaLearnset = (Learnsets as any).musharna?.learnset;
+if (musharnaLearnset) {
+	for (const move of musharnaLevelUpMoves) musharnaLearnset[move] ??= ['9L1'];
+	for (const move of musharnaEggMoves) musharnaLearnset[move] ??= ['9E'];
+	for (const move of musharnaRelearnerMoves) musharnaLearnset[move] ??= ['9L1'];
+	for (const move of musharnaCompatibleMoves) musharnaLearnset[move] ??= ['9M'];
+	(Learnsets as any).musharnarejuv = {learnset: {...musharnaLearnset}};
+}
+
 // Official Gen 8/9 learnset entries missing from this fork. Keep the exact
 // source records so the team builder and validator can distinguish them from
 // the custom additions above.
@@ -114207,6 +114241,33 @@ if (crobatLearnset) (Learnsets as any).crobatalt = {learnset: {...crobatLearnset
 const mukLearnset = (Learnsets as any).muk?.learnset;
 if (mukLearnset) (Learnsets as any).mukpulse = {learnset: {...mukLearnset}};
 
+const palossandRockyExclusiveMoves = [
+	'stealthrock', 'rockblast', 'rocktomb', 'powergem', 'recover', 'dreameater',
+	'explosion', 'grassknot', 'laserfocus', 'meteobeam', 'naturepower', 'selfdestruct',
+	'sludgewave', 'smackdown', 'strength', 'taunt', 'waterpulse',
+];
+const palossandFieryExclusiveMoves = [
+	'willowisp', 'firespin', 'flameburst', 'lavaplume', 'morningsun', 'sunnyday',
+	'burningjealousy', 'fireblast', 'flamecharge', 'flamethrower', 'focusblast', 'heatcrash',
+	'heatwave', 'incinerate', 'laserfocus', 'mysticalfire', 'overheat', 'phantomforce',
+	'shockwave', 'solarbeam', 'solarblade', 'workup',
+];
+const palossandIcyExclusiveMoves = [
+	'coldsnap', 'haze', 'iceshard', 'aurorabeam', 'freezedry', 'moonlight', 'snowscape',
+	'auroraveil', 'avalanche', 'blizzard', 'calmmind', 'frostbreath', 'gyroball', 'icebeam',
+	'iciclespear', 'icywind', 'laserfocus', 'thunderwave', 'tripleaxel', 'whirlpool',
+];
+const palossandLearnset = (Learnsets as any).palossand?.learnset;
+function addPalossandProfileLearnset(id: string, exclusiveMoves: string[]) {
+	if (!palossandLearnset) return;
+	const learnset = {...palossandLearnset};
+	for (const move of exclusiveMoves) learnset[move] ??= ['9M'];
+	(Learnsets as any)[id] = {learnset};
+}
+addPalossandProfileLearnset('palossandrocky', palossandRockyExclusiveMoves);
+addPalossandProfileLearnset('palossandfiery', palossandFieryExclusiveMoves);
+addPalossandProfileLearnset('palossandicy', palossandIcyExclusiveMoves);
+
 const basculegionLearnset = (Learnsets as any).basculegion?.learnset;
 const basculegionFemaleLearnset = (Learnsets as any).basculegionf?.learnset;
 if (basculegionLearnset && basculegionFemaleLearnset) {
@@ -114268,6 +114329,36 @@ for (const move of starterEeveeSinisterBlazeLevelUp) starterEeveeSinisterBlazeLe
 for (const move of starterEeveeSinisterBlazeTutor) starterEeveeSinisterBlazeLearnset[move] = ['9M'];
 for (const move of starterEeveeSinisterBlazeEvent) starterEeveeSinisterBlazeLearnset[move] = ['8V'];
 mergeLearnsetData((Learnsets as any).eeveestarter, {learnset: starterEeveeSinisterBlazeLearnset});
+
+// Starter Eevee's Ascendance event pool is filtered by ability in the client,
+// while these entries keep every declared move legal in server validation.
+const starterEeveeAscendanceMoves = [
+	'sing', 'radiantassault', 'tackle', 'helpinghand', 'tailwhip', 'sandattack', 'batonpass',
+	'aurorabeam', 'honeclaws', 'confusion', 'morningsun', 'sonicboom', 'punishment', 'secretpower',
+	'healpulse', 'spiritbreak', 'mindreader', 'recover', 'luminacrash', 'healingwish', 'dazzlinggleam',
+	'extremespeed', 'revivalblessing', 'sacredfire', 'judgment', 'acrobatics', 'aerialace', 'agility',
+	'alluringvoice', 'ancientpower', 'attract', 'aurasphere', 'auroraveil', 'bodyslam', 'calmmind',
+	'celebrate', 'charm', 'cosmicpower', 'crunch', 'curse', 'defog', 'dig', 'disarmingvoice',
+	'dragonpulse', 'earthpower', 'echoedvoice', 'encore', 'endeavor', 'expandingforce', 'faketears',
+	'falseswipe', 'flail', 'flamethrower', 'flash', 'flashcannon', 'flipturn', 'focusenergy',
+	'futuresight', 'headbutt', 'healbell', 'heatwave', 'hiddenpower', 'hurricane', 'hyperbeam',
+	'hypervoice', 'irontail', 'laserfocus', 'lightscreen', 'magiccoat', 'meteorbeam', 'metronome',
+	'mimic', 'mudslap', 'mysticalfire', 'naturepower', 'payday', 'playrough', 'psychic', 'psychicfangs',
+	'raindance', 'reflect', 'retaliate', 'round', 'scald', 'shadowball', 'shockwave', 'storedpower',
+	'sunnyday', 'superfang', 'swagger', 'tailslap', 'tailwind', 'terrainpulse', 'thunderfang',
+	'triattack', 'uturn', 'vacuumwave', 'weatherball', 'workup', 'zenheadbutt', 'lastresort',
+	'babydolleyes', 'baddybad', 'bite', 'bouncybubble', 'buzzybuzz', 'captivate', 'copycat', 'covet',
+	'detect', 'doubleedge', 'doublekick', 'dustydrift', 'endure', 'freezyfrost', 'glitzyglow', 'growl',
+	'ickyinjection', 'naturalgift', 'punchypummel', 'quickattack', 'rockyrampage', 'sappyseed',
+	'scalyscorn', 'sizzlyslide', 'sparklyswirl', 'spookyspell', 'stabbyswarm', 'steelystrike', 'swift',
+	'synchronoise', 'takedown', 'tickle', 'trailblaze', 'twirlytwister', 'veeveevolley', 'wish', 'yawn',
+];
+const starterEeveeAscendanceLearnset: {[moveid: string]: string[]} = {};
+for (const move of starterEeveeAscendanceMoves) starterEeveeAscendanceLearnset[move] = ['9M'];
+mergeLearnsetData((Learnsets as any).eeveestarter, {learnset: starterEeveeAscendanceLearnset});
+
+const umbreonLearnset = (Learnsets as any).umbreon?.learnset;
+if (umbreonLearnset) umbreonLearnset.radiantassault ??= ['9M'];
 
 const bronzongRejuvLevelUp = [
 	'flash', 'nightshade', 'mirrorshot', 'magiccoat', 'mimic', 'signalbeam',

@@ -169,7 +169,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('fairytaleterrain')) {
+			if (this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain(['fairytaleterrain', 'murkwatersurfaceterrain'])) {
 				move.boosts = {
 					def: 3,
 				};
@@ -565,8 +565,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 6,
 			onResidual(pokemon) {
-				if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('swampterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain')) {
+				if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('swampterrain') || this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain'])) {
 					this.heal(pokemon.baseMaxhp / 8);
+					if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) {
+						this.add('-message', `${pokemon.name}'s Aqua Ring restored its HP a little!`);
+					}
 				}
 				if (this.field.isTerrain('corrosivemistterrain') && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel')))
 					this.damage(pokemon.baseMaxhp / 16);
@@ -4299,7 +4302,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			if (attacker.hasAbility('gulpmissile') && attacker.species.name === 'Cramorant' && !attacker.transformed) {
-				const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
+				const forme = this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain']) || attacker.hp > attacker.maxhp / 2 ? 'cramorantgulping' : 'cramorantgorging';
 				attacker.formeChange(forme, move);
 			}
 			this.add('-prepare', attacker, move.name);
@@ -7851,8 +7854,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isMax: "Kingler",
 		self: {
 			onHit(source) {
+				const speedDrop = this.field.isTerrain('murkwatersurfaceterrain') ? 4 : this.field.isTerrain('watersurfaceterrain') ? 3 : 2;
 				for (const pokemon of source.foes()) {
-					this.boost({ spe: -2 }, pokemon);
+					this.boost({ spe: -speedDrop }, pokemon);
 				}
 			},
 		},
@@ -11555,6 +11559,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.heal = [1, 2];
 			}
 		},
+		onHit(target, source, move) {
+			if (this.field.isTerrain('watersurfaceterrain')) source.addVolatile('aquaring', source, move);
+		},
 		heal: [1, 4],
 		target: "allies",
 		type: "Water",
@@ -14665,7 +14672,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
 					return;
 				}
-				this.boost({ def: -1, spd: -1, spe: -1 }, pokemon, source, this.dex.getActiveMove('octolock'));
+				const defenseDrop = this.field.isTerrain('underwaterterrain') ? 2 : 1;
+				this.boost({ def: -defenseDrop, spd: -defenseDrop, spe: -1 }, pokemon, source, this.dex.getActiveMove('octolock'));
 			},
 			onTrapPokemon(pokemon) {
 				if (this.effectState.source?.isActive) pokemon.tryTrap();
@@ -16195,6 +16203,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
+		onAfterMove(source) {
+			if (this.field.isTerrain('murkwatersurfaceterrain')) {
+				this.add('-message', 'The attack cleared the waters!');
+				this.field.changeTerrain('watersurfaceterrain', source);
+			}
+		},
 		target: "normal",
 		type: "Poison",
 		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
@@ -16634,6 +16648,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		critRatio: 2,
 		target: "allAdjacentFoes",
 		type: "Grass",
+		contestType: "Cool",
+	},
+	radiantassault: {
+		num: 10005,
+		accuracy: 100,
+		basePower: 110,
+		category: "Physical",
+		name: "Radiant Assault",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, recharge: 1, protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit(target, source, move) {
+			useHigherOffensiveStat(source, move);
+		},
+		onAfterMove(source, target, move) {
+			if (target.fainted || move.hitTargets?.some(pokemon => pokemon.fainted)) {
+				source.removeVolatile('mustrecharge');
+			}
+		},
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
+		target: "allAdjacentFoes",
+		type: "???",
 		contestType: "Cool",
 	},
 	radiantclaw: {
@@ -17944,6 +17982,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyMove(move, pokemon) {
 			const currentTerrain = this.field.terrain; // Assuming this gets the ID string
 			if (!currentTerrain || currentTerrain === '') return;
+			if (currentTerrain === 'icyterrain') {
+				const iceShard = this.dex.moves.get('iceshard');
+				(move as any).name = iceShard.name;
+				move.type = iceShard.type;
+				move.basePower = iceShard.basePower;
+				move.priority = iceShard.priority;
+				move.accuracy = iceShard.accuracy;
+			}
 			move.secondaries = [];
 			type Secondary = NonNullable<typeof move.secondaries>[number];
 			const terrainSecondaries: Record<string, Secondary[]> = {
@@ -18636,6 +18682,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
+		onModifyType(move) {
+			if (this.field.isTerrain('watersurfaceterrain')) {
+				move.type = 'Water';
+			} else if (this.field.isTerrain('murkwatersurfaceterrain')) {
+				move.type = 'Water';
+				move.types = ['Water', 'Poison'];
+			}
+		},
 		onHit(pokemon) {
 			let factor = 0.5;
 			if (this.field.isWeather('sandstorm')) {
@@ -18649,13 +18703,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-fail', pokemon, 'heal');
 				return this.NOT_FAIL;
 			} else {
-				if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('murkwatersurfaceterrain')) {
+				if (this.field.isTerrain(['watersurfaceterrain', 'murkwatersurfaceterrain', 'underwaterterrain'])) {
 					if (pokemon.hasAbility('watercompaction')) {
 						this.boost({ def: 2 });
 					}
 				}
 			}
 			return success;
+		},
+		onAfterMove(source) {
+			if (this.field.isTerrain('underwaterterrain')) {
+				this.add('-message', 'The battle resurfaced!');
+				this.field.changeTerrain('watersurfaceterrain', source);
+			}
 		},
 		target: "self",
 		type: "Ground",
@@ -22496,6 +22556,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 			if (success) this.add('-activate', pokemon, 'move: Tidy Up');
+			if (this.field.isTerrain('murkwatersurfaceterrain')) {
+				const uses = (this.field.terrainState.terrainChanges?.get('tidyup') || 0) + 1;
+				this.field.terrainState.terrainChanges?.set('tidyup', uses);
+				if (uses >= 2) this.field.changeTerrain('watersurfaceterrain', pokemon);
+			}
 			return !!this.boost({ atk: 1, spe: 1 }, pokemon, pokemon, null, false, true) || success;
 		},
 		target: "self",

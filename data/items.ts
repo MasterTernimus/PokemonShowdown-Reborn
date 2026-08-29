@@ -1901,22 +1901,24 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.trySetStatus('tox', pokemon);
 			}
 			if (this.field.isTerrain('watersurfaceterrain')) {
+				this.add('-message', `${pokemon.name} surrounded itself with a veil of water!`);
 				this.boost({ spd: 1 });
 				pokemon.addVolatile('aquaring');
 			}
 			if (this.field.isTerrain('underwaterterrain')) {
+				this.add('-message', `${pokemon.name} transformed into the Water type!`);
 				this.boost({ spe: 1 });
 				this.actions.useMove('soak', pokemon, { target: pokemon });
 			}
 			if (this.field.isTerrain('murkwatersurfaceterrain')) {
+				this.add('-message', `${pokemon.name} surrounded itself with a veil of water!`);
 				this.boost({ spe: 1 });
 				pokemon.addVolatile('aquaring');
 				pokemon.trySetStatus('tox', pokemon, item);
 			}
 			if (this.field.isTerrain('icyterrain')) {
 				this.boost({ spe: 2 });
-				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
-				this.damage(damageAmounts[pokemon.side.sideConditions['spikes'] !== undefined ? pokemon.side.sideConditions['spikes'].layers : 1] * pokemon.maxhp / 24);
+				this.field.applyIcySpikesDamage(pokemon);
 			}
 			if (this.field.isTerrain('dragonsdenterrain')) {
 				this.add('-message', pokemon.name + ' raised its Fire power!');

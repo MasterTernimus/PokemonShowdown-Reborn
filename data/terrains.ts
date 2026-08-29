@@ -1753,6 +1753,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const strong_boost = ["mysticalfire", "magicalleaf", "ancientpower", "judgment", "sacredfire", "extremespeed", "sacredsword", "return"];
 				const boost = ["psystrike", "aeroblast", "originpulse", "doomdummy", "mistball", "crushgrip", "lusterpurge", "secretsword", "psychoboost", "relicsong", "spacialrend", "hyperspacehole", "roaroftime", "landswrath", "precipiceblades", "dragonascent", "moongeistbeam", "sunsteelstrike", "prismaticlaser", "fleurcannon", "diamondstorm", "genesissupernova", "searingsunrazesmash", "menacingmoonrazemaelstrom"];
 				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
+				if (move.id === 'radiantassault') {
+					this.add('-message', 'Legendary power accelerated the attack!');
+					modifier *= 1.5;
+				}
 				if ((move.type === 'Fairy' || move.type === 'Normal') && move.category === 'Special') {
 					this.add('-message', 'The holy energy resonated with the attack!');
 					modifier *= 1.5;
@@ -1804,6 +1808,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			effectType: "Terrain",
 			duration: 9999,
+			onModifySpe(spe, pokemon) {
+				if (pokemon.isGrounded() && !pokemon.hasType('Ice') && !pokemon.hasAbility(['snowcloak', 'slushrush', 'icebody', 'refrigerate'])) {
+					return this.chainModify(0.75);
+				}
+			},
 			onBasePowerPriority: 6,
 			onModifyDef(def, pokemon) {
 				if (pokemon.types.includes('Ice') && this.field.isWeather('hail')) {
@@ -1812,23 +1821,32 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onModifyMovePriority: 30,
 			onModifyMove(move, pokemon) {
-				const speedMoves = ['defensecurl', 'lunge', 'rollout', 'steamroller'];
-				if ((speedMoves.includes(move.id) || (move.priority > 0 && move.flags.contact && move.category === 'Physical')) && pokemon.isGrounded()) {
-					move.selfBoost = {
-						boosts: {
-							spe: 1,
-						},
-					};
+				const speedMoves = ['defensecurl', 'feint', 'iceball', 'icespinner', 'lunge', 'rollout', 'spincout', 'steamroller'];
+				const momentumMove = speedMoves.includes(move.id) ||
+					(move.priority > 0 && move.flags.contact && move.category === 'Physical');
+				if (!(move as any).icyMomentum && momentumMove && pokemon.isGrounded()) {
+					(move as any).icyMomentum = true;
 				}
 				if (move.type === 'Rock') {
-					move.types = [move.type, 'Ice'];
+					move.types = Array.from(new Set([...(move.types || [move.type]), 'Ice']));
+				}
+				if (move.id === 'bittermalice' && !(move as any).icyFrostbiteBoosted) {
+					move.secondaries ||= [];
+					const frostbite = move.secondaries.find(secondary => secondary.status === 'frz');
+					if (frostbite) {
+						frostbite.chance = (frostbite.chance || 0) + 10;
+					} else {
+						move.secondaries.push({ chance: 10, status: 'frz' });
+					}
+					(move as any).icyFrostbiteBoosted = true;
 				}
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'infernooverdrive', 'lavaplume', 'magmadrift', 'mindblown', 'ragingfury', 'searingshot'];
-				const watersurfaceMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
-				const waterTerrains = ['murkwatersurfaceterrain', 'watersurfaceterrain'];
+				const igniteMoves = ['burningjealousy', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'infernooverdrive', 'lavaplume', 'magmadrift', 'mindblown', 'ragingfury', 'searingshot'];
+				const quakeMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				const hotWaterMoves = ['scald', 'steameruption', 'hydrosteam'];
+				const hotWaterCount = this.field.terrainState.terrainChanges?.get('icyHotWater') ?? this.field.terrainState.terrainChanges?.get('previousTerrain') ?? 0;
 				if (move.type === 'Ice') {
 					this.add('-message', 'The cold strengthened the attack!');
 					modifier *= 1.5;
@@ -1837,10 +1855,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The cold softened the attack...');
 					modifier *= 0.5;
 				}
-				if (move.id === 'scald' || move.id === 'steameruption' || move.id === 'hydrosteam') {
+				if (hotWaterMoves.includes(move.id)) {
 					this.add('-message', 'The cold softened the attack...');
 					modifier *= 0.5;
-					if (this.field.terrainState.terrainChanges?.get('previousTerrain') === 1) {
+					if (hotWaterCount === 1) {
 						modifier *= 1.3;
 					}
 				}
@@ -1849,44 +1867,75 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= 1.2;
 				}
 				if (move.id === 'bittermalice') {
+					this.add('-message', 'The cold strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (move.id === 'chillingwater') {
+					this.add('-message', 'The freezing air boosted the attack!');
 					modifier *= 2;
 				}
-				if (igniteMoves.includes(move.id) || (waterTerrains.includes(this.field.terrainStack[1]?.id) && watersurfaceMoves.includes(move.id)) || (move.isMax && move.type === 'Fire')) {
+				if (igniteMoves.includes(move.id) || (this.field.terrainState.underlyingTerrain && quakeMoves.includes(move.id)) || (move.isMax && move.type === 'Fire')) {
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'infernooverdrive', 'lavaplume', 'magmadrift', 'mindblown', 'ragingfury', 'searingshot'];
-				const watersurfaceMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
-				const revertMoves = ['scald', 'steameruption', 'hydrosteam'];
-				const waterTerrains = ['murkwatersurfaceterrain', 'watersurfaceterrain'];
-				const currentCount = this.field.terrainState.terrainChanges?.get('previousTerrain') ?? 0;
-				const revertCount = revertMoves.includes(move.id) ? 1 : 0;
-				this.field.terrainState.terrainChanges?.set('previousTerrain', revertCount + currentCount);
-				if (waterTerrains.includes(this.field.terrainStack[1]?.id) && watersurfaceMoves.includes(move.id)) {
-					this.add('-message', 'The ice went away!');
-					this.field.changeTerrain('watersurfaceterrain');
-					return;
-				} else if (igniteMoves.includes(move.id) || revertCount + currentCount >= 2 || (move.isMax && move.type === 'Fire')) {
-					this.add('-message', 'The ice melted!');
-					this.field.changeTerrain(this.field.terrainState?.prevTerrain ?? 'watersurfaceterrain');
-					return;
-				}
-				if (watersurfaceMoves.includes(move.id) && waterTerrains.includes(this.field.terrainStack[1]?.id)) {
-					for (const sides of this.sides) {
-						sides.addSideCondition('spikes');
+				const igniteMoves = ['burningjealousy', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'infernooverdrive', 'lavaplume', 'magmadrift', 'mindblown', 'ragingfury', 'searingshot'];
+				const quakeMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
+				const hotWaterMoves = ['scald', 'steameruption', 'hydrosteam'];
+				const currentCount = this.field.terrainState.terrainChanges?.get('icyHotWater') ?? this.field.terrainState.terrainChanges?.get('previousTerrain') ?? 0;
+				if ((move as any).icyMomentum) {
+					if (source.hp && this.boost({ spe: 1 }, source, source, this.effect)) {
+						this.add('-message', source.hasAbility('contrary') ? `${source.name} lost momentum on the ice!` : `${source.name} gained momentum on the ice!`);
 					}
 				}
+				if (quakeMoves.includes(move.id)) {
+					if (this.field.terrainState.underlyingTerrain) {
+						this.add('-message', 'The quake broke up the ice and revealed the water beneath!');
+					} else {
+						for (const side of this.sides) side.addSideCondition('spikes', source);
+						return;
+					}
+					this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'watersurfaceterrain');
+					return;
+				}
+				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
+					this.add('-message', 'The ice melted away!');
+					this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'caveterrain');
+					return;
+				}
+				if (hotWaterMoves.includes(move.id)) {
+					const nextCount = currentCount + 1;
+					this.field.terrainState.terrainChanges?.set('icyHotWater', nextCount);
+					this.field.terrainState.terrainChanges?.set('previousTerrain', nextCount);
+					if (nextCount >= 2) {
+						this.add('-message', 'The hot water melted the ice!');
+						this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'watersurfaceterrain');
+					}
+					return;
+				}
+				if (move.id === 'matchagotcha') {
+					if (source.hp) this.heal(source.maxhp * 0.3, source, source, move);
+					this.add('-message', 'The hot tea melted the ice!');
+					this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'watersurfaceterrain');
+					return;
+				}
+				if (move.id === 'dive') {
+					this.add('-message', `${source.name} made a hole in the ice!`);
+					this.add('-message', 'The ice was broken from underneath!');
+					this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'watersurfaceterrain');
+					return;
+				}
+			},
+			onSwitchIn(pokemon) {
+				this.field.applyIcySpikesDamage(pokemon);
 			},
 			onFieldStart() {
-				this.add('-fieldstart', 'Icy Terrain');
+				this.add('-fieldstart', 'Icy Field');
+				this.add('-message', 'The field is covered in ice.');
 			},
 			onFieldEnd() {
-				this.add('-fieldend', 'Icy Terrain');
+				this.add('-fieldend', 'Icy Field');
 			},
 		},
 	},
@@ -2114,14 +2163,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyMove(move) {
-				const waterpoisonMoves = ['mudbomb', 'mudshot', 'thousandwaves'];
+				const waterpoisonMoves = ['mudbomb', 'mudshot', 'mudbarrage', 'mudslap', 'thousandwaves'];
 				if (move.type === 'Water' || waterpoisonMoves.includes(move.id)) {
 					move.types = ['Water', 'Poison'];
 					move.type = 'Water';
-				}
-				if (move.id === 'mudslap') {
-					move.type = 'Water';
-					delete move.types;
 				}
 				if (move.id === 'smackdown' || move.id === 'appleacid') {
 					move.types = [move.type, 'Poison'];
@@ -2132,22 +2177,26 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onTryMove(source, target, move) {
 				if ((move.type === 'Ground' && move.category !== 'Status') || move.id === 'sandattack') {
+					this.add('-message', '...But there was no solid ground to attack from!');
 					return false;
 				}
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const strengthenedMoves = ['mudbomb', 'mudshot', 'mudslap', 'thousandwaves', 'acid', 'acidspray', 'brine', 'smackdown', 'wavecrash', 'appleacid'];
+				const strengthenedMoves = ['mudbomb', 'mudshot', 'mudbarrage', 'mudslap', 'thousandwaves', 'acid', 'acidspray', 'brine', 'smackdown', 'wavecrash', 'appleacid'];
 				const change = ['whirlpool', 'blizzard', 'subzeroslammer', 'glaciate'];
 				if (move.type === 'Water') {
 					this.add('-message', 'The water move was aided by the poison!');
+					this.add('-message', 'The toxic water strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (move.type === 'Poison') {
 					this.add('-message', 'The poison in the move was supercharged!');
+					this.add('-message', 'The toxic water strengthened the attack!');
 					modifier *= 1.5;
 				}
 				if (move.type === 'Electric' && target.isGrounded()) {
+					this.add('-message', 'The toxic water conducted the attack!');
 					modifier *= 5325 / 4096;
 				}
 				if (strengthenedMoves.includes(move.id)) {
@@ -2187,6 +2236,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (pokemon.volatiles['dive']) {
 						damage *= 4;
 					}
+					this.add('-message', pokemon.volatiles['dive'] ? `${pokemon.name} suffocated underneath the toxic water!` : `${pokemon.name} is hurt by the toxic water!`);
 					if (weak.includes(pokemon.ability)) {
 						this.damage(damage * 2, pokemon);
 					} else {
@@ -2196,6 +2246,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldStart() {
 				this.add('-fieldstart', 'Murkwater Surface Terrain');
+				this.add('-message', 'The water is tainted...');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Murkwater Surface Terrain');
@@ -2227,6 +2278,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const boost: string[] = ["aurorabeam", "signalbeam", "flashcannon", "dazzlinggleam", "mirrorshot", "photongeyser", "psystrike", "aeroblast", "sacredfire", "mistball", "lusterpurge", "originpulse", "precipiceblades", "dragonascent", "psychoboost", "roaroftime", "magmastorm", "crushgrip", "judgment", "seedflare", "shadowforce", "searingshot", "vcreate", "secretsword", "sacredsword", "relicsong", "fusionbolt", "fusionflare", "iceburn", "freezeshock", "boltstrike", "blueflare", "technoblast", "oblivionwing", "landswrath", "thousandarrows", "thousandwaves", "diamondstorm", "steameruption", "coreenforcer", "fleurcannon", "prismaticlaser", "sunsteelstrike", "spectralthief", "moongeistbeam", "multiattack", "mindblown", "plasmafists", "earthpower", "powergem", "eruption", "continentalcrush", "genesissupernova", "soulstealing7starstrike", "searingsunrazesmash", "menacingmoonrazemaelstrom", "astralbarrage", "behemothbash", "behemothblade", "collisioncourse", "doubleironbash", "dragonenergy", "dynamaxcannon", "electrodrift", "eternabeam", "fierywrath", "glaciallance", "ruination", "freezingglare", "terastarstorm", "surgingstrikes", "malignantchain", "tachyoncutter", "mightycleave", "hydrosteam", "thunderclap", "ivycudgel", "psyblade", "sandsearstorm", "wildboltstorm", "springtidestorm", "thundercage", "thunderouskick", "wickedblow", "mirrorbeam"];
 				const strong_boost: string[] = ["vacuumwave", "dracometeor", "meteormash", "moonblast", "cometpunch", "swift", "meteorbeam", "hyperspacehole", "spacialrend", "hyperspacefury", "ancientpower", "futuredummy", "blackholeeclipse"];
 				const weak_nerf = ['bulldoze', 'earthquake', 'magnitude'];
+				if (move.id === 'radiantassault') {
+					this.add('-message', 'The light shone through the infinite darkness!');
+					modifier *= 1.5;
+				}
 				if (boost.includes(move.id)) {
 					this.add('-message', 'The ethereal energy strengthened the attack!');
 					modifier *= 1.5;
@@ -2950,7 +3005,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				if (pokemon.hasAbility('webassassin')) return;
-				const immune = ['swiftswim', 'steelworker'];
+				const immune = ['elevate', 'swiftswim', 'steelworker'];
 				if (
 					!pokemon.getTypes().includes('Water') &&
 					!immune.includes(pokemon.ability) &&
@@ -2960,13 +3015,30 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onTryMove(source, target, move) {
+				if (move.id === 'tarshot') {
+					this.add('-message', 'The tar washed off instantly!');
+					return false;
+				}
+				if (move.id === 'spicyextract') {
+					this.add('-message', 'The extract washed away!');
+					return false;
+				}
+				if (['sunnyday', 'hail', 'sandstorm', 'raindance'].includes(move.id)) {
+					this.add('-message', "You're too deep to notice the weather!");
+					return false;
+				}
 				if (move.type === 'Fire') {
+					this.add('-message', '...But the attack was doused instantly!');
 					return false;
 				}
 			},
 			onModifyMove(move) {
-				if (move.type === 'Ground' || move.id === 'dragondarts' || move.id === 'gravapple') {
+				if (move.type === 'Ground') {
 					move.types = [move.type, 'Water'];
+				}
+				if (move.id === 'dragondarts' || move.id === 'gravapple') {
+					move.type = 'Water';
+					delete move.types;
 				}
 			},
 			onAccuracy(accuracy, target, source, move) {
@@ -2986,7 +3058,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const change = ['bounce', 'dive', 'skydrop', 'fly', 'aciddownpour'];
+				if (move.id === 'waterpulse' || move.id === 'jetpunch') {
+					this.add('-message', 'Jet-streamed!');
+				}
 				if (move.type === 'Electric') {
+					this.add('-message', 'The water super-conducted the attack!');
 					modifier *= 2;
 				}
 				if (move.id === 'anchorshot' || move.id === 'dragondarts') {
@@ -3002,7 +3078,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (
 					move.category === 'Physical' &&
 					move.type !== 'Water' &&
+					!source.hasType('Water') &&
 					!source.hasAbility('steelworker') &&
+					!source.hasAbility('elevate') &&
 					!source.hasAbility('swiftswim')
 				) {
 					modifier *= 0.5;
@@ -3016,39 +3094,49 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const watersurface = ['bounce', 'dive', 'skydrop', 'fly'];
+				const watersurface = ['bounce', 'dive', 'skydrop', 'fly', 'shoreup', 'tripledive'];
 				const murkwater = ['sludgewave', 'aciddownpour'];
 				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbility('neutralization'));
 				if (watersurface.includes(move.id)) {
+					this.add('-message', 'The battle resurfaced!');
 					this.field.changeTerrain('watersurfaceterrain');
 					return;
 				}
 				if (murkwater.includes(move.id) && (move.id === 'aciddownpour' || this.field.terrainState.terrainChanges?.get('sludgewave') === 1)) {
 					if (neutralizationActive) return;
+					if (move.id === 'sludgewave') {
+						this.add('-message', 'Poison spread through the water!');
+					}
 					for (const pokemon of this.getAllActive()) {
 						if (!(pokemon.types.includes('Steel') || pokemon.types.includes('Poison')) && !pokemon.isSemiInvulnerable()) {
 							pokemon.faint();
 						}
 					}
+					this.add('-message', 'The grime sank beneath the battlers!');
 					this.field.changeTerrain('murkwatersurfaceterrain');
 					return;
 				}
 				if (move.id === 'sludgewave') {
 					if (neutralizationActive) return;
+					this.add('-message', 'Poison spread through the water!');
 					this.field.terrainState.terrainChanges?.set('sludgewave', 1);
 				}
 			},
 			onResidual(pokemon) {
-				const immune = ['magicguard', 'protectiveward', 'swiftswim', 'stormdrain', 'waterabsorb'];
+				if (pokemon.volatiles['tarshot']) {
+					this.add('-message', `The tar washed off ${pokemon.name} in the water!`);
+					pokemon.removeVolatile('tarshot');
+				}
+				const immune = ['dryskin', 'magicguard', 'protectiveward', 'swiftswim', 'stormdrain', 'waterabsorb'];
 				const weak = ['flamebody', 'magmaarmor'];
 				if (!immune.includes(pokemon.ability)) {
 					const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', pokemon.types), -6, 6);
 					const damage = this.clampIntRange(pokemon.baseMaxhp / 8 * 2 ** typeMod, 1);
 					if (typeMod > 0) {
-						if (weak.includes(pokemon.ability)) {
-							this.damage(damage * 2, pokemon);
-						} else {
-							this.damage(damage, pokemon);
+						const damageDealt = weak.includes(pokemon.ability) ?
+							this.damage(damage * 2, pokemon) : this.damage(damage, pokemon);
+						if (typeof damageDealt === 'number' && damageDealt > 0) {
+							this.add('-message', `${pokemon.name} struggled in the water!`);
 						}
 					}
 				}
@@ -3062,6 +3150,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				} else {
 					this.add('-fieldstart', 'Underwater Terrain');
 				}
+				this.add('-message', 'Blub blub...');
 			},
 			onFieldEnd() {
 				this.add('-fieldend', 'Underwater Terrain');
@@ -3342,7 +3431,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const change = ['dive', 'gravity', 'aciddownpour', 'blizzard', 'subzeroslammer', 'glaciate', 'gravapple'];
-				const strengthenedMoves = ['dive', 'muddywater', 'surf', 'whirlpool', 'hydrovortex'];
+				const strengthenedMoves = ['dive', 'muddywater', 'surf', 'whirlpool', 'hydrovortex', 'splishysplash'];
+				const individualBoostedMoves = ['whirlpool', 'surf', 'muddywater', 'dive', 'sludgewave', 'octazooka', 'originpulse', 'hydrovortex', 'tripledive'];
 				if (move.type === 'Water') {
 					this.add('-message', 'The water strengthened the attack!');
 					modifier *= 1.5;
@@ -3354,6 +3444,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (strengthenedMoves.includes(move.id)) {
 					this.add('-message', 'The attack rode the current!');
 					modifier *= 1.5;
+				}
+				if (individualBoostedMoves.includes(move.id)) {
+					if (!strengthenedMoves.includes(move.id)) this.add('-message', 'The attack rode the current!');
+					modifier *= 1.2;
 				}
 				if (target.isGrounded() && move.type === 'Electric') {
 					this.add('-message', 'The water conducted the attack!');
@@ -3376,18 +3470,21 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const underwater = ['dive', 'gravity', 'anchorshot', 'gravapple'];
+				const underwater = ['dive', 'gravity', 'anchorshot', 'gravapple', 'tripledive'];
 				const murkwater = ['sludgewave', 'aciddownpour'];
 				const icy = ['blizzard', 'subzeroslammer', 'glaciate'];
 				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbility('neutralization'));
 				if (underwater.includes(move.id)) {
-					this.add('-message', move.id === 'gravity' ? 'The battle sank into the depths!' : 'The battle was pulled underwater!');
+					this.add('-message', ['gravity', 'gravapple'].includes(move.id) ? 'The battle sank into the depths!' : 'The battle was pulled underwater!');
 					this.field.clearWeather();
 					this.field.changeTerrain('underwaterterrain');
 					return;
 				}
 				if (murkwater.includes(move.id) && (move.id === 'aciddownpour' || this.field.terrainState.terrainChanges?.get('sludgewave') === 1)) {
 					if (neutralizationActive) return;
+					if (move.id === 'sludgewave') {
+						this.add('-message', 'Poison spread through the water!');
+					}
 					this.add('-message', 'The water was polluted!');
 					this.field.changeTerrain('murkwatersurfaceterrain');
 					return;
@@ -3405,6 +3502,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onResidual(pokemon) {
 				if (pokemon.volatiles['tarshot']) {
+					this.add('-message', `The tar washed off ${pokemon.name} in the water!`);
 					pokemon.removeVolatile('tarshot');
 				}
 			},
