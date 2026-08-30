@@ -8125,6 +8125,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	intimidate: {
 		onStart(pokemon) {
+			if (this.event.id === 'SwitchIn') {
+				if (pokemon.abilityState.intimidateSwitchIn) return;
+				pokemon.abilityState.intimidateSwitchIn = true;
+			}
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {

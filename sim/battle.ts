@@ -541,6 +541,10 @@ export class Battle {
 		if (eventid === 'Residual') {
 			getKey = 'duration';
 		}
+		// A custom effect can register the same callback more than once while the
+		// switch-in handler list is being assembled. Keep separate callbacks on the
+		// same state independent, but resolve duplicate copies only once.
+		const seenSwitchInCallbacks = eventid === 'SwitchIn' ? new WeakMap<object, Set<Function>>() : null;
 		let handlers = this.findFieldEventHandlers(this.field, `onField${eventid}`, getKey);
 		for (const side of this.sides) {
 			if (side.n < 2 || !side.allySide) {
@@ -615,6 +619,18 @@ export class Battle {
 				if (expectedStateLocation !== handler.state) {
 					continue;
 				}
+			}
+			if (
+				eventid === 'SwitchIn' && handler.state?.target instanceof Pokemon &&
+				['Ability', 'Item', 'Status'].includes(effect.effectType) && handler.callback
+			) {
+				let callbacks = seenSwitchInCallbacks?.get(handler.state);
+				if (!callbacks) {
+					callbacks = new Set();
+					seenSwitchInCallbacks?.set(handler.state, callbacks);
+				}
+				if (callbacks.has(handler.callback)) continue;
+				callbacks.add(handler.callback);
 			}
 
 			let handlerEventid = eventid;
