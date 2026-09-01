@@ -13123,7 +13123,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('dryskin').onResidual?.call(this, pokemon);
 		},
 		onDamagingHit(damage, target, source, move) { return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, move); },
-		onSwitchOut(pokemon) { return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon); },
 		flags: { breakable: 1 },
 		name: "Raging Current",
 		rating: 4.5,
@@ -13189,6 +13188,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10038,
 	},
 	calderacore: {
+		onModifyMovePriority: 1,
+		onModifyMove(move, pokemon) {
+			return this.dex.abilities.get('sheerforce').onModifyMove?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			return this.dex.abilities.get('sheerforce').onBasePower?.call(this, basePower, pokemon, target, move);
+		},
 		onStart(pokemon) {
 			this.dex.abilities.get('drought').onStart?.call(this, pokemon);
 			this.dex.abilities.get('magmaarmor').onStart?.call(this, pokemon);

@@ -306,7 +306,8 @@ describe('Composite ability cleanup', function () {
 			lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
 			relentlesshunt: ['levitate'],
 			omenedge: ['sharpness', 'dualwield', 'toughclaws'],
-			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'regenerator', 'stamina'],
+			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
+			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 			riotamp: ['punkrock', 'galvanize', 'resonanceforce', 'technician', 'voltabsorb'],
 			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
@@ -323,6 +324,13 @@ describe('Composite ability cleanup', function () {
 		const bloomingSun = battle.dex.abilities.get('bloomingsun');
 		assert(bloomingSun.onCheckShow);
 		assert(bloomingSun.onResidual);
+		pokemon.setAbility('ragingcurrent', pokemon, battle.dex.abilities.get('noability'), true);
+		assert.false(pokemon.hasAbility('regenerator'));
+		assert.equal(battle.dex.abilities.get('ragingcurrent').onSwitchOut, undefined);
+		pokemon.setAbility('calderacore', pokemon, battle.dex.abilities.get('noability'), true);
+		const calderaMove = battle.dex.getActiveMove('flamethrower');
+		battle.singleEvent('ModifyMove', pokemon.getAbility(), pokemon.abilityState, calderaMove, pokemon);
+		assert.equal(calderaMove.hasSheerForce, true);
 	});
 
 	it('should apply the requested species ability replacements and Altaria event slot', function () {

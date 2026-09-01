@@ -2760,8 +2760,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingcurrent: {
 		name: "Raging Current",
-		desc: "This Pokemon has Swift Swim, Dry Skin, Regenerator, and Stamina's effects.",
-		shortDesc: "Swift Swim + Dry Skin + Regenerator + Stamina.",
+		desc: "This Pokemon has Swift Swim, Damp, Water Veil, Dry Skin, and Stamina's effects.",
+		shortDesc: "Swift Swim + Damp + Water Veil + Dry Skin + Stamina.",
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
@@ -2775,8 +2775,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	calderacore: {
 		name: "Caldera Core",
-		desc: "This Pokemon has Magma Armor and Drought's effects.",
-		shortDesc: "Magma Armor + Drought.",
+		desc: "This Pokemon has Magma Armor, Sheer Force, and Drought's effects.",
+		shortDesc: "Magma Armor + Sheer Force + Drought.",
 	},
 	soultag: {
 		name: "Soul Tag",

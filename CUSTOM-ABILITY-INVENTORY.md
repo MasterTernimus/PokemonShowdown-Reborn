@@ -144,7 +144,7 @@ Custom-numbered entries: 233
 - **Proficient** (`proficient`): STAB moves have 1.2x power. **Users:** None directly assigned.
 - **Punch Fiend** (`punchfiend`): Iron Fist + Inner Focus + Unseen Fist. **Users:** Hitmonchan
 - **Queen's Guard** (`queensguard`): Contrary + Shed Skin + Intimidate. **Users:** Serperior-Mega
-- **Raging Current** (`ragingcurrent`): Swift Swim + Dry Skin + Regenerator + Stamina. **Users:** Swampert-Mega
+- **Raging Current** (`ragingcurrent`): Swift Swim + Damp + Water Veil + Dry Skin + Stamina. **Users:** Swampert-Mega
 - **Raging Fists** (`ragingfists`): Hydra Bond + Fighting Fiend + Scrappy. **Users:** Machamp-Gmax
 - **Raging Storm** (`ragingstorm`): Cannot be suppressed; Mold Breaker; attacks clear boosts/ignore screens; KO bonus. **Users:** Haxorus
 - **Railgun Circuit** (`railguncircuit`): Transistor effects; this Pokemon's moves never miss. **Users:** Raichu-Mega-Y
