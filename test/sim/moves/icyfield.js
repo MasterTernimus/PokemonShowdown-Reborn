@@ -185,13 +185,25 @@ describe('Icy Field interactions', () => {
 		assert(battle.log.includes('|-message|The hot tea melted the ice!'));
 	});
 
-	it('breaks Icy Field from underneath with Dive', () => {
-		const [source, target] = createBattle();
-		battle.field.changeTerrain('murkwatersurfaceterrain', source);
-		setIcyField(source);
-		applyTerrainMove('dive', source, target);
-		assert(battle.field.isTerrain('murkwatersurfaceterrain'));
-		assert(battle.log.includes('|-message|Mew made a hole in the ice!'));
-		assert(battle.log.includes('|-message|The ice was broken from underneath!'));
+	it('breaks Icy Field from underneath with Dive after its charge turn', () => {
+		for (const underlyingTerrain of ['watersurfaceterrain', 'murkwatersurfaceterrain']) {
+			const [source] = createBattle([
+				[{ species: 'Mew', moves: ['dive'] }],
+				[{ species: 'Mew', moves: ['splash'] }],
+			]);
+			battle.field.changeTerrain(underlyingTerrain, source);
+			setIcyField(source);
+
+			battle.makeChoices('move dive', 'move splash');
+			assert(battle.field.isTerrain('icyterrain'));
+			assert(battle.log.includes('|-prepare|p1a: Mew|Dive'));
+
+			battle.makeChoices('move dive', 'move splash');
+			assert(battle.field.isTerrain(underlyingTerrain));
+			assert(battle.log.includes('|-message|Mew made a hole in the ice!'));
+			assert(battle.log.includes('|-message|The ice was broken from underneath!'));
+			battle.destroy();
+			battle = null;
+		}
 	});
 });

@@ -51,8 +51,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	spiralevolution: {
 		name: "Spiral Evolution",
-		desc: "This Pokemon has Adaptability, Levitate, Dual Wield, and Infiltrator. Its damaging moves pierce protection for reduced damage, its normal-priority moves act first in Trick Room without gaining priority, and it takes 0.8x damage.",
-		shortDesc: "Adaptability + Levitate + Dual Wield + Infiltrator; protection pierce; first in Trick Room; takes 0.8x.",
+		desc: "This Pokemon has Adaptability, Levitate, Dual Wield, Infiltrator, and Shield Dust. Its damaging moves pierce protection for reduced damage, its normal-priority moves act first in Trick Room without gaining priority, it ignores field-based Speed penalties, and it takes 0.8x damage.",
+		shortDesc: "Adaptability + Levitate + Dual Wield + Infiltrator + Shield Dust; ignores field Speed penalties; protection pierce; takes 0.8x.",
 	},
 	alchemistsurge: {
 		name: "Alchemist Surge",
@@ -106,8 +106,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	apexvenom: {
 		name: "Apex Venom",
-		desc: "This Pokemon has Strong Jaw and Shed Skin's effects. Biting moves bypass protection and have a 30% chance to badly poison the target. Poison Fang has 1.5x power.",
-		shortDesc: "Strong Jaw + Shed Skin; bites bypass protection and badly poison 30%; Poison Fang 1.5x.",
+		desc: "This Pokemon has Strong Jaw and Shed Skin's effects. Poison moves, including Poison Fang, are super effective against Poison- and Steel-type Pokemon. Poison Fang is Dragon-type and has 1.5x power. Biting moves bypass protection and have a 30% chance to badly poison the target.",
+		shortDesc: "Strong Jaw + Shed Skin; Poison hits Poison/Steel; Poison Fang is Dragon/1.5x; bites bypass protection and badly poison 30%.",
 	},
 	apexpredator: {
 		name: "Apex Predator",

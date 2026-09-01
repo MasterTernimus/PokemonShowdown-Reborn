@@ -10,9 +10,9 @@ describe('Apex Venom', function () {
 		battle?.destroy();
 	});
 
-	it('combines Strong Jaw and Shed Skin without changing move typing', function () {
+	it('combines Strong Jaw and Shed Skin with Apex Venom Poison Fang typing', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Seviper', ability: 'Apex Venom', moves: ['Poison Fang']}],
+			[{species: 'Seviper', ability: 'Apex Venom', moves: ['Poison Fang', 'Poison Jab']}],
 			[{species: 'Magikarp', moves: ['Splash']}],
 		]);
 		battle.makeChoices('team 1', 'team 1');
@@ -21,9 +21,29 @@ describe('Apex Venom', function () {
 		assert(seviper.hasAbility('shedskin'));
 		const poisonFang = battle.dex.getActiveMove('poisonfang');
 		battle.singleEvent('ModifyMove', seviper.getAbility(), seviper.abilityState, poisonFang, seviper, battle.p2.active[0]);
-		assert.equal(poisonFang.type, 'Poison');
+		assert.equal(poisonFang.type, 'Dragon');
 		assert.equal(poisonFang.breaksProtect, true);
 		assert.equal(poisonFang.secondaries?.at(-1)?.chance, 30);
+	});
+
+	it('makes Poison moves super effective against Poison and Steel', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
+			[{species: 'Seviper', ability: 'Apex Venom', moves: ['Poison Fang', 'Poison Jab']}],
+			[{species: 'Perrserker', moves: ['Splash']}, {species: 'Koffing', moves: ['Splash']}],
+		]);
+		battle.makeChoices('team 1', 'team 1');
+		const seviper = battle.p1.active[0];
+		const poisonFang = battle.dex.getActiveMove('poisonfang');
+		battle.singleEvent('ModifyMove', seviper.getAbility(), seviper.abilityState, poisonFang, seviper, battle.p2.active[0]);
+		assert.equal(battle.p2.pokemon[0].runEffectiveness(poisonFang), 1);
+		assert.equal(battle.p2.pokemon[1].runEffectiveness(poisonFang), 1);
+		const poisonJab = battle.dex.getActiveMove('poisonjab');
+		battle.singleEvent('ModifyMove', seviper.getAbility(), seviper.abilityState, poisonJab, seviper, battle.p2.active[0]);
+		assert.equal(battle.p2.pokemon[0].runEffectiveness(poisonJab), 1);
+		assert.equal(battle.p2.pokemon[1].runEffectiveness(poisonJab), 1);
+		const startingHP = battle.p2.active[0].hp;
+		battle.makeChoices('move poisonjab', 'move splash');
+		assert(battle.p2.active[0].hp < startingHP, 'Poison Jab should damage Steel under Apex Venom');
 	});
 
 	it('lets biting moves hit through protection', function () {
