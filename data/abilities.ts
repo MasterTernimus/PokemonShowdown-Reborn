@@ -8111,6 +8111,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	burningcrown: {
 		onStart(pokemon) {
+			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
 			this.dex.abilities.get('whitesmoke').onStart?.call(this, pokemon);
 		},
 		onTryBoost(boost, target, source, effect) {
