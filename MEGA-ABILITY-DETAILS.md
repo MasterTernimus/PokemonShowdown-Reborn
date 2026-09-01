@@ -108,7 +108,7 @@ On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemo
 This Pokemon's Steel-type moves have 1.5x power. At the end of each turn, its Speed rises by 1 stage.
 
 ## Camerupt-Mega - Caldera Core
-This Pokemon has Thick Fat's effect. Its Fire- and Ground-type moves have 1.2x power. It takes 0.5x damage from Water-type attacks. At the end of each turn, opposing Pokemon lose 1/16 max HP unless they are Fire, Ground, Rock, or airborne.
+This Pokemon has Magma Armor, Sheer Force, and Drought's effects. Water- and Ice-type attacks use 0.5x attacking stats against it, and in Dragon's Den it absorbs Fire-type moves.
 
 ## Flygon-Mega-Z - Tremor
 On switch-in, this Pokemon summons Sandstorm. This Pokemon is immune to Ground-type moves. Sound-based moves used by this Pokemon become physical, use Attack, have 1.5x power, and ignore sound-based Ability immunities. Sound-based moves used by this Pokemon's allies have 1.5x power and use the user's higher offensive stat. This Pokemon's side is immune to its own damaging sound-based moves.
