@@ -2171,7 +2171,7 @@ export class Pokemon {
 			shelltrap: ['regenerator', 'shellarmor'],
 			soaringspirit: ['windpower', 'selfsufficient'],
 			solartrap: ['accumulation', 'innardsout', 'solarpower'],
-			spiralevolution: ['adaptability', 'levitate', 'dualwield'],
+			spiralevolution: ['adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
 			stormsovereign: ['windysurge', 'speedboost'],
 			sunsovereign: ['drought', 'wildfirecore', 'selfsufficient'],
 			terraresolve: ['stamina', 'rockypayload', 'selfsufficient'],

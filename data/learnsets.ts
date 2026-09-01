@@ -114427,7 +114427,7 @@ if (unfezantLearnset) {
 const feraligatrCustomMoves = [
 	'agility', 'chillingwater', 'breakingswipe', 'detect', 'dragonclaw', 'dragonpulse', 'faketears',
 	'flipturn', 'focusblast', 'honeclaws', 'iciclespear', 'lashout', 'metalclaw', 'muddywater',
-	'poweruppunch', 'psychicfangs', 'razorshell', 'scaleshot', 'snarl', 'stompingtantrum', 'trailblaze',
+	'poweruppunch', 'psychicfangs', 'razorshell', 'scaleshot', 'snarl', 'stompingtantrum', 'trailblaze', 'fishiousrend',
 ];
 const feraligatrLearnset = (Learnsets as any).feraligatr?.learnset;
 if (feraligatrLearnset) {

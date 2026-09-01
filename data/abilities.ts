@@ -1088,6 +1088,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				(move as typeof move & { spiralEvolutionBreaksProtect?: boolean }).spiralEvolutionBreaksProtect = true;
 			}
 		},
+		onModifySecondaries(secondaries) {
+			return this.dex.abilities.get('shielddust').onModifySecondaries?.call(this, secondaries);
+		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
 			const spiralMove = move as typeof move & { spiralEvolutionProtectedTargets?: Pokemon[] };
@@ -1304,13 +1307,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10284,
 	},
 	apexvenom: {
-		onModifyMove(move, source) {
-			if (!move.flags['bite']) return;
-			move.breaksProtect = true;
-			const moveWithApexVenom = move as ActiveMove & {apexVenomToxicSecondary?: boolean};
-			if (moveWithApexVenom.apexVenomToxicSecondary) return;
-			moveWithApexVenom.apexVenomToxicSecondary = true;
-			move.secondaries = [...(move.secondaries || []), {chance: 30, status: 'tox'}];
+			onModifyMove(move, source) {
+			const poisonEffectiveness = move.id === 'poisonfang' || this.movehasType(move, 'Poison');
+			if (poisonEffectiveness) (move as ActiveMove & {apexVenomPoisonEffectiveness?: boolean}).apexVenomPoisonEffectiveness = true;
+			if (poisonEffectiveness) this.dex.abilities.get('corrosion').onModifyMove?.call(this, move, source);
+			if (move.id === 'poisonfang') move.type = 'Dragon';
+			if (move.flags['bite']) {
+				move.breaksProtect = true;
+				const moveWithApexVenom = move as ActiveMove & {apexVenomToxicSecondary?: boolean};
+				if (!moveWithApexVenom.apexVenomToxicSecondary) {
+					moveWithApexVenom.apexVenomToxicSecondary = true;
+					move.secondaries = [...(move.secondaries || []), {chance: 30, status: 'tox'}];
+				}
+			}
+			if (!poisonEffectiveness) return;
+			const moveWithApexVenom = move as ActiveMove & {apexVenomEffectivenessApplied?: boolean};
+			if (moveWithApexVenom.apexVenomEffectivenessApplied) return;
+			moveWithApexVenom.apexVenomEffectivenessApplied = true;
+			const originalEffectiveness = move.onEffectiveness;
+			move.onEffectiveness = function (typeMod, target, type, activeMove) {
+				const originalMod = originalEffectiveness?.call(this, typeMod, target, type, activeMove);
+				if (originalMod !== undefined) typeMod = originalMod;
+				if (!activeMove || activeMove.category === 'Status') return typeMod;
+				if ((activeMove as ActiveMove & {apexVenomPoisonEffectiveness?: boolean}).apexVenomPoisonEffectiveness &&
+					['Poison', 'Steel'].includes(type)) return 1;
+				return typeMod;
+			};
 		},
 		onBasePowerPriority: 20,
 		onBasePower(basePower, source, target, move) {

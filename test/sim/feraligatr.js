@@ -26,7 +26,7 @@ describe('Feraligatr custom data', function () {
 		assert.equal(gmax.abilities[0], 'Tidal Jaw');
 
 		const learnset = battle.dex.data.Learnsets.feraligatr.learnset;
-		for (const move of ['agility', 'chillingwater', 'breakingswipe', 'detect', 'flipturn', 'razorshell', 'trailblaze']) {
+		for (const move of ['agility', 'chillingwater', 'breakingswipe', 'detect', 'flipturn', 'razorshell', 'trailblaze', 'fishiousrend']) {
 			assert(move in learnset, `Feraligatr should learn ${move}`);
 		}
 		for (const move of ['firefang', 'thunderfang', 'poisonfang']) {
