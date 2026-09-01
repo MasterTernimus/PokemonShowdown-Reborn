@@ -43,7 +43,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - Flygon-Mega-Z: Tremor
 - Altaria-Mega: Heavenly Chorus
 - Banette-Mega: Cursed Marionette
-- Chimecho-Mega: Ironclad
+- Chimecho-Mega: Armorize
 - Absol-Mega: Doom Warning
 - Absol-Mega-Z: Omen Edge
 - Glalie-Mega: Freezer Burn

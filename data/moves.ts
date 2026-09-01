@@ -8519,6 +8519,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Ghost",
 		contestType: "Cool",
 	},
+	gmaxdeathroll: {
+		num: 1000,
+		accuracy: true,
+		basePower: 140,
+		category: "Physical",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Death Roll",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1 },
+		isMax: "Feraligatr",
+		onModifyMove(move) {
+			move.category = "Physical";
+		},
+		secondaries: [{ chance: 30, volatileStatus: "flinch" }],
+		target: "allAdjacentFoes",
+		type: "Dark",
+		contestType: "Cool",
+	},
 	grassknot: {
 		num: 447,
 		accuracy: 100,
@@ -13912,7 +13931,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 85,
 		basePower: 65,
 		category: "Special",
-		isNonstandard: "Past",
 		name: "Mud Bomb",
 		pp: 10,
 		priority: 0,

@@ -1262,6 +1262,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	feraligatrgmax: {
+		isNonstandard: "Gigantamax",
+		tier: "Illegal",
+	},
 	sentret: {
 		tier: "LC",
 	},
@@ -4003,6 +4007,12 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "PU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
+	},
+	clawitzermega: {
+		isNonstandard: "Custom",
+		tier: "OU",
+		doublesTier: "(DUU)",
+		natDexTier: "OU",
 	},
 	helioptile: {
 		isNonstandard: "Past",

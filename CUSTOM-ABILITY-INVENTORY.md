@@ -9,21 +9,21 @@ Custom-numbered entries: 233
 - **Abyss Sniper** (`abysssniper`): Sniper + Stalwart. **Users:** Kingdra
 - **Accumulation** (`accumulation`): Thick Fat; auto-Stockpiles; at 3 waits one turn, then auto-releases every other turn. **Users:** Arbok, Cradily, Greedent, Hippopotas, Hippowdon, Lickilicky, Mawile, Muk, Pelipper, Qwilfish, Seviper, Snorlax, Swalot, Victreebel, Walrein, Weezing
 - **Adaptive Cell** (`adaptivecell`): Overcoat; physical moves turn it Fighting and can use SpA; special moves turn it Psychic. **Users:** Reuniclus, Solosis
-- **Alchemist Surge** (`alchemistsurge`): Psychic Surge + Competitive + Hydra Bond. **Users:** Meowstic-F-Mega, Meowstic-M-Mega
-- **Alloy Core** (`alloycore`): Magic Guard + Self Sufficient. **Users:** Duraludon-Gmax
+- **Alchemist Surge** (`alchemistsurge`): Psychic Surge + Competitive + Neuroforce + Hydra Bond. **Users:** Meowstic-F-Mega, Meowstic-M-Mega
+- **Alloy Core** (`alloycore`): Magic Guard + Self Sufficient + Stalwart. **Users:** Duraludon-Gmax
 - **Ancient Bloom** (`ancientbloom`): Effect Spore + Self Sufficient; keeps field boosts. **Users:** Venusaur-Gmax
 - **Ange** (`ange`): Eternal Flower + Fairy Aura + Magic Guard; weakens opposing gimmicks. **Users:** Floette-Mega
 - **Apex Cleave** (`apexcleave`): Sharpness + Dual Wield + Moxie. **Users:** Garchomp-Mega
 - **Apex Predator** (`apexpredator`): Relic Armor + Precision + Wind Rider. **Users:** Aerodactyl-Mega
 - **Aqua Shell** (`aquashell`): Water Bubble + Water Veil; gains Aqua Ring on entry. **Users:** Golisopod-Mega
-- **Argent Devotion** (`argentdevotion`): Ironclad + Sworn Duty. **Users:** Gardevoir-Mega-Z
+- **Argent Devotion** (`argentdevotion`): Armorize + Sworn Duty. **Users:** Gardevoir-Mega-Z
 - **Ascendance** (`ascendance`): Off-type moves gain STAB; hits type immunities; Overcoat. **Users:** Eevee-Gmax
 - **Astral Core** (`astralcore`): Pure Power + Natural Cure + Illuminate. **Users:** Starmie-Mega
 - **Astral Watcher** (`astralwatcher`): Prankster + Telepathy + Defragment; reveals foes' items. **Users:** Orbeetle-Gmax
 - **Astral Witchcraft** (`astralwitchcraft`): Sworn Duty + Levitate + Magic Guard. **Users:** Delphox-Mega
 - **Atrocity** (`atrocity`): Wildfire Core + Self Sufficient + draining attacks. **Users:** Charizard-Mega-X
 - **Aura Instinct** (`aurainstinct`): Adaptability + Dual Wield + Second Wind. **Users:** Lucario-Mega
-- **Aura Master** (`auramaster`): Mega Launcher + Dual Wield + Inner Focus. **Users:** Lucario-Mega-Z
+- **Aura Master** (`auramaster`): 0.5x damage from contact moves + Dual Wield + Inner Focus + Technician. **Users:** Lucario-Mega-Z
 - **Aurora Current** (`auroracurrent`): Snow Warning; Electric STAB; in Snow, Electric never misses and Def/SpD 1.5x. **Users:** Aurorus
 - **Aurora Resonance** (`auroraresonance`): Liquid Voice + Water Absorb + Hydration. **Users:** Lapras-Gmax
 - **Battle Fervor** (`battlefervor`): Fast attacks 1.2x; once per switch-in slow takes 0.8x; hit boosts once; blocks Berries. **Users:** Aerodactyl, Floatzel, Toxicroak
@@ -51,7 +51,8 @@ Custom-numbered entries: 233
 - **Defragment** (`defragment`): Entry defensive boost based on foes' offenses; moves cannot miss. **Users:** Bronzong, Claydol, Klinklang, Magnezone, Metagross, Porygon-Z, Porygon2, Rotom, Starmie
 - **Divine Intervention** (`divineintervention`): Sworn Duty + Friend Guard + Regenerator. **Users:** Audino-Mega
 - **Doom Warning** (`doomwarning`): Magic Bounce + Magic Guard; on faint casts Doom Desire on all foes. **Users:** Absol-Mega
-- **Draconic Force** (`draconicforce`): Dragonize + Strong Jaw. **Users:** Feraligatr-Mega
+- **Draconic Force** (`draconicforce`): Dragonize + Strong Jaw + Mold Breaker. **Users:** Feraligatr-Mega
+- **Tidal Jaw** (`tidaljaw`): Strong Jaw + Swift Swim + Filter. **Users:** Feraligatr-Gmax
 - **Dread Maw** (`dreadmaw`): Huge Power + Strong Jaw. **Users:** Mawile-Mega
 - **Dual Wield** (`dualwield`): Two 65% independent rolls; boosting pairs: full +20%; FFA: two full-power targets. **Users:** Armarouge, Beedrill, Ceruledge, Doublade, Escavalier, Gallade, Inteleon, Lucario, Octillery, Sceptile, Scyther, Seviper, Zangoose
 - **Dune Terror** (`duneterror`): Sand Stream + custom Shed Skin; Ground chip respects immunities. **Users:** Sandaconda-Gmax
@@ -67,7 +68,7 @@ Custom-numbered entries: 233
 - **Execution** (`execution`): Duskilate; 2x vs targets at half HP or less; move KOs heal 1/8. **Users:** Gardevoir-Void-Mega
 - **Fallen Star** (`fallenstar`): Mold Breaker + Dual Wield + Self Sufficient; at half HP, Arrows gain +1 priority. **Users:** Decidueye, Decidueye-Hisui
 - **False Devotion** (`falsedevotion`): Built-in Serene Grace, Natural Cure, and Prankster. **Users:** Roserade
-- **Fighting Fiend** (`fightingfiend`): Vital Spirit + Multiscale; moves cannot miss. **Users:** Machamp, Machamp-Gmax
+- **Fighting Fiend** (`fightingfiend`): Vital Spirit + Multiscale; moves cannot miss. **Users:** Machamp
 - **Fire Mane** (`firemane`): This Pokemon's Fire-type attacks have 1.5x power. **Users:** Pyroar, Rapidash
 - **Fluffy Craft** (`fluffycraft`): Fluffy + Technician. **Users:** Cinccino
 - **Forest Surge** (`forestsurge`): On switch-in, this Pokemon sets Forest Terrain for 5 turns. **Users:** Rillaboom-Gmax
@@ -80,7 +81,7 @@ Custom-numbered entries: 233
 - **Grandmaster** (`grandmaster`): No flinch; status grants 20% damage reduction; queues Future Sight. **Users:** Alakazam
 - **Great Marsh** (`greatmarsh`): Dry Skin + Adaptability. **Users:** Toxicroak
 - **Guiding Omen** (`guidingomen`): Friend Guard + Serene Grace. **Users:** Togekiss
-- **Heat Coil** (`heatcoil`): Speed Boost + Magma Armor. **Users:** Centiskorch-Gmax
+- **Heat Coil** (`heatcoil`): Speed Boost + Magma Armor + Flame Body. **Users:** Centiskorch-Gmax
 - **Heavenly Chorus** (`heavenlychorus`): Pixilate + Cloud Nine + Fluffy. **Users:** Altaria-Mega
 - **Hellfire Eclipse** (`hellfireeclipse`): In Sun: Atk/SpA 1.5x; Fire moves set 2-turn Sun. **Users:** Houndoom-Mega
 - **High Noon** (`highnoon`): Water moves 1.2x; attacks cannot miss; Dual Wield; +1 crit vs unmoved targets. **Users:** Inteleon-Gmax
@@ -99,11 +100,11 @@ Custom-numbered entries: 233
 - **Iron Dominion** (`irondominion`): Pressure + Mirror Armor + Sworn Duty. **Users:** Corviknight-Gmax
 - **Iron Mountain** (`ironmountain`): Filter + Stamina + Heavy Metal. **Users:** Aggron-Mega
 - **Iron Will** (`ironwill`): Prism Armor + Second Wind + Self Sufficient. **Users:** Steelix-Mega
-- **Ironclad** (`ironclad`): Normal moves become Steel type and have 1.2x power. **Users:** Durant, Goodra-Hisui, Lucario, Pinsir
+- **Armorize** (`armorize`): Normal moves become Steel type and have 1.2x power. **Users:** Durant, Goodra-Hisui, Lucario, Pinsir
 - **Joyride** (`joyride`): Aerilate + Hyper Cutter. **Users:** Pinsir-Mega
 - **Kick Fiend** (`kickfiend`): Striker + Violent Rush + Limber. **Users:** Hitmonlee
 - **Lunar Idol** (`lunaridol`): Levitate; immune to hail; Ice power 1.5x; Sp. Atk 1.5x in hail/snow. **Users:** Lunatone
-- **Lunar Orbit** (`lunarorbit`): Magic Bounce + Serene Grace; sets Gravity and ignores Gravity's negative effects. **Users:** Clefable-Mega
+- **Lunar Orbit** (`lunarorbit`): Magic Bounce + Serene Grace + Triage; sets Gravity and ignores Gravity's negative effects. **Users:** Clefable-Mega
 - **Lunar Spirit** (`lunarspirit`): Psychic- and Normal-type moves get STAB. **Users:** Noctowl
 - **Memory Leak** (`memoryleak`): Passes positive stat boosts to an adjacent ally. **Users:** Beheeyem, Castform, Castform-Rainy, Castform-Sandy, Castform-Snowy, Castform-Sunny, Castform-Windy, Glimmet, Porygon-Z, Porygon2, Silvally, Silvally-Bug, Silvally-Dark, Silvally-Dragon, Silvally-Electric, Silvally-Fairy, Silvally-Fighting, Silvally-Fire, Silvally-Flying, Silvally-Ghost, Silvally-Grass, Silvally-Ground, Silvally-Ice, Silvally-Poison, Silvally-Psychic, Silvally-Rock, Silvally-Steel, Silvally-Water
 - **Mighty Jaw** (`mightyjaw`): Strong Jaw + Intimidate; first action after switch-in has +2 priority. **Users:** Feraligatr
@@ -120,14 +121,14 @@ Custom-numbered entries: 233
 - **Noble Dance** (`nobledance`): Dancer + Hospitality + Own Tempo. **Users:** Lilligant, Lilligant-Hisui
 - **Noble Rider** (`noblerider`): Swift Swim + Adaptability. **Users:** Basculegion, Basculegion-F
 - **Nose Formation** (`noseformation`): Filter + Elevate; three adaptive 20 BP Mini-Noses chain after KOs and trigger Elevate. **Users:** Probopass
-- **Omen Edge** (`omenedge`): Sharpness + Dual Wield; on faint: Doom Desire on foes. **Users:** Absol-Mega-Z
+- **Omen Edge** (`omenedge`): Sharpness + Dual Wield + Tough Claws; on faint: Doom Desire on foes. **Users:** Absol-Mega-Z
 - **Orchard Bond** (`orchardbond`): Hydra Bond + Harvest. **Users:** Exeggutor, Exeggutor-Alola
 - **Paradox Engine** (`paradoxengine`): Sun/Electric Terrain: Speed 2x. Fighting/Electric moves have 1.5x power. **Users:** Cyclizar
 - **Paradox Power** (`paradoxpower`): Sheer Force; gains Electric STAB. **Users:** Hariyama
 - **Paradox Pull** (`paradoxpull`): Magnet Pull; ignores Steel weaknesses. **Users:** Magneton
 - **Paradox Wheel** (`paradoxwheel`): Gains Steel/Electric STAB. **Users:** Donphan
 - **Parasitism** (`parasitism`): Dry Skin; above half: defensive protection; first KO triggers Resuscitation. **Users:** Parasect, Parasect-Parasitism
-- **Pattern Shift** (`patternshift`): Shed Skin + Protean + Merciless. **Users:** None directly assigned.
+- **Pattern Shift** (`patternshift`): Shed Skin + Protean + Merciless. **Users:** Arbok
 - **Pendulum Swing** (`pendulumswing`): Magic Bounce + Filter; 1.5x accuracy and 1.5x Sp. Atk. **Users:** Hypno
 - **Perfect Ego** (`perfectego`): Ultra Ego; moves cannot miss. **Users:** Hawlucha-Mega
 - **Perfect Foresight** (`perfectforesight`): Gains strongest foe's Ability; repeatedly queues 60 BP Future Sight. **Users:** Alakazam-Mega
@@ -143,15 +144,15 @@ Custom-numbered entries: 233
 - **Proficient** (`proficient`): STAB moves have 1.2x power. **Users:** None directly assigned.
 - **Punch Fiend** (`punchfiend`): Iron Fist + Inner Focus + Unseen Fist. **Users:** Hitmonchan
 - **Queen's Guard** (`queensguard`): Contrary + Shed Skin + Intimidate. **Users:** Serperior-Mega
-- **Raging Current** (`ragingcurrent`): Swift Swim + Regenerator + Stamina. **Users:** Swampert-Mega
-- **Raging Fists** (`ragingfists`): Hydra Bond + Unseen Fist + Skill Link. **Users:** None directly assigned.
+- **Raging Current** (`ragingcurrent`): Swift Swim + Dry Skin + Regenerator + Stamina. **Users:** Swampert-Mega
+- **Raging Fists** (`ragingfists`): Hydra Bond + Fighting Fiend + Scrappy. **Users:** Machamp-Gmax
 - **Raging Storm** (`ragingstorm`): Cannot be suppressed; Mold Breaker; attacks clear boosts/ignore screens; KO bonus. **Users:** Haxorus
 - **Railgun Circuit** (`railguncircuit`): Transistor effects; this Pokemon's moves never miss. **Users:** Raichu-Mega-Y
 - **Rain Sovereign** (`rainsovereign`): 8-turn Rain; Electric/Water/Flying STAB; immunity-aware Water chip. **Users:** Drampa-Mega
 - **Rapid Response** (`rapidresponse`): First active turn: 1.5x Spe and 1.2x Sp. Atk. **Users:** Basculegion-F, Rapidash, Rapidash-Galar, Seviper, Slurpuff
 - **Razor Current** (`razorcurrent`): Drizzle + Speed Boost + Steelworker + Strong Jaw. **Users:** Sharpedo-Mega
 - **Reaper's Grip** (`reapersgrip`): Iron Fist + Pressure; entry lowers opposing Def/SpD, doubled in Cold Eclipse. **Users:** Dusknoir
-- **Relentless Hunt** (`relentlesshunt`): Moves <=60 BP gain +1 priority; boosted fields give 1.5x or 2x damage. **Users:** Garchomp-Mega-Z
+- **Relentless Hunt** (`relentlesshunt`): Levitate; moves <=60 BP gain +1 priority; boosted fields give 1.5x or 2x damage. **Users:** Garchomp-Mega-Z
 - **Relentless Link** (`relentlesslink`): Skill Link + Battle Armor + Mold Breaker. **Users:** Heracross-Mega
 - **Relic Armor** (`relicarmor`): Entry drops foes' Def/SpD; no crits; takes 0.8x damage; reacts to stat drops. **Users:** Aerodactyl, Armaldo, Aurorus, Bastiodon, Carracosta, Cradily, Kabutops, Omastar, Rampardos, Relicanth, Tyrantrum
 - **Relic Beam** (`relicbeam`): SpA equals Defense using Def stages; beam/Mega Launcher moves have 1.5x power. **Users:** Claydol
@@ -160,7 +161,7 @@ Custom-numbered entries: 233
 - **Resonance Force** (`resonanceforce`): Side's sound moves 1.5x; allies avoid own damaging sound moves; user's sound moves use Atk. **Users:** Exploud, Flygon
 - **Resuscitation** (`resuscitation`): Revival fully resets battle effects; Self Repair + Magic Guard. **Users:** Parasect-Parasite
 - **Rime Knuckle** (`rimeknuckle`): Filter + Iron Fist; 40% frostbite; KO heals 1/8 or 1/4 vs gimmicks. **Users:** Crabominable-Mega
-- **Riot Amp** (`riotamp`): Punk Rock + Galvanize + Resonance Force. **Users:** Toxtricity-Gmax, Toxtricity-Low-Key-Gmax
+- **Riot Amp** (`riotamp`): Punk Rock + Galvanize + Resonance Force + Technician + Volt Absorb. **Users:** Toxtricity-Gmax, Toxtricity-Low-Key-Gmax
 - **Riptide Claws** (`riptideclaws`): Swift Swim + Tough Claws + Shell Armor. **Users:** Kingler-Gmax
 - **Royal Armament** (`royalarmament`): Steel STAB + Power Drill. **Users:** Nidoking
 - **Royal Decree** (`royaldecree`): Haze/screen clear; Safeguard blocks reset; blocks setup/screens; skips charge turns. **Users:** Chesnaught, Empoleon, Empoleon-Alt, Escavalier, Farigiraf, Honchkrow, Kingambit, Kingambit-Alt, Kingdra, Nidoking, Politoed, Serperior, Sirfetch’d
@@ -179,7 +180,6 @@ Custom-numbered entries: 233
 - **Self Sufficient** (`selfsufficient`): Heals 1/16 each turn; immune to Sandstorm and Hail. **Users:** Donphan, Skarmory, Steelix, Umbreon
 - **Shadow Current** (`shadowcurrent`): Protean + Technician + Sworn Duty. **Users:** Greninja-Mega
 - **Shadow Guard** (`shadowguard`): Shadow Shield + Elevate; every turn queues full-power Ghost/Dark/Fairy Temporal Shift. **Users:** Mismagius-Mega
-- **Shell Trap** (`shelltrap`): Regenerator + Shell Armor. **Users:** Slowbro-Mega
 - **Siege Launcher** (`siegelauncher`): Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves get a 20% second hit. **Users:** Blastoise-Mega
 - **Sinister Blaze** (`sinisterblaze`): Always burned; burn heals user; foes lose burn damage and heal it; cannot be copied/suppressed. **Users:** Flareon, Houndoom, Typhlosion-Hisui
 - **Soaring Spirit** (`soaringspirit`): Wind Power + Self Sufficient. **Users:** Salamence
@@ -200,7 +200,7 @@ Custom-numbered entries: 233
 - **Striker's Momentum** (`strikersmomentum`): Moves cannot miss; Striker + Libero; first KO gives +1 Speed. **Users:** Cinderace-Gmax
 - **Sun Sovereign** (`sunsovereign`): Drought + Wildfire Core + Self Sufficient; 8-turn Sun. **Users:** Charizard-Mega-Y
 - **Surge Conduit** (`surgeconduit`): Electric Surge + Lightning Rod + Brute Force. **Users:** Raichu-Mega-X
-- **Sweet Sanctuary** (`sweetsanctuary`): Friend Guard + Sweet Veil + Aroma Veil. **Users:** Alcremie-Gmax
+- **Sweet Sanctuary** (`sweetsanctuary`): Friend Guard + Sweet Veil + Aroma Veil + Pastel Veil. **Users:** Alcremie-Gmax
 - **Sworn Duty** (`swornduty`): On entry, heals an adjacent ally by 1/4 max HP. **Users:** Audino, Chesnaught, Corviknight, Delphox, Florges, Gallade, Gardevoir, Greninja, Lucario, Mienshao, Samurott, Samurott-Hisui
 - **Technical Specialist** (`technicalspecialist`): Technician + Shed Skin + Shell Armor. **Users:** Scizor-Mega
 - **Temporal Shift** (`temporalshift`): Stats cannot be lowered; after one turn, queues 120 BP Future Sight every other turn. **Users:** Chandelure, Cursola, Froslass, Gothitelle, Mismagius, Polteageist, Polteageist-Antique, Xatu
@@ -210,7 +210,7 @@ Custom-numbered entries: 233
 - **Toxic Bloom** (`toxicbloom`): Pollen Bloom + Self Sufficient + Poison drain. **Users:** Venusaur-Mega
 - **Toxic Evolution** (`toxicevolution`): Corrosion + Dual Wield + Shield Dust; its poison confuses; attackers may be poisoned. **Users:** Butterfree-Mega
 - **Toxic Renewal** (`toxicrenewal`): Adaptability + Regenerator. **Users:** Dragalge-Mega
-- **Treasure Titan** (`treasuretitan`): Filter + Earth Eater. **Users:** Copperajah-Gmax
+- **Treasure Titan** (`treasuretitan`): Filter + Earth Eater + Heavy Metal; Copperajah-Gmax weight-based moves use maximum power. **Users:** Copperajah-Gmax
 - **Tremor** (`tremor`): Sand Stream + Levitate; side sound moves 1.5x; user sound moves physical/use Atk. **Users:** Flygon-Mega-Z
 - **Tyrant Stream** (`tyrantstream`): Brute Force + Sand Stream + Strong Jaw. **Users:** Tyrantrum
 - **Ultra Ego** (`ultraego`): Mold Breaker; heals each turn/attack; KOs heal more; first enemy hit boosts Atk/SpA. **Users:** Hitmonchan, Incineroar, Lycanroc-Midnight, Throh, Ursaluna, Ursaluna-Bloodmoon
@@ -232,10 +232,9 @@ Custom-numbered entries: 233
 - **Wasting Surge** (`wastingsurge`): Sets Wasteland/Murkwater; Underwater KOs non-Poison/Steel; Byxbysion Touch. **Users:** Garbodor-Gmax
 - **Water Barrage** (`waterbarrage`): Proficient + Dual Wield; cycling Water chip respects effectiveness and immunities. **Users:** Blastoise
 - **Web Assassin** (`webassassin`): Speed doubled and cannot drop; Sniper; always crits poisoned or Speed-lowered targets. **Users:** Ariados
-- **Wicked Command** (`wickedcommand`): Insomnia + Super Luck; takes 0.8x damage; KO boosts higher offense, heals 1/4, clears hazards. **Users:** None directly assigned.
-- **Wicked Snare** (`wickedsnare`): Stakeout; switch-ins lose Speed; KO on switched-in target heals 1/8; hits Torment. **Users:** Grimmsnarl-Gmax
+- **Wicked Snare** (`wickedsnare`): Stakeout + Tangling Hair + Prankster. **Users:** Grimmsnarl-Gmax
 - **Wildfire Core** (`wildfirecore`): Dragonize + Magma Armor + Proficient; Fire scaling chip respects immunities. **Users:** Charizard
-- **Wind Chime** (`windchime`): Ironclad + Wind Power + Levitate. **Users:** Chimecho-Mega
+- **Wind Chime** (`windchime`): Armorize + Punk Rock + Levitate. **Users:** Chimecho-Mega
 - **Windy Surge** (`windysurge`): On switch-in, sets 2-turn Tailwind on this Pokemon's side. **Users:** Beautifly, Drifblim, Eldegoss, Jumpluff, Rotom-Fan, Tropius
 - **Wooly Conductor** (`woolyconductor`): Fur Coat + Mold Breaker + Static. **Users:** Ampharos-Mega
 - **Wrath Shield** (`wrathshield`): Bulletproof + Filter + Self Repair. **Users:** Chesnaught-Mega

@@ -2715,6 +2715,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Ghost-type, 100 Base Power. This move uses the user's higher offensive stat. After it hits, all opposing Pokemon take extra damage equal to half of the original hit's damage.",
 		shortDesc: "100 BP Ghost. Uses higher offense. Foes take half-hit splash damage.",
 	},
+	gmaxdeathroll: {
+		name: "G-Max Death Roll",
+		desc: "Dark-type, 140 Base Power. This move always hits and has a 30% chance to make each opposing Pokemon flinch.",
+		shortDesc: "140 BP Dark. Always hits; 30% chance to flinch each foe.",
+	},
 	grassknot: {
 		name: "Grass Knot",
 		desc: "This move's power is 20 if the target weighs less than 10 kg, 40 if less than 25 kg, 60 if less than 50 kg, 80 if less than 100 kg, 100 if less than 200 kg, and 120 if greater than or equal to 200 kg.",

@@ -1123,6 +1123,50 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 9,
 		isNonstandard: "Future",
 	},
+	cinderite: {
+		name: "Cinderite",
+		spritenum: 0,
+		megaStone: { "Cinderace": "Cinderace-Mega" },
+		itemUser: ["Cinderace"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2652,
+		gen: 9,
+	},
+	ledianite: {
+		name: "Ledianite",
+		spritenum: 0,
+		megaStone: { "Ledian": "Ledian-Mega" },
+		itemUser: ["Ledian"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2653,
+		gen: 9,
+	},
+	aridiate: {
+		name: "Aridiate",
+		spritenum: 0,
+		megaStone: { "Ariados": "Ariados-Mega" },
+		itemUser: ["Ariados"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2654,
+		gen: 9,
+	},
+	clawitzerite: {
+		name: "Clawitzerite",
+		spritenum: 0,
+		megaStone: { "Clawitzer": "Clawitzer-Mega" },
+		itemUser: ["Clawitzer"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2655,
+		gen: 9,
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		spritenum: 707,
@@ -5505,6 +5549,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat() { },
 		num: 686,
 		gen: 6,
+	},
+	roseradite: {
+		name: "Roseradite",
+		spritenum: 0,
+		megaStone: { "Roserade": "Roserade-Mega" },
+		itemUser: ["Roserade"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2651,
+		gen: 9,
 	},
 	rowapberry: {
 		name: "Rowap Berry",
