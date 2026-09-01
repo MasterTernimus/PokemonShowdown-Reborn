@@ -84,7 +84,7 @@ If rain is active, this Pokemon's Speed is doubled. It has Damp and Water Veil's
 This Pokemon has Pixilate, Queenly Majesty, and Sworn Duty's effects. Its Normal-type moves become Fairy type and have 1.2x power. Its Psychic- and Fairy-type moves have 1.2x power. On switch-in or Mega Evolution, it heals its ally by 1/4 max HP, or 1/3 on Fairy Tale Field.
 
 ## Gardevoir-Mega-Z - Argent Devotion
-This Pokemon has built-in Ironclad and Sworn Duty. Steel-type and Fairy-type moves used by this Pokemon deal 1.2x damage. If this Pokemon knocks out another Pokemon with a move, it and its adjacent allies restore 1/8 max HP per target knocked out.
+This Pokemon has built-in Armorize and Sworn Duty. Steel-type and Fairy-type moves used by this Pokemon deal 1.2x damage. If this Pokemon knocks out another Pokemon with a move, it and its adjacent allies restore 1/8 max HP per target knocked out.
 
 ## Gardevoir-Void-Mega - Execution
 Deals more damage the lower the target's HP is and built in Duskilate. This Pokemon has Sworn Duty's effect. If the target is at 50% HP or lower, this Pokemon's attacks deal 2x damage. If this Pokemon knocks out another Pokemon with a move, it restores 1/8 of its maximum HP per target knocked out. Its Attack and Special Attack cannot be lowered below -1, and fields prevent its Speed from being lowered.
@@ -119,7 +119,7 @@ This Pokemon has Pixilate, Cloud Nine, Fluffy, and Natural Cure's effects.
 ## Banette-Mega - Cursed Marionette
 This Pokemon's status moves have +1 priority. If this Pokemon uses a status move on an opposing Pokemon, hits an opposing Pokemon with a damaging move, or is hit by an opposing damaging move, that opposing Pokemon becomes cursed. Cursed Pokemon deal 0.5x damage to this Pokemon. This Pokemon restores HP equal to 1/2 of Curse damage it caused. The first time this Pokemon falls below half HP, it creates Haunted Field for 3 turns, ignoring Neutralization. When this Pokemon faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, or extends active Haunted Field by 5 turns, ignoring Neutralization.
 
-## Chimecho-Mega - Ironclad
+## Chimecho-Mega - Armorize
 This Pokemon's Normal-type moves become Steel-type moves and have their power multiplied by 1.2.
 
 ## Absol-Mega - Doom Warning

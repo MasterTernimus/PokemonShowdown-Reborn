@@ -285,21 +285,33 @@ describe('Composite ability cleanup', function () {
 		battle.makeChoices('team 1', 'team 1');
 		const pokemon = battle.p1.active[0];
 		const composites = {
+			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce'],
 			apexpredator: ['relicarmor', 'precision', 'windrider'],
-			alloycore: ['magicguard', 'selfsufficient'],
+			alloycore: ['magicguard', 'selfsufficient', 'stalwart'],
 			ancientbloom: ['effectspore', 'selfsufficient'],
 			astralcore: ['purepower', 'naturalcure', 'illuminate'],
 			bloomingsun: ['megasol', 'invigorate', 'naturalcure'],
 			celestialheart: ['multiscale', 'soulheart'],
 			doomwarning: ['magicbounce', 'magicguard'],
-			draconicforce: ['dragonize', 'strongjaw'],
+			draconicforce: ['dragonize', 'strongjaw', 'moldbreaker'],
+			tidaljaw: ['strongjaw', 'swiftswim', 'filter'],
 			dreadmaw: ['hugepower', 'strongjaw'],
 			freezerburn: ['slushrush', 'refrigerate'],
 			furnaceengine: ['steamengine', 'flamebody', 'selfsufficient'],
 			hisuianoath: ['swornduty', 'toughclaws', 'corrosion'],
 			moonlitwings: ['serenegrace'],
 			phalanxform: ['hydrabond', 'friendguard', 'battlearmor'],
-			riotamp: ['punkrock', 'galvanize', 'resonanceforce'],
+			windchime: ['armorize', 'punkrock', 'levitate'],
+			auramaster: ['dualwield', 'innerfocus', 'technician'],
+			lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
+			relentlesshunt: ['levitate'],
+			omenedge: ['sharpness', 'dualwield', 'toughclaws'],
+			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'regenerator', 'stamina'],
+			riotamp: ['punkrock', 'galvanize', 'resonanceforce', 'technician', 'voltabsorb'],
+			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
+			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
+			treasuretitan: ['filter', 'eartheater', 'heavymetal'],
+			wickedsnare: ['stakeout', 'tanglinghair', 'prankster'],
 			waterbubble: ['waterveil'],
 		};
 		for (const [ability, components] of Object.entries(composites)) {
@@ -311,5 +323,70 @@ describe('Composite ability cleanup', function () {
 		const bloomingSun = battle.dex.abilities.get('bloomingsun');
 		assert(bloomingSun.onCheckShow);
 		assert(bloomingSun.onResidual);
+	});
+
+	it('should apply the requested species ability replacements and Altaria event slot', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		assert.deepEqual(battle.dex.species.get('Scizor').abilities, {
+			0: 'Tough Claws', 1: 'Technician', H: 'Light Metal',
+		});
+		assert.deepEqual(battle.dex.species.get('Swampert').abilities, {
+			0: 'Dry Skin', 1: 'Regenerator', H: 'Damp',
+		});
+		assert.deepEqual(battle.dex.species.get('Crawdaunt').abilities, {
+			0: 'Adaptability', 1: 'Swift Swim', H: 'Cruel Shell',
+		});
+		assert.deepEqual(battle.dex.species.get('Altaria').abilities, {
+			0: 'Natural Cure', 1: 'Fluffy', H: 'Cloud Nine', S: 'Echo Fiend',
+		});
+	});
+
+	it('should use Armorize as the canonical name while resolving legacy Ironclad data', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Durant', ability: 'Ironclad', moves: ['splash']},
+		], [
+			{species: 'Magikarp', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const armorize = battle.dex.abilities.get('Armorize');
+		assert.equal(armorize.id, 'armorize');
+		assert.equal(armorize.name, 'Armorize');
+		assert.equal(battle.dex.abilities.get('Ironclad').id, 'armorize');
+		assert.equal(battle.p1.active[0].getAbility().id, 'armorize');
+		assert(battle.p1.active[0].hasAbility('armorize'));
+	});
+
+	it('should expose Aura Master contact protection and requested components', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Mew', ability: 'aura master', moves: ['splash']},
+		], [
+			{species: 'Mew', moves: ['tackle']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const auraMaster = battle.dex.abilities.get('auramaster');
+		assert(auraMaster.onSourceModifyDamage);
+		assert(auraMaster.onModifyMove);
+		assert(auraMaster.onTryAddVolatile);
+		assert(auraMaster.onBasePower);
+		const target = battle.p1.active[0];
+		const source = battle.p2.active[0];
+		const move = battle.dex.getActiveMove('tackle');
+		assert.equal(battle.runEvent('SourceModifyDamage', target, source, move, 100), 50);
+	});
+
+	it('should give Copperajah-Gmax maximum power on weight-based moves', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Copperajah-Gmax', ability: 'treasuretitan', moves: ['heavyslam']},
+		], [
+			{species: 'Magikarp', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const source = battle.p1.active[0];
+		const target = battle.p2.active[0];
+		const move = battle.dex.getActiveMove('heavyslam');
+		const basePower = move.basePowerCallback.call(battle, source, target, move);
+		const modifiedPower = battle.runEvent('BasePower', source, target, move, basePower, true);
+		assert.equal(modifiedPower, 120);
+		assert(source.hasAbility('heavymetal'));
 	});
 });

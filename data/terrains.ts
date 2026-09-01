@@ -622,7 +622,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifyDef(def, pokemon) {
 				let modifier = 1;
 				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'sinisterblaze']));
-				if (iceBeneficiary || pokemon.hasType(['Ghost', 'Fire', 'Steel', 'Dragon']) || pokemon.hasAbility(['duskilate', 'ironclad'])) {
+				if (iceBeneficiary || pokemon.hasType(['Ghost', 'Fire', 'Steel', 'Dragon']) || pokemon.hasAbility(['duskilate', 'armorize'])) {
 					modifier *= 1.5;
 				}
 				if (pokemon.hasAbility('icescales')) modifier *= 2;
@@ -631,13 +631,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifySpD(spd, pokemon) {
 				let modifier = 1;
 				const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'sinisterblaze']));
-				if (iceBeneficiary || pokemon.hasType(['Ghost', 'Fire', 'Steel', 'Dragon']) || pokemon.hasAbility(['duskilate', 'ironclad'])) {
+				if (iceBeneficiary || pokemon.hasType(['Ghost', 'Fire', 'Steel', 'Dragon']) || pokemon.hasAbility(['duskilate', 'armorize'])) {
 					modifier *= 1.5;
 				}
 				if (modifier !== 1) return this.chainModify(modifier);
 			},
 			onModifySpe(spe, pokemon) {
-				const immune = ['slushrush', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom', 'illusion', 'duskilate', 'ironclad', 'webassassin'];
+				const immune = ['slushrush', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom', 'illusion', 'duskilate', 'armorize', 'webassassin'];
 				if (!(pokemon.hasAbility(immune) || !pokemon.isGrounded() || pokemon.hasType(['Ice', 'Dragon']))) {
 					return this.chainModify(0.75);
 				}
@@ -664,8 +664,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifyMovePriority: -1,
 			onModifyMove(move, pokemon) {
 				const iceSubTypes = ['Rock', 'Steel', 'Ground', 'Water'];
-				const ironcladSteel = pokemon.hasAbility('ironclad') && move.type === 'Steel';
-				if (iceSubTypes.includes(move.type) && !ironcladSteel && !move.types?.includes('Ice')) {
+				const armorizeSteel = pokemon.hasAbility('armorize') && move.type === 'Steel';
+				if (iceSubTypes.includes(move.type) && !armorizeSteel && !move.types?.includes('Ice')) {
 					move.types = [move.type, 'Ice'];
 				}
 				if (move.id === 'terrainpulse') move.type = 'Ice';
@@ -758,7 +758,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onImmunity(type, pokemon) {
-				const immuneHail = ['fullmetalbody', 'illusion', 'prismarmor', 'shadowshield', 'darkaura', 'duskilate', 'ironclad', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom'];
+			const immuneHail = ['fullmetalbody', 'illusion', 'prismarmor', 'shadowshield', 'darkaura', 'duskilate', 'armorize', 'icebody', 'mindfreeze', 'thickfat', 'toxicbloom'];
 				if (type === 'hail' && (pokemon.hasType('Dragon') || pokemon.hasAbility(immuneHail))) {
 					return false;
 				}

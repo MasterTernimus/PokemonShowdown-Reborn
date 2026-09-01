@@ -3651,7 +3651,10 @@ export class Battle {
 			outcome = !!pokemon.canTerastallize;
 			break;
 		case 'Gigantamax':
-			outcome = !!pokemon.canDynamax && !pokemon.side.allySide?.hasLivingGmax();
+			const allowsGmaxInFieldSingles = this.gameType === 'singles' && !!this.format.terrain;
+			outcome = !!pokemon.canDynamax &&
+				(this.gameType !== 'singles' || allowsGmaxInFieldSingles) &&
+				!pokemon.side.allySide?.hasLivingGmax();
 			break;
 		case 'Mega':
 			outcome = !!(pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY) &&

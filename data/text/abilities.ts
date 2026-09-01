@@ -56,8 +56,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	alchemistsurge: {
 		name: "Alchemist Surge",
-		desc: "This Pokemon creates Psychic Terrain on entry, gains Competitive, and has Hydra Bond's effects.",
-		shortDesc: "Psychic Surge + Competitive + Hydra Bond.",
+		desc: "This Pokemon creates Psychic Terrain on entry, gains Competitive, Neuroforce, and Hydra Bond's effects.",
+		shortDesc: "Psychic Surge + Competitive + Neuroforce + Hydra Bond.",
 	},
 	guidingomen: {
 		name: "Guiding Omen",
@@ -76,13 +76,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	windchime: {
 		name: "Wind Chime",
-		desc: "This Pokemon has Ironclad, Wind Power, and Levitate's effects.",
-		shortDesc: "Ironclad + Wind Power + Levitate.",
+		desc: "This Pokemon has Armorize, Punk Rock, and Levitate's effects.",
+		shortDesc: "Armorize + Punk Rock + Levitate.",
 	},
 	auramaster: {
 		name: "Aura Master",
-		desc: "This Pokemon has Mega Launcher, Dual Wield, and Inner Focus's effects.",
-		shortDesc: "Mega Launcher + Dual Wield + Inner Focus.",
+		desc: "This Pokemon takes half damage from contact moves and has Dual Wield, Inner Focus, and Technician's effects.",
+		shortDesc: "0.5x from contact; Dual Wield + Inner Focus + Technician.",
 	},
 	patternshift: {
 		name: "Pattern Shift",
@@ -106,8 +106,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	apexvenom: {
 		name: "Apex Venom",
-		desc: "This Pokemon has Strong Jaw and Shed Skin's effects. Poison-type moves are super effective against Poison- and Steel-type Pokemon. Biting moves gain STAB and apply Poison-type effectiveness in addition to their normal type effectiveness. Poison Fang is Dragon-type and has 2x power.",
-		shortDesc: "Strong Jaw + Shed Skin; Poison hits Poison/Steel; bites add Poison effectiveness; Poison Fang is Dragon/2x.",
+		desc: "This Pokemon has Strong Jaw and Shed Skin's effects. Biting moves bypass protection and have a 30% chance to badly poison the target. Poison Fang has 1.5x power.",
+		shortDesc: "Strong Jaw + Shed Skin; bites bypass protection and badly poison 30%; Poison Fang 1.5x.",
 	},
 	apexpredator: {
 		name: "Apex Predator",
@@ -541,8 +541,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	draconicforce: {
 		name: "Draconic Force",
-		desc: "This Pokemon has Dragonize and Strong Jaw's effects.",
-		shortDesc: "Dragonize + Strong Jaw.",
+		desc: "This Pokemon has Dragonize, Strong Jaw, and Mold Breaker's effects.",
+		shortDesc: "Dragonize + Strong Jaw + Mold Breaker.",
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
@@ -584,8 +584,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	riotamp: {
 		name: "Riot Amp",
-		desc: "This Pokemon has Punk Rock and Galvanize's effects.",
-		shortDesc: "Punk Rock + Galvanize.",
+		desc: "This Pokemon has Punk Rock, Galvanize, Resonance Force, Technician, and Volt Absorb's effects.",
+		shortDesc: "Punk Rock + Galvanize + Resonance Force + Technician + Volt Absorb.",
 	},
 	relicarmor: {
 		name: "Relic Armor",
@@ -622,10 +622,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's Special Attack is multiplied by 1.5. Its first move slot sets its opening type if Psychic or Dark, and each later Psychic- or Dark-type move changes it to that type. If this Pokemon is Psychic type, it restores 1/8 of its max HP at the end of each turn. If this Pokemon is Dark type, its damaging moves restore HP equal to 1/4 of the damage dealt.",
 		shortDesc: "SpA 1.5x; first move slot sets Psychic/Dark type; later moves switch it; Psychic heals; Dark drains.",
 	},
-	venomrush: {
-		name: "Venom Rush",
-		desc: "While poisoned or badly poisoned, or while Corrosive, Murkwater Surface, or Wasteland is active, this Pokemon's physical moves have 1.5x power. Poison damage heals it for 1/8 of its maximum HP instead.",
-		shortDesc: "Physical moves 1.5x while poisoned or in toxic fields; poison damage heals 1/8.",
+	venomarmor: {
+		name: "Venom Armor",
+		desc: "On switch-in, this Pokemon becomes poisoned if it has no status, even if it is Steel-type. This Pokemon has Poison Heal and Dual Wield's effects. While poisoned, its physical damage is multiplied by 1.3. Metal Claw has 1.5x power.",
+		shortDesc: "Self-poisons on switch-in; Poison Heal + Dual Wield; poisoned physical damage 1.3x; Metal Claw 1.5x.",
 	},
 	noseformation: {
 		name: "Nose Formation",
@@ -699,8 +699,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
-		desc: "This Pokemon has Stakeout's effect. Opposing Pokemon that switch in have their Speed lowered by 1 stage. If this Pokemon knocks out a Pokemon that switched in this turn, it restores 1/8 of its maximum HP. Targets hit by this Pokemon become affected by Torment.",
-		shortDesc: "Stakeout; switch-ins lose Speed; KO on switched-in target heals 1/8; hits Torment.",
+		desc: "This Pokemon has Stakeout, Tangling Hair, and Prankster's effects.",
+		shortDesc: "Stakeout + Tangling Hair + Prankster.",
 	},
 	crumblingshell: {
 		name: "Crumbling Shell",
@@ -744,8 +744,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	alloycore: {
 		name: "Alloy Core",
-		desc: "This Pokemon has Magic Guard and Self Sufficient's effects.",
-		shortDesc: "Magic Guard + Self Sufficient.",
+		desc: "This Pokemon has Magic Guard, Self Sufficient, and Stalwart's effects.",
+		shortDesc: "Magic Guard + Self Sufficient + Stalwart.",
 	},
 	hellfireeclipse: {
 		name: "Hellfire Eclipse",
@@ -759,8 +759,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	omenedge: {
 		name: "Omen Edge",
-		desc: "This Pokemon has Sharpness and Dual Wield. When it faints, it casts a physical Doom Desire on each opposing Pokemon.",
-		shortDesc: "Sharpness + Dual Wield; on faint: Doom Desire on foes.",
+		desc: "This Pokemon has Sharpness, Dual Wield, and Tough Claws. When it faints, it casts a physical Doom Desire on each opposing Pokemon.",
+		shortDesc: "Sharpness + Dual Wield + Tough Claws; on faint: Doom Desire on foes.",
 	},
 	dreadmaw: {
 		name: "Dread Maw",
@@ -959,13 +959,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	treasuretitan: {
 		name: "Treasure Titan",
-		desc: "This Pokemon has Filter and Earth Eater's effects.",
-		shortDesc: "Filter + Earth Eater.",
+		desc: "This Pokemon has Filter, Earth Eater, and Heavy Metal's effects. Copperajah-Gmax's weight-based moves always use their maximum power.",
+		shortDesc: "Filter + Earth Eater + Heavy Metal; weight moves use max power.",
 	},
 	ragingfists: {
 		name: "Raging Fists",
-		desc: "This Pokemon has Hydra Bond, Unseen Fist, and Skill Link's effects.",
-		shortDesc: "Hydra Bond + Unseen Fist + Skill Link.",
+		desc: "This Pokemon has Hydra Bond, Fighting Fiend, and Scrappy's effects.",
+		shortDesc: "Hydra Bond + Fighting Fiend + Scrappy.",
 	},
 	warship: {
 		name: "War Ship",
@@ -984,13 +984,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heatcoil: {
 		name: "Heat Coil",
-		desc: "This Pokemon has Speed Boost and Magma Armor's effects.",
-		shortDesc: "Speed Boost + Magma Armor.",
+		desc: "This Pokemon has Speed Boost, Magma Armor, and Flame Body's effects.",
+		shortDesc: "Speed Boost + Magma Armor + Flame Body.",
 	},
 	sweetsanctuary: {
 		name: "Sweet Sanctuary",
-		desc: "This Pokemon has Friend Guard, Sweet Veil, and Aroma Veil's effects.",
-		shortDesc: "Friend Guard + Sweet Veil + Aroma Veil.",
+		desc: "This Pokemon has Friend Guard, Sweet Veil, Aroma Veil, and Pastel Veil's effects.",
+		shortDesc: "Friend Guard + Sweet Veil + Aroma Veil + Pastel Veil.",
 	},
 	riptideclaws: {
 		name: "Riptide Claws",
@@ -1103,6 +1103,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "False Devotion",
 		desc: "This Pokemon has Serene Grace, Natural Cure, and Prankster's effects.",
 		shortDesc: "Built-in Serene Grace, Natural Cure, and Prankster.",
+	},
+	blinddevotion: {
+		name: "Blind Devotion",
+		desc: "This Pokemon has False Devotion, Technician, and Cotton Down's effects.",
+		shortDesc: "False Devotion + Technician + Cotton Down.",
 	},
 	firemane: {
 		name: "Fire Mane",
@@ -1600,8 +1605,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lunarorbit: {
 		name: "Lunar Orbit",
-		desc: "This Pokemon has Magic Bounce and Serene Grace. On switch-in, it sets Gravity for 5 turns.",
-		shortDesc: "Magic Bounce + Serene Grace; sets Gravity for 5 turns.",
+		desc: "This Pokemon has Magic Bounce, Serene Grace, and Triage. On switch-in, it sets Gravity for 5 turns.",
+		shortDesc: "Magic Bounce + Serene Grace + Triage; sets Gravity for 5 turns.",
 	},
 	magicguard: {
 		name: "Magic Guard",
@@ -1656,6 +1661,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Mega Launcher",
 		desc: "This Pokemon's pulse and bullet moves have their power multiplied by 1.5.",
 		shortDesc: "Pulse and bullet moves have 1.5x power.",
+	},
+	heavyartillery: {
+		name: "Heavy Artillery",
+		desc: "This Pokemon's damaging pulse and bullet moves have their power doubled, hit all opposing Pokemon in Doubles and at full power in Free-for-All, and lower its Defense and Special Defense by 1 after use. This Pokemon has Swift Swim and Shell Armor's effects.",
+		shortDesc: "Damaging pulse/bullet moves 2x; spread in Doubles, full power in FFA; lowers Def/SpD; Swift Swim + Shell Armor.",
 	},
 	megasol: {
 		name: "Mega Sol",
@@ -1770,11 +1780,6 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Shell Armor, Ice Body, and Crumbling Shell's effects.",
 		shortDesc: "Shell Armor + Ice Body + Crumbling Shell.",
 	},
-	shelltrap: {
-		name: "Shell Tempo",
-		desc: "This Pokemon has Regenerator and Shell Armor's effects.",
-		shortDesc: "Regenerator + Shell Armor.",
-	},
 	paradoxwheel: {
 		name: "Paradox Wheel",
 		desc: "This Pokemon gains STAB on Steel- and Electric-type moves.",
@@ -1789,11 +1794,6 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Paradox Pull",
 		desc: "This Pokemon has Magnet Pull's effect. Its Steel typing only contributes resistances and immunities, not weaknesses.",
 		shortDesc: "Magnet Pull; ignores Steel weaknesses.",
-	},
-	wickedcommand: {
-		name: "Wicked Command",
-		desc: "This Pokemon has Insomnia and Super Luck's effects and takes 20% less damage from other Pokemon's damaging moves. If this Pokemon knocks out an enemy with a move, its higher attacking stat is raised by 1 stage, with Attack chosen on a tie. It also restores 1/4 of its maximum HP and removes entry hazards from its side.",
-		shortDesc: "Insomnia + Super Luck; takes 0.8x; KO boosts offense, heals 1/4, clears hazards.",
 	},
 	multiscale: {
 		name: "Multiscale",
@@ -2760,8 +2760,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingcurrent: {
 		name: "Raging Current",
-		desc: "This Pokemon has Swift Swim, Regenerator, and Stamina's effects.",
-		shortDesc: "Swift Swim + Regenerator + Stamina.",
+		desc: "This Pokemon has Swift Swim, Dry Skin, Regenerator, and Stamina's effects.",
+		shortDesc: "Swift Swim + Dry Skin + Regenerator + Stamina.",
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
@@ -3148,6 +3148,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Triage",
 		shortDesc: "Healing and status-cleansing moves have their priority increased by 3.",
 	},
+	tidaljaw: {
+		name: "Tidal Jaw",
+		desc: "This Pokemon has Strong Jaw, Swift Swim, and Filter's effects.",
+		shortDesc: "Strong Jaw + Swift Swim + Filter.",
+	},
 	islandcurrent: {
 		name: "Island Current",
 		desc: "This Pokemon has Swift Swim and Wind Rider's effects.",
@@ -3474,15 +3479,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "On switch-in, this Pokemon sets Inverse Field. Stat changes this Pokemon receives are inverted, except those from Z-Power effects.",
 		shortDesc: "Sets Inverse Field and inverts its stat changes.",
 	},
-	ironclad: {
-		name: "Ironclad",
+	armorize: {
+		name: "Armorize",
 		desc: "This Pokemon's Normal-type moves become Steel-type moves and have their power multiplied by 1.2.",
 		shortDesc: "Normal moves become Steel type and have 1.2x power.",
 	},
 	argentdevotion: {
 		name: "Argent Devotion",
-		desc: "This Pokemon has Ironclad and Sworn Duty's effects.",
-		shortDesc: "Ironclad + Sworn Duty.",
+		desc: "This Pokemon has Armorize and Sworn Duty's effects.",
+		shortDesc: "Armorize + Sworn Duty.",
 	},
 	ironcognition: {
 		name: "Iron Cognition",
@@ -3516,8 +3521,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relentlesshunt: {
 		name: "Relentless Hunt",
-		desc: "This Pokemon's moves with 60 or less Base Power gain +1 priority. In Fairy Tale, Big Top, Dragon's Den, Mountain, Snowy Mountain, or Cold Eclipse, its damaging moves deal 2x damage. In Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, or New World, its damaging moves deal 1.5x damage.",
-		shortDesc: "Moves <=60 BP gain +1 priority; boosted fields give 1.5x or 2x damage.",
+		desc: "This Pokemon has Levitate. Its moves with 60 or less Base Power gain +1 priority. In Fairy Tale, Big Top, Dragon's Den, Mountain, Snowy Mountain, or Cold Eclipse, its damaging moves deal 2x damage. In Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, or New World, its damaging moves deal 1.5x damage.",
+		shortDesc: "Levitate; moves <=60 BP gain +1 priority; boosted fields give 1.5x or 2x damage.",
 	},
 	soulfire: {
 		name: "Soul Fire",
@@ -3544,10 +3549,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's kicking moves have 1.4x power.",
 		shortDesc: "Kicking moves have 1.4x power.",
 	},
+	perfectstriker: {
+		name: "Perfect Striker",
+		desc: "This Pokemon has Striker, No Guard, and Libero's effects.",
+		shortDesc: "Striker + No Guard + Libero.",
+	},
+	silkendecoy: {
+		name: "Silken Decoy",
+		desc: "On Mega Evolution, this Pokemon spins a protective cocoon. When any Pokemon faints while this Pokemon is active, it spins a cocoon if it does not already have one. The cocoon blocks the next damaging hit, and blocks the remaining hits of that multi-hit move. It also has Insomnia and Self Sufficient's effects.",
+		shortDesc: "One cocoon blocks a damaging hit and the rest of that multi-hit move; Insomnia + Self Sufficient.",
+	},
 	strikersmomentum: {
 		name: "Striker's Momentum",
-		desc: "This Pokemon has Striker and Libero's effects, and its moves cannot miss. Once per switch-in, a KO caused by this Pokemon raises its Speed by 1 stage.",
-		shortDesc: "Moves cannot miss; Striker + Libero; first KO gives +1 Speed.",
+		desc: "This Pokemon has Striker, Defiant, and Libero's effects, and its moves cannot miss. Once per switch-in, a KO caused by this Pokemon raises its Speed by 1 stage.",
+		shortDesc: "Moves cannot miss; Striker + Defiant + Libero; first KO gives +1 Speed.",
 	},
 	ultraego: {
 		name: "Ultra Ego",

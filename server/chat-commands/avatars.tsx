@@ -239,7 +239,7 @@ const OFFICIAL_AVATARS = new Set([
 	'ariana',
 	'aromalady-gen3', 'aromalady-gen3rs', 'aromalady',
 	'artist-gen4', 'artist',
-	'ash-alola', 'ash-hoenn', 'ash-kalos', 'ash-unova', 'ash-capbackward', 'ash-johto', 'ash-sinnoh', 'ash',
+	'ash-alola', 'ash-hoenn', 'ash-kalos', 'ash-unova', 'ash-capbackward', 'ash-johto', 'ash-sinnoh', 'ash', 'asriel',
 	'backersf',
 	'backers',
 	'backpackerf',

@@ -29396,7 +29396,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			constrict: ["9L1", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			crosspoison: ["9L50", "7L55", "6L55", "5L55"],
 			curse: ["9M", "7V"],
-			darkestlariat: [],
+			darkestlariat: ["9M"],
 			doubleedge: ["9M", "3T"],
 			doubleteam: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			electroweb: ["9M", "7T", "6T", "5T"],
@@ -29444,7 +29444,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			snore: ["9M", "7T", "7V", "6T", "3T"],
 			solarbeam: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			spiderweb: ["9L43", "7L32", "7V", "6L32", "5L32", "4L32", "3L43"],
+			sonicboom: ["9M"],
 			spite: [],
+			spikes: ["9M"],
 			stickyweb: ["9L55", "7L58", "6L58"],
 			stompingtantrum: ["9M", "7T"],
 			stringshot: ["9L1", "7L1", "7V", "6L1", "5L1", "4T", "4L1", "3L1"],
@@ -29461,6 +29463,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxicspikes: ["9M"],
 			toxicthread: ["9L45", "7L63"],
 			trailblaze: [],
+			twineedle: ["9M"],
 			venomdrench: ["9L1", "7L1", "6L1"],
 			venoshock: ["9M", "7M", "6M", "5M"],
 			xscissor: ["9M", "7M", "6M", "5M"],
@@ -48204,18 +48207,18 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			aerialace: ["9L35", "7M", "6M", "5M", "4M", "3M"],
 			agility: ["9M"],
 			attract: ["9M", "7M", "6M", "5M", "4M", "3M"],
-			aurasphere: [],
+			aurasphere: ["9M"],
 			batonpass: [],
 			bellydrum: ["9E", "7E"],
 			blizzard: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			bodyslam: ["9M", "3T"],
 			brickbreak: ["9M", "7M", "6M", "5M", "4M", "3M", "3S2"],
-			bulkup: ["9M"],
+			bulkup: [],
 			captivate: ["4M"],
 			closecombat: ["9L53", "7L50", "6L47", "5L47", "4L53"],
 			confide: ["9M", "7M", "6M"],
 			counter: ["9E", "7E", "6E", "5E", "4E", "3T", "3E", "3S2"],
-			crosspoison: [],
+			crosspoison: ["9M"],
 			crushclaw: ["9L48", "7L26", "6L22", "5L22", "4L31", "3L31", "3S2"],
 			curse: ["9E", "7E", "6E", "5E", "4E", "3E"],
 			defensecurl: ["9E", "3T"],
@@ -48224,16 +48227,16 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			disable: ["9E", "7E", "6E", "5E", "4E"],
 			doubleedge: ["9M", "3T"],
 			doublehit: ["9E", "7E", "6E", "5E", "5D", "4E"],
-			doublekick: ["9E", "7E", "6E", "5E", "4E", "3E"],
+			doublekick: [],
 			doubleteam: ["9M", "7M", "6M", "5M", "4M", "3M"],
-			drainpunch: ["9M"],
+			drainpunch: [],
 			dynamicpunch: ["9E", "3T"],
 			embargo: ["9L25", "7M", "7L33", "6M", "6L19", "5M", "5L19", "4M", "4L27"],
 			endeavor: ["9M", "7T", "6T", "5T", "4T"],
 			endure: ["9M", "4M", "3T"],
-			extremespeed: ["9M"],
+			extremespeed: [],
 			facade: ["9L43", "7M", "6M", "5M", "4M", "3M"],
-			fakeout: [],
+			fakeout: ["9M"],
 			falseswipe: ["9L18", "7M", "7L29", "6M", "6L29", "5M", "5L29", "4M", "4L44", "3L55"],
 			feint: ["9E", "7E", "6E", "5E"],
 			finalgambit: ["9E", "7E", "6E", "5E"],
@@ -48264,12 +48267,12 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			incinerate: ["6M", "5M"],
 			irontail: ["9E", "7T", "7E", "6T", "6E", "5T", "5E", "4M", "3M"],
 			knockoff: ["9M", "7T", "6T", "5T", "4T"],
-			lashout: [],
+			lashout: ["9M"],
 			lastresort: ["9M", "7T", "6T", "5T", "4T"],
 			leer: ["9L1", "7L1", "6L1", "5L1", "4L1", "3L4", "3S0", "3S1"],
 			lowkick: ["9M", "7T", "6T", "5T", "5D", "4T"],
 			lowsweep: [],
-			machpunch: ["9M"],
+			machpunch: [],
 			megakick: ["9M", "3T"],
 			megapunch: ["9M", "3T"],
 			metalclaw: ["9L22", "7E", "6E", "5E", "4E"],
@@ -48303,7 +48306,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			rocktomb: ["9M", "7M", "6M", "5M", "4M"],
 			rollout: ["9E", "4T", "3T"],
 			round: ["9M", "7M", "6M", "5M"],
-			sacredsword: ["9M"],
+			sacredsword: [],
 			scratch: ["9L1", "7L1", "6L1", "5L1", "4L1", "3L1", "3S1"],
 			secretpower: ["9M", "6M", "4M", "3M"],
 			seedbomb: [],
@@ -48341,6 +48344,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			workup: ["9M", "7M", "5M"],
 			xscissor: ["9L50", "7M", "7L40", "6M", "6L36", "5M", "5L36", "4M", "4L48"],
 			zenheadbutt: [],
+			bulletpunch: ["9M"],
+			smartstrike: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 18, moves: ["leer", "quickattack", "swordsdance", "furycutter"], pokeball: "pokeball"},
@@ -48356,7 +48361,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			aquatail: ["9M", "7T", "6T", "5T", "5D", "4T"],
 			assurance: ["9E", "7E", "6E", "5E", "4E"],
 			attract: ["9M", "7M", "6M", "5M", "4M", "3M"],
-			barbbarrage: ["9M"],
+			barbbarrage: [],
 			belch: ["9L38", "7L41", "6L43"],
 			bind: ["9M", "7T", "6T", "5T"],
 			bite: ["9L4", "7L4", "6L4", "5L5", "5D", "4L10", "3L10", "3S0", "3S2"],
@@ -48382,12 +48387,12 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			dragonpulse: ["9M"],
 			dragonrush: ["9M"],
 			dragontail: ["9M", "7M", "6M", "5M"],
-			earthpower: ["9M"],
+			earthpower: [],
 			earthquake: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			endeavor: [],
 			endure: ["9M", "4M", "3T"],
 			facade: ["9M", "7M", "6M", "5M", "4M", "3M"],
-			fakeout: [],
+			fakeout: ["9M"],
 			feint: ["9L11", "7L11"],
 			finalgambit: ["9E", "7E", "6E", "5E"],
 			firefang: ["9M"],
@@ -48399,7 +48404,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			gastroacid: ["9L29", "7T", "7L29", "6T", "6L31", "5T", "5L34"],
 			gigadrain: ["9M", "7T", "6T", "5T", "4M", "3M"],
 			gigaimpact: [],
-			glaiverush: ["9M"],
+			glaiverush: [],
 			glare: ["9L16", "7L19", "6L19", "5L23", "4L25", "3L25", "3S1"],
 			gunkshot: ["9M"],
 			haze: ["9L36", "7L34", "6L37", "5L38", "4L43", "3L43"],
@@ -48414,8 +48419,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			irontail: ["9E", "7T", "7E", "6T", "6E", "5T", "5E", "4M", "3M"],
 			jawlock: ["9M"],
 			knockoff: ["9M", "7T", "6T", "5T", "4T"],
-			lashout: [],
-			leafblade: ["9M"],
+			lashout: ["9M"],
+			leafblade: [],
 			leer: ["9E"],
 			lick: ["9L1", "7L6", "6L7", "5L1", "4L7", "3L7", "3S0", "3S2"],
 			mimic: ["9M", "3T"],
@@ -48430,7 +48435,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			poisonjab: ["9L44", "7M", "7L31", "6M", "6L34", "5M", "5L42", "4M", "4L52"],
 			poisontail: ["9L9", "7L9", "6L10", "5L12", "4L16", "3L16", "3S0", "3S1"],
 			pounce: ["9M"],
-			powerwhip: ["9M"],
+			powerwhip: [],
 			protect: ["9M", "7M", "6M", "5M", "4M", "3M"],
 			psychicfangs: ["9M"],
 			psychocut: ["9M"],
@@ -48443,15 +48448,15 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			reversal: [],
 			rocksmash: ["9M", "6M", "5M", "4M", "3M"],
 			round: ["9M", "7M", "6M", "5M"],
-			sacredsword: ["9M"],
+			sacredsword: [],
 			scaleshot: ["9M"],
 			scaryface: ["9E", "7E", "6E", "5E", "4E"],
 			screech: ["9L14", "7L14", "6L13", "5L16", "4L19", "3L19", "3S1"],
 			secretpower: ["9M", "6M", "4M", "3M"],
-			secretsword: ["9M"],
+			secretsword: [],
 			seedbomb: [],
 			shedtail: ["9M"],
-			skittersmack: [],
+			skittersmack: ["9M"],
 			sleeptalk: ["9M", "7M", "6M", "5T", "4M", "3T"],
 			sludge: ["9M"],
 			sludgebomb: ["9L40", "7M", "6M", "5M", "4M", "3M"],
@@ -114099,7 +114104,7 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	lycanroc: ['precipiceblades', 'shoreup'], lycanrocmidnight: ['precipiceblades', 'shoreup'],
 	lycanrocdusk: ['precipiceblades', 'shoreup'], arcanine: ['mightycleave'],
 	donphan: ['mightycleave', 'shoreup'], druddigon: ['mightycleave', 'partingshot'],
-	feraligatr: ['mightycleave', 'shoreup'], marowak: ['mightycleave', 'shoreup'],
+	feraligatr: ['mightycleave', 'shoreup', 'firefang', 'thunderfang', 'poisonfang'], marowak: ['mightycleave', 'shoreup'],
 	marowakalola: ['mightycleave', 'shoreup'], solrock: ['mightycleave', 'diamondstorm'],
 	lucario: ['tachyoncutter', 'meteorassault'], sceptile: ['tachyoncutter'],
 	gallade: ['tachyoncutter', 'bitterblade', 'triplearrows'],
@@ -114113,7 +114118,10 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	goodrahisui: ['roaroftime', 'slackoff'], salamence: ['roaroftime'], flygon: ['roaroftime'],
 	hydreigon: ['roaroftime'], pangoro: ['ragefist'], hitmonchan: ['ragefist'],
 	rhydon: ['saltcure'], rhyperior: ['saltcure'], crobat: ['direclaw'],
-	toxicroak: ['direclaw', 'partingshot'], seviper: ['direclaw', 'partingshot'],
+	toxicroak: ['direclaw', 'partingshot'], seviper: [
+		'direclaw', 'partingshot', 'earthpower', 'secretsword', 'sacredsword',
+		'barbbarrage', 'glaiverush', 'leafblade', 'powerwhip',
+	],
 	mienshao: ['meteorassault'], escavalier: ['doubleironbash'], mawile: ['doubleironbash'],
 	arcaninehisui: ['accelerock', 'shoreup'], volcanion: ['hydrosteam'],
 	musharna: ['partingshot'], noivern: ['partingshot'], umbreon: ['partingshot'],
@@ -114121,7 +114129,10 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	mukalola: ['partingshot'], spiritomb: ['partingshot'], liepard: ['partingshot'],
 	manectric: ['partingshot'], nidoking: ['partingshot'], kecleon: ['partingshot'],
 	parasect: ['partingshot'], dusknoir: ['partingshot'], absol: ['partingshot'],
-	granbull: ['partingshot'], zangoose: ['partingshot'], scyther: ['sacredsword'],
+	granbull: ['partingshot'], zangoose: [
+		'partingshot', 'extremespeed', 'machpunch', 'drainpunch', 'doublekick',
+		'sacredsword', 'bulkup',
+	], scyther: ['sacredsword'],
 	scizor: ['sacredsword'], kleavor: ['sacredsword'], espeon: ['fierydance', 'lusterpurge'],
 	reuniclus: ['lusterpurge'], sawsbuck: ['shoreup'], seismitoad: ['shoreup'],
 	crustle: ['shoreup'], stoutland: ['shoreup'], armaldo: ['shoreup'], machamp: ['shoreup'],
@@ -114143,6 +114154,16 @@ for (const [id, moves] of Object.entries(CustomLearnsetRemovals)) {
 	const learnset = (Learnsets as any)[id]?.learnset;
 	if (!learnset) continue;
 	for (const move of moves) delete learnset[move];
+}
+
+const arbokCustomMoves = [
+	'nastyplot', 'psychicfangs', 'scaleshot', 'lashout', 'trailblaze', 'skittersmack',
+	'throatchop', 'stompingtantrum', 'mudbomb', 'earthpower', 'flamethrower', 'fireblast',
+	'overheat', 'heatwave', 'flameburst', 'fierydance', 'burningjealousy', 'firespin', 'firelash',
+];
+const arbokLearnset = (Learnsets as any).arbok?.learnset;
+if (arbokLearnset) {
+	for (const move of arbokCustomMoves) arbokLearnset[move] ??= ['9M'];
 }
 
 const musharnaLevelUpMoves = [
@@ -114235,6 +114256,12 @@ if (gliscorLearnset) (Learnsets as any).gliscoralt = {learnset: {...gliscorLearn
 const corsolaLearnset = (Learnsets as any).corsola?.learnset;
 if (corsolaLearnset) (Learnsets as any).corsolaalt = {learnset: {...corsolaLearnset}};
 
+const zangooseRebornLearnset = (Learnsets as any).zangoose?.learnset;
+if (zangooseRebornLearnset) (Learnsets as any).zangoosereborn = {learnset: {...zangooseRebornLearnset}};
+
+const seviperRebornLearnset = (Learnsets as any).seviper?.learnset;
+if (seviperRebornLearnset) (Learnsets as any).seviperreborn = {learnset: {...seviperRebornLearnset}};
+
 const crobatLearnset = (Learnsets as any).crobat?.learnset;
 if (crobatLearnset) (Learnsets as any).crobatalt = {learnset: {...crobatLearnset}};
 
@@ -114243,7 +114270,7 @@ if (mukLearnset) (Learnsets as any).mukpulse = {learnset: {...mukLearnset}};
 
 const palossandRockyExclusiveMoves = [
 	'stealthrock', 'rockblast', 'rocktomb', 'powergem', 'recover', 'dreameater',
-	'explosion', 'grassknot', 'laserfocus', 'meteobeam', 'naturepower', 'selfdestruct',
+	'explosion', 'grassknot', 'laserfocus', 'meteorbeam', 'naturepower', 'selfdestruct',
 	'sludgewave', 'smackdown', 'strength', 'taunt', 'waterpulse',
 ];
 const palossandFieryExclusiveMoves = [
@@ -114395,6 +114422,16 @@ const unfezantLearnsetAdditions = [
 const unfezantLearnset = (Learnsets as any).unfezant?.learnset;
 if (unfezantLearnset) {
 	for (const move of unfezantLearnsetAdditions) unfezantLearnset[move] ??= ['9M'];
+}
+
+const feraligatrCustomMoves = [
+	'agility', 'chillingwater', 'breakingswipe', 'detect', 'dragonclaw', 'dragonpulse', 'faketears',
+	'flipturn', 'focusblast', 'honeclaws', 'iciclespear', 'lashout', 'metalclaw', 'muddywater',
+	'poweruppunch', 'psychicfangs', 'razorshell', 'scaleshot', 'snarl', 'stompingtantrum', 'trailblaze',
+];
+const feraligatrLearnset = (Learnsets as any).feraligatr?.learnset;
+if (feraligatrLearnset) {
+	for (const move of feraligatrCustomMoves) feraligatrLearnset[move] ??= ['9M'];
 }
 
 // Intentional balance removals are authoritative and must run after every

@@ -238,7 +238,7 @@ const FORMAT_LIST: FormatList = [
 	{
 		name: "[Gen 9] Murkwater Surface",
 		mod: 'gen9',
-		terrain: 'murkwaterterrain',
+		terrain: 'murkwatersurfaceterrain',
 		searchShow: true,
 		debug: true,
 		battle: { trunc: Math.trunc },
