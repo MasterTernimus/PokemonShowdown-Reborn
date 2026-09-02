@@ -12407,6 +12407,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		eggGroups: ["Monster", "Dragon"],
 		battleOnly: "Haxorus",
+		requiredItem: "Haxorite",
 		changesFrom: "Haxorus",
 		isNonstandard: "Custom",
 	},

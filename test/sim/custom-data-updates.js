@@ -107,6 +107,8 @@ describe('Custom battle data updates', function () {
 		assert.deepEqual(megaHaxorus.abilities, {0: 'Raging Overlord'});
 		assert.equal(megaHaxorus.forme, 'Mega');
 		assert.equal(megaHaxorus.battleOnly, 'Haxorus');
+		assert.equal(megaHaxorus.requiredItem, 'Haxorite');
+		assert.deepEqual(dex.items.get('Haxorite').megaStone, {Haxorus: 'Haxorus-Mega'});
 		assert.equal(dex.abilities.get('Raging Overlord').name, 'Raging Overlord');
 	});
 
