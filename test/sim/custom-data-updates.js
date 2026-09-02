@@ -606,13 +606,17 @@ describe('Custom battle data updates', function () {
 		const megaZ = dex.species.get('Banette-Mega-Z');
 		assert.deepEqual(banette.otherFormes, ['Banette-Mega', 'Banette-Mega-Z']);
 		assert.deepEqual(megaZ.types, ['Ghost', 'Steel']);
-		assert.deepEqual(megaZ.baseStats, {hp: 84, atk: 145, def: 120, spa: 30, spd: 110, spe: 151});
+		assert.deepEqual(megaZ.baseStats, {hp: 84, atk: 105, def: 110, spa: 90, spd: 100, spe: 151});
 		assert.equal(megaZ.bst, 640);
 		assert.deepEqual(megaZ.abilities, {0: 'Cursed Armament'});
 		assert.equal(megaZ.requiredItem, 'Banettite');
 		const cursedArmament = dex.abilities.get('Cursed Armament');
 		assert.equal(cursedArmament.name, 'Cursed Armament');
 		assert(cursedArmament.onSourceModifyDamage, 'Cursed Armament should include Filter');
+		const banetteMoves = dex.species.getLearnsetData('banette').learnset;
+		for (const move of ['flashcannon', 'magnetbomb', 'mirrorshot', 'bittermalice', 'ancientpower', 'eeriespell']) {
+			assert(banetteMoves[move]?.length, `Banette should learn ${move}`);
+		}
 		battle.makeChoices('team 1', 'team 1');
 		const activeBanette = battle.p1.active[0];
 		const foe = battle.p2.active[0];
@@ -622,6 +626,15 @@ describe('Custom battle data updates', function () {
 		assert.species(activeBanette, 'Banette-Mega-Z');
 		assert.equal(activeBanette.ability, 'cursedarmament');
 		assert(activeBanette.hasAbility('filter'), 'Cursed Armament should expose Filter');
+		const curseMove = dex.getActiveMove('curse');
+		battle.singleEvent('ModifyMove', cursedArmament, activeBanette.abilityState, curseMove, activeBanette);
+		assert.equal(curseMove.category, 'Physical', 'Banette-Mega-Z should use its higher Attack for Curse');
+		assert.equal(curseMove.overrideOffensiveStat, 'atk');
+		const specialCurseMove = dex.getActiveMove('curse');
+		const specialAttacker = {getStat(stat) { return stat === 'spa' ? 101 : 100; }};
+		battle.singleEvent('ModifyMove', cursedArmament, {}, specialCurseMove, specialAttacker);
+		assert.equal(specialCurseMove.category, 'Special', 'Cursed Armament should use Special Attack when it is higher');
+		assert.equal(specialCurseMove.overrideOffensiveStat, 'spa');
 		battle.makeChoices('move curse', 'move splash');
 		assert(foe.volatiles.curse);
 		battle.makeChoices('move splash', 'move nightshade');

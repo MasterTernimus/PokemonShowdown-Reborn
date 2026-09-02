@@ -114449,7 +114449,7 @@ const documentLearnsetAdditions: {[id: string]: {[move: string]: string[]}} = {
 	audino: {triattack: ["9M"]},
 	aurorus: {coldsnap: ["9M"], icehammer: ["9L1"]},
 	avalugg: {coldsnap: ["9M"]},
-	banette: {astonish: ["9L1"], fakeout: ["9M"], healblock: ["9M"], iciclespear: ["9M"], playrough: ["9M"], psychocut: ["9M"], shadowpunch: ["9M"], slash: ["9M"], vacuumwave: ["9M"], xscissor: ["9M"], zenheadbutt: ["9M"]},
+	banette: {ancientpower: ["9M"], astonish: ["9L1"], bittermalice: ["9M"], eeriespell: ["9M"], fakeout: ["9M"], flashcannon: ["9M"], healblock: ["9M"], iciclespear: ["9M"], magnetbomb: ["9M"], mirrorshot: ["9M"], playrough: ["9M"], psychocut: ["9M"], shadowpunch: ["9M"], slash: ["9M"], vacuumwave: ["9M"], xscissor: ["9M"], zenheadbutt: ["9M"]},
 	barbaracle: {closecombat: ["9M"], cometpunch: ["9M"], doublehit: ["9M"], powergem: ["9M"], waterfall: ["9M"]},
 	bastiodon: {firefang: ["9M"], guardsplit: ["9M"], icefang: ["9M"], screech: ["9M"], thunderfang: ["9M"]},
 	baxcalibur: {aquatail: ["9M"], coldsnap: ["9M"], hail: ["9M"], icehammer: ["9L1"], psychicfangs: ["9M"]},
