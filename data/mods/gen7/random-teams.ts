@@ -859,8 +859,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'toucannon' && !counter.get('sheerforce') && !counter.get('skilllink')) return 'Keen Eye';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
-		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
-		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
+		// Prefer Unburden when Ambipom has no Double Strike move synergy.
+		if (species.id === 'ambipom' && !counter.get('technician') && !counter.get('skilllink') && !counter.get('ironfist')) return 'Unburden';
 		if (species.id === 'muk') return 'Poison Touch';
 		if (
 			['dusknoir', 'raikou', 'suicune', 'vespiquen'].includes(species.id)

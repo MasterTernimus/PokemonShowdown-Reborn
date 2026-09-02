@@ -586,6 +586,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10354,
 	},
+	doublestrike: {
+		onModifyMove(move) {
+			this.dex.abilities.get('skilllink').onModifyMove?.call(this, move);
+		},
+		onBasePowerPriority: 30,
+		onBasePower(basePower, source, target, move) {
+			let modifier = 1;
+			const minimum = this.field.isTerrain('factoryterrain') ? 80 : 60;
+			if (this.modify(basePower, this.event.modifier) <= minimum) modifier *= 1.5;
+			if (move.flags['punch']) modifier *= 1.4;
+			if (move.multihit) modifier *= 1.5;
+			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		flags: { breakable: 1 },
+		name: "Double Strike",
+		rating: 4.5,
+		num: 10384,
+	},
 	spinfiend: {
 		onBasePower(basePower, source, target, move) {
 			return this.dex.abilities.get('technician').onBasePower?.call(this, basePower, source, target, move);
