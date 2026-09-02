@@ -365,21 +365,66 @@ describe('Custom battle data updates', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Eevee-Starter-Alt', ability: 'unstableevo', item: 'firiumz', moves: ['buzzybuzz', 'bouncybubble', 'splash']},
 		], [
-			{species: 'Mew', ability: 'synchronize', moves: ['splash', 'surf']},
+			{species: 'Mew', ability: 'limber', moves: ['thunderbolt', 'surf']},
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const eevee = battle.p1.active[0];
 		assert.false(eevee.canDynamax);
 		assert.equal(eevee.canTerastallize, null);
 		assert.false(battle.actions.canZMove(eevee));
-		battle.makeChoices('move buzzybuzz', 'move splash');
+		battle.makeChoices('move buzzybuzz', 'move thunderbolt');
 		const moves = battle.log.filter(line => line.startsWith('|move|'));
 		assert.match(moves[0], /Eevee.*Buzzy Buzz/);
 		assert.species(eevee, 'Jolteon');
+		assert.statStage(eevee, 'spa', 1);
+		assert.fullHP(eevee);
+		assert(battle.log.some(line => line.includes('ability: Volt Absorb')), 'Jolteon should activate Volt Absorb');
 
 		battle.makeChoices('move bouncybubble', 'move surf');
 		assert.species(eevee, 'Vaporeon');
-		assert.equal(eevee.hp, eevee.maxhp, 'Storm Drain should block Surf after the Vaporeon change');
+		assert.statStage(eevee, 'spa', 2);
+		assert.equal(eevee.hp, eevee.maxhp, 'Vaporeon should block Surf after the form change');
+		assert(battle.log.some(line => line.includes('ability: Water Absorb')), 'Vaporeon should activate Water Absorb');
+	});
+
+	it('should activate both requested built-in Ability effects for each Unstable Evo form', function () {
+		const forms = [
+			['bouncybubble', 'Vaporeon', ['stormdrain', 'waterabsorb']],
+			['buzzybuzz', 'Jolteon', ['lightningrod', 'voltabsorb']],
+			['sizzlyslide', 'Flareon', ['soulfire', 'fluffy']],
+			['baddybad', 'Umbreon', ['pressure', 'innerfocus']],
+			['glitzyglow', 'Espeon', ['magicbounce', 'telepathy']],
+			['freezyfrost', 'Glaceon', ['icescales', 'slushrush']],
+		];
+		for (const [move, forme, components] of forms) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Eevee-Starter', ability: 'unstableevo', moves: [move, 'splash']},
+			], [
+				{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			const eevee = battle.p1.active[0];
+			const activated = [];
+			const originalGet = battle.dex.abilities.get.bind(battle.dex.abilities);
+			battle.dex.abilities.get = id => {
+				const ability = originalGet(id);
+				if (!components.includes(id)) return ability;
+				return {
+					...ability,
+					onStart(pokemon) {
+						activated.push(id);
+						return ability.onStart?.call(this, pokemon);
+					},
+				};
+			};
+			battle.makeChoices(`move ${move}`, 'move splash');
+			battle.dex.abilities.get = originalGet;
+			assert.species(eevee, forme);
+			assert.equal(eevee.ability, 'unstableevo');
+			assert.deepEqual(activated, components, `${forme} should activate both requested components`);
+			battle.destroy();
+			battle = null;
+		}
 	});
 
 	it('should shift Starter Eevee to Abysseon and keep Searing Void off the user', function () {
@@ -554,18 +599,20 @@ describe('Custom battle data updates', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Banette', ability: 'Cursed Armament', item: 'Banettite', moves: ['curse', 'splash']},
 		], [
-			{species: 'Snorlax', ability: 'Thick Fat', moves: ['splash']},
+			{species: 'Snorlax', ability: 'Thick Fat', moves: ['splash', 'nightshade']},
 		]]);
 		const dex = battle.dex;
 		const banette = dex.species.get('Banette');
 		const megaZ = dex.species.get('Banette-Mega-Z');
 		assert.deepEqual(banette.otherFormes, ['Banette-Mega', 'Banette-Mega-Z']);
 		assert.deepEqual(megaZ.types, ['Ghost', 'Steel']);
-		assert.deepEqual(megaZ.baseStats, {hp: 84, atk: 105, def: 110, spa: 30, spd: 100, spe: 151});
-		assert.equal(megaZ.bst, 580);
+		assert.deepEqual(megaZ.baseStats, {hp: 84, atk: 145, def: 120, spa: 30, spd: 110, spe: 151});
+		assert.equal(megaZ.bst, 640);
 		assert.deepEqual(megaZ.abilities, {0: 'Cursed Armament'});
 		assert.equal(megaZ.requiredItem, 'Banettite');
-		assert.equal(dex.abilities.get('Cursed Armament').name, 'Cursed Armament');
+		const cursedArmament = dex.abilities.get('Cursed Armament');
+		assert.equal(cursedArmament.name, 'Cursed Armament');
+		assert(cursedArmament.onSourceModifyDamage, 'Cursed Armament should include Filter');
 		battle.makeChoices('team 1', 'team 1');
 		const activeBanette = battle.p1.active[0];
 		const foe = battle.p2.active[0];
@@ -574,7 +621,16 @@ describe('Custom battle data updates', function () {
 		battle.makeChoices('move splash megax', 'move splash');
 		assert.species(activeBanette, 'Banette-Mega-Z');
 		assert.equal(activeBanette.ability, 'cursedarmament');
+		assert(activeBanette.hasAbility('filter'), 'Cursed Armament should expose Filter');
 		battle.makeChoices('move curse', 'move splash');
 		assert(foe.volatiles.curse);
+		battle.makeChoices('move splash', 'move nightshade');
+		battle.makeChoices('move splash', 'move nightshade');
+		assert.equal(battle.field.terrain, 'hauntedterrain', 'half HP should create Haunted Field');
+		battle.field.clearTerrain();
+		battle.makeChoices('move splash', 'move nightshade');
+		battle.makeChoices('move splash', 'move nightshade');
+		assert.equal(activeBanette.hp, 0, 'fourth Night Shade should faint Banette');
+		assert.equal(battle.field.terrain, 'hauntedterrain', 'fainting should create Haunted Field');
 	});
 });

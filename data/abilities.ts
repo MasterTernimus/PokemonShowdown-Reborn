@@ -41,6 +41,14 @@ function isUltraSuppressedTerrain(battle: Battle) {
 	return battle.field.isTerrain(['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain']);
 }
 
+function setCursedArmamentHauntedField(battle: Battle, pokemon: Pokemon) {
+	if (battle.field.terrain === 'hauntedterrain') {
+		battle.field.terrainState.duration = Math.max(battle.field.terrainState.duration || 0, 5);
+	} else if (battle.field.setTerrain('hauntedterrain', pokemon, battle.dex.abilities.get('cursedarmament'))) {
+		battle.field.terrainState.duration = 5;
+	}
+}
+
 const STATUS_DISPLAY_NAMES: Record<string, string> = {
 	brn: 'burn',
 	par: 'paralysis',
@@ -261,10 +269,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryHit(target, source, move) {
+			let result;
 			for (const id of unstableEvoComponents(target)) {
-				const result = this.dex.abilities.get(id).onTryHit?.call(this, target, source, move);
-				if (result !== undefined) return result;
+				const componentResult = this.dex.abilities.get(id).onTryHit?.call(this, target, source, move);
+				if (result === undefined && componentResult !== undefined) result = componentResult;
 			}
+			return result;
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
 			for (const id of unstableEvoComponents(this.effectState.target)) {
@@ -12014,6 +12024,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('curse', source, this.dex.abilities.get('cursedarmament'));
 			};
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onDamage(damage, target) {
+			if (damage > 0 && target.hp > target.maxhp / 2 && target.hp - damage <= target.maxhp / 2 &&
+				!target.abilityState.cursedArmamentField) {
+				target.abilityState.cursedArmamentField = true;
+				setCursedArmamentHauntedField(this, target);
+			}
+		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if (move.category !== 'Status') this.heal(damage / 4, source, source);
 		},
@@ -12023,11 +12043,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onFaint(pokemon) {
-			if (this.field.terrain === 'hauntedterrain') {
-				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
-			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('cursedarmament'))) {
-				this.field.terrainState.duration = 5;
-			}
+			pokemon.abilityState.cursedArmamentField = true;
+			setCursedArmamentHauntedField(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Cursed Armament",
@@ -16462,12 +16479,12 @@ const UNSTABLE_EVO_FORMES: Partial<Record<ID, string>> = {
 
 function unstableEvoComponents(pokemon: Pokemon): ID[] {
 	switch (pokemon.species.id) {
-	case 'jolteon': return ['lightningrod'];
-	case 'flareon': return ['soulfire'];
-	case 'vaporeon': return ['stormdrain'];
-	case 'umbreon': return ['pressure'];
-	case 'espeon': return ['magicbounce'];
-	case 'glaceon': return ['icescales'];
+	case 'jolteon': return ['lightningrod', 'voltabsorb'];
+	case 'flareon': return ['soulfire', 'fluffy'];
+	case 'vaporeon': return ['stormdrain', 'waterabsorb'];
+	case 'umbreon': return ['pressure', 'innerfocus'];
+	case 'espeon': return ['magicbounce', 'telepathy'];
+	case 'glaceon': return ['icescales', 'slushrush'];
 	case 'leafeon': return ['chlorophyll', 'regenerator'];
 	case 'sylveon': return ['friendguard', 'competitive'];
 	default: return [];
