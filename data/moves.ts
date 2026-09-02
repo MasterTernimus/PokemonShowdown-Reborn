@@ -19682,8 +19682,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTryMove() {
-			if (this.field.isTerrain('volcanicterrain') || this.field.isWeather('desolateland')) return null;
+		onTryMove(attacker, defender, move) {
+			const icyFieldTerrain = [
+				'watersurfaceterrain', 'murkwatersurfaceterrain', 'icyterrain', 'caveterrain',
+				'volcanicterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain', 'mistyterrain',
+			];
+			if (this.field.isTerrain(icyFieldTerrain)) {
+				move.terrain = 'icyterrain';
+				return;
+			}
+			if (this.field.isWeather('desolateland')) return null;
 		},
 		terrain: "coldeclipseterrain",
 		target: "all",
