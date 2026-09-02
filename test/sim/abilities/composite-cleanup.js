@@ -321,6 +321,7 @@ describe('Composite ability cleanup', function () {
 			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 			doublestrike: ['ironfist', 'technician', 'skilllink'],
+			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 			riotamp: ['punkrock', 'galvanize', 'resonanceforce', 'technician', 'voltabsorb'],
 			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],

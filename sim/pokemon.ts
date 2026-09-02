@@ -2185,6 +2185,7 @@ export class Pokemon {
 			woolyconductor: ['fluffy', 'moldbreaker', 'static'],
 			rimeknuckle: ['ironfist'],
 			ragingstorm: ['moldbreaker', 'battlearmor'],
+			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 			abysssniper: ['sniper', 'stalwart'],
 			atrocity: ['moldbreaker'],
 			streettyrant: ['intimidate', 'regenerator'],
