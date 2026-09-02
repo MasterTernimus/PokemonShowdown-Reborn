@@ -1664,8 +1664,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heavyartillery: {
 		name: "Heavy Artillery",
-		desc: "This Pokemon's damaging pulse and bullet moves have their power doubled, hit all opposing Pokemon in Doubles and at full power in Free-for-All, and lower its Defense and Special Defense by 1 after use. This Pokemon has Mold Breaker and Shell Armor's effects.",
-		shortDesc: "Damaging pulse/bullet moves 2x; spread in Doubles, full power in FFA; lowers Def/SpD; Mold Breaker + Shell Armor.",
+		desc: "This Pokemon's damaging pulse and bullet moves have their power doubled, hit all opposing Pokemon in Doubles and at full power in Free-for-All, and lower its Defense and Special Defense by 1 after use. This Pokemon has Unaware and Shell Armor's effects.",
+		shortDesc: "Damaging pulse/bullet moves 2x; spread in Doubles, full power in FFA; lowers Def/SpD; Unaware + Shell Armor.",
 	},
 	megasol: {
 		name: "Mega Sol",
