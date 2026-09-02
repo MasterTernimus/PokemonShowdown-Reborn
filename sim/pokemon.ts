@@ -2164,7 +2164,7 @@ export class Pokemon {
 			venombastion: ['stamina'],
 			draconicforce: ['dragonize', 'strongjaw', 'moldbreaker'],
 			tidaljaw: ['strongjaw', 'swiftswim', 'filter'],
-			heavyartillery: ['moldbreaker', 'shellarmor'],
+			heavyartillery: ['unaware', 'shellarmor'],
 			vanguard: ['intimidate'],
 			royalarmament: ['powerdrill'],
 			seablessing: ['waterveil', 'raindish'],
