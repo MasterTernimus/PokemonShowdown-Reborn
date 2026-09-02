@@ -2115,6 +2115,7 @@ export class Pokemon {
 			astralwitchcraft: ['levitate', 'magicguard', 'swornduty'],
 			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
+			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			siegelauncher: ['stalwart'],
 			soultag: ['soulfire', 'shadowtag'],
 			deserttyrant: ['sandstream'],

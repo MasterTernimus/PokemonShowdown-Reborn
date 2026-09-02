@@ -308,6 +308,7 @@ describe('Composite ability cleanup', function () {
 			omenedge: ['sharpness', 'dualwield', 'toughclaws'],
 			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
+			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			riotamp: ['punkrock', 'galvanize', 'resonanceforce', 'technician', 'voltabsorb'],
 			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],

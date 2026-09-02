@@ -8575,9 +8575,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	ambipom: {
 		num: 424,
 		name: "Ambipom",
-		types: ["Normal", "Grass"],
-		baseStats: { hp: 80, atk: 105, def: 75, spa: 105, spd: 70, spe: 115 },
-		abilities: { 0: "Unburden", 1: "Technician", H: "Skill Link" },
+		types: ["Normal", "Fighting"],
+		baseStats: { hp: 75, atk: 120, def: 70, spa: 90, spd: 70, spe: 125 },
+		abilities: { 0: "Unburden", 1: "Double Strike", H: "Scrappy" },
 		heightm: 1.2,
 		weightkg: 20.3,
 		color: "Purple",
