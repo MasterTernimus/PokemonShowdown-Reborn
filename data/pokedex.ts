@@ -7290,7 +7290,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Banette",
 		forme: "Mega-Z",
 		types: ["Ghost", "Steel"],
-		baseStats: { hp: 84, atk: 105, def: 110, spa: 30, spd: 100, spe: 151 },
+		baseStats: { hp: 84, atk: 145, def: 120, spa: 30, spd: 110, spe: 151 },
 		abilities: { 0: "Cursed Armament" },
 		heightm: 1.2,
 		weightkg: 13,

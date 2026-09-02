@@ -2129,6 +2129,7 @@ export class Pokemon {
 			omenedge: ['sharpness', 'dualwield', 'toughclaws'],
 			dreadmaw: ['hugepower', 'strongjaw'],
 			cursedmarionette: ['prankster'],
+			cursedarmament: ['filter'],
 			phantombarrage: ['clearbody', 'infiltrator', 'levitate', 'hydrabond'],
 			sandsovereign: ['sandstream', 'filter', 'battlearmor'],
 			frostsovereign: ['snowwarning', 'icebody', 'filter'],

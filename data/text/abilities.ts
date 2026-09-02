@@ -7,8 +7,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	selfrepair: { name: "Self Repair", desc: "This Pokemon has Self Sufficient and Natural Cure's effects.", shortDesc: "Self Sufficient + Natural Cure." },
 	unstableevo: {
 		name: "Unstable Evo",
-		desc: "Eevee-Starter's IVs carry through form changes. Before using a Let's Go move, it changes into the matching evolution and uses that form's stats, typing, and Speed. It keeps Unstable Evo, Filter, and Self Sufficient, and gains the evolution's listed Ability effects. Switching out restores Eevee-Starter. It cannot use battle gimmicks or hold Eevium Z.",
-		shortDesc: "Filter + Self Sufficient; Let's Go moves change form; no gimmicks.",
+		desc: "Eevee-Starter's IVs carry through form changes. Before using a Let's Go move, it changes into the matching evolution and uses that form's stats, typing, and Speed. It keeps Unstable Evo, Filter, and Self Sufficient, and gains both of the evolution's listed Ability effects. Switching out restores Eevee-Starter. It cannot use battle gimmicks or hold Eevium Z.",
+		shortDesc: "Filter + Self Sufficient; Let's Go moves change form and grant two Ability effects; no gimmicks.",
 	},
 	hisuianpath: { name: "Hisuian Path", desc: "This Pokemon has Sap Sipper, Inner Focus, and Fluffy's effects.", shortDesc: "Sap Sipper + Inner Focus + Fluffy." },
 	scarecrow: { name: "Scarecrow", desc: "This Pokemon has Wind Rider, Steelworker, and Stakeout's effects.", shortDesc: "Wind Rider + Steelworker + Stakeout." },
@@ -794,8 +794,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedarmament: {
 		name: "Cursed Armament",
-		desc: "Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. Curse from this Pokemon deals 1/8 max HP each turn. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon faints, it creates Haunted Field for 5 turns.",
-		shortDesc: "Curse becomes 100 BP spread Ghost attack; curses foes; heals 1/4 attack/Curse damage.",
+		desc: "This Pokemon has Filter's effects. Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. Curse from this Pokemon deals 1/8 max HP each turn. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon reaches half HP or faints, it creates Haunted Field for 5 turns.",
+		shortDesc: "Filter; Curse becomes 100 BP spread Ghost attack; curses foes; heals 1/4 attack/Curse damage; half HP/faint sets Haunted Field.",
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
