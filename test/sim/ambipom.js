@@ -13,7 +13,7 @@ describe('Ambipom custom data', function () {
 	it('uses the requested typing, 550 BST, abilities, and moves', function () {
 		const ambipom = Dex.species.get('Ambipom');
 		assert.deepEqual(ambipom.types, ['Normal', 'Fighting']);
-		assert.deepEqual(ambipom.baseStats, {hp: 75, atk: 120, def: 70, spa: 90, spd: 70, spe: 125});
+		assert.deepEqual(ambipom.baseStats, {hp: 80, atk: 110, def: 70, spa: 100, spd: 70, spe: 120});
 		assert.equal(Object.values(ambipom.baseStats).reduce((sum, stat) => sum + stat, 0), 550);
 		assert.deepEqual(ambipom.abilities, {0: 'Unburden', 1: 'Double Strike', H: 'Scrappy'});
 		for (const move of requestedMoves) {
