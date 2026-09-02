@@ -558,9 +558,10 @@ const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 ]);
 
 const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
-	'alain', 'alainalt', 'amelia', 'aurora', 'charm', 'coin', 'courtney', 'dulse', 'elio-usum', 'emma',
+	'adrienn', 'alain', 'alainalt', 'amelia', 'amaria', 'aurora', 'charm', 'charlotte', 'coin', 'courtney', 'dulse',
+	'florinia', 'julia',
 	'essentia', 'gloria-dojo',
-	'geara', 'lin', 'shiv', 'shivalt', 'sirius', 'taka', 'tyrant', 'zetta',
+	'geara', 'lin', 'radomus', 'saphira', 'shiv', 'shivalt', 'sirius', 'taka', 'titania', 'tyrant', 'zetta',
 	'magmagrunt', 'magmagruntf', 'marnie-league', 'morgan', 'phyco', 'selene-usum', 'shauna', 'skullgrunt',
 	'skullgruntf', 'soliera', 'zossie', 'arven-v', 'dexio-gen6', 'flannery-gen6', 'green', 'grusha', 'mela',
 	'norman-gen6', 'penny', 'sina-gen6', 'steven-gen6', 'atticus', 'eri', 'giacomo', 'ortega',
