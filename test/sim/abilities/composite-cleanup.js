@@ -47,6 +47,18 @@ describe('Composite ability cleanup', function () {
 		assert(battle.dex.abilities.get('mirrorarmor').onSourceModifyDamage);
 	});
 
+	it('should give Raging Storm built-in Battle Armor', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Haxorus', ability: 'ragingstorm', moves: ['splash']},
+		], [
+			{species: 'Mew', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const haxorus = battle.p1.active[0];
+		assert(haxorus.hasAbility('battlearmor'));
+		assert(haxorus.hasAbility('moldbreaker'));
+	});
+
 	it('should set Eclipse Vision from the first move slot and switch types later', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Gothitelle', ability: 'eclipsevision', moves: ['darkpulse', 'calmmind']},

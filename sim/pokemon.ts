@@ -2184,7 +2184,7 @@ export class Pokemon {
 			ironmountain: ['filter', 'stamina', 'heavymetal'],
 			woolyconductor: ['fluffy', 'moldbreaker', 'static'],
 			rimeknuckle: ['ironfist'],
-			ragingstorm: ['moldbreaker'],
+			ragingstorm: ['moldbreaker', 'battlearmor'],
 			abysssniper: ['sniper', 'stalwart'],
 			atrocity: ['moldbreaker'],
 			streettyrant: ['intimidate', 'regenerator'],
