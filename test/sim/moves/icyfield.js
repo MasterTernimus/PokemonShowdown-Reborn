@@ -35,6 +35,16 @@ describe('Icy Field interactions', () => {
 		return move;
 	}
 
+	function applySnowscape(source, target) {
+		const move = battle.dex.getActiveMove('snowscape');
+		assert(battle.singleEvent('TryMove', move, null, source, target, move));
+		assert.equal(move.terrain, 'icyterrain');
+		if (!battle.field.isTerrain('icyterrain')) {
+			assert(battle.field.setTerrain(move.terrain, source, move));
+		}
+		return move;
+	}
+
 	it('announces the Icy Field start text and preserves its internal id', () => {
 		const [source] = createBattle();
 		setIcyField(source);
@@ -78,6 +88,61 @@ describe('Icy Field interactions', () => {
 		applyTerrainMove('scald', source, target);
 		applyTerrainMove('scald', source, target);
 		assert(battle.field.isTerrain('murkwatersurfaceterrain'));
+	});
+
+	it('turns Snowscape into Icy Field over the requested terrains', () => {
+		for (const underlyingTerrain of [
+			'watersurfaceterrain', 'murkwatersurfaceterrain', 'caveterrain', 'volcanicterrain',
+			'crystalcavernterrain', 'darkcrystalcavernterrain', 'mistyterrain',
+		]) {
+			const [source, target] = createBattle();
+			battle.field.changeTerrain(underlyingTerrain, source);
+			applySnowscape(source, target);
+			assert(battle.field.isTerrain('icyterrain'));
+			assert.equal(battle.field.terrainStack[1]?.id, underlyingTerrain);
+			battle.destroy();
+			battle = null;
+		}
+	});
+
+	it('uses the Icy Field override through the full Snowscape move pipeline', () => {
+		const [source] = createBattle([
+			[{ species: 'Mew', moves: ['snowscape'] }],
+			[{ species: 'Mew', moves: ['splash'] }],
+		]);
+		battle.field.changeTerrain('volcanicterrain', source);
+		battle.makeChoices('move snowscape', 'move splash');
+		assert(battle.field.isTerrain('icyterrain'));
+		assert.equal(battle.field.terrainStack[1]?.id, 'volcanicterrain');
+	});
+
+	it('restores Misty Terrain and carries Icy Field Spikes through a break', () => {
+		const [source, target] = createBattle();
+		battle.field.changeTerrain('mistyterrain', source);
+		applySnowscape(source, target);
+		applyTerrainMove('earthquake', source, target);
+		assert(battle.field.isTerrain('mistyterrain'));
+		assert.equal(battle.p1.sideConditions.spikes.layers, 1);
+		assert.equal(battle.p2.sideConditions.spikes.layers, 1);
+		assert(battle.log.includes('|-message|The quake broke up the ice and revealed Misty Terrain!'));
+	});
+
+	it('restores the field beneath Icy Field after a melt', () => {
+		for (const underlyingTerrain of [
+			'mistyterrain', 'caveterrain', 'volcanicterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain',
+		]) {
+			const [source, target] = createBattle();
+			battle.field.changeTerrain(underlyingTerrain, source);
+			applySnowscape(source, target);
+			applyTerrainMove('heatwave', source, target);
+			assert(battle.field.isTerrain(underlyingTerrain));
+			if (underlyingTerrain === 'mistyterrain') {
+				assert.equal(battle.p1.sideConditions.spikes.layers, 1);
+				assert.equal(battle.p2.sideConditions.spikes.layers, 1);
+			}
+			battle.destroy();
+			battle = null;
+		}
 	});
 
 	it('melts to Cave with fire moves when no water is underneath', () => {

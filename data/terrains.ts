@@ -1874,7 +1874,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'The freezing air boosted the attack!');
 					modifier *= 2;
 				}
-				if (igniteMoves.includes(move.id) || (this.field.terrainState.underlyingTerrain && quakeMoves.includes(move.id)) || (move.isMax && move.type === 'Fire')) {
+				const underlyingTerrain = this.field.terrainState.underlyingTerrain ||
+					this.field.terrainStack[1]?.id || this.field.terrainState.prevTerrain;
+				if (igniteMoves.includes(move.id) || (underlyingTerrain && quakeMoves.includes(move.id)) || (move.isMax && move.type === 'Fire')) {
 					modifier *= 1.3;
 				}
 				return this.chainModify(modifier);
@@ -1884,24 +1886,43 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const quakeMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				const hotWaterMoves = ['scald', 'steameruption', 'hydrosteam'];
 				const currentCount = this.field.terrainState.terrainChanges?.get('icyHotWater') ?? this.field.terrainState.terrainChanges?.get('previousTerrain') ?? 0;
+				const stackedUnderlyingTerrain = this.field.terrainStack[1]?.id;
+				const underlyingTerrain = this.field.terrainState.underlyingTerrain || stackedUnderlyingTerrain || this.field.terrainState.prevTerrain;
+				const restoreTerrain = (fallback: ID) => {
+					if (underlyingTerrain === 'mistyterrain') {
+						for (const side of this.sides) side.addSideCondition('spikes', source);
+					}
+					if (stackedUnderlyingTerrain) {
+						this.field.clearTerrain();
+					} else if (underlyingTerrain) {
+						this.field.changeTerrain(underlyingTerrain, source, move);
+					} else {
+						this.field.changeTerrain(fallback, source, move);
+					}
+				};
 				if ((move as any).icyMomentum) {
 					if (source.hp && this.boost({ spe: 1 }, source, source, this.effect)) {
 						this.add('-message', source.hasAbility('contrary') ? `${source.name} lost momentum on the ice!` : `${source.name} gained momentum on the ice!`);
 					}
 				}
 				if (quakeMoves.includes(move.id)) {
-					if (this.field.terrainState.underlyingTerrain) {
-						this.add('-message', 'The quake broke up the ice and revealed the water beneath!');
+					if (underlyingTerrain) {
+						if (underlyingTerrain === 'watersurfaceterrain' || underlyingTerrain === 'murkwatersurfaceterrain') {
+							this.add('-message', 'The quake broke up the ice and revealed the water beneath!');
+						} else {
+							const terrainName = this.dex.conditions.get(underlyingTerrain).name;
+							this.add('-message', `The quake broke up the ice and revealed ${terrainName}!`);
+						}
 					} else {
 						for (const side of this.sides) side.addSideCondition('spikes', source);
 						return;
 					}
-					this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'watersurfaceterrain');
+					restoreTerrain('watersurfaceterrain');
 					return;
 				}
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					this.add('-message', 'The ice melted away!');
-					this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'caveterrain');
+					restoreTerrain('caveterrain');
 					return;
 				}
 				if (hotWaterMoves.includes(move.id)) {
@@ -1910,14 +1931,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.terrainState.terrainChanges?.set('previousTerrain', nextCount);
 					if (nextCount >= 2) {
 						this.add('-message', 'The hot water melted the ice!');
-						this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'watersurfaceterrain');
+						restoreTerrain('watersurfaceterrain');
 					}
 					return;
 				}
 				if (move.id === 'matchagotcha') {
 					if (source.hp) this.heal(source.maxhp * 0.3, source, source, move);
 					this.add('-message', 'The hot tea melted the ice!');
-					this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'watersurfaceterrain');
+					restoreTerrain('watersurfaceterrain');
 					return;
 				}
 				if (move.id === 'dive') {
@@ -1925,7 +1946,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					if (source.volatiles['dive']) return;
 					this.add('-message', `${source.name} made a hole in the ice!`);
 					this.add('-message', 'The ice was broken from underneath!');
-					this.field.changeTerrain(this.field.terrainState.underlyingTerrain || 'watersurfaceterrain');
+					restoreTerrain('watersurfaceterrain');
 					return;
 				}
 			},
