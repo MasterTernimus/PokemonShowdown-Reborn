@@ -8927,9 +8927,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({def: -1, spd: -1}, source, source, this.effect);
 			}
 		},
-		onModifySpe(spe, pokemon) {
-			return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon);
-		},
 		onCriticalHit: false,
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('shellarmor').onSourceModifyDamage?.call(this, damage, source, target, move);

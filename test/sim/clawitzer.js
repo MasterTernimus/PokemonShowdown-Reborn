@@ -48,7 +48,8 @@ describe('Clawitzer custom data', function () {
 		const clawitzer = battle.p1.active[0];
 		assert.species(clawitzer, 'Clawitzer-Mega');
 		assert.equal(clawitzer.ability, 'heavyartillery');
-		assert(clawitzer.hasAbility('swiftswim'));
+		assert(clawitzer.hasAbility('moldbreaker'));
+		assert(!clawitzer.hasAbility('swiftswim'));
 		assert(clawitzer.hasAbility('shellarmor'));
 		assert.equal(clawitzer.boosts.def, -1);
 		assert.equal(clawitzer.boosts.spd, -1);
