@@ -657,6 +657,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker and Battle Armor. Its attacks remove the target's positive stat changes before damage and ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 60% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
 		shortDesc: "Cannot be suppressed; Mold Breaker + Battle Armor; attacks clear boosts/ignore screens; KO bonus.",
 	},
+	ragingoverlord: {
+		name: "Raging Overlord",
+		desc: "This Ability cannot be suppressed. This Pokemon has Raging Storm and Supreme Overlord's effects.",
+		shortDesc: "Raging Storm + Supreme Overlord.",
+	},
 	voltagevolley: {
 		name: "Voltage Volley",
 		desc: "This Pokemon's multi-hit moves become special attacks and use its Special Attack.",

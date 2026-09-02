@@ -3534,6 +3534,63 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10121,
 	},
+	ragingoverlord: {
+		fallen(pokemon) {
+			return this.dex.abilities.get('supremeoverlord').fallen?.call(this, pokemon) || 0;
+		},
+		onStart(pokemon) {
+			return this.dex.abilities.get('supremeoverlord').onStart?.call(this, pokemon);
+		},
+		onEnd(pokemon) {
+			this.dex.abilities.get('supremeoverlord').onEnd?.call(this, pokemon);
+		},
+		onAnyFaint() {
+			this.dex.abilities.get('supremeoverlord').onAnyFaint?.call(this);
+		},
+		onModifyMove(move, pokemon) {
+			this.dex.abilities.get('ragingstorm').onModifyMove?.call(this, move, pokemon);
+			this.dex.abilities.get('supremeoverlord').onModifyMove?.call(this, move, pokemon);
+		},
+		onSourceTryPrimaryHit(target, source, move) {
+			this.dex.abilities.get('ragingstorm').onSourceTryPrimaryHit?.call(this, target, source, move);
+		},
+		onModifyCritRatio(critRatio, source, target, move) {
+			return this.dex.abilities.get('ragingstorm').onModifyCritRatio?.call(this, critRatio, source, target, move);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('ragingstorm').onSourceDamagingHit?.call(this, damage, target, source, move);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			this.dex.abilities.get('ragingstorm').onSourceAfterFaint?.call(this, length, target, source, effect);
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('supremeoverlord').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('supremeoverlord').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onTryAddVolatile(status, pokemon) {
+			return this.dex.abilities.get('supremeoverlord').onTryAddVolatile?.call(this, status, pokemon);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			this.dex.abilities.get('ragingstorm').onSourceModifyDamage?.call(this, damage, source, target, move);
+			this.dex.abilities.get('supremeoverlord').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('supremeoverlord').onDamage?.call(this, damage, target, source, effect);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('supremeoverlord').onResidual?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('ragingstorm').onImmunity?.call(this, type, pokemon);
+		},
+		flags: { cantsuppress: 1 },
+		name: "Raging Overlord",
+		rating: 5,
+		num: 10385,
+	},
 	voltagevolley: {
 		onModifyMove(move) {
 			if (!move.multihit) return;

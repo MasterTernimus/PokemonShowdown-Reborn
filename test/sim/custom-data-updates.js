@@ -80,6 +80,22 @@ describe('Custom battle data updates', function () {
 		assert.false(dex.species.getLearnsetData('decidueyehisui').learnset.ceaselessedge);
 	});
 
+	it('should split Haxorus-Mega from Haxorus and expose Raging Overlord', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const dex = battle.dex;
+		const haxorus = dex.species.get('Haxorus');
+		const megaHaxorus = dex.species.get('Haxorus-Mega');
+		assert.deepEqual(haxorus.baseStats, {hp: 95, atk: 147, def: 90, spa: 50, spd: 91, spe: 97});
+		assert.equal(haxorus.bst, 570);
+		assert.deepEqual(haxorus.otherFormes, ['Haxorus-Mega']);
+		assert.deepEqual(megaHaxorus.baseStats, {hp: 95, atk: 177, def: 131, spa: 60, spd: 110, spe: 97});
+		assert.equal(megaHaxorus.bst, 670);
+		assert.deepEqual(megaHaxorus.abilities, {0: 'Raging Overlord'});
+		assert.equal(megaHaxorus.forme, 'Mega');
+		assert.equal(megaHaxorus.battleOnly, 'Haxorus');
+		assert.equal(dex.abilities.get('Raging Overlord').name, 'Raging Overlord');
+	});
+
 	it('should let Perfect Foresight retain arbitrary copied ability effects', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Alakazam-Mega', ability: 'perfectforesight', moves: ['protect']},
