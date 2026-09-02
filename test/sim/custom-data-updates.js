@@ -80,6 +80,20 @@ describe('Custom battle data updates', function () {
 		assert.false(dex.species.getLearnsetData('decidueyehisui').learnset.ceaselessedge);
 	});
 
+	it('should expose Chimecho-Mega-Y and Chimechite Y', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const dex = battle.dex;
+		const chimecho = dex.species.get('Chimecho');
+		const megaY = dex.species.get('Chimecho-Mega-Y');
+		assert.deepEqual(chimecho.otherFormes, ['Chimecho-Mega', 'Chimecho-Mega-Y']);
+		assert.deepEqual(megaY.types, ['Psychic', 'Ghost']);
+		assert.deepEqual(megaY.baseStats, {hp: 75, atk: 50, def: 80, spa: 145, spd: 100, spe: 105});
+		assert.equal(megaY.bst, 555);
+		assert.deepEqual(megaY.abilities, {0: 'Haunted Chime'});
+		assert.equal(megaY.requiredItem, 'Chimechite Y');
+		assert.deepEqual(dex.items.get('Chimechite Y').megaStone, {Chimecho: 'Chimecho-Mega-Y'});
+	});
+
 	it('should split Haxorus-Mega from Haxorus and expose Raging Overlord', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const dex = battle.dex;

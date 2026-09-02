@@ -79,6 +79,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Armorize, Punk Rock, and Levitate's effects.",
 		shortDesc: "Armorize + Punk Rock + Levitate.",
 	},
+	hauntedchime: {
+		name: "Haunted Chime",
+		desc: "This Pokemon has Elevate, Wind Power, and Cursed Body's effects.",
+		shortDesc: "Elevate + Wind Power + Cursed Body.",
+	},
 	auramaster: {
 		name: "Aura Master",
 		desc: "This Pokemon takes half damage from contact moves and has Dual Wield, Inner Focus, and Technician's effects.",

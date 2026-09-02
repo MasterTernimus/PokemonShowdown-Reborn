@@ -1123,6 +1123,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 9,
 		isNonstandard: "Future",
 	},
+	chimechitey: {
+		name: "Chimechite Y",
+		spritenum: 498,
+		megaStone: { "Chimecho": "Chimecho-Mega-Y" },
+		itemUser: ["Chimecho"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2656,
+		gen: 9,
+		isNonstandard: "Future",
+	},
 	cinderite: {
 		name: "Cinderite",
 		spritenum: 0,
