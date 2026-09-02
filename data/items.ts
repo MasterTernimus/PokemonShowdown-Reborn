@@ -1123,18 +1123,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 9,
 		isNonstandard: "Future",
 	},
-	chimechitey: {
-		name: "Chimechite Y",
-		spritenum: 498,
-		megaStone: { "Chimecho": "Chimecho-Mega-Y" },
-		itemUser: ["Chimecho"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
-		},
-		num: 2656,
-		gen: 9,
-		isNonstandard: "Future",
-	},
 	haxorite: {
 		name: "Haxorite",
 		spritenum: 0,
@@ -1146,6 +1134,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 2657,
 		gen: 9,
 		isNonstandard: "Future",
+	},
+	arbokite: {
+		name: "Arbokite",
+		spritenum: 0,
+		megaStone: { "Arbok": "Arbok-Mega-X" },
+		itemUser: ["Arbok"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2658,
+		gen: 9,
 	},
 	cinderite: {
 		name: "Cinderite",

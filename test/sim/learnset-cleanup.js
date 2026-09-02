@@ -31,7 +31,7 @@ describe('Custom learnset cleanup', function () {
 		mienshao: ['meteorassault'], escavalier: ['doubleironbash'], mawile: ['doubleironbash'],
 		arcaninehisui: ['accelerock', 'shoreup'], volcanion: ['hydrosteam'],
 		musharna: ['partingshot'], noivern: ['partingshot'], umbreon: ['partingshot'],
-		abomasnow: ['partingshot'], cradily: ['sappyseed'], vespiquen: ['partingshot'], muk: ['partingshot'],
+		abomasnow: ['partingshot', 'sappyseed'], vespiquen: ['partingshot'], muk: ['partingshot'],
 		mukalola: ['partingshot'], spiritomb: ['partingshot'], liepard: ['partingshot'],
 		manectric: ['partingshot'], nidoking: ['partingshot'], kecleon: ['partingshot'],
 		parasect: ['partingshot'], dusknoir: ['partingshot'], absol: ['partingshot'],
@@ -65,7 +65,8 @@ describe('Custom learnset cleanup', function () {
 		assert(canLearn('latios', 'lusterpurge'));
 		assert(canLearn('wyrdeer', 'hypervoice'));
 		for (const species of ['flareon', 'maractus']) assert(canLearn(species, 'sizzleslide'));
-		for (const move of ['glaciallance', 'sappyseed']) assert(canLearn('abomasnow', move));
+		assert(canLearn('abomasnow', 'glaciallance'));
+		assert(canLearn('cradily', 'sappyseed'));
 		for (const move of ['gyroball', 'heavyslam', 'irondefense', 'ironhead', 'metalburst', 'smartstrike', 'steelroller']) {
 			assert(canLearn('falinks', move), `falinks should learn ${move}`);
 		}

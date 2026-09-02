@@ -2,12 +2,16 @@
 
 const assert = require('./../assert');
 const common = require('./../common');
+const {Dex} = require('./../../dist/sim/dex');
 
 let battle;
 
 describe('Custom battle data updates', function () {
 	afterEach(function () {
-		battle?.destroy();
+		if (battle) {
+			battle.destroy();
+			battle = null;
+		}
 	});
 
 	it('should let Gardevoir shift between Mega forms while a gimmick remains', function () {
@@ -39,6 +43,30 @@ describe('Custom battle data updates', function () {
 		assert.false(activeGardevoir.canMegaEvoY);
 	});
 
+	it('should let Charizardite X and Y cross-evolve Charizard', function () {
+		for (const [item, normal, alternate, choice] of [
+			['Charizardite X', 'Charizard-Mega-X', 'Charizard-Mega-Y', 'megay'],
+			['Charizardite Y', 'Charizard-Mega-Y', 'Charizard-Mega-X', 'megax'],
+		]) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Charizard', item, moves: ['splash']},
+			], [
+				{species: 'Magikarp', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+
+			const charizard = battle.p1.active[0];
+			assert.equal(charizard.canMegaEvo, normal);
+			assert.equal(choice === 'megax' ? charizard.canMegaEvoX : charizard.canMegaEvoY, alternate);
+			assert.match(battle.dex.items.get(item).shortDesc, /either Mega Charizard X or Mega Charizard Y/);
+
+			battle.makeChoices(`move splash ${choice}`, 'move splash');
+			assert.species(charizard, alternate);
+			battle.destroy();
+			battle = null;
+		}
+	});
+
 	it('should keep Rapid Response and Violent Rush for the entire first active turn only', function () {
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
 			{species: 'Rapidash', ability: 'rapidresponse', moves: ['protect']},
@@ -62,8 +90,8 @@ describe('Custom battle data updates', function () {
 	it('should expose the requested stats, abilities, moves, and removed Splinter condition', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const dex = battle.dex;
-		assert.deepEqual(dex.species.get('Kingler').baseStats, {hp: 80, atk: 140, def: 125, spa: 60, spd: 60, spe: 85});
-		assert.deepEqual(dex.species.get('Kingler-Gmax').baseStats, {hp: 120, atk: 140, def: 125, spa: 60, spd: 60, spe: 85});
+		assert.deepEqual(dex.species.get('Kingler').baseStats, {hp: 80, atk: 125, def: 115, spa: 60, spd: 60, spe: 75});
+		assert.deepEqual(dex.species.get('Kingler-Gmax').baseStats, {hp: 120, atk: 125, def: 115, spa: 60, spd: 60, spe: 75});
 		assert.equal(dex.species.get('Yanmega').abilities.H, 'Compound Eyes');
 		assert.equal(dex.species.get('Starmie-Mega').baseStats.atk, 100);
 		assert.equal(dex.moves.get('Needle Arm').basePower, 100);
@@ -80,7 +108,18 @@ describe('Custom battle data updates', function () {
 		assert.false(dex.species.getLearnsetData('decidueyehisui').learnset.ceaselessedge);
 	});
 
-	it('should expose Chimecho-Mega-Y and Chimechite Y', function () {
+	it('should expose the requested Ariados and Mega Ariados stats', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const dex = battle.dex;
+		const ariados = dex.species.get('Ariados');
+		const megaAriados = dex.species.get('Ariados-Mega');
+		assert.deepEqual(ariados.baseStats, {hp: 90, atk: 100, def: 80, spa: 50, spd: 80, spe: 40});
+		assert.equal(ariados.bst, 440);
+		assert.deepEqual(megaAriados.baseStats, {hp: 90, atk: 115, def: 110, spa: 110, spd: 110, spe: 50});
+		assert.equal(megaAriados.bst, 585);
+	});
+
+	it('should expose Chimecho-Mega-Y with the shared Chimechite', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const dex = battle.dex;
 		const chimecho = dex.species.get('Chimecho');
@@ -90,8 +129,48 @@ describe('Custom battle data updates', function () {
 		assert.deepEqual(megaY.baseStats, {hp: 75, atk: 50, def: 80, spa: 145, spd: 100, spe: 105});
 		assert.equal(megaY.bst, 555);
 		assert.deepEqual(megaY.abilities, {0: 'Haunted Chime'});
-		assert.equal(megaY.requiredItem, 'Chimechite Y');
-		assert.deepEqual(dex.items.get('Chimechite Y').megaStone, {Chimecho: 'Chimecho-Mega-Y'});
+		assert.equal(megaY.requiredItem, 'Chimechite');
+		assert.deepEqual(dex.items.get('Chimechite').megaStone, {Chimecho: 'Chimecho-Mega'});
+		assert.false(dex.items.get('Chimechite Y').exists);
+	});
+
+	it('should expose Meganium-Mega-Y with the shared Meganiumite', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const dex = battle.dex;
+		const meganium = dex.species.get('Meganium');
+		const megaY = dex.species.get('Meganium-Mega-Y');
+		assert.deepEqual(meganium.otherFormes, ['Meganium-Mega', 'Meganium-Mega-Y']);
+		assert.deepEqual(megaY.types, ['Grass', 'Fire']);
+		assert.deepEqual(megaY.baseStats, {hp: 80, atk: 82, def: 130, spa: 113, spd: 130, spe: 90});
+		assert.equal(megaY.bst, 625);
+		assert.deepEqual(megaY.abilities, {0: 'Blooming Sun'});
+		assert.equal(megaY.requiredItem, 'Meganiumite');
+		assert.deepEqual(dex.items.get('Meganiumite').megaStone, {Meganium: 'Meganium-Mega'});
+		assert.false(dex.items.get('Meganiumite Y').exists);
+	});
+
+	it('should let regular shared stones select either Mega form in battle', function () {
+		for (const [species, item, normal, alternate] of [
+			['Meganium', 'Meganiumite', 'Meganium-Mega', 'Meganium-Mega-Y'],
+			['Chimecho', 'Chimechite', 'Chimecho-Mega', 'Chimecho-Mega-Y'],
+		]) {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species, item, moves: ['splash']},
+			], [
+				{species: 'Magikarp', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+
+			const pokemon = battle.p1.active[0];
+			assert.equal(pokemon.canMegaEvo, normal);
+			assert.equal(pokemon.canMegaEvoY, alternate);
+
+			battle.makeChoices('move splash megay', 'move splash');
+			assert.species(pokemon, alternate);
+			assert.equal(pokemon.canMegaEvoY, normal);
+			battle.destroy();
+			battle = null;
+		}
 	});
 
 	it('should split Haxorus-Mega from Haxorus and expose Raging Overlord', function () {
@@ -164,7 +243,7 @@ describe('Custom battle data updates', function () {
 		const startingSpeed = blissey.getStat('spe');
 		battle.field.addPseudoWeather('gravity', blissey, battle.dex.moves.get('gravity'));
 
-		assert.true(blissey.isGrounded());
+		assert(blissey.isGrounded());
 		assert.equal(blissey.getStat('spe'), startingSpeed);
 		battle.makeChoices('move recover', 'move splash');
 		assert.equal(blissey.hp - startingHP, Math.round(blissey.maxhp / 2));
@@ -219,14 +298,15 @@ describe('Custom battle data updates', function () {
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 		], [
 			{species: 'Feebas', ability: 'swiftswim', moves: ['splash']},
+			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 		]]);
-		battle.makeChoices('team 1, 2', 'team 1');
+		battle.makeChoices('team 1', 'team 1');
 		const palafin = battle.p1.active[0];
 		palafin.setStatus('brn');
 		battle.makeChoices('switch 2', 'move splash');
 		assert.equal(palafin.status, 'brn');
 
-		battle.makeChoices('switch 1', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
 		assert.equal(palafin.status, 'brn');
 	});
 
@@ -266,9 +346,9 @@ describe('Custom battle data updates', function () {
 				{species: 'Eevee-Starter', ability: 'unstableevo', moves: [move, 'splash']},
 				{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 			], [
-				{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+				{species: 'Charizard', ability: 'blaze', moves: ['splash']},
 			]]);
-			battle.makeChoices('team 1, 2', 'team 1');
+			battle.makeChoices('team 1', 'team 1');
 			const eevee = battle.p1.active[0];
 			battle.makeChoices(`move ${move}`, 'move splash');
 			assert.species(eevee, forme);
@@ -365,7 +445,7 @@ describe('Custom battle data updates', function () {
 	});
 
 	it('should preserve the Grimmsnarl-Azzy skin when Gigantamaxing', function () {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+		battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [[
 			{species: 'Grimmsnarl-Azzy', ability: 'prankster', gigantamax: true, moves: ['splash']},
 			{species: 'Magikarp', moves: ['splash']},
 		], [
@@ -468,5 +548,33 @@ describe('Custom battle data updates', function () {
 			battle.destroy();
 			battle = null;
 		}
+	});
+
+	it('should restore Banette-Mega-Z and Cursed Armament', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Banette', ability: 'Cursed Armament', item: 'Banettite', moves: ['curse', 'splash']},
+		], [
+			{species: 'Snorlax', ability: 'Thick Fat', moves: ['splash']},
+		]]);
+		const dex = battle.dex;
+		const banette = dex.species.get('Banette');
+		const megaZ = dex.species.get('Banette-Mega-Z');
+		assert.deepEqual(banette.otherFormes, ['Banette-Mega', 'Banette-Mega-Z']);
+		assert.deepEqual(megaZ.types, ['Ghost', 'Steel']);
+		assert.deepEqual(megaZ.baseStats, {hp: 84, atk: 105, def: 110, spa: 30, spd: 100, spe: 151});
+		assert.equal(megaZ.bst, 580);
+		assert.deepEqual(megaZ.abilities, {0: 'Cursed Armament'});
+		assert.equal(megaZ.requiredItem, 'Banettite');
+		assert.equal(dex.abilities.get('Cursed Armament').name, 'Cursed Armament');
+		battle.makeChoices('team 1', 'team 1');
+		const activeBanette = battle.p1.active[0];
+		const foe = battle.p2.active[0];
+		assert.equal(activeBanette.canMegaEvo, 'Banette-Mega');
+		assert.equal(activeBanette.canMegaEvoX, 'Banette-Mega-Z');
+		battle.makeChoices('move splash megax', 'move splash');
+		assert.species(activeBanette, 'Banette-Mega-Z');
+		assert.equal(activeBanette.ability, 'cursedarmament');
+		battle.makeChoices('move curse', 'move splash');
+		assert(foe.volatiles.curse);
 	});
 });

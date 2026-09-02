@@ -547,8 +547,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10352,
 	},
 	neurotoxin: {
-		onStart(pokemon) {
-			return this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
+		onModifyMove(move, source) {
+			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source);
+		},
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			return this.dex.abilities.get('hydrabond').onSourceModifySecondaries?.call(this, secondaries, target, source, move);
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
@@ -561,6 +564,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSetStatus(status, target, source, effect) {
 			return this.dex.abilities.get('shedskin').onSetStatus?.call(this, status, target, source, effect);
+		},
+		onSwitchOut(pokemon) {
+			return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Neurotoxin",
@@ -1278,16 +1284,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10280,
 	},
 	patternshift: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('unaware').onStart?.call(this, pokemon);
+		},
 		onPrepareHit(source, target, move) {
 			this.dex.abilities.get('protean').onPrepareHit?.call(this, source, target, move);
 		},
 		onResidual(pokemon) {
 			this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon);
 		},
-		onModifyCritRatio(critRatio, source, target) {
-			return this.dex.abilities.get('merciless').onModifyCritRatio?.call(this, critRatio, source, target);
+		onAnyModifyBoost(boosts, pokemon) {
+			return this.dex.abilities.get('unaware').onAnyModifyBoost?.call(this, boosts, pokemon);
 		},
-		flags: {},
+		flags: { breakable: 1 },
 		name: "Pattern Shift",
 		rating: 4.5,
 		num: 10281,
@@ -4524,6 +4533,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			this.dex.abilities.get('skilllink').onModifyMove?.call(this, move);
 			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			return this.dex.abilities.get('guts').onModifyAtk?.call(this, atk, pokemon);
 		},
 		onSourceModifyDamage(damage, source, target, move) { return this.dex.abilities.get('battlearmor').onSourceModifyDamage?.call(this, damage, source, target, move); },
 		onCriticalHit: false,
@@ -11984,6 +11997,42 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Silken Decoy",
 		rating: 4,
 		num: 10381,
+	},
+	cursedarmament: {
+		onModifyMove(move, pokemon) {
+			if (move.id !== 'curse') return;
+			move.accuracy = 100;
+			move.basePower = 100;
+			move.category = 'Physical';
+			move.type = 'Ghost';
+			move.target = 'allAdjacentFoes';
+			move.flags = { protect: 1, mirror: 1, metronome: 1 };
+			delete move.volatileStatus;
+			delete move.self;
+			move.onTryHit = function () {};
+			move.onHit = function (target, source) {
+				target.addVolatile('curse', source, this.dex.abilities.get('cursedarmament'));
+			};
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (move.category !== 'Status') this.heal(damage / 4, source, source);
+		},
+		onAnyDamage(damage, target, source, effect) {
+			if (effect?.id === 'curse' && target.volatiles['curse']?.source?.hasAbility('cursedarmament')) {
+				this.heal(damage / 4, target.volatiles['curse'].source, target);
+			}
+		},
+		onFaint(pokemon) {
+			if (this.field.terrain === 'hauntedterrain') {
+				this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 5);
+			} else if (this.field.setTerrain('hauntedterrain', pokemon, this.dex.abilities.get('cursedarmament'))) {
+				this.field.terrainState.duration = 5;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Cursed Armament",
+		rating: 4.5,
+		num: 10122,
 	},
 	shedskin: {
 		onResidualOrder: 5,

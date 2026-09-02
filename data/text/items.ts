@@ -248,11 +248,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	charizarditex: {
 		name: "Charizardite X",
-		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard X.",
+		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve into either Mega Charizard X or Mega Charizard Y.",
 	},
 	charizarditey: {
 		name: "Charizardite Y",
-		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard Y.",
+		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve into either Mega Charizard X or Mega Charizard Y.",
 	},
 	chartiberry: {
 		name: "Charti Berry",
@@ -284,15 +284,15 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	chimechite: {
 		name: "Chimechite",
-		shortDesc: "If held by a Chimecho, this item allows it to Mega Evolve in battle.",
-	},
-	chimechitey: {
-		name: "Chimechite Y",
-		shortDesc: "If held by a Chimecho, this item allows it to Mega Evolve into Chimecho-Mega-Y in battle.",
+		shortDesc: "If held by a Chimecho, this item allows it to Mega Evolve into either Chimecho-Mega or Chimecho-Mega-Y in battle.",
 	},
 	haxorite: {
 		name: "Haxorite",
 		shortDesc: "If held by a Haxorus, this item allows it to Mega Evolve into Haxorus-Mega in battle.",
+	},
+	arbokite: {
+		name: "Arbokite",
+		shortDesc: "If held by an Arbok, this item allows it to Mega Evolve into either Arbok-Mega-X or Arbok-Mega-Y in battle.",
 	},
 	chippedpot: {
 		name: "Chipped Pot",
@@ -1249,7 +1249,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	meganiumite: {
 		name: "Meganiumite",
-		shortDesc: "If held by a Meganium, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Meganium, this item allows it to Mega Evolve into either Meganium-Mega or Meganium-Mega-Y in battle.",
 	},
 	mentalherb: {
 		name: "Mental Herb",
