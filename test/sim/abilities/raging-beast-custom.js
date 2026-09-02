@@ -59,4 +59,18 @@ describe('Raging Beast and related species updates', () => {
 		assert(lunarDread.hasAbility('pressure'));
 		assert(!lunarDread.hasAbility('intimidate'));
 	});
+
+	it('should give Relentless Link its Guts effect', () => {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Heracross-Mega', ability: 'Relentless Link', moves: ['splash']},
+		], [
+			{species: 'Mew', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const heracross = battle.p1.active[0];
+		assert(heracross.hasAbility('guts'));
+		const attackBeforeBurn = heracross.getStat('atk');
+		heracross.setStatus('brn');
+		assert.equal(heracross.getStat('atk'), battle.modify(attackBeforeBurn, 1.5));
+	});
 });

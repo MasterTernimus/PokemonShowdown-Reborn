@@ -2297,6 +2297,17 @@ export class BattleActions {
 	}
 
 	canMegaEvoX(pokemon: Pokemon) {
+		const charizardFormes = ['Charizard', 'Charizard-Mega-X', 'Charizard-Mega-Y'];
+		if (
+			charizardFormes.includes(pokemon.baseSpecies.name) &&
+			pokemon.getItem().id === 'charizarditey' &&
+			pokemon.baseSpecies.name !== 'Charizard-Mega-X'
+		) {
+			return 'Charizard-Mega-X';
+		}
+		if (pokemon.baseSpecies.name === 'Banette' && pokemon.getItem().id === 'banettite') {
+			return 'Banette-Mega-Z';
+		}
 		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (
 			gardevoirFormes.includes(pokemon.baseSpecies.name) &&
@@ -2309,6 +2320,35 @@ export class BattleActions {
 	}
 
 	canMegaEvoY(pokemon: Pokemon) {
+		const charizardFormes = ['Charizard', 'Charizard-Mega-X', 'Charizard-Mega-Y'];
+		if (
+			charizardFormes.includes(pokemon.baseSpecies.name) &&
+			pokemon.getItem().id === 'charizarditex' &&
+			pokemon.baseSpecies.name !== 'Charizard-Mega-Y'
+		) {
+			return 'Charizard-Mega-Y';
+		}
+		const sharedMegaData: Record<string, { formes: string[], normal: string, alternate: string }> = {
+			arbokite: {
+				formes: ['Arbok', 'Arbok-Mega-X', 'Arbok-Mega-Y'],
+				normal: 'Arbok-Mega-X',
+				alternate: 'Arbok-Mega-Y',
+			},
+			meganiumite: {
+				formes: ['Meganium', 'Meganium-Mega', 'Meganium-Mega-Y'],
+				normal: 'Meganium-Mega',
+				alternate: 'Meganium-Mega-Y',
+			},
+			chimechite: {
+				formes: ['Chimecho', 'Chimecho-Mega', 'Chimecho-Mega-Y'],
+				normal: 'Chimecho-Mega',
+				alternate: 'Chimecho-Mega-Y',
+			},
+		};
+		const sharedMega = sharedMegaData[pokemon.getItem().id];
+		if (sharedMega?.formes.includes(pokemon.baseSpecies.name)) {
+			return pokemon.baseSpecies.name === sharedMega.alternate ? sharedMega.normal : sharedMega.alternate;
+		}
 		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (!gardevoirFormes.includes(pokemon.baseSpecies.name) || pokemon.getItem().id !== 'gardevoirite') return null;
 		if (['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z'].includes(pokemon.baseSpecies.name)) {

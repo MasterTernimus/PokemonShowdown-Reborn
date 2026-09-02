@@ -91,8 +91,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	patternshift: {
 		name: "Pattern Shift",
-		desc: "This Pokemon has Shed Skin, Protean, and Merciless's effects.",
-		shortDesc: "Shed Skin + Protean + Merciless.",
+		desc: "This Pokemon has Protean, Shed Skin, and Unaware's effects.",
+		shortDesc: "Protean + Shed Skin + Unaware.",
 	},
 	bonewarrior: {
 		name: "Bone Warrior",
@@ -792,6 +792,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's status moves have +1 priority. Its attacks and status moves curse opposing targets, and being hit curses the attacker. Cursed foes deal 0.8x damage to this Pokemon. This Pokemon restores HP equal to 1/2 of Curse damage it caused. Its Curse deals 1/8 max HP. When it faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization.",
 		shortDesc: "Prankster; attacks/status curse; cursed foes deal 0.8x; heals 1/2 Curse damage.",
 	},
+	cursedarmament: {
+		name: "Cursed Armament",
+		desc: "Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. Curse from this Pokemon deals 1/8 max HP each turn. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon faints, it creates Haunted Field for 5 turns.",
+		shortDesc: "Curse becomes 100 BP spread Ghost attack; curses foes; heals 1/4 attack/Curse damage.",
+	},
 	sandsovereign: {
 		name: "Sand Sovereign",
 		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Dauntless Shield and Solid Rock. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, foes take immunity-aware Rock damage equal to 1/16 max HP, scaled by effectiveness.",
@@ -824,8 +829,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relentlesslink: {
 		name: "Relentless Link",
-		desc: "This Pokemon has Skill Link, Battle Armor, and Mold Breaker's effects.",
-		shortDesc: "Skill Link + Battle Armor + Mold Breaker.",
+		desc: "This Pokemon has Skill Link, Battle Armor, Mold Breaker's, and Guts's effects.",
+		shortDesc: "Skill Link + Battle Armor + Mold Breaker + Guts.",
 	},
 	mirrorgreed: {
 		name: "Mirror Greed",
@@ -2725,8 +2730,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neurotoxin: {
 		name: "Neurotoxin",
-		desc: "This Pokemon has Intimidate, Strong Jaw, and Shed Skin's effects.",
-		shortDesc: "Intimidate + Strong Jaw + Shed Skin.",
+		desc: "This Pokemon has Strong Jaw, Shed Skin, Hydra Bond, and Regenerator's effects.",
+		shortDesc: "Strong Jaw + Shed Skin + Hydra Bond + Regenerator.",
 	},
 	tremor: {
 		name: "Tremor",
