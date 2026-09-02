@@ -1226,6 +1226,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10285,
 	},
+	hauntedchime: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('windpower').onStart?.call(this, pokemon);
+		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('windpower').onTryHit?.call(this, target, source, move);
+		},
+		onSideConditionStart(side, source, sideCondition) {
+			return this.dex.abilities.get('windpower').onSideConditionStart?.call(this, side, source, sideCondition);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('windpower').onResidual?.call(this, pokemon);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			return this.dex.abilities.get('elevate').onSourceAfterFaint?.call(this, length, target, source, effect);
+		},
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('cursedbody').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onFaint(pokemon) {
+			return this.dex.abilities.get('cursedbody').onFaint?.call(this, pokemon);
+		},
+		flags: {},
+		name: "Haunted Chime",
+		rating: 4,
+		num: 10286,
+	},
 	auramaster: {
 		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {

@@ -314,6 +314,7 @@ describe('Composite ability cleanup', function () {
 			moonlitwings: ['serenegrace'],
 			phalanxform: ['hydrabond', 'friendguard', 'battlearmor'],
 			windchime: ['armorize', 'punkrock', 'levitate'],
+			hauntedchime: ['elevate', 'windpower', 'cursedbody'],
 			auramaster: ['dualwield', 'innerfocus', 'technician'],
 			lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
 			relentlesshunt: ['levitate'],

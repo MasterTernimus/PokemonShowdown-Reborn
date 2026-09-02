@@ -2097,6 +2097,7 @@ export class Pokemon {
 		sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 			auroraresonance: ['liquidvoice', 'waterabsorb', 'hydration'],
 			windchime: ['armorize', 'punkrock', 'levitate'],
+			hauntedchime: ['elevate', 'windpower', 'cursedbody'],
 			auramaster: ['dualwield', 'innerfocus', 'technician'],
 			bloomingsun: ['megasol', 'invigorate', 'naturalcure'],
 			burningcrown: ['whitesmoke', 'filter', 'selfsufficient'],
