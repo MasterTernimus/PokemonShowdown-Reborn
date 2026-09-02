@@ -646,4 +646,9 @@ describe('Custom battle data updates', function () {
 		assert.equal(activeBanette.hp, 0, 'fourth Night Shade should faint Banette');
 		assert.equal(battle.field.terrain, 'hauntedterrain', 'fainting should create Haunted Field');
 	});
+
+	it('should remove the stray Aura Wheel Plus entry from Morpeko', function () {
+		const learnset = Dex.species.getLearnsetData('morpeko').learnset;
+		assert(!learnset.aurawheelplus, 'Morpeko should not learn Aura Wheel Plus');
+	});
 });
