@@ -5,7 +5,7 @@ const {Dex} = require('./../../dist/sim/dex');
 
 describe('Ambipom custom data', function () {
 	const requestedMoves = [
-		'aurasphere', 'swordsdance', 'nastyplot', 'bulkup', 'axekick', 'closecombat',
+		'aurasphere', 'focusblast', 'vacuumwave', 'swordsdance', 'nastyplot', 'bulkup', 'axekick', 'closecombat',
 		'crosschop', 'drainpunch', 'forcepalm', 'focuspunch', 'hammerarm', 'karatechop',
 		'machpunch', 'victorydance', 'tailslap', 'doubleslap', 'cometpunch',
 	];
