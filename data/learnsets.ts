@@ -97070,7 +97070,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			assurance: ["9M", "8M"],
 			attract: ["9M", "8M"],
 			aurawheel: ["8L55"],
-         aurawheelplus: ["9L60"], 
 			batonpass: [],
 			bite: ["9L25", "8L25"],
 			brickbreak: ["9M", "8M"],
