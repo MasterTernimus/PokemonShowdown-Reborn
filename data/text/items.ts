@@ -290,6 +290,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Chimechite Y",
 		shortDesc: "If held by a Chimecho, this item allows it to Mega Evolve into Chimecho-Mega-Y in battle.",
 	},
+	haxorite: {
+		name: "Haxorite",
+		shortDesc: "If held by a Haxorus, this item allows it to Mega Evolve into Haxorus-Mega in battle.",
+	},
 	chippedpot: {
 		name: "Chipped Pot",
 		shortDesc: "Evolves Sinistea-Antique into Polteageist-Antique when used.",
