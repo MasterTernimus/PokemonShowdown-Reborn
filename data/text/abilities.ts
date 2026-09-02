@@ -794,8 +794,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedarmament: {
 		name: "Cursed Armament",
-		desc: "This Pokemon has Filter's effects. Curse used by this Pokemon becomes a 100 BP physical Ghost-type attack with 100% accuracy that hits all adjacent foes and curses each target. Curse from this Pokemon deals 1/8 max HP each turn. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon reaches half HP or faints, it creates Haunted Field for 5 turns.",
-		shortDesc: "Filter; Curse becomes 100 BP spread Ghost attack; curses foes; heals 1/4 attack/Curse damage; half HP/faint sets Haunted Field.",
+		desc: "This Pokemon has Filter's effects. Curse used by this Pokemon becomes a 100 BP physical or special Ghost-type attack using its higher Attack or Special Attack, with 100% accuracy, that hits all adjacent foes and curses each target. Curse from this Pokemon deals 1/8 max HP each turn. This Pokemon restores 1/4 of the damage dealt by its attacks and by Curse damage it caused. When this Pokemon reaches half HP or faints, it creates Haunted Field for 5 turns.",
+		shortDesc: "Filter; Curse becomes a 100 BP spread Ghost attack using the higher Attack or Sp. Atk; curses foes; heals 1/4 damage; half HP/faint sets Haunted Field.",
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",

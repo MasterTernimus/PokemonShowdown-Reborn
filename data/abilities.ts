@@ -12013,7 +12013,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.id !== 'curse') return;
 			move.accuracy = 100;
 			move.basePower = 100;
-			move.category = 'Physical';
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.category = 'Special';
+				move.overrideOffensiveStat = 'spa';
+			} else {
+				move.category = 'Physical';
+				move.overrideOffensiveStat = 'atk';
+			}
 			move.type = 'Ghost';
 			move.target = 'allAdjacentFoes';
 			move.flags = { protect: 1, mirror: 1, metronome: 1 };
