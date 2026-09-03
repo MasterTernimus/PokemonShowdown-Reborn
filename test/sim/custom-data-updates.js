@@ -67,6 +67,26 @@ describe('Custom battle data updates', function () {
 		}
 	});
 
+	it('should give Meowscarada Magician, Protean, and Zoroark-style Illusion', function () {
+		assert.deepEqual(Dex.species.get('Meowscarada').abilities, {
+			0: 'Magician', 1: 'Protean', H: 'Illusion',
+		});
+
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Meowscarada', ability: 'illusion', moves: ['tackle']},
+			{species: 'Garchomp', moves: ['tackle']},
+		], [
+			{species: 'Pikachu', moves: ['tackle']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+
+		const meowscarada = battle.p1.active[0];
+		assert.species(meowscarada.illusion, 'Garchomp');
+		battle.makeChoices('move tackle', 'move tackle');
+		assert(!meowscarada.illusion, 'Meowscarada should lose Illusion after direct damage');
+		assert(battle.log.some(line => line.includes('|-end|p1a: Meowscarada|Illusion')));
+	});
+
 	it('should keep Rapid Response and Violent Rush for the entire first active turn only', function () {
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
 			{species: 'Rapidash', ability: 'rapidresponse', moves: ['protect']},
