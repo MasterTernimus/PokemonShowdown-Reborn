@@ -87,6 +87,26 @@ describe('Custom battle data updates', function () {
 		assert(battle.log.some(line => line.includes('|-end|p1a: Meowscarada|Illusion')));
 	});
 
+	it('should only activate Burning Crown Intimidate once per switch-in', function () {
+		battle = common.createBattle({formatid: 'gen9watersurface'}, [[
+			{species: 'Qwilfish', moves: ['splash']},
+			{species: 'Magikarp', moves: ['splash']},
+		], [
+			{species: 'Charizard-Gmax', ability: 'burningcrown', moves: ['splash']},
+			{species: 'Magikarp', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+
+		const qwilfish = battle.p1.active[0];
+		const charizard = battle.p2.active[0];
+		const burningCrown = charizard.getAbility();
+		assert.equal(qwilfish.boosts.atk, -1);
+		battle.singleEvent('Start', burningCrown, charizard.abilityState, charizard);
+		battle.singleEvent('Start', burningCrown, charizard.abilityState, charizard);
+		assert.equal(qwilfish.boosts.atk, -1);
+		assert.equal(battle.log.filter(line => line.includes('|Intimidate|boost')).length, 1);
+	});
+
 	it('should keep Rapid Response and Violent Rush for the entire first active turn only', function () {
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
 			{species: 'Rapidash', ability: 'rapidresponse', moves: ['protect']},
