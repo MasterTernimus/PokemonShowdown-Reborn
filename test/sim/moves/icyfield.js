@@ -92,7 +92,7 @@ describe('Icy Field interactions', () => {
 
 	it('turns Snowscape into Icy Field over the requested terrains', () => {
 		for (const underlyingTerrain of [
-			'watersurfaceterrain', 'murkwatersurfaceterrain', 'caveterrain', 'volcanicterrain',
+			'watersurfaceterrain', 'murkwatersurfaceterrain', 'caveterrain',
 			'crystalcavernterrain', 'darkcrystalcavernterrain', 'mistyterrain',
 		]) {
 			const [source, target] = createBattle();
@@ -110,10 +110,40 @@ describe('Icy Field interactions', () => {
 			[{ species: 'Mew', moves: ['snowscape'] }],
 			[{ species: 'Mew', moves: ['splash'] }],
 		]);
-		battle.field.changeTerrain('volcanicterrain', source);
+		battle.field.changeTerrain('crystalcavernterrain', source);
 		battle.makeChoices('move snowscape', 'move splash');
 		assert(battle.field.isTerrain('icyterrain'));
-		assert.equal(battle.field.terrainStack[1]?.id, 'volcanicterrain');
+		assert.equal(battle.field.terrainStack[1]?.id, 'crystalcavernterrain');
+	});
+
+	it('makes Snowscape fail on heat fields and Fairy Tale', () => {
+		for (const blockedField of ['burningterrain', 'superheatedterrain', 'volcanicterrain', 'fairytaleterrain']) {
+			const [source] = createBattle([
+				[{ species: 'Mew', moves: ['snowscape'] }],
+				[{ species: 'Mew', moves: ['splash'] }],
+			]);
+			battle.field.changeTerrain(blockedField, source);
+			battle.makeChoices('move snowscape', 'move splash');
+			assert(battle.field.isTerrain(blockedField));
+			const expectedMessage = blockedField === 'fairytaleterrain' ?
+				'|-message|The fairy tale rejected the changing season!' :
+				'|-message|The intense heat prevented the snow from settling!';
+			assert(battle.log.includes(expectedMessage));
+			battle.destroy();
+			battle = null;
+		}
+	});
+
+	it('makes Snowscape fail on Icy Field without creating Cold Eclipse', () => {
+		const [source] = createBattle([
+			[{ species: 'Mew', moves: ['snowscape'] }],
+			[{ species: 'Mew', moves: ['splash'] }],
+		]);
+		setIcyField(source);
+		battle.makeChoices('move snowscape', 'move splash');
+		assert(battle.field.isTerrain('icyterrain'));
+		assert(!battle.field.isTerrain('coldeclipseterrain'));
+		assert(battle.log.some(line => line.startsWith('|-fail|p1a: Mew')));
 	});
 
 	it('restores Misty Terrain and carries Icy Field Spikes through a break', () => {
@@ -129,7 +159,7 @@ describe('Icy Field interactions', () => {
 
 	it('restores the field beneath Icy Field after a melt', () => {
 		for (const underlyingTerrain of [
-			'mistyterrain', 'caveterrain', 'volcanicterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain',
+			'mistyterrain', 'caveterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain',
 		]) {
 			const [source, target] = createBattle();
 			battle.field.changeTerrain(underlyingTerrain, source);
