@@ -116,8 +116,10 @@ describe('Icy Field interactions', () => {
 		assert.equal(battle.field.terrainStack[1]?.id, 'crystalcavernterrain');
 	});
 
-	it('makes Snowscape fail on heat fields and Fairy Tale', () => {
-		for (const blockedField of ['burningterrain', 'superheatedterrain', 'volcanicterrain', 'fairytaleterrain']) {
+	it('makes Snowscape fail on heat fields, Fairy Tale, and Starlight Arena', () => {
+		for (const blockedField of [
+			'burningterrain', 'superheatedterrain', 'volcanicterrain', 'fairytaleterrain', 'starlightarenaterrain',
+		]) {
 			const [source] = createBattle([
 				[{ species: 'Mew', moves: ['snowscape'] }],
 				[{ species: 'Mew', moves: ['splash'] }],
@@ -125,9 +127,13 @@ describe('Icy Field interactions', () => {
 			battle.field.changeTerrain(blockedField, source);
 			battle.makeChoices('move snowscape', 'move splash');
 			assert(battle.field.isTerrain(blockedField));
-			const expectedMessage = blockedField === 'fairytaleterrain' ?
-				'|-message|The fairy tale rejected the changing season!' :
-				'|-message|The intense heat prevented the snow from settling!';
+			let expectedMessage = '|-message|The intense heat prevented the snow from settling!';
+			if (blockedField === 'fairytaleterrain') {
+				expectedMessage = '|-message|The fairy tale rejected the changing season!';
+			}
+			if (blockedField === 'starlightarenaterrain') {
+				expectedMessage = '|-message|The starlight refused to be eclipsed!';
+			}
 			assert(battle.log.includes(expectedMessage));
 			battle.destroy();
 			battle = null;

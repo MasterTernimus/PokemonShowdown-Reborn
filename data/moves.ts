@@ -19683,11 +19683,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {},
 		onTryMove(attacker, defender, move) {
-			const blockedFields = ['volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain'];
+			const blockedFields = [
+				'volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain', 'starlightarenaterrain',
+			];
 			if (this.field.isTerrain(blockedFields)) {
-				this.add('-message', this.field.isTerrain('fairytaleterrain') ?
-					'The fairy tale rejected the changing season!' :
-					'The intense heat prevented the snow from settling!');
+				let message = 'The intense heat prevented the snow from settling!';
+				if (this.field.isTerrain('fairytaleterrain')) message = 'The fairy tale rejected the changing season!';
+				if (this.field.isTerrain('starlightarenaterrain')) message = 'The starlight refused to be eclipsed!';
+				this.add('-message', message);
 				return false;
 			}
 			const icyFieldTerrain = [
