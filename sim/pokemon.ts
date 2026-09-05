@@ -2103,7 +2103,7 @@ export class Pokemon {
 		sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 			auroraresonance: ['liquidvoice', 'waterabsorb', 'hydration'],
 			windchime: ['armorize', 'punkrock', 'levitate'],
-			bogbody: ['electromorphosis', 'levitate', 'dryskin'],
+			bogbody: ['thickfat', 'levitate', 'dryskin'],
 			solarhydra: ['hydrabond', 'grassysurge', 'solarpower', 'selfrepair', 'selfsufficient', 'naturalcure'],
 			astralengine: ['elevate', 'filter', 'analytic'],
 			hauntedchime: ['elevate', 'windpower', 'cursedbody'],
