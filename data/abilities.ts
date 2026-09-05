@@ -5021,6 +5021,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10163,
 	},
+	adaptivepower: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			return this.dex.abilities.get('purepower').onModifyAtk?.call(this, atk, pokemon);
+		},
+		onModifySpA(spa, pokemon) {
+			return this.dex.abilities.get('purepower').onModifySpA?.call(this, spa, pokemon);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
+		},
+		onSwitchOut(pokemon) {
+			this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Adaptive Power",
+		rating: 5,
+		num: 10298,
+	},
 	relicbeam: {
 		onModifySpA(spa, pokemon) {
 			return pokemon.getStat('def', false, true);

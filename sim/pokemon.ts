@@ -2206,7 +2206,7 @@ export class Pokemon {
 			reapersgrip: ['unaware', 'pressure'],
 			pendulumswing: ['insomnia', 'filter'],
 			nightmarepulse: ['pendulumswing', 'nightrealm'],
-			pulsewaste: ['protean', 'stench', 'regenerator'],
+			pulsewaste: ['protean', 'poisontouch', 'regenerator'],
 			riftdancer: ['opportunist', 'chlorophyll', 'dancer'],
 			curseddoll: ['toughclaws', 'shadowshield'],
 			apexvenom: ['strongjaw', 'shedskin'],
