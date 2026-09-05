@@ -1968,6 +1968,9 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 
 		setHas['move:' + move.id] = true;
+		if (move.id.startsWith('hiddenpower')) {
+			return `${set.name}'s move ${move.name} is unavailable.`;
+		}
 
 		let banReason = ruleTable.check('move:' + move.id);
 		if (banReason) {

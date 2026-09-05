@@ -1932,6 +1932,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Its first move slot sets its opening type: Fighting for physical moves or Psychic for special moves. Each later damaging move changes its type to match its category. Physical moves use its boosted Special Attack as Attack; special moves use its boosted Special Attack normally.",
 		shortDesc: "Overcoat; SpA 1.3x; first move slot sets Fighting/Psychic; later moves switch type.",
 	},
+	adaptivepower: {
+		name: "Adaptive Power",
+		desc: "This Pokemon has Pure Power, Magic Guard, and Regenerator's effects.",
+		shortDesc: "Pure Power + Magic Guard + Regenerator.",
+	},
 	dreamsickness: {
 		name: "Dream Sickness",
 		desc: "This Pokemon has Telepathy and Sworn Duty. Its stats cannot be lowered, and its allies' Speed cannot be lowered. At the end of each turn, this Pokemon and its allies restore 1/16 max HP. If an opposing attack would knock out an ally while this Pokemon is above 25% HP, this Pokemon takes the damage instead. Once per switch-in, an ally at 25% HP or lower heals 1/4 max HP, is cured of status, and is sheltered through the next turn.",
@@ -2690,8 +2695,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pulsewaste: {
 		name: "Pulse Waste",
-		desc: "This Pokemon has Protean, Stench, and Regenerator's effects.",
-		shortDesc: "Protean + Stench + Regenerator.",
+		desc: "This Pokemon has Protean, Poison Touch, and Regenerator's effects.",
+		shortDesc: "Protean + Poison Touch + Regenerator.",
 	},
 	riftdancer: {
 		name: "Rift Dancer",
