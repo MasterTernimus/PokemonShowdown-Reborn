@@ -1,6 +1,54 @@
 /* eslint-disable @stylistic/max-len */
 
 export const Items: import('../sim/dex-items').ItemDataTable = {
+	anomalycore: {
+		name: "Anomaly Core",
+		spritenum: 0,
+		megaStone: {Hypno: "Hypno-Pulse", Lilligant: "Lilligant-Rift", "Lilligant-Hisui": "Lilligant-Hisui-Rift", Muk: "Muk-Pulse", "Muk-Alola": "Muk-Pulse"},
+		itemUser: ["Hypno", "Lilligant", "Lilligant-Hisui", "Muk", "Muk-Alola"],
+		num: 2662,
+		gen: 9,
+		desc: "If held by a designated Pulse or Rift Pokemon, this Anomaly Core allows it to undergo its Pulse or Rift Evolution in battle.",
+		shortDesc: "Pulse/Rift Evolution item for designated Anomaly Pokemon.",
+		onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; },
+	},
+	belliboltite: {
+		name: "Belliboltite",
+		spritenum: 0,
+		megaStone: {Bellibolt: "Bellibolt-Mega"},
+		itemUser: ["Bellibolt"],
+		num: 2661,
+		gen: 9,
+		desc: "If held by a Bellibolt, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Bellibolt, this item allows it to Mega Evolve in battle.",
+		onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; },
+	},
+	sunflorite: {
+		name: "Sunflorite",
+		spritenum: 0,
+		megaStone: {Sunflora: "Sunflora-Mega"},
+		itemUser: ["Sunflora"],
+		num: 2660,
+		gen: 9,
+		desc: "If held by a Sunflora, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Sunflora, this item allows it to Mega Evolve in battle.",
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+	},
+	claydolite: {
+		name: "Claydolite",
+		spritenum: 0,
+		megaStone: { Claydol: "Claydol-Mega" },
+		itemUser: ["Claydol"],
+		num: 2659,
+		gen: 9,
+		desc: "If held by a Claydol, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Claydol, this item allows it to Mega Evolve in battle.",
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+	},
 	abilityshield: {
 		name: "Ability Shield",
 		spritenum: 746,

@@ -1932,11 +1932,6 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Overcoat's effect and its Special Attack is multiplied by 1.3. Its first move slot sets its opening type: Fighting for physical moves or Psychic for special moves. Each later damaging move changes its type to match its category. Physical moves use its boosted Special Attack as Attack; special moves use its boosted Special Attack normally.",
 		shortDesc: "Overcoat; SpA 1.3x; first move slot sets Fighting/Psychic; later moves switch type.",
 	},
-	adaptivewaste: {
-		name: "Adaptive Waste",
-		desc: "This Pokemon has Protean and Regenerator's effects.",
-		shortDesc: "Protean + Regenerator.",
-	},
 	dreamsickness: {
 		name: "Dream Sickness",
 		desc: "This Pokemon has Telepathy and Sworn Duty. Its stats cannot be lowered, and its allies' Speed cannot be lowered. At the end of each turn, this Pokemon and its allies restore 1/16 max HP. If an opposing attack would knock out an ally while this Pokemon is above 25% HP, this Pokemon takes the damage instead. Once per switch-in, an ally at 25% HP or lower heals 1/4 max HP, is cured of status, and is sheltered through the next turn.",
@@ -2372,11 +2367,6 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Effect Spore and Invigorate. It redirects and absorbs Poison-type moves, raising its Attack and Special Attack by 1.",
 		shortDesc: "Effect Spore + Invigorate; absorbs Poison moves for +1 Atk/SpA.",
 	},
-	toxicmess: {
-		name: "Toxic Mess",
-		desc: "This Pokemon has Stench, Poison Touch, and Gluttony's effects.",
-		shortDesc: "Stench + Poison Touch + Gluttony.",
-	},
 	scrappy: {
 		name: "Scrappy",
 		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves. This Pokemon is immune to the effect of the Intimidate Ability.",
@@ -2650,8 +2640,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	bogbody: {
 		name: "Bog Body",
-		desc: "This Pokemon has Dry Skin, Thick Fat, and Unaware's effects.",
-		shortDesc: "Dry Skin + Thick Fat + Unaware.",
+		desc: "This Pokemon has Electromorphosis, Levitate, and Dry Skin's effects.",
+		shortDesc: "Electromorphosis + Levitate + Dry Skin.",
 	},
 	frostsiren: {
 		name: "Frost Siren",
@@ -2687,6 +2677,26 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Pendulum Swing",
 		desc: "This Pokemon has Insomnia and Filter's effects. Its moves cannot miss.",
 		shortDesc: "Insomnia + Filter; moves cannot miss.",
+	},
+	nightrealm: {
+		name: "Night Realm",
+		desc: "This Pokemon can use Dream Eater and Nightmare on awake targets.",
+		shortDesc: "Dream Eater and Nightmare affect awake targets.",
+	},
+	nightmarepulse: {
+		name: "Nightmare Pulse",
+		desc: "This Pokemon has Pendulum Swing and Night Realm's effects.",
+		shortDesc: "Pendulum Swing + Night Realm.",
+	},
+	pulsewaste: {
+		name: "Pulse Waste",
+		desc: "This Pokemon has Protean, Stench, and Regenerator's effects.",
+		shortDesc: "Protean + Stench + Regenerator.",
+	},
+	riftdancer: {
+		name: "Rift Dancer",
+		desc: "This Pokemon has Opportunist, Chlorophyll, and Dancer's effects.",
+		shortDesc: "Opportunist + Chlorophyll + Dancer.",
 	},
 	lunarspirit: {
 		name: "Lunar Spirit",
@@ -3383,6 +3393,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Echo Fiend",
 		desc: "This Pokemon is immune to sound moves, and this immunity cannot be suppressed. Its sound moves become Flying type and have 1.5x power. This Pokemon's side is immune to its own damaging sound-based moves.",
 		shortDesc: "Unsuppressible sound immunity; sound -> Flying 1.5x; allies avoid own sound damage.",
+	},
+	solarhydra: {
+		name: "Solar Hydra",
+		desc: "This Pokemon has Hydra Bond, Grassy Surge, Solar Power, and Self Repair's effects.",
+		shortDesc: "Hydra Bond + Grassy Surge + Solar Power + Self Repair.",
+	},
+	astralengine: {
+		name: "Astral Engine",
+		desc: "This Pokemon has Elevate, Filter, and Analytic's effects.",
+		shortDesc: "Elevate + Filter + Analytic.",
 	},
 	elevate: {
 		name: "Elevate",

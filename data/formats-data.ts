@@ -2216,6 +2216,14 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "Illegal",
 		natDexTier: "LC",
 	},
+	sunfloramega: {
+		tier: "OU",
+		natDexTier: "OU",
+	},
+	claydolmega: {
+		tier: "OU",
+		natDexTier: "OU",
+	},
 	claydol: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -6168,6 +6176,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	pokestarufopropu2: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
+	},
+	belliboltmega: {
+		tier: "OU",
+		natDexTier: "OU",
 	},
 };
 

@@ -2254,6 +2254,54 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 34,
 	},
+	solarhydra: {
+		onStart(pokemon) {
+			return Abilities.grassysurge.onStart?.call(this, pokemon);
+		},
+		onModifyMove(move, source, target) {
+			return Abilities.hydrabond.onModifyMove?.call(this, move, source, target);
+		},
+		onBasePower(basePower, source, target, move) {
+			return Abilities.hydrabond.onBasePower?.call(this, basePower, source, target, move);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon, target, move) {
+			return Abilities.solarpower.onModifySpA?.call(this, spa, pokemon, target, move);
+		},
+		onResidual(pokemon, source, effect) {
+			Abilities.solarpower.onResidual?.call(this, pokemon, source, effect);
+			if (pokemon.hp) Abilities.selfrepair.onResidual?.call(this, pokemon, source, effect);
+		},
+		onCheckShow(pokemon) {
+			return Abilities.selfrepair.onCheckShow?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			return Abilities.selfrepair.onSwitchOut?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return Abilities.selfrepair.onImmunity?.call(this, type, pokemon);
+		},
+		flags: {},
+		name: "Solar Hydra",
+		rating: 5,
+		num: 10387,
+	},
+	astralengine: {
+		onSourceAfterFaint(length, target, source, effect) {
+			return Abilities.elevate.onSourceAfterFaint?.call(this, length, target, source, effect);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return Abilities.filter.onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			return Abilities.analytic.onBasePower?.call(this, basePower, pokemon, target, move);
+		},
+		flags: { breakable: 1 },
+		name: "Astral Engine",
+		rating: 5,
+		num: 10386,
+	},
 	elevate: {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
@@ -4972,18 +5020,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Adaptive Cell",
 		rating: 4,
 		num: 10163,
-	},
-	adaptivewaste: {
-		onPrepareHit(source, target, move) {
-			return this.dex.abilities.get('protean').onPrepareHit?.call(this, source, target, move);
-		},
-		onSwitchOut(pokemon) {
-			return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
-		},
-		flags: {},
-		name: "Adaptive Waste",
-		rating: 4.5,
-		num: 10373,
 	},
 	relicbeam: {
 		onModifySpA(spa, pokemon) {
@@ -12833,6 +12869,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10256,
 	},
+	nightrealm: {
+		flags: {},
+		name: "Night Realm",
+		rating: 3,
+		num: 10350,
+	},
+	nightmarepulse: {
+		flags: {},
+		name: "Nightmare Pulse",
+		rating: 4.5,
+		num: 10351,
+	},
+	pulsewaste: {
+		flags: {},
+		name: "Pulse Waste",
+		rating: 4.5,
+		num: 10353,
+	},
+	riftdancer: {
+		flags: {},
+		name: "Rift Dancer",
+		rating: 4.5,
+		num: 10352,
+	},
 	lunarspirit: {
 		onModifyMove(move) {
 			if (move.type === 'Psychic' || move.type === 'Normal') move.forceSTAB = true;
@@ -16072,6 +16132,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10314,
 	},
 	bogbody: {
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('electromorphosis').onDamagingHit?.call(this, damage, target, source, move);
+		},
 		onTryHit(target, source, move) {
 			return this.dex.abilities.get('dryskin').onTryHit?.call(this, target, source, move);
 		},
@@ -16086,18 +16149,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('dryskin').onResidual?.call(this, pokemon);
 		},
 		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('thickfat').onImmunity?.call(this, type, pokemon);
-		},
-		onSourceModifyAtkPriority: 6,
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			return this.dex.abilities.get('thickfat').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
-		},
-		onSourceModifySpAPriority: 5,
-		onSourceModifySpA(spa, attacker, defender, move) {
-			return this.dex.abilities.get('thickfat').onSourceModifySpA?.call(this, spa, attacker, defender, move);
-		},
-		onAnyModifyBoost(boosts, pokemon) {
-			return this.dex.abilities.get('unaware').onAnyModifyBoost?.call(this, boosts, pokemon);
+			return this.dex.abilities.get('levitate').onImmunity?.call(this, type, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Bog Body",
@@ -16139,25 +16191,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Toxic Sink",
 		rating: 4,
 		num: 10371,
-	},
-	toxicmess: {
-		onStart(pokemon) {
-			return this.dex.abilities.get('gluttony').onStart?.call(this, pokemon);
-		},
-		onDamage(item, pokemon) {
-			return this.dex.abilities.get('gluttony').onDamage?.call(this, item, pokemon);
-		},
-		onModifyMovePriority: -1,
-		onModifyMove(move) {
-			return this.dex.abilities.get('stench').onModifyMove?.call(this, move);
-		},
-		onSourceDamagingHit(damage, target, source, move) {
-			return this.dex.abilities.get('poisontouch').onSourceDamagingHit?.call(this, damage, target, source, move);
-		},
-		flags: {},
-		name: "Toxic Mess",
-		rating: 3.5,
-		num: 10372,
 	},
 	frostsiren: {
 		onStart(pokemon) {
