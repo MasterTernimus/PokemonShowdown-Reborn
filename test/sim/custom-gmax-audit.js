@@ -2,6 +2,7 @@
 
 const assert = require('./../assert');
 const common = require('./../common');
+const {Gen8Gen9NatDexLearnsets} = require('../../dist/data/natdex-gen8-gen9-learnsets');
 
 const TEST_MOVES_BY_TYPE = {
 	Normal: 'tackle', Fire: 'ember', Water: 'watergun', Bug: 'strugglebug', Electric: 'thundershock',
@@ -10,7 +11,7 @@ const TEST_MOVES_BY_TYPE = {
 	Psychic: 'confusion', Grass: 'leafage', Ice: 'powdersnow',
 };
 
-describe('Custom G-Max and NatDex audit', function () {
+describe('Custom G-Max audit', function () {
 	it('resolves every G-Max-capable species and form', function () {
 		const dex = common.gen(9).dex;
 		const eligible = dex.species.all().filter(species =>
@@ -54,17 +55,25 @@ describe('Custom G-Max and NatDex audit', function () {
 		assert.deepEqual(failures, []);
 	});
 
-	it('adds Nature Power to NatDex-legal learnsets only', function () {
+	it('scopes Nature Power to NatDex sources and Grass final evolutions', function () {
 		const dex = common.gen(9).dex;
-		const entries = Object.entries(dex.data.Learnsets).filter(([id, data]) =>
-			data.learnset && dex.species.get(id).exists
-		);
-		const natDexEntries = entries.filter(([id]) => dex.species.get(id).natDexTier !== 'Illegal');
-		const missing = natDexEntries.filter(([, data]) => !(data.learnset.naturepower || []).length).map(([id]) => id);
-		const nonNatDexEntries = entries.filter(([id]) => dex.species.get(id).natDexTier === 'Illegal');
-		const stillMissingOutsideNatDex = nonNatDexEntries.filter(([, data]) => !data.learnset.naturepower).map(([id]) => id);
-		assert(natDexEntries.length >= 900, `Expected the NatDex roster to contain at least 900 learnset entries, got ${natDexEntries.length}`);
-		assert(stillMissingOutsideNatDex.length > 0, 'Expected at least one non-NatDex entry to remain without Nature Power');
+		const expected = new Set(Object.entries(Gen8Gen9NatDexLearnsets)
+			.filter(([, data]) => data.learnset?.naturepower)
+			.map(([id]) => id));
+		for (const species of dex.species.all()) {
+			const forme = species.forme.toLowerCase();
+			const baseSpecies = species.baseSpecies === species.name ? null : dex.species.get(species.baseSpecies);
+			const hasLearnsetSource = dex.species.getLearnsetData(species.id).learnset ||
+				(baseSpecies?.types.includes('Grass') && !baseSpecies.evos.length);
+			if (hasLearnsetSource && species.types.includes('Grass') && !species.evos.length &&
+				!forme.includes('mega') && !forme.includes('gmax')) {
+				expected.add(species.id);
+			}
+		}
+		const missing = [...expected].filter(id => !dex.species.getMovePool(id, true).has('naturepower'));
+		assert(expected.size >= 100, `Expected the scoped Nature Power set to contain at least 100 entries, got ${expected.size}`);
 		assert.deepEqual(missing, []);
+		assert(!dex.data.Learnsets.flox.learnset.naturepower, 'Nature Power should not be added to unrelated entries');
 	});
+
 });
