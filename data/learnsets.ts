@@ -1,5 +1,4 @@
 import {Gen8Gen9NatDexLearnsets} from './natdex-gen8-gen9-learnsets';
-import {FormatsData} from './formats-data';
 import {Pokedex} from './pokedex';
 
 export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
@@ -114826,27 +114825,21 @@ for (const [id, moves] of Object.entries(CustomLearnsetRemovals)) {
 const cradilyLearnset = (Learnsets as any).cradily?.learnset;
 if (cradilyLearnset) cradilyLearnset.sappyseed = ['9M'];
 
-function getNatDexTier(id: string): string {
-	const directFormatsData = (FormatsData as any)[id];
-	if (directFormatsData?.natDexTier || directFormatsData?.tier) {
-		return directFormatsData.natDexTier || directFormatsData.tier;
+const natDexNaturePowerIds = new Set(
+	Object.entries(Gen8Gen9NatDexLearnsets)
+		.filter(([, data]) => data.learnset?.naturepower)
+		.map(([id]) => id)
+);
+for (const [id, species] of Object.entries(Pokedex)) {
+	const forme = String((species as any).forme || '').toLowerCase();
+	if ((species as any).types?.includes('Grass') && !(species as any).evos?.length &&
+		!forme.includes('mega') && !forme.includes('gmax')) {
+		natDexNaturePowerIds.add(id);
 	}
-
-	const species = (Pokedex as any)[id];
-	if (!species) return 'Illegal';
-	const fallbackIds = typeof species.battleOnly === 'string' ?
-		[species.battleOnly] : id.endsWith('totem') ? [id.slice(0, -5)] :
-		species.baseSpecies ? [species.baseSpecies] : [];
-	for (const fallbackId of fallbackIds) {
-		const fallbackFormatsData = (FormatsData as any)[String(fallbackId).toLowerCase().replace(/[^a-z0-9]/g, '')];
-		if (fallbackFormatsData) return fallbackFormatsData.natDexTier || fallbackFormatsData.tier || 'Illegal';
-	}
-	return 'Illegal';
 }
-
-// Nature Power is added to entries that are legal in the National Dex roster.
-for (const [id, data] of Object.entries(Learnsets)) {
-	if (data.learnset && getNatDexTier(id) !== 'Illegal' && !data.learnset.naturepower?.length) {
-		data.learnset.naturepower = ['9M'];
+for (const id of natDexNaturePowerIds) {
+	const learnset = (Learnsets as any)[id]?.learnset;
+	if (learnset && !Object.prototype.hasOwnProperty.call(learnset, 'naturepower')) {
+		learnset.naturepower = ['9M'];
 	}
 }
