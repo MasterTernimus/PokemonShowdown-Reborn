@@ -1290,6 +1290,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			sleeptalk: ["9M", "8M", "7M", "7V", "6M", "5T", "4M", "3T"],
 			sludge: ["9M"],
 			sludgebomb: ["9M"],
+			sludgewave: ["9M"],
 			snore: ["9M", "8M", "7T", "7V", "6T", "5T", "4T", "3T"],
 			solarbeam: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			stringshot: ["9L1", "8L1", "4T"],
@@ -66920,6 +66921,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	lilligant: {
 		learnset: {
+			shadowball: ["9M"], fierydance: ["9M"], aurasphere: ["9M"], flowertrick: ["9M"], axekick: ["9M"], petalblizzard: ["9M"],
 			absorb: ["9L1", "8L1"],
 			afteryou: ["9L27", "8L1", "7T", "6T", "5T"],
 			alluringvoice: ["9M"],
@@ -67021,6 +67023,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	lilliganthisui: {
 		learnset: {
+			shadowball: ["9M"], fierydance: ["9M"], aurasphere: ["9M"], flowertrick: ["9M"], axekick: ["9M"], petalblizzard: ["9M"],
 			absorb: ["9L1"],
 			acrobatics: [],
 			aerialace: [],
@@ -114094,6 +114097,7 @@ if (samurottLearnset && hisuianSamurottLearnset) {
 }
 
 export const CustomLearnsetRemovals: {[id: string]: string[]} = {
+	// Hidden Power and all typed variants are removed globally from legality and the team builder.
 	pidgeot: ['bleakwindstorm', 'windbolt', 'searingshot', 'springtidestorm'],
 	claydol: ['lightofruin', 'shoreup', 'lusterpurge'], chimecho: ['lightofruin'],
 	gyarados: ['dragonascent'], archeops: ['dragonascent'], aerodactyl: ['dragonascent'],
@@ -114141,6 +114145,13 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	samurott: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 	samurotthisui: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 };
+
+for (const learnsetData of Object.values(Learnsets)) {
+	if (!learnsetData.learnset) continue;
+	for (const move of Object.keys(learnsetData.learnset)) {
+		if (move === 'hiddenpower' || move.startsWith('hiddenpower')) delete learnsetData.learnset[move];
+	}
+}
 
 const alakazamLearnset = (Learnsets as any).alakazam?.learnset;
 if (alakazamLearnset) {

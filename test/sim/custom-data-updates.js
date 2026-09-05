@@ -130,6 +130,12 @@ describe('Custom battle data updates', function () {
 	it('should expose the requested stats, abilities, moves, and removed Splinter condition', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const dex = battle.dex;
+		const zangoose = dex.species.get('Zangoose');
+		const seviper = dex.species.get('Seviper');
+		assert.deepEqual(zangoose.baseStats, {hp: 75, atk: 140, def: 110, spa: 60, spd: 70, spe: 95});
+		assert.equal(zangoose.bst, 550);
+		assert.deepEqual(seviper.baseStats, {hp: 75, atk: 120, def: 80, spa: 100, spd: 80, spe: 95});
+		assert.equal(seviper.bst, 550);
 		assert.deepEqual(dex.species.get('Kingler').baseStats, {hp: 80, atk: 125, def: 115, spa: 60, spd: 60, spe: 75});
 		assert.deepEqual(dex.species.get('Kingler-Gmax').baseStats, {hp: 120, atk: 125, def: 115, spa: 60, spd: 60, spe: 75});
 		assert.equal(dex.species.get('Yanmega').abilities.H, 'Compound Eyes');

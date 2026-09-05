@@ -1,4 +1,8 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
+	anomalycore: {
+		name: "Anomaly Core",
+		shortDesc: "Pulse/Rift Evolution item for designated Anomaly Pokemon.",
+	},
 	abilityshield: {
 		name: "Ability Shield",
 		shortDesc: "Holder's Ability cannot be changed, suppressed, or ignored by any effect.",

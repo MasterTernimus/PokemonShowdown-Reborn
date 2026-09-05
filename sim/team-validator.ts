@@ -1597,9 +1597,17 @@ export class TeamValidator {
 		const dex = this.dex;
 		const name = set.name || set.species;
 
-		const problems = [];
+		const problems: string[] = [];
 		const item = dex.items.get(set.item);
 		const species = dex.species.get(set.species);
+		if (species.requiredItem === 'Anomaly Core' && item.name !== 'Anomaly Core') {
+			const baseSpecies = dex.species.get(species.changesFrom || species.baseSpecies);
+			if (baseSpecies.exists) {
+				set.species = baseSpecies.name;
+				if (!Object.values(baseSpecies.abilities).includes(set.ability)) set.ability = baseSpecies.abilities['0'];
+				return problems;
+			}
+		}
 
 		if (species.name === 'Necrozma-Ultra') {
 			const whichMoves = (set.moves.map(toID).includes('sunsteelstrike' as ID) ? 1 : 0) +
@@ -1915,6 +1923,14 @@ export class TeamValidator {
 		if (banReason === '') return null;
 
 		if (!item.id) return null;
+		if (item.id === 'anomalycore') {
+			const species = dex.species.get(set.species);
+			const isDesignatedForm = species.requiredItem === item.name;
+			const isDesignatedBase = item.itemUser?.includes(species.name) || item.itemUser?.includes(species.baseSpecies);
+			if (!isDesignatedForm && !isDesignatedBase) {
+				return `${set.name}'s item ${item.name} can only be used by designated Pulse or Rift Pokemon.`;
+			}
+		}
 
 		banReason = ruleTable.check('pokemontag:allitems');
 		if (banReason) {

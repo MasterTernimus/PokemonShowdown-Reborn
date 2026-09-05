@@ -333,6 +333,14 @@ export class Pokemon {
 		if (!this.baseSpecies.exists) {
 			throw new Error(`Unidentified species: ${this.baseSpecies.name}`);
 		}
+		if (this.baseSpecies.requiredItem === 'Anomaly Core' && toID(set.item) !== 'anomalycore') {
+			const baseSpecies = this.battle.dex.species.get(this.baseSpecies.changesFrom || this.baseSpecies.baseSpecies);
+			if (baseSpecies.exists) {
+				this.baseSpecies = baseSpecies;
+				set.species = baseSpecies.name;
+				if (!Object.values(baseSpecies.abilities).includes(set.ability)) set.ability = baseSpecies.abilities['0'];
+			}
+		}
 		this.set = set as PokemonSet;
 		if (this.baseSpecies.baseSpecies === 'Silvally') this.set.shiny = true;
 
@@ -2055,8 +2063,6 @@ export class Pokemon {
 			aeviandream: ['baddreams', 'shedskin', 'toughclaws'],
 				wingedwraith: ['infiltrator', 'galewings'],
 				toxicsink: ['effectspore', 'invigorate'],
-			toxicmess: ['stench', 'poisontouch', 'gluttony'],
-			adaptivewaste: ['protean', 'regenerator'],
 			ragingbeast: ['guts', 'moldbreaker'],
 			lunardread: ['magicguard', 'pressure'],
 			scavenger: ['overcoat', 'bigpecks', 'regenerator'],
@@ -2097,12 +2103,15 @@ export class Pokemon {
 		sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 			auroraresonance: ['liquidvoice', 'waterabsorb', 'hydration'],
 			windchime: ['armorize', 'punkrock', 'levitate'],
+			bogbody: ['electromorphosis', 'levitate', 'dryskin'],
+			solarhydra: ['hydrabond', 'grassysurge', 'solarpower', 'selfrepair', 'selfsufficient', 'naturalcure'],
+			astralengine: ['elevate', 'filter', 'analytic'],
 			hauntedchime: ['elevate', 'windpower', 'cursedbody'],
 			auramaster: ['dualwield', 'innerfocus', 'technician'],
 			bloomingsun: ['megasol', 'invigorate', 'naturalcure'],
 			burningcrown: ['whitesmoke', 'filter', 'selfsufficient'],
 			burningego: ['ultraego', 'magmaarmor'],
-			burningspirit: ['selfsufficient', 'opportunist', 'magmaarmor'],
+			burningspirit: ['selfsufficient', 'opportunist', 'magmaarmor', 'filter'],
 			crueltag: ['shadowtag', 'infiltrator'],
 			emperorsresolve: ['competitive', 'slushrush'],
 			execution: ['duskilate'],
@@ -2196,6 +2205,9 @@ export class Pokemon {
 			requiem: ['cursedbody'],
 			reapersgrip: ['unaware', 'pressure'],
 			pendulumswing: ['insomnia', 'filter'],
+			nightmarepulse: ['pendulumswing', 'nightrealm'],
+			pulsewaste: ['protean', 'stench', 'regenerator'],
+			riftdancer: ['opportunist', 'chlorophyll', 'dancer'],
 			curseddoll: ['toughclaws', 'shadowshield'],
 			apexvenom: ['strongjaw', 'shedskin'],
 			neurotoxin: ['strongjaw', 'shedskin', 'hydrabond', 'regenerator'],

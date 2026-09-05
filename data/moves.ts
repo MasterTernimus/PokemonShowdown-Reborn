@@ -4871,8 +4871,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1 },
 		drain: [1, 2],
-		onTryImmunity(target) {
-			return target.status === 'slp' || target.hasAbility('comatose');
+		onTryImmunity(target, source) {
+			return target.status === 'slp' || target.hasAbility('comatose') || source.hasAbility('nightrealm');
 		},
 		target: "normal",
 		type: "Psychic",
@@ -14352,8 +14352,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'nightmare',
 		condition: {
 			noCopy: true,
-			onStart(pokemon) {
-				if ((pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) || this.field.isTerrain('rainbowterrain')) {
+			onStart(pokemon, source) {
+				if ((pokemon.status !== 'slp' && !pokemon.hasAbility('comatose') && !source?.hasAbility('nightrealm')) || this.field.isTerrain('rainbowterrain')) {
 					return false;
 				}
 				this.add('-start', pokemon, 'Nightmare');
