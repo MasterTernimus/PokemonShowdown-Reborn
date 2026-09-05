@@ -1,4 +1,6 @@
 import {Gen8Gen9NatDexLearnsets} from './natdex-gen8-gen9-learnsets';
+import {FormatsData} from './formats-data';
+import {Pokedex} from './pokedex';
 
 export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	missingno: {
@@ -114824,7 +114826,27 @@ for (const [id, moves] of Object.entries(CustomLearnsetRemovals)) {
 const cradilyLearnset = (Learnsets as any).cradily?.learnset;
 if (cradilyLearnset) cradilyLearnset.sappyseed = ['9M'];
 
-// Nature Power is available to every Pokemon in this custom NatDex.
-for (const data of Object.values(Learnsets)) {
-	if (data.learnset && !data.learnset.naturepower?.length) data.learnset.naturepower = ['9M'];
+function getNatDexTier(id: string): string {
+	const directFormatsData = (FormatsData as any)[id];
+	if (directFormatsData?.natDexTier || directFormatsData?.tier) {
+		return directFormatsData.natDexTier || directFormatsData.tier;
+	}
+
+	const species = (Pokedex as any)[id];
+	if (!species) return 'Illegal';
+	const fallbackIds = typeof species.battleOnly === 'string' ?
+		[species.battleOnly] : id.endsWith('totem') ? [id.slice(0, -5)] :
+		species.baseSpecies ? [species.baseSpecies] : [];
+	for (const fallbackId of fallbackIds) {
+		const fallbackFormatsData = (FormatsData as any)[String(fallbackId).toLowerCase().replace(/[^a-z0-9]/g, '')];
+		if (fallbackFormatsData) return fallbackFormatsData.natDexTier || fallbackFormatsData.tier || 'Illegal';
+	}
+	return 'Illegal';
+}
+
+// Nature Power is added to entries that are legal in the National Dex roster.
+for (const [id, data] of Object.entries(Learnsets)) {
+	if (data.learnset && getNatDexTier(id) !== 'Illegal' && !data.learnset.naturepower?.length) {
+		data.learnset.naturepower = ['9M'];
+	}
 }

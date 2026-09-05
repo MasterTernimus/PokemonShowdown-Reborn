@@ -54,10 +54,17 @@ describe('Custom G-Max and NatDex audit', function () {
 		assert.deepEqual(failures, []);
 	});
 
-	it('gives every learnset entry Nature Power in the custom NatDex', function () {
-		const entries = Object.entries(common.gen(9).dex.data.Learnsets).filter(([, data]) => data.learnset);
-		const missing = entries.filter(([, data]) => !(data.learnset.naturepower || []).length).map(([id]) => id);
-		assert(entries.length >= 1200, `Expected the full learnset table, got ${entries.length} entries`);
+	it('adds Nature Power to NatDex-legal learnsets only', function () {
+		const dex = common.gen(9).dex;
+		const entries = Object.entries(dex.data.Learnsets).filter(([id, data]) =>
+			data.learnset && dex.species.get(id).exists
+		);
+		const natDexEntries = entries.filter(([id]) => dex.species.get(id).natDexTier !== 'Illegal');
+		const missing = natDexEntries.filter(([, data]) => !(data.learnset.naturepower || []).length).map(([id]) => id);
+		const nonNatDexEntries = entries.filter(([id]) => dex.species.get(id).natDexTier === 'Illegal');
+		const stillMissingOutsideNatDex = nonNatDexEntries.filter(([, data]) => !data.learnset.naturepower).map(([id]) => id);
+		assert(natDexEntries.length >= 900, `Expected the NatDex roster to contain at least 900 learnset entries, got ${natDexEntries.length}`);
+		assert(stillMissingOutsideNatDex.length > 0, 'Expected at least one non-NatDex entry to remain without Nature Power');
 		assert.deepEqual(missing, []);
 	});
 });
