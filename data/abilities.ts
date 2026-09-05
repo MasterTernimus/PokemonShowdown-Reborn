@@ -6394,11 +6394,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			this.dex.abilities.get('technician').onBasePower?.call(this, basePower, pokemon, target, move);
 			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) modifier *= 1.2;
-			if (move.flags['sound']) modifier *= 1.3;
+			if (move.flags['sound']) modifier *= 1.5;
+			if (move.category !== 'Status' && pokemon.hasType(move.type)) modifier *= 1.2;
 			if (modifier !== 1) return this.chainModify(modifier);
+		},
+		onAllyBasePowerPriority: 8,
+		onAllyBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('resonanceforce').onAllyBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onModifyMove(move, pokemon) {
+			return this.dex.abilities.get('resonanceforce').onModifyMove?.call(this, move, pokemon);
+		},
+		onAnyTryHit(target, source, move) {
+			return this.dex.abilities.get('resonanceforce').onAnyTryHit?.call(this, target, source, move);
 		},
 		onTryHit(target, source, move) {
 			return this.dex.abilities.get('voltabsorb').onTryHit?.call(this, target, source, move);
