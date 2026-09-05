@@ -16151,8 +16151,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10314,
 	},
 	bogbody: {
-		onDamagingHit(damage, target, source, move) {
-			return this.dex.abilities.get('electromorphosis').onDamagingHit?.call(this, damage, target, source, move);
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			return this.dex.abilities.get('thickfat').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			return this.dex.abilities.get('thickfat').onSourceModifySpA?.call(this, atk, attacker, defender, move);
 		},
 		onTryHit(target, source, move) {
 			return this.dex.abilities.get('dryskin').onTryHit?.call(this, target, source, move);

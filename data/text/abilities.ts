@@ -2645,8 +2645,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	bogbody: {
 		name: "Bog Body",
-		desc: "This Pokemon has Electromorphosis, Levitate, and Dry Skin's effects.",
-		shortDesc: "Electromorphosis + Levitate + Dry Skin.",
+		desc: "This Pokemon has Thick Fat, Levitate, and Dry Skin's effects.",
+		shortDesc: "Thick Fat + Levitate + Dry Skin.",
 	},
 	frostsiren: {
 		name: "Frost Siren",
