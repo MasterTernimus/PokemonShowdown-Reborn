@@ -248,6 +248,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10346,
 	},
+	naturalrecovery: {
+		onCheckShow(pokemon) {
+			this.dex.abilities.get('naturalcure').onCheckShow?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			this.dex.abilities.get('naturalcure').onSwitchOut?.call(this, pokemon);
+			this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('naturalcure').onResidual?.call(this, pokemon);
+		},
+		flags: {},
+		name: "Natural Recovery",
+		rating: 4.5,
+		num: 10389,
+	},
 	unstableevo: {
 		onTryHitPriority: 1,
 		onStart(pokemon) {
@@ -2657,20 +2673,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	witheringshell: {
 		onCheckShow(pokemon) {
-			this.dex.abilities.get('selfrepair').onCheckShow?.call(this, pokemon);
+			this.dex.abilities.get('naturalrecovery').onCheckShow?.call(this, pokemon);
 		},
 		onSwitchOut(pokemon) {
-			this.dex.abilities.get('selfrepair').onSwitchOut?.call(this, pokemon);
+			this.dex.abilities.get('naturalrecovery').onSwitchOut?.call(this, pokemon);
 		},
 		onDamagingHit(damage, target, source, move) {
 			this.dex.abilities.get('crumblingshell').onDamagingHit?.call(this, damage, target, source, move);
-			this.dex.abilities.get('weakarmor').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onTryHit(pokemon, target, move) {
+			return this.dex.abilities.get('sturdy').onTryHit?.call(this, pokemon, target, move);
+		},
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('sturdy').onDamage?.call(this, damage, target, source, effect);
 		},
 		onResidual(pokemon) {
-			this.dex.abilities.get('selfrepair').onResidual?.call(this, pokemon);
-		},
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
+			this.dex.abilities.get('naturalrecovery').onResidual?.call(this, pokemon);
 		},
 		flags: {},
 		name: "Withering Shell",
@@ -5024,10 +5043,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	adaptivepower: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			return this.dex.abilities.get('purepower').onModifyAtk?.call(this, atk, pokemon);
-		},
-		onModifySpA(spa, pokemon) {
-			return this.dex.abilities.get('purepower').onModifySpA?.call(this, spa, pokemon);
+			return this.dex.abilities.get('hugepower').onModifyAtk?.call(this, atk, pokemon);
 		},
 		onDamage(damage, target, source, effect) {
 			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
@@ -5635,10 +5651,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	warship: {
 		onModifySpe(spe, pokemon) {
-			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) return this.chainModify(2);
+			return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon);
 		},
-		onDamage(damage, target, source, effect) {
-			if (effect?.id === 'recoil') return false;
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onAnyModifyBoost(boosts, pokemon) {
 			const unawareUser = this.effectState.target;
@@ -5715,6 +5735,77 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Heat Coil",
 		rating: 3.5,
 		num: 10058,
+	},
+	sweetdecay: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk) {
+			return this.dex.abilities.get('hustle').onModifyAtk?.call(this, atk);
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			return this.dex.abilities.get('hustle').onSourceModifyAccuracy?.call(this, accuracy, target, source, move);
+		},
+		onStart(pokemon) {
+			return this.dex.abilities.get('gluttony').onStart?.call(this, pokemon);
+		},
+		onDamage(damage, target, source, effect) {
+			this.dex.abilities.get('gluttony').onDamage?.call(this, damage, target);
+			return this.dex.abilities.get('corrosion').onDamage?.call(this, damage, target, source, effect);
+		},
+		onModifyMove(move) {
+			return this.dex.abilities.get('corrosion').onModifyMove?.call(this, move);
+		},
+		onNegateImmunity(pokemon, type) {
+			return this.dex.abilities.get('corrosion').onNegateImmunity?.call(this, pokemon, type);
+		},
+		onFoeAfterSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('corrosion').onFoeAfterSetStatus?.call(this, status, target, source, effect);
+		},
+		onAllySetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('sweetveil').onAllySetStatus?.call(this, status, target, source, effect);
+		},
+		onAllyTryAddVolatile(status, target, source, effect) {
+			return this.dex.abilities.get('sweetveil').onAllyTryAddVolatile?.call(this, status, target, source, effect);
+		},
+		flags: {breakable: 1},
+		name: "Sweet Decay",
+		rating: 4,
+		num: 10061,
+	},
+	bakedbliss: {
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('wellbakedbody').onTryHit?.call(this, target, source, move);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('wellbakedbody').onResidual?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('thickfat').onImmunity?.call(this, type, pokemon);
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			return this.dex.abilities.get('thickfat').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			return this.dex.abilities.get('thickfat').onSourceModifySpA?.call(this, spa, attacker, defender, move);
+		},
+		onStart(pokemon) {
+			return this.dex.abilities.get('gluttony').onStart?.call(this, pokemon);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('gluttony').onDamage?.call(this, damage, target);
+		},
+		onAllySetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('sweetveil').onAllySetStatus?.call(this, status, target, source, effect);
+		},
+		onAllyTryAddVolatile(status, target, source, effect) {
+			return this.dex.abilities.get('sweetveil').onAllyTryAddVolatile?.call(this, status, target, source, effect);
+		},
+		flags: {breakable: 1},
+		name: "Baked Bliss",
+		rating: 4,
+		num: 10062,
 	},
 	sweetsanctuary: {
 		onStart(pokemon) { this.dex.abilities.get('pastelveil').onStart?.call(this, pokemon); },
@@ -6556,7 +6647,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return !!pokemon.status;
 		},
 		onSwitchOut(pokemon) {
-			return this.dex.abilities.get('naturalcure').onSwitchOut?.call(this, pokemon);
+			return this.dex.abilities.get('naturalrecovery').onSwitchOut?.call(this, pokemon);
 		},
 		onModifyMovePriority: -2,
 		onModifyMove(move) {
@@ -7776,6 +7867,56 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Hydra Bond",
 		rating: 4.5,
 		num: 10000,
+	},
+	hydraheart: {
+		onModifyMove(move, source) {
+			return this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('hydrabond').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
+		},
+		onDamagingHit(damage, target, source, effect) {
+			return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, effect);
+		},
+		flags: {breakable: 1},
+		name: "Hydra Heart",
+		rating: 4.5,
+		num: 10063,
+	},
+	sweetresonance: {
+		onStart(pokemon) {
+			this.dex.abilities.get('supersweetsyrup').onStart?.call(this, pokemon);
+			const ally = pokemon.adjacentAllies()[0];
+			if (ally) ally.addVolatile('dragoncheer', pokemon, this.dex.moves.get('dragoncheer'));
+		},
+		onTakeItem(item, pokemon, source) {
+			return this.dex.abilities.get('supersweetsyrup').onTakeItem?.call(this, item, pokemon, source);
+		},
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('supersweetsyrup').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onModifyMove(move, source) {
+			return this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('hydrabond').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
+		},
+		flags: {breakable: 1},
+		name: "Sweet Resonance",
+		rating: 4.5,
+		num: 10064,
 	},
 	imperialmandate: {
 		checkMode(pokemon) {
@@ -12916,6 +13057,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10353,
 	},
+	glacialmass: {
+		flags: {},
+		name: "Glacial Mass",
+		rating: 4.5,
+		num: 10388,
+	},
 	riftdancer: {
 		flags: {},
 		name: "Rift Dancer",
@@ -14007,8 +14154,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	supersweetsyrup: {
 		onStart(pokemon) {
-			if (pokemon.syrupTriggered) return;
-			pokemon.syrupTriggered = true;
 			this.add('-ability', pokemon, 'Supersweet Syrup');
 			for (const target of pokemon.adjacentFoes()) {
 				if (target.volatiles['substitute']) {
@@ -14020,6 +14165,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('mistyterrain')) {
 				this.boost({ accuracy: -1 });
 			}
+		},
+		onTakeItem(item, pokemon, source) {
+			return this.dex.abilities.get('stickyhold').onTakeItem?.call(this, item, pokemon, source);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source || source === target) return;
+			source.addVolatile('embargo', target, this.effect);
 		},
 		flags: {},
 		name: "Supersweet Syrup",

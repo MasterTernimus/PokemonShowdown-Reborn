@@ -66921,7 +66921,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	lilligant: {
 		learnset: {
-			shadowball: ["9M"], fierydance: ["9M"], aurasphere: ["9M"], flowertrick: ["9M"], axekick: ["9M"], petalblizzard: ["9M"],
+			shadowball: ["9M"], aurasphere: ["9M"], flowertrick: ["9M"], axekick: ["9M"],
 			absorb: ["9L1", "8L1"],
 			afteryou: ["9L27", "8L1", "7T", "6T", "5T"],
 			alluringvoice: ["9M"],
@@ -67023,7 +67023,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	lilliganthisui: {
 		learnset: {
-			shadowball: ["9M"], fierydance: ["9M"], aurasphere: ["9M"], flowertrick: ["9M"], axekick: ["9M"], petalblizzard: ["9M"],
+			shadowball: ["9M"], aurasphere: ["9M"], flowertrick: ["9M"],
 			absorb: ["9L1"],
 			acrobatics: [],
 			aerialace: [],
@@ -102249,21 +102249,23 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hail: ["9M"],
 			hardpress: ["9M"],
 			headbutt: ["9M"],
+			headlongrush: ["9M"],
 			heavyslam: ["9M"],
 			helpinghand: ["9M"],
 			hiddenpower: ["9M"],
-			highhorsepower: [],
+			highhorsepower: ["9M"],
 			hyperbeam: ["9M"],
 			hypervoice: ["9M"],
 			iceball: ["9M"],
 			icebeam: ["9M"],
 			icefang: ["9M"],
 			icepunch: ["9M"],
+			iciclecrash: ["9M"],
 			iceshard: ["9L12"],
 			icespinner: ["9L44"],
 			iciclespear: ["9M"],
 			icywind: ["9M"],
-			knockoff: [],
+			knockoff: ["9M"],
 			liquidation: ["9M"],
 			mountaingale: ["9L62"],
 			payback: ["9M"],
@@ -102275,6 +102277,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			return: ["9M"],
 			rocksmash: ["9M"],
 			secretpower: ["9M"],
+			shoreup: ["9M"],
 			sleeptalk: ["9M"],
 			snowscape: ["9M"],
 			steelroller: ["9M"],
@@ -113978,6 +113981,11 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 }
 
 const latestLearnsetAdditions: {[id: string]: string[]} = {
+	drednaw: ['psychicfangs', 'icefang', 'crunch'],
+	flapple: ['firstimpression', 'victorydance', 'bulletseed', 'gravapple', 'fellstinger', 'dragonenergy', 'gunkshot', 'poisonjab', 'acidspray', 'venoshock', 'toxic'],
+	appletun: ['junglehealing', 'dragonenergy', 'ragepowder'],
+	dipplin: ['naturepower', 'bodypress', 'irondefense'],
+	hydrapple: ['triattack', 'flamethrower', 'fireblast', 'irondefense'],
 	gligar: ['barbbarrage'],
 	gliscor: ['barbbarrage', 'poisonfang', 'toxicthread', 'sludgewave', 'clearsmog', 'poisonjab', 'poisontail', 'venomdrench'],
 	alakazam: ['darkpulse', 'snarl'],
@@ -114815,3 +114823,8 @@ for (const [id, moves] of Object.entries(CustomLearnsetRemovals)) {
 // Sappy Seed was reassigned from Abomasnow to Cradily.
 const cradilyLearnset = (Learnsets as any).cradily?.learnset;
 if (cradilyLearnset) cradilyLearnset.sappyseed = ['9M'];
+
+// Nature Power is available to every Pokemon in this custom NatDex.
+for (const data of Object.values(Learnsets)) {
+	if (data.learnset && !data.learnset.naturepower?.length) data.learnset.naturepower = ['9M'];
+}

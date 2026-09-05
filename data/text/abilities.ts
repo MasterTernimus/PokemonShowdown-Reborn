@@ -719,8 +719,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	witheringshell: {
 		name: "Withering Shell",
-		desc: "This Pokemon has Crumbling Shell, Self Repair, and Weak Armor's effects. Physical hits set Stealth Rock on the attacker's side except in water fields, lower this Pokemon's Defense by 1, and raise its Speed by 2. It restores 1/16 max HP each turn, is immune to Hail and Sandstorm damage, and cures status while restoring 1/3 max HP when switching out.",
-		shortDesc: "Crumbling Shell + Self Repair + Weak Armor.",
+		desc: "This Pokemon has Crumbling Shell, Natural Recovery, and Sturdy's effects. Physical hits set Stealth Rock on the attacker's side except in water fields. It cures status and restores 1/3 max HP when switching out. If it is at full HP, it survives one hit with at least 1 HP, and OHKO moves fail.",
+		shortDesc: "Crumbling Shell + Natural Recovery + Sturdy.",
 	},
 	iceabsorb: {
 		name: "Ice Absorb",
@@ -984,8 +984,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	warship: {
 		name: "War Ship",
-		desc: "If Rain is active, this Pokemon's Speed is doubled. This Pokemon does not take recoil damage and ignores opposing stat boosts like Unaware.",
-		shortDesc: "Swift Swim + Rock Head + Unaware.",
+		desc: "This Pokemon has Swift Swim, Unaware, Solid Rock, and Strong Jaw's effects. In rain, its Speed is doubled, it ignores opposing stat boosts, takes reduced damage from attacks, and bite-based moves have 1.5x power.",
+		shortDesc: "Swift Swim + Unaware + Solid Rock + Strong Jaw.",
 	},
 	furnaceengine: {
 		name: "Furnace Engine",
@@ -1001,6 +1001,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Heat Coil",
 		desc: "This Pokemon has Speed Boost, Magma Armor, and Flame Body's effects.",
 		shortDesc: "Speed Boost + Magma Armor + Flame Body.",
+	},
+	sweetdecay: {
+		name: "Sweet Decay",
+		desc: "This Pokemon has Hustle, Gluttony, Sweet Veil, and Corrosion's effects.",
+		shortDesc: "Hustle + Gluttony + Sweet Veil + Corrosion.",
+	},
+	bakedbliss: {
+		name: "Baked Bliss",
+		desc: "This Pokemon has Well-Baked Body, Thick Fat, Sweet Veil, and Gluttony's effects.",
+		shortDesc: "Well-Baked Body + Thick Fat + Sweet Veil + Gluttony.",
 	},
 	sweetsanctuary: {
 		name: "Sweet Sanctuary",
@@ -1116,8 +1126,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	falsedevotion: {
 		name: "False Devotion",
-		desc: "This Pokemon has Serene Grace, Natural Cure, and Prankster's effects.",
-		shortDesc: "Built-in Serene Grace, Natural Cure, and Prankster.",
+		desc: "This Pokemon has Serene Grace, Natural Recovery, and Prankster's effects.",
+		shortDesc: "Built-in Serene Grace, Natural Recovery, and Prankster.",
 	},
 	blinddevotion: {
 		name: "Blind Devotion",
@@ -1858,6 +1868,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		activate: "  ([POKEMON] is cured by its Natural Cure!)",
 	},
+	naturalrecovery: {
+		name: "Natural Recovery",
+		desc: "This Pokemon has Natural Cure and Regenerator's effects.",
+		shortDesc: "Natural Cure + Regenerator.",
+	},
 	neuroforce: {
 		name: "Neuroforce",
 		desc: "This Pokemon's attacks that are super effective against the target have their damage multiplied by 1.25.",
@@ -1934,8 +1949,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	adaptivepower: {
 		name: "Adaptive Power",
-		desc: "This Pokemon has Pure Power, Magic Guard, and Regenerator's effects.",
-		shortDesc: "Pure Power + Magic Guard + Regenerator.",
+		desc: "This Pokemon has Huge Power, Magic Guard, and Regenerator's effects.",
+		shortDesc: "Huge Power + Magic Guard + Regenerator.",
 	},
 	dreamsickness: {
 		name: "Dream Sickness",
@@ -2698,6 +2713,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Protean, Poison Touch, and Regenerator's effects.",
 		shortDesc: "Protean + Poison Touch + Regenerator.",
 	},
+	glacialmass: {
+		name: "Glacial Mass",
+		desc: "This Pokemon has Heavy Metal and Thick Fat's effects.",
+		shortDesc: "Heavy Metal + Thick Fat.",
+	},
 	riftdancer: {
 		name: "Rift Dancer",
 		desc: "This Pokemon has Opportunist, Chlorophyll, and Dancer's effects.",
@@ -2949,7 +2969,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supersweetsyrup: {
 		name: "Supersweet Syrup",
-		shortDesc: "On switch-in, this Pokemon lowers the evasiveness of opponents 1 stage. Once per battle.",
+		desc: "On switch-in, this Pokemon lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. This Pokemon has Sticky Hold. When this Pokemon is hit by an attack, the attacker is Embargoed for 5 turns.",
+		shortDesc: "On switch-in, lowers adjacent foes' evasiveness 1 stage; Sticky Hold; attackers are Embargoed for 5 turns.",
 
 		start: "  A supersweet aroma is wafting from the syrup covering [POKEMON]!",
 	},
@@ -3438,6 +3459,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Hydra Bond",
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power.",
 		shortDesc: "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x.",
+	},
+	hydraheart: {
+		name: "Hydra Heart",
+		desc: "This Pokemon has Hydra Bond, Self Sufficient, and Stamina's effects.",
+		shortDesc: "Hydra Bond + Self Sufficient + Stamina.",
+	},
+	sweetresonance: {
+		name: "Sweet Resonance",
+		desc: "On switch-in, this Pokemon has Supersweet Syrup, Self Sufficient, and Hydra Bond's effects, and gives its adjacent ally Dragon Cheer.",
+		shortDesc: "Supersweet Syrup + Self Sufficient + Hydra Bond; ally gets Dragon Cheer on entry.",
 	},
 	imperialmandate: {
 		name: "Imperial Mandate",
