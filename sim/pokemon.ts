@@ -2170,7 +2170,7 @@ export class Pokemon {
 			prismscale: ['marvelscale', 'dragonize', 'selfsufficient'],
 			queensguard: ['contrary', 'shedskin', 'intimidate'],
 			rainsovereign: ['drizzle'],
-		riotamp: ['punkrock', 'galvanize', 'resonanceforce', 'technician', 'voltabsorb'],
+riotamp: ['proficient', 'galvanize', 'resonanceforce', 'voltabsorb'],
 			mourningsnow: ['snowwarning', 'icebody'],
 			venombastion: ['stamina'],
 			draconicforce: ['dragonize', 'strongjaw', 'moldbreaker'],

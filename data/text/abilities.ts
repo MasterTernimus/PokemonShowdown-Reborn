@@ -589,8 +589,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	riotamp: {
 		name: "Riot Amp",
-		desc: "This Pokemon has Punk Rock, Galvanize, Resonance Force, Technician, and Volt Absorb's effects.",
-		shortDesc: "Punk Rock + Galvanize + Resonance Force + Technician + Volt Absorb.",
+		desc: "This Pokemon has Proficient, Galvanize, Resonance Force, and Volt Absorb's effects.",
+		shortDesc: "Proficient + Galvanize + Resonance Force + Volt Absorb.",
 	},
 	relicarmor: {
 		name: "Relic Armor",
