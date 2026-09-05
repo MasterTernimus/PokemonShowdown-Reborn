@@ -2661,6 +2661,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the user's side has its status condition cured, even if they have a substitute.",
 		shortDesc: "Base move affects power. Allies: status cured.",
 	},
+	gmaxsyrupfall: {
+		name: "G-Max Syrupfall",
+		desc: "This 120 BP Special move deals damage and applies Syrup Bomb's syrup effect to all opposing Pokemon for 4 turns.",
+		shortDesc: "120 BP Special; all foes get Syrup for 4 turns.",
+	},
 	gmaxtartness: {
 		name: "G-Max Tartness",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, the evasiveness of each Pokemon on the opposing side is lowered by 1 stage, even if they have a substitute.",

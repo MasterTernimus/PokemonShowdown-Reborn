@@ -267,7 +267,6 @@ export class Pokemon {
 	heroMessageDisplayed: boolean;
 	swordBoost: boolean;
 	shieldBoost: boolean;
-	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
 
 	/** Have this pokemon's Start events run yet? (Start events run every switch-in) */
@@ -500,7 +499,6 @@ export class Pokemon {
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.shieldBoost = false;
-		this.syrupTriggered = false;
 		this.stellarBoostedTypes = [];
 		this.isStarted = false;
 		this.duringMove = false;
@@ -516,10 +514,15 @@ export class Pokemon {
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
 		const pikachuGmaxForms = ['pikachu', 'pikachucosplay', 'pikachurockstar', 'pikachubelle', 'pikachupopstar', 'pikachuphd', 'pikachulibre', 'pikachupartner', 'pikachustarter'];
 		const originalSpecies = toID(this.set.species);
+		let defaultGmax = this.baseSpecies.id + 'gmax';
+		if (!this.battle.dex.species.get(defaultGmax).exists) {
+			const declaredBaseSpecies = this.battle.dex.species.get(this.baseSpecies.baseSpecies);
+			if (declaredBaseSpecies.exists) defaultGmax = declaredBaseSpecies.id + 'gmax';
+		}
 		this.canDynamax = this.baseSpecies.id === 'machampalt' ? 'machampgmaxalt' :
 			this.baseSpecies.id === 'grimmsnarlazzy' ? 'grimmsnarlgmaxazzy' :
 			['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) ? 'eeveegmax' :
-			pikachuGmaxForms.includes(this.baseSpecies.id) ? 'pikachugmax' : this.baseSpecies.id + 'gmax';
+			pikachuGmaxForms.includes(this.baseSpecies.id) ? 'pikachugmax' : defaultGmax;
 		if (['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) && this.ability === 'unstableevo') {
 			this.canMegaEvo = false;
 			this.canMegaEvoX = false;
@@ -2067,7 +2070,8 @@ export class Pokemon {
 			lunardread: ['magicguard', 'pressure'],
 			scavenger: ['overcoat', 'bigpecks', 'regenerator'],
 			toxicspines: ['toxicdebris', 'corrosion', 'merciless'],
-			witheringshell: ['crumblingshell', 'selfrepair', 'weakarmor'],
+			falsedevotion: ['serenegrace', 'naturalrecovery', 'prankster'],
+			witheringshell: ['crumblingshell', 'naturalrecovery', 'sturdy'],
 			argentdevotion: ['armorize', 'swornduty'],
 			fluffyevo: ['overcoat'],
 			bonewarrior: ['battlearmor', 'selfsufficient'],
@@ -2099,7 +2103,11 @@ export class Pokemon {
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],
 			ragingfists: ['ultraego', 'scrappy'],
 			aquashell: ['waterbubble', 'waterveil'],
-			warship: ['swiftswim', 'rockhead', 'unaware'],
+			warship: ['swiftswim', 'unaware', 'solidrock', 'strongjaw'],
+			sweetdecay: ['hustle', 'gluttony', 'sweetveil', 'corrosion'],
+			bakedbliss: ['wellbakedbody', 'thickfat', 'sweetveil', 'gluttony'],
+			hydraheart: ['hydrabond', 'selfsufficient', 'stamina'],
+			sweetresonance: ['supersweetsyrup', 'selfsufficient', 'hydrabond'],
 		sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 			auroraresonance: ['liquidvoice', 'waterabsorb', 'hydration'],
 			windchime: ['armorize', 'punkrock', 'levitate'],
@@ -2207,6 +2215,9 @@ riotamp: ['proficient', 'galvanize', 'resonanceforce', 'voltabsorb'],
 			pendulumswing: ['insomnia', 'filter'],
 			nightmarepulse: ['pendulumswing', 'nightrealm'],
 			pulsewaste: ['protean', 'poisontouch', 'regenerator'],
+			glacialmass: ['heavymetal', 'thickfat'],
+			supersweetsyrup: ['stickyhold'],
+			naturalrecovery: ['naturalcure', 'regenerator'],
 			riftdancer: ['opportunist', 'chlorophyll', 'dancer'],
 			curseddoll: ['toughclaws', 'shadowshield'],
 			apexvenom: ['strongjaw', 'shedskin'],
