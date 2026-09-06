@@ -16,6 +16,38 @@ describe('Composite ability cleanup', function () {
 		assert.equal(ability.onAnyTryHeal, undefined);
 	});
 
+	it('should add Pollen Bloom hooks to Ancient Bloom', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const ability = battle.dex.abilities.get('ancientbloom');
+		assert(ability.onAnyModifyBoost);
+		assert(ability.onSourceModifyAtk);
+		assert(ability.onSourceModifySpA);
+		assert(ability.onResidual);
+		assert(ability.onImmunity);
+	});
+
+	it('should give Fortress Shell Water Barrage while retaining its hidden Friend Guard hook', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const ability = battle.dex.abilities.get('fortressshell');
+		assert(ability.onModifyMove);
+		assert(ability.onResidual);
+		assert(ability.onAnyModifyDamage);
+		assert(ability.onSourceModifyDamage);
+	});
+
+	it('should give Burning Crown Wildfire Core while retaining its hidden Filter hook', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const ability = battle.dex.abilities.get('burningcrown');
+		assert(ability.onUpdate);
+		assert(ability.onModifyType);
+		assert(ability.onModifySTAB);
+		assert(ability.onAfterMove);
+		assert(ability.onTryHit);
+		assert(ability.onSourceModifyAtk);
+		assert(ability.onSourceModifySpA);
+		assert(ability.onSourceModifyDamage);
+	});
+
 	it('should not give Water Barrage Water Veil or Aqua Ring hooks', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Blastoise', ability: 'waterbarrage', moves: ['splash']},
