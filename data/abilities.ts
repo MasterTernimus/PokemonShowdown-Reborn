@@ -15324,7 +15324,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	territorial: {
 		onStart(pokemon) {
-			return this.dex.abilities.get('unnerve').onStart?.call(this, pokemon);
+			this.dex.abilities.get('unnerve').onStart?.call(this, pokemon);
+			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
 		},
 		onEnd() {
 			return this.dex.abilities.get('unnerve').onEnd?.call(this);
