@@ -87,6 +87,14 @@ describe('Custom battle data updates', function () {
 		assert(battle.log.some(line => line.includes('|-end|p1a: Meowscarada|Illusion')));
 	});
 
+	it('should update Attack and Speed for every Oricorio form', function () {
+		for (const species of ['Oricorio', 'Oricorio-Pom-Pom', "Oricorio-Pa'u", 'Oricorio-Sensu']) {
+			assert.deepEqual(Dex.species.get(species).baseStats, {
+				hp: 79, atk: 80, def: 75, spa: 98, spd: 75, spe: 93,
+			});
+		}
+	});
+
 	it('should only activate Burning Crown Intimidate once per switch-in', function () {
 		battle = common.createBattle({formatid: 'gen9watersurface'}, [[
 			{species: 'Qwilfish', moves: ['splash']},
