@@ -61,6 +61,22 @@ describe('Raging Beast and related species updates', () => {
 		assert(!lunarDread.hasAbility('intimidate'));
 	});
 
+	it('should provide Territorial with Intimidate alongside its existing effects', () => {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Ursaluna', ability: 'Territorial', moves: ['splash']},
+		], [
+			{species: 'Mew', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const territorial = battle.p1.active[0];
+		const foe = battle.p2.active[0];
+		assert.equal(foe.boosts.atk, -1);
+		assert(territorial.hasAbility('unnerve'));
+		assert(territorial.hasAbility('unaware'));
+		assert(territorial.hasAbility('toughclaws'));
+		assert(territorial.hasAbility('intimidate'));
+	});
+
 	it('should give Relentless Link its Guts effect', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Heracross-Mega', ability: 'Relentless Link', moves: ['splash']},

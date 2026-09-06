@@ -2100,6 +2100,7 @@ export class Pokemon {
 			astralwatcher: ['prankster', 'telepathy', 'defragment', 'frisk'],
 			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce'],
 			lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
+			territorial: ['unnerve', 'unaware', 'toughclaws', 'intimidate'],
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],
 			ragingfists: ['ultraego', 'scrappy'],
 			aquashell: ['waterbubble', 'waterveil'],

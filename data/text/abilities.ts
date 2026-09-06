@@ -3642,8 +3642,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	territorial: {
 		name: "Territorial",
-		desc: "This Pokemon has Unnerve, Unaware, and Tough Claws's effects.",
-		shortDesc: "Unnerve + Unaware + Tough Claws.",
+		desc: "This Pokemon has Unnerve, Unaware, Tough Claws, and Intimidate's effects.",
+		shortDesc: "Unnerve + Unaware + Tough Claws + Intimidate.",
 	},
 	lunardread: {
 		name: "Lunar Dread",

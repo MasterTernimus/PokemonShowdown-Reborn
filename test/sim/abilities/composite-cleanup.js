@@ -57,6 +57,14 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onAnyModifyBoost);
 	});
 
+	it('should give Territorial its Intimidate hook', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const ability = battle.dex.abilities.get('territorial');
+		assert(ability.onStart);
+		assert(ability.onAnyModifyBoost);
+		assert(ability.onBasePower);
+	});
+
 	it('should not give Water Barrage Water Veil or Aqua Ring hooks', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Blastoise', ability: 'waterbarrage', moves: ['splash']},
