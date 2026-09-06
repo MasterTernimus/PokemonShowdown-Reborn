@@ -3627,8 +3627,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	silkendecoy: {
 		name: "Silken Decoy",
-		desc: "On Mega Evolution, this Pokemon spins a protective cocoon. When any Pokemon faints while this Pokemon is active, it spins a cocoon if it does not already have one. The cocoon blocks the next damaging hit, and blocks the remaining hits of that multi-hit move. It also has Insomnia and Self Sufficient's effects.",
-		shortDesc: "One cocoon blocks a damaging hit and the rest of that multi-hit move; Insomnia + Self Sufficient.",
+		desc: "On becoming Mega Ariados, this Pokemon spins a protective cocoon and remembers whether it is still available when switching. When any Pokemon faints while this Pokemon is active, it spins a cocoon if it does not already have one. The cocoon blocks the next damaging hit, and blocks the remaining hits of that multi-hit move. It also has Insomnia and Self Sufficient's effects.",
+		shortDesc: "A persistent cocoon blocks a damaging hit and the rest of that multi-hit move; Insomnia + Self Sufficient.",
 	},
 	strikersmomentum: {
 		name: "Striker's Momentum",

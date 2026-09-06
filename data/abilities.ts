@@ -12178,15 +12178,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	silkendecoy: {
 		onStart(pokemon) {
-			if (pokemon.species.id !== 'ariadosmega' || pokemon.abilityState.silkenDecoyInitialized) return;
-			pokemon.abilityState.silkenDecoyInitialized = true;
-			pokemon.abilityState.silkenDecoyCocoon = true;
-			this.add('-message', `${pokemon.name}'s Silken Decoy spun a protective cocoon.`);
+			if (pokemon.species.id !== 'ariadosmega') return;
+			if (!pokemon.m.silkenDecoyInitialized) {
+				pokemon.m.silkenDecoyInitialized = true;
+				pokemon.m.silkenDecoyCocoon = true;
+				this.add('-message', `${pokemon.name}'s Silken Decoy spun a protective cocoon.`);
+			}
+			pokemon.abilityState.silkenDecoyCocoon = !!pokemon.m.silkenDecoyCocoon;
 		},
 		onAnyFaint(fainted) {
 			const holder = this.effectState.target;
 			if (!holder || holder.fainted || holder.species.id !== 'ariadosmega' || fainted === holder) return;
-			if (holder.abilityState.silkenDecoyCocoon) return;
+			if (holder.m.silkenDecoyCocoon) return;
+			holder.m.silkenDecoyCocoon = true;
 			holder.abilityState.silkenDecoyCocoon = true;
 			this.add('-message', `${holder.name}'s Silken Decoy spun a protective cocoon.`);
 		},
@@ -12195,7 +12199,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (effect?.effectType !== 'Move' || !source || source === target) return;
 			const move = effect as ActiveMove;
 			if (target.abilityState.silkenDecoyBlockedMove === move.id && move.multihit && move.hit > 1) return 0;
-			if (!damage || !target.abilityState.silkenDecoyCocoon) return;
+			if (!damage || !target.m.silkenDecoyCocoon) return;
+			target.m.silkenDecoyCocoon = false;
 			target.abilityState.silkenDecoyCocoon = false;
 			if (move.multihit) target.abilityState.silkenDecoyBlockedMove = move.id;
 			this.add('-message', `${target.name}'s protective cocoon blocked the hit.`);
