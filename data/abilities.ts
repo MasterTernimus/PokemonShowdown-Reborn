@@ -12726,7 +12726,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onType(types, pokemon) {
-			if (pokemon.species.id === 'abysseon') return;
+			if (pokemon.species.id === 'abysseon' || pokemon.species.id === 'divineon') return;
 			if (pokemon.hasAbility('sinisterblaze') &&
 				(this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']))) {
 				if (!types.includes('Ice')) return [...types, 'Ice'];

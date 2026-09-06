@@ -527,7 +527,7 @@ describe('Custom battle data updates', function () {
 		battle = null;
 	});
 
-	it('should not add Ice typing to Abysseon in hail or Icy Field', function () {
+	it('should not add Ice typing to Abysseon or Divineon in hail or Icy Field', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Eevee-Starter', ability: 'sinisterblaze', moves: ['splash']},
 		], [
@@ -544,6 +544,24 @@ describe('Custom battle data updates', function () {
 				battle.field.changeTerrain(condition, abysseon);
 			}
 			assert.false(abysseon.hasType('Ice'), `Abysseon should not gain Ice typing in ${condition}`);
+		}
+
+		battle.destroy();
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Divineon', ability: 'sinisterblaze', moves: ['splash']},
+		], [
+			{species: 'Blissey', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const divineon = battle.p1.active[0];
+		assert.species(divineon, 'Divineon');
+		for (const condition of ['hail', 'icyterrain']) {
+			if (condition === 'hail') {
+				battle.field.setWeather(condition);
+			} else {
+				battle.field.changeTerrain(condition, divineon);
+			}
+			assert.false(divineon.hasType('Ice'), `Divineon should not gain Ice typing in ${condition}`);
 		}
 	});
 
