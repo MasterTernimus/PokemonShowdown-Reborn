@@ -113987,6 +113987,12 @@ const latestLearnsetAdditions: {[id: string]: string[]} = {
 	appletun: ['junglehealing', 'dragonenergy', 'ragepowder'],
 	dipplin: ['naturepower', 'bodypress', 'irondefense'],
 	hydrapple: ['triattack', 'flamethrower', 'fireblast', 'irondefense'],
+	golduck: [
+		'hypnosis', 'triattack', 'simplebeam', 'weatherball', 'futuresight', 'meditate', 'miracleeye',
+		'twinbeam', 'barrier', 'kinesis', 'agility', 'aurasphere', 'aurorabeam', 'blizzard',
+		'calmmind', 'bulkup', 'skullbash', 'disable', 'encore', 'eeriespell', 'flipturn', 'shockwave',
+		'chargebeam', 'zapcannon', 'psychicnoise', 'topsyturvy', 'nastyplot', 'powergem',
+	],
 	gligar: ['barbbarrage'],
 	gliscor: ['barbbarrage', 'poisonfang', 'toxicthread', 'sludgewave', 'clearsmog', 'poisonjab', 'poisontail', 'venomdrench'],
 	alakazam: ['darkpulse', 'snarl'],

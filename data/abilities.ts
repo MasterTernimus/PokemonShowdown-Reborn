@@ -15366,6 +15366,33 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10265,
 	},
+	stillwaters: {
+		onSwitchIn(pokemon) {
+			return this.dex.abilities.get('cloudnine').onSwitchIn?.call(this, pokemon);
+		},
+		onStart(pokemon) {
+			this.dex.abilities.get('cloudnine').onStart?.call(this, pokemon);
+			this.dex.abilities.get('magicguard').onStart?.call(this, pokemon);
+			this.dex.abilities.get('unaware').onStart?.call(this, pokemon);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('cloudnine').onResidual?.call(this, pokemon);
+		},
+		onEnd(pokemon) {
+			return this.dex.abilities.get('cloudnine').onEnd?.call(this, pokemon);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
+		},
+		onAnyModifyBoost(boosts, pokemon) {
+			return this.dex.abilities.get('unaware').onAnyModifyBoost?.call(this, boosts, pokemon);
+		},
+		suppressWeather: true,
+		flags: {breakable: 1},
+		name: "Still Waters",
+		rating: 4,
+		num: 10266,
+	},
 	ragingbeast: {
 		onStart(pokemon) {
 			return this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);

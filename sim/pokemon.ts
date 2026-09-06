@@ -2068,6 +2068,7 @@ export class Pokemon {
 				toxicsink: ['effectspore', 'invigorate'],
 			ragingbeast: ['guts', 'moldbreaker'],
 			lunardread: ['magicguard', 'pressure', 'unaware'],
+			stillwaters: ['cloudnine', 'magicguard', 'unaware'],
 			scavenger: ['overcoat', 'bigpecks', 'regenerator'],
 			toxicspines: ['toxicdebris', 'corrosion', 'merciless'],
 			falsedevotion: ['serenegrace', 'naturalrecovery', 'prankster'],
