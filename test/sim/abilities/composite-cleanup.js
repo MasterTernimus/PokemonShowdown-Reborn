@@ -65,6 +65,18 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onBasePower);
 	});
 
+	it('should give Still Waters Cloud Nine, Magic Guard, and Unaware hooks', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const ability = battle.dex.abilities.get('stillwaters');
+		assert(ability.onSwitchIn);
+		assert(ability.onStart);
+		assert(ability.onResidual);
+		assert(ability.onEnd);
+		assert(ability.onDamage);
+		assert(ability.onAnyModifyBoost);
+		assert.equal(ability.suppressWeather, true);
+	});
+
 	it('should not give Water Barrage Water Veil or Aqua Ring hooks', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Blastoise', ability: 'waterbarrage', moves: ['splash']},
@@ -365,8 +377,9 @@ describe('Composite ability cleanup', function () {
 			windchime: ['armorize', 'punkrock', 'levitate'],
 			hauntedchime: ['elevate', 'windpower', 'cursedbody'],
 			auramaster: ['dualwield', 'innerfocus', 'technician'],
-			lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
-			relentlesshunt: ['levitate'],
+		lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
+		stillwaters: ['cloudnine', 'magicguard', 'unaware'],
+		relentlesshunt: ['levitate'],
 			omenedge: ['sharpness', 'dualwield', 'toughclaws'],
 			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],

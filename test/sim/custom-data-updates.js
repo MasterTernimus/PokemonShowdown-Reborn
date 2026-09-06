@@ -154,6 +154,23 @@ describe('Custom battle data updates', function () {
 		assert.false(dex.species.getLearnsetData('decidueyehisui').learnset.ceaselessedge);
 	});
 
+	it('should expose the requested Golduck stats, abilities, and moves', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const golduck = battle.dex.species.get('Golduck');
+		assert.deepEqual(golduck.baseStats, {hp: 80, atk: 82, def: 78, spa: 115, spd: 80, spe: 90});
+		assert.equal(golduck.bst, 525);
+		assert.deepEqual(golduck.abilities, {0: 'Swift Swim', 1: 'Still Waters', H: 'Defragment'});
+		const learnset = battle.dex.species.getLearnsetData('golduck').learnset;
+		for (const move of [
+			'simplebeam', 'weatherball', 'futuresight', 'meditate', 'miracleeye', 'twinbeam', 'barrier', 'kinesis',
+			'agility', 'aurasphere', 'aurorabeam', 'blizzard', 'calmmind', 'bulkup', 'skullbash', 'disable',
+			'encore', 'eeriespell', 'flipturn', 'shockwave', 'chargebeam', 'zapcannon', 'psychicnoise',
+			'topsyturvy', 'nastyplot', 'powergem',
+		]) {
+			assert(learnset[move], `Golduck should learn ${move}`);
+		}
+	});
+
 	it('should expose the requested Ariados and Mega Ariados stats', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const dex = battle.dex;

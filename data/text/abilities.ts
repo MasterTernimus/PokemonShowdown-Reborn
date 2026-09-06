@@ -3650,6 +3650,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Magic Guard, Pressure, and Unaware's effects.",
 		shortDesc: "Magic Guard + Pressure + Unaware.",
 	},
+	stillwaters: {
+		name: "Still Waters",
+		desc: "This Pokemon has Cloud Nine, Magic Guard, and Unaware's effects.",
+		shortDesc: "Cloud Nine + Magic Guard + Unaware.",
+	},
 	ragingbeast: {
 		name: "Raging Beast",
 		desc: "This Pokemon has Guts and Mold Breaker's effects.",
