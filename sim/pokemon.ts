@@ -2067,7 +2067,7 @@ export class Pokemon {
 				wingedwraith: ['infiltrator', 'galewings'],
 				toxicsink: ['effectspore', 'invigorate'],
 			ragingbeast: ['guts', 'moldbreaker'],
-			lunardread: ['magicguard', 'pressure'],
+			lunardread: ['magicguard', 'pressure', 'unaware'],
 			scavenger: ['overcoat', 'bigpecks', 'regenerator'],
 			toxicspines: ['toxicdebris', 'corrosion', 'merciless'],
 			falsedevotion: ['serenegrace', 'naturalrecovery', 'prankster'],

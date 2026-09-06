@@ -57,6 +57,7 @@ describe('Raging Beast and related species updates', () => {
 		assert.equal(foe.boosts.atk, 0);
 		assert(lunarDread.hasAbility('magicguard'));
 		assert(lunarDread.hasAbility('pressure'));
+		assert(lunarDread.hasAbility('unaware'));
 		assert(!lunarDread.hasAbility('intimidate'));
 	});
 

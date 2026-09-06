@@ -48,6 +48,15 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onSourceModifyDamage);
 	});
 
+	it('should give Lunar Dread Unaware while retaining Magic Guard and Pressure', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		const ability = battle.dex.abilities.get('lunardread');
+		assert(ability.onStart);
+		assert(ability.onDamage);
+		assert(ability.onDeductPP);
+		assert(ability.onAnyModifyBoost);
+	});
+
 	it('should not give Water Barrage Water Veil or Aqua Ring hooks', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Blastoise', ability: 'waterbarrage', moves: ['splash']},
