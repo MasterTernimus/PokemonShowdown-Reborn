@@ -4013,6 +4013,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('wildfirecore').onSourceModifySpA?.call(this, spa, attacker, defender, move);
 		},
 		onModifyMove(move) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
 			move.ignoreAbility = true;
 			move.ignoreDefensive = true;
 			move.infiltrates = true;
@@ -6718,6 +6719,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10024,
 	},
 	pollenbloom: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('unaware').onStart?.call(this, pokemon);
+		},
+		onAnyModifyBoost(boosts, pokemon) {
+			return this.dex.abilities.get('unaware').onAnyModifyBoost?.call(this, boosts, pokemon);
+		},
 		onImmunity(type, pokemon) {
 			return this.dex.abilities.get('thickfat').onImmunity?.call(this, type, pokemon);
 		},

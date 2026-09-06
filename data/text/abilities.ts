@@ -704,8 +704,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		name: "Atrocity",
-		desc: "This Ability cannot be suppressed and has Wildfire Core and Self Sufficient's effects. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities and defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. Each damaging hit restores 1/4 of the damage dealt, with no per-hit cap. In Cold Eclipse, its damaging moves gain another 1.3x boost, and its Defense and Special Defense become 1.5x.",
-		shortDesc: "Wildfire Core + Self Sufficient; damaging hits heal 1/4 damage.",
+		desc: "This Ability cannot be suppressed and has Wildfire Core, Self Sufficient, and Mold Breaker's effects. This Pokemon's damaging moves have 1.3x power, +1 critical hit ratio, ignore Abilities and defensive stat boosts, and bypass Substitute, Reflect, Light Screen, and Aurora Veil. Its Defense and Special Defense are 1.3x. Each damaging hit restores 1/4 of the damage dealt, with no per-hit cap. In Cold Eclipse, its damaging moves gain another 1.3x boost, and its Defense and Special Defense become 1.5x.",
+		shortDesc: "Wildfire Core + Self Sufficient + Mold Breaker; damaging hits heal 1/4 damage.",
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -3497,8 +3497,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
-		desc: "This Pokemon has Thick Fat and Proficient's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Grass immunities; this Pokemon heals the damage dealt by that chip.",
-		shortDesc: "Thick Fat + Proficient; Grass scaling chip heals the user for damage dealt.",
+		desc: "This Pokemon has Thick Fat, Proficient, and Unaware's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Grass immunities; this Pokemon heals the damage dealt by that chip.",
+		shortDesc: "Thick Fat + Proficient + Unaware; Grass scaling chip heals the user for damage dealt.",
 	},
 	waterbarrage: {
 		name: "Water Barrage",
