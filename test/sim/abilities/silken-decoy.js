@@ -20,8 +20,46 @@ describe('Silken Decoy', function () {
 		assert.false.hurts(ariados, () => battle.makeChoices('move splash mega', 'move iciclespear'));
 		assert.species(ariados, 'Ariados-Mega');
 		assert.equal(ariados.ability, 'silkendecoy');
+		assert.false(ariados.m.silkenDecoyCocoon);
 		assert.false(ariados.abilityState.silkenDecoyCocoon);
 		assert(battle.log.some(line => line.includes("Silken Decoy spun a protective cocoon")));
 		assert(battle.log.some(line => line.includes("protective cocoon blocked the hit")));
+	});
+
+	it('remembers an unused cocoon through switching', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Ariados', ability: 'Neutralization', item: 'Aridiate', moves: ['Splash']},
+			{species: 'Magikarp', moves: ['Splash']},
+		], [
+			{species: 'Magikarp', moves: ['Splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move splash mega', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+
+		const ariados = battle.p1.active[0];
+		assert.species(ariados, 'Ariados-Mega');
+		assert(ariados.m.silkenDecoyCocoon);
+		assert.equal(battle.log.filter(line => line.includes("Silken Decoy spun a protective cocoon")).length, 1);
+	});
+
+	it('does not restore a spent cocoon after switching', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Ariados', ability: 'Neutralization', item: 'Aridiate', moves: ['Splash']},
+			{species: 'Magikarp', moves: ['Splash']},
+		], [
+			{species: 'Cloyster', moves: ['Icicle Spear', 'Splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move splash mega', 'move iciclespear');
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+
+		const ariados = battle.p1.active[0];
+		assert.species(ariados, 'Ariados-Mega');
+		assert.false(ariados.m.silkenDecoyCocoon);
+		assert.false(ariados.abilityState.silkenDecoyCocoon);
+		assert.equal(battle.log.filter(line => line.includes("Silken Decoy spun a protective cocoon")).length, 1);
 	});
 });
