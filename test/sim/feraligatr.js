@@ -67,4 +67,24 @@ describe('Feraligatr custom data', function () {
 		assert(feraligatr.hasAbility('filter'));
 		assert(battle.log.some(line => line.includes('G-Max Death Roll')));
 	});
+
+	it('keeps Water Veil Aqua Ring healing through G-Max', function () {
+		battle = common.createBattle({formatid: 'gen9doublesmistyfieldadrienn'}, [[
+			{species: 'Feraligatr', ability: 'waterveil', gigantamax: true, moves: ['bite', 'splash']},
+			{species: 'Wynaut', moves: ['splash']},
+		], [
+			{species: 'Wynaut', moves: ['splash']},
+			{species: 'Wynaut', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1, 2', 'team 1, 2');
+		const feraligatr = battle.p1.active[0];
+		assert(feraligatr.volatiles['aquaring'], 'Water Veil should grant Aqua Ring before G-Max');
+		battle.makeChoices('move splash dynamax, move splash', 'move splash, move splash');
+		assert.species(feraligatr, 'Feraligatr-Gmax');
+		assert(feraligatr.volatiles['aquaring'], 'Water Veil Aqua Ring should survive G-Max');
+		battle.directDamage(100, feraligatr);
+		const hpBeforeHealing = feraligatr.hp;
+		battle.makeChoices('move splash, move splash', 'move splash, move splash');
+		assert(feraligatr.hp > hpBeforeHealing, 'Aqua Ring should heal after G-Max');
+	});
 });
