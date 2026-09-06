@@ -2916,6 +2916,8 @@ export class Battle {
 		case 'runDynamax':
 			const species = action.pokemon.canDynamax;
 			if (species && this.useGimmick(action.pokemon, 'Gigantamax')) {
+				const keepsWaterVeilAquaRing = action.pokemon.ability === 'waterveil' &&
+					!!action.pokemon.volatiles['aquaring'];
 				action.pokemon.formeChange(species, null, true);
 				const gmaxSpecies = this.dex.species.get(species);
 				const gmaxAbility = gmaxSpecies.abilities['0'];
@@ -2932,6 +2934,7 @@ export class Battle {
 					if (action.pokemon.volatiles[volatile]) action.pokemon.removeVolatile(volatile);
 				}
 				action.pokemon.addVolatile('dynamax');
+				if (keepsWaterVeilAquaRing) action.pokemon.addVolatile('aquaring');
 			}
 			break;
 		case 'terastallize':

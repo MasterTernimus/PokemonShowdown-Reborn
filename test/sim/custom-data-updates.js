@@ -527,6 +527,26 @@ describe('Custom battle data updates', function () {
 		battle = null;
 	});
 
+	it('should not add Ice typing to Abysseon in hail or Icy Field', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Eevee-Starter', ability: 'sinisterblaze', moves: ['splash']},
+		], [
+			{species: 'Blissey', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const abysseon = battle.p1.active[0];
+		assert.species(abysseon, 'Abysseon');
+
+		for (const condition of ['hail', 'icyterrain']) {
+			if (condition === 'hail') {
+				battle.field.setWeather(condition);
+			} else {
+				battle.field.changeTerrain(condition, abysseon);
+			}
+			assert.false(abysseon.hasType('Ice'), `Abysseon should not gain Ice typing in ${condition}`);
+		}
+	});
+
 	it('should activate Z Protean before the attack without changing move priority', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Eevee-Starter', ability: 'zprotean', moves: ['tackle']},
