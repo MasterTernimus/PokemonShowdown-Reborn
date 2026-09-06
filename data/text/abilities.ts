@@ -3647,8 +3647,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lunardread: {
 		name: "Lunar Dread",
-		desc: "This Pokemon has Magic Guard and Pressure's effects.",
-		shortDesc: "Magic Guard + Pressure.",
+		desc: "This Pokemon has Magic Guard, Pressure, and Unaware's effects.",
+		shortDesc: "Magic Guard + Pressure + Unaware.",
 	},
 	ragingbeast: {
 		name: "Raging Beast",

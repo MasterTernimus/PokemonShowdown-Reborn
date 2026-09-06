@@ -15357,6 +15357,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDeductPP(target, source) {
 			return this.dex.abilities.get('pressure').onDeductPP?.call(this, target, source);
 		},
+		onAnyModifyBoost(boosts, pokemon) {
+			return this.dex.abilities.get('unaware').onAnyModifyBoost?.call(this, boosts, pokemon);
+		},
 		flags: {},
 		name: "Lunar Dread",
 		rating: 4,
