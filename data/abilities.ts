@@ -6694,20 +6694,38 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	ancientbloom: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
+			this.dex.abilities.get('pollenbloom').onStart?.call(this, pokemon);
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 			}
 		},
+		onAnyModifyBoost(boosts, pokemon) {
+			return this.dex.abilities.get('pollenbloom').onAnyModifyBoost?.call(this, boosts, pokemon);
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			return this.dex.abilities.get('pollenbloom').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			return this.dex.abilities.get('pollenbloom').onSourceModifySpA?.call(this, spa, attacker, defender, move);
+		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
+			this.dex.abilities.get('pollenbloom').onBasePower?.call(this, basePower, attacker, defender, move);
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
-				return this.chainModify(1.5);
+				this.chainModify(1.5);
 			}
 		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
 		onResidual(pokemon) {
+			this.dex.abilities.get('pollenbloom').onResidual?.call(this, pokemon);
 			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		onImmunity(type, pokemon) {
+			const pollenResult = this.dex.abilities.get('pollenbloom').onImmunity?.call(this, type, pokemon);
+			if (pollenResult === false) return false;
 			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
 		},
 		onDamagingHit(damage, target, source, move) {
@@ -6822,14 +6840,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
-			let modifier = getDualWieldModifier(move);
+			this.dex.abilities.get('waterbarrage').onBasePower?.call(this, basePower, attacker, defender, move);
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
-				modifier *= 1.5;
+				this.chainModify(1.5);
 			}
-			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMove(move, source) {
-			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source);
+			this.dex.abilities.get('waterbarrage').onModifyMove?.call(this, move, source);
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
 			if (!this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) return;
@@ -6843,7 +6860,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.effectState.target;
 			}
 		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
 		onResidual(pokemon) {
+			this.dex.abilities.get('waterbarrage').onResidual?.call(this, pokemon);
 			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -8454,6 +8474,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
 			}
 			this.dex.abilities.get('whitesmoke').onStart?.call(this, pokemon);
+			this.dex.abilities.get('wildfirecore').onStart?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			const wildfireResult = this.dex.abilities.get('wildfirecore').onImmunity?.call(this, type, pokemon);
+			if (wildfireResult === false) return false;
+			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+		},
+		onUpdate(pokemon) {
+			return this.dex.abilities.get('wildfirecore').onUpdate?.call(this, pokemon);
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			return this.dex.abilities.get('wildfirecore').onModifyType?.call(this, move, pokemon);
+		},
+		onModifySTAB(stab, source, target, move) {
+			return this.dex.abilities.get('wildfirecore').onModifySTAB?.call(this, stab, source, target, move);
 		},
 		onTryBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('whitesmoke').onTryBoost?.call(this, boost, target, source, effect);
@@ -8470,17 +8506,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ [stat]: 1 }, candidate, holder);
 			}
 		},
-		onBasePowerPriority: 8,
+		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
+			this.dex.abilities.get('wildfirecore').onBasePower?.call(this, basePower, attacker, defender, move);
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
-				return this.chainModify(1.5);
+				this.chainModify(1.5);
 			}
+		},
+		onAfterMove(source, target, move) {
+			return this.dex.abilities.get('wildfirecore').onAfterMove?.call(this, source, target, move);
+		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('wildfirecore').onTryHit?.call(this, target, source, move);
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			return this.dex.abilities.get('wildfirecore').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			return this.dex.abilities.get('wildfirecore').onSourceModifySpA?.call(this, spa, attacker, defender, move);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
-		onImmunity(type, pokemon) { return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon); },
-		onResidual(pokemon) { return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
+		onResidual(pokemon) {
+			this.dex.abilities.get('wildfirecore').onResidual?.call(this, pokemon);
+			return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
+		},
 		flags: { breakable: 1 },
 		name: "Burning Crown",
 		rating: 4.5,
