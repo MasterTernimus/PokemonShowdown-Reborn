@@ -11808,7 +11808,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Zoroark",
 		types: ["Dark", "Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 60, atk: 110, def: 70, spa: 135, spd: 70, spe: 110 },
+		baseStats: { hp: 55, atk: 105, def: 60, spa: 125, spd: 60, spe: 105 },
 		abilities: { 0: "Illusion", 1: "Opportunist", H: "Pixilate" },
 		heightm: 1.6,
 		weightkg: 81.1,
