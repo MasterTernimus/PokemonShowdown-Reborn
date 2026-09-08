@@ -109,8 +109,28 @@ describe('Custom battle data updates', function () {
 		const charizard = battle.p2.active[0];
 		const burningCrown = charizard.getAbility();
 		assert.equal(qwilfish.boosts.atk, -1);
+		assert.false(charizard.hasAbility('whitesmoke'));
+		assert.equal(burningCrown.onTryBoost, undefined);
 		battle.singleEvent('Start', burningCrown, charizard.abilityState, charizard);
 		battle.singleEvent('Start', burningCrown, charizard.abilityState, charizard);
+		assert.equal(qwilfish.boosts.atk, -1);
+		assert.equal(battle.log.filter(line => line.includes('|Intimidate|boost')).length, 1);
+	});
+
+	it('should only activate composite Intimidate once per ability state', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Qwilfish', moves: ['splash']},
+		], [
+			{species: 'Ursaluna', ability: 'territorial', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+
+		const qwilfish = battle.p1.active[0];
+		const ursaluna = battle.p2.active[0];
+		const territorial = ursaluna.getAbility();
+		assert.equal(qwilfish.boosts.atk, -1);
+		battle.singleEvent('Start', territorial, ursaluna.abilityState, ursaluna);
+		battle.singleEvent('Start', territorial, ursaluna.abilityState, ursaluna);
 		assert.equal(qwilfish.boosts.atk, -1);
 		assert.equal(battle.log.filter(line => line.includes('|Intimidate|boost')).length, 1);
 	});

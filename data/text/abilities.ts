@@ -3492,8 +3492,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	burningcrown: {
 		name: "Burning Crown",
-		desc: "This Pokemon has Intimidate, White Smoke, Wildfire Core, and Self Sufficient. Hidden effect: Filter. When a Pokemon faints, it raises the highest offensive stat of itself and its allies by 1. Its field bonuses remain active.",
-		shortDesc: "Intimidate + White Smoke + Wildfire Core + Self Sufficient; faint raises the side's highest offenses.",
+		desc: "This Pokemon has Intimidate, Wildfire Core, and Self Sufficient. Hidden effect: Filter. When a Pokemon faints, it raises the highest offensive stat of itself and its allies by 1. Its field bonuses remain active.",
+		shortDesc: "Intimidate + Wildfire Core + Self Sufficient; faint raises the side's highest offenses.",
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",

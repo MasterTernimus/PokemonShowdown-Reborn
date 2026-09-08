@@ -148,7 +148,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - **Second Wind:** The first KO that would occur in an allowed format leaves the user at 1 HP.
 - **Freezer Burn:** Slush Rush, Refrigerate, and Ice Body. Normal moves become Ice moves with the established Refrigerate behavior.
 - **Frost Sovereign:** Snow Warning, Ice Body, and the established eight-turn hail/veil behavior.
-- **Burning Crown:** White Smoke, Fire moves deal 1.2x damage, Fire damage taken is reduced by 20%, and a KO raises the higher offensive stat.
+- **Burning Crown:** Intimidate, Wildfire Core, Fire moves deal 1.2x damage, Fire damage taken is reduced by 20%, and a KO raises the higher offensive stat.
 - **Burning Ego:** Ultra Ego, Brute Force, and Magma Armor.
 - **Burning Spirit:** Self Sufficient, Opportunist, and Magma Armor.
 - **Brute Force:** Reckless power behavior without recoil damage, including the custom recoil-move handling.
