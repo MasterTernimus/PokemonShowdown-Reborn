@@ -3447,13 +3447,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",
-		desc: "This Pokemon has Effect Spore, Self Sufficient, and Pollen Bloom's effects. It keeps its field-based Defense, Special Defense, and power boosts.",
-		shortDesc: "Effect Spore + Self Sufficient + Pollen Bloom; keeps field boosts.",
+		desc: "This Pokemon has Effect Spore and Pollen Bloom's effects. Thick Fat applies once through Pollen Bloom: Fire and Ice damage is halved, not quartered. It keeps its field-based Defense, Special Defense, and power boosts.",
+		shortDesc: "Effect Spore + Pollen Bloom; Thick Fat applies once; field boosts.",
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon has Self Sufficient, Shell Armor, and Water Barrage's effects. Hidden effect: Friend Guard. In Water Surface, Underwater, Factory, and Short Circuit fields, Electric moves are redirected to it and raise its Attack and Special Attack. Fairy Tale, New World, Cold Eclipse, and Starlight Arena give it +1 Defense and +1 Special Defense once per active terrain.",
-		shortDesc: "Self Sufficient + Shell Armor + Water Barrage; keeps field bonuses.",
+		desc: "This Pokemon has Shell Armor and Water Barrage's effects, plus Power Spot and Friend Guard. In Electric Terrain, Murkwater Surface, Water Surface, Underwater, Factory, and Short Circuit fields, incoming Electric moves are blocked and redirected to it, raising its Attack and Special Attack by 1. Fairy Tale, New World, Cold Eclipse, and Starlight Arena give it +1 Defense and +1 Special Defense once per active terrain. New World, Cold Eclipse, and Starlight Arena also boost its move power by 1.5x.",
+		shortDesc: "Shell Armor + Water Barrage; field Electric absorption; ally support.",
 	},
 	hydrabond: {
 		name: "Hydra Bond",
@@ -3492,8 +3492,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	burningcrown: {
 		name: "Burning Crown",
-		desc: "This Pokemon has Intimidate, Wildfire Core, and Self Sufficient. Hidden effect: Filter. When a Pokemon faints, it raises the highest offensive stat of itself and its allies by 1. Its field bonuses remain active.",
-		shortDesc: "Intimidate + Wildfire Core + Self Sufficient; faint raises the side's highest offenses.",
+		desc: "This Pokemon has Intimidate, White Smoke, Mold Breaker, and Wildfire Core. It takes 20% less damage from attacks. It gains no boosts when a Pokemon faints. Its field bonuses remain active.",
+		shortDesc: "Intimidate + White Smoke + Mold Breaker + Wildfire Core; no KO boost.",
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",

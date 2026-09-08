@@ -6827,7 +6827,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('fortressshell'));
 		},
 		onTryHit(target, source, move) {
-			if (target !== source && this.movehasType(move, 'Electric') && this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) {
+			if (target !== source && this.movehasType(move, 'Electric') && this.field.isTerrain(['electricterrain', 'murkwatersurfaceterrain', 'watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) {
 				if (!this.boost({ spa: 1, atk: 1 }, target, target)) {
 					this.add('-immune', target, '[from] ability: Fortress Shell');
 				}
@@ -6849,7 +6849,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('waterbarrage').onModifyMove?.call(this, move, source);
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			if (!this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) return;
+			if (!this.field.isTerrain(['electricterrain', 'murkwatersurfaceterrain', 'watersurfaceterrain', 'underwaterterrain', 'factoryterrain', 'shortcircuitterrain'])) return;
 			if (!this.movehasType(move, 'Electric')) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
@@ -8470,7 +8470,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	burningcrown: {
 		onStart(pokemon) {
 			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
+			this.dex.abilities.get('whitesmoke').onStart?.call(this, pokemon);
 			this.dex.abilities.get('wildfirecore').onStart?.call(this, pokemon);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('whitesmoke').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
 		},
 		onImmunity(type, pokemon) {
 			const wildfireResult = this.dex.abilities.get('wildfirecore').onImmunity?.call(this, type, pokemon);
@@ -8486,18 +8493,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifySTAB(stab, source, target, move) {
 			return this.dex.abilities.get('wildfirecore').onModifySTAB?.call(this, stab, source, target, move);
-		},
-		onAnyFaintPriority: 1,
-		onAnyFaint() {
-			const holder = this.effectState.target;
-			if (!holder || holder.fainted) return;
-			const candidates = [holder, ...holder.allies()].filter(pokemon => pokemon && !pokemon.fainted);
-			for (const candidate of candidates) {
-				const atk = candidate.getStat('atk', false, true);
-				const spa = candidate.getStat('spa', false, true);
-				const stat = atk >= spa ? 'atk' : 'spa';
-				this.boost({ [stat]: 1 }, candidate, holder);
-			}
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {

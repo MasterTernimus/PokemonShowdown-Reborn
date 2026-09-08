@@ -113995,6 +113995,8 @@ const latestLearnsetAdditions: {[id: string]: string[]} = {
 	],
 	gligar: ['barbbarrage'],
 	gliscor: ['barbbarrage', 'poisonfang', 'toxicthread', 'sludgewave', 'clearsmog', 'poisonjab', 'poisontail', 'venomdrench'],
+	salamence: ['bloodmoon', 'moongeistbeam'],
+	ursalunabloodmoon: ['moongeistbeam'],
 	alakazam: ['darkpulse', 'snarl'],
 	misdreavus: ['drainingkiss'],
 	granbull: ['highhorsepower', 'spiritbreak', 'stompingtantrum', 'suckerpunch', 'partingshot', 'closecombat', 'smellingsalts', 'brickbreak', 'leechlife', 'poweruppunch', 'wideguard'],
@@ -114159,6 +114161,7 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	dewott: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 	samurott: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
 	samurotthisui: ['flashcannon', 'ironhead', 'irontail', 'metalclaw', 'tachyoncutter'],
+	zoroark: ['bloodmoon'], zoroarkhisui: ['bloodmoon'],
 };
 
 for (const learnsetData of Object.values(Learnsets)) {
