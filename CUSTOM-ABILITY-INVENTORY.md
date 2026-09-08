@@ -35,7 +35,7 @@ Custom-numbered entries: 233
 - **Blooming Sun** (`bloomingsun`): Mega Sol + Invigorate + Natural Cure. **Users:** Meganium-Mega
 - **Bone Warrior** (`bonewarrior`): Battle Armor + Self Sufficient. **Users:** Marowak, Marowak-Alola
 - **Brute Force** (`bruteforce`): Reckless + Rock Head. **Users:** Aggron, Emboar, Geodude, Golem, Graveler, Obstagoon, Relicanth, Staraptor, Steelix, Sudowoodo
-- **Burning Crown** (`burningcrown`): White Smoke + Filter + Self Sufficient; faint raises the side's highest offenses. **Users:** Charizard-Gmax
+- **Burning Crown** (`burningcrown`): Intimidate + Wildfire Core + Self Sufficient; hidden Filter; faint raises the side's highest offenses. **Users:** Charizard-Gmax
 - **Burning Ego** (`burningego`): Ultra Ego + Magma Armor. **Users:** Emboar-Mega
 - **Burning Rage** (`burningrage`): Brute Force + Iron Fist + Turboblaze. **Users:** Infernape
 - **Burning Spirit** (`burningspirit`): Self Sufficient + Opportunist + Magma Armor. **Users:** Infernape

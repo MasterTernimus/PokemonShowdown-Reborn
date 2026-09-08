@@ -8469,11 +8469,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	burningcrown: {
 		onStart(pokemon) {
-			if (!pokemon.abilityState.burningCrownIntimidated) {
-				pokemon.abilityState.burningCrownIntimidated = true;
-				this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
-			}
-			this.dex.abilities.get('whitesmoke').onStart?.call(this, pokemon);
+			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
 			this.dex.abilities.get('wildfirecore').onStart?.call(this, pokemon);
 		},
 		onImmunity(type, pokemon) {
@@ -8490,9 +8486,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifySTAB(stab, source, target, move) {
 			return this.dex.abilities.get('wildfirecore').onModifySTAB?.call(this, stab, source, target, move);
-		},
-		onTryBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('whitesmoke').onTryBoost?.call(this, boost, target, source, effect);
 		},
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
@@ -8654,10 +8647,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	intimidate: {
 		onStart(pokemon) {
-			if (this.event.id === 'SwitchIn') {
-				if (pokemon.abilityState.intimidateSwitchIn) return;
-				pokemon.abilityState.intimidateSwitchIn = true;
-			}
+			if (pokemon.abilityState.intimidateActivated) return;
+			pokemon.abilityState.intimidateActivated = true;
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {

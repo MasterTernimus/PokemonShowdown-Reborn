@@ -2119,7 +2119,7 @@ export class Pokemon {
 			hauntedchime: ['elevate', 'windpower', 'cursedbody'],
 			auramaster: ['dualwield', 'innerfocus', 'technician'],
 			bloomingsun: ['megasol', 'invigorate', 'naturalcure'],
-			burningcrown: ['whitesmoke', 'filter', 'selfsufficient'],
+			burningcrown: ['filter', 'selfsufficient'],
 			burningego: ['ultraego', 'magmaarmor'],
 			burningspirit: ['selfsufficient', 'opportunist', 'magmaarmor', 'filter'],
 			crueltag: ['shadowtag', 'infiltrator'],
