@@ -5880,6 +5880,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 244,
 		gen: 2,
 	},
+	bronzongite: {...{"name":"Bronzongite","spritenum":619,"megaStone":{"Bronzong":"Bronzong-Mega"},"itemUser":["Bronzong"],"num":11091,"gen":9,"isNonstandard":"Custom","desc":"Allows Bronzong to Mega Evolve into Mega Bronzong.","shortDesc":"Allows Bronzong to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
+	noivernite: {...{"name":"Noivernite","spritenum":619,"megaStone":{"Noivern":"Noivern-Mega"},"itemUser":["Noivern"],"num":11093,"gen":9,"isNonstandard":"Custom","desc":"Allows Noivern to Mega Evolve into Mega Noivern.","shortDesc":"Allows Noivern to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
+	weavilite: {...{"name":"Weavilite","spritenum":619,"megaStone":{"Weavile":"Weavile-Mega"},"itemUser":["Weavile"],"num":11095,"gen":9,"isNonstandard":"Custom","desc":"Allows Weavile to Mega Evolve into Mega Weavile.","shortDesc":"Allows Weavile to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
+	dusknoirite: {...{"name":"Dusknoirite","spritenum":619,"megaStone":{"Dusknoir":"Dusknoir-Mega"},"itemUser":["Dusknoir"],"num":11097,"gen":9,"isNonstandard":"Custom","desc":"Allows Dusknoir to Mega Evolve into Mega Dusknoir.","shortDesc":"Allows Dusknoir to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
+	noctowlite: {...{"name":"Noctowlite","spritenum":619,"megaStone":{"Noctowl":"Noctowl-Mega"},"itemUser":["Noctowl"],"num":11098,"gen":9,"isNonstandard":"Custom","desc":"Allows Noctowl to Mega Evolve into Mega Noctowl.","shortDesc":"Allows Noctowl to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	sharpedonite: {
 		name: "Sharpedonite",
 		spritenum: 619,

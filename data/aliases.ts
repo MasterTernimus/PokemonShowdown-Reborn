@@ -1,5 +1,6 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
 	// Custom cosmetic sprite variants
+	gardevoirvoid: "Gardevoir",
 	dusknoiralt: "Dusknoir",
 	spiritombalt: "Spiritomb",
 	richard: "Jellicent-Azzy",

@@ -240,11 +240,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "As One (Spectrier)",
 		shortDesc: "Combination of the Unnerve and Grim Neigh Abilities.",
 	},
-	aquashell: {
-		name: "Aqua Shell",
-		desc: "This Pokemon has Water Bubble and Water Veil. Its Water attacks are doubled, incoming Fire attacks are halved, it cannot be burned, it ignores Hail and Sandstorm damage, and it gains Aqua Ring on entry.",
-		shortDesc: "Water Bubble + Water Veil; gains Aqua Ring on entry.",
-	},
+	aquashell: {"name":"Aqua Shell","desc":"Water Veil + Tough Claws + Inner Focus. Prevents and cures burns, grants Aqua Ring on switch-in, prevents hail and sandstorm damage, and cures status at turn end on Water Surface and Underwater fields. Contact moves have 1.3x power. Prevents flinching and Intimidate's Attack drop.","shortDesc":"Water Veil + Tough Claws + Inner Focus."},
 	aurabreak: {
 		name: "Aura Break",
 		desc: "While this Pokemon is active, the effects of the Dark Aura and Fairy Aura Abilities are reversed, multiplying the power of Dark- and Fairy-type moves, respectively, by 3/4 instead of 1.33.",
@@ -842,11 +838,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Scrappy, Technician, Opportunist, and Limber's effects.",
 		shortDesc: "Scrappy + Technician + Opportunist + Limber.",
 	},
-	royalvoice: {
-		name: "Royal Voice",
-		desc: "This Pokemon has Pixilate, Queenly Majesty, and Sworn Duty's effects.",
-		shortDesc: "Pixilate + Queenly Majesty + Sworn Duty.",
-	},
+	royalvoice: {"name":"Royal Voice","desc":"Pixilate + Queenly Majesty + Dream Sickness. Retains its Fairy conversion, Psychic/Fairy power boost and priority protection, with all Dream Sickness effects, including ally protection, healing, stat-drop protection and dream shelter.","shortDesc":"Pixilate + Queenly Majesty + Dream Sickness."},
 	perfectforesight: {
 		name: "Perfect Foresight",
 		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight queued by this Ability has 60 BP, ignores defensive boosts, screens, and Abilities, and hits Dark-type Pokemon neutrally. If this Pokemon uses a move on opposing Pokemon, is damaged by an opposing attack, or uses Future Sight, Future Sight is queued on the affected opposing slots. Spread moves queue Future Sight on all enemies, and existing Perfect Foresight delayed attacks stack instead of blocking new ones.",
@@ -1129,10 +1121,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Serene Grace, Natural Recovery, and Prankster's effects.",
 		shortDesc: "Built-in Serene Grace, Natural Recovery, and Prankster.",
 	},
-	blinddevotion: {
-		name: "Blind Devotion",
-		desc: "This Pokemon has False Devotion, Technician, and Cotton Down's effects.",
-		shortDesc: "False Devotion + Technician + Cotton Down.",
+	truedevotion: {
+		name: "True Devotion",
+		desc: "This Pokemon has False Devotion, Protean, and Technician's effects.",
+		shortDesc: "False Devotion + Protean + Technician.",
 	},
 	firemane: {
 		name: "Fire Mane",
@@ -1209,6 +1201,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Friend Guard's effect. On switch-in, it restores 1/8 of its ally's max HP. At the end of each turn, this Pokemon restores 1/8 of its max HP and its ally restores 1/16 of its max HP.",
 		shortDesc: "Friend Guard; heals ally on switch-in; heals self and ally each turn.",
 	},
+	echosense: {"name":"Echo Sense","desc":"This Pokemon has Echo Fiend, Frisk, Telepathy, and Infiltrator's effects.","shortDesc":"Echo Fiend + Frisk + Telepathy + Infiltrator."},
+	froststalker: {"name":"Frost Stalker","desc":"Stakeout + Sharpness + Refrigerate. Doubles attacking stats against foes that just entered battle. Slicing moves have 1.5x power except on Cold Eclipse. Eligible Normal moves become Ice with 1.2x power, or 1.5x on Icy and Snowy Mountain fields.","shortDesc":"Stakeout + Sharpness + Refrigerate."},
+	sacredpower: {"name":"Sacred Power","desc":"Duskilate + Adaptability + Magic Guard. Eligible Normal moves become Dark (Fairy on Holy and Rainbow fields) with 1.3x power, or 1.5x on Duskilate-boosting fields. STAB is 2x (2.25x when already 2x). Prevents indirect damage. Gains +1 Sp. Def on entry in Fairy Tale Field and ignores hail damage on Cold Eclipse.","shortDesc":"Duskilate + Adaptability + Magic Guard."},
 	frisk: {
 		name: "Frisk",
 		desc: "On switch-in, this Pokemon identifies the held items of all opposing Pokemon, removes foe Illusions, and each revealed foe has a 30% chance to be Embargoed.",
@@ -1730,6 +1725,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "If an active Pokemon has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		},
 	},
+	stormbell: {"name":"Storm Bell","desc":"Mirror Armor + Drizzle + Elevate. Starts rain, reflects opposing stat drops, reduces attack damage by 20%, is airborne, and boosts its best stat after a move KO. Retains Mirror Armor field effects, including +1 Defense and Sp. Def on Fairy Tale entry.","shortDesc":"Mirror Armor + Drizzle + Elevate."},
 	mirrorarmor: {
 		name: "Mirror Armor",
 		desc: "When another Pokemon would lower this Pokemon's stat stages, those stat drops are reflected onto that Pokemon instead. This Pokemon also takes 20% less damage from attacks.",
@@ -1785,11 +1781,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Cursed Body's effect. Its first direct damaging interaction with each opposing Pokemon applies Perish Song to that foe. The mark clears when the foe switches out. Whenever an opposing Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns. This Ability cannot be suppressed.",
 		shortDesc: "Cursed Body; first hit marks foes with Perish Song; foe KO heals 1/4; faint sets Haunted.",
 	},
-	reapersgrip: {
-		name: "Reaper's Grip",
-		desc: "This Pokemon has Unaware and Pressure's effects. Its foes lose 1 extra PP when targeting it. When it faints, it creates Haunted Field for 5 turns.",
-		shortDesc: "Unaware + Pressure; foes lose 1 extra PP; faint sets 5-turn Haunted Field.",
-	},
+	reapersgrip: {"name":"Reaper's Grip","desc":"Unaware + Iron Fist + Dark Aura. Ignores opposing stat changes when attacking or taking attacks. Punching moves have 1.4x power; all Dark moves receive Dark Aura's boost. The first damaging hit that leaves this Pokemon at half HP or less creates Haunted Field for 3 turns (or refreshes it to at least 3). Fainting creates Haunted Field for 5 turns, or adds 5 turns to an existing Haunted Field.","shortDesc":"Unaware + Iron Fist + Dark Aura; half HP: 3-turn Haunted Field; faint: +5 turns."},
 	moonlitwings: {
 		name: "Moonlit Wings",
 		desc: "This Pokemon has Serene Grace and gains STAB on Fairy-type moves.",
@@ -2825,8 +2817,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	calderacore: {
 		name: "Caldera Core",
-		desc: "This Pokemon has Magma Armor, Sheer Force, and Drought's effects.",
-		shortDesc: "Magma Armor + Sheer Force + Drought.",
+		desc: "This Pokemon has Magma Armor, Sheer Force, and Drought's effects. It starts sunlight on entry. Eligible moves have 1.3x power but lose their secondary effects. Incoming Water- and Ice-type attacks deal half damage. It cures freezing and prevents freezing outside Cold Eclipse. On entry in Dragon's Den, Volcanic, or Cold Eclipse, it gains +1 Defense and +1 Special Defense. In Dragon's Den, it also blocks incoming Fire-type moves.",
+		shortDesc: "Magma Armor + Sheer Force + Drought; halves Water/Ice damage; field bonuses.",
 	},
 	soultag: {
 		name: "Soul Tag",
@@ -3444,6 +3436,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Forest Surge",
 		desc: "On switch-in, this Pokemon sets Forest Terrain for 5 turns.",
 		shortDesc: "On switch-in, this Pokemon sets Forest Terrain for 5 turns.",
+	},
+	apexarmor: {
+		name: "Apex Armor",
+		desc: "Bulletproof + Rough Skin + Stalwart. Blocks bullet/pulse moves, reduces attack damage by 20%, damages contact attackers by 1/8 max HP, and ignores redirection. Stalwart grants +1 Sp. Atk on its supported fields; Fairy Tale additionally grants +1 Defense and Sp. Def on entry.",
+		shortDesc: "Bulletproof + Rough Skin + Stalwart; Fairy Tale: +1 Def/SpD.",
 	},
 	ancientbloom: {
 		name: "Ancient Bloom",

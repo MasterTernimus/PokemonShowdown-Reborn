@@ -1277,6 +1277,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	hoothoot: {
 		tier: "LC",
 	},
+	noctowlmega: {tier: "OU"},
 	noctowl: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
@@ -1540,6 +1541,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "NFE",
 		natDexTier: "NFE",
 	},
+	weavilemega: {tier: "OU"},
 	weavile: {
 		tier: "OU",
 		doublesTier: "(DUU)",
@@ -2097,6 +2099,9 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "Illegal",
 		natDexTier: "RU",
 	},
+	sharpedomegay: {
+		tier: "OU",
+	},
 	sharpedomega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -2298,6 +2303,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	dusclops: {
 		tier: "NFE",
 	},
+	dusknoirmega: {tier: "OU"},
 	dusknoir: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
@@ -2706,6 +2712,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	bronzor: {
 		tier: "LC",
 	},
+	bronzongmega: {tier: "OU"},
 	bronzong: {
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -4142,6 +4149,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	noibat: {
 		tier: "LC",
 	},
+	noivernmega: {tier: "OU"},
 	noivern: {
 		tier: "RU",
 		doublesTier: "(DUU)",

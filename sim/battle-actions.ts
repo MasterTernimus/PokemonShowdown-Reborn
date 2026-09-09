@@ -2329,6 +2329,11 @@ export class BattleActions {
 			return 'Charizard-Mega-Y';
 		}
 		const sharedMegaData: Record<string, { formes: string[], normal: string, alternate: string }> = {
+			sharpedonite: {
+				formes: ['Sharpedo', 'Sharpedo-Mega', 'Sharpedo-Mega-Y'],
+				normal: 'Sharpedo-Mega',
+				alternate: 'Sharpedo-Mega-Y',
+			},
 			arbokite: {
 				formes: ['Arbok', 'Arbok-Mega-X', 'Arbok-Mega-Y'],
 				normal: 'Arbok-Mega-X',
