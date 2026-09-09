@@ -4114,7 +4114,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 168,
 		name: "Ariados",
 		types: ["Bug", "Poison"],
-		baseStats: {"hp":90,"atk":100,"def":70,"spa":70,"spd":70,"spe":40},
+		baseStats: {"hp":90,"atk":100,"def":85,"spa":75,"spd":85,"spe":40},
 		abilities: { 0: "Neutralization", 1: "Insomnia", H: "Web Assassin" },
 		heightm: 1.1,
 		weightkg: 33.5,
