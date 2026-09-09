@@ -12,7 +12,7 @@ describe('Mega Noctowl and Sacred Power',function(){
   assert.equal(mon.canMegaEvo,'Noctowl-Mega');
   battle.makeChoices('move splash mega','move splash');
   assert.equal(mon.ability,'sacredpower');
-  assert.deepEqual(mon.species.baseStats,{hp:100,atk:55,def:98,spa:106,spd:141,spe:110});
+  assert.deepEqual(mon.species.baseStats,{hp:100,atk:65,def:98,spa:106,spd:141,spe:100});
   assert.deepEqual(mon.getTypes(),['Dark','Flying']);
   for(const id of ['duskilate','adaptability','magicguard'])assert(mon.hasAbility(id));
   let move=battle.dex.getActiveMove('hypervoice');

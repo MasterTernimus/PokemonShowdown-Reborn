@@ -4058,7 +4058,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Noctowl"],
 		eggGroups: ["Flying"],
 	},
-	noctowlmega: {"num":164,"name":"Noctowl-Mega","baseSpecies":"Noctowl","forme":"Mega","types":["Dark","Flying"],"baseStats":{"hp":100,"atk":55,"def":98,"spa":106,"spd":141,"spe":110},"abilities":{"0":"Sacred Power"},"heightm":1.6,"weightkg":40.8,"color":"Brown","eggGroups":["Flying"],"requiredItem":"Noctowlite","battleOnly":"Noctowl","isNonstandard":"Custom"},
+	noctowlmega: {"num":164,"name":"Noctowl-Mega","baseSpecies":"Noctowl","forme":"Mega","types":["Dark","Flying"],"baseStats":{"hp":100,"atk":65,"def":98,"spa":106,"spd":141,"spe":100},"abilities":{"0":"Sacred Power"},"heightm":1.6,"weightkg":40.8,"color":"Brown","eggGroups":["Flying"],"requiredItem":"Noctowlite","battleOnly":"Noctowl","isNonstandard":"Custom"},
 	noctowl: {
 		otherFormes: ["Noctowl-Mega"], formeOrder: ["Noctowl", "Noctowl-Mega"],
 		num: 164,
