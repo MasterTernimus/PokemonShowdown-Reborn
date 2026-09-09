@@ -114149,7 +114149,7 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	manectric: ['partingshot'], nidoking: ['partingshot'], kecleon: ['partingshot'],
 	parasect: ['partingshot'], dusknoir: ['partingshot'], absol: ['partingshot'],
 	granbull: ['partingshot'], zangoose: [
-		'partingshot', 'extremespeed', 'machpunch', 'drainpunch', 'doublekick',
+		'partingshot', 'machpunch', 'drainpunch', 'doublekick',
 		'sacredsword', 'bulkup',
 	], scyther: ['sacredsword'],
 	scizor: ['sacredsword'], kleavor: ['sacredsword'], espeon: ['fierydance', 'lusterpurge'],
@@ -114800,7 +114800,7 @@ const documentLearnsetAdditions: {[id: string]: {[move: string]: string[]}} = {
 	wobbuffet: {tickle: ["9L1"]},
 	wormadam: {magicalleaf: ["9M"]},
 	yanmega: {curse: ["9M"], mimic: ["9M"]},
-	zangoose: {bulletpunch: ["9M"], crosspoison: ["9M"], fakeout: ["9M"], lashout: ["9M"], smartstrike: ["9M"]},
+	zangoose: {extremespeed: ["9M"], bulletpunch: ["9M"], crosspoison: ["9M"], fakeout: ["9M"], lashout: ["9M"], smartstrike: ["9M"]},
 	zebstrika: {megakick: ["9M"]},
 	zoroark: {counter: ["9M"], detect: ["9M"], fakeout: ["9M"]},
 };
@@ -114851,4 +114851,9 @@ for (const id of natDexNaturePowerIds) {
 	if (learnset && !Object.prototype.hasOwnProperty.call(learnset, 'naturepower')) {
 		learnset.naturepower = ['9M'];
 	}
+}
+
+// Global balance removal runs after all official and custom learnset merges.
+for (const data of Object.values(Learnsets)) {
+	if (data.learnset) delete data.learnset.terablast;
 }

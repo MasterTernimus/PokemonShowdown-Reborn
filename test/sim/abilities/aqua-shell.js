@@ -1,0 +1,34 @@
+'use strict';
+const assert=require('../../assert');
+const common=require('../../common');
+let battle;
+describe('Reworked Aqua Shell',function(){
+ afterEach(()=>battle?.destroy());
+ it('combines Water Veil, Tough Claws and Inner Focus without Water Bubble',function(){
+  battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Golisopod-Mega',ability:'Aqua Shell',moves:['splash']}],[{species:'Mew',ability:'Synchronize',moves:['splash']}]]);
+  battle.makeChoices('team 1','team 1');
+  const mon=battle.p1.active[0],foe=battle.p2.active[0];
+  for(const a of ['waterveil','toughclaws','innerfocus'])assert(mon.hasAbility(a));
+  assert(!mon.hasAbility('waterbubble'));assert(mon.volatiles.aquaring);
+  assert.equal(mon.trySetStatus('brn',foe),false);
+  assert.equal(battle.runEvent('BasePower',mon,foe,battle.dex.getActiveMove('liquidation'),100),130);
+  assert.equal(battle.runEvent('BasePower',mon,foe,battle.dex.getActiveMove('surf'),100),100);
+  assert.equal(battle.runEvent('ModifyAtk',mon,foe,battle.dex.getActiveMove('liquidation'),100),100);
+  assert.equal(battle.runEvent('ModifySpA',mon,foe,battle.dex.getActiveMove('surf'),100),100);
+  assert.equal(battle.runEvent('ModifySpA',foe,mon,battle.dex.getActiveMove('flamethrower'),100),100);
+  assert.equal(battle.runEvent('ModifyDamage',foe,mon,battle.dex.getActiveMove('flamethrower'),100),100);
+  assert.notEqual(battle.runEvent('CriticalHit',mon,foe,battle.dex.getActiveMove('frostbreath')),false);
+  assert(!mon.addVolatile('flinch',foe));
+  battle.boost({atk:-1},mon,foe,battle.dex.abilities.get('intimidate'));
+  assert.statStage(mon,'atk',0);
+  assert(!mon.hasAbility('shellarmor'));
+  battle.field.setTerrain('fairytaleterrain',mon);
+  battle.singleEvent('Start',mon.getAbility(),mon.abilityState,mon);
+  assert.statStage(mon,'def',0);
+  battle.boost({atk:-1},mon,foe,battle.dex.getActiveMove('growl'));
+  assert.statStage(mon,'spd',0);
+  battle.field.setTerrain('underwaterterrain',mon);mon.setStatus('par',foe);
+  battle.singleEvent('Residual',mon.getAbility(),mon.abilityState,mon);
+  assert.equal(mon.status,'');
+ });
+});

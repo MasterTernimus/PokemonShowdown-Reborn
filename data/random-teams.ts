@@ -687,6 +687,7 @@ export class RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): Set<string> {
+		movePool = movePool.filter(move => move !== 'terablast');
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species, teraType, abilities);
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles, teraType, role);
@@ -706,10 +707,6 @@ export class RandomTeams {
 			);
 		};
 
-		if (role === 'Tera Blast user') {
-			counter = this.addMove('terablast', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
 		// Add required move (e.g. Relic Song for Meloetta-P)
 		if (species.requiredMove) {
 			const move = this.dex.moves.get(species.requiredMove).id;
