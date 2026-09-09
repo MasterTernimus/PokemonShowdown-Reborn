@@ -2183,6 +2183,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 66,
 	},
 	apexarmor: {
+  onResidual(pokemon) { this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
+  onImmunity(type, pokemon) { return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon); },
 		onStart(pokemon) {
 			this.dex.abilities.get('stalwart').onStart?.call(this, pokemon);
 			if (this.field.isTerrain('fairytaleterrain')) {
@@ -5403,6 +5405,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10117,
 	},
 	rimeknuckle: {
+  onDamagingHit(damage, target, source, move) { this.dex.abilities.get('icebody').onDamagingHit?.call(this, damage, target, source, move); },
+  onWeather(target, source, effect) { this.dex.abilities.get('icebody').onWeather?.call(this, target, source, effect); },
+  onResidual(pokemon) { this.dex.abilities.get('icebody').onResidual?.call(this, pokemon); },
+  onImmunity(type, pokemon) { return this.dex.abilities.get('icebody').onImmunity?.call(this, type, pokemon); },
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
 			return this.dex.abilities.get('ironfist').onBasePower?.call(this, basePower, source, target, move);
@@ -9777,6 +9783,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10208,
 	},
 	reapersgrip: {
+  onResidual(pokemon) { this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
   onStart(pokemon) {
    this.add('-ability', pokemon, "Reaper's Grip");
    this.dex.abilities.get('unaware').onStart?.call(this, pokemon);
@@ -9786,7 +9793,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
   onBasePower(basePower, attacker, defender, move) { return this.dex.abilities.get('ironfist').onBasePower?.call(this, basePower, attacker, defender, move); },
   onAnyBasePowerPriority: 20,
   onAnyBasePower(basePower, source, target, move) { return this.dex.abilities.get('darkaura').onAnyBasePower?.call(this, basePower, source, target, move); },
-  onImmunity(type, pokemon) { return this.dex.abilities.get('darkaura').onImmunity?.call(this, type, pokemon); },
+  onImmunity(type, pokemon) { return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon); },
   onDamagingHit(damage, target) {
    if ((target as any).reapersGripHaunted || target.hp > target.maxhp / 2) return;
    (target as any).reapersGripHaunted = true;
@@ -14156,6 +14163,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10027,
 	},
+	nighthunt: {
+  onStart(pokemon) { this.dex.abilities.get('intimidate').onStart?.call(this, pokemon); },
+  onBasePowerPriority: 19,
+  onBasePower(basePower, attacker, defender, move) { return this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, attacker, defender, move); },
+  onModifyMove(move) { this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move); },
+  flags: {}, name: 'Night Hunt', rating: 4.5, num: 11101,
+ },
 	strongjaw: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {

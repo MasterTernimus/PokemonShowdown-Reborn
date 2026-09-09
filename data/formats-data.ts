@@ -2580,6 +2580,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	luxio: {
 		tier: "NFE",
 	},
+	luxraymega: {tier: "OU"},
 	luxray: {
 		tier: "ZU",
 		doublesTier: "(DUU)",

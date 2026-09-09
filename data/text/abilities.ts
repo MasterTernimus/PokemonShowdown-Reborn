@@ -869,11 +869,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Stamina's effect: when hit by an opposing attack, its Defense rises by 1 stage once per turn and it restores 1/16 max HP. Its Bug-type moves have 1.5x power.",
 		shortDesc: "Stamina + Bug moves 1.5x; hit: +1 Def once/turn and heals 1/16.",
 	},
-	rimeknuckle: {
-		name: "Rime Knuckle",
-		desc: "This Pokemon has Filter and Iron Fist. Its moves have a 40% chance to cause frostbite. If this Pokemon knocks out a target, it restores 1/8 of its maximum HP, or 1/4 if the target was Mega, G-Max, Terastallized, Stellar, or holding a Z-Move item.",
-		shortDesc: "Filter + Iron Fist; 40% frostbite; KO heals 1/8 or 1/4 vs gimmicks.",
-	},
+	rimeknuckle: {"name":"Rime Knuckle","desc":"Filter + Iron Fist + Ice Body. Damaging moves have a 40% chance to cause frostbite (80% on Icy Field). KOs restore 1/8 max HP, or 1/4 against Mega, G-Max, Terastallized, Stellar or Z-Move item targets. Ice Body adds a 30% chance to frostbite contact attackers, hail immunity, and healing in hail/snow or on Icy, Snowy Mountain and Cold Eclipse fields. Healing is 1/16 max HP, or 1/8 in hail on Cold Eclipse.","shortDesc":"Filter + Iron Fist + Ice Body; frostbite chance; KO healing."},
 	razorcurrent: {
 		name: "Razor Current",
 		desc: "This Pokemon has Drizzle, Speed Boost, Steelworker, and Strong Jaw's effects.",
@@ -1781,7 +1777,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Cursed Body's effect. Its first direct damaging interaction with each opposing Pokemon applies Perish Song to that foe. The mark clears when the foe switches out. Whenever an opposing Pokemon faints, this Pokemon restores 1/4 max HP. When this Pokemon faints, it creates Haunted Field for 5 turns. This Ability cannot be suppressed.",
 		shortDesc: "Cursed Body; first hit marks foes with Perish Song; foe KO heals 1/4; faint sets Haunted.",
 	},
-	reapersgrip: {"name":"Reaper's Grip","desc":"Unaware + Iron Fist + Dark Aura. Ignores opposing stat changes when attacking or taking attacks. Punching moves have 1.4x power; all Dark moves receive Dark Aura's boost. The first damaging hit that leaves this Pokemon at half HP or less creates Haunted Field for 3 turns (or refreshes it to at least 3). Fainting creates Haunted Field for 5 turns, or adds 5 turns to an existing Haunted Field.","shortDesc":"Unaware + Iron Fist + Dark Aura; half HP: 3-turn Haunted Field; faint: +5 turns."},
+	reapersgrip: {"name":"Reaper's Grip","desc":"Unaware + Iron Fist + Dark Aura + Self Sufficient. Restores 1/16 max HP each turn and prevents hail and sandstorm damage. Ignores opposing stat changes when attacking or taking attacks. Punching moves have 1.4x power; all Dark moves receive Dark Aura's boost. The first damaging hit that leaves this Pokemon at half HP or less creates Haunted Field for 3 turns (or refreshes it to at least 3). Fainting creates Haunted Field for 5 turns, or adds 5 turns to an existing Haunted Field.","shortDesc":"Unaware + Iron Fist + Dark Aura + Self Sufficient; half HP: 3-turn Haunted Field; faint: +5 turns."},
 	moonlitwings: {
 		name: "Moonlit Wings",
 		desc: "This Pokemon has Serene Grace and gains STAB on Fairy-type moves.",
@@ -2933,6 +2929,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon's moves cannot miss and it has Ice Body and Refrigerate's effects. It is treated as an Ice-type Pokemon in Hail and Ice fields.",
 		shortDesc: "Moves cannot miss; Ice Body + Refrigerate; Ice in Ice fields.",
 	},
+	nighthunt: {"name":"Night Hunt","desc":"Strong Jaw + Infiltrator + Intimidate. Biting moves have 1.5x power. Moves bypass substitutes and opposing screens. Lowers adjacent foes' Attack on entry.","shortDesc":"Strong Jaw + Infiltrator + Intimidate."},
 	strongjaw: {
 		name: "Strong Jaw",
 		desc: "This Pokemon's bite-based attacks have their power multiplied by 1.5.",
@@ -3437,11 +3434,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "On switch-in, this Pokemon sets Forest Terrain for 5 turns.",
 		shortDesc: "On switch-in, this Pokemon sets Forest Terrain for 5 turns.",
 	},
-	apexarmor: {
-		name: "Apex Armor",
-		desc: "Bulletproof + Rough Skin + Stalwart. Blocks bullet/pulse moves, reduces attack damage by 20%, damages contact attackers by 1/8 max HP, and ignores redirection. Stalwart grants +1 Sp. Atk on its supported fields; Fairy Tale additionally grants +1 Defense and Sp. Def on entry.",
-		shortDesc: "Bulletproof + Rough Skin + Stalwart; Fairy Tale: +1 Def/SpD.",
-	},
+	apexarmor: {"name":"Apex Armor","desc":"Bulletproof + Rough Skin + Stalwart + Self Sufficient. Blocks bullet/pulse moves, reduces attack damage by 20%, damages contact attackers by 1/8 max HP, and ignores redirection. Restores 1/16 max HP each turn and prevents hail and sandstorm damage.","shortDesc":"Bulletproof + Rough Skin + Stalwart + Self Sufficient."},
 	ancientbloom: {
 		name: "Ancient Bloom",
 		desc: "This Pokemon has Effect Spore and Pollen Bloom's effects. Thick Fat applies once through Pollen Bloom: Fire and Ice damage is halved, not quartered. It keeps its field-based Defense, Special Defense, and power boosts.",
