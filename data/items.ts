@@ -5885,6 +5885,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	weavilite: {...{"name":"Weavilite","spritenum":619,"megaStone":{"Weavile":"Weavile-Mega"},"itemUser":["Weavile"],"num":11095,"gen":9,"isNonstandard":"Custom","desc":"Allows Weavile to Mega Evolve into Mega Weavile.","shortDesc":"Allows Weavile to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	dusknoirite: {...{"name":"Dusknoirite","spritenum":619,"megaStone":{"Dusknoir":"Dusknoir-Mega"},"itemUser":["Dusknoir"],"num":11097,"gen":9,"isNonstandard":"Custom","desc":"Allows Dusknoir to Mega Evolve into Mega Dusknoir.","shortDesc":"Allows Dusknoir to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	noctowlite: {...{"name":"Noctowlite","spritenum":619,"megaStone":{"Noctowl":"Noctowl-Mega"},"itemUser":["Noctowl"],"num":11098,"gen":9,"isNonstandard":"Custom","desc":"Allows Noctowl to Mega Evolve into Mega Noctowl.","shortDesc":"Allows Noctowl to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
+	luxranite: {...{"name":"Luxranite","spritenum":619,"megaStone":{"Luxray":"Luxray-Mega"},"itemUser":["Luxray"],"num":11100,"gen":9,"isNonstandard":"Custom","desc":"Allows Luxray to Mega Evolve into Mega Luxray.","shortDesc":"Allows Luxray to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	sharpedonite: {
 		name: "Sharpedonite",
 		spritenum: 619,
