@@ -2124,6 +2124,7 @@ export class Pokemon {
 			froststalker: ['stakeout', 'sharpness', 'refrigerate'],
 			sacredpower: ['duskilate', 'adaptability', 'magicguard'],
 			nighthunt: ['strongjaw', 'infiltrator', 'intimidate'],
+			corrosivetouch: ['technician', 'poisontouch', 'corrosion'],
 			stormbell: ['mirrorarmor', 'drizzle', 'elevate'],
 			apexarmor: ['bulletproof', 'roughskin', 'stalwart', 'selfsufficient'],
 			burningcrown: ['filter', 'selfsufficient', 'whitesmoke', 'moldbreaker'],

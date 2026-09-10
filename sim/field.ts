@@ -9,13 +9,6 @@ import { State } from './state';
 import { type EffectState, type Pokemon } from './pokemon';
 import { toID } from './dex';
 
-const WATER_FIELD_START_MESSAGES: { [id: string]: string } = {
-	watersurfaceterrain: "The water's surface is calm.",
-	underwaterterrain: 'Blub blub...',
-	murkwatersurfaceterrain: 'The water is tainted...',
-	icyterrain: 'The field is covered in ice.',
-};
-
 export class Field {
 	readonly battle: Battle;
 	readonly id: ID;
@@ -389,6 +382,7 @@ export class Field {
 			return false;
 		}
 		if (!this.canBypassNeutralizationForTerrainChange(status.id) && this.neutralizeTerrainChange()) return false;
+		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
 		const zMoveTerrain = !!prevTerrainState.zMoveTerrain;
 		const underlyingTerrain = status.id === 'icyterrain' &&
@@ -408,18 +402,23 @@ export class Field {
 			this.terrainState.zMoveTerrain = true;
 			this.terrainState.zMoveExpired = !!prevTerrainState.zMoveExpired;
 		}
+		// Changes need the same initialization as newly set fields: weather cleanup,
+		// per-field counters, entry effects, and rejection checks live in FieldStart.
+		if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
+			this.terrain = prevTerrain;
+			this.terrainState = prevTerrainState;
+			return false;
+		}
 		if (prevTerrainState.terrain_type === 'Base') {
 			this.terrainStack[0] = this.terrainState;
 		} else {
 			this.terrainStack.unshift(this.terrainState);
 		}
-		this.battle.add('-fieldstart', status.id === 'icyterrain' ? 'Icy Field' : status.name);
-		const fieldStartMessage = WATER_FIELD_START_MESSAGES[status.id];
-		if (fieldStartMessage) this.battle.add('-message', fieldStartMessage);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		this.clearWaterHazards();
 		this.clearFieldStartedWeather(prevTerrainState.id as ID);
 		this.restoreFormatHail();
+		return true;
 	}
 
 	private clearWaterHazards() {

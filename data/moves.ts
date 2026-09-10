@@ -21999,7 +21999,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onAfterMove() {
-			if (this.field.isTerrain('electricfield')) {
+			if (this.field.isTerrain('electricterrain')) {
 				this.field.clearTerrain();
 			}
 		},
@@ -24370,7 +24370,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterHit(target, source, move) {
 			if (!((target.getMoveHitData(move) as {damage?: number}).damage! > 0) || this.field.isWeather('sandstorm')) return;
 			if (this.field.setWeather('sandstorm', source, move)) {
-				if (source.hasItem('smoothrock') || this.field.isTerrain(['desertterrain', 'ashenbeachterrain', 'skyterrain'])) {
+				if (source.hasItem('smoothrock') || this.field.isTerrain(['desertterrain', 'ashenbeachterrain'])) {
 					this.field.weatherState.duration = 8;
 				}
 			}

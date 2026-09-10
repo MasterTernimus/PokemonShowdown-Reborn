@@ -114700,7 +114700,7 @@ const documentLearnsetAdditions: {[id: string]: {[move: string]: string[]}} = {
 	poliwrath: {iceball: ["9M"], jetpunch: ["9L1"], machpunch: ["9M"]},
 	porygonz: {bide: ["9M"], curse: ["9M"], flashcannon: ["9M"], headbutt: ["9M"], mimic: ["9M"], nightmare: ["9M"], psywave: ["9M"], rage: ["9M"], sharpen: ["9L1"], skullbash: ["9M"], teleport: ["9M"], voltswitch: ["9M"]},
 	primarina: {bubble: ["9L1"]},
-	probopass: {defensecurl: ["9M"], dynamicpunch: ["9M"], eerieimpulse: ["9M"], mimic: ["9M"], screech: ["9M"], selfdestruct: ["9M"], steelroller: ["9M"], swift: ["9M"]},
+	probopass: {recover: ["9M"], defensecurl: ["9M"], dynamicpunch: ["9M"], eerieimpulse: ["9M"], mimic: ["9M"], screech: ["9M"], selfdestruct: ["9M"], steelroller: ["9M"], swift: ["9M"]},
 	purugly: {assurance: ["9M"], beatup: ["9M"], bite: ["9M"], faketears: ["9M"], heavyslam: ["9M"], lashout: ["9M"], payday: ["9M"], playrough: ["9M"], scaryface: ["9M"], screech: ["9M"], tailslap: ["9M"]},
 	pyroar: {beatup: ["9M"], charm: ["9M"], earthpower: ["9M"], focusenergy: ["9M"], heatcrash: ["9M"], scaryface: ["9M"]},
 	rabsca: {cosmicpower: ["9M"]},

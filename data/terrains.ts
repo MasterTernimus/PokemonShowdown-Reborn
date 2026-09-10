@@ -483,7 +483,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldStart() {
-				if (this.field.weather !== 'hail') {
+				if (this.field.weather === 'hail') {
 					this.field.clearWeather();
 					this.add('-message', 'The hail is melting in the heat...');
 				}
@@ -2450,7 +2450,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifyMove(move) {
 				const rockymoves = ['bulldoze', 'earthquake', 'magnitude', 'rockclimb', 'strength'];
 				if (rockymoves.includes(move.id)) {
-					move.types = [move.type, 'Rock'];
+					move.types = [...new Set([...(move.types || [move.type]), 'Rock'])];
 				}
 			},
 			onTryAddVolatile(status, pokemon) {
@@ -2489,7 +2489,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (move.success === false && move.flags['contact'] && !source.hasAbility('rockhead')) {
+				if (source.moveThisTurnResult === false && move.flags['contact'] && !source.hasAbility('rockhead')) {
 					this.add('-message', 'The pokemon kept going and crashed into the rocks!');
 					this.damage(source.baseMaxhp / 8, source, source);
 				}

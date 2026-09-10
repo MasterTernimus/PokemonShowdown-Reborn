@@ -6123,11 +6123,13 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Breloom"],
 		eggGroups: ["Fairy", "Grass"],
 	},
+	breloommega: {"num":286,"name":"Breloom-Mega","baseSpecies":"Breloom","forme":"Mega","types":["Poison","Fighting"],"baseStats":{"hp":80,"atk":160,"def":90,"spa":55,"spd":105,"spe":110},"abilities":{"0":"Corrosive Touch"},"heightm":1.2,"weightkg":39.2,"color":"Purple","eggGroups":["Fairy","Grass"],"requiredItem":"Breloomite","battleOnly":"Breloom","isNonstandard":"Custom"},
 	breloom: {
+		otherFormes: ["Breloom-Mega"],
 		num: 286,
 		name: "Breloom",
 		types: ["Grass", "Fighting"],
-		baseStats: { hp: 80, atk: 130, def: 90, spa: 40, spd: 70, spe: 90 },
+		baseStats: {"hp":80,"atk":130,"def":80,"spa":60,"spd":80,"spe":70},
 		abilities: { 0: "Mold Breaker", 1: "Poison Heal", H: "Technician" },
 		heightm: 1.2,
 		weightkg: 39.2,
@@ -22875,7 +22877,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 
 const latestSpeciesUpdates: {[id: string]: any} = {
 	breloom: {
-		baseStats: {hp: 80, atk: 140, def: 110, spa: 50, spd: 90, spe: 70},
+		baseStats: {"hp":80,"atk":130,"def":80,"spa":60,"spd":80,"spe":70},
 		abilities: {0: "Technician", 1: "Poison Heal", H: "Guts"},
 	},
 	azumarill: {

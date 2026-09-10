@@ -5,7 +5,7 @@ export class DataTerrain extends BasicEffect implements Readonly<BasicEffect> {
 	readonly condition: ConditionData;
 	constructor(data: AnyObject) {
 		super(data);
-		this.condition = {};
+		this.condition = data.condition || {};
 	}
 }
 export interface TerrainData extends Partial<DataTerrain>, EventMethods {
