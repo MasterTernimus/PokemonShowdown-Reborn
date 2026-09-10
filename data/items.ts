@@ -5886,6 +5886,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	dusknoirite: {...{"name":"Dusknoirite","spritenum":619,"megaStone":{"Dusknoir":"Dusknoir-Mega"},"itemUser":["Dusknoir"],"num":11097,"gen":9,"isNonstandard":"Custom","desc":"Allows Dusknoir to Mega Evolve into Mega Dusknoir.","shortDesc":"Allows Dusknoir to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	noctowlite: {...{"name":"Noctowlite","spritenum":619,"megaStone":{"Noctowl":"Noctowl-Mega"},"itemUser":["Noctowl"],"num":11098,"gen":9,"isNonstandard":"Custom","desc":"Allows Noctowl to Mega Evolve into Mega Noctowl.","shortDesc":"Allows Noctowl to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	luxranite: {...{"name":"Luxranite","spritenum":619,"megaStone":{"Luxray":"Luxray-Mega"},"itemUser":["Luxray"],"num":11100,"gen":9,"isNonstandard":"Custom","desc":"Allows Luxray to Mega Evolve into Mega Luxray.","shortDesc":"Allows Luxray to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
+	breloomite: {...{"name":"Breloomite","spritenum":619,"megaStone":{"Breloom":"Breloom-Mega"},"itemUser":["Breloom"],"num":11102,"gen":9,"isNonstandard":"Custom","desc":"Allows Breloom to Mega Evolve into Mega Breloom.","shortDesc":"Allows Breloom to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	sharpedonite: {
 		name: "Sharpedonite",
 		spritenum: 619,
@@ -6672,8 +6673,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				this.boost({ atk: 1, spa: 1 }, pokemon, null, item);
 				for (const side of this.sides) {
 					side.addSideCondition('stealthrock');
-					return;
 				}
+				return;
 			}
 			if (this.field.isTerrain('caveterrain')) {
 				this.boost({ def: 2 }, pokemon, null, item);
@@ -8450,18 +8451,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.hp) return;
-			const moveSlot = pokemon.lastMove && pokemon.getMoveData(pokemon.lastMove.id);
+			const moveSlot = pokemon.moveSlots.find(slot => slot.pp === 0);
 			if (moveSlot && moveSlot.pp === 0) {
-				pokemon.addVolatile('leppaberry');
-				pokemon.volatiles['leppaberry'].moveSlot = moveSlot;
+				pokemon.itemState.moveSlot = moveSlot;
 				pokemon.eatItem();
 			}
 		},
 		onEat(pokemon) {
 			let moveSlot;
-			if (pokemon.volatiles['leppaberry']) {
-				moveSlot = pokemon.volatiles['leppaberry'].moveSlot;
-				pokemon.removeVolatile('leppaberry');
+			if (pokemon.itemState.moveSlot) {
+				moveSlot = pokemon.itemState.moveSlot;
 			} else {
 				let pp = 99;
 				for (const possibleMoveSlot of pokemon.moveSlots) {

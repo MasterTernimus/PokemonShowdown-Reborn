@@ -1906,6 +1906,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	shroomish: {
 		tier: "LC",
 	},
+	breloommega: {tier: "OU"},
 	breloom: {
 		tier: "RU",
 		doublesTier: "(DUU)",

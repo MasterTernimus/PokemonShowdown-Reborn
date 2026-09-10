@@ -365,7 +365,7 @@ export class BattleActions {
 			const terrainSet = move.id === 'oceanicoperetta' && this.battle.field.terrain === 'underwaterterrain' ?
 				(this.battle.field.changeTerrain(terrain, pokemon, move), this.battle.field.terrain === terrain) :
 				this.battle.field.setTerrain(terrain, pokemon, move);
-			if (terrainSet) {
+			if (terrainSet || (terrainBeforeMove !== terrain && this.battle.field.terrain === terrain)) {
 				this.battle.field.terrainState.duration = duration;
 				this.battle.field.terrainState.zMoveTerrain = true;
 			}
@@ -2308,7 +2308,7 @@ export class BattleActions {
 		if (pokemon.baseSpecies.name === 'Banette' && pokemon.getItem().id === 'banettite') {
 			return 'Banette-Mega-Z';
 		}
-		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
+		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (
 			gardevoirFormes.includes(pokemon.baseSpecies.name) &&
 			pokemon.getItem().id === 'gardevoirite' &&
@@ -2354,9 +2354,9 @@ export class BattleActions {
 		if (sharedMega?.formes.includes(pokemon.baseSpecies.name)) {
 			return pokemon.baseSpecies.name === sharedMega.alternate ? sharedMega.normal : sharedMega.alternate;
 		}
-		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
+		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (!gardevoirFormes.includes(pokemon.baseSpecies.name) || pokemon.getItem().id !== 'gardevoirite') return null;
-		if (['Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Mega-Z'].includes(pokemon.baseSpecies.name)) {
+		if (['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega', 'Gardevoir-Mega-Z'].includes(pokemon.baseSpecies.name)) {
 			return 'Gardevoir-Void-Mega';
 		}
 		if (pokemon.baseSpecies.name === 'Gardevoir-Void-Mega') {

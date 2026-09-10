@@ -407,9 +407,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (terrains?.some(t => this.field.isTerrain(t))) {
 				this.effectState.boundDivisor = 6;
 			}
-			if (this.field.isTerrain('ashenbeachterrain') && effect.id === 'sandtomb') {
-				pokemon.addVolatile('sandtomb');
-			}
 		},
 		onResidualOrder: 13,
 		onResidual(pokemon) {

@@ -399,6 +399,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Contrary, Shed Skin, and Intimidate's effects.",
 		shortDesc: "Contrary + Shed Skin + Intimidate.",
 	},
+	corrosivetouch: {"name":"Corrosive Touch","desc":"Technician + Poison Touch + Corrosion. Moves with 60 or less power receive a 1.5x boost (80 or less on Factory Field). Contact attacks have a 30% chance to poison. Can poison Poison- and Steel-types; Poison attacks can hit Steel-types. Poisoning a foe lowers its Defense and Special Defense by 1 stage. Includes Corrosion field effects. Grass attacks receive a 1.5x same-type attack bonus.","shortDesc":"Technician + Poison Touch + Corrosion; Grass STAB."},
 	corrosion: {
 		name: "Corrosion",
 		desc: "This Pokemon's Poison moves and status can affect normally immune targets. In Wasteland, its moves can add status; Corrosive fields amplify its damage; poisoned foes lose 1 Defense and Sp. Def.",

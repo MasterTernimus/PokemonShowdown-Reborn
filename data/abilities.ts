@@ -2547,6 +2547,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10120,
 	},
+	corrosivetouch: {
+  onBasePowerPriority: 30,
+  onBasePower(basePower, attacker, defender, move) { return this.dex.abilities.get('technician').onBasePower?.call(this, basePower, attacker, defender, move); },
+  onSourceDamagingHit(damage, target, source, move) { this.dex.abilities.get('poisontouch').onSourceDamagingHit?.call(this, damage, target, source, move); },
+  onModifyMove(move) { this.dex.abilities.get('corrosion').onModifyMove?.call(this, move); },
+  onNegateImmunity(pokemon, type) { return this.dex.abilities.get('corrosion').onNegateImmunity?.call(this, pokemon, type); },
+  onDamage(damage, target, source, effect) { return this.dex.abilities.get('corrosion').onDamage?.call(this, damage, target, source, effect); },
+  onFoeAfterSetStatus(status, target, source, effect) { this.dex.abilities.get('corrosion').onFoeAfterSetStatus?.call(this, status, target, source, effect); },
+  onModifySTAB(stab, source, target, move) { if (move.type === 'Grass') return Math.max(stab, 1.5); },
+  flags: {}, name: 'Corrosive Touch', rating: 4.5, num: 11103,
+ },
 	corrosion: {
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
 		flags: {},
@@ -5514,7 +5525,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.abilityState.ironDominionFairyTaleBoosted = true;
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('irondominion'));
 			}
-			if (this.field.isTerrain('mirrorarmor')) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 1 }, pokemon, pokemon, this.dex.abilities.get('irondominion'));
 			}
 			const pressureDrop = this.field.isTerrain('coldeclipseterrain') ? -2 : -1;
@@ -7640,7 +7651,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				let forme = '';
 				if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) {
 					forme = 'cramorantgulping';
-				} else if (source.hp <= source.maxhp / 2 || this.field.isTerrain(['electricterrains', 'factoryterrain', 'shortcircuitterrain'])) {
+				} else if (source.hp <= source.maxhp / 2 || this.field.isTerrain(['electricterrain', 'factoryterrain', 'shortcircuitterrain'])) {
 					forme = 'cramorantgorging';
 				} else if (source.hp > source.maxhp / 2 || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('swampterrain')) {
 					forme = 'cramorantgulping';
@@ -9197,9 +9208,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 			if (target !== source && this.movehasType(move, 'Fire') && this.field.isTerrain('dragonsdenterrain')) {
 				move.accuracy = true;
-				if (!target.addVolatile('magmaarmor')) {
-					this.add('-immune', target, '[from] ability: Magma Armor');
-				}
+				this.add('-immune', target, '[from] ability: Magma Armor');
 				return null;
 			}
 		},
@@ -9598,7 +9607,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('mirrorarmor'));
 			}
-			if (this.field.isTerrain('mirrorarmor')) {
+			if (this.field.isTerrain('mirrorarenaterrain')) {
 				this.boost({ evasion: 1 }, pokemon, pokemon, this.dex.abilities.get('mirrorarmor'));
 			}
 		},
@@ -13203,7 +13212,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('fairytaleterrain') && active.hasAbility(['mirrorarmor', 'irondominion', 'royaldecree', 'royalsun', 'empress'])) {
 					preservePositiveBoosts('def', 'spd');
 				}
-				if (this.field.isTerrain('mirrorarmor') && active.hasAbility(['mirrorarmor', 'irondominion'])) {
+				if (this.field.isTerrain('mirrorarenaterrain') && active.hasAbility(['mirrorarmor', 'irondominion'])) {
 					preservePositiveBoosts('evasion');
 				}
 				if (this.field.isTerrain(['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain']) && active.hasAbility('relicarmor')) {
@@ -13359,7 +13368,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('fairytaleterrain') && active.hasAbility(['mirrorarmor', 'irondominion', 'royaldecree', 'royalsun', 'empress'])) {
 					preservePositiveBoosts('def', 'spd');
 				}
-				if (this.field.isTerrain('mirrorarmor') && active.hasAbility(['mirrorarmor', 'irondominion'])) {
+				if (this.field.isTerrain('mirrorarenaterrain') && active.hasAbility(['mirrorarmor', 'irondominion'])) {
 					preservePositiveBoosts('evasion');
 				}
 				if (this.field.isTerrain(['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain']) && active.hasAbility('relicarmor')) {
