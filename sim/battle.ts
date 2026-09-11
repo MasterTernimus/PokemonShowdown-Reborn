@@ -2921,7 +2921,7 @@ export class Battle {
 				action.pokemon.formeChange(species, null, true);
 				const gmaxSpecies = this.dex.species.get(species);
 				const gmaxAbility = gmaxSpecies.abilities['0'];
-				if (gmaxAbility) {
+				if (gmaxAbility && action.pokemon.ability !== toID(gmaxAbility)) {
 					action.pokemon.setAbility(gmaxAbility, null, null, true);
 					action.pokemon.baseAbility = toID(gmaxAbility);
 				}

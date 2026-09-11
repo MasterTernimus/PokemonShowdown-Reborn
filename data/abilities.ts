@@ -4700,19 +4700,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect || this.movehasType(move, ['Psychic', 'Fairy'])) return this.chainModify(1.2);
+			return this.dex.abilities.get('pixilate').onBasePower?.call(this, basePower, pokemon, target, move);
 		},
 		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
-			const holder = this.effectState.target;
-			if ((source.isAlly(holder) || move.target === 'all') && move.priority > 0.1) {
-				this.attrLastMove('[still]');
-				this.add('cant', holder, 'ability: Royal Voice', move, `[of] ${target}`);
-				return false;
-			}
+			return this.dex.abilities.get('queenlymajesty').onFoeTryMove?.call(this, target, source, move);
 		},
 		flags: { breakable: 1 },
 		name: "Royal Voice",
@@ -4928,8 +4919,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	voidveil: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			if (!pokemon.allies()[0]) return;
-			this.dex.abilities.get('costar').onStart?.call(this, pokemon);
+			pokemon.abilityState.dreamShelterUsed = false;
+		},
+		onImmunity(type) {
+			if (type === 'Ground') return false;
+		},
+		onUpdate(pokemon) {
+			this.dex.abilities.get('insomnia').onUpdate?.call(this, pokemon);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('insomnia').onSetStatus?.call(this, status, target, source, effect);
+		},
+		onTryAddVolatile(status, target) {
+			return this.dex.abilities.get('insomnia').onTryAddVolatile?.call(this, status, target);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('insomnia').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('dreamsickness').onResidual?.call(this, pokemon);
 		},
 		onAnyModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move);
@@ -5077,16 +5085,42 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10164,
 	},
 	perfectforesight: {
+		onUpdate(pokemon) {
+			this.dex.abilities.get('insomnia').onUpdate?.call(this, pokemon);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('insomnia').onSetStatus?.call(this, status, target, source, effect);
+		},
+		onTryAddVolatile(status, target) {
+			return this.dex.abilities.get('insomnia').onTryAddVolatile?.call(this, status, target);
+		},
+		onBasePower(basePower, source, target, move) {
+			if (source.m.perfectForesightAbility === 'insomnia') return;
+			return this.dex.abilities.get('insomnia').onBasePower?.call(this, basePower, source, target, move);
+		},
 		onStart(pokemon) {
 			delete pokemon.m.perfectForesightAbility;
 			delete pokemon.m.perfectForesightAbilityState;
 			let best = null;
 			let bestStat = -1;
+			let bestSpeedActive = false;
+			const weather = pokemon.effectiveWeather();
+			const speedConditions: {[id: string]: boolean} = {
+				sandrush: this.field.isWeather('sandstorm') || this.field.isTerrain(['desertterrain', 'ashenbeachterrain']),
+				chlorophyll: ['sunnyday', 'desolateland'].includes(weather),
+				swiftswim: ['raindance', 'primordialsea'].includes(weather) || this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain']),
+				slushrush: this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain']),
+				surgesurfer: this.field.isTerrain(['electricterrain', 'watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain', 'shortcircuitterrain']),
+				quickfeet: !!pokemon.status || this.field.isTerrain('electricterrain'),
+				speedboost: true,
+			};
 			for (const target of pokemon.foes()) {
+				const speedActive = Object.entries(speedConditions).some(([id, active]) => active && target.hasAbility(id));
 				const stat = Math.max(target.getStat('atk', false, true), target.getStat('spa', false, true));
-				if (stat > bestStat) {
+				if ((speedActive && !bestSpeedActive) || (speedActive === bestSpeedActive && stat > bestStat)) {
 					best = target;
 					bestStat = stat;
+					bestSpeedActive = speedActive;
 				}
 			}
 			if (best) {
@@ -5133,7 +5167,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					id: 'futuresight',
 					name: "Future Sight",
 					accuracy: 100,
-					basePower: 60,
+					basePower: 90,
 					category: "Special",
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
@@ -5182,7 +5216,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						id: 'futuresight',
 						name: "Future Sight",
 						accuracy: 100,
-						basePower: 60,
+						basePower: 90,
 						category: "Special",
 						priority: 0,
 						flags: { allyanim: 1, metronome: 1, futuremove: 1 },
@@ -5448,12 +5482,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10118,
 	},
 	streettyrant: {
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			return this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon);
+		},
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				this.boost({ atk: -1 }, target, pokemon, null, true);
 			}
 		},
-		onSwitchOut(pokemon) { return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon); },
 		onModifyMove(move) {
 			if (move.category !== 'Status') move.ignoreAbility = true;
 		},
@@ -7976,22 +8014,41 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	imperialmandate: {
 		checkMode(pokemon) {
+			const boostedField = (this.dex.abilities.get('imperialmandate') as any).boostedField.call(this);
+			const wantsDefenses = boostedField && pokemon.hp >= pokemon.maxhp / 2;
+			const state = pokemon.abilityState;
+			if (wantsDefenses && !state.imperialMandateDefenses) {
+				const before = {def: pokemon.boosts.def, spd: pokemon.boosts.spd};
+				state.imperialMandateDefenses = {def: 0, spd: 0};
+				this.boost({def: 1, spd: 1}, pokemon, pokemon, this.dex.abilities.get('imperialmandate'));
+				state.imperialMandateDefenses = {
+					def: Math.max(0, pokemon.boosts.def - before.def),
+					spd: Math.max(0, pokemon.boosts.spd - before.spd),
+				};
+			} else if (!wantsDefenses && state.imperialMandateDefenses) {
+				const granted = state.imperialMandateDefenses;
+				delete state.imperialMandateDefenses;
+				this.boost({def: -granted.def, spd: -granted.spd}, pokemon, pokemon, this.dex.abilities.get('imperialmandate'));
+			}
 			const mode = pokemon.hp >= pokemon.maxhp / 2 ? 'power' : 'speed';
-			if (pokemon.abilityState.imperialMandateMode === mode) return;
-			pokemon.abilityState.imperialMandateMode = mode;
+			const modeKey = boostedField && mode === 'power' ? 'defense' : mode;
+			if (state.imperialMandateMode === modeKey) return;
+			state.imperialMandateMode = modeKey;
 			this.add('-message', mode === 'power' ?
-				'Imperial Mandate empowers its attacks!' :
+				(boostedField ? 'Imperial Mandate fortifies its defenses!' : 'Imperial Mandate empowers its attacks!') :
 				'Imperial Mandate quickens its command!');
 		},
 		boostedField() {
-			return this.field.isTerrain(['fairytaleterrain', 'coldeclipseterrain', 'newworldterrain']);
+			return this.field.isTerrain(['fairytaleterrain', 'chessboardterrain', 'newworldterrain', 'starlightarenaterrain', 'coldeclipseterrain']);
 		},
 		onStart(pokemon) {
 			this.effect.checkMode.call(this, pokemon);
-			if ((this.dex.abilities.get('imperialmandate') as any).boostedField.call(this)) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 		},
 		onTerrainChange(pokemon) {
-			if ((this.dex.abilities.get('imperialmandate') as any).boostedField.call(this)) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
+			(this.dex.abilities.get('imperialmandate') as any).checkMode.call(this, pokemon);
+		},
+		onUpdate(pokemon) {
+			(this.dex.abilities.get('imperialmandate') as any).checkMode.call(this, pokemon);
 		},
 		onModifySpe(spe, pokemon) {
 			if (pokemon.hp < pokemon.maxhp / 2) return this.chainModify(2);
@@ -7999,13 +8056,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (move.category === 'Status') return;
 			this.effect.checkMode.call(this, source);
+			if ((this.dex.abilities.get('imperialmandate') as any).boostedField.call(this)) {
+				return source.hp < source.maxhp / 2 ? this.chainModify(1.5) : undefined;
+			}
 			let modifier = 1.2;
 			if (source.hp >= source.maxhp / 2) modifier *= 2;
-			if ((this.dex.abilities.get('imperialmandate') as any).boostedField.call(this)) modifier *= 1.5;
 			return this.chainModify(modifier);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.8);
+			if (move.category !== 'Status' && !(this.dex.abilities.get('imperialmandate') as any).boostedField.call(this)) return this.chainModify(0.8);
 		},
 		onResidual(pokemon) { this.effect.checkMode.call(this, pokemon); },
 		flags: {},
@@ -9503,9 +9562,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const possibleType = terrainTypeMap.get(this.field.getTerrain().id);
 				newType = possibleType !== undefined ? possibleType : newType;
 			}
+			if (pokemon.terastallized) return;
 			const oldTypes = pokemon.getTypes();
-			if (oldTypes.join() === newType || !pokemon.setType(newType)) return;
-			if (this.field.terrain || pokemon.transformed) {
+			if (oldTypes.join() === newType || !pokemon.setType(newType, pokemon.species.num === 773)) return;
+			if (this.field.terrain || pokemon.transformed || pokemon.species.num === 773) {
 				this.add('-start', pokemon, 'typechange', newType, '[from] ability: Mimicry');
 				if (this.field.isTerrain('coldeclipseterrain')) this.boost({ def: 1, spd: 1 }, pokemon, pokemon);
 				if (!this.field.terrain) this.hint("Transform Mimicry changes you to your original un-transformed types.");
@@ -13861,7 +13921,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMovePriority: 1,
 		onStart() {
 			if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')) {
-				this.boost({ def: 1 });
+				this.boost({ def: 1, spd: 1 });
 			}
 		},
 		onModifyMove(move, attacker, defender) {
@@ -13872,9 +13932,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (attacker.species.name !== targetForme) {
 				if (this.field.isTerrain('fairytaleterrain') || this.field.isTerrain('chessboardterrain')) {
 					if (targetForme === 'Aegislash') {
-						this.boost({ def: 1, atk: -1 });
+						this.boost({ def: 1, spd: 1, atk: -1, spa: -1 });
 					} else {
-						this.boost({ def: -1, atk: 1 });
+						this.boost({ def: -1, spd: -1, atk: 1, spa: 1 });
 					}
 				}
 				attacker.formeChange(targetForme);

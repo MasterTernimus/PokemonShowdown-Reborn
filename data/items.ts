@@ -2646,8 +2646,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	gardevoirite: {
 		name: "Gardevoirite",
 		spritenum: 587,
-		megaStone: { "Gardevoir": "Gardevoir-Mega" },
-		itemUser: ["Gardevoir"],
+		megaStone: { "Gardevoir": "Gardevoir-Mega", "Gardevoir-Void": "Gardevoir-Mega-Alt" },
+		itemUser: ["Gardevoir", "Gardevoir-Void"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},

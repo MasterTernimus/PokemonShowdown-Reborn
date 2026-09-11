@@ -7269,7 +7269,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			});
 			if (source.hasAbility(['perfectforesight', 'doomwarning'])) {
 				const futureMove = target.side.slotConditions[target.position]['futuremove'];
-				futureMove.moveData.basePower = 60;
+				futureMove.moveData.basePower = source.hasAbility('perfectforesight') ? 90 : 60;
 				futureMove.moveData.ignoreAbility = true;
 				futureMove.moveData.ignoreDefensive = true;
 				futureMove.moveData.ignoreImmunity = true;
