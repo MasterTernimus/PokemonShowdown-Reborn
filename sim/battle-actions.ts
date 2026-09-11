@@ -2267,6 +2267,9 @@ export class BattleActions {
 		const species = pokemon.baseSpecies;
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
+		if (species.id === 'gardevoirmegaalt') return null;
+		if (species.id === 'alakazammegaalt') return null;
+		if (species.id === 'alakazamalt' && item.id === 'alakazite') return 'Alakazam-Mega-Alt';
 		if (species.id === 'charizardmegaxalt') return null;
 		if (species.id === 'charizardalt' && item.id === 'charizarditex') return 'Charizard-Mega-X-Alt';
 		if (species.id === 'gallademegaazzy') return null;
@@ -2308,7 +2311,7 @@ export class BattleActions {
 		if (pokemon.baseSpecies.name === 'Banette' && pokemon.getItem().id === 'banettite') {
 			return 'Banette-Mega-Z';
 		}
-		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
+		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega-Alt', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (
 			gardevoirFormes.includes(pokemon.baseSpecies.name) &&
 			pokemon.getItem().id === 'gardevoirite' &&
@@ -2354,9 +2357,9 @@ export class BattleActions {
 		if (sharedMega?.formes.includes(pokemon.baseSpecies.name)) {
 			return pokemon.baseSpecies.name === sharedMega.alternate ? sharedMega.normal : sharedMega.alternate;
 		}
-		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
+		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega-Alt', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (!gardevoirFormes.includes(pokemon.baseSpecies.name) || pokemon.getItem().id !== 'gardevoirite') return null;
-		if (['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega', 'Gardevoir-Mega-Z'].includes(pokemon.baseSpecies.name)) {
+		if (['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega-Alt', 'Gardevoir-Mega', 'Gardevoir-Mega-Z'].includes(pokemon.baseSpecies.name)) {
 			return 'Gardevoir-Void-Mega';
 		}
 		if (pokemon.baseSpecies.name === 'Gardevoir-Void-Mega') {

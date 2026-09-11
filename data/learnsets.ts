@@ -114493,7 +114493,7 @@ const documentLearnsetAdditions: {[id: string]: {[move: string]: string[]}} = {
 	boltund: {fakeout: ["9M"], icefang: ["9M"]},
 	brambleghast: {beatup: ["9M"], block: ["9M"], naturepower: ["9M"]},
 	braviary: {ominouswind: ["9M"], twister: ["9M"]},
-	breloom: {coaching: ["9M"]},
+	breloom: {barbbarrage: ["9M"], coaching: ["9M"]},
 	brutebonnet: {naturepower: ["9M"]},
 	bruxish: {bodyslam: ["9M"], drainingkiss: ["9M"], storedpower: ["9M"]},
 	butterfree: {dazzlinggleam: ["9M"], poisongas: ["9L1"], sludge: ["9M"], sludgebomb: ["9M"], venomdrench: ["9M"]},

@@ -839,11 +839,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Scrappy, Technician, Opportunist, and Limber's effects.",
 		shortDesc: "Scrappy + Technician + Opportunist + Limber.",
 	},
-	royalvoice: {"name":"Royal Voice","desc":"Pixilate + Queenly Majesty + Dream Sickness. Retains its Fairy conversion, Psychic/Fairy power boost and priority protection, with all Dream Sickness effects, including ally protection, healing, stat-drop protection and dream shelter.","shortDesc":"Pixilate + Queenly Majesty + Dream Sickness."},
+	royalvoice: {"name":"Royal Voice","desc":"Pixilate + Queenly Majesty + Dream Sickness. Normal moves become Fairy and receive Pixilate power boosts. Blocks opposing priority moves targeting its side. Includes all Dream Sickness effects: ally protection, healing, stat-drop protection and dream shelter.","shortDesc":"Pixilate + Queenly Majesty + Dream Sickness."},
 	perfectforesight: {
 		name: "Perfect Foresight",
-		desc: "On switch-in, this Pokemon identifies and gains the Ability of the opposing Pokemon with the highest offensive stat. Future Sight queued by this Ability has 60 BP, ignores defensive boosts, screens, and Abilities, and hits Dark-type Pokemon neutrally. If this Pokemon uses a move on opposing Pokemon, is damaged by an opposing attack, or uses Future Sight, Future Sight is queued on the affected opposing slots. Spread moves queue Future Sight on all enemies, and existing Perfect Foresight delayed attacks stack instead of blocking new ones.",
-		shortDesc: "Gains strongest foe's Ability; repeatedly queues 60 BP Future Sight.",
+		desc: "Includes Insomnia: prevents sleep and Yawn, cures sleep, and boosts damaging Dark- and Ghost-type moves by 1.3x. On activation, prioritizes opposing Speed abilities whose conditions are met for this Pokemon (Sand Rush, Chlorophyll, Swift Swim, Slush Rush, Surge Surfer, Quick Feet, or Speed Boost). Ties and fallback use the highest Attack or Special Attack. Future Sight queued by this Ability has 90 BP, ignores defensive boosts, screens, and Abilities, and hits Dark-type Pokemon neutrally. If this Pokemon uses a move on opposing Pokemon, is damaged by an opposing attack, or uses Future Sight, Future Sight is queued on the affected opposing slots. Spread moves queue Future Sight on all enemies, and existing Perfect Foresight delayed attacks stack instead of blocking new ones.",
+		shortDesc: "Insomnia + strongest foe's Ability; queues 90 BP Future Sight.",
 	},
 	doomwarning: {
 		name: "Doom Warning",
@@ -928,8 +928,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	streettyrant: {
 		name: "Street Tyrant",
-		desc: "This Pokemon has Intimidate, Regenerator, and Mold Breaker's effects.",
-		shortDesc: "Intimidate + Regenerator + Mold Breaker.",
+		desc: "This Pokemon has Intimidate, Shed Skin, and Mold Breaker's effects.",
+		shortDesc: "Intimidate + Shed Skin + Mold Breaker.",
 	},
 	divineintervention: {
 		name: "Divine Intervention",
@@ -1948,8 +1948,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	voidveil: {
 		name: "Void Veil",
-		desc: "This Pokemon has Levitate, Friend Guard, and Costar's effects.",
-		shortDesc: "Levitate + Friend Guard + Costar.",
+		desc: "Levitate + Friend Guard + Insomnia. Each turn heals itself and allies by 1/16 max HP. Once per entry, an ally at 25% HP or less before healing gets another 1/4 max HP heal, a status cure, and Dream Sickness shelter.",
+		shortDesc: "Levitate + Friend Guard + Insomnia; Dream Sickness healing.",
 	},
 	relicbeam: {
 		name: "Relic Beam",
@@ -2851,7 +2851,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stancechange: {
 		name: "Stance Change",
-		desc: "This Pokemon has Dual Wield. Aegislash changes to Blade Forme before attacking and Shield Forme before King's Shield. Shield Forme takes 20% less damage; consecutive Free-for-All hits deal 30% less damage. Blade Forme deals 1.2x damage.",
+		desc: "This Pokemon has Dual Wield. Aegislash changes to Blade Forme before attacking and Shield Forme before King's Shield. Shield Forme takes 20% less damage; consecutive Free-for-All hits deal 30% less damage. Blade Forme deals 1.2x damage. On Fairy Tale and Chessboard, activation raises Defense and Special Defense by 1; switching to Blade raises Attack and Special Attack by 1 and lowers both defenses by 1, with the reverse on switching to Shield.",
 		shortDesc: "Dual Wield; Shield: 20% less damage; Blade: 1.2x damage.",
 		gen6: {
 			desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield.",
@@ -3463,8 +3463,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	imperialmandate: {
 		name: "Imperial Mandate",
-		desc: "At 50% HP or higher, this Pokemon's damage dealt is doubled. Below 50% HP, its Speed is doubled instead. It also deals 1.2x damage and takes 0.8x damage from attacks. In Fairy Tale, Cold Eclipse, and New World, it raises Defense and Special Defense by 1 and deals 1.5x damage.",
-		shortDesc: "High HP doubles damage; low HP doubles Speed; 1.2x dealt and 0.8x taken.",
+		desc: "Outside boosted fields: at 50% HP or higher, attacks have 2.4x power; below 50%, attacks have 1.2x power and Speed is doubled. Takes 20% less attack damage outside boosted fields. On Fairy Tale, Chessboard, New World, Starlight Arena, and Cold Eclipse: at 50% HP or higher, grants +1 Defense and Special Defense with no attack boost; below 50%, removes its granted defense stages and grants 1.5x attack power and double Speed. Field defense stages do not stack and are removed on leaving these fields.",
+		shortDesc: "Boosted fields: high HP +1 Def/SpD; low HP 1.5x power, 2x Speed.",
 	},
 	phantombarrage: {
 		name: "Phantom Barrage",
