@@ -173,6 +173,19 @@ describe('Composite ability cleanup', function () {
 		assert.equal(coalossal.hp, coalossalHP);
 	});
 
+	it('should make Gooey lower only Speed after a damaging hit', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Goodra', ability: 'gooey', moves: ['splash']},
+		], [
+			{species: 'Mew', ability: 'noability', moves: ['tackle']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move splash', 'move tackle');
+		assert.deepEqual(battle.p2.active[0].boosts, {
+			atk: 0, def: 0, spa: 0, spd: 0, spe: -2, accuracy: 0, evasion: 0,
+		});
+	});
+
 	it('should expose every requested Hisuian Path component', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Wyrdeer', ability: 'hisuianpath', moves: ['splash']},

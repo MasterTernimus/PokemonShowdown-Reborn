@@ -7492,11 +7492,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
 			this.add('-ability', target, 'Gooey');
-			const bestStat = source.getStat('atk', false, true) >= source.getStat('spa', false, true) ? 'atk' : 'spa';
 			const speedDrop = this.field.isTerrain('murkwatersurfaceterrain') ? 4 : 2;
-			const offensiveDrop = this.field.isTerrain('murkwatersurfaceterrain') ? 2 : 1;
 			this.add('-message', `${target.name}'s Gooey ${source.hasAbility('contrary') ? 'sharply boosted' : 'harshly lowered'} ${source.name}'s Speed!`);
-			this.boost({ spe: -speedDrop, [bestStat]: -offensiveDrop }, source, target, null, true);
+			this.boost({ spe: -speedDrop }, source, target, null, true);
 		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {

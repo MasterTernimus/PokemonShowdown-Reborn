@@ -305,8 +305,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	ampharosite: {
 		name: "Ampharosite",
 		spritenum: 580,
-		megaStone: { "Ampharos": "Ampharos-Mega" },
-		itemUser: ["Ampharos"],
+		megaStone: { "Ampharos": "Ampharos-Mega", "Ampharos-Aevian": "Ampharos-Aevian-Mega" },
+		itemUser: ["Ampharos", "Ampharos-Aevian"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
