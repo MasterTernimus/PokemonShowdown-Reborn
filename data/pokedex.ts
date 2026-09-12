@@ -3146,9 +3146,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	pinsir: {
 		num: 127,
 		name: "Pinsir",
-		types: ["Bug", "Steel"],
+		types: ["Bug", "Ground"],
 		baseStats: { hp: 65, atk: 125, def: 100, spa: 55, spd: 70, spe: 85 },
-		abilities: { 0: "Hyper Cutter", 1: "Armorize", H: "Violent Rush" },
+		abilities: { 0: "Hyper Cutter", 1: "Hardy Skin", H: "Violent Rush" },
 		heightm: 1.5,
 		weightkg: 55,
 		color: "Brown",
