@@ -1942,9 +1942,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return;
 				}
 				if (move.id === 'dive') {
-					// Dive's charge turn also runs AfterMove; wait for the actual attack.
-					if (source.volatiles['dive']) return;
-					this.add('-message', `${source.name} made a hole in the ice!`);
+					// Dive's charge turn also runs AfterMove; announce the hole then,
+					// and wait to break the ice until the actual attack.
+					if (source.volatiles['dive']) {
+						this.add('-message', `${source.name} made a hole in the ice!`);
+						return;
+					}
 					this.add('-message', 'The ice was broken from underneath!');
 					restoreTerrain('watersurfaceterrain');
 					return;

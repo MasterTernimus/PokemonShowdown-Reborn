@@ -13639,6 +13639,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10031,
 	},
 	wrathshield: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
+		},
 		onStart(pokemon) {
 			if (this.field.isTerrain(['coldeclipseterrain', 'newworldterrain', 'starlightarenaterrain', 'fairytaleterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('wrathshield'));
@@ -13671,7 +13675,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	shadowcurrent: {
 		onStart(pokemon) {
-			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
+			this.dex.abilities.get('anticipation').onStart?.call(this, pokemon);
 		},
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
@@ -13682,15 +13686,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyMove(move, source, target) {
+			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move, source);
 			this.dex.abilities.get('technician').onModifyMove?.call(this, move, this.effectState.target);
 		},
-		onBasePower(basePower, source, target, move) { return this.dex.abilities.get('technician').onBasePower?.call(this, basePower, source, target, move); },
+		onBasePowerPriority: 30,
+		onBasePower(basePower, source, target, move) {
+			this.dex.abilities.get('technician').onBasePower?.call(this, basePower, source, target, move);
+			this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
+		},
 		flags: {},
 		name: "Shadow Current",
 		rating: 4.5,
 		num: 10033,
 	},
 	astralwitchcraft: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
+		},
 		onStart(pokemon) {
 			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain'])) {
@@ -13723,6 +13736,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10035,
 	},
 	ragingcurrent: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
+		},
 		onModifySpe(spe, pokemon) { return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon); },
 		onTryHit(target, source, move) { return this.dex.abilities.get('dryskin').onTryHit?.call(this, target, source, move); },
 		onSourceBasePowerPriority: 17,

@@ -381,11 +381,12 @@ describe('Composite ability cleanup', function () {
 		stillwaters: ['cloudnine', 'magicguard', 'unaware'],
 		relentlesshunt: ['levitate'],
 			omenedge: ['sharpness', 'dualwield', 'toughclaws'],
-			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
+			ragingcurrent: ['proficient', 'swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
+			shadowcurrent: ['proficient', 'protean', 'technician', 'anticipation', 'infiltrator'],
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
-			riotamp: ['punkrock', 'galvanize', 'resonanceforce', 'technician', 'voltabsorb'],
+			riotamp: ['proficient', 'galvanize', 'resonanceforce', 'voltabsorb'],
 			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],
@@ -408,6 +409,22 @@ describe('Composite ability cleanup', function () {
 		const calderaMove = battle.dex.getActiveMove('flamethrower');
 		battle.singleEvent('ModifyMove', pokemon.getAbility(), pokemon.abilityState, calderaMove, pokemon);
 		assert.equal(calderaMove.hasSheerForce, true);
+	});
+
+	it('should keep Proficient built into Mega abilities instead of separate species slots', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		assert.deepEqual(battle.dex.species.get('Swampert-Mega').abilities, {
+			0: 'Raging Current',
+		});
+		assert.deepEqual(battle.dex.species.get('Chesnaught-Mega').abilities, {
+			0: 'Wrath Shield',
+		});
+		assert.deepEqual(battle.dex.species.get('Greninja').abilities, {
+			0: 'Technician', 1: 'Protean', H: 'Battle Bond',
+		});
+		assert.deepEqual(battle.dex.species.get('Delphox').abilities, {
+			0: 'Sworn Duty', 1: 'Magic Guard', H: 'Magician',
+		});
 	});
 
 	it('should apply the requested species ability replacements and Altaria event slot', function () {
