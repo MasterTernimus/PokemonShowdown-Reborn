@@ -19,6 +19,8 @@ describe('Schooling custom effects', () => {
 		assert.equal(Dex.species.get('Beartic').abilities['0'], 'Tough Claws');
 		const learnset = Dex.species.getLearnsetData('wishiwashi').learnset;
 		for (const move of [
+			'acidarmor', 'amnesia', 'bulkup', 'bodypress', 'calmmind', 'flashcannon', 'haze', 'heavyslam',
+			'icespinner', 'iciclecrash', 'psychic', 'skullbash', 'waterspout', 'wideguard', 'earthquake',
 			'tripledive', 'wavecrash', 'dive', 'bounce', 'ironhead', 'icefang', 'psychicfangs', 'strength',
 		]) {
 			assert(learnset[move], `Wishiwashi should learn ${move}`);
@@ -42,7 +44,7 @@ describe('Schooling custom effects', () => {
 		assert.species(wishiwashi, 'Wishiwashi-School');
 	});
 
-	it('should apply Hydra Bond without Swift Swim or Mold Breaker in School Form', () => {
+	it('should apply Hydra Bond and Mold Breaker without inheriting unrelated abilities in School Form', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Wishiwashi', ability: 'Schooling', moves: ['raindance', 'tackle', 'earthquake'] },
 		], [
@@ -58,7 +60,7 @@ describe('Schooling custom effects', () => {
 		assert(battle.log.some(line => line.startsWith('|-hitcount|') && line.endsWith('|3')));
 		const hpBeforeEarthquake = eelektross.hp;
 		battle.makeChoices('move earthquake', 'move splash');
-		assert.equal(eelektross.hp, hpBeforeEarthquake, 'Levitate should block Earthquake without Mold Breaker');
+		assert(eelektross.hp < hpBeforeEarthquake, 'Mold Breaker should bypass Levitate for Earthquake');
 	});
 
 	it('should apply Self Repair while in School Form', () => {
