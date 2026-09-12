@@ -1517,6 +1517,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('aerilate').onBasePower?.call(this, basePower, pokemon, target, move);
 		},
 		onTryBoost(boost, target, source, effect) { return this.dex.abilities.get('hypercutter').onTryBoost?.call(this, boost, target, source, effect); },
+		onUpdate(pokemon) { this.dex.abilities.get('vitalspirit').onUpdate?.call(this, pokemon); },
+		onSetStatus(status, target, source, effect) { return this.dex.abilities.get('vitalspirit').onSetStatus?.call(this, status, target, source, effect); },
 		flags: {},
 		name: "Joyride",
 		rating: 4.5,
@@ -2209,6 +2211,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Apex Armor",
 		rating: 4.5,
 		num: 11090,
+	},
+	hardyskin: {
+		onTryAddVolatile(status, target) { return this.dex.abilities.get('dryskin').onTryAddVolatile?.call(this, status, target); },
+		onImmunity(type, pokemon) { return this.dex.abilities.get('dryskin').onImmunity?.call(this, type, pokemon); },
+		onWeather(pokemon) { return this.dex.abilities.get('dryskin').onWeather?.call(this, pokemon); },
+		onUpdate(pokemon) { this.dex.abilities.get('vitalspirit').onUpdate?.call(this, pokemon); },
+		onSetStatus(status, target, source, effect) { return this.dex.abilities.get('vitalspirit').onSetStatus?.call(this, status, target, source, effect); },
+		onSourceAfterFaint(length, target, source, effect) { return this.dex.abilities.get('moxie').onSourceAfterFaint?.call(this, length, target, source, effect); },
+		flags: {}, name: "Hardy Skin", rating: 3.5, num: 11104,
 	},
 	bulletproof: {
 		onTryHit(pokemon, target, move) {

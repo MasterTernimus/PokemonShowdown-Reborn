@@ -114708,7 +114708,7 @@ const documentLearnsetAdditions: {[id: string]: {[move: string]: string[]}} = {
 	perrserker: {bulkup: ["9M"], bulletpunch: ["9M"], covet: ["9M"], hypnosis: ["9L1"], liquidation: ["9M"], outrage: ["9M"], spikes: ["9M"], thunderwave: ["9M"]},
 	persian: {happyhour: ["9M"], sing: ["9L1"], spikes: ["9M"]},
 	pidgeot: {bravebird: ["9M"], dualwingbeat: ["9M"], feintattack: ["9M"], hypervoice: ["9M"]},
-	pinsir: {aerialace: ["9M"], circlethrow: ["9M"], dualwingbeat: ["9M"], lunge: ["9M"]},
+	pinsir: {aerialace: ["9M"], circlethrow: ["9M"], dualwingbeat: ["9M"], lunge: ["9M"], extremespeed: ["9M"]},
 	plusle: {drainingkiss: ["9M"], mysticalfire: ["9M"], powerswap: ["9M"], risingvoltage: ["9M"], screech: ["9M"], terrainpulse: ["9M"]},
 	politoed: {bide: ["9M"], fissure: ["9M"], iceball: ["9M"], psywave: ["9M"], rage: ["9M"], skullbash: ["9M"], submission: ["9M"]},
 	poliwrath: {iceball: ["9M"], jetpunch: ["9L1"], machpunch: ["9M"]},

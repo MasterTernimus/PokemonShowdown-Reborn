@@ -136,8 +136,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	joyride: {
 		name: "Joyride",
-		desc: "This Pokemon has Aerilate and Hyper Cutter's effects.",
-		shortDesc: "Aerilate + Hyper Cutter.",
+		desc: "Aerilate + Hyper Cutter + Vital Spirit.",
+		shortDesc: "Aerilate + Hyper Cutter + Vital Spirit.",
+	},
+	hardyskin: {
+		name: "Hardy Skin",
+		desc: "Dry Skin + Vital Spirit + Moxie.",
+		shortDesc: "Dry Skin + Vital Spirit + Moxie.",
 	},
 	aerilate: {
 		name: "Aerilate",
