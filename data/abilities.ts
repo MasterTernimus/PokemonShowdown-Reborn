@@ -11983,6 +11983,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move, pokemon) {
 			if (pokemon.species.id !== 'wishiwashischool') return;
 			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, pokemon);
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon);
 		},
 		onSourceModifySecondaries(secondaries, target, source, move) {
 			if (source.species.id !== 'wishiwashischool') return;
