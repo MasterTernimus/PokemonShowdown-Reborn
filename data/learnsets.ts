@@ -114449,6 +114449,26 @@ const rebornFlowerMoves = ['tackle', 'ember', 'fairywind', 'flamewheel', 'wish',
 for (const move of rebornFlowerMoves) {
 	if (!(Learnsets as any).florges.learnset[move]) (Learnsets as any).florges.learnset[move] = ['9L1'];
 }
+(Learnsets as any).ampharosaevian = {learnset: {
+	tackle: ['9L1'], snowscape: ['9L1'], thunderwave: ['9L1'], thundershock: ['9L1'],
+	thunderpunch: ['9L1'], icywind: ['9L1'], cottonspore: ['9L1'], takedown: ['9L1'],
+	iceball: ['9L1'], confuseray: ['9L1'], powergem: ['9L1'], discharge: ['9L1'],
+	cottonguard: ['9L1'], rest: ['9L1'], reflect: ['9L1'], thunder: ['9L1'], blizzard: ['9L1'],
+	zapcannon: ['9M'], haze: ['9M'], icepunch: ['9M'], afteryou: ['9M'], agility: ['9M'],
+	bodyslam: ['9M'], charge: ['9M'], eerieimpulse: ['9M'], electricterrain: ['9M'], flatter: ['9M'],
+	frostbreath: ['9M'], irontail: ['9M'], sandattack: ['9M'], screech: ['9M'], auroraveil: ['9M'],
+	avalanche: ['9M'], beatup: ['9M'], bodypress: ['9M'], brutalswing: ['9M'], chargebeam: ['9M'],
+	dragondance: ['9M'], dragonpulse: ['9M'], dynamicpunch: ['9M'], echoedvoice: ['9M'], electroball: ['9M'],
+	electroweb: ['9M'], endeavor: ['9M'], faketears: ['9M'], flash: ['9M'], flashcannon: ['9M'],
+	fling: ['9M'], focusblast: ['9M'], focuspunch: ['9M'], gigaimpact: ['9M'], guardswap: ['9M'],
+	gyroball: ['9M'], healbell: ['9M'], hyperbeam: ['9M'], icebeam: ['9M'], iciclespear: ['9M'],
+	laserfocus: ['9M'], magiccoat: ['9M'], magnetrise: ['9M'], megakick: ['9M'], megapunch: ['9M'],
+	metronome: ['9M'], outrage: ['9M'], payday: ['9M'], payback: ['9M'], playrough: ['9M'],
+	raindance: ['9M'], recycle: ['9M'], risingvoltage: ['9M'], rockclimb: ['9M'], rocksmash: ['9M'],
+	roleplay: ['9M'], safeguard: ['9M'], shadowball: ['9M'], shockwave: ['9M'], signalbeam: ['9M'],
+	skillswap: ['9M'], snatch: ['9M'], strength: ['9M'], taunt: ['9M'], thunderbolt: ['9M'],
+	voltswitch: ['9M'], waterpulse: ['9M'], weatherball: ['9M'], wildcharge: ['9M'],
+}};
 (Learnsets as any).florgesreborn = {learnset: {...(Learnsets as any).florges.learnset}};
 
 // Unfezant-Rejuv is a battle-only form, so both Wing abilities use the base

@@ -1253,8 +1253,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	gooey: {
 		name: "Gooey",
-		desc: "When this Pokemon is hit by an opposing damaging move, the attacker's Speed is lowered by 2 stages and its highest offensive stat is lowered by 1 stage. This Pokemon also has Hydration and Sap Sipper's effects.",
-		shortDesc: "Any damaging hit: attacker -2 Spe/-1 offense; Hydration + Sap Sipper.",
+		desc: "When this Pokemon is hit by an opposing damaging move, the attacker's Speed is lowered by 2 stages, or 4 stages on Murkwater Surface. This Pokemon also has Hydration and Sap Sipper's effects.",
+		shortDesc: "Damaging hit: attacker -2 Spe (-4 on Murkwater); Hydration + Sap Sipper.",
 	},
 	fluffycraft: {
 		name: "Fluffy Craft",
