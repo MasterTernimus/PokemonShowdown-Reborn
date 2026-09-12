@@ -90505,6 +90505,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	dhelmise: {
 		learnset: {
+			strengthsap: ["9M"],
 			spikecannon: ["9M"],
 			absorb: ["9L1", "8L1", "7L1"],
 			aerialace: ["9M", "7M"],
