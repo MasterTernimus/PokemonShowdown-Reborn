@@ -4,16 +4,16 @@ const common = require('../../common');
 describe('Mega Proficient and Illusion audit', function () {
  let battle;
  afterEach(() => battle?.destroy());
- for (const ability of ['wrathshield', 'astralwitchcraft', 'ragingcurrent', 'shadowcurrent']) {
+ for (const ability of ['proficient', 'wrathshield', 'astralwitchcraft', 'ragingcurrent', 'shadowcurrent']) {
   it(`${ability} boosts STAB once and preserves Technician`, function () {
    battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: false}, [[{species:'Mew', ability, moves:['psychic']}],[{species:'Blissey', ability:'noability', moves:['splash']}]]);
    if (battle.requestState === 'teampreview') battle.makeChoices();
    const user=battle.p1.active[0], foe=battle.p2.active[0];
    assert(user.hasAbility('proficient'));
    const calc=(power,type)=>{const move=battle.dex.getActiveMove('psychic'); move.basePower=power; move.type=type; return battle.runEvent('BasePower',user,foe,move,power,true);};
-   assert.equal(calc(100,'Psychic'),120);
+   assert.equal(calc(100,'Psychic'),130);
    assert.equal(calc(100,'Dragon'),100);
-   assert.equal(calc(60,'Psychic'),ability==='shadowcurrent'?108:72);
+   assert.equal(calc(60,'Psychic'),ability==='shadowcurrent'?117:78);
    assert.equal(calc(60,'Dragon'),ability==='shadowcurrent'?90:60);
   });
  }

@@ -11051,7 +11051,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	proficient: {
 		onBasePowerPriority: 22,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.category !== 'Status' && attacker.hasType(move.type)) return this.chainModify(1.2);
+			if (move.category !== 'Status' && attacker.hasType(move.type)) return this.chainModify(1.3);
 		},
 		flags: {},
 		name: "Proficient",
