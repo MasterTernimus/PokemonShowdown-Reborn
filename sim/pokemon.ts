@@ -2138,10 +2138,10 @@ export class Pokemon {
 		wickedsnare: ['stakeout', 'tanglinghair', 'prankster'],
 			corrosivescale: ['marvelscale'],
 			aurainstinct: ['adaptability', 'dualwield', 'secondwind'],
-			wrathshield: ['bulletproof', 'dauntlessshield', 'selfrepair'],
-			shadowcurrent: ['protean', 'technician', 'swornduty', 'infiltrator'],
-			astralwitchcraft: ['levitate', 'magicguard', 'swornduty'],
-			ragingcurrent: ['swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
+			wrathshield: ['proficient', 'bulletproof', 'dauntlessshield', 'selfrepair'],
+			shadowcurrent: ['proficient', 'protean', 'technician', 'anticipation', 'infiltrator'],
+			astralwitchcraft: ['proficient', 'levitate', 'magicguard', 'swornduty'],
+			ragingcurrent: ['proficient', 'swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			siegelauncher: ['stalwart'],
@@ -2350,8 +2350,13 @@ riotamp: ['proficient', 'galvanize', 'resonanceforce', 'voltabsorb'],
 	}
 
 	getHealth = (useIllusion = true): { side: SideID; secret: string; shared: string } => {
-		// Illusion copies the disguise's visible HP and status without changing the user's real battle state.
-		if (useIllusion && this.illusion && this.illusion !== this) return this.illusion.getHealth(false);
+		// Only public health may follow a living disguise. Private switch requests
+		// must retain this Pokemon's real HP/status, even after its disguise faints.
+		if (useIllusion && this.hp && this.illusion && this.illusion !== this && this.illusion.hp && !this.illusion.fainted) {
+			const health = this.getHealth(false);
+			health.shared = this.illusion.getHealth(false).shared;
+			return health;
+		}
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
 		let secret = `${this.hp}/${this.maxhp}`;
 		let shared;

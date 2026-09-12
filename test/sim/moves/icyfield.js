@@ -298,11 +298,13 @@ describe('Icy Field interactions', () => {
 			battle.makeChoices('move dive', 'move splash');
 			assert(battle.field.isTerrain('icyterrain'));
 			assert(battle.log.includes('|-prepare|p1a: Mew|Dive'));
+			assert.equal(battle.log.filter(line => line === '|-message|Mew made a hole in the ice!').length, 1);
+			assert.equal(battle.log.filter(line => line === '|-message|The ice was broken from underneath!').length, 0);
 
 			battle.makeChoices('move dive', 'move splash');
 			assert(battle.field.isTerrain(underlyingTerrain));
-			assert(battle.log.includes('|-message|Mew made a hole in the ice!'));
-			assert(battle.log.includes('|-message|The ice was broken from underneath!'));
+			assert.equal(battle.log.filter(line => line === '|-message|Mew made a hole in the ice!').length, 1);
+			assert.equal(battle.log.filter(line => line === '|-message|The ice was broken from underneath!').length, 1);
 			battle.destroy();
 			battle = null;
 		}
