@@ -1511,6 +1511,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	chistrike: "G-Max Chi Strike",
 	cuddle: "G-Max Cuddle",
 	deathroll: "G-Max Death Roll",
+	echoresonance: "G-Max Echo Resonance",
 	depletion: "G-Max Depletion",
 	drumsolo: "G-Max Drum Solo",
 	finale: "G-Max Finale",

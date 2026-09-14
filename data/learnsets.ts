@@ -23827,74 +23827,17 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			faketears: ["9E", "8M", "7E", "6E", "5E", "4E"],
 			feint: ["9E"],
 			firefang: ["9E"],
-			icefang: ["9M"],
-			crunch: ["9M"],
-			thunderfang: ["9M"],
 			iceshard: ["9M"],
 			tripleaxel: ["9M"],
 			icebeam: ["9M"],
 			blizzard: ["9M"],
 			earthpower: ["9M"],
-			extremespeed: ["9M"],
-			chargebeam: ["9M"],
-			conversion: ["9M"],
-			conversion2: ["9M"],
-			triattack: ["9M"],
 			paraboliccharge: ["9M"],
 			magnetbomb: ["9M"],
 			terrainpulse: ["9M"],
-			victorydance: ["9M"],
-			quiverdance: ["9M"],
-			firstimpression: ["9M"],
-			ironhead: ["9M"],
-			noretreat: ["9M"],
-			playrough: ["9M"],
-			bulkup: ["9M"],
-			triplekick: ["9M"],
-			defog: ["9M"],
-			airslash: ["9M"],
-			tailwind: ["9M"],
-			aeroblast: ["9M"],
-			hurricane: ["9M"],
 			tidyup: ["9M"],
-			bonerush: ["9M"],
-			shoreup: ["9M"],
-			earthquake: ["9M"],
-			sandtomb: ["9M"],
-			accelerock: ["9M"],
-			stoneedge: ["9M"],
-			rockblast: ["9M"],
-			rockslide: ["9M"],
-			poisonfang: ["9M"],
-			poisontail: ["9M"],
-			clearsmog: ["9M"],
-			gastroacid: ["9M"],
-			crosspoison: ["9M"],
-			acidarmor: ["9M"],
-			gunkshot: ["9M"],
-			ominouswind: ["9M"],
 			lick: ["9M"],
 			shadowsneak: ["9M"],
-			nightshade: ["9M"],
-			grudge: ["9M"],
-			hex: ["9M"],
-			nastyplot: ["9M"],
-			hydropump: ["9M"],
-			thunder: ["9M"],
-			dragonpulse: ["9M"],
-			dragonbreath: ["9M"],
-			strengthsap: ["9M"],
-			pursuit: ["9M"],
-			punishment: ["9M"],
-			spiritbreak: ["9M"],
-			bittermalice: ["9M"],
-			infernalparade: ["9M"],
-			destinybond: ["9M"],
-			dreameater: ["9M"],
-			eeriespell: ["9M"],
-			perishsong: ["9M"],
-			blueflare: ["9M"],
-			doomdesire: ["9M"],
 			flail: ["9E", "8E", "7E", "7V", "6E", "5E", "4E", "4S1", "3E"],
 			focusenergy: ["9L9", "8M", "7V"],
 			freezyfrost: ["8V", "7T"],
@@ -114138,7 +114081,18 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	lycanroc: ['precipiceblades', 'shoreup'], lycanrocmidnight: ['precipiceblades', 'shoreup'],
 	lycanrocdusk: ['precipiceblades', 'shoreup'], arcanine: ['mightycleave'],
 	donphan: ['mightycleave', 'shoreup'], druddigon: ['mightycleave', 'partingshot'],
-	feraligatr: ['mightycleave', 'shoreup', 'firefang', 'thunderfang', 'poisonfang'], marowak: ['mightycleave', 'shoreup'],
+	eeveestarter: [
+		'icefang', 'crunch', 'thunderfang', 'extremespeed', 'chargebeam', 'conversion', 'conversion2',
+		'triattack', 'victorydance', 'quiverdance', 'firstimpression', 'ironhead', 'noretreat',
+		'playrough', 'bulkup', 'triplekick', 'defog', 'airslash', 'tailwind', 'aeroblast', 'hurricane',
+		'bonerush', 'shoreup', 'earthquake', 'sandtomb', 'accelerock', 'stoneedge', 'rockblast',
+		'rockslide', 'poisonfang', 'poisontail', 'clearsmog', 'gastroacid', 'crosspoison', 'acidarmor',
+		'gunkshot', 'ominouswind', 'nightshade', 'grudge', 'hex', 'nastyplot', 'hydropump', 'thunder',
+		'dragonpulse', 'dragonbreath', 'strengthsap', 'pursuit', 'punishment', 'spiritbreak',
+		'bittermalice', 'infernalparade', 'destinybond', 'dreameater', 'eeriespell', 'perishsong',
+		'blueflare', 'doomdesire',
+	],
+	feraligatr: ['mightycleave', 'shoreup', 'firefang', 'thunderfang'], marowak: ['mightycleave', 'shoreup'],
 	marowakalola: ['mightycleave', 'shoreup'], solrock: ['mightycleave', 'diamondstorm'],
 	lucario: ['tachyoncutter', 'meteorassault'], sceptile: ['tachyoncutter'],
 	gallade: ['tachyoncutter', 'bitterblade', 'triplearrows'],
@@ -114450,7 +114404,7 @@ for (const move of rebornFlowerMoves) {
 	if (!(Learnsets as any).florges.learnset[move]) (Learnsets as any).florges.learnset[move] = ['9L1'];
 }
 (Learnsets as any).ampharosaevian = {learnset: {
-	tackle: ['9L1'], snowscape: ['9L1'], thunderwave: ['9L1'], thundershock: ['9L1'],
+	tackle: ['9L1'], snowscape: ['9L1'], thunderwave: ['9L1'], thundershock: ['9L1'], paraboliccharge: ['9L1'],
 	thunderpunch: ['9L1'], icywind: ['9L1'], cottonspore: ['9L1'], takedown: ['9L1'],
 	iceball: ['9L1'], confuseray: ['9L1'], powergem: ['9L1'], discharge: ['9L1'],
 	cottonguard: ['9L1'], rest: ['9L1'], reflect: ['9L1'], thunder: ['9L1'], blizzard: ['9L1'],
@@ -114468,6 +114422,111 @@ for (const move of rebornFlowerMoves) {
 	roleplay: ['9M'], safeguard: ['9M'], shadowball: ['9M'], shockwave: ['9M'], signalbeam: ['9M'],
 	skillswap: ['9M'], snatch: ['9M'], strength: ['9M'], taunt: ['9M'], thunderbolt: ['9M'],
 	voltswitch: ['9M'], waterpulse: ['9M'], weatherball: ['9M'], wildcharge: ['9M'],
+}};
+(Learnsets as any).glalieaevian = {learnset: {
+	leer: ['9L1'], absorb: ['9L1'], rockthrow: ['9L1'], worryseed: ['9L1'], doubleedge: ['9L1'],
+	razorleaf: ['9L1'], payback: ['9L1'], leaftornado: ['9L1'], headbutt: ['9L1'], protect: ['9L1'],
+	camouflage: ['9L1'], rockslide: ['9L1'], woodhammer: ['9L1'], grassyterrain: ['9L1', '9M'],
+	headsmash: ['9L1'], grassyglide: ['9L1', '9M'], leechseed: ['9L1', '9E'],
+	bide: ['9E'], chipaway: ['9E'], disable: ['9E'], faketears: ['9E', '9M'], rollout: ['9E'],
+	spikes: ['9E', '9M'], switcheroo: ['9E'], weatherball: ['9E', '9M'], wideguard: ['9E'],
+	afteryou: ['9M'], allyswitch: ['9M'], amnesia: ['9M'], arenitewall: ['9M'], assurance: ['9M'],
+	avalanche: ['9M'], block: ['9M'], bodypress: ['9M'], bodyslam: ['9M'], bulldoze: ['9M'],
+	bulletseed: ['9M'], cosmicpower: ['9M'], earthpower: ['9M'], earthquake: ['9M'], endeavor: ['9M'],
+	energyball: ['9M'], explosion: ['9M'], foulplay: ['9M'], gigadrain: ['9M'], gigaimpact: ['9M'],
+	grassknot: ['9M'], gravity: ['9M'], guardswap: ['9M'], gyroball: ['9M'], heatcrash: ['9M'],
+	helpinghand: ['9M'], hyperbeam: ['9M'], icefang: ['9M'], irondefense: ['9M'], ironhead: ['9M'],
+	leafstorm: ['9M'], magicalleaf: ['9M'], magnetrise: ['9M'], meteorbeam: ['9M'], mudshot: ['9M'],
+	naturepower: ['9M'], powergem: ['9M'], raindance: ['9M'], rockblast: ['9M'], rockpolish: ['9M'],
+	rocksmash: ['9M'], rocktomb: ['9M'], sandstorm: ['9M'], sandtomb: ['9M'], scaryface: ['9M'],
+	seedbomb: ['9M'], selfdestruct: ['9M'], shadowball: ['9M'], slashandburn: ['9M'], solarbeam: ['9M'],
+	stealthrock: ['9M'], steelroller: ['9M'], stoneedge: ['9M'], strength: ['9M'], suckerpunch: ['9M'],
+	sunnyday: ['9M'], synthesis: ['9M'], taunt: ['9M'], uproar: ['9M'], zenheadbutt: ['9M'],
+	mudslap: ['9M'], accelerock: ['9M'],
+}};
+const druddigonRejuvLearnset = {
+	agility: ["9M"], aircutter: ["9M"], airslash: ["9M"], ancientpower: ["9M"], bravebird: ["9M"],
+	confide: ["9M"], curse: ["9M"], dazzlinggleam: ["9M"], defog: ["9M"], discharge: ["9M"],
+	doubleedge: ["9M"], dragonbreath: ["9M"], fly: ["9M"], gust: ["9M"], hail: ["9M"], headbutt: ["9M"],
+	hurricane: ["9M"], laserfocus: ["9M"], lightscreen: ["9M"], mimic: ["9M"], mudslap: ["9M"],
+	ominouswind: ["9M"], pluck: ["9M"], rage: ["9M"], razorwind: ["9M"], reflect: ["9M"],
+	risingvoltage: ["9M"], roost: ["9M"], sandstorm: ["9M"], signalbeam: ["9M"], skyattack: ["9M"],
+	skydrop: ["9M"], steelwing: ["9M"], swift: ["9M"], tailwind: ["9M"], takedown: ["9M"], thunder: ["9M"],
+	thunderbolt: ["9M"], thunderwave: ["9M"], twister: ["9M"], uturn: ["9M"], voltswitch: ["9M"],
+	weatherball: ["9M"], whirlwind: ["9M"], wildcharge: ["9M"], zapcannon: ["9M"],
+};
+Object.assign((Learnsets as any).druddigon.learnset, druddigonRejuvLearnset);
+(Learnsets as any).druddigonrejuv = {learnset: {...(Learnsets as any).druddigon.learnset}};
+
+const turtonatorRejuvLearnset = {
+	aerialace: ["9M"], aquatail: ["9M"], avalanche: ["9M"], blizzard: ["9M"], breakingswipe: ["9M"],
+	brickbreak: ["9M"], crunch: ["9M"], dig: ["9M"], dragondance: ["9M"], dragonrush: ["9M"],
+	focusenergy: ["9M"], frostbreath: ["9M"], hail: ["9M"], headlongrush: ["9M"], helpinghand: ["9M"],
+	highhorsepower: ["9M"], icebeam: ["9M"], icefang: ["9M"], iciclespear: ["9M"], icywind: ["9M"],
+	metalclaw: ["9M"], mountaingale: ["9M"], poisonjab: ["9M"], poweruppunch: ["9M"], raindance: ["9M"],
+	rockslide: ["9M"], scaryface: ["9M"], sheercold: ["9M"], skullbash: ["9M"], swordsdance: ["9M"],
+	takedown: ["9M"], thunderfang: ["9M"], wildcharge: ["9M"], zenheadbutt: ["9M"],
+};
+Object.assign((Learnsets as any).turtonator.learnset, turtonatorRejuvLearnset);
+(Learnsets as any).turtonatorrejuv = {learnset: {...(Learnsets as any).turtonator.learnset}};
+
+(Learnsets as any).roseradeaevian = {learnset: {
+	aerialace: ["9M"], ancientpower: ["9L1"], aurasphere: ["9L1", "9M"], beatup: ["9M"], brickbreak: ["9M"],
+	brutalswing: ["9M"], bulldoze: ["9M"], camouflage: ["9L1"], charm: ["9M"], closecombat: ["9L1", "9M"],
+	coaching: ["9M"], covet: ["9M"], cut: ["9M"], darkpulse: ["9M"], defog: ["9M"], dig: ["9M"],
+	drainpunch: ["9M"], dualchop: ["9M"], dynamicpunch: ["9M"], earthpower: ["9L1", "9E", "9M"],
+	earthquake: ["9M"], echoedvoice: ["9M"], encore: ["9M"], endeavor: ["9M"], extrasensory: ["9E"],
+	finalgambit: ["9E"], firepunch: ["9M"], focusblast: ["9M"], focuspunch: ["9M"], foulplay: ["9L1", "9M"],
+	gigaimpact: ["9M"], gunkshot: ["9M"], hyperbeam: ["9M"], knockoff: ["9M"], laserfocus: ["9M"],
+	lastresort: ["9M"], lowkick: ["9M"], lowsweep: ["9L1", "9M"], megapunch: ["9M"], metronome: ["9M"],
+	mindreader: ["9E"], morningsun: ["9L1", "9E"], mudshot: ["9L1", "9E", "9M"], mudslap: ["9L1"],
+	naturalgift: ["9E"], naturepower: ["9M"], payback: ["9M"], pinmissile: ["9E", "9M"], playrough: ["9M"],
+	poisonjab: ["9M"], powergem: ["9L1", "9M"], poweruppunch: ["9M"], retaliate: ["9M"],
+	revenge: ["9E"], reversal: ["9M"], rockblast: ["9E", "9M"], rockslide: ["9M"], rocksmash: ["9L1", "9M"],
+	rockthrow: ["9L1"], rocktomb: ["9M"], roleplay: ["9M"], rototiller: ["9L1"], sandattack: ["9L1"],
+	sandtomb: ["9L1", "9M"], sandstorm: ["9E", "9M"], scorchingsands: ["9M"], shadowball: ["9M"],
+	smackdown: ["9M"], snarl: ["9M"], snatch: ["9M"], spikes: ["9E", "9M"], stealthrock: ["9M"],
+	stoneedge: ["9M"], storedpower: ["9M"], strength: ["9M"], suckerpunch: ["9M"], sunnyday: ["9M"],
+	superpower: ["9M"], taunt: ["9L1"], thief: ["9M"], throatchop: ["9M"], torment: ["9L1", "9M"],
+	toxicspikes: ["9M"], uproar: ["9M"], vacuumwave: ["9L1", "9M"], weatherball: ["9E", "9M"],
+	workup: ["9M"], yawn: ["9E"],
+}};
+
+(Learnsets as any).arcanineaevian = {learnset: {
+	aerialace: ["9M"], agility: ["9M"], aircutter: ["9M"], airslash: ["9M"], ancientpower: ["9M"],
+	bodyslam: ["9M"], bravebird: ["9M"], calmmind: ["9M"], chargebeam: ["9M"], curse: ["9M"],
+	dazzlinggleam: ["9M"], defog: ["9M"], doubleedge: ["9M"], dragonrage: ["9M"], dualwingbeat: ["9M"],
+	facade: ["9M"], fly: ["9M"], extremespeed: ["9M"], gigaimpact: ["9M"], gust: ["9M"], hail: ["9M"],
+	headbutt: ["9M"], heatwave: ["9M"], hiddenpower: ["9M"], howl: ["9M"], hurricane: ["9M"],
+	hyperbeam: ["9M"], icebeam: ["9M"], irontail: ["9M"], laserfocus: ["9M"], lightscreen: ["9M"],
+	mimic: ["9M"], mudslap: ["9M"], ominouswind: ["9M"], pluck: ["9M"], rage: ["9M"], raindance: ["9M"],
+	razorwind: ["9M"], reflect: ["9M"], return: ["9M"], risingvoltage: ["9M"], roar: ["9M"],
+	rocksmash: ["9M"], roost: ["9M"], round: ["9M"], sandstorm: ["9M"], secretpower: ["9M"],
+	shockwave: ["9M"], signalbeam: ["9M"], skyattack: ["9M"], skydrop: ["9M"], sleeptalk: ["9M"],
+	steelwing: ["9M"], sunnyday: ["9M"], swift: ["9M"], tackle: ["9L1"], tailwind: ["9M"], takedown: ["9M"],
+	thunder: ["9M"], thunderfang: ["9M"], thunderwave: ["9M"], thunderbolt: ["9M"], twister: ["9M"],
+	uturn: ["9M"], voltswitch: ["9M"], weatherball: ["9M"], whirlwind: ["9M"], wildcharge: ["9M"],
+	zapcannon: ["9M"],
+}};
+
+(Learnsets as any).froslassaevian = {learnset: {
+	absorb: ['9M'], afteryou: ['9M'], allyswitch: ['9M'], aquaring: ['9M'], assurance: ['9M'],
+	avalanche: ['9M'], blizzard: ['9M'], bodyslam: ['9M'], boomburst: ['9M'], brickbreak: ['9M'],
+	bulletseed: ['9M'], chipaway: ['9M'], disable: ['9M'], dive: ['9M'], doubleedge: ['9M'],
+	drainpunch: ['9M'], dynamicpunch: ['9M'], echoedvoice: ['9M'], energyball: ['9M'], facade: ['9M'],
+	fling: ['9M'], focusblast: ['9M'], gigadrain: ['9M'], gigaimpact: ['9M'], grassknot: ['9M'],
+	grassyglide: ['9M'], grassyterrain: ['9M'], gyroball: ['9M'], hail: ['9M'], headbutt: ['9M'],
+	hex: ['9M'], hydropump: ['9M'], hyperbeam: ['9M'], hypervoice: ['9M'], icebeam: ['9M'],
+	icywind: ['9M'], ironhead: ['9M'], knockoff: ['9M'], leafstorm: ['9M'], magicalleaf: ['9M'],
+	magnetrise: ['9M'], megakick: ['9M'], megapunch: ['9M'], moonblast: ['9M'], mudshot: ['9M'],
+	mudslap: ['9M'], muddywater: ['9M'], naturepower: ['9M'], petaldance: ['9M'], powergem: ['9M'],
+	psyshock: ['9M'], raindance: ['9M'], razorleaf: ['9M'], return: ['9M'], round: ['9M'],
+	sandstorm: ['9M'], scald: ['9M'], secretpower: ['9M'], seedbomb: ['9M'], seismictoss: ['9M'],
+	shadowball: ['9M'], sleeptalk: ['9M'], solarbeam: ['9M'], spikes: ['9M'], stomp: ['9M'],
+	strength: ['9M'], sunnyday: ['9M'], surf: ['9M'], swordsdance: ['9M'], synthesis: ['9M'],
+	tackle: ['9L1'], uproar: ['9M'], waterpulse: ['9M'], waterfall: ['9M'], weatherball: ['9M'],
+	whirlpool: ['9M'], worryseed: ['9M'], zenheadbutt: ['9M'], hurricane: ['9M'], thunder: ['9M'],
+	thunderbolt: ['9M'], thunderwave: ['9M'], airslash: ['9M'],
 }};
 (Learnsets as any).florgesreborn = {learnset: {...(Learnsets as any).florges.learnset}};
 
@@ -114497,7 +114556,7 @@ const documentLearnsetAdditions: {[id: string]: {[move: string]: string[]}} = {
 	altaria: {coldsnap: ["9M"], petaldance: ["9M"]},
 	ambipom: {assurance: ["9M"], aurasphere: ["9M"], axekick: ["9M"], beatup: ["9M"], bodyslam: ["9M"], breakingswipe: ["9M"], bulkup: ["9M"], closecombat: ["9M"], cometpunch: ["9M"], crosschop: ["9M"], curse: ["9M"], defensecurl: ["9M"], drainpunch: ["9M"], doubleslap: ["9M"], dynamicpunch: ["9M"], forcepalm: ["9M"], focusblast: ["9M"], focuspunch: ["9M"], hammerarm: ["9M"], karatechop: ["9M"], machpunch: ["9M"], megakick: ["9M"], megapunch: ["9M"], mimic: ["9M"], nastyplot: ["9M"], nightmare: ["9M"], seismictoss: ["9M"], swordsdance: ["9M"], tailslap: ["9M"], triattack: ["9M"], vacuumwave: ["9M"], victorydance: ["9M"], zapcannon: ["9M"]},
 	amoonguss: {dazzlinggleam: ["9M"], defensecurl: ["9M"], firstimpression: ["9M"], rollout: ["9M"], toxicspikes: ["9M"]},
-	ampharos: {charm: ["9M"], cometpunch: ["9M"], flashcannon: ["9M"], paraboliccharge: ["9L1"], risingvoltage: ["9M"]},
+	ampharos: {charm: ["9M"], cometpunch: ["9M"], dragondance: ["9M"], flashcannon: ["9M"], paraboliccharge: ["9L1"], risingvoltage: ["9M"]},
 	annihilape: {aerialace: ["9M"], beatup: ["9M"], bide: ["9M"], blazekick: ["9M"], burningjealousy: ["9M"], covet: ["9M"], darkestlariat: ["9M"], defensecurl: ["9M"], detect: ["9M"], dualchop: ["9M"], dynamicpunch: ["9M"], headbutt: ["9M"], honeclaws: ["9M"], irontail: ["9M"], knockoff: ["9M"], megakick: ["9M"], megapunch: ["9M"], mimic: ["9M"], mudslap: ["9M"], payback: ["9M"], payday: ["9M"], poweruppunch: ["9M"], psychup: ["9M"], rage: ["9M"], retaliate: ["9M"], revenge: ["9M"], roar: ["9M"], rockclimb: ["9M"], rocksmash: ["9M"], roleplay: ["9M"], skullbash: ["9M"], strength: ["9M"], superpower: ["9M"], workup: ["9M"]},
 	appletun: {naturepower: ["9M"], suckerpunch: ["9M"], twister: ["9L1"]},
 	araquanid: {watersport: ["9L1"]},
@@ -114850,7 +114909,7 @@ for (const [id, moves] of Object.entries(documentLearnsetAdditions)) {
 const feraligatrCustomMoves = [
 	'agility', 'chillingwater', 'breakingswipe', 'detect', 'dragonclaw', 'dragonpulse', 'faketears',
 	'flipturn', 'focusblast', 'honeclaws', 'iciclespear', 'lashout', 'metalclaw', 'muddywater',
-	'poweruppunch', 'psychicfangs', 'razorshell', 'scaleshot', 'snarl', 'stompingtantrum', 'trailblaze', 'fishiousrend',
+	'poweruppunch', 'psychicfangs', 'poisonfang', 'razorshell', 'scaleshot', 'sludgebomb', 'sludgewave', 'snarl', 'stompingtantrum', 'trailblaze', 'fishiousrend',
 ];
 const feraligatrLearnset = (Learnsets as any).feraligatr?.learnset;
 if (feraligatrLearnset) {
@@ -114892,3 +114951,11 @@ for (const id of natDexNaturePowerIds) {
 for (const data of Object.values(Learnsets)) {
 	if (data.learnset) delete data.learnset.terablast;
 }
+
+// Donphan-Rejuv and Whiplash move additions.
+for (const move of ['avalanche', 'blizzard', 'bulkup', 'defensecurl', 'dig', 'drillpeck', 'furycutter', 'hail', 'headlongrush', 'icebeam', 'icefang', 'iceshard', 'iciclecrash', 'iciclespear', 'icywind', 'ironhead', 'lightscreen', 'mudshot', 'raindance', 'reflect', 'rockblast', 'rockclimb', 'sheercold', 'smartstrike', 'mountaingale']) (Learnsets as any).donphan.learnset[move] ??= ['9M'];
+(Learnsets as any).donphanrejuv = {learnset: {...(Learnsets as any).donphan.learnset}};
+for (const species of ['ambipom', 'cinccino']) for (const move of ['tailslap', 'aquatail', 'poisontail', 'breakingswipe', 'dragontail']) (Learnsets as any)[species].learnset[move] ??= ['9M'];
+
+// Milotic-Terajuma regional learnset.
+(Learnsets as any).miloticterajuma = {learnset: {accelerock: ["9M"], aquajet: ["9M"], aquatail: ["9M"], coil: ["9M"], doublehit: ["9M"], feint: ["9M"], harden: ["9M"], liquidation: ["9M"], poisontail: ["9M"], rockslide: ["9M"], stoneedge: ["9M"], suckerpunch: ["9M"], tailwhip: ["9M"], tailwind: ["9M"], tripleaxel: ["9M"], wavecrash: ["9M"], dragontail: ["9M"], irontail: ["9M"], atlantiswall: ["9M"], bind: ["9M"], blizzard: ["9M"], brutalswing: ["9M"], bulldoze: ["9M"], dive: ["9M"], dragonpulse: ["9M"], flipturn: ["9M"], gigaimpact: ["9M"], hail: ["9M"], helpinghand: ["9M"], hyperbeam: ["9M"], icebeam: ["9M"], icywind: ["9M"], ironhead: ["9M"], laserfocus: ["9M"], lightscreen: ["9M"], magiccoat: ["9M"], mudslap: ["9M"], raindance: ["9M"], safeguard: ["9M"], scald: ["9M"], surf: ["9M"], swift: ["9M"], twister: ["9M"], waterfall: ["9M"], waterpulse: ["9M"], mudbarrage: ["9M"], tackle: ["9M"], return: ["9M"], round: ["9M"], secretpower: ["9M"], sleeptalk: ["9M"]}};

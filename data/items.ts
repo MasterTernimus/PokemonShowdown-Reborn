@@ -2549,8 +2549,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	froslassite: {
 		name: "Froslassite",
 		spritenum: 551,
-		megaStone: { "Froslass": "Froslass-Mega" },
-		itemUser: ["Froslass"],
+		megaStone: { "Froslass": "Froslass-Mega", "Froslass-Aevian": "Froslass-Aevian-Mega" },
+		itemUser: ["Froslass", "Froslass-Aevian"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -2712,8 +2712,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	glalitite: {
 		name: "Glalitite",
 		spritenum: 623,
-		megaStone: { "Glalie": "Glalie-Mega" },
-		itemUser: ["Glalie"],
+		megaStone: { "Glalie": "Glalie-Mega", "Glalie-Aevian": "Glalie-Aevian-Mega" },
+		itemUser: ["Glalie", "Glalie-Aevian"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},

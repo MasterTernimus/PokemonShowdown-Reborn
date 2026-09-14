@@ -161,8 +161,8 @@ function getIllusionThreatScore(battle: Battle, candidate: Pokemon, foes: Pokemo
 function getDualWieldModifier(move: ActiveMove, componentBoost = 1) {
 	if (move.multihitType !== 'dualwield') return componentBoost;
 	if (move.dualWieldFullPower) return componentBoost;
-	if (componentBoost !== 1) return move.hit > 1 ? 0.2 : componentBoost;
-	return 0.65;
+	if (componentBoost !== 1) return move.hit > 1 ? 0.15 : componentBoost;
+	return 0.6;
 }
 
 function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
@@ -263,6 +263,66 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Natural Recovery",
 		rating: 4.5,
 		num: 10389,
+	},
+	mossarmor: {
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('bruteforce').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('bruteforce').onDamage?.call(this, damage, target, source, effect);
+		},
+		onDamagingHit(damage, target, source, effect) {
+			return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, effect);
+		},
+		onCheckShow(pokemon) {
+			return this.dex.abilities.get('naturalrecovery').onCheckShow?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			return this.dex.abilities.get('naturalrecovery').onSwitchOut?.call(this, pokemon);
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('naturalrecovery').onResidual?.call(this, pokemon);
+		},
+		flags: {},
+		name: "Moss Armor",
+		rating: 5,
+		num: 10390,
+	},
+	stormpower: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onResidual(pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon);
+			}
+		},
+		flags: {},
+		name: "Storm Power",
+		rating: 2,
+		num: 10391,
+	},
+	stormcalling: {
+		onStart(pokemon) {
+			this.dex.abilities.get('drizzle').onStart?.call(this, pokemon);
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			this.dex.abilities.get('liquidvoice').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('liquidvoice').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('tintedlens').onModifyDamage?.call(this, damage, source, target, move);
+		},
+		flags: {breakable: 1},
+		name: "Storm Calling",
+		rating: 5,
+		num: 10392,
 	},
 	unstableevo: {
 		onTryHitPriority: 1,
@@ -925,6 +985,90 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10377,
 	},
+	aevianfrost: {
+		onStart(pokemon) {
+			if (pokemon.species.id === 'donphan' && !pokemon.abilityState.aevianFrostTransformed) {
+				pokemon.abilityState.aevianFrostTransformed = true;
+				pokemon.formeChange('Donphan-Rejuv', this.effect, true, '0');
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			(this.dex.abilities.get('icebody') as any).onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onWeather(target, source, effect) {
+			return (this.dex.abilities.get('icebody') as any).onWeather?.call(this, target, source, effect);
+		},
+		onResidual(pokemon) {
+			return (this.dex.abilities.get('icebody') as any).onResidual?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return (this.dex.abilities.get('icebody') as any).onImmunity?.call(this, type, pokemon);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			return (this.dex.abilities.get('guts') as any).onModifyAtk?.call(this, atk, pokemon);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return (this.dex.abilities.get('filter') as any).onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		flags: { breakable: 1 }, name: "Aevian Frost", rating: 5, num: 10395,
+	},
+	aevianglacier: {
+		onStart(pokemon) {
+			if (pokemon.species.id === 'turtonator' && !pokemon.abilityState.aevianGlacierTransformed) {
+				pokemon.abilityState.aevianGlacierTransformed = true;
+				pokemon.formeChange('Turtonator-Rejuv', this.effect, true, '0');
+			}
+			(this.dex.abilities.get('snowwarning') as any).onStart?.call(this, pokemon);
+		},
+		onDamagingHit(damage, target, source, move) {
+			(this.dex.abilities.get('snowwarning') as any).onDamagingHit?.call(this, damage, target, source, move);
+			(this.dex.abilities.get('icebody') as any).onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onWeather(target, source, effect) {
+			return (this.dex.abilities.get('icebody') as any).onWeather?.call(this, target, source, effect);
+		},
+		onResidual(pokemon) {
+			return (this.dex.abilities.get('icebody') as any).onResidual?.call(this, pokemon);
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			return (this.dex.abilities.get('refrigerate') as any).onModifyType?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			return (this.dex.abilities.get('refrigerate') as any).onBasePower?.call(this, basePower, pokemon, target, move);
+		},
+		name: "Aevian Glacier",
+		rating: 5,
+		num: 10393,
+	},
+	aevianbolt: {
+		onStart(pokemon) {
+			if (pokemon.species.id === 'druddigon' && !pokemon.abilityState.aevianBoltTransformed) {
+				pokemon.abilityState.aevianBoltTransformed = true;
+				pokemon.formeChange('Druddigon-Rejuv', this.effect, true, '0');
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			return (this.dex.abilities.get('stormpower') as any).onModifySpA?.call(this, spa, pokemon);
+		},
+		onModifySpe(spe, pokemon) {
+			return (this.dex.abilities.get('surgesurfer') as any).onModifySpe?.call(this, spe, pokemon);
+		},
+		onTryHit(target, source, move) {
+			return (this.dex.abilities.get('voltabsorb') as any).onTryHit?.call(this, target, source, move);
+		},
+		onResidual(pokemon) {
+			(this.dex.abilities.get('stormpower') as any).onResidual?.call(this, pokemon);
+			(this.dex.abilities.get('voltabsorb') as any).onResidual?.call(this, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Aevian Bolt",
+		rating: 5,
+		num: 10394,
+	},
 	ascendance: {
 		onStart(pokemon) {
 			const sourceSpecies = pokemon.species.id;
@@ -1382,7 +1526,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Dual Wield",
-		shortDesc: "Two 65% independent rolls; boosting pairs: full +20%; FFA: two full-power targets.",
+		shortDesc: "Two 60% independent rolls; boosting pairs: full +15%; FFA: two full-power targets.",
 		rating: 4,
 		num: 10284,
 	},
@@ -6551,7 +6695,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) modifier *= 1.2;
 			if (move.flags['sound']) modifier *= 1.5;
-			if (move.category !== 'Status' && pokemon.hasType(move.type)) modifier *= 1.2;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onAllyBasePowerPriority: 8,
@@ -14219,7 +14362,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
-			return this.dex.abilities.get('striker').onBasePower?.call(this, basePower, attacker, defender, move);
+			let modifier = 1;
+			if (move.flags['kick']) modifier *= 1.4;
+			if (move.category !== 'Status' && attacker.hasType(move.type)) modifier *= 1.3;
+			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		flags: {},
 		name: "Perfect Striker",
@@ -14319,8 +14465,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			return this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
-		onModifyPriority(priority, pokemon) {
-			if (!pokemon.abilityState.mightyJawUsed) return priority + 2;
+		onModifyPriority(priority, pokemon, target, move) {
+			if (!pokemon.abilityState.mightyJawUsed && move?.flags['bite']) return priority + 2;
 		},
 		onAfterMove(source) {
 			source.abilityState.mightyJawUsed = true;
@@ -15477,7 +15623,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	territorial: {
 		onStart(pokemon) {
 			this.dex.abilities.get('unnerve').onStart?.call(this, pokemon);
-			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
 		},
 		onEnd() {
 			return this.dex.abilities.get('unnerve').onEnd?.call(this);
@@ -16115,6 +16260,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: 73,
 	},
+	whiplash: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['tail']) return this.chainModify(1.5);
+		},
+		flags: {}, name: "Whiplash", rating: 3.5, num: 10396,
+	},
 	wimpout: {
 		onEmergencyExit(target) {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
@@ -16723,6 +16875,47 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Amethyst Glow",
 		rating: 4,
 		num: 10251,
+	},
+	crystalresonance: {
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onTryHit(target, source, move) {
+			const waterAbsorb = this.dex.abilities.get('waterabsorb').onTryHit?.call(this, target, source, move);
+			if (waterAbsorb !== undefined) return waterAbsorb;
+			return this.dex.abilities.get('amethystglow').onTryHit?.call(this, target, source, move);
+		},
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('amethystglow').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onWeather(target, source, effect) {
+			return this.dex.abilities.get('amethystglow').onWeather?.call(this, target, source, effect);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('amethystglow').onResidual?.call(this, pokemon);
+			this.dex.abilities.get('waterabsorb').onResidual?.call(this, pokemon);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('amethystglow').onImmunity?.call(this, type, pokemon);
+		},
+		onModifyMove(move, pokemon) {
+			return this.dex.abilities.get('amethystglow').onModifyMove?.call(this, move, pokemon);
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			return this.dex.abilities.get('amethystglow').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('amethystglow').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onType(types, pokemon) {
+			return this.dex.abilities.get('amethystglow').onType?.call(this, types, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Crystal Resonance",
+		rating: 5,
+		num: 10388,
 	},
 	islandcurrent: {
 		onModifySpe(spe, pokemon) {

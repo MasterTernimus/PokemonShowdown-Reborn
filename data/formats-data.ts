@@ -482,6 +482,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
+	arcanineaevian: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
 	poliwag: {
 		tier: "LC",
 	},
@@ -1048,6 +1053,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
+	laprasaeviangmax: {isNonstandard: "Custom", tier: "Illegal"},
 	ditto: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
@@ -1652,6 +1658,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	phanpy: {
 		tier: "LC",
 	},
+	donphanrejuv: { tier: "Illegal", doublesTier: "Illegal" },
 	donphan: {
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -2082,6 +2089,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "Illegal",
 		natDexTier: "RU",
 	},
+	roseradeaevian: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
 	gulpin: {
 		tier: "LC",
 	},
@@ -2258,6 +2270,7 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 	feebas: {
 		tier: "LC",
 	},
+	miloticterajuma: {isNonstandard: "Custom", tier: "OU"},
 	milotic: {
 		tier: "RU",
 		doublesTier: "(DUU)",
@@ -2524,6 +2537,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	glalieaevian: {isNonstandard: "Custom", tier: "OU"},
+	glalieaevianmega: {isNonstandard: "Custom", tier: "Illegal"},
+	froslassaevian: {isNonstandard: "Custom", tier: "OU"},
+	froslassaevianmega: {isNonstandard: "Custom", tier: "Illegal"},
 	chimchar: {
 		tier: "LC",
 	},
@@ -3600,6 +3617,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		tier: "Illegal",
 		natDexTier: "RU",
 	},
+	druddigonrejuv: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+		natDexTier: "Illegal",
+	},
 	golett: {
 		tier: "LC",
 	},
@@ -4586,6 +4608,11 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	turtonatorrejuv: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+		natDexTier: "Illegal",
 	},
 	togedemaru: {
 		isNonstandard: "Past",
@@ -6211,6 +6238,7 @@ const latestFormatUpdates: {[id: string]: any} = {
 	drapionaevian: {isNonstandard: "Custom", tier: "OU"},
 	volcaronaaevian: {isNonstandard: "Custom", tier: "OU"},
 	toxtricityaevian: {isNonstandard: "Custom", tier: "OU"},
+	toxtricityaeviangmax: {isNonstandard: "Custom", tier: "Illegal"},
 	sneasleraevian: {isNonstandard: "Custom", tier: "OU"},
 	pikachucosplay: {isNonstandard: null, tier: "ZU"},
 	pikachurockstar: {isNonstandard: null, tier: "ZU"},

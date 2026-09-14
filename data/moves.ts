@@ -611,7 +611,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Aqua Tail",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		target: "normal",
 		type: "Water",
 		contestType: "Beautiful",
@@ -969,7 +969,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (effect?.id === 'gmaxresonance') return 4;
+				if (effect && ['gmaxresonance', 'gmaxechoresonance'].includes(effect.id)) return 4;
 				if (source?.hasAbility(['mourningsnow', 'frostsovereign'])) return 8;
 				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
 					return 8;
@@ -1062,6 +1062,33 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Ground",
 		zMove: { boost: { def: 1 } },
 		contestType: "Tough",
+	},
+	atlantiswall: {
+		num: 10397, accuracy: true, basePower: 0, category: "Status", name: "Atlantis Wall", pp: 5,
+		priority: 0, flags: { snatch: 1, metronome: 1 }, sideCondition: 'atlantiswall',
+		onTry(source) {
+			if (['raindance', 'primordialsea'].includes(source.effectiveWeather())) return true;
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) return true;
+			return false;
+		},
+		condition: {
+			duration: 5,
+			durationCallback(target, source) {
+				if (source?.hasItem('lightclay') || this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) return 8;
+				return 5;
+			},
+			onAnyModifyDamage(damage, source, target, move) {
+				if (target === source || !this.effectState.target.hasAlly(target)) return;
+				if (target.getMoveHitData(move).typeMod <= 0) return;
+				if (target.getMoveHitData(move).crit || move.infiltrates) return;
+				return this.chainModify(0.5);
+			},
+			onSideStart(side) { this.add('-sidestart', side, 'move: Atlantis Wall'); },
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 11,
+			onSideEnd(side) { this.add('-sideend', side, 'move: Atlantis Wall'); },
+		},
+		target: "allySide", type: "Water", contestType: "Beautiful",
 	},
 	autotomize: {
 		num: 475,
@@ -1854,7 +1881,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Body Slam",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -2079,7 +2106,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Breaking Swipe",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1 },
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -2150,7 +2177,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Brutal Swing",
 		pp: 20,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		target: "allAdjacent",
 		type: "Dark",
 		contestType: "Tough",
@@ -4449,7 +4476,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Double Hit",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		fullDamageSpread: true,
 		target: "normal",
 		type: "Normal",
@@ -4820,7 +4847,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Dragon Tail",
 		pp: 10,
 		priority: -6,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, noassist: 1, failcopycat: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1, noassist: 1, failcopycat: 1 },
 		forceSwitch: true,
 		target: "normal",
 		type: "Dragon",
@@ -6528,7 +6555,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Flip Turn",
 		pp: 20,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		selfSwitch: true,
 		target: "normal",
 		type: "Water",
@@ -8206,6 +8233,44 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	gmaxflareshock: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Flare Shock",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Toxtricity-Aevian",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					pokemon.trySetStatus(this.random(2) === 0 ? 'brn' : 'psn', source);
+				}
+			},
+		},
+		target: "adjacentFoe",
+		type: "Fire",
+		contestType: "Cool",
+	},
+	gmaxechoresonance: {
+		num: 1000,
+		accuracy: true,
+		basePower: 10,
+		category: "Physical",
+		isNonstandard: "Gigantamax",
+		name: "G-Max Echo Resonance",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		isMax: "Lapras-Aevian",
+		self: { sideCondition: 'auroraveil' },
+		target: "adjacentFoe",
+		type: "Psychic",
+		contestType: "Cool",
+	},
 	gmaxsyrupfall: {
 		num: 1000,
 		accuracy: true,
@@ -9715,7 +9780,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Heavy Slam",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', pokemon, 'Dynamax');
@@ -10990,7 +11055,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Iron Tail",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, source) {
 			if (this.field.isTerrain('electricterrain')) return this.chainModify(1.5);
 		},
@@ -13983,6 +14048,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Water",
 		contestType: "Tough",
 	},
+	mudbarrage: {
+		num: 10398,
+		accuracy: 100,
+		basePower: 20,
+		category: "Special",
+		name: "Mud Barrage",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		multihit: [2, 5],
+		target: "normal",
+		type: "Ground",
+		contestType: "Tough",
+	},
 	mudshot: {
 		num: 341,
 		accuracy: 95,
@@ -15325,7 +15404,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Poison Tail",
 		pp: 25,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, slicing: 1, metronome: 1 },
 		critRatio: 2,
 		secondary: {
 			chance: 50,
@@ -19254,7 +19333,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Slam",
 		pp: 20,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 		target: "normal",
 		type: "Normal",
 		contestType: "Tough",
@@ -21718,7 +21797,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Tail Slap",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		multihit: [2, 5],
 		target: "normal",
 		type: "Normal",

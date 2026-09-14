@@ -67,6 +67,7 @@ interface MoveFlags {
 	reflectable?: 1; // Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
 	slicing?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Sharpness.
 	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
+	tail?: 1; // Boosted by Whiplash and listed by /tail.
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
 	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 }

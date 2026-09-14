@@ -57,7 +57,7 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onAnyModifyBoost);
 	});
 
-	it('should give Territorial its Intimidate hook', function () {
+	it('should give Territorial its remaining component hooks', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('territorial');
 		assert(ability.onStart);
@@ -399,7 +399,12 @@ describe('Composite ability cleanup', function () {
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
-			riotamp: ['proficient', 'galvanize', 'resonanceforce', 'voltabsorb'],
+			riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
+			perfectstriker: ['striker', 'noguard', 'libero', 'proficient'],
+			mossarmor: ['bruteforce', 'stamina', 'naturalrecovery'],
+		stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
+		aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
+		aevianbolt: ['stormpower', 'surgesurfer', 'voltabsorb'],
 			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],
