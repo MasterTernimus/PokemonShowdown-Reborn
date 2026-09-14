@@ -445,7 +445,7 @@ export class DexSpecies {
 
 		const alias = this.dex.getAlias(id);
 		if (alias) {
-			if (this.dex.data.FormatsData.hasOwnProperty(id)) {
+			if (this.dex.data.FormatsData.hasOwnProperty(id) && !this.dex.data.Pokedex[id]?.isCosmeticForme) {
 				// special event ID
 				species = new Species({
 					...this.dex.data.Pokedex[alias],
@@ -529,7 +529,11 @@ export class DexSpecies {
 			}
 		}
 		if (id && this.dex.data.Pokedex.hasOwnProperty(id)) {
-			const pokedexData = this.dex.data.Pokedex[id];
+			let pokedexData = this.dex.data.Pokedex[id];
+			if (pokedexData.isCosmeticForme && !pokedexData.abilities && pokedexData.baseSpecies && toID(pokedexData.baseSpecies) !== id) {
+				const base = this.get(pokedexData.baseSpecies);
+				pokedexData = {...base, ...pokedexData};
+			}
 			const baseSpeciesTags = pokedexData.baseSpecies && this.dex.data.Pokedex[toID(pokedexData.baseSpecies)].tags;
 			species = new Species({
 				tags: baseSpeciesTags,

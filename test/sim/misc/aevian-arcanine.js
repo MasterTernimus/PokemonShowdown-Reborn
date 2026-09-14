@@ -8,7 +8,7 @@ describe('Arcanine-Aevian', function () {
 	it('should have its requested profile and learnset', function () {
 		const species = Dex.species.get('Arcanine-Aevian');
 		assert.deepEqual(species.types, ['Electric', 'Flying']);
-		assert.deepEqual(species.baseStats, {hp: 100, atk: 120, def: 75, spa: 100, spd: 75, spe: 130});
+		assert.deepEqual(species.baseStats, {hp: 105, atk: 120, def: 80, spa: 100, spd: 80, spe: 115});
 		assert.deepEqual(species.abilities, {0: 'Intimidate', 1: 'Storm Power', H: 'Lightning Rod'});
 
 		const learnset = Learnsets.arcanineaevian.learnset;

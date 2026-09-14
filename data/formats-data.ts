@@ -6240,6 +6240,7 @@ const latestFormatUpdates: {[id: string]: any} = {
 	toxtricityaevian: {isNonstandard: "Custom", tier: "OU"},
 	toxtricityaeviangmax: {isNonstandard: "Custom", tier: "Illegal"},
 	sneasleraevian: {isNonstandard: "Custom", tier: "OU"},
+	kommooaevian: {isNonstandard: "Custom", tier: "OU"},
 	pikachucosplay: {isNonstandard: null, tier: "ZU"},
 	pikachurockstar: {isNonstandard: null, tier: "ZU"},
 	pikachubelle: {isNonstandard: null, tier: "ZU"},

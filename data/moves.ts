@@ -16399,6 +16399,60 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Dark",
 		contestType: "Clever",
 	},
+	vileassault: {
+		num: 10399,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		name: "Vile Assault",
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		beforeTurnCallback(pokemon) {
+			for (const target of pokemon.foes()) {
+				target.addVolatile('vileassault');
+				const data = target.volatiles['vileassault'];
+				if (!data.sources) data.sources = [];
+				data.sources.push(pokemon);
+			}
+		},
+		onModifyMove(move, source, target) {
+			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
+		},
+		condition: {
+			duration: 1,
+			onBeforeSwitchOut(pokemon) {
+				this.debug('Vile Assault start');
+				let alreadyAdded = false;
+				pokemon.removeVolatile('destinybond');
+				for (const source of this.effectState.sources) {
+					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
+					if (!alreadyAdded) {
+						this.add('-activate', pokemon, 'move: Vile Assault');
+						alreadyAdded = true;
+					}
+					if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+						for (const [actionIndex, action] of this.queue.entries()) {
+							if (action.pokemon !== source) continue;
+							if (action.choice === 'megaEvo') {
+								this.actions.runMegaEvo(source);
+							} else if (action.choice === 'terastallize') {
+								this.actions.terastallize(source);
+							} else {
+								continue;
+							}
+							this.queue.list.splice(actionIndex, 1);
+							break;
+						}
+					}
+					this.actions.runMove('vileassault', source, source.getLocOf(pokemon));
+				}
+			},
+		},
+		target: "normal",
+		type: "Poison",
+		contestType: "Tough",
+	},
 	pyroball: {
 		num: 780,
 		accuracy: 90,
