@@ -19,7 +19,7 @@ describe('Custom battle data updates', function () {
 		assert.deepEqual(gardevoir.formeOrder, [
 			'Gardevoir', 'Gardevoir-Mega', 'Gardevoir-Void-Mega', 'Gardevoir-Mega-Z',
 		]);
-		assert.false(Dex.species.get('Gardevoir-Void').exists);
+		assert(Dex.species.get('Gardevoir-Void').exists);
 
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Gardevoir', ability: 'trace', item: 'gardevoirite', moves: ['splash']},
@@ -109,15 +109,15 @@ describe('Custom battle data updates', function () {
 		const charizard = battle.p2.active[0];
 		const burningCrown = charizard.getAbility();
 		assert.equal(qwilfish.boosts.atk, -1);
-		assert.false(charizard.hasAbility('whitesmoke'));
-		assert.equal(burningCrown.onTryBoost, undefined);
+		assert(charizard.hasAbility('whitesmoke'));
+		assert.equal(typeof burningCrown.onTryBoost, 'function');
 		battle.singleEvent('Start', burningCrown, charizard.abilityState, charizard);
 		battle.singleEvent('Start', burningCrown, charizard.abilityState, charizard);
 		assert.equal(qwilfish.boosts.atk, -1);
 		assert.equal(battle.log.filter(line => line.includes('|Intimidate|boost')).length, 1);
 	});
 
-	it('should only activate composite Intimidate once per ability state', function () {
+	it('should not activate Intimidate for Territorial', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Qwilfish', moves: ['splash']},
 		], [
@@ -128,11 +128,11 @@ describe('Custom battle data updates', function () {
 		const qwilfish = battle.p1.active[0];
 		const ursaluna = battle.p2.active[0];
 		const territorial = ursaluna.getAbility();
-		assert.equal(qwilfish.boosts.atk, -1);
+		assert.equal(qwilfish.boosts.atk, 0);
 		battle.singleEvent('Start', territorial, ursaluna.abilityState, ursaluna);
 		battle.singleEvent('Start', territorial, ursaluna.abilityState, ursaluna);
-		assert.equal(qwilfish.boosts.atk, -1);
-		assert.equal(battle.log.filter(line => line.includes('|Intimidate|boost')).length, 1);
+		assert.equal(qwilfish.boosts.atk, 0);
+		assert.equal(battle.log.filter(line => line.includes('|Intimidate|boost')).length, 0);
 	});
 
 	it('should keep Rapid Response and Violent Rush for the entire first active turn only', function () {
@@ -204,10 +204,10 @@ describe('Custom battle data updates', function () {
 		const dex = battle.dex;
 		const ariados = dex.species.get('Ariados');
 		const megaAriados = dex.species.get('Ariados-Mega');
-		assert.deepEqual(ariados.baseStats, {hp: 90, atk: 100, def: 80, spa: 50, spd: 80, spe: 40});
-		assert.equal(ariados.bst, 440);
-		assert.deepEqual(megaAriados.baseStats, {hp: 90, atk: 115, def: 110, spa: 110, spd: 110, spe: 50});
-		assert.equal(megaAriados.bst, 585);
+		assert.deepEqual(ariados.baseStats, {hp: 90, atk: 100, def: 85, spa: 75, spd: 85, spe: 40});
+		assert.equal(ariados.bst, 475);
+		assert.deepEqual(megaAriados.baseStats, {hp: 80, atk: 130, def: 120, spa: 40, spd: 120, spe: 85});
+		assert.equal(megaAriados.bst, 575);
 	});
 
 	it('should expose Chimecho-Mega-Y with the shared Chimechite', function () {

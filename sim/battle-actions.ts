@@ -169,6 +169,25 @@ export class BattleActions {
 			pokemon.setSpecies(baseSpecies);
 			pokemon.details = pokemon.getUpdatedDetails();
 		}
+		// Turtonator-Rejuv is only a valid battle form with Aevian Glacier.
+		// This also protects custom/direct battle inputs that bypass team validation.
+		if (pokemon.species.id === 'turtonatorrejuv' && pokemon.ability !== 'aevianglacier') {
+			const baseSpecies = this.dex.species.get('Turtonator');
+			pokemon.baseSpecies = baseSpecies;
+			pokemon.setSpecies(baseSpecies);
+			pokemon.details = pokemon.getUpdatedDetails();
+		}
+		// Druddigon-Rejuv is only a valid battle form with Aevian Bolt.
+		// This also protects custom/direct battle inputs that bypass team validation.
+		if (pokemon.species.id === 'donphanrejuv' && pokemon.ability !== 'aevianfrost') {
+			pokemon.formeChange('Donphan', null, false, '0');
+		}
+		if (pokemon.species.id === 'druddigonrejuv' && pokemon.ability !== 'aevianbolt') {
+			const baseSpecies = this.dex.species.get('Druddigon');
+			pokemon.baseSpecies = baseSpecies;
+			pokemon.setSpecies(baseSpecies);
+			pokemon.details = pokemon.getUpdatedDetails();
+		}
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;

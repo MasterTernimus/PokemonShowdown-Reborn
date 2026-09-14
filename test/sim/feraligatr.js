@@ -26,10 +26,10 @@ describe('Feraligatr custom data', function () {
 		assert.equal(gmax.abilities[0], 'Tidal Jaw');
 
 		const learnset = battle.dex.data.Learnsets.feraligatr.learnset;
-		for (const move of ['agility', 'chillingwater', 'breakingswipe', 'detect', 'flipturn', 'razorshell', 'trailblaze', 'fishiousrend']) {
+		for (const move of ['agility', 'chillingwater', 'breakingswipe', 'detect', 'flipturn', 'poisonfang', 'razorshell', 'sludgebomb', 'sludgewave', 'trailblaze', 'fishiousrend']) {
 			assert(move in learnset, `Feraligatr should learn ${move}`);
 		}
-		for (const move of ['firefang', 'thunderfang', 'poisonfang']) {
+		for (const move of ['firefang', 'thunderfang']) {
 			assert(!(move in learnset), `Feraligatr should not learn ${move}`);
 		}
 		const inheritedLearnset = new Set();
@@ -38,8 +38,28 @@ describe('Feraligatr custom data', function () {
 		}
 		assert(inheritedLearnset.has('flipturn'), 'Feraligatr-Gmax should inherit Feraligatr moves');
 		assert(inheritedLearnset.has('trailblaze'), 'Feraligatr-Gmax should inherit custom Feraligatr moves');
+		assert(inheritedLearnset.has('poisonfang'), 'Feraligatr-Gmax should inherit Poison Fang');
+		assert(inheritedLearnset.has('sludgebomb'), 'Feraligatr-Gmax should inherit Sludge Bomb');
+		assert(inheritedLearnset.has('sludgewave'), 'Feraligatr-Gmax should inherit Sludge Wave');
 		assert(!inheritedLearnset.has('firefang'), 'Feraligatr-Gmax should inherit fang removals');
 		assert(!inheritedLearnset.has('gmaxdeathroll'), 'G-Max Death Roll should be a battle-time signature move');
+	});
+
+	it('only gives Mighty Jaw priority to biting moves on its first action', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Feraligatr', ability: 'mightyjaw', moves: ['bite', 'surf']},
+		], [
+			{species: 'Wynaut', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const feraligatr = battle.p1.active[0];
+		const ability = battle.dex.abilities.get('mightyjaw');
+		const bite = battle.dex.moves.get('bite');
+		const surf = battle.dex.moves.get('surf');
+		assert.equal(ability.onModifyPriority?.call(battle, 0, feraligatr, null, bite), 2);
+		assert.equal(ability.onModifyPriority?.call(battle, 0, feraligatr, null, surf), undefined);
+		ability.onAfterMove?.call(battle, feraligatr);
+		assert.equal(ability.onModifyPriority?.call(battle, 0, feraligatr, null, bite), undefined);
 	});
 
 	it('selects the fixed-power physical G-Max Death Roll and keeps its double-battle target', function () {

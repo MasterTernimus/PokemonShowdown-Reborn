@@ -52,6 +52,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during Sandstorm or on Desert Field, Rocky Field, Ashen Beach, or Cold Eclipse. If the user is holding Light Clay, or if used on Desert Field, Rocky Field, or Ashen Beach, the duration is 8 turns. Critical hits and moves that bypass screens ignore this effect.",
 		shortDesc: "5 turns (8 when extended): side takes 0.5x from super-effective hits.",
 	},
+	atlantiswall: {
+		name: "Atlantis Wall",
+		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during rain or on Water Surface or Underwater terrain. Light Clay and those terrains extend it to 8 turns. Critical hits and moves that bypass screens ignore this effect.",
+		shortDesc: "In rain: 5 turns; side takes 0.5x from super-effective hits.",
+	},
 	aciddownpour: {
 		name: "Acid Downpour",
 		shortDesc: "Power is equal to the base move's Z-Power.",
@@ -2632,6 +2637,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes confused, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: confusion.",
 	},
+	gmaxflareshock: {
+		name: "G-Max Flare Shock",
+		desc: "Fire-type. Poisons or burns each opposing Pokemon at random.",
+		shortDesc: "Poisons or burns each foe at random.",
+	},
+	gmaxechoresonance: {
+		name: "G-Max Echo Resonance",
+		desc: "Psychic-type. Sets Aurora Veil on the user's side.",
+		shortDesc: "Sets Aurora Veil on the user's side.",
+	},
 	gmaxsnooze: {
 		name: "G-Max Snooze",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, there is a 30% chance the effect of Yawn begins on the target, even if it has a substitute.",
@@ -4393,6 +4408,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Muddy Water",
 		desc: "Has a 30% chance to lower the target's accuracy by 1 stage.",
 		shortDesc: "30% chance to lower the foe(s) accuracy by 1.",
+	},
+	mudbarrage: {
+		name: "Mud Barrage",
+		desc: "Hits two to five times. Each hit has 20 power.",
+		shortDesc: "Hits 2-5 times in one turn.",
 	},
 	mudshot: {
 		name: "Mud Shot",

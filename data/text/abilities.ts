@@ -106,8 +106,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dualwield: {
 		name: "Dual Wield",
-		desc: "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 65% power, with an independent accuracy check for each hit. When combined with Sharpness, Mega Launcher, or Power Drill, the first hit receives that boost and the second hit deals 20% of the move's unboosted power. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair.",
-		shortDesc: "Two 65% independent rolls; boosting pairs: full +20%; FFA: two full-power targets.",
+		desc: "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. When combined with Sharpness, Mega Launcher, or Power Drill, the first hit receives that boost and the second hit deals 15% of the move's unboosted power. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair.",
+		shortDesc: "Two 60% independent rolls; boosting pairs: full +15%; FFA: two full-power targets.",
 	},
 	apexvenom: {
 		name: "Apex Venom",
@@ -591,8 +591,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	riotamp: {
 		name: "Riot Amp",
-		desc: "This Pokemon has Proficient, Galvanize, Resonance Force, and Volt Absorb's effects.",
-		shortDesc: "Proficient + Galvanize + Resonance Force + Volt Absorb.",
+		desc: "This Pokemon has Galvanize, Resonance Force, and Volt Absorb's effects.",
+		shortDesc: "Galvanize + Resonance Force + Volt Absorb.",
 	},
 	relicarmor: {
 		name: "Relic Armor",
@@ -646,8 +646,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mightyjaw: {
 		name: "Mighty Jaw",
-		desc: "This Pokemon has Strong Jaw and Intimidate's effects. Until it takes its first action after switching in, its moves have 2 higher priority.",
-		shortDesc: "Strong Jaw + Intimidate; first action after switch-in has +2 priority.",
+		desc: "This Pokemon has Strong Jaw and Intimidate's effects. On its first action after switching in, its biting moves have 2 higher priority.",
+		shortDesc: "Strong Jaw + Intimidate; biting moves gain +2 priority on first action.",
 	},
 	fallenstar: {
 		name: "Fallen Star",
@@ -945,6 +945,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Aurora Resonance",
 		desc: "This Pokemon has Liquid Voice, Water Absorb, and Hydration's effects.",
 		shortDesc: "Liquid Voice + Water Absorb + Hydration.",
+	},
+	crystalresonance: {
+		name: "Crystal Resonance",
+		desc: "This Pokemon has Solid Rock, Amethyst Glow, and Water Absorb's effects.",
+		shortDesc: "Solid Rock + Amethyst Glow + Water Absorb.",
 	},
 	auroracurrent: {
 		name: "Aurora Current",
@@ -1343,7 +1348,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 		hyperdrill: {
 		name: "Hyper Drill",
-		desc: "This Pokemon has Power Drill and Dual Wield's effects. Drill moves are used twice; the first hit receives Power Drill and the second hit deals 20% of the move's unboosted power. Its Rock-type moves receive a same-type attack bonus.",
+		desc: "This Pokemon has Power Drill and Dual Wield's effects. Drill moves are used twice; the first hit receives Power Drill and the second hit deals 15% of the move's unboosted power. Its Rock-type moves receive a same-type attack bonus.",
 		shortDesc: "Power Drill + Dual Wield; Rock moves get STAB.",
 	},
 	honeygather: {
@@ -1866,6 +1871,21 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Natural Recovery",
 		desc: "This Pokemon has Natural Cure and Regenerator's effects.",
 		shortDesc: "Natural Cure + Regenerator.",
+	},
+	mossarmor: {
+		name: "Moss Armor",
+		desc: "This Pokemon has Brute Force, Stamina, and Natural Recovery's effects.",
+		shortDesc: "Brute Force + Stamina + Natural Recovery.",
+	},
+	stormpower: {
+		name: "Storm Power",
+		desc: "If Rain Dance or Primordial Sea is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP at the end of each turn.",
+		shortDesc: "In rain, 1.5x Sp. Atk and loses 1/8 max HP each turn.",
+	},
+	stormcalling: {
+		name: "Storm Calling",
+		desc: "This Pokemon has Drizzle, Liquid Voice, and Tinted Lens's effects.",
+		shortDesc: "Drizzle + Liquid Voice + Tinted Lens.",
 	},
 	neuroforce: {
 		name: "Neuroforce",
@@ -2814,8 +2834,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	siegelauncher: {
 		name: "Siege Launcher",
-		desc: "This Pokemon has Water Barrage, Mega Launcher, Self Sufficient, and Stalwart's effects. Moves boosted by Mega Launcher are used twice through Dual Wield; the second hit deals 20% of the move's unboosted power.",
-		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves add 20% hit.",
+		desc: "This Pokemon has Water Barrage, Mega Launcher, Self Sufficient, and Stalwart's effects. Moves boosted by Mega Launcher are used twice through Dual Wield; the second hit deals 15% of the move's unboosted power.",
+		shortDesc: "Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves add 15% hit.",
 	},
 	calderacore: {
 		name: "Caldera Core",
@@ -3344,6 +3364,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "White Smoke",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
 	},
+	whiplash: {
+		name: "Whiplash",
+		desc: "This Pokemon's Tail moves have their power multiplied by 1.5.",
+		shortDesc: "This Pokemon's Tail moves have 1.5x power.",
+	},
 	wimpout: {
 		name: "Wimp Out",
 		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage bringing it to 1/2 or less of its maximum HP, it immediately switches out to a chosen ally. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability. This effect applies to both direct and indirect damage, except Curse and Substitute on use, Belly Drum, Pain Split, and confusion damage.",
@@ -3571,6 +3596,21 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Bad Dreams, Shed Skin, and Tough Claws's effects. When it enters battle as Musharna, it transforms into Musharna-Rejuv.",
 		shortDesc: "Bad Dreams + Shed Skin + Tough Claws; transforms Musharna into Musharna-Rejuv.",
 	},
+	aevianfrost: {
+		name: "Aevian Frost",
+		desc: "On entry, Donphan permanently transforms into Donphan-Rejuv. This Pokemon also has the effects of Ice Body, Guts, and Filter.",
+		shortDesc: "Transforms Donphan into Donphan-Rejuv; Ice Body + Guts + Filter.",
+	},
+	aevianglacier: {
+		name: "Aevian Glacier",
+		desc: "On entry, Turtonator permanently transforms into Turtonator-Rejuv. This Pokemon also has the effects of Snow Warning, Ice Body, and Refrigerate.",
+		shortDesc: "Transforms Turtonator into Turtonator-Rejuv; Snow Warning + Ice Body + Refrigerate.",
+	},
+	aevianbolt: {
+		name: "Aevian Bolt",
+		desc: "On entry, Druddigon permanently transforms into Druddigon-Rejuv. This Pokemon also has the effects of Storm Power, Surge Surfer, and Volt Absorb.",
+		shortDesc: "Transforms Druddigon into Druddigon-Rejuv; Storm Power + Surge Surfer + Volt Absorb.",
+	},
 	powerdrill: {
 		name: "Power Drill",
 		desc: "This Pokemon's drill moves have 1.5x power.",
@@ -3618,8 +3658,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perfectstriker: {
 		name: "Perfect Striker",
-		desc: "This Pokemon has Striker, No Guard, and Libero's effects.",
-		shortDesc: "Striker + No Guard + Libero.",
+		desc: "This Pokemon has Striker, No Guard, Libero, and Proficient's effects.",
+		shortDesc: "Striker + No Guard + Libero + Proficient.",
 	},
 	silkendecoy: {
 		name: "Silken Decoy",
@@ -3638,8 +3678,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	territorial: {
 		name: "Territorial",
-		desc: "This Pokemon has Unnerve, Unaware, Tough Claws, and Intimidate's effects.",
-		shortDesc: "Unnerve + Unaware + Tough Claws + Intimidate.",
+		desc: "This Pokemon has Unnerve, Unaware, and Tough Claws' effects.",
+		shortDesc: "Unnerve + Unaware + Tough Claws.",
 	},
 	lunardread: {
 		name: "Lunar Dread",
