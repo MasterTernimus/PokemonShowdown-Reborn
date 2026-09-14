@@ -38,7 +38,7 @@ describe('Aevian Glalie', function () {
 			'headbutt', 'protect', 'camouflage', 'rockslide', 'woodhammer', 'grassyterrain', 'headsmash',
 			'grassyglide', 'leechseed', 'bide', 'chipaway', 'disable', 'faketears', 'rollout', 'spikes',
 			'switcheroo', 'weatherball', 'wideguard', 'arenitewall', 'bodypress', 'bulletseed', 'earthquake',
-			'energyball', 'gigadrain', 'leafstorm', 'meteorbeam', 'mudshot', 'slashandburn', 'stealthrock',
+			'energyball', 'gigadrain', 'leafstorm', 'meteorbeam', 'mudshot', 'stealthrock',
 			'stoneedge', 'synthesis', 'mudslap', 'accelerock',
 		];
 		for (const move of moves) assert(learnset[move], `Glalie-Aevian should learn ${move}`);

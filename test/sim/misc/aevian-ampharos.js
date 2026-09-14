@@ -27,7 +27,7 @@ describe('Aevian Ampharos', function () {
 		const mega = battle.dex.species.get('Ampharos-Aevian-Mega');
 		assert.deepEqual(mega.types, ['Ice', 'Electric']);
 		assert.deepEqual(mega.baseStats, {hp: 110, atk: 95, def: 110, spa: 165, spd: 105, spe: 45});
-		assert.equal(mega.abilities[0], 'Wooly Conductor');
+		assert.equal(mega.abilities[0], 'Absolute Zero');
 		battle.makeChoices('move blizzard mega', 'move thunderbolt mega');
 		assert.equal(battle.p1.active[0].species.name, 'Ampharos-Aevian-Mega');
 	});

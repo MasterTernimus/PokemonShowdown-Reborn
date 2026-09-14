@@ -26,7 +26,7 @@ describe('Lapras-Aevian-Gmax', function () {
 		const dex = common.gen(9).dex;
 		const species = dex.species.get('Lapras-Aevian-Gmax');
 		assert.deepEqual(species.types, ['Rock', 'Psychic']);
-		assert.deepEqual(species.baseStats, {hp: 200, atk: 110, def: 90, spa: 95, spd: 105, spe: 60});
+		assert.deepEqual(species.baseStats, {hp: 195, atk: 100, def: 90, spa: 85, spd: 105, spe: 60});
 		assert.equal(species.abilities[0], 'Crystal Resonance');
 		assert.equal(dex.abilities.get('crystalresonance').name, 'Crystal Resonance');
 	});

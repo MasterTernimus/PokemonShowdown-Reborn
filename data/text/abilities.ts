@@ -1,4 +1,19 @@
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+	absolutezero: {
+		name: "Absolute Zero",
+		desc: "Fire-type moves are not very effective against this Pokemon. Its Ice-type moves are super effective against Fire-type Pokemon. This Pokemon has Mold Breaker and Filter's effects.",
+		shortDesc: "Fire resist; Ice hits Fire super effectively; Mold Breaker + Filter.",
+	},
+	inexorable: {
+		name: "Inexorable",
+		desc: "This Pokemon's attacks have 1.3x power if its target has not moved yet or is switching out.",
+		shortDesc: "1.3x power against targets that have not moved or are switching.",
+	},
+	wildspirit: {
+		name: "Wild Spirit",
+		desc: "On switch-in, this Pokemon's accuracy rises by 1 stage. During its first turn out, its attacks are guaranteed to critical hit. It takes 30% less damage from attacks.",
+		shortDesc: "+1 accuracy on entry; first-turn critical hits; takes 30% less attack damage.",
+	},
 	noability: {
 		name: "No Ability",
 		shortDesc: "Does nothing.",
@@ -943,13 +958,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	auroraresonance: {
 		name: "Aurora Resonance",
-		desc: "This Pokemon has Liquid Voice, Water Absorb, and Hydration's effects.",
-		shortDesc: "Liquid Voice + Water Absorb + Hydration.",
+		desc: "This Pokemon has Liquid Voice and Water Absorb's effects.",
+		shortDesc: "Liquid Voice + Water Absorb.",
 	},
 	crystalresonance: {
 		name: "Crystal Resonance",
-		desc: "This Pokemon has Solid Rock, Amethyst Glow, and Water Absorb's effects.",
-		shortDesc: "Solid Rock + Amethyst Glow + Water Absorb.",
+		desc: "This Pokemon has Amethyst Glow and Magic Bounce's effects.",
+		shortDesc: "Amethyst Glow + Magic Bounce.",
 	},
 	auroracurrent: {
 		name: "Aurora Current",
@@ -2375,8 +2390,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	safeharbor: {
 		name: "Safe Harbor",
-		desc: "This Pokemon absorbs Water- and Ice-type attacks to restore 1/4 of its maximum HP. It also has Ice Body, Hydration, and Self Sufficient's effects.",
-		shortDesc: "Absorbs Water/Ice moves; Ice Body + Hydration + Self Sufficient.",
+		desc: "This Pokemon absorbs Water- and Ice-type attacks to restore 1/4 of its maximum HP. It also has Ice Body and Hydration's effects.",
+		shortDesc: "Absorbs Water/Ice moves; Ice Body + Hydration.",
 	},
 	seablessing: {
 		name: "Sea Blessing",
@@ -2947,8 +2962,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	protectiveward: {
 		name: "Protective Ward",
-		desc: "This Pokemon is immune to Hail and has Liquid Voice and Storm Drain's effects. It can use Arenite Wall and Aurora Veil regardless of weather or field. In Hail and Ice fields, it is treated as an Ice-type Pokemon.",
-		shortDesc: "Liquid Voice + Storm Drain; ignores Arenite Wall/Aurora Veil conditions; Hail immune; Ice in Ice fields.",
+		desc: "This Pokemon has Liquid Voice, Shell Armor, and Water Absorb's effects. It can use Arenite Wall and Aurora Veil regardless of weather or field.",
+		shortDesc: "Liquid Voice + Shell Armor + Water Absorb; ignores wall conditions.",
 	},
 	amethystglow: {
 		name: "Amethyst Glow",

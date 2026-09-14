@@ -9,7 +9,7 @@ describe('Aevian Gmax ability audit', function () {
   ['Lapras-Aevian', 'Protective Ward', 'psychic', 'watergun', 'crystalresonance'],
   ['Toxtricity-Aevian', 'Galvanize', 'flamethrower', 'thundershock', 'riotamp'],
  ]) {
-  it(`${species} gains its absorption ability and keeps its custom form after switching`, function () {
+  it(`${species} gains its Gmax ability and keeps its custom form after switching`, function () {
    battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [[
     {species, ability, gigantamax: true, moves: [attack]},
     {species: 'Blissey', ability: 'noability', moves: ['splash']},
@@ -22,7 +22,11 @@ describe('Aevian Gmax ability audit', function () {
    pokemon.hp = Math.floor(pokemon.maxhp / 2);
    const hp = pokemon.hp;
    battle.makeChoices(`move ${attack}`, `move ${absorbed}`);
-   assert(pokemon.hp > hp, 'absorbed attack should heal');
+   if (gmaxAbility === 'riotamp') {
+    assert(pokemon.hp > hp, 'absorbed Electric attack should heal');
+   } else {
+    assert(pokemon.hp < hp, 'Crystal Resonance no longer absorbs Water');
+   }
    battle.makeChoices('switch 2', 'move splash');
    battle.makeChoices('switch 2', 'move splash');
    assert.equal(pokemon.species.id, expectedForm);

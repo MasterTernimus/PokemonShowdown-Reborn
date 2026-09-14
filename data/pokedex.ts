@@ -1690,7 +1690,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Aevian",
 		types: ["Electric", "Flying"],
 		genderRatio: { M: 0.75, F: 0.25 },
-		baseStats: { hp: 100, atk: 120, def: 75, spa: 100, spd: 75, spe: 130 },
+		baseStats: { hp: 105, atk: 120, def: 80, spa: 100, spd: 80, spe: 115 },
 		abilities: { 0: "Intimidate", 1: "Storm Power", H: "Lightning Rod" },
 		heightm: 1.9,
 		weightkg: 155,
@@ -3314,7 +3314,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 131,
 		name: "Lapras-Aevian",
 		types: ["Rock", "Psychic"],
-		baseStats: { hp: 140, atk: 110, def: 90, spa: 95, spd: 105, spe: 60 },
+		baseStats: { hp: 130, atk: 100, def: 90, spa: 85, spd: 105, spe: 60 },
 		abilities: { 0: "Protective Ward", 1: "Amethyst Glow", H: "Relic Armor" },
 		heightm: 2.5,
 		weightkg: 220,
@@ -3331,7 +3331,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Lapras-Aevian",
 		forme: "Gmax",
 		types: ["Rock", "Psychic"],
-		baseStats: { hp: 200, atk: 110, def: 90, spa: 95, spd: 105, spe: 60 },
+		baseStats: { hp: 195, atk: 100, def: 90, spa: 85, spd: 105, spe: 60 },
 		abilities: { 0: "Crystal Resonance" },
 		heightm: 24,
 		weightkg: 0,
@@ -4419,7 +4419,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-Aevian",
 		types: ["Ice", "Electric"],
 		baseStats: { hp: 110, atk: 95, def: 110, spa: 165, spd: 105, spe: 45 },
-		abilities: { 0: "Wooly Conductor" },
+		abilities: { 0: "Absolute Zero" },
 		heightm: 1.4,
 		weightkg: 61.5,
 		color: "Blue",
@@ -9855,7 +9855,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Electric", "Ghost"],
 		gender: "N",
 		baseStats: { hp: 60, atk: 65, def: 107, spa: 105, spd: 107, spe: 86 },
-		abilities: { 0: "Levitate", 1: "Electric Surge", H: "Defragment" },
+		abilities: { 0: "Levitate", 1: "Electromorphosis", H: "Defragment" },
 		heightm: 0.3,
 		weightkg: 0.3,
 		color: "Red",
@@ -9916,7 +9916,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Electric", "Flying"],
 		gender: "N",
 		baseStats: { hp: 60, atk: 65, def: 107, spa: 105, spd: 107, spe: 86 },
-		abilities: { 0: "Wind Power", 1: "Windy Surge", H: "Air Lock" },
+		abilities: { 0: "Wind Power", 1: "Windy Surge", H: "Air Lock", S: "Levitate" },
 		heightm: 0.3,
 		weightkg: 0.3,
 		color: "Red",
@@ -12018,7 +12018,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Zoroark",
 		types: ["Dark", "Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 55, atk: 105, def: 60, spa: 125, spd: 60, spe: 105 },
+		baseStats: { hp: 55, atk: 100, def: 60, spa: 125, spd: 60, spe: 110 },
 		abilities: { 0: "Illusion", 1: "Opportunist", H: "Pixilate" },
 		heightm: 1.6,
 		weightkg: 81.1,
@@ -12566,8 +12566,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Klinklang",
 		types: ["Steel", "Electric"],
 		gender: "N",
-		baseStats: { hp: 60, atk: 100, def: 115, spa: 100, spd: 85, spe: 90 },
-		abilities: { 0: "Clear Body", 1: "Galvanize", H: "Defragment" },
+		baseStats: { hp: 60, atk: 100, def: 115, spa: 90, spd: 85, spe: 90 },
+		abilities: { 0: "Clear Body", 1: "Galvanize", H: "Light Metal" },
 		heightm: 0.6,
 		weightkg: 81,
 		color: "Gray",
@@ -16955,6 +16955,20 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Dragon"],
 		otherFormes: ["Kommo-o-Totem"],
 		formeOrder: ["Kommo-o", "Kommo-o-Totem"],
+	},
+	kommooaevian: {
+		num: 784,
+		name: "Kommo-o-Aevian",
+		baseSpecies: "Kommo-o-Aevian",
+		forme: "Aevian",
+		types: ["Dragon", "Poison"],
+		baseStats: { hp: 100, atk: 130, def: 130, spa: 80, spd: 90, spe: 70 },
+		abilities: { 0: "Wild Spirit", 1: "Inexorable", H: "Analytic" },
+		heightm: 1.6,
+		weightkg: 78.2,
+		color: "Gray",
+		eggGroups: ["Dragon"],
+		isNonstandard: "Custom",
 	},
 	kommoototem: {
 		num: 784,
@@ -23293,7 +23307,7 @@ const normalizePokedexId = (name: string) => name.toLowerCase().replace(/[^a-z0-
 for (const [id, rawSpecies] of Object.entries(Pokedex)) {
 	const species = rawSpecies as any;
 	if (species.isNonstandard !== 'Custom') continue;
-	if (species.battleOnly && species.requiredAbility) continue;
+	if (species.requiredItem || (species.battleOnly && species.requiredAbility)) continue;
 	if (typeof species.forme !== 'string' ||
 		(!customVisualFormes.has(species.forme) && !species.forme.endsWith('-Alt') && !species.forme.endsWith('-Reborn'))) continue;
 	const baseId = customVisualBaseAliases[id] || normalizePokedexId(species.baseSpecies || '');
