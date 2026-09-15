@@ -44,6 +44,32 @@ describe('Schooling custom effects', () => {
 		assert.species(wishiwashi, 'Wishiwashi-School');
 	});
 
+	it('should force School Form by water terrain and respect grounded status', () => {
+		for (const terrain of ['underwaterterrain', 'watersurfaceterrain', 'murkwatersurfaceterrain']) {
+			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+				{ species: 'Wishiwashi', ability: 'Schooling', moves: ['splash'] },
+			], [{ species: 'Mew', moves: ['splash'] }]]);
+			battle.makeChoices('team 1', 'team 1');
+			const wishiwashi = battle.p1.active[0];
+			wishiwashi.hp = Math.floor(wishiwashi.maxhp / 4);
+			battle.field.changeTerrain(terrain, wishiwashi);
+			battle.runEvent('Residual');
+			assert.species(wishiwashi, 'Wishiwashi-School', terrain);
+			battle.destroy();
+		}
+
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Wishiwashi', ability: 'Schooling', moves: ['splash'] },
+		], [{ species: 'Mew', moves: ['splash'] }]]);
+		battle.makeChoices('team 1', 'team 1');
+		const airborneWishiwashi = battle.p1.active[0];
+		airborneWishiwashi.hp = Math.floor(airborneWishiwashi.maxhp / 4);
+		battle.field.changeTerrain('watersurfaceterrain', airborneWishiwashi);
+		airborneWishiwashi.addVolatile('magnetrise');
+		battle.runEvent('Residual');
+		assert.species(airborneWishiwashi, 'Wishiwashi');
+	});
+
 	it('should apply Hydra Bond and Mold Breaker without inheriting unrelated abilities in School Form', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Wishiwashi', ability: 'Schooling', moves: ['raindance', 'tackle', 'earthquake'] },
