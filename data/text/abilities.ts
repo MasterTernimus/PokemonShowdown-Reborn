@@ -729,6 +729,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Stakeout, Tangling Hair, and Prankster's effects.",
 		shortDesc: "Stakeout + Tangling Hair + Prankster.",
 	},
+	wickedcommand: {
+		name: "Wicked Command",
+		desc: "This Pokemon has Insomnia and Super Luck's effects and takes 20% less damage from other Pokemon's damaging moves. If this Pokemon knocks out an enemy with a move, its higher attacking stat is raised by 1 stage, with Attack chosen on a tie.",
+		shortDesc: "Insomnia + Super Luck; move KOs boost the higher attacking stat.",
+	},
 	crumblingshell: {
 		name: "Crumbling Shell",
 		desc: "When this Pokemon is hit by a Physical attack, Stealth Rock is set on the attacker's side unless a water field is active or that side already has Stealth Rock.",
@@ -2405,8 +2410,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	schooling: {
 		name: "Schooling",
-		desc: "A level 20 or higher Wishiwashi changes to School Form above 1/4 maximum HP and returns to Solo Form at or below 1/4 maximum HP. While in School Form, it has Hydra Bond, Self Repair, and Filter's effects.",
-		shortDesc: "Changes form by HP; School: Hydra Bond + Self Repair + Filter.",
+		desc: "A level 20 or higher Wishiwashi changes to School Form above 1/4 maximum HP. Underwater always forces School Form; Water Surface and Murkwater force it while grounded. It returns to Solo Form at or below 1/4 maximum HP otherwise. While in School Form, it has Hydra Bond, Self Repair, and Filter's effects.",
+		shortDesc: "Changes form by HP and water terrain; School: Hydra Bond + Self Repair + Filter.",
 
 		transform: "[POKEMON] formed a school!",
 		transformEnd: "[POKEMON] stopped schooling!",

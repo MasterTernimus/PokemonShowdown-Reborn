@@ -4264,6 +4264,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10044,
 	},
+	wickedcommand: {
+		onUpdate(pokemon) { return this.dex.abilities.get('insomnia').onUpdate?.call(this, pokemon); },
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('insomnia').onSetStatus?.call(this, status, target, source, effect);
+		},
+		onTryAddVolatile(status, target) {
+			return this.dex.abilities.get('insomnia').onTryAddVolatile?.call(this, status, target);
+		},
+		onModifyCritRatio(critRatio) {
+			return this.dex.abilities.get('superluck').onModifyCritRatio?.call(this, critRatio);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status' && source !== target) return this.chainModify(0.8);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (!effect || effect.effectType !== 'Move' || !source?.hp) return;
+			const atk = source.getStat('atk', false, true);
+			const spa = source.getStat('spa', false, true);
+			this.boost(atk >= spa ? {atk: 1} : {spa: 1}, source, source, this.dex.abilities.get('wickedcommand'));
+		},
+		flags: { breakable: 1 },
+		name: "Wicked Command",
+		rating: 4,
+		num: 10045,
+	},
 	bewitchingmajesty: {
 		onStart(pokemon) {
 			if (this.field.setTerrain('bewitchedwoodsterrain', pokemon, this.dex.abilities.get('bewitchingmajesty'))) {
@@ -12180,7 +12205,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed) return;
-			if (pokemon.hp > pokemon.maxhp / 4) {
+			const forcedSchool = this.field.isTerrain('underwaterterrain') ||
+				(this.field.isTerrain(['watersurfaceterrain', 'murkwatersurfaceterrain']) && pokemon.isGrounded());
+			if (forcedSchool || pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
 				}
@@ -12196,7 +12223,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 ||
 				pokemon.transformed || !pokemon.hp
 			) return;
-			if (pokemon.hp > pokemon.maxhp / 4) {
+			const forcedSchool = this.field.isTerrain('underwaterterrain') ||
+				(this.field.isTerrain(['watersurfaceterrain', 'murkwatersurfaceterrain']) && pokemon.isGrounded());
+			if (forcedSchool || pokemon.hp > pokemon.maxhp / 4) {
 				if (pokemon.species.id === 'wishiwashi') {
 					pokemon.formeChange('Wishiwashi-School');
 				}

@@ -8968,7 +8968,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Honchkrow",
 		types: ["Dark", "Flying"],
 		baseStats: { hp: 100, atk: 125, def: 72, spa: 81, spd: 72, spe: 90 },
-		abilities: { 0: "Pressure", 1: "Royal Decree", H: "Supreme Overlord" },
+		abilities: { 0: "Pressure", 1: "Wicked Command", H: "Supreme Overlord" },
 		heightm: 0.9,
 		weightkg: 27.3,
 		color: "Black",
