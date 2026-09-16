@@ -74,6 +74,7 @@ const FIELD_GROUPS = [
 			["Big Top Arena", "bigtopterrain"],
 			["Chess Board", "chessboardterrain"],
 			["Factory Field", "factoryterrain"],
+			["Flower Garden", "flowergarden1"],
 			["Glitch Field", "glitchterrain"],
 		],
 	},
@@ -377,6 +378,15 @@ const FORMAT_LIST: FormatList = [
 		subsection: "Synthetic",
 	},
 	{
+		name: "[Gen 9] Flower Garden",
+		mod: 'gen9',
+		terrain: 'flowergarden1',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: [...ALLGEN_FIELD_RULESET],
+	},
+	{
 		name: "[Gen 9] Big Top Arena",
 		mod: 'gen9',
 		terrain: 'bigtopterrain',
@@ -512,6 +522,16 @@ const FORMAT_LIST: FormatList = [
 	{
 		section: "AllGen Doubles",
 		column: 2,
+	},
+	{
+		name: "[Gen 9] Doubles Flower Garden",
+		mod: 'gen9',
+		gameType: 'doubles',
+		terrain: 'flowergarden1',
+		searchShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: [...ALLGEN_FIELD_RULESET],
 	},
 	{
 		name: "[Gen 9] Doubles Random Field",

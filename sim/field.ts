@@ -90,6 +90,9 @@ export class Field {
 			return false;
 		}
 		this.battle.eachEvent('WeatherChange', sourceEffect);
+		if (['raindance', 'primordialsea'].includes(status.id) && this.terrainState.gardenBurnStage) {
+			this.douseFlowerGarden(source || undefined);
+		}
 		return true;
 	}
 
@@ -187,6 +190,7 @@ export class Field {
 	}
 
 	startTerrain(status: string | Effect) {
+		if (this.isFlowerGardenBase()) return;
 		status = this.battle.dex.conditions.get(status);
 		this.terrain = status.id;
 		this.terrainState = this.battle.initEffectState({
@@ -214,6 +218,7 @@ export class Field {
 	}
 
 	canSetTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		if (this.isFlowerGardenBase()) return false;
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
@@ -269,6 +274,18 @@ export class Field {
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, ignoreNeutralization = false) {
+		const gardenSource = source && source !== 'debug' ? source : this.battle.event?.target;
+		const gardenEffect = sourceEffect || this.battle.effect;
+		if (this.flowerGardenStage() && ['grassyterrain', 'forestterrain'].includes(toID(status)) &&
+			gardenSource && ['grassyterrain', 'grassysurge', 'seedsower', 'forestsurge'].includes(gardenEffect?.id)) {
+			// Move growth is applied after successful execution; entry abilities grow after SwitchIn.
+			if (gardenEffect.id === 'seedsower') this.growFlowerGarden(gardenSource, gardenEffect);
+			return true;
+		}
+		if (this.isFlowerGardenBase()) {
+			this.battle.add('-message', 'The Flower Garden prevents a new field from being generated!');
+			return false;
+		}
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
@@ -352,8 +369,9 @@ export class Field {
 		return true;
 	}
 
-	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, gardenTransition = false) {
 		status = this.battle.dex.conditions.get(status);
+		if (this.isFlowerGardenBase() && !gardenTransition) return false;
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (this.terrain === status.id) {
 			return false;
@@ -385,6 +403,7 @@ export class Field {
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
 		const zMoveTerrain = !!prevTerrainState.zMoveTerrain;
+		const gardenBase = this.isFlowerGardenBase();
 		const underlyingTerrain = status.id === 'icyterrain' &&
 			['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain) ? this.terrain : undefined;
 		this.terrain = status.id;
@@ -396,6 +415,10 @@ export class Field {
 			duration: prevTerrainState.zMoveExpired ? 1 : prevTerrainState.duration,
 			turn: this.battle.turn,
 			prevTerrain: prevTerrainState.id,
+			gardenBase,
+			...(gardenTransition && status.id === 'burningterrain' ? {
+				gardenBurnStage: Number(prevTerrain.slice(-1)), gardenBurnTurns: 0,
+			} : {}),
 			...(underlyingTerrain ? { underlyingTerrain } : {}),
 		});
 		if (zMoveTerrain) {
@@ -433,6 +456,7 @@ export class Field {
 	}
 
 	clearTerrain(power: string | null = null) {
+		if (this.isFlowerGardenBase()) return false;
 		if (!this.terrain || this.terrain === 'newworldterrain') return false;
 		const clearedTerrain = this.terrain;
 		const clearedTerrainState = this.terrainState;
@@ -520,6 +544,62 @@ export class Field {
 		this.clearFieldStartedWeather(clearedTerrain);
 		this.restoreFormatHail();
 		return true;
+	}
+
+	flowerGardenStage() {
+		return /^flowergarden[1-5]$/.test(this.terrain) ? Number(this.terrain.slice(-1)) : 0;
+	}
+
+	isFlowerGardenBase() {
+		return !!this.terrainState.gardenBase || this.terrainStack.some(state => state.terrain_type === 'Base' && /^flowergarden[1-5]$/.test(state.id));
+	}
+
+	growFlowerGarden(source: Pokemon, effect: Effect) {
+		const stage = this.flowerGardenStage();
+		if (!stage || stage >= 5) return false;
+		const amount = stage <= 3 && source.hasAbility('ripen') ? 2 : 1;
+		const changed = this.changeTerrain(`flowergarden${Math.min(5, stage + amount)}`, source, effect, true);
+		if (changed) this.battle.add('-message', 'The garden grew a little!');
+		return changed;
+	}
+
+	flowerGardenSwitchIn(pokemon: Pokemon) {
+		if (!pokemon.hp || !this.flowerGardenStage()) return;
+		// One growth per entrant, not per component of a composite ability such as Ancient Bloom.
+		if (pokemon.hasAbility(['drizzle', 'drought', 'flowergift', 'flowerveil', 'orichalcumpulse',
+			'megasol', 'searingpetals', 'seedsower', 'grassysurge', 'forestsurge', 'pollenbloom', 'toxicbloom', 'ancientbloom'])) {
+			this.growFlowerGarden(pokemon, pokemon.getAbility());
+		}
+	}
+
+	douseFlowerGarden(source?: Pokemon, grow = false) {
+		if (!this.terrainState.gardenBurnStage) return false;
+		const stage = Math.max(1, this.terrainState.gardenBurnStage - this.terrainState.gardenBurnTurns);
+		const changed = this.changeTerrain(`flowergarden${stage}`, source || null, null, true);
+		if (changed && grow && source) this.growFlowerGarden(source, this.battle.effect);
+		return changed;
+	}
+
+	flowerGardenAfterMove(source: Pokemon, move: ActiveMove) {
+		if (this.terrainState.gardenBurnStage) {
+			const dousing = ['raindance', 'waterspout', 'watersport', 'defog', 'gust', 'hurricane', 'muddywater',
+				'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'hydrovortex',
+				'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
+			if (dousing.includes(move.id)) this.douseFlowerGarden(source, ['raindance', 'waterspout', 'watersport'].includes(move.id));
+			return;
+		}
+		const stage = this.flowerGardenStage();
+		if (!stage) return;
+		if (['growth', 'flowershield', 'raindance', 'sunnyday', 'rototiller', 'ingrain', 'grassyterrain', 'watersport', 'bloomdoom'].includes(move.id)) {
+			this.growFlowerGarden(source, move);
+		} else if (['cut', 'xscissor', 'aciddownpour'].includes(move.id)) {
+			this.changeTerrain(`flowergarden${move.id === 'aciddownpour' ? 1 : Math.max(1, stage - 1)}`, source, move, true);
+		} else if (stage >= 3 && ['heatwave', 'eruption', 'searingshot', 'flameburst', 'lavaplume', 'firepledge',
+			'mindblown', 'incinerate', 'burningjealousy', 'infernooverdrive'].includes(move.id) &&
+			!this.isWeather(['raindance', 'primordialsea']) && !this.pseudoWeather.watersport &&
+			!this.battle.getAllActive().some(pokemon => pokemon.volatiles.watersport)) {
+			if (this.changeTerrain('burningterrain', source, move, true)) this.battle.add('-message', 'The garden caught fire!');
+		}
 	}
 
 	effectiveTerrain(target?: Pokemon | Side | Battle) {

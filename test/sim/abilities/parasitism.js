@@ -28,7 +28,7 @@ describe('Parasitism and Resuscitation', function () {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const parasect = battle.p1.active[0];
-		assert.species(parasect, 'Parasect-Parasitism');
+		assert.species(parasect, 'Parasect-Aevian');
 		parasect.sethp(parasect.maxhp - 100);
 		const before = parasect.hp;
 		battle.makeChoices();

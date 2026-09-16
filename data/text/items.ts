@@ -1,4 +1,8 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
+	parasectite: {
+		name: "Parasectite",
+		shortDesc: "Allows Parasect, including its Aevian or Parasite form, to Mega Evolve.",
+	},
 	anomalycore: {
 		name: "Anomaly Core",
 		shortDesc: "Pulse/Rift Evolution item for designated Anomaly Pokemon.",

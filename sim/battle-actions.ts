@@ -248,6 +248,7 @@ export class BattleActions {
 			}
 			poke.isStarted = true;
 			poke.draggedIn = null;
+			this.battle.field.flowerGardenSwitchIn(poke);
 		}
 		return true;
 	}
@@ -389,6 +390,7 @@ export class BattleActions {
 				this.battle.field.terrainState.zMoveTerrain = true;
 			}
 		}
+		if (moveDidSomething) this.battle.field.flowerGardenAfterMove(pokemon, move);
 		this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.battle.runEvent('AfterMove', pokemon, target, move);
 		if (move.flags['cantusetwice'] && pokemon.removeVolatile(move.id)) {
@@ -2283,6 +2285,7 @@ export class BattleActions {
 	// ==================================================================
 
 	canMegaEvo(pokemon: Pokemon) {
+		if (pokemon.m.parasectMegaUsed) return null;
 		const species = pokemon.baseSpecies;
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
@@ -2416,6 +2419,7 @@ export class BattleActions {
 
 		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		if (toID(speciesid) === 'parasectmega') pokemon.m.parasectMegaUsed = true;
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
 		}

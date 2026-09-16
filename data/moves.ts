@@ -6589,7 +6589,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, heal: 1, allyanim: 1, metronome: 1 },
 		onHit(target, source) {
 			let success = false;
-			if (this.field.isTerrain('grassyterrain') || this.field.isTerrain('fairytaleterrain')) {
+			if (this.field.isTerrain(['grassyterrain', 'fairytaleterrain', 'flowergarden3'])) {
 				success = !!this.heal(this.modify(target.baseMaxhp, 1));
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
@@ -6622,6 +6622,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { distance: 1, metronome: 1 },
 		onHitField(t, source, move) {
+			const stage = this.field.flowerGardenStage();
+			if (stage === 2 || stage === 3) {
+				let success = false;
+				for (const target of this.getAllActive().filter(pokemon => pokemon.isAlly(source))) {
+					success = this.boost({ def: stage - 1, spd: stage - 1 }, target, source, move) || success;
+				}
+				return success;
+			}
 			const targets: Pokemon[] = [];
 			for (const pokemon of this.getAllActive()) {
 				if (
@@ -8083,14 +8091,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {},
 		isMax: "Sandaconda",
-			self: {
-				onHit(source) {
+		self: {
+			onHit(source) {
 				for (const pokemon of source.foes()) {
 					pokemon.addVolatile('partiallytrapped', source, this.dex.getActiveMove('G-Max Sandblast'));
-				}
-				if (this.field.isTerrain(['caveterrain', 'crystalcavernterrain', 'darkcrystalcavernterrain'])) return;
-				if (this.field.setTerrain('desertterrain', source, this.dex.moves.get('gmaxsandblast'))) {
-					this.field.terrainState.duration = 3;
 				}
 			},
 		},
@@ -9011,7 +9015,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) || this.field.isTerrain('grassyterrain') || this.field.isTerrain('forestterrain'))
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) || this.field.isTerrain(['grassyterrain', 'forestterrain', 'flowergarden1']))
 				move.boosts = {
 					atk: 2,
 					spa: 2,
@@ -10912,6 +10916,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 7,
 			onResidual(pokemon) {
+				if (this.field.isTerrain(['flowergarden2', 'flowergarden4'])) {
+					this.heal(pokemon.baseMaxhp / (this.field.isTerrain('flowergarden4') ? 4 : 8));
+					return;
+				}
 				if (this.field.isTerrain('corrosiveterrain') || this.field.isTerrain('swampterrain')) {
 					if (pokemon.hasType(['Poison', 'Steel']))
 						this.heal(pokemon.baseMaxhp / 16);
@@ -14293,6 +14301,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTryHit(target, pokemon) {
 			let move = 'triattack';
 			const terrainMoveMap = new Map<string, string>([
+				['flowergarden1', 'growth'],
+				['flowergarden5', 'petalblizzard'],
 				['ashenbeachterrain', 'meditate'],
 				['bewitchedwoodsterrain', 'alluringvoice'],
 				['bigtopterrain', 'acrobatics'],
@@ -14336,7 +14346,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			]);
 			const newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
-			this.actions.useMove(move, pokemon, { target });
+			this.actions.useMove(move, pokemon, { target: move === 'growth' ? pokemon : target });
 			return null;
 		},
 		target: "normal",
@@ -17677,6 +17687,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { distance: 1, nonsky: 1, metronome: 1 },
 		onHitField(target, source) {
+			const flowerGarden = this.field.isTerrain('flowergarden1');
 			const targets: Pokemon[] = [];
 			let anyAirborne = false;
 			for (const pokemon of this.getAllActive()) {
@@ -17685,14 +17696,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					anyAirborne = true;
 					continue;
 				}
-				if (pokemon.hasType('Grass')) {
+				if (pokemon.hasType('Grass') || (flowerGarden && pokemon === source)) {
 					// This move affects every grounded Grass-type Pokemon in play.
 					targets.push(pokemon);
 				}
 			}
 			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
 			for (const pokemon of targets) {
-				this.boost({ atk: 1, spa: 1 }, pokemon, source);
+				this.boost({ atk: flowerGarden ? 2 : 1, spa: flowerGarden ? 2 : 1 }, pokemon, source);
 			}
 		},
 		target: "all",
@@ -18150,6 +18161,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
+			if (this.field.isTerrain('flowergarden5')) {
+				Object.assign(move, this.dex.getActiveMove('petaldance'));
+				move.target = 'allAdjacentFoes';
+				move.secondary = null;
+				move.secondaries = null;
+				return;
+			}
+			if (this.field.isTerrain('flowergarden1')) {
+				Object.assign(move, this.dex.getActiveMove('sweetscent'));
+				move.secondary = null;
+				move.secondaries = null;
+				return;
+			}
 			const currentTerrain = this.field.terrain; // Assuming this gets the ID string
 			if (!currentTerrain || currentTerrain === '') return;
 			if (currentTerrain === 'icyterrain') {
@@ -21605,6 +21629,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
+			if (this.field.isTerrain('flowergarden3')) {
+				move.boosts = { def: -1, spd: -1, evasion: -1 };
+				return;
+			}
 			if (this.field.isTerrain('mistyterrain')) {
 				move.boosts = {
 					evasion: -2,

@@ -3027,6 +3027,13 @@ export class Battle {
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
+			if (this.field.terrainState.gardenBurnStage) {
+				this.field.terrainState.gardenBurnTurns++;
+				if (this.field.terrainState.gardenBurnTurns >= this.field.terrainState.gardenBurnStage - 1) {
+					this.add('-message', 'The garden was burned to ash');
+					this.field.changeTerrain('flowergarden1', null, null, true);
+				}
+			}
 			if (!this.ended) this.add('upkeep');
 			break;
 		}
@@ -3174,7 +3181,9 @@ export class Battle {
 			} else {
 				this.field.startTerrain(this.format.terrain);
 				const lower_terrain = this.dex.conditions.get(this.format.terrain);
-				this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", terrainChanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
+				if (!this.field.isFlowerGardenBase()) {
+					this.field.terrainStack.push(this.initEffectState({ id: lower_terrain.id, terrain_type: "Base", terrainChanges: new Map<string, number>(), duration: 9999, turn: this.turn }));
+				}
 			}
 			if (['coldeclipseterrain', 'fairytaleterrain'].includes(this.format.terrain)) {
 				this.field.startFieldWeather('hail', this.format.terrain as ID);
