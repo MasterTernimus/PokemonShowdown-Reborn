@@ -1,7 +1,53 @@
 /* eslint-disable @stylistic/max-len */
 import { type TerrainData } from "../sim/dex-terrains";
 
+function flowerGardenStage(stage: number): TerrainData {
+	const name = `Flower Garden ${stage}`;
+	return {
+		name,
+		condition: {
+			effectType: 'Terrain',
+			duration: 9999,
+			onBasePower(basePower, source, target, move) {
+				let modifier = 1;
+				if (move.type === 'Grass') modifier *= [1, 1, 1.1, 1.3, 1.5, 2][stage];
+				if (move.type === 'Bug') modifier *= [1, 1, 1, 1.5, 2, 2][stage];
+				if (move.type === 'Fire' && stage >= 3) modifier *= 1.5;
+				if (stage >= 2 && move.id === 'cut') modifier *= target.hasType('Grass') ? 2 : 1.5;
+				if (stage >= 3 && ['fleurcannon', 'flowertrick', 'petalblizzard', 'petaldance', 'springtidestorm'].includes(move.id)) {
+					modifier *= stage === 3 ? 1.2 : 1.5;
+				}
+				return this.chainModify(modifier);
+			},
+			onEffectiveness(typeMod, target, type, move) {
+				if (stage >= 4 && type === 'Grass' && typeMod > 0) return 0;
+			},
+			onModifyPriority(priority, pokemon, target, move) {
+				if (stage >= 4 && move.id === 'grassyglide') return priority + 1;
+			},
+			onModifyMove(move) {
+				if (stage === 5 && (['petaldance', 'petalblizzard'].includes(move.id) ||
+					(move.flags.powder && move.id !== 'ragepowder' && ['normal', 'adjacentFoe', 'randomNormal', 'allAdjacent'].includes(move.target)))) {
+					move.target = 'allAdjacentFoes';
+				}
+			},
+			onFieldStart() {
+				this.add('-fieldstart', name);
+				if (stage === 1) this.add('-message', 'Seeds line the field.');
+			},
+			onFieldEnd() {
+				this.add('-fieldend', name);
+			},
+		},
+	};
+}
+
 export const Terrains: { [k: string]: TerrainData } = {
+	flowergarden1: flowerGardenStage(1),
+	flowergarden2: flowerGardenStage(2),
+	flowergarden3: flowerGardenStage(3),
+	flowergarden4: flowerGardenStage(4),
+	flowergarden5: flowerGardenStage(5),
 	ashenbeachterrain: {
 		name: "Ashen Beach Terrain",
 		condition: {
@@ -294,6 +340,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onAfterMove(source, target, move) {
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
+				if (this.field.terrainState.gardenBurnStage) return;
 				if (terrainEndMoves.includes(move.id)) {
 					if (this.field.terrainState.prevTerrain) {
 						this.field.changeTerrain(this.field.terrainState.prevTerrain);
@@ -326,6 +373,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onFieldResidual() {
 				if (this.field.weather === 'raindance' || this.field.weather === 'sandstorm') {
+					if (this.field.terrainState.gardenBurnStage) {
+						if (this.field.isWeather('raindance')) this.field.douseFlowerGarden();
+						return;
+					}
 					if (this.field.terrainState.prevTerrain) {
 						this.field.changeTerrain(this.field.terrainState.prevTerrain);
 					} else {
@@ -334,7 +385,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onFieldStart() {
-				this.add('-fieldstart', 'Burning Terrain');
+				this.add('-fieldstart', 'Burning Terrain', ...(this.field.terrainState.gardenBurnStage ? ['[garden]'] : []));
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon?.hasAbility('blazingmane')) this.boost({ spe: 1 }, pokemon, pokemon);
 				}

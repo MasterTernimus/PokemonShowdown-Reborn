@@ -24,7 +24,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (!pokemon.hp || pokemon.baseSpecies.id !== 'parasect') {
+			if (!pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Parasect') {
 				pokemon.removeVolatile('resuscitationpending');
 				return;
 			}
@@ -34,6 +34,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			pokemon.clearVolatile();
 			this.add('-clearboost', pokemon);
 			pokemon.formeChange('Parasect-Parasite', this.dex.abilities.get('parasitism'), true);
+			this.actions.refreshMegaOptions(pokemon);
 			this.add('-message', `${pokemon.name} was fully revived as Parasect-Parasite!`);
 			this.heal(pokemon.maxhp, pokemon, pokemon, this.dex.abilities.get('resuscitation'));
 		},
@@ -422,7 +423,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 					return;
 				}
 			}
-			this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
+			const stage = this.field.flowerGardenStage();
+			const divisor = this.effectState.sourceEffect.id === 'infestation' && stage >= 3 ?
+				({3: 6, 4: 4, 5: 3} as Record<number, number>)[stage] : this.effectState.boundDivisor;
+			this.damage(pokemon.baseMaxhp / divisor);
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');

@@ -1,4 +1,9 @@
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+	completeparasitism: {
+		name: "Complete Parasitism",
+		desc: "Parasitism, Filter, and Self Repair. A lethal hit triggers a full-HP revival as Parasect-Parasite at the end of the turn, even if Parasitism was used before Mega Evolution.",
+		shortDesc: "Parasitism + Filter + Self Repair; Mega can revive as Parasite.",
+	},
 	absolutezero: {
 		name: "Absolute Zero",
 		desc: "Fire-type moves are not very effective against this Pokemon. Its Ice-type moves are super effective against Fire-type Pokemon. This Pokemon has Mold Breaker and Filter's effects.",
@@ -2814,8 +2819,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	verdantdrake: {
 		name: "Verdant Drake",
-		desc: "This Pokemon has Proficient, Regenerator, and Dual Wield's effects. Its STAB moves have 1.3x power, it restores 1/3 max HP when it switches out, and moves boosted by Sharpness or Mega Launcher, plus arrow moves, hit twice for reduced damage.",
-		shortDesc: "Proficient + Regenerator + Dual Wield.",
+		desc: "This Pokemon has Regenerator and Dual Wield's effects. It restores 1/3 max HP when it switches out, and moves boosted by Sharpness or Mega Launcher, plus arrow moves, hit twice for reduced damage.",
+		shortDesc: "Regenerator + Dual Wield.",
 	},
 	solarbloom: {
 		name: "Solar Bloom",
@@ -2824,28 +2829,28 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wrathshield: {
 		name: "Wrath Shield",
-		desc: "Its same-type attacks have 1.3x power (Proficient). This Pokemon has Bulletproof, Dauntless Shield, and Self Repair's effects. It gains 1 Defense stage on entry, plus 1 Special Defense stage in Cold Eclipse, New World, Starlight Arena, or Fairy Tale. It is immune to bullet and pulse moves and restores HP through Self Repair.",
-		shortDesc: "Proficient + Bulletproof + Dauntless Shield + Self Repair; boosted fields also give +1 SpD.",
+		desc: "This Pokemon has Bulletproof, Dauntless Shield, and Self Repair's effects. It gains 1 Defense stage on entry, plus 1 Special Defense stage in Cold Eclipse, New World, Starlight Arena, or Fairy Tale. It is immune to bullet and pulse moves and restores HP through Self Repair.",
+		shortDesc: "Bulletproof + Dauntless Shield + Self Repair; boosted fields also give +1 SpD.",
 	},
 	shadowcurrent: {
 		name: "Shadow Current",
-		desc: "Its same-type attacks have 1.3x power (Proficient). This Pokemon has Protean, Technician, Infiltrator, and Anticipation's effects. Before using a move, it becomes that move's type.",
-		shortDesc: "Proficient + Protean + Technician + Infiltrator + Anticipation.",
+		desc: "This Pokemon has Protean, Technician, Infiltrator, and Anticipation's effects. Before using a move, it becomes that move's type.",
+		shortDesc: "Protean + Technician + Infiltrator + Anticipation.",
 	},
 	astralwitchcraft: {
 		name: "Astral Witchcraft",
-		desc: "Its same-type attacks have 1.3x power (Proficient). This Pokemon has Sworn Duty, Levitate, and Magic Guard's effects. In Fairy Tale or New World, its Special Attack and Special Defense rise by 1 on entry.",
-		shortDesc: "Proficient + Sworn Duty + Levitate + Magic Guard; Fairy Tale/New World: +1 SpA/SpD.",
+		desc: "This Pokemon has Sworn Duty, Levitate, and Magic Guard's effects. In Fairy Tale or New World, its Special Attack and Special Defense rise by 1 on entry.",
+		shortDesc: "Sworn Duty + Levitate + Magic Guard; Fairy Tale/New World: +1 SpA/SpD.",
 	},
 	blazingtempo: {
 		name: "Blazing Tempo",
-		desc: "This Pokemon has Speed Boost, Striker, and Proficient's effects.",
-		shortDesc: "Speed Boost + Striker + Proficient.",
+		desc: "This Pokemon has Speed Boost and Striker's effects.",
+		shortDesc: "Speed Boost + Striker.",
 	},
 	ragingcurrent: {
 		name: "Raging Current",
-		desc: "Its same-type attacks have 1.3x power (Proficient). This Pokemon has Swift Swim, Damp, Water Veil, Dry Skin, and Stamina's effects.",
-		shortDesc: "Proficient + Swift Swim + Damp + Water Veil + Dry Skin + Stamina.",
+		desc: "This Pokemon has Swift Swim, Damp, Water Veil, Dry Skin, and Stamina's effects.",
+		shortDesc: "Swift Swim + Damp + Water Veil + Dry Skin + Stamina.",
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
@@ -3538,18 +3543,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
-		desc: "This Pokemon has Thick Fat, Proficient, and Unaware's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Grass immunities; this Pokemon heals the damage dealt by that chip.",
-		shortDesc: "Thick Fat + Proficient + Unaware; Grass scaling chip heals the user for damage dealt.",
+		desc: "This Pokemon has Thick Fat and Unaware's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Grass immunities; this Pokemon heals the damage dealt by that chip.",
+		shortDesc: "Thick Fat + Unaware; Grass scaling chip heals the user for damage dealt.",
 	},
 	waterbarrage: {
 		name: "Water Barrage",
-		desc: "This Pokemon has Proficient and Dual Wield's effects. At the end of each turn, opposing Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, scaled by effectiveness and blocked by Water immunities.",
-		shortDesc: "Proficient + Dual Wield; cycling Water chip respects effectiveness and immunities.",
+		desc: "This Pokemon has Dual Wield's effects. At the end of each turn, opposing Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, scaled by effectiveness and blocked by Water immunities.",
+		shortDesc: "Dual Wield; cycling Water chip respects effectiveness and immunities.",
 	},
 	wildfirecore: {
 		name: "Wildfire Core",
-		desc: "This Pokemon has Dragonize, Magma Armor, and Proficient's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage uses Fire-type effectiveness and is blocked by Fire immunities.",
-		shortDesc: "Dragonize + Magma Armor + Proficient; Fire scaling chip respects immunities.",
+		desc: "This Pokemon has Dragonize and Magma Armor's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage uses Fire-type effectiveness and is blocked by Fire immunities.",
+		shortDesc: "Dragonize + Magma Armor; Fire scaling chip respects immunities.",
 	},
 	memoryleak: {
 		name: "Memory Leak",
@@ -3678,13 +3683,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	perfectstriker: {
 		name: "Perfect Striker",
-		desc: "This Pokemon has Striker, No Guard, Libero, and Proficient's effects.",
-		shortDesc: "Striker + No Guard + Libero + Proficient.",
+		desc: "This Pokemon has Striker, No Guard, and Libero's effects.",
+		shortDesc: "Striker + No Guard + Libero.",
 	},
 	silkendecoy: {
 		name: "Silken Decoy",
-		desc: "On becoming Mega Ariados, this Pokemon spins a protective cocoon and remembers whether it is still available when switching. When any Pokemon faints while this Pokemon is active, it spins a cocoon if it does not already have one. The cocoon blocks the next damaging hit, and blocks the remaining hits of that multi-hit move. It also has Insomnia and Self Sufficient's effects.",
-		shortDesc: "A persistent cocoon blocks a damaging hit and the rest of that multi-hit move; Insomnia + Self Sufficient.",
+		desc: "Mega Ariados spins a persistent cocoon, renewed when another Pokemon faints. It blocks status moves and status conditions while intact, and absorbs one damaging move including all its hits and secondary effects. Also has Insomnia, Self Sufficient, and Swarm.",
+		shortDesc: "Cocoon blocks a move, status and secondaries; Insomnia + Self Sufficient + Swarm.",
 	},
 	strikersmomentum: {
 		name: "Striker's Momentum",

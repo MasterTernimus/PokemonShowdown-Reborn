@@ -1,6 +1,16 @@
 /* eslint-disable @stylistic/max-len */
 
 export const Items: import('../sim/dex-items').ItemDataTable = {
+	parasectite: {
+		name: "Parasectite",
+		spritenum: 619,
+		megaStone: { "Parasect": "Parasect-Mega", "Parasect-Aevian": "Parasect-Mega", "Parasect-Parasite": "Parasect-Mega" },
+		itemUser: ["Parasect", "Parasect-Aevian", "Parasect-Parasite"],
+		onTakeItem(item, source) { return source.baseSpecies.baseSpecies !== 'Parasect'; },
+		num: 11110,
+		gen: 9,
+		isNonstandard: "Custom",
+	},
 	anomalycore: {
 		name: "Anomaly Core",
 		spritenum: 0,
@@ -6498,19 +6508,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const terrains = ['glitchterrain', 'shortcircuitterrain', 'factoryterrain', 'mirrorarenaterrain', 'chessboardterrain', 'bigtopterrain'];
+			const terrains = ['glitchterrain', 'shortcircuitterrain', 'factoryterrain', 'mirrorarenaterrain', 'chessboardterrain', 'bigtopterrain', 'flowergarden1'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(terrains)) {
 				pokemon.useItem();
 			}
 		},
 		onTerrainChange(pokemon) {
-			const terrains = ['glitchterrain', 'shortcircuitterrain', 'factoryterrain', 'mirrorarenaterrain', 'chessboardterrain', 'bigtopterrain'];
+			const terrains = ['glitchterrain', 'shortcircuitterrain', 'factoryterrain', 'mirrorarenaterrain', 'chessboardterrain', 'bigtopterrain', 'flowergarden1'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(terrains)) {
 				pokemon.useItem();
 			}
 		},
 		onUseItem(item, pokemon) {
 			this.add('-activate', pokemon, item, '[consumed]');
+			if (this.field.isTerrain('flowergarden1')) {
+				this.boost({ spd: 1 }, pokemon, pokemon, item);
+				pokemon.addVolatile('ingrain', pokemon, item);
+				this.field.growFlowerGarden(pokemon, item);
+				return;
+			}
 			if (this.field.isTerrain('glitchterrain')) {
 				this.add('-message', `${pokemon} was corrupted by the rogue data!`);
 				this.boost({ def: 1 }, pokemon, pokemon, item);
