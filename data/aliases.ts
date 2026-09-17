@@ -1,6 +1,6 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
-	parasectparasitism: "Parasect-Aevian",
-	parasectrejuv: "Parasect-Aevian",
+	parasectparasitism: "Parasect-Rejuv",
+	parasectaevian: "Parasect-Rejuv",
 	// Custom cosmetic sprite variants
 	gardevoirvoid: "Gardevoir",
 	dusknoiralt: "Dusknoir",

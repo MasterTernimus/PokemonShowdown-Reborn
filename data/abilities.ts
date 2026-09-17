@@ -86,16 +86,16 @@ const Z_PROTEAN_FORMES: Record<string, { id: number, species: string }> = {
 	Fairy: { id: 18, species: 'Sylveon' },
 };
 
-const SCALING_CHIP_IMMUNITIES: Partial<Record<TypeName, string[]>> = {
+const ABILITY_CHIP_IMMUNITIES: Partial<Record<TypeName, string[]>> = {
 	Fire: ['flashfire', 'soulfire', 'wellbakedbody'],
 	Grass: ['sapsipper'],
 	Ground: ['eartheater'],
 	Water: ['dryskin', 'stormdrain', 'waterabsorb'],
 };
 
-function isImmuneToScalingChip(target: Pokemon, type: TypeName) {
+function isImmuneToAbilityChip(target: Pokemon, type: TypeName) {
 	if (target.hasType(type) || !target.runImmunity(type)) return true;
-	const immunityAbilities = SCALING_CHIP_IMMUNITIES[type];
+	const immunityAbilities = ABILITY_CHIP_IMMUNITIES[type];
 	return !!immunityAbilities?.length && target.hasAbility(immunityAbilities);
 }
 
@@ -543,6 +543,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	burningrage: {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, source, target, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'burningrage') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			let result = this.dex.abilities.get('bruteforce').onBasePower?.call(this, basePower, source, target, move);
 			return this.dex.abilities.get('ironfist').onBasePower?.call(this, result ?? basePower, source, target, move);
 		},
@@ -558,6 +560,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10349,
 	},
 	emperorspride: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'emperorspride') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onAfterEachBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('defiant').onAfterEachBoost?.call(this, boost, target, source, effect);
 		},
@@ -712,6 +718,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10355,
 	},
 	terragift: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'terragift') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) {
 			return this.dex.abilities.get('hospitality').onStart?.call(this, pokemon);
 		},
@@ -2723,6 +2733,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 126,
 	},
 	queensguard: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'queensguard') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) { return this.dex.abilities.get('intimidate').onStart?.call(this, pokemon); },
 		onChangeBoost(boost, target, source, effect) { return this.dex.abilities.get('contrary').onChangeBoost?.call(this, boost, target, source, effect); },
 		onResidual(pokemon) { return this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon); },
@@ -3388,6 +3402,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon);
 		},
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'draconicforce') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, attacker, defender, move);
 			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) {
@@ -3458,7 +3474,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyType(move, pokemon) { return this.dex.abilities.get('wildfirecore').onModifyType?.call(this, move, pokemon); },
 		onModifySTAB(stab, source, target, move) { return this.dex.abilities.get('wildfirecore').onModifySTAB?.call(this, stab, source, target, move); },
 		onBasePowerPriority: 8,
-		onBasePower(basePower, attacker, defender, move) { return this.dex.abilities.get('wildfirecore').onBasePower?.call(this, basePower, attacker, defender, move); },
+		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'sunsovereign') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move); return this.dex.abilities.get('wildfirecore').onBasePower?.call(this, basePower, attacker, defender, move); },
 		onAfterMove(source, target, move) { return this.dex.abilities.get('wildfirecore').onAfterMove?.call(this, source, target, move); },
 		onTryHit(target, source, move) { return this.dex.abilities.get('wildfirecore').onTryHit?.call(this, target, source, move); },
 		onSourceModifyAtkPriority: 6,
@@ -3475,6 +3493,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10039,
 	},
 	burningspirit: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'burningspirit') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onFoeAfterEachBoost(boost, target, source) {
 			return (this.dex.abilities.get('opportunist') as any).onFoeAfterEachBoost?.call(this, boost, target, source);
 		},
@@ -3502,6 +3524,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10040,
 	},
 	emperorsresolve: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'emperorsresolve') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onAfterEachBoost(boost, target, source, effect) { return this.dex.abilities.get('competitive').onAfterEachBoost?.call(this, boost, target, source, effect); },
 		onModifyMove(move) {
 			if (this.movehasType(move, 'Ice')) move.forceSTAB = true;
@@ -3513,6 +3539,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10041,
 	},
 	terraresolve: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'terraresolve') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onDamagingHit(damage, target, source, move) { return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, move); },
 		onModifyMove(move) { this.dex.abilities.get('rockypayload').onModifyMove?.call(this, move); },
 		onModifyAtk(atk, attacker, defender, move) { return this.dex.abilities.get('rockypayload').onModifyAtk?.call(this, atk, attacker, defender, move); },
@@ -3691,6 +3721,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'fallenstar') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			let modifier = getDualWieldModifier(move);
 			if (!arrowMoves.includes(move.id)) {
@@ -4205,6 +4237,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, source, target, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'atrocity') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			if (move.category === 'Status') return;
 			let modifier = 1.3;
 			if (move.typeChangerBoosted === this.effect) {
@@ -4695,9 +4729,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToScalingChip(target, 'Rock')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Rock', target.getTypes()), -6, 6);
-				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
+				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Rock')) continue;
+				this.damage(target.baseMaxhp / 16, target, pokemon);
 			}
 		},
 		flags: { breakable: 1 },
@@ -4736,9 +4769,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			this.dex.abilities.get('icebody').onResidual?.call(this, pokemon);
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToScalingChip(target, 'Ice')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Ice', target.getTypes()), -6, 6);
-				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
+				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Ice')) continue;
+				this.damage(target.baseMaxhp / 16, target, pokemon);
 			}
 		},
 		flags: { breakable: 1 },
@@ -5936,9 +5968,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('steamengine').onResidual?.call(this, pokemon);
 			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToScalingChip(target, 'Fire')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', target.getTypes()), -6, 6);
-				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
+				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Fire')) continue;
+				this.damage(target.baseMaxhp / 16, target, pokemon);
 			}
 		},
 		flags: { breakable: 1 },
@@ -5956,9 +5987,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon);
 			if (pokemon.effectiveWeather() !== 'sandstorm') return;
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToScalingChip(target, 'Ground')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Ground', target.getTypes()), -6, 6);
-				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
+				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Ground')) continue;
+				this.damage(target.baseMaxhp / 16, target, pokemon);
 			}
 		},
 		flags: { breakable: 1 },
@@ -6120,7 +6150,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon);
 		},
 		onBasePower(basePower, source, target, move) {
-			return this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, source, target, move);
+			let modifier = 1;
+			if (move.flags['bite']) modifier *= 1.5;
+			if (move.category !== 'Status' && source.hasType(move.type)) modifier *= 1.3;
+			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
@@ -6967,6 +7000,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'ancientbloom') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			this.dex.abilities.get('pollenbloom').onBasePower?.call(this, basePower, attacker, defender, move);
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
 				this.chainModify(1.5);
@@ -6992,6 +7027,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10024,
 	},
 	pollenbloom: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'pollenbloom') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) {
 			return this.dex.abilities.get('unaware').onStart?.call(this, pokemon);
 		},
@@ -7014,9 +7053,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			for (const target of this.getAllActive()) {
 				if (!target || target.fainted || target === pokemon || target.isAlly(pokemon) ||
-					isImmuneToScalingChip(target, 'Grass')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Grass', target.getTypes()), -6, 6);
-				const damage = this.clampIntRange(target.baseMaxhp / 16 * 2 ** typeMod, 1);
+					isImmuneToAbilityChip(target, 'Grass')) continue;
+				const damage = this.clampIntRange(target.baseMaxhp / 16, 1);
 				const dealt = this.damage(damage, target, pokemon);
 				if (dealt) this.heal(dealt, pokemon, pokemon);
 			}
@@ -7039,6 +7077,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	blazingmane: {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'blazingmane') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			let modifier = 1;
 			if (this.movehasType(move, 'Fire')) modifier *= 1.5;
 			if (move.multihitType === 'blazingmane' && move.hit > 1) modifier *= 0.3;
@@ -7091,6 +7131,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'fortressshell') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			this.dex.abilities.get('waterbarrage').onBasePower?.call(this, basePower, attacker, defender, move);
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
 				this.chainModify(1.5);
@@ -7135,6 +7177,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	waterbarrage: {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'waterbarrage') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			let modifier = getDualWieldModifier(move);
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
@@ -7146,9 +7190,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.abilityState.waterBarrageStage = stage;
 			for (const target of this.getAllActive()) {
 				if (!target || target.fainted || target === pokemon || target.isAlly(pokemon) ||
-					isImmuneToScalingChip(target, 'Water')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', target.getTypes()), -6, 6);
-				const damage = this.clampIntRange(target.baseMaxhp * stage / 16 * 2 ** typeMod, 1);
+					isImmuneToAbilityChip(target, 'Water')) continue;
+				const damage = this.clampIntRange(target.baseMaxhp * stage / 16, 1);
 				this.damage(damage, target, pokemon);
 			}
 		},
@@ -7484,6 +7527,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 132,
 	},
 	verdanthospitality: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'verdanthospitality') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) {
 			for (const ally of pokemon.allies()) {
 				this.heal(ally.baseMaxhp / 8, ally, pokemon);
@@ -8784,6 +8831,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'burningcrown') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			this.dex.abilities.get('wildfirecore').onBasePower?.call(this, basePower, attacker, defender, move);
 			if (this.field.isTerrain(['newworldterrain', 'coldeclipseterrain', 'starlightarenaterrain'])) {
 				this.chainModify(1.5);
@@ -8835,6 +8884,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'wildfirecore') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) {
 				modifier *= this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 1.5 : 1.2;
@@ -8858,10 +8909,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			for (const target of this.getAllActive()) {
 				if (!target || target.fainted || target === pokemon || target.isAlly(pokemon) ||
-					isImmuneToScalingChip(target, 'Fire')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', target.getTypes()), -6, 6);
+					isImmuneToAbilityChip(target, 'Fire')) continue;
 				const multiplier = target.status === 'brn' || pokemon.abilityState.wildFireUsedFire === this.turn ? 2 : 1;
-				const damage = this.clampIntRange(target.baseMaxhp * multiplier / 16 * 2 ** typeMod, 1);
+				const damage = this.clampIntRange(target.baseMaxhp * multiplier / 16, 1);
 				this.damage(damage, target, pokemon);
 			}
 		},
@@ -9611,6 +9661,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 	},
 	bloomingsun: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'bloomingsun') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) {
 			this.dex.abilities.get('megasol').onStart?.call(this, pokemon);
 		},
@@ -13233,6 +13287,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	highnoon: {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'highnoon') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			let modifier = getDualWieldModifier(move);
 			if (this.movehasType(move, 'Water')) modifier *= 1.2;
 			if (modifier !== 1) return this.chainModify(modifier);
@@ -13291,6 +13347,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10018,
 	},
 	forestsurge: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'forestsurge') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(source) {
 			if (this.field.setTerrain('forestterrain')) {
 				this.field.terrainState.duration = 5;
@@ -13331,7 +13391,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.dex.abilities.get('magicguard').onStart?.call(this, pokemon);
 			}
 			if (pokemon.species.id === 'parasect') {
-				pokemon.formeChange('Parasect-Aevian', this.effect, false, '0', '[silent]');
+				pokemon.formeChange('Parasect-Rejuv', this.effect, false, '0', '[silent]');
 			}
 		},
 		onSourceBasePowerPriority: 17,
@@ -13867,6 +13927,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	verdantdrake: {
 		onBasePowerPriority: 22,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'verdantdrake') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			let modifier = getDualWieldModifier(move);
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
@@ -13904,6 +13966,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10031,
 	},
 	wrathshield: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'wrathshield') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) {
 			if (this.field.isTerrain(['coldeclipseterrain', 'newworldterrain', 'starlightarenaterrain', 'fairytaleterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('wrathshield'));
@@ -13952,6 +14018,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 30,
 		onBasePower(basePower, source, target, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'shadowcurrent') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			this.dex.abilities.get('technician').onBasePower?.call(this, basePower, source, target, move);
 		},
 		flags: {},
@@ -13960,6 +14028,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10033,
 	},
 	astralwitchcraft: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'astralwitchcraft') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) {
 			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
 			if (this.field.isTerrain(['fairytaleterrain', 'newworldterrain'])) {
@@ -13983,6 +14055,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	blazingtempo: {
 		onResidual(pokemon) { return this.dex.abilities.get('speedboost').onResidual?.call(this, pokemon); },
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'blazingtempo') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			return this.dex.abilities.get('striker').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		flags: {},
@@ -13991,6 +14065,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10035,
 	},
 	ragingcurrent: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'ragingcurrent') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onModifySpe(spe, pokemon) { return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon); },
 		onTryHit(target, source, move) { return this.dex.abilities.get('dryskin').onTryHit?.call(this, target, source, move); },
 		onSourceBasePowerPriority: 17,
@@ -14021,6 +14099,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('pollenbloom').onSourceModifySpA?.call(this, spa, attacker, defender, move);
 		},
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'toxicbloom') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			return this.dex.abilities.get('pollenbloom').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onAnyTryHeal(damage, target, source, effect) {
@@ -14050,6 +14130,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) { return this.dex.abilities.get('waterbarrage').onImmunity?.call(this, type, pokemon); },
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'siegelauncher') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			const launcherBoost = move.flags['pulse'] || move.flags['bullet'] ? 1.5 : 1;
 			let modifier = getDualWieldModifier(move, launcherBoost);
 			if (modifier !== 1) return this.chainModify(modifier);
@@ -14088,6 +14170,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyAtk(atk, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifyAtk?.call(this, atk, attacker, defender, move); },
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(spa, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifySpA?.call(this, spa, attacker, defender, move); },
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
 		flags: { breakable: 1 },
 		name: "Caldera Core",
 		rating: 4.5,
@@ -14471,6 +14556,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'perfectstriker') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			let modifier = 1;
 			if (move.flags['kick']) modifier *= 1.4;
 			if (modifier !== 1) return this.chainModify(modifier);
@@ -14500,6 +14587,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'strikersmomentum') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			return this.dex.abilities.get('striker').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
@@ -14571,6 +14660,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
+			// Nested composite calls must not apply Proficient twice.
+			if (this.effect.id === 'mightyjaw') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			return this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onModifyPriority(priority, pokemon, target, move) {
@@ -15301,9 +15392,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToScalingChip(target, 'Water')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', target.getTypes()), -6, 6);
-				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
+				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Water')) continue;
+				this.damage(target.baseMaxhp / 16, target, pokemon);
 			}
 		},
 		flags: {},
@@ -15935,6 +16025,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10166,
 	},
 	burningego: {
+		onBasePowerPriority: 22,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effect.id === 'burningego') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) {
 			if (isUltraSuppressedTerrain(this)) return;
 			this.add('-ability', pokemon, 'Burning Ego');
@@ -16328,7 +16422,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	stormsovereign: {
 		onModifyMove(move) {
-			move.accuracy = true;
+			return this.dex.abilities.get('keeneye').onModifyMove?.call(this, move);
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			return this.dex.abilities.get('galewings').onModifyPriority?.call(this, priority, pokemon, target, move);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('keeneye').onTryBoost?.call(this, boost, target, source, effect);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move && this.movehasType(move, 'Water')) return this.chainModify(0.5);
@@ -16337,15 +16437,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.setWeather('deltastream', pokemon, this.dex.abilities.get('stormsovereign'));
 			if (this.field.isWeather('deltastream')) this.field.weatherState.duration = 8;
 			this.dex.abilities.get('windysurge').onStart?.call(this, pokemon);
+			this.dex.abilities.get('keeneye').onStart?.call(this, pokemon);
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			this.dex.abilities.get('speedboost').onResidual?.call(this, pokemon);
 			for (const target of pokemon.foes()) {
-				if (!target || target.fainted || isImmuneToScalingChip(target, 'Flying')) continue;
-				const typeMod = this.clampIntRange(this.dex.getEffectiveness('Flying', target.getTypes()), -6, 6);
-				this.damage(target.baseMaxhp / 16 * Math.max(0.25, 2 ** typeMod), target, pokemon);
+				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Flying')) continue;
+				this.damage(target.baseMaxhp / 16, target, pokemon);
 			}
 		},
 		flags: { breakable: 1 },

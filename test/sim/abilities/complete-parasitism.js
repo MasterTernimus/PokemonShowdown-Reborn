@@ -35,7 +35,7 @@ describe('Mega Parasect and Complete Parasitism', () => {
 	});
 	it('revives, Mega Evolves, revives again, and cannot Mega Evolve a second time', () => {
 		const pokemon = setup();
-		assert.equal(pokemon.species.id, 'parasectaevian');
+		assert.equal(pokemon.species.id, 'parasectrejuv');
 		assert.equal(pokemon.canMegaEvo, 'Parasect-Mega');
 		lethal(pokemon);
 		assert.equal(pokemon.canMegaEvo, 'Parasect-Mega');
@@ -45,7 +45,7 @@ describe('Mega Parasect and Complete Parasitism', () => {
 		assert.deepEqual(pokemon.species.baseStats, {hp: 90, atk: 140, def: 130, spa: 30, spd: 130, spe: 60});
 		assert.deepEqual(pokemon.getTypes(), ['Ghost', 'Bug']);
 		lethal(pokemon);
-		assert.deepEqual(pokemon.getTypes(), ['Ghost', 'Poison']);
+		assert.deepEqual(pokemon.getTypes(), ['Ghost', 'Grass']);
 		assert(!pokemon.canMegaEvo);
 		battle.makeChoices('switch 2', 'move splash');
 		battle.makeChoices('switch 2', 'move splash');
@@ -79,6 +79,6 @@ describe('Mega Parasect and Complete Parasitism', () => {
 	});
 	it('keeps the old host name as an alias', () => {
 		setup();
-		assert.equal(battle.dex.species.get('Parasect-Parasitism').name, 'Parasect-Aevian');
+		assert.equal(battle.dex.species.get('Parasect-Parasitism').name, 'Parasect-Rejuv');
 	});
 });

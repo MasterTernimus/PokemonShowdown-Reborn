@@ -4,8 +4,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	parasectite: {
 		name: "Parasectite",
 		spritenum: 619,
-		megaStone: { "Parasect": "Parasect-Mega", "Parasect-Aevian": "Parasect-Mega", "Parasect-Parasite": "Parasect-Mega" },
-		itemUser: ["Parasect", "Parasect-Aevian", "Parasect-Parasite"],
+		megaStone: { "Parasect": "Parasect-Mega", "Parasect-Rejuv": "Parasect-Mega", "Parasect-Parasite": "Parasect-Mega" },
+		itemUser: ["Parasect", "Parasect-Rejuv", "Parasect-Parasite"],
 		onTakeItem(item, source) { return source.baseSpecies.baseSpecies !== 'Parasect'; },
 		num: 11110,
 		gen: 9,

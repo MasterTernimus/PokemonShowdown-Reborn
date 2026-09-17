@@ -114079,7 +114079,7 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 		'bittermalice', 'infernalparade', 'destinybond', 'dreameater', 'eeriespell', 'perishsong',
 		'blueflare', 'doomdesire',
 	],
-	feraligatr: ['mightycleave', 'shoreup', 'firefang', 'thunderfang'], marowak: ['mightycleave', 'shoreup'],
+	feraligatr: ['mightycleave', 'shoreup', 'firefang', 'thunderfang', 'fishiousrend'], marowak: ['mightycleave', 'shoreup'],
 	marowakalola: ['mightycleave', 'shoreup'], solrock: ['mightycleave', 'diamondstorm'],
 	lucario: ['tachyoncutter', 'meteorassault'], sceptile: ['tachyoncutter'],
 	gallade: ['tachyoncutter', 'bitterblade', 'triplearrows'],
@@ -114917,7 +114917,7 @@ for (const [id, moves] of Object.entries(documentLearnsetAdditions)) {
 const feraligatrCustomMoves = [
 	'agility', 'chillingwater', 'breakingswipe', 'detect', 'dragonclaw', 'dragonpulse', 'faketears',
 	'flipturn', 'focusblast', 'honeclaws', 'iciclespear', 'lashout', 'metalclaw', 'muddywater',
-	'poweruppunch', 'psychicfangs', 'poisonfang', 'razorshell', 'scaleshot', 'sludgebomb', 'sludgewave', 'snarl', 'stompingtantrum', 'trailblaze', 'fishiousrend',
+	'poweruppunch', 'psychicfangs', 'poisonfang', 'razorshell', 'scaleshot', 'sludgebomb', 'sludgewave', 'snarl', 'stompingtantrum', 'trailblaze',
 ];
 const feraligatrLearnset = (Learnsets as any).feraligatr?.learnset;
 if (feraligatrLearnset) {

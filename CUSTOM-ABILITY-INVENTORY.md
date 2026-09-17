@@ -40,7 +40,7 @@ Custom-numbered entries: 233
 - **Burning Rage** (`burningrage`): Brute Force + Iron Fist + Turboblaze. **Users:** Infernape
 - **Burning Spirit** (`burningspirit`): Self Sufficient + Opportunist + Magma Armor. **Users:** Infernape
 - **Byxbysion Touch** (`byxbysiontouch`): Poison/poisoning attacks drain 50%; Ground damage is 1/4; drains foes' poison damage. **Users:** Garbodor
-- **Caldera Core** (`calderacore`): Magma Armor + Sheer Force + Drought; Fire chip respects effectiveness and immunities. **Users:** Camerupt-Mega
+- **Caldera Core** (`calderacore`): Magma Armor + Sheer Force + Drought + Solid Rock. **Users:** Camerupt-Mega
 - **Celestial Heart** (`celestialheart`): Multiscale + Soul Heart. **Users:** Dragonite-Mega
 - **Conductivity** (`conductivity`): Sound immunity; Electric moves hit Steel super effectively. **Users:** Exploud
 - **Corrosive Scale** (`corrosivescale`): Marvel Scale + Invigorate + Friend Guard; poison causes confusion. **Users:** Butterfree-Gmax
@@ -52,7 +52,7 @@ Custom-numbered entries: 233
 - **Divine Intervention** (`divineintervention`): Sworn Duty + Friend Guard + Regenerator. **Users:** Audino-Mega
 - **Doom Warning** (`doomwarning`): Magic Bounce + Magic Guard; on faint casts Doom Desire on all foes. **Users:** Absol-Mega
 - **Draconic Force** (`draconicforce`): Dragonize + Strong Jaw + Mold Breaker. **Users:** Feraligatr-Mega
-- **Tidal Jaw** (`tidaljaw`): Strong Jaw + Swift Swim + Filter. **Users:** Feraligatr-Gmax
+- **Tidal Jaw** (`tidaljaw`): Strong Jaw + Swift Swim + Filter + Proficient. **Users:** Feraligatr-Gmax
 - **Dread Maw** (`dreadmaw`): Huge Power + Strong Jaw. **Users:** Mawile-Mega
 - **Dual Wield** (`dualwield`): Two 65% independent rolls; boosting pairs: full +20%; FFA: two full-power targets. **Users:** Armarouge, Beedrill, Ceruledge, Doublade, Escavalier, Gallade, Inteleon, Lucario, Octillery, Sceptile, Scyther, Seviper, Zangoose
 - **Dune Terror** (`duneterror`): Sand Stream + custom Shed Skin; Ground chip respects immunities. **Users:** Sandaconda-Gmax
@@ -135,13 +135,13 @@ Custom-numbered entries: 233
 - **Phalanx Form** (`phalanxform`): Hydra Bond + Friend Guard + Battle Armor; Steel STAB; cannot be trapped. **Users:** Falinks-Mega
 - **Phantom Barrage** (`phantombarrage`): Infiltrator + Levitate + Hydra Bond; higher offensive stat for signature attacks. **Users:** Dragapult-Gmax
 - **Phantom Fist** (`phantomfist`): Moves cannot miss + Filter + Self Repair + Unseen Fist. **Users:** Golurk-Mega
-- **Pollen Bloom** (`pollenbloom`): Thick Fat + Proficient; Grass scaling chip heals the user for damage dealt. **Users:** Venusaur
+- **Pollen Bloom** (`pollenbloom`): Thick Fat + Proficient; fixed Grass chip heals the user for damage dealt. **Users:** Venusaur
 - **Power Drill** (`powerdrill`): Drill moves have 1.5x power. **Users:** Rhydon, Seaking
 - **Precision** (`precision`): Super-effective moves never miss; boosted critical-hit ratio. **Users:** Inteleon
 - **Predator** (`predator`): Has Contrary; boosts attacks into slower/new targets; 2x into authority abilities. **Users:** Staraptor-Mega
 - **Primal Tactics** (`primaltactics`): This Pokemon's Sp. Atk is 1.5x, but it can only select the first move it executes. **Users:** Oranguru, Simipour, Simisage, Simisear
 - **Prism Scale** (`prismscale`): Marvel Scale + Dragonize + Self Sufficient. **Users:** Milotic, Milotic-Alt
-- **Proficient** (`proficient`): STAB moves have 1.2x power. **Users:** None directly assigned.
+- **Proficient** (`proficient`): STAB moves have 1.3x power. **Users:** None directly assigned.
 - **Punch Fiend** (`punchfiend`): Iron Fist + Inner Focus + Unseen Fist. **Users:** Hitmonchan
 - **Queen's Guard** (`queensguard`): Contrary + Shed Skin + Intimidate. **Users:** Serperior-Mega
 - **Raging Current** (`ragingcurrent`): Swift Swim + Damp + Water Veil + Dry Skin + Stamina. **Users:** Swampert-Mega
@@ -194,7 +194,7 @@ Custom-numbered entries: 233
 - **Star Boxer** (`starboxer`): Punching moves hit 4 times at full power and 1.5x; secondaries only on hits 1-2. **Users:** Ledian
 - **Storm Circuit** (`stormcircuit`): Electric Surge + Swift Swim + Elevate. **Users:** Eelektross-Mega
 - **Storm Fright** (`stormfright`): Intimidate + Lightning Rod + Teravolt. **Users:** Manectric-Mega
-- **Storm Sovereign** (`stormsovereign`): Windy Surge + Speed Boost; 8-turn Strong Winds; no misses; Flying chip. **Users:** Pidgeot-Mega
+- **Storm Sovereign** (`stormsovereign`): Windy Surge + Gale Wings + Keen Eye; 8-turn Strong Winds; fixed Flying chip. **Users:** Pidgeot-Mega
 - **Street Tyrant** (`streettyrant`): Intimidate + Regenerator + Mold Breaker. **Users:** Scrafty-Mega
 - **Striker** (`striker`): Kicking moves have 1.4x power. **Users:** Blaziken, Decidueye-Hisui, Dodrio, Lopunny, Tsareena
 - **Striker's Momentum** (`strikersmomentum`): Moves cannot miss; Striker + Libero; first KO gives +1 Speed. **Users:** Cinderace-Gmax
@@ -230,10 +230,10 @@ Custom-numbered entries: 233
 - **War Path** (`warpath`): Overcoat; status Atk 1.5x; Rock/Fighting/Ground ignore screens/boosts; no flinch. **Users:** Rhydon
 - **War Ship** (`warship`): Swift Swim + Rock Head + Unaware. **Users:** Drednaw-Gmax
 - **Wasting Surge** (`wastingsurge`): Sets Wasteland/Murkwater; Underwater KOs non-Poison/Steel; Byxbysion Touch. **Users:** Garbodor-Gmax
-- **Water Barrage** (`waterbarrage`): Proficient + Dual Wield; cycling Water chip respects effectiveness and immunities. **Users:** Blastoise
+- **Water Barrage** (`waterbarrage`): Proficient + Dual Wield; cycling Water chip respects immunities. **Users:** Blastoise
 - **Web Assassin** (`webassassin`): Speed doubled and cannot drop; Sniper; always crits poisoned or Speed-lowered targets. **Users:** Ariados
 - **Wicked Snare** (`wickedsnare`): Stakeout + Tangling Hair + Prankster. **Users:** Grimmsnarl-Gmax
-- **Wildfire Core** (`wildfirecore`): Dragonize + Magma Armor + Proficient; Fire scaling chip respects immunities. **Users:** Charizard
+- **Wildfire Core** (`wildfirecore`): Dragonize + Magma Armor + Proficient; conditional Fire chip respects immunities. **Users:** Charizard
 - **Wind Chime** (`windchime`): Armorize + Punk Rock + Levitate. **Users:** Chimecho-Mega
 - **Windy Surge** (`windysurge`): On switch-in, sets 2-turn Tailwind on this Pokemon's side. **Users:** Beautifly, Drifblim, Eldegoss, Jumpluff, Rotom-Fan, Tropius
 - **Wooly Conductor** (`woolyconductor`): Fur Coat + Mold Breaker + Static. **Users:** Ampharos-Mega
