@@ -8915,11 +8915,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				return 5;
 			},
-			onFieldStart(target, source) {
+			onFieldStart(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Gravity', '[persistent]');
 				} else {
 					this.add('-fieldstart', 'move: Gravity');
+				}
+				if (this.field.isTerrain('watersurfaceterrain')) {
+					this.add('-message', 'The battle sank into the depths!');
+					this.field.changeTerrain('underwaterterrain', source, effect);
 				}
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;

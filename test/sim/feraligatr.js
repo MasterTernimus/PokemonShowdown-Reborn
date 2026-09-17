@@ -26,10 +26,10 @@ describe('Feraligatr custom data', function () {
 		assert.equal(gmax.abilities[0], 'Tidal Jaw');
 
 		const learnset = battle.dex.data.Learnsets.feraligatr.learnset;
-		for (const move of ['agility', 'chillingwater', 'breakingswipe', 'detect', 'flipturn', 'poisonfang', 'razorshell', 'sludgebomb', 'sludgewave', 'trailblaze', 'fishiousrend']) {
+		for (const move of ['agility', 'chillingwater', 'breakingswipe', 'detect', 'flipturn', 'poisonfang', 'razorshell', 'sludgebomb', 'sludgewave', 'trailblaze']) {
 			assert(move in learnset, `Feraligatr should learn ${move}`);
 		}
-		for (const move of ['firefang', 'thunderfang']) {
+		for (const move of ['firefang', 'thunderfang', 'fishiousrend']) {
 			assert(!(move in learnset), `Feraligatr should not learn ${move}`);
 		}
 		const inheritedLearnset = new Set();
@@ -42,6 +42,7 @@ describe('Feraligatr custom data', function () {
 		assert(inheritedLearnset.has('sludgebomb'), 'Feraligatr-Gmax should inherit Sludge Bomb');
 		assert(inheritedLearnset.has('sludgewave'), 'Feraligatr-Gmax should inherit Sludge Wave');
 		assert(!inheritedLearnset.has('firefang'), 'Feraligatr-Gmax should inherit fang removals');
+		assert(!inheritedLearnset.has('fishiousrend'), 'Feraligatr-Gmax should inherit the Fishious Rend removal');
 		assert(!inheritedLearnset.has('gmaxdeathroll'), 'G-Max Death Roll should be a battle-time signature move');
 	});
 
@@ -85,6 +86,7 @@ describe('Feraligatr custom data', function () {
 		assert(feraligatr.hasAbility('strongjaw'));
 		assert(feraligatr.hasAbility('swiftswim'));
 		assert(feraligatr.hasAbility('filter'));
+		assert(feraligatr.hasAbility('proficient'));
 		assert(battle.log.some(line => line.includes('G-Max Death Roll')));
 	});
 

@@ -166,8 +166,8 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - **Royal Sun:** Royal Decree, Drought, and Fire Mane's Fire-move power effect.
 - **Sand Sovereign:** Eight-turn Sand Stream, Battle Armor, and Solid Rock.
 - **Tyrant Stream:** Brute Force, Sand Stream, and Strong Jaw.
-- **Dune Terror:** Sand Stream, Shed Skin, and Ground-effect residual chip that scales with weakness.
-- **Caldera Core:** Solid Rock, Magma Armor, and Fire-effect residual chip.
+- **Dune Terror:** Sand Stream, Shed Skin, and fixed Ground-effect residual chip.
+- **Caldera Core:** Solid Rock, Magma Armor, Sheer Force, and Drought.
 - **Hellfire Eclipse:** Flash Fire plus its established Sun/Fire behavior.
 - **Requiem:** Attacking or being attacked marks the other Pokemon with Perish Song, then Curse, then Mean Look on repeated interactions. Requiem Curse deals 1/8 max HP, KOs heal the user 1/8 per target, and fainting creates Haunted Field for five turns.
 - **Phantom Barrage:** Infiltrator, Levitate, Hydra Bond, and the Dragapult higher-offensive-stat logic. Its old Clear Body and passive healing are removed.

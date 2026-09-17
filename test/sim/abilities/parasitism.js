@@ -15,7 +15,7 @@ describe('Parasitism and Resuscitation', function () {
 		const parasect = battle.dex.species.get('Parasect');
 		const parasite = battle.dex.species.get('Parasect-Parasite');
 		assert.equal(parasect.baseStats.spe, 20);
-		assert.deepEqual(parasite.types, ['Ghost', 'Poison']);
+		assert.deepEqual(parasite.types, ['Ghost', 'Grass']);
 		assert.deepEqual(parasite.baseStats, {hp: 90, atk: 130, def: 70, spa: 30, spd: 70, spe: 110});
 		assert.equal(Object.values(parasite.baseStats).reduce((sum, stat) => sum + stat, 0), 500);
 	});
@@ -28,7 +28,7 @@ describe('Parasitism and Resuscitation', function () {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const parasect = battle.p1.active[0];
-		assert.species(parasect, 'Parasect-Aevian');
+		assert.species(parasect, 'Parasect-Rejuv');
 		parasect.sethp(parasect.maxhp - 100);
 		const before = parasect.hp;
 		battle.makeChoices();

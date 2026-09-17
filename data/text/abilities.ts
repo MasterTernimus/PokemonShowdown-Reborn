@@ -826,7 +826,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
-		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Dauntless Shield and Solid Rock. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, foes take immunity-aware Rock damage equal to 1/16 max HP, scaled by effectiveness.",
+		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Dauntless Shield and Solid Rock. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, non-immune foes take Rock damage equal to 1/16 max HP.",
 		shortDesc: "8-turn Sand; Dauntless Shield + Solid Rock; Arenite Wall 5/8 turns; Rock chip.",
 	},
 	tyrantstream: {
@@ -836,7 +836,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	frostsovereign: {
 		name: "Frost Sovereign",
-		desc: "On entry, this Pokemon sets Snow through Snow Warning for 8 turns. It has Ice Body and Filter. Manually used Aurora Veil lasts 8 turns. Each turn, foes take immunity-aware Ice damage equal to 1/16 max HP, scaled by effectiveness.",
+		desc: "On entry, this Pokemon sets Snow through Snow Warning for 8 turns. It has Ice Body and Filter. Manually used Aurora Veil lasts 8 turns. Each turn, non-immune foes take Ice damage equal to 1/16 max HP.",
 		shortDesc: "8-turn Snow Warning; Ice Body + Filter; manual Veil lasts 8 turns; Ice chip.",
 	},
 	freezerburn: {
@@ -908,7 +908,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rainsovereign: {
 		name: "Rain Sovereign",
-		desc: "On entry, this Pokemon sets Rain for 8 turns. Its Electric-, Water-, and Flying-type moves receive STAB. Each turn, foes take immunity-aware Water damage equal to 1/16 max HP, scaled by effectiveness.",
+		desc: "On entry, this Pokemon sets Rain for 8 turns. Its Electric-, Water-, and Flying-type moves receive STAB. Each turn, non-immune foes take Water damage equal to 1/16 max HP.",
 		shortDesc: "8-turn Rain; Electric/Water/Flying STAB; immunity-aware Water chip.",
 	},
 	toxicrenewal: {
@@ -1013,12 +1013,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	furnaceengine: {
 		name: "Furnace Engine",
-		desc: "This Pokemon has Steam Engine, Flame Body, and Self Sufficient's effects. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Fire immunities.",
+		desc: "This Pokemon has Steam Engine, Flame Body, and Self Sufficient's effects. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, blocked by Fire immunities.",
 		shortDesc: "Steam Engine + Flame Body + Self Sufficient; Fire chip.",
 	},
 	duneterror: {
 		name: "Dune Terror",
-		desc: "This Pokemon has Sand Stream and Shed Skin's effects. During Sandstorm, grounded foes take Ground-type residual damage based on effectiveness, blocked by Ground immunities.",
+		desc: "This Pokemon has Sand Stream and Shed Skin's effects. During Sandstorm, opposing Pokemon take Ground-type damage equal to 1/16 max HP, blocked by Ground immunities.",
 		shortDesc: "Sand Stream + Shed Skin; Ground chip respects immunities.",
 	},
 	heatcoil: {
@@ -2864,8 +2864,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	calderacore: {
 		name: "Caldera Core",
-		desc: "This Pokemon has Magma Armor, Sheer Force, and Drought's effects. It starts sunlight on entry. Eligible moves have 1.3x power but lose their secondary effects. Incoming Water- and Ice-type attacks deal half damage. It cures freezing and prevents freezing outside Cold Eclipse. On entry in Dragon's Den, Volcanic, or Cold Eclipse, it gains +1 Defense and +1 Special Defense. In Dragon's Den, it also blocks incoming Fire-type moves.",
-		shortDesc: "Magma Armor + Sheer Force + Drought; halves Water/Ice damage; field bonuses.",
+		desc: "This Pokemon has Magma Armor, Sheer Force, Drought, and Solid Rock's effects. It starts sunlight on entry. Eligible moves have 1.3x power but lose their secondary effects. Incoming Water- and Ice-type attacks deal half damage. All incoming damage is reduced by 20%, with an additional 25% reduction against super-effective attacks. It cures freezing and prevents freezing outside Cold Eclipse. On entry in Dragon's Den, Volcanic, or Cold Eclipse, it gains +1 Defense and +1 Special Defense. In Dragon's Den, it also blocks incoming Fire-type moves.",
+		shortDesc: "Magma Armor + Sheer Force + Drought + Solid Rock; field bonuses.",
 	},
 	soultag: {
 		name: "Soul Tag",
@@ -3241,7 +3241,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	tidaljaw: {
 		name: "Tidal Jaw",
-		desc: "This Pokemon has Strong Jaw, Swift Swim, and Filter's effects.",
+		desc: "This Pokemon has Strong Jaw, Swift Swim, Filter's effects.",
 		shortDesc: "Strong Jaw + Swift Swim + Filter.",
 	},
 	islandcurrent: {
@@ -3543,18 +3543,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
-		desc: "This Pokemon has Thick Fat and Unaware's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, scaled by effectiveness and blocked by Grass immunities; this Pokemon heals the damage dealt by that chip.",
-		shortDesc: "Thick Fat + Unaware; Grass scaling chip heals the user for damage dealt.",
+		desc: "This Pokemon has Thick Fat and Unaware's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; this Pokemon heals the damage dealt by that chip.",
+		shortDesc: "Thick Fat + Unaware; fixed Grass chip heals the user for damage dealt.",
 	},
 	waterbarrage: {
 		name: "Water Barrage",
-		desc: "This Pokemon has Dual Wield's effects. At the end of each turn, opposing Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, scaled by effectiveness and blocked by Water immunities.",
-		shortDesc: "Dual Wield; cycling Water chip respects effectiveness and immunities.",
+		desc: "This Pokemon has Dual Wield's effects. At the end of each turn, opposing Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, blocked by Water immunities.",
+		shortDesc: "Dual Wield; cycling Water chip respects immunities.",
 	},
 	wildfirecore: {
 		name: "Wildfire Core",
-		desc: "This Pokemon has Dragonize and Magma Armor's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage uses Fire-type effectiveness and is blocked by Fire immunities.",
-		shortDesc: "Dragonize + Magma Armor; Fire scaling chip respects immunities.",
+		desc: "This Pokemon has Dragonize and Magma Armor's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage is blocked by Fire immunities.",
+		shortDesc: "Dragonize + Magma Armor; conditional Fire chip respects immunities.",
 	},
 	memoryleak: {
 		name: "Memory Leak",
@@ -3668,8 +3668,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",
-		desc: "On entry, this Pokemon sets changeable Strong Winds for 8 turns and activates Windy Surge. It has Speed Boost, its moves cannot miss, and foes take immunity-aware Flying chip equal to 1/16 max HP, scaled by effectiveness.",
-		shortDesc: "Windy Surge + Speed Boost; 8-turn Strong Winds; no misses; Flying chip.",
+		desc: "On entry, this Pokemon sets changeable Strong Winds for 8 turns and activates Windy Surge. It has Gale Wings and Keen Eye, and non-immune foes take Flying chip equal to 1/16 max HP.",
+		shortDesc: "Windy Surge + Gale Wings + Keen Eye; 8-turn Strong Winds; Flying chip.",
 	},
 	highnoon: {
 		name: "High Noon",

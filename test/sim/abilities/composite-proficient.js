@@ -2,9 +2,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 let battle;
-const composites = ['Pollen Bloom', 'Ancient Bloom', 'Toxic Bloom', 'Water Barrage', 'Fortress Shell',
-	'Siege Launcher', 'Wildfire Core', 'Sun Sovereign', 'Atrocity', 'Burning Crown', 'Verdant Drake',
-	'Wrath Shield', 'Shadow Current', 'Astral Witchcraft', 'Blazing Tempo', 'Raging Current', 'Perfect Striker'];
+const composites = require('./starter-proficient-ids.json');
 function setup(ability) {
 	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 		[{species: 'Mew', ability, moves: ['psychic', 'splash']}],
@@ -13,18 +11,18 @@ function setup(ability) {
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];
 }
-describe('Proficient removed from composite abilities', () => {
+describe('Proficient restored to starter signature composites', () => {
 	afterEach(() => { battle?.destroy(); });
 	for (const ability of composites) {
-		it(`${ability} has no extra same-type modifier or Proficient component`, () => {
+		it(`${ability} applies exactly one same-type Proficient modifier`, () => {
 			const [user, foe] = setup(ability);
 			const move = battle.dex.getActiveMove('psychic');
 			const sameType = battle.runEvent('BasePower', user, foe, move, 100);
-			move.type = 'Dark';
+			user.setType('Dark');
 			const otherType = battle.runEvent('BasePower', user, foe, move, 100);
-			assert.equal(sameType, otherType);
-			assert.equal(sameType, ability === 'Atrocity' ? 130 : 100);
-			assert.equal(user.hasAbility('proficient'), false);
+			assert(Math.abs(sameType - otherType * 1.3) <= 1, `${sameType} vs ${otherType}`);
+			assert.equal(user.hasAbility('proficient'), true);
+			assert(!/proficient/i.test(user.getAbility().desc + ' ' + user.getAbility().shortDesc));
 		});
 	}
 	it('preserves standalone Proficient', () => {
@@ -32,6 +30,12 @@ describe('Proficient removed from composite abilities', () => {
 		assert(user.hasAbility('proficient'));
 		assert.equal(battle.runEvent('BasePower', user, foe, battle.dex.getActiveMove('psychic'), 100), 130);
 	});
+	for (const ability of ['Soul Fire', 'Violent Rush', 'Invigorate', 'Protean', 'Moxie']) {
+		it(`does not add Proficient to shared or ordinary ${ability}`, () => {
+			const [user] = setup(ability);
+			assert.equal(user.hasAbility('proficient'), false);
+		});
+	}
 	for (const ability of ['Blazing Tempo', 'Perfect Striker']) {
 		it(`preserves the kick boost in ${ability}`, () => {
 			const [user, foe] = setup(ability);
