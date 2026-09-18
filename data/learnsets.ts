@@ -1072,7 +1072,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			dragonrage: ["9L1"],
 			dragontail: ["9M", "8V", "7M", "6M", "5M"],
 			dynamicpunch: ["9M", "7V", "3T"],
-			electroshot: ["9M"],
 			earthquake: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			endure: ["9M", "8M", "7V", "4M", "3T"],
 			facade: ["9M", "8M", "8V", "7M", "6M", "5M", "4M", "3M"],
@@ -81613,7 +81612,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	clawitzer: {
 		learnset: {
-			electroshot: ["9M"],
 			aquajet: ["9L20", "8L15", "7L49", "6L47"],
 			aquatail: ["9M", "7T", "6T"],
 			attract: ["9M", "8M", "7M", "6M"],
@@ -113929,7 +113927,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 const latestLearnsetAdditions: {[id: string]: string[]} = {
 	drednaw: ['psychicfangs', 'icefang', 'crunch'],
 	flapple: ['firstimpression', 'victorydance', 'bulletseed', 'gravapple', 'fellstinger', 'dragonenergy', 'gunkshot', 'poisonjab', 'acidspray', 'venoshock', 'toxic'],
-	appletun: ['junglehealing', 'dragonenergy', 'ragepowder'],
+	appletun: ['junglehealing', 'dragonenergy'],
 	dipplin: ['naturepower', 'bodypress', 'irondefense'],
 	hydrapple: ['triattack', 'flamethrower', 'fireblast', 'irondefense'],
 	golduck: [
@@ -114239,11 +114237,11 @@ if (gliscorLearnset) (Learnsets as any).gliscoralt = {learnset: {...gliscorLearn
 const corsolaLearnset = (Learnsets as any).corsola?.learnset;
 if (corsolaLearnset) (Learnsets as any).corsolaalt = {learnset: {...corsolaLearnset}};
 
-const zangooseRebornLearnset = (Learnsets as any).zangoose?.learnset;
-if (zangooseRebornLearnset) (Learnsets as any).zangoosereborn = {learnset: {...zangooseRebornLearnset}};
+const zangooseMegaLearnset = (Learnsets as any).zangoose?.learnset;
+if (zangooseMegaLearnset) (Learnsets as any).zangoosemega = {learnset: {...zangooseMegaLearnset}};
 
-const seviperRebornLearnset = (Learnsets as any).seviper?.learnset;
-if (seviperRebornLearnset) (Learnsets as any).seviperreborn = {learnset: {...seviperRebornLearnset}};
+const seviperMegaLearnset = (Learnsets as any).seviper?.learnset;
+if (seviperMegaLearnset) (Learnsets as any).sevipermega = {learnset: {...seviperMegaLearnset}};
 
 const crobatLearnset = (Learnsets as any).crobat?.learnset;
 if (crobatLearnset) (Learnsets as any).crobatalt = {learnset: {...crobatLearnset}};
@@ -114967,3 +114965,43 @@ for (const species of ['ambipom', 'cinccino']) for (const move of ['tailslap', '
 
 // Milotic-Terajuma regional learnset.
 (Learnsets as any).miloticterajuma = {learnset: {accelerock: ["9M"], aquajet: ["9M"], aquatail: ["9M"], coil: ["9M"], doublehit: ["9M"], feint: ["9M"], harden: ["9M"], liquidation: ["9M"], poisontail: ["9M"], rockslide: ["9M"], stoneedge: ["9M"], suckerpunch: ["9M"], tailwhip: ["9M"], tailwind: ["9M"], tripleaxel: ["9M"], wavecrash: ["9M"], dragontail: ["9M"], irontail: ["9M"], atlantiswall: ["9M"], bind: ["9M"], blizzard: ["9M"], brutalswing: ["9M"], bulldoze: ["9M"], dive: ["9M"], dragonpulse: ["9M"], flipturn: ["9M"], gigaimpact: ["9M"], hail: ["9M"], helpinghand: ["9M"], hyperbeam: ["9M"], icebeam: ["9M"], icywind: ["9M"], ironhead: ["9M"], laserfocus: ["9M"], lightscreen: ["9M"], magiccoat: ["9M"], mudslap: ["9M"], raindance: ["9M"], safeguard: ["9M"], scald: ["9M"], surf: ["9M"], swift: ["9M"], twister: ["9M"], waterfall: ["9M"], waterpulse: ["9M"], mudbarrage: ["9M"], tackle: ["9M"], return: ["9M"], round: ["9M"], secretpower: ["9M"], sleeptalk: ["9M"]}};
+
+// Gyarados-Aevian has an independent regional learnset and does not inherit Gyarados's moves.
+(Learnsets as any).gyaradosaevian = {learnset: {
+	snarl: ["9L0", "9L1", "9M"], morningsun: ["9L1"], thrash: ["9L1"], leer: ["9L21"],
+	twister: ["9L24"], firefang: ["9L27", "9M"], flameburst: ["9L30"], scaryface: ["9L33", "9M"],
+	dragonrage: ["9L36"], darkpulse: ["9L39", "9M"], fireblast: ["9L42", "9M"], fierydance: ["9L45"],
+	solarbeam: ["9L48", "9M"], sunnyday: ["9L51", "9M"], hyperbeam: ["9L54", "9M"],
+	bind: ["9M"], bodyslam: ["9M"], bounce: ["9M"], breakingswipe: ["9M"], brutalswing: ["9M"],
+	burningjealousy: ["9M"], chargebeam: ["9M"], crunch: ["9M"], dig: ["9M"], dracometeor: ["9M"],
+	dragonclaw: ["9M"], dragondance: ["9M"], dragonpulse: ["9M"], dragontail: ["9M"], earthpower: ["9M"],
+	earthquake: ["9M"], energyball: ["9M"], metalclaw: ["9M"], flamewheel: ["9M"], firespin: ["9M"],
+	flamecharge: ["9M"], flamethrower: ["9M"], flareblitz: ["9M"], gigadrain: ["9M"], gigaimpact: ["9M"],
+	grassknot: ["9M"], heatcrash: ["9M"], heatwave: ["9M"], honeclaws: ["9M"], hurricane: ["9M"],
+	hydropump: ["9M"], hypervoice: ["9M"], incinerate: ["9M"], ironhead: ["9M"], irontail: ["9M"],
+	lashout: ["9M"], lastresort: ["9M"], mudshot: ["9M"], mysticalfire: ["9M"], nastyplot: ["9M"],
+	outrage: ["9M"], overheat: ["9M"], payback: ["9M"], powerwhip: ["9M"], roar: ["9M"],
+	rockclimb: ["9M"], rocksmash: ["9M"], rocktomb: ["9M"], roost: ["9M"], scald: ["9M"],
+	scaleshot: ["9M"], shadowclaw: ["9M"], shockwave: ["9M"], solarblade: ["9M"], stompingtantrum: ["9M"],
+	strength: ["9M"], surf: ["9M"], taunt: ["9M"], thunder: ["9M"], thunderbolt: ["9M"],
+	thunderfang: ["9M"], thunderwave: ["9M"], torment: ["9M"], uproar: ["9M"], waterpulse: ["9M"],
+	weatherball: ["9M"], willowisp: ["9M"], zapcannon: ["9M"], zenheadbutt: ["9M"],
+}};
+
+// Chandelure-Aevian has an independent regional learnset and does not inherit Chandelure's moves.
+(Learnsets as any).chandelureaevian = {learnset: {
+	allyswitch: ["9M"], astonish: ["9M"], burningjealousy: ["9M"], calmmind: ["9M"], charge: ["9M"],
+	chargebeam: ["9M"], confuseray: ["9M"], curse: ["9M"], darkpulse: ["9M"], discharge: ["9M"],
+	dreameater: ["9M"], eerieimpulse: ["9M"], electricterrain: ["9M"], electroball: ["9M"], electroweb: ["9M"],
+	ember: ["9M"], embargo: ["9M"], firespin: ["9M"], flamecharge: ["9M"], flash: ["9M"],
+	flashcannon: ["9M"], foulplay: ["9M"], futuresight: ["9M"], gigaimpact: ["9M"], hex: ["9M"],
+	hyperbeam: ["9M"], icywind: ["9M"], irondefense: ["9M"], laserfocus: ["9M"], magicroom: ["9M"],
+	magnetrise: ["9M"], memento: ["9M"], nightshade: ["9M"], nuzzle: ["9M"], overheat: ["9M"],
+	painsplit: ["9M"], payback: ["9M"], poltergeist: ["9M"], psychup: ["9M"], psychic: ["9M"],
+	raindance: ["9M"], recycle: ["9M"], risingvoltage: ["9M"], safeguard: ["9M"], shadowball: ["9M"],
+	shockwave: ["9M"], signalbeam: ["9M"], skillswap: ["9M"], smog: ["9M"], spikes: ["9M"],
+	spite: ["9M"], storedpower: ["9M"], taunt: ["9M"], terrainpulse: ["9M"], thief: ["9M"],
+	thunder: ["9M"], thundershock: ["9M"], thunderwave: ["9M"], torment: ["9M"], trick: ["9M"],
+	trickroom: ["9M"], uproar: ["9M"], voltswitch: ["9M"], willowisp: ["9M"], wonderroom: ["9M"],
+	zapcannon: ["9M"],
+}};

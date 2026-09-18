@@ -155,6 +155,26 @@ describe('Composite ability cleanup', function () {
 		assert.equal(battle.dex.abilities.get('abysssniper').name, 'Abyss Sniper');
 	});
 
+	it('should give Defeatist every Relic Armor hook', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Archeops', ability: 'defeatist', moves: ['splash']},
+		], [
+			{species: 'Mew', ability: 'noability', moves: ['growl']},
+		]]);
+		const defeatist = battle.dex.abilities.get('defeatist');
+		for (const hook of ['onStart', 'onCriticalHit', 'onEffectiveness', 'onImmunity', 'onType', 'onResidual', 'onAfterBoost', 'onSourceModifyDamage']) {
+			assert(defeatist[hook], `Defeatist is missing ${hook}`);
+		}
+		battle.makeChoices('team 1', 'team 1');
+		const archeops = battle.p1.active[0];
+		battle.directDamage(80, archeops);
+		const hpBefore = archeops.hp;
+		battle.makeChoices('move splash', 'move growl');
+		assert.equal(archeops.hp - hpBefore, Math.floor(archeops.baseMaxhp / 16));
+		assert.statStage(archeops, 'def', 1);
+		assert.statStage(archeops, 'spd', 1);
+	});
+
 	it('should remove Self Sufficient healing from Gooey and Steam Engine', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Goodra', ability: 'gooey', moves: ['splash']},

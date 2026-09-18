@@ -335,6 +335,8 @@ interface MoveHitData {
 
 type MutableMove = BasicEffect & MoveData;
 export interface ActiveMove extends MutableMove {
+	/** Retains the Ground field bonus after Midnight Zone converts the move to Water. */
+	midnightGround?: boolean;
 	readonly name: string;
 	readonly effectType: 'Move';
 	readonly id: ID;

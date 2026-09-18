@@ -1508,8 +1508,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doublehit: {
 		name: "Double Hit",
-		desc: "Hits all adjacent foes once without a spread damage penalty.",
-		shortDesc: "Hits all adjacent foes at full damage.",
+		desc: "Hits twice. The second hit can damage the target after the first breaks its substitute.",
+		shortDesc: "Hits twice.",
 		gen4: {
 			desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -7263,8 +7263,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twinbeam: {
 		name: "Twin Beam",
-		desc: "Hits all adjacent foes once without a spread damage penalty.",
-		shortDesc: "Hits all adjacent foes at full damage.",
+		desc: "Hits twice. The second hit can damage the target after the first breaks its substitute.",
+		shortDesc: "Hits twice.",
 	},
 	twineedle: {
 		name: "Twineedle",

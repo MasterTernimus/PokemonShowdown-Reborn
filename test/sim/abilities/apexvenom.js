@@ -10,7 +10,7 @@ describe('Apex Venom', function () {
 		battle?.destroy();
 	});
 
-	it('combines Strong Jaw and Shed Skin with Apex Venom Poison Fang typing', function () {
+	it('combines Strong Jaw and Shed Skin while keeping Poison Fang Poison-type', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Seviper', ability: 'Apex Venom', moves: ['Poison Fang', 'Poison Jab']}],
 			[{species: 'Magikarp', moves: ['Splash']}],
@@ -21,7 +21,7 @@ describe('Apex Venom', function () {
 		assert(seviper.hasAbility('shedskin'));
 		const poisonFang = battle.dex.getActiveMove('poisonfang');
 		battle.singleEvent('ModifyMove', seviper.getAbility(), seviper.abilityState, poisonFang, seviper, battle.p2.active[0]);
-		assert.equal(poisonFang.type, 'Dragon');
+		assert.equal(poisonFang.type, 'Poison');
 		assert.equal(poisonFang.breaksProtect, true);
 		assert.equal(poisonFang.secondaries?.at(-1)?.chance, 30);
 	});

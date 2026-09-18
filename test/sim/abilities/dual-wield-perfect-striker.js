@@ -27,12 +27,17 @@ describe('Dual Wield and Perfect Striker balance', function () {
 	});
 
 	it('combines Proficient and Striker inside Perfect Striker', function () {
-		const ability = common.gen(9).dex.abilities.get('perfectstriker');
-		const context = {chainModify: modifier => modifier};
-		const attacker = {hasType: type => type === 'Fighting'};
-		assert.equal(ability.onBasePower.call(context, 100, attacker, {},
-			{category: 'Physical', type: 'Fighting', flags: {kick: 1}}), 1.4 * 1.3);
-		assert.equal(ability.onBasePower.call(context, 100, attacker, {},
-			{category: 'Special', type: 'Fighting', flags: {}}), 1.3);
+		const battle = common.createBattle({formatid: 'gen9customgame'}, [[
+			{species: 'Machamp', ability: 'Perfect Striker', moves: ['lowkick']},
+		], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+		try {
+			const attacker = battle.p1.active[0], defender = battle.p2.active[0];
+			for (const [kick, expected] of [[true, 182], [false, 130]]) {
+				const move = battle.dex.getActiveMove('lowkick');
+				move.basePower = 100;
+				move.flags = kick ? {kick: 1} : {};
+				assert.equal(battle.runEvent('BasePower', attacker, defender, move, 100, true), expected);
+			}
+		} finally { battle.destroy(); }
 	});
 });

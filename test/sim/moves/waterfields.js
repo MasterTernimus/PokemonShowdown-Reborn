@@ -48,6 +48,25 @@ describe('Water field move interactions', () => {
 		assert.equal(battle.log.filter(line => line === '|-message|From the depths!!').length, 2);
 	});
 
+	it('should exempt Schooling from the Underwater physical damage penalty', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', ability: 'schooling', moves: ['tackle'] },
+		], [
+			{ species: 'Mew', moves: ['splash'] },
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		const source = battle.p1.active[0];
+		const target = battle.p2.active[0];
+		battle.field.changeTerrain('underwaterterrain', source);
+		const move = battle.dex.getActiveMove('tackle');
+
+		assert.equal(
+			battle.runEvent('BasePower', source, target, move, move.basePower, true),
+			move.basePower,
+			'Schooling should preserve physical move power Underwater'
+		);
+	});
+
 	it('should stack the new Water Surface move boosts with existing boosts', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Mew', moves: ['splash'] },

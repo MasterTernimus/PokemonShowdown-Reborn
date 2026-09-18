@@ -53,6 +53,10 @@ export class Field {
 				return false;
 			}
 		}
+		if (this.isTerrain('midnightzoneterrain')) {
+			this.battle.add('-message', "You're too deep to notice the weather!");
+			return false;
+		}
 		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain')) {
 			this.battle.add('-message', 'The weather was annihilated by the crushing weight of the field!');
 			return false;
@@ -225,7 +229,7 @@ export class Field {
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
-		if (this.isTerrain('underwaterterrain') || this.isTerrain('newworldterrain') || this.isTerrain('dragonsdenterrain')) {
+		if (this.isTerrain(['underwaterterrain', 'midnightzoneterrain']) || this.isTerrain('newworldterrain') || this.isTerrain('dragonsdenterrain')) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
 			return false;
 		}
@@ -267,7 +271,7 @@ export class Field {
 	}
 
 	canBypassNeutralizationForTerrainChange(statusid: ID) {
-		const waterDepthTerrains = ['watersurfaceterrain', 'underwaterterrain'];
+		const waterDepthTerrains = ['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'];
 		if (waterDepthTerrains.includes(this.terrain) && waterDepthTerrains.includes(statusid)) return true;
 		if (statusid === 'bewitchedwoodsterrain') return true;
 		return false;
@@ -320,7 +324,7 @@ export class Field {
 		} else if (this.neutralizeTerrainChange()) {
 			return false;
 		}
-		if (this.isTerrain(['underwaterterrain', 'newworldterrain', 'dragonsdenterrain'])) {
+		if (this.isTerrain(['underwaterterrain', 'midnightzoneterrain', 'newworldterrain', 'dragonsdenterrain'])) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
 			return false;
 		}
@@ -372,6 +376,7 @@ export class Field {
 	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, gardenTransition = false) {
 		status = this.battle.dex.conditions.get(status);
 		if (this.isFlowerGardenBase() && !gardenTransition) return false;
+		if (this.terrain === 'midnightzoneterrain' && status.id !== 'underwaterterrain') return false;
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (this.terrain === status.id) {
 			return false;
@@ -460,7 +465,7 @@ export class Field {
 		if (!this.terrain || this.terrain === 'newworldterrain') return false;
 		const clearedTerrain = this.terrain;
 		const clearedTerrainState = this.terrainState;
-		if (this.terrain === 'underwaterterrain') {
+		if (this.isTerrain(['underwaterterrain', 'midnightzoneterrain'])) {
 			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
 			return false;
 		}

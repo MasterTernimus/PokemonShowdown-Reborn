@@ -160,10 +160,12 @@ describe('Custom battle data updates', function () {
 		const dex = battle.dex;
 		const zangoose = dex.species.get('Zangoose');
 		const seviper = dex.species.get('Seviper');
-		assert.deepEqual(zangoose.baseStats, {hp: 75, atk: 140, def: 110, spa: 60, spd: 70, spe: 95});
-		assert.equal(zangoose.bst, 550);
-		assert.deepEqual(seviper.baseStats, {hp: 75, atk: 120, def: 80, spa: 100, spd: 80, spe: 95});
-		assert.equal(seviper.bst, 550);
+		assert.deepEqual(zangoose.baseStats, {hp: 75, atk: 130, def: 80, spa: 60, spd: 70, spe: 95});
+		assert.equal(Object.values(zangoose.baseStats).reduce((sum, stat) => sum + stat, 0), 510);
+		assert.equal(zangoose.bst, 510);
+		assert.deepEqual(seviper.baseStats, {hp: 75, atk: 110, def: 70, spa: 90, spd: 70, spe: 95});
+		assert.equal(Object.values(seviper.baseStats).reduce((sum, stat) => sum + stat, 0), 510);
+		assert.equal(seviper.bst, 510);
 		assert.deepEqual(dex.species.get('Kingler').baseStats, {hp: 80, atk: 125, def: 115, spa: 60, spd: 60, spe: 75});
 		assert.deepEqual(dex.species.get('Kingler-Gmax').baseStats, {hp: 120, atk: 125, def: 115, spa: 60, spd: 60, spe: 75});
 		assert.equal(dex.species.get('Yanmega').abilities.H, 'Compound Eyes');
@@ -204,8 +206,8 @@ describe('Custom battle data updates', function () {
 		const dex = battle.dex;
 		const ariados = dex.species.get('Ariados');
 		const megaAriados = dex.species.get('Ariados-Mega');
-		assert.deepEqual(ariados.baseStats, {hp: 90, atk: 100, def: 85, spa: 75, spd: 85, spe: 40});
-		assert.equal(ariados.bst, 475);
+		assert.deepEqual(ariados.baseStats, {hp: 80, atk: 100, def: 85, spa: 75, spd: 85, spe: 40});
+		assert.equal(ariados.bst, 465);
 		assert.deepEqual(megaAriados.baseStats, {hp: 80, atk: 130, def: 120, spa: 40, spd: 120, spe: 85});
 		assert.equal(megaAriados.bst, 575);
 	});

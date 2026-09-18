@@ -565,6 +565,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 6,
 			onResidual(pokemon) {
+				if (this.field.isTerrain('midnightzoneterrain')) {
+					this.heal(pokemon.baseMaxhp / 8);
+					return;
+				}
 				if (this.field.isTerrain('mistyterrain') || this.field.isTerrain('swampterrain') || this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain'])) {
 					this.heal(pokemon.baseMaxhp / 8);
 					if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) {
@@ -2521,6 +2525,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				['superheatedterrain', 'Fire'],
 				['swampterrain', 'Water'],
 				['underwaterterrain', 'Water'],
+				['midnightzoneterrain', 'Water'],
 				['volcanicterrain', 'Fire'],
 				['wastelandterrain', 'Poison'],
 				['watersurfaceterrain', 'Water'],
@@ -4333,7 +4338,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				attacker.formeChange(forme, move);
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('watersurfaceterrain') || this.field.isTerrain('underwaterterrain') || this.field.isTerrain('underwaterterrain')) {
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'])) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -4474,6 +4479,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 50,
 		category: "Physical",
 		name: "Double Hit",
+		multihit: 2,
 		pp: 10,
 		priority: 0,
 		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
@@ -8924,6 +8930,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (this.field.isTerrain('watersurfaceterrain')) {
 					this.add('-message', 'The battle sank into the depths!');
 					this.field.changeTerrain('underwaterterrain', source, effect);
+				} else if (this.field.isTerrain('underwaterterrain')) {
+					this.field.changeTerrain('midnightzoneterrain', source, effect);
 				}
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;
@@ -14344,6 +14352,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				['superheatedterrain', 'heatwave'],
 				['swampterrain', 'muddywater'],
 				['underwaterterrain', 'waterpulse'],
+				['midnightzoneterrain', 'anchorshot'],
 				['volcanicterrain', 'flamethrower'],
 				['wastelandterrain', 'gunkshot'],
 				['watersurfaceterrain', 'whirlpool'],
@@ -18245,6 +18254,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				superheatedterrain: [{ chance: 30, status: 'brn' }],
 				swampterrain: [{ chance: 30, boosts: { spe: -1 } }],
 				underwaterterrain: [{ chance: 30, boosts: { atk: -1 } }],
+				midnightzoneterrain: [{ chance: 30, boosts: { spa: -1 } }],
 				volcanicterrain: [{ chance: 30, status: 'brn' }],
 				wastelandterrain: [
 					{ chance: 7.5, status: 'brn' },
@@ -23302,6 +23312,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 60,
 		category: "Special",
 		name: "Twin Beam",
+		multihit: 2,
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
