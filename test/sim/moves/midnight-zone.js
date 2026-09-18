@@ -10,6 +10,19 @@ function start(ability = 'noability', species = 'Mew', foeAbility = 'noability',
 	return battle.p1.active[0];
 }
 describe('Midnight Zone', () => {
+	for (const [type, ability, exempt] of [['Water', 'noability', true], ['Psychic', 'noability', false], ['Psychic', 'swiftswim', true], ['Psychic', 'schooling', true], ['Psychic', 'steelworker', true]]) {
+		it(`checks attacker type and ability for physical damage: ${type}/${ability}`, () => {
+			const p = start(ability); p.setType(type);
+			for (const [id, boost] of [['tackle', 1], ['waterfall', 1.5]]) {
+				const move = battle.dex.getActiveMove(id);
+				assert.equal(battle.runEvent('BasePower', p, battle.p2.active[0], move, 100, true), battle.modify(100, boost * (exempt ? 1 : 0.33)));
+			}
+		});
+	}
+	it('halves Doom Desire power', () => {
+		const p = start();
+		assert.equal(battle.runEvent('BasePower', p, battle.p2.active[0], battle.dex.getActiveMove('doomdesire'), 100, true), 50);
+	});
 	afterEach(() => battle?.destroy());
 	it('starts with the correct field and blocks weather and generated fields', () => {
 		const p = start();
@@ -54,7 +67,7 @@ describe('Midnight Zone', () => {
 	}
 	it('converts Ground and Dragon Darts to Water, and applies stacked boosts', () => {
 		const p = start(); const foe = battle.p2.active[0];
-		for (const [id, type, multiplier] of [['earthpower', 'Water', 1.8], ['dragondarts', 'Water', 3], ['waterpulse', 'Water', 2.25], ['thunderbolt', 'Electric', 1.2], ['tackle', 'Normal', 0.33]]) {
+		for (const [id, type, multiplier] of [['earthpower', 'Water', 1.8], ['dragondarts', 'Water', 0.99], ['waterpulse', 'Water', 2.25], ['thunderbolt', 'Electric', 1.2], ['tackle', 'Normal', 0.33]]) {
 			const move = battle.dex.getActiveMove(id);
 			battle.runEvent('ModifyMove', p, foe, move, move);
 			assert.equal(move.type, type);
