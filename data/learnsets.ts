@@ -89647,11 +89647,13 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	minior: {
 		learnset: {
+			accelerock: ["9M"],
 			acrobatics: ["9M", "7M"],
 			ancientpower: ["9L17", "7L17"],
 			attract: ["9M", "7M"],
 			autotomize: ["9L29", "7L31"],
 			bulldoze: ["9M", "7M"],
+			bulkup: ["9M"],
 			calmmind: ["9M", "7M"],
 			chargebeam: ["9M", "7M"],
 			confide: ["9M", "7M"],
@@ -89672,13 +89674,16 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			gigaimpact: ["9M", "7M"],
 			gravity: ["9M", "7T"],
 			gyroball: ["9M", "7M"],
+			headsmash: ["9M"],
 			hiddenpower: ["9M", "7M"],
 			hyperbeam: ["9M", "7M"],
+			hurricane: ["9M"],
 			ironhead: ["9M", "7T"],
 			lastresort: ["9E", "7T"],
 			lightscreen: ["9M", "7M"],
+			lunardance: ["9M"],
 			magnetrise: ["9E", "7T"],
-			meteorbeam: [],
+			meteorbeam: ["9M"],
          mimic: ["9M"], 
 			powergem: ["9L38", "7L38"],
 			protect: ["9M", "7M"],
@@ -89710,6 +89715,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			swift: ["9L15", "7L15"],
 			tackle: ["9L1", "7L1"],
 			takedown: ["9L24", "7L29"],
+			tailwind: ["9M"],
 			telekinesis: ["9E", "7T"],
 			terablast: [],
 			toxic: ["9M", "7M"],
@@ -114242,6 +114248,9 @@ if (zangooseMegaLearnset) (Learnsets as any).zangoosemega = {learnset: {...zango
 
 const seviperMegaLearnset = (Learnsets as any).seviper?.learnset;
 if (seviperMegaLearnset) (Learnsets as any).sevipermega = {learnset: {...seviperMegaLearnset}};
+
+const salazzleMegaLearnset = (Learnsets as any).salazzle?.learnset;
+if (salazzleMegaLearnset) (Learnsets as any).salazzlemega = {learnset: {...salazzleMegaLearnset}};
 
 const crobatLearnset = (Learnsets as any).crobat?.learnset;
 if (crobatLearnset) (Learnsets as any).crobatalt = {learnset: {...crobatLearnset}};

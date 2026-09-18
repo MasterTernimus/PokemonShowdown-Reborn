@@ -3697,6 +3697,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10403,
 	},
+	corrosiveburn: {
+		onModifyCritRatio(critRatio, source, target) {
+			return this.dex.abilities.get('merciless').onModifyCritRatio?.call(this, critRatio, source, target);
+		},
+		onSwitchOut(pokemon) {
+			return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon);
+		},
+		onModifyMove(move) {
+			this.dex.abilities.get('corrosion').onModifyMove?.call(this, move);
+		},
+		onNegateImmunity(pokemon, type) {
+			return this.dex.abilities.get('corrosion').onNegateImmunity?.call(this, pokemon, type);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('corrosion').onDamage?.call(this, damage, target, source, effect);
+		},
+		onFoeAfterSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('corrosion').onFoeAfterSetStatus?.call(this, status, target, source, effect);
+		},
+		flags: {},
+		name: "Corrosive Burn",
+		rating: 5,
+		num: 10406,
+	},
 	noseformation: {
 		getBestNoseMove(source, target) {
 			let bestDamage = 0;
@@ -6208,6 +6232,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10059,
 	},
 	riptideclaws: {
+		onStart(pokemon) {
+			this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
+			this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon);
+		},
+		onModifyMove(move) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+		},
 		onModifySpe(spe, pokemon) {
 			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) return this.chainModify(2);
 		},
@@ -6219,9 +6250,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('shellarmor').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
-		onStart(pokemon) {
-			return this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon);
 		},
 		onAfterEachBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('shellarmor').onAfterEachBoost?.call(this, boost, target, source, effect);
@@ -12932,7 +12960,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	shieldsdown: {
 		onSwitchInPriority: -1,
+		onCheckShow(pokemon) {
+			this.dex.abilities.get('selfrepair').onCheckShow?.call(this, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			this.dex.abilities.get('selfrepair').onSwitchOut?.call(this, pokemon);
+		},
 		onStart(pokemon) {
+			this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon);
 			if (pokemon.baseSpecies.baseSpecies !== 'Minior' || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
 				if (pokemon.species.forme !== 'Meteor') {
@@ -12946,6 +12981,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
+			this.dex.abilities.get('selfrepair').onResidual?.call(this, pokemon);
 			if (pokemon.baseSpecies.baseSpecies !== 'Minior' || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
 				if (pokemon.species.forme !== 'Meteor') {
@@ -12969,6 +13005,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (status.id !== 'yawn') return;
 			this.add('-immune', target, '[from] ability: Shields Down');
 			return null;
+		},
+		onCriticalHit: false,
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('shellarmor').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('shellarmor').onAfterEachBoost?.call(this, boost, target, source, effect);
+		},
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('crumblingshell').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onImmunity(type, pokemon) {
+			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Shields Down",
@@ -17158,6 +17207,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10316,
 	},
 	protectiveward: {
+		onStart(pokemon) {
+			return this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon);
+		},
 		onTryHit(target, source, move) {
 			return this.dex.abilities.get('waterabsorb').onTryHit?.call(this, target, source, move);
 		},
@@ -17167,9 +17219,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onCriticalHit: false,
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('shellarmor').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
-		onStart(pokemon) {
-			return this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon);
 		},
 		onAfterEachBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('shellarmor').onAfterEachBoost?.call(this, boost, target, source, effect);

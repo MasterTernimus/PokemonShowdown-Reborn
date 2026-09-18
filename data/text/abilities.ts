@@ -744,6 +744,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Venom Armor, Violent Rush, and Scrappy's effects.",
 		shortDesc: "Venom Armor + Violent Rush + Scrappy.",
 	},
+	corrosiveburn: {
+		name: "Corrosive Burn",
+		desc: "This Pokemon has Merciless, Regenerator, and Corrosion's effects.",
+		shortDesc: "Merciless + Regenerator + Corrosion.",
+	},
 	wickedcommand: {
 		name: "Wicked Command",
 		desc: "This Pokemon has Insomnia and Super Luck's effects and takes 20% less damage from other Pokemon's damaging moves. If this Pokemon knocks out an enemy with a move, its higher attacking stat is raised by 1 stage, with Attack chosen on a tie.",
@@ -1053,8 +1058,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	riptideclaws: {
 		name: "Riptide Claws",
-		desc: "This Pokemon has Swift Swim, Tough Claws, and Shell Armor's effects.",
-		shortDesc: "Swift Swim + Tough Claws + Shell Armor.",
+		desc: "This Pokemon has Swift Swim, Tough Claws, Shell Armor, and Mold Breaker's effects.",
+		shortDesc: "Swift Swim + Tough Claws + Shell Armor + Mold Breaker.",
 	},
 	dryskin: {
 		name: "Dry Skin",
@@ -2560,8 +2565,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shieldsdown: {
 		name: "Shields Down",
-		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP, and changes to Meteor Form if it has more than 1/2 its maximum HP. This check is done on switch-in and at the end of each turn. While in its Meteor Form, it cannot become affected by a non-volatile status condition or Yawn.",
-		shortDesc: "If Minior, switch-in/end of turn it changes to Core at 1/2 max HP or less, else Meteor.",
+		desc: "If this Pokemon is a Minior, it changes to its Core forme if it has 1/2 or less of its maximum HP, and changes to Meteor Form if it has more than 1/2 its maximum HP. This check is done on switch-in and at the end of each turn. While in its Meteor Form, it cannot become affected by a non-volatile status condition or Yawn. This Pokemon also has Shell Armor, Self Repair, and Crumbling Shell's effects.",
+		shortDesc: "Form changes at 1/2 HP; Shell Armor + Self Repair + Crumbling Shell.",
 
 		transform: "Shields Down deactivated!\n([POKEMON] shielded itself.)",
 		transformEnd: "Shields Down activated!\n([POKEMON] stopped shielding itself.)",
