@@ -366,6 +366,7 @@ export class Field {
 			this.terrainStack.shift();
 		}
 		this.terrainStack.unshift(this.terrainState);
+		this.clearDepartedWaterFieldEffects(prevTerrain);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		this.clearWaterHazards();
 		this.clearFieldStartedWeather(prevTerrain);
@@ -442,6 +443,7 @@ export class Field {
 		} else {
 			this.terrainStack.unshift(this.terrainState);
 		}
+		this.clearDepartedWaterFieldEffects(prevTerrain);
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		this.clearWaterHazards();
 		this.clearFieldStartedWeather(prevTerrainState.id as ID);
@@ -449,12 +451,23 @@ export class Field {
 		return true;
 	}
 
+	private clearDepartedWaterFieldEffects(previousTerrain: ID) {
+		if (previousTerrain === this.terrain || ![
+			'watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain', 'midnightzoneterrain',
+		].includes(previousTerrain)) return;
+		for (const side of this.battle.sides) side.removeSideCondition('tailwind');
+		for (const room of ['trickroom', 'magicroom', 'wonderroom']) this.removePseudoWeather(room);
+	}
+
 	private clearWaterHazards() {
-		if (!['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain)) return;
+		const submerged = ['underwaterterrain', 'midnightzoneterrain'].includes(this.terrain);
+		if (!submerged && !['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain)) return;
+		const hazards = submerged ? ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'] : ['spikes', 'toxicspikes'];
 		for (const side of this.battle.sides) {
-			for (const sideCondition of ['spikes', 'toxicspikes']) {
+			for (const sideCondition of hazards) {
 				if (!side.removeSideCondition(sideCondition)) continue;
-				this.battle.add('-message', '...The spikes sank into the water and vanished!');
+				this.battle.add('-message', submerged ? 'The hazards were swept away into the depths!' :
+					'...The spikes sank into the water and vanished!');
 				this.battle.add('-sideend', side, this.battle.dex.conditions.get(sideCondition).name);
 			}
 		}
@@ -545,7 +558,9 @@ export class Field {
 			this.terrain = '';
 			this.terrainState = this.battle.initEffectState({ id: '' });
 		}
+		this.clearDepartedWaterFieldEffects(clearedTerrain);
 		this.battle.eachEvent('TerrainChange');
+		this.clearWaterHazards();
 		this.clearFieldStartedWeather(clearedTerrain);
 		this.restoreFormatHail();
 		return true;
