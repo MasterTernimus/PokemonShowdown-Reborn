@@ -97,11 +97,11 @@ export const MidnightZone: TerrainData = {
 				modifier *= 1.2;
 				this.add('-message', 'The lightless abyss boosted the attack.');
 			}
-			if (['signalbeam', 'doomdummy', 'flashcannon', 'lusterpurge', 'dazzlinggleam', 'mirrorshot', 'technoblast', 'powergem', 'moongeistbeam', 'menacingmoonrazemaelstrom'].includes(move.id)) {
+			if (['signalbeam', 'doomdesire', 'flashcannon', 'lusterpurge', 'dazzlinggleam', 'mirrorshot', 'technoblast', 'powergem', 'moongeistbeam', 'menacingmoonrazemaelstrom'].includes(move.id)) {
 				modifier *= 0.5;
 				this.add('-message', 'The light disappeared in the dark...');
 			}
-			if (move.category === 'Physical' && move.type !== 'Water' && !source.hasAbility(['steelworker', 'schooling', 'swiftswim'])) {
+			if (move.category === 'Physical' && !source.hasType('Water') && !source.hasAbility(['steelworker', 'schooling', 'swiftswim'])) {
 				modifier *= 0.33;
 			}
 			return this.chainModify(modifier);
