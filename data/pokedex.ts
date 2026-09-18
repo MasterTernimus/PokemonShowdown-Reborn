@@ -3291,7 +3291,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Gyarados-Aevian",
 		forme: "Aevian",
 		types: ["Fire", "Dragon"],
-		baseStats: { hp: 95, atk: 165, def: 115, spa: 99, spd: 145, spe: 81 },
+		baseStats: { hp: 95, atk: 89, def: 85, spa: 135, spd: 115, spe: 81 },
 		abilities: { 0: "Multiscale", 1: "Competitive", H: "Intimidate" },
 		heightm: 6.5,
 		weightkg: 235,
