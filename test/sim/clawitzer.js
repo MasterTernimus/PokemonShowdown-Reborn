@@ -24,6 +24,7 @@ describe('Clawitzer custom data', function () {
 		assert.equal(mega.requiredItem, 'Clawitzerite');
 		assert.equal(mega.battleOnly, 'Clawitzer');
 		assert.deepEqual(clawitzer.otherFormes, ['Clawitzer-Mega']);
+		assert.deepEqual(clawitzer.abilities, {0: 'Mega Launcher', 1: 'Swift Swim', H: 'Quick Draw'});
 
 		const learnset = new Set();
 		for (const entry of battle.dex.species.getFullLearnset('clawitzer')) {

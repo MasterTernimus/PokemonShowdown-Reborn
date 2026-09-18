@@ -1,3 +1,4 @@
+import { MidnightZone } from './midnight-zone';
 /* eslint-disable @stylistic/max-len */
 import { type TerrainData } from "../sim/dex-terrains";
 
@@ -3074,6 +3075,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		},
 	},
+	midnightzoneterrain: MidnightZone,
 	underwaterterrain: {
 		name: "Underwater Terrain",
 		condition: {
@@ -3158,6 +3160,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					!source.hasType('Water') &&
 					!source.hasAbility('steelworker') &&
 					!source.hasAbility('elevate') &&
+					!source.hasAbility('schooling') &&
 					!source.hasAbility('swiftswim')
 				) {
 					modifier *= 0.5;
@@ -3171,6 +3174,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
+				if (['darkvoid', 'blackholeeclipse', 'nightdaze', 'darkpulse'].includes(move.id)) {
+					this.field.changeTerrain('midnightzoneterrain', source, move);
+					return;
+				}
 				const watersurface = ['bounce', 'dive', 'skydrop', 'fly', 'shoreup', 'tripledive'];
 				const murkwater = ['sludgewave', 'aciddownpour'];
 				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbility('neutralization'));

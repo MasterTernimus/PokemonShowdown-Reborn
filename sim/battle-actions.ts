@@ -529,6 +529,7 @@ export class BattleActions {
 		}
 
 		let attrs = '';
+		if (move.id === 'secretpower' && this.battle.field.isTerrain('midnightzoneterrain')) attrs += '|[anim]Dark Void';
 
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
@@ -1051,7 +1052,7 @@ export class BattleActions {
 				if (!livingFoes.length) break;
 				targets = [this.battle.sample(livingFoes)];
 				damage = [0];
-				move.smartTarget = false;
+				if (targets[0] !== originalMultihitTarget) move.smartTarget = false;
 			}
 			if (hit > 1 && move.dualWieldFullPower && !(move as any).fallenStarSpread) {
 				const livingFoes = pokemon.foes().filter(foe => foe?.hp && !foe.fainted);
@@ -1078,7 +1079,7 @@ export class BattleActions {
 			}
 			const targetsHadHP = targetsCopy.map(target => !!target && target.hp > 0);
 			const target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
-			if (target && hit > 1 && move.dualWieldFullPower && target !== originalMultihitTarget) {
+			if (target && hit > 1 && move.multihitType === 'dualwield' && target !== originalMultihitTarget) {
 				if (this.battle.runEvent('Invulnerability', target, pokemon, move) === false) {
 					this.battle.add('-miss', pokemon, target);
 					this.battle.runEvent('Miss', pokemon, target, move);

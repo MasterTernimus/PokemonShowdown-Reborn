@@ -356,6 +356,7 @@ export class Battle {
 				"superheatedterrain",
 				"swampterrain",
 				"underwaterterrain",
+				"midnightzoneterrain",
 				"wastelandterrain",
 				"newworldterrain",
 				"coldeclipseterrain",

@@ -131,8 +131,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	apexvenom: {
 		name: "Apex Venom",
-		desc: "This Pokemon has Strong Jaw and Shed Skin's effects. Poison moves, including Poison Fang, are super effective against Poison- and Steel-type Pokemon. Poison Fang is Dragon-type and has 1.5x power. Biting moves bypass protection and have a 30% chance to badly poison the target.",
-		shortDesc: "Strong Jaw + Shed Skin; Poison hits Poison/Steel; Poison Fang is Dragon/1.5x; bites bypass protection and badly poison 30%.",
+		desc: "This Pokemon has Strong Jaw and Shed Skin's effects. Poison moves, including Poison Fang, are super effective against Poison- and Steel-type Pokemon. Poison Fang has 1.5x power. Biting moves bypass protection and have a 30% chance to badly poison the target.",
+		shortDesc: "Strong Jaw + Shed Skin; Poison hits Poison/Steel; Poison Fang is 1.5x; bites bypass protection and badly poison 30%.",
+	},
+	sirius: {
+		name: "Sirius",
+		desc: "This Pokemon has Apex Venom, Whiplash, and Accumulation's effects. Poison Fang becomes Dragon-type.",
+		shortDesc: "Apex Venom + Whiplash + Accumulation; Poison Fang becomes Dragon-type.",
 	},
 	apexpredator: {
 		name: "Apex Predator",
@@ -733,6 +738,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Wicked Snare",
 		desc: "This Pokemon has Stakeout, Tangling Hair, and Prankster's effects.",
 		shortDesc: "Stakeout + Tangling Hair + Prankster.",
+	},
+	toxicarmor: {
+		name: "Toxic Armor",
+		desc: "This Pokemon has Venom Armor, Violent Rush, and Scrappy's effects.",
+		shortDesc: "Venom Armor + Violent Rush + Scrappy.",
 	},
 	wickedcommand: {
 		name: "Wicked Command",
@@ -2381,6 +2391,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Sand Rush",
 		desc: "If Sandstorm is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "If Sandstorm is active, this Pokemon's Speed is doubled; immunity to Sandstorm.",
+	},
+	solarrush: {
+		name: "Solar Rush",
+		desc: "This Pokemon has Sand Rush and Chlorophyll's effects.",
+		shortDesc: "Sand Rush + Chlorophyll.",
 	},
 	sandspit: {
 		name: "Sand Spit",

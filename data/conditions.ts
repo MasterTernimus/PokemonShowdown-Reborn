@@ -395,7 +395,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 			const moveBoosts: Record<string, readonly string[]> = {
 				firespin: ['burningterrain', 'hauntedterrain'],
-				whirlpool: ['watersurfaceterrain', 'underwaterterrain'],
+				whirlpool: ['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'],
 				sandtomb: ['desertterrain'],
 				magmastorm: ['dragonsdenterrain'],
 				infestation: ['forestterrain'],

@@ -1248,6 +1248,28 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 2655,
 		gen: 9,
 	},
+	zangoosite: {
+		name: "Zangoosite",
+		spritenum: 0,
+		megaStone: { "Zangoose": "Zangoose-Mega" },
+		itemUser: ["Zangoose"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2656,
+		gen: 9,
+	},
+	sevipite: {
+		name: "Sevipite",
+		spritenum: 0,
+		megaStone: { "Seviper": "Seviper-Mega" },
+		itemUser: ["Seviper"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2664,
+		gen: 9,
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		spritenum: 707,
@@ -1999,12 +2021,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
 		},
 		onUseItem(item, pokemon) {
+			if (this.field.isTerrain('midnightzoneterrain')) {
+				this.boost({spa: 1});
+				pokemon.addVolatile('aquaring');
+				this.add('-message', pokemon.name + ' surrounded itself with a veil of water!');
+			}
 			if (this.field.isTerrain('electricterrain')) {
 				this.boost({ spe: 1 });
 				pokemon.addVolatile('charge', pokemon, item);
@@ -2061,7 +2088,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
@@ -2940,8 +2967,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	gyaradosite: {
 		name: "Gyaradosite",
 		spritenum: 589,
-		megaStone: { "Gyarados": "Gyarados-Mega" },
-		itemUser: ["Gyarados"],
+		megaStone: { "Gyarados": "Gyarados-Mega", "Gyarados-Aevian": "Gyarados-Aevian-Mega" },
+		itemUser: ["Gyarados", "Gyarados-Aevian"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},

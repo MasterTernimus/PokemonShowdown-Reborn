@@ -16,7 +16,7 @@ describe('Schooling custom effects', () => {
 			hp: 80, atk: 135, def: 130, spa: 135, spd: 130, spe: 60,
 		});
 		assert.equal(Dex.species.get('Wishiwashi').baseStats.hp, 80);
-		assert.equal(Dex.species.get('Beartic').abilities['0'], 'Tough Claws');
+		assert.equal(Dex.species.get('Beartic').abilities['0'], 'Raging Beast');
 		const learnset = Dex.species.getLearnsetData('wishiwashi').learnset;
 		for (const move of [
 			'acidarmor', 'amnesia', 'bulkup', 'bodypress', 'calmmind', 'flashcannon', 'haze', 'heavyslam',
@@ -53,7 +53,7 @@ describe('Schooling custom effects', () => {
 			const wishiwashi = battle.p1.active[0];
 			wishiwashi.hp = Math.floor(wishiwashi.maxhp / 4);
 			battle.field.changeTerrain(terrain, wishiwashi);
-			battle.runEvent('Residual');
+			battle.makeChoices('move splash', 'move splash');
 			assert.species(wishiwashi, 'Wishiwashi-School', terrain);
 			battle.destroy();
 		}
@@ -66,7 +66,7 @@ describe('Schooling custom effects', () => {
 		airborneWishiwashi.hp = Math.floor(airborneWishiwashi.maxhp / 4);
 		battle.field.changeTerrain('watersurfaceterrain', airborneWishiwashi);
 		airborneWishiwashi.addVolatile('magnetrise');
-		battle.runEvent('Residual');
+		battle.makeChoices('move splash', 'move splash');
 		assert.species(airborneWishiwashi, 'Wishiwashi');
 	});
 
