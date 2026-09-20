@@ -277,6 +277,21 @@ export class Field {
 		return false;
 	}
 
+	applyGravityTerrainChange(source: Pokemon, sourceEffect: Effect) {
+		if (this.isTerrain('newworldterrain')) return false;
+		if (this.isTerrain('watersurfaceterrain')) {
+			this.battle.add('-message', 'The battle sank into the depths!');
+			return this.changeTerrain('underwaterterrain', source, sourceEffect);
+		}
+		if (this.isTerrain('underwaterterrain')) {
+			return this.changeTerrain('midnightzoneterrain', source, sourceEffect);
+		}
+		if (this.isTerrain('corrosivemistterrain')) {
+			return this.changeTerrain('corrosiveterrain', source, sourceEffect);
+		}
+		return false;
+	}
+
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, ignoreNeutralization = false) {
 		const gardenSource = source && source !== 'debug' ? source : this.battle.event?.target;
 		const gardenEffect = sourceEffect || this.battle.effect;

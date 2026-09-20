@@ -29,6 +29,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - Tyranitar-Mega: Sand Sovereign
 - Sceptile-Mega: Verdant Drake
 - Blaziken-Mega: Blazing Tempo
+- Typhlosion-Mega: Plasma Eruption
 - Swampert-Mega: Raging Current
 - Gardevoir-Mega: Royal Voice
 - Gardevoir-Mega-Z: Argent Devotion
@@ -40,6 +41,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - Manectric-Mega: Storm Fright
 - Sharpedo-Mega: Razor Current
 - Camerupt-Mega: Caldera Core
+- Flygon-Mega: Desert Spirit
 - Flygon-Mega-Z: Tremor
 - Altaria-Mega: Heavenly Chorus
 - Banette-Mega: Cursed Marionette
@@ -79,7 +81,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - Pyroar-Mega: Royal Sun
 - Floette-Mega: Ange
 - Malamar-Mega: Inversion
-- Barbaracle-Mega: Hydra Breaker
+- Barbaracle-Mega: Divine Mockery
 - Dragalge-Mega: Toxic Renewal
 - Hawlucha-Mega: Perfect Ego
 - Zygarde-Mega: Aura Break

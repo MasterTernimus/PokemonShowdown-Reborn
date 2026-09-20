@@ -131,6 +131,18 @@ function makeMultiFieldFormats(): FormatList {
 				challengeShow: true,
 				ruleset: fieldRuleset(ALLGEN_MULTI_RULESET, terrain),
 			});
+			formats.push({
+				name: `[Gen 9] Multi 1v2 ${fieldName}`,
+				mod: 'gen9',
+				terrain,
+				gameType: 'multi',
+				searchShow: false,
+				challengeShow: true,
+				onValidateTeam(team) {
+					if (team.length !== 6) return ['Multi 1v2 requires a six-Pokémon team: the solo player shares all six across two active slots, and each teammate brings three of their six.'];
+				},
+				ruleset: fieldRuleset(ALLGEN_MULTI_RULESET.filter(rule => rule !== 'Picked Team Size = 6').concat('Picked Team Size = 3'), terrain),
+			});
 		}
 	}
 	return formats;

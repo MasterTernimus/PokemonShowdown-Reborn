@@ -49,6 +49,7 @@ Custom-numbered entries: 233
 - **Cursed Keepsake** (`cursedkeepsake`): Curses attackers; cursed foes deal 0.5x; heals 1/2 Curse damage. **Users:** Banette
 - **Cursed Marionette** (`cursedmarionette`): Prankster; attacks/status curse; cursed foes deal 0.8x; heals 1/2 Curse damage. **Users:** Banette-Mega
 - **Defragment** (`defragment`): Entry defensive boost based on foes' offenses; moves cannot miss. **Users:** Bronzong, Claydol, Klinklang, Magnezone, Metagross, Porygon-Z, Porygon2, Rotom, Starmie
+- **Desert Spirit** (`desertspirit`): Levitate + Sand Stream + Tinted Lens; Ground moves receive STAB. **Users:** Flygon-Mega
 - **Divine Intervention** (`divineintervention`): Sworn Duty + Friend Guard + Regenerator. **Users:** Audino-Mega
 - **Doom Warning** (`doomwarning`): Magic Bounce + Magic Guard; on faint casts Doom Desire on all foes. **Users:** Absol-Mega
 - **Draconic Force** (`draconicforce`): Dragonize + Strong Jaw + Mold Breaker. **Users:** Feraligatr-Mega
@@ -90,7 +91,7 @@ Custom-numbered entries: 233
 - **Hisuian Resolve** (`hisuianresolve`): Brute Force + Magma Armor. **Users:** Arcanine-Hisui
 - **Hisuian Vanguard** (`hisuianvanguard`): Rapid Response + Wind Power. **Users:** Braviary-Hisui
 - **Hydra Bond** (`hydrabond`): Damaging moves hit 3 times; hits 2/3 have 30% power. FFA: single-target hits all foes at 1.3x. **Users:** Dodrio, Dugtrio, Hydrapple, Magneton, Wugtrio, Zweilous
-- **Hydra Breaker** (`hydrabreaker`): Hydra Bond + Mold Breaker. **Users:** Barbaracle-Mega
+- **Divine Mockery** (`divinemockery`): Hydra Bond + Mold Breaker + Sniper + Water Bubble. **Users:** Barbaracle-Mega
 - **Hydra Tyrant** (`hydratyrant`): Hydra Bond + Berserk + Self Sufficient. **Users:** Hydreigon
 - **Hyper Drill** (`hyperdrill`): Power Drill + Dual Wield; Rock moves get STAB. **Users:** Rhyperior
 - **Imperial Mandate** (`imperialmandate`): High HP doubles damage; low HP doubles Speed; 1.2x dealt and 0.8x taken. **Users:** Aegislash-Gmax
@@ -135,6 +136,7 @@ Custom-numbered entries: 233
 - **Phalanx Form** (`phalanxform`): Hydra Bond + Friend Guard + Battle Armor; Steel STAB; cannot be trapped. **Users:** Falinks-Mega
 - **Phantom Barrage** (`phantombarrage`): Infiltrator + Levitate + Hydra Bond; higher offensive stat for signature attacks. **Users:** Dragapult-Gmax
 - **Phantom Fist** (`phantomfist`): Moves cannot miss + Filter + Self Repair + Unseen Fist. **Users:** Golurk-Mega
+- **Plasma Eruption** (`plasmaeruption`): Proficient + Blazing Mane for Fire and Electric moves; 50% type swap, or forced conversion after Burn Up/Double Shock without creating an immunity. **Users:** Typhlosion-Mega
 - **Pollen Bloom** (`pollenbloom`): Thick Fat + Proficient; fixed Grass chip heals the user for damage dealt. **Users:** Venusaur
 - **Power Drill** (`powerdrill`): Drill moves have 1.5x power. **Users:** Rhydon, Seaking
 - **Precision** (`precision`): Super-effective moves never miss; boosted critical-hit ratio. **Users:** Inteleon

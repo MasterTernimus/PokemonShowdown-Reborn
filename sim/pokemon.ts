@@ -262,6 +262,7 @@ export class Pokemon {
 	previouslySwitchedIn: number;
 	truantTurn: boolean;
 	bondTriggered: boolean;
+	battleBondEndured: boolean;
 	battleFervorBoosted: boolean;
 	// Gen 9 only
 	heroMessageDisplayed: boolean;
@@ -495,6 +496,7 @@ export class Pokemon {
 		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
 		this.bondTriggered = false;
+		this.battleBondEndured = false;
 		this.battleFervorBoosted = false;
 		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
@@ -2061,6 +2063,10 @@ export class Pokemon {
 
 	hasAbility(ability: string | string[]) {
 		const abilityAliases: { [abilityid: string]: string[] } = {
+			shadowbond: ['battlebond', 'filter', 'selfsufficient', 'proficient', 'infiltrator'],
+			apexbond: ['battlebond', 'filter', 'selfsufficient', 'supremeoverlord', 'roughskin'],
+			sacredbond: ['battlebond', 'filter', 'selfsufficient', 'magmaarmor', 'intimidate'],
+			battlebond: ['filter', 'selfsufficient'],
 	highnoon: ['proficient'],
 	strikersmomentum: ['proficient'],
 	forestsurge: ['proficient'],
@@ -2070,8 +2076,10 @@ export class Pokemon {
 	blazingtempo: ['proficient'],
 	verdantdrake: ['proficient'],
 	mightyjaw: ['proficient'],
-	blazingmane: ['proficient'],
+			blazingmane: ['proficient'],
+			plasmaeruption: ['proficient', 'blazingmane'],
 	verdanthospitality: ['proficient'],
+	verdantsanctuary: ['grassysurge', 'invigorate', 'hospitality', 'friendguard'],
 	fortressshell: ['proficient'],
 	waterbarrage: ['proficient'],
 	wildfirecore: ['proficient'],
@@ -2116,7 +2124,7 @@ export class Pokemon {
 			mountainhunger: ['thickfat', 'gluttony', 'earlybird'],
 			astralwatcher: ['prankster', 'telepathy', 'defragment', 'frisk'],
 			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce'],
-			lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
+			lunarorbit: ['magicbounce', 'serenegrace', 'triage', 'magicguard'],
 			territorial: ['unnerve', 'unaware', 'toughclaws'],
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],
 			ragingfists: ['ultraego', 'scrappy'],
@@ -2125,6 +2133,11 @@ export class Pokemon {
 			sweetdecay: ['hustle', 'gluttony', 'sweetveil', 'corrosion'],
 			bakedbliss: ['wellbakedbody', 'thickfat', 'sweetveil', 'gluttony'],
 			hydraheart: ['hydrabond', 'selfsufficient', 'stamina'],
+			truehydra: ['hydrabond', 'regenerator', 'shedskin', 'selfsufficient'],
+			aevianspark: ['toughclaws', 'technician', 'static'],
+			aeviangrief: ['flareboost', 'wonderskin', 'levitate'],
+			aevianrocket: ['bruteforce', 'reckless', 'rockhead', 'regenerator', 'moldbreaker', 'swiftswim'],
+			adaptivecore: ['download', 'defragment', 'selfrepair', 'selfsufficient', 'naturalcure'],
 			sweetresonance: ['supersweetsyrup', 'selfsufficient', 'hydrabond'],
 		sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 			auroraresonance: ['liquidvoice', 'waterabsorb'],
@@ -2167,6 +2180,8 @@ export class Pokemon {
 			siegelauncher: ['stalwart', 'proficient'],
 			soultag: ['soulfire', 'shadowtag'],
 			deserttyrant: ['sandstream'],
+			desertspirit: ['levitate', 'sandstream', 'tintedlens'],
+			desertshell: ['skilllink', 'heatproof', 'sandstream'],
 			riptideclaws: ['swiftswim', 'toughclaws', 'shellarmor', 'moldbreaker'],
 			fossilfrenzy: ['klutz'],
 			phantomfist: ['unseenfist'],
@@ -2178,7 +2193,7 @@ export class Pokemon {
 			cursedmarionette: ['prankster'],
 			cursedarmament: ['filter'],
 			phantombarrage: ['clearbody', 'infiltrator', 'levitate', 'hydrabond'],
-			sandsovereign: ['sandstream', 'filter', 'battlearmor'],
+			sandsovereign: ['sandstream', 'dauntlessshield', 'solidrock'],
 			frostsovereign: ['snowwarning', 'icebody', 'filter'],
 			freezerburn: ['slushrush', 'refrigerate'],
 			stormfright: ['intimidate', 'lightningrod'],
@@ -2188,12 +2203,12 @@ export class Pokemon {
 			mirrorgreed: ['magicbounce', 'analytic'],
 			moonlitwings: ['serenegrace'],
 			uncheckedassault: ['scrappy', 'striker', 'opportunist', 'limber'],
-			royalvoice: ['pixilate', 'queenlymajesty', 'dreamsickness', 'telepathy', 'swornduty'],
+			royalvoice: ['pixilate', 'queenlymajesty', 'dreamsickness', 'telepathy', 'swornduty', 'trace'],
 			perfectforesight: ['trace', 'insomnia'],
 			dreamsickness: ['telepathy', 'swornduty'],
 			voidveil: ['levitate', 'friendguard', 'insomnia'],
 			knightsguard: ['swornduty', 'justified', 'steadfast'],
-			hydrabreaker: ['hydrabond', 'moldbreaker'],
+			divinemockery: ['hydrabond', 'moldbreaker', 'sniper', 'waterbubble', 'waterveil'],
 			hydratyrant: ['hydrabond', 'berserk', 'selfsufficient'],
 			hisuianpath: ['sapsipper', 'innerfocus', 'fluffy'],
 			toxicevolution: ['corrosion', 'dualwield', 'shielddust'],
@@ -2241,7 +2256,7 @@ riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			abysssniper: ['sniper', 'stalwart'],
 			atrocity: ['moldbreaker', 'proficient'],
 			streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
-			divineintervention: ['friendguard', 'regenerator'],
+			divineintervention: ['swornduty', 'friendguard', 'regenerator', 'triage', 'fluffy', 'queensguard', 'contrary', 'shedskin', 'intimidate', 'proficient', 'infiltrator'],
 			shadowguard: ['shadowshield', 'elevate'],
 			requiem: ['cursedbody'],
 			reapersgrip: ['unaware', 'ironfist', 'darkaura', 'selfsufficient'],
@@ -2254,6 +2269,7 @@ riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			mossarmor: ['bruteforce', 'stamina', 'naturalrecovery'],
 			stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
 			aevianfrost: ['icebody', 'guts', 'filter'],
+			aeviantoxin: ['strongjaw', 'layeredcoat', 'furcoat', 'overcoat', 'merciless'],
 			aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
 			aevianbolt: ['stormpower', 'surgesurfer', 'voltabsorb'],
 			riftdancer: ['opportunist', 'chlorophyll', 'dancer'],
@@ -2271,11 +2287,15 @@ riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			aevianwing: ['scrappy', 'rockhead', 'defiant'],
 			resuscitation: ['selfrepair', 'magicguard'],
 			shieldsdown: ['shellarmor', 'selfrepair', 'crumblingshell'],
-				schooling: ['hydrabond', 'selfrepair', 'filter'],
+			schooling: ['hydrabond', 'selfrepair', 'moldbreaker'],
+			seviischooling: ['hydrabond', 'selfrepair', 'moldbreaker'],
 			};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
+		if (['schooling', 'seviischooling'].includes(this.ability) &&
+			abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
+			!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) return false;
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
-			!(this.ability === 'perfectforesight' && this.m.perfectForesightAbility &&
+			!(['perfectforesight', 'royalvoice'].includes(this.ability) && this.m.perfectForesightAbility &&
 				abilityids.includes(this.m.perfectForesightAbility))) {
 			return false;
 		}

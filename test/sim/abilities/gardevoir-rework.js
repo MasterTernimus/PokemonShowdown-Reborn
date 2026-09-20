@@ -59,4 +59,46 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 		battle.makeChoices('move splash, move splash', 'move quickattack 2, move splash');
 		assert.equal(ally.hp, hp);
 	});
+	it('Royal Voice copies an opposing Ability and runs its effects without Future Sight', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Gardevoir', ability: 'Royal Voice', moves: ['hypervoice'] }],
+			[{ species: 'Lapras', ability: 'Water Absorb', moves: ['surf'] }],
+		]);
+		battle.makeChoices('team 1', 'team 1');
+		const mon = battle.p1.active[0];
+		assert.equal(mon.m.perfectForesightAbility, 'waterabsorb');
+		assert(mon.hasAbility('waterabsorb'));
+		assert(!mon.hasAbility('insomnia'));
+		mon.hp = Math.floor(mon.maxhp / 2);
+		const hp = mon.hp;
+		battle.makeChoices('move hypervoice', 'move surf');
+		assert(mon.hp > hp);
+		assert(!battle.p2.slotConditions[0].futuremove);
+	});
+	it('Royal Voice prioritizes an active Speed Ability when choosing a foe', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
+			[{ species: 'Gardevoir', ability: 'Royal Voice', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Magikarp', ability: 'Speed Boost', moves: ['splash'] }, { species: 'Mewtwo', ability: 'Pressure', moves: ['splash'] }],
+		]);
+		battle.makeChoices('team 12', 'team 12');
+		const mon = battle.p1.active[0];
+		assert.equal(mon.m.perfectForesightAbility, 'speedboost');
+		battle.makeChoices('move splash, move splash', 'move splash, move splash');
+		assert.equal(mon.boosts.spe, 1);
+	});
+	it('Mega Gardevoir copies on Mega Evolution and removes the copy with Royal Voice', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
+			[{ species: 'Gardevoir', ability: 'Trace', item: 'Gardevoirite', moves: ['splash'] }],
+			[{ species: 'Lapras', ability: 'Water Absorb', moves: ['splash'] }],
+		]);
+		battle.makeChoices('team 1', 'team 1');
+		const mon = battle.p1.active[0];
+		battle.makeChoices('move splash mega', 'move splash');
+		assert.equal(mon.ability, 'royalvoice');
+		assert.equal(mon.m.perfectForesightAbility, 'waterabsorb');
+		assert(mon.hasAbility('waterabsorb'));
+		mon.setAbility('No Ability');
+		assert(!mon.m.perfectForesightAbility);
+		assert(!mon.hasAbility('waterabsorb'));
+	});
 });

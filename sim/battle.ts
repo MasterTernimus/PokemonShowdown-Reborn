@@ -587,7 +587,7 @@ export class Battle {
 				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
 					const stateTarget = handler.state.target;
 					if (
-						stateTarget.ability === 'perfectforesight' &&
+						['perfectforesight', 'royalvoice'].includes(stateTarget.ability) &&
 						stateTarget.m.perfectForesightAbility === effect.id
 					) {
 						expectedStateLocation = stateTarget.m.perfectForesightAbilityState;
@@ -1208,8 +1208,8 @@ export class Battle {
 			}, callbackName));
 		}
 		if (
-			ability.id === 'perfectforesight' && callbackName !== 'onSwitchIn' &&
-			pokemon.m.perfectForesightAbility && pokemon.m.perfectForesightAbility !== 'perfectforesight'
+			['perfectforesight', 'royalvoice'].includes(ability.id) && callbackName !== 'onSwitchIn' &&
+			pokemon.m.perfectForesightAbility && pokemon.m.perfectForesightAbility !== ability.id
 		) {
 			const copiedAbility = this.dex.abilities.get(pokemon.m.perfectForesightAbility);
 			const copiedState = pokemon.m.perfectForesightAbilityState;
@@ -2783,12 +2783,34 @@ export class Battle {
 			}
 		}
 
+		if (this.gameType === 'multi' && this.format.name.startsWith('[Gen 9] Multi 1v2 ')) {
+			this.rebalanceSoloMultiTeam();
+		}
 		if (checkWin && this.checkWin(faintData)) return true;
 
 		if (faintData && length) {
 			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
 		}
 		return false;
+	}
+
+	/** Let either solo active slot draw replacements from the same six-Pokémon pool. */
+	rebalanceSoloMultiTeam() {
+		for (const [receiver, donor] of [[this.p1, this.p3], [this.p3, this.p1]]) {
+			while (donor.pokemonLeft - receiver.pokemonLeft > 1) {
+				const index = donor.pokemon.findIndex((pokemon, i) => i >= donor.active.length && !pokemon.fainted && !pokemon.faintQueued);
+				if (index < 0) break; // The donor's only remaining Pokémon is active.
+				const [pokemon] = donor.pokemon.splice(index, 1);
+				donor.pokemonLeft--;
+				receiver.pokemon.push(pokemon);
+				Object.assign(pokemon, { side: receiver });
+				pokemon.position = receiver.pokemon.length - 1;
+				receiver.pokemonLeft++;
+				for (let i = index; i < donor.pokemon.length; i++) donor.pokemon[i].position = i;
+				this.add('teamsize', donor.id, donor.pokemon.length);
+				this.add('teamsize', receiver.id, receiver.pokemon.length);
+			}
+		}
 	}
 
 	checkWin(faintData?: Battle['faintQueue'][0]) {

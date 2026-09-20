@@ -55,7 +55,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	atlantiswall: {
 		name: "Atlantis Wall",
 		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during rain or on Water Surface or Underwater terrain. Light Clay and those terrains extend it to 8 turns. Critical hits and moves that bypass screens ignore this effect.",
-		shortDesc: "In rain: 5 turns; side takes 0.5x from super-effective hits.",
+		shortDesc: "Rain or Water Surface/Underwater: halves super-effective damage for 5-8 turns.",
 	},
 	aciddownpour: {
 		name: "Acid Downpour",
@@ -265,8 +265,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	attackorder: {
 		name: "Attack Order",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "Has a higher chance for a critical hit and a 50% chance to raise the user's Attack by 1 stage.",
+		shortDesc: "High critical-hit ratio; 50% chance to raise Attack by 1.",
 	},
 	attract: {
 		name: "Attract",
@@ -867,8 +867,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ceaselessedge: {
 		name: "Ceaseless Edge",
-		desc: "If this move is successful, it sets up a layer of Spikes on the opposing side.",
-		shortDesc: "Sets Spikes on the opposing side.",
+		desc: "Has a higher chance for a critical hit. If this move hits, it sets a layer of Spikes on the opposing side.",
+		shortDesc: "High critical-hit ratio; sets Spikes on the opposing side.",
 	},
 	celebrate: {
 		name: "Celebrate",
@@ -1408,8 +1408,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	direclaw: {
 		name: "Dire Claw",
-		desc: "Has a 50% chance to cause the target to either fall asleep, become poisoned, or become paralyzed.",
-		shortDesc: "50% chance to sleep, poison, or paralyze target.",
+		desc: "Has a higher chance for a critical hit and a 30% chance to poison, paralyze, or put the target to sleep, chosen at random. On Wasteland, the status chance becomes 100%.",
+		shortDesc: "High crit; 30% random status (100% on Wasteland).",
 	},
 	disable: {
 		name: "Disable",
@@ -1508,8 +1508,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doublehit: {
 		name: "Double Hit",
-		desc: "Hits twice. The second hit can damage the target after the first breaks its substitute.",
-		shortDesc: "Hits twice.",
+		desc: "Hits twice, with 50 power per hit. The second hit can damage the target after the first breaks its substitute.",
+		shortDesc: "Hits twice, with 50 power per hit.",
 		gen4: {
 			desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
@@ -1585,7 +1585,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonclaw: {
 		name: "Dragon Claw",
-		shortDesc: "30% chance to lower the target's Defense by 1.",
+		desc: "Has a higher chance for a critical hit and a 30% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "High critical-hit ratio; 30% chance to lower Defense by 1.",
 	},
 	dragondance: {
 		name: "Dragon Dance",
@@ -1616,8 +1617,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonrush: {
 		name: "Dragon Rush",
-		desc: "Has a 20% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "20% chance to make the target flinch.",
+		desc: "Has a higher chance for a critical hit and a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active. Accuracy becomes 100 on Dragon's Den.",
+		shortDesc: "High crit; 30% flinch. Doubles damage against Minimize.",
 		gen5: {
 			desc: "Has a 20% chance to make the target flinch.",
 		},
@@ -1656,7 +1657,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	drillpeck: {
 		name: "Drill Peck",
-		shortDesc: "No additional effect.",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical-hit ratio.",
 	},
 	drillrun: {
 		name: "Drill Run",
@@ -1670,8 +1672,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dualchop: {
 		name: "Dual Chop",
-		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
-		shortDesc: "Hits 2 times in one turn.",
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. With Apex Bond, both hits never miss and always critically hit.",
+		shortDesc: "Hits twice; Apex Bond: never misses and always critical.",
 	},
 	dualwingbeat: {
 		name: "Dual Wingbeat",
@@ -1923,8 +1925,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	extremespeed: {
 		name: "Extreme Speed",
-		desc: "No additional effect.",
-		shortDesc: "Nearly always goes first.",
+		desc: "Nearly always goes first. With Sacred Bond, this move's power is multiplied by 1.5 and it always critically hits.",
+		shortDesc: "Nearly always goes first; Sacred Bond: 1.5x power, always critical.",
 		gen4: {
 			shortDesc: "Usually goes first.",
 		},
@@ -1949,7 +1951,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fairywind: {
 		name: "Fairy Wind",
-		shortDesc: "No additional effect.",
+		desc: "Has a 20% chance to make the target flinch.",
+		shortDesc: "20% chance to make the target flinch.",
 	},
 	fakeout: {
 		name: "Fake Out",
@@ -2346,8 +2349,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	freezingglare: {
 		name: "Freezing Glare",
-		desc: "Has a 10% chance to freeze the target.",
-		shortDesc: "10% chance to freeze the target.",
+		desc: "Has a 30% chance to freeze the target.",
+		shortDesc: "30% chance to freeze the target.",
 	},
 	freezyfrost: {
 		name: "Freezy Frost",
@@ -2589,8 +2592,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxgravitas: {
 		name: "G-Max Gravitas",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Gravity begins.",
-		shortDesc: "Base move affects power. Starts Gravity.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, Gravity begins. Each successful use sinks Water Surface to Underwater, Underwater to Midnight Zone, or Corrosive Mist to Corrosive, even if Gravity is already active. These field changes do not occur on New World.",
+		shortDesc: "Base move affects power. Starts Gravity and sinks fields, except New World.",
 	},
 	gmaxhydrosnipe: {
 		name: "G-Max Hydrosnipe",
@@ -2629,7 +2632,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxsandblast: {
 		name: "G-Max Sandblast",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side is prevented from switching for four or five turns (seven turns if the user is holding Grip Claw), even if they have a substitute. Causes damage equal to 1/8 of their maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. They can still switch out if they are holding Shed Shell or use Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends for a target if it leaves the field, or if it uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Power and category depend on the base move. Traps opposing Pokemon for four or five turns (seven with Grip Claw), dealing 1/8 of their maximum HP each turn (1/6 with Binding Band). The effect ends when the user or target leaves the field, or when the target uses Rapid Spin or Substitute successfully. A trapped Pokemon can still switch with Shed Shell or a switching move. This move does not change terrain.",
 		shortDesc: "Base move affects power. Traps and damages foes.",
 	},
 	gmaxsmite: {
@@ -3664,8 +3667,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lifedew: {
 		name: "Life Dew",
-		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up.",
-		shortDesc: "Heals the user and its allies by 1/4 their max HP.",
+		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up. On Water Surface, Underwater, and Midnight Zone, the user and its allies also gain Aqua Ring, even if already at full HP.",
+		shortDesc: "Heals allies by 1/4; grants Aqua Ring on three water fields.",
 	},
 	lightofruin: {
 		name: "Light of Ruin",
@@ -4107,8 +4110,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	metalclaw: {
 		name: "Metal Claw",
-		desc: "Has a 10% chance to raise the user's Attack by 1 stage.",
-		shortDesc: "10% chance to raise the user's Attack by 1.",
+		desc: "Has a 30% chance to raise the user's Attack by 1 stage.",
+		shortDesc: "30% chance to raise the user's Attack by 1.",
 	},
 	metalsound: {
 		name: "Metal Sound",
@@ -4117,8 +4120,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	meteorassault: {
 		name: "Meteor Assault",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "Has a 60% chance to paralyze the target. If this move succeeds and does not knock out the target, the user must recharge on the next turn.",
+		shortDesc: "60% paralysis; recharges next turn unless it gets a KO.",
 	},
 	meteorbeam: {
 		name: "Meteor Beam",
@@ -4537,6 +4540,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has 80 Base Power and a higher chance for a critical hit.",
 		shortDesc: "80 BP. High critical hit ratio.",
 	},
+	nihillight: {
+		name: "Nihil Light",
+		desc: "Hits all adjacent foes, ignoring their evasion and defensive stat changes. Fairy-type targets remain immune to this Dragon-type move.",
+		shortDesc: "Hits adjacent foes; ignores evasion and defensive stat changes.",
+	},
 	nobleroar: {
 		name: "Noble Roar",
 		desc: "Lowers the target's Attack and Special Attack by 1 stage.",
@@ -4765,8 +4773,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	plasmafists: {
 		name: "Plasma Fists",
-		desc: "If this move is successful, causes Normal-type moves to become Electric type this turn.",
-		shortDesc: "Normal moves become Electric type this turn.",
+		desc: "Has a higher chance for a critical hit. If this move succeeds, it turns Normal-type moves into Electric-type moves for the rest of the turn and sets Electric Terrain. If Electric Terrain can be set, this move gains 30% power.",
+		shortDesc: "High crit; sets Electric Terrain and electrifies Normal moves.",
 	},
 	playnice: {
 		name: "Play Nice",
@@ -4939,8 +4947,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	prismaticlaser: {
 		name: "Prismatic Laser",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "Has a 50% chance to put the target to sleep. If this move succeeds and does not knock out the target, the user must recharge on the next turn.",
+		shortDesc: "50% sleep; recharges next turn unless it gets a KO.",
 	},
 	protect: {
 		name: "Protect",
@@ -5432,8 +5440,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockslide: {
 		name: "Rock Slide",
-		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to make the foe(s) flinch.",
+		desc: "Has a 20% chance to make each target flinch.",
+		shortDesc: "20% chance to make the foe(s) flinch.",
 		gen1: {
 			desc: "No additional effect.",
 			shortDesc: "No additional effect.",
@@ -5757,8 +5765,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowforce: {
 		name: "Shadow Force",
-		desc: "Uses the user's higher offensive stat. The user vanishes turn 1 and attacks turn 2. This move breaks protection. When used by Giratina, a successful hit also makes it take 0.7x damage from all sources next turn. Power Herb makes it attack immediately.",
-		shortDesc: "Uses higher offense. Vanishes; breaks Protect. Giratina gains 0.7x damage guard on hit.",
+		desc: "Has a higher chance for a critical hit and uses the user's higher offensive stat. The user vanishes on the first turn and attacks on the second, breaking protection. When used by Giratina, a successful hit also makes it take 0.7x damage from all sources next turn. Power Herb makes it attack immediately.",
+		shortDesc: "High crit; uses higher offense; vanishes, then breaks Protect. Giratina gains 0.7x damage guard.",
 		gen6: {
 			desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		},
@@ -5956,8 +5964,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyattack: {
 		name: "Sky Attack",
-		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges with +4 priority on its actual charge turn and executes at normal priority on the second turn. On the charge turn, the user's Speed rises by 1 stage and cannot be lowered. When attacking from its charge, this move ignores the target's evasion boosts, Reflect, and Aurora Veil. If used instantly through Tailwind, Strong Winds, Power Herb, or another charge-skipping effect, it retains its boosted critical-hit ratio.",
-		shortDesc: "+4 charge: +Spe. Instant use keeps its boosted critical-hit ratio.",
+		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. Its charge turn has +4 priority, raises the user's Speed by 1 stage, and prevents its Speed from being lowered. The attack lands at normal priority on the next turn, ignoring the target's evasion boosts, Reflect, and Aurora Veil. During Tailwind or Strong Winds, it attacks immediately at 90 power with an even higher critical-hit ratio. Power Herb and other charge-skipping effects make it attack immediately at 140 power with that higher critical-hit ratio.",
+		shortDesc: "+4 priority charge: +1 Spe; next turn 140 BP. Tailwind/Strong Winds: instant 90 BP.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
@@ -6329,8 +6337,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiritshackle: {
 		name: "Spirit Shackle",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
-		shortDesc: "Prevents the target from switching out.",
+		desc: "Has a higher chance for a critical hit and prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		shortDesc: "High critical-hit ratio; prevents the target from switching.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		},
@@ -6436,8 +6444,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	steelwing: {
 		name: "Steel Wing",
-		desc: "Has a 10% chance to raise the user's Defense by 1 stage.",
-		shortDesc: "10% chance to raise the user's Defense by 1.",
+		desc: "Has a 30% chance to raise the user's Defense by 1 stage.",
+		shortDesc: "30% chance to raise the user's Defense by 1.",
 	},
 	stickyweb: {
 		name: "Sticky Web",
@@ -6495,8 +6503,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stoneaxe: {
 		name: "Stone Axe",
-		desc: "If this move is successful, it sets Stealth Rock on the opposing side.",
-		shortDesc: "Sets Stealth Rock on the opposing side.",
+		desc: "Has a higher chance for a critical hit. If this move hits, it sets Stealth Rock on the opposing side.",
+		shortDesc: "High critical-hit ratio; sets Stealth Rock on the opposing side.",
 	},
 	stoneedge: {
 		name: "Stone Edge",
@@ -7263,8 +7271,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twinbeam: {
 		name: "Twin Beam",
-		desc: "Hits twice. The second hit can damage the target after the first breaks its substitute.",
-		shortDesc: "Hits twice.",
+		desc: "Hits twice, with 60 power per hit. The second hit can damage the target after the first breaks its substitute.",
+		shortDesc: "Hits twice, with 60 power per hit.",
 	},
 	twineedle: {
 		name: "Twineedle",
@@ -7290,8 +7298,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twister: {
 		name: "Twister",
-		desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
-		shortDesc: "20% chance to make the foe(s) flinch.",
+		desc: "Has a 30% chance to make the target flinch. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
+		shortDesc: "30% chance to make the foe(s) flinch.",
 		gen4: {
 			desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Bounce or Fly.",
 		},
@@ -7371,6 +7379,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Raises the user's Attack, Defense, and Speed by 1 stage.",
 		shortDesc: "Raises the user's Attack, Defense, Speed by 1.",
 	},
+	vileassault: {
+		name: "Vile Assault",
+		desc: "Attacks a target attempting to switch out before it leaves, without doubling this move's 90 power. It cannot miss a switching target. When the target does not switch, this move attacks normally.",
+		shortDesc: "90 power; hits a switching target before it leaves and cannot miss it.",
+	},
 	vinewhip: {
 		name: "Vine Whip",
 		shortDesc: "No additional effect.",
@@ -7415,6 +7428,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Power doubles if the target is asleep. If this move is successful, the target wakes up.",
 		},
 	},
+	wakeupshock: {
+		name: "Wake-Up Shock",
+		desc: "This move has 160 power against a sleeping target and cures its sleep after a successful hit. Against an awake target, it has 80 power and a 30% chance to paralyze it.",
+		shortDesc: "160 power and wakes sleeping targets; otherwise 30% paralysis chance.",
+	},
 	waterfall: {
 		name: "Waterfall",
 		desc: "Has a 20% chance to make the target flinch.",
@@ -7444,7 +7462,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watershuriken: {
 		name: "Water Shuriken",
-		desc: "This 20 Base Power move has +1 priority, an increased critical-hit ratio, and hits two to six times. With Shadow Current, it always critically hits: the first hit has 90 Base Power, followed by one to four 20 Base Power hits, or two to five follow-up hits in Free-For-All. Ash-Greninja with Battle Bond uses 30 Base Power, hits exactly three times, and always critically hits.",
+		desc: "This 20 Base Power move has +1 priority, an increased critical-hit ratio, and hits two to six times. With Shadow Current, it always critically hits: the first hit has 90 Base Power, followed by one to four 20 Base Power hits, or two to five follow-up hits in Free-For-All. Ash-Greninja with Shadow Bond uses 30 Base Power, hits exactly three times, and always critically hits.",
 		shortDesc: "+1 priority. 20 BP, high crit, hits 2-6. Greninja forms have special patterns.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",
@@ -7560,6 +7578,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Stabby Swarm",
 		desc: "Traps opposing Pokemon for 4-5 turns and damages them each turn. In Forest Field, power is 1.5x and Defense falls by 1. Grip Claw extends the trap to 7 turns.",
 		shortDesc: "Traps foes; 1.5x and -1 Def in Forest; Grip Claw extends it.",
+	},
+	injection: {
+		name: "Injection",
+		desc: "Deals Steel-type special damage and restores the user's HP by 50% of the damage dealt. Makes contact.",
+		shortDesc: "Restores HP equal to 50% of damage dealt; makes contact.",
 	},
 	ickyinjection: {
 		name: "Icky Injection",
@@ -7763,4 +7786,3 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 };
-
