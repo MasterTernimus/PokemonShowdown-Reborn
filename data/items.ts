@@ -1,6 +1,16 @@
 /* eslint-disable @stylistic/max-len */
 
 export const Items: import('../sim/dex-items').ItemDataTable = {
+	hydreigonite: {
+		name: "Hydreigonite",
+		spritenum: 0,
+		megaStone: { Hydreigon: "Hydreigon-Mega-X" },
+		itemUser: ["Hydreigon"],
+		onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; },
+		num: 2714,
+		gen: 9,
+		isNonstandard: "Custom",
+	},
 	parasectite: {
 		name: "Parasectite",
 		spritenum: 619,
@@ -1281,6 +1291,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 2665,
 		gen: 9,
 	},
+	arbolivite: {
+		name: "Arbolivite",
+		spritenum: 0,
+		megaStone: { "Arboliva": "Arboliva-Mega" },
+		itemUser: ["Arboliva"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2666,
+		gen: 9,
+	},
 	cloversweet: {
 		name: "Clover Sweet",
 		spritenum: 707,
@@ -2017,8 +2038,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	emboarite: {
 		name: "Emboarite",
 		spritenum: 552,
-		megaStone: { "Emboar": "Emboar-Mega" },
-		itemUser: ["Emboar"],
+		megaStone: { "Emboar": "Emboar-Mega", "Emboar-Reborn": "Emboar-Mega-Reborn" },
+		itemUser: ["Emboar", "Emboar-Reborn"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -2502,6 +2523,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
+	flygonite: {
+		name: "Flygonite",
+		spritenum: 578,
+		megaStone: { "Flygon": "Flygon-Mega" },
+		itemUser: ["Flygon"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2711,
+		gen: 9,
+		isNonstandard: "Future",
+	},
 	flyiniumz: {
 		name: "Flyinium Z",
 		spritenum: 640,
@@ -2772,8 +2805,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	glimmoranite: {
 		name: "Glimmoranite",
 		spritenum: 512,
-		megaStone: { "Glimmora": "Glimmora-Mega" },
-		itemUser: ["Glimmora"],
+		megaStone: { "Glimmora": "Glimmora-Mega", "Glimmora-Aevian": "Glimmora-Aevian-Mega" },
+		itemUser: ["Glimmora", "Glimmora-Aevian"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -2792,6 +2825,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	golisopite: {
 		name: "Golisopite",
+		spritenum: 508,
+		megaStone: { "Golisopod-Aevian": "Golisopod-Aevian-Mega" },
+		itemUser: ["Golisopod-Aevian"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2713,
+		gen: 9,
+		isNonstandard: "Future",
+	},
+	megagolisopite: {
+		name: "Mega Golisopite",
 		spritenum: 508,
 		megaStone: { "Golisopod": "Golisopod-Mega" },
 		itemUser: ["Golisopod"],
@@ -3555,11 +3600,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 241,
 		fling: {
 			basePower: 30,
-		},
-		megaStone: { "Flygon": "Flygon-Mega-Z" },
-		itemUser: ["Flygon"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		num: 85,
 		gen: 1,
@@ -5934,7 +5974,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	dusknoirite: {...{"name":"Dusknoirite","spritenum":619,"megaStone":{"Dusknoir":"Dusknoir-Mega"},"itemUser":["Dusknoir"],"num":11097,"gen":9,"isNonstandard":"Custom","desc":"Allows Dusknoir to Mega Evolve into Mega Dusknoir.","shortDesc":"Allows Dusknoir to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	noctowlite: {...{"name":"Noctowlite","spritenum":619,"megaStone":{"Noctowl":"Noctowl-Mega"},"itemUser":["Noctowl"],"num":11098,"gen":9,"isNonstandard":"Custom","desc":"Allows Noctowl to Mega Evolve into Mega Noctowl.","shortDesc":"Allows Noctowl to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	luxranite: {...{"name":"Luxranite","spritenum":619,"megaStone":{"Luxray":"Luxray-Mega"},"itemUser":["Luxray"],"num":11100,"gen":9,"isNonstandard":"Custom","desc":"Allows Luxray to Mega Evolve into Mega Luxray.","shortDesc":"Allows Luxray to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
-	breloomite: {...{"name":"Breloomite","spritenum":619,"megaStone":{"Breloom":"Breloom-Mega"},"itemUser":["Breloom"],"num":11102,"gen":9,"isNonstandard":"Custom","desc":"Allows Breloom to Mega Evolve into Mega Breloom.","shortDesc":"Allows Breloom to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
+	breloomite: {...{"name":"Breloomite","spritenum":619,"megaStone":{"Breloom":"Breloom-Mega","Breloom-Rejuv":"Breloom-Mega"},"itemUser":["Breloom","Breloom-Rejuv"],"num":11102,"gen":9,"isNonstandard":"Custom","desc":"Allows Breloom and Breloom-Rejuv to Mega Evolve into Mega Breloom.","shortDesc":"Allows Breloom or Breloom-Rejuv to Mega Evolve."}, onTakeItem(item, source) { return !item.megaStone?.[source.species.name] && !item.megaStone?.[source.baseSpecies.baseSpecies]; }},
 	sharpedonite: {
 		name: "Sharpedonite",
 		spritenum: 619,
@@ -7872,6 +7912,22 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 669,
 		gen: 6,
 		isNonstandard: "Past",
+	},
+	typhlosionite: {
+		name: "Typhlosionite",
+		spritenum: 578,
+		megaStone: {
+			"Typhlosion": "Typhlosion-Mega",
+			"Typhlosion-Alt": "Typhlosion-Mega",
+			"Typhlosion-Hisui": "Typhlosion-Mega",
+		},
+		itemUser: ["Typhlosion", "Typhlosion-Alt", "Typhlosion-Hisui"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2712,
+		gen: 9,
+		isNonstandard: "Custom",
 	},
 	ultraball: {
 		name: "Ultra Ball",

@@ -4962,7 +4962,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 90,
 		basePower: 60,
 		basePowerCallback(pokemon, target, move) {
-			if (pokemon.species.id === 'garchompbattlebond') return 60;
+			if (pokemon.species.id === 'garchompbattlebond' && pokemon.hasAbility('apexbond')) return 60;
 			return move.basePower;
 		},
 		category: "Physical",
@@ -4972,7 +4972,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
-			if (pokemon.species.id === 'garchompbattlebond') move.accuracy = true;
+			if (pokemon.species.id === 'garchompbattlebond' && pokemon.hasAbility('apexbond')) {
+				move.accuracy = true;
+				move.willCrit = true;
+			}
 		},
 		multihit: 2,
 		target: "normal",
@@ -7939,7 +7942,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {},
 		isMax: "Orbeetle",
 		self: {
-			pseudoWeather: 'gravity',
+			onHit(pokemon, source, move) {
+				const gravityWasActive = !!this.field.getPseudoWeather('gravity');
+				this.field.addPseudoWeather('gravity', pokemon, move);
+				if (gravityWasActive) this.field.applyGravityTerrainChange(pokemon, move);
+			},
 		},
 		target: "adjacentFoe",
 		type: "Psychic",
@@ -8927,12 +8934,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				} else {
 					this.add('-fieldstart', 'move: Gravity');
 				}
-				if (this.field.isTerrain('watersurfaceterrain')) {
-					this.add('-message', 'The battle sank into the depths!');
-					this.field.changeTerrain('underwaterterrain', source, effect);
-				} else if (this.field.isTerrain('underwaterterrain')) {
-					this.field.changeTerrain('midnightzoneterrain', source, effect);
-				}
+				if (source) this.field.applyGravityTerrainChange(source, effect);
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
@@ -11675,15 +11677,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					status: 'psn',
 				};
 			}
-			if (this.field.isTerrain('watersurfaceterrain')) {
-				move.volatileStatus = 'aquaring';
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'])) {
+				// Handle healing in onHit so full-HP allies can still gain Aqua Ring.
+				delete move.heal;
 			}
 			if (this.field.isTerrain('rainbowterrain') || this.field.isTerrain('holyterrain')) {
 				move.heal = [1, 2];
 			}
 		},
 		onHit(target, source, move) {
-			if (this.field.isTerrain('watersurfaceterrain')) source.addVolatile('aquaring', source, move);
+			if (!this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'])) return;
+			const ringAdded = target.addVolatile('aquaring', source, move);
+			const healed = target.hp < target.maxhp ?
+				this.heal(Math.round(target.baseMaxhp / 4), target, source, move) : false;
+			return !!ringAdded || !!healed;
 		},
 		heal: [1, 4],
 		target: "allies",
@@ -23695,6 +23702,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Fighting",
 		contestType: "Tough",
 	},
+	wakeupshock: {
+		num: 10414,
+		accuracy: 100,
+		basePower: 80,
+		basePowerCallback(pokemon, target, move) {
+			return target.status === 'slp' ? move.basePower * 2 : move.basePower;
+		},
+		category: "Physical",
+		name: "Wake-Up Shock",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onHit(target, source, move) {
+			if (target.status === 'slp') {
+				target.cureStatus();
+			} else if (this.randomChance(3, 10)) {
+				target.trySetStatus('par', source, move);
+			}
+		},
+		target: "adjacentFoe",
+		type: "Electric",
+		contestType: "Cool",
+		isNonstandard: "Custom",
+	},
 	waterfall: {
 		num: 127,
 		accuracy: 100,
@@ -23788,7 +23819,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (pokemon.hasAbility('shadowcurrent')) {
 				return move.hit === 1 ? 90 : 20;
 			}
-			if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') &&
+			if (pokemon.species.id === 'greninjaash' && pokemon.hasAbility('shadowbond') &&
 				!pokemon.transformed) {
 				return 30;
 			}
@@ -23802,7 +23833,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		multihit: [2, 6],
 		critRatio: 2,
 		onModifyMove(move, pokemon) {
-			const isAshGreninja = pokemon.species.id === 'greninjaash' && pokemon.hasAbility('battlebond') && !pokemon.transformed;
+			const isAshGreninja = pokemon.species.id === 'greninjaash' && pokemon.hasAbility('shadowbond') && !pokemon.transformed;
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.basePower = 20;
 				move.multihit = this.gameType === 'freeforall' ? [3, 6] : [2, 5];
@@ -24598,6 +24629,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'partiallytrapped',
 		target: "allAdjacentFoes",
 		type: "Bug",
+	},
+	injection: {
+		num: 10418,
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		name: "Injection",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1, metronome: 1},
+		drain: [1, 2],
+		target: "adjacentFoe",
+		type: "Steel",
+		isNonstandard: "Custom",
 	},
 	ickyinjection: {
 		num: 10026,

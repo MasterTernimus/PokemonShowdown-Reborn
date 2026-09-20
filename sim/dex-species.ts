@@ -119,6 +119,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * `species`. USE `changesFrom` FOR THAT.
 	 */
 	readonly baseSpecies: string;
+	/** A separate regional species rather than an alternate battle form. */
+	readonly standalone?: boolean;
 	/**
 	 * Forme name. If the forme exists,
 	 * `species.name === species.baseSpecies + '-' + species.forme`

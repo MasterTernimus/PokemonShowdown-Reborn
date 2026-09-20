@@ -12,7 +12,7 @@ describe('Salazzle-Mega', function () {
 		const mega = battle.dex.species.get('Salazzle-Mega');
 		assert(base.otherFormes.includes('Salazzle-Mega'));
 		assert.deepEqual(mega.types, ['Poison', 'Fire']);
-		assert.deepEqual(mega.baseStats, {hp: 68, atk: 64, def: 70, spa: 148, spd: 150, spe: 80});
+		assert.deepEqual(mega.baseStats, {hp: 68, atk: 74, def: 70, spa: 148, spd: 80, spe: 140});
 		assert.equal(mega.bst, 580);
 		assert.equal(mega.abilities[0], 'Corrosive Burn');
 		assert.equal(mega.requiredItem, 'Salazzite');

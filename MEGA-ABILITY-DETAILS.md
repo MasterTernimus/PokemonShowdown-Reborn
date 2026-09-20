@@ -32,6 +32,9 @@ This Pokemon has Shell Prison, Regenerator, and Shell Armor's effects. When hit 
 ## Gengar-Mega - Cruel Tag
 Standard ability behavior; see data/text/abilities.ts.
 
+## Typhlosion-Mega - Plasma Eruption
+Fire/Electric, 83/138/85/139/70/130. Typhlosionite Mega Evolves regular, Alt, and Hisuian Typhlosion. Plasma Eruption adds Proficient and Blazing Mane to both Fire and Electric attacks; either attack type has a 50% chance to swap unless the new type is immune. Burn Up and Double Shock remove their respective typings, then force the remaining attack type conversion.
+
 ## Kangaskhan-Mega - Parental Bond
 Cannot be suppressed. This Pokemon has Parental Bond, Tough Claws, Scrappy, and Friend Guard's effects. Its damaging moves become multi-hit moves that hit twice; the second hit deals reduced damage. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, existing multi-hit moves, multi-target moves, or two-turn moves.
 
@@ -109,6 +112,9 @@ This Pokemon's Steel-type moves have 1.5x power. At the end of each turn, its Sp
 
 ## Camerupt-Mega - Caldera Core
 This Pokemon has Magma Armor, Sheer Force, Drought, and Solid Rock's effects. Water- and Ice-type attacks use 0.5x attacking stats against it, and in Dragon's Den it absorbs Fire-type moves.
+
+## Flygon-Mega - Desert Spirit
+Flygon becomes Dragon/Bug with Levitate, Sand Stream, Tinted Lens, and STAB on Ground attacks. Flygonite also offers its Mega-Z form through the alternate Mega option.
 
 ## Flygon-Mega-Z - Tremor
 On switch-in, this Pokemon summons Sandstorm. This Pokemon is immune to Ground-type moves. Sound-based moves used by this Pokemon become physical, use Attack, have 1.5x power, and ignore sound-based Ability immunities. Sound-based moves used by this Pokemon's allies have 1.5x power and use the user's higher offensive stat. This Pokemon's side is immune to its own damaging sound-based moves.
@@ -227,8 +233,8 @@ This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects. Its Gras
 ## Malamar-Mega - Inversion
 On switch-in, this Pokemon sets Inverse Field. Stat changes this Pokemon receives are inverted, except those from Z-Power effects.
 
-## Barbaracle-Mega - Hydra Breaker
-This Pokemon has Hydra Bond and Mold Breaker's effects. Its damaging moves become three-hit attacks, with the second and third hits dealing 30% damage, and its moves ignore Abilities.
+## Barbaracle-Mega - Divine Mockery
+This Pokemon has Hydra Bond, Mold Breaker, Sniper, and Water Bubble's effects. Eligible damaging moves hit three times, with the second and third hits dealing 30% damage, and its moves ignore Abilities. It gains +1 accuracy on entry and its critical hits deal 2.25x damage. Water attacks gain double offensive power and STAB, incoming Fire attacks are halved, and it cannot be burned.
 
 ## Dragalge-Mega - Toxic Renewal
 This Pokemon has Adaptability, Regenerator, and Merciless's effects.

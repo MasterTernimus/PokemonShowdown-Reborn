@@ -49,13 +49,13 @@ require('../dist/lib/repl').Repl.start = noop;
 
 // Start the server.
 // NOTE: This used "server" before when we needed "server"
-require('../dist/server');
+const { readyPromise } = require('../dist/server');
 
-LoginServer.disabled = true;
-Ladders.disabled = true;
-
-before('initialization', function () {
+before('initialization', async function () {
 	this.timeout(0); // Remove timeout limitation
+	await readyPromise;
+	LoginServer.disabled = true;
+	Ladders.disabled = true;
 	process.on('unhandledRejection', err => {
 		// I'd throw the err, but we have a heisenbug on our hands and I'd
 		// rather not have it screw with Travis in the interim

@@ -695,6 +695,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Flying Memory",
 		shortDesc: "Holder's Multi-Attack is Flying type. RKS System gives Gale Wings and Air Lock.",
 	},
+	flygonite: {
+		name: "Flygonite",
+		shortDesc: "Allows Flygon to Mega Evolve into Flygon-Mega or Flygon-Mega-Z.",
+	},
 	flyiniumz: {
 		name: "Flyinium Z",
 		shortDesc: "If holder has a Flying move, this item allows it to use a Flying Z-Move.",
@@ -806,7 +810,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	golisopite: {
 		name: "Golisopite",
-		shortDesc: "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by Golisopod-Aevian, this item allows it to Mega Evolve in battle.",
+	},
+	megagolisopite: {
+		name: "Mega Golisopite",
+		shortDesc: "If held by a regular Golisopod, this item allows it to Mega Evolve in battle.",
 	},
 	golurkite: {
 		name: "Golurkite",
@@ -931,6 +939,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	houndoominite: {
 		name: "Houndoominite",
 		shortDesc: "If held by a Houndoom, this item allows it to Mega Evolve in battle.",
+	},
+	hydreigonite: {
+		name: "Hydreigonite",
+		shortDesc: "Allows Hydreigon to Mega Evolve into Hydreigon-Mega-X.",
 	},
 	iapapaberry: {
 		name: "Iapapa Berry",
@@ -2453,6 +2465,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	tyranitarite: {
 		name: "Tyranitarite",
 		shortDesc: "If held by a Tyranitar, this item allows it to Mega Evolve in battle.",
+	},
+	typhlosionite: {
+		name: "Typhlosionite",
+		shortDesc: "Allows Typhlosion and Typhlosion-Hisui to Mega Evolve.",
 	},
 	ultraball: {
 		name: "Ultra Ball",

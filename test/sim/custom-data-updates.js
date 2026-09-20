@@ -166,8 +166,8 @@ describe('Custom battle data updates', function () {
 		assert.deepEqual(seviper.baseStats, {hp: 75, atk: 110, def: 70, spa: 90, spd: 70, spe: 95});
 		assert.equal(Object.values(seviper.baseStats).reduce((sum, stat) => sum + stat, 0), 510);
 		assert.equal(seviper.bst, 510);
-		assert.deepEqual(dex.species.get('Kingler').baseStats, {hp: 80, atk: 125, def: 115, spa: 60, spd: 60, spe: 75});
-		assert.deepEqual(dex.species.get('Kingler-Gmax').baseStats, {hp: 120, atk: 125, def: 115, spa: 60, spd: 60, spe: 75});
+		assert.deepEqual(dex.species.get('Kingler').baseStats, {hp: 80, atk: 135, def: 115, spa: 60, spd: 80, spe: 75});
+		assert.deepEqual(dex.species.get('Kingler-Gmax').baseStats, {hp: 120, atk: 135, def: 115, spa: 60, spd: 80, spe: 75});
 		assert.equal(dex.species.get('Yanmega').abilities.H, 'Compound Eyes');
 		assert.equal(dex.species.get('Starmie-Mega').baseStats.atk, 100);
 		assert.equal(dex.moves.get('Needle Arm').basePower, 100);

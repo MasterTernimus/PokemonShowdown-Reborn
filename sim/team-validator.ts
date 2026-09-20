@@ -1968,7 +1968,9 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 
 		setHas['move:' + move.id] = true;
-		if (move.id.startsWith('hiddenpower')) {
+		const aevianGastrodonHiddenPower = move.id === 'hiddenpower' &&
+			['gastrodonaevian', 'gastrodoneastaevian'].includes(dex.species.get(set.species).id);
+		if (move.id.startsWith('hiddenpower') && !aevianGastrodonHiddenPower) {
 			return `${set.name}'s move ${move.name} is unavailable.`;
 		}
 

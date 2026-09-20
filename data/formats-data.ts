@@ -5427,6 +5427,10 @@ export const FormatsData: { [k: string]: SpeciesFormatsData } = {
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	arbolivamega: {
+		tier: "Illegal",
+		doublesTier: "Illegal",
+	},
 	capsakid: {
 		tier: "LC",
 	},
@@ -6235,7 +6239,8 @@ const latestFormatUpdates: {[id: string]: any} = {
 	gastrodonaevian: {isNonstandard: "Custom", tier: "OU"},
 	gastrodoneastaevian: {isNonstandard: "Custom", tier: "OU"},
 	mismagiusaevian: {isNonstandard: "Custom", tier: "OU"},
-	drapionaevian: {isNonstandard: "Custom", tier: "OU"},
+	golisopodaevian: {isNonstandard: "Custom", tier: "OU"},
+	drapionrejuv: {isNonstandard: "Custom", tier: "Illegal", doublesTier: "Illegal"},
 	volcaronaaevian: {isNonstandard: "Custom", tier: "OU"},
 	toxtricityaevian: {isNonstandard: "Custom", tier: "OU"},
 	toxtricityaeviangmax: {isNonstandard: "Custom", tier: "Illegal"},

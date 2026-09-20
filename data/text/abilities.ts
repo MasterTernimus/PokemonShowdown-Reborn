@@ -309,14 +309,29 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Battle Bond",
-		desc: "When this Pokemon is a Greninja or Greninja-Bond, it transforms into Ash-Greninja after it knocks out another Pokemon, and knocking out a target restores 1/8 of this Pokemon's maximum HP. This Pokemon takes 0.75x damage from attacks, takes 30% less damage from Fighting Clause Abilities, and those Abilities' bonus damage does not affect it. In Doubles, Multi, or Free-For-All, once per battle, if a move would knock it out from above 1/3 max HP, it survives with 1 HP. This Pokemon's attacks deal 1.3x damage to Pokemon with Royal Decree or Neutralization. In Cold Eclipse, its attacks deal 1.3x damage and it takes 0.6x damage from attacks.",
-		shortDesc: "After a KO, Greninja or Greninja-Bond becomes Ash-Greninja; 0.75x damage from attacks; KO healing.",
+		desc: "After a move KO while another foe remains, Arcanine or Arcanine-Hisui becomes Arcanine-Battle-Bond with Sacred Bond, Garchomp becomes Garchomp-Battle-Bond with Apex Bond, and Greninja or Greninja-Bond becomes Ash-Greninja with Shadow Bond. All four Bond abilities include Filter and Self Sufficient; transformed forms heal 1/8 max HP after later move KOs. Battle Fervor, Ultra Ego, Perfect Ego, and Ultra Instinct skip their conditional move-power boosts against them; their other effects can still apply. Attacks deal 1.3x damage to Royal Decree, Empress, or Neutralization users and another 1.3x in Cold Eclipse. In Doubles, Multi, or Free-For-All, a Bond ability can endure one otherwise fatal move hit from above 1/3 max HP with 1 HP.",
+		shortDesc: "Move KO transforms into a species-specific Bond form; Filter, Self Sufficient, and one KO survival in doubles or larger.",
 		gen8: {
-			desc: "If this Pokemon is a Greninja or Greninja-Bond, it transforms into Ash-Greninja after attacking and knocking out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
-			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
+			desc: "After a move KO while another foe remains, Greninja or Greninja-Bond becomes Ash-Greninja and gains Shadow Bond. Shadow Bond's Water Shuriken hits three times at 30 base power per hit and always critically hits.",
+			shortDesc: "After a KO: becomes Ash-Greninja with Shadow Bond; Water Shuriken hits 3x at 30 power, always critical.",
 		},
 		activate: "  [POKEMON] became fully charged due to its bond with its Trainer!",
-		transform: "[POKEMON] became Ash-Greninja!",
+		transform: "[POKEMON] changed form through Battle Bond!",
+	},
+	shadowbond: {
+		name: "Shadow Bond",
+		desc: "Battle Bond's shared effects plus Proficient and Infiltrator. Ash-Greninja's Water Shuriken hits three times at 30 base power per hit and always critically hits.",
+		shortDesc: "Battle Bond + Proficient + Infiltrator; Water Shuriken is 3 hits at 30 power, always critical.",
+	},
+	apexbond: {
+		name: "Apex Bond",
+		desc: "Battle Bond's shared effects plus Supreme Overlord and Rough Skin. Garchomp-Battle-Bond's Dual Chop never misses and always critically hits.",
+		shortDesc: "Battle Bond + Supreme Overlord + Rough Skin; Dual Chop never misses and always critical.",
+	},
+	sacredbond: {
+		name: "Sacred Bond",
+		desc: "Battle Bond's shared effects plus Magma Armor and Intimidate. Arcanine-Battle-Bond's Extreme Speed has 1.5x power and always critically hits.",
+		shortDesc: "Battle Bond + Magma Armor + Intimidate; Extreme Speed is 1.5x power and always critical.",
 	},
 	beadsofruin: {
 		name: "Beads of Ruin",
@@ -841,8 +856,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandsovereign: {
 		name: "Sand Sovereign",
-		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Dauntless Shield and Solid Rock. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, non-immune foes take Rock damage equal to 1/16 max HP.",
-		shortDesc: "8-turn Sand; Dauntless Shield + Solid Rock; Arenite Wall 5/8 turns; Rock chip.",
+		desc: "On entry, this Pokemon sets Sandstorm for 8 turns. It has Dauntless Shield and Solid Rock. Arenite Wall lasts 5 turns, or 8 turns when extended. Each turn, non-immune foes take Rock damage equal to 1/16 max HP. Only in Free-for-All does Rock type effectiveness scale this chip.",
+		shortDesc: "8-turn Sand; Dauntless Shield + Solid Rock; Rock chip scales by type in FFA.",
 	},
 	tyrantstream: {
 		name: "Tyrant Stream",
@@ -851,8 +866,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	frostsovereign: {
 		name: "Frost Sovereign",
-		desc: "On entry, this Pokemon sets Snow through Snow Warning for 8 turns. It has Ice Body and Filter. Manually used Aurora Veil lasts 8 turns. Each turn, non-immune foes take Ice damage equal to 1/16 max HP.",
-		shortDesc: "8-turn Snow Warning; Ice Body + Filter; manual Veil lasts 8 turns; Ice chip.",
+		desc: "On entry, this Pokemon sets Snow through Snow Warning for 8 turns. It has Ice Body and Filter. Manually used Aurora Veil lasts 8 turns. Each turn, non-immune foes take Ice damage equal to 1/16 max HP. Only in Free-for-All does Ice type effectiveness scale this chip.",
+		shortDesc: "8-turn Snow; Ice Body + Filter; Ice chip scales by type in FFA.",
 	},
 	freezerburn: {
 		name: "Freezer Burn",
@@ -884,7 +899,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Scrappy, Technician, Opportunist, and Limber's effects.",
 		shortDesc: "Scrappy + Technician + Opportunist + Limber.",
 	},
-	royalvoice: {"name":"Royal Voice","desc":"Pixilate + Queenly Majesty + Dream Sickness. Normal moves become Fairy and receive Pixilate power boosts. Blocks opposing priority moves targeting its side. Includes all Dream Sickness effects: ally protection, healing, stat-drop protection and dream shelter.","shortDesc":"Pixilate + Queenly Majesty + Dream Sickness."},
+	royalvoice: {"name":"Royal Voice","desc":"Pixilate + Queenly Majesty + Dream Sickness, plus Perfect Foresight's ability copying. Normal moves become Fairy and receive Pixilate power boosts. Blocks opposing priority moves targeting its side. Includes all Dream Sickness effects: ally protection, healing, stat-drop protection and dream shelter. On activation, copies an opposing Pokemon's Ability, prioritizing an active Speed Ability; otherwise it selects the foe with the higher Attack or Special Attack. The copied Ability's effects apply until this Pokemon leaves battle or loses Royal Voice.","shortDesc":"Pixilate + Queenly Majesty + Dream Sickness; copies a foe's Ability."},
 	perfectforesight: {
 		name: "Perfect Foresight",
 		desc: "Includes Insomnia: prevents sleep and Yawn, cures sleep, and boosts damaging Dark- and Ghost-type moves by 1.3x. On activation, prioritizes opposing Speed abilities whose conditions are met for this Pokemon (Sand Rush, Chlorophyll, Swift Swim, Slush Rush, Surge Surfer, Quick Feet, or Speed Boost). Ties and fallback use the highest Attack or Special Attack. Future Sight queued by this Ability has 90 BP, ignores defensive boosts, screens, and Abilities, and hits Dark-type Pokemon neutrally. If this Pokemon uses a move on opposing Pokemon, is damaged by an opposing attack, or uses Future Sight, Future Sight is queued on the affected opposing slots. Spread moves queue Future Sight on all enemies, and existing Perfect Foresight delayed attacks stack instead of blocking new ones.",
@@ -923,8 +938,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rainsovereign: {
 		name: "Rain Sovereign",
-		desc: "On entry, this Pokemon sets Rain for 8 turns. Its Electric-, Water-, and Flying-type moves receive STAB. Each turn, non-immune foes take Water damage equal to 1/16 max HP.",
-		shortDesc: "8-turn Rain; Electric/Water/Flying STAB; immunity-aware Water chip.",
+		desc: "On entry, this Pokemon sets Rain for 8 turns. Its Electric-, Water-, and Flying-type moves receive STAB. Each turn, non-immune foes take Water damage equal to 1/16 max HP. Only in Free-for-All does Water type effectiveness scale this chip.",
+		shortDesc: "8-turn Rain; Electric/Water/Flying STAB; Water chip scales by type in FFA.",
 	},
 	toxicrenewal: {
 		name: "Toxic Renewal",
@@ -978,8 +993,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	divineintervention: {
 		name: "Divine Intervention",
-		desc: "This Pokemon has Sworn Duty, Friend Guard, and Regenerator's effects.",
-		shortDesc: "Sworn Duty + Friend Guard + Regenerator.",
+		desc: "This Pokemon has Sworn Duty, Friend Guard, Regenerator, Triage, Fluffy, Queen's Guard, Proficient, and Infiltrator's effects. Queen's Guard lowers foes' Attack on entry, reverses this Pokemon's stat changes, and can clear its status at the end of a turn. Its STAB attacks have 1.3x power and its moves bypass substitutes and opposing screens.",
+		shortDesc: "Sworn Duty + Friend Guard + Regenerator + Triage + Fluffy + Queen's Guard + Proficient + Infiltrator.",
 	},
 	auroraresonance: {
 		name: "Aurora Resonance",
@@ -1028,13 +1043,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	furnaceengine: {
 		name: "Furnace Engine",
-		desc: "This Pokemon has Steam Engine, Flame Body, and Self Sufficient's effects. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, blocked by Fire immunities.",
-		shortDesc: "Steam Engine + Flame Body + Self Sufficient; Fire chip.",
+		desc: "This Pokemon has Steam Engine, Flame Body, and Self Sufficient's effects. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, blocked by Fire immunities. Only in Free-for-All does Fire type effectiveness scale this chip.",
+		shortDesc: "Steam Engine + Flame Body + Self Sufficient; Fire chip scales by type in FFA.",
 	},
 	duneterror: {
 		name: "Dune Terror",
-		desc: "This Pokemon has Sand Stream and Shed Skin's effects. During Sandstorm, opposing Pokemon take Ground-type damage equal to 1/16 max HP, blocked by Ground immunities.",
-		shortDesc: "Sand Stream + Shed Skin; Ground chip respects immunities.",
+		desc: "This Pokemon has Sand Stream and Shed Skin's effects. During Sandstorm, opposing Pokemon take Ground-type damage equal to 1/16 max HP, blocked by Ground immunities. Only in Free-for-All does Ground type effectiveness scale this chip.",
+		shortDesc: "Sand Stream + Shed Skin; Ground chip scales by type in FFA.",
 	},
 	heatcoil: {
 		name: "Heat Coil",
@@ -1247,6 +1262,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Verdant Hospitality",
 		desc: "This Pokemon has Friend Guard's effect. On switch-in, it restores 1/8 of its ally's max HP. At the end of each turn, this Pokemon restores 1/8 of its max HP and its ally restores 1/16 of its max HP.",
 		shortDesc: "Friend Guard; heals ally on switch-in; heals self and ally each turn.",
+	},
+	plasmaeruption: {
+		name: "Plasma Eruption",
+		desc: "Proficient and Blazing Mane. Fire and Electric moves have a 50% chance to swap types, unless the target would be immune to the new type. Blazing Mane also boosts Electric moves. After Burn Up removes Fire typing, Fire moves become Electric; after Double Shock removes Electric typing, Electric moves become Fire. The moves that remove typing keep their original type when used.",
+		shortDesc: "Proficient + Blazing Mane; Fire/Electric swap, with forced conversion after losing a type.",
+	},
+	verdantsanctuary: {
+		name: "Verdant Sanctuary",
+		desc: "On entry, sets Grassy Terrain and heals each adjacent ally by 1/4 max HP. Healing received by this Pokemon and its allies is multiplied by 1.3. At the end of each turn, this Pokemon has a 50% chance to cure each adjacent ally's status. Allies also take 3/4 damage from attacks.",
+		shortDesc: "Grassy Surge + Invigorate + Hospitality + Friend Guard.",
 	},
 	echosense: {"name":"Echo Sense","desc":"This Pokemon has Echo Fiend, Frisk, Telepathy, and Infiltrator's effects.","shortDesc":"Echo Fiend + Frisk + Telepathy + Infiltrator."},
 	froststalker: {"name":"Frost Stalker","desc":"Stakeout + Sharpness + Refrigerate. Doubles attacking stats against foes that just entered battle. Slicing moves have 1.5x power except on Cold Eclipse. Eligible Normal moves become Ice with 1.2x power, or 1.5x on Icy and Snowy Mountain fields.","shortDesc":"Stakeout + Sharpness + Refrigerate."},
@@ -1672,8 +1697,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lunarorbit: {
 		name: "Lunar Orbit",
-		desc: "This Pokemon has Magic Bounce, Serene Grace, and Triage. On switch-in, it sets Gravity for 5 turns.",
-		shortDesc: "Magic Bounce + Serene Grace + Triage; sets Gravity for 5 turns.",
+		desc: "This Pokemon has Magic Bounce, Serene Grace, Triage, and Magic Guard. On switch-in or Mega Evolution, it sets Gravity for 5 turns and sinks Water Surface to Underwater, Underwater to Midnight Zone, or Corrosive Mist to Corrosive. These field changes do not occur on New World.",
+		shortDesc: "Magic Bounce + Serene Grace + Triage + Magic Guard; sets Gravity and sinks fields.",
 	},
 	magicguard: {
 		name: "Magic Guard",
@@ -2435,10 +2460,17 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	schooling: {
 		name: "Schooling",
-		desc: "A level 20 or higher Wishiwashi changes to School Form above 1/4 maximum HP. Underwater always forces School Form; Water Surface and Murkwater force it while grounded. It returns to Solo Form at or below 1/4 maximum HP otherwise. While in School Form, it has Hydra Bond, Self Repair, and Filter's effects.",
-		shortDesc: "Changes form by HP and water terrain; School: Hydra Bond + Self Repair + Filter.",
+		desc: "A level 20 or higher Wishiwashi changes to School Form above 1/4 maximum HP. Underwater and Midnight Zone force School Form; Water Surface and Murkwater force it while grounded. It returns to Solo Form at or below 1/4 maximum HP otherwise. While in School Form, it has Hydra Bond, Self Repair, and Mold Breaker's effects.",
+		shortDesc: "Changes form by HP and water terrain; School: Hydra Bond + Self Repair + Mold Breaker.",
 
 		transform: "[POKEMON] formed a school!",
+		transformEnd: "[POKEMON] stopped schooling!",
+	},
+	seviischooling: {
+		name: "Sevii Schooling",
+		desc: "Changes Wishiwashi into its Ghost-type Sevii form, or Ghost/Dragon Sevii Schooling form at level 20 or higher above 1/4 maximum HP. Underwater and Midnight Zone force School Form; Water Surface and Murkwater force it while grounded. The School Form has Hydra Bond, Self Repair, and Mold Breaker's effects.",
+		shortDesc: "Changes Wishiwashi to Sevii form; School: Hydra Bond + Self Repair + Mold Breaker.",
+		transform: "[POKEMON] formed a Sevii school!",
 		transformEnd: "[POKEMON] stopped schooling!",
 	},
 	toxicsink: {
@@ -2537,6 +2569,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Shell Armor",
 		desc: "This Pokemon cannot be struck by critical hits and takes 0.8x damage from attacks. In Fairy Tale or Dragon's Den, it gains 1 Defense on entry; opposing stat drops give +2 Sp. Def.",
 		shortDesc: "No critical hits; takes 0.8x damage; field +1 Def; stat drops give +2 SpD.",
+	},
+	shelltrap: {
+		name: "Shell Trap",
+		desc: "This Pokemon has Shell Armor and Regenerator's effects. It cannot be critically hit, takes 20% less damage, and restores 1/3 max HP when it switches out.",
+		shortDesc: "Shell Armor + Regenerator.",
 	},
 	shielddust: {
 		name: "Shield Dust",
@@ -3546,10 +3583,25 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Infiltrator, Levitate, and Hydra Bond's effects. Dragon Darts and G-Max Spirit Volley use this Pokemon's higher offensive stat. In Free-for-All battles, Dragon Darts and G-Max Spirit Volley hit all opposing Pokemon twice.",
 		shortDesc: "Infiltrator + Levitate + Hydra Bond; higher offensive stat for signature attacks.",
 	},
-	hydrabreaker: {
-		name: "Hydra Breaker",
-		desc: "This Pokemon has Hydra Bond and Mold Breaker's effects.",
-		shortDesc: "Hydra Bond + Mold Breaker.",
+	divinemockery: {
+		name: "Divine Mockery",
+		desc: "This Pokemon has Hydra Bond, Mold Breaker, Sniper, and Water Bubble's effects. Eligible attacks strike three times and ignore opposing Abilities. It gains +1 accuracy on entry and its critical hits deal more damage. Water attacks gain Water Bubble's power and STAB effects; incoming Fire damage is halved, and it cannot be burned.",
+		shortDesc: "Hydra Bond + Mold Breaker + Sniper + Water Bubble.",
+	},
+	truehydra: {
+		name: "True Hydra",
+		desc: "This Pokemon has Hydra Bond, Regenerator, Shed Skin, and Self Sufficient's effects. Eligible damaging moves hit three times, with the second and third hits at 30% damage. It heals 1/3 of its maximum HP on switching out, may shed status and other ailments at the end of a turn, heals 1/16 of its maximum HP each turn, and is immune to Sandstorm and Hail damage.",
+		shortDesc: "Hydra Bond + Regenerator + Shed Skin + Self Sufficient.",
+	},
+	desertspirit: {
+		name: "Desert Spirit",
+		desc: "This Pokemon has Levitate, Sand Stream, and Tinted Lens's effects. It is airborne, summons sandstorm on entry, and deals double damage with resisted attacks. Its Ground-type attacks receive STAB even though it is not Ground-type.",
+		shortDesc: "Levitate + Sand Stream + Tinted Lens; Ground moves get STAB.",
+	},
+	desertshell: {
+		name: "Desert Shell",
+		desc: "This Pokemon has Skill Link, Heatproof, and Sand Stream's effects. Multi-hit moves always hit the maximum number of times and have 1.5x power. Damage from Fire-type moves and burns is halved. Summons sandstorm on entry.",
+		shortDesc: "Skill Link + Heatproof + Sand Stream.",
 	},
 	hydratyrant: {
 		name: "Hydra Tyrant",
@@ -3563,18 +3615,18 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
-		desc: "This Pokemon has Thick Fat and Unaware's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; this Pokemon heals the damage dealt by that chip.",
-		shortDesc: "Thick Fat + Unaware; fixed Grass chip heals the user for damage dealt.",
+		desc: "This Pokemon has Thick Fat and Unaware's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; this Pokemon heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip.",
+		shortDesc: "Thick Fat + Unaware; healing Grass chip scales by type in FFA.",
 	},
 	waterbarrage: {
 		name: "Water Barrage",
-		desc: "This Pokemon has Dual Wield's effects. At the end of each turn, opposing Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, blocked by Water immunities.",
-		shortDesc: "Dual Wield; cycling Water chip respects immunities.",
+		desc: "This Pokemon has Dual Wield's effects. At the end of each turn, opposing Pokemon take cycling Water damage of 1/16, 2/16, then 3/16 max HP, blocked by Water immunities. Only in Free-for-All does Water type effectiveness scale this chip.",
+		shortDesc: "Dual Wield; cycling Water chip scales by type in FFA.",
 	},
 	wildfirecore: {
 		name: "Wildfire Core",
-		desc: "This Pokemon has Dragonize and Magma Armor's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage is blocked by Fire immunities.",
-		shortDesc: "Dragonize + Magma Armor; conditional Fire chip respects immunities.",
+		desc: "This Pokemon has Dragonize and Magma Armor's effects. It is immune to Hail damage. At the end of each turn, opposing Pokemon take Fire-type damage equal to 1/16 max HP, doubled if burned or if this Pokemon used a Fire- or Dragon-type move this turn. This damage is blocked by Fire immunities. Only in Free-for-All does Fire type effectiveness scale this chip.",
+		shortDesc: "Dragonize + Magma Armor; Fire chip scales by type in FFA.",
 	},
 	memoryleak: {
 		name: "Memory Leak",
@@ -3603,8 +3655,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	invigorate: {
 		name: "Invigorate",
-		desc: "Healing received by this Pokemon and its allies is multiplied by 1.2. At the end of each turn, this Pokemon has a 50% chance to cure each adjacent ally's status condition.",
-		shortDesc: "User/allies receive 1.2x healing; 50% to cure ally status each turn.",
+		desc: "Healing received by this Pokemon and its allies is multiplied by 1.3. At the end of each turn, this Pokemon has a 50% chance to cure each adjacent ally's status condition.",
+		shortDesc: "User/allies receive 1.3x healing; 50% to cure ally status each turn.",
 	},
 	swornduty: {
 		name: "Sworn Duty",
@@ -3645,6 +3697,31 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Aevian Frost",
 		desc: "On entry, Donphan permanently transforms into Donphan-Rejuv. This Pokemon also has the effects of Ice Body, Guts, and Filter.",
 		shortDesc: "Transforms Donphan into Donphan-Rejuv; Ice Body + Guts + Filter.",
+	},
+	aeviantoxin: {
+		name: "Aevian Toxin",
+		desc: "On entry, Drapion permanently transforms into Drapion-Rejuv. This Pokemon also has the effects of Strong Jaw, Layered Coat, and Merciless.",
+		shortDesc: "Transforms Drapion into Drapion-Rejuv; Strong Jaw + Layered Coat + Merciless.",
+	},
+	aevianspark: {
+		name: "Aevian Spark",
+		desc: "When Breloom enters battle with this Ability, it changes into Breloom-Rejuv. Its contact moves gain Tough Claws's 1.3x power boost, moves with 60 or less base power gain Technician's 1.5x boost, and contact moves that hit it can trigger Static's 30% paralysis chance.",
+		shortDesc: "Transforms Breloom into Breloom-Rejuv; Tough Claws + Technician + Static.",
+	},
+	aeviangrief: {
+		name: "Aevian Grief",
+		desc: "When Sigilyph enters battle with this Ability, it changes into Sigilyph-Rejuv. It has Flare Boost's power increases, Wonder Skin's reduction of incoming status-move accuracy, and Levitate's Ground immunity.",
+		shortDesc: "Transforms Sigilyph into Sigilyph-Rejuv; Flare Boost + Wonder Skin + Levitate.",
+	},
+	aevianrocket: {
+		name: "Aevian Rocket",
+		desc: "When Veluza enters battle with this Ability, it changes into Veluza-Rejuv. It has Brute Force's Reckless power boost and Rock Head recoil protection, restores 1/3 of its maximum HP on switching out through Regenerator, ignores opposing Abilities with Mold Breaker, and doubles its Speed under Swift Swim's conditions.",
+		shortDesc: "Transforms Veluza into Veluza-Rejuv; Brute Force + Regenerator + Mold Breaker + Swift Swim.",
+	},
+	adaptivecore: {
+		name: "Adaptive Core",
+		desc: "This Pokemon has Download, Defragment, and Self Repair's effects. On entry, Download and Defragment each grant their usual boosts. Its first damaging move always critically hits, its moves cannot miss, it heals at the end of each turn, and switching out cures its status.",
+		shortDesc: "Download + Defragment + Self Repair.",
 	},
 	aevianglacier: {
 		name: "Aevian Glacier",
@@ -3688,8 +3765,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormsovereign: {
 		name: "Storm Sovereign",
-		desc: "On entry, this Pokemon sets changeable Strong Winds for 8 turns and activates Windy Surge. It has Gale Wings and Keen Eye, and non-immune foes take Flying chip equal to 1/16 max HP.",
-		shortDesc: "Windy Surge + Gale Wings + Keen Eye; 8-turn Strong Winds; Flying chip.",
+		desc: "On entry, this Pokemon sets changeable Strong Winds for 8 turns and activates Windy Surge. It has Gale Wings and Keen Eye, and non-immune foes take Flying chip equal to 1/16 max HP. Only in Free-for-All does Flying type effectiveness scale this chip.",
+		shortDesc: "Windy Surge + Gale Wings + Keen Eye; Flying chip scales by type in FFA.",
 	},
 	highnoon: {
 		name: "High Noon",

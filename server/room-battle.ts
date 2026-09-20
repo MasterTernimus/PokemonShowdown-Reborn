@@ -12,7 +12,7 @@
  */
 
 import { execSync } from "child_process";
-import { ProcessManager, type Streams } from '../lib';
+import { ProcessManager, Utils, type Streams } from '../lib';
 import { BattleStream } from "../sim/battle-stream";
 import { RoomGamePlayer, RoomGame } from "./room-game";
 import * as ConfigLoader from './config-loader';
@@ -206,6 +206,7 @@ export class RoomBattleTimer {
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
 
 		for (const player of this.battle.players) {
+			if (this.battle.soloMulti && player === this.battle.p3) continue;
 			player.secondsLeft = this.settings.starting + this.settings.grace;
 			player.turnSecondsLeft = player.secondsLeft;
 			player.dcSecondsLeft = this.settings.dcTimerBank ? DISCONNECTION_BANK_TIME : DISCONNECTION_TIME;
@@ -237,7 +238,10 @@ export class RoomBattleTimer {
 		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
 
 		this.checkActivity();
-		for (const player of this.battle.players) this.nextRequest(player);
+		for (const player of this.battle.players) {
+			if (this.battle.soloMulti && player === this.battle.p3) continue;
+			this.nextRequest(player);
+		}
 		return true;
 	}
 	stop(requester?: User) {
@@ -307,8 +311,9 @@ export class RoomBattleTimer {
 		}
 	}
 	nextRequest(player: RoomBattlePlayer) {
+		if (this.battle.soloMulti && player === this.battle.p3) return;
 		if (player.secondsLeft <= 0) return;
-		if (player.request.isWait) {
+		if (player.request.isWait && !(this.battle.soloMulti && player === this.battle.p1 && !this.battle.p3.request.isWait)) {
 			player.turnSecondsLeft = this.settings.maxPerTurn;
 			return;
 		}
@@ -348,7 +353,8 @@ export class RoomBattleTimer {
 
 		const room = this.battle.room;
 		for (const player of this.battle.players) {
-			if (player.request.isWait) continue;
+			if (this.battle.soloMulti && player === this.battle.p3) continue;
+			if (player.request.isWait && !(this.battle.soloMulti && player === this.battle.p1 && !this.battle.p3.request.isWait)) continue;
 			if (player.knownActive) {
 				player.secondsLeft -= TICK_TIME;
 				player.turnSecondsLeft -= TICK_TIME;
@@ -390,6 +396,7 @@ export class RoomBattleTimer {
 	checkActivity() {
 		if (this.battle.ended) return;
 		for (const player of this.battle.players) {
+			if (this.battle.soloMulti && player === this.battle.p3) continue;
 			const isActive = !!player.active;
 
 			if (isActive === player.knownActive) continue;
@@ -436,7 +443,7 @@ export class RoomBattleTimer {
 		}
 	}
 	checkTimeout() {
-		const players = this.battle.players;
+		const players = this.battle.soloMulti ? this.battle.players.filter(player => player !== this.battle.p3) : this.battle.players;
 		if (players.every(player => player.turnSecondsLeft <= 0)) {
 			if (!this.settings.timeoutAutoChoose || players.every(player => player.secondsLeft <= 0)) {
 				this.battle.room.add(`|-message|All players are inactive.`).update();
@@ -507,6 +514,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	/** Will exist even if the game is unrated, in case it's later forced to be rated */
 	readonly ladder: string;
 	readonly gameType: string | undefined;
+	/** A Multi battle with one person controlling both slots on p1's team. */
+	readonly soloMulti: boolean;
 	readonly challengeType: ChallengeType;
 	/**
 	 * The lower player's rating, for searching purposes.
@@ -539,6 +548,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	turn = 0;
 	rqid = 1;
 	requestCount = 0;
+	soloControlsShown = false;
 	options: RoomBattleOptions;
 	frozen?: boolean;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
@@ -552,6 +562,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		this.format = options.format;
 		this.gameType = format.gameType;
+		this.soloMulti = format.gameType === 'multi' && format.name.startsWith('[Gen 9] Multi 1v2 ');
 		this.challengeType = options.challengeType || 'challenge';
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
@@ -587,8 +598,20 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		for (let i = 0; i < this.playerCap; i++) {
 			const p = options.players[i];
-			const player = this.addPlayer(p?.user || null, p || null);
+			const team = this.soloMulti && p?.team ? Teams.unpack(p.team) : null;
+			const playerOpts = team ? { ...p, team: Teams.pack(team.slice(0, 3)) } : p;
+			const player = this.addPlayer(p?.user || null, playerOpts || null);
 			if (!player) throw new Error(`failed to create player ${i + 1} in ${room.roomid}`);
+		}
+		if (this.soloMulti) {
+			const team = Teams.unpack(options.players[0].team || '');
+			if (!team || team.length !== 6) throw new Error('Multi 1v2 requires a six-Pokémon solo team.');
+			this.p3.name = this.p1.name;
+			this.p3.hasTeam = true;
+			void this.stream.write(`>player p3 ${JSON.stringify({
+				name: this.p1.name, avatar: `${options.players[0].user.avatar}`,
+				team: Teams.pack(team.slice(3)),
+			})}`);
 		}
 		if (options.inputLog) {
 			let scanIndex = 0;
@@ -608,7 +631,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	checkActive() {
-		const active = (this.started && !this.ended && this.players.every(p => p.active));
+		const active = (this.started && !this.ended && this.players.every(p => (this.soloMulti && p === this.p3) || p.active));
 		Rooms.global.battleCount += (active ? 1 : 0) - (this.active ? 1 : 0);
 		this.room.active = active;
 		this.active = active;
@@ -619,43 +642,118 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			user.popup(`Your battle is currently paused, so you cannot move right now.`);
 			return;
 		}
-		const player = this.playerTable[user.id];
+		this.chooseForPlayer(this.playerTable[user.id], data);
+	}
+	chooseSolo(user: User, data: string) {
+		if (!this.soloMulti || user.id !== this.p1.id || !this.started || this.ended) return;
+		if (this.frozen) return user.popup('Your battle is currently paused.');
+		if (data.startsWith('undo')) return this.undoForPlayer(this.p3, data);
+		this.chooseForPlayer(this.p3, data);
+	}
+	chooseForPlayer(player: RoomBattlePlayer | undefined, data: string) {
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
+		const sendError = (message: string) => {
+			if (this.soloMulti && player === this.p3) this.p1.getUser()?.popup(message);
+			else player.sendRoom(`|error|[Invalid choice] ${message}`);
+		};
 		const request = player.request;
 		if (request.isWait !== false && request.isWait !== true) {
-			player.sendRoom(`|error|[Invalid choice] There's nothing to choose`);
+			sendError(`There's nothing to choose`);
 			return;
 		}
 		const allPlayersWait = this.players.every(p => !!p.request.isWait);
 		if (allPlayersWait || // too late
 			(rqid && rqid !== `${request.rqid}`)) { // WAY too late
-			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
+			sendError(`Sorry, too late to make a different move; the next turn has already started`);
 			return;
 		}
 		request.isWait = true;
 		request.choice = choice;
 
 		void this.stream.write(`>${player.slot} ${choice}`);
+		if (this.soloMulti && player === this.p3) this.sendSoloControls();
 	}
 	override undo(user: User, data: string) {
-		const player = this.playerTable[user.id];
+		this.undoForPlayer(this.playerTable[user.id], data);
+	}
+	undoForPlayer(player: RoomBattlePlayer | undefined, data: string) {
 		const [, rqid] = data.split('|', 2);
 		if (!player) return;
+		const sendError = (message: string) => {
+			if (this.soloMulti && player === this.p3) this.p1.getUser()?.popup(message);
+			else player.sendRoom(`|error|[Invalid choice] ${message}`);
+		};
 		const request = player.request;
 		if (request.isWait !== true) {
-			player.sendRoom(`|error|[Invalid choice] There's nothing to cancel`);
+			sendError(`There's nothing to cancel`);
 			return;
 		}
 		const allPlayersWait = this.players.every(p => !!p.request.isWait);
 		if (allPlayersWait || // too late
 			(rqid && rqid !== `${request.rqid}`)) { // WAY too late
-			player.sendRoom(`|error|[Invalid choice] Sorry, too late to cancel; the next turn has already started`);
+			sendError(`Sorry, too late to cancel; the next turn has already started`);
 			return;
 		}
 		request.isWait = false;
 
 		void this.stream.write(`>${player.slot} undo`);
+		if (this.soloMulti && player === this.p3) this.sendSoloControls();
+	}
+	/** The solo player's second slot has its own simulator request and private controls. */
+	sendSoloControls(connection?: Connection | User) {
+		if (!this.soloMulti || !this.p1 || !this.p3 || !this.started) return;
+		const recipient = connection || this.p1.getUser();
+		if (!recipient) return;
+		const tracker = this.p3.request;
+		if (!tracker.request) return;
+		const request = JSON.parse(tracker.request);
+		const button = (label: string, choice: string) => (
+			`<form data-submitsend="/msgroom ${this.roomid},/solochoice ${choice}|${tracker.rqid}" style="display:inline-block;margin:2px">` +
+			`<button class="button" type="submit">${Utils.escapeHTML(label)}</button></form>`
+		);
+		let controls = '';
+		if (request.teamPreview) {
+			const team = request.side.pokemon;
+			controls = team.map((pokemon: { details: string }, i: number) => {
+				const order = [i + 1, ...team.map((_: unknown, index: number) => index + 1).filter((slot: number) => slot !== i + 1)];
+				return button(`Lead ${pokemon.details}`, `team ${order.join(',')}`);
+			}).join('');
+		} else if (request.forceSwitch) {
+			controls = request.side.pokemon.map((pokemon: { details: string, condition: string, active: boolean }, i: number) => (
+				!pokemon.active && !pokemon.condition.includes(' fnt') && !pokemon.condition.startsWith('0 ') ?
+					button(`Switch to ${pokemon.details}`, `switch ${i + 1}`) : ''
+			)).join('');
+		} else if (request.active?.[0]) {
+			const active = request.active[0];
+			controls = active.moves.map((move: { move: string, disabled?: boolean, target?: string }, i: number) => {
+				if (move.disabled) return '';
+				const name = move.move;
+				const choice = `move ${i + 1}`;
+				if (['normal', 'adjacentFoe', 'any'].includes(move.target || '')) {
+					return button(`${name} → ${this.p2.name}`, `${choice} +1`) +
+						button(`${name} → ${this.p4.name}`, `${choice} +2`) +
+						(move.target === 'any' ? button(`${name} → ally`, `${choice} -1`) : '');
+				}
+				if (['adjacentAlly', 'adjacentAllyOrSelf'].includes(move.target || '')) {
+					return button(`${name} → ally`, `${choice} -1`) +
+						(move.target === 'adjacentAllyOrSelf' ? button(`${name} → self`, `${choice} -2`) : '');
+				}
+				return button(name, choice);
+			}).join('');
+			controls += request.side.pokemon.map((pokemon: { details: string, condition: string, active: boolean }, i: number) => (
+				!pokemon.active && !pokemon.condition.includes(' fnt') && !pokemon.condition.startsWith('0 ') ?
+					button(`Switch to ${pokemon.details}`, `switch ${i + 1}`) : ''
+			)).join('');
+		}
+		const status = tracker.isWait === true ? 'Choice sent. Waiting for the other players.' :
+			tracker.isWait ? 'Waiting for the battle.' : controls;
+		const undo = tracker.isWait === true ? button('Change second-slot choice', 'undo') : '';
+		const html = `<div class="broadcast broadcast-blue"><strong>Your second Pokémon (p3)</strong><br />` +
+			`${status}${undo}<br /><small>For Mega, Z, Max, or Tera choices, use /solochoice move [number] [target] [mega|zmove|dynamax|terastallize].</small></div>`;
+		const command = connection || !this.soloControlsShown ? 'uhtml' : 'uhtmlchange';
+		recipient.sendTo(this.roomid, `|${command}|solomulti-${this.roomid}|${html}`);
+		this.soloControlsShown = true;
 	}
 	override joinGame(user: User, slot?: SideID, playerOpts?: { team?: string }) {
 		if (user.id in this.playerTable) {
@@ -663,7 +761,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return false;
 		}
 
-		const validSlots = this.players.filter(player => !player.id).map(player => player.slot);
+		const validSlots = this.players.filter(player => !player.id && !(this.soloMulti && player === this.p3)).map(player => player.slot);
 
 		if (slot && !validSlots.includes(slot)) {
 			user.popup(`This battle already has a user in slot ${slot}.`);
@@ -690,7 +788,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 
 		this.setPlayerUser(this[slot], user, playerOpts);
-		if (this.players.every(player => player.id)) {
+		if (this.players.every(player => player.id || this.soloMulti && player === this.p3)) {
 			// all players have joined, start the battle
 			// onCreateBattleRoom crashes if some users are unavailable at start of battle
 			// what do we do??? no clue but I guess just exclude them from the array for now
@@ -816,11 +914,20 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 					choice: '',
 				};
 				this.requestCount++;
-				player?.sendRoom(`|request|${requestJSON}`);
-				if (!request.update) this.timer.nextRequest(player);
+				if (this.soloMulti && player === this.p3) {
+					this.sendSoloControls();
+				} else {
+					player?.sendRoom(`|request|${requestJSON}`);
+					if (!request.update) this.timer.nextRequest(player);
+				}
 				break;
 			}
-			player?.sendRoom(lines[2]);
+			if (this.soloMulti && player === this.p3) {
+				this.p1.getUser()?.popup(lines[2].replace(/^\|error\|/, ''));
+				this.sendSoloControls();
+			} else {
+				player?.sendRoom(lines[2]);
+			}
 			break;
 		}
 
@@ -973,6 +1080,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			if (request.choice) data += `\n|sentchoice|${request.choice}`;
 			(connection || user).sendTo(this.roomid, data);
 		}
+		if (this.soloMulti && player === this.p1) this.sendSoloControls(connection || user);
 		if (!this.started) {
 			this.sendInviteForm(connection || user);
 		}
@@ -1072,6 +1180,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.setPlayerUser(player, null);
 		}
 		void this.stream.write(`>forcelose ${player.slot}`);
+		if (this.soloMulti && player === this.p1) {
+			this.p3.eliminated = true;
+			void this.stream.write('>forcelose p3');
+		}
 		return true;
 	}
 
@@ -1170,6 +1282,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: { team?: string }) {
+		if (this.soloMulti && player === this.p4 && playerOpts?.team) {
+			playerOpts = { ...playerOpts, team: Teams.pack((Teams.unpack(playerOpts.team) || []).slice(0, 3)) };
+		}
 		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
 			this.room.auth.set(player.id, '+');
 		}
@@ -1240,12 +1355,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			Rooms.global.onCreateBattleRoom(users as User[], this.room, { rated: this.rated });
 			this.started = true;
 		} else if (delayStart === 'multi') {
-			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);
+			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a ${this.soloMulti ? '1 vs 2' : '4-player'} challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);
 		}
 	}
 
 	invitesFull() {
-		return this.players.every(player => player.id || player.invite);
+		return this.players.every(player => player.id || player.invite || this.soloMulti && player === this.p3);
 	}
 	/** true = send to every player; falsy = send to no one */
 	sendInviteForm(connection: Connection | User | null | boolean) {
@@ -1256,7 +1371,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (!connection) return;
 
 		const playerForms = this.players.map(player => (
-			player.id ? (
+			this.soloMulti && player === this.p3 ? (
+				`<form><label>Player 3: <strong>${Utils.escapeHTML(this.p1.name)}</strong> (solo player's second Pokémon)</label></form>`
+			) : player.id ? (
 				`<form><label>Player ${player.num}: <strong>${player.name}</strong></label></form>`
 			) : player.invite ? (
 				`<form data-submitsend="/msgroom ${this.roomid},/uninvitebattle ${player.invite}"><label>Player ${player.num}: <strong>${player.invite}</strong> (invited) <button type="submit">Uninvite</button></label></form>`

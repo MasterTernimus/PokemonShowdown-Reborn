@@ -1103,6 +1103,14 @@ export const commands: Chat.ChatCommands = {
 		if (room.game.checkChat) this.checkChat();
 		room.game.choose(user, target);
 	},
+	solochoice(target, room, user) {
+		room = this.requireRoom();
+		if (!room.battle?.soloMulti) throw new Chat.ErrorMessage('This command is for 1v2 Multi battles.');
+		room.battle.chooseSolo(user, target);
+	},
+	solochoicehelp: [
+		'/solochoice [move/switch/team/undo] - Choose for your second Pokémon in a 1v2 Multi battle.',
+	],
 	choosehelp: [
 		`/choose [text] - Make a choice for the currently active game.`,
 	],

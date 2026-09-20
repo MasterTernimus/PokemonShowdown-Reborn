@@ -10,6 +10,16 @@ function start(ability = 'noability', species = 'Mew', foeAbility = 'noability',
 	return battle.p1.active[0];
 }
 describe('Midnight Zone', () => {
+	for (const id of ['psychic', 'aurasphere', 'dragonpulse', 'sludgebomb', 'energyball', 'hypervoice', 'airslash', 'bugbuzz', 'ancientpower']) {
+		it(`does not apply the physical pressure penalty to ${id}`, () => {
+			const p = start();
+			const foe = battle.p2.active[0];
+			const move = battle.dex.getActiveMove(id);
+			battle.runEvent('ModifyMove', p, foe, move, move);
+			assert.equal(move.category, 'Special');
+			assert.equal(battle.runEvent('BasePower', p, foe, move, 100, true), 100);
+		});
+	}
 	for (const [type, ability, exempt] of [['Water', 'noability', true], ['Psychic', 'noability', false], ['Psychic', 'swiftswim', true], ['Psychic', 'schooling', true], ['Psychic', 'steelworker', true]]) {
 		it(`checks attacker type and ability for physical damage: ${type}/${ability}`, () => {
 			const p = start(ability); p.setType(type);

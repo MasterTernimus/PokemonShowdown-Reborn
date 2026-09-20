@@ -8,6 +8,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	richard: "Jellicent-Azzy",
 	venomrush: "Venom Armor",
 	ironclad: "Armorize",
+	hydrabreaker: "Divine Mockery",
 	corsolareborn: "Corsola-Alt",
 	granbullreborn: "Granbull-Alt",
 	miloticreborn: "Milotic-Alt",

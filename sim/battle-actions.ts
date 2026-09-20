@@ -182,6 +182,9 @@ export class BattleActions {
 		if (pokemon.species.id === 'donphanrejuv' && pokemon.ability !== 'aevianfrost') {
 			pokemon.formeChange('Donphan', null, false, '0');
 		}
+		if (pokemon.species.id === 'drapionrejuv' && pokemon.ability !== 'aeviantoxin') {
+			pokemon.formeChange('Drapion', null, false, '0');
+		}
 		if (pokemon.species.id === 'druddigonrejuv' && pokemon.ability !== 'aevianbolt') {
 			const baseSpecies = this.dex.species.get('Druddigon');
 			pokemon.baseSpecies = baseSpecies;
@@ -714,13 +717,29 @@ export class BattleActions {
 			'auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb',
 		]);
 	}
+	canChainHitTarget(target: Pokemon, pokemon: Pokemon, move: ActiveMove) {
+		if (!target.hp || target.fainted || target.isProtected() || target.isSemiInvulnerable() ||
+			!this.battle.validTarget(target, pokemon, move.target) || !target.runImmunity(move)) return false;
+		if (move.ignoreAbility) return true;
+		const immuneAbilities: [string, string[]][] = [
+			['Water', ['auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb']],
+			['Electric', ['lightningrod', 'motordrive', 'voltabsorb']],
+			['Fire', ['wellbakedbody']],
+			['Grass', ['sapsipper']],
+			['Ground', ['eartheater', 'treasuretitan']],
+			['Ice', ['safeharbor']],
+		];
+		if (immuneAbilities.some(([type, abilities]) =>
+			this.battle.movehasType(move, type) && target.hasAbility(abilities))) return false;
+		return !(this.battle.movehasType(move, 'Fire') &&
+			!this.battle.field.isTerrain('coldeclipseterrain') && target.hasAbility('flashfire'));
+	}
 	redirectWaterShurikenFromProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		if (move.id !== 'watershuriken') return;
 		for (const [i, target] of targets.entries()) {
 			if (!target?.isProtected() || this.waterShurikenTargetHasWaterImmunity(target)) continue;
 			const candidates = pokemon.foes().filter(foe =>
-				foe && foe.hp && !foe.fainted && foe !== target && this.battle.validTarget(foe, pokemon, move.target)
-			);
+				foe && foe !== target && this.canChainHitTarget(foe, pokemon, move));
 			if (!candidates.length) continue;
 			const newTarget = this.battle.sample(candidates);
 			this.battle.add('-message', `${move.name} slipped past Protect toward ${newTarget.name}!`);
@@ -1048,14 +1067,14 @@ export class BattleActions {
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			(move as any).spilloverDamageModifier = undefined;
 			if (hit > 1 && move.multihitType === 'dualwield' && !move.dualWieldFullPower && !(move as any).fallenStarSpread) {
-				const livingFoes = pokemon.foes().filter(foe => foe?.hp && !foe.fainted);
+				const livingFoes = pokemon.foes().filter(foe => this.canChainHitTarget(foe, pokemon, move));
 				if (!livingFoes.length) break;
 				targets = [this.battle.sample(livingFoes)];
 				damage = [0];
 				if (targets[0] !== originalMultihitTarget) move.smartTarget = false;
 			}
 			if (hit > 1 && move.dualWieldFullPower && !(move as any).fallenStarSpread) {
-				const livingFoes = pokemon.foes().filter(foe => foe?.hp && !foe.fainted);
+				const livingFoes = pokemon.foes().filter(foe => this.canChainHitTarget(foe, pokemon, move));
 				if (!livingFoes.length) break;
 				const otherFoes = livingFoes.filter(foe => foe !== originalMultihitTarget);
 				targets = [this.battle.sample(otherFoes.length ? otherFoes : livingFoes)];
@@ -1079,7 +1098,7 @@ export class BattleActions {
 			}
 			const targetsHadHP = targetsCopy.map(target => !!target && target.hp > 0);
 			const target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
-			if (target && hit > 1 && move.multihitType === 'dualwield' && target !== originalMultihitTarget) {
+			if (target && hit > 1 && target !== originalMultihitTarget) {
 				if (this.battle.runEvent('Invulnerability', target, pokemon, move) === false) {
 					this.battle.add('-miss', pokemon, target);
 					this.battle.runEvent('Miss', pokemon, target, move);
@@ -1269,26 +1288,21 @@ export class BattleActions {
 		if (!parentalLike && !move.multihit) return null;
 		if (this.battle.gameType === 'freeforall') {
 			const targets = pokemon.foes().filter(target =>
-				target && target !== originalTarget && target.hp && !target.fainted && !target.isProtected() &&
-				!target.isSemiInvulnerable()
-			);
+				target !== originalTarget && this.canChainHitTarget(target, pokemon, move));
 			if (!targets.length) return null;
 			(move as any).spilloverDamageModifier = move.multihitType === 'parentalbond' ? 0.8 : 0.7;
 			return this.battle.sample(targets);
 		}
 		if (this.battle.gameType === 'multi') {
 			const targets = pokemon.foes().filter(target =>
-				target && target !== originalTarget && target.hp && !target.fainted && !target.isProtected() &&
-				!target.isSemiInvulnerable()
-			);
+				target !== originalTarget && this.canChainHitTarget(target, pokemon, move));
 			if (!targets.length) return null;
 			(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.8) : 0.7;
 			return this.battle.sample(targets);
 		}
 		const ally = originalTarget.side.active.find(target =>
-			target && target !== originalTarget && target.hp && !target.fainted && !target.isProtected() &&
-			!target.isSemiInvulnerable() && !target.isAlly(pokemon)
-		);
+			target && target !== originalTarget && !target.isAlly(pokemon) &&
+			this.canChainHitTarget(target, pokemon, move));
 		if (!ally) return null;
 		(move as any).spilloverDamageModifier = parentalLike ? (move.multihitType === 'hydrabond' ? 0.3 : 0.8) : 0.7;
 		return ally;
@@ -1433,8 +1447,8 @@ export class BattleActions {
 		}
 		if (!leftoverDamage) return;
 		const spilloverTargets = targets.filter((target): target is Pokemon => (
-			!!target && !knockedOut.has(target) &&
-			!!target.hp && !target.fainted && !target.isAlly(source)
+			!!target && !knockedOut.has(target) && !target.isAlly(source) &&
+			this.canChainHitTarget(target, source, move)
 		));
 		if (!spilloverTargets.length) return;
 		const damage = Math.max(1, Math.floor(leftoverDamage / spilloverTargets.length));
@@ -2314,6 +2328,8 @@ export class BattleActions {
 		// FIXME: Change to species.name when champions comes
 		megaEvolution = item.megaStone[species.baseSpecies];
 		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;
+		// These two Golisopod lines use different stones. Do not fall back to a form from the wrong line.
+		if (species.id === 'golisopod' || species.id === 'golisopodaevian') return null;
 		const megaFormes = species.otherFormes?.filter(forme => this.dex.species.get(forme).isMega);
 		if (megaFormes?.length && item.megaStone) {
 			const fallbackMega = this.dex.species.get(megaFormes[0]);
@@ -2333,6 +2349,9 @@ export class BattleActions {
 		}
 		if (pokemon.baseSpecies.name === 'Banette' && pokemon.getItem().id === 'banettite') {
 			return 'Banette-Mega-Z';
+		}
+		if (pokemon.baseSpecies.id === 'flygon' && pokemon.getItem().id === 'flygonite') {
+			return 'Flygon-Mega-Z';
 		}
 		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega-Alt', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (
