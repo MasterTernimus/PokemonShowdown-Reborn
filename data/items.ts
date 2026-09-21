@@ -1,5 +1,7 @@
 /* eslint-disable @stylistic/max-len */
 
+import { ENABLE_MEGA_HYDREIGON_X } from './disabled-custom-content';
+
 export const Items: import('../sim/dex-items').ItemDataTable = {
 	hydreigonite: {
 		name: "Hydreigonite",
@@ -8708,3 +8710,5 @@ const redundantItemIds = [
 ] as ID[];
 
 for (const itemId of redundantItemIds) delete Items[itemId];
+
+if (!ENABLE_MEGA_HYDREIGON_X) delete Items.hydreigonite;

@@ -441,8 +441,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	queensguard: {
 		name: "Queen's Guard",
-		desc: "This Pokemon has Contrary, Shed Skin, and Intimidate's effects.",
-		shortDesc: "Contrary + Shed Skin + Intimidate.",
+		desc: "This Pokemon has Contrary, Shed Skin, Intimidate, Infiltrator, and Proficient's effects. Its stat changes are reversed, it lowers opposing Attack on entry, and Shed Skin can clear ailments and restore HP. Its moves bypass substitutes and opposing screens, and attacks matching its type have 1.3x power.",
+		shortDesc: "Contrary + Shed Skin + Intimidate + Infiltrator + Proficient.",
 	},
 	corrosivetouch: {"name":"Corrosive Touch","desc":"Technician + Poison Touch + Corrosion. Moves with 60 or less power receive a 1.5x boost (80 or less on Factory Field). Contact attacks have a 30% chance to poison. Can poison Poison- and Steel-types; Poison attacks can hit Steel-types. Poisoning a foe lowers its Defense and Special Defense by 1 stage. Includes Corrosion field effects. Grass attacks receive a 1.5x same-type attack bonus.","shortDesc":"Technician + Poison Touch + Corrosion; Grass STAB."},
 	corrosion: {
@@ -993,8 +993,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	divineintervention: {
 		name: "Divine Intervention",
-		desc: "This Pokemon has Sworn Duty, Friend Guard, Regenerator, Triage, Fluffy, Queen's Guard, Proficient, and Infiltrator's effects. Queen's Guard lowers foes' Attack on entry, reverses this Pokemon's stat changes, and can clear its status at the end of a turn. Its STAB attacks have 1.3x power and its moves bypass substitutes and opposing screens.",
-		shortDesc: "Sworn Duty + Friend Guard + Regenerator + Triage + Fluffy + Queen's Guard + Proficient + Infiltrator.",
+		desc: "This Pokemon has Sworn Duty, Friend Guard, Regenerator, and Fluffy's effects.",
+		shortDesc: "Sworn Duty + Friend Guard + Regenerator + Fluffy.",
 	},
 	auroraresonance: {
 		name: "Aurora Resonance",
@@ -1265,8 +1265,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	plasmaeruption: {
 		name: "Plasma Eruption",
-		desc: "Proficient and Blazing Mane. Fire and Electric moves have a 50% chance to swap types, unless the target would be immune to the new type. Blazing Mane also boosts Electric moves. After Burn Up removes Fire typing, Fire moves become Electric; after Double Shock removes Electric typing, Electric moves become Fire. The moves that remove typing keep their original type when used.",
-		shortDesc: "Proficient + Blazing Mane; Fire/Electric swap, with forced conversion after losing a type.",
+		desc: "Proficient boosts same-type attacks by 1.3x. Contact attackers have Static's chance to be paralyzed and Flame Body's chance to be burned. Fire moves may become Electric, and Electric moves may become Fire (50% chance each), unless the new type would make the target immune. After Burn Up removes Fire typing, Fire moves always become Electric; after Double Shock removes Electric typing, Electric moves always become Fire. Burn Up and Double Shock themselves keep their original type.",
+		shortDesc: "Proficient + Static + Flame Body; Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
 	},
 	verdantsanctuary: {
 		name: "Verdant Sanctuary",
@@ -3585,8 +3585,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	divinemockery: {
 		name: "Divine Mockery",
-		desc: "This Pokemon has Hydra Bond, Mold Breaker, Sniper, and Water Bubble's effects. Eligible attacks strike three times and ignore opposing Abilities. It gains +1 accuracy on entry and its critical hits deal more damage. Water attacks gain Water Bubble's power and STAB effects; incoming Fire damage is halved, and it cannot be burned.",
-		shortDesc: "Hydra Bond + Mold Breaker + Sniper + Water Bubble.",
+		desc: "This Pokemon has Hydra Bond, Mold Breaker, and Sniper's effects. Eligible attacks gain Hydra Bond's extra hits and ignore opposing Abilities. It gains +1 accuracy on entry and its critical hits deal more damage. Water attacks receive STAB even without Water typing.",
+		shortDesc: "Hydra Bond + Mold Breaker + Sniper; Water STAB.",
 	},
 	truehydra: {
 		name: "True Hydra",

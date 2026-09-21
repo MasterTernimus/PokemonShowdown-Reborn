@@ -64,7 +64,9 @@ describe('Typhlosionite and Plasma Eruption', () => {
 		const [holder, foe] = start();
 		const ability = holder.getAbility();
 		assert(holder.hasAbility('proficient'));
-		assert(holder.hasAbility('blazingmane'));
+		assert(holder.hasAbility('static'));
+		assert(holder.hasAbility('flamebody'));
+		assert(!holder.hasAbility('blazingmane'));
 		const previousChance = battle.randomChance;
 		battle.randomChance = () => true;
 		const fireMove = battle.dex.getActiveMove('flamethrower');
@@ -90,14 +92,15 @@ describe('Typhlosionite and Plasma Eruption', () => {
 		battle.randomChance = previousChance;
 	});
 
-	it('extends Blazing Mane to Electric attacks without changing ordinary Blazing Mane', () => {
+	it('keeps Proficient without Blazing Mane power, extra hits, or priority', () => {
 		const [holder, foe] = start();
 		const electricMove = battle.dex.getActiveMove('thunderbolt');
-		assert.equal(battle.runEvent('BasePower', holder, foe, electricMove, 100), 195);
+		assert.equal(battle.runEvent('BasePower', holder, foe, electricMove, 100), 130);
+		assert.equal(battle.runEvent('BasePower', holder, foe, battle.dex.getActiveMove('shadowball'), 100), 100);
 		battle.singleEvent('PrepareHit', holder.getAbility(), holder.abilityState, holder, foe, electricMove);
-		assert.equal(electricMove.multihit, 2);
+		assert.equal(electricMove.multihit, undefined);
 		holder.hp = Math.floor(holder.maxhp / 2);
-		assert.equal(battle.runEvent('ModifyPriority', holder, foe, electricMove, 0), 1);
+		assert.equal(battle.runEvent('ModifyPriority', holder, foe, electricMove, 0), 0);
 		battle.destroy();
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Typhlosion', ability: 'Blazing Mane', moves: ['splash', 'thunderbolt'] },
@@ -109,6 +112,20 @@ describe('Typhlosionite and Plasma Eruption', () => {
 		const ordinaryFoe = battle.p2.active[0];
 		assert.equal(battle.runEvent('BasePower', ordinary, ordinaryFoe,
 			battle.dex.getActiveMove('thunderbolt'), 100), 100);
+	});
+
+	it('applies Static and Flame Body independently when hit by contact', () => {
+		const [holder, foe] = start();
+		const contactMove = battle.dex.getActiveMove('tackle');
+		battle.randomChance = () => true;
+		battle.singleEvent('DamagingHit', holder.getAbility(), holder.abilityState, holder, foe, contactMove, 10);
+		assert.equal(foe.status, 'par');
+		foe.clearStatus();
+		let attempt = 0;
+		battle.randomChance = () => ++attempt === 2;
+		battle.singleEvent('DamagingHit', holder.getAbility(), holder.abilityState, holder, foe, contactMove, 10);
+		assert.equal(attempt, 2);
+		assert.equal(foe.status, 'brn');
 	});
 
 	it('forces Fire into Electric after Burn Up and Electric into Fire after Double Shock', () => {

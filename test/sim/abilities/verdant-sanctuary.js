@@ -3,6 +3,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
+const { TeamValidator } = require('../../../dist/sim/team-validator');
 
 let battle;
 
@@ -13,6 +14,13 @@ describe('Verdant Sanctuary Mega Arboliva', () => {
 	});
 
 	it('has the requested Mega profile and evolves only with Arbolivite', () => {
+		const learnset = Dex.species.getLearnsetData('arboliva').learnset;
+		assert.deepEqual(learnset.forestscurse, ['9M']);
+		assert.equal(learnset.forestcurse, undefined);
+		assert.equal(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([
+			{ species: 'Arboliva', item: 'Arbolivite', moves: ["Forest's Curse", 'Protect'] },
+			{ species: 'Mew', moves: ['Splash'] },
+		]), null);
 		const mega = Dex.species.get('Arboliva-Mega');
 		assert.deepEqual(mega.types, ['Grass', 'Normal']);
 		assert.deepEqual(mega.baseStats, { hp: 78, atk: 69, def: 135, spa: 135, spd: 154, spe: 39 });

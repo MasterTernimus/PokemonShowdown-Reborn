@@ -99373,7 +99373,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			facade: ["9M"],
 			flail: ["9L20"],
 			fling: ["9M"],
-			forestcurse: ["9M"],
+			forestscurse: ["9M"],
 			gigadrain: ["9M"],
 			gigaimpact: ["9M"],
 			grassknot: ["9M"],
