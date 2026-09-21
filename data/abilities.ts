@@ -3039,8 +3039,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	queensguard: {
 		onBasePowerPriority: 22,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.effect.id === 'queensguard') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
+			return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
+		onModifyMove(move) { return this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move); },
 		onStart(pokemon) { return this.dex.abilities.get('intimidate').onStart?.call(this, pokemon); },
 		onChangeBoost(boost, target, source, effect) { return this.dex.abilities.get('contrary').onChangeBoost?.call(this, boost, target, source, effect); },
 		onResidual(pokemon) { return this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon); },
@@ -6184,25 +6185,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	divineintervention: {
 		onStart(pokemon) {
 			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
-			this.dex.abilities.get('queensguard').onStart?.call(this, pokemon);
-		},
-		onBasePowerPriority: 22,
-		onBasePower(basePower, attacker, defender, move) {
-			return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
-		},
-		onChangeBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('queensguard').onChangeBoost?.call(this, boost, target, source, effect);
-		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			return this.dex.abilities.get('queensguard').onResidual?.call(this, pokemon);
-		},
-		onModifyPriority(priority, pokemon, target, move) {
-			return this.dex.abilities.get('triage').onModifyPriority?.call(this, priority, pokemon, target, move);
-		},
-		onModifyMove(move) {
-			return this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move);
 		},
 		onAnyModifyDamage(damage, source, target, move) {
 			if (target !== this.effectState.target && target.isAlly(this.effectState.target)) {
@@ -7602,18 +7584,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-message', 'Plasma Eruption turned Electricity into Fire!');
 			}
 		},
-		onBasePowerPriority: 8,
+		onBasePowerPriority: 22,
 		onBasePower(basePower, attacker, defender, move) {
-			this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
-			this.dex.abilities.get('blazingmane').onBasePower?.call(this, basePower, attacker, defender, move);
-			if (this.movehasType(move, 'Electric')) return this.chainModify(1.5);
+			return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
-		onModifyPriority(priority, pokemon, target, move) {
-			if (pokemon.hp <= pokemon.maxhp / 2 && move.category !== 'Status' &&
-				this.movehasType(move, ['Fire', 'Electric'])) return priority + 1;
+		onStart(pokemon) {
+			this.dex.abilities.get('flamebody').onStart?.call(this, pokemon);
 		},
-		onPrepareHit(source, target, move) {
-			return this.dex.abilities.get('blazingmane').onPrepareHit?.call(this, source, target, move);
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('static').onDamagingHit?.call(this, damage, target, source, move);
+			this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move);
 		},
 		flags: {},
 		name: "Plasma Eruption",
@@ -8931,11 +8911,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
 			this.dex.abilities.get('sniper').onStart?.call(this, pokemon);
-			this.dex.abilities.get('waterbubble').onStart?.call(this, pokemon);
 		},
 		onModifyMove(move, source, target) {
 			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
-			this.dex.abilities.get('waterbubble').onModifyMove?.call(this, move);
+			if (move.category !== 'Status' && this.movehasType(move, 'Water')) move.forceSTAB = true;
 			this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source);
 		},
 		onSourceModifySecondaries(secondaries, target, source, move) {
@@ -8947,26 +8926,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('sniper').onModifyDamage?.call(this, damage, source, target, move);
 		},
-		onModifyAtk(atk, attacker, defender, move) {
-			return this.dex.abilities.get('waterbubble').onModifyAtk?.call(this, atk, attacker, defender, move);
-		},
-		onModifySpA(atk, defender, attacker, move) {
-			return this.dex.abilities.get('waterbubble').onModifySpA?.call(this, atk, defender, attacker, move);
-		},
-		onSourceModifyAtkPriority: 5,
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			return this.dex.abilities.get('waterbubble').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
-		},
-		onSourceModifySpAPriority: 5,
-		onSourceModifySpA(atk, attacker, defender, move) {
-			return this.dex.abilities.get('waterbubble').onSourceModifySpA?.call(this, atk, attacker, defender, move);
-		},
-		onUpdate(pokemon) { return this.dex.abilities.get('waterbubble').onUpdate?.call(this, pokemon); },
-		onSetStatus(status, target, source, effect) {
-			return this.dex.abilities.get('waterbubble').onSetStatus?.call(this, status, target, source, effect);
-		},
-		onImmunity(type, pokemon) { return this.dex.abilities.get('waterbubble').onImmunity?.call(this, type, pokemon); },
-		onResidual(pokemon) { return this.dex.abilities.get('waterbubble').onResidual?.call(this, pokemon); },
 		flags: { breakable: 1 },
 		name: "Divine Mockery",
 		rating: 5,

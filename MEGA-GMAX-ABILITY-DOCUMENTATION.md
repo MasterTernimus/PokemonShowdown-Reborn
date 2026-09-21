@@ -159,7 +159,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - **Rapid Response:** Speed is multiplied by 1.5 and Special Attack by 1.2 until the first damaging move is used.
 - **Violent Rush:** Speed is multiplied by 1.5 and Attack by 1.2 until the first damaging move is used.
 - **Dusk Drive:** Precision, Opportunist, and Battle Fervor.
-- **Queen's Guard:** Contrary, Shed Skin, and Multiscale.
+- **Queen's Guard:** Contrary + Shed Skin + Intimidate + Infiltrator + Proficient.
 - **Raging Current:** Swift Swim, Regenerator, and Stamina.
 - **Storm Circuit:** Electric Surge, Lightning Rod, and Levitate.
 - **Terra Resolve:** Stamina, Rocky Payload, and Self Sufficient.

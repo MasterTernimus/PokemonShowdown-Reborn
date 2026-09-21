@@ -189,7 +189,7 @@ Standard ability behavior.
 While this Pokemon is active, the power of Dark-type moves used by active Pokemon is multiplied by 1.33.
 
 ## Serperior-Mega - Queen's Guard
-This Pokemon has Contrary's effect and cannot flinch. When Contrary causes this Pokemon's stats to be raised, it restores 1/16 of its maximum HP.
+This Pokemon has Contrary, Shed Skin, Intimidate, Infiltrator, and Proficient's effects. Its stat changes are reversed, it lowers opposing Attack on entry, and Shed Skin can clear ailments and restore HP. Its moves bypass substitutes and opposing screens, and attacks matching its type have 1.3x power.
 
 ## Emboar-Mega - Burning Ego
 This Pokemon has Ultra Ego, Brute Force, and Magma Armor built in. Recoil moves receive the established Brute Force power effect without recoil damage, and Water- and Ice-type attacks are weakened against this Pokemon.
@@ -198,7 +198,7 @@ This Pokemon has Ultra Ego, Brute Force, and Magma Armor built in. Recoil moves 
 This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage. This Pokemon also has Power Drill's effect, boosting drill moves by 1.5x.
 
 ## Audino-Mega - Divine Intervention
-This Pokemon has Friend Guard and Regenerator's effects.
+This Pokemon has Sworn Duty, Friend Guard, Regenerator, and Fluffy's effects.
 
 ## Scolipede-Mega - Venom Bastion
 This Pokemon has Shell Armor's effect. Its Bug-type moves have 1.5x power, and contact moves used against it deal 0.75x damage.
@@ -234,7 +234,7 @@ This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects. Its Gras
 On switch-in, this Pokemon sets Inverse Field. Stat changes this Pokemon receives are inverted, except those from Z-Power effects.
 
 ## Barbaracle-Mega - Divine Mockery
-This Pokemon has Hydra Bond, Mold Breaker, Sniper, and Water Bubble's effects. Eligible damaging moves hit three times, with the second and third hits dealing 30% damage, and its moves ignore Abilities. It gains +1 accuracy on entry and its critical hits deal 2.25x damage. Water attacks gain double offensive power and STAB, incoming Fire attacks are halved, and it cannot be burned.
+This Pokemon has Hydra Bond, Mold Breaker, and Sniper's effects. Eligible attacks gain Hydra Bond's extra hits and ignore opposing Abilities. It gains +1 accuracy on entry and its critical hits deal more damage. Water attacks receive STAB even without Water typing.
 
 ## Dragalge-Mega - Toxic Renewal
 This Pokemon has Adaptability, Regenerator, and Merciless's effects.

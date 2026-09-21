@@ -1,3 +1,5 @@
+import { ENABLE_MEGA_HYDREIGON_X } from './disabled-custom-content';
+
 export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	bulbasaur: {
 		num: 1,
@@ -23482,6 +23484,12 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		isCosmeticForme: true,
 	},
 };
+
+if (!ENABLE_MEGA_HYDREIGON_X) {
+	delete Pokedex.hydreigonmegax;
+	Pokedex.hydreigon.otherFormes = [];
+	Pokedex.hydreigon.formeOrder = ['Hydreigon'];
+}
 
 const latestSpeciesUpdates: {[id: string]: any} = {
 	breloom: {
