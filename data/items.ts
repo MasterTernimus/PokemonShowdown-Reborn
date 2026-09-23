@@ -2828,8 +2828,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	golisopite: {
 		name: "Golisopite",
 		spritenum: 508,
-		megaStone: { "Golisopod-Aevian": "Golisopod-Aevian-Mega" },
-		itemUser: ["Golisopod-Aevian"],
+		megaStone: { "Golisopod": "Golisopod-Mega", "Golisopod-Aevian": "Golisopod-Aevian-Mega" },
+		itemUser: ["Golisopod", "Golisopod-Aevian"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},

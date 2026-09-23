@@ -50,13 +50,26 @@ describe('Midnight Zone', () => {
 			assert.equal(p.maxhp - p.hp, Math.floor(p.baseMaxhp * fraction));
 		});
 	}
-	for (const ability of ['waterveil', 'dryskin', 'stormdrain', 'steelworker', 'schooling', 'magicguard']) {
+	for (const ability of ['waterveil', 'dryskin', 'stormdrain', 'steelworker', 'schooling', 'seviischooling', 'magicguard']) {
 		it(`${ability} prevents pressure damage`, () => {
 			const p = start(ability);
 			battle.makeChoices('move splash', 'move splash');
 			assert.equal(p.hp, p.maxhp);
 		});
 	}
+	it('Ghost types avoid pressure damage without receiving Water healing', () => {
+		const p = start(); p.setType(['Ghost', 'Steel']); p.hp = 100;
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.hp, 100);
+	});
+	it('Sevii Schooling counts as Schooling without granting school-only components to solo forms', () => {
+		const p = start('seviischooling');
+		assert(p.hasAbility('schooling'));
+		assert(p.hasAbility(['schooling', 'hydrabond']));
+		assert(!p.hasAbility('hydrabond'));
+		const move = battle.dex.getActiveMove('tackle');
+		assert.equal(battle.runEvent('BasePower', p, battle.p2.active[0], move, 100, true), 100);
+	});
 	it('Water heals 1/16 and Dry Skin adds 1/10 exactly once', () => {
 		const p = start('dryskin'); p.setType('Water'); p.hp = 100;
 		battle.makeChoices('move splash', 'move splash');
@@ -69,7 +82,7 @@ describe('Midnight Zone', () => {
 		assert(battle.log.some(l => l.includes('The water pressure hurt')));
 		assert(battle.log.some(l => l.includes('The intense water pressure healed')));
 	});
-	for (const [ability, modifier] of [['noability', 0.25], ['schooling', 1], ['steelworker', 1], ['swiftswim', 2], ['propellertail', 0.5]]) {
+	for (const [ability, modifier] of [['noability', 0.25], ['schooling', 1], ['seviischooling', 1], ['steelworker', 1], ['swiftswim', 2], ['propellertail', 0.5]]) {
 		it(`${ability} has the correct speed multiplier`, () => {
 			const p = start(ability);
 			assert.equal(battle.runEvent('ModifySpe', p, null, null, 100), 100 * modifier);

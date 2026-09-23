@@ -7077,7 +7077,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Alt",
 		types: ["Grass", "Dark"],
 		baseStats: { hp: 75, atk: 160, def: 70, spa: 105, spd: 70, spe: 90 },
-		abilities: { 0: "Sand Rush", 1: "Scarecrow", H: "Chlorophyll" },
+		abilities: { 0: "Scarecrow", 1: "Solar Rush", H: "Storm Drain" },
 		heightm: 1.3,
 		weightkg: 77.4,
 		color: "Green",
@@ -16540,7 +16540,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 148,
 		color: "Gray",
 		eggGroups: ["Bug", "Water 3"],
-		requiredItem: "Mega Golisopite",
+		requiredItems: ["Golisopite", "Mega Golisopite"],
 		gen: 9,
 	},
 	golisopodaevianmega: {

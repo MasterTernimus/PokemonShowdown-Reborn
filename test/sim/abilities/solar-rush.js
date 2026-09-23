@@ -11,6 +11,8 @@ describe('Solar Rush', function () {
 		assert.deepEqual(battle.dex.species.get('Cacturne').abilities, {
 			0: 'Scarecrow', 1: 'Solar Rush', H: 'Storm Drain',
 		});
+		assert.deepEqual(battle.dex.species.get('Cacturne-Alt').abilities,
+			battle.dex.species.get('Cacturne').abilities);
 	});
 
 	it('combines Sand Rush and Chlorophyll', function () {
