@@ -2288,11 +2288,12 @@ riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			resuscitation: ['selfrepair', 'magicguard'],
 			shieldsdown: ['shellarmor', 'selfrepair', 'crumblingshell'],
 			schooling: ['hydrabond', 'selfrepair', 'moldbreaker'],
-			seviischooling: ['hydrabond', 'selfrepair', 'moldbreaker'],
+			seviischooling: ['schooling', 'hydrabond', 'selfrepair', 'moldbreaker'],
 			};
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		if (['schooling', 'seviischooling'].includes(this.ability) &&
-			abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
+			!abilityids.some(id => id === this.ability || id === 'schooling') &&
+			abilityids.some(id => id !== 'schooling' && abilityAliases[this.ability]?.includes(id)) &&
 			!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) return false;
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
 			!(['perfectforesight', 'royalvoice'].includes(this.ability) && this.m.perfectForesightAbility &&

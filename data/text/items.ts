@@ -810,7 +810,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	golisopite: {
 		name: "Golisopite",
-		shortDesc: "If held by Golisopod-Aevian, this item allows it to Mega Evolve in battle.",
+		shortDesc: "Allows Golisopod or Golisopod-Aevian to Mega Evolve into its own Mega form.",
 	},
 	megagolisopite: {
 		name: "Mega Golisopite",

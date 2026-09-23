@@ -115,7 +115,7 @@ export const MidnightZone: TerrainData = {
 		},
 		onResidualOrder: 28,
 		onResidual(pokemon) {
-			if (!pokemon.hasType('Water') && !pokemon.hasAbility(['waterveil', 'dryskin', 'stormdrain', 'steelworker', 'schooling', 'magicguard'])) {
+			if (!pokemon.hasType(['Water', 'Ghost']) && !pokemon.hasAbility(['waterveil', 'dryskin', 'stormdrain', 'steelworker', 'schooling', 'magicguard'])) {
 				const divisor = pokemon.hasType(['Steel', 'Ice', 'Fire', 'Rock']) ? 4 : 10;
 				if (this.damage(pokemon.baseMaxhp / divisor, pokemon)) {
 					this.add('-message', `The water pressure hurt ${pokemon.name}!`);

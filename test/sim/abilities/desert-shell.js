@@ -11,18 +11,18 @@ describe('Aevian Mega Golisopod and Desert Shell', () => {
 		battle = null;
 	});
 
-	it('keeps both Golisopod lines separate and assigns each its own stone', () => {
+	it('keeps both Golisopod lines separate with compatible Mega stones', () => {
 		const standard = Dex.species.get('Golisopod');
 		const aevian = Dex.species.get('Golisopod-Aevian');
 		const standardMega = Dex.species.get('Golisopod-Mega');
 		const aevianMega = Dex.species.get('Golisopod-Aevian-Mega');
 		assert.deepEqual(standard.otherFormes, ['Golisopod-Mega']);
 		assert.deepEqual(aevian.otherFormes, ['Golisopod-Aevian-Mega']);
-		assert.equal(standardMega.requiredItem, 'Mega Golisopite');
+		assert.deepEqual(standardMega.requiredItems, ['Golisopite', 'Mega Golisopite']);
 		assert.equal(aevianMega.requiredItem, 'Golisopite');
 		assert.deepEqual(Dex.items.get('Mega Golisopite').megaStone, {Golisopod: 'Golisopod-Mega'});
 		assert.deepEqual(Dex.items.get('Golisopite').megaStone,
-			{'Golisopod-Aevian': 'Golisopod-Aevian-Mega'});
+			{Golisopod: 'Golisopod-Mega', 'Golisopod-Aevian': 'Golisopod-Aevian-Mega'});
 		assert.deepEqual(aevianMega.types, ['Bug', 'Ground']);
 		assert.deepEqual(aevianMega.baseStats, {hp: 75, atk: 160, def: 155, spa: 60, spd: 140, spe: 40});
 		assert.equal(aevianMega.bst, 630);
@@ -34,7 +34,7 @@ describe('Aevian Mega Golisopod and Desert Shell', () => {
 	for (const [species, item, expected] of [
 		['Golisopod', 'Mega Golisopite', 'Golisopod-Mega'],
 		['Golisopod-Aevian', 'Golisopite', 'Golisopod-Aevian-Mega'],
-		['Golisopod', 'Golisopite', null],
+		['Golisopod', 'Golisopite', 'Golisopod-Mega'],
 		['Golisopod-Aevian', 'Mega Golisopite', null],
 	]) {
 		it(`${species} with ${item} Mega Evolves only into ${expected || 'no form'}`, () => {
