@@ -2133,7 +2133,7 @@ export class Pokemon {
 			soulstrike: [],
 			mountainhunger: ['thickfat', 'gluttony', 'earlybird'],
 			astralwatcher: ['prankster', 'telepathy', 'defragment', 'frisk'],
-			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce'],
+			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce', 'prankster'],
 			lunarorbit: ['magicbounce', 'serenegrace', 'triage', 'magicguard'],
 			territorial: ['unnerve', 'unaware', 'toughclaws'],
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],

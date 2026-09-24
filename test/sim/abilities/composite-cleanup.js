@@ -391,7 +391,7 @@ describe('Composite ability cleanup', function () {
 		battle.makeChoices('team 1', 'team 1');
 		const pokemon = battle.p1.active[0];
 		const composites = {
-			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce'],
+			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce', 'prankster'],
 			apexpredator: ['relicarmor', 'precision', 'windrider'],
 			alloycore: ['magicguard', 'selfsufficient', 'stalwart'],
 			ancientbloom: ['effectspore', 'selfsufficient'],
