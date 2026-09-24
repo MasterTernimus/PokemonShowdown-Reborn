@@ -54,6 +54,47 @@ describe('Flygonite and Desert Spirit', () => {
 		battle.makeChoices('move splash megax', 'move splash');
 		assert.equal(battle.p1.active[0].species.id, 'flygonmegaz');
 		assert.equal(battle.p1.active[0].ability, 'tremor');
+		assert.equal(battle.field.weather, '');
+		const flygon = battle.p1.active[0];
+		const foe = battle.p2.active[0];
+		for (const component of ['levitate', 'resonanceforce', 'sandforce']) {
+			assert(flygon.hasAbility(component), `Missing ${component}`);
+		}
+		assert.equal(flygon.isGrounded(), null);
+		assert.equal(flygon.runImmunity('Ground'), false);
+		assert.equal(flygon.runStatusImmunity('sandstorm'), false);
+		assert.equal(battle.runEvent('ModifySTAB', flygon, foe, battle.dex.getActiveMove('bugbuzz'), 1), 1.5);
+		const soundMove = battle.dex.getActiveMove('bugbuzz');
+		battle.singleEvent('ModifyMove', flygon.getAbility(), flygon.abilityState, soundMove, flygon, foe);
+		assert.equal(soundMove.category, 'Special');
+		assert.equal(soundMove.ignoreAbility, false);
+		assert.equal(soundMove.overrideOffensiveStat,
+			flygon.getStat('atk') >= flygon.getStat('spa') ? 'atk' : 'spa');
+		assert.equal(battle.runEvent('BasePower', flygon, foe, soundMove, 100), 150);
+		assert.equal(battle.runEvent('BasePower', flygon, foe, battle.dex.getActiveMove('earthquake'), 100), 100);
+		battle.field.setWeather('sandstorm');
+		assert.equal(battle.runEvent('BasePower', flygon, foe, battle.dex.getActiveMove('earthquake'), 100), 130);
+		assert.equal(battle.runEvent('BasePower', flygon, foe, battle.dex.getActiveMove('hypervoice'), 100), 150);
+	});
+
+	it('boosts allied sound moves without doubling the holder\'s boost', () => {
+		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [[
+			{ species: 'Flygon', item: 'Flygonite', moves: ['splash'] },
+			{ species: 'Mew', moves: ['hypervoice'] },
+		], [
+			{ species: 'Mew', moves: ['splash'] },
+			{ species: 'Mew', moves: ['splash'] },
+		]]);
+		battle.makeChoices('team 1, 2', 'team 1, 2');
+		battle.makeChoices('move splash megax, move hypervoice', 'move splash, move splash');
+		const flygon = battle.p1.active[0];
+		const ally = battle.p1.active[1];
+		const foe = battle.p2.active[0];
+		assert.equal(flygon.ability, 'tremor');
+		assert.equal(battle.runEvent('BasePower', ally, foe, battle.dex.getActiveMove('hypervoice'), 100), 150);
+		assert.equal(battle.runEvent('BasePower', flygon, foe, battle.dex.getActiveMove('hypervoice'), 100), 150);
+		assert.equal(battle.singleEvent('AnyTryHit', flygon.getAbility(), flygon.abilityState,
+			ally, flygon, battle.dex.getActiveMove('hypervoice')), null);
 	});
 
 	it('grants Levitate, Ground STAB, and Tinted Lens', () => {

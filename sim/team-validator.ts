@@ -14,6 +14,7 @@ import { Tags } from '../data/tags';
 import { Teams } from './teams';
 import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
+import { AEVIAN_GRIEF_MOVES } from '../data/aevian-grief-moves';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -803,6 +804,14 @@ export class TeamValidator {
 		if (!set.moves?.length) {
 			problems.push(`${name} has no moves (it must have at least one to be usable).`);
 			set.moves = [];
+		}
+		if (toID(outOfBattleSpecies.baseSpecies) === 'sigilyph' && ability.id === 'aeviangrief') {
+			for (const moveName of set.moves) {
+				const move = dex.moves.get(moveName);
+				if (move.exists && !AEVIAN_GRIEF_MOVES.has(move.id)) {
+					problems.push(`${name} can't use ${move.name} with Aevian Grief.`);
+				}
+			}
 		}
 		if (set.moves.length > ruleTable.maxMoveCount) {
 			problems.push(`${name} has ${set.moves.length} moves, which is more than the limit of ${ruleTable.maxMoveCount}.`);

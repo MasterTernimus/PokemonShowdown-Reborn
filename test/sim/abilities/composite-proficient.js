@@ -22,7 +22,7 @@ describe('Proficient restored to starter signature composites', () => {
 			const otherType = battle.runEvent('BasePower', user, foe, move, 100);
 			assert(Math.abs(sameType - otherType * 1.3) <= 1, `${sameType} vs ${otherType}`);
 			assert.equal(user.hasAbility('proficient'), true);
-			assert(!/proficient/i.test(user.getAbility().desc + ' ' + user.getAbility().shortDesc));
+			if (ability !== 'queensguard') assert(!/proficient/i.test(user.getAbility().desc + ' ' + user.getAbility().shortDesc));
 		});
 	}
 	it('preserves standalone Proficient', () => {

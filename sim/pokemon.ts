@@ -2078,14 +2078,24 @@ export class Pokemon {
 	mightyjaw: ['proficient'],
 			blazingmane: ['proficient'],
 			plasmaeruption: ['proficient', 'static', 'flamebody'],
+			gigavolt: ['moldbreaker', 'lightningrod', 'static'],
+			verdantedge: ['chlorophyll', 'invigorate', 'sharpness', 'grasspelt'],
+			permafrost: ['icebody', 'icescales', 'refrigerate'],
+			glacialheart: ['thermalexchange', 'icebody', 'toughclaws', 'stalwart'],
+			tidalwave: ['waterabsorb', 'hydration', 'regenerator', 'raindish'],
+			livewire: ['transistor', 'voltabsorb', 'quickfeet', 'ironbarbs'],
+			kindledfury: ['fluffy', 'guts', 'flashfire', 'bruteforce', 'reckless', 'rockhead'],
 	verdanthospitality: ['proficient'],
 	verdantsanctuary: ['grassysurge', 'invigorate', 'hospitality', 'friendguard'],
 	fortressshell: ['proficient'],
 	waterbarrage: ['proficient'],
 	wildfirecore: ['proficient'],
-	pollenbloom: ['proficient'],
+	pollenbloom: ['proficient', 'thickfat'],
 			ironclad: ['armorize'],
 			apexpredator: ['relicarmor', 'precision', 'windrider'],
+			tyrantdomain: ['relicarmor', 'supremeoverlord', 'selfsufficient'],
+			auroradomain: ['relicarmor', 'refrigerate', 'selfsufficient'],
+			royalscales: ['marvelscale', 'filter', 'dragonize', 'selfsufficient'],
 			aeviandream: ['baddreams', 'shedskin', 'toughclaws'],
 				wingedwraith: ['infiltrator', 'galewings'],
 				toxicsink: ['effectspore', 'invigorate'],
@@ -2181,6 +2191,7 @@ export class Pokemon {
 			soultag: ['soulfire', 'shadowtag'],
 			deserttyrant: ['sandstream'],
 			desertspirit: ['levitate', 'sandstream', 'tintedlens'],
+			tremor: ['levitate', 'resonanceforce', 'sandforce'],
 			desertshell: ['skilllink', 'heatproof', 'sandstream'],
 			riptideclaws: ['swiftswim', 'toughclaws', 'shellarmor', 'moldbreaker'],
 			fossilfrenzy: ['klutz'],
@@ -2242,14 +2253,14 @@ riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			stormsovereign: ['windysurge', 'galewings', 'keeneye'],
 			sunsovereign: ['drought', 'wildfirecore', 'selfsufficient', 'proficient'],
 			terraresolve: ['stamina', 'rockypayload', 'selfsufficient', 'proficient'],
-			toxicbloom: ['pollenbloom', 'selfsufficient', 'proficient'],
+			toxicbloom: ['pollenbloom', 'selfsufficient', 'proficient', 'thickfat'],
 			toxicrenewal: ['adaptability', 'regenerator'],
 			vendetta: ['angerpoint', 'secondwind', 'selfsufficient'],
 			auroracurrent: ['snowwarning'],
 			dunetyrant: ['sandstream', 'strongjaw'],
 			ironmountain: ['filter', 'stamina', 'heavymetal'],
 			woolyconductor: ['fluffy', 'moldbreaker', 'static'],
-			helios: ['drought', 'moldbreaker', 'multiscale'],
+			helios: ['drought', 'moldbreaker', 'berserk', 'swiftswim'],
 			rimeknuckle: ['ironfist', 'filter', 'icebody'],
 			ragingstorm: ['moldbreaker', 'battlearmor'],
 			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
@@ -2295,9 +2306,21 @@ riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			!abilityids.some(id => id === this.ability || id === 'schooling') &&
 			abilityids.some(id => id !== 'schooling' && abilityAliases[this.ability]?.includes(id)) &&
 			!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) return false;
+		// Expand copied identities without dispatching component hooks twice.
+		const copiedComponents = new Set<string>();
+		if (['perfectforesight', 'royalvoice'].includes(this.ability) && this.m.perfectForesightAbility) {
+			const pending: string[] = [this.m.perfectForesightAbility];
+			while (pending.length) {
+				const id = pending.pop()!;
+				if (copiedComponents.has(id)) continue;
+				copiedComponents.add(id);
+				if (['schooling', 'seviischooling'].includes(id) &&
+					!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) continue;
+				pending.push(...(abilityAliases[id] || []));
+			}
+		}
 		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
-			!(['perfectforesight', 'royalvoice'].includes(this.ability) && this.m.perfectForesightAbility &&
-				abilityids.includes(this.m.perfectForesightAbility))) {
+			!abilityids.some(id => copiedComponents.has(id))) {
 			return false;
 		}
 		return !this.ignoringAbility();

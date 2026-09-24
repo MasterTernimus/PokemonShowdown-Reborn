@@ -68,6 +68,7 @@ interface MoveFlags {
 	slicing?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Sharpness.
 	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
 	tail?: 1; // Boosted by Whiplash and listed by /tail.
+	tailmove?: 1; // Reborn tail-move marker; also boosted by Whiplash.
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
 	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 }

@@ -23,7 +23,7 @@ describe('Eeveelution event abilities', () => {
 			0: 'Poison Heal', 1: 'Inner Focus', H: 'Pressure', S: 'Eclipse', G: 'Ascendance',
 		});
 		assert.deepEqual(Dex.species.get('Glaceon').abilities, {
-			0: 'Ice Scales', 1: 'Slush Rush', H: 'Ice Body', S: 'Mind Freeze',
+			0: 'Permafrost', 1: 'Slush Rush', H: 'Snow Warning', S: 'Mind Freeze',
 		});
 		assert.deepEqual(Dex.species.get('Espeon').abilities, {
 			0: 'Trace', 1: 'Magic Bounce', H: 'Telepathy', S: 'Mind Freeze', E: 'Eclipse',

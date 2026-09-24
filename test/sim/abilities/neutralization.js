@@ -52,8 +52,43 @@ describe('Neutralization rooms', function () {
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move pinmissile', 'move splash');
 
-		assert.statStage(battle.p2.active[0], 'atk', -2);
-		assert.statStage(battle.p2.active[0], 'spe', -1);
+		assert.statStage(battle.p2.active[0], 'atk', -1);
+		assert.statStage(battle.p2.active[0], 'spa', 0);
+		assert.statStage(battle.p2.active[0], 'spe', 0);
+	});
+
+	it('lowers only the higher special offense by one stage', function () {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Quagsire', ability: 'neutralization', moves: ['tackle'] },
+		], [
+			{ species: 'Mew', nature: 'Modest', evs: { spa: 252 }, moves: ['splash'] },
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move tackle', 'move splash');
+		const target = battle.p2.active[0];
+		assert.statStage(target, 'atk', 0);
+		assert.statStage(target, 'spa', -1);
+		assert.statStage(target, 'spe', 0);
+	});
+
+	it('allows Auras to form and persist while still blocking base field changes', function () {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Quagsire', ability: 'neutralization', moves: ['splash'] },
+		], [
+			{ species: 'Mew', moves: ['electricterrain', 'splash'] },
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.field.startTerrain('factoryterrain');
+		battle.makeChoices('move splash', 'move electricterrain');
+		assert.equal(battle.field.terrain, 'factoryterrain');
+		assert.equal(battle.field.auraField, 'electricterrain');
+		for (const aura of ['electricterrain', 'grassyterrain', 'mistyterrain', 'rainbowterrain', 'psychicterrain']) {
+			assert(battle.field.setAura(aura, 5, battle.p2.active[0]));
+			assert.equal(battle.field.auraField, aura);
+		}
+		assert.false(battle.field.setTerrain('desertterrain', battle.p2.active[0]));
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(battle.field.auraField, 'psychicterrain');
 	});
 
 	it('should not activate when a chaining multi-hit move becomes a spread hit', function () {

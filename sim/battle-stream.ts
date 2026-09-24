@@ -196,6 +196,17 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		case 'requestlog':
 			this.push(`requesteddata\n${this.battle!.inputLog.join('\n')}`);
 			break;
+		case 'requestfieldinfo': {
+			// Public battlefield state only; no teams, private choices, or arbitrary evaluation.
+			const field = this.battle?.field;
+			this.push(`requesteddata\n${JSON.stringify(field ? {
+				field: field.terrain,
+				fieldTurns: field.terrainState.permanent ? null : (field.terrainState.duration ?? null),
+				aura: field.auraField,
+				auraTurns: field.terrain === 'coldeclipseterrain' ? null : field.auraTurns,
+			} : null)}`);
+			break;
+		}
 		case 'requestexport':
 			this.push(`requesteddata\n${this.battle!.prngSeed}\n${this.battle!.inputLog.join('\n')}`);
 			break;

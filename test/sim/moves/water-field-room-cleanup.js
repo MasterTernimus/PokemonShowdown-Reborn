@@ -50,8 +50,16 @@ describe('Water field transition room cleanup', () => {
 	for (const terrain of ['watersurfaceterrain', 'murkwatersurfaceterrain']) {
 		it(`clears effects when a generated field replaces ${terrain}`, () => {
 			const source = start(terrain);
-			assert(battle.field.setTerrain('grassyterrain', source));
+			assert(battle.field.setFieldOrAura('grassyterrain', 5, source, battle.dex.moves.get('bloomdoom'), true));
+			assert.equal(battle.field.terrain, 'grassyterrain');
 			checkEffects(false);
+		});
+		it(`preserves effects when an Aura is created over ${terrain}`, () => {
+			const source = start(terrain);
+			assert(battle.field.setTerrain('grassyterrain', source));
+			assert.equal(battle.field.terrain, terrain);
+			assert.equal(battle.field.auraField, 'grassyterrain');
+			checkEffects(true);
 		});
 		it(`clears effects when ${terrain} expires`, () => {
 			start(terrain);
