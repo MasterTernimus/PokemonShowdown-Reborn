@@ -8,6 +8,7 @@
 import { State } from './state';
 import { type EffectState, type Pokemon } from './pokemon';
 import { toID } from './dex';
+import { Auras } from '../data/auras';
 
 export class Field {
 	readonly battle: Battle;
@@ -19,6 +20,11 @@ export class Field {
 	terrainState: EffectState;
 	pseudoWeather: { [id: string]: EffectState };
 	terrainStack: EffectState[];
+	aurasEnabled = true;
+	auraField: ID = '' as ID;
+	auraTurns = 0;
+	auraRoll: number | null = null;
+	auraState: EffectState;
 
 	constructor(battle: Battle) {
 		this.battle = battle;
@@ -32,6 +38,149 @@ export class Field {
 		this.terrainState = this.battle.initEffectState({ id: '', terrainChanges: new Map<string, number>(), prevTerrain: '' });
 		this.pseudoWeather = {};
 		this.terrainStack = [];
+		this.auraState = this.battle.initEffectState({id: 'terrainaura'});
+	}
+
+	get baseField() { return this.terrain; }
+
+	setTerrainDuration(duration: number | undefined) {
+		const previous = this.terrainState.duration;
+		const extendingPermanent = this.terrainState.permanent && previous !== undefined && duration !== undefined && duration >= previous;
+		this.terrainState.permanent = duration === undefined || duration >= 9999 || !!extendingPermanent;
+		this.terrainState.duration = duration;
+	}
+
+
+	getAura() { return Auras[this.auraField]; }
+
+	isAura(id: string) { return this.auraField === toID(id); }
+
+	isTerrainOrAura(id: string) { return this.isTerrain(id) || this.isAura(id); }
+
+	canSupportAura(id: string) {
+		if (!this.terrain || this.terrain === id || this.isFlowerGardenBase()) return false;
+		if (['newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
+		if (this.terrain === 'corrosivemistterrain' && id === 'mistyterrain') return false;
+		return true;
+	}
+
+	setAura(id: string, turns: number, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
+		const aura = Auras[toID(id)];
+		if (!this.aurasEnabled || !aura || !Number.isFinite(turns) || turns < 1 || !this.canSupportAura(aura.id)) return false;
+		if (!sourceEffect) sourceEffect = this.battle.effect;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
+		const previousSource = this.auraState.sourceEffect?.id;
+		if (this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
+			!['raindance', 'sunnyday'].includes(sourceEffect.id) &&
+			sourceEffect.id !== previousSource && this.promoteAura(source, sourceEffect)) return true;
+		if (this.auraField) this.clearAura(false);
+		this.auraField = toID(aura.id);
+		this.auraTurns = Math.floor(turns);
+		this.auraRoll = null;
+		this.auraState = this.battle.initEffectState({id: 'terrainaura', source, sourceEffect});
+		this.battle.add('-fieldstart', aura.name, `[aura] ${this.terrain === 'coldeclipseterrain' ? 0 : this.auraTurns}`);
+		this.refreshAuraAbilities();
+		return true;
+	}
+
+	promoteAura(source: Pokemon, sourceEffect: Effect) {
+		if (!this.auraField) return false;
+		// Aura permission does not remove full-field replacement restrictions.
+		if (this.isFlowerGardenBase() || ['chessboardterrain', 'glitchterrain', 'bewitchedwoodsterrain',
+			'newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
+		if (this.terrain === 'hauntedterrain' && this.auraField !== 'rainbowterrain') return false;
+		if (this.auraField === 'electricterrain' && ['factoryterrain', 'shortcircuitterrain'].includes(this.terrain)) return false;
+		if (this.auraField === 'mistyterrain' && this.terrain === 'corrosivemistterrain') return false;
+		const duration = source.hasItem('amplifieldrock') ? 8 : 5;
+		return this.setFieldOrAura(this.auraField, duration, source, sourceEffect, true);
+	}
+
+	clearAura(refresh = true) {
+		const aura = this.getAura();
+		if (!aura) return false;
+		this.auraField = '' as ID;
+		this.auraTurns = 0;
+		this.auraRoll = null;
+		this.battle.clearEffectState(this.auraState);
+		this.battle.add('-fieldend', aura.name, '[aura]');
+		this.battle.add('-message', aura.endMessage);
+		if (refresh) this.refreshAuraAbilities();
+		return true;
+	}
+
+	refreshAuraAbilities() {
+		// Aura changes must not run the base field's seeds or entry effects.
+		for (const pokemon of this.battle.getAllActive()) {
+			for (const id of ['mimicry', 'quarkdrive']) {
+				if (!pokemon.hasAbility(id)) continue;
+				this.battle.singleEvent('TerrainChange', this.battle.dex.abilities.get(id), pokemon.abilityState, pokemon);
+			}
+		}
+	}
+
+	reconcileAura() {
+		if (this.auraField && !this.canSupportAura(this.auraField)) this.clearAura();
+		else if (this.auraField) this.battle.add('-fieldstart', this.getAura().name, `[aura] ${this.terrain === 'coldeclipseterrain' ? 0 : this.auraTurns}`);
+	}
+
+	tickAura() {
+		if (!this.auraField) return;
+		if (this.terrain === 'coldeclipseterrain') return;
+		if (--this.auraTurns <= 0) this.clearAura();
+	}
+
+	setFieldOrAura(status: string | Effect, duration: number, source: Pokemon | null = null,
+		sourceEffect: Effect | null = null, ignoreAuras = false) {
+		const id = toID(typeof status === 'string' ? status : status.id);
+		if (this.aurasEnabled && Auras[id] && duration > 0 && this.terrain && !ignoreAuras) {
+			return this.setAura(id, duration, source, sourceEffect);
+		}
+		const success = this.setTerrain(status, source, sourceEffect, false, true);
+		if (success) this.setTerrainDuration(duration > 0 ? duration : 9999);
+		return success;
+	}
+
+	/** Only type-wide bonuses shared with an Aura belong in the overlap calculation. */
+	baseAuraTypeBoost(move: ActiveMove, source: Pokemon, target: Pokemon) {
+		const type = move.type;
+		if (this.terrain === 'bewitchedwoodsterrain' && type === 'Fairy') return 1.5;
+		if (this.terrain === 'glitchterrain' && type === 'Psychic') return 1.2;
+		if (this.terrain === 'factoryterrain' && type === 'Electric') return 1.2;
+		if (this.terrain === 'fairytaleterrain' && type === 'Fairy') return 1.5;
+		if (this.terrain === 'forestterrain' && type === 'Grass') return 1.5;
+		if (this.terrain === 'swampterrain' && type === 'Grass') return 1.3;
+		if (this.terrain === 'holyterrain') {
+			if (['Fairy', 'Normal'].includes(type) && move.category === 'Special') return 1.5;
+			if (type === 'Psychic') return 1.2;
+		}
+		if (this.terrain === 'starlightarenaterrain' && !this.weather) {
+			if (type === 'Psychic') return 1.5;
+			if (type === 'Fairy') return 1.3;
+		}
+		if (type === 'Electric' && target.isGrounded()) {
+			if (this.terrain === 'watersurfaceterrain') return 1.5;
+			if (this.terrain === 'murkwatersurfaceterrain') return 5325 / 4096;
+		}
+		return 1;
+	}
+
+	auraPowerMultiplier(source: Pokemon, target: Pokemon, move: ActiveMove) {
+		const aura = this.getAura();
+		if (!aura || move.category === 'Status') return 1;
+		let multiplier = aura.damageMultipliers[move.id] || 1;
+		if (multiplier !== 1) this.battle.add('-message', aura.moveMessages[move.id]);
+		const types = move.types || [move.type];
+		const grounded = source.isGrounded() && !source.isSemiInvulnerable();
+		const typeAllowed = aura.typeCondition === 'none' ||
+			(aura.typeCondition === 'special' ? move.category === 'Special' : grounded);
+		if (!typeAllowed || (this.auraField === 'electricterrain' && this.terrain === 'shortcircuitterrain')) return multiplier;
+		for (const [type, boost] of Object.entries(aura.typeMultipliers)) {
+			if (!types.includes(type)) continue;
+			const baseBoost = move.type === type ? this.baseAuraTypeBoost(move, source, target) : 1;
+			multiplier *= baseBoost > 1 && boost > 1 ? Math.max(1.5, baseBoost, boost) / baseBoost : boost;
+			this.battle.add('-message', aura.typeMessage);
+		}
+		return multiplier;
 	}
 
 	toJSON(): AnyObject {
@@ -200,6 +349,7 @@ export class Field {
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
 			startingField: true,
+			permanent: true,
 			terrain_type: "Base",
 			terrainChanges: new Map<string, number>(),
 			turn: this.battle.turn,
@@ -207,6 +357,7 @@ export class Field {
 		});
 		this.terrainStack.unshift(this.terrainState);
 		this.battle.singleEvent('FieldStart', status, this.terrainState, this);
+		this.reconcileAura();
 		this.battle.eachEvent('TerrainChange');
 		this.restoreFormatHail();
 	}
@@ -236,7 +387,7 @@ export class Field {
 		const hauntedBlockedTerrains = [
 			'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'coldeclipseterrain',
 		];
-		if (this.terrain === 'hauntedterrain' && hauntedBlockedTerrains.includes(status.id)) {
+		if (this.terrain === 'hauntedterrain' && hauntedBlockedTerrains.includes(status.id) && !Auras[status.id]) {
 			this.battle.add('-message', 'The evil spirits prevent the new field from forming!');
 			return false;
 		}
@@ -289,10 +440,13 @@ export class Field {
 		if (this.isTerrain('corrosivemistterrain')) {
 			return this.changeTerrain('corrosiveterrain', source, sourceEffect);
 		}
+		if (sourceEffect && ['gravity', 'lunarorbit', 'gmaxgravitas'].includes(sourceEffect.id) && this.auraField) {
+			return this.promoteAura(source, sourceEffect);
+		}
 		return false;
 	}
 
-	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, ignoreNeutralization = false) {
+	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, ignoreNeutralization = false, ignoreAuras = false) {
 		const gardenSource = source && source !== 'debug' ? source : this.battle.event?.target;
 		const gardenEffect = sourceEffect || this.battle.effect;
 		if (this.flowerGardenStage() && ['grassyterrain', 'forestterrain'].includes(toID(status)) &&
@@ -311,6 +465,17 @@ export class Field {
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
+		// Pledge rainbows and terrain-setting Z-Moves replace the base field.
+		// Rainbow Auras are reserved for transitions between rain and sunlight.
+		if (['stokedsparksurfer', 'bloomdoom', 'genesissupernova'].includes(sourceEffect?.id || '') ||
+			(status.id === 'rainbowterrain' && !['raindance', 'sunnyday'].includes(sourceEffect?.id || ''))) {
+			ignoreAuras = true;
+		}
+		if (this.aurasEnabled && this.terrain && Auras[status.id] && !ignoreAuras) {
+			const duration = status.durationCallback ?
+				status.durationCallback.call(this.battle, source, source, sourceEffect) : status.duration;
+			if (duration && duration < 9999) return this.setAura(status.id, duration, source, sourceEffect);
+		}
 		if (this.terrain === 'chessboardterrain') {
 			this.battle.add('-message', 'The chessboard prevents a new field from being generated!');
 			return false;
@@ -348,6 +513,7 @@ export class Field {
 			return false;
 		}
 		let new_terrain_type = "";
+
 		const core_terrains = ["mistyterrain", "psychicterrain", "grassyterrain", "electricterrain"];
 		if (core_terrains.includes(status.id)) {
 			new_terrain_type = "Core";
@@ -368,9 +534,10 @@ export class Field {
 			terrainChanges: new Map<string, number>(),
 			turn: this.battle.turn,
 			duration: status.duration,
+			permanent: status.duration === undefined || status.duration >= 9999,
 		});
 		if (status.durationCallback) {
-			this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			this.setTerrainDuration(status.durationCallback.call(this.battle, source, source, sourceEffect));
 		}
 		if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
 			this.terrain = prevTerrain;
@@ -382,6 +549,7 @@ export class Field {
 		}
 		this.terrainStack.unshift(this.terrainState);
 		this.clearDepartedWaterFieldEffects(prevTerrain);
+		this.reconcileAura();
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		this.clearWaterHazards();
 		this.clearFieldStartedWeather(prevTerrain);
@@ -434,6 +602,7 @@ export class Field {
 			terrain_type: prevTerrainState.terrain_type,
 			origin: sourceEffect,
 			duration: prevTerrainState.zMoveExpired ? 1 : prevTerrainState.duration,
+			permanent: !prevTerrainState.zMoveExpired && !!prevTerrainState.permanent,
 			turn: this.battle.turn,
 			prevTerrain: prevTerrainState.id,
 			gardenBase,
@@ -459,6 +628,7 @@ export class Field {
 			this.terrainStack.unshift(this.terrainState);
 		}
 		this.clearDepartedWaterFieldEffects(prevTerrain);
+		this.reconcileAura();
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		this.clearWaterHazards();
 		this.clearFieldStartedWeather(prevTerrainState.id as ID);
@@ -489,6 +659,7 @@ export class Field {
 	}
 
 	clearTerrain(power: string | null = null) {
+		if (power === 'mid' && this.auraField) return this.clearAura();
 		if (this.isFlowerGardenBase()) return false;
 		if (!this.terrain || this.terrain === 'newworldterrain') return false;
 		const clearedTerrain = this.terrain;
@@ -499,7 +670,7 @@ export class Field {
 		}
 		if (power !== 'neutralization' && power !== 'mid' && this.neutralizeTerrainChange()) {
 			this.terrainState.neutralizationHeldExpired = true;
-			this.terrainState.duration = 1;
+			this.setTerrainDuration(1);
 			if (this.terrainState.zMoveTerrain) this.terrainState.zMoveExpired = true;
 			return false;
 		}
@@ -574,6 +745,7 @@ export class Field {
 			this.terrainState = this.battle.initEffectState({ id: '' });
 		}
 		this.clearDepartedWaterFieldEffects(clearedTerrain);
+		this.reconcileAura();
 		this.battle.eachEvent('TerrainChange');
 		this.clearWaterHazards();
 		this.clearFieldStartedWeather(clearedTerrain);

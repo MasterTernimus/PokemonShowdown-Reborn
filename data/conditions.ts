@@ -1,6 +1,52 @@
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	terrainaura: {
+		name: 'Terrain Aura',
+		onModifySpD(spd, pokemon) {
+			if (this.field.isAura('mistyterrain') && pokemon.hasType('Fairy')) return this.chainModify(1.5);
+		},
+		onTryHitPriority: 4,
+		onTryHit(target, source, move) {
+			if (!this.field.isAura('psychicterrain')) return;
+			if (['followme', 'ragepowder', 'spotlight'].includes(move.id) || move.priority <= 0.1 || move.target === 'self') return;
+			if (target.isSemiInvulnerable() || target.isAlly(source) || !target.isGrounded()) return;
+			this.add('-activate', target, 'Psychic Aura');
+			return null;
+		},
+		onModifyMovePriority: -100,
+		onModifyMove(move) {
+			const aura = this.field.getAura();
+			if (!aura) return;
+			const addedType = aura.secondaryTypeAdditions[move.id];
+			if (addedType) {
+				const types = move.types || [move.type];
+				move.types = types.includes(addedType) ? types : [...types, addedType];
+			}
+		},
+		onBasePowerPriority: 5,
+		onBasePower(basePower, source, target, move) {
+			let multiplier = this.field.auraPowerMultiplier(source, target, move);
+			if (move.id === 'terrainpulse') multiplier *= 2;
+			return this.chainModify(multiplier);
+		},
+		onPrepareHit(target, source, move) {
+			const aura = this.field.getAura();
+			if (move.id !== 'secretpower' || !aura) return;
+			this.attrLastMove('[still]');
+			this.add('-anim', source, this.dex.moves.get(aura.secretPowerMove).name, target);
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (this.field.isAura('grassyterrain') && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
+			}
+		},
+		onFieldResidualOrder: 27,
+		onFieldResidualSubOrder: 8,
+		onFieldResidual() { this.field.tickAura(); },
+	},
 	ghostresistance: {
 		name: 'Ghost Resistance',
 		onSourceModifyDamage(damage, source, target, move) {
@@ -188,7 +234,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifySpe(spe, pokemon) {
 			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
 			spe = this.finalModify(spe);
-			if (!pokemon.hasAbility('quickfeet')) {
+			if (!pokemon.hasAbility(['quickfeet', 'livewire'])) {
 				spe = Math.floor(spe * 50 / 100);
 			}
 			return spe;
@@ -760,7 +806,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onFieldStart(field, source, effect) {
 			if (this.field.weatherState?.previousWeather === 'sunnyday') {
 				if (this.field.isTerrain('rainbowterrain')) {
-					this.field.terrainState.duration = this.field.weatherState.duration;
+					this.field.setTerrainDuration(this.field.weatherState.duration);
 				} else {
 					this.field.setTerrain('rainbowterrain', source, effect);
 				}
@@ -843,7 +889,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onFieldStart(battle, source, effect) {
 			if (this.field.weatherState?.previousWeather === 'raindance') {
 				if (this.field.isTerrain('rainbowterrain')) {
-					this.field.terrainState.duration = this.field.weatherState.duration;
+					this.field.setTerrainDuration(this.field.weatherState.duration);
 				} else {
 					this.field.setTerrain('rainbowterrain', source, effect);
 				}
@@ -854,7 +900,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			} else {
 				this.add('-weather', 'SunnyDay');
 			}
-			this.field.terrainState.terrainChanges?.set('sunnyday', 1);
 		},
 		onImmunity(type, pokemon) {
 			if (pokemon.effectiveWeather() !== 'sunnyday') return;
@@ -866,7 +911,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			this.field.terrainState.terrainChanges?.set('sunnyday', 0);
 			this.add('-weather', 'none');
 		},
 	},
@@ -965,7 +1009,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'toxicbloom', 'execution', 'argentdevotion', 'pollenbloom', 'wildfirecore', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
+			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'wildfirecore', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
 			if (iceBeneficiary && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);

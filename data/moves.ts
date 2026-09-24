@@ -1068,23 +1068,29 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Tough",
 	},
 	atlantiswall: {
-		num: 10397, accuracy: true, basePower: 0, category: "Status", name: "Atlantis Wall", pp: 5,
+		num: 10397, accuracy: true, basePower: 0, category: "Status", name: "Atlantis Wall", pp: 1,
 		priority: 0, flags: { snatch: 1, metronome: 1 }, sideCondition: 'atlantiswall',
+		onModifyPriority(priority) {
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'mistyterrain', 'murkwatersurfaceterrain', 'midnightzoneterrain'])) {
+				return priority + 1;
+			}
+		},
 		onTry(source) {
+			if (source.side.getSideCondition('atlantiswall')) return false;
 			if (['raindance', 'primordialsea'].includes(source.effectiveWeather())) return true;
-			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) return true;
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'mistyterrain', 'murkwatersurfaceterrain', 'midnightzoneterrain'])) return true;
 			return false;
 		},
 		condition: {
 			duration: 5,
 			durationCallback(target, source) {
-				if (source?.hasItem('lightclay') || this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) return 8;
+				if (source?.hasItem('lightclay') || ['raindance', 'primordialsea'].includes(source?.effectiveWeather() || '') ||
+					this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'])) return 8;
 				return 5;
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target === source || !this.effectState.target.hasAlly(target)) return;
 				if (target.getMoveHitData(move).typeMod <= 0) return;
-				if (target.getMoveHitData(move).crit || move.infiltrates) return;
 				return this.chainModify(0.5);
 			},
 			onSideStart(side) { this.add('-sidestart', side, 'move: Atlantis Wall'); },
@@ -1093,6 +1099,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSideEnd(side) { this.add('-sideend', side, 'move: Atlantis Wall'); },
 		},
 		target: "allySide", type: "Water", contestType: "Beautiful",
+	},
+	tailsmash: {
+		num: 10415, accuracy: 100, basePower: 100, category: "Physical", name: "Tail Smash", pp: 3,
+		priority: 0, flags: {tail: 1, tailmove: 1, contact: 1, protect: 1, mirror: 1},
+		secondary: {chance: 100, boosts: {def: -1}},
+		target: "normal", type: "Rock", isNonstandard: "Custom",
+	},
+	deluge: {
+		num: 10416, accuracy: 100, basePower: 65, category: "Physical", name: "Deluge", pp: 5,
+		basePowerCallback(pokemon, target, move) {
+			const damagedByTarget = pokemon.attackedBy.some(
+				p => p.source === target && p.damage > 0 && p.thisTurn
+			);
+			return damagedByTarget ? move.basePower * 2 : move.basePower;
+		},
+		priority: -4, flags: {contact: 1, protect: 1, mirror: 1},
+		target: "normal", type: "Water", isNonstandard: "Custom",
 	},
 	autotomize: {
 		num: 475,
@@ -2540,6 +2563,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const possibleType = terrainTypeMap.get(this.field.getTerrain().id);
 				newType = possibleType !== undefined ? possibleType : newType;
 			}
+			newType = this.field.getAura()?.mimicryType || newType;
 			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
 		},
@@ -3260,7 +3284,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterMove(source, target, move) {
 			if (this.field.isTerrain('glitchterrain')) {
-				this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
+				this.field.setTerrainDuration(this.field.getTerrain().durationCallback?.call(this, source, source, move));
 			} else if (this.field.terrainState.terrainChanges?.get('glitchterrain') === 1) {
 				this.field.setTerrain('glitchterrain');
 			} else {
@@ -3304,7 +3328,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterMove(source, target, move) {
 			if (this.field.isTerrain('glitchterrain')) {
-				this.field.terrainState.duration = this.field.getTerrain().durationCallback?.call(this, source, source, move);
+				this.field.setTerrainDuration(this.field.getTerrain().durationCallback?.call(this, source, source, move));
 			} else if (this.field.terrainState.terrainChanges?.get('glitchterrain') === 1) {
 				this.field.setTerrain('glitchterrain');
 			} else {
@@ -3986,8 +4010,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
-			let success = false;
-			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
+			let success = this.field.clearAura();
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 }) || success;
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
@@ -4043,12 +4067,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (this.effectState.zPowered) return;
 					this.add('-message', `${target.name} will now haunt the field`);
 					if (this.field.terrain === 'hauntedterrain') {
-						this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
+						this.field.setTerrainDuration(Math.max(this.field.terrainState.duration || 0, 3));
 						if (['banette', 'banettemega'].includes(target.species.id)) {
-							this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
+							this.field.setTerrainDuration((this.field.terrainState.duration || 0) + 3);
 						}
 					} else if (this.field.setTerrain('hauntedterrain', target, this.dex.moves.get('destinybond'))) {
-						this.field.terrainState.duration = ['banette', 'banettemega'].includes(target.species.id) ? 6 : 3;
+						this.field.setTerrainDuration(['banette', 'banettemega'].includes(target.species.id) ? 6 : 3);
 					}
 				}
 			},
@@ -5683,13 +5707,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
+			if (this.field.isTerrainOrAura('psychicterrain') && source.isGrounded()) {
 				this.debug('terrain buff');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifyMove(move, source, target) {
-			if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
+			if (this.field.isAura('psychicterrain') || (this.field.isTerrain('psychicterrain') && source.isGrounded())) {
 				move.target = 'allAdjacentFoes';
 			}
 		},
@@ -6156,7 +6180,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterHit(target, source, move) {
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) && this.field.terrainState?.duration) {
-				this.field.terrainState.duration = source.hasItem('amplifieldrock') ? 7 : 4;
+				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1) {
 				this.field.setTerrain('rainbowterrain', null, move);
 			} else if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
@@ -6166,7 +6190,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterSubDamage(damage, target, source, move) {
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) && this.field.terrainState?.duration) {
-				this.field.terrainState.duration = source.hasItem('amplifieldrock') ? 7 : 4;
+				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1) {
 				this.field.setTerrain('rainbowterrain', null, move);
 			} else if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
@@ -7438,8 +7462,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 100,
 			self: {
-				onHit() {
-					this.field.setTerrain('psychicterrain');
+				onHit(source) {
+					this.field.setTerrain('psychicterrain', source, this.dex.moves.get('genesissupernova'), false, true);
 				},
 			},
 		},
@@ -8696,7 +8720,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterHit(target, source, move) {
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('swampterrain')) && this.field.terrainState?.duration) {
-				this.field.terrainState.duration = source.hasItem('amplifieldrock') ? 7 : 4;
+				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1) {
 				this.field.setTerrain('swampterrain', null, move);
 			} else if (this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
@@ -8706,7 +8730,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterSubDamage(damage, target, source, move) {
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('swampterrain')) && this.field.terrainState?.duration) {
-				this.field.terrainState.duration = source.hasItem('amplifieldrock') ? 7 : 4;
+				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1) {
 				this.field.setTerrain('swampterrain', null, move);
 			} else if (this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
@@ -8752,7 +8776,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyPriority(priority, source, target, move) {
-			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
+			if (this.field.isAura('grassyterrain') || (this.field.isTerrain('grassyterrain') && source.isGrounded())) {
 				return priority + 1;
 			}
 		},
@@ -8792,7 +8816,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
-				const windyMoves = ['fairywind', 'silverwind', 'grassknot', 'icywind', 'ominouswind', 'razordwind', 'twister'];
+				const windyMoves = ['fairywind', 'silverwind', 'grassknot', 'icywind', 'ominouswind', 'razorwind', 'twister'];
 				const weakenedMoves = ['earthquake', 'bulldoze', 'magnitude', 'muddywater', 'surf'];
 				let modifier = 1;
 				if (weakenedMoves.includes(move.id)) {
@@ -8869,7 +8893,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-message', 'The extremely harsh sunlight dried out the meadow!');
 					this.field.changeTerrain('desertterrain');
 					if (this.field.terrainState?.duration) {
-						this.field.terrainState.duration = 9999;
+						this.field.setTerrainDuration(9999);
 					}
 				}
 			},
@@ -8927,6 +8951,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return 7;
 				}
 				return 5;
+			},
+			onFieldRestart(field, source, effect) {
+				// Reusing the move may convert a newly created Aura; passive Gravity never does.
+				if (effect?.id !== 'gravity' || !source || !this.field.auraField) return false;
+				return this.field.promoteAura(source, effect);
 			},
 			onFieldStart(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
@@ -9078,12 +9107,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (this.effectState.zPowered) return;
 					this.add('-message', `${target.name} will now haunt the field`);
 					if (this.field.terrain === 'hauntedterrain') {
-						this.field.terrainState.duration = Math.max(this.field.terrainState.duration || 0, 3);
+						this.field.setTerrainDuration(Math.max(this.field.terrainState.duration || 0, 3));
 						if (['banette', 'banettemega'].includes(target.species.id)) {
-							this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
+							this.field.setTerrainDuration((this.field.terrainState.duration || 0) + 3);
 						}
 					} else if (this.field.setTerrain('hauntedterrain', target, this.dex.moves.get('grudge'))) {
-						this.field.terrainState.duration = ['banette', 'banettemega'].includes(target.species.id) ? 6 : 3;
+						this.field.setTerrainDuration(['banette', 'banettemega'].includes(target.species.id) ? 6 : 3);
 					}
 				}
 			},
@@ -12186,7 +12215,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.getTypes().join() === 'Psychic' || !target.setType('Psychic')) return false;
 			this.add('-start', target, 'typechange', 'Psychic');
 			if (this.field.setTerrain('bewitchedwoodsterrain', source, this.dex.moves.get('magicpowder'), true)) {
-				this.field.terrainState.duration = 5;
+				this.field.setTerrainDuration(5);
 			}
 		},
 		target: "normal",
@@ -12722,7 +12751,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setTerrain('electricterrain');
+				this.field.setTerrain('electricterrain', source, this.dex.moves.get('maxlightning'));
 			},
 		},
 		target: "adjacentFoe",
@@ -12743,7 +12772,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setTerrain('psychicterrain');
+				this.field.setTerrain('psychicterrain', source, this.dex.moves.get('maxmindstorm'));
 			},
 		},
 		target: "adjacentFoe",
@@ -12787,7 +12816,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setTerrain('grassyterrain');
+				this.field.setTerrain('grassyterrain', source, this.dex.moves.get('maxovergrowth'));
 			},
 		},
 		target: "adjacentFoe",
@@ -12875,7 +12904,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setTerrain('mistyterrain');
+				this.field.setTerrain('mistyterrain', source, this.dex.moves.get('maxstarfall'));
 			},
 		},
 		target: "adjacentFoe",
@@ -13644,13 +13673,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, metronome: 1 },
 		onAfterMove(source, target, move) {
 			if (this.field.isTerrain('bewitchedwoodsterrain')) {
-				this.field.terrainState.duration = (this.field.terrainState.duration || 0) + 3;
+				this.field.setTerrainDuration((this.field.terrainState.duration || 0) + 3);
 				this.add('-message', 'The mist deepened the woods magic!');
 				return;
 			}
-			if (this.field.setTerrain('mistyterrain', source, move)) {
-				this.field.terrainState.duration = 3;
-			}
+			this.field.setFieldOrAura('mistyterrain', 3, source, move);
 		},
 		sideCondition: 'mist',
 		condition: {
@@ -13727,7 +13754,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		selfdestruct: "always",
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('mistyterrain') && source.isGrounded()) {
+			if ((this.field.isTerrain(['mistyterrain', 'corrosivemistterrain']) || this.field.isAura('mistyterrain')) && source.isGrounded()) {
 				this.debug('misty terrain boost');
 				return this.chainModify(1.5);
 			}
@@ -15989,7 +16016,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		onBasePower(basePower, source) {
-			if (this.field.isTerrain('electricterrain')) {
+			if (this.field.isTerrainOrAura('electricterrain')) {
 				this.debug('psyblade electric terrain boost');
 				return this.chainModify(1.5);
 			}
@@ -17298,7 +17325,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 70,
 		basePowerCallback(source, target, move) {
-			if (this.field.isTerrain('electricterrain') && target.isGrounded()) {
+			if (this.field.isTerrainOrAura('electricterrain') && target.isGrounded()) {
 				if (!source.isAlly(target)) this.hint(`${move.name}'s BP doubled on grounded target.`);
 				return move.basePower * 2;
 			}
@@ -20541,6 +20568,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 1,
 		priority: 0,
 		flags: {},
+		onHit() { this.field.clearAura(); },
+		onAfterSubDamage() { this.field.clearAura(); },
 		onBasePower() {
 			if (this.field.canSetTerrain('rockyterrain'))
 				return this.chainModify(1.3);
@@ -20808,7 +20837,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onTry() {
-			return !!this.field.terrain && !(this.field.terrainState?.duration && this.field.terrainState?.duration > 10);
+			return !!this.field.auraField || (!!this.field.terrain && !(this.field.terrainState?.duration && this.field.terrainState?.duration > 10));
 		},
 		onHit() {
 			this.field.clearTerrain("mid");
@@ -22374,7 +22403,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
+		onBasePower() {
+			if (!this.field.getAura() && this.field.isTerrain(['electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'rainbowterrain'])) return this.chainModify(2);
+		},
 		onModifyType(move, pokemon) {
+			const aura = this.field.getAura();
+			if (aura) {
+				move.type = aura.mimicryType;
+				return;
+			}
 			const terrainTypeMap = new Map<string, string>([
 				["ashenbeachterrain", "Ground"],
 				["bewitchedwoodsterrain", "Fairy"],
@@ -22822,7 +22859,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterMove(source, target, move) {
 			this.field.setTerrain('inverseterrain');
-			this.field.terrainState.duration = this.field.terrain === 'inverseterrain' ? (source.hasItem('amplifieldrock') ? 6 : 3) : this.field.terrainState.duration;
+			this.field.setTerrainDuration(this.field.terrain === 'inverseterrain' ? (source.hasItem('amplifieldrock') ? 6 : 3) : this.field.terrainState.duration);
 		},
 		target: "normal",
 		type: "Dark",
@@ -23772,7 +23809,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterSubDamage(damage, target, source, move) {
 			if ((this.field.isTerrain('swampterrain') || this.field.isTerrain('rainbowterrain')) && this.field.terrainState?.duration) {
-				this.field.terrainState.duration = source.hasItem('amplifieldrock') ? 7 : 4;
+				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
 				this.field.setTerrain('swampterrain', null, move);
 			} else if (this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
@@ -23782,7 +23819,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterHit(target, source, move) {
 			if ((this.field.isTerrain('swampterrain') || this.field.isTerrain('rainbowterrain')) && this.field.terrainState?.duration) {
-				this.field.terrainState.duration = source.hasItem('amplifieldrock') ? 7 : 4;
+				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
 				this.field.setTerrain('swampterrain', null, move);
 			} else if (this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
@@ -24706,7 +24743,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(source, _, move) {
 			if (!this.field.isTerrain('glitchterrain')) {
 				if (!this.field.setTerrain('glitchterrain', source, move)) return false;
-				this.field.terrainState.duration = 5;
+				this.field.setTerrainDuration(5);
 				return;
 			}
 			const types = this.dex.types.names().filter(type => type !== '???');

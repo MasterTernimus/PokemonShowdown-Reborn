@@ -1,4 +1,44 @@
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+	helios: {
+		name: "Helios",
+		desc: "On switch-in, this Pokemon summons harsh sunlight. Its moves ignore opposing Abilities. Berserk raises its Special Attack by one stage when an attack leaves it at half HP or less, and by two stages on entry in Dragon's Den. Swift Swim doubles its Speed in rain, Water Surface, Murkwater Surface, Underwater, or Midnight Zone.",
+		shortDesc: "Drought + Mold Breaker + Berserk + Swift Swim.",
+	},
+	glacialheart: {
+		name: "Glacial Heart",
+		desc: "Thermal Exchange + Ice Body + Tough Claws + Stalwart. Fire hits raise Attack, burns are prevented, and certain hot fields raise Attack each turn. Snow, hail, and icy fields restore HP; contact attackers may freeze. Contact moves gain power, and attacks track their targets through redirection. Stalwart also raises Special Attack on entry on New World, Starlight Arena, Fairy Tale, and Chessboard fields.",
+		shortDesc: "Thermal Exchange + Ice Body + Tough Claws + Stalwart.",
+	},
+	verdantedge: {
+		name: "Verdant Edge",
+		desc: "Chlorophyll + Invigorate + Sharpness + Grass Pelt. Speed doubles in sun and on Flower Garden stage 4. This Pokemon and its allies receive 30% more healing, adjacent allies may have status cured each turn, slicing moves gain 1.5x power, and Defense rises by 50% on Grassy or Forest Field.",
+		shortDesc: "Chlorophyll + Invigorate + Sharpness + Grass Pelt.",
+	},
+	permafrost: {
+		name: "Permafrost",
+		desc: "Ice Body + Ice Scales + Refrigerate. Contact attackers may be frozen. Hail, snow, and icy fields restore HP; special attacks deal half damage. Eligible Normal moves become Ice and gain power. Retains the component abilities' field effects.",
+		shortDesc: "Ice Body + Ice Scales + Refrigerate.",
+	},
+	gigavolt: {
+		name: "Gigavolt",
+		desc: "Mold Breaker + Lightning Rod + Static. This Pokemon's moves ignore opposing Abilities. Electric attacks targeting it are redirected to it and raise its Attack and Special Attack instead of dealing damage. Contact attackers may be paralyzed.",
+		shortDesc: "Mold Breaker + Lightning Rod + Static.",
+	},
+	tidalwave: {
+		name: "Tidal Wave",
+		desc: "Water Absorb + Hydration + Regenerator + Rain Dish. Water attacks heal this Pokemon instead of damaging it. Rain or certain water fields cure its status; rain also restores HP each turn. Switching out restores one-third of its maximum HP.",
+		shortDesc: "Water Absorb + Hydration + Regenerator + Rain Dish.",
+	},
+	livewire: {
+		name: "Livewire",
+		desc: "Transistor + Volt Absorb + Quick Feet + Iron Barbs. Electric attacks heal this Pokemon instead of damaging it. Its Electric attacks are boosted, its Speed rises while statused or on Electric Terrain, and contact attackers lose HP.",
+		shortDesc: "Transistor + Volt Absorb + Quick Feet + Iron Barbs.",
+	},
+	kindledfury: {
+		name: "Kindled Fury",
+		desc: "Fluffy + Guts + Flash Fire + Brute Force. Contact attacks deal half damage to this Pokemon, while Fire attacks deal double damage unless Flash Fire blocks them. Status boosts its Attack. Absorbing Fire boosts its Fire attacks. Recoil moves are stronger and their recoil is prevented.",
+		shortDesc: "Fluffy + Guts + Flash Fire + Brute Force.",
+	},
 	completeparasitism: {
 		name: "Complete Parasitism",
 		desc: "Parasitism, Filter, and Self Repair. A lethal hit triggers a full-HP revival as Parasect-Parasite at the end of the turn, even if Parasitism was used before Mega Evolution.",
@@ -346,8 +386,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	berserk: {
 		name: "Berserk",
-		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage from an attack bringing it to 1/2 or less of its maximum HP, its Special Attack is raised by 1 stage. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
-		shortDesc: "This Pokemon's Sp. Atk is raised by 1 when it reaches 1/2 or less of its max HP.",
+		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage from an attack bringing it to 1/2 or less of its maximum HP, its Attack and Special Attack are raised by 1 stage. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability. On Dragon's Den, both stats rise by 2 stages on entry.",
+		shortDesc: "Attack and Sp. Atk rise by 1 when it falls to 1/2 HP or less.",
 	},
 	bigpecks: {
 		name: "Big Pecks",
@@ -753,6 +793,21 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Wicked Snare",
 		desc: "This Pokemon has Stakeout, Tangling Hair, and Prankster's effects.",
 		shortDesc: "Stakeout + Tangling Hair + Prankster.",
+	},
+	tyrantdomain: {
+		name: "Tyrant Domain",
+		desc: "Relic Armor and Supreme Overlord. On entry, sets Fairy Tale for 5 turns without starting Hail. When this Pokemon faints, displays 'The Tyrant will persist' and sets Dragon's Den for 5 turns. Hail and Fairy Tale can be set later by other effects.",
+		shortDesc: "Relic Armor + Supreme Overlord; 5-turn Fairy Tale on entry; 5-turn Dragon's Den on faint.",
+	},
+	auroradomain: {
+		name: "Aurora Domain",
+		desc: "Relic Armor and Refrigerate. On entry or Mega Evolution, sets Fairy Tale and Aurora Veil on its side for 5 turns. When this Pokemon faints, displays 'The Aurora will persist', sets Cold Eclipse for 5 turns, and creates or refreshes its side's Aurora Veil to 8 turns.",
+		shortDesc: "Relic Armor + Refrigerate; 5-turn Fairy Tale and Veil on entry; 5-turn Cold Eclipse and 8-turn Veil on faint.",
+	},
+	royalscales: {
+		name: "Royal Scales",
+		desc: "Marvel Scale, Filter, Dragonize, and Self Sufficient. Status or certain fields boost Defense by 1.5x. Takes 0.8x damage from attacks, with a further 0.75x reduction against super-effective attacks. Normal moves become Dragon and gain Dragonize's power boost. Restores 1/16 maximum HP each turn and ignores Sandstorm and Hail damage.",
+		shortDesc: "Marvel Scale + Filter + Dragonize + Self Sufficient.",
 	},
 	toxicarmor: {
 		name: "Toxic Armor",
@@ -1638,8 +1693,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lightningrod: {
 		name: "Lightning Rod",
-		desc: "This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by an Electric-type move. If this Pokemon is not the target of a single-target Electric-type move used by another Pokemon, this Pokemon redirects that move to itself if it is within the range of that move. If multiple Pokemon could redirect with this Ability, it goes to the one with the highest Speed, or in the case of a tie to the one that has had this Ability active longer.",
-		shortDesc: "This Pokemon draws Electric moves to itself to raise Sp. Atk by 1; Electric immunity.",
+		desc: "This Pokemon is immune to Electric-type moves and raises its Attack and Special Attack by 1 stage when hit by an Electric-type move. It redirects single-target Electric moves within range to itself. On Electric Terrain, both stats rise by 1 stage on entry.",
+		shortDesc: "Draws Electric moves to raise Attack and Sp. Atk by 1; Electric immunity.",
 		gen4: {
 			desc: "If this Pokemon is not the target of a single-target Electric-type move used by another Pokemon, this Pokemon redirects that move to itself.",
 			shortDesc: "This Pokemon draws single-target Electric moves to itself.",
@@ -2455,8 +2510,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sapsipper: {
 		name: "Sap Sipper",
-		desc: "This Pokemon is immune to Grass-type moves and raises its Attack by 1 stage when hit by a Grass-type move.",
-		shortDesc: "This Pokemon's Attack is raised 1 stage if hit by a Grass move; Grass immunity.",
+		desc: "This Pokemon is immune to Grass-type moves and raises its Attack and Special Attack by 1 stage when hit by a Grass-type move. Grass moves from an ally also raise both stats. Grassy and Forest fields restore HP each turn.",
+		shortDesc: "Grass moves raise Attack and Sp. Atk by 1; Grass immunity.",
 	},
 	schooling: {
 		name: "Schooling",
@@ -2866,8 +2921,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	tremor: {
 		name: "Tremor",
-		desc: "On switch-in, this Pokemon summons Sandstorm. This Pokemon is immune to Ground-type moves. Sound-based moves used by this Pokemon become physical, use Attack, have 1.5x power, and ignore sound-based Ability immunities. Sound-based moves used by this Pokemon's allies have 1.5x power and use the user's higher offensive stat. This Pokemon's side is immune to its own damaging sound-based moves.",
-		shortDesc: "Sand Stream + Levitate; side sound moves 1.5x; user sound moves physical/use Atk.",
+		desc: "Levitate + Resonance Force + Sand Force. This Pokemon's Bug-type attacks receive STAB. Damaging sound moves used by this Pokemon or its allies have 1.5x power; this Pokemon's sound moves use its higher offensive stat, and allies are protected from allied sound moves. In Sandstorm, Desert Terrain, or Ashen Beach Terrain, this Pokemon's Rock-, Ground-, and Steel-type attacks have 1.3x power. This Pokemon is immune to sandstorm damage.",
+		shortDesc: "Levitate + Resonance Force + Sand Force; Bug attacks receive STAB.",
 	},
 	resonanceforce: {
 		name: "Resonance Force",
@@ -3073,8 +3128,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
-		desc: "This Pokemon has Self Sufficient. Each fainted ally gives its moves 1.1x damage; in Free-for-All, allies count twice. At 1+, it has Clear Body; 2+, Inner Focus; 3+, Filter and Second Wind; 4+, Infiltrator; 5+, Magic Guard and +1 Attack/Sp. Atk.",
-		shortDesc: "Self Sufficient; fallen allies boost damage; thresholds grant defenses and stat boosts.",
+		desc: "This Pokemon heals 1/16 of its maximum HP each turn. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 1+ fallen allies it blocks opposing stat drops; 2+, it gains Infiltrator; 3+, Filter; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and +1 Attack/Sp. Atk.",
+		shortDesc: "Fallen allies add 10% damage each; 2+ Infiltrator, 4+ Inner Focus.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
@@ -3448,8 +3503,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	whiplash: {
 		name: "Whiplash",
-		desc: "This Pokemon's Tail moves have their power multiplied by 1.5.",
-		shortDesc: "This Pokemon's Tail moves have 1.5x power.",
+		desc: "On entry, this Pokemon gains +1 accuracy. Its Tail moves have their power multiplied by 1.5.",
+		shortDesc: "On entry: +1 accuracy. Tail moves have 1.5x power.",
 	},
 	wimpout: {
 		name: "Wimp Out",
@@ -3685,8 +3740,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neutralization: {
 		name: "Neutralization",
-		desc: "Once per target per move, when this Pokemon directly hits an opposing Pokemon, the target's higher attacking stat is lowered by 2 stages and Speed is lowered by 1 stage. Spread hits do not trigger this effect. This does not affect other Neutralization users or Pokemon immune to stat drops. While active, field changes are neutralized; Trick Room, Magic Room, and Wonder Room are ended and cannot start; and Rainbow Field ends automatically. Ice Spinner and Steel Roller still remove terrain normally.",
-		shortDesc: "Hits lower foe offense/Spe; blocks field changes and Trick/Magic/Wonder Room.",
+		desc: "Once per target per move, when this Pokemon directly hits an opposing Pokemon, the target's higher attacking stat is lowered by 1 stage. Spread hits do not trigger this effect. This does not affect other Neutralization users or Pokemon immune to stat drops. While active, base field changes are neutralized, but Auras can still be created and remain active; Trick Room, Magic Room, and Wonder Room are ended and cannot start; and Rainbow Field ends automatically. Ice Spinner and Steel Roller still remove terrain normally.",
+		shortDesc: "Hits lower the foe's higher offensive stat by 1; blocks base field changes, not Auras.",
 	},
 	aeviandream: {
 		name: "Aevian Dream",

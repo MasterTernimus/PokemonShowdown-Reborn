@@ -388,8 +388,10 @@ export class BattleActions {
 			const terrainSet = move.id === 'oceanicoperetta' && this.battle.field.terrain === 'underwaterterrain' ?
 				(this.battle.field.changeTerrain(terrain, pokemon, move), this.battle.field.terrain === terrain) :
 				this.battle.field.setTerrain(terrain, pokemon, move);
-			if (terrainSet || (terrainBeforeMove !== terrain && this.battle.field.terrain === terrain)) {
-				this.battle.field.terrainState.duration = duration;
+			if (terrainSet && this.battle.field.isAura(terrain)) {
+				this.battle.field.auraTurns = duration;
+			} else if (terrainSet || (terrainBeforeMove !== terrain && this.battle.field.terrain === terrain)) {
+				this.battle.field.setTerrainDuration(duration);
 				this.battle.field.terrainState.zMoveTerrain = true;
 			}
 		}
@@ -714,7 +716,7 @@ export class BattleActions {
 	}
 	waterShurikenTargetHasWaterImmunity(target: Pokemon) {
 		return target.hasAbility([
-			'auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb',
+			'auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb', 'tidalwave',
 		]);
 	}
 	canChainHitTarget(target: Pokemon, pokemon: Pokemon, move: ActiveMove) {
@@ -722,8 +724,8 @@ export class BattleActions {
 			!this.battle.validTarget(target, pokemon, move.target) || !target.runImmunity(move)) return false;
 		if (move.ignoreAbility) return true;
 		const immuneAbilities: [string, string[]][] = [
-			['Water', ['auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb']],
-			['Electric', ['lightningrod', 'motordrive', 'voltabsorb']],
+			['Water', ['auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb', 'tidalwave']],
+			['Electric', ['lightningrod', 'motordrive', 'voltabsorb', 'livewire']],
 			['Fire', ['wellbakedbody']],
 			['Grass', ['sapsipper']],
 			['Ground', ['eartheater', 'treasuretitan']],
@@ -732,7 +734,7 @@ export class BattleActions {
 		if (immuneAbilities.some(([type, abilities]) =>
 			this.battle.movehasType(move, type) && target.hasAbility(abilities))) return false;
 		return !(this.battle.movehasType(move, 'Fire') &&
-			!this.battle.field.isTerrain('coldeclipseterrain') && target.hasAbility('flashfire'));
+			!this.battle.field.isTerrain('coldeclipseterrain') && target.hasAbility(['flashfire', 'kindledfury']));
 	}
 	redirectWaterShurikenFromProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		if (move.id !== 'watershuriken') return;
@@ -2181,7 +2183,7 @@ export class BattleActions {
 		if (type !== '???') {
 			let stab: number | [number, number] = 1;
 
-			const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type) || (move.types !== undefined ? pokemon.hasType(move.types[1]) : false);
+			const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type) || (move.types !== undefined ? pokemon.hasType(move.types) : false);
 			if (isSTAB) {
 				stab = 1.5;
 			}
@@ -2220,7 +2222,7 @@ export class BattleActions {
 
 		if (isCrit && !suppressMessages) this.battle.add('-crit', target);
 
-		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility(['guts', 'sinisterblaze'])) {
+		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility(['guts', 'sinisterblaze', 'kindledfury'])) {
 			if (this.battle.gen < 6 || move.id !== 'facade') {
 				baseDamage = this.battle.modify(baseDamage, 0.5);
 			}
@@ -2321,6 +2323,7 @@ export class BattleActions {
 			return altForme.name;
 		}
 		if (!item.megaStone) return null;
+		if (item.id === 'miloticide' && species.id !== 'milotic') return null;
 		// TODO confirm with generation shift
 		let megaEvolution = item.megaStone[species.name];
 		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;

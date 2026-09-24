@@ -61,12 +61,12 @@ describe('Bond ability component audit', () => {
 			battle.dex.abilities.get('intimidate'), drop);
 		assert.equal(drop.atk, undefined, 'one fallen ally should block opposing stat drops');
 		garchomp.side.totalFainted = 2;
-		assert.equal(battle.singleEvent('TryAddVolatile', ability, garchomp.abilityState,
-			garchomp, null, null, battle.dex.conditions.get('flinch')), null);
-		garchomp.side.totalFainted = 4;
 		const move = battle.dex.getActiveMove('dragonclaw');
 		battle.singleEvent('ModifyMove', ability, garchomp.abilityState, move, garchomp, foe);
-		assert.equal(move.infiltrates, true, 'four fallen allies should grant Infiltrator');
+		assert.equal(move.infiltrates, true, 'two fallen allies should grant Infiltrator');
+		garchomp.side.totalFainted = 4;
+		assert.equal(battle.singleEvent('TryAddVolatile', ability, garchomp.abilityState,
+			garchomp, null, null, battle.dex.conditions.get('flinch')), null);
 		garchomp.side.totalFainted = 5;
 		battle.singleEvent('Start', ability, garchomp.abilityState, garchomp);
 		assert.equal(garchomp.boosts.atk, 1);

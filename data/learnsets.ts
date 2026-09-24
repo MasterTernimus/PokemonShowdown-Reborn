@@ -1,5 +1,6 @@
 import {Gen8Gen9NatDexLearnsets} from './natdex-gen8-gen9-learnsets';
 import {Pokedex} from './pokedex';
+import {AEVIAN_GRIEF_MOVE_IDS} from './aevian-grief-moves';
 
 export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	missingno: {
@@ -112841,14 +112842,14 @@ const documentLearnsetAdditions: {[id: string]: {[move: string]: string[]}} = {
 	tropius: {grassyglide: ["9M"]},
 	typhlosion: {bite: ["9M"], closecombat: ["9M"], drainpunch: ["9M"], machpunch: ["9M"], submission: ["9M"]},
 	tyranitar: {scaleshot: ["9M"], scorchingsands: ["9M"]},
-	tyrantrum: {curse: ["9M"]},
+	tyrantrum: {curse: ["9M"], heavyslam: ["9M"], smartstrike: ["9M"]},
 	umbreon: {baddybad: ["9L1"], bide: ["9M"], knockoff: ["9M"], rage: ["9M"], sing: ["9L1"], skullbash: ["9M"]},
 	unown: {attract: ["9M"], bide: ["9M"], captivate: ["9M"], confide: ["9M"], doubleteam: ["9M"], endure: ["9M"], facade: ["9M"], frustration: ["9M"], naturalgift: ["9M"], protect: ["9M"], rest: ["9M"], return: ["9M"], round: ["9M"], secretpower: ["9M"], sleeptalk: ["9M"], snore: ["9M"], substitute: ["9M"], swagger: ["9M"], toxic: ["9M"]},
 	ursaluna: {babydolleyes: ["9M"], bloodmoon: ["9M"], cut: ["9M"], dynamicpunch: ["9M"], focusblast: ["9M"], focusenergy: ["9M"], furycutter: ["9M"], harden: ["9M"], headbutt: ["9M"], honeclaws: ["9M"], laserfocus: ["9M"], lastresort: ["9M"], megakick: ["9M"], megapunch: ["9M"], mimic: ["9M"], moonblast: ["9M"], moonlight: ["9M"], mudslap: ["9M"], poweruppunch: ["9M"], rockclimb: ["9M"], rocksmash: ["9M"], rollout: ["9M"], strength: ["9M"], superpower: ["9M"], torment: ["9M"], workup: ["9M"], zapcannon: ["9M"]},
 	vanilluxe: {coldsnap: ["9M"]},
 	vaporeon: {bouncybubble: ["9L1"], sing: ["9L1"], taunt: ["9M"]},
 	veluza: {hail: ["9M"]},
-	venomoth: {crosspoison: ["9M"], futuresight: ["9M"], psychicfangs: ["9M"]},
+	venomoth: {crosspoison: ["9M"], expandingforce: ["9M"], futuresight: ["9M"], psychicfangs: ["9M"]},
 	venusaur: {celebrate: ["9M"], razorwind: ["9M"], skullbash: ["9M"], sludgewave: ["9M"]},
 	victreebel: {crosspoison: ["9M"], solarblade: ["9M"], toxicspikes: ["9M"], venomdrench: ["9M"]},
 	vileplume: {leechseed: ["9L1"]},
@@ -112930,6 +112931,21 @@ for (const species of ['ambipom', 'cinccino']) for (const move of ['tailslap', '
 // Milotic-Terajuma regional learnset.
 (Learnsets as any).miloticterajuma = {learnset: {accelerock: ["9M"], aquajet: ["9M"], aquatail: ["9M"], coil: ["9M"], doublehit: ["9M"], feint: ["9M"], harden: ["9M"], liquidation: ["9M"], poisontail: ["9M"], rockslide: ["9M"], stoneedge: ["9M"], suckerpunch: ["9M"], tailwhip: ["9M"], tailwind: ["9M"], tripleaxel: ["9M"], wavecrash: ["9M"], dragontail: ["9M"], irontail: ["9M"], atlantiswall: ["9M"], bind: ["9M"], blizzard: ["9M"], brutalswing: ["9M"], bulldoze: ["9M"], dive: ["9M"], dragonpulse: ["9M"], flipturn: ["9M"], gigaimpact: ["9M"], hail: ["9M"], helpinghand: ["9M"], hyperbeam: ["9M"], icebeam: ["9M"], icywind: ["9M"], ironhead: ["9M"], laserfocus: ["9M"], lightscreen: ["9M"], magiccoat: ["9M"], mudslap: ["9M"], raindance: ["9M"], safeguard: ["9M"], scald: ["9M"], surf: ["9M"], swift: ["9M"], twister: ["9M"], waterfall: ["9M"], waterpulse: ["9M"], mudbarrage: ["9M"], tackle: ["9M"], return: ["9M"], round: ["9M"], secretpower: ["9M"], sleeptalk: ["9M"]}};
 
+for (const move of ['tailsmash', 'deluge']) {
+	(Learnsets as any).miloticterajuma.learnset[move] = ['9M'];
+}
+
+// Atlantis Wall is a level-up move for these species and a TM for the second group.
+// Level 1 makes it available through the move reminder when no later level is specified.
+for (const species of ['vaporeon', 'lanturn', 'kingdra', 'deoxys', 'manaphy', 'alomomola', 'tapufini', 'inteleon', 'arctovish']) {
+	const learnset = (Learnsets as any)[species].learnset;
+	learnset.atlantiswall = [...(learnset.atlantiswall || []), '9L1'];
+}
+for (const species of ['lapras', 'politoed', 'milotic', 'miloticaevian', 'primarina', 'veluza', 'tatsugiri']) {
+	const learnset = (Learnsets as any)[species].learnset;
+	learnset.atlantiswall = [...(learnset.atlantiswall || []), '9M'];
+}
+
 // Gyarados-Aevian has an independent regional learnset and does not inherit Gyarados's moves.
 (Learnsets as any).gyaradosaevian = {learnset: {
 	snarl: ["9L0", "9L1", "9M"], morningsun: ["9L1"], thrash: ["9L1"], leer: ["9L21"],
@@ -112998,7 +113014,9 @@ const sigilyphRejuvMoveAdditions = {
 	willowisp: ["9M"], wonderroom: ["9M"],
 };
 Object.assign(Learnsets.sigilyph.learnset!, sigilyphRejuvMoveAdditions);
-(Learnsets as any).sigilyphrejuv = {learnset: {...Learnsets.sigilyph.learnset}};
+Learnsets.sigilyphrejuv = {learnset: Object.fromEntries(
+	AEVIAN_GRIEF_MOVE_IDS.map(id => [id, Learnsets.sigilyph.learnset![id] || ['9M']])
+)};
 
 // Aevian Rocket transforms base Veluza, so both forms need the regional moves.
 // Tera Blast remains unavailable under the global learnset rule.
@@ -113034,3 +113052,47 @@ const glimmoraAevianLearnset = Object.fromEntries(glimmoraAevianMoveIds.map(move
 glimmoraAevianLearnset.injection = ["9L1"];
 (Learnsets as any).glimmoraaevian = {learnset: glimmoraAevianLearnset};
 (Learnsets as any).glimmoraaevianmega = {learnset: {...glimmoraAevianLearnset}};
+
+// Deluge TM distribution requested for compatible species and regional forms.
+const DELUGE_TM_SPECIES = [
+	'squirtle', 'wartortle', 'blastoise', 'psyduck', 'golduck', 'poliwag', 'poliwhirl', 'poliwrath',
+	'tentacool', 'tentacruel', 'slowpoke', 'slowpokegalar', 'slowbro', 'slowbrogalar', 'seel', 'dewgong',
+	'shellder', 'cloyster', 'krabby', 'kingler', 'chansey', 'horsea', 'seadra', 'goldeen',
+	'seaking', 'staryu', 'starmie', 'taurospaldeaaqua', 'gyarados', 'lapras', 'vaporeon', 'omanyte',
+	'omastar', 'kabuto', 'kabutops', 'snorlax', 'dratini', 'dragonair', 'dragonite', 'totodile',
+	'croconaw', 'feraligatr', 'chinchou', 'lanturn', 'ampharosaevian', 'marill', 'azumarill', 'politoed',
+	'wooper', 'wooperpaldea', 'quagsire', 'slowking', 'slowkinggalar', 'dunsparce', 'qwilfish', 'qwilfishhisui',
+	'sneasel', 'sneaselhisui', 'corsola', 'corsolagalar', 'remoraid', 'octillery', 'delibird', 'mantine',
+	'kingdra', 'donphan', 'blissey', 'suicune', 'tyranitar', 'lugia', 'mudkip', 'marshtomp',
+	'swampert', 'lotad', 'lombre', 'ludicolo', 'wingull', 'pelipper', 'surskit', 'masquerain',
+	'makuhita', 'hariyama', 'aggron', 'carvanha', 'sharpedo', 'wailmer', 'wailord', 'barboach',
+	'whiscash', 'corphish', 'crawdaunt', 'lileep', 'cradily', 'anorith', 'armaldo', 'feebas',
+	'milotic', 'miloticaevian', 'castform', 'snorunt', 'glalie', 'spheal', 'sealeo', 'walrein',
+	'clamperl', 'huntail', 'gorebyss', 'relicanth', 'luvdisc', 'shelgon', 'salamence', 'latias',
+	'latios', 'kyogre', 'turtwig', 'grotle', 'torterra', 'piplup', 'prinplup', 'empoleon',
+	'bidoof', 'bibarel', 'cranidos', 'rampardos', 'shieldon', 'bastiodon', 'buizel', 'floatzel',
+	'shellos', 'gastrodon', 'gastrodonaevian', 'gastrodoneastaevian', 'munchlax', 'hippopotas', 'hippowdon', 'drapionrejuv',
+	'croagunk', 'toxicroak', 'finneon', 'lumineon', 'mantyke', 'snover', 'abomasnow', 'weavile',
+	'dusknoir', 'froslass', 'froslassaevian', 'palkia', 'regigigas', 'phione', 'manaphy', 'arceus',
+	'oshawott', 'dewott', 'samurott', 'samurotthisui', 'panpour', 'simipour', 'tympole', 'palpitoad',
+	'seismitoad', 'basculin', 'basculinwhitestriped', 'sandile', 'krokorok', 'krookodile', 'darumakagalar', 'darmanitangalar',
+	'maractus', 'tirtouga', 'carracosta', 'ducklett', 'swanna', 'vanillite', 'vanillish', 'vanilluxe',
+	'frillish', 'jellicent', 'alomomola', 'cubchoo', 'beartic', 'stunfisk', 'stunfiskgalar', 'kyurem',
+	'keldeo', 'froakie', 'frogadier', 'greninja', 'pangoro', 'inkay', 'malamar', 'binacle',
+	'barbaracle', 'skrelp', 'dragalge', 'clauncher', 'clawitzer', 'helioptile', 'heliolisk', 'amaura',
+	'aurorus', 'goomy', 'sliggoo', 'sliggoohisui', 'goodra', 'goodrahisui', 'bergmite', 'avalugg',
+	'avalugghisui', 'volcanion', 'popplio', 'brionne', 'primarina', 'crabrawler', 'crabominable', 'wishiwashi',
+	'mareanie', 'toxapex', 'dewpider', 'araquanid', 'wimpod', 'golisopod', 'palossandrocky', 'palossandicy',
+	'silvally', 'bruxish', 'dhelmise', 'tapufini', 'sobble', 'drizzile', 'inteleon', 'greedent',
+	'chewtle', 'drednaw', 'cramorant', 'arrokuda', 'barraskewda', 'clobbopus', 'grapploct', 'pincurchin',
+	'eiscue', 'dracovish', 'arctovish', 'drakloak', 'dragapult', 'urshifurapidstrike', 'basculegion', 'sneasler',
+	'overqwil', 'quaxly', 'quaxwell', 'quaquaval', 'lechonk', 'oinkologne', 'oinkolognef', 'tadbulb',
+	'bellibolt', 'brambleghast', 'wiglett', 'wugtrio', 'finizen', 'palafin', 'greavard', 'houndstone',
+	'flamigo', 'cetoddle', 'cetitan', 'veluza', 'veluzarejuv', 'dondozo', 'tatsugiri', 'clodsire',
+	'dudunsparce', 'greattusk', 'screamtail', 'irontreads', 'ironbundle', 'ironhands', 'ironthorns', 'frigibax',
+	'arctibax', 'baxcalibur', 'roaringmoon', 'walkingwake', 'poltchageist', 'sinistcha', 'terapagos',
+];
+for (const species of DELUGE_TM_SPECIES) {
+	const learnset = (Learnsets as any)[species].learnset;
+	if (!learnset.deluge?.includes('9M')) learnset.deluge = [...(learnset.deluge || []), '9M'];
+}

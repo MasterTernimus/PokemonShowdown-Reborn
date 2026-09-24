@@ -10,7 +10,7 @@ describe('Gardevoir-Void and Royal Voice',function(){
   assert.equal(mon.species.name,'Gardevoir-Void');
   assert.deepEqual(mon.species.baseStats,battle.dex.species.get('Gardevoir').baseStats);
   assert.deepEqual(mon.species.abilities,{0:'Trace',1:'Dream Sickness',H:'Void Veil'});
-  assert.equal(mon.canMegaEvo,'Gardevoir-Mega');
+  assert.equal(mon.canMegaEvo,'Gardevoir-Mega-Alt');
   battle.makeChoices('move splash mega','move splash');
   assert.equal(mon.ability,'royalvoice');assert(mon.hasAbility('dreamsickness'));
   const move=battle.dex.getActiveMove('hypervoice');

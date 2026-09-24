@@ -8,7 +8,7 @@ describe('Silvally Mimicry',function(){
   battle.makeChoices('team 1','team 1');
   const mon=battle.p1.active[0];
   for(const [field,type] of [['electricterrain','Electric'],['grassyterrain','Grass'],['mistyterrain','Fairy'],['psychicterrain','Psychic'],['burningterrain','Fire'],['watersurfaceterrain','Water'],['hauntedterrain','Ghost'],['glitchterrain','???']]){
-   battle.field.setTerrain(field,mon);assert.deepEqual(mon.getTypes(),[type]);assert.equal(mon.item,'firememory');
+   battle.field.setFieldOrAura(field,5,mon,null,true);assert.deepEqual(mon.getTypes(),[type]);assert.equal(mon.item,'firememory');
   }
   for(let i=0; i<20 && battle.field.terrain; i++) battle.field.clearTerrain();assert.deepEqual(mon.getTypes(),['Normal']);
   assert.equal(mon.setType('Water'),false,'Other type changes remain blocked');

@@ -729,8 +729,6 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	infernapereborn: "Infernape-Alt",
 	empoleonreborn: "Empoleon-Alt",
 	luxraydeso: "Luxray-Alt",
-	nidoqueenreborn: "Nidoqueen-Alt",
-	nidokingreborn: "Nidoking-Alt",
 	ninetalesreborn: "Ninetales-Alt",
 	sandslashreborn: "Sandslash-Alt",
 	tentacruelreborn: "Tentacruel-Alt",

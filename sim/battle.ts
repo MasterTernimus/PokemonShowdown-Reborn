@@ -610,7 +610,9 @@ export class Battle {
 				}
 			} else if (handler.state?.target instanceof Field) {
 				let expectedStateLocation;
-				if (effect.effectType === 'Weather') {
+				if (effect.id === 'terrainaura') {
+					expectedStateLocation = handler.state.target.auraState;
+				} else if (effect.effectType === 'Weather') {
 					expectedStateLocation = handler.state.target.weatherState;
 				} else if (effect.effectType === 'Terrain') {
 					expectedStateLocation = handler.state.target.terrainState;
@@ -1308,6 +1310,16 @@ export class Battle {
 				end: customHolder ? null : field.clearTerrain, effectHolder: customHolder || field,
 			}, callbackName));
 		}
+		if (field.auraField) {
+			const aura = this.dex.conditions.get('terrainaura');
+			callback = this.getCallback(field, aura, callbackName);
+			if (callback !== undefined) {
+				handlers.push(this.resolvePriority({
+					effect: aura, callback, state: field.auraState,
+					end: customHolder ? null : field.clearAura, effectHolder: customHolder || field,
+				}, callbackName));
+			}
+		}
 
 		return handlers;
 	}
@@ -1619,6 +1631,7 @@ export class Battle {
 
 	draw() {
 		this.winner = '';
+		this.field.clearAura(false);
 		this.add('');
 		this.add('tie');
 		this.ended = true;
@@ -1645,6 +1658,7 @@ export class Battle {
 			side = null;
 		}
 		this.winner = side ? side.name : '';
+		this.field.clearAura(false);
 
 		this.add('');
 		if (side?.allySide) {

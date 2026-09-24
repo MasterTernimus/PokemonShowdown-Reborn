@@ -1454,6 +1454,15 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const result = await logPromise;
 		return result;
 	}
+	async getFieldInfo(): Promise<{field: string, fieldTurns: number | null, aura: string, auraTurns: number | null} | null> {
+		const response = new Promise<string[]>((resolve, reject) => {
+			if (!this.dataResolvers) this.dataResolvers = [];
+			this.dataResolvers.push([resolve, reject]);
+		});
+		void this.stream.write('>requestfieldinfo');
+		const lines = await response;
+		return JSON.parse(lines[0]);
+	}
 }
 
 export class RoomBattleStream extends BattleStream {

@@ -727,7 +727,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
 				pokemon.addVolatile('protosynthesis');
 			}
-			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrain('electricterrain') && pokemon.useItem()) {
+			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrainOrAura('electricterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('quarkdrive');
 			}
 		},
@@ -1303,6 +1303,42 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 2666,
 		gen: 9,
+	},
+	tyrantrumite: {
+		name: "Tyrantrumite",
+		spritenum: 0,
+		megaStone: { "Tyrantrum": "Tyrantrum-Mega" },
+		itemUser: ["Tyrantrum"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2715,
+		gen: 9,
+		isNonstandard: "Custom",
+	},
+	aurorite: {
+		name: "Aurorite",
+		spritenum: 0,
+		megaStone: { "Aurorus": "Aurorus-Mega" },
+		itemUser: ["Aurorus"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2716,
+		gen: 9,
+		isNonstandard: "Custom",
+	},
+	miloticide: {
+		name: "Miloticide",
+		spritenum: 0,
+		megaStone: { "Milotic": "Milotic-Mega" },
+		itemUser: ["Milotic"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2717,
+		gen: 9,
+		isNonstandard: "Custom",
 	},
 	cloversweet: {
 		name: "Clover Sweet",
