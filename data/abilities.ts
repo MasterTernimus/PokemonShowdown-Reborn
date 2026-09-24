@@ -1665,6 +1665,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10206,
 	},
 	alchemistsurge: {
+		onModifyPriority(priority, pokemon, target, move) {
+			return this.dex.abilities.get('prankster').onModifyPriority?.call(this, priority, pokemon, target, move);
+		},
 		onStart(pokemon) {
 			this.dex.abilities.get('psychicsurge').onStart?.call(this, pokemon);
 		},
@@ -14430,6 +14433,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(source) {
 			if (this.field.setTerrain('forestterrain')) {
 				this.field.setTerrainDuration(5);
+			}
+			if (this.field.isTerrain('forestterrain')) {
+				this.field.setAura('grassyterrain', 5, source, this.effect);
 			}
 		},
 		flags: {},

@@ -116,8 +116,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	alchemistsurge: {
 		name: "Alchemist Surge",
-		desc: "This Pokemon creates Psychic Terrain on entry, gains Competitive, Neuroforce, and Hydra Bond's effects.",
-		shortDesc: "Psychic Surge + Competitive + Neuroforce + Hydra Bond.",
+		desc: "This Pokemon creates Psychic Terrain on entry and has Competitive, Neuroforce, Hydra Bond, and Prankster's effects.",
+		shortDesc: "Psychic Surge + Competitive + Neuroforce + Hydra Bond + Prankster.",
 	},
 	guidingomen: {
 		name: "Guiding Omen",
@@ -3599,8 +3599,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	forestsurge: {
 		name: "Forest Surge",
-		desc: "On switch-in, this Pokemon sets Forest Terrain for 5 turns.",
-		shortDesc: "On switch-in, this Pokemon sets Forest Terrain for 5 turns.",
+		desc: "On switch-in, this Pokemon sets Forest Terrain and Grassy Aura for 5 turns. It also has Proficient's effect.",
+		shortDesc: "Sets Forest and Grassy Aura for 5 turns; Proficient.",
 	},
 	apexarmor: {"name":"Apex Armor","desc":"Bulletproof + Rough Skin + Stalwart + Self Sufficient. Blocks bullet/pulse moves, reduces attack damage by 20%, damages contact attackers by 1/8 max HP, and ignores redirection. Restores 1/16 max HP each turn and prevents hail and sandstorm damage.","shortDesc":"Bulletproof + Rough Skin + Stalwart + Self Sufficient."},
 	ancientbloom: {

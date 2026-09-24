@@ -6,14 +6,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifySpD(spd, pokemon) {
 			if (this.field.isAura('mistyterrain') && pokemon.hasType('Fairy')) return this.chainModify(1.5);
 		},
-		onTryHitPriority: 4,
-		onTryHit(target, source, move) {
-			if (!this.field.isAura('psychicterrain')) return;
-			if (['followme', 'ragepowder', 'spotlight'].includes(move.id) || move.priority <= 0.1 || move.target === 'self') return;
-			if (target.isSemiInvulnerable() || target.isAlly(source) || !target.isGrounded()) return;
-			this.add('-activate', target, 'Psychic Aura');
-			return null;
-		},
 		onModifyMovePriority: -100,
 		onModifyMove(move) {
 			const aura = this.field.getAura();
