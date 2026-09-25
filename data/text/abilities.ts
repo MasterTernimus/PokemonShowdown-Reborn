@@ -3785,8 +3785,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aevianbolt: {
 		name: "Aevian Bolt",
-		desc: "On entry, Druddigon permanently transforms into Druddigon-Rejuv. This Pokemon also has the effects of Storm Power, Surge Surfer, and Volt Absorb.",
-		shortDesc: "Transforms Druddigon into Druddigon-Rejuv; Storm Power + Surge Surfer + Volt Absorb.",
+		desc: "On entry, Druddigon permanently transforms into Druddigon-Rejuv. This Pokemon also has the effects of Storm Power, Static, and Volt Absorb.",
+		shortDesc: "Transforms Druddigon into Druddigon-Rejuv; Storm Power + Static + Volt Absorb.",
 	},
 	powerdrill: {
 		name: "Power Drill",

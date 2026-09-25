@@ -424,7 +424,7 @@ describe('Composite ability cleanup', function () {
 			mossarmor: ['bruteforce', 'stamina', 'naturalrecovery'],
 		stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
 		aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
-		aevianbolt: ['stormpower', 'surgesurfer', 'voltabsorb'],
+			aevianbolt: ['stormpower', 'static', 'voltabsorb'],
 			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
 			sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
 			treasuretitan: ['filter', 'eartheater', 'heavymetal'],

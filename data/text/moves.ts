@@ -7786,3 +7786,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 };
+
+const typeZMoves: [IDEntry, string][] = [
+	['savagespinout', 'Bug'], ['blackholeeclipse', 'Dark'], ['devastatingdrake', 'Dragon'],
+	['gigavolthavoc', 'Electric'], ['twinkletackle', 'Fairy'], ['alloutpummeling', 'Fighting'],
+	['infernooverdrive', 'Fire'], ['supersonicskystrike', 'Flying'], ['neverendingnightmare', 'Ghost'],
+	['bloomdoom', 'Grass'], ['tectonicrage', 'Ground'], ['subzeroslammer', 'Ice'],
+	['breakneckblitz', 'Normal'], ['aciddownpour', 'Poison'], ['shatteredpsyche', 'Psychic'],
+	['continentalcrush', 'Rock'], ['corkscrewcrash', 'Steel'], ['hydrovortex', 'Water'],
+];
+for (const [moveId, type] of typeZMoves) {
+	MovesText[moveId].desc = `A one-use ${type}-type Z-Move. Its power depends on the damaging ${type}-type move selected as its base.`;
+	MovesText[moveId].shortDesc = `Power depends on the base ${type}-type move.`;
+}
+
+for (const [moveId, user, baseMove] of [
+	['catastropika', 'Pikachu', 'Volt Tackle'],
+	['letssnuggleforever', 'Mimikyu', 'Play Rough'],
+	['oceanicoperetta', 'Primarina', 'Sparkling Aria'],
+	['pulverizingpancake', 'Snorlax', 'Giga Impact'],
+	['sinisterarrowraid', 'Decidueye', 'Spirit Shackle'],
+	['soulstealing7starstrike', 'Marshadow', 'Spectral Thief'],
+] as [IDEntry, string, string][]) {
+	MovesText[moveId].desc = `${user}'s exclusive Z-Move, used through ${baseMove}. No additional effect.`;
+	MovesText[moveId].shortDesc = `Exclusive ${user} Z-Move; no additional effect.`;
+}

@@ -1407,8 +1407,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpA(spa, pokemon) {
 			return (this.dex.abilities.get('stormpower') as any).onModifySpA?.call(this, spa, pokemon);
 		},
-		onModifySpe(spe, pokemon) {
-			return (this.dex.abilities.get('surgesurfer') as any).onModifySpe?.call(this, spe, pokemon);
+		onDamagingHit(damage, target, source, move) {
+			return this.dex.abilities.get('static').onDamagingHit?.call(this, damage, target, source, move);
 		},
 		onTryHit(target, source, move) {
 			return (this.dex.abilities.get('voltabsorb') as any).onTryHit?.call(this, target, source, move);
