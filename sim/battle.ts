@@ -519,6 +519,10 @@ export class Battle {
 	 */
 	eachEvent(eventid: string, effect?: Effect | null, relayVar?: boolean) {
 		const actives = this.getAllActive();
+		// Also catch suppression beginning mid-turn, such as losing Ability Shield under Gas.
+		if (eventid === 'Update') {
+			for (const pokemon of actives) pokemon.revertSuppressedRegionalForm();
+		}
 		if (!effect && this.effect) effect = this.effect;
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
 		for (const pokemon of actives) {
@@ -1454,6 +1458,8 @@ export class Battle {
 			this.singleEvent('Start', sourceAbility, target.abilityState, target);
 			this.singleEvent('Start', targetAbility, source.abilityState, source);
 		}
+		source.updateAbilityAppearance();
+		target.updateAbilityAppearance();
 	}
 
 	getPokemon(fullname: string | Pokemon) {

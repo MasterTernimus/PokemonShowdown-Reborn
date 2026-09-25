@@ -536,7 +536,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	eeviumz: {
 		name: "Eevium Z",
-		shortDesc: "Eevee forms: Def/SpD 1.5x; heals 1/16; Extreme Evoboost via Last Resort or Veevee Volley.",
+		shortDesc: "Eevee forms: heals 1/16 max HP each turn; Extreme Evoboost via Last Resort or Veevee Volley.",
 	},
 	ejectbutton: {
 		name: "Eject Button",

@@ -31,7 +31,8 @@ describe('Seviper-Mega', function () {
 		const seviper = battle.p1.active[0];
 		assert.species(seviper, 'Seviper-Mega');
 		assert.equal(seviper.ability, 'sirius');
-		for (const component of ['apexvenom', 'whiplash', 'accumulation']) assert(seviper.hasAbility(component));
+		for (const component of ['apexvenom', 'whiplash']) assert(seviper.hasAbility(component));
+		assert.false(seviper.hasAbility('accumulation'));
 		const poisonFang = battle.dex.getActiveMove('poisonfang');
 		battle.singleEvent('ModifyMove', seviper.getAbility(), seviper.abilityState, poisonFang, seviper, battle.p2.active[0]);
 		assert.equal(poisonFang.type, 'Dragon');
@@ -40,6 +41,18 @@ describe('Seviper-Mega', function () {
 		const dragonTail = battle.dex.getActiveMove('dragontail');
 		const boosted = battle.runEvent('BasePower', seviper, battle.p2.active[0], dragonTail, 60);
 		assert.equal(boosted, 90, 'Whiplash should boost Tail moves by 1.5x');
-		assert.equal(battle.runEvent('SourceModifyAtk', seviper, battle.p2.active[0], battle.dex.moves.get('icepunch'), 100), 50);
+		assert.equal(battle.runEvent('SourceModifyAtk', seviper, battle.p2.active[0], battle.dex.moves.get('icepunch'), 100), 100);
+	});
+
+	it('does not Stockpile or auto-release after Mega Evolution', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Seviper', item: 'Sevipite', moves: ['splash']},
+		], [{species: 'Magikarp', moves: ['splash']}]]);
+		battle.makeChoices('team 1', 'team 1');
+		for (let turn = 1; turn <= 4; turn++) {
+			battle.makeChoices(turn === 1 ? 'move splash mega' : 'move splash', 'move splash');
+		}
+		assert.false(!!battle.p1.active[0].volatiles['stockpile']);
+		assert.false(battle.log.some(line => line.includes('|move|p1a: Seviper|Spit Up|') || line.includes('|move|p1a: Seviper|Belch|')));
 	});
 });

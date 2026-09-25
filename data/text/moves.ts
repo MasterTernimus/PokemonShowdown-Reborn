@@ -54,8 +54,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	atlantiswall: {
 		name: "Atlantis Wall",
-		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during rain or on Water Surface or Underwater terrain. Light Clay and those terrains extend it to 8 turns. Critical hits and moves that bypass screens ignore this effect.",
-		shortDesc: "Rain or Water Surface/Underwater: halves super-effective damage for 5-8 turns.",
+		desc: "Protects the user's side for 5 turns, halving damage from super-effective attacks, whether physical or special. Critical hits and attacks that bypass screens ignore the wall; screen-breaking moves remove it. Can be used only during effective rain or on Water Surface, Underwater, Misty Terrain, Murkwater Surface, or Midnight Zone; fails if Atlantis Wall is already active. Lasts 8 turns with Light Clay, during effective rain, or on Water Surface, Underwater, or Midnight Zone. Has +1 priority on any of the listed terrains. Air Lock and Cloud Nine suppress rain as a use condition.",
+		shortDesc: "5 turns (8 with Light Clay, rain, Water Surface, Underwater, or Midnight Zone); halves super-effective damage.",
 	},
 	aciddownpour: {
 		name: "Acid Downpour",
@@ -2735,13 +2735,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxspiritvolley: {
 		name: "G-Max Spirit Volley",
-		desc: "Ghost-type, 100 Base Power. This move uses the user's higher offensive stat. After it hits, all opposing Pokemon take extra damage equal to half of the original hit's damage.",
-		shortDesc: "100 BP Ghost. Uses higher offense. Foes take half-hit splash damage.",
+		desc: "Ghost-type, 100 Base Power. Uses the user's higher offensive stat. Hits the selected foe at full power, then makes a separate 50 Base Power Ghost-type hit against one other adjacent foe, if present. The follow-up checks its own type immunity and protection. In a single battle, there is no follow-up.",
+		shortDesc: "100 BP Ghost to one foe; 50 BP Ghost follow-up to another foe.",
 	},
 	gmaxdeathroll: {
 		name: "G-Max Death Roll",
-		desc: "Dark-type, 140 Base Power. This move always hits and has a 30% chance to make each opposing Pokemon flinch.",
-		shortDesc: "140 BP Dark. Always hits; 30% chance to flinch each foe.",
+		desc: "Dark-type, 140 Base Power. Always hits one selected foe at full power. After a successful hit, each opposing active Pokemon independently has a 30% chance to flinch; the other foes take no damage from this move.",
+		shortDesc: "140 BP Dark to one foe; 30% flinch chance for each foe.",
 	},
 	grassknot: {
 		name: "Grass Knot",

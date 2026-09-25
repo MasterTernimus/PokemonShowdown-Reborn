@@ -1068,7 +1068,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Tough",
 	},
 	atlantiswall: {
-		num: 10397, accuracy: true, basePower: 0, category: "Status", name: "Atlantis Wall", pp: 1,
+		num: 10397, accuracy: true, basePower: 0, category: "Status", name: "Atlantis Wall", pp: 10,
 		priority: 0, flags: { snatch: 1, metronome: 1 }, sideCondition: 'atlantiswall',
 		onModifyPriority(priority) {
 			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'mistyterrain', 'murkwatersurfaceterrain', 'midnightzoneterrain'])) {
@@ -1091,9 +1091,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target === source || !this.effectState.target.hasAlly(target)) return;
 				if (target.getMoveHitData(move).typeMod <= 0) return;
+				if (target.getMoveHitData(move).crit || move.infiltrates) return;
 				return this.chainModify(0.5);
 			},
-			onSideStart(side) { this.add('-sidestart', side, 'move: Atlantis Wall'); },
+			onSideStart(side) {
+			if ((this.effectState?.duration ?? 5) > 5) {
+				this.add('-sidestart', side, 'move: Atlantis Wall', '[persistent]');
+			} else {
+				this.add('-sidestart', side, 'move: Atlantis Wall');
+			}
+			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
 			onSideEnd(side) { this.add('-sideend', side, 'move: Atlantis Wall'); },
@@ -2173,6 +2180,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			pokemon.side.removeSideCondition('lightscreen');
 			pokemon.side.removeSideCondition('auroraveil');
 			 pokemon.side.removeSideCondition('arenitewall');
+			pokemon.side.removeSideCondition('atlantiswall');
 		},
 		target: "normal",
 		type: "Fighting",
@@ -3549,7 +3557,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { mirror: 1, metronome: 1 },
 		onHitField(target, source) {
 			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'luckychant', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire', 'gmaxvolcalith',
+				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'arenitewall', 'atlantiswall', 'luckychant', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire', 'gmaxvolcalith',
 			];
 			let success = false;
 			if (this.gameType === "freeforall") {
@@ -4013,7 +4021,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let success = this.field.clearAura();
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 }) || success;
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'safeguard', 'mist', ...removeAll];
+			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
@@ -5205,7 +5213,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			durationCallback(source, target, effect) {
 				const terrainMoves = ['stokedsparksurfer', 'iondeluge', 'plasmafists'];
 				let duration = 5;
-				if (effect && (source.hasAbility(effect.id) || terrainMoves.includes(effect.id))) {
+				if (effect && terrainMoves.includes(effect.id)) {
 					duration = 3;
 				}
 				if (source?.hasItem('amplifieldrock')) {
@@ -7387,9 +7395,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hasItem('Ability Shield')) return false;
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
+				pokemon.revertSuppressedRegionalForm();
 			},
 			onCopy(pokemon) {
 				if (pokemon.getAbility().flags['cantsuppress']) pokemon.removeVolatile('gastroacid');
+				pokemon.revertSuppressedRegionalForm();
 			},
 		},
 		target: "normal",
@@ -8551,7 +8561,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(source) {
 				let success = false;
 				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-				const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'safeguard', 'mist', ...removeAll];
+				const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall', 'safeguard', 'mist', ...removeAll];
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
 						if (!removeAll.includes(targetCondition)) continue;
@@ -8618,27 +8628,29 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
 				move.category = 'Special';
 				move.overrideOffensiveStat = 'spa';
+				move.overrideDefensiveStat = 'spd';
 			} else {
 				move.category = 'Physical';
 				move.overrideOffensiveStat = 'atk';
-			}
-			if (this.gameType === 'freeforall') {
-				move.multihit = 2;
-				move.multihitType = 'hydrabond';
-				move.target = 'allAdjacentFoes';
-			} else {
-				move.multihit = 3;
-				move.multihitType = 'hydrabond';
+				move.overrideDefensiveStat = 'def';
 			}
 		},
 		onAfterHit(target, source, move) {
-			if (move.hit && move.hit > 1) return;
-			if (!source.lastDamage) return;
-			const damage = Math.max(1, Math.floor(source.lastDamage / 2));
-			for (const pokemon of source.foes()) {
-				if (!pokemon.hp || pokemon.fainted) continue;
-				this.damage(damage, pokemon, source, move);
-			}
+			if (!target || !source.hp) return;
+			const otherFoes = source.foes().filter(pokemon =>
+				pokemon !== target && pokemon.hp && !pokemon.fainted && source.isAdjacent(pokemon));
+			if (!otherFoes.length) return;
+			const other = this.sample(otherFoes);
+			const followUp = this.dex.getActiveMove('gmaxspiritvolley');
+			followUp.basePower = 50;
+			followUp.category = move.category;
+			followUp.isZOrMaxPowered = move.isZOrMaxPowered;
+			followUp.overrideOffensiveStat = move.overrideOffensiveStat;
+			followUp.overrideDefensiveStat = move.overrideDefensiveStat;
+			followUp.onAfterHit = undefined;
+			this.addMove('-anim', source, move.name, other);
+			if (!this.runEvent('TryHit', other, source, followUp)) return;
+			this.actions.tryMoveHit(other, source, followUp);
 		},
 		target: "adjacentFoe",
 		type: "Ghost",
@@ -8658,8 +8670,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyMove(move) {
 			move.category = "Physical";
 		},
-		secondaries: [{ chance: 30, volatileStatus: "flinch" }],
-		target: "allAdjacentFoes",
+		self: {
+			onHit(source) {
+				for (const pokemon of source.foes()) {
+					if (pokemon.hp && this.randomChance(3, 10)) pokemon.addVolatile('flinch', source);
+				}
+			},
+		},
+		target: "adjacentFoe",
 		type: "Dark",
 		contestType: "Cool",
 	},
@@ -8799,7 +8817,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 5,
 			durationCallback(source, target, effect) {
 				let duration = 5;
-				if (effect && ((source.hasAbility(effect.id) && effect.id !== 'seedsower') || effect.id === 'bloomdoom')) {
+				if (effect?.id === 'bloomdoom') {
 					duration = 3;
 				}
 				if (source?.hasItem('amplifieldrock')) {
@@ -13777,7 +13795,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 5,
 			durationCallback(source, target, effect) {
 				let duration = 5;
-				if (effect && (source.hasAbility(effect.id) || effect.id === 'mist')) {
+				if (effect?.id === 'mist') {
 					duration = 3;
 				}
 				if (source.hasItem('amplifieldrock')) {
@@ -15226,6 +15244,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onHit(target, source, move) {
+			if (this.field.isTerrain('underwaterterrain')) {
+				this.field.changeTerrain('midnightzoneterrain', source, move);
+			}
+		},
 		condition: {
 			duration: 2,
 			onInvulnerability: false,
@@ -15879,7 +15902,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (pokemon.hasAbility('evilsanta')) {
 				move.basePower = 120;
 				move.type = 'Dark';
-				move.target = 'allAdjacentFoes';
+				move.target = 'allAdjacent';
 				move.onAfterHit = function (target, source, move) {
 					const effects = ['damage', 'toxic', 'confusion', 'curse'];
 					while (effects.length) {
@@ -15887,7 +15910,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						const effect = effects.splice(index, 1)[0];
 						if (effect === 'damage') {
 							const damage = Math.floor(target.maxhp / 8);
-							if (damage > 0 && this.damage(damage, target, source, move)) return;
+							if (damage > 0 && this.damage(damage, target, source, this.dex.abilities.get('evilsanta'))) return;
 						} else if (effect === 'toxic') {
 							if (target.setStatus('tox', source, move)) return;
 						} else if (effect === 'confusion') {
@@ -16094,6 +16117,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			pokemon.side.removeSideCondition('lightscreen');
 			pokemon.side.removeSideCondition('auroraveil');
 			 pokemon.side.removeSideCondition('arenitewall');
+			pokemon.side.removeSideCondition('atlantiswall');
 		},
 		target: "normal",
 		type: "Psychic",
@@ -16129,14 +16153,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			effectType: "Terrain",
 			duration: 5,
 			durationCallback(source, target, effect) {
-				let duration = 5;
-				if (effect && source.hasAbility(effect.id)) {
-					duration = 3;
-				}
-				if (source?.hasItem('amplifieldrock')) {
-					return duration + 3;
-				}
-				return duration;
+				return source?.hasItem('amplifieldrock') ? 8 : 5;
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
@@ -16751,6 +16768,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			pokemon.side.removeSideCondition('lightscreen');
 			pokemon.side.removeSideCondition('auroraveil');
 			 pokemon.side.removeSideCondition('arenitewall');
+			pokemon.side.removeSideCondition('atlantiswall');
 		},
 		onModifyType(move, pokemon) {
 			switch (pokemon.species.name) {
@@ -24638,7 +24656,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onTryHit(target) {
-			for (const condition of ['reflect', 'lightscreen', 'auroraveil', 'arenitewall']) target.side.removeSideCondition(condition);
+			for (const condition of ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall']) target.side.removeSideCondition(condition);
 		},
 		target: "normal",
 		type: "Steel",

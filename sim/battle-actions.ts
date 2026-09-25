@@ -243,6 +243,7 @@ export class BattleActions {
 		this.battle.speedSort(allActive);
 		this.battle.speedOrder = allActive.map(a => a.getFieldPositionValue());
 		this.battle.fieldEvent('SwitchIn', switchersIn);
+		for (const poke of switchersIn) poke.revertSuppressedRegionalForm();
 
 		for (const poke of switchersIn) {
 			if (!poke.hp) continue;
@@ -2335,8 +2336,9 @@ export class BattleActions {
 		if (species.id === 'golisopod' || species.id === 'golisopodaevian') return null;
 		const megaFormes = species.otherFormes?.filter(forme => this.dex.species.get(forme).isMega);
 		if (megaFormes?.length && item.megaStone) {
-			const fallbackMega = this.dex.species.get(megaFormes[0]);
-			if (fallbackMega.exists && fallbackMega.name !== species.name) return fallbackMega.name;
+			const fallbackMega = megaFormes.map(forme => this.dex.species.get(forme)).find(forme =>
+				forme.requiredItem === item.name || forme.requiredItems?.includes(item.name));
+			if (fallbackMega?.exists && fallbackMega.name !== species.name) return fallbackMega.name;
 		}
 		return null;
 	}
