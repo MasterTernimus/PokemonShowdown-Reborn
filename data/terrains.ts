@@ -858,8 +858,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return false;
 				}
 				const failMoves = ['trickroom', 'wonderroom', 'gravity', 'magicroom'];
-				this.add('-fieldstart', "Cold Eclipse Terrain",
-					...(this.field.terrainState.origin?.id === 'auroradomain' ? ['[turns] 5'] : []));
+				this.add('-fieldstart', "Cold Eclipse Terrain");
 				this.field.terrainState.terrainChanges?.set('coldEclipseHailExtended', this.field.isWeather('hail') ? 1 : 0);
 				this.field.terrainState.terrainChanges?.set('coldEclipseHeat', 0);
 				startColdEclipseRainWaterSport(this);
@@ -1387,7 +1386,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onFieldStart() {
 				this.add('-message', 'If you wish to slay a dragon...');
 				this.add('-fieldstart', 'Dragon\'s Den Terrain',
-					...(this.field.terrainState.origin?.id === 'tyrantdomain' ? ['[turns] 5'] : []));
+					...(this.field.terrainState.origin?.id === 'tyrantdomain' ? ['[turns] 8'] : []));
 				if (this.field.isWeather('hail')) {
 					this.field.clearWeather();
 				}
@@ -1490,7 +1489,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onFieldStart() {
-				this.add('-fieldstart', 'Fairy Tale Terrain');
+				this.add('-fieldstart', 'Fairy Tale Terrain',
+					...(this.field.terrainState.origin?.id === 'auroradomain' ? ['[turns] 8'] : []));
 				for (const pokemon of this.getAllActive()) {
 					if (!pokemon.hasAbility('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'fairytaleterrain') continue;
 					pokemon.abilityState.fortressShellBoostedTerrain = 'fairytaleterrain';

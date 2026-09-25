@@ -17,7 +17,7 @@ describe('Aevian Bolt', () => {
 		assert.equal(Dex.species.get('Druddigon').abilities.S, 'Aevian Bolt');
 		const rejuv = Dex.species.get('Druddigon-Rejuv');
 		assert.deepEqual(rejuv.types, ['Dragon', 'Electric']);
-		assert.deepEqual(rejuv.baseStats, {hp: 107, atk: 50, def: 88, spa: 120, spd: 100, spe: 90});
+		assert.deepEqual(rejuv.baseStats, {hp: 107, atk: 60, def: 88, spa: 120, spd: 100, spe: 80});
 		assert.equal(rejuv.requiredAbility, 'Aevian Bolt');
 		for (const move of ['agility', 'airslash', 'bravebird', 'discharge', 'hurricane', 'risingvoltage', 'voltswitch', 'zapcannon']) {
 			assert(Learnsets.druddigon.learnset[move], `Druddigon should learn ${move}`);

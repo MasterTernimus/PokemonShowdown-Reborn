@@ -126,6 +126,43 @@ describe('Schooling custom effects', () => {
 		assert.species(wishiwashi, 'Wishiwashi-Sevii-Schooling');
 	});
 
+	it('should let Sevii Schooling Dive through Dry Skin in Murkwater', () => {
+		battle = common.createBattle({ formatid: 'gen9doubleswatersurface' }, [[
+			{ species: 'Wishiwashi', ability: 'Sevii Schooling', moves: ['dive'] },
+			{ species: 'Magikarp', moves: ['splash'] },
+		], [
+			{ species: 'Toxicroak-Deso', ability: 'Dry Skin', moves: ['splash'] },
+			{ species: 'Magikarp', moves: ['splash'] },
+		]]);
+		battle.makeChoices('team 12', 'team 12');
+		const wishiwashi = battle.p1.active[0];
+		const toxicroak = battle.p2.active[0];
+		assert.equal(toxicroak.ability, 'dryskin');
+		battle.field.changeTerrain('murkwatersurfaceterrain', wishiwashi);
+		assert.species(wishiwashi, 'Wishiwashi-Sevii-Schooling');
+		battle.makeChoices('move dive +1, move splash', 'move splash, move splash');
+		const hpBefore = toxicroak.hp;
+		battle.makeChoices('move dive +1, move splash', 'move splash, move splash');
+		assert(toxicroak.hp < hpBefore, 'Sevii Schooling Mold Breaker should bypass Dry Skin');
+		assert(!battle.log.some(line => line.includes('absorbed some of the water')), 'Dry Skin should not absorb Dive');
+	});
+
+	it('should let Ability Shield preserve Dry Skin against Sevii Schooling', () => {
+		battle = common.createBattle({ formatid: 'gen9doubleswatersurface' }, [[
+			{ species: 'Wishiwashi', ability: 'Sevii Schooling', moves: ['dive'] },
+			{ species: 'Magikarp', moves: ['splash'] },
+		], [
+			{ species: 'Toxicroak-Deso', ability: 'Dry Skin', item: 'Ability Shield', moves: ['splash'] },
+			{ species: 'Magikarp', moves: ['splash'] },
+		]]);
+		battle.makeChoices('team 12', 'team 12');
+		const wishiwashi = battle.p1.active[0];
+		battle.field.changeTerrain('murkwatersurfaceterrain', wishiwashi);
+		battle.makeChoices('move dive +1, move splash', 'move splash, move splash');
+		battle.makeChoices('move dive +1, move splash', 'move splash, move splash');
+		assert(battle.log.some(line => line.includes('absorbed some of the water')));
+	});
+
 	it('should apply Self Repair while in School Form', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Wishiwashi', ability: 'Schooling', moves: ['splash'] },

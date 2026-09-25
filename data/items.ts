@@ -1922,18 +1922,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem: false,
 		zMove: "Extreme Evoboost",
 		zMoveFrom: ["Last Resort", "Veevee Volley"],
-		onModifyDefPriority: 2,
-		onModifyDef(def, pokemon) {
-			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpDPriority: 2,
-		onModifySpD(spd, pokemon) {
-			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
-				return this.chainModify(1.5);
-			}
-		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {

@@ -47,6 +47,21 @@ export const RESTORATIVE_BERRIES = new Set([
 	'leppaberry', 'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry',
 ] as ID[]);
 
+const ABILITY_REGIONAL_FORMS: {[ability: string]: [string, string]} = {
+	aevianwing: ['unfezant', 'unfezantrejuv'],
+	aeviandream: ['musharna', 'musharnarejuv'],
+	aevianfrost: ['donphan', 'donphanrejuv'],
+	aeviantoxin: ['drapion', 'drapionrejuv'],
+	aevianspark: ['breloom', 'breloomrejuv'],
+	aeviangrief: ['sigilyph', 'sigilyphrejuv'],
+	aevianrocket: ['veluza', 'veluzarejuv'],
+	aevianglacier: ['turtonator', 'turtonatorrejuv'],
+	aevianbolt: ['druddigon', 'druddigonrejuv'],
+	parasitism: ['parasect', 'parasectrejuv'],
+	completeparasitism: ['parasect', 'parasectrejuv'],
+	reflector: ['bronzong', 'bronzongrejuv'],
+};
+
 export class Pokemon {
 	readonly side: Side;
 	readonly battle: Battle;
@@ -575,6 +590,9 @@ export class Pokemon {
 
 	getUpdatedDetails(level?: number) {
 		let name = this.species.name;
+		if (this.species.id === 'delibird' && (this.ability ?? toID(this.set.ability)) === 'evilsanta') {
+			name = 'Delibird-EvilSanta';
+		}
 		if (['Greninja-Bond', 'Rockruff-Dusk'].includes(name)) name = this.species.baseSpecies;
 		if (this.species.baseSpecies === 'Bronzong' && toID(this.set.ability) === 'reflector') name = 'Bronzong-Rejuv';
 		if (!level) level = this.level;
@@ -930,6 +948,21 @@ export class Pokemon {
 		}
 
 		return false;
+	}
+
+	/** Actual suppression locks an ability-driven regional form out until switching. */
+	revertSuppressedRegionalForm() {
+		if (!this.isActive || !this.hp || this.transformed || !this.ignoringAbility()) return false;
+		const forms = ABILITY_REGIONAL_FORMS[this.ability];
+		if (!forms || !forms.includes(this.species.id)) return false;
+		const wasSuppressed = this.m.regionalFormSuppressed;
+		this.m.regionalFormSuppressed = true;
+		// Reflector advertises its regional artwork in preview, even before it can activate.
+		if (this.species.id === forms[1] || (!wasSuppressed && this.ability === 'reflector')) {
+			this.formeChange(forms[0], this.battle.dex.conditions.get('gastroacid'), false);
+			this.updateMaxHp(true);
+		}
+		return true;
 	}
 
 	ignoringItem(isFling = false) {
@@ -1529,6 +1562,8 @@ export class Pokemon {
 		isPermanent?: boolean, abilitySlot = '0', message?: string, visualSpecies?: string
 	) {
 		const rawSpecies = this.battle.dex.species.get(speciesId);
+		if (this.m.regionalFormSuppressed && source?.effectType === 'Ability' &&
+			ABILITY_REGIONAL_FORMS[source.id]?.[1] === rawSpecies.id) return false;
 		const species = this.setSpecies(rawSpecies, source);
 		if (!species) return false;
 
@@ -1595,12 +1630,15 @@ export class Pokemon {
 		return true;
 	}
 
-	updateMaxHp() {
+	updateMaxHp(preserveRatio = false) {
 		const newBaseMaxHp = this.battle.statModify(this.species.baseStats, this.set, 'hp');
 		if (newBaseMaxHp === this.baseMaxhp) return;
 		this.baseMaxhp = newBaseMaxHp;
 		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
-		this.hp = this.hp <= 0 ? 0 : Math.max(1, newMaxHP - (this.maxhp - this.hp));
+		// Temporary regional reversion preserves health proportion, not missing HP:
+		// clamping a damage deficit to 1 would otherwise heal on restoration.
+		this.hp = this.hp <= 0 ? 0 : Math.max(1, preserveRatio ?
+			Math.floor(this.hp * newMaxHP / this.maxhp) : newMaxHP - (this.maxhp - this.hp));
 		this.maxhp = newMaxHP;
 		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
@@ -1662,6 +1700,11 @@ export class Pokemon {
 		delete this.itemState.started;
 
 		this.setSpecies(this.baseSpecies);
+		if (this.m.regionalFormSuppressed) {
+			delete this.m.regionalFormSuppressed;
+			this.updateMaxHp(true);
+		}
+		if (this.baseSpecies.id === 'delibird') this.details = this.getUpdatedDetails();
 	}
 
 	hasType(type: string | string[]) {
@@ -2054,7 +2097,16 @@ export class Pokemon {
 			(!isTransform || oldAbility.id !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
+		this.updateAbilityAppearance();
 		return oldAbility.id;
+	}
+
+	updateAbilityAppearance() {
+		if (this.transformed || this.species.id !== 'delibird') return;
+		const details = this.getUpdatedDetails();
+		if (details === this.details) return;
+		this.details = details;
+		if (this.isActive && !this.illusion) this.battle.add('detailschange', this, details, '[cosmetic]', '[silent]');
 	}
 
 	getAbility() {
@@ -2065,7 +2117,7 @@ export class Pokemon {
 		const abilityAliases: { [abilityid: string]: string[] } = {
 			shadowbond: ['battlebond', 'filter', 'selfsufficient', 'proficient', 'infiltrator'],
 			apexbond: ['battlebond', 'filter', 'selfsufficient', 'supremeoverlord', 'roughskin'],
-			sacredbond: ['battlebond', 'filter', 'selfsufficient', 'magmaarmor', 'intimidate'],
+			sacredbond: ['battlebond', 'filter', 'selfsufficient', 'magmaarmor', 'intimidate', 'flashfire'],
 			battlebond: ['filter', 'selfsufficient'],
 	highnoon: ['proficient'],
 	strikersmomentum: ['proficient'],
@@ -2074,14 +2126,14 @@ export class Pokemon {
 	burningrage: ['proficient'],
 	terragift: ['proficient'],
 	blazingtempo: ['proficient'],
-	verdantdrake: ['proficient'],
+	verdantdrake: ['proficient', 'dualwield', 'regenerator', 'lightningrod'],
 	mightyjaw: ['proficient'],
 			blazingmane: ['proficient'],
 			plasmaeruption: ['proficient', 'static', 'flamebody'],
 			gigavolt: ['moldbreaker', 'lightningrod', 'static'],
 			verdantedge: ['chlorophyll', 'invigorate', 'sharpness', 'grasspelt'],
 			permafrost: ['icebody', 'icescales', 'refrigerate'],
-			glacialheart: ['thermalexchange', 'icebody', 'toughclaws', 'stalwart'],
+			glacialheart: ['thermalexchange', 'icebody', 'stalwart'],
 			tidalwave: ['waterabsorb', 'hydration', 'regenerator', 'raindish'],
 			livewire: ['transistor', 'voltabsorb', 'quickfeet', 'ironbarbs'],
 			kindledfury: ['fluffy', 'guts', 'flashfire', 'bruteforce', 'reckless', 'rockhead'],
@@ -2093,8 +2145,8 @@ export class Pokemon {
 	pollenbloom: ['proficient', 'thickfat'],
 			ironclad: ['armorize'],
 			apexpredator: ['relicarmor', 'precision', 'windrider'],
-			tyrantdomain: ['relicarmor', 'supremeoverlord', 'selfsufficient'],
-			auroradomain: ['relicarmor', 'refrigerate', 'selfsufficient'],
+			tyrantdomain: ['relicarmor', 'supremeoverlord', 'selfsufficient', 'sandstream'],
+			auroradomain: ['relicarmor', 'refrigerate', 'selfsufficient', 'snowwarning'],
 			royalscales: ['marvelscale', 'filter', 'dragonize', 'selfsufficient'],
 			aeviandream: ['baddreams', 'shedskin', 'toughclaws'],
 				wingedwraith: ['infiltrator', 'galewings'],
@@ -2144,6 +2196,7 @@ export class Pokemon {
 			bakedbliss: ['wellbakedbody', 'thickfat', 'sweetveil', 'gluttony'],
 			hydraheart: ['hydrabond', 'selfsufficient', 'stamina'],
 			truehydra: ['hydrabond', 'regenerator', 'shedskin', 'selfsufficient'],
+			moonveil: ['pastelveil', 'mistysurge'],
 			aevianspark: ['toughclaws', 'technician', 'static'],
 			aeviangrief: ['flareboost', 'wonderskin', 'levitate'],
 			aevianrocket: ['bruteforce', 'reckless', 'rockhead', 'regenerator', 'moldbreaker', 'swiftswim'],
@@ -2207,7 +2260,7 @@ export class Pokemon {
 			sandsovereign: ['sandstream', 'dauntlessshield', 'solidrock'],
 			frostsovereign: ['snowwarning', 'icebody', 'filter'],
 			freezerburn: ['slushrush', 'refrigerate'],
-			stormfright: ['intimidate', 'lightningrod'],
+			stormfright: ['intimidate', 'stormpower', 'lightningrod'],
 			enlightenment: ['purepower'],
 			relentlesslink: ['skilllink', 'battlearmor', 'moldbreaker', 'guts'],
 			relentlesshunt: ['levitate'],
@@ -2286,11 +2339,11 @@ riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			riftdancer: ['opportunist', 'chlorophyll', 'dancer'],
 			curseddoll: ['toughclaws', 'shadowshield'],
 			apexvenom: ['strongjaw', 'shedskin'],
-			sirius: ['apexvenom', 'whiplash', 'accumulation'],
+			sirius: ['apexvenom', 'whiplash'],
 			neurotoxin: ['strongjaw', 'shedskin', 'hydrabond', 'regenerator'],
 			patternshift: ['protean', 'shedskin', 'unaware'],
 			venomarmor: ['poisonheal', 'dualwield'],
-			toxicarmor: ['venomarmor', 'violentrush', 'scrappy'],
+			toxicarmor: ['venomarmor', 'violentrush'],
 			corrosiveburn: ['merciless', 'regenerator', 'corrosion'],
 			solarrush: ['sandrush', 'chlorophyll'],
 			ultrainstinct: ['moldbreaker', 'innerfocus'],

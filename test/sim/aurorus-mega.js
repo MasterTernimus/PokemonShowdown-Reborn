@@ -20,7 +20,7 @@ describe('Aurorus-Mega', function () {
 		assert.equal(Dex.items.get('Aurorite').megaStone.Aurorus, mega.name);
 	});
 
-	it('sets Fairy Tale and a five-turn Veil on entry, then refreshes Veil to eight turns on faint', function () {
+	it('starts Snow Warning and a five-turn Veil on entry, then sets Fairy Tale and refreshes Veil on faint', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Aurorus', item: 'Aurorite', ability: 'relicarmor', moves: ['splash', 'tackle']},
 		], [{species: 'Magikarp', moves: ['splash']}]]);
@@ -30,10 +30,9 @@ describe('Aurorus-Mega', function () {
 		assert.species(aurorus, 'Aurorus-Mega');
 		assert(aurorus.hasAbility('relicarmor'));
 		assert(aurorus.hasAbility('refrigerate'));
-		assert.equal(aurorus.boosts.def, 1);
-		assert.equal(aurorus.boosts.spd, 1);
-		assert.equal(battle.field.terrain, 'fairytaleterrain');
-		assert.equal(battle.field.terrainState.duration, 4, 'the five-turn field has spent its first turn');
+		assert(aurorus.hasAbility('snowwarning'));
+		assert.equal(battle.field.weather, 'hail', 'Snow Warning uses the simulator\'s hail weather');
+		assert.equal(battle.field.terrain, '', 'entry must not create Fairy Tale');
 		assert(aurorus.side.getSideCondition('auroraveil'));
 		assert.equal(aurorus.side.sideConditions['auroraveil'].duration, 4, 'the five-turn Veil has spent its first turn');
 		const tackle = battle.dex.getActiveMove('tackle');
@@ -41,10 +40,10 @@ describe('Aurorus-Mega', function () {
 		assert.equal(tackle.type, 'Ice');
 		aurorus.faint();
 		battle.faintMessages();
-		assert.equal(battle.field.terrain, 'coldeclipseterrain');
-		assert.equal(battle.field.terrainState.duration, 5);
+		assert.equal(battle.field.terrain, 'fairytaleterrain');
+		assert.equal(battle.field.terrainState.duration, 8);
 		assert.equal(aurorus.side.sideConditions['auroraveil'].duration, 8);
-		assert(battle.log.some(line => line.includes('Cold Eclipse Terrain') && line.includes('[turns] 5')));
+		assert(battle.log.some(line => line.includes('Fairy Tale Terrain') && line.includes('[turns] 8')));
 		assert(battle.log.some(line => line.includes('The Aurora will persist')));
 	});
 });

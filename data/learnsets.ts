@@ -24293,7 +24293,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			doubleedge: ["9L41", "8L1", "3T"],
 			doublekick: ["9L19"],
 			doubleteam: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
-			decorate: ["9M"],
 			drainingkiss: ["9M"],
 			dreameater: ["9M", "7M", "7V", "6M", "5M", "4M", "3T"],
 			echoedvoice: ["9M", "7M", "6M", "5M"],
@@ -36683,7 +36682,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			confusion: ["9E"],
 			counter: ["9E", "8E", "7E", "3T"],
 			curse: ["9M", "7V"],
-			decorate: ["9M"],
 			defog: ["9M", "7T", "4M"],
 			destinybond: ["9E", "8E", "7E", "6E"],
 			detect: ["7V"],
@@ -45417,7 +45415,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			counter: ["9E", "3T"],
 			covet: ["9M", "7T"],
          curse: ["9M"], 
-			decorate: ["9M"],
 			defensecurl: ["9E", "3T"],
 			discharge: ["9L42", "7L31", "7E", "6L31", "6E", "5E", "5D", "4E"],
 			doubleedge: ["9E", "3T"],
@@ -77412,7 +77409,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			defog: ["9L1", "7T"],
 			disarmingvoice: ["9L1", "7L1", "6L1"],
 			doubleteam: ["9M", "7M", "6M"],
-			decorate: ["9M"],
 			drainingkiss: ["9M"],
 			echoedvoice: ["9M", "7M", "6M"],
 			endeavor: ["9M", "7T", "6T"],
@@ -78715,7 +78711,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			covet: ["9M", "7T", "6T"],
 			curse: ["9M"],
 			dazzlinggleam: ["9M", "8M", "7M", "6M"],
-			decorate: ["9M"],
 			doubleedge: ["9M"],
 			doubleteam: ["9M", "7M", "6M"],
 			drainingkiss: ["9L21", "8M", "8L12", "7L31", "6L31"],
@@ -84412,7 +84407,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			crunch: ["9M"],
 			curse: ["9M"],
 			dazzlinggleam: ["9L31", "8M", "8L48", "7M", "7L35"],
-			decorate: ["9M"],
 			defog: ["9M", "7T"],
 			doubleedge: ["9M"],
 			doubleteam: ["9M", "7M"],
@@ -86674,7 +86668,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			covet: ["9E", "7T"],
 			curse: ["9M"],
 			dazzlinggleam: ["9M", "8M", "7M"],
-			decorate: ["9M"],
 			defog: ["9E", "7T"],
 			disarmingvoice: ["9M"],
 			doubleedge: ["9M"],
@@ -111267,7 +111260,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			chillingwater: [],
 			crunch: ["8M", "8L35"],
 			darkpulse: ["8M", "8S0"],
-			decorate: ["8L65"],
 			endure: ["8M"],
 			facade: ["8M"],
 			faketears: ["8M"],
@@ -112037,7 +112029,9 @@ export const CustomLearnsetRemovals: {[id: string]: string[]} = {
 	],
 	feraligatr: ['mightycleave', 'shoreup', 'firefang', 'thunderfang', 'fishiousrend'], marowak: ['mightycleave', 'shoreup'],
 	marowakalola: ['mightycleave', 'shoreup'], solrock: ['mightycleave', 'diamondstorm'],
-	lucario: ['tachyoncutter', 'meteorassault'], sceptile: ['tachyoncutter'],
+	lucario: ['tachyoncutter', 'meteorassault'],
+	treecko: ['thunderpunch'], grovyle: ['thunderpunch'],
+	sceptile: ['tachyoncutter', 'electroweb', 'risingvoltage', 'thunderbolt', 'thunderpunch', 'voltswitch', 'wildcharge'],
 	gallade: ['tachyoncutter', 'bitterblade', 'triplearrows'],
 	gardevoir: ['tachyoncutter', 'psychoboost', 'lunarwish', 'lunardance', 'psyblade'],
 	empoleon: ['tachyoncutter'], starmie: ['diamondstorm'], lunatone: ['diamondstorm'],
@@ -112919,8 +112913,11 @@ for (const id of natDexNaturePowerIds) {
 }
 
 // Global balance removal runs after all official and custom learnset merges.
-for (const data of Object.values(Learnsets)) {
-	if (data.learnset) delete data.learnset.terablast;
+for (const [id, data] of Object.entries(Learnsets)) {
+	if (!data.learnset) continue;
+	delete data.learnset.terablast;
+	// Keep Decorate exclusive to Alcremie, including after imported learnset merges.
+	if (id !== 'alcremie') delete data.learnset.decorate;
 }
 
 // Donphan-Rejuv and Whiplash move additions.

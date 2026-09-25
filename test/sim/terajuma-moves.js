@@ -70,6 +70,23 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 		assert.false(!!battle.p2.getSideCondition('atlantiswall'));
 	});
 
+	it('uses normal integer PP and announces its actual duration', function () {
+		const [milotic] = setup(['atlantiswall', 'splash']);
+		const move = battle.dex.moves.get('atlantiswall');
+		const slot = milotic.moveSlots.find(entry => entry.id === 'atlantiswall');
+		assert.equal(move.pp, 10);
+		assert.equal(slot.maxpp, 16);
+		assert.equal(slot.pp, 16);
+		battle.field.setWeather('raindance', milotic);
+		battle.makeChoices('move atlantiswall', 'move splash');
+		assert.equal(slot.pp, 15);
+		assert(battle.log.some(line => line.includes('move: Atlantis Wall') && line.includes('[persistent]')));
+		assert.equal(battle.p1.sideConditions.atlantiswall.duration, 7);
+		for (let turn = 0; turn < 7; turn++) battle.makeChoices('move splash', 'move splash');
+		assert.false(!!battle.p1.getSideCondition('atlantiswall'));
+		assert(battle.log.some(line => line.includes('-sideend') && line.includes('move: Atlantis Wall')));
+	});
+
 	it('gives Atlantis Wall eight turns in rain and five on Misty Terrain', function () {
 		const [milotic] = setup(['atlantiswall']);
 		const move = battle.dex.moves.get('atlantiswall');
@@ -121,5 +138,13 @@ describe('Milotic-Terajuma moves and Whiplash', function () {
 			battle.destroy();
 			battle = undefined;
 		}
+	});
+
+	it('lets screen-breaking moves remove Atlantis Wall', function () {
+		const [milotic] = setup(['atlantiswall'], ['brickbreak']);
+		battle.field.setWeather('raindance', milotic);
+		battle.makeChoices('move atlantiswall', 'move brickbreak');
+		assert.false(!!battle.p1.getSideCondition('atlantiswall'));
+		assert(battle.log.some(line => line.includes('-sideend') && line.includes('Atlantis Wall')));
 	});
 });

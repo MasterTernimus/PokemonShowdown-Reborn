@@ -6,8 +6,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	glacialheart: {
 		name: "Glacial Heart",
-		desc: "Thermal Exchange + Ice Body + Tough Claws + Stalwart. Fire hits raise Attack, burns are prevented, and certain hot fields raise Attack each turn. Snow, hail, and icy fields restore HP; contact attackers may freeze. Contact moves gain power, and attacks track their targets through redirection. Stalwart also raises Special Attack on entry on New World, Starlight Arena, Fairy Tale, and Chessboard fields.",
-		shortDesc: "Thermal Exchange + Ice Body + Tough Claws + Stalwart.",
+		desc: "Thermal Exchange + Ice Body + Stalwart. Fire hits raise Attack, burns are prevented, and certain hot fields raise Attack each turn. Snow, hail, and icy fields restore HP; contact attackers may freeze. Attacks track their targets through redirection. Stalwart also raises Special Attack on entry on New World, Starlight Arena, Fairy Tale, and Chessboard fields.",
+		shortDesc: "Thermal Exchange + Ice Body + Stalwart.",
+	},
+	moonveil: {
+		name: "Moon Veil",
+		desc: "Pastel Veil + Misty Surge. On entry, sets Misty Terrain, or Misty Aura over a compatible existing field. This Pokemon and its allies cannot be poisoned and are cured of poison when this Ability becomes active. Opposing Poison-type moves lower their user's Attack and Special Attack by 1 stage. Retains Pastel Veil's field effects.",
+		shortDesc: "Pastel Veil + Misty Surge.",
 	},
 	verdantedge: {
 		name: "Verdant Edge",
@@ -88,7 +93,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aevianwing: {
 		name: "Aevian Wing",
-		desc: "This Pokemon has Scrappy, Rock Head, and Defiant's effects. It changes into Unfezant-Rejuv once when it enters battle.",
+		desc: "This Pokemon has Scrappy, Rock Head, and Defiant's effects. It changes into Unfezant-Rejuv once when it enters battle. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Transforms once; Scrappy + Rock Head + Defiant.",
 	},
 	ascendance: {
@@ -176,8 +181,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sirius: {
 		name: "Sirius",
-		desc: "This Pokemon has Apex Venom, Whiplash, and Accumulation's effects. Poison Fang becomes Dragon-type.",
-		shortDesc: "Apex Venom + Whiplash + Accumulation; Poison Fang becomes Dragon-type.",
+		desc: "This Pokemon has Apex Venom and Whiplash's effects. Poison Fang becomes Dragon-type.",
+		shortDesc: "Apex Venom + Whiplash; Poison Fang becomes Dragon-type.",
 	},
 	apexpredator: {
 		name: "Apex Predator",
@@ -186,6 +191,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	violentrush: {
 		name: "Violent Rush",
+		desc: "On this Pokemon's first active turn, its Speed is 1.5x and its Attack is 1.2x.",
+		shortDesc: "First active turn: 1.5x Spe and 1.2x Atk.",
+	},
+	bullrush: {
+		name: "Bull Rush",
 		desc: "On this Pokemon's first active turn, its Speed is 1.5x and its Attack is 1.2x.",
 		shortDesc: "First active turn: 1.5x Spe and 1.2x Atk.",
 	},
@@ -370,8 +380,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sacredbond: {
 		name: "Sacred Bond",
-		desc: "Battle Bond's shared effects plus Magma Armor and Intimidate. Arcanine-Battle-Bond's Extreme Speed has 1.5x power and always critically hits.",
-		shortDesc: "Battle Bond + Magma Armor + Intimidate; Extreme Speed is 1.5x power and always critical.",
+		desc: "Battle Bond's shared effects plus Magma Armor, Intimidate, and Flash Fire. Arcanine-Battle-Bond's Extreme Speed has 1.5x power and always critically hits.",
+		shortDesc: "Battle Bond + Magma Armor + Intimidate + Flash Fire; Extreme Speed is 1.5x power and always critical.",
 	},
 	beadsofruin: {
 		name: "Beads of Ruin",
@@ -796,13 +806,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	tyrantdomain: {
 		name: "Tyrant Domain",
-		desc: "Relic Armor and Supreme Overlord. On entry, sets Fairy Tale for 5 turns without starting Hail. When this Pokemon faints, displays 'The Tyrant will persist' and sets Dragon's Den for 5 turns. Hail and Fairy Tale can be set later by other effects.",
-		shortDesc: "Relic Armor + Supreme Overlord; 5-turn Fairy Tale on entry; 5-turn Dragon's Den on faint.",
+		desc: "Relic Armor, Supreme Overlord, Self Sufficient, and Sand Stream. On entry or Mega Evolution, starts a sandstorm without changing the field. When this Pokemon faints, displays 'The Tyrant will persist' and sets Dragon's Den for 8 turns.",
+		shortDesc: "Relic Armor + Supreme Overlord + Sand Stream; 8-turn Dragon's Den on faint.",
 	},
 	auroradomain: {
 		name: "Aurora Domain",
-		desc: "Relic Armor and Refrigerate. On entry or Mega Evolution, sets Fairy Tale and Aurora Veil on its side for 5 turns. When this Pokemon faints, displays 'The Aurora will persist', sets Cold Eclipse for 5 turns, and creates or refreshes its side's Aurora Veil to 8 turns.",
-		shortDesc: "Relic Armor + Refrigerate; 5-turn Fairy Tale and Veil on entry; 5-turn Cold Eclipse and 8-turn Veil on faint.",
+		desc: "Relic Armor, Refrigerate, Self Sufficient, and Snow Warning. On entry or Mega Evolution, starts snow and creates Aurora Veil on its side for 5 turns without changing the field. When this Pokemon faints, displays 'The Aurora will persist', sets Fairy Tale for 8 turns, and creates or refreshes its side's Aurora Veil to 8 turns.",
+		shortDesc: "Relic Armor + Refrigerate + Snow Warning; 5-turn Veil on entry; 8-turn Fairy Tale and Veil on faint.",
 	},
 	royalscales: {
 		name: "Royal Scales",
@@ -811,8 +821,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicarmor: {
 		name: "Toxic Armor",
-		desc: "This Pokemon has Venom Armor, Violent Rush, and Scrappy's effects.",
-		shortDesc: "Venom Armor + Violent Rush + Scrappy.",
+		desc: "This Pokemon has Venom Armor and Violent Rush's effects.",
+		shortDesc: "Venom Armor + Violent Rush.",
 	},
 	corrosiveburn: {
 		name: "Corrosive Burn",
@@ -931,8 +941,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormfright: {
 		name: "Storm Fright",
-		desc: "On switch-in, opposing Pokemon have their Attack lowered by 1 stage. This Pokemon is immune to Electric-type moves and raises its Special Attack by 1 stage when hit by one. This Pokemon has Teravolt and Strong Jaw's effects.",
-		shortDesc: "Intimidate + Lightning Rod + Teravolt + Strong Jaw.",
+		desc: "Intimidate + Storm Power + Lightning Rod. On entry, lowers adjacent foes' Attack by 1 stage. Draws in and absorbs Electric moves, raising Attack and Special Attack by 1 stage; Electric Terrain also grants these boosts on entry. In rain, Special Attack is multiplied by 1.5, but this Pokemon loses 1/8 of its maximum HP each turn.",
+		shortDesc: "Intimidate + Storm Power + Lightning Rod.",
 	},
 	enlightenment: {
 		name: "Enlightenment",
@@ -1463,7 +1473,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	reflector: {
 		name: "Reflector",
-		desc: "On entry, copies the active foe's types and adds them to this Pokemon's typing. Matching attacks deal half damage unless this Pokemon is immune. Reflect Type refreshes the copied types.",
+		desc: "On entry, copies the active foe's types and adds them to this Pokemon's typing. Matching attacks deal half damage unless this Pokemon is immune. Reflect Type refreshes the copied types. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Copies foe types; adds them to its typing; matching attacks deal 0.5x unless immune.",
 	},
 		hyperdrill: {
@@ -2786,12 +2796,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royaldecree: {
 		name: "Royal Decree",
-		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, except Pokemon on a side protected by Safeguard, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, enemy-caused stat drops fail, and charge moves fire immediately. This Pokemon's own self-inflicted stat drops still work. Neutralization disables these Royal Decree effects while active.",
+		desc: "On switch-in, all active Pokemon's stat stages are reset to 0, except Pokemon on a side protected by Safeguard, and Reflect, Light Screen, and Aurora Veil are removed from both sides. While this Pokemon is active, Reflect, Light Screen, and Aurora Veil cannot be created, enemy stat boosts fail, enemy-caused stat drops fail, and charge moves fire immediately. This Pokemon's own self-inflicted stat drops still work. Neutralization disables these Royal Decree effects while active. If Neutralization is already active on entry, the stat and screen reset does not happen; it does not happen later when Neutralization leaves.",
 		shortDesc: "Haze/screen clear; Safeguard blocks reset; blocks setup/screens; skips charge turns.",
 	},
 	empress: {
 		name: "Empress",
-		desc: "This Pokemon has Queenly Majesty and Royal Decree's effects, gains normal STAB on Fighting-type moves, and ignores the Fairy-type component of Poison- and Steel-type weaknesses.",
+		desc: "This Pokemon has Queenly Majesty and Royal Decree's effects, gains normal STAB on Fighting-type moves, and ignores the Fairy-type component of Poison- and Steel-type weaknesses. Neutralization suppresses only its Royal Decree effects; Queenly Majesty still works.",
 		shortDesc: "Queenly Majesty + Royal Decree; Fighting STAB; ignores Fairy's Poison/Steel weakness.",
 	},
 	imperialprincess: {
@@ -2826,7 +2836,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalsun: {
 		name: "Royal Sun",
-		desc: "On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects. Safeguard protects a side from Royal Decree's switch-in stat reset. Neutralization disables the Royal Decree effects while active.",
+		desc: "On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects. Safeguard protects a side from Royal Decree's switch-in stat reset. Neutralization suppresses the Royal Decree effects while active, but Sunny Day still starts. If Neutralization is active on entry, the stat and screen reset does not happen later when it leaves.",
 		shortDesc: "Drought + Royal Decree; Safeguard blocks the reset; disabled by Neutralization.",
 	},
 	parasitism: {
@@ -2931,8 +2941,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	verdantdrake: {
 		name: "Verdant Drake",
-		desc: "This Pokemon has Regenerator and Dual Wield's effects. It restores 1/3 max HP when it switches out, and moves boosted by Sharpness or Mega Launcher, plus arrow moves, hit twice for reduced damage.",
-		shortDesc: "Regenerator + Dual Wield.",
+		desc: "Same-type attacks gain 1.3x power. Dual Wield makes moves boosted by Sharpness or Mega Launcher, plus arrow moves, hit twice for reduced damage. Regenerator restores 1/3 max HP on switching out. Lightning Rod draws in and absorbs Electric moves, raising Attack and Special Attack by 1 stage; Electric Terrain also grants these boosts on entry.",
+		shortDesc: "1.3x same-type moves; Dual Wield + Regenerator + Lightning Rod.",
 	},
 	solarbloom: {
 		name: "Solar Bloom",
@@ -3594,13 +3604,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	evilsanta: {
 		name: "Evil Santa",
-		desc: "This Pokemon's Present becomes a 120 Base Power Dark-type move that hits all opposing Pokemon. Delibird gets STAB on Dark-type moves. Present always applies one random extra effect that succeeds: damage equal to 1/8 of the target's max HP, bad poison, 3-turn confusion, or Curse.",
-		shortDesc: "Present becomes 120 BP Dark spread and applies a random successful extra effect.",
+		desc: "This Pokemon's Present becomes a 120 Base Power Dark-type move that hits every adjacent Pokemon except the user, including allies. Delibird gets STAB on Dark-type moves. After each hit, Present applies one random extra effect that succeeds: separate damage equal to 1/8 of that target's max HP, bad poison, 3-turn confusion, or Curse. The extra damage is an ability effect, not another Present hit.",
+		shortDesc: "Present hits all adjacent Pokemon, including allies, then applies an extra effect.",
 	},
 	forestsurge: {
 		name: "Forest Surge",
-		desc: "On switch-in, this Pokemon sets Forest Terrain and Grassy Aura for 5 turns. It also has Proficient's effect.",
-		shortDesc: "Sets Forest and Grassy Aura for 5 turns; Proficient.",
+		desc: "On switch-in, this Pokemon sets Forest Terrain and Grassy Aura for 5 turns, or 8 turns with Amplifield Rock. It also has Proficient's effect.",
+		shortDesc: "Forest and Grassy Aura: 5 turns (8 with Amplifield Rock); Proficient.",
 	},
 	apexarmor: {"name":"Apex Armor","desc":"Bulletproof + Rough Skin + Stalwart + Self Sufficient. Blocks bullet/pulse moves, reduces attack damage by 20%, damages contact attackers by 1/8 max HP, and ignores redirection. Restores 1/16 max HP each turn and prevents hail and sandstorm damage.","shortDesc":"Bulletproof + Rough Skin + Stalwart + Self Sufficient."},
 	ancientbloom: {
@@ -3635,8 +3645,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	phantombarrage: {
 		name: "Phantom Barrage",
-		desc: "This Pokemon has Infiltrator, Levitate, and Hydra Bond's effects. Dragon Darts and G-Max Spirit Volley use this Pokemon's higher offensive stat. In Free-for-All battles, Dragon Darts and G-Max Spirit Volley hit all opposing Pokemon twice.",
-		shortDesc: "Infiltrator + Levitate + Hydra Bond; higher offensive stat for signature attacks.",
+		desc: "This Pokemon has Infiltrator, Levitate, and Hydra Bond's effects. Dragon Darts and G-Max Spirit Volley use its higher offensive stat and gain 20% power from Hydra Bond instead of extra hits. Dragon Darts keeps its two-hit pattern; Spirit Volley keeps its full-power hit and weaker follow-up against another foe. In Free-for-All battles, Dragon Darts hits all opposing Pokemon twice.",
+		shortDesc: "Infiltrator + Levitate + Hydra Bond; signature moves gain 20% power.",
 	},
 	divinemockery: {
 		name: "Divine Mockery",
@@ -3740,37 +3750,37 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neutralization: {
 		name: "Neutralization",
-		desc: "Once per target per move, when this Pokemon directly hits an opposing Pokemon, the target's higher attacking stat is lowered by 1 stage. Spread hits do not trigger this effect. This does not affect other Neutralization users or Pokemon immune to stat drops. While active, base field changes are neutralized, but Auras can still be created and remain active; Trick Room, Magic Room, and Wonder Room are ended and cannot start; and Rainbow Field ends automatically. Ice Spinner and Steel Roller still remove terrain normally.",
+		desc: "Once per target per move, when this Pokemon directly hits an opposing Pokemon, the target's higher attacking stat is lowered by 1 stage. Spread hits do not trigger this effect. This does not affect other Neutralization users or Pokemon immune to stat drops. While active, base field changes are neutralized, but Auras can still be created and remain active; Trick Room, Magic Room, and Wonder Room are ended and cannot start; and Rainbow Field ends automatically. It also suppresses Royal Decree's stat reset, screen removal, and ongoing restrictions, including those granted by Empress and Royal Sun. Ice Spinner and Steel Roller still remove terrain normally.",
 		shortDesc: "Hits lower the foe's higher offensive stat by 1; blocks base field changes, not Auras.",
 	},
 	aeviandream: {
 		name: "Aevian Dream",
-		desc: "This Pokemon has Bad Dreams, Shed Skin, and Tough Claws's effects. When it enters battle as Musharna, it transforms into Musharna-Rejuv.",
+		desc: "This Pokemon has Bad Dreams, Shed Skin, and Tough Claws's effects. When it enters battle as Musharna, it transforms into Musharna-Rejuv. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Bad Dreams + Shed Skin + Tough Claws; transforms Musharna into Musharna-Rejuv.",
 	},
 	aevianfrost: {
 		name: "Aevian Frost",
-		desc: "On entry, Donphan permanently transforms into Donphan-Rejuv. This Pokemon also has the effects of Ice Body, Guts, and Filter.",
+		desc: "On entry, Donphan permanently transforms into Donphan-Rejuv. This Pokemon also has the effects of Ice Body, Guts, and Filter. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Transforms Donphan into Donphan-Rejuv; Ice Body + Guts + Filter.",
 	},
 	aeviantoxin: {
 		name: "Aevian Toxin",
-		desc: "On entry, Drapion permanently transforms into Drapion-Rejuv. This Pokemon also has the effects of Strong Jaw, Layered Coat, and Merciless.",
+		desc: "On entry, Drapion permanently transforms into Drapion-Rejuv. This Pokemon also has the effects of Strong Jaw, Layered Coat, and Merciless. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Transforms Drapion into Drapion-Rejuv; Strong Jaw + Layered Coat + Merciless.",
 	},
 	aevianspark: {
 		name: "Aevian Spark",
-		desc: "When Breloom enters battle with this Ability, it changes into Breloom-Rejuv. Its contact moves gain Tough Claws's 1.3x power boost, moves with 60 or less base power gain Technician's 1.5x boost, and contact moves that hit it can trigger Static's 30% paralysis chance.",
+		desc: "When Breloom enters battle with this Ability, it changes into Breloom-Rejuv. Its contact moves gain Tough Claws's 1.3x power boost, moves with 60 or less base power gain Technician's 1.5x boost, and contact moves that hit it can trigger Static's 30% paralysis chance. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Transforms Breloom into Breloom-Rejuv; Tough Claws + Technician + Static.",
 	},
 	aeviangrief: {
 		name: "Aevian Grief",
-		desc: "When Sigilyph enters battle with this Ability, it changes into Sigilyph-Rejuv. It has Flare Boost's power increases, Wonder Skin's reduction of incoming status-move accuracy, and Levitate's Ground immunity.",
+		desc: "When Sigilyph enters battle with this Ability, it changes into Sigilyph-Rejuv. It has Flare Boost's power increases, Wonder Skin's reduction of incoming status-move accuracy, and Levitate's Ground immunity. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Transforms Sigilyph into Sigilyph-Rejuv; Flare Boost + Wonder Skin + Levitate.",
 	},
 	aevianrocket: {
 		name: "Aevian Rocket",
-		desc: "When Veluza enters battle with this Ability, it changes into Veluza-Rejuv. It has Brute Force's Reckless power boost and Rock Head recoil protection, restores 1/3 of its maximum HP on switching out through Regenerator, ignores opposing Abilities with Mold Breaker, and doubles its Speed under Swift Swim's conditions.",
+		desc: "When Veluza enters battle with this Ability, it changes into Veluza-Rejuv. It has Brute Force's Reckless power boost and Rock Head recoil protection, restores 1/3 of its maximum HP on switching out through Regenerator, ignores opposing Abilities with Mold Breaker, and doubles its Speed under Swift Swim's conditions. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Transforms Veluza into Veluza-Rejuv; Brute Force + Regenerator + Mold Breaker + Swift Swim.",
 	},
 	adaptivecore: {
@@ -3780,12 +3790,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aevianglacier: {
 		name: "Aevian Glacier",
-		desc: "On entry, Turtonator permanently transforms into Turtonator-Rejuv. This Pokemon also has the effects of Snow Warning, Ice Body, and Refrigerate.",
+		desc: "On entry, Turtonator permanently transforms into Turtonator-Rejuv. This Pokemon also has the effects of Snow Warning, Ice Body, and Refrigerate. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Transforms Turtonator into Turtonator-Rejuv; Snow Warning + Ice Body + Refrigerate.",
 	},
 	aevianbolt: {
 		name: "Aevian Bolt",
-		desc: "On entry, Druddigon permanently transforms into Druddigon-Rejuv. This Pokemon also has the effects of Storm Power, Static, and Volt Absorb.",
+		desc: "On entry, Druddigon permanently transforms into Druddigon-Rejuv. This Pokemon also has the effects of Storm Power, Static, and Volt Absorb. If this Ability is suppressed, its Rejuv form reverts to the normal species until it switches out, even if suppression ends earlier.",
 		shortDesc: "Transforms Druddigon into Druddigon-Rejuv; Storm Power + Static + Volt Absorb.",
 	},
 	powerdrill: {

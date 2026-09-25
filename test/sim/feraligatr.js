@@ -63,7 +63,7 @@ describe('Feraligatr custom data', function () {
 		assert.equal(ability.onModifyPriority?.call(battle, 0, feraligatr, null, bite), undefined);
 	});
 
-	it('selects the fixed-power physical G-Max Death Roll and keeps its double-battle target', function () {
+	it('selects a single-target G-Max Death Roll with a field-wide flinch chance', function () {
 		battle = common.createBattle({formatid: 'gen9doublesmistyfieldadrienn'}, [[
 			{species: 'Feraligatr', gigantamax: true, moves: ['bite']},
 			{species: 'Wynaut', moves: ['splash']},
@@ -78,9 +78,10 @@ describe('Feraligatr custom data', function () {
 		assert.equal(move.basePower, 140);
 		assert.equal(move.category, 'Physical');
 		assert.equal(move.accuracy, true);
-		assert.equal(move.target, 'allAdjacentFoes');
-		assert.equal(move.secondaries[0].chance, 30);
-		battle.makeChoices('move bite dynamax, move splash', 'move splash, move splash');
+		assert.equal(move.target, 'adjacentFoe');
+		assert.equal(move.secondaries, undefined);
+		assert(move.self?.onHit);
+		battle.makeChoices('move bite dynamax 1, move splash', 'move splash, move splash');
 		assert.species(feraligatr, 'Feraligatr-Gmax');
 		assert.equal(feraligatr.ability, 'tidaljaw');
 		assert(feraligatr.hasAbility('strongjaw'));
@@ -88,6 +89,32 @@ describe('Feraligatr custom data', function () {
 		assert(feraligatr.hasAbility('filter'));
 		assert(feraligatr.hasAbility('proficient'));
 		assert(battle.log.some(line => line.includes('G-Max Death Roll')));
+	});
+
+	it('damages only the selected foe but rolls flinch for both foes', function () {
+		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
+			{species: 'Feraligatr', gigantamax: true, moves: ['bite']},
+			{species: 'Wynaut', moves: ['splash']},
+		], [
+			{species: 'Umbreon', moves: ['splash']},
+			{species: 'Umbreon', moves: ['splash']},
+		]]);
+		battle.makeChoices('team 1, 2', 'team 1, 2');
+		const flinchRolls = [];
+		const randomChance = battle.randomChance;
+		battle.randomChance = (numerator, denominator) => {
+			if (numerator === 3 && denominator === 10) {
+				flinchRolls.push(true);
+				return true;
+			}
+			return randomChance.call(battle, numerator, denominator);
+		};
+		battle.makeChoices('move bite dynamax 1, move splash', 'move splash, move splash');
+		assert(battle.p2.active[0].hp < battle.p2.active[0].maxhp);
+		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+		assert.equal(flinchRolls.length, 2);
+		assert(battle.log.some(line => line.includes('p2a: Umbreon') && line.includes('flinch')));
+		assert(battle.log.some(line => line.includes('p2b: Umbreon') && line.includes('flinch')));
 	});
 
 	it('keeps Water Veil Aqua Ring healing through G-Max', function () {

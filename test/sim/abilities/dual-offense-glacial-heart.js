@@ -80,7 +80,7 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 		assert.equal(bouffalant.boosts.spa, 1);
 	});
 
-	it('gives Mega Baxcalibur all four Glacial Heart effects', () => {
+	it('gives Mega Baxcalibur Glacial Heart without Tough Claws', () => {
 		assert.equal(Dex.species.get('Baxcalibur-Mega').abilities[0], 'Glacial Heart');
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Baxcalibur', item: 'Baxcalibrite', moves: ['splash', 'dragonclaw']},
@@ -93,12 +93,13 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 		const foe = battle.p2.active[0];
 		assert.equal(baxcalibur.species.id, 'baxcaliburmega');
 		assert.equal(baxcalibur.ability, 'glacialheart');
-		for (const component of ['thermalexchange', 'icebody', 'toughclaws', 'stalwart']) {
+		for (const component of ['thermalexchange', 'icebody', 'stalwart']) {
 			assert(baxcalibur.hasAbility(component), component);
 		}
+		assert.equal(baxcalibur.hasAbility('toughclaws'), false);
 		assert.equal(baxcalibur.setStatus('brn', foe), false);
 		assert.equal(battle.runEvent('BasePower', baxcalibur, foe,
-			battle.dex.getActiveMove('dragonclaw'), 100), 130);
+			battle.dex.getActiveMove('dragonclaw'), 100), 100);
 		const trackedMove = battle.dex.getActiveMove('watergun');
 		battle.singleEvent('ModifyMove', baxcalibur.getAbility(), baxcalibur.abilityState, trackedMove, baxcalibur, foe);
 		assert.equal(trackedMove.tracksTarget, true);

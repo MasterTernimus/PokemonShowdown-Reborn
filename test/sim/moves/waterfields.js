@@ -10,6 +10,34 @@ describe('Water field move interactions', () => {
 		battle?.destroy();
 	});
 
+	it('changes Underwater to Midnight Zone when Phantom Force lands', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', moves: ['phantomforce'] },
+		], [
+			{ species: 'Mewtwo', moves: ['splash'] },
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.field.changeTerrain('underwaterterrain', battle.p1.active[0]);
+		battle.makeChoices('move phantomforce', 'move splash');
+		assert.equal(battle.field.terrain, 'underwaterterrain', 'charging should not change the field');
+		battle.p2.active[0].hp = 1;
+		battle.makeChoices('move phantomforce', 'move splash');
+		assert.equal(battle.field.terrain, 'midnightzoneterrain');
+	});
+
+	it('does not change Underwater when Phantom Force is immune', () => {
+		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
+			{ species: 'Mew', moves: ['phantomforce'] },
+		], [
+			{ species: 'Blissey', moves: ['splash'] },
+		]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.field.changeTerrain('underwaterterrain', battle.p1.active[0]);
+		battle.makeChoices('move phantomforce', 'move splash');
+		battle.makeChoices('move phantomforce', 'move splash');
+		assert.equal(battle.field.terrain, 'underwaterterrain');
+	});
+
 	function assertDoubledBasePower(moveID) {
 		const source = battle.p1.active[0];
 		const target = battle.p2.active[0];

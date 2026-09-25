@@ -49,13 +49,14 @@ describe('Zangoose-Mega', function () {
 		const zangoose = battle.p1.active[0];
 		assert.species(zangoose, 'Zangoose-Mega');
 		assert.equal(zangoose.ability, 'toxicarmor');
-		for (const component of ['venomarmor', 'violentrush', 'scrappy']) assert(zangoose.hasAbility(component));
+		for (const component of ['venomarmor', 'violentrush']) assert(zangoose.hasAbility(component));
+		assert.false(zangoose.hasAbility('scrappy'));
 		assert.equal(zangoose.status, 'psn', 'Venom Armor should self-poison the Mega');
 		battle.boost({atk: -1}, zangoose, battle.p2.active[0], battle.dex.abilities.get('intimidate'));
-		assert.equal(zangoose.boosts.atk, 0, 'Scrappy should block Intimidate');
+		assert.equal(zangoose.boosts.atk, -1, 'Intimidate should lower Attack without Scrappy');
 		const bodySlam = battle.dex.getActiveMove('bodyslam');
 		battle.singleEvent('ModifyMove', zangoose.getAbility(), zangoose.abilityState, bodySlam, zangoose, battle.p2.active[0]);
-		assert.equal(bodySlam.ignoreImmunity?.Normal, true, 'Scrappy should let Normal moves hit Ghost');
+		assert.equal(bodySlam.ignoreImmunity?.Normal, undefined, 'Toxic Armor should not bypass Ghost immunity');
 		zangoose.activeTurns = 1;
 		assert.equal(battle.runEvent('ModifySpe', zangoose, null, null, 100), 150);
 		assert.equal(battle.runEvent('ModifyAtk', zangoose, null, null, 100), 120);
