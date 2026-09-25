@@ -1,4 +1,9 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
+	reuniclusite: {
+		name: "Reuniclusite",
+		desc: "Allows Reuniclus to Mega Evolve into Mega Reuniclus in battle.",
+		shortDesc: "Allows Reuniclus to Mega Evolve.",
+	},
 	parasectite: {
 		name: "Parasectite",
 		shortDesc: "Allows Parasect, including its Rejuv or Parasite form, to Mega Evolve.",
@@ -2666,6 +2671,53 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
 	},
 };
+
+const typeZCrystals: [IDEntry, string, string][] = [
+	['buginiumz', 'Bug', 'Savage Spin-Out'],
+	['darkiniumz', 'Dark', 'Black Hole Eclipse'],
+	['dragoniumz', 'Dragon', 'Devastating Drake'],
+	['electriumz', 'Electric', 'Gigavolt Havoc'],
+	['fairiumz', 'Fairy', 'Twinkle Tackle'],
+	['fightiniumz', 'Fighting', 'All-Out Pummeling'],
+	['firiumz', 'Fire', 'Inferno Overdrive'],
+	['flyiniumz', 'Flying', 'Supersonic Skystrike'],
+	['ghostiumz', 'Ghost', 'Never-Ending Nightmare'],
+	['grassiumz', 'Grass', 'Bloom Doom'],
+	['groundiumz', 'Ground', 'Tectonic Rage'],
+	['iciumz', 'Ice', 'Subzero Slammer'],
+	['normaliumz', 'Normal', 'Breakneck Blitz'],
+	['poisoniumz', 'Poison', 'Acid Downpour'],
+	['psychiumz', 'Psychic', 'Shattered Psyche'],
+	['rockiumz', 'Rock', 'Continental Crush'],
+	['steeliumz', 'Steel', 'Corkscrew Crash'],
+	['wateriumz', 'Water', 'Hydro Vortex'],
+];
+for (const [itemId, type, move] of typeZCrystals) {
+	ItemsText[itemId].desc = `Once per battle, converts a damaging ${type}-type move into ${move}, or gives a ${type}-type status move its Z-effect.`;
+	ItemsText[itemId].shortDesc = `${type} Z-Move crystal; use once per battle.`;
+}
+
+for (const [itemId, description] of [
+	['aloraichiumz', 'Alolan Raichu with Thunderbolt can use Stoked Sparksurfer once per battle.'],
+	['decidiumz', 'Decidueye with Spirit Shackle can use Sinister Arrow Raid once per battle.'],
+	['inciniumz', 'Incineroar with Darkest Lariat can use Malicious Moonsault once per battle.'],
+	['kommoniumz', 'Kommo-o with Clanging Scales can use Clangorous Soulblaze once per battle.'],
+	['lunaliumz', 'Lunala or Dawn Wings Necrozma with Moongeist Beam can use Menacing Moonraze Maelstrom once per battle.'],
+	['lycaniumz', 'Any Lycanroc form with Stone Edge can use Splintered Stormshards once per battle.'],
+	['marshadiumz', 'Marshadow with Spectral Thief can use Soul-Stealing 7-Star Strike once per battle.'],
+	['mewniumz', 'Mew with Psychic can use Genesis Supernova once per battle.'],
+	['mimikiumz', "Mimikyu with Play Rough can use Let's Snuggle Forever once per battle."],
+	['pikaniumz', 'Pikachu with Volt Tackle can use Catastropika once per battle.'],
+	['pikashuniumz', 'Cap Pikachu with Thunderbolt can use 10,000,000 Volt Thunderbolt once per battle.'],
+	['primariumz', 'Primarina with Sparkling Aria can use Oceanic Operetta once per battle.'],
+	['snorliumz', 'Snorlax with Giga Impact can use Pulverizing Pancake once per battle.'],
+	['solganiumz', 'Solgaleo or Dusk Mane Necrozma with Sunsteel Strike can use Searing Sunraze Smash once per battle.'],
+	['tapuniumz', "A Tapu with Nature's Madness can use Guardian of Alola once per battle."],
+	['ultranecroziumz', 'Dusk Mane or Dawn Wings Necrozma can Ultra Burst; with Photon Geyser, it can use Light That Burns the Sky once per battle.'],
+] as [IDEntry, string][]) {
+	ItemsText[itemId].desc = description;
+	ItemsText[itemId].shortDesc = description;
+}
 
 const redundantItemTextIds = [
 	'berserkgene',

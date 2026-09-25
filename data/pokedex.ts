@@ -13063,7 +13063,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Druddigon",
 		forme: "Rejuv",
 		types: ["Dragon", "Electric"],
-		baseStats: { hp: 107, atk: 30, def: 98, spa: 130, spd: 100, spe: 90 },
+		baseStats: { hp: 107, atk: 50, def: 88, spa: 120, spd: 100, spe: 90 },
 		abilities: { 0: "Aevian Bolt" },
 		heightm: 1.6,
 		weightkg: 139,
