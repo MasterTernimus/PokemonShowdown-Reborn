@@ -7640,10 +7640,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	royalscales: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
-			return (this.dex.abilities.get('marvelscale') as any).onModifyDef?.call(this, def, pokemon);
+			return (this.dex.abilities.get('prismscale') as any).onModifyDef?.call(this, def, pokemon);
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return (this.dex.abilities.get('filter') as any).onSourceModifyDamage?.call(this, damage, source, target, move);
+		onUpdate(pokemon) {
+			return this.dex.abilities.get('prismscale').onUpdate?.call(this, pokemon);
+		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.get('prismscale').onTryHit?.call(this, target, source, move);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('prismscale').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onModifySpe(spe, pokemon) {
+			return this.dex.abilities.get('prismscale').onModifySpe?.call(this, spe, pokemon);
 		},
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
@@ -7657,6 +7666,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return (this.dex.abilities.get('dragonize') as any).onModifySTAB?.call(this, stab, source, target, move);
 		},
 		onImmunity(type, pokemon) {
+			const result = this.dex.abilities.get('prismscale').onImmunity?.call(this, type, pokemon);
+			if (result !== undefined) return result;
 			return (this.dex.abilities.get('selfsufficient') as any).onImmunity?.call(this, type, pokemon);
 		},
 		onResidual(pokemon) {

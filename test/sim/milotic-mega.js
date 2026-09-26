@@ -33,7 +33,7 @@ describe('Milotic-Mega', function () {
 		const milotic = battle.p1.active[0];
 		const foe = battle.p2.active[0];
 		assert.species(milotic, 'Milotic-Mega');
-		for (const component of ['marvelscale', 'filter', 'dragonize', 'selfsufficient']) {
+		for (const component of ['prismscale', 'marvelscale', 'oblivious', 'swiftswim', 'dragonize', 'selfsufficient']) {
 			assert(milotic.hasAbility(component));
 		}
 		const tackle = battle.dex.getActiveMove('tackle');
@@ -41,7 +41,19 @@ describe('Milotic-Mega', function () {
 		assert.equal(tackle.type, 'Dragon');
 		assert.equal(battle.runEvent('BasePower', milotic, foe, tackle, 100), 120);
 		const neutral = battle.dex.getActiveMove('tackle');
-		assert.equal(battle.runEvent('SourceModifyDamage', milotic, foe, neutral, 100), 80);
+		assert.equal(battle.runEvent('SourceModifyDamage', milotic, foe, neutral, 100), 100);
+		assert.false(milotic.hasAbility('filter'));
+		milotic.getMoveHitData(neutral).typeMod = 1;
+		assert.equal(battle.runEvent('SourceModifyDamage', milotic, foe, neutral, 100), 100);
+		const speed = milotic.getStat('spe');
+		battle.field.setWeather('raindance', milotic);
+		assert.equal(milotic.getStat('spe'), speed * 2);
+		battle.field.clearWeather();
+		battle.actions.useMove('taunt', foe, milotic);
+		assert.false(!!milotic.volatiles.taunt);
+		battle.boost({atk: -1}, milotic, foe, battle.dex.abilities.get('intimidate'));
+		assert.equal(milotic.boosts.atk, 0);
+		assert.equal(battle.runEvent('Immunity', milotic, null, null, 'attract'), false);
 		const defense = milotic.getStat('def');
 		milotic.setStatus('par', foe);
 		assert(milotic.getStat('def') >= Math.floor(defense * 1.49));
