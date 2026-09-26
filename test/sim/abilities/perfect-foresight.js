@@ -63,3 +63,28 @@ describe('Perfect Foresight Insomnia', () => {
 		});
 	}
 });
+
+describe('Copied weather suppression', () => {
+ for (const copier of ['Perfect Foresight', 'Royal Voice']) for (const copied of ['Cloud Nine', 'Air Lock']) {
+  it(copier + ' keeps ' + copied + ' active after its original holder leaves', () => {
+   const b=common.createBattle({formatid:'gen9nofieldsinglesgame'}, [[{species:'Alakazam',ability:copier,moves:['splash']}],[{species:'Golduck',ability:copied,moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}]]);
+   try {
+    b.makeChoices('team 1','team 12');const p=b.p1.active[0];
+    b.field.setWeather('sunnyday',p);
+    b.makeChoices('move splash','switch 2');
+    assert.equal(b.field.effectiveWeather(),'');
+    p.addVolatile('gastroacid',b.p2.active[0]);
+    assert.equal(b.field.effectiveWeather(),'sunnyday');
+    p.removeVolatile('gastroacid');
+    b.singleEvent('Start',p.getAbility(),p.abilityState,p);
+    assert.equal(b.field.effectiveWeather(),'sunnyday','recopying No Ability must discard suppression');
+    b.p2.active[0].setAbility(copied);
+    b.singleEvent('Start',p.getAbility(),p.abilityState,p);
+    b.p2.active[0].setAbility('No Ability');
+    assert.equal(b.field.effectiveWeather(),'');
+    p.faint();b.faintMessages();
+    assert.equal(b.field.effectiveWeather(),'sunnyday');
+   } finally {b.destroy();}
+  });
+ }
+});

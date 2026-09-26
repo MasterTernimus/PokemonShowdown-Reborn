@@ -12,6 +12,41 @@ const TEST_MOVES_BY_TYPE = {
 };
 
 describe('Custom G-Max audit', function () {
+	it('gives every non-cosmetic G-Max form its own HP and applies it in battle', function () {
+		const dex = common.gen(9).dex;
+		const gmaxForms = dex.species.all().filter(species =>
+			species.exists && species.forme.includes('Gmax') && !species.isCosmeticForme
+		);
+		const inheritedHp = gmaxForms.filter(species => {
+			const base = dex.species.get(species.changesFrom || species.baseSpecies);
+			return species.baseStats.hp <= base.baseStats.hp;
+		});
+		assert.deepEqual(inheritedHp.map(species => species.name), []);
+		assert.equal(dex.species.get('Eevee-Gmax').baseStats.hp, 150);
+		assert.equal(dex.species.get('Meowth-Gmax').baseStats.hp, 60);
+		assert.equal(dex.species.get('Inteleon-Gmax').baseStats.hp, 105);
+		assert.equal(dex.species.get('Grimmsnarl-Gmax').baseStats.hp, 143);
+		assert.equal(dex.species.get('Grimmsnarl-Gmax-Azzy').baseStats.hp, 143);
+
+		const battle = common.createBattle({formatid: 'gen9mistyfieldadrienn'}, [[
+			{species: 'Grimmsnarl', ability: 'noability', gigantamax: true, moves: ['tackle']},
+		], [
+			{species: 'Magikarp', moves: ['splash']},
+		]]);
+		try {
+			battle.makeChoices('team 1', 'team 1');
+			const pokemon = battle.p1.active[0];
+			const baseMaxHp = pokemon.maxhp;
+			battle.makeChoices('move tackle dynamax', 'move splash');
+			assert.equal(pokemon.species.id, 'grimmsnarlgmax');
+			assert(pokemon.maxhp > baseMaxHp);
+			assert.equal(pokemon.baseMaxhp, pokemon.maxhp);
+			assert.equal(pokemon.maxhp, battle.statModify(pokemon.species.baseStats, pokemon.set, 'hp'));
+		} finally {
+			battle.destroy();
+		}
+	});
+
 	it('resolves every G-Max-capable species and form', function () {
 		const dex = common.gen(9).dex;
 		const eligible = dex.species.all().filter(species =>
@@ -45,6 +80,10 @@ describe('Custom G-Max audit', function () {
 				battle.makeChoices(`move ${baseMove} dynamax`, 'move splash');
 				if (battle.p1.active[0].species.id !== expectedGmax) {
 					failures.push(`${species.id} transformed to ${battle.p1.active[0].species.id}, expected ${expectedGmax}`);
+				}
+				const expectedHp = battle.statModify(pokemon.species.baseStats, pokemon.set, 'hp');
+				if (pokemon.maxhp !== expectedHp) {
+					failures.push(`${species.id} transformed with ${pokemon.maxhp} HP, expected ${expectedHp}`);
 				}
 			} finally {
 				battle?.destroy();
