@@ -321,10 +321,12 @@ export class Field {
 	suppressingWeather() {
 		for (const side of this.battle.sides) {
 			for (const pokemon of side.active) {
-				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() &&
-					pokemon.getAbility().suppressWeather && !pokemon.abilityState.ending) {
-					return true;
-				}
+				if (!pokemon || pokemon.fainted || pokemon.ignoringAbility() || pokemon.abilityState.ending) continue;
+				const ability = pokemon.getAbility();
+				if (ability.suppressWeather) return true;
+				if (['perfectforesight', 'royalvoice'].includes(ability.id) &&
+					pokemon.m.perfectForesightAbility && !pokemon.m.perfectForesightAbilityState?.ending &&
+					this.battle.dex.abilities.get(pokemon.m.perfectForesightAbility).suppressWeather) return true;
 			}
 		}
 		return false;

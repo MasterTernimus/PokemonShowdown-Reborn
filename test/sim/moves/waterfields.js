@@ -10,6 +10,35 @@ describe('Water field move interactions', () => {
 		battle?.destroy();
 	});
 
+	it('lets allied and opposing Storm Drain redirect instant Dive in doubles while the field changes', () => {
+		for (const [field, nextField] of [
+			['watersurfaceterrain', 'underwaterterrain'],
+			['underwaterterrain', 'watersurfaceterrain'],
+		]) {
+			for (const stormDrainSide of ['ally', 'foe']) {
+				const ally = stormDrainSide === 'ally';
+				battle = common.createBattle({formatid: 'gen9doubleswatersurface'}, [[
+					{species: 'Mew', ability: 'No Ability', moves: ['dive']},
+					{species: ally ? 'Gastrodon' : 'Mew', ability: ally ? 'Storm Drain' : 'No Ability', moves: ['splash']},
+				], [
+					{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+					{species: ally ? 'Mew' : 'Gastrodon', ability: ally ? 'No Ability' : 'Storm Drain', moves: ['splash']},
+				]]);
+				battle.makeChoices('team 1', 'team 1');
+				battle.field.changeTerrain(field, battle.p1.active[0]);
+				battle.makeChoices('move dive +1, move splash', 'move splash, move splash');
+				const stormDrain = ally ? battle.p1.active[1] : battle.p2.active[1];
+				assert.equal(stormDrain.boosts.atk, 1);
+				assert.equal(stormDrain.boosts.spa, 1);
+				assert.fullHP(stormDrain);
+				assert.fullHP(battle.p2.active[0]);
+				assert.equal(battle.field.terrain, nextField);
+				battle.destroy();
+				battle = null;
+			}
+		}
+	});
+
 	it('changes Underwater to Midnight Zone when Phantom Force lands', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Mew', moves: ['phantomforce'] },
