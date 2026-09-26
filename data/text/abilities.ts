@@ -816,8 +816,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalscales: {
 		name: "Royal Scales",
-		desc: "Marvel Scale, Filter, Dragonize, and Self Sufficient. Status or certain fields boost Defense by 1.5x. Takes 0.8x damage from attacks, with a further 0.75x reduction against super-effective attacks. Normal moves become Dragon and gain Dragonize's power boost. Restores 1/16 maximum HP each turn and ignores Sandstorm and Hail damage.",
-		shortDesc: "Marvel Scale + Filter + Dragonize + Self Sufficient.",
+		desc: "Prism Scale, Dragonize, and Self Sufficient. Status or Prism Scale's supported fields boost Defense by 1.5x. Blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Speed doubles in rain and Swift Swim's supported fields. Normal moves become Dragon and gain Dragonize's power boost. Restores 1/16 maximum HP each turn and ignores Sandstorm and Hail damage.",
+		shortDesc: "Prism Scale + Dragonize + Self Sufficient.",
 	},
 	toxicarmor: {
 		name: "Toxic Armor",
