@@ -501,8 +501,10 @@ export class Side {
 		if (target instanceof Pokemon) target = target.position;
 		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return false;
-		this.battle.singleEvent('End', status, this.slotConditions[target][status.id], this.active[target]);
+		const state = this.slotConditions[target][status.id];
+		// End handlers may install a replacement (for example, a queued future attack).
 		delete this.slotConditions[target][status.id];
+		this.battle.singleEvent('End', status, state, this.active[target]);
 		return true;
 	}
 
@@ -807,7 +809,7 @@ export class Side {
 		}
 		const maxGimmicks = 2;
 		const pendingGimmicks = this.choice.actions.reduce((total, action) => {
-			return total + (action.mega ? 1 : 0) + (action.dynamax ? 1 : 0) +
+			return total + (action.mega || action.megax || action.megay ? 1 : 0) + (action.dynamax ? 1 : 0) +
 				(action.zmove ? 1 : 0) + (action.terastallize ? 1 : 0);
 		}, 0);
 		const requestedGimmicks = (mega || megax || megay || ultra ? 1 : 0) + (dynamax ? 1 : 0) +

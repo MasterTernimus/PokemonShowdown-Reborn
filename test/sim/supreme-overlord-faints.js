@@ -55,6 +55,8 @@ describe('Supreme Overlord faint tracking', function () {
 		const ability = kingambit.getAbility();
 		const flinch = battle.dex.conditions.get('flinch');
 		kingambit.side.totalFainted = 1;
+		battle.boost({atk: -1}, kingambit, foe, battle.dex.moves.get('growl'));
+		assert.equal(kingambit.boosts.atk, -1, 'Supreme Overlord must not block stat drops');
 		const before = battle.dex.getActiveMove('slash');
 		battle.singleEvent('ModifyMove', ability, kingambit.abilityState, before, kingambit, foe);
 		assert.false(!!before.infiltrates);
@@ -65,6 +67,11 @@ describe('Supreme Overlord faint tracking', function () {
 		assert(battle.singleEvent('TryAddVolatile', ability, kingambit.abilityState,
 			kingambit, foe, null, flinch) !== null);
 		kingambit.side.totalFainted = 3;
+		const hpBeforeResidual = kingambit.hp -= 40;
+		battle.singleEvent('Residual', ability, kingambit.abilityState, kingambit);
+		assert.equal(kingambit.hp, hpBeforeResidual, 'Supreme Overlord must not heal each turn');
+		assert.equal(battle.runEvent('ModifyDamage', foe, kingambit, battle.dex.getActiveMove('tackle'), 100), 100,
+			'Supreme Overlord must not reduce damage through Filter');
 		const lethalDamage = kingambit.hp + 100;
 		assert.equal(battle.singleEvent('Damage', ability, kingambit.abilityState,
 			kingambit, foe, battle.dex.moves.get('tackle'), lethalDamage), lethalDamage);

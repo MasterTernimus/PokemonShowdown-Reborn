@@ -32,7 +32,7 @@ describe('Imperial Mandate and Stance Change field modes', () => {
 	});
 	for (const boosted of [false, true]) {
 		for (const low of [false, true]) {
-			it(`checks power, Speed and damage reduction: boosted=${boosted}, low=${low}`, () => {
+			it(`checks power and Speed without passive damage reduction: boosted=${boosted}, low=${low}`, () => {
 				const mon = start(), foe = battle.p2.active[0];
 				battle.field.startTerrain(boosted ? 'fairytaleterrain' : 'rockyterrain');
 				mon.hp = low ? Math.floor(mon.maxhp / 2) : mon.maxhp;
@@ -40,8 +40,8 @@ describe('Imperial Mandate and Stance Change field modes', () => {
 				assert.equal(mon.getStat('spe'), speed * (low ? 2 : 1));
 				for (const id of ['tackle', 'swift']) {
 					const move = battle.dex.getActiveMove(id);
-					assert.equal(battle.runEvent('BasePower', mon, foe, move, 100), boosted ? (low ? 150 : 100) : (low ? 120 : 240));
-					assert.equal(battle.runEvent('ModifyDamage', foe, mon, move, 100), boosted ? 100 : 80);
+					assert.equal(battle.runEvent('BasePower', mon, foe, move, 100), boosted ? (low ? 150 : 100) : (low ? 100 : 200));
+					assert.equal(battle.runEvent('ModifyDamage', foe, mon, move, 100), 100);
 				}
 			});
 		}

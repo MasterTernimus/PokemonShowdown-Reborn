@@ -210,18 +210,19 @@ export class Field {
 			this.battle.add('-message', 'The weather was annihilated by the crushing weight of the field!');
 			return false;
 		}
-		if (source) {
-			const result = this.battle.runEvent('SetWeather', source, source, status);
-			if (!result) {
-				if (result === false) {
-					if ((sourceEffect as Move)?.weather) {
-						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
-					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
-						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
-					}
+		// Automatic field weather has no Pokemon source, but must still consult
+		// active abilities such as Desolate Land before replacing their weather.
+		const weatherTarget = source || this.battle.getAllActive()[0] || this.battle;
+		const result = this.battle.runEvent('SetWeather', weatherTarget, source, status);
+		if (!result) {
+			if (result === false && source) {
+				if ((sourceEffect as Move)?.weather) {
+					this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
+				} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+					this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
 				}
-				return null;
 			}
+			return null;
 		}
 		const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
@@ -324,6 +325,7 @@ export class Field {
 				if (!pokemon || pokemon.fainted || pokemon.ignoringAbility() || pokemon.abilityState.ending) continue;
 				const ability = pokemon.getAbility();
 				if (ability.suppressWeather) return true;
+				if (ability.id === 'rkssystem' && pokemon.hasAbility('airlock')) return true;
 				if (['perfectforesight', 'royalvoice'].includes(ability.id) &&
 					pokemon.m.perfectForesightAbility && !pokemon.m.perfectForesightAbilityState?.ending &&
 					this.battle.dex.abilities.get(pokemon.m.perfectForesightAbility).suppressWeather) return true;
@@ -344,19 +346,21 @@ export class Field {
 		return this.battle.dex.conditions.getByID(this.weather);
 	}
 
+	createBaseTerrainState(id: string, startingField = false) {
+		// Restoring an underlying field must not replay its entry effects.
+		return this.battle.initEffectState({
+			id, startingField, permanent: true, terrain_type: 'Base',
+			terrainChanges: new Map<string, number>(), turn: this.battle.turn, duration: 9999,
+			durationUpdatedTurn: this.battle.turn - 1,
+			...(id === 'wastelandterrain' ? { toxicspikes: [], spikes: [], stickyweb: [], stealthrock: [] } : {}),
+		});
+	}
+
 	startTerrain(status: string | Effect) {
 		if (this.isFlowerGardenBase()) return;
 		status = this.battle.dex.conditions.get(status);
 		this.terrain = status.id;
-		this.terrainState = this.battle.initEffectState({
-			id: status.id,
-			startingField: true,
-			permanent: true,
-			terrain_type: "Base",
-			terrainChanges: new Map<string, number>(),
-			turn: this.battle.turn,
-			duration: 9999,
-		});
+		this.terrainState = this.createBaseTerrainState(status.id, true);
 		this.terrainStack.unshift(this.terrainState);
 		this.battle.singleEvent('FieldStart', status, this.terrainState, this);
 		this.reconcileAura();
@@ -536,6 +540,7 @@ export class Field {
 			terrainChanges: new Map<string, number>(),
 			turn: this.battle.turn,
 			duration: status.duration,
+			durationUpdatedTurn: this.battle.turn - 1,
 			permanent: status.duration === undefined || status.duration >= 9999,
 		});
 		if (status.durationCallback) {
@@ -604,6 +609,7 @@ export class Field {
 			terrain_type: prevTerrainState.terrain_type,
 			origin: sourceEffect,
 			duration: prevTerrainState.zMoveExpired ? 1 : prevTerrainState.duration,
+			durationUpdatedTurn: prevTerrainState.durationUpdatedTurn ?? this.battle.turn - 1,
 			permanent: !prevTerrainState.zMoveExpired && !!prevTerrainState.permanent,
 			turn: this.battle.turn,
 			prevTerrain: prevTerrainState.id,
@@ -725,17 +731,30 @@ export class Field {
 			} else {
 				this.terrainStack.shift();
 			}
-			const elapsedTurns = this.battle.turn - clearedTerrainState.turn;
-			while (this.terrainStack.length) {
-				const terrainState = this.terrainStack[0];
-				if (!terrainState.duration) break;
-				if (terrainState.duration <= elapsedTurns + 1) {
+		}
+		const updateThroughTurn = clearedTerrainState.durationUpdatedTurn === this.battle.turn ?
+			this.battle.turn : this.battle.turn - 1;
+		while (this.terrainStack.length) {
+			const terrainState = this.terrainStack[0];
+			// Recheck this entry restriction without resetting counters or repeating boosts.
+			if (terrainState.id === 'coldeclipseterrain' && this.isWeather('desolateland')) {
+				this.terrainStack.shift();
+				this.battle.add('-message', 'The harsh sun melted the snow before it could form!');
+				continue;
+			}
+			if (!terrainState.permanent && terrainState.duration !== undefined) {
+				// Each suspended field was last active at a different time. Age it from
+				// its own last tick, including this turn only if its replacement ticked.
+				const elapsedTurns = Math.max(0, updateThroughTurn -
+					(terrainState.durationUpdatedTurn ?? clearedTerrainState.turn - 1));
+				terrainState.duration = Math.max(0, terrainState.duration - elapsedTurns);
+				terrainState.durationUpdatedTurn = updateThroughTurn;
+				if (!terrainState.duration) {
 					this.terrainStack.shift();
 					continue;
 				}
-				terrainState.duration -= elapsedTurns;
-				break;
 			}
+			break;
 		}
 		if (this.terrainStack.length !== 0) {
 			this.terrain = this.terrainStack[0].id as ID;

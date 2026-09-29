@@ -56,7 +56,7 @@ describe('Sigilyph-Rejuv and Aevian Grief', () => {
 		assert.equal(validator.validateTeam(set('Magic Guard', ['Protect', 'Air Cutter'])), null);
 	});
 
-	it('transforms on entry and provides Flare Boost, Wonder Skin, and Levitate', () => {
+	it('transforms on entry and provides Magic Guard, Cursed Body, Wonder Skin, and Levitate', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Sigilyph', ability: 'Aevian Grief', moves: ['splash']},
 		], [{species: 'Mew', moves: ['splash']}]]);
@@ -64,14 +64,15 @@ describe('Sigilyph-Rejuv and Aevian Grief', () => {
 		const sigilyph = battle.p1.active[0];
 		const foe = battle.p2.active[0];
 		assert.equal(sigilyph.species.id, 'sigilyphrejuv');
-		for (const component of ['flareboost', 'wonderskin', 'levitate']) {
+		for (const component of ['magicguard', 'cursedbody', 'wonderskin', 'levitate']) {
 			assert(sigilyph.hasAbility(component), component);
 		}
+		assert(!sigilyph.hasAbility('flareboost'));
 		assert.equal(sigilyph.runImmunity('Ground'), false);
 		assert.equal(battle.runEvent('ModifyAccuracy', sigilyph, foe, battle.dex.getActiveMove('thunderwave'), 90), 50);
-		assert.equal(battle.runEvent('BasePower', sigilyph, foe, battle.dex.getActiveMove('flamethrower'), 100), 150);
+		assert.equal(battle.runEvent('BasePower', sigilyph, foe, battle.dex.getActiveMove('flamethrower'), 100), 100);
 		sigilyph.setStatus('brn');
-		assert.equal(battle.runEvent('BasePower', sigilyph, foe, battle.dex.getActiveMove('shadowball'), 100), 150);
+		assert.equal(battle.runEvent('BasePower', sigilyph, foe, battle.dex.getActiveMove('shadowball'), 100), 100);
 		assert.equal(battle.runEvent('BasePower', sigilyph, foe, battle.dex.getActiveMove('shadowclaw'), 100), 100);
 	});
 });

@@ -3750,8 +3750,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	luckychant: {
 		name: "Lucky Chant",
-		desc: "This move has +4 priority. For 4 turns, the user and its party members cannot be struck by a critical hit and their moves have +1 critical hit ratio. Fails if the effect is already active on the user's side.",
-		shortDesc: "+4 priority. 4 turns: blocks crits; user's side gets +crit.",
+		desc: "This move has +3 priority. For 5 turns, the user and its party members cannot be struck by a critical hit and take 10% less damage from attacks. Fails if the effect is already active on the user's side.",
+		shortDesc: "+3 priority. 5 turns: blocks critical hits and reduces attack damage by 10%.",
 
 		start: "  Lucky Chant shielded [TEAM] from critical hits!",
 		end: "  [TEAM]'s Lucky Chant wore off!",

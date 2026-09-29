@@ -12,7 +12,7 @@
 import { Battle } from './battle';
 import { Dex } from './dex';
 import { Field } from './field';
-import { Pokemon } from './pokemon';
+import { type EffectState, Pokemon } from './pokemon';
 import { PRNG } from './prng';
 import { type Choice, Side } from './side';
 
@@ -41,7 +41,8 @@ const BATTLE = new Set([
 	'HIT_SUBSTITUTE', 'NOT_FAIL', 'FAIL', 'SILENT_FAIL', 'field', 'sides', 'prng', 'hints',
 	'deserialized', 'queue', 'actions',
 ]);
-const FIELD = new Set(['id', 'battle']);
+const FIELD = new Set(['id', 'battle', 'terrainState', 'terrainStack']);
+const TERRAIN_STATE = new Set(['terrainChanges']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
 	'side', 'battle', 'set', 'name', 'fullname', 'id',
@@ -170,11 +171,34 @@ export const State = new class {
 	}
 
 	serializeField(field: Field): /* Field */ AnyObject {
-		return this.serialize(field, FIELD, field.battle);
+		const state = this.serialize(field, FIELD, field.battle);
+		state.terrainStack = field.terrainStack.map(terrain => this.serializeTerrainState(terrain, field.battle));
+		// The active state and its stack entry must remain the same object: timers
+		// and counters are updated through both references during field changes.
+		const activeIndex = field.terrainStack.indexOf(field.terrainState);
+		state.terrainState = activeIndex < 0 ? this.serializeTerrainState(field.terrainState, field.battle) : activeIndex;
+		return state;
 	}
 
 	deserializeField(state: /* Field */ AnyObject, field: Field) {
 		this.deserialize(state, field, FIELD, field.battle);
+		field.terrainStack = state.terrainStack.map((terrain: AnyObject) =>
+			this.deserializeTerrainState(terrain, field.battle));
+		field.terrainState = typeof state.terrainState === 'number' ? field.terrainStack[state.terrainState] :
+			this.deserializeTerrainState(state.terrainState, field.battle);
+	}
+
+	serializeTerrainState(terrain: EffectState, battle: Battle): AnyObject {
+		const state = this.serialize(terrain, TERRAIN_STATE, battle);
+		if (terrain.terrainChanges) state.terrainChanges = Array.from(terrain.terrainChanges.entries());
+		return state;
+	}
+
+	deserializeTerrainState(state: AnyObject, battle: Battle): EffectState {
+		const terrain = {} as EffectState;
+		this.deserialize(state, terrain, TERRAIN_STATE, battle);
+		if (state.terrainChanges) terrain.terrainChanges = new Map<string, number>(state.terrainChanges);
+		return terrain;
 	}
 
 	serializeSide(side: Side): /* Side */ AnyObject {

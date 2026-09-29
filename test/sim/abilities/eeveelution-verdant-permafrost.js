@@ -24,7 +24,7 @@ describe('Eeveelution ability order, Verdant Edge, and Permafrost', () => {
 		assert.equal(Dex.species.get('Umbreon').abilities[0], 'Poison Heal');
 	});
 
-	it('applies Verdant Edge speed, slicing, Defense, and allied healing effects', () => {
+	it('applies Verdant Edge speed, slicing, and Defense without Invigorate healing', () => {
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[
 			{species: 'Leafeon', ability: 'Verdant Edge', moves: ['splash', 'leafblade']},
 			{species: 'Mew', moves: ['splash']},
@@ -36,11 +36,12 @@ describe('Eeveelution ability order, Verdant Edge, and Permafrost', () => {
 		const leafeon = battle.p1.active[0];
 		const ally = battle.p1.active[1];
 		const foe = battle.p2.active[0];
-		for (const component of ['chlorophyll', 'invigorate', 'sharpness', 'grasspelt']) {
+		for (const component of ['chlorophyll', 'sharpness', 'grasspelt']) {
 			assert(leafeon.hasAbility(component), component);
 		}
+		assert(!leafeon.hasAbility('invigorate'));
 		assert.equal(battle.runEvent('BasePower', leafeon, foe, battle.dex.getActiveMove('leafblade'), 100), 150);
-		assert.equal(battle.runEvent('TryHeal', ally, leafeon, null, 100), 130);
+		assert.equal(battle.runEvent('TryHeal', ally, leafeon, null, 100), 100);
 		assert.equal(battle.runEvent('ModifySpe', leafeon, null, null, 100), 100);
 		battle.field.setWeather('sunnyday');
 		assert.equal(battle.runEvent('ModifySpe', leafeon, null, null, 100), 200);

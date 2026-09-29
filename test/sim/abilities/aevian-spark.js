@@ -37,19 +37,20 @@ describe('Breloom-Rejuv, Aevian Spark, and Wake-Up Shock', () => {
 		const breloom = battle.p1.active[0];
 		assert.equal(breloom.species.id, 'breloomrejuv');
 		assert.equal(breloom.canMegaEvo, 'Breloom-Mega');
-		for (const component of ['toughclaws', 'technician', 'static']) assert(breloom.hasAbility(component));
+		for (const component of ['earlybird', 'technician', 'static']) assert(breloom.hasAbility(component));
 		battle.makeChoices('move splash mega', 'move splash');
 		assert.equal(breloom.species.id, 'breloommega');
 	});
 
-	it('applies Tough Claws, Technician, and Static', () => {
+	it('applies Early Bird, Technician, and Static without Tough Claws', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Breloom', ability: 'Aevian Spark', moves: ['splash']},
 		], [{species: 'Mew', moves: ['tackle']}]]);
 		battle.makeChoices('team 1', 'team 1');
 		const breloom = battle.p1.active[0];
 		const foe = battle.p2.active[0];
-		assert.equal(battle.runEvent('BasePower', breloom, foe, battle.dex.getActiveMove('tackle'), 40), 78);
+		assert(!breloom.hasAbility('toughclaws'));
+		assert.equal(battle.runEvent('BasePower', breloom, foe, battle.dex.getActiveMove('tackle'), 40), 60);
 		assert.equal(battle.runEvent('BasePower', breloom, foe, battle.dex.getActiveMove('absorb'), 20), 30);
 		battle.randomChance = () => true;
 		battle.makeChoices('move splash', 'move tackle');

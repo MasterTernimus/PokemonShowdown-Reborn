@@ -244,15 +244,15 @@ describe('Composite ability cleanup', function () {
 		assert.equal(ability.onImmunity, undefined);
 	});
 
-	it('should keep both Empoleon profiles on the requested ability spread', function () {
+	it('should give base Empoleon and its Mega their distinct abilities', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
-		const expected = {
-			0: "Emperor's Resolve",
-			1: "Emperor's Pride",
+		const base = {
+			0: 'Competitive',
+			1: 'Exalt',
 			H: 'Royal Decree',
 		};
-		assert.deepEqual(battle.dex.species.get('Empoleon').abilities, expected);
-		assert.deepEqual(battle.dex.species.get('Empoleon-Alt').abilities, expected);
+		assert.deepEqual(battle.dex.species.get('Empoleon').abilities, base);
+		assert.deepEqual(battle.dex.species.get('Empoleon-Mega').abilities, {0: "Emperor's Resolve"});
 	});
 
 	it('should give Empress and Imperial Princess native Fighting STAB and suppress only Fairy weakness components', function () {

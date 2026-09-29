@@ -41,4 +41,19 @@ describe('Aevian Ampharos', function () {
 		}
 		assert(Learnsets.ampharos.learnset.dragondance, 'Ampharos should learn Dragon Dance');
 	});
+
+	it('names Mega Energy when Mega Evolution restores HP', function () {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: false}, [[
+			{species: 'Ampharos', ability: 'Static', item: 'Ampharosite', moves: ['splash']},
+		], [
+			{species: 'Eevee', ability: 'Run Away', moves: ['splash']},
+		]]);
+		if (!battle.p1.active[0]) battle.makeChoices('team 1', 'team 1');
+		const ampharos = battle.p1.active[0];
+		ampharos.hp -= Math.floor(ampharos.maxhp / 4);
+		battle.makeChoices('move splash mega', 'move splash');
+		assert(battle.log.some(line => line.includes('|-heal|') && line.includes('[from] Mega Energy')));
+		assert(!battle.log.some(line => line.includes('|-heal|') && line.includes('Ampharosite')));
+		assert(!battle.log.some(line => line.includes('[from] undefined')));
+	});
 });
