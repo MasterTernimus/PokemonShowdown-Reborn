@@ -112,7 +112,7 @@ describe('Bond ability component audit', () => {
 		assert.notEqual(ordinary.willCrit, true);
 	});
 
-	it('KO survival is consumed for the battle even after switching out and back', () => {
+	it('does not grant KO survival in doubles', () => {
 		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
 			[
 				{ species: 'Arcanine', ability: 'Battle Bond', moves: ['splash'] },
@@ -127,22 +127,17 @@ describe('Bond ability component audit', () => {
 		const arcanine = battle.p1.active[0];
 		arcanine.hp = Math.floor(arcanine.maxhp / 3) + 1;
 		battle.makeChoices('move splash, move splash', 'move earthpower 1, move splash');
-		assert.equal(arcanine.abilityState.battleBondEndured, true);
-		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
-		battle.makeChoices('switch 3, move splash', 'move splash, move splash');
-		assert.equal(battle.p1.active[0], arcanine);
-		arcanine.hp = Math.floor(arcanine.maxhp / 3) + 1;
-		battle.makeChoices('move splash, move splash', 'move earthpower 1, move splash');
 		assert.equal(arcanine.hp, 0, battle.log.join('\n'));
+		assert.equal(arcanine.abilityState.battleBondEndured, undefined);
 	});
 
-	it('a lethal hit survived before transformation remains spent afterward', () => {
+	it('transforms after a KO without gaining an endurance marker', () => {
 		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
 			[
 				{ species: 'Arcanine', ability: 'Battle Bond', moves: ['flamethrower', 'splash'] },
 				{ species: 'Magikarp', ability: 'No Ability', moves: ['splash'] },
 			], [
-				{ species: 'Mewtwo', ability: 'No Ability', moves: ['earthpower'] },
+				{ species: 'Mewtwo', ability: 'No Ability', moves: ['earthpower', 'splash'] },
 				{ species: 'Mew', level: 1, ability: 'No Ability', moves: ['splash'] },
 				{ species: 'Magikarp', ability: 'No Ability', moves: ['splash'] },
 			],
@@ -150,10 +145,10 @@ describe('Bond ability component audit', () => {
 		battle.makeChoices('team 12', 'team 12');
 		const arcanine = battle.p1.active[0];
 		arcanine.hp = Math.floor(arcanine.maxhp / 3) + 1;
-		battle.makeChoices('move flamethrower 2, move splash', 'move earthpower 1, move splash');
+		battle.makeChoices('move flamethrower 2, move splash', 'move splash, move splash');
 		assert.equal(arcanine.species.id, 'arcaninebattlebond', battle.log.join('\n'));
 		assert.equal(arcanine.ability, 'sacredbond');
-		assert.equal(arcanine.battleBondEndured, true);
+		assert.equal(arcanine.abilityState.battleBondEndured, undefined);
 		battle.makeChoices('', 'switch 3');
 		arcanine.hp = Math.floor(arcanine.maxhp / 3) + 1;
 		battle.makeChoices('move splash, move splash', 'move earthpower 1, move splash');
@@ -179,7 +174,7 @@ describe('Bond ability component audit', () => {
 		['Free-for-All', 'gen9freeforall4pfactoryfield'],
 		['Multi', 'gen9multifactoryfield'],
 	]) {
-		it(`Battle Bond survives one lethal move in ${label}`, () => {
+		it(`Battle Bond does not survive a lethal move in ${label}`, () => {
 			battle = common.createBattle({ formatid }, [
 				[{ species: 'Arcanine', ability: 'Battle Bond', moves: ['splash'] }],
 				[{ species: 'Mewtwo', ability: 'No Ability', moves: ['earthpower'] }],
@@ -191,8 +186,8 @@ describe('Bond ability component audit', () => {
 			arcanine.hp = Math.floor(arcanine.maxhp / 3) + 1;
 			battle.makeChoices('move splash', `move earthpower ${battle.p2.active[0].getLocOf(arcanine)}`,
 				'move splash', 'move splash');
-			assert.equal(arcanine.battleBondEndured, true, battle.log.join('\n'));
-			assert(arcanine.hp > 0, battle.log.join('\n'));
+			assert.equal(arcanine.abilityState.battleBondEndured, undefined);
+			assert.equal(arcanine.hp, 0, battle.log.join('\n'));
 		});
 	}
 });

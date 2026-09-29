@@ -3562,9 +3562,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let success = false;
 			if (this.gameType === "freeforall") {
 				// the list of all sides in clockwise order
-				const sides = [this.sides[0], this.sides[3]!, this.sides[1], this.sides[2]!];
-				const temp: { [k: number]: typeof source.side.sideConditions } = { 0: {}, 1: {}, 2: {}, 3: {} };
+				const sides = [this.sides[0], this.sides[3], this.sides[1], this.sides[2]]
+					.filter((side): side is Side => !!side);
+				const temp: { [k: number]: typeof source.side.sideConditions } = {};
 				for (const side of sides) {
+					temp[side.n] = {};
 					for (const id in side.sideConditions) {
 						if (!sideConditions.includes(id)) continue;
 						temp[side.n][id] = side.sideConditions[id];
@@ -3572,9 +3574,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						success = true;
 					}
 				}
-				for (let i = 0; i < 4; i++) {
+				for (let i = 0; i < sides.length; i++) {
 					const sourceSideConditions = temp[sides[i].n];
-					const targetSide = sides[(i + 1) % 4]; // the next side in rotation
+					const targetSide = sides[(i + 1) % sides.length]; // the next side in rotation
 					for (const id in sourceSideConditions) {
 						targetSide.sideConditions[id] = sourceSideConditions[id];
 						targetSide.sideConditions[id].target = targetSide;
@@ -11971,17 +11973,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Lucky Chant",
 		pp: 30,
-		priority: 4,
+		priority: 3,
 		flags: { snatch: 1, metronome: 1 },
 		sideCondition: 'luckychant',
 		condition: {
-			duration: 4,
+			duration: 5,
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Lucky Chant'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
 			},
 			onCriticalHit: false,
-			onModifyCritRatio(critRatio, source) {
-				if (source.side === this.effectState.target) return critRatio + 1;
+			onAnyModifyDamage(damage, source, target, move) {
+				if (target === source || !this.effectState.target.hasAlly(target) || move.category === 'Status') return;
+				return this.chainModify(0.9);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 6,
@@ -15904,23 +15907,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.type = 'Dark';
 				move.target = 'allAdjacent';
 				move.onAfterHit = function (target, source, move) {
-					const effects = ['damage', 'toxic', 'confusion', 'curse'];
-					while (effects.length) {
-						const index = this.random(effects.length);
-						const effect = effects.splice(index, 1)[0];
-						if (effect === 'damage') {
-							const damage = Math.floor(target.maxhp / 8);
-							if (damage > 0 && this.damage(damage, target, source, this.dex.abilities.get('evilsanta'))) return;
-						} else if (effect === 'toxic') {
-							if (target.setStatus('tox', source, move)) return;
-						} else if (effect === 'confusion') {
-							if (target.addVolatile('confusion', source, move)) {
-								target.volatiles['confusion'].time = 3;
-								return;
-							}
-						} else if (effect === 'curse') {
-							if (target.addVolatile('curse', source, move)) return;
-						}
+					const effect = this.sample(['damage', 'toxic', 'confusion', 'curse']);
+					if (effect === 'damage') {
+						this.damage(Math.floor(target.maxhp / 8), target, source, this.dex.abilities.get('evilsanta'));
+					} else if (effect === 'toxic') {
+						target.setStatus('tox', source, move);
+					} else if (effect === 'confusion') {
+						if (target.addVolatile('confusion', source, move)) target.volatiles['confusion'].time = 3;
+					} else {
+						target.addVolatile('curse', source, move);
 					}
 				};
 				return;

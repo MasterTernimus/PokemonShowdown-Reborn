@@ -30,10 +30,15 @@ describe('Toxic Spines custom effects', () => {
 		assert(toxapex.hasAbility('toxicdebris'));
 		assert(toxapex.hasAbility('corrosion'));
 		assert(toxapex.hasAbility('merciless'));
+		const surf = battle.dex.getActiveMove('surf');
+		assert.equal(battle.runEvent('ModifyCritRatio', toxapex, registeel, surf, 0), 0,
+			'Merciless should not force critical hits before the target is poisoned');
 
 		battle.makeChoices('move toxic', 'move tackle');
 		assert.equal(registeel.status, 'tox', 'Corrosion should let Toxic affect Steel types');
 		assert(registeel.side.getSideCondition('toxicspikes'), 'A physical hit should set Toxic Spikes');
+		assert.equal(battle.runEvent('ModifyCritRatio', toxapex, registeel, surf, 0), 5,
+			'Toxic Spines should inherit Merciless against poisoned targets');
 
 		battle.makeChoices('move surf', 'move tackle');
 		assert(battle.log.some(line => line.includes('|-crit|')), 'Merciless should guarantee a critical hit');

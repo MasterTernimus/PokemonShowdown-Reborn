@@ -1,6 +1,9 @@
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	megaenergy: {
+		name: 'Mega Energy',
+	},
 	terrainaura: {
 		name: 'Terrain Aura',
 		onModifySpD(spd, pokemon) {
@@ -1116,17 +1119,22 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(pokemon) {
 			this.effectState.turns = 0;
 			if (pokemon.gigantamax || pokemon.species.forme?.includes('Gmax')) {
-				(pokemon as any).gmaxOriginalMoveSlots = pokemon.moveSlots.map(slot => ({ pp: slot.pp, maxpp: slot.maxpp, gmaxpp: null as number | null }));
-				for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
-					const move = this.dex.moves.get(moveSlot.id);
-					const maxMove = this.actions.getMaxMove(move, pokemon);
-					if (maxMove?.name !== pokemon.canGigantamax) continue;
-					(pokemon as any).gmaxOriginalMoveSlots[i].gmaxpp = 8;
-					moveSlot.pp = 8;
-					moveSlot.maxpp = 8;
+				// Switching removes the volatile but keeps the Gmax form and its spent PP.
+				// Only initialize the signature allowance on the first transformation.
+				if (!(pokemon as any).gmaxOriginalMoveSlots) {
+					(pokemon as any).gmaxOriginalMoveSlots = pokemon.moveSlots.map(slot => ({ pp: slot.pp, maxpp: slot.maxpp, gmaxpp: null as number | null }));
+					for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
+						const move = this.dex.moves.get(moveSlot.id);
+						const maxMove = this.actions.getMaxMove(move, pokemon);
+						if (maxMove?.name !== pokemon.canGigantamax) continue;
+						(pokemon as any).gmaxOriginalMoveSlots[i].gmaxpp = 8;
+						moveSlot.pp = 8;
+						moveSlot.maxpp = 8;
+					}
 				}
 				for (const volatile of Object.keys(pokemon.volatiles)) {
-					if (volatile !== 'dynamax') pokemon.removeVolatile(volatile);
+					if (volatile === 'dynamax' || (volatile === 'stellarhealing' && pokemon.terastallized === 'Stellar')) continue;
+					pokemon.removeVolatile(volatile);
 				}
 				if (!(pokemon as any).gmaxTransformHealed) {
 					(pokemon as any).gmaxTransformHealed = true;

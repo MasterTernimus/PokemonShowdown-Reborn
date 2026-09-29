@@ -20,13 +20,12 @@ describe('Arcanine Battle Bond', () => {
 				{ species: 'Pikachu', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
-			battle.p1.active[0].abilityState.battleBondEndured = true;
 			battle.makeChoices('move flamethrower', 'move splash');
 			const arcanine = battle.p1.active[0];
 			assert.equal(arcanine.species.id, 'arcaninebattlebond', battle.log.join('\n'));
 			assert.equal(arcanine.ability, 'sacredbond');
 			assert.equal(arcanine.bondTriggered, true);
-			assert.equal(arcanine.abilityState.battleBondEndured, true);
+			assert.equal(arcanine.abilityState.battleBondEndured, undefined);
 			assert.deepEqual(arcanine.species.types, ['Fire']);
 			assert.deepEqual(arcanine.species.baseStats, {
 				hp: 90, atk: 150, def: 105, spa: 125, spd: 105, spe: 125,
@@ -113,7 +112,7 @@ describe('Arcanine Battle Bond', () => {
 		['Garchomp', 'earthquake', 'garchompbattlebond', 'apexbond'],
 		['Greninja', 'surf', 'greninjaash', 'shadowbond'],
 	]) {
-		it(`${species} keeps its endurance use when Battle Bond transforms it`, () => {
+		it(`${species} transforms without a KO-survival marker`, () => {
 			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 				{ species, ability: 'Battle Bond', moves: [move] },
 			], [
@@ -121,15 +120,14 @@ describe('Arcanine Battle Bond', () => {
 				{ species: 'Pikachu', moves: ['splash'] },
 			]]);
 			battle.makeChoices('team 1', 'team 1');
-			battle.p1.active[0].abilityState.battleBondEndured = true;
 			battle.makeChoices(`move ${move}`, 'move splash');
 			assert.equal(battle.p1.active[0].species.id, forme);
 			assert.equal(battle.p1.active[0].ability, ability);
-			assert.equal(battle.p1.active[0].abilityState.battleBondEndured, true);
+			assert.equal(battle.p1.active[0].abilityState.battleBondEndured, undefined);
 		});
 	}
 
-	it('endures one lethal move from above one-third HP in doubles, then is KOed by the next', () => {
+	it('does not endure a lethal move from above one-third HP in doubles', () => {
 		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
 			[
 				{ species: 'Arcanine', ability: 'Battle Bond', moves: ['splash'] },
@@ -142,9 +140,6 @@ describe('Arcanine Battle Bond', () => {
 		battle.makeChoices('team 12', 'team 12');
 		const arcanine = battle.p1.active[0];
 		arcanine.hp = Math.floor(arcanine.maxhp / 3) + 1;
-		battle.makeChoices('move splash, move splash', 'move earthpower 1, move splash');
-		assert.equal(arcanine.hp, 1 + Math.floor(arcanine.baseMaxhp / 16), battle.log.join('\n'));
-		assert.equal(arcanine.abilityState.battleBondEndured, true);
 		battle.makeChoices('move splash, move splash', 'move earthpower 1, move splash');
 		assert.equal(arcanine.hp, 0, battle.log.join('\n'));
 	});

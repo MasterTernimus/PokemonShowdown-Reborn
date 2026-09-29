@@ -33,20 +33,31 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 		battle.makeChoices('team 12', 'team 12');
 		return battle.p1.active;
 	}
-	it('Void Veil provides Levitate, Insomnia, Friend Guard, and Dream Sickness healing', () => {
+	it('Void Veil provides Levitate, Insomnia, and Magic Guard without healing or shelter', () => {
 		const [mon, ally] = doubles('Void Veil'), foe = battle.p2.active[0];
 		assert(!mon.runImmunity('Ground'));
 		assert(!mon.trySetStatus('slp', foe)); assert(!mon.addVolatile('yawn', foe));
 		assert(!mon.hasAbility('costar'));
-		assert.equal(battle.runEvent('ModifyDamage', foe, ally, battle.dex.getActiveMove('tackle'), 100), 75);
+		assert(mon.hasAbility('magicguard'));
+		assert(!mon.hasAbility('friendguard'));
+		assert.equal(battle.runEvent('ModifyDamage', foe, ally, battle.dex.getActiveMove('tackle'), 100), 100);
+		assert.equal(battle.runEvent('Damage', mon, foe, battle.dex.conditions.get('brn'), 100), false);
+		mon.hp = 100; ally.hp = 10; ally.status = 'brn';
+		battle.singleEvent('Residual', mon.getAbility(), mon.abilityState, mon);
+		assert.equal(mon.hp, 100);
+		assert.equal(ally.hp, 10);
+		assert.equal(ally.status, 'brn');
+		assert(!ally.volatiles.dreamsickness);
+	});
+	it('Dream Sickness heals itself and allies only by 1/16 each turn', () => {
+		const [mon, ally] = doubles('Dream Sickness');
+		assert(!mon.hasAbility('swornduty'));
 		mon.hp = 100; ally.hp = 10; ally.status = 'brn';
 		battle.singleEvent('Residual', mon.getAbility(), mon.abilityState, mon);
 		assert.equal(mon.hp, 100 + Math.floor(mon.baseMaxhp / 16));
-		assert.equal(ally.hp, 10 + Math.floor(ally.baseMaxhp / 16) + Math.floor(ally.baseMaxhp / 4));
-		assert.equal(ally.status, ''); assert(ally.volatiles.dreamsickness);
-		ally.hp = 10;
-		battle.singleEvent('Residual', mon.getAbility(), mon.abilityState, mon);
 		assert.equal(ally.hp, 10 + Math.floor(ally.baseMaxhp / 16));
+		assert.equal(ally.status, 'brn');
+		assert(!ally.volatiles.dreamsickness);
 	});
 	it('Royal Voice has exact Pixilate conversion and Queenly Majesty protection', () => {
 		const [mon, ally] = doubles('Royal Voice'), foe = battle.p2.active[0];

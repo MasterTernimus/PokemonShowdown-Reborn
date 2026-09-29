@@ -76,8 +76,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onAccuracy(accuracy, target, source, move) {
 				const noguard = ['owntempo', 'purepower', 'sandveil', 'steadfast'];
 				if (!target.hasAbility('unnerve') && source.hasAbility(noguard)) {
-					if (move && target === this.effectState.target)
-						return true;
+					return true;
 				}
 				return accuracy;
 			},
@@ -373,10 +372,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onResidual(pokemon) {
 				const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil', 'wellbakedbody'];
 				const weak = ['leafguard', 'fluffy', 'grasspelt', 'icebody'];
-				if (!(immune.includes(pokemon.ability) || pokemon.volatiles['aquaring'] || pokemon.hasType('Fire')) && pokemon.isGrounded()) {
+				if (!(pokemon.hasAbility(immune) || pokemon.volatiles['aquaring'] || pokemon.hasType('Fire')) && pokemon.isGrounded()) {
 					const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', pokemon.types), -6, 6);
 					const damage = this.clampIntRange(pokemon.baseMaxhp / 8 * 2 ** typeMod, 1);
-					if (weak.includes(pokemon.ability) || pokemon.volatiles['tarshot']) {
+					if (pokemon.hasAbility(weak) || pokemon.volatiles['tarshot']) {
 						this.damage(damage * 2, pokemon);
 					} else {
 						this.damage(damage, pokemon);
@@ -483,16 +482,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.add('-message', 'The quake collapsed the ceiling!');
 						this.field.terrainState.terrainChanges?.set('collapse', 0);
 						for (const pokemon of this.getAllActive()) {
-							if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.side.sideConditions['wideguard'] || pokemon.side.sideConditions['matblock'] || pokemon.hasAbility(['rockhead', 'bulletproof', 'stalward'])) {
+							if (pokemon.isSemiInvulnerable() || pokemon.isProtected() || pokemon.side.sideConditions['wideguard'] || pokemon.side.sideConditions['matblock'] || pokemon.hasAbility(['rockhead', 'bulletproof', 'stalwart'])) {
 								continue;
 							}
 							if (pokemon.hasAbility(['prismarmor', 'solidrock'])) {
 								this.damage(pokemon.baseMaxhp / 3, pokemon);
-							}
-							if (pokemon.hasAbility(['battlearmor', 'shellarmor'])) {
+							} else if (pokemon.hasAbility(['battlearmor', 'shellarmor'])) {
 								this.damage(pokemon.baseMaxhp / 2, pokemon);
-							}
-							if ((pokemon.hasAbility('sturdy') || pokemon.getVolatile('endure')) && pokemon.baseMaxhp === pokemon.hp) {
+							} else if ((pokemon.hasAbility('sturdy') || pokemon.getVolatile('endure')) && pokemon.baseMaxhp === pokemon.hp) {
 								this.damage(pokemon.baseMaxhp - 1, pokemon);
 							} else {
 								this.damage(pokemon.baseMaxhp, pokemon);
@@ -627,11 +624,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 
 				if (chessMoves.includes(move.id)) {
-					if (dumbAbilities.includes(target.ability) || target.volatiles['confusion']) {
+					if (target.hasAbility(dumbAbilities) || target.volatiles['confusion']) {
 						this.add('-message', 'The complicated move made the pokemon cross-eyed!');
 						modifier *= 2;
 					}
-					if (smartAbilities.includes(target.ability)) {
+					if (target.hasAbility(smartAbilities)) {
 						this.add('-message', 'The complicated move was easily analyzed by the pokemon!');
 						modifier *= 0.5;
 					}
@@ -990,7 +987,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onSwitchIn(pokemon) {
 				const immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
-				if (!immune.includes(pokemon.ability) && pokemon.isGrounded() && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
+				if (!pokemon.hasAbility(immune) && pokemon.isGrounded() && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
 					let typeMod = this.dex.getEffectiveness('Poison', pokemon.types);
 					typeMod = this.clampIntRange(typeMod, -6, 6);
 					this.damage(pokemon.baseMaxhp / 4 * 2 ** typeMod, pokemon);
@@ -1020,7 +1017,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onResidual(pokemon) {
 				const immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard'];
-				if (!immune.includes(pokemon.ability) && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
+				if (!pokemon.hasAbility(immune) && !(pokemon.types.includes('Poison') || pokemon.types.includes('Steel'))) {
 					if (pokemon.status === 'slp' || pokemon.hasAbility('comatose')) {
 						this.damage(pokemon.baseMaxhp / 16, pokemon);
 					}
@@ -1680,7 +1677,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onAfterMove(source, target, move) {
-				if (target.fainted && move.flags['recharge']) {
+				if (move.flags['recharge'] && target?.fainted) {
 					this.add('-message', 'The glitched terrain allowed the move to recharge from the fallen pokemon');
 					source.removeVolatile('mustrecharge');
 				}
@@ -2296,16 +2293,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
-				const immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wondergaurd', 'pastelveil', 'surgesurfer'];
+				const immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard', 'pastelveil', 'surgesurfer'];
 				const weak = ['dryskin', 'flamebody', 'magmaarmor', 'waterabsorb'];
-				if (!immune.includes(pokemon.ability) && !pokemon.hasType(['Poison', 'Steel']) && pokemon.isGrounded()) {
+				if (!pokemon.hasAbility(immune) && !pokemon.hasType(['Poison', 'Steel']) && pokemon.isGrounded()) {
 					const typeMod = this.clampIntRange(this.dex.getEffectiveness('Poison', pokemon.types), -6, 6);
 					let damage = this.clampIntRange(pokemon.baseMaxhp / 8 * 2 ** typeMod, 1);
 					if (pokemon.volatiles['dive']) {
 						damage *= 4;
 					}
 					this.add('-message', pokemon.volatiles['dive'] ? `${pokemon.name} suffocated underneath the toxic water!` : `${pokemon.name} is hurt by the toxic water!`);
-					if (weak.includes(pokemon.ability)) {
+					if (pokemon.hasAbility(weak)) {
 						this.damage(damage * 2, pokemon);
 					} else {
 						this.damage(damage, pokemon);
@@ -2756,7 +2753,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					}
 				}
 			},
-			onResidual() {
+			onFieldResidual() {
 				if (this.field.weather === 'raindance') {
 					this.field.changeWeather('hail');
 				}
@@ -3020,7 +3017,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onResidual(pokemon) {
 				const immune = ['quickfeet', 'swiftswim', 'clearbody', 'whitesmoke', 'fullmetalbody', 'myceliummight', 'propellertail', 'steamengine'];
 				const trapMoves = ['infestation', 'spiderweb', 'leechseed', 'snaptrap'];
-				if (pokemon.isGrounded() && (!immune.includes(pokemon.ability) || pokemon.hasItem('heavydutyboots'))) {
+				if (pokemon.isGrounded() && (!pokemon.hasAbility(immune) || pokemon.hasItem('heavydutyboots'))) {
 					if (pokemon.trapped) {
 						this.boost({ spe: -2 }, pokemon);
 					} else {
@@ -3044,6 +3041,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 						break;
 					}
 				}
+			},
+			onFieldResidual() {
 				if (this.field.weather === 'sunnyday' || this.field.weather === 'desolateland') {
 					const currentCounter = this.field.terrainState.terrainChanges?.get('revertTerrain') ?? 0;
 					const revertCounter = this.field.weather === 'sunnyday' ? 1 : 3;
@@ -3203,11 +3202,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				const immune = ['dryskin', 'magicguard', 'protectiveward', 'swiftswim', 'stormdrain', 'waterabsorb'];
 				const weak = ['flamebody', 'magmaarmor'];
-				if (!immune.includes(pokemon.ability)) {
+				if (!pokemon.hasAbility(immune)) {
 					const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', pokemon.types), -6, 6);
 					const damage = this.clampIntRange(pokemon.baseMaxhp / 8 * 2 ** typeMod, 1);
 					if (typeMod > 0) {
-						const damageDealt = weak.includes(pokemon.ability) ?
+						const damageDealt = pokemon.hasAbility(weak) ?
 							this.damage(damage * 2, pokemon) : this.damage(damage, pokemon);
 						if (typeof damageDealt === 'number' && damageDealt > 0) {
 							this.add('-message', `${pokemon.name} struggled in the water!`);
@@ -3341,10 +3340,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onResidual(pokemon) {
 				const immune = ['flamebody', 'flareboost', 'flashfire', 'heatproof', 'magmaarmor', 'waterbubble', 'waterveil', 'wellbakedbody'];
 				const weak = ['leafguard', 'fluffy', 'grasspelt', 'icebody'];
-				if (!(immune.includes(pokemon.ability) || pokemon.volatiles['aquaring'] || pokemon.hasType('Fire')) && pokemon.isGrounded()) {
+				if (!(pokemon.hasAbility(immune) || pokemon.volatiles['aquaring'] || pokemon.hasType('Fire')) && pokemon.isGrounded()) {
 					const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', pokemon.types), -6, 6);
 					const damage = this.clampIntRange(pokemon.baseMaxhp / 8 * 2 ** typeMod, 1);
-					if (weak.includes(pokemon.ability) || pokemon.volatiles['tarshot']) {
+					if (pokemon.hasAbility(weak) || pokemon.volatiles['tarshot']) {
 						this.damage(damage * 2, pokemon);
 					} else {
 						this.damage(damage, pokemon);

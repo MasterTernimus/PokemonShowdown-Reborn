@@ -26,8 +26,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	anomalycore: {
 		name: "Anomaly Core",
 		spritenum: 0,
-		megaStone: {Hypno: "Hypno-Pulse", Lilligant: "Lilligant-Rift", "Lilligant-Hisui": "Lilligant-Hisui-Rift", Muk: "Muk-Pulse", "Muk-Alola": "Muk-Pulse"},
-		itemUser: ["Hypno", "Lilligant", "Lilligant-Hisui", "Muk", "Muk-Alola"],
+		megaStone: {Hypno: "Hypno-Pulse", Lilligant: "Lilligant-Rift", "Lilligant-Hisui": "Lilligant-Hisui-Rift", Muk: "Muk-Pulse", "Muk-Alola": "Muk-Pulse", Hippowdon: "Hippowdon-Rift", Torterra: "Torterra-Rift"},
+		itemUser: ["Hypno", "Lilligant", "Lilligant-Hisui", "Muk", "Muk-Alola", "Hippowdon", "Torterra"],
 		num: 2662,
 		gen: 9,
 		desc: "If held by a designated Pulse or Rift Pokemon, this Anomaly Core allows it to undergo its Pulse or Rift Evolution in battle.",
@@ -1313,6 +1313,42 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		num: 2715,
+		gen: 9,
+		isNonstandard: "Custom",
+	},
+	torterranite: {
+		name: "Torterranite",
+		spritenum: 0,
+		megaStone: { Torterra: "Torterra-Mega-X" },
+		itemUser: ["Torterra"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2718,
+		gen: 9,
+		isNonstandard: "Custom",
+	},
+	infernite: {
+		name: "Infernite",
+		spritenum: 0,
+		megaStone: { Infernape: "Infernape-Mega" },
+		itemUser: ["Infernape"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2719,
+		gen: 9,
+		isNonstandard: "Custom",
+	},
+	empoleonite: {
+		name: "Empoleonite",
+		spritenum: 0,
+		megaStone: { Empoleon: "Empoleon-Mega" },
+		itemUser: ["Empoleon"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 2720,
 		gen: 9,
 		isNonstandard: "Custom",
 	},

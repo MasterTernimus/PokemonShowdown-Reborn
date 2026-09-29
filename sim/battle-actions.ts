@@ -2,6 +2,10 @@ import { Dex, toID } from './dex';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
+function isGigantamaxed(pokemon: Pokemon) {
+	return pokemon.species.forme.includes('Gmax');
+}
+
 export class BattleActions {
 	battle: Battle;
 	dex: ModdedDex;
@@ -215,7 +219,7 @@ export class BattleActions {
 		} else {
 			this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
 		}
-		if (pokemon.species.forme === 'Gmax') {
+		if (isGigantamaxed(pokemon)) {
 			pokemon.addVolatile('dynamax');
 		}
 		return true;
@@ -546,7 +550,10 @@ export class BattleActions {
 		}
 		this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
 
-		if (zMove) this.runZPower(move, pokemon);
+		if (zMove && !this.runZPower(move, pokemon)) {
+			this.battle.add('-fail', pokemon);
+			return false;
+		}
 
 		if (!target) {
 			this.battle.attrLastMove('[notarget]');
@@ -717,7 +724,7 @@ export class BattleActions {
 	}
 	waterShurikenTargetHasWaterImmunity(target: Pokemon) {
 		return target.hasAbility([
-			'auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb', 'tidalwave',
+			'auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'zen', 'stormdrain', 'waterabsorb', 'tidalwave',
 		]);
 	}
 	canChainHitTarget(target: Pokemon, pokemon: Pokemon, move: ActiveMove) {
@@ -725,12 +732,11 @@ export class BattleActions {
 			!this.battle.validTarget(target, pokemon, move.target) || !target.runImmunity(move)) return false;
 		if (move.ignoreAbility) return true;
 		const immuneAbilities: [string, string[]][] = [
-			['Water', ['auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'stormdrain', 'waterabsorb', 'tidalwave']],
+			['Water', ['auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'zen', 'stormdrain', 'waterabsorb', 'tidalwave']],
 			['Electric', ['lightningrod', 'motordrive', 'voltabsorb', 'livewire']],
 			['Fire', ['wellbakedbody']],
 			['Grass', ['sapsipper']],
 			['Ground', ['eartheater', 'treasuretitan']],
-			['Ice', ['safeharbor']],
 		];
 		if (immuneAbilities.some(([type, abilities]) =>
 			this.battle.movehasType(move, type) && target.hasAbility(abilities))) return false;
@@ -1872,7 +1878,7 @@ export class BattleActions {
 	}
 
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
-		if (!this.battle.useGimmick(pokemon, 'zMove')) this.battle.add('-message', 'Send this replay to Ternimus!');
+		if (!this.battle.useGimmick(pokemon, 'zMove')) return false;
 		const zPower = this.dex.conditions.get('zpower');
 		const zTerrains: { [moveid: string]: [string, number] } = {
 			oceanicoperetta: ['watersurfaceterrain', 4],
@@ -1937,6 +1943,7 @@ export class BattleActions {
 				}
 			}
 		}
+		return true;
 	}
 
 	targetTypeChoices(targetType: string) {
@@ -2153,7 +2160,7 @@ export class BattleActions {
 		}
 		if (ffaFollowUpAttack) {
 			const targetIsMega = !!(target.species.isMega || target.species.forme === 'Mega');
-			const targetIsGmax = !!(target.gigantamax || target.species.forme?.includes('Gmax'));
+			const targetIsGmax = isGigantamaxed(target);
 			if (!move.isZ && (targetIsMega || targetIsGmax || target.terastallized === 'Stellar' || target.hasAbility('ultraego'))) {
 				this.battle.debug('FFA gimmick follow-up damage reduction');
 				baseDamage = this.battle.modify(baseDamage, 0.9);
@@ -2234,9 +2241,9 @@ export class BattleActions {
 				baseDamage = this.battle.modify(baseDamage, 0.5);
 			}
 		}
-		const targetIsGmax = !!(target.gigantamax || target.species.forme?.includes('Gmax'));
+		const targetIsGmax = isGigantamaxed(target);
 		const targetIsMega = !!(target.species.isMega || target.species.forme === 'Mega');
-		const sourceIsGmax = !!(pokemon.gigantamax || pokemon.species.forme?.includes('Gmax'));
+		const sourceIsGmax = isGigantamaxed(pokemon);
 		const sourceIsMega = !!(pokemon.species.isMega || pokemon.species.forme === 'Mega');
 		if (pokemon.terastallized === 'Stellar') {
 			if (targetIsGmax) {
@@ -2257,7 +2264,7 @@ export class BattleActions {
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
-		if (!move.isZ && (target.species.forme === 'Gmax' || target.species.id.endsWith('gmax'))) {
+		if (!move.isZ && targetIsGmax) {
 			baseDamage = this.battle.modify(baseDamage, 0.9);
 		}
 
@@ -2325,6 +2332,8 @@ export class BattleActions {
 		}
 		if (!item.megaStone) return null;
 		if (item.id === 'miloticide' && species.id !== 'milotic') return null;
+		// Zygardite requires Power Construct to reach Complete Forme first.
+		if (item.id === 'zygardite' && species.id !== 'zygardecomplete') return null;
 		// TODO confirm with generation shift
 		let megaEvolution = item.megaStone[species.name];
 		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;
@@ -2394,6 +2403,11 @@ export class BattleActions {
 				normal: 'Meganium-Mega',
 				alternate: 'Meganium-Mega-Y',
 			},
+			torterranite: {
+				formes: ['Torterra', 'Torterra-Mega-X', 'Torterra-Mega-Y'],
+				normal: 'Torterra-Mega-X',
+				alternate: 'Torterra-Mega-Y',
+			},
 			chimechite: {
 				formes: ['Chimecho', 'Chimecho-Mega', 'Chimecho-Mega-Y'],
 				normal: 'Chimecho-Mega',
@@ -2439,8 +2453,9 @@ export class BattleActions {
 
 	runMegaEvo(pokemon: Pokemon) {
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
-		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid) return false;
+		const gimmick = pokemon.canMegaEvo ? 'Mega' : 'Ultraburst';
+		if (!this.battle.useGimmick(pokemon, gimmick)) return false;
 
 		this.clearDynamaxForMega(pokemon);
 		pokemon.formeChange(speciesid, pokemon.getItem(), true);
@@ -2448,7 +2463,7 @@ export class BattleActions {
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
 		}
-		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon, this.battle.dex.conditions.get('megaenergy'));
 		this.battle.runEvent('AfterMega', pokemon);
 		this.refreshMegaOptions(pokemon);
 		return true;
@@ -2465,7 +2480,7 @@ export class BattleActions {
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
 		}
-		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon, this.battle.dex.conditions.get('megaenergy'));
 		this.battle.runEvent('AfterMega', pokemon);
 		this.refreshMegaOptions(pokemon);
 		return true;
@@ -2481,7 +2496,7 @@ export class BattleActions {
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
 		}
-		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+		this.battle.heal(pokemon.baseMaxhp / 8, pokemon, pokemon, this.battle.dex.conditions.get('megaenergy'));
 		this.battle.runEvent('AfterMega', pokemon);
 		this.refreshMegaOptions(pokemon);
 		return true;
