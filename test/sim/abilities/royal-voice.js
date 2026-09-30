@@ -17,7 +17,7 @@ describe('Gardevoir-Void and Royal Voice',function(){
   battle.singleEvent('ModifyType',mon.getAbility(),mon.abilityState,move,mon);
   assert.equal(move.type,'Fairy');assert.equal(battle.runEvent('BasePower',mon,foe,move,100),120);
   battle.boost({atk:-1,spe:-1},mon,foe,battle.dex.getActiveMove('growl'));
-  assert.statStage(mon,'atk',0);assert.statStage(mon,'spe',0);
+  assert.statStage(mon,'atk',-1);assert.statStage(mon,'spe',-1);
   mon.hp-=100;const hp=mon.hp;
   battle.singleEvent('Residual',mon.getAbility(),mon.abilityState,mon);
   assert(mon.hp>hp);

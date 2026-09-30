@@ -727,7 +727,6 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	gastrodonw: "Gastrodon",
 	gastrodonwest: "Gastrodon",
 	gastrodonwestsea: "Gastrodon",
-	luxraydeso: "Luxray-Alt",
 	ninetalesreborn: "Ninetales-Alt",
 	sandslashreborn: "Sandslash-Alt",
 	tentacruelreborn: "Tentacruel-Alt",

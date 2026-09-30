@@ -1,3 +1,7 @@
+import { applyRosterWave4 } from './roster-expansion-wave4';
+import { applyRosterWave3 } from './roster-expansion-wave3';
+import { applyRosterWave2 } from './roster-expansion-wave2';
+import { applyApprovedRosterAbilities } from './roster-expansion';
 /* eslint-disable @stylistic/max-len */
 /*
 
@@ -353,6 +357,385 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Natural Recovery",
 		rating: 4.5,
 		num: 10389,
+	},
+	purifyingfrost: {
+		onStart(pokemon) {
+			this.effectState.safeguardUsed = false;
+			for (const ally of pokemon.alliesAndSelf()) {
+				if (ally.status) ally.cureStatus();
+			}
+		},
+		onAfterMove(source, target, move) {
+			if (this.effectState.safeguardUsed || move.type !== 'Ice') return;
+			this.effectState.safeguardUsed = true;
+			if (!source.side.addSideCondition('safeguard', source, this.dex.getActiveMove('safeguard'))) {
+				this.add('-activate', source, 'ability: Purifying Frost');
+			}
+			source.side.sideConditions['safeguard'].duration = 5;
+		},
+		flags: {},
+		name: "Purifying Frost",
+		rating: 4,
+		num: 10428,
+	},
+	smolderingshroud: {
+		onStart(pokemon) {
+			this.effectState.specialAttackRaised = false;
+			if (this.field.isTerrain('volcanicterrain')) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let blocked = false;
+			let stat: BoostID;
+			for (stat in boost) {
+				if (boost[stat]! < 0) {
+					delete boost[stat];
+					blocked = true;
+				}
+			}
+			if (!blocked) return;
+			if (!(effect as ActiveMove)?.secondaries && effect?.id !== 'octolock') {
+				this.add('-fail', target, 'unboost', '[from] ability: Smoldering Shroud', `[of] ${target}`);
+			}
+			if (source && !source.isAlly(target) && !this.effectState.specialAttackRaised) {
+				this.effectState.specialAttackRaised = true;
+				this.boost({ spa: 1 }, target, target, this.effect);
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Smoldering Shroud",
+		rating: 4,
+		num: 10429,
+	},
+	springfur: {
+		onStart() {
+			this.effectState.attackRaised = false;
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def) {
+			return this.chainModify(2);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!damage || !target.hp || !source || source.isAlly(target) || move.category !== 'Physical' ||
+				this.effectState.attackRaised) return;
+			this.effectState.attackRaised = true;
+			this.boost({ atk: 1 }, target, target, this.effect);
+		},
+		flags: { breakable: 1 },
+		name: "Spring Fur",
+		rating: 4,
+		num: 10430,
+	},
+	varietyrush: {
+		onStart() {
+			this.effectState.usedTypes = {};
+			this.effectState.pendingTypes = {};
+		},
+		onBasePower(basePower, source, target, move) {
+			if (move.category !== 'Status' && move.type !== 'Normal' && !this.effectState.usedTypes[move.type]) {
+				return this.chainModify(1.4);
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (damage && !target.isAlly(source) && move.category !== 'Status' && move.type !== 'Normal') {
+				this.effectState.pendingTypes[move.type] = true;
+			}
+		},
+		onAfterMove(source, target, move) {
+			if (this.effectState.pendingTypes[move.type]) {
+				this.effectState.usedTypes[move.type] = true;
+				delete this.effectState.pendingTypes[move.type];
+			}
+		},
+		flags: {},
+		name: "Variety Rush",
+		rating: 4,
+		num: 10431,
+	},
+	knuckletide: {
+		onStart() {
+			this.effectState.waterPrimed = false;
+			this.effectState.waterConnected = false;
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, source, target, move) {
+			if (move.flags['punch']) return this.chainModify(1.4);
+		},
+		onModifyMove(move) {
+			if (this.effectState.waterPrimed && move.type === 'Water' && move.category !== 'Status') {
+				move.ignorePositiveDefensive = true;
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!damage || target.isAlly(source)) return;
+			if (move.type === 'Water' && move.category !== 'Status' && this.effectState.waterPrimed) {
+				this.effectState.waterConnected = true;
+			}
+			if (move.flags['punch']) this.effectState.punchConnected = true;
+		},
+		onAfterMove(source, target, move) {
+			if (this.effectState.waterConnected) this.effectState.waterPrimed = false;
+			if (this.effectState.punchConnected) this.effectState.waterPrimed = true;
+			this.effectState.waterConnected = false;
+			this.effectState.punchConnected = false;
+		},
+		flags: {},
+		name: "Knuckle Tide",
+		rating: 4,
+		num: 10432,
+	},
+	crosscurrent: {
+		onStart() {
+			this.effectState.lastCategory = '';
+			this.effectState.pendingCategory = '';
+		},
+		onModifySpe(spe, pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather()) ||
+				this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'murkwatersurfaceterrain'])) {
+				return this.chainModify(2);
+			}
+		},
+		onBasePower(basePower, source, target, move) {
+			if (move.category !== 'Status' && this.effectState.lastCategory &&
+				move.category !== this.effectState.lastCategory) return this.chainModify(1.3);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (damage && !target.isAlly(source) && move.category !== 'Status') {
+				this.effectState.pendingCategory = move.category;
+			}
+		},
+		onAfterMove(source, target, move) {
+			if (this.effectState.pendingCategory) {
+				this.effectState.lastCategory = this.effectState.pendingCategory;
+				this.effectState.pendingCategory = '';
+			}
+		},
+		flags: {},
+		name: "Crosscurrent",
+		rating: 4,
+		num: 10433,
+	},
+	pearlcurrent: {
+		onStart() {
+			this.effectState.allyHealed = false;
+		},
+		onTryHit(target, source, move) {
+			const absorbed = (this.dex.abilities.get('waterabsorb') as any).onTryHit?.call(this, target, source, move);
+			if (absorbed === null && !this.effectState.allyHealed) {
+				this.effectState.allyHealed = true;
+				const ally = target.allies().filter(pokemon => pokemon.hp).sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp)[0];
+				if (ally) this.heal(ally.baseMaxhp / 8, ally, target, this.effect);
+			}
+			return absorbed;
+		},
+		onResidual(pokemon) {
+			(this.dex.abilities.get('waterabsorb') as any).onResidual?.call(this, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Pearl Current",
+		rating: 4,
+		num: 10434,
+	},
+	slipstream: {
+		onStart() {
+			this.effectState.tailwindUsed = false;
+		},
+		onImmunity(type) {
+			if (type === 'Ground') return false;
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!damage || target.isAlly(source) || move.type !== 'Flying' || this.effectState.tailwindUsed) return;
+			this.effectState.tailwindUsed = true;
+			if (!source.side.addSideCondition('tailwind', source, this.dex.getActiveMove('tailwind'))) {
+				this.add('-activate', source, 'ability: Slipstream');
+			}
+			source.side.sideConditions['tailwind'].duration = 3;
+		},
+		flags: { breakable: 1 },
+		name: "Slipstream",
+		rating: 4,
+		num: 10435,
+	},
+	mimecraft: {
+		onStart() {
+			this.effectState.allyHealed = false;
+			this.effectState.screenWasActive = false;
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move && ['reflect', 'lightscreen'].includes(move.id)) return priority + 1;
+		},
+		onBeforeMove(pokemon, target, move) {
+			if (['reflect', 'lightscreen'].includes(move.id)) {
+				this.effectState.screenWasActive = !!pokemon.side.getSideCondition(move.id);
+			}
+		},
+		onAfterMove(source, target, move) {
+			if (!['reflect', 'lightscreen'].includes(move.id) || this.effectState.allyHealed ||
+				this.effectState.screenWasActive || !source.side.getSideCondition(move.id)) return;
+			this.effectState.allyHealed = true;
+			const ally = source.allies().filter(pokemon => pokemon.hp).sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp)[0];
+			if (ally) this.heal(ally.baseMaxhp / 8, ally, source, this.effect);
+		},
+		flags: {},
+		name: "Mimecraft",
+		rating: 3.5,
+		num: 10436,
+	},
+	apexflytrap: {
+		onStart() {
+			this.effectState.trapUsed = false;
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.effectState.trapUsed || !target.hp || !source?.hp || !source.isActive ||
+				source.isAlly(target) || !move.flags['contact']) return;
+			if (source.addVolatile('apexflytraptrapped', target, this.effect)) {
+				this.effectState.trapUsed = true;
+			}
+		},
+		flags: { breakable: 1 },
+		name: "Apex Flytrap",
+		rating: 4,
+		num: 10425,
+	},
+	forgegrit: {
+		onStart() {
+			this.effectState.defenseRaised = false;
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			return this.dex.abilities.get('guts').onModifyAtk?.call(this, atk, pokemon);
+		},
+		onDamagingHit(damage, target, source) {
+			if (!damage || !target.hp || !target.status || !source || source.isAlly(target) ||
+				this.effectState.defenseRaised) return;
+			if (this.boost({ def: 1 }, target, target, this.effect)) {
+				this.effectState.defenseRaised = true;
+			}
+		},
+		flags: {},
+		name: "Forge Grit",
+		rating: 4,
+		num: 10420,
+	},
+	masonsfist: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			return this.dex.abilities.get('ironfist').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (!damage || !move.flags['punch'] || target.isAlly(source)) return;
+			let brokeScreen = false;
+			for (const screen of ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall']) {
+				if (target.side.removeSideCondition(screen)) brokeScreen = true;
+			}
+			if (brokeScreen) this.add('-activate', source, 'ability: Mason\'s Fist');
+		},
+		flags: {},
+		name: "Mason's Fist",
+		rating: 4,
+		num: 10421,
+	},
+	marshconduit: {
+		onStart() {
+			this.effectState.speedDropUsed = false;
+		},
+		onTryHit(target, source, move) {
+			const absorbed = this.dex.abilities.get('waterabsorb').onTryHit?.call(this, target, source, move);
+			if (absorbed === null && !this.effectState.speedDropUsed) {
+				this.effectState.speedDropUsed = true;
+				for (const foe of target.foes()) {
+					if (foe.hp) this.boost({ spe: -1 }, foe, target, this.effect);
+				}
+			}
+			return absorbed;
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('waterabsorb').onResidual?.call(this, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Marsh Conduit",
+		rating: 4,
+		num: 10422,
+	},
+	silkward: {
+		onStart() {
+			this.effectState.used = false;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.effectState.used || !move || move.category === 'Status' ||
+				target.getMoveHitData(move).typeMod <= 0) return;
+			this.effectState.used = true;
+			this.add('-activate', target, 'ability: Silk Ward');
+			return this.chainModify(0.5);
+		},
+		flags: { breakable: 1 },
+		name: "Silk Ward",
+		rating: 4,
+		num: 10423,
+	},
+	swarmdrive: {
+		onStart() {
+			this.effectState.speedRaised = false;
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			return this.dex.abilities.get('swarm').onModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, attacker, defender, move) {
+			return this.dex.abilities.get('swarm').onModifySpA?.call(this, spa, attacker, defender, move);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (this.effectState.speedRaised || !source.hp || !source.isActive ||
+				!effect || effect.effectType !== 'Move' || effect.type !== 'Bug' || effect.selfSwitch) return;
+			this.effectState.speedRaised = true;
+			this.boost({ spe: 1 }, source, source, this.effect);
+		},
+		flags: {},
+		name: "Swarm Drive",
+		rating: 4,
+		num: 10424,
+	},
+	mirechorus: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			return this.dex.abilities.get('liquidvoice').onModifyType?.call(this, move, pokemon);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('liquidvoice').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('poisontouch').onSourceDamagingHit?.call(this, damage, target, source, move);
+			if (!damage || !move.flags['sound'] || this.checkMoveMakesContact(move, target, source) ||
+				target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (this.randomChance(1, 5)) target.trySetStatus('psn', source);
+		},
+		flags: {},
+		name: "Mire Chorus",
+		rating: 4,
+		num: 10426,
+	},
+	boretunnel: {
+		onStart() {
+			this.effectState.hazardsCleared = false;
+		},
+		onTryHit(target, source, move) {
+			const absorbed = this.dex.abilities.get('eartheater').onTryHit?.call(this, target, source, move);
+			if (absorbed === null && !this.effectState.hazardsCleared) {
+				this.effectState.hazardsCleared = true;
+				for (const hazard of ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge']) {
+					target.side.removeSideCondition(hazard);
+				}
+			}
+			return absorbed;
+		},
+		onResidual(pokemon) {
+			return this.dex.abilities.get('eartheater').onResidual?.call(this, pokemon);
+		},
+		flags: { breakable: 1 },
+		name: "Bore Tunnel",
+		rating: 4,
+		num: 10427,
 	},
 	mossarmor: {
 		onDamagingHit(damage, target, source, effect) {
@@ -1688,6 +2071,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move, source) {
 			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move, source);
 		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			this.dex.abilities.get('baddreams').onResidual?.call(this, pokemon);
+		},
 		flags: {},
 		name: "Cruel Tag",
 		rating: 5,
@@ -2536,7 +2924,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.category !== 'Special') return;
 			let modifier = 1.3;
-			if (this.field.isTerrain('electricterrain') || this.field.effectiveWeather() === 'raindance') {
+			if (this.field.isTerrain('electricterrain')) {
 				modifier *= 1.5;
 			}
 			this.debug('Battery boost');
@@ -4179,10 +4567,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effect.id === 'terraresolve') return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onDamagingHit(damage, target, source, move) { return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, move); },
-		onModifyMove(move) { this.dex.abilities.get('rockypayload').onModifyMove?.call(this, move); },
-		onEffectiveness(typeMod, target, type, move) { return this.dex.abilities.get('rockypayload').onEffectiveness?.call(this, typeMod, target, type, move); },
-		onModifyAtk(atk, attacker, defender, move) { return this.dex.abilities.get('rockypayload').onModifyAtk?.call(this, atk, attacker, defender, move); },
-		onModifySpA(spa, attacker, defender, move) { return this.dex.abilities.get('rockypayload').onModifySpA?.call(this, spa, attacker, defender, move); },
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
@@ -5089,11 +5473,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10045,
 	},
 	mythicscale: {
+		onStart(pokemon) { this.dex.abilities.get('compoundeyes').onStart?.call(this, pokemon); },
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
 			return this.dex.abilities.get('marvelscale').onModifyDef?.call(this, def, pokemon);
 		},
 		onImmunity(type) { if (type === 'Ground') return false; },
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy) {
+			return this.dex.abilities.get('compoundeyes').onSourceModifyAccuracy?.call(this, accuracy);
+		},
+		onModifySecondaries(secondaries) {
+			return this.dex.abilities.get('shielddust').onModifySecondaries?.call(this, secondaries);
+		},
 		flags: { breakable: 1 },
 		name: "Mythic Scale",
 		rating: 3.5,
@@ -5531,10 +5923,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			this.dex.abilities.get('strongjaw').onBasePower?.call(this, basePower, pokemon, target, move);
-			if (move.typeChangerBoosted === this.effect) {
+		if (move.typeChangerBoosted === this.effect) {
 				return this.chainModify(1.2);
 			}
 		},
+		onImmunity(type) { if (type === 'Ground') return false; },
 		flags: {},
 		name: "Freezer Burn",
 		rating: 5,
@@ -5669,6 +6062,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('dreamsickness').onBoost?.call(this, boost, target, source, effect);
 		},
 		onStart(pokemon) {
+			this.effectState.rescueUsed = false;
 			this.dex.abilities.get('perfectforesight').onStart?.call(this, pokemon);
 		},
 		onEnd(pokemon) {
@@ -5838,6 +6232,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10142,
 	},
 	dreamsickness: {
+		onStart() {
+			this.effectState.rescueUsed = false;
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && target.isAlly(source) && move.category !== 'Status') {
 				this.add('-activate', target, 'ability: Dream Sickness');
@@ -5847,33 +6244,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifySpe(spe, pokemon) {
 			return this.dex.abilities.get('telepathy').onModifySpe?.call(this, spe, pokemon);
 		},
-		onAnyBoost(boost, target, source, effect) {
-			const pokemon = this.effectState.target;
-			if (target === pokemon || target.isAlly(pokemon)) {
-				if (boost.spe && boost.spe < 0) delete boost.spe;
-			}
-		},
-		onBoost(boost, target, source, effect) {
-			if (source && target === source) return;
-			let stat: BoostID;
-			for (stat in boost) {
-				if (boost[stat]! < 0) delete boost[stat];
-			}
-		},
 		onAnyDamage(damage, target, source, effect) {
 			if (DREAM_SICKNESS_TRANSFERS.has(this)) return;
 			const pokemon = this.effectState.target;
-			if (!pokemon || pokemon.fainted || pokemon.hp <= pokemon.maxhp / 4) return;
+			if (!pokemon || pokemon.fainted || this.effectState.rescueUsed) return;
 			if (!target || target === pokemon || !target.isAlly(pokemon) || !source || source === pokemon || source.isAlly(pokemon)) return;
 			if (effect?.effectType !== 'Move' || typeof damage !== 'number' || target.hp <= 0 || damage < target.hp) return;
+			const cost = Math.max(1, Math.floor(pokemon.baseMaxhp / 4));
+			if (pokemon.hp <= cost) return;
+			this.effectState.rescueUsed = true;
 			this.add('-activate', pokemon, 'ability: Dream Sickness');
+			this.add('-message', `${pokemon.name} pulled ${target.name} back from a fatal dream!`);
 			DREAM_SICKNESS_TRANSFERS.add(this);
 			try {
-				const transferred = this.damage(damage, pokemon, source, effect);
-				if (transferred) return false;
+				this.damage(cost, pokemon, pokemon, this.effect);
 			} finally {
 				DREAM_SICKNESS_TRANSFERS.delete(this);
 			}
+			return target.hp - 1;
 		},
 		onResidual(pokemon) {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
@@ -5888,7 +6276,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	voidveil: {
 		onStart() {
+			this.effectState.phaseUsed = false;
+			this.effectState.phasePending = false;
 			this.dex.abilities.get('magicguard').onStart?.call(this);
+		},
+		onModifyMove(move) {
+			if (!this.effectState.phaseUsed && move.category !== 'Status' &&
+				['Dark', 'Ghost'].includes(move.type)) {
+				move.infiltrates = true;
+				this.effectState.phasePending = true;
+			}
+		},
+		onAfterMove(source, target, move) {
+			if (this.effectState.phasePending && move.category !== 'Status' &&
+				['Dark', 'Ghost'].includes(move.type)) {
+				this.effectState.phaseUsed = true;
+				this.effectState.phasePending = false;
+			}
 		},
 		onImmunity(type) {
 			if (type === 'Ground') return false;
@@ -6643,15 +7047,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move && this.movehasType(move, ['Fire', 'Ice'])) return this.chainModify(0.5);
 		},
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType === 'Move' && target.getUndynamaxedHP(damage) >= target.hp) {
-				this.effectState.gluttony = true;
-			}
-		},
-		onTryEatItem(item, pokemon) {
-			const healingItems = ['aguavberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry'];
-			return !healingItems.includes(item.id) || pokemon.hp <= pokemon.maxhp / 2 || this.effectState.gluttony;
-		},
 		onResidual(pokemon) {
 			this.dex.abilities.get('sapsipper').onResidual?.call(this, pokemon);
 		},
@@ -6748,7 +7143,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10052,
 	},
 	treasuretitan: {
-		onStart(pokemon) { this.dex.abilities.get('heavymetal').onStart?.call(this, pokemon); },
+		onStart(pokemon) {
+			this.dex.abilities.get('heavymetal').onStart?.call(this, pokemon);
+			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
+		},
 		onModifyWeight(weighthg, pokemon) {
 			return this.dex.abilities.get('heavymetal').onModifyWeight?.call(this, weighthg, pokemon);
 		},
@@ -6840,6 +7238,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.damage(abilityChipDamage(this, target, 'Fire'), target, pokemon);
 			}
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
 		flags: { breakable: 1 },
 		name: "Furnace Engine",
 		rating: 4,
@@ -6858,6 +7259,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!target || target.fainted || isImmuneToAbilityChip(target, 'Ground')) continue;
 				this.damage(abilityChipDamage(this, target, 'Ground'), target, pokemon);
 			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('sandspit').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onFaint(pokemon) {
+			if (this.field.isTerrain('desertterrain')) {
+				this.field.setTerrainDuration(5);
+		} else if (this.field.setTerrain('desertterrain', pokemon, this.effect, true)) {
+				this.field.setTerrainDuration(5);
+		}
 		},
 		flags: { breakable: 1 },
 		name: "Dune Terror",
@@ -10223,6 +10634,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyType(move, pokemon) {
 			this.dex.abilities.get('armorize').onModifyType?.call(this, move, pokemon);
 		},
+		onModifyMovePriority: -2,
+		onModifyMove(move) { this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move); },
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			let modifier = 1;
@@ -10268,15 +10681,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 154,
 	},
 	knightsguard: {
-		onStart(pokemon) {
-			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
-			this.dex.abilities.get('steadfast').onStart?.call(this, pokemon);
+		onStart() {
+			this.effectState.interceptUsed = false;
+			this.effectState.attackRaised = false;
+			this.effectState.guardedMove = null;
+			this.effectState.guardedSource = null;
+		},
+		onAnyRedirectTarget(target, source, source2, move) {
+			const guardian = this.effectState.target;
+			if (this.effectState.interceptUsed || !guardian?.hp || !target || !source ||
+				guardian === target || !target.isAlly(guardian) || source.isAlly(guardian) ||
+				!guardian.isAdjacent(target) || move.category === 'Status' ||
+				!['normal', 'adjacentFoe', 'randomNormal'].includes(move.target) ||
+				!this.validTarget(guardian, source, 'normal')) return;
+			this.effectState.interceptUsed = true;
+			this.effectState.guardedMove = move;
+			this.effectState.guardedSource = source;
+			if (move.smartTarget) move.smartTarget = false;
+			this.add('-activate', guardian, 'ability: Knight\'s Guard');
+			return guardian;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target === this.effectState.target && move === this.effectState.guardedMove &&
+				source === this.effectState.guardedSource) return this.chainModify(0.75);
 		},
 		onDamagingHit(damage, target, source, move) {
-			this.dex.abilities.get('justified').onDamagingHit?.call(this, damage, target, source, move);
+			if (!damage || !target.hp || this.effectState.attackRaised || move !== this.effectState.guardedMove ||
+				source !== this.effectState.guardedSource) return;
+			this.effectState.attackRaised = true;
+			this.boost({ atk: 1 }, target, target, this.effect);
 		},
-		onFlinch(pokemon) {
-			this.dex.abilities.get('steadfast').onFlinch?.call(this, pokemon);
+		onAnyAfterMove() {
+			this.effectState.guardedMove = null;
+			this.effectState.guardedSource = null;
 		},
 		flags: { breakable: 1 },
 		name: "Knight's Guard",
@@ -14088,7 +14525,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1,
 		num: 75,
 	},
-	shelltrap: {
+	slowclamp: {
 		onStart(pokemon) { return this.dex.abilities.get('shellarmor').onStart?.call(this, pokemon); },
 		onCriticalHit: false,
 		onSourceModifyDamage(damage, source, target, move) {
@@ -14097,9 +14534,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAfterEachBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('shellarmor').onAfterEachBoost?.call(this, boost, target, source, effect);
 		},
-		onSwitchOut(pokemon) { return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon); },
+		onUpdate(pokemon) { this.dex.abilities.get('owntempo').onUpdate?.call(this, pokemon); },
+		onTryAddVolatile(status, pokemon) {
+			return this.dex.abilities.get('owntempo').onTryAddVolatile?.call(this, status, pokemon);
+		},
+		onHit(target, source, move) { this.dex.abilities.get('owntempo').onHit?.call(this, target, source, move); },
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('owntempo').onTryBoost?.call(this, boost, target, source, effect);
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon) { this.dex.abilities.get('analytic').onBasePower?.call(this, basePower, pokemon); },
+		onAllySetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('sweetveil').onAllySetStatus?.call(this, status, target, source, effect);
+		},
+		onAllyTryAddVolatile(status, target) {
+			return this.dex.abilities.get('sweetveil').onAllyTryAddVolatile?.call(this, status, target);
+		},
 		flags: { breakable: 1 },
-		name: "Shell Trap",
+		name: "Slow Clamp",
 		rating: 4,
 		num: 10407,
 	},
@@ -14516,6 +14968,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.dex.abilities.get('soulfire').onStart?.call(this, pokemon);
 			this.dex.abilities.get('shadowtag').onStart?.call(this, pokemon);
+			this.dex.abilities.get('flamebody').onStart?.call(this, pokemon);
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move);
 		},
 		onFaint(pokemon) { return this.dex.abilities.get('shadowtag').onFaint?.call(this, pokemon); },
 		onSourceModifyDamage(damage, source, target, move) {
@@ -15068,8 +15524,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10201,
 	},
 	royalsun: {
-		onBasePower(basePower, attacker, defender, move) { return this.dex.abilities.get('firemane').onBasePower?.call(this, basePower, attacker, defender, move); },
+		fallen(pokemon) { return (this.dex.abilities.get('supremeoverlord') as any).fallen.call(this, pokemon); },
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			this.dex.abilities.get('supremeoverlord').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
 		onStart(pokemon) {
+			this.dex.abilities.get('supremeoverlord').onStart?.call(this, pokemon);
 			this.field.setWeather('sunnyday', pokemon);
 			const neutralizer = this.getAllActive().find(active => active.hasAbility('neutralization'));
 			if (neutralizer) {
@@ -15177,7 +15638,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (blocked) this.add('-fail', target, 'boost', '[from] ability: Royal Sun', `[of] ${this.effectState.target}`);
 		},
-		onModifyMove(move) {
+		onEnd(pokemon) { this.dex.abilities.get('supremeoverlord').onEnd?.call(this, pokemon); },
+		onAnyFaint(fainted) { this.dex.abilities.get('supremeoverlord').onAnyFaint?.call(this, fainted); },
+		onTryAddVolatile(status, pokemon) {
+			return this.dex.abilities.get('supremeoverlord').onTryAddVolatile?.call(this, status, pokemon);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('supremeoverlord').onDamage?.call(this, damage, target, source, effect);
+		},
+		onModifyMove(move, pokemon) {
+			this.dex.abilities.get('supremeoverlord').onModifyMove?.call(this, move, pokemon);
 			if (this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization'))) return;
 			if (move.flags['charge']) delete move.flags['charge'];
 		},
@@ -16762,6 +17232,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('poisontouch').onSourceDamagingHit?.call(this, damage, target, source, move);
+		},
 		flags: {},
 		name: "Toxic Renewal",
 		rating: 4.5,
@@ -16823,21 +17296,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	absolutezero: {
 		onStart(pokemon) {
+			this.dex.abilities.get('snowwarning').onStart?.call(this, pokemon);
 			return this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
 		},
 		onModifyMove(move) {
 			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
-			if (move.type !== 'Ice' || move.category === 'Status') return;
-			const originalEffectiveness = move.onEffectiveness;
-			move.onEffectiveness = function (typeMod, target, type, activeMove) {
-				const original = originalEffectiveness?.call(this, typeMod, target, type, activeMove);
-				if (original !== undefined) typeMod = original;
-				return type === 'Fire' ? 1 : typeMod;
-			};
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (move?.type !== 'Fire' || move.category === 'Status') return;
-			return type === target.getTypes()[0] ? -1 : 0;
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('snowwarning').onDamagingHit?.call(this, damage, target, source, move);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
@@ -17123,8 +17589,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			this.dex.abilities.get('selfrepair').onResidual?.call(this, pokemon);
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('shadowshield').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('aftermath').onDamagingHit?.call(this, damage, target, source, move);
+		},
 		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
+			const repair = this.dex.abilities.get('selfrepair').onImmunity?.call(this, type, pokemon);
+			if (repair !== undefined) return repair;
+			return this.dex.abilities.get('shadowshield').onImmunity?.call(this, type, pokemon);
 		},
 		flags: {},
 		name: "Phantom Fist",
@@ -17328,6 +17802,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (isUltraSuppressedTerrain(this)) return;
 			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
 		},
+		onModifyMove(move) {
+			if (isUltraSuppressedTerrain(this)) return;
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move);
+		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target) {
 			if (isUltraSuppressedTerrain(this)) return;
@@ -17391,7 +17869,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effect.id === 'burningego') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onStart(pokemon) {
-			this.dex.abilities.get('magmaarmor').onStart?.call(this, pokemon);
+			this.dex.abilities.get('flamebody').onStart?.call(this, pokemon);
 			if (isUltraSuppressedTerrain(this)) return;
 			this.add('-ability', pokemon, 'Burning Ego');
 			pokemon.abilityState.ultraEgoDefBoosted = false;
@@ -17430,6 +17908,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			(this.dex.abilities.get('perfectego') as any).healUltraEgo.call(this, source, 'attack');
 		},
 		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move);
 			if (isUltraSuppressedTerrain(this)) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
 			if (target.abilityState.ultraEgoHitTriggered) {
@@ -17450,11 +17929,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			(this.dex.abilities.get('perfectego') as any).healUltraEgo.call(this, target, 'hit');
 		},
-		onUpdate(pokemon) { return this.dex.abilities.get('magmaarmor').onUpdate?.call(this, pokemon); },
-		onTryHit(target, source, move) { return this.dex.abilities.get('magmaarmor').onTryHit?.call(this, target, source, move); },
-		onImmunity(type, pokemon) { return this.dex.abilities.get('magmaarmor').onImmunity?.call(this, type, pokemon); },
-		onSourceModifyAtk(atk, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifyAtk?.call(this, atk, attacker, defender, move); },
-		onSourceModifySpA(spa, attacker, defender, move) { return this.dex.abilities.get('magmaarmor').onSourceModifySpA?.call(this, spa, attacker, defender, move); },
+		onImmunity(type, pokemon) { return this.dex.abilities.get('thickfat').onImmunity?.call(this, type, pokemon); },
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			return this.dex.abilities.get('thickfat').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			return this.dex.abilities.get('thickfat').onSourceModifySpA?.call(this, spa, attacker, defender, move);
+		},
 		flags: {},
 		name: "Burning Ego",
 		rating: 4,
@@ -17812,9 +18295,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10127,
 	},
-	ironcognition: {
+	coldlogic: {
+		onStart(pokemon) { this.dex.abilities.get('forewarn').onStart?.call(this, pokemon); },
 		onBasePower(basePower, attacker, defender, move) {
 			return this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, attacker, defender, move);
+		},
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			this.dex.abilities.get('aftermath').onDamagingHit?.call(this, damage, target, source, move);
+		},
+		onDamage(damage, source, target, effect) {
+			return this.dex.abilities.get('forewarn').onDamage?.call(this, damage, source, target, effect);
 		},
 		onModifyDef(def, pokemon) {
 			return this.dex.abilities.get('prismarmor').onModifyDef?.call(this, def, pokemon);
@@ -17829,7 +18320,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('prismarmor').onImmunity?.call(this, type, pokemon);
 		},
 		flags: { breakable: 1 },
-		name: "Iron Cognition",
+		name: "Cold Logic",
 		rating: 4.5,
 		num: 10128,
 	},
@@ -18279,7 +18770,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	abysslure: {
 		onStart(pokemon) {
-			this.dex.abilities.get('lightningrod').onStart?.call(this, pokemon);
 			this.dex.abilities.get('illuminate').onStart?.call(this, pokemon);
 		},
 		onTryHit(target, source, move) {
@@ -18292,11 +18782,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ spa: 1, atk: 1 });
 				return this.dex.abilities.get('waterabsorb').onTryHit?.call(this, target, source, move);
 			}
-		},
-		onAnyRedirectTarget(target, source, source2, move) {
-			const electric = this.dex.abilities.get('lightningrod').onAnyRedirectTarget?.call(this, target, source, source2, move);
-			if (electric !== undefined) return electric;
-			return this.dex.abilities.get('stormdrain').onAnyRedirectTarget?.call(this, target, source, source2, move);
 		},
 		onTryBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('illuminate').onTryBoost?.call(this, boost, target, source, effect);
@@ -18801,3 +19286,10 @@ function setStarterEeveeBattleEVs(pokemon: Pokemon, effect: Effect) {
 	pokemon.setSpecies(pokemon.species, effect);
 	pokemon.updateMaxHp();
 }
+
+applyApprovedRosterAbilities(Abilities);
+
+applyRosterWave2(Abilities);
+
+applyRosterWave3(Abilities);
+applyRosterWave4(Abilities);

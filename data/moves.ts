@@ -986,7 +986,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
 					}
-					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
 						this.debug('Aurora Veil weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
@@ -1045,7 +1045,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target === source || !this.effectState.target.hasAlly(target)) return;
 				if (target.getMoveHitData(move).typeMod <= 0) return;
-				if (target.getMoveHitData(move).crit || move.infiltrates) return;
+				if (target.getMoveHitData(move).crit || move.infiltrates || move.ignoreScreens) return;
 				this.debug('Arenite Wall weaken');
 				return this.chainModify(0.5);
 			},
@@ -1091,7 +1091,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target === source || !this.effectState.target.hasAlly(target)) return;
 				if (target.getMoveHitData(move).typeMod <= 0) return;
-				if (target.getMoveHitData(move).crit || move.infiltrates) return;
+				if (target.getMoveHitData(move).crit || move.infiltrates || move.ignoreScreens) return;
 				return this.chainModify(0.5);
 			},
 			onSideStart(side) {
@@ -1114,7 +1114,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal", type: "Rock", isNonstandard: "Custom",
 	},
 	deluge: {
-		num: 10416, accuracy: 100, basePower: 65, category: "Physical", name: "Deluge", pp: 5,
+		num: 10416, accuracy: 100, basePower: 65, category: "Physical", name: "Deluge", pp: 10,
 		basePowerCallback(pokemon, target, move) {
 			const damagedByTarget = pokemon.attackedBy.some(
 				p => p.source === target && p.damage > 0 && p.thisTurn
@@ -3535,7 +3535,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.getAtSlot(this.effectState.slot);
 			},
 			onDamagingHit(damage, target, source, move) {
-				if (!source.isAlly(target) && this.getCategory(move) === 'Physical') {
+				if (!source.isAlly(target) && (this.getCategory(move) === 'Physical' || target.hasAbility('bloodchallenge'))) {
 					this.effectState.slot = source.getSlot();
 					this.effectState.damage = 2 * damage;
 				}
@@ -11780,7 +11780,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
-					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
 						this.debug('Light Screen weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
@@ -17041,7 +17041,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
-					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
 						this.debug('Reflect weaken');
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
@@ -19530,7 +19530,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const moveid = moveSlot.id;
 				if (!moveid) continue;
 				const move = this.dex.moves.get(moveid);
-				if (move.flags['nosleeptalk'] || move.flags['charge'] || (move.isZ && move.basePower !== 1) || move.isMax) {
+				if ((moveid === 'rest' && pokemon.hasAbility('dozinggiant')) ||
+					move.flags['nosleeptalk'] || move.flags['charge'] || (move.isZ && move.basePower !== 1) || move.isMax) {
 					continue;
 				}
 				moves.push(moveid);
@@ -20906,6 +20907,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
+				const webSetter = this.effectState.source;
+				if (webSetter?.isActive && webSetter.hp && webSetter.hasAbility('livenet') &&
+					pokemon.runImmunity('Electric', false) && !pokemon.hasAbility(['voltabsorb', 'lightningrod', 'motordrive'])) {
+					if (this.damage(pokemon.baseMaxhp / 16, pokemon, webSetter, this.dex.conditions.get('stickyweb'))) {
+						this.add('-activate', webSetter, 'ability: Live Net');
+					}
+				}
+
 				if (this.field.isTerrain('forestterrain')) {
 					this.boost({ spe: -2 }, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
 				} else {

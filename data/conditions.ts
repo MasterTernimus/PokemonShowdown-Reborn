@@ -417,6 +417,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-activate', target, 'trapped');
 		},
 	},
+	apexflytraptrapped: {
+		name: 'Apex Flytrap Trapped',
+		duration: 2,
+		onTrapPokemon(pokemon) {
+			if (this.effectState.source?.isActive) pokemon.tryTrap();
+		},
+		onStart(target, source) {
+			this.add('-message', `${target.name} was caught by ${source.name}'s Apex Flytrap!`);
+		},
+		onEnd(target) {
+			this.add('-message', `${target.name} escaped Apex Flytrap!`);
+		},
+	},
 	trapper: {
 		name: 'trapper',
 		noCopy: true,

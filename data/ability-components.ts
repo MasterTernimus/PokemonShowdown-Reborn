@@ -1,0 +1,532 @@
+/** Genuine mechanical components shared by battle identity and search. */
+export const AbilityComponents: { [id: string]: string[] } = {
+	shadowbond: ['battlebond', 'filter', 'selfsufficient', 'proficient', 'infiltrator'],
+	apexbond: ['battlebond', 'filter', 'selfsufficient', 'supremeoverlord', 'roughskin'],
+	sacredbond: ['battlebond', 'filter', 'selfsufficient', 'magmaarmor', 'intimidate', 'flashfire'],
+	battlebond: ['filter', 'selfsufficient'],
+	highnoon: ['dualwield', 'megalauncher', 'proficient'],
+	strikersmomentum: ['proficient'],
+	forestsurge: ['proficient'],
+	exalt: ['defiant'],
+	burningrage: ['proficient'],
+	terragift: ['hospitality', 'unaware', 'proficient'],
+	blazingtempo: ['proficient', 'speedboost', 'striker', 'magmaarmor', 'keeneye'],
+	verdantdrake: ['proficient', 'dualwield', 'regenerator', 'lightningrod'],
+	mightyjaw: ['proficient'],
+	blazingmane: ['proficient'],
+	plasmaeruption: ['proficient', 'static', 'flamebody'],
+	gigavolt: ['moldbreaker', 'lightningrod', 'static'],
+	verdantedge: ['chlorophyll', 'grasspelt', 'sharpness'],
+	permafrost: ['icebody', 'icescales', 'refrigerate'],
+	glacialheart: ['thermalexchange', 'icebody', 'stalwart'],
+	tidalwave: ['waterabsorb', 'hydration', 'raindish'],
+	livewire: ['transistor', 'voltabsorb', 'quickfeet', 'ironbarbs'],
+	kindledfury: ['fluffy', 'guts', 'flashfire'],
+	verdanthospitality: ['proficient'],
+	verdantsanctuary: ['grassysurge', 'invigorate', 'hospitality', 'friendguard'],
+	fortressshell: ['proficient'],
+	waterbarrage: ['proficient'],
+	wildfirecore: ['proficient'],
+	pollenbloom: ['proficient', 'thickfat'],
+	ironclad: ['armorize'],
+	apexpredator: ['relicarmor', 'dragonize', 'windrider'],
+	tyrantdomain: ['relicarmor', 'supremeoverlord', 'selfsufficient', 'sandstream'],
+	auroradomain: ['relicarmor', 'refrigerate', 'selfsufficient', 'snowwarning'],
+	royalscales: ['prismscale', 'marvelscale', 'oblivious', 'swiftswim', 'dragonize', 'selfsufficient'],
+	aeviandream: ['baddreams', 'shedskin', 'toughclaws'],
+	wingedwraith: ['infiltrator', 'galewings'],
+	toxicsink: ['effectspore', 'invigorate'],
+	ragingbeast: ['guts', 'moldbreaker'],
+	lunardread: ['magicguard', 'pressure', 'unaware'],
+	stillwaters: ['cloudnine', 'magicguard', 'unaware'],
+	scavenger: ['overcoat', 'bigpecks', 'regenerator'],
+	toxicspines: ['toxicdebris', 'corrosion', 'merciless'],
+	truedevotion: ['falsedevotion', 'serenegrace', 'naturalrecovery', 'prankster', 'protean', 'technician'],
+	falsedevotion: ['serenegrace', 'naturalrecovery', 'prankster'],
+	witheringshell: ['crumblingshell', 'naturalrecovery', 'sturdy'],
+	argentdevotion: ['armorize', 'swornduty', 'serenegrace'],
+	fluffyevo: ['overcoat'],
+	bonewarrior: ['battlearmor', 'selfsufficient'],
+	seafiend: ['toxicdebris', 'waterbubble', 'waterveil'],
+	hisuianoath: ['swornduty', 'toughclaws', 'corrosion'],
+	abysslure: ['voltabsorb', 'waterabsorb', 'illuminate'],
+	celestialheart: ['soulheart', 'friendguard', 'serenegrace'],
+	phalanxform: ['hydrabond', 'friendguard', 'battlearmor'],
+	astralcore: ['purepower', 'naturalcure', 'illuminate'],
+	doomwarning: ['magicbounce', 'magicguard'],
+	ancientbloom: ['effectspore', 'selfsufficient', 'proficient'],
+	furnaceengine: ['steamengine', 'flamebody', 'selfsufficient', 'solidrock'],
+	apexflytrap: ['levitate'],
+	forgegrit: ['guts'],
+	masonsfist: ['ironfist'],
+	marshconduit: ['waterabsorb'],
+	swarmdrive: ['swarm'],
+	mirechorus: ['liquidvoice', 'poisontouch'],
+	boretunnel: ['eartheater'],
+	duneterror: ['sandstream', 'shedskin', 'sandspit'],
+	waterbubble: ['waterveil'],
+	hisuianvanguard: ['rapidresponse', 'windpower'],
+	unovavanguard: ['violentrush', 'windrider'],
+	hisuianresolve: ['bruteforce', 'reckless', 'rockhead', 'magmaarmor'],
+	nobleconduit: ['battery', 'solarpower', 'aftermath'],
+	nobledance: ['dancer', 'hospitality', 'owntempo'],
+	noblearmor: ['prismarmor', 'icebody'],
+	noblerider: ['swiftswim', 'moldbreaker'],
+	gooey: ['hydration', 'sapsipper'],
+	irondominion: ['pressure', 'swornduty', 'mirrorarmor'],
+	bewitchingmajesty: ['magicbounce', 'queenlymajesty'],
+	soulstrike: [],
+	mountainhunger: ['sapsipper', 'thickfat', 'earlybird'],
+	astralwatcher: ['prankster', 'defragment', 'frisk'],
+	alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce', 'prankster'],
+	lunarorbit: ['magicbounce', 'serenegrace', 'triage', 'magicguard'],
+	territorial: ['unnerve', 'unaware', 'toughclaws'],
+	treasuretitan: ['filter', 'eartheater', 'heavymetal', 'intimidate'],
+	royalsun: ['drought', 'royaldecree', 'supremeoverlord'],
+	ragingfists: ['hydrabond', 'fightingfiend', 'scrappy'],
+	aquashell: ['waterveil', 'toughclaws', 'innerfocus'],
+	warship: ['swiftswim', 'unaware', 'solidrock', 'strongjaw'],
+	sweetdecay: ['hustle', 'gluttony', 'sweetveil', 'corrosion'],
+	bakedbliss: ['wellbakedbody', 'thickfat', 'sweetveil', 'gluttony'],
+	hydraheart: ['hydrabond', 'selfsufficient', 'stamina'],
+	truehydra: ['hydrabond', 'regenerator', 'shedskin', 'selfsufficient'],
+	moonveil: ['pastelveil', 'mistysurge'],
+	aevianspark: ['technician', 'static', 'earlybird'],
+	aeviangrief: ['magicguard', 'cursedbody', 'wonderskin', 'levitate'],
+	aevianrocket: ['bruteforce', 'reckless', 'rockhead', 'regenerator', 'moldbreaker', 'swiftswim'],
+	railguncircuit: ['lightningrod'],
+	wreckingball: ['sturdy', 'selfsufficient', 'crumblingshell'],
+	swiftdrill: ['swiftswim', 'powerdrill', 'raindish'],
+	bullrush: ['violentrush', 'intimidate'],
+	safeharbor: ['icebody', 'waterabsorb', 'hydration'],
+	ironvise: ['toughclaws', 'battlearmor', 'lightmetal', 'intimidate'],
+	razorcurrent: ['drizzle', 'strongjaw', 'speedboost'],
+	longreach: ['superluck'],
+	paradoxengine: [],
+	greatmarsh: ['anticipation', 'dryskin', 'adaptability'],
+	lifeguard: ['friendguard', 'swornduty', 'propellertail'],
+	zen: ['waterabsorb', 'unaware', 'damp'],
+	stormsong: ['liquidvoice', 'drizzle', 'soundproof'],
+	astralward: ['magicbounce', 'telepathy'],
+	moonlightvigil: ['innerfocus', 'pressure', 'illuminate'],
+	adaptivecore: ['download', 'defragment', 'selfrepair'],
+	sweetresonance: ['supersweetsyrup', 'selfsufficient', 'hydrabond'],
+	sweetsanctuary: ['friendguard', 'sweetveil', 'aromaveil', 'pastelveil'],
+	auroraresonance: ['liquidvoice', 'waterabsorb', 'icebody', 'raindish'],
+	absolutezero: ['snowwarning', 'moldbreaker', 'filter'],
+	protectiveward: ['liquidvoice', 'shellarmor', 'waterabsorb'],
+	crystalresonance: ['amethystglow', 'magicbounce'],
+	windchime: ['armorize', 'punkrock', 'levitate'],
+	bogbody: ['thickfat', 'levitate', 'dryskin'],
+	solarhydra: ['hydrabond', 'grassysurge', 'solarpower', 'selfrepair', 'selfsufficient', 'naturalcure'],
+	astralengine: ['elevate', 'powerspot', 'analytic'],
+	hauntedchime: ['elevate', 'windpower', 'cursedbody'],
+	auramaster: ['dualwield', 'innerfocus', 'technician'],
+	bloomingsun: ['megasol', 'invigorate', 'naturalcure', 'proficient'],
+	echosense: ['echofiend', 'frisk', 'telepathy', 'infiltrator'],
+	froststalker: ['stakeout', 'sharpness', 'refrigerate'],
+	sacredpower: ['duskilate', 'insomnia', 'magicguard'],
+	nighthunt: ['strongjaw', 'infiltrator', 'intimidate'],
+	corrosivetouch: ['technician', 'poisontouch', 'corrosion'],
+	stormbell: ['mirrorarmor', 'drizzle', 'elevate'],
+	apexarmor: ['bulletproof', 'roughskin', 'stalwart', 'selfsufficient'],
+	burningcrown: ['filter', 'selfsufficient', 'whitesmoke', 'moldbreaker', 'proficient'],
+	burningego: ['proficient', 'ultraego', 'flamebody', 'thickfat'],
+	burningspirit: ['selfsufficient', 'opportunist', 'magmaarmor', 'proficient'],
+	crueltag: ['shadowtag', 'infiltrator', 'baddreams'],
+	emperorsresolve: ['competitive', 'slushrush', 'swiftswim', 'proficient'],
+	execution: ['duskilate'],
+	fallenstar: ['moldbreaker', 'dualwield', 'selfsufficient', 'proficient'],
+	parasitism: ['dryskin'],
+	completeparasitism: ['parasitism', 'dryskin', 'filter', 'selfrepair'],
+	silkendecoy: ['insomnia', 'selfsufficient', 'swarm'],
+	wickedsnare: ['stakeout', 'tanglinghair', 'prankster'],
+	mythicscale: ['marvelscale', 'levitate', 'compoundeyes', 'shielddust'],
+	aurainstinct: ['adaptability', 'dualwield', 'secondwind'],
+	wrathshield: ['bulletproof', 'dauntlessshield', 'selfrepair', 'proficient'],
+	shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator', 'proficient'],
+	astralwitchcraft: ['levitate', 'magicguard', 'magicbounce', 'proficient'],
+	ragingcurrent: ['swiftswim', 'damp', 'dryskin', 'stamina', 'proficient'],
+	calderacore: ['magmaarmor', 'sheerforce', 'drought'],
+	doublestrike: ['ironfist', 'technician', 'skilllink'],
+	siegelauncher: ['stalwart', 'proficient'],
+	soultag: ['soulfire', 'shadowtag', 'flamebody'],
+	deserttyrant: ['sandstream'],
+	desertspirit: ['levitate', 'sandstream', 'tintedlens'],
+	tremor: ['levitate', 'resonanceforce', 'sandforce'],
+	desertshell: ['skilllink', 'heatproof', 'sandstream'],
+	riptideclaws: ['swiftswim', 'toughclaws', 'shellarmor', 'moldbreaker'],
+	fossilfrenzy: ['klutz'],
+	phantomfist: ['unseenfist', 'selfrepair', 'shadowshield', 'aftermath'],
+	alloycore: ['magicguard', 'selfsufficient', 'stalwart'],
+	hellfireeclipse: ['solarpower', 'darkaura'],
+	sacrededge: ['sharpness', 'swornduty'],
+	omenedge: ['sharpness', 'dualwield', 'pressure'],
+	dreadmaw: ['hugepower', 'strongjaw', 'invigorate'],
+	cursedmarionette: ['prankster'],
+	cursedarmament: ['filter'],
+	phantombarrage: ['clearbody', 'infiltrator', 'levitate', 'hydrabond'],
+	sandsovereign: ['sandstream', 'dauntlessshield', 'solidrock'],
+	frostsovereign: ['snowwarning', 'icebody', 'filter'],
+	freezerburn: ['slushrush', 'refrigerate', 'strongjaw', 'levitate'],
+	stormfright: ['intimidate', 'stormpower', 'lightningrod'],
+	enlightenment: ['purepower'],
+	relentlesslink: ['skilllink', 'moldbreaker', 'powerdrill'],
+	relentlesshunt: ['levitate'],
+	mirrorgreed: ['magicbounce', 'analytic'],
+	moonlitwings: ['serenegrace'],
+	uncheckedassault: ['scrappy', 'striker', 'opportunist', 'limber'],
+	royalvoice: ['pixilate', 'queenlymajesty', 'dreamsickness', 'telepathy', 'trace'],
+	perfectforesight: ['trace', 'insomnia'],
+	dreamsickness: ['telepathy'],
+	voidveil: ['levitate', 'magicguard', 'insomnia'],
+	knuckletide: ['ironfist'],
+	crosscurrent: ['swiftswim'],
+	pearlcurrent: ['waterabsorb'],
+	slipstream: ['levitate'],
+	smolderingshroud: ['whitesmoke'],
+	springfur: ['furcoat'],
+	hexbound: ['shadowtag', 'prankster'],
+	divinemockery: ['hydrabond', 'moldbreaker', 'sniper'],
+	hydratyrant: ['hydrabond', 'berserk', 'selfsufficient'],
+	hisuianpath: ['sapsipper', 'innerfocus', 'fluffy'],
+	toxicevolution: ['corrosion', 'dualwield', 'shielddust', 'levitate'],
+	heavenlychorus: ['pixilate', 'cloudnine', 'fluffy'],
+	guidingomen: ['friendguard', 'serenegrace'],
+	heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
+	coldlogic: ['toughclaws', 'prismarmor', 'aftermath', 'forewarn'],
+	ironwill: ['prismarmor', 'secondwind', 'selfsufficient', 'whiplash'],
+	joyride: ['aerilate', 'violentrush', 'vitalspirit'],
+	hardyskin: ['dryskin', 'vitalspirit', 'moxie'],
+	noseformation: ['filter', 'elevate'],
+	perfectego: ['ultraego'],
+	prismscale: ['marvelscale', 'oblivious', 'swiftswim'],
+	queensguard: ['contrary', 'shedskin', 'intimidate', 'infiltrator', 'proficient'],
+	rainsovereign: ['drizzle'],
+	riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
+	mourningsnow: ['snowwarning', 'icebody'],
+	venombastion: ['stamina', 'selfsufficient', 'merciless'],
+	draconicforce: ['dragonize', 'strongjaw', 'moldbreaker', 'proficient'],
+	tidaljaw: ['strongjaw', 'swiftswim', 'filter', 'proficient'],
+	heavyartillery: ['unaware', 'shellarmor'],
+	perfectstriker: ['striker', 'noguard', 'libero', 'proficient'],
+	vanguard: ['intimidate'],
+	royalarmament: ['powerdrill'],
+	seablessing: ['waterveil', 'raindish'],
+	seasonalstride: ['chlorophyll'],
+	slowclamp: ['shellarmor', 'owntempo', 'analytic', 'sweetveil'],
+	soaringspirit: ['windpower', 'selfsufficient'],
+	solartrap: ['accumulation', 'innardsout', 'solarpower'],
+	spiralevolution: ['adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
+	stormsovereign: ['galewings', 'keeneye'],
+	sunsovereign: ['drought', 'wildfirecore', 'selfsufficient', 'proficient'],
+	terraresolve: ['stamina', 'solidrock', 'proficient'],
+	primalego: ['unaware', 'proficient', 'ultraego', 'moldbreaker'],
+	toxicbloom: ['pollenbloom', 'selfsufficient', 'proficient', 'thickfat'],
+	toxicrenewal: ['adaptability', 'regenerator', 'poisontouch'],
+	vendetta: ['angerpoint', 'secondwind', 'selfsufficient'],
+	auroracurrent: ['snowwarning'],
+	dunetyrant: ['sandstream', 'strongjaw'],
+	ironmountain: ['filter', 'stamina', 'heavymetal'],
+	woolyconductor: ['fluffy', 'moldbreaker', 'static'],
+	helios: ['drought', 'moldbreaker', 'berserk', 'swiftswim'],
+	rimeknuckle: ['ironfist', 'filter', 'icebody'],
+	ragingstorm: ['moldbreaker', 'battlearmor'],
+	ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
+	abysssniper: ['sniper', 'stalwart'],
+	atrocity: ['wildfirecore', 'selfsufficient', 'proficient', 'levitate'],
+	streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
+	divineintervention: ['swornduty', 'friendguard', 'regenerator', 'fluffy'],
+	shadowguard: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
+	requiem: ['cursedbody'],
+	reapersgrip: ['unaware', 'darkaura', 'selfsufficient'],
+	pendulumswing: ['insomnia', 'filter'],
+	nightmarepulse: ['pendulumswing', 'cursedbody', 'baddreams', 'infiltrator'],
+	pulsewaste: ['protean', 'poisontouch', 'regenerator'],
+	rifteater: ['accumulation', 'sandstream'],
+	mountainrift: ['shellarmor', 'selfsufficient'],
+	desertrift: ['sandforce', 'sandstream', 'heavymetal'],
+	glacialmass: ['heavymetal', 'thickfat'],
+	supersweetsyrup: ['stickyhold'],
+	naturalrecovery: ['naturalcure', 'regenerator'],
+	mossarmor: ['stamina', 'naturalrecovery', 'levitate'],
+	stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
+	aevianfrost: ['icebody', 'guts'],
+	aeviantoxin: ['strongjaw', 'layeredcoat', 'furcoat', 'overcoat'],
+	aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
+	aevianbolt: ['stormpower', 'static', 'voltabsorb'],
+	riftdancer: ['opportunist', 'chlorophyll', 'dancer'],
+	curseddoll: ['toughclaws', 'shadowshield'],
+	apexvenom: ['strongjaw', 'shedskin'],
+	sirius: ['apexvenom', 'whiplash'],
+	neurotoxin: ['hydrabond', 'shedskin', 'regenerator'],
+	patternshift: ['protean', 'shedskin', 'unaware'],
+	venomarmor: ['poisonheal', 'dualwield'],
+	toxicarmor: ['venomarmor', 'violentrush'],
+	corrosiveburn: ['merciless', 'regenerator', 'corrosion'],
+	solarrush: ['sandrush', 'chlorophyll'],
+	ultrainstinct: ['moldbreaker', 'innerfocus'],
+	unovawing: ['superluck', 'competitive'],
+	aevianwing: ['rockhead', 'defiant'],
+	resuscitation: ['selfrepair', 'magicguard'],
+	shieldsdown: ['shellarmor', 'selfrepair', 'crumblingshell'],
+	schooling: ['hydrabond', 'selfrepair', 'moldbreaker'],
+	seviischooling: ['schooling', 'hydrabond', 'selfrepair', 'moldbreaker'],
+};
+Object.assign(AbilityComponents, {
+	"updraft": [],
+	"corneredfang": [
+		"guts",
+	],
+	"nighthoard": [],
+	"dunerunner": [
+		"sandrush",
+	],
+	"frostrunner": [
+		"slushrush",
+	],
+	"bedrockclaw": [
+		"toughclaws",
+	],
+	"rimeclaw": [
+		"toughclaws",
+	],
+	"broodguard": [
+		"thickfat",
+		"friendguard",
+	],
+	"suncharm": [
+		"drought",
+	],
+	"causticscales": [],
+	"prismwings": [
+		"tintedlens",
+	],
+	"oneiricdust": [
+		"psychicsurge",
+	],
+	"pincercrush": [
+		"toughclaws",
+	],
+	"decoypincers": [],
+	"toxiccocoon": [],
+	"galebloom": [],
+	"gemeye": [
+		"keeneye",
+	],
+	"lastlaugh": [],
+	"openingoverture": [],
+	"resonantblade": [],
+	"finalnote": [],
+	"livingtangle": [
+		"tanglinghair",
+		"stamina",
+	],
+	"rootrenewal": [
+		"regenerator",
+	],
+	"fortunatewing": [
+		"superluck",
+	],
+	"snowpack": [
+		"thickfat",
+		"icebody",
+		"toughclaws",
+	],
+	"icemirror": [],
+	"wailingsnow": [],
+	"stonewall": [
+		"sturdy",
+	],
+	"saltbastion": [
+		"sturdy",
+	],
+	"anchorbridge": [
+		"sturdy",
+	],
+	"layeredshell": [
+		"shellarmor",
+	],
+	"breakaway": [],
+	"fossilram": [
+		"rockhead",
+	],
+	"rootediron": [
+		"stamina",
+	],
+	"encorearia": [
+		"serenegrace",
+	],
+	"peppersting": [
+		"insomnia",
+	],
+	"sushitrick": [
+		"hospitality",
+	],
+	"mastercourse": [
+		"contrary",
+	],
+	"secondbrew": [],
+	"railsight": [
+		"stalwart",
+	],
+});
+
+export function abilityIncludesComponent(ability: string, component: string, seen = new Set<string>()): boolean {
+	const id = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
+	const query = component.toLowerCase().replace(/[^a-z0-9]/g, '');
+	if (id === query) return true;
+	if (seen.has(id)) return false;
+	seen.add(id);
+	return (AbilityComponents[id] || []).some(part => abilityIncludesComponent(part, query, seen));
+}
+
+Object.assign(AbilityComponents, {
+  "sovereignarsenal": [],
+  "pollenengine": [
+    "chlorophyll"
+  ],
+  "titanpincer": [
+    "hypercutter"
+  ],
+  "shellcracker": [],
+  "tidaldominion": [
+    "swiftswim"
+  ],
+  "tempestfury": [],
+  "ironlash": [
+    "whiplash"
+  ],
+  "trailbreaker": [],
+  "armoredadvance": [],
+  "gritgrappler": [
+    "guts"
+  ],
+  "dreadjaw": [
+    "moxie"
+  ],
+  "floehunter": [
+    "slushrush"
+  ],
+  "lanceguard": [
+    "shellarmor"
+  ],
+  "headlongresolve": [],
+  "herdshelter": [
+    "soundproof"
+  ],
+  "scorchsweep": [],
+  "opensky": [],
+  "tidalvoice": [
+    "liquidvoice"
+  ],
+  "rechargerelay": [
+    "battery"
+  ],
+  "hovercannon": [
+    "levitate"
+  ],
+  "keenhunt": [],
+  "bloodchallenge": [],
+  "twilightinstinct": [],
+  "twincannons": [],
+  "twinblades": [],
+  "heatreservoir": [
+    "flashfire"
+  ],
+  "mourningcoat": [
+    "fluffy"
+  ],
+  "gravewind": [
+    "sandrush"
+  ],
+  "dozinggiant": [
+    "oblivious"
+  ],
+  "quillreservoir": [
+    "waterabsorb"
+  ],
+  "raisedquills": []
+});
+
+Object.assign(AbilityComponents, {
+  "mountainbreaker": [],
+  "dreadpresence": [],
+  "palmmastery": [
+    "thickfat"
+  ],
+  "galvanicspirit": [
+    "vitalspirit"
+  ],
+  "blastchamber": [
+    "vitalspirit"
+  ],
+  "venomspurs": [],
+  "lastbrood": [
+    "swarm"
+  ],
+  "venombastion": [
+    "stamina"
+  ],
+  "shadowfeint": [],
+  "silksights": [
+    "compoundeyes"
+  ],
+  "livenet": [
+    "unnerve"
+  ],
+  "barbharvest": [
+    "ironbarbs"
+  ],
+  "currentcoil": [
+    "swiftswim"
+  ],
+  "stormcircuit": [
+    "electricsurge",
+    "elevate",
+    "currentcoil",
+    "swiftswim"
+  ],
+  "soulpyre": [],
+  "blackviper": [
+    "whiplash"
+  ],
+  "silkshuriken": [],
+  "hiddenscroll": [],
+  "toxicserenity": [
+    "poisonheal"
+  ],
+  "mudtemper": [
+    "battlearmor"
+  ],
+  "skywarden": [],
+  "lockjaw": [
+    "strongjaw"
+  ],
+  "rivershell": [
+    "shellarmor"
+  ],
+  "territorial": [],
+  "funeralchoir": [],
+  "festivalstep": [],
+  "saltcrust": [
+    "clearbody"
+  ],
+  "beyondfear": [
+    "innerfocus"
+  ],
+  "stillwater": [
+    "waterabsorb"
+  ],
+  "mudmeditation": []
+});
+
+Object.assign(AbilityComponents, {
+  sirius: ['apexvenom', 'blackviper', 'whiplash'],
+  coldopen: [], quarrycannon: ['solidrock'], tundramarch: ['oblivious'],
+  undertow: ['waterabsorb'], deadwater: [], vitalcircuit: [],
+  ringmaster: ['toughclaws'], unyielding: ['stamina'], primalrhythm: [],
+  setpiece: [], calculatedshot: [], lunardread: [], falsebouquet: [],
+  hydratyrant: ['hydrabond', 'berserk'],
+  meridianseal: [], rimeplate: [], darkdominion: ['darkaura'],
+});
