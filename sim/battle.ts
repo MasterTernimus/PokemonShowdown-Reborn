@@ -2274,6 +2274,7 @@ export class Battle {
 			}
 
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
+			if (targetDamage > 0) this.runEvent('AfterDamageApplied', target, source, effect, targetDamage);
 			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
 			if (source && effect.effectType === 'Move') {
 				source.lastDamage = targetDamage;
@@ -2418,6 +2419,8 @@ export class Battle {
 	}
 
 	heal(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: 'drain' | Effect | null = null) {
+		// Weather recovery runs in a nested Weather event during end-of-turn upkeep.
+		const residualHealing = this.event?.id === 'Residual' || this.event?.id === 'Weather';
 		if (this.event) {
 			target ||= this.event.target;
 			source ||= this.event.source;
@@ -2432,6 +2435,10 @@ export class Battle {
 		if (!target?.hp) return false;
 		if (!target.isActive) return false;
 		if (target.hp >= target.maxhp) return false;
+		if (residualHealing) {
+			damage = this.runEvent('ResidualHeal', target, source, effect, damage);
+			if (!damage) return false;
+		}
 		const finalDamage = target.heal(damage, source, effect);
 		switch (effect?.id) {
 		case 'leechseed':
@@ -2768,6 +2775,7 @@ export class Battle {
 				);
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
+				pokemon.previouslyFainted = true;
 				pokemon.illusion = null;
 				pokemon.isActive = false;
 				pokemon.isStarted = false;

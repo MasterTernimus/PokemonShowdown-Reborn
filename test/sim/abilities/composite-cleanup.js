@@ -48,21 +48,21 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onSourceModifyDamage);
 	});
 
-	it('should give Lunar Dread Unaware while retaining Magic Guard and Pressure', function () {
+	it('should replace Lunar Dread legacy defenses with marks', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('lunardread');
-		assert(ability.onStart);
-		assert(ability.onDamage);
-		assert(ability.onDeductPP);
-		assert(ability.onAnyModifyBoost);
+		assert(ability.onSourceDamagingHit);
+		assert(ability.onModifyCritRatio);
+		for (const hook of ['onDamage', 'onDeductPP', 'onAnyModifyBoost']) assert.equal(ability[hook], undefined);
 	});
 
-	it('should give Territorial its remaining component hooks', function () {
+	it('should give Territorial a charged Ground attack and healing', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('territorial');
 		assert(ability.onStart);
-		assert(ability.onAnyModifyBoost);
-		assert(ability.onBasePower);
+		assert(ability.onDamagingHit);
+		assert(ability.onModifyMove);
+		assert(ability.onSourceDamagingHit);
 	});
 
 	it('should give Still Waters Cloud Nine, Magic Guard, and Unaware hooks', function () {
@@ -222,12 +222,14 @@ describe('Composite ability cleanup', function () {
 		assert(battle.dex.abilities.get('hisuianpath').onSourceModifyDamage);
 	});
 
-	it('should give Hydra Tyrant Hydra Bond, Berserk, and Self Sufficient hooks', function () {
+	it('should give Hydra Tyrant Hydra Bond, Berserk, and its Draco Meteor recovery', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('hydratyrant');
 		assert(ability.onModifyMove);
 		assert(ability.onAfterMoveSecondary);
-		assert(ability.onResidual);
+		assert.equal(ability.onResidual, undefined);
+		assert.equal(ability.onImmunity, undefined);
+		assert(ability.onAfterMove);
 	});
 
 	it('should give Toxic Evolution only its requested visible components and hidden reduction', function () {
@@ -241,7 +243,7 @@ describe('Composite ability cleanup', function () {
 		assert.equal(ability.onAnyTryHeal, undefined);
 		assert.equal(ability.onResidual, undefined);
 		assert.equal(ability.onAnyModifyDamage, undefined);
-		assert.equal(ability.onImmunity, undefined);
+		assert(ability.onImmunity);
 	});
 
 	it('should give base Empoleon and its Mega their distinct abilities', function () {
@@ -280,7 +282,7 @@ describe('Composite ability cleanup', function () {
 		});
 	});
 
-	it('should give Apex Predator complete Relic Armor, Precision, and Wind Rider hooks', function () {
+	it('should give Apex Predator Relic Armor, Dragonize, and Wind Rider hooks', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Aerodactyl-Mega', ability: 'apexpredator', moves: ['splash']},
 		], [
@@ -296,7 +298,8 @@ describe('Composite ability cleanup', function () {
 		assert.equal(aerodactyl.hp, hp);
 		assert.statStage(aerodactyl, 'atk', 1);
 		const ability = battle.dex.abilities.get('apexpredator');
-		assert(ability.onModifyCritRatio);
+		assert.equal(ability.onModifyCritRatio, undefined);
+		assert(ability.onModifyType);
 		assert(ability.onCriticalHit);
 	});
 
@@ -372,7 +375,7 @@ describe('Composite ability cleanup', function () {
 
 	it('should remove the requested legacy composite hooks and expose Soul Strike', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
-		assert.equal(battle.dex.abilities.get('celestialheart').onModifyMove, undefined);
+		assert(battle.dex.abilities.get('celestialheart').onModifyMove);
 		assert.equal(battle.dex.abilities.get('draconicforce').onModifyAtk, undefined);
 		assert.equal(battle.dex.abilities.get('dreadmaw').onStart, undefined);
 		assert.equal(battle.dex.abilities.get('freezerburn').onWeather, undefined);
@@ -392,12 +395,12 @@ describe('Composite ability cleanup', function () {
 		const pokemon = battle.p1.active[0];
 		const composites = {
 			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'neuroforce', 'prankster'],
-			apexpredator: ['relicarmor', 'precision', 'windrider'],
+			apexpredator: ['relicarmor', 'dragonize', 'windrider'],
 			alloycore: ['magicguard', 'selfsufficient', 'stalwart'],
 			ancientbloom: ['effectspore', 'selfsufficient'],
 			astralcore: ['purepower', 'naturalcure', 'illuminate'],
 			bloomingsun: ['megasol', 'invigorate', 'naturalcure'],
-			celestialheart: ['multiscale', 'soulheart'],
+			celestialheart: ['soulheart', 'friendguard', 'serenegrace'],
 			doomwarning: ['magicbounce', 'magicguard'],
 			draconicforce: ['dragonize', 'strongjaw', 'moldbreaker'],
 			tidaljaw: ['strongjaw', 'swiftswim', 'filter'],
@@ -413,15 +416,15 @@ describe('Composite ability cleanup', function () {
 		lunarorbit: ['magicbounce', 'serenegrace', 'triage'],
 		stillwaters: ['cloudnine', 'magicguard', 'unaware'],
 		relentlesshunt: ['levitate'],
-			omenedge: ['sharpness', 'dualwield', 'toughclaws'],
-			ragingcurrent: ['proficient', 'swiftswim', 'damp', 'waterveil', 'dryskin', 'stamina'],
+			omenedge: ['sharpness', 'dualwield', 'pressure'],
+			ragingcurrent: ['proficient', 'swiftswim', 'damp', 'dryskin', 'stamina'],
 			shadowcurrent: ['proficient', 'protean', 'technician', 'anticipation', 'infiltrator'],
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 			riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			perfectstriker: ['striker', 'noguard', 'libero', 'proficient'],
-			mossarmor: ['bruteforce', 'stamina', 'naturalrecovery'],
+			mossarmor: ['stamina', 'naturalrecovery', 'levitate'],
 		stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
 		aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
 			aevianbolt: ['stormpower', 'static', 'voltabsorb'],
@@ -468,7 +471,7 @@ describe('Composite ability cleanup', function () {
 	it('should apply the requested species ability replacements and Altaria event slot', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		assert.deepEqual(battle.dex.species.get('Scizor').abilities, {
-			0: 'Tough Claws', 1: 'Technician', H: 'Light Metal',
+			0: 'Pincer Crush', 1: 'Technician', H: 'Decoy Pincers',
 		});
 		assert.deepEqual(battle.dex.species.get('Swampert').abilities, {
 			0: 'Dry Skin', 1: 'Regenerator', H: 'Damp',

@@ -435,7 +435,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Pidgeot",
 		types: ["Normal", "Flying"],
 		baseStats: { hp: 83, atk: 55, def: 75, spa: 100, spd: 80, spe: 101 },
-		abilities: { 0: "Competitive", 1: "Gale Wings", H: "Wind Power" },
+		abilities: {"0":"Updraft","1":"Gale Wings","H":"Wind Power"},
 		heightm: 1.5,
 		weightkg: 39.5,
 		color: "Brown",
@@ -491,8 +491,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 20,
 		name: "Raticate",
 		types: ["Normal"],
-		baseStats: { hp: 55, atk: 81, def: 60, spa: 50, spd: 70, spe: 97 },
-		abilities: { 0: "Guts", 1: "Strong Jaw", H: "Hustle" },
+		baseStats: {"hp":75,"atk":115,"def":75,"spa":50,"spd":75,"spe":90},
+		abilities: {0: "Cornered Fang", 1: "Strong Jaw", H: "Hustle"},
 		heightm: 0.7,
 		weightkg: 18.5,
 		color: "Brown",
@@ -508,8 +508,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Raticate",
 		forme: "Alola",
 		types: ["Dark", "Normal"],
-		baseStats: { hp: 75, atk: 71, def: 70, spa: 40, spd: 80, spe: 77 },
-		abilities: { 0: "Gluttony", 1: "Hustle", H: "Thick Fat" },
+		baseStats: {"hp":90,"atk":105,"def":80,"spa":40,"spd":90,"spe":75},
+		abilities: {"0":"Gluttony","1":"Night Hoard","H":"Thick Fat"},
 		heightm: 0.7,
 		weightkg: 25.5,
 		color: "Black",
@@ -979,7 +979,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Sandslash",
 		types: ["Ground", "Bug"],
 		baseStats: { hp: 95, atk: 120, def: 130, spa: 45, spd: 75, spe: 85 },
-		abilities: { 0: "Tough Claws", 1: "Iron Barbs", H: "Sand Rush" },
+		abilities: {"0":"Bedrock Claw","1":"Iron Barbs","H":"Dune Runner"},
 		heightm: 1,
 		weightkg: 29.5,
 		color: "Yellow",
@@ -996,7 +996,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Alola",
 		types: ["Ice", "Steel"],
 		baseStats: { hp: 95, atk: 120, def: 130, spa: 45, spd: 75, spe: 85 },
-		abilities: { 0: "Ice Body", 1: "Tough Claws", H: "Slush Rush" },
+		abilities: {"0":"Ice Body","1":"Rime Claw","H":"Frost Runner"},
 		heightm: 1.2,
 		weightkg: 55,
 		color: "Blue",
@@ -1046,7 +1046,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Poison", "Ground"],
 		gender: "F",
 		baseStats: { hp: 92, atk: 100, def: 105, spa: 93, spd: 100, spe: 80 },
-		abilities: { 0: "Sheer Force", 1: "Queenly Majesty", H: "Thick Fat" },
+		abilities: {"0":"Sheer Force","1":"Queenly Majesty","H":"Broodguard"},
 		heightm: 1.3,
 		weightkg: 60,
 		color: "Blue",
@@ -1183,7 +1183,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Ghost"],
 		genderRatio: { M: 0.25, F: 0.75 },
 		baseStats: { hp: 73, atk: 76, def: 75, spa: 101, spd: 110, spe: 110 },
-		abilities: { 0: "Drought", 1: "Serene Grace", H: "Soul Fire" },
+		abilities: {"0":"Sun Charm","1":"Serene Grace","H":"Soul Fire"},
 		heightm: 1.1,
 		weightkg: 19.9,
 		color: "Yellow",
@@ -1412,7 +1412,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Venomoth",
 		types: ["Poison", "Psychic"],
 		baseStats: { hp: 70, atk: 65, def: 75, spa: 115, spd: 90, spe: 105 },
-		abilities: { 0: "Corrosion", 1: "Tinted Lens", H: "Psychic Surge" },
+		abilities: {"0":"Caustic Scales","1":"Prism Wings","H":"Oneiric Dust"},
 		heightm: 1.5,
 		weightkg: 12.5,
 		color: "Purple",
@@ -1750,8 +1750,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 62,
 		name: "Poliwrath",
 		types: ["Water", "Fighting"],
-		baseStats: { hp: 90, atk: 115, def: 95, spa: 75, spd: 90, spe: 70 },
-		abilities: { 0: "Gluttony", 1: "Iron Fist", H: "Swift Swim" },
+		baseStats: { hp: 95, atk: 105, def: 95, spa: 100, spd: 85, spe: 70 },
+		abilities: { 0: "Gluttony", 1: "Knuckle Tide", H: "Crosscurrent" },
 		heightm: 1.3,
 		weightkg: 54,
 		color: "Blue",
@@ -1812,7 +1812,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Psychic", "Dark"],
 		genderRatio: { M: 0.75, F: 0.25 },
-		baseStats: { hp: 80, atk: 58, def: 70, spa: 175, spd: 105, spe: 162 },
+		baseStats: { hp: 80, atk: 55, def: 60, spa: 175, spd: 105, spe: 155 },
 		abilities: { 0: "Perfect Foresight" },
 		heightm: 1.2,
 		weightkg: 48,
@@ -1846,7 +1846,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		battleOnly: "Alakazam-Alt",
 		types: ["Psychic", "Dark"],
 		genderRatio: { M: 0.75, F: 0.25 },
-		baseStats: { hp: 80, atk: 48, def: 60, spa: 175, spd: 105, spe: 162 },
+		baseStats: { hp: 80, atk: 55, def: 60, spa: 175, spd: 105, spe: 155 },
 		abilities: { 0: "Perfect Foresight" },
 		heightm: 1.2,
 		weightkg: 48,
@@ -2216,7 +2216,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Water", "Psychic"],
 		baseStats: { hp: 95, atk: 75, def: 180, spa: 130, spd: 80, spe: 30 },
-		abilities: { 0: "Shell Trap" },
+		abilities: { 0: "Slow Clamp" },
 		heightm: 2,
 		weightkg: 120,
 		color: "Pink",
@@ -2437,8 +2437,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 91,
 		name: "Cloyster",
 		types: ["Water", "Ice"],
-		baseStats: { hp: 50, atk: 95, def: 180, spa: 85, spd: 70, spe: 70 },
-		abilities: { 0: "Frozen Fortress", 1: "Skill Link", H: "Overcoat" },
+		baseStats: { hp: 50, atk: 95, def: 160, spa: 85, spd: 90, spe: 70 },
+		abilities: { 0: "Frozen Fortress", 1: "Skill Link", H: "Pearl Current" },
 		heightm: 1.5,
 		weightkg: 132.5,
 		color: "Purple",
@@ -3050,8 +3050,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 122,
 		name: "Mr. Mime",
 		types: ["Psychic", "Fairy"],
-		baseStats: { hp: 40, atk: 45, def: 65, spa: 100, spd: 120, spe: 90 },
-		abilities: { 0: "Soundproof", 1: "Filter", H: "Technician" },
+		baseStats: { hp: 65, atk: 45, def: 80, spa: 110, spd: 125, spe: 95 },
+		abilities: { 0: "Soundproof", 1: "Mimecraft", H: "Technician" },
 		heightm: 1.3,
 		weightkg: 54.5,
 		color: "Pink",
@@ -4116,8 +4116,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 162,
 		name: "Furret",
 		types: ["Normal"],
-		baseStats: { hp: 85, atk: 76, def: 64, spa: 45, spd: 55, spe: 90 },
-		abilities: { 0: "Fur Coat", 1: "Simple", H: "Frisk" },
+		baseStats: { hp: 95, atk: 115, def: 80, spa: 45, spd: 80, spe: 115 },
+		abilities: { 0: "Spring Fur", 1: "Simple", H: "Variety Rush" },
 		heightm: 1.8,
 		weightkg: 32.5,
 		color: "Brown",
@@ -4998,7 +4998,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Scizor",
 		types: ["Bug", "Steel"],
 		baseStats: { hp: 70, atk: 130, def: 100, spa: 55, spd: 80, spe: 65 },
-		abilities: { 0: "Tough Claws", 1: "Technician", H: "Light Metal" },
+		abilities: {"0":"Pincer Crush","1":"Technician","H":"Decoy Pincers"},
 		heightm: 1.8,
 		weightkg: 118,
 		color: "Red",
@@ -5959,8 +5959,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 267,
 		name: "Beautifly",
 		types: ["Psychic", "Bug"],
-		baseStats: { hp: 80, atk: 40, def: 65, spa: 130, spd: 65, spe: 95 },
-		abilities: { 0: "Windy Surge", 1: "Pastel Veil", H: "Unaware" },
+		baseStats: {"hp":80,"atk":40,"def":70,"spa":150,"spd":75,"spe":115},
+		abilities: {"0":"Windy Surge","1":"Pastel Veil","H":"Gale Bloom"},
 		heightm: 1,
 		weightkg: 28.4,
 		color: "Yellow",
@@ -5986,8 +5986,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 269,
 		name: "Dustox",
 		types: ["Bug", "Poison"],
-		baseStats: { hp: 80, atk: 50, def: 70, spa: 50, spd: 130, spe: 95 },
-		abilities: { 0: "Shield Dust", 1: "Unaware", H: "Poison Point" },
+		baseStats: {"hp":90,"atk":50,"def":90,"spa":80,"spd":130,"spe":90},
+		abilities: {"0":"Shield Dust","1":"Unaware","H":"Toxic Cocoon"},
 		heightm: 1.2,
 		weightkg: 31.6,
 		color: "Green",
@@ -6494,7 +6494,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Sableye",
 		types: ["Dark", "Ghost"],
 		baseStats: { hp: 70, atk: 75, def: 80, spa: 65, spd: 70, spe: 50 },
-		abilities: { 0: "Keen Eye", 1: "Stall", H: "Prankster" },
+		abilities: {"0":"Gem Eye","1":"Last Laugh","H":"Prankster"},
 		heightm: 0.5,
 		weightkg: 11,
 		color: "Purple",
@@ -6896,7 +6896,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Torkoal",
 		types: ["Fire"],
 		baseStats: { hp: 100, atk: 100, def: 160, spa: 100, spd: 70, spe: 20 },
-		abilities: { 0: "Drought", 1: "White Smoke", H: "Shell Armor" },
+		abilities: { 0: "Drought", 1: "Smoldering Shroud", H: "Solid Rock" },
 		heightm: 0.5,
 		weightkg: 80.4,
 		color: "Brown",
@@ -7959,7 +7959,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Steel", "Psychic"],
 		gender: "N",
 		baseStats: { hp: 80, atk: 145, def: 150, spa: 105, spd: 110, spe: 110 },
-		abilities: { 0: "Iron Cognition" },
+		abilities: { 0: "Cold Logic" },
 		heightm: 2.5,
 		weightkg: 942.9,
 		color: "Blue",
@@ -8566,8 +8566,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 402,
 		name: "Kricketune",
 		types: ["Bug"],
-		baseStats: { hp: 77, atk: 85, def: 51, spa: 55, spd: 51, spe: 65 },
-		abilities: { 0: "Swarm", H: "Technician" },
+		baseStats: {"hp":85,"atk":105,"def":75,"spa":80,"spd":75,"spe":80},
+		abilities: {"0":"Opening Overture","1":"Resonant Blade","H":"Final Note"},
 		heightm: 1,
 		weightkg: 25.5,
 		color: "Red",
@@ -8615,16 +8615,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Luxio",
 		evoLevel: 30,
 		eggGroups: ["Field"],
-		cosmeticFormes: ["Luxray-Deso"],
-		formeOrder: ["Luxray", "Luxray-Deso", "Luxray-Mega"],
-	},
-	luxrayalt: {
-		isCosmeticForme: true,
-		name: "Luxray-Deso",
-		baseSpecies: "Luxray",
-		forme: "Reborn",
-		color: "Blue",
-		isNonstandard: "Custom",
+		formeOrder: ["Luxray", "Luxray-Mega"],
 	},
 	budew: {
 		num: 406,
@@ -9615,8 +9606,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 455,
 		name: "Carnivine",
 		types: ["Grass", "Steel"],
-		baseStats: { hp: 74, atk: 100, def: 72, spa: 90, spd: 72, spe: 46 },
-		abilities: { 0: "Levitate", 1: "Dry Skin", H: "Chlorophyll" },
+		baseStats: { hp: 80, atk: 115, def: 85, spa: 90, spd: 80, spe: 70 },
+		abilities: { 0: "Apex Flytrap", 1: "Dry Skin", H: "Regenerator" },
 		heightm: 1.4,
 		weightkg: 27,
 		color: "Green",
@@ -9718,7 +9709,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Monster", "Grass"],
 		requiredItem: "Abomasite",
 	},
-	weavilemega: {"num":461,"name":"Weavile-Mega","baseSpecies":"Weavile","forme":"Mega","types":["Dark","Ice"],"baseStats":{"hp":85,"atk":160,"def":85,"spa":50,"spd":100,"spe":160},"abilities":{"0":"Frost Stalker"},"heightm":1.1,"weightkg":34,"color":"Black","eggGroups":["Field"],"requiredItem":"Weavilite","battleOnly":"Weavile","isNonstandard":"Custom"},
+	weavilemega: {"num":461,"name":"Weavile-Mega","baseSpecies":"Weavile","forme":"Mega","types":["Dark","Ice"],"baseStats":{"hp":85,"atk":160,"def":90,"spa":50,"spd":100,"spe":155},"abilities":{"0":"Frost Stalker"},"heightm":1.1,"weightkg":34,"color":"Black","eggGroups":["Field"],"requiredItem":"Weavilite","battleOnly":"Weavile","isNonstandard":"Custom"},
 	weavile: {
 		otherFormes: ["Weavile-Mega"], formeOrder: ["Weavile", "Weavile-Mega"],
 		num: 461,
@@ -9783,7 +9774,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Tangrowth",
 		types: ["Grass"],
 		baseStats: { hp: 110, atk: 100, def: 125, spa: 110, spd: 75, spe: 50 },
-		abilities: { 0: "Chlorophyll", 1: "Invigorate", H: "Stamina" },
+		abilities: {"0":"Chlorophyll","1":"Living Tangle","H":"Root Renewal"},
 		heightm: 2,
 		weightkg: 128.6,
 		color: "Blue",
@@ -9828,7 +9819,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy", "Flying"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 85, atk: 75, def: 95, spa: 120, spd: 115, spe: 80 },
-		abilities: { 0: "Guiding Omen", 1: "Pixilate", H: "Super Luck" },
+		abilities: {"0":"Guiding Omen","1":"Pixilate","H":"Fortunate Wing"},
 		heightm: 1.5,
 		weightkg: 38,
 		color: "White",
@@ -9842,7 +9833,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Yanmega",
 		types: ["Bug", "Dragon"],
 		baseStats: { hp: 98, atk: 86, def: 81, spa: 126, spd: 64, spe: 95 },
-		abilities: { 0: "Speed Boost", 1: "Tinted Lens", H: "Compound Eyes" },
+		abilities: { 0: "Speed Boost", 1: "Tinted Lens", H: "Slipstream" },
 		heightm: 1.9,
 		weightkg: 51.5,
 		color: "Green",
@@ -9904,7 +9895,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Mamoswine",
 		types: ["Ice", "Ground"],
 		baseStats: { hp: 120, atk: 135, def: 90, spa: 70, spd: 70, spe: 85 },
-		abilities: { 0: "Oblivious", 1: "Intimidate", H: "Thick Fat" },
+		abilities: {"0":"Oblivious","1":"Intimidate","H":"Snowpack"},
 		heightm: 2.5,
 		weightkg: 291,
 		color: "Brown",
@@ -9934,7 +9925,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Psychic", "Fighting"],
 		gender: "M",
 		baseStats: { hp: 75, atk: 125, def: 65, spa: 60, spd: 115, spe: 100 },
-		abilities: { 0: "Dual Wield", 1: "Sworn Duty", H: "Inner Focus", S: "Knight's Guard" },
+		abilities: { 0: "Dual Wield", 1: "Knight's Guard", H: "Inner Focus" },
 		heightm: 1.6,
 		weightkg: 52,
 		color: "White",
@@ -10024,7 +10015,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ice", "Ghost"],
 		gender: "F",
 		baseStats: { hp: 70, atk: 70, def: 70, spa: 110, spd: 70, spe: 110 },
-		abilities: { 0: "Cursed Body", 1: "Shadow Shield", H: "Temporal Shift" },
+		abilities: {"0":"Cursed Body","1":"Ice Mirror","H":"Wailing Snow"},
 		heightm: 1.3,
 		weightkg: 26.6,
 		color: "White",
@@ -11487,7 +11478,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fighting"],
 		genderRatio: { M: 0.75, F: 0.25 },
 		baseStats: { hp: 120, atk: 140, def: 110, spa: 55, spd: 80, spe: 45 },
-		abilities: { 0: "Guts", 1: "Stamina", H: "Iron Fist" },
+		abilities: { 0: "Forge Grit", 1: "Stamina", H: "Mason's Fist" },
 		heightm: 1.4,
 		weightkg: 87,
 		color: "Brown",
@@ -11525,8 +11516,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 537,
 		name: "Seismitoad",
 		types: ["Water", "Ground"],
-		baseStats: { hp: 105, atk: 110, def: 85, spa: 90, spd: 86, spe: 74 },
-		abilities: { 0: "Swift Swim", 1: "Liquid Voice", H: "Water Absorb" },
+		baseStats: { hp: 105, atk: 110, def: 90, spa: 95, spd: 90, spe: 75 },
+		abilities: { 0: "Swift Swim", 1: "Mire Chorus", H: "Marsh Conduit" },
 		heightm: 1.5,
 		weightkg: 62,
 		color: "Blue",
@@ -11989,7 +11980,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Crustle",
 		types: ["Bug", "Rock"],
 		baseStats: { hp: 85, atk: 115, def: 130, spa: 45, spd: 95, spe: 50 },
-		abilities: { 0: "Sturdy", 1: "Shell Armor", H: "Weak Armor" },
+		abilities: {"0":"Stonewall","1":"Layered Shell","H":"Breakaway"},
 		heightm: 1.4,
 		weightkg: 200,
 		color: "Red",
@@ -12128,7 +12119,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Rock"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 84, atk: 125, def: 145, spa: 70, spd: 80, spe: 26 },
-		abilities: { 0: "Relic Armor", 1: "Rock Head", H: "Swift Swim" },
+		abilities: {"0":"Relic Armor","1":"Fossil Ram","H":"Swift Swim"},
 		heightm: 1.2,
 		weightkg: 81,
 		color: "Blue",
@@ -12615,7 +12606,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Escavalier",
 		types: ["Bug", "Steel"],
 		baseStats: { hp: 80, atk: 135, def: 110, spa: 60, spd: 115, spe: 20 },
-		abilities: { 0: "Royal Decree", 1: "Shell Armor", H: "Dual Wield" },
+		abilities: {"0":"Dual Wield","1":"Royal Decree","H":"Shell Armor"},
 		heightm: 1,
 		weightkg: 33,
 		color: "Gray",
@@ -12745,7 +12736,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Ferrothorn",
 		types: ["Grass", "Steel"],
 		baseStats: { hp: 85, atk: 94, def: 131, spa: 54, spd: 116, spe: 20 },
-		abilities: { 0: "Iron Barbs", 1: "Filter", H: "Stamina" },
+		abilities: {"0":"Iron Barbs","1":"Filter","H":"Rooted Iron"},
 		heightm: 1,
 		weightkg: 110,
 		color: "Gray",
@@ -13036,8 +13027,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Cryogonal",
 		types: ["Ice", "Ghost"],
 		gender: "N",
-		baseStats: { hp: 80, atk: 50, def: 50, spa: 95, spd: 135, spe: 105 },
-		abilities: { 0: "Levitate", 1: "Mirror Armor", H: "Ice Body" },
+		baseStats: { hp: 80, atk: 50, def: 65, spa: 100, spd: 135, spe: 105 },
+		abilities: { 0: "Levitate", 1: "Mirror Armor", H: "Purifying Frost" },
 		heightm: 1.1,
 		weightkg: 148,
 		color: "Blue",
@@ -13997,8 +13988,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 660,
 		name: "Diggersby",
 		types: ["Normal", "Ground"],
-		baseStats: { hp: 95, atk: 56, def: 92, spa: 50, spd: 92, spe: 78 },
-		abilities: { 0: "Huge Power", 1: "Earth Eater", H: "Fur Coat" },
+		baseStats: { hp: 95, atk: 56, def: 98, spa: 50, spd: 98, spe: 83 },
+		abilities: { 0: "Huge Power", 1: "Bore Tunnel", H: "Fur Coat" },
 		heightm: 1,
 		weightkg: 42.4,
 		color: "Brown",
@@ -15802,7 +15793,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Water", "Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 80, atk: 74, def: 74, spa: 126, spd: 116, spe: 60 },
-		abilities: { 0: "Serene Grace", 1: "Marvel Scale", H: "Liquid Voice" },
+		abilities: {"0":"Encore Aria","1":"Marvel Scale","H":"Liquid Voice"},
 		heightm: 1.8,
 		weightkg: 44,
 		color: "Blue",
@@ -19123,8 +19114,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 873,
 		name: "Frosmoth",
 		types: ["Ice", "Bug"],
-		baseStats: { hp: 70, atk: 65, def: 60, spa: 125, spd: 90, spe: 65 },
-		abilities: { 0: "Moonlit Wings", 1: "Ice Body", H: "Ice Scales" },
+		baseStats: { hp: 75, atk: 55, def: 65, spa: 130, spd: 100, spe: 75 },
+		abilities: { 0: "Moonlit Wings", 1: "Silk Ward", H: "Ice Scales" },
 		heightm: 1.3,
 		weightkg: 42,
 		color: "White",
@@ -19249,7 +19240,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Copperajah",
 		types: ["Steel"],
 		baseStats: { hp: 122, atk: 130, def: 69, spa: 80, spd: 69, spe: 30 },
-		abilities: { 0: "Sheer Force", H: "Heavy Metal" },
+		abilities: { 0: "Sheer Force", 1: "Water Absorb", H: "Heavy Metal" },
 		heightm: 3,
 		weightkg: 650,
 		color: "Green",
@@ -20116,8 +20107,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 920,
 		name: "Lokix",
 		types: ["Bug", "Dark"],
-		baseStats: { hp: 71, atk: 102, def: 78, spa: 52, spd: 55, spe: 92 },
-		abilities: { 0: "Swarm", H: "Tinted Lens" },
+		baseStats: { hp: 71, atk: 115, def: 78, spa: 52, spd: 67, spe: 97 },
+		abilities: { 0: "Swarm Drive", 1: "Stakeout", H: "Tinted Lens" },
 		heightm: 1,
 		weightkg: 17.5,
 		color: "Gray",
@@ -20376,7 +20367,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Garganacl",
 		types: ["Rock"],
 		baseStats: { hp: 100, atk: 100, def: 130, spa: 45, spd: 90, spe: 35 },
-		abilities: { 0: "Purifying Salt", 1: "Sturdy", H: "Clear Body" },
+		abilities: {"0":"Purifying Salt","1":"Salt Bastion","H":"Clear Body"},
 		heightm: 2.3,
 		weightkg: 240,
 		color: "Brown",
@@ -20621,7 +20612,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Scovillain",
 		types: ["Grass", "Fire"],
 		baseStats: { hp: 65, atk: 108, def: 65, spa: 108, spd: 65, spe: 75 },
-		abilities: { 0: "Chlorophyll", 1: "Insomnia", H: "Solar Power" },
+		abilities: {"0":"Chlorophyll","1":"Pepper Sting","H":"Solar Power"},
 		heightm: 0.9,
 		weightkg: 15,
 		color: "Green",
@@ -21049,7 +21040,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseForme: "Curly",
 		types: ["Dragon", "Water"],
 		baseStats: { hp: 68, atk: 50, def: 60, spa: 120, spd: 95, spe: 82 },
-		abilities: { 0: "Commander", H: "Storm Drain" },
+		abilities: {"0":"Commander","1":"Sushi Trick","H":"Storm Drain"},
 		heightm: 0.3,
 		weightkg: 8,
 		color: "Red",
@@ -21064,7 +21055,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Droopy",
 		types: ["Dragon", "Water"],
 		baseStats: { hp: 68, atk: 50, def: 60, spa: 120, spd: 95, spe: 82 },
-		abilities: { 0: "Commander", H: "Storm Drain" },
+		abilities: {"0":"Commander","1":"Sushi Trick","H":"Storm Drain"},
 		heightm: 0.3,
 		weightkg: 8,
 		color: "Pink",
@@ -21077,7 +21068,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Stretchy",
 		types: ["Dragon", "Water"],
 		baseStats: { hp: 68, atk: 50, def: 60, spa: 120, spd: 95, spe: 82 },
-		abilities: { 0: "Commander", H: "Storm Drain" },
+		abilities: {"0":"Commander","1":"Sushi Trick","H":"Storm Drain"},
 		heightm: 0.3,
 		weightkg: 8,
 		color: "Yellow",
@@ -21090,7 +21081,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Curly-Mega",
 		types: ["Dragon", "Water"],
 		baseStats: { hp: 68, atk: 65, def: 90, spa: 135, spd: 125, spe: 92 },
-		abilities: { 0: "Contrary" },
+		abilities: {"0":"Master Course"},
 		heightm: 0.3,
 		weightkg: 24,
 		color: "Red",
@@ -21105,7 +21096,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Droopy-Mega",
 		types: ["Dragon", "Water"],
 		baseStats: { hp: 68, atk: 65, def: 90, spa: 135, spd: 125, spe: 92 },
-		abilities: { 0: "Contrary" },
+		abilities: {"0":"Master Course"},
 		heightm: 0.3,
 		weightkg: 24,
 		color: "Pink",
@@ -21120,7 +21111,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Stretchy-Mega",
 		types: ["Dragon", "Water"],
 		baseStats: { hp: 68, atk: 65, def: 90, spa: 135, spd: 125, spe: 92 },
-		abilities: { 0: "Contrary" },
+		abilities: {"0":"Master Course"},
 		heightm: 0.3,
 		weightkg: 24,
 		color: "Yellow",
@@ -21671,7 +21662,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Ghost"],
 		gender: "N",
 		baseStats: { hp: 71, atk: 60, def: 106, spa: 121, spd: 80, spe: 70 },
-		abilities: { 0: "Hospitality", H: "Heatproof" },
+		abilities: {"0":"Hospitality","1":"Second Brew","H":"Heatproof"},
 		heightm: 0.2,
 		weightkg: 2.2,
 		color: "Green",
@@ -21878,7 +21869,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Archaludon",
 		types: ["Steel", "Dragon"],
 		baseStats: { hp: 90, atk: 105, def: 130, spa: 125, spd: 65, spe: 85 },
-		abilities: { 0: "Stamina", 1: "Sturdy", H: "Stalwart" },
+		abilities: {"0":"Stamina","1":"Anchor Bridge","H":"Rail Sight"},
 		heightm: 2,
 		weightkg: 60,
 		color: "White",
@@ -23658,7 +23649,7 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	toxicroak: {baseStats: {hp: 83, atk: 131, def: 70, spa: 121, spd: 70, spe: 95}},
 	toxicroakdeso: {baseStats: {hp: 83, atk: 126, def: 70, spa: 116, spd: 70, spe: 95}},
 	alakazam: {baseStats: {hp: 80, atk: 50, def: 50, spa: 135, spd: 95, spe: 120}},
-	alakazammega: {baseStats: {hp: 80, atk: 48, def: 60, spa: 175, spd: 105, spe: 162}},
+	alakazammega: {baseStats: {hp: 80, atk: 55, def: 60, spa: 175, spd: 105, spe: 155}},
 	dodrio: {
 		baseStats: {hp: 90, atk: 115, def: 85, spa: 40, spd: 75, spe: 120},
 		abilities: {0: "Triple Threat", 1: "Speed Boost", H: "Striker Frenzy"},
@@ -23832,3 +23823,171 @@ for (const [baseId, group] of Object.entries(customVisualGroups)) {
 }
 
 
+
+// Approved follow-up roster ability slots; other forms and slots remain independent.
+for (const [id, abilities] of Object.entries({
+  "nidoking": {
+    "H": "Sovereign Arsenal"
+  },
+  "vileplume": {
+    "0": "Pollen Engine"
+  },
+  "kingler": {
+    "1": "Titan Pincer",
+    "H": "Shellcracker"
+  },
+  "kinglergmax": {
+    "0": "Tidal Dominion"
+  },
+  "gyarados": {
+    "1": "Tempest Fury"
+  },
+  "steelix": {
+    "1": "Iron Lash"
+  },
+  "donphan": {
+    "1": "Armored Advance",
+    "H": "Trailbreaker"
+  },
+  "hariyama": {
+    "H": "Grit Grappler"
+  },
+  "krookodile": {
+    "1": "Dread Jaw"
+  },
+  "beartic": {
+    "1": "Floe Hunter"
+  },
+  "escavalier": {
+    "H": "Lanceguard"
+  },
+  "bouffalant": {
+    "0": "Headlong Resolve",
+    "H": "Herd Shelter"
+  },
+  "talonflame": {
+    "0": "Open Sky",
+    "1": "Scorch Sweep"
+  },
+  "primarina": {
+    "H": "Tidal Voice"
+  },
+  "vikavolt": {
+    "0": "Hover Cannon",
+    "H": "Recharge Relay"
+  },
+  "lycanroc": {
+    "0": "Keen Hunt"
+  },
+  "lycanrocmidnight": {
+    "1": "Blood Challenge"
+  },
+  "lycanrocdusk": {
+    "1": "Twilight Instinct"
+  },
+  "armarouge": {
+    "0": "Heat Reservoir",
+    "1": "Twin Cannons"
+  },
+  "ceruledge": {
+    "1": "Twin Blades"
+  },
+  "houndstone": {
+    "0": "Gravewind",
+    "H": "Mourning Coat"
+  },
+  "dondozo": {
+    "1": "Dozing Giant"
+  },
+  "clodsire": {
+    "0": "Raised Quills",
+    "1": "Quill Reservoir"
+  }
+})) {
+ Object.assign(Pokedex[id as ID].abilities, abilities);
+}
+
+// Approved third roster pass.
+for (const [id, abilities] of Object.entries({
+  "tyranitar": {
+    "1": "Mountainbreaker",
+    "H": "Dread Presence"
+  },
+  "hariyama": {
+    "0": "Palm Mastery"
+  },
+  "electivire": {
+    "H": "Galvanic Spirit"
+  },
+  "magmortar": {
+    "H": "Blast Chamber"
+  },
+  "scolipede": {
+    "0": "Venom Spurs",
+    "1": "Last Brood"
+  },
+  "zoroark": {
+    "H": "Shadow Feint"
+  },
+  "galvantula": {
+    "0": "Silk Sights",
+    "1": "Live Net"
+  },
+  "ferrothorn": {
+    "0": "Barb Harvest"
+  },
+  "eelektross": {
+    "1": "Current Coil"
+  },
+  "chandelure": {
+    "1": "Soul Pyre"
+  },
+  "seviper": {
+    "1": "Black Viper"
+  },
+  "accelgor": {
+    "0": "Silk Shuriken",
+    "1": "Hidden Scroll"
+  },
+  "goodra": {
+    "H": "Toxic Serenity"
+  },
+  "mudsdale": {
+    "1": "Mud Temper"
+  },
+  "corviknight": {
+    "1": "Skywarden"
+  },
+  "drednaw": {
+    "0": "Lockjaw",
+    "H": "River Shell"
+  },
+  "skeledirge": {
+    "1": "Funeral Choir"
+  },
+  "quaquaval": {
+    "0": "Festival Step"
+  },
+  "garganacl": {
+    "H": "Salt Crust"
+  },
+  "annihilape": {
+    "1": "Beyond Fear"
+  },
+  "quagsire": {
+    "0": "Mud Meditation",
+    "1": "Stillwater"
+  }
+})) {
+ Object.assign(Pokedex[id as ID].abilities, abilities);
+}
+
+for (const [id, abilities] of Object.entries({
+ weavile: {0: 'Cold Open'}, rhyperior: {1: 'Quarry Cannon'}, mamoswine: {0: 'Tundra March'},
+ jellicent: {0: 'Undertow', H: 'Deadwater'}, eelektross: {H: 'Vital Circuit'},
+ incineroar: {1: 'Ringmaster'}, mudsdale: {0: 'Unyielding'}, rillaboom: {0: 'Primal Rhythm'},
+ mienshao: {H: 'Meridian Seal'}, baxcalibur: {1: 'Rimeplate'}, hydreigon: {1: 'Dark Dominion'},
+ cinderace: {1: 'Set Piece'}, inteleon: {H: 'Calculated Shot'}, meowscarada: {0: 'False Bouquet'},
+})) {
+ Object.assign(Pokedex[id as ID].abilities, abilities);
+}

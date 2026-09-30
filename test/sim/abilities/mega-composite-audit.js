@@ -40,11 +40,12 @@ describe('Mega composite ability components', () => {
 		}
 	});
 
-	it('Raging Current blocks burns, starts Aqua Ring, halves Fire attacks, and stops explosions', () => {
+	it('Raging Current removes Water Veil while retaining Dry Skin and Damp', () => {
 		const [swampert, foe] = mega('Swampert', 'Swampertite', ['splash', 'explosion']);
 		assert.equal(swampert.ability, 'ragingcurrent');
-		assert(swampert.volatiles.aquaring);
-		assert.equal(swampert.trySetStatus('brn', foe), false);
+		assert(!swampert.volatiles.aquaring);
+		assert.equal(swampert.trySetStatus('brn', foe), true);
+		swampert.cureStatus();
 		assert.equal(battle.runEvent('SourceModifySpA', swampert, foe, battle.dex.getActiveMove('flamethrower'), 100), 50);
 		const foeHP = foe.hp;
 		battle.makeChoices('move splash', 'move explosion');
@@ -63,16 +64,15 @@ describe('Mega composite ability components', () => {
 		assert.equal(battle.runEvent('SourceModifyDamage', falinks, foe, battle.dex.getActiveMove('tackle'), 100), 80);
 	});
 
-	it('Mega Slowbro has a real Shell Trap ability with Shell Armor and Regenerator', () => {
+	it('Mega Slowbro has Slow Clamp with Shell Armor, Own Tempo, Analytic, and Sweet Veil', () => {
 		const [slowbro, foe] = mega('Slowbro', 'Slowbronite');
 		assert.equal(slowbro.species.name, 'Slowbro-Mega');
-		assert.equal(slowbro.ability, 'shelltrap');
-		assert(battle.dex.abilities.get('shelltrap').exists);
+		assert.equal(slowbro.ability, 'slowclamp');
+		for (const component of ['shellarmor', 'owntempo', 'analytic', 'sweetveil']) {
+			assert(slowbro.hasAbility(component));
+		}
 		assert.equal(battle.runEvent('SourceModifyDamage', slowbro, foe, battle.dex.getActiveMove('tackle'), 100), 80);
-		slowbro.hp = Math.floor(slowbro.maxhp / 2);
-		const before = slowbro.hp;
-		battle.singleEvent('SwitchOut', slowbro.getAbility(), slowbro.abilityState, slowbro);
-		assert.equal(slowbro.hp, before + Math.floor(slowbro.baseMaxhp / 3));
+		assert(!slowbro.trySetStatus('slp', foe));
 	});
 
 	it('Iron Mountain keeps Heavy Metal physical protection and weight', () => {
@@ -89,11 +89,13 @@ describe('Mega composite ability components', () => {
 		assert.equal(battle.runEvent('SourceModifyDamage', pinsir, foe, battle.dex.getActiveMove('tackle'), 100), 80);
 	});
 
-	it('Relentless Link retains Skill Link power and Battle Armor', () => {
+	it('Relentless Link retains Skill Link power and replaces Battle Armor with Power Drill', () => {
 		const [heracross, foe] = mega('Heracross', 'Heracronite');
 		assert.equal(heracross.ability, 'relentlesslink');
 		assert.equal(battle.runEvent('BasePower', heracross, foe, battle.dex.getActiveMove('bulletseed'), 100), 150);
-		assert.equal(battle.runEvent('SourceModifyDamage', heracross, foe, battle.dex.getActiveMove('tackle'), 100), 80);
+		assert.equal(battle.runEvent('SourceModifyDamage', heracross, foe, battle.dex.getActiveMove('tackle'), 100), 100);
+		assert(heracross.hasAbility('powerdrill'));
+		assert(!heracross.hasAbility('battlearmor'));
 	});
 
 	it('Sand Sovereign only advertises its implemented components', () => {

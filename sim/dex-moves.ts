@@ -258,10 +258,11 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	ignorePositiveEvasion?: boolean;
 	multiaccuracy?: boolean;
 	multihit?: number | number[];
-	multihitType?: 'parentalbond' | 'hydrabond' | 'dualwield' | 'blazingmane' | 'starboxer';
+	multihitType?: 'parentalbond' | 'hydrabond' | 'dualwield' | 'blazingmane' | 'starboxer' | 'twincannons' | 'twinblades';
 	dualWieldAccuracy?: number | true;
 	dualWieldFullPower?: boolean;
 	noDamageVariance?: boolean;
+	vitalCircuitDrain?: boolean;
 	nonGhostTarget?: MoveTarget;
 	spreadModifier?: number;
 	sleepUsable?: boolean;
@@ -369,6 +370,8 @@ export interface ActiveMove extends MutableMove {
 	totalDamage?: number | false;
 	typeChangerBoosted?: Effect;
 	infiltrates?: boolean;
+	/** Bypasses damage-reducing screens without bypassing Substitute. */
+	ignoreScreens?: boolean;
 	ruinedAtk?: Pokemon;
 	ruinedDef?: Pokemon;
 	ruinedSpA?: Pokemon;

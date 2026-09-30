@@ -1,3 +1,4 @@
+import { abilityIncludesComponent } from '../../data/ability-components';
 /**
  * Data searching commands.
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -1497,7 +1498,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			if (matched) continue;
 
 			for (const ability in alts.abilities) {
-				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability]) {
+				if (Object.values(dex[mon].abilities).some(slot => abilityIncludesComponent(slot, ability)) === alts.abilities[ability]) {
 					matched = true;
 					break;
 				}

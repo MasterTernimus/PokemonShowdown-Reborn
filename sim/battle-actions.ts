@@ -141,6 +141,7 @@ export class BattleActions {
 			if (newMove) pokemon.lastMove = newMove;
 			oldActive.clearVolatile();
 		}
+		pokemon.replacedFainted = !!oldActive?.fainted;
 		if (oldActive) {
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
@@ -257,6 +258,9 @@ export class BattleActions {
 			poke.isStarted = true;
 			poke.draggedIn = null;
 			this.battle.field.flowerGardenSwitchIn(poke);
+		}
+		for (const poke of switchersIn) {
+			if (poke.hp) this.battle.runEvent('AfterSwitchIn', poke);
 		}
 		return true;
 	}
@@ -1624,6 +1628,9 @@ export class BattleActions {
 					didSomething = this.combineResults(didSomething, false);
 				}
 			}
+			if (isSecondary && didSomething && source.hp) {
+				this.battle.runEvent('AfterSuccessfulSecondary', source, target, move);
+			}
 			// Move didn't fail because it didn't try to do anything
 			if (didSomething === undefined) didSomething = true;
 			damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
@@ -1648,6 +1655,8 @@ export class BattleActions {
 		targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean
 	) {
+		// Split-hit abilities split damage, not Armor Cannon's self-drop or other self effects.
+		if (['twincannons', 'twinblades'].includes(move.multihitType || '') && move.hit > 1) return;
 		for (const target of targets) {
 			if (target === false) continue;
 			if (moveData.self && !move.selfDropped) {
@@ -2270,7 +2279,8 @@ export class BattleActions {
 
 		const bypassProtect = target.getMoveHitData(move).bypassProtect;
 		if (bypassProtect) {
-			baseDamage = this.battle.modify(baseDamage, 0.25);
+			const shadowFeint = bypassProtect !== true && bypassProtect.id === 'shadowfeint';
+			baseDamage = this.battle.modify(baseDamage, shadowFeint ? [1, 3] : 0.25);
 			if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
 				this.battle.add('-ability', pokemon, bypassProtect.name);
 			}

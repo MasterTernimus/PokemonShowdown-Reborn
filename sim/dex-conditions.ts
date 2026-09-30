@@ -11,6 +11,7 @@ import type { SecondaryEffect, MoveEventMethods } from './dex-moves';
  */
 
 export interface EventMethods {
+	onAfterSuccessfulSecondary?: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void;
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
 	onEmergencyExit?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
@@ -359,6 +360,9 @@ export interface EventMethods {
 		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
 	) => number | boolean | null | void;
 	onAnyDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void;
+	onAnyAfterDamageApplied?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAnyResidualHeal?: (this: Battle, amount: number, target: Pokemon, source: Pokemon, effect: Effect) => number | void;
+	onHeal?: (this: Battle, amount: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
 	onAnyEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
@@ -403,6 +407,7 @@ export interface EventMethods {
 	onAnySetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: Condition) => boolean | void;
 	onAnyStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
 	onAnySwitchIn?: (this: Battle, pokemon: Pokemon) => void;
+	onAnyAfterSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onAnySwitchOut?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
