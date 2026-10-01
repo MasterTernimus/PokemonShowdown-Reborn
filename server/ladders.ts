@@ -16,6 +16,7 @@ const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
 import type { ChallengeType } from './room-battle';
+import { validateChallengeOptions, describeChallengeOptions, type ChallengeOptions } from '../sim/challenge-options';
 import { BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges } from './ladders-challenges';
 
 /**
@@ -148,7 +149,14 @@ class Ladder extends LadderStore {
 		return null;
 	}
 
-	async makeChallenge(connection: Connection, targetUser: User, isOfficial: boolean) {
+	async makeChallenge(connection: Connection, targetUser: User, isOfficial: boolean, options?: ChallengeOptions) {
+		let challengeOptions;
+		try {
+			challengeOptions = validateChallengeOptions(options, Dex.formats.get(this.formatid));
+		} catch (error) {
+			connection.popup((error as Error).message);
+			return false;
+		}
 		const user = connection.user;
 		if (targetUser === user) {
 			connection.popup(`You can't battle yourself. The best you can do is open PS in Private Browsing (or another browser) and log into a different username, and battle that username.`);
@@ -188,6 +196,7 @@ class Ladder extends LadderStore {
 		}
 		const ready = await this.prepBattle(connection, isOfficial ? 'challengeofficial' : 'challenge');
 		if (!ready) return false;
+		ready.challengeOptions = challengeOptions;
 		// If our target is already challenging us in the same format,
 		// simply accept the pending challenge instead of creating a new one.
 		const existingChall = Ladders.challenges.search(user.id, targetUser.id);
@@ -197,6 +206,7 @@ class Ladder extends LadderStore {
 				existingChall.to === user.id &&
 				existingChall.format === this.formatid &&
 				existingChall.official === isOfficial &&
+				JSON.stringify(existingChall.ready?.challengeOptions || {}) === JSON.stringify(challengeOptions) &&
 				existingChall.ready
 			) {
 				if (Ladders.challenges.remove(existingChall)) {
@@ -209,7 +219,9 @@ class Ladder extends LadderStore {
 				return false;
 			}
 		}
-		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready, isOfficial));
+		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready, isOfficial, {
+			message: describeChallengeOptions(challengeOptions),
+		}));
 		Ladders.challenges.send(user.id, targetUser.id, `/log ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
 		Chat.runHandlers('onChallenge', user, targetUser, ready.formatid, isOfficial);
@@ -476,6 +488,7 @@ class Ladder extends LadderStore {
 			players,
 			rated: minRating,
 			challengeType: readies[0].challengeType,
+			challengeOptions: readies[0].challengeOptions,
 			delayedStart,
 		});
 	}

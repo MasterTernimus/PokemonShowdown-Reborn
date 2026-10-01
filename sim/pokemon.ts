@@ -2131,7 +2131,7 @@ export class Pokemon {
 			!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) return false;
 		// Expand copied identities without dispatching component hooks twice.
 		const copiedComponents = new Set<string>();
-		if (['perfectforesight', 'royalvoice'].includes(this.ability) && this.m.perfectForesightAbility) {
+		if (['perfectforesight'].includes(this.ability) && this.m.perfectForesightAbility) {
 			const pending: string[] = [this.m.perfectForesightAbility];
 			while (pending.length) {
 				const id = pending.pop()!;
@@ -2356,7 +2356,7 @@ export class Pokemon {
 	isSkyDropped() {
 		if (this.volatiles['skydrop']) return true;
 		for (const foeActive of this.side.foe.active) {
-			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === this) {
+			if (foeActive?.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === this) {
 				return true;
 			}
 		}

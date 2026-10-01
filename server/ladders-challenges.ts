@@ -1,4 +1,5 @@
 import type { ChallengeType } from './room-battle';
+import type { ChallengeOptions } from '../sim/challenge-options';
 
 /**
  * A bundle of:
@@ -10,6 +11,7 @@ import type { ChallengeType } from './room-battle';
  * To start a battle, you need one of these for every player.
  */
 export class BattleReady {
+	challengeOptions?: Readonly<ChallengeOptions>;
 	readonly userid: ID;
 	readonly formatid: string;
 	readonly settings: User['battleSettings'];

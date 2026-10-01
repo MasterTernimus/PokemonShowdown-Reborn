@@ -477,6 +477,7 @@ export interface RoomBattlePlayerOptions {
 }
 
 export interface RoomBattleOptions {
+	challengeOptions?: import('../sim/challenge-options').ChallengeOptions;
 	format: string;
 	/**
 	 * length should be equal to the format's playerCount, except in two
@@ -581,6 +582,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		const battleOptions = {
 			formatid: this.format,
+			challengeOptions: options.challengeOptions,
 			roomid: this.roomid,
 			rated: ratedMessage,
 			seed: options.seed,

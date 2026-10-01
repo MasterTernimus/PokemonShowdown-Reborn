@@ -888,7 +888,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Raichu",
 		types: ["Electric"],
 		baseStats: { hp: 60, atk: 90, def: 55, spa: 90, spd: 80, spe: 120 },
-		abilities: { 0: "Static", H: "Lightning Rod" },
+		abilities: { 0: "Static", 1: "Grounding Tail", H: "Lightning Rod" },
 		heightm: 0.8,
 		weightkg: 30,
 		color: "Yellow",
@@ -3772,7 +3772,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Dragonite",
 		types: ["Dragon", "Flying"],
 		baseStats: { hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80 },
-		abilities: { 0: "Inner Focus", 1: "Shed Skin", H: "Multiscale" },
+		abilities: { 0: "Inner Focus", 1: "Sea Rescuer", H: "Multiscale" },
 		heightm: 2.2,
 		weightkg: 210,
 		color: "Brown",
@@ -4055,7 +4055,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	feraligatr: {
 		num: 160,
 		name: "Feraligatr",
-		types: ["Water", "Poison"],
+		types: ["Water", "Dragon"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 100, atk: 109, def: 100, spa: 59, spd: 93, spe: 78 },
 		abilities: { 0: "Water Veil", 1: "Mighty Jaw", H: "Sheer Force" },
@@ -5269,7 +5269,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Skarmory",
 		types: ["Steel", "Flying"],
 		baseStats: { hp: 65, atk: 80, def: 140, spa: 40, spd: 70, spe: 70 },
-		abilities: { 0: "Self Sufficient", 1: "Sturdy", H: "Weak Armor" },
+		abilities: { 0: "Steel Plumage", 1: "Sturdy", H: "Weak Armor" },
 		heightm: 1.7,
 		weightkg: 50.5,
 		color: "Gray",
@@ -7593,7 +7593,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Chimecho",
 		types: ["Psychic"],
 		baseStats: { hp: 75, atk: 50, def: 80, spa: 95, spd: 90, spe: 65 },
-		abilities: { 0: "Elevate" },
+		abilities: { 0: "Temple Chime" },
 		heightm: 0.6,
 		weightkg: 1,
 		color: "Blue",
@@ -12917,7 +12917,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Ghost", "Fire"],
 		baseStats: { hp: 80, atk: 35, def: 130, spa: 175, spd: 130, spe: 90 },
-		abilities: { 0: "Soul Tag" },
+		abilities: { 0: "Soul Cremation" },
 		heightm: 2.5,
 		weightkg: 69.6,
 		color: "Black",
@@ -14268,7 +14268,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Normal"],
 		genderRatio: { M: 0.125, F: 0.875 },
 		baseStats: { hp: 86, atk: 68, def: 72, spa: 109, spd: 66, spe: 116 },
-		abilities: { 0: "Fire Mane", 1: "Supreme Overlord", H: "Competitive" },
+		abilities: { 0: "Fire Mane", 1: "Royal Decree", H: "Competitive" },
 		heightm: 1.5,
 		weightkg: 81.5,
 		color: "Brown",
@@ -15071,7 +15071,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 95, atk: 65, def: 65, spa: 110, spd: 130, spe: 60 },
-		abilities: { 0: "Competitive", 1: "Friend Guard", H: "Pixilate" },
+		abilities: { 0: "Competitive", 1: "Soothing Presence", H: "Pixilate" },
 		heightm: 1,
 		weightkg: 23.5,
 		color: "Pink",
@@ -18490,7 +18490,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Barraskewda",
 		types: ["Water"],
 		baseStats: { hp: 61, atk: 123, def: 60, spa: 60, spd: 50, spe: 136 },
-		abilities: { 0: "Swift Swim", H: "Propeller Tail" },
+		abilities: { 0: "Swift Swim", H: "Breakwater" },
 		heightm: 1.3,
 		weightkg: 30,
 		color: "Brown",
@@ -19369,7 +19369,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Dragapult",
 		types: ["Dragon", "Ghost"],
 		baseStats: { hp: 88, atk: 120, def: 75, spa: 100, spd: 75, spe: 142 },
-		abilities: { 0: "Clear Body", 1: "Infiltrator", H: "Stalwart" },
+		abilities: { 0: "Clear Body", 1: "Infiltrator", H: "Dreepy Vanguard" },
 		heightm: 3,
 		weightkg: 50,
 		color: "Green",
@@ -19972,7 +19972,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy", "Poison"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 90, atk: 50, def: 110, spa: 100, spd: 105, spe: 77 },
-		abilities: { 0: "Unaware", 1: "Misty Surge", H: "Flash Fire" },
+		abilities: { 0: "Unaware", 1: "Misty Surge", H: "Venom Canticle" },
 		heightm: 1.6,
 		weightkg: 326.5,
 		color: "Purple",
@@ -23990,4 +23990,55 @@ for (const [id, abilities] of Object.entries({
  cinderace: {1: 'Set Piece'}, inteleon: {H: 'Calculated Shot'}, meowscarada: {0: 'False Bouquet'},
 })) {
  Object.assign(Pokedex[id as ID].abilities, abilities);
+}
+
+// Verified artwork-only counterparts. Resolve after every roster update so skins
+// cannot retain stale slots. Do not infer this from isCosmeticForme: several
+// regional/custom gameplay forms use that flag too. Preserve skin transform routes.
+const cosmeticBattleCounterparts: {[id: string]: string} = {
+  "charizardalt": "charizard",
+  "charizardmegaxalt": "charizardmegax",
+  "arcaninealt": "arcanine",
+  "alakazamalt": "alakazam",
+  "alakazammegaalt": "alakazammega",
+  "machampalt": "machamp",
+  "machampgmaxalt": "machampgmax",
+  "jynxalt": "jynx",
+  "laprasazzy": "lapras",
+  "eeveestarteralt": "eeveestarter",
+  "typhlosionalt": "typhlosion",
+  "crobatalt": "crobat",
+  "lanturnalt": "lanturn",
+  "gardevoirmegaalt": "gardevoirmega",
+  "gastrodonazzy": "gastrodon",
+  "gastrodonazzy2": "gastrodon",
+  "galladeazzy": "gallade",
+  "gallademegaazzy": "gallademega",
+  "serperiorazzy": "serperior",
+  "emboaralt": "emboar",
+  "emboarmegaalt": "emboarmega",
+  "samurottalt": "samurott",
+  "samurotthisuialt": "samurotthisui",
+  "scolipedeazzy": "scolipede",
+  "scolipedemegaazzy": "scolipedemega",
+  "jellicentazzy": "jellicent",
+  "goodrahisuialt": "goodrahisui",
+  "decidueyealt": "decidueye",
+  "decidueyehisuialt": "decidueyehisui",
+  "incineroaralt": "incineroar",
+  "primarinaalt": "primarina",
+  "tsareenaalt": "tsareena",
+  "grimmsnarlazzy": "grimmsnarl",
+  "grimmsnarlgmaxazzy": "grimmsnarlgmax",
+  "skeledirgealt": "skeledirge",
+  "gligaralt": "gligar",
+  "gliscoralt": "gliscor"
+};
+for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)) {
+	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;
+	const counterpart = Pokedex[counterpartId as ID] as import('../sim/dex-species').SpeciesData;
+	skin.types = [...counterpart.types];
+	skin.baseStats = {...counterpart.baseStats};
+	skin.abilities = {...counterpart.abilities};
+	if (counterpart.canGigantamax) Object.assign(skin, {canGigantamax: counterpart.canGigantamax});
 }

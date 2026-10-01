@@ -86,16 +86,19 @@ describe('Future attack queue and RKS Memory audit regressions', () => {
 	});
 
 	for (const ability of ['Perfect Foresight', 'Grandmaster']) {
-		it(`resolves every ${ability} retaliation in the queue`, () => {
+		it(`resolves one capped ${ability} special retaliation independently of Future Sight`, () => {
 			singles([{ species: 'Alakazam', ability, moves: ['splash'] }],
-				[{ species: 'Blissey', ability: 'No Ability', moves: ['tackle', 'splash'] }]);
-			const hits = watchFutureHits();
-			battle.makeChoices('move splash', 'move tackle');
-			battle.makeChoices('move splash', 'move tackle');
-			assert.equal(battle.p2.slotConditions[0].futuremove.perfectForesightQueued, 2);
-			for (let turn = 3; turn <= 8; turn++) battle.makeChoices('move splash', 'move splash');
-			assert.equal(hits.length, 2);
+				[{ species: 'Blissey', ability: 'No Ability', moves: ['flamethrower', 'splash'] }]);
+			let hits = 0;
+			battle.onEvent('AfterDamageApplied', battle.format, (damage, target, source, move) => {
+				if (move.foresightStored) hits++;
+			});
+			battle.makeChoices('move splash', 'move flamethrower');
+			assert.equal(battle.field.pseudoWeather.foresightmemory.entries.length, 1);
 			assert.equal(battle.p2.slotConditions[0].futuremove, undefined);
+			for (let turn = 2; turn <= 6; turn++) battle.makeChoices('move splash', 'move splash');
+			assert.equal(hits, 1);
+			assert.equal(battle.field.pseudoWeather.foresightmemory, undefined);
 		});
 	}
 

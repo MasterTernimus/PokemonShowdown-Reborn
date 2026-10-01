@@ -32,16 +32,13 @@ describe('Perfect Foresight Insomnia', () => {
 			}
 		});
 	}
-	for (const trigger of ['DamagingHit', 'AfterMove', 'Future Sight']) {
-		it(`queues 90 BP Future Sight via ${trigger}`, () => {
-			const mon = start(), foe = battle.p2.active[0];
-			const move = battle.dex.getActiveMove('tackle');
-			if (trigger === 'DamagingHit') battle.singleEvent(trigger, mon.getAbility(), mon.abilityState, mon, foe, move, 10);
-			else if (trigger === 'AfterMove') battle.singleEvent(trigger, mon.getAbility(), mon.abilityState, mon, foe, move);
-			else battle.actions.useMove('futuresight', mon, foe);
-			assert.equal(foe.side.slotConditions[foe.position].futuremove.moveData.basePower, 90);
-		});
-	}
+	it('keeps manual Future Sight ordinary and independent of stored attacks', () => {
+		const mon = start(), foe = battle.p2.active[0];
+		battle.actions.useMove('futuresight', mon, {target: foe});
+		assert.equal(foe.side.slotConditions[foe.position].futuremove.moveData.basePower, 120);
+		assert(!foe.side.slotConditions[foe.position].futuremove.moveData.perfectForesight);
+		assert(!battle.field.pseudoWeather.foresightmemory);
+	});
 	it('retains its copied ability while preventing sleep and Yawn and curing existing sleep', () => {
 		const mon = start();
 		assert.equal(mon.m.perfectForesightAbility, 'pressure');
@@ -66,13 +63,13 @@ describe('Perfect Foresight Insomnia', () => {
 
 describe('Copied weather suppression', () => {
  for (const copier of ['Perfect Foresight', 'Royal Voice']) for (const copied of ['Cloud Nine', 'Air Lock']) {
-  it(copier + ' keeps ' + copied + ' active after its original holder leaves', () => {
+  it(copier + (copier === 'Royal Voice' ? ' does not copy ' : ' keeps ') + copied + ' after its original holder leaves', () => {
    const b=common.createBattle({formatid:'gen9nofieldsinglesgame'}, [[{species:'Alakazam',ability:copier,moves:['splash']}],[{species:'Golduck',ability:copied,moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}]]);
    try {
     b.makeChoices('team 1','team 12');const p=b.p1.active[0];
     b.field.setWeather('sunnyday',p);
     b.makeChoices('move splash','switch 2');
-    assert.equal(b.field.effectiveWeather(),'');
+    assert.equal(b.field.effectiveWeather(),copier === 'Royal Voice' ? 'sunnyday' : '');
     p.addVolatile('gastroacid',b.p2.active[0]);
     assert.equal(b.field.effectiveWeather(),'sunnyday');
     p.removeVolatile('gastroacid');
@@ -81,7 +78,7 @@ describe('Copied weather suppression', () => {
     b.p2.active[0].setAbility(copied);
     b.singleEvent('Start',p.getAbility(),p.abilityState,p);
     b.p2.active[0].setAbility('No Ability');
-    assert.equal(b.field.effectiveWeather(),'');
+    assert.equal(b.field.effectiveWeather(),copier === 'Royal Voice' ? 'sunnyday' : '');
     p.faint();b.faintMessages();
     assert.equal(b.field.effectiveWeather(),'sunnyday');
    } finally {b.destroy();}

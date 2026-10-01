@@ -11,7 +11,7 @@ function setup(ability, foeAbility = 'No Ability', species = 'Mew', moves = ['sp
 }
 describe('Composite and field audit fixes', () => {
  afterEach(() => { battle?.destroy(); battle = null; });
- for (const ability of ['Perfect Foresight', 'Royal Voice']) {
+ for (const ability of ['Perfect Foresight']) {
   it(ability + ' inherits copied Void Veil Levitate and respects suppression', () => {
    const p = setup(ability, 'Void Veil');
    assert.equal(p.m.perfectForesightAbility, 'voidveil');
@@ -23,6 +23,11 @@ describe('Composite and field audit fixes', () => {
    assert(!p.hasAbility('levitate')); assert(p.isGrounded());
   });
  }
+ it('Royal Voice does not copy Void Veil or gain its Levitate', () => {
+  const p = setup('Royal Voice', 'Void Veil');
+  assert.equal(p.m.perfectForesightAbility, undefined);
+  assert(!p.hasAbility('levitate')); assert(p.isGrounded());
+ });
  it('resolves nested components of a copied composite', () => {
   const p = setup('Perfect Foresight', 'Toxic Armor');
   assert(p.hasAbility('poisonheal'));

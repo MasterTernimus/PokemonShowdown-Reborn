@@ -360,6 +360,7 @@ export interface EventMethods {
 		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
 	) => number | boolean | null | void;
 	onAnyDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void;
+	onAfterDamageApplied?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyAfterDamageApplied?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyResidualHeal?: (this: Battle, amount: number, target: Pokemon, source: Pokemon, effect: Effect) => number | void;
 	onHeal?: (this: Battle, amount: number, target: Pokemon, source: Pokemon, effect: Effect) => void;

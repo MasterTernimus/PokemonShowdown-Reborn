@@ -199,6 +199,14 @@ export class BattleActions {
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
+		// These entry budgets belong to the Pokemon, not its replaceable AbilityState.
+		delete pokemon.m.seaRescuerUsed;
+		delete pokemon.m.dreepyVanguardUsed;
+		delete pokemon.m.groundingTailUsed;
+		delete pokemon.m.steelPlumageUsed;
+		delete pokemon.m.templeChimeUsed;
+		delete pokemon.m.solarBudSpent;
+		delete pokemon.m.dissonantEchoUsed;
 		pokemon.activeMoveActions = 0;
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
@@ -535,8 +543,9 @@ export class BattleActions {
 		move = this.battle.runEvent('ModifyType', pokemon, target, move, move);
 		move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
 		if (baseTarget !== move.target) {
-			// Adjust again
-			target = this.battle.getRandomTarget(pokemon, move);
+			// Heavy Artillery keeps the selected primary when it expands into a spread move.
+			target = move.heavyArtilleryPrimary ? this.battle.getAtSlot(move.heavyArtilleryPrimary) :
+				this.battle.getRandomTarget(pokemon, move);
 		}
 		if (!move || pokemon.fainted) {
 			return false;
@@ -1070,6 +1079,9 @@ export class BattleActions {
 		let successfulDualWieldHits = 0;
 		let moveDamage: (number | boolean | undefined)[] = [];
 		const originalMultihitTarget = targets.find(target => !!target) || null;
+		const twinStrike = ['twincannons', 'twinblades'].includes(move.multihitType || '');
+		// Snapshot identities: a switch-in must never inherit the second strike.
+		const twinStrikeFoes = twinStrike ? pokemon.foes().slice() : [];
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 
@@ -1077,8 +1089,20 @@ export class BattleActions {
 		let hit: number;
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
+			if (twinStrike && (!pokemon.hp || pokemon.fainted || !pokemon.isActive)) break;
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			(move as any).spilloverDamageModifier = undefined;
+			if (twinStrike && hit > 1 &&
+				(this.battle.gameType === 'freeforall' || !originalMultihitTarget?.hp)) {
+				const livingFoes = twinStrikeFoes.filter(foe => foe.isActive && !foe.isAlly(pokemon) &&
+					this.canChainHitTarget(foe, pokemon, move));
+				const otherFoes = livingFoes.filter(foe => foe !== originalMultihitTarget);
+				const candidates = otherFoes.length ? otherFoes : livingFoes;
+				if (!candidates.length) break;
+				targets = [this.battle.sample(candidates)];
+				damage = [0];
+				move.smartTarget = false;
+			}
 			if (hit > 1 && move.multihitType === 'dualwield' && !move.dualWieldFullPower && !(move as any).fallenStarSpread) {
 				const livingFoes = pokemon.foes().filter(foe => this.canChainHitTarget(foe, pokemon, move));
 				if (!livingFoes.length) break;
@@ -1203,7 +1227,7 @@ export class BattleActions {
 				}
 			}
 			this.battle.eachEvent('Update');
-			if (hit < targetHits && targets.every(target => !target?.hp)) {
+			if (!twinStrike && hit < targetHits && targets.every(target => !target?.hp)) {
 				const spilloverTarget = originalMultihitTarget && this.getMultihitSpilloverTarget(originalMultihitTarget, pokemon, move, hit + 1, targetHits);
 				if (spilloverTarget) {
 					targets = [spilloverTarget];
@@ -1223,6 +1247,11 @@ export class BattleActions {
 				hit++; // report the correct number of hits for multihit moves
 				break;
 			}
+		}
+		if (move.multihitType === 'starboxer' && pokemon.hp && !nullDamage) {
+			(move as any).starBoxerFinishing = true;
+			if ((move as any).starBoxerSelfTargets) this.selfDrops((move as any).starBoxerSelfTargets, pokemon, move, move);
+			if ((move as any).starBoxerSecondaryTargets) this.secondaries((move as any).starBoxerSecondaryTargets, pokemon, move, move);
 		}
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
@@ -1296,7 +1325,7 @@ export class BattleActions {
 	}
 
 	getMultihitSpilloverTarget(originalTarget: Pokemon, pokemon: Pokemon, move: ActiveMove, hit: number, targetHits: number) {
-		if (hit > targetHits) return null;
+		if (hit > targetHits || move.multihitType === 'starboxer') return null;
 		const parentalLike = ['parentalbond', 'hydrabond'].includes(move.multihitType || '');
 		if (!parentalLike && !move.multihit) return null;
 		if (this.battle.gameType === 'freeforall') {
@@ -1655,6 +1684,10 @@ export class BattleActions {
 		targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean
 	) {
+		if (move.multihitType === 'starboxer' && !(move as any).starBoxerFinishing) {
+			(move as any).starBoxerSelfTargets = targets;
+			return;
+		}
 		// Split-hit abilities split damage, not Armor Cannon's self-drop or other self effects.
 		if (['twincannons', 'twinblades'].includes(move.multihitType || '') && move.hit > 1) return;
 		for (const target of targets) {
@@ -1674,6 +1707,10 @@ export class BattleActions {
 	}
 	secondaries(targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSelf?: boolean) {
 		if (!moveData.secondaries) return;
+		if (move.multihitType === 'starboxer' && !(move as any).starBoxerFinishing) {
+			(move as any).starBoxerSecondaryTargets = targets;
+			return;
+		}
 		const hydraBondFollowUp = move.multihitType === 'hydrabond' && move.hit > 1;
 		for (const target of targets) {
 			if (target === false) continue;
@@ -1734,7 +1771,7 @@ export class BattleActions {
 		const item = pokemon.getItem();
 		if (!skipChecks) {
 			if (pokemon.gigantamax && pokemon.species.id === 'eeveegmax') return;
-			const maxGimmicks = 2;
+			const maxGimmicks = this.battle.gimmickLimit;
 			if (pokemon.side.gimmickCount >= maxGimmicks) return;
 			if (!item.zMove) return;
 			if (!this.isValidItemUser(pokemon, item.itemUser)) return;
@@ -1812,7 +1849,7 @@ export class BattleActions {
 			['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) &&
 			pokemon.ability === 'unstableevo'
 		) return;
-		const maxGimmicks = 2;
+		const maxGimmicks = this.battle.gimmickLimit;
 		if (pokemon.side.gimmickCount >= maxGimmicks ||
 			(pokemon.transformed &&
 				(pokemon.species.forme === 'Mega' || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))
@@ -2140,6 +2177,7 @@ export class BattleActions {
 		const type = move.type;
 
 		baseDamage += 2;
+		if (move.multihitType === 'starboxer') baseDamage = this.battle.modify(baseDamage, 0.4);
 
 		let ffaFollowUpAttack = false;
 		if (move.spreadHit) {
@@ -2220,6 +2258,9 @@ export class BattleActions {
 
 		// types
 		let typeMod = target.runEffectiveness(move);
+		if ((move as any).dissonantEchoTarget === target && pokemon.hasAbility('dissonantecho') && typeMod < 0) {
+			typeMod = 0;
+		}
 		typeMod = this.battle.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
@@ -2286,6 +2327,10 @@ export class BattleActions {
 			}
 			this.battle.add('-zbroken', target);
 		}
+
+		// Splash is half this target's otherwise-calculated damage, after its own defenses.
+		if (this.battle.gameType === 'freeforall' && move.heavyArtilleryPrimary &&
+			target.getSlot() !== move.heavyArtilleryPrimary) baseDamage = this.battle.modify(baseDamage, 0.5);
 
 		// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
 		if (this.battle.gen !== 5 && !baseDamage) return 1;
@@ -2454,7 +2499,7 @@ export class BattleActions {
 	}
 
 	refreshMegaOptions(pokemon: Pokemon) {
-		const canUseAnotherGimmick = pokemon.side.gimmickCount < 2 &&
+		const canUseAnotherGimmick = pokemon.side.gimmickCount < this.battle.gimmickLimit &&
 			(this.battle.gameType !== 'freeforall' || pokemon.side.megaEvoCount < 2);
 		pokemon.canMegaEvo = canUseAnotherGimmick ? this.canMegaEvo(pokemon) : false;
 		pokemon.canMegaEvoX = canUseAnotherGimmick ? this.canMegaEvoX(pokemon) : false;

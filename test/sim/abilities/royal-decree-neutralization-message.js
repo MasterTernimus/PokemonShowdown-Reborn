@@ -7,7 +7,6 @@ describe('Royal Decree and Neutralization messages', function () {
 	const royalUsers = [
 		{species: 'Tsareena', ability: 'Empress'},
 		{species: 'Nidoking', ability: 'Royal Decree'},
-		{species: 'Pyroar-Mega', ability: 'Royal Sun', item: 'Pyroarite'},
 	];
 
 	for (const royalUser of royalUsers) {
