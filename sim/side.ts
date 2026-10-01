@@ -124,6 +124,7 @@ export interface DynamaxOptions {
 	gigantamax?: string;
 }
 export interface SideRequestData {
+	gimmicks?: { id: SideID, name: string, used: number, limit: number }[];
 	name: string;
 	/** Side ID (`p1`, `p2`, `p3`, or `p4`), not the ID of the side's name. */
 	id: SideID;
@@ -355,6 +356,10 @@ export class Side {
 			name: this.name,
 			id: this.id,
 			pokemon: [] as PokemonSwitchRequestData[],
+			gimmicks: this.battle.dex.currentMod === 'base' && !this.battle.format.name.includes('Multi 1v2') ?
+				this.battle.sides.map(side => ({
+					id: side.id, name: side.name, used: side.gimmickCount, limit: this.battle.gimmickLimit,
+				})) : undefined,
 		};
 		for (const pokemon of this.pokemon) {
 			data.pokemon.push(pokemon.getSwitchRequestData(forAlly));
@@ -517,6 +522,17 @@ export class Side {
 	}
 
 	emitRequest(update: ChoiceRequest = this.activeRequest!, updatedRequest = false) {
+		if (update && 'active' in update && this.gimmickCount >= this.battle.gimmickLimit) {
+			for (const pokemon of update.active) {
+				delete pokemon.canMegaEvo;
+				delete pokemon.canMegaEvoX;
+				delete pokemon.canMegaEvoY;
+				delete pokemon.canUltraBurst;
+				delete pokemon.canZMove;
+				delete pokemon.canDynamax;
+				delete pokemon.canTerastallize;
+			}
+		}
 		if (updatedRequest) (this.activeRequest as MoveRequest | SwitchRequest).update = true;
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
@@ -807,7 +823,7 @@ export class Side {
 		if (moveSlot === undefined) {
 			throw new Error(`moveSlot should have been set by this point`);
 		}
-		const maxGimmicks = 2;
+		const maxGimmicks = this.battle.gimmickLimit;
 		const pendingGimmicks = this.choice.actions.reduce((total, action) => {
 			return total + (action.mega || action.megax || action.megay ? 1 : 0) + (action.dynamax ? 1 : 0) +
 				(action.zmove ? 1 : 0) + (action.terastallize ? 1 : 0);

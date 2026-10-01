@@ -994,7 +994,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']));
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree']));
 				if (decree) {
 					this.add('-fail', source, 'move: Aurora Veil', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
@@ -7302,21 +7302,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 		ignoreImmunity: true,
 		onTry(source, target) {
+			const doomWarning = source.hasAbility('doomwarning') && !source.hasAbility(['perfectforesight', 'grandmaster']);
 			const existingFutureMove = target.side.slotConditions[target.position]['futuremove'];
-			if (existingFutureMove && source.hasAbility(['perfectforesight', 'grandmaster', 'doomwarning'])) {
-				if (source.hasAbility('perfectforesight') && existingFutureMove.moveData?.perfectForesight) {
-					existingFutureMove.perfectForesightQueued = (existingFutureMove.perfectForesightQueued || 1) + 1;
-					this.add('-start', source, 'move: Future Sight', '[from] ability: Perfect Foresight', '[silent]');
-					this.add('-message', `Perfect Foresight queued another Future Sight after turn ${existingFutureMove.endingTurn}.`);
-					return this.NOT_FAIL;
-				}
-				if (source.hasAbility('grandmaster') && existingFutureMove.moveData?.grandmasterForesight) {
-					existingFutureMove.perfectForesightQueued = (existingFutureMove.perfectForesightQueued || 1) + 1;
-					this.add('-start', source, 'move: Future Sight', '[from] ability: Grandmaster', '[silent]');
-					this.add('-message', `Grandmaster queued another Future Sight after turn ${existingFutureMove.endingTurn}.`);
-					return this.NOT_FAIL;
-				}
-				if (source.hasAbility('doomwarning') && existingFutureMove.moveData?.perfectForesight) {
+			if (existingFutureMove && doomWarning) {
+				if (doomWarning && existingFutureMove.moveData?.perfectForesight) {
 					existingFutureMove.perfectForesightQueued = (existingFutureMove.perfectForesightQueued || 1) + 1;
 					const queuedTurn = existingFutureMove.endingTurn + existingFutureMove.perfectForesightQueued - 1;
 					this.add('-start', source, 'move: Future Sight', '[from] ability: Doom Warning', '[silent]');
@@ -7345,9 +7334,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					type: 'Psychic',
 				},
 			});
-			if (source.hasAbility(['perfectforesight', 'doomwarning'])) {
+			if (doomWarning) {
 				const futureMove = target.side.slotConditions[target.position]['futuremove'];
-				futureMove.moveData.basePower = source.hasAbility('perfectforesight') ? 90 : 60;
+				futureMove.moveData.basePower = 60;
 				futureMove.moveData.ignoreAbility = true;
 				futureMove.moveData.ignoreDefensive = true;
 				futureMove.moveData.ignoreImmunity = true;
@@ -7358,12 +7347,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return typeMod;
 				};
 				futureMove.perfectForesightQueued = 1;
-				this.add('-message', `${source.hasAbility('doomwarning') ? 'Doom Warning' : 'Perfect Foresight'}'s Future Sight will strike on turn ${futureMove.endingTurn}.`);
-			} else if (source.hasAbility('grandmaster')) {
-				const futureMove = target.side.slotConditions[target.position]['futuremove'];
-				futureMove.moveData.grandmasterForesight = true;
-				futureMove.perfectForesightQueued = 1;
-				this.add('-message', `Grandmaster's Future Sight will strike on turn ${futureMove.endingTurn}.`);
+				this.add('-message', `${doomWarning ? 'Doom Warning' : 'Perfect Foresight'}'s Future Sight will strike on turn ${futureMove.endingTurn}.`);
 			}
 			this.add('-start', source, 'move: Future Sight');
 			return this.NOT_FAIL;
@@ -11788,7 +11772,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']));
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree']));
 				if (decree) {
 					this.add('-fail', source, 'move: Light Screen', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
@@ -17049,7 +17033,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side, source) {
-				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree', 'royalsun']));
+				const decree = this.getAllActive().find(pokemon => pokemon.hasAbility(['royaldecree']));
 				if (decree) {
 					this.add('-fail', source, 'move: Reflect', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
@@ -24858,3 +24842,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 
 
 
+
+// Observe successful protection without changing any protection condition's result.
+// Detect shares Protect's condition; Endure does not block an attack and is excluded.
+for (const id of ['protect', 'banefulbunker', 'burningbulwark', 'kingsshield', 'matblock',
+	'obstruct', 'quickguard', 'silktrap', 'spikyshield', 'wideguard', 'maxguard'] as const) {
+	const condition = Moves[id].condition;
+	const original = condition?.onTryHit;
+	if (!condition || typeof original !== 'function') continue;
+	condition.onTryHit = function (target: Pokemon, source: Pokemon, move: ActiveMove) {
+		const result = original.call(this, target, source, move);
+		if (result === this.NOT_FAIL && this.gameType === 'freeforall' && move.category !== 'Status' &&
+			target.hp && !target.isAlly(source) && target.hasAbility('lifeguard') &&
+			!target.volatiles['lifeguardguard']) {
+			if (target.addVolatile('lifeguardguard', target, this.dex.abilities.get('lifeguard'))) {
+				this.add('-activate', target, 'ability: Life Guard');
+			}
+		}
+		return result;
+	};
+}

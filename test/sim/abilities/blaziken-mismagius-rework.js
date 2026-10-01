@@ -28,7 +28,7 @@ describe('Blazing Tempo, Hex Bound, and Shadow Tag rework', () => {
 		assert.equal(mon.boosts.spe, 1);
 	});
 
-	it('gives Mismagius Hex Bound trapping and Prankster without summoning Haunted Field', () => {
+	it('gives Mismagius Hex Bound earned trapping, Prankster and Cursed Body without Haunted Field', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Mismagius', ability: 'Hex Bound', moves: ['splash']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}, {species: 'Ditto', ability: 'No Ability', moves: ['splash']}],
@@ -37,11 +37,12 @@ describe('Blazing Tempo, Hex Bound, and Shadow Tag rework', () => {
 		const mon = battle.p1.active[0], foe = battle.p2.active[0];
 		assert.equal(mon.species.abilities[0], 'Void Veil');
 		assert.equal(mon.species.abilities.H, 'Hex Bound');
-		assert(mon.hasAbility('shadowtag'));
+		assert(!mon.hasAbility('shadowtag'));
+		assert(mon.hasAbility('cursedbody'));
 		assert(mon.hasAbility('prankster'));
 		assert.equal(battle.runEvent('ModifyPriority', mon, foe, battle.dex.getActiveMove('willowisp'), 0), 1);
-		assert.equal(battle.runEvent('SourceModifyDamage', mon, foe, battle.dex.getActiveMove('tackle'), 100), 75);
-		assert.trapped(() => battle.makeChoices('move splash', 'switch 2'), true);
+		assert.equal(battle.runEvent('SourceModifyDamage', mon, foe, battle.dex.getActiveMove('tackle'), 100), 100);
+		assert.doesNotThrow(() => battle.makeChoices('move splash', 'switch 2'));
 		mon.faint();
 		battle.faintMessages();
 		assert.equal(battle.field.terrain, '');

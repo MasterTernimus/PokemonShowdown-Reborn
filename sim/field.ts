@@ -326,7 +326,7 @@ export class Field {
 				const ability = pokemon.getAbility();
 				if (ability.suppressWeather) return true;
 				if (ability.id === 'rkssystem' && pokemon.hasAbility('airlock')) return true;
-				if (['perfectforesight', 'royalvoice'].includes(ability.id) &&
+				if (['perfectforesight'].includes(ability.id) &&
 					pokemon.m.perfectForesightAbility && !pokemon.m.perfectForesightAbilityState?.ending &&
 					this.battle.dex.abilities.get(pokemon.m.perfectForesightAbility).suppressWeather) return true;
 			}
@@ -600,6 +600,12 @@ export class Field {
 		const prevTerrainState = this.terrainState;
 		const zMoveTerrain = !!prevTerrainState.zMoveTerrain;
 		const gardenBase = this.isFlowerGardenBase();
+		const riftGardenTransition = !!prevTerrainState.riftGarden && gardenTransition &&
+			(/^flowergarden[1-5]$/.test(status.id) || status.id === 'burningterrain');
+		const oldGardenStage = /^flowergarden[1-5]$/.test(prevTerrain) ? Number(prevTerrain.slice(-1)) : 0;
+		const newGardenStage = /^flowergarden[1-5]$/.test(status.id) ? Number(status.id.slice(-1)) : 0;
+		const riftGrowthTurns = riftGardenTransition && oldGardenStage && newGardenStage ?
+			Math.max(0, newGardenStage - oldGardenStage) : 0;
 		const underlyingTerrain = status.id === 'icyterrain' &&
 			['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain) ? this.terrain : undefined;
 		this.terrain = status.id;
@@ -608,12 +614,13 @@ export class Field {
 			terrainChanges: new Map<string, number>(),
 			terrain_type: prevTerrainState.terrain_type,
 			origin: sourceEffect,
-			duration: prevTerrainState.zMoveExpired ? 1 : prevTerrainState.duration,
+			duration: prevTerrainState.zMoveExpired ? 1 : (prevTerrainState.duration === undefined ? undefined : prevTerrainState.duration + riftGrowthTurns),
 			durationUpdatedTurn: prevTerrainState.durationUpdatedTurn ?? this.battle.turn - 1,
 			permanent: !prevTerrainState.zMoveExpired && !!prevTerrainState.permanent,
 			turn: this.battle.turn,
 			prevTerrain: prevTerrainState.id,
 			gardenBase,
+			...(riftGardenTransition ? {riftGarden: true} : {}),
 			...(gardenTransition && status.id === 'burningterrain' ? {
 				gardenBurnStage: Number(prevTerrain.slice(-1)), gardenBurnTurns: 0,
 			} : {}),
@@ -630,7 +637,8 @@ export class Field {
 			this.terrainState = prevTerrainState;
 			return false;
 		}
-		if (prevTerrainState.terrain_type === 'Base') {
+		// Rift Garden stages share one lifetime instead of stacking obsolete stages.
+		if (prevTerrainState.terrain_type === 'Base' || prevTerrainState.riftGarden) {
 			this.terrainStack[0] = this.terrainState;
 		} else {
 			this.terrainStack.unshift(this.terrainState);

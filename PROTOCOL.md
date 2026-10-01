@@ -504,3 +504,69 @@ details about how to convert and read this format, see [sim/TEAMS.md](./sim/TEAM
 If you're not using JavaScript and don't want to reimplement these conversions,
 [Pokémon Showdown's command-line client](./COMMANDLINE.md) can convert between
 packed teams and JSON using standard IO.
+
+### Local challenge battle options
+
+The legacy challenge command accepts optional challenge-local restrictions:
+`/challenge USER, FORMAT, false, weather=raindance;gimmicks=1`.
+The boolean is the existing official-match flag. Either option may be omitted;
+omitting both preserves format defaults. Custom-rule commas remain part of FORMAT.
+
+`weather` accepts `raindance`, `sunnyday`, `sandstorm`, or `hail` in the base Gen 9
+engine. Initialization uses `Field.setWeather`, including the normal field,
+duration, and subsequent weather-change rules. Unsupported weather and fields
+that prohibit weather are rejected.
+
+`gimmicks` accepts integer 0, 1, or 2: a shared allowance **per trainer**, capped at
+the engine's existing two uses. This does not override individual mechanic bans,
+requirements, FFA Mega caps, or Multi Gigantamax restrictions. Solo Multi 1v2
+custom allowances are unsupported because one person controls two engine sides.
+
+The server stores a validated snapshot on the challenge, includes its description
+in challenge/invite messages before acceptance, and passes it through battle
+creation. Reciprocal challenges with different options do not auto-accept.
+Settings do not change user/global battle defaults.
+
+`/cmd challengeoptions FORMAT` returns `|queryresponse|challengeoptions|JSON`
+with `{format, weather, gimmicks}`. Each option is an empty string when supported,
+or a human-readable reason when unavailable, derived from the same validator used
+when creating challenges. Clients disable unavailable controls, clear selections
+when the format changes, and ignore replies for another format. Format defaults
+remain available while support is being checked.
+
+For supported base-engine trainer modes, `request.side.gimmicks` contains an
+array of `{id, name, used, limit}` for each trainer. Remaining uses are
+`max(0, limit - used)`. These counters come from simulator side state, including
+switch/wait requests and reconnect requests; consumers must tolerate their
+absence in older servers and unsupported modes.
+
+Supported battles also emit public `|gimmickcount|SIDE|USED|LIMIT` snapshots at
+battle start and immediately when a use is consumed, including the winning turn.
+They contain no team, item, ability, or pending-choice information. Clients should
+reconstruct these counts from the battle log when reconnecting or seeking a replay,
+using request counters only as a compatibility fallback when public snapshots are absent.
+Starting-weather overrides are rejected for random-field formats because their
+possible fields include ones that prohibit weather; format defaults remain available.
+
+### Custom engine calculator
+
+`/cmd customcalc REQUESTID [JSON]` returns `|queryresponse|customcalc|JSON` with the
+same alphanumeric request ID (maximum 40 characters). Omit JSON for supported
+formats, auras, assumptions and the compiled engine hash. The paired client opens
+this calculator from its main menu; the existing external `/calc` command remains
+unchanged. A calculation accepts only the scenario fields documented by
+`sim/custom-calculator.ts`; it does not accept serialized battle state.
+
+Each request runs in a fresh child process, with at most two workers, 512 MB V8
+heap per worker, a 15-second timeout, a 16,000-character input limit, and a
+one-second per-user request cooldown. Results identify the compiled engine build.
+Rebuild the server after source/data changes; subsequent requests load that build.
+A build changing during a calculation causes a retry error.
+
+Results are reproducible sampled **single-action observations**, including random
+hits, critical hits and redirects. They are not exhaustive damage bounds or exact
+KO probabilities. Entry effects run; HP/stages are then applied. Prior turns,
+consumed items, copied abilities, stored moves and other historical state cannot
+be imported. Opponent actions, residual damage and delayed hits are not resolved.
+Hypothetical sets are supported without team-legality validation. Full fields and
+temporary auras remain distinct and use the custom engine's compatibility rules.

@@ -113142,3 +113142,7 @@ for (const species of DELUGE_TM_SPECIES) {
 	const learnset = (Learnsets as any)[species].learnset;
 	if (!learnset.deluge?.includes('9M')) learnset.deluge = [...(learnset.deluge || []), '9M'];
 }
+
+// Approved support coverage. Cosmetic forms inherit the same effective pools.
+Learnsets.maractus.learnset!.rapidspin = ['9L1'];
+Learnsets.lumineon.learnset!.haze = ['9L1'];

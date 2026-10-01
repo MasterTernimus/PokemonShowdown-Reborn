@@ -15,10 +15,40 @@
 
 /* eslint no-else-return: "error" */
 import { Utils, ProcessManager } from '../../lib';
+import { queryCalculator } from '../custom-calculator';
 import type { UserSettings } from '../users';
+import { describeChallengeOptions, validateChallengeOptions, type ChallengeOptions } from '../../sim/challenge-options';
 import type { GlobalPermission, RoomPermission } from '../user-groups';
 
+const calculatorRequests = new WeakMap<User, number>();
 export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
+	challengeoptions(target, user, trustable) {
+		if (!trustable || target.length > 2000) return null;
+		try {
+			const format = Dex.formats.get(Dex.formats.validate(target));
+			const reason = (options: ChallengeOptions) => {
+				try { validateChallengeOptions(options, format); return ''; } catch (error) {
+					return (error as Error).message;
+				}
+			};
+			return { format: target, weather: reason({ weather: 'raindance' }), gimmicks: reason({ gimmicks: 1 }) };
+		} catch {
+			return { format: target, weather: 'Select a supported format.', gimmicks: 'Select a supported format.' };
+		}
+	},
+	customcalc(target, user, trustable) {
+		const envelope = /^([a-z0-9]{1,40})(?: (.*))?$/.exec(target);
+		const requestId = envelope?.[1];
+		const payload = envelope ? envelope[2] || '' : target;
+		const respond = (result: unknown) => ({ ...(result as object), requestId });
+		if (!trustable) return respond({ error: 'Calculator unavailable during emergency restrictions.' });
+		const now = Date.now();
+		if (now - (calculatorRequests.get(user) || 0) < 1000) {
+			return respond({ error: 'Please wait a second between calculator requests.' });
+		}
+		calculatorRequests.set(user, now);
+		return queryCalculator(payload).then(respond);
+	},
 	userdetails(target, user, trustable) {
 		if (target.length > 18) {
 			return null;
@@ -1227,7 +1257,7 @@ export const commands: Chat.ChatCommands = {
 			Ladders.challenges.add(
 				new Ladders.BattleInvite(user.id, targetUser.id, ready, room.official, {
 					acceptCommand: `/acceptbattle ${user.id}`,
-					message: `You're invited to join a battle (with ${playerNames})`,
+					message: `You're invited to join a battle (with ${playerNames}). ${describeChallengeOptions(battle.options.challengeOptions)}`,
 					roomid: room.roomid,
 				})
 			);
@@ -1512,10 +1542,10 @@ export const commands: Chat.ChatCommands = {
 	chall: 'challenge',
 	challenge(target, room, user, connection) {
 		const { targetUser, targetUsername, rest: format } = this.splitUser(target);
-		const formatArgs = format.split(", ");
-		const formatName = formatArgs[0];
-
-		const isOfficial = formatArgs[1];
+		const formatMatch = /^(.*), (true|false)(?:, (.*))?$/.exec(format);
+		const formatName = formatMatch ? formatMatch[1] : format;
+		const isOfficial = formatMatch?.[2];
+		const optionsText = formatMatch?.[3];
 		if (!targetUser?.connected) {
 			return this.popupReply(this.tr`The user '${targetUsername}' was not found.`);
 		}
@@ -1533,7 +1563,19 @@ export const commands: Chat.ChatCommands = {
 			this.popupReply(this.tr`This server requires you to be rank ${groupName} or higher to challenge users.`);
 			return false;
 		}
-		return Ladders(formatName).makeChallenge(connection, targetUser, isOfficial !== 'false');
+		const options: ChallengeOptions = {};
+		if (optionsText) {
+			const seen = new Set<string>();
+			for (const entry of optionsText.split(';')) {
+				const [key, value, extra] = entry.split('=');
+				if (extra !== undefined || seen.has(key)) return this.popupReply('Malformed challenge options.');
+				seen.add(key);
+				if (key === 'weather' && value) options.weather = value;
+				else if (key === 'gimmicks' && /^[0-2]$/.test(value)) options.gimmicks = Number(value);
+				else return this.popupReply('Unsupported challenge option or value.');
+			}
+		}
+		return Ladders(formatName).makeChallenge(connection, targetUser, isOfficial !== 'false', options);
 	},
 	challengehelp: [
 		`/challenge [user], [format] - Challenges the given [user] to a battle in the given [format].`,

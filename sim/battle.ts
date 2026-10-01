@@ -16,6 +16,7 @@
  */
 
 import { Dex, toID } from './dex';
+import { validateChallengeOptions, type ChallengeOptions } from './challenge-options';
 import { Teams } from './teams';
 import { Field } from './field';
 import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';
@@ -60,6 +61,7 @@ export function extractChannelMessages<T extends ChannelID | -1>(message: string
 }
 
 interface BattleOptions {
+	challengeOptions?: ChallengeOptions;
 	format?: Format;
 	formatid: ID;
 	/** Output callback */
@@ -108,6 +110,8 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
 export class Battle {
+	readonly challengeOptions: Readonly<ChallengeOptions>;
+	readonly gimmickLimit: number;
 	readonly id: ID;
 	readonly debugMode: boolean;
 	readonly forceRandomChance: boolean | null;
@@ -200,6 +204,8 @@ export class Battle {
 
 		const format = options.format || Dex.formats.get(options.formatid, true);
 		this.format = format;
+		this.challengeOptions = validateChallengeOptions(options.challengeOptions, format);
+		this.gimmickLimit = this.challengeOptions.gimmicks ?? 2;
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(format);
@@ -285,9 +291,12 @@ export class Battle {
 
 		this.send = options.send || (() => {});
 
-		const inputOptions: { formatid: ID, seed: PRNGSeed, rated?: string | true } = {
+		const inputOptions: {
+			formatid: ID, seed: PRNGSeed, rated?: string | true, challengeOptions?: Readonly<ChallengeOptions>,
+		} = {
 			formatid: options.formatid, seed: this.prngSeed,
 		};
+		if (Object.keys(this.challengeOptions).length) inputOptions.challengeOptions = this.challengeOptions;
 		if (this.rated) inputOptions.rated = this.rated;
 		if (typeof __version !== 'undefined') {
 			if (__version.head) {
@@ -597,7 +606,7 @@ export class Battle {
 				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
 					const stateTarget = handler.state.target;
 					if (
-						['perfectforesight', 'royalvoice'].includes(stateTarget.ability) &&
+						['perfectforesight'].includes(stateTarget.ability) &&
 						stateTarget.m.perfectForesightAbility === effect.id
 					) {
 						expectedStateLocation = stateTarget.m.perfectForesightAbilityState;
@@ -921,6 +930,10 @@ export class Battle {
 			}
 			const effect = handler.effect;
 			const effectHolder = handler.effectHolder;
+			// Stored Foresight uses its real owner for attribution, but carries no owner ability/item procs.
+			// Retaliation has its own source effect, so the owner's defensive effects still apply normally.
+			if ((sourceEffect as any)?.foresightStored && effectHolder === source &&
+				(effect.effectType === 'Ability' || effect.effectType === 'Item')) continue;
 			// this.debug('match ' + eventid + ': ' + status.id + ' ' + status.effectType);
 			if (effect.effectType === 'Status' && (effectHolder as Pokemon).status !== effect.id) {
 				// it's changed; call it off
@@ -1220,7 +1233,7 @@ export class Battle {
 			}, callbackName));
 		}
 		if (
-			['perfectforesight', 'royalvoice'].includes(ability.id) && callbackName !== 'onSwitchIn' &&
+			['perfectforesight'].includes(ability.id) && callbackName !== 'onSwitchIn' &&
 			pokemon.m.perfectForesightAbility && pokemon.m.perfectForesightAbility !== ability.id
 		) {
 			const copiedAbility = this.dex.abilities.get(pokemon.m.perfectForesightAbility);
@@ -2925,6 +2938,8 @@ export class Battle {
 			}
 
 			this.add('start');
+			for (const side of this.sides) this.addGimmickCounter(side);
+			if (this.challengeOptions.weather) this.field.setWeather(this.challengeOptions.weather);
 
 			for (const pokemon of this.getAllPokemon()) {
 				this.singleEvent('BattleStart', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
@@ -3704,13 +3719,19 @@ export class Battle {
 		}
 	}
 
+	/** Public counts reveal only a trainer's already-used mechanics and agreed cap. */
+	addGimmickCounter(side: Side) {
+		if (this.dex.currentMod !== 'base' || this.gen !== 9 || this.format.name.includes('Multi 1v2')) return;
+		this.add('gimmickcount', side.id, side.gimmickCount, this.gimmickLimit);
+	}
+
 	useGimmick(pokemon: Pokemon, gimmick: Gimmick): boolean {
 		const originalSpecies = toID(pokemon.set.species);
 		if (
 			['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) &&
 			pokemon.ability === 'unstableevo'
 		) return false;
-		const maxGimmicks = 2;
+		const maxGimmicks = this.gimmickLimit;
 		if (pokemon.side.gimmickCount >= maxGimmicks) {
 			return false;
 		}
@@ -3749,6 +3770,7 @@ export class Battle {
 			}
 			pokemon.canUltraBurst = null;
 			pokemon.side.gimmickCount++;
+			this.addGimmickCounter(pokemon.side);
 			if (gimmick === 'Gigantamax') {
 				pokemon.side.dynamaxUsed = true;
 			} else if (gimmick === 'Mega') {

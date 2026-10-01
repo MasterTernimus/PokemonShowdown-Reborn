@@ -289,6 +289,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	dualWieldBoosted?: boolean;
 	fallenStarFollowUp?: boolean;
 	fullDamageSpread?: boolean;
+	heavyArtilleryPrimary?: PokemonSlot;
 	hydraBondSingleTargetSpread?: boolean;
 	hydraBondSpread?: boolean;
 	parentalBondSpread?: boolean;

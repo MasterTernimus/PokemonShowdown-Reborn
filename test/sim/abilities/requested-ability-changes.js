@@ -196,7 +196,7 @@ describe('Requested ability changes', () => {
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const aurorus = battle.p1.active[0];
-		assert.equal(aurorus.side.sideConditions.auroraveil.duration, 5);
+		assert.equal(aurorus.side.sideConditions.auroraveil, undefined);
 		aurorus.faint();
 		battle.faintMessages();
 		assert.equal(battle.field.terrain, 'fairytaleterrain');

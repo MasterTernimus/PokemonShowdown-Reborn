@@ -1,6 +1,28 @@
+import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	vanguardlaststand: {
+		name: 'Vanguard Last Stand',
+		noCopy: true,
+		onStart(pokemon) {
+			this.effectState.turn = this.turn;
+			this.add('-activate', pokemon, 'ability: Vanguard');
+		},
+		onDamagePriority: -100,
+		onDamage(damage, target) {
+			if (this.effectState.turn === this.turn && damage >= target.hp) return target.hp - 1;
+		},
+		onResidualOrder: 1000,
+		onResidual(pokemon) {
+			if (this.turn > this.effectState.turn) pokemon.removeVolatile('vanguardlaststand');
+		},
+	},
+	foresightmemory: {
+		name: 'Foresight Memory',
+		onFieldResidualOrder: -100,
+		onFieldResidual() { resolveForesight(this); },
+	},
 	megaenergy: {
 		name: 'Mega Energy',
 	},
@@ -41,6 +63,28 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onFieldResidualOrder: 27,
 		onFieldResidualSubOrder: 8,
 		onFieldResidual() { this.field.tickAura(); },
+	},
+	soulsiphonblock: {
+		name: 'Soul Siphon Block',
+		duration: 2,
+		noCopy: true,
+		onStart(pokemon) { this.add('-start', pokemon, 'move: Heal Block', '[from] ability: Soul Siphon'); },
+		onRestart() { this.effectState.duration = 2; },
+		onDisableMove(pokemon) {
+			for (const slot of pokemon.moveSlots) {
+				if (this.dex.moves.get(slot.id).flags['heal']) pokemon.disableMove(slot.id);
+			}
+		},
+		onBeforeMovePriority: 6,
+		onBeforeMove(pokemon, target, move) {
+			if (move.flags['heal'] && !move.isZ && !move.isMax) {
+				this.add('cant', pokemon, 'move: Heal Block', move);
+				return false;
+			}
+		},
+		onTryHeal() { return false; },
+		onResidualOrder: 28,
+		onEnd(pokemon) { this.add('-end', pokemon, 'move: Heal Block'); },
 	},
 	ghostresistance: {
 		name: 'Ghost Resistance',
@@ -416,6 +460,49 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(target) {
 			this.add('-activate', target, 'trapped');
 		},
+	},
+	lifeguardguard: {
+		name: 'lifeguardguard',
+		duration: 2,
+		noCopy: true,
+		onDamagePriority: -1,
+		onDamage(damage, target, source, effect) {
+			if (damage <= 0 || !source || source.isAlly(target) || effect?.effectType !== 'Move' ||
+				(effect as ActiveMove).category === 'Status') return;
+			target.removeVolatile('lifeguardguard');
+			return this.modify(damage, 0.75);
+		},
+		onResidualOrder: 100,
+	},
+	breakwaterspent: {
+		name: 'breakwaterspent',
+		noCopy: true,
+	},
+	mythicscalespent: {
+		name: 'mythicscalespent',
+		noCopy: true,
+	},
+	hexboundtrap: {
+		name: 'hexboundtrap',
+		duration: 2,
+		noCopy: true,
+		onStart(target, source) {
+			if (!source?.hp || !source.isActive || !target.runStatusImmunity('trapped') || target.hasItem('shedshell')) return false;
+			this.add('-activate', target, 'trapped', '[from] ability: Hex Bound', '[of] ' + source);
+		},
+		onTrapPokemon(pokemon) {
+			if (this.effectState.source?.hp && this.effectState.source.isActive) pokemon.tryTrap();
+			else pokemon.removeVolatile('hexboundtrap');
+		},
+		onResidualOrder: 100,
+	},
+	hexboundanchor: {
+		name: 'hexboundanchor',
+		noCopy: true,
+	},
+	hexboundspent: {
+		name: 'Hex Bound Spent',
+		noCopy: true,
 	},
 	apexflytraptrapped: {
 		name: 'Apex Flytrap Trapped',
