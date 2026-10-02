@@ -27,7 +27,7 @@ describe('Simple [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should double the effect of stat boosts', function () {
+	common.itGen(4, 'should double the effect of stat boosts', function () {
 		battle = common.gen(4).createBattle([
 			[{species: "Bibarel", ability: 'simple', moves: ['defensecurl']}],
 			[{species: "Gyarados", ability: 'moxie', moves: ['splash']}],
@@ -37,7 +37,7 @@ describe('Simple [Gen 4]', function () {
 		assert.statStage(target, 'def', 1);
 	});
 
-	it('should double the effect of stat boosts passed by Baton Pass', function () {
+	common.itGen(4, 'should double the effect of stat boosts passed by Baton Pass', function () {
 		battle = common.gen(4).createBattle([
 			[{species: "Sableye", ability: 'prankster', moves: ['batonpass']}, {species: "Bibarel", ability: 'simple', moves: ['protect']}],
 			[{species: "Gyarados", ability: 'intimidate', moves: ['splash']}],
@@ -48,7 +48,7 @@ describe('Simple [Gen 4]', function () {
 		assert.equal(battle.p1.active[0].getStat('atk'), Math.floor(0.5 * battle.p1.active[0].getStat('atk', true)));
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	common.itGen(4, 'should be suppressed by Mold Breaker', function () {
 		battle = common.gen(4).createBattle([
 			[{species: "Bibarel", ability: 'simple', moves: ['defensecurl']}],
 			[{species: "Haxorus", ability: 'moldbreaker', item: 'laggingtail', moves: ['earthquake']}],

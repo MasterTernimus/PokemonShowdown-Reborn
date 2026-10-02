@@ -26,8 +26,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	anomalycore: {
 		name: "Anomaly Core",
 		spritenum: 0,
-		megaStone: {Hypno: "Hypno-Pulse", Lilligant: "Lilligant-Rift", "Lilligant-Hisui": "Lilligant-Hisui-Rift", Muk: "Muk-Pulse", "Muk-Alola": "Muk-Pulse", Hippowdon: "Hippowdon-Rift", Torterra: "Torterra-Rift"},
-		itemUser: ["Hypno", "Lilligant", "Lilligant-Hisui", "Muk", "Muk-Alola", "Hippowdon", "Torterra"],
+		megaStone: {Camerupt: "Camerupt-Pulse", Swalot: "Swalot-Pulse", Hypno: "Hypno-Pulse", Lilligant: "Lilligant-Rift", "Lilligant-Hisui": "Lilligant-Hisui-Rift", Muk: "Muk-Pulse", "Muk-Alola": "Muk-Pulse", Hippowdon: "Hippowdon-Rift", Torterra: "Torterra-Rift", Avalugg: "Avalugg-Pulse", "Avalugg-Hisui": "Avalugg-Pulse", Magnezone: "Magnezone-Pulse", "Mr. Mime": "Mr. Mime-Pulse"},
+		itemUser: ["Camerupt", "Swalot", "Hypno", "Lilligant", "Lilligant-Hisui", "Muk", "Muk-Alola", "Hippowdon", "Torterra", "Avalugg", "Avalugg-Hisui", "Magnezone", "Mr. Mime"],
 		num: 2662,
 		gen: 9,
 		desc: "If held by a designated Pulse or Rift Pokemon, this Anomaly Core allows it to undergo its Pulse or Rift Evolution in battle.",

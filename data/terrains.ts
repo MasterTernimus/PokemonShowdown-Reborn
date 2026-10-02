@@ -1927,7 +1927,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const currentCount = this.field.terrainState.terrainChanges?.get('icyHotWater') ?? this.field.terrainState.terrainChanges?.get('previousTerrain') ?? 0;
 				const stackedUnderlyingTerrain = this.field.terrainStack[1]?.id;
 				const underlyingTerrain = this.field.terrainState.underlyingTerrain || stackedUnderlyingTerrain || this.field.terrainState.prevTerrain;
-				const restoreTerrain = (fallback: ID) => {
+				const restoreTerrain = (fallback: IDEntry) => {
 					if (underlyingTerrain === 'mistyterrain') {
 						for (const side of this.sides) side.addSideCondition('spikes', source);
 					}

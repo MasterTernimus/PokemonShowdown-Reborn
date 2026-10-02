@@ -1,4 +1,4 @@
-import {MoveCounter, TeamData, RandomGen8Teams} from '../gen8/random-teams';
+import {MoveCounter, TeamData, RandomGen8Teams} from '../../legacy-gen8/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -200,7 +200,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				}
 			}
 			// Moves with secondary effects:
-			if (move.secondary || move.hasSheerForce) {
+			if (move.secondary || move.hasSheerForceBoost) {
 				counter.add('sheerforce');
 				if (sereneGraceBenefits(move)) {
 					counter.add('serenegrace');
@@ -665,7 +665,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker', 'Z-Move user'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value?.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -702,7 +702,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return moves;
 	}
 
-	shouldCullAbility(
+	override shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -821,7 +821,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 	}
 
 
-	getAbility(
+	override getAbility(
 		types: Set<string>,
 		moves: Set<string>,
 		abilities: Set<string>,
@@ -1102,7 +1102,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return 'Leftovers';
 	}
 
-	getLevel(species: Species): number {
+	override getLevel(species: Species): number {
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
 		if (this.gen >= 3) {
@@ -1134,7 +1134,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return 80;
 	}
 
-	randomSet(
+	override randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
@@ -1288,10 +1288,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		};
 	}
 
-	randomTeam() {
-		this.enforceNoDirectCustomBanlisterrainChanges();
+	override randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
@@ -1454,9 +1454,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (item.megaStone || species.name === 'Rayquaza-Mega') hasMega = true;
 				if (item.zMove) teamDetails.zMove = 1;
 				if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails.hail = 1;
-				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails.rain = 1;
+				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !['redorb', 'blueorb'].includes(item.id)) teamDetails.rain = 1;
 				if (set.ability === 'Sand Stream') teamDetails.sand = 1;
-				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !item.onPrimal) teamDetails.sun = 1;
+				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !['redorb', 'blueorb'].includes(item.id)) teamDetails.sun = 1;
 				if (set.moves.includes('spikes')) teamDetails.spikes = (teamDetails.spikes || 0) + 1;
 				if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
 				if (set.moves.includes('stickyweb')) teamDetails.stickyWeb = 1;
@@ -1475,9 +1475,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
+	override randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
-	randomFactorySet(
+	override randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
 	): RandomTeamsTypes.RandomFactorySet | null {
 		const id = toID(species.name);
@@ -1597,8 +1597,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		};
 	}
 
-	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
-		this.enforceNoDirectCustomBanlisterrainChanges();
+	override randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
+		this.enforceNoDirectCustomBanlistChanges();
 
 		const forceResult = (depth >= 12);
 		const isMonotype = !!this.forceMonotype || this.dex.formats.getRuleTable(this.format).has('sametypeclause');
@@ -1690,7 +1690,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (isMonotype) {
 				// Prevents Mega Evolutions from breaking the type limits
 				if (itemData.megaStone) {
-					const megaSpecies = this.dex.species.get(itemData.megaStone);
+					const megaSpecies = this.dex.species.get(itemData.megaStone[species.name] || itemData.megaStone[species.baseSpecies] || species.name);
 					if (types.length > megaSpecies.types.length) types = [species.types[0]];
 					// Only check the second type because a Mega Evolution should always share the first type with its base forme.
 					if (megaSpecies.types[1] && types[1] && megaSpecies.types[1] !== types[1]) {
@@ -1794,9 +1794,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
+	override randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
 
-	randomBSSFactorySet(
+	override randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails
 	): RandomTeamsTypes.RandomFactorySet | null {
 		const id = toID(species.name);
@@ -1886,8 +1886,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		};
 	}
 
-	randomBSSFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
-		this.enforceNoDirectCustomBanlisterrainChanges();
+	override randomBSSFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
+		this.enforceNoDirectCustomBanlistChanges();
 
 		const forceResult = (depth >= 4);
 

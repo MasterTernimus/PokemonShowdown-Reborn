@@ -25,12 +25,12 @@ export interface SpeciesData extends Partial<Species> {
 	eggGroups: string[];
 	weightkg: number;
 }
-export interface CosmeticFormeData {
+export interface CosmeticFormeData extends Partial<Mutable<Species>> {
 	isCosmeticForme: boolean;
 	name: string;
 	baseSpecies: string;
 	forme: string;
-	color: string;
+	color?: string;
 }
 
 export type ModdedSpeciesData = SpeciesData | CosmeticFormeData |
@@ -197,6 +197,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly canHatch: boolean;
 	/** True if this species is a purely cosmetic forme. */
 	readonly isCosmeticForme: boolean;
+	declare readonly forceTeraType?: string;
 	/**
 	 * Gender. M = always male, F = always female, N = always
 	 * genderless, '' = sometimes male sometimes female.

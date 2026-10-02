@@ -80,7 +80,7 @@ async function updateLevels(database: SQL.DatabaseManager) {
 }
 
 if (global.Config && Config.usesqlite && Config.usesqliteleveling) {
-	const database = SQL(module, {file: './databases/battlestats.db'});
+	const database = SQL('cg-teams-level-updater', module, {file: './databases/battlestats.db'});
 
 	// update every 2 hours
 	void updateLevels(database);
@@ -878,7 +878,7 @@ export default class TeamGenerator {
 
 		const totalWeight = weights.reduce((a, b) => a + b, 0);
 
-		let randomWeight = this.prng.next(0, totalWeight);
+		let randomWeight = this.prng.random(0, totalWeight);
 		for (let i = 0; i < choices.length; i++) {
 			randomWeight -= weights[i];
 			if (randomWeight < 0) {
@@ -893,6 +893,6 @@ export default class TeamGenerator {
 	}
 
 	setSeed(seed: PRNGSeed) {
-		this.prng.seed = seed;
+		this.prng.setSeed(seed);
 	}
 }

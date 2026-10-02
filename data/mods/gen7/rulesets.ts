@@ -1,3 +1,4 @@
+import type {ModdedFormatData} from '../../../sim/dex-formats';
 export const Rulesets: {[k: string]: ModdedFormatData} = {
 	standard: {
 		inherit: true,

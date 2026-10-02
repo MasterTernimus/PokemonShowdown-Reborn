@@ -19,15 +19,15 @@ describe('Flower Gift', function () {
 			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']},
 		]]);
 
-		const cherAtk = battle.p1.active[0].getStat('atk');
-		const cherSpd = battle.p1.active[0].getStat('spd');
+		// The custom Sunshine form also changes Cherrim's base stats.
+		const cherrim = battle.p1.active[0];
 		const baseAtk = battle.p1.active[1].getStat('atk');
 		const baseSpd = battle.p1.active[1].getStat('spd');
 
 		// Set the weather to sun and re-check
 		battle.field.setWeather('sunnyday', 'debug');
-		assert.equal(battle.p1.active[0].getStat('atk'), battle.modify(cherAtk, 1.5));
-		assert.equal(battle.p1.active[0].getStat('spd'), battle.modify(cherSpd, 1.5));
+		assert.equal(battle.p1.active[0].getStat('atk'), battle.modify(cherrim.storedStats.atk, 1.5));
+		assert.equal(battle.p1.active[0].getStat('spd'), battle.modify(cherrim.storedStats.spd, 1.5));
 		assert.equal(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
@@ -42,20 +42,20 @@ describe('Flower Gift', function () {
 		]]);
 
 		battle.makeChoices('move transform 1, move healbell', 'move healbell, move healbell');
-		const cherAtk = battle.p1.active[0].getStat('atk');
-		const cherSpd = battle.p1.active[0].getStat('spd');
+		// The custom Sunshine form also changes Cherrim's base stats.
+		const cherrim = battle.p1.active[0];
 		const baseAtk = battle.p1.active[1].getStat('atk');
 		const baseSpd = battle.p1.active[1].getStat('spd');
 
 		// Set the weather to sun and re-check
 		battle.field.setWeather('sunnyday', 'debug');
-		assert.equal(battle.p1.active[0].getStat('atk'), battle.modify(cherAtk, 1.5));
-		assert.equal(battle.p1.active[0].getStat('spd'), battle.modify(cherSpd, 1.5));
+		assert.equal(battle.p1.active[0].getStat('atk'), battle.modify(cherrim.storedStats.atk, 1.5));
+		assert.equal(battle.p1.active[0].getStat('spd'), battle.modify(cherrim.storedStats.spd, 1.5));
 		assert.equal(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
-	it(`should not trigger if the Pokemon was KOed`, function () {
+	common.itGen(8, `should not trigger if the Pokemon was KOed`, function () {
 		// TODO: Is this interaction possible in Gen 9?
 		battle = common.gen(8).createBattle([[
 			{species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk']},

@@ -42,13 +42,13 @@ describe('Composite and field audit fixes', () => {
    assert.equal(p.getStat('spe'), speed * 2);
   });
  }
- for (const endure of [true, false]) {
-  it('Solar Trap retaliates only after a knockout; Endure=' + endure, () => {
+	for (const endure of [true, false]) {
+	 it('Solar Trap no longer has Innards Out; Endure=' + endure, () => {
    const p = setup('Solar Trap', 'No Ability', 'Victreebel-Mega', ['splash', 'endure']);
    const foe = battle.p2.active[0]; const hp = foe.hp; p.hp = 50;
    battle.makeChoices(endure ? 'move endure' : 'move splash', 'move seismictoss');
    assert.equal(p.hp, endure ? 1 : 0);
-   assert.equal(hp - foe.hp, endure ? 0 : 50);
+	   assert.equal(hp - foe.hp, 0);
   });
  }
  for (const ability of ['Sirius', 'Whiplash']) {

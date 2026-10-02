@@ -3,7 +3,7 @@ const {SQL} = require('../../dist/lib/sql');
 const assert = require('../assert').strict;
 const common = require('../common');
 
-const database = SQL(module, {file: `:memory:`, processes: 1});
+const database = SQL('test-sql', module, {file: `:memory:`});
 
 (common.hasModule('better-sqlite3') ? describe : describe.skip)(`SQLite worker wrapper`, () => {
 	// prepare statements and set up table
@@ -14,11 +14,7 @@ const database = SQL(module, {file: `:memory:`, processes: 1});
 		insert = await database.prepare(`INSERT INTO test (col, col2) VALUES (?, ?)`);
 	});
 	it(`should require you to prepare a statement before running`, async () => {
-		database.get('SELECT col FROM test').then(() => {
-			assert(false, 'expected error');
-		}).catch(() => {
-			assert(true, 'received error');
-		});
+		await assert.rejects(database.get('SELECT col FROM test'));
 	});
 	it(`should support both statement strings and corresponding statement classes`, async () => {
 		await database.run(`INSERT INTO test (col, col2) VALUES (?, ?)`, ['a', 'b']);

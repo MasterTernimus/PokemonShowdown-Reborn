@@ -1,4 +1,4 @@
-import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from '../gen8/random-teams';
+import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from '../../legacy-gen8/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -110,7 +110,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		};
 	}
 
-	shouldCullMove(
+	override shouldCullMove(
 		move: Move,
 		types: Set<string>,
 		moves: Set<string>,
@@ -550,7 +550,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		return {cull: false};
 	}
 
-	shouldCullAbility(
+	override shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -679,7 +679,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 	}
 
 
-	getAbility(
+	override getAbility(
 		types: Set<string>,
 		moves: Set<string>,
 		abilities: Set<string>,
@@ -760,7 +760,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 	}
 
 	/** Item generation specific to Random Doubles */
-	getDoublesItem(
+	override getDoublesItem(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -979,7 +979,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		if (ability === 'Super Luck') return 'Scope Lens';
 	}
 
-	randomSet(
+	override randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false,
@@ -1351,10 +1351,10 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		};
 	}
 
-	randomTeam() {
-		this.enforceNoDirectCustomBanlisterrainChanges();
+	override randomTeam() {
+		this.enforceNoDirectCustomBanlistChanges();
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
@@ -1509,9 +1509,9 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 				if (item.megaStone || species.name === 'Rayquaza-Mega') hasMega = true;
 				if (item.zMove) teamDetails.zMove = 1;
 				if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails.hail = 1;
-				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails.rain = 1;
+				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !['redorb', 'blueorb'].includes(item.id)) teamDetails.rain = 1;
 				if (set.ability === 'Sand Stream') teamDetails.sand = 1;
-				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !item.onPrimal) teamDetails.sun = 1;
+				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !['redorb', 'blueorb'].includes(item.id)) teamDetails.sun = 1;
 				if (set.moves.includes('spikes')) teamDetails.spikes = (teamDetails.spikes || 0) + 1;
 				if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
 				if (set.moves.includes('stickyweb')) teamDetails.stickyWeb = 1;

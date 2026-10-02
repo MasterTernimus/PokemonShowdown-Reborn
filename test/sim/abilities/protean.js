@@ -101,7 +101,7 @@ describe('Protean', function () {
 	});
 
 	describe('Gen 6-8', function () {
-		it(`should activate on both turns of a charge move`, function () {
+		common.itGen(8, `should activate on both turns of a charge move`, function () {
 			battle = common.gen(8).createBattle([[
 				{species: 'Wynaut', ability: 'protean', moves: ['bounce']},
 			], [

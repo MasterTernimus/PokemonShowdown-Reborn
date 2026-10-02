@@ -14,9 +14,9 @@ describe('Ability chip type effectiveness by game type', function () {
 		battle?.destroy();
 	});
 
-	it('scales Wildfire Core against weaknesses and resistances in Free-for-All only', function () {
+	it('scales Unbound Blaze against weaknesses and resistances in Free-for-All only', function () {
 		battle = common.createBattle({formatid: 'gen9freeforall4pfactoryfield'}, [
-			[{species: 'Charizard', ability: 'wildfirecore', moves: ['tailwind']}],
+			[{species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind']}],
 			[{species: 'Scizor', moves: ['splash']}],
 			[{species: 'Swampert', moves: ['splash']}],
 			[{species: 'Arcanine', moves: ['splash']}],
@@ -30,9 +30,9 @@ describe('Ability chip type effectiveness by game type', function () {
 		assert.equal(arcanine.hp, before[2]);
 	});
 
-	it('keeps Wildfire Core fixed in singles and doubles', function () {
+	it('keeps Unbound Blaze fixed in singles and doubles', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Charizard', ability: 'wildfirecore', moves: ['tailwind']}],
+			[{species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind']}],
 			[{species: 'Scizor', moves: ['splash']}],
 		]);
 		if (battle.turn === 0) battle.makeChoices();
@@ -44,7 +44,7 @@ describe('Ability chip type effectiveness by game type', function () {
 
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
 			[
-				{species: 'Charizard', ability: 'wildfirecore', moves: ['tailwind']},
+				{species: 'Charizard', ability: 'unboundblaze', moves: ['tailwind']},
 				{species: 'Mew', moves: ['splash']},
 			],
 			[

@@ -60,7 +60,7 @@ describe('Intrepid Sword', function () {
 		assert.statStage(zacian, 'atk', 1);
 	});
 
-	it(`should be able to increase the user's Attack stat multiple times per game [Gen 8]`, function () {
+	common.itGen(8, `should be able to increase the user's Attack stat multiple times per game [Gen 8]`, function () {
 		battle = common.gen(8).createBattle([[
 			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},

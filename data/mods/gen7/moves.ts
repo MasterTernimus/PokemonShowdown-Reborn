@@ -1,3 +1,4 @@
+import type {ModdedMoveData} from '../../../sim/dex-moves';
 export const Moves: {[k: string]: ModdedMoveData} = {
 	"10000000voltthunderbolt": {
 		inherit: true,
@@ -470,7 +471,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).bypassProtect = true;
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');

@@ -117,7 +117,7 @@ describe('Cloud Nine', function () {
 
 	it(`should allow Hydration to trigger if the user fainted before Hydration could trigger`, function () {
 		battle = common.createBattle([[
-			{species: 'Toxapex', ability: 'cloudnine', moves: ['toxic', 'raindance', 'finalgambit']},
+			{species: 'Toxapex', level: 50, ability: 'cloudnine', moves: ['toxic', 'raindance', 'finalgambit']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
 			{species: 'Manaphy', ability: 'hydration', moves: ['sleeptalk']},

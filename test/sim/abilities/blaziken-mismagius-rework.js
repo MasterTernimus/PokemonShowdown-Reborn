@@ -63,13 +63,13 @@ describe('Blazing Tempo, Hex Bound, and Shadow Tag rework', () => {
 		}
 	});
 
-	it('replaces Victreebel Accumulation with Arena Trap', () => {
+	it('replaces Victreebel Accumulation with Digestive Sap', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Victreebel', ability: 'Arena Trap', moves: ['splash']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		assert.deepEqual(battle.dex.species.get('Victreebel').abilities, {
-			0: 'Chlorophyll', 1: 'Arena Trap', H: 'Gluttony',
+			0: 'Chlorophyll', 1: 'Digestive Sap', H: 'Gluttony',
 		});
 	});
 });

@@ -35,7 +35,7 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onSourceModifyDamage);
 	});
 
-	it('should give Burning Crown Wildfire Core while retaining its hidden Filter hook', function () {
+	it('should give Burning Crown Unbound Blaze while retaining its hidden Filter hook', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('burningcrown');
 		assert(ability.onUpdate);
@@ -377,7 +377,7 @@ describe('Composite ability cleanup', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		assert(battle.dex.abilities.get('celestialheart').onModifyMove);
 		assert.equal(battle.dex.abilities.get('draconicforce').onModifyAtk, undefined);
-		assert.equal(battle.dex.abilities.get('dreadmaw').onStart, undefined);
+		assert.equal(typeof battle.dex.abilities.get('dreadmaw').onStart, 'function'); // Frisk
 		assert.equal(battle.dex.abilities.get('freezerburn').onWeather, undefined);
 		assert.equal(battle.dex.abilities.get('moonlitwings').onSetStatus, undefined);
 		assert.equal(battle.dex.abilities.get('doomwarning').onAfterMove, undefined);
@@ -404,7 +404,7 @@ describe('Composite ability cleanup', function () {
 			doomwarning: ['magicbounce', 'magicguard'],
 			draconicforce: ['dragonize', 'strongjaw', 'moldbreaker'],
 			tidaljaw: ['strongjaw', 'swiftswim', 'filter'],
-			dreadmaw: ['hugepower', 'strongjaw'],
+			dreadmaw: ['hugepower', 'frisk', 'invigorate'],
 			freezerburn: ['slushrush', 'refrigerate'],
 			furnaceengine: ['steamengine', 'flamebody', 'selfsufficient'],
 			hisuianoath: ['swornduty', 'toughclaws', 'corrosion'],
@@ -424,8 +424,8 @@ describe('Composite ability cleanup', function () {
 			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 			riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
 			perfectstriker: ['striker', 'noguard', 'libero', 'proficient'],
-			mossarmor: ['stamina', 'naturalrecovery', 'levitate'],
-		stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
+			mossarmor: ['stamina', 'naturalcure', 'levitate'],
+		stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
 		aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
 			aevianbolt: ['stormpower', 'static', 'voltabsorb'],
 			heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],

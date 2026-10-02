@@ -26,7 +26,7 @@ describe('Eevee and Eeveelution ability updates', () => {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const vaporeon = battle.p1.active[0];
-		for (const component of ['waterabsorb', 'hydration', 'regenerator', 'raindish']) {
+		for (const component of ['waterabsorb', 'hydration', 'raindish']) {
 			assert(vaporeon.hasAbility(component), component);
 		}
 		battle.damage(80, vaporeon);
@@ -63,7 +63,7 @@ describe('Eevee and Eeveelution ability updates', () => {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const flareon = battle.p1.active[0];
-		for (const component of ['fluffy', 'guts', 'flashfire', 'bruteforce']) {
+		for (const component of ['fluffy', 'guts', 'flashfire']) {
 			assert(flareon.hasAbility(component), component);
 		}
 		const hpBefore = flareon.hp;

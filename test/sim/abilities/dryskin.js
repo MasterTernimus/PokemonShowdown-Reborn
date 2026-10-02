@@ -47,9 +47,15 @@ describe('Dry Skin', function () {
 		], [
 			{species: 'Haxorus', ability: 'unnerve', moves: ['incinerate']},
 		]]);
+		battle.randomizer = damage => damage;
+		battle.onEvent('CriticalHit', battle.format, () => false);
+		const defender = battle.p1.active[0];
+		defender.setAbility('No Ability');
+		const unboosted = battle.actions.getDamage(battle.p2.active[0], defender, 'incinerate');
+		defender.setAbility('Dry Skin');
 		battle.makeChoices('move bulkup', 'move incinerate');
 		const damage = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
-		assert.bounded(damage, [51, 61]);
+		assert.bounded(damage / unboosted, [1.2, 1.3]);
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
@@ -58,10 +64,16 @@ describe('Dry Skin', function () {
 		], [
 			{species: 'Haxorus', ability: 'moldbreaker', moves: ['incinerate', 'surf']},
 		]]);
+		battle.randomizer = damage => damage;
+		battle.onEvent('CriticalHit', battle.format, () => false);
+		const defender = battle.p1.active[0];
+		defender.setAbility('No Ability');
+		const unboosted = battle.actions.getDamage(battle.p2.active[0], defender, 'incinerate');
+		defender.setAbility('Dry Skin');
 		battle.makeChoices('move bulkup', 'move incinerate');
 		const target = battle.p1.active[0];
 		const damage = target.maxhp - target.hp;
-		assert.bounded(damage, [41, 49]);
+		assert.equal(damage, unboosted);
 		assert.hurts(target, () => battle.makeChoices('move bulkup', 'move surf'));
 	});
 });

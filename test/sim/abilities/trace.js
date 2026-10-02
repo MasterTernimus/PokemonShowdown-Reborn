@@ -14,12 +14,12 @@ describe('Trace', function () {
 		battle = common.createBattle([[
 			{species: "Ralts", ability: 'trace', moves: ['sleeptalk']},
 		], [
-			{species: "Wynaut", ability: 'shadowtag', moves: ['sleeptalk']},
+			{species: "Wynaut", ability: 'pressure', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
 		const ralts = battle.p1.active[0];
-		assert.equal(ralts.ability, 'shadowtag');
+		assert.equal(ralts.ability, 'pressure');
 	});
 
 	it(`should delay copying the opponent's Ability if the initial Abilities could not be copied by Trace`, function () {
@@ -28,7 +28,7 @@ describe('Trace', function () {
 		], [
 			{species: "Arceus", ability: 'multitype', moves: ['sleeptalk']},
 			{species: "Aegislash", ability: 'stancechange', moves: ['sleeptalk']},
-			{species: "Wynaut", ability: 'shadowtag', moves: ['sleeptalk']},
+			{species: "Wynaut", ability: 'pressure', moves: ['sleeptalk']},
 		]]);
 
 		battle.makeChoices();
@@ -39,7 +39,7 @@ describe('Trace', function () {
 		assert.equal(ralts.ability, 'trace');
 
 		battle.makeChoices('auto', 'switch 3');
-		assert.equal(ralts.ability, 'shadowtag');
+		assert.equal(ralts.ability, 'pressure');
 	});
 
 	// see research: https://www.smogon.com/forums/threads/pokemon-sun-moon-battle-mechanics-research.3586701/post-7790209

@@ -44,7 +44,7 @@ describe('Ice Face', function () {
 		assert.species(transformedEiscue, 'Eiscue-Noice', `Transformed Eiscue should not have changed to Eiscue after hail was set`);
 	});
 
-	it(`should not trigger if the Pokemon was KOed by Max Hailstorm`, function () {
+	common.itGen(8, `should not trigger if the Pokemon was KOed by Max Hailstorm`, function () {
 		battle = common.gen(8).createBattle([[
 			{species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk']},
 		], [

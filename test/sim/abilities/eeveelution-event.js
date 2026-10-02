@@ -17,16 +17,16 @@ describe('Eeveelution event abilities', () => {
 			0: 'Z Protean', 1: 'Opportunist', H: 'Unstable Evo', S: 'Mind Freeze', E: 'Sinister Blaze', F: 'Eclipse', G: 'Ascendance',
 		});
 		assert.deepEqual(Dex.species.get('Umbreon').abilities, {
-			0: 'Poison Heal', 1: 'Inner Focus', H: 'Pressure', S: 'Eclipse', G: 'Ascendance',
+			0: 'Poison Heal', 1: 'Moonlight Vigil', H: 'Dark Aura', S: 'Eclipse', G: 'Ascendance',
 		});
 		assert.deepEqual(Dex.species.get('Umbreon-Perfect').abilities, {
-			0: 'Poison Heal', 1: 'Inner Focus', H: 'Pressure', S: 'Eclipse', G: 'Ascendance',
+			0: 'Poison Heal', 1: 'Moonlight Vigil', H: 'Dark Aura', S: 'Eclipse', G: 'Ascendance',
 		});
 		assert.deepEqual(Dex.species.get('Glaceon').abilities, {
 			0: 'Permafrost', 1: 'Slush Rush', H: 'Snow Warning', S: 'Mind Freeze',
 		});
 		assert.deepEqual(Dex.species.get('Espeon').abilities, {
-			0: 'Trace', 1: 'Magic Bounce', H: 'Telepathy', S: 'Mind Freeze', E: 'Eclipse',
+			0: 'Trace', 1: 'Astral Ward', H: 'Psychic Surge', S: 'Mind Freeze', E: 'Eclipse',
 		});
 	});
 

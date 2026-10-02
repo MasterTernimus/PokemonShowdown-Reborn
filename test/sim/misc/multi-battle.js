@@ -7,11 +7,11 @@ let battle;
 
 describe('Free-for-all', function () {
 	afterEach(function () {
-		battle.destroy();
+		battle?.destroy();
 	});
 
 	it(`should support forfeiting`, function () {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
+		battle = common.createBattle({formatid: 'gen9freeforall4pfactoryfield'}, [[
 			{species: 'wynaut', moves: ['vitalthrow']},
 		], [
 			{species: 'scyther', moves: ['sleeptalk']},
@@ -21,6 +21,7 @@ describe('Free-for-all', function () {
 		], [
 			{species: 'scyther', moves: ['sleeptalk']},
 		]]);
+		battle.makeChoices('team 1', 'team 1', 'team 1, 2', 'team 1');
 		battle.makeChoices();
 		battle.lose('p2');
 		assert(battle.p2.activeRequest.wait);

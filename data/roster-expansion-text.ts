@@ -49,7 +49,7 @@ Object.assign(RosterExpansionDescriptions, {
 	broodguard: 'Thick Fat + Friend Guard. Once per switch-in, when an adjacent ally survives an opposing hit that takes it from above half HP to half or less, this Pokemon gains +1 Defense.',
 	suncharm: 'Drought. Its first landed Fire hit each entry extends the sunlight it summoned by 1 turn, capped at 8 remaining turns. Once per entry, burning a foe also curses it: 1/8 maximum HP lost per turn under this server\'s ability-Curse rules. No HP cost to Ninetales.',
 	pollenengine: 'Chlorophyll. Once per turn, successfully hitting a foe with a powder move or damaging Grass move heals itself and adjacent allies by 1/16 maximum HP, or 1/8 in sunlight.',
-	titanpincer: 'Hyper Cutter. Crabhammer uses this Pokemon\'s Defense instead of Attack when its Defense is higher. Retains all Hyper Cutter effects.',
+	titanpincer: 'Hyper Cutter. Crabhammer and physical Steel-type moves use this Pokemon\'s Defense instead of Attack when its Defense is higher. Retains all Hyper Cutter effects.',
 	shellcracker: 'Crabhammer has 100% base accuracy and always critically hits, unless critical hits are prevented.',
 	tidaldominion: 'Swift Swim. Opponents with a lowered Speed stage cannot hit this Pokemon or its allies with priority moves. Pairs with G-Max Foam Burst\'s existing Speed drops.',
 	tempestfury: 'Surviving an opposing direct attack charges its next damaging Water move to critically hit. A landed Water hit spends the non-stacking charge; misses and Protect do not.',

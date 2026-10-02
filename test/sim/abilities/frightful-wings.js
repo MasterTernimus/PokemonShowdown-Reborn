@@ -1,0 +1,10 @@
+const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');
+describe('Approved Swellow and Masquerain',()=>{let b;afterEach(()=>b?.destroy());
+function setup(ability='No Ability'){b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Masquerain',ability:'Frightful Wings',moves:['watergun','splash']}],[{species:'Mew',ability,moves:['splash']}]]);b.makeChoices('team 1','team 1');return b.p1.active[0];}
+it('effective stats and approved hidden slot',()=>{assert.deepEqual(Dex.species.get('swellow').baseStats,{hp:75,atk:95,def:65,spa:100,spd:60,spe:135});const m=Dex.species.get('masquerain');assert.deepEqual(m.baseStats,{hp:80,atk:50,def:80,spa:110,spd:90,spe:100});assert.deepEqual(m.abilities,{0:'Frightful Wings',1:'Shield Dust',H:'Storm Drain'});});
+it('normal entry Intimidate and component identity',()=>{const p=setup();assert.equal(b.p2.active[0].boosts.atk,-1);assert(p.hasAbility('intimidate'));});
+for(const a of ['Scrappy','Clear Body','Inner Focus'])it('respects '+a,()=>{setup(a);assert.equal(b.p2.active[0].boosts.atk,0);});
+it('grants Water STAB without stacking or weakening stronger STAB',()=>{const p=setup(),t=b.p2.active[0],move=b.dex.getActiveMove('watergun');for(const [initial,expected] of [[1,1.5],[1.5,1.5],[2,2]])assert.equal(b.runEvent('ModifySTAB',p,t,move,initial),expected);assert.equal(b.runEvent('ModifySTAB',p,t,b.dex.getActiveMove('gust'),1.5),1.5);});
+it('raises actual Water damage while native Water STAB stays single',()=>{const p=setup(),t=b.p2.active[0];b.randomizer=x=>x;const move=b.dex.getActiveMove('watergun');move.willCrit=false;const damage=()=>b.actions.getDamage(p,t,move);const boosted=damage();p.setAbility('No Ability');const plain=damage();assert(boosted>plain*1.4);p.setType('Water');const water=damage();p.setAbility('Frightful Wings');assert.equal(damage(),water);});
+it('suppression disables the extra STAB',()=>{const p=setup();p.addVolatile('gastroacid');assert.equal(b.runEvent('ModifySTAB',p,b.p2.active[0],b.dex.getActiveMove('watergun'),1),1);});
+});

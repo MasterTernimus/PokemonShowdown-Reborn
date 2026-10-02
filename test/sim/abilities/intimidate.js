@@ -10,7 +10,7 @@ describe('Intimidate', function () {
 		battle.destroy();
 	});
 
-	it('should decrease Atk by 1 level', function () {
+	common.itGen(7, 'should decrease Atk by 1 level', function () {
 		battle = common.gen(7).createBattle([[
 			{species: "Smeargle", ability: 'owntempo', moves: ['sketch']},
 		], [
@@ -31,7 +31,7 @@ describe('Intimidate', function () {
 		assert.statStage(battle.p1.active[0], 'atk', 0);
 	});
 
-	it('should not activate if U-turn breaks the Substitute in Gen 4', function () {
+	common.itGen(4, 'should not activate if U-turn breaks the Substitute in Gen 4', function () {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: "Gengar", level: 1, item: 'leftovers', ability: 'levitate', moves: ['substitute']},
 			{species: "Suicune", level: 1, item: 'leftovers', ability: 'pressure', moves: ['substitute']},
@@ -54,7 +54,7 @@ describe('Intimidate', function () {
 		assert.statStage(battle.p1.active[1], 'atk', 0);
 	});
 
-	it('should affect adjacent foes only', function () {
+	common.itGen(5, 'should affect adjacent foes only', function () {
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: "Bulbasaur", item: 'leftovers', ability: 'overgrow', moves: ['vinewhip']},
 			{species: "Charmander", item: 'leftovers', ability: 'blaze', moves: ['ember']},

@@ -4,7 +4,7 @@ const common = require('../../common');
 let battle;
 describe('True Devotion', function () {
 	afterEach(() => battle?.destroy());
-	it('uses Protean on successive moves, Technician, and False Devotion effects', function () {
+	it('keeps its typing while using Technician and False Devotion effects', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Roserade-Mega', ability: 'True Devotion', moves: ['watergun', 'thundershock', 'growth']},
 			{species: 'Mew', moves: ['splash']},
@@ -19,9 +19,9 @@ describe('True Devotion', function () {
 		battle.singleEvent('ModifyMove', rose.getAbility(), rose.abilityState, move, rose);
 		assert.equal(move.secondaries[0].chance, 20);
 		battle.makeChoices('move watergun', 'move splash');
-		assert.deepEqual(rose.getTypes(), ['Water']);
+		assert.deepEqual(rose.getTypes(), ['Grass', 'Poison']);
 		battle.makeChoices('move thundershock', 'move splash');
-		assert.deepEqual(rose.getTypes(), ['Electric']);
+		assert.deepEqual(rose.getTypes(), ['Grass', 'Poison']);
 		battle.directDamage(100, rose);
 		rose.setStatus('par');
 		const hp = rose.hp;

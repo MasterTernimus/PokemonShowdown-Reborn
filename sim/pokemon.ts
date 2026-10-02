@@ -456,7 +456,7 @@ export class Pokemon {
 		this.storedStats = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		this.boosts = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0 };
 
-		this.baseAbility = toID(set.ability);
+		this.baseAbility = this.battle.dex.abilities.get(set.ability).id;
 		this.ability = this.baseAbility;
 		this.abilityState = this.battle.initEffectState({ id: this.ability, target: this });
 
@@ -1086,6 +1086,9 @@ export class Pokemon {
 			}
 			let target = moveSlot.target;
 			switch (moveSlot.id) {
+			case 'followme': case 'ragepowder':
+				target = this.battle.gameType === 'freeforall' ? 'normal' : 'self';
+				break;
 			case 'curse':
 				if (!this.hasType('Ghost')) {
 					target = this.battle.dex.moves.get('curse').nonGhostTarget;
@@ -1638,7 +1641,7 @@ export class Pokemon {
 	}
 
 	updateMaxHp(preserveRatio = false) {
-		const newBaseMaxHp = this.battle.statModify(this.species.baseStats, this.set, 'hp');
+		const newBaseMaxHp = this.species.maxHP || this.battle.statModify(this.species.baseStats, this.set, 'hp');
 		if (newBaseMaxHp === this.baseMaxhp) return;
 		this.baseMaxhp = newBaseMaxHp;
 		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
@@ -1871,7 +1874,12 @@ export class Pokemon {
 			!ignoreImmunities && !soulFireBurn && status.id && !(source?.hasAbility(['corrosion', 'ancientbloom']) && ['tox', 'psn'].includes(status.id))
 		) {
 			// the game currently never ignores immunities
-			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
+			const statusType = status.id === 'tox' ? 'psn' : status.id;
+			const bypassPoisonTyping = statusType === 'psn' && source?.hasAbility('debilitatingvenom') &&
+				this.getTypes().some(type => type === 'Steel' || type === 'Poison');
+			const statusAllowed = bypassPoisonTyping ?
+				this.battle.runEvent('Immunity', this, null, null, statusType) : this.runStatusImmunity(statusType);
+			if (!statusAllowed) {
 				this.battle.debug('immune to status');
 				if ((sourceEffect as Move)?.status) {
 					this.battle.add('-immune', this);

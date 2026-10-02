@@ -5,6 +5,21 @@ const assert = require('assert').strict;
 const {makeUser} = require('../users-utils');
 
 describe('Simulator abstraction layer features', function () {
+	it('creates unique battle room IDs that preserve each configured format ID', function () {
+		const {Formats} = require('../../dist/config/formats');
+		const state = {lastBattle: 0, writeNumRooms() {}};
+		const seen = new Set();
+		for (const entry of Formats) {
+			if (!entry.name) continue;
+			const format = Dex.formats.get(entry.name);
+			for (let i = 0; i < 2; i++) {
+				const id = Rooms.global.prepBattleRoom.call(state, format.id);
+				assert.equal(id.split('-')[1], format.id);
+				assert(!seen.has(id), id);
+				seen.add(id);
+			}
+		}
+	});
 	describe('Battle', function () {
 		let p1, p2, room;
 		afterEach(function () {
@@ -49,20 +64,22 @@ describe('Simulator abstraction layer features', function () {
 			assert.equal(PM.processes[0].getLoad(), 1);
 			stream.write(
 				'>version a2393dfd2a2da5594148bf99eea514e72b136c2c\n' +
-				'>start {"formatid":"gen8randombattle","seed":[9619,36790,28450,62465],"rated":"Rated battle"}\n' +
-				'>player p1 {"name":"p1","avatar":"ethan","team":"","rating":1507,"seed":[59512,58581,51338,7861]}\n' +
-				'>player p2 {"name":"p2","avatar":"dawn","team":"","rating":1447,"seed":[33758,53485,62378,29757]}\n'
+				'>start {"formatid":"gen9nofieldsinglesgame@@@!Team Preview","seed":[9619,36790,28450,62465],"rated":"Rated battle"}\n' +
+				'>player p1 {"name":"p1","avatar":"ethan","team":"Blissey||||splash|||||||","rating":1507,"seed":[59512,58581,51338,7861]}\n' +
+				'>player p2 {"name":"p2","avatar":"dawn","team":"Blissey||||splash|||||||","rating":1447,"seed":[33758,53485,62378,29757]}\n'
 			);
-			assert((await stream.read()).startsWith('sideupdate\np1\n|request|'));
-			assert((await stream.read()).startsWith('sideupdate\np2\n|request|'));
-			assert((await stream.read()).includes('|switch|'));
+			const initial = [await stream.read(), await stream.read(), await stream.read()];
+			assert(initial.some(message => message.startsWith('sideupdate\np1\n|request|')));
+			assert(initial.some(message => message.startsWith('sideupdate\np2\n|request|')));
+			assert(initial.some(message => message.includes('|switch|')));
 			stream.write(
 				'>p1 move 1\n' +
 				'>p2 move 1\n'
 			);
-			assert((await stream.read()).startsWith('sideupdate\np1\n|request|'));
-			assert((await stream.read()).startsWith('sideupdate\np2\n|request|'));
-			assert((await stream.read()).includes('|move|'));
+			const turn = [await stream.read(), await stream.read(), await stream.read()];
+			assert(turn.some(message => message.startsWith('sideupdate\np1\n|request|')));
+			assert(turn.some(message => message.startsWith('sideupdate\np2\n|request|')));
+			assert(turn.some(message => message.includes('|move|')));
 			stream.destroy();
 			assert.equal(PM.processes[0].getLoad(), 0);
 
@@ -70,9 +87,9 @@ describe('Simulator abstraction layer features', function () {
 			assert.equal(PM.processes[0].getLoad(), 1);
 			stream2.write(
 				'>version a2393dfd2a2da5594148bf99eea514e72b136c2c\n' +
-				'>start {"formatid":"gen8randombattle","seed":[9619,36790,28450,62465],"rated":"Rated battle"}\n' +
-				'>player p1 {"name":"p1","avatar":"ethan","team":"","rating":1507,"seed":[59512,58581,51338,7861]}\n' +
-				'>player p2 {"name":"p2","avatar":"dawn","team":"","rating":1447,"seed":[33758,53485,62378,29757]}\n' +
+				'>start {"formatid":"gen9nofieldsinglesgame@@@!Team Preview","seed":[9619,36790,28450,62465],"rated":"Rated battle"}\n' +
+				'>player p1 {"name":"p1","avatar":"ethan","team":"Blissey||||splash|||||||","rating":1507,"seed":[59512,58581,51338,7861]}\n' +
+				'>player p2 {"name":"p2","avatar":"dawn","team":"Blissey||||splash|||||||","rating":1447,"seed":[33758,53485,62378,29757]}\n' +
 				'>p1 move 1\n' +
 				'>p2 move 1\n'
 			);

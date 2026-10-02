@@ -1,5 +1,8 @@
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
+	savageresolve: ['guts'],
+	lancepoint: ['keeneye'],
+	anchoredbattery: ['megalauncher', 'suctioncups'],
 	shadowbond: ['battlebond', 'filter', 'selfsufficient', 'proficient', 'infiltrator'],
 	apexbond: ['battlebond', 'filter', 'selfsufficient', 'supremeoverlord', 'roughskin'],
 	sacredbond: ['battlebond', 'filter', 'selfsufficient', 'magmaarmor', 'intimidate', 'flashfire'],
@@ -26,7 +29,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	verdantsanctuary: ['grassysurge', 'invigorate', 'hospitality', 'friendguard'],
 	fortressshell: ['proficient'],
 	waterbarrage: ['proficient'],
-	wildfirecore: ['proficient'],
+	unboundblaze: ['proficient'],
 	pollenbloom: ['proficient', 'thickfat'],
 	ironclad: ['armorize'],
 	apexpredator: ['relicarmor', 'dragonize', 'windrider'],
@@ -150,7 +153,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 	doublestrike: ['ironfist', 'technician', 'skilllink'],
 	siegelauncher: ['stalwart', 'proficient'],
-	soulcremation: ['soulsiphon', 'flamebody'],
+	soulcremation: ['soulsiphon', 'soulpyre', 'malicewell', 'flamebody'],
+	malicewell: ['flamebody'],
 	soultag: ['soulfire', 'shadowtag', 'flamebody'],
 	deserttyrant: ['sandstream'],
 	desertspirit: ['levitate', 'sandstream', 'tintedlens'],
@@ -218,10 +222,10 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	seasonalstride: ['chlorophyll'],
 	slowclamp: ['shellarmor', 'owntempo', 'analytic', 'sweetveil'],
 	soaringspirit: ['windpower', 'selfsufficient'],
-	solartrap: ['accumulation', 'innardsout', 'solarpower'],
+	solartrap: ['accumulation', 'digestivesap', 'liquidooze'],
 	spiralevolution: ['adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
 	stormsovereign: ['galewings', 'keeneye'],
-	sunsovereign: ['drought', 'wildfirecore', 'selfsufficient', 'proficient'],
+	sunsovereign: ['drought', 'unboundblaze', 'selfsufficient', 'proficient'],
 	terraresolve: ['stamina', 'solidrock', 'proficient'],
 	primalego: ['unaware', 'proficient', 'ultraego', 'moldbreaker'],
 	toxicbloom: ['pollenbloom', 'selfsufficient', 'proficient', 'thickfat'],
@@ -236,14 +240,15 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	ragingstorm: ['moldbreaker', 'battlearmor'],
 	ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 	abysssniper: ['sniper', 'stalwart'],
-	atrocity: ['wildfirecore', 'selfsufficient', 'proficient', 'levitate'],
+	atrocity: ['unboundblaze', 'selfsufficient', 'proficient', 'levitate'],
 	streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
 	divineintervention: ['swornduty', 'friendguard', 'regenerator', 'fluffy'],
 	shadowguard: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
 	requiem: ['cursedbody'],
 	reapersgrip: ['unaware', 'darkaura', 'selfsufficient'],
 	pendulumswing: ['insomnia', 'filter'],
-	nightmarepulse: ['pendulumswing', 'cursedbody', 'baddreams', 'infiltrator'],
+	nightmarepulse: ['pendulumswing', 'cursedbody', 'baddreams'],
+	pulsetriad: ['hydrabond', 'levitate', 'clearbody'],
 	pulsewaste: ['protean', 'poisontouch', 'regenerator'],
 	rifteater: ['accumulation', 'sandstream'],
 	mountainrift: ['shellarmor', 'selfsufficient'],
@@ -545,3 +550,10 @@ Object.assign(AbilityComponents, {
 });
 
 Object.assign(AbilityComponents, {searescuer: [], dreepyvanguard: ['stalwart'], groundingtail: []});
+
+// Venom Veil forwards selected Corrosion hooks; this identity enables poison-status immunity bypass.
+AbilityComponents.venomveil = ['liquidooze', 'corrosion', 'waterveil'];
+
+AbilityComponents.frightfulwings = ['intimidate'];
+
+AbilityComponents.pulseeruption = ['sturdy'];

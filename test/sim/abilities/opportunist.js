@@ -41,6 +41,21 @@ describe("Opportunist", () => {
 		assert.statStage(battle.p1.active[0], 'atk', -1 + 6);
 	});
 
+	it("should not copy boosts back through an Opportunist composite or on later turns", () => {
+		battle = common.createBattle([[
+			{species: 'Mew', ability: 'Opportunist', moves: ['calmmind', 'splash']},
+		], [
+			{species: 'Mew', ability: 'Burning Spirit', moves: ['splash']},
+		]]);
+		battle.makeChoices('move calmmind', 'move splash');
+		battle.makeChoices('move splash', 'move splash');
+		for (const pokemon of battle.getAllActive()) {
+			assert.statStage(pokemon, 'spa', 1);
+			assert.statStage(pokemon, 'spd', 1);
+			assert.equal(pokemon.m.copyingOpportunistBoosts, undefined);
+		}
+	});
+
 	it("should copy every positive No Retreat boost through composite abilities", () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Infernape', item: 'Infernite', moves: ['sleeptalk']},

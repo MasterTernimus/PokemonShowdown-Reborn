@@ -31,7 +31,9 @@ describe('Flash Fire', function () {
 		]]);
 		const flashMon = battle.p1.active[0];
 		flashMon.setStatus('frz');
-		assert.false.hurts(flashMon, () => battle.makeChoices('move sleeptalk', 'move flareblitz'));
+		assert.hurtsBy(flashMon, Math.floor(flashMon.maxhp / 16), () => battle.makeChoices('move sleeptalk', 'move flareblitz'));
+		assert.equal(flashMon.status, 'frz');
+		assert(flashMon.volatiles.flashfire); // Only custom frostbite residual damage applied.
 	});
 
 	it('should have its Fire-type immunity suppressed by Mold Breaker', function () {
@@ -49,11 +51,17 @@ describe('Flash Fire', function () {
 		], [
 			{species: 'Talonflame', ability: 'shellarmor', moves: ['flamethrower', 'worryseed']},
 		]]);
+		battle.randomizer = damage => damage;
+		battle.onEvent('CriticalHit', battle.format, () => false);
+		const unboosted = battle.actions.getDamage(battle.p1.active[0], battle.p2.active[0], 'incinerate');
 		battle.makeChoices('move sleeptalk', 'move flamethrower');
+		assert(battle.p1.active[0].volatiles.flashfire);
 		battle.makeChoices('move incinerate', 'move worryseed');
 		const talonflame = battle.p2.active[0];
 		const damage = talonflame.maxhp - talonflame.hp;
-		assert.bounded(damage, [54, 65]);
+		assert.equal(damage, unboosted);
+		assert.equal(battle.p1.active[0].ability, 'insomnia');
+		assert(!battle.p1.active[0].volatiles.flashfire);
 	});
 });
 
@@ -62,7 +70,7 @@ describe('Flash Fire [Gen 3-4]', function () {
 		battle.destroy();
 	});
 
-	it('should activate and grant Fire-type immunity even if the user is frozen in Gen 3', function () {
+	common.itGen(3, 'should activate and grant Fire-type immunity even if the user is frozen in Gen 3', function () {
 		battle = common.gen(3).createBattle([[
 			{species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk']},
 		], [
@@ -74,7 +82,7 @@ describe('Flash Fire [Gen 3-4]', function () {
 		assert.notEqual(flashFireMon.hp, flashFireMon.maxhp);
 	});
 
-	it('should activate and grant Fire-type immunity even if the user is frozen in Gen 4', function () {
+	common.itGen(4, 'should activate and grant Fire-type immunity even if the user is frozen in Gen 4', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk']},
 		], [

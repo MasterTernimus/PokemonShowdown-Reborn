@@ -23,7 +23,7 @@ describe('Mega and G-Max component revisions', () => {
 			['Snorlax-Gmax', 'Mountain Hunger', ['sapsipper', 'thickfat', 'earlybird']],
 			['Pyroar-Mega', 'Royal Sun', ['drought', 'supremeoverlord']],
 			['Ampharos-Aevian-Mega', 'Absolute Zero', ['snowwarning', 'moldbreaker', 'filter']],
-			['Chandelure-Mega', 'Soul Cremation', ['soulsiphon', 'flamebody']],
+			['Chandelure-Mega', 'Soul Cremation', ['soulsiphon', 'soulpyre', 'malicewell', 'flamebody']],
 			['Dragalge-Mega', 'Toxic Renewal', ['adaptability', 'regenerator', 'poisontouch']],
 			['Gardevoir-Mega-Z', 'Argent Devotion', ['armorize', 'swornduty', 'serenegrace']],
 			['Gengar-Mega', 'Cruel Tag', ['shadowtag', 'infiltrator', 'baddreams']],

@@ -59,7 +59,7 @@ describe('Bond ability component audit', () => {
 		const drop = { atk: -1 };
 		battle.singleEvent('TryBoost', ability, garchomp.abilityState, garchomp, foe,
 			battle.dex.abilities.get('intimidate'), drop);
-		assert.equal(drop.atk, undefined, 'one fallen ally should block opposing stat drops');
+		assert.equal(drop.atk, -1, 'one fallen ally must not grant the removed stat-drop immunity');
 		garchomp.side.totalFainted = 2;
 		const move = battle.dex.getActiveMove('dragonclaw');
 		battle.singleEvent('ModifyMove', ability, garchomp.abilityState, move, garchomp, foe);

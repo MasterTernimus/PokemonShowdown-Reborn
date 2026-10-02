@@ -207,6 +207,12 @@ export class BattleActions {
 		delete pokemon.m.templeChimeUsed;
 		delete pokemon.m.solarBudSpent;
 		delete pokemon.m.dissonantEchoUsed;
+		delete pokemon.m.maliceWellUsed;
+		delete pokemon.m.gildedGraceUsed;
+		delete pokemon.m.savageResolveUsed;
+		delete pokemon.m.spentForceUntil;
+		delete pokemon.m.holyCowMilkCuredEntry;
+		delete pokemon.m.pulseBulwarkScreenCuredEntry;
 		pokemon.activeMoveActions = 0;
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
@@ -715,6 +721,8 @@ export class BattleActions {
 			return hitResult === this.battle.NOT_FAIL;
 		}
 
+		// Targets have been resolved and the move is executing, before protection/immunity/accuracy.
+		this.battle.runEvent('MoveTargeted', targets, pokemon, move);
 		let atLeastOneFailure = false;
 		for (const step of moveSteps) {
 			const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, targets, pokemon, move);
@@ -733,6 +741,8 @@ export class BattleActions {
 		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
 		const hitSlot = targets.map(p => p.getSlot());
 		if (move.spreadHit) this.battle.attrLastMove('[spread] ' + hitSlot.join(','));
+		// Delayed attacks do not pass through runMove's normal AfterMove boundary.
+		if (notActive) this.battle.runEvent('AfterTargetedMove', pokemon, targets[0], move);
 		return moveResult;
 	}
 	waterShurikenTargetHasWaterImmunity(target: Pokemon) {
@@ -2600,4 +2610,3 @@ export class BattleActions {
 
 	// #endregion
 }
-
