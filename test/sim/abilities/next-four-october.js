@@ -24,9 +24,15 @@ describe('Approved Haxorus, furnace, scales and Gooey changes',()=>{
  it('Furnace rejects allied HP damage',()=>{
   const p={species:'Coalossal-Gmax',ability:'Furnace Engine',moves:['splash']},f={species:'Blissey',ability:'No Ability',moves:['splash']};battle=common.createBattle({formatid:'gen9nofielddoublesbattle'},[[p,f],[f,f]]);battle.makeChoices('team 12','team 12');const mon=battle.p1.active[0];hit(mon,battle.p1.active[1],'ember');assert.notEqual(mon.abilityState.furnaceDamageTurn,battle.turn);
  });
- it('Royal Scales loses healing/weather immunity while retaining Prism Scale and Dragonize',()=>{
-  const[p,t]=setup('Royal Scales','Milotic-Mega');for(const a of ['prismscale','marvelscale','oblivious','swiftswim','dragonize'])assert(p.hasAbility(a),a);assert(!p.hasAbility('selfsufficient'));p.hp-=100;const hp=p.hp;residual(p);assert.equal(p.hp,hp);assert(p.runStatusImmunity('sandstorm'));assert(p.runStatusImmunity('hail'));
+ it('Royal Scales gains Self Sufficient while retaining Prism Scale and Dragonize',()=>{
+  const[p,t]=setup('Royal Scales','Milotic-Mega');for(const a of ['prismscale','marvelscale','oblivious','swiftswim','dragonize','selfsufficient'])assert(p.hasAbility(a),a);p.hp-=100;const hp=p.hp;residual(p);assert.equal(p.hp,hp+Math.floor(p.baseMaxhp/16));assert(!p.runStatusImmunity('sandstorm'));assert(!p.runStatusImmunity('hail'));
   p.status='brn';assert.equal(battle.runEvent('ModifyDef',p,null,null,100),150);battle.field.setWeather('raindance',p);assert.equal(battle.runEvent('ModifySpe',p,null,null,100),200);hit(t,p,'taunt',{category:'Status'});assert(!p.volatiles.taunt);const m=battle.dex.getActiveMove('hypervoice');battle.singleEvent('ModifyType',p.getAbility(),p.abilityState,m,p);assert.equal(m.type,'Dragon');
+ });
+ it('Royal Scales heals once per turn and respects Heal Block and suppression',()=>{
+  const[p]=setup('Royal Scales','Milotic-Mega');p.hp=100;
+  battle.makeChoices('move splash','move splash');assert.equal(p.hp,100+Math.floor(p.baseMaxhp/16));
+  p.addVolatile('healblock');const hp=p.hp;battle.makeChoices('move splash','move splash');assert.equal(p.hp,hp);
+  p.removeVolatile('healblock');p.addVolatile('gastroacid');battle.makeChoices('move splash','move splash');assert.equal(p.hp,hp);assert(p.runStatusImmunity('sandstorm'));assert(p.runStatusImmunity('hail'));
  });
  it('Gooey drops Speed only once for five hits, then again on the next attack',()=>{
   const[p,t]=setup('Gooey','Goodra');hit(t,p,'tailslap',{multihit:5,basePower:1});assert.equal(t.boosts.spe,-2);hit(t,p,'tailslap',{multihit:5,basePower:1});assert.equal(t.boosts.spe,-4);
