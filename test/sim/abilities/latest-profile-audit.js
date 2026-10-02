@@ -4,7 +4,7 @@ const common = require('../../common');
 describe('Latest profile ability regressions', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
-	it('Absolute Zero resists Fire and only changes its own Ice attacks', () => {
+	it('Absolute Zero grants Snow Warning, Mold Breaker and Filter without changing type effectiveness', () => {
 		battle = common.createBattle({formatid: 'gen9doublescustomgame'}, [[
 			{species: 'Ampharos-Aevian-Mega', ability: 'Absolute Zero', moves: ['icebeam']},
 			{species: 'Mew', ability: 'No Ability', moves: ['icebeam']},
@@ -14,9 +14,14 @@ describe('Latest profile ability regressions', () => {
 		]]);
 		const [holder, ally] = battle.p1.active;
 		const fire = battle.p2.active[0];
-		assert.equal(holder.runEffectiveness(battle.dex.getActiveMove('flamethrower')), -1);
+		for (const id of ['snowwarning', 'moldbreaker', 'filter']) assert(holder.hasAbility(id));
+		assert(battle.field.isWeather('hail'));
+		const hit = battle.dex.getActiveMove('flamethrower');
+		holder.getMoveHitData(hit).typeMod = 1;
+		assert.equal(battle.runEvent('ModifyDamage', fire, holder, hit, 100), 60);
+		assert.equal(holder.runEffectiveness(battle.dex.getActiveMove('flamethrower')), 1);
 		assert.equal(holder.runEffectiveness(battle.dex.getActiveMove('earthquake')), 1);
-		for (const [attacker, expected] of [[holder, 1], [ally, -1]]) {
+		for (const [attacker, expected] of [[holder, -1], [ally, -1]]) {
 			const move = battle.dex.getActiveMove('icebeam');
 			battle.runEvent('ModifyMove', attacker, fire, move, move);
 			assert.equal(fire.runEffectiveness(move), expected);

@@ -23,12 +23,16 @@ describe('Aura, Mega Stone and Sacred Bond audit fixes', () => {
   });
  }
  for (const ability of ['Perfect Foresight', 'Royal Voice']) for (const aura of [true, false]) {
-  it(ability + ' prefers active Telepathy with Psychic Aura=' + aura, () => {
+  it(ability + ' uses active Telepathy with Psychic Aura=' + aura, () => {
    battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[{species:'Alakazam',ability:'No Ability',moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Gardevoir',ability:'Telepathy',moves:['splash']},{species:'Mewtwo',ability:'Pressure',moves:['splash']}]]);
    battle.makeChoices('team 12','team 12'); const p=battle.p1.active[0];
    battle.field.startTerrain(aura ? 'rockyterrain' : 'psychicterrain');
    if(aura) battle.field.setAura('psychicterrain',5,p,battle.dex.moves.get('psychicterrain'));
-   p.setAbility(ability); assert.equal(p.m.perfectForesightAbility,'telepathy');
+   const speed = p.getStat('spe');
+   p.setAbility(ability);
+   if (ability === 'Perfect Foresight') assert.equal(p.m.perfectForesightAbility,'telepathy');
+   else { assert(p.hasAbility('telepathy')); assert.equal(p.m.perfectForesightAbility, undefined); }
+   assert.equal(p.getStat('spe'), speed * 2);
   });
  }
  it('prefers active Swift Swim in Midnight Zone', () => {

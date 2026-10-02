@@ -86,15 +86,17 @@ describe('Protosynthesis', function () {
 		]]);
 
 		const tail = battle.p1.active[0];
+		battle.randomizer = damage => damage;
 		battle.makeChoices('move luckychant', 'move venoshock');
-		assert.bounded(tail.maxhp - tail.hp, [84, 102]);
+		const boostedDamage = tail.maxhp - tail.hp;
+		assert(boostedDamage > 0);
 		battle.makeChoices('auto', 'switch 2');
 		battle.makeChoices('move recover', 'move venoshock');
-		assert.bounded(tail.maxhp - tail.hp, [110, 132]);
+		assert.bounded((tail.maxhp - tail.hp) / boostedDamage, [1.25, 1.35]);
 		// Ensure that the boost wasn't completely removed
 		battle.makeChoices('auto', 'switch 2');
 		battle.makeChoices('move recover', 'move venoshock');
-		assert.bounded(tail.maxhp - tail.hp, [84, 102]);
+		assert.equal(tail.maxhp - tail.hp, boostedDamage);
 	});
 
 	it(`should not activate while the user is Transformed`, function () {

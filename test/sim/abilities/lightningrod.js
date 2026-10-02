@@ -10,7 +10,7 @@ describe('Lightning Rod', function () {
 		battle.destroy();
 	});
 
-	it('should grant immunity to Electric-type moves and boost Special Attack by 1 stage', function () {
+	common.itGen(6, 'should grant immunity to Electric-type moves and boost Special Attack by 1 stage', function () {
 		battle = common.gen(6).createBattle([[
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
 		], [
@@ -21,7 +21,7 @@ describe('Lightning Rod', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
-	it('should not boost Special Attack if the user is already immune to Electric-type moves in gen 6-', function () {
+	common.itGen(6, 'should not boost Special Attack if the user is already immune to Electric-type moves in gen 6-', function () {
 		battle = common.gen(6).createBattle([[
 			{species: 'Rhydon', ability: 'lightningrod', moves: ['sleeptalk']},
 		], [
@@ -42,7 +42,7 @@ describe('Lightning Rod', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
-	it('should redirect single-target Electric-type attacks to the user if it is a valid target', function () {
+	common.itGen(5, 'should redirect single-target Electric-type attacks to the user if it is a valid target', function () {
 		this.timeout(3000);
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},

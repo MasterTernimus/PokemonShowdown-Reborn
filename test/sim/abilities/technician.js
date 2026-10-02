@@ -10,7 +10,7 @@ describe('Technician', function () {
 		battle.destroy();
 	});
 
-	it('should not apply boost on a move boosted over 60 BP by Battery in Gen 7', function () {
+	common.itGen(7, 'should not apply boost on a move boosted over 60 BP by Battery in Gen 7', function () {
 		battle = common.gen(7).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Toxtricity', ability: 'technician', moves: ['shockwave']},

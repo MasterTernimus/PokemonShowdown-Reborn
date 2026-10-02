@@ -2,6 +2,8 @@
 import { Battle } from './battle';
 import { Dex } from './dex';
 import { Auras } from '../data/auras';
+import { Terrains } from '../data/terrains';
+import { AbilityComponents } from '../data/ability-components';
 
 const STATS = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
 const BOOSTS = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'] as const;
@@ -22,6 +24,7 @@ export interface CalcActor {
 }
 export interface CalcScenario {
 	format: Format;
+	field: string;
 	actors: CalcActor[];
 	move: string;
 	weather: string;
@@ -114,13 +117,16 @@ export function calculatorFormats() {
 export function calculatorMetadata() {
 	return {
 		formats: calculatorFormats().map(f => ({ id: f.id, name: f.name, mode: f.gameType, field: f.terrain || '' })),
+		fields: [{id: '', name: 'No field'}, ...Object.entries(Terrains).map(([id, field]) => ({id, name: field.name || id}))],
+		species: Dex.species.all().filter(s => s.exists && !s.isCosmeticForme).map(s => ({name: s.name, abilities: s.abilities})),
+		abilityComponents: Object.fromEntries(Object.entries(AbilityComponents).map(([id, parts]) => [id, parts.map(p => Dex.abilities.get(p).name)])),
 		auras: Object.values(Auras).map(a => ({ id: a.id, name: a.name })),
 		assumptions: ASSUMPTIONS,
 	};
 }
 export function validateScenario(input: unknown): CalcScenario {
 	const data = record(input);
-	keys(data, ['format', 'actors', 'move', 'weather', 'aura', 'screens', 'attackMode', 'samples', 'seed']);
+	keys(data, ['format', 'field', 'actors', 'move', 'weather', 'aura', 'screens', 'attackMode', 'samples', 'seed']);
 	const format = calculatorFormats().find(f => f.id === data.format);
 	if (!format) throw new Error('Unsupported calculator format. Select one from this server.');
 	const move = Dex.moves.get(name(data.move));
@@ -133,7 +139,7 @@ export function validateScenario(input: unknown): CalcScenario {
 	const aura = name(data.aura);
 	if (aura && !Object.prototype.hasOwnProperty.call(Auras, aura)) throw new Error('Unknown aura.');
 	return {
-		format, actors: data.actors.map((a, i) => actor(a, i ? '' : move.name)), move: move.id,
+		format, field: choice(data.field, format.terrain || '', ['', ...Object.keys(Terrains)]), actors: data.actors.map((a, i) => actor(a, i ? '' : move.name)), move: move.id,
 		weather: choice(data.weather, '', ['', 'raindance', 'sunnyday', 'sandstorm', 'hail']),
 		aura, screens: [...new Set(screens)] as string[],
 		attackMode: choice(data.attackMode, '', ['', 'z', 'max']),
@@ -145,6 +151,7 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 	const seed = (scenario.seed + Math.imul(sample, 2654435761)) >>> 0;
 	const battle = new Battle({
 		formatid: scenario.format.id,
+		format: Object.assign(Object.create(Object.getPrototypeOf(scenario.format)), scenario.format, {terrain: scenario.field}),
 		seed: `gen5,${seed >>> 16},${seed & 65535},${(seed ^ 0xa5a5) & 65535},${(seed ^ 0x5a5a) >>> 16}`,
 	});
 	try {

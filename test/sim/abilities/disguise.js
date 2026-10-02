@@ -8,7 +8,7 @@ let battle;
 describe('Disguise', function () {
 	afterEach(() => battle.destroy());
 
-	it('should block damage from one move', function () {
+	common.itGen(7, 'should block damage from one move', function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
 		], [
@@ -18,7 +18,7 @@ describe('Disguise', function () {
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should only block damage from the first hit of a move', function () {
+	common.itGen(7, 'should only block damage from the first hit of a move', function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
 		], [
@@ -27,7 +27,7 @@ describe('Disguise', function () {
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it(`should bust Disguise on self-hit confusion`, function () {
+	common.itGen(7, `should bust Disguise on self-hit confusion`, function () {
 		battle = common.gen(7).createBattle({forceRandomChance: true}, [[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
 		], [
@@ -65,12 +65,12 @@ describe('Disguise', function () {
 			{species: 'Ariados', ability: 'swarm', moves: ['toxicthread']},
 		]]);
 		const pokemon = battle.p1.active[0];
-		assert.sets(() => pokemon.status, 'psn', () => battle.makeChoices());
-		assert.statStage(pokemon, 'spe', -1);
+		assert.sets(() => pokemon.status, 'tox', () => battle.makeChoices());
+		assert.statStage(pokemon, 'spe', -2);
 		assert.false.fullHP(pokemon);
 	});
 
-	it('should not block secondary effects from damaging moves', function () {
+	common.itGen(7, 'should not block secondary effects from damaging moves', function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
 		], [
@@ -81,13 +81,13 @@ describe('Disguise', function () {
 		assert.fullHP(pokemon);
 	});
 
-	it('should cause Counter to deal 1 damage if it blocks a move', function () {
+	it('should deal one Counter damage plus the custom Disguise curse when it blocks a move', function () {
 		battle = common.createBattle([[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['counter']},
 		], [
 			{species: 'Weavile', ability: 'pressure', moves: ['feintattack']},
 		]]);
-		assert.hurtsBy(battle.p2.active[0], 1, () => battle.makeChoices());
+		assert.hurtsBy(battle.p2.active[0], 1 + Math.floor(battle.p2.active[0].maxhp / 8), () => battle.makeChoices());
 	});
 
 	it('should not trigger critical hits while active', function () {

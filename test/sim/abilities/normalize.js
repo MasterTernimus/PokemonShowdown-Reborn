@@ -64,7 +64,7 @@ describe('Normalize [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should change most of the user\'s moves to Normal-type', function () {
+	common.itGen(4, 'should change most of the user\'s moves to Normal-type', function () {
 		battle = common.gen(4).createBattle([
 			[{species: "Delcatty", ability: 'normalize', moves: ['grassknot']}],
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
@@ -73,7 +73,7 @@ describe('Normalize [Gen 4]', function () {
 		assert(battle.p2.active[0].hasType('Normal'));
 	});
 
-	it('should change Hidden Power to Normal-type', function () {
+	common.itGen(4, 'should change Hidden Power to Normal-type', function () {
 		battle = common.gen(4).createBattle([
 			[{species: "Delcatty", ability: 'normalize', moves: ['hiddenpowerfire']}],
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
@@ -82,7 +82,7 @@ describe('Normalize [Gen 4]', function () {
 		assert(battle.p2.active[0].hasType('Normal'));
 	});
 
-	it('should change Judgment to Normal-type even if the user is holding a Plate', function () {
+	common.itGen(4, 'should change Judgment to Normal-type even if the user is holding a Plate', function () {
 		battle = common.gen(4).createBattle([
 			[{species: "Delcatty", ability: 'normalize', item: 'pixieplate', moves: ['judgment']}],
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
@@ -91,7 +91,7 @@ describe('Normalize [Gen 4]', function () {
 		assert(battle.p2.active[0].hasType('Normal'));
 	});
 
-	it('should change Weather Ball to Normal-type even if sun, rain, or hail is an active weather', function () {
+	common.itGen(4, 'should change Weather Ball to Normal-type even if sun, rain, or hail is an active weather', function () {
 		battle = common.gen(4).createBattle([
 			[{species: "Delcatty", ability: 'normalize', item: 'laggingtail', moves: ['weatherball']}],
 			[{species: "Latias", ability: 'colorchange', moves: ['sunnyday']}],

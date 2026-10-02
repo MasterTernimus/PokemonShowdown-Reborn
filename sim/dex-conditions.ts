@@ -11,6 +11,8 @@ import type { SecondaryEffect, MoveEventMethods } from './dex-moves';
  */
 
 export interface EventMethods {
+	onBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAnyBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterSuccessfulSecondary?: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void;
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
 	onEmergencyExit?: (this: Battle, pokemon: Pokemon) => void;
@@ -59,7 +61,7 @@ export interface EventMethods {
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
 	onFractionalPriority?: CommonHandlers['ModifierSourceMove'] | -0.1 | -0.2;
 	onHit?: MoveEventMethods['onHit'];
-	onImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
+	onImmunity?: (this: Battle, type: string, pokemon: Pokemon) => boolean | null | void;
 	onLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string);
 	onSemiLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string);
 	onMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void;
@@ -90,7 +92,7 @@ export interface EventMethods {
 	onRedirectTarget?: (
 		this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove
 	) => Pokemon | void;
-	onResidual?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onResidual?: (this: Battle, target: Pokemon, source?: Pokemon, effect?: Effect) => void;
 	onSetAbility?: (
 		(this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => null | void
 	) | boolean;
@@ -211,11 +213,7 @@ export interface EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onFoeTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
-	/* FIXME: onFoeTryHeal() is run with two different sets of arguments */
-	onFoeTryHeal?: (
-		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
-		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
-	);
+	onFoeTryHeal?: ((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) | boolean;
 	onFoeTryHit?: MoveEventMethods['onTryHit'];
 	onFoeTryHitField?: MoveEventMethods['onTryHitField'];
 	onFoeTryHitSide?: CommonHandlers['ResultMove'];
@@ -312,11 +310,7 @@ export interface EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onSourceTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
-	/* FIXME: onSourceTryHeal() is run with two different sets of arguments */
-	onSourceTryHeal?: (
-		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
-		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
-	);
+	onSourceTryHeal?: ((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) | boolean;
 	onSourceTryHit?: MoveEventMethods['onTryHit'];
 	onSourceTryHitField?: MoveEventMethods['onTryHitField'];
 	onSourceTryHitSide?: CommonHandlers['ResultMove'];
@@ -360,6 +354,8 @@ export interface EventMethods {
 		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
 	) => number | boolean | null | void;
 	onAnyDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void;
+	onAnyAfterTargetedMove?: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void;
+	onMoveTargeted?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
 	onAfterDamageApplied?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyAfterDamageApplied?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyResidualHeal?: (this: Battle, amount: number, target: Pokemon, source: Pokemon, effect: Effect) => number | void;
@@ -419,11 +415,7 @@ export interface EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onAnyTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
-	/* FIXME: onAnyTryHeal() is run with two different sets of arguments */
-	onAnyTryHeal?: (
-		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
-		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
-	);
+	onAnyTryHeal?: ((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) | boolean;
 	onAnyTryHit?: MoveEventMethods['onTryHit'];
 	onAnyTryHitField?: MoveEventMethods['onTryHitField'];
 	onAnyTryHitSide?: CommonHandlers['ResultMove'];
@@ -591,11 +583,7 @@ export interface PokemonEventMethods extends EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onAllyTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
-	/* FIXME: onAllyTryHeal() is run with two different sets of arguments */
-	onAllyTryHeal?: (
-		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
-		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
-	);
+	onAllyTryHeal?: ((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) | boolean;
 	onAllyTryHit?: MoveEventMethods['onTryHit'];
 	onAllyTryHitField?: MoveEventMethods['onTryHitField'];
 	onAllyTryHitSide?: CommonHandlers['ResultMove'];
@@ -639,6 +627,10 @@ export type ConditionData = PokemonConditionData | SideConditionData | FieldCond
 export type ModdedConditionData = ConditionData & { inherit?: true };
 export interface ConditionDataTable { [id: IDEntry]: ConditionData }
 export interface ModdedConditionDataTable { [id: IDEntry]: ModdedConditionData }
+
+export interface Condition {
+	updateSilvallyForme?: (this: Battle, pokemon: Pokemon, type: string) => void;
+}
 
 export class Condition extends BasicEffect implements
 	Readonly<BasicEffect & SideConditionData & FieldConditionData & PokemonConditionData> {

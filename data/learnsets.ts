@@ -2306,6 +2306,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	fearow: {
 		learnset: {
+			taunt: ["9M"],
+			swordsdance: ["9M"],
+			hyperdrill: ["9M"],
 			aerialace: ["9L25", "7M", "7L15", "6M", "6L17", "5M", "5L17", "4M", "4L17", "3M"],
 			agility: ["9L36", "8V", "7L27", "7V", "6L29", "5L29", "4L29", "3L47"],
 			aircutter: ["9M", "4T"],
@@ -7279,6 +7282,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	wigglytuff: {
 		learnset: {
+			roar: ["9M"],
 			alluringvoice: ["9M"],
 			allyswitch: ["9M", "8M", "7T"],
 			amnesia: [],
@@ -8118,6 +8122,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			snore: ["9M", "8M", "7T", "7V", "6T", "5T", "4T", "3T"],
 			solarbeam: ["9L47", "8M", "7M", "7V", "6M", "5M", "4M", "3M", "3L55"],
 			solarblade: [],
+			strengthsap: ["9L1"],
 			stunspore: ["9L15", "8L1", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			substitute: ["9M", "8M", "7M", "6M", "5M", "4M", "3T"],
 			sunnyday: ["9L1", "8M", "7M", "7L1", "7V", "6M", "6L1", "5M", "5L1", "4M", "4L1", "3M"],
@@ -9475,6 +9480,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			dreameater: ["8V", "7M"],
 			echoedvoice: ["7M"],
 			embargo: ["7M"],
+			encore: ["9M"],
 			endeavor: [],
 			endure: ["8M"],
 			facade: ["8M", "8V", "7M"],
@@ -9524,6 +9530,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			shadowclaw: ["8M", "7M"],
 			shockwave: ["7T"],
 			skittersmack: ["8T"],
+			slackoff: ["9L1"],
 			slash: ["8V", "7L37"],
 			sleeptalk: ["8M", "7M"],
 			smackdown: [],
@@ -21033,6 +21040,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			aerialace: ["9M", "7M", "6M", "5M", "4M"],
 			allyswitch: ["9M", "8M", "7T"],
 			attract: ["9M", "8M", "7M", "7V", "6M", "5M", "4M", "3M"],
+			darkpulse: ["9M"],
          avalanche: ["9M"], 
 			barrier: ["9L1", "8V", "7L1", "7V", "6L1", "5L1", "5D", "4L1", "3L1"],
 			batonpass: ["9L40", "8M", "8L1", "7L46", "7V", "6L46", "5L46", "4L46", "3L47"],
@@ -36172,6 +36180,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	corsola: {
 		learnset: {
+			flipturn: ["9M"],
 			amnesia: ["9E", "8M", "7E", "7V", "6E", "5E", "4E", "3E"],
 			ancientpower: ["9L27", "8L20", "7L17", "7V", "6L17", "5L20", "4T", "4L32", "3L45"],
 			aquaring: ["9L10", "8L10", "7L38", "7E", "6L38", "6E", "5L37", "5E", "4L37", "4E"],
@@ -36544,6 +36553,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	octillery: {
 		learnset: {
+			trickroom: ["9M"],
 			hydrosteam: [],
          acidspray: ["9L16"], 
 			assurance: ["9M", "8M"],
@@ -111996,8 +112006,8 @@ function mergeLearnsetData(
 ) {
 	const targetLearnset = target.learnset ??= {};
 	for (const [move, sources] of Object.entries(source.learnset || {})) {
-		const currentSources = targetLearnset[move] ?? [];
-		targetLearnset[move] = [...new Set([...currentSources, ...sources])];
+		const currentSources = targetLearnset[move as IDEntry] ?? [];
+		targetLearnset[move as IDEntry] = [...new Set([...currentSources, ...sources])];
 	}
 
 	for (const key of ['eventData', 'encounters'] as const) {
@@ -112297,7 +112307,7 @@ if (toxtricityLearnset && toxtricityLowKeyLearnset) {
 	const toxtricityAevianLearnset = {...toxtricityLowKeyLearnset};
 	mergeLearnsetData((Learnsets as any).toxtricitylowkey, (Learnsets as any).toxtricity);
 	(Learnsets as any).toxtricityaevian = {learnset: toxtricityAevianLearnset};
-	const sharedToxtricityMoves = {
+	const sharedToxtricityMoves: NonNullable<import('../sim/dex-species').LearnsetData['learnset']> = {
 		snarl: ["9M"],
 		darkpulse: ["9M"],
 		bite: ["9M"],
@@ -112339,10 +112349,10 @@ const starterEeveeSinisterBlazeEvent = [
 	'synchronoise', 'takedown', 'tickle', 'trailblaze', 'twirlytwister', 'veeveevolley', 'wish', 'yawn',
 	'glitchygraphics',
 ];
-const starterEeveeSinisterBlazeLearnset: {[moveid: string]: string[]} = {};
-for (const move of starterEeveeSinisterBlazeLevelUp) starterEeveeSinisterBlazeLearnset[move] = ['9L1'];
-for (const move of starterEeveeSinisterBlazeTutor) starterEeveeSinisterBlazeLearnset[move] = ['9M'];
-for (const move of starterEeveeSinisterBlazeEvent) starterEeveeSinisterBlazeLearnset[move] = ['8V'];
+const starterEeveeSinisterBlazeLearnset: NonNullable<import('../sim/dex-species').LearnsetData['learnset']> = {};
+for (const move of starterEeveeSinisterBlazeLevelUp) starterEeveeSinisterBlazeLearnset[move as IDEntry] = ['9L1'];
+for (const move of starterEeveeSinisterBlazeTutor) starterEeveeSinisterBlazeLearnset[move as IDEntry] = ['9M'];
+for (const move of starterEeveeSinisterBlazeEvent) starterEeveeSinisterBlazeLearnset[move as IDEntry] = ['8V'];
 mergeLearnsetData((Learnsets as any).eeveestarter, {learnset: starterEeveeSinisterBlazeLearnset});
 
 // Starter Eevee's Ascendance event pool is filtered by ability in the client,
@@ -112368,8 +112378,8 @@ const starterEeveeAscendanceMoves = [
 	'scalyscorn', 'sizzlyslide', 'sparklyswirl', 'spookyspell', 'stabbyswarm', 'steelystrike', 'swift',
 	'synchronoise', 'takedown', 'tickle', 'trailblaze', 'twirlytwister', 'veeveevolley', 'wish', 'yawn',
 ];
-const starterEeveeAscendanceLearnset: {[moveid: string]: string[]} = {};
-for (const move of starterEeveeAscendanceMoves) starterEeveeAscendanceLearnset[move] = ['9M'];
+const starterEeveeAscendanceLearnset: NonNullable<import('../sim/dex-species').LearnsetData['learnset']> = {};
+for (const move of starterEeveeAscendanceMoves) starterEeveeAscendanceLearnset[move as IDEntry] = ['9M'];
 mergeLearnsetData((Learnsets as any).eeveestarter, {learnset: starterEeveeAscendanceLearnset});
 
 const umbreonLearnset = (Learnsets as any).umbreon?.learnset;
@@ -112385,9 +112395,9 @@ const bronzongRejuvTutor = [
 	'selfdestruct', 'shockwave', 'snatch', 'terrainpulse', 'thunderwave', 'thunderbolt',
 	'torment', 'triattack', 'waterpulse', 'snowscape', 'mirrorbeam',
 ];
-const bronzongRejuvLearnset: {[moveid: string]: string[]} = {};
-for (const move of bronzongRejuvLevelUp) bronzongRejuvLearnset[move] = ['9L1'];
-for (const move of bronzongRejuvTutor) bronzongRejuvLearnset[move] = ['9M'];
+const bronzongRejuvLearnset: NonNullable<import('../sim/dex-species').LearnsetData['learnset']> = {};
+for (const move of bronzongRejuvLevelUp) bronzongRejuvLearnset[move as IDEntry] = ['9L1'];
+for (const move of bronzongRejuvTutor) bronzongRejuvLearnset[move as IDEntry] = ['9M'];
 mergeLearnsetData((Learnsets as any).bronzong, {learnset: bronzongRejuvLearnset});
 (Learnsets as any).bronzongrejuv = {learnset: {...(Learnsets as any).bronzong.learnset}};
 
@@ -113146,3 +113156,6 @@ for (const species of DELUGE_TM_SPECIES) {
 // Approved support coverage. Cosmetic forms inherit the same effective pools.
 Learnsets.maractus.learnset!.rapidspin = ['9L1'];
 Learnsets.lumineon.learnset!.haze = ['9L1'];
+
+// Tentacruel can clear one foe's boosts without resetting the entire field.
+Learnsets.tentacruel.learnset!.clearsmog = ['9M'];

@@ -25,7 +25,7 @@ async function setupDatabase(database: SQL.DatabaseManager) {
 }
 
 if (Config.usesqlite && Config.usesqliteleveling) {
-	const database = SQL(module, {
+	const database = SQL('cg-teams-levels', module, {
 		file: './databases/battlestats.db',
 	});
 	dbSetupPromise = setupDatabase(database);

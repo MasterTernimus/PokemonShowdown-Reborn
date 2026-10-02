@@ -14,12 +14,12 @@ describe('Mega Dusknoir and Reaper\'s Grip',function(){
   battle.makeChoices('move splash mega','move splash');
   return mon;
  }
- it('Mega Evolves and combines punches with Dark Aura on both sides',function(){
+ it('Mega Evolves and combines Self Sufficient with Dark Aura on both sides',function(){
   const mon=setup(),foe=battle.p2.active[0];
   assert.equal(mon.ability,'reapersgrip');
   assert.deepEqual(mon.species.baseStats,{hp:65,atk:180,def:155,spa:70,spd:155,spe:45});
-  assert(mon.hasAbility('unaware'));assert(mon.hasAbility('ironfist'));assert(mon.hasAbility('darkaura'));assert(!mon.hasAbility('pressure'));
-  assert.equal(battle.runEvent('BasePower',mon,foe,battle.dex.getActiveMove('firepunch'),100),140);
+  assert(mon.hasAbility('unaware'));assert(mon.hasAbility('selfsufficient'));assert(!mon.hasAbility('ironfist'));assert(mon.hasAbility('darkaura'));assert(!mon.hasAbility('pressure'));
+  assert.equal(battle.runEvent('BasePower',mon,foe,battle.dex.getActiveMove('firepunch'),100),100);
   assert.equal(battle.runEvent('BasePower',mon,foe,battle.dex.getActiveMove('darkpulse'),100),133);
   assert.equal(battle.runEvent('BasePower',foe,mon,battle.dex.getActiveMove('darkpulse'),100),133);
   battle.activePokemon=mon;battle.activeTarget=foe;

@@ -48,7 +48,7 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, '');
 	});
 
-	it('should trigger on an ally losing their Eject Button in Generation 6', function () {
+	common.itGen(6, 'should trigger on an ally losing their Eject Button in Generation 6', function () {
 		battle = common.gen(6).createBattle({gameType: 'doubles'}, [[
 			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 			{species: 'wynaut', item: 'ejectbutton', moves: ['sleeptalk']},
@@ -65,7 +65,7 @@ describe('Symbiosis', function () {
 
 	// See Marty's research for many more examples: https://www.smogon.com/forums/threads/battle-mechanics-research.3489239/post-6401506
 	describe.skip('Symbiosis Eject Button Glitch (Gen 6 only)', function () {
-		it('should cause Leftovers to restore HP 4 times', function () {
+		common.itGen(6, 'should cause Leftovers to restore HP 4 times', function () {
 			battle = common.gen(6).createBattle({gameType: 'doubles'}, [[
 				{species: 'florges', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 				{species: 'roggenrola', level: 50, ability: 'sturdy', item: 'ejectbutton', moves: ['sleeptalk']},
@@ -87,7 +87,7 @@ describe('Symbiosis', function () {
 			assert.equal(targetHP, roggenrola.hp);
 		});
 
-		it('should cause Choice items to apply 2 times', function () {
+		common.itGen(6, 'should cause Choice items to apply 2 times', function () {
 			battle = common.gen(6).createBattle({gameType: 'doubles'}, [[
 				{species: 'florges', ability: 'symbiosis', item: 'choiceband', moves: ['sleeptalk']},
 				{species: 'roggenrola', evs: {atk: 8}, item: 'ejectbutton', moves: ['smackdown']},

@@ -4,7 +4,7 @@ const assert = require('./../../assert');
 const common = require('./../../common');
 
 describe('Dual Wield and Perfect Striker balance', function () {
-	it('uses two 60% hits and a 15% second hit when paired with a component boost', function () {
+	common.itGen(9, 'uses two 60% hits and a 15% second hit when paired with a component boost', function () {
 		const dex = common.gen(9).dex;
 		const context = {
 			gameType: 'singles',

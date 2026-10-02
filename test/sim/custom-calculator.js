@@ -6,6 +6,25 @@ function scenario(overrides = {}) {
 }
 function format(mode, field = '') { return calculatorFormats().find(f => f.gameType === mode && (f.terrain || '') === field).id; }
 describe('Custom engine calculator', () => {
+	it('exposes the complete field and authoritative species/component inventory', () => {
+		const {calculatorMetadata} = require('../../dist/sim/custom-calculator');
+		const {Terrains} = require('../../dist/data/terrains');
+		const {AbilityComponents} = require('../../dist/data/ability-components');
+		const {Dex} = require('../../dist/sim/dex');
+		const metadata = calculatorMetadata();
+		assert.deepEqual(metadata.fields.map(f => f.id).sort(), ['', ...Object.keys(Terrains)].sort());
+		assert.deepEqual(metadata.species.find(p => p.name === 'Sylveon').abilities, Dex.species.get('Sylveon').abilities);
+		assert.deepEqual(metadata.abilityComponents.soothingpresence, AbilityComponents.soothingpresence.map(id => Dex.abilities.get(id).name));
+		assert.throws(() => validateScenario(scenario({field: 'inventedfield'})), /Unsupported choice/);
+		for (const mode of ['singles', 'doubles', 'freeforall']) {
+			const base = calculatorFormats().find(f => f.gameType === mode);
+			for (const field of Object.keys(Terrains)) {
+				const {battle} = buildCalculatorBattle(validateScenario(scenario({format: base.id, field})), 0);
+				assert.equal(battle.field.terrain, field, mode + ': ' + field);
+				battle.destroy();
+			}
+		}
+	});
 	it('activates engine Mega, Z and supported G-Max mechanics', () => {
 		const input = scenario();
 		Object.assign(input.actors[0], { species: 'Charizard', item: 'Charizardite X', gimmick: 'mega' });

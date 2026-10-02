@@ -19,7 +19,7 @@ describe('Wandering Spirit', function () {
 		assert(battle.p2.active[0].hasAbility('overgrow'));
 	});
 
-	it(`should not activate while Dynamaxed`, function () {
+	common.itGen(8, `should not activate while Dynamaxed`, function () {
 		battle = common.gen(8).createBattle([[
 			{species: 'Decidueye', ability: 'overgrow', moves: ['shadowsneak']},
 		], [

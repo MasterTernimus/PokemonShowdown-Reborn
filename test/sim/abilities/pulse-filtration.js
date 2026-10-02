@@ -1,0 +1,10 @@
+const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim/dex');
+describe('Swalot Pulse',()=>{let b;afterEach(()=>b?.destroy());function setup(ability='No Ability'){b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Swalot',ability:'Liquid Ooze',item:'Anomaly Core',moves:['splash']}],[{species:'Mew',ability,moves:['watergun','sludge','tackle']}]]);b.makeChoices('team 1','team 1');const p=b.p1.active[0];assert.equal(b.actions.canMegaEvo(p),'Swalot-Pulse');assert(b.actions.runMegaEvo(p));return[p,b.p2.active[0]];}function hit(p,t,id){const m=b.dex.getActiveMove(id);m.accuracy=true;m.willCrit=false;b.actions.runMove(m,t,t.getLocOf(p));}
+it('preserves base and defines 630 BST required-item form',()=>{const s=Dex.species.get('swalot'),f=Dex.species.get('swalotpulse');assert.equal(s.bst,530);assert.deepEqual(s.baseStats,{hp:120,atk:75,def:105,spa:85,spd:110,spe:35});assert.deepEqual(f.baseStats,{hp:135,atk:85,def:125,spa:115,spd:125,spe:45});assert.equal(f.bst,630);assert.equal(f.forme,'Pulse');assert.equal(f.requiredItem,'Anomaly Core');});
+it('transforms through Anomaly Core',()=>{const[p]=setup();assert.equal(p.species.id,'swalotpulse');assert.equal(p.ability,'pulsefiltration');assert.deepEqual(p.types,['Water','Poison']);});
+for(const move of ['watergun','sludge'])it('absorbs '+move+' for quarter HP',()=>{const[p,t]=setup();p.hp=Math.floor(p.maxhp/2);const old=p.hp;hit(p,t,move);assert.equal(p.hp-old,Math.floor(p.baseMaxhp/4));});
+it('remains immune at full HP',()=>{const[p,t]=setup();p.hp=p.maxhp;hit(p,t,'watergun');assert.equal(p.hp,p.maxhp);});
+it('Heal Block blocks recovery but not immunity',()=>{const[p,t]=setup();p.hp=100;p.addVolatile('healblock');hit(p,t,'sludge');assert.equal(p.hp,100);});
+it('Mold Breaker bypasses absorption',()=>{const[p,t]=setup('Mold Breaker');p.hp=p.maxhp;const old=p.hp;hit(p,t,'watergun');assert(p.hp<old);});
+it('has no residual field-healing hook and ordinary attacks hit',()=>{const[p,t]=setup();assert.equal(p.getAbility().onResidual,undefined);const old=p.hp;hit(p,t,'tackle');assert(p.hp<old);});
+});

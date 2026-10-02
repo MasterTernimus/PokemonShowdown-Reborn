@@ -41,7 +41,7 @@ export class MoveCounter extends Utils.Multiset<string> {
 		this.ironFist = 0;
 	}
 
-	get(key: string): number {
+	override get(key: string): number {
 		return super.get(key) || 0;
 	}
 }
@@ -175,7 +175,7 @@ export class RandomTeams {
 
 		this.factoryTier = '';
 		this.format = format;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = prng instanceof PRNG ? prng : new PRNG(prng);
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
@@ -221,7 +221,7 @@ export class RandomTeams {
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = prng instanceof PRNG ? prng : new PRNG(prng);
 	}
 
 	getTeam(options?: PlayerOptions | null): PokemonSet[] {
@@ -248,7 +248,7 @@ export class RandomTeams {
 	}
 
 	random(m?: number, n?: number) {
-		return this.prng.next(m, n);
+		return this.prng.random(m, n);
 	}
 
 	/**
@@ -314,7 +314,7 @@ export class RandomTeams {
 	/**
 	 * Inform user when custom bans are unsupported in a team generator.
 	 */
-	protected enforceNoDirectCustomBanlisterrainChanges() {
+	protected enforceNoDirectCustomBanlistChanges() {
 		if (this.hasDirectCustomBanlisterrainChanges()) {
 			throw new Error(`Custom bans are not currently supported in ${this.format.name}.`);
 		}
@@ -395,7 +395,7 @@ export class RandomTeams {
 				}
 			}
 			// Moves with secondary effects:
-			if (move.secondary || move.hasSheerForce) {
+			if (move.secondary || move.hasSheerForceBoost) {
 				counter.add('sheerforce');
 				if (sereneGraceBenefits(move)) {
 					counter.add('serenegrace');
@@ -942,7 +942,7 @@ export class RandomTeams {
 		if (!['AV Pivot', 'Fast Support', 'Bulky Support', 'Bulky Protect', 'Doubles Support'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value?.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -1758,9 +1758,9 @@ export class RandomTeams {
 	randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-doubles-sets.json');
 
 	randomTeam() {
-		this.enforceNoDirectCustomBanlisterrainChanges();
+		this.enforceNoDirectCustomBanlistChanges();
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
@@ -1938,7 +1938,7 @@ export class RandomTeams {
 	}
 
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
-		this.enforceNoDirectCustomBanlisterrainChanges();
+		this.enforceNoDirectCustomBanlistChanges();
 
 		const dex = this.dex;
 		const team = [];
@@ -2149,7 +2149,7 @@ export class RandomTeams {
 						for (const ruleid of ruleTable.tagRules) {
 							if (ruleid.startsWith('*')) continue;
 							const tagid = ruleid.slice(12);
-							const tag = Tags[tagid];
+							const tag = Tags[toID(tagid)];
 							if ((tag.speciesFilter || tag.genericFilter)!(species)) {
 								const existenceTag = EXISTENCE_TAG.includes(tagid);
 								if (ruleid.startsWith('+')) {

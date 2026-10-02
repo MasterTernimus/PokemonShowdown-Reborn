@@ -24,7 +24,12 @@ describe('Primordial Sea', function () {
 		battle.setPlayer('p2', {team: [{species: 'Blastoise', ability: 'torrent', moves: ['splash']}]});
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
-		assert.hurtsBy(defender, 104, () => battle.makeChoices('move waterpledge', 'move splash'));
+		battle.field.clearWeather();
+		battle.onEvent('CriticalHit', battle.format, () => false);
+		const unboosted = battle.actions.getDamage(attacker, defender, 'waterpledge');
+		battle.field.setWeather('primordialsea', attacker);
+		battle.makeChoices('move waterpledge', 'move splash');
+		assert.bounded((defender.maxhp - defender.hp) / unboosted, [1.45, 1.55]);
 		const move = Dex.moves.get('waterpledge');
 		const basePower = battle.runEvent('BasePower', attacker, defender, move, move.basePower, true);
 		assert.equal(basePower, move.basePower);

@@ -104,6 +104,9 @@ export interface SecondaryEffect extends HitEffect {
 }
 
 export interface MoveEventMethods {
+	onModifyCritRatio?: CommonHandlers['ModifierSourceMove'];
+	onModifyDamage?: CommonHandlers['ModifierSourceMove'];
+	onHitProtect?: CommonHandlers['ResultSourceMove'];
 	basePowerCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => number | false | null;
 	/** Return true to stop the move from being used */
 	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon | null, move: ActiveMove) => boolean | void;
@@ -135,7 +138,7 @@ export interface MoveEventMethods {
 	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon | null) => void;
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onMoveFail?: CommonHandlers['VoidMove'];
-	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
+	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon | null) => void;
 	onModifyTarget?: (
 		this: Battle, relayVar: { target: Pokemon }, pokemon: Pokemon, target: Pokemon, move: ActiveMove
 	) => void;
@@ -215,8 +218,8 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	mindBlownRecoil?: boolean;
 	stealsBoosts?: boolean;
 	struggleRecoil?: boolean;
-	secondary?: SecondaryEffect;
-	secondaries?: SecondaryEffect[];
+	secondary?: SecondaryEffect | null;
+	secondaries?: SecondaryEffect[] | null;
 	self?: SecondaryEffect;
 	/**
 	 * Boosted by Sheer Force without suppressing secondary effects.
@@ -412,13 +415,13 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 * Secondary effect. You usually don't want to access this
 	 * directly; but through the secondaries array.
 	 */
-	readonly secondary?: SecondaryEffect;
+	readonly secondary?: SecondaryEffect | null;
 	/**
 	 * Secondary effects. An array because there can be more than one
 	 * (for instance, Fire Fang has both a burn and a flinch
 	 * secondary).
 	 */
-	readonly secondaries?: SecondaryEffect[];
+	readonly secondaries?: SecondaryEffect[] | null;
 	/**
 	 * Moves manually boosted by Sheer Force.
 	 * e.g. Electro Shot and Order Up.

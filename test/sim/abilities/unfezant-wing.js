@@ -59,7 +59,7 @@ describe('Unfezant Wing abilities', function () {
 		assert.equal(unovaWing.name, 'Unova Wing');
 		assert(unovaWing.onModifyCritRatio);
 		assert(unovaWing.onAfterEachBoost);
-		assert(unovaWing.condition?.onModifySpe);
+		assert.equal(unovaWing.condition?.onModifySpe, undefined); // Unburden was removed.
 
 		const unfezant = dex.species.get('Unfezant');
 		assert.deepEqual(unfezant.baseStats, {hp: 90, atk: 40, def: 105, spa: 125, spd: 80, spe: 107});

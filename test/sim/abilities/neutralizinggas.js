@@ -201,7 +201,7 @@ describe('Neutralizing Gas', function () {
 
 		// Gluttony now has the opportunity to activate the Aguav Berry again on taking damage
 		battle.makeChoices();
-		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp / 3));
+		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp / 2));
 	});
 
 	it(`should not trigger twice if negated then replaced`, function () {
@@ -343,7 +343,8 @@ describe('Neutralizing Gas', function () {
 			]]);
 
 			battle.makeChoices('auto', 'move sleeptalk, switch 3');
-			assert(battle.field.isTerrain('electricterrain'));
+			assert(battle.field.isTerrain('grassyterrain'));
+			assert(battle.field.isAura('electricterrain')); // The slower Surge overlays the first field.
 		});
 
 		it(`should cause non-entrance abilities to be active immediately`, function () {

@@ -41,6 +41,31 @@ class TestTools {
 		return this.mod('gen' + genNum);
 	}
 
+	hasGeneration(genNum) {
+		let mod = 'gen' + genNum;
+		const visited = new Set();
+		while (mod !== 'base') {
+			if (!Dex.dexes[mod]) return false;
+			if (visited.has(mod)) throw new Error(`Circular test mod inheritance: ${mod}`);
+			visited.add(mod);
+			const scriptsPath = path.resolve(__dirname, '../dist/data/mods', mod, 'scripts.js');
+			mod = fs.existsSync(scriptsPath) ? require(scriptsPath).Scripts.inherit || 'base' : 'base';
+		}
+		// Broken supported modules must fail loudly, rather than becoming skipped tests.
+		Dex.mod('gen' + genNum);
+		return true;
+	}
+
+	itGen(genNum, title, callback) {
+		const supported = this.hasGeneration(genNum);
+		return (supported ? it : it.skip)(`${title} [Gen ${genNum}${supported ? '' : ': unsupported module'}]`, callback);
+	}
+
+	describeGen(genNum, title, callback) {
+		const supported = this.hasGeneration(genNum);
+		return (supported ? describe : describe.skip)(`${title} [Gen ${genNum}${supported ? '' : ': unsupported module'}]`, callback);
+	}
+
 	getFormat(options) {
 		if (options.formatid) return Dex.formats.get(options.formatid);
 
@@ -73,7 +98,20 @@ class TestTools {
 		if (format) return format;
 
 		format = Dex.formats.get(formatName);
-		if (!format.exists) throw new Error(`Unidentified format: ${formatName}`);
+		if (!format.exists) {
+			// Mechanics tests must not depend on the public ladder menu. Explicit
+			// formatid tests above still exercise the actual registered formats.
+			const {Format} = require('../dist/sim/dex-formats');
+			format = new Format({
+				name: `Mechanics Test ${formatsCache.size}`,
+				effectType: 'Format',
+				mod: this.dex.currentMod,
+				gameType,
+				ruleset: ['Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999',
+					'Default Level = 100', 'Team Preview', 'Cancel Mod', ...customRules],
+			});
+			Dex.formats.rulesetCache.set(format.id, format);
+		}
 
 		formatsCache.set(formatName, format);
 		return format;

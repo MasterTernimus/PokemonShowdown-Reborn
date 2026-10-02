@@ -25,7 +25,7 @@ describe('Requested ability changes', () => {
 			['Espeon', 'H', 'Psychic Surge'],
 			['Umbreon', '1', 'Moonlight Vigil'],
 			['Umbreon', 'H', 'Dark Aura'],
-			['Octillery', '0', 'Mega Launcher'],
+			['Octillery', '0', 'Anchored Battery'],
 			['Scizor-Mega', '0', 'Iron Vise'],
 			['Floatzel', '1', 'Life Guard'],
 		]) {

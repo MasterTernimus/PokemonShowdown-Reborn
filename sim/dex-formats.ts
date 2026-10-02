@@ -10,7 +10,9 @@ export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
 }
 
-export type FormatList = (FormatData | { section: string, subsection?: string, column?: number })[];
+export type FormatList = (FormatData |
+	{ section: string, subsection?: string, column?: number } |
+	{ section?: undefined, subsection: string, column?: undefined })[];
 export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & { inherit: true };
 export interface FormatDataTable { [id: IDEntry]: FormatData }
 export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }

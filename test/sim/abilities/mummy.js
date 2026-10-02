@@ -41,8 +41,14 @@ describe('Mummy', function () {
 			{species: 'Hoopa', ability: 'shellarmor', moves: ['sleeptalk']},
 		]]);
 
-		const hoopa = battle.p2.active[1];
+		const attacker = battle.p1.active[0];
+		const abilitiesDuringDamage = [];
+		battle.onEvent('ModifyDamage', battle.format, (damage, source, target, move) => {
+			if (move.id === 'brutalswing') abilitiesDuringDamage.push(source.ability);
+		});
 		battle.makeChoices();
-		assert.fainted(hoopa);
+		assert.equal(abilitiesDuringDamage.length, 3);
+		assert(abilitiesDuringDamage.every(ability => ability === 'toughclaws'));
+		assert.equal(attacker.ability, 'mummy');
 	});
 });

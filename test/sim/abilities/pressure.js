@@ -67,7 +67,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2, `Surf should lose 1 additional PP from Pressure`);
 	});
 
-	it(`should deduct PP for each Pressure Pokemon targeted`, function () {
+	common.itGen(5, `should deduct PP for each Pressure Pokemon targeted`, function () {
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['rest']},
 			{species: 'Palkia', ability: 'pressure', moves: ['rest']},
@@ -86,7 +86,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 3, `Rock Slide should lose 2 additional PP from Pressure`);
 	});
 
-	it(`should deduct PP for each opposing Pressure Pokemon when Snatch or Imprison are used`, function () {
+	common.itGen(5, `should deduct PP for each opposing Pressure Pokemon when Snatch or Imprison are used`, function () {
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['rest']},
 			{species: 'Palkia', ability: 'pressure', moves: ['rest']},
@@ -104,7 +104,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 4, `Imprison should lose 3 additional PP from Pressure`);
 	});
 
-	it(`should deduct additional PP from Max Moves`, function () {
+	common.itGen(8, `should deduct additional PP from Max Moves`, function () {
 		battle = common.gen(8).createBattle([[
 			{species: 'wynaut', moves: ['darkpulse']},
 		], [
@@ -115,7 +115,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it(`should deduct additional PP from Z-Moves`, function () {
+	common.itGen(7, `should deduct additional PP from Z-Moves`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'wynaut', item: 'darkiniumz', moves: ['darkpulse']},
 		], [
@@ -192,7 +192,7 @@ describe('Pressure [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it(`should deduct 1 extra PP from any moves targeting the user`, function () {
+	common.itGen(4, `should deduct 1 extra PP from any moves targeting the user`, function () {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['sleeptalk']},
 			{species: 'Togepi', moves: ['peck']},
@@ -208,7 +208,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
 	});
 
-	it(`should deduct 1 extra PP if moves are redirected to the user`, function () {
+	common.itGen(4, `should deduct 1 extra PP if moves are redirected to the user`, function () {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['followme']},
 			{species: 'Togepi', moves: ['peck']},
@@ -224,7 +224,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
 	});
 
-	it(`should deduct PP even if the move fails or misses`, function () {
+	common.itGen(4, `should deduct PP even if the move fails or misses`, function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'Dusknoir', ability: 'pressure', moves: ['shadowforce']},
 		], [
@@ -240,7 +240,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.equal(move.pp, move.maxpp - 2, `Dragon Pulse should lose 1 additional PP from Pressure`);
 	});
 
-	it(`should deduct PP for each Pressure Pokemon targeted`, function () {
+	common.itGen(4, `should deduct PP for each Pressure Pokemon targeted`, function () {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: 'Palkia', ability: 'pressure', moves: ['rest']},
 			{species: 'Dialga', ability: 'pressure', moves: ['rest']},
@@ -255,7 +255,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.equal(move.pp, move.maxpp - 4, `Earthquake should lose 3 additional PP from Pressure`);
 	});
 
-	it(`should not deduct PP from self-targeting moves`, function () {
+	common.itGen(4, `should not deduct PP from self-targeting moves`, function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'Palkia', ability: 'pressure', moves: ['calmmind']},
 		], [

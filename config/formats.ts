@@ -99,7 +99,7 @@ function makeFfaFieldFormats(): FormatList {
 	for (const group of FIELD_GROUPS) {
 		formats.push({ subsection: group.subsection });
 		for (const [fieldName, terrain] of group.fields) {
-			for (const playerCount of [4, 3]) {
+			for (const playerCount of [4, 3] as const) {
 				formats.push({
 					name: `[Gen 9] Free-For-All ${playerCount}P ${fieldName}`,
 					mod: 'gen9',

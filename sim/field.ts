@@ -43,11 +43,15 @@ export class Field {
 
 	get baseField() { return this.terrain; }
 
-	setTerrainDuration(duration: number | undefined) {
+	setTerrainDuration(duration: number | undefined, announce = true) {
 		const previous = this.terrainState.duration;
 		const extendingPermanent = this.terrainState.permanent && previous !== undefined && duration !== undefined && duration >= previous;
 		this.terrainState.permanent = duration === undefined || duration >= 9999 || !!extendingPermanent;
 		this.terrainState.duration = duration;
+		if (announce && this.terrain) {
+			const turns = this.terrainState.permanent ? 0 : duration;
+			this.battle.add('-fieldstart', this.getTerrain().name, `[turns] ${turns}`, '[silent]');
+		}
 	}
 
 
@@ -368,6 +372,16 @@ export class Field {
 		this.restoreFormatHail();
 	}
 
+	private pulseBlockadeHolder(source: Pokemon | 'debug' | null, sourceEffect: Effect | null) {
+		for (const pokemon of this.battle.getAllActive()) {
+			if (!pokemon.hp || !pokemon.isActive || !pokemon.hasAbility('pulseblockade') ||
+				this.battle.suppressingAbility(pokemon)) continue;
+			if (pokemon === source && sourceEffect?.id === 'pulseblockade') continue;
+			return pokemon;
+		}
+		return null;
+	}
+
 	applyIcySpikesDamage(pokemon: Pokemon) {
 		if (this.terrain !== 'icyterrain' || !pokemon.isGrounded() ||
 			pokemon.hasAbility('magicguard')) return false;
@@ -386,6 +400,7 @@ export class Field {
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 		if (this.terrain === status.id) return false;
+		if (!(this.aurasEnabled && this.terrain && Auras[status.id]) && this.pulseBlockadeHolder(source, sourceEffect)) return false;
 		if (this.isTerrain(['underwaterterrain', 'midnightzoneterrain']) || this.isTerrain('newworldterrain') || this.isTerrain('dragonsdenterrain')) {
 			this.battle.add('-message', 'The new field was annihilated by the crushing weight of the existing one!');
 			return false;
@@ -457,6 +472,7 @@ export class Field {
 		const gardenEffect = sourceEffect || this.battle.effect;
 		if (this.flowerGardenStage() && ['grassyterrain', 'forestterrain'].includes(toID(status)) &&
 			gardenSource && ['grassyterrain', 'grassysurge', 'seedsower', 'forestsurge'].includes(gardenEffect?.id)) {
+			if (this.pulseBlockadeHolder(gardenSource, gardenEffect)) return false;
 			// Move growth is applied after successful execution; entry abilities grow after SwitchIn.
 			if (gardenEffect.id === 'seedsower') this.growFlowerGarden(gardenSource, gardenEffect);
 			return true;
@@ -481,6 +497,11 @@ export class Field {
 			const duration = status.durationCallback ?
 				status.durationCallback.call(this.battle, source, source, sourceEffect) : status.duration;
 			if (duration && duration < 9999) return this.setAura(status.id, duration, source, sourceEffect);
+		}
+		const blockade = this.pulseBlockadeHolder(source, sourceEffect);
+		if (blockade) {
+			this.battle.add('-activate', blockade, 'ability: Pulse Blockade');
+			return false;
 		}
 		if (this.terrain === 'chessboardterrain') {
 			this.battle.add('-message', 'The chessboard prevents a new field from being generated!');
@@ -544,7 +565,7 @@ export class Field {
 			permanent: status.duration === undefined || status.duration >= 9999,
 		});
 		if (status.durationCallback) {
-			this.setTerrainDuration(status.durationCallback.call(this.battle, source, source, sourceEffect));
+			this.setTerrainDuration(status.durationCallback.call(this.battle, source, source, sourceEffect), false);
 		}
 		if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
 			this.terrain = prevTerrain;
@@ -570,6 +591,11 @@ export class Field {
 		if (this.terrain === 'midnightzoneterrain' && status.id !== 'underwaterterrain') return false;
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (this.terrain === status.id) {
+			return false;
+		}
+		const blockade = this.pulseBlockadeHolder(source, sourceEffect);
+		if (blockade) {
+			this.battle.add('-activate', blockade, 'ability: Pulse Blockade');
 			return false;
 		}
 		if (this.terrain === 'chessboardterrain') {

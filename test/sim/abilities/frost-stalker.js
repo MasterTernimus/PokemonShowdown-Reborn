@@ -12,7 +12,7 @@ describe('Mega Weavile and Frost Stalker',function(){
 		assert.equal(mon.canMegaEvo,'Weavile-Mega');
 		battle.makeChoices('move splash mega','move splash');
 		assert.equal(mon.ability,'froststalker');
-		assert.deepEqual(mon.species.baseStats,{hp:85,atk:160,def:85,spa:50,spd:100,spe:160});
+		assert.deepEqual(mon.species.baseStats,{hp:85,atk:160,def:90,spa:50,spd:100,spe:155});
 		const move=battle.dex.getActiveMove('slash');
 		battle.singleEvent('ModifyType',mon.getAbility(),mon.abilityState,move,mon);
 		assert.equal(move.type,'Ice');

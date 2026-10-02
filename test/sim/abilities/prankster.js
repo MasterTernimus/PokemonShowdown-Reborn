@@ -88,7 +88,7 @@ describe('Prankster [Gen 6]', function () {
 		battle.destroy();
 	});
 
-	it(`should not cause Status moves to fail against Dark Pokémon`, function () {
+	common.itGen(6, `should not cause Status moves to fail against Dark Pokémon`, function () {
 		battle = common.gen(6).createBattle([[
 			{species: 'Sableye', ability: 'prankster', moves: ['willowisp']},
 		], [

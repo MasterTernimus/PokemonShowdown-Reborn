@@ -9,6 +9,7 @@
  * @license MIT
  */
 import * as net from 'net';
+import {getAbilityMechanicsHTML} from '../ability-lookup';
 import { YouTube, Twitch } from '../chat-plugins/youtube';
 import { Net, Utils } from '../../lib';
 import { RoomSections } from './room-settings';
@@ -854,6 +855,7 @@ export const commands: Chat.ChatCommands = {
 			case 'ability':
 				const ability = dex.abilities.get(newTarget.name);
 				buffer += `${prefix}${Chat.getDataAbilityHTML(ability)}\n`;
+				buffer += `${prefix}${getAbilityMechanicsHTML(ability, dex)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(ability.gen) || 'CAP',

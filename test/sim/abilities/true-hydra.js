@@ -3,6 +3,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const {Dex} = require('../../../dist/sim');
+const {ENABLE_MEGA_HYDREIGON_X} = require('../../../dist/data/disabled-custom-content');
 
 let battle;
 describe('Mega Hydreigon X and True Hydra', () => {
@@ -13,6 +14,12 @@ describe('Mega Hydreigon X and True Hydra', () => {
 
 	it('registers the stone, form, stats, and move access', () => {
 		const mega = Dex.species.get('Hydreigon-Mega-X');
+		if (!ENABLE_MEGA_HYDREIGON_X) {
+			assert(!mega.exists);
+			assert(!Dex.items.get('Hydreigonite').exists);
+			assert(!Dex.species.get('Hydreigon').otherFormes?.includes('Hydreigon-Mega-X'));
+			return;
+		}
 		assert.deepEqual(mega.types, ['Dark', 'Dragon']);
 		assert.deepEqual(mega.baseStats, {hp: 92, atk: 155, def: 115, spa: 135, spd: 115, spe: 88});
 		assert.equal(mega.bst, 700);
@@ -29,10 +36,13 @@ describe('Mega Hydreigon X and True Hydra', () => {
 			{species: 'Hydreigon', item: 'Hydreigonite', moves: ['dragonclaw', 'splash']},
 		], [{species: 'Aggron', moves: ['splash']}]]);
 		battle.makeChoices('team 1', 'team 1');
-		assert.equal(battle.p1.active[0].canMegaEvo, 'Hydreigon-Mega-X');
-		battle.makeChoices('move dragonclaw mega', 'move splash');
+		if (!ENABLE_MEGA_HYDREIGON_X) {
+			assert.equal(battle.p1.active[0].canMegaEvo, null);
+			battle.p1.active[0].setAbility('True Hydra');
+		} else assert.equal(battle.p1.active[0].canMegaEvo, 'Hydreigon-Mega-X');
+		battle.makeChoices(ENABLE_MEGA_HYDREIGON_X ? 'move dragonclaw mega' : 'move dragonclaw', 'move splash');
 		const hydreigon = battle.p1.active[0];
-		assert.equal(hydreigon.species.id, 'hydreigonmegax');
+		assert.equal(hydreigon.species.id, ENABLE_MEGA_HYDREIGON_X ? 'hydreigonmegax' : 'hydreigon');
 		assert.equal(hydreigon.ability, 'truehydra');
 		for (const component of ['hydrabond', 'regenerator', 'shedskin', 'selfsufficient']) {
 			assert(hydreigon.hasAbility(component), component);
@@ -46,7 +56,9 @@ describe('Mega Hydreigon X and True Hydra', () => {
 			{species: 'Mew', moves: ['splash']},
 		], [{species: 'Blissey', moves: ['splash']}]]);
 		battle.makeChoices('team 1', 'team 1');
-		battle.makeChoices('move splash mega', 'move splash');
+		if (ENABLE_MEGA_HYDREIGON_X) battle.makeChoices('move splash mega', 'move splash');
+		else battle.p1.active[0].setAbility('True Hydra');
+		assert.equal(battle.p1.active[0].ability, 'truehydra');
 		const hydreigon = battle.p1.active[0];
 		hydreigon.hp = Math.floor(hydreigon.maxhp / 2);
 		const priorHP = hydreigon.hp;

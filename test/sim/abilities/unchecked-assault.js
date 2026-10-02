@@ -28,7 +28,7 @@ describe('Unchecked Assault', function () {
 		assert.statStage(attacker, 'spe', 0);
 	});
 
-	it('replaces Persian\'s Unnerve slot with Limber', function () {
-		assert.equal(common.dex.species.get('persian').abilities.H, 'Limber');
+	it('replaces Persian\'s Unnerve slot with Gilded Grace', function () {
+		assert.equal(common.dex.species.get('persian').abilities.H, 'Gilded Grace');
 	});
 });

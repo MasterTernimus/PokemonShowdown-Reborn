@@ -17,7 +17,7 @@ describe('Aevian Glacier', () => {
 		assert.equal(Dex.species.get('Turtonator').abilities.S, 'Aevian Glacier');
 		const rejuv = Dex.species.get('Turtonator-Rejuv');
 		assert.deepEqual(rejuv.types, ['Ice', 'Dragon']);
-		assert.deepEqual(rejuv.baseStats, {hp: 80, atk: 115, def: 130, spa: 15, spd: 130, spe: 50});
+		assert.deepEqual(rejuv.baseStats, {hp: 80, atk: 110, def: 130, spa: 25, spd: 120, spe: 36});
 		assert.equal(rejuv.requiredAbility, 'Aevian Glacier');
 		for (const move of ['avalanche', 'dragondance', 'headlongrush', 'mountaingale', 'sheercold', 'wildcharge']) {
 			assert(Learnsets.turtonator.learnset[move], `Turtonator should learn ${move}`);

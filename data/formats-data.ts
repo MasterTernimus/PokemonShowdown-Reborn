@@ -6249,6 +6249,8 @@ const latestFormatUpdates: {[id: string]: any} = {
 	gyaradosaevian: {isNonstandard: "Custom", tier: "OU"},
 	gyaradosaevianmega: {isNonstandard: "Custom", tier: "Illegal"},
 	chandelureaevian: {isNonstandard: "Custom", tier: "OU"},
+	skeledirgeaevian: {isNonstandard: "Custom", tier: "OU"},
+	glimmoraaevian: {isNonstandard: "Custom", tier: "OU"},
 	pikachucosplay: {isNonstandard: null, tier: "ZU"},
 	pikachurockstar: {isNonstandard: null, tier: "ZU"},
 	pikachubelle: {isNonstandard: null, tier: "ZU"},

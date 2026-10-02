@@ -77,7 +77,7 @@ describe('Levitate [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should not have its airborne property suppressed by Mold Breaker if it is forced out by a move', function () {
+	common.itGen(4, 'should not have its airborne property suppressed by Mold Breaker if it is forced out by a move', function () {
 		battle = common.gen(4).createBattle([
 			[{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']}, {species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']}],
 			[{species: 'Rampardos', ability: 'moldbreaker', moves: ['roar', 'spikes']}],

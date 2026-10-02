@@ -12,8 +12,8 @@ describe('Raging Beast and related species updates', () => {
 	});
 
 	it('should expose the requested species data on server', () => {
-		assert.deepEqual(Dex.species.get('Zangoose').types, ['Normal', 'Steel']);
-		assert.deepEqual(Dex.species.get('Beartic').abilities, {0: 'Raging Beast', 1: 'Slush Rush', H: 'Swift Swim'});
+		assert.deepEqual(Dex.species.get('Zangoose').types, ['Normal', 'Fighting']);
+		assert.deepEqual(Dex.species.get('Beartic').abilities, {0: 'Raging Beast', 1: 'Floe Hunter', H: 'Swift Swim'});
 		assert.deepEqual(Dex.species.get('Beartic').baseStats, {
 			hp: 110, atk: 130, def: 90, spa: 55, spd: 85, spe: 75,
 		});
@@ -24,7 +24,7 @@ describe('Raging Beast and related species updates', () => {
 		assert.deepEqual(Dex.species.get('Ursaring').baseStats, {
 			hp: 100, atk: 130, def: 80, spa: 40, spd: 80, spe: 70,
 		});
-		assert.equal(Dex.species.get('Ursaring').abilities[0], 'Raging Beast');
+		assert.equal(Dex.species.get('Ursaring').abilities[0], 'Savage Resolve');
 	});
 
 	it('should provide both Guts and Mold Breaker behavior', () => {
@@ -55,13 +55,13 @@ describe('Raging Beast and related species updates', () => {
 		const lunarDread = battle.p1.active[0];
 		const foe = battle.p2.active[0];
 		assert.equal(foe.boosts.atk, 0);
-		assert(lunarDread.hasAbility('magicguard'));
-		assert(lunarDread.hasAbility('pressure'));
-		assert(lunarDread.hasAbility('unaware'));
+		assert(!lunarDread.hasAbility('magicguard'));
+		assert(!lunarDread.hasAbility('pressure'));
+		assert(!lunarDread.hasAbility('unaware'));
 		assert(!lunarDread.hasAbility('intimidate'));
 	});
 
-	it('should provide Territorial with its component effects', () => {
+	it('should not retain Territorial’s removed Unnerve, Unaware or Tough Claws effects', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Ursaluna', ability: 'Territorial', moves: ['splash']},
 		], [
@@ -71,13 +71,13 @@ describe('Raging Beast and related species updates', () => {
 		const territorial = battle.p1.active[0];
 		const foe = battle.p2.active[0];
 		assert.equal(foe.boosts.atk, 0);
-		assert(territorial.hasAbility('unnerve'));
-		assert(territorial.hasAbility('unaware'));
-		assert(territorial.hasAbility('toughclaws'));
+		assert(!territorial.hasAbility('unnerve'));
+		assert(!territorial.hasAbility('unaware'));
+		assert(!territorial.hasAbility('toughclaws'));
 		assert(!territorial.hasAbility('intimidate'));
 	});
 
-	it('should give Relentless Link its Guts effect', () => {
+	it('should give Relentless Link Skill Link, Mold Breaker and Power Drill without Guts', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Heracross-Mega', ability: 'Relentless Link', moves: ['splash']},
 		], [
@@ -85,9 +85,10 @@ describe('Raging Beast and related species updates', () => {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const heracross = battle.p1.active[0];
-		assert(heracross.hasAbility('guts'));
+		for (const id of ['skilllink', 'moldbreaker', 'powerdrill']) assert(heracross.hasAbility(id));
+		assert(!heracross.hasAbility('guts'));
 		const attackBeforeBurn = heracross.getStat('atk');
 		heracross.setStatus('brn');
-		assert.equal(heracross.getStat('atk'), battle.modify(attackBeforeBurn, 1.5));
+		assert.equal(heracross.getStat('atk'), attackBeforeBurn);
 	});
 });

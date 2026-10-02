@@ -21,7 +21,7 @@ describe('Approved mixed attacker and guardian abilities', () => {
 
 	it('Knuckle Tide primes both physical and special Water attacks', () => {
 		const [holder, , foe] = doubles('Poliwrath', 'Knuckle Tide');
-		assert.deepEqual(holder.species.baseStats, {hp: 95, atk: 105, def: 95, spa: 100, spd: 85, spe: 70});
+		assert.deepEqual(holder.species.baseStats, {hp: 100, atk: 115, def: 100, spa: 80, spd: 90, spe: 75});
 		assert(holder.hasAbility('ironfist'));
 		const punch = battle.dex.getActiveMove('drainpunch');
 		assert.equal(battle.runEvent('BasePower', holder, foe, punch, 100), 140);

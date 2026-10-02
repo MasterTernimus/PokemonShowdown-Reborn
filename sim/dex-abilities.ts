@@ -3,6 +3,14 @@ import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
 
 interface AbilityEventMethods {
+	fallen?: (this: Battle, pokemon: Pokemon) => number;
+	getBestNoseMove?: (this: Battle, source: Pokemon, target: Pokemon) => ActiveMove | null;
+	queueTemporalHex?: (this: Battle, pokemon: Pokemon, abilityName?: string, typePool?: string[] | null, basePower?: number, immediate?: boolean) => void;
+	boostedField?: (this: Battle) => boolean;
+	healUltraEgo?: (this: Battle, pokemon: Pokemon, source: string) => void;
+	checkMode?: (this: Battle, pokemon: Pokemon) => void;
+	markRequiem?: (this: Battle, target: Pokemon, source: Pokemon) => void;
+	lowerOffense?: (this: Battle, target: Pokemon, source: Pokemon) => void;
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
 	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
 	onStart?: (this: Battle, target: Pokemon) => void;
@@ -30,6 +38,12 @@ export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {
 };
 export interface AbilityDataTable { [abilityid: IDEntry]: AbilityData }
 export interface ModdedAbilityDataTable { [abilityid: IDEntry]: ModdedAbilityData }
+
+// Event callbacks are copied onto Dex abilities by assignMissingFields.
+export interface Ability extends AbilityEventMethods, PokemonEventMethods {}
+
+type AbilityHandler<K extends keyof Ability> = Extract<NonNullable<Ability[K]>, (...args: never[]) => unknown>;
+type AbilityHandlerName = {[K in keyof Ability]-?: AbilityHandler<K> extends never ? never : K}[keyof Ability];
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Ability';
@@ -79,6 +93,14 @@ export class DexAbilities {
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
+	}
+
+	/** Composite abilities may delegate callbacks or constant event results. */
+	getHandler<K extends AbilityHandlerName>(name: string, event: K): AbilityHandler<K> | undefined {
+		const handler: unknown = this.get(name)[event];
+		if (typeof handler === 'function') return handler as AbilityHandler<K>;
+		if (typeof handler === 'boolean') return (() => handler) as AbilityHandler<K>;
+		return undefined;
 	}
 
 	get(name: string | Ability = ''): Ability {

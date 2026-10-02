@@ -1,4 +1,5 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
+	wildfirecore: "Unbound Blaze",
 	hippodownrift: "Hippowdon-Rift",
 	torterreariftshatter: "Torterra-Rift-Shatter",
 	parasectparasitism: "Parasect-Rejuv",

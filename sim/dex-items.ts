@@ -23,6 +23,8 @@ export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 export interface ItemDataTable { [itemid: IDEntry]: ItemData }
 export interface ModdedItemDataTable { [itemid: IDEntry]: ModdedItemData }
 
+export interface Item extends PokemonEventMethods {}
+
 export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Item';
 

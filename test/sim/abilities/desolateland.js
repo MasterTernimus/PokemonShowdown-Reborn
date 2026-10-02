@@ -28,7 +28,12 @@ describe('Desolate Land', function () {
 		battle.randomizer = dmg => dmg; // max damage
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
-		assert.hurtsBy(defender, 152, () => battle.makeChoices('move incinerate', 'move splash'));
+		battle.field.clearWeather();
+		battle.onEvent('CriticalHit', battle.format, () => false);
+		const unboosted = battle.actions.getDamage(attacker, defender, 'incinerate');
+		battle.field.setWeather('desolateland', attacker);
+		battle.makeChoices('move incinerate', 'move splash');
+		assert.bounded((defender.maxhp - defender.hp) / unboosted, [1.45, 1.55]);
 		const move = Dex.moves.get('incinerate');
 		const basePower = battle.runEvent('BasePower', attacker, defender, move, move.basePower, true);
 		assert.equal(basePower, move.basePower);

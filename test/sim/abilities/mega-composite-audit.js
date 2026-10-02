@@ -105,12 +105,12 @@ describe('Mega composite ability components', () => {
 		assert.equal(tyranitar.hasAbility('battlearmor'), false);
 	});
 
-	it('Solar Trap damages the attacker when Mega Victreebel takes a lethal hit', () => {
+	it('Solar Trap no longer retaliates when Mega Victreebel faints', () => {
 		const [victreebel, foe] = mega('Victreebel', 'Victreebelite', ['splash', 'tackle']);
 		assert.equal(victreebel.ability, 'solartrap');
 		victreebel.hp = 1;
 		const before = foe.hp;
 		battle.makeChoices('move splash', 'move tackle');
-		assert(foe.hp < before);
+		assert.equal(foe.hp, before);
 	});
 });

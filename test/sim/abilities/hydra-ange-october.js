@@ -9,7 +9,7 @@ describe('Hydra Heart and Ange approved scope; disputed abilities verification',
   battle.singleEvent('DamagingHit',p.getAbility(),p.abilityState,p,t,battle.dex.getActiveMove('tackle'),1);assert.equal(p.boosts.def,1);assert(p.hp>hp);
  });
  it('Ange excludes every current Rift/Pulse form even when Terastallized',()=>{
-  const[p,t]=setup('Ange','Floette-Mega');const forms=battle.dex.species.all().filter(s=>/^(Rift|Pulse)(?:-|$)/i.test(s.forme));assert.equal(forms.length,7);
+  const[p,t]=setup('Ange','Floette-Mega');const forms=battle.dex.species.all().filter(s=>/^(Rift|Pulse)(?:-|$)/i.test(s.forme));assert(forms.length >= 12, 'Expected the current Rift/Pulse roster, including new forms');
   for(const species of forms){t.species=species;for(const tera of ['', 'Fire']){t.terastallized=tera;for(const stat of ['Atk','Def','SpA','SpD','Spe'])assert.equal(battle.runEvent('Modify'+stat,t,p,null,100),100,species.name+' '+tera+' '+stat);}}
  });
  it('Ange retains 0.7 suppression on all five stats for eligible Mega and Gmax targets',()=>{

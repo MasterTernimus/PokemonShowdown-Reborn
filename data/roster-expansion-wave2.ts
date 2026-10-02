@@ -61,7 +61,8 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	add('titanpincer', 'Titan Pincer', {
 		...base.hypercutter,
 		onModifyMove(move, source) {
-			if (move.id === 'crabhammer' && source.getStat('def') > source.getStat('atk')) move.overrideOffensiveStat = 'def';
+			if ((move.id === 'crabhammer' || (move.type === 'Steel' && move.category === 'Physical')) &&
+				source.getStat('def') > source.getStat('atk')) move.overrideOffensiveStat = 'def';
 		},
 	});
 	add('shellcracker', 'Shellcracker', {

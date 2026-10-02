@@ -10,6 +10,24 @@ describe('Gulp Missile', function () {
 		battle.destroy();
 	});
 
+	for (const field of ['watersurfaceterrain', 'underwaterterrain']) {
+		it(`should preload a temporary catch on ${field} but reset on re-entry elsewhere`, function () {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Cramorant', ability: 'Gulp Missile', moves: ['splash']},
+				{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+			battle.field.changeTerrain(field, 'debug');
+			battle.makeChoices('team 1', 'team 1');
+			const cramorant = battle.p1.active[0];
+			assert.species(cramorant, 'Cramorant-Gulping');
+			assert.equal(cramorant.baseSpecies.id, 'cramorant');
+			battle.field.changeTerrain('rockyterrain', cramorant);
+			battle.makeChoices('switch 2', 'move splash');
+			battle.makeChoices('switch 2', 'move splash');
+			assert.species(cramorant, 'Cramorant');
+		});
+	}
+
 	it(`should retrieve a catch on the first turn of Dive`, function () {
 		battle = common.createBattle([[
 			{species: 'cramorant', ability: 'gulpmissile', moves: ['dive']},
@@ -48,10 +66,17 @@ describe('Gulp Missile', function () {
 		], [
 			{species: 'sceptile', ability: 'shellarmor', moves: ['magicpowder']},
 		]]);
+		let checked = false;
+		battle.onEvent('ModifySTAB', battle.format, (stab, source, target, move) => {
+			if (move.id !== 'surf') return;
+			assert.species(source, 'Cramorant-Gulping');
+			assert(source.hasType('Water'));
+			assert.equal(stab, 1.5);
+			checked = true;
+		});
 		battle.makeChoices();
-		const sceptile = battle.p2.active[0];
-		const damage = sceptile.maxhp - sceptile.hp;
-		assert.bounded(damage, [48, 57], `Cramorant should have received STAB in damage calculation`);
+		assert(checked, 'Surf must receive STAB after the forme change');
+		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	describe(`Hackmons Cramorant`, function () {

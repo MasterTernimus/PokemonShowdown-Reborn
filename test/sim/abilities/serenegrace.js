@@ -31,7 +31,7 @@ describe(`Serene Grace`, function () {
 		battle.makeChoices('move bite 1, move sleeptalk', 'auto');
 	});
 
-	it(`[Gen 8] should overflow when quadrupling a stat drop effect with Pledge Rainbow`, function () {
+	common.itGen(8, `[Gen 8] should overflow when quadrupling a stat drop effect with Pledge Rainbow`, function () {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', ability: 'serenegrace', moves: ['poweruppunch', 'waterpledge']},
 			{species: 'wobbuffet', ability: 'serenegrace', moves: ['acidspray', 'firepledge']},

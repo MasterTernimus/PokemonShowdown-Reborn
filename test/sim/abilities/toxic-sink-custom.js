@@ -13,7 +13,7 @@ describe('Toxic Sink custom effects', () => {
 
 	it('should expose the reworked Vileplume abilities', () => {
 		assert.deepEqual(Dex.species.get('Vileplume').abilities, {
-			0: 'Chlorophyll', 1: 'Storm Drain', H: 'Toxic Sink',
+			0: 'Pollen Engine', 1: 'Storm Drain', H: 'Toxic Sink',
 		});
 	});
 

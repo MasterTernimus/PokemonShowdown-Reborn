@@ -36,7 +36,7 @@ describe('Liquid Ooze [Gen 4]', function () {
 		battle.destroy();
 	});
 
-	it('should damage the target after it uses a draining move', function () {
+	common.itGen(4, 'should damage the target after it uses a draining move', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
 		], [
@@ -46,7 +46,7 @@ describe('Liquid Ooze [Gen 4]', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should damage the target after taking damage from leech seed`, function () {
+	common.itGen(4, `should damage the target after taking damage from leech seed`, function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
 		], [
@@ -56,7 +56,7 @@ describe('Liquid Ooze [Gen 4]', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should not damage the target if the target used Dream Eater', function () {
+	common.itGen(4, 'should not damage the target if the target used Dream Eater', function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
 		], [

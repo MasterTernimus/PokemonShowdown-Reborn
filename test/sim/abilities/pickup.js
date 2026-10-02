@@ -91,7 +91,7 @@ describe('Pickup', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it('should not pick up items from non-adjacent allies and enemies', function () {
+	common.itGen(5, 'should not pick up items from non-adjacent allies and enemies', function () {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Ambipom', ability: 'pickup', moves: ['protect']},

@@ -79,7 +79,7 @@ describe('Dancer', function () {
 		assert.holdsItem(wynaut, `Persim Berry should not be consumed, because Dancer did not activate`);
 
 		battle.makeChoices('auto', 'move teeterdance, move sleeptalk');
-		assert(battle.log.some(line => line.includes('Dancer')));
+		assert(battle.log.some(line => line.startsWith('|-activate|') && line.includes('Dancer')));
 	});
 
 	it(`should not copy a Dance move that failed for other reasons`, function () {
@@ -111,12 +111,12 @@ describe('Dancer', function () {
 
 		// Modding accuracy so Revelation Dance always misses if Oricorio uses it (Wynaut should in fact never use it though)
 		battle.onEvent('Accuracy', battle.format, function (accuracy, target, pokemon, move) {
-			return pokemon.id === 'wynaut';
+			return pokemon.species.id === 'wynaut';
 		});
 
 		battle.makeChoices(); // miss on initial use
 		battle.makeChoices(); // miss into semi-invulnerability
-		assert.false(battle.log.some(line => line.includes('Dancer')));
+		assert.false(battle.log.some(line => line.startsWith('|-activate|') && line.includes('Dancer')));
 	});
 
 	it('should copy a move that hit, but did 0 damage', function () {
@@ -170,7 +170,7 @@ describe('Dancer', function () {
 
 	it('should adopt the target selected by copycat', function () {
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
-			{species: 'oricoriopau', ability: 'dancer', moves: ['featherdance']},
+			{species: 'oricoriopau', ability: 'dancer', evs: {spe: 252}, nature: 'Timid', moves: ['featherdance']},
 			{species: 'flamigo', moves: ['copycat']},
 		], [
 			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},

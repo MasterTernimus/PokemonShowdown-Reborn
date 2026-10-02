@@ -88,7 +88,7 @@ describe(`Emergency Exit`, function () {
 			{species: "Golisopod", item: 'blacksludge', ability: 'emergencyexit', moves: ['payback']},
 			{species: "Wynaut", moves: ['sleeptalk']},
 		], [
-			{species: "Swoobat", ability: 'noguard', moves: ['superfang']},
+			{species: "Swoobat", level: 50, ability: 'noguard', moves: ['superfang']},
 			{species: "Stufful", moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
@@ -296,7 +296,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it('should request switchout if its HP drops to below 50% while dynamaxed', function () {
+	common.itGen(8, 'should request switchout if its HP drops to below 50% while dynamaxed', function () {
 		battle = common.gen(8).createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['closecombat'], ivs: EMPTY_IVS, level: 30}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Gengar", ability: 'cursedbody', moves: ['nightshade']}],
@@ -307,7 +307,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it('should not request switchout if its HP is below 50% when its dynamax ends', function () {
+	common.itGen(8, 'should not request switchout if its HP is below 50% when its dynamax ends', function () {
 		battle = common.gen(8).createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['drillrun'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Landorus", ability: 'sheerforce', moves: ['sludgewave']}],
