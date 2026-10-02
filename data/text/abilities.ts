@@ -1,6 +1,11 @@
 import {getAbilityDisplayComponents} from '../ability-display';
 import { RosterExpansionDescriptions, RosterExpansionShortDescriptions } from '../roster-expansion-text';
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+	reservoir: {
+		name: "Reservoir",
+		desc: "Has Water Absorb, Gluttony, and Damp's full effects. Water-type moves from other Pokemon heal 1/4 maximum HP instead of hitting; qualifying water fields heal 1/16 each turn. Berries normally eaten at 1/4 HP activate at 1/2 HP. Prevents Explosion, Self-Destruct, Mind Blown, Misty Explosion, and Aftermath damage. Halves the attacking stat used by incoming Fire-type moves, and prevents Damp's ignition moves on Corrosive Mist Field.",
+		shortDesc: "Water Absorb + Gluttony + Damp.",
+	},
 	lancepoint: {
 		name: "Lance Point",
 		desc: "Has Keen Eye's full effect: opponents cannot lower its accuracy and its moves ignore the target's evasion boosts. On Mirror Arena, gains one accuracy stage and Laser Focus on entry. Drill moves gain one critical-hit stage and do not make contact. Critical-hit prevention still applies. Does not include Sniper.",
@@ -954,8 +959,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalscales: {
 		name: "Royal Scales",
-		desc: "Prism Scale and Dragonize. Status or Prism Scale's supported fields boost Defense by 1.5x. Blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Speed doubles in rain and Swift Swim's supported fields. Normal moves become Dragon and gain Dragonize's power boost.",
-		shortDesc: "Prism Scale + Dragonize.",
+		desc: "Prism Scale, Dragonize, and Self Sufficient. Status or Prism Scale's supported fields boost Defense by 1.5x. Blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Speed doubles in rain and Swift Swim's supported fields. Normal moves become Dragon and gain Dragonize's power boost. Restores 1/16 of this Pokemon's maximum HP at the end of each turn and prevents Sandstorm and Hail damage.",
+		shortDesc: "Prism Scale + Dragonize + Self Sufficient; heals 1/16 each turn; immune to Sandstorm and Hail.",
 	},
 	toxicarmor: {
 		name: "Toxic Armor",

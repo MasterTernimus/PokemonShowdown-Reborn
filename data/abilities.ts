@@ -486,6 +486,38 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10432,
 	},
+	reservoir: {
+		onStart(pokemon) {
+			this.dex.abilities.get('gluttony').onStart?.call(this, pokemon);
+		},
+		onDamage(damage, pokemon, source, effect) {
+			return this.dex.abilities.get('gluttony').onDamage?.call(this, damage, pokemon, source, effect);
+		},
+		onTryHit(target, source, move) {
+			return this.dex.abilities.getHandler('waterabsorb', 'onTryHit')?.call(this, target, source, move);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('waterabsorb').onResidual?.call(this, pokemon);
+		},
+		onAnyTryMove(target, source, move) {
+			return this.dex.abilities.getHandler('damp', 'onAnyTryMove')?.call(this, target, source, move);
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			return this.dex.abilities.get('damp').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(spa, attacker, defender, move) {
+			return this.dex.abilities.get('damp').onSourceModifySpA?.call(this, spa, attacker, defender, move);
+		},
+		onAnyDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('damp').onAnyDamage?.call(this, damage, target, source, effect);
+		},
+		flags: { breakable: 1 },
+		name: "Reservoir",
+		rating: 4,
+		num: 11233,
+	},
 	crosscurrent: {
 		onStart() {
 			this.effectState.lastCategory = '';
@@ -8066,7 +8098,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return (this.dex.abilities.get('dragonize') as any).onModifySTAB?.call(this, stab, source, target, move);
 		},
 		onImmunity(type, pokemon) {
+			const result = this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
+			if (result !== undefined) return result;
 			return this.dex.abilities.get('prismscale').onImmunity?.call(this, type, pokemon);
+		},
+		onResidual(pokemon) {
+			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Royal Scales",

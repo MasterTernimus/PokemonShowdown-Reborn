@@ -1,5 +1,6 @@
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
+	reservoir: ['waterabsorb', 'gluttony', 'damp'],
 	savageresolve: ['guts'],
 	lancepoint: ['keeneye'],
 	anchoredbattery: ['megalauncher', 'suctioncups'],
@@ -35,7 +36,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	apexpredator: ['relicarmor', 'dragonize', 'windrider'],
 	tyrantdomain: ['relicarmor', 'supremeoverlord', 'selfsufficient', 'sandstream'],
 	auroradomain: ['relicarmor', 'refrigerate', 'selfsufficient', 'snowwarning'],
-	royalscales: ['prismscale', 'marvelscale', 'oblivious', 'swiftswim', 'dragonize'],
+	royalscales: ['prismscale', 'marvelscale', 'oblivious', 'swiftswim', 'dragonize', 'selfsufficient'],
 	aeviandream: ['baddreams', 'shedskin', 'toughclaws'],
 	wingedwraith: ['infiltrator', 'galewings'],
 	toxicsink: ['effectspore', 'invigorate'],
