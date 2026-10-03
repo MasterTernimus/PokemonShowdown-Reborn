@@ -1,3 +1,4 @@
+import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { MidnightZone } from './midnight-zone';
 /* eslint-disable @stylistic/max-len */
 import { type TerrainData } from "../sim/dex-terrains";
@@ -29,12 +30,12 @@ function flowerGardenStage(stage: number): TerrainData {
 			duration: 9999,
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				if (move.type === 'Grass') modifier *= [1, 1, 1.1, 1.3, 1.5, 2][stage];
-				if (move.type === 'Bug') modifier *= [1, 1, 1, 1.5, 2, 2][stage];
-				if (move.type === 'Fire' && stage >= 3) modifier *= 1.5;
-				if (stage >= 2 && move.id === 'cut') modifier *= target.hasType('Grass') ? 2 : 1.5;
+				if (move.type === 'Grass') modifier *= adaptiveFieldMultiplier(this, source, target, [1, 1, 1.1, 1.3, 1.5, 2][stage]);
+				if (move.type === 'Bug') modifier *= adaptiveFieldMultiplier(this, source, target, [1, 1, 1, 1.5, 2, 2][stage]);
+				if (move.type === 'Fire' && stage >= 3) modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
+				if (stage >= 2 && move.id === 'cut') modifier *= adaptiveFieldMultiplier(this, source, target, target.hasType('Grass') ? 2 : 1.5);
 				if (stage >= 3 && ['fleurcannon', 'flowertrick', 'petalblizzard', 'petaldance', 'springtidestorm'].includes(move.id)) {
-					modifier *= stage === 3 ? 1.2 : 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, stage === 3 ? 1.2 : 1.5);
 				}
 				return this.chainModify(modifier);
 			},
@@ -92,16 +93,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const boost = ['psychic'];
 				let modifier = 1;
 				if (uberboost.includes(move.id)) {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (megaboost.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (miniboost.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (boost.includes(move.id)) {
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				}
 				return this.chainModify(modifier);
 			},
@@ -159,31 +160,31 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const blessedMoves = ['judgement', 'originpulse', 'purify', 'sacredfire', 'dazzlinggleam', 'flash'];
 
 				if (move.type === 'Fairy') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'The fairy aura amplified the attack\'s power!');
 				}
 				if (move.type === 'Grassy') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'Flourish!');
 				}
 				if (move.type === 'Dark') {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 					this.add('-message', 'The dark aura amplified the attack\'s power!');
 				}
 				if (boostMoves.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'Mystical aura amplified the attack!');
 				}
 				if (weakerboostMoves.includes(move.id)) {
-					modifier *= 1.4;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.4);
 					this.add('-message', 'Magic aura amplified the attack!');
 				}
 				if (weakBoost.includes(move.id)) {
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 					this.add('-message', 'The forest is cursed with nightfall!');
 				}
 				if (blessedMoves.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 					this.add('-message', 'The evil spirits have been exorcised!');
 				}
 				return this.chainModify(modifier);
@@ -270,16 +271,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const boost = ['acrobatics', 'fierydance', 'firelash', 'firstimpression', 'fly', 'petaldance', 'powerwhip', 'revelationdance', 'vinewhip'];
 				if (move.id === 'payday' || move.id === 'makeitrain') {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (move.flags.sound || move.id === 'drumbeating') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boost.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'skittersmack' || move.id === 'bodypress' || move.id === 'tripleaxel') {
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				}
 				return this.chainModify(modifier);
 			},
@@ -334,25 +335,25 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const smogfireMoves = ['smog', 'clearsmog'];
 				let modifier = 1;
 				if (move.type === 'Fire' && source.isGrounded()) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'infernalparade') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Grass' && target.isGrounded()) {
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (move.type === 'Ice') {
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (rockfireMoves.includes(move.id)) {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (smogfireMoves.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (terrainEndMoves.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -437,34 +438,34 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
 				if (move.id === 'rocktomb') {
 					this.add('message', '...Piled on!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Rock') {
 					this.add('-message', 'The cavern strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.flags.sound) {
 					this.add('-message', 'Echo-Echo-Echo');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Flying' && !move.flags.contact) {
 					this.add('-message', 'The cave choked out the air!');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (cavern.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.terrainChanges?.get('volcanicterrain') === 1)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.isMax && (move.type === 'Dragon' || move.type === 'Fire')) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (dragonMove.includes(move.id) || (uberDragon.includes(move.id) && this.field.terrainState.terrainChanges?.get('dragonsdenterrain') === 1)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (icy.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -620,41 +621,41 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const smartAbilities = ['adaptability', 'synchronize', 'anticipation', 'telepathy'];
 				const breakMoves = ['stompingtantrum', 'tectonicrage'];
 				if (move.id === 'barrage') {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 
 				if (chessMoves.includes(move.id)) {
 					if (target.hasAbility(dumbAbilities) || target.volatiles['confusion']) {
 						this.add('-message', 'The complicated move made the pokemon cross-eyed!');
-						modifier *= 2;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 					}
 					if (target.hasAbility(smartAbilities)) {
 						this.add('-message', 'The complicated move was easily analyzed by the pokemon!');
-						modifier *= 0.5;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 					}
 					this.add('-message', 'The chess piece slammed forward!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boost.includes(move.id)) {
 					this.add('-message', 'En Passant!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (source.Role === 'Queen') {
 					this.add('-message', 'The Queen is dominating the board!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (source.Role === 'Knight') {
 					if (target.Role === 'Queen') {
 						this.add('-message', 'An unblockable attack on the Queen!');
-						modifier *= 3;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 3);
 					}
 					if (move.target === 'allAdjacentFoes') {
 						this.add('-message', 'The knight forked the opponents!');
-						modifier *= 1.25;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.25);
 					}
 				}
 				if (breakMoves.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -697,6 +698,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('limber')) return;
 				const immune = ['slushrush', 'icebody', 'mindfreeze', 'thickfat', 'illusion', 'duskilate', 'armorize', 'webassassin', 'spiralevolution'];
 				if (!(pokemon.hasAbility(immune) || !pokemon.isGrounded() || pokemon.hasType(['Ice', 'Dragon']))) {
 					return this.chainModify(0.75);
@@ -749,38 +751,38 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const onePointFive = ['bittermalice', 'bloodmoon', 'freezingglare', 'moongeistbeam', 'fierywrath', 'roaroftime', 'freezeshock', 'iceburn', 'menacingmoonrazemaelstrom'];
 				const reduced = ['hydrosteam', 'scald', 'steameruption', 'lightthatburnsthesky'];
 				if (moveTypes.includes('Ice')) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (moveTypes.includes('Dragon')) {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (moveTypes.includes('Rock') || moveTypes.includes('Fighting')) {
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (moveTypes.includes('Fire')) {
 					if (source.hasAbility(['fullmetalbody', 'turboblaze', 'atrocity'])) {
-						modifier *= 2;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 						this.add('-message', source.name + '\'s ' + source.ability + ' defies the frozen night!');
 					} else {
 						this.add('-message', 'The heat was swallowed by the frozen night!');
-						modifier *= source.hasAbility('soulfire') ? 0.75 : 0.5;
+						modifier *= adaptiveFieldMultiplier(this, source, target, source.hasAbility('soulfire') ? 0.75 : 0.5);
 					}
 				}
 				if (moveTypes.includes('Ghost') && source.hasAbility('soulfire')) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (reduced.includes(move.id)) {
 					this.add('-message', 'The heat was swallowed by the frozen night!');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (move.flags['wind'] || twoTimes.includes(move.id)) {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (onePointFive.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (source.hasAbility('relentlesshunt')) {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				return this.chainModify(modifier);
 			},
@@ -900,16 +902,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const terrainEndMoves = ['defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'supersonicskystrike', 'seedflare', 'gmaxwindrage'];
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				if (move.type === 'Fire') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (poisonedMoves.includes(move.id))
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				if (smogMoves.includes(move.id))
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				if (terrainEndMoves.includes(move.id) || igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire'))
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				if (move.id === 'seedflare')
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
@@ -998,13 +1000,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const superStrong = ['acid', 'acidspray', 'grassknot', 'snaptrap'];
 				const poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows', 'appleacid'];
 				if (superStrong.includes(move.id)) {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (poisonedMoves.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'seedflare') {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -1054,28 +1056,28 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const dark = ['darkpulse', 'darkvoid', 'nightdaze', 'lightthatburnsthesky'];
 				if (move.type === 'Rock') {
 					this.add('-message', 'The crystals charged the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Dragon') {
 					this.add('-message', 'The crystal energy strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (crystalBoost.includes(move.id)) {
 					this.add('-message', 'The crystals strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boost.includes(move.id)) {
 					this.add('-message', 'The crystals\' light strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (weakboost.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (terrainbreak.includes(move.id) && (this.field.terrainState.terrainChanges?.get('caveterrain') === 1 || move.id === 'tectonicrage')) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (dark.includes('move.id') && this.field.weather !== 'sunnyday') {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -1155,17 +1157,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const terrainbreak = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];
 				if (superboost.includes(move.id)) {
 					this.add('-message', 'The field super charged the attack');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (boost.includes(move.id)) {
 					this.add('-message', 'The field strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'lightthatburnsthesky') {
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (terrainbreak.includes(move.id) && this.field.terrainState.terrainChanges?.get('caveterrain') === 1) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -1236,18 +1238,18 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const boneBoost = ['bonemerang', 'boneclub', 'bonerush', 'shadowbone'];
 				if (move.type === 'Water' && source.isGrounded() && !steamMoves.includes(move.id)) {
 					this.add('-message', 'The intense desert heat blunted the attack!');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (move.type === 'Electric' && target.isGrounded()) {
 					this.add('-message', 'The floating sand particles partially grounded the attack!');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (sandified.includes(move.id)) {
 					this.add('-message', 'The harsh desert heat augmented the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boneBoost.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'The lifeless desert strengthened the attack!');
 				}
 				return this.chainModify(modifier);
@@ -1309,25 +1311,25 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const current = this.field.terrainState.terrainChanges?.get('caveterrain') ?? 0;
 				if (move.type === 'Dragon' || move.type === 'Fire') {
 					this.add('-message', 'The ambient dragon fire boosted the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Rock') {
 					this.add('-message', 'The super hot rocks boosted the attack!');
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.type === 'Ice' || move.type === 'Water') {
 					this.add('-message', 'The lava\'s heat softened the attack...');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (boost.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (uberboost.includes(move.id)) {
 					this.add('-message', 'The draconic energy boosted the attack!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (terrain_change.includes(move.id) || (current + change >= 3)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				const moveMessages = new Map<string, string>([
 					['megakick', 'Trial of the Dragon!!!'],
@@ -1405,17 +1407,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const uberboost = ['doubleironbash', 'flashcannon', 'geargrind', 'gyroball', 'magnetbomb'];
 				const boost = ['steamroller', 'technoblast'];
 				if (move.type === 'Electric') {
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				}
 				if (uberboost.includes(move.id)) {
 					this.add('-message', 'ATTACK SEQUENCE INITIATE.');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (boost.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (quakemoves.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -1464,24 +1466,24 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (move.type === 'Dragon') {
 					this.add('-message', 'The draconic energy was strengthened by the dead princesses on the field!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (move.type === 'Fairy') {
 					this.add('-message', 'The fairy energy was strengthened by the dead dragons on the field!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Steel') {
 					this.add('-message', 'The steel energy was strengthened by the dead knights on the field!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					this.add('-message', 'The move was strengthened by the terrain!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'drainingkiss' || move.id === 'mistball') {
 					this.add('-message', 'The move was strengthened by the terrain!');
 
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				return this.chainModify(modifier);
 			},
@@ -1524,41 +1526,41 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
 				const nerfed = ['muddywater', 'surf'];
 				if (move.type === 'Grass') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Bug' && move.category === 'Special') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boosted.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.isMax && move.type === 'Water') {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (nerfed.includes(move.id)) {
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 					const marshCounter = move.id === 'surf' ? 1 : 2;
 					const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
 					if (currentCounter + marshCounter >= 3) {
-						modifier *= 1.3;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 					}
 				}
 				if (move.id === 'cut') {
 					this.add('-message', 'A tree slammed down!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (cutMoves.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (hauntedMoves.includes(move.id) || (move.id === 'curse' && source.types.includes('Ghost'))) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.id === 'gravapple') {
 					this.add('-message', 'The apple did not fall far from the tree.');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				return this.chainModify(modifier);
 			},
@@ -1713,22 +1715,22 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const booMoves = ['astonish', 'boneclub', 'bonerush', 'bonemerang'];
 				const blessedMoves = ['judgement', 'originpulse', 'purify', 'sacredfire', 'dazzlinggleam', 'flash'];
 				if (move.type === 'Ghost') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'The evil aura powered up the attack!');
 				}
 				if (wispMoves.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'Will-o\'-wisps joined the attack...');
 				}
 				if (booMoves.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'Boo!');
 				}
 				if (blessedMoves.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.id === 'shadowbone') {
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 					this.add('-message', 'Spooky scary skeletons!');
 				}
 				return this.chainModify(modifier);
@@ -1794,19 +1796,19 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const hauntedMoves = ['ominouswind', 'phantomforce', 'shadowforce', 'spectralscream', 'trickortreat'];
 				if (move.id === 'radiantassault') {
 					this.add('-message', 'Legendary power accelerated the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if ((move.type === 'Fairy' || move.type === 'Normal') && move.category === 'Special') {
 					this.add('-message', 'The holy energy resonated with the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Dragon' || move.type === 'Psychic') {
 					this.add('-message', 'The legendary energy resonated with the attack!');
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				}
 				if (move.type === 'Ghost' || (move.category === 'Special' && move.type === 'Dark')) {
 					this.add('-message', 'The attack was cleansed...');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (strong_boost.includes(move.id)) {
 					if (move.id === 'extremespeed') {
@@ -1814,14 +1816,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 					} else {
 						this.add('-message', 'The holy energy resonated with the attack!');
 					}
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (hauntedMoves.includes(move.id) || (move.id === 'curse' && source.types.includes('Ghost'))) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (boost.includes(move.id)) {
 					this.add('-message', 'Legendary power accelerated the attack!');
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -1848,6 +1850,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			effectType: "Terrain",
 			duration: 9999,
 			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('limber')) return;
 				if (pokemon.isGrounded() && !pokemon.hasType('Ice') && !pokemon.hasAbility(['snowcloak', 'slushrush', 'icebody', 'refrigerate', 'spiralevolution'])) {
 					return this.chainModify(0.75);
 				}
@@ -1888,35 +1891,35 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const hotWaterCount = this.field.terrainState.terrainChanges?.get('icyHotWater') ?? this.field.terrainState.terrainChanges?.get('previousTerrain') ?? 0;
 				if (move.type === 'Ice') {
 					this.add('-message', 'The cold strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Fire') {
 					this.add('-message', 'The cold softened the attack...');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (hotWaterMoves.includes(move.id)) {
 					this.add('-message', 'The cold softened the attack...');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 					if (hotWaterCount === 1) {
-						modifier *= 1.3;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 					}
 				}
 				if (move.id === 'snipeshot') {
 					this.add('-message', 'The cold air crystallized the missile');
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				}
 				if (move.id === 'bittermalice') {
 					this.add('-message', 'The cold strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'chillingwater') {
 					this.add('-message', 'The freezing air boosted the attack!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				const underlyingTerrain = this.field.terrainState.underlyingTerrain ||
 					this.field.terrainStack[1]?.id || this.field.terrainState.prevTerrain;
 				if (igniteMoves.includes(move.id) || (underlyingTerrain && quakeMoves.includes(move.id)) || (move.isMax && move.type === 'Fire')) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -2097,18 +2100,18 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (isevasion && evasionshredder.includes(move.id)) {
 					this.add('-message', 'The enemy\'s increased evasion concentrated the attack!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (move.id === 'mirrorshot') {
 					this.add('-message', 'The mirrors strengthened the attack!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (minievasionshredder.includes(move.id)) {
 					this.add('-message', 'The reflected light was blinding!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (mirrorbreak.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -2168,23 +2171,23 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const snow = ['blizzard', 'glaciate', 'subzeroslammer', 'mountaingale'];
 				if (move.type === 'Rock' || move.type === 'Flying') {
 					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boost.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (this.field.weather === 'deltastream') {
 					if (wind_boost.includes(move.id)) {
 						this.add('-message', 'The wind strengthened the attack!');
-						modifier *= 1.5;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					}
 					if (move.category === 'Special' && move.type === 'Flying') {
 						this.add('-message', 'The wind strengthened the attack!');
-						modifier *= 1.5;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					}
 				}
 				if (snow.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -2222,6 +2225,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('limber')) return;
 				const immune = ['surgesurfer', 'swiftswim', 'limber', 'webassassin', 'spiralevolution'];
 				if (!pokemon.hasType('Water') && !pokemon.hasAbility(immune) && pokemon.isGrounded()) {
 					return this.chainModify(0.75);
@@ -2253,16 +2257,16 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.type === 'Water') {
 					this.add('-message', 'The water move was aided by the poison!');
 					this.add('-message', 'The toxic water strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Poison') {
 					this.add('-message', 'The poison in the move was supercharged!');
 					this.add('-message', 'The toxic water strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Electric' && target.isGrounded()) {
 					this.add('-message', 'The toxic water conducted the attack!');
-					modifier *= 5325 / 4096;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 5325 / 4096);
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					if (move.id === 'wavecrash') {
@@ -2272,10 +2276,10 @@ export const Terrains: { [k: string]: TerrainData } = {
 					} else {
 						this.add('-message', 'The toxic water strengthened the attack!');
 					}
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (change.includes(move.id)) {
-					modifier *= 5325 / 4096;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 5325 / 4096);
 				}
 				return this.chainModify(modifier);
 			},
@@ -2323,6 +2327,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			effectType: "Terrain",
 			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('limber')) return;
 				if (pokemon.isGrounded() && !pokemon.hasAbility(['limber', 'webassassin', 'spiralevolution'])) {
 					return this.chainModify(0.75);
 				}
@@ -2345,26 +2350,26 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const weak_nerf = ['bulldoze', 'earthquake', 'magnitude'];
 				if (move.id === 'radiantassault') {
 					this.add('-message', 'The light shone through the infinite darkness!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boost.includes(move.id)) {
 					this.add('-message', 'The ethereal energy strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (strong_boost.includes(move.id)) {
 					this.add('-message', 'The light shone through the infinite darkness!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (move.id === 'doomdesire') {
 					this.add('-message', 'A star came crashing down on ' + target.name);
-					modifier *= 4;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 4);
 				}
 				if (weak_nerf.includes(move.id)) {
 					this.add('-message', 'The unformed land diffused the attack...');
-					modifier *= 0.25;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.25);
 				}
 				if (move.type === 'Dark') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'Infinity boosted the attack!');
 				}
 				return this.chainModify(modifier);
@@ -2439,18 +2444,18 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const strengthenedMoves = ['aurorabeam', 'dazzlinggleam', 'dragonpulse', 'firepledge', 'fleurcannon', 'grasspledge', 'heartstamp', 'hiddenpower', 'judgment', 'mirrorbeam', 'mistball', 'moonblast', 'mysticalfire', 'oceanicoperetta', 'prismaticlaser', 'relicsong', 'sacredfire', 'secretpower', 'silverwind', 'solarbeam', 'solarblade', 'sparklingaria', 'triattack', 'twinkletackle', 'waterpledge', 'weatherball', 'zenheadbutt'];
 				const weakenedMoves = ['darkpulse', 'nightdaze', 'neverendingnightmare', 'shadowball'];
 				if (move.type === 'Normal' && move.category === 'Special') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					this.add('-message', 'The terrain strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (weakenedMoves.includes(move.id)) {
 					this.add('-message', ' The terrain weakened the attack!');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (move.id === 'lightthatburnsthesky') {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -2518,20 +2523,21 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const rockymoves = ['bulldoze', 'earthquake', 'magnitude', 'rockclimb', 'strength', 'accelerock'];
 				if (move.type === 'Rock') {
 					this.add('-message', 'The field strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'rocksmash') {
 					this.add('-message', 'SMASH\'D!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (rockymoves.includes(move.id)) {
 					this.add('-message', 'The rocks strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				if (source.moveThisTurnResult === false && move.flags['contact'] && !source.hasAbility('rockhead')) {
+				const blockedByProtect = Object.values(move.moveHitData || {}).some(hit => hit.blockedByProtect);
+				if ((source.moveThisTurnResult === false || blockedByProtect) && move.flags['contact'] && !source.hasAbility('rockhead')) {
 					this.add('-message', 'The pokemon kept going and crashed into the rocks!');
 					this.damage(source.baseMaxhp / 8, source, source);
 				}
@@ -2569,25 +2575,25 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const nerfed = ['lightthatburnsthesky'];
 				const fieldchange = ['aurawheel', 'chargebeam', 'discharge', 'gigavolthavoc', 'iondeluge', 'overdrive', 'paraboliccharge', 'wildcharge', 'risingvoltage'];
 				if (move.id === 'steelbeam') {
-					modifier *= 1.666666;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.666666);
 				}
 				if (electrified.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (boosted.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (shadow.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (nerfed.includes(move.id)) {
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (fieldchange.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.type === 'Electric') {
-					modifier *= multiplier[this.ShortCircuitCounter];
+					modifier *= adaptiveFieldMultiplier(this, source, target, multiplier[this.ShortCircuitCounter]);
 					this.add('-message', text[this.ShortCircuitCounter]);
 					this.ShortCircuitCounter += 1;
 					this.ShortCircuitCounter %= 5;
@@ -2639,34 +2645,34 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				if (boost_types.includes(move.type)) {
 					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Fire') {
 					this.add('-message', 'The cold softened the attack');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (boost.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (['scald', 'steameruption', 'hydrosteam'].includes(move.id)) {
 					this.add('-message', 'The cold softened the attack...');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (this.field.weather === 'deltastream') {
 					if (wind_boost.includes(move.id)) {
 						this.add('-message', 'The wind strengthened the attack!');
-						modifier *= 1.5;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					}
 					if (move.category === 'Special' && move.type === 'Flying') {
 						this.add('-message', 'The wind strengthened the attack!');
-						modifier *= 1.5;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					}
 				}
 				if (move.id === 'icywind') {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				return this.chainModify(modifier);
 			},
@@ -2702,6 +2708,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 		condition: {
 			effectType: "Terrain",
 			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('limber')) return;
 				const immuneAbiltiy = ['slushrush', 'icebody', 'snowcloak', 'limber', 'webassassin', 'spiralevolution'];
 				if (!(pokemon.hasType('Ice') || pokemon.hasAbility(immuneAbiltiy)) && pokemon.isGrounded()) {
 					return this.chainModify(0.75);
@@ -2727,18 +2734,18 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				if (weak.includes(move.id) || move.type === 'Fire') {
 					this.add('-message', "The fire was doused by the snow!");
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (boost.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')) {
 					this.add('-message', 'The snowy terrain charged up the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (secondBoost.includes(move.id)) {
 					this.add('-message', 'The snowy terrain charged up the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				return this.chainModify(modifier);
 			},
@@ -2795,23 +2802,23 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (this.field.weather === '') {
 					if (move.type === 'Dark' || move.type === 'Psychic') {
 						this.add('-message', 'The field strengthened the attack!');
-						modifier *= 1.5;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					}
 					if (move.type === 'Fairy') {
 						this.add('-message', 'Starlight supercharged the attack!');
-						modifier *= 1.3;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 					}
 					if (move.id === 'doomdesire') {
 						this.add('-message', 'A star came crashing down!');
-						modifier *= 4;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 4);
 					}
 					if (boost.includes(move.id)) {
 						this.add('-message', 'Starlight surged through the attack!');
-						modifier *= 1.5;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					}
 					if (strong_boost.includes(move.id)) {
 						this.add('-message', 'The astral energy boosted the attack!');
-						modifier *= 2;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 					}
 					return this.chainModify(modifier);
 				}
@@ -2858,27 +2865,27 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const freeze = ['blizzard', 'glaciate', 'subzeroslammer'];
 				if (move.type === 'Fire') {
 					this.add('-message', 'The attack was super-heated!');
-					modifier *= 1.1;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.1);
 				}
 				if (move.type === 'Ice') {
 					this.add('-message', 'The extreme heat softened the attack...');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (move.type === 'Water' && !(scald.includes(move.id) || steam.includes(move.id))) {
 					this.add('-message', 'The extreme heat softened the attack...');
-					modifier *= 0.9;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.9);
 				}
 				if (scald.includes(move.id)) {
 					this.add('-message', 'The field super-heated the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (steam.includes(move.id)) {
 					this.add('-message', 'Steam shot up from the field!');
-					modifier *= 0.5625;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5625);
 				}
 				if (igniteMoves.includes(move.id) || freeze.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					igniteMoves.includes(move.id) ? this.add('-message', 'The field combusted!') : this.add('-message', 'The field cooled off!');
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -2961,37 +2968,37 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const weakenedMoves = ['bulldoze', 'earthquake', 'magnitude'];
 				const igniteMoves = ['eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				if (move.type === 'Poison' && target.isGrounded()) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Bug') {
 					this.add('-message', 'Bugs are swarming everywhere!');
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.type === 'Grass') {
 					this.add('-message', 'Thick mangroves line the area!');
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.type === 'Water') {
 					this.add('-message', 'The dampness strengthened the attack!');
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.type === 'Fire') {
 					this.add('-message', 'The dampness weakened the flame...');
-					modifier *= 0.8;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.8);
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					this.add('-message', 'The murk strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (weakenedMoves.includes(move.id)) {
 					this.add('-message', 'The attack dissipated in the soggy ground...');
-					modifier *= 0.25;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.25);
 				}
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					const revertCounter = move.id === 'infernooverdrive' ? 2 : 1;
 					const currentCounter = this.field.terrainState.terrainChanges?.get('revertTerrain') ?? 0;
 					if (currentCounter + revertCounter >= 3) {
-						modifier *= 1.3;
+						modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 					}
 				}
 				return this.chainModify(modifier);
@@ -3072,6 +3079,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('limber')) return;
 				if (pokemon.hasAbility(['webassassin', 'spiralevolution'])) return;
 				const immune = ['elevate', 'swiftswim', 'steelworker', 'spiralevolution'];
 				if (
@@ -3131,17 +3139,17 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (move.type === 'Electric') {
 					this.add('-message', 'The water super-conducted the attack!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (move.id === 'anchorshot' || move.id === 'dragondarts') {
 					this.add('-message', 'From the depths!!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (move.id === 'waterpulse') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.type === 'Water') {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (
 					move.category === 'Physical' &&
@@ -3152,13 +3160,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 					!source.hasAbility('schooling') &&
 					!source.hasAbility('swiftswim')
 				) {
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (source.hasAbility('propellertail') && move.priority > 0) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (change.includes(move.id) || (this.field.terrainState.terrainChanges?.get('sludgewave') === 1 && move.id === 'sludgewave')) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -3250,7 +3258,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				if (move.id === 'etherealtempest') {
 					this.add('-message', 'The volcanic air strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				const caveMoves = ['sandtomb', 'scorchingsands', 'sandsearstorm', 'defog', 'gust', 'hurricane', 'razorwind', 'tailwind', 'twister', 'whirlwind', 'muddywater', 'sparklingaria', 'watersport', 'surf', 'waterpledge', 'sludgewave', 'gmaxwindrage'];
 				const caveZMoves = ['continentalcrush', 'supersonicskystrike', 'hydrovortex', 'aciddownpour'];
@@ -3258,33 +3266,33 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
 				if (source.isGrounded() && move.type === 'Fire') {
 					this.add('-message', 'The blaze amplified the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (target.isGrounded() && move.type === 'Grass' || move.type === 'Ice') {
 					this.add('-message', 'The blaze softened the attack...');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (move.type === 'Water') {
 					this.add('-message', 'The attack evaporated!');
-					modifier *= 0.75;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.75);
 				}
 				if (['clearsmog', 'smog'].includes(move.id)) {
 					this.add('-message', 'The flames spread from the attack!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (['rockslide', 'smackdown', 'thousandarrows'].includes(move.id)) {
 					this.add('-message', `${target.name} was knocked into the flames!`);
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'infernalparade') {
 					this.add('-message', 'The flames spread from the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (caveZMoves.includes(move.id) || (caveMoves.includes(move.id) && this.field.terrainState.terrainChanges?.get('caveterrain') === 1)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (dragonMove.includes(move.id) || (uberDragon.includes(move.id) && this.field.terrainState.terrainChanges?.get('dragonsdenterrain') === 1)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -3421,19 +3429,19 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const weak = ['bulldoze', 'earthquake', 'magnitude'];
 				if (boost.includes(move.id)) {
 					this.add('-message', 'The waste joined the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, pokemon, 1.5);
 				}
 				if (miniboost.includes(move.id)) {
 					this.add('-message', 'The waste did it for the vine!');
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, pokemon, 1.2);
 				}
 				if (weak.includes(move.id)) {
 					this.add('-message', 'Wibble-wibble wobble-wobb...');
-					modifier *= 0.25;
+					modifier *= adaptiveFieldMultiplier(this, source, pokemon, 0.25);
 				}
 				if (move.id === 'spitup') {
 					this.add('-message', 'BLEAAARGGGGH!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, pokemon, 2);
 				}
 				return this.chainModify(modifier);
 			},
@@ -3490,6 +3498,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			duration: 9999,
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
+				if (pokemon.hasAbility('limber')) return;
 				const immune = ['swiftswim', 'surgesurfer', 'limber', 'webassassin', 'spiralevolution'];
 				if (pokemon.isGrounded() && !pokemon.getTypes().includes('Water') && !pokemon.hasAbility(immune)) {
 					return this.chainModify(0.75);
@@ -3508,37 +3517,37 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const individualBoostedMoves = ['whirlpool', 'surf', 'muddywater', 'dive', 'sludgewave', 'octazooka', 'originpulse', 'hydrovortex', 'tripledive'];
 				if (move.type === 'Water') {
 					this.add('-message', 'The water strengthened the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'anchorshot' || move.id === 'dragondarts') {
 					this.add('-message', 'From the depths!!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					this.add('-message', 'The attack rode the current!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (individualBoostedMoves.includes(move.id)) {
 					if (!strengthenedMoves.includes(move.id)) this.add('-message', 'The attack rode the current!');
-					modifier *= 1.2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				}
 				if (target.isGrounded() && move.type === 'Electric') {
 					this.add('-message', 'The water conducted the attack!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (target.isGrounded() && move.type === 'Fire') {
 					this.add('-message', 'The water deluged the attack...');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				}
 				if (move.id === 'wavecrash') {
 					this.add('-message', 'The attack rode the current!');
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
 				if (source.hasAbility('propellertail') && move.priority > 0) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (change.includes(move.id) || (this.field.terrainState.terrainChanges?.get('sludgewave') === 1 && move.id === 'sludgewave')) {
-					modifier *= 5325 / 4096;
+					modifier *= adaptiveFieldMultiplier(this, source, target, 5325 / 4096);
 				}
 				return this.chainModify(modifier);
 			},

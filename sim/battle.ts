@@ -1,3 +1,4 @@
+import {adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCaptureMove, adaptiveSkipAbility, adaptiveIgnoresAbility, adaptiveCheckpoint, adaptiveResistsBypass, adaptiveAnalyzed, adaptivePreventDamage, adaptiveDamaged, adaptiveDamageMultiplier, adaptiveEnvironmentalContribution, adaptiveEnvironment, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 /* eslint-disable @stylistic/max-len */
 /**
  * Simulator Battle
@@ -15,6 +16,7 @@
  * @license MIT
  */
 
+import { reduceGraveHungerHealing } from '../data/approved-signatures';
 import { Dex, toID } from './dex';
 import { validateChallengeOptions, type ChallengeOptions } from './challenge-options';
 import { Teams } from './teams';
@@ -426,6 +428,7 @@ export class Battle {
 	}
 
 	suppressingAbility(target?: Pokemon) {
+		if (target && adaptiveResistsBypass(target, this.activePokemon)) return false;
 		if (target?.getAbility().flags['cantsuppress']) return false;
 		return this.activePokemon && this.activePokemon.isActive && (this.activePokemon !== target || this.gen < 8) &&
 			this.activeMove && this.activeMove.ignoreAbility && !target?.hasItem('Ability Shield');
@@ -930,6 +933,14 @@ export class Battle {
 			}
 			const effect = handler.effect;
 			const effectHolder = handler.effectHolder;
+			if (effect.effectType === 'Ability' && effectHolder instanceof Pokemon &&
+				adaptiveSkipAbility(eventid, effectHolder, this.event.target, source)) continue;
+			if (effect.effectType === 'Ability' && effectHolder instanceof Pokemon && source instanceof Pokemon &&
+				effectHolder === this.event.target && adaptiveAnalyzed(source, effectHolder) &&
+				['TryHit', 'Immunity', 'CriticalHit', 'TryPrimaryHit'].includes(eventid) && sourceEffect?.effectType === 'Move') continue;
+			if (['Terrain', 'Weather'].includes(effect.effectType) &&
+				['TryMove', 'BeforeMove', 'DisableMove'].includes(eventid) && this.event.target instanceof Pokemon &&
+				adaptiveEnvironment(this.event.target, effect.effectType === 'Terrain' ? 'fields' : 'weather', effect.id)) continue;
 			// Stored Foresight uses its real owner for attribution, but carries no owner ability/item procs.
 			// Retaliation has its own source effect, so the owner's defensive effects still apply normally.
 			if ((sourceEffect as any)?.foresightStored && effectHolder === source &&
@@ -940,6 +951,7 @@ export class Battle {
 				continue;
 			}
 			if (effect.effectType === 'Ability' && effect.flags['breakable'] &&
+				!(effect.flags['unbreakableDamage'] && eventid === 'ModifyDamage' && effectHolder === source) &&
 				this.suppressingAbility(effectHolder as Pokemon)) {
 				if (effect.flags['breakable']) {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');
@@ -1001,6 +1013,9 @@ export class Battle {
 			}
 			let returnVal;
 			const previousModifier = this.event.modifier;
+			const adaptiveEventMove = ['ModifyMove', 'ModifyType'].includes(eventid) ? args[0] as ActiveMove :
+				eventid === 'PrepareHit' ? sourceEffect as ActiveMove : null;
+			const adaptiveMoveBefore = adaptiveEventMove?.effectType === 'Move' && this.getAllActive().some(p => p.ability === 'adaptivecycle') ? adaptiveMoveSnapshot(adaptiveEventMove) : null;
 			if (typeof handler.callback === 'function') {
 				const parentEffect = this.effect;
 				const parentEffectState = this.effectState;
@@ -1014,6 +1029,10 @@ export class Battle {
 				this.effectState = parentEffectState;
 			} else {
 				returnVal = handler.callback;
+			}
+			if (adaptiveMoveBefore && adaptiveEventMove) adaptiveCaptureMove(adaptiveEventMove, adaptiveMoveBefore, effect, effectHolder instanceof Pokemon ? effectHolder : undefined);
+			if (this.event.target instanceof Pokemon) {
+				returnVal = adaptiveEnvironmentalContribution(this, eventid, effect, this.event.target, source instanceof Pokemon ? source : null, args[0], returnVal, previousModifier);
 			}
 			if (zMoveDamageModifier && effect.effectType === 'Ability' && this.event.modifier < previousModifier) {
 				this.debug(`${eventid} ability damage reduction bypassed by Z move: ${effect.name}`);
@@ -1438,6 +1457,7 @@ export class Battle {
 		}
 		if ((move.category !== 'Status' || blockStatus) && move.flags['protect'] &&
 			this.runEvent('HitProtect', attacker, defender, move)) {
+			defender.getMoveHitData(move).blockedByProtect = true;
 			return false;
 		}
 		if (move.isZOrMaxPowered && !['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) {
@@ -2181,6 +2201,12 @@ export class Battle {
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
 		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
+		boost = {...boost};
+		if (effect?.effectType === 'Ability' && (adaptiveIgnoresAbility(target, source) ||
+			(this.effectState?.target instanceof Pokemon && adaptiveIgnoresAbility(target, this.effectState.target)))) return false;
+		for (const stat of Object.keys(boost) as BoostID[]) {
+			if (boost[stat]! < 0 && adaptiveBlocksCondition(target, effect?.id || '', source, effect)) delete boost[stat];
+		}
 		boost = this.runEvent('ChangeBoost', target, source, effect, { ...boost });
 		boost = target.getCappedBoost(boost);
 		boost = this.runEvent('TryBoost', target, source, effect, { ...boost });
@@ -2218,7 +2244,11 @@ export class Battle {
 						this.add(msg, target, boostName, boostBy, '[from] item: ' + effect.name);
 					} else {
 						if (effect.effectType === 'Ability' && !boosted) {
-							this.add('-ability', target, effect.name, 'boost');
+							// The recipient of a boost need not own the ability (e.g. Memory Leak).
+							const holder = [this.effectState?.target, source, target].find(pokemon =>
+								pokemon instanceof Pokemon && (pokemon.ability === effect.id || pokemon.hasAbility(effect.id))
+							) as Pokemon | undefined;
+							if (holder) this.add('-ability', holder, holder.getAbility().name, 'boost');
 							boosted = true;
 						}
 						this.add(msg, target, boostName, boostBy);
@@ -2234,6 +2264,7 @@ export class Battle {
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
 		if (success) {
+			if (effect?.id === 'stickyweb') adaptiveStatus(target, '', effect);
 			if (Object.values(boost).some(x => x > 0)) target.statsRaisedThisTurn = true;
 			if (Object.values(boost).some(x => x < 0)) target.statsLoweredThisTurn = true;
 		}
@@ -2264,6 +2295,14 @@ export class Battle {
 			}
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
+			if (effect.effectType === 'Ability' && (adaptiveIgnoresAbility(target, source) ||
+				(this.effectState?.target instanceof Pokemon && adaptiveIgnoresAbility(target, this.effectState.target)))) { retVals[i] = 0; continue; }
+			if (adaptivePreventDamage(target, source, effect)) { retVals[i] = 0; continue; }
+			// Final adaptation damage must reach survival checks before Focus Sash/Sturdy cap it.
+			if (source && effect.effectType === 'Move' && (effect as ActiveMove).category !== 'Status') {
+				targetDamage = this.modify(targetDamage, adaptiveDamageMultiplier(target, source, adaptiveMoveView(effect as ActiveMove, source, target)));
+				if (adaptiveAnalyzed(source, target)) targetDamage = this.modify(targetDamage, 1.5);
+			}
 			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
 					this.debug('weather immunity');
@@ -2287,6 +2326,7 @@ export class Battle {
 			}
 
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
+			adaptiveDamaged(target, source, source && effect.effectType === 'Move' ? adaptiveMoveView(effect as ActiveMove, source, target) : effect, targetDamage);
 			if (targetDamage > 0) this.runEvent('AfterDamageApplied', target, source, effect, targetDamage);
 			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
 			if (source && effect.effectType === 'Move') {
@@ -2452,6 +2492,9 @@ export class Battle {
 			damage = this.runEvent('ResidualHeal', target, source, effect, damage);
 			if (!damage) return false;
 		}
+		if (target.m.graveHungerHealing !== undefined) damage = Math.min(damage, target.m.graveHungerHealing);
+		damage = reduceGraveHungerHealing(this, damage, target, effect);
+		if (damage <= 0) return 0;
 		const finalDamage = target.heal(damage, source, effect);
 		switch (effect?.id) {
 		case 'leechseed':
@@ -3099,6 +3142,7 @@ export class Battle {
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
+			adaptiveCheckpoint(this);
 			if (this.field.terrainState.gardenBurnStage) {
 				this.field.terrainState.gardenBurnTurns++;
 				if (this.field.terrainState.gardenBurnTurns >= this.field.terrainState.gardenBurnStage - 1) {
@@ -3121,6 +3165,7 @@ export class Battle {
 		}
 
 		this.clearActiveMove();
+		for (const p of this.getAllActive()) adaptiveDisplay(p);
 
 		// fainting
 

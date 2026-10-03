@@ -18,7 +18,7 @@ describe('Mega and G-Max component revisions', () => {
 	it('exposes the revised component lists and names on the roster', () => {
 		const [holder] = start('Mew', 'No Ability');
 		const expected = [
-			['Emboar-Mega', 'Burning Ego', ['proficient', 'ultraego', 'flamebody', 'thickfat']],
+			['Emboar-Mega', 'Burning Ego', ['proficient', 'ultraego', 'flamebody', 'magmaarmor']],
 			['Machamp-Gmax', 'Raging Fists', ['hydrabond', 'scrappy']],
 			['Snorlax-Gmax', 'Mountain Hunger', ['sapsipper', 'thickfat', 'earlybird']],
 			['Pyroar-Mega', 'Royal Sun', ['drought', 'supremeoverlord']],
@@ -85,9 +85,9 @@ describe('Mega and G-Max component revisions', () => {
 		assert.equal(foe.boosts.atk, -1);
 	});
 
-	it('Phantom Fist applies Shadow Shield at full HP and makes its attacks accurate', () => {
+	it('Phantom Fist applies universal Shadow Shield protection and makes its attacks accurate', () => {
 		const [holder, foe] = start('Golurk-Mega', 'Phantom Fist');
-		assert.equal(battle.runEvent('SourceModifyDamage', holder, foe, battle.dex.getActiveMove('tackle'), 100), 50);
+		assert.equal(battle.runEvent('SourceModifyDamage', holder, foe, battle.dex.getActiveMove('tackle'), 100), 80);
 		const move = battle.dex.getActiveMove('dynamicpunch');
 		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, move, holder, foe);
 		assert.equal(move.accuracy, true);

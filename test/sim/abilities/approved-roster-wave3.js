@@ -240,12 +240,13 @@ describe('Approved third roster pass', () => {
 		p.setAbility('River Shell'); hit('shellsmash', p, p);
 		assert.equal(p.boosts.def, 0); assert.equal(p.boosts.spd, -1); assert.equal(p.boosts.atk, 2);
 	});
-	it('Territorial charges physical survival and heals on one landed Ground hit', () => {
+	it('Territorial keeps full Stamina without restoring the old outgoing Ground heal', () => {
 		const [p, , foe] = make('Territorial'); p.hp -= 100;
-		hit('psychic', foe, p); assert(!p.abilityState.charged);
-		hit('tackle', foe, p); assert(p.abilityState.charged);
-		const hp = p.hp; hit('mudslap', p, foe); hit('mudslap', p, foe);
-		assert.equal(p.hp - hp, Math.floor(p.maxhp / 8));
+		hit('psychic', foe, p); assert.equal(p.boosts.def, 1);
+		hit('tackle', foe, p); assert.equal(p.boosts.def, 1);
+		hit('tackle', foe, p); assert.equal(p.boosts.def, 1);
+		const hp = p.hp; hit('mudslap', p, foe);
+		assert.equal(p.hp, hp);
 	});
 	it('Funeral Choir counts fainted teammates and heals once per turn from sound damage', () => {
 		const [p, ally, foe] = make('Funeral Choir'); ally.faint(); battle.faintMessages();

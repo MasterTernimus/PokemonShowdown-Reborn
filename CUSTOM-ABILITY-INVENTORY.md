@@ -36,7 +36,7 @@ Custom-numbered entries: 233
 - **Bone Warrior** (`bonewarrior`): Battle Armor + Self Sufficient. **Users:** Marowak, Marowak-Alola
 - **Brute Force** (`bruteforce`): Reckless + Rock Head. **Users:** Aggron, Emboar, Geodude, Golem, Graveler, Obstagoon, Relicanth, Staraptor, Steelix, Sudowoodo
 - **Burning Crown** (`burningcrown`): Intimidate + Wildfire Core + Self Sufficient; hidden Filter; faint raises the side's highest offenses. **Users:** Charizard-Gmax
-- **Burning Ego** (`burningego`): Ultra Ego + Magma Armor. **Users:** Emboar-Mega
+- **Burning Ego** (`burningego`): Proficient + Ultra Ego + Flame Body + full Magma Armor. **Users:** Emboar-Mega, Emboar-Mega-Reborn
 - **Burning Rage** (`burningrage`): Brute Force + Iron Fist + Turboblaze. **Users:** Infernape
 - **Burning Spirit** (`burningspirit`): Self Sufficient + Opportunist + Magma Armor. **Users:** Infernape
 - **Byxbysion Touch** (`byxbysiontouch`): Poison/poisoning attacks drain 50%; Ground damage is 1/4; drains foes' poison damage. **Users:** Garbodor
@@ -168,7 +168,7 @@ Custom-numbered entries: 233
 - **Royal Armament** (`royalarmament`): Steel STAB + Power Drill. **Users:** Nidoking
 - **Royal Decree** (`royaldecree`): Haze/screen clear; Safeguard blocks reset; blocks setup/screens; skips charge turns. **Users:** Chesnaught, Empoleon, Empoleon-Alt, Escavalier, Farigiraf, Honchkrow, Kingambit, Kingambit-Alt, Kingdra, Nidoking, Politoed, Serperior, Sirfetch’d
 - **Royal Hive** (`royalhive`): Starts +1 Atk/SpA; status moves swap to +1 Def/SpD and heal 1/16; attacks swap back. **Users:** Vespiquen
-- **Royal Sun** (`royalsun`): Drought + Royal Decree; Safeguard blocks the reset; disabled by Neutralization. **Users:** Pyroar-Mega
+- **Royal Sun** (`royalsun`): Full Drought + Supreme Overlord + Unnerve + Flame Body, including local field effects and fallen-ally thresholds. **Users:** Pyroar-Mega
 - **Royal Voice** (`royalvoice`): Pixilate + Queenly Majesty + Sworn Duty. **Users:** Gardevoir-Mega
 - **Sacred Edge** (`sacrededge`): Sharpness + Dual Wield + Sworn Duty. **Users:** Gallade-Mega
 - **Safe Harbor** (`safeharbor`): Absorbs Water/Ice moves; Ice Body + Hydration + Self Sufficient. **Users:** Lapras
@@ -181,7 +181,7 @@ Custom-numbered entries: 233
 - **Self Repair** (`selfrepair`): Self Sufficient + Natural Cure. **Users:** Golurk
 - **Self Sufficient** (`selfsufficient`): Heals 1/16 each turn; immune to Sandstorm and Hail. **Users:** Donphan, Skarmory, Steelix, Umbreon
 - **Shadow Current** (`shadowcurrent`): Protean + Technician + Sworn Duty. **Users:** Greninja-Mega
-- **Shadow Guard** (`shadowguard`): Shadow Shield + Elevate; every turn queues full-power Ghost/Dark/Fairy Temporal Shift. **Users:** Mismagius-Mega
+- **Voidcraft** (`voidcraft`): Elevate + Shadow Shield + Temporal Shift + Insomnia; 0.8x incoming attack damage (0.6x super-effective); 120 BP Ghost Future Sight on entry and every other turn. **Users:** Mismagius-Mega
 - **Siege Launcher** (`siegelauncher`): Water Barrage + Mega Launcher + Self Sufficient + Stalwart; boosted moves get a 20% second hit. **Users:** Blastoise-Mega
 - **Sinister Blaze** (`sinisterblaze`): Always burned; burn heals user; foes lose burn damage and heal it; cannot be copied/suppressed. **Users:** Flareon, Houndoom, Typhlosion-Hisui
 - **Soaring Spirit** (`soaringspirit`): Wind Power + Self Sufficient. **Users:** Salamence
@@ -240,3 +240,32 @@ Custom-numbered entries: 233
 - **Windy Surge** (`windysurge`): On switch-in, sets 2-turn Tailwind on this Pokemon's side. **Users:** Beautifly, Drifblim, Eldegoss, Jumpluff, Rotom-Fan, Tropius
 - **Wooly Conductor** (`woolyconductor`): Fur Coat + Mold Breaker + Static. **Users:** Ampharos-Mega
 - **Wrath Shield** (`wrathshield`): Bulletproof + Filter + Self Repair. **Users:** Chesnaught-Mega
+
+## Approved signature follow-ups
+
+- **Scrapbreaker:** Full Mold Breaker. A connecting Gigaton Hammer removes the target side's Reflect, Light Screen and Aurora Veil before damage. Actual opposing HP damage also grounds the target as Smack Down; Substitute-only damage does not ground it. Normal accuracy, protection and consecutive-use restrictions remain.
+- **Toxic Signature:** Full Unnerve, including its field effects. Poison attacks dealing opposing HP damage place one Toxic Spikes layer on that side only if none exists. Damaging attacks against poisoned targets ignore accuracy and evasion stages but retain their base accuracy and other accuracy modifiers.
+- **Wicked Weave:** Full Prankster. A successful status move readies the next contact attack to lower a foe's Speed by 1 after actual HP damage. The charge does not stack, is consumed by a qualifying hit, and expires at the end of the following turn.
+- **Vault Keeper:** Full Prankster and Sticky Hold. While active, opposing moves cannot remove this side's Reflect, Light Screen or Aurora Veil. Normal expiration and damage bypass still work; applicable Mold Breaker effects bypass the protection.
+- **Master Key:** Single-target status moves bypass Substitute and ignore opposing abilities under normal Mold Breaker rules. No priority boost. Accuracy, Protect, type/status immunities, Safeguard, terrain and Taunt still apply.
+- **Grounding Tail:** Electric moves treat each Ground typing as a resistance instead of an immunity, retaining all other type factors, and cause no move recoil. Water/Ground takes neutral damage; Ground/Dragon takes quarter damage. Absorption abilities still block them, and incoming Ground attacks are unchanged.
+- **Flint Fracture:** Connecting slicing moves remove the target side's Reflect and Aurora Veil before damage. Opposing HP damage applies stone splinters dealing 1/16 maximum HP at the end of this turn and the following turn. Reapplication refreshes, never stacks; switching clears splinters. No slicing power multiplier.
+- **Frozen Feast:** Full Strong Jaw. Ice moves dealing opposing HP damage lower each surviving target's Speed by 1 after the whole move, once per target, unless that move already successfully lowered its Speed. Biting attacks drain half their actual opposing HP damage if that target had negative Speed stages before the attack began. Normal draining interactions apply.
+- **Cinder Scales:** Full Flame Body, Swarm and Shield Dust, including their existing field effects.
+- **Spore Shroud:** Full Effect Spore. Contact attacks deal 0.75x damage; non-contact physical attacks are unaffected.
+- **Primeval Hunt:** Full Skill Link and Battle Armor. The final scheduled hit of a move with at least three hits is a guaranteed critical hit unless critical-hit immunity prevents it. Earlier hits retain normal critical chances; interruption does not promote an earlier hit.
+- **Rimebreaker:** Full Refrigerate, including its field boosts only for converted moves. Once per turn, an Ice move dealing opposing HP damage removes this side's Stealth Rock and one Spikes layer. Toxic Spikes and Sticky Web remain. Natural Ice moves receive no extra ability damage boost.
+- **Twilight Instinct:** The first opposing damaging HP hit each stay deals 0.75x damage. If an opponent damages this Pokemon before it acts, it prepares +1 priority for its next normally zero-priority damaging move on the following turn. One charge, consumed on attempt even if it misses or is protected; expires at that following turn's end. Status and already-prioritized moves receive no boost.
+- **Dusk Drive:** Full Battle Fervor, Precision and Opportunist, including their field effects, entry behavior, item blocking, damage modifiers and boost-copy timing.
+- **Evaporate:** Full Dry Skin, including field/weather effects. On entry, ends ordinary rain but not Primordial Sea. Once per stay, ending rain or absorbing Water grants one Steam Veil; the next damaging special HP hit deals 0.75x damage and consumes it. It cannot stack or refresh within that stay.
+- **Pressure Kiln:** Stores half the actual HP damage from opposing direct moves, up to 1/4 maximum HP. Its next Fire attack dealing opposing HP damage consumes the reservoir and heals the stored amount. Residual, recoil, ally and Substitute-only damage do not fill it. Switching clears storage.
+- **Shattercrust:** Full Crumbling Shell: physical HP hits set Stealth Rock on the attacker's side if absent (an allied attacker instead selects the opposing side), except on Water Surface, Underwater, Murkwater Surface and Swamp. Additionally, the first opposing physical HP hit each stay deals half damage; if this Pokemon survives it, adds one Spikes layer to the attacker's side.
+- **Restorative Chime:** Once per stay, a healing move that actually restores HP also cures the healed recipient's major status; Rest is excluded. Wish checks and consumes the originating entry's cure only when it heals its eventual recipient. Successful sound moves heal this Pokemon by 1/8 maximum HP once per turn.
+- **Dissonant Chime:** Immune to opposing sound moves. Once per stay, a damaging sound move that deals opposing HP damage removes that target's positive stat stages. The use is spent only when a positive stage is removed.
+- **Grave Hunger:** Full Bad Dreams. Ghost attacks drain 25% of actual opposing HP damage, without adding drain to moves that already drain. While active, halves opposing active Pokemon's healing and gains the HP actually prevented. Combined new healing is capped at 1/8 maximum HP per turn; opposing healing stays reduced when this Pokemon is full or capped. Bench healing and switching-out Regenerator are unaffected. Normal healing blockers and drain interactions apply.
+
+Magcargo: 95/50/145/115/105/30, BST 540. Only the explicitly approved base-species slots change; Cradily and Dawn Herald remain unchanged.
+
+Atrocity replaces only Levitate with full Tough Claws. Charizard-Mega-X and its Alt form now have 130 Attack and 125 Special Attack; their other stats and BST 654 are unchanged. Double Shock now has the punch flag, with all other move properties unchanged.
+
+Latest approved follow-ups: Spent Force recovers after two complete turns regardless of actions; Cradily uses Primeval Hunger (full Accumulation plus draining-hit Heal Block and one positive attacking-stage reduction); Dishearten replaces Dreadful Presence (ID 11234, old name remains an alias); Volcarona uses Cinder Scales / Overcoat / Drought.

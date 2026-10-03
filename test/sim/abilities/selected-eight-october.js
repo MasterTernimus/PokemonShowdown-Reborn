@@ -20,7 +20,7 @@ describe('Approved October signatures',()=>{
  function residual(p){battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);}
  function out(p){battle.singleEvent('SwitchOut',p.getAbility(),p.abilityState,p);}
  it('assigns only the approved slots and removes replaced composite identities',()=>{
-  assert.deepEqual(Dex.species.get('Skarmory').abilities,{0:'Steel Plumage',1:'Sturdy',H:'Weak Armor'});
+  assert.deepEqual(Dex.species.get('Skarmory').abilities,{0:'Fresh Plumage',1:'Sturdy',H:'Weak Armor'});
   assert.equal(Dex.species.get('Skeledirge-Aevian').abilities.H,'Venom Canticle');assert.equal(Dex.species.get('Chimecho').abilities[0],'Temple Chime');
   for(const[a,c]of [['solarhydra','selfrepair'],['solarhydra','naturalcure'],['stormcalling','tintedlens'],['mossarmor','regenerator']])assert(!abilityIncludesComponent(a,c),a+c);
   for(const[a,c]of [['solarhydra','solarbud'],['stormcalling','liquidvoice'],['mossarmor','naturalcure'],['templechime','levitate']])assert(abilityIncludesComponent(a,c),a+c);

@@ -9,6 +9,11 @@ describe('Ability descriptions and full command lookup',function () {
   let count=0;
   for(const ability of Dex.abilities.all()) {
    const parts=getAbilityDisplayComponents(ability.id); if(!parts.length)continue; count++;
+			if (ability.id === 'sushitrick') {
+				assert.equal(ability.shortDesc, 'On entry, heals adjacent allies by 1/4 max HP and cures confusion.');
+				assert.deepEqual(parts, ['hospitality']);
+				continue;
+			}
    for(const id of parts) assert(ability.shortDesc.toLowerCase().includes(Dex.abilities.get(id).name.toLowerCase()),`${ability.id}: ${id}`);
   }
   assert(count>330);
@@ -16,7 +21,8 @@ describe('Ability descriptions and full command lookup',function () {
  it('does not advertise stale Filter identity as Burning Crown mechanics',()=>{
   const a=Dex.abilities.get('burningcrown');
   assert(!a.shortDesc.includes('Filter'));assert(!a.desc.includes('Filter'));
-  for(const n of ['Intimidate','White Smoke','Mold Breaker','Unbound Blaze','Self Sufficient','Proficient'])assert(a.shortDesc.includes(n));
+		for (const id of getAbilityDisplayComponents('burningcrown'))assert(a.shortDesc.includes(Dex.abilities.get(id).name));
+		for (const n of ['Intimidate', 'White Smoke', 'Mold Breaker', 'Unbound Blaze', 'Self Sufficient', 'Proficient'])assert(a.desc.includes(n));
   assert(a.desc.includes('20% less'));assert(a.desc.includes('1/16'));assert(a.desc.includes('1.3x'));
  });
  it('renders full Heavy Artillery mechanics, format conditions and component lookup buttons',()=>{

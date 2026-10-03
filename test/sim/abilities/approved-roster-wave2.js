@@ -227,17 +227,17 @@ describe('Approved roster follow-up', () => {
 		assert.equal(foe.hp, hp); assert.equal(other.boosts.spa, 1);
 		assert(!p.isGrounded());
 	});
-	it('Keen Hunt and Twilight Instinct have distinct accuracy and repeated-target effects', () => {
+	it('Keen Hunt and Twilight Instinct retain Keen Hunt accuracy without the retired Twilight critical chain', () => {
 		const [p, , foe, other] = make('Keen Hunt');
 		foe.hp = Math.floor(foe.maxhp / 2);
 		assert.equal(modify('stoneedge', p, foe).accuracy, true);
 		battle.boost({ spe: -1 }, p, foe); assert.equal(p.boosts.spe, 0);
 		p.setAbility('Twilight Instinct');
 		hit('tackle', p, foe);
-		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, battle.dex.getActiveMove('tackle'), 1), 2);
+		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, battle.dex.getActiveMove('tackle'), 1), 1);
 		assert.equal(battle.runEvent('ModifyCritRatio', p, other, battle.dex.getActiveMove('tackle'), 1), 1);
 		hit('tackle', p, foe);
-		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, battle.dex.getActiveMove('tackle'), 1), 3);
+		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, battle.dex.getActiveMove('tackle'), 1), 1);
 	});
 	it('Blood Challenge Counter retaliates against special damage', () => {
 		const [p, , foe] = make('Blood Challenge');

@@ -141,46 +141,13 @@ export function applyRosterWave4(base: AbilityDataTable) {
 			}
 		},
 	});
-	base.territorial.onModifyMove = function (move) {
-		if (this.effectState.charged && move.type === 'Ground' && move.category !== 'Status') {
-			if (move.category === 'Physical') move.ignoreNegativeOffensive = true;
-			move.ignorePositiveEvasion = true;
-		}
-	};
 	base.lunardread = {
-		flags: {}, name: 'Lunar Dread', num: base.lunardread.num, rating: 4,
-		onSourceDamagingHit(damage, target, source, move) {
-			if (foeHit(damage, target, source) && target.hp && move.type === 'Normal') {
-				target.addVolatile('lunardread', source, this.effect);
-			}
-		},
-		onModifyCritRatio(ratio, source, target, move) {
-			const marks = target.volatiles['lunardread']?.marks as { source: Pokemon, until: number }[] | undefined;
-			if (move.type === 'Ground' && marks?.some(mark => mark.source === source && mark.until >= this.turn)) {
-				return ratio + 1;
-			}
-		},
-		condition: {
-			noCopy: true,
-			onStart(target, source) {
-				this.effectState.marks = [{ source, until: this.turn + 1 }];
-				this.add('-start', target, 'Lunar Dread', '[from] ability: Lunar Dread', `[of] ${source}`);
-			},
-			onRestart(target, source) {
-				this.effectState.marks = this.effectState.marks.filter((m: { source: Pokemon }) => m.source !== source);
-				this.effectState.marks.push({ source, until: this.turn + 1 });
-			},
-			onModifyDamage(damage, source, target) {
-				if (target.hasAbility('lunardread') && this.effectState.marks.some(
-					(m: { source: Pokemon, until: number }) => m.source === target && m.until >= this.turn
-				)) return this.chainModify(0.75);
-			},
-			onResidualOrder: 28,
-			onResidual(target) {
-				this.effectState.marks = this.effectState.marks.filter((m: { until: number }) => m.until > this.turn);
-				if (!this.effectState.marks.length) target.removeVolatile('lunardread');
-			},
-			onEnd(target) { this.add('-end', target, 'Lunar Dread'); },
+		...base.insomnia,
+		...base.pressure,
+		flags: { breakable: 1 }, name: 'Lunar Dread', num: base.lunardread.num, rating: 4,
+		onStart(pokemon) {
+			base.dishearten.onStart?.call(this, pokemon);
+			base.pressure.onStart?.call(this, pokemon);
 		},
 	};
 	add('falsebouquet', 'False Bouquet', {

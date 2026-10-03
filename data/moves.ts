@@ -1,8 +1,12 @@
+import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
+import { cureRestorativeStatus } from './approved-signatures';
 /* eslint-disable @stylistic/max-len */
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
-function useHigherOffensiveStat(source: Pokemon, move: ActiveMove) {
-	if (source.getStat('atk', false, true) > source.getStat('spa', false, true)) {
+function useHigherOffensiveStat(source: Pokemon, move: ActiveMove, physicalTie = false) {
+	// Compare stage-adjusted stats, before ability/item/status multipliers.
+	const atk = source.getStat('atk', false, true), spa = source.getStat('spa', false, true);
+	if (atk > spa || (physicalTie && atk === spa)) {
 		move.category = 'Physical';
 		move.overrideOffensiveStat = 'atk';
 		move.overrideDefensiveStat = 'def';
@@ -13,8 +17,7 @@ function useHigherOffensiveStat(source: Pokemon, move: ActiveMove) {
 	}
 }
 
-function useHigherOffensiveStatAgainstLowerDefense(source: Pokemon, target: Pokemon, move: ActiveMove) {
-	move.overrideOffensiveStat = source.getStat('atk', false, true) >= source.getStat('spa', false, true) ? 'atk' : 'spa';
+function useLowerDefense(target: Pokemon, move: ActiveMove) {
 	move.overrideDefensiveStat = target.getStat('def', false, true) <= target.getStat('spd', false, true) ? 'def' : 'spd';
 }
 
@@ -244,6 +247,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 55,
 		basePowerCallback(pokemon, target, move) {
+			if (pokemon.item && adaptiveEnvironment(target, 'fields')) return move.basePower;
 			if (!pokemon.item || this.field.isTerrain('bigtopterrain')) {
 				this.debug("BP doubled for no item");
 				return move.basePower * 2;
@@ -1311,6 +1315,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, pokemon, target) {
+			if (adaptiveEnvironment(target, 'fields') && !(target.status || target.hasAbility('comatose'))) return;
 			if (target.status || target.hasAbility('comatose') || this.field.isTerrain(['corrosivemistterrain', 'murkwatersurfaceterrain', 'corrosiveterrain', 'wastelandterrain'])) {
 				return this.chainModify(2);
 			}
@@ -4568,7 +4573,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Double Shock",
 		pp: 5,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
 		onTryMove(pokemon, target, move) {
 			if (pokemon.hasType('Electric')) return;
 			this.add('-fail', pokemon, 'move: Double Shock');
@@ -4771,15 +4776,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
 		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
-				move.category = 'Special';
-				move.overrideOffensiveStat = 'spa';
-				move.overrideDefensiveStat = 'spd';
-			} else {
-				move.category = 'Physical';
-				move.overrideOffensiveStat = 'atk';
-				move.overrideDefensiveStat = 'def';
-			}
+			useHigherOffensiveStat(pokemon, move, true);
 		},
 		multihit: 2,
 		smartTarget: true,
@@ -5249,13 +5246,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				let modifier = 1;
 				const electrified = ['explosion', 'hurricane', 'muddywater', 'selfdestruct', 'smackdown', 'thousandarrows', 'surf', 'overdrive', 'wildboltstorm'];
 				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				if (move.id === 'magnetbomb') {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 2);
 				}
 				if (electrified.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				return this.chainModify(modifier);
 			},
@@ -5716,7 +5713,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onBasePower(basePower, source) {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields') && !this.field.isAura('psychicterrain')) return;
 			if (this.field.isTerrainOrAura('psychicterrain') && source.isGrounded()) {
 				this.debug('terrain buff');
 				return this.chainModify(1.5);
@@ -5741,12 +5739,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
 		selfdestruct: "always",
 		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
-				move.overrideOffensiveStat = 'spa';
-				move.overrideDefensiveStat = 'spd';
-			} else {
-				move.overrideDefensiveStat = 'def';
-			}
+			useHigherOffensiveStat(pokemon, move, true);
 		},
 		target: "allAdjacent",
 		type: "Normal",
@@ -6183,7 +6176,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
-		onBasePower() {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1 || this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
 				return this.chainModify(1.3);
 			}
@@ -6304,7 +6298,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
-		onTryMove() {
+		onTryMove(attacker) {
+			if (adaptiveEnvironment(attacker, 'fields')) return;
 			if (this.field.isTerrain('newworldterrain')) {
 				this.add('-message', 'The unformed land diffused the attack...');
 				return false;
@@ -8611,15 +8606,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {},
 		isMax: "Dragapult",
 		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
-				move.category = 'Special';
-				move.overrideOffensiveStat = 'spa';
-				move.overrideDefensiveStat = 'spd';
-			} else {
-				move.category = 'Physical';
-				move.overrideOffensiveStat = 'atk';
-				move.overrideDefensiveStat = 'def';
-			}
+			useHigherOffensiveStat(pokemon, move, true);
 		},
 		onAfterHit(target, source, move) {
 			if (!target || !source.hp) return;
@@ -8717,7 +8704,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
-		onBasePower() {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1 || this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
 				return this.chainModify([5325, 4096]);
 			}
@@ -8825,30 +8813,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				let modifier = 1;
 				if (weakenedMoves.includes(move.id)) {
 					this.debug('move weakened by grassy terrain');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 0.5);
 				}
 				if (move.type === 'Grass' && attacker.isGrounded()) {
 					this.debug('grassy terrain boost');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				if (move.type === 'Fire' && defender.isGrounded()) {
 					this.debug('grassy terrain boost');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				if (windyMoves.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 					this.add('-message', 'The wind picked up strength from the field!');
 				}
 				if ((igniteMoves.includes(move.id) && !this.field.isWeather(['raindance', 'primordealsea']) && !this.field.pseudoWeather['watersport']) || (move.isMax && move.type === 'Fire')) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.3);
 				}
 				if (move.id === 'sludgewave' || move.id === 'aciddownpour')
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.3);
 				if (move.id === 'muddywater' || move.id === 'surf') {
 					const marshCounter = move.id === 'muddywater' ? 2 : 1;
 					const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
 					if (currentCounter + marshCounter >= 3) {
-						modifier *= 1.3;
+						modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.3);
 					}
 				}
 				return this.chainModify(modifier);
@@ -10324,6 +10312,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.accuracy = 50;
 				break;
 			}
+					if (typeof move.accuracy === 'number' && move.accuracy < 70 && adaptiveEnvironment(pokemon, 'weather')) move.accuracy = 70;
 		},
 		secondary: {
 			chance: 30,
@@ -10862,6 +10851,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback(pokemon, target, move) {
+			if (adaptiveEnvironment(target, 'fields') && !target.status && !target.hasAbility('comatose') && !pokemon.hasAbility(['soulfire', 'sinisterblaze'])) return move.basePower;
 			if (
 				target.status || target.hasAbility('comatose') ||
 				this.field.isTerrain('hauntedterrain') ||
@@ -11111,7 +11101,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onBasePower(basePower, source) {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.isTerrain('electricterrain')) return this.chainModify(1.5);
 		},
 		onModifyMove(move) {
@@ -11806,7 +11797,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyMove(move, pokemon) {
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 		},
-		onBasePower() {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.isTerrain('holyterrain') || this.field.isTerrain('starlightarenaterrain')) {
 				return this.chainModify(1.3);
 			}
@@ -13758,7 +13750,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		selfdestruct: "always",
-		onBasePower(basePower, source) {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields') && !this.field.isAura('mistyterrain')) return;
 			if ((this.field.isTerrain(['mistyterrain', 'corrosivemistterrain']) || this.field.isAura('mistyterrain')) && source.isGrounded()) {
 				this.debug('misty terrain boost');
 				return this.chainModify(1.5);
@@ -13825,26 +13818,26 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (move.type === 'Dragon') {
 					this.debug('misty terrain weaken');
 					this.add('-message', 'The draconic energy was leeched by the terrain!');
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 0.5);
 				}
 				if (move.type === 'Fairy') {
 					this.add('-message', 'The mist buoyed the fairy type move!');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				if (weakMoves.includes(move.id)) {
-					modifier *= 0.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 0.5);
 				}
 				if (strMoves.includes(move.id)) {
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				if (move.id === 'mistyexplosion') {
-					modifier *= 2;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 2);
 				}
 				if ((corrosiveMoves.includes(move.id) && this.field.terrainState.terrainChanges?.get('corrosivemistterrain') === 1) || move.id === 'aciddownpour') {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.3);
 				}
 				if (windyMoves.includes(move.id)) {
-					modifier *= 1.3;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
@@ -13949,6 +13942,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				factor = 0.75;
 			}
+			if (factor < 0.5 && adaptiveEnvironment(pokemon, 'weather')) factor = 0.5;
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
 			if (!success) {
 				this.add('-fail', pokemon, 'heal');
@@ -13985,7 +13979,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				factor = 0.25;
 				break;
 			}
-			if (this.field.isTerrain(['coldeclipseterrain', 'darkcrystalcavernterrain'])) {
+			if (factor < 0.5 && adaptiveEnvironment(pokemon, 'weather')) factor = 0.5;
+			if (!adaptiveEnvironment(pokemon, 'fields') && this.field.isTerrain(['coldeclipseterrain', 'darkcrystalcavernterrain'])) {
 				factor = 0.25;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -14447,6 +14442,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Clever",
 	},
 	needlegun: {
+		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move, true);
+		},
 		num: 10000,
 		accuracy: 100,
 		basePower: 30,
@@ -14457,7 +14455,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: 6,
 		onPrepareHit(target, source, move) {
-			useHigherOffensiveStatAgainstLowerDefense(source, target, move);
+			useLowerDefense(target, move);
 		},
 		target: "normal",
 		type: "Steel",
@@ -15809,6 +15807,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
+			if (adaptiveEnvironment(target, 'fields')) return move.basePower + 20 * pokemon.positiveBoosts();
 			let modifier = 1;
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				modifier = 2;
@@ -16017,7 +16016,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
-		onBasePower(basePower, source) {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields') && !this.field.isAura('electricterrain')) return;
 			if (this.field.isTerrainOrAura('electricterrain')) {
 				this.debug('psyblade electric terrain boost');
 				return this.chainModify(1.5);
@@ -16157,11 +16157,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				let modifier = 1;
 				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				if (strengthenedMoves.includes(move.id)) {
 					this.debug('psychic terrain boost');
-					modifier *= 1.5;
+					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				return this.chainModify(modifier);
 			},
@@ -16875,6 +16875,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cool",
 	},
 	radiantassault: {
+		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
+		},
 		num: 10005,
 		accuracy: 100,
 		basePower: 110,
@@ -16883,9 +16886,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, recharge: 1, protect: 1, mirror: 1, metronome: 1 },
-		onPrepareHit(target, source, move) {
-			useHigherOffensiveStat(source, move);
-		},
 		onAfterMove(source, target, move) {
 			if (target.fainted || move.hitTargets?.some(pokemon => pokemon.fainted)) {
 				source.removeVolatile('mustrecharge');
@@ -17322,6 +17322,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 70,
 		basePowerCallback(source, target, move) {
+			if (adaptiveEnvironment(target, 'fields') && !this.field.isAura('electricterrain')) return move.basePower;
 			if (this.field.isTerrainOrAura('electricterrain') && target.isGrounded()) {
 				if (!source.isAlly(target)) this.hint(`${move.name}'s BP doubled on grounded target.`);
 				return move.basePower * 2;
@@ -17362,6 +17363,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, cantusetwice: 1 },
 		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
 			if (pokemon.baseSpecies.baseSpecies !== 'Dialga') return;
 			move.ignoreImmunity = { 'Fairy': true };
 			move.breaksProtect = true;
@@ -17371,9 +17373,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (pokemon.baseSpecies.baseSpecies === 'Dialga' && this.field.getPseudoWeather('trickroom')) {
 				return priority + 3;
 			}
-		},
-		onPrepareHit(target, source, move) {
-			useHigherOffensiveStat(source, move);
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if ((move as any).dialgaBonus && type === 'Fairy') return -1;
@@ -18377,12 +18376,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
 		selfdestruct: "always",
 		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
-				move.overrideOffensiveStat = 'spa';
-				move.overrideDefensiveStat = 'spd';
-			} else {
-				move.overrideDefensiveStat = 'def';
-			}
+			useHigherOffensiveStat(pokemon, move, true);
 		},
 		target: "allAdjacent",
 		type: "Normal",
@@ -18509,6 +18503,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Beautiful",
 	},
 	shadowforce: {
+		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
+		},
 		num: 467,
 		accuracy: 100,
 		basePower: 120,
@@ -18519,9 +18516,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1 },
 		critRatio: 2,
 		breaksProtect: true,
-		onPrepareHit(target, source, move) {
-			useHigherOffensiveStat(source, move);
-		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -19327,7 +19321,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTry(source, target) {
 			return !target.fainted;
 		},
-		onTryMove() {
+		onTryMove(attacker) {
+			if (adaptiveEnvironment(attacker, 'fields')) return;
 			if (this.field.isTerrain(['dragonsdenterrain'])) {
 				return null;
 			}
@@ -19986,7 +19981,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onTryMove(attacker, defender, move) {
-			if (this.field.isTerrain(['darkcrystalcavernterrain']) && !this.field.isWeather('sunnyday')) {
+			if (!adaptiveEnvironment(attacker, 'fields') && this.field.isTerrain(['darkcrystalcavernterrain']) && !this.field.isWeather('sunnyday')) {
 				this.debug('Dark Crystal Cavern sun suppress');
 				this.add('-fail', attacker, move, '[from] Dark Crystal Cavern');
 				this.attrLastMove('[still]');
@@ -20008,6 +20003,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
+			if (adaptiveEnvironment(pokemon, 'weather')) return;
 			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snowscape'];
 			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
@@ -20033,7 +20029,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onTryMove(attacker, defender, move) {
-			if (this.field.isTerrain(['darkcrystalcavernterrain']) && !this.field.isWeather('sunnyday')) {
+			if (!adaptiveEnvironment(attacker, 'fields') && this.field.isTerrain(['darkcrystalcavernterrain']) && !this.field.isWeather('sunnyday')) {
 				this.debug('Dark Crystal Cavern sun suppress');
 				this.add('-fail', attacker, move, '[from] Dark Crystal Cavern');
 				this.attrLastMove('[still]');
@@ -20055,6 +20051,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
+			if (adaptiveEnvironment(pokemon, 'weather')) return;
 			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snowscape'];
 			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
@@ -20111,13 +20108,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		critRatio: 2,
 		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
 			if (pokemon.baseSpecies.baseSpecies !== 'Palkia') return;
 			move.accuracy = true;
 			move.breaksProtect = true;
 			move.tracksTarget = true;
-		},
-		onPrepareHit(target, source, move) {
-			useHigherOffensiveStat(source, move);
 		},
 		target: "normal",
 		type: "Dragon",
@@ -21831,7 +21826,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				break;
 			default:
 			}
-			if (this.field.isTerrain(['darkcrystalcavernterrain', 'coldeclipseterrain'])) {
+			if (factor < 0.5 && adaptiveEnvironment(pokemon, 'weather')) factor = 0.5;
+			if (!adaptiveEnvironment(pokemon, 'fields') && this.field.isTerrain(['darkcrystalcavernterrain', 'coldeclipseterrain'])) {
 				factor = 0.25;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -22210,7 +22206,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onBasePower() {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.isTerrain('electricterrain')) {
 				return this.chainModify(5325 / 4096);
 			}
@@ -22409,7 +22406,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
-		onBasePower() {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (!this.field.getAura() && this.field.isTerrain(['electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'rainbowterrain'])) return this.chainModify(2);
 		},
 		onModifyType(move, pokemon) {
@@ -22639,6 +22637,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				break;
 			}
 			if (this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) move.accuracy = true;
+					if (typeof move.accuracy === 'number' && move.accuracy < 70 && adaptiveEnvironment(pokemon, 'weather')) move.accuracy = 70;
 		},
 		secondary: {
 			chance: 30,
@@ -23557,6 +23556,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cool",
 	},
 	veeveevolley: {
+		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
+		},
 		num: 741,
 		accuracy: true,
 		basePower: 0,
@@ -23564,9 +23566,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const bp = Math.floor((pokemon.happiness * 10) / 25) || 1;
 			this.debug(`BP: ${bp}`);
 			return bp;
-		},
-		onPrepareHit(source, target, move) {
-			useHigherOffensiveStat(source, move);
 		},
 		category: "Physical",
 		isNonstandard: "LGPE",
@@ -23609,6 +23608,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, pokemon, target) {
+			if (adaptiveEnvironment(target, 'fields') && !(['psn', 'tox'].includes(target.status))) return;
 			if (target.status === 'psn' || target.status === 'tox' || this.field.isTerrain(['corrosivemistterrain', 'corrosiveterrain', 'murkwatersurfaceterrain', 'wastelandterrain'])) {
 				return this.chainModify(2);
 			}
@@ -23707,7 +23707,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		recoil: [33, 100],
-		onBasePower(basePower, source) {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.isTerrain('electricterrain')) return this.chainModify(1.5);
 		},
 		onModifyMove(move) {
@@ -23808,7 +23809,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
-		onBasePower() {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1 || this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
 				return this.chainModify([5325, 4096]);
 			}
@@ -24243,6 +24245,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source) {
+				if (source.hasAbility('restorativechime')) {
+					this.effectState.restorativeEntry = source.m.approvedSignatures ||= {};
+				}
 				if (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']))
 					this.effectState.hp = source.maxhp * 3 / 4;
 				else
@@ -24253,6 +24258,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (target && !target.fainted) {
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
+						if (this.effectState.restorativeEntry) cureRestorativeStatus(target, this.effectState.restorativeEntry);
 						this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
 					}
 				}
@@ -24637,7 +24643,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
-		onBasePower() {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.isTerrain('fairytaleterrain')) {
 				this.add('-message', 'The blade cuts true!');
 				return this.chainModify(1.5);
@@ -24661,7 +24668,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyMove() {
 			if (this.field.isTerrain('forestterrain')) this.add('-message', "They're coming out of the woodwork!");
 		},
-		onBasePower() {
+		onBasePower(basePower, source, target) {
+			if (adaptiveEnvironment(target, 'fields')) return;
 			if (this.field.isTerrain('forestterrain')) return this.chainModify(1.5);
 		},
 		onAfterHit(target, source, move) {

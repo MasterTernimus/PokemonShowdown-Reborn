@@ -105,7 +105,7 @@ Each ✓ means the Mega route, ability identity, attack-power event, and followi
 | Staraptor-Mega | Predator | ✓ | ✓ | ✓ |
 | Luxray-Mega | Night Hunt | ✓ | ✓ | ✓ |
 | Lopunny-Mega | Unchecked Assault | ✓ | ✓ | ✓ |
-| Mismagius-Mega | Shadow Guard | ✓ | ✓ | ✓ |
+| Mismagius-Mega | Voidcraft | ✓ | ✓ | ✓ |
 | Bronzong-Mega | Storm Bell | ✓ | ✓ | ✓ |
 | Garchomp-Mega | Apex Cleave | ✓ | ✓ | ✓ |
 | Garchomp-Mega-Z | Relentless Hunt | ✓ | ✓ | ✓ |

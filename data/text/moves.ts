@@ -4506,8 +4506,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	needlegun: {
 		name: "Needle Gun",
-		desc: "A 30 Base Power physical Steel-type attack that hits exactly six times. It uses whichever is higher, the user's Attack or Special Attack, against whichever is lower, the target's Defense or Special Defense.",
-		shortDesc: "30 BP physical Steel; hits 6 times; higher Atk/SpA vs lower Def/SpD.",
+		desc: "A 30 Base Power Steel-type attack that hits exactly six times. Its category matches the chosen attacking stat (Physical on a tie). It uses whichever is higher, the user's Attack or Special Attack, against whichever is lower, the target's Defense or Special Defense.",
+		shortDesc: "Hits 6 times; adaptive category; higher offense vs lower defense.",
 	},
 	neverendingnightmare: {
 		name: "Never-Ending Nightmare",

@@ -30,7 +30,7 @@ describe('Aevian Toxin Drapion-Rejuv', () => {
 		assert.deepEqual(drapion.species.types, ['Poison', 'Ice']);
 		assert.deepEqual(drapion.species.baseStats, { hp: 80, atk: 125, def: 110, spa: 60, spd: 80, spe: 95 });
 		assert.equal(Object.values(drapion.species.baseStats).reduce((sum, stat) => sum + stat, 0), 550);
-		for (const component of ['strongjaw', 'layeredcoat']) {
+		for (const component of ['strongjaw', 'layeredcoat', 'furcoat', 'overcoat', 'merciless']) {
 			assert(drapion.hasAbility(component), `missing ${component}`);
 		}
 		for (const donphanComponent of ['icebody', 'guts', 'filter']) {
@@ -38,7 +38,7 @@ describe('Aevian Toxin Drapion-Rejuv', () => {
 		}
 	});
 
-	it('combines Strong Jaw and Layered Coat without Merciless', () => {
+	it('combines Strong Jaw and Layered Coat with Merciless once', () => {
 		const [drapion, foe] = start();
 		assert.equal(battle.runEvent('BasePower', drapion, foe, battle.dex.getActiveMove('crunch'), 100), 150);
 		assert.equal(battle.runEvent('BasePower', drapion, foe, battle.dex.getActiveMove('poisonjab'), 100), 100);
@@ -46,7 +46,8 @@ describe('Aevian Toxin Drapion-Rejuv', () => {
 		assert.equal(battle.runEvent('Immunity', drapion, null, null, 'sandstorm'), false);
 		foe.setStatus('psn');
 		battle.makeChoices('move crunch', 'move splash');
-		assert(!drapion.hasAbility('merciless'));
+		assert(drapion.hasAbility('merciless'));
+		assert(battle.log.some(line => line.startsWith('|-crit|')), battle.log.join('\n'));
 	});
 
 	it('keeps Donphan-Rejuv and its existing Aevian Frost effects intact', () => {

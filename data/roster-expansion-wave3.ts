@@ -224,18 +224,13 @@ export function applyRosterWave3(base: AbilityDataTable) {
 		},
 	});
 	base.territorial = {
-		flags: {}, name: 'Territorial', num: base.territorial.num, rating: 4,
-		onStart() { this.effectState.charged = false; },
-		onDamagingHit(damage, target, source, move) {
-			if (target.hp && foeHit(damage, target, source) && move.category === 'Physical') this.effectState.charged = true;
+		...base.unnerve, ...base.stamina, ...base.guarddog,
+		name: 'Territorial', num: base.territorial.num, rating: 4,
+		onDragOut(pokemon) {
+			this.add('-activate', pokemon, 'ability: Territorial');
+			return null;
 		},
-		onSourceDamagingHit(damage, target, source, move) {
-			if (!this.effectState.charged || !foeHit(damage, target, source) || move.type !== 'Ground') return;
-			this.effectState.charged = false;
-			this.heal(source.baseMaxhp / 8, source, source, this.effect);
-		},
-	};
-	add('funeralchoir', 'Funeral Choir', {
+	};	add('funeralchoir', 'Funeral Choir', {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (!foeHit(damage, target, source) || !move.flags['sound'] || this.effectState.healTurn === this.turn) return;
 			const fallen = source.side.pokemon.filter(pokemon => pokemon !== source && pokemon.fainted).length;

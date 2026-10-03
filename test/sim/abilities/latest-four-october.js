@@ -54,8 +54,23 @@ describe('Latest four approved base-form changes',()=>{
  });
  it('Dreepy Vanguard preserves Stalwart tracking and field boosts',()=>{const[p,t]=setup('Dreepy Vanguard');const m=battle.dex.getActiveMove('tackle');battle.runEvent('ModifyMove',p,t,m,m);assert(m.tracksTarget);battle.field.setTerrain('fairytaleterrain',p);const before=p.boosts.spa;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.spa,before+1);});
  it('Dreepy Vanguard only clears FFA sides actually damaged',()=>{const[p,t]=setup('Dreepy Vanguard','ffa');p.storedStats.atk=200;p.storedStats.spa=100;for(const side of battle.sides.slice(1))side.addSideCondition('reflect',side.active[0]);use(p,t,'dragondarts');assert(!t.side.sideConditions.reflect);assert(battle.p3.sideConditions.reflect);assert(battle.p4.sideConditions.reflect);});
- it('Grounding Tail clears only its own web and gives no Ground immunity or Speed boost',()=>{const[p,t]=setup('Grounding Tail','ffa');for(const side of battle.sides)side.addSideCondition('stickyweb',side.active[0]);use(p,t,'thundershock');assert(!p.side.sideConditions.stickyweb);for(const side of battle.sides.slice(1))assert(side.sideConditions.stickyweb);assert.equal(p.boosts.spe,0);assert(p.runImmunity('Ground'));p.side.addSideCondition('stickyweb',p);p.setAbility('No Ability');p.setAbility('Grounding Tail');use(p,t,'thundershock');assert(p.side.sideConditions.stickyweb);});
- it('Grounding Tail excludes immune, allied, substitute and non-Electric attacks',()=>{const[p,t]=setup('Grounding Tail','doubles');p.side.addSideCondition('stickyweb',p);t.setType('Ground');use(p,t,'thundershock');assert(!p.m.groundingTailUsed);t.setType('Normal');t.addVolatile('substitute');use(p,t,'thundershock');assert(!p.m.groundingTailUsed);use(p,p.side.active[1],'thundershock');use(p,t);assert(p.side.sideConditions.stickyweb);assert(!p.m.groundingTailUsed);});
- it('new entry budgets refresh after a genuine switch, even if ability was changed before leaving',()=>{const[p,t]=setup('Grounding Tail');use(p,t,'thundershock');assert(p.m.groundingTailUsed);p.setAbility('No Ability');battle.makeChoices('switch 2','move 1');battle.makeChoices('switch 2','move 1');p.setAbility('Grounding Tail');assert(!p.m.groundingTailUsed);p.side.addSideCondition('stickyweb',p);use(p,t,'thundershock');assert(!p.side.sideConditions.stickyweb);});
-
+	it('Grounding Tail preserves webs and Speed while Electric attacks damage Ground foes', () => {
+		const [p, t] = setup('Grounding Tail', 'ffa');
+		for (const side of battle.sides)side.addSideCondition('stickyweb', side.active[0]);
+		t.setType('Ground');
+		const hp = t.hp;
+		use(p, t, 'thundershock');
+		assert(t.hp < hp);
+		for (const side of battle.sides)assert(side.sideConditions.stickyweb);
+		assert.equal(p.boosts.spe, 0); assert(p.runImmunity('Ground'));
+	});
+	it('Grounding Tail has no once-per-entry budget and respects ability suppression', () => {
+		const [p, t] = setup('Grounding Tail'); t.setType('Ground');
+		const hp = t.hp; use(p, t, 'thundershock'); assert(t.hp < hp);
+		p.addVolatile('gastroacid');
+		const blocked = t.hp;
+		use(p, t, 'thundershock');
+		assert.equal(t.hp, blocked);
+		p.removeVolatile('gastroacid'); use(p, t, 'thundershock'); assert(t.hp < blocked);
+	});
 });

@@ -7526,7 +7526,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Kecleon",
 		types: ["Normal"],
 		baseStats: { hp: 90, atk: 115, def: 90, spa: 50, spd: 135, spe: 50 },
-		abilities: { 0: "Shed Skin", 1: "Protean", H: "Mimicry" },
+		abilities: { 0: "Shed Skin", 1: "Protean", H: "Mimicry", S: "Adaptive Cycle" },
 		heightm: 1,
 		weightkg: 22,
 		color: "Green",
@@ -9159,7 +9159,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Ghost", "Dark"],
 		baseStats: { hp: 60, atk: 60, def: 60, spa: 140, spd: 140, spe: 140 },
-		abilities: { 0: "Shadow Guard" },
+		abilities: { 0: "Voidcraft" },
 		heightm: 0.9,
 		weightkg: 4.4,
 		color: "Purple",
@@ -9572,7 +9572,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Drapion",
 		types: ["Poison", "Dark"],
 		baseStats: { hp: 80, atk: 110, def: 125, spa: 60, spd: 80, spe: 95 },
-		abilities: { 0: "Serrated Pincers", 1: "Debilitating Venom", H: "Strong Jaw", S: "Aevian Toxin" },
+		abilities: { 0: "Razor Reach", 1: "Withering Touch", H: "Strong Jaw", S: "Aevian Toxin" },
 		heightm: 1.3,
 		weightkg: 61.5,
 		color: "Purple",
@@ -10875,8 +10875,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Emboar",
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 110, atk: 123, def: 65, spa: 100, spd: 65, spe: 65 },
-		abilities: { 0: "Gluttony", 1: "Violent Rush", H: "Brute Force" },
+		baseStats: { hp: 110, atk: 123, def: 75, spa: 80, spd: 75, spe: 65 },
+		abilities: { 0: "Gluttony", 1: "Thick Fat", H: "Brute Force" },
 		heightm: 1.6,
 		weightkg: 150,
 		color: "Red",
@@ -10960,8 +10960,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Reborn",
 		types: ["Fire", "Fighting"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 110, atk: 123, def: 65, spa: 100, spd: 65, spe: 65 },
-		abilities: { 0: "Gluttony", 1: "Violent Rush", H: "Brute Force" },
+		baseStats: { hp: 110, atk: 123, def: 75, spa: 80, spd: 75, spe: 65 },
+		abilities: { 0: "Gluttony", 1: "Thick Fat", H: "Brute Force" },
 		heightm: 1.6,
 		weightkg: 150,
 		color: "Red",
@@ -13123,7 +13123,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Stunfisk",
 		types: ["Ground", "Electric"],
 		baseStats: { hp: 109, atk: 66, def: 84, spa: 81, spd: 99, spe: 32 },
-		abilities: { 0: "Static", 1: "Limber", H: "Earth Eater" },
+		abilities: { 0: "Static", 1: "Limber", H: "Earth Eater", S: "Adaptive Cycle" },
 		heightm: 0.7,
 		weightkg: 11,
 		color: "Brown",
@@ -13138,7 +13138,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Galar",
 		types: ["Ground", "Steel"],
 		baseStats: { hp: 109, atk: 81, def: 99, spa: 66, spd: 84, spe: 32 },
-		abilities: { 0: "Mimicry" },
+		abilities: { 0: "Mimicry", S: "Adaptive Cycle" },
 		heightm: 0.7,
 		weightkg: 20.5,
 		color: "Green",
@@ -16358,7 +16358,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 752,
 		name: "Araquanid",
 		types: ["Water", "Bug"],
-		baseStats: { hp: 88, atk: 94, def: 102, spa: 50, spd: 153, spe: 53 },
+		baseStats: { hp: 88, atk: 80, def: 92, spa: 50, spd: 147, spe: 43 },
 		abilities: { 0: "Water Bubble", 1: "Water Absorb", H: "Neutralization" },
 		heightm: 1.8,
 		weightkg: 82,
@@ -16467,7 +16467,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Poison", "Fire"],
 		gender: "F",
 		baseStats: { hp: 68, atk: 64, def: 60, spa: 111, spd: 60, spe: 117 },
-		abilities: { 0: "Corrosion", 1: "Dragonize", H: "Aroma Veil" },
+		abilities: { 0: "Corrosion", 1: "Venom Ignition", H: "Aroma Veil" },
 		heightm: 1.2,
 		weightkg: 22.2,
 		color: "Black",
@@ -16808,7 +16808,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Normal"],
 		gender: "N",
 		baseStats: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 },
-		abilities: { 0: "RKS System", 1: "Mimicry", H: "Memory Leak" },
+		abilities: { 0: "RKS System", 1: "Mimicry", H: "Memory Leak", S: "Adaptive Cycle" },
 		heightm: 2.3,
 		weightkg: 100.5,
 		color: "Gray",
@@ -19801,7 +19801,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Ursaluna",
 		types: ["Ground", "Normal"],
 		baseStats: { hp: 150, atk: 145, def: 110, spa: 25, spd: 120, spe: 50 },
-		abilities: { 0: "Guts", 1: "Bulletproof", H: "Territorial" },
+		abilities: { 0: "Raging Beast", 1: "Bulletproof", H: "Territorial" },
 		heightm: 2.4,
 		weightkg: 290,
 		color: "Brown",
@@ -20746,7 +20746,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Espathra",
 		types: ["Psychic"],
 		baseStats: { hp: 95, atk: 60, def: 60, spa: 101, spd: 60, spe: 105 },
-		abilities: { 0: "Opportunist", 1: "Frisk", H: "Speed Boost" },
+		abilities: { 0: "Opportunist", 1: "Transfixing Gaze", H: "Speed Boost" },
 		heightm: 1.9,
 		weightkg: 90,
 		color: "Yellow",
@@ -24114,3 +24114,31 @@ for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)
 	skin.abilities = {...counterpart.abilities};
 	if (counterpart.canGigantamax) Object.assign(skin, {canGigantamax: counterpart.canGigantamax});
 }
+
+// Explicitly approved base-species signature slots.
+Object.assign(Pokedex.tinkaton.abilities!, { "0": "Scrapbreaker" });
+Object.assign(Pokedex.grafaiai.abilities!, { "1": "Toxic Signature" });
+Object.assign(Pokedex.grimmsnarl.abilities!, { "0": "Wicked Weave" });
+Object.assign(Pokedex.klefki.abilities!, { "0": "Vault Keeper", "1": "Master Key" });
+Object.assign(Pokedex.kleavor.abilities!, { "0": "Flint Fracture" });
+Object.assign(Pokedex.glalie.abilities!, { "1": "Frozen Feast" });
+Object.assign(Pokedex.chimecho.abilities!, { "1": "Restorative Chime", "H": "Dissonant Chime" });
+Object.assign(Pokedex.gengar.abilities!, { "H": "Grave Hunger" });
+Object.assign(Pokedex.volcarona.abilities!, { "0": "Cinder Scales", "1": "Overcoat", H: "Dawn Herald" });
+Object.assign(Pokedex.magcargo.abilities!, { "0": "Evaporate", "1": "Pressure Kiln", "H": "Shattercrust" });
+Object.assign(Pokedex.armaldo.abilities!, { "H": "Primeval Hunt" });
+Object.assign(Pokedex.walrein.abilities!, { "0": "Rimebreaker" });
+Object.assign(Pokedex.amoonguss.abilities!, { "1": "Spore Shroud" });
+Pokedex.magcargo.baseStats = { hp: 95, atk: 50, def: 145, spa: 115, spd: 105, spe: 30 };
+
+for (const id of ['charizardmegax', 'charizardmegaxalt'] as const) {
+	Pokedex[id].baseStats!.atk = 130;
+	Pokedex[id].baseStats!.spa = 125;
+}
+
+// Cosmetic counterpart keeps the approved base-form ability slots.
+Pokedex.grimmsnarlazzy.abilities = { ...Pokedex.grimmsnarl.abilities! };
+
+Pokedex.cradily.abilities!.H = "Primeval Hunger";
+
+Pokedex.skarmory.abilities![0] = 'Fresh Plumage';

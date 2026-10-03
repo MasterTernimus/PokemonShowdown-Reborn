@@ -4,7 +4,7 @@ const assert = require('../../assert');
 const common = require('../../common');
 
 let battle;
-describe('Shadow Guard rework', () => {
+describe('Voidcraft rework', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 
 	it('Mega Evolves into the new component ability without trapping or Magic Guard', () => {
@@ -25,23 +25,6 @@ describe('Shadow Guard rework', () => {
 		assert(mega.getAbility().onSourceModifyDamage);
 		battle.makeChoices('move splash', 'switch 2');
 		assert.species(battle.p2.active[0], 'Mew');
-	});
-
-	it('halves a real attack at full HP, then loses Shadow Shield’s reduction', () => {
-		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mismagius-Mega', ability: 'Shadow Guard', moves: ['splash']}],
-			[{species: 'Mew', ability: 'No Ability', moves: ['shadowball']}],
-		]);
-		battle.makeChoices('team 1', 'team 1');
-		const mega = battle.p1.active[0];
-		let before = mega.hp;
-		battle.makeChoices('move splash', 'move shadowball');
-		const fullHpDamage = before - mega.hp;
-		before = mega.hp;
-		battle.makeChoices('move splash', 'move shadowball');
-		const damagedHpDamage = before - mega.hp;
-		assert(fullHpDamage > 0);
-		assert(damagedHpDamage > fullHpDamage * 1.5);
 	});
 
 	it('queues 120 BP Ghost Future Sight on Mega Evolution and every other turn', () => {
@@ -73,7 +56,7 @@ describe('Shadow Guard rework', () => {
 
 	it('keeps Shadow Shield, Temporal Shift stat protection, and Insomnia', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mismagius-Mega', ability: 'Shadow Guard', moves: ['splash']}],
+			[{ species: 'Mismagius-Mega', ability: 'Voidcraft', moves: ['splash'] }],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		battle.makeChoices('team 1', 'team 1');

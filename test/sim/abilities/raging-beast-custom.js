@@ -56,12 +56,15 @@ describe('Raging Beast and related species updates', () => {
 		const foe = battle.p2.active[0];
 		assert.equal(foe.boosts.atk, 0);
 		assert(!lunarDread.hasAbility('magicguard'));
-		assert(!lunarDread.hasAbility('pressure'));
+		assert(lunarDread.hasAbility('pressure'));
+		assert(lunarDread.hasAbility('insomnia'));
+		assert(lunarDread.hasAbility('dishearten'));
+		assert.equal(foe.boosts.spa, -1);
 		assert(!lunarDread.hasAbility('unaware'));
 		assert(!lunarDread.hasAbility('intimidate'));
 	});
 
-	it('should not retain Territorial’s removed Unnerve, Unaware or Tough Claws effects', () => {
+	it('should not retain Territorial’s removed Unaware or Tough Claws effects', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Ursaluna', ability: 'Territorial', moves: ['splash']},
 		], [
@@ -71,7 +74,9 @@ describe('Raging Beast and related species updates', () => {
 		const territorial = battle.p1.active[0];
 		const foe = battle.p2.active[0];
 		assert.equal(foe.boosts.atk, 0);
-		assert(!territorial.hasAbility('unnerve'));
+		assert(territorial.hasAbility('unnerve'));
+		assert(territorial.hasAbility('guarddog'));
+		assert(territorial.hasAbility('stamina'));
 		assert(!territorial.hasAbility('unaware'));
 		assert(!territorial.hasAbility('toughclaws'));
 		assert(!territorial.hasAbility('intimidate'));

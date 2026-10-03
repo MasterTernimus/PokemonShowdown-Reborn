@@ -1,3 +1,4 @@
+import {adaptiveEnvironment} from './adaptive-cycle';
 /**
  * Simulator Field
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -146,6 +147,7 @@ export class Field {
 
 	/** Only type-wide bonuses shared with an Aura belong in the overlap calculation. */
 	baseAuraTypeBoost(move: ActiveMove, source: Pokemon, target: Pokemon) {
+		if (adaptiveEnvironment(target, 'fields')) return 1;
 		const type = move.type;
 		if (this.terrain === 'bewitchedwoodsterrain' && type === 'Fairy') return 1.5;
 		if (this.terrain === 'glitchterrain' && type === 'Psychic') return 1.2;
@@ -689,11 +691,13 @@ export class Field {
 	private clearWaterHazards() {
 		const submerged = ['underwaterterrain', 'midnightzoneterrain'].includes(this.terrain);
 		if (!submerged && !['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(this.terrain)) return;
-		const hazards = submerged ? ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'] : ['spikes', 'toxicspikes'];
+		const hazards = submerged ?
+			['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'] : ['spikes', 'toxicspikes', 'stealthrock'];
 		for (const side of this.battle.sides) {
 			for (const sideCondition of hazards) {
 				if (!side.removeSideCondition(sideCondition)) continue;
 				this.battle.add('-message', submerged ? 'The hazards were swept away into the depths!' :
+					sideCondition === 'stealthrock' ? '...The pointed stones sank into the water and vanished!' :
 					'...The spikes sank into the water and vanished!');
 				this.battle.add('-sideend', side, this.battle.dex.conditions.get(sideCondition).name);
 			}
