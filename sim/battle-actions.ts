@@ -1,3 +1,4 @@
+import {adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
 import { Dex, toID } from './dex';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
@@ -143,6 +144,8 @@ export class BattleActions {
 		}
 		pokemon.replacedFainted = !!oldActive?.fainted;
 		if (oldActive) {
+			delete oldActive.m.spentForceExhausted;
+			delete oldActive.m.spentForceRecoveryTurn;
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
@@ -202,7 +205,7 @@ export class BattleActions {
 		// These entry budgets belong to the Pokemon, not its replaceable AbilityState.
 		delete pokemon.m.seaRescuerUsed;
 		delete pokemon.m.dreepyVanguardUsed;
-		delete pokemon.m.groundingTailUsed;
+		pokemon.m.approvedSignatures = {};
 		delete pokemon.m.steelPlumageUsed;
 		delete pokemon.m.templeChimeUsed;
 		delete pokemon.m.solarBudSpent;
@@ -210,7 +213,6 @@ export class BattleActions {
 		delete pokemon.m.maliceWellUsed;
 		delete pokemon.m.gildedGraceUsed;
 		delete pokemon.m.savageResolveUsed;
-		delete pokemon.m.spentForceUntil;
 		delete pokemon.m.holyCowMilkCuredEntry;
 		delete pokemon.m.pulseBulwarkScreenCuredEntry;
 		pokemon.activeMoveActions = 0;
@@ -421,6 +423,7 @@ export class BattleActions {
 		if (moveDidSomething) this.battle.field.flowerGardenAfterMove(pokemon, move);
 		this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.battle.runEvent('AfterMove', pokemon, target, move);
+		adaptiveAfterMove(this.battle, pokemon, move, !!moveDidSomething);
 		if (move.flags['cantusetwice'] && pokemon.removeVolatile(move.id)) {
 			this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
 		}
@@ -539,7 +542,9 @@ export class BattleActions {
 		this.battle.setActiveMove(move, pokemon, target);
 
 		this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
+		const adaptiveNativeBefore = this.battle.getAllActive().some(p => p.ability === 'adaptivecycle') ? adaptiveMoveSnapshot(move) : null;
 		this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+		if (adaptiveNativeBefore) adaptiveCaptureNativeMove(this.battle, move, adaptiveNativeBefore);
 		if (baseTarget !== move.target) {
 			// Target changed in ModifyMove, so we must adjust it here
 			// Adjust before the next event so the correct target is passed to the
@@ -581,6 +586,7 @@ export class BattleActions {
 		}
 
 		const originalTarget = target;
+		(move as any).adaptiveOriginalTarget = target;
 		const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
 		if (targets.length) {
 			target = targets[targets.length - 1]; // in case of redirection
@@ -742,7 +748,10 @@ export class BattleActions {
 		const hitSlot = targets.map(p => p.getSlot());
 		if (move.spreadHit) this.battle.attrLastMove('[spread] ' + hitSlot.join(','));
 		// Delayed attacks do not pass through runMove's normal AfterMove boundary.
-		if (notActive) this.battle.runEvent('AfterTargetedMove', pokemon, targets[0], move);
+		if (notActive) {
+			this.battle.runEvent('AfterTargetedMove', pokemon, targets[0], move);
+			adaptiveAfterMove(this.battle, pokemon, move, moveResult);
+		}
 		return moveResult;
 	}
 	waterShurikenTargetHasWaterImmunity(target: Pokemon) {
@@ -825,7 +834,12 @@ export class BattleActions {
 	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		this.redirectWaterShurikenFromProtect(targets, pokemon, move);
 		this.focusSpiralEvolutionSpreadFromProtect(targets, pokemon, move);
-		const hitResults = this.battle.runEvent('TryHit', targets, pokemon, move);
+		const hitResults = targets.map(target => {
+			if (move.category === 'Status' && adaptiveHarmfulStatus(move) && adaptiveKnownMove(target, pokemon, move)) return false;
+			// Target-specific move views must share protection results with the executing move.
+			target.getMoveHitData(move);
+			return this.battle.runEvent('TryHit', target, pokemon, adaptiveMoveView(move, pokemon, target));
+		});
 		if (!hitResults.includes(true) && hitResults.includes(false)) {
 			this.battle.add('-fail', pokemon);
 			this.battle.attrLastMove('[still]');
@@ -843,7 +857,9 @@ export class BattleActions {
 
 		const hitResults = [];
 		for (const i of targets.keys()) {
-			hitResults[i] = targets[i].runImmunity(move, !move.smartTarget);
+			const targetMove = adaptiveMoveView(move, pokemon, targets[i]);
+			adaptiveCountertype(targets[i], pokemon, targetMove);
+			hitResults[i] = targets[i].runImmunity(targetMove, !move.smartTarget);
 		}
 
 		return hitResults;
@@ -877,7 +893,7 @@ export class BattleActions {
 		for (const [i, target] of targets.entries()) {
 			this.battle.activeTarget = target;
 			// calculate true accuracy
-			let accuracy = move.accuracy;
+			let accuracy = adaptiveMoveView(move, pokemon, target).accuracy;
 			if (move.ohko) { // bypasses accuracy modifiers
 				if (!target.isSemiInvulnerable()) {
 					accuracy = 30;
@@ -899,10 +915,12 @@ export class BattleActions {
 					let boost = 0;
 					if (!move.ignoreAccuracy) {
 						const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
+						if (boosts.accuracy > 0 && adaptiveSetup(target, pokemon)) boosts.accuracy = 0;
 						boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 					}
 					if (!move.ignoreEvasion) {
 						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
+						if (boosts.evasion > 0 && adaptiveSetup(pokemon, target)) boosts.evasion = 0;
 						boost = this.battle.clampIntRange(boost - boosts['evasion'], -6, 6);
 					}
 					if (boost > 0) {
@@ -1170,6 +1188,7 @@ export class BattleActions {
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
 						const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
+						if (boosts.accuracy > 0 && adaptiveSetup(target, pokemon)) boosts.accuracy = 0;
 						const boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
@@ -1179,6 +1198,7 @@ export class BattleActions {
 					}
 					if (!move.ignoreEvasion) {
 						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
+						if (boosts.evasion > 0 && adaptiveSetup(pokemon, target)) boosts.evasion = 0;
 						const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
@@ -1526,7 +1546,13 @@ export class BattleActions {
 			if (!target) continue;
 			this.battle.activeTarget = target;
 			damage[i] = undefined;
-			const curDamage = this.getDamage(source, target, moveData);
+			const targetMove = adaptiveMoveView(moveData, source, target);
+			if (targetMove !== moveData) {
+				const allowedHits = Array.isArray(targetMove.multihit) ? targetMove.multihit[1] : targetMove.multihit || 1;
+				if (move.hit > allowedHits || (targetMove.target !== moveData.target && targetMove.target === 'normal' &&
+					(move as any).adaptiveOriginalTarget !== target)) { damage[i] = false; continue; }
+			}
+			const curDamage = this.getDamage(source, target, targetMove);
 			// getDamage has several possible return values:
 			//
 			//   a number:
@@ -1725,8 +1751,9 @@ export class BattleActions {
 		for (const target of targets) {
 			if (target === false) continue;
 			const secondaries: Dex.SecondaryEffect[] =
-				this.battle.runEvent('ModifySecondaries', target, source, moveData, moveData.secondaries.slice());
+				this.battle.runEvent('ModifySecondaries', target, source, moveData, (target ? adaptiveWeatherSecondaries(this.battle, source, target, adaptiveMoveView(moveData, source, target)) : moveData.secondaries)?.slice() || []);
 			for (const secondary of secondaries) {
+				if (target && !secondary.self && adaptiveKnownMove(target, source, move)) continue;
 				// Hydra Bond repeats stat-boost effects with their normal chance, but not other effects.
 				const repeatsOnHydraFollowUp = secondary.boosts || secondary.self?.boosts;
 				if (hydraBondFollowUp && !repeatsOnHydraFollowUp) continue;
@@ -2047,6 +2074,7 @@ export class BattleActions {
 			move.hit = 0;
 		}
 
+		move = adaptiveMoveView(move, source, target);
 		if (!target.runImmunity(move, !suppressMessages)) {
 			return false;
 		}
@@ -2132,6 +2160,8 @@ export class BattleActions {
 
 		let atkBoosts = attacker.boosts[attackStat];
 		let defBoosts = defender.boosts[defenseStat];
+		if (atkBoosts > 0 && adaptiveSetup(target, attacker)) atkBoosts = 0;
+		if (defBoosts > 0 && adaptiveSetup(source, defender)) defBoosts = 0;
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;

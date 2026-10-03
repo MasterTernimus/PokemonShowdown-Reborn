@@ -37,7 +37,7 @@ describe('Empoleon and Empoleon-Mega', () => {
 		assert.equal(battle.runEvent('ModifySpe', empoleon, null, null, 100), 200);
 	});
 
-	it('gives Exalt Ice and Flying STAB without a rain Speed boost', () => {
+	it('gives Exalt slicing and Steel Wing power without extra STAB or rain Speed', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Empoleon', ability: 'Exalt', moves: ['icebeam', 'aerialace']},
 		], [{species: 'Mew', moves: ['splash']}]]);
@@ -46,8 +46,12 @@ describe('Empoleon and Empoleon-Mega', () => {
 		for (const moveId of ['icebeam', 'aerialace']) {
 			const move = battle.dex.getActiveMove(moveId);
 			battle.singleEvent('ModifyMove', empoleon.getAbility(), empoleon.abilityState, move, empoleon, battle.p2.active[0]);
-			assert.equal(move.forceSTAB, true, moveId);
+			assert.equal(!!move.forceSTAB, false, moveId);
+			assert.equal(battle.runEvent('BasePower', empoleon, battle.p2.active[0], move, 100),
+				move.flags.slicing ? 150 : 100, moveId);
 		}
+		const steelWing = battle.dex.getActiveMove('steelwing');
+		assert.equal(battle.runEvent('BasePower', empoleon, battle.p2.active[0], steelWing, 100), 150);
 		battle.field.setWeather('raindance');
 		assert.equal(battle.runEvent('ModifySpe', empoleon, null, null, 100), 100);
 	});

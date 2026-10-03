@@ -49,7 +49,7 @@ describe('Approved fourth roster pass', () => {
 			assert(abilityIncludesComponent(ability, component));
 		}
 		assert(!abilityIncludesComponent('Hydra Tyrant', 'Self Sufficient'));
-		for (const component of ['Magic Guard', 'Unaware', 'Pressure']) {
+		for (const component of ['Magic Guard', 'Unaware']) {
 			assert(!abilityIncludesComponent('Lunar Dread', component));
 		}
 		assert.equal(Dex.species.get('Hydreigon').abilities[0], 'Levitate');
@@ -330,27 +330,21 @@ describe('Approved fourth roster pass', () => {
 		const values = Array.from({ length: 10 }, () => battle.actions.getDamage(p, foe, move));
 		assert.equal(new Set(values).size, 1);
 	});
-	it('Territorial ignores negative offense and positive evasion only while charged', () => {
+	it('Territorial no longer ignores negative offense or positive evasion', () => {
 		const [p, , foe] = make('Territorial');
 		assert(!modify('earthpower', p, foe).ignoreNegativeOffensive);
 		hit('tackle', foe, p);
 		const move = modify('earthquake', p, foe);
-		assert(move.ignoreNegativeOffensive && move.ignorePositiveEvasion);
+		assert(!move.ignoreNegativeOffensive && !move.ignorePositiveEvasion);
 		assert(!modify('tackle', p, foe).ignoreNegativeOffensive);
 	});
-	it('Lunar Dread marks for two turns and modifies only the holder/marked foe matchup', () => {
-		const [p, ally, foe, other] = make('Lunar Dread');
+	it('Lunar Dread has no former mark, damage reduction or Ground critical effects', () => {
+		const [p, , foe] = make('Lunar Dread');
 		hit('tackle', p, foe);
-		assert(foe.volatiles.lunardread);
-		const tackle = battle.dex.getActiveMove('tackle'), earth = battle.dex.getActiveMove('earthpower');
-		assert.equal(battle.runEvent('ModifyDamage', foe, p, tackle, 100), 75);
-		assert.equal(battle.runEvent('ModifyDamage', foe, ally, tackle, 100), 100);
-		assert.equal(battle.runEvent('ModifyDamage', other, p, tackle, 100), 100);
-		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, earth, 1), 2);
-		battle.turn += 2;
-		battle.singleEvent('Residual', battle.dex.conditions.get('lunardread'), foe.volatiles.lunardread, foe);
 		assert(!foe.volatiles.lunardread);
+		const tackle = battle.dex.getActiveMove('tackle'), earth = battle.dex.getActiveMove('earthpower');
 		assert.equal(battle.runEvent('ModifyDamage', foe, p, tackle, 100), 100);
+		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, earth, 1), 1);
 	});
 	it('False Bouquet seeds once per entry, respecting Substitute and Grass immunity', () => {
 		const [p, , foe, other] = make('False Bouquet');

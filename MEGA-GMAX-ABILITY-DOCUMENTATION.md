@@ -56,7 +56,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - Rayquaza-Mega: Delta Stream
 - Staraptor-Mega: Predator
 - Lopunny-Mega: Unchecked Assault
-- Mismagius-Mega: Shadow Guard
+- Mismagius-Mega: Voidcraft
 - Garchomp-Mega: Apex Cleave
 - Garchomp-Mega-Z: Relentless Hunt
 - Lucario-Mega: Aura Instinct
@@ -151,7 +151,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - **Freezer Burn:** Slush Rush, Refrigerate, and Ice Body. Normal moves become Ice moves with the established Refrigerate behavior.
 - **Frost Sovereign:** Snow Warning, Ice Body, and the established eight-turn hail/veil behavior.
 - **Burning Crown:** Intimidate, Wildfire Core, Fire moves deal 1.2x damage, Fire damage taken is reduced by 20%, and a KO raises the higher offensive stat.
-- **Burning Ego:** Ultra Ego, Brute Force, and Magma Armor.
+- **Burning Ego:** Proficient, Ultra Ego, Flame Body, and full Magma Armor.
 - **Burning Spirit:** Self Sufficient, Opportunist, and Magma Armor.
 - **Brute Force:** Reckless power behavior without recoil damage, including the custom recoil-move handling.
 - **Self Sufficient:** Restores 1/16 max HP at the end of each turn.
@@ -165,7 +165,7 @@ This is the current server-side reference for every Mega and Gmax profile in `da
 - **Terra Resolve:** Stamina, Rocky Payload, and Self Sufficient.
 - **Venom Bastion:** Dauntless Shield, Self Sufficient, and Bug-type STAB behavior.
 - **Wicked Snare:** Stakeout, Intimidate, and Tangling Hair.
-- **Royal Sun:** Royal Decree, Drought, and Fire Mane's Fire-move power effect.
+- **Royal Sun:** Full Drought, Supreme Overlord, Unnerve, and Flame Body, including local field effects and fallen-ally thresholds.
 - **Sand Sovereign:** Eight-turn Sand Stream, Battle Armor, and Solid Rock.
 - **Tyrant Stream:** Brute Force, Sand Stream, and Strong Jaw.
 - **Dune Terror:** Sand Stream, Shed Skin, and fixed Ground-effect residual chip.

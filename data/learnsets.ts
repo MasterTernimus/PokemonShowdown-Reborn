@@ -26592,6 +26592,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			confide: ["9M", "7M", "6M"],
 			curse: ["9M", "7V"],
 			detect: ["7V"],
+			dive: ["9M"],
 			doubleedge: ["9M", "7V", "3T"],
 			doubleteam: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			dracometeor: ["9M", "8T", "7T", "6T", "5T", "4T"],
@@ -71554,6 +71555,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	stunfisk: {
 		learnset: {
+			recover: ["9L1"],
 			aquatail: ["9E", "7T", "6T", "5T"],
 			astonish: ["9E", "8E", "7E", "6E", "5E"],
 			attract: ["9M", "8M", "7M", "6M", "5M"],
@@ -71649,6 +71651,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	stunfiskgalar: {
 		learnset: {
+			recover: ["9L1"],
 			astonish: ["8E"],
 			attract: ["8M"],
 			bind: ["8E"],

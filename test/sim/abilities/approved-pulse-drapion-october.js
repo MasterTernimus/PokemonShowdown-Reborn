@@ -78,18 +78,18 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 	});
 
 	it('Drapion has its new ordinary abilities and preserves Aevian Toxin', () => {
-		const [drapion] = start('Drapion', 'Serrated Pincers', ['nightslash']);
+		const [drapion] = start('Drapion', 'Razor Reach', ['nightslash']);
 		assert.deepEqual(drapion.species.abilities,
-			{0: 'Serrated Pincers', 1: 'Debilitating Venom', H: 'Strong Jaw', S: 'Aevian Toxin'});
+			{0: 'Razor Reach', 1: 'Withering Touch', H: 'Strong Jaw', S: 'Aevian Toxin'});
 		const move = battle.dex.getActiveMove('nightslash');
 		assert(move.flags['contact'] && move.flags['slicing']);
-		battle.dex.abilities.get('serratedpincers').onModifyMove.call(battle, move, drapion);
+		battle.dex.abilities.get('razorreach').onModifyMove.call(battle, move, drapion);
 		assert(!move.flags['contact']);
-		assert.equal(battle.runEvent('BasePower', drapion, battle.p2.active[0], move, 100), 130);
+		assert.equal(battle.runEvent('BasePower', drapion, battle.p2.active[0], move, 100), 150);
 	});
 
-	it('Debilitating Venom poisons Steel but cannot damage it with Poison attacks', () => {
-		const [drapion, steel] = start('Drapion', 'Debilitating Venom', ['toxic', 'gunkshot'],
+	it('Withering Touch inherits custom Corrosion poisoning and Poison damage against Steel', () => {
+		const [drapion, steel] = start('Drapion', 'Withering Touch', ['toxic', 'gunkshot'],
 			{species: 'Registeel', ability: 'No Ability', moves: ['splash']});
 		battle.makeChoices('move toxic', 'move splash');
 		assert.equal(steel.status, 'tox');
@@ -97,12 +97,12 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 		const attack = battle.dex.getActiveMove('gunkshot');
 		attack.accuracy = true;
 		battle.actions.runMove(attack, drapion, drapion.getLocOf(steel));
-		assert.equal(steel.hp, hp);
-		assert.equal(steel.boosts.atk, 0);
+		assert(steel.hp < hp);
+		assert.equal(steel.boosts.atk, -1);
 	});
 
-	it('Debilitating Venom lowers a poisoned foe once per target per turn', () => {
-		const [drapion, foe] = start('Drapion', 'Debilitating Venom', ['sludgebomb']);
+	it('Withering Touch lowers a poisoned foe once per target per turn', () => {
+		const [drapion, foe] = start('Drapion', 'Withering Touch', ['sludgebomb']);
 		foe.setStatus('psn', drapion);
 		const move = battle.dex.getActiveMove('sludgebomb');
 		Object.assign(move, {damage: 10, accuracy: true, willCrit: false, secondaries: undefined, multihit: 3});

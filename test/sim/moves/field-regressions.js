@@ -3,10 +3,10 @@ const assert = require('assert').strict;
 const common = require('../../common');
 const {Dex} = require('../../../dist/sim/dex');
 let battle;
-function setup(move = 'splash', ability = 'No Ability', targetAbility = 'No Ability') {
+function setup(move = 'splash', ability = 'No Ability', targetAbility = 'No Ability', guard = 'protect') {
 	battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 		[{species: 'Mew', ability, moves: [move, 'splash'], evs: {spe: 252}}],
-		[{species: 'Mew', ability: targetAbility, moves: ['splash', 'protect']}],
+		[{species: 'Mew', ability: targetAbility, moves: ['splash', guard]}],
 	]);
 	battle.makeChoices('team 1', 'team 1');
 	return [battle.p1.active[0], battle.p2.active[0]];
@@ -20,6 +20,58 @@ describe('Field audit regressions', () => {
 		battle.makeChoices();
 		assert.equal(source.maxhp - source.hp, Math.floor(source.baseMaxhp / 8));
 	});
+	it('charges Rocky crash damage when Protect blocks a contact move', () => {
+		const [source, target] = setup('tackle');
+		battle.field.startTerrain('rockyterrain');
+		battle.makeChoices('move tackle', 'move protect');
+		assert.equal(source.maxhp - source.hp, Math.floor(source.baseMaxhp / 8));
+		assert.equal(target.hp, target.maxhp);
+		assert.equal(battle.log.filter(line => line.includes('crashed into the rocks')).length, 1);
+		const hp = source.hp;
+		battle.makeChoices('move tackle', 'move splash');
+		assert.equal(source.hp, hp, 'A previous Protect block must not affect the next attack');
+	});
+	for (const guard of ['detect', 'kingsshield', 'spikyshield']) {
+		it(`charges Rocky crash damage when ${guard} blocks contact`, () => {
+			const [source] = setup('tackle', 'No Ability', 'No Ability', guard);
+			battle.field.startTerrain('rockyterrain');
+			battle.makeChoices('move tackle', `move ${guard}`);
+			const damage = Math.floor(source.baseMaxhp / 8);
+			assert.equal(source.maxhp - source.hp, guard === 'spikyshield' ? damage * 2 : damage);
+			assert.equal(battle.log.filter(line => line.includes('crashed into the rocks')).length, 1);
+		});
+	}
+	for (const ability of ['Rock Head', 'Magic Guard', 'Long Reach', 'Unseen Fist']) {
+		it(`exempts ${ability} from Rocky Protect crash damage`, () => {
+			const [source, target] = setup('tackle', ability);
+			battle.field.startTerrain('rockyterrain');
+			battle.makeChoices('move tackle', 'move protect');
+			assert.equal(source.hp, source.maxhp);
+			assert.equal(target.hp === target.maxhp, ability !== 'Unseen Fist');
+		});
+	}
+	for (const [move, field] of [['swift', 'rockyterrain'], ['rockslide', 'rockyterrain'], ['tackle', 'grassyterrain'], ['feint', 'rockyterrain']]) {
+		it(`does not charge a Rocky Protect crash for ${move} on ${field}`, () => {
+			const [source] = setup(move);
+			battle.field.startTerrain(field);
+			battle.makeChoices(`move ${move}`, 'move protect');
+			assert.equal(source.hp, source.maxhp);
+		});
+	}
+	for (const bothProtected of [false, true]) {
+		it(`charges a Rocky spread contact move once when ${bothProtected ? 'both foes' : 'one foe'} Protect`, () => {
+			battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
+				[{species: 'Mew', ability: 'No Ability', moves: ['breakingswipe']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
+				[{species: 'Mew', ability: 'No Ability', moves: ['protect', 'splash']}, {species: 'Mew', ability: 'No Ability', moves: ['protect', 'splash']}],
+			]);
+			battle.makeChoices('team 12', 'team 12');
+			battle.field.startTerrain('rockyterrain');
+			const source = battle.p1.active[0];
+			battle.makeChoices('move breakingswipe, move splash', `move protect, move ${bothProtected ? 'protect' : 'splash'}`);
+			assert.equal(source.maxhp - source.hp, Math.floor(source.baseMaxhp / 8));
+			assert.equal(battle.log.filter(line => line.includes('crashed into the rocks')).length, 1);
+		});
+	}
 	for (const ability of ['Rock Head', 'Magic Guard', 'Long Reach']) {
 		it(`exempts ${ability} from Rocky missed-contact damage`, () => {
 			const [source] = setup('tackle', ability);

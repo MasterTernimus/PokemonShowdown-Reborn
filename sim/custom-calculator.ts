@@ -1,3 +1,4 @@
+import { getAbilityDisplayComponents } from '../data/ability-display';
 /** Isolated, bounded single-action scenarios using the real battle engine. */
 import { Battle } from './battle';
 import { Dex } from './dex';
@@ -8,6 +9,7 @@ import { AbilityComponents } from '../data/ability-components';
 const STATS = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
 const BOOSTS = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'] as const;
 const ASSUMPTIONS = [
+	'Adaptive Cycle starts with empty memory in this fresh-entry calculator; completed adaptations require battle history and are not assumed.',
 	'Sampled single-action outcomes, not guaranteed min/max damage or exact KO probabilities. Misses, critical hits and random redirects are included.',
 	'Fresh battle entry effects run first. Requested HP and stages then replace entry HP/stages. Selected statuses are applied through the engine.',
 	'No previous turns, hits, faints, consumed items, stored moves, copied abilities or field history. History-dependent abilities use fresh-entry state; this does not model a mid-battle snapshot.',
@@ -119,7 +121,8 @@ export function calculatorMetadata() {
 		formats: calculatorFormats().map(f => ({ id: f.id, name: f.name, mode: f.gameType, field: f.terrain || '' })),
 		fields: [{id: '', name: 'No field'}, ...Object.entries(Terrains).map(([id, field]) => ({id, name: field.name || id}))],
 		species: Dex.species.all().filter(s => s.exists && !s.isCosmeticForme).map(s => ({name: s.name, abilities: s.abilities})),
-		abilityComponents: Object.fromEntries(Object.entries(AbilityComponents).map(([id, parts]) => [id, parts.map(p => Dex.abilities.get(p).name)])),
+		abilityComponents: Object.fromEntries(Object.keys(AbilityComponents).map(id =>
+			[id, getAbilityDisplayComponents(id).map(p => Dex.abilities.get(p).name)])),
 		auras: Object.values(Auras).map(a => ({ id: a.id, name: a.name })),
 		assumptions: ASSUMPTIONS,
 	};

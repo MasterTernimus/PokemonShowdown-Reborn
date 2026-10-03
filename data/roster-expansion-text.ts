@@ -36,11 +36,11 @@ export const RosterExpansionDescriptions: { [id: string]: string } = {
 	encorearia: 'Serene Grace. Once per switch-in, successfully applying a move secondary effect creates Safeguard for 5 turns. A blocked secondary does not trigger this effect.',
 	saltbastion: 'Sturdy. When Sturdy saves this Pokemon from a direct hit, its side gains Safeguard for 5 turns.',
 	peppersting: 'Insomnia. After using a Fire move, its first Grass attack to damage a foe each switch-in lowers that foe\'s Speed and Sp. Def by 1 stage. Retains this server\'s full Insomnia effects.',
-	sushitrick: 'Hospitality. On entry, restores 1/4 of each adjacent ally\'s maximum HP and cures its confusion, with a cheerful sushi-service message.',
+	sushitrick: "On entry, restores 1/4 of each adjacent ally's maximum HP and cures its confusion.",
 	mastercourse: 'Contrary. Once per turn, damaging a foe with a Water or Dragon attack gives an adjacent ally +1 critical-hit stage for its next damaging move. The charge does not stack and ends on switching out.',
 	secondbrew: 'Once per turn, when this Pokemon receives draining-move healing, it also restores 1/8 of the lowest-HP adjacent ally\'s maximum HP.',
-	anchorbridge: 'Sturdy. When Sturdy saves this Pokemon from a direct hit, its side gains Light Screen for 3 turns. Does not shorten a longer existing screen.',
-	railsight: 'Stalwart. Once per switch-in, a successful attack against a foe using Follow Me, Rage Powder, Lightning Rod or Storm Drain ignores damage-reducing screens. Does not bypass Substitute.',
+	anchorbridge: 'Sturdy and Solid Rock: survives a fatal hit at full HP, blocks OHKO moves, and takes 0.8x attack damage (0.6x if super effective).',
+	railsight: 'Stalwart. Once per entry, surviving a whole opposing damaging move that hits HP charges the next Electric attack to 1.5x power. Executed misses, protection and immunity consume it; switching clears it.',
 	execution: 'Duskilate. Attacks against targets at half HP or less gain 1.3x power. Once per switch-in, a direct hit that brings a surviving foe from above half HP to half or less marks it; the next Dark or Ghost hit against that foe ignores positive defensive boosts and spends the mark. The mark ends if either Pokemon switches. Restores 1/8 maximum HP per KO; Attack and Sp. Atk cannot fall below -1, and Speed cannot be lowered while a field is active. Retains Duskilate field effects.',
 };
 
@@ -64,7 +64,7 @@ Object.assign(RosterExpansionDescriptions, {
 	herdshelter: 'Soundproof. Adjacent allies are also immune to opposing damaging sound moves.',
 	scorchsweep: 'Once per switch-in, damaging a foe with a recoil move clears entry hazards from its side. The attack still deals normal recoil.',
 	opensky: 'While itemless, immune to entry-hazard damage, Toxic Spikes poison and Sticky Web Speed drops; Flying moves do not make contact.',
-	tidalvoice: 'Liquid Voice: sound moves become Water-type (Ice on Icy Field) and gain 1.3x power, including already-Water moves such as Sparkling Aria. Sound moves spare allies. Its first damaging sound hit each entry clears its negative stat stages.',
+	tidalvoice: 'Liquid Voice: sound moves become Water-type (Ice on Icy Field) and gain 1.3x power, including already-Water moves such as Sparkling Aria. Sound moves spare allies. Its first damaging sound hit each entry clears its negative stat stages. After executing Sparkling Aria, each active adjacent ally heals 1/8 of its maximum HP once per move, even if foes avoid the attack. Does not heal the user or benched allies; Heal Block applies.',
 	rechargerelay: 'Battery, including its existing Electric Terrain effect. Switching with Volt Switch restores 1/8 of the incoming teammate\'s maximum HP.',
 	hovercannon: 'Levitate. Above half HP, damaging Electric moves cannot miss or be redirected. Type and ability immunities still apply.',
 	keenhunt: 'Opponents cannot lower its Speed. Rock moves cannot miss and gain +1 critical-hit stage against targets at half HP or less.',
@@ -104,7 +104,7 @@ Object.assign(RosterExpansionDescriptions, {
 	skywarden: 'After successfully using Defog, creates Mist for its team for 5 turns. The Mist is applied after Defog removes effects; an existing longer Mist is not shortened.',
 	lockjaw: 'Strong Jaw. Biting hits inflict Torment on a surviving foe for 2 turns. Does not prevent switching.',
 	rivershell: 'Shell Armor, including this server\'s damage reduction and field/stat-drop effects. Shell Smash does not lower its Defense, but still lowers its Sp. Def.',
-	territorial: 'Surviving an opposing physical hit charges its next Ground hit against a foe to restore 1/8 maximum HP. Charges do not stack; misses and Protect preserve them, switching clears them.',
+	territorial: 'Full Unnerve, Stamina and Guard Dog. Each opposing physical or special hit that damages its HP heals 1/16 base maximum HP; the first such hit each turn immediately raises Defense by 1, including between multi-hit strikes. Opposing forced switching is blocked and Intimidate raises Attack instead. Opponents cannot eat Berries or use field seeds; Cold Eclipse entry lowers opposing Speed.',
 	funeralchoir: 'Damaging sound moves restore 1/32 maximum HP per currently fainted teammate, capped at 1/8 maximum HP and once per turn.',
 	festivalstep: 'Landing a damaging dance move against a foe clears this Pokemon\'s negative stat stages after damage. Positive stages are preserved; blocked or missed moves do not trigger the effect.',
 	saltcrust: 'Clear Body. While Defense is positively boosted, opponents cannot remove its held item. Does not prevent its boosts being reset, stolen or ignored.',
@@ -126,8 +126,8 @@ Object.assign(RosterExpansionDescriptions, {
 	primalrhythm: 'Damaging sound moves become physical and use Attack. These moves spare allies. Retains normal sound interactions, including Soundproof and Throat Chop.',
 	setpiece: 'Successfully using Court Change or damaging a target with Feint primes its next Fire attack to gain +1 priority and never miss. One non-stacking charge; used when the attack is attempted, and cleared on switching. Protect and immunities still work.',
 	calculatedshot: 'Damaging Water moves gain +1 critical-hit stage and always use the highest normal damage roll. Does not increase fixed damage or bypass accuracy checks.',
-	territorial: 'Surviving an opposing physical hit charges its next Ground attack to ignore its own negative Attack stages and positive target evasion. Landing a Ground hit on a foe consumes the charge to heal 1/8 maximum HP. Misses and Protect preserve it; charges do not stack and switching clears them. Ground immunities still apply.',
-	lunardread: 'Damaging Normal hits mark foes for 2 turns, including the current turn. Marked foes deal 25% less damage to this Pokemon, and its Ground attacks against them gain +1 critical-hit stage. Switching the marked foe clears its mark. Replaces the previous Magic Guard, Pressure and Unaware effects.',
+	territorial: 'Full Unnerve, Stamina and Guard Dog. Each opposing physical or special hit that damages its HP heals 1/16 base maximum HP; the first such hit each turn immediately raises Defense by 1, including between multi-hit strikes. Opposing forced switching is blocked and Intimidate raises Attack instead. Opponents cannot eat Berries or use field seeds; Cold Eclipse entry lowers opposing Speed.',
+	lunardread: 'Dishearten + Insomnia + Pressure. On entry, lowers adjacent foes Sp. Atk by 1 stage, blocked by Substitute and normal stat-drop protection. Prevents sleep and Yawn; Dark and Ghost attacks have 1.3x power. Retains local Pressure: lowers foes Defense and Sp. Def by 1 stage on entry (2 on Cold Eclipse), costs foes 1 extra PP (2 on Midnight Zone), and changes Underwater to Midnight Zone. No mark, damage-reduction or Ground critical-hit effects.',
 	falsebouquet: 'Its first damaging Flower Trick against a surviving foe each entry also attempts to plant Leech Seed. Grass-type immunity and Substitute still apply.',
 	funeralchoir: 'Damaging sound moves restore 1/32 maximum HP per currently fainted teammate, capped at 1/8 and once per turn. While a teammate is fainted, damaging Ghost moves also become sound moves, including sound interactions such as Soundproof and Substitute bypass.',
 	hydratyrant: 'Hydra Bond + Berserk. Once per battle, after Draco Meteor applies its Sp. Atk drops, restores all negative stat stages to zero after the entire attack finishes. Positive stages remain. No Self Sufficient healing or immunity.',
@@ -138,12 +138,13 @@ Object.assign(RosterExpansionDescriptions, {
 
 /** Selector previews; the complete mechanics remain in RosterExpansionDescriptions. */
 export const RosterExpansionShortDescriptions: { [id: string]: string } = {
+	sushitrick: "On entry, heals adjacent allies by 1/4 max HP and cures confusion.",
 	suncharm: 'Drought; first Fire hit adds 1 sun turn (max 8); first burn also curses the foe.',
 	guidingomen: 'Friend Guard + Serene Grace; first secondary effect shields an ally from a stat drop.',
 	layeredshell: 'Shell Armor; the first special hit each entry deals 25% less damage.',
 	execution: 'Duskilate; stronger against low-HP foes; a hit crossing half HP marks them for defense bypass.',
 	sovereignarsenal: 'Poison/Ground attacks use the stronger damage category; horn and tail moves crit more often.',
-	tidalvoice: 'Liquid Voice; sound moves gain 1.3x power, spare allies, and first hit clears stat drops.',
+	tidalvoice: 'Liquid Voice; 1.3x sound, spares allies, first hit clears drops; Aria heals adjacent allies 1/8.',
 	twincannons: 'Fire/Psychic attacks hit twice; the second hit targets Defense instead of Sp. Def.',
 	twinblades: 'Fire/Ghost slicing moves hit twice; the second hit ignores defensive boosts.',
 	mountainbreaker: 'Rock moves use the better Rock/Ground matchup without changing type.',
@@ -155,7 +156,7 @@ export const RosterExpansionShortDescriptions: { [id: string]: string } = {
 	barbharvest: 'Iron Barbs; restores its used Berry after three opposing contact attacks, once per battle.',
 	soulpyre: 'Heals 1/8 after foe burn damage; Ghost hits lower burned foes\' Sp. Def.',
 	hiddenscroll: 'In doubles, its first single-target status move each entry also targets the other foe.',
-	territorial: 'After surviving a physical hit, its next Ground hit ignores drops/evasion and heals 1/8.',
+	territorial: 'Unnerve + Stamina + Guard Dog.',
 	funeralchoir: 'Sound hits heal per fainted ally; Ghost attacks become sound after an ally faints.',
 	sirius: 'Apex Venom + Black Viper; first tail hit each entry badly poisons.',
 	coldopen: 'First damaging move each entry ignores defensive boosts and screens.',
@@ -164,7 +165,7 @@ export const RosterExpansionShortDescriptions: { [id: string]: string } = {
 	vitalcircuit: 'Electric attacks drain 25% of damage, capped at 1/8 HP per turn.',
 	unyielding: 'Stamina; while Defense is raised, foes cannot force it out.',
 	setpiece: 'Court Change or Feint charges the next Fire attack with +1 priority and perfect accuracy.',
-	lunardread: 'Normal hits mark foes; marked foes deal 25% less damage and face stronger Ground crits.',
+	lunardread: 'Dishearten + Insomnia + Pressure; retains their local field effects.',
 	hydratyrant: 'Hydra Bond + Berserk; once per battle, Draco Meteor clears its negative stat stages.',
 	meridianseal: 'First Fighting hit each entry suppresses the foe\'s Ability for 2 turns.',
 	corneredfang: 'Guts; at half HP, the first biting move each entry gains +1 priority.',
@@ -185,7 +186,7 @@ export const RosterExpansionShortDescriptions: { [id: string]: string } = {
 	encorearia: 'Serene Grace; the first secondary effect each entry sets 5-turn Safeguard.',
 	peppersting: 'Insomnia; a Fire move primes the next Grass hit to lower Speed and Sp. Def.',
 	mastercourse: 'Contrary; Water or Dragon hits grant an adjacent ally +1 critical-hit stage.',
-	railsight: 'Stalwart; first hit through redirection each entry ignores screens.',
+	railsight: 'Stalwart; once/entry surviving an enemy HP hit charges next Electric attack 1.5x.',
 	pollenengine: 'Chlorophyll; Grass or powder hits heal it and its allies, more in sun.',
 	tidaldominion: 'Swift Swim; foes with lowered Speed cannot use priority against its side.',
 	tempestfury: 'After surviving a direct hit, its next damaging Water move is a critical hit.',
@@ -218,3 +219,6 @@ export const RosterExpansionShortDescriptions: { [id: string]: string } = {
 	rimeplate: 'Later hits of a multi-hit move deal 75% less damage.',
 	darkdominion: 'Dark Aura; Dark hits Heal Block surviving foes for 2 turns.',
 };
+
+RosterExpansionDescriptions.dishearten = 'On entry, lowers adjacent opposing Pokemon Sp. Atk by 1 stage. Blocked by Substitute and normal stat-drop protection; normal stat-drop reflection and reactions apply. Intimidate-specific immunities and reactions do not apply.';
+RosterExpansionShortDescriptions.dishearten = "On entry, lowers adjacent foes Sp. Atk by 1 stage.";

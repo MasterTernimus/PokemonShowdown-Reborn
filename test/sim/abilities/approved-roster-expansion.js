@@ -271,13 +271,14 @@ describe('Approved roster expansion and component search', () => {
 		assert.equal(battle.runEvent('ModifyPriority', p, foe, ghost, 0), 0);
 	});
 	it('Sturdy-based abilities trigger their correct hazards/screens only on actual survival', () => {
-		for (const [species, ability, condition, duration] of [['Crustle', 'Stonewall', 'spikes', 0], ['Garganacl', 'Salt Bastion', 'safeguard', 5], ['Archaludon', 'Anchor Bridge', 'lightscreen', 3]]) {
+		for (const [species, ability, condition, duration] of [['Crustle', 'Stonewall', 'spikes', 0], ['Garganacl', 'Salt Bastion', 'safeguard', 5], ['Archaludon', 'Anchor Bridge', '', 0]]) {
 			const [p, , foe] = make(species, ability);
 			p.hp = p.maxhp = 100;
 			hit('seismictoss', foe, p);
 			assert.equal(p.hp, 1);
 			const side = duration ? p.side : foe.side;
-			assert(side.sideConditions[condition]);
+			if (condition) assert(side.sideConditions[condition]);
+			else assert(!p.side.sideConditions.lightscreen);
 			if (duration)
 				assert.equal(side.sideConditions[condition].duration, duration);
 			battle.destroy();
@@ -351,13 +352,13 @@ describe('Approved roster expansion and component search', () => {
 		hit('absorb', p, foe);
 		assert.equal(ally.hp - before, Math.floor(ally.baseMaxhp / 8));
 	});
-	it('Rail Sight keeps redirection bypass and grants one screen-piercing hit', () => {
+	it('Rail Sight keeps redirection bypass without bypassing screens', () => {
 		const [p, , foe] = make('Archaludon', 'Rail Sight');
 		hit('followme', foe, foe);
 		const move = battle.dex.getActiveMove('dragonpulse');
 		event('ModifyMove', p, move, p, foe);
 		assert(move.tracksTarget);
-		assert(move.ignoreScreens);
+		assert(!move.ignoreScreens);
 		assert(!move.infiltrates);
 	});
 	it('Execution uses the approved 1.3x finisher and marks only a half-HP crossing', () => {
@@ -396,13 +397,13 @@ describe('Roster support duration protocol', () => {
 		assert.equal(holder.side.sideConditions.tailwind.duration, 4);
 		assert(battle.log.some(line => line.includes('|move: Tailwind|[turns] 5|[silent]')));
 	});
-	it('announces Anchor Bridge three-turn Light Screen after Sturdy saves its holder', () => {
+	it('keeps Anchor Bridge Sturdy survival without creating Light Screen', () => {
 		const holder = setup('Anchor Bridge');
 		const attacker = battle.p2.active[0];
 		attacker.storedStats.atk = 9999;
 		battle.makeChoices('move splash', 'move tackle');
 		assert.equal(holder.hp, 1);
-		assert.equal(holder.side.sideConditions.lightscreen.duration, 2);
-		assert(battle.log.some(line => line.includes('|move: Light Screen|[turns] 3|[silent]')));
+		assert.equal(holder.side.sideConditions.lightscreen, undefined);
+		assert(!battle.log.some(line => line.includes('|move: Light Screen|[turns] 3|[silent]')));
 	});
 });

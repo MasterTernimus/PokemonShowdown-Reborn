@@ -48,21 +48,27 @@ describe('Composite ability cleanup', function () {
 		assert(ability.onSourceModifyDamage);
 	});
 
-	it('should replace Lunar Dread legacy defenses with marks', function () {
+	it('should replace Lunar Dread marks with Dishearten, Insomnia and Pressure', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('lunardread');
-		assert(ability.onSourceDamagingHit);
-		assert(ability.onModifyCritRatio);
-		for (const hook of ['onDamage', 'onDeductPP', 'onAnyModifyBoost']) assert.equal(ability[hook], undefined);
+		for (const hook of ['onStart', 'onSetStatus', 'onTryAddVolatile', 'onDeductPP']) assert(ability[hook]);
+		for (const hook of ['onDamage', 'onAnyModifyBoost', 'onSourceDamagingHit', 'onModifyCritRatio', 'condition']) {
+			assert.equal(ability[hook], undefined);
+		}
 	});
 
-	it('should give Territorial a charged Ground attack and healing', function () {
+	it('should give Territorial Unnerve, Guard Dog and immediate Stamina hooks', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		const ability = battle.dex.abilities.get('territorial');
 		assert(ability.onStart);
 		assert(ability.onDamagingHit);
-		assert(ability.onModifyMove);
-		assert(ability.onSourceDamagingHit);
+		assert.equal(ability.onAnyAfterMove, undefined);
+		assert.equal(ability.onDamagingHit, battle.dex.abilities.get('stamina').onDamagingHit);
+		assert(ability.onFoeTryEatItem);
+		assert(ability.onDragOut);
+		assert(ability.onTryBoost);
+		assert.equal(ability.onModifyMove, undefined);
+		assert.equal(ability.onSourceDamagingHit, undefined);
 	});
 
 	it('should give Still Waters Cloud Nine, Magic Guard, and Unaware hooks', function () {

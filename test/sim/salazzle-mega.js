@@ -30,13 +30,14 @@ describe('Salazzle-Mega', function () {
 		const skarmory = battle.p2.active[0];
 		assert.species(salazzle, 'Salazzle-Mega');
 		assert.equal(salazzle.ability, 'corrosiveburn');
-		for (const component of ['merciless', 'regenerator', 'corrosion']) assert(salazzle.hasAbility(component));
+		for (const component of ['corrosion', 'oblivious', 'venomignition']) assert(salazzle.hasAbility(component));
 		assert.equal(skarmory.status, 'tox', 'Corrosion should poison Steel types');
-		assert(battle.runEvent('ModifyCritRatio', salazzle, skarmory, battle.dex.moves.get('sludgebomb'), 0) >= 5,
-			'Merciless should force a critical hit against poisoned targets');
+		assert.equal(battle.runEvent('ModifyCritRatio', salazzle, skarmory, battle.dex.moves.get('sludgebomb'), 0), 0);
+		assert(!salazzle.hasAbility('merciless'));
+		assert(!salazzle.hasAbility('regenerator'));
 		salazzle.hp = Math.floor(salazzle.maxhp / 2);
 		const before = salazzle.hp;
 		battle.singleEvent('SwitchOut', salazzle.getAbility(), salazzle.abilityState, salazzle);
-		assert.equal(salazzle.hp, Math.min(salazzle.maxhp, before + Math.floor(salazzle.baseMaxhp / 3)));
+		assert.equal(salazzle.hp, before);
 	});
 });

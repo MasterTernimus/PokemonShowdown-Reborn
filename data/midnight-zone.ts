@@ -1,3 +1,4 @@
+import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { type TerrainData } from '../sim/dex-terrains';
 
 /** The deepest stage of the water fields. */
@@ -18,7 +19,7 @@ export const MidnightZone: TerrainData = {
 			this.add('-fieldend', 'Midnight Zone Terrain');
 		},
 		onModifySpe(spe, pokemon) {
-			if (!pokemon.hasType('Water') && !pokemon.hasAbility(['steelworker', 'schooling', 'swiftswim'])) {
+			if (!pokemon.hasType('Water') && !pokemon.hasAbility(['steelworker', 'schooling', 'swiftswim', 'limber'])) {
 				return this.chainModify(0.25);
 			}
 		},
@@ -78,31 +79,31 @@ export const MidnightZone: TerrainData = {
 				Dark: 'Darkness gathers...!', Electric: 'The water super-conducted the attack!',
 			};
 			if (messages[move.type]) {
-				modifier *= move.type === 'Electric' ? 1.2 : 1.5;
+				modifier *= adaptiveFieldMultiplier(this, source, target, move.type === 'Electric' ? 1.2 : 1.5);
 				this.add('-message', messages[move.type]);
 			}
 			if (move.midnightGround || move.type === 'Ground') {
-				modifier *= 1.2;
+				modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				this.add('-message', 'The trenches strengthened the attack.');
 			}
 			if (move.id === 'waterpulse') {
-				modifier *= 1.5;
+				modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				this.add('-message', 'Jet-streamed!');
 			}
 			if (['anchorshot', 'dragondarts'].includes(move.id)) {
-				modifier *= 2;
+				modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				this.add('-message', 'From the depths!');
 			}
 			if (['darkpulse', 'nightdaze', 'nightslash', 'shadowball', 'shadowforce', 'shadowclaw', 'shadowpunch', 'shadowbone'].includes(move.id)) {
-				modifier *= 1.2;
+				modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
 				this.add('-message', 'The lightless abyss boosted the attack.');
 			}
 			if (['signalbeam', 'doomdesire', 'flashcannon', 'lusterpurge', 'dazzlinggleam', 'mirrorshot', 'technoblast', 'powergem', 'moongeistbeam', 'menacingmoonrazemaelstrom'].includes(move.id)) {
-				modifier *= 0.5;
+				modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				this.add('-message', 'The light disappeared in the dark...');
 			}
 			if (move.category === 'Physical' && !source.hasType('Water') && !source.hasAbility(['steelworker', 'schooling', 'swiftswim'])) {
-				modifier *= 0.33;
+				modifier *= adaptiveFieldMultiplier(this, source, target, 0.33);
 			}
 			return this.chainModify(modifier);
 		},

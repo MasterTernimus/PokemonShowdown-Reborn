@@ -7,14 +7,31 @@ export function parseColor(value: string): string {
 	return value.toLowerCase();
 }
 
+export function parseNickname(value: unknown): string {
+	if (typeof value !== 'string' || /[\p{Cc}\p{Cf}\p{Zl}\p{Zp}]/u.test(value)) {
+		throw new Error('Display nickname must be plain text without control characters.');
+	}
+	const nickname = value.trim().normalize('NFC');
+	if ([...nickname].length > 24) throw new Error('Display nickname must be 24 characters or fewer.');
+	return nickname;
+}
+
 export class UsernameColorStore {
 	colors: { [id: string]: string } = Object.create(null);
+	nicknames: { [id: string]: string } = Object.create(null);
 	lastWrite = new Map<string, number>();
 	private save: (data: string) => void;
 	constructor(raw: string, save: (data: string) => void) {
 		this.save = save;
 		const parsed = JSON.parse(raw || '{}');
-		for (const [id, value] of Object.entries(parsed)) {
+		for (const [id, entry] of Object.entries(parsed)) {
+			const value = typeof entry === 'string' ? entry : (entry as { color?: unknown })?.color;
+			if (/^[a-z0-9]{1,18}$/.test(id) && entry && typeof entry === 'object') {
+				try {
+					const nickname = parseNickname((entry as { nickname?: unknown }).nickname || '');
+					if (nickname) this.nicknames[id] = nickname;
+				} catch {}
+			}
 			if (/^[a-z0-9]{1,18}$/.test(id) && typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value)) {
 				this.colors[id] = value.toLowerCase();
 			}
@@ -32,8 +49,27 @@ export class UsernameColorStore {
 		this.lastWrite.set(user.id, now);
 		if (color) this.colors[user.id] = color;
 		else delete this.colors[user.id];
-		this.save(JSON.stringify(this.colors));
+		this.persist();
 		return color;
+	}
+	private persist() {
+		const data: { [id: string]: string | { color: string, nickname: string } } = Object.create(null);
+		for (const id of new Set([...Object.keys(this.colors), ...Object.keys(this.nicknames)])) {
+			data[id] = this.nicknames[id] ? { color: this.colors[id] || '', nickname: this.nicknames[id] } : this.colors[id];
+		}
+		this.save(JSON.stringify(data));
+	}
+	setNickname(user: { id: string, registered: boolean }, value: unknown, now = Date.now()) {
+		if (!user.registered || !/^[a-z0-9]{1,18}$/.test(user.id)) throw new Error('Sign in to save a display nickname.');
+		const nickname = parseNickname(value);
+		if (now - (this.lastWrite.get(user.id) ?? -Infinity) < 3000)
+			throw new Error('Please wait three seconds between appearance changes.');
+		for (const [id, time] of this.lastWrite) if (now - time > 60000) this.lastWrite.delete(id);
+		this.lastWrite.set(user.id, now);
+		if (nickname) this.nicknames[user.id] = nickname;
+		else delete this.nicknames[user.id];
+		this.persist();
+		return nickname;
 	}
 }
 
@@ -44,18 +80,33 @@ function visibleColor(id: string) {
 	const user = Users.getExact(id);
 	return user?.registered ? colorStore.colors[id] || '' : '';
 }
+function visibleNickname(id: string) {
+	return Users.getExact(id)?.registered ? colorStore.nicknames[id] || '' : '';
+}
 function send(connection: Connection, colors: { [id: string]: string }, error?: string) {
 	const user = connection.user;
-	connection.send(`|queryresponse|usernamecolor|${JSON.stringify({ colors, error, own: {
-		userid: user.id, registered: user.registered, color: visibleColor(user.id),
+	connection.send(`|queryresponse|usernamecolor|${JSON.stringify({ colors, nicknames: Object.fromEntries(Object.keys(colors).map(id => [id, visibleNickname(id)])), error, own: {
+		userid: user.id, registered: user.registered, color: visibleColor(user.id), nickname: visibleNickname(user.id),
 	} })}`);
 }
 function broadcast(id: string) {
 	for (const user of Users.users.values()) for (const connection of user.connections) {
-		if (watchers.get(connection)?.has(id)) send(connection, { [id]: visibleColor(id) });
+		if (user.id === id || watchers.get(connection)?.has(id)) send(connection, { [id]: visibleColor(id) });
 	}
 }
 export const commands: Chat.ChatCommands = {
+	displaynickname(target, room, user, connection) {
+		try {
+			if (target.length > 500) throw new Error('Display nickname is too long.');
+			// The authenticated user supplies identity; the payload contains only the label.
+			const value = target === 'reset' ? '' : JSON.parse(target);
+			colorStore.setNickname(user, value);
+			send(connection, { [user.id]: visibleColor(user.id) });
+			broadcast(user.id);
+		} catch (error) {
+			send(connection, {}, (error as Error).message);
+		}
+	},
 	usernamecolor(target, room, user, connection) {
 		try {
 			if (target.startsWith('watch ')) {

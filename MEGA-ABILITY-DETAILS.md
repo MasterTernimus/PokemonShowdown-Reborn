@@ -158,8 +158,8 @@ Stat changes this Pokemon receives are inverted, except those from Z-Power effec
 ## Lopunny-Mega - Unchecked Assault
 This Pokemon has Scrappy, Limber, and Opportunist's effects.
 
-## Mismagius-Mega - Shadow Guard
-This Pokemon has Shadow Shield and Elevate's effects. It also queues a full-power Temporal Shift Future Sight every turn, using whichever of Ghost, Dark, or Fairy would hit the target best.
+## Mismagius-Mega - Voidcraft
+Elevate + Shadow Shield + Temporal Shift + Insomnia. Takes 0.8x attack damage at any HP, or 0.6x from super-effective attacks, including against ability-ignoring attacks. Retains airborne status, a highest-stat boost after a move KO, protection from opposing stat drops, sleep/Yawn immunity, and 1.3x Dark/Ghost power. Queues a 120 BP Ghost Future Sight on entry and every other turn, resolving two turns later. Suppression disables the ability; other defensive effects remain bypassable.
 
 ## Garchomp-Mega - Apex Cleave
 This Pokemon's slicing moves have 1.5x power and ignore Substitute, Reflect, Light Screen, and Aurora Veil.
@@ -192,7 +192,7 @@ While this Pokemon is active, the power of Dark-type moves used by active Pokemo
 This Pokemon has Contrary, Shed Skin, Intimidate, Infiltrator, and Proficient's effects. Its stat changes are reversed, it lowers opposing Attack on entry, and Shed Skin can clear ailments and restore HP. Its moves bypass substitutes and opposing screens, and attacks matching its type have 1.3x power.
 
 ## Emboar-Mega - Burning Ego
-This Pokemon has Ultra Ego, Brute Force, and Magma Armor built in. Recoil moves receive the established Brute Force power effect without recoil damage, and Water- and Ice-type attacks are weakened against this Pokemon.
+Proficient + Ultra Ego + Flame Body + Magma Armor. Same-type moves have 1.3x power; it heals and gains Attack and Sp. Atk when fighting, can burn contact attackers, and has full local Magma Armor. Water and Ice moves use half attacking stats; Dragon's Den blocks opposing Fire moves. Freeze is prevented outside Cold Eclipse and cured on update. Dragon's Den, Volcanic Field and Cold Eclipse grant +1 Defense and Special Defense on entry. Flame Body separately retains its Cold Eclipse +1 Defense and Special Defense. There is no Thick Fat Fire reduction or hail immunity. Its enhanced-field one-time 1/4 HP pinch recovery is consumed only when it actually restores HP; blocked healing preserves it for a later eligible hit window.
 
 ## Excadrill-Mega - Piercing Drill
 This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage. This Pokemon also has Power Drill's effect, boosting drill moves by 1.5x.
@@ -225,7 +225,7 @@ This Pokemon has Sworn Duty's effect. It is airborne, immune to Ground-type move
 This Pokemon has Sworn Duty and Infiltrator's effects. Before using a move, this Pokemon becomes the move's type. Its moves with less than 80 Base Power have 1.5x power. This Pokemon takes 0.75x damage from attacks. Water Shuriken's first hit is 90 Base Power, followed by 1 to 6 weaker hits that still receive the low-power boost.
 
 ## Pyroar-Mega - Royal Sun
-On switch-in, this Pokemon summons Sunny Day for 5 turns and activates Royal Decree's effects. Safeguard protects a side from Royal Decree's switch-in stat reset. Neutralization disables the Royal Decree effects while active.
+Drought + Supreme Overlord + Unnerve + Flame Body. Summons sun for the usual Drought duration. Move power gains 10% per fainted ally; at 2 fallen allies, gains Infiltrator; at 4, flinch immunity; at 5, Magic Guard and a one-time +1 Attack and Special Attack. Opponents cannot eat Berries or use field seeds. Contact has a 30% burn chance, or 60% on Volcanic Field. On Cold Eclipse, lowers opposing Speed by 1 on entry (blocked by Substitute), raises its Defense and Special Defense by 1, and cannot burn through contact.
 
 ## Floette-Mega - Ange
 This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.6x. When this Pokemon faints, it creates Bewitched Woods for 5 turns.

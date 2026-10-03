@@ -11,11 +11,11 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	highnoon: ['dualwield', 'megalauncher', 'proficient'],
 	strikersmomentum: ['proficient'],
 	forestsurge: ['proficient'],
-	exalt: ['defiant'],
+	exalt: ['defiant', 'sharpness'],
 	burningrage: ['proficient'],
 	terragift: ['hospitality', 'unaware', 'proficient'],
 	blazingtempo: ['proficient', 'speedboost', 'striker', 'magmaarmor', 'keeneye'],
-	verdantdrake: ['proficient', 'dualwield', 'regenerator', 'lightningrod'],
+	verdantdrake: ['proficient', 'dualwield', 'regenerator', 'lightningrod', 'limber'],
 	mightyjaw: ['proficient'],
 	blazingmane: ['proficient'],
 	plasmaeruption: ['proficient', 'static', 'flamebody'],
@@ -41,7 +41,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	wingedwraith: ['infiltrator', 'galewings'],
 	toxicsink: ['effectspore', 'invigorate'],
 	ragingbeast: ['guts', 'moldbreaker'],
-	lunardread: ['magicguard', 'pressure', 'unaware'],
+	lunardread: ['dishearten', 'insomnia', 'pressure'],
 	stillwaters: ['cloudnine', 'magicguard', 'unaware'],
 	scavenger: ['overcoat', 'bigpecks', 'regenerator'],
 	toxicspines: ['toxicdebris', 'corrosion', 'merciless'],
@@ -57,7 +57,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	celestialheart: ['soulheart', 'friendguard', 'serenegrace'],
 	phalanxform: ['hydrabond', 'friendguard', 'battlearmor'],
 	astralcore: ['purepower', 'naturalcure', 'illuminate'],
-	doomwarning: ['magicbounce', 'magicguard'],
+	doomwarning: ['magicbounce', 'magicguard', 'anticipation'],
 	ancientbloom: ['effectspore', 'selfsufficient', 'proficient'],
 	furnaceengine: ['steamengine', 'flamebody', 'selfsufficient', 'solidrock'],
 	apexflytrap: ['levitate'],
@@ -84,9 +84,9 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	astralwatcher: ['prankster', 'defragment', 'frisk'],
 	alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'prankster'],
 	lunarorbit: ['magicbounce', 'serenegrace', 'triage', 'magicguard'],
-	territorial: ['unnerve', 'unaware', 'toughclaws'],
+	territorial: ['unnerve', 'stamina', 'guarddog'],
 	treasuretitan: ['filter', 'eartheater', 'heavymetal', 'intimidate'],
-	royalsun: ['drought', 'supremeoverlord'],
+	royalsun: ['drought', 'supremeoverlord', 'unnerve', 'flamebody'],
 	ragingfists: ['hydrabond', 'scrappy'],
 	aquashell: ['waterveil', 'toughclaws', 'innerfocus'],
 	warship: ['swiftswim', 'solidrock', 'strongjaw'],
@@ -105,13 +105,13 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	safeharbor: ['icebody', 'waterabsorb', 'hydration'],
 	ironvise: ['toughclaws', 'battlearmor', 'lightmetal', 'intimidate'],
 	razorcurrent: ['drizzle', 'strongjaw', 'speedboost'],
-	longreach: ['superluck'],
+	longreach: ['superluck', 'keeneye'],
 	paradoxengine: [],
-	greatmarsh: ['anticipation', 'dryskin', 'adaptability'],
+	greatmarsh: ['anticipation', 'dryskin', 'adaptability', 'toxicchain'],
 	lifeguard: ['friendguard', 'swornduty', 'propellertail'],
 	zen: ['waterabsorb', 'unaware', 'damp'],
 	stormsong: ['liquidvoice', 'drizzle', 'soundproof'],
-	astralward: ['magicbounce', 'telepathy'],
+	astralward: ['magicbounce', 'telepathy', 'anticipation'],
 	moonlightvigil: ['innerfocus', 'pressure', 'illuminate'],
 	adaptivecore: ['download', 'defragment', 'selfrepair'],
 	sweetresonance: ['supersweetsyrup', 'selfsufficient', 'hydrabond'],
@@ -130,12 +130,12 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	echosense: ['echofiend', 'frisk', 'telepathy', 'infiltrator'],
 	froststalker: ['stakeout', 'sharpness', 'refrigerate'],
 	sacredpower: ['duskilate', 'insomnia', 'magicguard'],
-	nighthunt: ['strongjaw', 'infiltrator', 'intimidate'],
+	nighthunt: ['strongjaw', 'infiltrator', 'intimidate', 'frisk', 'illuminate'],
 	corrosivetouch: ['technician', 'poisontouch', 'corrosion'],
 	stormbell: ['mirrorarmor', 'drizzle', 'elevate'],
 	apexarmor: ['bulletproof', 'roughskin', 'stalwart', 'selfsufficient'],
 	burningcrown: ['filter', 'selfsufficient', 'whitesmoke', 'moldbreaker', 'proficient'],
-	burningego: ['proficient', 'ultraego', 'flamebody', 'thickfat'],
+	burningego: ['proficient', 'ultraego', 'flamebody', 'magmaarmor'],
 	burningspirit: ['selfsufficient', 'opportunist', 'magmaarmor', 'proficient'],
 	crueltag: ['shadowtag', 'infiltrator', 'baddreams'],
 	emperorsresolve: ['competitive', 'slushrush', 'swiftswim', 'proficient'],
@@ -169,8 +169,9 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	sacrededge: ['sharpness', 'swornduty'],
 	omenedge: ['sharpness', 'dualwield', 'pressure'],
 	dreadmaw: ['hugepower', 'frisk', 'invigorate'],
-	cursedmarionette: ['prankster'],
-	cursedarmament: ['filter'],
+	cursedkeepsake: ['frisk'],
+	cursedmarionette: ['prankster', 'frisk'],
+	cursedarmament: ['filter', 'frisk'],
 	phantombarrage: ['clearbody', 'infiltrator', 'levitate', 'hydrabond'],
 	sandsovereign: ['sandstream', 'dauntlessshield', 'solidrock'],
 	frostsovereign: ['snowwarning', 'icebody', 'filter'],
@@ -189,7 +190,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	knuckletide: ['ironfist'],
 	crosscurrent: ['swiftswim'],
 	pearlcurrent: ['waterabsorb'],
-	slipstream: ['levitate'],
+	slipstream: ['levitate', 'keeneye'],
 	smolderingshroud: ['whitesmoke'],
 	springfur: ['furcoat'],
 	hexbound: ['prankster', 'cursedbody'],
@@ -229,7 +230,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	sunsovereign: ['drought', 'unboundblaze', 'selfsufficient', 'proficient'],
 	terraresolve: ['stamina', 'solidrock', 'proficient'],
 	primalego: ['unaware', 'proficient', 'ultraego', 'moldbreaker'],
-	toxicbloom: ['pollenbloom', 'selfsufficient', 'proficient', 'thickfat'],
+	toxicbloom: ['pollenbloom', 'selfsufficient'],
 	toxicrenewal: ['adaptability', 'regenerator', 'poisontouch'],
 	vendetta: ['angerpoint', 'secondwind', 'selfsufficient'],
 	auroracurrent: ['snowwarning'],
@@ -241,10 +242,10 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	ragingstorm: ['moldbreaker', 'battlearmor'],
 	ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 	abysssniper: ['sniper', 'stalwart'],
-	atrocity: ['unboundblaze', 'selfsufficient', 'proficient', 'levitate'],
+	atrocity: ['unboundblaze', 'selfsufficient', 'proficient', 'toughclaws'],
 	streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
 	divineintervention: ['swornduty', 'friendguard', 'regenerator', 'fluffy'],
-	shadowguard: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
+	voidcraft: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
 	requiem: ['cursedbody'],
 	reapersgrip: ['unaware', 'darkaura', 'selfsufficient'],
 	pendulumswing: ['insomnia', 'filter'],
@@ -260,18 +261,18 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	mossarmor: ['stamina', 'naturalrecovery', 'levitate'],
 	stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
 	aevianfrost: ['icebody', 'guts'],
-	aeviantoxin: ['strongjaw', 'layeredcoat', 'furcoat', 'overcoat'],
+	aeviantoxin: ['strongjaw', 'layeredcoat', 'furcoat', 'overcoat', 'merciless'],
 	aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
 	aevianbolt: ['stormpower', 'static', 'voltabsorb'],
 	riftdancer: ['chlorophyll', 'dancer'],
-	curseddoll: ['toughclaws', 'shadowshield'],
+	curseddoll: ['toughclaws', 'shadowshield', 'frisk'],
 	apexvenom: ['strongjaw', 'shedskin'],
 	sirius: ['apexvenom', 'whiplash'],
 	neurotoxin: ['hydrabond', 'shedskin', 'regenerator'],
 	patternshift: ['protean', 'shedskin', 'unaware'],
 	venomarmor: ['poisonheal', 'dualwield'],
 	toxicarmor: ['venomarmor', 'violentrush'],
-	corrosiveburn: ['merciless', 'regenerator', 'corrosion'],
+	corrosiveburn: ['corrosion', 'oblivious', 'venomignition'],
 	solarrush: ['sandrush', 'chlorophyll'],
 	ultrainstinct: ['moldbreaker', 'innerfocus'],
 	unovawing: ['superluck', 'competitive'],
@@ -477,9 +478,7 @@ Object.assign(AbilityComponents, {
     "stamina"
   ],
   "shadowfeint": [],
-  "silksights": [
-    "compoundeyes"
-  ],
+	"silksights": ["compoundeyes", "keeneye"],
   "livenet": [
     "unnerve"
   ],
@@ -514,7 +513,7 @@ Object.assign(AbilityComponents, {
   "rivershell": [
     "shellarmor"
   ],
-  "territorial": [],
+	"territorial": ["unnerve", "stamina", "guarddog"],
   "funeralchoir": [],
   "festivalstep": [],
   "saltcrust": [
@@ -534,7 +533,7 @@ Object.assign(AbilityComponents, {
   coldopen: [], quarrycannon: ['solidrock'], tundramarch: ['oblivious'],
   undertow: ['waterabsorb'], deadwater: [], vitalcircuit: [],
   ringmaster: ['toughclaws'], unyielding: ['stamina'], primalrhythm: [],
-  setpiece: [], calculatedshot: [], lunardread: [], falsebouquet: [],
+	setpiece: [], calculatedshot: ['frisk'], lunardread: ['dishearten', 'insomnia', 'pressure'], falsebouquet: [],
   hydratyrant: ['hydrabond', 'berserk'],
   meridianseal: [], rimeplate: [], darkdominion: ['darkaura'],
 });
@@ -558,3 +557,76 @@ AbilityComponents.venomveil = ['liquidooze', 'corrosion', 'waterveil'];
 AbilityComponents.frightfulwings = ['intimidate'];
 
 AbilityComponents.pulseeruption = ['sturdy'];
+
+Object.assign(AbilityComponents, {
+	"scrapbreaker": [
+		"moldbreaker",
+	],
+	"toxicsignature": [
+		"unnerve",
+	],
+	"wickedweave": [
+		"prankster",
+	],
+	"vaultkeeper": [
+		"prankster",
+		"stickyhold",
+	],
+	"masterkey": [],
+	"groundingtail": [],
+	"flintfracture": [],
+	"frozenfeast": [
+		"strongjaw",
+	],
+	"cinderscales": [
+		"flamebody",
+		"swarm",
+		"shielddust",
+	],
+	"sporeshroud": [
+		"effectspore",
+	],
+	"primevalhunt": [
+		"skilllink",
+		"battlearmor",
+	],
+	"rimebreaker": [
+		"refrigerate",
+	],
+	"twilightinstinct": [],
+	"duskdrive": [
+		"battlefervor",
+		"precision",
+		"opportunist",
+	],
+	"evaporate": [
+		"dryskin",
+	],
+	"pressurekiln": [],
+	"shattercrust": [
+		"crumblingshell",
+	],
+	"restorativechime": [],
+	"dissonantchime": [],
+	"gravehunger": [
+		"baddreams",
+	],
+});
+
+AbilityComponents.primevalhunger = ['accumulation'];
+
+AbilityComponents.razorreach = ['sharpness', 'longreach', 'keeneye'];
+AbilityComponents.witheringtouch = ['poisontouch', 'corrosion'];
+
+AbilityComponents.anchorbridge = ['sturdy', 'solidrock'];
+AbilityComponents.railsight = ['stalwart'];
+
+AbilityComponents.kickfiend = ['striker', 'violentrush', 'limber'];
+
+AbilityComponents.fluffycraft = ['fluffy', 'technician', 'naturalcure'];
+
+AbilityComponents.dawnherald = ['drought', 'friendguard'];
+
+AbilityComponents.transfixinggaze = ['frisk'];
+
+AbilityComponents.freshplumage = ['naturalcure'];

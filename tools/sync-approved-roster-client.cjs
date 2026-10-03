@@ -51,12 +51,9 @@ if (!tooltip.includes("value.abilityModify(0, 'Primal Rhythm')")) {
 fs.writeFileSync(tooltipFile, tooltip);
 const animationsFile = path.join(client, 'play.pokemonshowdown.com/src/battle-animations.ts');
 let animations = fs.readFileSync(animationsFile, 'utf8');
-if (!animations.includes("lunardread: ['Lunar Dread'")) {
- const anchor = "\t\tthroatchop: ['Throat Chop', 'bad'],";
- if (!animations.includes(anchor)) throw new Error('Missing volatile status table anchor');
- animations = animations.replace(anchor, anchor + "\n\t\tlunardread: ['Lunar Dread', 'bad'],");
- fs.writeFileSync(animationsFile, animations);
-}
+// Lunar Dread no longer applies a volatile mark.
+animations = animations.replace(/^.*lunardread: \['Lunar Dread', 'bad'\],?\r?\n/gm, '');
+fs.writeFileSync(animationsFile, animations);
 if (!animations.includes("meridianseal: ['Meridian Seal'")) {
  animations = animations.replace("throatchop: ['Throat Chop', 'bad'],", "throatchop: ['Throat Chop', 'bad'],\n\t\tmeridianseal: ['Meridian Seal', 'bad'],");
  fs.writeFileSync(animationsFile, animations);

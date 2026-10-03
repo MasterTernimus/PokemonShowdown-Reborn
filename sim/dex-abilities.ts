@@ -1,3 +1,4 @@
+import {adaptiveReductionCallback} from './adaptive-cycle';
 import type { PokemonEventMethods, ConditionData, ModdedConditionData } from './dex-conditions';
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
@@ -19,6 +20,7 @@ interface AbilityEventMethods {
 /* Possible Ability flags */
 interface AbilityFlags {
 	breakable?: 1; // Can be suppressed by Mold Breaker and related effects
+	unbreakableDamage?: 1; // Preserve only incoming damage protection in an otherwise breakable composite
 	cantsuppress?: 1; // Ability can't be suppressed by e.g. Gastro Acid or Neutralizing Gas
 	failroleplay?: 1; // Role Play fails if target has this Ability
 	failskillswap?: 1; // Skill Swap fails if either the user or target has this Ability
@@ -81,6 +83,10 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 			}
 		}
 		assignMissingFields(this, data);
+		for (const event of ['onDamage', 'onSourceModifyDamage', 'onSourceBasePower', 'onSourceModifyAtk', 'onSourceModifySpA', 'onModifyDef', 'onModifySpD']) {
+			const callback = (this as any)[event];
+			if (typeof callback === 'function') (this as any)[event] = adaptiveReductionCallback(this, callback);
+		}
 	}
 }
 

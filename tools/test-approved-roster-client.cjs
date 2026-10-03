@@ -56,6 +56,9 @@ for (const [species, ability, component] of [
 }
 assert(!Dex.hasAbilityEffect(Dex.species.get('Scolipede-Mega'),'Merciless'));
 assert(!Dex.getAbilityEffects('territorial').has('toughclaws'));
+assert(Dex.getAbilityEffects('territorial').has('unnerve'));
+assert(Dex.getAbilityEffects('territorial').has('guarddog'));
+assert(!Dex.getAbilityEffects('territorial').has('stamina'));
 assert.equal(Dex.species.get('Mudsdale').abilities.H,'Inner Focus');
 for (const [species, ability, component] of [
  ['Seviper-Mega','Sirius','Black Viper'], ['Rhyperior','Quarry Cannon','Solid Rock'],
@@ -74,6 +77,8 @@ for (const [species,ability] of [['Weavile','Cold Open'],['Eelektross','Vital Ci
 }
 assert(!Dex.getAbilityEffects('hydratyrant').has('selfsufficient'));
 assert(!Dex.getAbilityEffects('lunardread').has('unaware'));
+for (const component of ['dishearten', 'insomnia', 'pressure']) assert(Dex.getAbilityEffects('lunardread').has(component));
+assert(Dex.abilities.get('dishearten').exists);
 assert.equal(Dex.species.get('Mienshao').abilities.H, 'Meridian Seal');
 assert.equal(Dex.species.get('Baxcalibur').abilities[1], 'Rimeplate');
 assert.equal(Dex.species.get('Hydreigon').abilities[0], 'Levitate');

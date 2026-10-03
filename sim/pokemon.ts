@@ -1,3 +1,4 @@
+import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 import { AbilityComponents } from '../data/ability-components';
 /**
  * Simulator Pokemon
@@ -937,6 +938,7 @@ export class Pokemon {
 
 	ignoringAbility() {
 		if (this.battle.gen >= 5 && !this.isActive) return true;
+		if (this.ability === 'adaptivecycle') return false;
 
 		// Certain Abilities won't activate while Transformed, even if they ordinarily couldn't be suppressed (e.g. Disguise)
 		if (this.getAbility().flags['notransform'] && this.transformed) return true;
@@ -947,6 +949,7 @@ export class Pokemon {
 		if (this.hasItem('Ability Shield') || this.ability === ('neutralizinggas' as ID)) return false;
 		for (const pokemon of this.battle.getAllActive()) {
 			// can't use hasAbility because it would lead to infinite recursion
+			if (adaptiveSuppressionException(this, pokemon)) continue;
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
 				!pokemon.volatiles['meridianseal'] &&
 				!pokemon.transformed && !pokemon.abilityState.ending && !this.volatiles['commanding']) {
@@ -1853,6 +1856,7 @@ export class Pokemon {
 		}
 		if (!source) source = this;
 
+		if (status.id && adaptiveBlocksCondition(this, status.id, source, sourceEffect)) return false;
 		if (this.status === status.id) {
 			if ((sourceEffect as Move)?.status === this.status) {
 				this.battle.add('-fail', this, this.status);
@@ -1875,11 +1879,7 @@ export class Pokemon {
 		) {
 			// the game currently never ignores immunities
 			const statusType = status.id === 'tox' ? 'psn' : status.id;
-			const bypassPoisonTyping = statusType === 'psn' && source?.hasAbility('debilitatingvenom') &&
-				this.getTypes().some(type => type === 'Steel' || type === 'Poison');
-			const statusAllowed = bypassPoisonTyping ?
-				this.battle.runEvent('Immunity', this, null, null, statusType) : this.runStatusImmunity(statusType);
-			if (!statusAllowed) {
+			if (!this.runStatusImmunity(statusType)) {
 				this.battle.debug('immune to status');
 				if ((sourceEffect as Move)?.status) {
 					this.battle.add('-immune', this);
@@ -1913,6 +1913,7 @@ export class Pokemon {
 			this.statusState = prevStatusState;
 			return false;
 		}
+		adaptiveStatus(this, status.id, sourceEffect);
 		if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
 			return false;
 		}
@@ -2082,6 +2083,8 @@ export class Pokemon {
 		if (!this.hp) return false;
 		if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (!isFromFormeChange && sourceEffect?.effectType === 'Ability' && adaptiveBlocksCondition(this, 'ability', source, sourceEffect)) return false;
+		if (!isFromFormeChange && sourceEffect?.effectType === 'Move' && adaptiveBlocksCondition(this, 'ability', source, sourceEffect)) return false;
 		const oldAbility = this.battle.dex.abilities.get(this.ability);
 		if (!isFromFormeChange) {
 			if (ability.flags['cantsuppress'] || this.getAbility().flags['cantsuppress']) return false;
@@ -2129,31 +2132,31 @@ export class Pokemon {
 	}
 
 	hasAbility(ability: string | string[]) {
+		if (this.battle.activeMove && !['ModifyMove', 'ModifyType', 'PrepareHit', 'SwitchOut', 'SwitchIn', 'Start', 'End', 'Residual', 'Update'].includes(this.battle.event?.id || '')) {
+			if (adaptiveIgnoresAbility(this.battle.activePokemon, this) || adaptiveIgnoresAbility(this.battle.activeTarget, this)) return false;
+		}
 		const abilityAliases = AbilityComponents;
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		const memoryComponents: string[] = this.ability === 'rkssystem' ?
 			(this.getAbility() as RKSSystemAbility).memoryAbilities.call(this.battle, this) : [];
-		if (['schooling', 'seviischooling'].includes(this.ability) &&
-			!abilityids.some(id => id === this.ability || id === 'schooling') &&
-			abilityids.some(id => id !== 'schooling' && abilityAliases[this.ability]?.includes(id)) &&
-			!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) return false;
-		// Expand copied identities without dispatching component hooks twice.
-		const copiedComponents = new Set<string>();
-		if (['perfectforesight'].includes(this.ability) && this.m.perfectForesightAbility) {
-			const pending: string[] = [this.m.perfectForesightAbility];
-			while (pending.length) {
-				const id = pending.pop()!;
-				if (copiedComponents.has(id)) continue;
-				copiedComponents.add(id);
-				if (['schooling', 'seviischooling'].includes(id) &&
-					!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) continue;
-				pending.push(...(abilityAliases[id] || []));
+		// Identity lookup only: composites still dispatch their own component callbacks.
+		const components = new Set<string>();
+		const pending: string[] = [this.ability, ...memoryComponents];
+		if (this.ability === 'perfectforesight' && this.m.perfectForesightAbility) {
+			pending.push(this.m.perfectForesightAbility);
+		}
+		while (pending.length) {
+			const id = pending.pop()!;
+			if (components.has(id)) continue;
+			components.add(id);
+			if (['schooling', 'seviischooling'].includes(id) &&
+				!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) {
+				components.add('schooling');
+				continue;
 			}
+			pending.push(...(abilityAliases[id] || []));
 		}
-		if (!abilityids.includes(this.ability) && !abilityids.some(id => abilityAliases[this.ability]?.includes(id)) &&
-			!abilityids.some(id => copiedComponents.has(id) || memoryComponents.includes(id))) {
-			return false;
-		}
+		if (!abilityids.some(id => components.has(id))) return false;
 		return !this.ignoringAbility();
 	}
 
@@ -2179,6 +2182,7 @@ export class Pokemon {
 		}
 		if (!source) source = this;
 
+		if (status.id && adaptiveBlocksCondition(this, status.id, source, sourceEffect)) return false;
 		if (this.volatiles[status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
@@ -2211,6 +2215,7 @@ export class Pokemon {
 			delete this.volatiles[status.id];
 			return result;
 		}
+		adaptiveStatus(this, status.id, sourceEffect);
 		if (linkedStatus && source) {
 			if (!source.volatiles[linkedStatus.toString()]) {
 				source.addVolatile(linkedStatus, this, sourceEffect);
@@ -2350,7 +2355,8 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft', 'shadowguard', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
+			'voidcraft', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';

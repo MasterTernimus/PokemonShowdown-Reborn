@@ -324,7 +324,8 @@ export interface EventMethods {
 	onSourceModifyDamagePhase1?: CommonHandlers['ModifierSourceMove'];
 	onSourceModifyDamagePhase2?: CommonHandlers['ModifierSourceMove'];
 	onAnyDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
-	onAnyAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void;
+	onAnyAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon,
+		effect: Effect) => void;
 	onAnyAfterHit?: MoveEventMethods['onAfterHit'];
 	onAnyAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyAfterSubDamage?: MoveEventMethods['onAfterSubDamage'];
@@ -360,6 +361,7 @@ export interface EventMethods {
 	onAnyAfterDamageApplied?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyResidualHeal?: (this: Battle, amount: number, target: Pokemon, source: Pokemon, effect: Effect) => number | void;
 	onHeal?: (this: Battle, amount: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onSourceHeal?: (this: Battle, amount: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void;
 	onAnyEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;

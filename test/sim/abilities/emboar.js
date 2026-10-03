@@ -16,7 +16,7 @@ describe('Emboar abilities and Mega Evolution', () => {
 
 	it('has the expected base and Mega ability slots', () => {
 		const [emboar] = start('Gluttony');
-		assert.deepEqual(emboar.species.abilities, { 0: 'Gluttony', 1: 'Violent Rush', H: 'Brute Force' });
+		assert.deepEqual(emboar.species.abilities, { 0: 'Gluttony', 1: 'Thick Fat', H: 'Brute Force' });
 		assert.equal(battle.dex.species.get('Emboar-Mega').abilities[0], 'Burning Ego');
 	});
 
@@ -53,7 +53,7 @@ describe('Emboar abilities and Mega Evolution', () => {
 		battle.makeChoices('move flareblitz mega', 'move splash');
 		assert.equal(emboar.species.name, 'Emboar-Mega');
 		assert.equal(emboar.ability, 'burningego');
-		for (const component of ['proficient', 'ultraego', 'flamebody', 'thickfat']) assert(emboar.hasAbility(component));
+		for (const component of ['proficient', 'ultraego', 'flamebody', 'magmaarmor']) assert(emboar.hasAbility(component));
 		const fireMove = battle.dex.getActiveMove('firepunch');
 		const neutralMove = battle.dex.getActiveMove('tackle');
 		assert.equal(battle.runEvent('BasePower', emboar, foe, fireMove, 100), 130,
@@ -71,7 +71,7 @@ describe('Emboar abilities and Mega Evolution', () => {
 		assert.equal(emboar.ability, 'burningego');
 	});
 
-	it('Burning Ego applies Ultra Ego hit recovery, boosts, and Thick Fat', () => {
+	it('Burning Ego applies Ultra Ego hit recovery, boosts, and Magma Armor', () => {
 		const [emboar, foe] = start('Gluttony', { item: 'Emboarite' });
 		battle.makeChoices('move splash mega', 'move splash');
 		emboar.hp = Math.floor(emboar.maxhp * 0.75);
@@ -80,9 +80,9 @@ describe('Emboar abilities and Mega Evolution', () => {
 		assert.equal(emboar.boosts.atk, 1);
 		assert.equal(emboar.boosts.spa, 1);
 		assert(emboar.hp > before, 'Ultra Ego should heal when hit');
-		assert.equal(battle.runEvent('SourceModifyAtk', emboar, foe, battle.dex.getActiveMove('firepunch'), 100), 50,
-			'Thick Fat should halve incoming physical Fire attacks');
+		assert.equal(battle.runEvent('SourceModifyAtk', emboar, foe, battle.dex.getActiveMove('firepunch'), 100), 100,
+			'Magma Armor should not retain Thick Fat Fire reduction');
 		assert.equal(battle.runEvent('SourceModifySpA', emboar, foe, battle.dex.getActiveMove('icebeam'), 100), 50,
-			'Thick Fat should halve incoming special Ice attacks');
+			'Magma Armor should halve incoming special Ice attacks');
 	});
 });

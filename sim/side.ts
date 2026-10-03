@@ -457,6 +457,15 @@ export class Side {
 	removeSideCondition(status: string | Effect): boolean {
 		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
+		const attacker = this.battle.activePokemon;
+		if (['reflect', 'lightscreen', 'auroraveil'].includes(status.id) && this.battle.activeMove && attacker) {
+			const keeper = this.active.find(pokemon => pokemon?.hp && !pokemon.isAlly(attacker) &&
+				pokemon.hasAbility('vaultkeeper') && !this.battle.suppressingAbility(pokemon));
+			if (keeper) {
+				this.battle.add('-activate', keeper, 'ability: Vault Keeper');
+				return false;
+			}
+		}
 		this.battle.singleEvent('SideEnd', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
 		return true;
