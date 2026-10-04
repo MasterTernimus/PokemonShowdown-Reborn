@@ -107,7 +107,7 @@ describe('Flower Garden stage effects and transitions', () => {
 		battle.makeChoices();
 		assert.equal(battle.field.flowerGardenStage(), 4);
 	});
-	it('Drizzle entry extinguishes and grows the remaining garden exactly once', () => {
+	it('Drizzle entry extinguishes and grows the remaining garden on entry and again at turn end', () => {
 		battle = common.createBattle({formatid: 'gen9flowergarden'}, [
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']},
 				{species: 'Mew', ability: 'Drizzle', moves: ['splash']}],
@@ -119,7 +119,7 @@ describe('Flower Garden stage effects and transitions', () => {
 		battle.field.flowerGardenAfterMove(battle.p1.active[0], battle.dex.getActiveMove('incinerate'));
 		battle.field.terrainState.gardenBurnTurns = 1;
 		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(battle.field.terrain, 'flowergarden4');
+		assert.equal(battle.field.terrain, 'flowergarden5');
 		assert.equal(battle.field.terrainStack.length, 1);
 	});
 	it('Rage Powder retains its existing targeting and redirection behavior', () => {
@@ -147,10 +147,10 @@ describe('Flower Garden stage effects and transitions', () => {
 		});
 	}
 	for (const move of ['growth', 'flowershield', 'raindance', 'sunnyday', 'rototiller', 'ingrain', 'grassyterrain', 'watersport']) {
-		it(`${move} grows exactly one stage after succeeding`, () => {
+		it(`${move} grows on use, with additional weather growth at turn end`, () => {
 			setup(2, move, 'No Ability', 'Tangrowth');
 			battle.makeChoices();
-			assert.equal(battle.field.flowerGardenStage(), 3);
+			assert.equal(battle.field.flowerGardenStage(), ['raindance', 'sunnyday'].includes(move) ? 4 : 3);
 		});
 	}
 	it('Ripen doubles only the triggering Pokemon growth at Stages 1-3 and caps at 5', () => {
@@ -269,7 +269,7 @@ describe('Flower Garden stage effects and transitions', () => {
 		battle.field.flowerGardenAfterMove(user, battle.dex.getActiveMove('incinerate'));
 		battle.field.terrainState.gardenBurnTurns = 1;
 		battle.makeChoices();
-		assert.equal(battle.field.terrain, 'flowergarden4');
+		assert.equal(battle.field.terrain, 'flowergarden5');
 	});
 	for (const [move, item, expected] of [['energyball', 'grassiumz', 'flowergarden4'],
 		['sludgebomb', 'poisoniumz', 'flowergarden1'], ['flamethrower', 'firiumz', 'burningterrain']]) {

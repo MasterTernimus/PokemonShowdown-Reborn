@@ -644,7 +644,7 @@ describe('Custom battle data updates', function () {
 		assert.false.legalTeam([{...baseSet, item: 'Eevium Z'}], 'gen9nofieldsinglesgame');
 	});
 
-	it('should not give Starter Eevee an Eviolite boost from Eevium Z before or during G-Max', function () {
+	it('should give Starter Eevee an Eviolite boost from Eevium Z before or during G-Max', function () {
 		battle = common.createBattle({formatid: 'gen9doublesmistyfieldadrienn'}, [[
 			{species: 'Eevee-Starter', ability: 'protean', item: 'Eevium Z', gigantamax: true, moves: ['tackle']},
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
@@ -654,15 +654,15 @@ describe('Custom battle data updates', function () {
 		]]);
 		battle.makeChoices('team 1, 2', 'team 1, 2');
 		const eevee = battle.p1.active[0];
-		const assertNoEeviumBoost = () => {
-			assert.equal(eevee.getStat('def'), eevee.getStat('def', true, true));
-			assert.equal(eevee.getStat('spd'), eevee.getStat('spd', true, true));
+		const assertEeviumBoost = () => {
+			assert.equal(eevee.getStat('def'), Math.floor(eevee.getStat('def', true, true) * 1.5));
+			assert.equal(eevee.getStat('spd'), Math.floor(eevee.getStat('spd', true, true) * 1.5));
 		};
 
-		assertNoEeviumBoost();
+		assertEeviumBoost();
 		battle.makeChoices('move tackle +1 dynamax, move splash', 'move splash, move splash');
 		assert.species(eevee, 'Eevee-Gmax');
-		assertNoEeviumBoost();
+		assertEeviumBoost();
 	});
 
 	it('should let Eevee and Starter Eevee use Eevium Z with Last Resort', function () {
@@ -677,8 +677,8 @@ describe('Custom battle data updates', function () {
 			const eevee = battle.p1.active[0];
 			const zMoves = battle.actions.canZMove(eevee);
 
-			assert.equal(eevee.getStat('def'), eevee.getStat('def', true, true));
-			assert.equal(eevee.getStat('spd'), eevee.getStat('spd', true, true));
+			assert.equal(eevee.getStat('def'), Math.floor(eevee.getStat('def', true, true) * 1.5));
+			assert.equal(eevee.getStat('spd'), Math.floor(eevee.getStat('spd', true, true) * 1.5));
 			assert(zMoves?.some(option => option?.move === 'Extreme Evoboost'));
 			battle.makeChoices('move lastresort zmove', 'move splash');
 			for (const stat of ['atk', 'def', 'spa', 'spd', 'spe']) {

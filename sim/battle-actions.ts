@@ -1,4 +1,4 @@
-import {adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
+import {adaptiveAnalyzed, adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
 import { Dex, toID } from './dex';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
@@ -760,9 +760,10 @@ export class BattleActions {
 		]);
 	}
 	canChainHitTarget(target: Pokemon, pokemon: Pokemon, move: ActiveMove) {
+		move = adaptiveMoveView(move, pokemon, target);
 		if (!target.hp || target.fainted || target.isProtected() || target.isSemiInvulnerable() ||
 			!this.battle.validTarget(target, pokemon, move.target) || !target.runImmunity(move)) return false;
-		if (move.ignoreAbility) return true;
+		if (move.ignoreAbility || adaptiveAnalyzed(pokemon, target)) return true;
 		const immuneAbilities: [string, string[]][] = [
 			['Water', ['auroraresonance', 'dryskin', 'parasitism', 'safeharbor', 'zen', 'stormdrain', 'waterabsorb', 'tidalwave']],
 			['Electric', ['lightningrod', 'motordrive', 'voltabsorb', 'livewire']],
@@ -1170,7 +1171,7 @@ export class BattleActions {
 					continue;
 				}
 				const tryHit = this.battle.runEvent('TryHit', [target], pokemon, move)[0];
-				if (!tryHit || !target.runImmunity(move, true)) continue;
+				if (!tryHit || !target.runImmunity(adaptiveMoveView(move, pokemon, target), true)) continue;
 			}
 			if (target && typeof move.smartTarget === 'boolean') {
 				if (hit > 1) {
@@ -2300,6 +2301,12 @@ export class BattleActions {
 		let typeMod = target.runEffectiveness(move);
 		if ((move as any).dissonantEchoTarget === target && pokemon.hasAbility('dissonantecho') && typeMod < 0) {
 			typeMod = 0;
+		}
+		// Completed defender adaptation wins when both individuals have analyzed each other.
+		if (adaptiveAnalyzed(target, pokemon)) {
+			typeMod = Math.min(typeMod, -1);
+		} else if (adaptiveAnalyzed(pokemon, target)) {
+			typeMod = Math.max(typeMod, 1);
 		}
 		typeMod = this.battle.clampIntRange(typeMod, -6, 6);
 		target.getMoveHitData(move).typeMod = typeMod;

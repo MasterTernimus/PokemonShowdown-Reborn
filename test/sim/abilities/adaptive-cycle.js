@@ -22,6 +22,53 @@ describe('Adaptive Cycle', () => {
 		for (let i = 0; i < 4; i++) battle.makeChoices('move splash', 'move splash');
 		assert(A.adaptiveAnalyzed(p, foe));
 	}
+	it('bypasses type immunity only for the analyzed target and forces super effectiveness', () => {
+		setup(); analyzed();
+		foe.setType('Ghost');
+		const move = Dex.getActiveMove('tackle');
+		assert(battle.actions.getDamage(p, foe, move, true) > 0);
+		assert.equal(foe.getMoveHitData(move).typeMod, 1);
+		const other = battle.p2.pokemon[1]; other.setType('Ghost'); other.isActive = true;
+		assert.equal(battle.actions.getDamage(p, other, move, true), false);
+		assert.notEqual(move.ignoreImmunity, true, 'must not mutate the shared spread move');
+		other.isActive = false;
+	});
+	it('retains stronger natural effectiveness and resists attacks even when countertyping cannot change Tera', () => {
+		setup(); analyzed();
+		foe.setType(['Grass', 'Steel']);
+		const fire = Dex.getActiveMove('ember');
+		battle.actions.getDamage(p, foe, fire, true);
+		assert.equal(foe.getMoveHitData(fire).typeMod, 2);
+		p.terastallized = 'Grass';
+		battle.actions.getDamage(foe, p, fire, true);
+		assert.equal(p.getMoveHitData(fire).typeMod, -1);
+	});
+	it('gives completed defender analysis priority in both directions', () => {
+		setup('Adaptive Cycle'); analyzed();
+		assert(A.adaptiveAnalyzed(foe, p));
+		for (const [source, target] of [[p, foe], [foe, p]]) {
+			const move = Dex.getActiveMove('tackle');
+			battle.actions.getDamage(source, target, move, true);
+			assert.equal(target.getMoveHitData(move).typeMod, -1);
+		}
+	});
+	it('does not grant immunity bypass before completion or to status moves; fixed damage stays fixed', () => {
+		setup(); foe.setType('Ghost');
+		assert.equal(battle.actions.getDamage(p, foe, Dex.getActiveMove('tackle'), true), false);
+		analyzed();
+		assert.notEqual(A.adaptiveMoveView(Dex.getActiveMove('thunderwave'), p, foe).ignoreImmunity, true);
+		assert.equal(battle.actions.getDamage(p, foe, Dex.getActiveMove('seismictoss'), true), p.level);
+	});
+	it('lands an actual immune attack after analysis while Protect still blocks it', () => {
+		setup(); analyzed(); foe.setType('Ghost');
+		const before = foe.hp;
+		battle.makeChoices('move tackle', 'move splash');
+		assert(foe.hp < before);
+		foe.addVolatile('protect');
+		const protectedHP = foe.hp;
+		battle.actions.runMove('tackle', p, 1);
+		assert.equal(foe.hp, protectedHP);
+	});
 	it('registers a separate event slot and legal Recover on all four recipients without Mimicry', () => {
 		for (const species of ['Silvally', 'Kecleon', 'Stunfisk', 'Stunfisk-Galar']) {
 			assert.equal(Dex.species.get(species).abilities.S, 'Adaptive Cycle');
@@ -252,6 +299,19 @@ describe('Adaptive Cycle', () => {
 		assert(p.hp < hp); assert.equal(foe.hp, foeHP); assert.equal(foe.ability, 'ultraego');
 	});
 	for (const gameType of ['doubles', 'freeforall']) {
+		it(`keeps spread immunity bypass specific to completed opponents in ${gameType}`, () => {
+			const count = gameType === 'doubles' ? 2 : 4;
+			const teams = Array.from({length: count}, (_, side) => Array.from({length: count === 2 ? 2 : 1}, (_, slot) =>
+				({species: 'Mew', ability: side === 0 && slot === 0 ? 'Adaptive Cycle' : 'No Ability', moves: ['splash', 'earthquake']})));
+			battle = common.createBattle({gameType}, teams); p = battle.p1.active[0]; foe = battle.p2.active[0];
+			for (let i = 0; i < 2; i++) battle.makeChoices(...teams.map(team => team.map(() => 'move splash').join(', ')));
+			const other = gameType === 'doubles' ? battle.p2.active[1] : battle.p3.active[0];
+			p.m.adaptiveCycle.opponents[other.m.adaptiveCycleIdentity].complete = false;
+			foe.setType('Flying'); other.setType('Flying');
+			const hp = foe.hp, otherHP = other.hp;
+			battle.actions.runMove('earthquake', p, 0, {externalMove: true});
+			assert(foe.hp < hp); assert.equal(other.hp, otherHP);
+		});
 		it(`filters offensive ability bonuses per target in ${gameType}`, () => {
 			const count = gameType === 'doubles' ? 2 : 4;
 			const teams = Array.from({length: count}, (_, side) => Array.from({length: count === 2 ? 2 : 1}, (_, slot) =>

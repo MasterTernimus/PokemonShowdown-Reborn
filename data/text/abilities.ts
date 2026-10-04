@@ -4,7 +4,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	adaptivecycle: {
 		name: "Adaptive Cycle",
 		shortDesc: "Learns foes, two active attack types, status/chip, fields and weather; keeps memory when switching.",
-		desc: "Cannot be suppressed by Neutralizing Gas, Gastro Acid or similar effects. Battle-long individual memory pauses while inactive or replaced. After surviving a whole opposing move, its type joins two active memories (oldest archived): active end turns grant 20/35/50% damage reduction. Observed opposing actions grant 1 analysis point per turn (2 with shared typing); 4 points unlock 50% incoming reduction, 1.5x outgoing damage, known harmful move/secondary immunity, interaction-specific negation of that individual's entire ability (including composites) and resistant countertyping. Type/opponent reductions use the stronger only. Learns each foe's bypass or encountered defensive reduction at turn end. Two observed boosted turns counter positive combat/accuracy stages, not Speed. Status and named chip causes complete in two active end turns, curing/removing the learned condition. Each full field/weather completes in three: ignores personal penalties and incoming direct damage bonuses, retaining benefits, Auras and shared transformations. See the Adapted display for observed progress.",
+		desc: "Cannot be suppressed by Neutralizing Gas, Gastro Acid or similar effects. Battle-long individual memory pauses while inactive or replaced. After surviving a whole opposing move, its type joins two active memories (oldest archived): active end turns grant 20/35/50% damage reduction. Observed opposing actions grant 1 analysis point per turn (2 with shared typing); 4 points unlock 50% incoming reduction, 1.5x outgoing damage, known harmful move/secondary immunity, interaction-specific negation of that individual's entire ability (including composites) and resistant countertyping. Damaging attacks from that foe are at least resisted; attacks against it bypass type immunities and are at least super effective. Stronger natural effectiveness is retained; completed defender adaptation wins if both have analyzed each other. Fixed-damage and OHKO moves retain their normal damage rules. Type/opponent reductions use the stronger only. Learns each foe's bypass or encountered defensive reduction at turn end. Two observed boosted turns counter positive combat/accuracy stages, not Speed. Status and named chip causes complete in two active end turns, curing/removing the learned condition. Each full field/weather completes in three: ignores personal penalties and incoming direct damage bonuses, retaining benefits, Auras and shared transformations. See the Adapted display for observed progress.",
 	},
 	reservoir: {
 		name: "Reservoir",
@@ -804,12 +804,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eternalflower: {
 		name: "Eternal Flower",
-		desc: "This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.7x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
-		shortDesc: "Grass attacks use 1.5x offenses; opposing gimmick Pokemon have stats reduced to 0.7x.",
+		desc: "Includes Mold Breaker. Its attacks deal 2x damage to all Pulse forms. This Pokemon's Grass-type moves use 1.5x Attack and Special Attack. Opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have Attack, Defense, Special Attack, Special Defense, and Speed reduced to 0.7x while this Pokemon is active. This debuff does not affect allies. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		shortDesc: "Mold Breaker; 2x damage to Pulse; Grass offenses 1.5x; weakens opposing gimmicks.",
 	},
 	ange: {
 		name: "Ange",
-		desc: "This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.7x. Rift and Pulse forms are excluded from this stat suppression, even when Terastallized. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
+		desc: "This Pokemon has Eternal Flower, Fairy Aura, and Magic Guard's effects, including Mold Breaker and 2x attack damage to all Pulse forms. Its Grass-type moves use 1.5x Attack and Special Attack, Fairy-type moves are boosted, and opposing Mega, G-Max, Terastallized, Stellar, and Ultra Beast Pokemon have their stats reduced to 0.7x. Rift and Pulse forms are excluded from this stat suppression, even when Terastallized. When this Pokemon faints, it creates Bewitched Woods for 5 turns.",
 		shortDesc: "Eternal Flower + Fairy Aura + Magic Guard; weakens opposing gimmicks.",
 	},
 	fluffyevo: {
@@ -1211,7 +1211,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pulsebulwark: {
 		name: "Pulse Bulwark",
-		desc: "On entry, sets Short-Circuit Field for 5 turns. Reflect and Light Screen gain +1 priority. Once per actual entry, successfully creating a new one of these screens cures major status on this Pokemon and its active allies. Ability changes do not reset the cure. Screens retain their normal duration, removal, and bypass rules.",
+		desc: "Mr. Mime-Pulse automatically receives Light Screen, Reflect, Dazzling Gleam, and Dark Pulse in that order. On entry, sets Short-Circuit Field for 5 turns. Reflect and Light Screen gain +1 priority. Once per actual entry, successfully creating a new one of these screens cures major status on this Pokemon and its active allies. Ability changes do not reset the cure. Screens retain their normal duration, removal, and bypass rules.",
 		shortDesc: "5-turn Short-Circuit; +1-priority screens; first new screen per entry cures active allies' status.",
 	},
 	soaringspirit: {
@@ -3094,8 +3094,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	riftdancer: {
 		name: "Rift Dancer",
-		desc: "Chlorophyll + Dancer. Once per battle, its first successful activation creates a full Stage 1 Flower Garden for 5 turns, respecting protected fields. Existing gardens are not advanced or refreshed, and failed creation does not spend the use. Each actual stage gained adds 1 remaining turn to this garden, including re-growth; lowering a stage or trying to grow at maximum adds nothing. The garden keeps this property after the user switches out.",
-		shortDesc: "Chlorophyll + Dancer; once/battle 5-turn full Garden; +1 turn per stage gained.",
+		desc: "Chlorophyll + Dancer + Overgrow. Once per battle, the first damaging hit that would cross below half HP stops at half HP, then immediately heals 25% max HP. Once per battle, its first activation attempts to create a full Stage 1 Flower Garden for 5 turns, respecting protected fields. Existing gardens are not advanced or refreshed; this first attempt spends the use even if creation is blocked. Each actual stage gained adds 1 remaining turn to this garden, including re-growth; lowering a stage or trying to grow at maximum adds nothing. The garden grows one stage at each turn end without requiring weather and keeps this property after the user switches out.",
+		shortDesc: "Chlorophyll + Dancer + Overgrow; growing Garden; once/battle half-HP guard + 25% heal.",
 	},
 	lunarspirit: {
 		name: "Lunar Spirit",
@@ -3943,7 +3943,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rifteater: {
 		name: "Rift Eater",
-		desc: "Combines Accumulation and Sand Stream. Its fourth move is always Sludge Wave. At half HP or less, it creates Desert Field, becomes Ground/Fire, and changes its fourth move to Heat Wave. If sandstorm has ended, it summons it again at that moment.",
+		desc: "Combines Accumulation and Sand Stream. Once per battle, the first damaging hit that would cross below half HP stops at half HP, activates its awakening, then immediately heals 25% max HP. Its fourth move is always Sludge Wave. At half HP or less, it creates Desert Field, becomes Ground/Fire, and changes its fourth move to Heat Wave. If sandstorm has ended, it summons it again at that moment.",
 		shortDesc: "Accumulation + Sand Stream; at half HP: Desert Field, Ground/Fire, Sludge Wave becomes Heat Wave, restores sand.",
 	},
 	mountainrift: {
@@ -4295,8 +4295,8 @@ AbilitiesText.agonyflame = {
 
 AbilitiesText.pulseeruption = {
 	name: "Pulse Eruption",
-	desc: "Full Sturdy: OHKO moves fail, and direct move damage cannot KO this Pokemon from full HP. On entry, attempts to create or refresh Super-Heated Terrain for 5 turns, respecting normal field restrictions. Once per battle, cures its major status and confusion when afflicted, including an existing affliction on entry. Suppression delays this cure without consuming it. Switching or ability changes do not refresh the cure. Skill Swap fails. At Camerupt-Pulse's fixed 1 HP, Sturdy can prevent repeated direct hits; indirect damage and ability bypass remain effective.",
-	shortDesc: "Sturdy; 5-turn Super-Heated field on entry; one major-status/confusion cure per battle; no Skill Swap.",
+	desc: "Camerupt-Pulse automatically receives Eruption, Snarl, Shadow Ball, and Earth Power in that order. Full Sturdy: OHKO moves fail, and direct move damage cannot KO this Pokemon from full HP. On entry, attempts to create or refresh Super-Heated Terrain for 5 turns, respecting normal field restrictions. Skill Swap fails. At Camerupt-Pulse's fixed 1 HP, Sturdy can prevent repeated direct hits; indirect damage and ability bypass remain effective.",
+	shortDesc: "Sturdy; 5-turn Super-Heated field on entry; no Skill Swap.",
 };
 
 // Approved October signature follow-ups.
@@ -4476,3 +4476,12 @@ for (const [id, entry] of Object.entries(AbilitiesText)) {
 		} as { [id: string]: string })[part] || ''
 	);
 }
+
+// PULSE field generation has one persistent attempt per individual per battle.
+for (const id of ['nightmarepulse', 'pulsewaste', 'pulsefiltration', 'pulseblockade', 'pulsetriad', 'pulsebulwark', 'pulseeruption'] as const) {
+	const entry = AbilitiesText[id];
+	if (entry?.desc) entry.desc += ' Field creation or refresh is attempted only once per battle per holder, even if blocked; switching, suppression, revival, or ability changes never reset this use.';
+}
+AbilitiesText.pulsetriad.desc += ' Magnezone-Pulse automatically receives Flash Cannon, Discharge, Recover, and Autotomize in that order.';
+
+AbilitiesText.desertrift.desc += ' Its Desert Field creation or refresh is attempted once per battle; switching or ability changes do not reset it. Mountain Rift retains its explicit field-transition exceptions.';
