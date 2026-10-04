@@ -2494,7 +2494,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {},
 		name: "Dual Wield",
-		shortDesc: "Two 60% independent rolls; boosting pairs: full +15%; FFA: two full-power targets.",
 		rating: 4,
 		num: 10284,
 	},
