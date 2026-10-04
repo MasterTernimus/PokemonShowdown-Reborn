@@ -51,6 +51,14 @@ function flowerGardenStage(stage: number): TerrainData {
 					move.target = 'allAdjacentFoes';
 				}
 			},
+			onFieldResidualOrder: 26,
+			onFieldResidual() {
+				if (this.field.terrainState.gardenGrowthTurn === this.turn ||
+					!(this.field.terrainState.riftGarden || this.field.isWeather(['sunnyday', 'desolateland', 'raindance', 'primordialsea']))) return;
+				const source = this.field.terrainState.source || this.getAllActive().find(p => p.hp);
+				if (source) this.field.growFlowerGarden(source, this.field.getTerrain());
+				this.field.terrainState.gardenGrowthTurn = this.turn;
+			},
 			onFieldStart() {
 				this.add('-fieldstart', name);
 				if (stage === 1) this.add('-message', 'Seeds line the field.');

@@ -214,9 +214,8 @@ export function adaptiveCaptureMove(move: ActiveMove, before: AnyObject, effect:
 export function adaptiveMoveView(move: ActiveMove, source: Pokemon, target: Pokemon): ActiveMove {
 	if ((move as any).adaptiveViewFor === target) return move;
 	const contributions = (move as any).adaptiveContributions as MoveContribution[] | undefined;
-	if (!contributions?.length) return move;
 	let view: ActiveMove = move;
-	for (const c of [...contributions].reverse()) {
+	for (const c of [...(contributions || [])].reverse()) {
 		const ignoreAbility = c.owner && adaptiveIgnoresAbility(target, c.owner);
 		const incoming = c.kind && adaptiveEnvironment(target, c.kind, c.id);
 		const outgoing = c.kind && adaptiveEnvironment(source, c.kind, c.id);
@@ -248,7 +247,15 @@ export function adaptiveMoveView(move: ActiveMove, source: Pokemon, target: Poke
 			}
 		}
 	}
-	if (view !== move) (view as any).adaptiveViewFor = target;
+	if (move.category !== 'Status' && adaptiveAnalyzed(source, target)) {
+		if (view === move) view = {...move, ...adaptiveMoveSnapshot(move)};
+		view.ignoreImmunity = true;
+	}
+	if (view !== move) {
+		// Damage and subsequent hit callbacks must see the same per-target results.
+		view.moveHitData = move.moveHitData ||= {};
+		(view as any).adaptiveViewFor = target;
+	}
 	return view;
 }
 

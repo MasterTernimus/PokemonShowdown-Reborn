@@ -1,5 +1,7 @@
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
+	eternalflower: ['moldbreaker'],
+	ange: ['moldbreaker'],
 	reservoir: ['waterabsorb', 'gluttony', 'damp'],
 	savageresolve: ['guts'],
 	lancepoint: ['keeneye'],
@@ -264,7 +266,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	aeviantoxin: ['strongjaw', 'layeredcoat', 'furcoat', 'overcoat', 'merciless'],
 	aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
 	aevianbolt: ['stormpower', 'static', 'voltabsorb'],
-	riftdancer: ['chlorophyll', 'dancer'],
+	riftdancer: ['chlorophyll', 'dancer', 'overgrow'],
 	curseddoll: ['toughclaws', 'shadowshield', 'frisk'],
 	apexvenom: ['strongjaw', 'shedskin'],
 	sirius: ['apexvenom', 'whiplash'],

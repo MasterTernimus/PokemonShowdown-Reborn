@@ -1954,6 +1954,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	eeviumz: {
 		name: "Eevium Z",
+		onModifyDefPriority: 2,
+		onModifyDef(def, pokemon) {
+			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (['eevee', 'eeveestarter', 'eeveestarteralt'].includes(pokemon.baseSpecies.id) || pokemon.species.id === 'eeveegmax') {
+				return this.chainModify(1.5);
+			}
+		},
 		spritenum: 657,
 		onTakeItem: false,
 		zMove: "Extreme Evoboost",
@@ -1968,7 +1980,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		itemUser: ["Eevee", 'Eevee-Starter', 'Eevee-Starter-Alt', 'Eevee-Gmax'],
 		num: 805,
 		gen: 7,
-		isNonstandard: "Past",
+		isNonstandard: null,
 	},
 	ejectbutton: {
 		name: "Eject Button",

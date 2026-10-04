@@ -89,7 +89,16 @@ function setCursedArmamentHauntedField(battle: Battle, pokemon: Pokemon) {
 	}
 }
 
+// Shared across Pulse/Rift ability changes; Mountain Rift deliberately does not use this budget.
+function claimAnomalyField(pokemon: Pokemon) {
+	if (pokemon.m.anomalyFieldUsed) return false;
+	pokemon.m.anomalyFieldUsed = true;
+	return true;
+}
+
 function setPulseMurkwater(battle: Battle, pokemon: Pokemon) {
+	if (!claimAnomalyField(pokemon)) return;
+	pokemon.m.pulseFieldUsed = true;
 	const terrain = 'murkwatersurfaceterrain';
 	if (battle.field.terrain === terrain) {
 		// Refreshing the current field must respect effective field-generation blockers too.
@@ -157,6 +166,22 @@ function awakenMountainRift(battle: Battle, pokemon: Pokemon) {
 	setMountainRiftField(battle, pokemon);
 }
 
+function riftHalfGuard(battle: Battle, damage: number, target: Pokemon, effect: Effect) {
+	const half = Math.floor(target.maxhp / 2);
+	if (effect?.effectType !== 'Move' || target.m.riftHalfGuardUsed || target.hp < half || target.hp - damage >= half) return;
+	target.m.riftHalfGuardUsed = true;
+	target.m.riftHalfGuardPending = true;
+	if (target.hp === half) { healRiftHalfGuard(battle, target); return 0; }
+	return target.hp - half;
+}
+
+function healRiftHalfGuard(battle: Battle, target: Pokemon) {
+	if (!target.m.riftHalfGuardPending) return;
+	delete target.m.riftHalfGuardPending;
+	if (target.ability === 'rifteater') awakenRiftEater(battle, target);
+	battle.heal(target.maxhp / 4, target, target, target.getAbility());
+}
+
 function awakenRiftEater(battle: Battle, pokemon: Pokemon) {
 	if (pokemon.m.riftEaterAwakened || pokemon.fainted || pokemon.hp > pokemon.maxhp / 2) return;
 	pokemon.m.riftEaterAwakened = true;
@@ -167,7 +192,7 @@ function awakenRiftEater(battle: Battle, pokemon: Pokemon) {
 	battle.add('-message', `${pokemon.name} changed from Ground/Poison to Ground/Fire!`);
 	setAnomalyMoveSlot(battle, pokemon, 3, 'heatwave');
 	battle.add('-message', `${pokemon.name}'s fourth move changed from Sludge Wave to Heat Wave!`);
-	if (battle.field.setTerrain('desertterrain', pokemon, battle.dex.abilities.get('rifteater'))) {
+	if (claimAnomalyField(pokemon) && battle.field.setTerrain('desertterrain', pokemon, battle.dex.abilities.get('rifteater'))) {
 		battle.add('-message', 'Rift Eater created Desert Field!');
 	}
 	if (!battle.field.isWeather('sandstorm') && battle.field.setWeather('sandstorm', pokemon)) {
@@ -6367,6 +6392,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10143,
 	},
 	rifteater: {
+		onDamage(damage, target, source, effect) { return riftHalfGuard(this, damage, target, effect); },
+		onAfterDamageApplied(damage, target) { healRiftHalfGuard(this, target); },
 		onStart(pokemon) {
 			setAnomalyMoveSlot(this, pokemon, 3, pokemon.m.riftEaterAwakened ? 'heatwave' : 'sludgewave');
 			if (pokemon.m.riftEaterAwakened) {
@@ -6461,6 +6488,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			setDesertRiftMoves(this, pokemon);
 			(this.dex.abilities.get('sandstream') as any).onStart?.call(this, pokemon);
 			(this.dex.abilities.get('heavymetal') as any).onStart?.call(this, pokemon);
+			if (!claimAnomalyField(pokemon)) return;
+			pokemon.m.riftFieldUsed = true;
 			if (this.field.isTerrain('desertterrain')) {
 				this.field.setTerrainDuration(5);
 				this.add('-message', `${pokemon.name}'s Desert Rift refreshed Desert Field for 5 turns!`);
@@ -7679,6 +7708,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 194,
 	},
 	eternalflower: {
+		onModifyMove(move) { move.ignoreAbility = true; },
+		onModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status' && /^Pulse(?:-|$)/i.test(target.species.forme)) return this.chainModify(2);
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			let modifier = 1;
@@ -7755,7 +7788,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('magicguard').onDamage?.call(this, damage, target, source, effect);
 		},
 		onModifyMove(move) {
+			move.ignoreAbility = true;
 			if (this.field.isTerrain('fairytaleterrain')) move.accuracy = true;
+		},
+		onModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('eternalflower').onModifyDamage?.call(this, damage, source, target, move);
 		},
 		onAnyBasePowerPriority: 20,
 		onAnyBasePower(basePower, source, target, move) {
@@ -15583,6 +15620,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	nightmarepulse: {
 		onStart(pokemon) {
+			if (!claimAnomalyField(pokemon)) return;
+			pokemon.m.pulseFieldUsed = true;
 			if (this.field.isTerrain('hauntedterrain')) this.field.setTerrainDuration(5);
 			else if (this.field.setTerrain('hauntedterrain', pokemon, this.effect)) this.field.setTerrainDuration(5);
 		},
@@ -15622,10 +15661,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10388,
 	},
 	riftdancer: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			return (this.dex.abilities.get('overgrow') as any).onModifyAtk?.call(this, atk, attacker, defender, move);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, attacker, defender, move) {
+			return (this.dex.abilities.get('overgrow') as any).onModifySpA?.call(this, spa, attacker, defender, move);
+		},
+		onDamage(damage, target, source, effect) { return riftHalfGuard(this, damage, target, effect); },
+		onAfterDamageApplied(damage, target) { healRiftHalfGuard(this, target); },
 		onStart(pokemon) {
-			if (pokemon.m.riftGardenUsed || this.field.flowerGardenStage() || this.field.terrainState.gardenBurnStage) return;
-			if (!this.field.setTerrain('flowergarden1', pokemon, this.effect, false, true)) return;
+			if (!claimAnomalyField(pokemon)) return;
 			pokemon.m.riftGardenUsed = true;
+			if (this.field.flowerGardenStage() || this.field.terrainState.gardenBurnStage) return;
+			if (!this.field.setTerrain('flowergarden1', pokemon, this.effect, false, true)) return;
 			this.field.terrainState.riftGarden = true;
 			this.field.terrainState.permanent = false;
 			this.field.setTerrainDuration(5);
@@ -17601,6 +17651,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	pulseblockade: {
 		onStart(pokemon) {
+			if (!claimAnomalyField(pokemon)) return;
+			pokemon.m.pulseFieldUsed = true;
 			if (this.field.isTerrain('snowymountainterrain')) this.field.setTerrainDuration(5);
 			else if (this.field.setTerrain('snowymountainterrain', pokemon, this.effect)) this.field.setTerrainDuration(5);
 		},
@@ -17608,6 +17660,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	pulsetriad: {
 		onStart(pokemon) {
+			if (pokemon.species.id === 'magnezonepulse') {
+				for (const [index, move] of ['flashcannon', 'discharge', 'recover', 'autotomize'].entries()) {
+					setAnomalyMoveSlot(this, pokemon, index, move);
+				}
+			}
+			if (!claimAnomalyField(pokemon)) return;
+			pokemon.m.pulseFieldUsed = true;
 			if (this.field.isTerrain('factoryterrain')) this.field.setTerrainDuration(5);
 			else if (this.field.setTerrain('factoryterrain', pokemon, this.effect)) this.field.setTerrainDuration(5);
 		},
@@ -17636,6 +17695,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	pulsebulwark: {
 		onStart(pokemon) {
+			if (pokemon.species.id === 'mrmimepulse') {
+				for (const [index, move] of ['lightscreen', 'reflect', 'dazzlinggleam', 'darkpulse'].entries()) {
+					setAnomalyMoveSlot(this, pokemon, index, move);
+				}
+			}
+			if (!claimAnomalyField(pokemon)) return;
+			pokemon.m.pulseFieldUsed = true;
 			if (this.field.isTerrain('shortcircuitterrain')) this.field.setTerrainDuration(5);
 			else if (this.field.setTerrain('shortcircuitterrain', pokemon, this.effect)) this.field.setTerrainDuration(5);
 		},
@@ -19737,19 +19803,17 @@ Abilities.agonyflame = {
 	num: 11221,
 };
 
-function curePulseEruptionStatus(battle: Battle, pokemon: Pokemon) {
-	if (!pokemon.hp || !pokemon.isActive || pokemon.ignoringAbility() || pokemon.m.pulseEruptionCureUsed ||
-		(!pokemon.status && !pokemon.volatiles['confusion'])) return;
-	pokemon.m.pulseEruptionCureUsed = true;
-	battle.add('-activate', pokemon, 'ability: Pulse Eruption');
-	pokemon.cureStatus();
-	pokemon.removeVolatile('confusion');
-}
 Abilities.pulseeruption = {
 	onStart(pokemon) {
+		if (pokemon.species.id === 'cameruptpulse') {
+			for (const [index, move] of ['eruption', 'snarl', 'shadowball', 'earthpower'].entries()) {
+				setAnomalyMoveSlot(this, pokemon, index, move);
+			}
+		}
+		if (!claimAnomalyField(pokemon)) return;
+		pokemon.m.pulseFieldUsed = true;
 		if (this.field.isTerrain('superheatedterrain')) this.field.setTerrainDuration(5);
 		else if (this.field.setTerrain('superheatedterrain', pokemon, this.effect)) this.field.setTerrainDuration(5);
-		curePulseEruptionStatus(this, pokemon);
 	},
 	onTryHit(target, source, move) {
 		const hook = (this.dex.abilities.get('sturdy') as import('../sim/dex-abilities').AbilityData).onTryHit;
@@ -19759,9 +19823,6 @@ Abilities.pulseeruption = {
 	onDamage(damage, target, source, effect) {
 		return (this.dex.abilities.get('sturdy') as import('../sim/dex-abilities').AbilityData).onDamage?.call(this, damage, target, source, effect);
 	},
-	onAfterSetStatusPriority: -1,
-	onAfterSetStatus(status, pokemon) { curePulseEruptionStatus(this, pokemon); },
-	onUpdate(pokemon) { curePulseEruptionStatus(this, pokemon); },
 	flags: {breakable: 1, failskillswap: 1}, name: "Pulse Eruption", rating: 5, num: 11225,
 };
 

@@ -118,10 +118,11 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 		assert.equal(battle.field.terrain, 'shortcircuitterrain');
 		assert(battle.field.terrainState.duration <= 5);
 		assert(mime.side.getSideCondition('reflect'));
+		assert.deepEqual(mime.moveSlots.map(move => move.id), ['lightscreen', 'reflect', 'dazzlinggleam', 'darkpulse']);
 		assert.equal(battle.dex.abilities.get('pulsebulwark').onModifyPriority.call(
 			battle, 0, mime, battle.p2.active[0], battle.dex.getActiveMove('reflect')), 1);
 		battle.field.changeTerrain('factoryterrain', mime);
-		battle.makeChoices('move discharge', 'move splash');
+		battle.actions.runMove('discharge', mime, mime.getLocOf(battle.p2.active[0]), {externalMove: true});
 		assert.equal(battle.field.terrain, 'shortcircuitterrain');
 		assert(battle.field.terrainState.duration < 9999);
 		assert(battle.dex.species.getLearnsetData('mrmime').learnset.darkpulse.includes('9M'));
@@ -175,7 +176,7 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 describe('Pulse Blockade field duration protocol', () => {
  let battle;
  afterEach(() => battle?.destroy());
- it('announces exact creation and re-entry refresh durations', () => {
+ it('announces creation without refreshing on re-entry', () => {
   battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
    {species: 'Avalugg', ability: 'Own Tempo', item: 'Anomaly Core', moves: ['splash']},
    {species: 'Mew', ability: 'No Ability', moves: ['splash']},
@@ -187,8 +188,8 @@ describe('Pulse Blockade field duration protocol', () => {
   battle.makeChoices('switch 2', 'move splash');
   const before = battle.log.length;
   battle.makeChoices('switch 2', 'move splash');
-  assert.equal(battle.field.terrainState.duration, 4);
-  assert(battle.log.slice(before).includes(announcement));
+  assert.equal(battle.field.terrainState.duration, 2);
+  assert(!battle.log.slice(before).includes(announcement));
   battle.field.setTerrainDuration(9999);
   assert(battle.log.includes('|-fieldstart|Snowy Mountain Terrain|[turns] 0|[silent]'));
  });

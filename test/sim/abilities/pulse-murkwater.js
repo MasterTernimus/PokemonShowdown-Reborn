@@ -16,7 +16,7 @@ describe('Pulse Murkwater entry fields', () => {
 	}
 
 	for (const [species, ability, formAbility] of [['Muk', 'Poison Touch', 'Pulse Waste'], ['Swalot', 'Liquid Ooze', 'Pulse Filtration']]) {
-		it(`${species} transforms, creates five turns, expires, and restores on reentry`, () => {
+		it(`${species} transforms, creates five turns, expires, and stays expired on reentry`, () => {
 			const [p] = setup(species, ability);
 			b.field.setTerrain('factoryterrain', p);
 			assert(b.actions.runMegaEvo(p));
@@ -35,7 +35,7 @@ describe('Pulse Murkwater entry fields', () => {
 
 			b.makeChoices('switch 2', 'move splash');
 			b.makeChoices('switch 2', 'move splash');
-			assert.equal(b.field.terrain, 'murkwatersurfaceterrain');
+			assert.equal(b.field.terrain, 'factoryterrain');
 		});
 
 		for (const blocker of ['Pulse Blockade', 'Neutralization'])

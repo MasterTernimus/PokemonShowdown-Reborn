@@ -1,0 +1,8 @@
+'use strict';
+const assert=require('assert').strict,common=require('../../common');
+describe('Pulse fields once per battle',()=>{let b;afterEach(()=>{b?.destroy();b=null;});
+for(const [ability,field] of [['Desert Rift','desertterrain'],['Nightmare Pulse','hauntedterrain'],['Pulse Waste','murkwatersurfaceterrain'],['Pulse Filtration','murkwatersurfaceterrain'],['Pulse Blockade','snowymountainterrain'],['Pulse Triad','factoryterrain'],['Pulse Bulwark','shortcircuitterrain'],['Pulse Eruption','superheatedterrain']])it(ability+' never refreshes or retries after activation',()=>{
+b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Mew',ability,moves:['splash','protect','tackle','splash']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);b.makeChoices('team 1','team 1');const p=b.p1.active[0];assert.equal(b.field.terrain,field);assert(p.m.pulseFieldUsed || p.m.riftFieldUsed);b.field.setTerrainDuration(2);b.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(b.field.terrainState.duration,2);b.field.clearTerrain();p.setAbility('No Ability');p.setAbility(ability);assert.equal(b.field.terrain,'');p.setAbility('Pulse Eruption');assert.equal(b.field.terrain,'');p.setAbility('Rift Dancer');assert.equal(b.field.terrain,'');
+});
+it('sets Magnezone moves on transformation in the requested order',()=>{b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Magnezone',ability:'Sturdy',item:'Anomaly Core',moves:['splash']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);b.makeChoices('team 1','team 1');const p=b.p1.active[0];b.actions.runMegaEvo(p);assert.deepEqual(p.moveSlots.map(m=>m.id),['flashcannon','discharge','recover','autotomize']);});
+});
