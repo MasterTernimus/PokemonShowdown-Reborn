@@ -6607,7 +6607,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	substitute: {
 		name: "Substitute",
-		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute is removed once enough damage is inflicted on it, if the user switches out or faints, or if any Pokemon uses Tidy Up. Baton Pass can be used to transfer the substitute to an ally, and the substitute will keep its remaining HP. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat stage changes caused by other Pokemon. Sound-based moves and Pokemon with the Infiltrator Ability ignore substitutes. The user still takes normal damage from weather and status effects while behind its substitute. If the substitute breaks during a multi-hit attack, the user will take damage from any remaining hits. If a substitute is created while the user is trapped by a binding move, the binding effect ends immediately. Fails if the user does not have enough HP remaining to create a substitute without fainting, or if it already has a substitute.",
+		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute is removed once enough damage is inflicted on it, if the user switches out or faints, or if any Pokemon uses Tidy Up. Baton Pass can be used to transfer the substitute to an ally, and the substitute will keep its remaining HP. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat stage changes caused by other Pokemon. Sound-based moves and Pokemon with the Infiltrator Ability ignore substitutes. The user still takes normal damage from weather and status effects while behind its substitute. If the substitute breaks during a multi-hit attack, the user will take damage from any remaining hits. If a substitute is created while the user is trapped by a binding move, the binding effect ends immediately. Fails if the user does not have enough HP remaining to create a substitute without fainting, or if it already has a substitute. Pulse and Rift forms cannot create or retain a substitute; transforming into these forms or receiving a transferred substitute breaks it.",
 		shortDesc: "User takes 1/4 its max HP to put in a substitute.",
 		gen8: {
 			desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The substitute is removed once enough damage is inflicted on it, or if the user switches out or faints. Baton Pass can be used to transfer the substitute to an ally, and the substitute will keep its remaining HP. Until the substitute is broken, it receives damage from all attacks made by other Pokemon and shields the user from status effects and stat stage changes caused by other Pokemon. Sound-based moves and Pokemon with the Infiltrator Ability ignore substitutes. The user still takes normal damage from weather and status effects while behind its substitute. If the substitute breaks during a multi-hit attack, the user will take damage from any remaining hits. If a substitute is created while the user is trapped by a binding move, the binding effect ends immediately. Fails if the user does not have enough HP remaining to create a substitute without fainting, or if it already has a substitute.",
@@ -7231,8 +7231,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triplearrows: {
 		name: "Triple Arrows",
-		desc: "Has a 50% chance to lower the target's Defense by 1 stage, a 30% chance to make it flinch, and a higher chance for a critical hit. Each use raises the critical-hit ratio of the user's side by 1 stage, like G-Max Chi Strike.",
-		shortDesc: "High crit. 50% -1 Def, 30% flinch; +1 ally crit.",
+		desc: "Has a 50% chance to lower the target's Defense by 1 stage, a 30% chance to make it flinch, and a higher chance for a critical hit.",
+		shortDesc: "High crit. 50% -1 Def, 30% flinch.",
 	},
 	tripleaxel: {
 		name: "Triple Axel",
@@ -7810,4 +7810,8 @@ for (const [moveId, user, baseMove] of [
 ] as [IDEntry, string, string][]) {
 	MovesText[moveId].desc = `${user}'s exclusive Z-Move, used through ${baseMove}. No additional effect.`;
 	MovesText[moveId].shortDesc = `Exclusive ${user} Z-Move; no additional effect.`;
+}
+
+for (const id of ['boneclub', 'bonerush', 'bonemerang'] as const) {
+	MovesText[id].desc += ' While Ground-type, this move bypasses field bans on Ground attacks and retains Ground typing instead of field-added Ice/Water typing or Midnight Zone conversion. Existing Bone-move immunity bypass, accuracy and protection rules are unchanged.';
 }

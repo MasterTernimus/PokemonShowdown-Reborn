@@ -1,3 +1,4 @@
+import { isGroundBoneMove } from './ground-bone-moves';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { type TerrainData } from '../sim/dex-terrains';
 
@@ -59,7 +60,7 @@ export const MidnightZone: TerrainData = {
 					};
 				}
 			}
-			if (move.type === 'Ground') {
+			if (move.type === 'Ground' && !isGroundBoneMove(move)) {
 				move.midnightGround = true;
 				move.type = 'Water';
 				delete move.types;

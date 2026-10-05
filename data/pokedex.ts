@@ -19801,7 +19801,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Ursaluna",
 		types: ["Ground", "Normal"],
 		baseStats: { hp: 150, atk: 145, def: 110, spa: 25, spd: 120, spe: 50 },
-		abilities: { 0: "Raging Beast", 1: "Bulletproof", H: "Territorial" },
+		abilities: { 0: "Raging Beast", 1: "Moonlit Hide", H: "Territorial" },
 		heightm: 2.4,
 		weightkg: 290,
 		color: "Brown",
@@ -21264,7 +21264,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Kingambit",
 		types: ["Dark", "Steel"],
 		baseStats: { hp: 105, atk: 135, def: 125, spa: 60, spd: 95, spe: 50 },
-		abilities: { 0: "Defiant", 1: "Supreme Overlord", H: "Royal Decree" },
+		abilities: { 0: "Defiant", 1: "Conqueror's Will", H: "Royal Decree" },
 		heightm: 2,
 		weightkg: 120,
 		color: "Black",
@@ -23717,7 +23717,7 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	alakazam: {baseStats: {hp: 80, atk: 50, def: 50, spa: 135, spd: 95, spe: 120}},
 	alakazammega: {baseStats: {hp: 80, atk: 55, def: 60, spa: 175, spd: 105, spe: 155}},
 	dodrio: {
-		baseStats: {hp: 90, atk: 115, def: 85, spa: 40, spd: 75, spe: 120},
+		baseStats: {hp: 90, atk: 106, def: 85, spa: 50, spd: 75, spe: 119},
 		abilities: {0: "Triple Threat", 1: "Speed Boost", H: "Striker Frenzy"},
 	},
 	honchkrow: {baseStats: {hp: 100, atk: 135, def: 72, spa: 71, spd: 72, spe: 90}},
@@ -24142,3 +24142,120 @@ Pokedex.grimmsnarlazzy.abilities = { ...Pokedex.grimmsnarl.abilities! };
 Pokedex.cradily.abilities!.H = "Primeval Hunger";
 
 Pokedex.skarmory.abilities![0] = 'Fresh Plumage';
+
+// Regular components of Soul Cremation; Soul Fire remains a special event ability.
+Pokedex.chandelure.abilities = {0: 'Soul Siphon', 1: 'Soul Pyre', H: 'Malice Well', S: 'Soul Fire'};
+
+Pokedex.noctowl.abilities![1] = 'Night Watch';
+Pokedex.tropius.abilities![0] = 'Fruitful Bough';
+Pokedex.dhelmise.abilities![1] = 'Soul Anchor';
+
+Pokedex.lanturn.abilities!.H = 'Guiding Light';
+Pokedex.vespiquen.abilities![0] = 'Royal Escort';
+
+Pokedex.greninja.abilities![0] = 'Liquid Arsenal';
+Pokedex.chesnaught.abilities!.H = "Knight's Reprisal";
+Pokedex.ninetalesalola.abilities!.H = 'Aurora Sanctum';
+Pokedex.raichu.abilities![0] = 'Charged Tail';
+
+Pokedex.slowkinggalar.abilities!['1'] = 'Eldritch Remedy';
+
+Pokedex.charizard.abilities!['1'] = 'Infernal Dominion';
+
+Pokedex.blastoise.abilities!['H'] = 'Hydraulic Armor';
+
+Pokedex.gengar.abilities!['1'] = 'Haunting Presence';
+
+Pokedex.snorlax.abilities!['1'] = 'Slumbering Giant';
+
+Pokedex.lapras.abilities!['1'] = 'Ocean Lullaby';
+
+Pokedex.greninja.abilities!['H'] = 'Shadow Screen';
+
+Pokedex.clefable.abilities!['H'] = 'Moonlit Promise';
+
+Pokedex.flygon.abilities!['0'] = 'Sandshroud';
+
+Pokedex.delphox.abilities!['H'] = 'Arcane Pilfer';
+Pokedex.greninja.abilities!.S = 'Battle Bond';
+
+Pokedex.garchomp.abilities!.H = 'Faultline';
+Pokedex.garchomp.abilities!.S = 'Battle Bond';
+
+Pokedex.venusaur.abilities![1] = 'Creeping Bloom';
+
+Pokedex.hydreigon.abilities![0] = 'Dread Wings';
+
+Pokedex.ninetalesalt.abilities!["0"] = "Sun Charm";
+Pokedex.slowbrogalar.abilities!["1"] = "Caustic Chamber";
+Pokedex.copperajah.abilities!["0"] = "Demolition Trunk";
+Pokedex.wailord.abilities!["H"] = "Deep Resonance";
+Pokedex.golemalola.abilities!["0"] = "Siege Magnet";
+Pokedex.inteleon.abilities!["1"] = "Patient Marksman";
+Pokedex.rabsca.abilities!["0"] = "Cradle Ward";
+Pokedex.sunflora.abilities!["0"] = "Sun Reserve";
+Pokedex.hatterene.abilities!["1"] = "Silent Reprisal";
+Pokedex.musharna.abilities!["1"] = "Dream Refuge";
+Pokedex.klinklang.abilities!["0"] = "Closed Circuit";
+
+Pokedex.pyroar.abilities!.H = 'Pridecall';
+Pokedex.heliolisk.abilities = {0: 'Hydroelectric', 1: 'Solar Stride', H: 'Frill Flash'};
+
+Pokedex.emboar.abilities!["0"] = "Stoke Belly";
+Pokedex.mrmime.abilities!["0"] = "Invisible Wall";
+Pokedex.barraskewda.abilities!["1"] = "Pursuit Wake";
+Pokedex.golurk.abilities!["0"] = "Sentinel Fist";
+Pokedex.drampa.abilities!["H"] = "Gentle Giant";
+Pokedex.tauros.abilities!["1"] = "Rousing Feast";
+Pokedex.taurospaldeacombat.abilities!["1"] = "Rousing Feast";
+Pokedex.taurospaldeablaze.abilities!["1"] = "Rousing Feast";
+Pokedex.taurospaldeaaqua.abilities!["1"] = "Rousing Feast";
+Pokedex.hawlucha.abilities!["0"] = "Ringcraft";
+Pokedex.centiskorch.abilities!["1"] = "Constricting Heat";
+
+Pokedex.conkeldurr.abilities![0] = 'Grit Reprisal';
+Pokedex.conkeldurr.abilities!.H = 'Wrecking Crew';
+
+Pokedex.abomasnow.abilities!["1"] = "Evergreen";
+Pokedex.heracross.abilities!["H"] = "Battle Grip";
+Pokedex.slurpuff.abilities!["H"] = "Scent Scout";
+Pokedex.mudsdale.abilities!["H"] = "Surefoot";
+Pokedex.victreebel.abilities!["H"] = "Baited Bloom";
+Pokedex.rapidash.abilities!["H"] = "Guiding Gallop";
+Pokedex.mandibuzz.abilities!["H"] = "Carrion Watch";
+
+Pokedex.masquerain.abilities!["1"] = "Scale Shelter";
+Pokedex.mrrime.abilities!["H"] = "Stage Sweep";
+Pokedex.crabominable.abilities!["0"] = "Icebreaker";
+Pokedex.maractus.abilities!["1"] = "Cactus Chorus";
+Pokedex.drapion.abilities!["H"] = "Crushing Venom";
+Pokedex.electivire.abilities!["1"] = "Crosswire";
+Pokedex.walrein.abilities!["1"] = "Deep Chill";
+Pokedex.castform.abilities!["H"] = "Climate Reserve";
+Pokedex.castformsunny.abilities!["H"] = "Climate Reserve";
+Pokedex.castformrainy.abilities!["H"] = "Climate Reserve";
+Pokedex.castformsnowy.abilities!["H"] = "Climate Reserve";
+Pokedex.castformsandy.abilities!["H"] = "Climate Reserve";
+Pokedex.castformwindy.abilities!["H"] = "Climate Reserve";
+
+Pokedex.excadrill.abilities!["1"] = "Tunnel Clearance";
+Pokedex.gigalith.abilities!["0"] = "Crystal Bastion";
+Pokedex.sandaconda.abilities!["0"] = "Buried Coil";
+Pokedex.arctozolt.abilities!["1"] = "Static Reserve";
+Pokedex.pinsir.abilities!["0"] = "Locking Grip";
+Pokedex.comfey.abilities!["0"] = "Garland Gift";
+Pokedex.delibird.baseStats!.spe = 126;
+
+Pokedex.obstagoon.abilities!.H = 'Riot Stance';
+
+Pokedex.charizardalt.abilities!['1'] = 'Infernal Dominion';
+Pokedex.rillaboom.abilities!['1'] = 'Drum Guard';
+Pokedex.sinistchamasterpiece.abilities!['1'] = 'Second Brew';
+Pokedex.slowking.abilities!['1'] = 'Measured Counsel';
+
+Pokedex.golisopod.abilities!['0'] = 'Tactical Retreat';
+Pokedex.pelipper.abilities!['H'] = 'Rain Courier';
+
+Pokedex.malamar.abilities!['H'] = 'Disorienting Mind';
+Pokedex.oranguru.abilities!['0'] = 'Wise Counsel';
+Pokedex.raichualola.abilities!['H'] = 'Mind Current';

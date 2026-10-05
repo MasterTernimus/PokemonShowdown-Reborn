@@ -238,9 +238,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				}
 				for (const foe of pokemon.foes()) {
 					if (!foe.fainted && foe.hp) {
-						// Sinister Blaze's reflected burn is 1/8 max HP, doubled for already-burned foes.
+						// Sinister Blaze's reflected burn is 1/16 max HP, doubled for already-burned foes.
 						// This generated damage does not heal the Sinister Blaze user.
-						const foeDamage = foe.baseMaxhp * (foe.status === 'brn' ? 1 / 4 : 1 / 8);
+						const foeDamage = foe.baseMaxhp * (foe.status === 'brn' ? 1 / 8 : 1 / 16);
 						this.damage(foeDamage, foe, pokemon, this.dex.abilities.get('sinisterblaze'));
 					}
 				}
@@ -451,6 +451,74 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return false;
 		},
 	},
+	nightwatchstate: {
+		name: 'nightwatchstate', noCopy: true,
+	},
+	soulanchortether: {
+		name: 'soulanchortether', noCopy: true,
+		onStart(holder, target) { this.effectState.foe = target; },
+		onResidualOrder: 8,
+		onResidual(holder) {
+			const target = this.effectState.foe;
+			if (!holder.hp || !holder.isActive || !target?.hp || !target.isActive ||
+				target.volatiles['trapped']?.source !== holder || !target.runStatusImmunity('trapped') || target.hasItem('shedshell')) {
+				holder.removeVolatile('soulanchortether');
+				return;
+			}
+			if (!holder.hasAbility('soulanchor')) return;
+			const effect = this.dex.abilities.get('soulanchor');
+			const damage = this.damage(target.baseMaxhp / 16, target, holder, effect);
+			if (damage) this.heal(damage, holder, target, effect);
+		},
+	},
+	guidinglightguard: {
+		name: 'guidinglightguard', noCopy: true, duration: 1,
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status') return this.chainModify(0.8);
+		},
+	},
+	royalescortspent: {name: 'royalescortspent', noCopy: true},
+	royalescortshield: {
+		name: 'royalescortshield', noCopy: true, duration: 2,
+		onDamagePriority: -1,
+		onDamage(damage, target, source, effect) {
+			if (damage <= 0 || effect?.effectType !== 'Move' || (effect as ActiveMove).category === 'Status') return;
+			target.removeVolatile('royalescortshield');
+			return this.modify(damage, 0.75);
+		},
+		onResidualOrder: 100,
+	},
+	knightsreprisalcharge: {name: 'knightsreprisalcharge', noCopy: true},
+	stancechangereprisalspent: {name: 'stancechangereprisalspent', noCopy: true},
+	stancechangereprisalpending: {name: 'stancechangereprisalpending', noCopy: true, duration: 1},
+	faultlinespent: {name: 'faultlinespent', noCopy: true},
+	creepingbloomspent: {name: 'creepingbloomspent', noCopy: true},
+	demolitiontrunkspent: {name: 'demolitiontrunkspent', noCopy: true},
+	siegemagnetspent: {name: 'siegemagnetspent', noCopy: true},
+	dreamrefugespent: {name: 'dreamrefugespent', noCopy: true},
+	wideguardrewardspent: {name: 'wideguardrewardspent', noCopy: true},
+	gentlegiantspent: {name: 'gentlegiantspent', noCopy: true},
+	ringcraftspent: {name: 'ringcraftspent', noCopy: true},
+	gritreprisalcharge: {name: 'gritreprisalcharge', noCopy: true},
+	scentscoutspent: {name: 'scentscoutspent', noCopy: true},
+	crushingvenomspent: {name: 'crushingvenomspent', noCopy: true},
+	crosswirecharge: {name: 'crosswirecharge', noCopy: true},
+	deepchillspent: {name: 'deepchillspent', noCopy: true},
+	climatereservespent: {name: 'climatereservespent', noCopy: true},
+	bloodchallengespent: {name: 'bloodchallengespent', noCopy: true},
+	buriedcoilspent: {name: 'buriedcoilspent', noCopy: true},
+	staticreservespent: {name: 'staticreservespent', noCopy: true},
+	lockinggripspent: {name: 'lockinggripspent', noCopy: true},
+	garlandgiftspent: {name: 'garlandgiftspent', noCopy: true},
+	riotstancespent: {name: 'riotstancespent', noCopy: true},
+	riotstancecharge: {name: 'riotstancecharge', noCopy: true},
+	drumguardspent: {name: 'drumguardspent', noCopy: true},
+	raincourierspent: {name: 'raincourierspent', noCopy: true},
+	lastlaughtormentspent: {name: 'lastlaughtormentspent', noCopy: true},
+	disorientingmindspent: {name: 'disorientingmindspent', noCopy: true},
+	wisecounselspent: {name: 'wisecounselspent', noCopy: true},
+	mindcurrentspent: {name: 'mindcurrentspent', noCopy: true},
+	fortunatewingspent: {name: 'fortunatewingspent', noCopy: true},
 	trapped: {
 		name: 'trapped',
 		noCopy: true,
@@ -476,6 +544,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	},
 	breakwaterspent: {
 		name: 'breakwaterspent',
+		noCopy: true,
+	},
+	toxicevolutionhealed: {
+		name: 'toxicevolutionhealed',
+		duration: 1,
 		noCopy: true,
 	},
 	mythicscalespent: {
@@ -534,6 +607,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(pokemon, source, effect) {
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
+			if (effect.id === 'sandtomb' && source.hasAbility('faultline') && !pokemon.isAlly(source) && !source.volatiles['faultlinespent']) {
+				source.addVolatile('faultlinespent', source, this.dex.abilities.get('faultline'));
+				pokemon.side.addSideCondition('spikes', source, this.dex.abilities.get('faultline'));
+			}
 			const moveBoosts: Record<string, readonly string[]> = {
 				firespin: ['burningterrain', 'hauntedterrain'],
 				whirlpool: ['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'],
@@ -553,6 +630,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onResidualOrder: 13,
 		onResidual(pokemon) {
 			const source = this.effectState.source;
+			if (this.effectState.constrictingHeatTurns && (!source?.hasAbility('constrictingheat') || source.volatiles['dynamax'])) {
+				pokemon.removeVolatile('partiallytrapped'); return;
+			}
+			if (this.effectState.infernalDominionTurns && (!source?.hasAbility('infernaldominion') || source.species.isMega)) {
+				pokemon.removeVolatile('partiallytrapped'); return;
+			}
 			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
 			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
 			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns && !gmaxEffect)) {
@@ -568,6 +651,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const divisor = this.effectState.sourceEffect.id === 'infestation' && stage >= 3 ?
 				({3: 6, 4: 4, 5: 3} as Record<number, number>)[stage] : this.effectState.boundDivisor;
 			this.damage(pokemon.baseMaxhp / divisor);
+			if (this.effectState.infernalDominionTurns && --this.effectState.infernalDominionTurns === 0) pokemon.removeVolatile('partiallytrapped');
+			if (this.effectState.constrictingHeatTurns && --this.effectState.constrictingHeatTurns === 0) pokemon.removeVolatile('partiallytrapped');
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');
@@ -1217,6 +1302,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'Dynamax',
 		noCopy: true,
 		onStart(pokemon) {
+			for (const foe of this.getAllActive()) {
+				const trap = foe.volatiles['partiallytrapped'];
+				if (trap?.source === pokemon && trap.constrictingHeatTurns) foe.removeVolatile('partiallytrapped');
+			}
 			this.effectState.turns = 0;
 			if (pokemon.gigantamax || pokemon.species.forme?.includes('Gmax')) {
 				// Switching removes the volatile but keeps the Gmax form and its spent PP.

@@ -160,7 +160,7 @@ describe('Approved signature batch', () => {
 		assert.equal(source.hp, before); assert.equal(target.boosts.spe, -1);
 		const hp = target.hp;
 		use(source, target, 'bite', { basePower: 10, secondaries: undefined });
-		assert.equal(source.hp, before + Math.round((hp - target.hp) / 2));
+		assert.equal(source.hp, before + Math.round((hp - target.hp) / 4));
 	});
 	it('Frozen Feast does not double a successful move Speed drop or drain Substitute damage', () => {
 		const [source, target] = start('Frozen Feast');

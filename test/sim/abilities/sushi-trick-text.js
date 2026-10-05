@@ -4,7 +4,7 @@ const common = require('../../common');
 describe('Sushi Trick approved wording', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
-	it('keeps exact descriptions, Hospitality identity, healing, confusion cure and the existing message', () => {
+	it('keeps updated descriptions, Hospitality identity, ally healing and the existing message', () => {
 		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
 			[{ species: 'Tatsugiri', ability: 'Sushi Trick', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
@@ -12,8 +12,8 @@ describe('Sushi Trick approved wording', () => {
 		battle.makeChoices('team 12', 'team 12');
 		const [p, ally] = battle.p1.active;
 		const ability = p.getAbility();
-		assert.equal(ability.desc, "On entry, restores 1/4 of each adjacent ally's maximum HP and cures its confusion.");
-		assert.equal(ability.shortDesc, 'On entry, heals adjacent allies by 1/4 max HP and cures confusion.');
+		assert.equal(ability.desc, "On entry, heals each adjacent active ally by 1/4 maximum HP and removes its confusion. If there is no adjacent active ally to serve, instead clears its own confusion and negative accuracy stages, preserving positive accuracy, without self-healing.");
+		assert.equal(ability.shortDesc, "Entry heals adjacent allies 1/4 HP and clears confusion; alone, clears own confusion and negative accuracy.");
 		assert(p.hasAbility('hospitality'));
 		ally.hp = 1; ally.addVolatile('confusion');
 		const from = battle.log.length;

@@ -16,9 +16,9 @@ describe('Approved Conkeldurr, Seismitoad, and Frosmoth abilities', () => {
 	}
 
 	it('exposes the approved slots and Frosmoth stats', () => {
-		const [holder] = singles('Conkeldurr', 'Forge Grit');
+		const [holder] = singles('Conkeldurr', 'Grit Reprisal');
 		assert.deepEqual(holder.species.abilities,
-			{0: 'Forge Grit', 1: 'Stamina', H: "Mason's Fist"});
+			{0: 'Grit Reprisal', 1: 'Stamina', H: 'Wrecking Crew'});
 		assert.equal(holder.hasAbility('guts'), true);
 		assert.equal(battle.dex.species.get('Frosmoth').abilities[1], 'Silk Ward');
 		assert.deepEqual(battle.dex.species.get('Frosmoth').baseStats,

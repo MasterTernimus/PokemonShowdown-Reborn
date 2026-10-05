@@ -23,7 +23,7 @@ export const RosterExpansionDescriptions: { [id: string]: string } = {
 	finalnote: 'Once per switch-in, its first sound move selected while at half HP or less gains +1 priority. Using it spends the effect even if it misses or is blocked.',
 	livingtangle: 'Tangling Hair + Stamina. Contact attackers lose 1 Speed stage. Opposing hits raise Defense once per turn and restore 1/16 maximum HP per hit, as this server\'s Stamina does.',
 	rootrenewal: 'Regenerator. Switching out restores 1/3 maximum HP and cures one adjacent active ally\'s major status condition.',
-	guidingomen: 'Friend Guard + Serene Grace. Once per switch-in, successfully applying a move secondary effect creates a ward that blocks the next opposing stat-drop event against an adjacent ally. Retains both components\' effects.',
+	guidingomen: 'Mold Breaker + Friend Guard + Serene Grace. Once per switch-in, successfully applying a move secondary effect creates a ward that blocks the next opposing stat-drop event against an adjacent ally. Retains both components\' effects.',
 	fortunatewing: 'Super Luck. Once per switch-in, its first critical hit to damage a foe creates Safeguard for 5 turns. Does not shorten an existing longer Safeguard.',
 	snowpack: 'Thick Fat + Ice Body + Tough Claws. Includes reduced Fire/Ice damage, contact-move power, weather/field healing, and this server\'s Ice Body contact-freeze chance.',
 	icemirror: 'Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker\'s Speed by 1 stage.',
@@ -41,7 +41,7 @@ export const RosterExpansionDescriptions: { [id: string]: string } = {
 	secondbrew: 'Once per turn, when this Pokemon receives draining-move healing, it also restores 1/8 of the lowest-HP adjacent ally\'s maximum HP.',
 	anchorbridge: 'Sturdy and Solid Rock: survives a fatal hit at full HP, blocks OHKO moves, and takes 0.8x attack damage (0.6x if super effective).',
 	railsight: 'Stalwart. Once per entry, surviving a whole opposing damaging move that hits HP charges the next Electric attack to 1.5x power. Executed misses, protection and immunity consume it; switching clears it.',
-	execution: 'Duskilate. Attacks against targets at half HP or less gain 1.3x power. Once per switch-in, a direct hit that brings a surviving foe from above half HP to half or less marks it; the next Dark or Ghost hit against that foe ignores positive defensive boosts and spends the mark. The mark ends if either Pokemon switches. Restores 1/8 maximum HP per KO; Attack and Sp. Atk cannot fall below -1, and Speed cannot be lowered while a field is active. Retains Duskilate field effects.',
+	execution: 'Duskilate + Mold Breaker. Attacks against targets at half HP or less gain 1.3x power. Once per switch-in, a direct hit that brings a surviving foe from above half HP to half or less marks it; the next Dark or Ghost hit against that foe ignores positive defensive boosts and spends the mark. The mark ends if either Pokemon switches. Restores 1/8 maximum HP per KO; Attack and Sp. Atk cannot fall below -1, and Speed cannot be lowered while a field is active. Retains Duskilate field effects.',
 };
 
 Object.assign(RosterExpansionDescriptions, {
@@ -71,7 +71,7 @@ Object.assign(RosterExpansionDescriptions, {
 	bloodchallenge: 'Its first opposing direct hit each entry deals 25% less damage. Counter can retaliate against either physical or special attacks.',
 	twilightinstinct: 'Consecutive damaging attacks landed on the same foe gain +1 critical-hit stage per repeat, up to +2. Missing, being blocked or changing targets resets the chain; status moves pause it.',
 	twincannons: 'Single-target special Fire and Psychic attacks hit twice at half power per hit (full power in FFA). In FFA the second hit targets a random different eligible foe, or the original foe if none exists; elsewhere it redirects after a KO. Both use Sp. Atk: the first targets Sp. Def, the second Defense. Secondary effects roll only on the first hit. Excludes Z/Max, fixed-damage and existing multi-hit moves.',
-	twinblades: 'Single-target Fire and Ghost slicing attacks hit twice at half power per hit (full power in FFA). In FFA the second hit targets a random different eligible foe, or the original foe if none exists; elsewhere it redirects after a KO. The second hit ignores positive defensive stages. Secondary effects roll only on the first hit. Excludes Z/Max, fixed-damage and existing multi-hit moves.',
+	twinblades: 'Single-target Fire and Ghost slicing attacks hit twice at half power per hit (60% power per hit in FFA). In FFA the second hit targets a random different eligible foe, or the original foe if none exists; elsewhere it redirects after a KO. The second hit ignores positive defensive stages. Secondary effects roll only on the first hit. Excludes Z/Max, fixed-damage and existing multi-hit moves.',
 	heatreservoir: 'Flash Fire. After a boosted Armor Cannon deals damage, consumes the Flash Fire charge to prevent Armor Cannon\'s own Defense and Sp. Def drops. Retains Flash Fire\'s field effects.',
 	mourningcoat: 'Fluffy. After a teammate has fainted, Fluffy\'s extra Fire weakness is removed for the rest of battle; contact damage reduction remains.',
 	gravewind: 'Sand Rush. Entering directly into a fainted teammate\'s slot summons sandstorm for 3 turns. Does not shorten or refresh an existing sandstorm.',
@@ -140,9 +140,9 @@ Object.assign(RosterExpansionDescriptions, {
 export const RosterExpansionShortDescriptions: { [id: string]: string } = {
 	sushitrick: "On entry, heals adjacent allies by 1/4 max HP and cures confusion.",
 	suncharm: 'Drought; first Fire hit adds 1 sun turn (max 8); first burn also curses the foe.',
-	guidingomen: 'Friend Guard + Serene Grace; first secondary effect shields an ally from a stat drop.',
+	guidingomen: 'Mold Breaker + Friend Guard + Serene Grace; first secondary effect shields an ally from a stat drop.',
 	layeredshell: 'Shell Armor; the first special hit each entry deals 25% less damage.',
-	execution: 'Duskilate; stronger against low-HP foes; a hit crossing half HP marks them for defense bypass.',
+	execution: 'Duskilate + Mold Breaker; low-HP power and defense-bypass marks.',
 	sovereignarsenal: 'Poison/Ground attacks use the stronger damage category; horn and tail moves crit more often.',
 	tidalvoice: 'Liquid Voice; 1.3x sound, spares allies, first hit clears drops; Aria heals adjacent allies 1/8.',
 	twincannons: 'Fire/Psychic attacks hit twice; the second hit targets Defense instead of Sp. Def.',

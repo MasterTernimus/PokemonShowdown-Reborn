@@ -1,3 +1,4 @@
+import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 import { AbilityComponents } from '../data/ability-components';
 /**
@@ -1389,6 +1390,47 @@ export class Pokemon {
 		}
 	}
 
+	/** Install once per form, keeping the actual slots (and their spent PP) on re-entry. */
+	applyPulseFixedMoves() {
+		const moves = PULSE_FIXED_MOVES[this.species.id];
+		if (!moves) return;
+		this.m.pulseFixedMoveSlots ||= {};
+		let slots: MoveSlot[] = this.m.pulseFixedMoveSlots[this.species.id];
+		if (!slots) {
+			slots = moves.map((id, index) => {
+				const move = this.battle.dex.moves.get(id);
+				const current = this.baseMoveSlots.find(slot => slot.id === move.id) || this.baseMoveSlots[index];
+				const maxpp = this.battle.calculatePP(move, 3);
+				return {
+					move: move.name, id: move.id, maxpp,
+					pp: Math.max(0, maxpp - (current ? current.maxpp - current.pp : 0)),
+					target: move.target, disabled: false, disabledSource: '', used: false,
+				};
+			});
+			this.m.pulseFixedMoveSlots[this.species.id] = slots;
+		}
+		this.baseMoveSlots.splice(0, this.baseMoveSlots.length, ...slots);
+		this.moveSlots = slots.slice();
+		this.ppUps = moves.map(() => 3);
+		this.set.moves = slots.map(slot => slot.move);
+	}
+
+	/** These are species forms, independent of the holder's current ability. */
+	isPulseOrRift() {
+		return this.species.forme.split('-').some(part => part === 'Pulse' || part === 'Rift');
+	}
+
+	/** Check before any HP normalization (including ending Dynamax). */
+	checkPulseEvolution(species: Species, source: Effect | null = this.battle.effect) {
+		if (species.id !== 'cameruptpulse' || this.species.id === 'cameruptpulse' || !this.maxhp) return true;
+		if (this.hp === this.maxhp) return true;
+		if (this.hp && !this.faintQueued) {
+			this.battle.add('-message', 'Camerupt must be at full HP to undergo Pulse Evolution!');
+			this.faint(this, source);
+		}
+		return false;
+	}
+
 	copyVolatileFrom(pokemon: Pokemon, switchCause?: string | boolean) {
 		this.clearVolatile();
 		if (switchCause !== 'shedtail') this.boosts = pokemon.boosts;
@@ -1406,11 +1448,15 @@ export class Pokemon {
 				}
 			}
 		}
+		// Transfers happen before the switch message. Remove now; the caller logs after switching.
+		const brokeSubstitute = !!this.volatiles['substitute'] && this.isPulseOrRift();
+		if (brokeSubstitute) delete this.volatiles['substitute'];
 		pokemon.clearVolatile();
 		for (const i in this.volatiles) {
 			const volatile = this.getVolatile(i) as Condition;
 			this.battle.singleEvent('Copy', volatile, this.volatiles[i], this);
 		}
+		return brokeSubstitute;
 	}
 
 	transformInto(pokemon: Pokemon, effect?: Effect) {
@@ -1533,7 +1579,10 @@ export class Pokemon {
 	setSpecies(rawSpecies: Species, source: Effect | null = this.battle.effect, isTransform = false) {
 		const species = this.battle.runEvent('ModifySpecies', this, null, source, rawSpecies);
 		if (!species) return null;
+		if (!isTransform && !this.checkPulseEvolution(species, source)) return null;
 		this.species = species;
+		if (this.isPulseOrRift() && this.volatiles['substitute']) this.removeVolatile('substitute');
+		if (!isTransform) this.applyPulseFixedMoves();
 
 		this.setType(species.types, true);
 		this.apparentType = rawSpecies.types.join('/');
@@ -2174,6 +2223,7 @@ export class Pokemon {
 	): boolean | any {
 		let result;
 		status = this.battle.dex.conditions.get(status);
+		if (status.id === 'substitute' && this.isPulseOrRift()) return false;
 		if (!this.hp && !status.affectsFainted) return false;
 		if (linkedStatus && source && !source.hp) return false;
 		if (this.battle.event) {

@@ -41,7 +41,7 @@ describe('Muk-Pulse custom effects', () => {
 		assert(muk.hasAbility('poisontouch'));
 		assert(muk.hasAbility('regenerator'));
 		battle.random = () => 0;
-		battle.makeChoices('move tackle', 'move splash');
+		battle.actions.runMove('tackle', muk, muk.getLocOf(target), {externalMove: true});
 		assert.equal(target.status, 'psn');
 	});
 
@@ -58,7 +58,7 @@ describe('Muk-Pulse custom effects', () => {
 		assert.equal(muk.species.name, 'Muk-Pulse');
 		assert(muk.hasAbility('protean'));
 		assert(muk.hasAbility('regenerator'));
-		battle.makeChoices('move watergun', 'move splash');
+		battle.makeChoices('move muddywater', 'move splash');
 		assert.deepEqual(muk.getTypes(), ['Water']);
 		muk.damage(Math.floor(muk.maxhp / 2));
 		const hpBeforeSwitch = muk.hp;

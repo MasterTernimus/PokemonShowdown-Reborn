@@ -1,3 +1,4 @@
+import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 /**
  * Team Validator
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -14,6 +15,7 @@ import { Tags } from '../data/tags';
 import { Teams } from './teams';
 import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
+import { StarterEeveeMoveExceptions } from '../data/eevee-ability-move-exceptions';
 import { AEVIAN_GRIEF_MOVES } from '../data/aevian-grief-moves';
 
 /**
@@ -453,6 +455,8 @@ export class TeamValidator {
 				}
 			}
 			if (setProblems) {
+				setProblems = setProblems.map(problem => problem.includes('has exactly 0 EVs') ?
+					`Team slot ${team.indexOf(set) + 1} (${set.species}): ${problem}` : problem);
 				problems = problems.concat(setProblems);
 			}
 			if (options.removeNicknames) {
@@ -574,6 +578,11 @@ export class TeamValidator {
 		}
 
 		let species = dex.species.get(set.species);
+		const pulseMoves = PULSE_FIXED_MOVES[species.id];
+		if (pulseMoves && (!Array.isArray(set.moves) || set.moves.length !== 4 ||
+			pulseMoves.some(move => !set.moves.map(toID).includes(move as ID)))) {
+			return [`${species.name} must use exactly ${pulseMoves.map(id => dex.moves.get(id).name).join(', ')}.`];
+		}
 		set.species = species.name;
 		// Backwards compatibility with old Gmax format
 		if (set.species.toLowerCase().endsWith('-gmax') && this.format.id !== 'gen8megamax') {
@@ -1644,7 +1653,8 @@ export class TeamValidator {
 			set.species = 'Terapagos';
 			set.ability = 'Tera Shift';
 		} else if (species.battleOnly) {
-			if (species.requiredAbility && set.ability !== species.requiredAbility) {
+			if (species.requiredAbility && set.ability !== species.requiredAbility &&
+				!(species.baseSpecies === 'Castform' && set.ability === 'Climate Reserve')) {
 				// Darmanitan-Zen
 				problems.push(`${species.name} transforms in-battle with ${species.requiredAbility}, please fix its ability.`);
 			}
@@ -2549,6 +2559,9 @@ export class TeamValidator {
 		move = dex.moves.get(move);
 		const moveid = move.id;
 		const baseSpecies = dex.species.get(originalSpecies);
+		if (dex.gen >= 9 && ['eeveestarter', 'eeveestarteralt', 'divineon'].includes(baseSpecies.id) &&
+			StarterEeveeMoveExceptions[toID(set.ability)]?.includes(moveid)) return null;
+
 
 		const format = this.format;
 		const ruleTable = this.ruleTable;
@@ -2985,4 +2998,11 @@ export class TeamValidator {
 	static get(format: string | Format) {
 		return new TeamValidator(format);
 	}
+}
+
+/** Plain-text owner attribution, only for the existing zero-EV diagnostic. */
+export function attributeZeroEVProblems(problems: string[], owner?: string): string[] {
+	if (!owner) return problems;
+	const name = Dex.getName(owner);
+	return problems.map(problem => problem.includes('has exactly 0 EVs') ? `Player ${name}: ${problem}` : problem);
 }

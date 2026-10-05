@@ -18,7 +18,7 @@ describe('Approved Breakwater, Meowstic, Heavy Artillery and Mythic Scale',()=>{
  const hazards=['spikes','toxicspikes','stealthrock','stickyweb','gmaxsteelsurge'];
  function addHazards(side,p){for(const h of hazards)side.addSideCondition(h,p);}
  it('assigns Breakwater without changing Swift Swim or Arrokuda',()=>{
-  assert.deepEqual(Dex.species.get('barraskewda').abilities,{0:'Swift Swim',H:'Breakwater'});
+  assert.deepEqual(Dex.species.get('barraskewda').abilities,{0:'Swift Swim',1:'Pursuit Wake',H:'Breakwater'});
   assert.equal(Dex.species.get('arrokuda').abilities.H,'Propeller Tail');
   const[p]=setup();assert(p.hasAbility('propellertail'));
  });
@@ -115,9 +115,9 @@ describe('Approved Breakwater, Meowstic, Heavy Artillery and Mythic Scale',()=>{
   t.addVolatile('protect');hit(p,t,'sleeppowder');t.removeVolatile('protect');t.addVolatile('substitute');hit(p,t,'sleeppowder');t.removeVolatile('substitute');
   t.setType('Grass');hit(p,t,'sleeppowder');t.setType('Psychic');t.setStatus('psn',t);hit(p,t,'sleeppowder');assert.equal(p.boosts.def,0);assert(!p.volatiles.mythicscalespent);
  });
- it('Gmax Befuddle and called powder status cannot grant Defense',()=>{
+ it('direct Gmax Befuddle grants Defense but called powder does not',()=>{
   const[p,t]=setup('Mythic Scale',false,'Butterfree-Gmax');hit(p,t,'sleeppowder',{sourceEffect:'sleeptalk'});assert.equal(p.boosts.def,0);t.cureStatus();
-  hit(p,t,'gmaxbefuddle',{basePower:1});assert(t.status);assert.equal(p.boosts.def,0);
+  hit(p,t,'gmaxbefuddle',{basePower:1});assert(t.status);assert.equal(p.boosts.def,1);
  });
  it('FFA spread powder can reward only one Defense boost total',()=>{
   const[p]=setup('Mythic Scale',true,'Butterfree-Gmax');battle.field.terrain='';const t=battle.p2.active[0];hit(p,t,'sleeppowder',{target:'allAdjacentFoes'});

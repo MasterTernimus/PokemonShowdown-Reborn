@@ -1,3 +1,4 @@
+import { PULSE_FIXED_MOVES } from './pulse-fixed-moves';
 import {Gen8Gen9NatDexLearnsets} from './natdex-gen8-gen9-learnsets';
 import {Pokedex} from './pokedex';
 import {AEVIAN_GRIEF_MOVE_IDS} from './aevian-grief-moves';
@@ -82618,9 +82619,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hex: ["9M", "8M"],
 			hiddenpower: ["9M", "7M"],
 			hurricane: ["9M", "8M"],
-			hyperbeam: ["9M", "8M"],
-			iciclespear: ["9M"],
-			imprison: ["9M", "8M"],
+			hyperbeam: ["9M", "8M"],			imprison: ["9M", "8M"],
 			knockoff: ["9M"],
 			laserfocus: ["9L1", "7T"],
 			leafage: ["9L4", "8L1", "7L1"],
@@ -82663,9 +82662,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			snipeshot: ["9L1"],
 			snore: ["9M", "8M", "7T"],
 			solarbeam: ["9M", "8M", "7M"],
-			solarblade: ["9M", "8M"],
-			spikecannon: ["9M"],
-			spiritshackle: ["9L39", "8L0", "7L1"],
+			solarblade: ["9M", "8M"],			spiritshackle: ["9L39", "8L0", "7L1"],
 			spite: ["9L1", "8L1", "7T"],
 			steelwing: ["9M", "8M", "7M"],
 			substitute: ["9M", "8M", "7M"],
@@ -82737,9 +82734,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			helpinghand: [],
 			hex: [],
 			hurricane: [],
-			hyperbeam: [],
-			iciclespear: ["9M"],
-			imprison: [],
+			hyperbeam: [],			imprison: [],
 			knockoff: [],
 			laserfocus: [],
 			leafage: ["9L4"],
@@ -82782,9 +82777,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			snipeshot: ["9M"],
 			solarbeam: [],
 			solarblade: [],
-			spikes: ["9L1"],
-			spikecannon: ["9M"],
-			spiritshackle: ["9M"],
+			spikes: ["9L1"],			spiritshackle: ["9M"],
 			spite: [],
 			steelwing: [],
 			stomp: ["9M"],
@@ -112068,6 +112061,13 @@ if (samurottLearnset && hisuianSamurottLearnset) {
 }
 
 export const CustomLearnsetRemovals: {[id: string]: string[]} = {
+	// Decidueye-family removal includes pre-evolution and cosmetic inheritance routes.
+	rowlet: ['iciclespear', 'spikecannon'],
+	dartrix: ['iciclespear', 'spikecannon'],
+	decidueye: ['iciclespear', 'spikecannon'],
+	decidueyehisui: ['iciclespear', 'spikecannon'],
+	decidueyealt: ['iciclespear', 'spikecannon'],
+	decidueyehisuialt: ['iciclespear', 'spikecannon'],
 	// Hidden Power and all typed variants are removed globally from legality and the team builder.
 	pidgeot: ['bleakwindstorm', 'windbolt', 'searingshot', 'springtidestorm'],
 	claydol: ['lightofruin', 'shoreup', 'lusterpurge'], chimecho: ['lightofruin'],
@@ -113162,3 +113162,8 @@ Learnsets.lumineon.learnset!.haze = ['9L1'];
 
 // Tentacruel can clear one foe's boosts without resetting the entire field.
 Learnsets.tentacruel.learnset!.clearsmog = ['9M'];
+
+// Pulse-only battle sets; do not add these moves to ordinary forms.
+for (const [id, moves] of Object.entries(PULSE_FIXED_MOVES)) {
+	Learnsets[id as ID] = {learnset: Object.fromEntries(moves.map(move => [move, ['9L1']]))};
+}

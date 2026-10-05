@@ -207,7 +207,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			if (!foeHit(damage, target, source) || move !== this.effectState.feastMove) return;
 			if (move.type === 'Ice') this.effectState.feastHit.add(target);
 			if (move.flags.bite && this.effectState.feastSlowed.has(target) && !move.drain) {
-				this.heal(Math.round(damage / 2), source, target, 'drain');
+				this.heal(Math.round(damage / 4), source, target, 'drain');
 			}
 		},
 		onAfterMove(source, target, move) {

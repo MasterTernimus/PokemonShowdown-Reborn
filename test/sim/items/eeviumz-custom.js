@@ -30,6 +30,18 @@ describe('Eevee balance and Eevium Z', () => {
    assert.equal(p.hp - hp, species === 'Mew' ? 0 : Math.floor(p.baseMaxhp / 16));
   });
  }
+
+ it('restores only each ability-specific exception pool', () => {
+  const {StarterEeveeMoveExceptions} = require('../../../dist/data/eevee-ability-move-exceptions');
+  const validator = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Moves');
+  for (const species of ['Eevee-Starter', 'Eevee-Starter-Alt', 'Divineon']) {
+   for (const [ability, moves] of Object.entries(StarterEeveeMoveExceptions)) {
+    for (const move of moves) assert.equal(validator.validateTeam([{species, ability, moves: [move]}]), null, species + '/' + ability + '/' + move);
+    const errors = validator.validateTeam([{species, ability, moves: ['victorydance']}]);
+    assert(errors?.some(error => /learn/i.test(error)));
+   }
+  }
+ });
  it('preserves both Z-Move triggers', () => {
   assert.deepEqual(Dex.items.get('eeviumz').zMoveFrom, ['Last Resort', 'Veevee Volley']);
   assert.equal(Dex.items.get('eeviumz').zMove, 'Extreme Evoboost');

@@ -20,12 +20,12 @@ describe('Royal Sun full components', () => {
 		const components = require('../../../dist/data/ability-components').AbilityComponents.royalsun;
 		assert.deepEqual(components, ['drought', 'supremeoverlord', 'unnerve', 'flamebody']);
 	});
-	it('keeps the uncapped local power scaling and all fallen thresholds, without repeated stat boosts', () => {
+	it('keeps the capped local power scaling and all fallen thresholds, without repeated stat boosts', () => {
 		const [p, foe] = start();
 		const move = battle.dex.getActiveMove('tackle');
 		for (const n of [0, 1, 2, 4, 5, 6]) {
 			p.side.totalFainted = n;
-			assert.equal(battle.runEvent('BasePower', p, foe, move, 100), 100 + 10 * n);
+			assert.equal(battle.runEvent('BasePower', p, foe, move, 100), 100 + 10 * Math.min(5, n));
 		}
 		p.side.totalFainted = 2;
 		battle.singleEvent('ModifyMove', p.getAbility(), p.abilityState, move, p, foe);

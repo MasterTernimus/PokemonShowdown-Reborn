@@ -1,3 +1,4 @@
+import type {PokemonConditionData, FieldConditionData, SideConditionData} from '../sim/dex-conditions';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { cureRestorativeStatus } from './approved-signatures';
 /* eslint-disable @stylistic/max-len */
@@ -476,7 +477,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 100,
 			onHit(target, source, move) {
-				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+				if (source.isActive && target.addVolatile('trapped', source, move, 'trapper') &&
+					source.hasAbility('soulanchor') && !target.isAlly(source) && target.runStatusImmunity('trapped') && !target.hasItem('shedshell')) {
+					source.removeVolatile('soulanchortether');
+					source.addVolatile('soulanchortether', target, this.dex.abilities.get('soulanchor'));
+				}
 			},
 		},
 		target: "normal",
@@ -7676,11 +7681,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				for (const pokemon of source.foes()) {
 					const result = this.random(3);
 					if (result === 0) {
-						pokemon.trySetStatus('slp', source);
+						pokemon.trySetStatus('slp', source, this.activeMove);
 					} else if (result === 1) {
-						pokemon.trySetStatus('par', source);
+						pokemon.trySetStatus('par', source, this.activeMove);
 					} else {
-						pokemon.trySetStatus('psn', source);
+						pokemon.trySetStatus('psn', source, this.activeMove);
 					}
 				}
 			},
@@ -9872,7 +9877,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback(pokemon, target, move) {
-			if (target.status || target.hasAbility('comatose')) {
+			if (target.status || target.hasAbility('comatose') || (pokemon.hasAbility('hauntingpresence') &&
+				['taunt', 'encore', 'disable', 'healblock'].some(id => !!target.volatiles[id]))) {
 				this.debug('BP doubled from status condition');
 				return move.basePower * 2;
 			}
@@ -11322,6 +11328,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 				}
+				if (move.category !== 'Status' && !source.isAlly(target) && this.checkMoveMakesContact(move, source, target) &&
+					target.hasAbility('stancechange') && target.species.baseSpecies === 'Aegislash' && target.species.id !== 'aegislashgmax' &&
+					!target.transformed && !target.volatiles['stancechangereprisalspent'] && !target.volatiles['stancechangereprisalpending']) {
+					target.addVolatile('stancechangereprisalpending', target, this.dex.abilities.get('stancechange'));
+					const pending = target.volatiles['stancechangereprisalpending'] as any;
+					if (pending) { pending.foe = source; pending.move = move.id; }
+				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
@@ -12481,11 +12494,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		stallingMove: true,
 		sideCondition: 'matblock',
 		onTry(source) {
+			if (source.hasAbility('shadowscreen')) return !!this.queue.willAct() && this.runEvent('StallMove', source);
 			if (source.activeMoveActions > 1) {
 				this.hint("Mat Block only works on your first turn out.");
 				return false;
 			}
 			return !!this.queue.willAct();
+		},
+		onHitSide(side, source) {
+			if (source.hasAbility('shadowscreen')) source.addVolatile('stall');
 		},
 		condition: {
 			duration: 1,
@@ -20369,6 +20386,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (this.checkMoveMakesContact(move, source, target)) {
 					this.damage(source.baseMaxhp / 8, source, target);
 				}
+				if (move.category !== 'Status' && !source.isAlly(target) && target.hasAbility('knightsreprisal')) {
+					target.addVolatile('knightsreprisalcharge', target, this.dex.abilities.get('knightsreprisal'));
+				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
@@ -20645,7 +20665,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			noCopy: true, // doesn't get copied by Baton Pass
-			onStart(pokemon) {
+			onStart(pokemon, source, effect) {
+				const move = effect as ActiveMove;
+				if (source && source !== pokemon && pokemon.isAlly(source) && source.hasAbility('guidinglight') &&
+					move?.effectType === 'Move' && move.id === 'spotlight' && !move.hasBounced && !move.isExternal) {
+					pokemon.addVolatile('guidinglightguard', source, this.dex.abilities.get('guidinglight'));
+				}
 				this.add('-singleturn', pokemon, 'move: Spotlight');
 			},
 			onAnyRedirectTargetPriority: 2,
@@ -21324,6 +21349,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, nonsky: 1, metronome: 1 },
 		volatileStatus: 'substitute',
 		onTryHit(source) {
+			if (source.isPulseOrRift()) {
+				this.add('-fail', source, 'move: Substitute');
+				return this.NOT_FAIL;
+			}
 			if (source.volatiles['substitute']) {
 				this.add('-fail', source, 'move: Substitute');
 				return this.NOT_FAIL;
@@ -23215,7 +23244,27 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, kick: 1, metronome: 1, arrow: 1 },
 		critRatio: 2,
 		self: {
-			sideCondition: 'gmaxchistrike',
+			onHit(source) {
+				// Current species follows Transform; every successful hit can add a side layer.
+				if (['decidueyehisui', 'decidueyehisuialt'].includes(source.species.id)) {
+					source.side.addSideCondition('triplearrows', source);
+				}
+			},
+		},
+		condition: {
+			// The original side scope has no timer. Use side lifecycle hooks, not Chi Strike's volatile hooks.
+			onSideStart(side) {
+				this.effectState.layers = 1;
+				this.add('-sidestart', side, 'move: Triple Arrows');
+			},
+			onSideRestart(side) {
+				if (this.effectState.layers >= 3) return false;
+				this.effectState.layers++;
+				this.add('-sidestart', side, 'move: Triple Arrows');
+			},
+			onModifyCritRatio(critRatio) {
+				return critRatio + this.effectState.layers;
+			},
 		},
 		secondaries: [
 			{
@@ -24245,6 +24294,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source) {
+				this.effectState.moonlitPromise = source.hasAbility('moonlitpromise');
 				if (source.hasAbility('restorativechime')) {
 					this.effectState.restorativeEntry = source.m.approvedSignatures ||= {};
 				}
@@ -24256,6 +24306,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 4,
 			onEnd(target) {
 				if (target && !target.fainted) {
+					if (this.effectState.moonlitPromise) {
+						let changed = false;
+						for (const stat in target.boosts) if (target.boosts[stat as BoostID] < 0) { target.boosts[stat as BoostID] = 0; changed = true; }
+						if (changed) this.add('-clearnegativeboost', target, '[from] ability: Moonlit Promise');
+					}
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
 						if (this.effectState.restorativeEntry) cureRestorativeStatus(target, this.effectState.restorativeEntry);
@@ -24472,7 +24527,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		volatileStatus: 'yawn',
 		onTryHit(target) {
-			if (target.status || !target.runStatusImmunity('slp')) {
+			if (target.status || target.hasAbility('comatose') || !target.runStatusImmunity('slp')) {
 				return false;
 			}
 		},
@@ -24870,3 +24925,114 @@ for (const id of ['protect', 'banefulbunker', 'burningbulwark', 'kingsshield', '
 		return result;
 	};
 }
+
+// Bonuses tied to successful native move effects, not attempted or failed actions.
+const patientFocusCondition = Moves.focusenergy.condition as PokemonConditionData;
+const patientFocusStart = patientFocusCondition.onStart!;
+Moves.focusenergy.condition = {...patientFocusCondition, onStart: function (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) {
+	const result = patientFocusStart.call(this, target, source, effect);
+	if (result !== false && effect?.id === 'focusenergy' && target.hasAbility('patientmarksman')) {
+		target.removeVolatile('confusion');
+		if (target.boosts.accuracy < 0) {
+			target.boosts.accuracy = 0;
+			this.add('-setboost', target, 'accuracy', 0, '[from] ability: Patient Marksman');
+		}
+	}
+	return result;
+}};
+const cradleRoomCondition = Moves.trickroom.condition as FieldConditionData;
+const cradleRoomStart = cradleRoomCondition.onFieldStart!;
+cradleRoomCondition.onFieldStart = function (target, source, effect) {
+	const result = cradleRoomStart.call(this, target, source, effect);
+	if (source?.hasAbility('cradleward') && effect?.id === 'trickroom' && source.side.addSideCondition('safeguard', source, this.dex.abilities.get('cradleward'))) {
+		source.side.sideConditions['safeguard'].duration = 5;
+	}
+	return result;
+};
+const dreamMoonlightHit = Moves.moonlight.onHit!;
+Moves.moonlight.onHit = function (target, source, move) {
+	const result = typeof dreamMoonlightHit === 'function' ? dreamMoonlightHit.call(this, target, source, move) : dreamMoonlightHit;
+	if (result === true && target.hasAbility('dreamrefuge') && !target.volatiles['dreamrefugespent']) {
+		target.addVolatile('dreamrefugespent', target, this.dex.abilities.get('dreamrefuge'));
+		const ally = target.allies().filter(p => p.hp && p.status).sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp)[0];
+		if (ally) ally.cureStatus();
+	}
+	return result;
+};
+
+const frillElectrify = Moves.electrify.condition as PokemonConditionData;
+const frillElectrifyType = frillElectrify.onModifyType!;
+frillElectrify.onModifyType = function (move, pokemon, target) {
+	const converted = move.id !== 'struggle' && move.type !== 'Electric';
+	const result = frillElectrifyType.call(this, move, pokemon, target);
+	const caster = this.effectState.source;
+	if (converted && move.type === 'Electric' && caster?.hasAbility('frillflash') && !caster.isAlly(pokemon)) {
+		this.effectState.frillMove = move;
+		this.effectState.frillCaster = caster;
+	}
+	return result;
+};
+frillElectrify.onAfterMove = function (pokemon, target, move) {
+	if (this.effectState.frillMove !== move) return;
+	const caster = this.effectState.frillCaster;
+	delete this.effectState.frillMove;
+	delete this.effectState.frillCaster;
+	const alreadyDisabled = !!pokemon.volatiles['disable'];
+	if (!pokemon.hp || !pokemon.isActive || !caster || alreadyDisabled) return;
+	const lastMove = pokemon.lastMove;
+	pokemon.lastMove = move;
+	try {
+		const eligible = Moves.disable.onTryHit;
+		if (typeof eligible === 'function' && eligible.call(this, pokemon, caster, move) === false) return;
+		if (pokemon.addVolatile('disable', caster, this.dex.abilities.get('frillflash'))) pokemon.volatiles['disable'].duration = 2;
+	} finally {
+		pokemon.lastMove = lastMove;
+	}
+};
+
+const freshRoostHit = Moves.roost.onHit;
+Moves.roost.onHit = function (target, source, move) {
+	const result = typeof freshRoostHit === 'function' ? freshRoostHit.call(this, target, source, move) : freshRoostHit;
+	if (result === false || result === null) return result;
+	const entry = target.m.approvedSignatures;
+	if (target.hasAbility('freshplumage') && entry?.freshPlumageUsed && !entry.freshPlumageRestored) {
+		entry.freshPlumageRestored = true;
+		entry.freshPlumageUsed = false;
+		delete entry.freshPlumageMove;
+	}
+	return result;
+};
+const approvedWideGuard = Moves.wideguard.condition as SideConditionData;
+const priorWideGuardHit = approvedWideGuard.onTryHit;
+approvedWideGuard.onTryHit = function (target, source, move) {
+	const result = typeof priorWideGuardHit === 'function' ? priorWideGuardHit.call(this, target, source, move) : priorWideGuardHit;
+	const holder = this.effectState.source;
+	if (result === this.NOT_FAIL && move.category !== 'Status' && holder?.hp && holder.isActive && !holder.isAlly(source) &&
+		!holder.volatiles['wideguardrewardspent']) {
+		if (holder.hasAbility('invisiblewall')) {
+			holder.addVolatile('wideguardrewardspent', holder, this.dex.abilities.get('invisiblewall'));
+			if (holder.side.addSideCondition('safeguard', holder, this.dex.abilities.get('invisiblewall'))) holder.side.sideConditions['safeguard'].duration = 5;
+		} else if (holder.hasAbility('crystalbastion')) {
+			holder.addVolatile('wideguardrewardspent', holder, this.dex.abilities.get('crystalbastion'));
+			for (const stat of ['def', 'spd'] as const) {
+				if (holder.boosts[stat] < 0) {holder.boosts[stat] = 0; this.add('-clearnegativeboost', holder, '[from] ability: Crystal Bastion');}
+			}
+		} else if (holder.hasAbility('sentinelfist')) {
+			holder.addVolatile('wideguardrewardspent', holder, this.dex.abilities.get('sentinelfist'));
+			this.heal(holder.baseMaxhp / 8, holder, holder, this.dex.abilities.get('sentinelfist'));
+		}
+	}
+	return result;
+};
+
+const riotObstruct = Moves.obstruct.condition!;
+const priorRiotObstructHit = riotObstruct.onTryHit;
+riotObstruct.onTryHit = function (target, source, move) {
+ const result = typeof priorRiotObstructHit === 'function' ? priorRiotObstructHit.call(this, target, source, move) : priorRiotObstructHit;
+ if (result === this.NOT_FAIL && move.category !== 'Status' && !target.isAlly(source) && target.hp &&
+  target.hasAbility('riotstance') && !target.volatiles['riotstancespent']) {
+  target.addVolatile('riotstancespent', target, this.dex.abilities.get('riotstance'));
+  target.addVolatile('riotstancecharge', target, this.dex.abilities.get('riotstance'));
+ }
+ return result;
+};

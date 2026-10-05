@@ -8,6 +8,7 @@ function isGigantamaxed(pokemon: Pokemon) {
 }
 
 export class BattleActions {
+	attackResolutionDepth = 0;
 	battle: Battle;
 	dex: ModdedDex;
 
@@ -96,6 +97,7 @@ export class BattleActions {
 			throw new Error(`Invalid switch position ${pos} / ${side.active.length}`);
 		}
 		const oldActive = side.active[pos];
+		let brokeTransferredSubstitute = false;
 		const unfaintedActive = oldActive?.hp ? oldActive : null;
 		if (unfaintedActive) {
 			oldActive.beingCalledBack = true;
@@ -137,7 +139,7 @@ export class BattleActions {
 				newMove = oldActive.lastMove;
 			}
 			if (switchCopyFlag) {
-				pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
+				brokeTransferredSubstitute = pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
 			}
 			if (newMove) pokemon.lastMove = newMove;
 			oldActive.clearVolatile();
@@ -227,6 +229,7 @@ export class BattleActions {
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
+		if (brokeTransferredSubstitute) this.battle.add('-end', pokemon, 'Substitute');
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
@@ -484,7 +487,14 @@ export class BattleActions {
 	) {
 		pokemon.moveThisTurnResult = undefined;
 		const oldMoveResult: boolean | null | undefined = pokemon.moveThisTurnResult;
-		const moveResult = this.useMoveInner(move, pokemon, options);
+		let moveResult: boolean;
+		this.attackResolutionDepth++;
+		try {
+			moveResult = this.useMoveInner(move, pokemon, options);
+		} finally {
+			this.attackResolutionDepth--;
+		}
+		this.battle.runEvent('AfterAttackResolved', pokemon, this.battle.activeTarget, this.battle.activeMove);
 		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
 		return moveResult;
 	}
@@ -573,6 +583,10 @@ export class BattleActions {
 			movename = `Z-${movename}`;
 		}
 		this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
+		// Set Piece is spent at execution, after inability checks, never during move preview.
+		if (pokemon.hasAbility('setpiece') && pokemon.abilityState.charged && move.type === 'Fire' && move.category !== 'Status') {
+			pokemon.abilityState.charged = false;
+		}
 
 		if (zMove && !this.runZPower(move, pokemon)) {
 			this.battle.add('-fail', pokemon);
@@ -2166,6 +2180,9 @@ export class BattleActions {
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
+		if (defenseStat === 'spd' && move.category === 'Special' && this.battle.movehasType(move, 'Electric') &&
+			source.hasAbility('crosswire') && (move as any).crosswireCharged) ignorePositiveDefensive = true;
+		if (defenseStat === 'def' && this.battle.movehasType(move, 'Ground') && source.hasAbility('surefoot')) ignorePositiveDefensive = true;
 
 		if (moveHit.crit) {
 			ignoreNegativeOffensive = true;
@@ -2199,6 +2216,21 @@ export class BattleActions {
 		}
 		if (['explosion', 'selfdestruct'].includes(move.id) && ['def', 'spd'].includes(defenseStat)) {
 			defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
+		}
+
+		// Liquid Arsenal compares fully modified defenses per target/hit; category and offense are unchanged.
+		// Each defense's modifiers run once. Explicit move defense overrides retain precedence; ties keep normal defense.
+		if (source.hasAbility('liquidarsenal') && this.battle.movehasType(move, 'Water') && move.category !== 'Status' &&
+			!move.overrideDefensiveStat && !move.overrideDefensivePokemon) {
+			const alternateStat = defenseStat === 'def' ? 'spd' : 'def';
+			let alternateBoosts = defender.boosts[alternateStat];
+			if ((alternateBoosts > 0 && adaptiveSetup(source, defender)) || move.ignoreDefensive ||
+				(ignorePositiveDefensive && alternateBoosts > 0)) alternateBoosts = 0;
+			let alternate = defender.calculateStat(alternateStat, alternateBoosts, 1, target);
+			alternate = this.battle.runEvent('Modify' + statTable[alternateStat], target, source, move, alternate);
+			if (this.battle.field.terrain === 'glitchterrain' && alternateStat === 'spd') alternate = Math.max(alternate, target.getStat('spa'));
+			if (['explosion', 'selfdestruct'].includes(move.id)) alternate = this.battle.clampIntRange(Math.floor(alternate / 2), 1);
+			if (alternate < defense) defense = alternate;
 		}
 
 		const tr = this.battle.trunc;
@@ -2559,8 +2591,9 @@ export class BattleActions {
 		const gimmick = pokemon.canMegaEvo ? 'Mega' : 'Ultraburst';
 		if (!this.battle.useGimmick(pokemon, gimmick)) return false;
 
+		if (!pokemon.checkPulseEvolution(this.dex.species.get(speciesid), pokemon.getItem())) return false;
 		this.clearDynamaxForMega(pokemon);
-		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		if (!pokemon.formeChange(speciesid, pokemon.getItem(), true)) return false;
 		if (toID(speciesid) === 'parasectmega') pokemon.m.parasectMegaUsed = true;
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
@@ -2577,8 +2610,9 @@ export class BattleActions {
 		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid) return false;
 
+		if (!pokemon.checkPulseEvolution(this.dex.species.get(speciesid), pokemon.getItem())) return false;
 		this.clearDynamaxForMega(pokemon);
-		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		if (!pokemon.formeChange(speciesid, pokemon.getItem(), true)) return false;
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
 		}
@@ -2593,8 +2627,9 @@ export class BattleActions {
 		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid) return false;
 
+		if (!pokemon.checkPulseEvolution(this.dex.species.get(speciesid), pokemon.getItem())) return false;
 		this.clearDynamaxForMega(pokemon);
-		pokemon.formeChange(speciesid, pokemon.getItem(), true);
+		if (!pokemon.formeChange(speciesid, pokemon.getItem(), true)) return false;
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
 		}

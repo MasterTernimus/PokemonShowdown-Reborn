@@ -50,7 +50,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	truedevotion: ['falsedevotion', 'serenegrace', 'naturalrecovery', 'prankster', 'technician'],
 	falsedevotion: ['serenegrace', 'naturalrecovery', 'prankster'],
 	witheringshell: ['crumblingshell', 'naturalrecovery', 'sturdy'],
-	argentdevotion: ['armorize', 'swornduty', 'serenegrace'],
+	argentdevotion: ['armorize', 'swornduty', 'serenegrace', 'moldbreaker'],
 	fluffyevo: ['overcoat'],
 	bonewarrior: ['battlearmor', 'selfsufficient'],
 	seafiend: ['toxicdebris', 'waterbubble', 'waterveil'],
@@ -141,7 +141,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	burningspirit: ['selfsufficient', 'opportunist', 'magmaarmor', 'proficient'],
 	crueltag: ['shadowtag', 'infiltrator', 'baddreams'],
 	emperorsresolve: ['competitive', 'slushrush', 'swiftswim', 'proficient'],
-	execution: ['duskilate'],
+	execution: ['duskilate', 'moldbreaker'],
 	fallenstar: ['moldbreaker', 'dualwield', 'selfsufficient', 'proficient'],
 	parasitism: ['dryskin'],
 	completeparasitism: ['parasitism', 'dryskin', 'filter', 'selfrepair'],
@@ -156,7 +156,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 	doublestrike: ['ironfist', 'technician', 'skilllink'],
 	siegelauncher: ['stalwart', 'proficient'],
-	soulcremation: ['soulsiphon', 'soulpyre', 'malicewell', 'flamebody'],
+	soulcremation: ['soulsiphon', 'soulpyre', 'malicewell'],
 	malicewell: ['flamebody'],
 	soultag: ['soulfire', 'shadowtag', 'flamebody'],
 	deserttyrant: ['sandstream'],
@@ -200,9 +200,9 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	divinemockery: ['hydrabond', 'moldbreaker', 'sniper'],
 	hydratyrant: ['hydrabond', 'berserk', 'selfsufficient'],
 	hisuianpath: ['sapsipper', 'innerfocus', 'fluffy'],
-	toxicevolution: ['corrosion', 'dualwield', 'shielddust', 'levitate'],
+	toxicevolution: ['moldbreaker', 'corrosion', 'dualwield', 'shielddust', 'levitate'],
 	heavenlychorus: ['pixilate', 'cloudnine', 'fluffy'],
-	guidingomen: ['friendguard', 'serenegrace'],
+	guidingomen: ['friendguard', 'serenegrace', 'moldbreaker'],
 	heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
 	coldlogic: ['toughclaws', 'prismarmor', 'aftermath', 'forewarn'],
 	ironwill: ['prismarmor', 'secondwind', 'selfsufficient', 'whiplash'],
@@ -227,9 +227,9 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	slowclamp: ['shellarmor', 'owntempo', 'analytic', 'sweetveil'],
 	soaringspirit: ['windpower', 'selfsufficient'],
 	solartrap: ['accumulation', 'digestivesap', 'liquidooze'],
-	spiralevolution: ['adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
+	spiralevolution: ['moldbreaker', 'adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
 	stormsovereign: ['galewings', 'keeneye'],
-	sunsovereign: ['drought', 'unboundblaze', 'selfsufficient', 'proficient'],
+	sunsovereign: ['moldbreaker', 'drought', 'unboundblaze', 'selfsufficient', 'proficient'],
 	terraresolve: ['stamina', 'solidrock', 'proficient'],
 	primalego: ['unaware', 'proficient', 'ultraego', 'moldbreaker'],
 	toxicbloom: ['pollenbloom', 'selfsufficient'],
@@ -244,7 +244,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	ragingstorm: ['moldbreaker', 'battlearmor'],
 	ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 	abysssniper: ['sniper', 'stalwart'],
-	atrocity: ['unboundblaze', 'selfsufficient', 'proficient', 'toughclaws'],
+	atrocity: ['moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient', 'toughclaws'],
 	streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
 	divineintervention: ['swornduty', 'friendguard', 'regenerator', 'fluffy'],
 	voidcraft: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
@@ -258,6 +258,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	mountainrift: ['shellarmor', 'selfsufficient'],
 	desertrift: ['sandforce', 'sandstream', 'heavymetal'],
 	glacialmass: ['heavymetal', 'thickfat'],
+	unleashedego: ['ultraego', 'levitate', 'ragingstorm'],
+	moonlithide: ['shadowshield', 'magicguard'],
 	supersweetsyrup: ['stickyhold'],
 	naturalrecovery: ['naturalcure', 'regenerator'],
 	mossarmor: ['stamina', 'naturalrecovery', 'levitate'],
@@ -632,3 +634,111 @@ AbilityComponents.dawnherald = ['drought', 'friendguard'];
 AbilityComponents.transfixinggaze = ['frisk'];
 
 AbilityComponents.freshplumage = ['naturalcure'];
+
+AbilityComponents.pulsefiltration = ['waterabsorb', 'liquidooze'];
+
+AbilityComponents.soulsiphon = ['flashfire'];
+
+AbilityComponents.conquerorswill = ['supremeoverlord', 'unnerve'];
+
+AbilityComponents.triplethreat = ['hydrabond', 'tangledfeet', 'keeneye', 'bigpecks', 'limber'];
+
+// Its other local effects remain manually implemented; do not add identities for partial components.
+AbilityComponents.parentalbond = ['moldbreaker'];
+
+AbilityComponents.nightwatch = ['keeneye', 'insomnia'];
+AbilityComponents.fruitfulbough = ['harvest'];
+AbilityComponents.soulanchor = ['steelworker'];
+
+AbilityComponents.guidinglight = ['dazzling', 'illuminate'];
+AbilityComponents.royalescort = ['pressure', 'sweetveil'];
+
+AbilityComponents.liquidarsenal = ['technician'];
+AbilityComponents.knightsreprisal = ['bulletproof'];
+AbilityComponents.aurorasanctum = ['snowwarning'];
+AbilityComponents.chargedtail = ['static'];
+AbilityComponents.falsebouquet = ['magician'];
+
+AbilityComponents.eldritchremedy = ["owntempo","curiousmedicine"];
+
+AbilityComponents.infernaldominion = ["intimidate"];
+
+AbilityComponents.hydraulicarmor = ["stamina"];
+
+AbilityComponents.hauntingpresence = ["levitate"];
+
+AbilityComponents.slumberinggiant = ["comatose","thickfat"];
+
+AbilityComponents.oceanlullaby = ["shellarmor"];
+
+AbilityComponents.shadowscreen = ["infiltrator"];
+
+AbilityComponents.moonlitpromise = ["unaware"];
+
+AbilityComponents.sandshroud = ["levitate","overcoat"];
+
+AbilityComponents.arcanepilfer = ["magician"];
+
+AbilityComponents.faultline = ['moldbreaker'];
+
+AbilityComponents.creepingbloom = ['infiltrator'];
+
+AbilityComponents.dreadwings = ['levitate', 'unnerve'];
+
+Object.assign(AbilityComponents, {
+	"causticchamber": [
+		"owntempo"
+	],
+	"demolitiontrunk": [
+		"sheerforce"
+	],
+	"deepresonance": [
+		"soundproof"
+	],
+	"siegemagnet": [
+		"magnetpull"
+	],
+	"patientmarksman": [
+		"sniper"
+	],
+	"cradleward": [
+		"sweetveil"
+	],
+	"sunreserve": [
+		"flashfire"
+	],
+	"silentreprisal": [
+		"soundproof",
+		"anticipation"
+	],
+	"dreamrefuge": [
+		"telepathy"
+	],
+	"closedcircuit": [
+		"clearbody"
+	]
+});
+
+Object.assign(AbilityComponents, {"pridecall":["competitive","unnerve"],"hydroelectric":["dryskin"],"solarstride":["chlorophyll"],"frillflash":["dazzling"]});
+
+Object.assign(AbilityComponents, {"stokebelly":["gluttony"],"rousingfeast":["gluttony"],"invisiblewall":["soundproof"],"sentinelfist":["ironfist"],"pursuitwake":["infiltrator"],"gentlegiant":["cloudnine"],"ringcraft":["limber"],"constrictingheat":["whitesmoke"]});
+
+AbilityComponents.gritreprisal = ['guts'];
+AbilityComponents.wreckingcrew = ['ironfist'];
+
+Object.assign(AbilityComponents, {"evergreen":["overcoat","ripen"],"battlegrip":["moxie"],"scentscout":["frisk"],"surefoot":["innerfocus"],"baitedbloom":["gluttony","stickyhold"],"guidinggallop":["pastelveil"],"carrionwatch":["frisk","unnerve"]});
+
+Object.assign(AbilityComponents, {"scaleshelter":["shielddust","overcoat"],"stagesweep":["screencleaner"],"icebreaker":["hypercutter"],"cactuschorus":["waterabsorb"],"crushingvenom":["strongjaw"],"crosswire":["ironfist"],"deepchill":["oblivious"],"climatereserve":[]});
+
+Object.assign(AbilityComponents, {"tunnelclearance":["hypercutter"],"crystalbastion":["sturdy"],"buriedcoil":["sandspit"],"staticreserve":["static"],"lockinggrip":["hypercutter"],"garlandgift":["flowerveil"]});
+
+AbilityComponents.riotstance = ['defiant'];
+
+AbilityComponents.drumguard = ['soundproof'];
+AbilityComponents.measuredcounsel = ['owntempo'];
+
+AbilityComponents.raincourier = ['raindish'];
+
+AbilityComponents.disorientingmind = ['infiltrator'];
+AbilityComponents.wisecounsel = ['innerfocus'];
+AbilityComponents.mindcurrent = ['innerfocus'];

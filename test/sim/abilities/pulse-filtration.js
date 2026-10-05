@@ -6,5 +6,5 @@ for(const move of ['watergun','sludge'])it('absorbs '+move+' for quarter HP',()=
 it('remains immune at full HP',()=>{const[p,t]=setup();p.hp=p.maxhp;hit(p,t,'watergun');assert.equal(p.hp,p.maxhp);});
 it('Heal Block blocks recovery but not immunity',()=>{const[p,t]=setup();p.hp=100;p.addVolatile('healblock');hit(p,t,'sludge');assert.equal(p.hp,100);});
 it('Mold Breaker bypasses absorption',()=>{const[p,t]=setup('Mold Breaker');p.hp=p.maxhp;const old=p.hp;hit(p,t,'watergun');assert(p.hp<old);});
-it('has no residual field-healing hook and ordinary attacks hit',()=>{const[p,t]=setup();assert.equal(p.getAbility().onResidual,undefined);const old=p.hp;hit(p,t,'tackle');assert(p.hp<old);});
+it('has Water Absorb field healing and ordinary attacks hit',()=>{const[p,t]=setup();p.hp=100;b.singleEvent('Residual',p.getAbility(),p.abilityState,p);assert.equal(p.hp,100+Math.floor(p.baseMaxhp/16));const old=p.hp;hit(p,t,'tackle');assert(p.hp<old);});
 });

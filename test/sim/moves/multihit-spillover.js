@@ -10,7 +10,8 @@ describe('Multi-hit spillover', () => {
 		battle?.destroy();
 	});
 
-	it('should continue Bone Rush onto the opposing partner after a KO', () => {
+	for (const [partner, shouldHit] of [['Blissey', true], ['Drifblim', true]]) {
+	it(`Bone Rush spillover respects ${partner}'s Ground matchup after a KO`, () => {
 		battle = common.createBattle({ formatid: 'gen9multimistyfieldadrienn' }, [[
 			{ species: 'Marowak', ability: 'bonewarrior', item: 'thickclub', moves: ['bonerush'] },
 		], [
@@ -18,7 +19,7 @@ describe('Multi-hit spillover', () => {
 		], [
 			{ species: 'Wynaut', moves: ['splash'] },
 		], [
-			{ species: 'Drifblim', moves: ['splash'] },
+			{ species: partner, moves: ['splash'] },
 		]]);
 		battle.makeChoices('team 1', 'team 1', 'team 1', 'team 1');
 
@@ -28,6 +29,7 @@ describe('Multi-hit spillover', () => {
 		battle.makeChoices('move bonerush', 'auto', 'auto', 'auto');
 
 		assert.equal(firstTarget.hp, 0, `Bone Rush should KO its first target`);
-		assert(opposingPartner.hp < opposingPartner.maxhp, `Bone Rush should chain to the opposing partner`);
+		assert.equal(opposingPartner.hp < opposingPartner.maxhp, shouldHit, 'Spillover preserves the existing Bone immunity bypass');
 	});
+	}
 });
