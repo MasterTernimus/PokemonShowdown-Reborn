@@ -1364,6 +1364,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10349,
 	},
 	exalt: {
+		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
+		onModifyMove(move, source, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
+		},
 		onAfterEachBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('defiant').onAfterEachBoost?.call(this, boost, target, source, effect);
 		},
@@ -5229,6 +5233,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10124,
 	},
 	warpath: {
+		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
 		onImmunity(type) {
 			if (type === 'sandstorm' || type === 'hail') return false;
 		},
@@ -5250,7 +5255,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
-		onModifyMove(move) {
+		onModifyMove(move, source, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
 			if (this.movehasType(move, ['Rock', 'Fighting', 'Ground'])) {
 				move.infiltrates = true;
 				move.ignoreDefensive = true;
