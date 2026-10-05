@@ -2176,16 +2176,15 @@ export class Battle {
 	}
 
 	checkEVBalance() {
-		let limitedEVs: boolean | null = null;
-		for (const side of this.sides) {
-			const sideLimitedEVs = !side.pokemon.some(
-				pokemon => Object.values(pokemon.set.evs).reduce((a, b) => a + b, 0) > 510
-			);
-			if (limitedEVs === null) {
-				limitedEVs = sideLimitedEVs;
-			} else if (limitedEVs !== sideLimitedEVs) {
-				this.add('bigerror', "Warning: One player isn't adhering to a 510 EV limit, and the other player is.");
-			}
+		const overLimit = this.sides.map(side => ({side, slots: side.pokemon.flatMap((pokemon, index) =>
+			Object.values(pokemon.set.evs).reduce((a, b) => a + b, 0) > 510 ? [index + 1] : [])}));
+		// Preserve the existing mixed-limit warning; Custom Game still permits zero EVs.
+		if (!overLimit.some(entry => !entry.slots.length)) return;
+		for (const {side, slots} of overLimit) {
+			if (!slots.length) continue;
+			// Slots identify the sets without publishing unrevealed species or full EV spreads.
+			this.add('bigerror', `Warning: ${this.dex.getName(side.name)} (${side.id}), team slot${slots.length > 1 ? 's' : ''} ${slots.join(', ')} ` +
+				`exceed the 510 EV limit while another player is adhering to it.`);
 		}
 	}
 
@@ -3018,6 +3017,9 @@ export class Battle {
 				sourceEffect: action.sourceEffect, zMove: action.zmove,
 				maxMove: action.maxMove, originalTarget: action.originalTarget,
 			});
+			// A completed move action (including a prevented attempt), never merely a switch or Mega Evolution.
+			action.pokemon.m.lastCompletedActionTurn = this.turn;
+			action.pokemon.m.lastCompletedActionEntry = action.pokemon.previouslySwitchedIn;
 			break;
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
@@ -3207,6 +3209,18 @@ export class Battle {
 		if (action.choice === 'runSwitch') {
 			const pokemon = action.pokemon;
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
+				this.runEvent('EmergencyExit', pokemon);
+			}
+		}
+
+		// Resolve deferred retreat only at an action boundary, including prevented/cancelled moves.
+		// Never consume another Pokemon's pivot or interrupt an in-progress multi-hit attack.
+		for (const pokemon of this.getAllActive()) {
+			if (!pokemon.abilityState.tacticalRetreatPending) continue;
+			if (!pokemon.hp || !pokemon.hasAbility('tacticalretreat')) {
+				delete pokemon.abilityState.tacticalRetreatPending;
+			} else {
+				delete pokemon.abilityState.tacticalRetreatPending;
 				this.runEvent('EmergencyExit', pokemon);
 			}
 		}

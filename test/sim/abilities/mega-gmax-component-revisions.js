@@ -25,7 +25,7 @@ describe('Mega and G-Max component revisions', () => {
 			['Ampharos-Aevian-Mega', 'Absolute Zero', ['snowwarning', 'moldbreaker', 'filter']],
 			['Chandelure-Mega', 'Soul Cremation', ['soulsiphon', 'soulpyre', 'malicewell', 'flamebody']],
 			['Dragalge-Mega', 'Toxic Renewal', ['adaptability', 'regenerator', 'poisontouch']],
-			['Gardevoir-Mega-Z', 'Argent Devotion', ['armorize', 'swornduty', 'serenegrace']],
+			['Gardevoir-Mega-Z', 'Argent Devotion', ['armorize', 'swornduty', 'serenegrace', 'moldbreaker']],
 			['Gengar-Mega', 'Cruel Tag', ['shadowtag', 'infiltrator', 'baddreams']],
 			['Glalie-Aevian-Mega', 'Moss Armor', ['stamina', 'naturalcure', 'levitate']],
 			['Glalie-Mega', 'Freezer Burn', ['slushrush', 'refrigerate', 'strongjaw', 'levitate']],
@@ -41,6 +41,27 @@ describe('Mega and G-Max component revisions', () => {
 		}
 		assert.equal(battle.dex.species.get('Copperajah').abilities[1], 'Water Absorb');
 	});
+	for (const ability of ['Execution', 'Argent Devotion']) {
+		for (const [foeAbility, move] of [['Levitate', 'earthquake'], ['Water Absorb', 'watergun'], ['Sturdy', 'earthquake']]) {
+			it(`${ability} bypasses ${foeAbility} through Mold Breaker`, () => {
+				const [holder, foe] = start('Mew', ability);
+				foe.setAbility(foeAbility);
+				if (foeAbility === 'Sturdy') foe.hp = foe.maxhp = foe.baseMaxhp = 1;
+				assert(holder.hasAbility('moldbreaker'));
+				assert.match(holder.getAbility().desc, /Moves ignore bypassable (?:opposing )?abilities/);
+				battle.actions.runMove(move, holder, 1, {externalMove: true});
+				assert(foe.hp < foe.maxhp, `${ability} should bypass ${foeAbility}`);
+				if (foeAbility === 'Sturdy') assert.equal(foe.hp, 0);
+			});
+		}
+		it(`${ability}'s Mold Breaker stops when the ability is suppressed`, () => {
+			const [holder, foe] = start('Mew', ability);
+			foe.setAbility('Levitate');
+			holder.addVolatile('gastroacid', foe);
+			battle.actions.runMove('earthquake', holder, 1, {externalMove: true});
+			assert.equal(foe.hp, foe.maxhp);
+		});
+	}
 
 	it('Absolute Zero starts Snow and no longer changes Fire/Ice type effectiveness', () => {
 		const [holder] = start('Ampharos-Aevian-Mega', 'Absolute Zero');

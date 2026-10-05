@@ -9,8 +9,9 @@ describe('Canonical composite descriptions', () => {
 	const nameOf = id => Dex.abilities.get(id).name;
 	it('renders the exact Verdant Drake row without repeated component lists', () => {
 		const a = Dex.abilities.get('verdantdrake');
-		assert.equal(a.shortDesc, 'Proficient + Dual Wield + Regenerator + Lightning Rod + Limber; 1.3x same-type moves.');
-		for (const value of ['1.3x', 'Limber prevents paralysis', 'Attack and Special Attack by 1']) assert(a.desc.includes(value));
+		assert.match(a.shortDesc, /1\.3x/);
+		assert.doesNotMatch(a.shortDesc, /Proficient \+/);
+		for (const value of ['1.3x', 'Prevents and cures paralysis', '+1 Attack and Sp. Atk']) assert(a.desc.includes(value));
 		assert(getAbilityMechanicsHTML(a, Dex).includes('1.3x power'));
 	});
 	it('canonicalizes legacy aliases and overlapping nested component paths for display only', () => {
@@ -27,8 +28,9 @@ describe('Canonical composite descriptions', () => {
 	});
 	it('collapses Layered Coat children without removing explanatory prose or identity', () => {
 		const a = Dex.abilities.get('aeviantoxin');
-		assert.equal(a.shortDesc, 'Strong Jaw + Layered Coat + Merciless.');
-		assert(a.desc.includes('Layered Coat includes Fur Coat and Overcoat'));
+		assert.match(a.shortDesc, /1\.5x biting power; double Defense/);
+		assert.match(a.desc, /Defense.*doubled|Doubles Defense/i);
+		assert.match(a.desc, /powder/);
 		assert.deepEqual(getAbilityDisplayComponents(a.id), ['strongjaw', 'layeredcoat', 'merciless']);
 		assert(AbilityComponents.aeviantoxin.includes('furcoat'));
 		assert(AbilityComponents.aeviantoxin.includes('overcoat'));

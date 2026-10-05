@@ -276,7 +276,7 @@ export function applyRosterWave2(base: AbilityDataTable) {
 				if (move.multihitType !== id) return;
 				if (id === 'twincannons') move.overrideDefensiveStat = move.hit > 1 ? 'def' : 'spd';
 				else move.ignorePositiveDefensive = move.hit > 1;
-				return this.chainModify(this.gameType === 'freeforall' ? 1 : 0.5);
+				return this.chainModify(this.gameType === 'freeforall' ? (id === 'twinblades' ? 0.6 : 1) : 0.5);
 			},
 			onSourceModifySecondaries(secondaries, target, source, move) {
 				if (move.multihitType === id && move.hit > 1) return [];

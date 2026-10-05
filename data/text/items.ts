@@ -10,7 +10,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	anomalycore: {
 		name: "Anomaly Core",
-		shortDesc: "Pulse/Rift Evolution item for designated Anomaly Pokemon.",
+		desc: "Allows designated Pokemon to undergo Pulse/Rift Evolution. Pulse and Rift forms cannot have a Substitute; existing or transferred substitutes break. Camerupt must be at full HP immediately before Pulse Evolution or it faints.",
+		shortDesc: "Pulse/Rift Evolution; no Substitute. Camerupt must be at full HP or faints.",
 	},
 	abilityshield: {
 		name: "Ability Shield",

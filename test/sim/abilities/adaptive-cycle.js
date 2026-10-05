@@ -22,6 +22,22 @@ describe('Adaptive Cycle', () => {
 		for (let i = 0; i < 4; i++) battle.makeChoices('move splash', 'move splash');
 		assert(A.adaptiveAnalyzed(p, foe));
 	}
+
+	it('stops Murkwater damage and hurt messages after natural field adaptation', () => {
+		setup(); battle.field.setTerrain('murkwatersurfaceterrain', p);
+		for (let turn = 0; turn < 3; turn++) battle.makeChoices('move splash', 'move splash');
+		assert(A.adaptiveEnvironment(p, 'fields'));
+		const hp = p.hp;
+		const otherHP = foe.hp;
+		const logStart = battle.log.length;
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(p.hp, hp, 'the adapted holder must take no field damage');
+		assert(foe.hp < otherHP, 'unadapted opponents still take field damage');
+		assert(!battle.log.slice(logStart).some(line => line.includes(`${p.name} is hurt by the toxic water`)));
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', 'move splash');
+		assert.equal(p.hp, hp, 'switching preserves completed field protection');
+	});
 	it('bypasses type immunity only for the analyzed target and forces super effectiveness', () => {
 		setup(); analyzed();
 		foe.setType('Ghost');

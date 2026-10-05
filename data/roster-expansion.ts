@@ -261,7 +261,11 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 	const omen = base.guidingomen;
 	base.guidingomen = {
 		...omen,
-		onStart() { this.effectState.used = false; this.effectState.ward = false; },
+		onStart(pokemon) {
+			omen.onStart?.call(this, pokemon);
+			this.effectState.used = false;
+			this.effectState.ward = false;
+		},
 		onAfterSuccessfulSecondary(source) {
 			if (!this.effectState.used) { this.effectState.used = true; this.effectState.ward = true; }
 		},
@@ -458,7 +462,11 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 	const execution = base.execution;
 	base.execution = {
 		...execution,
-		onStart() { this.effectState.markUsed = false; this.effectState.mark = null; },
+		onStart(pokemon) {
+			this.effectState.markUsed = false;
+			this.effectState.mark = null;
+			this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
+		},
 		onBasePower(basePower, pokemon, target, move) {
 			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) {
@@ -470,6 +478,7 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMove(move, source, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
 			if (target === this.effectState.mark && ['Dark', 'Ghost'].includes(move.type)) move.ignorePositiveDefensive = true;
 		},
 		onSourceDamagingHit(damage, target, source, move) {

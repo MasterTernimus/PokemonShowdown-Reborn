@@ -1550,7 +1550,7 @@ const commands: Chat.ChatCommands = {
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
-			const result = await TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.battleSettings.team);
+			const result = await TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.battleSettings.team, {user: user.id});
 			if (result.startsWith('1')) {
 				connection.popup("Your team is valid for this tournament.");
 			} else {

@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import { TeamValidator } from '../sim/team-validator';
+import { TeamValidator, attributeZeroEVProblems } from '../sim/team-validator';
 import * as ConfigLoader from './config-loader';
 
 export const PM = new QueryProcessManager<{
@@ -58,7 +58,12 @@ export class TeamValidatorAsync {
 		if (team.length > (25 * 1024 - 6)) { // don't even let it go to the child process
 			return Promise.resolve('0Your team is over 25KB. Please use a smaller team.');
 		}
-		return PM.query({ formatid, options, team });
+		// Resolve identity in the parent process; rejected teams remain private to their owner.
+		const owner = options?.user ? Users.get(options.user)?.name || options.user : undefined;
+		return PM.query({ formatid, options, team }).then(result => {
+			if (!result.startsWith('0') || !owner) return result;
+			return '0' + attributeZeroEVProblems(result.slice(1).split('\n'), owner).join('\n');
+		});
 	}
 
 	static get(this: void, format: string) {

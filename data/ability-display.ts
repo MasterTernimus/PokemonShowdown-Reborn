@@ -1,3 +1,4 @@
+import { AbilityDescriptionOverrides } from './ability-descriptions';
 import { Aliases } from './aliases';
 import {AbilityComponents} from './ability-components';
 
@@ -164,9 +165,9 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 	"triplethreat": [
 		"hydrabond",
 		"tangledfeet",
-		"sniper",
 		"keeneye",
-		"bigpecks"
+		"bigpecks",
+		"limber"
 	],
 	"strikerfrenzy": [
 		"striker",
@@ -225,6 +226,8 @@ export function getAbilityDisplayComponents(id: string): string[] {
 
 /** Remove only metadata-confirmed standalone component lists, preserving all mechanics prose. */
 export function getAbilitySelectorSummary(id: string, summary: string, nameOf: (id: string) => string): string {
+	const reviewed = AbilityDescriptionOverrides[canonicalAbilityDisplayID(id)];
+	if (reviewed && summary === reviewed.shortDesc) return summary;
 	// Sushi Trick's approved summary describes the effect directly; metadata retains Hospitality.
 	if (canonicalAbilityDisplayID(id) === 'sushitrick') return summary;
 	const components = getAbilityDisplayComponents(id);

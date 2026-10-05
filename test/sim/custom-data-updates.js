@@ -67,9 +67,9 @@ describe('Custom battle data updates', function () {
 		}
 	});
 
-	it('should give Meowscarada Magician, Protean, and Zoroark-style Illusion', function () {
+	it('should give Meowscarada False Bouquet, Protean, and Zoroark-style Illusion', function () {
 		assert.deepEqual(Dex.species.get('Meowscarada').abilities, {
-			0: 'Magician', 1: 'Protean', H: 'Illusion',
+			0: 'False Bouquet', 1: 'Protean', H: 'Illusion',
 		});
 
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
@@ -168,7 +168,7 @@ describe('Custom battle data updates', function () {
 		assert.equal(seviper.bst, 510);
 		assert.deepEqual(dex.species.get('Kingler').baseStats, {hp: 80, atk: 135, def: 115, spa: 60, spd: 80, spe: 75});
 		assert.deepEqual(dex.species.get('Kingler-Gmax').baseStats, {hp: 120, atk: 135, def: 115, spa: 60, spd: 80, spe: 75});
-		assert.equal(dex.species.get('Yanmega').abilities.H, 'Compound Eyes');
+		assert.equal(dex.species.get('Yanmega').abilities.H, 'Slipstream');
 		assert.equal(dex.species.get('Starmie-Mega').baseStats.atk, 100);
 		assert.equal(dex.moves.get('Needle Arm').basePower, 100);
 		assert.equal(dex.moves.get('Meteor Mash').basePower, 100);
@@ -548,6 +548,27 @@ describe('Custom battle data updates', function () {
 		battle.destroy();
 		battle = null;
 	});
+
+
+	for (const burned of [false, true]) {
+		it(`should deal ${burned ? '1/8' : '1/16'} Sinister Blaze damage to a ${burned ? 'burned' : 'healthy'} foe`, function () {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Eevee-Starter', ability: 'sinisterblaze', moves: ['splash']},
+			], [
+				{species: 'Blissey', ability: 'naturalcure', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			const holder = battle.p1.active[0];
+			const foe = battle.p2.active[0];
+			if (burned) foe.setStatus('brn');
+			holder.hp = Math.floor(holder.maxhp / 2);
+			const before = holder.hp;
+			const foeBefore = foe.hp;
+			battle.singleEvent('Residual', battle.dex.conditions.get('brn'), holder.statusState, holder);
+			assert.equal(foeBefore - foe.hp, Math.floor(foe.baseMaxhp / (burned ? 8 : 16)));
+			assert.equal(holder.hp - before, Math.floor(holder.baseMaxhp / 16), 'Only its own burn heals it; generated damage does not');
+		});
+	}
 
 	it('should not add Ice typing to Abysseon or Divineon in hail or Icy Field', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[

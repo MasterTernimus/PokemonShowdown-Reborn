@@ -96,10 +96,9 @@ function claimAnomalyField(pokemon: Pokemon) {
 	return true;
 }
 
-function setPulseMurkwater(battle: Battle, pokemon: Pokemon) {
+function setPulseMurkwater(battle: Battle, pokemon: Pokemon, terrain = 'murkwatersurfaceterrain') {
 	if (!claimAnomalyField(pokemon)) return;
 	pokemon.m.pulseFieldUsed = true;
-	const terrain = 'murkwatersurfaceterrain';
 	if (battle.field.terrain === terrain) {
 		// Refreshing the current field must respect effective field-generation blockers too.
 		if (battle.getAllActive().some(holder => holder.hp && holder.isActive &&
@@ -1643,7 +1642,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	seafiend: {
 		onStart(pokemon) { this.dex.abilities.get('waterbubble').onStart?.call(this, pokemon); },
-		onModifyMove(move, pokemon, target) { this.dex.abilities.get('waterbubble').onModifyMove?.call(this, move, pokemon, target ); },
 		onDamagingHit(damage, target, source, move) {
 			this.dex.abilities.get('toxicdebris').onDamagingHit?.call(this, damage, target, source, move);
 		},
@@ -2235,6 +2233,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 91,
 	},
 	spiralevolution: {
+		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
 		onImmunity(type, pokemon) {
 			if (type === 'Ground') return false;
 		},
@@ -2242,6 +2241,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('adaptability').onModifySTAB?.call(this, stab, source, target, move);
 		},
 		onModifyMove(move, source, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source, target);
 			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move, source, target);
 			if (move.category !== 'Status') {
@@ -2306,8 +2306,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10255,
 	},
 	guidingomen: {
+		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
 		onAnyModifyDamage(damage, source, target, move) { return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move); },
-		onModifyMove(move, pokemon, target) { this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move, pokemon, target ); },
+		onModifyMove(move, pokemon, target) { this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target); this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move, pokemon, target ); },
 		flags: {},
 		name: "Guiding Omen",
 		rating: 4.5,
@@ -2615,42 +2616,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 11131,
 	},
-	unleashedego: {
-		onModifyMove(move, pokemon, target) {
-			this.dex.abilities.get('ragingstorm').onModifyMove?.call(this, move, pokemon, target );
-		},
-		onSourceTryPrimaryHit(target, source, move) {
-			this.dex.abilities.get('ragingstorm').onSourceTryPrimaryHit?.call(this, target, source, move);
-		},
-		onModifyCritRatio(critRatio, source, target, move) {
-			return this.dex.abilities.get('ragingstorm').onModifyCritRatio?.call(this, critRatio, source, target, move);
-		},
-		onSourceDamagingHit(damage, target, source, move) {
-			this.dex.abilities.get('ragingstorm').onSourceDamagingHit?.call(this, damage, target, source, move);
-		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			this.dex.abilities.get('ragingstorm').onAfterMoveSecondarySelf?.call(this, source, target, move);
-		},
-		onDamage(damage, target, source, effect) {
-			return this.dex.abilities.get('ultraego').onDamage?.call(this, damage, target, source, effect);
-		},
-		onDamagingHit(damage, target, source, move) {
-			this.dex.abilities.get('ultraego').onDamagingHit?.call(this, damage, target, source, move);
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('ultraego').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
-		onResidual(pokemon) {
-			this.dex.abilities.get('ultraego').onResidual?.call(this, pokemon);
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'Ground') return false;
-		},
-		flags: {},
-		name: "Unleashed Ego",
-		rating: 5,
-		num: 10287,
-	},
+	unleashedego: { flags: {cantsuppress: 1}, name: "Unleashed Ego", rating: 5, num: 10287 },
 	joyride: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon, target) {
@@ -4383,20 +4349,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onCriticalHit(target, source, move) {
-			const relicArmorResult = this.dex.abilities.getHandler('relicarmor', 'onCriticalHit')?.call(this, target, source, move);
-			if (relicArmorResult !== undefined) return relicArmorResult;
 			if (!target) return;
 			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id)) return;
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 			if (!target.runImmunity(move.type)) return;
 			return false;
-		},
-		onAfterBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('relicarmor').onAfterBoost?.call(this, boost, target, source, effect);
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('relicarmor').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onModifyMove(move, pokemon, target) {
 			return this.dex.abilities.get('relicarmor').onModifyMove?.call(this, move, pokemon, target );
@@ -4407,12 +4365,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category === 'Status' && ['mimikyu', 'mimikyutotem'].includes(pokemon.species.id)) {
 				return priority + 1;
-			}
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
-			if (['mimikyubusted', 'mimikyubustedtotem'].includes(target.species.id)) {
-				source.addVolatile('curse', target, this.dex.abilities.get('disguise'));
 			}
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -4591,9 +4543,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sunsovereign: {
 		onStart(source) {
+			this.dex.abilities.get('moldbreaker').onStart?.call(this, source);
 			this.dex.abilities.get('drought').onStart?.call(this, source);
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) this.field.weatherState.duration = 8;
 			this.dex.abilities.get('unboundblaze').onStart?.call(this, source);
+		},
+		onModifyMove(move, pokemon, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
 		},
 		onImmunity(type, pokemon) { return this.dex.abilities.get('unboundblaze').onImmunity?.call(this, type, pokemon); },
 		onUpdate(pokemon) { return this.dex.abilities.get('unboundblaze').onUpdate?.call(this, pokemon); },
@@ -4921,6 +4877,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10157,
 	},
 	fallenstar: {
+		onStart(pokemon) {
+			this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
+		},
 		onModifyMove(move, pokemon, target) {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
 			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
@@ -5335,6 +5294,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('unboundblaze').onUpdate?.call(this, pokemon);
 		},
 		onStart(pokemon) {
+			this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
 			return this.dex.abilities.get('unboundblaze').onStart?.call(this, pokemon);
 		},
 		onModifyTypePriority: -1,
@@ -5355,7 +5315,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifySpA(spa, attacker, defender, move) {
 			return this.dex.abilities.get('unboundblaze').onSourceModifySpA?.call(this, spa, attacker, defender, move);
 		},
-		onModifyMove(move) {
+		onModifyMove(move, pokemon, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
 			move.critRatio = (move.critRatio ?? 1) + 1;
 			if (move.id === 'dragonrush') move.accuracy = true;
 		},
@@ -5490,11 +5451,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const holder = this.effectState.target;
 			const move = effect as ActiveMove;
 			if (source !== holder || !holder?.hp || !holder.isActive || target.isAlly(holder) ||
-				holder.volatiles['mythicscalespent'] || move?.effectType !== 'Move' || !move.flags?.powder ||
-				move.isMax || move.sourceEffect || move.callsMove || move.hasBounced || (move as any).isExternal ||
+				holder.volatiles['mythicscalespent'] || move?.effectType !== 'Move' ||
+				!(move.id === 'gmaxbefuddle' || (move.flags?.powder && !move.isMax)) || move.sourceEffect || move.callsMove || move.hasBounced || (move as any).isExternal ||
 				this.activePokemon !== holder || this.activeMove?.id !== move.id) return;
 			if (holder.addVolatile('mythicscalespent', holder, this.effect)) {
 				this.boost({def: 1}, holder, holder, this.effect);
+				for (const ally of holder.allies()) this.boost({spd: 1}, ally, holder, this.effect);
 			}
 		},
 		flags: { breakable: 1 },
@@ -5503,7 +5465,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10046,
 	},
 	toxicevolution: {
+		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
 		onModifyMove(move, source, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
 			this.dex.abilities.get('corrosion').onModifyMove?.call(this, move, source, target);
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source, target);
 		},
@@ -5529,6 +5493,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const holder = this.effectState.target;
 			if ((status.id === 'psn' || status.id === 'tox') && source === holder && target !== holder && !target.isAlly(holder)) {
 				target.addVolatile('confusion', holder);
+				if (holder.hp && holder.isActive && !holder.volatiles['toxicevolutionhealed'] &&
+					(effect?.effectType === 'Move' || effect?.id === 'toxicevolution')) {
+					holder.addVolatile('toxicevolutionhealed', holder, this.effect);
+					this.heal(holder.baseMaxhp / 8, holder, holder, this.effect);
+				}
 			}
 		},
 		onModifySecondaries(secondaries, target, source, move) { return this.dex.abilities.get('shielddust').onModifySecondaries?.call(this, secondaries, target, source, move); },
@@ -6901,7 +6870,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move) {
 			if (move.category === 'Status') return;
 			if (!move.secondaries) move.secondaries = [];
-			const chance = this.field.isTerrain('icyterrain') ? 80 : 40;
+			const chance = this.field.isTerrain('icyterrain') ? 40 : 20;
 			move.secondaries.push({ chance, status: 'frz' });
 		},
 		onSourceAfterFaint(length, target, source, effect) {
@@ -9137,7 +9106,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			for (const ally of pokemon.allies()) {
 				this.heal(ally.baseMaxhp / 16, ally, pokemon);
 			}
@@ -10343,7 +10312,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (pokemon.illusion) {
 				const blacklist = [
-					'multitype', 'comatose', 'disguise', 'schooling', 'seviischooling', 'resuscitation', 'prismpower',
+					'multitype', 'comatose', 'slumberinggiant', 'disguise', 'schooling', 'seviischooling', 'resuscitation', 'prismpower',
 					'battlebond', 'rkssystem', 'imposter', 'shieldsdown', 'powerofalchemy', 'receiver',
 					'forecast', 'flowergift', 'illusion', 'wonderguard', 'zenmode', 'stancechange',
 					'powerconstruct', 'iceface', 'asone', 'asonechilling', 'asonegrim', 'neutralizinggas',
@@ -10765,13 +10734,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	argentdevotion: {
 		onStart(pokemon) {
 			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
+			this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon);
 		},
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon, target) {
 			this.dex.abilities.get('armorize').onModifyType?.call(this, move, pokemon, target);
 		},
 		onModifyMovePriority: -2,
-		onModifyMove(move, pokemon, target) { this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move, pokemon, target ); },
+		onModifyMove(move, pokemon, target) {
+			this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move, pokemon, target);
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
+		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			let modifier = 1;
@@ -12534,6 +12507,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 20,
 	},
 	parentalbond: {
+		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
 		onBasePower(basePower, attacker, defender, move) {
 			return this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
@@ -12549,7 +12523,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.multihit = 2;
 			move.multihitType = 'parentalbond';
 		},
-		onModifyMove(move) {
+		onModifyMove(move, pokemon, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
 				move.ignoreImmunity['Fighting'] = true;
@@ -12640,6 +12615,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!foe || foe.fainted) continue;
 				const perishSong = foe.volatiles['perishsong'];
 				if (perishSong) {
+					if (target.species.baseSpecies === 'Cursola') continue;
 					perishSong.duration = Math.max(1, (perishSong.duration ?? 4) - 1);
 				} else {
 					foe.addVolatile('perishsong');
@@ -14633,6 +14609,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
+			const recoveryDivisor = pokemon.species.baseSpecies === 'Scrafty' &&
+				['shedskin', 'streettyrant'].includes(pokemon.ability) ? 8 : 4;
 			const removableVolatiles = [
 				'attract', 'confusion', 'curse', 'disable', 'encore', 'healblock', 'leechseed',
 				'nightmare', 'perishsong', 'taunt', 'torment', 'yawn',
@@ -14649,7 +14627,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const atk = pokemon.getStat('atk', false, true);
 				const spa = pokemon.getStat('spa', false, true);
 				this.boost(atk >= spa ? { atk: 1, def: -1, spd: -1 } : { spa: 1, def: -1, spd: -1 }, pokemon, pokemon);
-				this.heal(pokemon.maxhp / 4, pokemon, pokemon);
+				this.heal(pokemon.maxhp / recoveryDivisor, pokemon, pokemon);
 				return;
 			}
 			for (const volatile of removableVolatiles) {
@@ -14664,7 +14642,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (clearedBoost) this.add('-clearnegativeboost', pokemon, '[from] ability: Shed Skin');
-			this.heal(pokemon.maxhp / 4, pokemon, pokemon);
+			this.heal(pokemon.maxhp / recoveryDivisor, pokemon, pokemon);
 		},
 		flags: {},
 		name: "Shed Skin",
@@ -15161,6 +15139,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10008,
 	},
 	soulsiphon: {
+		onStart(pokemon) { return Abilities.flashfire.onStart?.call(this, pokemon); },
+		onTryHit(target, source, move) {
+			const hook = Abilities.flashfire.onTryHit;
+			if (typeof hook === 'function') return hook.call(this, target, source, move);
+		},
+		onResidual(pokemon) { return Abilities.flashfire.onResidual?.call(this, pokemon, pokemon, this.effect); },
+		onEnd(pokemon) { return Abilities.flashfire.onEnd?.call(this, pokemon); },
 		onAnyAfterDamageApplied(damage, target, source, effect) {
 			const holder = this.effectState.target;
 			if (source !== holder || !source.hp || !source.isActive || source.isAlly(target) || damage <= 0 ||
@@ -15195,7 +15180,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return Math.min(modified, Math.max(0, Math.floor(target.maxhp / 6) - target.m.soulSiphonHealed));
 			}
 		},
-		flags: {},
+		flags: { breakable: 1 },
 		name: "Soul Siphon",
 		rating: 4,
 		num: 11232,
@@ -15226,7 +15211,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {}, name: "Malice Well", rating: 3.5, num: 11209,
 	},
 	soulcremation: {
-		onStart(pokemon) { return (this.dex.abilities.get('malicewell') as any).onStart?.call(this, pokemon); },
+		onStart(pokemon) {
+			Abilities.soulsiphon.onStart?.call(this, pokemon);
+			Abilities.malicewell.onStart?.call(this, pokemon);
+		},
+		onTryHit(target, source, move) {
+			const hook = Abilities.soulsiphon.onTryHit;
+			if (typeof hook === 'function') return hook.call(this, target, source, move);
+		},
+		onEnd(pokemon) { return Abilities.soulsiphon.onEnd?.call(this, pokemon); },
 		onDamagingHit(damage, target, source, move) {
 			return (this.dex.abilities.get('malicewell') as any).onDamagingHit?.call(this, damage, target, source, move);
 		},
@@ -15245,6 +15238,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidualOrder: 30,
 		onResidual(pokemon) {
+			Abilities.soulsiphon.onResidual?.call(this, pokemon, pokemon, this.effect);
 			return (this.dex.abilities.get('soulpyre') as any).onResidual?.call(this, pokemon);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
@@ -15254,7 +15248,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHeal(damage, target, source, effect) {
 			return (this.dex.abilities.get('soulsiphon') as any).onTryHeal?.call(this, damage, target, source, effect);
 		},
-		flags: {},
+		flags: { breakable: 1 },
 		name: "Soul Cremation",
 		rating: 5,
 		num: 11259,
@@ -15638,7 +15632,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {}, name: "Nightmare Pulse", rating: 4.5, num: 11257,
 	},
 	pulsewaste: {
-		onStart(pokemon) { setPulseMurkwater(this, pokemon); },
+		onStart(pokemon) {
+			setPulseMurkwater(this, pokemon, pokemon.species.id === 'mukpulse' ? 'swampterrain' : 'murkwatersurfaceterrain');
+		},
 		onPrepareHit(source, target, move) {
 			return this.dex.abilities.getHandler('protean', 'onPrepareHit')?.call(this, source, target, move);
 		},
@@ -15653,12 +15649,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10353,
 	},
-	glacialmass: {
-		flags: {},
-		name: "Glacial Mass",
-		rating: 4.5,
-		num: 10388,
-	},
+	glacialmass: { flags: {breakable: 1}, name: "Glacial Mass", rating: 4.5, num: 10388 },
 	riftdancer: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
@@ -15774,7 +15765,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!effect || effect.id === 'royaldecree' || effect.id === 'empress') return;
 			if (effect.id === 'relicinstinct' || effect.id === 'neutralization') return;
 			const isOnlyDrops = Object.values(boost).some(value => value && value < 0) &&
-				!Object.values(boost).some(value => value && value > 0);
+				!Object.values(boost).some(value => value && value !== 0);
 			if (isOnlyDrops && source === target && target.hasAbility(['royaldecree', 'empress'])) return;
 			const positiveBoost = Object.values(boost).some(value => value && value > 0);
 			if (positiveBoost && target === source && effect.effectType === 'Ability') {
@@ -15794,6 +15785,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let stat: BoostID;
 			for (stat in boost) {
 				if (!boost[stat]) continue;
+				if (target === source && target.hasAbility(['royaldecree', 'empress']) &&
+					(boost[stat]! > 0 || effect.effectType === 'Move')) continue;
 				delete boost[stat];
 				blocked = true;
 			}
@@ -16832,7 +16825,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	supremeoverlord: {
 		fallen(pokemon) {
 			const totalFainted = pokemon.side.totalFainted + (pokemon.side.allySide?.totalFainted || 0);
-			return this.gameType === 'freeforall' ? totalFainted * 2 : totalFainted;
+			return Math.min(5, this.gameType === 'freeforall' ? totalFainted * 2 : totalFainted);
 		},
 		onStart(pokemon) {
 			const totalFainted = ((this.effect as Ability).fallen?.call(this, pokemon) ?? 0);
@@ -18469,9 +18462,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.dex.abilities.get('waterveil').onSwitchIn?.call(this, pokemon);
 		},
-		onModifyMove(move) {
-			if (move && this.movehasType(move, 'Water')) move.forceSTAB = true;
-		},
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move && this.movehasType(move, 'Fire')) {
@@ -18917,7 +18907,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.species.forme === 'Hero') {
 				for (const ally of pokemon.alliesAndSelf()) {
 					if (ally.fainted) continue;
-					this.heal(ally.baseMaxhp * (ally.hp <= ally.maxhp / 2 ? 1 / 4 : 1 / 8), ally, pokemon, this.dex.abilities.get('zerotohero'));
+					this.heal(ally.baseMaxhp / 8, ally, pokemon, this.dex.abilities.get('zerotohero'));
 				}
 			}
 		},
@@ -19401,7 +19391,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	triplethreat: {
 		onStart(pokemon) {
 			this.dex.abilities.get('tangledfeet').onStart?.call(this, pokemon);
-			this.dex.abilities.get('sniper').onStart?.call(this, pokemon);
 			this.dex.abilities.get('keeneye').onStart?.call(this, pokemon);
 		},
 		onModifyMove(move, source, target) {
@@ -19421,11 +19410,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAccuracy(accuracy, target, source, move) {
 			return this.dex.abilities.get('tangledfeet').onModifyAccuracy?.call(this, accuracy, target, source, move);
 		},
-		onModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('sniper').onModifyDamage?.call(this, damage, source, target, move);
+		onUpdate(pokemon) {
+			return this.dex.abilities.get('limber').onUpdate?.call(this, pokemon);
+		},
+		onSetStatus(status, target, source, effect) {
+			return this.dex.abilities.get('limber').onSetStatus?.call(this, status, target, source, effect);
 		},
 		onTryBoost(boost, target, source, effect) {
 			this.dex.abilities.get('bigpecks').onTryBoost?.call(this, boost, target, source, effect);
+			this.dex.abilities.get('limber').onTryBoost?.call(this, boost, target, source, effect);
 			this.dex.abilities.get('keeneye').onTryBoost?.call(this, boost, target, source, effect);
 		},
 		flags: {},
@@ -19744,15 +19737,46 @@ Abilities.spentforce = {
 	num: 11218,
 };
 
+/** Underwater conversion is separate from the once-per-battle field-generation budget. */
+function convertPulseSwalotUnderwater(battle: Battle, pokemon: Pokemon) {
+	if (pokemon.species.id !== 'swalotpulse' || battle.field.terrain !== 'underwaterterrain') return false;
+	if (battle.field.changeTerrain('murkwatersurfaceterrain', pokemon, battle.dex.abilities.get('pulsefiltration'))) {
+		battle.field.setTerrainDuration(5);
+	}
+	return true;
+}
+
 Abilities.pulsefiltration = {
-	onStart(pokemon) { setPulseMurkwater(this, pokemon); },
+	onStart(pokemon) {
+		if (convertPulseSwalotUnderwater(this, pokemon)) {
+			claimAnomalyField(pokemon);
+			pokemon.m.pulseFieldUsed = true;
+			return;
+		}
+		setPulseMurkwater(this, pokemon);
+	},
+	onTerrainChange(pokemon) {
+		convertPulseSwalotUnderwater(this, pokemon);
+	},
 	onTryHit(target, source, move) {
-		if (target !== source && this.movehasType(move, ['Water', 'Poison'])) {
+		if (target !== source && this.movehasType(move, 'Water')) {
+			const hook = Abilities.waterabsorb.onTryHit;
+			if (typeof hook === 'function') return hook.call(this, target, source, move);
+		}
+		if (target !== source && this.movehasType(move, 'Poison')) {
 			if (!this.heal(target.baseMaxhp / 4, target)) {
 				this.add('-immune', target, '[from] ability: Pulse Filtration');
 			}
 			return null;
 		}
+	},
+	onResidual(pokemon) {
+		return Abilities.waterabsorb.onResidual?.call(this, pokemon, pokemon, this.effect);
+	},
+	onSourceTryHeal(damage, target, source, effect) {
+		const hook = Abilities.liquidooze.onSourceTryHeal as
+			(this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void;
+		return hook.call(this, damage, target, source, effect);
 	},
 	flags: { breakable: 1 },
 	name: "Pulse Filtration",
@@ -19826,3 +19850,1054 @@ Abilities.pulseeruption = {
 };
 
 applyApprovedSignatures(Abilities);
+
+// Full local components, installed after roster overrides. Shared hooks are combined once.
+Abilities.glacialmass = {
+	...Abilities.heavymetal,
+	...Abilities.thickfat,
+	flags: {breakable: 1}, name: "Glacial Mass", rating: 4.5, num: 10388,
+};
+
+Abilities.unleashedego = {
+	...Abilities.ultraego,
+	...Abilities.levitate,
+	...Abilities.ragingstorm,
+	onStart(pokemon) {
+		Abilities.ultraego.onStart?.call(this, pokemon);
+		Abilities.ragingstorm.onStart?.call(this, pokemon);
+	},
+	onModifyMove(move, pokemon, target) {
+		Abilities.ultraego.onModifyMove?.call(this, move, pokemon, target);
+		Abilities.ragingstorm.onModifyMove?.call(this, move, pokemon, target);
+	},
+	onSourceDamagingHit(damage, target, source, move) {
+		Abilities.ultraego.onSourceDamagingHit?.call(this, damage, target, source, move);
+		Abilities.ragingstorm.onSourceDamagingHit?.call(this, damage, target, source, move);
+	},
+	onSourceModifyDamage(damage, source, target, move) {
+		Abilities.ultraego.onSourceModifyDamage?.call(this, damage, source, target, move);
+		Abilities.ragingstorm.onSourceModifyDamage?.call(this, damage, source, target, move);
+	},
+	flags: {cantsuppress: 1}, name: "Unleashed Ego", rating: 5, num: 10287,
+};
+
+Abilities.moonlithide = {
+	...Abilities.shadowshield,
+	...Abilities.magicguard,
+	flags: {}, name: "Moonlit Hide", rating: 4.5, num: 11235,
+};
+
+// Supreme Overlord and Unnerve retain their full local hooks and thresholds.
+Abilities.conquerorswill = {
+	...Abilities.supremeoverlord,
+	...Abilities.unnerve,
+	onStart(pokemon) {
+		Abilities.supremeoverlord.onStart?.call(this, pokemon);
+		Abilities.unnerve.onStart?.call(this, pokemon);
+	},
+	onEnd(pokemon) {
+		Abilities.supremeoverlord.onEnd?.call(this, pokemon);
+		Abilities.unnerve.onEnd?.call(this, pokemon);
+	},
+	onModifyMove(move, pokemon, target) {
+		Abilities.supremeoverlord.onModifyMove?.call(this, move, pokemon, target);
+		if (move.id !== 'kowtowcleave') return;
+		// Brick Break's move-local TryHit timing: after protection, accuracy and immunity,
+		// before damage (including Substitute). Only the three approved screens are removed.
+		move.onTryHit = function (target, source) {
+			if (target.isAlly(source)) return;
+			for (const screen of ['reflect', 'lightscreen', 'auroraveil']) {
+				target.side.removeSideCondition(screen);
+			}
+		};
+	},
+	flags: {}, name: "Conqueror's Will", rating: 4.5, num: 11236,
+};
+
+Abilities.nightwatch = {
+	...Abilities.keeneye,
+	...Abilities.insomnia,
+	onStart(pokemon) {
+		Abilities.keeneye.onStart?.call(this, pokemon);
+		pokemon.addVolatile('nightwatchstate', pokemon);
+	},
+	onEnd(pokemon) {
+		const state = pokemon.volatiles['nightwatchstate'];
+		if (state) state.observations = [];
+	},
+	onAnySwitchOut(pokemon) {
+		const state = this.effectState.target.volatiles['nightwatchstate'];
+		if (state?.observations) state.observations = state.observations.filter((entry: any) => entry.pokemon !== pokemon);
+	},
+	onAnyAfterMove(pokemon, target, move) {
+		const holder = this.effectState.target;
+		if (!holder.hp || !holder.isActive || pokemon.isAlly(holder) || !pokemon.hp || !pokemon.isActive) return;
+		if (move.isExternal || move.sourceEffect || move.hasBounced) return;
+		holder.addVolatile('nightwatchstate', holder);
+		const state = holder.volatiles['nightwatchstate'];
+		if (state.spent) return;
+		const observations: {pokemon: Pokemon, move: string, turn: number}[] = state.observations ||= [];
+		const previous = observations.find(entry => entry.pokemon === pokemon);
+		if (previous?.turn === this.turn) return;
+		const qualifies = move.category === 'Status' && !move.callsMove && pokemon.lastMove?.id === move.id;
+		const repeated = qualifies && previous?.turn === this.turn - 1 && previous.move === move.id;
+		state.observations = observations.filter(entry => entry.pokemon !== pokemon);
+		if (qualifies) state.observations.push({pokemon, move: move.id, turn: this.turn});
+		if (!repeated) return;
+		// Execute normal Disable after the observed action, retaining its protection/immunity checks.
+		const activeMove = this.activeMove, activePokemon = this.activePokemon, activeTarget = this.activeTarget;
+		this.clearActiveMove();
+		const succeeded = this.actions.useMove('disable', holder, {target: pokemon, sourceEffect: this.effect});
+		if (succeeded) state.spent = true;
+		this.setActiveMove(activeMove!, activePokemon!, activeTarget!);
+	},
+	flags: {breakable: 1}, name: 'Night Watch', rating: 3.5, num: 11237,
+};
+
+Abilities.fruitfulbough = {
+	...Abilities.harvest,
+	onEatItem(item, pokemon, source, effect) {
+		if (!item.isBerry || ['bugbite', 'pluck'].includes(effect?.id || '') || pokemon.item !== item.id || pokemon.m.fruitfulBoughTurn === this.turn) return;
+		pokemon.m.fruitfulBoughTurn = this.turn;
+		for (const ally of pokemon.allies()) this.heal(ally.baseMaxhp / 8, ally, pokemon, this.effect);
+	},
+	flags: {}, name: 'Fruitful Bough', rating: 3.5, num: 11238,
+};
+
+Abilities.soulanchor = {
+	...Abilities.steelworker,
+	flags: {}, name: 'Soul Anchor', rating: 4, num: 11239,
+};
+
+Abilities.guidinglight = {
+	...Abilities.dazzling,
+	...Abilities.illuminate,
+	flags: {breakable: 1}, name: 'Guiding Light', rating: 4, num: 11240,
+};
+
+Abilities.royalescort = {
+	...Abilities.pressure,
+	...Abilities.sweetveil,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || move.id !== 'attackorder' || target.isAlly(source) || source.volatiles['royalescortspent']) return;
+		if (!source.addVolatile('royalescortspent', source, this.effect)) return;
+		this.boost({atk: -1}, target, source, this.effect);
+	},
+	onAfterBoost(boost, target, source, effect) {
+		if (target !== source || effect?.id !== 'defendorder' || !Object.values(boost).some(value => value && value > 0) ||
+			target.volatiles['royalescortspent']) return;
+		if (!target.addVolatile('royalescortspent', target, this.effect)) return;
+		for (const ally of target.allies()) ally.addVolatile('royalescortshield', target, this.effect);
+	},
+	onHeal(damage, target, source, effect) {
+		if (damage <= 0 || target !== source || !['healorder', 'defendorder'].includes(effect?.id) ||
+			target.volatiles['royalescortspent']) return;
+		if (!target.addVolatile('royalescortspent', target, this.effect)) return;
+		for (const ally of target.allies()) {
+			if (effect.id === 'defendorder') ally.addVolatile('royalescortshield', target, this.effect);
+			else this.heal(ally.baseMaxhp / 8, ally, target, this.effect);
+		}
+	},
+	flags: {breakable: 1}, name: 'Royal Escort', rating: 4, num: 11241,
+};
+
+Abilities.liquidarsenal = {
+	...Abilities.technician,
+	flags: {}, name: 'Liquid Arsenal', rating: 4, num: 11242,
+};
+Abilities.knightsreprisal = {
+	...Abilities.bulletproof,
+	onModifyPriority(priority, pokemon, target, move) {
+		if (move.category !== 'Status' && pokemon.volatiles['knightsreprisalcharge']) return priority + 1;
+	},
+	onModifyMove(move, pokemon) {
+		if (move.category !== 'Status') pokemon.removeVolatile('knightsreprisalcharge');
+	},
+	flags: {breakable: 1}, name: "Knight's Reprisal", rating: 4, num: 11243,
+};
+Abilities.aurorasanctum = {
+	...Abilities.snowwarning,
+	onAllyTryBoost(boost, target, source) {
+		const holder = this.effectState.target;
+		if (!holder.side.getSideCondition('auroraveil') || !source || source.isAlly(target)) return;
+		for (const stat in boost) if (boost[stat as BoostID]! < 0) delete boost[stat as BoostID];
+	},
+	flags: {}, name: 'Aurora Sanctum', rating: 4, num: 11244,
+};
+Abilities.chargedtail = {
+	...Abilities.static,
+	onAnyAfterSetStatus(status, target, source, effect) {
+		const holder = this.effectState.target;
+		if (status.id === 'par' && source === holder && target !== holder && effect?.id === 'nuzzle') {
+			this.effectState.chargeTurn = this.turn;
+		}
+	},
+	onAfterMovePriority: -1,
+	onAfterMove(pokemon, target, move) {
+		const pending = this.effectState.chargeTurn === this.turn;
+		delete this.effectState.chargeTurn;
+		if (pending && move.id === 'nuzzle' && pokemon.hp && !pokemon.volatiles['charge']) {
+			pokemon.addVolatile('charge', pokemon, this.effect);
+		}
+	},
+	flags: {}, name: 'Charged Tail', rating: 3.5, num: 11245,
+};
+
+// Compose with the final roster version, retaining its first Flower Trick seed attempt.
+const falseBouquetBeforeMagician = Abilities.falsebouquet;
+Abilities.falsebouquet = {
+	...Abilities.magician,
+	...falseBouquetBeforeMagician,
+	onStart(pokemon) {
+		falseBouquetBeforeMagician.onStart?.call(this, pokemon);
+		Abilities.magician.onStart?.call(this, pokemon);
+	},
+};
+
+Abilities.stancechange.onAnyAfterMove = function (pokemon, target, move) {
+	const holder = this.effectState.target;
+	const pending = holder.volatiles['stancechangereprisalpending'];
+	if (!pending || pending.foe !== pokemon || pending.move !== move.id) return;
+	holder.removeVolatile('stancechangereprisalpending');
+	if (!holder.hp || !holder.isActive || !pokemon.hp || !pokemon.isActive || holder.volatiles['stancechangereprisalspent']) return;
+	const activeMove = this.activeMove, activePokemon = this.activePokemon, activeTarget = this.activeTarget;
+	const previousLastMove = pokemon.lastMove;
+	pokemon.lastMove = this.dex.getActiveMove(move.id);
+	this.clearActiveMove();
+	const succeeded = this.actions.useMove('disable', holder, {target: pokemon, sourceEffect: this.effect});
+	pokemon.lastMove = previousLastMove;
+	if (succeeded) {
+		holder.addVolatile('stancechangereprisalspent', holder, this.effect);
+		const disabled = pokemon.volatiles['disable'];
+		if (disabled?.move === move.id) disabled.duration = 3; // this end-of-turn plus two future turns
+	}
+	this.setActiveMove(activeMove!, activePokemon!, activeTarget!);
+};
+
+// Approved global Curious Medicine revision; clear only harmful stages and confusion.
+Abilities.curiousmedicine.onStart = function (pokemon) {
+	for (const ally of [pokemon, ...pokemon.allies()]) {
+		let cleansed = ally.removeVolatile('confusion');
+		let stages = false;
+		for (const stat in ally.boosts) if (ally.boosts[stat as BoostID] < 0) {
+			ally.boosts[stat as BoostID] = 0; stages = true;
+		}
+		if (stages) { this.add('-clearnegativeboost', ally, '[from] ability: Curious Medicine'); cleansed = true; }
+		if (cleansed) this.heal(ally.baseMaxhp / 8, ally, pokemon, this.effect);
+	}
+};
+Abilities.eldritchremedy = {
+	...Abilities.owntempo, ...Abilities.curiousmedicine,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || move.id !== 'eeriespell' || source.m.eldritchRemedyTurn === this.turn) return;
+		const recipient = source.status ? source : source.allies().filter(ally => ally.status)
+			.sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp)[0];
+		if (recipient?.cureStatus()) source.m.eldritchRemedyTurn = this.turn;
+	},
+	flags: {breakable: 1}, name: 'Eldritch Remedy', rating: 4, num: 11246,
+};
+Abilities.infernaldominion = {
+	...Abilities.intimidate,
+	onStart(pokemon) { this.singleEvent('Start', this.dex.abilities.get('intimidate'), pokemon.abilityState, pokemon); },
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || !target.hp || target.isAlly(source) || !this.movehasType(move, 'Fire') || target.volatiles['partiallytrapped']) return;
+		if (!target.addVolatile('partiallytrapped', source, this.dex.getActiveMove('firespin'))) return;
+		const old = this.effectState.trappedFoe;
+		if (old && old !== target && old.volatiles['partiallytrapped']?.source === source && old.volatiles['partiallytrapped'].infernalDominionTurns) old.removeVolatile('partiallytrapped');
+		this.effectState.trappedFoe = target;
+		const trap = target.volatiles['partiallytrapped'] as any;
+		trap.infernalDominionTurns = 2;
+		trap.duration = 3;
+	},
+	onEnd(pokemon) {
+		const target = this.effectState.trappedFoe;
+		if (target?.volatiles['partiallytrapped']?.source === pokemon && target.volatiles['partiallytrapped'].infernalDominionTurns) target.removeVolatile('partiallytrapped');
+	},
+	flags: {}, name: 'Infernal Dominion', rating: 4, num: 11247,
+};
+Abilities.hydraulicarmor = {
+	...Abilities.stamina,
+	onModifyMove(move, pokemon) {
+		if (['waterpulse', 'hydropump'].includes(move.id) && pokemon.getStat('def', false, true) > pokemon.getStat('spa', false, true)) move.overrideOffensiveStat = 'def';
+	},
+	flags: {}, name: 'Hydraulic Armor', rating: 4, num: 11249,
+};
+Abilities.hauntingpresence = {...Abilities.levitate, name: 'Haunting Presence', rating: 4, num: 11250};
+Abilities.slumberinggiant = {...Abilities.thickfat, ...Abilities.comatose, name: 'Slumbering Giant', rating: 4, num: 11251};
+Abilities.oceanlullaby = {
+	...Abilities.shellarmor,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || !move.flags.sound || source.m.oceanLullabyTurn === this.turn) return;
+		source.m.oceanLullabyTurn = this.turn;
+		for (const ally of [source, ...source.allies()]) {
+			ally.removeVolatile('confusion');
+			if (ally.boosts.accuracy < 0) {
+				ally.boosts.accuracy = 0;
+				this.add('-setboost', ally, 'accuracy', 0, '[from] ability: Ocean Lullaby');
+			}
+		}
+	},
+	name: 'Ocean Lullaby', rating: 4, num: 11252,
+};
+Abilities.shadowscreen = {...Abilities.infiltrator, name: 'Shadow Screen', rating: 4, num: 11253};
+Abilities.moonlitpromise = {...Abilities.unaware, name: 'Moonlit Promise', rating: 4, num: 11254};
+Abilities.sandshroud = {
+	...Abilities.levitate, ...Abilities.overcoat,
+	onResidualOrder: 5, onResidualSubOrder: 1,
+	onResidual(pokemon) {
+		if (this.field.isWeather('sandstorm')) this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon, this.effect);
+	},
+	name: 'Sandshroud', rating: 4, num: 11255,
+};
+Abilities.arcanepilfer = {
+	...Abilities.magician,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || !target.hp || target.isAlly(source) || move.id !== 'mysticalfire') return;
+		if (target.addVolatile('embargo', source, this.effect)) target.volatiles['embargo'].duration = 2;
+	},
+	name: 'Arcane Pilfer', rating: 4, num: 11256,
+};
+
+Abilities.faultline = {...Abilities.moldbreaker, name: 'Faultline', rating: 4, num: 11257};
+
+Abilities.creepingbloom = {
+	...Abilities.infiltrator,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || target.isAlly(source) || !this.movehasType(move, 'Poison')) return;
+		const action = this.activeMove;
+		let state = source.volatiles['creepingbloomspent'];
+		if (!state) {
+			if (!source.addVolatile('creepingbloomspent', source, this.effect)) return;
+			state = source.volatiles['creepingbloomspent'];
+			state.move = action;
+			state.targets = [];
+		}
+		if (state.move !== action || state.targets.includes(target)) return;
+		state.targets.push(target);
+		if (target.hp) target.trySetStatus('psn', source, this.effect);
+	},
+	flags: {}, name: 'Creeping Bloom', rating: 4, num: 11258,
+};
+
+Abilities.dreadwings = {
+	...Abilities.levitate, ...Abilities.unnerve,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage > 0 && target.hp && !target.isAlly(source) && move.id === 'darkpulse') {
+			target.addVolatile('torment', source, this.effect);
+		}
+	},
+	flags: {breakable: 1}, name: 'Dread Wings', rating: 4, num: 11248,
+};
+
+// Approved signature refinements; retain the current local component implementations.
+Abilities.setpiece.onModifyMove = function (move) {
+	if (this.effectState.charged && move.type === 'Fire' && move.category !== 'Status') move.accuracy = true;
+};
+Abilities.dozinggiant.onDragOutPriority = 1;
+Abilities.dozinggiant.onDragOut = function (pokemon, source) {
+	if (pokemon.status === 'slp' && (!source || !pokemon.isAlly(source))) {
+		this.add('-activate', pokemon, 'ability: Dozing Giant');
+		return null;
+	}
+};
+Abilities.causticchamber = {
+	...Abilities.owntempo,
+	onModifyMove(move) { if (move.id === 'shellsidearm') move.ignorePositiveDefensive = true; },
+	name: 'Caustic Chamber', rating: 4, num: 11261,
+};
+Abilities.demolitiontrunk = {
+	...Abilities.sheerforce,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || target.isAlly(source) || !['heavyslam', 'heatcrash'].includes(move.id) || source.volatiles['demolitiontrunkspent']) return;
+		source.addVolatile('demolitiontrunkspent', source, this.effect);
+		for (const screen of ['reflect', 'lightscreen', 'auroraveil']) target.side.removeSideCondition(screen);
+	},
+	name: 'Demolition Trunk', rating: 4, num: 11262,
+};
+Abilities.deepresonance = {
+	...Abilities.soundproof,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || !target.hp || target.isAlly(source) || move.id !== 'psychicnoise') return;
+		if (this.effectState.move !== this.activeMove) {
+			this.effectState.move = this.activeMove;
+			this.effectState.targets = [];
+		}
+		if (this.effectState.targets.includes(target)) return;
+		this.effectState.targets.push(target);
+		this.boost({atk: -1}, target, source, this.effect);
+	},
+	name: 'Deep Resonance', rating: 4, num: 11263,
+};
+Abilities.siegemagnet = {
+	...Abilities.magnetpull,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || target.isAlly(source) || !this.movehasType(move, 'Electric') || source.volatiles['siegemagnetspent']) return;
+		source.addVolatile('siegemagnetspent', source, this.effect);
+		const alreadyBlocked = !!target.volatiles['healblock'];
+		if (target.hp && !alreadyBlocked && target.addVolatile('healblock', source, this.effect)) target.volatiles['healblock'].duration = 2;
+	},
+	name: 'Siege Magnet', rating: 4, num: 11264,
+};
+Abilities.patientmarksman = {...Abilities.sniper, name: 'Patient Marksman', rating: 4, num: 11265};
+const sushiTrickEntry = Abilities.sushitrick.onStart!;
+Abilities.sushitrick.onStart = function (pokemon) {
+	if (pokemon.adjacentAllies().length) return sushiTrickEntry.call(this, pokemon);
+	pokemon.removeVolatile('confusion');
+	if (pokemon.boosts.accuracy < 0) {
+		pokemon.boosts.accuracy = 0;
+		this.add('-setboost', pokemon, 'accuracy', 0, '[from] ability: Sushi Trick');
+	}
+};
+Abilities.cradleward = {...Abilities.sweetveil, name: 'Cradle Ward', rating: 4, num: 11266};
+Abilities.raisedquills.onDamagingHit = function (damage, target, source) {
+	if (!this.effectState.charged || damage <= 0 || !source || target.isAlly(source)) return;
+	this.effectState.charged = false;
+	source.trySetStatus('psn', target, this.effect);
+};
+Abilities.sunreserve = {
+	...Abilities.flashfire,
+	onTryHit(target, source, move) {
+		const callback = this.dex.abilities.get('flashfire').onTryHit;
+		const result = typeof callback === 'function' ? callback.call(this, target, source, move) : undefined;
+		if (result === null && target.m.sunReserveTurn !== this.turn) {
+			target.m.sunReserveTurn = this.turn;
+			this.heal(target.baseMaxhp / 8, target, target, this.effect);
+		}
+		return result;
+	},
+	name: 'Sun Reserve', rating: 4, num: 11267,
+};
+Abilities.silentreprisal = {
+	...Abilities.soundproof, ...Abilities.anticipation,
+	flags: {breakable: 1}, name: 'Silent Reprisal', rating: 4, num: 11268,
+};
+Abilities.dreamrefuge = {...Abilities.telepathy, name: 'Dream Refuge', rating: 4, num: 11269};
+Abilities.closedcircuit = {
+	...Abilities.clearbody,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || move.id !== 'geargrind') return;
+		if (this.effectState.move !== this.activeMove || this.effectState.hitTarget !== target) {
+			this.effectState.move = this.activeMove;
+			this.effectState.hitTarget = target;
+			this.effectState.hits = 0;
+		}
+		this.effectState.hits++;
+	},
+	onAfterMoveSecondarySelf(source, target, move) {
+		if (move.id !== 'geargrind' || this.effectState.move !== this.activeMove || this.effectState.hits !== 2) return;
+		this.effectState.hits = 0;
+		this.heal(source.baseMaxhp / 16, source, source, this.effect);
+	},
+	name: 'Closed Circuit', rating: 4, num: 11270,
+};
+
+Abilities.pridecall = {...Abilities.competitive, ...Abilities.unnerve, name: 'Pridecall', rating: 4, num: 11271};
+Abilities.hydroelectric = {
+	...Abilities.dryskin,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || !this.movehasType(move, 'Water') || source.m.hydroelectricTurn === this.turn) return;
+		source.m.hydroelectricTurn = this.turn;
+		this.heal(source.baseMaxhp / 8, source, source, this.effect);
+	},
+	name: 'Hydroelectric', rating: 4, num: 11272,
+};
+Abilities.solarstride = {
+	...Abilities.chlorophyll,
+	onModifyMove(move, source) {
+		if (move.category === 'Status' || !this.movehasType(move, 'Electric') || !['sunnyday', 'desolateland'].includes(source.effectiveWeather())) return;
+		const originalTryHit = move.onTryHit;
+		move.onTryHit = function (target, pokemon, attack) {
+			const result = typeof originalTryHit === 'function' ? originalTryHit.call(this, target, pokemon, attack) : originalTryHit;
+			if (result === false || result === null || result === '') return result;
+			if (!target.isAlly(pokemon) && ['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				for (const screen of ['reflect', 'lightscreen', 'auroraveil']) target.side.removeSideCondition(screen);
+			}
+			return result;
+		};
+	},
+	name: 'Solar Stride', rating: 4, num: 11273,
+};
+Abilities.frillflash = {...Abilities.dazzling, name: 'Frill Flash', rating: 4, num: 11274};
+
+function clearApprovedNegativeStats(battle: Battle, pokemon: Pokemon, stats: BoostID[], ability: string) {
+	for (const stat of stats) if (pokemon.boosts[stat] < 0) {
+		pokemon.boosts[stat] = 0;
+		battle.add('-setboost', pokemon, stat, 0, '[from] ability: ' + ability);
+	}
+}
+Abilities.stokebelly = {
+	...Abilities.gluttony,
+	onEatItem(item, pokemon) { if (item.isBerry) clearApprovedNegativeStats(this, pokemon, ['atk'], 'Stoke Belly'); },
+	name: 'Stoke Belly', rating: 4, num: 11275,
+};
+Abilities.rousingfeast = {
+	...Abilities.gluttony,
+	onEatItem(item, pokemon) { if (item.isBerry) clearApprovedNegativeStats(this, pokemon, ['atk', 'spe'], 'Rousing Feast'); },
+	name: 'Rousing Feast', rating: 4, num: 11276,
+};
+Abilities.meridianseal.onSourceDamagingHit = function (damage, target, source, move) {
+	if (damage <= 0 || target.isAlly(source) || !target.hp || move.type !== 'Fighting' || this.effectState.used) return;
+	if (target.getAbility().flags.cantsuppress) return;
+	if (target.hasItem('abilityshield')) { this.add('-block', target, 'item: Ability Shield'); return; }
+	if (target.addVolatile('meridianseal', source, this.effect)) this.effectState.used = true;
+};
+Abilities.invisiblewall = {...Abilities.soundproof, name: 'Invisible Wall', rating: 4, num: 11277};
+Abilities.sentinelfist = {...Abilities.ironfist, name: 'Sentinel Fist', rating: 4, num: 11278};
+Abilities.pursuitwake = {
+	...Abilities.infiltrator,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage > 0 && move.id === 'aquajet') clearApprovedNegativeStats(this, source, ['spe'], 'Pursuit Wake');
+	},
+	name: 'Pursuit Wake', rating: 4, num: 11279,
+};
+Abilities.gentlegiant = {
+	...Abilities.cloudnine,
+	onAllyDamagingHit(damage, target, source, move) {
+		const holder = this.effectState.target;
+		if (damage <= 0 || !target.hp || target === holder || !holder.isAdjacent(target) || target.isAlly(source) ||
+			target.hp > target.maxhp / 2 || target.hp + damage <= target.maxhp / 2 || holder.volatiles['gentlegiantspent']) return;
+		holder.addVolatile('gentlegiantspent', holder, this.effect);
+		this.boost({spa: 1}, holder, holder, this.effect);
+	},
+	name: 'Gentle Giant', rating: 4, num: 11280,
+};
+const windPowerSideStart = Abilities.windpower.onSideConditionStart!;
+Abilities.windpower.onSideConditionStart = function (side, source, condition) {
+	windPowerSideStart.call(this, side, source, condition);
+	const holder = this.effectState.target;
+	if (condition.id === 'tailwind' && source === holder && this.activeMove?.id === 'tailwind') {
+		holder.removeVolatile('confusion');
+		clearApprovedNegativeStats(this, holder, ['accuracy'], 'Wind Power');
+	}
+};
+const silkWardReduction = Abilities.silkward.onSourceModifyDamage!;
+Abilities.silkward.onSourceModifyDamage = function (damage, source, target, move) {
+	const used = this.effectState.used;
+	const result = silkWardReduction.call(this, damage, source, target, move);
+	if (!used && this.effectState.used) this.effectState.wardMove = move;
+	return result;
+};
+Abilities.silkward.onDamagingHit = function (damage, target, source, move) {
+	if (damage > 0 && target.hp && this.effectState.wardMove === move) {
+		delete this.effectState.wardMove;
+		clearApprovedNegativeStats(this, target, ['spe'], 'Silk Ward');
+	}
+};
+Abilities.silkward.onAfterSubDamage = Abilities.silkward.onDamagingHit;
+Abilities.ringcraft = {
+	...Abilities.limber,
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || target.isAlly(source) || move.id !== 'flyingpress' || source.volatiles['ringcraftspent']) return;
+		source.addVolatile('ringcraftspent', source, this.effect);
+		const taunted = !!target.volatiles['taunt'];
+		if (target.hp && !taunted && target.addVolatile('taunt', source, this.effect)) target.volatiles['taunt'].duration = 2;
+	},
+	name: 'Ringcraft', rating: 4, num: 11281,
+};
+const marshConduitHit = Abilities.marshconduit.onTryHit;
+Abilities.marshconduit.onTryHit = function (target, source, move) {
+	const used = this.effectState.speedDropUsed;
+	const result = typeof marshConduitHit === 'function' ? marshConduitHit.call(this, target, source, move) : marshConduitHit;
+	if (!used && this.effectState.speedDropUsed) {
+		target.removeVolatile('confusion');
+		clearApprovedNegativeStats(this, target, ['accuracy'], 'Marsh Conduit');
+	}
+	return result;
+};
+Abilities.constrictingheat = {
+	...Abilities.whitesmoke,
+	onSourceDamagingHit(damage, target, source, move) {
+		const alreadyTrapped = !!target.volatiles['partiallytrapped'];
+		if (damage <= 0 || !target.hp || target.isAlly(source) || move.id !== 'firelash' || alreadyTrapped || source.volatiles['dynamax']) return;
+		if (!target.addVolatile('partiallytrapped', source, this.dex.getActiveMove('firespin'))) return;
+		const previous = this.effectState.trappedFoe;
+		if (previous && previous !== target && previous.volatiles['partiallytrapped']?.source === source && previous.volatiles['partiallytrapped'].constrictingHeatTurns) previous.removeVolatile('partiallytrapped');
+		this.effectState.trappedFoe = target;
+		target.volatiles['partiallytrapped'].constrictingHeatTurns = 2;
+		target.volatiles['partiallytrapped'].duration = 3;
+	},
+	onEnd(pokemon) {
+		const target = this.effectState.trappedFoe;
+		if (target?.volatiles['partiallytrapped']?.source === pokemon && target.volatiles['partiallytrapped'].constrictingHeatTurns) target.removeVolatile('partiallytrapped');
+	},
+	name: 'Constricting Heat', rating: 4, num: 11282,
+};
+Abilities.venomspurs.onSourceTryPrimaryHitPriority = -100;
+Abilities.venomspurs.onSourceTryPrimaryHit = function (target, source, move) {
+	if (!this.effectState.charged || target.isAlly(source) || move.type !== 'Bug' || move.category === 'Status' ||
+		(target.volatiles['substitute'] && !move.infiltrates && !move.flags.bypasssub) || this.effectState.venomMove === this.activeMove) return;
+	this.effectState.venomMove = this.activeMove;
+	this.effectState.venomTarget = target;
+	this.boost({def: -1}, target, source, this.effect);
+};
+const venomSpursHit = Abilities.venomspurs.onSourceDamagingHit!;
+Abilities.venomspurs.onSourceDamagingHit = function (damage, target, source, move) {
+	if (damage > 0 && this.effectState.venomMove === this.activeMove && this.effectState.venomTarget === target && move.type === 'Bug') this.effectState.charged = false;
+	venomSpursHit.call(this, damage, target, source, move);
+};
+
+Abilities.gritreprisal = {
+	...Abilities.guts,
+	onDamagingHit(damage, target, source) {
+		if (damage > 0 && target.hp && source && !target.isAlly(source)) target.addVolatile('gritreprisalcharge', target, this.effect);
+	},
+	onModifyMove(move, pokemon) {
+		if (pokemon.volatiles['gritreprisalcharge'] && move.category !== 'Status' && move.flags.punch) move.ignorePositiveDefensive = true;
+	},
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage > 0 && move.flags.punch && move.category !== 'Status') source.removeVolatile('gritreprisalcharge');
+	},
+	name: 'Grit Reprisal', rating: 4, num: 11283,
+};
+Abilities.wreckingcrew = {
+	...Abilities.ironfist,
+	onModifyMove(move) {
+		if (!move.flags.punch || move.category === 'Status') return;
+		const originalTryHit = move.onTryHit;
+		move.onTryHit = function (target, source, attack) {
+			const result = typeof originalTryHit === 'function' ? originalTryHit.call(this, target, source, attack) : originalTryHit;
+			if (result === false || result === null || result === '') return result;
+			if (!target.isAlly(source)) for (const screen of ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall']) target.side.removeSideCondition(screen);
+			return result;
+		};
+	},
+	name: 'Wrecking Crew', rating: 4, num: 11284,
+};
+
+Abilities.gritreprisal.onSourceAfterSubDamage = Abilities.gritreprisal.onSourceDamagingHit;
+
+function restoreRelicInstinct(battle: Battle, pokemon: Pokemon) {
+	if (!pokemon.hp || !pokemon.isActive || pokemon.m.relicInstinctSpent || pokemon.m.relicInstinctHealing || pokemon.hp > pokemon.maxhp / 4) return;
+	pokemon.m.relicInstinctHealing = true;
+	const healed = battle.heal(Math.floor(pokemon.maxhp * 3 / 5) - pokemon.hp, pokemon, pokemon, battle.dex.abilities.get('relicinstinct'));
+	delete pokemon.m.relicInstinctHealing;
+	if (!healed) return;
+	pokemon.m.relicInstinctSpent = true;
+	battle.add('-ability', pokemon, 'Relic Instinct');
+	clearApprovedNegativeStats(battle, pokemon, ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'], 'Relic Instinct');
+}
+Abilities.relicinstinct.onUpdate = function (pokemon) {
+	if (!this.actions.attackResolutionDepth) restoreRelicInstinct(this, pokemon);
+};
+Abilities.relicinstinct.onAnyAfterAttackResolved = function () {
+	restoreRelicInstinct(this, this.effectState.target);
+};
+Abilities.relicinstinct.onAfterDamageApplied = function (damage, target) {
+	if (!this.actions.attackResolutionDepth) restoreRelicInstinct(this, target);
+};
+const relicResidual = Abilities.relicinstinct.onResidual!;
+Abilities.relicinstinct.onResidual = function (pokemon) {
+	restoreRelicInstinct(this, pokemon);
+	relicResidual.call(this, pokemon);
+};
+Abilities.fossilfrenzy.onDamagingHit = function (damage, target, source, move) {
+	if (damage > 0 && source && !target.isAlly(source) && move.category !== 'Status') this.effectState.fossilFrenzyPending = this.activeMove;
+};
+function resolveFossilFrenzy(battle: Battle, pokemon: Pokemon, state: Pokemon['abilityState']) {
+	if (!state.fossilFrenzyPending) return;
+	delete state.fossilFrenzyPending;
+	if (!pokemon.hp || !pokemon.isActive) return;
+	battle.boost({atk: 1, spe: 1}, pokemon, pokemon, battle.dex.abilities.get('fossilfrenzy'));
+	pokemon.addVolatile('confusion', pokemon, battle.dex.abilities.get('fossilfrenzy'));
+}
+Abilities.fossilfrenzy.onAnyAfterAttackResolved = function (source, target, move) {
+	if (this.effectState.fossilFrenzyPending === move) resolveFossilFrenzy(this, this.effectState.target, this.effectState);
+};
+Abilities.fossilfrenzy.onUpdate = function (pokemon) {
+	if (!this.actions.attackResolutionDepth) resolveFossilFrenzy(this, pokemon, this.effectState);
+};
+
+Abilities.evergreen = {...Abilities.overcoat, ...Abilities.ripen, flags: {breakable: 1}, name: 'Evergreen', rating: 4, num: 11285};
+Abilities.battlegrip = {
+	...Abilities.moxie,
+	onSourceAfterFaint(length, target, source, effect) {
+		this.dex.abilities.get('moxie').onSourceAfterFaint!.call(this, length, target, source, effect);
+		if (length > 0 && effect?.effectType === 'Move' && !target.isAlly(source)) {
+			source.removeVolatile('confusion');
+			clearApprovedNegativeStats(this, source, ['accuracy'], 'Battle Grip');
+		}
+	},
+	name: 'Battle Grip', rating: 4, num: 11286,
+};
+Abilities.scentscout = {
+	...Abilities.frisk,
+	onSwitchIn(pokemon) { this.singleEvent('Start', this.dex.abilities.get('frisk'), pokemon.abilityState, pokemon); },
+	onAnySwitchIn() {
+		const holder = this.effectState.target;
+		if (!holder.isStarted || !holder.hp || !holder.isActive || holder.volatiles['scentscoutspent']) return;
+		// Field SwitchIn callbacks receive their holder; entrants have not been marked started yet.
+		const pokemon = holder.foes(true).find((foe: Pokemon) => !foe.isStarted);
+		if (!pokemon) return;
+		holder.addVolatile('scentscoutspent', holder, this.effect);
+		if (pokemon.item) this.add('-item', pokemon, pokemon.getItem().name, '[from] ability: Scent Scout', '[of] ' + holder);
+	},
+	name: 'Scent Scout', rating: 4, num: 11287,
+};
+Abilities.surefoot = {...Abilities.innerfocus, name: 'Surefoot', rating: 4, num: 11288};
+Abilities.baitedbloom = {...Abilities.gluttony, ...Abilities.stickyhold, name: 'Baited Bloom', rating: 4, num: 11289};
+Abilities.guidinggallop = {
+	...Abilities.pastelveil,
+	onAfterMoveSecondarySelf(source, target, move) {
+		if (move.category === 'Status' && ['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf'].includes(move.target) &&
+			target && target !== source && target.isAlly(source)) clearApprovedNegativeStats(this, target, ['spe'], 'Guiding Gallop');
+	},
+	name: 'Guiding Gallop', rating: 4, num: 11290,
+};
+Abilities.carrionwatch = {
+	...Abilities.frisk, ...Abilities.unnerve,
+	onStart(pokemon) {
+		this.singleEvent('Start', this.dex.abilities.get('frisk'), pokemon.abilityState, pokemon);
+		this.singleEvent('Start', this.dex.abilities.get('unnerve'), pokemon.abilityState, pokemon);
+	},
+	name: 'Carrion Watch', rating: 4, num: 11291,
+};
+
+// Nine-family approved abilities; compose finalized local components once.
+Abilities.scaleshelter = {...Abilities.shielddust, ...Abilities.overcoat, flags: {breakable: 1}, name: 'Scale Shelter', rating: 4, num: 11292};
+Abilities.stagesweep = {
+ ...Abilities.screencleaner,
+ onModifyMove(move) {
+  if (move.id !== 'rapidspin') return;
+  const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+  const hit = move.onAfterHit, sub = move.onAfterSubDamage;
+  move.onAfterHit = function (target, source, attack) {
+   const before = hazards.filter(id => !!source.side.sideConditions[id]);
+   const result = hit?.call(this, target, source, attack);
+   if (source.hp && source.hasAbility('stagesweep') && before.some(id => !source.side.sideConditions[id])) clearApprovedNegativeStats(this, source, ['def', 'spd'], 'Stage Sweep');
+   return result;
+  };
+  move.onAfterSubDamage = function (damage, target, source, attack) {
+   const before = hazards.filter(id => !!source.side.sideConditions[id]);
+   const result = sub?.call(this, damage, target, source, attack);
+   if (source.hp && source.hasAbility('stagesweep') && before.some(id => !source.side.sideConditions[id])) clearApprovedNegativeStats(this, source, ['def', 'spd'], 'Stage Sweep');
+   return result;
+  };
+ },
+ name: 'Stage Sweep', rating: 4, num: 11293,
+};
+Abilities.icebreaker = {
+ ...Abilities.hypercutter,
+ onModifyMove(move) {
+  if (move.id !== 'icehammer') return;
+  const previous = move.onTryHit;
+  move.onTryHit = function (target, source, attack) {
+   const result = typeof previous === 'function' ? previous.call(this, target, source, attack) : previous;
+   if (result === false || result === null) return result;
+   if (!target.isAlly(source)) target.side.removeSideCondition('reflect');
+   return result;
+  };
+ },
+ name: 'Icebreaker', rating: 4, num: 11294,
+};
+Abilities.cactuschorus = {
+ ...Abilities.waterabsorb,
+ onAfterMoveSecondarySelf(source, target, move) {
+  if (move.id === 'helpinghand' && target && source !== target && source.isAlly(target)) target.removeVolatile('confusion');
+ },
+ name: 'Cactus Chorus', rating: 4, num: 11295,
+};
+Abilities.crushingvenom = {
+ ...Abilities.strongjaw,
+ onSourceDamagingHit(damage, target, source, move) {
+  if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || !move.flags.bite || source.volatiles['crushingvenomspent']) return;
+  source.addVolatile('crushingvenomspent', source, this.effect);
+  if (target.hp && target.addVolatile('healblock', source, this.effect)) target.volatiles['healblock'].duration = 2;
+ },
+ onSourceAfterSubDamage(damage, target, source, move) {
+  if (damage > 0 && !target.isAlly(source) && move.category !== 'Status' && move.flags.bite) source.addVolatile('crushingvenomspent', source, this.effect);
+ },
+ name: 'Crushing Venom', rating: 4, num: 11296,
+};
+Abilities.crosswire = {
+ ...Abilities.ironfist,
+ onModifyMove(move, source) {
+  (move as any).crosswireCharged = !!source.volatiles['crosswirecharge'] && move.category === 'Special' && this.movehasType(move, 'Electric');
+ },
+ onSourceDamagingHit(damage, target, source, move) {
+  if (damage <= 0 || move.category === 'Status' || target.isAlly(source)) return;
+  if ((move as any).crosswireCharged) source.removeVolatile('crosswirecharge');
+  else if (move.flags.punch) source.addVolatile('crosswirecharge', source, this.effect);
+ },
+ name: 'Crosswire', rating: 4, num: 11297,
+};
+Abilities.crosswire.onSourceAfterSubDamage = Abilities.crosswire.onSourceDamagingHit;
+Abilities.deepchill = {
+ ...Abilities.oblivious,
+ onSourceDamagingHit(damage, target, source, move) {
+  if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || !this.movehasType(move, 'Ice') || source.volatiles['deepchillspent']) return;
+  source.addVolatile('deepchillspent', source, this.effect);
+  if (target.hp) target.addVolatile('torment', source, this.effect);
+ },
+ onSourceAfterSubDamage(damage, target, source, move) {
+  if (damage > 0 && !target.isAlly(source) && move.category !== 'Status' && this.movehasType(move, 'Ice')) source.addVolatile('deepchillspent', source, this.effect);
+ },
+ name: 'Deep Chill', rating: 4, num: 11298,
+};
+Abilities.climatereserve = {
+ onStart(pokemon) { Abilities.forecast.onWeatherChange?.call(this, pokemon, null!, this.effect); },
+ onWeatherChange(pokemon, source, effect) {
+  Abilities.forecast.onWeatherChange?.call(this, pokemon, source, effect);
+  const state = this.field.weatherState;
+  if (!effect || effect.effectType !== 'Move' || state.source !== pokemon || this.activePokemon !== pokemon ||
+   this.activeMove?.id !== effect.id || state.climateReserveProcessed || !this.field.weather) return;
+  state.climateReserveProcessed = true;
+  if (['sunnyday', 'raindance', 'sandstorm', 'hail', 'snowscape'].includes(effect.id) &&
+   ['sunnyday', 'raindance', 'sandstorm', 'hail', 'snow'].includes(this.field.weather) &&
+   typeof state.duration === 'number' && state.duration > 0 && state.duration < 9999) state.duration++;
+  if (!pokemon.volatiles['climatereservespent']) {
+   pokemon.addVolatile('climatereservespent', pokemon, this.effect);
+   this.boost({spd: 1}, pokemon, pokemon, this.effect);
+  }
+ },
+ flags: {...Abilities.forecast.flags}, name: 'Climate Reserve', rating: 3, num: 11299,
+};
+
+Abilities.tunnelclearance = {
+ ...Abilities.hypercutter,
+ onSourceDamagingHit(damage, target, source, move) {
+  if (damage <= 0 || move.id !== 'rapidspin' || source.isAlly(target)) return;
+  for (const id of ['reflect', 'lightscreen']) target.side.removeSideCondition(id);
+ },
+ name: 'Tunnel Clearance', rating: 4, num: 11300,
+};
+Abilities.tunnelclearance.onSourceAfterSubDamage = Abilities.tunnelclearance.onSourceDamagingHit;
+Abilities.crystalbastion = {...Abilities.sturdy, name: 'Crystal Bastion', rating: 4, num: 11301};
+Abilities.bloodchallenge.onSourceDamagingHit = function (damage, target, source, move) {
+ if (damage > 0 && move.id === 'counter' && !source.isAlly(target) && !source.volatiles['bloodchallengespent']) {
+  source.addVolatile('bloodchallengespent', source, this.effect);
+  this.heal(source.baseMaxhp / 8, source, source, this.effect);
+ }
+};
+Abilities.bloodchallenge.onSourceAfterSubDamage = Abilities.bloodchallenge.onSourceDamagingHit;
+Abilities.purifyingfrost.onAfterMoveSecondarySelf = Abilities.purifyingfrost.onAfterMove;
+delete Abilities.purifyingfrost.onAfterMove;
+Abilities.mudmeditation.onSourceModifyDamage = function (damage, source, target, move) {
+ const action = this.queue.willMove(target);
+ if (move.category === 'Special' && (action && action.move.category === 'Status' ||
+  this.effectState.meditationTurn === this.turn)) return this.chainModify(0.75);
+};
+Abilities.mudmeditation.onAfterMoveSecondarySelf = function (source, target, move) {
+ if (move.category === 'Status' && (!(move as any).meditationFailedHit || (move as any).meditationSuccessfulHit)) this.effectState.meditationTurn = this.turn;
+};
+Abilities.buriedcoil = {
+ ...Abilities.sandspit,
+ onAfterMoveSecondarySelf(source, target, move) {
+  if (move.id !== 'coil' || source.volatiles['buriedcoilspent']) return;
+  source.addVolatile('buriedcoilspent', source, this.effect);
+  source.removeVolatile('confusion');
+  clearApprovedNegativeStats(this, source, ['accuracy'], 'Buried Coil');
+ },
+ name: 'Buried Coil', rating: 4, num: 11302,
+};
+Abilities.staticreserve = {
+ ...Abilities.static,
+ onDamagingHit(damage, target, source, move) {
+  const before = source.status;
+  Abilities.static.onDamagingHit?.call(this, damage, target, source, move);
+  if (!before && source.status === 'par' && target.hp && !target.volatiles['staticreservespent']) {
+   target.addVolatile('staticreservespent', target, this.effect);
+   target.addVolatile('charge', target, this.effect);
+  }
+ },
+ name: 'Static Reserve', rating: 4, num: 11303,
+};
+Abilities.lockinggrip = {
+ ...Abilities.hypercutter,
+ onSourceDamagingHit(damage, target, source, move) {
+  if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || !this.movehasType(move, 'Bug') || source.volatiles['lockinggripspent']) return;
+  source.addVolatile('lockinggripspent', source, this.effect);
+  if (target.hp) target.addVolatile('torment', source, this.effect);
+ },
+ onSourceAfterSubDamage(damage, target, source, move) {
+  if (damage > 0 && !target.isAlly(source) && move.category !== 'Status' && this.movehasType(move, 'Bug')) source.addVolatile('lockinggripspent', source, this.effect);
+ },
+ name: 'Locking Grip', rating: 4, num: 11304,
+};
+Abilities.garlandgift = {
+ ...Abilities.flowerveil,
+ onSourceHeal(amount, target, source, move) {
+  if (amount <= 0 || move.id !== 'floralhealing' || !source || source.volatiles['garlandgiftspent']) return;
+  source.addVolatile('garlandgiftspent', source, this.effect);
+  target.removeVolatile('confusion');
+  clearApprovedNegativeStats(this, target, ['accuracy'], 'Garland Gift');
+ },
+ name: 'Garland Gift', rating: 4, num: 11305,
+};
+
+Abilities.riotstance = {
+ ...Abilities.defiant,
+ onModifyPriority(priority, source, target, move) {
+  if (source.volatiles['riotstancecharge'] && move.category !== 'Status' && this.movehasType(move, 'Dark')) return priority + 1;
+ },
+ onTryMove(source, target, move) {
+  if (move.category !== 'Status' && this.movehasType(move, 'Dark')) source.removeVolatile('riotstancecharge');
+ },
+ name: 'Riot Stance', rating: 4, num: 11306,
+};
+
+// Some healing moves return NOT_FAIL after announcing a failed full-HP heal.
+// They must not count as a successful status action for Mud Meditation.
+Abilities.mudmeditation.onModifyMove = function (move) {
+ if (move.category !== 'Status' || typeof move.onHit !== 'function') return;
+ const hit = move.onHit;
+ move.onHit = function (target, source, attack) {
+  const result = hit.call(this, target, source, attack);
+  if (result === this.NOT_FAIL || result === false || result === null) (attack as any).meditationFailedHit = true;
+  else (attack as any).meditationSuccessfulHit = true;
+  return result;
+ };
+};
+
+// Six additional approved selections. Forewarn itself remains unchanged.
+Abilities.coldlogic.onDamage = function (damage, target, source, effect) {
+ if (this.field.isTerrain('psychicterrain', target)) return Abilities.forewarn.onDamage?.call(this, damage, target, source, effect);
+};
+Abilities.updraft.onSourceDamagingHit = function (damage, target, source, move) {
+ if (damage <= 0 || target.isAlly(source) || move.type !== 'Flying' || this.effectState.used) return;
+ const ally = source.adjacentAllies().filter(pokemon => pokemon.hp && !pokemon.fainted)
+  .sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp)[0];
+ this.effectState.used = true;
+ this.boost({spe: 1}, ally || source, source, this.effect);
+};
+Abilities.drumguard = {
+ ...Abilities.soundproof,
+ onAnyAfterEachBoost(boost, target, source, effect) {
+  const holder = this.effectState.target;
+  if (source !== holder || target.isAlly(holder) || effect?.id !== 'drumbeating' || !(boost.spe && boost.spe < 0) || holder.volatiles['drumguardspent']) return;
+  holder.addVolatile('drumguardspent', holder, this.effect);
+  clearApprovedNegativeStats(this, holder, ['def', 'spd'], 'Drum Guard');
+ },
+ name: 'Drum Guard', rating: 4, num: 11307,
+};
+delete Abilities.secondbrew.onTryHeal;
+Abilities.secondbrew.onHeal = function (amount, target, source, effect) {
+ if (amount <= 0 || effect?.id !== 'drain' || this.effectState.lastTurn === this.turn) return;
+ this.effectState.lastTurn = this.turn;
+ const ally = target.adjacentAllies().filter(pokemon => pokemon.hp && !pokemon.fainted)
+  .sort((a, b) => a.hp / a.maxhp - b.hp / b.maxhp)[0];
+ if (ally) this.heal(ally.baseMaxhp / 8, ally, target, this.effect);
+};
+Abilities.measuredcounsel = {
+ ...Abilities.owntempo,
+ onModifyMove(move) {
+  if (move.id !== 'futuresight') return;
+  const previous = move.onTry;
+  move.onTry = function (source, target, attack) {
+   const before = target.side.slotConditions[target.position]['futuremove'];
+   const result = typeof previous === 'function' ? previous.call(this, source, target, attack) : previous;
+   const after = target.side.slotConditions[target.position]['futuremove'];
+   if (after && after !== before && after.source === source && source.hasAbility('measuredcounsel')) {
+    source.removeVolatile('confusion');
+    clearApprovedNegativeStats(this, source, ['spa'], 'Measured Counsel');
+   }
+   return result;
+  };
+ },
+ name: 'Measured Counsel', rating: 4, num: 11308,
+};
+
+// Approved Golisopod / Pelipper replacements.
+Abilities.tacticalretreat = {
+ onEmergencyExit(target) {
+  if (!target.hp || !this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+  const queued = this.queue.willMove(target);
+  const asleep = target.status === 'slp' && target.statusState.time > 1 && !queued?.move.sleepUsable;
+  if (queued && queued.move.category !== 'Status' && !asleep && !target.volatiles['flinch'] && !target.volatiles['mustrecharge']) {
+   this.effectState.tacticalRetreatPending = true;
+   return;
+  }
+  delete this.effectState.tacticalRetreatPending;
+  target.switchFlag = true;
+  this.add('-activate', target, 'ability: Tactical Retreat');
+ },
+ onEnd() { delete this.effectState.tacticalRetreatPending; },
+ onSwitchOut() { delete this.effectState.tacticalRetreatPending; },
+ flags: {}, name: 'Tactical Retreat', rating: 3, num: 11309,
+};
+Abilities.raincourier = {
+ ...Abilities.raindish,
+ onModifyMove(move, pokemon) {
+  if (move.id !== 'tailwind') return;
+  const before = pokemon.side.sideConditions['tailwind'];
+  const previous = move.onHitSide;
+  move.onHitSide = function (side, source, attack) {
+   const result = typeof previous === 'function' ? previous.call(this, side, source, attack) : previous;
+   const after = side.sideConditions['tailwind'];
+   if (source.hasAbility('raincourier') && side === source.side && after && after !== before && !source.volatiles['raincourierspent']) {
+    source.addVolatile('raincourierspent', source, this.dex.abilities.get('raincourier'));
+    for (const hazard of ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge']) side.removeSideCondition(hazard);
+   }
+   return result;
+  };
+ },
+ name: 'Rain Courier', rating: 3, num: 11310,
+};
+
+// Six approved follow-ups: no other roster proposals are included.
+const approvedLastLaughHit = Abilities.lastlaugh.onSourceDamagingHit;
+Abilities.lastlaugh.onSourceDamagingHit = function (damage, target, source, move) {
+ approvedLastLaughHit?.call(this, damage, target, source, move);
+ if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || source.volatiles['lastlaughtormentspent'] ||
+  target.m.lastCompletedActionTurn !== this.turn || target.m.lastCompletedActionEntry !== target.previouslySwitchedIn) return;
+ source.addVolatile('lastlaughtormentspent', source, this.effect);
+ if (target.hp) target.addVolatile('torment', source, this.effect);
+};
+const approvedFortunateWingHit = Abilities.fortunatewing.onSourceDamagingHit;
+Abilities.fortunatewing.onSourceDamagingHit = function (damage, target, source, move) {
+ if (source.volatiles['fortunatewingspent']) return;
+ const used = this.effectState.used;
+ approvedFortunateWingHit?.call(this, damage, target, source, move);
+ if (!used && this.effectState.used) {
+  source.addVolatile('fortunatewingspent', source, this.effect);
+  for (const ally of source.allies()) if (ally.hp && ally.isActive) ally.removeVolatile('confusion');
+ }
+};
+Abilities.disorientingmind = {
+ ...Abilities.infiltrator,
+ onSourceDamagingHit(damage, target, source, move) {
+  if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || !this.movehasType(move, 'Psychic') || source.volatiles['disorientingmindspent']) return;
+  source.addVolatile('disorientingmindspent', source, this.effect);
+  if (target.hp) target.addVolatile('torment', source, this.effect);
+ },
+ name: 'Disorienting Mind', rating: 3.5, num: 11311,
+};
+Abilities.wisecounsel = {
+ ...Abilities.innerfocus,
+ onModifyMove(move) {
+  if (move.id !== 'instruct' || typeof move.onHit !== 'function') return;
+  const previous = move.onHit;
+  move.onHit = function (target, source, attack) {
+   const result = previous.call(this, target, source, attack);
+   if (result !== false && result !== null && target !== source && target.isAlly(source) && target.hp && target.isActive &&
+    source.hasAbility('wisecounsel') && !source.volatiles['wisecounselspent']) {
+    source.addVolatile('wisecounselspent', source, this.dex.abilities.get('wisecounsel'));
+    target.removeVolatile('confusion');
+   }
+   return result;
+  };
+ },
+ name: 'Wise Counsel', rating: 3.5, num: 11312,
+};
+Abilities.mindcurrent = {
+ ...Abilities.innerfocus,
+ onSourceDamagingHit(damage, target, source, move) {
+  if (damage > 0 && !target.isAlly(source) && move.category !== 'Status' && this.movehasType(move, 'Psychic') && !source.volatiles['mindcurrentspent']) this.effectState.mindCurrentMove = move;
+ },
+ onSourceAfterSubDamage(damage, target, source, move) {
+  if (damage > 0 && !target.isAlly(source) && move.category !== 'Status' && this.movehasType(move, 'Psychic') && !source.volatiles['mindcurrentspent']) this.effectState.mindCurrentMove = move;
+ },
+ onAfterMovePriority: -1,
+ onAfterMove(source, target, move) {
+  if (this.effectState.mindCurrentMove !== move) return;
+  delete this.effectState.mindCurrentMove;
+  if (!source.hp || source.volatiles['mindcurrentspent']) return;
+  source.addVolatile('mindcurrentspent', source, this.effect);
+  source.addVolatile('charge', source, this.effect);
+ },
+ name: 'Mind Current', rating: 3.5, num: 11313,
+};
+
+// Future Sight resolves at the delayed targeted-move boundary instead of runMove's AfterMove.
+Abilities.mindcurrent.onAnyAfterTargetedMove = function (source, target, move) {
+ if (source === this.effectState.target) Abilities.mindcurrent.onAfterMove?.call(this, source, target, move);
+};

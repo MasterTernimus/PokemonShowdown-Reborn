@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict, common = require('../../common');
 
-describe('Pulse Murkwater entry fields', () => {
+describe('Pulse entry fields', () => {
 	let b;
 
 	afterEach(() => b?.destroy());
@@ -18,19 +18,20 @@ describe('Pulse Murkwater entry fields', () => {
 	for (const [species, ability, formAbility] of [['Muk', 'Poison Touch', 'Pulse Waste'], ['Swalot', 'Liquid Ooze', 'Pulse Filtration']]) {
 		it(`${species} transforms, creates five turns, expires, and stays expired on reentry`, () => {
 			const [p] = setup(species, ability);
+			b.p2.active[0].hp = b.p2.active[0].maxhp = 9999;
 			b.field.setTerrain('factoryterrain', p);
 			assert(b.actions.runMegaEvo(p));
 			assert.equal(p.getAbility().name, formAbility);
 
-			assert.equal(b.field.terrain, 'murkwatersurfaceterrain');
+			assert.equal(b.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
 			assert.equal(b.field.terrainState.duration, 5);
 
 			for (let i = 0; i < 4; i++) {
-				b.makeChoices('move splash', 'move splash');
-				assert.equal(b.field.terrain, 'murkwatersurfaceterrain');
+				b.makeChoices('move 1', 'move splash');
+				assert.equal(b.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
 			}
 
-			b.makeChoices('move splash', 'move splash');
+			b.makeChoices('move 1', 'move splash');
 			assert.equal(b.field.terrain, 'factoryterrain');
 
 			b.makeChoices('switch 2', 'move splash');
@@ -44,7 +45,7 @@ describe('Pulse Murkwater entry fields', () => {
 				b.field.setTerrain('factoryterrain', p);
 				t.setAbility(blocker);
 				assert(b.actions.runMegaEvo(p));
-				assert.notEqual(b.field.terrain, 'murkwatersurfaceterrain');
+				assert.notEqual(b.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
 			});
 
 		for (const field of ['newworldterrain', 'underwaterterrain', 'chessboardterrain', 'glitchterrain'])
@@ -53,7 +54,7 @@ describe('Pulse Murkwater entry fields', () => {
 				b.field.setTerrain(field, p);
 				assert.equal(b.field.terrain, field);
 				b.actions.runMegaEvo(p);
-				assert.equal(b.field.terrain, field);
+				assert.equal(b.field.terrain, species === 'Swalot' && field === 'underwaterterrain' ? 'murkwatersurfaceterrain' : field);
 			});
 
 		it(`${species} does not clear Auras, and a suppressed blockade does not block`, () => {
@@ -65,14 +66,14 @@ describe('Pulse Murkwater entry fields', () => {
 			t.setAbility('Pulse Blockade');
 			t.addVolatile('gastroacid');
 			b.actions.runMegaEvo(p);
-			assert.equal(b.field.terrain, 'murkwatersurfaceterrain');
+			assert.equal(b.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
 			assert.equal(b.field.auraField, aura);
 		});
 
 		it(`${species} suppression prevents its field on ability start`, () => {
 			const [p, t] = setup(species, ability, 'Neutralizing Gas');
 			b.actions.runMegaEvo(p);
-			assert.notEqual(b.field.terrain, 'murkwatersurfaceterrain');
+			assert.notEqual(b.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
 		});
 	}
 });

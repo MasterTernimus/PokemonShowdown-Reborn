@@ -24,10 +24,10 @@ describe('Twin strike targeting',()=>{
   it(ability+' redirects a Multi KO only to the other opposing trainer',()=>{
    const[p,t]=setup(ability,'multi');t.hp=1;const ally=battle.p3.active[0],hp=ally.hp,events=hit(p,t);assert.equal(events.length,2);assert.equal(events[1].target,battle.p4.active[0]);assert.equal(ally.hp,hp);assert.equal(battle.runEvent('BasePower',p,events[1].target,battle.activeMove,100,true),50);
   });
-  it(ability+' splits FFA across selected and another foe at full power',()=>{
+  it(ability+' splits FFA across selected and another foe at its approved power',()=>{
    const[p,t]=setup(ability),events=hit(p,t);assert.equal(events.length,2);assert.equal(events[0].target,t);assert.notEqual(events[1].target,t);assert(!events[1].target.isAlly(p));assert.deepEqual(events.map(e=>e.hit),[1,2]);
    if(ability==='Twin Cannons')assert.deepEqual(events.map(e=>e.stat),['spd','def']);else assert.deepEqual(events.map(e=>!!e.ignore),[false,true]);
-   const m=battle.activeMove;m.hit=1;assert.equal(battle.runEvent('BasePower',p,t,m,100,true),100);m.hit=2;assert.equal(battle.runEvent('BasePower',p,t,m,100,true),100);
+   const m=battle.activeMove;m.hit=1;assert.equal(battle.runEvent('BasePower',p,t,m,100,true),ability==='Twin Blades'?60:100);m.hit=2;assert.equal(battle.runEvent('BasePower',p,t,m,100,true),ability==='Twin Blades'?60:100);
   });
   it(ability+' redirects KO in doubles without a spillover power penalty',()=>{
    const[p,t]=setup(ability,'doubles');t.hp=1;const allyHP=p.side.active[1].hp,events=hit(p,t);assert.equal(events.length,2);assert.equal(events[1].target,battle.p2.active[1]);assert.equal(p.side.active[1].hp,allyHP);assert.equal(battle.activeMove.spilloverDamageModifier,undefined);assert.equal(battle.runEvent('BasePower',p,events[1].target,battle.activeMove,100,true),50);

@@ -30,6 +30,7 @@ export interface EventMethods {
 	onAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
 	onAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary'];
 	onAfterMove?: MoveEventMethods['onAfterMove'];
+	onAnyAfterAttackResolved?: MoveEventMethods['onAfterMove'];
 	onAfterMoveSelf?: CommonHandlers['VoidSourceMove'];
 	onAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void;
 	onAccuracy?: (
@@ -437,6 +438,7 @@ export interface EventMethods {
 	onAfterMoveSecondaryPriority?: number;
 	onAfterMoveSecondarySelfPriority?: number;
 	onAfterMoveSelfPriority?: number;
+	onAfterMovePriority?: number;
 	onAfterSetStatusPriority?: number;
 	onAnyBasePowerPriority?: number;
 	onAnyInvulnerabilityPriority?: number;
@@ -490,6 +492,7 @@ export interface EventMethods {
 	onSourceModifyAccuracyPriority?: number;
 	onSourceModifyAtkPriority?: number;
 	onSourceModifyDamagePriority?: number;
+	onSourceTryPrimaryHitPriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
 	onSwitchInSubOrder?: number;

@@ -34,10 +34,10 @@ describe('Approved Cryogonal, Torkoal, and Furret changes', () => {
 		assert.equal(holder.status, '');
 		assert.equal(ally.status, '');
 		const ice = battle.dex.getActiveMove('icywind');
-		battle.singleEvent('AfterMove', holder.getAbility(), holder.abilityState, holder, foe, ice);
+		battle.actions.useMove(ice, holder, {target: foe});
 		assert.equal(holder.side.sideConditions.safeguard.duration, 5);
 		holder.side.sideConditions.safeguard.duration = 2;
-		battle.singleEvent('AfterMove', holder.getAbility(), holder.abilityState, holder, foe, ice);
+		battle.actions.useMove(ice, holder, {target: foe});
 		assert.equal(holder.side.sideConditions.safeguard.duration, 2);
 	});
 

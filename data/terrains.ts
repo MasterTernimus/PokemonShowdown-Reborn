@@ -1,3 +1,4 @@
+import { isGroundBoneMove } from './ground-bone-moves';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { MidnightZone } from './midnight-zone';
 /* eslint-disable @stylistic/max-len */
@@ -732,7 +733,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifyMove(move, pokemon) {
 				const iceSubTypes = ['Rock', 'Steel', 'Ground', 'Water'];
 				const armorizeSteel = pokemon.hasAbility('armorize') && move.type === 'Steel';
-				if (iceSubTypes.includes(move.type) && !armorizeSteel && !move.types?.includes('Ice')) {
+				if (iceSubTypes.includes(move.type) && !isGroundBoneMove(move) && !armorizeSteel && !move.types?.includes('Ice')) {
 					move.types = [move.type, 'Ice'];
 				}
 				if (move.id === 'freezeshock' || move.id === 'iceburn') {
@@ -2253,7 +2254,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onTryMove(source, target, move) {
-				if ((move.type === 'Ground' && move.category !== 'Status') || move.id === 'sandattack') {
+				if ((move.type === 'Ground' && move.category !== 'Status' && !isGroundBoneMove(move)) || move.id === 'sandattack') {
 					this.add('-message', '...But there was no solid ground to attack from!');
 					return false;
 				}
@@ -2305,6 +2306,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onResidual(pokemon) {
+				if (adaptiveEnvironment(pokemon, 'fields', 'murkwatersurfaceterrain')) return;
 				const immune = ['immunity', 'magicguard', 'poisonheal', 'toxicboost', 'wonderguard', 'pastelveil', 'surgesurfer'];
 				const weak = ['dryskin', 'flamebody', 'magmaarmor', 'waterabsorb'];
 				if (!pokemon.hasAbility(immune) && !pokemon.hasType(['Poison', 'Steel']) && pokemon.isGrounded()) {
@@ -2341,12 +2343,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyDef(def, pokemon) {
-				if (!pokemon.isGrounded()) {
+				if (!pokemon.isGrounded() && !(pokemon.species.id === 'gardevoir' && pokemon.hasAbility('voidveil'))) {
 					return this.chainModify(0.9);
 				}
 			},
 			onModifySpD(spd, pokemon) {
-				if (!pokemon.isGrounded()) {
+				if (!pokemon.isGrounded() && !(pokemon.species.id === 'gardevoir' && pokemon.hasAbility('voidveil'))) {
 					return this.chainModify(0.9);
 				}
 			},
@@ -3117,7 +3119,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyMove(move) {
-				if (move.type === 'Ground') {
+				if (move.type === 'Ground' && !isGroundBoneMove(move)) {
 					move.types = [move.type, 'Water'];
 				}
 				if (move.id === 'dragondarts' || move.id === 'gravapple') {
@@ -3513,7 +3515,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onTryMove(source, target, move) {
-				if ((move.type === 'Ground' && move.category !== 'Status') || move.id === 'sandattack') {
+				if ((move.type === 'Ground' && move.category !== 'Status' && !isGroundBoneMove(move)) || move.id === 'sandattack') {
 					this.add('-message', '...But there was no solid ground to attack from!');
 					return false;
 				}

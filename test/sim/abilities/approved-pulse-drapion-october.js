@@ -44,7 +44,7 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 		assert(battle.field.setTerrain('electricterrain', avalugg, battle.dex.moves.get('electricterrain')));
 		assert.equal(battle.field.auraField, 'electricterrain');
 		battle.field.setTerrainDuration(1);
-		battle.makeChoices('move splash', 'move splash');
+		battle.makeChoices('move 1', 'move splash');
 		assert.equal(battle.field.terrain, 'factoryterrain');
 		assert.equal(battle.field.setTerrain('holyterrain', avalugg), false);
 		avalugg.addVolatile('gastroacid');
@@ -80,7 +80,7 @@ describe('Approved PULSE forms and Drapion abilities', () => {
 	it('Drapion has its new ordinary abilities and preserves Aevian Toxin', () => {
 		const [drapion] = start('Drapion', 'Razor Reach', ['nightslash']);
 		assert.deepEqual(drapion.species.abilities,
-			{0: 'Razor Reach', 1: 'Withering Touch', H: 'Strong Jaw', S: 'Aevian Toxin'});
+			{0: 'Razor Reach', 1: 'Withering Touch', H: 'Crushing Venom', S: 'Aevian Toxin'});
 		const move = battle.dex.getActiveMove('nightslash');
 		assert(move.flags['contact'] && move.flags['slicing']);
 		battle.dex.abilities.get('razorreach').onModifyMove.call(battle, move, drapion);

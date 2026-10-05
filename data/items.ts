@@ -30,8 +30,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		itemUser: ["Camerupt", "Swalot", "Hypno", "Lilligant", "Lilligant-Hisui", "Muk", "Muk-Alola", "Hippowdon", "Torterra", "Avalugg", "Avalugg-Hisui", "Magnezone", "Mr. Mime", "Mr. Mime-Galar"],
 		num: 2662,
 		gen: 9,
-		desc: "If held by a designated Pulse or Rift Pokemon, this Anomaly Core allows it to undergo its Pulse or Rift Evolution in battle.",
-		shortDesc: "Pulse/Rift Evolution item for designated Anomaly Pokemon.",
+		desc: "Allows designated Pokemon to undergo Pulse/Rift Evolution. Pulse and Rift forms cannot have a Substitute; existing or transferred substitutes break. Camerupt must be at full HP immediately before Pulse Evolution or it faints.",
+		shortDesc: "Pulse/Rift Evolution; no Substitute. Camerupt must be at full HP or faints.",
 		onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; },
 	},
 	belliboltite: {

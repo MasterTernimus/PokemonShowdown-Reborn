@@ -1,7 +1,7 @@
 import { Battle } from '../../sim/battle';
 import { Dex } from '../../sim/dex';
 import { Teams } from '../../sim/teams';
-import { TeamValidator } from '../../sim/team-validator';
+import { TeamValidator, attributeZeroEVProblems } from '../../sim/team-validator';
 
 function selectedFormat(value: unknown) {
 	if (typeof value !== 'string' || !value.trim()) throw new Error('No format selected.');
@@ -51,7 +51,7 @@ export function previewForms(formatName: unknown, packed: unknown) {
 	}
 }
 
-export function validateSavedTeams(input: unknown) {
+export function validateSavedTeams(input: unknown, owner?: string) {
 	if (!Array.isArray(input) || !input.length || input.length > 12) {
 		throw new Error('Select 1–12 teams per validation batch.');
 	}
@@ -65,7 +65,7 @@ export function validateSavedTeams(input: unknown) {
 			const team = Teams.unpack(entry.team);
 			if (!team?.length) throw new Error('Team roster is missing.');
 			// Validator may normalize its input. Always give it a fresh unpacked copy.
-			const problems = TeamValidator.get(format.id).validateTeam(team) || [];
+			const problems = attributeZeroEVProblems(TeamValidator.get(format).validateTeam(team) || [], owner);
 			const suggestions = new Set<string>();
 			for (const problem of problems) {
 				if (/move|learn/i.test(problem)) suggestions.add('Choose a move allowed for this species and format.');
@@ -101,7 +101,7 @@ export const commands: Chat.ChatCommands = {
 			if (now - (recentRequests.get(user) || 0) < 300) throw new Error('Please wait briefly before retrying.');
 			recentRequests.set(user, now);
 			if (payload.action === 'preview') return respond(previewForms(payload.format, payload.team));
-			if (payload.action === 'validate') return respond({ results: validateSavedTeams(payload.teams) });
+			if (payload.action === 'validate') return respond({ results: validateSavedTeams(payload.teams, user.name) });
 			throw new Error('Unknown team tool action.');
 		} catch (error) {
 			return respond({ error: (error as Error).message });
