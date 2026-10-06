@@ -1,5 +1,6 @@
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
+import { StarterPassives } from '../data/starter-passives';
 import { isDeepStrictEqual } from 'node:util';
 
 interface SpeciesAbility {
@@ -170,6 +171,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly spriteid: string;
 	/** Abilities. */
 	readonly abilities: SpeciesAbility;
+	readonly passives: readonly string[];
 	/** Types. */
 	readonly types: string[];
 	/** Added type (added by Trick-Or-Treat or Forest's Curse, but only listed in species by OMs). */
@@ -303,6 +305,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || { 0: "" };
+		this.passives = StarterPassives[this.id] || [];
 		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;
 		this.prevo = data.prevo || '';

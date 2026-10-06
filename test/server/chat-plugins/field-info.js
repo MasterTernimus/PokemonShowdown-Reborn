@@ -7,6 +7,26 @@ const reference = require('../../../data/field-reference.json');
 const {FieldNotes} = require('../../../dist/data/field-guide');
 
 describe('Field and Aura information commands', () => {
+	it('groups Rocky rules and labels move references without promising calculated damage', () => {
+		const html = renderField('rockyterrain');
+		for (const heading of ['Damage', 'Protection', 'Penalties', 'Ability interactions and exceptions']) assert(html.includes(heading));
+		assert(renderFieldMove('rockyterrain', 'Rock Slide').includes('Listed field modifiers'));
+		assert(renderFieldMove('rockyterrain', 'Rock Slide').includes('not a calculated damage result'));
+		assert(!commands.fieldhelp.join(' ').includes('complete field reference'));
+	});
+	it('distinguishes paused Auras from permanent fields and ordinary countdowns', async () => {
+		const replies = [];
+		const context = {sendReplyBox: text => replies.push(text), errorReply: text => replies.push(text)};
+		const state = {field: 'coldeclipseterrain', fieldTurns: null, aura: 'psychicterrain', auraTurns: null};
+		const room = {battle: {getFieldInfo: async () => state}};
+		await commands.aura.call(context, '', room);
+		assert(replies.pop().includes('Duration paused by Cold Eclipse'));
+		await commands.field.call(context, '', room);
+		assert(replies.pop().includes('Permanent'));
+		state.field = 'watersurfaceterrain'; state.auraTurns = 3;
+		await commands.aura.call(context, '', room);
+		assert(replies.pop().includes('3 turns remaining'));
+	});
 	it('resolves friendly names and rejects unknown or injected text', () => {
 		assert.equal(resolveFieldName('Chess'), 'chessboardterrain');
 		assert.equal(resolveFieldName('Cold Eclipse Field'), 'coldeclipseterrain');

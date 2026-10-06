@@ -47,8 +47,8 @@ describe('Four approved composite removals',()=>{
   const[p,t]=setup('War Ship','Drednaw-Gmax');
   for(const [mod,expected]of [[0,80],[1,60]]){const m=battle.dex.getActiveMove('tackle');p.getMoveHitData(m).typeMod=mod;assert.equal(battle.runEvent('ModifyDamage',t,p,m,100),expected);}
  });
- it('Royal Voice cannot activate stale copy state but retains its three components',()=>{
-  const[p,t]=setup('Royal Voice','Gardevoir-Mega');
+ it('Void Voice cannot activate stale copy state but retains its three components',()=>{
+  const[p,t]=setup('Void Voice','Gardevoir-Mega');
   for(const a of ['pixilate','queenlymajesty','dreamsickness'])assert(p.hasAbility(a),a);assert(!p.hasAbility('trace'));
   p.m.perfectForesightAbility='speedboost';p.m.perfectForesightAbilityState={id:'speedboost',target:p};assert(!p.hasAbility('speedboost'));
   battle.makeChoices('move splash','move splash');assert.equal(p.boosts.spe,0);

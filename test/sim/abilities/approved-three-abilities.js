@@ -21,8 +21,8 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('keeps exact roster slots and component identities', () => {
 		const [p] = start('Moonlit Hide');
-		assert.deepEqual(battle.dex.species.get('Ursaluna').abilities, {0: 'Raging Beast', 1: 'Moonlit Hide', H: 'Territorial'});
-		assert.deepEqual(battle.dex.species.get('Ursaluna-Bloodmoon').abilities, {0: "Mind's Eye", 1: 'Lunar Dread', H: 'Shadow Shield'});
+		assert.deepEqual(battle.dex.species.get('Ursaluna').abilities, {0: 'Raging Beast', 1: 'Bulletproof', H: 'Territorial'});
+		assert.deepEqual(battle.dex.species.get('Ursaluna-Bloodmoon').abilities, {0: "Mind's Eye", 1: 'Lunar Dread', H: 'Moonlit Hide'});
 		assert(Object.values(battle.dex.species.get('Cetitan').abilities).includes('Glacial Mass'));
 		assert.equal(battle.dex.species.get('Gyarados-Mega').abilities[0], 'Unleashed Ego');
 		for (const [ability, components] of [['Moonlit Hide', ['shadowshield','magicguard']], ['Glacial Mass',['heavymetal','thickfat']], ['Unleashed Ego',['ultraego','levitate','ragingstorm','battlearmor','moldbreaker']]]) {
@@ -189,6 +189,7 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		assert.deepEqual(m.abilityComponents.glacialmass,['Heavy Metal','Thick Fat']);
 		assert.deepEqual(m.abilityComponents.unleashedego,['Ultra Ego','Levitate','Raging Storm']);
 		assert.deepEqual(m.abilityComponents.moonlithide,['Shadow Shield','Magic Guard']);
-		assert.equal(m.species.find(p=>p.name==='Ursaluna').abilities[1],'Moonlit Hide');
+		assert.equal(m.species.find(p=>p.name==='Ursaluna').abilities[1],'Bulletproof');
+		assert.equal(m.species.find(p=>p.name==='Ursaluna-Bloodmoon').abilities.H,'Moonlit Hide');
 	});
 });

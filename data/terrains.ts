@@ -2343,12 +2343,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyDef(def, pokemon) {
-				if (!pokemon.isGrounded() && !(pokemon.species.id === 'gardevoir' && pokemon.hasAbility('voidveil'))) {
+				if (!pokemon.isGrounded() && !(pokemon.species.id === 'gardevoir' && pokemon.hasAbility('voidveil')) && !pokemon.hasAbility('voidcrossing')) {
 					return this.chainModify(0.9);
 				}
 			},
 			onModifySpD(spd, pokemon) {
-				if (!pokemon.isGrounded() && !(pokemon.species.id === 'gardevoir' && pokemon.hasAbility('voidveil'))) {
+				if (!pokemon.isGrounded() && !(pokemon.species.id === 'gardevoir' && pokemon.hasAbility('voidveil')) && !pokemon.hasAbility('voidcrossing')) {
 					return this.chainModify(0.9);
 				}
 			},

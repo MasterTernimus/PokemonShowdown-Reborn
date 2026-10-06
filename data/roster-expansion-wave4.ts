@@ -172,24 +172,24 @@ export function applyRosterWave4(base: AbilityDataTable) {
 			if (move.type === 'Ghost' && move.category !== 'Status') pokemon.disableMove(slot.id);
 		}
 	};
-	delete base.hydratyrant.onImmunity;
-	delete base.hydratyrant.onResidual;
-	base.hydratyrant.onAfterEachBoost = function (boost, target, source, effect) {
+	delete base.voidtyrant.onImmunity;
+	delete base.voidtyrant.onResidual;
+	base.voidtyrant.onAfterEachBoost = function (boost, target, source, effect) {
 		if (source === target && effect.id === 'dracometeor' && boost.spa && boost.spa < 0) {
 			this.effectState.dracoDropMove = this.activeMove;
 		}
 	};
-	base.hydratyrant.onAfterMove = function (source, target, move) {
+	base.voidtyrant.onAfterMove = function (source, target, move) {
 		if (source.m.hydraTyrantRestoreUsed || move.id !== 'dracometeor' ||
 			this.effectState.dracoDropMove !== move || source.boosts.spa >= 0) return;
 		source.m.hydraTyrantRestoreUsed = true;
 		const boosts: SparseBoostsTable = {};
 		for (const stat of Object.keys(source.boosts) as BoostID[]) if (source.boosts[stat] < 0) boosts[stat] = 0;
 		source.setBoost(boosts);
-		this.add('-clearnegativeboost', source, '[from] ability: Hydra Tyrant');
+		this.add('-clearnegativeboost', source, '[from] ability: Void Tyrant');
 	};
 	// Called moves also complete here, even when they do not run the outer turn's AfterMove event.
-	base.hydratyrant.onAfterMoveSecondarySelf = base.hydratyrant.onAfterMove;
+	base.voidtyrant.onAfterMoveSecondarySelf = base.voidtyrant.onAfterMove;
 	add('meridianseal', 'Meridian Seal', {
 		onStart() { this.effectState.used = false; },
 		onSourceDamagingHit(damage, target, source, move) {

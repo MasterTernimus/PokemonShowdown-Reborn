@@ -8,6 +8,26 @@ const references: { [id: string]: Reference } = JSON.parse(FS('data/field-refere
 const escape = Utils.escapeHTML;
 const list = (lines: string[]) => `<ul>${lines.map(line => `<li>${escape(line)}</li>`).join('')}</ul>`;
 
+function renderMainEffects(id: string): string {
+	if (id === 'rockyterrain') {
+		return '<h4>Damage</h4>' + list(['Rock attacks: 1.5× power. Named move bonuses can stack.']) +
+			'<h4>Protection</h4>' + list([
+				'Positive Defense stages prevent flinching and block bullet moves.',
+				'Substitute also blocks bullet moves.',
+			]) + '<h4>Penalties</h4>' + list([
+				'Failed contact moves cost 1/8 maximum HP, including misses, immunity and protection failures. Rock Head prevents this penalty.',
+				'Flinching costs 1/4 HP. Steadfast or Sturdy prevents this penalty.',
+			]) + '<details><summary>Ability interactions and exceptions</summary>' + list([
+				'Rock Head prevents the failed-contact penalty; it does not prevent the flinch penalty.',
+				'Steadfast and Sturdy prevent the flinch penalty; they do not prevent the failed-contact penalty.',
+				'These are the field-specific exceptions listed here, not every possible ability interaction.',
+			]) + '</details>';
+	}
+	const notes = (FieldNotes[id] || []).flatMap(note => note.split(/(?<!Sp)\.\s+(?=[A-Z])/)
+		.map(sentence => sentence.endsWith('.') ? sentence : sentence + '.'));
+	return `<h4>Main effects</h4>${list(notes)}`;
+}
+
 export function resolveFieldName(text: string, aura = false): string | undefined {
 	const id = toID(text).replace(/(?:terrain|field|aura)$/, '');
 	const aliases: { [id: string]: string } = { chess: 'chessboard', bewitched: 'bewitchedwoods', water: 'watersurface',
@@ -85,9 +105,8 @@ export function renderAura(id: string): string {
 
 export function renderField(id: string): string {
 	const reference = references[id];
-	const notes = FieldNotes[id] || [];
 	return `<strong>${escape(reference.name)} — Full Field</strong>` +
-		`<h4>Main effects</h4>${list(notes)}` +
+		renderMainEffects(id) +
 		`<p><strong>Move effects:</strong> Use /field ${escape(reference.name)}, MOVE for one move's changes. ` +
 		'In battle, hover a move to see the relevant effects for the current field.</p>' +
 		`<p>For the detailed reference, use <strong>/field ${escape(reference.name)} full</strong>.</p>`;
@@ -113,7 +132,7 @@ export function renderFieldFull(id: string): string {
 		return `<details><summary>${escape(section)} (${entries.length})</summary><ul>${rows}</ul></details>`;
 	}).join('');
 	return `<strong>${escape(reference.name)} — Detailed effects</strong>` +
-		`<h4>Main effects</h4>${list(FieldNotes[id] || [])}` +
+		renderMainEffects(id) +
 		'<p>This reference combines main field rules with move previews; conditional ability interactions and field transitions may have additional effects.</p>' +
 		'<h4>Move changes</h4><p>Open a category, then an effect to see its moves. ' +
 		`For one move, use /field ${escape(reference.name)}, MOVE.</p>${sections}`;
@@ -125,8 +144,8 @@ export function renderFieldMove(id: string, moveName: string): string {
 	const effects = Object.entries(reference.moves).filter(([, moves]) => moves.some(name => toID(name) === move.id))
 		.map(([description]) => description);
 	return `<strong>${escape(reference.name)} — ${escape(move.name)}</strong>` +
-		`<h4>Move effects</h4>${effects.length ? list(effects) : '<p>No move-specific modifier is listed. Main field rules may still apply.</p>'}` +
-		'<p>Conditional results depend on the user, target, weather, roles and other battle state.</p>';
+		`<h4>Listed field modifiers</h4>${effects.length ? list(effects) : '<p>No move-specific modifier is listed. Main field rules may still apply.</p>'}` +
+		'<p>This is a reference, not a calculated damage result. Ability, Aura, target, weather and role conditions can change the outcome.</p>';
 }
 
 async function lookup(context: Chat.CommandContext, target: string, room: Room | null, aura: boolean) {
@@ -134,6 +153,7 @@ async function lookup(context: Chat.CommandContext, target: string, room: Room |
 	let turns: number | null | undefined;
 	let moveName = '';
 	let full = false;
+	let paused = false;
 	if (!aura) {
 		if (target.includes(',')) {
 			const comma = target.indexOf(',');
@@ -159,6 +179,7 @@ async function lookup(context: Chat.CommandContext, target: string, room: Room |
 		if (!state) return context.errorReply('The battle state is not available yet.');
 		id = aura ? state.aura : state.field;
 		turns = aura ? state.auraTurns : state.fieldTurns;
+		paused = aura && state.field === 'coldeclipseterrain';
 		if (!id) return context.sendReplyBox(`There is no active ${aura ? 'Aura' : 'base field'} in this battle.`);
 	} else {
 		id = resolveFieldName(target, aura);
@@ -167,7 +188,7 @@ async function lookup(context: Chat.CommandContext, target: string, room: Room |
 		return context.errorReply(`Unknown ${aura ? 'Aura' : 'field'}. Available: ${Object.values(aura ? Auras : references).map(entry => entry.name).join(', ')}.`);
 	}
 	if (moveName && !Dex.moves.get(moveName).exists) return context.errorReply(`Unknown move: ${moveName}.`);
-	const timerText = turns === null ? 'No active countdown.' :
+	const timerText = paused ? 'Duration paused by Cold Eclipse. The countdown resumes after leaving this field, if the Aura remains active.' : turns === null ? 'Permanent — no timed expiration; field-changing effects can still end it.' :
 		`${turns} ${turns === 1 ? 'turn' : 'turns'} remaining (including this turn).`;
 	const timer = turns === undefined ? '' : `<p>${timerText}</p>`;
 	context.sendReplyBox(`<div style="max-height:480px;overflow:auto">${timer}${aura ? renderAura(id) : moveName ? renderFieldMove(id, moveName) : full ? renderFieldFull(id) : renderField(id)}</div>`);
@@ -176,6 +197,6 @@ async function lookup(context: Chat.CommandContext, target: string, room: Room |
 export const commands: Chat.ChatCommands = {
 	async field(target, room) { await lookup(this, target, room, false); },
 	async aura(target, room) { await lookup(this, target, room, true); },
-	fieldhelp: ['/field info — privately shows the current battle field and its effects.', '/field NAME — shows a field’s main rules, e.g. /field Chess.', '/field NAME full — shows the complete field reference in expandable sections.', '/field full — shows the detailed reference for the active battle field.', '/field NAME, MOVE — shows one move’s field effects, e.g. /field Chess, Fake Out.'],
+	fieldhelp: ['/field info — privately shows the current battle field and its effects.', '/field NAME — shows a field’s main rules, e.g. /field Chess.', '/field NAME full — shows the detailed reference: main rules and listed move modifiers; additional conditional interactions may apply.', '/field full — shows the detailed reference for the active battle field.', '/field NAME, MOVE — shows listed field modifiers, not calculated damage, e.g. /field Chess, Fake Out.'],
 	aurahelp: ['/aura — privately shows the current battle Aura and its effects.', '/aura NAME — looks up an Aura, e.g. /aura Psychic.'],
 };

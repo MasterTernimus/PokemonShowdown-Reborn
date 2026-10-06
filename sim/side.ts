@@ -87,6 +87,8 @@ export interface PokemonSwitchRequestData {
 	pokeball: ID;
 	/** Current ability. Only sent in Gen 7+. */
 	ability?: ID;
+	/** Private owner-side species traits; never announced through ability messages. */
+	passives?: readonly string[];
 	/** @see https://dex.pokemonshowdown.com/abilities/commander */
 	commanding?: boolean;
 	/** @see https://dex.pokemonshowdown.com/moves/revivalblessing */

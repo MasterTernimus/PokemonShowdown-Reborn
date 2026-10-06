@@ -1,9 +1,9 @@
 'use strict';
 const assert=require('../../assert'),common=require('../../common');
 let battle;
-describe('Gardevoir-Void and Royal Voice',function(){
+describe('Gardevoir-Void and Void Voice',function(){
  afterEach(()=>battle?.destroy());
- it('uses normal Gardevoir mechanics and Mega Evolves with Dream Sickness in Royal Voice',function(){
+ it('uses normal Gardevoir mechanics and Mega Evolves with Dream Sickness in Void Voice',function(){
   battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Gardevoir-Void',ability:'Void Veil',item:'Gardevoirite',moves:['splash']}],[{species:'Mew',ability:'Synchronize',moves:['splash']}]]);
   battle.makeChoices('team 1','team 1');
   const mon=battle.p1.active[0],foe=battle.p2.active[0];
@@ -12,7 +12,7 @@ describe('Gardevoir-Void and Royal Voice',function(){
   assert.deepEqual(mon.species.abilities,{0:'Trace',1:'Dream Sickness',H:'Void Veil'});
   assert.equal(mon.canMegaEvo,'Gardevoir-Mega-Alt');
   battle.makeChoices('move splash mega','move splash');
-  assert.equal(mon.ability,'royalvoice');assert(mon.hasAbility('dreamsickness'));
+  assert.equal(mon.ability,'voidvoice');assert(mon.hasAbility('dreamsickness'));
   const move=battle.dex.getActiveMove('hypervoice');
   battle.singleEvent('ModifyType',mon.getAbility(),mon.abilityState,move,mon);
   assert.equal(move.type,'Fairy');assert.equal(battle.runEvent('BasePower',mon,foe,move,100),120);

@@ -1321,6 +1321,7 @@ export class Pokemon {
 				return move as ID;
 			}),
 			baseAbility: this.baseAbility,
+			passives: this.getPassives(),
 			item: this.item,
 			pokeball: this.pokeball,
 		};
@@ -2178,6 +2179,11 @@ export class Pokemon {
 
 	getAbility() {
 		return this.battle.dex.abilities.getByID(this.ability);
+	}
+
+	/** Current mechanical form, including Transform; independent of ability suppression. */
+	getPassives(): readonly string[] {
+		return this.species.passives;
 	}
 
 	hasAbility(ability: string | string[]) {

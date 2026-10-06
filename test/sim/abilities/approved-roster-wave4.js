@@ -48,7 +48,7 @@ describe('Approved fourth roster pass', () => {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));
 			assert(abilityIncludesComponent(ability, component));
 		}
-		assert(!abilityIncludesComponent('Hydra Tyrant', 'Self Sufficient'));
+		assert(!abilityIncludesComponent('Void Tyrant', 'Self Sufficient'));
 		for (const component of ['Magic Guard', 'Unaware']) {
 			assert(!abilityIncludesComponent('Lunar Dread', component));
 		}
@@ -375,8 +375,8 @@ describe('Approved fourth roster pass', () => {
 		hit('shadowball', p, foe);
 		assert.equal(foe.hp, hp);
 	});
-	it('Hydra Tyrant restores all negative stages after the complete Draco Meteor only once per battle', () => {
-		const [p, , foe] = make('Hydra Tyrant', 'Hydreigon');
+	it('Void Tyrant restores all negative stages after the complete Draco Meteor only once per battle', () => {
+		const [p, , foe] = make('Void Tyrant', 'Hydreigon');
 		p.boosts.atk = 2;
 		p.boosts.def = -1;
 		hit('dracometeor', p, foe);
@@ -390,21 +390,21 @@ describe('Approved fourth roster pass', () => {
 		assert(p.boosts.spa < 0);
 		assert.equal(p.getAbility().onResidual, undefined);
 	});
-	it('Hydra Tyrant does not spend restoration when Draco Meteor is blocked', () => {
-		const [p, , foe] = make('Hydra Tyrant', 'Hydreigon');
+	it('Void Tyrant does not spend restoration when Draco Meteor is blocked', () => {
+		const [p, , foe] = make('Void Tyrant', 'Hydreigon');
 		foe.setType('Fairy');
 		hit('dracometeor', p, foe);
 		assert(!p.m.hydraTyrantRestoreUsed);
 	});
-	it('Hydra Tyrant also restores after a called Draco Meteor without an outer AfterMove event', () => {
-		const [p, , foe] = make('Hydra Tyrant', 'Hydreigon');
+	it('Void Tyrant also restores after a called Draco Meteor without an outer AfterMove event', () => {
+		const [p, , foe] = make('Void Tyrant', 'Hydreigon');
 		p.boosts.accuracy = 6;
 		battle.actions.useMove('dracometeor', p, { target: foe });
 		assert.equal(p.boosts.spa, 0);
 		assert(p.m.hydraTyrantRestoreUsed);
 	});
-	it('Hydra Tyrant restoration works through the actual turn queue and survives switching', () => {
-		const [p, , foe] = make('Hydra Tyrant', 'Hydreigon');
+	it('Void Tyrant restoration works through the actual turn queue and survives switching', () => {
+		const [p, , foe] = make('Void Tyrant', 'Hydreigon');
 		p.boosts.accuracy = 6;
 		battle.makeChoices('move dracometeor 1, move splash', 'move splash, move splash');
 		assert.equal(p.boosts.spa, 0);

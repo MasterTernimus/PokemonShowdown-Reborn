@@ -2,6 +2,16 @@ import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	starterpassives: {
+		name: 'Starter Passives',
+		onBasePowerPriority: 22,
+		onBasePower(power, source, target, move) {
+			if (source.getPassives().includes('proficient')) {
+				return this.dex.abilities.get('proficient').onBasePower?.call(this, power, source, target, move);
+			}
+		},
+
+	},
 	vanguardlaststand: {
 		name: 'Vanguard Last Stand',
 		noCopy: true,
@@ -519,6 +529,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	wisecounselspent: {name: 'wisecounselspent', noCopy: true},
 	mindcurrentspent: {name: 'mindcurrentspent', noCopy: true},
 	fortunatewingspent: {name: 'fortunatewingspent', noCopy: true},
+	spectralcrossingspent: {name: 'spectralcrossingspent', noCopy: true},
 	trapped: {
 		name: 'trapped',
 		noCopy: true,
@@ -559,9 +570,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'hexboundtrap',
 		duration: 2,
 		noCopy: true,
+		onRestart(target, source) {
+			// Keep ownership and links intact; another source cannot steal or refresh this trap.
+			if (source !== this.effectState.source || !source?.hp || !source.isActive ||
+				!target.runStatusImmunity('trapped') || target.hasItem('shedshell')) return false;
+			this.effectState.duration = 2;
+		},
 		onStart(target, source) {
 			if (!source?.hp || !source.isActive || !target.runStatusImmunity('trapped') || target.hasItem('shedshell')) return false;
-			this.add('-activate', target, 'trapped', '[from] ability: Hex Bound', '[of] ' + source);
+			this.add('-activate', target, 'trapped', '[from] ability: Void Hex', '[of] ' + source);
 		},
 		onTrapPokemon(pokemon) {
 			if (this.effectState.source?.hp && this.effectState.source.isActive) pokemon.tryTrap();
@@ -574,7 +591,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		noCopy: true,
 	},
 	hexboundspent: {
-		name: 'Hex Bound Spent',
+		name: 'Void Hex Spent',
 		noCopy: true,
 	},
 	apexflytraptrapped: {
@@ -607,10 +624,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(pokemon, source, effect) {
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
-			if (effect.id === 'sandtomb' && source.hasAbility('faultline') && !pokemon.isAlly(source) && !source.volatiles['faultlinespent']) {
-				source.addVolatile('faultlinespent', source, this.dex.abilities.get('faultline'));
-				pokemon.side.addSideCondition('spikes', source, this.dex.abilities.get('faultline'));
-			}
+
 			const moveBoosts: Record<string, readonly string[]> = {
 				firespin: ['burningterrain', 'hauntedterrain'],
 				whirlpool: ['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'],

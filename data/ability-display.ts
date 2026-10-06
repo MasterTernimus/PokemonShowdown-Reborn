@@ -1,4 +1,4 @@
-import { AbilityDescriptionOverrides } from './ability-descriptions';
+import {AbilityDisplaySummaries} from './ability-display-summaries';
 import { Aliases } from './aliases';
 import {AbilityComponents} from './ability-components';
 
@@ -68,7 +68,7 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 		"dualwield",
 		"moxie"
 	],
-	"wickedcommand": [
+	"voidcommand": [
 		"insomnia",
 		"superluck"
 	],
@@ -187,6 +187,7 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 // The legacy identity registry is not always an exact implementation summary.
 // Burning Crown uses flat damage reduction, not Filter; its other delegates remain active.
 const DisplayComponentOverrides: {[id: string]: string[]} = {
+ unboundblaze: ['dragonize', 'magmaarmor', 'proficient'],
  soulcremation: ['soulsiphon', 'soulpyre', 'malicewell'],
  burningcrown: ['intimidate', 'whitesmoke', 'moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient'],
 };
@@ -220,26 +221,20 @@ export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): 
 export function getAbilityDisplayComponents(id: string): string[] {
 	const parts = directDisplayComponents(id);
 	// A component already included by another named package needs no second display entry.
-	return parts.filter((part, index) => !parts.some((other, otherIndex) => other !== part &&
+	return parts.filter((part, index) => part !== 'proficient' && !parts.some((other, otherIndex) => other !== part &&
 		getAbilityDisplayClosure(other).has(part) && (!getAbilityDisplayClosure(part).has(other) || otherIndex < index)));
 }
 
-/** Remove only metadata-confirmed standalone component lists, preserving all mechanics prose. */
-export function getAbilitySelectorSummary(id: string, summary: string, nameOf: (id: string) => string): string {
-	const reviewed = AbilityDescriptionOverrides[canonicalAbilityDisplayID(id)];
-	if (reviewed && summary === reviewed.shortDesc) return summary;
-	// Sushi Trick's approved summary describes the effect directly; metadata retains Hospitality.
-	if (canonicalAbilityDisplayID(id) === 'sushitrick') return summary;
-	const components = getAbilityDisplayComponents(id);
-	if (!components.length) return summary;
-	const closure = getAbilityDisplayClosure(id);
-	const clauses = summary.split(/;\s*/);
-	const mechanics = clauses.filter(clause => {
-		const parts = clause.trim().replace(/\.$/, '').split(/\s*\+\s*|,\s*(?:and\s+)?|\s+and\s+/);
-		return !parts.every(part => closure.has(canonicalAbilityDisplayID(part)));
-	}).join('; ').replace(/\.$/, '');
-	const names = components.map(nameOf).filter(Boolean);
-	const missing = names.filter(name => !mechanics.toLowerCase().includes(name.toLowerCase()));
-	if (!missing.length && mechanics === summary.replace(/\.$/, '')) return summary;
-	return [missing.join(' + '), mechanics].filter(Boolean).join('; ') + '.';
+/** Short effects and component names are separate display fields. */
+export function getAbilitySelectorSummary(id: string, summary: string, _nameOf: (id: string) => string): string {
+ id = canonicalAbilityDisplayID(id);
+ if (AbilityDisplaySummaries[id]) return AbilityDisplaySummaries[id];
+ if (id === 'proficient') return summary;
+ const closure = getAbilityDisplayClosure(id);
+ const clauses = summary.split(/;\s*/).filter(clause => {
+  const parts = clause.trim().replace(/\.$/, '').split(/\s*\+\s*|,\s*(?:and\s+)?|\s+and\s+/);
+  return !parts.every(part => closure.has(canonicalAbilityDisplayID(part)));
+ });
+ const result = clauses.join('; ').replace(/\bProficient\b/gi, '1.3x same-type move power');
+ return result ? result.replace(/^[a-z]/, letter => letter.toUpperCase()) : 'Combines the listed abilities.';
 }

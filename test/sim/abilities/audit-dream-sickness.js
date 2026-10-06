@@ -42,8 +42,8 @@ describe('Dream Sickness ally rescue', () => {
 		assert.equal(holder.hp, Math.floor(holder.baseMaxhp / 4));
 	});
 
-	it('Royal Voice inherits the rescue without a stat-drop immunity', () => {
-		const [holder, ally, foe] = start('Royal Voice');
+	it('Void Voice inherits the rescue without a stat-drop immunity', () => {
+		const [holder, ally, foe] = start('Void Voice');
 		assert(holder.hasAbility('dreamsickness'));
 		battle.boost({atk: -1}, holder, foe, battle.dex.getActiveMove('growl'));
 		assert.equal(holder.boosts.atk, -1);

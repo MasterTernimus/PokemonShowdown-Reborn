@@ -23,8 +23,8 @@ describe('Composite and field audit fixes', () => {
    assert(!p.hasAbility('levitate')); assert(p.isGrounded());
   });
  }
- it('Royal Voice does not copy Void Veil or gain its Levitate', () => {
-  const p = setup('Royal Voice', 'Void Veil');
+ it('Void Voice does not copy Void Veil or gain its Levitate', () => {
+  const p = setup('Void Voice', 'Void Veil');
   assert.equal(p.m.perfectForesightAbility, undefined);
   assert(!p.hasAbility('levitate')); assert(p.isGrounded());
  });

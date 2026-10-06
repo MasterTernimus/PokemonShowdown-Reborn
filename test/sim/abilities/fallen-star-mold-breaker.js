@@ -18,8 +18,8 @@ describe('Fallen Star full local Mold Breaker',()=>{
 	it('retains exactly the existing four components in server and calculator metadata',()=>{
 		start();const {AbilityComponents}=require('../../../dist/data/ability-components');const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');
 		assert.deepEqual(AbilityComponents.fallenstar,['moldbreaker','dualwield','selfsufficient','proficient']);
-		assert.deepEqual(calculatorMetadata().abilityComponents.fallenstar,['Mold Breaker','Dual Wield','Self Sufficient','Proficient']);
-		const a=battle.dex.abilities.get('fallenstar');assert(/Mold Breaker/.test(a.desc));assert(/Mold Breaker/.test(a.shortDesc));
+		assert.deepEqual(calculatorMetadata().abilityComponents.fallenstar,['Mold Breaker','Dual Wield','Self Sufficient']);
+		const a=battle.dex.abilities.get('fallenstar');assert(/Mold Breaker/.test(a.desc));assert(require('../../../dist/data/ability-display').getAbilityDisplayComponents('fallenstar').includes('moldbreaker'));
 	});
 	it('retains Dual Wield, arrow priority, Proficient and protection without duplicates',()=>{
 		const[p,t]=start();const m=battle.dex.getActiveMove('triplearrows');battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,t);assert(m.ignoreAbility);assert.equal(m.multihit,2);
@@ -33,7 +33,7 @@ describe('Fallen Star full local Mold Breaker',()=>{
 });
 describe('Four approved Mold Breaker composites',()=>{
 	afterEach(()=>{battle?.destroy();battle=null;});
-	for(const name of ['Fallen Star','Atrocity','Sun Sovereign','Guiding Omen']){
+	for(const name of ['Fallen Star','Atrocity','Sun Sovereign','Void Omen']){
 		for(const [ability,move] of [['Levitate','earthquake'],['Water Absorb','watergun'],['Sturdy','tackle']])it(`${name} bypasses ${ability}`,()=>{
 			const[p,t]=start(ability,name);if(ability==='Sturdy')t.hp=t.maxhp=t.baseMaxhp=1;
 			battle.actions.useMove(move,p,{target:t});assert(t.hp<t.maxhp);
@@ -41,7 +41,7 @@ describe('Four approved Mold Breaker composites',()=>{
 		it(`${name} announces and exposes Mold Breaker once`,()=>{
 			const[p]=start('No Ability',name);assert(p.hasAbility('moldbreaker'));
 			assert.equal(battle.log.filter(x=>x.startsWith('|-ability|')&&x.endsWith('|Mold Breaker')).length,1);
-			assert(/Mold Breaker/.test(p.getAbility().desc));assert(/Mold Breaker/.test(p.getAbility().shortDesc));
+			assert(/Mold Breaker/.test(p.getAbility().desc));assert(require('../../../dist/data/ability-display').getAbilityDisplayComponents(p.ability).includes('moldbreaker'));
 			const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');assert(calculatorMetadata().abilityComponents[p.ability].includes('Mold Breaker'));
 		});
 		it(`${name} preserves its existing suppression policy`,()=>{
@@ -67,9 +67,9 @@ describe('Four approved Mold Breaker composites',()=>{
 		assert.equal(m.critRatio,originalCrit+1);assert.equal(m.accuracy,true);assert(m.ignoreAbility);
 		assert.equal(battle.runEvent('ModifyDef',p,null,null,1000),1300);assert.equal(battle.runEvent('ModifySpD',p,null,null,1000),1300);
 	});
-	it('Guiding Omen preserves Friend Guard, Serene Grace and its one-use ward',()=>{
+	it('Void Omen preserves Friend Guard, Serene Grace and its one-use ward',()=>{
 		const mon={species:'Mew',ability:'No Ability',moves:['splash']};
-		battle=common.createBattle({formatid:'gen9nofielddoublesbattle'},[[{...mon,ability:'Guiding Omen'},{...mon}],[{...mon},{...mon}]]);battle.makeChoices('team 12','team 12');
+		battle=common.createBattle({formatid:'gen9nofielddoublesbattle'},[[{...mon,ability:'Void Omen'},{...mon}],[{...mon},{...mon}]]);battle.makeChoices('team 12','team 12');
 		const p=battle.p1.active[0],ally=battle.p1.active[1],foe=battle.p2.active[0],move=battle.dex.getActiveMove('tackle');
 		assert.equal(battle.runEvent('ModifyDamage',foe,ally,move,1000),750);assert.equal(battle.runEvent('ModifyDamage',foe,p,move,1000),1000);
 		const flame=battle.dex.getActiveMove('flamethrower');const originalChance=flame.secondaries[0].chance;

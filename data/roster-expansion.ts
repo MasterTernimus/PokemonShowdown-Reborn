@@ -258,8 +258,8 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 			if (ally) { this.add('-activate', pokemon, 'ability: Root Renewal'); ally.cureStatus(); }
 		},
 	});
-	const omen = base.guidingomen;
-	base.guidingomen = {
+	const omen = base.voidomen;
+	base.voidomen = {
 		...omen,
 		onStart(pokemon) {
 			omen.onStart?.call(this, pokemon);
@@ -270,14 +270,14 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 			if (!this.effectState.used) { this.effectState.used = true; this.effectState.ward = true; }
 		},
 		onAllyTryBoost(boost, target, source) {
-			if (!this.effectState.ward || target === this.effectState.target || !source || source.isAlly(target)) return;
+			if (!this.effectState.ward || !source || source.isAlly(target)) return;
 			let blocked = false;
 			for (const stat of Object.keys(boost) as BoostID[]) {
 				if (boost[stat]! < 0) { delete boost[stat]; blocked = true; }
 			}
 			if (blocked) {
 				this.effectState.ward = false;
-				this.add('-activate', this.effectState.target, 'ability: Guiding Omen');
+				this.add('-activate', this.effectState.target, 'ability: Void Omen');
 			}
 		},
 	};
