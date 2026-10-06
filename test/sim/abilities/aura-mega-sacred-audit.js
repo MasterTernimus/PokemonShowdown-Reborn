@@ -22,7 +22,7 @@ describe('Aura, Mega Stone and Sacred Bond audit fixes', () => {
    assert.equal(p.species.name, species + '-Mega');
   });
  }
- for (const ability of ['Perfect Foresight', 'Royal Voice']) for (const aura of [true, false]) {
+ for (const ability of ['Perfect Foresight', 'Void Voice']) for (const aura of [true, false]) {
   it(ability + ' uses active Telepathy with Psychic Aura=' + aura, () => {
    battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [[{species:'Alakazam',ability:'No Ability',moves:['splash']},{species:'Mew',ability:'No Ability',moves:['splash']}],[{species:'Gardevoir',ability:'Telepathy',moves:['splash']},{species:'Mewtwo',ability:'Pressure',moves:['splash']}]]);
    battle.makeChoices('team 12','team 12'); const p=battle.p1.active[0];

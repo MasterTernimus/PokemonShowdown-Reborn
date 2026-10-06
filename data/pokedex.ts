@@ -4067,7 +4067,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	feraligatr: {
 		num: 160,
 		name: "Feraligatr",
-		types: ["Water", "Dragon"],
+		types: ["Water", "Dark"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 100, atk: 109, def: 100, spa: 59, spd: 93, spe: 78 },
 		abilities: { 0: "Water Veil", 1: "Mighty Jaw", H: "Sheer Force" },
@@ -6187,7 +6187,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Psychic", "Fairy"],
 		baseStats: { hp: 75, atk: 75, def: 80, spa: 165, spd: 135, spe: 110 },
-		abilities: { 0: "Royal Voice" },
+		abilities: { 0: "Void Voice" },
 		heightm: 1.6,
 		weightkg: 48.4,
 		color: "White",
@@ -9126,7 +9126,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Mismagius",
 		types: ["Ghost", "Fairy"],
 		baseStats: { hp: 60, atk: 60, def: 60, spa: 110, spd: 105, spe: 115 },
-		abilities: { 0: "Void Veil", 1: "Temporal Shift", H: "Hex Bound" },
+		abilities: { 0: "Void Veil", 1: "Temporal Shift", H: "Void Hex" },
 		heightm: 0.9,
 		weightkg: 4.4,
 		color: "Purple",
@@ -9171,7 +9171,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Honchkrow",
 		types: ["Dark", "Flying"],
 		baseStats: { hp: 100, atk: 125, def: 72, spa: 81, spd: 72, spe: 90 },
-		abilities: { 0: "Pressure", 1: "Wicked Command", H: "Supreme Overlord" },
+		abilities: { 0: "Pressure", 1: "Void Command", H: "Supreme Overlord" },
 		heightm: 0.9,
 		weightkg: 27.3,
 		color: "Black",
@@ -9867,7 +9867,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy", "Flying"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 85, atk: 75, def: 95, spa: 120, spd: 115, spe: 80 },
-		abilities: {"0":"Guiding Omen","1":"Pixilate","H":"Fortunate Wing"},
+		abilities: {"0":"Void Omen","1":"Pixilate","H":"Fortunate Wing"},
 		heightm: 1.5,
 		weightkg: 38,
 		color: "White",
@@ -11480,7 +11480,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Audino",
 		types: ["Normal", "Fairy"],
 		baseStats: { hp: 103, atk: 60, def: 96, spa: 80, spd: 96, spe: 50 },
-		abilities: { 0: "Invigorate", 1: "Regenerator", H: "Triage" },
+		abilities: { 0: "Vital Signs", 1: "Regenerator", H: "Triage" },
 		heightm: 1.1,
 		weightkg: 31,
 		color: "Pink",
@@ -12689,7 +12689,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 591,
 		name: "Amoonguss",
 		types: ["Grass", "Poison"],
-		baseStats: { hp: 114, atk: 105, def: 70, spa: 75, spd: 80, spe: 30 },
+		baseStats: { hp: 120, atk: 105, def: 80, spa: 75, spd: 90, spe: 30 },
 		abilities: { 0: "Effect Spore", H: "Regenerator" },
 		heightm: 0.6,
 		weightkg: 10.5,
@@ -13405,7 +13405,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Hydreigon",
 		types: ["Dark", "Dragon"],
 		baseStats: { hp: 92, atk: 105, def: 90, spa: 125, spd: 90, spe: 98 },
-		abilities: { 0: "Levitate", 1: "Dark Aura", H: "Hydra Tyrant" },
+		abilities: { 0: "Levitate", 1: "Dark Aura", H: "Void Tyrant" },
 		heightm: 1.8,
 		weightkg: 160,
 		color: "Blue",
@@ -19801,7 +19801,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Ursaluna",
 		types: ["Ground", "Normal"],
 		baseStats: { hp: 150, atk: 145, def: 110, spa: 25, spd: 120, spe: 50 },
-		abilities: { 0: "Raging Beast", 1: "Moonlit Hide", H: "Territorial" },
+		abilities: { 0: "Raging Beast", 1: "Bulletproof", H: "Territorial" },
 		heightm: 2.4,
 		weightkg: 290,
 		color: "Brown",
@@ -19820,7 +19820,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ground", "Normal"],
 		gender: "M",
 		baseStats: { hp: 133, atk: 40, def: 130, spa: 135, spd: 110, spe: 52 },
-		abilities: { 0: "Mind's Eye", 1: "Lunar Dread", H: "Shadow Shield" },
+		abilities: { 0: "Mind's Eye", 1: "Lunar Dread", H: "Moonlit Hide" },
 		heightm: 2.7,
 		weightkg: 333,
 		color: "Brown",
@@ -24155,7 +24155,7 @@ Pokedex.vespiquen.abilities![0] = 'Royal Escort';
 
 Pokedex.greninja.abilities![0] = 'Liquid Arsenal';
 Pokedex.chesnaught.abilities!.H = "Knight's Reprisal";
-Pokedex.ninetalesalola.abilities!.H = 'Aurora Sanctum';
+Pokedex.ninetalesalola.abilities!.H = 'Void Sanctum';
 Pokedex.raichu.abilities![0] = 'Charged Tail';
 
 Pokedex.slowkinggalar.abilities!['1'] = 'Eldritch Remedy';
@@ -24172,14 +24172,14 @@ Pokedex.lapras.abilities!['1'] = 'Ocean Lullaby';
 
 Pokedex.greninja.abilities!['H'] = 'Shadow Screen';
 
-Pokedex.clefable.abilities!['H'] = 'Moonlit Promise';
+Pokedex.clefable.abilities!['H'] = 'Void Promise';
 
-Pokedex.flygon.abilities!['0'] = 'Sandshroud';
+Pokedex.flygon.abilities!['0'] = 'Void Drift';
 
-Pokedex.delphox.abilities!['H'] = 'Arcane Pilfer';
+Pokedex.delphox.abilities!['H'] = 'Void Guile';
 Pokedex.greninja.abilities!.S = 'Battle Bond';
 
-Pokedex.garchomp.abilities!.H = 'Faultline';
+Pokedex.garchomp.abilities!.H = 'Void Wrath';
 Pokedex.garchomp.abilities!.S = 'Battle Bond';
 
 Pokedex.venusaur.abilities![1] = 'Creeping Bloom';
@@ -24213,7 +24213,7 @@ Pokedex.taurospaldeaaqua.abilities!["1"] = "Rousing Feast";
 Pokedex.hawlucha.abilities!["0"] = "Ringcraft";
 Pokedex.centiskorch.abilities!["1"] = "Constricting Heat";
 
-Pokedex.conkeldurr.abilities![0] = 'Grit Reprisal';
+Pokedex.conkeldurr.abilities![0] = 'Void Reprisal';
 Pokedex.conkeldurr.abilities!.H = 'Wrecking Crew';
 
 Pokedex.abomasnow.abilities!["1"] = "Evergreen";
@@ -24259,3 +24259,5 @@ Pokedex.pelipper.abilities!['H'] = 'Rain Courier';
 Pokedex.malamar.abilities!['H'] = 'Disorienting Mind';
 Pokedex.oranguru.abilities!['0'] = 'Wise Counsel';
 Pokedex.raichualola.abilities!['H'] = 'Mind Current';
+
+Pokedex.mismagius.abilities!['0'] = 'Void Crossing';

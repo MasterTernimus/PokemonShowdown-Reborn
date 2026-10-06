@@ -3000,3 +3000,17 @@ export const CompoundWordNames = [
 	'Turbo-blaze',
 	'Un-seen Fist',
 ];
+
+// Legacy Lin ability names remain valid in saved teams and lookups.
+Aliases.hexbound = "Void Hex";
+Aliases.spectralcrossing = "Void Crossing";
+Aliases.wickedcommand = "Void Command";
+Aliases.moonlitpromise = "Void Promise";
+Aliases.hydratyrant = "Void Tyrant";
+Aliases.aurorasanctum = "Void Sanctum";
+Aliases.royalvoice = "Void Voice";
+Aliases.gritreprisal = "Void Reprisal";
+Aliases.guidingomen = "Void Omen";
+Aliases.sandshroud = "Void Drift";
+Aliases.faultline = "Void Wrath";
+Aliases.arcanepilfer = "Void Guile";

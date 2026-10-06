@@ -24,7 +24,7 @@ export function previewForms(formatName: unknown, packed: unknown) {
 		battle.setPlayer('p1', { name: 'Preview', team: JSON.parse(JSON.stringify(team)) });
 		const pokemon = battle.p1.pokemon[0];
 		const options: {
-			id: string, name: string, kind: string, baseStats: StatsTable, types: string[], ability: string,
+			id: string, name: string, kind: string, baseStats: StatsTable, types: string[], ability: string, passives: readonly string[],
 		}[] = [];
 		const add = (name: string | false | null | undefined, kind: string) => {
 			if (!name) return;
@@ -32,7 +32,7 @@ export function previewForms(formatName: unknown, packed: unknown) {
 			if (!species.exists || options.some(option => option.id === species.id) || species.id === pokemon.species.id) return;
 			options.push({
 				id: species.id, name: species.name, kind, baseStats: species.baseStats,
-				types: species.types, ability: species.abilities['0'],
+				types: species.types, ability: species.abilities['0'], passives: species.passives,
 			});
 		};
 		if (battle.gimmickLimit > 0) {

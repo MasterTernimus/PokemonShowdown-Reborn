@@ -228,9 +228,9 @@ describe('Composite ability cleanup', function () {
 		assert(battle.dex.abilities.get('hisuianpath').onSourceModifyDamage);
 	});
 
-	it('should give Hydra Tyrant Hydra Bond, Berserk, and its Draco Meteor recovery', function () {
+	it('should give Void Tyrant Hydra Bond, Berserk, and its Draco Meteor recovery', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
-		const ability = battle.dex.abilities.get('hydratyrant');
+		const ability = battle.dex.abilities.get('voidtyrant');
 		assert(ability.onModifyMove);
 		assert(ability.onAfterMoveSecondary);
 		assert.equal(ability.onResidual, undefined);
@@ -282,7 +282,7 @@ describe('Composite ability cleanup', function () {
 	it('should replace Sandaconda\'s Sand Veil with Shed Skin', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		assert.deepEqual(battle.dex.species.get('Sandaconda').abilities, {
-			0: 'Sand Spit',
+			0: 'Buried Coil',
 			1: 'Stamina',
 			H: 'Shed Skin',
 		});
@@ -458,8 +458,12 @@ describe('Composite ability cleanup', function () {
 		assert.equal(calderaMove.hasSheerForce, true);
 	});
 
-	it('should keep Proficient built into Mega abilities instead of separate species slots', function () {
+	it('should keep active slots intact while Mega starters receive the Proficient passive', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
+		assert.deepEqual(battle.dex.species.get('Swampert-Mega').passives, ['proficient']);
+		assert.deepEqual(battle.dex.species.get('Chesnaught-Mega').passives, ['proficient']);
+		assert.deepEqual(battle.dex.species.get('Greninja').passives, []);
+		assert.deepEqual(battle.dex.species.get('Delphox').passives, []);
 		assert.deepEqual(battle.dex.species.get('Swampert-Mega').abilities, {
 			0: 'Raging Current',
 		});
@@ -467,10 +471,10 @@ describe('Composite ability cleanup', function () {
 			0: 'Wrath Shield',
 		});
 		assert.deepEqual(battle.dex.species.get('Greninja').abilities, {
-			0: 'Technician', 1: 'Protean', H: 'Battle Bond',
+			0: 'Liquid Arsenal', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond',
 		});
 		assert.deepEqual(battle.dex.species.get('Delphox').abilities, {
-			0: 'Sworn Duty', 1: 'Magic Guard', H: 'Magician',
+			0: 'Sworn Duty', 1: 'Magic Guard', H: 'Void Guile',
 		});
 	});
 

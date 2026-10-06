@@ -51,8 +51,8 @@ describe('Approved third roster pass', () => {
 		assert(!abilityIncludesComponent('Venom Bastion', 'Merciless'));
 		assert(!abilityIncludesComponent('Venom Bastion', 'Self Sufficient'));
 		assert(!abilityIncludesComponent('Territorial', 'Unaware'));
-		assert.equal(Dex.species.get('Mudsdale').abilities.H, 'Inner Focus');
-		assert(!Dex.abilities.get('Royal Voice').desc.includes('Perfect Foresight'));
+		assert.equal(Dex.species.get('Mudsdale').abilities.H, 'Surefoot');
+		assert(!Dex.abilities.get('Void Voice').desc.includes('Perfect Foresight'));
 	});
 	it('Mountainbreaker selects a whole Rock/Ground matchup per target while retaining Rock type', () => {
 		const [p, , foe] = make('Mountainbreaker', 'Tyranitar');

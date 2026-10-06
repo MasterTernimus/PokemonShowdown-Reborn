@@ -21,7 +21,7 @@ describe('Togekiss-Alde cosmetic profile', () => {
 	for (const shiny of [false, true]) {
 		it(`retains the cosmetic form in battle with shiny=${shiny}`, () => {
 			const battle = common.createBattle([[
-				{species: 'Togekiss-Alde', ability: 'Guiding Omen', shiny, moves: ['splash']},
+				{species: 'Togekiss-Alde', ability: 'Void Omen', shiny, moves: ['splash']},
 			], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
 			try {
 				const pokemon = battle.p1.active[0];

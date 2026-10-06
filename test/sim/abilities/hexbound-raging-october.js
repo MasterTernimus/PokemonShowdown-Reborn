@@ -2,10 +2,10 @@
 const assert=require('assert').strict;
 const common=require('../../common');
 const {Dex}=require('../../../dist/sim/dex');
-describe('Approved Hex Bound and Raging Fists',()=>{
+describe('Approved Void Hex and Raging Fists',()=>{
  let battle;
  afterEach(()=>{battle?.destroy();battle=null;});
- function setup(ffa=false,ability='Hex Bound'){
+ function setup(ffa=false,ability='Void Hex'){
   const p={species:'Mismagius',level:50,ability,moves:['splash','shadowball','hex','toxic']};
   const foe={species:'Mew',ability:'No Ability',moves:['splash','protect','substitute','uturn']};
   const team=[p,{...p,ability:'No Ability'}],other=[foe,{...foe}];
@@ -21,22 +21,20 @@ describe('Approved Hex Bound and Raging Fists',()=>{
  function trapped(t){t.trapped=false;battle.runEvent('TrapPokemon',t);return !!t.trapped;}
  it('replaces Shadow Tag with Prankster and full Cursed Body identity',()=>{
   const[p,t]=setup();assert(p.hasAbility('prankster'));assert(p.hasAbility('cursedbody'));assert(!p.hasAbility('shadowtag'));
-  assert(!trapped(t));assert(!Dex.abilities.get('hexbound').onSourceModifyDamage);assert(!Dex.abilities.get('hexbound').flags.cantsuppress);
+  assert(!trapped(t));assert(!Dex.abilities.get('voidhex').onSourceModifyDamage);assert(!Dex.abilities.get('voidhex').flags.cantsuppress);
   assert.equal(battle.runEvent('ModifyPriority',p,t,battle.dex.getActiveMove('toxic'),0),1);
  });
- it('traps only after Ghost HP damage and lasts the hit turn plus next turn',()=>{
-  const[p,t]=setup();hit(p,t,'tackle');assert(!t.volatiles.hexboundtrap);hit(p,t);
-  assert(trapped(t));assert.equal(t.volatiles.hexboundtrap.duration,2);assert(p.volatiles.hexboundspent);
-  advance();assert.equal(t.volatiles.hexboundtrap.duration,1);assert(trapped(t));
-  hit(p,t);assert.equal(t.volatiles.hexboundtrap.duration,1);advance();assert(!t.volatiles.hexboundtrap);assert(!trapped(t));
-  hit(p,t);assert(!t.volatiles.hexboundtrap);
+ it('traps after direct HP damage, refreshes through the following turn, and can retrigger',()=>{
+  const[p,t]=setup();hit(p,t,'tackle');assert(trapped(t));assert.equal(t.volatiles.hexboundtrap.duration,2);
+  advance();assert.equal(t.volatiles.hexboundtrap.duration,1);hit(p,t);assert.equal(t.volatiles.hexboundtrap.duration,2);
+  advance();advance();assert(!t.volatiles.hexboundtrap);hit(p,t);assert(trapped(t));assert(!p.volatiles.hexboundspent);
  });
  it('clears on source switching and refreshes the allowance only on re-entry',()=>{
   const[p,t]=setup();hit(p,t);advance('switch 2');assert(!t.volatiles.hexboundtrap);assert(!p.volatiles.hexboundspent);
   advance('switch 2');assert.equal(battle.p1.active[0],p);hit(p,t);assert(trapped(t));
  });
- it('does not refresh the allowance when the ability is lost and regained',()=>{
-  const[p,t]=setup();hit(p,t);t.removeVolatile('hexboundtrap');p.setAbility('No Ability');p.setAbility('Hex Bound');hit(p,t);assert(!t.volatiles.hexboundtrap);
+ it('remains repeatable when the ability is lost and regained',()=>{
+  const[p,t]=setup();hit(p,t);t.removeVolatile('hexboundtrap');p.setAbility('No Ability');p.setAbility('Void Hex');hit(p,t);assert(t.volatiles.hexboundtrap);
  });
  it('does not spend the allowance on Ghosts or Shed Shell',()=>{
   const[p,t]=setup();t.setType('Ghost');hit(p,t);assert(!t.volatiles.hexboundtrap);assert(!p.volatiles.hexboundspent);
@@ -52,28 +50,26 @@ describe('Approved Hex Bound and Raging Fists',()=>{
   hit(p,t,'shadowball',{accuracy:0});assert(!p.volatiles.hexboundspent);
   t.setType('Normal');hit(p,t);assert(!p.volatiles.hexboundspent);
  });
- it('rejects called, future, external, stored and spread damage',()=>{
-  const[p,t]=setup();
-  for(const extra of [{sourceEffect:'sleeptalk'},{flags:{futuremove:1}},{isExternal:true},{foresightStored:true},{target:'allAdjacentFoes'}]){
-   hit(p,t,'shadowball',extra);assert(!p.volatiles.hexboundspent,JSON.stringify(extra));
-  }
+ it('permits called, external and spread hits but excludes future and stored damage',()=>{
+  const[p,t]=setup();for(const extra of [{sourceEffect:'sleeptalk'},{isExternal:true},{target:'allAdjacentFoes'}]){hit(p,t,'shadowball',extra);assert(trapped(t));t.removeVolatile('hexboundtrap');}
+  for(const extra of [{flags:{futuremove:1}},{foresightStored:true}]){hit(p,t,'shadowball',extra);assert(!t.volatiles.hexboundtrap);}
  });
  it('does not spend the allowance on a knocked-out victim',()=>{
   const[p,t]=setup();t.hp=1;hit(p,t);assert.equal(t.hp,0);assert(!p.volatiles.hexboundspent);
  });
- it('FFA traps a single victim without spreading or allowing a second victim',()=>{
+ it('FFA targets are independently trapped by their own damaging hits',()=>{
   const[p,t]=setup(true);const other=battle.p3.active[0];hit(p,t);assert(trapped(t));assert(!trapped(other));assert(!trapped(battle.p4.active[0]));
-  hit(p,other);assert(!other.volatiles.hexboundtrap);
+  hit(p,other);assert(other.volatiles.hexboundtrap);
  });
  it('rejects allied HP damage in doubles',()=>{
-  const p={species:'Mismagius',ability:'Hex Bound',moves:['splash']},foe={species:'Mew',ability:'No Ability',moves:['splash']};
+  const p={species:'Mismagius',ability:'Void Hex',moves:['splash']},foe={species:'Mew',ability:'No Ability',moves:['splash']};
   battle=common.createBattle({formatid:'gen9nofielddoublesbattle'},[[p,foe],[foe,foe]]);battle.makeChoices('team 12','team 12');
   hit(battle.p1.active[0],battle.p1.active[1]);assert(!battle.p1.active[0].volatiles.hexboundspent);
  });
  it('allows the victim to pivot away and does not transfer the trap',()=>{
   const[p,t]=setup();hit(p,t);advance('move splash','move uturn');assert(battle.p2.activeRequest.forceSwitch?.[0],battle.log.slice(-25).join('\n'));
   battle.makeChoices('','switch 2');assert.notEqual(battle.p2.active[0],t);assert(!battle.p2.active[0].volatiles.hexboundtrap);
-  assert(p.volatiles.hexboundspent);
+  assert(!p.volatiles.hexboundspent);
  });
  it('ends trapping when the source faints, and keeps full Cursed Body faint Curse',()=>{
   const[p,t]=setup(true);hit(p,t);p.faint();battle.faintMessages();assert(!trapped(t));

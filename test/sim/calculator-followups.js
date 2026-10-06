@@ -29,7 +29,7 @@ describe('Approved calculator ability followups', () => {
 		assert.equal(calculateScenario(s).resolved.actors[1].ability, 'Voidcraft');
 
 		const m = calculatorMetadata();
-		assert.deepEqual(m.abilityComponents.exalt, ['Defiant', 'Sharpness']);
+		assert.deepEqual(m.abilityComponents.exalt, ['Defiant', 'Sharpness', 'Mold Breaker']);
 		assert(m.abilityComponents.voidcraft.includes('Shadow Shield'));
 		assert(!m.abilityComponents.shadowguard);
 	});
@@ -66,7 +66,7 @@ describe('Approved calculator ability followups', () => {
 			Object.assign(s.actors[0], { species, ability: '', item: 'Anomaly Core', gimmick: 'mega' });
 			const { battle } = buildCalculatorBattle(validateScenario(s), 0);
 			try {
-				assert.equal(battle.field.terrain, 'murkwatersurfaceterrain');
+				assert.equal(battle.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
 				assert.equal(battle.field.terrainState.duration, 5);
 			} finally {
 				battle.destroy();

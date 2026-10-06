@@ -1245,6 +1245,13 @@ export class Battle {
 			}
 		}
 		const ability = pokemon.getAbility();
+		if (pokemon.getPassives().length && callbackName === 'onBasePower') {
+			const passive = this.dex.conditions.get('starterpassives');
+			const passiveCallback = this.getCallback(pokemon, passive, callbackName);
+			handlers.push(this.resolvePriority({
+				effect: passive, callback: passiveCallback, state: pokemon.speciesState, end() {}, effectHolder: pokemon,
+			}, callbackName));
+		}
 		callback = this.getCallback(pokemon, ability, callbackName);
 		if (callback !== undefined || (getKey && pokemon.abilityState[getKey])) {
 			handlers.push(this.resolvePriority({

@@ -17,7 +17,7 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 				battle.makeChoices(`move splash ${choice}`, 'move splash');
 				assert.equal(mon.species.name, expected);
 				if (choice === 'mega') {
-					assert.equal(mon.ability, 'royalvoice');
+					assert.equal(mon.ability, 'voidvoice');
 					assert.deepEqual(mon.species.baseStats, battle.dex.species.get('gardevoirmega').baseStats);
 					assert.equal(mon.canMegaEvoX, 'Gardevoir-Mega-Z');
 					assert.equal(mon.canMegaEvoY, 'Gardevoir-Void-Mega');
@@ -59,8 +59,8 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 		assert.equal(ally.status, 'brn');
 		assert(!ally.volatiles.dreamsickness);
 	});
-	it('Royal Voice has exact Pixilate conversion and Queenly Majesty protection', () => {
-		const [mon, ally] = doubles('Royal Voice'), foe = battle.p2.active[0];
+	it('Void Voice has exact Pixilate conversion and Queenly Majesty protection', () => {
+		const [mon, ally] = doubles('Void Voice'), foe = battle.p2.active[0];
 		const move = battle.dex.getActiveMove('hypervoice');
 		battle.singleEvent('ModifyType', mon.getAbility(), mon.abilityState, move, mon);
 		assert.equal(move.type, 'Fairy');
@@ -70,9 +70,9 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 		battle.makeChoices('move splash, move splash', 'move quickattack 2, move splash');
 		assert.equal(ally.hp, hp);
 	});
-	it('Royal Voice does not copy an opposing Ability or create Future Sight', () => {
+	it('Void Voice does not copy an opposing Ability or create Future Sight', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
-			[{ species: 'Gardevoir', ability: 'Royal Voice', moves: ['hypervoice'] }],
+			[{ species: 'Gardevoir', ability: 'Void Voice', moves: ['hypervoice'] }],
 			[{ species: 'Lapras', ability: 'Water Absorb', moves: ['surf'] }],
 		]);
 		battle.makeChoices('team 1', 'team 1');
@@ -86,9 +86,9 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 		assert(mon.hp < hp);
 		assert(!battle.p2.slotConditions[0].futuremove);
 	});
-	it('Royal Voice does not copy an opposing Speed Ability', () => {
+	it('Void Voice does not copy an opposing Speed Ability', () => {
 		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
-			[{ species: 'Gardevoir', ability: 'Royal Voice', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Gardevoir', ability: 'Void Voice', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			[{ species: 'Magikarp', ability: 'Speed Boost', moves: ['splash'] }, { species: 'Mewtwo', ability: 'Pressure', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 12', 'team 12');
@@ -97,7 +97,7 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 		battle.makeChoices('move splash, move splash', 'move splash, move splash');
 		assert.equal(mon.boosts.spe, 0);
 	});
-	it('Mega Gardevoir ends ordinary Trace on Mega Evolution without creating a Royal Voice copy', () => {
+	it('Mega Gardevoir ends ordinary Trace on Mega Evolution without creating a Void Voice copy', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [
 			[{ species: 'Gardevoir', ability: 'Trace', item: 'Gardevoirite', moves: ['splash'] }],
 			[{ species: 'Lapras', ability: 'Water Absorb', moves: ['splash'] }],
@@ -106,7 +106,7 @@ describe('Gardevoir abilities and cosmetic Mega branches', () => {
 		const mon = battle.p1.active[0];
 		assert(mon.hasAbility('waterabsorb'));
 		battle.makeChoices('move splash mega', 'move splash');
-		assert.equal(mon.ability, 'royalvoice');
+		assert.equal(mon.ability, 'voidvoice');
 		assert(!mon.m.perfectForesightAbility);
 		assert(!mon.hasAbility('waterabsorb'));
 		mon.setAbility('No Ability');

@@ -186,7 +186,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	mirrorgreed: ['magicbounce', 'analytic'],
 	moonlitwings: ['serenegrace'],
 	uncheckedassault: ['scrappy', 'striker', 'opportunist', 'limber'],
-	royalvoice: ['pixilate', 'queenlymajesty', 'dreamsickness', 'telepathy'],
+	voidvoice: ['pixilate', 'queenlymajesty', 'dreamsickness', 'telepathy'],
 	perfectforesight: ['trace', 'insomnia'],
 	dreamsickness: ['telepathy'],
 	voidveil: ['levitate', 'magicguard', 'insomnia'],
@@ -196,14 +196,14 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	slipstream: ['levitate', 'keeneye'],
 	smolderingshroud: ['whitesmoke'],
 	springfur: ['furcoat'],
-	hexbound: ['prankster', 'cursedbody'],
+	voidhex: ['prankster', 'cursedbody'],
 	breakwater: ['propellertail'],
 	divinemockery: ['hydrabond', 'moldbreaker', 'sniper'],
-	hydratyrant: ['hydrabond', 'berserk', 'selfsufficient'],
+	voidtyrant: ['hydrabond', 'berserk', 'selfsufficient'],
 	hisuianpath: ['sapsipper', 'innerfocus', 'fluffy'],
 	toxicevolution: ['moldbreaker', 'corrosion', 'dualwield', 'shielddust', 'levitate'],
 	heavenlychorus: ['pixilate', 'cloudnine', 'fluffy'],
-	guidingomen: ['friendguard', 'serenegrace', 'moldbreaker'],
+	voidomen: ['friendguard', 'serenegrace', 'moldbreaker'],
 	heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
 	coldlogic: ['toughclaws', 'prismarmor', 'aftermath', 'forewarn'],
 	ironwill: ['prismarmor', 'secondwind', 'selfsufficient', 'whiplash'],
@@ -247,7 +247,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	abysssniper: ['sniper', 'stalwart'],
 	atrocity: ['moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient', 'toughclaws'],
 	streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
-	divineintervention: ['swornduty', 'friendguard', 'regenerator', 'fluffy'],
+	vitalsigns: ['invigorate'],
+	divineintervention: ['vitalsigns', 'triage', 'regenerator', 'friendguard'],
 	voidcraft: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
 	requiem: ['cursedbody'],
 	reapersgrip: ['unaware', 'darkaura', 'selfsufficient'],
@@ -539,7 +540,7 @@ Object.assign(AbilityComponents, {
   undertow: ['waterabsorb'], deadwater: [], vitalcircuit: [],
   ringmaster: ['toughclaws'], unyielding: ['stamina'], primalrhythm: [],
 	setpiece: [], calculatedshot: ['frisk'], lunardread: ['dishearten', 'insomnia', 'pressure'], falsebouquet: [],
-  hydratyrant: ['hydrabond', 'berserk'],
+  voidtyrant: ['hydrabond', 'berserk'],
   meridianseal: [], rimeplate: [], darkdominion: ['darkaura'],
 });
 
@@ -656,7 +657,7 @@ AbilityComponents.royalescort = ['pressure', 'sweetveil'];
 
 AbilityComponents.liquidarsenal = ['technician'];
 AbilityComponents.knightsreprisal = ['bulletproof'];
-AbilityComponents.aurorasanctum = ['snowwarning'];
+AbilityComponents.voidsanctum = ['snowwarning'];
 AbilityComponents.chargedtail = ['static'];
 AbilityComponents.falsebouquet = ['magician'];
 
@@ -674,13 +675,13 @@ AbilityComponents.oceanlullaby = ["shellarmor"];
 
 AbilityComponents.shadowscreen = ["infiltrator"];
 
-AbilityComponents.moonlitpromise = ["unaware"];
+AbilityComponents.voidpromise = ["unaware"];
 
-AbilityComponents.sandshroud = ["levitate","overcoat"];
+AbilityComponents.voiddrift = ["levitate","overcoat"];
 
-AbilityComponents.arcanepilfer = ["magician"];
+AbilityComponents.voidguile = ["magician", "infiltrator"];
 
-AbilityComponents.faultline = ['moldbreaker'];
+AbilityComponents.voidwrath = ['moldbreaker'];
 
 AbilityComponents.creepingbloom = ['infiltrator'];
 
@@ -724,7 +725,7 @@ Object.assign(AbilityComponents, {"pridecall":["competitive","unnerve"],"hydroel
 
 Object.assign(AbilityComponents, {"stokebelly":["gluttony"],"rousingfeast":["gluttony"],"invisiblewall":["soundproof"],"sentinelfist":["ironfist"],"pursuitwake":["infiltrator"],"gentlegiant":["cloudnine"],"ringcraft":["limber"],"constrictingheat":["whitesmoke"]});
 
-AbilityComponents.gritreprisal = ['guts'];
+AbilityComponents.voidreprisal = ['guts'];
 AbilityComponents.wreckingcrew = ['ironfist'];
 
 Object.assign(AbilityComponents, {"evergreen":["overcoat","ripen"],"battlegrip":["moxie"],"scentscout":["frisk"],"surefoot":["innerfocus"],"baitedbloom":["gluttony","stickyhold"],"guidinggallop":["pastelveil"],"carrionwatch":["frisk","unnerve"]});
@@ -743,3 +744,5 @@ AbilityComponents.raincourier = ['raindish'];
 AbilityComponents.disorientingmind = ['infiltrator'];
 AbilityComponents.wisecounsel = ['innerfocus'];
 AbilityComponents.mindcurrent = ['innerfocus'];
+
+AbilityComponents.voidcrossing = ['levitate', 'magicguard'];

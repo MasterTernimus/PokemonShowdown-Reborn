@@ -2485,6 +2485,7 @@ export const Chat = new class {
 		buf += `<span class="col bstcol"><em>BST<br />${species.bst}</em></span> `;
 		buf += '</span>';
 		buf += '</li>';
+		if (species.passives.length) buf += `<li style="clear:both;padding:6px"><strong>Passives:</strong> ${species.passives.map(id => Dex.abilities.get(id).name).join(' · ')}</li>`;
 		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 	}
 	getDataMoveHTML(move: Move) {

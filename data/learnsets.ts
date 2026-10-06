@@ -113167,3 +113167,7 @@ Learnsets.tentacruel.learnset!.clearsmog = ['9M'];
 for (const [id, moves] of Object.entries(PULSE_FIXED_MOVES)) {
 	Learnsets[id as ID] = {learnset: Object.fromEntries(moves.map(move => [move, ['9L1']]))};
 }
+
+// Approved Audino support tools; Mega inherits the base learnset.
+Learnsets.audino.learnset!.healbell = ['9M'];
+Learnsets.audino.learnset!.followme = ['9L1'];

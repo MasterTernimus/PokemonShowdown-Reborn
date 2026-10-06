@@ -3,7 +3,7 @@ const assert = require('../../assert');
 const common = require('../../common');
 
 let battle;
-describe('Blazing Tempo, Hex Bound, and Shadow Tag rework', () => {
+describe('Blazing Tempo, Void Hex, and Shadow Tag rework', () => {
 	afterEach(() => battle?.destroy());
 
 	it('gives Mega Blaziken every Blazing Tempo component', () => {
@@ -28,15 +28,15 @@ describe('Blazing Tempo, Hex Bound, and Shadow Tag rework', () => {
 		assert.equal(mon.boosts.spe, 1);
 	});
 
-	it('gives Mismagius Hex Bound earned trapping, Prankster and Cursed Body without Haunted Field', () => {
+	it('gives Mismagius Void Hex earned trapping, Prankster and Cursed Body without Haunted Field', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
-			[{species: 'Mismagius', ability: 'Hex Bound', moves: ['splash']}],
+			[{species: 'Mismagius', ability: 'Void Hex', moves: ['splash']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}, {species: 'Ditto', ability: 'No Ability', moves: ['splash']}],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const mon = battle.p1.active[0], foe = battle.p2.active[0];
-		assert.equal(mon.species.abilities[0], 'Void Veil');
-		assert.equal(mon.species.abilities.H, 'Hex Bound');
+		assert.equal(mon.species.abilities[0], 'Void Crossing');
+		assert.equal(mon.species.abilities.H, 'Void Hex');
 		assert(!mon.hasAbility('shadowtag'));
 		assert(mon.hasAbility('cursedbody'));
 		assert(mon.hasAbility('prankster'));
@@ -69,7 +69,7 @@ describe('Blazing Tempo, Hex Bound, and Shadow Tag rework', () => {
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		assert.deepEqual(battle.dex.species.get('Victreebel').abilities, {
-			0: 'Chlorophyll', 1: 'Digestive Sap', H: 'Gluttony',
+			0: 'Chlorophyll', 1: 'Digestive Sap', H: 'Baited Bloom',
 		});
 	});
 });

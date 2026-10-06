@@ -368,7 +368,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"desc": "On entry, creates Psychic Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules. Foe stat drops give +2 Sp. Atk, except on Chessboard. On Chessboard, move power instead rises with missing HP, from 1x at full HP to 2x at 20% HP or less. Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods. Psychic Surge follows the existing field/Aura rules: it can create Psychic Terrain on an empty field or Psychic Aura over a compatible field. No Neuroforce.",
 		"shortDesc": "Creates Psychic Terrain on entry; Foe stat drops give +2 Sp. Atk; Chessboard boosts power instead; Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Status moves gain +1 priority."
 	},
-	"guidingomen": {
+	"voidomen": {
 		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Allies take 25% less attack damage; this does not protect the holder. Doubles move secondary-effect chances and removes charging turns. Once per switch-in, successfully applying a move secondary effect creates a ward that blocks the next opposing stat-drop event against an adjacent ally.",
 		"shortDesc": "Mold Breaker; allies take 25% less damage; doubles secondaries, skips charging; first secondary wards an ally."
 	},
@@ -720,7 +720,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"desc": "Attacks use double the offensive stat against targets that entered this turn. Contact attackers lose 1 Speed stage. Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods.",
 		"shortDesc": "Double attacking stats against newly entered targets; Contact attackers lose 1 Speed; Status moves gain +1 priority; Dark foes usually block them."
 	},
-	"wickedcommand": {
+	"voidcommand": {
 		"desc": "Prevents and cures sleep, blocks Yawn, and gains +1 critical-hit stage. Takes 20% less attack damage from other Pokemon. A move KO boosts its higher attacking stat by 1, choosing Attack on a tie.",
 		"shortDesc": "No sleep/Yawn; +1 critical-hit stage; 20% less damage; KOs boost higher attacking stat."
 	},
@@ -820,7 +820,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"desc": "Normal and Fighting moves bypass type immunity. Kicking moves have 1.4x power. Prevents and cures paralysis. Other Pokemon and field effects cannot lower its Speed; self-inflicted costs and item slowdowns still apply. Does not alter Trick Room or prevent removing Speed boosts or Tailwind. Copies foes' positive stat changes after moves, entries, transformations and at turn end.",
 		"shortDesc": "Normal/Fighting hit Ghosts; 1.4x kicks; copies foe boosts; no paralysis or opposing Speed drops."
 	},
-	"royalvoice": {
+	"voidvoice": {
 		"desc": "Eligible Normal moves become Fairy and have 1.2x power, or 1.5x on Misty Terrain. Excludes moves whose type is set by their own effect, damaging Z-Moves and Terastallized Tera Blast. Blocks opposing priority moves aimed at it or its allies. Attacks deal 1.5x damage on Fairy Tale, or on Chessboard unless it has the Queen role. Retains Telepathy, including avoiding allied damaging moves and doubled Speed in Psychic Terrain or Psychic Aura. At turn end, it and its active allies each heal 1/16 max HP. Once per switch-in, if an opposing move would knock out an ally, that ally survives at 1 HP and it loses 1/4 max HP, provided it has more HP than the cost.",
 		"shortDesc": "Normal moves become Fairy; blocks foe priority; avoids allied attacks; heals allies and can save one."
 	},
@@ -900,10 +900,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"desc": "On entry, lowers all active foes' Attack by 1. Damaging moves ignore bypassable abilities. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1.",
 		"shortDesc": "Entry lowers foes' Attack; attacks ignore abilities; end-turn status cure, stat reset and healing chance."
 	},
-	"divineintervention": {
-		"desc": "On entry, heals each adjacent ally by 1/4 max HP, or 1/3 on Fairy Tale. Allies take 25% less attack damage; this does not protect the holder. Heals 1/3 max HP on switching out. Takes half damage from contact attacks and double damage from Fire attacks; contact Fire attacks deal normal damage.",
-		"shortDesc": "Entry heals allies; allies take 25% less damage; switching heals 1/3 HP; half contact damage, double Fire damage."
-	},
+	"vitalsigns": {"desc":"Includes Invigorate: healing received by the holder and its allies is multiplied by 1.3, each adjacent ally has a 50% chance to have its major status cured at turn end, and Safeguard lasts 5 turns. After an opposing damaging move finishes, each active teammate, including the holder, that lost HP to that move, survived, and is at half HP or less is healed by 1/4 max HP and cured of major status. Invigorate normally increases this healing to 32.5%. Each recipient can receive this emergency treatment only once per battle, even after switching, changing abilities or being revived. Healing obeys normal restrictions; the allowance is spent only if healing or curing succeeds. Allied, residual and Substitute-only damage do not trigger it.","shortDesc":"Heals and cures each teammate once when an attack leaves it at half HP or less."},
+	"divineintervention": {"desc":"Includes Invigorate: healing received by the holder and its allies is multiplied by 1.3, each adjacent ally has a 50% chance to have its major status cured at turn end, and Safeguard lasts 5 turns. After an opposing damaging move finishes, each active teammate, including the holder, that lost HP to that move, survived, and is at half HP or less is healed by 1/4 max HP and cured of major status. Invigorate normally increases this healing to 32.5%. Each recipient can receive this emergency treatment only once per battle, even after switching, changing abilities or being revived. Healing obeys normal restrictions; the allowance is spent only if healing or curing succeeds. Allied, residual and Substitute-only damage do not trigger it. Healing moves, including draining attacks, and supported status-cleansing moves gain +3 priority; Wish remains delayed. Heals 1/3 max HP on switching out. Other allies take 25% less attack damage; the holder is not protected by this reduction.","shortDesc":"Emergency team healing and cleansing with priority recovery and ally protection."},
 	"mountainhunger": {
 		"desc": "Absorbs Grass moves for +1 Attack and Sp. Atk; allied Grass moves also grant both boosts. Heals 1/8 max HP each turn on Forest and 1/16 on Grassy Field. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Sleep lasts half as long, rounded down.",
 		"shortDesc": "Absorbs Grass for attacking boosts; half Fire/Ice attacking stats; no hail damage; shorter sleep."
@@ -1252,7 +1250,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"desc": "Multi-hit moves always use their maximum hit count and have 1.5x power. Moves that normally check accuracy per hit check only once. Incoming Fire attacks use half the attacker's offensive stat. Burn damage is halved. On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. Multi-hit moves always hit the maximum number of times and have 1.5x power. Damage from Fire-type moves and burns is halved. Summons sandstorm on entry.",
 		"shortDesc": "Maximum multi-hit count; 1.5x multi-hit power; Half Fire attacking stats and burn damage; Summons sandstorm on entry."
 	},
-	"hydratyrant": {
+	"voidtyrant": {
 		"desc": "Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. When an attack takes it from above half HP to half or less, gains +1 Attack and Sp. Atk after the move. Dragon's Den entry gives +2 Attack and Sp. Atk. Once per battle, after Draco Meteor applies its Sp. Atk drops, restores all negative stat stages to zero after the entire attack finishes. Positive stages remain. No Self Sufficient healing or immunity.",
 		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Crossing half HP from an attack gives +1 Attack/Sp. Atk — once per battle, Draco Meteor clears its negative stat stages."
 	},
@@ -1664,7 +1662,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"desc": "Airborne. Takes 20% less attack damage at any HP, or 40% less from super-effective attacks. These reductions cannot be bypassed by ability-ignoring moves; its other protections can. Cannot sleep or be affected by Yawn, and foes cannot lower its stats. Dark and Ghost attacks have 1.3x power. Move KOs raise its highest stat by 1. Starting on Mega Evolution, queues a 120 BP Ghost Future Sight every other turn; each strikes two turns later. Immune to hail damage on Cold Eclipse. Ability suppression disables these effects.",
 		"shortDesc": "Airborne; 20% less attack damage (40% if super effective); no sleep/stat drops; recurring Ghost Future Sight."
 	},
-	"hexbound": {
+	"voidhex": {
 		"desc": "Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods. Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. On fainting, curses all active foes. Once per switch-in, a directly selected damaging Ghost move that removes HP from a surviving opponent traps that opponent through the following turn. Later hits do not refresh the trap; it ends when it leaves. Ghost types, Shed Shell and normal pivot escapes still work. Misses, protection, substitutes, spread, called, future and residual damage do not trigger the trap. Cursed Body can disable incoming attacks (guaranteed on Haunted Field, disabled on Holy Field) and curses all foes when it faints. No Shadow Tag trapping, damage reduction or item reveal.",
 		"shortDesc": "Status moves gain +1 priority; Dark foes usually block them; 30% chance to disable attacks; curses foes on faint — once per entry, a Ghost HP hit traps one foe through next turn."
 	},
@@ -2789,7 +2787,7 @@ AbilityDescriptionOverrides.knightsreprisal = {
 	"shortDesc": "Bulletproof; blocking an attack with Spiky Shield grants the next damaging move +1 priority."
 };
 
-AbilityDescriptionOverrides.aurorasanctum = {
+AbilityDescriptionOverrides.voidsanctum = {
 	"desc": "Snow Warning: summons hail on entry; on Cold Eclipse, damaging hits Disable the attacker's move under the usual local restrictions. While Aurora Veil is active on its side, opposing Pokemon cannot lower the holder's or its active allies' stats. Self-inflicted drops remain. This protection ends with Aurora Veil or ability suppression and adds no damage reduction.",
 	"shortDesc": "Snow Warning; while its side has Aurora Veil, blocks opposing stat drops for itself and allies."
 };
@@ -2849,22 +2847,22 @@ AbilityDescriptionOverrides.shadowscreen = {
 	"shortDesc": "Infiltrator; Mat Block works after turn one but uses the normal consecutive-protection failure counter."
 };
 
-AbilityDescriptionOverrides.moonlitpromise = {
+AbilityDescriptionOverrides.voidpromise = {
 	"desc": "Unaware. Wishes created while this ability is active also clear the eventual recipient's negative stat stages when they resolve, preserving positive stages and normal Wish healing. The stored bonus follows the Wish even if the user switches out.",
 	"shortDesc": "Unaware; its Wish clears the recipient's negative stat stages when it resolves."
 };
 
-AbilityDescriptionOverrides.sandshroud = {
+AbilityDescriptionOverrides.voiddrift = {
 	"desc": "Levitate + Overcoat: airborne, immune to powder moves and sandstorm/hail damage under normal rules. Recovers 1/16 maximum HP at turn end during sandstorm. Has no evasion effect.",
 	"shortDesc": "Levitate + Overcoat; heals 1/16 maximum HP each turn during sandstorm."
 };
 
-AbilityDescriptionOverrides.arcanepilfer = {
+AbilityDescriptionOverrides.voidguile = {
 	"desc": "Full local Magician: while itemless, steals a removable item after eligible damaging moves. Fairy Tale, Bewitched Woods, Haunted, Misty and New World entry grant +1 Sp. Atk; Psychic Terrain limits incoming numeric-accuracy status moves to 50 accuracy. A successful Mystical Fire also applies Embargo for the rest of this turn and the following turn, respecting normal volatile-status rules and existing Embargo duration.",
 	"shortDesc": "Magician; successful Mystical Fire also applies two-turn Embargo."
 };
 
-AbilityDescriptionOverrides.faultline = {
+AbilityDescriptionOverrides.voidwrath = {
 	"desc": "Full local Mold Breaker: moves ignore bypassable opposing abilities. Once per entry, the first Sand Tomb that successfully applies its binding effect adds one Spikes layer to the target's side, up to the normal three-layer cap. Misses, protection, immunity and Substitute preventing binding give no layer. Spikes causes no immediate damage to the trapped target.",
 	"shortDesc": "Mold Breaker; first successful Sand Tomb bind each entry adds one Spikes layer to the foe's side."
 };
@@ -3044,7 +3042,7 @@ AbilityDescriptionOverrides.venomspurs = {
 	"shortDesc": "Poison damage primes the next Bug hit to lower Defense before damage; failed or blocked hits keep the charge."
 };
 
-AbilityDescriptionOverrides.gritreprisal = {
+AbilityDescriptionOverrides.voidreprisal = {
 	"desc": "Full Guts: Attack is 1.5x while statused and burn does not weaken physical attacks. Surviving an opposing damaging hit stores one charge. Its next damaging punching move ignores positive stages of the defense used for that hit, retaining its normal category and defensive-stat choice. Successful punch damage spends the charge; failed or blocked hits preserve it. Switching clears it. No extra power, healing or Defense boost.",
 	"shortDesc": "Guts; surviving a foe hit primes the next damaging punch to ignore positive defensive stages."
 };
@@ -3338,3 +3336,44 @@ AbilityDescriptionOverrides.zerotohero = {
 	"desc": "Gains Fighting-type STAB. Palafin changes to Hero Form after switching out or entering Water fields. In Doubles, Multi or Free-for-All, survives one KO at 1 HP. Hero Form retains Friend Guard and, on entry, heals itself and active allies by a flat 1/8 of each recipient's maximum HP, regardless of current HP.",
 	"shortDesc": "Palafin becomes Hero; Fighting STAB; Hero grants Friend Guard and heals self/active allies 1/8 on entry."
 };
+
+AbilityDescriptionOverrides.voidhex = {
+	"desc": "Prankster + Cursed Body. Any directly executed damaging move that deals opposing HP damage traps each surviving target through the following turn. Called and spread attacks qualify. Repeated hits refresh the same-source trap to two turns without stacking duration; another source cannot steal a live trap. The trap deals no damage and ends when its source leaves or faints. Ghost types, Shed Shell and normal pivot escapes remain valid. Substitute, immunity, protection, delayed attacks and residual damage do not trigger it.",
+	"shortDesc": "Direct damaging hits trap surviving foes through the next turn; further hits refresh the trap."
+};
+
+AbilityDescriptionOverrides.voidcommand = {
+	"desc": "Insomnia + Super Luck. Takes 20% less attack damage from other Pokemon. Each move KO raises its higher attacking stat by 1, choosing Attack on a tie. Once per battle, successfully executing any Z-Move also grants this boost after the move, including status Z-Moves. A Z-Move KO receives the ordinary per-KO boost without an additional Z-use boost. Damaging Z-Moves that deal reduced damage through Protect count; misses, immunity and failed base moves do not. A status Z bonus alone does not count when its base move fails.",
+	"shortDesc": "20% less attack damage; KOs boost higher offense. First successful Z-Move also boosts it, without doubling a KO reward."
+};
+
+AbilityDescriptionOverrides.voidpromise = {
+	"desc": "Unaware. Its Wish clears the eventual recipient’s negative stat stages when it resolves, even after the user switches out. Successful Moonlight healing also clears the holder’s negative stages. Positive stages are preserved; Moonlight that restores no HP grants no cleanup.",
+	"shortDesc": "Wish clears its recipient’s negative stages; actual Moonlight healing clears its own."
+};
+
+AbilityDescriptionOverrides.voidsanctum = {
+	"desc": "Snow Warning. While its side has Aurora Veil, blocks opposing stat drops for itself and active allies; self-inflicted drops remain. Once per battle, its first switch-out with an active Aurora Veil extends that existing Veil by one turn. Normal switching and Eject Button qualify; fainting does not. Adds no entry cleanse or extra damage reduction.",
+	"shortDesc": "Aurora Veil blocks foe stat drops for its side; first exit under Veil extends it 1 turn, once per battle."
+};
+
+AbilityDescriptionOverrides.voidreprisal = {
+	"desc": "Guts. Surviving opposing HP damage or actual burn residual HP damage stores one punch charge. Its next damaging punch ignores positive stages of the defense used for that hit, without changing category or defensive-stat choice. Successful punch damage spends the charge; misses and blocked attacks preserve it. Charges do not stack and switching clears them. Applying burn without HP damage does not charge it.",
+	"shortDesc": "Surviving foe hits or burn damage charges a punch to ignore positive defensive stages."
+};
+
+AbilityDescriptionOverrides.voidomen = {
+	"desc": "Mold Breaker + Friend Guard + Serene Grace. Once per entry, actually applying a move secondary effect creates a ward that blocks the next opposing stat-drop event against the holder or an adjacent active ally. Positive changes and self-inflicted drops remain. The ward lasts until used or the holder leaves; further secondary effects do not refresh the spent entry reward.",
+	"shortDesc": "First applied secondary each entry wards the holder or an ally against one opposing stat-drop event."
+};
+
+AbilityDescriptionOverrides.voidcrossing = {
+	"desc": "Levitate + Magic Guard. Its first executed damaging Ghost move or Power Gem each entry bypasses opposing screens and Substitute. Misses, protection and immunity still spend the bypass; being prevented from acting does not. Switching restores the use. Includes the components’ normal effects and field interactions.",
+	"shortDesc": "Its first Ghost attack or Power Gem bypasses screens and Substitute."
+};
+
+AbilityDescriptionOverrides.voiddrift = {"shortDesc":"On New World, its special Ground moves ignore lowered Sp. Atk while airborne.","desc":"Levitate + Overcoat. Restores 1/16 of its base maximum HP each turn during sand. While airborne on effective New World, its special Ground moves ignore its negative Sp. Atk stages for damage calculation. Positive stages and other modifiers remain; its actual stages are unchanged."};
+
+AbilityDescriptionOverrides.voidwrath = {"shortDesc":"Outrage lasts one turn and does not cause confusion.","desc":"Mold Breaker. Outrage does not lock this Pokemon into successive turns or cause rampage confusion. Choice items retain their normal move lock. Other moves retain their normal behavior."};
+
+AbilityDescriptionOverrides.voidguile = {"shortDesc":"Combines the listed abilities.","desc":"Magician + Infiltrator, including all local field effects, entry boosts and normal item-theft rules. Its moves bypass opposing screens, Substitute and Safeguard as usual for Infiltrator."};

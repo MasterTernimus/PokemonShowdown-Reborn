@@ -218,7 +218,7 @@ describe('Approved roster expansion and component search', () => {
 		assert(p.hp > before);
 		assert.equal(ally.status, '');
 	});
-	it('Encore Aria requires an applied secondary; Guiding Omen wards only one ally drop', () => {
+	it('Encore Aria requires an applied secondary; Void Omen wards only one ally drop', () => {
 		let [p, , foe] = make('Primarina', 'Encore Aria', 'Shield Dust');
 		const acid = battle.dex.getActiveMove('acid');
 		acid.target = 'normal';
@@ -231,7 +231,7 @@ describe('Approved roster expansion and component search', () => {
 		battle.destroy();
 		battle = null;
 		let ally;
-		[p, ally, foe] = make('Togekiss', 'Guiding Omen');
+		[p, ally, foe] = make('Togekiss', 'Void Omen');
 		hit(acid, p, foe);
 		battle.boost({ atk: -1 }, ally, foe);
 		assert.equal(ally.boosts.atk, 0);

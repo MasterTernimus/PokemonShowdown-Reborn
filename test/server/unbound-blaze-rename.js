@@ -24,7 +24,7 @@ describe('Unbound Blaze rename', function () {
   for (const id of ['atrocity', 'sunsovereign', 'burningcrown']) {
    const ability = Dex.abilities.get(id);
    assert(getAbilityDisplayComponents(id).includes('unboundblaze'), id);
-   assert(ability.shortDesc.includes('Unbound Blaze'), id);
+   assert(!ability.shortDesc.includes('Unbound Blaze'), id);
    assert(!ability.desc.includes('Wildfire Core'), id);
    assert(getAbilityMechanicsHTML(ability, Dex).includes('/dt Unbound Blaze, gen9'), id);
   }

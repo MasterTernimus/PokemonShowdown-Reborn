@@ -1,3 +1,4 @@
+import {recordVitalSigns, resolveVitalSigns} from './vital-signs';
 import { applyApprovedSignatures } from './approved-signatures';
 import {DataMove as DexMove} from '../sim/dex-moves';
 import {prepareForesight, recordForesight, startForesightScreens} from './foresight-memory';
@@ -2309,12 +2310,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10255,
 	},
-	guidingomen: {
+	voidomen: {
 		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
 		onAnyModifyDamage(damage, source, target, move) { return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move); },
 		onModifyMove(move, pokemon, target) { this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target); this.dex.abilities.get('serenegrace').onModifyMove?.call(this, move, pokemon, target ); },
 		flags: {},
-		name: "Guiding Omen",
+		name: "Void Omen",
 		rating: 4.5,
 		num: 10283,
 	},
@@ -5384,7 +5385,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10044,
 	},
-	wickedcommand: {
+	voidcommand: {
 		onUpdate(pokemon) { return this.dex.abilities.get('insomnia').onUpdate?.call(this, pokemon); },
 		onSetStatus(status, target, source, effect) {
 			return this.dex.abilities.get('insomnia').onSetStatus?.call(this, status, target, source, effect);
@@ -5402,10 +5403,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!effect || effect.effectType !== 'Move' || !source?.hp) return;
 			const atk = source.getStat('atk', false, true);
 			const spa = source.getStat('spa', false, true);
-			this.boost(atk >= spa ? {atk: 1} : {spa: 1}, source, source, this.dex.abilities.get('wickedcommand'));
+			this.boost(atk >= spa ? {atk: 1} : {spa: 1}, source, source, this.dex.abilities.get('voidcommand'));
 		},
 		flags: { breakable: 1 },
-		name: "Wicked Command",
+		name: "Void Command",
 		rating: 4,
 		num: 10045,
 	},
@@ -6041,7 +6042,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10112,
 	},
-	royalvoice: {
+	voidvoice: {
 		onModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('queenlymajesty').onModifyDamage?.call(this, damage, source, target, move);
 		},
@@ -6079,7 +6080,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.getHandler('queenlymajesty', 'onFoeTryMove')?.call(this, target, source, move);
 		},
 		flags: { breakable: 1 },
-		name: "Royal Voice",
+		name: "Void Voice",
 		rating: 5,
 		num: 10113,
 	},
@@ -6600,7 +6601,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			};
 			for (const target of pokemon.foes()) {
 				// Trace-style abilities cannot copy another Trace-style ability.
-				if (['trace', 'perfectforesight', 'royalvoice'].includes(target.getAbility().id)) continue;
+				if (['trace', 'perfectforesight', 'voidvoice'].includes(target.getAbility().id)) continue;
 				const speedActive = Object.entries(speedConditions).some(([id, active]) => active && target.hasAbility(id));
 				const stat = Math.max(target.getStat('atk', false, true), target.getStat('spa', false, true));
 				if ((speedActive && !bestSpeedActive) || (speedActive === bestSpeedActive && stat > bestStat)) {
@@ -6912,24 +6913,36 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: 10119,
 	},
+	vitalsigns: {
+		onAnyTryHeal(amount, target, source, effect) {
+			return this.dex.abilities.getHandler('invigorate', 'onAnyTryHeal')?.call(this, amount, target, source, effect);
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) { return this.dex.abilities.get('invigorate').onResidual?.call(this, pokemon); },
+		onAnyAfterDamageApplied: recordVitalSigns,
+		onAnyAfterMove: resolveVitalSigns,
+		onAnyAfterTargetedMove: resolveVitalSigns,
+		flags: {breakable: 1}, name: 'Vital Signs', rating: 4.5, num: 11315,
+	},
 	divineintervention: {
-		onStart(pokemon) {
-			this.dex.abilities.get('swornduty').onStart?.call(this, pokemon);
+		onAnyTryHeal(amount, target, source, effect) {
+			return this.dex.abilities.getHandler('vitalsigns', 'onAnyTryHeal')?.call(this, amount, target, source, effect);
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) { return this.dex.abilities.get('vitalsigns').onResidual?.call(this, pokemon); },
+		onAnyAfterDamageApplied: recordVitalSigns,
+		onAnyAfterMove: resolveVitalSigns,
+		onAnyAfterTargetedMove: resolveVitalSigns,
+		onModifyPriority(priority, pokemon, target, move) {
+			return this.dex.abilities.get('triage').onModifyPriority?.call(this, priority, pokemon, target, move);
 		},
 		onAnyModifyDamage(damage, source, target, move) {
-			if (target !== this.effectState.target && target.isAlly(this.effectState.target)) {
-				this.debug('Divine Intervention Friend Guard weaken');
-				return this.chainModify(0.75);
-			}
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('fluffy').onSourceModifyDamage?.call(this, damage, source, target, move);
+			return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move);
 		},
 		onSwitchOut(pokemon) { return this.dex.abilities.get('regenerator').onSwitchOut?.call(this, pokemon); },
-		flags: { breakable: 1 },
-		name: "Divine Intervention",
-		rating: 5,
-		num: 10120,
+		flags: {breakable: 1}, name: 'Divine Intervention', rating: 5, num: 10120,
 	},
 	mountainhunger: {
 		onTryHitPriority: 1,
@@ -7331,7 +7344,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, source, target, move) {
 			let modifier = 1;
 			if (move.flags['bite']) modifier *= 1.5;
-			if (move.category !== 'Status' && source.hasType(move.type)) modifier *= 1.3;
+			if (!source.getPassives().includes('proficient') && move.category !== 'Status' && source.hasType(move.type)) modifier *= 1.3;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -10057,7 +10070,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10267,
 	},
-	hydratyrant: {
+	voidtyrant: {
 		onStart(pokemon) {
 			this.dex.abilities.get('berserk').onStart?.call(this, pokemon);
 		},
@@ -10084,7 +10097,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) { return this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon); },
 		flags: {},
-		name: "Hydra Tyrant",
+		name: "Void Tyrant",
 		rating: 5,
 		num: 10179,
 	},
@@ -13095,6 +13108,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	proficient: {
 		onBasePowerPriority: 22,
 		onBasePower(basePower, attacker, defender, move) {
+			// The species dispatcher owns this component even when the active ability is suppressed.
+			if (attacker.getPassives().includes('proficient') && this.effect.id !== 'starterpassives') return;
 			if (move.category !== 'Status' && attacker.hasType(move.type)) return this.chainModify(1.3);
 		},
 		flags: {},
@@ -14392,7 +14407,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 23,
 	},
-	hexbound: {
+	voidhex: {
 		onAnyAfterDamageApplied(damage, target, source, move) {
 			const holder = this.effectState.target;
 			if (source !== holder || !holder?.hp || !holder.isActive || holder.volatiles['hexboundspent'] ||
@@ -14419,7 +14434,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('prankster').onModifyPriority?.call(this, priority, pokemon, target, move);
 		},
 		flags: {},
-		name: "Hex Bound",
+		name: "Void Hex",
 		rating: 5,
 		num: 10410,
 	},
@@ -20021,14 +20036,14 @@ Abilities.knightsreprisal = {
 	},
 	flags: {breakable: 1}, name: "Knight's Reprisal", rating: 4, num: 11243,
 };
-Abilities.aurorasanctum = {
+Abilities.voidsanctum = {
 	...Abilities.snowwarning,
 	onAllyTryBoost(boost, target, source) {
 		const holder = this.effectState.target;
 		if (!holder.side.getSideCondition('auroraveil') || !source || source.isAlly(target)) return;
 		for (const stat in boost) if (boost[stat as BoostID]! < 0) delete boost[stat as BoostID];
 	},
-	flags: {}, name: 'Aurora Sanctum', rating: 4, num: 11244,
+	flags: {}, name: 'Void Sanctum', rating: 4, num: 11244,
 };
 Abilities.chargedtail = {
 	...Abilities.static,
@@ -20146,25 +20161,25 @@ Abilities.oceanlullaby = {
 	name: 'Ocean Lullaby', rating: 4, num: 11252,
 };
 Abilities.shadowscreen = {...Abilities.infiltrator, name: 'Shadow Screen', rating: 4, num: 11253};
-Abilities.moonlitpromise = {...Abilities.unaware, name: 'Moonlit Promise', rating: 4, num: 11254};
-Abilities.sandshroud = {
+Abilities.voidpromise = {...Abilities.unaware, name: 'Void Promise', rating: 4, num: 11254};
+Abilities.voiddrift = {
 	...Abilities.levitate, ...Abilities.overcoat,
 	onResidualOrder: 5, onResidualSubOrder: 1,
 	onResidual(pokemon) {
 		if (this.field.isWeather('sandstorm')) this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon, this.effect);
 	},
-	name: 'Sandshroud', rating: 4, num: 11255,
+	name: 'Void Drift', rating: 4, num: 11255,
 };
-Abilities.arcanepilfer = {
+Abilities.voidguile = {
 	...Abilities.magician,
 	onSourceDamagingHit(damage, target, source, move) {
 		if (damage <= 0 || !target.hp || target.isAlly(source) || move.id !== 'mysticalfire') return;
 		if (target.addVolatile('embargo', source, this.effect)) target.volatiles['embargo'].duration = 2;
 	},
-	name: 'Arcane Pilfer', rating: 4, num: 11256,
+	name: 'Void Guile', rating: 4, num: 11256,
 };
 
-Abilities.faultline = {...Abilities.moldbreaker, name: 'Faultline', rating: 4, num: 11257};
+Abilities.voidwrath = {...Abilities.moldbreaker, name: 'Void Wrath', rating: 4, num: 11257};
 
 Abilities.creepingbloom = {
 	...Abilities.infiltrator,
@@ -20442,7 +20457,7 @@ Abilities.venomspurs.onSourceDamagingHit = function (damage, target, source, mov
 	venomSpursHit.call(this, damage, target, source, move);
 };
 
-Abilities.gritreprisal = {
+Abilities.voidreprisal = {
 	...Abilities.guts,
 	onDamagingHit(damage, target, source) {
 		if (damage > 0 && target.hp && source && !target.isAlly(source)) target.addVolatile('gritreprisalcharge', target, this.effect);
@@ -20453,7 +20468,7 @@ Abilities.gritreprisal = {
 	onSourceDamagingHit(damage, target, source, move) {
 		if (damage > 0 && move.flags.punch && move.category !== 'Status') source.removeVolatile('gritreprisalcharge');
 	},
-	name: 'Grit Reprisal', rating: 4, num: 11283,
+	name: 'Void Reprisal', rating: 4, num: 11283,
 };
 Abilities.wreckingcrew = {
 	...Abilities.ironfist,
@@ -20470,7 +20485,7 @@ Abilities.wreckingcrew = {
 	name: 'Wrecking Crew', rating: 4, num: 11284,
 };
 
-Abilities.gritreprisal.onSourceAfterSubDamage = Abilities.gritreprisal.onSourceDamagingHit;
+Abilities.voidreprisal.onSourceAfterSubDamage = Abilities.voidreprisal.onSourceDamagingHit;
 
 function restoreRelicInstinct(battle: Battle, pokemon: Pokemon) {
 	if (!pokemon.hp || !pokemon.isActive || pokemon.m.relicInstinctSpent || pokemon.m.relicInstinctHealing || pokemon.hp > pokemon.maxhp / 4) return;
@@ -20907,3 +20922,68 @@ Abilities.mindcurrent = {
 Abilities.mindcurrent.onAnyAfterTargetedMove = function (source, target, move) {
  if (source === this.effectState.target) Abilities.mindcurrent.onAfterMove?.call(this, source, target, move);
 };
+
+// Approved Lin-roster follow-ups. Display metadata is independent of these callbacks.
+Abilities.voidhex.onAnyAfterDamageApplied = function (damage, target, source, effect) {
+ const holder = this.effectState.target;
+ const move = effect as ActiveMove;
+ if (source !== holder || !holder?.hp || !holder.isActive || !target?.hp || target.isAlly(holder) || damage <= 0 ||
+  move?.effectType !== 'Move' || move.category === 'Status' || move.flags?.futuremove || (move as any).foresightStored ||
+  this.activePokemon !== holder || this.activeMove?.id !== move.id) return;
+ target.addVolatile('hexboundtrap', holder, this.effect, 'hexboundanchor');
+};
+Abilities.voidcommand.onAfterMove = function (source, target, move) {
+ if (!source.hp || !move.isZ || source.moveThisTurnResult !== true || source.m.wickedCommandZUsed) return;
+ source.m.wickedCommandZUsed = true;
+ // Faints can be announced after AfterMove. Their ordinary per-KO callback supplies the boost.
+ if (this.faintQueue.some(faint => faint.source === source && faint.effect === move) ||
+  move.hitTargets?.some(pokemon => pokemon !== source && pokemon.hp <= 0)) return;
+ const atk = source.getStat('atk', false, true), spa = source.getStat('spa', false, true);
+ this.boost(atk >= spa ? {atk: 1} : {spa: 1}, source, source, this.effect);
+};
+const approvedWickedKO = Abilities.voidcommand.onSourceAfterFaint;
+Abilities.voidcommand.onSourceAfterFaint = function (length, target, source, effect) {
+ if (effect?.effectType === 'Move' && (effect as ActiveMove).isZ && source?.hp) source.m.wickedCommandZUsed = true;
+ return approvedWickedKO?.call(this, length, target, source, effect);
+};
+Abilities.voidpromise.onHeal = function (amount, target, source, effect) {
+ if (amount > 0 && target === source && effect?.id === 'moonlight') {
+  clearApprovedNegativeStats(this, target, Object.keys(target.boosts) as BoostID[], 'Void Promise');
+ }
+};
+Abilities.voidsanctum.onSwitchOut = function (pokemon) {
+ const veil = pokemon.side.sideConditions['auroraveil'];
+ if (!pokemon.hp || pokemon.fainted || pokemon.m.auroraSanctumExitUsed || !veil || typeof veil.duration !== 'number') return;
+ pokemon.m.auroraSanctumExitUsed = true;
+ veil.duration++;
+ this.add('-activate', pokemon, 'ability: Void Sanctum');
+};
+Abilities.voidreprisal.onAfterDamageApplied = function (damage, target, source, effect) {
+ if (damage > 0 && target.hp && target.status === 'brn' && effect?.id === 'brn' && effect.effectType === 'Status') {
+  target.addVolatile('gritreprisalcharge', target, this.effect);
+ }
+};
+
+Abilities.voidcrossing = {
+ ...Abilities.levitate, ...Abilities.magicguard,
+ onModifyMove(move, pokemon) {
+  if (!pokemon.volatiles['spectralcrossingspent'] && move.category !== 'Status' && (this.movehasType(move, 'Ghost') || move.id === 'powergem')) move.infiltrates = true;
+ },
+ onTryMove(pokemon, target, move) {
+  if (move.category !== 'Status' && (this.movehasType(move, 'Ghost') || move.id === 'powergem')) pokemon.addVolatile('spectralcrossingspent', pokemon, this.effect);
+ },
+ name: 'Void Crossing', rating: 4, num: 11314,
+};
+
+// Final approved Lin reworks. Rename aliases live in data/aliases.ts.
+Abilities.voiddrift.onModifyMove = function (move, pokemon) {
+ if (move.category === 'Special' && this.movehasType(move, 'Ground') && !pokemon.isGrounded() && this.field.isTerrain('newworldterrain')) move.ignoreNegativeOffensive = true;
+};
+Abilities.voidwrath.onModifyMove = function (move, pokemon, target) {
+ Abilities.moldbreaker.onModifyMove?.call(this, move, pokemon, target);
+ if (move.id === 'outrage' && move.self?.volatileStatus === 'lockedmove') {
+  move.self = {...move.self};
+  delete move.self.volatileStatus;
+ }
+};
+Abilities.voidguile = {...Abilities.magician, ...Abilities.infiltrator, name: 'Void Guile', rating: 4, num: 11256};

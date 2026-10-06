@@ -1,0 +1,197 @@
+[
+  {
+    "old": "Hex Bound",
+    "name": "Void Hex",
+    "oldid": "hexbound",
+    "id": "voidhex",
+    "holders": [
+      [
+        "mismagius",
+        "H"
+      ]
+    ],
+    "components": [
+      "prankster",
+      "cursedbody"
+    ]
+  },
+  {
+    "old": "Spectral Crossing",
+    "name": "Void Crossing",
+    "oldid": "spectralcrossing",
+    "id": "voidcrossing",
+    "holders": [
+      [
+        "mismagius",
+        "0"
+      ]
+    ],
+    "components": [
+      "levitate",
+      "magicguard"
+    ]
+  },
+  {
+    "old": "Wicked Command",
+    "name": "Void Command",
+    "oldid": "wickedcommand",
+    "id": "voidcommand",
+    "holders": [
+      [
+        "honchkrow",
+        "1"
+      ]
+    ],
+    "components": []
+  },
+  {
+    "old": "Moonlit Promise",
+    "name": "Void Promise",
+    "oldid": "moonlitpromise",
+    "id": "voidpromise",
+    "holders": [
+      [
+        "clefable",
+        "H"
+      ]
+    ],
+    "components": [
+      "unaware"
+    ]
+  },
+  {
+    "old": "Hydra Tyrant",
+    "name": "Void Tyrant",
+    "oldid": "hydratyrant",
+    "id": "voidtyrant",
+    "holders": [
+      [
+        "hydreigon",
+        "H"
+      ]
+    ],
+    "components": [
+      "hydrabond",
+      "berserk"
+    ]
+  },
+  {
+    "old": "Aurora Sanctum",
+    "name": "Void Sanctum",
+    "oldid": "aurorasanctum",
+    "id": "voidsanctum",
+    "holders": [
+      [
+        "ninetalesalola",
+        "H"
+      ]
+    ],
+    "components": [
+      "snowwarning"
+    ]
+  },
+  {
+    "old": "Royal Voice",
+    "name": "Void Voice",
+    "oldid": "royalvoice",
+    "id": "voidvoice",
+    "holders": [
+      [
+        "gardevoirmega",
+        "0"
+      ],
+      [
+        "gardevoirmegaalt",
+        "0"
+      ]
+    ],
+    "components": [
+      "pixilate",
+      "queenlymajesty",
+      "dreamsickness",
+      "telepathy"
+    ]
+  },
+  {
+    "old": "Grit Reprisal",
+    "name": "Void Reprisal",
+    "oldid": "gritreprisal",
+    "id": "voidreprisal",
+    "holders": [
+      [
+        "conkeldurr",
+        "0"
+      ]
+    ],
+    "components": [
+      "guts"
+    ]
+  },
+  {
+    "old": "Guiding Omen",
+    "name": "Void Omen",
+    "oldid": "guidingomen",
+    "id": "voidomen",
+    "holders": [
+      [
+        "togekiss",
+        "0"
+      ],
+      [
+        "togekissalde",
+        "0"
+      ]
+    ],
+    "components": [
+      "friendguard",
+      "serenegrace",
+      "moldbreaker"
+    ]
+  },
+  {
+    "old": "Sandshroud",
+    "name": "Void Drift",
+    "oldid": "sandshroud",
+    "id": "voiddrift",
+    "holders": [
+      [
+        "flygon",
+        "0"
+      ]
+    ],
+    "components": [
+      "levitate",
+      "overcoat"
+    ]
+  },
+  {
+    "old": "Faultline",
+    "name": "Void Wrath",
+    "oldid": "faultline",
+    "id": "voidwrath",
+    "holders": [
+      [
+        "garchomp",
+        "H"
+      ]
+    ],
+    "components": [
+      "moldbreaker"
+    ]
+  },
+  {
+    "old": "Arcane Pilfer",
+    "name": "Void Guile",
+    "oldid": "arcanepilfer",
+    "id": "voidguile",
+    "holders": [
+      [
+        "delphox",
+        "H"
+      ]
+    ],
+    "components": [
+      "magician"
+    ]
+  }
+]

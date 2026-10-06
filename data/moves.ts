@@ -24294,7 +24294,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source) {
-				this.effectState.moonlitPromise = source.hasAbility('moonlitpromise');
+				this.effectState.moonlitPromise = source.hasAbility('voidpromise');
 				if (source.hasAbility('restorativechime')) {
 					this.effectState.restorativeEntry = source.m.approvedSignatures ||= {};
 				}
@@ -24309,7 +24309,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (this.effectState.moonlitPromise) {
 						let changed = false;
 						for (const stat in target.boosts) if (target.boosts[stat as BoostID] < 0) { target.boosts[stat as BoostID] = 0; changed = true; }
-						if (changed) this.add('-clearnegativeboost', target, '[from] ability: Moonlit Promise');
+						if (changed) this.add('-clearnegativeboost', target, '[from] ability: Void Promise');
 					}
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {

@@ -37,7 +37,7 @@ describe('Parental Bond full local Mold Breaker',()=>{
 		assert(!Object.values(AbilityComponents).some(parts=>parts.includes('parentalbond')));
 		for(const id of ['hydrabond','dualwield'])assert(!(AbilityComponents[id]||[]).includes('moldbreaker'));
 		const users=battle.dex.species.all().filter(s=>Object.values(s.abilities).includes('Parental Bond')).map(s=>s.name);assert.deepEqual(users,['Kangaskhan-Mega']);
-		const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');assert(calculatorMetadata().abilityComponents.parentalbond.includes('Mold Breaker'));assert(/Mold Breaker/.test(p.getAbility().shortDesc));
+		const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');assert(calculatorMetadata().abilityComponents.parentalbond.includes('Mold Breaker'));assert(require('../../../dist/data/ability-display').getAbilityDisplayComponents(p.ability).includes('moldbreaker'));
 	});
 	it('does not bypass screens or field weather modifiers',()=>{
 		const[p,t]=start();t.side.addSideCondition('reflect',t,battle.dex.moves.get('reflect'));

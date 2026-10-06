@@ -120,7 +120,7 @@ export function calculatorMetadata() {
 	return {
 		formats: calculatorFormats().map(f => ({ id: f.id, name: f.name, mode: f.gameType, field: f.terrain || '' })),
 		fields: [{id: '', name: 'No field'}, ...Object.entries(Terrains).map(([id, field]) => ({id, name: field.name || id}))],
-		species: Dex.species.all().filter(s => s.exists && !s.isCosmeticForme).map(s => ({name: s.name, abilities: s.abilities})),
+		species: Dex.species.all().filter(s => s.exists && (!s.isCosmeticForme || s.passives.length)).map(s => ({name: s.name, abilities: s.abilities, passives: s.passives})),
 		abilityComponents: Object.fromEntries(Object.keys(AbilityComponents).map(id =>
 			[id, getAbilityDisplayComponents(id).map(p => Dex.abilities.get(p).name)])),
 		auras: Object.values(Auras).map(a => ({ id: a.id, name: a.name })),
@@ -217,7 +217,7 @@ export function calculateScenario(input: unknown) {
 				resolved = {
 					field: battle.field.terrain, aura: battle.field.auraField, weather: battle.field.weather,
 					actors: mons.map(mon => ({
-						species: mon.species.name, ability: mon.getAbility().name, item: mon.getItem().name,
+						species: mon.species.name, ability: mon.getAbility().name, passives: mon.getPassives(), item: mon.getItem().name,
 						tera: mon.terastallized || '', hp: mon.hp, maxhp: mon.maxhp,
 						status: mon.status, boosts: { ...mon.boosts },
 					})),
