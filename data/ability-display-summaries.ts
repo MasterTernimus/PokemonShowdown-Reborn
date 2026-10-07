@@ -190,7 +190,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"truedevotion": "Status priority; stronger weak moves and secondary chances; switching cures status and heals.",
 	"ancientbloom": "Same-type moves gain 1.3x power; end-turn Grass damage to foes restores its HP.",
 	"pollenbloom": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA.",
-	"blazingmane": "Fire 1.5x; second hit 30%; half-HP Fire +1 priority; fire fields +1 Spe.",
+	"blazingmane": "Second hit 30%; Fire +1 priority at half HP; fire fields +1 Spe.",
 	"plasmaeruption": "Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
 	"fortressshell": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption.",
 	"waterbarrage": "1.3x same-type power; eligible moves hit twice; cycling 1/16–3/16 Water damage to foes each turn.",

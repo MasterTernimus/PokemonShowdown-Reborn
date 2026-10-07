@@ -86,6 +86,6 @@ export const StarterFamilies = {
   ]
 } as const;
 for (const [passive, ids] of Object.entries(StarterFamilies)) {
-	for (const id of ids) StarterPassives[id] = Object.freeze([passive, ...(ProficientPassiveForms.has(id) ? ['proficient'] : [])]);
+	for (const id of ids) StarterPassives[id] = Object.freeze(ProficientPassiveForms.has(id) ? ['proficient'] : id === 'torterrarift' || id === 'torterrariftshatter' ? [] : [passive]);
 }
 Object.freeze(StarterPassives);

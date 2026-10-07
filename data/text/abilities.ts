@@ -27,7 +27,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	deepchill: {"name":"Deep Chill","desc":"Full local Oblivious. Once per entry, its first damaging Ice attack against a foe applies Torment after HP damage. A hit absorbed by Substitute spends the use without affecting its holder; misses, protection and immunity do not spend it.","shortDesc":"Oblivious; first damaging Ice attack each entry applies Torment after damage."},
 	crosswire: {"name":"Crosswire","desc":"Full local Iron Fist gives punches 1.4x power. A damaging punch against a foe stores one charge. Its next special Electric attack ignores positive Sp. Def stages when Sp. Def is used for damage. Successful HP or Substitute damage consumes the charge; misses, protection and immunity preserve it. A physical Electric punch cannot consume its newly gained charge. No extra damage multiplier; switching clears the charge.","shortDesc":"Iron Fist; a damaging punch charges the next special Electric attack to ignore positive Sp. Def."},
 	crushingvenom: {"name":"Crushing Venom","desc":"Full Strong Jaw gives biting moves 1.5x power. Once per entry, its first damaging bite against a foe applies two-turn Heal Block after HP damage. A hit absorbed by Substitute spends the use without affecting its holder; misses, protection and immunity do not spend it.","shortDesc":"Strong Jaw; first damaging bite each entry applies two-turn Heal Block after damage."},
-	cactuschorus: {"name":"Cactus Chorus","desc":"Full local Water Absorb: absorbs Water moves for 1/4 max HP and retains its field healing. A successful Helping Hand also clears the recipient ally's confusion.","shortDesc":"Water Absorb; successful Helping Hand clears the recipient ally's confusion."},
+	cactuschorus: {"name":"Cactus Chorus","desc":"Water Absorb absorbs Water moves for 1/4 max HP and retains its field healing. Sand Rush doubles Speed in sandstorm, Desert Field, and Ashen Beach, and prevents sandstorm damage. A successful Helping Hand also clears the recipient ally's confusion.","shortDesc":"Water Absorb + Sand Rush; successful Helping Hand clears the recipient ally's confusion."},
 	icebreaker: {"name":"Icebreaker","desc":"Full Hyper Cutter prevents other Pokemon from lowering its Attack. Ice Hammer removes opposing Reflect before damage, including through Substitute, but not on protection, a miss or immunity. Its Speed drop is unchanged.","shortDesc":"Hyper Cutter; Ice Hammer breaks Reflect before damage and keeps its Speed drop."},
 	stagesweep: {"name":"Stage Sweep","desc":"Full Screen Cleaner removes screens from both sides on entry. When its Rapid Spin successfully removes at least one hazard, clears only its negative Defense and Sp. Def stages; positive stages remain.","shortDesc":"Screen Cleaner; removing hazards with Rapid Spin clears its negative Defense and Sp. Def."},
 	scaleshelter: {"name":"Scale Shelter","desc":"Full local Shield Dust + Overcoat: blocks opposing secondary effects, powder moves and sandstorm/hail damage.","shortDesc":"Shield Dust + Overcoat."},
@@ -2730,8 +2730,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	runaway: {
 		name: "Run Away",
-		desc: "This Pokemon is ignored by entry hazards when it switches in, including Spikes, Stealth Rock, Sticky Web, Toxic Spikes, and their field variants.",
-		shortDesc: "Immune to entry-hazard effects on switch-in.",
+		desc: "This Pokemon can switch out despite trapping moves and abilities. It is also ignored by entry hazards when it switches in, including Spikes, Stealth Rock, Sticky Web, Toxic Spikes, and their field variants.",
+		shortDesc: "Can escape trapping; immune to entry hazards.",
 	},
 	sandforce: {
 		name: "Sand Force",

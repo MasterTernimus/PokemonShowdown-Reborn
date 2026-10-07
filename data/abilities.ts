@@ -13924,7 +13924,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 10365,
 	},
-		runaway: {
+	runaway: {
+		onTrapPokemonPriority: -10,
+		onTrapPokemon(pokemon) { pokemon.trapped = false; },
+		onMaybeTrapPokemonPriority: -10,
+		onMaybeTrapPokemon(pokemon) { pokemon.maybeTrapped = false; },
 		flags: {},
 		name: "Run Away",
 		rating: 0,
@@ -20641,6 +20645,8 @@ Abilities.icebreaker = {
 };
 Abilities.cactuschorus = {
  ...Abilities.waterabsorb,
+ onModifySpe: Abilities.sandrush.onModifySpe,
+ onImmunity: Abilities.sandrush.onImmunity,
  onAfterMoveSecondarySelf(source, target, move) {
   if (move.id === 'helpinghand' && target && source !== target && source.isAlly(target)) target.removeVolatile('confusion');
  },

@@ -18,20 +18,36 @@ function setup(species, ability='No Ability') {
 function boost(p,t,move,event='ModifySpA') {return battle.runEvent(event,p,t,battle.dex.getActiveMove(move),100);}
 describe('Starter family passives', () => {
  afterEach(() => {battle?.destroy(); battle=null;});
+ it('drops the family boost on gimmick forms and restores it on reversion', () => {
+  for (const [base, form, move] of [['Charizard', 'Charizard-Mega-X', 'flamethrower'], ['Venusaur', 'Venusaur-Gmax', 'energyball'], ['Torterra', 'Torterra-Rift', 'energyball']]) {
+   const [p,t] = setup(base); p.hp=1;
+   assert.equal(boost(p,t,move),150);
+   p.formeChange(form,null,true); p.setAbility('No Ability'); p.hp=1;
+   assert.equal(boost(p,t,move),100);
+   p.formeChange(base,null,true); p.setAbility('No Ability'); p.hp=1;
+   assert.equal(boost(p,t,move),150);
+   battle.destroy(); battle=null;
+  }
+ });
+ it('names Fire Mane and Sand Rush in their composite display', () => {
+  const {getAbilityDisplayComponents} = require('../../../dist/data/ability-display');
+  assert.deepEqual(getAbilityDisplayComponents('blazingmane'), ['firemane']);
+  assert.deepEqual(getAbilityDisplayComponents('cactuschorus'), ['waterabsorb','sandrush']);
+ });
  it('covers the complete current final-starter inventory by original family, with no other grants', () => {
   const expected = Dex.species.all().filter(s=>Object.values(families).flat().some(f=>s.id.startsWith(f)));
   assert.equal(expected.length,76); assert.equal(new Set(expected.map(s=>s.id)).size,76);
   assert.deepEqual(Object.keys(StarterPassives).sort(),expected.map(s=>s.id).sort());
   for(const s of expected) {
    const family = Object.keys(families).find(p=>families[p].some(f=>s.id.startsWith(f)));
-   assert.deepEqual(s.passives,[family,...(ProficientPassiveForms.has(s.id)?['proficient']:[])],s.id);
+   assert.deepEqual(s.passives,ProficientPassiveForms.has(s.id)?['proficient']:s.id.startsWith('torterrarift')?[]:[family],s.id);
    assert(!s.evos.length,s.id);
   }
   assert.equal(expected.filter(s=>s.passives.includes('proficient')).length,31);
   const {SpeciesPassives}=require('../../../dist/data/species-passives');
   for(const s of Dex.species.all())if(!expected.includes(s))assert.deepEqual(s.passives,SpeciesPassives[s.id]||[],s.id);
  });
- for(const [id,passives] of Object.entries(StarterPassives)) it(id+' uses one family callback and matches calculator damage with a duplicate active component',()=>{
+ for(const [id,passives] of Object.entries(StarterPassives).filter(([,p])=>moves[p[0]])) it(id+' uses one family callback and matches calculator damage with a duplicate active component',()=>{
   const family=passives[0], [p,t]=setup(id);p.hp=1;
   for(const [i,event] of ['ModifySpA','ModifyAtk'].entries()) {
    assert.equal(boost(p,t,moves[family][i],event),150);p.setAbility(family);
@@ -86,7 +102,7 @@ describe('Starter family passives', () => {
   const[p,t]=setup('Venusaur');const raw={...p.getSwitchRequestData().stats};
   p.hp=1;battle.field.setTerrain('grassyterrain',p);assert.equal(boost(p,t,'energyball'),150);
   assert.deepEqual(p.getSwitchRequestData().stats,raw);
-  for(const [id,names]of [['charizard',['Blaze']],['charizardmegax',['Blaze','Proficient']],['venusaur',['Overgrow']],['blastoise',['Torrent']]]){
+  for(const [id,names]of [['charizard',['Blaze']],['charizardmegax',['Proficient']],['venusaur',['Overgrow']],['blastoise',['Torrent']]]){
    const html=Chat.getDataPokemonHTML(Dex.species.get(id));assert(html.includes('Passives:'));
    for(const name of names)assert(html.slice(html.indexOf('Passives:')).includes(name));
   }
