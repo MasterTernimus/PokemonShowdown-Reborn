@@ -3860,7 +3860,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	fortressshell: {
 		name: "Fortress Shell",
-		desc: "This Pokemon has Shell Armor and Water Barrage's effects, plus Power Spot and Friend Guard. In Electric Terrain, Murkwater Surface, Water Surface, Underwater, Factory, and Short Circuit fields, incoming Electric moves are blocked and redirected to it, raising its Attack and Special Attack by 1. Fairy Tale, New World, Cold Eclipse, and Starlight Arena give it +1 Defense and +1 Special Defense once per active terrain. New World, Cold Eclipse, and Starlight Arena also boost its move power by 1.5x.",
+		desc: "This Pokemon has Shell Armor and Water Barrage's effects, plus Power Spot and Friend Guard. During Electric Aura or in Electric Terrain, Murkwater Surface, Water Surface, Underwater, Midnight Zone, Factory, and Short Circuit fields, incoming Electric moves are blocked and redirected to it, raising its Attack and Special Attack by 1. Fairy Tale, New World, Cold Eclipse, and Starlight Arena give it +1 Defense and +1 Special Defense once per active terrain. New World, Cold Eclipse, and Starlight Arena also boost its move power by 1.5x.",
 		shortDesc: "Shell Armor + Water Barrage; field Electric absorption; ally support.",
 	},
 	hydrabond: {
