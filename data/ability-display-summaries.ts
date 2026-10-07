@@ -120,7 +120,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"aurainstinct": "Stronger STAB; eligible moves hit twice; one 50% roll per battle to survive a lethal attack.",
 	"abysssniper": "Critical hits deal 2.25x damage; +1 Sp. Atk on specified fields.",
 	"warpath": "Powder/weather/flinch immunity; accuracy/power 1.3x; status Atk 1.5x; attacks deal 25% less; stage/bypass effects.",
-	"atrocity": "Stronger attacks and defenses, extra critical-hit chance, and a stronger Dragon Rush that cannot miss.",
+	"atrocity": "Stronger attacks and defenses; ignores bypassable abilities; heals 1/16 HP each turn.",
 	"wickedsnare": "Combines the listed abilities.",
 	"voidcommand": "20% less attack damage; KOs boost higher offense. First successful Z-Move also boosts it, without doubling a KO reward.",
 	"bewitchingmajesty": "Creates 5-turn Bewitched Woods; reflects targeted status moves; blocks foe priority against its side.",
@@ -189,7 +189,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"falsedevotion": "+1 status priority; switching cures status and heals HP.",
 	"truedevotion": "Status priority; stronger weak moves and secondary chances; switching cures status and heals.",
 	"ancientbloom": "Same-type moves gain 1.3x power; end-turn Grass damage to foes restores its HP.",
-	"pollenbloom": "Healing Grass chip scales by type in FFA.",
+	"pollenbloom": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA.",
 	"blazingmane": "Fire 1.5x; second hit 30%; half-HP Fire +1 priority; fire fields +1 Spe.",
 	"plasmaeruption": "Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
 	"fortressshell": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption.",
@@ -436,7 +436,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"voidguile": "Successful Mystical Fire also applies two-turn Embargo.",
 	"voidwrath": "First successful Sand Tomb bind each entry adds one Spikes layer to the foe's side.",
 	"creepingbloom": "First Poison attack to damage a foe each entry also attempts poison on all foes it damages.",
-	"dreadwings": "Dark Pulse damage also applies Torment to surviving foes.",
+	"dreadwings": "Weakens foes on entry; Dark Pulse damage applies Torment to surviving foes.",
 	"causticchamber": "Shell Side Arm ignores positive defensive stages without changing its category selection.",
 	"demolitiontrunk": "First Heavy Slam or Heat Crash damage each entry clears the foe side's screens after damage.",
 	"deepresonance": "Psychic Noise damage lowers surviving foes' Attack once per target per move.",
@@ -488,7 +488,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"disorientingmind": "First damaging Psychic hit each entry applies Torment after damage.",
 	"wisecounsel": "First successful ally Instruct each entry cures confusion before the repeated action.",
 	"mindcurrent": "First damaging Psychic move each entry grants Charge after the move completes.",
-	"voidcrossing": "Its first Ghost attack or Power Gem bypasses screens and Substitute."
+	"voidcrossing": "Ghost hits or Power Gem curse foes: their next attack deals 20% less damage."
 };
 
 AbilityDisplaySummaries.voiddrift = "On New World, its special Ground moves ignore lowered Sp. Atk while airborne.";

@@ -24261,3 +24261,19 @@ Pokedex.oranguru.abilities!['0'] = 'Wise Counsel';
 Pokedex.raichualola.abilities!['H'] = 'Mind Current';
 
 Pokedex.mismagius.abilities!['0'] = 'Void Crossing';
+
+// Approved selected-ability replacements after the innate Levitate migration.
+Pokedex.baltoy.abilities!['0'] = 'Own Tempo';
+Pokedex.claydol.abilities!['0'] = 'Clear Body';
+Pokedex.misdreavus.abilities!['0'] = 'Infiltrator';
+Pokedex.duskull.abilities!['0'] = 'Infiltrator';
+Pokedex.cryogonal.abilities!['0'] = 'Ice Body';
+Pokedex.rotom.abilities!['0'] = 'Infiltrator';
+Pokedex.rotomheat.abilities!['0'] = 'White Smoke';
+Pokedex.rotomwash.abilities!['0'] = 'Hydration';
+Pokedex.rotomfrost.abilities!['0'] = 'Clear Body';
+Pokedex.rotomfan.abilities!['S'] = 'Soundproof';
+Pokedex.rotommow.abilities!['0'] = 'Leaf Guard';
+Pokedex.tynamo.abilities!['0'] = 'Static';
+Pokedex.eelektrik.abilities!['0'] = 'Static';
+Pokedex.koffing.abilities!['0'] = 'Aftermath';

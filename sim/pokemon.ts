@@ -109,6 +109,7 @@ export class Pokemon {
 	baseSpecies: Species;
 	species: Species;
 	speciesState: EffectState;
+	passiveStates: {[id: string]: EffectState} = {};
 
 	status: ID;
 	statusState: EffectState;
@@ -2186,6 +2187,16 @@ export class Pokemon {
 		return this.species.passives;
 	}
 
+	/** Mechanical helper; selected ability identity remains separate from species traits. */
+	hasAbilityOrPassive(ability: string | string[]) {
+		const ids = (Array.isArray(ability) ? ability : [ability]).map(toID);
+		return ids.some(id => {
+			if (!this.getPassives().includes(id)) return this.hasAbility(id);
+			const component = this.battle.dex.abilities.get(id);
+			return !component.flags.breakable || !this.battle.suppressingAbility(this, component);
+		});
+	}
+
 	hasAbility(ability: string | string[]) {
 		if (this.battle.activeMove && !['ModifyMove', 'ModifyType', 'PrepareHit', 'SwitchOut', 'SwitchIn', 'Start', 'End', 'Residual', 'Update'].includes(this.battle.event?.id || '')) {
 			if (adaptiveIgnoresAbility(this.battle.activePokemon, this) || adaptiveIgnoresAbility(this.battle.activeTarget, this)) return false;
@@ -2411,6 +2422,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
+		if (this.getPassives().includes('levitate') && this.hasAbilityOrPassive('levitate')) return null;
 		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
 			'voidcraft', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
@@ -2519,7 +2531,12 @@ export class Pokemon {
 			if (notImmune) continue;
 			if (!message) return false;
 			if (notImmune === null) {
-				this.battle.add('-immune', this, '[from] ability: Levitate');
+				if (this.getPassives().includes('levitate')) {
+					if (this.illusion) this.battle.add('-immune', this);
+					else this.battle.add('-immune', this, '[from] passive: Levitate');
+				} else {
+					this.battle.add('-immune', this, '[from] ability: Levitate');
+				}
 			} else {
 				this.battle.add('-immune', this);
 			}

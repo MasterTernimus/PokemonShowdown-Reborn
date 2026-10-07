@@ -3921,7 +3921,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	darkvoid: {
 		num: 464,
-		accuracy: 80,
+		accuracy: 70,
 		basePower: 0,
 		category: "Status",
 		name: "Dark Void",
@@ -8206,7 +8206,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) return;
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
 				// They don't get typed damage from Steelsurge because Steelsurge doesn't,
@@ -19676,7 +19676,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			noCopy: true,
 			onStart(pokemon) {
 				let applies = false;
-				if (pokemon.hasType('Flying') || pokemon.hasAbility('levitate')) applies = true;
+				if (pokemon.hasType('Flying') || pokemon.getPassives().includes('levitate') || pokemon.hasAbility('levitate')) applies = true;
 				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] ||
 					this.field.getPseudoWeather('gravity')) applies = false;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
@@ -20329,7 +20329,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
-				if ((!pokemon.isGrounded() && !this.field.isTerrain('electricterrain')) || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
+				if ((!pokemon.isGrounded() && !this.field.isTerrain('electricterrain')) || pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) return;
 				let typeMod = 1;
 				if (this.field.isTerrain('electricterrain')) {
 					if (!pokemon.runImmunity('Electric')) {
@@ -20740,7 +20740,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSwitchIn(pokemon) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) return;
 				let typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				if (this.field.isTerrain('crystalcavernterrain')) {
 					if (!pokemon.runImmunity(counter[this.CrystalCavernCounter])) {
@@ -20909,7 +20909,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
-				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) return;
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				const webSetter = this.effectState.source;
 				if (webSetter?.isActive && webSetter.hp && webSetter.hasAbility('livenet') &&
@@ -23011,7 +23011,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hasType('Poison') && !this.field.isTerrain('corrosiveterrain')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('runaway')) {
+				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) {
 					return;
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -23245,22 +23245,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		critRatio: 2,
 		self: {
 			onHit(source) {
-				// Current species follows Transform; every successful hit can add a side layer.
+				// Current species follows Transform; only current active allies receive each layer.
 				if (['decidueyehisui', 'decidueyehisuialt'].includes(source.species.id)) {
-					source.side.addSideCondition('triplearrows', source);
+					for (const ally of source.alliesAndSelf()) {
+						if (!ally.fainted) ally.addVolatile('triplearrows', source);
+					}
 				}
 			},
 		},
 		condition: {
-			// The original side scope has no timer. Use side lifecycle hooks, not Chi Strike's volatile hooks.
-			onSideStart(side) {
+			noCopy: true,
+			onStart(target) {
 				this.effectState.layers = 1;
-				this.add('-sidestart', side, 'move: Triple Arrows');
+				this.add('-start', target, 'move: Triple Arrows');
 			},
-			onSideRestart(side) {
+			onRestart(target) {
 				if (this.effectState.layers >= 3) return false;
 				this.effectState.layers++;
-				this.add('-sidestart', side, 'move: Triple Arrows');
+				this.add('-start', target, 'move: Triple Arrows');
 			},
 			onModifyCritRatio(critRatio) {
 				return critRatio + this.effectState.layers;

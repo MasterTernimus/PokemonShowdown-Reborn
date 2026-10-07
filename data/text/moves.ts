@@ -1,4 +1,9 @@
 export const MovesText: { [id: IDEntry]: MoveText } = {
+	deluge: {
+		name: "Deluge",
+		desc: "Usually moves after other attacks (-4 priority). Power doubles from 65 to 130 if the target already damaged the user this turn.",
+		shortDesc: "Moves late. 2x power if the target hurt the user this turn.",
+	},
 	"10000000voltthunderbolt": {
 		name: "10,000,000 Volt Thunderbolt",
 		desc: "Has a very high chance for a critical hit.",
@@ -1282,8 +1287,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	darkvoid: {
 		name: "Dark Void",
-		desc: "Has 80% accuracy and causes the target to fall asleep. If used by Mega Banette with its custom Ability, this move has 90% accuracy.",
-		shortDesc: "80% sleep; Mega Banette custom Ability: 90%.",
+		desc: "Has 70% accuracy. Puts adjacent opposing Pokemon to sleep.",
+		shortDesc: "Puts adjacent foes to sleep.",
 		gen6: {
 			desc: "Causes the target to fall asleep.",
 			shortDesc: "Causes the foe(s) to fall asleep.",
@@ -5950,8 +5955,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "This attack charges with +4 priority on its actual charge turn and executes at normal priority on the second turn. Raises the user's Attack, Defense, and Special Defense by 1 stage each on the first turn. While charging, the user takes 0.7x damage from attacks. After a successful hit, the user restores 1/8 of its maximum HP. If the charge is skipped, including by Power Herb, it executes without the charge-turn priority.",
-		shortDesc: "+4 charge: +Atk/Def/SpD, 0.7x damage. Hit heals 1/8.",
+		desc: "Charges with +2 priority, raising the user's Attack, Defense, and Special Defense by 1 stage each. While charging, the user takes 20% less damage from attacks. Attacks at normal priority on the next turn. After dealing damage, restores 10% of the user's base maximum HP. Skipping the charge, such as with Power Herb, keeps the stat boosts but does not grant charge-turn priority or the charging damage reduction.",
+		shortDesc: "+2 charge: +1 Atk/Def/SpD, 20% less damage. Hit heals 10%.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},

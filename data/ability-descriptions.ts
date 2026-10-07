@@ -713,8 +713,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Mold Breaker; Powder/weather/flinch immunity; accuracy/power 1.3x; status Atk 1.5x; attacks deal 25% less; stage/bypass effects."
 	},
 	"atrocity": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Contact moves have 1.3x power. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Critical-hit ratio rises by 1. Dragon Rush cannot miss and has a further 1.5x power. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
-		"shortDesc": "Mold Breaker; stronger attacks and defenses; healing, Fire chip and never-miss Dragon Rush."
+		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Contact moves have 1.3x power. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
+		"shortDesc": "Mold Breaker; stronger attacks and defenses; healing and Fire chip."
 	},
 	"wickedsnare": {
 		"desc": "Attacks use double the offensive stat against targets that entered this turn. Contact attackers lose 1 Speed stage. Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods.",
@@ -1071,8 +1071,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Status priority; stronger weak moves and secondary chances; switching cures status and heals."
 	},
 	"pollenbloom": {
-		"desc": "Same-type moves have 1.3x power. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. At turn end, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; it heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip.",
-		"shortDesc": "Same-type moves have 1.3x power; Half Fire/Ice attacking stats; immune to hail damage; Ignores opposing combat/accuracy stages; reveals Illusions — healing Grass chip scales by type in FFA."
+		"desc": "Thick Fat + Unaware. Same-type attacks gain 30% power. Fire and Ice attacks use half the attacker's attacking stat; hail causes no damage. Ignores the foe's Defense, Sp. Def and evasion changes when attacking, and their Attack, Defense, Sp. Atk and accuracy changes when defending. Reveals opposing Illusions on entry. At each turn's end, drains 1/16 of each foe's base maximum HP and heals by the HP actually drained. Grass types and Grass-immune foes are unaffected. In Free-for-All only, Grass weaknesses and resistances change the drain amount.",
+		"shortDesc": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA."
 	},
 	"ancientbloom": {
 		"desc": "Damaging hits have separate 10% chances to inflict sleep, paralysis or poison on the attacker; powder immunity blocks this. If Sleep Clause blocks sleep, a further roll can inflict paralysis or poison instead. Same-type moves have 1.3x power. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. At turn end, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; it heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip.",
@@ -2878,8 +2878,8 @@ AbilityDescriptionOverrides.creepingbloom = {
 };
 
 AbilityDescriptionOverrides.dreadwings = {
-	"desc": "Levitate + full local Unnerve: airborne with normal Ground and grounded-hazard immunity; foes cannot eat Berries or use field seeds while Unnerve is active. On Cold Eclipse entry, lowers opposing Speed one stage unless protected by Substitute. A Dark Pulse that damages a surviving foe also applies Torment under normal volatile-status rules, preventing consecutive use of the same move. Existing Torment does not stack.",
-	"shortDesc": "Levitate + Unnerve; Dark Pulse damage also applies Torment to surviving foes."
+	"desc": "Full local Intimidate and Unnerve: on entry, lowers adjacent foes' Attack one stage under normal Intimidate protections; foes cannot eat Berries or use field seeds while Unnerve is active. On Cold Eclipse entry, lowers opposing Speed one stage unless protected by Substitute. A Dark Pulse that damages a surviving foe also applies Torment under normal volatile-status rules, preventing consecutive use of the same move. Existing Torment does not stack.",
+	"shortDesc": "Weakens foes on entry; Dark Pulse damage applies Torment to surviving foes."
 };
 
 AbilityDescriptionOverrides.setpiece = {
@@ -3368,8 +3368,8 @@ AbilityDescriptionOverrides.voidomen = {
 };
 
 AbilityDescriptionOverrides.voidcrossing = {
-	"desc": "Levitate + Magic Guard. Its first executed damaging Ghost move or Power Gem each entry bypasses opposing screens and Substitute. Misses, protection and immunity still spend the bypass; being prevented from acting does not. Switching restores the use. Includes the components’ normal effects and field interactions.",
-	"shortDesc": "Its first Ghost attack or Power Gem bypasses screens and Substitute."
+	"desc": "Magic Guard + Infiltrator. After a damaging Ghost move or Power Gem hits an opponent, curses it through the end of the following turn. Its next damaging move deals 20% less damage across all hits and targets, then consumes the curse. Status moves do not consume it. Reapplying refreshes the duration without stacking; switching removes it.",
+	"shortDesc": "Ghost hits or Power Gem curse foes: their next attack deals 20% less damage."
 };
 
 AbilityDescriptionOverrides.voiddrift = {"shortDesc":"On New World, its special Ground moves ignore lowered Sp. Atk while airborne.","desc":"Levitate + Overcoat. Restores 1/16 of its base maximum HP each turn during sand. While airborne on effective New World, its special Ground moves ignore its negative Sp. Atk stages for damage calculation. Positive stages and other modifiers remain; its actual stages are unchanged."};

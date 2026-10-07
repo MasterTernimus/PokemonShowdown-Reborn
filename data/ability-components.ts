@@ -685,7 +685,7 @@ AbilityComponents.voidwrath = ['moldbreaker'];
 
 AbilityComponents.creepingbloom = ['infiltrator'];
 
-AbilityComponents.dreadwings = ['levitate', 'unnerve'];
+AbilityComponents.dreadwings = ['intimidate', 'unnerve'];
 
 Object.assign(AbilityComponents, {
 	"causticchamber": [
@@ -745,4 +745,4 @@ AbilityComponents.disorientingmind = ['infiltrator'];
 AbilityComponents.wisecounsel = ['innerfocus'];
 AbilityComponents.mindcurrent = ['innerfocus'];
 
-AbilityComponents.voidcrossing = ['levitate', 'magicguard'];
+AbilityComponents.voidcrossing = ['magicguard', 'infiltrator'];
