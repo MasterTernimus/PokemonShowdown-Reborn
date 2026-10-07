@@ -3128,7 +3128,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onAccuracy(accuracy, target, source, move) {
-				if (move.type === 'Electric' && typeof move.accuracy === 'number') {
+				// Dual Wield stores per-hit accuracy separately and sets move.accuracy
+				// to true. Inspect this hit's relay value so both checks get the field bonus.
+				if (move.type === 'Electric' && typeof accuracy === 'number') {
 					return true;
 				}
 			},
