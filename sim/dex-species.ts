@@ -1,6 +1,6 @@
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
-import { StarterPassives } from '../data/starter-passives';
+import { SpeciesPassives } from '../data/species-passives';
 import { isDeepStrictEqual } from 'node:util';
 
 interface SpeciesAbility {
@@ -305,7 +305,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || { 0: "" };
-		this.passives = StarterPassives[this.id] || [];
+		this.passives = SpeciesPassives[this.id] || [];
 		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;
 		this.prevo = data.prevo || '';
@@ -812,6 +812,12 @@ export class DexSpecies {
 		const species = [];
 		for (const id in this.dex.data.Pokedex) {
 			species.push(this.getByID(id as ID));
+		}
+		// Approved cosmetic passive records can be aliases rather than Pokedex keys.
+		const seen = new Set(species.map(s => s.id));
+		for (const id of Object.keys(SpeciesPassives)) {
+			const entry = this.get(id);
+			if (entry.exists && !seen.has(entry.id)) { species.push(entry); seen.add(entry.id); }
 		}
 		this.allCache = Object.freeze(species);
 		return this.allCache;

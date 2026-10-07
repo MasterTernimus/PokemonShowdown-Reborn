@@ -12,7 +12,7 @@ const ASSUMPTIONS = [
 	'Adaptive Cycle starts with empty memory in this fresh-entry calculator; completed adaptations require battle history and are not assumed.',
 	'Sampled single-action outcomes, not guaranteed min/max damage or exact KO probabilities. Misses, critical hits and random redirects are included.',
 	'Fresh battle entry effects run first. Requested HP and stages then replace entry HP/stages. Selected statuses are applied through the engine.',
-	'No previous turns, hits, faints, consumed items, stored moves, copied abilities or field history. History-dependent abilities use fresh-entry state; this does not model a mid-battle snapshot.',
+	'No previous turns, hits, faints, consumed items, stored moves, copied abilities or field history. History-dependent abilities use fresh-entry state; an actor may explicitly start with Void Crossing curse, but this does not model a full mid-battle snapshot.',
 	'Only the selected attacker acts. No opponent move, speed-order contest, end-of-turn residuals, delayed-hit resolution or subsequent-turn KO prediction.',
 	'Damage is actual HP removed during the action, capped by available HP, and includes immediate triggered damage. Net HP loss can differ because of healing.',
 ];
@@ -23,6 +23,7 @@ export interface CalcActor {
 	boosts: SparseBoostsTable;
 	status: string;
 	gimmick: string;
+	voidCrossingCurse: boolean;
 }
 export interface CalcScenario {
 	format: Format;
@@ -63,7 +64,13 @@ function choice(value: unknown, fallback: string, allowed: string[]) {
 }
 function actor(input: unknown, move: string): CalcActor {
 	const data = record(input);
-	keys(data, ['species', 'ability', 'item', 'nature', 'level', 'evs', 'ivs', 'boosts', 'hpPercent', 'status', 'gimmick', 'teraType', 'gender', 'moves']);
+	keys(data, [
+		'species', 'ability', 'item', 'nature', 'level', 'evs', 'ivs', 'boosts', 'hpPercent', 'status', 'gimmick',
+		'teraType', 'gender', 'moves', 'voidCrossingCurse',
+	]);
+	if (data.voidCrossingCurse !== undefined && typeof data.voidCrossingCurse !== 'boolean') {
+		throw new Error('Void Crossing curse must be a boolean.');
+	}
 	const species = Dex.species.get(name(data.species));
 	if (!species.exists) throw new Error('Unknown species or form.');
 	const ability = Dex.abilities.get(name(data.ability) || species.abilities['0']);
@@ -107,6 +114,7 @@ function actor(input: unknown, move: string): CalcActor {
 		set, boosts, hpPercent: integer(data.hpPercent, 100, 1, 100),
 		status: choice(data.status, '', ['', 'brn', 'par', 'psn', 'tox', 'slp', 'frz']),
 		gimmick: choice(data.gimmick, '', ['', 'mega', 'tera', 'gmax']),
+		voidCrossingCurse: data.voidCrossingCurse === true,
 	};
 }
 
@@ -194,6 +202,10 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 				throw new Error(`${mon.species.name} cannot receive the selected status in this position.`);
 			}
 			mon.updateSpeed();
+			if (spec.voidCrossingCurse &&
+				!mon.addVolatile('voidcrossingcurse', mons[1], battle.dex.abilities.get('voidcrossing'))) {
+				throw new Error(`${mon.species.name} cannot receive Void Crossing curse in this position.`);
+			}
 		}
 		for (const screen of scenario.screens) battle.p2.addSideCondition(screen, mons[1]);
 		return { battle, mons };
@@ -219,7 +231,7 @@ export function calculateScenario(input: unknown) {
 					actors: mons.map(mon => ({
 						species: mon.species.name, ability: mon.getAbility().name, passives: mon.getPassives(), item: mon.getItem().name,
 						tera: mon.terastallized || '', hp: mon.hp, maxhp: mon.maxhp,
-						status: mon.status, boosts: { ...mon.boosts },
+						status: mon.status, boosts: { ...mon.boosts }, voidCrossingCurse: !!mon.volatiles['voidcrossingcurse'],
 					})),
 				};
 			}

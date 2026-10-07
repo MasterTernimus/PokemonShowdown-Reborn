@@ -1,5 +1,91 @@
-/** Only the existing Proficient-bearing gimmick starter forms. These are species traits, never selectable abilities. */
+/** Explicit final-stage starter roster, grouped by original family affiliation. These are species traits, never selectable abilities. */
 export const StarterPassives: {[id: string]: readonly string[]} = {};
 export const ProficientPassiveForms = new Set(('venusaurmega venusaurgmax charizardmegax charizardmegaxalt charizardmegay charizardgmax blastoisemega blastoisegmax meganiummega meganiummegay typhlosionmega feraligatrmega feraligatrgmax sceptilemega blazikenmega swampertmega torterramegax torterramegay infernapemega empoleonmega serperiormega emboarmega emboarmegareborn chesnaughtmega delphoxmega greninjaash greninjamega rillaboomgmax cinderacegmax cinderacemega inteleongmax').split(' '));
-for (const id of ProficientPassiveForms) StarterPassives[id] = Object.freeze(['proficient']);
+export const StarterFamilies = {
+  "overgrow": [
+    "venusaur",
+    "venusaurmega",
+    "venusaurgmax",
+    "meganium",
+    "meganiummega",
+    "meganiummegay",
+    "sceptile",
+    "sceptilemega",
+    "torterra",
+    "torterramegax",
+    "torterramegay",
+    "torterrarift",
+    "torterrariftshatter",
+    "serperior",
+    "serperiorazzy",
+    "serperiormega",
+    "chesnaught",
+    "chesnaughtmega",
+    "decidueye",
+    "decidueyealt",
+    "decidueyehisui",
+    "decidueyehisuialt",
+    "rillaboom",
+    "rillaboomgmax",
+    "meowscarada"
+  ],
+  "blaze": [
+    "charizard",
+    "charizardalt",
+    "charizardmegax",
+    "charizardmegaxalt",
+    "charizardmegay",
+    "charizardgmax",
+    "typhlosion",
+    "typhlosionalt",
+    "typhlosionhisui",
+    "typhlosionmega",
+    "blaziken",
+    "blazikenmega",
+    "infernape",
+    "infernapemega",
+    "emboar",
+    "emboarmega",
+    "emboarreborn",
+    "emboarmegareborn",
+    "delphox",
+    "delphoxmega",
+    "incineroar",
+    "incineroaralt",
+    "cinderace",
+    "cinderacegmax",
+    "skeledirge",
+    "skeledirgealt",
+    "skeledirgeaevian",
+    "cinderacemega"
+  ],
+  "torrent": [
+    "blastoise",
+    "blastoisemega",
+    "blastoisegmax",
+    "feraligatr",
+    "feraligatrmega",
+    "feraligatrgmax",
+    "swampert",
+    "swampertmega",
+    "empoleon",
+    "empoleonmega",
+    "samurott",
+    "samurottalt",
+    "samurotthisui",
+    "samurotthisuialt",
+    "greninja",
+    "greninjabond",
+    "greninjaash",
+    "greninjamega",
+    "primarina",
+    "primarinaalt",
+    "inteleon",
+    "inteleongmax",
+    "quaquaval"
+  ]
+} as const;
+for (const [passive, ids] of Object.entries(StarterFamilies)) {
+	for (const id of ids) StarterPassives[id] = Object.freeze([passive, ...(ProficientPassiveForms.has(id) ? ['proficient'] : [])]);
+}
 Object.freeze(StarterPassives);

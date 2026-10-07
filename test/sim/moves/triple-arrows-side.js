@@ -11,11 +11,11 @@ function start(species='Decidueye-Hisui',ability='Unburden',doubles=false) {
 	return [battle.p1.active[0],battle.p2.active[0]];
 }
 function use(p,t,patch={}){const m=battle.dex.getActiveMove('triplearrows');Object.assign(m,patch);battle.actions.useMove(m,p,{target:t});}
-function layers(p){return p.side.sideConditions.triplearrows?.layers||0;}
+function layers(p){return p.volatiles.triplearrows?.layers||0;}
 function crit(p){return battle.runEvent('ModifyCritRatio',p,null,battle.dex.getActiveMove('tackle'),1);}
-describe('Triple Arrows Hisuian side lifecycle',()=>{
+describe('Triple Arrows Hisuian active ally lifecycle',()=>{
 	afterEach(()=>{battle?.destroy();battle=null;});
-	for(const species of ['Decidueye-Hisui','Decidueye-Hisui-Alt'])for(const ability of ['Fallen Star','Unburden','Scrappy'])it(`${species} / ${ability} adds one finite side layer per landed hit`,()=>{
+	for(const species of ['Decidueye-Hisui','Decidueye-Hisui-Alt'])for(const ability of ['Fallen Star','Unburden','Scrappy'])it(`${species} / ${ability} adds one finite active layer per landed hit`,()=>{
 		const[p,t]=start(species,ability);use(p,t);assert.equal(layers(p),ability==='Fallen Star'?2:1);assert.equal(crit(p),1+layers(p));
 		assert(Number.isFinite(crit(p)));assert.equal(p.volatiles.gmaxchistrike,undefined);assert.equal(p.side.sideConditions.gmaxchistrike,undefined);
 		for(let i=0;i<4;i++)use(p,t);assert.equal(layers(p),3);assert.equal(crit(p),4);
@@ -50,13 +50,19 @@ describe('Triple Arrows Hisuian side lifecycle',()=>{
 	it('increments for each landed target of a multi-target use',()=>{
 		const[p,t]=start('Decidueye-Hisui','Unburden',true);use(p,t,{target:'allAdjacentFoes'});assert.equal(layers(p),2);
 	});
-	it('keeps its side-wide layers through turns and switching with no timer',()=>{
+	it('keeps layers while active but clears them on switching',()=>{
 		const[p,t]=start();use(p,t);for(let i=0;i<4;i++)battle.makeChoices('move splash','move splash');
-		assert.equal(layers(p),1);assert.equal(p.side.sideConditions.triplearrows.duration,undefined);
-		battle.makeChoices('switch 2','move splash');assert.equal(crit(battle.p1.active[0]),2);
-		battle.makeChoices('switch 2','move splash');assert.equal(crit(p),2);
+		assert.equal(layers(p),1);assert.equal(p.volatiles.triplearrows.duration,undefined);
+		battle.makeChoices('switch 2','move splash');assert.equal(crit(battle.p1.active[0]),1);
+		battle.makeChoices('switch 2','move splash');assert.equal(crit(p),1);
 	});
-	it('copying the move with Mimic does not grant eligibility',()=>{
+	it('clears only the departing ally and cannot be passed with Baton Pass',()=>{
+  const[p,t]=start('Decidueye-Hisui','Unburden',true); const ally=battle.p1.active[1]; use(p,t);
+  p.clearVolatile(); assert.equal(crit(p),1); assert.equal(crit(ally),2);
+  assert.equal(battle.dex.moves.get('triplearrows').condition.noCopy,true);
+  assert.equal(p.side.sideConditions.triplearrows,undefined);
+ });
+ it('copying the move with Mimic does not grant eligibility',()=>{
 		const[p,t]=start('Mew','No Ability');p.moveSlots[0].id='mimic';p.moveSlots[0].move='Mimic';t.lastMove=battle.dex.moves.get('triplearrows');
 		battle.actions.useMove('mimic',p,{target:t});assert(p.hasMove('triplearrows'));use(p,t);assert.equal(layers(p),0);
 	});

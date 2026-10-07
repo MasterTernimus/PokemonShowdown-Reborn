@@ -11,16 +11,16 @@ function start(species='Charizard',ability='No Ability',foe='No Ability') {
 function event(p,t,event='ModifySpA',move='flamethrower') {return battle.runEvent(event,p,t,battle.dex.getActiveMove(move),100);}
 describe('Starter species passives',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('maps exactly the 31 existing Proficient gimmick records',()=>{
+ it('maps all 76 final records and preserves exactly 31 Proficient gimmick records',()=>{
   const {AbilityComponents}=require('../../../dist/data/ability-components');
   const includesProficient=(id,seen=new Set())=>id==='proficient'||(!seen.has(id)&&(seen.add(id),(AbilityComponents[id]||[]).some(component=>includesProficient(component,seen))));
   for(const id of ProficientPassiveForms)assert(Object.values(Dex.species.get(id).abilities).some(a=>includesProficient(Dex.abilities.get(a).id)),id+' must already contain Proficient');
-  assert.equal(Object.keys(StarterPassives).length,31);assert.equal(ProficientPassiveForms.size,31);
+  assert.equal(Object.keys(StarterPassives).length,76);assert.equal(ProficientPassiveForms.size,31);
   for(const [id,passives] of Object.entries(StarterPassives)){const s=Dex.species.get(id);assert(s.exists,id);assert.equal(s.id,id);assert.deepEqual(s.passives,passives);assert(!s.evos.length,id);}
-  for(const id of ['bulbasaur','ivysaur','charmander','charmeleon','pikachu','eevee','mew','charizard','venusaur','blastoise','greninjabond','torterrarift','skeledirgealt'])assert.deepEqual(Dex.species.get(id).passives,[]);
+  for(const id of ['bulbasaur','ivysaur','charmander','charmeleon','pikachu','mew'])assert.deepEqual(Dex.species.get(id).passives,[]);
  });
  for(const [species,pinch,move] of [['Charizard','Blaze','flamethrower'],['Venusaur','Overgrow','energyball'],['Blastoise','Torrent','surf']]) {
-  it(species+' keeps its existing pinch effect active-only',()=>{const[p,t]=start(species);p.hp=1;assert.equal(event(p,t,'ModifySpA',move),100);p.setAbility(pinch);assert.equal(event(p,t,'ModifySpA',move),150);p.addVolatile('gastroacid');assert.equal(event(p,t,'ModifySpA',move),100);assert.deepEqual(p.getPassives(),[]);});
+  it(species+' keeps one passive pinch effect through selected ability and suppression',()=>{const[p,t]=start(species);p.hp=1;assert.equal(event(p,t,'ModifySpA',move),150);p.setAbility(pinch);assert.equal(event(p,t,'ModifySpA',move),150);p.addVolatile('gastroacid');assert.equal(event(p,t,'ModifySpA',move),150);assert.deepEqual(p.getPassives(),[pinch.toLowerCase()]);});
  }
  it('preserves a nested active Overgrow component',()=>{const[p,t]=start('Venusaur','Rift Dancer');p.hp=1;assert.equal(event(p,t,'ModifySpA','energyball'),150);});
  for(const id of ProficientPassiveForms)it(id+' retains one Proficient after active ability replacement/suppression',()=>{
@@ -33,22 +33,22 @@ describe('Starter species passives',()=>{
   const[p,t]=start(species,ability);p.setType(move==='bite'?'Dark':'Normal');assert.equal(event(p,t,'BasePower',move),expected);
  });
  it('ordinary shared-ability users retain active Proficient without a new passive',()=>{
-  const[p,t]=start('Charizard','Unbound Blaze');p.setType('Normal');assert.deepEqual(p.getPassives(),[]);assert.equal(event(p,t,'BasePower','tackle'),130);
+  const[p,t]=start('Charizard','Unbound Blaze');p.setType('Normal');assert.deepEqual(p.getPassives(),['blaze']);assert.equal(event(p,t,'BasePower','tackle'),130);
   p.addVolatile('gastroacid');assert.equal(event(p,t,'BasePower','tackle'),100);
  });
  it('nonstarter shared users retain active components',()=>{const[p,t]=start('Mew','Toxic Bloom');p.setType('Normal');assert.equal(event(p,t,'BasePower','tackle'),130);assert.deepEqual(p.getPassives(),[]);});
  it('Transform follows target form, resets on switching, and copying an ability never copies passives',()=>{
-  const[p,t]=start('Charizard');t.formeChange('Venusaur-Mega',null,true);assert(p.transformInto(t));assert.deepEqual(p.getPassives(),['proficient']);
-  battle.makeChoices('switch 2','move splash');battle.makeChoices('switch 2','move splash');assert.deepEqual(p.getPassives(),[]);
+  const[p,t]=start('Charizard');t.formeChange('Venusaur-Mega',null,true);assert(p.transformInto(t));assert.deepEqual(p.getPassives(),['overgrow','proficient']);
+  battle.makeChoices('switch 2','move splash');battle.makeChoices('switch 2','move splash');assert.deepEqual(p.getPassives(),['blaze']);
   t.formeChange('Mew',null,true);t.setAbility('Blaze');assert.deepEqual(t.getPassives(),[]);
  });
  it('mechanical form changes add and remove Proficient; Illusion changes neither mechanics nor public protocol',()=>{
-  const[p,t]=start('Charizard');p.illusion=t;assert.deepEqual(p.getPassives(),[]);assert.deepEqual(p.getSwitchRequestData().passives,[]);
-  p.illusion=null;p.formeChange('Charizard-Mega-X',null,true);p.illusion=t;assert.deepEqual(p.getPassives(),['proficient']);assert.deepEqual(p.getSwitchRequestData().passives,['proficient']);p.setType('Normal');const disguisedPower=event(p,t,'BasePower','tackle');p.illusion=null;assert.equal(event(p,t,'BasePower','tackle'),disguisedPower);assert.equal(disguisedPower,220); // Atrocity's independent 1.3 and contact 1.3 also apply.
-  p.formeChange('Charizard',null,true);assert.deepEqual(p.getPassives(),[]);
+  const[p,t]=start('Charizard');p.illusion=t;assert.deepEqual(p.getPassives(),['blaze']);assert.deepEqual(p.getSwitchRequestData().passives,['blaze']);
+  p.illusion=null;p.formeChange('Charizard-Mega-X',null,true);p.illusion=t;assert.deepEqual(p.getPassives(),['blaze','proficient']);assert.deepEqual(p.getSwitchRequestData().passives,['blaze','proficient']);p.setType('Normal');const disguisedPower=event(p,t,'BasePower','tackle');p.illusion=null;assert.equal(event(p,t,'BasePower','tackle'),disguisedPower);assert.equal(disguisedPower,220); // Atrocity's independent 1.3 and contact 1.3 also apply.
+  p.formeChange('Charizard',null,true);assert.deepEqual(p.getPassives(),['blaze']);
   assert(!battle.log.some(line=>line.includes('|-ability|')&&line.includes('Proficient')));
  });
- it('Greninja Bond to Ash gains Proficient immediately',()=>{const[p]=start('Greninja-Bond','Battle Bond');assert.deepEqual(p.getPassives(),[]);p.formeChange('Greninja-Ash',null,true);assert.deepEqual(p.getPassives(),['proficient']);});
+ it('Greninja Bond to Ash gains Proficient immediately',()=>{const[p]=start('Greninja-Bond','Battle Bond');assert.deepEqual(p.getPassives(),['torrent']);p.formeChange('Greninja-Ash',null,true);assert.deepEqual(p.getPassives(),['torrent','proficient']);});
  it('preserves custom field conditions, including broad Grassy Terrain Overgrow',()=>{
   const[p,t]=start('Venusaur','Overgrow');battle.field.setTerrain('grassyterrain',p);assert.equal(event(p,t,'ModifySpA','flamethrower'),150);
   p.formeChange('Charizard',null,true);p.setAbility('Blaze');battle.field.setTerrain('burningterrain',p);assert.equal(event(p,t),150);assert.equal(event(p,t,'ModifySpA','surf'),100);
@@ -61,10 +61,10 @@ describe('Starter species passives',()=>{
  });
  it('deduplicates Perfect Foresight copied components without replaying entry events',()=>{
   const[p,t]=start('Charizard-Mega-X','Perfect Foresight');p.m.perfectForesightAbility='proficient';p.m.perfectForesightAbilityState={id:'proficient',target:p};p.setType('Normal');assert.equal(event(p,t,'BasePower','tackle'),130);
-  p.m.perfectForesightAbility='blaze';p.hp=1;assert.equal(event(p,t),150);p.addVolatile('gastroacid');assert.equal(event(p,t),100);
+  p.m.perfectForesightAbility='blaze';p.hp=1;assert.equal(event(p,t),150);p.addVolatile('gastroacid');assert.equal(event(p,t),150);
  });
  it('Skill Swap and Role Play change only active ability',()=>{
-  const[p,t]=start('Charizard','Run Away');t.setAbility('Water Absorb');battle.actions.useMove('skillswap',p,{target:t});assert.equal(p.ability,'waterabsorb');assert.deepEqual(p.getPassives(),[]);assert.deepEqual(t.getPassives(),[]);
+  const[p,t]=start('Charizard','Run Away');t.setAbility('Water Absorb');battle.actions.useMove('skillswap',p,{target:t});assert.equal(p.ability,'waterabsorb');assert.deepEqual(p.getPassives(),['blaze']);assert.deepEqual(t.getPassives(),[]);
   battle.actions.useMove('roleplay',t,{target:p});assert.deepEqual(t.getPassives(),[]);
  });
  it('preserves current-type Proficient and excludes off-type moves',()=>{
@@ -80,7 +80,7 @@ describe('Starter species passives',()=>{
   input.actors[0]={species:'Charizard-Mega-X',ability:'No Ability',hpPercent:25};const plain=calculateScenario(input);
   input.actors[0].ability='Proficient';assert.deepEqual(calculateScenario(input).results,plain.results);
   input.actors[0]={species:'Charizard',ability:'No Ability',item:'Charizardite X',gimmick:'mega'};
-  const {battle:calc}=buildCalculatorBattle(validateScenario(input),0);assert.deepEqual(calc.p1.active[0].getPassives(),['proficient']);calc.destroy();
-  input.format='gen9factoryfield';input.actors[0]={species:'Charizard',ability:'No Ability',gimmick:'gmax'};const {battle:gmax}=buildCalculatorBattle(validateScenario(input),0);assert.equal(gmax.p1.active[0].species.id,'charizardgmax');assert.deepEqual(gmax.p1.active[0].getPassives(),['proficient']);gmax.destroy();
+  const {battle:calc}=buildCalculatorBattle(validateScenario(input),0);assert.deepEqual(calc.p1.active[0].getPassives(),['blaze','proficient']);calc.destroy();
+  input.format='gen9factoryfield';input.actors[0]={species:'Charizard',ability:'No Ability',gimmick:'gmax'};const {battle:gmax}=buildCalculatorBattle(validateScenario(input),0);assert.equal(gmax.p1.active[0].species.id,'charizardgmax');assert.deepEqual(gmax.p1.active[0].getPassives(),['blaze','proficient']);gmax.destroy();
  });
 });

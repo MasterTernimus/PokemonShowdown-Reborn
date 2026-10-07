@@ -2,6 +2,13 @@ import {AbilityDisplaySummaries} from './ability-display-summaries';
 import { Aliases } from './aliases';
 import {AbilityComponents} from './ability-components';
 
+/** Break long player text into readable points without dropping rules or splitting stat names. */
+export function abilityDescriptionLines(description: string): string[] {
+	return description.replace(/\b(Sp|No|Mr|Mrs)\.\s/g, '$1\u0001 ')
+		.split(/\.\s+(?=[A-Z0-9])|;\s+/)
+		.map(line => line.replace(/\u0001/g, '.').trim()).filter(Boolean);
+}
+
 // Display-only additions confirmed by named descriptions and active implementation.
 // Do not alter battle identity when filling omissions in the mechanical registry.
 const AdditionalDisplayComponents: {[id: string]: string[]} = {
@@ -187,6 +194,8 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 // The legacy identity registry is not always an exact implementation summary.
 // Burning Crown uses flat damage reduction, not Filter; its other delegates remain active.
 const DisplayComponentOverrides: {[id: string]: string[]} = {
+ pollenbloom: ['thickfat', 'unaware', 'proficient'],
+ atrocity: ['unboundblaze', 'toughclaws'],
  unboundblaze: ['dragonize', 'magmaarmor', 'proficient'],
  soulcremation: ['soulsiphon', 'soulpyre', 'malicewell'],
  burningcrown: ['intimidate', 'whitesmoke', 'moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient'],

@@ -1,3 +1,4 @@
+import {passiveEffect, passiveState, thematicPassives} from './species-passives';
 import {adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCaptureMove, adaptiveSkipAbility, adaptiveIgnoresAbility, adaptiveCheckpoint, adaptiveResistsBypass, adaptiveAnalyzed, adaptivePreventDamage, adaptiveDamaged, adaptiveDamageMultiplier, adaptiveEnvironmentalContribution, adaptiveEnvironment, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 /* eslint-disable @stylistic/max-len */
 /**
@@ -17,6 +18,7 @@ import {adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCapture
  */
 
 import { reduceGraveHungerHealing } from '../data/approved-signatures';
+import { AbilityComponents } from '../data/ability-components';
 import { Dex, toID } from './dex';
 import { validateChallengeOptions, type ChallengeOptions } from './challenge-options';
 import { Teams } from './teams';
@@ -427,9 +429,9 @@ export class Battle {
 		this.add('message', "The battle's RNG was reset.");
 	}
 
-	suppressingAbility(target?: Pokemon) {
+	suppressingAbility(target?: Pokemon, component?: Ability) {
 		if (target && adaptiveResistsBypass(target, this.activePokemon)) return false;
-		if (target?.getAbility().flags['cantsuppress']) return false;
+		if ((component || target?.getAbility())?.flags['cantsuppress']) return false;
 		return this.activePokemon && this.activePokemon.isActive && (this.activePokemon !== target || this.gen < 8) &&
 			this.activeMove && this.activeMove.ignoreAbility && !target?.hasItem('Ability Shield');
 	}
@@ -606,7 +608,10 @@ export class Battle {
 			// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
 			if (handler.state?.target instanceof Pokemon) {
 				let expectedStateLocation;
-				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
+				if (handler.state.speciesPassive) {
+					expectedStateLocation = handler.state.target.getPassives().includes(handler.state.speciesPassive) ?
+						handler.state.target.passiveStates[handler.state.speciesPassive] : undefined;
+				} else if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
 					const stateTarget = handler.state.target;
 					if (
 						['perfectforesight'].includes(stateTarget.ability) &&
@@ -1244,8 +1249,17 @@ export class Battle {
 				}, callbackName));
 			}
 		}
+		for (const id of thematicPassives(pokemon)) {
+			const component = this.dex.abilities.get(id);
+			if (component.flags.breakable && this.suppressingAbility(pokemon, component)) continue;
+			const passive = passiveEffect(this, id);
+			const callback = this.getCallback(pokemon, passive, callbackName);
+			if (callback === undefined) continue;
+			handlers.push(this.resolvePriority({effect: passive, callback, state: passiveState(pokemon, id),
+				end() {}, effectHolder: pokemon}, callbackName));
+		}
 		const ability = pokemon.getAbility();
-		if (pokemon.getPassives().length && callbackName === 'onBasePower') {
+		if (pokemon.getPassives().some(id => ['overgrow', 'blaze', 'torrent', 'proficient'].includes(id)) && ['onBasePower', 'onModifyAtk', 'onModifySpA'].includes(callbackName)) {
 			const passive = this.dex.conditions.get('starterpassives');
 			const passiveCallback = this.getCallback(pokemon, passive, callbackName);
 			handlers.push(this.resolvePriority({
@@ -3472,6 +3486,58 @@ export class Battle {
 	}
 
 	add(...parts: (Part | (() => { side: SideID, secret: string, shared: string }))[]) {
+		// Preserve Dread Wings' original activation before composite-name rewriting.
+		if (parts[0] === '-ability' && this.effectState?.id === 'dreadwings' &&
+			parts[1] instanceof Pokemon && ['Intimidate', 'Unnerve'].includes(String(parts[2]))) {
+			const component = parts[2];
+			parts[2] = parts[1].getAbility().name;
+			parts.push(`[component] ${component}`);
+		}
+		// Component activations reveal the selected composite, not a replacement ability.
+		const holder = this.effectState?.target;
+		if (!this.effectState?.speciesPassive && holder instanceof Pokemon && !holder.illusion &&
+			this.effect?.effectType === 'Ability' && this.effectState === holder.abilityState &&
+			!parts.some(part => typeof part === 'string' && (part.startsWith('[from] move:') ||
+				(parts[0] === '-ability' && part.startsWith('[from]'))))) {
+			const components = new Set<string>();
+			const collect = (id: string) => {
+				for (const component of AbilityComponents[id] || []) {
+					if (components.has(component)) continue;
+					components.add(component);
+					collect(component);
+				}
+			};
+			collect(holder.ability);
+			const attributedHolder = parts.find(part => typeof part === 'string' && part.startsWith('[of] '));
+			const namedHolder = attributedHolder ? attributedHolder === `[of] ${holder}` : parts[1] === holder;
+			if (namedHolder && components.size) {
+				parts = parts.map((part, index) => {
+					if (typeof part !== 'string') return part;
+					const prefix = part.startsWith('[from] ability: ') ? '[from] ability: ' :
+						part.startsWith('ability: ') ? 'ability: ' : parts[0] === '-ability' && index === 2 ? '' : null;
+					if (prefix === null || !components.has(toID(part.slice(prefix.length)))) return part;
+					return prefix + holder.getAbility().name;
+				});
+			}
+		}
+		// A passive activation must never teach the client a selected ability (or reveal a disguised holder).
+		if (this.effectState?.speciesPassive) {
+			const ability = this.dex.abilities.get(this.effectState.speciesPassive);
+			const holder = this.effectState.target as Pokemon;
+			if (['-boost', '-unboost'].includes(String(parts[0])) && !parts.some(part => typeof part === 'string' && part.startsWith('[from]'))) {
+				parts.push(`[from] passive: ${ability.name}`);
+			}
+			if (holder?.illusion) {
+				if (parts[0] === '-block') {
+					parts = ['-immune', parts[1]];
+				} else {
+					parts = parts.filter(part => typeof part !== 'string' || (!part.includes('ability: ' + ability.name) && !part.includes('passive: ' + ability.name) && !part.startsWith('[of]')));
+				}
+			} else {
+				parts = parts.map(part => typeof part === 'string' ? part.replace('ability: ' + ability.name, 'passive: ' + ability.name) : part);
+			}
+		}
+
 		if (!parts.some(part => typeof part === 'function')) {
 			this.log.push(`|${parts.join('|')}`);
 			return;

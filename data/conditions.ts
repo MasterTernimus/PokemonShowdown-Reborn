@@ -11,6 +11,18 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, source, target, move) {
+			for (const id of source.getPassives()) {
+				if (id !== 'proficient') this.dex.abilities.getHandler(id, 'onModifyAtk')?.call(this, atk, source, target, move);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, source, target, move) {
+			for (const id of source.getPassives()) {
+				if (id !== 'proficient') this.dex.abilities.getHandler(id, 'onModifySpA')?.call(this, atk, source, target, move);
+			}
+		},
 	},
 	vanguardlaststand: {
 		name: 'Vanguard Last Stand',
@@ -487,6 +499,31 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (move.category !== 'Status') return this.chainModify(0.8);
 		},
 	},
+	voidcrossingcurse: {
+		name: 'Void Crossing curse', noCopy: true, duration: 2,
+		onStart(target, source) {
+			this.add('-start', target, 'Void Crossing curse', '[from] ability: Void Crossing', `[of] ${source}`);
+		},
+		onRestart() {
+			this.effectState.duration = 2;
+		},
+		onTryMove(source, target, move) {
+			if (move.category !== 'Status') this.effectState.cursedMove = this.activeMove;
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (move.category !== 'Status' && this.effectState.cursedMove === this.activeMove) return this.chainModify(0.8);
+		},
+		onAfterMove(pokemon) {
+			if (this.effectState.cursedMove) pokemon.removeVolatile('voidcrossingcurse');
+		},
+		onAfterMoveSecondarySelf(pokemon) {
+			if (this.effectState.cursedMove === this.activeMove) pokemon.removeVolatile('voidcrossingcurse');
+		},
+		onResidualOrder: 100,
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Void Crossing curse');
+		},
+	},
 	royalescortspent: {name: 'royalescortspent', noCopy: true},
 	royalescortshield: {
 		name: 'royalescortshield', noCopy: true, duration: 2,
@@ -529,7 +566,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	wisecounselspent: {name: 'wisecounselspent', noCopy: true},
 	mindcurrentspent: {name: 'mindcurrentspent', noCopy: true},
 	fortunatewingspent: {name: 'fortunatewingspent', noCopy: true},
-	spectralcrossingspent: {name: 'spectralcrossingspent', noCopy: true},
 	trapped: {
 		name: 'trapped',
 		noCopy: true,

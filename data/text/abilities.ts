@@ -2,7 +2,7 @@ import { AbilityDescriptionOverrides } from '../ability-descriptions';
 import { getAbilitySelectorSummary } from '../ability-display';
 import { RosterExpansionDescriptions, RosterExpansionShortDescriptions } from '../roster-expansion-text';
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
-	voidcrossing: {"name":"Void Crossing","desc":"Levitate + Magic Guard. Its first executed damaging Ghost move or Power Gem each entry bypasses opposing screens and Substitute. Misses, protection and immunity still spend the bypass; being prevented from acting does not. Switching restores the use. Includes the components’ normal effects and field interactions.","shortDesc":"Its first Ghost attack or Power Gem bypasses screens and Substitute."},
+	voidcrossing: {name: 'Void Crossing', ...AbilityDescriptionOverrides.voidcrossing},
 	mindcurrent: {"name":"Mind Current","desc":"Full Inner Focus blocks flinching and Intimidate's Attack drop. Once per entry, a damaging Psychic move dealing damage to a foe or its Substitute grants Charge after the move finishes. The triggering move cannot consume the new Charge. Misses, Protect and immunity do not spend the use.","shortDesc":"Inner Focus; first damaging Psychic move each entry grants Charge after the move completes."},
 	wisecounsel: {"name":"Wise Counsel","desc":"Full Inner Focus blocks flinching and Intimidate's Attack drop. Once per entry, successfully using Instruct on an active ally cures that ally's confusion before its ordinary repeated action. Failed Instruct and non-ally targets do not trigger or spend the use.","shortDesc":"Inner Focus; first successful ally Instruct each entry cures confusion before the repeated action."},
 	disorientingmind: {"name":"Disorienting Mind","desc":"Full Infiltrator bypasses Substitute and opposing protective screens. Once per entry, its first damaging Psychic attack dealing opposing HP damage applies Torment after damage, subject to normal eligibility. Misses, Protect and immunity do not spend the use.","shortDesc":"Infiltrator; first damaging Psychic hit each entry applies Torment after damage."},
@@ -1010,8 +1010,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		"name": "Atrocity",
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Contact moves have 1.3x power. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Critical-hit ratio rises by 1. Dragon Rush cannot miss and has a further 1.5x power. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
-		"shortDesc": "Mold Breaker; stronger attacks and defenses; healing, Fire chip and never-miss Dragon Rush."
+		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Contact moves have 1.3x power. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
+		"shortDesc": "Mold Breaker; stronger attacks and defenses; healing and Fire chip."
 	},
 	wickedsnare: {
 		name: "Wicked Snare",
@@ -3920,8 +3920,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pollenbloom: {
 		name: "Pollen Bloom",
-		desc: "This Pokemon has Proficient, Thick Fat and Unaware's effects. At the end of each turn, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; this Pokemon heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip.",
-		shortDesc: "Proficient + Thick Fat + Unaware; healing Grass chip scales by type in FFA.",
+		"desc": "Thick Fat + Unaware. Same-type attacks gain 30% power. Fire and Ice attacks use half the attacker's attacking stat; hail causes no damage. Ignores the foe's Defense, Sp. Def and evasion changes when attacking, and their Attack, Defense, Sp. Atk and accuracy changes when defending. Reveals opposing Illusions on entry. At each turn's end, drains 1/16 of each foe's base maximum HP and heals by the HP actually drained. Grass types and Grass-immune foes are unaffected. In Free-for-All only, Grass weaknesses and resistances change the drain amount.",
+		"shortDesc": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA."
 	},
 	waterbarrage: {
 		name: "Water Barrage",

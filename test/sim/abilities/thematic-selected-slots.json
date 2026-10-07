@@ -1,0 +1,286 @@
+{
+  "baltoy": {
+    "abilities": {
+      "0": "Levitate"
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 40,
+      "def": 55,
+      "spa": 40,
+      "spd": 70,
+      "spe": 55
+    },
+    "types": [
+      "Ground",
+      "Psychic"
+    ],
+    "slot": "0",
+    "replacement": "Own Tempo"
+  },
+  "claydol": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Relic Beam",
+      "H": "Defragment"
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 70,
+      "def": 105,
+      "spa": 70,
+      "spd": 120,
+      "spe": 75
+    },
+    "types": [
+      "Ground",
+      "Fairy"
+    ],
+    "slot": "0",
+    "replacement": "Clear Body"
+  },
+  "misdreavus": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Prankster",
+      "H": "Perish Body"
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 40,
+      "def": 80,
+      "spa": 85,
+      "spd": 85,
+      "spe": 85
+    },
+    "types": [
+      "Ghost",
+      "Fairy"
+    ],
+    "slot": "0",
+    "replacement": "Infiltrator"
+  },
+  "duskull": {
+    "abilities": {
+      "0": "Levitate",
+      "H": "Frisk"
+    },
+    "baseStats": {
+      "hp": 20,
+      "atk": 40,
+      "def": 90,
+      "spa": 30,
+      "spd": 90,
+      "spe": 25
+    },
+    "types": [
+      "Ghost"
+    ],
+    "slot": "0",
+    "replacement": "Infiltrator"
+  },
+  "cryogonal": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Mirror Armor",
+      "H": "Purifying Frost"
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 50,
+      "def": 65,
+      "spa": 100,
+      "spd": 135,
+      "spe": 105
+    },
+    "types": [
+      "Ice",
+      "Ghost"
+    ],
+    "slot": "0",
+    "replacement": "Ice Body"
+  },
+  "rotom": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Electromorphosis",
+      "H": "Defragment"
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "types": [
+      "Electric",
+      "Ghost"
+    ],
+    "slot": "0",
+    "replacement": "Infiltrator"
+  },
+  "rotomheat": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Drought",
+      "H": "Flame Body"
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "types": [
+      "Electric",
+      "Fire"
+    ],
+    "slot": "0",
+    "replacement": "White Smoke"
+  },
+  "rotomwash": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Storm Drain",
+      "H": "Drizzle"
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "types": [
+      "Electric",
+      "Water"
+    ],
+    "slot": "0",
+    "replacement": "Hydration"
+  },
+  "rotomfrost": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Refrigerate",
+      "H": "Snow Warning"
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "types": [
+      "Electric",
+      "Ice"
+    ],
+    "slot": "0",
+    "replacement": "Clear Body"
+  },
+  "rotomfan": {
+    "abilities": {
+      "0": "Wind Power",
+      "1": "Windy Surge",
+      "H": "Air Lock",
+      "S": "Levitate"
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "slot": "S",
+    "replacement": "Soundproof"
+  },
+  "rotommow": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Grassy Surge",
+      "H": "Seed Sower"
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "types": [
+      "Electric",
+      "Grass"
+    ],
+    "slot": "0",
+    "replacement": "Leaf Guard"
+  },
+  "tynamo": {
+    "abilities": {
+      "0": "Levitate"
+    },
+    "baseStats": {
+      "hp": 35,
+      "atk": 55,
+      "def": 40,
+      "spa": 45,
+      "spd": 40,
+      "spe": 60
+    },
+    "types": [
+      "Electric"
+    ],
+    "slot": "0",
+    "replacement": "Static"
+  },
+  "eelektrik": {
+    "abilities": {
+      "0": "Levitate"
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 85,
+      "def": 70,
+      "spa": 75,
+      "spd": 70,
+      "spe": 40
+    },
+    "types": [
+      "Electric"
+    ],
+    "slot": "0",
+    "replacement": "Static"
+  },
+  "koffing": {
+    "abilities": {
+      "0": "Levitate",
+      "1": "Neutralizing Gas",
+      "H": "Stench"
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 65,
+      "def": 95,
+      "spa": 60,
+      "spd": 45,
+      "spe": 35
+    },
+    "types": [
+      "Poison"
+    ],
+    "slot": "0",
+    "replacement": "Aftermath"
+  }
+}
