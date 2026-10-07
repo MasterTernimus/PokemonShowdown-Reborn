@@ -730,7 +730,7 @@ AbilityComponents.wreckingcrew = ['ironfist'];
 
 Object.assign(AbilityComponents, {"evergreen":["overcoat","ripen"],"battlegrip":["moxie"],"scentscout":["frisk"],"surefoot":["innerfocus"],"baitedbloom":["gluttony","stickyhold"],"guidinggallop":["pastelveil"],"carrionwatch":["frisk","unnerve"]});
 
-Object.assign(AbilityComponents, {"scaleshelter":["shielddust","overcoat"],"stagesweep":["screencleaner"],"icebreaker":["hypercutter"],"cactuschorus":["waterabsorb"],"crushingvenom":["strongjaw"],"crosswire":["ironfist"],"deepchill":["oblivious"],"climatereserve":[]});
+Object.assign(AbilityComponents, {"scaleshelter":["shielddust","overcoat"],"stagesweep":["screencleaner"],"icebreaker":["hypercutter"],"cactuschorus":["waterabsorb","sandrush"],"crushingvenom":["strongjaw"],"crosswire":["ironfist"],"deepchill":["oblivious"],"climatereserve":[]});
 
 Object.assign(AbilityComponents, {"tunnelclearance":["hypercutter"],"crystalbastion":["sturdy"],"buriedcoil":["sandspit"],"staticreserve":["static"],"lockinggrip":["hypercutter"],"garlandgift":["flowerveil"]});
 

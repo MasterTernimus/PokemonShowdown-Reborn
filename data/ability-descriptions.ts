@@ -3168,8 +3168,8 @@ AbilityDescriptionOverrides.icebreaker = {
 };
 
 AbilityDescriptionOverrides.cactuschorus = {
-	"desc": "Full local Water Absorb: absorbs Water moves for 1/4 max HP and retains its field healing. A successful Helping Hand also clears the recipient ally's confusion.",
-	"shortDesc": "Water Absorb; successful Helping Hand clears the recipient ally's confusion."
+	"desc": "Water Absorb absorbs Water moves for 1/4 max HP and retains its field healing. Sand Rush doubles Speed in sandstorm, Desert Field, and Ashen Beach, and prevents sandstorm damage. A successful Helping Hand also clears the recipient ally's confusion.",
+	"shortDesc": "Water Absorb + Sand Rush; successful Helping Hand clears the recipient ally's confusion."
 };
 
 AbilityDescriptionOverrides.crushingvenom = {
