@@ -8504,7 +8504,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('fortressshell'));
 		},
 		onTryHit(target, source, move) {
-			if (target !== source && this.movehasType(move, 'Electric') && this.field.isTerrain(['electricterrain', 'murkwatersurfaceterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'factoryterrain', 'shortcircuitterrain'])) {
+			if (target !== source && this.movehasType(move, 'Electric') && (this.field.isAura('electricterrain') || this.field.isTerrain(['electricterrain', 'murkwatersurfaceterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'factoryterrain', 'shortcircuitterrain']))) {
 				if (!this.boost({ spa: 1, atk: 1 }, target, target)) {
 					this.add('-immune', target, '[from] ability: Fortress Shell');
 				}
@@ -8528,7 +8528,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('waterbarrage').onModifyMove?.call(this, move, source, target);
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			if (!this.field.isTerrain(['electricterrain', 'murkwatersurfaceterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'factoryterrain', 'shortcircuitterrain'])) return;
+			if (!(this.field.isAura('electricterrain') || this.field.isTerrain(['electricterrain', 'murkwatersurfaceterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'factoryterrain', 'shortcircuitterrain']))) return;
 			if (!this.movehasType(move, 'Electric')) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
