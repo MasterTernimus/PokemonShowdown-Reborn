@@ -1,6 +1,6 @@
 /** Explicit final-stage starter roster, grouped by original family affiliation. These are species traits, never selectable abilities. */
 export const StarterPassives: {[id: string]: readonly string[]} = {};
-export const ProficientPassiveForms = new Set(('venusaurmega venusaurgmax charizardmegax charizardmegaxalt charizardmegay charizardgmax blastoisemega blastoisegmax meganiummega meganiummegay typhlosionmega feraligatrmega feraligatrgmax sceptilemega blazikenmega swampertmega torterramegax torterramegay infernapemega empoleonmega serperiormega emboarmega emboarmegareborn chesnaughtmega delphoxmega greninjaash greninjamega rillaboomgmax cinderacegmax cinderacemega inteleongmax').split(' '));
+export const ProficientPassiveForms = new Set(('venusaurmega venusaurgmax charizardmegax charizardmegaxalt charizardmegay charizardgmax blastoisemega blastoisegmax meganiummega meganiummegay typhlosionmega feraligatrmega feraligatrgmax sceptilemega blazikenmega swampertmega torterramegax torterramegay infernapemega empoleonmega serperiormega emboarmega emboarmegareborn chesnaughtmega delphoxmega greninjaash greninjamega rillaboomgmax cinderacegmax cinderacemega inteleongmax torterrarift torterrariftshatter greninjabond').split(' '));
 export const StarterFamilies = {
   "overgrow": [
     "venusaur",
@@ -86,6 +86,6 @@ export const StarterFamilies = {
   ]
 } as const;
 for (const [passive, ids] of Object.entries(StarterFamilies)) {
-	for (const id of ids) StarterPassives[id] = Object.freeze(ProficientPassiveForms.has(id) ? ['proficient'] : id === 'torterrarift' || id === 'torterrariftshatter' ? [] : [passive]);
+	for (const id of ids) StarterPassives[id] = Object.freeze(ProficientPassiveForms.has(id) ? ['proficient'] : [passive]);
 }
 Object.freeze(StarterPassives);

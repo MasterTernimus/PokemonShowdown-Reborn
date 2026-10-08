@@ -35,7 +35,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Poison"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80 },
-		abilities: { 0: "Pollen Bloom", 1: "Hospitality", H: "Chlorophyll" },
+		abilities: {"0":"Pollen Bloom","1":"Creeping Bloom","H":"Chlorophyll","S":"Uproot"},
 		heightm: 2,
 		weightkg: 100,
 		color: "Green",
@@ -1456,7 +1456,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Dugtrio",
 		types: ["Ground"],
 		baseStats: { hp: 35, atk: 100, def: 50, spa: 50, spd: 70, spe: 120 },
-		abilities: { 0: "Hydra Bond", 1: "Arena Trap", H: "Sand Force" },
+		abilities: {"0":"Hydra Bond","1":"Arena Trap","H":"Sand Rush"},
 		heightm: 0.7,
 		weightkg: 33.3,
 		color: "Brown",
@@ -3405,7 +3405,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Normal"],
 		gender: "N",
 		baseStats: { hp: 48, atk: 48, def: 48, spa: 48, spd: 48, spe: 48 },
-		abilities: { 0: "Limber", H: "Imposter" },
+		abilities: {"0":"Frisk","H":"Imposter"},
 		heightm: 0.3,
 		weightkg: 4,
 		color: "Purple",
@@ -3641,7 +3641,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Normal"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 160, atk: 125, def: 90, spa: 40, spd: 125, spe: 30 },
-		abilities: { 0: "Accumulation", 1: "Guts", H: "Gluttony" },
+		abilities: {"0":"Accumulation","1":"Slumbering Giant","H":"Cheek Pouch"},
 		heightm: 2.1,
 		weightkg: 460,
 		color: "Black",
@@ -4221,7 +4221,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Crobat",
 		types: ["Poison", "Flying"],
 		baseStats: { hp: 80, atk: 100, def: 80, spa: 100, spd: 80, spe: 130 },
-		abilities: { 0: "Inner Focus", 1: "Wind Rider", H: "Winged Wraith" },
+		abilities: {"0":"Poison Touch","1":"Wind Rider","H":"Winged Wraith"},
 		heightm: 1.8,
 		weightkg: 75,
 		color: "Purple",
@@ -4536,7 +4536,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Sudowoodo",
 		types: ["Rock", "Fairy"],
 		baseStats: { hp: 110, atk: 120, def: 125, spa: 30, spd: 85, spe: 30 },
-		abilities: { 0: "Sturdy", 1: "Brute Force", H: "Mold Breaker" },
+		abilities: {"0":"Rattled","1":"Brute Force","H":"Mold Breaker"},
 		heightm: 1.2,
 		weightkg: 38,
 		color: "Brown",
@@ -4818,7 +4818,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Psychic"],
 		gender: "N",
 		baseStats: { hp: 48, atk: 72, def: 48, spa: 72, spd: 48, spe: 48 },
-		abilities: { 0: "Levitate" },
+		abilities: {"0":"Analytic"},
 		heightm: 0.5,
 		weightkg: 5,
 		color: "Black",
@@ -6720,7 +6720,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Bug", "Electric"],
 		gender: "M",
 		baseStats: { hp: 65, atk: 47, def: 85, spa: 73, spd: 85, spe: 115 },
-		abilities: { 0: "Illuminate", 1: "Swarm", H: "Prankster" },
+		abilities: {"0":"Battery","1":"Swarm","H":"Prankster"},
 		heightm: 0.7,
 		weightkg: 17.7,
 		color: "Gray",
@@ -7104,7 +7104,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Altaria",
 		types: ["Dragon", "Flying"],
 		baseStats: { hp: 85, atk: 80, def: 90, spa: 80, spd: 105, spe: 80 },
-		abilities: { 0: "Natural Cure", 1: "Fluffy", H: "Cloud Nine", S: "Echo Fiend" },
+		abilities: {"0":"Aroma Veil","1":"Fluffy","H":"Cloud Nine","S":"Echo Fiend"},
 		heightm: 1.1,
 		weightkg: 20.6,
 		color: "Blue",
@@ -7843,7 +7843,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Huntail",
 		types: ["Water", "Dark"],
 		baseStats: { hp: 70, atk: 114, def: 115, spa: 94, spd: 85, spe: 52 },
-		abilities: { 0: "Swift Swim", 1: "Strong Jaw", H: "Water Veil" },
+		abilities: {"0":"Swift Swim","1":"Strong Jaw","H":"Water Absorb"},
 		heightm: 1.7,
 		weightkg: 27,
 		color: "Blue",
@@ -8788,7 +8788,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Bug", "Grass"],
 		gender: "F",
 		baseStats: { hp: 60, atk: 59, def: 85, spa: 79, spd: 105, spe: 36 },
-		abilities: { 0: "Anticipation", H: "Overcoat" },
+		abilities: {"0":"Anticipation","H":"Leaf Guard"},
 		heightm: 0.5,
 		weightkg: 6.5,
 		color: "Green",
@@ -8806,7 +8806,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Bug", "Ground"],
 		gender: "F",
 		baseStats: { hp: 60, atk: 79, def: 105, spa: 59, spd: 85, spe: 36 },
-		abilities: { 0: "Anticipation", H: "Overcoat" },
+		abilities: {"0":"Anticipation","H":"Battle Armor"},
 		heightm: 0.5,
 		weightkg: 6.5,
 		color: "Brown",
@@ -8822,7 +8822,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Bug", "Steel"],
 		gender: "F",
 		baseStats: { hp: 60, atk: 69, def: 95, spa: 69, spd: 95, spe: 36 },
-		abilities: { 0: "Anticipation", H: "Overcoat" },
+		abilities: {"0":"Anticipation","H":"Heatproof"},
 		heightm: 0.5,
 		weightkg: 6.5,
 		color: "Red",
@@ -8876,7 +8876,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Pachirisu",
 		types: ["Electric"],
 		baseStats: { hp: 60, atk: 45, def: 70, spa: 45, spd: 90, spe: 95 },
-		abilities: { 0: "Run Away", 1: "Pickup", H: "Electric Surge" },
+		abilities: {"0":"Run Away","1":"Cheek Pouch","H":"Electric Surge"},
 		heightm: 0.4,
 		weightkg: 3.9,
 		color: "White",
@@ -8978,7 +8978,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseForme: "West",
 		types: ["Water", "Ground"],
 		baseStats: { hp: 111, atk: 83, def: 78, spa: 97, spd: 92, spe: 39 },
-		abilities: { 0: "Sticky Hold", 1: "Storm Drain", H: "Poison Heal" },
+		abilities: {"0":"Rain Dish","1":"Storm Drain","H":"Poison Heal"},
 		heightm: 0.9,
 		weightkg: 29.9,
 		color: "Purple",
@@ -10073,7 +10073,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Ice", "Ghost"],
 		gender: "F",
 		baseStats: { hp: 70, atk: 70, def: 70, spa: 110, spd: 70, spe: 110 },
-		abilities: {"0":"Cursed Body","1":"Ice Mirror","H":"Wailing Snow"},
+		abilities: {"0":"Infiltrator","1":"Ice Mirror","H":"Wailing Snow"},
 		heightm: 1.3,
 		weightkg: 26.6,
 		color: "White",
@@ -12641,7 +12641,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Emolga",
 		types: ["Electric", "Flying"],
 		baseStats: { hp: 55, atk: 75, def: 60, spa: 75, spd: 60, spe: 103 },
-		abilities: { 0: "Static", 1: "Wind Rider", H: "Motor Drive" },
+		abilities: {"0":"Competitive","1":"Wind Rider","H":"Motor Drive"},
 		heightm: 0.4,
 		weightkg: 5,
 		color: "White",
@@ -14628,7 +14628,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Kabuki",
 		types: ["Normal", "Fighting"],
 		baseStats: { hp: 75, atk: 110, def: 80, spa: 65, spd: 100, spe: 112 },
-		abilities: { 0: "Fur Coat", 1: "Defiant", H: "Inner Focus" },
+		abilities: {"0":"Fur Coat","1":"Defiant","H":"Scrappy"},
 		heightm: 1.2,
 		weightkg: 28,
 		color: "Red",
@@ -14816,7 +14816,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Aromatisse",
 		types: ["Fairy"],
 		baseStats: { hp: 101, atk: 72, def: 72, spa: 99, spd: 89, spe: 29 },
-		abilities: { 0: "Invigorate", 1: "Aroma Veil", H: "Triage" },
+		abilities: {"0":"Invigorate","1":"Symbiosis","H":"Triage"},
 		heightm: 0.8,
 		weightkg: 15.5,
 		color: "Pink",
@@ -16527,7 +16527,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Bewear",
 		types: ["Normal", "Fighting"],
 		baseStats: { hp: 130, atk: 135, def: 70, spa: 75, spd: 70, spe: 70 },
-		abilities: { 0: "Scrappy", 1: "Fluffy", H: "Unaware" },
+		abilities: {"0":"Scrappy","1":"Thick Fat","H":"Unaware","S":"Multipulse"},
 		heightm: 2.1,
 		weightkg: 135,
 		color: "Pink",
@@ -17300,7 +17300,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Bruxish",
 		types: ["Water", "Psychic"],
 		baseStats: { hp: 68, atk: 105, def: 70, spa: 70, spd: 70, spe: 92 },
-		abilities: { 0: "Dazzling", 1: "Strong Jaw", H: "Wonder Skin" },
+		abilities: {"0":"Dazzling","1":"Swift Swim","H":"Wonder Skin"},
 		heightm: 0.9,
 		weightkg: 19,
 		color: "Pink",
@@ -20566,7 +20566,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Mabosstiff",
 		types: ["Dark", "Psychic"],
 		baseStats: { hp: 80, atk: 120, def: 90, spa: 60, spd: 70, spe: 85 },
-		abilities: { 0: "Intimidate", 1: "Guard Dog", H: "Strong Jaw" },
+		abilities: {"0":"Intimidate","1":"Guard Dog","H":"Stakeout"},
 		heightm: 1.1,
 		weightkg: 61,
 		color: "Gray",
@@ -20916,7 +20916,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Orthworm",
 		types: ["Steel"],
 		baseStats: { hp: 70, atk: 85, def: 145, spa: 60, spd: 55, spe: 65 },
-		abilities: { 0: "Earth Eater", 1: "Filter", H: "Sand Veil" },
+		abilities: {"0":"Sturdy","1":"Filter","H":"Sand Veil"},
 		heightm: 2.5,
 		weightkg: 310,
 		color: "Pink",
@@ -24277,3 +24277,102 @@ Pokedex.rotommow.abilities!['0'] = 'Leaf Guard';
 Pokedex.tynamo.abilities!['0'] = 'Static';
 Pokedex.eelektrik.abilities!['0'] = 'Static';
 Pokedex.koffing.abilities!['0'] = 'Aftermath';
+
+// Approved replacements for 38 redundant selected slots; species passives stay unchanged.
+Pokedex.butterfree.abilities = {"0":"Compound Eyes","1":"Tinted Lens","H":"Magic Guard"};
+Pokedex.vivillon.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+Pokedex.dustox.abilities = {"0":"Compound Eyes","1":"Unaware","H":"Toxic Cocoon"};
+Pokedex.swalot.abilities = {"0":"Sticky Hold","1":"Neutralization","H":"Accumulation"};
+Pokedex.gulpin.abilities = {"0":"Corrosion","1":"Sticky Hold","H":"Gluttony"};
+Pokedex.tentacool.abilities = {"0":"Clear Body","1":"Water Veil","H":"Rain Dish"};
+Pokedex.watchog.abilities = {"0":"Illuminate","1":"Frisk","H":"Analytic"};
+Pokedex.alcremie.abilities = {"0":"Ripen","H":"Aroma Veil"};
+Pokedex.milcery.abilities = {"0":"Ripen","H":"Aroma Veil"};
+Pokedex.swirlix.abilities = {"0":"Healer","H":"Unburden"};
+Pokedex.eevee.abilities = {"0":"Pickup","1":"Adaptability","H":"Anticipation"};
+if (Pokedex.vivillonarchipelago) Pokedex.vivillonarchipelago.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivilloncontinental) Pokedex.vivilloncontinental.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonelegant) Pokedex.vivillonelegant.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillongarden) Pokedex.vivillongarden.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonhighplains) Pokedex.vivillonhighplains.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonicysnow) Pokedex.vivillonicysnow.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonjungle) Pokedex.vivillonjungle.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonmarine) Pokedex.vivillonmarine.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonmodern) Pokedex.vivillonmodern.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonmonsoon) Pokedex.vivillonmonsoon.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonocean) Pokedex.vivillonocean.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonpolar) Pokedex.vivillonpolar.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonriver) Pokedex.vivillonriver.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonsandstorm) Pokedex.vivillonsandstorm.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonsavanna) Pokedex.vivillonsavanna.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonsun) Pokedex.vivillonsun.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillontundra) Pokedex.vivillontundra.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonfancy) Pokedex.vivillonfancy.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.vivillonpokeball) Pokedex.vivillonpokeball.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
+if (Pokedex.alcremierubycream) Pokedex.alcremierubycream.abilities = {"0":"Ripen","H":"Aroma Veil"};
+if (Pokedex.alcremiematchacream) Pokedex.alcremiematchacream.abilities = {"0":"Ripen","H":"Aroma Veil"};
+if (Pokedex.alcremiemintcream) Pokedex.alcremiemintcream.abilities = {"0":"Ripen","H":"Aroma Veil"};
+if (Pokedex.alcremielemoncream) Pokedex.alcremielemoncream.abilities = {"0":"Ripen","H":"Aroma Veil"};
+if (Pokedex.alcremiesaltedcream) Pokedex.alcremiesaltedcream.abilities = {"0":"Ripen","H":"Aroma Veil"};
+if (Pokedex.alcremierubyswirl) Pokedex.alcremierubyswirl.abilities = {"0":"Ripen","H":"Aroma Veil"};
+if (Pokedex.alcremiecaramelswirl) Pokedex.alcremiecaramelswirl.abilities = {"0":"Ripen","H":"Aroma Veil"};
+if (Pokedex.alcremierainbowswirl) Pokedex.alcremierainbowswirl.abilities = {"0":"Ripen","H":"Aroma Veil"};
+
+// Approved support choices; preserve all other slots.
+Pokedex.butterfree.abilities!["0"] = 'Gentle Scales';
+Pokedex.beedrill.abilities!["0"] = 'Hive Courier';
+
+// Approved replacements for the four newly redundant standalone slots.
+Pokedex.grimer.abilities!["1"] = "Poison Point";
+Pokedex.trubbish.abilities!["1"] = "Pickup";
+Pokedex.whismur.abilities!["0"] = "Scrappy";
+Pokedex.loudred.abilities!["0"] = "Rattled";
+
+Pokedex.ludicolo.abilities!["H"] = 'Rain Dish';
+
+// Approved Rejuvenation event choices: exact forms, no Mega inheritance.
+Pokedex.bewear.abilities!["S"] = "Multipulse";
+Pokedex.primarina.abilities!["S"] = "Aquabatics";
+Pokedex.toxtricityaevian.abilities!["S"] = "Fever Pitch";
+Pokedex.electivire.abilities!["S"] = "Thunder Raid";
+Pokedex.torterra.abilities!["S"] = "Desert's Mark";
+
+// Expanded exact-form event choices; preserve every occupied event slot.
+Pokedex.metagross.abilities!["S"] = "Super U.M.D. Move";
+Pokedex.duraludon.abilities!["S"] = "Super U.M.D. Move";
+Pokedex.lucario.abilities!["S"] = "Gale Strike";
+Pokedex.dusclops.abilities!["S"] = "Spectral Scream";
+Pokedex.chandelure.abilities!["E"] = "Spectral Scream";
+Pokedex.mismagius.abilities!["S"] = "Spectral Scream";
+Pokedex.araquanid.abilities!["S"] = "Barbed Web";
+Pokedex.walrein.abilities!["S"] = "Cold Truth";
+Pokedex.medicham.abilities!["S"] = "Bunraku Beatdown";
+Pokedex.meowsticf.abilities!["S"] = "Bunraku Beatdown";
+Pokedex.aerodactyl.abilities!["S"] = "Matrix Shot";
+Pokedex.alakazam.abilities!["S"] = "Pyrokinesis";
+Pokedex.delphox.abilities!["S"] = "Pyrokinesis";
+Pokedex.seviper.abilities!["S"] = "Venam's Kiss";
+Pokedex.pidgeot.abilities!["S"] = "Heavenly Wing";
+
+// Settled Relic Armor replacements. Armaldo awaits its replacement; its duplicate selected armor is inert.
+Pokedex.laprasaevian.abilities!["H"] = "Telepathy";
+Pokedex.omastar.abilities!["H"] = "Compound Eyes";
+Pokedex.kabutops.abilities!["H"] = "Moxie";
+Pokedex.aerodactyl.abilities!["H"] = "Opportunist";
+Pokedex.cradily.abilities!["1"] = "Harvest";
+Pokedex.relicanth.abilities!["1"] = "Unaware";
+Pokedex.rampardos.abilities!["1"] = "Mold Breaker";
+Pokedex.bastiodon.abilities!["1"] = "Stalwart";
+Pokedex.carracosta.abilities!["0"] = "Dredger";
+Pokedex.tyrantrum.abilities!["1"] = "Unnerve";
+Pokedex.aurorus.abilities!["1"] = "Serene Grace";
+
+Pokedex.armaldo.abilities!['0'] = 'Grappling Claws';
+
+// Preserve unapproved custom forms after the legacy base-slot synchronization.
+Pokedex.crobatalt.abilities = {"0":"Inner Focus","1":"Wind Rider","H":"Winged Wraith"};
+Pokedex.gastrodonazzy.abilities = {"0":"Sticky Hold","1":"Storm Drain","H":"Poison Heal"};
+Pokedex.gastrodonazzy2.abilities = {"0":"Sticky Hold","1":"Storm Drain","H":"Poison Heal"};
+
+// Explicit base-form slot replacement; keep other Garchomp forms unchanged.
+Pokedex.garchomp.abilities!['0'] = 'Unnerve';

@@ -2042,10 +2042,10 @@ export class TeamValidator {
 		if (this.format.id.startsWith('gen9pokebilities')) {
 			const species = dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
-				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
-				.map(key => species.abilities[key as "0" | "1" | "H" | "S" | "E" | "F"]);
+				.filter(key => ['0', '1', 'H'].includes(key) && (key !== 'H' || !species.unreleasedHidden))
+				.map(key => species.abilities[key as "0" | "1" | "H"]);
 
-			if (ability.id !== this.toID(species.abilities['S'])) {
+			if (!(['S', 'E', 'F', 'G'] as const).some(slot => ability.id === this.toID(species.abilities[slot]))) {
 				for (const abilityName of unSeenAbilities) {
 					setHas['ability:' + toID(abilityName)] = true;
 				}

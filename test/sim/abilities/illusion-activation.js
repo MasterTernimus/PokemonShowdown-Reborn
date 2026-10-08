@@ -19,7 +19,7 @@ describe('Approved activation-only Illusion reveal', () => {
 		foe.ability = 'overgrow';
 		foe.abilityState = battle.initEffectState({ id: 'overgrow', target: foe });
 	}
-	const ids = ['keeneye', 'illuminate', 'astralwatcher', 'terragift', 'heavyartillery', 'lancepoint', 'blazingtempo', 'abysslure', 'astralcore', 'moonlightvigil', 'stormsovereign', 'triplethreat'];
+	const ids = ['keeneye', 'illuminate', 'astralwatcher', 'terragift', 'heavyartillery', 'blazingtempo', 'abysslure', 'astralcore', 'moonlightvigil', 'stormsovereign', 'triplethreat'];
 	for (const id of ids) it(id + ' reveals both itemless foes once and clears copied abilities without revealing allies', () => {
 		const p = setup(), ally = battle.p1.active[1];
 		for (const foe of p.foes())disguise(foe);

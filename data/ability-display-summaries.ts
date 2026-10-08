@@ -188,7 +188,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"royalscales": "Heals 1/16 each turn; immune to Sandstorm and Hail.",
 	"falsedevotion": "+1 status priority; switching cures status and heals HP.",
 	"truedevotion": "Status priority; stronger weak moves and secondary chances; switching cures status and heals.",
-	"ancientbloom": "Same-type moves gain 1.3x power; end-turn Grass damage to foes restores its HP.",
+	"ancientbloom": "Same-type moves gain 1.3x power; End-turn Grass damage to foes restores its HP.",
 	"pollenbloom": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA.",
 	"blazingmane": "Second hit 30%; Fire +1 priority at half HP; fire fields +1 Spe.",
 	"plasmaeruption": "Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
@@ -265,8 +265,8 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"tremor": "Bug STAB; stronger allied sound moves; stronger Rock/Ground/Steel moves in sand fields.",
 	"verdantdrake": "Combines the listed abilities.",
 	"wrathshield": "Blocks bullet/pulse moves; entry Defense boost; end-turn healing; switching cures status.",
-	"shadowcurrent": "Combines the listed abilities.",
-	"astralwitchcraft": "1.3x same-type power; no indirect damage; reflects status moves; field entry boosts.",
+	"shadowcurrent": "Changes type before attacks; boosts weak moves; bypasses abilities and screens; scouts threats.",
+	"astralwitchcraft": "1.3x same-type power; No indirect damage; reflects status moves; field entry boosts.",
 	"blazingtempo": "+1 Speed after each full active turn; Same-type moves have 1.3x power; Kicks have 1.4x power; field defenses; reveals Illusions.",
 	"ragingcurrent": "Combines the listed abilities.",
 	"toxicbloom": "Stronger same-type moves; Fire/Ice protection; ignores foe stat stages; Grass chip/healing; Poison drain.",
@@ -468,7 +468,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"baitedbloom": "Combines the listed abilities.",
 	"guidinggallop": "Successful status moves directly targeting an ally clear that ally's negative Speed.",
 	"carrionwatch": "Combines the listed abilities.",
-	"scaleshelter": "Combines the listed abilities.",
+	"scaleshelter": "Blocks powder moves and sandstorm/hail damage.",
 	"stagesweep": "Removing hazards with Rapid Spin clears its negative Defense and Sp. Def.",
 	"icebreaker": "Ice Hammer breaks Reflect before damage and keeps its Speed drop.",
 	"cactuschorus": "Successful Helping Hand clears the recipient ally's confusion.",
@@ -496,3 +496,121 @@ AbilityDisplaySummaries.voiddrift = "On New World, its special Ground moves igno
 AbilityDisplaySummaries.voidwrath = "Outrage lasts one turn and does not cause confusion.";
 
 AbilityDisplaySummaries.voidguile = "Combines the listed abilities.";
+
+Object.assign(AbilityDisplaySummaries, {
+	"toxicbloom": "Fire/Ice protection; ignores foe stat stages; Grass chip/healing; Poison drain.",
+	"ancientbloom": "End-turn Grass damage to foes restores its HP.",
+	"bloomingsun": "Combines the listed abilities.",
+	"verdantdrake": "Combines the listed abilities.",
+	"primalego": "Combines the listed abilities.",
+	"terraresolve": "Combines the listed abilities.",
+	"queensguard": "Combines the listed abilities.",
+	"wrathshield": "Blocks bullet/pulse moves; entry Defense boost; end-turn healing; switching cures status.",
+	"forestsurge": "Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock.",
+	"atrocity": "Stronger attacks and defenses; ignores bypassable abilities; heals 1/16 HP each turn.",
+	"sunsovereign": "Summons 8-turn sunlight on entry.",
+	"burningcrown": "Takes 20% less attack damage.",
+	"plasmaeruption": "Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
+	"blazingtempo": "+1 Speed after each full active turn; kicks have 1.4x power; field defenses; reveals Illusions.",
+	"burningspirit": "Combines the listed abilities.",
+	"burningego": "Combines the listed abilities.",
+	"astralwitchcraft": "No indirect damage; reflects status moves; field entry boosts.",
+	"strikersmomentum": "Stronger kicking moves; foe stat drops boost Attack; never misses; changes type; first KO boosts Speed.",
+	"perfectstriker": "1.4x kicks; moves by/against it always hit; changes type before moves.",
+	"siegelauncher": "Stronger pulse/bullet moves; eligible moves hit twice; heals and damages foes each turn.",
+	"fortressshell": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption.",
+	"draconicforce": "Combines the listed abilities.",
+	"tidaljaw": "1.5x biting power; rain/water fields double Speed; 20%/40% less attack damage.",
+	"ragingcurrent": "Combines the listed abilities.",
+	"emperorsresolve": "Combines the listed abilities.",
+	"shadowbond": "Water Shuriken hits 3 times at 30 power and always critically hits.",
+	"shadowcurrent": "Changes type before attacks; boosts weak moves; bypasses abilities and screens; scouts threats.",
+	"highnoon": "Accurate attacks; stronger pulse/bullet and Water moves; eligible moves hit twice.",
+	"titanpincer": "Crabhammer and physical Steel moves use Defense when higher than Attack.",
+	"lockinggrip": "First damaging Bug attack each entry applies Torment after damage.",
+	"cruelshell": "Combines the listed abilities.",
+	"scaleshelter": "Blocks powder moves and sandstorm/hail damage.",
+	"lancepoint": "Drill moves gain +1 critical-hit stage and make no contact.",
+	"nightwatch": "Once/entry, Disables a foe repeating its status move on consecutive turns.",
+	"royalescort": "Once/entry, one successful Order weakens a foe, shields allies or heals allies.",
+	"templechime": "Move KOs boost highest stat; once per entry, Heal Bell curing status clears negative Sp. Def.",
+	"voiddrift": "On New World, its special Ground moves ignore lowered Sp. Atk while airborne.",
+	"solaridol": "Fire power 1.5x; Attack 1.5x in sun; resists Grass.",
+	"lunaridol": "Hail-immune; 1.5x Ice power; 1.5x Sp. Atk in hail/snow."
+});
+
+Object.assign(AbilityDisplaySummaries, {"gentlescales":"Pollen Puff healing also cures an ally's major status once per turn.","hivecourier":"Successful Bug pivot clears hazards; replacement and active allies guard the next move by 25%."});
+AbilityDisplaySummaries.toxicevolution = 'Own poison or damage to a poisoned foe heals 1/8 HP, sharing one use per turn.';
+AbilityDisplaySummaries.mythicscale = 'Powder/Befuddle status: clears ally/own defensive drops, then boosts defenses once/entry.';
+AbilityDisplaySummaries.spiralevolution = 'Pierces protection at half power; double Twineedle power; Trick Room ordering; 20% less damage.';
+
+AbilityDisplaySummaries.conductivity = 'Electric moves hit Steel types super effectively.';
+AbilityDisplaySummaries.anchoredbattery = 'Pulse and bullet moves have 1.5x power.';
+
+AbilityDisplaySummaries.nobledance = 'Copies dance moves; heals adjacent allies by 1/4 HP on entry.';
+AbilityDisplaySummaries.anchoredbattery = "First pulse/bullet HP hit each entry lowers the foe's Speed by 1.";
+
+AbilityDisplaySummaries.nobledance = 'First successful directly selected dance each entry wards the next opposing move by 20%.';
+
+Object.assign(AbilityDisplaySummaries, {
+  "multipulse": "An effective held Plate converts eligible damaging Normal moves to its type, preserving category and power.",
+  "aquabatics": "Once per entry, actual opposing HP damage from its Water attack raises Sp.",
+  "feverpitch": "Damaging sound moves randomly get 0.75x, 1x or 1.25x power, equally likely once per whole execution.",
+  "thunderraid": "Eligible single-target, nonpriority Physical Electric attacks hit three times at 20%, 40% and 60% power, checking accuracy for each hit and stopping on a miss.",
+  "desertsmark": "Once per entry, a Ground attack dealing actual opposing HP damage makes that target pure Ground and binds it for four turns.",
+  "deepchill": "Includes full local Oblivious.",
+  "superumdmove": "Eligible single-target Steel attacks choose Physical or Special by higher deterministic noncritical pre-random engine damage, including defensive stats, burn and screens.",
+  "galestrike": "Damaging attacks gain one critical-hit stage, two at half HP or less, three at quarter HP or less.",
+  "spectralscream": "Damaging Ghost moves become sound moves and bypass Substitute, retaining their targets.",
+  "barbedweb": "Bug attacks have 1.5x power and one extra critical-hit stage.",
+  "coldtruth": "Ice attacks dealing opposing HP damage inflict Torment.",
+  "bunrakubeatdown": "Psychic and Fighting attacks have 1.25x power plus 0.25x per currently fainted teammate, up to 2.5x.",
+  "matrixshot": "Physical Rock attacks use Attack against Sp.",
+  "pyrokinesis": "Psychic attacks gain a 30% burn secondary unless they already have one.",
+  "venamskiss": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types.",
+  "heavenlywing": "Flying attacks bypass accuracy checks, but not semi-invulnerability.",
+  "dredger": "Once per turn after its Ground attack deals opposing HP damage, removes one layer of its side's Spikes, or one Toxic Spikes layer if no Spikes remain."
+});
+
+Object.assign(AbilityDisplaySummaries, {
+  "apexpredator": "Dragon conversion/STAB and wind boosts.",
+  "tyrantdomain": "Sandstorm and fallen-ally power; Dragon's Den on fainting.",
+  "auroradomain": "Hail and stronger Ice moves; field and Veil on fainting."
+});
+
+AbilityDisplaySummaries.grapplingclaws = "Physical contact HP hits prevent switching/healing through next turn, once per foe per stay.";
+
+Object.assign(AbilityDisplaySummaries, {
+  "multipulse": "Effective Plates convert eligible damaging Normal moves to their type.",
+  "aquabatics": "First opposing Water HP hit each entry gives +1 Sp. Atk and Speed.",
+  "feverpitch": "Sound attacks roll 0.75/1/1.25x power; directly selected sound attacks wake it.",
+  "thunderraid": "Eligible Physical Electric moves hit three times at 20/40/60% power.",
+  "desertsmark": "First Ground HP hit each entry makes its foe pure Ground and binds for 4 turns.",
+  "superumdmove": "Steel attacks choose the stronger damage category; 20% defense drop once per move.",
+  "galestrike": "Critical-hit stages rise at low HP; critical HP hits clear Speed drops and give +1 Speed once/turn.",
+  "spectralscream": "Ghost attacks become sound and bypass Substitute; HP hits heal and may boost defenses once/turn.",
+  "barbedweb": "Stronger, higher-critical Bug attacks poison and bind each foe once per stay.",
+  "coldtruth": "Ice HP hits Torment/clear positive offenses; already-Tormented foes take stronger Ice attacks.",
+  "bunrakubeatdown": "Psychic/Fighting attacks bypass Substitute; power scales with currently fainted allies.",
+  "matrixshot": "Physical Rock uses Sp. Def, bypasses screens, and removes opposing Reflect/Light Screen on HP hits.",
+  "pyrokinesis": "Psychic attacks can burn; pre-burned foes take stronger hits that bypass Sp. Def boosts.",
+  "venamskiss": "Poison hits can poison Steel/Poison; pre-poisoned foes are drained/heal-blocked. Poisoned foes are slower.",
+  "heavenlywing": "Accurate Flying attacks gain priority against boosted foes; HP hits purge boosts for a healing reward.",
+  "dredger": "First Ground HP hit each turn removes one own Spikes layer, then Toxic Spikes if none remain."
+});
+
+AbilityDisplaySummaries.pulseblockade = 'Sets a 3-turn Snowy Mountain Field; blocks other field creation while active.';
+
+Object.assign(AbilityDisplaySummaries, {
+  "vendetta": "Once/entry, survive a hit to mark its attacker; next Ground/Dark retaliation cannot miss and traps on HP damage.",
+  "steadyaim": "Prevents external accuracy drops; self-inflicted costs remain.",
+  "uproot": "Grass HP hits: -2 foe Sp. Def once/target/turn; already-weakened foes also yield capped 1/4 drain.",
+  "silksights": "Keen Eye; Electric bypasses slowed foes' boosts; once/entry Bug HP hit on slowed foe Disables its last move."
+});
+
+Object.assign(AbilityDisplaySummaries, {"freeflight":"While airborne, can switch despite opposing trapping; binding damage remains.","entrenched":"Opposing moves and items cannot force it to switch."});
+AbilityDisplaySummaries.voidomen = 'First successful secondary or self status move: 3-turn Safeguard once/entry; secondary also grants stat-drop ward.';
+
+AbilityDisplaySummaries.hydroelectric = "Water HP hits heal 1/8 once/turn; first Water attack dealing opposing HP damage grants +1 Speed after the move.";
+
+AbilityDisplaySummaries.steadyswimmer = "Prevents and cures confusion only.";

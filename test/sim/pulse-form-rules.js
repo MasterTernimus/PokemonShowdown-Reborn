@@ -172,23 +172,23 @@ describe('Pulse/Rift form rules', () => {
 		assert.deepEqual(p.moves, PULSE_FIXED_MOVES.avaluggpulse);
 		assert(Dex.species.getLearnsetData('avalugg').learnset.recover);
 	});
-	it('Muk sets Swamp for five turns and preserves its existing components', () => {
+	it('Muk sets Swamp for three turns and preserves its existing components', () => {
 		const p = start('Muk'); assert(battle.actions.runMegaEvo(p));
-		assert.equal(battle.field.terrain, 'swampterrain'); assert.equal(battle.field.terrainState.duration, 5);
+		assert.equal(battle.field.terrain, 'swampterrain'); assert.equal(battle.field.terrainState.duration, 3);
 		for (const ability of ['protean', 'poisontouch', 'regenerator']) assert(p.hasAbility(ability));
 	});
 	it('Swalot converts existing and newly created Underwater immediately without refreshing Murkwater', () => {
 		const p = start('Swalot');
 		battle.field.setTerrain('underwaterterrain', p);
 		assert(battle.actions.runMegaEvo(p));
-		assert.equal(battle.field.terrain, 'murkwatersurfaceterrain'); assert.equal(battle.field.terrainState.duration, 5);
+		assert.equal(battle.field.terrain, 'murkwatersurfaceterrain'); assert.equal(battle.field.terrainState.duration, 3);
 		assert.equal(p.status, ''); assert(!p.hasAbility('poisonheal'));
 		assert(p.hasAbility('waterabsorb')); assert(p.hasAbility('liquidooze'));
 		battle.field.setTerrainDuration(2);
 		battle.eachEvent('TerrainChange');
 		assert.equal(battle.field.terrainState.duration, 2);
 		assert(battle.field.changeTerrain('underwaterterrain', p));
-		assert.equal(battle.field.terrain, 'murkwatersurfaceterrain'); assert.equal(battle.field.terrainState.duration, 5);
+		assert.equal(battle.field.terrain, 'murkwatersurfaceterrain'); assert.equal(battle.field.terrainState.duration, 3);
 	});
 	it('Swalot conversion respects ability suppression and Neutralization', () => {
 		const p = start('Swalot'); battle.actions.runMegaEvo(p);

@@ -20,7 +20,7 @@ export const MidnightZone: TerrainData = {
 			this.add('-fieldend', 'Midnight Zone Terrain');
 		},
 		onModifySpe(spe, pokemon) {
-			if (!pokemon.hasType('Water') && !pokemon.hasAbility(['steelworker', 'schooling', 'swiftswim', 'limber'])) {
+			if (!pokemon.hasType('Water') && !pokemon.hasAbilityOrPassive(['steelworker', 'schooling', 'swiftswim', 'limber'])) {
 				return this.chainModify(0.25);
 			}
 		},
@@ -70,7 +70,7 @@ export const MidnightZone: TerrainData = {
 			}
 		},
 		onAccuracy(accuracy, target, source) {
-			if (source.hasAbility('illuminate')) return true;
+			if (source.hasAbilityOrPassive('illuminate')) return true;
 		},
 		onBasePowerPriority: 6,
 		onBasePower(basePower, source, target, move) {
@@ -103,7 +103,7 @@ export const MidnightZone: TerrainData = {
 				modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				this.add('-message', 'The light disappeared in the dark...');
 			}
-			if (move.category === 'Physical' && !source.hasType('Water') && !source.hasAbility(['steelworker', 'schooling', 'swiftswim'])) {
+			if (move.category === 'Physical' && !source.hasType('Water') && !source.hasAbilityOrPassive(['steelworker', 'schooling', 'swiftswim'])) {
 				modifier *= adaptiveFieldMultiplier(this, source, target, 0.33);
 			}
 			return this.chainModify(modifier);
@@ -117,7 +117,7 @@ export const MidnightZone: TerrainData = {
 		},
 		onResidualOrder: 28,
 		onResidual(pokemon) {
-			if (!pokemon.hasType(['Water', 'Ghost']) && !pokemon.hasAbility(['waterveil', 'dryskin', 'stormdrain', 'steelworker', 'schooling', 'magicguard'])) {
+			if (!pokemon.hasType(['Water', 'Ghost']) && !pokemon.hasAbilityOrPassive(['waterveil', 'dryskin', 'stormdrain', 'steelworker', 'schooling', 'magicguard'])) {
 				const divisor = pokemon.hasType(['Steel', 'Ice', 'Fire', 'Rock']) ? 4 : 10;
 				if (this.damage(pokemon.baseMaxhp / divisor, pokemon)) {
 					this.add('-message', `The water pressure hurt ${pokemon.name}!`);
@@ -127,7 +127,7 @@ export const MidnightZone: TerrainData = {
 			if (pokemon.hasType('Water') && this.heal(pokemon.baseMaxhp / 16, pokemon)) {
 				this.add('-message', `The water healed ${pokemon.name}!`);
 			}
-			if (pokemon.hasAbility(['waterabsorb', 'dryskin']) && this.heal(pokemon.baseMaxhp / 10, pokemon)) {
+			if (pokemon.hasAbilityOrPassive(['waterabsorb', 'dryskin']) && this.heal(pokemon.baseMaxhp / 10, pokemon)) {
 				this.add('-message', `The intense water pressure healed ${pokemon.name}!`);
 			}
 		},

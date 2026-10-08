@@ -127,6 +127,10 @@ export class BattleActions {
 			}
 
 			// will definitely switch out at this point
+			if (!isDrag) {
+				this.battle.singleEvent('AfterSwitchOut', oldActive.getAbility(), oldActive.abilityState,
+					oldActive, pokemon, sourceEffect);
+			}
 
 			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
 			this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
@@ -1126,6 +1130,8 @@ export class BattleActions {
 		const twinStrike = ['twincannons', 'twinblades'].includes(move.multihitType || '');
 		// Snapshot identities: a switch-in must never inherit the second strike.
 		const twinStrikeFoes = twinStrike ? pokemon.foes().slice() : [];
+		const battleBondFoes = move.id === 'watershuriken' ? pokemon.foes().slice() : [];
+		let battleBondHitOffset = 0;
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 
@@ -1133,6 +1139,7 @@ export class BattleActions {
 		let hit: number;
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
+			if (battleBondHitOffset && (!pokemon.hp || pokemon.fainted || !pokemon.isActive)) break;
 			if (twinStrike && (!pokemon.hp || pokemon.fainted || !pokemon.isActive)) break;
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			(move as any).spilloverDamageModifier = undefined;
@@ -1163,14 +1170,18 @@ export class BattleActions {
 				move.smartTarget = false;
 			}
 			if (targets.every(target => !target?.hp)) {
-				const spilloverTarget = originalMultihitTarget && this.getMultihitSpilloverTarget(originalMultihitTarget, pokemon, move, hit, targetHits);
+				const remainingFoes = battleBondHitOffset ? battleBondFoes.filter(foe =>
+					foe.isActive && !foe.isAlly(pokemon) && this.canChainHitTarget(foe, pokemon, move)) : [];
+				const spilloverTarget = battleBondHitOffset ?
+					(remainingFoes.length ? this.battle.sample(remainingFoes) : null) :
+					originalMultihitTarget && this.getMultihitSpilloverTarget(originalMultihitTarget, pokemon, move, hit, targetHits);
 				if (!spilloverTarget) break;
 				targets = [spilloverTarget];
 				damage = [0];
 				move.smartTarget = false;
 			}
-			move.hit = hit;
-			move.lastHit = move.hit === targetHits;
+			move.hit = hit - battleBondHitOffset;
+			move.lastHit = hit === targetHits;
 			if (move.smartTarget && targets.length > 1) {
 				targetsCopy = [targets[hit - 1]];
 				damage = [damage[hit - 1]];
@@ -1273,7 +1284,27 @@ export class BattleActions {
 				}
 			}
 			this.battle.eachEvent('Update');
-			if (!twinStrike && hit < targetHits && targets.every(target => !target?.hp)) {
+			if (move.id === 'watershuriken' && !battleBondHitOffset && !pokemon.bondTriggered &&
+				!pokemon.transformed && pokemon.hp && pokemon.hasAbility('battlebond') &&
+				['greninja', 'greninjabond'].includes(pokemon.species.id) &&
+				this.battle.faintQueue.some(faint => faint.source === pokemon && faint.effect?.id === move.id &&
+					!faint.target.isAlly(pokemon))) {
+				// Finalize the KO now so Battle Bond installs Ash's stats, ability, and passives before the next hit.
+				this.battle.faintMessages(false, false, false);
+				if (pokemon.hp && pokemon.isActive && pokemon.species.id === 'greninjaash' && pokemon.hasAbility('shadowbond')) {
+					const ashMove = this.dex.getActiveMove(move.id);
+					this.battle.singleEvent('ModifyMove', ashMove, null, pokemon, target, ashMove, ashMove);
+					move.basePower = ashMove.basePower;
+					move.category = ashMove.category;
+					move.multihit = ashMove.multihit;
+					move.willCrit = ashMove.willCrit;
+					this.battle.singleEvent('ModifyMove', pokemon.getAbility(), pokemon.abilityState, pokemon, target, move, move);
+					battleBondHitOffset = hit;
+					targetHits = hit + Number(ashMove.multihit);
+					move.lastHit = false;
+				}
+			}
+			if (!twinStrike && !battleBondHitOffset && hit < targetHits && targets.every(target => !target?.hp)) {
 				const spilloverTarget = originalMultihitTarget && this.getMultihitSpilloverTarget(originalMultihitTarget, pokemon, move, hit + 1, targetHits);
 				if (spilloverTarget) {
 					targets = [spilloverTarget];
@@ -2181,6 +2212,8 @@ export class BattleActions {
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
+		if ((move as any).coldTruthTargets?.includes(target) && source.hasAbility('coldtruth')) ignorePositiveDefensive = true;
+		if (defenseStat === 'spd' && (move as any).pyrokinesisTargets?.includes(target) && source.hasAbility('pyrokinesis')) ignorePositiveDefensive = true;
 		if (defenseStat === 'spd' && move.category === 'Special' && this.battle.movehasType(move, 'Electric') &&
 			source.hasAbility('crosswire') && (move as any).crosswireCharged) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && this.battle.movehasType(move, 'Ground') && source.hasAbility('surefoot')) ignorePositiveDefensive = true;

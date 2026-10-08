@@ -10,7 +10,7 @@ describe('Neutralization rooms', function () {
 		battle?.destroy();
 	});
 
-	it('should prevent Trick Room, Magic Room, and Wonder Room from starting', function () {
+	it('allows Trick Room, Magic Room, and Wonder Room after entry', function () {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 			{ species: 'Quagsire', ability: 'neutralization', moves: ['splash'] },
 		], [
@@ -24,7 +24,7 @@ describe('Neutralization rooms', function () {
 			['wonderroom', 'wonderroom'],
 		]) {
 			battle.makeChoices('move splash', `move ${move}`);
-			assert.false(battle.field.getPseudoWeather(room));
+			assert(battle.field.getPseudoWeather(room));
 		}
 	});
 

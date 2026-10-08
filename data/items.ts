@@ -243,7 +243,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -355,7 +355,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -634,7 +634,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			const glutton = pokemon.hasAbility('Gluttony') ? 2 : 1;
+			const glutton = pokemon.hasAbilityOrPassive('Gluttony') ? 2 : 1;
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.baseMaxhp * glutton / 16);
 			} else {
@@ -1524,7 +1524,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (
 				priority <= 0 &&
 				(pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony))
+					(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony)))
 			) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
@@ -2411,7 +2411,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2764,7 +2764,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3279,7 +3279,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3455,7 +3455,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
 				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+					this.damage(source.baseMaxhp / (target.hasAbilityOrPassive('ripen') ? 4 : 8), source, target);
 				}
 			}
 		},
@@ -3619,7 +3619,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3703,7 +3703,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			const glutton = pokemon.hasAbility('Gluttony') ? 2 : 1;
+			const glutton = pokemon.hasAbilityOrPassive('Gluttony') ? 2 : 1;
 			this.heal(pokemon.baseMaxhp*glutton / 16);
 		},
 		num: 234,
@@ -3727,7 +3727,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			const moveSlot = pokemon.moveSlots.find(move => move.pp === 0) ||
 				pokemon.moveSlots.find(move => move.pp < move.maxpp);
 			if (!moveSlot) return;
-			const addedPP = pokemon.hasAbility('ripen') ? 20 : 10;
+			const addedPP = pokemon.hasAbilityOrPassive('ripen') ? 20 : 10;
 			moveSlot.pp = Math.min(moveSlot.pp + addedPP, moveSlot.maxpp);
 			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]');
 		},
@@ -3751,7 +3751,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -4147,7 +4147,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -4526,7 +4526,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -4968,7 +4968,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -5816,7 +5816,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Special' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
 				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+					this.damage(source.baseMaxhp / (target.hasAbilityOrPassive('ripen') ? 4 : 8), source, target);
 				}
 			}
 		},
@@ -5917,7 +5917,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -6447,7 +6447,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},
@@ -8337,7 +8337,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				(pokemon.getPassives().includes('gluttony') || pokemon.hasAbilityOrPassive('gluttony') && pokemon.abilityState.gluttony))) {
 				pokemon.eatItem();
 			}
 		},

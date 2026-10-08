@@ -33,14 +33,14 @@ describe('Hydreigon innate Levitate and revised Dread Wings',()=>{
   p.removeVolatile('gastroacid');battle.actions.useMove('tackle',p,{target:t});assert(!t.volatiles.torment);
  });
  it('Skill Swap and Role Play transfer the selected package without moving innate Levitate',()=>{
-  const[p,t]=setup();battle.actions.useMove('skillswap',p,{target:t});assert.equal(t.ability,'dreadwings');assert.equal(p.ability,'pressure');assert.deepEqual(p.getPassives(),['levitate']);assert.deepEqual(t.getPassives(),[]);assert(t.isGrounded());assert.equal(p.boosts.atk,-1);
+  const[p,t]=setup();battle.actions.useMove('skillswap',p,{target:t});assert.equal(t.ability,'dreadwings');assert.equal(p.ability,'pressure');assert.deepEqual(p.getPassives(),['levitate']);assert.deepEqual(t.getPassives(),['synchronize']);assert(t.isGrounded());assert.equal(p.boosts.atk,-1);
   battle.actions.useMove('roleplay',p,{target:t});assert.equal(p.ability,'dreadwings');assert.deepEqual(p.getPassives(),['levitate']);
   fixtures.push({name:'dread-wings-swapped',log:battle.log.slice()});
  });
  it('copied Dread Wings has no copied Levitate and respects suppression',()=>{
   const[p,t]=setup('Perfect Foresight');t.m.perfectForesightAbility='dreadwings';t.m.perfectForesightAbilityState=battle.initEffectState({id:'dreadwings',target:t});
   delete t.abilityState.intimidateActivated;battle.singleEvent('Start',Dex.abilities.get('dreadwings'),t.m.perfectForesightAbilityState,t);
-  assert.deepEqual(t.getPassives(),[]);assert(t.isGrounded());assert(t.hasAbility('intimidate'));assert(!t.hasAbility('levitate'));
+  assert.deepEqual(t.getPassives(),['synchronize']);assert(t.isGrounded());assert(t.hasAbility('intimidate'));assert(!t.hasAbility('levitate'));
   t.addVolatile('gastroacid');assert(!t.hasAbility('intimidate'));assert(!p.isGrounded());
   fixtures.push({name:'dread-wings-copied',log:battle.log.slice()});
  });

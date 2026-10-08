@@ -12,6 +12,7 @@ interface AbilityEventMethods {
 	checkMode?: (this: Battle, pokemon: Pokemon) => void;
 	markRequiem?: (this: Battle, target: Pokemon, source: Pokemon) => void;
 	lowerOffense?: (this: Battle, target: Pokemon, source: Pokemon) => void;
+	onAfterSwitchOut?: (this: Battle, target: Pokemon, replacement: Pokemon, effect: Effect | null) => void;
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
 	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
 	onStart?: (this: Battle, target: Pokemon) => void;

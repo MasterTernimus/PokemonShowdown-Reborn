@@ -75,7 +75,7 @@ describe('Transform', function () {
 		battle = common.createBattle([[
 			{species: 'Ditto', ability: 'limber', moves: ['transform']},
 		], [
-			{species: 'Arcanine', ability: 'intimidate', moves: ['sleeptalk']},
+			{species: 'Salamence', ability: 'intimidate', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p2.active[0], 'atk', -1);
@@ -85,7 +85,7 @@ describe('Transform', function () {
 		battle = common.createBattle([[
 			{species: 'Ditto', ability: 'intimidate', moves: ['transform']},
 		], [
-			{species: 'Arcanine', ability: 'intimidate', moves: ['sleeptalk']},
+			{species: 'Salamence', ability: 'intimidate', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p2.active[0], 'atk', -1);

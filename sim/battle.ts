@@ -3523,11 +3523,13 @@ export class Battle {
 		// A passive activation must never teach the client a selected ability (or reveal a disguised holder).
 		if (this.effectState?.speciesPassive) {
 			const ability = this.dex.abilities.get(this.effectState.speciesPassive);
+			if (parts[0] === '-ability') parts = ['-activate', parts[1], `passive: ${ability.name}`, ...parts.slice(3)];
 			const holder = this.effectState.target as Pokemon;
 			if (['-boost', '-unboost'].includes(String(parts[0])) && !parts.some(part => typeof part === 'string' && part.startsWith('[from]'))) {
 				parts.push(`[from] passive: ${ability.name}`);
 			}
 			if (holder?.illusion) {
+				if (parts[0] === '-message') parts = parts.map(part => typeof part === 'string' ? part.split(holder.name).join(holder.illusion!.name) : part);
 				if (parts[0] === '-block') {
 					parts = ['-immune', parts[1]];
 				} else {

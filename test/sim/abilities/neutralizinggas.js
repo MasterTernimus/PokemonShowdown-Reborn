@@ -53,7 +53,7 @@ describe('Neutralizing Gas', function () {
 		battle = common.createBattle([
 			[{species: "Weezing", ability: 'neutralizinggas', moves: ['toxic']},
 				{species: "Type: Null", ability: 'battlearmor', moves: ['facade']}],
-			[{species: "Corsola", ability: 'naturalcure', moves: ['uturn']},
+			[{species: "Chansey", ability: 'naturalcure', moves: ['uturn']},
 				{species: "Magikarp", ability: 'rattled', moves: ['splash']}],
 		]);
 		battle.makeChoices('move toxic', 'move uturn');

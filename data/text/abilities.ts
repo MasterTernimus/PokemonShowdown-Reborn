@@ -4507,6 +4507,29 @@ AbilitiesText.soulsiphon.desc += ' Includes full local Flash Fire: absorbs Fire 
 AbilitiesText.soulsiphon.shortDesc = 'Flash Fire; Fire/Ghost hits drain HP and block healing.';
 AbilitiesText.soulcremation.desc += ' Soul Siphon includes Flash Fire. On Cold Eclipse entry, Flash Fire and the Flame Body component of Malice Well each grant +1 Defense and Special Defense (+2 total).';
 
+AbilitiesText.gentlescales = {name: 'Gentle Scales', ...AbilityDescriptionOverrides.gentlescales};
+AbilitiesText.hivecourier = {name: 'Hive Courier', ...AbilityDescriptionOverrides.hivecourier};
+
+AbilitiesText.multipulse = {name: "Multipulse", ...AbilityDescriptionOverrides.multipulse};
+AbilitiesText.aquabatics = {name: "Aquabatics", ...AbilityDescriptionOverrides.aquabatics};
+AbilitiesText.feverpitch = {name: "Fever Pitch", ...AbilityDescriptionOverrides.feverpitch};
+AbilitiesText.thunderraid = {name: "Thunder Raid", ...AbilityDescriptionOverrides.thunderraid};
+AbilitiesText.desertsmark = {name: "Desert's Mark", ...AbilityDescriptionOverrides.desertsmark};
+AbilitiesText.deepchill = {name: "Deep Chill", ...AbilityDescriptionOverrides.deepchill};
+AbilitiesText.superumdmove = {name: "Super U.M.D. Move", ...AbilityDescriptionOverrides.superumdmove};
+AbilitiesText.galestrike = {name: "Gale Strike", ...AbilityDescriptionOverrides.galestrike};
+AbilitiesText.spectralscream = {name: "Spectral Scream", ...AbilityDescriptionOverrides.spectralscream};
+AbilitiesText.barbedweb = {name: "Barbed Web", ...AbilityDescriptionOverrides.barbedweb};
+AbilitiesText.coldtruth = {name: "Cold Truth", ...AbilityDescriptionOverrides.coldtruth};
+AbilitiesText.bunrakubeatdown = {name: "Bunraku Beatdown", ...AbilityDescriptionOverrides.bunrakubeatdown};
+AbilitiesText.matrixshot = {name: "Matrix Shot", ...AbilityDescriptionOverrides.matrixshot};
+AbilitiesText.pyrokinesis = {name: "Pyrokinesis", ...AbilityDescriptionOverrides.pyrokinesis};
+AbilitiesText.venamskiss = {name: "Venam's Kiss", ...AbilityDescriptionOverrides.venamskiss};
+AbilitiesText.heavenlywing = {name: "Heavenly Wing", ...AbilityDescriptionOverrides.heavenlywing};
+AbilitiesText.dredger = {name: "Dredger", ...AbilityDescriptionOverrides.dredger};
+
+AbilitiesText.grapplingclaws = {name: 'Grappling Claws', ...AbilityDescriptionOverrides.grapplingclaws};
+
 // Apply after legacy text assembly so full descriptions and selectors share the reviewed wording.
 for (const [id, text] of Object.entries(AbilityDescriptionOverrides)) {
 	if (AbilitiesText[id as ID]) Object.assign(AbilitiesText[id as ID], text);
@@ -4516,3 +4539,11 @@ for (const [id, text] of Object.entries(AbilityDescriptionOverrides)) {
 for (const [id, entry] of Object.entries(AbilitiesText)) {
  entry.shortDesc = getAbilitySelectorSummary(id, entry.shortDesc || entry.desc || '', part => AbilitiesText[part as ID]?.name || '');
 }
+
+for (const [id, name] of [['vendetta', 'Vendetta'], ['silksights', 'Silk Sights'], ['steadyaim', 'Steady Aim'], ['uproot', 'Uproot']]) {
+ AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
+}
+
+for (const [id, name] of [['freeflight', 'Free Flight'], ['entrenched', 'Entrenched'], ['voidomen', 'Void Omen']]) AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
+
+AbilitiesText.steadyswimmer = {name: 'Steady Swimmer', ...AbilityDescriptionOverrides.steadyswimmer};

@@ -1,0 +1,160 @@
+{
+  "proficientForms": [
+    "venusaurmega",
+    "venusaurgmax",
+    "charizardmegax",
+    "charizardmegaxalt",
+    "charizardmegay",
+    "charizardgmax",
+    "blastoisemega",
+    "blastoisegmax",
+    "meganiummega",
+    "meganiummegay",
+    "typhlosionmega",
+    "feraligatrmega",
+    "feraligatrgmax",
+    "sceptilemega",
+    "blazikenmega",
+    "swampertmega",
+    "torterramegax",
+    "torterramegay",
+    "infernapemega",
+    "empoleonmega",
+    "serperiormega",
+    "emboarmega",
+    "emboarmegareborn",
+    "chesnaughtmega",
+    "delphoxmega",
+    "greninjaash",
+    "greninjamega",
+    "rillaboomgmax",
+    "cinderacegmax",
+    "cinderacemega",
+    "inteleongmax",
+    "torterrarift",
+    "torterrariftshatter",
+    "greninjabond"
+  ],
+  "overrides": {
+    "venusaurmega": [
+      "proficient"
+    ],
+    "venusaurgmax": [
+      "proficient"
+    ],
+    "charizardmegax": [
+      "proficient"
+    ],
+    "charizardmegaxalt": [
+      "proficient"
+    ],
+    "charizardmegay": [
+      "proficient"
+    ],
+    "charizardgmax": [
+      "proficient"
+    ],
+    "blastoisemega": [
+      "proficient"
+    ],
+    "blastoisegmax": [
+      "proficient"
+    ],
+    "meganiummega": [
+      "proficient"
+    ],
+    "meganiummegay": [
+      "proficient"
+    ],
+    "typhlosionmega": [
+      "proficient"
+    ],
+    "feraligatrmega": [
+      "proficient"
+    ],
+    "feraligatrgmax": [
+      "proficient"
+    ],
+    "sceptilemega": [
+      "proficient"
+    ],
+    "blazikenmega": [
+      "proficient"
+    ],
+    "swampertmega": [
+      "proficient"
+    ],
+    "torterramegax": [
+      "proficient"
+    ],
+    "torterramegay": [
+      "proficient"
+    ],
+    "infernapemega": [
+      "proficient"
+    ],
+    "empoleonmega": [
+      "proficient"
+    ],
+    "serperiormega": [
+      "proficient"
+    ],
+    "emboarmega": [
+      "proficient"
+    ],
+    "emboarmegareborn": [
+      "proficient"
+    ],
+    "chesnaughtmega": [
+      "proficient"
+    ],
+    "delphoxmega": [
+      "proficient"
+    ],
+    "greninjaash": [
+      "proficient"
+    ],
+    "greninjamega": [
+      "proficient"
+    ],
+    "rillaboomgmax": [
+      "proficient"
+    ],
+    "cinderacegmax": [
+      "proficient"
+    ],
+    "cinderacemega": [
+      "proficient"
+    ],
+    "inteleongmax": [
+      "proficient"
+    ],
+    "torterrarift": [
+      "proficient"
+    ],
+    "torterrariftshatter": [
+      "proficient"
+    ],
+    "greninjabond": [
+      "proficient"
+    ],
+    "quaquaval": [
+      "torrent"
+    ],
+    "butterfree": [
+      "shielddust"
+    ],
+    "butterfreemega": [
+      "levitate"
+    ],
+    "butterfreegmax": [
+      "levitate"
+    ],
+    "beedrill": [
+      "levitate"
+    ],
+    "beedrillmega": [
+      "levitate"
+    ]
+  }
+}

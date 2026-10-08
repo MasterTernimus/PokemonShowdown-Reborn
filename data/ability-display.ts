@@ -1,3 +1,4 @@
+import {AbilityComponentExclusions, getAbilityComponentAdditions} from './passive-ability-cleanup';
 import {AbilityDisplaySummaries} from './ability-display-summaries';
 import { Aliases } from './aliases';
 import {AbilityComponents} from './ability-components';
@@ -194,6 +195,7 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 // The legacy identity registry is not always an exact implementation summary.
 // Burning Crown uses flat damage reduction, not Filter; its other delegates remain active.
 const DisplayComponentOverrides: {[id: string]: string[]} = {
+ templechime: [],
  blazingmane: ['firemane', 'proficient'],
  pollenbloom: ['thickfat', 'unaware', 'proficient'],
  atrocity: ['unboundblaze', 'toughclaws'],
@@ -217,7 +219,7 @@ function directDisplayComponents(id: string): string[] {
 	id = canonicalAbilityDisplayID(id);
 	const parts = DisplayComponentOverrides[id] ||
 		(AbilityComponents[id]?.length ? AbilityComponents[id] : AdditionalDisplayComponents[id]) || [];
-	return [...new Set(parts.map(canonicalAbilityDisplayID))];
+	return [...new Set(parts.map(canonicalAbilityDisplayID))].filter(part => !AbilityComponentExclusions[id]?.includes(part));
 }
 
 export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): Set<string> {
@@ -228,8 +230,8 @@ export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): 
 	return seen;
 }
 
-export function getAbilityDisplayComponents(id: string): string[] {
-	const parts = directDisplayComponents(id);
+export function getAbilityDisplayComponents(id: string, passives: readonly string[] = []): string[] {
+	const parts = [...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].filter(part => !passives.includes(part));
 	// A component already included by another named package needs no second display entry.
 	return parts.filter((part, index) => part !== 'proficient' && !parts.some((other, otherIndex) => other !== part &&
 		getAbilityDisplayClosure(other).has(part) && (!getAbilityDisplayClosure(part).has(other) || otherIndex < index)));
