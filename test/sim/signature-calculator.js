@@ -13,7 +13,7 @@ describe('Approved signature calculator parity', () => {
 		assert.deepEqual(metadata.abilityComponents.duskdrive, ['Battle Fervor', 'Precision', 'Opportunist']);
 		assert(metadata.abilityComponents.atrocity.includes('Tough Claws'));
 		assert(!metadata.abilityComponents.atrocity.includes('Levitate'));
-		assert.deepEqual(metadata.abilityComponents.cinderscales, ['Flame Body', 'Swarm', 'Shield Dust']);
+		assert.deepEqual(metadata.abilityComponents.cinderscales, ['Flame Body', 'Swarm']);
 		assert.equal(Dex.species.get('magcargo').bst, 540);
 	});
 	it('calculates Grounding Tail against Ground without bypassing absorption', () => {

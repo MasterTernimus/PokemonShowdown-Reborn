@@ -18,12 +18,12 @@ function setup(species, ability='No Ability') {
 function boost(p,t,move,event='ModifySpA') {return battle.runEvent(event,p,t,battle.dex.getActiveMove(move),100);}
 describe('Starter family passives', () => {
  afterEach(() => {battle?.destroy(); battle=null;});
- it('drops the family boost on gimmick forms and restores it on reversion', () => {
+ it('replaces the family boost with Proficient on gimmick changes and restores it on reversion', () => {
   for (const [base, form, move] of [['Charizard', 'Charizard-Mega-X', 'flamethrower'], ['Venusaur', 'Venusaur-Gmax', 'energyball'], ['Torterra', 'Torterra-Rift', 'energyball']]) {
    const [p,t] = setup(base); p.hp=1;
    assert.equal(boost(p,t,move),150);
    p.formeChange(form,null,true); p.setAbility('No Ability'); p.hp=1;
-   assert.equal(boost(p,t,move),100);
+   assert.equal(boost(p,t,move),100);assert.deepEqual(p.getPassives(),['proficient']);
    p.formeChange(base,null,true); p.setAbility('No Ability'); p.hp=1;
    assert.equal(boost(p,t,move),150);
    battle.destroy(); battle=null;
@@ -40,10 +40,10 @@ describe('Starter family passives', () => {
   assert.deepEqual(Object.keys(StarterPassives).sort(),expected.map(s=>s.id).sort());
   for(const s of expected) {
    const family = Object.keys(families).find(p=>families[p].some(f=>s.id.startsWith(f)));
-   assert.deepEqual(s.passives,ProficientPassiveForms.has(s.id)?['proficient']:s.id.startsWith('torterrarift')?[]:[family],s.id);
+   assert.deepEqual(s.passives,ProficientPassiveForms.has(s.id)?['proficient']:[family],s.id);
    assert(!s.evos.length,s.id);
   }
-  assert.equal(expected.filter(s=>s.passives.includes('proficient')).length,31);
+  assert.equal(expected.filter(s=>s.passives.includes('proficient')).length,34);
   const {SpeciesPassives}=require('../../../dist/data/species-passives');
   for(const s of Dex.species.all())if(!expected.includes(s))assert.deepEqual(s.passives,SpeciesPassives[s.id]||[],s.id);
  });
@@ -95,7 +95,7 @@ describe('Starter family passives', () => {
   battle.field.setTerrain('grassyterrain',p);assert.equal(boost(p,t,'flamethrower'),150);
  });
  it('Transform onto a nonstarter drops passives and switch reversion restores the actual species',()=>{
-  const[p,t]=setup('Venusaur');assert(p.transformInto(t));assert.deepEqual(p.getPassives(),[]);
+  const[p,t]=setup('Venusaur');assert(p.transformInto(t));assert.deepEqual(p.getPassives(),['synchronize']);
   battle.makeChoices('switch 2','move splash');battle.makeChoices('switch 2','move splash');assert.deepEqual(p.getPassives(),['overgrow']);
  });
  it('keeps conditional boosts out of raw request stats and renders separate lookup passives',()=>{

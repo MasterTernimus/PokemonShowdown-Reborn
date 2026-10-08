@@ -3451,8 +3451,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iondeluge: {
 		name: "Ion Deluge",
-		desc: "Causes Normal-type moves to become Electric type this turn. The effect happens after other effects that change a move's type.",
-		shortDesc: "Normal moves become Electric type this turn.",
+		desc: "Causes Normal-type moves to become Electric type this turn. The effect happens after other effects that change a move's type. Creates Electric Aura for 3 turns, or 5 with Amplifield Rock, without replacing the base field. This Aura cannot promote into Electric Terrain, including after refreshes.",
+		shortDesc: "Electrifies Normal moves; 3-turn Electric Aura (5 with Amp Rock), never Terrain.",
 
 		activate: "  A deluge of ions showers the battlefield!",
 	},
@@ -4778,8 +4778,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	plasmafists: {
 		name: "Plasma Fists",
-		desc: "Has a higher chance for a critical hit. If this move succeeds, it turns Normal-type moves into Electric-type moves for the rest of the turn and sets Electric Terrain. If Electric Terrain can be set, this move gains 30% power.",
-		shortDesc: "High crit; sets Electric Terrain and electrifies Normal moves.",
+		desc: "Has a higher chance for a critical hit. If this move succeeds, it turns Normal-type moves into Electric-type moves for the rest of the turn and creates Electric Aura for 3 turns, or 5 with Amplifield Rock, without replacing the base field. This Aura cannot promote into Electric Terrain, including after refreshes. If Electric Terrain can be set, this move gains 30% power.",
+		shortDesc: "High crit; electrifies Normal moves; 3-turn Electric Aura (5 with Amp Rock), never Terrain.",
 	},
 	playnice: {
 		name: "Play Nice",
@@ -7467,7 +7467,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watershuriken: {
 		name: "Water Shuriken",
-		desc: "This 20 Base Power move has +1 priority, an increased critical-hit ratio, and hits two to six times. With Shadow Current, it always critically hits: the first hit has 90 Base Power, followed by one to four 20 Base Power hits, or two to five follow-up hits in Free-For-All. Ash-Greninja with Shadow Bond uses 30 Base Power, hits exactly three times, and always critically hits.",
+		desc: "This 20 Base Power move has +1 priority, an increased critical-hit ratio, and hits two to six times. With Shadow Current, it always critically hits: the first hit has 90 Base Power, followed by one to four 20 Base Power hits, or two to five follow-up hits in Free-For-All. Ash-Greninja with Shadow Bond uses 30 Base Power, hits exactly three times, and always critically hits. If Greninja activates Battle Bond by KOing a foe with this move, it immediately transforms and starts a fresh three-hit Ash volley against eligible remaining active foes, without a spillover damage penalty or additional PP cost.",
 		shortDesc: "+1 priority. 20 BP, high crit, hits 2-6. Greninja forms have special patterns.",
 		gen8: {
 			desc: "Hits three to five times. Has a 35% chance to hit three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times.",

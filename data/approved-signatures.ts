@@ -533,7 +533,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 					continue;
 				}
 
-				if (curPoke.hasAbility('naturalcure')) {
+				if (curPoke.hasAbilityOrPassive('naturalcure')) {
 					// this.add('-message', "" + curPoke + " confirmed: could be Natural Cure (and is)");
 					cureList.push(curPoke);
 				} else {

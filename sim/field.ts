@@ -62,8 +62,8 @@ export class Field {
 
 	isTerrainOrAura(id: string) { return this.isTerrain(id) || this.isAura(id); }
 
-	canSupportAura(id: string) {
-		if (!this.terrain || this.terrain === id || this.isFlowerGardenBase()) return false;
+	canSupportAura(id: string, allowEmptyField = false) {
+		if ((!this.terrain && !allowEmptyField) || this.terrain === id || this.isFlowerGardenBase()) return false;
 		if (['newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
 		if (this.terrain === 'corrosivemistterrain' && id === 'mistyterrain') return false;
 		return true;
@@ -71,25 +71,31 @@ export class Field {
 
 	setAura(id: string, turns: number, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
 		const aura = Auras[toID(id)];
-		if (!this.aurasEnabled || !aura || !Number.isFinite(turns) || turns < 1 || !this.canSupportAura(aura.id)) return false;
 		if (!sourceEffect) sourceEffect = this.battle.effect;
+		const fromElectricMove = aura?.id === 'electricterrain' && sourceEffect?.effectType === 'Move' &&
+			['iondeluge', 'plasmafists'].includes(sourceEffect.id);
+		// Same-Aura refreshes cannot launder move-created Aura provenance into a promotable Aura.
+		const noTerrainPromotion = fromElectricMove ||
+			(this.auraField === aura?.id && !!this.auraState.noTerrainPromotion);
+		if (!this.aurasEnabled || !aura || !Number.isFinite(turns) || turns < 1 ||
+			!this.canSupportAura(aura.id, noTerrainPromotion)) return false;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		const previousSource = this.auraState.sourceEffect?.id;
-		if (this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
+		if (!noTerrainPromotion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
 			!['raindance', 'sunnyday'].includes(sourceEffect.id) &&
 			sourceEffect.id !== previousSource && this.promoteAura(source, sourceEffect)) return true;
 		if (this.auraField) this.clearAura(false);
 		this.auraField = toID(aura.id);
 		this.auraTurns = Math.floor(turns);
 		this.auraRoll = null;
-		this.auraState = this.battle.initEffectState({id: 'terrainaura', source, sourceEffect});
+		this.auraState = this.battle.initEffectState({id: 'terrainaura', source, sourceEffect, noTerrainPromotion});
 		this.battle.add('-fieldstart', aura.name, `[aura] ${this.terrain === 'coldeclipseterrain' ? 0 : this.auraTurns}`);
 		this.refreshAuraAbilities();
 		return true;
 	}
 
 	promoteAura(source: Pokemon, sourceEffect: Effect) {
-		if (!this.auraField) return false;
+		if (!this.auraField || this.auraState.noTerrainPromotion) return false;
 		// Aura permission does not remove full-field replacement restrictions.
 		if (this.isFlowerGardenBase() || ['chessboardterrain', 'glitchterrain', 'bewitchedwoodsterrain',
 			'newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
@@ -117,14 +123,14 @@ export class Field {
 		// Aura changes must not run the base field's seeds or entry effects.
 		for (const pokemon of this.battle.getAllActive()) {
 			for (const id of ['mimicry', 'quarkdrive']) {
-				if (!pokemon.hasAbility(id)) continue;
+				if (!pokemon.hasAbilityOrPassive(id)) continue;
 				this.battle.singleEvent('TerrainChange', this.battle.dex.abilities.get(id), pokemon.abilityState, pokemon);
 			}
 		}
 	}
 
 	reconcileAura() {
-		if (this.auraField && !this.canSupportAura(this.auraField)) this.clearAura();
+		if (this.auraField && !this.canSupportAura(this.auraField, !!this.auraState.noTerrainPromotion)) this.clearAura();
 		else if (this.auraField) this.battle.add('-fieldstart', this.getAura().name, `[aura] ${this.terrain === 'coldeclipseterrain' ? 0 : this.auraTurns}`);
 	}
 
@@ -331,7 +337,7 @@ export class Field {
 				if (!pokemon || pokemon.fainted || pokemon.ignoringAbility() || pokemon.abilityState.ending) continue;
 				const ability = pokemon.getAbility();
 				if (ability.suppressWeather) return true;
-				if (ability.id === 'rkssystem' && pokemon.hasAbility('airlock')) return true;
+				if (ability.id === 'rkssystem' && pokemon.hasAbilityOrPassive('airlock')) return true;
 				if (['perfectforesight'].includes(ability.id) &&
 					pokemon.m.perfectForesightAbility && !pokemon.m.perfectForesightAbilityState?.ending &&
 					this.battle.dex.abilities.get(pokemon.m.perfectForesightAbility).suppressWeather) return true;
@@ -376,7 +382,7 @@ export class Field {
 
 	private pulseBlockadeHolder(source: Pokemon | 'debug' | null, sourceEffect: Effect | null) {
 		for (const pokemon of this.battle.getAllActive()) {
-			if (!pokemon.hp || !pokemon.isActive || !pokemon.hasAbility('pulseblockade') ||
+			if (!pokemon.hp || !pokemon.isActive || !pokemon.hasAbilityOrPassive('pulseblockade') ||
 				this.battle.suppressingAbility(pokemon)) continue;
 			if (pokemon === source && sourceEffect?.id === 'pulseblockade') continue;
 			return pokemon;
@@ -386,7 +392,7 @@ export class Field {
 
 	applyIcySpikesDamage(pokemon: Pokemon) {
 		if (this.terrain !== 'icyterrain' || !pokemon.isGrounded() ||
-			pokemon.hasAbility('magicguard')) return false;
+			pokemon.hasAbilityOrPassive('magicguard')) return false;
 		const layers = Math.min(pokemon.side.sideConditions.spikes?.layers ?? 0, 3);
 		const damageFractions = [1 / 8, 1 / 8, 1 / 6, 1 / 4];
 		const damage = pokemon.maxhp * damageFractions[layers];
@@ -419,7 +425,7 @@ export class Field {
 
 	neutralizeTerrainChange() {
 		const neutralizer = this.battle.getAllActive().find(pokemon =>
-			pokemon?.isActive && !pokemon.fainted && pokemon.hasAbility('neutralization')
+			pokemon?.isActive && !pokemon.fainted && pokemon.hasAbilityOrPassive('neutralization')
 		);
 		if (!neutralizer) return false;
 		this.battle.add('-message', `${neutralizer.side.name}'s Pokemon neutralizes the field change`);
@@ -428,13 +434,13 @@ export class Field {
 
 	neutralizingTerrainEffects() {
 		return this.battle.getAllActive().some(pokemon =>
-			pokemon?.isActive && !pokemon.fainted && pokemon.hasAbility('neutralization')
+			pokemon?.isActive && !pokemon.fainted && pokemon.hasAbilityOrPassive('neutralization')
 		);
 	}
 
 	neutralizingTerrainEffectsExcept(excluded: Pokemon) {
 		return this.battle.getAllActive().some(pokemon =>
-			pokemon !== excluded && pokemon?.isActive && !pokemon.fainted && pokemon.hasAbility('neutralization')
+			pokemon !== excluded && pokemon?.isActive && !pokemon.fainted && pokemon.hasAbilityOrPassive('neutralization')
 		);
 	}
 
@@ -823,7 +829,7 @@ export class Field {
 	growFlowerGarden(source: Pokemon, effect: Effect) {
 		const stage = this.flowerGardenStage();
 		if (!stage || stage >= 5) return false;
-		const amount = stage <= 3 && source.hasAbility('ripen') ? 2 : 1;
+		const amount = stage <= 3 && source.hasAbilityOrPassive('ripen') ? 2 : 1;
 		const changed = this.changeTerrain(`flowergarden${Math.min(5, stage + amount)}`, source, effect, true);
 		if (changed) this.battle.add('-message', 'The garden grew a little!');
 		return changed;
@@ -832,7 +838,7 @@ export class Field {
 	flowerGardenSwitchIn(pokemon: Pokemon) {
 		if (!pokemon.hp || !this.flowerGardenStage()) return;
 		// One growth per entrant, not per component of a composite ability such as Ancient Bloom.
-		if (pokemon.hasAbility(['drizzle', 'drought', 'flowergift', 'flowerveil', 'orichalcumpulse',
+		if (pokemon.hasAbilityOrPassive(['drizzle', 'drought', 'flowergift', 'flowerveil', 'orichalcumpulse',
 			'megasol', 'searingpetals', 'seedsower', 'grassysurge', 'forestsurge', 'pollenbloom', 'toxicbloom', 'ancientbloom'])) {
 			this.growFlowerGarden(pokemon, pokemon.getAbility());
 		}
@@ -893,14 +899,6 @@ export class Field {
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		status = this.battle.dex.conditions.get(status);
-		if (['trickroom', 'magicroom', 'wonderroom'].includes(status.id)) {
-			const neutralizer = this.battle.getAllActive().find(pokemon => pokemon?.hasAbility('neutralization'));
-			if (neutralizer) {
-				this.battle.add('-ability', neutralizer, 'Neutralization');
-				this.battle.add('-message', `${status.name} was neutralized!`);
-				return false;
-			}
-		}
 
 		let state = this.pseudoWeather[status.id];
 		if (state) {

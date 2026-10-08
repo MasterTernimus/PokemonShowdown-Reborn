@@ -1,0 +1,42 @@
+{
+  "groups": {
+    "freeflight": [
+      "salamence"
+    ],
+    "forewarn": [
+      "gardevoir"
+    ],
+    "solidrock": [
+      "rhyperior"
+    ],
+    "rockypayload": [
+      "conkeldurr"
+    ],
+    "overcoat": [
+      "excadrill",
+      "excadrillmega"
+    ],
+    "superluck": [
+      "meowsticf",
+      "meowsticfmega"
+    ],
+    "entrenched": [
+      "kingambit",
+      "baxcalibur"
+    ],
+    "liquidooze": [
+      "glimmora",
+      "glimmoramega"
+    ],
+    "levitate": [
+      "probopass"
+    ],
+    "poisonpoint": [
+      "roserade",
+      "roserademega"
+    ],
+    "steadyswimmer": [
+      "seaking"
+    ]
+  }
+}

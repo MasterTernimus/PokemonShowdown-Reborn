@@ -1,0 +1,6028 @@
+[
+  {
+    "id": "venusaur",
+    "name": "Venusaur",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Pollen Bloom",
+        "id": "pollenbloom",
+        "components": [
+          "pollenbloom",
+          "proficient",
+          "thickfat"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Creeping Bloom",
+        "id": "creepingbloom",
+        "components": [
+          "creepingbloom",
+          "infiltrator"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Chlorophyll",
+        "id": "chlorophyll",
+        "components": [
+          "chlorophyll"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "venusaurmega",
+    "name": "Venusaur-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Toxic Bloom",
+        "id": "toxicbloom",
+        "components": [
+          "toxicbloom",
+          "pollenbloom",
+          "proficient",
+          "thickfat",
+          "selfsufficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "venusaurgmax",
+    "name": "Venusaur-Gmax",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Ancient Bloom",
+        "id": "ancientbloom",
+        "components": [
+          "ancientbloom",
+          "effectspore",
+          "selfsufficient",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "meganium",
+    "name": "Meganium",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Triage",
+        "id": "triage",
+        "components": [
+          "triage"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Verdant Hospitality",
+        "id": "verdanthospitality",
+        "components": [
+          "verdanthospitality",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Invigorate",
+        "id": "invigorate",
+        "components": [
+          "invigorate"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "meganiummega",
+    "name": "Meganium-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Blooming Sun",
+        "id": "bloomingsun",
+        "components": [
+          "bloomingsun",
+          "megasol",
+          "invigorate",
+          "naturalcure",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "meganiummegay",
+    "name": "Meganium-Mega-Y",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Blooming Sun",
+        "id": "bloomingsun",
+        "components": [
+          "bloomingsun",
+          "megasol",
+          "invigorate",
+          "naturalcure",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "sceptile",
+    "name": "Sceptile",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Regenerator",
+        "id": "regenerator",
+        "components": [
+          "regenerator"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Dual Wield",
+        "id": "dualwield",
+        "components": [
+          "dualwield"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Unburden",
+        "id": "unburden",
+        "components": [
+          "unburden"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "sceptilemega",
+    "name": "Sceptile-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Verdant Drake",
+        "id": "verdantdrake",
+        "components": [
+          "verdantdrake",
+          "proficient",
+          "dualwield",
+          "regenerator",
+          "lightningrod",
+          "limber"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "torterra",
+    "name": "Torterra",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Stamina",
+        "id": "stamina",
+        "components": [
+          "stamina"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Shell Armor",
+        "id": "shellarmor",
+        "components": [
+          "shellarmor"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Terra Gift",
+        "id": "terragift",
+        "components": [
+          "terragift",
+          "hospitality",
+          "unaware",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "torterramegax",
+    "name": "Torterra-Mega-X",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Primal Ego",
+        "id": "primalego",
+        "components": [
+          "primalego",
+          "unaware",
+          "proficient",
+          "ultraego",
+          "moldbreaker"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "torterramegay",
+    "name": "Torterra-Mega-Y",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Terra Resolve",
+        "id": "terraresolve",
+        "components": [
+          "terraresolve",
+          "stamina",
+          "solidrock",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "torterrarift",
+    "name": "Torterra-Rift",
+    "passives": [],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Mountain Rift",
+        "id": "mountainrift",
+        "components": [
+          "mountainrift",
+          "shellarmor",
+          "selfsufficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "torterrariftshatter",
+    "name": "Torterra-Rift-Shatter",
+    "passives": [],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Desert Rift",
+        "id": "desertrift",
+        "components": [
+          "desertrift",
+          "sandforce",
+          "sandstream",
+          "heavymetal"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "serperior",
+    "name": "Serperior",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Multiscale",
+        "id": "multiscale",
+        "components": [
+          "multiscale"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Royal Decree",
+        "id": "royaldecree",
+        "components": [
+          "royaldecree"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Contrary",
+        "id": "contrary",
+        "components": [
+          "contrary"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "serperiorazzy",
+    "name": "Serperior-Azzy",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Multiscale",
+        "id": "multiscale",
+        "components": [
+          "multiscale"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Royal Decree",
+        "id": "royaldecree",
+        "components": [
+          "royaldecree"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Contrary",
+        "id": "contrary",
+        "components": [
+          "contrary"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "serperiormega",
+    "name": "Serperior-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Queen's Guard",
+        "id": "queensguard",
+        "components": [
+          "queensguard",
+          "contrary",
+          "shedskin",
+          "intimidate",
+          "infiltrator",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "chesnaught",
+    "name": "Chesnaught",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Royal Decree",
+        "id": "royaldecree",
+        "components": [
+          "royaldecree"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Knight's Reprisal",
+        "id": "knightsreprisal",
+        "components": [
+          "knightsreprisal",
+          "bulletproof"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "chesnaughtmega",
+    "name": "Chesnaught-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Wrath Shield",
+        "id": "wrathshield",
+        "components": [
+          "wrathshield",
+          "bulletproof",
+          "dauntlessshield",
+          "selfrepair",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "decidueye",
+    "name": "Decidueye",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Fallen Star",
+        "id": "fallenstar",
+        "components": [
+          "fallenstar",
+          "moldbreaker",
+          "dualwield",
+          "selfsufficient",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Long Reach",
+        "id": "longreach",
+        "components": [
+          "longreach",
+          "superluck",
+          "keeneye"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Tinted Lens",
+        "id": "tintedlens",
+        "components": [
+          "tintedlens"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "decidueyealt",
+    "name": "Decidueye-Alt",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Fallen Star",
+        "id": "fallenstar",
+        "components": [
+          "fallenstar",
+          "moldbreaker",
+          "dualwield",
+          "selfsufficient",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Long Reach",
+        "id": "longreach",
+        "components": [
+          "longreach",
+          "superluck",
+          "keeneye"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Tinted Lens",
+        "id": "tintedlens",
+        "components": [
+          "tintedlens"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "decidueyehisui",
+    "name": "Decidueye-Hisui",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Fallen Star",
+        "id": "fallenstar",
+        "components": [
+          "fallenstar",
+          "moldbreaker",
+          "dualwield",
+          "selfsufficient",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Unburden",
+        "id": "unburden",
+        "components": [
+          "unburden"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Scrappy",
+        "id": "scrappy",
+        "components": [
+          "scrappy"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "decidueyehisuialt",
+    "name": "Decidueye-Hisui-Alt",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Fallen Star",
+        "id": "fallenstar",
+        "components": [
+          "fallenstar",
+          "moldbreaker",
+          "dualwield",
+          "selfsufficient",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Unburden",
+        "id": "unburden",
+        "components": [
+          "unburden"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Scrappy",
+        "id": "scrappy",
+        "components": [
+          "scrappy"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "rillaboom",
+    "name": "Rillaboom",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Primal Rhythm",
+        "id": "primalrhythm",
+        "components": [
+          "primalrhythm"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Drum Guard",
+        "id": "drumguard",
+        "components": [
+          "drumguard",
+          "soundproof"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Grassy Surge",
+        "id": "grassysurge",
+        "components": [
+          "grassysurge"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "rillaboomgmax",
+    "name": "Rillaboom-Gmax",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Forest Surge",
+        "id": "forestsurge",
+        "components": [
+          "forestsurge",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "meowscarada",
+    "name": "Meowscarada",
+    "passives": [
+      "overgrow"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "False Bouquet",
+        "id": "falsebouquet",
+        "components": [
+          "falsebouquet",
+          "magician"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Protean",
+        "id": "protean",
+        "components": [
+          "protean"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Illusion",
+        "id": "illusion",
+        "components": [
+          "illusion"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "charizard",
+    "name": "Charizard",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Unbound Blaze",
+        "id": "unboundblaze",
+        "components": [
+          "unboundblaze",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Infernal Dominion",
+        "id": "infernaldominion",
+        "components": [
+          "infernaldominion",
+          "intimidate"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Solar Power",
+        "id": "solarpower",
+        "components": [
+          "solarpower"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "charizardalt",
+    "name": "Charizard-Alt",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Unbound Blaze",
+        "id": "unboundblaze",
+        "components": [
+          "unboundblaze",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Infernal Dominion",
+        "id": "infernaldominion",
+        "components": [
+          "infernaldominion",
+          "intimidate"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Solar Power",
+        "id": "solarpower",
+        "components": [
+          "solarpower"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "charizardmegax",
+    "name": "Charizard-Mega-X",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Atrocity",
+        "id": "atrocity",
+        "components": [
+          "atrocity",
+          "moldbreaker",
+          "unboundblaze",
+          "proficient",
+          "selfsufficient",
+          "toughclaws"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "charizardmegaxalt",
+    "name": "Charizard-Mega-X-Alt",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Atrocity",
+        "id": "atrocity",
+        "components": [
+          "atrocity",
+          "moldbreaker",
+          "unboundblaze",
+          "proficient",
+          "selfsufficient",
+          "toughclaws"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "charizardmegay",
+    "name": "Charizard-Mega-Y",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sun Sovereign",
+        "id": "sunsovereign",
+        "components": [
+          "sunsovereign",
+          "moldbreaker",
+          "drought",
+          "unboundblaze",
+          "proficient",
+          "selfsufficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "charizardgmax",
+    "name": "Charizard-Gmax",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Burning Crown",
+        "id": "burningcrown",
+        "components": [
+          "burningcrown",
+          "filter",
+          "selfsufficient",
+          "whitesmoke",
+          "moldbreaker",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "typhlosion",
+    "name": "Typhlosion",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Blazing Mane",
+        "id": "blazingmane",
+        "components": [
+          "blazingmane",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Drought",
+        "id": "drought",
+        "components": [
+          "drought"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Sand Rush",
+        "id": "sandrush",
+        "components": [
+          "sandrush"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "typhlosionalt",
+    "name": "Typhlosion-Alt",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Blazing Mane",
+        "id": "blazingmane",
+        "components": [
+          "blazingmane",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Drought",
+        "id": "drought",
+        "components": [
+          "drought"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Sand Rush",
+        "id": "sandrush",
+        "components": [
+          "sandrush"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "typhlosionhisui",
+    "name": "Typhlosion-Hisui",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Blazing Mane",
+        "id": "blazingmane",
+        "components": [
+          "blazingmane",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Soul Fire",
+        "id": "soulfire",
+        "components": [
+          "soulfire"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Supreme Overlord",
+        "id": "supremeoverlord",
+        "components": [
+          "supremeoverlord"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "typhlosionmega",
+    "name": "Typhlosion-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Plasma Eruption",
+        "id": "plasmaeruption",
+        "components": [
+          "plasmaeruption",
+          "proficient",
+          "static",
+          "flamebody"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "blaziken",
+    "name": "Blaziken",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Defiant",
+        "id": "defiant",
+        "components": [
+          "defiant"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Striker",
+        "id": "striker",
+        "components": [
+          "striker"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Speed Boost",
+        "id": "speedboost",
+        "components": [
+          "speedboost"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "blazikenmega",
+    "name": "Blaziken-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Blazing Tempo",
+        "id": "blazingtempo",
+        "components": [
+          "blazingtempo",
+          "proficient",
+          "speedboost",
+          "striker",
+          "magmaarmor",
+          "keeneye"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "infernape",
+    "name": "Infernape",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "White Smoke",
+        "id": "whitesmoke",
+        "components": [
+          "whitesmoke"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Ultra Instinct",
+        "id": "ultrainstinct",
+        "components": [
+          "ultrainstinct",
+          "moldbreaker",
+          "innerfocus"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Burning Rage",
+        "id": "burningrage",
+        "components": [
+          "burningrage",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "infernapemega",
+    "name": "Infernape-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Burning Spirit",
+        "id": "burningspirit",
+        "components": [
+          "burningspirit",
+          "selfsufficient",
+          "opportunist",
+          "magmaarmor",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "emboar",
+    "name": "Emboar",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Stoke Belly",
+        "id": "stokebelly",
+        "components": [
+          "stokebelly",
+          "gluttony"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Thick Fat",
+        "id": "thickfat",
+        "components": [
+          "thickfat"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Brute Force",
+        "id": "bruteforce",
+        "components": [
+          "bruteforce"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "emboarmega",
+    "name": "Emboar-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Burning Ego",
+        "id": "burningego",
+        "components": [
+          "burningego",
+          "proficient",
+          "ultraego",
+          "flamebody",
+          "magmaarmor"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "emboarreborn",
+    "name": "Emboar-Reborn",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Gluttony",
+        "id": "gluttony",
+        "components": [
+          "gluttony"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Thick Fat",
+        "id": "thickfat",
+        "components": [
+          "thickfat"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Brute Force",
+        "id": "bruteforce",
+        "components": [
+          "bruteforce"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "emboarmegareborn",
+    "name": "Emboar-Mega-Reborn",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Burning Ego",
+        "id": "burningego",
+        "components": [
+          "burningego",
+          "proficient",
+          "ultraego",
+          "flamebody",
+          "magmaarmor"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "delphox",
+    "name": "Delphox",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sworn Duty",
+        "id": "swornduty",
+        "components": [
+          "swornduty"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Magic Guard",
+        "id": "magicguard",
+        "components": [
+          "magicguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Void Guile",
+        "id": "voidguile",
+        "components": [
+          "voidguile",
+          "magician",
+          "infiltrator"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "delphoxmega",
+    "name": "Delphox-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Astral Witchcraft",
+        "id": "astralwitchcraft",
+        "components": [
+          "astralwitchcraft",
+          "levitate",
+          "magicguard",
+          "magicbounce",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "incineroar",
+    "name": "Incineroar",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Ultra Ego",
+        "id": "ultraego",
+        "components": [
+          "ultraego"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Ringmaster",
+        "id": "ringmaster",
+        "components": [
+          "ringmaster",
+          "toughclaws"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Intimidate",
+        "id": "intimidate",
+        "components": [
+          "intimidate"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "incineroaralt",
+    "name": "Incineroar-Alt",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Ultra Ego",
+        "id": "ultraego",
+        "components": [
+          "ultraego"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Ringmaster",
+        "id": "ringmaster",
+        "components": [
+          "ringmaster",
+          "toughclaws"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Intimidate",
+        "id": "intimidate",
+        "components": [
+          "intimidate"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "cinderace",
+    "name": "Cinderace",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Defiant",
+        "id": "defiant",
+        "components": [
+          "defiant"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Set Piece",
+        "id": "setpiece",
+        "components": [
+          "setpiece"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Libero",
+        "id": "libero",
+        "components": [
+          "libero"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "cinderacegmax",
+    "name": "Cinderace-Gmax",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Striker's Momentum",
+        "id": "strikersmomentum",
+        "components": [
+          "strikersmomentum",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "skeledirge",
+    "name": "Skeledirge",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Soul Fire",
+        "id": "soulfire",
+        "components": [
+          "soulfire"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Funeral Choir",
+        "id": "funeralchoir",
+        "components": [
+          "funeralchoir"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Unaware",
+        "id": "unaware",
+        "components": [
+          "unaware"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "skeledirgealt",
+    "name": "Skeledirge-Alt",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Soul Fire",
+        "id": "soulfire",
+        "components": [
+          "soulfire"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Funeral Choir",
+        "id": "funeralchoir",
+        "components": [
+          "funeralchoir"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Unaware",
+        "id": "unaware",
+        "components": [
+          "unaware"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "skeledirgeaevian",
+    "name": "Skeledirge-Aevian",
+    "passives": [
+      "blaze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Unaware",
+        "id": "unaware",
+        "components": [
+          "unaware"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Misty Surge",
+        "id": "mistysurge",
+        "components": [
+          "mistysurge"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Venom Canticle",
+        "id": "venomcanticle",
+        "components": [
+          "venomcanticle"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "cinderacemega",
+    "name": "Cinderace-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Perfect Striker",
+        "id": "perfectstriker",
+        "components": [
+          "perfectstriker",
+          "striker",
+          "noguard",
+          "libero",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "blastoise",
+    "name": "Blastoise",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Water Barrage",
+        "id": "waterbarrage",
+        "components": [
+          "waterbarrage",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Bulletproof",
+        "id": "bulletproof",
+        "components": [
+          "bulletproof"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Hydraulic Armor",
+        "id": "hydraulicarmor",
+        "components": [
+          "hydraulicarmor",
+          "stamina"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "blastoisemega",
+    "name": "Blastoise-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Siege Launcher",
+        "id": "siegelauncher",
+        "components": [
+          "siegelauncher",
+          "stalwart",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "blastoisegmax",
+    "name": "Blastoise-Gmax",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Fortress Shell",
+        "id": "fortressshell",
+        "components": [
+          "fortressshell",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "feraligatr",
+    "name": "Feraligatr",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Water Veil",
+        "id": "waterveil",
+        "components": [
+          "waterveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Mighty Jaw",
+        "id": "mightyjaw",
+        "components": [
+          "mightyjaw",
+          "proficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Sheer Force",
+        "id": "sheerforce",
+        "components": [
+          "sheerforce"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "feraligatrmega",
+    "name": "Feraligatr-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Draconic Force",
+        "id": "draconicforce",
+        "components": [
+          "draconicforce",
+          "dragonize",
+          "strongjaw",
+          "moldbreaker",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "feraligatrgmax",
+    "name": "Feraligatr-Gmax",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Tidal Jaw",
+        "id": "tidaljaw",
+        "components": [
+          "tidaljaw",
+          "strongjaw",
+          "swiftswim",
+          "filter",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "swampert",
+    "name": "Swampert",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Dry Skin",
+        "id": "dryskin",
+        "components": [
+          "dryskin"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Regenerator",
+        "id": "regenerator",
+        "components": [
+          "regenerator"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Damp",
+        "id": "damp",
+        "components": [
+          "damp"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "swampertmega",
+    "name": "Swampert-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Raging Current",
+        "id": "ragingcurrent",
+        "components": [
+          "ragingcurrent",
+          "swiftswim",
+          "damp",
+          "dryskin",
+          "stamina",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "empoleon",
+    "name": "Empoleon",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Competitive",
+        "id": "competitive",
+        "components": [
+          "competitive"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Exalt",
+        "id": "exalt",
+        "components": [
+          "exalt",
+          "defiant",
+          "sharpness",
+          "moldbreaker"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Royal Decree",
+        "id": "royaldecree",
+        "components": [
+          "royaldecree"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "empoleonmega",
+    "name": "Empoleon-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Emperor's Resolve",
+        "id": "emperorsresolve",
+        "components": [
+          "emperorsresolve",
+          "competitive",
+          "slushrush",
+          "swiftswim",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "samurott",
+    "name": "Samurott",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Swift Swim",
+        "id": "swiftswim",
+        "components": [
+          "swiftswim"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Blade Mastery",
+        "id": "blademastery",
+        "components": [
+          "blademastery"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Shell Armor",
+        "id": "shellarmor",
+        "components": [
+          "shellarmor"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "samurottalt",
+    "name": "Samurott-Alt",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Swift Swim",
+        "id": "swiftswim",
+        "components": [
+          "swiftswim"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Blade Mastery",
+        "id": "blademastery",
+        "components": [
+          "blademastery"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Shell Armor",
+        "id": "shellarmor",
+        "components": [
+          "shellarmor"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "samurotthisui",
+    "name": "Samurott-Hisui",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Lightning Rod",
+        "id": "lightningrod",
+        "components": [
+          "lightningrod"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Blade Mastery",
+        "id": "blademastery",
+        "components": [
+          "blademastery"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Swift Swim",
+        "id": "swiftswim",
+        "components": [
+          "swiftswim"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "samurotthisuialt",
+    "name": "Samurott-Hisui-Alt",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Lightning Rod",
+        "id": "lightningrod",
+        "components": [
+          "lightningrod"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Blade Mastery",
+        "id": "blademastery",
+        "components": [
+          "blademastery"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Swift Swim",
+        "id": "swiftswim",
+        "components": [
+          "swiftswim"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "greninja",
+    "name": "Greninja",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Liquid Arsenal",
+        "id": "liquidarsenal",
+        "components": [
+          "liquidarsenal",
+          "technician"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Protean",
+        "id": "protean",
+        "components": [
+          "protean"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Shadow Screen",
+        "id": "shadowscreen",
+        "components": [
+          "shadowscreen",
+          "infiltrator"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "S",
+        "name": "Battle Bond",
+        "id": "battlebond",
+        "components": [
+          "battlebond",
+          "filter",
+          "selfsufficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "greninjabond",
+    "name": "Greninja-Bond",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Battle Bond",
+        "id": "battlebond",
+        "components": [
+          "battlebond",
+          "filter",
+          "selfsufficient"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "greninjaash",
+    "name": "Greninja-Ash",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shadow Bond",
+        "id": "shadowbond",
+        "components": [
+          "shadowbond",
+          "battlebond",
+          "filter",
+          "selfsufficient",
+          "proficient",
+          "infiltrator"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "greninjamega",
+    "name": "Greninja-Mega",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shadow Current",
+        "id": "shadowcurrent",
+        "components": [
+          "shadowcurrent",
+          "protean",
+          "technician",
+          "anticipation",
+          "infiltrator",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "primarina",
+    "name": "Primarina",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Encore Aria",
+        "id": "encorearia",
+        "components": [
+          "encorearia",
+          "serenegrace"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Marvel Scale",
+        "id": "marvelscale",
+        "components": [
+          "marvelscale"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Tidal Voice",
+        "id": "tidalvoice",
+        "components": [
+          "tidalvoice",
+          "liquidvoice"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "primarinaalt",
+    "name": "Primarina-Alt",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Encore Aria",
+        "id": "encorearia",
+        "components": [
+          "encorearia",
+          "serenegrace"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Marvel Scale",
+        "id": "marvelscale",
+        "components": [
+          "marvelscale"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Tidal Voice",
+        "id": "tidalvoice",
+        "components": [
+          "tidalvoice",
+          "liquidvoice"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "inteleon",
+    "name": "Inteleon",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Dual Wield",
+        "id": "dualwield",
+        "components": [
+          "dualwield"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Patient Marksman",
+        "id": "patientmarksman",
+        "components": [
+          "patientmarksman",
+          "sniper"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Calculated Shot",
+        "id": "calculatedshot",
+        "components": [
+          "calculatedshot",
+          "frisk"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "inteleongmax",
+    "name": "Inteleon-Gmax",
+    "passives": [
+      "proficient"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "High Noon",
+        "id": "highnoon",
+        "components": [
+          "highnoon",
+          "dualwield",
+          "megalauncher",
+          "proficient"
+        ],
+        "overlap": [
+          "proficient"
+        ],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "quaquaval",
+    "name": "Quaquaval",
+    "passives": [
+      "torrent"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Festival Step",
+        "id": "festivalstep",
+        "components": [
+          "festivalstep"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Dancer",
+        "id": "dancer",
+        "components": [
+          "dancer"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Moxie",
+        "id": "moxie",
+        "components": [
+          "moxie"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "kingler",
+    "name": "Kingler",
+    "passives": [
+      "hypercutter"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shell Armor",
+        "id": "shellarmor",
+        "components": [
+          "shellarmor"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Titan Pincer",
+        "id": "titanpincer",
+        "components": [
+          "titanpincer",
+          "hypercutter"
+        ],
+        "overlap": [
+          "hypercutter"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Shellcracker",
+        "id": "shellcracker",
+        "components": [
+          "shellcracker"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "pinsir",
+    "name": "Pinsir",
+    "passives": [
+      "hypercutter"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Locking Grip",
+        "id": "lockinggrip",
+        "components": [
+          "lockinggrip",
+          "hypercutter"
+        ],
+        "overlap": [
+          "hypercutter"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Hardy Skin",
+        "id": "hardyskin",
+        "components": [
+          "hardyskin",
+          "dryskin",
+          "vitalspirit",
+          "moxie"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Violent Rush",
+        "id": "violentrush",
+        "components": [
+          "violentrush"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "crawdaunt",
+    "name": "Crawdaunt",
+    "passives": [
+      "hypercutter"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Adaptability",
+        "id": "adaptability",
+        "components": [
+          "adaptability"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Swift Swim",
+        "id": "swiftswim",
+        "components": [
+          "swiftswim"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Cruel Shell",
+        "id": "cruelshell",
+        "components": [
+          "cruelshell"
+        ],
+        "overlap": [
+          "hypercutter"
+        ],
+        "standalone": true,
+        "implicitEvidence": {
+          "methods": [
+            "onTryBoost"
+          ],
+          "grounded": false
+        }
+      }
+    ]
+  },
+  {
+    "id": "gliscor",
+    "name": "Gliscor",
+    "passives": [
+      "hypercutter"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Venom Heal",
+        "id": "venomheal",
+        "components": [
+          "venomheal"
+        ],
+        "overlap": [
+          "hypercutter"
+        ],
+        "standalone": true,
+        "implicitEvidence": {
+          "methods": [
+            "onTryBoost"
+          ],
+          "grounded": false
+        }
+      },
+      {
+        "slot": "1",
+        "name": "Toxic Boost",
+        "id": "toxicboost",
+        "components": [
+          "toxicboost"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Wind Rider",
+        "id": "windrider",
+        "components": [
+          "windrider"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "butterfree",
+    "name": "Butterfree",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Magic Guard",
+        "id": "magicguard",
+        "components": [
+          "magicguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillon",
+    "name": "Vivillon",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "dustox",
+    "name": "Dustox",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Unaware",
+        "id": "unaware",
+        "components": [
+          "unaware"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Toxic Cocoon",
+        "id": "toxiccocoon",
+        "components": [
+          "toxiccocoon"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "mothim",
+    "name": "Mothim",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Swarm",
+        "id": "swarm",
+        "components": [
+          "swarm"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Protean",
+        "id": "protean",
+        "components": [
+          "protean"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Tinted Lens",
+        "id": "tintedlens",
+        "components": [
+          "tintedlens"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "masquerain",
+    "name": "Masquerain",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Frightful Wings",
+        "id": "frightfulwings",
+        "components": [
+          "frightfulwings",
+          "intimidate"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Scale Shelter",
+        "id": "scaleshelter",
+        "components": [
+          "scaleshelter",
+          "shielddust",
+          "overcoat"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Storm Drain",
+        "id": "stormdrain",
+        "components": [
+          "stormdrain"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "cacnea",
+    "name": "Cacnea",
+    "passives": [
+      "overcoat"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sand Veil",
+        "id": "sandveil",
+        "components": [
+          "sandveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Water Absorb",
+        "id": "waterabsorb",
+        "components": [
+          "waterabsorb"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "cacturne",
+    "name": "Cacturne",
+    "passives": [
+      "overcoat"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Scarecrow",
+        "id": "scarecrow",
+        "components": [
+          "scarecrow"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Solar Rush",
+        "id": "solarrush",
+        "components": [
+          "solarrush",
+          "sandrush",
+          "chlorophyll"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Storm Drain",
+        "id": "stormdrain",
+        "components": [
+          "stormdrain"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "maractus",
+    "name": "Maractus",
+    "passives": [
+      "overcoat"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Chlorophyll",
+        "id": "chlorophyll",
+        "components": [
+          "chlorophyll"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Cactus Chorus",
+        "id": "cactuschorus",
+        "components": [
+          "cactuschorus",
+          "waterabsorb",
+          "sandrush"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Storm Drain",
+        "id": "stormdrain",
+        "components": [
+          "stormdrain"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "swalot",
+    "name": "Swalot",
+    "passives": [
+      "liquidooze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Liquid Ooze",
+        "id": "liquidooze",
+        "components": [
+          "liquidooze"
+        ],
+        "overlap": [
+          "liquidooze"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Neutralization",
+        "id": "neutralization",
+        "components": [
+          "neutralization"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Accumulation",
+        "id": "accumulation",
+        "components": [
+          "accumulation"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "tentacruel",
+    "name": "Tentacruel",
+    "passives": [
+      "liquidooze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Venom Veil",
+        "id": "venomveil",
+        "components": [
+          "venomveil",
+          "liquidooze",
+          "corrosion",
+          "waterveil"
+        ],
+        "overlap": [
+          "liquidooze"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Regenerator",
+        "id": "regenerator",
+        "components": [
+          "regenerator"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Water Absorb",
+        "id": "waterabsorb",
+        "components": [
+          "waterabsorb"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "muk",
+    "name": "Muk",
+    "passives": [
+      "liquidooze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Accumulation",
+        "id": "accumulation",
+        "components": [
+          "accumulation"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Poison Touch",
+        "id": "poisontouch",
+        "components": [
+          "poisontouch"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Regenerator",
+        "id": "regenerator",
+        "components": [
+          "regenerator"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "gulpin",
+    "name": "Gulpin",
+    "passives": [
+      "liquidooze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Liquid Ooze",
+        "id": "liquidooze",
+        "components": [
+          "liquidooze"
+        ],
+        "overlap": [
+          "liquidooze"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Sticky Hold",
+        "id": "stickyhold",
+        "components": [
+          "stickyhold"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Gluttony",
+        "id": "gluttony",
+        "components": [
+          "gluttony"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "tentacool",
+    "name": "Tentacool",
+    "passives": [
+      "liquidooze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Clear Body",
+        "id": "clearbody",
+        "components": [
+          "clearbody"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Liquid Ooze",
+        "id": "liquidooze",
+        "components": [
+          "liquidooze"
+        ],
+        "overlap": [
+          "liquidooze"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Rain Dish",
+        "id": "raindish",
+        "components": [
+          "raindish"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "grimer",
+    "name": "Grimer",
+    "passives": [
+      "liquidooze"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Stench",
+        "id": "stench",
+        "components": [
+          "stench"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Sticky Hold",
+        "id": "stickyhold",
+        "components": [
+          "stickyhold"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Poison Touch",
+        "id": "poisontouch",
+        "components": [
+          "poisontouch"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "fearow",
+    "name": "Fearow",
+    "passives": [
+      "keeneye"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Lance Point",
+        "id": "lancepoint",
+        "components": [
+          "lancepoint",
+          "keeneye"
+        ],
+        "overlap": [
+          "keeneye"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Sniper",
+        "id": "sniper",
+        "components": [
+          "sniper"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "noctowl",
+    "name": "Noctowl",
+    "passives": [
+      "keeneye"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Duskilate",
+        "id": "duskilate",
+        "components": [
+          "duskilate"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Night Watch",
+        "id": "nightwatch",
+        "components": [
+          "nightwatch",
+          "keeneye",
+          "insomnia"
+        ],
+        "overlap": [
+          "keeneye"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Lunar Spirit",
+        "id": "lunarspirit",
+        "components": [
+          "lunarspirit"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "watchog",
+    "name": "Watchog",
+    "passives": [
+      "keeneye"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Illuminate",
+        "id": "illuminate",
+        "components": [
+          "illuminate"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Keen Eye",
+        "id": "keeneye",
+        "components": [
+          "keeneye"
+        ],
+        "overlap": [
+          "keeneye"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Analytic",
+        "id": "analytic",
+        "components": [
+          "analytic"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "furret",
+    "name": "Furret",
+    "passives": [
+      "keeneye"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Spring Fur",
+        "id": "springfur",
+        "components": [
+          "springfur",
+          "furcoat"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Simple",
+        "id": "simple",
+        "components": [
+          "simple"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Variety Rush",
+        "id": "varietyrush",
+        "components": [
+          "varietyrush"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremie",
+    "name": "Alcremie",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "slurpuff",
+    "name": "Slurpuff",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Unburden",
+        "id": "unburden",
+        "components": [
+          "unburden"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Violent Rush",
+        "id": "violentrush",
+        "components": [
+          "violentrush"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Scent Scout",
+        "id": "scentscout",
+        "components": [
+          "scentscout",
+          "frisk"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "vespiquen",
+    "name": "Vespiquen",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Royal Escort",
+        "id": "royalescort",
+        "components": [
+          "royalescort",
+          "pressure",
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Queenly Majesty",
+        "id": "queenlymajesty",
+        "components": [
+          "queenlymajesty"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Royal Hive",
+        "id": "royalhive",
+        "components": [
+          "royalhive"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "milcery",
+    "name": "Milcery",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "swirlix",
+    "name": "Swirlix",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Unburden",
+        "id": "unburden",
+        "components": [
+          "unburden"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "combee",
+    "name": "Combee",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Honey Gather",
+        "id": "honeygather",
+        "components": [
+          "honeygather"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Hustle",
+        "id": "hustle",
+        "components": [
+          "hustle"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "eevee",
+    "name": "Eevee",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Run Away",
+        "id": "runaway",
+        "components": [
+          "runaway"
+        ],
+        "overlap": [
+          "runaway"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Adaptability",
+        "id": "adaptability",
+        "components": [
+          "adaptability"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Anticipation",
+        "id": "anticipation",
+        "components": [
+          "anticipation"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vaporeon",
+    "name": "Vaporeon",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Tidal Wave",
+        "id": "tidalwave",
+        "components": [
+          "tidalwave",
+          "waterabsorb",
+          "hydration",
+          "raindish"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Marvel Scale",
+        "id": "marvelscale",
+        "components": [
+          "marvelscale"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Drizzle",
+        "id": "drizzle",
+        "components": [
+          "drizzle"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "jolteon",
+    "name": "Jolteon",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Livewire",
+        "id": "livewire",
+        "components": [
+          "livewire",
+          "transistor",
+          "voltabsorb",
+          "quickfeet",
+          "ironbarbs"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Battery",
+        "id": "battery",
+        "components": [
+          "battery"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Electric Surge",
+        "id": "electricsurge",
+        "components": [
+          "electricsurge"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "flareon",
+    "name": "Flareon",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Kindled Fury",
+        "id": "kindledfury",
+        "components": [
+          "kindledfury",
+          "fluffy",
+          "guts",
+          "flashfire"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Fire Mane",
+        "id": "firemane",
+        "components": [
+          "firemane"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Drought",
+        "id": "drought",
+        "components": [
+          "drought"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "espeon",
+    "name": "Espeon",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Trace",
+        "id": "trace",
+        "components": [
+          "trace"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Astral Ward",
+        "id": "astralward",
+        "components": [
+          "astralward",
+          "magicbounce",
+          "telepathy",
+          "anticipation"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Psychic Surge",
+        "id": "psychicsurge",
+        "components": [
+          "psychicsurge"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "S",
+        "name": "Mind Freeze",
+        "id": "mindfreeze",
+        "components": [
+          "mindfreeze"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "E",
+        "name": "Eclipse",
+        "id": "eclipse",
+        "components": [
+          "eclipse"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "umbreon",
+    "name": "Umbreon",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Poison Heal",
+        "id": "poisonheal",
+        "components": [
+          "poisonheal"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Moonlight Vigil",
+        "id": "moonlightvigil",
+        "components": [
+          "moonlightvigil",
+          "innerfocus",
+          "pressure",
+          "illuminate"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Dark Aura",
+        "id": "darkaura",
+        "components": [
+          "darkaura"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "S",
+        "name": "Eclipse",
+        "id": "eclipse",
+        "components": [
+          "eclipse"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "G",
+        "name": "Ascendance",
+        "id": "ascendance",
+        "components": [
+          "ascendance"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "leafeon",
+    "name": "Leafeon",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Verdant Edge",
+        "id": "verdantedge",
+        "components": [
+          "verdantedge",
+          "chlorophyll",
+          "grasspelt",
+          "sharpness"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Regenerator",
+        "id": "regenerator",
+        "components": [
+          "regenerator"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Grassy Surge",
+        "id": "grassysurge",
+        "components": [
+          "grassysurge"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "glaceon",
+    "name": "Glaceon",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Permafrost",
+        "id": "permafrost",
+        "components": [
+          "permafrost",
+          "icebody",
+          "icescales",
+          "refrigerate"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Slush Rush",
+        "id": "slushrush",
+        "components": [
+          "slushrush"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Snow Warning",
+        "id": "snowwarning",
+        "components": [
+          "snowwarning"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "S",
+        "name": "Mind Freeze",
+        "id": "mindfreeze",
+        "components": [
+          "mindfreeze"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "sylveon",
+    "name": "Sylveon",
+    "passives": [
+      "runaway"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Competitive",
+        "id": "competitive",
+        "components": [
+          "competitive"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Soothing Presence",
+        "id": "soothingpresence",
+        "components": [
+          "soothingpresence",
+          "friendguard",
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Pixilate",
+        "id": "pixilate",
+        "components": [
+          "pixilate"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "baltoy",
+    "name": "Baltoy",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Own Tempo",
+        "id": "owntempo",
+        "components": [
+          "owntempo"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "claydol",
+    "name": "Claydol",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Clear Body",
+        "id": "clearbody",
+        "components": [
+          "clearbody"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Relic Beam",
+        "id": "relicbeam",
+        "components": [
+          "relicbeam"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Defragment",
+        "id": "defragment",
+        "components": [
+          "defragment"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "chimecho",
+    "name": "Chimecho",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Temple Chime",
+        "id": "templechime",
+        "components": [
+          "templechime",
+          "elevate",
+          "levitate"
+        ],
+        "overlap": [
+          "levitate"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Restorative Chime",
+        "id": "restorativechime",
+        "components": [
+          "restorativechime"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Dissonant Chime",
+        "id": "dissonantchime",
+        "components": [
+          "dissonantchime"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "misdreavus",
+    "name": "Misdreavus",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Infiltrator",
+        "id": "infiltrator",
+        "components": [
+          "infiltrator"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Prankster",
+        "id": "prankster",
+        "components": [
+          "prankster"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Perish Body",
+        "id": "perishbody",
+        "components": [
+          "perishbody"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "mismagius",
+    "name": "Mismagius",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Void Crossing",
+        "id": "voidcrossing",
+        "components": [
+          "voidcrossing",
+          "magicguard",
+          "infiltrator"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Temporal Shift",
+        "id": "temporalshift",
+        "components": [
+          "temporalshift"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Void Hex",
+        "id": "voidhex",
+        "components": [
+          "voidhex",
+          "prankster",
+          "cursedbody"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "duskull",
+    "name": "Duskull",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Infiltrator",
+        "id": "infiltrator",
+        "components": [
+          "infiltrator"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Frisk",
+        "id": "frisk",
+        "components": [
+          "frisk"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "dusknoir",
+    "name": "Dusknoir",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Requiem",
+        "id": "requiem",
+        "components": [
+          "requiem",
+          "cursedbody"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Pressure",
+        "id": "pressure",
+        "components": [
+          "pressure"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Shadow Tag",
+        "id": "shadowtag",
+        "components": [
+          "shadowtag"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "cryogonal",
+    "name": "Cryogonal",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Ice Body",
+        "id": "icebody",
+        "components": [
+          "icebody"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Mirror Armor",
+        "id": "mirrorarmor",
+        "components": [
+          "mirrorarmor"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Purifying Frost",
+        "id": "purifyingfrost",
+        "components": [
+          "purifyingfrost"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "flygon",
+    "name": "Flygon",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Void Drift",
+        "id": "voiddrift",
+        "components": [
+          "voiddrift",
+          "levitate",
+          "overcoat"
+        ],
+        "overlap": [
+          "levitate"
+        ],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Resonance Force",
+        "id": "resonanceforce",
+        "components": [
+          "resonanceforce"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Sandstream",
+        "id": "sandstream",
+        "components": [
+          "sandstream"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "solrock",
+    "name": "Solrock",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Solar Idol",
+        "id": "solaridol",
+        "components": [
+          "solaridol"
+        ],
+        "overlap": [
+          "levitate"
+        ],
+        "standalone": true,
+        "implicitEvidence": {
+          "methods": [
+            "onImmunity"
+          ],
+          "grounded": true
+        }
+      },
+      {
+        "slot": "1",
+        "name": "Dauntless Shield",
+        "id": "dauntlessshield",
+        "components": [
+          "dauntlessshield"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Full Metal Body",
+        "id": "fullmetalbody",
+        "components": [
+          "fullmetalbody"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "lunatone",
+    "name": "Lunatone",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Lunar Idol",
+        "id": "lunaridol",
+        "components": [
+          "lunaridol"
+        ],
+        "overlap": [
+          "levitate"
+        ],
+        "standalone": true,
+        "implicitEvidence": {
+          "methods": [
+            "onImmunity"
+          ],
+          "grounded": true
+        }
+      },
+      {
+        "slot": "1",
+        "name": "Ice Scales",
+        "id": "icescales",
+        "components": [
+          "icescales"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Shadow Shield",
+        "id": "shadowshield",
+        "components": [
+          "shadowshield"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "rotom",
+    "name": "Rotom",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Infiltrator",
+        "id": "infiltrator",
+        "components": [
+          "infiltrator"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Electromorphosis",
+        "id": "electromorphosis",
+        "components": [
+          "electromorphosis"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Defragment",
+        "id": "defragment",
+        "components": [
+          "defragment"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "rotomheat",
+    "name": "Rotom-Heat",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "White Smoke",
+        "id": "whitesmoke",
+        "components": [
+          "whitesmoke"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Drought",
+        "id": "drought",
+        "components": [
+          "drought"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Flame Body",
+        "id": "flamebody",
+        "components": [
+          "flamebody"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "rotomwash",
+    "name": "Rotom-Wash",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Hydration",
+        "id": "hydration",
+        "components": [
+          "hydration"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Storm Drain",
+        "id": "stormdrain",
+        "components": [
+          "stormdrain"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Drizzle",
+        "id": "drizzle",
+        "components": [
+          "drizzle"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "rotomfrost",
+    "name": "Rotom-Frost",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Clear Body",
+        "id": "clearbody",
+        "components": [
+          "clearbody"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Refrigerate",
+        "id": "refrigerate",
+        "components": [
+          "refrigerate"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Snow Warning",
+        "id": "snowwarning",
+        "components": [
+          "snowwarning"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "rotomfan",
+    "name": "Rotom-Fan",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Wind Power",
+        "id": "windpower",
+        "components": [
+          "windpower"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Windy Surge",
+        "id": "windysurge",
+        "components": [
+          "windysurge"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Air Lock",
+        "id": "airlock",
+        "components": [
+          "airlock"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "S",
+        "name": "Soundproof",
+        "id": "soundproof",
+        "components": [
+          "soundproof"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "rotommow",
+    "name": "Rotom-Mow",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Leaf Guard",
+        "id": "leafguard",
+        "components": [
+          "leafguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Grassy Surge",
+        "id": "grassysurge",
+        "components": [
+          "grassysurge"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Seed Sower",
+        "id": "seedsower",
+        "components": [
+          "seedsower"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "tynamo",
+    "name": "Tynamo",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Static",
+        "id": "static",
+        "components": [
+          "static"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "eelektrik",
+    "name": "Eelektrik",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Static",
+        "id": "static",
+        "components": [
+          "static"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "eelektross",
+    "name": "Eelektross",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Elevate",
+        "id": "elevate",
+        "components": [
+          "elevate"
+        ],
+        "overlap": [
+          "levitate"
+        ],
+        "standalone": true,
+        "implicitEvidence": {
+          "methods": [],
+          "grounded": true
+        }
+      },
+      {
+        "slot": "1",
+        "name": "Current Coil",
+        "id": "currentcoil",
+        "components": [
+          "currentcoil",
+          "swiftswim"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Vital Circuit",
+        "id": "vitalcircuit",
+        "components": [
+          "vitalcircuit"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "koffing",
+    "name": "Koffing",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Aftermath",
+        "id": "aftermath",
+        "components": [
+          "aftermath"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Neutralizing Gas",
+        "id": "neutralizinggas",
+        "components": [
+          "neutralizinggas"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Stench",
+        "id": "stench",
+        "components": [
+          "stench"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "weezing",
+    "name": "Weezing",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Elevate",
+        "id": "elevate",
+        "components": [
+          "elevate"
+        ],
+        "overlap": [
+          "levitate"
+        ],
+        "standalone": true,
+        "implicitEvidence": {
+          "methods": [],
+          "grounded": true
+        }
+      },
+      {
+        "slot": "1",
+        "name": "Neutralizing Gas",
+        "id": "neutralizinggas",
+        "components": [
+          "neutralizinggas"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Flare Boost",
+        "id": "flareboost",
+        "components": [
+          "flareboost"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "weezinggalar",
+    "name": "Weezing-Galar",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Elevate",
+        "id": "elevate",
+        "components": [
+          "elevate"
+        ],
+        "overlap": [
+          "levitate"
+        ],
+        "standalone": true,
+        "implicitEvidence": {
+          "methods": [],
+          "grounded": true
+        }
+      },
+      {
+        "slot": "1",
+        "name": "Neutralizing Gas",
+        "id": "neutralizinggas",
+        "components": [
+          "neutralizinggas"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Misty Surge",
+        "id": "mistysurge",
+        "components": [
+          "mistysurge"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "hydreigon",
+    "name": "Hydreigon",
+    "passives": [
+      "levitate"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Dread Wings",
+        "id": "dreadwings",
+        "components": [
+          "dreadwings",
+          "intimidate",
+          "unnerve"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "1",
+        "name": "Dark Dominion",
+        "id": "darkdominion",
+        "components": [
+          "darkdominion",
+          "darkaura"
+        ],
+        "overlap": [],
+        "standalone": false
+      },
+      {
+        "slot": "H",
+        "name": "Void Tyrant",
+        "id": "voidtyrant",
+        "components": [
+          "voidtyrant",
+          "hydrabond",
+          "berserk"
+        ],
+        "overlap": [],
+        "standalone": false
+      }
+    ]
+  },
+  {
+    "id": "vivillonarchipelago",
+    "name": "Vivillon-Archipelago",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivilloncontinental",
+    "name": "Vivillon-Continental",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonelegant",
+    "name": "Vivillon-Elegant",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillongarden",
+    "name": "Vivillon-Garden",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonhighplains",
+    "name": "Vivillon-High Plains",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonicysnow",
+    "name": "Vivillon-Icy Snow",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonjungle",
+    "name": "Vivillon-Jungle",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonmarine",
+    "name": "Vivillon-Marine",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonmodern",
+    "name": "Vivillon-Modern",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonmonsoon",
+    "name": "Vivillon-Monsoon",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonocean",
+    "name": "Vivillon-Ocean",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonpolar",
+    "name": "Vivillon-Polar",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonriver",
+    "name": "Vivillon-River",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonsandstorm",
+    "name": "Vivillon-Sandstorm",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonsavanna",
+    "name": "Vivillon-Savanna",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonsun",
+    "name": "Vivillon-Sun",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillontundra",
+    "name": "Vivillon-Tundra",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonfancy",
+    "name": "Vivillon-Fancy",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "vivillonpokeball",
+    "name": "Vivillon-Pokeball",
+    "passives": [
+      "shielddust"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Shield Dust",
+        "id": "shielddust",
+        "components": [
+          "shielddust"
+        ],
+        "overlap": [
+          "shielddust"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "1",
+        "name": "Compound Eyes",
+        "id": "compoundeyes",
+        "components": [
+          "compoundeyes"
+        ],
+        "overlap": [],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Friend Guard",
+        "id": "friendguard",
+        "components": [
+          "friendguard"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremierubycream",
+    "name": "Alcremie-Ruby-Cream",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremiematchacream",
+    "name": "Alcremie-Matcha-Cream",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremiemintcream",
+    "name": "Alcremie-Mint-Cream",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremielemoncream",
+    "name": "Alcremie-Lemon-Cream",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremiesaltedcream",
+    "name": "Alcremie-Salted-Cream",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremierubyswirl",
+    "name": "Alcremie-Ruby-Swirl",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremiecaramelswirl",
+    "name": "Alcremie-Caramel-Swirl",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  },
+  {
+    "id": "alcremierainbowswirl",
+    "name": "Alcremie-Rainbow-Swirl",
+    "passives": [
+      "sweetveil"
+    ],
+    "slots": [
+      {
+        "slot": "0",
+        "name": "Sweet Veil",
+        "id": "sweetveil",
+        "components": [
+          "sweetveil"
+        ],
+        "overlap": [
+          "sweetveil"
+        ],
+        "standalone": true
+      },
+      {
+        "slot": "H",
+        "name": "Aroma Veil",
+        "id": "aromaveil",
+        "components": [
+          "aromaveil"
+        ],
+        "overlap": [],
+        "standalone": true
+      }
+    ]
+  }
+]

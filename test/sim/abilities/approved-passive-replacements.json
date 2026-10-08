@@ -1,0 +1,230 @@
+[
+  {
+    "id": "butterfree",
+    "slot": "1",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillon",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "dustox",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Compound Eyes"
+  },
+  {
+    "id": "swalot",
+    "slot": "0",
+    "before": "Liquid Ooze",
+    "after": "Sticky Hold"
+  },
+  {
+    "id": "gulpin",
+    "slot": "0",
+    "before": "Liquid Ooze",
+    "after": "Corrosion"
+  },
+  {
+    "id": "tentacool",
+    "slot": "1",
+    "before": "Liquid Ooze",
+    "after": "Water Veil"
+  },
+  {
+    "id": "watchog",
+    "slot": "1",
+    "before": "Keen Eye",
+    "after": "Frisk"
+  },
+  {
+    "id": "alcremie",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "milcery",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "swirlix",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Healer"
+  },
+  {
+    "id": "eevee",
+    "slot": "0",
+    "before": "Run Away",
+    "after": "Pickup"
+  },
+  {
+    "id": "vivillonarchipelago",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivilloncontinental",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonelegant",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillongarden",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonhighplains",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonicysnow",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonjungle",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonmarine",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonmodern",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonmonsoon",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonocean",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonpolar",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonriver",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonsandstorm",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonsavanna",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonsun",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillontundra",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonfancy",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "vivillonpokeball",
+    "slot": "0",
+    "before": "Shield Dust",
+    "after": "Tinted Lens"
+  },
+  {
+    "id": "alcremierubycream",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "alcremiematchacream",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "alcremiemintcream",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "alcremielemoncream",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "alcremiesaltedcream",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "alcremierubyswirl",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "alcremiecaramelswirl",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  },
+  {
+    "id": "alcremierainbowswirl",
+    "slot": "0",
+    "before": "Sweet Veil",
+    "after": "Ripen"
+  }
+]

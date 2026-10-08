@@ -1,3 +1,4 @@
+import {getAbilityComponentExclusions, getAbilityComponentAdditions} from '../data/passive-ability-cleanup';
 import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 import { AbilityComponents } from '../data/ability-components';
@@ -1708,6 +1709,8 @@ export class Pokemon {
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
+		this.illusion = null;
+		this.passiveStates = {};
 		if (includeSwitchFlags && this.timesAttacked > 0) {
 			this.timesAttacked = Math.floor(this.timesAttacked / 2);
 		}
@@ -1817,6 +1820,10 @@ export class Pokemon {
 	}
 
 	tryTrap(isHidden = false) {
+  // Only opposing trapping is bypassed. Binding damage and airborne/grounding rules are unchanged.
+  const trapper = this.battle.effectState.source || this.battle.effectState.target;
+  if (trapper && typeof trapper.isAlly === 'function' && !trapper.isAlly(this) &&
+   this.hasAbilityOrPassive('freeflight') && !this.isGrounded()) return false;
 		if (!this.runStatusImmunity('trapped')) return false;
 		if (this.trapped && isHidden) return true;
 		this.trapped = isHidden ? 'hidden' : true;
@@ -1923,10 +1930,11 @@ export class Pokemon {
 			!this.runStatusImmunity('brn') ||
 			!!this.side.sideConditions['mist'] ||
 			(this.battle.field.isTerrain('mistyterrain') && this.isGrounded() && !this.isSemiInvulnerable()) ||
-			this.hasAbility(['comatose', 'purifyingsalt', 'ragingcurrent', 'thermalexchange', 'waterbubble', 'waterveil'])
+			this.hasAbilityOrPassive(['comatose', 'purifyingsalt', 'ragingcurrent', 'thermalexchange', 'waterbubble', 'waterveil'])
 		);
 		if (
-			!ignoreImmunities && !soulFireBurn && status.id && !(source?.hasAbility(['corrosion', 'ancientbloom']) && ['tox', 'psn'].includes(status.id))
+			!ignoreImmunities && !soulFireBurn && status.id && !((source?.hasAbility(['corrosion', 'ancientbloom']) ||
+				(sourceEffect?.id === 'venamskiss' && source?.hasAbility('venamskiss'))) && ['tox', 'psn'].includes(status.id))
 		) {
 			// the game currently never ignores immunities
 			const statusType = status.id === 'tox' ? 'psn' : status.id;
@@ -2184,7 +2192,7 @@ export class Pokemon {
 
 	/** Current mechanical form, including Transform; independent of ability suppression. */
 	getPassives(): readonly string[] {
-		return this.species.passives;
+		return (this.illusion?.species || this.species).passives;
 	}
 
 	/** Mechanical helper; selected ability identity remains separate from species traits. */
@@ -2197,23 +2205,30 @@ export class Pokemon {
 		});
 	}
 
+	getAbilityComponentExclusions(): readonly string[] {
+		return [...getAbilityComponentExclusions(this.ability, this.getPassives()),
+			...(this.ability === 'perfectforesight' && this.m.perfectForesightAbility ?
+				getAbilityComponentExclusions(this.m.perfectForesightAbility, this.getPassives()) : [])];
+	}
+
 	hasAbility(ability: string | string[]) {
 		if (this.battle.activeMove && !['ModifyMove', 'ModifyType', 'PrepareHit', 'SwitchOut', 'SwitchIn', 'Start', 'End', 'Residual', 'Update'].includes(this.battle.event?.id || '')) {
 			if (adaptiveIgnoresAbility(this.battle.activePokemon, this) || adaptiveIgnoresAbility(this.battle.activeTarget, this)) return false;
 		}
 		const abilityAliases = AbilityComponents;
+		const excluded = this.getAbilityComponentExclusions();
 		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
 		const memoryComponents: string[] = this.ability === 'rkssystem' ?
 			(this.getAbility() as RKSSystemAbility).memoryAbilities.call(this.battle, this) : [];
 		// Identity lookup only: composites still dispatch their own component callbacks.
 		const components = new Set<string>();
-		const pending: string[] = [this.ability, ...memoryComponents];
+		const pending: string[] = [this.ability, ...memoryComponents, ...getAbilityComponentAdditions(this.ability, this.getPassives())];
 		if (this.ability === 'perfectforesight' && this.m.perfectForesightAbility) {
 			pending.push(this.m.perfectForesightAbility);
 		}
 		while (pending.length) {
 			const id = pending.pop()!;
-			if (components.has(id)) continue;
+			if (components.has(id) || (id !== this.ability && excluded.includes(id))) continue;
 			components.add(id);
 			if (['schooling', 'seviischooling'].includes(id) &&
 				!['wishiwashischool', 'wishiwashiseviischooling'].includes(this.species.id)) {
@@ -2423,7 +2438,7 @@ export class Pokemon {
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 		if (this.getPassives().includes('levitate') && this.hasAbilityOrPassive('levitate')) return null;
-		if (this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
+		if (!this.getAbilityComponentExclusions().includes('levitate') && this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
 			'voidcraft', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;

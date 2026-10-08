@@ -451,7 +451,7 @@ export class DexSpecies {
 
 		const alias = this.dex.getAlias(id);
 		if (alias) {
-			if (this.dex.data.FormatsData.hasOwnProperty(id) && !this.dex.data.Pokedex[id]?.isCosmeticForme) {
+			if (this.dex.data.FormatsData.hasOwnProperty(id) && this.dex.data.Pokedex[alias]?.abilities?.S && !this.dex.data.Pokedex[id]?.isCosmeticForme) {
 				// special event ID
 				species = new Species({
 					...this.dex.data.Pokedex[alias],

@@ -1,3 +1,4 @@
+import {AbilityComponentExclusions} from './passive-ability-cleanup';
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
 	eternalflower: ['moldbreaker'],
@@ -151,7 +152,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	mythicscale: ['marvelscale', 'levitate', 'compoundeyes', 'shielddust'],
 	aurainstinct: ['adaptability', 'dualwield', 'secondwind'],
 	wrathshield: ['bulletproof', 'dauntlessshield', 'selfrepair', 'proficient'],
-	shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator', 'proficient'],
+	shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator', 'moldbreaker', 'proficient'],
 	astralwitchcraft: ['levitate', 'magicguard', 'magicbounce', 'proficient'],
 	ragingcurrent: ['swiftswim', 'damp', 'dryskin', 'stamina', 'proficient'],
 	calderacore: ['magmaarmor', 'sheerforce', 'drought'],
@@ -391,6 +392,7 @@ export function abilityIncludesComponent(ability: string, component: string, see
 	const id = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
 	const query = component.toLowerCase().replace(/[^a-z0-9]/g, '');
 	if (id === query) return true;
+	if (AbilityComponentExclusions[id]?.includes(query)) return false;
 	if (seen.has(id)) return false;
 	seen.add(id);
 	return (AbilityComponents[id] || []).some(part => abilityIncludesComponent(part, query, seen));
@@ -652,7 +654,7 @@ AbilityComponents.nightwatch = ['keeneye', 'insomnia'];
 AbilityComponents.fruitfulbough = ['harvest'];
 AbilityComponents.soulanchor = ['steelworker'];
 
-AbilityComponents.guidinglight = ['dazzling', 'illuminate'];
+AbilityComponents.guidinglight = ['dazzling', 'healer'];
 AbilityComponents.royalescort = ['pressure', 'sweetveil'];
 
 AbilityComponents.liquidarsenal = ['technician'];
@@ -746,3 +748,22 @@ AbilityComponents.wisecounsel = ['innerfocus'];
 AbilityComponents.mindcurrent = ['innerfocus'];
 
 AbilityComponents.voidcrossing = ['magicguard', 'infiltrator'];
+
+AbilityComponents.orchardbond = ['hydrabond', 'harvest'];
+
+// Previously implicit components are explicit for shared-package search and form-aware displays.
+AbilityComponents.venomheal = [...(AbilityComponents.venomheal || []), 'hypercutter'];
+AbilityComponents.elevate = [...(AbilityComponents.elevate || []), 'levitate'];
+for (const [id, excluded] of Object.entries(AbilityComponentExclusions)) {
+ AbilityComponents[id] = (AbilityComponents[id] || []).filter(part => !excluded.includes(part));
+}
+
+AbilityComponents.gentlescales = ['compoundeyes'];
+
+AbilityComponents.vendetta = [];
+
+AbilityComponents.spiralevolution = ['moldbreaker', 'adaptability', 'dualwield', 'shielddust'];
+AbilityComponents.toxicevolution = ['moldbreaker', 'corrosion', 'dualwield', 'shielddust'];
+AbilityComponents.mythicscale = ['marvelscale', 'compoundeyes', 'shielddust'];
+
+AbilityComponents.voidomen = ['friendguard', 'serenegrace'];

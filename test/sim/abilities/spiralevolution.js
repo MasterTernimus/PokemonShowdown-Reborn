@@ -29,7 +29,7 @@ describe('Spiral Evolution', function () {
 		}
 	});
 
-	it('has Shield Dust built in', function () {
+	it('includes restored selected Shield Dust on a copied holder', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Eevee', ability: 'Spiral Evolution', moves: ['Splash']}],
 			[{species: 'Magikarp', moves: ['Splash']}],

@@ -67,7 +67,7 @@ describe('Approved calculator ability followups', () => {
 			const { battle } = buildCalculatorBattle(validateScenario(s), 0);
 			try {
 				assert.equal(battle.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
-				assert.equal(battle.field.terrainState.duration, 5);
+				assert.equal(battle.field.terrainState.duration, 3);
 			} finally {
 				battle.destroy();
 			}

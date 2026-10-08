@@ -114,7 +114,7 @@ describe('Composite ability cleanup', function () {
 		assert(battle.dex.abilities.get('mirrorarmor').onSourceModifyDamage);
 	});
 
-	it('should give Raging Storm built-in Battle Armor', function () {
+	it('should keep Haxorus Battle Armor as a passive alongside Raging Storm', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Haxorus', ability: 'ragingstorm', moves: ['splash']},
 		], [
@@ -122,7 +122,8 @@ describe('Composite ability cleanup', function () {
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const haxorus = battle.p1.active[0];
-		assert(haxorus.hasAbility('battlearmor'));
+		assert.false(haxorus.hasAbility('battlearmor'));
+		assert(haxorus.hasAbilityOrPassive('battlearmor'));
 		assert(haxorus.hasAbility('moldbreaker'));
 	});
 
@@ -249,7 +250,8 @@ describe('Composite ability cleanup', function () {
 		assert.equal(ability.onAnyTryHeal, undefined);
 		assert.equal(ability.onResidual, undefined);
 		assert.equal(ability.onAnyModifyDamage, undefined);
-		assert(ability.onImmunity);
+		assert.equal(ability.onImmunity, undefined);
+		assert.deepEqual(battle.dex.species.get('Weezing').passives, ['levitate']);
 	});
 
 	it('should give base Empoleon and its Mega their distinct abilities', function () {
@@ -288,7 +290,7 @@ describe('Composite ability cleanup', function () {
 		});
 	});
 
-	it('should give Apex Predator Relic Armor, Dragonize, and Wind Rider hooks', function () {
+	it('should pair Apex Predator with innate Relic Armor', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Aerodactyl-Mega', ability: 'apexpredator', moves: ['splash']},
 		], [
@@ -306,7 +308,8 @@ describe('Composite ability cleanup', function () {
 		const ability = battle.dex.abilities.get('apexpredator');
 		assert.equal(ability.onModifyCritRatio, undefined);
 		assert(ability.onModifyType);
-		assert(ability.onCriticalHit);
+		assert.equal(ability.onCriticalHit, undefined);
+		assert(aerodactyl.hasAbilityOrPassive('relicarmor'));
 	});
 
 	it('should let Hisuian Oath Poison attacks damage and poison Steel targets', function () {
@@ -401,7 +404,7 @@ describe('Composite ability cleanup', function () {
 		const pokemon = battle.p1.active[0];
 		const composites = {
 			alchemistsurge: ['psychicsurge', 'competitive', 'hydrabond', 'prankster'],
-			apexpredator: ['relicarmor', 'dragonize', 'windrider'],
+			apexpredator: ['dragonize', 'windrider'],
 			alloycore: ['magicguard', 'selfsufficient', 'stalwart'],
 			ancientbloom: ['effectspore', 'selfsufficient'],
 			astralcore: ['purepower', 'naturalcure', 'illuminate'],
@@ -423,13 +426,13 @@ describe('Composite ability cleanup', function () {
 		stillwaters: ['cloudnine', 'magicguard', 'unaware'],
 		relentlesshunt: ['levitate'],
 			omenedge: ['sharpness', 'dualwield', 'pressure'],
-			ragingcurrent: ['proficient', 'swiftswim', 'damp', 'dryskin', 'stamina'],
-			shadowcurrent: ['proficient', 'protean', 'technician', 'anticipation', 'infiltrator'],
+			ragingcurrent: ['swiftswim', 'damp', 'dryskin', 'stamina'],
+			shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator', 'moldbreaker'],
 			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 			riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
-			perfectstriker: ['striker', 'noguard', 'libero', 'proficient'],
+			perfectstriker: ['striker', 'noguard', 'libero'],
 			mossarmor: ['stamina', 'naturalcure', 'levitate'],
 		stormcalling: ['drizzle', 'liquidvoice', 'dissonantecho'],
 		aevianglacier: ['snowwarning', 'icebody', 'refrigerate'],
@@ -462,8 +465,8 @@ describe('Composite ability cleanup', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
 		assert.deepEqual(battle.dex.species.get('Swampert-Mega').passives, ['proficient']);
 		assert.deepEqual(battle.dex.species.get('Chesnaught-Mega').passives, ['proficient']);
-		assert.deepEqual(battle.dex.species.get('Greninja').passives, []);
-		assert.deepEqual(battle.dex.species.get('Delphox').passives, []);
+		assert.deepEqual(battle.dex.species.get('Greninja').passives, ['torrent']);
+		assert.deepEqual(battle.dex.species.get('Delphox').passives, ['blaze']);
 		assert.deepEqual(battle.dex.species.get('Swampert-Mega').abilities, {
 			0: 'Raging Current',
 		});
@@ -474,7 +477,7 @@ describe('Composite ability cleanup', function () {
 			0: 'Liquid Arsenal', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond',
 		});
 		assert.deepEqual(battle.dex.species.get('Delphox').abilities, {
-			0: 'Sworn Duty', 1: 'Magic Guard', H: 'Void Guile',
+			0: 'Sworn Duty', 1: 'Magic Guard', H: 'Void Guile', S: 'Pyrokinesis',
 		});
 	});
 
@@ -490,7 +493,7 @@ describe('Composite ability cleanup', function () {
 			0: 'Adaptability', 1: 'Swift Swim', H: 'Cruel Shell',
 		});
 		assert.deepEqual(battle.dex.species.get('Altaria').abilities, {
-			0: 'Natural Cure', 1: 'Fluffy', H: 'Cloud Nine', S: 'Echo Fiend',
+			0: 'Aroma Veil', 1: 'Fluffy', H: 'Cloud Nine', S: 'Echo Fiend',
 		});
 	});
 

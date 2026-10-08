@@ -680,7 +680,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally !== source && !this.suppressingAbility(ally)) {
-					if (ally.hasAbility('sapsipper')) {
+					if (ally.hasAbilityOrPassive('sapsipper')) {
 						this.add('-immune', ally, '[from] ability: Sap Sipper');
 						continue;
 					}
@@ -7423,7 +7423,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHitSide(side, source, move) {
 			let boost = 1;
 			const targets = side.allies().filter(target => (
-				target.hasAbility(['plus', 'minus']) &&
+				target.hasAbilityOrPassive(['plus', 'minus']) &&
 				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
 			));
 			let didSomething = false;
@@ -9484,8 +9484,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally !== source && !this.suppressingAbility(ally)) {
-					if (ally.hasAbility('soundproof')) {
-						this.add('-immune', ally, '[from] ability: Soundproof');
+					if (ally.hasAbilityOrPassive('soundproof')) {
+						if (ally.getPassives().includes('soundproof')) {
+							if (ally.illusion) this.add('-immune', ally);
+							else this.add('-immune', ally, '[from] passive: Soundproof');
+						} else this.add('-immune', ally, '[from] ability: Soundproof');
 						continue;
 					}
 					if (ally.hasAbility('goodasgold')) {
@@ -9636,8 +9639,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally !== source && !this.suppressingAbility(ally)) {
-					if (ally.hasAbility('soundproof')) {
-						this.add('-immune', ally, '[from] ability: Soundproof');
+					if (ally.hasAbilityOrPassive('soundproof')) {
+						if (ally.getPassives().includes('soundproof')) {
+							if (ally.illusion) this.add('-immune', ally);
+							else this.add('-immune', ally, '[from] passive: Soundproof');
+						} else this.add('-immune', ally, '[from] ability: Soundproof');
 						continue;
 					}
 					if (ally.hasAbility('goodasgold')) {
@@ -11034,8 +11040,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 25,
 		priority: 1,
 		flags: { metronome: 1 },
-		onAfterMove() {
-			this.field.setTerrain('electricterrain');
+		onAfterMove(source, target, move) {
+			this.field.setAura('electricterrain', source.hasItem('amplifieldrock') ? 5 : 3, source, move);
 		},
 		pseudoWeather: 'iondeluge',
 		condition: {
@@ -12318,7 +12324,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let didSomething = false;
 			if (!this.field.isTerrain('electricterrain')) {
 				const targets = side.allies().filter(ally => (
-					ally.hasAbility(['plus', 'minus']) &&
+					ally.hasAbilityOrPassive(['plus', 'minus']) &&
 					(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
 				));
 				if (!targets.length) {
@@ -12331,7 +12337,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			} else {
 				const targets = side.allies();
 				for (const target of targets) {
-					if (target.hasAbility(['plus', 'minus'])) {
+					if (target.hasAbilityOrPassive(['plus', 'minus'])) {
 						didSomething = this.boost({ def: 2, spd: 2 }, target, source, move, false, true) || didSomething;
 					} else {
 						didSomething = this.boost({ def: 2, spd: 2 }, target, source, move, false, true) || didSomething;
@@ -15325,7 +15331,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (this.field.canSetTerrain('electricterrain'))
 				return this.chainModify(1.3);
 		},
-		terrain: 'electricterrain',
+		onHit(target, source, move) {
+			this.field.setAura('electricterrain', source.hasItem('amplifieldrock') ? 5 : 3, source, move);
+		},
 		pseudoWeather: 'iondeluge',
 		critRatio: 2,
 		target: "normal",
@@ -21752,7 +21760,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1 },
 		onTryImmunity(target) {
-			return !target.hasAbility('stickyhold');
+			return !target.hasAbilityOrPassive('stickyhold');
 		},
 		onHit(target, source, move) {
 			const yourItem = target.takeItem(source);
@@ -23125,7 +23133,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1 },
 		onTryImmunity(target) {
-			return !target.hasAbility('stickyhold');
+			return !target.hasAbilityOrPassive('stickyhold');
 		},
 		onHit(target, source, move) {
 			const yourItem = target.takeItem(source);

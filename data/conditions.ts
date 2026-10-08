@@ -1,7 +1,43 @@
+import {directFeverPitchMove} from './rejuvenation-event-abilities';
 import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+ woolyconductorspent: {name: 'woolyconductorspent', noCopy: true, duration: 1},
+
+ grapplingclawsspent: {name: 'Grappling Claws spent', noCopy: true},
+ grapplingclawsanchor: {name: 'Grappling Claws anchor', noCopy: true},
+ grapplingclawslock: {
+  name: 'grapplingclawslock', duration: 2, noCopy: true,
+  onStart(target, source) { this.add('-start', target, 'Grappling Claws', '[of] ' + source); },
+  onTrapPokemon(target) {
+   if (this.effectState.source?.hp && this.effectState.source.isActive) target.tryTrap();
+   else target.removeVolatile('grapplingclawslock');
+  },
+  onTryHeal(damage, target, source, effect) {
+   if (!this.effectState.source?.hp || !this.effectState.source.isActive) return;
+   if (effect && (effect.id === 'zpower' || (effect as ActiveMove).isZ)) return;
+   return false;
+  },
+  onDisableMove(pokemon) {
+   for (const slot of pokemon.moveSlots) if (this.dex.moves.get(slot.id).flags.heal) pokemon.disableMove(slot.id);
+  },
+  onBeforeMovePriority: 6,
+  onBeforeMove(pokemon, target, move) {
+   if (move.flags.heal && !move.isZ && !move.isMax) {this.add('cant', pokemon, 'move: Heal Block', move); return false;}
+  },
+  onEnd(target) { this.add('-end', target, 'Grappling Claws'); },
+  onResidualOrder: 20,
+ },
+ dredgerturn: {name: 'Dredger turn', noCopy: true, duration: 1},
+	galestriketurn: {name: 'galestriketurn', noCopy: true, duration: 1},
+	spectralscreamheal: {name: 'spectralscreamheal', noCopy: true, duration: 1},
+	spectralscreamboost: {name: 'spectralscreamboost', noCopy: true, duration: 1},
+	coldtruthturn: {name: 'coldtruthturn', noCopy: true, duration: 1},
+	pyrokinesisturn: {name: 'pyrokinesisturn', noCopy: true, duration: 1},
+	venamskissturn: {name: 'venamskissturn', noCopy: true, duration: 1},
+	heavenlywingturn: {name: 'heavenlywingturn', noCopy: true, duration: 1},
+	barbedwebspent: {name: 'Barbed Web spent', noCopy: true},
 	starterpassives: {
 		name: 'Starter Passives',
 		onBasePowerPriority: 22,
@@ -329,7 +365,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
-			if (pokemon.hasAbility('earlybird')) {
+			if (pokemon.hasAbility('feverpitch') && directFeverPitchMove(move)) return;
+			if (pokemon.hasAbilityOrPassive('earlybird')) {
 				pokemon.statusState.time--;
 			}
 			pokemon.statusState.time--;
@@ -592,6 +629,41 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	breakwaterspent: {
 		name: 'breakwaterspent',
 		noCopy: true,
+	},
+	gentlescalesspent: {name: 'gentlescalesspent', noCopy: true, duration: 1},
+	anchoredbatteryspent: {name: 'anchoredbatteryspent', noCopy: true},
+	hivecourierspent: {name: 'hivecourierspent', noCopy: true},
+	aquabaticsspent: {name: 'aquabaticsspent', noCopy: true},
+	desertsmarkspent: {name: 'desertsmarkspent', noCopy: true},
+	deepchillturnspent: {name: 'deepchillturnspent', noCopy: true, duration: 1},
+	nobledancespent: {name: 'nobledancespent', noCopy: true},
+	nobledanceward: {
+		name: 'nobledanceward', noCopy: true, duration: 2,
+		onDamagePriority: -1,
+		onDamage(damage, target, source, effect) {
+			if (damage <= 0 || !source || source.isAlly(target) || effect?.effectType !== 'Move' ||
+				(effect as ActiveMove).category === 'Status') return;
+			this.effectState.guardedMove ||= effect;
+			if (this.effectState.guardedMove === effect) return this.modify(damage, 0.8);
+		},
+		onAnyAfterAttackResolved(source, target, move) {
+			if (this.effectState.guardedMove === move) this.effectState.target.removeVolatile('nobledanceward');
+		},
+		onResidualOrder: 100,
+	},
+	hivecourierguard: {
+		name: 'hivecourierguard', noCopy: true, duration: 2,
+		onDamagePriority: -1,
+		onDamage(damage, target, source, effect) {
+			if (damage <= 0 || !source || source === target || effect?.effectType !== 'Move' ||
+				(effect as ActiveMove).category === 'Status') return;
+			this.effectState.guardedMove ||= effect;
+			if (this.effectState.guardedMove === effect) return this.modify(damage, 0.75);
+		},
+		onAnyAfterAttackResolved(source, target, move) {
+			if (this.effectState.guardedMove === move) this.effectState.target.removeVolatile('hivecourierguard');
+		},
+		onResidualOrder: 100,
 	},
 	toxicevolutionhealed: {
 		name: 'toxicevolutionhealed',
@@ -892,7 +964,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			target.removeVolatile('Protect');
 			target.removeVolatile('Endure');
 
-			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+			if (data.source.hasAbilityOrPassive('infiltrator') && this.gen >= 6) {
 				data.moveData.infiltrates = true;
 			}
 			if (data.source.hasAbility('normalize') && this.gen >= 6) {
@@ -1239,7 +1311,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbility(['mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
+			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbilityOrPassive(['mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
 			if (iceBeneficiary && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);
@@ -1662,4 +1734,22 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.damage(target.baseMaxhp / 24, target);
 		},
 	},
+ hydroelectricspent: {noCopy: true},
+ voidomensafeguardspent: {noCopy: true},
+ silksightsspent: {noCopy: true},
+ vendettatrap: {
+  name: 'Vendetta Trap', duration: 2, noCopy: true,
+  onTrapPokemon(pokemon) {
+   const source = this.effectState.source;
+   if (!source?.hp || !source.isActive || !source.hasAbility('vendetta')) {
+    pokemon.removeVolatile('vendettatrap'); return;
+   }
+   pokemon.tryTrap();
+  },
+  onAnySwitchOut(pokemon) { if (pokemon === this.effectState.source) this.effectState.target.removeVolatile('vendettatrap'); },
+  onUpdate(pokemon) {
+   const source = this.effectState.source;
+   if (!source?.hp || !source.isActive || !source.hasAbility('vendetta')) pokemon.removeVolatile('vendettatrap');
+  },
+ },
 };

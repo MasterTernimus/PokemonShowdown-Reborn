@@ -18,17 +18,17 @@ describe('Approved thematic species passives',()=>{
  it('grants exactly 61 named species and 27 cosmetic equivalents, preserving 76 starter records',()=>{
   const ids=Object.values(ThematicPassiveGroups).flat();assert.equal(ids.length,61);
   const cosmetics=Object.entries(PassiveCosmeticForms).flatMap(([base,forms])=>forms.map(form=>base+form));assert.equal(cosmetics.length,27);
-  assert.equal(Object.keys(SpeciesPassives).length,164);
-  for(const[passive,group]of Object.entries(ThematicPassiveGroups))for(const id of group)assert.deepEqual(Dex.species.get(id).passives,[passive],id);
+  assert.equal(Object.keys(SpeciesPassives).length,700);
+  for(const[passive,group]of Object.entries(ThematicPassiveGroups))for(const id of group)assert.deepEqual(Dex.species.get(id).passives,id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive],id);
   for(const id of cosmetics){const s=Dex.species.get(id);assert(s.exists,id);assert.deepEqual(s.passives,SpeciesPassives[id]);const base=Dex.species.get(s.baseSpecies);assert.deepEqual(s.baseStats,base.baseStats);assert.deepEqual(s.types,base.types);assert.deepEqual(s.abilities,base.abilities);}
   for(const[id,passives]of Object.entries(StarterPassives))assert.deepEqual(Dex.species.get(id).passives,passives,id);
   for(const s of Dex.species.all())assert.deepEqual(s.passives,SpeciesPassives[s.id]||[],s.id);
-  for(const id of ['krabby','gligar','corphish','caterpie','metapod','wurmple','surskit','hoothoot','spearow','sentret','patrat','mukalola','grimeralola','eeveestarter','eeveegmax','pinsirmega','kinglergmax','butterfreegmax','alcremiegmax','swalotpulse','mukpulse'])assert.deepEqual(Dex.species.get(id).passives,[],id);
+  for(const id of ['krabby','gligar','corphish','caterpie','metapod','wurmple','surskit','hoothoot','spearow','sentret','patrat','eeveestarter','eeveegmax','pinsirmega','kinglergmax','alcremiegmax','swalotpulse','mukpulse'])assert.deepEqual(Dex.species.get(id).passives,[],id);
  });
  for(const[passive,ids]of Object.entries(ThematicPassiveGroups))for(const id of ids)it(id+' keeps '+passive+' through suppression, selected-ability replacement and swaps',()=>{
-  const[p,t]=setup(id);assert.deepEqual(p.getPassives(),[passive]);
+  const[p,t]=setup(id);assert.deepEqual(p.getPassives(),id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]);
   suppression(p,t,()=>assert(p.hasAbilityOrPassive(passive)));
-  p.setAbility('Water Absorb');t.setAbility('Pressure');battle.actions.useMove('skillswap',p,{target:t});assert.deepEqual(p.getPassives(),[passive]);assert.deepEqual(t.getPassives(),[]);assert(!p.hasAbility(passive));
+  p.setAbility('Water Absorb');t.setAbility('Pressure');battle.actions.useMove('skillswap',p,{target:t});assert.deepEqual(p.getPassives(),id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]);assert.deepEqual(t.getPassives(),['synchronize']);assert(!p.hasAbility(passive));
  });
  it('Hyper Cutter blocks only external Attack drops with a duplicate composite once',()=>{
   const[p,t]=setup('Kingler','Icebreaker');suppression(p,t,()=>{battle.boost({atk:-1,def:-1},p,t,Dex.moves.get('growl'));assert.equal(p.boosts.atk,0);});
@@ -90,7 +90,7 @@ describe('Approved thematic species passives',()=>{
   assert(!battle.log.some(l=>l.includes('ability: Sweet Veil')));protocol.push({name:'sweet-veil-ally',log:battle.log});
  });
  it('Sweet Veil does not reveal a disguised holder in public attribution',()=>{
-  const[p,t,ally]=setup('Alcremie','Illusion',true);p.illusion=battle.p1.pokemon[2];const start=battle.log.length;
+  const[p,t,ally]=setup('Alcremie','Illusion',true);battle.p1.pokemon[2].formeChange('Slurpuff');p.illusion=battle.p1.pokemon[2];const start=battle.log.length;
   assert(!ally.trySetStatus('slp',t,Dex.moves.get('spore')));assert(!battle.log.slice(start).join('\n').includes('Sweet Veil'));assert(!battle.log.slice(start).join('\n').includes('Alcremie'));
   protocol.push({name:'sweet-veil-hidden',log:battle.log});
  });
@@ -136,12 +136,12 @@ describe('Approved thematic species passives',()=>{
   const[p,t]=setup('Kingler','Hyper Cutter',false,'Mold Breaker');battle.actions.useMove('growl',t,{target:p});assert.equal(p.boosts.atk,-1);
   p.formeChange('Cacturne',null,true);p.setAbility('Overcoat');p.setType('Normal');const sleep=battle.dex.getActiveMove('spore');sleep.accuracy=true;battle.actions.useMove(sleep,t,{target:p});assert.equal(p.status,'slp');
   p.cureStatus();p.formeChange('Charizard-Mega-X',null,true);p.setAbility('Pressure');battle.field.terrain='';p.hp=1;t.setAbility('Mold Breaker');const move=battle.dex.getActiveMove('flamethrower');move.ignoreAbility=true;battle.setActiveMove(move,p,t);
-  assert.equal(battle.runEvent('ModifySpA',p,t,move,100),150);const power=battle.runEvent('BasePower',p,t,move,100);assert(power>=130);move.ignoreAbility=false;assert.equal(battle.runEvent('BasePower',p,t,move,100),power);
+  assert.equal(battle.runEvent('ModifySpA',p,t,move,100),100);const power=battle.runEvent('BasePower',p,t,move,100);assert(power>=130);move.ignoreAbility=false;assert.equal(battle.runEvent('BasePower',p,t,move,100),power);
   p.formeChange('Eevee',null,true);assert(p.hasAbilityOrPassive('runaway'));
  });
  it('Levitate attribution preserves a different selected ability and conceals a disguised species',()=>{
   const[p,t]=setup('Mismagius','Pressure');assert(!p.runImmunity('Ground',true));assert(battle.log.some(l=>l.includes('[from] passive: Levitate')));protocol.push({name:'levitate-selected-ability',log:battle.log.slice()});
-  p.illusion=battle.p1.pokemon[2];const start=battle.log.length;assert(!p.runImmunity('Ground',true));assert(!battle.log.slice(start).join('\n').includes('Levitate'));
+  battle.p1.pokemon[2].formeChange('Rotom');p.illusion=battle.p1.pokemon[2];const start=battle.log.length;assert(!p.runImmunity('Ground',true));assert(!battle.log.slice(start).join('\n').includes('Levitate'));
  });
  for(const [species,ability,type,weather,stat]of [['Solrock','Solar Idol','Fire','sunnyday','ModifyAtk'],['Lunatone','Lunar Idol','Ice','hail','ModifySpA'],['Flygon','Elevate','Dragon','','ModifyAtk']])it(ability+' keeps extras while its redundant immunity respects all grounding',()=>{
   const[p,t]=setup(species,ability);assert(!p.isGrounded());

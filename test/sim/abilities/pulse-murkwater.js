@@ -16,7 +16,7 @@ describe('Pulse entry fields', () => {
 	}
 
 	for (const [species, ability, formAbility] of [['Muk', 'Poison Touch', 'Pulse Waste'], ['Swalot', 'Liquid Ooze', 'Pulse Filtration']]) {
-		it(`${species} transforms, creates five turns, expires, and stays expired on reentry`, () => {
+		it(`${species} transforms, creates three turns, expires, and stays expired on reentry`, () => {
 			const [p] = setup(species, ability);
 			b.p2.active[0].hp = b.p2.active[0].maxhp = 9999;
 			b.field.setTerrain('factoryterrain', p);
@@ -24,9 +24,9 @@ describe('Pulse entry fields', () => {
 			assert.equal(p.getAbility().name, formAbility);
 
 			assert.equal(b.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
-			assert.equal(b.field.terrainState.duration, 5);
+			assert.equal(b.field.terrainState.duration, 3);
 
-			for (let i = 0; i < 4; i++) {
+			for (let i = 0; i < 2; i++) {
 				b.makeChoices('move 1', 'move splash');
 				assert.equal(b.field.terrain, species === 'Muk' ? 'swampterrain' : 'murkwatersurfaceterrain');
 			}
