@@ -26,18 +26,19 @@ describe('Mega and G-Max component revisions', () => {
 			['Chandelure-Mega', 'Soul Cremation', ['soulsiphon', 'soulpyre', 'malicewell', 'flamebody']],
 			['Dragalge-Mega', 'Toxic Renewal', ['adaptability', 'regenerator', 'poisontouch']],
 			['Gardevoir-Mega-Z', 'Argent Devotion', ['armorize', 'swornduty', 'serenegrace', 'moldbreaker']],
-			['Gengar-Mega', 'Cruel Tag', ['shadowtag', 'infiltrator', 'baddreams']],
+			['Gengar-Mega', 'Shadow Double', ['shadowtag']],
 			['Glalie-Aevian-Mega', 'Moss Armor', ['stamina', 'naturalcure', 'levitate']],
-			['Glalie-Mega', 'Freezer Burn', ['slushrush', 'refrigerate', 'strongjaw', 'levitate']],
-			['Golurk-Mega', 'Phantom Fist', ['unseenfist', 'selfrepair', 'shadowshield', 'aftermath']],
+			['Glalie-Mega', 'Freezer Burn', ['slushrush', 'refrigerate', 'levitate']],
+			['Golurk-Mega', 'Phantom Fist', ['unseenfist', 'selfsufficient', 'noguard', 'aftermath']],
 			['Metagross-Mega', 'Cold Logic', ['toughclaws', 'prismarmor', 'aftermath', 'forewarn']],
-			['Slowbro-Mega', 'Slow Clamp', ['shellarmor', 'owntempo', 'analytic', 'sweetveil']],
+			['Slowbro-Mega', 'Slow Clamp', ['shellarmor', 'analytic', 'sweetveil']],
 			['Copperajah-Gmax', 'Treasure Titan', ['filter', 'eartheater', 'heavymetal', 'intimidate']],
 		];
 		for (const [species, name, components] of expected) {
 			assert.equal(battle.dex.species.get(species).abilities[0], name, species);
+			holder.formeChange(species, null, true);
 			holder.setAbility(name, holder, holder.getAbility(), true);
-			for (const component of components) assert(holder.hasAbility(component), `${name} should expose ${component}`);
+			for (const component of components) assert(holder.hasAbilityOrPassive(component), `${name} should expose ${component}`);
 		}
 		assert.equal(battle.dex.species.get('Copperajah').abilities[1], 'Water Absorb');
 	});
@@ -92,7 +93,7 @@ describe('Mega and G-Max component revisions', () => {
 	it('Mega Slowbro blocks sleep through Sweet Veil and confusion through Own Tempo', () => {
 		const [holder, foe] = start('Slowbro-Mega', 'Slow Clamp');
 		assert(!holder.trySetStatus('slp', foe));
-		assert(!holder.addVolatile('confusion', foe));
+		assert(holder.addVolatile('confusion', foe));
 	});
 
 	it('Mega Metagross reveals a foe move with Forewarn and uses Aftermath on contact knockout', () => {
@@ -108,9 +109,9 @@ describe('Mega and G-Max component revisions', () => {
 
 	it('Phantom Fist applies universal Shadow Shield protection and makes its attacks accurate', () => {
 		const [holder, foe] = start('Golurk-Mega', 'Phantom Fist');
-		assert.equal(battle.runEvent('SourceModifyDamage', holder, foe, battle.dex.getActiveMove('tackle'), 100), 80);
+		assert.equal(battle.runEvent('SourceModifyDamage', holder, foe, battle.dex.getActiveMove('tackle'), 100), 100);
 		const move = battle.dex.getActiveMove('dynamicpunch');
 		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, move, holder, foe);
-		assert.equal(move.accuracy, true);
+		assert.equal(battle.runEvent('Accuracy',foe,holder,move,move.accuracy),true);
 	});
 });

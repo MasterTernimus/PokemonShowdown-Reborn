@@ -1,0 +1,15 @@
+{
+	"passives": {
+		"pikachugmax":"static", "meowthgmax":"pickup", "kinglergmax":"swiftswim", "gengargmax":"cursedbody",
+		"eeveegmax":"overcoat", "garbodorgmax":"stickyhold", "aegislashgmax":"owntempo", "corviknightgmax":"swornduty",
+		"orbeetlegmax":"frisk", "drednawgmax":"strongjaw", "coalossalgmax":"flamebody", "flapplegmax":"gluttony",
+		"appletungmax":"gluttony", "sandacondagmax":"shedskin", "toxtricitygmax":"voltabsorb", "toxtricitylowkeygmax":"voltabsorb",
+		"centiskorchgmax":"flamebody", "hatterenegmax":"sweetveil", "grimmsnarlgmax":"prankster", "grimmsnarlgmaxazzy":"prankster",
+		"alcremiegmax":"friendguard", "copperajahgmax":"heavymetal", "duraludongmax":"stalwart", "dragapultgmax":"levitate", "dipplingmax":"selfsufficient"
+	},
+	"abilities": {
+		"kinglergmax":{"0":"Crushing Depths"}, "gengargmax":{"0":"Afterlife Gate"}, "meowthgmax":{"0":"Technician","H":"Unnerve"},
+		"machampgmax":{"0":"Raging Fists"}, "machampgmaxalt":{"0":"Raging Fists"}
+	},
+	"types":{"kinglergmax":["Water","Steel"]}
+}

@@ -2835,7 +2835,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "Takes 0.8x attack damage at any HP; super-effective hits deal 0.6x total.",
 	},
 	voidcraft: {
-		name: "Voidcraft",
+		name: "Void Craft",
 		desc: "Elevate + Shadow Shield + Temporal Shift + Insomnia. It is ungrounded, takes 0.8x attack damage at any HP (0.6x total from super-effective attacks), cannot sleep or be affected by Yawn, and opposing Pokemon cannot lower its stats. Its damage reduction is not bypassed by Mold Breaker or ability-ignoring moves; its other defensive components remain bypassable. Ability suppression disables it. It retains hail immunity on Cold Eclipse. Its Dark- and Ghost-type damaging moves have 1.3x power, and it raises its highest stat after a move KO. Starting on Mega Evolution, it queues a 120 BP Ghost-type Future Sight on that turn and every other turn afterward; each queued attack strikes two turns later. It does not trap foes or have Magic Guard's indirect-damage immunity.",
 		shortDesc: "Elevate + Shadow Shield + Temporal Shift + Insomnia; 120 BP Ghost Future Sight every other turn.",
 	},
@@ -4547,3 +4547,22 @@ for (const [id, name] of [['vendetta', 'Vendetta'], ['silksights', 'Silk Sights'
 for (const [id, name] of [['freeflight', 'Free Flight'], ['entrenched', 'Entrenched'], ['voidomen', 'Void Omen']]) AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
 
 AbilitiesText.steadyswimmer = {name: 'Steady Swimmer', ...AbilityDescriptionOverrides.steadyswimmer};
+
+Object.assign(AbilitiesText, {"hauntingveil":{"desc":"Cursed Body + Infiltrator. Damaging hits have a 30% chance to Disable the attacker's move. Its moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist.","shortDesc":"Cursed Body + Infiltrator."},"parentalbond":{"desc":"Mold Breaker: moves ignore bypassable opposing abilities. Eligible attacks hit twice; the second hit deals 80% damage. Existing multi-hit moves, spread hits, charging or delayed attacks, Z/Max moves and moves barred from extra hits are excluded. Contact moves have 1.3x power. Normal- and Fighting-type moves can hit Ghosts. Cannot be suppressed.","shortDesc":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts."},"ironwill":{"desc":"Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Gains +1 accuracy on entry; tail moves have 1.5x power.","shortDesc":"Prism Armor, Self-Sufficient and Whiplash."},"calderacore":{"desc":"On entry, summons sun for 5 turns, or 8 with Heat Rock. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def.","shortDesc":"Summons sun; Magma Armor protects and grants field bonuses."},"razorcurrent":{"desc":"On entry, summons rain for 5 turns, or 8 with Damp Rock. Gains +1 Speed at the end of each full turn it spends active.","shortDesc":"Summons rain; gains Speed each full active turn."}});
+
+for (const [id, name] of [['shadowdouble', 'Shadow Double'], ['crossfire', 'Crossfire'], ['hauntingveil', 'Haunting Veil']]) AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
+
+AbilitiesText.auraconvergence = {name: 'Aura Convergence', ...AbilityDescriptionOverrides.auraconvergence};
+
+AbilitiesText.crescentrend = {name: 'Crescent Rend', ...AbilityDescriptionOverrides.crescentrend};
+
+AbilitiesText.solartrap = {name: 'Solar Trap', ...AbilityDescriptionOverrides.solartrap};
+AbilitiesText.auraguard = {name: 'Aura Guard', ...AbilityDescriptionOverrides.auraguard};
+AbilitiesText.auraprecision = {name: 'Aura Precision', ...AbilityDescriptionOverrides.auraprecision};
+AbilitiesText.predator = {name: 'Predator', ...AbilityDescriptionOverrides.predator};
+
+import {SelectedAbilityDescriptions} from '../selected-mega-simplification-data';
+Object.assign(AbilitiesText, SelectedAbilityDescriptions);
+
+import {GmaxRedesignDescriptions} from '../gmax-passive-data';
+Object.assign(AbilitiesText, GmaxRedesignDescriptions);

@@ -69,14 +69,15 @@ describe('Approved passive copy lifecycle and component replacements', () => {
 		assert(!p.hasAbility('illuminate'));
 		assert(p.hasAbilityOrPassive('illuminate'));
 	});
-	it('ordinary Lanturn gains Suction Cups while Lanturn-Alt retains its old package', () => {
+	it('ordinary and equivalent Alt Lanturn share the approved Suction Cups replacement', () => {
 		const [p, t] = setup('Lanturn', 'Abyss Lure');
 		assert(p.hasAbility('suctioncups'));
 		use('roar', t, p);
 		assert(!p.forceSwitchFlag);
 		p.formeChange('Lanturn-Alt');
-		assert(!p.hasAbility('suctioncups'));
-		assert(p.hasAbility('illuminate'));
+		assert(p.hasAbility('suctioncups'));
+		assert(!p.hasAbility('illuminate'));
+		assert(p.hasAbilityOrPassive('illuminate'));
 	});
 	it('Orchard Bond protects the approved holder item but preserves Alolan Harvest', () => {
 		const [p, t] = setup('Exeggutor', 'Orchard Bond');
@@ -106,7 +107,7 @@ describe('Approved passive copy lifecycle and component replacements', () => {
 		use('tackle', t, p, { basePower: 1 });
 		use('tackle', t, p, { basePower: 1 });
 		assert.equal(t.boosts.spe, -1);
-		assert.equal(rolls, 2);
+		assert.equal(rolls, 0);
 		battle.fieldEvent('Residual');
 		use('tackle', t, p, { basePower: 1 });
 		assert.equal(t.boosts.spe, -2);

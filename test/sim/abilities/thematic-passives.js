@@ -18,12 +18,12 @@ describe('Approved thematic species passives',()=>{
  it('grants exactly 61 named species and 27 cosmetic equivalents, preserving 76 starter records',()=>{
   const ids=Object.values(ThematicPassiveGroups).flat();assert.equal(ids.length,61);
   const cosmetics=Object.entries(PassiveCosmeticForms).flatMap(([base,forms])=>forms.map(form=>base+form));assert.equal(cosmetics.length,27);
-  assert.equal(Object.keys(SpeciesPassives).length,700);
+  assert.equal(Object.keys(SpeciesPassives).length, 820);
   for(const[passive,group]of Object.entries(ThematicPassiveGroups))for(const id of group)assert.deepEqual(Dex.species.get(id).passives,id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive],id);
   for(const id of cosmetics){const s=Dex.species.get(id);assert(s.exists,id);assert.deepEqual(s.passives,SpeciesPassives[id]);const base=Dex.species.get(s.baseSpecies);assert.deepEqual(s.baseStats,base.baseStats);assert.deepEqual(s.types,base.types);assert.deepEqual(s.abilities,base.abilities);}
   for(const[id,passives]of Object.entries(StarterPassives))assert.deepEqual(Dex.species.get(id).passives,passives,id);
   for(const s of Dex.species.all())assert.deepEqual(s.passives,SpeciesPassives[s.id]||[],s.id);
-  for(const id of ['krabby','gligar','corphish','caterpie','metapod','wurmple','surskit','hoothoot','spearow','sentret','patrat','eeveestarter','eeveegmax','pinsirmega','kinglergmax','alcremiegmax','swalotpulse','mukpulse'])assert.deepEqual(Dex.species.get(id).passives,[],id);
+  for(const id of ['krabby','gligar','corphish','caterpie','metapod','wurmple','surskit','hoothoot','spearow','sentret','patrat','eeveestarter','eeveegmax','pinsirmega','kinglergmax','alcremiegmax','swalotpulse','mukpulse'])assert.deepEqual(Dex.species.get(id).passives,require('./passive-approval-overlays').current(id,[]),id);
  });
  for(const[passive,ids]of Object.entries(ThematicPassiveGroups))for(const id of ids)it(id+' keeps '+passive+' through suppression, selected-ability replacement and swaps',()=>{
   const[p,t]=setup(id);assert.deepEqual(p.getPassives(),id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]);
@@ -102,7 +102,7 @@ describe('Approved thematic species passives',()=>{
  it('Transform copies current passives, then restores original passives on switching; combat formes remove them',()=>{
   const[p,t]=setup('Eevee');t.formeChange('Cacturne',null,true);assert(p.transformInto(t));assert.deepEqual(p.getPassives(),['overcoat']);
   battle.makeChoices('switch 3','move splash');battle.makeChoices('switch 3','move splash');assert.deepEqual(p.getPassives(),['runaway']);
-  p.formeChange('Eevee-Gmax',null,true);assert.deepEqual(p.getPassives(),[]);
+  p.formeChange('Eevee-Gmax',null,true);assert.deepEqual(p.getPassives(),['overcoat']);
  });
  it('calculator and species metadata include every ordinary and cosmetic passive without selectable grants',()=>{
   const metadata=require('../../../dist/sim/custom-calculator').calculatorMetadata();for(const id of Object.keys(SpeciesPassives))assert.deepEqual(metadata.species.find(s=>Dex.species.get(s.name).id===id)?.passives,SpeciesPassives[id],id);

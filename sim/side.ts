@@ -108,6 +108,7 @@ export interface MoveRequestData {
 
 export interface PokemonMoveRequestData {
 	moves: MoveRequestData[];
+	pulseMoves?: MoveRequestData[];
 	maybeDisabled?: boolean;
 	maybeLocked?: boolean;
 	trapped?: boolean;
@@ -593,6 +594,8 @@ export class Side {
 		// If the move is not found, the action is invalid without requiring further inspection.
 
 		const request = pokemon.getMoveRequestData();
+		const pulseMoves = event === 'mega' ? request.pulseMoves : undefined;
+		if (pulseMoves) request.moves = pulseMoves;
 		let moveSlot: number | undefined = undefined;
 		let moveid = '';
 		let targetType = '';
@@ -649,7 +652,7 @@ export class Side {
 			}
 		}
 
-		const moves = pokemon.getMoves();
+		const moves = pulseMoves || pokemon.getMoves();
 		if (autoChoose) {
 			for (const [i, move] of request.moves.entries()) {
 				if (move.disabled) continue;
@@ -680,6 +683,12 @@ export class Side {
 		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).target;
 
 		// Validate targeting
+		// Older clients can submit the static FFA target for these self-targeting moves.
+		if (this.battle.gameType !== 'freeforall' && !maxMove &&
+			['followme', 'ragepowder'].includes(move.id)) {
+			targetType = 'self';
+			targetLoc = 0;
+		}
 		if (autoChoose || moveid === 'testfight') {
 			targetLoc = 0;
 		} else if (this.battle.actions.targetTypeChoices(targetType)) {

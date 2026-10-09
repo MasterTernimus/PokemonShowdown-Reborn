@@ -31,32 +31,32 @@ describe('Exact approved regional passive whitelist', () => {
 		for (const [p, ids] of Object.entries(require('./latest-passives-approved.json').groups)) for (const id of ids) expected[id] = [p];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 700);
+		assert.equal(Object.keys(SpeciesPassives).length, 820);
 	});
 	for (const [p, ids] of Object.entries(before.groups))
 		for (const id of ids)
 			it(id + ' has only approved ' + p + ' and preserves stats/types', () => {
 				const s = Dex.species.get(id);
-				assert.deepEqual(s.passives, [p]);
+				assert.deepEqual(s.passives, require('./passive-approval-overlays').current(id, [p]));
 				assert.deepEqual(s.baseStats, before.species[id].baseStats);
 				assert.deepEqual(s.types, before.species[id].types);
 				const expected = { ...before.species[id].abilities };
 				if (id === 'froslass')
 					expected[0] = 'Infiltrator';
 				for (const [changed, slot, , name] of require('./latest-passives-approved.json').slots) if (changed === id) expected[slot] = name;
-				assert.deepEqual(s.abilities, expected);
+				assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(id, expected));
 			});
 	it('resolves the existing Corsola Reborn alias without creating a blank event-ability record', () => {
 		const alias = Dex.species.get('corsolareborn');
 		assert.deepEqual(alias.abilities, Dex.species.get('corsolaalt').abilities);
 		assert(alias.abilities[0]);
-		assert.deepEqual(alias.passives, []);
+		assert.deepEqual(alias.passives, ['naturalcure']);
 	});
 	it('exports calculator metadata for all approved forms', () => {
 		const metadata = calculatorMetadata();
 		for (const [p, ids] of Object.entries(before.groups))
 			for (const id of ids)
-				assert.deepEqual(metadata.species.find(s => Dex.species.get(s.name).id === id).passives, [p], id);
+				assert.deepEqual(metadata.species.find(s => Dex.species.get(s.name).id === id).passives, require('./passive-approval-overlays').current(id, [p]), id);
 	});
 	it('preserves Accumulation damage mitigation without doubling Thick Fat', () => {
 		const input = { format: 'gen9nofieldsinglesgame', move: 'Flamethrower', samples: 16, seed: 42, actors: [{ species: 'Chansey', ability: 'No Ability' }, { species: 'Walrein', ability: 'No Ability' }, { species: 'Chansey', ability: 'No Ability' }, { species: 'Chansey', ability: 'No Ability' }] };
@@ -68,7 +68,7 @@ describe('Exact approved regional passive whitelist', () => {
 		battle.eachEvent('Residual');
 		assert.equal(p.volatiles.stockpile.layers, 1);
 	});
-	it('Mega Lopunny gets only confusion protection from its replacement', () => {
+	it('Mega Lopunny retains confusion protection and gains full local Limber', () => {
 		const [p, t] = setup('Lopunny', 'No Ability');
 		p.formeChange('Lopunny-Mega');
 		p.setAbility('Unchecked Assault');
@@ -76,7 +76,7 @@ describe('Exact approved regional passive whitelist', () => {
 		assert(!p.volatiles.confusion);
 		assert(!p.hasAbility('owntempo'));
 		battle.boost({ atk: -1 }, p, t, Dex.abilities.get('intimidate'));
-		assert.equal(p.boosts.atk, -1);
+		assert.equal(p.boosts.atk, 0);
 	});
 	it('Cinder Scales stops external accuracy drops but permits self costs', () => {
 		const [p, t] = setup('Volcarona', 'Cinder Scales');

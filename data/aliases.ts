@@ -2,7 +2,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	serratedpincers: "Razor Reach",
 	debilitatingvenom: "Withering Touch",
 	dreadfulpresence: "Dishearten",
-	shadowguard: "Voidcraft",
+	shadowguard: "Void Craft",
 	wildfirecore: "Unbound Blaze",
 	hippodownrift: "Hippowdon-Rift",
 	torterreariftshatter: "Torterra-Rift-Shatter",

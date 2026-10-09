@@ -31,8 +31,8 @@ describe('Starter species passives',()=>{
  for(const [species,ability,move,expected] of [['Venusaur-Mega','Toxic Bloom','tackle',130],['Venusaur-Gmax','Ancient Bloom','tackle',130],['Feraligatr-Gmax','Tidal Jaw','tackle',130],['Feraligatr-Gmax','Tidal Jaw','bite',195],['Charizard-Mega-X','Atrocity','swift',169]])it(species+' '+ability+' preserves independent multipliers',()=>{
   const[p,t]=start(species,ability);p.setType(move==='bite'?'Dark':'Normal');assert.equal(event(p,t,'BasePower',move),expected);
  });
- it('ordinary shared-ability users retain active Proficient without a new passive',()=>{
-  const[p,t]=start('Charizard','Unbound Blaze');p.setType('Normal');assert.deepEqual(p.getPassives(),['blaze']);assert.equal(event(p,t,'BasePower','tackle'),130);
+ it('ordinary Unbound Blaze loses Proficient without adding a passive',()=>{
+  const[p,t]=start('Charizard','Unbound Blaze');p.setType('Normal');assert.deepEqual(p.getPassives(),['blaze']);assert.equal(event(p,t,'BasePower','tackle'),100);
   p.addVolatile('gastroacid');assert.equal(event(p,t,'BasePower','tackle'),100);
  });
  it('copying an exclusive composite does not copy the species passive',()=>{const[p,t]=start('Mew','Toxic Bloom');p.setType('Normal');assert.equal(event(p,t,'BasePower','tackle'),100);assert.deepEqual(p.getPassives(),['synchronize']);});

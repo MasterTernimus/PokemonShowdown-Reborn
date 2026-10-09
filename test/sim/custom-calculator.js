@@ -12,7 +12,7 @@ describe('Custom engine calculator', () => {
 		const {AbilityComponents} = require('../../dist/data/ability-components');
 		const {Dex} = require('../../dist/sim/dex');
 		const metadata = calculatorMetadata();
-		assert.deepEqual(metadata.fields.map(f => f.id).sort(), ['', ...Object.keys(Terrains)].sort());
+		assert.deepEqual(metadata.fields.map(f => f.id).sort(), ['', ...Object.keys(Terrains), 'electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'adriennterrain'].sort());
 		assert.deepEqual(metadata.species.find(p => p.name === 'Sylveon').abilities, Dex.species.get('Sylveon').abilities);
 		assert.deepEqual(metadata.abilityComponents.soothingpresence, AbilityComponents.soothingpresence.map(id => Dex.abilities.get(id).name));
 		assert.throws(() => validateScenario(scenario({field: 'inventedfield'})), /Unsupported choice/);

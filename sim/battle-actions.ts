@@ -1,5 +1,7 @@
 import {adaptiveAnalyzed, adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
 import { Dex, toID } from './dex';
+import {takeCrescentOverflow, hasCrescentSubDamage} from './crescent-rend';
+import {predatorUltraMatch} from './predator';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
@@ -208,6 +210,7 @@ export class BattleActions {
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
+		pokemon.m.cursedArmamentEntryTurn = this.battle.turn;
 		// These entry budgets belong to the Pokemon, not its replaceable AbilityState.
 		delete pokemon.m.seaRescuerUsed;
 		delete pokemon.m.dreepyVanguardUsed;
@@ -681,7 +684,7 @@ export class BattleActions {
 			return false;
 		}
 
-		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
+		if (!(move.hasSheerForce && pokemon.hasAbilityOrPassive('sheerforce')) && !move.flags['futuremove']) {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
@@ -894,7 +897,7 @@ export class BattleActions {
 			} else if (!this.battle.singleEvent('TryImmunity', move, {}, target, pokemon, move)) {
 				this.battle.add('-immune', target);
 				hitResults[i] = false;
-			} else if (this.battle.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') &&
+			} else if (this.battle.gen >= 7 && move.pranksterBoosted && pokemon.hasAbilityOrPassive('prankster') &&
 				!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 				this.battle.debug('natural prankster immunity');
 				if (target.illusion || !(move.status && !this.dex.getImmunity(move.status, target))) {
@@ -1054,7 +1057,7 @@ export class BattleActions {
 	}
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		// console.log(`${targets}, ${pokemon}, ${move}`)
-		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (!(move.hasSheerForce && pokemon.hasAbilityOrPassive('sheerforce'))) {
 			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
 			this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
 		}
@@ -1384,7 +1387,7 @@ export class BattleActions {
 
 		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (!(move.hasSheerForce && pokemon.hasAbilityOrPassive('sheerforce'))) {
 			for (const [i, d] of damage.entries()) {
 				// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts
@@ -1484,9 +1487,15 @@ export class BattleActions {
 
 		// 2. call to this.battle.spreadDamage
 		const calculatedDamage = damage.slice();
+		const crescentSubHits = targets.map(t => t && hasCrescentSubDamage(t, move));
 		damage = this.battle.spreadDamage(damage, targets, pokemon, move);
 
 		for (const i of targets.keys()) {
+			if (crescentSubHits[i] && !damage[i] && damage[i] !== 0) {
+				// Blocking the HP portion cannot undo a successful Substitute hit.
+				damage[i] = true;
+				targets[i] = null;
+			}
 			if (damage[i] === false) targets[i] = false;
 		}
 		if (!isSecondary && !isSelf) {
@@ -1599,7 +1608,8 @@ export class BattleActions {
 				if (move.hit > allowedHits || (targetMove.target !== moveData.target && targetMove.target === 'normal' &&
 					(move as any).adaptiveOriginalTarget !== target)) { damage[i] = false; continue; }
 			}
-			const curDamage = this.getDamage(source, target, targetMove);
+			const overflow = !isSecondary && !isSelf ? takeCrescentOverflow(target, targetMove) : undefined;
+			const curDamage = overflow === undefined ? this.getDamage(source, target, targetMove) : overflow;
 			// getDamage has several possible return values:
 			//
 			//   a number:
@@ -1957,7 +1967,9 @@ export class BattleActions {
 			if (zMoveName) {
 				const zMove = this.dex.moves.get(zMoveName);
 				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
-				zMoves.push({ move: zMoveName, target: zMove.target });
+				const target = this.battle.gameType !== 'freeforall' &&
+					['followme', 'ragepowder'].includes(move.id) ? 'self' : zMove.target;
+				zMoves.push({ move: zMoveName, target });
 			} else {
 				zMoves.push(null);
 			}
@@ -2212,6 +2224,8 @@ export class BattleActions {
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
+		if (defender === target && ['def', 'spd'].includes(defenseStat) &&
+			predatorUltraMatch(this.battle, source, target)) ignorePositiveDefensive = true;
 		if ((move as any).coldTruthTargets?.includes(target) && source.hasAbility('coldtruth')) ignorePositiveDefensive = true;
 		if (defenseStat === 'spd' && (move as any).pyrokinesisTargets?.includes(target) && source.hasAbility('pyrokinesis')) ignorePositiveDefensive = true;
 		if (defenseStat === 'spd' && move.category === 'Special' && this.battle.movehasType(move, 'Electric') &&

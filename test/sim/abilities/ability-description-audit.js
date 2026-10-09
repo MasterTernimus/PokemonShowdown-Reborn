@@ -31,14 +31,14 @@ describe('Ability description audit', () => {
 		assert(!mismagius.isGrounded());
 	});
 
-	it('gives Unchecked Assault the described Striker kick bonus', () => {
+	it('removes the selected Striker kick bonus from Unchecked Assault', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Mew', ability: 'Unchecked Assault', moves: ['highjumpkick']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const user = battle.p1.active[0], foe = battle.p2.active[0];
-		assert.equal(battle.runEvent('BasePower', user, foe, battle.dex.getActiveMove('highjumpkick'), 100), 140);
+		assert.equal(battle.runEvent('BasePower', user, foe, battle.dex.getActiveMove('highjumpkick'), 100), 100);
 	});
 
 	it('gives Neurotoxin Hydra Bond’s Dragon’s Den power bonus', () => {

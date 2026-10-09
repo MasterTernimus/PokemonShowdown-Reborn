@@ -9159,7 +9159,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Ghost", "Dark"],
 		baseStats: { hp: 60, atk: 60, def: 60, spa: 140, spd: 140, spe: 140 },
-		abilities: { 0: "Voidcraft" },
+		abilities: { 0: "Void Craft" },
 		heightm: 0.9,
 		weightkg: 4.4,
 		color: "Purple",
@@ -9503,7 +9503,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fighting", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 80, atk: 120, def: 80, spa: 164, spd: 75, spe: 151 },
-		abilities: { 0: "Aura Master" },
+		abilities: { 0: "Aura Precision" },
 		heightm: 1.3,
 		weightkg: 49.4,
 		color: "Gray",
@@ -24376,3 +24376,23 @@ Pokedex.gastrodonazzy2.abilities = {"0":"Sticky Hold","1":"Storm Drain","H":"Poi
 
 // Explicit base-form slot replacement; keep other Garchomp forms unchanged.
 Pokedex.garchomp.abilities!['0'] = 'Unnerve';
+
+// Explicit selected-slot replacements; other family forms retain their selected abilities.
+Pokedex.kangaskhan.abilities!['1'] = 'Healer';
+Pokedex.froslass.abilities!['0'] = 'Haunting Veil';
+
+Pokedex.salamencemega.abilities!['0'] = 'Free Flight';
+Pokedex.gengarmega.abilities!['0'] = 'Shadow Double';
+Pokedex.scovillainmega.abilities!['0'] = 'Crossfire';
+
+Pokedex.lucariomega.abilities!['0'] = 'Aura Convergence';
+
+Pokedex.salamencemega.abilities!['0'] = 'Crescent Rend';
+
+// Explicit Gmax-only selections; no base, Mega, excluded branch or movepool changes.
+Pokedex.kinglergmax.types = ['Water', 'Steel'];
+Pokedex.kinglergmax.abilities = {0: 'Crushing Depths'};
+Pokedex.gengargmax.abilities = {0: 'Afterlife Gate'};
+Pokedex.meowthgmax.abilities = {0: 'Technician', H: 'Unnerve'};
+Pokedex.machampgmax.abilities = {0: 'Raging Fists'};
+Pokedex.machampgmaxalt.abilities = {0: 'Raging Fists'};

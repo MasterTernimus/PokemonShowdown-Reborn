@@ -10,7 +10,7 @@ describe('Requested ability changes', () => {
 
 	it('updates the affected roster slots and ability names', () => {
 		for (const [species, slot, expected] of [
-			['Blastoise', 'H', 'Stamina'],
+			['Blastoise', 'H', 'Hydraulic Armor'],
 			['Butterfree-Gmax', '0', 'Mythic Scale'],
 			['Golem', '0', 'Wrecking Ball'],
 			['Weezing', 'H', 'Flare Boost'],
@@ -83,13 +83,16 @@ describe('Requested ability changes', () => {
 		assert.equal(holder.boosts.spa, 1);
 	});
 
-	it('gives Mythic Scale Ground immunity without poison confusion', () => {
+	it('keeps Ground immunity in the native Levitate passive and Mythic Scale poison without confusion', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Mew', ability: 'Mythic Scale', moves: ['toxic']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
 		]);
 		battle.makeChoices('team 1', 'team 1');
 		const holder = battle.p1.active[0], foe = battle.p2.active[0];
+		assert.equal(holder.runImmunity('Ground'), true, 'copied selected ability does not copy species passives');
+		holder.setSpecies(battle.dex.species.get('Butterfree-Gmax'));
+		assert.deepEqual(holder.getPassives(), ['levitate']);
 		assert.equal(holder.runImmunity('Ground'), false);
 		battle.makeChoices('move toxic', 'move splash');
 		assert.equal(foe.status, 'tox');
@@ -99,7 +102,7 @@ describe('Requested ability changes', () => {
 	it('adds the requested move power components', () => {
 		for (const [ability, moveId, expected] of [
 			['High Noon', 'waterpulse', 180],
-			['Freezer Burn', 'icefang', 150],
+			['Freezer Burn', 'icefang', 100], // Strong Jaw was removed by the later approved simplification.
 			['Paradox Engine', 'brickbreak', 130],
 		]) {
 			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [

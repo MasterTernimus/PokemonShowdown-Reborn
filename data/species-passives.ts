@@ -842,4 +842,119 @@ for (const [passive, ids] of Object.entries(SettledPassiveGroups)) {
  ThematicPassiveIds.add(passive);
  for (const id of ids) SpeciesPassives[id] = Object.freeze([passive]);
 }
+/** Explicit Mega migration and reviewed equivalent-form counterparts. */
+export const MegaMigrationPassives: {[id: string]: readonly string[]} = {
+  "kangaskhan": [
+    "friendguard"
+  ],
+  "kangaskhanmega": [
+    "friendguard"
+  ],
+  "steelix": [
+    "sandforce"
+  ],
+  "steelixmega": [
+    "sandforce"
+  ],
+  "cameruptmega": [
+    "sheerforce"
+  ],
+  "sharpedomega": [
+    "strongjaw"
+  ],
+  "froslass": [
+    "levitate"
+  ],
+  "froslassmega": [
+    "levitate"
+  ]
+};
+export const EquivalentPassiveForms: {[id: string]: string} = {
+  "charizardalt": "charizard",
+  "charizardmegaxalt": "charizardmegax",
+  "sandslashreborn": "sandslash",
+  "ninetalesreborn": "ninetales",
+  "arcaninealt": "arcanine",
+  "alakazamalt": "alakazam",
+  "alakazammegaalt": "alakazammega",
+  "machampalt": "machamp",
+  "machampgmaxalt": "machampgmax",
+  "jynxalt": "jynx",
+  "laprasazzy": "lapras",
+  "eeveestarteralt": "eeveestarter",
+  "typhlosionalt": "typhlosion",
+  "crobatalt": "crobat",
+  "lanturnalt": "lanturn",
+  "granbullreborn": "granbull",
+  "corsolareborn": "corsola",
+  "gardevoirmegaalt": "gardevoirmega",
+  "cacturnealt": "cacturne",
+  "gastrodonazzy": "gastrodon",
+  "gastrodonazzy2": "gastrodon",
+  "lumineonalt": "lumineon",
+  "galladeazzy": "gallade",
+  "gallademegaazzy": "gallademega",
+  "serperiorazzy": "serperior",
+  "emboarreborn": "emboar",
+  "emboarmegareborn": "emboarmega",
+  "samurottalt": "samurott",
+  "samurotthisuialt": "samurotthisui",
+  "scolipedeazzy": "scolipede",
+  "scolipedemegaazzy": "scolipedemega",
+  "jellicentazzy": "jellicent",
+  "florgesreborn": "florges",
+  "goodrahisuialt": "goodrahisui",
+  "decidueyealt": "decidueye",
+  "decidueyehisuialt": "decidueyehisui",
+  "incineroaralt": "incineroar",
+  "primarinaalt": "primarina",
+  "tsareenaalt": "tsareena",
+  "grimmsnarlazzy": "grimmsnarl",
+  "grimmsnarlgmaxazzy": "grimmsnarlgmax",
+  "skeledirgealt": "skeledirge",
+  "tentacruelreborn": "tentacruel",
+  "gligaralt": "gligar",
+  "gliscoralt": "gliscor"
+};
+Object.assign(MegaMigrationPassives, {"slowbromega":["shellarmor"],"gengarmega":["shadowtag"],"pinsirmega":["aerilate"],"pidgeotmega":["noguard"],"clefablemega":["magicbounce"],"starmiemega":["purepower"],"ampharosmega":["moldbreaker"],"heracrossmega":["skilllink"],"tyranitarmega":["sandstream"],"scizormega":["intimidate"],"gardevoirmega":["pixilate"],"sableyemega":["magicbounce"],"mawilemega":["hugepower"],"altariamega":["pixilate"],"banettemega":["prankster"],"absolmega":["magicbounce"],"glaliemega":["refrigerate"],"metagrossmega":["toughclaws"],"salamencemega":["aerilate"],"lopunnymega":["scrappy"],"lucariomega":["adaptability"],"abomasnowmega":["snowwarning"],"gallademega":["sharpness"],"audinomega":["invigorate"]});
+MegaMigrationPassives.scovillainmega = ['spicyspray'];
+MegaMigrationPassives.eeveestarter = ['adaptability'];
+Object.assign(MegaMigrationPassives, {
+ arbokmegax: ['regenerator'], arbokmegay: ['shedskin'],
+ raichumegax: ['electricsurge'], raichumegay: ['noguard'],
+ parasectmega: ['dryskin'], victreebelmega: ['innardsout'],
+ noctowlmega: ['insomnia'], ledianmega: ['ironfist'], ariadosmega: ['selfsufficient'],
+ sunfloramega: ['solarpower'], skarmorymega: ['stalwart'],
+ gardevoirmegaz: ['armorize'], gardevoirvoidmega: ['duskilate'], breloommega: ['technician'],
+ flygonmega: ['levitate'], flygonmegaz: ['levitate'], sevipermega: ['venamskiss'],
+ claydolmega: ['levitate'], chimechomega: ['levitate'], chimechomegay: ['levitate'],
+ staraptormega: ['contrary'], luxraymega: ['strongjaw'], mismagiusmega: ['elevate'],
+ bronzongmega: ['mirrorarmor'], weavilemega: ['stakeout'], dusknoirmega: ['unaware'],
+ scraftymega: ['shedskin'], reuniclusmega: ['regenerator'], eelektrossmega: ['elevate'],
+ chandeluremega: ['soulpyre'], golurkmega: ['noguard'],
+ lucariomegaz: ['auraguard'],
+ haxorusmega: ['entrenched'],
+ pyroarmega: ['unnerve'], floettemega: ['fairyaura'], malamarmega: ['contrary'],
+ barbaraclemega: ['moldbreaker'], hawluchamega: ['noguard'], noivernmega: ['frisk'],
+ salazzlemega: ['oblivious'], golisopodmega: ['waterveil'], drampamega: ['drizzle'],
+ arbolivamega: ['grassysurge'], belliboltmega: ['levitate'],
+ tatsugiricurlymega: ['contrary'], tatsugiridroopymega: ['contrary'], tatsugiristretchymega: ['contrary'],
+ baxcaliburmega: ['thermalexchange'],
+});
+import {SelectedPassiveSwaps} from './selected-mega-simplification-data';
+for (const [id, passive] of Object.entries(SelectedPassiveSwaps)) MegaMigrationPassives[id] = [passive];
+for (const [id, passives] of Object.entries(MegaMigrationPassives)) {
+ SpeciesPassives[id] = Object.freeze(passives);
+ for (const passive of passives) ThematicPassiveIds.add(passive);
+}
+for (const [id, normal] of Object.entries(EquivalentPassiveForms)) {
+ if (SpeciesPassives[normal]?.length) SpeciesPassives[id] = SpeciesPassives[normal];
+}
+
+import {GmaxPassiveSelections} from './gmax-passive-data';
+for (const [id, passive] of Object.entries(GmaxPassiveSelections)) {
+	SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
 Object.freeze(SpeciesPassives);
+

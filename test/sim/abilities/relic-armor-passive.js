@@ -29,13 +29,13 @@ describe('Exact Relic Armor species passive migration', () => {
 	it('adds exactly fifteen recipients without broadening form inheritance or previous passives', () => {
 		const before = require('./relic-armor-before.json');
 		assert.equal(RelicArmorPassiveForms.length, 15);
-		assert.equal(Object.keys(SpeciesPassives).length, 700);
+		assert.equal(Object.keys(SpeciesPassives).length, 820);
 		const approved = {};
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) approved[id] = [passive];
 		for (const [passive, ids] of Object.entries(require('./kanto-johto-before.json').groups)) for (const id of ids) approved[id] = [passive];
 		require('./passive-approval-overlays').passives(approved);
 		for (const p of Dex.species.all())
-			assert.deepEqual(p.passives, approved[p.id] || (RelicArmorPassiveForms.includes(p.id) ? [...(before.passives[p.id] || []), 'relicarmor'] : before.passives[p.id] || []), p.id);
+			assert.deepEqual(p.passives, require('./passive-approval-overlays').current(p.id, approved[p.id] || (RelicArmorPassiveForms.includes(p.id) ? [...(before.passives[p.id] || []), 'relicarmor'] : before.passives[p.id] || [])), p.id);
 		for (const id of ['omanyte', 'kabuto', 'tirtouga', 'amaura', 'tyrunt', 'lileep', 'anorith', 'lapras', 'aerodactylzombie'])
 			assert(!Dex.species.get(id).passives.includes('relicarmor'));
 	});

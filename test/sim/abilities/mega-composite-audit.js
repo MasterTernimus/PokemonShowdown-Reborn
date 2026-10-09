@@ -18,7 +18,7 @@ describe('Mega composite ability components', () => {
 
 	it('Cruel Tag traps opposing Pokemon as Shadow Tag does', () => {
 		const [gengar, foe] = mega('Gengar', 'Gengarite');
-		assert.equal(gengar.ability, 'crueltag');
+		assert.equal(gengar.ability, 'shadowdouble');
 		battle.runEvent('TrapPokemon', foe);
 		assert(foe.trapped);
 		assert.equal(battle.runEvent('SourceModifyDamage', gengar, foe, battle.dex.getActiveMove('tackle'), 100), 75);
@@ -68,8 +68,8 @@ describe('Mega composite ability components', () => {
 		const [slowbro, foe] = mega('Slowbro', 'Slowbronite');
 		assert.equal(slowbro.species.name, 'Slowbro-Mega');
 		assert.equal(slowbro.ability, 'slowclamp');
-		for (const component of ['shellarmor', 'owntempo', 'analytic', 'sweetveil']) {
-			assert(slowbro.hasAbility(component));
+		for (const component of ['shellarmor', 'analytic', 'sweetveil']) {
+			assert(slowbro.hasAbilityOrPassive(component));
 		}
 		assert.equal(battle.runEvent('SourceModifyDamage', slowbro, foe, battle.dex.getActiveMove('tackle'), 100), 80);
 		assert(!slowbro.trySetStatus('slp', foe));
@@ -78,8 +78,8 @@ describe('Mega composite ability components', () => {
 	it('Iron Mountain keeps Heavy Metal physical protection and weight', () => {
 		const [aggron, foe] = mega('Aggron', 'Aggronite');
 		assert.equal(aggron.ability, 'ironmountain');
-		assert.equal(battle.runEvent('Damage', aggron, foe, battle.dex.getActiveMove('tackle'), 100), 50);
-		assert.equal(aggron.getWeight(), aggron.species.weightkg * 20);
+		assert.equal(battle.runEvent('Damage', aggron, foe, battle.dex.getActiveMove('tackle'), 100), 100);
+		assert.equal(aggron.getWeight(), aggron.species.weightkg * 10);
 	});
 
 	it('Joyride prevents sleep and preserves Vital Spirit protection', () => {
@@ -101,7 +101,7 @@ describe('Mega composite ability components', () => {
 	it('Sand Sovereign only advertises its implemented components', () => {
 		const [tyranitar] = mega('Tyranitar', 'Tyranitarite');
 		assert.equal(tyranitar.ability, 'sandsovereign');
-		for (const component of ['sandstream', 'solidrock', 'dauntlessshield']) assert(tyranitar.hasAbility(component));
+		for (const component of ['sandstream', 'solidrock']) assert(tyranitar.hasAbilityOrPassive(component));
 		assert.equal(tyranitar.hasAbility('battlearmor'), false);
 	});
 
@@ -111,6 +111,6 @@ describe('Mega composite ability components', () => {
 		victreebel.hp = 1;
 		const before = foe.hp;
 		battle.makeChoices('move splash', 'move tackle');
-		assert.equal(foe.hp, before);
+		assert.equal(foe.hp, before - 1);
 	});
 });

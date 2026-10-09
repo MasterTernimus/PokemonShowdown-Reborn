@@ -1,5 +1,6 @@
 import type {PokemonConditionData, FieldConditionData, SideConditionData} from '../sim/dex-conditions';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
+import {crescentRendApplies, prepareCrescentRend} from '../sim/crescent-rend';
 import { cureRestorativeStatus } from './approved-signatures';
 /* eslint-disable @stylistic/max-len */
 // List of flags and their descriptions can be found in sim/dex-moves.ts
@@ -997,6 +998,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
 						this.debug('Aurora Veil weaken');
+						if (crescentRendApplies(source, move)) return;
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
@@ -3832,7 +3834,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			if (!source.hasAbility(['cursedkeepsake', 'cursedmarionette'])) {
+			if (!source.hasAbility('cursedkeepsake')) {
 				this.directDamage(source.maxhp / 4, source, source);
 			}
 		},
@@ -17052,6 +17054,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
 						this.debug('Reflect weaken');
+						if (crescentRendApplies(source, move)) return;
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
@@ -17179,7 +17182,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return null;
 			}
 			// insomnia and vital spirit checks are separate so that the message is accurate in multi-ability mods
-			if (source.hasAbility('insomnia')) {
+			if (source.hasAbilityOrPassive('insomnia')) {
 				this.add('-fail', source, '[from] ability: Insomnia', `[of] ${source}`);
 				return null;
 			}
@@ -17872,7 +17875,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 3,
 			durationCallback(target, source) {
-				if (source?.hasAbility('invigorate')) return 5;
+				if (source?.hasAbilityOrPassive('invigorate')) return 5;
 				return 3;
 			},
 			onSetStatus(status, target, source, effect) {
@@ -19684,7 +19687,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			noCopy: true,
 			onStart(pokemon) {
 				let applies = false;
-				if (pokemon.hasType('Flying') || pokemon.getPassives().includes('levitate') || pokemon.hasAbility('levitate')) applies = true;
+				if (pokemon.hasType('Flying') || pokemon.getPassives().some(id => id === 'levitate' || id === 'elevate') ||
+					pokemon.hasAbility(['levitate', 'elevate'])) applies = true;
 				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] ||
 					this.field.getPseudoWeather('gravity')) applies = false;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
@@ -21397,6 +21401,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.attrLastMove('[still]');
 					return null;
 				}
+				// Crescent Rend continues this original hit with its already calculated overflow.
+				if (prepareCrescentRend(source, target, move, damage)) return;
 				if (damage > target.volatiles['substitute'].hp) {
 					damage = target.volatiles['substitute'].hp as number;
 				}
@@ -23937,6 +23943,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		multihit: [2, 6],
 		critRatio: 2,
 		onModifyMove(move, pokemon) {
+			move.ignoreAbility = true;
 			const isAshGreninja = pokemon.species.id === 'greninjaash' && pokemon.hasAbility('shadowbond') && !pokemon.transformed;
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.basePower = 20;

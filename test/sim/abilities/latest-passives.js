@@ -30,14 +30,14 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('matches the entire approved 700-holder registry and all selected slots', () => {
+	it('matches the entire approved 820-holder registry and all selected slots', () => {
 		const expected = { ...approved.previousPassives };
 		for (const [passive, ids] of Object.entries(approved.groups))
 			for (const id of ids)
 				expected[id] = [passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(require('../../../dist/data/species-passives').SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 700);
+		assert.equal(Object.keys(expected).length, 820);
 		for (const [id, slot, , name] of approved.slots)
 			assert.equal(Dex.species.get(id).abilities[slot], name, id);
 		for (const [id, abilities] of Object.entries(approved.priorAbilities)) {
@@ -47,16 +47,16 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 					expected[slot] = name;
 			if (id === 'venusaur')
 				expected.S = 'Uproot';
-			assert.deepEqual(Dex.species.get(id).abilities, expected, id);
+			assert.deepEqual(Dex.species.get(id).abilities, require('./passive-approval-overlays').abilities(id, expected), id);
 		}
 	});
 	for (const [passive, ids] of Object.entries(approved.groups))
 		for (const id of ids)
-			it(id + ' has exactly ' + passive, () => assert.deepEqual(Dex.species.get(id).passives, [passive]));
+			it(id + ' has exactly ' + passive, () => assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, [passive])));
 	it('leaves all held species and excluded related forms untouched', () => {
 		for (const id of ['salamence', 'gardevoir', 'rhyperior', 'conkeldurr', 'excadrill', 'excadrillmega', 'meowsticf', 'meowsticfmega', 'kingambit', 'baxcalibur', 'glimmora', 'glimmoramega', 'probopass', 'roserade', 'roserademega', 'gyaradosaevian', 'gyaradosaevianmega', 'miloticaevian', 'miloticterajuma', 'granbullreborn'])
 			if (Dex.species.get(id).exists && !Object.values(require('./settled-passives-approved.json').groups).flat().includes(id))
-				assert.deepEqual(Dex.species.get(id).passives, approved.previousPassives[id] || [], id);
+				assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, approved.previousPassives[id] || []), id);
 		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sandforce']);
 		for (const s of Dex.species.all())
 			if (Object.values(s.abilities).includes('Uproot'))

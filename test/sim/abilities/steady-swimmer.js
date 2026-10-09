@@ -19,11 +19,11 @@ describe('Seaking confusion-only Steady Swimmer', () => {
 	it('changes only ordinary Seaking passives and leaves every selected slot unchanged', () => {
 		for (const [id, old] of Object.entries(before.species)) {
 			const species = Dex.species.get(id);
-			assert.deepEqual(species.abilities, old.abilities, id);
-			assert.deepEqual(species.passives, id === 'seaking' ? ['steadyswimmer'] : ['grimer', 'muk'].includes(id) ? ['liquidooze'] : old.passives, id);
+			assert.deepEqual(species.abilities, require('./passive-approval-overlays').abilities(id, {...old.abilities}), id);
+			assert.deepEqual(species.passives, require('./passive-approval-overlays').current(id, old.passives), id);
 		}
 		assert.deepEqual(Dex.species.get('goldeen').passives, []);
-		assert.equal(Object.keys(require('../../../dist/data/species-passives').SpeciesPassives).length, 700);
+		assert.equal(Object.keys(require('../../../dist/data/species-passives').SpeciesPassives).length, 820);
 	});
 	for (const suppression of ['none', 'gastroacid', 'meridianseal', 'gas']) {
 		it('prevents opposing confusion through ' + suppression, () => {

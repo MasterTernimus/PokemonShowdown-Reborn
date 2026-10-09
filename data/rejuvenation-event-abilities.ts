@@ -340,7 +340,7 @@ export function installRejuvenationEvents(abilities: AbilityDataTable) {
 		onFoeModifySpe(speed, pokemon) {
 			if (!['psn', 'tox'].includes(pokemon.status))
 				return;
-			const holders = pokemon.foes().filter(p => p.hasAbility('venamskiss'));
+			const holders = pokemon.foes().filter(p => p.hasAbilityOrPassive('venamskiss'));
 			if (holders[0] === this.effectState.target)
 				return this.chainModify(0.75);
 		},

@@ -20,12 +20,12 @@ describe('Passive and selected component separation', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('preserves every existing species passive and selected slot without widening distribution', () => {
 		const { SpeciesPassives } = require('../../../dist/data/species-passives');
-		assert.equal(Object.keys(SpeciesPassives).length, before.length + 536);
+		assert.equal(Object.keys(SpeciesPassives).length, before.length + 656);
 		for (const row of before) {
 			const s = Dex.species.get(row.id);
 			const { StarterPassives } = require('../../../dist/data/starter-passives');
-			assert.deepEqual(s.passives, (row.id === 'quaquaval' ? ['torrent'] : StarterPassives[row.id]) || (row.id === 'butterfree' ? ['shielddust'] : ['grimer', 'muk'].includes(row.id) ? ['liquidooze'] : row.passives), row.id);
-			for (const slot of row.slots) assert.equal(s.abilities[slot.slot], selected(row.id, slot.slot, slot.name), row.id);
+			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(row.id, (row.id === 'quaquaval' ? ['torrent'] : StarterPassives[row.id]) || (row.id === 'butterfree' ? ['shielddust'] : ['grimer', 'muk'].includes(row.id) ? ['liquidooze'] : row.passives)), row.id);
+			for (const slot of row.slots) assert.equal(s.abilities[slot.slot], require('./passive-approval-overlays').abilities(row.id, {[slot.slot]: selected(row.id, slot.slot, slot.name)})[slot.slot], row.id);
 		}
 	});
 	for (const row of before) for (const slot of row.slots.filter(s => s.overlap.length)) {
@@ -71,7 +71,9 @@ describe('Passive and selected component separation', () => {
 		['Bronzong', 'Elevate', 'levitate'], ['Bronzong-Rejuv', 'Elevate', 'levitate'],
 	]) it(species + ' keeps the shared ' + ability + ' component', () => {
 		const [p, t] = setup(species, ability);
-		assert(!p.getPassives().includes(component)); assert(p.hasAbility(component));
+		if (['Gliscor-Alt', 'Tentacruel-Reborn'].includes(species)) {
+			assert(p.getPassives().includes(component)); assert(!p.hasAbility(component));
+		} else { assert(!p.getPassives().includes(component)); assert(p.hasAbility(component)); }
 		if (component === 'hypercutter') { battle.boost({ atk: -1 }, p, t); assert.equal(p.boosts.atk, 0); }
 		if (component === 'levitate') {
 			assert.equal(p.isGrounded(), null);
@@ -91,11 +93,11 @@ describe('Passive and selected component separation', () => {
 		assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, Dex.moves.get('tackle'), [{ chance: 100, status: 'par' }]), []);
 		assert(!p.hasAbility('overcoat'));
 	});
-	it('retains Proficient on base and nonstarter/shared packages', () => {
+	it('removes Proficient from the selected base packages but keeps standalone Proficient', () => {
 		for (const [species, ability] of [['Venusaur', 'Pollen Bloom'], ['Charizard', 'Unbound Blaze'], ['Mew', 'Proficient']]) {
 			const [p, t] = setup(species, ability);
-			assert(!p.getPassives().includes('proficient')); assert(p.hasAbility('proficient'));
-			assert.equal(battle.runEvent('BasePower', p, t, { ...Dex.moves.get('tackle'), type: p.getTypes()[0] }, 100), 130);
+			assert(!p.getPassives().includes('proficient')); assert.equal(p.hasAbility('proficient'), ability === 'Proficient');
+			assert.equal(battle.runEvent('BasePower', p, t, { ...Dex.moves.get('tackle'), type: p.getTypes()[0] }, 100), ability === 'Proficient' ? 130 : 100);
 			battle.destroy(); battle = null;
 		}
 	});

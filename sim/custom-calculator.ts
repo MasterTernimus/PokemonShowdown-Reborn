@@ -125,10 +125,13 @@ export function calculatorFormats() {
 		(format.terrain || ['gen9nofieldsinglesgame', 'gen9nofielddoublesbattle'].includes(format.id)) &&
 		format.terrain !== 'randomterrain' && (format.gameType !== 'freeforall' || format.playerCount === 4));
 }
+function calculatorFieldIDs() {
+	return [...new Set([...Object.keys(Terrains), ...calculatorFormats().map(format => format.terrain).filter(Boolean)])] as string[];
+}
 export function calculatorMetadata() {
 	return {
 		formats: calculatorFormats().map(f => ({ id: f.id, name: f.name, mode: f.gameType, field: f.terrain || '' })),
-		fields: [{id: '', name: 'No field'}, ...Object.entries(Terrains).map(([id, field]) => ({id, name: field.name || id}))],
+		fields: [{id: '', name: 'No field'}, ...calculatorFieldIDs().map(id => ({id, name: Terrains[id]?.name || Dex.conditions.get(id).name || id}))],
 		species: Dex.species.all().filter(s => s.exists && (!s.isCosmeticForme || s.passives.length)).map(s => ({name: s.name, abilities: s.abilities, passives: s.passives})),
 		abilityComponentExclusions: AbilityComponentExclusions, sharedPassiveComponents: SharedPassiveComponents, sharedPassiveComponentAdditions: SharedPassiveComponentAdditions,
 		abilityComponents: Object.fromEntries(Object.keys(AbilityComponents).map(id =>
@@ -152,7 +155,7 @@ export function validateScenario(input: unknown): CalcScenario {
 	const aura = name(data.aura);
 	if (aura && !Object.prototype.hasOwnProperty.call(Auras, aura)) throw new Error('Unknown aura.');
 	return {
-		format, field: choice(data.field, format.terrain || '', ['', ...Object.keys(Terrains)]), actors: data.actors.map((a, i) => actor(a, i ? '' : move.name)), move: move.id,
+		format, field: choice(data.field, format.terrain || '', ['', ...calculatorFieldIDs()]), actors: data.actors.map((a, i) => actor(a, i ? '' : move.name)), move: move.id,
 		weather: choice(data.weather, '', ['', 'raindance', 'sunnyday', 'sandstorm', 'hail']),
 		aura, screens: [...new Set(screens)] as string[],
 		attackMode: choice(data.attackMode, '', ['', 'z', 'max']),

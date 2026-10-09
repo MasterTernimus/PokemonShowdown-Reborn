@@ -1,0 +1,244 @@
+{
+  "removed": {
+    "streettyrant": [
+      "shedskin"
+    ],
+    "ange": [
+      "fairyaura",
+      "magicguard"
+    ],
+    "siegelauncher": [
+      "selfsufficient"
+    ],
+    "stormfright": [
+      "intimidate",
+      "static"
+    ],
+    "enlightenment": [
+      "anticipation",
+      "purepower"
+    ],
+    "royalsun": [
+      "flamebody",
+      "unnerve"
+    ],
+    "toxicrenewal": [
+      "regenerator",
+      "liquidooze"
+    ],
+    "adaptivepower": [
+      "regenerator"
+    ],
+    "apexcleave": [
+      "sharpness"
+    ],
+    "freezerburn": [
+      "strongjaw",
+      "refrigerate"
+    ],
+    "phantomfist": [
+      "shadowshield",
+      "selfrepair",
+      "naturalcure",
+      "noguard"
+    ],
+    "surgeconduit": [
+      "shadowshield",
+      "bruteforce",
+      "electricsurge",
+      "reckless"
+    ],
+    "solarhydra": [
+      "solarpower",
+      "solarbud"
+    ],
+    "cursedarmament": [
+      "filter",
+      "frisk"
+    ],
+    "unboundblaze": [
+      "proficient"
+    ],
+    "pollenbloom": [
+      "proficient"
+    ],
+    "waterbarrage": [
+      "proficient"
+    ],
+    "toxicbloom": [
+      "selfsufficient"
+    ],
+    "atrocity": [
+      "moldbreaker",
+      "selfsufficient"
+    ],
+    "sunsovereign": [
+      "moldbreaker",
+      "selfsufficient"
+    ],
+    "toxicevolution": [
+      "moldbreaker",
+      "dualwield"
+    ],
+    "spiralevolution": [
+      "shielddust"
+    ],
+    "neurotoxin": [
+      "shedskin"
+    ],
+    "lunarorbit": [
+      "triage",
+      "serenegrace"
+    ],
+    "completeparasitism": [
+      "filter",
+      "dryskin"
+    ],
+    "perfectforesight": [
+      "insomnia"
+    ],
+    "slowclamp": [
+      "owntempo"
+    ],
+    "parentalbond": [
+      "moldbreaker",
+      "toughclaws"
+    ],
+    "celestialheart": [
+      "serenegrace"
+    ],
+    "bloomingsun": [
+      "naturalcure"
+    ],
+    "silkendecoy": [
+      "insomnia"
+    ],
+    "ironvise": [
+      "battlearmor"
+    ],
+    "sandsovereign": [
+      "dauntlessshield"
+    ],
+    "verdantdrake": [
+      "dualwield"
+    ],
+    "blazingtempo": [
+      "striker"
+    ],
+    "ragingcurrent": [
+      "stamina"
+    ],
+    "corrosivetouch": [
+      "corrosion"
+    ],
+    "dreadmaw": [
+      "frisk"
+    ],
+    "ironmountain": [
+      "heavymetal"
+    ],
+    "heavenlychorus": [
+      "cloudnine"
+    ],
+    "astralengine": [
+      "analytic"
+    ],
+    "royalscales": [
+      "oblivious"
+    ],
+    "hauntedchime": [
+      "elevate"
+    ],
+    "nighthunt": [
+      "frisk",
+      "infiltrator"
+    ],
+    "uncheckedassault": [
+      "striker"
+    ],
+    "queensguard": [
+      "infiltrator"
+    ],
+    "shadowcurrent": [
+      "moldbreaker",
+      "infiltrator"
+    ],
+    "heavyartillery": [
+      "shellarmor"
+    ]
+  },
+  "exact": {
+    "solarhydra": [
+      "hydrabond",
+      "grassysurge"
+    ],
+    "cursedarmament": [],
+    "ange": [
+      "eternalflower",
+      "moldbreaker"
+    ],
+    "siegelauncher": [
+      "megalauncher",
+      "stalwart",
+      "waterbarrage"
+    ],
+    "neurotoxin": [
+      "hydrabond",
+      "regenerator"
+    ],
+    "surgeconduit": [
+      "lightningrod",
+      "rockhead"
+    ],
+    "railguncircuit": [
+      "lightningrod",
+      "transistor"
+    ],
+    "enlightenment": [
+      "innerfocus",
+      "technician"
+    ],
+    "stormfright": [
+      "stormpower",
+      "lightningrod"
+    ],
+    "apexcleave": [
+      "dualwield",
+      "moxie"
+    ],
+    "streettyrant": [
+      "intimidate",
+      "moldbreaker"
+    ],
+    "adaptivepower": [
+      "magicguard",
+      "hugepower"
+    ],
+    "phantomfist": [
+      "unseenfist",
+      "aftermath",
+      "selfsufficient"
+    ],
+    "toxicrenewal": [
+      "adaptability",
+      "poisontouch"
+    ],
+    "freezerburn": [
+      "slushrush",
+      "levitate"
+    ],
+    "royalsun": [
+      "supremeoverlord",
+      "drought"
+    ]
+  },
+  "passives": {
+    "sunfloramega": "solarbud",
+    "arbokmegax": "shedskin",
+    "medichammega": "purepower",
+    "manectricmega": "intimidate",
+    "pyroarmega": "flamebody",
+    "dragalgemega": "regenerator"
+  },
+  "held": []
+}

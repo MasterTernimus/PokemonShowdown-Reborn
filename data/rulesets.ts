@@ -859,7 +859,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onValidateTeam(team) {
 			const restrictedAbilities = new Set<ID>(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive'] as ID[]);
 			const compositeRestrictedAbilities: { [abilityid: string]: ID[] } = {
-				perfectego: ['ultraego', 'battlefervor'] as ID[],
+				perfectego: ['ultraego'] as ID[],
 				ragingfists: ['ultraego'] as ID[],
 			};
 			const restrictedPokemon: string[] = [];
