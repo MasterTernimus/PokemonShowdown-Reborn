@@ -62,6 +62,24 @@ describe('Icy Field interactions', () => {
 		assert(battle.log.includes('|-message|The quake broke up the ice and revealed the water beneath!'));
 	});
 
+	for (const underlying of ['watersurfaceterrain', 'murkwatersurfaceterrain', null]) {
+		it(`Anchor Shot breaks ice and restores ${underlying || 'Water Surface by default'}`, () => {
+			const [source, target] = createBattle([
+				[{species: 'Mew', moves: ['anchorshot']}],
+				[{species: 'Mew', moves: ['splash']}],
+			]);
+			if (underlying) battle.field.changeTerrain(underlying, source);
+			setIcyField(source);
+			const hp = target.hp;
+			battle.makeChoices('move anchorshot', 'move splash');
+			assert(target.hp < hp);
+			assert(battle.field.isTerrain(underlying || 'watersurfaceterrain'));
+				assert.equal(battle.log.filter(line => line === '|-message|The Anchor broke past the Ice!').length, 1);
+			assert(!battle.p1.sideConditions.spikes);
+			assert(!battle.p2.sideConditions.spikes);
+		});
+	}
+
 	it('keeps Icy Field and creates Spikes when no water is underneath', () => {
 		const [source, target] = createBattle();
 		setIcyField(source);

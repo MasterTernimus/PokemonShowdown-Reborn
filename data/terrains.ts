@@ -1956,6 +1956,11 @@ export const Terrains: { [k: string]: TerrainData } = {
 						this.add('-message', source.hasAbilityOrPassive('contrary') ? `${source.name} lost momentum on the ice!` : `${source.name} gained momentum on the ice!`);
 					}
 				}
+				if (move.id === 'anchorshot') {
+					this.add('-message', 'The Anchor broke past the Ice!');
+					restoreTerrain('watersurfaceterrain');
+					return;
+				}
 				if (quakeMoves.includes(move.id)) {
 					if (underlyingTerrain) {
 						if (underlyingTerrain === 'watersurfaceterrain' || underlyingTerrain === 'murkwatersurfaceterrain') {
