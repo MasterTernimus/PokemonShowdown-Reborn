@@ -16,7 +16,7 @@ describe('Emboar abilities and Mega Evolution', () => {
 
 	it('has the expected base and Mega ability slots', () => {
 		const [emboar] = start('Gluttony');
-		assert.deepEqual(emboar.species.abilities, { 0: 'Gluttony', 1: 'Thick Fat', H: 'Brute Force' });
+		assert.deepEqual(emboar.species.abilities, { 0: 'Stoke Belly', 1: 'Thick Fat', H: 'Brute Force' });
 		assert.equal(battle.dex.species.get('Emboar-Mega').abilities[0], 'Burning Ego');
 	});
 
@@ -53,7 +53,10 @@ describe('Emboar abilities and Mega Evolution', () => {
 		battle.makeChoices('move flareblitz mega', 'move splash');
 		assert.equal(emboar.species.name, 'Emboar-Mega');
 		assert.equal(emboar.ability, 'burningego');
-		for (const component of ['proficient', 'ultraego', 'flamebody', 'magmaarmor']) assert(emboar.hasAbility(component));
+		for (const component of ['ultraego', 'flamebody', 'magmaarmor']) assert(emboar.hasAbility(component));
+		assert(!emboar.hasAbility('proficient'));
+		assert(emboar.hasAbilityOrPassive('proficient'));
+		assert.deepEqual(emboar.getPassives(), ['proficient']);
 		const fireMove = battle.dex.getActiveMove('firepunch');
 		const neutralMove = battle.dex.getActiveMove('tackle');
 		assert.equal(battle.runEvent('BasePower', emboar, foe, fireMove, 100), 130,

@@ -1,4 +1,5 @@
 import {passiveEffect, passiveState, thematicPassives} from './species-passives';
+import {takeCrescentSubDamage} from './crescent-rend';
 import {adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCaptureMove, adaptiveSkipAbility, adaptiveIgnoresAbility, adaptiveCheckpoint, adaptiveResistsBypass, adaptiveAnalyzed, adaptivePreventDamage, adaptiveDamaged, adaptiveDamageMultiplier, adaptiveEnvironmentalContribution, adaptiveEnvironment, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 /* eslint-disable @stylistic/max-len */
 /**
@@ -938,6 +939,14 @@ export class Battle {
 			}
 			const effect = handler.effect;
 			const effectHolder = handler.effectHolder;
+			// Keep damage reactions on the category already selected for this target.
+			if ((sourceEffect as any)?.auraCategories && source instanceof Pokemon &&
+				this.event.target instanceof Pokemon &&
+				['DamagingHit', 'Damage', 'AfterDamage', 'AfterDamageApplied', 'AfterSubDamage', 'TryPrimaryHit'].includes(eventid)) {
+				const targetMove = adaptiveMoveView(sourceEffect as ActiveMove, source, this.event.target);
+				args[hasRelayVar + 2] = targetMove;
+				this.event.effect = targetMove;
+			}
 			if (effect.effectType === 'Ability' && effectHolder instanceof Pokemon &&
 				adaptiveSkipAbility(eventid, effectHolder, this.event.target, source)) continue;
 			if (effect.effectType === 'Ability' && effectHolder instanceof Pokemon && source instanceof Pokemon &&
@@ -2315,6 +2324,7 @@ export class Battle {
 			}
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
+			const crescentSubDamage = takeCrescentSubDamage(target, effect);
 			if (effect.effectType === 'Ability' && (adaptiveIgnoresAbility(target, source) ||
 				(this.effectState?.target instanceof Pokemon && adaptiveIgnoresAbility(target, this.effectState.target)))) { retVals[i] = 0; continue; }
 			if (adaptivePreventDamage(target, source, effect)) { retVals[i] = 0; continue; }
@@ -2331,6 +2341,10 @@ export class Battle {
 				}
 				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage, true);
 				if (!(targetDamage || targetDamage === 0)) {
+					if (crescentSubDamage && source && effect.effectType === 'Move') {
+						source.lastDamage = crescentSubDamage;
+						if (effect.drain) this.heal(Math.round(crescentSubDamage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+					}
 					this.debug('damage event failed');
 					retVals[i] = curDamage === true ? undefined : targetDamage;
 					continue;
@@ -2350,7 +2364,7 @@ export class Battle {
 			if (targetDamage > 0) this.runEvent('AfterDamageApplied', target, source, effect, targetDamage);
 			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
 			if (source && effect.effectType === 'Move') {
-				source.lastDamage = targetDamage;
+				source.lastDamage = targetDamage + crescentSubDamage;
 				const hitData = target.getMoveHitData(effect as ActiveMove);
 				hitData.damage = Math.max(hitData.damage || 0, targetDamage);
 			}
@@ -2377,7 +2391,7 @@ export class Battle {
 				break;
 			}
 
-			if (targetDamage && effect.effectType === 'Move') {
+			if ((targetDamage || crescentSubDamage) && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
 					if (this.dex.currentMod !== 'gen1stadium' || target.hp > 0) {
 						const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
@@ -2391,7 +2405,7 @@ export class Battle {
 					this.heal(amount, source, target, 'drain');
 				}
 				if (this.gen > 4 && effect.drain && source) {
-					const amount = Math.round(targetDamage * effect.drain[0] / effect.drain[1]);
+					const amount = Math.round((targetDamage + crescentSubDamage) * effect.drain[0] / effect.drain[1]);
 					this.heal(amount, source, target, 'drain');
 				}
 			}
@@ -2723,7 +2737,7 @@ export class Battle {
 		let tracksTarget = move.tracksTarget;
 		// Stalwart sets trackTarget in ModifyMove, but ModifyMove happens after getTarget, so
 		// we need to manually check for Stalwart here
-		if (pokemon.hasAbility(['stalwart', 'propellertail'])) tracksTarget = true;
+		if (pokemon.hasAbilityOrPassive('stalwart') || pokemon.hasAbility('propellertail')) tracksTarget = true;
 		if (tracksTarget && originalTarget?.isActive) {
 			// smart-tracking move's original target is on the field: target it
 			return originalTarget;

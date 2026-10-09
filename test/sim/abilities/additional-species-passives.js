@@ -49,7 +49,7 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) expected[id] = [...(expected[id] || []), passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 700);
+		assert.equal(Object.keys(SpeciesPassives).length, 820);
 		for (const old of before.species) {
 			const s = Dex.species.get(old.id), abilities = { ...old.abilities };
 			for (const [id, slot, name] of before.replacement) if (id === old.id) abilities[slot] = name;
@@ -57,7 +57,7 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 			for (const k of ['baseStats', 'types', 'weightkg']) assert.deepEqual(s[k], old[k], old.id + '/' + k);
 			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, old.learnset);
 		}
-		for (const id of ['mukpulse', 'garbodorgmax', 'clobbopus', 'remoraid', 'lileep']) assert.deepEqual(Dex.species.get(id).passives, before.previousPassives[id] || []);
+		for (const id of ['mukpulse', 'garbodorgmax', 'clobbopus', 'remoraid', 'lileep']) assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, before.previousPassives[id] || []));
 	});
 	for (const id of before.groups.stickyhold.filter(id => !['grimer', 'muk'].includes(id))) it(id + ' keeps its item against Knock Off through suppression and replacement', () => {
 		const [p, t] = setup(id); states(p, t, () => {

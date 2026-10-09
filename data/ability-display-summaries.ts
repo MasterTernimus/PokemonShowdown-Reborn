@@ -154,7 +154,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"adaptivepower": "Double Attack; heals 1/3 HP on switching; no indirect damage.",
 	"perfectforesight": "Ability copy; Miracle Eye; stored attacks; once-per-battle Mega screens.",
 	"doomwarning": "Reflects status moves; no indirect damage; reveals threats; Doom Desire against foes on fainting.",
-	"perfectego": "Never misses; heals and gains stats in combat; stronger attacks before foes move.",
+	"perfectego": "Never misses; heals and gains stats in combat.",
 	"heavenlychorus": "Half contact damage, double Fire damage.",
 	"mourningsnow": "8-turn Hail/Veil; damaging moves add 30% frostbite; faint healing/curse; hit Disable.",
 	"venombastion": "HP hits heal 1/16 and boost Defense once per turn; poisoned attackers lose their higher offense once per turn.",
@@ -198,7 +198,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"templechime": "Move KOs boost highest stat; once per entry, Heal Bell curing status clears negative Sp. Def.",
 	"soothingpresence": "Combines the listed abilities.",
 	"verdanthospitality": "1.3x same-type power; allies take 25% less damage; entry and end-turn healing.",
-	"verdantsanctuary": "On entry, sets Grassy Terrain and heals each adjacent ally by 1/4 max HP. Healing received by it and its allies is multiplied by 1.3.",
+	"verdantsanctuary": "Grassy Terrain on entry; Hospitality and Friend Guard.",
 	"echosense": "Allies avoid own sound damage; 30% chance of 5-turn Embargo; double Speed on Psychic field/aura.",
 	"wingedwraith": "Moves bypass Substitute and opposing screens; If it is at full HP, its Flying-type moves have their priority increased by 1.",
 	"gooey": "Damaging hit: attacker -2 Spe (-4 on Murkwater).",
@@ -351,7 +351,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"encorearia": "The first secondary effect each entry sets 5-turn Safeguard.",
 	"peppersting": "A Fire move primes the next Grass hit to lower Speed and Sp. Def.",
 	"sushitrick": "Entry heals adjacent allies 1/4 HP and clears confusion; alone, clears own confusion and negative accuracy.",
-	"mastercourse": "Water or Dragon hits grant an adjacent ally +1 critical-hit stage.",
+	"mastercourse": "Water/Dragon HP hits charge an ally, or itself alone, after the move.",
 	"railsight": "Surviving a foe HP-damaging move once per entry powers the next Electric attack by 1.5x.",
 	"pollenengine": "Grass or powder hits heal it and its allies, more in sun.",
 	"titanpincer": "Crabhammer and physical Steel moves use Defense when higher than Attack.",
@@ -614,3 +614,13 @@ AbilityDisplaySummaries.voidomen = 'First successful secondary or self status mo
 AbilityDisplaySummaries.hydroelectric = "Water HP hits heal 1/8 once/turn; first Water attack dealing opposing HP damage grants +1 Speed after the move.";
 
 AbilityDisplaySummaries.steadyswimmer = "Prevents and cures confusion only.";
+
+Object.assign(AbilityDisplaySummaries, {"hauntingveil":"Cursed Body + Infiltrator.","parentalbond":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts.","ironwill":"Prism Armor, Self-Sufficient and Whiplash.","calderacore":"Summons sun; Magma Armor protects and grants field bonuses.","razorcurrent":"Summons rain; gains Speed each full active turn."});
+
+AbilityDisplaySummaries.solartrap = 'Automatic Stockpiles/releases; draining moves hurt their user.';
+
+import {SelectedAbilityDescriptions} from './selected-mega-simplification-data';
+for (const [id, details] of Object.entries(SelectedAbilityDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+
+import {GmaxRedesignDescriptions} from './gmax-passive-data';
+for (const [id, details] of Object.entries(GmaxRedesignDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;

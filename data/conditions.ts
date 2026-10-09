@@ -3,6 +3,8 @@ import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+ shadowdoublespent: {name: 'Shadow Double spent', noCopy: true, onStart() { this.effectState.armed = true; }},
+ crossfirecharge: {name: 'Crossfire charge', noCopy: true},
  woolyconductorspent: {name: 'woolyconductorspent', noCopy: true, duration: 1},
 
  grapplingclawsspent: {name: 'Grappling Claws spent', noCopy: true},

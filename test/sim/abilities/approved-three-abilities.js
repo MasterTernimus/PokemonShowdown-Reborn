@@ -101,10 +101,10 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		assert.equal(battle.runEvent('CriticalHit', p, foe, battle.dex.getActiveMove('tackle')), false);
 		battle.boost({atk:-1}, p, foe); assert.equal(p.boosts.def, 2);
 	});
-	it('Unleashed Ego combines conditional Royal Decree power and defense once', () => {
+	it('Unleashed Ego removes Ultra authority bonuses but retains Raging Storm defenses', () => {
 		const [p, foe] = start('Unleashed Ego', 'Royal Decree');
-		assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('tackle'), 1000), 1300);
-		assert.equal(damage(p, foe), 560); assert.equal(damage(p, foe, 'quickattack'), 280);
+		assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('tackle'), 1000), 1000);
+		assert.equal(damage(p, foe), 800); assert.equal(damage(p, foe, 'quickattack'), 400);
 	});
 	for (const field of ['bewitchedwoodsterrain','hauntedterrain','holyterrain']) {
 		it(`Unleashed Ego disables only Ultra Ego on ${field}`, () => {

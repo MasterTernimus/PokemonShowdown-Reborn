@@ -35,12 +35,12 @@ describe('Approved Kanto and Johto passive migration', () => {
 		for (const [p, ids] of Object.entries(require('./latest-passives-approved.json').groups)) for (const id of ids) expected[id] = [p];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 700);
+		assert.equal(Object.keys(SpeciesPassives).length, 820);
 	});
 	for (const [passive, ids] of Object.entries(before.groups))
 		for (const id of ids) {
 			it(id + ' resolves the exact approved passive', () => {
-				assert.deepEqual(Dex.species.get(id).passives, [id === 'granbull' ? 'rattled' : passive]);
+				assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, [id === 'granbull' ? 'rattled' : passive]));
 			});
 		}
 	it('Gluttony consumes its half-HP berry through Gastro Acid', () => {
@@ -124,7 +124,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		for (const [passive, ids] of Object.entries(before.groups))
 			for (const id of ids) {
 				const row = metadata.species.find(row => Dex.species.get(row.name).id === id);
-				assert.deepEqual(row.passives, [id === 'granbull' ? 'rattled' : passive], id);
+				assert.deepEqual(row.passives, require('./passive-approval-overlays').current(id, [id === 'granbull' ? 'rattled' : passive]), id);
 			}
 		for (const [species, passive] of [['Golduck', 'Damp'], ['Magcargo', 'Heatproof']]) {
 			const input = { format: 'gen9nofieldsinglesgame', move: 'Flamethrower', samples: 16, seed: 42,
@@ -134,14 +134,14 @@ describe('Approved Kanto and Johto passive migration', () => {
 			assert.deepEqual(calculateScenario(input).results[1], passiveOnly, species);
 		}
 	});
-	it('real Mega Evolution retains Static and changes the selected ability independently', () => {
+	it('real Mega Evolution replaces Static with Mold Breaker and changes the selected ability independently', () => {
 		const [p] = setup('Ampharos', 'Cotton Down');
 		p.setItem('Ampharosite');
 		p.canMegaEvo = battle.actions.canMegaEvo(p);
 		assert(battle.actions.runMegaEvo(p));
 		assert.equal(p.species.id, 'ampharosmega');
 		assert.equal(p.ability, 'woolyconductor');
-		assert.deepEqual(p.getPassives(), ['static']);
+		assert.deepEqual(p.getPassives(), ['moldbreaker']);
 	});
 	it('Illusion copies a passive-free disguise without publishing actual identity', () => {
 		const [p] = setup('Raichu', 'Illusion');

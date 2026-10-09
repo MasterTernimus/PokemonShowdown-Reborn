@@ -2,6 +2,7 @@ import {getAbilityComponentExclusions, getAbilityComponentAdditions} from '../da
 import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 import { AbilityComponents } from '../data/ability-components';
+import {startGainedPassives} from './species-passives';
 /**
  * Simulator Pokemon
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -946,7 +947,10 @@ export class Pokemon {
 		// Certain Abilities won't activate while Transformed, even if they ordinarily couldn't be suppressed (e.g. Disguise)
 		if (this.getAbility().flags['notransform'] && this.transformed) return true;
 		if (this.getAbility().flags['cantsuppress']) return false;
-		if (this.volatiles['gastroacid'] || this.volatiles['meridianseal']) return true;
+		if (this.volatiles['gastroacid'] || this.volatiles['meridianseal']) {
+			if (this.ability === 'cursedarmament') delete this.abilityState.charged;
+			return true;
+		}
 
 		// Check if any active pokemon have the ability Neutralizing Gas
 		if (this.hasItem('Ability Shield') || this.ability === ('neutralizinggas' as ID)) return false;
@@ -956,6 +960,7 @@ export class Pokemon {
 			if (pokemon.ability === ('neutralizinggas' as ID) && !pokemon.volatiles['gastroacid'] &&
 				!pokemon.volatiles['meridianseal'] &&
 				!pokemon.transformed && !pokemon.abilityState.ending && !this.volatiles['commanding']) {
+				if (this.ability === 'cursedarmament') delete this.abilityState.charged;
 				return true;
 			}
 		}
@@ -1285,6 +1290,8 @@ export class Pokemon {
 
 		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
+			const pulseMoves = this.getPulseEvolutionMoves();
+			if (pulseMoves) data.pulseMoves = pulseMoves;
 			if (this.canMegaEvoX) data.canMegaEvoX = true;
 			if (this.canMegaEvoY) data.canMegaEvoY = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
@@ -1393,28 +1400,55 @@ export class Pokemon {
 		}
 	}
 
-	/** Install once per form, keeping the actual slots (and their spent PP) on re-entry. */
-	applyPulseFixedMoves() {
-		const moves = PULSE_FIXED_MOVES[this.species.id];
+	getPulseFixedMoveSlots(speciesid: string): MoveSlot[] | undefined {
+		const moves = PULSE_FIXED_MOVES[speciesid];
 		if (!moves) return;
-		this.m.pulseFixedMoveSlots ||= {};
-		let slots: MoveSlot[] = this.m.pulseFixedMoveSlots[this.species.id];
-		if (!slots) {
-			slots = moves.map((id, index) => {
-				const move = this.battle.dex.moves.get(id);
-				const current = this.baseMoveSlots.find(slot => slot.id === move.id) || this.baseMoveSlots[index];
-				const maxpp = this.battle.calculatePP(move, 3);
-				return {
-					move: move.name, id: move.id, maxpp,
-					pp: Math.max(0, maxpp - (current ? current.maxpp - current.pp : 0)),
-					target: move.target, disabled: false, disabledSource: '', used: false,
-				};
-			});
-			this.m.pulseFixedMoveSlots[this.species.id] = slots;
+		const saved: MoveSlot[] | undefined = this.m.pulseFixedMoveSlots?.[speciesid];
+		return saved ? saved.map(slot => ({...slot})) : moves.map((id, index) => {
+			const move = this.battle.dex.moves.get(id);
+			const current = this.baseMoveSlots.find(slot => slot.id === move.id) || this.baseMoveSlots[index];
+			const maxpp = this.battle.calculatePP(move, 3);
+			return {
+				move: move.name, id: move.id, maxpp,
+				pp: Math.max(0, maxpp - (current ? current.maxpp - current.pp : 0)),
+				target: move.target, disabled: false, disabledSource: '', used: false,
+			};
+		});
+	}
+
+	/** Project choices without evolving or spending PP; run the usual move-disable checks. */
+	getPulseEvolutionMoves() {
+		if (!this.canMegaEvo || this.getLockedMove() || this.getSemiLockedMove()) return;
+		const slots = this.getPulseFixedMoveSlots(toID(this.canMegaEvo));
+		if (!slots) return;
+		const originalSlots = this.moveSlots;
+		const maybeDisabled = this.maybeDisabled;
+		const maybeLocked = this.maybeLocked;
+		try {
+			this.moveSlots = slots;
+			for (const slot of slots) { slot.disabled = false; slot.disabledSource = ''; }
+			this.battle.runEvent('DisableMove', this);
+			for (const slot of slots) {
+				this.battle.singleEvent('DisableMove', this.battle.dex.getActiveMove(slot.id), null, this);
+			}
+			const moves = this.getMoves();
+			return moves.length ? moves : [{move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false}];
+		} finally {
+			this.moveSlots = originalSlots;
+			this.maybeDisabled = maybeDisabled;
+			this.maybeLocked = maybeLocked;
 		}
+	}
+
+	/** Install once per form, keeping spent PP on re-entry. */
+	applyPulseFixedMoves() {
+		const slots = this.getPulseFixedMoveSlots(this.species.id);
+		if (!slots) return;
+		this.m.pulseFixedMoveSlots ||= {};
+		this.m.pulseFixedMoveSlots[this.species.id] = slots;
 		this.baseMoveSlots.splice(0, this.baseMoveSlots.length, ...slots);
 		this.moveSlots = slots.slice();
-		this.ppUps = moves.map(() => 3);
+		this.ppUps = slots.map(() => 3);
 		this.set.moves = slots.map(slot => slot.move);
 	}
 
@@ -1481,6 +1515,7 @@ export class Pokemon {
 			return false;
 		}
 
+		const previousPassives = this.getPassives();
 		if (!this.setSpecies(species, effect, true)) return false;
 
 		this.transformed = true;
@@ -1570,7 +1605,7 @@ export class Pokemon {
 		// Pokemon transformed into Ogerpon cannot Terastallize
 		// restoring their ability to tera after they untransform is handled ELSEWHERE
 		if (['Ogerpon', 'Terapagos'].includes(this.species.baseSpecies) && this.canTerastallize) this.canTerastallize = false;
-
+		startGainedPassives(this, previousPassives);
 		return true;
 	}
 
@@ -1627,6 +1662,7 @@ export class Pokemon {
 		isPermanent?: boolean, abilitySlot = '0', message?: string, visualSpecies?: string
 	) {
 		const rawSpecies = this.battle.dex.species.get(speciesId);
+		const previousPassives = this.getPassives();
 		if (this.m.regionalFormSuppressed && source?.effectType === 'Ability' &&
 			ABILITY_REGIONAL_FORMS[source.id]?.[1] === rawSpecies.id) return false;
 		const species = this.setSpecies(rawSpecies, source);
@@ -1677,6 +1713,10 @@ export class Pokemon {
 				this.battle.add('-formechange', this, this.illusion ? this.illusion.species.name : clientSpecies, message);
 			}
 		}
+		// Acquired Electric Surge establishes the field before the new Lightning Rod entry callback.
+		if (!previousPassives.includes('electricsurge') && this.getPassives().includes('electricsurge')) {
+			startGainedPassives(this, previousPassives, ['electricsurge']);
+		}
 		if (isPermanent && (!source || !['disguise', 'iceface'].includes(source.id))) {
 			if (this.illusion && source) {
 				// Tera forme by Ogerpon or Terapagos breaks the Illusion
@@ -1692,6 +1732,7 @@ export class Pokemon {
 			this.knownType = true;
 			this.apparentType = this.terastallized;
 		}
+		startGainedPassives(this, [...previousPassives, 'electricsurge']);
 		return true;
 	}
 
@@ -1934,7 +1975,8 @@ export class Pokemon {
 		);
 		if (
 			!ignoreImmunities && !soulFireBurn && status.id && !((source?.hasAbility(['corrosion', 'ancientbloom']) ||
-				(sourceEffect?.id === 'venamskiss' && source?.hasAbility('venamskiss'))) && ['tox', 'psn'].includes(status.id))
+				(['venamskiss', 'speciespassivevenamskiss'].includes(sourceEffect?.id || '') &&
+					source?.hasAbilityOrPassive('venamskiss'))) && ['tox', 'psn'].includes(status.id))
 		) {
 			// the game currently never ignores immunities
 			const statusType = status.id === 'tox' ? 'psn' : status.id;
@@ -2206,9 +2248,10 @@ export class Pokemon {
 	}
 
 	getAbilityComponentExclusions(): readonly string[] {
-		return [...getAbilityComponentExclusions(this.ability, this.getPassives()),
+		const species = (this.illusion?.species || this.species).id;
+		return [...getAbilityComponentExclusions(this.ability, this.getPassives(), species),
 			...(this.ability === 'perfectforesight' && this.m.perfectForesightAbility ?
-				getAbilityComponentExclusions(this.m.perfectForesightAbility, this.getPassives()) : [])];
+				getAbilityComponentExclusions(this.m.perfectForesightAbility, this.getPassives(), species) : [])];
 	}
 
 	hasAbility(ability: string | string[]) {
@@ -2438,6 +2481,7 @@ export class Pokemon {
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 		if (this.getPassives().includes('levitate') && this.hasAbilityOrPassive('levitate')) return null;
+		if (this.getPassives().includes('elevate') && this.hasAbilityOrPassive('elevate')) return null;
 		if (!this.getAbilityComponentExclusions().includes('levitate') && this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
 			'voidcraft', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
@@ -2546,9 +2590,9 @@ export class Pokemon {
 			if (notImmune) continue;
 			if (!message) return false;
 			if (notImmune === null) {
-				if (this.getPassives().includes('levitate')) {
+				if (this.getPassives().some(id => id === 'levitate' || id === 'elevate')) {
 					if (this.illusion) this.battle.add('-immune', this);
-					else this.battle.add('-immune', this, '[from] passive: Levitate');
+					else this.battle.add('-immune', this, `[from] passive: ${this.getPassives().includes('elevate') ? 'Elevate' : 'Levitate'}`);
 				} else {
 					this.battle.add('-immune', this, '[from] ability: Levitate');
 				}

@@ -31,10 +31,10 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		for (const [id, p] of Object.entries(rev.overrides))
 			assert.deepEqual(Dex.species.get(id).passives, p, id);
 	});
-	it('Spiral retains Shield Dust and normal Lunge with neither Infiltrator nor Power Drill', () => {
+	it('Spiral loses Shield Dust and retains normal Lunge with neither Infiltrator nor Power Drill', () => {
 		const [p, t] = setup();
 		assert(!p.hasAbility('infiltrator'));
-		assert(p.hasAbility('shielddust'));
+		assert(!p.hasAbility('shielddust'));
 		assert(!p.hasAbility('powerdrill'));
 		assert(!Dex.moves.get('lunge').flags.drill);
 		const m = Dex.getActiveMove('lunge');
@@ -63,7 +63,7 @@ describe('Final starter/insect revision and settled passive choices', () => {
 			const [p, t] = setup(s, a);
 			const m = Dex.getActiveMove('tackle'), secondary = [{ chance: 100, status: 'brn' }];
 			assert.deepEqual(p.getPassives(), ['levitate']);
-			assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, m, secondary), []);
+			assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, m, secondary), a === 'Spiral Evolution' ? secondary : []);
 			p.addVolatile('gastroacid');
 			assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, m, secondary), secondary);
 			assert(!p.isGrounded());

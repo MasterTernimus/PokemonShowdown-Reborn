@@ -51,7 +51,8 @@ describe('Approved roster expansion and component search', () => {
 		assert(abilityIncludesComponent('Broodguard', 'Friend Guard'));
 		assert(!abilityIncludesComponent('Abyss Lure', 'Lightning Rod'));
 		assert(!abilityIncludesComponent('Terra Resolve', 'Rocky Payload'));
-		assert.deepEqual(Dex.species.get('Dustox').abilities, { 0: 'Shield Dust', 1: 'Unaware', H: 'Toxic Cocoon' });
+		assert.deepEqual(Dex.species.get('Dustox').abilities, { 0: 'Compound Eyes', 1: 'Unaware', H: 'Toxic Cocoon' });
+		assert.deepEqual(Dex.species.get('Dustox').passives, ['shielddust']);
 		assert.deepEqual(Dex.species.get('Beautifly').abilities, { 0: 'Windy Surge', 1: 'Pastel Veil', H: 'Gale Bloom' });
 		for (const [name, bst] of [['Raticate', 480], ['Raticate-Alola', 480], ['Dustox', 530], ['Beautifly', 530], ['Kricketune', 500]])
 			assert.equal(Dex.species.get(name).bst, bst);
@@ -233,8 +234,12 @@ describe('Approved roster expansion and component search', () => {
 		let ally;
 		[p, ally, foe] = make('Togekiss', 'Void Omen');
 		hit(acid, p, foe);
+		assert.equal(p.side.sideConditions.safeguard.duration, 3);
+		// Safeguard independently prevents stat drops; isolate the one-use ward.
+		p.side.removeSideCondition('safeguard');
 		battle.boost({ atk: -1 }, ally, foe);
 		assert.equal(ally.boosts.atk, 0);
+		assert.equal(p.abilityState.ward, false);
 		battle.boost({ atk: -1 }, ally, foe);
 		assert.equal(ally.boosts.atk, -1);
 	});

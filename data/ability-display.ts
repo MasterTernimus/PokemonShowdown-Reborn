@@ -1,4 +1,4 @@
-import {AbilityComponentExclusions, getAbilityComponentAdditions} from './passive-ability-cleanup';
+import {AbilityComponentExclusions, getAbilityComponentAdditions, getAbilityComponentExclusions} from './passive-ability-cleanup';
 import {AbilityDisplaySummaries} from './ability-display-summaries';
 import { Aliases } from './aliases';
 import {AbilityComponents} from './ability-components';
@@ -230,8 +230,10 @@ export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): 
 	return seen;
 }
 
-export function getAbilityDisplayComponents(id: string, passives: readonly string[] = []): string[] {
-	const parts = [...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].filter(part => !passives.includes(part));
+export function getAbilityDisplayComponents(id: string, passives: readonly string[] = [], species = ''): string[] {
+	const excluded = getAbilityComponentExclusions(id, passives, species);
+	const parts = [...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)]
+		.filter(part => !passives.includes(part) && !excluded.includes(part));
 	// A component already included by another named package needs no second display entry.
 	return parts.filter((part, index) => part !== 'proficient' && !parts.some((other, otherIndex) => other !== part &&
 		getAbilityDisplayClosure(other).has(part) && (!getAbilityDisplayClosure(part).has(other) || otherIndex < index)));

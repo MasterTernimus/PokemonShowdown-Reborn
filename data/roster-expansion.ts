@@ -423,10 +423,17 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 		onSourceDamagingHit(damage, target, source, move) {
 			if (!foeHit(damage, target, source) || !['Water', 'Dragon'].includes(move.type) ||
 				this.effectState.lastTurn === this.turn) return;
-			const ally = lowestAlly(source);
-			if (!ally) return;
 			this.effectState.lastTurn = this.turn;
-			ally.addVolatile('mastercourse', source, this.effect);
+			this.effectState.pendingMove = move;
+		},
+		// Spend the old charge before granting the next one, after all hits and targets.
+		onAfterMovePriority: -1,
+		onAfterMove(source, target, move) {
+			const pending = this.effectState.pendingMove;
+			delete this.effectState.pendingMove;
+			if (pending !== move || !source.hp || source.fainted || !source.isActive) return;
+			const recipient = lowestAlly(source) || source;
+			recipient.addVolatile('mastercourse', source, this.effect);
 		},
 		condition: {
 			onStart(pokemon) {

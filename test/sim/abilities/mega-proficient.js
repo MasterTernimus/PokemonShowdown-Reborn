@@ -9,11 +9,11 @@ describe('Mega Proficient and Illusion audit', function () {
    battle = common.createBattle({formatid: 'gen9nofieldsinglesgame', preview: false}, [[{species:'Mew', ability, moves:['psychic']}],[{species:'Blissey', ability:'noability', moves:['splash']}]]);
    if (battle.requestState === 'teampreview') battle.makeChoices();
    const user=battle.p1.active[0], foe=battle.p2.active[0];
-   assert(user.hasAbility('proficient'));
+   assert.equal(user.hasAbility('proficient'), ability === 'proficient');
    const calc=(power,type)=>{const move=battle.dex.getActiveMove('psychic'); move.basePower=power; move.type=type; return battle.runEvent('BasePower',user,foe,move,power,true);};
-   assert.equal(calc(100,'Psychic'),130);
+   assert.equal(calc(100,'Psychic'),ability==='proficient'?130:100);
    assert.equal(calc(100,'Dragon'),100);
-   assert.equal(calc(60,'Psychic'),ability==='shadowcurrent'?117:78);
+   assert.equal(calc(60,'Psychic'),ability==='shadowcurrent'?90:ability==='proficient'?78:60);
    assert.equal(calc(60,'Dragon'),ability==='shadowcurrent'?90:60);
   });
  }
@@ -26,7 +26,7 @@ describe('Mega Proficient and Illusion audit', function () {
    const user=battle.p1.active[0],ally=battle.p1.pokemon[1];
   assert.equal(user.illusion,ally);
   assert.equal(user.ability,'ragingcurrent');
-  assert(user.hasAbility('proficient'));
+  ally.formeChange('Swampert-Mega', null, true); assert(user.getPassives().includes('proficient'));
   const hp=user.hp, allyHp=ally.hp;
   battle.makeChoices('move splash','move tackle');
   assert(user.hp<hp);

@@ -41,14 +41,16 @@ describe('Latest approved passive routing and scope preservation', () => {
 		assert.equal(hp - t.hp, Math.floor(t.maxhp / 8));
 		assert.equal(battle.runEvent('BasePower', p, t, Dex.getActiveMove('tackle'), 100), 130);
 	});
-	it('Freezer Burn uses passive Levitate, including grounding and suppression', () => {
+	it('Freezer Burn retains selected Levitate, which suppression disables', () => {
 		const [p, t] = setup('Glalie');
 		p.formeChange('Glalie-Mega');
 		p.setAbility('Freezer Burn');
 		p.addVolatile('gastroacid');
 		const hp = p.hp;
 		hit(t, p, 'earthquake');
-		assert.equal(p.hp, hp);
+		assert(p.hp < hp);
+		p.removeVolatile('gastroacid');
+		assert.equal(p.isGrounded(), null);
 		p.addVolatile('smackdown', t);
 		hit(t, p, 'earthquake');
 		assert(p.hp < hp);

@@ -31,7 +31,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	livewire: ['transistor', 'voltabsorb', 'quickfeet', 'ironbarbs'],
 	kindledfury: ['fluffy', 'guts', 'flashfire'],
 	verdanthospitality: ['proficient'],
-	verdantsanctuary: ['grassysurge', 'invigorate', 'hospitality', 'friendguard'],
+	verdantsanctuary: ['grassysurge', 'hospitality', 'friendguard'],
 	fortressshell: ['proficient'],
 	waterbarrage: ['proficient'],
 	unboundblaze: ['proficient'],
@@ -199,7 +199,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	springfur: ['furcoat'],
 	voidhex: ['prankster', 'cursedbody'],
 	breakwater: ['propellertail'],
-	divinemockery: ['hydrabond', 'moldbreaker', 'sniper'],
+	divinemockery: ['hydrabond', 'moldbreaker'],
 	voidtyrant: ['hydrabond', 'berserk', 'selfsufficient'],
 	hisuianpath: ['sapsipper', 'innerfocus', 'fluffy'],
 	toxicevolution: ['moldbreaker', 'corrosion', 'dualwield', 'shielddust', 'levitate'],
@@ -767,3 +767,25 @@ AbilityComponents.toxicevolution = ['moldbreaker', 'corrosion', 'dualwield', 'sh
 AbilityComponents.mythicscale = ['marvelscale', 'compoundeyes', 'shielddust'];
 
 AbilityComponents.voidomen = ['friendguard', 'serenegrace'];
+
+AbilityComponents.hauntingveil = ['cursedbody', 'infiltrator'];
+
+AbilityComponents.solartrap = ['accumulation', 'liquidooze'];
+AbilityComponents.auraprecision = ['shielddust', 'technician'];
+
+import {SelectedComponentRemovals, SelectedExactComponents} from './selected-mega-simplification-data';
+for (const [id, removed] of Object.entries(SelectedComponentRemovals)) {
+	AbilityComponents[id] = (AbilityComponents[id] || []).filter(part => !removed.includes(part));
+}
+Object.assign(AbilityComponents, SelectedExactComponents);
+AbilityComponents.uncheckedassault = [...AbilityComponents.uncheckedassault, 'vitalspirit'];
+// These primitives already dispatch these components; record their genuine ownership.
+AbilityComponents.waterbarrage = ['dualwield'];
+AbilityComponents.pollenbloom = ['thickfat', 'unaware'];
+
+import {GmaxExtractedComponents} from './gmax-passive-data';
+for (const [id, components] of Object.entries(GmaxExtractedComponents)) {
+	AbilityComponents[id] = [...new Set([...(AbilityComponents[id] || []), ...components])];
+}
+AbilityComponents.crushingdepths = [];
+AbilityComponents.afterlifegate = ['shadowshield'];

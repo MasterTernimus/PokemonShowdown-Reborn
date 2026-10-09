@@ -11,7 +11,7 @@ describe('Composite callback duplication audit', () => {
 	}
 	for (const ability of ['Verdant Drake', 'Pollen Bloom', 'Toxic Bloom', 'Ancient Bloom']) it(ability + ' retains Proficient only when it remains part of the selected package', () => {
 		const [p, foe] = setup(ability); p.setType('Normal');
-		const m = battle.dex.getActiveMove('tackle'); assert.equal(battle.runEvent('BasePower', p, foe, m, 100), ability === 'Pollen Bloom' ? 130 : 100);
+		const m = battle.dex.getActiveMove('tackle'); assert.equal(battle.runEvent('BasePower', p, foe, m, 100), 100);
 	});
 	for (const ability of ['Pollen Bloom', 'Toxic Bloom', 'Ancient Bloom']) it(ability + ' applies inherited Thick Fat once', () => {
 		const [p, foe] = setup(ability);

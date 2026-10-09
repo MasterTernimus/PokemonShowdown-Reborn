@@ -46,7 +46,7 @@ describe('Approved Rejuvenation event alternatives', () => {
 		const current = new Map(Dex.species.all().map(p => [p.id, p]));
 		for (const [id, abilities] of Object.entries(before))
 			if (!changed.has(id))
-				assert.deepEqual(current.get(id).abilities, abilities, id);
+				assert.deepEqual(current.get(id).abilities, require('./passive-approval-overlays').abilities(id, {...abilities}), id);
 		assert.deepEqual(Dex.species.get('chandelure').abilities.S, relic.abilities.chandelure.S);
 	});
 	it('Multipulse needs an effective Plate and adds no ability power multiplier', () => {
@@ -471,10 +471,19 @@ describe('Approved Rejuvenation event alternatives', () => {
 		for (const [file, key] of [['data/moves.ts', 'movesHash'], ['data/learnsets.ts', 'learnsetsHash']]) {
 			let contents = fs.readFileSync(file, 'utf8');
 			if (key === 'movesHash') {
+				contents = contents.replace("pokemon.getPassives().some(id => id === 'levitate' || id === 'elevate') ||\n\t\t\t\t\tpokemon.hasAbility(['levitate', 'elevate'])", "pokemon.getPassives().includes('levitate') || pokemon.hasAbility('levitate')");
 				contents = contents.replaceAll("hasAbilityOrPassive('sapsipper')", "hasAbility('sapsipper')")
-					.replaceAll("hasAbilityOrPassive(['plus', 'minus'])", "hasAbility(['plus', 'minus'])");
+					.replaceAll("hasAbilityOrPassive('insomnia')", "hasAbility('insomnia')")
+					.replaceAll("hasAbilityOrPassive(['plus', 'minus'])", "hasAbility(['plus', 'minus'])")
+					.replaceAll("hasAbilityOrPassive('invigorate')", "hasAbility('invigorate')");
+				contents = contents.replace("import {crescentRendApplies, prepareCrescentRend} from '../sim/crescent-rend';\n", '')
+					.replaceAll('\t\t\t\t\t\tif (crescentRendApplies(source, move)) return;\n', '')
+					.replace('\t\t\t\t// Crescent Rend continues this original hit with its already calculated overflow.\n' +
+						'\t\t\t\tif (prepareCrescentRend(source, target, move, damage)) return;\n', '');
 			}
-			assert.equal(crypto.createHash('sha256').update(contents).digest('hex'), before[key]);
+			// Reverse only the two newly approved move changes before comparing the original fingerprint.
+			if (key === 'movesHash') contents = contents.replace("if (!source.hasAbility('cursedkeepsake'))", "if (!source.hasAbility(['cursedkeepsake', 'cursedmarionette']))").replace("\t\t\tmove.ignoreAbility = true;\n\t\t\tconst isAshGreninja", "\t\t\tconst isAshGreninja");
+			assert.equal(crypto.createHash('sha256').update(contents).digest('hex'), before[key], key);
 		}
 	});
 	it('calculator Super UMD Steel category matches the equivalent Special Steel damage under burn', () => {

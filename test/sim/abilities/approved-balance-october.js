@@ -72,22 +72,27 @@ describe('Approved Soul Cremation, Dread Maw and Star Boxer balance', () => {
   hit(p,t,'flamethrower',{basePower:1});
   battle.makeChoices('move splash','switch 2');assert(!t.volatiles.soulsiphonblock);
  });
- it('keeps full Flame Body field entry and contact behavior, without Soul Fire absorption', () => {
+ it('keeps both Flash Fire and Flame Body field entry boosts and Flame Body contact behavior', () => {
   const [p,t]=setup();
   battle.field.setTerrain('coldeclipseterrain',p);
   p.boosts.def=0;p.boosts.spd=0;
   battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
-  assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);
+  // Both delegates grant +1 on Cold Eclipse; confirmed against committed pre-migration behavior.
+  assert.equal(p.boosts.def,2);assert.equal(p.boosts.spd,2);
   battle.field.clearTerrain();battle.randomChance=()=>true;
   hit(t,p,'tackle',{basePower:1});assert.equal(t.status,'brn');
-  const hp=p.hp;hit(t,p,'flamethrower',{basePower:1});assert(p.hp<hp);
+  const hp=p.hp;hit(t,p,'flamethrower',{basePower:1});assert.equal(p.hp,hp);assert(p.volatiles.flashfire);
  });
- it('Dread Maw retains Huge Power and Invigorate, gains Frisk and allows Intimidate', () => {
+ it('Dread Maw retains its nonrecipient package without removed Frisk and allows Intimidate', () => {
   const [p,t]=setup('Dread Maw');
-  assert(p.hasAbility('hugepower'));assert(p.hasAbility('frisk'));assert(p.hasAbility('invigorate'));
+  assert(p.hasAbility('hugepower'));assert(!p.hasAbility('frisk'));assert(p.hasAbility('invigorate'));
   assert(!p.hasAbility('strongjaw'));assert(!p.hasAbility('hypercutter'));
-  t.setItem('leftovers');battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
-  assert(battle.log.some(x=>x.includes('Frisk')&&x.includes('Leftovers')));
+  t.setItem('leftovers');battle.randomChance=()=>true;
+  const before=battle.log.length;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
+  // The approved Frisk removal must not reveal items or apply Embargo.
+  const reveals=battle.log.slice(before).filter(x=>x.startsWith('|-item|')&&x.includes('Leftovers'));
+  assert.equal(reveals.length,0);
+  assert(!t.volatiles.embargo);
   t.setAbility('intimidate');assert.equal(p.boosts.atk,-1);
   const move=battle.dex.getActiveMove('crunch');
   assert.equal(battle.runEvent('BasePower',p,t,move,80),80);

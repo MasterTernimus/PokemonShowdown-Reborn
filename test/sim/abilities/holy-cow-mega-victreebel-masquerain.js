@@ -14,7 +14,7 @@ describe('Holy Cow, Mega Victreebel, and Masquerain revisions', () => {
 	it('keeps Masquerain ordinary slots and gives its hidden slot Storm Drain', () => {
 		const [masquerain] = start([[{species: 'Masquerain', ability: 'Storm Drain', moves: ['splash']}]]);
 		assert.deepEqual(masquerain.species.abilities,
-			{0: 'Frightful Wings', 1: 'Shield Dust', H: 'Storm Drain'});
+			{0: 'Frightful Wings', 1: 'Scale Shelter', H: 'Storm Drain'});
 		assert(masquerain.hasAbility('stormdrain'));
 	});
 
@@ -24,7 +24,7 @@ describe('Holy Cow, Mega Victreebel, and Masquerain revisions', () => {
 		const move = battle.dex.getActiveMove('sludgebomb');
 		Object.assign(move, {damage: 60, accuracy: true, willCrit: false, secondaries: undefined, multihit: 3});
 		battle.actions.runMove(move, victreebel, victreebel.getLocOf(foe));
-		assert.equal(victreebel.hp, 50 + Math.floor(victreebel.maxhp / 8));
+		assert.equal(victreebel.hp, 50);
 	});
 
 	it('Mega Victreebel punishes an opponent trying to drain it', () => {
