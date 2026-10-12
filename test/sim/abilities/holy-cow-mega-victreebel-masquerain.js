@@ -24,7 +24,7 @@ describe('Holy Cow, Mega Victreebel, and Masquerain revisions', () => {
 		const move = battle.dex.getActiveMove('sludgebomb');
 		Object.assign(move, {damage: 60, accuracy: true, willCrit: false, secondaries: undefined, multihit: 3});
 		battle.actions.runMove(move, victreebel, victreebel.getLocOf(foe));
-		assert.equal(victreebel.hp, 50);
+		assert.equal(victreebel.hp, 50 + Math.min(60, Math.floor(victreebel.maxhp / 8)));
 	});
 
 	it('Mega Victreebel punishes an opponent trying to drain it', () => {

@@ -12,7 +12,7 @@ describe('Neutralizing Gas', function () {
 
 	it('should prevent switch-in abilities from activating', function () {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Gyarados", ability: 'intimidate', moves: ['splash']}]});
+		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'intimidate', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: "Weezing", ability: 'neutralizinggas', moves: ['toxicspikes']}]});
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});

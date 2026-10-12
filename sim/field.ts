@@ -63,7 +63,7 @@ export class Field {
 	isTerrainOrAura(id: string) { return this.isTerrain(id) || this.isAura(id); }
 
 	canSupportAura(id: string, allowEmptyField = false) {
-		if ((!this.terrain && !allowEmptyField) || this.terrain === id || this.isFlowerGardenBase()) return false;
+		if ((!this.terrain && !allowEmptyField && id !== 'frozenaura') || this.terrain === id || this.isFlowerGardenBase()) return false;
 		if (['newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
 		if (this.terrain === 'corrosivemistterrain' && id === 'mistyterrain') return false;
 		return true;
@@ -80,8 +80,9 @@ export class Field {
 		if (!this.aurasEnabled || !aura || !Number.isFinite(turns) || turns < 1 ||
 			!this.canSupportAura(aura.id, noTerrainPromotion)) return false;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
-		const previousSource = this.auraState.sourceEffect?.id;
-		if (!noTerrainPromotion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
+  if (aura.id === 'frozenaura' && (this.pulseBlockadeHolder(source, sourceEffect) || this.neutralizeTerrainChange())) return false;
+  const previousSource = this.auraState.sourceEffect?.id;
+		if (aura.id !== 'frozenaura' && !noTerrainPromotion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
 			!['raindance', 'sunnyday'].includes(sourceEffect.id) &&
 			sourceEffect.id !== previousSource && this.promoteAura(source, sourceEffect)) return true;
 		if (this.auraField) this.clearAura(false);
@@ -103,10 +104,27 @@ export class Field {
 		if (this.auraField === 'electricterrain' && ['factoryterrain', 'shortcircuitterrain'].includes(this.terrain)) return false;
 		if (this.auraField === 'mistyterrain' && this.terrain === 'corrosivemistterrain') return false;
 		const duration = source.hasItem('amplifieldrock') ? 8 : 5;
-		return this.setFieldOrAura(this.auraField, duration, source, sourceEffect, true);
+		const frozen = this.isAura('frozenaura');
+  const success = this.setFieldOrAura(frozen ? 'coldeclipseterrain' : this.auraField, duration, source, sourceEffect, true);
+  if (success && frozen) this.clearAura();
+  return success;
 	}
 
-	clearAura(refresh = true) {
+ frozenAuraAfterAttack(source: Pokemon, move: ActiveMove) {
+  if (!this.isAura('frozenaura') || !move || !(move as any).frozenAuraDamage) return false;
+  delete (move as any).frozenAuraDamage;
+  if (move.id === 'blizzard') {
+   this.auraState.blizzards = Math.min(2, (this.auraState.blizzards || 0) + 1);
+   if (this.auraState.blizzards < 2) return false;
+  } else if (!move.isZ || move.category === 'Status' || !(move.types || [move.type]).includes('Ice')) {
+   return false;
+  }
+  const success = this.promoteAura(source, move);
+  if (success) (move as any).frozenAuraPromoted = true;
+  return success;
+ }
+
+ clearAura(refresh = true) {
 		const aura = this.getAura();
 		if (!aura) return false;
 		this.auraField = '' as ID;
@@ -136,8 +154,13 @@ export class Field {
 
 	tickAura() {
 		if (!this.auraField) return;
-		if (this.terrain === 'coldeclipseterrain') return;
-		if (--this.auraTurns <= 0) this.clearAura();
+		if (this.isAura('frozenaura')) {
+   this.auraState.hailTurns = this.isWeather('hail') ? Math.min(3, (this.auraState.hailTurns || 0) + 1) : 0;
+   const source = this.auraState.source || this.battle.getAllActive()[0];
+   if (this.auraState.hailTurns >= 3 && source && this.promoteAura(source, this.battle.dex.getActiveMove('snowscape'))) return;
+  }
+  if (this.terrain === 'coldeclipseterrain' && !this.isAura('frozenaura')) return;
+  if (--this.auraTurns <= 0) this.clearAura();
 	}
 
 	setFieldOrAura(status: string | Effect, duration: number, source: Pokemon | null = null,
@@ -155,6 +178,7 @@ export class Field {
 	baseAuraTypeBoost(move: ActiveMove, source: Pokemon, target: Pokemon) {
 		if (adaptiveEnvironment(target, 'fields')) return 1;
 		const type = move.type;
+		if (move.id === 'deiludicium' && this.isTerrain('rainbowterrain') && type === 'Normal' && move.category === 'Special') return 1.5;
 		if (this.terrain === 'bewitchedwoodsterrain' && type === 'Fairy') return 1.5;
 		if (this.terrain === 'glitchterrain' && type === 'Psychic') return 1.2;
 		if (this.terrain === 'factoryterrain' && type === 'Electric') return 1.2;
@@ -180,6 +204,8 @@ export class Field {
 		const aura = this.getAura();
 		if (!aura || move.category === 'Status') return 1;
 		let multiplier = aura.damageMultipliers[move.id] || 1;
+		// The matching field already applies Dei Ludicium's named Rainbow boost.
+		if (move.id === 'deiludicium' && this.isAura('rainbowterrain') && this.isTerrain('rainbowterrain')) multiplier = 1;
 		if (multiplier !== 1) this.battle.add('-message', aura.moveMessages[move.id]);
 		const types = move.types || [move.type];
 		const grounded = source.isGrounded() && !source.isSemiInvulnerable();
@@ -259,6 +285,7 @@ export class Field {
 		if (['raindance', 'primordialsea'].includes(status.id) && this.terrainState.gardenBurnStage) {
 			this.douseFlowerGarden(source || undefined);
 		}
+		if (this.isAura('frozenaura') && this.weather !== 'hail') this.auraState.hailTurns = 0;
 		return true;
 	}
 
@@ -280,6 +307,7 @@ export class Field {
 		});
 		this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect);
 		this.battle.add('-fieldstart', status.name);
+  if (this.isAura('frozenaura') && this.weather !== 'hail') this.auraState.hailTurns = 0;
 		this.battle.eachEvent('WeatherChange', sourceEffect);
 	}
 
@@ -288,6 +316,7 @@ export class Field {
 		const prevWeather = this.getWeather();
 		this.battle.singleEvent('FieldEnd', prevWeather, this.weatherState, this);
 		this.weather = '';
+  if (this.isAura('frozenaura')) this.auraState.hailTurns = 0;
 		this.battle.clearEffectState(this.weatherState);
 		this.battle.eachEvent('WeatherChange');
 		this.restoreFormatHail();
@@ -459,6 +488,7 @@ export class Field {
 
 	applyGravityTerrainChange(source: Pokemon, sourceEffect: Effect) {
 		if (this.isTerrain('newworldterrain')) return false;
+		if (this.isAura('frozenaura') && sourceEffect?.id === 'gravity' && this.promoteAura(source, sourceEffect)) return true;
 		if (this.isTerrain('watersurfaceterrain')) {
 			this.battle.add('-message', 'The battle sank into the depths!');
 			return this.changeTerrain('underwaterterrain', source, sourceEffect);
@@ -854,7 +884,7 @@ export class Field {
 
 	flowerGardenAfterMove(source: Pokemon, move: ActiveMove) {
 		if (this.terrainState.gardenBurnStage) {
-			const dousing = ['raindance', 'waterspout', 'watersport', 'defog', 'gust', 'hurricane', 'muddywater',
+			const dousing = ['raindance', 'waterspout', 'watersport', 'defog', 'gust', 'winddance', 'airstreamassault', 'hurricane', 'muddywater',
 				'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'hydrovortex',
 				'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
 			if (dousing.includes(move.id)) this.douseFlowerGarden(source, ['raindance', 'waterspout', 'watersport'].includes(move.id));

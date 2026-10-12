@@ -1,45 +1,15 @@
-import {directFeverPitchMove} from './rejuvenation-event-abilities';
+import {ShelterConditions} from './shelter-audit-reworks';
 import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	...ShelterConditions,
  shadowdoublespent: {name: 'Shadow Double spent', noCopy: true, onStart() { this.effectState.armed = true; }},
  crossfirecharge: {name: 'Crossfire charge', noCopy: true},
  woolyconductorspent: {name: 'woolyconductorspent', noCopy: true, duration: 1},
 
- grapplingclawsspent: {name: 'Grappling Claws spent', noCopy: true},
- grapplingclawsanchor: {name: 'Grappling Claws anchor', noCopy: true},
- grapplingclawslock: {
-  name: 'grapplingclawslock', duration: 2, noCopy: true,
-  onStart(target, source) { this.add('-start', target, 'Grappling Claws', '[of] ' + source); },
-  onTrapPokemon(target) {
-   if (this.effectState.source?.hp && this.effectState.source.isActive) target.tryTrap();
-   else target.removeVolatile('grapplingclawslock');
-  },
-  onTryHeal(damage, target, source, effect) {
-   if (!this.effectState.source?.hp || !this.effectState.source.isActive) return;
-   if (effect && (effect.id === 'zpower' || (effect as ActiveMove).isZ)) return;
-   return false;
-  },
-  onDisableMove(pokemon) {
-   for (const slot of pokemon.moveSlots) if (this.dex.moves.get(slot.id).flags.heal) pokemon.disableMove(slot.id);
-  },
-  onBeforeMovePriority: 6,
-  onBeforeMove(pokemon, target, move) {
-   if (move.flags.heal && !move.isZ && !move.isMax) {this.add('cant', pokemon, 'move: Heal Block', move); return false;}
-  },
-  onEnd(target) { this.add('-end', target, 'Grappling Claws'); },
-  onResidualOrder: 20,
- },
  dredgerturn: {name: 'Dredger turn', noCopy: true, duration: 1},
-	galestriketurn: {name: 'galestriketurn', noCopy: true, duration: 1},
-	spectralscreamheal: {name: 'spectralscreamheal', noCopy: true, duration: 1},
-	spectralscreamboost: {name: 'spectralscreamboost', noCopy: true, duration: 1},
-	coldtruthturn: {name: 'coldtruthturn', noCopy: true, duration: 1},
-	pyrokinesisturn: {name: 'pyrokinesisturn', noCopy: true, duration: 1},
 	venamskissturn: {name: 'venamskissturn', noCopy: true, duration: 1},
-	heavenlywingturn: {name: 'heavenlywingturn', noCopy: true, duration: 1},
-	barbedwebspent: {name: 'Barbed Web spent', noCopy: true},
 	starterpassives: {
 		name: 'Starter Passives',
 		onBasePowerPriority: 22,
@@ -88,6 +58,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	},
 	terrainaura: {
 		name: 'Terrain Aura',
+  onAfterDamageApplied(damage, target, source, move) {
+   if (damage > 0 && source && !target.isAlly(source) && move?.effectType === 'Move' && this.field.isAura('frozenaura')) {
+    (move as any).frozenAuraDamage = true;
+   }
+  },
+  onAfterSubDamage(damage, target, source, move) {
+   if (damage > 0 && source && !target.isAlly(source) && this.field.isAura('frozenaura')) (move as any).frozenAuraDamage = true;
+  },
 		onModifySpD(spd, pokemon) {
 			if (this.field.isAura('mistyterrain') && pokemon.hasType('Fairy')) return this.chainModify(1.5);
 		},
@@ -232,6 +210,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	},
 	illusioncopy: {
 		name: 'Illusion Copy',
+		onUpdate(pokemon) {
+			if (pokemon.m.perfectIllusion && pokemon.ignoringAbility()) {
+				this.singleEvent('End', this.dex.abilities.get('illusion'), pokemon.abilityState, pokemon);
+			}
+		},
+		onBasePower(basePower, source, target, move) {
+			if (source.m.perfectIllusion && source.ability !== 'perfectillusion') {
+				return this.dex.abilities.get('perfectillusion').onBasePower?.call(this, basePower, source, target, move);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (pokemon.m.perfectIllusion && type === 'hail' && this.field.isTerrain('coldeclipseterrain')) return false;
+		},
 		onModifyMove(move, pokemon) {
 			if (pokemon.illusion && pokemon.illusion.getTypes().some(type => this.movehasType(move, type))) {
 				move.forceSTAB = true;
@@ -245,8 +236,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onEnd(pokemon) {
+			delete pokemon.m.perfectIllusion;
 			const originalAbility = this.effectState.originalAbility;
-			if (originalAbility && pokemon.ability !== originalAbility) {
+			if (originalAbility && pokemon.ability !== originalAbility && pokemon.ability === this.effectState.copiedAbility) {
 				const copiedAbility = pokemon.getAbility();
 				this.singleEvent('End', copiedAbility, pokemon.abilityState, pokemon, pokemon);
 				pokemon.ability = originalAbility;
@@ -333,7 +325,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifySpe(spe, pokemon) {
 			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
 			spe = this.finalModify(spe);
-			if (!pokemon.hasAbility(['quickfeet', 'livewire'])) {
+			if (!pokemon.hasAbilityOrPassive('quickfeet') && !pokemon.hasAbility('livewire')) {
 				spe = Math.floor(spe * 50 / 100);
 			}
 			return spe;
@@ -367,7 +359,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
-			if (pokemon.hasAbility('feverpitch') && directFeverPitchMove(move)) return;
 			if (pokemon.hasAbilityOrPassive('earlybird')) {
 				pokemon.statusState.time--;
 			}
@@ -635,8 +626,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	gentlescalesspent: {name: 'gentlescalesspent', noCopy: true, duration: 1},
 	anchoredbatteryspent: {name: 'anchoredbatteryspent', noCopy: true},
 	hivecourierspent: {name: 'hivecourierspent', noCopy: true},
-	aquabaticsspent: {name: 'aquabaticsspent', noCopy: true},
-	desertsmarkspent: {name: 'desertsmarkspent', noCopy: true},
 	deepchillturnspent: {name: 'deepchillturnspent', noCopy: true, duration: 1},
 	nobledancespent: {name: 'nobledancespent', noCopy: true},
 	nobledanceward: {
@@ -739,6 +728,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				firespin: ['burningterrain', 'hauntedterrain'],
 				whirlpool: ['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'],
 				sandtomb: ['desertterrain'],
+				desertsmark: ['desertterrain'],
 				magmastorm: ['dragonsdenterrain'],
 				infestation: ['forestterrain'],
 				thundercage: ['electricterrain'],
@@ -762,7 +752,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
 			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
-			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns && !gmaxEffect)) {
+			if (source && !gmaxEffect && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
 				if (pokemon !== source || ['elementalseed', 'telluricseed'].includes(this.effectState.sourceEffect.id)) {
 					delete pokemon.volatiles['partiallytrapped'];
 					this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
@@ -775,6 +765,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const divisor = this.effectState.sourceEffect.id === 'infestation' && stage >= 3 ?
 				({3: 6, 4: 4, 5: 3} as Record<number, number>)[stage] : this.effectState.boundDivisor;
 			this.damage(pokemon.baseMaxhp / divisor);
+			if (pokemon.hp && this.effectState.sourceEffect.id === 'desertsmark' && this.field.isTerrain('ashenterrain')) {
+				this.boost({accuracy: -1}, pokemon, source, this.effectState.sourceEffect);
+			}
 			if (this.effectState.infernalDominionTurns && --this.effectState.infernalDominionTurns === 0) pokemon.removeVolatile('partiallytrapped');
 			if (this.effectState.constrictingHeatTurns && --this.effectState.constrictingHeatTurns === 0) pokemon.removeVolatile('partiallytrapped');
 		},
@@ -1410,7 +1403,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect.name, `[of] ${source}`);
+			this.add('-weather', 'DeltaStream', '[from] ' + (effect.effectType === 'Move' ? 'move: ' : 'ability: ') + effect.name, `[of] ${source}`);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {

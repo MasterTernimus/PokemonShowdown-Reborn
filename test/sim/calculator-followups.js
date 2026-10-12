@@ -26,7 +26,7 @@ describe('Approved calculator ability followups', () => {
 	it('resolves Voidcraft and exposes new Exalt components', () => {
 		const s = scenario();
 		s.actors[1].ability = 'Shadow Guard';
-		assert.equal(calculateScenario(s).resolved.actors[1].ability, 'Voidcraft');
+		assert.equal(calculateScenario(s).resolved.actors[1].ability, 'Void Craft');
 
 		const m = calculatorMetadata();
 		assert.deepEqual(m.abilityComponents.exalt, ['Defiant', 'Sharpness', 'Mold Breaker']);

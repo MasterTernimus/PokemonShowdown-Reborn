@@ -3,6 +3,7 @@ const assert=require('assert').strict,fs=require('fs');
 const common=require('../../common');
 const {Dex}=require('../../../dist/sim');
 const {SpeciesPassives,ThematicPassiveGroups,PassiveCosmeticForms}=require('../../../dist/data/species-passives');
+const signature = require('./shortlist-approved.json').passives;
 const {StarterPassives}=require('../../../dist/data/starter-passives');
 let battle;const protocol=[];
 function setup(species,ability='Pressure',doubles=false,foeAbility='No Ability') {
@@ -18,20 +19,20 @@ describe('Approved thematic species passives',()=>{
  it('grants exactly 61 named species and 27 cosmetic equivalents, preserving 76 starter records',()=>{
   const ids=Object.values(ThematicPassiveGroups).flat();assert.equal(ids.length,61);
   const cosmetics=Object.entries(PassiveCosmeticForms).flatMap(([base,forms])=>forms.map(form=>base+form));assert.equal(cosmetics.length,27);
-  assert.equal(Object.keys(SpeciesPassives).length, 820);
-  for(const[passive,group]of Object.entries(ThematicPassiveGroups))for(const id of group)assert.deepEqual(Dex.species.get(id).passives,id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive],id);
+  assert.equal(Object.keys(SpeciesPassives).length, 839);
+  for(const[passive,group]of Object.entries(ThematicPassiveGroups))for(const id of group)assert.deepEqual(Dex.species.get(id).passives,signature[id] || (id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]),id);
   for(const id of cosmetics){const s=Dex.species.get(id);assert(s.exists,id);assert.deepEqual(s.passives,SpeciesPassives[id]);const base=Dex.species.get(s.baseSpecies);assert.deepEqual(s.baseStats,base.baseStats);assert.deepEqual(s.types,base.types);assert.deepEqual(s.abilities,base.abilities);}
   for(const[id,passives]of Object.entries(StarterPassives))assert.deepEqual(Dex.species.get(id).passives,passives,id);
   for(const s of Dex.species.all())assert.deepEqual(s.passives,SpeciesPassives[s.id]||[],s.id);
   for(const id of ['krabby','gligar','corphish','caterpie','metapod','wurmple','surskit','hoothoot','spearow','sentret','patrat','eeveestarter','eeveegmax','pinsirmega','kinglergmax','alcremiegmax','swalotpulse','mukpulse'])assert.deepEqual(Dex.species.get(id).passives,require('./passive-approval-overlays').current(id,[]),id);
  });
  for(const[passive,ids]of Object.entries(ThematicPassiveGroups))for(const id of ids)it(id+' keeps '+passive+' through suppression, selected-ability replacement and swaps',()=>{
-  const[p,t]=setup(id);assert.deepEqual(p.getPassives(),id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]);
-  suppression(p,t,()=>assert(p.hasAbilityOrPassive(passive)));
-  p.setAbility('Water Absorb');t.setAbility('Pressure');battle.actions.useMove('skillswap',p,{target:t});assert.deepEqual(p.getPassives(),id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]);assert.deepEqual(t.getPassives(),['synchronize']);assert(!p.hasAbility(passive));
+  const[p,t]=setup(id);assert.deepEqual(p.getPassives(),signature[id] || (id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]));
+  suppression(p,t,()=>assert(p.hasAbilityOrPassive(signature[id]?.[0] || passive)));
+  p.setAbility('Water Absorb');t.setAbility('Pressure');battle.actions.useMove('skillswap',p,{target:t});assert.deepEqual(p.getPassives(),signature[id] || (id === 'butterfree' ? ['shielddust'] : ['grimer','muk'].includes(id) ? ['liquidooze'] : [passive]));assert.deepEqual(t.getPassives(),['synchronize']);assert(!p.hasAbility(passive));
  });
  it('Hyper Cutter blocks only external Attack drops with a duplicate composite once',()=>{
-  const[p,t]=setup('Kingler','Icebreaker');suppression(p,t,()=>{battle.boost({atk:-1,def:-1},p,t,Dex.moves.get('growl'));assert.equal(p.boosts.atk,0);});
+  const[p,t]=setup('Crawdaunt','Icebreaker');suppression(p,t,()=>{battle.boost({atk:-1,def:-1},p,t,Dex.moves.get('growl'));assert.equal(p.boosts.atk,0);});
   battle.boost({atk:-1},p,p,Dex.moves.get('superpower'));assert.equal(p.boosts.atk,-1);
   const failures=battle.log.filter(l=>l.includes('passive: Hyper Cutter'));assert.equal(failures.length,5);
   assert(!battle.log.some(l=>l.includes('[from] ability: Hyper Cutter')));protocol.push({name:'hyper-cutter',log:battle.log});
@@ -77,7 +78,7 @@ describe('Approved thematic species passives',()=>{
   protocol.push({name:'keen-eye',log:battle.log});
  });
  it('Keen Eye reveals an opposing Illusion on entry even with a suppressed different ability',()=>{
-  const[p,t]=setup('Fearow','Pressure');t.illusion=battle.p2.pokemon[2];t.setAbility('Illusion');p.addVolatile('gastroacid');
+  const[p,t]=setup('Noctowl','Pressure');t.illusion=battle.p2.pokemon[2];t.setAbility('Illusion');p.addVolatile('gastroacid');
   battle.fieldEvent('SwitchIn',[p]);assert.equal(t.illusion,null);assert.equal(p.ability,'pressure');
   protocol.push({name:'keen-eye-illusion',log:battle.log});
  });

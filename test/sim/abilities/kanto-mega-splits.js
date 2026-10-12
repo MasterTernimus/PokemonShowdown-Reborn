@@ -2,7 +2,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const approved = { arbokmegax: 'regenerator', arbokmegay: 'shedskin', raichumegax: 'electricsurge', raichumegay: 'noguard', parasectmega: 'dryskin', victreebelmega: 'innardsout', noctowlmega: 'insomnia', ledianmega: 'ironfist', ariadosmega: 'selfsufficient', sunfloramega: 'solarpower', skarmorymega: 'stalwart' };
+const approved = { arbokmegax: 'regenerator', arbokmegay: 'shedskin', raichumegax: 'electricsurge', raichumegay: 'noguard', parasectmega: 'dryskin', victreebelmega: 'digestivesap', noctowlmega: 'insomnia', ledianmega: 'ironfist', ariadosmega: 'selfsufficient', sunfloramega: 'solarpower', skarmorymega: 'stalwart' };
 let battle;
 Object.assign(approved, {arbokmegax:'shedskin',sunfloramega:'solarbud'});
 Object.assign(approved, require('./hoenn-mega-approved.json'), require('./sinnoh-unova-mega-approved.json'));
@@ -173,11 +173,11 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		battle.actions.useMove('watergun', q, { target: p });
 		assert(p.hp < 100);
 	});
-	it('Solar Trap loses only Digestive Sap; base Victreebel retains its healing', () => {
+	it('Digestive Sap is passive on Mega Victreebel and remains available as a selected primitive', () => {
 		const [p, q] = setup('Victreebel-Mega');
 		p.hp = 100;
-		battle.actions.useMove('sludgebomb', p, { target: q });
-		assert.equal(p.hp, 100);
+		battle.actions.useMove(Object.assign(Dex.getActiveMove('sludgebomb'), {damage: 300, accuracy: true}), p, { target: q });
+		assert.equal(p.hp, 200);
 		assert(p.hasAbility('accumulation'));
 		assert(p.hasAbility('liquidooze'));
 		assert(!p.hasAbility('digestivesap'));
@@ -188,12 +188,12 @@ describe('Approved Kanto and Johto Mega splits', () => {
 		battle.actions.useMove('sludgebomb', q, { target: p });
 		assert(q.hp > 100);
 	});
-	it('Innards Out retaliates on a real lethal hit while Solar Trap remains separate', () => {
+	it('Mega Victreebel no longer has Innards Out retaliation', () => {
 		const [p, q] = setup('Victreebel-Mega');
 		p.hp = 100;
 		battle.actions.useMove(Object.assign(Dex.getActiveMove('tackle'), { damage: 200 }), q, { target: p });
 		assert.equal(p.hp, 0);
-		assert.equal(q.hp, 1100);
+		assert.equal(q.hp, 1200);
 	});
 	it('copied nonrecipient Neurotoxin and Railgun Circuit retain their original components', () => {
 		const [p, q] = setup('Mew', 'Neurotoxin');

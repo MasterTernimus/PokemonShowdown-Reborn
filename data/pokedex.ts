@@ -35,7 +35,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Grass", "Poison"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80 },
-		abilities: {"0":"Pollen Bloom","1":"Creeping Bloom","H":"Chlorophyll","S":"Uproot"},
+		abilities: {"0":"Pollen Bloom","1":"Creeping Bloom","H":"Chlorophyll"},
 		heightm: 2,
 		weightkg: 100,
 		color: "Green",
@@ -9487,7 +9487,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Fighting", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 80, atk: 150, def: 98, spa: 145, spd: 75, spe: 122 },
+		baseStats: { hp: 80, atk: 150, def: 98, spa: 145, spd: 80, spe: 117 },
 		abilities: { 0: "Aura Instinct" },
 		heightm: 1.3,
 		weightkg: 57.5,
@@ -16527,7 +16527,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Bewear",
 		types: ["Normal", "Fighting"],
 		baseStats: { hp: 130, atk: 135, def: 70, spa: 75, spd: 70, spe: 70 },
-		abilities: {"0":"Scrappy","1":"Thick Fat","H":"Unaware","S":"Multipulse"},
+		abilities: {"0":"Scrappy","1":"Thick Fat","H":"Unaware"},
 		heightm: 2.1,
 		weightkg: 135,
 		color: "Pink",
@@ -16808,7 +16808,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Normal"],
 		gender: "N",
 		baseStats: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 },
-		abilities: { 0: "RKS System", 1: "Mimicry", H: "Memory Leak", S: "Adaptive Cycle" },
+		abilities: { 0: "RKS System", 1: "Mimicry", H: "Memory Leak" },
 		heightm: 2.3,
 		weightkg: 100.5,
 		color: "Gray",
@@ -24330,29 +24330,9 @@ Pokedex.loudred.abilities!["0"] = "Rattled";
 
 Pokedex.ludicolo.abilities!["H"] = 'Rain Dish';
 
-// Approved Rejuvenation event choices: exact forms, no Mega inheritance.
-Pokedex.bewear.abilities!["S"] = "Multipulse";
-Pokedex.primarina.abilities!["S"] = "Aquabatics";
-Pokedex.toxtricityaevian.abilities!["S"] = "Fever Pitch";
-Pokedex.electivire.abilities!["S"] = "Thunder Raid";
-Pokedex.torterra.abilities!["S"] = "Desert's Mark";
+// Rejuvenation gym signatures are now moves; ordinary ability slots are preserved.
 
-// Expanded exact-form event choices; preserve every occupied event slot.
-Pokedex.metagross.abilities!["S"] = "Super U.M.D. Move";
-Pokedex.duraludon.abilities!["S"] = "Super U.M.D. Move";
-Pokedex.lucario.abilities!["S"] = "Gale Strike";
-Pokedex.dusclops.abilities!["S"] = "Spectral Scream";
-Pokedex.chandelure.abilities!["E"] = "Spectral Scream";
-Pokedex.mismagius.abilities!["S"] = "Spectral Scream";
-Pokedex.araquanid.abilities!["S"] = "Barbed Web";
-Pokedex.walrein.abilities!["S"] = "Cold Truth";
-Pokedex.medicham.abilities!["S"] = "Bunraku Beatdown";
-Pokedex.meowsticf.abilities!["S"] = "Bunraku Beatdown";
-Pokedex.aerodactyl.abilities!["S"] = "Matrix Shot";
-Pokedex.alakazam.abilities!["S"] = "Pyrokinesis";
-Pokedex.delphox.abilities!["S"] = "Pyrokinesis";
-Pokedex.seviper.abilities!["S"] = "Venam's Kiss";
-Pokedex.pidgeot.abilities!["S"] = "Heavenly Wing";
+// Chandelure retains its independent Soul Fire event choice.
 
 // Settled Relic Armor replacements. Armaldo awaits its replacement; its duplicate selected armor is inert.
 Pokedex.laprasaevian.abilities!["H"] = "Telepathy";
@@ -24396,3 +24376,59 @@ Pokedex.gengargmax.abilities = {0: 'Afterlife Gate'};
 Pokedex.meowthgmax.abilities = {0: 'Technician', H: 'Unnerve'};
 Pokedex.machampgmax.abilities = {0: 'Raging Fists'};
 Pokedex.machampgmaxalt.abilities = {0: 'Raging Fists'};
+
+// Approved exact-form shortlist. Extra slot E is selectable without event restrictions.
+Pokedex.dedenne.abilities!['H'] = 'Symbiosis';
+Pokedex.swoobat.abilities!['1'] = 'Hospitality';
+Pokedex.avalugg.abilities!['0'] = 'Scrappy';
+Pokedex.cursola.abilities!['0'] = 'Cursed Body';
+Pokedex.veluza.abilities!['E'] = 'Unburden';
+
+Pokedex.slowkinggalar.abilities!['1'] = 'Telepathy';
+Pokedex.mrmime.abilities!['1'] = 'Soundproof';
+Pokedex.raichu.abilities!['0'] = 'Static';
+Pokedex.fearow.abilities!['0'] = 'Keen Eye';
+Pokedex.kingler.abilities!['1'] = 'Hyper Cutter';
+Pokedex.cloyster.abilities!['H'] = 'Shell Armor';
+Pokedex.garganacl.abilities!['1'] = 'Inner Focus';
+Pokedex.vikavolt.abilities!['H'] = 'Battery';
+Pokedex.jellicent.abilities!['0'] = 'Water Absorb';
+Pokedex.jellicentazzy.abilities!['0'] = 'Water Absorb';
+Pokedex.pinsir.abilities!['0'] = 'Hyper Cutter';
+Pokedex.hariyama.abilities!['0'] = 'Thick Fat';
+Pokedex.drednaw.abilities!['0'] = 'Strong Jaw';
+Pokedex.mudsdale.abilities!['0'] = 'Stamina';
+Pokedex.seismitoad.abilities!['1'] = 'Poison Touch';
+
+// Approved Dusk replacement; its existing Tough Claws becomes a species passive.
+Pokedex.lycanrocdusk.abilities![0] = 'Scrappy';
+
+Pokedex.crobatalt.abilities![0] = 'Poison Touch';
+Pokedex.gastrodonazzy.abilities![0] = 'Rain Dish';
+Pokedex.gastrodonazzy2.abilities![0] = 'Rain Dish';
+Pokedex.gliscor.abilities![0] = 'Venom Pincer';
+Pokedex.gliscoralt.abilities![0] = 'Venom Pincer';
+
+// Mega Mismagius retains Dusk Stone while its dedicated stone is deferred.
+
+Pokedex.gyarados.abilities![0] = 'Unbridled Wrath';
+
+Pokedex.conkeldurr.abilities!['1'] = 'Rocky Payload';
+
+import {CastformForms} from './castform-split';
+for (const id of CastformForms) Pokedex[id as ID].abilities![0] = 'Perfect Forecast';
+
+Pokedex.zoroark.abilities![0] = 'Perfect Illusion';
+Pokedex.zoroarkhisui.abilities![0] = 'Perfect Illusion';
+Pokedex.meowscarada.abilities!['H'] = 'Perfect Illusion';
+
+Pokedex.nidoking.abilities!['H'] = "Patriarch's Wrath";
+Pokedex.nidoqueen.abilities!['H'] = "Matriarch's Vigil";
+
+import {FinalPassiveSlotChanges} from './final-passive-migrations';
+import {FamilyReplacementSlots} from './family-replacements';
+for (const [id, slots] of Object.entries({...FinalPassiveSlotChanges, ...FamilyReplacementSlots})) Object.assign(Pokedex[id as ID].abilities!, slots);
+
+// Approved additional options; preserve existing Electrode slots and Soundproof passives.
+Pokedex.electrode.abilities!['S'] = 'Brute Force';
+Pokedex.electrodehisui.abilities!['S'] = 'Brute Force';

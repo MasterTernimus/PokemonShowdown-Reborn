@@ -85,8 +85,8 @@ describe('Adaptive Cycle', () => {
 		battle.actions.runMove('tackle', p, 1);
 		assert.equal(foe.hp, protectedHP);
 	});
-	it('registers a separate event slot and legal Recover on all four recipients without Mimicry', () => {
-		for (const species of ['Silvally', 'Kecleon', 'Stunfisk', 'Stunfisk-Galar']) {
+	it('registers a separate event slot and legal Recover on the three remaining recipients without Mimicry', () => {
+		for (const species of ['Kecleon', 'Stunfisk', 'Stunfisk-Galar']) {
 			assert.equal(Dex.species.get(species).abilities.S, 'Adaptive Cycle');
 			const set = {species, ability: 'Adaptive Cycle', moves: ['Recover'], nature: 'Serious', evs: {hp: 252, def: 252, spd: 4}};
 			const result = new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities,Obtainable Moves').validateTeam([set]);

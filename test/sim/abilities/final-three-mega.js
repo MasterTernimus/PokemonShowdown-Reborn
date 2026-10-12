@@ -88,11 +88,11 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 	it('bypasses Ultra Instinct reduction in ordinary and boosted fields, but not other defenses', () => {
 		const [p, q] = setup();
 		p.moveThisTurnResult = undefined;
-		assert.equal(battle.runEvent('ModifyDamage', p, q, Dex.getActiveMove('tackle'), 100), 100);
+		assert.equal(battle.runEvent('Damage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 		battle.field.terrain = 'ashenbeachterrain';
-		assert.equal(battle.runEvent('ModifyDamage', p, q, Dex.getActiveMove('tackle'), 100), 100);
+		assert.equal(battle.runEvent('Damage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 		p.setAbility('No Ability');
-		assert.equal(battle.runEvent('ModifyDamage', p, q, Dex.getActiveMove('tackle'), 100), 50);
+		assert.equal(battle.runEvent('Damage', q, p, Dex.getActiveMove('tackle'), 100), 65);
 	});
 	for (const ability of ['Ultra Ego', 'Burning Ego', 'Perfect Ego', 'Primal Ego', 'Unleashed Ego']) it('preserves unrelated defenses after removing Ultra damage bonuses inside ' + ability, () => {
 		const [p, q] = setup('Mew', 'Predator', ability, true);

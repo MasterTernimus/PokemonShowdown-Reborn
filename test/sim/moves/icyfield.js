@@ -35,15 +35,9 @@ describe('Icy Field interactions', () => {
 		return move;
 	}
 
-	function applySnowscape(source, target) {
-		const move = battle.dex.getActiveMove('snowscape');
-		assert(battle.singleEvent('TryMove', move, null, source, target, move));
-		assert.equal(move.terrain, 'icyterrain');
-		if (!battle.field.isTerrain('icyterrain')) {
-			assert(battle.field.setTerrain(move.terrain, source, move));
-		}
-		return move;
-	}
+	function applyIcyField(source) {
+  if (!battle.field.isTerrain('icyterrain')) assert(battle.field.setTerrain('icyterrain', source));
+ }
 
 	it('announces the Icy Field start text and preserves its internal id', () => {
 		const [source] = createBattle();
@@ -108,30 +102,30 @@ describe('Icy Field interactions', () => {
 		assert(battle.field.isTerrain('murkwatersurfaceterrain'));
 	});
 
-	it('turns Snowscape into Icy Field over the requested terrains', () => {
+	it('creates Frozen Aura over the requested terrains without replacing them', () => {
 		for (const underlyingTerrain of [
 			'watersurfaceterrain', 'murkwatersurfaceterrain', 'caveterrain',
 			'crystalcavernterrain', 'darkcrystalcavernterrain', 'mistyterrain',
 		]) {
 			const [source, target] = createBattle();
 			battle.field.changeTerrain(underlyingTerrain, source);
-			applySnowscape(source, target);
-			assert(battle.field.isTerrain('icyterrain'));
-			assert.equal(battle.field.terrainStack[1]?.id, underlyingTerrain);
+			battle.actions.useMove('snowscape', source, {target});
+			assert(battle.field.isTerrain(underlyingTerrain));
+   assert(battle.field.isAura('frozenaura'));
 			battle.destroy();
 			battle = null;
 		}
 	});
 
-	it('uses the Icy Field override through the full Snowscape move pipeline', () => {
+	it('creates Frozen Aura through the full Snowscape move pipeline', () => {
 		const [source] = createBattle([
 			[{ species: 'Mew', moves: ['snowscape'] }],
 			[{ species: 'Mew', moves: ['splash'] }],
 		]);
 		battle.field.changeTerrain('crystalcavernterrain', source);
 		battle.makeChoices('move snowscape', 'move splash');
-		assert(battle.field.isTerrain('icyterrain'));
-		assert.equal(battle.field.terrainStack[1]?.id, 'crystalcavernterrain');
+		assert(battle.field.isTerrain('crystalcavernterrain'));
+  assert(battle.field.isAura('frozenaura'));
 	});
 
 	it('makes Snowscape fail on heat fields, Fairy Tale, and Starlight Arena', () => {
@@ -158,7 +152,7 @@ describe('Icy Field interactions', () => {
 		}
 	});
 
-	it('makes Snowscape fail on Icy Field without creating Cold Eclipse', () => {
+	it('keeps Icy Field under Frozen Aura without creating Cold Eclipse', () => {
 		const [source] = createBattle([
 			[{ species: 'Mew', moves: ['snowscape'] }],
 			[{ species: 'Mew', moves: ['splash'] }],
@@ -167,13 +161,13 @@ describe('Icy Field interactions', () => {
 		battle.makeChoices('move snowscape', 'move splash');
 		assert(battle.field.isTerrain('icyterrain'));
 		assert(!battle.field.isTerrain('coldeclipseterrain'));
-		assert(battle.log.some(line => line.startsWith('|-fail|p1a: Mew')));
+		assert(battle.field.isAura('frozenaura'));
 	});
 
 	it('restores Misty Terrain and carries Icy Field Spikes through a break', () => {
 		const [source, target] = createBattle();
 		battle.field.changeTerrain('mistyterrain', source);
-		applySnowscape(source, target);
+		applyIcyField(source);
 		applyTerrainMove('earthquake', source, target);
 		assert(battle.field.isTerrain('mistyterrain'));
 		assert.equal(battle.p1.sideConditions.spikes.layers, 1);
@@ -187,7 +181,7 @@ describe('Icy Field interactions', () => {
 		]) {
 			const [source, target] = createBattle();
 			battle.field.changeTerrain(underlyingTerrain, source);
-			applySnowscape(source, target);
+			applyIcyField(source);
 			applyTerrainMove('heatwave', source, target);
 			assert(battle.field.isTerrain(underlyingTerrain));
 			if (underlyingTerrain === 'mistyterrain') {

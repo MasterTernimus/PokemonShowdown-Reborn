@@ -147,10 +147,10 @@ describe('Individually selected Mega simplifications', () => {
 		assert.equal(p.hp, 500); assert.equal(p.status, 'brn'); battle.runEvent('SwitchOut', p); assert.equal(p.status, 'brn');
 		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 	});
-	for (const ability of ['No Ability', 'Shadow Current']) it('Water Shuriken alone bypasses Water Absorb with ' + ability, () => {
+	for (const ability of ['No Ability', 'Shadow Current']) it('Water Shuriken bypass belongs to the selected ability: ' + ability, () => {
 		const [p, q] = setup('Mew', ability); q.setAbility('Water Absorb');
-		battle.actions.useMove('watershuriken', p, { target: q }); assert(q.hp < 1600);
-		const hp = q.hp; battle.actions.useMove('watergun', p, { target: q }); assert(q.hp >= hp);
+		battle.actions.useMove('watershuriken', p, { target: q }); assert.equal(q.hp < 1600, ability === 'Shadow Current');
+		const hp = q.hp; battle.actions.useMove('watergun', p, { target: q }); assert.equal(q.hp < hp, ability === 'Shadow Current');
 	});
 	it('Water Shuriken does not bypass Protect or Substitute', () => {
 		const [p, q] = setup(); q.addVolatile('protect'); battle.actions.useMove('watershuriken', p, { target: q }); assert.equal(q.hp, 1600);

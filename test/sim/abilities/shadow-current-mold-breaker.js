@@ -31,17 +31,22 @@ describe('Shadow Current Mold Breaker component', () => {
 	it('exposes Mold Breaker while retaining its other components', () => {
 		const [user, target] = start();
 		assert.equal(battle.log.filter(line => line.startsWith('|-ability|') && line.endsWith('|Shadow Current')).length, 1);
-		for (const component of ['moldbreaker', 'protean', 'technician', 'infiltrator', 'anticipation']) {
+		for (const component of ['moldbreaker', 'protean', 'technician', 'anticipation']) {
 			assert(user.hasAbility(component), `Shadow Current should include ${component}`);
 		}
 		const move = battle.dex.getActiveMove('watergun');
 		battle.singleEvent('ModifyMove', user.getAbility(), user.abilityState, move, user, target);
-		assert(move.ignoreAbility);
-		assert.match(user.getAbility().desc, /bypassable opposing Abilities/);
+		assert(move.ignoreAbility); assert(!user.hasAbility('infiltrator'));
+		assert.match(user.getAbility().desc, /bypass breakable abilities/);
 		assert(require('../../../dist/data/ability-display').getAbilityDisplayComponents(user.ability).includes('moldbreaker'));
 		assert(require('../../../dist/sim/custom-calculator').calculatorMetadata().abilityComponents.shadowcurrent.includes('Mold Breaker'));
 	});
 
+	for (const defense of ['Ability Shield', 'suppression']) it('respects ' + defense, () => {
+		const [user, target] = start('Water Absorb');
+		if (defense === 'Ability Shield') target.setItem('Ability Shield'); else user.addVolatile('gastroacid', target);
+		battle.actions.useMove('watershuriken', user, {target}); assert.equal(target.hp, target.maxhp);
+	});
 	it('still respects Protect', () => {
 		const [user, target] = start();
 		target.addVolatile('protect', target);

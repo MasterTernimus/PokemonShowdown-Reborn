@@ -24,30 +24,30 @@ describe("Conqueror's Will",()=>{
 	it('has only the approved components and exact Kingambit slot',()=>{
 		const [p]=start();
 		assert.deepEqual(battle.dex.species.get('Kingambit').abilities,{0:'Defiant',1:"Conqueror's Will",H:'Royal Decree'});
-		assert(p.hasAbility('supremeoverlord'));assert(p.hasAbility('unnerve'));assert(!p.hasAbility('battlearmor'));
+		assert(!p.hasAbility('supremeoverlord'));assert(p.hasAbility('unnerve'));assert(!p.hasAbility('battlearmor'));
 		const {AbilityComponents}=require('../../../dist/data/ability-components');
-		assert.deepEqual(AbilityComponents.conquerorswill,['supremeoverlord','unnerve']);
+		assert.deepEqual(AbilityComponents.conquerorswill,['unnerve']);
 	});
 	for(const fallen of [0,1,2,4,5,7])it(`scales once with a five-faint cap at ${fallen} fallen`,()=>{
-		const [p,t]=start();p.side.totalFainted=fallen;
+		const [p,t]=start('Supreme Overlord');p.side.totalFainted=fallen;
 		assert.equal(battle.runEvent('BasePower',p,t,battle.dex.getActiveMove('tackle'),1000),1000+100*Math.min(5,fallen));
 	});
 	it('inherits the current allied-side and FFA fallen calculation',()=>{
-		const [p]=start();p.side.totalFainted=2;
+		const [p]=start('Supreme Overlord');p.side.totalFainted=2;
 		const fn=p.getAbility().fallen;
 		const fake={side:{totalFainted:2,allySide:{totalFainted:1}}};
 		assert.equal(fn.call(battle,fake),3);
 		const mode=battle.gameType;battle.gameType='freeforall';assert.equal(fn.call(battle,fake),5);battle.gameType=mode;
 	});
 	for(const mode of ['multi','freeforall'])it(`retains actual ${mode} power accounting`,()=>{
-		const teams=Array.from({length:4},(_,i)=>[{species:'Mew',ability:i===0?"Conqueror's Will":'No Ability',moves:['splash']}]);
+		const teams=Array.from({length:4},(_,i)=>[{species:'Mew',ability:i===0?'Supreme Overlord':'No Ability',moves:['splash']}]);
 		battle=common.createBattle({gameType:mode},teams);
 		const p=battle.p1.active[0],t=battle.p2.active[0];p.side.totalFainted=2;
 		if(mode==='multi')p.side.allySide.totalFainted=1;
 		assert.equal(battle.runEvent('BasePower',p,t,battle.dex.getActiveMove('tackle'),1000),mode==='multi'?1300:1400);
 	});
 	it('inherits 2/4/5 thresholds and only one entry boost',()=>{
-		const [p,t]=start();p.side.totalFainted=2;
+		const [p,t]=start('Supreme Overlord');p.side.totalFainted=2;
 		const m=battle.dex.getActiveMove('tackle');battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,t);assert(m.infiltrates);
 		p.side.totalFainted=4;assert(!p.addVolatile('flinch',t));
 		p.side.totalFainted=5;
@@ -58,7 +58,7 @@ describe("Conqueror's Will",()=>{
 		assert.equal(battle.runEvent('Damage',p,t,battle.dex.getActiveMove('tackle'),100),100);
 	});
 	it('updates fallen state on ally faint without double threshold boosts',()=>{
-		const [p]=start("Conqueror's Will",true);const ally=battle.p1.active[1];p.side.totalFainted=5;
+		const [p]=start('Supreme Overlord',true);const ally=battle.p1.active[1];p.side.totalFainted=5;
 		battle.singleEvent('AnyFaint',p.getAbility(),p.abilityState,ally);
 		battle.singleEvent('AnyFaint',p.getAbility(),p.abilityState,ally);
 		assert.equal(p.abilityState.fallen,5);assert.equal(p.boosts.atk,1);assert.equal(p.boosts.spa,1);
@@ -117,7 +117,7 @@ describe("Conqueror's Will",()=>{
 	});
 	it('publishes exact calculator metadata',()=>{
 		const {calculatorMetadata}=require('../../../dist/sim/custom-calculator');const m=calculatorMetadata();
-		assert.deepEqual(m.abilityComponents.conquerorswill,['Supreme Overlord','Unnerve']);
+		assert.deepEqual(m.abilityComponents.conquerorswill,['Unnerve']);
 		assert.deepEqual(m.species.find(p=>p.name==='Kingambit').abilities,{0:'Defiant',1:"Conqueror's Will",H:'Royal Decree'});
 	});
 	it('does not add armor, forced-switch protection or Attack-drop cleansing',()=>{

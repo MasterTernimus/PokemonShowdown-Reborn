@@ -2,6 +2,7 @@ import type { Battle } from './battle';
 import type { Pokemon } from './pokemon';
 import { Condition } from './dex-conditions';
 import { ThematicPassiveIds } from '../data/species-passives';
+import { SignaturePassiveCallbacks } from '../data/signature-passive-data';
 
 const effects = new WeakMap<object, Condition>();
 
@@ -12,6 +13,12 @@ export function passiveEffect(battle: Battle, id: string): Condition {
 	if (!effect) {
 		effect = new Condition({ ...ability, id: `speciespassive${id}`, effectType: 'Condition',
 			fullname: `passive: ${ability.name}`, onSwitchIn: ability.onStart || ability.onSwitchIn, onSwitchInSubOrder: 7 });
+		const callbacks = SignaturePassiveCallbacks[id];
+		if (callbacks) for (const key of Object.keys(effect)) {
+			if (key.startsWith('on') && typeof (effect as any)[key] === 'function' && !callbacks.includes(key)) {
+				delete (effect as any)[key];
+			}
+		}
 		// Preserve Sirius's first-tail toxic before the passive attempts regular poison.
 		if (id === 'venamskiss') Object.assign(effect, { onSourceDamagingHitPriority: -1 });
 		effects.set(ability, effect);
@@ -30,7 +37,8 @@ export function thematicPassives(pokemon: Pokemon) {
 	return pokemon.getPassives().filter(id => ThematicPassiveIds.has(id));
 }
 
-const migratedEntryPassives = new Set(['unnerve', 'fairyaura', 'contrary', 'moldbreaker', 'noguard',
+const migratedEntryPassives = new Set(['supremeoverlord', 'unnerve', 'fairyaura', 'contrary', 'moldbreaker', 'noguard',
+	'eldritchremedy', 'mimecraft', 'saltbastion', 'download', 'hospitality',
 	'frisk', 'oblivious', 'waterveil', 'drizzle', 'grassysurge', 'electricsurge', 'thermalexchange', 'flamebody', 'intimidate',
 	'swornduty', 'gluttony', 'heavymetal', 'stalwart']);
 /** Entry effects in the approved Kalos/Alola and Paldea migrations run once when acquired. */
@@ -39,7 +47,7 @@ export function startGainedPassives(pokemon: Pokemon, previous: readonly string[
 	for (const id of thematicPassives(pokemon)) {
 		if (only && !only.includes(id)) continue;
 		if (previous.includes(id) || !migratedEntryPassives.has(id)) continue;
-		delete pokemon.passiveStates[id];
+		if (id !== 'supremeoverlord') delete pokemon.passiveStates[id];
 		pokemon.battle.singleEvent('SwitchIn', passiveEffect(pokemon.battle, id), passiveState(pokemon, id), pokemon);
 	}
 }

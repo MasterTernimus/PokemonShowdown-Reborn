@@ -1,3 +1,4 @@
+import {AbilityDescriptionOverrides} from './ability-descriptions';
 /** Reviewed compact display text. Never used for battle identity or callback dispatch. */
 export const AbilityDisplaySummaries: Record<string, string> = {
 	"selfrepair": "Combines the listed abilities.",
@@ -553,22 +554,8 @@ AbilityDisplaySummaries.anchoredbattery = "First pulse/bullet HP hit each entry 
 AbilityDisplaySummaries.nobledance = 'First successful directly selected dance each entry wards the next opposing move by 20%.';
 
 Object.assign(AbilityDisplaySummaries, {
-  "multipulse": "An effective held Plate converts eligible damaging Normal moves to its type, preserving category and power.",
-  "aquabatics": "Once per entry, actual opposing HP damage from its Water attack raises Sp.",
-  "feverpitch": "Damaging sound moves randomly get 0.75x, 1x or 1.25x power, equally likely once per whole execution.",
-  "thunderraid": "Eligible single-target, nonpriority Physical Electric attacks hit three times at 20%, 40% and 60% power, checking accuracy for each hit and stopping on a miss.",
-  "desertsmark": "Once per entry, a Ground attack dealing actual opposing HP damage makes that target pure Ground and binds it for four turns.",
   "deepchill": "Includes full local Oblivious.",
-  "superumdmove": "Eligible single-target Steel attacks choose Physical or Special by higher deterministic noncritical pre-random engine damage, including defensive stats, burn and screens.",
-  "galestrike": "Damaging attacks gain one critical-hit stage, two at half HP or less, three at quarter HP or less.",
-  "spectralscream": "Damaging Ghost moves become sound moves and bypass Substitute, retaining their targets.",
-  "barbedweb": "Bug attacks have 1.5x power and one extra critical-hit stage.",
-  "coldtruth": "Ice attacks dealing opposing HP damage inflict Torment.",
-  "bunrakubeatdown": "Psychic and Fighting attacks have 1.25x power plus 0.25x per currently fainted teammate, up to 2.5x.",
-  "matrixshot": "Physical Rock attacks use Attack against Sp.",
-  "pyrokinesis": "Psychic attacks gain a 30% burn secondary unless they already have one.",
   "venamskiss": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types.",
-  "heavenlywing": "Flying attacks bypass accuracy checks, but not semi-invulnerability.",
   "dredger": "Once per turn after its Ground attack deals opposing HP damage, removes one layer of its side's Spikes, or one Toxic Spikes layer if no Spikes remain."
 });
 
@@ -581,21 +568,7 @@ Object.assign(AbilityDisplaySummaries, {
 AbilityDisplaySummaries.grapplingclaws = "Physical contact HP hits prevent switching/healing through next turn, once per foe per stay.";
 
 Object.assign(AbilityDisplaySummaries, {
-  "multipulse": "Effective Plates convert eligible damaging Normal moves to their type.",
-  "aquabatics": "First opposing Water HP hit each entry gives +1 Sp. Atk and Speed.",
-  "feverpitch": "Sound attacks roll 0.75/1/1.25x power; directly selected sound attacks wake it.",
-  "thunderraid": "Eligible Physical Electric moves hit three times at 20/40/60% power.",
-  "desertsmark": "First Ground HP hit each entry makes its foe pure Ground and binds for 4 turns.",
-  "superumdmove": "Steel attacks choose the stronger damage category; 20% defense drop once per move.",
-  "galestrike": "Critical-hit stages rise at low HP; critical HP hits clear Speed drops and give +1 Speed once/turn.",
-  "spectralscream": "Ghost attacks become sound and bypass Substitute; HP hits heal and may boost defenses once/turn.",
-  "barbedweb": "Stronger, higher-critical Bug attacks poison and bind each foe once per stay.",
-  "coldtruth": "Ice HP hits Torment/clear positive offenses; already-Tormented foes take stronger Ice attacks.",
-  "bunrakubeatdown": "Psychic/Fighting attacks bypass Substitute; power scales with currently fainted allies.",
-  "matrixshot": "Physical Rock uses Sp. Def, bypasses screens, and removes opposing Reflect/Light Screen on HP hits.",
-  "pyrokinesis": "Psychic attacks can burn; pre-burned foes take stronger hits that bypass Sp. Def boosts.",
   "venamskiss": "Poison hits can poison Steel/Poison; pre-poisoned foes are drained/heal-blocked. Poisoned foes are slower.",
-  "heavenlywing": "Accurate Flying attacks gain priority against boosted foes; HP hits purge boosts for a healing reward.",
   "dredger": "First Ground HP hit each turn removes one own Spikes layer, then Toxic Spikes if none remain."
 });
 
@@ -604,7 +577,6 @@ AbilityDisplaySummaries.pulseblockade = 'Sets a 3-turn Snowy Mountain Field; blo
 Object.assign(AbilityDisplaySummaries, {
   "vendetta": "Once/entry, survive a hit to mark its attacker; next Ground/Dark retaliation cannot miss and traps on HP damage.",
   "steadyaim": "Prevents external accuracy drops; self-inflicted costs remain.",
-  "uproot": "Grass HP hits: -2 foe Sp. Def once/target/turn; already-weakened foes also yield capped 1/4 drain.",
   "silksights": "Keen Eye; Electric bypasses slowed foes' boosts; once/entry Bug HP hit on slowed foe Disables its last move."
 });
 
@@ -624,3 +596,52 @@ for (const [id, details] of Object.entries(SelectedAbilityDescriptions)) Ability
 
 import {GmaxRedesignDescriptions} from './gmax-passive-data';
 for (const [id, details] of Object.entries(GmaxRedesignDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+
+import {GrapplingClawsDescription} from './targeted-passive-reworks';
+AbilityDisplaySummaries.grapplingclaws = GrapplingClawsDescription.shortDesc;
+
+AbilityDisplaySummaries.pressure = 'Entry: -1 foe Def/SpD once per foe per user per battle; Cold Eclipse repeats -2. Extra PP cost.';
+
+import {ShelterDescriptions} from './shelter-audit-reworks';
+AbilityDisplaySummaries.scaleshelter = ShelterDescriptions.scaleshelter.shortDesc;
+AbilityDisplaySummaries.roughscale = ShelterDescriptions.roughscale.shortDesc;
+
+AbilityDisplaySummaries.baitedbloom = ShelterDescriptions.baitedbloom.shortDesc;
+
+import {BurningRageDescription} from './burning-rage-display';
+AbilityDisplaySummaries.burningrage = BurningRageDescription.shortDesc;
+import {SovereignDescriptions} from './sovereign-approved-data';
+for (const [id, details] of Object.entries(SovereignDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+
+import {UltraInstinctDescription, BurningSpiritDescription} from './ultra-instinct-description';
+AbilityDisplaySummaries.ultrainstinct = UltraInstinctDescription.shortDesc;
+AbilityDisplaySummaries.burningspirit = BurningSpiritDescription.shortDesc;
+import {PassiveCleanupDescriptions} from './passive-cleanup-approved';
+for (const [id, details] of Object.entries(PassiveCleanupDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+
+AbilityDisplaySummaries.ragingstorm += ' Rampages last one turn without ending confusion.';
+
+AbilityDisplaySummaries.toxicspines += ' Iron Barbs adds 1/8 contact damage.';
+
+import {CastformDescriptions} from './castform-split';
+for (const [id, details] of Object.entries(CastformDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+
+import {IllusionDescriptions} from './illusion-split';
+for (const [id, details] of Object.entries(IllusionDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+
+import {NidoDescriptions} from './nido-approved';
+for (const [id, details] of Object.entries(NidoDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+
+for (const id of ['relentlesshunt', 'voidomen', 'venombastion']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+for (const id of ['heatcoil', 'inversion', 'ironmountain']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+import {FinalPassiveDescriptions} from './final-passive-migrations';
+import {FamilyReplacementDescriptions} from './family-replacements';
+for (const [id, details] of Object.entries({...FinalPassiveDescriptions, ...FamilyReplacementDescriptions})) AbilityDisplaySummaries[id] = details.shortDesc;
+
+for (const id of ['encorearia', 'marvelscale', 'tidalvoice']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+for (const id of ['voidomen', 'inversion', 'heatcoil', 'ironmountain', 'venombastion', 'relentlesshunt']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+AbilityDisplaySummaries.knightsguard = "Entry heals adjacent allies 1/4 HP (1/3 Fairy Tale); once per entry intercepts an ally attack, takes 25% less and gains +1 Atk if hit.";

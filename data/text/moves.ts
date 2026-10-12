@@ -5955,8 +5955,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "Charges with +2 priority, raising the user's Attack, Defense, and Special Defense by 1 stage each. While charging, the user takes 20% less damage from attacks. Attacks at normal priority on the next turn. After dealing damage, restores 10% of the user's base maximum HP. Skipping the charge, such as with Power Herb, keeps the stat boosts but does not grant charge-turn priority or the charging damage reduction.",
-		shortDesc: "+2 charge: +1 Atk/Def/SpD, 20% less damage. Hit heals 10%.",
+		desc: "Charges with +2 priority, raising the user's Attack, Defense, and Special Defense by 1 stage each. While charging, the user takes 20% less damage from attacks. Attacks at normal priority on the next turn. After dealing damage, restores 15% of the user's base maximum HP. Skipping the charge, such as with Power Herb, keeps the stat boosts but does not grant charge-turn priority or the charging damage reduction.",
+		shortDesc: "+2 charge: +1 Atk/Def/SpD, 20% less damage. Hit heals 15%.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},
@@ -7820,3 +7820,17 @@ for (const [moveId, user, baseMove] of [
 for (const id of ['boneclub', 'bonerush', 'bonemerang'] as const) {
 	MovesText[id].desc += ' While Ground-type, this move bypasses field bans on Ground attacks and retains Ground typing instead of field-added Ice/Water typing or Midnight Zone conversion. Existing Bone-move immunity bypass, accuracy and protection rules are unchanged.';
 }
+
+for (const [id, effect] of Object.entries({outrage: "lower the target's Defense by 1", thrash: "lower the target's Defense by 1", petaldance: "lower the target's Sp. Def by 1", ragingfury: 'burn the target'})) {
+ MovesText[id as ID].desc += ' Each hit has a 30% chance to ' + effect + '. Sheer Force removes this secondary and boosts power once, while retaining normal rampage locking and confusion. With Raging Storm, this move lasts one turn without rampage-ending confusion; existing confusion is not cured.';
+ MovesText[id as ID].shortDesc = '120 BP; 30% to ' + effect + '. Locks 2-3 turns.';
+}
+
+MovesText.snowscape.desc = 'Creates Frozen Aura for 5 turns, or 8 with Amplifield Rock, without replacing weather or the base field. Ice attacks have 1.2x power for both sides, including airborne Pokemon; Mimicry becomes Ice and Nature Power becomes Ice Beam. While active, successful Gravity, two Blizzard executions dealing opposing HP or Substitute damage, a damaging Ice Z-Move, or three consecutive end-of-turn Hail checks promote it to Cold Eclipse. Promotion consumes the aura and uses normal Cold Eclipse duration. Refreshing resets progress; interrupted Hail resets its count. Existing field locks apply; blocked promotion retains capped progress. The aura itself adds no Cold Eclipse defensive, healing or Speed effects.';
+MovesText.snowscape.shortDesc = 'Frozen Aura 5/8 turns: Ice 1.2x; qualifying moves or 3 Hail turns make Cold Eclipse.';
+
+import {RejuvenationSignatureDescriptions} from '../rejuvenation-signature-moves';
+for (const [id, details] of Object.entries(RejuvenationSignatureDescriptions)) MovesText[id as ID] = {...MovesText[id as ID], ...details};
+
+import {YangSignatureDescriptions} from '../yang-signature-moves';
+for (const [id, details] of Object.entries(YangSignatureDescriptions)) MovesText[id as ID] = {...MovesText[id as ID], ...details};

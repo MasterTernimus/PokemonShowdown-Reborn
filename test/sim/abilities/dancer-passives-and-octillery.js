@@ -29,11 +29,18 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) expected[id] = [...(expected[id] || []), passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 820);
+		assert.equal(Object.keys(expected).length, 839);
 		for (let old of before.species) {
 			const s = Dex.species.get(old.id);
 			if (old.id === 'ludicolo') old = { ...old, abilities: { ...old.abilities, H: 'Rain Dish' } }; for (const key of ['abilities', 'baseStats', 'types']) assert.deepEqual(s[key], old[key], old.id + key);
-			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, old.learnset);
+			let expectedLearnset = old.learnset && {...old.learnset};
+			const grants = {...require('./rejuv-move-learnsets-approved.json'), ...require('./yang-move-learnsets-approved.json')};
+			for (const [move, users] of Object.entries(grants)) if (users.includes(old.id)) {
+				assert(!Object.hasOwn(old.learnset || {}, move));
+				expectedLearnset ||= {};
+				expectedLearnset[move] = ['9L1'];
+			}
+			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, expectedLearnset, old.id + '/learnset');
 		}
 		assert.deepEqual(Dex.species.get('quaquaval').passives, ['torrent']);
 		for (const id of ['lotad', 'lombre', 'petilil', 'oddish', 'gloom', 'quaxly', 'quaxwell', 'meloettamega']) assert(!Dex.species.get(id).passives.includes('owntempo'));
@@ -86,7 +93,7 @@ describe('Approved eleven dancer passives and Anchored Battery extension', () =>
 	});
 	it('Illusion copies the disguise and does not keep actual-species Own Tempo', () => {
 		const [p, t] = setup('Ludicolo', 'Pressure');
-		p.illusion = battle.p1.pokemon[2];
+		p.m.perfectIllusion = true; p.illusion = battle.p1.pokemon[2];
 		const start = battle.log.length;
 		use('confuseray', t, p);
 		assert(p.volatiles.confusion);

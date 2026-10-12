@@ -113171,3 +113171,19 @@ for (const [id, moves] of Object.entries(PULSE_FIXED_MOVES)) {
 // Approved Audino support tools; Mega inherits the base learnset.
 Learnsets.audino.learnset!.healbell = ['9M'];
 Learnsets.audino.learnset!.followme = ['9L1'];
+
+import {RejuvenationSignatureLearnsets} from './rejuvenation-signature-moves';
+for (const [move, species] of Object.entries(RejuvenationSignatureLearnsets)) {
+ for (const id of species) {
+  Learnsets[id as ID] ||= {learnset: {}};
+  Learnsets[id as ID].learnset![move as ID] = ['9L1'];
+ }
+}
+
+import {YangSignatureLearnsets} from './yang-signature-moves';
+for (const [move, species] of Object.entries(YangSignatureLearnsets)) {
+ for (const id of species) {
+  Learnsets[id as ID] ||= {learnset: {}};
+  Learnsets[id as ID].learnset![move as ID] = ['9L1'];
+ }
+}

@@ -70,7 +70,7 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		});
 	for (const [passive, ids] of Object.entries(require('./settled-passives-approved.json').groups))
 		for (const id of ids)
-			it(id + ' receives exactly ' + passive, () => assert.deepEqual(Dex.species.get(id).passives, [passive]));
+			it(id + ' receives its current approved passive', () => assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id,[passive])));
 	it('Free Flight allows airborne voluntary escape while preserving binding damage and grounding', () => {
 		const [p, t] = setup('Salamence', 'No Ability');
 		p.addVolatile('partiallytrapped', t, Dex.moves.get('firespin'));
@@ -96,7 +96,7 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		assert(p.trapped);
 	});
 	it('Entrenched blocks opposing phazing and Red Card but permits self and allied switching', () => {
-		const [p, t] = setup('Kingambit', 'No Ability');
+		const [p, t] = setup('Baxcalibur', 'No Ability');
 		p.addVolatile('gastroacid');
 		for (const effect of [Dex.moves.get('roar'), Dex.items.get('redcard')])
 			assert.equal(battle.runEvent('DragOut', p, t, effect), null);
@@ -115,15 +115,15 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		battle.runEvent('ModifyMove', p, t, rock, rock);
 		assert.equal(rock.multihit, 5);
 	});
-	it('Rocky Payload preserves local Rock STAB, offensive field boost and extra type resistance', () => {
-		const [p, t] = setup('Conkeldurr', 'No Ability');
+	it('Rocky Payload preserves local Rock STAB and offensive field boost without added resistance', () => {
+		const [p, t] = setup('Conkeldurr', 'Rocky Payload');
 		const m = Dex.getActiveMove('rockslide');
 		battle.runEvent('ModifyMove', p, t, m, m);
 		assert(m.forceSTAB);
 		assert.equal(battle.runEvent('ModifyAtk', p, t, m, 100), 150);
 		battle.field.setTerrain('rockyterrain', p);
 		assert.equal(battle.runEvent('ModifyAtk', p, t, m, 100), 200);
-		assert.equal(battle.runEvent('Effectiveness', p, 'Fire', Dex.getActiveMove('flamethrower'), 0), -1);
+		assert.equal(battle.runEvent('Effectiveness', p, 'Fire', Dex.getActiveMove('flamethrower'), 0), 0);
 	});
 	it('Nose Formation keeps Elevate, Filter and its existing mini-nose callbacks alongside passive Levitate', () => {
 		const [p] = setup('Probopass', 'Nose Formation');

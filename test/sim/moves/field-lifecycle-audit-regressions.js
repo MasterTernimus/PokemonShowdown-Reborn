@@ -12,6 +12,12 @@ function setup(format = 'gen9nofieldsinglesgame', item = '', moves = ['grassyter
 	battle.makeChoices('team 1', 'team 1');
 }
 
+function coldOverlayTurn() {
+ const p = battle.p1.active[0];
+ battle.field.setTerrain('coldeclipseterrain', p, battle.dex.getActiveMove('snowscape'));
+ turn();
+}
+
 function turn(move = 'recover') {
 	battle.makeChoices(`move ${move}`, 'move softboiled');
 }
@@ -74,7 +80,7 @@ describe('Field lifecycle audit regressions', () => {
 
 	it('ages the underlying field correctly when an overlay is removed during a move', () => {
 		setup('gen9nofieldsinglesgame', '', ['grassyterrain', 'snowscape', 'steelroller', 'recover']);
-		turn('grassyterrain'); turn('snowscape');
+		turn('grassyterrain'); coldOverlayTurn();
 		assert.equal(battle.field.terrain, 'coldeclipseterrain');
 		turn('steelroller');
 		assert.equal(battle.field.terrain, 'grassyterrain');
@@ -85,7 +91,7 @@ describe('Field lifecycle audit regressions', () => {
 
 	it('ages the underlying field correctly when its overlay expires at turn end', () => {
 		setup('gen9nofieldsinglesgame', 'amplifieldrock', ['grassyterrain', 'snowscape', 'recover']);
-		turn('grassyterrain'); turn('snowscape');
+		turn('grassyterrain'); coldOverlayTurn();
 		for (let elapsed = 3; elapsed <= 6; elapsed++) turn();
 		assert.equal(battle.field.terrain, 'grassyterrain');
 		assert.equal(battle.field.terrainState.duration, 2);
@@ -97,7 +103,7 @@ describe('Field lifecycle audit regressions', () => {
 		setup('gen9rockyfield', '', ['snowscape', 'steelroller', 'recover']);
 		const base = battle.field.terrainState;
 		const duration = base.duration;
-		turn(); turn('snowscape'); turn('steelroller');
+		turn(); coldOverlayTurn(); turn('steelroller');
 		turn();
 		assert.equal(battle.field.terrainState, base);
 		assert.equal(base.duration, duration);

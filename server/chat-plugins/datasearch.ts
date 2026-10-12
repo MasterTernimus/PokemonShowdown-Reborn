@@ -113,7 +113,7 @@ export const commands: Chat.ChatCommands = {
 	horn: 'drill',
 	drill(target, room, user) {
 		this.checkBroadcast();
-		const drillMoves = (move: Move) => !!(move.flags as { [flag: string]: boolean | undefined }).drill;
+		const drillMoves = (move: Move) => !!(move.flags['drill'] || move.flags['horn']);
 		this.sendReplyBox(customMoveList("Power Drill moves", drillMoves));
 	},
 	drillhelp: ["/drill or /horn - Lists all moves boosted by Power Drill."],

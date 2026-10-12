@@ -3569,7 +3569,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { mirror: 1, metronome: 1 },
 		onHitField(target, source) {
 			const sideConditions = [
-				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'arenitewall', 'atlantiswall', 'luckychant', 'gmaxsteelsurge', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire', 'gmaxvolcalith',
+				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock', 'waterpledge', 'firepledge', 'grasspledge', 'stickyweb', 'auroraveil', 'arenitewall', 'atlantiswall', 'luckychant', 'gmaxsteelsurge', 'dragonrend', 'gmaxcannonade', 'gmaxvinelash', 'gmaxwildfire', 'gmaxvolcalith',
 			];
 			let success = false;
 			if (this.gameType === "freeforall") {
@@ -4034,7 +4034,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source, move) {
 			let success = this.field.clearAura();
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 }) || success;
-			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
@@ -8548,7 +8548,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				let success = false;
-				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 				const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall', 'safeguard', 'mist', ...removeAll];
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
@@ -11023,7 +11023,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.queue.prioritizeAction(this.queue.resolveAction({
 				choice: 'move',
 				pokemon: target,
-				moveid: target.lastMove.id,
+				move: {...this.dex.getActiveMove(target.lastMove.id), sourceEffect: 'instruct'},
 				targetLoc: target.lastMoveTargetLoc!,
 			})[0] as MoveAction);
 		},
@@ -14034,7 +14034,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', `[of] ${pokemon}`);
 				}
-				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', `[of] ${pokemon}`);
@@ -14050,7 +14050,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', `[of] ${pokemon}`);
 				}
-				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', `[of] ${pokemon}`);
@@ -14418,6 +14418,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			]);
 			const newMove = terrainMoveMap.get(this.field.getTerrain().id);
 			move = newMove !== undefined ? newMove : move;
+   if (this.field.isAura('frozenaura')) move = this.field.getAura().naturePowerMove;
 			this.actions.useMove(move, pokemon, { target: move === 'growth' ? pokemon : target });
 			return null;
 		},
@@ -16848,7 +16849,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', `[of] ${pokemon}`);
 				}
-				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', `[of] ${pokemon}`);
@@ -16864,7 +16865,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', `[of] ${pokemon}`);
 				}
-				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', `[of] ${pokemon}`);
@@ -19232,7 +19233,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	skullbash: {
 		num: 130,
 		accuracy: 100,
-		basePower: 130,
+		basePower: 80,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Skull Bash",
@@ -19252,7 +19253,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterMove(source, target, move) {
-			if (move.totalDamage) this.heal(source.baseMaxhp / 10, source, source);
+			if (move.totalDamage) this.heal(source.baseMaxhp * 3 / 20, source, source);
 		},
 		condition: {
 			onSourceModifyDamage(damage, source, target, move) {
@@ -19920,39 +19921,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	snowscape: {
-		num: 883,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Snowscape",
-		pp: 10,
-		priority: 0,
-		flags: {},
-		onTryMove(attacker, defender, move) {
-			const blockedFields = [
-				'volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain', 'starlightarenaterrain',
-			];
-			if (this.field.isTerrain(blockedFields)) {
-				let message = 'The intense heat prevented the snow from settling!';
-				if (this.field.isTerrain('fairytaleterrain')) message = 'The fairy tale rejected the changing season!';
-				if (this.field.isTerrain('starlightarenaterrain')) message = 'The starlight refused to be eclipsed!';
-				this.add('-message', message);
-				return false;
-			}
-			const icyFieldTerrain = [
-				'watersurfaceterrain', 'murkwatersurfaceterrain', 'icyterrain', 'caveterrain',
-				'crystalcavernterrain', 'darkcrystalcavernterrain', 'mistyterrain',
-			];
-			if (this.field.isTerrain(icyFieldTerrain)) {
-				move.terrain = 'icyterrain';
-				return;
-			}
-			if (this.field.isWeather('desolateland')) return null;
-		},
-		terrain: "coldeclipseterrain",
-		target: "all",
-		type: "Ice",
-	},
+  num: 883, accuracy: true, basePower: 0, category: "Status", name: "Snowscape", pp: 10,
+  priority: 0, flags: {}, target: "all", type: "Ice",
+  onTryMove() {
+   if (this.field.isTerrain(['volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain', 'starlightarenaterrain'])) {
+    const message = this.field.isTerrain('fairytaleterrain') ? 'The fairy tale rejected the changing season!' :
+     this.field.isTerrain('starlightarenaterrain') ? 'The starlight refused to be eclipsed!' : 'The intense heat prevented the snow from settling!';
+    this.add('-message', message);
+    return false;
+   }
+   if (this.field.isWeather('desolateland')) return null;
+  },
+  onHitField(target, source, move) {
+   return this.field.setAura('frozenaura', source.hasItem('amplifieldrock') ? 8 : 5, source, move);
+  },
+ },
 	soak: {
 		num: 487,
 		accuracy: 100,
@@ -22867,7 +22850,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			for (const active of this.getAllActive()) {
 				if (active.removeVolatile('substitute')) success = true;
 			}
-			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
 			for (const side of sides) {
 				for (const sideCondition of removeAll) {
@@ -23943,7 +23926,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		multihit: [2, 6],
 		critRatio: 2,
 		onModifyMove(move, pokemon) {
-			move.ignoreAbility = true;
 			const isAshGreninja = pokemon.species.id === 'greninjaash' && pokemon.hasAbility('shadowbond') && !pokemon.transformed;
 			if (pokemon.hasAbility('shadowcurrent')) {
 				move.basePower = 20;
@@ -24310,12 +24292,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		slotCondition: 'Wish',
 		condition: {
 			duration: 2,
-			onStart(pokemon, source) {
+			onStart(pokemon, source, sourceEffect) {
 				this.effectState.moonlitPromise = source.hasAbility('voidpromise');
 				if (source.hasAbility('restorativechime')) {
 					this.effectState.restorativeEntry = source.m.approvedSignatures ||= {};
 				}
-				if (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']))
+				if (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']) ||
+					(['nomoswish', 'nostraswish'].includes(sourceEffect?.id) &&
+					(this.field.isAura('mistyterrain') || this.field.isAura('rainbowterrain'))))
 					this.effectState.hp = source.maxhp * 3 / 4;
 				else
 					this.effectState.hp = source.maxhp / 2;
@@ -24658,7 +24642,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
 		onAfterHit(target, source, move) {
 			if (!((target.getMoveHitData(move) as {damage?: number}).damage! > 0)) return;
-			const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 			for (const side of [source.side, ...source.side.foeSidesWithConditions()]) {
 				for (const hazard of hazards) {
 					if (side.removeSideCondition(hazard)) this.add('-sideend', side, this.dex.conditions.get(hazard).name, '[from] move: Twirly Twister', `[of] ${source}`);
@@ -25053,3 +25037,14 @@ riotObstruct.onTryHit = function (target, source, move) {
  }
  return result;
 };
+
+Moves.outrage.secondary = {chance: 30, boosts: {def: -1}};
+Moves.thrash.secondary = {chance: 30, boosts: {def: -1}};
+Moves.petaldance.secondary = {chance: 30, boosts: {spd: -1}};
+Moves.ragingfury.secondary = {chance: 30, status: 'brn'};
+
+import {RejuvenationSignatureMoves} from './rejuvenation-signature-moves';
+Object.assign(Moves, RejuvenationSignatureMoves);
+
+import {YangSignatureMoves} from './yang-signature-moves';
+Object.assign(Moves, YangSignatureMoves);

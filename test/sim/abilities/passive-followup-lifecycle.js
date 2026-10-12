@@ -21,7 +21,7 @@ describe('Approved passive copy lifecycle and component replacements', () => {
 		battle = null;
 	});
 	it('Illusion copies disguise Levitate before damage and restores actual passives on reveal', () => {
-		const [p, t] = setup('Raichu', 'Illusion', 'Rotom');
+		const [p, t] = setup('Raichu', 'Perfect Illusion', 'Rotom');
 		assert.deepEqual(p.getPassives(), ['levitate']);
 		assert.equal(p.ability, 'noability');
 		const hp = p.hp;
@@ -30,33 +30,33 @@ describe('Approved passive copy lifecycle and component replacements', () => {
 		assert(p.illusion);
 		use('tackle', t, p);
 		assert(!p.illusion);
-		assert.deepEqual(p.getPassives(), ['static']);
-		assert.equal(p.ability, 'illusion');
+		assert.deepEqual(p.getPassives(), ['chargedtail']);
+		assert.equal(p.ability, 'perfectillusion');
 	});
-	it('copied passives survive suppression and do not allow Transform while concealed', () => {
-		const [p, t] = setup('Raichu', 'Illusion', 'Rotom');
+	it('suppression clears advanced copied passives and permits Transform after reveal', () => {
+		const [p, t] = setup('Raichu', 'Perfect Illusion', 'Rotom');
 		p.addVolatile('gastroacid');
-		assert.deepEqual(p.getPassives(), ['levitate']);
-		assert(!p.transformInto(t));
-		assert(!t.transformInto(p));
+		battle.runEvent('Update', p);
+		assert.deepEqual(p.getPassives(), ['chargedtail']);
+		assert(!p.illusion);
 		const hp = p.hp;
 		use('earthquake', t, p);
-		assert.equal(p.hp, hp);
+		assert(p.hp < hp);
 	});
 	it('switching and faint cleanup discard the disguise passive identity', () => {
-		const [p, t] = setup('Raichu', 'Illusion', 'Rotom');
+		const [p, t] = setup('Raichu', 'Perfect Illusion', 'Rotom');
 		battle.makeChoices('switch 2', 'move splash');
 		assert(!p.illusion);
-		assert.deepEqual(p.getPassives(), ['static']);
+		assert.deepEqual(p.getPassives(), ['chargedtail']);
 		battle.makeChoices('switch 2', 'move splash');
 		assert(p.illusion);
 		p.faint();
 		battle.faintMessages();
 		assert(!p.illusion);
-		assert.deepEqual(p.getPassives(), ['static']);
+		assert.deepEqual(p.getPassives(), ['chargedtail']);
 	});
 	it('disguise without passives masks the actual passive without public identity leakage', () => {
-		const [p] = setup('Raichu', 'Illusion', 'Chansey');
+		const [p] = setup('Raichu', 'Perfect Illusion', 'Chansey');
 		assert.deepEqual(p.getPassives(), []);
 		assert(!battle.log.some(l => l.startsWith('|switch|p1') && /Raichu|Static/.test(l)));
 	});

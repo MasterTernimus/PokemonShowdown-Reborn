@@ -24,142 +24,13 @@ function hit(p, t, id = 'tackle', extra = {}) {
 function callback(p, event, ...args) {
 	return battle.singleEvent(event, p.getAbility(), p.abilityState, ...args);
 }
-describe('Approved Rejuvenation event alternatives', () => {
-	afterEach(() => {
+// Legacy event-ability cases are replaced by the approved move suite; retained abilities stay covered here.
+describe('Rejuvenation move migration and retained abilities', () => {
+afterEach(() => {
 		battle?.destroy();
 		battle = null;
 	});
-	const slots = { bewear: ['S', 'Multipulse'], primarina: ['S', 'Aquabatics'], toxtricityaevian: ['S', 'Fever Pitch'], electivire: ['S', 'Thunder Raid'], torterra: ['S', "Desert's Mark"], metagross: ['S', 'Super U.M.D. Move'], duraludon: ['S', 'Super U.M.D. Move'], lucario: ['S', 'Gale Strike'], dusclops: ['S', 'Spectral Scream'], chandelure: ['E', 'Spectral Scream'], mismagius: ['S', 'Spectral Scream'], araquanid: ['S', 'Barbed Web'], walrein: ['S', 'Cold Truth'], medicham: ['S', 'Bunraku Beatdown'], meowsticf: ['S', 'Bunraku Beatdown'], aerodactyl: ['S', 'Matrix Shot'], alakazam: ['S', 'Pyrokinesis'], delphox: ['S', 'Pyrokinesis'], seviper: ['S', "Venam's Kiss"], pidgeot: ['S', 'Heavenly Wing'] };
-	for (const [id, [slot, ability]] of Object.entries(slots))
-		it(id + ' has the exact event slot and description', () => {
-			assert.equal(Dex.species.get(id).abilities[slot], ability);
-			assert(Dex.abilities.get(ability).desc.length > 40);
-			if (id === 'chandelure')
-				assert.equal(Dex.species.get(id).abilities.S, 'Soul Fire');
-		});
-	it('does not grant event choices to Mega or other unapproved forms', () => {
-		const before = require('./rejuvenation-events-before.json').abilities;
-		const relic = require('./relic-armor-before.json');
-		const changed = new Set([...Object.keys(slots), 'froslass', 'laprasaevian', 'omastar', 'kabutops', 'aerodactyl', 'cradily', 'armaldo', 'relicanth', 'rampardos', 'bastiodon', 'carracosta', 'tyrantrum', 'aurorus']);
-		for (const [id] of require('./latest-passives-approved.json').slots) changed.add(id);
-		changed.add('venusaur');
-		const current = new Map(Dex.species.all().map(p => [p.id, p]));
-		for (const [id, abilities] of Object.entries(before))
-			if (!changed.has(id))
-				assert.deepEqual(current.get(id).abilities, require('./passive-approval-overlays').abilities(id, {...abilities}), id);
-		assert.deepEqual(Dex.species.get('chandelure').abilities.S, relic.abilities.chandelure.S);
-	});
-	it('Multipulse needs an effective Plate and adds no ability power multiplier', () => {
-		const [p, t] = setup('Multipulse');
-		p.setItem('Flame Plate');
-		let m = Dex.getActiveMove('tackle');
-		callback(p, 'ModifyType', m, p, t);
-		assert.equal(m.type, 'Fire');
-		assert.equal(m.basePower, 40);
-		assert.equal(m.category, 'Physical');
-		p.addVolatile('embargo');
-		m = Dex.getActiveMove('tackle');
-		callback(p, 'ModifyType', m, p, t);
-		assert.equal(m.type, 'Normal');
-		p.removeVolatile('embargo');
-		p.setItem('Firium Z');
-		m = Dex.getActiveMove('tackle');
-		callback(p, 'ModifyType', m, p, t);
-		assert.equal(m.type, 'Normal');
-		p.setItem('Flame Plate');
-		m = Dex.getActiveMove('weatherball');
-		callback(p, 'ModifyType', m, p, t);
-		assert.equal(m.type, 'Normal');
-	});
-	it('Aquabatics triggers once across hits and survives ability replacement', () => {
-		const [p, t] = setup('Aquabatics');
-		hit(p, t, 'watergun', { multihit: 3, damage: 20 });
-		assert.equal(p.boosts.spa, 1);
-		assert.equal(p.boosts.spe, 1);
-		p.setAbility('Pressure');
-		p.setAbility('Aquabatics');
-		hit(p, t, 'watergun', { damage: 20 });
-		assert.equal(p.boosts.spa, 1);
-	});
-	for (const ability of ['Aquabatics', "Desert's Mark", 'Barbed Web'])
-		it(ability + ' does not spend its entry effect on Substitute-only damage', () => {
-			const [p, t] = setup(ability);
-			t.addVolatile('substitute', t);
-			hit(p, t, ability === 'Aquabatics' ? 'watergun' : ability === 'Barbed Web' ? 'bugbite' : 'mudslap', { damage: 20 });
-			assert(!p.volatiles.aquabaticsspent);
-			assert(!p.volatiles.desertsmarkspent);
-			assert(!p.volatiles.barbedwebspent);
-		});
-	it('Deserts Mark makes pure Ground and binds four turns once per entry', () => {
-		const [p, t] = setup("Desert's Mark");
-		hit(p, t, 'mudslap', { damage: 20 });
-		assert.deepEqual(t.getTypes(), ['Ground']);
-		assert.equal(t.volatiles.partiallytrapped.duration, 4);
-		t.removeVolatile('partiallytrapped');
-		hit(p, t, 'mudslap', { damage: 20 });
-		assert(!t.volatiles.partiallytrapped);
-	});
-	it('Fever Pitch directly wakes for selected damaging sound but not indirect moves', () => {
-		const [p, t] = setup('Fever Pitch');
-		p.setStatus('slp');
-		p.statusState.time = 5;
-		battle.actions.runMove('hypervoice', p, 1);
-		assert.equal(p.status, '');
-		assert(t.hp < t.maxhp);
-		p.setStatus('slp');
-		const m = Dex.getActiveMove('hypervoice');
-		m.sourceEffect = 'sleeptalk';
-		callback(p, 'TryMove', p, t, m);
-		assert.equal(p.status, 'slp');
-	});
-	it('Fever Pitch samples once for the entire multihit execution', () => {
-		const [p, t] = setup('Fever Pitch');
-		let rolls = 0;
-		const sample = battle.sample.bind(battle);
-		battle.sample = xs => {
-			if (xs.length === 3 && xs[0] === 0.75) {
-				rolls++;
-				return 1.25;
-			}
-			return sample(xs);
-		};
-		hit(p, t, 'hypervoice', { multihit: 3 });
-		assert.equal(rolls, 1);
-	});
-	it('Fever Pitch remains asleep when flinched or suppressed', () => {
-		const [p] = setup('Fever Pitch');
-		p.setStatus('slp');
-		p.statusState.time = 5;
-		p.addVolatile('flinch');
-		battle.actions.runMove('hypervoice', p, 1);
-		assert.equal(p.status, 'slp');
-		p.removeVolatile('flinch');
-		p.addVolatile('gastroacid');
-		battle.actions.runMove('hypervoice', p, 1);
-		assert.equal(p.status, 'slp');
-	});
-	it('Thunder Raid escalates power and preserves contact', () => {
-		const [p, t] = setup('Thunder Raid');
-		const m = Dex.getActiveMove('thunderpunch');
-		callback(p, 'ModifyMove', m, p, t);
-		assert.equal(m.multihit, 3);
-		assert(m.multiaccuracy);
-		assert(m.flags.contact);
-		const powers = [];
-		for (let i = 1; i <= 3; i++) {
-			m.hit = i;
-			powers.push(battle.runEvent('BasePower', p, t, m, 100));
-		}
-		assert.deepEqual(powers, [20, 40, 60]);
-	});
-	for (const extra of [{ multihit: 2 }, { priority: 1 }, { recoil: [1, 3] }, { damage: 40 }, { isZ: true }, { isMax: true }, { selfdestruct: 'always' }, { flags: { charge: 1 } }])
-		it('Thunder Raid excludes ' + JSON.stringify(extra), () => {
-			const [p, t] = setup('Thunder Raid');
-			const m = Object.assign(Dex.getActiveMove('thunderpunch'), extra);
-			callback(p, 'ModifyMove', m, p, t);
-			assert(!m.thunderRaid);
-		});
-	it('Deep Chill retains Oblivious and lowers Speed only after the whole Physical move', () => {
+it('Deep Chill retains Oblivious and lowers Speed only after the whole Physical move', () => {
 		const [p, t] = setup('Deep Chill');
 		hit(t, p, 'taunt');
 		assert(!p.volatiles.taunt);
@@ -177,7 +48,7 @@ describe('Approved Rejuvenation event alternatives', () => {
 		hit(t, p, 'tackle', { damage: 20 });
 		assert.equal(t.boosts.spe, -1);
 	});
-	it('Deep Chill ignores Special, ally and Substitute-only damage', () => {
+it('Deep Chill ignores Special, ally and Substitute-only damage', () => {
 		const [p, t, ally] = setup('Deep Chill', 'Mew', true);
 		hit(t, p, 'watergun', { damage: 20 });
 		hit(ally, p, 'tackle', { damage: 20 });
@@ -187,152 +58,7 @@ describe('Approved Rejuvenation event alternatives', () => {
 		hit(t, p, 'tackle', { damage: 20 });
 		assert.equal(t.boosts.spe, 0);
 	});
-	it('Super UMD compares defenses, burn and screens without live state or RNG changes', () => {
-		const [p, t] = setup('Super U.M.D. Move');
-		p.storedStats.atk = 200;
-		p.storedStats.spa = 100;
-		t.storedStats.def = 400;
-		t.storedStats.spd = 50;
-		const m = Dex.getActiveMove('ironhead');
-		const before = JSON.stringify(battle.toJSON());
-		assert.equal(expectedCategory(battle, p, t, m), 'Special');
-		assert.equal(JSON.stringify(battle.toJSON()), before);
-		t.storedStats.def = 100;
-		t.storedStats.spd = 100;
-		p.storedStats.spa = 150;
-		assert.equal(expectedCategory(battle, p, t, m), 'Physical');
-		p.setStatus('brn');
-		assert.equal(expectedCategory(battle, p, t, m), 'Special');
-		p.cureStatus();
-		t.side.addSideCondition('reflect', t);
-		assert.equal(expectedCategory(battle, p, t, m), 'Special');
-	});
-	it('Super UMD changes the actual category and rolls its drop once across multihit', () => {
-		const [p, t] = setup('Super U.M.D. Move');
-		p.storedStats.atk = 50;
-		p.storedStats.spa = 400;
-		const m = Dex.getActiveMove('geargrind');
-		callback(p, 'PrepareHit', p, t, m);
-		assert.equal(m.category, 'Special');
-		assert.equal(m.umdDefense, 'spd');
-		let count = 0;
-		const random = battle.randomChance.bind(battle);
-		battle.randomChance = (a, b) => {
-			if (a === 1 && b === 5) {
-				count++;
-				return true;
-			}
-			return random(a, b);
-		};
-		hit(p, t, 'geargrind', { accuracy: true });
-		assert.equal(count, 1);
-		assert.equal(t.boosts.spd, -1);
-	});
-	it('Super UMD rejects unsupported variable-power and fixed damage moves', () => {
-		const [p, t] = setup('Super U.M.D. Move');
-		for (const id of ['heavyslam', 'nightshade'])
-			assert.equal(expectedCategory(battle, p, t, Dex.getActiveMove(id)), undefined);
-	});
-	it('Gale Strike has HP-sensitive crit stages and one Speed reward per turn', () => {
-		const [p, t] = setup('Gale Strike');
-		const m = Dex.getActiveMove('tackle');
-		assert.equal(battle.runEvent('ModifyCritRatio', p, t, m, 0), 1);
-		p.hp = 5000;
-		assert.equal(battle.runEvent('ModifyCritRatio', p, t, m, 0), 2);
-		p.hp = 2500;
-		assert.equal(battle.runEvent('ModifyCritRatio', p, t, m, 0), 3);
-		p.boosts.spe = -3;
-		hit(p, t, 'tackle', { willCrit: true });
-		assert.equal(p.boosts.spe, 1);
-		hit(p, t, 'tackle', { willCrit: true });
-		assert.equal(p.boosts.spe, 1);
-	});
-	it('Spectral Scream bypasses Substitute with Night Shade but Soundproof blocks it', () => {
-		const [p, t] = setup('Spectral Scream');
-		p.hp = 5000;
-		t.addVolatile('substitute', t);
-		hit(p, t, 'nightshade');
-		assert.equal(t.hp, 9900);
-		assert.equal(p.hp, 6250);
-		assert(t.volatiles.substitute);
-		t.setAbility('Soundproof');
-		hit(p, t, 'nightshade');
-		assert.equal(t.hp, 9900);
-		assert.equal(p.hp, 6250);
-	});
-	it('Barbed Web poisons/binds each foe once without refreshing or duplicating an existing bind', () => {
-		const [p, t] = setup('Barbed Web');
-		hit(p, t, 'bugbite', { damage: 20 });
-		assert.equal(t.status, 'psn');
-		assert.equal(t.volatiles.partiallytrapped.duration, 4);
-		t.volatiles.partiallytrapped.duration = 2;
-		hit(p, t, 'bugbite', { damage: 20 });
-		assert.equal(t.volatiles.partiallytrapped.duration, 2);
-		const m = Dex.getActiveMove('tackle');
-		callback(p, 'ModifyMove', m, p, t);
-		assert(m.tracksTarget);
-		t.removeVolatile('partiallytrapped');
-		hit(p, t, 'bugbite', { damage: 20 });
-		assert(!t.volatiles.partiallytrapped);
-	});
-	it('Cold Truth does not boost the first Torment-inflicting move and preserves negative offenses', () => {
-		const [p, t] = setup('Cold Truth');
-		t.boosts.atk = 3;
-		t.boosts.spa = -2;
-		const before = t.hp;
-		hit(p, t, 'icebeam');
-		const first = before - t.hp;
-		assert(t.volatiles.torment);
-		assert.equal(t.boosts.atk, 0);
-		assert.equal(t.boosts.spa, -2);
-		t.boosts.spd = 6;
-		const next = t.hp;
-		hit(p, t, 'icebeam');
-		assert(next - t.hp > first * 1.2);
-	});
-	it('Bunraku counts current faints and bypasses only Substitute', () => {
-		const [p, t] = setup('Bunraku Beatdown');
-		const m = Dex.getActiveMove('psychic');
-		callback(p, 'ModifyMove', m, p, t);
-		assert(m.flags.bypasssub);
-		assert(!m.infiltrates);
-		assert.equal(battle.runEvent('BasePower', p, t, m, 100), 125);
-		p.side.pokemon[1].fainted = true;
-		assert.equal(battle.runEvent('BasePower', p, t, m, 100), 150);
-		p.side.pokemon[1].fainted = false;
-		assert.equal(battle.runEvent('BasePower', p, t, m, 100), 125);
-	});
-	it('Matrix Shot retains Physical category, targets SpD and removes only opposing Reflect/Light Screen', () => {
-		const [p, t] = setup('Matrix Shot');
-		for (const side of battle.sides)
-			for (const id of ['reflect', 'lightscreen', 'auroraveil'])
-				side.addSideCondition(id, side.active[0]);
-		const m = Dex.getActiveMove('rockslide');
-		callback(p, 'ModifyMove', m, p, t);
-		assert.equal(m.category, 'Physical');
-		assert.equal(m.overrideDefensiveStat, 'spd');
-		assert(m.ignoreScreens);
-		hit(p, t, 'rockslide', { damage: 20 });
-		assert(!t.side.sideConditions.reflect);
-		assert(!t.side.sideConditions.lightscreen);
-		assert(t.side.sideConditions.auroraveil);
-		assert(p.side.sideConditions.reflect);
-	});
-	it('Pyrokinesis adds one burn secondary and powers up only pre-burned targets', () => {
-		const [p, t] = setup('Pyrokinesis');
-		p.hp = 5000;
-		const m = Dex.getActiveMove('psychic');
-		callback(p, 'ModifyMove', m, p, t);
-		callback(p, 'ModifyMove', m, p, t);
-		assert.equal(m.secondaries.filter(s => s.status === 'brn').length, 1);
-		t.setStatus('brn');
-		t.boosts.spd = 6;
-		hit(p, t, 'psychic');
-		assert.equal(p.hp, 6250);
-		hit(p, t, 'psychic');
-		assert.equal(p.hp, 6250);
-	});
-	it('Venams Kiss hits and poisons Steel, respects other typing and caps drain', () => {
+it('Venams Kiss hits and poisons Steel, respects other typing and caps drain', () => {
 		const [p, t] = setup("Venam's Kiss");
 		t.setType(['Steel', 'Grass']);
 		p.hp = 5000;
@@ -344,7 +70,7 @@ describe('Approved Rejuvenation event alternatives', () => {
 		assert(t.volatiles.healblock);
 		assert.equal(t.volatiles.healblock.duration, 2);
 	});
-	it('Venams Kiss speed aura does not stack and ends on suppression', () => {
+it('Venams Kiss speed aura does not stack and ends on suppression', () => {
 		const [p, t, ally] = setup("Venam's Kiss", 'Mew', true);
 		ally.setAbility("Venam's Kiss");
 		t.setStatus('psn');
@@ -355,26 +81,7 @@ describe('Approved Rejuvenation event alternatives', () => {
 		ally.addVolatile('gastroacid');
 		assert.equal(t.getStat('spe'), base);
 	});
-	it('Heavenly Wing gives only anti-boost priority and a once-turn successful purge reward', () => {
-		const [p, t] = setup('Heavenly Wing');
-		p.hp = 5000;
-		p.boosts.def = -2;
-		const m = Dex.getActiveMove('wingattack');
-		assert.equal(battle.runEvent('ModifyPriority', p, t, m, 0), 0);
-		t.boosts.atk = 2;
-		t.boosts.spd = -2;
-		assert.equal(battle.runEvent('ModifyPriority', p, t, m, 0), 1);
-		hit(p, t, 'wingattack', { damage: 20 });
-		assert.equal(t.boosts.atk, 0);
-		assert.equal(t.boosts.spd, -2);
-		assert.equal(p.hp, 6250);
-		assert.equal(p.boosts.def, 0);
-		t.boosts.atk = 2;
-		hit(p, t, 'wingattack', { damage: 20 });
-		assert.equal(t.boosts.atk, 2);
-		assert.equal(p.hp, 6250);
-	});
-	it('Dredger removes one prioritized layer per turn and leaves other hazards', () => {
+it('Dredger removes one prioritized layer per turn and leaves other hazards', () => {
 		const [p, t] = setup('Dredger');
 		for (const id of ['spikes', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'])
 			p.side.addSideCondition(id, t);
@@ -392,37 +99,21 @@ describe('Approved Rejuvenation event alternatives', () => {
 		hit(p, t, 'mudslap', { damage: 20 });
 		assert(!p.side.sideConditions.toxicspikes);
 	});
-	it('Grappling Claws links trapping and Heal Block to the holder without chip or refresh', () => {
-		const [p, t] = setup('Grappling Claws');
-		t.hp = 5000;
-		hit(p, t, 'tackle', { damage: 20, multihit: 3 });
-		assert(t.volatiles.grapplingclawslock);
-		assert.equal(t.volatiles.grapplingclawslock.duration, 2);
-		assert.equal(battle.heal(100, t, t), false);
-		battle.runEvent('TrapPokemon', t);
-		assert(t.trapped);
-		t.volatiles.grapplingclawslock.duration = 1;
-		hit(p, t, 'tackle', { damage: 20 });
-		assert.equal(t.volatiles.grapplingclawslock.duration, 1);
-		p.clearVolatile();
-		assert(!t.volatiles.grapplingclawslock);
-		assert.equal(battle.heal(100, t, t), 100);
+it('Grappling Claws lowers Speed after the whole move without trapping or blocking healing', () => {
+		const [p, t] = setup('Grappling Claws'); t.hp = 5000;
+		const move = hit(p, t, 'tackle', {damage: 20, multihit: 3});
+		assert.equal(t.boosts.spe, 0); battle.runEvent('AfterMove', p, t, move); assert.equal(t.boosts.spe, -1);
+		assert(!t.volatiles.grapplingclawslock); assert.equal(battle.heal(100, t, t), 100);
+		battle.runEvent('TrapPokemon', t); assert(!t.trapped);
 	});
-	it('Grappling Claws ignores Special contact and Substitute and allows Ghost trapping exemption', () => {
+it('Grappling Claws ignores Special contact and Substitute-only damage', () => {
 		const [p, t] = setup('Grappling Claws');
-		hit(p, t, 'tackle', { damage: 20, category: 'Special' });
-		assert(!t.volatiles.grapplingclawslock);
-		t.addVolatile('substitute', t);
-		hit(p, t, 'tackle', { damage: 20 });
-		assert(!t.volatiles.grapplingclawslock);
-		t.removeVolatile('substitute');
-		t.setType('Ghost');
-		hit(p, t, 'bite', { damage: 20 });
-		assert(t.volatiles.grapplingclawslock);
-		battle.runEvent('TrapPokemon', t);
-		assert(!t.trapped);
+		let move = hit(p, t, 'tackle', {damage: 20, category: 'Special'});
+		battle.runEvent('AfterMove', p, t, move); assert.equal(t.boosts.spe, 0);
+		t.addVolatile('substitute', t); move = hit(p, t, 'tackle', {damage: 20});
+		battle.runEvent('AfterMove', p, t, move); assert.equal(t.boosts.spe, 0);
 	});
-	it('Venams Kiss treats Steel as a weakness without erasing the other type', () => {
+it('Venams Kiss treats Steel as a weakness without erasing the other type', () => {
 		const [p, t] = setup("Venam's Kiss");
 		t.setType(['Steel']);
 		let hp = t.hp;
@@ -435,7 +126,7 @@ describe('Approved Rejuvenation event alternatives', () => {
 		assert(t.hp < hp);
 		assert(hp - t.hp >= steel * 1.95);
 	});
-	it('Venams Kiss drain observes Liquid Ooze and Heal Block, and does not bypass poison protection globally', () => {
+it('Venams Kiss drain observes Liquid Ooze and Heal Block, and does not bypass poison protection globally', () => {
 		const [p, t] = setup("Venam's Kiss");
 		p.hp = 5000;
 		t.setAbility('Liquid Ooze');
@@ -453,24 +144,32 @@ describe('Approved Rejuvenation event alternatives', () => {
 		t.setType('Steel');
 		assert.equal(t.trySetStatus('psn', p, Dex.getActiveMove('toxic')), false);
 	});
-	it('Super UMD respects Shield Dust and excludes duplicate identical defense drops', () => {
-		const [p, t] = setup('Super U.M.D. Move');
-		p.storedStats.atk = 400;
-		p.storedStats.spa = 50;
-		t.setAbility('Shield Dust');
-		battle.randomChance = (a, b) => a === 1 && b === 5;
-		hit(p, t, 'ironhead');
-		assert.equal(t.boosts.def, 0);
-		const m = Dex.getActiveMove('ironhead');
-		m.secondaries = [{ chance: 20, boosts: { def: -1 } }];
-		callback(p, 'PrepareHit', p, t, m);
-		assert(!m.umdDefense);
-	});
-	it('preserves moves and learnsets apart from approved passive-aware ability checks', () => {
+it('preserves moves and learnsets apart from approved passive-aware ability checks', () => {
 		const fs = require('fs'), crypto = require('crypto'), before = require('./rejuvenation-events-before.json');
 		for (const [file, key] of [['data/moves.ts', 'movesHash'], ['data/learnsets.ts', 'learnsetsHash']]) {
-			let contents = fs.readFileSync(file, 'utf8');
+			let contents = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+			const yangIntegration = key === 'movesHash' ? "\nimport {YangSignatureMoves} from './yang-signature-moves';\nObject.assign(Moves, YangSignatureMoves);\n" : "\nimport {YangSignatureLearnsets} from './yang-signature-moves';\nfor (const [move, species] of Object.entries(YangSignatureLearnsets)) {\n for (const id of species) {\n  Learnsets[id as ID] ||= {learnset: {}};\n  Learnsets[id as ID].learnset![move as ID] = ['9L1'];\n }\n}\n";
+			assert.equal(contents.split(yangIntegration).length, 2, key + ' has exactly one approved Yang integration');
+			contents = contents.replace(yangIntegration, '');
 			if (key === 'movesHash') {
+				const hazardList = "['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend']";
+				assert.equal(contents.split(hazardList).length - 1, 8);
+				contents = contents.replaceAll(hazardList, "['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge']");
+				assert.equal(contents.split("'gmaxsteelsurge', 'dragonrend', 'gmaxcannonade'").length, 2);
+				contents = contents.replace("'gmaxsteelsurge', 'dragonrend', 'gmaxcannonade'", "'gmaxsteelsurge', 'gmaxcannonade'");
+			}
+			// Remove only the approved additive signature-move integration, not existing move/learnset data.
+			const signatureIntegration = key === 'movesHash' ? "\nimport {RejuvenationSignatureMoves} from './rejuvenation-signature-moves';\nObject.assign(Moves, RejuvenationSignatureMoves);\n" : "\nimport {RejuvenationSignatureLearnsets} from './rejuvenation-signature-moves';\nfor (const [move, species] of Object.entries(RejuvenationSignatureLearnsets)) {\n for (const id of species) {\n  Learnsets[id as ID] ||= {learnset: {}};\n  Learnsets[id as ID].learnset![move as ID] = ['9L1'];\n }\n}\n";
+			assert.equal(contents.split(signatureIntegration).length, 2, key + ' has exactly one approved signature integration');
+			contents = contents.replace(signatureIntegration, '');
+			if (key === 'movesHash') {
+				// Reverse exactly the approved Frozen Aura move changes; retain the original hash.
+				const frozenSnowscape = "\tsnowscape: {\n  num: 883, accuracy: true, basePower: 0, category: \"Status\", name: \"Snowscape\", pp: 10,\n  priority: 0, flags: {}, target: \"all\", type: \"Ice\",\n  onTryMove() {\n   if (this.field.isTerrain(['volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain', 'starlightarenaterrain'])) {\n    const message = this.field.isTerrain('fairytaleterrain') ? 'The fairy tale rejected the changing season!' :\n     this.field.isTerrain('starlightarenaterrain') ? 'The starlight refused to be eclipsed!' : 'The intense heat prevented the snow from settling!';\n    this.add('-message', message);\n    return false;\n   }\n   if (this.field.isWeather('desolateland')) return null;\n  },\n  onHitField(target, source, move) {\n   return this.field.setAura('frozenaura', source.hasItem('amplifieldrock') ? 8 : 5, source, move);\n  },\n },\n";
+				assert(contents.includes(frozenSnowscape), 'Frozen Aura Snowscape changed outside the approved block');
+				contents = contents.replace(frozenSnowscape, "\tsnowscape: {\n\t\tnum: 883,\n\t\taccuracy: true,\n\t\tbasePower: 0,\n\t\tcategory: \"Status\",\n\t\tname: \"Snowscape\",\n\t\tpp: 10,\n\t\tpriority: 0,\n\t\tflags: {},\n\t\tonTryMove(attacker, defender, move) {\n\t\t\tconst blockedFields = [\n\t\t\t\t'volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain', 'starlightarenaterrain',\n\t\t\t];\n\t\t\tif (this.field.isTerrain(blockedFields)) {\n\t\t\t\tlet message = 'The intense heat prevented the snow from settling!';\n\t\t\t\tif (this.field.isTerrain('fairytaleterrain')) message = 'The fairy tale rejected the changing season!';\n\t\t\t\tif (this.field.isTerrain('starlightarenaterrain')) message = 'The starlight refused to be eclipsed!';\n\t\t\t\tthis.add('-message', message);\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst icyFieldTerrain = [\n\t\t\t\t'watersurfaceterrain', 'murkwatersurfaceterrain', 'icyterrain', 'caveterrain',\n\t\t\t\t'crystalcavernterrain', 'darkcrystalcavernterrain', 'mistyterrain',\n\t\t\t];\n\t\t\tif (this.field.isTerrain(icyFieldTerrain)) {\n\t\t\t\tmove.terrain = 'icyterrain';\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tif (this.field.isWeather('desolateland')) return null;\n\t\t},\n\t\tterrain: \"coldeclipseterrain\",\n\t\ttarget: \"all\",\n\t\ttype: \"Ice\",\n\t},\n");
+				contents = contents.replace("   if (this.field.isAura('frozenaura')) move = this.field.getAura().naturePowerMove;\n", '');
+				contents = contents.replace(/(skullbash: \{[\s\S]*?basePower: )80,/, '$1130,');
+				contents = contents.replace(/(skullbash: \{[\s\S]*?if \(move.totalDamage\) this.heal\()source.baseMaxhp \* 3 \/ 20/, '$1source.baseMaxhp / 10');
 				contents = contents.replace("pokemon.getPassives().some(id => id === 'levitate' || id === 'elevate') ||\n\t\t\t\t\tpokemon.hasAbility(['levitate', 'elevate'])", "pokemon.getPassives().includes('levitate') || pokemon.hasAbility('levitate')");
 				contents = contents.replaceAll("hasAbilityOrPassive('sapsipper')", "hasAbility('sapsipper')")
 					.replaceAll("hasAbilityOrPassive('insomnia')", "hasAbility('insomnia')")
@@ -483,29 +182,46 @@ describe('Approved Rejuvenation event alternatives', () => {
 			}
 			// Reverse only the two newly approved move changes before comparing the original fingerprint.
 			if (key === 'movesHash') contents = contents.replace("if (!source.hasAbility('cursedkeepsake'))", "if (!source.hasAbility(['cursedkeepsake', 'cursedmarionette']))").replace("\t\t\tmove.ignoreAbility = true;\n\t\t\tconst isAshGreninja", "\t\t\tconst isAshGreninja");
+			if (key === 'movesHash') contents = contents.replace("move: {...this.dex.getActiveMove(target.lastMove.id), sourceEffect: 'instruct'},", "moveid: target.lastMove.id,");
+			if (key === 'movesHash') contents = contents.replace("\nMoves.outrage.secondary = {chance: 30, boosts: {def: -1}};\nMoves.thrash.secondary = {chance: 30, boosts: {def: -1}};\nMoves.petaldance.secondary = {chance: 30, boosts: {spd: -1}};\nMoves.ragingfury.secondary = {chance: 30, status: 'brn'};\n", '');
+			// Reverse only the approved signature-Wish aura support, preserving the old fingerprint.
+			if (key === 'movesHash') {
+				contents = contents.replace(/(slotCondition: 'Wish',[\s\S]*?onStart\(pokemon, source), sourceEffect\)/, '$1)');
+				contents = contents.replace("'holyterrain', 'starlightarenaterrain']) ||\n\t\t\t\t\t(['nomoswish', 'nostraswish'].includes(sourceEffect?.id) &&\n\t\t\t\t\t(this.field.isAura('mistyterrain') || this.field.isAura('rainbowterrain'))))", "'holyterrain', 'starlightarenaterrain']))");
+			}
 			assert.equal(crypto.createHash('sha256').update(contents).digest('hex'), before[key], key);
 		}
 	});
-	it('calculator Super UMD Steel category matches the equivalent Special Steel damage under burn', () => {
-		const { calculateScenario } = require('../../../dist/sim/custom-calculator');
-		const input = { format: 'gen9nofieldsinglesgame', move: 'ironhead', samples: 8, seed: 22, actors: [{ species: 'Metagross', ability: 'Super U.M.D. Move', status: 'brn', boosts: { spa: 4 } }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }] };
-		const converted = calculateScenario(input).results[1];
-		input.move = 'flashcannon';
-		input.actors[0].ability = 'No Ability';
-		const special = calculateScenario(input).results[1];
-		assert.equal(converted.min, special.min);
-		assert.equal(converted.max, special.max);
-	});
-	it('Super UMD accounts for Ice Face without consuming or mutating the real shield', () => {
-		const [p, t] = setup('Super U.M.D. Move');
-		p.storedStats.atk = 500;
-		p.storedStats.spa = 100;
-		t.formeChange('Eiscue');
-		t.setAbility('Ice Face', null, null, true);
-		assert.equal(t.ability, 'iceface');
-		const before = JSON.stringify(battle.toJSON());
-		assert.equal(expectedCategory(battle, p, t, Dex.getActiveMove('ironhead')), 'Special');
-		assert.equal(JSON.stringify(battle.toJSON()), before);
-		assert(!t.abilityState.busted);
-	});
+ it('keeps the sixteen approved move recipient lists exact', () => {
+  const actual = require('../../../dist/data/rejuvenation-signature-moves').RejuvenationSignatureLearnsets;
+  assert.deepEqual(actual, require('./rejuv-move-learnsets-approved.json'));
+ });
+ const migrated = ['multipulse', 'aquabatics', 'feverpitch', 'thunderraid', 'desertsmark', 'superumdmove', 'galestrike', 'spectralscream', 'barbedweb', 'coldtruth', 'bunrakubeatdown', 'matrixshot', 'pyrokinesis', 'heavenlywing', 'uproot'];
+ for (const id of migrated) it(id + ' exists as a move, not an ability', () => {
+  assert(!Dex.abilities.get(id).exists, id); assert(Dex.moves.get(id).exists, id);
+ });
+ it('removes only the 21 approved event slots and preserves other choices and passives', () => {
+  const before = require('./rejuv-move-migration-before.json');
+  let removed = 0;
+  for (const old of before) {
+   const abilities = {...old.abilities};
+   for (const [slot, name] of Object.entries(abilities)) if (migrated.concat('venamskiss').includes(Dex.toID(name))) {
+    assert(['S', 'E'].includes(slot), old.id + ':' + slot); delete abilities[slot]; removed++;
+   }
+   const current = Dex.species.get(old.id);
+   assert.deepEqual(current.abilities, abilities, old.id);
+   // Later explicit Kingambit approval replaces Entrenched with Supreme Overlord.
+   if (old.id === 'kingambit') assert.deepEqual(old.passives, ['entrenched']);
+   const expectedPassives = old.id === 'kingambit' ? ['supremeoverlord'] : old.passives;
+   assert.deepEqual(current.passives, expectedPassives, old.id);
+  }
+  assert.equal(removed, 21);
+  assert.equal(Dex.species.get('chandelure').abilities.S, 'Soul Fire');
+ });
+ it('retains Mega Seviper Venams Kiss and unrelated local ability definitions', () => {
+  assert.deepEqual(Dex.species.get('sevipermega').passives, ['venamskiss']);
+  for (const id of ['venamskiss', 'deepchill', 'vendetta', 'silksights', 'steadyaim']) assert(Dex.abilities.get(id).exists, id);
+  assert(Dex.moves.get('venamskiss').exists);
+ });
+
 });

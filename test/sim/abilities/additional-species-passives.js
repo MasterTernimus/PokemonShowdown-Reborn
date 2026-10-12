@@ -49,13 +49,19 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) expected[id] = [...(expected[id] || []), passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 820);
+		assert.equal(Object.keys(SpeciesPassives).length, 839);
 		for (const old of before.species) {
 			const s = Dex.species.get(old.id), abilities = { ...old.abilities };
 			for (const [id, slot, name] of before.replacement) if (id === old.id) abilities[slot] = name;
 			assert.deepEqual(s.abilities, abilities, old.id);
 			for (const k of ['baseStats', 'types', 'weightkg']) assert.deepEqual(s[k], old[k], old.id + '/' + k);
-			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, old.learnset);
+			const expectedLearnset = {...old.learnset};
+			for (const [move, recipients] of Object.entries({...require('./rejuv-move-learnsets-approved.json'), ...require('./yang-move-learnsets-approved.json')})) {
+				if (!recipients.includes(old.id)) continue;
+				assert(!Object.hasOwn(old.learnset, move), old.id + '/' + move + ' is an additive approved grant');
+				expectedLearnset[move] = ['9L1'];
+			}
+			assert.deepEqual(Dex.species.getLearnsetData(old.id).learnset, expectedLearnset, old.id + '/learnset');
 		}
 		for (const id of ['mukpulse', 'garbodorgmax', 'clobbopus', 'remoraid', 'lileep']) assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, before.previousPassives[id] || []));
 	});
@@ -140,7 +146,7 @@ describe('Additional exact Sticky Hold, Soundproof and Suction Cups passives', (
 		t.formeChange('Mew', null, true);
 		t.setAbility('No Ability');
 		assert.deepEqual(t.getPassives(), ['synchronize']);
-		p.illusion = battle.p1.pokemon[2];
+		p.m.perfectIllusion = true; p.illusion = battle.p1.pokemon[2];
 		const start = battle.log.length;
 		use(passive === 'stickyhold' ? 'knockoff' : passive === 'soundproof' ? 'hypervoice' : 'roar', t, p, { basePower: passive === 'suctioncups' ? 0 : 1 });
 		assert(!battle.log.slice(start).join('\n').includes('passive:'));

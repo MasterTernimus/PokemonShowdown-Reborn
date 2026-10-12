@@ -1,4 +1,4 @@
-import {AbilityComponentExclusions, SharedPassiveComponents, SharedPassiveComponentAdditions} from '../data/passive-ability-cleanup';
+import {AbilityComponentExclusions, SharedPassiveComponents, SharedPassiveComponentAdditions, SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions} from '../data/passive-ability-cleanup';
 import { getAbilityDisplayComponents } from '../data/ability-display';
 /** Isolated, bounded single-action scenarios using the real battle engine. */
 import { Battle } from './battle';
@@ -78,6 +78,7 @@ function actor(input: unknown, move: string): CalcActor {
 	if (!ability.exists) throw new Error('Unknown ability.');
 	const itemName = name(data.item);
 	const item = Dex.items.get(itemName);
+	if (item.id === 'mismagiusite') throw new Error('Mismagiusite is deferred. Mega Mismagius currently requires Dusk Stone.');
 	if (itemName && !item.exists) throw new Error('Unknown item.');
 	const nature = Dex.natures.get(name(data.nature) || 'Serious');
 	if (!nature.exists) throw new Error('Unknown nature.');
@@ -134,6 +135,8 @@ export function calculatorMetadata() {
 		fields: [{id: '', name: 'No field'}, ...calculatorFieldIDs().map(id => ({id, name: Terrains[id]?.name || Dex.conditions.get(id).name || id}))],
 		species: Dex.species.all().filter(s => s.exists && (!s.isCosmeticForme || s.passives.length)).map(s => ({name: s.name, abilities: s.abilities, passives: s.passives})),
 		abilityComponentExclusions: AbilityComponentExclusions, sharedPassiveComponents: SharedPassiveComponents, sharedPassiveComponentAdditions: SharedPassiveComponentAdditions,
+		signaturePassiveComponents: SignaturePassiveComponents,
+		signaturePassiveRemovedComponents: SignaturePassiveRemovedComponents, signaturePassiveDescriptions: SignaturePassiveDescriptions,
 		abilityComponents: Object.fromEntries(Object.keys(AbilityComponents).map(id =>
 			[id, getAbilityDisplayComponents(id).map(p => Dex.abilities.get(p).name)])),
 		auras: Object.values(Auras).map(a => ({ id: a.id, name: a.name })),

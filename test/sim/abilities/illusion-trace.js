@@ -9,7 +9,7 @@ describe('Illusion copying Trace', () => {
 
 	it('copies Trace, traces a foe, and restores Illusion when the disguise breaks', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame', preview: false }, [[
-			{ species: 'Zoroark', ability: 'Illusion', moves: ['splash'] },
+			{ species: 'Zoroark', ability: 'Perfect Illusion', moves: ['splash'] },
 			{ species: 'Ralts', ability: 'Trace', moves: ['splash'] },
 		], [
 			{ species: 'Mew', ability: 'Intimidate', moves: ['tackle'] },
@@ -22,7 +22,7 @@ describe('Illusion copying Trace', () => {
 
 		battle.makeChoices('move splash', 'move tackle');
 		assert.equal(zoroark.illusion, null);
-		assert.equal(zoroark.ability, 'illusion');
+		assert.equal(zoroark.ability, 'perfectillusion');
 		assert(!zoroark.volatiles['illusioncopy']);
 	});
 });

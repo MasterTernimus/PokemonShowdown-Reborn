@@ -107,14 +107,14 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		assert(p.hasAbility('poisontouch'));
 		assert(!p.hasAbility('corrosion'));
 	});
-	it('Desert Spirit retains one sandstorm, Tinted Lens and extra Ground STAB', () => {
+	it('Desert Spirit retains one sandstorm, Overcoat and extra Ground STAB', () => {
 		const [p, q] = setup('Flygon-Mega');
 		assert.equal(battle.field.weather, 'sandstorm');
 		const move = Dex.getActiveMove('earthquake');
 		battle.runEvent('ModifyMove', p, q, move, move);
 		assert(move.forceSTAB);
 		q.getMoveHitData(move).typeMod = -1;
-		assert.equal(battle.runEvent('ModifyDamage', p, q, move, 100), 200);
+		assert.equal(battle.runEvent('ModifyDamage', p, q, move, 100), 100);
 	});
 	it('Tremor retains higher-stat sound attacks without category changes or Soundproof bypass', () => {
 		const [p, q] = setup('Flygon-Mega-Z');
@@ -328,10 +328,11 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		assert.equal(attempts, 1);
 		assert.equal(p.hp, 120);
 	});
-	it('Venams Kiss follows Illusion disguise passives and restores actual passives on reveal', () => {
+	it('Venams Kiss follows Perfect Illusion disguise passives and restores actual passives on reveal', () => {
 		const [p, q] = setup('Mew');
 		q.formeChange('Seviper-Mega', null, true);
 		p.illusion = q;
+		p.m.perfectIllusion = true;
 		assert.deepEqual(p.getPassives(), ['venamskiss']);
 		assert.deepEqual(p.getSwitchRequestData().passives, ['venamskiss']);
 		q.status = 'psn';

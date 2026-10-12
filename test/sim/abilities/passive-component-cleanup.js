@@ -20,7 +20,7 @@ describe('Passive and selected component separation', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('preserves every existing species passive and selected slot without widening distribution', () => {
 		const { SpeciesPassives } = require('../../../dist/data/species-passives');
-		assert.equal(Object.keys(SpeciesPassives).length, before.length + 656);
+		assert.equal(Object.keys(SpeciesPassives).length, before.length + 675);
 		for (const row of before) {
 			const s = Dex.species.get(row.id);
 			const { StarterPassives } = require('../../../dist/data/starter-passives');
@@ -30,8 +30,14 @@ describe('Passive and selected component separation', () => {
 	});
 	for (const row of before) for (const slot of row.slots.filter(s => s.overlap.length)) {
 		it(row.id + ' slot ' + slot.slot + ' separates components from actual form passives', () => {
-			const [p] = setup(row.id, selected(row.id, slot.slot, slot.name));
+			const [p] = setup(row.id, row.id === 'gliscor' ? 'Venom Pincer' : selected(row.id, slot.slot, slot.name));
 			for (const component of slot.overlap) {
+				if (row.id === 'gliscor') { assert(p.getPassives().includes('poisonheal')); assert(p.hasAbility('hypercutter')); continue; }
+				if (['kingler', 'fearow', 'pinsir'].includes(row.id)) {
+					assert.deepEqual(p.getPassives(), [{kingler:'titanpincer',fearow:'lancepoint',pinsir:'lockinggrip'}[row.id]]);
+					assert(!p.hasAbilityOrPassive(component));
+					continue;
+				}
 				assert(p.getPassives().includes(component));
 				assert.equal(p.hasAbility(component), false, row.id + '/' + slot.id + '/' + component);
 			}
@@ -66,12 +72,12 @@ describe('Passive and selected component separation', () => {
 	}
 	for (const [species, ability, component] of [
 		['Gligar', 'Venom Heal', 'hypercutter'], ['Gligar-Alt', 'Venom Heal', 'hypercutter'],
-		['Gliscor-Alt', 'Venom Heal', 'hypercutter'], ['Tentacruel-Reborn', 'Venom Veil', 'liquidooze'],
+		['Gliscor-Alt', 'Venom Pincer', 'hypercutter'], ['Tentacruel-Reborn', 'Venom Veil', 'liquidooze'],
 		['Magneton', 'Elevate', 'levitate'], ['Magnezone', 'Elevate', 'levitate'], ['Rabsca', 'Elevate', 'levitate'],
 		['Bronzong', 'Elevate', 'levitate'], ['Bronzong-Rejuv', 'Elevate', 'levitate'],
 	]) it(species + ' keeps the shared ' + ability + ' component', () => {
 		const [p, t] = setup(species, ability);
-		if (['Gliscor-Alt', 'Tentacruel-Reborn'].includes(species)) {
+		if (['Tentacruel-Reborn'].includes(species)) {
 			assert(p.getPassives().includes(component)); assert(!p.hasAbility(component));
 		} else { assert(!p.getPassives().includes(component)); assert(p.hasAbility(component)); }
 		if (component === 'hypercutter') { battle.boost({ atk: -1 }, p, t); assert.equal(p.boosts.atk, 0); }
@@ -102,11 +108,11 @@ describe('Passive and selected component separation', () => {
 		}
 	});
 	it('shared-component exclusions follow Transform, form changes and copied disguise passives under Illusion', () => {
-		const [p, t] = setup('Gliscor', 'Venom Heal');
-		assert(!p.hasAbility('hypercutter')); p.illusion = battle.p1.pokemon[1]; assert(p.hasAbility('hypercutter'));
-		p.illusion = null; p.formeChange('Gligar'); assert(p.hasAbility('hypercutter'));
-		t.formeChange('Gliscor'); t.setAbility('Venom Heal'); p.transformInto(t);
-		assert(p.getPassives().includes('hypercutter')); assert(!p.hasAbility('hypercutter'));
+		const [p, t] = setup('Gliscor', 'Venom Pincer');
+		assert(p.hasAbility('hypercutter')); assert(p.getPassives().includes('poisonheal')); p.m.perfectIllusion = true; p.illusion = battle.p1.pokemon[1]; assert(!p.getPassives().includes('poisonheal'));
+		p.illusion = null; delete p.m.perfectIllusion; p.formeChange('Gligar'); assert(p.hasAbility('hypercutter'));
+		t.formeChange('Gliscor'); t.setAbility('Venom Pincer'); p.transformInto(t);
+		assert(p.getPassives().includes('poisonheal')); assert(p.hasAbility('hypercutter')); 
 	});
 	it('retains unrelated KO, hail and field effects after separating Levitate', () => {
 		for (const [species, ability] of [['Chimecho', 'Temple Chime'], ['Eelektross', 'Elevate']]) {

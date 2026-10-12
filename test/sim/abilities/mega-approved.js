@@ -28,7 +28,9 @@ describe('Approved Mega component/passive splits', () => {
 		for (const [id, p] of Object.entries(approved)) expected[id] = [p];
 		for (const [id, normal] of Object.entries(variants)) if (expected[normal]?.length) expected[id] = expected[normal];
 		for (const [id, p] of Object.entries(require('./gmax-approved.json').passives)) expected[id] = [p];
-		for (const [id, p] of Object.entries(expected)) assert.deepEqual(Dex.species.get(id).passives, p, id);
+		expected.lapras = ['liquidvoice']; expected.yanmega = ['levitate'];
+		Object.assign(expected, require('./shortlist-approved.json').passives);
+		for (const [id, p] of Object.entries(expected)) assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, p), id);
 		for (const id of ['beedrillmega', 'gyaradosmega', 'houndoommega', 'aggronmega', 'alakazammega', 'excadrillmega', 'sharpedomegay'])
 			assert.deepEqual(Dex.species.get(id).passives, before.find(s => s.id === id).passives, id);
 	});
@@ -154,8 +156,11 @@ describe('Approved Mega component/passive splits', () => {
 		assert.deepEqual(calculateScenario(input).results, expected);
 	});
 	it('keeps Friend Guard once for Mega Kangaskhan and removes only Iron Will Second Wind', () => {
-		const [p, q] = setup('Kangaskhan-Mega', 'Parental Bond', true), ally = battle.p1.active[1];
+		const [p, q] = setup('Kangaskhan-Mega', 'Family Guardian', true), ally = battle.p1.active[1];
 		assert.equal(battle.runEvent('ModifyDamage', q, ally, Dex.getActiveMove('tackle'), 100), 75);
+		assert.deepEqual(p.getPassives(), ['parentalbond']);
+		p.setAbility('No Ability');
+		assert.equal(battle.runEvent('ModifyDamage', q, ally, Dex.getActiveMove('tackle'), 100), 100);
 		assert.equal(Dex.abilities.get('ironwill').onDamage, undefined);
 		assert(Dex.abilities.get('ironwill').onResidual);
 		assert.equal(Dex.species.get('kangaskhan').abilities[1], 'Healer');

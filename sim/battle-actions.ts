@@ -213,6 +213,21 @@ export class BattleActions {
 		pokemon.m.cursedArmamentEntryTurn = this.battle.turn;
 		// These entry budgets belong to the Pokemon, not its replaceable AbilityState.
 		delete pokemon.m.seaRescuerUsed;
+		delete pokemon.m.dreamRescueUsed;
+		delete pokemon.m.slipstreamUsed;
+		delete pokemon.m.updraftUsed;
+		delete pokemon.m.venomBastionSealUsed;
+		delete pokemon.m.venomBastionSealPending;
+		delete pokemon.m.familyGuardianUsed;
+		delete pokemon.m.familyGuardianPending;
+		delete pokemon.m.matriarchVigilUsed;
+		delete pokemon.m.matriarchVigilPending;
+		delete pokemon.m.climateReserveUsed;
+		delete pokemon.m.climateReservePending;
+		pokemon.m.enteredBattleTurn = this.battle.turn;
+		delete pokemon.m.mimecraftUsed;
+		delete pokemon.m.pearlCurrentUsed;
+		delete pokemon.m.apexFlytrapUsed;
 		delete pokemon.m.dreepyVanguardUsed;
 		pokemon.m.approvedSignatures = {};
 		delete pokemon.m.steelPlumageUsed;
@@ -419,7 +434,7 @@ export class BattleActions {
 			(oldActiveMove as ActiveMove & { pendingZTerrain?: [string, number] }).pendingZTerrain;
 		const preserveNativeSubzeroTerrain = pendingZTerrain?.[0] === 'snowymountainterrain' &&
 			['watersurfaceterrain', 'murkwatersurfaceterrain'].includes(terrainBeforeMove);
-		if (moveDidSomething && pendingZTerrain && !preserveNativeSubzeroTerrain) {
+		if (moveDidSomething && pendingZTerrain && !preserveNativeSubzeroTerrain && !(move as any).frozenAuraPromoted) {
 			const [terrain, duration] = pendingZTerrain;
 			const terrainSet = move.id === 'oceanicoperetta' && this.battle.field.terrain === 'underwaterterrain' ?
 				(this.battle.field.changeTerrain(terrain, pokemon, move), this.battle.field.terrain === terrain) :
@@ -445,7 +460,7 @@ export class BattleActions {
 			const dancers = [];
 			for (const currentPoke of this.battle.getAllActive()) {
 				if (pokemon === currentPoke) continue;
-				if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
+				if (currentPoke.hasAbilityOrPassive('dancer') && !currentPoke.isSemiInvulnerable()) {
 					dancers.push(currentPoke);
 				}
 			}
@@ -502,6 +517,7 @@ export class BattleActions {
 		} finally {
 			this.attackResolutionDepth--;
 		}
+		this.battle.field.frozenAuraAfterAttack(pokemon, this.battle.activeMove!);
 		this.battle.runEvent('AfterAttackResolved', pokemon, this.battle.activeTarget, this.battle.activeMove);
 		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
 		return moveResult;
@@ -2226,8 +2242,6 @@ export class BattleActions {
 		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
 		if (defender === target && ['def', 'spd'].includes(defenseStat) &&
 			predatorUltraMatch(this.battle, source, target)) ignorePositiveDefensive = true;
-		if ((move as any).coldTruthTargets?.includes(target) && source.hasAbility('coldtruth')) ignorePositiveDefensive = true;
-		if (defenseStat === 'spd' && (move as any).pyrokinesisTargets?.includes(target) && source.hasAbility('pyrokinesis')) ignorePositiveDefensive = true;
 		if (defenseStat === 'spd' && move.category === 'Special' && this.battle.movehasType(move, 'Electric') &&
 			source.hasAbility('crosswire') && (move as any).crosswireCharged) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && this.battle.movehasType(move, 'Ground') && source.hasAbility('surefoot')) ignorePositiveDefensive = true;

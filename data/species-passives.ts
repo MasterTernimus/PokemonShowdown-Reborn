@@ -922,7 +922,7 @@ MegaMigrationPassives.eeveestarter = ['adaptability'];
 Object.assign(MegaMigrationPassives, {
  arbokmegax: ['regenerator'], arbokmegay: ['shedskin'],
  raichumegax: ['electricsurge'], raichumegay: ['noguard'],
- parasectmega: ['dryskin'], victreebelmega: ['innardsout'],
+ parasectmega: ['dryskin'], victreebelmega: ['digestivesap'],
  noctowlmega: ['insomnia'], ledianmega: ['ironfist'], ariadosmega: ['selfsufficient'],
  sunfloramega: ['solarpower'], skarmorymega: ['stalwart'],
  gardevoirmegaz: ['armorize'], gardevoirvoidmega: ['duskilate'], breloommega: ['technician'],
@@ -947,6 +947,7 @@ for (const [id, passives] of Object.entries(MegaMigrationPassives)) {
  SpeciesPassives[id] = Object.freeze(passives);
  for (const passive of passives) ThematicPassiveIds.add(passive);
 }
+EquivalentPassiveForms.togekissalde = 'togekiss';
 for (const [id, normal] of Object.entries(EquivalentPassiveForms)) {
  if (SpeciesPassives[normal]?.length) SpeciesPassives[id] = SpeciesPassives[normal];
 }
@@ -955,6 +956,62 @@ import {GmaxPassiveSelections} from './gmax-passive-data';
 for (const [id, passive] of Object.entries(GmaxPassiveSelections)) {
 	SpeciesPassives[id] = Object.freeze([passive]);
 	ThematicPassiveIds.add(passive);
+}
+// Explicit base-only replacements; distinct Lapras forms retain their prior passives.
+SpeciesPassives.lapras = Object.freeze(['liquidvoice']);
+SpeciesPassives.yanmega = Object.freeze(['levitate']);
+ThematicPassiveIds.add('liquidvoice');
+// Exact recipients approved in the ordinary-species shortlist; no family propagation.
+for (const [id, passive] of Object.entries({
+	drifblim: 'aftermath', beheeyem: 'analytic', farigiraf: 'earlybird',
+	polteageist: 'liquidooze', polteageistantique: 'liquidooze', dedenne: 'plus',
+})) {
+	SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
+import {SignaturePassiveSelections} from './signature-passive-data';
+for (const [id, passive] of Object.entries(SignaturePassiveSelections)) {
+	SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
+// Exact Lycanroc forms; preserve all other forms and pre-evolutions.
+for (const [id, passive] of Object.entries({lycanroc: 'infiltrator', lycanrocmidnight: 'defiant', lycanrocdusk: 'toughclaws'})) {
+	SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
+for (const [id, passive] of Object.entries({
+	conkeldurr: 'stamina', gyarados: 'intimidate', milotic: 'waterabsorb', raichualola: 'static',
+	wishiwashisevii: 'infiltrator', wishiwashiseviischooling: 'infiltrator',
+	gliscor: 'poisonheal', gliscoralt: 'poisonheal',
+})) {
+	SpeciesPassives[id] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
+for (const id of ['castform', 'castformsunny', 'castformrainy', 'castformsnowy', 'castformsandy', 'castformwindy']) SpeciesPassives[id] = Object.freeze(['forecast']);
+ThematicPassiveIds.add('forecast');
+SpeciesPassives.zoroark = Object.freeze(['illusion']);
+SpeciesPassives.zoroarkhisui = Object.freeze(['illusion']);
+ThematicPassiveIds.add('illusion');
+SpeciesPassives.arcaninehisui = Object.freeze(['sturdy']);
+SpeciesPassives.dragonite = Object.freeze(['overcoat']);
+SpeciesPassives.dragonitemega = Object.freeze(['innerfocus']);
+SpeciesPassives.duraludon = Object.freeze(['keeneye']);
+SpeciesPassives.murkrow = Object.freeze(['infiltrator']);
+SpeciesPassives.porygon2 = Object.freeze(['analytic']);
+SpeciesPassives.dusclops = Object.freeze(['unnerve']);
+SpeciesPassives.gligar = Object.freeze(['poisontouch']);
+SpeciesPassives.corsolagalar = Object.freeze(['infiltrator']);
+SpeciesPassives.mightyena = Object.freeze(['infiltrator']);
+SpeciesPassives.mightyenadeso = Object.freeze(['infiltrator']);
+SpeciesPassives.toxicroakdeso = Object.freeze(['limber']);
+SpeciesPassives.cinccinodeso = Object.freeze(['overcoat']);
+SpeciesPassives.ursaring = Object.freeze(['quickfeet']);
+ThematicPassiveIds.add('quickfeet');
+import {FinalPassiveMigrations} from './final-passive-migrations';
+import {FamilyReplacementPassives} from './family-replacements';
+for (const [id, passives] of Object.entries({...FinalPassiveMigrations, ...FamilyReplacementPassives})) {
+ SpeciesPassives[id] = Object.freeze(passives);
+ for (const passive of passives) ThematicPassiveIds.add(passive);
 }
 Object.freeze(SpeciesPassives);
 

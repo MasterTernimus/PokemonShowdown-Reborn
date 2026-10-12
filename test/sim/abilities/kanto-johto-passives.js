@@ -35,7 +35,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		for (const [p, ids] of Object.entries(require('./latest-passives-approved.json').groups)) for (const id of ids) expected[id] = [p];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(SpeciesPassives, expected);
-		assert.equal(Object.keys(SpeciesPassives).length, 820);
+		assert.equal(Object.keys(SpeciesPassives).length, 839);
 	});
 	for (const [passive, ids] of Object.entries(before.groups))
 		for (const id of ids) {
@@ -63,7 +63,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		assert.equal(rolls, 1);
 	});
 	it('Static survives suppression', () => {
-		const [p, t] = setup('Raichu');
+		const [p, t] = setup('Ampharos');
 		p.addVolatile('gastroacid');
 		battle.randomChance = () => true;
 		use('tackle', t, p);
@@ -144,7 +144,7 @@ describe('Approved Kanto and Johto passive migration', () => {
 		assert.deepEqual(p.getPassives(), ['moldbreaker']);
 	});
 	it('Illusion copies a passive-free disguise without publishing actual identity', () => {
-		const [p] = setup('Raichu', 'Illusion');
+		const [p] = setup('Raichu', 'Perfect Illusion');
 		assert.deepEqual(p.getPassives(), []);
 		assert(!battle.log.some(line => line.startsWith('|switch|p1') && /Raichu|Static|passive/.test(line)));
 	});

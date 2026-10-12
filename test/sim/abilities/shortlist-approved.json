@@ -1,0 +1,345 @@
+{
+  "passives": {
+    "drifblim": [
+      "aftermath"
+    ],
+    "beheeyem": [
+      "analytic"
+    ],
+    "farigiraf": [
+      "earlybird"
+    ],
+    "polteageist": [
+      "liquidooze"
+    ],
+    "polteageistantique": [
+      "liquidooze"
+    ],
+    "dedenne": [
+      "plus"
+    ],
+    "fearow": [
+      "lancepoint"
+    ],
+    "garganacl": [
+      "saltbastion"
+    ],
+    "mrmime": [
+      "mimecraft"
+    ],
+    "kingler": [
+      "titanpincer"
+    ],
+    "slowkinggalar": [
+      "eldritchremedy"
+    ],
+    "raichu": [
+      "chargedtail"
+    ],
+    "cloyster": [
+      "pearlcurrent"
+    ],
+    "vikavolt": [
+      "rechargerelay"
+    ],
+    "jellicent": [
+      "undertow"
+    ],
+    "jellicentazzy": [
+      "undertow"
+    ],
+    "pinsir": [
+      "lockinggrip"
+    ],
+    "hariyama": [
+      "palmmastery"
+    ],
+    "drednaw": [
+      "lockjaw"
+    ],
+    "mudsdale": [
+      "unyielding"
+    ],
+    "seismitoad": [
+      "mirechorus"
+    ],
+    "lycanroc": [
+      "infiltrator"
+    ],
+    "lycanrocmidnight": [
+      "defiant"
+    ],
+    "lycanrocdusk": [
+      "toughclaws"
+    ],
+    "milotic": [
+      "waterabsorb"
+    ],
+    "raichualola": [
+      "static"
+    ],
+    "wishiwashisevii": [
+      "infiltrator"
+    ],
+    "wishiwashiseviischooling": [
+      "infiltrator"
+    ],
+    "gliscor": [
+      "poisonheal"
+    ],
+    "gliscoralt": [
+      "poisonheal"
+    ],
+    "gyarados": [
+      "intimidate"
+    ],
+    "conkeldurr": [
+      "stamina"
+    ],
+    "castform": [
+      "forecast"
+    ],
+    "castformsunny": [
+      "forecast"
+    ],
+    "castformrainy": [
+      "forecast"
+    ],
+    "castformsnowy": [
+      "forecast"
+    ],
+    "castformsandy": [
+      "forecast"
+    ],
+    "castformwindy": [
+      "forecast"
+    ],
+    "zoroark": [
+      "illusion"
+    ],
+    "zoroarkhisui": [
+      "illusion"
+    ],
+    "arcaninehisui": [
+      "sturdy"
+    ],
+    "dragonite": [
+      "overcoat"
+    ],
+    "dragonitemega": [
+      "innerfocus"
+    ],
+    "duraludon": [
+      "keeneye"
+    ],
+    "murkrow": [
+      "infiltrator"
+    ],
+    "porygon2": [
+      "download"
+    ],
+    "dusclops": [
+      "unnerve"
+    ],
+    "gligar": [
+      "poisontouch"
+    ],
+    "corsolagalar": [
+      "infiltrator"
+    ],
+    "mightyena": [
+      "infiltrator"
+    ],
+    "mightyenadeso": [
+      "infiltrator"
+    ],
+    "toxicroakdeso": [
+      "limber"
+    ],
+    "cinccinodeso": [
+      "overcoat"
+    ],
+    "ursaring": [
+      "quickfeet"
+    ],
+    "ursaluna": [
+      "thickfat"
+    ],
+    "ursalunabloodmoon": [
+      "mindseye"
+    ],
+    "archaludon": [
+      "lightningrod"
+    ],
+    "tsareena": [
+      "queenlymajesty"
+    ],
+    "tsareenaalt": [
+      "queenlymajesty"
+    ],
+    "porygonz": [
+      "download"
+    ],
+    "medicham": [
+      "purepower"
+    ],
+    "slowbrogalar": [
+      "quickdraw"
+    ],
+    "sinistcha": [
+      "hospitality"
+    ],
+    "sinistchamasterpiece": [
+      "hospitality"
+    ],
+    "kangaskhanmega": [
+      "parentalbond"
+    ]
+  },
+  "slots": {
+    "dedenne": {
+      "H": "Symbiosis"
+    },
+    "swoobat": {
+      "1": "Hospitality"
+    },
+    "avalugg": {
+      "0": "Scrappy"
+    },
+    "cursola": {
+      "0": "Cursed Body"
+    },
+    "veluza": {
+      "E": "Unburden"
+    },
+    "fearow": {
+      "0": "Keen Eye"
+    },
+    "garganacl": {
+      "1": "Inner Focus"
+    },
+    "mrmime": {
+      "1": "Soundproof"
+    },
+    "kingler": {
+      "1": "Hyper Cutter"
+    },
+    "slowkinggalar": {
+      "1": "Telepathy"
+    },
+    "raichu": {
+      "0": "Static"
+    },
+    "cloyster": {
+      "H": "Shell Armor"
+    },
+    "vikavolt": {
+      "H": "Battery"
+    },
+    "jellicent": {
+      "0": "Water Absorb"
+    },
+    "jellicentazzy": {
+      "0": "Water Absorb"
+    },
+    "pinsir": {
+      "0": "Hyper Cutter"
+    },
+    "hariyama": {
+      "0": "Thick Fat"
+    },
+    "drednaw": {
+      "0": "Strong Jaw"
+    },
+    "mudsdale": {
+      "0": "Stamina"
+    },
+    "seismitoad": {
+      "1": "Poison Touch"
+    },
+    "lycanrocdusk": {
+      "0": "Scrappy"
+    },
+    "crobatalt": {
+      "0": "Poison Touch"
+    },
+    "gastrodonazzy": {
+      "0": "Rain Dish"
+    },
+    "gastrodonazzy2": {
+      "0": "Rain Dish"
+    },
+    "gliscor": {
+      "0": "Venom Pincer"
+    },
+    "gliscoralt": {
+      "0": "Venom Pincer"
+    },
+    "gyarados": {
+      "0": "Unbridled Wrath"
+    },
+    "conkeldurr": {
+      "1": "Rocky Payload"
+    },
+    "castform": {
+      "0": "Perfect Forecast"
+    },
+    "castformsunny": {
+      "0": "Perfect Forecast"
+    },
+    "castformrainy": {
+      "0": "Perfect Forecast"
+    },
+    "castformsnowy": {
+      "0": "Perfect Forecast"
+    },
+    "castformsandy": {
+      "0": "Perfect Forecast"
+    },
+    "castformwindy": {
+      "0": "Perfect Forecast"
+    },
+    "zoroark": {
+      "0": "Perfect Illusion"
+    },
+    "zoroarkhisui": {
+      "0": "Perfect Illusion"
+    },
+    "meowscarada": {
+      "H": "Perfect Illusion"
+    },
+    "nidoking": {
+      "H": "Patriarch's Wrath"
+    },
+    "nidoqueen": {
+      "H": "Matriarch's Vigil"
+    },
+    "ursalunabloodmoon": {
+      "0": "Bloodmoon Gaze"
+    },
+    "porygonz": {
+      "1": "Error Handler"
+    },
+    "medicham": {
+      "0": "Still Mind"
+    },
+    "slowbrogalar": {
+      "0": "Shellder Artillery"
+    },
+    "sinistcha": {
+      "0": "Tea Ceremony"
+    },
+    "sinistchamasterpiece": {
+      "0": "Tea Ceremony"
+    },
+    "kangaskhanmega": {
+      "0": "Family Guardian"
+    },
+    "electrode": {
+      "S": "Brute Force"
+    },
+    "electrodehisui": {
+      "S": "Brute Force"
+    }
+  }
+}

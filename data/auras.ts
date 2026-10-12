@@ -24,10 +24,17 @@ function values<T>(ids: string[], value: T): {[id: string]: T} {
 const electricMoves = ['explosion', 'selfdestruct', 'hurricane', 'surf', 'smackdown', 'muddywater', 'thousandarrows', 'wildboltstorm'];
 const grassyMoves = ['fairywind', 'silverwind', 'ominouswind', 'icywind', 'razorwind', 'gust', 'twister'];
 const mistyMoves = ['mysticalfire', 'magicalleaf', 'doomdesire', 'icywind', 'mistball', 'aurasphere', 'steameruption', 'silverwind', 'moongeistbeam', 'smog', 'clearsmog', 'strangesteam', 'springtidestorm', 'hydrosteam'];
-const rainbowMoves = ['silverwind', 'mysticalfire', 'dragonpulse', 'triattack', 'sacredfire', 'firepledge', 'waterpledge', 'grasspledge', 'aurorabeam', 'mirrorbeam', 'judgment', 'relicsong', 'hiddenpower', 'secretpower', 'weatherball', 'mistball', 'heartstamp', 'moonblast', 'zenheadbutt', 'sparklingaria', 'fleurcannon', 'prismaticlaser', 'twinkletackle', 'oceanicoperetta', 'solarbeam', 'solarblade', 'dazzlinggleam', 'luminacrash'];
+const rainbowMoves = ['silverwind', 'mysticalfire', 'dragonpulse', 'triattack', 'sacredfire', 'firepledge', 'waterpledge', 'grasspledge', 'aurorabeam', 'mirrorbeam', 'judgment', 'deiludicium', 'relicsong', 'hiddenpower', 'secretpower', 'weatherball', 'mistball', 'heartstamp', 'moonblast', 'zenheadbutt', 'sparklingaria', 'fleurcannon', 'prismaticlaser', 'twinkletackle', 'oceanicoperetta', 'solarbeam', 'solarblade', 'dazzlinggleam', 'luminacrash'];
 const psychicMoves = ['secretpower', 'hiddenpower', 'hex', 'magicalleaf', 'mysticalfire', 'moonblast', 'aurasphere', 'focusblast', 'mindblown'];
 
 export const Auras: {[id: string]: AuraData} = {
+ frozenaura: {
+  id: 'frozenaura', name: 'Frozen Aura', turns: 5, mimicryType: 'Ice',
+  secretPowerMove: 'bodyslam', naturePowerMove: 'icebeam', damageMultipliers: {}, secondaryTypeAdditions: {},
+  typeMultipliers: {Ice: 1.2}, typeCondition: 'none', moveMessages: {},
+  typeMessage: 'The Frozen Aura strengthened the attack!', endMessage: 'The Frozen Aura faded.',
+  statusBuffs: [], statusNerfs: [],
+ },
 	electricterrain: {
 		id: 'electricterrain', name: 'Electric Aura', turns: 5, mimicryType: 'Electric',
 		secretPowerMove: 'shockwave', naturePowerMove: 'thunderbolt',

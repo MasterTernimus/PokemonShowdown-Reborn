@@ -2731,3 +2731,5 @@ const redundantItemTextIds = [
 ] as IDEntry[];
 
 for (const itemId of redundantItemTextIds) delete ItemsText[itemId];
+
+ItemsText.mismagiusite = {name: 'Mismagiusite', desc: 'If held by Mismagius, allows it to Mega Evolve into Mega Mismagius.', shortDesc: 'Mismagius can Mega Evolve into Mega Mismagius.'};

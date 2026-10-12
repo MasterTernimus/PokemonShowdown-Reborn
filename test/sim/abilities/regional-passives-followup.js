@@ -21,7 +21,7 @@ describe('Latest approved passive routing and scope preservation', () => {
 		battle = null;
 	});
 	it('leaves rejected choices and excluded new groups unassigned', () => {
-		const held = ['castform', 'gardevoir', 'mawilemega', 'milotic', 'salamence', 'seviper', 'roserade', 'cherrim', 'probopass', 'bronzong', 'rhyperior', 'clawitzer', 'clawitzermega', 'meowstic', 'meowsticf', 'kommoo', 'golisopod', 'corviknight', 'armarouge', 'baxcalibur', 'tinkaton', 'kingambit', 'archaludon', 'glimmora', 'glimmoramega', 'bellibolt', 'scovillain', 'rabsca', 'dondozo', 'garchomp', 'garchompmegaz', 'garchompbattlebond', 'weavile', 'sigilyph', 'excadrill', 'krookodile', 'escavalier', 'conkeldurr'];
+		const held = [ 'gardevoir', 'mawilemega', 'milotic', 'salamence', 'seviper', 'roserade', 'cherrim', 'probopass', 'bronzong', 'rhyperior', 'clawitzer', 'clawitzermega', 'meowstic', 'meowsticf', 'kommoo', 'golisopod', 'corviknight', 'armarouge', 'baxcalibur', 'tinkaton', 'kingambit', 'archaludon', 'glimmora', 'glimmoramega', 'bellibolt', 'scovillain', 'rabsca', 'dondozo', 'garchomp', 'garchompmegaz', 'garchompbattlebond', 'weavile', 'sigilyph', 'excadrill', 'krookodile', 'escavalier', 'conkeldurr'];
 		for (const id of held.filter(id => ![...Object.values(require('./latest-passives-approved.json').groups).flat(), ...Object.values(require('./settled-passives-approved.json').groups).flat()].includes(id))) {
 			const p = Dex.species.get(id);
 			if (p.exists)
@@ -55,13 +55,13 @@ describe('Latest approved passive routing and scope preservation', () => {
 		hit(t, p, 'earthquake');
 		assert(p.hp < hp);
 	});
-	it('Salt Bastion still grants Safeguard when passive Sturdy saves it', () => {
+	it('Salt Bastion still grants Safeguard when its passive Sturdy component saves it', () => {
 		const [p, t] = setup('Garganacl', 'Salt Bastion');
 		hit(t, p, 'watergun', { basePower: 10000 });
 		assert.equal(p.hp, 1);
 		assert.equal(p.side.sideConditions.safeguard.duration, 5);
 		assert(!battle.log.some(l => l.startsWith('|-ability|') && l.endsWith('|Sturdy')));
-		assert(battle.log.some(l => l.includes('passive: Sturdy')));
+		assert(battle.log.some(l => l.includes('passive: Salt Bastion')));
 	});
 	it('Smoldering Shroud retains one blocked-drop reward and single Volcanic entry boost', () => {
 		const [p, t] = setup('Torkoal', 'Smoldering Shroud');
@@ -79,13 +79,13 @@ describe('Latest approved passive routing and scope preservation', () => {
 		battle.boost({ def: -1 }, p, t, Dex.moves.get('tailwhip'));
 		assert.equal(p.boosts.def, 0);
 	});
-	it('Stamina keeps a separate once-turn boost budget through selected ability changes', () => {
-		const [p, t] = setup('Mudsdale', 'Unyielding');
+	it('selected Stamina owns its boost budget separately from native Unyielding', () => {
+		const [p, t] = setup('Mudsdale', 'Stamina');
 		p.hp = p.maxhp - 50;
 		hit(t, p, undefined, { basePower: 1 });
 		assert.equal(p.boosts.def, 1);
-		assert.equal(p.passiveStates.stamina.staminaHitTurn, battle.turn);
-		assert.equal(p.abilityState.staminaHitTurn, undefined);
+		assert.equal(p.abilityState.staminaHitTurn, battle.turn);
+		assert.equal(p.passiveStates.unyielding?.staminaHitTurn, undefined);
 		p.setAbility('Pressure');
 		hit(t, p, undefined, { basePower: 1 });
 		assert.equal(p.boosts.def, 1);

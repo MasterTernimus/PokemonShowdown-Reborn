@@ -3,6 +3,7 @@ import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 import { AbilityComponents } from '../data/ability-components';
 import {startGainedPassives} from './species-passives';
+import {SignaturePassiveComponents} from '../data/signature-passive-data';
 /**
  * Simulator Pokemon
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -1751,6 +1752,7 @@ export class Pokemon {
 
 	clearVolatile(includeSwitchFlags = true) {
 		this.illusion = null;
+		delete this.m.perfectIllusion;
 		this.passiveStates = {};
 		if (includeSwitchFlags && this.timesAttacked > 0) {
 			this.timesAttacked = Math.floor(this.timesAttacked / 2);
@@ -2194,6 +2196,9 @@ export class Pokemon {
 			const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, sourceEffect, ability);
 			if (!setAbilityEvent) return setAbilityEvent;
 		}
+		if (this.m.perfectIllusion && this.volatiles.illusioncopy?.copiedAbility && ability.id !== this.ability) {
+			this.battle.singleEvent('End', this.battle.dex.abilities.get('illusion'), this.abilityState, this);
+		}
 		this.battle.singleEvent('End', oldAbility, this.abilityState, this, source);
 		this.ability = ability.id;
 		this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
@@ -2234,21 +2239,22 @@ export class Pokemon {
 
 	/** Current mechanical form, including Transform; independent of ability suppression. */
 	getPassives(): readonly string[] {
-		return (this.illusion?.species || this.species).passives;
+		return (this.m.perfectIllusion && this.illusion ? this.illusion.species : this.species).passives;
 	}
 
 	/** Mechanical helper; selected ability identity remains separate from species traits. */
 	hasAbilityOrPassive(ability: string | string[]) {
 		const ids = (Array.isArray(ability) ? ability : [ability]).map(toID);
 		return ids.some(id => {
-			if (!this.getPassives().includes(id)) return this.hasAbility(id);
-			const component = this.battle.dex.abilities.get(id);
+			const passive = this.getPassives().find(p => p === id || SignaturePassiveComponents[p]?.includes(id));
+			if (!passive) return this.hasAbility(id);
+			const component = this.battle.dex.abilities.get(passive);
 			return !component.flags.breakable || !this.battle.suppressingAbility(this, component);
 		});
 	}
 
 	getAbilityComponentExclusions(): readonly string[] {
-		const species = (this.illusion?.species || this.species).id;
+		const species = (this.m.perfectIllusion && this.illusion ? this.illusion.species : this.species).id;
 		return [...getAbilityComponentExclusions(this.ability, this.getPassives(), species),
 			...(this.ability === 'perfectforesight' && this.m.perfectForesightAbility ?
 				getAbilityComponentExclusions(this.m.perfectForesightAbility, this.getPassives(), species) : [])];

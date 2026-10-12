@@ -1510,9 +1510,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	// G-Max Moves --- ordered alphabetically by alias
 	befuddle: "G-Max Befuddle",
 	cannonade: "G-Max Cannonade",
-	centiferno: "G-Max Centiferno",
-	chistrike: "G-Max Chi Strike",
-	cuddle: "G-Max Cuddle",
+	centiferno: "G-Max Centiferno",	cuddle: "G-Max Cuddle",
 	deathroll: "G-Max Death Roll",
 	echoresonance: "G-Max Echo Resonance",
 	depletion: "G-Max Depletion",

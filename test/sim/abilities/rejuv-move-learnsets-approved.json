@@ -1,0 +1,84 @@
+{
+  "multipulse": [
+    "bewear",
+    "porygonz",
+    "silvally"
+  ],
+  "aquabatics": [
+    "primarina",
+    "floatzel",
+    "lumineon"
+  ],
+  "feverpitch": [
+    "toxtricityaevian",
+    "exploud",
+    "skeledirge"
+  ],
+  "thunderraid": [
+    "electivire",
+    "luxray",
+    "zebstrika"
+  ],
+  "desertsmark": [
+    "torterra",
+    "sandaconda",
+    "palossand"
+  ],
+  "superumdmove": [
+    "metagross",
+    "duraludon",
+    "magnezone",
+    "archaludon"
+  ],
+  "galestrike": [
+    "lucario",
+    "gallade",
+    "hawlucha"
+  ],
+  "spectralscream": [
+    "dusclops",
+    "dusknoir",
+    "mismagius",
+    "chandelure"
+  ],
+  "barbedweb": [
+    "araquanid",
+    "ariados",
+    "galvantula"
+  ],
+  "coldtruth": [
+    "walrein",
+    "froslass",
+    "cryogonal"
+  ],
+  "bunrakubeatdown": [
+    "medicham",
+    "meowsticf",
+    "mrmime"
+  ],
+  "matrixshot": [
+    "aerodactyl",
+    "gigalith",
+    "minior"
+  ],
+  "pyrokinesis": [
+    "alakazam",
+    "delphox",
+    "armarouge"
+  ],
+  "venamskiss": [
+    "seviper",
+    "arbok",
+    "salazzle"
+  ],
+  "heavenlywing": [
+    "pidgeot",
+    "togekiss",
+    "swanna"
+  ],
+  "uproot": [
+    "venusaur",
+    "vileplume",
+    "cradily"
+  ]
+}

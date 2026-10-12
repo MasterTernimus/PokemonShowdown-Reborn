@@ -337,9 +337,9 @@ describe('Composite ability cleanup', function () {
 		const porygon = battle.p1.active[0];
 		assert.statStage(porygon, 'atk', 0);
 		assert.statStage(porygon, 'spa', 1);
-		assert.equal(porygon.abilityState.downloadFirstHit, true);
+		assert.equal(porygon.passiveStates.download.downloadFirstHit, true);
 		battle.makeChoices('move tackle', 'move splash');
-		assert.equal(porygon.abilityState.downloadFirstHit, false);
+		assert.equal(porygon.passiveStates.download.downloadFirstHit, false);
 		assert(battle.log.some(line => line.includes('|-crit|')), 'Download should make the first damaging move crit');
 	});
 
@@ -365,7 +365,7 @@ describe('Composite ability cleanup', function () {
 		assert.equal(accuracy, true, 'Defragment should make its moves unable to miss');
 	});
 
-	it('should keep Phalanx Form untrapped and grant Steel STAB', function () {
+	it('should keep Phalanx Form untrapped without the removed Steel STAB', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Falinks-Mega', ability: 'phalanxform', moves: ['noretreat', 'ironhead']},
 			{species: 'Mew', ability: 'noguard', moves: ['splash']},
@@ -377,21 +377,21 @@ describe('Composite ability cleanup', function () {
 		battle.makeChoices('move noretreat', 'move splash');
 		const move = battle.dex.getActiveMove('ironhead');
 		battle.singleEvent('ModifyMove', falinks.getAbility(), falinks.abilityState, move, falinks);
-		assert.equal(move.forceSTAB, true);
+		assert.equal(move.forceSTAB, false);
 		battle.makeChoices('switch 2', 'move splash');
 		assert.species(battle.p1.active[0], 'Mew');
 	});
 
 	it('should remove the requested legacy composite hooks and expose Soul Strike', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'});
-		assert(battle.dex.abilities.get('celestialheart').onModifyMove);
+		assert.equal(battle.dex.abilities.get('celestialheart').onModifyMove, undefined);
 		assert.equal(battle.dex.abilities.get('draconicforce').onModifyAtk, undefined);
-		assert.equal(typeof battle.dex.abilities.get('dreadmaw').onStart, 'function'); // Frisk
+		assert.equal(battle.dex.abilities.get('dreadmaw').onStart, undefined); // Frisk was removed.
 		assert.equal(battle.dex.abilities.get('freezerburn').onWeather, undefined);
 		assert.equal(battle.dex.abilities.get('moonlitwings').onSetStatus, undefined);
 		assert.equal(battle.dex.abilities.get('doomwarning').onAfterMove, undefined);
 		assert.equal(battle.dex.abilities.get('soulstrike').name, 'Soul Strike');
-		assert.equal(battle.dex.species.get('Gengar-Gmax').abilities[0], 'Soul Strike');
+		assert.equal(battle.dex.species.get('Gengar-Gmax').abilities[0], 'Afterlife Gate');
 	});
 
 	it('should expose every updated composite through normalized component IDs', function () {
@@ -428,7 +428,7 @@ describe('Composite ability cleanup', function () {
 			omenedge: ['sharpness', 'dualwield', 'pressure'],
 			ragingcurrent: ['swiftswim', 'damp', 'dryskin', 'stamina'],
 			shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator', 'moldbreaker'],
-			calderacore: ['magmaarmor', 'sheerforce', 'drought'],
+			calderacore: ['magmaarmor', 'drought'],
 			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
 			riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
@@ -446,11 +446,15 @@ describe('Composite ability cleanup', function () {
 		for (const [ability, components] of Object.entries(composites)) {
 			pokemon.setAbility(ability, pokemon, battle.dex.abilities.get('noability'), true);
 			for (const component of components) {
+				if (require('./selected-simplifications-approved.json').removed[ability]?.includes(component)) {
+					assert(!pokemon.hasAbility(component), `${ability} must no longer expose ${component}`);
+					continue;
+				}
 				assert(pokemon.hasAbility(component), `${ability} should expose ${component}`);
 			}
 		}
 		const bloomingSun = battle.dex.abilities.get('bloomingsun');
-		assert(bloomingSun.onCheckShow);
+		assert.equal(bloomingSun.onCheckShow, undefined); // Natural Cure was removed.
 		assert(bloomingSun.onResidual);
 		pokemon.setAbility('ragingcurrent', pokemon, battle.dex.abilities.get('noability'), true);
 		assert.false(pokemon.hasAbility('regenerator'));
@@ -458,7 +462,9 @@ describe('Composite ability cleanup', function () {
 		pokemon.setAbility('calderacore', pokemon, battle.dex.abilities.get('noability'), true);
 		const calderaMove = battle.dex.getActiveMove('flamethrower');
 		battle.singleEvent('ModifyMove', pokemon.getAbility(), pokemon.abilityState, calderaMove, pokemon);
-		assert.equal(calderaMove.hasSheerForce, true);
+		assert.equal(calderaMove.hasSheerForce, undefined);
+		assert(!pokemon.hasAbility('sheerforce'));
+		assert.deepEqual(battle.dex.species.get('Coalossal-Gmax').passives, ['flamebody']);
 	});
 
 	it('should keep active slots intact while Mega starters receive the Proficient passive', function () {
@@ -477,7 +483,7 @@ describe('Composite ability cleanup', function () {
 			0: 'Liquid Arsenal', 1: 'Protean', H: 'Shadow Screen', S: 'Battle Bond',
 		});
 		assert.deepEqual(battle.dex.species.get('Delphox').abilities, {
-			0: 'Sworn Duty', 1: 'Magic Guard', H: 'Void Guile', S: 'Pyrokinesis',
+			0: 'Sworn Duty', 1: 'Magic Guard', H: 'Void Guile',
 		});
 	});
 
@@ -543,6 +549,7 @@ describe('Composite ability cleanup', function () {
 		const basePower = move.basePowerCallback.call(battle, source, target, move);
 		const modifiedPower = battle.runEvent('BasePower', source, target, move, basePower, true);
 		assert.equal(modifiedPower, 120);
-		assert(source.hasAbility('heavymetal'));
+		assert(source.hasAbilityOrPassive('heavymetal'));
+		assert.deepEqual(source.getPassives(), ['heavymetal']);
 	});
 });

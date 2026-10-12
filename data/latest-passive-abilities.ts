@@ -3,7 +3,6 @@ import type { AbilityDataTable } from '../sim/dex-abilities';
 type RetaliationMove = ActiveMove & {
 	vendettaTarget?: Pokemon,
 	silkSlowed?: Pokemon[],
-	uprootWeakened?: Pokemon[],
 };
 function clearMark(state: any) {
 	delete state.mark;
@@ -187,49 +186,5 @@ export function installLatestPassiveAbilities(abilities: AbilityDataTable) {
 			target.volatiles['disable' as string].duration = 2;
 			source.addVolatile('silksightsspent', source, this.effect);
 		}
-	};
-	abilities.uproot = {
-		name: 'Uproot', num: 11341, rating: 4, flags: {},
-		onModifyMove(move: RetaliationMove, source) {
-			move.uprootWeakened = source.foes().filter(p => p.boosts.spd < 0);
-		},
-		onSourceDamagingHit(damage, target, source, move: RetaliationMove) {
-			if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || !this.movehasType(move, 'Grass'))
-				return;
-			source.addVolatile('uproot', source, this.effect);
-			const state = source.volatiles.uproot;
-			if (state.turn !== this.turn) {
-				state.turn = this.turn;
-				state.targets = [];
-				state.drained = 0;
-			}
-			if (!move.drain && move.uprootWeakened?.includes(target) && source.hp) {
-				const amount = Math.min(Math.floor(damage / 4), Math.floor(source.maxhp / 4) - state.drained);
-				if (amount > 0) {
-					state.healing = true;
-					try {
-						const healed = this.heal(amount, source, target, 'drain');
-						if (typeof healed === 'number') state.drained += healed;
-					} finally {
-						state.healing = false;
-					}
-				}
-			}
-			if (target.hp && !state.targets.includes(target)) {
-				state.targets.push(target);
-				this.boost({ spd: -2 }, target, source, this.effect);
-			}
-		},
-		condition: {
-			noCopy: true,
-			onTryHealPriority: -1000,
-			onTryHeal(amount, target, source, effect) {
-				if (!this.effectState.healing || effect?.id !== 'drain') return;
-				// Apply ordinary healing modifiers before enforcing the absolute per-turn cap.
-				const modified = this.modify(amount, this.event.modifier);
-				this.event.modifier = 1;
-				return Math.min(modified, Math.floor(target.maxhp / 4) - this.effectState.drained);
-			},
-		},
 	};
 }

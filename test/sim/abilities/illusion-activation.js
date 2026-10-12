@@ -7,7 +7,7 @@ describe('Approved activation-only Illusion reveal', () => {
 	function setup() {
 		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
 			[{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
-			[{ species: 'Zoroark', ability: 'Illusion', moves: ['splash'] }, { species: 'Zoroark', ability: 'Illusion', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species: 'Zoroark', ability: 'Perfect Illusion', moves: ['splash'] }, { species: 'Zoroark', ability: 'Perfect Illusion', moves: ['splash'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		battle.makeChoices('team 123', 'team 123');
 		return battle.p1.active[0];
@@ -15,11 +15,13 @@ describe('Approved activation-only Illusion reveal', () => {
 	function disguise(foe) {
 		foe.illusion = foe.side.pokemon[2];
 		foe.addVolatile('illusioncopy');
-		foe.volatiles.illusioncopy.originalAbility = 'illusion';
+		foe.volatiles.illusioncopy.originalAbility = 'perfectillusion';
+		foe.m.perfectIllusion = true;
+		foe.volatiles.illusioncopy.copiedAbility = 'overgrow';
 		foe.ability = 'overgrow';
 		foe.abilityState = battle.initEffectState({ id: 'overgrow', target: foe });
 	}
-	const ids = ['keeneye', 'illuminate', 'astralwatcher', 'terragift', 'heavyartillery', 'blazingtempo', 'abysslure', 'astralcore', 'moonlightvigil', 'stormsovereign', 'triplethreat'];
+	const ids = ['keeneye', 'illuminate', 'astralwatcher', 'terragift', 'heavyartillery', 'blazingtempo', 'abysslure', 'astralcore', 'moonlightvigil', 'triplethreat'];
 	for (const id of ids) it(id + ' reveals both itemless foes once and clears copied abilities without revealing allies', () => {
 		const p = setup(), ally = battle.p1.active[1];
 		for (const foe of p.foes())disguise(foe);
@@ -29,7 +31,7 @@ describe('Approved activation-only Illusion reveal', () => {
 		for (const foe of p.foes()) {
 			assert(!foe.illusion);
 			assert(!foe.volatiles.illusioncopy);
-			assert.equal(foe.ability, 'illusion');
+			assert.equal(foe.ability, 'perfectillusion');
 		}
 		assert(ally.illusion);
 		assert.equal(battle.log.slice(from).filter(x => x.startsWith('|-end|') && x.endsWith('|Illusion')).length, 2);
@@ -37,6 +39,11 @@ describe('Approved activation-only Illusion reveal', () => {
 		for (const foe of p.foes())disguise(foe);
 		battle.singleEvent('Residual', p.getAbility(), p.abilityState, p);
 		assert(p.foes().every(foe => foe.illusion), 'not a continuous aura');
+	});
+	it('Storm Sovereign no longer reveals Illusion after Keen Eye is replaced by Updraft', () => {
+		const p = setup(); for (const foe of p.foes()) disguise(foe);
+		p.setAbility('Storm Sovereign');
+		assert(p.foes().every(foe => foe.illusion && foe.volatiles.illusioncopy));
 	});
 	it('respects suppression, then reveals on a later real ability activation and reentry', () => {
 		const p = setup(); for (const foe of p.foes())disguise(foe);

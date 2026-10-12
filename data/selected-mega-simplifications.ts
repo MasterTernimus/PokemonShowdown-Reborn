@@ -30,7 +30,8 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 		}
 		table[id] = result;
 	};
-	compose('siegelauncher', ['megalauncher', 'stalwart', 'waterbarrage']);
+	// Water Barrage owns Stalwart; dispatch that component exactly once.
+	compose('siegelauncher', ['megalauncher', 'waterbarrage']);
 	compose('neurotoxin', ['hydrabond', 'regenerator']);
 	compose('surgeconduit', ['lightningrod', 'rockhead']);
 	compose('railguncircuit', ['lightningrod', 'transistor']);

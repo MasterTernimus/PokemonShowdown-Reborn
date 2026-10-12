@@ -577,6 +577,9 @@ export class TeamValidator {
 			return [`This is not a Pokemon.`];
 		}
 
+		if (toID(set.item) === 'mismagiusite') {
+			return ['Mismagiusite is deferred. Mega Mismagius currently requires Dusk Stone; update this saved set manually.'];
+		}
 		let species = dex.species.get(set.species);
 		const pulseMoves = PULSE_FIXED_MOVES[species.id];
 		if (pulseMoves && (!Array.isArray(set.moves) || set.moves.length !== 4 ||
@@ -1654,7 +1657,7 @@ export class TeamValidator {
 			set.ability = 'Tera Shift';
 		} else if (species.battleOnly) {
 			if (species.requiredAbility && set.ability !== species.requiredAbility &&
-				!(species.baseSpecies === 'Castform' && set.ability === 'Climate Reserve')) {
+				!(species.baseSpecies === 'Castform' && species.passives.includes('forecast'))) {
 				// Darmanitan-Zen
 				problems.push(`${species.name} transforms in-battle with ${species.requiredAbility}, please fix its ability.`);
 			}

@@ -30,14 +30,14 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('matches the entire approved 820-holder registry and all selected slots', () => {
+	it('matches the entire approved 839-holder registry and all selected slots', () => {
 		const expected = { ...approved.previousPassives };
 		for (const [passive, ids] of Object.entries(approved.groups))
 			for (const id of ids)
 				expected[id] = [passive];
 		require('./passive-approval-overlays').passives(expected);
 		assert.deepEqual(require('../../../dist/data/species-passives').SpeciesPassives, expected);
-		assert.equal(Object.keys(expected).length, 820);
+		assert.equal(Object.keys(expected).length, 839);
 		for (const [id, slot, , name] of approved.slots)
 			assert.equal(Dex.species.get(id).abilities[slot], name, id);
 		for (const [id, abilities] of Object.entries(approved.priorAbilities)) {
@@ -45,8 +45,6 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 			for (const [s, slot, , name] of approved.slots)
 				if (s === id)
 					expected[slot] = name;
-			if (id === 'venusaur')
-				expected.S = 'Uproot';
 			assert.deepEqual(Dex.species.get(id).abilities, require('./passive-approval-overlays').abilities(id, expected), id);
 		}
 	});
@@ -58,9 +56,7 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 			if (Dex.species.get(id).exists && !Object.values(require('./settled-passives-approved.json').groups).flat().includes(id))
 				assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id, approved.previousPassives[id] || []), id);
 		assert.deepEqual(Dex.species.get('garchompmega').passives, ['sandforce']);
-		for (const s of Dex.species.all())
-			if (Object.values(s.abilities).includes('Uproot'))
-				assert.equal(s.id, 'venusaur');
+		for (const s of Dex.species.all()) assert(!Object.values(s.abilities).includes('Uproot'), s.id);
 	});
 	it('Steady Aim blocks only external accuracy drops under suppression', () => {
 		const [p, t] = setup('Clawitzer');
@@ -203,75 +199,15 @@ describe('Latest explicit passive approvals and redesigned abilities', () => {
 		hit(p, t, 'bugbite');
 		assert(!t.volatiles.disable);
 	});
-	it('Uproot lowers Sp. Def once per target per turn and only drains already-weakened targets', () => {
-		const [p, t] = setup('Venusaur', 'Uproot');
-		p.hp = 500;
-		hit(p, t, 'vinewhip', { multihit: 3 });
-		assert.equal(t.boosts.spd, -2);
-		assert.equal(p.hp, 500);
-		hit(p, t, 'vinewhip');
-		assert.equal(t.boosts.spd, -2);
-		assert.equal(p.hp, 510);
-		battle.turn++;
-		hit(p, t, 'vinewhip');
-		assert.equal(t.boosts.spd, -4);
-		assert.equal(p.hp, 520);
-	});
-	it('Uproot caps drain per turn across ability changes and does not add drain to Giga Drain', () => {
-		const [p, t] = setup('Venusaur', 'Uproot');
-		p.hp = 100;
-		t.boosts.spd = -1;
-		t.hp = t.maxhp = 10000;
-		hit(p, t, 'vinewhip', { damage: 1200 });
-		assert.equal(p.hp, 350);
-		p.setAbility('Pressure');
-		p.setAbility('Uproot');
-		hit(p, t, 'vinewhip', { damage: 400 });
-		assert.equal(p.hp, 350);
-		battle.turn++;
-		hit(p, t, 'gigadrain', { damage: 40 });
-		assert.equal(p.hp, 370);
-	});
-	for (const blocked of ['protect', 'substitute', 'Clear Body', 'Water Veil'])
-		it('Uproot respects ' + blocked, () => {
-			const [p, t] = setup('Venusaur', 'Uproot');
-			if (blocked === 'protect' || blocked === 'substitute')
-				t.addVolatile(blocked, t);
-			else
-				t.setAbility(blocked);
-			hit(p, t, 'vinewhip');
-			assert.equal(t.boosts.spd, blocked === 'Water Veil' ? -2 : 0);
-		});
-	it('Uproot drain respects Liquid Ooze and Heal Block', () => {
-		const [p, t] = setup('Venusaur', 'Uproot');
-		p.hp = 500;
-		t.boosts.spd = -1;
-		t.setAbility('Liquid Ooze');
-		hit(p, t, 'vinewhip');
-		assert.equal(p.hp, 490);
-		t.setAbility('No Ability');
-		p.addVolatile('healblock', t);
-		hit(p, t, 'vinewhip');
-		assert.equal(p.hp, 490);
-	});
-	it('Uproot is suppressed and introduces no selected components or raw stat modifiers', () => {
-		const [p, t] = setup('Venusaur', 'Uproot');
-		p.addVolatile('gastroacid');
-		hit(p, t, 'vinewhip');
-		assert.equal(t.boosts.spd, 0);
-		assert(!require('../../../dist/data/ability-components').AbilityComponents.vendetta.length);
-		assert(!Dex.abilities.get('vendetta').onResidual);
-		assert(!Dex.abilities.get('vendetta').onDamage);
-	});
-	it('Uproot retains its absolute quarter-HP cap with Big Root', () => {
-		const [p, t] = setup('Venusaur', 'Uproot');
-		p.hp = 100;
-		p.setItem('Big Root');
-		t.boosts.spd = -1;
-		t.hp = t.maxhp = 10000;
-		hit(p, t, 'vinewhip', { damage: 1200 });
-		assert.equal(p.hp, 350);
-		hit(p, t, 'vinewhip', { damage: 400 });
-		assert.equal(p.hp, 350);
-	});
+	// Uproot's former ability mechanics are superseded by the approved signature-move tests.
+ it('Uproot is a move rather than a selectable ability', () => {
+  assert(!Dex.abilities.get('uproot').exists);
+  assert(Dex.moves.get('uproot').exists);
+  assert(!Object.values(Dex.species.get('venusaur').abilities).includes('Uproot'));
+ });
+ it('preserves Vendetta without unrelated components, residuals or damage modifiers', () => {
+  assert(!require('../../../dist/data/ability-components').AbilityComponents.vendetta.length);
+  assert(!Dex.abilities.get('vendetta').onResidual);
+  assert(!Dex.abilities.get('vendetta').onDamage);
+ });
 });

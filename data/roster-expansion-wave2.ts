@@ -210,8 +210,15 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	});
 	add('rechargerelay', 'Recharge Relay', {
 		...base.battery,
+		onBeforeSwitchOut(pokemon) {
+			// The switch queue consumes switchFlag before SwitchOut runs.
+			this.effectState.relayVoltSwitch = pokemon.switchFlag === 'voltswitch';
+		},
 		onSwitchOut(pokemon) {
-			if (pokemon.switchFlag === 'voltswitch') pokemon.side.addSlotCondition(pokemon, 'rechargerelay', pokemon, this.effect);
+			if (this.effectState.relayVoltSwitch || pokemon.switchFlag === 'voltswitch') {
+				pokemon.side.addSlotCondition(pokemon, 'rechargerelay', pokemon, this.effect);
+			}
+			this.effectState.relayVoltSwitch = false;
 		},
 		condition: {
 			onSwitchIn(pokemon) {

@@ -1,3 +1,4 @@
+import {PerfectForecastForms} from './castform-split';
 import {AbilityComponentExclusions, getAbilityComponentAdditions, getAbilityComponentExclusions} from './passive-ability-cleanup';
 import {AbilityDisplaySummaries} from './ability-display-summaries';
 import { Aliases } from './aliases';
@@ -195,6 +196,10 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 // The legacy identity registry is not always an exact implementation summary.
 // Burning Crown uses flat damage reduction, not Filter; its other delegates remain active.
 const DisplayComponentOverrides: {[id: string]: string[]} = {
+ burningrage: ['proficient', 'bruteforce', 'ironfist', 'moldbreaker'],
+ // These packages retain custom effects; Includes names only their full components.
+ astralwatcher: ['frisk'],
+ roughscale: ['roughskin', 'toughclaws'],
  templechime: [],
  blazingmane: ['firemane', 'proficient'],
  pollenbloom: ['thickfat', 'unaware', 'proficient'],
@@ -231,9 +236,11 @@ export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): 
 }
 
 export function getAbilityDisplayComponents(id: string, passives: readonly string[] = [], species = ''): string[] {
+	if (id === 'ironmountain') return passives.includes('hypercutter') ? [] : ['hypercutter'];
+	if (id === 'perfectforecast') return PerfectForecastForms[canonicalAbilityDisplayID(species)]?.components || [];
 	const excluded = getAbilityComponentExclusions(id, passives, species);
-	const parts = [...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)]
-		.filter(part => !passives.includes(part) && !excluded.includes(part));
+	const parts = Array.from(new Set([...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].map(canonicalAbilityDisplayID)))
+		.filter(part => !passives.includes(part) && !excluded.includes(part) && !(id === 'heatcoil' && part === 'magmaarmor'));
 	// A component already included by another named package needs no second display entry.
 	return parts.filter((part, index) => part !== 'proficient' && !parts.some((other, otherIndex) => other !== part &&
 		getAbilityDisplayClosure(other).has(part) && (!getAbilityDisplayClosure(part).has(other) || otherIndex < index)));

@@ -12,7 +12,7 @@ describe('Illusion', function () {
 
 	common.itGen(9, `should disguise as the ally with the strongest known pressure`, function () {
 		battle = common.gen(9).createBattle([[
-			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
+			{species: "Zoroark", ability: 'perfectillusion', moves: ['sleeptalk']},
 			{species: "Garchomp", moves: ['earthquake']},
 			{species: "Blissey", moves: ['softboiled']},
 		], [

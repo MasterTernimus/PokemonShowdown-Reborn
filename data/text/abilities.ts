@@ -1874,8 +1874,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	knightsguard: {
 		name: "Knight's Guard",
-		desc: "Once per switch-in in doubles, redirects the first single-target damaging attack aimed at an adjacent ally to this Pokemon. It takes 25% less damage from that attack and, if it survives a hit, gains one Attack stage. Spread moves and status moves are not redirected.",
-		shortDesc: "Once per switch-in, intercepts an ally-targeted attack; takes 25% less and gains +1 Atk if hit.",
+		desc: "On entry, heals each adjacent ally by 1/4 max HP, or 1/3 on Fairy Tale. Once per switch-in in doubles, redirects the first single-target damaging attack aimed at an adjacent ally to this Pokemon. It takes 25% less damage from that attack and, if it survives a hit, gains one Attack stage. Spread moves and status moves are not redirected.",
+		shortDesc: "Entry heals adjacent allies 1/4 HP (1/3 Fairy Tale); once per entry intercepts an ally attack, takes 25% less and gains +1 Atk if hit.",
 	},
 	keeneye: {
 		name: "Keen Eye",
@@ -3900,8 +3900,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	desertspirit: {
 		name: "Desert Spirit",
-		desc: "This Pokemon has Levitate, Sand Stream, and Tinted Lens's effects. It is airborne, summons sandstorm on entry, and deals double damage with resisted attacks. Its Ground-type attacks receive STAB even though it is not Ground-type.",
-		shortDesc: "Levitate + Sand Stream + Tinted Lens; Ground moves get STAB.",
+		desc: "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. Immune to powder effects and sandstorm/hail damage. Ground-type attacks receive STAB. Levitate provides normal airborne protection unless supplied separately by the species passive.",
+		shortDesc: "Sand Stream + Overcoat; Ground moves get STAB; Levitate where not supplied by its passive.",
 	},
 	desertshell: {
 		name: "Desert Shell",
@@ -4066,7 +4066,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relentlesshunt: {
 		name: "Relentless Hunt",
-		desc: "This Pokemon has Levitate. Its moves with 60 or less Base Power gain +1 priority. In Fairy Tale, Big Top, Dragon's Den, Mountain, Snowy Mountain, or Cold Eclipse, its damaging moves deal 2x damage. In Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, or New World, its damaging moves deal 1.5x damage.",
+		desc: "This Pokemon has Levitate. Its moves with 60 or less Base Power gain +1 priority; Cold Eclipse raises the threshold to 80 without stacking another priority boost. In Fairy Tale, Big Top, Dragon's Den, Mountain, Snowy Mountain, or Cold Eclipse, its damaging moves deal 2x damage, applied once. In Desert, Rocky, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena, or New World, its damaging moves deal 1.5x damage.",
 		shortDesc: "Levitate; moves <=60 BP gain +1 priority; boosted fields give 1.5x or 2x damage.",
 	},
 	soulfire: {
@@ -4509,23 +4509,8 @@ AbilitiesText.soulcremation.desc += ' Soul Siphon includes Flash Fire. On Cold E
 
 AbilitiesText.gentlescales = {name: 'Gentle Scales', ...AbilityDescriptionOverrides.gentlescales};
 AbilitiesText.hivecourier = {name: 'Hive Courier', ...AbilityDescriptionOverrides.hivecourier};
-
-AbilitiesText.multipulse = {name: "Multipulse", ...AbilityDescriptionOverrides.multipulse};
-AbilitiesText.aquabatics = {name: "Aquabatics", ...AbilityDescriptionOverrides.aquabatics};
-AbilitiesText.feverpitch = {name: "Fever Pitch", ...AbilityDescriptionOverrides.feverpitch};
-AbilitiesText.thunderraid = {name: "Thunder Raid", ...AbilityDescriptionOverrides.thunderraid};
-AbilitiesText.desertsmark = {name: "Desert's Mark", ...AbilityDescriptionOverrides.desertsmark};
 AbilitiesText.deepchill = {name: "Deep Chill", ...AbilityDescriptionOverrides.deepchill};
-AbilitiesText.superumdmove = {name: "Super U.M.D. Move", ...AbilityDescriptionOverrides.superumdmove};
-AbilitiesText.galestrike = {name: "Gale Strike", ...AbilityDescriptionOverrides.galestrike};
-AbilitiesText.spectralscream = {name: "Spectral Scream", ...AbilityDescriptionOverrides.spectralscream};
-AbilitiesText.barbedweb = {name: "Barbed Web", ...AbilityDescriptionOverrides.barbedweb};
-AbilitiesText.coldtruth = {name: "Cold Truth", ...AbilityDescriptionOverrides.coldtruth};
-AbilitiesText.bunrakubeatdown = {name: "Bunraku Beatdown", ...AbilityDescriptionOverrides.bunrakubeatdown};
-AbilitiesText.matrixshot = {name: "Matrix Shot", ...AbilityDescriptionOverrides.matrixshot};
-AbilitiesText.pyrokinesis = {name: "Pyrokinesis", ...AbilityDescriptionOverrides.pyrokinesis};
 AbilitiesText.venamskiss = {name: "Venam's Kiss", ...AbilityDescriptionOverrides.venamskiss};
-AbilitiesText.heavenlywing = {name: "Heavenly Wing", ...AbilityDescriptionOverrides.heavenlywing};
 AbilitiesText.dredger = {name: "Dredger", ...AbilityDescriptionOverrides.dredger};
 
 AbilitiesText.grapplingclaws = {name: 'Grappling Claws', ...AbilityDescriptionOverrides.grapplingclaws};
@@ -4540,7 +4525,7 @@ for (const [id, entry] of Object.entries(AbilitiesText)) {
  entry.shortDesc = getAbilitySelectorSummary(id, entry.shortDesc || entry.desc || '', part => AbilitiesText[part as ID]?.name || '');
 }
 
-for (const [id, name] of [['vendetta', 'Vendetta'], ['silksights', 'Silk Sights'], ['steadyaim', 'Steady Aim'], ['uproot', 'Uproot']]) {
+for (const [id, name] of [['vendetta', 'Vendetta'], ['silksights', 'Silk Sights'], ['steadyaim', 'Steady Aim']]) {
  AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
 }
 
@@ -4566,3 +4551,59 @@ Object.assign(AbilitiesText, SelectedAbilityDescriptions);
 
 import {GmaxRedesignDescriptions} from '../gmax-passive-data';
 Object.assign(AbilitiesText, GmaxRedesignDescriptions);
+
+import {GrapplingClawsDescription} from '../targeted-passive-reworks';
+AbilitiesText.grapplingclaws = {name: 'Grappling Claws', ...GrapplingClawsDescription};
+
+for (const id of ['pressure', 'lunardread', 'moonlightvigil', 'omenedge', 'royalescort', 'irondominion'] as const) {
+	AbilitiesText[id] = {...AbilitiesText[id], desc: AbilityDescriptionOverrides[id].desc};
+}
+AbilitiesText.pressure.shortDesc = AbilityDescriptionOverrides.pressure.shortDesc;
+
+for (const id of ['scaleshelter', 'roughscale'] as const) AbilitiesText[id] = {...AbilitiesText[id], ...AbilityDescriptionOverrides[id]};
+
+AbilitiesText.baitedbloom = {...AbilitiesText.baitedbloom, ...AbilityDescriptionOverrides.baitedbloom};
+AbilitiesText.slipstream = {...AbilitiesText.slipstream, ...AbilityDescriptionOverrides.slipstream};
+
+import {BurningRageDescription} from '../burning-rage-display';
+AbilitiesText.burningrage = {name: 'Burning Rage', ...BurningRageDescription};
+import {SovereignDescriptions} from '../sovereign-approved-data';
+for (const [id, details] of Object.entries(SovereignDescriptions)) Object.assign(AbilitiesText[id as ID], details);
+
+import {UltraInstinctDescription, BurningSpiritDescription} from '../ultra-instinct-description';
+Object.assign(AbilitiesText.ultrainstinct, UltraInstinctDescription);
+Object.assign(AbilitiesText.burningspirit, BurningSpiritDescription);
+import {PassiveCleanupDescriptions} from '../passive-cleanup-approved';
+for (const [id, details] of Object.entries(PassiveCleanupDescriptions)) {
+	AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...details};
+}
+AbilitiesText.venompincer.name = 'Venom Pincer';
+
+AbilitiesText.unbridledwrath.name = 'Unbridled Wrath';
+
+Object.assign(AbilitiesText.ragingstorm, AbilityDescriptionOverrides.ragingstorm);
+
+Object.assign(AbilitiesText.toxicspines, AbilityDescriptionOverrides.toxicspines);
+
+import {CastformDescriptions} from '../castform-split';
+for (const [id, details] of Object.entries(CastformDescriptions)) AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...details};
+AbilitiesText.perfectforecast.name = 'Perfect Forecast';
+
+import {IllusionDescriptions} from '../illusion-split';
+for (const [id, details] of Object.entries(IllusionDescriptions)) AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...details};
+AbilitiesText.perfectillusion.name = 'Perfect Illusion';
+
+import {NidoDescriptions} from '../nido-approved';
+for (const [id, details] of Object.entries(NidoDescriptions)) AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...details};
+AbilitiesText.patriarchswrath.name = "Patriarch's Wrath";
+AbilitiesText.matriarchsvigil.name = "Matriarch's Vigil";
+
+for (const id of ['relentlesshunt', 'voidomen', 'venombastion']) Object.assign(AbilitiesText[id as ID], AbilityDescriptionOverrides[id]);
+
+for (const id of ['heatcoil', 'inversion', 'ironmountain']) Object.assign(AbilitiesText[id as ID], AbilityDescriptionOverrides[id]);
+
+import {FinalPassiveDescriptions} from '../final-passive-migrations';
+import {FamilyReplacementDescriptions} from '../family-replacements';
+for (const [id, details] of Object.entries({...FinalPassiveDescriptions, ...FamilyReplacementDescriptions})) AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...details};
+
+for (const id of ['encorearia', 'marvelscale', 'tidalvoice']) Object.assign(AbilitiesText[id as ID], AbilityDescriptionOverrides[id]);

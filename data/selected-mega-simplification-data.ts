@@ -160,7 +160,6 @@ export const SelectedComponentRemovals: { [id: string]: string[] } = {
 		"infiltrator",
 	],
 	"shadowcurrent": [
-		"moldbreaker",
 		"infiltrator",
 	],
 	"heavyartillery": [
@@ -250,8 +249,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Thick Fat + Unaware. Fire and Ice attacks use half the attacker's attacking stat; hail causes no damage. Ignores the foe's Defense, Sp. Def and evasion changes when attacking, and their Attack, Defense, Sp. Atk and accuracy changes when defending. Reveals opposing Illusions on entry. At each turn's end, drains 1/16 of each foe's base maximum HP and heals by the HP actually drained. Grass types and Grass-immune foes are unaffected. In Free-for-All only, Grass weaknesses and resistances change the drain amount.",
 	},
 	"waterbarrage": {
-		"shortDesc": "Dual Wield and cycling Water chip.",
-		"desc": "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. Separate bespoke composites can specify a boosted first hit and a 15% second hit. A literal Mega Launcher + Water Barrage combination instead boosts both eligible pulse/bullet hits by 1.5x: 0.9x each outside Free-for-All, or 1.5x each in Free-for-All. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP. Water immunities block it; type effectiveness scales it only in Free-for-All.",
+		"shortDesc": "Dual Wield + Stalwart; cycling Water chip.",
+		"desc": "Full local Stalwart bypasses redirection and grants +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. Separate bespoke composites can specify a boosted first hit and a 15% second hit. A literal Mega Launcher + Water Barrage combination instead boosts both eligible pulse/bullet hits by 1.5x: 0.9x each outside Free-for-All, or 1.5x each in Free-for-All. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP. Water immunities block it; type effectiveness scales it only in Free-for-All.",
 	},
 	"toxicbloom": {
 		"shortDesc": "Pollen Bloom and Poison-hit recovery.",
@@ -267,7 +266,7 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"siegelauncher": {
 		"shortDesc": "Mega Launcher + Stalwart + Water Barrage.",
-		"desc": "Mega Launcher gives pulse and bullet moves 1.5x power. Water Barrage supplies exactly one eligible Dual Wield pair, each hit at 0.6x power outside Free-for-All: pulse/bullet pairs therefore use 0.9x power per hit before STAB and passives. In Free-for-All both hits use full power, with the existing second-target selection. Existing multi-hit, charging, delayed, Z/Max and ineligible moves gain no extra pair. Stalwart bypasses redirection and grants +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP; Water immunities block it and type effectiveness scales it only in Free-for-All. Proficient is a separate species passive.",
+		"desc": "Mega Launcher gives pulse and bullet moves 1.5x power. Water Barrage supplies exactly one eligible Dual Wield pair, each hit at 0.6x power outside Free-for-All: pulse/bullet pairs therefore use 0.9x power per hit before STAB and passives. In Free-for-All both hits use full power, with the existing second-target selection. Existing multi-hit, charging, delayed, Z/Max and ineligible moves gain no extra pair. Water Barrage supplies Stalwart exactly once: redirection bypass and +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP; Water immunities block it and type effectiveness scales it only in Free-for-All. Proficient is a separate species passive.",
 	},
 	"toxicevolution": {
 		"shortDesc": "Corrosion, Shield Dust and retained poison recovery/protection.",
@@ -307,7 +306,7 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"parentalbond": {
 		"shortDesc": "Eligible attacks hit twice; the second hit deals 80% damage.",
-		"desc": "Eligible attacks hit twice; the second hit deals 80% damage. Existing multi-hit moves, spread hits, charging or delayed attacks, Z/Max moves and moves barred from extra hits are excluded. Cannot be suppressed. Fixed-damage attacks retain their existing fixed-damage handling. Existing KO spillover and Free-for-All follow-up rules remain. Friend Guard is a separate species passive.",
+		"desc": "Eligible attacks hit twice; the second hit deals 80% damage. Existing multi-hit moves, spread hits, charging or delayed attacks, Z/Max moves and moves barred from extra hits are excluded. Cannot be suppressed. Fixed-damage attacks retain their existing fixed-damage handling. Existing KO spillover and Free-for-All follow-up rules remain. Family Guardian provides Mega Kangaskhan’s Friend Guard protection.",
 	},
 	"celestialheart": {
 		"shortDesc": "Soul-Heart + Friend Guard.",
@@ -378,8 +377,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Airborne: immune to Ground attacks and grounded hazards unless grounded. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Sp. Atk each turn, plus +1 Attack on Mountain or Snowy Mountain. Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. On fainting, curses all active foes.",
 	},
 	"freezerburn": {
-		"shortDesc": "Slush Rush + Levitate.",
-		"desc": "Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Airborne: immune to Ground attacks and grounded hazards unless grounded. Refrigerate is supplied separately by the species passive.",
+		"shortDesc": "Slush Rush + Levitate; Ice damage is 1.2x against burned targets.",
+		"desc": "Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Levitate makes it airborne and immune to Ground attacks and grounded hazards unless grounded. Its Ice-type attacks deal 1.2x damage against targets that are already burned, including Normal moves converted to Ice by its separate Refrigerate passive. Other move types and other target statuses receive no extra damage; this ability does not inflict burn. Refrigerate is supplied separately by the species passive.",
 	},
 	"coldlogic": {
 		"shortDesc": "Prism Armor + Aftermath + Forewarn; damage reductions do not stack.",
@@ -414,8 +413,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Contact moves bypass protection except Max Guard. Punching moves have 1.4x power. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist; Damp prevents this damage. No Guard is supplied separately by the species passive.",
 	},
 	"shadowcurrent": {
-		"shortDesc": "Protean, Technician and Anticipation.",
-		"desc": "Before an eligible damaging move, changes to its type; status, reflected, delayed, Snatched and move-calling moves do not trigger this. Moves with effective power of 60 or less have 1.5x power; the threshold is 80 on Factory Field. On entry, reveals opposing Illusions and alerts to an opposing super-effective or OHKO move. If no threat is found, Psychic Terrain grants +2 Sp. Atk.",
+		"shortDesc": "Protean, Technician, Anticipation and Mold Breaker.",
+		"desc": "Before an eligible damaging move, changes to its type; status, reflected, delayed, Snatched and move-calling moves do not trigger this. Moves with effective power of 60 or less have 1.5x power; the threshold is 80 on Factory Field. On entry, reveals opposing Illusions and alerts to an opposing super-effective or OHKO move. If no threat is found, Psychic Terrain grants +2 Sp. Atk. Full local Mold Breaker lets its moves bypass breakable abilities; Ability Shield still protects them.",
 	},
 	"royalsun": {
 		"shortDesc": "Drought + Supreme Overlord.",

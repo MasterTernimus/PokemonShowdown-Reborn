@@ -29,7 +29,7 @@ describe('Exact Relic Armor species passive migration', () => {
 	it('adds exactly fifteen recipients without broadening form inheritance or previous passives', () => {
 		const before = require('./relic-armor-before.json');
 		assert.equal(RelicArmorPassiveForms.length, 15);
-		assert.equal(Object.keys(SpeciesPassives).length, 820);
+		assert.equal(Object.keys(SpeciesPassives).length, 839);
 		const approved = {};
 		for (const [passive, ids] of Object.entries(require('./regional-passives-approved.json').groups)) for (const id of ids) approved[id] = [passive];
 		for (const [passive, ids] of Object.entries(require('./kanto-johto-before.json').groups)) for (const id of ids) approved[id] = [passive];

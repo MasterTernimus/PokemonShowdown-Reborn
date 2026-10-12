@@ -16,7 +16,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	forestsurge: ['proficient'],
 	exalt: ['defiant', 'sharpness', 'moldbreaker'],
 	warpath: ['moldbreaker'],
-	burningrage: ['proficient'],
+	// Brute Force delegates power/recoil callbacks; it does not grant full Reckless/Rock Head field identities.
+	burningrage: ['proficient', 'bruteforce', 'ironfist', 'moldbreaker'],
 	terragift: ['hospitality', 'unaware', 'proficient'],
 	blazingtempo: ['proficient', 'speedboost', 'striker', 'magmaarmor', 'keeneye'],
 	verdantdrake: ['proficient', 'dualwield', 'regenerator', 'lightningrod', 'limber'],
@@ -162,7 +163,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	malicewell: ['flamebody'],
 	soultag: ['soulfire', 'shadowtag', 'flamebody'],
 	deserttyrant: ['sandstream'],
-	desertspirit: ['levitate', 'sandstream', 'tintedlens'],
+	desertspirit: ['levitate', 'sandstream', 'overcoat'],
 	tremor: ['levitate', 'resonanceforce', 'sandforce'],
 	desertshell: ['skilllink', 'heatproof', 'sandstream'],
 	riptideclaws: ['swiftswim', 'toughclaws', 'shellarmor', 'moldbreaker'],
@@ -643,7 +644,7 @@ AbilityComponents.pulsefiltration = ['waterabsorb', 'liquidooze'];
 
 AbilityComponents.soulsiphon = ['flashfire'];
 
-AbilityComponents.conquerorswill = ['supremeoverlord', 'unnerve'];
+AbilityComponents.conquerorswill = ['unnerve'];
 
 AbilityComponents.triplethreat = ['hydrabond', 'tangledfeet', 'keeneye', 'bigpecks', 'limber'];
 
@@ -780,7 +781,7 @@ for (const [id, removed] of Object.entries(SelectedComponentRemovals)) {
 Object.assign(AbilityComponents, SelectedExactComponents);
 AbilityComponents.uncheckedassault = [...AbilityComponents.uncheckedassault, 'vitalspirit'];
 // These primitives already dispatch these components; record their genuine ownership.
-AbilityComponents.waterbarrage = ['dualwield'];
+AbilityComponents.waterbarrage = ['dualwield', 'stalwart'];
 AbilityComponents.pollenbloom = ['thickfat', 'unaware'];
 
 import {GmaxExtractedComponents} from './gmax-passive-data';
@@ -789,3 +790,31 @@ for (const [id, components] of Object.entries(GmaxExtractedComponents)) {
 }
 AbilityComponents.crushingdepths = [];
 AbilityComponents.afterlifegate = ['shadowshield'];
+
+AbilityComponents.grapplingclaws = ['toughclaws'];
+
+AbilityComponents.baitedbloom = ['gluttony', 'regenerator'];
+AbilityComponents.sunsovereign = [...AbilityComponents.sunsovereign, 'intimidate'];
+AbilityComponents.stormsovereign = AbilityComponents.stormsovereign.filter(id => id !== 'keeneye').concat('updraft');
+AbilityComponents.sandsovereign = [...AbilityComponents.sandsovereign, 'mountainbreaker'];
+AbilityComponents.frostsovereign = [...AbilityComponents.frostsovereign, 'soundproof'];
+
+AbilityComponents.burningspirit = ['ultrainstinct', 'opportunist', 'magmaarmor'];
+AbilityComponents.venompincer = ['poisontouch', 'hypercutter'];
+
+AbilityComponents.unbridledwrath = ['sheerforce', 'innerfocus'];
+
+AbilityComponents.toxicspines = [...AbilityComponents.toxicspines, 'ironbarbs'];
+
+AbilityComponents.patriarchswrath = ['powerdrill', 'whiplash'];
+AbilityComponents.matriarchsvigil = ['thickfat', 'aromaveil'];
+
+AbilityComponents.heatcoil = [...AbilityComponents.heatcoil, 'longreach'];
+AbilityComponents.inversion = [...(AbilityComponents.inversion || []), 'infiltrator'];
+AbilityComponents.ironmountain = [...AbilityComponents.ironmountain, 'hypercutter'];
+
+import {FinalPassiveComponents} from './final-passive-migrations';
+import {FamilyReplacementComponents} from './family-replacements';
+Object.assign(AbilityComponents, FinalPassiveComponents, FamilyReplacementComponents);
+
+AbilityComponents.knightsguard = ['swornduty'];

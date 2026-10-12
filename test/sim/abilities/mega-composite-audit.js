@@ -111,6 +111,6 @@ describe('Mega composite ability components', () => {
 		victreebel.hp = 1;
 		const before = foe.hp;
 		battle.makeChoices('move splash', 'move tackle');
-		assert.equal(foe.hp, before - 1);
+		assert.equal(foe.hp, before);
 	});
 });

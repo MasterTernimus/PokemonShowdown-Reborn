@@ -1,0 +1,145 @@
+{
+  "ids": [
+    "ultrainstinct"
+  ],
+  "holders": [
+    {
+      "id": "hitmonlee",
+      "abilities": {
+        "0": "Unburden",
+        "1": "Ultra Instinct",
+        "H": "Kick Fiend"
+      },
+      "passives": [
+        "infiltrator"
+      ]
+    },
+    {
+      "id": "infernape",
+      "abilities": {
+        "0": "White Smoke",
+        "1": "Ultra Instinct",
+        "H": "Burning Rage"
+      },
+      "passives": [
+        "blaze"
+      ]
+    },
+    {
+      "id": "sawk",
+      "abilities": {
+        "0": "Ultra Instinct",
+        "1": "Inner Focus",
+        "H": "Mold Breaker"
+      },
+      "passives": [
+        "owntempo"
+      ]
+    },
+    {
+      "id": "lycanroc",
+      "abilities": {
+        "0": "Keen Hunt",
+        "1": "Sand Rush",
+        "H": "Ultra Instinct"
+      },
+      "passives": [
+        "steadfast"
+      ]
+    }
+  ],
+  "abilities": {
+    "ultrainstinct": {
+      "components": [
+        "moldbreaker",
+        "innerfocus"
+      ],
+      "callbacks": {
+        "onStart": "onStart(pokemon) {\n      if (isUltraSuppressedTerrain(this)) return;\n      this.add(\"-ability\", pokemon, \"Ultra Instinct\");\n      if (this.field.isTerrain([\"ashenbeachterrain\", \"newworldterrain\", \"starlightarenaterrain\", \"holyterrain\", \"coldeclipseterrain\"])) this.boost({ accuracy: 1 }, pokemon, pokemon);\n    }",
+        "onTryAddVolatile": "onTryAddVolatile(status, pokemon, source, effect) {\n      if (isUltraSuppressedTerrain(this)) return;\n      return this.dex.abilities.get(\"innerfocus\").onTryAddVolatile?.call(this, status, pokemon, source, effect);\n    }",
+        "onTryBoost": "onTryBoost(boost, target, source, effect) {\n      if (isUltraSuppressedTerrain(this)) return;\n      return this.dex.abilities.get(\"innerfocus\").onTryBoost?.call(this, boost, target, source, effect);\n    }",
+        "onModifyMove": "onModifyMove(move, pokemon, target) {\n      if (isUltraSuppressedTerrain(this)) return;\n      this.dex.abilities.get(\"moldbreaker\").onModifyMove?.call(this, move, pokemon, target);\n    }",
+        "onBasePower": "onBasePower(basePower, source, target) {\n      if (isUltraSuppressedTerrain(this)) return;\n      if (target?.hasAbility(\"battlebond\")) return;\n      if (target?.side.getSideCondition(\"reflect\") || target?.side.getSideCondition(\"lightscreen\") || target?.side.getSideCondition(\"auroraveil\")) {\n        this.debug(\"Ultra Instinct screen punish\");\n        return this.chainModify(2);\n      }\n      if (this.field.isTerrain([\"ashenbeachterrain\", \"newworldterrain\", \"starlightarenaterrain\", \"holyterrain\", \"coldeclipseterrain\"]) || this.queue.willMove(target) || target.newlySwitched) {\n        this.debug(\"Ultra Instinct boost\");\n        return this.chainModify(1.5);\n      }\n    }",
+        "onSourceModifyDamage": "function(...args) {\n    const target = this.event?.target;\n    const source = this.event?.source;\n    const owner = this.effectState?.target;\n    if (!target?.m || !source?.m || !owner?.m || !adaptiveActive(target) && !adaptiveActive(source)) return callback.apply(this, args);\n    const stack = this.adaptiveReductionStack ||= [];\n    const frame = { childFactor: 1, childReturns: [] };\n    const before = this.event.modifier;\n    stack.push(frame);\n    let value;\n    try {\n      value = callback.apply(this, args);\n      const ownValue = frame.childReturns.includes(value) ? void 0 : value;\n      const filtered = adaptiveAbilityContribution(\n        this,\n        this.event.id,\n        owner,\n        target,\n        source,\n        mechanism,\n        this.event.effect,\n        args[0],\n        ownValue,\n        before * frame.childFactor\n      );\n      if (ownValue !== void 0) value = filtered;\n    } finally {\n      stack.pop();\n      const parent = stack[stack.length - 1];\n      if (parent) {\n        parent.childFactor *= this.event.modifier / before;\n        parent.childReturns.push(value);\n      } else {\n        delete this.adaptiveReductionStack;\n      }\n    }\n    return value;\n  }"
+      }
+    },
+    "burningspirit": {
+      "components": [
+        "selfsufficient",
+        "opportunist",
+        "magmaarmor"
+      ],
+      "callbacks": {
+        "onBasePower": "onBasePower(basePower, attacker, defender, move) {\n      if (this.effect.id === \"burningspirit\") this.dex.abilities.get(\"proficient\").onBasePower?.call(this, basePower, attacker, defender, move);\n    }",
+        "onFoeAfterEachBoost": "onFoeAfterEachBoost(boost, target, source) {\n      return this.dex.abilities.get(\"opportunist\").onFoeAfterEachBoost?.call(this, boost, target, source);\n    }",
+        "onAnySwitchIn": "onAnySwitchIn(pokemon) {\n      return this.dex.abilities.get(\"opportunist\").onAnySwitchIn?.call(this, pokemon);\n    }",
+        "onAnyAfterMega": "onAnyAfterMega(pokemon) {\n      return this.dex.abilities.get(\"opportunist\").onAnyAfterMega?.call(this, pokemon);\n    }",
+        "onAnyAfterTerastallization": "onAnyAfterTerastallization(pokemon) {\n      return this.dex.abilities.get(\"opportunist\").onAnyAfterTerastallization?.call(this, pokemon);\n    }",
+        "onAnyAfterMove": "onAnyAfterMove(pokemon, target, move) {\n      return this.dex.abilities.get(\"opportunist\").onAnyAfterMove?.call(this, pokemon, target, move);\n    }",
+        "onResidual": "onResidual(pokemon) {\n      this.dex.abilities.get(\"opportunist\").onResidual?.call(this, pokemon);\n      return this.dex.abilities.get(\"selfsufficient\").onResidual?.call(this, pokemon);\n    }",
+        "onEnd": "onEnd(pokemon) {\n      return this.dex.abilities.get(\"opportunist\").onEnd?.call(this, pokemon);\n    }",
+        "onStart": "onStart(pokemon) {\n      return this.dex.abilities.get(\"magmaarmor\").onStart?.call(this, pokemon);\n    }",
+        "onUpdate": "onUpdate(pokemon) {\n      return this.dex.abilities.get(\"magmaarmor\").onUpdate?.call(this, pokemon);\n    }",
+        "onTryHit": "onTryHit(target, source, move) {\n      return this.dex.abilities.getHandler(\"magmaarmor\", \"onTryHit\")?.call(this, target, source, move);\n    }",
+        "onImmunity": "onImmunity(type, pokemon) {\n      return this.dex.abilities.get(\"magmaarmor\").onImmunity?.call(this, type, pokemon);\n    }",
+        "onSourceModifyAtk": "function(...args) {\n    const target = this.event?.target;\n    const source = this.event?.source;\n    const owner = this.effectState?.target;\n    if (!target?.m || !source?.m || !owner?.m || !adaptiveActive(target) && !adaptiveActive(source)) return callback.apply(this, args);\n    const stack = this.adaptiveReductionStack ||= [];\n    const frame = { childFactor: 1, childReturns: [] };\n    const before = this.event.modifier;\n    stack.push(frame);\n    let value;\n    try {\n      value = callback.apply(this, args);\n      const ownValue = frame.childReturns.includes(value) ? void 0 : value;\n      const filtered = adaptiveAbilityContribution(\n        this,\n        this.event.id,\n        owner,\n        target,\n        source,\n        mechanism,\n        this.event.effect,\n        args[0],\n        ownValue,\n        before * frame.childFactor\n      );\n      if (ownValue !== void 0) value = filtered;\n    } finally {\n      stack.pop();\n      const parent = stack[stack.length - 1];\n      if (parent) {\n        parent.childFactor *= this.event.modifier / before;\n        parent.childReturns.push(value);\n      } else {\n        delete this.adaptiveReductionStack;\n      }\n    }\n    return value;\n  }",
+        "onSourceModifySpA": "function(...args) {\n    const target = this.event?.target;\n    const source = this.event?.source;\n    const owner = this.effectState?.target;\n    if (!target?.m || !source?.m || !owner?.m || !adaptiveActive(target) && !adaptiveActive(source)) return callback.apply(this, args);\n    const stack = this.adaptiveReductionStack ||= [];\n    const frame = { childFactor: 1, childReturns: [] };\n    const before = this.event.modifier;\n    stack.push(frame);\n    let value;\n    try {\n      value = callback.apply(this, args);\n      const ownValue = frame.childReturns.includes(value) ? void 0 : value;\n      const filtered = adaptiveAbilityContribution(\n        this,\n        this.event.id,\n        owner,\n        target,\n        source,\n        mechanism,\n        this.event.effect,\n        args[0],\n        ownValue,\n        before * frame.childFactor\n      );\n      if (ownValue !== void 0) value = filtered;\n    } finally {\n      stack.pop();\n      const parent = stack[stack.length - 1];\n      if (parent) {\n        parent.childFactor *= this.event.modifier / before;\n        parent.childReturns.push(value);\n      } else {\n        delete this.adaptiveReductionStack;\n      }\n    }\n    return value;\n  }"
+      }
+    },
+    "ultraego": {
+      "callbacks": {
+        "onStart": "onStart(pokemon) {\n      if (isUltraSuppressedTerrain(this)) return;\n      this.add(\"-ability\", pokemon, \"Ultra Ego\");\n      pokemon.abilityState.ultraEgoDefBoosted = false;\n      pokemon.abilityState.ultraEgoSpDBoosted = false;\n      pokemon.abilityState.ultraEgoPinch = false;\n      pokemon.abilityState.ultraEgoHitTriggered = false;\n    }",
+        "boostedField": "boostedField() {\n      return this.field.isTerrain([\"ashenbeachterrain\", \"newworldterrain\", \"starlightarenaterrain\", \"holyterrain\", \"coldeclipseterrain\", \"fairytaleterrain\"]);\n    }",
+        "healUltraEgo": "healUltraEgo(pokemon, source) {\n      if (isUltraSuppressedTerrain(this)) return;\n      if (source === \"hit\" && this.dex.abilities.get(\"burningego\").boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {\n        const healed = this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);\n        if (typeof healed === \"number\" && healed > 0) pokemon.abilityState.ultraEgoPinch = true;\n        return;\n      }\n      this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);\n    }",
+        "onModifyMove": "onModifyMove(move) {\n      if (isUltraSuppressedTerrain(this)) return;\n      move.ignoreAbility = true;\n    }",
+        "onAfterMove": "onAfterMove(source, target, move) {\n      if (isUltraSuppressedTerrain(this)) return;\n      if (move.category !== \"Status\") source.abilityState.ultraEgoHitTriggered = false;\n    }",
+        "onSourceDamagingHit": "onSourceDamagingHit(damage, target, source, move) {\n      if (isUltraSuppressedTerrain(this)) return;\n      if (!move || move.category === \"Status\") return;\n      if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;\n      source.abilityState.ultraEgoAttackHealTurn = this.turn;\n      this.dex.abilities.get(\"burningego\").healUltraEgo.call(this, source, \"attack\");\n    }",
+        "onDamagingHit": "onDamagingHit(damage, target, source, move) {\n      if (isUltraSuppressedTerrain(this)) return;\n      if (!source || target.isAlly(source) || !move || move.category === \"Status\") return;\n      if (target.abilityState.ultraEgoHitTriggered) {\n        this.heal(target.baseMaxhp / 20, target, target);\n        return;\n      }\n      target.abilityState.ultraEgoHitTriggered = true;\n      this.boost({ atk: 1, spa: 1 }, target, target);\n      if (this.dex.abilities.get(\"burningego\").boostedField.call(this)) {\n        if (move.category === \"Physical\" && !target.abilityState.ultraEgoDefBoosted) {\n          target.abilityState.ultraEgoDefBoosted = true;\n          this.boost({ def: 1 }, target, target);\n        }\n        if (move.category === \"Special\" && !target.abilityState.ultraEgoSpDBoosted) {\n          target.abilityState.ultraEgoSpDBoosted = true;\n          this.boost({ spd: 1 }, target, target);\n        }\n      }\n      this.dex.abilities.get(\"burningego\").healUltraEgo.call(this, target, \"hit\");\n    }"
+      }
+    },
+    "burningego": {
+      "components": [
+        "ultraego",
+        "flamebody",
+        "magmaarmor"
+      ],
+      "callbacks": {
+        "onBasePower": "onBasePower(basePower, attacker, defender, move) {\n      this.dex.abilities.get(\"ultraego\").onBasePower?.call(this, basePower, attacker, defender, move);\n      if (this.effect.id === \"burningego\") this.dex.abilities.get(\"proficient\").onBasePower?.call(this, basePower, attacker, defender, move);\n    }",
+        "onStart": "onStart(pokemon) {\n      this.dex.abilities.get(\"flamebody\").onStart?.call(this, pokemon);\n      this.dex.abilities.get(\"magmaarmor\").onStart?.call(this, pokemon);\n      if (isUltraSuppressedTerrain(this)) return;\n      this.add(\"-ability\", pokemon, \"Burning Ego\");\n      pokemon.abilityState.ultraEgoDefBoosted = false;\n      pokemon.abilityState.ultraEgoSpDBoosted = false;\n      pokemon.abilityState.ultraEgoPinch = false;\n      pokemon.abilityState.ultraEgoHitTriggered = false;\n    }",
+        "boostedField": "boostedField() {\n      return this.field.isTerrain([\"ashenbeachterrain\", \"newworldterrain\", \"starlightarenaterrain\", \"holyterrain\", \"coldeclipseterrain\", \"fairytaleterrain\"]);\n    }",
+        "healUltraEgo": "healUltraEgo(pokemon, source) {\n      if (isUltraSuppressedTerrain(this)) return;\n      if (source === \"hit\" && this.dex.abilities.get(\"perfectego\").boostedField.call(this) && !pokemon.abilityState.ultraEgoPinch && pokemon.hp > 0 && pokemon.hp <= pokemon.maxhp / 2) {\n        const healed = this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);\n        if (typeof healed === \"number\" && healed > 0) pokemon.abilityState.ultraEgoPinch = true;\n        return;\n      }\n      this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);\n    }",
+        "onModifyMove": "onModifyMove(move, pokemon, target) {\n      if (isUltraSuppressedTerrain(this)) return;\n      this.dex.abilities.get(\"ultraego\").onModifyMove?.call(this, move, pokemon, target);\n    }",
+        "onSourceModifyDamage": "function(...args) {\n    const target = this.event?.target;\n    const source = this.event?.source;\n    const owner = this.effectState?.target;\n    if (!target?.m || !source?.m || !owner?.m || !adaptiveActive(target) && !adaptiveActive(source)) return callback.apply(this, args);\n    const stack = this.adaptiveReductionStack ||= [];\n    const frame = { childFactor: 1, childReturns: [] };\n    const before = this.event.modifier;\n    stack.push(frame);\n    let value;\n    try {\n      value = callback.apply(this, args);\n      const ownValue = frame.childReturns.includes(value) ? void 0 : value;\n      const filtered = adaptiveAbilityContribution(\n        this,\n        this.event.id,\n        owner,\n        target,\n        source,\n        mechanism,\n        this.event.effect,\n        args[0],\n        ownValue,\n        before * frame.childFactor\n      );\n      if (ownValue !== void 0) value = filtered;\n    } finally {\n      stack.pop();\n      const parent = stack[stack.length - 1];\n      if (parent) {\n        parent.childFactor *= this.event.modifier / before;\n        parent.childReturns.push(value);\n      } else {\n        delete this.adaptiveReductionStack;\n      }\n    }\n    return value;\n  }",
+        "onAfterMove": "onAfterMove(source, target, move) {\n      if (isUltraSuppressedTerrain(this)) return;\n      if (move.category !== \"Status\") source.abilityState.ultraEgoHitTriggered = false;\n    }",
+        "onSourceDamagingHit": "onSourceDamagingHit(damage, target, source, move) {\n      if (isUltraSuppressedTerrain(this)) return;\n      if (!move || move.category === \"Status\") return;\n      if (source.abilityState.ultraEgoAttackHealTurn === this.turn) return;\n      source.abilityState.ultraEgoAttackHealTurn = this.turn;\n      this.dex.abilities.get(\"perfectego\").healUltraEgo.call(this, source, \"attack\");\n    }",
+        "onDamagingHit": "onDamagingHit(damage, target, source, move) {\n      this.dex.abilities.get(\"flamebody\").onDamagingHit?.call(this, damage, target, source, move);\n      if (isUltraSuppressedTerrain(this)) return;\n      if (!source || target.isAlly(source) || !move || move.category === \"Status\") return;\n      if (target.abilityState.ultraEgoHitTriggered) {\n        this.heal(target.baseMaxhp / 20, target, target);\n        return;\n      }\n      target.abilityState.ultraEgoHitTriggered = true;\n      this.boost({ atk: 1, spa: 1 }, target, target);\n      if (this.dex.abilities.get(\"perfectego\").boostedField.call(this)) {\n        if (move.category === \"Physical\" && !target.abilityState.ultraEgoDefBoosted) {\n          target.abilityState.ultraEgoDefBoosted = true;\n          this.boost({ def: 1 }, target, target);\n        }\n        if (move.category === \"Special\" && !target.abilityState.ultraEgoSpDBoosted) {\n          target.abilityState.ultraEgoSpDBoosted = true;\n          this.boost({ spd: 1 }, target, target);\n        }\n      }\n      this.dex.abilities.get(\"perfectego\").healUltraEgo.call(this, target, \"hit\");\n    }",
+        "onUpdate": "onUpdate(pokemon) {\n      this.dex.abilities.get(\"magmaarmor\").onUpdate?.call(this, pokemon);\n    }",
+        "onTryHit": "onTryHit(target, source, move) {\n      return this.dex.abilities.getHandler(\"magmaarmor\", \"onTryHit\")?.call(this, target, source, move);\n    }",
+        "onImmunity": "onImmunity(type, pokemon) {\n      return this.dex.abilities.get(\"magmaarmor\").onImmunity?.call(this, type, pokemon);\n    }",
+        "onSourceModifyAtk": "function(...args) {\n    const target = this.event?.target;\n    const source = this.event?.source;\n    const owner = this.effectState?.target;\n    if (!target?.m || !source?.m || !owner?.m || !adaptiveActive(target) && !adaptiveActive(source)) return callback.apply(this, args);\n    const stack = this.adaptiveReductionStack ||= [];\n    const frame = { childFactor: 1, childReturns: [] };\n    const before = this.event.modifier;\n    stack.push(frame);\n    let value;\n    try {\n      value = callback.apply(this, args);\n      const ownValue = frame.childReturns.includes(value) ? void 0 : value;\n      const filtered = adaptiveAbilityContribution(\n        this,\n        this.event.id,\n        owner,\n        target,\n        source,\n        mechanism,\n        this.event.effect,\n        args[0],\n        ownValue,\n        before * frame.childFactor\n      );\n      if (ownValue !== void 0) value = filtered;\n    } finally {\n      stack.pop();\n      const parent = stack[stack.length - 1];\n      if (parent) {\n        parent.childFactor *= this.event.modifier / before;\n        parent.childReturns.push(value);\n      } else {\n        delete this.adaptiveReductionStack;\n      }\n    }\n    return value;\n  }",
+        "onSourceModifySpA": "function(...args) {\n    const target = this.event?.target;\n    const source = this.event?.source;\n    const owner = this.effectState?.target;\n    if (!target?.m || !source?.m || !owner?.m || !adaptiveActive(target) && !adaptiveActive(source)) return callback.apply(this, args);\n    const stack = this.adaptiveReductionStack ||= [];\n    const frame = { childFactor: 1, childReturns: [] };\n    const before = this.event.modifier;\n    stack.push(frame);\n    let value;\n    try {\n      value = callback.apply(this, args);\n      const ownValue = frame.childReturns.includes(value) ? void 0 : value;\n      const filtered = adaptiveAbilityContribution(\n        this,\n        this.event.id,\n        owner,\n        target,\n        source,\n        mechanism,\n        this.event.effect,\n        args[0],\n        ownValue,\n        before * frame.childFactor\n      );\n      if (ownValue !== void 0) value = filtered;\n    } finally {\n      stack.pop();\n      const parent = stack[stack.length - 1];\n      if (parent) {\n        parent.childFactor *= this.event.modifier / before;\n        parent.childReturns.push(value);\n      } else {\n        delete this.adaptiveReductionStack;\n      }\n    }\n    return value;\n  }"
+      }
+    },
+    "opportunist": {
+      "callbacks": {
+        "onFoeAfterEachBoost": "onFoeAfterEachBoost(boost, target, source) {\n      if (target.m.copyingOpportunistBoosts) return;\n      if (!this.effectState.boosts) this.effectState.boosts = {};\n      const boostPlus = this.effectState.boosts;\n      let i;\n      for (i in boost) {\n        if (boost[i] > 0) {\n          boostPlus[i] = (boostPlus[i] || 0) + boost[i];\n        }\n      }\n    }",
+        "onAnySwitchIn": "onAnySwitchIn() {\n      applyOpportunistBoosts(this);\n    }",
+        "onAnyAfterMega": "onAnyAfterMega() {\n      applyOpportunistBoosts(this);\n    }",
+        "onAnyAfterTerastallization": "onAnyAfterTerastallization() {\n      applyOpportunistBoosts(this);\n    }",
+        "onAnyAfterMove": "onAnyAfterMove() {\n      applyOpportunistBoosts(this);\n    }",
+        "onResidual": "onResidual(pokemon) {\n      applyOpportunistBoosts(this);\n    }",
+        "onEnd": "onEnd() {\n      delete this.effectState.boosts;\n    }"
+      }
+    },
+    "magmaarmor": {
+      "callbacks": {
+        "onUpdate": "onUpdate(pokemon) {\n      if (pokemon.status === \"frz\") {\n        this.add(\"-activate\", pokemon, \"ability: Magma Armor\");\n        pokemon.cureStatus();\n      }\n    }",
+        "onStart": "onStart(pokemon) {\n      if (this.field.isTerrain([\"dragonsdenterrain\", \"volcanicterrain\", \"coldeclipseterrain\"])) {\n        this.boost({ def: 1, spd: 1 }, pokemon, pokemon);\n      }\n    }",
+        "onTryHit": "onTryHit(target, source, move) {\n      if (target !== source && this.movehasType(move, \"Fire\") && this.field.isTerrain(\"dragonsdenterrain\")) {\n        move.accuracy = true;\n        this.add(\"-immune\", target, \"[from] ability: Magma Armor\");\n        return null;\n      }\n    }",
+        "onSourceModifyAtk": "function(...args) {\n    const target = this.event?.target;\n    const source = this.event?.source;\n    const owner = this.effectState?.target;\n    if (!target?.m || !source?.m || !owner?.m || !adaptiveActive(target) && !adaptiveActive(source)) return callback.apply(this, args);\n    const stack = this.adaptiveReductionStack ||= [];\n    const frame = { childFactor: 1, childReturns: [] };\n    const before = this.event.modifier;\n    stack.push(frame);\n    let value;\n    try {\n      value = callback.apply(this, args);\n      const ownValue = frame.childReturns.includes(value) ? void 0 : value;\n      const filtered = adaptiveAbilityContribution(\n        this,\n        this.event.id,\n        owner,\n        target,\n        source,\n        mechanism,\n        this.event.effect,\n        args[0],\n        ownValue,\n        before * frame.childFactor\n      );\n      if (ownValue !== void 0) value = filtered;\n    } finally {\n      stack.pop();\n      const parent = stack[stack.length - 1];\n      if (parent) {\n        parent.childFactor *= this.event.modifier / before;\n        parent.childReturns.push(value);\n      } else {\n        delete this.adaptiveReductionStack;\n      }\n    }\n    return value;\n  }",
+        "onSourceModifySpA": "function(...args) {\n    const target = this.event?.target;\n    const source = this.event?.source;\n    const owner = this.effectState?.target;\n    if (!target?.m || !source?.m || !owner?.m || !adaptiveActive(target) && !adaptiveActive(source)) return callback.apply(this, args);\n    const stack = this.adaptiveReductionStack ||= [];\n    const frame = { childFactor: 1, childReturns: [] };\n    const before = this.event.modifier;\n    stack.push(frame);\n    let value;\n    try {\n      value = callback.apply(this, args);\n      const ownValue = frame.childReturns.includes(value) ? void 0 : value;\n      const filtered = adaptiveAbilityContribution(\n        this,\n        this.event.id,\n        owner,\n        target,\n        source,\n        mechanism,\n        this.event.effect,\n        args[0],\n        ownValue,\n        before * frame.childFactor\n      );\n      if (ownValue !== void 0) value = filtered;\n    } finally {\n      stack.pop();\n      const parent = stack[stack.length - 1];\n      if (parent) {\n        parent.childFactor *= this.event.modifier / before;\n        parent.childReturns.push(value);\n      } else {\n        delete this.adaptiveReductionStack;\n      }\n    }\n    return value;\n  }",
+        "onImmunity": "onImmunity(type, pokemon) {\n      if (type === \"frz\" && !this.field.isTerrain(\"coldeclipseterrain\")) return false;\n    }"
+      }
+    }
+  }
+}

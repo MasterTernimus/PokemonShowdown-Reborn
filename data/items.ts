@@ -1911,8 +1911,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		megaStone: { "Gardevoir": "Gardevoir-Void-Mega", "Mismagius": "Mismagius-Mega" },
-		itemUser: ["Gardevoir", "Mismagius"],
+		megaStone: { "Mismagius": "Mismagius-Mega", "Gardevoir": "Gardevoir-Void-Mega" },
+		itemUser: ["Mismagius", "Gardevoir"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
@@ -8784,3 +8784,4 @@ const redundantItemIds = [
 for (const itemId of redundantItemIds) delete Items[itemId];
 
 if (!ENABLE_MEGA_HYDREIGON_X) delete Items.hydreigonite;
+

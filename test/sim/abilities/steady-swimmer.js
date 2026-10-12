@@ -23,7 +23,7 @@ describe('Seaking confusion-only Steady Swimmer', () => {
 			assert.deepEqual(species.passives, require('./passive-approval-overlays').current(id, old.passives), id);
 		}
 		assert.deepEqual(Dex.species.get('goldeen').passives, []);
-		assert.equal(Object.keys(require('../../../dist/data/species-passives').SpeciesPassives).length, 820);
+		assert.equal(Object.keys(require('../../../dist/data/species-passives').SpeciesPassives).length, 839);
 	});
 	for (const suppression of ['none', 'gastroacid', 'meridianseal', 'gas']) {
 		it('prevents opposing confusion through ' + suppression, () => {
@@ -103,7 +103,7 @@ describe('Seaking confusion-only Steady Swimmer', () => {
 		assert(!t.volatiles.confusion);
 	});
 	it('Illusion copies disguise passives and removes them on reveal without revealing actual species', () => {
-		const [p, t] = setup('Zoroark', 'Illusion');
+		const [p, t] = setup('Zoroark', 'Perfect Illusion');
 		assert(p.illusion);
 		assert.deepEqual(p.getPassives(), ['steadyswimmer']);
 		const at = battle.log.length;

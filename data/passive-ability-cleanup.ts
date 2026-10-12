@@ -1,8 +1,11 @@
+import {SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions} from './signature-passive-data';
+export {SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions};
 /** Components moved out of exclusive selected packages into existing species passives. */
 export const AbilityComponentExclusions: { [id: string]: readonly string[] } = {
  uncheckedassault: ['limber'], cinderscales: ['shielddust'],
  cursedkeepsake: ['frisk'], curseddoll: ['frisk'], cursedmarionette: ['frisk'], cursedarmament: ['frisk'],
  guidinglight: ['illuminate'],
+ stormsovereign: ['keeneye'],
  chargedtail: ['static'],
  woolyconductor: ['static'],
  reservoir: ['damp'],
@@ -59,6 +62,7 @@ export const AbilityComponentExclusions: { [id: string]: readonly string[] } = {
 	],
 	"burningspirit": [
 		"proficient",
+	'selfsufficient',
 	],
 	"burningego": [
 		"proficient",
@@ -77,6 +81,7 @@ export const AbilityComponentExclusions: { [id: string]: readonly string[] } = {
 	],
 	"fortressshell": [
 		"proficient",
+		"stalwart",
 	],
 	"draconicforce": [
 		"proficient",
@@ -171,15 +176,20 @@ export const SharedPassiveComponents: { [id: string]: readonly string[] } = {
 
 export function getAbilityComponentExclusions(id: string, passives: readonly string[] = [], species = ''): readonly string[] {
 	return [...(AbilityComponentExclusions[id] || []),
+		...(id === 'empress' && ['tsareena', 'tsareenaalt'].includes(species) && passives.includes('queenlymajesty') ? ['queenlymajesty'] : []),
+		...(passives.includes(id) ? SignaturePassiveRemovedComponents[id] || [] : []),
+		...passives.flatMap(passive => SignaturePassiveComponents[passive] || []),
 		...(id === 'stormsovereign' && species === 'pidgeotmega' && passives.includes('noguard') ? ['galewings'] : []),
 		...(SharedPassiveComponents[id] || []).filter(p => passives.includes(p))];
 }
 
 /** Primitive delegates consult the outer package, including copied packages, before applying an effect. */
 export function skipPassiveComponent(battle: Battle, pokemon: Pokemon | undefined, component: string): boolean {
-	if (battle.effectState?.speciesPassive === component || battle.effect.id === 'starterpassives') return false;
-	if (pokemon?.getPassives().includes(component)) return true;
-	const ids = [battle.effect.id, pokemon?.ability,
+	const passive = battle.effectState?.speciesPassive;
+	if (SignaturePassiveRemovedComponents[passive]?.includes(component)) return true;
+	if (passive === component || SignaturePassiveComponents[passive]?.includes(component) || battle.effect.id === 'starterpassives') return false;
+	if (pokemon?.getPassives().some(id => id === component || SignaturePassiveComponents[id]?.includes(component))) return true;
+	const ids = [battle.effect.id, passive, pokemon?.ability,
 		pokemon?.ability === 'perfectforesight' ? pokemon.m.perfectForesightAbility : ''];
 	return ids.some(id => id && AbilityComponentExclusions[id]?.includes(component));
 }
@@ -521,7 +531,7 @@ Object.assign(SharedPassiveAbilityDescriptions, {
  argentdevotion: {passive: 'armorize', shortDesc: 'Sworn Duty, Serene Grace and Mold Breaker.', desc: 'Sworn Duty, Serene Grace and Mold Breaker retain their full local effects. Armorize is supplied by the species passive, including Steel conversion, its field-dependent power boost and Cold Eclipse hail immunity.'},
  execution: {passive: 'duskilate', shortDesc: 'Double power against foes at half HP or less; retains offense-drop limits, field Speed protection and KO healing.', desc: 'Retains Mold Breaker, double attack power against targets at half HP or less, limits to Attack and Special Attack drops, prevention of Speed drops while a field exists, and 1/8 max HP healing per move KO. Duskilate is supplied by the species passive, retaining its conversion, field power and Cold Eclipse hail immunity.'},
  corrosivetouch: {passive: 'technician', shortDesc: 'Poison Touch, Corrosion and extra Grass STAB.', desc: 'Poison Touch and full local Corrosion remain selected, including their field effects. Grass attacks retain STAB. Technician is supplied by the species passive: 1.5x power at effective base power 60 or less, or 80 or less on Factory Terrain.'},
- desertspirit: {passive: 'levitate', shortDesc: 'Summons sandstorm; doubles resisted damage; Ground attacks gain STAB.', desc: 'Summons sandstorm on entry for 5 turns, or 8 with Smooth Rock. Resisted attacks deal double damage, and Ground attacks receive STAB despite its Dragon/Bug typing. Levitate is supplied by the species passive and follows normal grounding rules.'},
+ desertspirit: {passive: 'levitate', shortDesc: 'Summons sandstorm; powder and sandstorm/hail immunity; Ground attacks gain STAB.', desc: 'Summons sandstorm on entry for 5 turns, or 8 with Smooth Rock. Overcoat protects against powder effects and sandstorm/hail damage. Ground attacks receive STAB despite its Dragon/Bug typing. Levitate is supplied by the species passive and follows normal grounding rules.'},
  tremor: {passive: 'levitate', shortDesc: 'Resonance Force, Sand Force and extra Bug STAB.', desc: 'Own and allied damaging sound moves have 1.5x power. Its sound moves use its higher offensive stat without changing category; allied sound attacks do not damage allies. Does not bypass Soundproof. Rock, Ground and Steel attacks have 1.3x power in sandstorm or on Desert/Ashen Beach Terrain, and sandstorm damage is blocked. Bug attacks receive STAB. Levitate replaces the direct Ground immunity as a species passive and follows normal grounding rules.'},
  sirius: {passive: 'venamskiss', shortDesc: 'Apex Venom, Dragon Poison Fang, Shed Skin and full tail effects.', desc: 'Retains full Sirius: Strong Jaw remains selected, and Poison Fang keeps its original single 1.5x power boost and Dragon conversion. Poison Fang and Poison attacks retain their custom Poison/Steel matchups; biting attacks bypass protection and append a 30% toxic chance. Wasteland retains its existing secondary replacement before the added biting toxic chance. Full Shed Skin, +1 entry accuracy, 1.5x tail power and first-tail-hit toxic remain. Venam\'s Kiss is a separate passive: Poison HP hits can poison Steel/Poison foes; pre-poisoned foes are drained and heal-blocked, and poisoned foes have 0.75x Speed. The overlapping Steel matchup applies once; Dragon Poison Fang does not trigger Poison-only passive effects.'},
  windchime: {passive: 'levitate', shortDesc: 'Armorize and Punk Rock.', desc: 'Retains full local Armorize and Punk Rock, including field interactions. The direct Ground immunity is replaced by passive Levitate, which follows normal grounding rules.'},
@@ -610,6 +620,44 @@ SharedPassiveComponents.solarhydra = ['solarbud'];
 import {GmaxExtractedComponents} from './gmax-passive-data';
 import {GmaxPassiveDescriptions} from './gmax-passive-descriptions';
 Object.assign(SharedPassiveAbilityDescriptions, GmaxPassiveDescriptions);
+import {NativeSlipstreamDescription} from './targeted-passive-reworks';
+SharedPassiveComponents.slipstream = ['keeneye', 'levitate'];
+SharedPassiveAbilityDescriptions.slipstream = NativeSlipstreamDescription;
 for (const [id, components] of Object.entries(GmaxExtractedComponents)) {
 	SharedPassiveComponents[id] = [...new Set([...(SharedPassiveComponents[id] || []), ...components])];
 }
+
+import {PressureLimitText} from './pressure-memory';
+for (const id of ['irondominion', 'royalescort']) {
+	if (SharedPassiveAbilityDescriptions[id]) SharedPassiveAbilityDescriptions[id].desc += ' ' + PressureLimitText;
+}
+
+import {ShelterDescriptions} from './shelter-audit-reworks';
+SharedPassiveAbilityDescriptions.scaleshelter = {passive: 'shielddust', ...ShelterDescriptions.scaleshelter};
+SharedPassiveAbilityDescriptions.roughscale = {passive: 'roughskin', ...ShelterDescriptions.roughscale};
+AbilityComponentExclusions.astralwatcher = [...(AbilityComponentExclusions.astralwatcher || []), 'defragment'];
+SharedPassiveAbilityDescriptions.glacialmass.shortDesc = 'Double weight and half physical attack damage; field effects.';
+SharedPassiveAbilityDescriptions.lunarorbit.desc = 'Magic Guard prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. Fairy Tale entry gives +1 Sp. Def. On entry or Mega Evolution, sets Gravity for 5 turns. Water Surface sinks to Underwater, Underwater to Midnight Zone, and Corrosive Mist to Corrosive, except on New World. Magic Bounce is supplied separately by the species passive.';
+
+import {BurningRagePassiveDescription} from './burning-rage-display';
+SharedPassiveAbilityDescriptions.burningrage = BurningRagePassiveDescription;
+import {NativeStormDescription, SovereignDescriptions} from './sovereign-approved-data';
+SharedPassiveAbilityDescriptions.stormsovereign = NativeStormDescription;
+for (const id of ['sandsovereign', 'frostsovereign']) {
+	if (SharedPassiveAbilityDescriptions[id]) Object.assign(SharedPassiveAbilityDescriptions[id], SovereignDescriptions[id]);
+}
+
+SharedPassiveAbilityDescriptions.cursedmarionette = {
+ passive: 'prankster',
+ shortDesc: 'Curses opposing targets and attackers; cursed foes deal 20% less damage; Curse damage heals it.',
+ desc: 'Full local Frisk reveals opposing held items on entry. Attacks and status moves curse opposing targets, and taking a damaging hit curses the attacker. Cursed foes deal 20% less damage to it. Its curses deal 1/8 max HP and restore half of that damage to it. After taking a hit at half HP or less, once per battle it creates Haunted Field for 3 turns or extends it to at least 3 turns. Fainting curses opposing Pokemon and creates Haunted Field for 5 turns, or extends an existing Haunted Field by 5 turns. Ordinary Ghost Curse costs 1/4 max HP; ability-applied curses do not pay that move cost. Prankster is supplied separately by the species passive.',
+};
+
+if (SharedPassiveAbilityDescriptions.toxicspines) {
+ SharedPassiveAbilityDescriptions.toxicspines.desc += ' Full local Iron Barbs additionally deals 1/8 of a contact attacker\'s base max HP, separate from Toxic Debris contact damage.';
+ SharedPassiveAbilityDescriptions.toxicspines.shortDesc += ' Iron Barbs adds 1/8 contact damage.';
+}
+
+
+import {LateDisplayClarifications} from './late-display-clarifications';
+for (const [id, details] of Object.entries(LateDisplayClarifications)) if (SharedPassiveAbilityDescriptions[id]) Object.assign(SharedPassiveAbilityDescriptions[id], details);

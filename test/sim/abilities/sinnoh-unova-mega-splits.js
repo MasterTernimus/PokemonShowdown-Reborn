@@ -27,7 +27,7 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
 			if (JSON.stringify(s.passives) !== JSON.stringify(old.passives)) changed++;
 		}
-		assert.equal(changed, 59); // Includes later Mega Pidgeot and 25 explicit Gmax grants.
+		assert.equal(changed, 129); // Includes the later approved Mega/Gmax, shortlist, and Kingambit migrations checked individually above.
 	});
 	for (const [id, passive] of Object.entries(approved)) {
 		it(id + ' migrates through real Mega evolution, Transform, suppression and selected-ability replacement', () => {
@@ -263,10 +263,11 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		const [p, q] = setup('Mew', 'Aura Master');
 		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 50);
 	});
-	it('Illusion uses the disguise passive including Scraftys one-eighth recovery variant', () => {
+	it('Perfect Illusion uses the disguise passive including Scraftys one-eighth recovery variant', () => {
 		const [p, q] = setup('Mew');
 		q.formeChange('Scrafty-Mega', null, true);
 		p.illusion = q;
+		p.m.perfectIllusion = true;
 		p.hp = 100;
 		battle.randomChance = () => true;
 		assert.deepEqual(p.getPassives(), ['shedskin']);
