@@ -189,6 +189,14 @@ it('preserves moves and learnsets apart from approved passive-aware ability chec
 				contents = contents.replace(/(slotCondition: 'Wish',[\s\S]*?onStart\(pokemon, source), sourceEffect\)/, '$1)');
 				contents = contents.replace("'holyterrain', 'starlightarenaterrain']) ||\n\t\t\t\t\t(['nomoswish', 'nostraswish'].includes(sourceEffect?.id) &&\n\t\t\t\t\t(this.field.isAura('mistyterrain') || this.field.isAura('rainbowterrain'))))", "'holyterrain', 'starlightarenaterrain']))");
 			}
+			// Preserve the original fingerprint after the approved Psycho Boost removals.
+			if (key === 'learnsetsHash') {
+				for (const [species, nextMove] of [['jynx', 'psychocut'], ['gothitelle', 'psychup']]) {
+					const pattern = new RegExp('(\\t' + species + ': \{[\\s\\S]*?)(\\t\\t\\t' + nextMove + ':)');
+					assert(pattern.test(contents), species + ' learnset anchor');
+					contents = contents.replace(pattern, '$1\t\t\tpsychoboost: ["9M"],\n$2');
+				}
+			}
 			assert.equal(crypto.createHash('sha256').update(contents).digest('hex'), before[key], key);
 		}
 	});
