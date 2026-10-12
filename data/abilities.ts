@@ -3211,6 +3211,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 210,
 	},
 	shadowbond: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Shadow Bond');
+		},
 		onSourceAfterFaint(length, target, source, effect) {
 			return this.dex.abilities.get('battlebond').onSourceAfterFaint?.call(this, length, target, source, effect);
 		},
@@ -3221,6 +3224,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move, pokemon, target) {
 			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move, pokemon, target);
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('battlebond').onSourceModifyDamage?.call(this, damage, source, target, move);

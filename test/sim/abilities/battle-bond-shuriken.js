@@ -91,12 +91,16 @@ describe('Battle Bond Water Shuriken restart', () => {
 		assert.equal(capture(user, target).length, 2);
 		assert.equal(user.species.id, 'greninja');
 	});
-	it('respects Protect and Water Absorb on remaining foes', () => {
+	for (const shield of [false, true]) it('respects Protect and bypasses Water Absorb unless shielded: ' + shield, () => {
 		const [user, target] = setup('ffa');
 		target.hp = 1;
 		battle.p3.active[0].addVolatile('protect');
 		battle.p4.active[0].setAbility('Water Absorb');
-		assert.equal(capture(user, target).length, 1);
+		battle.p4.active[0].hp = battle.p4.active[0].maxhp = 10000;
+		if (shield) battle.p4.active[0].setItem('Ability Shield');
+		assert.equal(capture(user, target).length, shield ? 1 : 4);
+		assert.equal(battle.p3.active[0].hp, battle.p3.active[0].maxhp);
+		assert.equal(battle.p4.active[0].hp < 10000, !shield);
 		assert.equal(user.species.id, 'greninjaash');
 	});
 	it('spends only one PP for the whole action', () => {

@@ -7,7 +7,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	savageresolve: ['guts'],
 	lancepoint: ['keeneye'],
 	anchoredbattery: ['megalauncher', 'suctioncups'],
-	shadowbond: ['battlebond', 'filter', 'selfsufficient', 'proficient', 'infiltrator'],
+	shadowbond: ['battlebond', 'filter', 'selfsufficient', 'proficient', 'infiltrator', 'moldbreaker'],
 	apexbond: ['battlebond', 'filter', 'selfsufficient', 'supremeoverlord', 'roughskin'],
 	sacredbond: ['battlebond', 'filter', 'selfsufficient', 'magmaarmor', 'intimidate', 'flashfire'],
 	battlebond: ['filter', 'selfsufficient'],
