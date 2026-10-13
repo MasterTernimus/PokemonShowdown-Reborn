@@ -133,7 +133,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Prevents poison; opposing Poison move users lose Atk/SpA."
 	},
 	"moonveil": {
-		"desc": "It and its allies cannot be poisoned. Gaining this Ability while it or its ally is poisoned cures them. Before an opposing Pokemon uses a Poison-type move, that Pokemon's Attack and Special Attack are lowered by 1 stage. On entry, creates Misty Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules.",
+		"desc": "Allies take 25% less damage from attacks. It and its allies cannot be poisoned. Gaining this Ability while it or its ally is poisoned cures them. Before an opposing Pokemon uses a Poison-type move, that Pokemon's Attack and Special Attack are lowered by 1 stage. On entry, creates Misty Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules.",
 		"shortDesc": "Prevents poison; opposing Poison move users lose Atk/SpA; Creates Misty Terrain on entry."
 	},
 	"tidalwave": {
@@ -813,7 +813,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Maximum multi-hit count; 1.5x multi-hit power; Moves ignore bypassable abilities; Drill/horn moves have 1.5x power; 2x and pierce protection on rocky fields."
 	},
 	"mirrorgreed": {
-		"desc": "Reflects eligible status moves and entry hazards once; reflected moves cannot bounce again. Fairy Tale entry gives +1 Sp. Def; Mirror Arena entry gives +1 evasion. Moves have 1.3x power if no other active Pokemon has a move left to use that turn. Takes 20% less attack damage, or 40% less from super-effective attacks.",
+		"desc": "Reflects eligible status moves and entry hazards once; reflected moves cannot bounce again. Fairy Tale entry gives +1 Sp. Def; Mirror Arena entry gives +1 evasion. Moves have 1.3x power if no other active Pokemon has a move left to use that turn. Takes 20% less attack damage, or 40% less from super-effective attacks. Opportunist copies positive stat boosts gained by opposing Pokemon.",
 		"shortDesc": "Reflects status moves; 1.3x power when moving last; 20% less attack damage, 40% if super effective."
 	},
 	"uncheckedassault": {
@@ -2347,7 +2347,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Contact moves have 1.3x power — first Steel contact hit per entry lowers the foe’s Defense."
 	},
 	"gemeye": {
-		"desc": "Prevents other Pokemon's accuracy drops and ignores evasion boosts. Reveals opposing Illusions on activation. Mirror Arena entry gives +1 accuracy and Laser Focus. Once per switch-in, reflects the first reflectable opposing status move aimed directly at it. Side-targeting hazards do not use this reflection.",
+		"desc": "Magic Guard prevents indirect damage and grants +1 Sp. Def on Fairy Tale entry. Prevents opposing accuracy drops, ignores evasion boosts, and reveals opposing Illusions. Mirror Arena entry gives +1 accuracy and Laser Focus. Reflects the first direct opposing status move each entry; side-targeting hazards do not consume this reflection.",
 		"shortDesc": "No opposing accuracy drops; ignores evasion; reveals Illusions — reflects the first direct opposing status move each entry."
 	},
 	"lastlaugh": {
@@ -2838,8 +2838,8 @@ AbilityDescriptionOverrides.slumberinggiant = {
 };
 
 AbilityDescriptionOverrides.oceanlullaby = {
-	"desc": "Shell Armor prevents critical hits. Once per turn, a successful damaging sound move clears confusion and negative accuracy stages from the holder and active allies. Other stages and positive accuracy remain; the bench is unaffected. Does not change Sing accuracy.",
-	"shortDesc": "Shell Armor; damaging sound hits clear self/allies' confusion and negative accuracy once/turn."
+	"desc": "Shell Armor. Once per turn, a successful damaging sound hit heals the holder and active allies by 1/16 max HP, clears confusion, and removes negative accuracy stages. Does not affect benched Pokemon, other stat stages, positive accuracy, or Sing accuracy.",
+	"shortDesc": "Shell Armor; sound hits heal active allies 1/16 and clear confusion/accuracy drops once/turn."
 };
 
 AbilityDescriptionOverrides.shadowscreen = {
@@ -3308,8 +3308,8 @@ AbilityDescriptionOverrides.raincourier = {
 };
 
 AbilityDescriptionOverrides.lastlaugh = {
-	"desc": "If no other active Pokemon has a move left to use this turn, its damaging attack bypasses Substitute. Damaging a foe with that attack restores 1/8 max HP, once per turn. Once per entry, a damaging attack that hits a foe after that foe has completed its move action this turn applies Torment after damage, subject to normal eligibility. Merely switching in does not qualify.",
-	"shortDesc": "Last-action hits bypass Substitute and heal 1/8; once/entry, hitting an already-acted foe applies Torment."
+	"desc": "If no other active Pokemon has a move left to use this turn, its damaging attack bypasses Substitute. Damaging a foe with that attack restores 1/8 max HP, once per turn. Once per entry, a damaging attack that hits a foe after that foe has completed its move action this turn applies Torment after damage, subject to normal eligibility. Merely switching in does not qualify. Deals 2x damage to foes already affected by Torment.",
+	"shortDesc": "2x damage to Tormented foes; last-action hits bypass Substitute and heal 1/8; Torment once/entry."
 };
 
 AbilityDescriptionOverrides.fortunatewing = {

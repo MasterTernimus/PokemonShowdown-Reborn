@@ -11,6 +11,24 @@ function hit(p,t,id,extra={}){battle.clearActiveMove();const m=battle.dex.getAct
 function residual(){battle.fieldEvent('Residual');}
 describe('Approved eleven-species batch',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
+ it('Ocean Lullaby heals active allies once across spread and multi-hit sound attacks, never the bench',()=>{
+  const[p,t]=start('oceanlullaby','doubles'),ally=p.allies()[0],bench=p.side.pokemon[2];
+  p.hp=ally.hp=800;bench.hp=100;const benchHP=bench.hp;
+  hit(p,t,'hypervoice',{basePower:1,multihit:2});assert.equal(p.hp,900);assert.equal(ally.hp,900);assert.equal(bench.hp,benchHP);
+  hit(p,t,'hypervoice',{basePower:1});assert.equal(p.hp,900);assert.equal(ally.hp,900);
+  battle.turn++;hit(p,t,'hypervoice',{basePower:1});assert.equal(p.hp,1000);assert.equal(ally.hp,1000);
+ });
+ it('Ocean Lullaby healing respects Heal Block, suppression and failed hits',()=>{
+  const[p,t]=start('oceanlullaby','doubles'),ally=p.allies()[0];p.hp=ally.hp=800;
+  p.addVolatile('healblock',t);hit(p,t,'hypervoice',{basePower:1});assert.equal(p.hp,800);assert.equal(ally.hp,900);
+  battle.turn++;p.addVolatile('gastroacid',t);hit(p,t,'hypervoice',{basePower:1});assert.equal(ally.hp,900);
+  p.removeVolatile('gastroacid');battle.turn++;for(const foe of t.side.active)foe.addVolatile('protect');hit(p,t,'hypervoice',{basePower:1});assert.equal(ally.hp,900);
+ });
+ it('Ocean Lullaby healing never benefits opponents in Free-for-All',()=>{
+  const[p,t]=start('oceanlullaby','ffa');for(const side of battle.sides)side.active[0].hp=800;
+  hit(p,t,'hypervoice',{basePower:1});assert.equal(p.hp,900);for(const side of battle.sides.slice(1))assert(side.active[0].hp<=800);
+ });
+
  it('sets only approved slots, including Greninja event S; leaves Garchomp pending',()=>{for(const [id,slot,name] of [['slowkinggalar','1','Eldritch Remedy'],['charizard','1','Infernal Dominion'],['blastoise','H','Hydraulic Armor'],['gengar','1','Haunting Presence'],['snorlax','1','Slumbering Giant'],['lapras','1','Ocean Lullaby'],['greninja','H','Shadow Screen'],['clefable','H','Void Promise'],['flygon','0','Void Drift'],['delphox','H','Void Guile']])assert.equal(Dex.species.get(id).abilities[slot],name);assert.deepEqual(Dex.species.get('greninja').abilities,{0:'Liquid Arsenal',1:'Protean',H:'Shadow Screen',S:'Battle Bond'});assert.equal(Dex.species.get('garchomp').abilities.H,'Void Wrath');assert.equal(Dex.species.get('greninjaash').abilities[0],'Shadow Bond');});
  it('Curious Medicine globally cleans only negative stages/confusion and heals only cleansed active Pokemon',()=>{const[p,t]=start('curiousmedicine','doubles'),ally=p.allies()[0],bench=p.side.pokemon[2];p.hp=ally.hp=bench.hp=800;p.boosts.atk=2;p.boosts.def=-2;ally.addVolatile('confusion',t);bench.boosts.atk=-2;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.hp,1000);assert.equal(ally.hp,1000);assert.equal(bench.hp,800);assert.equal(p.boosts.atk,2);assert.equal(p.boosts.def,0);assert.equal(bench.boosts.atk,-2);assert(!ally.volatiles.confusion);battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.hp,1000);});
  it('Curious Medicine respects healing restrictions and never cleans foes in FFA',()=>{const[p,t]=start('curiousmedicine','ffa');p.hp=800;p.boosts.def=-2;p.addVolatile('healblock',t);t.boosts.atk=-1;t.hp=800;battle.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.hp,800);assert.equal(p.boosts.def,0);assert.equal(t.hp,800);assert.equal(t.boosts.atk,-1);});

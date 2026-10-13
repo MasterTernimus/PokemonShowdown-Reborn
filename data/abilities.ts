@@ -1226,6 +1226,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 11129,
 	},
 	moonveil: {
+		onAnyModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move);
+		},
 		onStart(pokemon) {
 			this.dex.abilities.get('pastelveil').onStart?.call(this, pokemon);
 			this.dex.abilities.get('mistysurge').onStart?.call(this, pokemon);
@@ -20293,6 +20296,7 @@ Abilities.oceanlullaby = {
 		if (damage <= 0 || !move.flags.sound || source.m.oceanLullabyTurn === this.turn) return;
 		source.m.oceanLullabyTurn = this.turn;
 		for (const ally of [source, ...source.allies()]) {
+			this.heal(ally.baseMaxhp / 16, ally, source, this.effect);
 			ally.removeVolatile('confusion');
 			if (ally.boosts.accuracy < 0) {
 				ally.boosts.accuracy = 0;
@@ -21382,3 +21386,6 @@ import {installFinalPassiveMigrations} from './final-passive-migrations';
 installFinalPassiveMigrations(Abilities);
 import {installFamilyReplacements} from './family-replacements';
 installFamilyReplacements(Abilities);
+
+// Mirror Greed retains its defenses and reflection, and copies opposing boosts.
+Abilities.mirrorgreed = {...Abilities.opportunist, ...Abilities.mirrorgreed};

@@ -195,7 +195,8 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 	});
 	add('gemeye', 'Gem Eye', {
 		...base.keeneye,
-		onStart(pokemon) { this.effectState.used = false; base.keeneye.onStart!.call(this, pokemon); },
+		onStart(pokemon) { this.effectState.used = false; base.keeneye.onStart!.call(this, pokemon); base.magicguard.onStart!.call(this, pokemon); },
+		onDamage: base.magicguard.onDamage,
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (this.effectState.used || target.isAlly(source) || move.category !== 'Status' ||
@@ -205,6 +206,9 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 		},
 	});
 	add('lastlaugh', 'Last Laugh', {
+		onBasePower(basePower, source, target) {
+			if (target?.volatiles.torment && !source.isAlly(target)) return this.chainModify(2);
+		},
 		onStart() { this.effectState.healTurn = -1; },
 		onModifyMove(move, pokemon) {
 			if (move.category !== 'Status' &&
