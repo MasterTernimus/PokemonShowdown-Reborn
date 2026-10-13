@@ -19,7 +19,7 @@ function boost(p,t,move,event='ModifySpA') {return battle.runEvent(event,p,t,bat
 describe('Starter family passives', () => {
  afterEach(() => {battle?.destroy(); battle=null;});
  it('replaces the family boost with Proficient on gimmick changes and restores it on reversion', () => {
-  for (const [base, form, move] of [['Charizard', 'Charizard-Mega-X', 'flamethrower'], ['Venusaur', 'Venusaur-Gmax', 'energyball'], ['Torterra', 'Torterra-Rift', 'energyball']]) {
+  for (const [base, form, move] of [['Charizard', 'Charizard-Mega-X', 'flamethrower'], ['Torterra', 'Torterra-Rift', 'energyball']]) {
    const [p,t] = setup(base); p.hp=1;
    assert.equal(boost(p,t,move),150);
    p.formeChange(form,null,true); p.setAbility('No Ability'); p.hp=1;
@@ -43,7 +43,7 @@ describe('Starter family passives', () => {
    assert.deepEqual(s.passives,ProficientPassiveForms.has(s.id)?['proficient']:[family],s.id);
    assert(!s.evos.length,s.id);
   }
-  assert.equal(expected.filter(s=>s.passives.includes('proficient')).length,34);
+  assert.equal(expected.filter(s=>s.passives.includes('proficient')).length,27);
   const {SpeciesPassives}=require('../../../dist/data/species-passives');
   for(const s of Dex.species.all())if(!expected.includes(s))assert.deepEqual(s.passives,SpeciesPassives[s.id]||[],s.id);
  });
@@ -107,4 +107,15 @@ describe('Starter family passives', () => {
    for(const name of names)assert(html.slice(html.indexOf('Passives:')).includes(name));
   }
  });
+
+ for(const [base,family,move] of [['Venusaur','overgrow','energyball'],['Charizard','blaze','flamethrower'],['Blastoise','torrent','surf'],['Feraligatr','torrent','surf'],['Rillaboom','overgrow','energyball'],['Cinderace','blaze','flamethrower'],['Inteleon','torrent','surf']]) {
+  it(base+' keeps its family passive when entering and leaving G-Max',()=>{
+   const[p,t]=setup(base);p.formeChange(base+'-Gmax',null,true);p.setAbility('No Ability');battle.field.clearTerrain();
+   assert.deepEqual(p.getPassives(),[family]);assert(!ProficientPassiveForms.has(p.species.id));
+   p.hp=1;assert.equal(boost(p,t,move),150);battle.eachEvent('Update');assert(p.volatiles[family+'active']);
+   p.addVolatile('gastroacid');assert.equal(boost(p,t,move),150);
+   assert.equal(battle.runEvent('BasePower',p,t,battle.dex.getActiveMove(move),100),100);
+   p.formeChange(base,null,true);assert.deepEqual(p.getPassives(),[family]);
+  });
+ }
 });

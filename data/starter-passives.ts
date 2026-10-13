@@ -1,6 +1,6 @@
 /** Explicit final-stage starter roster, grouped by original family affiliation. These are species traits, never selectable abilities. */
 export const StarterPassives: {[id: string]: readonly string[]} = {};
-export const ProficientPassiveForms = new Set(('venusaurmega venusaurgmax charizardmegax charizardmegaxalt charizardmegay charizardgmax blastoisemega blastoisegmax meganiummega meganiummegay typhlosionmega feraligatrmega feraligatrgmax sceptilemega blazikenmega swampertmega torterramegax torterramegay infernapemega empoleonmega serperiormega emboarmega emboarmegareborn chesnaughtmega delphoxmega greninjaash greninjamega rillaboomgmax cinderacegmax cinderacemega inteleongmax torterrarift torterrariftshatter greninjabond').split(' '));
+export const ProficientPassiveForms = new Set(('venusaurmega charizardmegax charizardmegaxalt charizardmegay blastoisemega meganiummega meganiummegay typhlosionmega feraligatrmega sceptilemega blazikenmega swampertmega torterramegax torterramegay infernapemega empoleonmega serperiormega emboarmega emboarmegareborn chesnaughtmega delphoxmega greninjaash greninjamega cinderacemega torterrarift torterrariftshatter greninjabond').split(' '));
 export const StarterFamilies = {
   "overgrow": [
     "venusaur",

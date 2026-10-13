@@ -11,10 +11,10 @@ function start(species='Charizard',ability='No Ability',foe='No Ability') {
 function event(p,t,event='ModifySpA',move='flamethrower') {return battle.runEvent(event,p,t,battle.dex.getActiveMove(move),100);}
 describe('Starter species passives',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('maps all 76 final records and preserves exactly 34 Proficient gimmick records',()=>{
+ it('maps all 76 final records and preserves exactly 27 Proficient gimmick records',()=>{
   const {abilityIncludesComponent}=require('../../../dist/data/ability-components');
   for(const id of ProficientPassiveForms)assert(Object.values(Dex.species.get(id).abilities).every(a=>!abilityIncludesComponent(Dex.abilities.get(a).id,'proficient')),id+' chosen abilities must not duplicate Proficient');
-  assert.equal(Object.keys(StarterPassives).length,76);assert.equal(ProficientPassiveForms.size,34);
+  assert.equal(Object.keys(StarterPassives).length,76);assert.equal(ProficientPassiveForms.size,27);
   for(const [id,passives] of Object.entries(StarterPassives)){const s=Dex.species.get(id);assert(s.exists,id);assert.equal(s.id,id);assert.deepEqual(s.passives,passives);assert(!s.evos.length,id);}
   for(const id of ['bulbasaur','ivysaur','charmander','charmeleon','pikachu'])assert.deepEqual(Dex.species.get(id).passives,[]);
  });
@@ -28,7 +28,7 @@ describe('Starter species passives',()=>{
   p.addVolatile('gastroacid');assert.equal(event(p,t,'BasePower','tackle'),130);
   assert.equal(event(p,t,'BasePower','splash'),100);p.removeVolatile('gastroacid');p.addVolatile('meridianseal');assert.equal(event(p,t,'BasePower','tackle'),130);p.removeVolatile('meridianseal');t.setAbility('Neutralizing Gas');assert.equal(event(p,t,'BasePower','tackle'),130);t.setAbility('Mold Breaker');p.setAbility('Run Away');assert.equal(event(p,t,'BasePower','tackle'),130);
  });
- for(const [species,ability,move,expected] of [['Venusaur-Mega','Toxic Bloom','tackle',130],['Venusaur-Gmax','Ancient Bloom','tackle',130],['Feraligatr-Gmax','Tidal Jaw','tackle',130],['Feraligatr-Gmax','Tidal Jaw','bite',195],['Charizard-Mega-X','Atrocity','swift',169]])it(species+' '+ability+' preserves independent multipliers',()=>{
+ for(const [species,ability,move,expected] of [['Venusaur-Mega','Toxic Bloom','tackle',130],['Venusaur-Gmax','Ancient Bloom','tackle',100],['Feraligatr-Gmax','Tidal Jaw','tackle',100],['Feraligatr-Gmax','Tidal Jaw','bite',150],['Charizard-Mega-X','Atrocity','swift',169]])it(species+' '+ability+' preserves independent multipliers',()=>{
   const[p,t]=start(species,ability);p.setType(move==='bite'?'Dark':'Normal');assert.equal(event(p,t,'BasePower',move),expected);
  });
  it('ordinary Unbound Blaze loses Proficient without adding a passive',()=>{
@@ -80,6 +80,6 @@ describe('Starter species passives',()=>{
   input.actors[0].ability='Proficient';assert.deepEqual(calculateScenario(input).results,plain.results);
   input.actors[0]={species:'Charizard',ability:'No Ability',item:'Charizardite X',gimmick:'mega'};
   const {battle:calc}=buildCalculatorBattle(validateScenario(input),0);assert.deepEqual(calc.p1.active[0].getPassives(),['proficient']);calc.destroy();
-  input.format='gen9factoryfield';input.actors[0]={species:'Charizard',ability:'No Ability',gimmick:'gmax'};const {battle:gmax}=buildCalculatorBattle(validateScenario(input),0);assert.equal(gmax.p1.active[0].species.id,'charizardgmax');assert.deepEqual(gmax.p1.active[0].getPassives(),['proficient']);gmax.destroy();
+  input.format='gen9factoryfield';input.actors[0]={species:'Charizard',ability:'No Ability',gimmick:'gmax'};const {battle:gmax}=buildCalculatorBattle(validateScenario(input),0);assert.equal(gmax.p1.active[0].species.id,'charizardgmax');assert.deepEqual(gmax.p1.active[0].getPassives(),['blaze']);gmax.destroy();
  });
 });
