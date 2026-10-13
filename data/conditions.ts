@@ -1,3 +1,4 @@
+import {protectsWarnedMove} from './warned-moves';
 import {ShelterConditions} from './shelter-audit-reworks';
 import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
@@ -33,6 +34,19 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-message', `${pokemon.name}'s Overgrow is active!`);
 		},
 		onEnd(pokemon) { this.add('-end', pokemon, 'overgrowactive', '[silent]'); },
+	},
+	warnedmoves: {
+		name: 'Warned Moves', noCopy: true,
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			if (!protectsWarnedMove(target, source, effect)) return;
+			// Cold Logic already applied Prism Armor earlier in the damage pipeline.
+			const state = target.abilityState;
+			let applied = 1;
+			if (target.hasAbility('coldlogic') && state.prismAppliedMove === effect &&
+				state.prismAppliedHit === (effect as ActiveMove).hit) applied = state.prismAppliedFactor;
+			if (applied > 0.75) return this.chainModify(0.75 / applied);
+		},
 	},
 	starterpassives: {
 		name: 'Starter Passives',

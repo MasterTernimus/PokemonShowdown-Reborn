@@ -92,7 +92,7 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 	abilities.coldlogic.onSourceModifyDamage = function (damage, source, target, move) {
 		const before = this.event.modifier;
 		const result = prismDamage.call(this, damage, source, target, move);
-		if (target.species.id === 'metagrossmega') {
+		if (target.hasAbility('coldlogic')) {
 			this.effectState.prismAppliedMove = move;
 			this.effectState.prismAppliedHit = move.hit;
 			this.effectState.prismAppliedFactor = this.event.modifier / before;

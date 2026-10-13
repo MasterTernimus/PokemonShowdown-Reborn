@@ -55,14 +55,5 @@ export function installPassiveCleanupApproved(abilities: AbilityDataTable) {
 		onTryBoost: abilities.hypercutter.onTryBoost,
 		onModifySTAB: abilities.venomheal.onModifySTAB,
 	};
-	const start = abilities.shadowcurrent.onStart!;
-	abilities.shadowcurrent.onStart = function (pokemon) {
-		start.call(this, pokemon);
-		abilities.moldbreaker.onStart!.call(this, pokemon);
-	};
-	const modify = abilities.shadowcurrent.onModifyMove!;
-	abilities.shadowcurrent.onModifyMove = function (move, pokemon, target) {
-		modify.call(this, move, pokemon, target);
-		abilities.moldbreaker.onModifyMove!.call(this, move, pokemon, target);
-	};
+
 }

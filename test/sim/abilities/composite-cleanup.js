@@ -427,7 +427,7 @@ describe('Composite ability cleanup', function () {
 		relentlesshunt: ['levitate'],
 			omenedge: ['sharpness', 'dualwield', 'pressure'],
 			ragingcurrent: ['swiftswim', 'damp', 'dryskin', 'stamina'],
-			shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator', 'moldbreaker'],
+			shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator'],
 			calderacore: ['magmaarmor', 'drought'],
 			doublestrike: ['ironfist', 'technician', 'skilllink'],
 			ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],

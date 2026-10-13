@@ -381,8 +381,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Levitate makes it airborne and immune to Ground attacks and grounded hazards unless grounded. Its Ice-type attacks deal 1.2x damage against targets that are already burned, including Normal moves converted to Ice by its separate Refrigerate passive. Other move types and other target statuses receive no extra damage; this ability does not inflict burn. Refrigerate is supplied separately by the species passive.",
 	},
 	"coldlogic": {
-		"shortDesc": "Prism Armor + Aftermath + Forewarn; damage reductions do not stack.",
-		"desc": "Contact moves have 1.3x power. Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Immune to hail damage on Cold Eclipse. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage. On entry, it reveals a strongest move known by an opposing Pokemon and removes foe Illusions. In Psychic Terrain, it gains 2 Sp. Atk and takes 0.8x damage from moves. Native Mega Metagross uses the strongest applicable Forewarn/Prism Armor damage reduction, never their product. Forewarn damage protection still requires Psychic Terrain, a Psychic aura alone does not qualify. Prism Armor field Defense/Sp. Def multipliers, Forewarn reveals and entry Sp. Atk remain unchanged.",
+		"shortDesc": "Prism Armor + Forewarn + Aftermath; Aftermath also triggers on noncontact KOs.",
+		"desc": "Prism Armor + Forewarn + Aftermath. Takes 20% less attack damage, or 40% less against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern. Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow; immune to hail on Cold Eclipse. Forewarn reveals a strongest opposing move and removes foe Illusions; that move deals 25% less damage until switching out, excluding OHKO moves. Uses the stronger Prism Armor or learned-move reduction, not both. Psychic Terrain grants 2 Sp. Atk on a successful reveal and 20% Forewarn protection against moves, including fixed damage; a Psychic aura alone does not qualify. An opposing move that knocks it out triggers Aftermath even without contact: the attacker loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this, and indirect-damage protection applies. Tough Claws is supplied separately by Mega Metagross's passive.",
 	},
 	"nighthunt": {
 		"shortDesc": "Intimidate + Illuminate.",
@@ -413,8 +413,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Contact moves bypass protection except Max Guard. Punching moves have 1.4x power. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist; Damp prevents this damage. No Guard is supplied separately by the species passive.",
 	},
 	"shadowcurrent": {
-		"shortDesc": "Protean, Technician, Anticipation and Mold Breaker.",
-		"desc": "Before an eligible damaging move, changes to its type; status, reflected, delayed, Snatched and move-calling moves do not trigger this. Moves with effective power of 60 or less have 1.5x power; the threshold is 80 on Factory Field. On entry, reveals opposing Illusions and alerts to an opposing super-effective or OHKO move. If no threat is found, Psychic Terrain grants +2 Sp. Atk. Full local Mold Breaker lets its moves bypass breakable abilities; Ability Shield still protects them.",
+		"shortDesc": "Protean, Technician and Anticipation.",
+		"desc": "Before an eligible damaging move, changes to its type. Technician boosts eligible weak moves. Anticipation reveals a dangerous opposing move and grants 25% damage reduction against that move until switching out; OHKO moves are not reduced. Removes opposing Illusions; if no threat is found, Psychic Terrain grants +2 Sp. Atk.",
 	},
 	"royalsun": {
 		"shortDesc": "Drought + Supreme Overlord.",

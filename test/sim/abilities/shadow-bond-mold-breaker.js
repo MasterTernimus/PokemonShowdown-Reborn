@@ -16,11 +16,11 @@ describe('Shadow Bond Mold Breaker', () => {
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
 	for (const [ability, move] of [['Water Absorb', 'watergun'], ['Levitate', 'earthquake'], ['Sturdy', 'tackle']]) {
-		it(`bypasses ${ability}`, () => {
+		it(`respects ${ability}`, () => {
 			const [user, target] = start(ability);
 			if (ability === 'Sturdy') target.hp = target.maxhp = target.baseMaxhp = 1;
 			battle.actions.useMove(move, user, {target});
-			assert(target.hp < target.maxhp);
+			assert.equal(target.hp, target.maxhp);
 		});
 	}
 	it('respects Ability Shield and Protect', () => {
@@ -32,19 +32,19 @@ describe('Shadow Bond Mold Breaker', () => {
 		battle.actions.useMove('watergun', user, {target});
 		assert.equal(target.hp, target.maxhp);
 	});
-	it('retains Infiltrator and its unsuppressible Bond flags and exposes Mold Breaker', () => {
+	it('retains Infiltrator and its unsuppressible Bond flags and does not expose Mold Breaker', () => {
 		const [user, target] = start();
-		assert(user.hasAbility('moldbreaker'));
+		assert(!user.hasAbility('moldbreaker'));
 		assert(user.hasAbility('infiltrator'));
 		battle.actions.useMove('gastroacid', target, {target: user});
 		assert(!user.volatiles.gastroacid);
 		assert(!user.ignoringAbility());
 		const move = battle.dex.getActiveMove('watergun');
 		battle.singleEvent('ModifyMove', user.getAbility(), user.abilityState, move, user, target);
-		assert(move.ignoreAbility);
+		assert(!move.ignoreAbility);
 		assert(move.infiltrates);
-		assert.match(user.getAbility().desc, /Mold Breaker/);
-		assert(require('../../../dist/data/ability-display').getAbilityDisplayComponents('shadowbond').includes('moldbreaker'));
-		assert(require('../../../dist/sim/custom-calculator').calculatorMetadata().abilityComponents.shadowbond.includes('Mold Breaker'));
+		assert.doesNotMatch(user.getAbility().desc, /Mold Breaker|bypass breakable abilities/);
+		assert(!require('../../../dist/data/ability-display').getAbilityDisplayComponents('shadowbond').includes('moldbreaker'));
+		assert(!require('../../../dist/sim/custom-calculator').calculatorMetadata().abilityComponents.shadowbond.includes('Mold Breaker'));
 	});
 });

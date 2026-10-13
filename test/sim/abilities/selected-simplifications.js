@@ -147,10 +147,10 @@ describe('Individually selected Mega simplifications', () => {
 		assert.equal(p.hp, 500); assert.equal(p.status, 'brn'); battle.runEvent('SwitchOut', p); assert.equal(p.status, 'brn');
 		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 	});
-	for (const ability of ['No Ability', 'Shadow Current']) it('Water Shuriken bypass belongs to the selected ability: ' + ability, () => {
+	for (const ability of ['No Ability', 'Shadow Current']) it('Water Shuriken and Shadow Current respect Water Absorb: ' + ability, () => {
 		const [p, q] = setup('Mew', ability); q.setAbility('Water Absorb');
-		battle.actions.useMove('watershuriken', p, { target: q }); assert.equal(q.hp < 1600, ability === 'Shadow Current');
-		const hp = q.hp; battle.actions.useMove('watergun', p, { target: q }); assert.equal(q.hp < hp, ability === 'Shadow Current');
+		battle.actions.useMove('watershuriken', p, { target: q }); assert.equal(q.hp < 1600, false);
+		const hp = q.hp; battle.actions.useMove('watergun', p, { target: q }); assert.equal(q.hp < hp, false);
 	});
 	it('Water Shuriken does not bypass Protect or Substitute', () => {
 		const [p, q] = setup(); q.addVolatile('protect'); battle.actions.useMove('watershuriken', p, { target: q }); assert.equal(q.hp, 1600);
@@ -238,10 +238,10 @@ describe('Individually selected Mega simplifications', () => {
 		p.m.perfectForesightAbility = 'insomnia'; p.m.perfectForesightAbilityState = battle.initEffectState({ id: 'insomnia', target: p });
 		assert(p.hasAbility('insomnia')); assert(!p.trySetStatus('slp', q, Dex.moves.get('spore')));
 	});
-	it('calculator native Cold Logic equals Prism Armor damage on Psychic Terrain', () => {
+	it('calculator uses the stronger learned-move reduction on Psychic Terrain', () => {
 		const { calculateScenario } = require('../../../dist/sim/custom-calculator');
 		const input = { format: 'gen9psychicfield', move: 'frostbreath', samples: 64, seed: 42, actors: [{ species: 'Mew', ability: 'No Ability' }, { species: 'Metagross-Mega', ability: 'Cold Logic' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }] };
 		const actual = calculateScenario(input).results[1]; input.actors[1].ability = 'Prism Armor'; const expected = calculateScenario(input).results[1];
-		assert.equal(actual.min, expected.min); assert.equal(actual.max, expected.max);
+		assert(Math.abs(actual.min - expected.min * 0.75 / 0.8) <= 1); assert(Math.abs(actual.max - expected.max * 0.75 / 0.8) <= 1);
 	});
 });

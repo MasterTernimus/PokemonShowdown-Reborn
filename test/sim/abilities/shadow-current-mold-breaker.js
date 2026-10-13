@@ -19,27 +19,26 @@ describe('Shadow Current Mold Breaker component', () => {
 	});
 
 	for (const [ability, move] of [['Levitate', 'earthquake'], ['Water Absorb', 'watergun'], ['Sturdy', 'tackle']]) {
-		it(`bypasses ${ability} with ${move}`, () => {
+		it(`respects ${ability} with ${move}`, () => {
 			const [user, target] = start(ability);
 			if (ability === 'Sturdy') target.hp = target.maxhp = target.baseMaxhp = 1;
 			battle.actions.useMove(move, user, {target});
-			assert(target.hp < target.maxhp);
-			if (ability === 'Sturdy') assert.equal(target.hp, 0);
+			assert.equal(target.hp, target.maxhp);
+
 		});
 	}
 
-	it('exposes Mold Breaker while retaining its other components', () => {
+	it('does not expose Mold Breaker while retaining its other components', () => {
 		const [user, target] = start();
-		assert.equal(battle.log.filter(line => line.startsWith('|-ability|') && line.endsWith('|Shadow Current')).length, 1);
-		for (const component of ['moldbreaker', 'protean', 'technician', 'anticipation']) {
+		for (const component of ['protean', 'technician', 'anticipation']) {
 			assert(user.hasAbility(component), `Shadow Current should include ${component}`);
 		}
 		const move = battle.dex.getActiveMove('watergun');
 		battle.singleEvent('ModifyMove', user.getAbility(), user.abilityState, move, user, target);
-		assert(move.ignoreAbility); assert(!user.hasAbility('infiltrator'));
-		assert.match(user.getAbility().desc, /bypass breakable abilities/);
-		assert(require('../../../dist/data/ability-display').getAbilityDisplayComponents(user.ability).includes('moldbreaker'));
-		assert(require('../../../dist/sim/custom-calculator').calculatorMetadata().abilityComponents.shadowcurrent.includes('Mold Breaker'));
+		assert(!move.ignoreAbility); assert(!user.hasAbility('infiltrator'));
+		assert.doesNotMatch(user.getAbility().desc, /Mold Breaker|bypass breakable abilities/);
+		assert(!require('../../../dist/data/ability-display').getAbilityDisplayComponents(user.ability).includes('moldbreaker'));
+		assert(!require('../../../dist/sim/custom-calculator').calculatorMetadata().abilityComponents.shadowcurrent.includes('Mold Breaker'));
 	});
 
 	for (const defense of ['Ability Shield', 'suppression']) it('respects ' + defense, () => {

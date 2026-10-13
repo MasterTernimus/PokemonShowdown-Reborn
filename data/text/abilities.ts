@@ -510,8 +510,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	anticipation: {
 		name: "Anticipation",
-		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has a super-effective or OHKO move, and foe Illusions are removed.",
-		shortDesc: "Warns of super-effective/OHKO moves; removes foe Illusions on entry.",
+		desc: "On entry, reveals opposing Illusions and one super-effective damaging move or OHKO threat. Until it switches out, takes 25% less damage from the revealed move used by opponents; OHKO moves are not reduced. This replaces weaker Forewarn damage protection rather than stacking with it. If no threat is found, Psychic Terrain grants +2 Sp. Atk.",
+		shortDesc: "Warns of danger; 25% less damage from the revealed move until switching.",
 		gen5: {
 			desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attacking move with a type that is super effective against this Pokemon, or any OHKO move. This effect considers moves to be their original type.",
 		},
@@ -1547,8 +1547,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	forewarn: {
 		name: "Forewarn",
-		desc: "On switch-in, this Pokemon reveals a strongest move known by an opposing Pokemon and removes foe Illusions. In Psychic Terrain, it gains 2 Sp. Atk and takes 0.8x damage from moves.",
-		shortDesc: "Reveals strongest foe move; removes Illusions; Psychic Terrain +2 SpA; takes 0.8x damage.",
+		desc: "On entry, reveals a strongest opposing move and removes foe Illusions. Takes 20% less move damage. Until it switches out, takes 25% less damage from the revealed move used by opponents; OHKO moves are not reduced. This replaces weaker Forewarn damage protection rather than stacking with it. In Psychic Terrain, gains 2 Sp. Atk on a successful reveal.",
+		shortDesc: "Reveals strongest move; 25% less damage from it, otherwise 20%.",
 		gen4: {
 			desc: "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon. This effect considers OHKO moves to have 150 power, Counter, Mirror Coat, and Metal Burst to have 120 power, and every other attacking move with an unspecified power to have 80 power.",
 		},
@@ -3998,7 +3998,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Armorize + Sworn Duty + Serene Grace + Mold Breaker. Eligible Normal moves become Steel, Sworn Duty supports its ally, move secondary effects are more likely, and moves ignore breakable abilities.",
 		shortDesc: "Armorize + Sworn Duty + Serene Grace + Mold Breaker.",
 	},
-	coldlogic: {"name":"Cold Logic","desc":"Contact moves have 1.3x power. Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Immune to hail damage on Cold Eclipse. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage. On entry, it reveals a strongest move known by an opposing Pokemon and removes foe Illusions. In Psychic Terrain, it gains 2 Sp. Atk and takes 0.8x damage from moves. Cold Logic applies Forewarn's additional 0.8x attack-damage factor only when the effective base field is Psychic Terrain; a Psychic aura alone does not qualify. Global Forewarn and all other Cold Logic effects are unchanged.","shortDesc":"Tough Claws + Prism Armor + Aftermath + Forewarn; extra Forewarn reduction only on Psychic Terrain."},
+	coldlogic: {"name":"Cold Logic","desc":"Prism Armor + Forewarn + Aftermath. Takes 20% less attack damage, or 40% less against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern. Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow; immune to hail on Cold Eclipse. Forewarn reveals a strongest opposing move and removes foe Illusions; that move deals 25% less damage until switching out, excluding OHKO moves. Uses the stronger Prism Armor or learned-move reduction, not both. Psychic Terrain grants 2 Sp. Atk on a successful reveal and 20% Forewarn protection against moves, including fixed damage; a Psychic aura alone does not qualify. An opposing move that knocks it out triggers Aftermath even without contact: the attacker loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this, and indirect-damage protection applies. Tough Claws is supplied separately by Mega Metagross's passive.","shortDesc":"Prism Armor + Forewarn + Aftermath; Aftermath also triggers on noncontact KOs."},
 	neutralization: {
 		name: "Neutralization",
 		desc: "Once per target per move, when this Pokemon directly hits an opposing Pokemon, the target's higher attacking stat is lowered by 1 stage. Spread hits do not trigger this effect. This does not affect other Neutralization users or Pokemon immune to stat drops. While active, base field changes are neutralized, but Auras can still be created and remain active; Trick Room, Magic Room, and Wonder Room are ended and cannot start; and Rainbow Field ends automatically. It also suppresses Royal Decree's stat reset, screen removal, and ongoing restrictions, including those granted by Empress and Royal Sun. Ice Spinner and Steel Roller still remove terrain normally.",

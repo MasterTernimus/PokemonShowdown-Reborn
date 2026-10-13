@@ -457,8 +457,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "+1 accuracy on entry; first-turn critical hits; takes 30% less attack damage."
 	},
 	"anticipation": {
-		"desc": "On entry, reveals opposing Illusions and alerts to an opposing super-effective or OHKO move. If no threat is found, Psychic Terrain grants +2 Sp. Atk.",
-		"shortDesc": "Reveals Illusions and dangerous moves; Psychic-field bonus."
+		"desc": "On entry, reveals opposing Illusions and one super-effective damaging move or OHKO threat. Until it switches out, takes 25% less damage from the revealed move used by opponents; OHKO moves are not reduced. This replaces weaker Forewarn damage protection rather than stacking with it. If no threat is found, Psychic Terrain grants +2 Sp. Atk.",
+		"shortDesc": "Warns of danger; 25% less damage from the revealed move until switching."
 	},
 	"aromaveil": {
 		"desc": "Protects itself and allies from Attract, Disable, Encore, Heal Block, Taunt and Torment.",
@@ -1863,7 +1863,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Blocks bullet/pulse moves; entry Defense boost; end-turn healing; switching cures status."
 	},
 	"shadowcurrent": {
-		"desc": "Before an eligible damaging move, changes to its type; status, reflected, delayed, Snatched and move-calling moves do not trigger this. Moves with effective power of 60 or less have 1.5x power; the threshold is 80 on Factory Field. Same-type moves have 1.3x power. Moves bypass bypassable opposing Abilities, Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. On entry, reveals opposing Illusions and alerts to an opposing super-effective or OHKO move. If no threat is found, Psychic Terrain grants +2 Sp. Atk.",
+		"desc": "Before an eligible damaging move, changes to its type; status, reflected, delayed, Snatched and move-calling moves do not trigger this. Moves with effective power of 60 or less have 1.5x power; the threshold is 80 on Factory Field. Same-type moves have 1.3x power. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. On entry, reveals opposing Illusions and alerts to an opposing super-effective or OHKO move. If no threat is found, Psychic Terrain grants +2 Sp. Atk.",
 		"shortDesc": "Changes type before attacks; boosts weak/same-type moves; bypasses abilities and screens; scouts threats."
 	},
 	"astralwitchcraft": {
@@ -2191,12 +2191,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Summons 8-turn Strong Winds; Flying priority; accuracy protection; moves never miss."
 	},
 	"forewarn": {
-		"desc": "On entry, it reveals a strongest move known by an opposing Pokemon and removes foe Illusions. In Psychic Terrain, it gains 2 Sp. Atk and takes 0.8x damage from moves.",
-		"shortDesc": "Reveals strongest foe move; removes Illusions; Psychic Terrain +2 SpA; takes 0.8x damage."
+		"desc": "On entry, reveals a strongest opposing move and removes foe Illusions. Takes 20% less move damage. Until it switches out, takes 25% less damage from the revealed move used by opponents; OHKO moves are not reduced. This replaces weaker Forewarn damage protection rather than stacking with it. In Psychic Terrain, gains 2 Sp. Atk on a successful reveal.",
+		"shortDesc": "Reveals strongest move; 25% less damage from it, otherwise 20%."
 	},
 	"coldlogic": {
-		"desc": "Contact moves have 1.3x power. Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Immune to hail damage on Cold Eclipse. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage. On entry, it reveals a strongest move known by an opposing Pokemon and removes foe Illusions. In Psychic Terrain, it gains 2 Sp. Atk and takes 0.8x damage from moves.",
-		"shortDesc": "Contact moves have 1.3x power; 20% less attack damage; 40% less if super effective; field defenses; Contact KO costs attacker 1/4 HP (1/2 on Corrosive Mist); Reveals strongest foe move; removes Illusions; takes 0.8x damage."
+		"desc": "Prism Armor + Forewarn + Aftermath. Takes 20% less attack damage, or 40% less against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern. Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow; immune to hail on Cold Eclipse. Forewarn reveals a strongest opposing move and removes foe Illusions; that move deals 25% less damage until switching out, excluding OHKO moves. Uses the stronger Prism Armor or learned-move reduction, not both. Psychic Terrain grants 2 Sp. Atk on a successful reveal and 20% Forewarn protection against moves, including fixed damage; a Psychic aura alone does not qualify. An opposing move that knocks it out triggers Aftermath even without contact: the attacker loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this, and indirect-damage protection applies. Tough Claws is supplied separately by Mega Metagross's passive.",
+		"shortDesc": "Prism Armor + Forewarn + Aftermath; Aftermath also triggers on noncontact KOs."
 	},
 	"whitesmoke": {
 		"desc": "Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry.",
@@ -3481,7 +3481,7 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "Combines the listed abilities."
 	},
 	"shadowbond": {
-		"desc": "Battle Bond's shared effects plus Infiltrator and Mold Breaker. Moves bypass breakable abilities; Ability Shield still protects them. Ash-Greninja's Water Shuriken hits three times at 30 base power per hit and always critically hits.",
+		"desc": "Battle Bond's shared effects plus Infiltrator. Ash-Greninja's Water Shuriken hits three times at 30 base power per hit and always critically hits.",
 		"shortDesc": "Water Shuriken hits 3 times at 30 power and always critically hits."
 	},
 	"shadowcurrent": {

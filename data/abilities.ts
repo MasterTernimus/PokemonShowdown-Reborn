@@ -1,3 +1,4 @@
+import {rememberWarning, protectsWarnedMove} from './warned-moves';
 import {applySereneGrace} from './ally-serene-grace';
 import {installLatestPassiveAbilities} from './latest-passive-abilities';
 import {pressureAttempt} from './pressure-memory';
@@ -2820,7 +2821,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
 						move.ohko
 					) {
-						this.add('-ability', pokemon, 'Anticipation');
+						this.add('-activate', pokemon, 'ability: Anticipation', move.name, `[of] ${target}`);
+						rememberWarning(pokemon, 'anticipation', move);
+						this.add('-message', `${pokemon.name} anticipated ${move.name}!`);
 						return;
 					}
 				}
@@ -3227,7 +3230,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyMove(move, pokemon, target) {
 			this.dex.abilities.get('infiltrator').onModifyMove?.call(this, move, pokemon, target);
-			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.dex.abilities.get('battlebond').onSourceModifyDamage?.call(this, damage, source, target, move);
@@ -8921,6 +8923,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (!warnMoves.length) return;
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
+			rememberWarning(pokemon, 'forewarn', warnMoveName as Move);
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, `[of] ${warnTarget}`);
 			if (this.field.isTerrain('psychicterrain')) {
 				return this.boost({ spa: 2 });
@@ -8928,6 +8931,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDamage(damage, source, target, effect) {
 			if (skipPassiveComponent(this, this.effectState.target, 'forewarn')) return;
+			if (protectsWarnedMove(source, target, effect)) return;
 			if (effect && effect.effectType === 'Move' && effect.category !== 'Status')
 				return this.chainModify(0.8);
 		},
@@ -18802,7 +18806,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			this.dex.abilities.get('aftermath').onDamagingHit?.call(this, damage, target, source, move);
+			if (target.hp || source.isAlly(target) || damage <= 0) return;
+			if (this.getAllActive().some(p => p.hp && p.hasAbilityOrPassive('damp'))) return;
+			this.add('-message', target.name + ' executed its final contingency!');
+			this.damage(source.baseMaxhp / (this.field.isTerrain('corrosivemistterrain') ? 2 : 4),
+				source, target, this.dex.abilities.get('aftermath'));
 		},
 		onDamage(damage, source, target, effect) {
 			return this.dex.abilities.get('forewarn').onDamage?.call(this, damage, source, target, effect);
