@@ -191,7 +191,7 @@ it('preserves moves and learnsets apart from approved passive-aware ability chec
 			}
 			// Preserve the original fingerprint after the approved Psycho Boost removals.
 			if (key === 'learnsetsHash') {
-				for (const [species, nextMove] of [['jynx', 'psychocut'], ['gothitelle', 'psychup']]) {
+				for (const [species, nextMove] of [['gothitelle', 'psychup']]) {
 					const pattern = new RegExp('(\\t' + species + ': \{[\\s\\S]*?)(\\t\\t\\t' + nextMove + ':)');
 					assert(pattern.test(contents), species + ' learnset anchor');
 					contents = contents.replace(pattern, '$1\t\t\tpsychoboost: ["9M"],\n$2');

@@ -21988,6 +21988,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			protect: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			psychic: ["9L47", "8M", "8L34", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			psychicterrain: ["9M", "8M"],
+			psychoboost: ["9M"],
 			psychocut: ["9M", "8M"],
 			psychup: ["9M", "7M", "7V", "6M", "5M", "4M", "3T"],
 			psyshock: ["9M", "8M", "7M", "6M", "5M"],
