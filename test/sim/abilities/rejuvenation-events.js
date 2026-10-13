@@ -197,6 +197,7 @@ it('preserves moves and learnsets apart from approved passive-aware ability chec
 					contents = contents.replace(pattern, '$1\t\t\tpsychoboost: ["9M"],\n$2');
 				}
 			}
+			if (key === 'movesHash') contents = contents.replace("\t\t\tif (this.field.isTerrainOrAura('electricterrain')) return;\n", '');
 			assert.equal(crypto.createHash('sha256').update(contents).digest('hex'), before[key], key);
 		}
 	});

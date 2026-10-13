@@ -31,15 +31,16 @@ describe('Approved Ion Deluge and Plasma Fists Aura provenance', () => {
 				battle.field.tickAura(); assert.equal(battle.field.auraField, '');
 			});
 		}
-		for (const previous of ['grassyterrain', 'electricterrain']) it(move + ' replaces/refreshes ' + previous + ' without promotion', () => {
+		for (const previous of ['grassyterrain', 'electricterrain']) it(move + ' handles existing ' + previous + ' with correct provenance', () => {
 			const [p, t] = setup();
 			battle.field.setAura(previous, 8, p, battle.dex.moves.get(previous));
 			use(move, p, t);
 			assert.equal(battle.field.terrain, 'rockyterrain');
 			assert.equal(battle.field.auraField, 'electricterrain');
-			assert.equal(battle.field.auraTurns, 3);
-			assert.equal(battle.field.auraState.sourceEffect.id, move);
-			assert.equal(battle.field.promoteAura(p, battle.dex.moves.get('gravity')), false);
+			const preserved = move === 'plasmafists' && previous === 'electricterrain';
+			assert.equal(battle.field.auraTurns, preserved ? 8 : 3);
+			assert.equal(battle.field.auraState.sourceEffect.id, preserved ? previous : move);
+			assert.equal(battle.field.promoteAura(p, battle.dex.moves.get('gravity')), preserved);
 		});
 		it(move + ' remains non-promotable after same-Aura refresh from another source', () => {
 			const [p, t] = setup(); use(move, p, t);
@@ -49,10 +50,10 @@ describe('Approved Ion Deluge and Plasma Fists Aura provenance', () => {
 			for (const trigger of ['gravity', 'lunarorbit', 'gmaxgravitas']) assert.equal(battle.field.promoteAura(p, battle.dex.moves.get(trigger)), false);
 			use('gravity', p, t); assert.equal(battle.field.terrain, 'rockyterrain');
 		});
-		it(move + ' refreshes duration after the other approved move without promotion', () => {
+		it(move + ' handles the other move Aura without promotion', () => {
 			const [p, t] = setup(); use(move === 'iondeluge' ? 'plasmafists' : 'iondeluge', p, t);
 			battle.field.tickAura(); p.setItem('Amplifield Rock'); use(move, p, t);
-			assert.equal(battle.field.auraTurns, 5); assert.equal(battle.field.terrain, 'rockyterrain');
+			assert.equal(battle.field.auraTurns, move === 'plasmafists' ? 2 : 5); assert.equal(battle.field.terrain, 'rockyterrain');
 		});
 		it(move + ' never falls back to Terrain when Auras are disabled', () => {
 			const [p, t] = setup(''); battle.field.aurasEnabled = false; const hp = t.hp;
@@ -68,6 +69,21 @@ describe('Approved Ion Deluge and Plasma Fists Aura provenance', () => {
 			});
 		}
 	}
+	for (const origin of ['electricterrain', 'plasmafists']) it('Plasma Fists preserves an existing Aura from ' + origin, () => {
+		const [p, t] = setup('rockyterrain', 'Amplifield Rock');
+		battle.field.setAura('electricterrain', 8, p, battle.dex.moves.get(origin));
+		battle.field.tickAura();
+		const state = battle.field.auraState, terrainState = battle.field.terrainState;
+		const hp = t.hp, logStart = battle.log.length;
+		use('plasmafists', p, t); use('plasmafists', p, t);
+		assert.equal(battle.field.auraState, state);
+		assert.equal(battle.field.terrainState, terrainState);
+		assert.equal(battle.field.auraTurns, 7);
+		assert.equal(battle.field.auraState.noTerrainPromotion, origin === 'plasmafists');
+		assert(t.hp < hp);
+		assert(battle.field.pseudoWeather.iondeluge);
+		assert(!battle.log.slice(logStart).some(line => /\|-field(start|end)\|/.test(line)));
+	});
 	it('clears provenance on removal/replacement and preserves ordinary promotion and duration', () => {
 		const [p, t] = setup(); use('iondeluge', p, t);
 		battle.field.setAura('grassyterrain', 5, p, battle.dex.moves.get('grassyterrain'));

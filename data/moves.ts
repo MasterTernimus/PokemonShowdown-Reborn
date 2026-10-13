@@ -15335,6 +15335,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.chainModify(1.3);
 		},
 		onHit(target, source, move) {
+			if (this.field.isTerrainOrAura('electricterrain')) return;
 			this.field.setAura('electricterrain', source.hasItem('amplifieldrock') ? 5 : 3, source, move);
 		},
 		pseudoWeather: 'iondeluge',

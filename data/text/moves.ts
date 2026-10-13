@@ -4778,8 +4778,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	plasmafists: {
 		name: "Plasma Fists",
-		desc: "Has a higher chance for a critical hit. If this move succeeds, it turns Normal-type moves into Electric-type moves for the rest of the turn and creates Electric Aura for 3 turns, or 5 with Amplifield Rock, without replacing the base field. This Aura cannot promote into Electric Terrain, including after refreshes. If Electric Terrain can be set, this move gains 30% power.",
-		shortDesc: "High crit; electrifies Normal moves; 3-turn Electric Aura (5 with Amp Rock), never Terrain.",
+		desc: "Has a higher chance for a critical hit. If this move succeeds, it turns Normal-type moves into Electric-type moves for the rest of the turn and creates Electric Aura for 3 turns, or 5 with Amplifield Rock, without replacing the base field. Existing Electric Terrain or Electric Aura is left unchanged, including its remaining duration and promotion eligibility. A new Aura created by this move cannot promote into Electric Terrain. If Electric Terrain can be set, this move gains 30% power.",
+		shortDesc: "High crit; electrifies Normal moves; creates Electric Aura only if no Electric field/Aura exists.",
 	},
 	playnice: {
 		name: "Play Nice",
