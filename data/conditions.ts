@@ -10,6 +10,30 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 
  dredgerturn: {name: 'Dredger turn', noCopy: true, duration: 1},
 	venamskissturn: {name: 'venamskissturn', noCopy: true, duration: 1},
+	blazeactive: {
+		name: 'Blaze active', noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'blazeactive', '[silent]');
+			this.add('-message', `${pokemon.name}'s Blaze is active!`);
+		},
+		onEnd(pokemon) { this.add('-end', pokemon, 'blazeactive', '[silent]'); },
+	},
+	torrentactive: {
+		name: 'Torrent active', noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'torrentactive', '[silent]');
+			this.add('-message', `${pokemon.name}'s Torrent is active!`);
+		},
+		onEnd(pokemon) { this.add('-end', pokemon, 'torrentactive', '[silent]'); },
+	},
+	overgrowactive: {
+		name: 'Overgrow active', noCopy: true,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'overgrowactive', '[silent]');
+			this.add('-message', `${pokemon.name}'s Overgrow is active!`);
+		},
+		onEnd(pokemon) { this.add('-end', pokemon, 'overgrowactive', '[silent]'); },
+	},
 	starterpassives: {
 		name: 'Starter Passives',
 		onBasePowerPriority: 22,

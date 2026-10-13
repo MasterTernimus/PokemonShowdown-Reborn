@@ -1,4 +1,5 @@
 import {passiveEffect, passiveState, thematicPassives} from './species-passives';
+import {updateStarterBoostIndicators} from './starter-boost-indicators';
 import {takeCrescentSubDamage} from './crescent-rend';
 import {adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCaptureMove, adaptiveSkipAbility, adaptiveIgnoresAbility, adaptiveCheckpoint, adaptiveResistsBypass, adaptiveAnalyzed, adaptivePreventDamage, adaptiveDamaged, adaptiveDamageMultiplier, adaptiveEnvironmentalContribution, adaptiveEnvironment, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 /* eslint-disable @stylistic/max-len */
@@ -542,6 +543,9 @@ export class Battle {
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
 		for (const pokemon of actives) {
 			this.runEvent(eventid, pokemon, null, effect, relayVar);
+		}
+		if (eventid === 'Update') {
+			for (const pokemon of actives) updateStarterBoostIndicators(pokemon);
 		}
 		if (eventid === 'Weather' && this.gen >= 7) {
 			// TODO: further research when updates happen
