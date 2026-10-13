@@ -17,7 +17,7 @@ describe('Final approved passive migrations',()=>{
  for(const [id,passive,slots] of [
   ['ursaluna','thickfat',{0:'Raging Beast',1:'Bulletproof',H:'Territorial'}],
   ['ursalunabloodmoon','mindseye',{0:'Bloodmoon Gaze',1:'Lunar Dread',H:'Moonlit Hide'}],
-  ['archaludon','lightningrod',{0:'Stamina',1:'Anchor Bridge',H:'Rail Sight'}],
+  ['archaludon','stalwart',{0:'Stamina',1:'Anchor Bridge',H:'Rail Sight'}],
   ['tsareena','queenlymajesty',{0:'Empress',1:'Supreme Overlord',H:'Imperial Princess'}],
   ['tsareenaalt','queenlymajesty',{0:'Empress',1:'Supreme Overlord',H:'Imperial Princess'}],
   ['porygon2','download',{0:'Trace',1:'Defragment',H:'Memory Leak'}],
@@ -39,7 +39,7 @@ describe('Final approved passive migrations',()=>{
  it('Error Handler combines Aroma Veil and Infiltrator independently of Download',()=>{const[p,q]=setup('Porygon-Z','Error Handler');assert(modified(p,q).infiltrates);battle.actions.useMove('taunt',q,{target:p});assert(!p.volatiles.taunt);assert.equal(p.passiveStates.download.downloadFirstHit,false);});
  for(const species of ['Tsareena','Tsareena-Alt'])it(species+' uses one Queenly Majesty multiplier and full Long Reach',()=>{const[p,q]=setup(species,'Empress','fairytaleterrain');const m=modified(p,q);assert(!m.flags.contact);assert.equal(battle.runEvent('ModifyDamage',p,q,m,100),150);assert(p.boosts.accuracy>=1);assert(p.getAbilityComponentExclusions().includes('queenlymajesty'));p.addVolatile('gastroacid');assert.equal(battle.runEvent('ModifyDamage',p,q,m,100),150);});
  it('other Empress users retain Queenly Majesty',()=>{const[p,q]=setup('Mew','Empress','fairytaleterrain');assert.equal(battle.runEvent('ModifyDamage',p,q,battle.dex.getActiveMove('tackle'),100),150);assert(!p.getAbilityComponentExclusions().includes('queenlymajesty'));});
- it('Archaludon passive Lightning Rod absorbs Electric while selected ability is suppressed',()=>{const[p,q]=setup('Archaludon','Stamina');p.addVolatile('gastroacid');const hp=p.hp;battle.actions.useMove('thunderbolt',q,{target:p});assert.equal(p.hp,hp);assert.equal(p.boosts.spa,1);});
+ it('Archaludon passive Stalwart tracks targets while selected ability is suppressed',()=>{const[p,q]=setup('Archaludon','Stamina');p.addVolatile('gastroacid');assert(modified(p,q).tracksTarget);});
  it('Ursaluna passive Thick Fat halves Fire offense under suppression',()=>{const[p,q]=setup('Ursaluna','Bulletproof');p.addVolatile('gastroacid');const m=battle.dex.getActiveMove('flamethrower');assert.equal(battle.runEvent('ModifySpA',q,p,m,100),50);});
 });
 

@@ -353,7 +353,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"peppersting": "A Fire move primes the next Grass hit to lower Speed and Sp. Def.",
 	"sushitrick": "Entry heals adjacent allies 1/4 HP and clears confusion; alone, clears own confusion and negative accuracy.",
 	"mastercourse": "Water/Dragon HP hits charge an ally, or itself alone, after the move.",
-	"railsight": "Surviving a foe HP-damaging move once per entry powers the next Electric attack by 1.5x.",
+	"railsight": "Inner Focus; surviving a foe HP-damaging move once per entry powers the next Electric attack by 1.5x.",
 	"pollenengine": "Grass or powder hits heal it and its allies, more in sun.",
 	"titanpincer": "Crabhammer and physical Steel moves use Defense when higher than Attack.",
 	"tidaldominion": "Foes with lowered Speed cannot use priority against its side.",

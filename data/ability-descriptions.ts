@@ -2415,8 +2415,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Once per turn, when it receives draining-move healing, it also restores 1/8 of the lowest-HP adjacent ally's HP."
 	},
 	"railsight": {
-		"desc": "Moves cannot be redirected. On New World, Starlight Arena, Fairy Tale and Chessboard entry, gains +1 Sp. Atk. Once per switch-in, surviving a whole opposing damaging move that hits HP stores a non-stacking 1.5x boost for the next Electric attack. Consumed when that attack executes, including misses, Protect or immunity; charge-only and interrupted turns do not consume it. Switching clears it. Does not skip Electro Shot charging, grant an extra Sp. Atk boost or ignore screens.",
-		"shortDesc": "Ignores redirection; surviving a foe HP-damaging move once per entry powers the next Electric attack by 1.5x."
+		"desc": "Prevents flinching and Intimidate Attack drops. Stalwart is supplied separately by Archaludon's passive. Once per switch-in, surviving a whole opposing damaging move that hits HP stores a non-stacking 1.5x boost for the next Electric attack. Consumed when that attack executes, including misses, Protect or immunity; charge-only and interrupted turns do not consume it. Switching clears it. Does not skip Electro Shot charging, grant an extra Sp. Atk boost or ignore screens.",
+		"shortDesc": "Inner Focus; surviving a foe HP-damaging move once per entry powers the next Electric attack by 1.5x."
 	},
 	"pollenengine": {
 		"desc": "Doubles Speed in sun or Stage 4 Flower Garden. Once per turn, successfully hitting a foe with a powder move or damaging Grass move heals itself and adjacent allies by 1/16 max HP, or 1/8 in sunlight.",

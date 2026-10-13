@@ -629,7 +629,7 @@ AbilityComponents.razorreach = ['sharpness', 'longreach', 'keeneye'];
 AbilityComponents.witheringtouch = ['poisontouch', 'corrosion'];
 
 AbilityComponents.anchorbridge = ['sturdy', 'solidrock'];
-AbilityComponents.railsight = ['stalwart'];
+AbilityComponents.railsight = ['innerfocus'];
 
 AbilityComponents.kickfiend = ['striker', 'violentrush', 'limber'];
 

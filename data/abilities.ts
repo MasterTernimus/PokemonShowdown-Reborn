@@ -16474,12 +16474,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	stalwart: {
 		onStart(pokemon) {
+			if (skipPassiveComponent(this, this.effectState.target, 'stalwart')) return;
 			if (this.field.isTerrain(['newworldterrain', 'starlightarenaterrain', 'fairytaleterrain', 'chessboardterrain'])) {
 				this.boost({ spa: 1 }, pokemon, pokemon, this.dex.abilities.get('stalwart'));
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
+			if (skipPassiveComponent(this, this.effectState.target, 'stalwart')) return;
 			// most of the implementation is in Battle#getTarget
 			move.tracksTarget = move.target !== 'scripted';
 		},

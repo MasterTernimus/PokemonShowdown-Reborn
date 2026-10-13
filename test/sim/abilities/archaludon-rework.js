@@ -76,14 +76,19 @@ describe('Archaludon approved rework', () => {
 	});
 	it('retains full Stalwart field activation and bypasses redirection without ignoring screens', () => {
 		const [p, t] = setup(); battle.field.changeTerrain('newworldterrain', p);
-		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(p.boosts.spa, 1);
+		battle.makeChoices('switch 2', 'move splash'); battle.makeChoices('switch 2', 'move splash'); assert.equal(p.boosts.spa, 1);
 		const m = battle.dex.getActiveMove('thunderbolt'); battle.runEvent('ModifyMove', p, t, m, m);
 		assert(m.tracksTarget); assert(!m.ignoreScreens);
 	});
 	it('ally HP damage and interrupted Electric turns neither grant nor consume a charge', () => {
 		const [p, t] = setup('Rail Sight', true); hit(battle.p1.active[1], p); assert(!p.m.approvedSignatures.railCharge);
-		hit(t, p); assert(p.m.approvedSignatures.railCharge); p.addVolatile('flinch');
+		hit(t, p); assert(p.m.approvedSignatures.railCharge); p.setStatus('slp'); p.statusState.time = 3;
 		hit(p, t, 'thunderbolt'); assert(p.m.approvedSignatures.railCharge);
+	});
+	it('Mold Breaker preserves Rail Sight charge while bypassing Inner Focus', () => {
+		const [p, t] = setup(); t.setAbility('Mold Breaker');
+		hit(t, p, 'bite', {secondaries: [{chance: 100, volatileStatus: 'flinch'}]});
+		assert(p.m.approvedSignatures.railCharge); assert(p.volatiles.flinch);
 	});
 	it('Anchor Bridge respects suppression', () => {
 		const [p, t] = setup('Anchor Bridge');

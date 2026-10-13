@@ -40,7 +40,7 @@ export const RosterExpansionDescriptions: { [id: string]: string } = {
 	mastercourse: "Contrary. Once per turn, opposing Water or Dragon HP damage grants a nonstacking +1 critical-hit-stage charge after the entire move. The lowest-HP-percentage living adjacent ally receives it, or the user if alone. The next executed damaging move spends it even on a miss, protection or immunity; status moves preserve it and switching clears it. A charged Water or Dragon attack can earn a new charge afterward.",
 	secondbrew: 'Once per turn, when this Pokemon receives draining-move healing, it also restores 1/8 of the lowest-HP adjacent ally\'s maximum HP.',
 	anchorbridge: 'Sturdy and Solid Rock: survives a fatal hit at full HP, blocks OHKO moves, and takes 0.8x attack damage (0.6x if super effective).',
-	railsight: 'Stalwart. Once per entry, surviving a whole opposing damaging move that hits HP charges the next Electric attack to 1.5x power. Executed misses, protection and immunity consume it; switching clears it.',
+	railsight: 'Inner Focus. Once per entry, surviving a whole opposing damaging move that hits HP charges the next Electric attack to 1.5x power. Executed misses, protection and immunity consume it; switching clears it.',
 	execution: 'Duskilate + Mold Breaker. Attacks against targets at half HP or less gain 1.3x power. Once per switch-in, a direct hit that brings a surviving foe from above half HP to half or less marks it; the next Dark or Ghost hit against that foe ignores positive defensive boosts and spends the mark. The mark ends if either Pokemon switches. Restores 1/8 maximum HP per KO; Attack and Sp. Atk cannot fall below -1, and Speed cannot be lowered while a field is active. Retains Duskilate field effects.',
 };
 
@@ -186,7 +186,7 @@ export const RosterExpansionShortDescriptions: { [id: string]: string } = {
 	encorearia: 'Serene Grace; the first secondary effect each entry sets 5-turn Safeguard.',
 	peppersting: 'Insomnia; a Fire move primes the next Grass hit to lower Speed and Sp. Def.',
 	mastercourse: 'Contrary; Water/Dragon HP hits charge an ally, or itself alone, after the move.',
-	railsight: 'Stalwart; once/entry surviving an enemy HP hit charges next Electric attack 1.5x.',
+	railsight: 'Inner Focus; once/entry surviving an enemy HP hit charges next Electric attack 1.5x.',
 	pollenengine: 'Chlorophyll; Grass or powder hits heal it and its allies, more in sun.',
 	tidaldominion: 'Swift Swim; foes with lowered Speed cannot use priority against its side.',
 	tempestfury: 'After surviving a direct hit, its next damaging Water move is a critical hit.',

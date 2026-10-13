@@ -426,7 +426,17 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		name: 'Anchor Bridge', num: base.anchorbridge.num,
 	};
 	base.railsight = {
-		...base.stalwart,
+		...base.innerfocus,
+		// Keep the charge lifecycle independent of Mold Breaker; only Inner Focus is bypassable.
+		flags: {},
+		onTryAddVolatile(status, pokemon, source, effect) {
+			if (this.suppressingAbility(pokemon, this.dex.abilities.get('innerfocus'))) return;
+			return base.innerfocus.onTryAddVolatile!.call(this, status, pokemon, source, effect);
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (this.suppressingAbility(target, this.dex.abilities.get('innerfocus'))) return;
+			return base.innerfocus.onTryBoost!.call(this, boost, target, source, effect);
+		},
 		name: 'Rail Sight', num: base.railsight.num,
 		onDamagingHit(damage, target, source, move) {
 			if (foeHit(damage, target, source) && !budget(target).railGranted) this.effectState.railHitMove = move;
