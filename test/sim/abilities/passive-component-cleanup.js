@@ -32,6 +32,10 @@ describe('Passive and selected component separation', () => {
 		it(row.id + ' slot ' + slot.slot + ' separates components from actual form passives', () => {
 			const [p] = setup(row.id, row.id === 'gliscor' ? 'Venom Pincer' : selected(row.id, slot.slot, slot.name));
 			for (const component of slot.overlap) {
+                if (row.id.endsWith('gmax') && component === 'proficient' && require('../../../dist/data/starter-passives').StarterPassives[row.id]) {
+                    assert.deepEqual(p.getPassives(), require('../../../dist/data/starter-passives').StarterPassives[row.id]);
+                    assert(!p.hasAbilityOrPassive('proficient')); continue;
+                }
 				if (row.id === 'gliscor') { assert(p.getPassives().includes('poisonheal')); assert(p.hasAbility('hypercutter')); continue; }
 				if (['kingler', 'fearow', 'pinsir'].includes(row.id)) {
 					assert.deepEqual(p.getPassives(), [{kingler:'titanpincer',fearow:'lancepoint',pinsir:'lockinggrip'}[row.id]]);

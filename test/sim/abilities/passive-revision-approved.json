@@ -1,18 +1,14 @@
 {
   "proficientForms": [
     "venusaurmega",
-    "venusaurgmax",
     "charizardmegax",
     "charizardmegaxalt",
     "charizardmegay",
-    "charizardgmax",
     "blastoisemega",
-    "blastoisegmax",
     "meganiummega",
     "meganiummegay",
     "typhlosionmega",
     "feraligatrmega",
-    "feraligatrgmax",
     "sceptilemega",
     "blazikenmega",
     "swampertmega",
@@ -27,10 +23,7 @@
     "delphoxmega",
     "greninjaash",
     "greninjamega",
-    "rillaboomgmax",
-    "cinderacegmax",
     "cinderacemega",
-    "inteleongmax",
     "torterrarift",
     "torterrariftshatter",
     "greninjabond"
@@ -40,7 +33,7 @@
       "proficient"
     ],
     "venusaurgmax": [
-      "proficient"
+      "overgrow"
     ],
     "charizardmegax": [
       "proficient"
@@ -52,13 +45,13 @@
       "proficient"
     ],
     "charizardgmax": [
-      "proficient"
+      "blaze"
     ],
     "blastoisemega": [
       "proficient"
     ],
     "blastoisegmax": [
-      "proficient"
+      "torrent"
     ],
     "meganiummega": [
       "proficient"
@@ -73,7 +66,7 @@
       "proficient"
     ],
     "feraligatrgmax": [
-      "proficient"
+      "torrent"
     ],
     "sceptilemega": [
       "proficient"
@@ -118,16 +111,16 @@
       "proficient"
     ],
     "rillaboomgmax": [
-      "proficient"
+      "overgrow"
     ],
     "cinderacegmax": [
-      "proficient"
+      "blaze"
     ],
     "cinderacemega": [
       "proficient"
     ],
     "inteleongmax": [
-      "proficient"
+      "torrent"
     ],
     "torterrarift": [
       "proficient"

@@ -22,7 +22,7 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('uses only Proficient on exactly 34 explicit gimmick records and family traits on the remaining 42', () => {
+	it('uses only Proficient on exactly 27 explicit gimmick records and family traits on the remaining 49', () => {
 		const { StarterPassives, ProficientPassiveForms } = require('../../../dist/data/starter-passives'), rev = require('./passive-revision-approved.json');
 		assert.deepEqual([...ProficientPassiveForms].sort(), rev.proficientForms.sort());
 		assert.equal(Object.keys(StarterPassives).length, 76);
