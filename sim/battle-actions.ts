@@ -2244,7 +2244,6 @@ export class BattleActions {
 			predatorUltraMatch(this.battle, source, target)) ignorePositiveDefensive = true;
 		if (defenseStat === 'spd' && move.category === 'Special' && this.battle.movehasType(move, 'Electric') &&
 			source.hasAbility('crosswire') && (move as any).crosswireCharged) ignorePositiveDefensive = true;
-		if (defenseStat === 'def' && this.battle.movehasType(move, 'Ground') && source.hasAbility('surefoot')) ignorePositiveDefensive = true;
 
 		if (moveHit.crit) {
 			ignoreNegativeOffensive = true;

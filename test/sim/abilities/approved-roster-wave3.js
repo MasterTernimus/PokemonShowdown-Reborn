@@ -41,7 +41,7 @@ describe('Approved third roster pass', () => {
 			['Magmortar', 'Blast Chamber', 'Vital Spirit'], ['Galvantula', 'Silk Sights', 'Compound Eyes'],
 			['Ferrothorn', 'Barb Harvest', 'Iron Barbs'], ['Eelektross', 'Current Coil', 'Swift Swim'],
 			['Goodra', 'Toxic Serenity', 'Poison Heal'], ['Drednaw', 'River Shell', 'Shell Armor'],
-			['Mudsdale', 'Mud Temper', 'Battle Armor'], ['Annihilape', 'Beyond Fear', 'Inner Focus'],
+			['Mudsdale', 'Battle Armor', 'Battle Armor'], ['Annihilape', 'Beyond Fear', 'Inner Focus'],
 		]) {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));
 			assert(abilityIncludesComponent(ability, component));
@@ -224,10 +224,9 @@ describe('Approved third roster pass', () => {
 		battle.damage(10, p, p, battle.dex.conditions.get('psn'));
 		assert(p.hp > hp);
 	});
-	it('Mud Temper preserves Battle Armor and grants one SpD boost per turn', () => {
-		const [p, , foe] = make('Mud Temper');
-		hit('ember', foe, p); hit('watergun', foe, p); assert.equal(p.boosts.spd, 1);
-		assert(p.hasAbility('battlearmor'));
+	it('Mud Temper is removed and Mudsdale selects Battle Armor directly', () => {
+		assert(!Dex.abilities.get('mudtemper').exists);
+		assert.equal(Dex.species.get('mudsdale').abilities[1], 'Battle Armor');
 	});
 	it('Skywarden creates five-turn Mist after Defog clears hazards', () => {
 		const [p, , foe] = make('Skywarden'); p.side.addSideCondition('stealthrock', foe);

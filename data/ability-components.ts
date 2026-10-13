@@ -513,9 +513,6 @@ Object.assign(AbilityComponents, {
   "toxicserenity": [
     "poisonheal"
   ],
-  "mudtemper": [
-    "battlearmor"
-  ],
   "skywarden": [],
   "lockjaw": [
     "strongjaw"
@@ -542,7 +539,7 @@ Object.assign(AbilityComponents, {
   sirius: ['apexvenom', 'blackviper', 'whiplash'],
   coldopen: [], quarrycannon: ['solidrock'], tundramarch: ['oblivious'],
   undertow: ['waterabsorb'], deadwater: [], vitalcircuit: [],
-  ringmaster: ['toughclaws'], unyielding: ['stamina'], primalrhythm: [],
+  ringmaster: ['toughclaws'], unyielding: ['innerfocus'], primalrhythm: [],
 	setpiece: [], calculatedshot: ['frisk'], lunardread: ['dishearten', 'insomnia', 'pressure'], falsebouquet: [],
   voidtyrant: ['hydrabond', 'berserk'],
   meridianseal: [], rimeplate: [], darkdominion: ['darkaura'],
@@ -732,7 +729,7 @@ Object.assign(AbilityComponents, {"stokebelly":["gluttony"],"rousingfeast":["glu
 AbilityComponents.voidreprisal = ['guts'];
 AbilityComponents.wreckingcrew = ['ironfist'];
 
-Object.assign(AbilityComponents, {"evergreen":["overcoat","ripen"],"battlegrip":["moxie"],"scentscout":["frisk"],"surefoot":["innerfocus"],"baitedbloom":["gluttony","stickyhold"],"guidinggallop":["pastelveil"],"carrionwatch":["frisk","unnerve"]});
+Object.assign(AbilityComponents, {"evergreen":["overcoat","ripen"],"battlegrip":["moxie"],"scentscout":["frisk"],"surefoot":[],"baitedbloom":["gluttony","stickyhold"],"guidinggallop":["pastelveil"],"carrionwatch":["frisk","unnerve"]});
 
 Object.assign(AbilityComponents, {"scaleshelter":["shielddust","overcoat"],"stagesweep":["screencleaner"],"icebreaker":["hypercutter"],"cactuschorus":["waterabsorb","sandrush"],"crushingvenom":["strongjaw"],"crosswire":["ironfist"],"deepchill":["oblivious"],"climatereserve":[]});
 

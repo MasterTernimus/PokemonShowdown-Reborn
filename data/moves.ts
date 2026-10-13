@@ -17410,6 +17410,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterMove(source, target, move) {
 			if (source.baseSpecies.baseSpecies !== 'Dialga') return;
+			if (!move.hitTargets?.includes(target)) return;
 			if (target.fainted) {
 				source.removeVolatile('mustrecharge');
 			} else {
@@ -17593,10 +17594,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1, cantusetwice: 1 },
+		secondary: {chance: 60, status: 'par'},
 		onAfterMove(source, target, move) {
-			if (!target.fainted && target.hp > 0) {
-				if (this.randomChance(60, 100)) target.trySetStatus('par', source, move);
-			}
 			if (target.fainted) {
 				source.removeVolatile('mustrecharge');
 			}

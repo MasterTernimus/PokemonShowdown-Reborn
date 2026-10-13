@@ -20733,7 +20733,13 @@ Abilities.scentscout = {
 	},
 	name: 'Scent Scout', rating: 4, num: 11287,
 };
-Abilities.surefoot = {...Abilities.innerfocus, name: 'Surefoot', rating: 4, num: 11288};
+Abilities.surefoot = {
+	name: 'Surefoot', rating: 4, num: 11288,
+	onBasePowerPriority: 19,
+	onBasePower(basePower, source, target, move) {
+		if (source.boosts.def > 0 && this.movehasType(move, 'Ground')) return this.chainModify([5325, 4096]);
+	},
+};
 Abilities.baitedbloom = {...Abilities.gluttony, ...Abilities.stickyhold, name: 'Baited Bloom', rating: 4, num: 11289};
 Abilities.guidinggallop = {
 	...Abilities.pastelveil,

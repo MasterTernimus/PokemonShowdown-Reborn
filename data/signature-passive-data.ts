@@ -3,7 +3,7 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 	slowkinggalar: 'eldritchremedy', mrmime: 'mimecraft', raichu: 'chargedtail', fearow: 'lancepoint',
 	kingler: 'titanpincer', cloyster: 'pearlcurrent', garganacl: 'saltbastion',
 	vikavolt: 'rechargerelay', jellicent: 'undertow', jellicentazzy: 'undertow', pinsir: 'lockinggrip',
-	hariyama: 'palmmastery', drednaw: 'lockjaw', mudsdale: 'unyielding', seismitoad: 'mirechorus',
+	hariyama: 'palmmastery', drednaw: 'lockjaw', seismitoad: 'mirechorus',
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
@@ -15,12 +15,12 @@ export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
 export const SignaturePassiveCallbacks: { [id: string]: readonly string[] } = {
 	rechargerelay: ['onBeforeSwitchOut', 'onSwitchOut'], undertow: ['onSourceDamagingHit'],
 	lockinggrip: ['onSourceDamagingHit', 'onSourceAfterSubDamage'], palmmastery: ['onModifyMove'],
-	lockjaw: ['onSourceDamagingHit'], unyielding: ['onDragOut'],
+	lockjaw: ['onSourceDamagingHit'],
 	mirechorus: ['onModifyType', 'onBasePower', 'onSourceDamagingHit'],
 };
 export const SignaturePassiveRemovedComponents: { [id: string]: readonly string[] } = {
 	rechargerelay: ['battery'], undertow: ['waterabsorb'], lockinggrip: ['hypercutter'],
-	palmmastery: ['thickfat'], lockjaw: ['strongjaw'], unyielding: ['stamina'], mirechorus: ['poisontouch'],
+	palmmastery: ['thickfat'], lockjaw: ['strongjaw'], mirechorus: ['poisontouch'],
 };
 export const SignaturePassiveDescriptions: { [id: string]: { shortDesc: string, desc: string } } = {
 	rechargerelay: { shortDesc: 'Volt Switch heals the incoming teammate by 1/8 max HP.',
@@ -33,8 +33,6 @@ export const SignaturePassiveDescriptions: { [id: string]: { shortDesc: string, 
 		desc: 'Force Palm paralysis is a primary move effect rather than a secondary roll. It always paralyzes when it lands, subject to status immunity and existing status. This passive does not include Thick Fat.' },
 	lockjaw: { shortDesc: 'Biting HP hits Torment surviving foes for 2 turns.',
 		desc: 'Biting attacks that deal HP damage apply Torment to surviving foes for 2 turns. Does not prevent switching or bypass Substitute. This passive does not include Strong Jaw.' },
-	unyielding: { shortDesc: 'Positive Defense stages prevent opposing forced switching.',
-		desc: 'While its Defense stage is positive, opponents cannot force it to switch. Normal switching and stat resets still work. This passive does not include Stamina and does not generate Defense boosts or healing.' },
 	mirechorus: { shortDesc: 'Sound becomes Water (Ice on Icy), 1.2x power; noncontact sound can poison.',
 		desc: 'Sound moves become Water-type, or Ice-type on Icy Field, and have 1.2x power. Each foe damaged by a noncontact sound hit has a 20% poison chance. Shield Dust and Covert Cloak prevent this added poison. This passive does not include contact Poison Touch.' },
 };

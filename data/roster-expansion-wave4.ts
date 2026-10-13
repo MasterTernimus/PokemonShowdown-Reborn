@@ -97,10 +97,10 @@ export function applyRosterWave4(base: AbilityDataTable) {
 		},
 	});
 	add('unyielding', 'Unyielding', {
-		...base.stamina,
+		...base.innerfocus,
 		onDragOutPriority: 1,
 		onDragOut(pokemon, source) {
-			if (pokemon.boosts.def > 0 && (!source?.isAlly(pokemon))) {
+			if (!source?.isAlly(pokemon)) {
 				this.add('-activate', pokemon, 'ability: Unyielding');
 				return null;
 			}

@@ -2,7 +2,7 @@
 'use strict';
 const assert = require('assert').strict, common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const grants = { vikavolt: 'rechargerelay', jellicent: 'undertow', jellicentazzy: 'undertow', pinsir: 'lockinggrip', hariyama: 'palmmastery', drednaw: 'lockjaw', mudsdale: 'unyielding', seismitoad: 'mirechorus' };
+const grants = { vikavolt: 'rechargerelay', jellicent: 'undertow', jellicentazzy: 'undertow', pinsir: 'lockinggrip', hariyama: 'palmmastery', drednaw: 'lockjaw', mudsdale: 'stamina', seismitoad: 'mirechorus' };
 let battle;
 function setup(species, ability = 'No Ability', doubles = false) {
 	const mon = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'voltswitch', 'uturn', 'forcepalm'] });
@@ -66,10 +66,10 @@ describe('Approved custom-only signature passives', () => {
 		const [p, q] = setup('Drednaw'); q.addVolatile('substitute'); q.volatiles.substitute.hp = 1000; hit(p, q, 'crunch', { damage: 100 }); assert(!q.volatiles.torment); q.removeVolatile('substitute');
 		hit(p, q, 'crunch', { damage: 100 }); battle.makeChoices('move 1', 'switch 2'); assert.notEqual(battle.p2.active[0], q);
 	});
-	for (const ability of ['No Ability', 'Unyielding', 'Stamina'])it('Unyielding requires positive Defense and grants no Stamina under ' + ability, () => {
-		const [p, q] = setup('Mudsdale', ability); p.addVolatile('gastroacid'); p.hp = 2000; hit(q, p, 'tackle', { damage: 100 }); assert.equal(p.hp, 1900); assert.equal(p.boosts.def, 0);
-		assert.notEqual(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), null); p.boosts.def = 1; assert.equal(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), null);
-		p.boosts.def = 0; assert.notEqual(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), null); p.boosts.def = 1; battle.makeChoices('switch 2', 'move 1'); assert.notEqual(battle.p1.active[0], p);
+	for (const ability of ['No Ability', 'Unyielding', 'Stamina']) it('Mudsdale keeps passive Stamina under suppression with ' + ability, () => {
+		const [p, q] = setup('Mudsdale', ability); p.addVolatile('gastroacid'); p.hp = 2000;
+		hit(q, p, 'tackle', {damage: 100}); assert.equal(p.hp, 2150); assert.equal(p.boosts.def, 1);
+		assert.notEqual(battle.runEvent('DragOut', p, q, Dex.moves.get('roar')), null);
 	});
 	for (const ability of ['No Ability', 'Mire Chorus', 'Liquid Voice', 'Poison Touch'])it('Mire Chorus converts sound and boosts once under ' + ability, () => {
 		const [p, q] = setup('Seismitoad', ability); for (const suppressed of [false, true]) { if (suppressed)p.addVolatile('gastroacid'); for (const field of ['', 'icyterrain']) { battle.field.terrain = field; const move = Dex.getActiveMove('hypervoice'); battle.runEvent('ModifyType', p, q, move, move); assert.equal(move.type, field ? 'Ice' : 'Water'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), field ? 180 : 120); } }
@@ -83,7 +83,7 @@ describe('Approved custom-only signature passives', () => {
 		const [p, q] = setup('Seismitoad'); if (protection === 'Shield Dust')q.setAbility(protection); else q.setItem(protection); battle.randomChance = () => true; hit(p, q, 'hypervoice', { damage: 100 }); assert.equal(q.status, '');
 	});
 	it('nonrecipient copied signatures preserve their original primitive identities', () => {
-		const [p] = setup('Mew'); for (const [ability, component] of [['Recharge Relay', 'battery'], ['Undertow', 'waterabsorb'], ['Palm Mastery', 'thickfat'], ['Lockjaw', 'strongjaw'], ['Unyielding', 'stamina'], ['Mire Chorus', 'poisontouch']]) { p.setAbility(ability); assert(p.hasAbility(component), ability); }
+		const [p] = setup('Mew'); for (const [ability, component] of [['Recharge Relay', 'battery'], ['Undertow', 'waterabsorb'], ['Palm Mastery', 'thickfat'], ['Lockjaw', 'strongjaw'], ['Unyielding', 'innerfocus'], ['Mire Chorus', 'poisontouch']]) { p.setAbility(ability); assert(p.hasAbility(component), ability); }
 	});
 	it('native Battery remains selectable and supplies one self/ally power boost', () => {
 		const [p, q] = setup('Vikavolt', 'Battery', true), ally = battle.p1.active[1]; battle.field.terrain = 'electricterrain'; const move = Dex.getActiveMove('darkpulse');

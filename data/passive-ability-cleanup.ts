@@ -334,9 +334,6 @@ Object.assign(SharedPassiveComponents, {
   "toxicspines": [
     "merciless"
   ],
-  "unyielding": [
-    "stamina"
-  ],
   "saltbastion": [
     "sturdy"
   ],
@@ -420,11 +417,6 @@ Object.assign(SharedPassiveAbilityDescriptions, {
     "passive": "merciless",
     "desc": "Physical HP hits set one Toxic Spikes layer on the attacker's side, up to two; allied attacks use the opposing side. Contact attackers also lose 1/6 max HP. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5.",
     "shortDesc": "Combines the listed abilities."
-  },
-  "unyielding": {
-    "passive": "stamina",
-    "desc": "While its Defense stage is positive, opponents cannot force it to switch. Normal switching and stat resets still work.",
-    "shortDesc": "While its Defense stage is positive, opponents cannot force it to switch. Normal switching and stat resets still work."
   },
   "saltbastion": {
     "passive": "sturdy",

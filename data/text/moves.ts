@@ -5471,8 +5471,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockwrecker: {
 		name: "Rock Wrecker",
-		desc: "If this move fails to KO its target, it has a 60% chance to paralyze the target. If successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "If it fails to KO, 60% chance to paralyze; user must recharge.",
+		desc: "A successful hit has a 60% chance to paralyze the surviving target. Protect, misses, immunity and Substitute prevent paralysis; Shield Dust and Covert Cloak block this secondary effect. The user must recharge after a successful hit unless the target faints.",
+		shortDesc: "60% paralysis on hit; recharge unless it KOs.",
 	},
 	roleplay: {
 		name: "Role Play",

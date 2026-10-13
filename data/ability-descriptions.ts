@@ -2526,10 +2526,6 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"desc": "Poison damage instead heals 1/8 max HP. Also heals 1/8 each turn on Corrosive Mist and Murkwater Surface, or while grounded on Corrosive and Wasteland. While poisoned or badly poisoned, Dragon moves cannot miss.",
 		"shortDesc": "Poison heals 1/8 HP; healing on corrosive fields — Dragon moves cannot miss while poisoned."
 	},
-	"mudtemper": {
-		"desc": "Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats. Surviving an opposing Fire or Water hit raises Sp. Def by 1 stage once per turn.",
-		"shortDesc": "Critical-hit protection; 20% less attack damage; surviving Fire/Water hits gives +1 Sp. Def once per turn."
-	},
 	"lockjaw": {
 		"desc": "Biting moves have 1.5x power. Biting hits inflict Torment on a surviving foe for 2 turns. Does not prevent switching.",
 		"shortDesc": "Bites have 1.5x power."
@@ -2582,10 +2578,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"desc": "Contact moves have 1.3x power. Its first damaging Dark hit against a surviving foe each entry attempts to inflict Taunt for 2 turns. Normal Taunt immunities apply; no Fake Out requirement.",
 		"shortDesc": "Contact moves have 1.3x power — first Dark hit each entry Taunts the foe for 2 turns."
 	},
-	"unyielding": {
-		"desc": "Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. While its Defense stage is positive, opponents cannot force it to switch. Normal switching and stat resets still work.",
-		"shortDesc": "HP hits heal 1/16 and give +1 Defense once per turn; raised Defense blocks opposing forced switching."
-	},
+	"unyielding": {"desc":"Inner Focus prevents flinching and Intimidate Attack drops. Opponents cannot force this Pokemon to switch, regardless of its stat stages. Voluntary switching still works. Stamina is a separate species passive on Mudsdale.","shortDesc":"Inner Focus; opponents cannot force it to switch."},
 	"calculatedshot": {
 		"desc": "Damaging Water moves gain +1 critical-hit stage and always use the highest normal damage roll. Does not increase fixed damage or bypass accuracy checks. Frisk reveals opposing Illusions (including itemless foes), reveals held items and independently has a 30% chance to Embargo each opposing item holder for 5 turns.",
 		"shortDesc": "Water attacks gain +1 critical-hit stage and the highest normal damage roll."
@@ -3077,10 +3070,7 @@ AbilityDescriptionOverrides.scentscout = {
 	"shortDesc": "Frisk; once per entry, reveals the first incoming opponent's item while already active."
 };
 
-AbilityDescriptionOverrides.surefoot = {
-	"desc": "Full Inner Focus prevents flinching and Intimidate Attack drops. Ground attacks ignore the target's positive Defense stages only when Defense is the stat used for damage. Does not ignore positive Sp. Def, abilities or screens, or change attack category.",
-	"shortDesc": "Inner Focus; Ground attacks ignore positive Defense stages when using Defense for damage."
-};
+AbilityDescriptionOverrides.surefoot = {"desc":"Ground-type moves have 1.3x power while its Defense stage is positive. The bonus ends when Defense returns to zero or below. Does not ignore opposing defensive stat stages.","shortDesc":"Ground moves have 1.3x power while Defense is raised."};
 
 AbilityDescriptionOverrides.baitedbloom = {
 	"desc": "Full Gluttony + Sticky Hold: qualifying low-HP Berries activate at half HP; other Pokemon cannot remove its item while it survives, retaining the Sticky Barb exception.",

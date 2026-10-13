@@ -79,13 +79,13 @@ describe('Latest approved passive routing and scope preservation', () => {
 		battle.boost({ def: -1 }, p, t, Dex.moves.get('tailwhip'));
 		assert.equal(p.boosts.def, 0);
 	});
-	it('selected Stamina owns its boost budget separately from native Unyielding', () => {
+	it('passive Stamina owns one boost budget even when Stamina is also selected', () => {
 		const [p, t] = setup('Mudsdale', 'Stamina');
 		p.hp = p.maxhp - 50;
 		hit(t, p, undefined, { basePower: 1 });
 		assert.equal(p.boosts.def, 1);
-		assert.equal(p.abilityState.staminaHitTurn, battle.turn);
-		assert.equal(p.passiveStates.unyielding?.staminaHitTurn, undefined);
+		assert.equal(p.passiveStates.stamina?.staminaHitTurn, battle.turn);
+		assert.equal(p.abilityState.staminaHitTurn, undefined);
 		p.setAbility('Pressure');
 		hit(t, p, undefined, { basePower: 1 });
 		assert.equal(p.boosts.def, 1);

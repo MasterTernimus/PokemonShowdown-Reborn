@@ -192,15 +192,8 @@ export function applyRosterWave3(base: AbilityDataTable) {
 			if (move.type === 'Dragon' && ['psn', 'tox'].includes(source.status)) move.accuracy = true;
 		},
 	});
-	add('mudtemper', 'Mud Temper', {
-		...base.battlearmor,
-		onDamagingHit(damage, target, source, move) {
-			if (!target.hp || !foeHit(damage, target, source) || !['Fire', 'Water'].includes(move.type) ||
-				this.effectState.boostTurn === this.turn) return;
-			this.effectState.boostTurn = this.turn;
-			this.boost({ spd: 1 }, target, target, this.effect);
-		},
-	});
+	// Reserve the removed Mud Temper ID so later abilities retain their numbers.
+	num++;
 	add('skywarden', 'Skywarden', {
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (move.id !== 'defog') return;

@@ -1013,5 +1013,9 @@ for (const [id, passives] of Object.entries({...FinalPassiveMigrations, ...Famil
  SpeciesPassives[id] = Object.freeze(passives);
  for (const passive of passives) ThematicPassiveIds.add(passive);
 }
+SpeciesPassives.mudsdale = Object.freeze(['stamina']);
+SpeciesPassives.rhydon = Object.freeze(['powerdrill']);
+ThematicPassiveIds.add('stamina');
+ThematicPassiveIds.add('powerdrill');
 Object.freeze(SpeciesPassives);
 

@@ -24021,7 +24021,7 @@ for (const [id, abilities] of Object.entries({
     "H": "Toxic Serenity"
   },
   "mudsdale": {
-    "1": "Mud Temper"
+    "1": "Battle Armor"
   },
   "corviknight": {
     "1": "Skywarden"
@@ -24397,7 +24397,8 @@ Pokedex.jellicentazzy.abilities!['0'] = 'Water Absorb';
 Pokedex.pinsir.abilities!['0'] = 'Hyper Cutter';
 Pokedex.hariyama.abilities!['0'] = 'Thick Fat';
 Pokedex.drednaw.abilities!['0'] = 'Strong Jaw';
-Pokedex.mudsdale.abilities!['0'] = 'Stamina';
+Pokedex.mudsdale.abilities = {0: 'Unyielding', 1: 'Battle Armor', H: 'Surefoot'};
+Pokedex.rhydon.abilities!['H'] = 'Lightning Rod';
 Pokedex.seismitoad.abilities!['1'] = 'Poison Touch';
 
 // Approved Dusk replacement; its existing Tough Claws becomes a species passive.
