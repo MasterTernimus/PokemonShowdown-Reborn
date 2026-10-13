@@ -222,7 +222,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"lunarorbit": "Reflects status moves; stronger secondary chances; healing priority; no indirect damage; sets Gravity.",
 	"prismscale": "Combines the listed abilities.",
 	"anchoredbattery": "1.5x pulse/bullet power; cannot be forced to switch.",
-	"heavyartillery": "Ignores foe stat changes; armor protection; double-power pulse/bullet moves hit all foes; defenses fall.",
+	"heavyartillery": "Double-power pulse/bullet spread hits break screens; capped defense cost; reload on a non-firing turn.",
 	"bloomingsun": "Combines the listed abilities.",
 	"stormbell": "Takes 0.8x damage from attacks; Summons rain on entry; move KOs raise its highest stat.",
 	"requiem": "Attacks may be disabled; first damage interaction marks foes with Perish Song; foe KOs heal 1/4 HP.",

@@ -48,6 +48,21 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (applied > 0.75) return this.chainModify(0.75 / applied);
 		},
 	},
+    artilleryreload: {
+        name: 'Artillery Reload', noCopy: true,
+        onStart() { this.effectState.def = 0; this.effectState.spd = 0; this.effectState.firedTurn = this.turn; },
+        onResidualOrder: 28,
+        onResidual(pokemon) {
+            if (this.effectState.firedTurn === this.turn || !pokemon.hasAbility('heavyartillery')) return;
+            const boosts: SparseBoostsTable = {};
+            for (const stat of ['def', 'spd'] as const) if (this.effectState[stat]) boosts[stat] = this.effectState[stat];
+            if (Object.keys(boosts).length) {
+                this.add('-message', pokemon.name + ' reloaded its heavy artillery!');
+                this.boost(boosts, pokemon, pokemon, this.dex.abilities.get('heavyartillery'));
+            }
+            if (!this.effectState.def && !this.effectState.spd) pokemon.removeVolatile('artilleryreload');
+        },
+    },
 	starterpassives: {
 		name: 'Starter Passives',
 		onBasePowerPriority: 22,

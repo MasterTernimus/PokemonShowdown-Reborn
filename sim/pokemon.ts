@@ -1383,6 +1383,10 @@ export class Pokemon {
 		for (boostName in boosts) {
 			delta = boosts[boostName]!;
 			this.boosts[boostName] += delta;
+            const reload = this.volatiles.artilleryreload;
+            if (reload && delta > 0 && (boostName === 'def' || boostName === 'spd')) {
+                reload[boostName] = Math.max(0, (reload[boostName] || 0) - delta);
+            }
 		}
 		return delta;
 	}
@@ -1391,6 +1395,7 @@ export class Pokemon {
 		let boostName: BoostID;
 		for (boostName in this.boosts) {
 			this.boosts[boostName] = 0;
+            if (this.volatiles.artilleryreload) this.volatiles.artilleryreload[boostName] = 0;
 		}
 	}
 
@@ -1398,6 +1403,7 @@ export class Pokemon {
 		let boostName: BoostID;
 		for (boostName in boosts) {
 			this.boosts[boostName] = boosts[boostName]!;
+            if (this.volatiles.artilleryreload) this.volatiles.artilleryreload[boostName] = 0;
 		}
 	}
 

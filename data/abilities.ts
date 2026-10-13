@@ -11470,6 +11470,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyMove(move, pokemon, target) {
+            if (move.category !== 'Status' && (move.flags.pulse || move.flags.bullet) && pokemon.volatiles.artilleryreload) {
+                pokemon.volatiles.artilleryreload.firedTurn = this.turn;
+            }
 			if (['doubles', 'freeforall'].includes(this.gameType) && move.category !== 'Status' &&
 				(move.flags['pulse'] || move.flags['bullet'])) {
 				if (this.gameType === 'freeforall') {
@@ -11482,11 +11485,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.target = 'allAdjacentFoes';
 			}
 		},
-		onAfterMove(source, target, move) {
-			if (move.category !== 'Status' && (move.flags['pulse'] || move.flags['bullet'])) {
-				this.boost({def: -1, spd: -1}, source, source, this.effect);
-			}
-		},
+        onSourceDamagingHit(damage, target, source, move) {
+            if (damage <= 0 || source.isAlly(target) || move.category === 'Status' || !(move.flags.pulse || move.flags.bullet)) return;
+            (move as any).heavyArtilleryHit = true;
+            for (const screen of ['reflect', 'lightscreen', 'auroraveil', 'atlantiswall', 'arenitewall']) target.side.removeSideCondition(screen);
+        },
+        onAfterMove(source, target, move) {
+            if (!(move as any).heavyArtilleryHit || !source.hp) return;
+            // Consume the whole-move marker once, even for multi-hit or spread attacks.
+            delete (move as any).heavyArtilleryHit;
+            source.addVolatile('artilleryreload', source, this.effect);
+            const state = source.volatiles.artilleryreload;
+            if (!state) return;
+            state.firedTurn = this.turn;
+            for (const stat of ['def', 'spd'] as const) {
+                if (state[stat]) continue;
+                const before = source.boosts[stat];
+                this.boost({[stat]: -1}, source, source, this.effect);
+                state[stat] = Math.min(1, Math.max(0, before - source.boosts[stat]));
+            }
+        },
 
 
 		onStart(pokemon) {
