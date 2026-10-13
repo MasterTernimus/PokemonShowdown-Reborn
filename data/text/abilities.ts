@@ -2,6 +2,11 @@ import { AbilityDescriptionOverrides } from '../ability-descriptions';
 import { getAbilitySelectorSummary } from '../ability-display';
 import { RosterExpansionDescriptions, RosterExpansionShortDescriptions } from '../roster-expansion-text';
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+	dreaddominion: {
+		name: 'Dread Dominion',
+		desc: 'Hydra Bond + Moxie. While this ability is active, Dark attacks are neutral against Fairy typing and Dark typing resists Fairy attacks for all Pokemon. Other type matchups still apply. Ends when the holder leaves battle or its ability is suppressed.',
+		shortDesc: 'Hydra Bond + Moxie. Field-wide: Dark is neutral vs Fairy; Dark resists Fairy.',
+	},
 	voidcrossing: {name: 'Void Crossing', ...AbilityDescriptionOverrides.voidcrossing},
 	mindcurrent: {"name":"Mind Current","desc":"Full Inner Focus blocks flinching and Intimidate's Attack drop. Once per entry, a damaging Psychic move dealing damage to a foe or its Substitute grants Charge after the move finishes. The triggering move cannot consume the new Charge. Misses, Protect and immunity do not spend the use.","shortDesc":"Inner Focus; first damaging Psychic move each entry grants Charge after the move completes."},
 	wisecounsel: {"name":"Wise Counsel","desc":"Full Inner Focus blocks flinching and Intimidate's Attack drop. Once per entry, successfully using Instruct on an active ally cures that ally's confusion before its ordinary repeated action. Failed Instruct and non-ally targets do not trigger or spend the use.","shortDesc":"Inner Focus; first successful ally Instruct each entry cures confusion before the repeated action."},

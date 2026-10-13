@@ -1316,6 +1316,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 9,
 		isNonstandard: "Custom",
 	},
+	grimyinite: {
+		name: "Grimyinite",
+		spritenum: 0,
+		megaStone: { Mightyena: "Mightyena-Mega" },
+		itemUser: ["Mightyena", "Mightyena-Deso", "Mightyena-Grim"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 11111,
+		gen: 9,
+		isNonstandard: "Custom",
+	},
 	torterranite: {
 		name: "Torterranite",
 		spritenum: 0,

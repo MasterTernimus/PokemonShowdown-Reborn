@@ -1,6 +1,7 @@
 import {AbilityDescriptionOverrides} from './ability-descriptions';
 /** Reviewed compact display text. Never used for battle identity or callback dispatch. */
 export const AbilityDisplaySummaries: Record<string, string> = {
+	dreaddominion: 'While active: Dark is neutral vs Fairy; Dark resists Fairy for both sides.',
 	"selfrepair": "Combines the listed abilities.",
 	"naturalrecovery": "Switching out heals an extra 1/3 HP if a major status was cured.",
 	"smolderingshroud": "First blocked opposing stat drop each entry raises Sp. Atk by 1.",

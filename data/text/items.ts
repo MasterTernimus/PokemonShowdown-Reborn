@@ -1,4 +1,9 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
+	grimyinite: {
+		name: 'Grimyinite',
+		desc: 'Allows Mightyena, Mightyena-Deso and Mightyena-Grim to Mega Evolve into Mightyena-Mega.',
+		shortDesc: 'Allows Mightyena to Mega Evolve.',
+	},
 	reuniclusite: {
 		name: "Reuniclusite",
 		desc: "Allows Reuniclus to Mega Evolve into Mega Reuniclus in battle.",

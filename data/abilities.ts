@@ -4135,7 +4135,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyBasePowerPriority: 20,
 		onAnyBasePower(basePower, source, target, move) {
 			if (target === source || move.category === 'Status' || !this.movehasType(move, 'Dark')) return;
-			if (!move.auraBooster?.hasAbility('Dark Aura')) move.auraBooster = this.effectState.target;
+			if (!move.auraBooster?.hasAbilityOrPassive('Dark Aura')) move.auraBooster = this.effectState.target;
 			if (move.auraBooster !== this.effectState.target) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
@@ -9825,6 +9825,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Hustle",
 		rating: 3.5,
 		num: 55,
+	},
+	dreaddominion: {
+		onModifyMove(move, source, target) {
+			return this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source, target);
+		},
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('hydrabond').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			return this.dex.abilities.get('moxie').onSourceAfterFaint?.call(this, length, target, source, effect);
+		},
+		onAnyEffectiveness(typeMod, target, type, move) {
+			// Change only the named type matchup; preserve the target's other typing.
+			if (move.type === 'Dark' && type === 'Fairy') return 0;
+			if (move.type === 'Fairy' && type === 'Dark') return -1;
+		},
+		flags: {},
+		name: "Dread Dominion",
+		rating: 5,
+		num: 11452,
 	},
 	hydrabond: {
 		onModifyMove(move, source) {

@@ -37,7 +37,7 @@ export function thematicPassives(pokemon: Pokemon) {
 	return pokemon.getPassives().filter(id => ThematicPassiveIds.has(id));
 }
 
-const migratedEntryPassives = new Set(['supremeoverlord', 'unnerve', 'fairyaura', 'contrary', 'moldbreaker', 'noguard',
+const migratedEntryPassives = new Set(['supremeoverlord', 'unnerve', 'fairyaura', 'darkaura', 'contrary', 'moldbreaker', 'noguard',
 	'eldritchremedy', 'mimecraft', 'saltbastion', 'download', 'hospitality',
 	'frisk', 'oblivious', 'waterveil', 'drizzle', 'grassysurge', 'electricsurge', 'thermalexchange', 'flamebody', 'intimidate',
 	'swornduty', 'gluttony', 'heavymetal', 'stalwart']);

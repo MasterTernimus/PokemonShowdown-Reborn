@@ -1,6 +1,7 @@
 import {AbilityComponentExclusions} from './passive-ability-cleanup';
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
+	dreaddominion: ['hydrabond', 'moxie'],
 	eternalflower: ['moldbreaker'],
 	ange: ['moldbreaker'],
 	reservoir: ['waterabsorb', 'gluttony', 'damp'],
