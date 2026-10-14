@@ -14,13 +14,82 @@ function hit(p, q, extra = {}) { const m = Object.assign(Dex.getActiveMove('tack
 function power(p, q) { return battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100); }
 describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
+	for (const ability of ['Ultra Instinct', 'Burning Spirit']) it(ability + ' announces a rivalry once per actual encounter', () => {
+		const [p, q] = setup(ability); q.setAbility('Burning Ego');
+		const messages = () => battle.log.filter(line => line.startsWith('|-message|') && /Ego flares|Instinct sharpens/.test(line));
+		const update = () => battle.eachEvent('Update');
+		const before = messages().length; update(); assert.equal(messages().length, before + 2);
+		update(); battle.turn++; update(); p.setAbility('No Ability'); p.setAbility(ability); update();
+		assert.equal(messages().length, before + 2);
+		p.addVolatile('gastroacid'); update(); p.removeVolatile('gastroacid'); update();
+		assert.equal(messages().length, before + 2);
+		battle.actions.switchIn(battle.p2.pokemon[1], 0); battle.actions.switchIn(q, 0); q.setAbility('Burning Ego'); update();
+		assert.equal(messages().length, before + 4);
+		battle.actions.switchIn(battle.p1.pokemon[1], 0); battle.actions.switchIn(p, 0); update();
+		assert.equal(messages().length, before + 6);
+	});
+	it('rivalry announcements wait for an effective opposing matchup', () => {
+		const [p, q] = setup('Ultra Instinct', 'holyterrain', true); q.setAbility('Ultra Ego');
+		const messages = () => battle.log.filter(line => /Ego flares|Instinct sharpens/.test(line));
+		battle.eachEvent('Update'); assert.equal(messages().length, 0);
+		battle.field.terrain = ''; q.addVolatile('gastroacid'); battle.eachEvent('Update'); assert.equal(messages().length, 0);
+		q.removeVolatile('gastroacid'); battle.eachEvent('Update'); assert.equal(messages().length, 2);
+		battle.p1.active[1].setAbility('Ultra Ego'); battle.eachEvent('Update'); assert.equal(messages().length, 2);
+	});
+
+	for (const instinct of ['Ultra Instinct', 'Burning Spirit']) {
+		for (const ego of ['Ultra Ego', 'Burning Ego', 'Perfect Ego', 'Unleashed Ego', 'Primal Ego']) {
+			it(instinct + ' and ' + ego + ' inherit the rivalry without doubling retaliation', () => {
+				const [p, q] = setup(instinct); q.setAbility(ego, null, null, true);
+				hit(q, p, {multihit: 3}); assert.equal(p.hp, 3820);
+				hit(q, p); assert.equal(p.hp, 3720);
+				hit(p, q); assert.equal(q.boosts.atk, 1); assert.equal(q.boosts.spa, 1);
+				hit(p, q); assert.equal(q.boosts.atk, 1); assert.equal(q.boosts.spa, 1);
+			});
+		}
+	}
+	for (const category of ['Physical', 'Special']) it(category + ' rivalry ignores stages only for the appropriate matchup and guard', () => {
+		const [p, q] = setup(); q.setAbility('Ultra Ego');
+		const stat = category === 'Physical' ? 'atk' : 'spa';
+		const damage = () => {p.hp = 4000; hit(q, p, {damage: undefined, category}); return 4000 - p.hp;};
+		const neutral = damage(); battle.turn++; q.boosts[stat] = 6;
+		assert.equal(damage(), neutral); assert.equal(q.boosts[stat], 6);
+		assert(damage() > neutral * 4, 'later attack uses positive stages and no guard');
+		battle.turn++; q.boosts[stat] = -6; assert.equal(damage(), neutral); assert.equal(q.boosts[stat], -6);
+		p.setAbility('No Ability'); const weakened = damage(); q.boosts[stat] = 0;
+		assert(damage() > weakened * 3, 'penalties remain against unrelated targets');
+	});
+	it('the rivalry replaces favored reduction rather than stacking it', () => {
+		const [p, q] = setup('Ultra Instinct', 'ashenbeachterrain'); q.setAbility('Ultra Ego');
+		hit(q, p); assert.equal(p.hp, 3940);
+	});
+	for (const suppressed of ['source', 'target']) it('suppression of ' + suppressed + ' disables rivalry', () => {
+		const [p, q] = setup(); q.setAbility('Ultra Ego'); (suppressed === 'source' ? q : p).addVolatile('gastroacid');
+		hit(q, p); assert.equal(p.hp, suppressed === 'source' ? 3930 : 3900);
+	});
+	for (const field of ['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain']) it('no rivalry on ' + field, () => {
+		const [p, q] = setup('Ultra Instinct', field); q.setAbility('Ultra Ego'); hit(q, p); assert.equal(p.hp, 3900);
+	});
+	it('rivalry does not affect allied attacks or activate from an unrelated opposing Ego', () => {
+		const [p, q] = setup('Ultra Instinct', '', true); battle.p1.active[1].setAbility('Ultra Ego');
+		hit(battle.p1.active[1], p); assert.equal(p.hp, 3900);
+		battle.p2.active[1].setAbility('Ultra Ego'); hit(q, p); assert.equal(p.hp, 3830);
+	});
+	it('Substitute retains boosted damage and does not spend the rivalry guard', () => {
+		const [p, q] = setup(); q.setAbility('Ultra Ego'); q.boosts.atk = 6;
+		p.addVolatile('substitute'); p.volatiles.substitute.hp = 2000;
+		hit(q, p, {damage: undefined}); const boosted = 2000 - p.volatiles.substitute.hp;
+		assert.equal(p.m.ultraInstinctGuardTurn, undefined); p.removeVolatile('substitute');
+		hit(q, p, {damage: undefined}); assert(boosted > (4000 - p.hp) * 4);
+	});
+
 	it('Predator bypasses the first reduction without reserving it for a later attack', () => {
 		const [p, q] = setup(); q.setAbility('Predator'); hit(q, p); assert.equal(p.hp, 3900);
 		q.setAbility('No Ability'); hit(q, p); assert.equal(p.hp, 3800);
 	});
 	for (const species of ['Hitmonlee', 'Infernape', 'Sawk', 'Lycanroc']) it(species + ' keeps its selected Ultra Instinct and receives the revised effects', () => {
 		const [p, q] = setup('Ultra Instinct', '', false, species); assert(Object.values(p.species.abilities).includes('Ultra Instinct'));
-		hit(q, p); assert.equal(p.hp, 3925); p.hp = 2000; hit(p, q); assert.equal(p.hp, 2250);
+		hit(q, p); assert.equal(p.hp, 3930); p.hp = 2000; hit(p, q); assert.equal(p.hp, 2250);
 	});
 	it('only true switching stamps this-turn entry, including foes who already acted', () => {
 		const [p, q] = setup(); battle.queue.willMove = () => null; q.newlySwitched = true; assert.equal(power(p, q), 100);
@@ -39,7 +108,7 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 	for (const item of ['', 'Ability Shield']) it('Burning Spirit preserves component-specific Magma Armor bypass with ' + (item || 'no item'), () => {
 		const [p, q] = setup('Burning Spirit'); p.setItem(item); q.setAbility('Mold Breaker'); const move = Dex.getActiveMove('watergun'); move.ignoreAbility = true; battle.setActiveMove(move, q, p);
 		assert.equal(battle.runEvent('ModifySpA', q, p, move, 100), item ? 50 : 100);
-		battle.clearActiveMove(); hit(q, p); assert.equal(p.hp, 3925); // Ultra Instinct itself is not a breakable component.
+		battle.clearActiveMove(); hit(q, p); assert.equal(p.hp, 3930); // Ultra Instinct itself is not a breakable component.
 	});
 	it('Burning Spirit preserves Magma Armor freeze cure and Dragon Den Fire immunity', () => {
 		const [p, q] = setup('Burning Spirit'); assert.equal(p.trySetStatus('frz', q), false); p.status = 'frz'; battle.singleEvent('Update', p.getAbility(), p.abilityState, p); assert.equal(p.status, '');
@@ -49,7 +118,7 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 		const { calculateScenario } = require('../../../dist/sim/custom-calculator');
 		const scenario = { format: 'gen9nofieldsinglesgame', move: 'Tackle', samples: 16, seed: 42, actors: Array.from({ length: 4 }, () => ({ species: 'Mew', ability: 'No Ability' })) };
 		const plain = calculateScenario(scenario).results[1]; scenario.actors[1].ability = 'Ultra Instinct'; const guarded = calculateScenario(scenario).results[1];
-		for (const key of ['min', 'max']) assert(Math.abs(guarded[key] - plain[key] * 0.75) <= 2, key);
+		for (const key of ['min', 'max']) assert(Math.abs(guarded[key] - plain[key] * 0.70) <= 2, key);
 	});
 	it('keeps Ultra Ego, Burning Ego, ordinary Opportunist and Magma Armor callbacks byte-identical', () => {
 		const before = require('../../../artifacts/ultra-instinct-before.json'); for (const id of ['ultraego', 'burningego', 'opportunist', 'magmaarmor'])assert.deepEqual(Object.fromEntries(Object.entries(Dex.abilities.get(id)).filter(([,v]) => typeof v === 'function').map(([k, v]) => [k, v.toString()])), before.abilities[id].callbacks, id);
@@ -62,7 +131,7 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 			for (const screen of ['reflect', 'lightscreen', 'auroraveil']) { q.side.addSideCondition(screen, q); assert.equal(power(p, q), 100); }
 			q.ability = 'battlebond'; q.abilityState = battle.initEffectState({ id: 'battlebond', target: q }); q.m.enteredBattleTurn = battle.turn; assert.equal(power(p, q), 100); battle.queue.willMove = original;
 		});
-		for (const [field, damage, heal] of [['', 75, 250], ['ashenbeachterrain', 65, 500], ['newworldterrain', 65, 500], ['starlightarenaterrain', 65, 500], ['coldeclipseterrain', 65, 500], ['fairytaleterrain', 75, 250]])it(ability + ' exact damage/heal limits on ' + (field || 'no field'), () => {
+		for (const [field, damage, heal] of [['', 70, 250], ['ashenbeachterrain', 65, 500], ['newworldterrain', 65, 500], ['starlightarenaterrain', 65, 500], ['coldeclipseterrain', 65, 500], ['fairytaleterrain', 70, 250]])it(ability + ' exact damage/heal limits on ' + (field || 'no field'), () => {
 			const [p, q] = setup(ability, field); hit(q, p, { multihit: 3 }); assert.equal(p.hp, 4000 - 3 * damage); hit(q, p); assert.equal(p.hp, 4000 - 3 * damage - 100);
 			p.hp = 2000; hit(p, q, { multihit: 3 }); assert.equal(p.hp, 2000 + heal); hit(p, q); assert.equal(p.hp, 2000 + heal);
 			battle.turn++; hit(q, p); assert.equal(p.hp, 2000 + heal - damage); hit(p, q); assert.equal(p.hp, 2000 + 2 * heal - damage);
@@ -74,10 +143,10 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 		it(ability + ' excludes Substitute-only and allied damage, hazards and residual damage from defensive budget', () => {
 			const [p, q] = setup(ability, '', true); p.addVolatile('substitute'); p.volatiles.substitute.hp = 1000; hit(q, p); assert.equal(p.volatiles.substitute.hp, 900); assert.equal(p.m.ultraInstinctGuardTurn, undefined);
 			p.removeVolatile('substitute'); hit(battle.p1.active[1], p); assert.equal(p.hp, 3900); battle.damage(100, p, q, Dex.conditions.get('spikes')); assert.equal(p.hp, 3800); assert.equal(p.m.ultraInstinctGuardTurn, undefined);
-			hit(q, p); assert.equal(p.hp, 3725);
+			hit(q, p); assert.equal(p.hp, 3730);
 		});
 		it(ability + ' starts reduction when a multi-hit move breaks Substitute and reaches HP', () => {
-			const [p, q] = setup(ability); p.addVolatile('substitute'); p.volatiles.substitute.hp = 50; hit(q, p, { multihit: 3 }); assert.equal(p.hp, 3850); hit(q, p); assert.equal(p.hp, 3750);
+			const [p, q] = setup(ability); p.addVolatile('substitute'); p.volatiles.substitute.hp = 50; hit(q, p, { multihit: 3 }); assert.equal(p.hp, 3860); hit(q, p); assert.equal(p.hp, 3760);
 		});
 		it(ability + ' heals after all hits and only once across spread foes', () => {
 			const [p, q] = setup(ability, '', true); p.hp = 2000; const samples = []; const damage = battle.damage; battle.damage = function (...args) { samples.push(p.hp); return damage.apply(this, args); };
@@ -98,7 +167,7 @@ describe('Approved Ultra Instinct and Burning Spirit rework', () => {
 		});
 		it(ability + ' suppression disables benefits without spending the turn budgets', () => {
 			const [p, q] = setup(ability); p.addVolatile('gastroacid'); hit(q, p); assert.equal(p.hp, 3900); p.hp = 2000; hit(p, q); assert.equal(p.hp, 2000); assert.equal(p.m.ultraInstinctGuardTurn, undefined);
-			p.removeVolatile('gastroacid'); hit(q, p); assert.equal(p.hp, 1925); hit(p, q); assert.equal(p.hp, 2175);
+			p.removeVolatile('gastroacid'); hit(q, p); assert.equal(p.hp, 1930); hit(p, q); assert.equal(p.hp, 2180);
 		});
 	}
 	it('Burning Spirit filters only copied accuracy/evasion and preserves ordinary Opportunist and copy-loop protection', () => {

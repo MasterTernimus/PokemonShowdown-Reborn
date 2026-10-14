@@ -1,0 +1,2 @@
+export const UltraEgoRivalryDescription = " Against an opposing effective Ultra Instinct (including composites), its attacks ignore its own negative Attack and Sp. Atk stages. Ultra Instinct instead reduces its first HP-damaging move each turn by 40% and ignores positive Attack or Sp. Atk stages for that protected move. Stored stages are unchanged; normal +1 retaliation is unchanged. The rivalry is disabled on Bewitched Woods, Haunted and Holy.";
+export const UltraEgoRivalryAbilities = ["ultraego", "burningego", "perfectego", "unleashedego", "primalego"];

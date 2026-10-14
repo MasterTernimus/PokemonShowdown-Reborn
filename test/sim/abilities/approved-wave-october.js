@@ -75,7 +75,7 @@ describe('Approved Breakwater, Meowstic, Heavy Artillery and Mythic Scale',()=>{
   const[p]=setup('Heavy Artillery',true,'Clawitzer-Mega');const foes=battle.sides.slice(1).map(s=>s.active[0]),hp=foes.map(f=>f.hp);
   const m=hit(p,foes[1],'waterpulse',{basePower:30});const damage=foes.map((f,i)=>hp[i]-f.hp);
   assert.equal(m.heavyArtilleryPrimary,foes[1].getSlot());assert(damage[1]>0);assert.equal(damage[0],battle.modify(damage[1],0.5));assert.equal(damage[2],damage[0]);
-  assert.equal(p.boosts.def,-1);assert.equal(p.boosts.spd,-1);
+  assert.equal(p.boosts.def,0);assert.equal(p.boosts.spd,0);
  });
  it('Heavy Artillery preserves an actual player-selected target through move resolution',()=>{
   const[p]=setup('Heavy Artillery',true,'Clawitzer-Mega');const foes=battle.sides.slice(1).map(s=>s.active[0]),hp=foes.map(f=>f.hp);
@@ -95,15 +95,15 @@ describe('Approved Breakwater, Meowstic, Heavy Artillery and Mythic Scale',()=>{
   const[p]=setup('Heavy Artillery',true,'Clawitzer-Mega');const m=battle.dex.getActiveMove('waterpulse');m.target='allAdjacentFoes';p.getAbility().onModifyMove.call(battle,m,p,p);
   assert.equal(m.heavyArtilleryPrimary,battle.p2.active[0].getSlot());
  });
- it('Heavy Artillery does not change Singles targeting or its doubled power and defensive drops',()=>{
-  const[p,t]=setup('Heavy Artillery',false,'Clawitzer-Mega');const m=hit(p,t,'waterpulse',{basePower:30});assert.equal(m.target,Dex.moves.get('waterpulse').target);assert.equal(m.heavyArtilleryPrimary,undefined);assert.equal(p.boosts.def,-1);assert.equal(p.boosts.spd,-1);
+ it('Heavy Artillery keeps Singles targeting and never creates defensive debt',()=>{
+  const[p,t]=setup('Heavy Artillery',false,'Clawitzer-Mega');const m=hit(p,t,'waterpulse',{basePower:30});assert.equal(m.target,Dex.moves.get('waterpulse').target);assert.equal(m.heavyArtilleryPrimary,undefined);assert.equal(p.boosts.def,0);assert.equal(p.boosts.spd,0);assert(!p.volatiles.artilleryreload);
   assert.equal(battle.runEvent('BasePower',p,t,m,100),200);
  });
  it('Heavy Artillery does not expand non-pulse/bullet attacks',()=>{
   const[p,t]=setup('Heavy Artillery',true,'Clawitzer-Mega');const m=hit(p,t,'waterfall');assert.equal(m.target,'normal');assert.equal(m.heavyArtilleryPrimary,undefined);assert.equal(p.boosts.def,0);
  });
- it('Mythic Scale retains all four components, including field Marvel Scale',()=>{
-  const[p]=setup('Mythic Scale',false,'Butterfree-Gmax');for(const a of ['marvelscale','levitate','compoundeyes','shielddust'])assert(p.hasAbility(a));
+ it('Mythic Scale retains its active components and separate Levitate passive',()=>{
+  const[p]=setup('Mythic Scale',false,'Butterfree-Gmax');for(const a of ['marvelscale','compoundeyes','shielddust'])assert(p.hasAbility(a));assert(!p.hasAbility('levitate'));assert(p.getPassives().includes('levitate'));
   battle.field.terrain='fairytaleterrain';assert.equal(battle.runEvent('ModifyDef',p,null,null,100),150);
  });
  it('successful powder status grants one Defense stage per entry',()=>{

@@ -1,4 +1,5 @@
 import {adaptiveFieldMultiplier} from '../sim/adaptive-cycle';
+import {signatureMoveText} from './signature-move-summaries';
 function adaptiveCategory(move: ActiveMove, source: Pokemon) {
  move.category = source.getStat('atk', false, true) > source.getStat('spa', false, true) ? 'Physical' : 'Special';
 }
@@ -229,5 +230,5 @@ const summaries: {[id: string]: string} = {
 };
 export const YangSignatureDescriptionsB: {[id: string]: {shortDesc: string, desc: string}} = {};
 for (const [id, summary] of Object.entries(summaries)) {
- YangSignatureDescriptionsB[id] = {shortDesc: summary, desc: `${summary} ${id === 'swarmsnare' ? 'Approved custom Bennett move inspired by an unused Yang placeholder, not a released Yang move.' : `Inspired by ${YangSignatureCreditsB[id]} from Pokemon Reborn Yang.`} This is the approved custom local implementation; its effects do not claim to reproduce the original game's mechanics.`};
+ YangSignatureDescriptionsB[id] = signatureMoveText(id, YangSignatureCreditsB[id], summary);
 }

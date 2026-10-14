@@ -1,7 +1,8 @@
 import {AbilityComponentExclusions} from './passive-ability-cleanup';
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
-	dreaddominion: ['hydrabond', 'moxie'],
+ swiftvenom: ['swiftswim', 'merciless'],
+	dreaddominion: ['hydrabond', 'moxie', 'intimidate'],
 	eternalflower: ['moldbreaker'],
 	ange: ['moldbreaker'],
 	reservoir: ['waterabsorb', 'gluttony', 'damp'],
@@ -28,7 +29,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	gigavolt: ['moldbreaker', 'lightningrod', 'static'],
 	verdantedge: ['chlorophyll', 'grasspelt', 'sharpness'],
 	permafrost: ['icebody', 'icescales', 'refrigerate'],
-	glacialheart: ['thermalexchange', 'icebody', 'stalwart'],
+	glacialheart: ['icebody'],
 	tidalwave: ['waterabsorb', 'hydration', 'raindish'],
 	livewire: ['transistor', 'voltabsorb', 'quickfeet', 'ironbarbs'],
 	kindledfury: ['fluffy', 'guts', 'flashfire'],
@@ -164,7 +165,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	malicewell: ['flamebody'],
 	soultag: ['soulfire', 'shadowtag', 'flamebody'],
 	deserttyrant: ['sandstream'],
-	desertspirit: ['levitate', 'sandstream', 'overcoat'],
+	desertspirit: ['levitate', 'sandstream', 'overcoat', 'tintedlens'],
 	tremor: ['levitate', 'resonanceforce', 'sandforce'],
 	desertshell: ['skilllink', 'heatproof', 'sandstream'],
 	riptideclaws: ['swiftswim', 'toughclaws', 'shellarmor', 'moldbreaker'],
@@ -253,7 +254,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	vitalsigns: ['invigorate'],
 	divineintervention: ['vitalsigns', 'triage', 'regenerator', 'friendguard'],
 	voidcraft: ['elevate', 'shadowshield', 'temporalshift', 'insomnia'],
-	requiem: ['cursedbody'],
+	requiem: ['cursedbody', 'filter'],
 	reapersgrip: ['unaware', 'darkaura', 'selfsufficient'],
 	pendulumswing: ['insomnia', 'filter'],
 	nightmarepulse: ['pendulumswing', 'cursedbody', 'baddreams'],
@@ -292,7 +293,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	seviischooling: ['schooling', 'hydrabond', 'selfrepair', 'moldbreaker'],
 };
 Object.assign(AbilityComponents, {
-	"updraft": [],
+	"updraft": ['competitive'],
 	"corneredfang": [
 		"guts",
 	],
@@ -538,7 +539,7 @@ Object.assign(AbilityComponents, {
 
 Object.assign(AbilityComponents, {
   sirius: ['apexvenom', 'blackviper', 'whiplash'],
-  coldopen: [], quarrycannon: ['solidrock'], tundramarch: ['oblivious'],
+  coldopen: [], quarrycannon: ['megalauncher'], tundramarch: ['oblivious'],
   undertow: ['waterabsorb'], deadwater: [], vitalcircuit: [],
   ringmaster: ['toughclaws'], unyielding: ['innerfocus'], primalrhythm: [],
 	setpiece: [], calculatedshot: ['frisk'], lunardread: ['dishearten', 'insomnia', 'pressure'], falsebouquet: [],
@@ -817,3 +818,17 @@ import {FamilyReplacementComponents} from './family-replacements';
 Object.assign(AbilityComponents, FinalPassiveComponents, FamilyReplacementComponents);
 
 AbilityComponents.knightsguard = ['swornduty'];
+
+AbilityComponents.ruinedsky = ['moldbreaker'];
+AbilityComponents.apocalypticflame = ['owntempo'];
+AbilityComponents.rupturedheaven = ['sharpness'];
+AbilityComponents.burningquake = ['superluck'];
+
+AbilityComponents.wintersmalice = ['refrigerate', 'berserk', 'cursedbody'];
+
+AbilityComponents.bloomingsun = ['megasol', 'flowerveil'];
+AbilityComponents.skywarden = ['windrider'];
+AbilityComponents.steelwingescort = ['swornduty'];
+AbilityComponents.soulreaver = ['infiltrator'];
+AbilityComponents.wickedsnare = ['intimidate'];
+AbilityComponents.sweetsanctuary = ['ripen'];

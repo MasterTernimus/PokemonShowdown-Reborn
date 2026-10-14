@@ -140,9 +140,8 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	});
 	add('floehunter', 'Floe Hunter', {
 		...base.slushrush,
-		onModifyMove(move, source, target) {
-			if (target && move.flags['bite'] && ['snow', 'hail'].includes(source.effectiveWeather()) &&
-				source.getStat('spe') > target.getStat('spe')) move.willCrit = true;
+		onModifyDamage(damage, source, target, move) {
+			if (move.category === 'Physical' && !target.isAlly(source) && target.hasType('Water') && source.effectiveWeather() === 'hail') return this.chainModify(1.5);
 		},
 	});
 	add('lanceguard', 'Lanceguard', {

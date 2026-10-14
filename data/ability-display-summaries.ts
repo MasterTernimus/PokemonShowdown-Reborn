@@ -1,7 +1,7 @@
 import {AbilityDescriptionOverrides} from './ability-descriptions';
 /** Reviewed compact display text. Never used for battle identity or callback dispatch. */
 export const AbilityDisplaySummaries: Record<string, string> = {
-	dreaddominion: 'While active: Dark is neutral vs Fairy; Dark resists Fairy for both sides.',
+	dreaddominion: 'Hydra Bond, Moxie and Intimidate.',
 	"selfrepair": "Combines the listed abilities.",
 	"naturalrecovery": "Switching out heals an extra 1/3 HP if a major status was cured.",
 	"smolderingshroud": "First blocked opposing stat drop each entry raises Sp. Atk by 1.",
@@ -223,7 +223,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"lunarorbit": "Reflects status moves; stronger secondary chances; healing priority; no indirect damage; sets Gravity.",
 	"prismscale": "Combines the listed abilities.",
 	"anchoredbattery": "1.5x pulse/bullet power; cannot be forced to switch.",
-	"heavyartillery": "Double-power pulse/bullet spread hits break screens; capped defense cost; reload on a non-firing turn.",
+	"heavyartillery": "Unaware; double-power artillery breaks screens; idle turns become Loaded (+1 Def/SpD); attacks become Fired (-1 Def/SpD).",
 	"bloomingsun": "Combines the listed abilities.",
 	"stormbell": "Takes 0.8x damage from attacks; Summons rain on entry; move KOs raise its highest stat.",
 	"requiem": "Attacks may be disabled; first damage interaction marks foes with Perish Song; foe KOs heal 1/4 HP.",
@@ -361,7 +361,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"ironlash": "Tail hits raise Sp. Def once per turn.",
 	"gritgrappler": "While statused, damaging Fighting hits heal 1/16 HP once per turn.",
 	"dreadjaw": "A move KO lowers the next opposing entrant's Attack.",
-	"floehunter": "Bites always crit slower foes in snow or hail, unless blocked.",
+	"floehunter": "In hail, physical attacks deal 1.5x damage to Water-type foes.",
 	"lanceguard": "Blocking contact with Protect lowers the attacker’s Defense by 1.",
 	"herdshelter": "Adjacent allies are immune to opposing damaging sound moves.",
 	"tidalvoice": "1.3x sound, spares allies, first hit clears drops; Aria heals adjacent allies 1/8.",
@@ -387,7 +387,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"saltcrust": "While Defense is boosted, its held item cannot be removed.",
 	"beyondfear": "An opposing offensive boost grants a matching defensive boost once per entry.",
 	"stillwater": "Absorbs Water; absorbing it at full HP gives +1 Sp. Def once per turn.",
-	"quarrycannon": "Rock Blast always hits five times.",
+	"quarrycannon": "Mega Launcher; damaging pulse/bullet moves become Physical (except Z/Max).",
 	"tundramarch": "Ground hits remove Spikes, Toxic Spikes, and Sticky Web.",
 	"undertow": "Water hits ground surviving foes.",
 	"ringmaster": "First Dark hit each entry Taunts the foe for 2 turns.",
@@ -475,7 +475,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"cactuschorus": "Successful Helping Hand clears the recipient ally's confusion.",
 	"crushingvenom": "First damaging bite each entry applies two-turn Heal Block after damage.",
 	"crosswire": "A damaging punch charges the next special Electric attack to ignore positive Sp. Def.",
-	"deepchill": "First damaging Ice attack each entry applies Torment after damage.",
+	"deepchill": "Oblivious; surviving a foe's physical HP hit lowers its Speed once per turn.",
 	"tunnelclearance": "Damaging Rapid Spin removes opposing Reflect and Light Screen after damage.",
 	"crystalbastion": "First own Wide Guard block each entry clears negative Defense and Sp. Def.",
 	"buriedcoil": "First successful Coil each entry clears confusion and negative accuracy.",
@@ -554,7 +554,7 @@ AbilityDisplaySummaries.anchoredbattery = "First pulse/bullet HP hit each entry 
 AbilityDisplaySummaries.nobledance = 'First successful directly selected dance each entry wards the next opposing move by 20%.';
 
 Object.assign(AbilityDisplaySummaries, {
-  "deepchill": "Includes full local Oblivious.",
+  "deepchill": "Oblivious; surviving a foe's physical HP hit lowers its Speed once per turn.",
   "venamskiss": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types.",
   "dredger": "Once per turn after its Ground attack deals opposing HP damage, removes one layer of its side's Spikes, or one Toxic Spikes layer if no Spikes remain."
 });
@@ -587,7 +587,7 @@ AbilityDisplaySummaries.hydroelectric = "Water HP hits heal 1/8 once/turn; first
 
 AbilityDisplaySummaries.steadyswimmer = "Prevents and cures confusion only.";
 
-Object.assign(AbilityDisplaySummaries, {"hauntingveil":"Cursed Body + Infiltrator.","parentalbond":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts.","ironwill":"Prism Armor, Self-Sufficient and Whiplash.","calderacore":"Summons sun; Magma Armor protects and grants field bonuses.","razorcurrent":"Summons rain; gains Speed each full active turn."});
+Object.assign(AbilityDisplaySummaries, {"hauntingveil":"Cursed Body + Infiltrator.","parentalbond":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts.","ironwill":"Prism Armor, Self-Sufficient and Whiplash.","calderacore":"Drought + Magma Armor.","razorcurrent":"Summons rain; gains Speed each full active turn."});
 
 AbilityDisplaySummaries.solartrap = 'Automatic Stockpiles/releases; draining moves hurt their user.';
 
@@ -645,3 +645,15 @@ for (const id of ['encorearia', 'marvelscale', 'tidalvoice']) AbilityDisplaySumm
 for (const id of ['voidomen', 'inversion', 'heatcoil', 'ironmountain', 'venombastion', 'relentlesshunt']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
 AbilityDisplaySummaries.knightsguard = "Entry heals adjacent allies 1/4 HP (1/3 Fairy Tale); once per entry intercepts an ally attack, takes 25% less and gains +1 Atk if hit.";
+
+for (const id of ['bloomingsun','skywarden','steelwingescort','crescentrend','badseeds','wintersmalice']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+AbilityDisplaySummaries.swiftvenom = AbilityDescriptionOverrides.swiftvenom.shortDesc;
+
+AbilityDisplaySummaries.glacialheart = AbilityDescriptionOverrides.glacialheart.shortDesc;
+
+AbilityDisplaySummaries.requiem = AbilityDescriptionOverrides.requiem.shortDesc;
+
+AbilityDisplaySummaries.soulreaver = AbilityDescriptionOverrides.soulreaver.shortDesc;
+AbilityDisplaySummaries.wickedsnare = AbilityDescriptionOverrides.wickedsnare.shortDesc;
+AbilityDisplaySummaries.sweetsanctuary = AbilityDescriptionOverrides.sweetsanctuary.shortDesc;

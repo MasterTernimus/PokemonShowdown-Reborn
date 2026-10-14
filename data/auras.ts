@@ -30,8 +30,11 @@ const psychicMoves = ['secretpower', 'hiddenpower', 'hex', 'magicalleaf', 'mysti
 export const Auras: {[id: string]: AuraData} = {
  frozenaura: {
   id: 'frozenaura', name: 'Frozen Aura', turns: 5, mimicryType: 'Ice',
-  secretPowerMove: 'bodyslam', naturePowerMove: 'icebeam', damageMultipliers: {}, secondaryTypeAdditions: {},
-  typeMultipliers: {Ice: 1.2}, typeCondition: 'none', moveMessages: {},
+  secretPowerMove: 'bodyslam', naturePowerMove: 'icebeam', damageMultipliers: {
+   ...values(['icebeam', 'blizzard', 'frostbreath', 'aurorabeam'], 1.2),
+   ...values(['darkpulse', 'snarl', 'nightdaze', 'nightslash', 'lashout', 'stompingtantrum', 'ragingfury', 'thrash', 'outrage', 'rage', 'freezingglare', 'fierywrath', 'roaroftime', 'bitterblade', 'bittermalice'], 1.5), chillingwater: 2,
+  }, secondaryTypeAdditions: {},
+  typeMultipliers: {Ice: 1.3}, typeCondition: 'none', moveMessages: {},
   typeMessage: 'The Frozen Aura strengthened the attack!', endMessage: 'The Frozen Aura faded.',
   statusBuffs: [], statusNerfs: [],
  },

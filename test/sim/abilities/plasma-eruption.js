@@ -63,7 +63,7 @@ describe('Typhlosionite and Plasma Eruption', () => {
 	it('swaps Fire and Electric at 50% without turning an attack into an immunity', () => {
 		const [holder, foe] = start();
 		const ability = holder.getAbility();
-		assert(holder.hasAbility('proficient'));
+		assert(holder.getPassives().includes('proficient'));
 		assert(holder.hasAbility('static'));
 		assert(holder.hasAbility('flamebody'));
 		assert(!holder.hasAbility('blazingmane'));

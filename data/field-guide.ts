@@ -68,3 +68,8 @@ for (let stage = 1; stage <= 5; stage++) {
 		`Growth effects advance the garden. ${stage > 1 ? 'Cut and X-Scissor lower it one stage.' : 'Cut and X-Scissor cannot lower it further.'} ${stage >= 3 ? 'Fire ignition moves can start Burning Field.' : 'This stage cannot ignite.'} Auras are rejected.`,
 	];
 }
+
+FieldNotes.watersurfaceterrain.push('Triple Dive has a named 1.5x power bonus, stacking with the generic Water boost. Its second successful hit creates Underwater (third when starting on Icy Field).');
+FieldNotes.underwaterterrain.push('Triple Dive has a named 1.5x power bonus, stacking with the generic Water boost. Its first hit resurfaces, second returns Underwater and third stays there.');
+FieldNotes.icyterrain.push('Triple Dive leaves Icy Field intact on hit one, breaks it to Water Surface on hit two, and creates Underwater on hit three, subject to field locks.');
+FieldNotes.midnightzoneterrain.push('Shadow Force creates this field after dealing positive HP or Substitute damage, for 5 turns or 8 with Amplifield Rock; the charge turn does not create it.');

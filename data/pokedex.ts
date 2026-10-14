@@ -5349,8 +5349,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 230,
 		name: "Kingdra",
 		types: ["Water", "Dragon"],
-		baseStats: { hp: 85, atk: 120, def: 90, spa: 120, spd: 90, spe: 95 },
-		abilities: { 0: "Swift Swim", 1: "Abyss Sniper", H: "Backwash" },
+		baseStats: { hp: 85, atk: 105, def: 90, spa: 105, spd: 90, spe: 95 },
+		abilities: { 0: "Swift Swim", 1: "Abyss Sniper", H: "Storm Drain" },
 		heightm: 1.8,
 		weightkg: 152,
 		color: "Blue",
@@ -10081,7 +10081,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Dusknoir",
 		types: ["Ghost", "Dark"],
 		baseStats: {"hp":65,"atk":120,"def":135,"spa":70,"spd":135,"spe":45},
-		abilities: {0: 'Requiem', 1: 'Pressure', H: 'Shadow Tag'},
+		abilities: {0: 'Requiem', 1: 'Pressure', H: 'Soul Reaver'},
 		heightm: 2.2,
 		weightkg: 106.6,
 		color: "Black",
@@ -24436,7 +24436,7 @@ Pokedex.gliscoralt.abilities![0] = 'Venom Pincer';
 
 // Mega Mismagius retains Dusk Stone while its dedicated stone is deferred.
 
-Pokedex.gyarados.abilities![0] = 'Unbridled Wrath';
+Pokedex.gyarados.abilities![0] = 'Intimidate';
 
 Pokedex.conkeldurr.abilities!['1'] = 'Rocky Payload';
 
@@ -24457,3 +24457,34 @@ for (const [id, slots] of Object.entries({...FinalPassiveSlotChanges, ...FamilyR
 // Approved additional options; preserve existing Electrode slots and Soundproof passives.
 Pokedex.electrode.abilities!['S'] = 'Brute Force';
 Pokedex.electrodehisui.abilities!['S'] = 'Brute Force';
+
+// Optional signature slot; ordinary species only.
+Pokedex.escavalier.abilities!['S'] = 'Ruined Sky';
+Pokedex.sirfetchd.abilities!['S'] = 'Ruined Sky';
+// Approved Fire Emblem choices; distinct forms retain their own kits.
+Pokedex.tinkaton.abilities!['1'] = 'Apocalyptic Flame';
+Pokedex.gallade.abilities!['S'] = 'Ruptured Heaven';
+Pokedex.skarmory.abilities!['H'] = 'Burning Quake';
+Pokedex.corviknight.abilities!['S'] = 'Burning Quake';
+Pokedex.talonflame.abilities!['S'] = 'Burning Quake';
+// Independent regional record: unresolved abilities and evolution are deliberately omitted.
+Pokedex.arbolivaaevian = {
+ num: 930, name: 'Arboliva-Aevian', baseSpecies: 'Arboliva-Aevian', forme: 'Aevian', spriteid: 'arboliva-aevian',
+ types: ['Ice', 'Dark'], baseStats: {hp: 78, atk: 69, def: 90, spa: 125, spd: 109, spe: 39},
+ abilities: {0: 'Harvest', 1: 'Bad Seeds', H: "Winter's Malice", S: 'Arena Trap'},
+ heightm: 1.4, weightkg: 48.2, color: 'Blue', eggGroups: ['Grass'], isNonstandard: 'Custom',
+};
+// Cosmetic Ego variants retain the exact current ordinary and Mega mechanical data.
+Pokedex.emboarego = {...Pokedex.emboar, name: 'Emboar-Ego', baseSpecies: 'Emboar', forme: 'Ego', spriteid: 'emboar-ego',
+ otherFormes: ['Emboar-Mega-Ego'], formeOrder: ['Emboar-Ego', 'Emboar-Mega-Ego'], isNonstandard: 'Custom'};
+Pokedex.emboarmegaego = {...Pokedex.emboarmega, name: 'Emboar-Mega-Ego', baseSpecies: 'Emboar', forme: 'Mega-Ego', spriteid: 'emboar-mega-ego',
+ battleOnly: 'Emboar-Ego', changesFrom: 'Emboar-Ego', isNonstandard: 'Custom'};
+Pokedex.emboar = {...Pokedex.emboar, otherFormes: [...(Pokedex.emboar.otherFormes || []), 'Emboar-Ego', 'Emboar-Mega-Ego'], formeOrder: [...(Pokedex.emboar.formeOrder || []), 'Emboar-Ego', 'Emboar-Mega-Ego']};
+
+Pokedex.corviknight.abilities = {0: 'Pressure', 1: 'Skywarden', H: 'Steelwing Escort', S: 'Burning Quake'};
+Pokedex.overqwil.abilities!['1'] = 'Swift Venom';
+
+// Grim remains a cosmetic mechanical counterpart with its own Mega identity.
+Pokedex.mightyenagrim = {...Pokedex.mightyena, name: 'Mightyena-Grim', baseSpecies: 'Mightyena', forme: 'Grim', spriteid: 'mightyena-grim', isCosmeticForme: false, otherFormes: ['Mightyena-Mega-Grim'], formeOrder: ['Mightyena-Grim', 'Mightyena-Mega-Grim'], isNonstandard: 'Custom'};
+Pokedex.mightyenamegagrim = {...Pokedex.mightyenamega, name: 'Mightyena-Mega-Grim', baseSpecies: 'Mightyena', forme: 'Mega-Grim', spriteid: 'mightyena-mega', battleOnly: 'Mightyena-Grim', changesFrom: 'Mightyena-Grim', isNonstandard: 'Custom'};
+Pokedex.mightyena = {...Pokedex.mightyena, otherFormes: [...(Pokedex.mightyena.otherFormes || []), 'Mightyena-Mega-Grim']};

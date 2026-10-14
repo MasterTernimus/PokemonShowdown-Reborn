@@ -31,7 +31,7 @@ describe('Frozen Aura',()=>{
  it('boosts Ice for either airborne side without cold defenses or Speed',()=>{
   const [p,q]=setup(); p.setType('Flying');q.setType('Flying'); const speed=p.getStat('spe'),def=p.getStat('def');aura(p);
   for(const [source,target] of [[p,q],[q,p]]) {
-   const move=battle.dex.getActiveMove('icebeam');assert.equal(battle.runEvent('BasePower',source,target,move,100,true),120);
+   const move=battle.dex.getActiveMove('icebeam');assert.equal(battle.runEvent('BasePower',source,target,move,100,true),156);
   }
   assert.equal(p.getStat('spe'),speed);assert.equal(p.getStat('def'),def);
  });

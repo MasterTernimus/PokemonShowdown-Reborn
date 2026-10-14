@@ -3174,6 +3174,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.add('-message', 'From the depths!!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
+				if (move.id === 'tripledive') modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				if (move.id === 'waterpulse') {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
@@ -3204,7 +3205,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					this.field.changeTerrain('midnightzoneterrain', source, move);
 					return;
 				}
-				const watersurface = ['bounce', 'dive', 'skydrop', 'fly', 'shoreup', 'tripledive'];
+				const watersurface = ['bounce', 'dive', 'skydrop', 'fly', 'shoreup'];
 				const murkwater = ['sludgewave', 'aciddownpour'];
 				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbilityOrPassive('neutralization'));
 				if (watersurface.includes(move.id)) {
@@ -3543,7 +3544,8 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const change = ['dive', 'gravity', 'aciddownpour', 'blizzard', 'subzeroslammer', 'glaciate', 'gravapple'];
 				const strengthenedMoves = ['dive', 'muddywater', 'surf', 'whirlpool', 'hydrovortex', 'splishysplash'];
-				const individualBoostedMoves = ['whirlpool', 'surf', 'muddywater', 'dive', 'sludgewave', 'octazooka', 'originpulse', 'hydrovortex', 'tripledive'];
+				const individualBoostedMoves = ['whirlpool', 'surf', 'muddywater', 'dive', 'sludgewave', 'octazooka', 'originpulse', 'hydrovortex'];
+				if (move.id === 'tripledive') modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				if (move.type === 'Water') {
 					this.add('-message', 'The water strengthened the attack!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
@@ -3581,7 +3583,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const underwater = ['dive', 'gravity', 'anchorshot', 'gravapple', 'tripledive'];
+				const underwater = ['dive', 'gravity', 'anchorshot', 'gravapple'];
 				const murkwater = ['sludgewave', 'aciddownpour'];
 				const icy = ['blizzard', 'subzeroslammer', 'glaciate'];
 				const neutralizationActive = this.getAllActive().some(pokemon => pokemon?.hasAbilityOrPassive('neutralization'));

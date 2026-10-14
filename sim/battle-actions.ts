@@ -2,6 +2,7 @@ import {adaptiveAnalyzed, adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveC
 import { Dex, toID } from './dex';
 import {takeCrescentOverflow, hasCrescentSubDamage} from './crescent-rend';
 import {predatorUltraMatch} from './predator';
+import {ultraRivalry, ultraGuardAvailable} from './ultra-rivalry';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
@@ -149,6 +150,7 @@ export class BattleActions {
 			}
 			if (newMove) pokemon.lastMove = newMove;
 			oldActive.clearVolatile();
+			delete oldActive.m.skywardenDefogUsed;
 		}
 		pokemon.replacedFainted = !!oldActive?.fainted;
 		if (oldActive) {
@@ -212,6 +214,7 @@ export class BattleActions {
 		pokemon.activeTurns = 0;
 		pokemon.m.cursedArmamentEntryTurn = this.battle.turn;
 		// These entry budgets belong to the Pokemon, not its replaceable AbilityState.
+		delete pokemon.m.skywardenDefogUsed;
 		delete pokemon.m.seaRescuerUsed;
 		delete pokemon.m.dreamRescueUsed;
 		delete pokemon.m.slipstreamUsed;
@@ -225,6 +228,9 @@ export class BattleActions {
 		delete pokemon.m.climateReserveUsed;
 		delete pokemon.m.climateReservePending;
 		pokemon.m.enteredBattleTurn = this.battle.turn;
+		pokemon.m.ultraRivalryEntryCount = (pokemon.m.ultraRivalryEntryCount || 0) + 1;
+		pokemon.m.ultraRivalryEntryToken = `${pokemon.side.id}:${pokemon.side.pokemon.reduce((n, p) => n + (p.m.ultraRivalryEntryCount || 0), 0)}`;
+		delete pokemon.m.ultraRivalryAnnounced;
 		delete pokemon.m.mimecraftUsed;
 		delete pokemon.m.pearlCurrentUsed;
 		delete pokemon.m.apexFlytrapUsed;
@@ -289,7 +295,13 @@ export class BattleActions {
 		const allActive = this.battle.getAllActive(true);
 		this.battle.speedSort(allActive);
 		this.battle.speedOrder = allActive.map(a => a.getFieldPositionValue());
-		this.battle.fieldEvent('SwitchIn', switchersIn);
+		for (const poke of switchersIn) {
+   if (poke.m.steelwingEscortEntry) poke.addVolatile('steelwingescortentry');
+   delete poke.m.steelwingEscortEntry;
+  }
+  try { this.battle.fieldEvent('SwitchIn', switchersIn); } finally {
+   for (const poke of switchersIn) poke.removeVolatile('steelwingescortentry');
+  }
 		for (const poke of switchersIn) poke.revertSuppressedRegionalForm();
 
 		for (const poke of switchersIn) {
@@ -1771,6 +1783,10 @@ export class BattleActions {
 			}
 			// Move didn't fail because it didn't try to do anything
 			if (didSomething === undefined) didSomething = true;
+			if (didSomething && !isSelf && !isSecondary && move.category === 'Status' &&
+				!['self', 'all', 'foeSide', 'allySide', 'allyTeam'].includes(move.target)) {
+				this.battle.runEvent('AfterSuccessfulStatusHit', target, source, move);
+			}
 			damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
 			didAnything = this.combineResults(didAnything, didSomething);
 		}
@@ -2235,6 +2251,15 @@ export class BattleActions {
 
 		let atkBoosts = attacker.boosts[attackStat];
 		let defBoosts = defender.boosts[defenseStat];
+		// Ego ignores its own offensive penalties against Instinct. Instinct reads
+		// Ego's offensive boosts only while its first HP-damaging move guard is available.
+		if (attacker === source && (attackStat === 'atk' || attackStat === 'spa') &&
+			ultraRivalry(this.battle, source, target)) {
+			const reachesHP = !target.volatiles['substitute'] || move.infiltrates || move.flags['bypasssub'];
+			if (atkBoosts < 0 || (atkBoosts > 0 && reachesHP &&
+				ultraGuardAvailable(this.battle, source, target, move) &&
+				!predatorUltraMatch(this.battle, source, target))) atkBoosts = 0;
+		}
 		if (atkBoosts > 0 && adaptiveSetup(target, attacker)) atkBoosts = 0;
 		if (defBoosts > 0 && adaptiveSetup(source, defender)) defBoosts = 0;
 

@@ -1,7 +1,7 @@
 type RendHitData = { crescentOverflow?: number, crescentSubDamage?: number };
 
 export function crescentRendApplies(source: Pokemon, move: ActiveMove) {
-	return source.hasAbility('crescentrend') && move.category === 'Physical' && source.battle.movehasType(move, 'Flying');
+	return source.hasAbility('crescentrend') && move.category !== 'Status' && source.battle.movehasType(move, 'Flying');
 }
 
 export function prepareCrescentRend(source: Pokemon, target: Pokemon, move: ActiveMove, damage: number) {

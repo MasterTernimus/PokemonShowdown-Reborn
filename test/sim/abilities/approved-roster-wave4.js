@@ -41,13 +41,16 @@ describe('Approved fourth roster pass', () => {
 	}
 	it('updates slots and searchable components while preserving Goodra and the Levitate component', () => {
 		for (const [species, ability, component] of [
-			['Seviper-Mega', 'Sirius', 'Black Viper'], ['Rhyperior', 'Quarry Cannon', 'Solid Rock'],
-			['Mamoswine', 'Tundra March', 'Oblivious'], ['Jellicent', 'Undertow', 'Water Absorb'],
-			['Incineroar', 'Ringmaster', 'Tough Claws'], ['Mudsdale', 'Unyielding', 'Stamina'],
+			['Seviper-Mega', 'Sirius', 'Black Viper'], ['Rhyperior', 'Quarry Cannon', 'Mega Launcher'],
+			['Mamoswine', 'Tundra March', 'Oblivious'], ['Jellicent', 'Water Absorb', 'Water Absorb'],
+			['Incineroar', 'Ringmaster', 'Tough Claws'], ['Mudsdale', 'Unyielding', 'Inner Focus'],
 		]) {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));
 			assert(abilityIncludesComponent(ability, component));
 		}
+		assert.deepEqual(Dex.species.get('Jellicent').passives, ['undertow']);
+		assert.deepEqual(Dex.species.get('Mudsdale').passives, ['stamina']);
+		assert(!abilityIncludesComponent('Unyielding', 'Stamina'));
 		assert(!abilityIncludesComponent('Void Tyrant', 'Self Sufficient'));
 		for (const component of ['Magic Guard', 'Unaware']) {
 			assert(!abilityIncludesComponent('Lunar Dread', component));
@@ -169,12 +172,12 @@ describe('Approved fourth roster pass', () => {
 		hit('tackle', p, foe);
 		assert.equal(foe.hp, hp);
 	});
-	it('Quarry Cannon makes Rock Blast five hits and preserves Solid Rock', () => {
+	it('Quarry Cannon preserves normal Rock Blast hit counts and separate Solid Rock', () => {
 		const [p, , foe] = make('Quarry Cannon', 'Rhyperior');
-		assert.equal(modify('rockblast', p, foe).multihit, 5);
-		assert.equal(p.getAbility().onSourceModifyDamage, Dex.abilities.get('Solid Rock').onSourceModifyDamage);
+		assert.deepEqual(modify('rockblast', p, foe).multihit, [2, 5]);
+		assert.equal(p.getAbility().onSourceModifyDamage, undefined);assert(p.getPassives().includes('solidrock'));
 		hit('rockblast', p, foe);
-		assert(battle.log.some(line => line.includes('|-hitcount|') && line.endsWith('|5')));
+		assert(battle.log.some(line => /\|-hitcount\|.*\|[2-5]$/.test(line)));
 	});
 	it('Tundra March clears only floor hazards after a landed opposing Ground hit', () => {
 		const [p, , foe] = make('Tundra March');
@@ -281,14 +284,14 @@ describe('Approved fourth roster pass', () => {
 		hit('bite', p, other);
 		assert(!other.volatiles.taunt);
 	});
-	it('Unyielding blocks opposing phazing only with positive Defense and keeps Stamina', () => {
-		const [p, , foe] = make('Unyielding');
-		assert(battle.runEvent('DragOut', p, foe, battle.dex.moves.get('roar')));
+	it('Unyielding blocks opposing phazing at any Defense while Mudsdale retains passive Stamina', () => {
+		const [p, , foe] = make('Unyielding', 'Mudsdale');
+		assert.equal(battle.runEvent('DragOut', p, foe, battle.dex.moves.get('roar')), null);
 		hit('tackle', foe, p);
 		assert.equal(p.boosts.def, 1);
 		assert.equal(battle.runEvent('DragOut', p, foe, battle.dex.moves.get('roar')), null);
 		p.clearBoosts();
-		assert(battle.runEvent('DragOut', p, foe, battle.dex.moves.get('roar')));
+		assert.equal(battle.runEvent('DragOut', p, foe, battle.dex.moves.get('roar')), null);
 	});
 	it('Primal Rhythm uses Attack, spares allies, and remains blocked by Soundproof', () => {
 		const [p, ally, foe, other] = make('Primal Rhythm', 'Rillaboom', 'Soundproof');

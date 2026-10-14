@@ -9,6 +9,14 @@ export function installApprovedSovereigns(abilities: AbilityDataTable) {
 	};
 	// Updraft's allowance belongs to the Pokemon's entry, including base-to-Mega transitions.
 	delete abilities.updraft.onStart;
+	abilities.updraft.onAfterEachBoost = abilities.competitive.onAfterEachBoost;
+	abilities.updraft.onBasePower = abilities.competitive.onBasePower;
+	abilities.stormsovereign.onAfterEachBoost = function (boost, target, source, effect) {
+		return this.dex.abilities.get('updraft').onAfterEachBoost?.call(this, boost, target, source, effect);
+	};
+	abilities.stormsovereign.onBasePower = function (power, source, target, move) {
+		return this.dex.abilities.get('updraft').onBasePower?.call(this, power, source, target, move);
+	};
 	abilities.updraft.onSourceDamagingHit = function (damage, target, source, move) {
 		if (damage <= 0 || target.isAlly(source) || move.type !== 'Flying' || source.m.updraftUsed) return;
 		const ally = source.adjacentAllies().filter(pokemon => pokemon.hp && !pokemon.fainted)

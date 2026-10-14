@@ -35,7 +35,9 @@ describe('Starter family passives', () => {
   assert.deepEqual(getAbilityDisplayComponents('cactuschorus'), ['waterabsorb','sandrush']);
  });
  it('covers the complete current final-starter inventory by original family, with no other grants', () => {
-  const expected = Dex.species.all().filter(s=>Object.values(families).flat().some(f=>s.id.startsWith(f)));
+  // Later Emboar-Ego cosmetics copy existing records; they do not expand the explicit starter registry.
+  const cosmetics = new Set(['emboarego', 'emboarmegaego']);
+  const expected = Dex.species.all().filter(s=>!cosmetics.has(s.id)&&Object.values(families).flat().some(f=>s.id.startsWith(f)));
   assert.equal(expected.length,76); assert.equal(new Set(expected.map(s=>s.id)).size,76);
   assert.deepEqual(Object.keys(StarterPassives).sort(),expected.map(s=>s.id).sort());
   for(const s of expected) {

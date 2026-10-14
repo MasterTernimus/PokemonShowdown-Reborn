@@ -9,7 +9,7 @@ describe('Mightyena Grim artwork variant', () => {
 	it('inherits the current base gameplay and keeps both artwork choices', () => {
 		const base = Dex.species.get('Mightyena');
 		const grim = Dex.species.get('Mightyena-Grim');
-		assert(grim.exists && grim.isCosmeticForme);
+		assert(grim.exists && !grim.isCosmeticForme); // Explicit record supports its own Mega-Grim route.
 		for (const key of ['baseStats', 'types', 'abilities', 'passives', 'weightkg', 'eggGroups']) {
 			assert.deepEqual(grim[key], base[key], key);
 		}

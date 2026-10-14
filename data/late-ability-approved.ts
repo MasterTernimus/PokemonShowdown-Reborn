@@ -3,10 +3,15 @@ import {applySereneGrace} from './ally-serene-grace';
 export function installLateAbilityApproved(abilities: AbilityDataTable) {
  const table = abilities as any;
  table.serenegrace.onChargeMove = function () { return false; };
+ table.voidomen.onAllyChargeMovePriority = -100;
  table.voidomen.onAllyChargeMove = function (this: Battle, source: Pokemon) {
   const holder = this.effectState.target;
-  if (source !== holder && holder.hp && holder.isActive && source.isAlly(holder)) return false;
+  if (!holder.hp || !holder.isActive || !source.isAlly(holder) || source.volatiles.voidomenchargespent) return;
+  source.addVolatile('voidomenchargespent', source, this.effect);
+  this.add('-activate', source, 'ability: Void Omen');
+  return false;
  };
+ table.voidomen.onModifyMove = function (this: Battle, move: ActiveMove) { applySereneGrace(move, false); };
  const reach = table.longreach;
  for (const key of Object.keys(reach).filter(key => key.startsWith('on'))) {
   const addition = reach[key], previous = table.heatcoil[key];
@@ -36,7 +41,7 @@ export function installLateAbilityApproved(abilities: AbilityDataTable) {
  table.voidomen.onAllyModifyMove = function (this: Battle, move: ActiveMove, source: Pokemon) {
   const holder = this.effectState.target;
   if (source === holder || !holder.hp || !holder.isActive || !source.isAlly(holder)) return;
-  applySereneGrace(move);
+  applySereneGrace(move, false);
  };
  table.venombastion.onSourceAfterDamageApplied = function (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: ActiveMove) {
   if (damage <= 0 || !source || source.m.venomBastionSealUsed || source.isAlly(target) || !target.hp || !['psn', 'tox'].includes(target.status) || !(effect as any)?.venomBastionPoisonedTargets?.includes(target) || effect?.effectType !== 'Move' || effect.category === 'Status' || !(effect.types || [effect.type]).some(type => ['Poison', 'Steel'].includes(type))) return;

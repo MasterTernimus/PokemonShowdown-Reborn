@@ -1,3 +1,4 @@
+import {skywardenDefog} from './approved-support-reworks';
 import type {PokemonConditionData, FieldConditionData, SideConditionData} from '../sim/dex-conditions';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import {crescentRendApplies, prepareCrescentRend} from '../sim/crescent-rend';
@@ -4038,6 +4039,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
+					success = true;
 					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', `[of] ${source}`);
 					success = true;
@@ -4049,6 +4051,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					success = true;
 				}
 			}
+			if (success) skywardenDefog(this, source);
 			return success || this.NOT_FAIL;
 		},
 		target: "normal",
@@ -4852,7 +4855,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('coldeclipseterrain')) {
+			if ((this.field.isTerrain('coldeclipseterrain') || this.field.isAura('frozenaura'))) {
 				move.damage = 140;
 			}
 		},
@@ -7072,7 +7075,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('coldeclipseterrain')) {
+			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('coldeclipseterrain') || this.field.isAura('frozenaura')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -10643,7 +10646,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('coldeclipseterrain')) {
+			if (this.field.isTerrain('icyterrain') || this.field.isTerrain('coldeclipseterrain') || this.field.isAura('frozenaura')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -11785,6 +11788,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
 					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
 						this.debug('Light Screen weaken');
+						if (crescentRendApplies(source, move)) return;
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
 						return this.chainModify(0.5);
 					}
@@ -13032,36 +13036,27 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Beautiful",
 	},
 	meditate: {
-		num: 96,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		isNonstandard: "Past",
-		name: "Meditate",
-		pp: 40,
-		priority: 0,
-		flags: { snatch: 1, metronome: 1 },
-		onHit(pokemon, source, move) {
-			const boosts: SparseBoostsTable = { spe: 1 };
-			const atk = pokemon.getStat('atk', false, true);
-			const spa = pokemon.getStat('spa', false, true);
-			if (this.field.isTerrain('psychicterrain')) {
-				boosts.atk = 2;
-				boosts.spa = 2;
-			} else if (this.field.isTerrain('rainbowterrain') || this.field.isTerrain('ashenbeachterrain')) {
-				if (atk >= spa) boosts.atk = 3;
-				else boosts.spa = 3;
-			} else {
-				if (atk >= spa) boosts.atk = 1;
-				else boosts.spa = 1;
-			}
-			this.boost(boosts, pokemon, pokemon, move);
-		},
-		target: "self",
-		type: "Psychic",
-		zMove: { boost: { atk: 1 } },
-		contestType: "Beautiful",
-	},
+  num: 96, accuracy: true, basePower: 0, category: 'Status', isNonstandard: 'Past',
+  name: 'Meditate', pp: 40, priority: 0, flags: {snatch: 1, metronome: 1, heal: 1},
+  onHit(pokemon, source, move) {
+   const state = pokemon.volatiles.meditate;
+   if (state && this.turn <= state.lastSuccess + 1) return false;
+   const stat = pokemon.getStat('atk', false, true) >= pokemon.getStat('spa', false, true) ? 'atk' : 'spa';
+   const healed = this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon, move);
+   const boosted = this.boost({[stat]: 1}, pokemon, pokemon, move);
+   if (!healed && !boosted) return false;
+   if (!state) pokemon.addVolatile('meditate', pokemon, move);
+   pokemon.volatiles.meditate.lastSuccess = this.turn;
+   return true;
+  },
+  condition: {
+   noCopy: true,
+   onDisableMove(pokemon) {
+    if (this.turn <= this.effectState.lastSuccess + 1) pokemon.disableMove('meditate');
+   },
+  },
+  target: 'self', type: 'Psychic', zMove: {boost: {atk: 1}}, contestType: 'Beautiful',
+ },
 	mefirst: {
 		num: 382,
 		accuracy: true,
@@ -18572,6 +18567,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (source.baseSpecies.baseSpecies === 'Giratina') {
 				source.addVolatile('shadowforceguard', source, move);
 			}
+			if ((target.getMoveHitData(move).damage || 0) > 0) {
+				this.field.setFieldOrAura('midnightzoneterrain', source.hasItem('amplifieldrock') ? 8 : 5, source, move);
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			if (damage > 0) this.field.setFieldOrAura('midnightzoneterrain', source.hasItem('amplifieldrock') ? 8 : 5, source, move);
 		},
 		condition: {
 			duration: 2,
@@ -23313,16 +23314,37 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	tripledive: {
 		num: 865,
-		accuracy: 95,
-		basePower: 30,
+		accuracy: 90,
+		basePower: 20,
+		onPrepareHit(target, source, move) {
+			(move as any).tripleDiveStartedIcy = this.field.isTerrain('icyterrain');
+		},
+		onTryHit(target, source, move) {
+			// This per-hit hook runs after accuracy, protection and immunity checks, before damage.
+			const hit = move.hit || 1;
+			const icy = (move as any).tripleDiveStartedIcy;
+			if (icy && hit === 1) return;
+			const next = hit === (icy ? 2 : 1) ? 'watersurfaceterrain' : 'underwaterterrain';
+			if (this.field.terrain === next) return;
+			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'icyterrain'])) {
+				this.field.changeTerrain(next, source, move);
+			} else {
+				this.field.setFieldOrAura(next, source.hasItem('amplifieldrock') ? 8 : 5, source, move);
+			}
+		},
+		basePowerCallback(pokemon, target, move) { return 20 * move.hit; },
 		category: "Physical",
 		name: "Triple Dive",
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		multihit: 3,
+		multiaccuracy: true,
+		fullDamageSpread: true,
 		target: "normal",
 		type: "Water",
+		zMove: {basePower: 120},
+		maxMove: {basePower: 140},
 	},
 	triplekick: {
 		num: 167,

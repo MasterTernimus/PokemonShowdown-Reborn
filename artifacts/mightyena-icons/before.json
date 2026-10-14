@@ -1,0 +1,92 @@
+[
+  {
+    "id": "mightyena",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "stats": {
+      "hp": 90,
+      "atk": 125,
+      "def": 90,
+      "spa": 60,
+      "spd": 80,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Intimidate",
+      "1": "Black Fang",
+      "H": "Stakeout"
+    },
+    "passives": [
+      "infiltrator"
+    ]
+  },
+  {
+    "id": "mightyenamega",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "stats": {
+      "hp": 90,
+      "atk": 150,
+      "def": 115,
+      "spa": 85,
+      "spd": 100,
+      "spe": 130
+    },
+    "abilities": {
+      "0": "Dread Dominion"
+    },
+    "passives": [
+      "darkaura"
+    ]
+  },
+  {
+    "id": "mightyenagrim",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "stats": {
+      "hp": 90,
+      "atk": 125,
+      "def": 90,
+      "spa": 60,
+      "spd": 80,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Intimidate",
+      "1": "Black Fang",
+      "H": "Stakeout"
+    },
+    "passives": [
+      "infiltrator"
+    ]
+  },
+  {
+    "id": "mightyenadeso",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "stats": {
+      "hp": 90,
+      "atk": 125,
+      "def": 85,
+      "spa": 60,
+      "spd": 80,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Intimidate",
+      "1": "Black Fang",
+      "H": "Stakeout"
+    },
+    "passives": [
+      "infiltrator"
+    ]
+  }
+]

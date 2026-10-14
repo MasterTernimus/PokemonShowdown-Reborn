@@ -34,9 +34,17 @@ function bash(command: string, context: Chat.CommandContext, cwd?: string): Prom
 			let log = `[o] ${stdout}[e] ${stderr}`;
 			if (error) log = `[c] ${error.code}\n${log}`;
 			context.stafflog(log);
-			resolve([error?.code || 0, stdout, stderr]);
+			resolve([error ? (error.code || 1) : 0, stdout, stderr]);
 		});
 	});
+}
+
+async function rebuild(context: Chat.CommandContext) {
+	const [code, stdout, stderr] = await bash('node ./build', context);
+	if (code) {
+		throw new Chat.ErrorMessage(`Build failed (exit ${code}): ${stderr || stdout || 'No compiler output.'}`);
+	}
+	context.sendReply('Rebuilt.');
 }
 
 function keysIncludingNonEnumerable(obj: object) {
@@ -605,250 +613,252 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage("Wait for /updateserver to finish before hotpatching.");
 		}
 
-		await this.parse(`/rebuild`);
+		await rebuild(this);
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
 			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
 			'processmanager', 'roomsp', 'usersp',
 		];
 
-		target = toID(target);
-		try {
-			Utils.clearRequireCache({ exclude: ['/lib/process-manager'] });
-			if (target === 'all') {
-				if (lock['all']) {
-					throw new Chat.ErrorMessage(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
-				}
-				if (Config.disablehotpatchall) {
-					throw new Chat.ErrorMessage("This server does not allow for the use of /hotpatch all");
-				}
+		const applyHotpatch = async (target: string): Promise<void> => {
+			try {
+				Utils.clearRequireCache({ exclude: ['/lib/process-manager'] });
+				if (target === 'all') {
+					if (lock['all']) {
+						throw new Chat.ErrorMessage(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
+					}
+					if (Config.disablehotpatchall) {
+						throw new Chat.ErrorMessage("This server does not allow for the use of /hotpatch all");
+					}
 
-				for (const hotpatch of hotpatches) {
-					await this.parse(`/hotpatch ${hotpatch}`);
-				}
-			} else if (target === 'chat' || target === 'commands') {
-				if (lock['tournaments']) {
-					throw new Chat.ErrorMessage(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
-				}
-				if (lock['chat']) {
-					throw new Chat.ErrorMessage(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
-				}
+					for (const hotpatch of hotpatches) {
+						await applyHotpatch(hotpatch);
+					}
+				} else if (target === 'chat' || target === 'commands') {
+					if (lock['tournaments']) {
+						throw new Chat.ErrorMessage(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
+					}
+					if (lock['chat']) {
+						throw new Chat.ErrorMessage(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
+					}
 
-				this.sendReply("Hotpatching chat commands...");
+					this.sendReply("Hotpatching chat commands...");
 
-				const disabledCommands = Chat.allCommands().filter(c => c.disabled).map(c => `/${c.fullCmd}`);
-				if (cmd !== 'forcehotpatch' && disabledCommands.length) {
-					throw new Chat.ErrorMessage([
-						`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`,
-						`Hotpatching will enable them. Use /forcehotpatch chat if you're sure.`,
-						`Currently disabled: ${disabledCommands.join(', ')}`,
-					]);
-				}
+					const disabledCommands = Chat.allCommands().filter(c => c.disabled).map(c => `/${c.fullCmd}`);
+					if (cmd !== 'forcehotpatch' && disabledCommands.length) {
+						throw new Chat.ErrorMessage([
+							`${Chat.count(disabledCommands.length, "commands")} are disabled right now.`,
+							`Hotpatching will enable them. Use /forcehotpatch chat if you're sure.`,
+							`Currently disabled: ${disabledCommands.join(', ')}`,
+						]);
+					}
 
-				const oldPlugins = Chat.plugins;
-				Chat.destroy();
+					const oldPlugins = Chat.plugins;
+					Chat.destroy();
 
-				global.Chat = require('../chat').Chat;
-				Chat.start(Config.subprocessescache);
-				global.Tournaments = require('../tournaments').Tournaments;
+					global.Chat = require('../chat').Chat;
+					Chat.start(Config.subprocessescache);
+					global.Tournaments = require('../tournaments').Tournaments;
 
-				this.sendReply("Reloading chat plugins...");
-				Chat.loadPlugins(oldPlugins);
-				this.sendReply("DONE");
-			} else if (target === 'processmanager') {
-				if (lock['processmanager']) {
-					throw new Chat.ErrorMessage(
-						`Hot-patching formats has been disabled by ${lock['processmanager'].by} ` +
-						`(${lock['processmanager'].reason})`
-					);
-				}
-				this.sendReply('Hotpatching processmanager prototypes...');
+					this.sendReply("Reloading chat plugins...");
+					Chat.loadPlugins(oldPlugins);
+					this.sendReply("DONE");
+				} else if (target === 'processmanager') {
+					if (lock['processmanager']) {
+						throw new Chat.ErrorMessage(
+							`Hot-patching formats has been disabled by ${lock['processmanager'].by} ` +
+							`(${lock['processmanager'].reason})`
+						);
+					}
+					this.sendReply('Hotpatching processmanager prototypes...');
 
-				// keep references
-				const cache = { ...require.cache };
-				Utils.clearRequireCache();
-				const newPM = require('../../lib/process-manager');
-				require.cache = cache;
+					// keep references
+					const cache = { ...require.cache };
+					Utils.clearRequireCache();
+					const newPM = require('../../lib/process-manager');
+					require.cache = cache;
 
-				const protos = [
-					[ProcessManager.QueryProcessManager, newPM.QueryProcessManager],
-					[ProcessManager.StreamProcessManager, newPM.StreamProcessManager],
-					[ProcessManager.ProcessManager, newPM.ProcessManager],
-					[ProcessManager.RawProcessManager, newPM.RawProcessManager],
-					[ProcessManager.QueryProcessWrapper, newPM.QueryProcessWrapper],
-					[ProcessManager.StreamProcessWrapper, newPM.StreamProcessWrapper],
-					[ProcessManager.RawProcessManager, newPM.RawProcessWrapper],
-				].map(part => part.map(constructor => constructor.prototype));
+					const protos = [
+						[ProcessManager.QueryProcessManager, newPM.QueryProcessManager],
+						[ProcessManager.StreamProcessManager, newPM.StreamProcessManager],
+						[ProcessManager.ProcessManager, newPM.ProcessManager],
+						[ProcessManager.RawProcessManager, newPM.RawProcessManager],
+						[ProcessManager.QueryProcessWrapper, newPM.QueryProcessWrapper],
+						[ProcessManager.StreamProcessWrapper, newPM.StreamProcessWrapper],
+						[ProcessManager.RawProcessManager, newPM.RawProcessWrapper],
+					].map(part => part.map(constructor => constructor.prototype));
 
-				for (const [oldProto, newProto] of protos) {
+					for (const [oldProto, newProto] of protos) {
+						const newKeys = keysToCopy(newProto);
+						const oldKeys = keysToCopy(oldProto);
+						for (const key of oldKeys) {
+							if (!newProto[key]) {
+								delete oldProto[key];
+							}
+						}
+						for (const key of newKeys) {
+							oldProto[key] = newProto[key];
+						}
+					}
+					this.sendReply('DONE');
+				} else if (target === 'usersp' || target === 'roomsp') {
+					if (lock[target]) {
+						throw new Chat.ErrorMessage(`Hot-patching ${target} has been disabled by ${lock[target].by} (${lock[target].reason})`);
+					}
+					let newProto: any, oldProto: any, message: string;
+					switch (target) {
+					case 'usersp':
+						newProto = require('../users').User.prototype;
+						oldProto = Users.User.prototype;
+						message = 'user prototypes';
+						break;
+					case 'roomsp':
+						newProto = require('../rooms').BasicRoom.prototype;
+						oldProto = Rooms.BasicRoom.prototype;
+						message = 'rooms prototypes';
+						break;
+					}
+
+					this.sendReply(`Hotpatching ${message}...`);
 					const newKeys = keysToCopy(newProto);
 					const oldKeys = keysToCopy(oldProto);
+
+					const counts = {
+						added: 0,
+						updated: 0,
+						deleted: 0,
+					};
+
 					for (const key of oldKeys) {
 						if (!newProto[key]) {
+							counts.deleted++;
 							delete oldProto[key];
 						}
 					}
 					for (const key of newKeys) {
+						if (!oldProto[key]) {
+							counts.added++;
+						} else if (
+							// compare source code
+							typeof oldProto[key] !== 'function' || oldProto[key].toString() !== newProto[key].toString()
+						) {
+							counts.updated++;
+						}
+
 						oldProto[key] = newProto[key];
 					}
-				}
-				this.sendReply('DONE');
-			} else if (target === 'usersp' || target === 'roomsp') {
-				if (lock[target]) {
-					throw new Chat.ErrorMessage(`Hot-patching ${target} has been disabled by ${lock[target].by} (${lock[target].reason})`);
-				}
-				let newProto: any, oldProto: any, message: string;
-				switch (target) {
-				case 'usersp':
-					newProto = require('../users').User.prototype;
-					oldProto = Users.User.prototype;
-					message = 'user prototypes';
-					break;
-				case 'roomsp':
-					newProto = require('../rooms').BasicRoom.prototype;
-					oldProto = Rooms.BasicRoom.prototype;
-					message = 'rooms prototypes';
-					break;
-				}
-
-				this.sendReply(`Hotpatching ${message}...`);
-				const newKeys = keysToCopy(newProto);
-				const oldKeys = keysToCopy(oldProto);
-
-				const counts = {
-					added: 0,
-					updated: 0,
-					deleted: 0,
-				};
-
-				for (const key of oldKeys) {
-					if (!newProto[key]) {
-						counts.deleted++;
-						delete oldProto[key];
+					this.sendReply(`DONE`);
+					this.sendReply(
+						`Updated ${Chat.count(counts.updated, 'methods')}` +
+						(counts.added ? `, added ${Chat.count(counts.added, 'new methods')} to ${message}` : '') +
+						(counts.deleted ? `, and removed ${Chat.count(counts.deleted, 'methods')}.` : '.')
+					);
+				} else if (target === 'tournaments') {
+					if (lock['tournaments']) {
+						throw new Chat.ErrorMessage(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 					}
-				}
-				for (const key of newKeys) {
-					if (!oldProto[key]) {
-						counts.added++;
-					} else if (
-						// compare source code
-						typeof oldProto[key] !== 'function' || oldProto[key].toString() !== newProto[key].toString()
-					) {
-						counts.updated++;
+					this.sendReply("Hotpatching tournaments...");
+
+					global.Tournaments = require('../tournaments').Tournaments;
+					Chat.loadPlugin(Tournaments, 'tournaments');
+					this.sendReply("DONE");
+				} else if (target === 'formats' || target === 'battles') {
+					if (lock['formats']) {
+						throw new Chat.ErrorMessage(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
+					}
+					if (lock['battles']) {
+						throw new Chat.ErrorMessage(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
+					}
+					if (lock['validator']) {
+						throw new Chat.ErrorMessage(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
+					}
+					this.sendReply("Hotpatching formats...");
+
+					// reload .sim-dist/dex.js
+					global.Dex = require('../../sim/dex').Dex;
+					// rebuild the formats list
+					Rooms.global.formatList = '';
+					// respawn validator processes
+					void TeamValidatorAsync.PM.respawn();
+					// respawn simulator processes
+					void Rooms.PM.respawn();
+					// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
+					void Chat.plugins.datasearch?.PM?.respawn();
+					// update teams global
+					global.Teams = require('../../sim/teams').Teams;
+					// broadcast the new formats list to clients
+					Rooms.global.sendAll(Rooms.global.formatListText);
+					this.sendReply("DONE");
+				} else if (target === 'loginserver') {
+					this.sendReply("Hotpatching loginserver...");
+					FS('config/custom.css').unwatch();
+					global.LoginServer = require('../loginserver').LoginServer;
+					this.sendReply("DONE. New login server requests will use the new code.");
+				} else if (target === 'learnsets' || target === 'validator') {
+					if (lock['validator']) {
+						throw new Chat.ErrorMessage(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
+					}
+					if (lock['formats']) {
+						throw new Chat.ErrorMessage(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 					}
 
-					oldProto[key] = newProto[key];
+					this.sendReply("Hotpatching validator...");
+					void TeamValidatorAsync.PM.respawn();
+					// update teams global too while we're at it
+					global.Teams = require('../../sim/teams').Teams;
+					this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
+				} else if (target === 'punishments') {
+					if (lock['punishments']) {
+						throw new Chat.ErrorMessage(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
+					}
+
+					this.sendReply("Hotpatching punishments...");
+					global.Punishments = require('../punishments').Punishments;
+					this.sendReply("DONE");
+				} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
+					this.sendReply("Hotpatching ip-tools...");
+
+					global.IPTools = require('../ip-tools').IPTools;
+					void IPTools.loadHostsAndRanges();
+					this.sendReply("DONE");
+				} else if (target === 'modlog') {
+					if (!Config.usesqlite) {
+						throw new Chat.ErrorMessage(`The moderator log is not available because SQLite is disabled.`);
+					}
+					if (!Config.usesqlitemodlog) {
+						throw new Chat.ErrorMessage(`The moderator log is not available because of the server configuration.`);
+					}
+					if (lock['modlog']) {
+						throw new Chat.ErrorMessage(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
+					}
+					if (Rooms.Modlog.readyPromise) {
+						throw new Chat.ErrorMessage(`There is already a hotpatch in progress.`);
+					}
+					this.sendReply("Hotpatching modlog...");
+
+					void Rooms.Modlog.restart();
+					// eslint-disable-next-line @typescript-eslint/await-thenable
+					await Rooms.Modlog.readyPromise;
+					this.sendReply("DONE");
+				} else if (target.startsWith('disable')) {
+					this.sendReply("Disabling hot-patch has been moved to its own command:");
+					return this.parse('/help nohotpatch');
+				} else {
+					throw new Chat.ErrorMessage("Your hot-patch command was unrecognized.");
 				}
-				this.sendReply(`DONE`);
-				this.sendReply(
-					`Updated ${Chat.count(counts.updated, 'methods')}` +
-					(counts.added ? `, added ${Chat.count(counts.added, 'new methods')} to ${message}` : '') +
-					(counts.deleted ? `, and removed ${Chat.count(counts.deleted, 'methods')}.` : '.')
+			} catch (e: any) {
+				Rooms.global.notifyRooms(
+					['development', 'staff'] as RoomID[],
+					`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`
 				);
-			} else if (target === 'tournaments') {
-				if (lock['tournaments']) {
-					throw new Chat.ErrorMessage(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
-				}
-				this.sendReply("Hotpatching tournaments...");
-
-				global.Tournaments = require('../tournaments').Tournaments;
-				Chat.loadPlugin(Tournaments, 'tournaments');
-				this.sendReply("DONE");
-			} else if (target === 'formats' || target === 'battles') {
-				if (lock['formats']) {
-					throw new Chat.ErrorMessage(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
-				}
-				if (lock['battles']) {
-					throw new Chat.ErrorMessage(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
-				}
-				if (lock['validator']) {
-					throw new Chat.ErrorMessage(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
-				}
-				this.sendReply("Hotpatching formats...");
-
-				// reload .sim-dist/dex.js
-				global.Dex = require('../../sim/dex').Dex;
-				// rebuild the formats list
-				Rooms.global.formatList = '';
-				// respawn validator processes
-				void TeamValidatorAsync.PM.respawn();
-				// respawn simulator processes
-				void Rooms.PM.respawn();
-				// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
-				void Chat.plugins.datasearch?.PM?.respawn();
-				// update teams global
-				global.Teams = require('../../sim/teams').Teams;
-				// broadcast the new formats list to clients
-				Rooms.global.sendAll(Rooms.global.formatListText);
-				this.sendReply("DONE");
-			} else if (target === 'loginserver') {
-				this.sendReply("Hotpatching loginserver...");
-				FS('config/custom.css').unwatch();
-				global.LoginServer = require('../loginserver').LoginServer;
-				this.sendReply("DONE. New login server requests will use the new code.");
-			} else if (target === 'learnsets' || target === 'validator') {
-				if (lock['validator']) {
-					throw new Chat.ErrorMessage(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
-				}
-				if (lock['formats']) {
-					throw new Chat.ErrorMessage(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
-				}
-
-				this.sendReply("Hotpatching validator...");
-				void TeamValidatorAsync.PM.respawn();
-				// update teams global too while we're at it
-				global.Teams = require('../../sim/teams').Teams;
-				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
-			} else if (target === 'punishments') {
-				if (lock['punishments']) {
-					throw new Chat.ErrorMessage(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
-				}
-
-				this.sendReply("Hotpatching punishments...");
-				global.Punishments = require('../punishments').Punishments;
-				this.sendReply("DONE");
-			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
-				this.sendReply("Hotpatching ip-tools...");
-
-				global.IPTools = require('../ip-tools').IPTools;
-				void IPTools.loadHostsAndRanges();
-				this.sendReply("DONE");
-			} else if (target === 'modlog') {
-				if (!Config.usesqlite) {
-					throw new Chat.ErrorMessage(`The moderator log is not available because SQLite is disabled.`);
-				}
-				if (!Config.usesqlitemodlog) {
-					throw new Chat.ErrorMessage(`The moderator log is not available because of the server configuration.`);
-				}
-				if (lock['modlog']) {
-					throw new Chat.ErrorMessage(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
-				}
-				if (Rooms.Modlog.readyPromise) {
-					throw new Chat.ErrorMessage(`There is already a hotpatch in progress.`);
-				}
-				this.sendReply("Hotpatching modlog...");
-
-				void Rooms.Modlog.restart();
-				// eslint-disable-next-line @typescript-eslint/await-thenable
-				await Rooms.Modlog.readyPromise;
-				this.sendReply("DONE");
-			} else if (target.startsWith('disable')) {
-				this.sendReply("Disabling hot-patch has been moved to its own command:");
-				return this.parse('/help nohotpatch');
-			} else {
-				throw new Chat.ErrorMessage("Your hot-patch command was unrecognized.");
+				throw new Chat.ErrorMessage([`Something failed while trying to hot-patch ${target}:`, e.stack]);
 			}
-		} catch (e: any) {
 			Rooms.global.notifyRooms(
 				['development', 'staff'] as RoomID[],
-				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`
+				`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`
 			);
-			throw new Chat.ErrorMessage([`Something failed while trying to hot-patch ${target}:`, e.stack]);
-		}
-		Rooms.global.notifyRooms(
-			['development', 'staff'] as RoomID[],
-			`|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`
-		);
+		};
+		await applyHotpatch(toID(target));
 	},
 	hotpatchhelp: [
 		`Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: console access`,
@@ -1363,25 +1373,27 @@ export const commands: Chat.ChatCommands = {
 		target = toID(target);
 		Monitor.updateServerLock = true;
 
-		let success = true;
-		if (target === 'private') {
-			if (!validPrivateCodePath) {
-				Monitor.updateServerLock = false;
-				throw new Chat.ErrorMessage("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
-			}
-			success = await updateserver(this, Config.privatecodepath);
-			this.addGlobalModAction(`${user.name} used /updateserver private`);
-		} else {
-			if (target !== 'public' && validPrivateCodePath) {
+		try {
+			let success = true;
+			if (target === 'private') {
+				if (!validPrivateCodePath) {
+					throw new Chat.ErrorMessage("`Config.privatecodepath` must be set to an absolute path before using /updateserver private.");
+				}
 				success = await updateserver(this, Config.privatecodepath);
+				this.addGlobalModAction(`${user.name} used /updateserver private`);
+			} else {
+				if (target !== 'public' && validPrivateCodePath) {
+					success = await updateserver(this, Config.privatecodepath);
+				}
+				success = success && await updateserver(this, FS.ROOT_PATH);
+				this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 			}
-			success = success && await updateserver(this, FS.ROOT_PATH);
-			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
+
+			this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
+
+		} finally {
+			Monitor.updateServerLock = false;
 		}
-
-		this.sendReply(success ? `DONE` : `FAILED, old changes restored.`);
-
-		Monitor.updateServerLock = false;
 	},
 	updateserverhelp: [
 		`/updateserver - Updates the server's code from its Git repository, including private code if present. Requires: console access`,
@@ -1455,11 +1467,7 @@ export const commands: Chat.ChatCommands = {
 
 	async rebuild() {
 		this.canUseConsole();
-		const [, , stderr] = await bash('node ./build', this);
-		if (stderr) {
-			throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
-		}
-		this.sendReply('Rebuilt.');
+		await rebuild(this);
 	},
 
 	/*********************************************************

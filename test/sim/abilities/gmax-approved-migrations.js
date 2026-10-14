@@ -4,6 +4,9 @@ const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
 const { GmaxPassiveSelections: grants } = require('../../../dist/data/gmax-passive-data');
+// Later approved changes supersede parts of the historical pre-Gmax snapshot.
+// In particular, eb65b6417 restored the seven Gmax starter family passives.
+const laterApprovals = require('./gmax-snapshot-approved-overrides.json');
 let battle;
 function setup(species, ability = Dex.species.get(species).abilities[0], doubles = false) {
 	const set = (species, ability) => ({ species, ability, moves: ['splash', 'waterfall', 'shadowball', 'protect'] });
@@ -30,8 +33,8 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 		const slots = { kinglergmax: { 0: 'Crushing Depths' }, gengargmax: { 0: 'Afterlife Gate' }, meowthgmax: { 0: 'Technician', H: 'Unnerve' }, machampgmax: { 0: 'Raging Fists' }, machampgmaxalt: { 0: 'Raging Fists' } };
 		for (const old of require('./gmax-selection-species-before.json')) {
 			const s = Dex.species.get(old.id);
-			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, grants[old.id] ? [grants[old.id]] : old.passives), old.id);
-			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, {...(slots[old.id] || old.abilities)}), old.id);
+			assert.deepEqual(s.passives, laterApprovals.passives[old.id] || require('./passive-approval-overlays').current(old.id, grants[old.id] ? [grants[old.id]] : old.passives), old.id);
+			assert.deepEqual(s.abilities, laterApprovals.abilities[old.id] || require('./passive-approval-overlays').abilities(old.id, {...(slots[old.id] || old.abilities)}), old.id);
 			assert.deepEqual(s.types, old.id === 'kinglergmax' ? ['Water', 'Steel'] : old.types, old.id);
 			if (grants[old.id]) changed++;
 		}

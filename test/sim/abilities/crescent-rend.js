@@ -48,7 +48,7 @@ describe('Approved Crescent Rend', () => {
 		input.screens = []; input.actors[0].ability = 'No Ability';
 		assert.deepEqual(calculateScenario(input).results, plain);
 	});
-	for (const screen of ['reflect', 'auroraveil'])it('ignores ' + screen + ' only for physical Flying attacks', () => {
+	for (const screen of ['reflect', 'auroraveil'])it('ignores ' + screen + ' for damaging Flying attacks', () => {
 		const [p, q] = setup();
 		let hp = q.hp;
 		hit(p, q);
@@ -69,8 +69,7 @@ describe('Approved Crescent Rend', () => {
 		q.side.removeSideCondition(screen);
 		q.hp = q.maxhp;
 		hit(p, q, 'airslash');
-		if (screen === 'auroraveil')assert(q.maxhp - q.hp > special);
-		else assert.equal(q.maxhp - q.hp, special);
+		assert.equal(q.maxhp - q.hp, special);
 	});
 	it('makes converted attacks noncontact without bypassing Protect or immunity', () => {
 		const [p, q] = setup();
@@ -255,4 +254,11 @@ describe('Approved Crescent Rend', () => {
 		hit(p, q, 'tackle', { drain: [1, 2] });
 		assert.equal(events, 2); assert.equal(p.hp, 5015);
 	});
+});
+
+describe('Crescent Rend special-category extension',()=>{
+ afterEach(()=>{battle?.destroy();battle=null;});
+ for(const id of ['airslash','hypervoice'])for(const screen of ['lightscreen','auroraveil'])it(id+' ignores '+screen+' without changing category',()=>{const[p,q]=setup();hit(p,q,id);const plain=q.maxhp-q.hp;q.hp=q.maxhp;q.side.addSideCondition(screen,q);hit(p,q,id);assert.equal(q.maxhp-q.hp,plain);assert.equal(Dex.moves.get(id).category,'Special');});
+ it('special overflow and sound bypass do not duplicate damage',()=>{const[p,q]=setup();hit(p,q,'airslash');const plain=q.maxhp-q.hp;q.hp=q.maxhp;sub(q,10);hit(p,q,'airslash');assert.equal(q.maxhp-q.hp,plain-10);assert(!q.volatiles.substitute);q.hp=q.maxhp;hit(p,q,'hypervoice');const sound=q.maxhp-q.hp;q.hp=q.maxhp;sub(q,10);hit(p,q,'hypervoice');assert.equal(q.maxhp-q.hp,sound);assert.equal(q.volatiles.substitute.hp,10);});
+ it('special multihits overflow once per original hit',()=>{const[p,q]=setup();hit(p,q,'airslash',{multihit:3});const plain=q.maxhp-q.hp;q.hp=q.maxhp;sub(q,10);hit(p,q,'airslash',{multihit:3});assert.equal(q.maxhp-q.hp,plain-10);});
 });

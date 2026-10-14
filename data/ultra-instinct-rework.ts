@@ -1,5 +1,6 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import { predatorUltraMatch } from '../sim/predator';
+import { ultraRivalry, announceUltraRivalry } from '../sim/ultra-rivalry';
 
 const favored = ['ashenbeachterrain', 'newworldterrain', 'starlightarenaterrain', 'coldeclipseterrain'];
 function disabled(battle: Battle) {
@@ -17,6 +18,9 @@ function moveToken(battle: Battle, source: Pokemon, move: ActiveMove) {
 export function installUltraInstinctRework(abilities: AbilityDataTable) {
 	const table = abilities as any;
 	const instinct = table.ultrainstinct;
+	instinct.onUpdate = function (this: Battle, pokemon: Pokemon) {
+		announceUltraRivalry(this, pokemon);
+	};
 	instinct.onStart = function (this: Battle, pokemon: Pokemon) {
 		if (!disabled(this)) this.add('-ability', pokemon, 'Ultra Instinct');
 	};
@@ -30,7 +34,7 @@ export function installUltraInstinctRework(abilities: AbilityDataTable) {
 		if (disabled(this) || !opposingMove(source, target, effect) || predatorUltraMatch(this, source, target)) return;
 		const token = moveToken(this, source, effect);
 		if (target.m.ultraInstinctGuardTurn === this.turn && target.m.ultraInstinctGuardMove !== token) return;
-		return this.chainModify(this.field.isTerrain(favored) ? 0.65 : 0.75);
+		return this.chainModify(ultraRivalry(this, source, target) ? 0.60 : this.field.isTerrain(favored) ? 0.65 : 0.70);
 	};
 	instinct.onAfterDamageApplied = function (
 		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: ActiveMove

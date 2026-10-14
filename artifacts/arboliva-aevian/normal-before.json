@@ -1,0 +1,325 @@
+{
+  "species": {
+    "name": "Arboliva",
+    "id": "arboliva",
+    "fullname": "pokemon: Arboliva",
+    "effectType": "Pokemon",
+    "exists": true,
+    "num": 930,
+    "gen": 9,
+    "shortDesc": "",
+    "desc": "",
+    "isNonstandard": null,
+    "noCopy": false,
+    "affectsFainted": false,
+    "sourceEffect": "",
+    "baseSpecies": "Arboliva",
+    "forme": "",
+    "baseForme": "",
+    "otherFormes": [
+      "Arboliva-Mega"
+    ],
+    "formeOrder": [
+      "Arboliva",
+      "Arboliva-Mega"
+    ],
+    "spriteid": "arboliva",
+    "abilities": {
+      "0": "Seed Sower",
+      "1": "Hospitality",
+      "H": "Harvest"
+    },
+    "passives": [
+      "sweetveil"
+    ],
+    "types": [
+      "Grass",
+      "Normal"
+    ],
+    "prevo": "Dolliv",
+    "tier": "PU",
+    "doublesTier": "(DUU)",
+    "natDexTier": "RU",
+    "evos": [],
+    "evoLevel": 35,
+    "nfe": false,
+    "eggGroups": [
+      "Grass"
+    ],
+    "canHatch": false,
+    "gender": "",
+    "genderRatio": {
+      "M": 0.5,
+      "F": 0.5
+    },
+    "baseStats": {
+      "hp": 78,
+      "atk": 69,
+      "def": 90,
+      "spa": 125,
+      "spd": 109,
+      "spe": 39
+    },
+    "bst": 510,
+    "weightkg": 48.2,
+    "weighthg": 482,
+    "heightm": 1.4,
+    "color": "Green",
+    "tags": [],
+    "unreleasedHidden": false,
+    "maleOnlyHidden": false,
+    "gmaxUnreleased": false,
+    "cannotDynamax": false
+  },
+  "learnset": {
+    "exists": true,
+    "effectType": "Learnset",
+    "learnset": {
+      "absorb": [
+        "9L7",
+        "9L5"
+      ],
+      "alluringvoice": [
+        "9M"
+      ],
+      "bulletseed": [
+        "9M"
+      ],
+      "charm": [
+        "9M"
+      ],
+      "dazzlinggleam": [
+        "9M"
+      ],
+      "earthpower": [
+        "9M"
+      ],
+      "encore": [
+        "9M"
+      ],
+      "endure": [
+        "9M"
+      ],
+      "energyball": [
+        "9L38",
+        "9M",
+        "9L34"
+      ],
+      "facade": [
+        "9M"
+      ],
+      "flail": [
+        "9L20",
+        "9L16"
+      ],
+      "fling": [
+        "9M"
+      ],
+      "forestscurse": [
+        "9M"
+      ],
+      "gigadrain": [
+        "9M"
+      ],
+      "gigaimpact": [
+        "9M"
+      ],
+      "grassknot": [
+        "9M"
+      ],
+      "grassyterrain": [
+        "9L27",
+        "9M",
+        "9L23"
+      ],
+      "growth": [
+        "9L5",
+        "9L7"
+      ],
+      "helpinghand": [
+        "9L10",
+        "9M",
+        "9L13"
+      ],
+      "hyperbeam": [
+        "9M"
+      ],
+      "hypervoice": [
+        "9M"
+      ],
+      "leafstorm": [
+        "9M"
+      ],
+      "leechseed": [
+        "9L13",
+        "9L39"
+      ],
+      "lightscreen": [
+        "9M"
+      ],
+      "magicalleaf": [
+        "9M"
+      ],
+      "megadrain": [
+        "9L16",
+        "9L20"
+      ],
+      "metronome": [
+        "9M"
+      ],
+      "mirrorcoat": [
+        "9L42",
+        "9L1"
+      ],
+      "petalblizzard": [
+        "9L46",
+        "9M",
+        "9L52"
+      ],
+      "petaldance": [
+        "9L52",
+        "9L58"
+      ],
+      "pollenpuff": [
+        "9M"
+      ],
+      "protect": [
+        "9M"
+      ],
+      "psychup": [
+        "9M"
+      ],
+      "razorleaf": [
+        "9L23",
+        "9L10"
+      ],
+      "reflect": [
+        "9M"
+      ],
+      "rest": [
+        "9M"
+      ],
+      "safeguard": [
+        "9L1"
+      ],
+      "seedbomb": [
+        "9L30",
+        "9M",
+        "9L29"
+      ],
+      "sleeptalk": [
+        "9M"
+      ],
+      "solarbeam": [
+        "9M"
+      ],
+      "solarblade": [
+        "9M"
+      ],
+      "substitute": [
+        "9M"
+      ],
+      "sunnyday": [
+        "9M"
+      ],
+      "sweetscent": [
+        "9L1"
+      ],
+      "swift": [
+        "9M"
+      ],
+      "tackle": [
+        "9L1"
+      ],
+      "terrainpulse": [
+        "9L34",
+        "9L46"
+      ],
+      "trailblaze": [
+        "9M"
+      ],
+      "weatherball": [
+        "9M"
+      ],
+      "naturepower": [
+        "9M"
+      ],
+      "synthesis": [
+        "9M"
+      ]
+    },
+    "eventOnly": false,
+    "species": {
+      "name": "Arboliva",
+      "id": "arboliva",
+      "fullname": "pokemon: Arboliva",
+      "effectType": "Pokemon",
+      "exists": true,
+      "num": 930,
+      "gen": 9,
+      "shortDesc": "",
+      "desc": "",
+      "isNonstandard": null,
+      "noCopy": false,
+      "affectsFainted": false,
+      "sourceEffect": "",
+      "baseSpecies": "Arboliva",
+      "forme": "",
+      "baseForme": "",
+      "otherFormes": [
+        "Arboliva-Mega"
+      ],
+      "formeOrder": [
+        "Arboliva",
+        "Arboliva-Mega"
+      ],
+      "spriteid": "arboliva",
+      "abilities": {
+        "0": "Seed Sower",
+        "1": "Hospitality",
+        "H": "Harvest"
+      },
+      "passives": [
+        "sweetveil"
+      ],
+      "types": [
+        "Grass",
+        "Normal"
+      ],
+      "prevo": "Dolliv",
+      "tier": "PU",
+      "doublesTier": "(DUU)",
+      "natDexTier": "RU",
+      "evos": [],
+      "evoLevel": 35,
+      "nfe": false,
+      "eggGroups": [
+        "Grass"
+      ],
+      "canHatch": false,
+      "gender": "",
+      "genderRatio": {
+        "M": 0.5,
+        "F": 0.5
+      },
+      "baseStats": {
+        "hp": 78,
+        "atk": 69,
+        "def": 90,
+        "spa": 125,
+        "spd": 109,
+        "spe": 39
+      },
+      "bst": 510,
+      "weightkg": 48.2,
+      "weighthg": 482,
+      "heightm": 1.4,
+      "color": "Green",
+      "tags": [],
+      "unreleasedHidden": false,
+      "maleOnlyHidden": false,
+      "gmaxUnreleased": false,
+      "cannotDynamax": false
+    }
+  }
+}

@@ -31,7 +31,7 @@ for (const [id, normal] of Object.entries(require('./mega-approved-variants.json
 for (const [id, p] of Object.entries(require('./gmax-approved.json').passives)) megaExpected[id] = [p];
 megaExpected.lapras = ['liquidvoice'];
 megaExpected.yanmega = ['levitate'];
-exports.current = (id, fallback) => megaExpected[id] || fallback;
+exports.current = (id, fallback) => ({dragonitemega: ['multiscale'], corviknight: ['mirrorarmor']}[id] || megaExpected[id] || fallback);
 
 const shortlist=require('./shortlist-approved.json');
 const previousPassives=exports.passives;
@@ -56,3 +56,35 @@ exports.abilities = (id, expected) => {
 const beforeKingambitPassives = exports.passives;
 exports.passives = expected => Object.assign(beforeKingambitPassives(expected), {kingambit: ['supremeoverlord']});
 megaExpected.kingambit = ['supremeoverlord'];
+
+const beforeWrathPassives = exports.passives;
+exports.passives = expected => Object.assign(beforeWrathPassives(expected), {gyarados: ['unbridledwrath'], honchkrow: ['stakeout']});
+megaExpected.gyarados = ['unbridledwrath'];
+megaExpected.honchkrow = ['stakeout'];
+const beforeOverqwilPassives = exports.passives;
+exports.passives = expected => Object.assign(beforeOverqwilPassives(expected), {overqwil: ['aftermath']});
+megaExpected.overqwil = ['aftermath'];
+const beforeWrathAbilities = exports.abilities;
+exports.abilities = (id, expected) => Object.assign(beforeWrathAbilities(id, expected), id === 'gyarados' ? {0: 'Intimidate'} : {});
+
+const beforeSwiftVenomAbilities = exports.abilities;
+exports.abilities = (id, expected) => Object.assign(beforeSwiftVenomAbilities(id, expected), id === 'overqwil' ? {1: 'Swift Venom'} : {});
+
+// Approved starter G-Max and Golisopod passive revisions.
+const octoberPassives = {"charizardgmax":["blaze"],"blastoisegmax":["torrent"],"venusaurgmax":["overgrow"],"cinderacegmax":["blaze"],"feraligatrgmax":["torrent"],"rillaboomgmax":["overgrow"],"inteleongmax":["torrent"],"golisopod":["toughclaws"]};
+Object.assign(megaExpected, octoberPassives);
+const beforeOctoberPassives = exports.passives;
+exports.passives = expected => Object.assign(beforeOctoberPassives(expected), octoberPassives);
+// Approved Mudsdale and Rhydon ability/passive separation.
+Object.assign(megaExpected, {mudsdale: ['stamina'], rhydon: ['powerdrill']});
+const beforeMudsdalePassives = exports.passives;
+exports.passives = expected => Object.assign(beforeMudsdalePassives(expected), {mudsdale: ['stamina'], rhydon: ['powerdrill']});
+const beforeMudsdaleAbilities = exports.abilities;
+exports.abilities = (id, expected) => Object.assign(beforeMudsdaleAbilities(id, expected), {mudsdale: {0: 'Unyielding', 1: 'Battle Armor', H: 'Surefoot'}, rhydon: {0: 'Brute Force', 1: 'War Path', H: 'Lightning Rod'}}[id] || {});
+// Later approved signature slots and defensive passive corrections.
+Object.assign(megaExpected, {beartic: ['thickfat'], archaludon: ['stalwart']});
+const beforeSignaturePassives = exports.passives;
+exports.passives = expected => Object.assign(beforeSignaturePassives(expected), {beartic: ['thickfat'], archaludon: ['stalwart']});
+const beforeSignatureAbilities = exports.abilities;
+const signatureSlots = {skarmory: {H: 'Burning Quake'}, kingdra: {H: 'Storm Drain'}, gallade: {S: 'Ruptured Heaven'}, dusknoir: {H: 'Soul Reaver'}, escavalier: {S: 'Ruined Sky'}, talonflame: {S: 'Burning Quake'}, corviknight: {H: 'Steelwing Escort', S: 'Burning Quake'}, sirfetchd: {S: 'Ruined Sky'}, tinkaton: {1: 'Apocalyptic Flame'}};
+exports.abilities = (id, expected) => Object.assign(beforeSignatureAbilities(id, expected), signatureSlots[id] || {});

@@ -178,6 +178,7 @@ export class Field {
 	baseAuraTypeBoost(move: ActiveMove, source: Pokemon, target: Pokemon) {
 		if (adaptiveEnvironment(target, 'fields')) return 1;
 		const type = move.type;
+		if (type === 'Ice' && ['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'].includes(this.terrain)) return 1.5;
 		if (move.id === 'deiludicium' && this.isTerrain('rainbowterrain') && type === 'Normal' && move.category === 'Special') return 1.5;
 		if (this.terrain === 'bewitchedwoodsterrain' && type === 'Fairy') return 1.5;
 		if (this.terrain === 'glitchterrain' && type === 'Psychic') return 1.2;
@@ -206,7 +207,17 @@ export class Field {
 		let multiplier = aura.damageMultipliers[move.id] || 1;
 		// The matching field already applies Dei Ludicium's named Rainbow boost.
 		if (move.id === 'deiludicium' && this.isAura('rainbowterrain') && this.isTerrain('rainbowterrain')) multiplier = 1;
-		if (multiplier !== 1) this.battle.add('-message', aura.moveMessages[move.id]);
+		if (this.isAura('frozenaura') && !adaptiveEnvironment(target, 'fields')) {
+   let shared = 1;
+   if (['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'].includes(this.terrain) && move.id === 'bittermalice') shared = 1.5;
+   if (['icyterrain', 'coldeclipseterrain'].includes(this.terrain) && move.id === 'chillingwater') shared = 2;
+   if (this.terrain === 'coldeclipseterrain') {
+    if (['nightslash', 'rage'].includes(move.id)) shared = 2;
+    if (['freezingglare', 'fierywrath', 'roaroftime'].includes(move.id)) shared = 1.5;
+   }
+   if (shared > 1) multiplier = Math.max(shared, multiplier) / shared;
+  }
+  if (multiplier !== 1) this.battle.add('-message', aura.moveMessages[move.id] || aura.typeMessage);
 		const types = move.types || [move.type];
 		const grounded = source.isGrounded() && !source.isSemiInvulnerable();
 		const typeAllowed = aura.typeCondition === 'none' ||
@@ -411,7 +422,11 @@ export class Field {
 
 	/** Read-only lock check for power granted by a Cave/Icy move transition. */
 	moveTransitionBlocked(source: Pokemon, move: ActiveMove) {
-		return this.neutralizingTerrainEffects() || !!this.pulseBlockadeHolder(source, move);
+		return this.neutralizingTerrainEffects() || !!this.pulseBlockadeHolder(source, move) || this.badSeedsLocksField();
+	}
+
+	badSeedsLocksField() {
+		return this.terrain === 'coldeclipseterrain' && this.battle.getAllActive().some(p => p.hp > 0 && p.isActive && p.hasAbility('badseeds'));
 	}
 
 	private pulseBlockadeHolder(source: Pokemon | 'debug' | null, sourceEffect: Effect | null) {
@@ -435,6 +450,7 @@ export class Field {
 	}
 
 	canSetTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		if (this.badSeedsLocksField()) return false;
 		if (this.isFlowerGardenBase()) return false;
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -511,6 +527,7 @@ export class Field {
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, ignoreNeutralization = false, ignoreAuras = false) {
+		if (this.badSeedsLocksField()) return false;
 		const gardenSource = source && source !== 'debug' ? source : this.battle.event?.target;
 		const gardenEffect = sourceEffect || this.battle.effect;
 		if (this.flowerGardenStage() && ['grassyterrain', 'forestterrain'].includes(toID(status)) &&
@@ -629,6 +646,7 @@ export class Field {
 	}
 
 	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, gardenTransition = false) {
+		if (this.badSeedsLocksField()) return false;
 		status = this.battle.dex.conditions.get(status);
 		if (this.isFlowerGardenBase() && !gardenTransition) return false;
 		if (this.terrain === 'midnightzoneterrain' && status.id !== 'underwaterterrain') return false;
@@ -747,6 +765,8 @@ export class Field {
 
 	clearTerrain(power: string | null = null) {
 		if (power === 'mid' && this.auraField) return this.clearAura();
+		// Ordinary duration expiry remains allowed; this lock is not permanence.
+		if (this.badSeedsLocksField() && !((power === null || power === this.terrain) && this.terrainState.duration === 0)) return false;
 		if (this.isFlowerGardenBase()) return false;
 		if (!this.terrain || this.terrain === 'newworldterrain') return false;
 		const clearedTerrain = this.terrain;

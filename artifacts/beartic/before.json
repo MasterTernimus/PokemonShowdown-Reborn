@@ -1,0 +1,65 @@
+{
+  "name": "Beartic",
+  "id": "beartic",
+  "fullname": "pokemon: Beartic",
+  "effectType": "Pokemon",
+  "exists": true,
+  "num": 614,
+  "gen": 5,
+  "shortDesc": "",
+  "desc": "",
+  "isNonstandard": null,
+  "noCopy": false,
+  "affectsFainted": false,
+  "sourceEffect": "",
+  "baseSpecies": "Beartic",
+  "forme": "",
+  "baseForme": "",
+  "spriteid": "beartic",
+  "abilities": {
+    "0": "Raging Beast",
+    "1": "Floe Hunter",
+    "H": "Swift Swim"
+  },
+  "passives": [
+    "overcoat"
+  ],
+  "types": [
+    "Ice",
+    "Dark"
+  ],
+  "prevo": "Cubchoo",
+  "tier": "ZU",
+  "doublesTier": "(DUU)",
+  "natDexTier": "RU",
+  "evos": [],
+  "evoLevel": 37,
+  "nfe": false,
+  "eggGroups": [
+    "Field"
+  ],
+  "canHatch": false,
+  "gender": "",
+  "genderRatio": {
+    "M": 0.5,
+    "F": 0.5
+  },
+  "baseStats": {
+    "hp": 110,
+    "atk": 130,
+    "def": 90,
+    "spa": 55,
+    "spd": 85,
+    "spe": 75
+  },
+  "bst": 545,
+  "weightkg": 260,
+  "weighthg": 2600,
+  "heightm": 2.6,
+  "color": "White",
+  "tags": [],
+  "unreleasedHidden": false,
+  "maleOnlyHidden": false,
+  "gmaxUnreleased": false,
+  "cannotDynamax": false
+}

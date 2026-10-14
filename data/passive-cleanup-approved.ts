@@ -8,8 +8,8 @@ export const PassiveCleanupDescriptions = {
 	},
 
 	unbridledwrath: {
-		shortDesc: 'Sheer Force + Inner Focus; Intimidate is a separate species passive.',
-		desc: 'Full local Sheer Force removes eligible secondary effects and gives those moves approximately 1.3x power, once. Rampage moves still lock the user and cause their normal ending confusion. Full local Inner Focus prevents flinching and Intimidate Attack drops. Intimidate is supplied separately by ordinary Gyarados\'s species passive.',
+		shortDesc: 'Sheer Force + Inner Focus.',
+		desc: 'Full local Sheer Force removes eligible secondary effects and gives those moves approximately 1.3x power, once. Rampage moves still lock the user and cause their normal ending confusion. Full local Inner Focus prevents flinching and Intimidate Attack drops.',
 	},
 
 	venompincer: {

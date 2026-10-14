@@ -733,8 +733,7 @@ export const LatestPassiveGroups = {
   ],
   "defiant": [
     "gyarados",
-    "gyaradosmega",
-    "golisopod"
+    "gyaradosmega"
   ],
   "aromaveil": [
     "milotic",
@@ -980,7 +979,7 @@ for (const [id, passive] of Object.entries({lycanroc: 'infiltrator', lycanrocmid
 	ThematicPassiveIds.add(passive);
 }
 for (const [id, passive] of Object.entries({
-	conkeldurr: 'stamina', gyarados: 'intimidate', milotic: 'waterabsorb', raichualola: 'static',
+	conkeldurr: 'stamina', gyarados: 'unbridledwrath', milotic: 'waterabsorb', raichualola: 'static',
 	wishiwashisevii: 'infiltrator', wishiwashiseviischooling: 'infiltrator',
 	gliscor: 'poisonheal', gliscoralt: 'poisonheal',
 })) {
@@ -994,7 +993,7 @@ SpeciesPassives.zoroarkhisui = Object.freeze(['illusion']);
 ThematicPassiveIds.add('illusion');
 SpeciesPassives.arcaninehisui = Object.freeze(['sturdy']);
 SpeciesPassives.dragonite = Object.freeze(['overcoat']);
-SpeciesPassives.dragonitemega = Object.freeze(['innerfocus']);
+SpeciesPassives.dragonitemega = Object.freeze(['multiscale']);
 SpeciesPassives.duraludon = Object.freeze(['keeneye']);
 SpeciesPassives.murkrow = Object.freeze(['infiltrator']);
 SpeciesPassives.porygon2 = Object.freeze(['analytic']);
@@ -1020,5 +1019,18 @@ SpeciesPassives.mudsdale = Object.freeze(['stamina']);
 SpeciesPassives.rhydon = Object.freeze(['powerdrill']);
 ThematicPassiveIds.add('stamina');
 ThematicPassiveIds.add('powerdrill');
+// Ordinary Honchkrow only; Murkrow and distinct counterparts retain their own passives.
+SpeciesPassives.honchkrow = Object.freeze(['stakeout']);
+SpeciesPassives.emboarego = Object.freeze([...(SpeciesPassives.emboar || [])]);
+SpeciesPassives.emboarmegaego = Object.freeze([...(SpeciesPassives.emboarmega || [])]);
+SpeciesPassives.corviknight = Object.freeze(['mirrorarmor']);
+ThematicPassiveIds.add('mirrorarmor');
+ThematicPassiveIds.add('multiscale');
+SpeciesPassives.beartic = Object.freeze(['thickfat']);
+SpeciesPassives.overqwil = Object.freeze(['aftermath']);
+SpeciesPassives.golisopod = Object.freeze(['toughclaws']);
+ThematicPassiveIds.add('toughclaws');
+SpeciesPassives.mightyenagrim = Object.freeze([...(SpeciesPassives.mightyena || [])]);
+SpeciesPassives.mightyenamegagrim = Object.freeze([...(SpeciesPassives.mightyenamega || [])]);
 Object.freeze(SpeciesPassives);
 

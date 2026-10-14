@@ -103,7 +103,7 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		assert.equal(battle.runEvent('DragOut', p, p, Dex.moves.get('roar')), true);
 		assert.equal(battle.runEvent('DragOut', p, battle.p1.pokemon[1], Dex.moves.get('roar')), true);
 	});
-	it('Quarry Cannon retains five Rock Blast hits with one Solid Rock multiplier', () => {
+	it('Quarry Cannon retains ordinary Rock Blast hits with one Solid Rock passive multiplier', () => {
 		const [p, t] = setup('Rhyperior', 'Quarry Cannon');
 		const m = Dex.getActiveMove('watergun');
 		t.setType('Water');
@@ -113,7 +113,7 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		p.setAbility('Quarry Cannon');
 		const rock = Dex.getActiveMove('rockblast');
 		battle.runEvent('ModifyMove', p, t, rock, rock);
-		assert.equal(rock.multihit, 5);
+		assert.deepEqual(rock.multihit, [2, 5]);
 	});
 	it('Rocky Payload preserves local Rock STAB and offensive field boost without added resistance', () => {
 		const [p, t] = setup('Conkeldurr', 'Rocky Payload');

@@ -19331,6 +19331,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	rhyperior: {
 		learnset: {
+			waterpulse: ["9M"],
 			spikecannon: ["9M"],
 			accelerock: ["9M"],
 			ancientpower: ["9M", "4T"],
@@ -113200,3 +113201,12 @@ delete Learnsets.indeedeef.learnset!.stackingshot;
 for (const id of RejuvenationAdvancedLearnsets.stackingshot) {
 	Learnsets[id as ID].learnset!.furycutter ||= ['9L1'];
 }
+
+import {ArbolivaAevianLearnset} from './arboliva-aevian';
+Learnsets.arbolivaaevian = {learnset: ArbolivaAevianLearnset};
+
+Learnsets.emboarego = {learnset: {...Learnsets.emboar.learnset}};
+Learnsets.emboarmegaego = {learnset: {...Learnsets.emboar.learnset}};
+
+Learnsets.mightyenagrim = {learnset: {...Learnsets.mightyena.learnset}};
+Learnsets.mightyenamegagrim = {learnset: {...Learnsets.mightyena.learnset}};

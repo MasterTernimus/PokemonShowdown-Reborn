@@ -1,5 +1,6 @@
 import {adaptiveFieldMultiplier} from '../sim/adaptive-cycle';
 import type {MoveDataTable} from '../sim/dex-moves';
+import {signatureMoveText} from './signature-move-summaries';
 
 const flags = {protect: 1, mirror: 1, metronome: 1} as const;
 const contact = {...flags, contact: 1} as const;
@@ -61,7 +62,7 @@ export const YangSignatureMovesA: MoveDataTable = {
 export const YangSignatureLearnsetsA: {[id:string]:string[]} = {
  kaboom:['electrode','electrodehisui','golem','golemalola','bronzong','magnezone'],
  cactibash:['cacturne','maractus','chesnaught'],
- corrosivestrike:['seviper','muk','crobat','skuntank','grafaiai','sneasler','glimmora','toxapex'],
+ corrosivestrike:['seviper','muk','mukalola','crobat','skuntank','grafaiai','sneasler','glimmora','toxapex'],
  toxicvial:['weezing','garbodor','toxapex','nidoqueen','toxicroak'],
  flutterscales:['butterfree','vivillon','araquanid','volbeat','leavanny'],
  spiritmend:['dusknoir','cursola','gengar'],
@@ -88,7 +89,9 @@ const descriptions: {[id:string]:[string,string]} = {
  beatdown:['Samson','Hits three times with a separate 95% accuracy check per hit, stopping on a miss. A successful hit applies Taunt once per use.'],
  infernalrage:['Charlotte','Hits opposing Pokemon and applies Torment to damaged targets. Clears a replaceable field after a hit, respecting field locks.'],
 };
-for(const[id,[credit,summary]]of Object.entries(descriptions))YangSignatureDescriptionsA[id]={shortDesc:summary,desc:"Inspired by "+credit+" from Pokemon Reborn Yang. The mechanics described here are this server’s custom implementation. "+summary};
+for (const [id, [credit, summary]] of Object.entries(descriptions)) {
+ YangSignatureDescriptionsA[id] = signatureMoveText(id, credit, summary);
+}
 
 export const YangSignatureFieldNotesA: {[id: string]: string | null} = {
   "kaboom": "Electric Terrain or Electric Aura removes recoil.",

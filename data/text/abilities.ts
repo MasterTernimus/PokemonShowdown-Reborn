@@ -4,8 +4,8 @@ import { RosterExpansionDescriptions, RosterExpansionShortDescriptions } from '.
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	dreaddominion: {
 		name: 'Dread Dominion',
-		desc: 'Hydra Bond + Moxie. While this ability is active, Dark attacks are neutral against Fairy typing and Dark typing resists Fairy attacks for all Pokemon. Other type matchups still apply. Ends when the holder leaves battle or its ability is suppressed.',
-		shortDesc: 'Hydra Bond + Moxie. Field-wide: Dark is neutral vs Fairy; Dark resists Fairy.',
+		desc: 'Full Hydra Bond and Moxie. Full Intimidate lowers adjacent foes\' Attack by 1 on entry, respecting Substitute and normal Intimidate protections. Dark Aura remains a separate species passive. Does not change Dark/Fairy type matchups.',
+		shortDesc: 'Hydra Bond, Moxie and Intimidate.',
 	},
 	voidcrossing: {name: 'Void Crossing', ...AbilityDescriptionOverrides.voidcrossing},
 	mindcurrent: {"name":"Mind Current","desc":"Full Inner Focus blocks flinching and Intimidate's Attack drop. Once per entry, a damaging Psychic move dealing damage to a foe or its Substitute grants Charge after the move finishes. The triggering move cannot consume the new Charge. Misses, Protect and immunity do not spend the use.","shortDesc":"Inner Focus; first damaging Psychic move each entry grants Charge after the move completes."},
@@ -3905,8 +3905,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	desertspirit: {
 		name: "Desert Spirit",
-		desc: "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. Immune to powder effects and sandstorm/hail damage. Ground-type attacks receive STAB. Levitate provides normal airborne protection unless supplied separately by the species passive.",
-		shortDesc: "Sand Stream + Overcoat; Ground moves get STAB; Levitate where not supplied by its passive.",
+		desc: "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. Immune to powder effects and sandstorm/hail damage. Ground-type attacks receive STAB. Tinted Lens doubles damage from resisted attacks. Levitate provides normal airborne protection unless supplied separately by the species passive.",
+		shortDesc: "Sand Stream + Overcoat + Tinted Lens; Ground STAB; Levitate unless supplied by its passive.",
 	},
 	desertshell: {
 		name: "Desert Shell",
@@ -4538,7 +4538,7 @@ for (const [id, name] of [['freeflight', 'Free Flight'], ['entrenched', 'Entrenc
 
 AbilitiesText.steadyswimmer = {name: 'Steady Swimmer', ...AbilityDescriptionOverrides.steadyswimmer};
 
-Object.assign(AbilitiesText, {"hauntingveil":{"desc":"Cursed Body + Infiltrator. Damaging hits have a 30% chance to Disable the attacker's move. Its moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist.","shortDesc":"Cursed Body + Infiltrator."},"parentalbond":{"desc":"Mold Breaker: moves ignore bypassable opposing abilities. Eligible attacks hit twice; the second hit deals 80% damage. Existing multi-hit moves, spread hits, charging or delayed attacks, Z/Max moves and moves barred from extra hits are excluded. Contact moves have 1.3x power. Normal- and Fighting-type moves can hit Ghosts. Cannot be suppressed.","shortDesc":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts."},"ironwill":{"desc":"Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Gains +1 accuracy on entry; tail moves have 1.5x power.","shortDesc":"Prism Armor, Self-Sufficient and Whiplash."},"calderacore":{"desc":"On entry, summons sun for 5 turns, or 8 with Heat Rock. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def.","shortDesc":"Summons sun; Magma Armor protects and grants field bonuses."},"razorcurrent":{"desc":"On entry, summons rain for 5 turns, or 8 with Damp Rock. Gains +1 Speed at the end of each full turn it spends active.","shortDesc":"Summons rain; gains Speed each full active turn."}});
+Object.assign(AbilitiesText, {"hauntingveil":{"desc":"Cursed Body + Infiltrator. Damaging hits have a 30% chance to Disable the attacker's move. Its moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist.","shortDesc":"Cursed Body + Infiltrator."},"parentalbond":{"desc":"Mold Breaker: moves ignore bypassable opposing abilities. Eligible attacks hit twice; the second hit deals 80% damage. Existing multi-hit moves, spread hits, charging or delayed attacks, Z/Max moves and moves barred from extra hits are excluded. Contact moves have 1.3x power. Normal- and Fighting-type moves can hit Ghosts. Cannot be suppressed.","shortDesc":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts."},"ironwill":{"desc":"Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Gains +1 accuracy on entry; tail moves have 1.5x power.","shortDesc":"Prism Armor, Self-Sufficient and Whiplash."},"calderacore":{"desc":"Full Drought and Magma Armor. On entry, summons sun for 5 turns, or 8 with Heat Rock. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def.","shortDesc":"Drought + Magma Armor."},"razorcurrent":{"desc":"On entry, summons rain for 5 turns, or 8 with Damp Rock. Gains +1 Speed at the end of each full turn it spends active.","shortDesc":"Summons rain; gains Speed each full active turn."}});
 
 for (const [id, name] of [['shadowdouble', 'Shadow Double'], ['crossfire', 'Crossfire'], ['hauntingveil', 'Haunting Veil']]) AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
 
@@ -4612,3 +4612,22 @@ import {FamilyReplacementDescriptions} from '../family-replacements';
 for (const [id, details] of Object.entries({...FinalPassiveDescriptions, ...FamilyReplacementDescriptions})) AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...details};
 
 for (const id of ['encorearia', 'marvelscale', 'tidalvoice']) Object.assign(AbilitiesText[id as ID], AbilityDescriptionOverrides[id]);
+
+for (const id of ["ultraego", "burningego", "perfectego", "unleashedego", "primalego"]) AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...AbilityDescriptionOverrides[id]};
+
+AbilitiesText.ruinedsky = {name: 'Ruined Sky', ...AbilityDescriptionOverrides.ruinedsky};
+for (const [id, name] of Object.entries({apocalypticflame: 'Apocalyptic Flame', rupturedheaven: 'Ruptured Heaven', burningquake: 'Burning Quake'})) AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
+AbilitiesText.badseeds = {name: 'Bad Seeds', ...AbilityDescriptionOverrides.badseeds};
+AbilitiesText.wintersmalice = {name: "Winter's Malice", ...AbilityDescriptionOverrides.wintersmalice};
+
+for (const [id, name] of Object.entries({bloomingsun: 'Blooming Sun', skywarden: 'Skywarden', steelwingescort: 'Steelwing Escort', crescentrend: 'Crescent Rend'})) AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
+
+AbilitiesText.swiftvenom = {name: 'Swift Venom', ...AbilityDescriptionOverrides.swiftvenom};
+
+AbilitiesText.glacialheart = {name: 'Glacial Heart', ...AbilityDescriptionOverrides.glacialheart};
+
+AbilitiesText.requiem = {name: 'Requiem', ...AbilityDescriptionOverrides.requiem};
+
+AbilitiesText.soulreaver = {name: 'Soul Reaver', ...AbilityDescriptionOverrides.soulreaver};
+AbilitiesText.wickedsnare = {name: 'Wicked Snare', ...AbilityDescriptionOverrides.wickedsnare};
+AbilitiesText.sweetsanctuary = {name: 'Sweet Sanctuary', ...AbilityDescriptionOverrides.sweetsanctuary};

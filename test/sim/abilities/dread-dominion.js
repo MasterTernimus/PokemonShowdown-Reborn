@@ -15,10 +15,10 @@ describe('Mega Mightyena and Dread Dominion', () => {
 				{species: 'Mew', ability: 'Synchronize', moves: ['Splash']},
 			]]);
 			battle.makeChoices('team 1', 'team 1');
-			assert.equal(battle.p1.active[0].canMegaEvo, 'Mightyena-Mega');
+			assert.equal(battle.p1.active[0].canMegaEvo, species === 'Mightyena-Grim' ? 'Mightyena-Mega-Grim' : 'Mightyena-Mega');
 			battle.makeChoices('move 1 mega', 'move 1');
 			const mon = battle.p1.active[0];
-			assert.equal(mon.species.name, 'Mightyena-Mega');
+			assert.equal(mon.species.name, species === 'Mightyena-Grim' ? 'Mightyena-Mega-Grim' : 'Mightyena-Mega');
 			assert.deepEqual(mon.species.baseStats, {hp: 90, atk: 150, def: 115, spa: 85, spd: 100, spe: 130});
 			assert.equal(mon.species.bst, Dex.species.get('Mightyena').bst + 100);
 			assert.equal(mon.ability, 'dreaddominion');
@@ -43,33 +43,33 @@ describe('Mega Mightyena and Dread Dominion', () => {
 		return battle.p1.active[0];
 	}
 	function effectiveness(mon, type) { return mon.runEffectiveness(battle.dex.getActiveMove(type === 'Dark' ? 'darkpulse' : 'moonblast')); }
-	it('changes both sides, preserves dual typing, and does not stack', () => {
+	it('preserves normal Dark/Fairy matchups on both sides and with multiple holders', () => {
 		setup();
-		assert.equal(effectiveness(battle.p1.active[1], 'Dark'), 0);
-		assert.equal(effectiveness(battle.p2.active[0], 'Dark'), 0);
-		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), -1);
+		assert.equal(effectiveness(battle.p1.active[1], 'Dark'), -1);
+		assert.equal(effectiveness(battle.p2.active[0], 'Dark'), -1);
+		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), 1);
 		battle.p2.active[0].setType(['Fairy', 'Psychic']);
-		assert.equal(effectiveness(battle.p2.active[0], 'Dark'), 1);
+		assert.equal(effectiveness(battle.p2.active[0], 'Dark'), 0);
 		battle.p2.active[1].setType(['Dark', 'Dragon']);
-		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), 0);
+		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), 2);
 		battle.p1.active[1].setAbility('dreaddominion');
-		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), 0);
+		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), 2);
 	});
-	it('stops under suppression and resumes when suppression ends', () => {
+	it('keeps normal matchups through suppression', () => {
 		const holder = setup();
 		holder.addVolatile('gastroacid');
 		assert.equal(effectiveness(battle.p2.active[0], 'Dark'), -1);
 		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), 1);
 		holder.removeVolatile('gastroacid');
-		assert.equal(effectiveness(battle.p2.active[0], 'Dark'), 0);
+		assert.equal(effectiveness(battle.p2.active[0], 'Dark'), -1);
 	});
-	it('stops after the holder switches out', () => {
+	it('keeps normal matchups after switching', () => {
 		setup();
 		battle.makeChoices('switch 3, move 1', 'move 1, move 1');
 		assert.equal(effectiveness(battle.p2.active[0], 'Dark'), -1);
 		assert.equal(effectiveness(battle.p2.active[1], 'Fairy'), 1);
 	});
-	it('stops after the holder faints', () => {
+	it('keeps normal matchups after fainting', () => {
 		const holder = setup();
 		holder.faint();
 		battle.faintMessages();

@@ -1,42 +1,24 @@
 'use strict';
 const assert=require('assert').strict,common=require('../../common');let battle;
-function setup(ability='No Ability') {
- const mon=(ability)=>({species:'Mew',ability,moves:['waterpulse','tackle','protect','splash']});
- battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[mon('Heavy Artillery'),mon('No Ability')],[mon(ability),mon('No Ability')]]);
- battle.makeChoices('team 12','team 12');battle.randomizer=x=>x;for(const p of battle.getAllActive()){p.hp=p.maxhp=p.baseMaxhp=10000;p.getPassives=()=>[];}
- return [battle.p1.active[0],battle.p2.active[0]];
-}
-function fire(p,q,id='waterpulse',extra={}){const move=Object.assign(battle.dex.getActiveMove(id),{accuracy:true,secondaries:null},extra);battle.actions.useMove(move,p,{target:q});battle.runEvent('AfterMove',p,q,battle.activeMove);}
-function reload(p){battle.turn++;battle.singleEvent('Residual',battle.dex.conditions.get('artilleryreload'),p.volatiles.artilleryreload,p);}
-describe('Heavy Artillery fire and reload',()=>{
- afterEach(()=>battle?.destroy());
- it('retains doubled power, caps its own drops and breaks all five barriers on an HP hit',()=>{
-  const[p,q]=setup();for(const id of ['reflect','lightscreen','auroraveil','atlantiswall','arenitewall'])q.side.addSideCondition(id,q);
-  assert.equal(battle.runEvent('BasePower',p,q,battle.dex.getActiveMove('waterpulse'),100),200);
-  fire(p,q);assert.equal(p.boosts.def,-1);assert.equal(p.boosts.spd,-1);
-  for(const id of ['reflect','lightscreen','auroraveil','atlantiswall','arenitewall'])assert(!q.side.sideConditions[id]);
-  fire(p,q);assert.equal(p.boosts.def,-1);assert.equal(p.boosts.spd,-1);
-  battle.singleEvent('Residual',battle.dex.conditions.get('artilleryreload'),p.volatiles.artilleryreload,p);assert.equal(p.boosts.def,-1);
-  reload(p);assert.equal(p.boosts.def,0);assert.equal(p.boosts.spd,0);
- });
- it('reload restores only its own loss, preserving later enemy defense drops',()=>{
-  const[p,q]=setup();fire(p,q);battle.boost({def:-2,spd:-2},p,q);assert.equal(p.boosts.def,-3);reload(p);assert.equal(p.boosts.def,-2);assert.equal(p.boosts.spd,-2);
- });
- for(const mode of ['clear','set','boost'])it('cannot manufacture recovery after '+mode+' removed its loss',()=>{
-  const[p,q]=setup();fire(p,q);
-  if(mode==='clear')p.clearBoosts();else if(mode==='set')p.setBoost({def:0,spd:0});else battle.boost({def:1,spd:1},p,q);
-  battle.boost({def:-1,spd:-1},p,q);reload(p);assert.equal(p.boosts.def,-1);assert.equal(p.boosts.spd,-1);
- });
- for(const defense of ['protect','substitute','immune','miss'])it('no drops or screen breaking on '+defense,()=>{
-  const[p,q]=setup(defense==='immune'?'Water Absorb':'No Ability');q.side.addSideCondition('lightscreen',q);
-  if(['protect','substitute'].includes(defense))q.addVolatile(defense,q);
-  fire(p,q,'waterpulse',defense==='miss'?{accuracy:0}:{});assert.equal(p.boosts.def,0);assert(q.side.sideConditions.lightscreen);
- });
- it('a normal non-artillery turn reloads at turn end',()=>{
-  const[p,q]=setup();battle.makeChoices('move waterpulse','move splash');assert.equal(p.boosts.def,-1);
-  battle.makeChoices('move protect','move splash');assert.equal(p.boosts.def,0);assert.equal(p.boosts.spd,0);
- });
- it('multi-hit attacks spend one penalty and cannot exceed the cap',()=>{
-  const[p,q]=setup();fire(p,q,'bulletseed',{multihit:5});assert.equal(p.boosts.def,-1);assert.equal(p.boosts.spd,-1);
- });
+function setup(foe='No Ability'){const mon=(ability)=>({species:'Mew',ability,moves:['waterpulse','tackle','protect','splash']});battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[mon('Heavy Artillery'),mon('No Ability')],[mon(foe),mon('No Ability')]]);battle.makeChoices('team 12','team 12');battle.randomizer=x=>x;for(const p of battle.getAllActive()){p.hp=p.maxhp=p.baseMaxhp=10000;p.getPassives=()=>[];}return[battle.p1.active[0],battle.p2.active[0]];}
+function stages(p){return battle.runEvent('ModifyBoost',p,null,null,{...p.boosts});}
+function reload(p){battle.singleEvent('Residual',p.getAbility(),p.abilityState,p);}
+function fire(p,q,id='waterpulse',extra={}){if(!p.moveSlots.some(m=>m.id===id))p.moveSlots.push({id,move:id,pp:20,maxpp:20,target:battle.dex.moves.get(id).target,disabled:false,used:false});battle.actions.runMove(Object.assign(battle.dex.getActiveMove(id),{accuracy:true,secondaries:null},extra),p,p.getLocOf(q));}
+describe('Heavy Artillery Neutral Loaded Fired defense',()=>{
+ afterEach(()=>{battle?.destroy();battle=null;});
+ it('reload is one effective stage, never an underlying boost or stacking',()=>{const[p]=setup();reload(p);reload(p);assert.equal(stages(p).def,1);assert.equal(stages(p).spd,1);assert.equal(p.boosts.def,0);assert.equal(p.boosts.spd,0);const raw=p.getSwitchRequestData().stats;assert.equal(raw.def,p.storedStats.def);});
+ for(const id of ['waterpulse','tackle','bulletseed'])it(id+' consumes bonus before damage and cannot reload afterward',()=>{const[p,q]=setup();reload(p);let seen=false;const old=q.damage;q.damage=function(...args){seen=true;assert(!p.volatiles.artilleryreload);assert(p.volatiles.artilleryfired);assert.equal(stages(p).def,-1);return old.apply(this,args);};fire(p,q,id,id==='bulletseed'?{multihit:5}:{});assert(seen);reload(p);assert(!p.volatiles.artilleryreload);assert.equal(p.boosts.def,0);});
+ it('preserves existing double power and all five barrier breaks',()=>{const[p,q]=setup();for(const id of ['reflect','lightscreen','auroraveil','atlantiswall','arenitewall'])q.side.addSideCondition(id,q);assert.equal(battle.runEvent('BasePower',p,q,battle.dex.getActiveMove('waterpulse'),100),200);fire(p,q);for(const id of ['reflect','lightscreen','auroraveil','atlantiswall','arenitewall'])assert(!q.side.sideConditions[id]);});
+ for(const defense of ['protect','substitute','immune','miss'])it('attempted attack consumes reload without screen removal on '+defense,()=>{const[p,q]=setup(defense==='immune'?'Water Absorb':'No Ability');reload(p);q.side.addSideCondition('lightscreen',q);if(['protect','substitute'].includes(defense))q.addVolatile(defense,q);fire(p,q,'waterpulse',defense==='miss'?{accuracy:0}:{});assert(!p.volatiles.artilleryreload);assert.equal(p.boosts.def,0);assert(q.side.sideConditions.lightscreen);reload(p);assert(!p.volatiles.artilleryreload);});
+ it('ordinary boosts and drops are never subtracted on firing',()=>{const[p,q]=setup();battle.boost({def:2,spd:-2},p,q);reload(p);assert.equal(stages(p).def,3);assert.equal(stages(p).spd,-1);fire(p,q);assert.equal(p.boosts.def,2);assert.equal(p.boosts.spd,-2);assert.equal(stages(p).def,1);assert.equal(stages(p).spd,-3);});
+ for(const n of [-6,5,6])it('respects stage cap from '+n,()=>{const[p,q]=setup();p.setBoost({def:n,spd:n});reload(p);assert.equal(stages(p).def,Math.min(6,n+1));fire(p,q);assert.equal(p.boosts.def,n);assert.equal(stages(p).def,Math.max(-6,n-1));});
+ for(const reset of ['haze','clearsmog','set'])it(reset+' clears temporary state without a debt',()=>{const[p,q]=setup();reload(p);if(reset==='set')p.setBoost({def:2,spd:2});else fire(q,p,reset);assert(!p.volatiles.artilleryreload);fire(p,q);assert.equal(p.boosts.def,reset==='set'?2:0);});
+ for(const mode of ['status','charge','recharge','flinch','paralysis'])it(mode+' permits reload at turn end',()=>{const[p,q]=setup();if(mode==='recharge')p.addVolatile('mustrecharge');if(mode==='flinch')p.addVolatile('flinch');if(mode==='paralysis'){p.setStatus('par');battle.randomChance=()=>true;}fire(p,q,mode==='status'?'splash':mode==='charge'?'solarbeam':'tackle');reload(p);assert(p.volatiles.artilleryreload);if(mode==='charge'){battle.turn++;fire(p,q,'solarbeam');assert(!p.volatiles.artilleryreload);}});
+ it('switching clears the bonus',()=>{const[p]=setup();reload(p);battle.makeChoices('switch 2','move splash');assert(!p.volatiles.artilleryreload);});
+ it('suppression pauses contributions and loading; an existing state still becomes Fired',()=>{const[p,q]=setup();reload(p);p.addVolatile('gastroacid');assert.equal(stages(p).def,0);p.removeVolatile('gastroacid');assert.equal(stages(p).def,1);p.addVolatile('gastroacid');fire(p,q);assert(!p.volatiles.artilleryreload);reload(p);assert(!p.volatiles.artilleryreload);assert(p.volatiles.artilleryfired);assert.equal(stages(p).def,0);p.removeVolatile('gastroacid');assert.equal(stages(p).def,-1);});
+ it('ability replacement clears the indicator',()=>{const[p]=setup();reload(p);p.setAbility('No Ability');battle.eachEvent('Update');assert(!p.volatiles.artilleryreload);});
+ it('retains Unaware while defending',()=>{const[p,q]=setup();reload(p);q.boosts.atk=4;battle.setActiveMove(battle.dex.getActiveMove('tackle'),q,p);assert.equal(stages(q).atk,0);});
+ for(const ability of ['Simple','Contrary'])it(ability+' cannot multiply or invert the separate bonus',()=>{const[p,q]=setup();p.getPassives=()=>[ability.toLowerCase()];battle.boost({def:1,spd:1},p,p);const baseline={...p.boosts};reload(p);assert.equal(stages(p).def,baseline.def+1);assert.equal(stages(p).spd,baseline.spd+1);fire(p,q);assert.deepEqual(p.boosts,baseline);assert.equal(stages(p).def,baseline.def-1);});
 });
+
+describe('Heavy Artillery state transitions',()=>{afterEach(()=>{battle?.destroy();battle=null;});it('Neutral to Fired to Loaded to Fired never stacks',()=>{const[p,q]=setup();assert.equal(stages(p).def,0);fire(p,q);assert.equal(stages(p).def,-1);battle.turn++;fire(p,q);assert.equal(stages(p).def,-1);battle.turn++;reload(p);assert.equal(stages(p).def,1);battle.turn++;reload(p);assert.equal(stages(p).def,1);battle.turn++;fire(p,q);assert.equal(stages(p).def,-1);assert.equal(p.boosts.def,0);});for(const reset of ['haze','clearsmog','switch'])it(reset+' clears Fired to Neutral',()=>{const[p,q]=setup();fire(p,q);if(reset==='switch')battle.makeChoices('switch 2','move splash');else fire(q,p,reset);assert(!p.volatiles.artilleryfired);assert.equal(p.boosts.def,0);});});

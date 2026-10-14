@@ -17,6 +17,7 @@ import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
 import { StarterEeveeMoveExceptions } from '../data/eevee-ability-move-exceptions';
 import { AEVIAN_GRIEF_MOVES } from '../data/aevian-grief-moves';
+import { abilityIncludesComponent } from '../data/ability-components';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -822,6 +823,29 @@ export class TeamValidator {
 				const move = dex.moves.get(moveName);
 				if (move.exists && !AEVIAN_GRIEF_MOVES.has(move.id)) {
 					problems.push(`${name} can't use ${move.name} with Aevian Grief.`);
+				}
+			}
+		}
+		// Reject fixed-level damage with either multi-strike Bond, including
+		// components, species passives, and forms enabled by the equipped item.
+		const bondMoves = set.moves.map(move => dex.moves.get(move))
+			.filter(move => move.id === 'nightshade' || move.id === 'seismictoss');
+		if (bondMoves.length) {
+			const abilities = new Set([ability.id as string, ...species.passives]);
+			const transformed = item.megaStone?.[species.name] || item.megaStone?.[species.baseSpecies];
+			const forms = transformed ? [dex.species.get(transformed)] : [];
+			if (set.gigantamax) {
+				const gmax = dex.species.get(`${species.baseSpecies}-Gmax`);
+				if (gmax.exists) forms.push(gmax);
+			}
+			for (const form of forms) {
+				abilities.add(form.abilities[0]);
+				for (const passive of form.passives) abilities.add(passive);
+			}
+			for (const bond of ['hydrabond', 'parentalbond']) {
+				if (!Array.from(abilities).some(id => abilityIncludesComponent(id, bond))) continue;
+				for (const move of bondMoves) {
+					problems.push(`${name} can't use ${move.name} with ${dex.abilities.get(bond).name} (including composite abilities, passives, or transformations).`);
 				}
 			}
 		}

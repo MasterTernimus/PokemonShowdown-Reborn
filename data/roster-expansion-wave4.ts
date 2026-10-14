@@ -23,8 +23,12 @@ export function applyRosterWave4(base: AbilityDataTable) {
 		},
 	});
 	add('quarrycannon', 'Quarry Cannon', {
-		...base.solidrock,
-		onModifyMove(move) { if (move.id === 'rockblast' && !move.isZ && !move.isMax) move.multihit = 5; },
+		...base.megalauncher,
+		onModifyMove(move) {
+			if (!move.isZ && !move.isMax && move.category !== 'Status' && (move.flags.pulse || move.flags.bullet)) {
+				move.category = 'Physical';
+			}
+		},
 	});
 	add('tundramarch', 'Tundra March', {
 		...base.oblivious,

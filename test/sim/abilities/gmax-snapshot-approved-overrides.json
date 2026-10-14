@@ -1,0 +1,29 @@
+{
+  "passives": {
+    "golisopod": ["toughclaws"],
+    "venusaurgmax": ["overgrow"],
+    "charizardgmax": ["blaze"],
+    "blastoisegmax": ["torrent"],
+    "feraligatrgmax": ["torrent"],
+    "rillaboomgmax": ["overgrow"],
+    "cinderacegmax": ["blaze"],
+    "inteleongmax": ["torrent"],
+    "rhydon": ["powerdrill"],
+    "beartic": ["thickfat"],
+    "mudsdale": ["stamina"],
+    "archaludon": ["stalwart"]
+  },
+  "abilities": {
+    "rhydon": {"0": "Brute Force", "1": "War Path", "H": "Lightning Rod"},
+    "skarmory": {"0": "Fresh Plumage", "1": "Sturdy", "H": "Burning Quake"},
+    "kingdra": {"0": "Swift Swim", "1": "Abyss Sniper", "H": "Storm Drain"},
+    "gallade": {"0": "Dual Wield", "1": "Knight's Guard", "H": "Inner Focus", "S": "Ruptured Heaven"},
+    "dusknoir": {"0": "Requiem", "1": "Pressure", "H": "Soul Reaver"},
+    "escavalier": {"0": "Dual Wield", "1": "Royal Decree", "H": "Lanceguard", "S": "Ruined Sky"},
+    "talonflame": {"0": "Open Sky", "1": "Scorch Sweep", "H": "Gale Wings", "S": "Burning Quake"},
+    "mudsdale": {"0": "Unyielding", "1": "Battle Armor", "H": "Surefoot"},
+    "corviknight": {"0": "Pressure", "1": "Skywarden", "H": "Steelwing Escort", "S": "Burning Quake"},
+    "sirfetchd": {"0": "Royal Decree", "1": "Sharpness", "H": "Scrappy", "S": "Ruined Sky"},
+    "tinkaton": {"0": "Scrapbreaker", "1": "Apocalyptic Flame", "H": "Steely Spirit"}
+  }
+}

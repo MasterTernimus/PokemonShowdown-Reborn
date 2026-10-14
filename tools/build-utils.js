@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const child_process = require("child_process");
+const path = require("path");
 const esbuild = require('esbuild');
 
 const copyOverDataJSON = (file = 'data') => {
@@ -22,45 +23,49 @@ const shouldBeCompiled = file => {
 	return false;
 };
 
-const findFilesForPath = path => {
+// Restrict discovery to source trees; generated output and saved patches are not inputs.
+const sourceRoots = ['config', 'data', 'dev-tools', 'lib', 'server', 'sim', 'tools', 'translations'];
+const excludedDirectories = new Set(['node_modules', 'dist', 'logs', 'databases', 'artifacts', 'backups']);
+const findFilesForPath = directory => {
 	const out = [];
-	const files = fs.readdirSync(path);
-	for (const file of files) {
-		const cur = `${path}/${file}`;
-		// HACK: Logs and databases exclusions are a hack. Logs is too big to
-		// traverse, databases adds/removes files which can lead to a filesystem
-		// race between readdirSync and statSync. Please, at some point someone
-		// fix this function to be more robust.
-		if (cur.includes('node_modules') || cur.includes("/logs") || cur.includes("/databases")) continue;
-		if (fs.statSync(cur).isDirectory()) {
-			out.push(...findFilesForPath(cur));
-		} else if (shouldBeCompiled(cur)) {
-			out.push(cur);
+	for (const entry of fs.readdirSync(directory, {withFileTypes: true})) {
+		if (entry.name.startsWith('.') || excludedDirectories.has(entry.name)) continue;
+		const file = path.join(directory, entry.name);
+		// stat preserves support for private source trees linked into server/chat-plugins.
+		if (entry.isDirectory() || (entry.isSymbolicLink() && fs.statSync(file).isDirectory())) {
+			out.push(...findFilesForPath(file));
+		} else if (shouldBeCompiled(file)) {
+			out.push(file);
 		}
 	}
 	return out;
 };
 
-exports.transpile = decl => {
+exports.transpile = (force = false, decl = false) => {
+	// esbuild always rebuilds all inputs; force must not enable declarations.
+	const started = Date.now();
+	const entryPoints = sourceRoots.filter(root => fs.existsSync(root)).flatMap(findFilesForPath);
+	const scanned = Date.now();
 	esbuild.buildSync({
-		entryPoints: findFilesForPath('./'),
+		entryPoints,
 		outdir: './dist',
 		outbase: '.',
 		format: 'cjs',
 		tsconfig: './tsconfig.json',
 		sourcemap: true,
 	});
+	const compiled = Date.now();
 	fs.copyFileSync('./config/config-example.js', './dist/config/config-example.js');
 	copyOverDataJSON();
 
-	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
+	console.log(`Build: ${entryPoints.length} sources; scan ${scanned - started}ms, compile ${compiled - scanned}ms, assets ${Date.now() - compiled}ms.`);
 	if (decl) {
 		exports.buildDecls();
 	}
 };
 
 exports.buildDecls = () => {
-	try {
-		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, { stdio: 'inherit' });
-	} catch {}
+	const started = Date.now();
+	child_process.execFileSync(process.execPath, ['./node_modules/typescript/bin/tsc', '-p', 'sim'], {stdio: 'inherit'});
+	console.log(`Declarations: ${Date.now() - started}ms.`);
 };

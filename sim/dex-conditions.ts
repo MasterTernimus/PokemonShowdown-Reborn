@@ -14,6 +14,9 @@ export interface EventMethods {
 	onBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterSuccessfulSecondary?: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void;
+	onAnyAfterSuccessfulStatusHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
+	onSourceAfterDamageApplied?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
+	onModifyBoostPriority?: number;
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
 	onEmergencyExit?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;

@@ -4,6 +4,14 @@ import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+ glacialheartice: {name: 'glacialheartice', noCopy: true,
+  onStart(pokemon) {this.add('-start', pokemon, 'glacialheartice', '[silent]');},
+  onEnd(pokemon) {this.add('-end', pokemon, 'glacialheartice', '[silent]');},
+ },
+ glacialheartdragon: {name: 'glacialheartdragon', noCopy: true,
+  onStart(pokemon) {this.add('-start', pokemon, 'glacialheartdragon', '[silent]');},
+  onEnd(pokemon) {this.add('-end', pokemon, 'glacialheartdragon', '[silent]');},
+ },
 	...ShelterConditions,
  shadowdoublespent: {name: 'Shadow Double spent', noCopy: true, onStart() { this.effectState.armed = true; }},
  crossfirecharge: {name: 'Crossfire charge', noCopy: true},
@@ -49,19 +57,38 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
     artilleryreload: {
-        name: 'Artillery Reload', noCopy: true,
-        onStart() { this.effectState.def = 0; this.effectState.spd = 0; this.effectState.firedTurn = this.turn; },
-        onResidualOrder: 28,
-        onResidual(pokemon) {
-            if (this.effectState.firedTurn === this.turn || !pokemon.hasAbility('heavyartillery')) return;
-            const boosts: SparseBoostsTable = {};
-            for (const stat of ['def', 'spd'] as const) if (this.effectState[stat]) boosts[stat] = this.effectState[stat];
-            if (Object.keys(boosts).length) {
-                this.add('-message', pokemon.name + ' reloaded its heavy artillery!');
-                this.boost(boosts, pokemon, pokemon, this.dex.abilities.get('heavyartillery'));
-            }
-            if (!this.effectState.def && !this.effectState.spd) pokemon.removeVolatile('artilleryreload');
+        name: 'artilleryreload', noCopy: true,
+        onStart(pokemon) { this.add('-start', pokemon, 'artilleryreload', '[silent]'); },
+        onEnd(pokemon) { this.add('-end', pokemon, 'artilleryreload', '[silent]'); },
+        onModifyBoostPriority: 10,
+        onModifyBoost(boosts, pokemon) {
+            if (!pokemon.hasAbility('heavyartillery') || this.suppressingAbility(pokemon)) return;
+            for (const stat of ['def', 'spd'] as const) if (boosts[stat] !== undefined) boosts[stat] = Math.min(6, boosts[stat]! + 1);
         },
+        onTryMovePriority: -100,
+        onTryMove(pokemon, target, move) {
+            if (move.category === 'Status') return;
+            pokemon.m.heavyArtilleryFiredTurn = this.turn;
+            pokemon.removeVolatile('artilleryreload');
+            pokemon.addVolatile('artilleryfired', pokemon, this.effect);
+        },
+        onUpdate(pokemon) { if (pokemon.ability !== 'heavyartillery') pokemon.removeVolatile('artilleryreload'); },
+    },
+    artilleryfired: {
+        name: 'artilleryfired', noCopy: true,
+        onStart(pokemon) { this.add('-start', pokemon, 'artilleryfired', '[silent]'); },
+        onEnd(pokemon) { this.add('-end', pokemon, 'artilleryfired', '[silent]'); },
+        onModifyBoostPriority: 10,
+        onModifyBoost(boosts, pokemon) {
+            if (!pokemon.hasAbility('heavyartillery') || this.suppressingAbility(pokemon)) return;
+            for (const stat of ['def', 'spd'] as const) if (boosts[stat] !== undefined) boosts[stat] = Math.max(-6, boosts[stat]! - 1);
+        },
+        onTryMovePriority: -100,
+        onTryMove(pokemon, target, move) {
+            if (move.category === 'Status') return;
+            pokemon.m.heavyArtilleryFiredTurn = this.turn;
+        },
+        onUpdate(pokemon) { if (pokemon.ability !== 'heavyartillery') pokemon.removeVolatile('artilleryfired'); },
     },
 	starterpassives: {
 		name: 'Starter Passives',
@@ -1801,3 +1828,12 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
   },
  },
 };
+
+Conditions.steelwingescortentry = {
+ name: 'Steelwing Escort Entry', noCopy: true,
+ onDamage(damage, target, source, effect) {
+  if (effect && ['spikes', 'stealthrock', 'gmaxsteelsurge', 'dragonrend'].includes(effect.id)) return false;
+ },
+};
+
+Conditions.voidomenchargespent = {name: 'voidomenchargespent', noCopy: true};

@@ -1,14 +1,15 @@
 import { SelectedAbilityDescriptions } from './selected-mega-simplification-data';
 
-const updraft = "Full Updraft: Flying moves ignore evasion boosts. Once per switch-in, the first Flying attack dealing opposing HP damage raises the living adjacent ally with the lowest HP percentage by 1 Speed stage, or the holder if no such ally exists. Only one recipient is boosted; ability restarts and Mega Evolution do not reset the entry allowance.";
+const updraft = "Full Updraft: Full Competitive: opposing stat drops raise Special Attack by 2 outside Chessboard; on Chessboard, instead boosts damage with missing HP up to 2x at 20% HP. Flying moves ignore evasion boosts. Once per switch-in, the first Flying attack dealing opposing HP damage raises the living adjacent ally with the lowest HP percentage by 1 Speed stage, or the holder if no such ally exists. Only one recipient is boosted; ability restarts and Mega Evolution do not reset the entry allowance.";
 export const SovereignDescriptions: { [id: string]: { shortDesc: string, desc: string } } = {
+	updraft: {shortDesc: "Competitive; Flying ignores evasion; one ally Speed boost per entry.", desc: updraft},
 	sunsovereign: {
 		shortDesc: 'Drought, eight-turn sun, Unbound Blaze and Intimidate.',
 		desc: SelectedAbilityDescriptions.sunsovereign.desc +
 			' Full local Intimidate lowers adjacent foes\' Attack by 1 on entry, respecting Substitute and normal Intimidate protections. No Infernal Dominion trapping effect is included. Proficient remains a separate species passive.',
 	},
 	stormsovereign: {
-		shortDesc: 'Updraft and eight-turn Strong Winds; no Gale Wings on Mega Pidgeot.',
+		shortDesc: 'Updraft (Competitive) and eight-turn Strong Winds; no Gale Wings on Mega Pidgeot.',
 		desc: 'Summons replaceable Strong Winds for 8 turns on entry. ' + updraft + ' Mega Pidgeot receives No Guard from its species passive and has no Gale Wings priority. Other holders retain their existing full-HP Flying priority and never-miss effect when no No Guard passive is present. Keen Eye is removed.',
 	},
 	sandsovereign: {
@@ -21,6 +22,6 @@ export const SovereignDescriptions: { [id: string]: { shortDesc: string, desc: s
 	},
 };
 export const NativeStormDescription = {
-	passive: 'noguard', shortDesc: 'Updraft and eight-turn Strong Winds.',
+	passive: 'noguard', shortDesc: 'Updraft (Competitive) and eight-turn Strong Winds.',
 	desc: 'Summons replaceable Strong Winds for 8 turns on entry. ' + updraft + ' No Guard is supplied separately by the species passive. No Keen Eye or Gale Wings.',
 };

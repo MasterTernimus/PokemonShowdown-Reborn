@@ -8797,3 +8797,8 @@ for (const itemId of redundantItemIds) delete Items[itemId];
 
 if (!ENABLE_MEGA_HYDREIGON_X) delete Items.hydreigonite;
 
+
+Items.emboarite.megaStone!['Emboar-Ego'] = 'Emboar-Mega-Ego';
+Items.emboarite = {...Items.emboarite, itemUser: [...(Items.emboarite.itemUser || []), 'Emboar-Ego']};
+
+Items.grimyinite.megaStone!['Mightyena-Grim'] = 'Mightyena-Mega-Grim';

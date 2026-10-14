@@ -56,15 +56,15 @@ export const GmaxPassiveDescriptions = {
 		"desc": "Gains +1 Speed at the end of each full turn it spends active. Cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Flame Body is supplied separately by the species passive.",
 	},
 	"wickedsnare": {
-		"passive": "prankster",
-		"shortDesc": "Stakeout and Tangling Hair.",
-		"desc": "Attacks use double the offensive stat against targets that entered this turn. Contact attackers lose 1 Speed stage. Prankster is supplied separately by the species passive.",
-	},
+  "passive": "prankster",
+  "shortDesc": "Intimidate; damaging Dark moves lower each damaged foe's Defense after all hits.",
+  "desc": "Full Intimidate lowers adjacent foes' Attack by one stage on entry, respecting its normal protections. After a damaging Dark move finishes all hits, each opponent that took positive HP damage loses one Defense stage, once per target per move. Substitute-only damage, misses, protection and immunity do not trigger this effect. Native effects remain independent: Crunch can also cause its own Defense drop. Prankster remains the species passive."
+},
 	"sweetsanctuary": {
-		"passive": "friendguard",
-		"shortDesc": "Pastel Veil and team status protection.",
-		"desc": "Its side is protected from sleep, Yawn, attraction, Disable, Encore, Heal Block, Taunt and Torment. Prevents and cures poison for itself and allies. Before a foe uses a Poison move, lowers that foe's Attack and Sp. Atk by 1. Its own and allies' Poison attacks deal half damage on Misty and Rainbow. On Fairy Tale, gains +1 Sp. Def on entry and whenever a Pokemon enters. On Bewitched Woods, its Fairy typing adds no weakness. Friend Guard is supplied separately by the species passive.",
-	},
+  "passive": "friendguard",
+  "shortDesc": "Ripen; successful Decorate heals its boosted target by 1/4 max HP.",
+  "desc": "Full local Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current maximum HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing. Friend Guard remains the species passive; G-Max Finale retains its separate 1/6 active-side healing."
+},
 	"treasuretitan": {
 		"passive": "heavymetal",
 		"shortDesc": "Intimidate, super-effective reduction, Ground absorption and weight-move floor.",

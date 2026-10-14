@@ -14,7 +14,7 @@ describe('Yang signature moves 1–14',()=>{
  it('has distinct reserved IDs, credits and exact learnsets',()=>{
   const {YangSignatureMovesA:moves,YangSignatureDescriptionsA:text,YangSignatureLearnsetsA:learnsets}=require('../../../dist/data/yang-signature-moves-a');
   assert.equal(Object.keys(moves).length,14);let num=10435;
-  for(const[id,move]of Object.entries(moves)){assert.equal(move.num,num++);assert(Dex.moves.get(id).exists);assert(text[id].desc.includes('from Pokemon Reborn Yang') && text[id].desc.includes('custom implementation'));for(const species of learnsets[id])assert.deepEqual(Dex.species.getLearnsetData(species).learnset[id],['9L1']);}
+  for(const[id,move]of Object.entries(moves)){assert.equal(move.num,num++);assert(Dex.moves.get(id).exists);assert(text[id].desc.includes("'s move.") && !/inspired by|custom implementation/i.test(text[id].desc));for(const species of learnsets[id])assert.deepEqual(Dex.species.getLearnsetData(species).learnset[id],['9L1']);}
  });
  for(const context of ['normal','lightclay','mourning','frost','mirror'])it('Frozen Refractals creates exactly three turns without weather: '+context,()=>{
   const[p,q]=setup();if(context==='lightclay')p.setItem('Light Clay');if(context==='mourning')p.setAbility('Mourning Snow');if(context==='frost')p.setAbility('Frost Sovereign');if(context==='mirror')battle.field.terrain='mirrorarenaterrain';

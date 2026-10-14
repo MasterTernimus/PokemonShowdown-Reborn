@@ -9827,6 +9827,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 55,
 	},
 	dreaddominion: {
+		onStart(pokemon) {
+			this.singleEvent('Start', this.dex.abilities.get('intimidate'), pokemon.abilityState, pokemon);
+		},
 		onModifyMove(move, source, target) {
 			return this.dex.abilities.get('hydrabond').onModifyMove?.call(this, move, source, target);
 		},
@@ -9835,11 +9838,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			return this.dex.abilities.get('moxie').onSourceAfterFaint?.call(this, length, target, source, effect);
-		},
-		onAnyEffectiveness(typeMod, target, type, move) {
-			// Change only the named type matchup; preserve the target's other typing.
-			if (move.type === 'Dark' && type === 'Fairy') return 0;
-			if (move.type === 'Fairy' && type === 'Dark') return -1;
 		},
 		flags: {},
 		name: "Dread Dominion",
@@ -10101,6 +10099,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10413,
 	},
 	desertspirit: {
+		onModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('tintedlens').onModifyDamage?.call(this, damage, source, target, move);
+		},
 		onStart(pokemon) {
 			this.dex.abilities.get('sandstream').onStart?.call(this, pokemon);
 		},
@@ -11490,9 +11491,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyMove(move, pokemon, target) {
-            if (move.category !== 'Status' && (move.flags.pulse || move.flags.bullet) && pokemon.volatiles.artilleryreload) {
-                pokemon.volatiles.artilleryreload.firedTurn = this.turn;
-            }
 			if (['doubles', 'freeforall'].includes(this.gameType) && move.category !== 'Status' &&
 				(move.flags['pulse'] || move.flags['bullet'])) {
 				if (this.gameType === 'freeforall') {
@@ -11507,25 +11505,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
         onSourceDamagingHit(damage, target, source, move) {
             if (damage <= 0 || source.isAlly(target) || move.category === 'Status' || !(move.flags.pulse || move.flags.bullet)) return;
-            (move as any).heavyArtilleryHit = true;
             for (const screen of ['reflect', 'lightscreen', 'auroraveil', 'atlantiswall', 'arenitewall']) target.side.removeSideCondition(screen);
         },
-        onAfterMove(source, target, move) {
-            if (!(move as any).heavyArtilleryHit || !source.hp) return;
-            // Consume the whole-move marker once, even for multi-hit or spread attacks.
-            delete (move as any).heavyArtilleryHit;
-            source.addVolatile('artilleryreload', source, this.effect);
-            const state = source.volatiles.artilleryreload;
-            if (!state) return;
-            state.firedTurn = this.turn;
-            for (const stat of ['def', 'spd'] as const) {
-                if (state[stat]) continue;
-                const before = source.boosts[stat];
-                this.boost({[stat]: -1}, source, source, this.effect);
-                state[stat] = Math.min(1, Math.max(0, before - source.boosts[stat]));
+        onTryMovePriority: -100,
+        onTryMove(pokemon, target, move) {
+            if (move.category === 'Status') return;
+            pokemon.m.heavyArtilleryFiredTurn = this.turn;
+            pokemon.removeVolatile('artilleryreload');
+            pokemon.addVolatile('artilleryfired', pokemon, this.effect);
+        },
+        onResidualOrder: 28,
+        onResidual(pokemon) {
+            if (pokemon.m.heavyArtilleryFiredTurn !== this.turn) {
+                pokemon.removeVolatile('artilleryfired');
+                pokemon.addVolatile('artilleryreload', pokemon, this.effect);
             }
         },
-
 
 		onStart(pokemon) {
 			revealOpposingIllusions(this, pokemon);
@@ -11973,6 +11968,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 153,
 	},
 	requiem: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (skipPassiveComponent(this, target, 'filter')) return;
+			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
 		markRequiem(target, source) {
 			if (!target || target.fainted || !source || target.isAlly(source) || target.volatiles['requiem']) return;
 			if (!target.addVolatile('requiem', source, this.dex.abilities.get('requiem'))) return;
@@ -11980,6 +11979,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('perishsong', source, this.dex.abilities.get('requiem'))) {
 				this.add('-start', target, 'perish3', '[from] ability: Requiem', `[of] ${source}`);
 			}
+		},
+		onAnyAfterSuccessfulStatusHit(target, source) {
+			const holder = this.effectState.target;
+			if (source === holder) (this.effect as any).markRequiem.call(this, target, holder);
+			else if (target === holder) (this.effect as any).markRequiem.call(this, source, holder);
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			(this.effect as any).markRequiem.call(this, target, source);
@@ -21388,7 +21392,7 @@ Abilities.auraconvergence = {name: 'Aura Convergence', num: 11423, rating: 4, fl
 Abilities.crescentrend = {
 	name: 'Crescent Rend', num: 11424, rating: 4, flags: {}, onModifyMovePriority: -100,
 	onModifyMove(move) {
-		if (move.category === 'Physical' && this.movehasType(move, 'Flying')) {
+		if (move.category !== 'Status' && this.movehasType(move, 'Flying')) {
 			move.flags = {...move.flags};
 			delete move.flags.contact;
 		}
@@ -21443,3 +21447,21 @@ installFamilyReplacements(Abilities);
 
 // Mirror Greed retains its defenses and reflection, and copies opposing boosts.
 Abilities.mirrorgreed = {...Abilities.opportunist, ...Abilities.mirrorgreed};
+// Approved signature option: use ordinary Mold Breaker, with one target-type damage bonus.
+Abilities.ruinedsky = {
+ ...Abilities.moldbreaker,
+ name: 'Ruined Sky', num: 11453, rating: 4,
+ onStart(pokemon) { this.add('-ability', pokemon, 'Ruined Sky'); },
+ onModifyDamage(damage, source, target) {
+  if (target.hasType(['Flying', 'Dragon'])) return this.chainModify([5325, 4096]);
+ },
+};
+
+import {installFireEmblemSignatures} from './fire-emblem-signatures';
+installFireEmblemSignatures(Abilities);
+
+import {installArbolivaAevianAbilities} from './arboliva-aevian-abilities';
+installArbolivaAevianAbilities(Abilities);
+
+import {installApprovedSupportReworks} from './approved-support-reworks';
+installApprovedSupportReworks(Abilities);

@@ -1,0 +1,698 @@
+[
+  {
+    "id": "emboar",
+    "abilities": {
+      "0": "Stoke Belly",
+      "1": "Thick Fat",
+      "H": "Brute Force"
+    },
+    "stats": {
+      "hp": 110,
+      "atk": 123,
+      "def": 75,
+      "spa": 80,
+      "spd": 75,
+      "spe": 65
+    },
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "passives": [
+      "blaze"
+    ],
+    "learnset": {
+      "drainpunch": [
+        "9M"
+      ],
+      "armthrust": [
+        "9L1",
+        "7L1",
+        "6L17",
+        "5L17"
+      ],
+      "assurance": [
+        "9L37",
+        "7L38",
+        "6L38",
+        "5L38",
+        "9L38"
+      ],
+      "attract": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "blastburn": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "block": [
+        "9L1",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "bodypress": [
+        "9M"
+      ],
+      "bodyslam": [
+        "9M"
+      ],
+      "brickbreak": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "bulkup": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "bulldoze": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "burningjealousy": [
+        "9M"
+      ],
+      "circlethrow": [
+        "9M"
+      ],
+      "closecombat": [
+        "9M"
+      ],
+      "coaching": [
+        "9M"
+      ],
+      "cometpunch": [
+        "9M"
+      ],
+      "confide": [
+        "9M",
+        "7M",
+        "6M"
+      ],
+      "covet": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "curse": [
+        "9M"
+      ],
+      "defensecurl": [
+        "9L15",
+        "7L13",
+        "6L13",
+        "5L13",
+        "9L13"
+      ],
+      "dig": [
+        "9M"
+      ],
+      "doubleedge": [
+        "9M"
+      ],
+      "doublekick": [
+        "9M"
+      ],
+      "doubleteam": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "earthquake": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "echoedvoice": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "ember": [
+        "9L13",
+        "7L1",
+        "6L1",
+        "5L1",
+        "9L1"
+      ],
+      "endeavor": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "endure": [
+        "9L19",
+        "9M",
+        "9L1"
+      ],
+      "facade": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "fireblast": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "firepledge": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "firepunch": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "firespin": [
+        "9M"
+      ],
+      "flameburst": [
+        "9M"
+      ],
+      "flamecharge": [
+        "9L21",
+        "7M",
+        "7L15",
+        "6M",
+        "6L15",
+        "5M",
+        "5L15",
+        "9M",
+        "9L15"
+      ],
+      "flamethrower": [
+        "9L39",
+        "7M",
+        "7L43",
+        "6M",
+        "6L43",
+        "5M",
+        "5L43",
+        "9M",
+        "9L43"
+      ],
+      "flamewheel": [
+        "9L1"
+      ],
+      "flareblitz": [
+        "9L47",
+        "7L62",
+        "6L62",
+        "6S1",
+        "5L62",
+        "5S0",
+        "9M",
+        "9L62"
+      ],
+      "fling": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "focusblast": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "focuspunch": [
+        "9M",
+        "7T",
+        "6T"
+      ],
+      "frustration": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "gigaimpact": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "grassknot": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "gyroball": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "hammerarm": [
+        "9L1",
+        "7L1",
+        "6L1",
+        "5L1",
+        "5S0"
+      ],
+      "hardpress": [
+        "9M"
+      ],
+      "headsmash": [
+        "9L43",
+        "7L50",
+        "6L50",
+        "6S1",
+        "5L50",
+        "5S0",
+        "9L50"
+      ],
+      "heatcrash": [
+        "9L33",
+        "7L31",
+        "6L31",
+        "5L31",
+        "9M",
+        "9L31"
+      ],
+      "heatwave": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "heavyslam": [
+        "9M"
+      ],
+      "helpinghand": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "highhorsepower": [
+        "9M"
+      ],
+      "holdback": [
+        "9L1",
+        "6S1"
+      ],
+      "hyperbeam": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "incinerate": [
+        "6M",
+        "5M"
+      ],
+      "ironhead": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "irontail": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "knockoff": [
+        "9M"
+      ],
+      "lowkick": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "lowsweep": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "machpunch": [
+        "9M"
+      ],
+      "mimic": [
+        "9M"
+      ],
+      "mudslap": [
+        "9M"
+      ],
+      "odorsleuth": [
+        "9L7",
+        "7L1",
+        "6L1",
+        "5L1"
+      ],
+      "overheat": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "poisonjab": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "poweruppunch": [
+        "9M",
+        "6M"
+      ],
+      "protect": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "ragingfury": [
+        "9M"
+      ],
+      "rest": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "return": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "reversal": [
+        "9M"
+      ],
+      "roar": [
+        "9L31",
+        "7M",
+        "7L55",
+        "6M",
+        "6L55",
+        "5M",
+        "5L55",
+        "9M",
+        "9L55"
+      ],
+      "rockslide": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "rocksmash": [
+        "9M",
+        "6M",
+        "5M"
+      ],
+      "rocktomb": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "rollout": [
+        "9L25",
+        "7L23",
+        "6L23",
+        "5L23",
+        "9L23"
+      ],
+      "round": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "scald": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "scaryface": [
+        "9M"
+      ],
+      "secretpower": [
+        "9M",
+        "6M"
+      ],
+      "seismictoss": [
+        "9M"
+      ],
+      "slackoff": [
+        "9M"
+      ],
+      "sleeptalk": [
+        "9M",
+        "7M",
+        "6M",
+        "5T"
+      ],
+      "smackdown": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "smog": [
+        "9L9",
+        "7L20",
+        "6L20",
+        "5L20",
+        "9L20"
+      ],
+      "snore": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "solarbeam": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "solarblade": [
+        "9M"
+      ],
+      "stompingtantrum": [
+        "9M",
+        "7T"
+      ],
+      "stoneedge": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "stormthrow": [
+        "9M"
+      ],
+      "strength": [
+        "9M",
+        "6M",
+        "5M"
+      ],
+      "substitute": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "suckerpunch": [
+        "9M"
+      ],
+      "sunnyday": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "superpower": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "swagger": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "tackle": [
+        "9L1",
+        "7L1",
+        "6L1",
+        "5L1"
+      ],
+      "tailwhip": [
+        "9L3",
+        "7L1",
+        "6L1",
+        "5L1",
+        "9L1"
+      ],
+      "takedown": [
+        "9L27",
+        "7L28",
+        "6L28",
+        "6S1",
+        "5L28",
+        "9M",
+        "9L28"
+      ],
+      "taunt": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "temperflare": [
+        "9M"
+      ],
+      "thunderpunch": [
+        "9M",
+        "7T",
+        "6T",
+        "5T"
+      ],
+      "toxic": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "trailblaze": [
+        "9M"
+      ],
+      "uturn": [
+        "9M"
+      ],
+      "vacuumwave": [
+        "9M"
+      ],
+      "wildcharge": [
+        "9M",
+        "7M",
+        "6M",
+        "5M",
+        "5S0"
+      ],
+      "willowisp": [
+        "9M",
+        "7M",
+        "6M",
+        "5M"
+      ],
+      "workup": [
+        "9M",
+        "7M",
+        "5M"
+      ],
+      "zenheadbutt": [
+        "9M",
+        "7T",
+        "6T"
+      ],
+      "scorchingsands": [
+        "9M"
+      ],
+      "galestrike": [
+        "9L1"
+      ]
+    }
+  },
+  {
+    "id": "emboarmega",
+    "abilities": {
+      "0": "Burning Ego"
+    },
+    "stats": {
+      "hp": 110,
+      "atk": 150,
+      "def": 93,
+      "spa": 85,
+      "spd": 115,
+      "spe": 75
+    },
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "passives": [
+      "proficient"
+    ]
+  },
+  {
+    "id": "emboaralt",
+    "abilities": {
+      "0": "Gluttony",
+      "1": "Thick Fat",
+      "H": "Brute Force"
+    },
+    "stats": {
+      "hp": 110,
+      "atk": 123,
+      "def": 75,
+      "spa": 80,
+      "spd": 75,
+      "spe": 65
+    },
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "passives": [
+      "blaze"
+    ]
+  },
+  {
+    "id": "emboarmegaalt",
+    "abilities": {
+      "0": "Burning Ego"
+    },
+    "stats": {
+      "hp": 110,
+      "atk": 150,
+      "def": 93,
+      "spa": 85,
+      "spd": 115,
+      "spe": 75
+    },
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "passives": [
+      "proficient"
+    ]
+  }
+]
