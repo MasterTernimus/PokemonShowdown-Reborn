@@ -1,3 +1,4 @@
+import {beastHunterMoveView} from './beast-hunter';
 import {auraConvergenceView} from './aura-convergence';
 /** Adaptive Cycle's battle-long, individual memory. No state lives in abilityState or volatiles. */
 import type {Pokemon} from './pokemon';
@@ -257,7 +258,7 @@ export function adaptiveMoveView(move: ActiveMove, source: Pokemon, target: Poke
 		view.moveHitData = move.moveHitData ||= {};
 		(view as any).adaptiveViewFor = target;
 	}
-	return auraConvergenceView(view, source, target, move);
+	return beastHunterMoveView(auraConvergenceView(view, source, target, move), source, target);
 }
 
 /** Native moves with environmental effects outside Terrain handlers. Shared rewrites (e.g. Weather Ball) stay intact. */

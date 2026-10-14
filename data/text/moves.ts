@@ -7834,3 +7834,6 @@ for (const [id, details] of Object.entries(RejuvenationSignatureDescriptions)) M
 
 import {YangSignatureDescriptions} from '../yang-signature-moves';
 for (const [id, details] of Object.entries(YangSignatureDescriptions)) MovesText[id as ID] = {...MovesText[id as ID], ...details};
+
+import {RejuvenationAdvancedDescriptions} from '../rejuvenation-advanced-moves';
+for (const [id, details] of Object.entries(RejuvenationAdvancedDescriptions)) MovesText[id as ID] = {...MovesText[id as ID], ...details};

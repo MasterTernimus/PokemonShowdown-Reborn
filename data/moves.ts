@@ -4401,13 +4401,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onInvulnerability(target, source, move) {
-				if (['surf', 'whirlpool'].includes(move.id)) {
+				if (['surf', 'whirlpool', 'magmadrift'].includes(move.id)) {
 					return;
 				}
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
-				if (move.id === 'surf' || move.id === 'whirlpool') {
+				if (['surf', 'whirlpool', 'magmadrift'].includes(move.id)) {
 					return this.chainModify(2);
 				}
 			},
@@ -7209,6 +7209,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	furycutter: {
 		num: 210,
+		onMoveFail(target, source) { source.removeVolatile('furycutter'); },
 		accuracy: 95,
 		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
@@ -7226,6 +7227,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		condition: {
 			duration: 2,
+			onBeforeMove(source, target, move) {
+				if (!['furycutter', 'stackingshot'].includes(move.id)) source.removeVolatile('furycutter');
+			},
+			onTryMove(source, target, move) {
+				if (!['furycutter', 'stackingshot'].includes(move.id)) source.removeVolatile('furycutter');
+			},
 			onStart() {
 				this.effectState.multiplier = 1;
 			},
@@ -25048,3 +25055,6 @@ Object.assign(Moves, RejuvenationSignatureMoves);
 
 import {YangSignatureMoves} from './yang-signature-moves';
 Object.assign(Moves, YangSignatureMoves);
+
+import {RejuvenationAdvancedMoves} from './rejuvenation-advanced-moves';
+Object.assign(Moves, RejuvenationAdvancedMoves);

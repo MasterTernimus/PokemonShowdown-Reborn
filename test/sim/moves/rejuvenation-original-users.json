@@ -1,0 +1,200 @@
+{
+  "baseline": {
+    "multipulse": [
+      "bewear",
+      "porygonz",
+      "silvally"
+    ],
+    "aquabatics": [
+      "primarina",
+      "floatzel",
+      "lumineon"
+    ],
+    "feverpitch": [
+      "toxtricityaevian",
+      "exploud",
+      "skeledirge"
+    ],
+    "thunderraid": [
+      "electivire",
+      "luxray",
+      "zebstrika"
+    ],
+    "desertsmark": [
+      "torterra",
+      "sandaconda",
+      "palossand"
+    ],
+    "superumdmove": [
+      "metagross",
+      "duraludon",
+      "magnezone",
+      "archaludon"
+    ],
+    "galestrike": [
+      "lucario",
+      "gallade",
+      "hawlucha"
+    ],
+    "spectralscream": [
+      "dusclops",
+      "dusknoir",
+      "mismagius",
+      "chandelure"
+    ],
+    "barbedweb": [
+      "araquanid",
+      "ariados",
+      "galvantula"
+    ],
+    "coldtruth": [
+      "walrein",
+      "froslass",
+      "cryogonal"
+    ],
+    "bunrakubeatdown": [
+      "medicham",
+      "meowsticf",
+      "mrmime"
+    ],
+    "matrixshot": [
+      "aerodactyl",
+      "gigalith",
+      "minior"
+    ],
+    "pyrokinesis": [
+      "alakazam",
+      "delphox",
+      "armarouge"
+    ],
+    "venamskiss": [
+      "seviper",
+      "arbok",
+      "salazzle"
+    ],
+    "heavenlywing": [
+      "pidgeot",
+      "togekiss",
+      "swanna"
+    ],
+    "uproot": [
+      "venusaur",
+      "vileplume",
+      "cradily"
+    ]
+  },
+  "additions": {
+    "multipulse": [
+      "delcatty",
+      "indeedeef",
+      "cyclizar",
+      "chatot",
+      "wyrdeer"
+    ],
+    "aquabatics": [
+      "lanturn",
+      "octillery"
+    ],
+    "feverpitch": [
+      "camerupt",
+      "blaziken",
+      "gyaradosaevian",
+      "scovillain"
+    ],
+    "thunderraid": [
+      "togedemaru",
+      "electrodehisui",
+      "eelektross",
+      "toxtricity",
+      "toxtricitylowkey"
+    ],
+    "desertsmark": [
+      "gliscor",
+      "dugtrioalola",
+      "runerigus"
+    ],
+    "superumdmove": [
+      "tinkaton",
+      "bastiodon",
+      "durant",
+      "bronzong",
+      "klinklang"
+    ],
+    "galestrike": [
+      "scrafty",
+      "sirfetchd",
+      "machamp",
+      "pawmot",
+      "darmanitan",
+      "emboar",
+      "blaziken"
+    ],
+    "spectralscream": [
+      "drifblim",
+      "sinistcha",
+      "mismagiusaevian",
+      "gengar",
+      "sinistchamasterpiece"
+    ],
+    "barbedweb": [
+      "escavalier"
+    ],
+    "coldtruth": [
+      "ninetalesalola",
+      "glaceon",
+      "jynx",
+      "rotomfrost",
+      "beartic",
+      "kyurem",
+      "kyuremwhite"
+    ],
+    "bunrakubeatdown": [
+      "beheeyem",
+      "hatterene",
+      "delphox",
+      "musharna",
+      "gardevoir",
+      "claydol",
+      "xatu",
+      "rabsca",
+      "mrrime",
+      "slowking",
+      "oranguru"
+    ],
+    "matrixshot": [
+      "tyranitar",
+      "rampardos",
+      "kleavor",
+      "kabutops",
+      "coalossal",
+      "crustle",
+      "golemalola"
+    ],
+    "pyrokinesis": [
+      "espeon",
+      "exeggutor",
+      "slowbrogalar"
+    ],
+    "venamskiss": [
+      "garbodor",
+      "toxicroak",
+      "toxtricity",
+      "toxtricitylowkey",
+      "scolipede",
+      "venusaur"
+    ],
+    "heavenlywing": [
+      "skarmory",
+      "unfezant",
+      "volcaronaaevian",
+      "dragonite"
+    ],
+    "uproot": [
+      "ludicolo",
+      "shiinotic",
+      "rotommow",
+      "froslassaevian",
+      "whimsicott"
+    ]
+  }
+}

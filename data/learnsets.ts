@@ -113186,3 +113186,17 @@ for (const [move, species] of Object.entries(YangSignatureLearnsets)) {
   Learnsets[id as ID].learnset![move as ID] = ['9L1'];
  }
 }
+
+import {RejuvenationAdvancedLearnsets} from './rejuvenation-advanced-moves';
+for (const [move, species] of Object.entries(RejuvenationAdvancedLearnsets)) {
+ for (const id of species) {
+  Learnsets[id as ID] ||= {learnset: {}};
+  Learnsets[id as ID].learnset![move as ID] = ['9L1'];
+ }
+}
+
+// Replace the unusable orphan with the approved narrow Stacking Shot roster.
+delete Learnsets.indeedeef.learnset!.stackingshot;
+for (const id of RejuvenationAdvancedLearnsets.stackingshot) {
+	Learnsets[id as ID].learnset!.furycutter ||= ['9L1'];
+}

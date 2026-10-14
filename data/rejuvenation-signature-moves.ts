@@ -29,7 +29,22 @@ export const RejuvenationSignatureMoves: MoveDataTable = {
  uproot: {num:10434,name:'Uproot',type:'Grass',category:'Special',basePower:40,accuracy:100,pp:20,priority:0,target:'adjacentFoe',flags,boosts:{spd:-2}},
 };
 export const RejuvenationSignatureLearnsets: {[id:string]: string[]} = {
- multipulse:['bewear','porygonz','silvally'],aquabatics:['primarina','floatzel','lumineon'],feverpitch:['toxtricityaevian','exploud','skeledirge'],thunderraid:['electivire','luxray','zebstrika'],desertsmark:['torterra','sandaconda','palossand'],superumdmove:['metagross','duraludon','magnezone','archaludon'],galestrike:['lucario','gallade','hawlucha'],spectralscream:['dusclops','dusknoir','mismagius','chandelure'],barbedweb:['araquanid','ariados','galvantula'],coldtruth:['walrein','froslass','cryogonal'],bunrakubeatdown:['medicham','meowsticf','mrmime'],matrixshot:['aerodactyl','gigalith','minior'],pyrokinesis:['alakazam','delphox','armarouge'],venamskiss:['seviper','arbok','salazzle'],heavenlywing:['pidgeot','togekiss','swanna'],uproot:['venusaur','vileplume','cradily'],
+ multipulse: ["bewear","porygonz","silvally","delcatty","indeedeef","cyclizar","chatot","wyrdeer"],
+ aquabatics: ["primarina","floatzel","lumineon","lanturn","octillery"],
+ feverpitch: ["toxtricityaevian","exploud","skeledirge","camerupt","blaziken","gyaradosaevian","scovillain"],
+ thunderraid: ["electivire","luxray","zebstrika","togedemaru","electrodehisui","eelektross","toxtricity","toxtricitylowkey"],
+ desertsmark: ["torterra","sandaconda","palossand","gliscor","dugtrioalola","runerigus"],
+ superumdmove: ["metagross","duraludon","magnezone","archaludon","tinkaton","bastiodon","durant","bronzong","klinklang"],
+ galestrike: ["lucario","gallade","hawlucha","scrafty","sirfetchd","machamp","pawmot","darmanitan","emboar","blaziken"],
+ spectralscream: ["dusclops","dusknoir","mismagius","chandelure","drifblim","sinistcha","mismagiusaevian","gengar","sinistchamasterpiece"],
+ barbedweb: ["araquanid","ariados","galvantula","escavalier"],
+ coldtruth: ["walrein","froslass","cryogonal","ninetalesalola","glaceon","jynx","rotomfrost","beartic","kyurem","kyuremwhite"],
+ bunrakubeatdown: ["medicham","meowsticf","mrmime","beheeyem","hatterene","delphox","musharna","gardevoir","claydol","xatu","rabsca","mrrime","slowking","oranguru"],
+ matrixshot: ["aerodactyl","gigalith","minior","tyranitar","rampardos","kleavor","kabutops","coalossal","crustle","golemalola"],
+ pyrokinesis: ["alakazam","delphox","armarouge","espeon","exeggutor","slowbrogalar"],
+ venamskiss: ["seviper","arbok","salazzle","garbodor","toxicroak","toxtricity","toxtricitylowkey","scolipede","venusaur"],
+ heavenlywing: ["pidgeot","togekiss","swanna","skarmory","unfezant","volcaronaaevian","dragonite"],
+ uproot: ["venusaur","vileplume","cradily","ludicolo","shiinotic","rotommow","froslassaevian","whimsicott"],
 };
 export const RejuvenationSignatureDescriptions: {[id:string]: {shortDesc:string,desc:string}} = {};
 const summaries: {[id:string]:string} = {

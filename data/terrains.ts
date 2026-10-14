@@ -165,7 +165,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const boostMoves = ['hex', 'mysticalfire', 'spiritbreak'];
 				const weakerboostMoves = ["aurorabeam", "bubblebeam", "chargebeam", "flashcannon", "hyperbeam", "icebeam", "magicalleaf", "mirrorbeam", "psybeam", "signalbeam"];
-				const weakBoost: string[] = ["darkpulse", "moonblast", "nightdaze"];
+				const weakBoost: string[] = ["darkpulse", "moonblast", "nightdaze", "vorpalblade"];
 				const blessedMoves = ['judgement', 'originpulse', 'purify', 'sacredfire', 'dazzlinggleam', 'flash'];
 
 				if (move.type === 'Fairy') {
@@ -441,7 +441,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const icy = ['blizzard', 'subzeroslammer'];
 				const cavern = ['powergem', 'diamondstorm'];
-				const burning = ['feverpitch', 'heatwave', 'lavaplume', 'overheat', 'incinerate', 'inferno', 'flameburst', 'firepledge', 'sacredfire'];
+				const burning = ['magmadrift', 'feverpitch', 'heatwave', 'lavaplume', 'overheat', 'incinerate', 'inferno', 'flameburst', 'firepledge', 'sacredfire'];
 				const explosive = ['blastburn', 'eruption', 'infernooverdrive', 'fusionfame', 'mindblown', 'searingshot', 'burnup'];
 				const dragonMove = ['dragonpulse', 'dragonenergy'];
 				const uberDragon = ['devastatingdrake', 'dracometeor', 'coreenforcer'];
@@ -464,7 +464,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (cavern.includes(move.id)) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
-				if (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.terrainChanges?.get('volcanicterrain') === 1)) {
+				if ((move.id !== 'magmadrift' || !this.field.moveTransitionBlocked(source, move)) && (explosive.includes(move.id) || (burning.includes(move.id) && this.field.terrainState.terrainChanges?.get('volcanicterrain') === 1))) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.isMax && (move.type === 'Dragon' || move.type === 'Fire')) {
@@ -479,7 +479,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const burning = ['feverpitch', 'heatwave', 'lavaplume', 'overheat', 'incinerate', 'inferno', 'flameburst', 'firepledge', 'sacredfire'];
+				const burning = ['magmadrift', 'feverpitch', 'heatwave', 'lavaplume', 'overheat', 'incinerate', 'inferno', 'flameburst', 'firepledge', 'sacredfire'];
 				const explosive = ['blastburn', 'eruption', 'infernooverdrive', 'fusionfame', 'mindblown', 'searingshot', 'burnup'];
 				const cavern = ['powergem', 'diamondstorm'];
 				const icy = ['blizzard', 'subzeroslammer'];
@@ -539,6 +539,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					return;
 				}
 				if (burning.includes(move.id)) {
+					if (move.id === 'magmadrift' && this.field.moveTransitionBlocked(source, move)) return;
 					if (this.field.terrainState.terrainChanges?.get('volcanicterrain') >= 1) {
 						this.add('-message', 'The cave combusted!');
 						this.field.changeTerrain('volcanicterrain');
@@ -1315,7 +1316,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const uberboost = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage', 'dragonascent', 'payday', 'lusterpurge', 'mistball'];
-				const boost = ['matrixshot', 'lavaplume', 'magmastorm', 'megakick', 'makeitrain', 'rockclimb', 'strength', 'diamondstorm', 'makeitrain', 'powergem', 'shelltrap', 'earthpower', 'stompingtantrum'];
+				const boost = ['magmadrift', 'matrixshot', 'lavaplume', 'magmastorm', 'megakick', 'makeitrain', 'rockclimb', 'strength', 'diamondstorm', 'makeitrain', 'powergem', 'shelltrap', 'earthpower', 'stompingtantrum'];
 				const terrain_change = ['glaciate', 'hydrovortex', 'oceanicoperetta', 'subzeroslammer', 'mistball'];
 				const terrain_change1 = ['muddywater', 'surf'];
 				const change = terrain_change1.includes(move.id) ? 1 : (move.id === 'sparklingaria' ? 2 : 0);
@@ -1931,12 +1932,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				const underlyingTerrain = this.field.terrainState.underlyingTerrain ||
 					this.field.terrainStack[1]?.id || this.field.terrainState.prevTerrain;
-				if (igniteMoves.includes(move.id) || (underlyingTerrain && quakeMoves.includes(move.id)) || (move.isMax && move.type === 'Fire')) {
+				if ((move.id !== 'magmadrift' || !this.field.moveTransitionBlocked(source, move)) && (igniteMoves.includes(move.id) || (underlyingTerrain && quakeMoves.includes(move.id)) || (move.isMax && move.type === 'Fire'))) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
+				if (move.id === 'magmadrift' && this.field.moveTransitionBlocked(source, move)) return;
 				if (move.id === 'infernalrage' && !(move as ActiveMove & {infernalFieldCleared?: boolean}).infernalFieldCleared) return;
 				const igniteMoves = ['infernalrage', 'burningjealousy', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'infernooverdrive', 'lavaplume', 'magmadrift', 'mindblown', 'ragingfury', 'searingshot'];
 				const quakeMoves = ['bulldoze', 'earthquake', 'fissure', 'magnitude', 'tectonicrage'];

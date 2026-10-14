@@ -944,7 +944,7 @@ export class Battle {
 			const effect = handler.effect;
 			const effectHolder = handler.effectHolder;
 			// Keep damage reactions on the category already selected for this target.
-			if ((sourceEffect as any)?.auraCategories && source instanceof Pokemon &&
+			if (((sourceEffect as any)?.auraCategories || sourceEffect?.id === 'beasthunter') && source instanceof Pokemon &&
 				this.event.target instanceof Pokemon &&
 				['DamagingHit', 'Damage', 'AfterDamage', 'AfterDamageApplied', 'AfterSubDamage', 'TryPrimaryHit'].includes(eventid)) {
 				const targetMove = adaptiveMoveView(sourceEffect as ActiveMove, source, this.event.target);
@@ -1485,6 +1485,10 @@ export class Battle {
 	}
 
 	checkMoveBypassesProtect(move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus = true) {
+		if (move.id === 'beasthunter' && !move.isZ && !move.isMax) {
+			defender.getMoveHitData(move).bypassProtect = true;
+			return true;
+		}
 		if (move.breaksProtect) {
 			defender.getMoveHitData(move).bypassProtect = true;
 			return true;

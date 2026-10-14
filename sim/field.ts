@@ -409,6 +409,11 @@ export class Field {
 		this.restoreFormatHail();
 	}
 
+	/** Read-only lock check for power granted by a Cave/Icy move transition. */
+	moveTransitionBlocked(source: Pokemon, move: ActiveMove) {
+		return this.neutralizingTerrainEffects() || !!this.pulseBlockadeHolder(source, move);
+	}
+
 	private pulseBlockadeHolder(source: Pokemon | 'debug' | null, sourceEffect: Effect | null) {
 		for (const pokemon of this.battle.getAllActive()) {
 			if (!pokemon.hp || !pokemon.isActive || !pokemon.hasAbilityOrPassive('pulseblockade') ||
