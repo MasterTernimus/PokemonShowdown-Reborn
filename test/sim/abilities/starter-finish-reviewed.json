@@ -211,6 +211,33 @@
     ],
     "kommoo": [
       "overcoat"
+    ],
+    "wigglytuff": [
+      "fluffy"
+    ],
+    "lurantis": [
+      "solarmimicry"
+    ],
+    "spiritomb": [
+      "mourningvessel"
+    ],
+    "dewgong": [
+      "polarrest"
+    ],
+    "walrein": [
+      "glacierbreaker"
+    ],
+    "roserade": [
+      "beguilingbouquet"
+    ],
+    "roserademega": [
+      "beguilingbouquet"
+    ],
+    "scolipede": [
+      "merciless"
+    ],
+    "scolipedeazzy": [
+      "merciless"
     ]
   },
   "slots": {
@@ -452,6 +479,21 @@
       "0": "Bottomless Gullet",
       "1": "Dive Fisher",
       "H": "Scatterbrain"
+    },
+    "wigglytuff": {
+      "0": "Cushion Chorus",
+      "1": "Reinflate",
+      "H": "Perfect Apple"
+    },
+    "spiritomb": {
+      "0": "Keystone Seal",
+      "1": "Bound Spirits",
+      "H": "Pressure"
+    },
+    "decidueye": {
+      "0": "Fallen Star",
+      "1": "Long Reach",
+      "H": "Canopy Archer"
     }
   }
 }

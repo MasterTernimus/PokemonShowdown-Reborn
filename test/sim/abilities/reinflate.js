@@ -25,7 +25,7 @@ describe('Reinflate', function () {
   const [p] = setup();
   assert.deepEqual(p.species.baseStats, {hp:150, atk:50, def:70, spa:110, spd:80, spe:45});
   assert.equal(p.species.bst, 505);
-  assert.deepEqual(p.species.abilities, {0:'Fluffy',1:'Reinflate',H:'Punk Rock'});
+  assert.deepEqual(p.species.abilities, {0:'Cushion Chorus',1:'Reinflate',H:'Perfect Apple'});
   assert(battle.dex.species.getLearnsetData('wigglytuff').learnset.roar.length);
  });
  it('heals after the complete multihit move and only once per turn', () => {
@@ -33,19 +33,19 @@ describe('Reinflate', function () {
   battle.onEvent('DamagingHit', battle.format, () => during.push(p.hp));
   use(p,t,{multihit:3});
   assert.deepEqual(during,[hp,hp,hp]);
-  assert.equal(p.hp,hp+Math.floor(p.maxhp/8));
-  use(p,t); assert.equal(p.hp,hp+Math.floor(p.maxhp/8));
-  battle.turn++; use(p,t); assert.equal(p.hp,hp+2*Math.floor(p.maxhp/8));
+  assert.equal(p.hp,hp+Math.floor(p.maxhp/4));
+  use(p,t); assert.equal(p.hp,hp+Math.floor(p.maxhp/4));
+  battle.turn++; use(p,t); assert.equal(p.hp,hp+2*Math.floor(p.maxhp/4));
  });
  it('retains Torch Song boost and heals once', () => {
   const [p,t]=setup(),hp=p.hp; use(p,t,{},'torchsong');
-  assert.equal(p.boosts.spa,1); assert.equal(p.hp,hp+Math.floor(p.maxhp/8));
+  assert.equal(p.boosts.spa,1); assert.equal(p.hp,hp+Math.floor(p.maxhp/4));
  });
  it('heals once for Boomburst damaging all three FFA foes', () => {
   const [p,t]=setup('gen9freeforall4pmistyfieldadrienn'), hp=p.hp;
   const foes=[battle.p2.active[0],battle.p3.active[0],battle.p4.active[0]], before=foes.map(f=>f.hp);
   use(p,t,{target:'allAdjacent'});
-  assert(foes.every((f,i)=>f.hp<before[i])); assert.equal(p.hp,hp+Math.floor(p.maxhp/8));
+  assert(foes.every((f,i)=>f.hp<before[i])); assert.equal(p.hp,hp+Math.floor(p.maxhp/4));
  });
  for(const mode of ['miss','protect','immune','soundproof','substitute','nonsound','delayed','self','suppressed','healblock']) {
   it('does not heal from '+mode,()=>{

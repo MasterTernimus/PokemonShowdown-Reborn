@@ -4683,3 +4683,9 @@ AbilitiesText.gulpmissile.desc += ' Species passive on all three Cramorant forms
 
 import {CramorantGoodraKommoDescriptions} from '../cramorant-goodra-kommo-approved';
 for (const [id,text] of Object.entries(CramorantGoodraKommoDescriptions)) AbilitiesText[id as ID] = text;
+
+import {LostFourDescriptions} from '../lost-four-approved';
+for (const [id,text] of Object.entries(LostFourDescriptions)) AbilitiesText[id as ID] = text;
+
+import {ConciseAbilityDescriptions} from '../concise-ability-descriptions';
+for (const [id,text] of Object.entries(ConciseAbilityDescriptions)) Object.assign(AbilitiesText[id as ID] ||= {name:id}, text);

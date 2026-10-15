@@ -86,6 +86,33 @@
     ],
     "gyarados": [
       "intimidate"
+    ],
+    "wigglytuff": [
+      "fluffy"
+    ],
+    "lurantis": [
+      "solarmimicry"
+    ],
+    "spiritomb": [
+      "mourningvessel"
+    ],
+    "dewgong": [
+      "polarrest"
+    ],
+    "walrein": [
+      "glacierbreaker"
+    ],
+    "roserade": [
+      "beguilingbouquet"
+    ],
+    "roserademega": [
+      "beguilingbouquet"
+    ],
+    "scolipede": [
+      "merciless"
+    ],
+    "scolipedeazzy": [
+      "merciless"
     ]
   },
   "abilities": {
@@ -194,6 +221,21 @@
       "0": "Adaptability",
       "1": "Dissonant Echo",
       "H": "Storm Power"
+    },
+    "wigglytuff": {
+      "0": "Cushion Chorus",
+      "1": "Reinflate",
+      "H": "Perfect Apple"
+    },
+    "spiritomb": {
+      "0": "Keystone Seal",
+      "1": "Bound Spirits",
+      "H": "Pressure"
+    },
+    "decidueye": {
+      "0": "Fallen Star",
+      "1": "Long Reach",
+      "H": "Canopy Archer"
     }
   }
 }

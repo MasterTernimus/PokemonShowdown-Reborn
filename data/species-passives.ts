@@ -1115,4 +1115,18 @@ for (const id of ['cramorant','cramorantgulping','cramorantgorging']) SpeciesPas
 ThematicPassiveIds.add('gulpmissile');
 SpeciesPassives.goodra = Object.freeze(['thickfat']);
 SpeciesPassives.kommoo = Object.freeze(['overcoat']);
+SpeciesPassives.wigglytuff = Object.freeze(['fluffy']);
+SpeciesPassives.lurantis = Object.freeze(['solarmimicry']);
+SpeciesPassives.spiritomb = Object.freeze(['mourningvessel']);
+ThematicPassiveIds.add('fluffy');
+ThematicPassiveIds.add('solarmimicry');
+ThematicPassiveIds.add('mourningvessel');
+SpeciesPassives.dewgong = Object.freeze(['polarrest']);
+SpeciesPassives.walrein = Object.freeze(['glacierbreaker']);
+ThematicPassiveIds.add('polarrest');
+ThematicPassiveIds.add('glacierbreaker');
+for(const id of ['roserade','roserademega']) SpeciesPassives[id] = Object.freeze(['beguilingbouquet']);
+for(const id of ['scolipede','scolipedeazzy']) SpeciesPassives[id] = Object.freeze(['merciless']);
+ThematicPassiveIds.add('beguilingbouquet');
+ThematicPassiveIds.add('merciless');
 Object.freeze(SpeciesPassives);

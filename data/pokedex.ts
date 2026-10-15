@@ -24545,3 +24545,7 @@ Pokedex.staraptormega.baseStats!.spe = 110;
 
 for (const id of ['cramorant','cramorantgulping','cramorantgorging'] as const) Pokedex[id].abilities = {0:'Bottomless Gullet',1:'Dive Fisher',H:'Scatterbrain'};
 Pokedex.kommoo.abilities!.H = 'Scale Rhythm';
+
+Pokedex.wigglytuff.abilities = {0:'Cushion Chorus',1:'Reinflate',H:'Perfect Apple'};
+Pokedex.decidueye.abilities!.H = 'Canopy Archer';
+Pokedex.spiritomb.abilities = {0:'Keystone Seal',1:'Bound Spirits',H:'Pressure'};

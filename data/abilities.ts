@@ -21587,3 +21587,6 @@ installGarchompPoise(Abilities);
 
 import {installCramorantGoodraKommo} from './cramorant-goodra-kommo-approved';
 installCramorantGoodraKommo(Abilities);
+
+import {installLostFour} from './lost-four-approved';
+installLostFour(Abilities);

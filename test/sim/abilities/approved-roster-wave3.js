@@ -37,7 +37,7 @@ describe('Approved third roster pass', () => {
 	}
 	it('assigns retained components and removes discarded components without changing Gardevoir', () => {
 		for (const [species, ability, component] of [
-			['Hariyama', 'Palm Mastery', 'Thick Fat'], ['Electivire', 'Galvanic Spirit', 'Vital Spirit'],
+			['Hariyama', 'Thick Fat', 'Thick Fat'], ['Electivire', 'Galvanic Spirit', 'Vital Spirit'],
 			['Magmortar', 'Blast Chamber', 'Vital Spirit'], ['Galvantula', 'Silk Sights', 'Compound Eyes'],
 			['Ferrothorn', 'Barb Harvest', 'Iron Barbs'], ['Eelektross', 'Current Coil', 'Swift Swim'],
 			['Goodra', 'Toxic Serenity', 'Poison Heal'], ['Drednaw', 'River Shell', 'Shell Armor'],
@@ -46,6 +46,7 @@ describe('Approved third roster pass', () => {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));
 			assert(abilityIncludesComponent(ability, component));
 		}
+		assert.deepEqual(Dex.species.get('Hariyama').passives, ['palmmastery']);
 		assert(abilityIncludesComponent('Storm Circuit', 'Current Coil'));
 		assert(abilityIncludesComponent('Storm Circuit', 'Swift Swim'));
 		assert(!abilityIncludesComponent('Venom Bastion', 'Merciless'));
@@ -96,24 +97,20 @@ describe('Approved third roster pass', () => {
 		foe.removeVolatile('protect'); hit('focusblast', p, foe);
 		assert.equal(modify('fireblast', p, foe).accuracy, true);
 	});
-	it('Venom Spurs spends its defense-drop charge before a real Bug hit, not Protect or Substitute', () => {
-		const [p, , foe] = make('Venom Spurs');
-		hit('poisonsting', p, foe); assert(p.abilityState.charged);
-		foe.addVolatile('protect', foe); hit('bugbite', p, foe);
-		assert(p.abilityState.charged); assert.equal(foe.boosts.def, 0);
-		foe.removeVolatile('protect'); foe.addVolatile('substitute', foe); hit('bugbite', p, foe);
-		assert(p.abilityState.charged); assert.equal(foe.boosts.def, 0);
-		foe.removeVolatile('substitute'); hit('bugbite', p, foe);
-		assert(!p.abilityState.charged); assert.equal(foe.boosts.def, -1);
-	});
-	it('Last Brood creates a free eighth-HP Substitute only once in the battle', () => {
+	it('Venom Spurs replaces its charge with Bug poison and Corrosion', () => {
+ const [p, , foe] = make('Venom Spurs');
+ const move=modify('bugbite',p,foe);
+ assert(p.hasAbility('corrosion'));assert(move.secondaries.some(s=>s.status==='psn'&&s.chance===30));
+ foe.setAbility('Shield Dust');hit('poisonsting',p,foe);assert(!p.abilityState.charged);assert.equal(foe.boosts.def,0);
+ });
+	it('Last Brood creates a free quarter-HP Substitute once per entry', () => {
 		const [p, , foe] = make('Last Brood');
 		p.hp = Math.floor(p.maxhp / 2) + 10;
 		const before = p.hp;
 		hit('seismictoss', foe, p);
 		assert.equal(p.hp, before - 100);
-		assert.equal(p.volatiles.substitute.hp, Math.floor(p.maxhp / 8));
-		assert(p.m.lastBroodUsed);
+		assert.equal(p.volatiles.substitute.hp, Math.floor(p.maxhp / 4));
+		assert(p.m.lastBroodSpent);
 		p.removeVolatile('substitute'); p.hp = before;
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		hit('seismictoss', foe, p); assert(!p.volatiles.substitute);
@@ -213,6 +210,8 @@ describe('Approved third roster pass', () => {
 	});
 	it('Hidden Scroll can affect both foes and respects Magic Bounce on the second', () => {
 		const [p, , foe, other] = make('Hidden Scroll'); other.setAbility('Magic Bounce');
+		// Isolate reflection from Mew's Synchronize passive, which would poison the reflector afterward.
+		p.setSpecies(Dex.species.get('Delphox'));
 		hit('toxic', p, foe);
 		assert.equal(foe.status, 'tox'); assert.equal(other.status, ''); assert.equal(p.status, 'tox');
 	});

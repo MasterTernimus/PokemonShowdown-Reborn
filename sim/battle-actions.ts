@@ -2404,6 +2404,10 @@ export class BattleActions {
 
 		// weather modifier
 		baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+		if ([pokemon, target].some(p => p.hasAbilityOrPassive('solarmimicry') && p.effectiveWeather() === 'sunnyday')) {
+			if (move.type === 'Fire' || move.id === 'hydrosteam') baseDamage = this.battle.modify(baseDamage, 1.5);
+			else if (move.type === 'Water') baseDamage = this.battle.modify(baseDamage, 0.5);
+		}
 
 		// crit - not a modifier
 		const isCrit = target.getMoveHitData(move).crit;

@@ -887,3 +887,19 @@ AbilityComponents.pyrousdominion = ['pressure'];
 AbilityComponents.bottomlessgullet = ['gluttony','cheekpouch'];
 AbilityComponents.divefisher = ['waterveil'];
 AbilityComponents.scatterbrain = ['oblivious','unaware'];
+
+AbilityComponents.reinflate = ['punkrock'];
+AbilityComponents.cushionchorus = ['friendguard','aromaveil'];
+AbilityComponents.perfectapple = ['purepower','selfsufficient','angershell'];
+AbilityComponents.boundspirits = ['prankster','magicguard'];
+AbilityComponents.keystoneseal = ['cursedbody'];
+
+AbilityComponents.polarrest = ['earlybird', 'icebody'];
+AbilityComponents.glacierbreaker = ['moldbreaker'];
+AbilityComponents.deepchill = ['oblivious', 'intimidate'];
+
+AbilityComponents.accumulation = [...(AbilityComponents.accumulation || []), 'thickfat'];
+
+AbilityComponents.beguilingbouquet = ['aromaveil'];
+AbilityComponents.venomspurs = ['corrosion'];
+AbilityComponents.lastbrood = ['swarm'];

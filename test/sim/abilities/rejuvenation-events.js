@@ -48,15 +48,15 @@ it('Deep Chill retains Oblivious and lowers Speed only after the whole Physical 
 		hit(t, p, 'tackle', { damage: 20 });
 		assert.equal(t.boosts.spe, -1);
 	});
-it('Deep Chill ignores Special, ally and Substitute-only damage', () => {
+it('Deep Chill includes Special but ignores ally and Substitute-only damage', () => {
 		const [p, t, ally] = setup('Deep Chill', 'Mew', true);
 		hit(t, p, 'watergun', { damage: 20 });
 		hit(ally, p, 'tackle', { damage: 20 });
-		assert.equal(t.boosts.spe, 0);
+		assert.equal(t.boosts.spe, -1);
 		assert.equal(ally.boosts.spe, 0);
 		p.addVolatile('substitute', p);
 		hit(t, p, 'tackle', { damage: 20 });
-		assert.equal(t.boosts.spe, 0);
+		assert.equal(t.boosts.spe, -1);
 	});
 it('Venams Kiss hits and poisons Steel, respects other typing and caps drain', () => {
 		const [p, t] = setup("Venam's Kiss");

@@ -196,6 +196,7 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 // The legacy identity registry is not always an exact implementation summary.
 // Burning Crown uses flat damage reduction, not Filter; its other delegates remain active.
 const DisplayComponentOverrides: {[id: string]: string[]} = {
+ mourningvessel: [],
  burningrage: ['proficient', 'bruteforce', 'ironfist', 'moldbreaker'],
  // These packages retain custom effects; Includes names only their full components.
  astralwatcher: ['frisk'],

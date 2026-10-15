@@ -1049,5 +1049,67 @@
       "1": "Soundproof",
       "H": "Scale Rhythm"
     }
+  },
+  "wigglytuff": {
+    "passives": [
+      "fluffy"
+    ],
+    "abilities": {
+      "0": "Cushion Chorus",
+      "1": "Reinflate",
+      "H": "Perfect Apple"
+    }
+  },
+  "lurantis": {
+    "passives": [
+      "solarmimicry"
+    ]
+  },
+  "spiritomb": {
+    "passives": [
+      "mourningvessel"
+    ],
+    "abilities": {
+      "0": "Keystone Seal",
+      "1": "Bound Spirits",
+      "H": "Pressure"
+    }
+  },
+  "dewgong": {
+    "passives": [
+      "polarrest"
+    ]
+  },
+  "walrein": {
+    "passives": [
+      "glacierbreaker"
+    ]
+  },
+  "roserade": {
+    "passives": [
+      "beguilingbouquet"
+    ]
+  },
+  "roserademega": {
+    "passives": [
+      "beguilingbouquet"
+    ]
+  },
+  "scolipede": {
+    "passives": [
+      "merciless"
+    ]
+  },
+  "scolipedeazzy": {
+    "passives": [
+      "merciless"
+    ]
+  },
+  "decidueye": {
+    "abilities": {
+      "0": "Fallen Star",
+      "1": "Long Reach",
+      "H": "Canopy Archer"
+    }
   }
 }

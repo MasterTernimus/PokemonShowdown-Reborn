@@ -1868,3 +1868,6 @@ Conditions.steelwingescortentry = {
 };
 
 Conditions.voidomenchargespent = {name: 'voidomenchargespent', noCopy: true};
+
+import {installLostFourConditions} from './lost-four-approved';
+installLostFourConditions(Conditions);

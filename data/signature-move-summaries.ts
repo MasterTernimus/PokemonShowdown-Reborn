@@ -14,7 +14,7 @@ export const SignatureMoveSummaries: {[id: string]: string} = {
 	spectralscream: 'Adaptive (Special on ties); heals 25% of damage dealt.',
 	barbedweb: 'Adaptive; binds for 4 turns; 30% poison.',
 	coldtruth: 'Torments after damaging opposing HP.',
-	bunrakubeatdown: 'Adaptive; 80 +15 per fainted ally (max 155); bypasses Sub.',
+	bunrakubeatdown: 'Adaptive; 80 +15 per fainted ally (max 140); bypasses Sub.',
 	matrixshot: 'Uses Attack against Sp. Def.',
 	pyrokinesis: '30% chance to burn.',
 	venamskiss: 'Super effective on Steel; 30% poison, even Steel/Poison.',

@@ -3959,3 +3959,9 @@ Object.assign(AbilityDescriptionOverrides, GarchompPoiseDescriptions);
 
 import {CramorantGoodraKommoDescriptions} from './cramorant-goodra-kommo-approved';
 Object.assign(AbilityDescriptionOverrides, CramorantGoodraKommoDescriptions);
+
+import {LostFourDescriptions} from './lost-four-approved';
+Object.assign(AbilityDescriptionOverrides, LostFourDescriptions);
+
+import {ConciseAbilityDescriptions} from './concise-ability-descriptions';
+Object.assign(AbilityDescriptionOverrides, ConciseAbilityDescriptions);

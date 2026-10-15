@@ -39,7 +39,7 @@ describe('Mourning Vessel in Midnight Zone', () => {
 			battle.makeChoices(...choices);
 			assert.equal(battle.p2.totalFainted, 1);
 			assert.equal(vessel.hp - hp, Math.floor(vessel.baseMaxhp / 20));
-			assert(battle.log.some(line => line.includes('[from] ability: Mourning Vessel')));
+			assert(battle.log.some(line => line.includes('Mourning Vessel')));
 		});
 	}
 

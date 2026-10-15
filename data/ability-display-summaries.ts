@@ -707,3 +707,9 @@ for (const [id,text] of Object.entries(GarchompPoiseDescriptions)) AbilityDispla
 
 import {CramorantGoodraKommoDescriptions} from './cramorant-goodra-kommo-approved';
 for (const [id,text] of Object.entries(CramorantGoodraKommoDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {LostFourDescriptions} from './lost-four-approved';
+for (const [id,text] of Object.entries(LostFourDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {ConciseAbilityDescriptions} from './concise-ability-descriptions';
+for (const [id,text] of Object.entries(ConciseAbilityDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;

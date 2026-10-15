@@ -948,6 +948,8 @@ export class Battle {
 			}
 			const effect = handler.effect;
 			const effectHolder = handler.effectHolder;
+			if (eventid === 'WeatherModifyDamage' && effect.effectType === 'Weather' &&
+				[target, source].some(p => p instanceof Pokemon && p.hasAbilityOrPassive('solarmimicry') && p.effectiveWeather() === 'sunnyday')) continue;
 			// Keep damage reactions on the category already selected for this target.
 			if (((sourceEffect as any)?.auraCategories || ['beasthunter', 'attackorder'].includes(sourceEffect?.id || '')) && source instanceof Pokemon &&
 				this.event.target instanceof Pokemon &&

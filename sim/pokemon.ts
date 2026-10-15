@@ -2544,6 +2544,7 @@ export class Pokemon {
 	 * the Utility Umbrella is active for the Pokemon.
 	 */
 	effectiveWeather(message?: string | boolean) {
+		if (this.hasAbilityOrPassive('solarmimicry') && !this.hasItem('utilityumbrella') && !this.battle.field.suppressingWeather()) return 'sunnyday' as ID;
 		const weather = this.battle.field.effectiveWeather();
 		switch (weather) {
 		case 'sunnyday':
@@ -2588,6 +2589,8 @@ export class Pokemon {
 			this.abilityState.resisted = true;
 			return -1;
 		}
+		if (this.hasAbilityOrPassive('solarmimicry') && !this.hasType('Bug') && this.battle.dex.getEffectiveness(move.type, 'Bug') < 0) totalTypeMod--;
+		if (this.hasAbility('canopyarcher') && !this.battle.suppressingAbility(this) && !this.hasType('Flying') && this.battle.dex.getEffectiveness(move.type, 'Flying') < 0) totalTypeMod--;
 		return totalTypeMod;
 	}
 

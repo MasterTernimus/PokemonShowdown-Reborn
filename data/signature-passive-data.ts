@@ -40,3 +40,8 @@ export const SignaturePassiveDescriptions: { [id: string]: { shortDesc: string, 
 };
 
 SignaturePassiveComponents.bonewarrior = ['battlearmor'];
+
+SignaturePassiveComponents.polarrest = ['earlybird', 'icebody'];
+SignaturePassiveComponents.glacierbreaker = ['moldbreaker'];
+
+SignaturePassiveComponents.beguilingbouquet = ['aromaveil'];
