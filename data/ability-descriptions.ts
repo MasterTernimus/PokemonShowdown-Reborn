@@ -3965,3 +3965,26 @@ Object.assign(AbilityDescriptionOverrides, LostFourDescriptions);
 
 import {ConciseAbilityDescriptions} from './concise-ability-descriptions';
 Object.assign(AbilityDescriptionOverrides, ConciseAbilityDescriptions);
+
+AbilityDescriptionOverrides.racingspirit = {shortDesc:'Rock Head + Limber.',desc:'Rock Head + Limber: prevents move recoil except Struggle; prevents and cures paralysis and blocks opposing Speed drops. Crash damage, Life Orb and self-inflicted Speed costs still apply.'};
+
+import {AlcremieDescriptions} from './alcremie-approved';
+Object.assign(AbilityDescriptionOverrides,AlcremieDescriptions);
+
+AbilityDescriptionOverrides.matriarchsvigil = NidoDescriptions.matriarchsvigil;
+
+AbilityDescriptionOverrides.tirelessmuscle = {"shortDesc":"Inner Focus; end-turn heals 1/16 HP after surviving opposing attack HP damage.","desc":"Full local Inner Focus prevents flinching and Intimidate Attack drops. At the end of a turn in which it survived opposing direct damaging-move HP damage, heals 1/16 max HP once. Recoil, allied attacks, Substitute-only hits and residual damage do not qualify. Normal healing modifiers and Heal Block apply."};
+
+import {FossilDescriptions} from './fossil-drain-approved';
+Object.assign(AbilityDescriptionOverrides,FossilDescriptions);
+
+AbilityDescriptionOverrides.crystalward = {"shortDesc":"Blocks opposing ball/bomb moves for itself and adjacent allies.","desc":"Opposing ball/bomb moves cannot hit this Pokemon or adjacent active allies. Uses the ball/bomb move classification only, without other Bulletproof effects. Allied Pollen Puff still works. Protection ends when the holder leaves, faints or is suppressed, and respects Mold Breaker and Ability Shield."};
+
+AbilityDescriptionOverrides.agonyflame.desc = "After a damaging Fire move finishes, burns each surviving active opponent that lost HP and applies Heal Block for 2 turns including the current turn. Normal status protections apply. A longer Heal Block is not shortened. A target already burned by the move is not burned again after a curing Berry. Protected, immune, Substitute-only, allied, self and delayed damage do not qualify. As a species passive it remains active under ability suppression.";
+
+AbilityDescriptionOverrides.barbharvest = {"shortDesc":"Suction Cups; removes own-side Stealth Rock before taking entry damage.","desc":"Full local Suction Cups. On each genuine switch-in, absorbs and removes Stealth Rock from its own side before it causes entry damage. Other hazards remain. No healing, stat boost, berry restoration or embedded Iron Barbs. Ability restarts do not activate it, and suppression prevents removal. Iron Barbs is its separate species passive."};
+
+AbilityDescriptionOverrides.rimeboundspirit = {"shortDesc":"Heatproof; immune to wind moves. No Wind Rider boosts.","desc":"Full local Heatproof halves incoming Fire attack power and burn damage, retaining its field interactions. Immune to wind-flagged moves targeting it, including its part of a spread move. No Attack boosts, Tailwind triggers or Delta Stream boosts. It is grounded without Levitate. As a species passive it persists through selected-ability suppression; Mold Breaker can bypass its breakable effects."};
+
+import {StunfiskDescriptions} from './stunfisk-approved';
+Object.assign(AbilityDescriptionOverrides,StunfiskDescriptions);

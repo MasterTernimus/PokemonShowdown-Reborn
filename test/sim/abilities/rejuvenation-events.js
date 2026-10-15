@@ -154,6 +154,11 @@ it('preserves committed move sources outside explicit rampage, Accumulation and 
   if (file.endsWith('/text/moves.ts')) text = text.replace("\nMovesText.drakefang = {name: 'Drake Fang', shortDesc: 'Dragon-type biting attack; 50% chance to badly poison.', desc: '85-power physical Dragon-type biting contact attack with 100% accuracy and 15 PP. Has a 50% chance to badly poison the target. Uses ordinary Dragon effectiveness: Fairy immunity and Steel resistance apply. Mega Seviper converts its Poison Fang slot into this move while preserving PP; Sirius supplies its separately described signature and Strong Jaw multipliers.'};\n", '');
   if (file.endsWith('/text/moves.ts')) text = text.replace("\nimport {FinisherMoveDescriptions} from '../finisher-moves-approved';\nfor (const [id,text] of Object.entries(FinisherMoveDescriptions)) MovesText[id as ID] = text;\n", '');
   if (file.endsWith('/moves.ts')) {
+   // Approved Pledge fix changes only the field-creation source to the triggering user.
+   for (const id of ['firepledge','waterpledge','grasspledge']) {
+    const start=text.indexOf('\n\t'+id+': {'),end=text.indexOf('\n\t},',start)+5;
+    text=text.slice(0,start)+text.slice(start,end).replace(/setTerrain\('(rainbowterrain|burningterrain|swampterrain)', source, move\)/g, "setTerrain('$1', null, move)")+text.slice(end);
+   }
    text = text.replace("attacker.hasAbilityOrPassive('gulpmissile')", "attacker.hasAbility('gulpmissile')");
    text = text.replace("\nimport {installFinisherMoves} from './finisher-moves-approved';\ninstallFinisherMoves(Moves);\n", '');
    text = text.replace("\nimport {installStarterFinishMoves} from './starter-finish-approved';\ninstallStarterFinishMoves(Moves);\n", '');

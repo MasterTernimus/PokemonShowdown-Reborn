@@ -45,3 +45,11 @@ SignaturePassiveComponents.polarrest = ['earlybird', 'icebody'];
 SignaturePassiveComponents.glacierbreaker = ['moldbreaker'];
 
 SignaturePassiveComponents.beguilingbouquet = ['aromaveil'];
+
+SignaturePassiveComponents.guidinggallop = ['pastelveil'];
+
+SignaturePassiveComponents.racingspirit = ['rockhead','limber'];
+
+SignaturePassiveComponents.tirelessmuscle = ['innerfocus'];
+
+SignaturePassiveComponents.rimeboundspirit = ['heatproof'];

@@ -123,7 +123,7 @@
       "fairyring"
     ],
     "rapidashgalar": [
-      "pastelveil"
+      "guidinggallop"
     ],
     "alakazam": [
       "revealinggaze"
@@ -238,6 +238,42 @@
     ],
     "scolipedeazzy": [
       "merciless"
+    ],
+    "rapidash": [
+      "racingspirit"
+    ],
+    "parasectmega": [
+      "mycelialbond"
+    ],
+    "victreebel": [
+      "digestivesap"
+    ],
+    "laprasazzy": [
+      "liquidvoice"
+    ],
+    "lanturnalt": [
+      "illuminate"
+    ],
+    "poliwrath": [
+      "tirelessmuscle"
+    ],
+    "ninetalesalola": [
+      "crystalward"
+    ],
+    "houndoom": [
+      "agonyflame"
+    ],
+    "houndoommega": [
+      "agonyflame"
+    ],
+    "golurk": [
+      "aftermath"
+    ],
+    "ferrothorn": [
+      "ironbarbs"
+    ],
+    "froslassmega": [
+      "rimeboundspirit"
     ]
   },
   "slots": {
@@ -494,6 +530,98 @@
       "0": "Fallen Star",
       "1": "Long Reach",
       "H": "Canopy Archer"
+    },
+    "rapidash": {
+      "0": "Fire Mane",
+      "1": "Speed Boost",
+      "H": "Flame Body"
+    },
+    "nidoking": {
+      "0": "Royal Decree",
+      "1": "Sheer Force",
+      "H": "Royal Onslaught"
+    },
+    "victreebel": {
+      "0": "Chlorophyll",
+      "1": "Corrosion",
+      "H": "Baited Bloom"
+    },
+    "alcremie": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "laprasazzy": {
+      "0": "Safe Harbor",
+      "1": "Ocean Lullaby",
+      "H": "Ice Scales"
+    },
+    "lanturnalt": {
+      "0": "Abyss Lure",
+      "1": "Drizzle",
+      "H": "Guiding Light"
+    },
+    "alcremierubycream": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "alcremiematchacream": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "alcremiemintcream": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "alcremielemoncream": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "alcremiesaltedcream": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "alcremierubyswirl": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "alcremiecaramelswirl": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "alcremierainbowswirl": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    },
+    "kabutops": {
+      "0": "Swift Swim",
+      "1": "Sharpness",
+      "H": "Blood Sickle"
+    },
+    "omastar": {
+      "0": "Swift Swim",
+      "1": "Mega Launcher",
+      "H": "Grasping Current"
+    },
+    "houndoom": {
+      "0": "Flash Fire",
+      "1": "Infiltrator",
+      "H": "Battle Fervor"
+    },
+    "ferrothorn": {
+      "0": "Mineral Grip",
+      "1": "Filter",
+      "H": "Rooted Iron"
+    },
+    "stunfisk": {
+      "0": "Livewire Trap",
+      "1": "Mudflat Dynamo",
+      "H": "Earth Eater",
+      "S": "Adaptive Cycle"
+    },
+    "stunfiskgalar": {
+      "0": "Iron Clamp",
+      "1": "Baited Counter",
+      "S": "Adaptive Cycle"
     }
   }
 }

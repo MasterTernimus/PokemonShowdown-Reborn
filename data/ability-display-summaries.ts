@@ -713,3 +713,24 @@ for (const [id,text] of Object.entries(LostFourDescriptions)) AbilityDisplaySumm
 
 import {ConciseAbilityDescriptions} from './concise-ability-descriptions';
 for (const [id,text] of Object.entries(ConciseAbilityDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+AbilityDisplaySummaries.racingspirit = 'Rock Head + Limber.';
+
+import {AlcremieDescriptions} from './alcremie-approved';
+for(const[id,text]of Object.entries(AlcremieDescriptions)) AbilityDisplaySummaries[id]=text.shortDesc;
+
+AbilityDisplaySummaries.matriarchsvigil = NidoDescriptions.matriarchsvigil.shortDesc;
+
+AbilityDisplaySummaries.tirelessmuscle = "Inner Focus; end-turn heals 1/16 HP after surviving opposing attack HP damage.";
+
+import {FossilDescriptions} from './fossil-drain-approved';
+for(const[id,text]of Object.entries(FossilDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+AbilityDisplaySummaries.crystalward = "Blocks opposing ball/bomb moves for itself and adjacent allies.";
+
+AbilityDisplaySummaries.barbharvest = "Suction Cups; removes own-side Stealth Rock before taking entry damage.";
+
+AbilityDisplaySummaries.rimeboundspirit = "Heatproof; immune to wind moves. No Wind Rider boosts.";
+
+import {StunfiskDescriptions} from './stunfisk-approved';
+for(const[id,text]of Object.entries(StunfiskDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;

@@ -2726,6 +2726,8 @@ export class Battle {
 		case 'scripted':
 		case 'normal':
 			return isAdjacent;
+		case 'normalOrSelf':
+			return isAdjacent || isSelf;
 		case 'adjacentAlly':
 			return isAdjacent && !isFoe;
 		case 'adjacentAllyOrSelf':
@@ -2744,6 +2746,7 @@ export class Battle {
 
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon) {
 		move = this.dex.moves.get(move);
+		if (move.id === 'decorate' && pokemon.hasAbility('masterpatissier')) move = {...move, target:'normalOrSelf'};
 		if (['followme', 'ragepowder'].includes(move.id)) {
 			if (this.gameType !== 'freeforall') return pokemon;
 			const selectedTarget = pokemon.getAtLoc(targetLoc);

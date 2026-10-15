@@ -20,7 +20,7 @@ describe('Approved Grappling Claws, Lapras and Yanmega changes', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('keeps Relic Armor and all distinct Lapras forms unchanged', () => {
 		assert.deepEqual(Dex.species.get('armaldo').passives, ['relicarmor']);
-		for (const [id, p] of Object.entries({ lapras: ['liquidvoice'], laprasazzy: ['hydration'], laprasgmax: ['hydration'], laprasaevian: ['relicarmor'], laprasaeviangmax: [], yanmega: ['levitate'] })) assert.deepEqual(Dex.species.get(id).passives, p, id);
+		for (const [id, p] of Object.entries({ lapras: ['liquidvoice'], laprasazzy: ['liquidvoice'], laprasgmax: ['hydration'], laprasaevian: ['relicarmor'], laprasaeviangmax: [], yanmega: ['levitate'] })) assert.deepEqual(Dex.species.get(id).passives, p, id);
 	});
 	it('uses full local Tough Claws on contact moves, without boosting noncontact moves', () => {
 		const [p, q] = setup();

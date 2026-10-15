@@ -113222,3 +113222,5 @@ for (const data of Object.values(Learnsets)) {
  moves.mudbarrage = [...new Set([...(moves.mudbarrage || []), ...moves.mudslap])];
  delete moves.mudslap;
 }
+
+for (const [cosmetic,base] of [['laprasazzy','lapras'],['lanturnalt','lanturn']]) Learnsets[cosmetic as ID] = {...Learnsets[base as ID], learnset:{...Learnsets[base as ID].learnset}};

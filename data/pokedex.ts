@@ -24447,7 +24447,7 @@ Pokedex.zoroark.abilities![0] = 'Perfect Illusion';
 Pokedex.zoroarkhisui.abilities![0] = 'Perfect Illusion';
 Pokedex.meowscarada.abilities!['H'] = 'Perfect Illusion';
 
-Pokedex.nidoking.abilities!['H'] = "Patriarch's Wrath";
+Pokedex.nidoking.abilities!['H'] = "Royal Onslaught";
 Pokedex.nidoqueen.abilities!['H'] = "Royal Aegis";
 
 import {FinalPassiveSlotChanges} from './final-passive-migrations';
@@ -24549,3 +24549,28 @@ Pokedex.kommoo.abilities!.H = 'Scale Rhythm';
 Pokedex.wigglytuff.abilities = {0:'Cushion Chorus',1:'Reinflate',H:'Perfect Apple'};
 Pokedex.decidueye.abilities!.H = 'Canopy Archer';
 Pokedex.spiritomb.abilities = {0:'Keystone Seal',1:'Bound Spirits',H:'Pressure'};
+
+Pokedex.rapidash.abilities!.H = 'Flame Body';
+
+Pokedex.alcremie.abilities = {0:'Soothing Cream',H:'Master Pâtissier'};
+
+Pokedex.victreebel.abilities!['1'] = 'Corrosion';
+
+// Azzy is a cosmetic counterpart of regular Lapras.
+Object.assign(Pokedex.laprasazzy, {types:[...Pokedex.lapras.types!], baseStats:{...Pokedex.lapras.baseStats!}, abilities:{...Pokedex.lapras.abilities!}, canGigantamax:Pokedex.lapras.canGigantamax});
+
+Object.assign(Pokedex.lanturnalt, {types:[...Pokedex.lanturn.types!], baseStats:{...Pokedex.lanturn.baseStats!}, abilities:{...Pokedex.lanturn.abilities!}});
+
+for (const id of ['alcremierubycream','alcremiematchacream','alcremiemintcream','alcremielemoncream','alcremiesaltedcream','alcremierubyswirl','alcremiecaramelswirl','alcremierainbowswirl']) if (Pokedex[id as ID]) Pokedex[id as ID].abilities = {...Pokedex.alcremie.abilities!};
+
+Pokedex.kabutops.abilities!.H = 'Blood Sickle';
+Pokedex.omastar.abilities!.H = 'Grasping Current';
+
+Pokedex.houndoom.abilities!['1'] = 'Infiltrator';
+
+Pokedex.ferrothorn.abilities!['0'] = 'Mineral Grip';
+
+Pokedex.stunfisk.baseStats={hp:109,atk:66,def:99,spa:95,spd:109,spe:32};
+Pokedex.stunfiskgalar.baseStats={hp:109,atk:95,def:109,spa:66,spd:99,spe:32};
+Object.assign(Pokedex.stunfisk.abilities!,{0:'Livewire Trap',1:'Mudflat Dynamo'});
+Object.assign(Pokedex.stunfiskgalar.abilities!,{0:'Iron Clamp',1:'Baited Counter'});

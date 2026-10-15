@@ -39,7 +39,7 @@ describe('Approved third roster pass', () => {
 		for (const [species, ability, component] of [
 			['Hariyama', 'Thick Fat', 'Thick Fat'], ['Electivire', 'Galvanic Spirit', 'Vital Spirit'],
 			['Magmortar', 'Blast Chamber', 'Vital Spirit'], ['Galvantula', 'Silk Sights', 'Compound Eyes'],
-			['Ferrothorn', 'Barb Harvest', 'Iron Barbs'], ['Eelektross', 'Current Coil', 'Swift Swim'],
+			['Ferrothorn', 'Mineral Grip', 'Suction Cups'], ['Eelektross', 'Current Coil', 'Swift Swim'],
 			['Goodra', 'Toxic Serenity', 'Poison Heal'], ['Drednaw', 'River Shell', 'Shell Armor'],
 			['Mudsdale', 'Battle Armor', 'Battle Armor'], ['Annihilape', 'Beyond Fear', 'Inner Focus'],
 		]) {
@@ -162,13 +162,8 @@ describe('Approved third roster pass', () => {
 		foe.setAbility('No Ability'); p.isActive = false; enter(foe);
 		assert.equal(foe.hp, hp);
 	});
-	it('Barb Harvest counts moves, restores only an eaten Berry, and activates once per battle', () => {
-		const [p, , foe] = make('Barb Harvest');
-		p.setItem('cheriberry'); p.eatItem();
-		hit('doublehit', foe, p); assert.equal(p.m.barbHarvestHits, 1);
-		hit('tackle', foe, p); assert(!p.item);
-		hit('tackle', foe, p); assert.equal(p.item, 'cheriberry'); assert(p.m.barbHarvestUsed);
-		p.eatItem(); hit('tackle', foe, p); assert(!p.item);
+	it('Mineral Grip removes the former berry restoration and embedded retaliation', () => {
+		const a = Dex.abilities.get('Mineral Grip'); assert.equal(a.name, 'Mineral Grip'); assert(!a.onEatItem); assert(!a.onAfterUseItem); assert(!a.onDamagingHit); assert(a.onBeforeSwitchIn); assert(a.onDragOut);
 	});
 	it('Current Coil and Storm Circuit add SpA to Coil without losing rain Speed', () => {
 		const [p] = make('Current Coil');

@@ -30,7 +30,7 @@ describe('Approved Shelter, Rough Scale and audit fixes', () => {
 	it('grants one ward on a successful queued Quiver Dance, without evasion', () => {
 		const [p] = setup(); battle.makeChoices('move 1', 'move 2');
 		assert(p.volatiles.scaleshelterward); assert(p.volatiles.scaleshelterspent); assert.equal(p.boosts.evasion, 0);
-		assert.deepEqual(p.getPassives(), ['shielddust']); assert(p.hasAbility('overcoat'));
+		assert.deepEqual(p.getPassives(), ['prismskimmer']); assert(p.hasAbility('overcoat'));
 	});
 	it('reduces every hit of a whole opposing attack, then expires', () => {
 		const [p, q] = setup(); hit(p, p, 'quiverdance');
@@ -126,11 +126,11 @@ describe('Approved Shelter, Rough Scale and audit fixes', () => {
 		hit(p, q, 'sludgebomb', { damage: 300, multihit: 5 }); assert.equal(p.hp, 1500);
 		assert.deepEqual(p.getPassives(), ['digestivesap']);
 	});
-	it('Digestive Sap stays passive under suppression and Transform; base stays Sticky Hold', () => {
+	it('Digestive Sap stays passive under suppression and Transform; base also has Digestive Sap', () => {
 		const [p, q] = setup('Victreebel-Mega', 'Solar Trap'); p.addVolatile('gastroacid'); p.hp = 1000;
 		hit(p, q, 'sludgebomb', { damage: 300 }); assert.equal(p.hp, 1100);
 		q.transformInto(p); assert.deepEqual(q.getPassives(), ['digestivesap']);
-		assert.deepEqual(Dex.species.get('victreebel').passives, ['stickyhold']);
+		assert.deepEqual(Dex.species.get('victreebel').passives, ['digestivesap']);
 		assert(!Dex.abilities.get('solartrap').onAnyAfterDamageApplied); assert(!p.hasAbilityOrPassive('innardsout'));
 	});
 	for (const kind of ['healblock', 'ooze', 'substitute', 'nativeDrain', 'delayed']) it('Digestive Sap respects ' + kind, () => {

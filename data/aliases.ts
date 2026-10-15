@@ -3023,3 +3023,9 @@ Aliases.mudslap = 'Mud Barrage';
 Aliases.fluffycraft = 'Silken Salvo';
 
 Aliases.royalescort = 'Royal Presence';
+
+Aliases.royalonslaught = 'patriarchswrath';
+
+Aliases.masterptissier = 'masterpatissier';
+
+Aliases.mineralgrip = 'barbharvest';

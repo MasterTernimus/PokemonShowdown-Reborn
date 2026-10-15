@@ -1100,6 +1100,7 @@ export class Pokemon {
 				moveName += ` ${basePowerCallback(this)}`;
 			}
 			let target = moveSlot.target;
+			if (moveSlot.id === 'decorate' && this.hasAbility('masterpatissier')) target = 'normalOrSelf';
 			switch (moveSlot.id) {
 			case 'followme': case 'ragepowder':
 				target = this.battle.gameType === 'freeforall' ? 'normal' : 'self';
@@ -1179,6 +1180,7 @@ export class Pokemon {
 			if (move.volatileStatus && protectVolatiles.includes(move.volatileStatus)) protectMove = true;
 			if (this.species.id === 'aegislashgmax' && move.id === 'kingsshield') protectMove = false;
 			let actualTarget = move.target;
+			if (move.id === 'decorate' && this.hasAbility('masterpatissier')) actualTarget = 'normalOrSelf';
 			switch (moveSlot.id) {
 			case 'curse':
 				if (!this.hasType('Ghost')) {

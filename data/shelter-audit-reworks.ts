@@ -4,7 +4,7 @@ import type { ConditionDataTable } from '../sim/dex-conditions';
 export const ShelterDescriptions = {
 	baitedbloom: {
 		shortDesc: 'Gluttony and Regenerator: early pinch Berries, stronger Leftovers; heals 1/3 on switching.',
-		desc: 'Full local Gluttony makes pinch Berries activate at half HP and Leftovers heal 1/8 max HP each turn. Full local Regenerator restores 1/3 base max HP when switching out. Sticky Hold is supplied separately by base Victreebel\'s species passive. No first-Berry stat reward.',
+		desc: 'Full local Gluttony makes pinch Berries activate at half HP and Leftovers heal 1/8 max HP each turn. Full local Regenerator restores 1/3 base max HP when switching out. Digestive Sap is supplied separately by base Victreebel\'s species passive. No first-Berry stat reward.',
 	},
 	scaleshelter: {
 		shortDesc: 'Overcoat; first selected Quiver Dance each entry grants a 20% whole-attack HP ward.',

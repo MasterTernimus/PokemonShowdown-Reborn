@@ -453,7 +453,7 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Once per entry, reveals the first incoming opponent's item while already active."
   },
   "baitedbloom": {
-    "desc": "Gluttony makes pinch Berries activate at half HP and Leftovers heal 1/8 max HP each turn. Regenerator restores 1/3 base max HP when switching out. Sticky Hold is supplied separately by base Victreebel's species passive. No first-Berry stat reward.",
+    "desc": "Gluttony makes pinch Berries activate at half HP and Leftovers heal 1/8 max HP each turn. Regenerator restores 1/3 base max HP when switching out. Digestive Sap is supplied separately by base Victreebel's species passive. No first-Berry stat reward.",
     "shortDesc": "Gluttony and Regenerator: early pinch Berries, stronger Leftovers; heals 1/3 on switching."
   },
   "guidinggallop": {

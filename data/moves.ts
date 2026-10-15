@@ -6197,9 +6197,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) && this.field.terrainState?.duration) {
 				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1) {
-				this.field.setTerrain('rainbowterrain', null, move);
+				this.field.setTerrain('rainbowterrain', source, move);
 			} else if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
-				this.field.setTerrain('burningterrain', null, move);
+				this.field.setTerrain('burningterrain', source, move);
 			}
 			this.field.terrainState.terrainChanges?.set('firepledge', 1);
 		},
@@ -6207,9 +6207,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('rainbowterrain')) && this.field.terrainState?.duration) {
 				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1) {
-				this.field.setTerrain('rainbowterrain', null, move);
+				this.field.setTerrain('rainbowterrain', source, move);
 			} else if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
-				this.field.setTerrain('burningterrain', null, move);
+				this.field.setTerrain('burningterrain', source, move);
 			}
 			this.field.terrainState.terrainChanges?.set('firepledge', 1);
 		},
@@ -8732,9 +8732,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('swampterrain')) && this.field.terrainState?.duration) {
 				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1) {
-				this.field.setTerrain('swampterrain', null, move);
+				this.field.setTerrain('swampterrain', source, move);
 			} else if (this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
-				this.field.setTerrain('burningterrain', null, move);
+				this.field.setTerrain('burningterrain', source, move);
 			}
 			this.field.terrainState.terrainChanges?.set('grasspledge', 1);
 		},
@@ -8742,9 +8742,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if ((this.field.isTerrain('burningterrain') || this.field.isTerrain('swampterrain')) && this.field.terrainState?.duration) {
 				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('waterpledge') === 1) {
-				this.field.setTerrain('swampterrain', null, move);
+				this.field.setTerrain('swampterrain', source, move);
 			} else if (this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
-				this.field.setTerrain('burningterrain', null, move);
+				this.field.setTerrain('burningterrain', source, move);
 			}
 			this.field.terrainState.terrainChanges?.set('grasspledge', 1);
 		},
@@ -23897,9 +23897,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if ((this.field.isTerrain('swampterrain') || this.field.isTerrain('rainbowterrain')) && this.field.terrainState?.duration) {
 				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
-				this.field.setTerrain('swampterrain', null, move);
+				this.field.setTerrain('swampterrain', source, move);
 			} else if (this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
-				this.field.setTerrain('rainbowterrain', null, move);
+				this.field.setTerrain('rainbowterrain', source, move);
 			}
 			this.field.terrainState.terrainChanges?.set('waterpledge', 1);
 		},
@@ -23907,9 +23907,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if ((this.field.isTerrain('swampterrain') || this.field.isTerrain('rainbowterrain')) && this.field.terrainState?.duration) {
 				this.field.setTerrainDuration(source.hasItem('amplifieldrock') ? 7 : 4);
 			} else if (this.field.terrainState.terrainChanges?.get('grasspledge') === 1) {
-				this.field.setTerrain('swampterrain', null, move);
+				this.field.setTerrain('swampterrain', source, move);
 			} else if (this.field.terrainState.terrainChanges?.get('firepledge') === 1) {
-				this.field.setTerrain('rainbowterrain', null, move);
+				this.field.setTerrain('rainbowterrain', source, move);
 			}
 			this.field.terrainState.terrainChanges?.set('waterpledge', 1);
 		},

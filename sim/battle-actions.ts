@@ -7,7 +7,7 @@ import {predatorUltraMatch} from './predator';
 import {ultraRivalry, ultraGuardAvailable} from './ultra-rivalry';
 import {ringmasterSwitch, ringmasterEntry, resetQueuedEntry, shedDecoyEntry} from '../data/queued-abilities-approved';
 
-const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
+const CHOOSABLE_TARGETS = new Set(['normal', 'normalOrSelf', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
 function isGigantamaxed(pokemon: Pokemon) {
 	return pokemon.species.forme.includes('Gmax');
@@ -229,6 +229,7 @@ export class BattleActions {
 		delete pokemon.m.familyGuardianPending;
 		delete pokemon.m.matriarchVigilUsed;
 		delete pokemon.m.matriarchVigilPending;
+		delete pokemon.m.mudflatCharge;
 		delete pokemon.m.climateReserveUsed;
 		delete pokemon.m.climateReservePending;
 		pokemon.m.enteredBattleTurn = this.battle.turn;
@@ -581,6 +582,7 @@ export class BattleActions {
 			move.priority = this.battle.activeMove.priority;
 			if (!move.hasBounced) move.pranksterBoosted = this.battle.activeMove.pranksterBoosted;
 		}
+		if (move.id === 'decorate' && pokemon.hasAbility('masterpatissier')) move.target = 'normalOrSelf';
 		const baseTarget = move.target;
 		let targetRelayVar = { target };
 		targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);

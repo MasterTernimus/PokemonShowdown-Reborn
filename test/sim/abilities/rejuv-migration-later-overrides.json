@@ -50,7 +50,7 @@
       "H": "Rapid Response"
     },
     "passives": [
-      "pastelveil"
+      "guidinggallop"
     ]
   },
   "hitmonlee": {
@@ -1110,6 +1110,186 @@
       "0": "Fallen Star",
       "1": "Long Reach",
       "H": "Canopy Archer"
+    }
+  },
+  "rapidash": {
+    "passives": [
+      "racingspirit"
+    ],
+    "abilities": {
+      "0": "Fire Mane",
+      "1": "Speed Boost",
+      "H": "Flame Body"
+    }
+  },
+  "parasectmega": {
+    "passives": [
+      "mycelialbond"
+    ]
+  },
+  "victreebel": {
+    "passives": [
+      "digestivesap"
+    ],
+    "abilities": {
+      "0": "Chlorophyll",
+      "1": "Corrosion",
+      "H": "Baited Bloom"
+    }
+  },
+  "laprasazzy": {
+    "passives": [
+      "liquidvoice"
+    ],
+    "abilities": {
+      "0": "Safe Harbor",
+      "1": "Ocean Lullaby",
+      "H": "Ice Scales"
+    }
+  },
+  "lanturnalt": {
+    "passives": [
+      "illuminate"
+    ],
+    "abilities": {
+      "0": "Abyss Lure",
+      "1": "Drizzle",
+      "H": "Guiding Light"
+    }
+  },
+  "poliwrath": {
+    "passives": [
+      "tirelessmuscle"
+    ]
+  },
+  "nidoking": {
+    "abilities": {
+      "0": "Royal Decree",
+      "1": "Sheer Force",
+      "H": "Royal Onslaught"
+    }
+  },
+  "ninetalesalola": {
+    "passives": [
+      "crystalward"
+    ]
+  },
+  "kabutops": {
+    "abilities": {
+      "0": "Swift Swim",
+      "1": "Sharpness",
+      "H": "Blood Sickle"
+    }
+  },
+  "omastar": {
+    "abilities": {
+      "0": "Swift Swim",
+      "1": "Mega Launcher",
+      "H": "Grasping Current"
+    }
+  },
+  "houndoom": {
+    "passives": [
+      "agonyflame"
+    ],
+    "abilities": {
+      "0": "Flash Fire",
+      "1": "Infiltrator",
+      "H": "Battle Fervor"
+    }
+  },
+  "houndoommega": {
+    "passives": [
+      "agonyflame"
+    ]
+  },
+  "alcremie": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "alcremierubycream": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "alcremiematchacream": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "alcremiemintcream": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "alcremielemoncream": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "alcremiesaltedcream": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "alcremierubyswirl": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "alcremiecaramelswirl": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "alcremierainbowswirl": {
+    "abilities": {
+      "0": "Soothing Cream",
+      "H": "Master Pâtissier"
+    }
+  },
+  "golurk": {
+    "passives": [
+      "aftermath"
+    ]
+  },
+  "ferrothorn": {
+    "abilities": {
+      "0": "Mineral Grip",
+      "1": "Filter",
+      "H": "Rooted Iron"
+    },
+    "passives": [
+      "ironbarbs"
+    ]
+  },
+  "froslassmega": {
+    "passives": [
+      "rimeboundspirit"
+    ]
+  },
+  "stunfisk": {
+    "abilities": {
+      "0": "Livewire Trap",
+      "1": "Mudflat Dynamo",
+      "H": "Earth Eater",
+      "S": "Adaptive Cycle"
+    }
+  },
+  "stunfiskgalar": {
+    "abilities": {
+      "0": "Iron Clamp",
+      "1": "Baited Counter",
+      "S": "Adaptive Cycle"
     }
   }
 }

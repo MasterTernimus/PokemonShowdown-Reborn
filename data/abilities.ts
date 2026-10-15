@@ -10835,6 +10835,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	ironbarbs: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
+			if (skipPassiveComponent(this, this.effectState.target, 'ironbarbs')) return;
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
@@ -17843,6 +17844,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	digestivesap: {
 		onAnyAfterDamageApplied(damage, target, source, effect) {
+			if (skipPassiveComponent(this, this.effectState.target, 'digestivesap')) return;
 			const holder = this.effectState.target;
 			if (source !== holder || !source.hp || !source.isActive || source.isAlly(target) || damage <= 0 ||
 				effect.effectType !== 'Move') return;
@@ -21590,3 +21592,90 @@ installCramorantGoodraKommo(Abilities);
 
 import {installLostFour} from './lost-four-approved';
 installLostFour(Abilities);
+
+// Galarian Rapidash's Guiding Gallop includes Pastel Veil; copied active
+// components must not repeat the species passive callbacks.
+for (const id of ['guidinggallop', 'pastelveil'] as const) {
+ for (const [key, callback] of Object.entries(Abilities[id])) {
+  if (!key.startsWith('on') || typeof callback !== 'function') continue;
+  (Abilities[id] as any)[key] = function(this: Battle, ...args: any[]) {
+   if (skipPassiveComponent(this, this.effectState.target, id)) return;
+   return (callback as Function).apply(this, args);
+  };
+ }
+}
+
+Abilities.racingspirit = {...Abilities.rockhead, ...Abilities.limber, name:'Racing Spirit', num:11519, rating:4, flags:{}};
+for (const [key, callback] of Object.entries(Abilities.limber)) {
+ if (!key.startsWith('on') || typeof callback !== 'function') continue;
+ (Abilities.racingspirit as any)[key] = function(this: Battle, ...args: any[]) {
+  const pokemon = this.effectState.target as Pokemon;
+  if (skipPassiveComponent(this, pokemon, 'racingspirit') || this.suppressingAbility(pokemon, this.dex.abilities.get('limber'))) return;
+  return (callback as Function).apply(this, args);
+ };
+}
+
+import {installAlcremie} from './alcremie-approved';
+installAlcremie(Abilities);
+
+Abilities.tirelessmuscle = {
+ ...Abilities.innerfocus, name:'Tireless Muscle', num:11523, rating:4, flags:{},
+ onAnyAfterDamageApplied(damage,target,source,effect) {
+  const holder=this.effectState.target as Pokemon;
+  if(skipPassiveComponent(this,holder,'tirelessmuscle')) return;
+  if(target===holder && damage>0 && source && !source.isAlly(target) && effect?.effectType==='Move' && effect.category!=='Status') holder.m.tirelessMuscleTurn=this.turn;
+ },
+ onResidualOrder:28,
+ onResidual(pokemon) {
+  if(skipPassiveComponent(this,pokemon,'tirelessmuscle') || pokemon.m.tirelessMuscleTurn!==this.turn) return;
+  delete pokemon.m.tirelessMuscleTurn;
+  if(pokemon.hp) this.heal(pokemon.baseMaxhp/16,pokemon,pokemon,this.effect);
+ },
+};
+for(const key of ['onTryAddVolatile','onTryBoost'] as const) {
+ const callback=Abilities.innerfocus[key]!;
+ (Abilities.tirelessmuscle as any)[key]=function(this:Battle,...args:any[]) {
+  if(this.suppressingAbility(this.effectState.target,this.dex.abilities.get('innerfocus')))return;
+  return (callback as Function).apply(this,args);
+ };
+}
+
+import {installFossilDrain} from './fossil-drain-approved';
+installFossilDrain(Abilities);
+
+Abilities.crystalward = {
+ name:'Crystal Ward',num:11526,rating:4,flags:{breakable:1},
+ onAllyTryHit(target,source,move) {
+  const holder=this.effectState.target as Pokemon;
+  if(skipPassiveComponent(this,holder,'crystalward') || !holder.hp || !holder.isActive || holder.ignoringAbility() || this.suppressingAbility(holder,this.dex.abilities.get('crystalward')))return;
+  if(!source || source.isAlly(target) || (target!==holder&&!holder.isAdjacent(target)) || !move.flags.bullet)return;
+  this.add('-immune',target,'[from] passive: Crystal Ward');
+  this.add('-message', 'Ninetales’s ice crystals shielded '+target.name+' ('+target.side.id+') from the attack!');
+  return null;
+ },
+};
+
+for(const [key,callback] of Object.entries(Abilities.agonyflame)) {
+ if(!key.startsWith('on')||typeof callback!=='function')continue;
+ (Abilities.agonyflame as any)[key]=function(this:Battle,...args:any[]) {
+  if(skipPassiveComponent(this,this.effectState.target,'agonyflame'))return;
+  return (callback as Function).apply(this,args);
+ };
+}
+
+// Mineral Grip replaces Barb Harvest's entire callback package.
+Abilities.barbharvest = {...Abilities.suctioncups,id:'barbharvest' as ID,name:'Mineral Grip',num:11527,rating:4,
+ onBeforeSwitchIn(pokemon) {
+  if(pokemon.side.removeSideCondition('stealthrock')) this.add('-message','Ferrothorn absorbed the pointed stones with its feelers!');
+ },
+};
+
+Abilities.rimeboundspirit = {...Abilities.heatproof,name:'Rimebound Spirit',num:11528,rating:4,
+ onTryHit(target,source,move) {
+  if(skipPassiveComponent(this,target,'rimeboundspirit'))return;
+  if(move.flags.wind){this.add('-immune',target,'[from] passive: Rimebound Spirit');return null;}
+ },
+};
+
+import {installStunfisk} from './stunfisk-approved';
+installStunfisk(Abilities);

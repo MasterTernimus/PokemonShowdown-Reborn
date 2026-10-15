@@ -32,7 +32,7 @@ describe('Approved roster follow-up', () => {
 	}
 	it('assigns approved slots and searchable retained components', () => {
 		for (const [species, slot, ability, component] of [
-			['Nidoking', 'H', "Patriarch's Wrath", 'Power Drill'],
+			['Nidoking', 'H', "Royal Onslaught", 'Power Drill'],
 			['Kingler', '1', 'Hyper Cutter', 'Hyper Cutter'], ['Steelix', '1', 'Iron Lash', 'Whiplash'],
 			['Hariyama', 'H', 'Grit Grappler', 'Guts'], ['Krookodile', '1', 'Dread Jaw', 'Moxie'],
 			['Beartic', '1', 'Floe Hunter', 'Slush Rush'], ['Escavalier', 'H', 'Lanceguard', 'Shell Armor'],

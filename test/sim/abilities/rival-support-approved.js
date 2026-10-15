@@ -5,12 +5,12 @@ function setup(species,ability,mode='doubles',moves){battle=common.createBattle(
 function hit(p,q,id,extra={}){return battle.actions.useMove(Object.assign(Dex.getActiveMove(id),{accuracy:true,willCrit:false},extra),p,{target:q});}
 describe('Approved rival and support queue',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- it('exact rival slots, passives, Mega stats and no accidental Mega Parasect migration',()=>{
+ it('exact rival slots, passives, Mega stats and approved Mega Parasect migration',()=>{
   assert.deepEqual(Dex.species.get('zangoose').abilities,{0:'Venom Armor',1:'Toxic Boost',H:'Scrappy'});
   for(const id of ['zangoose','zangoosemega'])assert.deepEqual(Dex.species.get(id).passives,['rivalresolve']);
   for(const id of ['seviper','sevipermega'])assert.deepEqual(Dex.species.get(id).passives,['rivalmalice']);
   assert.deepEqual(Dex.species.get('sevipermega').baseStats,{hp:75,atk:140,def:120,spa:90,spd:120,spe:65});
-  assert.deepEqual(Dex.species.get('parasectmega').passives,['dryskin']);
+  assert.deepEqual(Dex.species.get('parasectmega').passives,['mycelialbond']);
  });
  it('Rival Resolve self-poisons and only its own recovery bypasses Heal Block and healing prevention',()=>{
   const[p,q]=setup('Zangoose','Venom Armor');assert.equal(p.status,'psn');p.hp=100;p.addVolatile('healblock',q);p.m.graveHungerHealing=0;
@@ -43,7 +43,7 @@ describe('Approved rival and support queue',()=>{
   assert.equal(battle.runEvent('BasePower',p,q,Object.assign(Dex.getActiveMove('metalclaw'),{multihitType:'dualwield',hit:2}),100),150);
   assert(!p.setAbility('No Ability'));
  });
- for(const species of ['Parasect','Parasect-Rejuv','Parasect-Parasite'])it(species+' has full Dry Skin without doubled Fire weakness',()=>{
+ for(const species of ['Parasect','Parasect-Rejuv','Parasect-Parasite','Parasect-Mega'])it(species+' has full Dry Skin without doubled Fire weakness',()=>{
   const[p,q]=setup(species,'Parasitism');assert.deepEqual(p.getPassives(),['mycelialbond']);
   assert.equal(battle.runEvent('BasePower',q,p,Dex.getActiveMove('flamethrower'),100),125);
  });

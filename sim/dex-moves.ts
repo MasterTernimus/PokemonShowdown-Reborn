@@ -22,7 +22,7 @@ import { assignMissingFields, BasicEffect, toID } from './dex-data';
  */
 export type MoveTarget =
 	'adjacentAlly' | 'adjacentAllyOrSelf' | 'adjacentFoe' | 'all' | 'allAdjacent' | 'allAdjacentFoes' |
-	'allies' | 'allySide' | 'allyTeam' | 'any' | 'foeSide' | 'normal' | 'randomNormal' | 'scripted' | 'self';
+	'allies' | 'allySide' | 'allyTeam' | 'any' | 'foeSide' | 'normal' | 'normalOrSelf' | 'randomNormal' | 'scripted' | 'self';
 
 /** Possible move flags. */
 interface MoveFlags {

@@ -13,7 +13,7 @@ describe('Agony Flame',function(){
  function use(p,t,extra={},name='flamethrower'){const m=b.dex.getActiveMove(name);Object.assign(m,{accuracy:true,willCrit:false,basePower:5,secondaries:undefined},extra);b.actions.runMove(m,p,p.getLocOf(t));}
  it('uses approved base/Mega stats and separate abilities',()=>{
   const[p]=setup();assert.deepEqual(p.species.baseStats,{hp:75,atk:110,def:60,spa:120,spd:85,spe:110});assert.equal(p.species.bst,560);
-  assert.deepEqual(p.species.abilities,{0:'Flash Fire',1:'Agony Flame',H:'Battle Fervor'});
+  assert.deepEqual(p.species.abilities,{0:'Flash Fire',1:'Infiltrator',H:'Battle Fervor'});
   const mega=b.dex.species.get('houndoommega');assert.deepEqual(mega.baseStats,{hp:75,atk:110,def:100,spa:150,spd:95,spe:130});assert.equal(mega.bst,660);assert.equal(mega.abilities[0],'Hellfire Eclipse');
  });
  it('burns and Heal Blocks after the whole multi-hit move, once per target',()=>{
@@ -30,7 +30,7 @@ describe('Agony Flame',function(){
   assert.equal(b.log.filter(l=>l.includes('|-status|')&&l.includes('|brn')).length,1);
  });
  it('allows a Berry to cure the ability burn',()=>{const[p,t]=setup(undefined,'Lum Berry');use(p,t);b.runEvent('Update');assert.equal(t.item,'');assert.equal(t.status,'');assert(t.volatiles.healblock);});
- for(const mode of ['miss','protect','immune','substitute','nonfire','delayed','suppressed','self'])it('excludes '+mode,()=>{
+ for(const mode of ['miss','protect','immune','substitute','nonfire','delayed','self'])it('excludes '+mode,()=>{
   const[p,t]=setup();let extra={};if(mode==='miss')extra.accuracy=0;if(mode==='protect')t.addVolatile('protect');if(mode==='immune')t.setAbility('Flash Fire');if(mode==='substitute')t.addVolatile('substitute');if(mode==='nonfire')extra.type='Dark';if(mode==='delayed')extra.flags={futuremove:1};if(mode==='suppressed')p.addVolatile('gastroacid');
   const target=mode==='self'?p:t;use(p,target,extra);assert.equal(target.status,'');assert(!target.volatiles.healblock);
  });
@@ -49,7 +49,9 @@ describe('Agony Flame',function(){
   b.makeChoices('move splash','move splash');assert(!t.volatiles.healblock);assert(b.heal(10,t,t,b.dex.moves.get('recover'))>0);
  });
  it('refreshes a shorter Heal Block without stacking durations',()=>{const[p,t]=setup();use(p,t);t.volatiles.healblock.duration=1;b.turn++;use(p,t);assert.equal(t.volatiles.healblock.duration,2);});
- it('Mega Evolution replaces Agony Flame with Hellfire Eclipse',()=>{
-  const[p,t]=setup();assert(b.actions.runMegaEvo(p));assert.equal(p.ability,'hellfireeclipse');assert.equal(p.species.bst,660);use(p,t);assert.equal(t.status,'');assert(!t.volatiles.healblock);assert.equal(b.field.weather,'sunnyday');
+ it('Mega Evolution retains Agony Flame passive alongside Hellfire Eclipse',()=>{
+  const[p,t]=setup();assert(b.actions.runMegaEvo(p));assert.equal(p.ability,'hellfireeclipse');assert.equal(p.species.bst,660);use(p,t);assert.equal(t.status,'brn');assert(t.volatiles.healblock);assert.equal(b.field.weather,'sunnyday');
  });
+ for(const ability of ['Infiltrator','Agony Flame','Flash Fire'])it('passive burns once under suppression with selected '+ability,()=>{const[p,t]=setup();p.setAbility(ability);p.addVolatile('gastroacid');use(p,t);assert.equal(t.status,'brn');assert.equal(t.volatiles.healblock.duration,2);assert.equal(b.log.filter(l=>l.includes('|-status|')&&l.includes('|brn')).length,1);});
+ it('Infiltrator HP damage through Substitute triggers the passive',()=>{const[p,t]=setup();p.setAbility('Infiltrator');t.addVolatile('substitute');const hp=t.hp,sub=t.volatiles.substitute.hp;use(p,t);assert(t.hp<hp);assert.equal(t.volatiles.substitute.hp,sub);assert.equal(t.status,'brn');assert(t.volatiles.healblock);});
 });

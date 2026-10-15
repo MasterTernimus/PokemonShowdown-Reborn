@@ -393,7 +393,8 @@ Object.assign(AbilityComponents, {
 });
 
 export function abilityIncludesComponent(ability: string, component: string, seen = new Set<string>()): boolean {
-	const id = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
+	const rawId = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
+	const id = ({mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
 	const query = component.toLowerCase().replace(/[^a-z0-9]/g, '');
 	if (id === query) return true;
 	if (AbilityComponentExclusions[id]?.includes(query)) return false;
@@ -808,7 +809,7 @@ AbilityComponents.unbridledwrath = ['sheerforce', 'innerfocus'];
 AbilityComponents.toxicspines = [...AbilityComponents.toxicspines, 'ironbarbs'];
 
 AbilityComponents.patriarchswrath = ['powerdrill', 'whiplash'];
-AbilityComponents.matriarchsvigil = ['thickfat', 'aromaveil'];
+AbilityComponents.matriarchsvigil = ['thickfat', 'aromaveil', 'friendguard'];
 
 AbilityComponents.heatcoil = [...AbilityComponents.heatcoil, 'longreach'];
 AbilityComponents.inversion = [...(AbilityComponents.inversion || []), 'infiltrator'];
@@ -903,3 +904,20 @@ AbilityComponents.accumulation = [...(AbilityComponents.accumulation || []), 'th
 AbilityComponents.beguilingbouquet = ['aromaveil'];
 AbilityComponents.venomspurs = ['corrosion'];
 AbilityComponents.lastbrood = ['swarm'];
+
+AbilityComponents.racingspirit = ['rockhead','limber'];
+
+AbilityComponents.soothingcream = ['ripen'];
+AbilityComponents.masterpatissier = ['aromaveil'];
+AbilityComponents.sweetsanctuary = ['stamina'];
+
+AbilityComponents.tirelessmuscle = ['innerfocus'];
+
+AbilityComponents.bloodsickle = ['hypercutter'];
+AbilityComponents.graspingcurrent = ['suctioncups'];
+
+AbilityComponents.barbharvest = ['suctioncups'];
+
+AbilityComponents.rimeboundspirit = ['heatproof'];
+
+Object.assign(AbilityComponents,{livewiretrap:['static'],mudflatdynamo:['battlearmor'],ironclamp:['battlearmor'],baitedcounter:['filter']});

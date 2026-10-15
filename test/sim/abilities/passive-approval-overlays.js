@@ -105,6 +105,7 @@ exports.abilities=(id,expected)=>Object.assign(beforeStarterFinishAbilities(id,e
 // fixed expectations from the approved roster, not read from the runtime Dex.
 megaExpected.mightyenagrim = ['rattled'];
 const reviewedStats = {
+ stunfisk:[109,66,99,95,109,32],stunfiskgalar:[109,95,109,66,99,32],
  kingdra: [85,105,90,105,90,95],
  mightyena: [90,115,80,60,80,125], mightyenadeso: [90,115,80,60,80,125], mightyenagrim: [90,115,80,60,80,125],
  mightyenamega: [90,140,105,85,100,130],
