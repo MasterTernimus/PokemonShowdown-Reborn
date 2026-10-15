@@ -10,7 +10,6 @@ import type {MoveDataTable} from '../sim/dex-moves';
 
 function dragonField(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
  if (this.field.isTerrain('volcanicterrain')) this.field.changeTerrain('dragonsdenterrain', source, move);
- if (!this.field.isTerrain(['underwaterterrain', 'midnightzoneterrain'])) target.side.addSideCondition('dragonrend', source, move);
 }
 const hitFlags = {protect: 1, mirror: 1} as const;
 const hasHPDamage = (target: Pokemon, move: ActiveMove) => (target.getMoveHitData(move) as {damage?: number}).damage! > 0;
@@ -75,6 +74,7 @@ export const YangSignatureMovesB: MoveDataTable = {
  crestcleave: {
   num: 10452, name: 'Crest Cleave', type: 'Steel', category: 'Physical', basePower: 65, accuracy: 100,
   pp: 10, priority: 0, target: 'normal', flags: hitFlags, drain: [1, 3],
+  onModifyMove: adaptiveCategory,
   onHit(target, source, move) {
    if (!hasHPDamage(target, move)) return;
    const item = target.takeItem(source);
@@ -128,17 +128,11 @@ export const YangSignatureMovesB: MoveDataTable = {
  dragonrend: {
   num: 10456, name: 'Dragon Rend', type: 'Dragon', category: 'Special', basePower: 75, accuracy: 100,
   pp: 10, priority: 0, target: 'normal', flags: hitFlags,
+  ignoreImmunity: {Dragon: true},
+  onEffectiveness(typeMod, target, type) { if (type === 'Fairy') return 0; },
   onModifyMove: adaptiveCategory,
   onHit(target, source, move) { if (!target.isAlly(source) && hasHPDamage(target, move)) dragonField.call(this, target, source, move); },
   onAfterSubDamage(damage, target, source, move) { if (damage > 0 && !target.isAlly(source)) dragonField.call(this, target, source, move); },
-  condition: {
-   onSideStart(side) { this.add('-sidestart', side, 'move: Dragon Rend'); },
-   onSwitchIn(pokemon) {
-    if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || !pokemon.runImmunity('Fire')) return;
-    const typeMod = this.clampIntRange(this.dex.getEffectiveness('Fire', pokemon), -6, 6);
-    this.damage(pokemon.maxhp * (2 ** typeMod) / 8, pokemon, this.effectState.source);
-   },
-  },
  },
  airstreamassault: {
   num: 10457, name: 'Airstream Assault', type: 'Flying', category: 'Special', basePower: 75, accuracy: 100,
@@ -206,7 +200,7 @@ export const YangSignatureLearnsetsB: {[id: string]: string[]} = {
  sirensveil: ['primarina', 'palafin', 'dondozo', 'basculegion', 'basculegionf', 'lapras', 'tatsugiri', 'seismitoad', 'drednaw'],
  sirenswrath: ['primarina', 'palafin', 'swampert', 'lapras', 'blastoise', 'seismitoad', 'kingler', 'basculegion', 'basculegionf', 'crawdaunt'],
  rocknroll: ['lycanroc', 'lycanrocmidnight', 'lycanrocdusk', 'gigalith', 'aerodactyl'],
- dragonrend: ['cyclizar', 'dragonite', 'garchomp', 'charizard'],
+ dragonrend: ['cyclizar', 'dragonite', 'garchomp', 'charizard', 'goodrahisui', 'hydreigon'],
  airstreamassault: ['crobat', 'talonflame', 'salamence', 'sneasler', 'nidoking'],
  wisteriamaelstrom: ['kleavor', 'cherrim', 'lilliganthisui', 'lilligant', 'venusaur'],
  deiludicium: ['cyclizar', 'kommoo', 'goodrahisui', 'drampa', 'noivern'],
@@ -217,11 +211,11 @@ const summaries: {[id: string]: string} = {
  m3g4qu4k3: 'Hits all adjacent Pokemon; damaged opposing targets lose 1 Defense and Sp. Def. Glitch boosts power 1.3x; Big Top applies its Striker roll.',
  winddance: 'Dance move. After a hit, sets Strong Winds for 4 turns. +1 priority if Strong Winds are already active. Big Top boosts power 1.5x; Mountain and Snowy Mountain retain their normal Flying boost. Clears fields that existing blowing moves clear.',
  timeblade: 'Uses higher staged Attack or Sp. Atk (Special on ties). After damage, applies Encore for 2 turns if eligible.',
- crestcleave: 'Removes a removable held item after damage; drains 1/3 of damage dealt. No item-dependent power boost.',
+ crestcleave: 'Uses higher staged Attack or Sp. Atk with the corresponding defense (Special on ties). Removes a removable held item after damage; drains 1/3 of damage dealt. No item-dependent power boost.',
  sirensveil: 'Raises Defense and Sp. Def by 1; suppresses active opposing abilities until they switch. Respects Ability Shield and unsuppressible abilities. On Short Circuit, a working Covert Cloak also prevents suppression.',
  sirenswrath: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Ignores defensive abilities for this attack. After damaging a foe, reduces the next opposing whole attack by 25% before the user next acts. Does not stack. Breaks Icy Field back into Water Surface only when that water is recorded underneath.',
  rocknroll: 'Lowers the target Defense by 1 and sets Stealth Rock on its side. Cannot place Stealth Rock in Midnight Zone.',
- dragonrend: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, lays a nonstacking burning entry hazard: grounded foes lose 1/8 HP, scaled by Fire effectiveness. Heavy-Duty Boots prevent it. Turns Volcanic Field into Dragon\'s Den; cannot place its hazard in Underwater or Midnight Zone.',
+ dragonrend: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Treats Fairy as neutral while preserving the other defensive type: Fairy/Steel resists and Fairy/Dragon is weak. This exception does not carry to generic Z or Max moves. Turns Volcanic Field into Dragon\'s Den after a hit. Does not place an entry hazard.',
  airstreamassault: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, clears own-side entry hazards and sets Tailwind. Bypasses accuracy checks in Strong Winds. New Tailwind lasts 6 turns on Mountain/Snowy Mountain and uses native Tailwind weather rules; existing Tailwind is not refreshed. Clears fields that existing blowing moves clear.',
  wisteriamaelstrom: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, each active allied Grass or Bug Pokemon raises its higher staged offense by 1, once per use (Sp. Atk on ties). Grows Flower Garden by one stage per damaging use, up to stage 5.',
  deiludicium: 'After a hit, cures the user of its status condition. Uses Judgment\'s existing named field boosts without its held-item typing. Rainbow Aura also grants its named 1.5x boost; matching Rainbow Terrain and Aura do not duplicate it.',

@@ -145,6 +145,8 @@ for (const id of ['apexpredator', 'tyrantdomain', 'auroradomain']) {
 
 /** Shared packages retain the component for users without the matching species passive. */
 export const SharedPassiveComponents: { [id: string]: readonly string[] } = {
+prismscale: ['friendguard'],
+royalscales: ['marvelscale'],
 "parasitism": ["dryskin"],
 "safeharbor": ["hydration"],
 "witheringshell": ["naturalcure"],
@@ -658,3 +660,18 @@ for (const id of UltraEgoRivalryAbilities) if (SharedPassiveAbilityDescriptions[
 
 delete SharedPassiveComponents.glacialheart;
 SharedPassiveAbilityDescriptions.glacialheart = {"passive":"thermalexchange","shortDesc":"Ice Body; alternating Ice/Dragon hits bypass positive defensive stages.","desc":"Full Ice Body: contact attackers have a 30% frostbite chance; heals 1/16 maximum HP in hail/snow or qualifying cold fields, 1/8 in hail on Cold Eclipse; immune to hail damage. After dealing positive opposing HP damage with an Ice attack, prepares Dragon; Dragon damage prepares Ice. The next successful attack of the prepared type ignores positive Defense or Special Defense stages for its whole move, including every hit; negative stages remain. Preparation updates only after the move finishes, never stacks, and clears on switching. Misses, protection, immunity, Substitute-only damage, status moves and unrelated types do not change preparation. Suppression disables both preparation and its benefit without consuming stored preparation. Thermal Exchange remains a separate species passive. No Speed or raw power boost."};
+
+import {RivalSupportDescriptions} from './rival-support-descriptions';
+SharedPassiveAbilityDescriptions.sirius = {passive:'rivalmalice', desc:RivalSupportDescriptions.sirius.desc, shortDesc:RivalSupportDescriptions.sirius.shortDesc};
+
+AbilityComponentExclusions.venomarmor = ['poisonheal'];
+AbilityComponentExclusions.toxicarmor = ['poisonheal'];
+AbilityComponentExclusions.scrapbreaker = ['moldbreaker'];
+
+
+AbilityComponentExclusions.ragingstorm = [];
+
+AbilityComponentExclusions.bonewarrior = ['selfsufficient'];
+
+import {SoulCremationBypassDescription} from './weather-choice-approved';
+SharedPassiveAbilityDescriptions.soulcremation.desc += SoulCremationBypassDescription;

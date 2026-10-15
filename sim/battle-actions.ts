@@ -1,8 +1,11 @@
+import {endArsenal} from './adaptive-arsenal';
+import {settleFinisherCost} from './finisher-cost';
 import {adaptiveAnalyzed, adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
 import { Dex, toID } from './dex';
 import {takeCrescentOverflow, hasCrescentSubDamage} from './crescent-rend';
 import {predatorUltraMatch} from './predator';
 import {ultraRivalry, ultraGuardAvailable} from './ultra-rivalry';
+import {ringmasterSwitch, ringmasterEntry, resetQueuedEntry, shedDecoyEntry} from '../data/queued-abilities-approved';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
@@ -130,6 +133,7 @@ export class BattleActions {
 			}
 
 			// will definitely switch out at this point
+			ringmasterSwitch(this.battle, oldActive, pokemon);
 			if (!isDrag) {
 				this.battle.singleEvent('AfterSwitchOut', oldActive.getAbility(), oldActive.abilityState,
 					oldActive, pokemon, sourceEffect);
@@ -293,6 +297,7 @@ export class BattleActions {
 			switchersIn.push(nextSwitch!.pokemon!);
 		}
 		const allActive = this.battle.getAllActive(true);
+		for (const poke of switchersIn) resetQueuedEntry(poke);
 		this.battle.speedSort(allActive);
 		this.battle.speedOrder = allActive.map(a => a.getFieldPositionValue());
 		for (const poke of switchersIn) {
@@ -314,8 +319,10 @@ export class BattleActions {
 			this.battle.field.flowerGardenSwitchIn(poke);
 		}
 		for (const poke of switchersIn) {
+			ringmasterEntry(this.battle, poke);
 			if (poke.hp) this.battle.runEvent('AfterSwitchIn', poke);
 		}
+		for (const poke of switchersIn) shedDecoyEntry(this.battle, poke);
 		return true;
 	}
 
@@ -529,8 +536,11 @@ export class BattleActions {
 		} finally {
 			this.attackResolutionDepth--;
 		}
+		const resolvedMove = this.battle.activeMove;
+		endArsenal(this.battle, resolvedMove);
 		this.battle.field.frozenAuraAfterAttack(pokemon, this.battle.activeMove!);
 		this.battle.runEvent('AfterAttackResolved', pokemon, this.battle.activeTarget, this.battle.activeMove);
+		settleFinisherCost(this.battle, pokemon, resolvedMove);
 		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
 		return moveResult;
 	}
@@ -1138,7 +1148,9 @@ export class BattleActions {
 		pokemon.lastDamage = 0;
 		let targetHits = move.multihit || 1;
 		if (Array.isArray(targetHits)) {
-			if (pokemon.hasItem('loadeddice')) {
+			if ((move as any).silkenSalvo) {
+				targetHits = pokemon.hasItem('loadeddice') ? 5 : this.battle.sample([2, 2, 3, 3, 4, 5]);
+			} else if (pokemon.hasItem('loadeddice')) {
 				targetHits = 5 + this.battle.random(2);
 			// yes, it's hardcoded... meh
 			} else if (targetHits[0] === 2 && targetHits[1] === 5) {
@@ -1433,6 +1445,7 @@ export class BattleActions {
 	}
 
 	getMultihitSpilloverTarget(originalTarget: Pokemon, pokemon: Pokemon, move: ActiveMove, hit: number, targetHits: number) {
+		if ((move as any).mycelialBond || (move as any).twinFang) return null;
 		if (hit > targetHits || move.multihitType === 'starboxer') return null;
 		const parentalLike = ['parentalbond', 'hydrabond'].includes(move.multihitType || '');
 		if (!parentalLike && !move.multihit) return null;
@@ -1810,10 +1823,12 @@ export class BattleActions {
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean
 	) {
 		if (move.multihitType === 'starboxer' && !(move as any).starBoxerFinishing) {
+			// Star Boxer defers self effects until its final hit.
 			(move as any).starBoxerSelfTargets = targets;
 			return;
 		}
 		// Split-hit abilities split damage, not Armor Cannon's self-drop or other self effects.
+		if (((move as any).mycelialBond || (move as any).twinFang) && move.hit > 1) return;
 		if (['twincannons', 'twinblades'].includes(move.multihitType || '') && move.hit > 1) return;
 		for (const target of targets) {
 			if (target === false) continue;
@@ -1832,6 +1847,8 @@ export class BattleActions {
 	}
 	secondaries(targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSelf?: boolean) {
 		if (!moveData.secondaries) return;
+		if (((move as any).mycelialBond || (move as any).twinFang) && move.hit > 1) return;
+		if ((move as any).silkenSalvo && move.hit > 2) return;
 		if (move.multihitType === 'starboxer' && !(move as any).starBoxerFinishing) {
 			(move as any).starBoxerSecondaryTargets = targets;
 			return;
@@ -2182,9 +2199,13 @@ export class BattleActions {
 
 		let basePower: number | false | null = move.basePower;
 		if (move.basePowerCallback) {
-			basePower = move.basePowerCallback.call(this.battle, source, target, move);
+			const chain = (move as any).silkenSalvo && ['furycutter', 'stackingshot'].includes(move.id);
+			basePower = chain && (move as any).silkenChainPower !== undefined ? (move as any).silkenChainPower :
+				move.basePowerCallback.call(this.battle, source, target, move);
+			if (chain) (move as any).silkenChainPower = basePower;
 		}
 		if (!basePower) return basePower === 0 ? undefined : basePower;
+		if ((move as any).silkenSalvo) basePower = Math.max(1, Math.ceil(basePower * 0.4 - 0.5));
 		basePower = this.battle.clampIntRange(basePower, 1);
 
 		let critMult;
@@ -2264,7 +2285,7 @@ export class BattleActions {
 		if (defBoosts > 0 && adaptiveSetup(source, defender)) defBoosts = 0;
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
-		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
+		let ignorePositiveDefensive = (move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive;
 		if (defender === target && ['def', 'spd'].includes(defenseStat) &&
 			predatorUltraMatch(this.battle, source, target)) ignorePositiveDefensive = true;
 		if (defenseStat === 'spd' && move.category === 'Special' && this.battle.movehasType(move, 'Electric') &&
@@ -2275,6 +2296,8 @@ export class BattleActions {
 			ignorePositiveDefensive = true;
 		}
 		const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
+		if (defenseStat === 'spd' && target.volatiles['miracleeye'] &&
+			this.battle.movehasType(move, 'Psychic') && source.hasAbilityOrPassive('revealinggaze')) ignorePositiveDefensive = true;
 		const ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
 
 		if (ignoreOffensive) {
@@ -2339,6 +2362,8 @@ export class BattleActions {
 		if (move.multihitType === 'starboxer') baseDamage = this.battle.modify(baseDamage, 0.4);
 
 		let ffaFollowUpAttack = false;
+		if ((move as any).mycelialBond && move.hit > 1) baseDamage = this.battle.modify(baseDamage, 0.25);
+		if ((move as any).twinFang && move.hit > 1) baseDamage = this.battle.modify(baseDamage, 0.3);
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
 			let spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
@@ -2417,7 +2442,7 @@ export class BattleActions {
 
 		// types
 		let typeMod = target.runEffectiveness(move);
-		if ((move as any).dissonantEchoTarget === target && pokemon.hasAbility('dissonantecho') && typeMod < 0) {
+		if ((move as any).dissonantEchoTarget === target && (move as any).dissonantEchoProvider?.hasAbility('dissonantecho') && typeMod < 0) {
 			typeMod = 0;
 		}
 		// Completed defender adaptation wins when both individuals have analyzed each other.
@@ -2427,6 +2452,11 @@ export class BattleActions {
 			typeMod = Math.max(typeMod, 1);
 		}
 		typeMod = this.battle.clampIntRange(typeMod, -6, 6);
+		if (this.battle.movehasType(move, 'Poison') && target.hasAbilityOrPassive('rivalresolve')) typeMod = Math.min(typeMod, -1);
+		if (this.battle.movehasType(move, 'Rock') && target.hasAbility('infernaldominion') && typeMod > 0) {
+			if (!suppressMessages) this.battle.add('-message', target.name + "'s flames melted and weakened the incoming rocks!");
+			typeMod = 0;
+		}
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.battle.add('-supereffective', target);
@@ -2479,6 +2509,9 @@ export class BattleActions {
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+		if (move.id === 'fissure' && !move.isZ && !move.isMax && target.hp * 2 <= target.maxhp) {
+			baseDamage = this.battle.modify(baseDamage, 1.5);
+		}
 		if (!move.isZ && targetIsGmax) {
 			baseDamage = this.battle.modify(baseDamage, 0.9);
 		}

@@ -13,8 +13,8 @@ export const PassiveCleanupDescriptions = {
 	},
 
 	venompincer: {
-		shortDesc: 'Poison Touch + Hyper Cutter; Poison moves receive 1.5x STAB.',
-		desc: 'Full local Poison Touch gives contact attacks a 30% chance to poison the target; Shield Dust, Covert Cloak and normal poison immunities block it. Full local Hyper Cutter prevents opposing Attack drops. Poison moves receive 1.5x STAB, including when the user is already Poison-type; this is not an extra multiplier. Poison Heal is supplied separately by Gliscor\'s species passive.',
+		shortDesc: 'Poison Touch; first opposing contact HP hit per entry lowers target Speed.',
+		desc: "Full Poison Touch: contact attacks have a 30% poison chance, subject to Shield Dust, Covert Cloak and normal poison immunities. The first damaging contact hit dealing opposing HP damage each entry lowers that target's Speed by 1. Switching resets this allowance; ability changes do not. Misses, protection, immunity and Substitute-only damage do not spend it. A knockout spends it without lowering a fainted target's Speed. Poison Heal remains a separate passive. No Hyper Cutter or bonus Poison STAB.",
 	},
 	surgesurfer: {
 		shortDesc: 'Doubles Speed on Electric, Water Surface, Underwater, Murkwater Surface and Short-Circuit fields.',
@@ -52,8 +52,11 @@ export function installPassiveCleanupApproved(abilities: AbilityDataTable) {
 	abilities.venompincer = {
 		name: 'Venom Pincer', num: 11440, rating: 4, flags: {},
 		onSourceDamagingHit: abilities.poisontouch.onSourceDamagingHit,
-		onTryBoost: abilities.hypercutter.onTryBoost,
-		onModifySTAB: abilities.venomheal.onModifySTAB,
+		onSourceAfterDamageApplied(damage, target, source, move) {
+            if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || source.volatiles.venompincerspent || !this.checkMoveMakesContact(move, target, source)) return;
+            source.addVolatile('venompincerspent', source, this.effect);
+            if (target.hp) this.boost({spe: -1}, target, source, this.effect);
+        },
 	};
 
 }

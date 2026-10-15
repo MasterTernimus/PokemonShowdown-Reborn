@@ -4,7 +4,7 @@ function signatureMoveText(id: string, credit: string, details: string) {
 	const summaries: {[id: string]: string} = {
 		vorpalblade: 'Hits foes; field-based secondary effects and Glitch form.',
 		gildedarrow: 'User-dependent type; high critical-hit ratio.',
-		gildedhelix: 'Two hits; user-dependent type; high crit rate each hit.',
+		gildedhelix: '2 hits (3 with Hydra Bond); user-type; high crit rate.',
 		beasthunter: 'Hits foes; best category per target; 25% through Protect.',
 	};
 	return {shortDesc: `${credit}'s move. ${summaries[id]}`, desc: `${credit}'s move. ${details}`};
@@ -111,6 +111,6 @@ export const RejuvenationAdvancedDescriptions = {
 	magmadrift: {shortDesc: 'Hits all adjacent. Thaws user; 2x against Dive.', desc: 'Hits all adjacent Pokémon, including allies. Thaws the user. Hits targets using Dive for double damage. Does not burn.'},
 	vorpalblade: signatureMoveText('vorpalblade', 'Allen', 'Hits both foes. Uses field-selected Secret Power secondary effects, normally a 30% chance. Not a slicing move. Bewitched Woods boosts this move by 1.2x, combining with its Fairy boost for 1.8x. On Glitch, becomes Unown Buster: 175 power, ??? type, super effective against ??? targets, and no spread damage penalty. These changes last only for that use.'),
 	gildedarrow: signatureMoveText('gildedarrow', 'Melia', 'High critical-hit ratio. Uses the user\'s current secondary type unless it is Fairy or Dark; otherwise uses the primary type. Ordinary type, field and aura effects apply.'),
-	gildedhelix: signatureMoveText('gildedhelix', 'Melia', 'Hits twice at 50 power each. Each hit has a high critical-hit ratio. Uses the user\'s current secondary type unless it is Fairy or Dark; otherwise uses the primary type. Ordinary type, field and aura effects apply.'),
+	gildedhelix: signatureMoveText('gildedhelix', 'Melia', 'Hits twice at 50 power each, or three times at full power with active Hydra Bond (including composite abilities). Suppression restores two hits. Each hit has a high critical-hit ratio. Uses the user\'s current secondary type unless it is Fairy or Dark; otherwise uses the primary type. Always Special. Ordinary type, field and aura effects apply. In free-for-all, Hydra Bond retains its all-foes targeting without reducing these three hits.'),
 	beasthunter: signatureMoveText('beasthunter', 'Damien', 'Hits both foes. Independently chooses the Physical or Special category dealing greater calculated damage against each target; ties use Special. Makes contact in either category. Deals 25% damage through protection without removing it. Normal priority.'),
 };

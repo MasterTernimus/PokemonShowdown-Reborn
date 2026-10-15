@@ -25,7 +25,7 @@ describe('Mightyena Grim artwork variant', () => {
 		try {
 			battle.makeChoices('team 1', 'team 1');
 			assert.equal(battle.p1.active[0].species.name, 'Mightyena-Grim');
-			assert.deepEqual(battle.p1.active[0].species.passives, ['infiltrator']);
+			assert.deepEqual(battle.p1.active[0].species.passives, ['rattled']);
 			assert(battle.log.some(line => line.includes('Mightyena-Grim')));
 		} finally {
 			battle.destroy();

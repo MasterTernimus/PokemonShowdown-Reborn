@@ -84,7 +84,7 @@ describe('Bond ability component audit', () => {
 		assert.equal(battle.runEvent('SourceModifySpA', arcanine, foe,
 			battle.dex.getActiveMove('icebeam'), 100), 50);
 		assert.equal(battle.runEvent('BasePower', arcanine, foe,
-			battle.dex.getActiveMove('extremespeed'), 100), 150);
+			battle.dex.getActiveMove('extremespeed'), 100), 100);
 	});
 
 	it('Enhanced attacks require the matching transformed ability', () => {

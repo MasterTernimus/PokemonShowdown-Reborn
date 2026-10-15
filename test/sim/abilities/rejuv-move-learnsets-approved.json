@@ -2,83 +2,163 @@
   "multipulse": [
     "bewear",
     "porygonz",
-    "silvally"
+    "silvally",
+    "delcatty",
+    "indeedeef",
+    "cyclizar",
+    "chatot",
+    "wyrdeer"
   ],
   "aquabatics": [
     "primarina",
     "floatzel",
-    "lumineon"
+    "lumineon",
+    "lanturn",
+    "octillery"
   ],
   "feverpitch": [
     "toxtricityaevian",
     "exploud",
-    "skeledirge"
+    "skeledirge",
+    "camerupt",
+    "blaziken",
+    "gyaradosaevian",
+    "scovillain"
   ],
   "thunderraid": [
     "electivire",
     "luxray",
-    "zebstrika"
+    "zebstrika",
+    "togedemaru",
+    "electrodehisui",
+    "eelektross",
+    "toxtricity",
+    "toxtricitylowkey"
   ],
   "desertsmark": [
     "torterra",
     "sandaconda",
-    "palossand"
+    "palossand",
+    "gliscor",
+    "dugtrioalola",
+    "runerigus"
   ],
   "superumdmove": [
     "metagross",
     "duraludon",
     "magnezone",
-    "archaludon"
+    "archaludon",
+    "tinkaton",
+    "bastiodon",
+    "durant",
+    "bronzong",
+    "klinklang"
   ],
   "galestrike": [
     "lucario",
     "gallade",
-    "hawlucha"
+    "hawlucha",
+    "scrafty",
+    "sirfetchd",
+    "machamp",
+    "pawmot",
+    "darmanitan",
+    "emboar",
+    "blaziken"
   ],
   "spectralscream": [
     "dusclops",
     "dusknoir",
     "mismagius",
-    "chandelure"
+    "chandelure",
+    "drifblim",
+    "sinistcha",
+    "mismagiusaevian",
+    "gengar",
+    "sinistchamasterpiece"
   ],
   "barbedweb": [
     "araquanid",
     "ariados",
-    "galvantula"
+    "galvantula",
+    "escavalier"
   ],
   "coldtruth": [
     "walrein",
     "froslass",
-    "cryogonal"
+    "cryogonal",
+    "ninetalesalola",
+    "glaceon",
+    "jynx",
+    "rotomfrost",
+    "beartic",
+    "kyurem",
+    "kyuremwhite"
   ],
   "bunrakubeatdown": [
     "medicham",
     "meowsticf",
-    "mrmime"
+    "mrmime",
+    "beheeyem",
+    "hatterene",
+    "delphox",
+    "musharna",
+    "gardevoir",
+    "claydol",
+    "xatu",
+    "rabsca",
+    "mrrime",
+    "slowking",
+    "oranguru"
   ],
   "matrixshot": [
     "aerodactyl",
     "gigalith",
-    "minior"
+    "minior",
+    "tyranitar",
+    "rampardos",
+    "kleavor",
+    "kabutops",
+    "coalossal",
+    "crustle",
+    "golemalola"
   ],
   "pyrokinesis": [
     "alakazam",
     "delphox",
-    "armarouge"
+    "armarouge",
+    "espeon",
+    "exeggutor",
+    "slowbrogalar"
   ],
   "venamskiss": [
     "seviper",
     "arbok",
-    "salazzle"
+    "salazzle",
+    "garbodor",
+    "toxicroak",
+    "toxtricity",
+    "toxtricitylowkey",
+    "scolipede",
+    "venusaur"
   ],
   "heavenlywing": [
     "pidgeot",
     "togekiss",
-    "swanna"
+    "swanna",
+    "skarmory",
+    "unfezant",
+    "volcaronaaevian",
+    "dragonite"
   ],
   "uproot": [
     "venusaur",
     "vileplume",
-    "cradily"
+    "cradily",
+    "ludicolo",
+    "shiinotic",
+    "rotommow",
+    "froslassaevian",
+    "whimsicott"
   ]
 }

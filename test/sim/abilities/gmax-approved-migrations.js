@@ -35,7 +35,7 @@ describe('Approved Gmax migrations and selected redesigns', () => {
 			const s = Dex.species.get(old.id);
 			assert.deepEqual(s.passives, laterApprovals.passives[old.id] || require('./passive-approval-overlays').current(old.id, grants[old.id] ? [grants[old.id]] : old.passives), old.id);
 			assert.deepEqual(s.abilities, laterApprovals.abilities[old.id] || require('./passive-approval-overlays').abilities(old.id, {...(slots[old.id] || old.abilities)}), old.id);
-			assert.deepEqual(s.types, old.id === 'kinglergmax' ? ['Water', 'Steel'] : old.types, old.id);
+			assert.deepEqual(s.types, old.id === 'kinglergmax' ? ['Water', 'Steel'] : require('./passive-approval-overlays').types(old.id, old.types), old.id);
 			if (grants[old.id]) changed++;
 		}
 		assert.equal(changed, 25);

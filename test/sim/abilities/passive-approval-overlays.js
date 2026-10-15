@@ -58,14 +58,14 @@ exports.passives = expected => Object.assign(beforeKingambitPassives(expected), 
 megaExpected.kingambit = ['supremeoverlord'];
 
 const beforeWrathPassives = exports.passives;
-exports.passives = expected => Object.assign(beforeWrathPassives(expected), {gyarados: ['unbridledwrath'], honchkrow: ['stakeout']});
-megaExpected.gyarados = ['unbridledwrath'];
+exports.passives = expected => Object.assign(beforeWrathPassives(expected), {gyarados: ['intimidate'], honchkrow: ['stakeout']});
+megaExpected.gyarados = ['intimidate'];
 megaExpected.honchkrow = ['stakeout'];
 const beforeOverqwilPassives = exports.passives;
 exports.passives = expected => Object.assign(beforeOverqwilPassives(expected), {overqwil: ['aftermath']});
 megaExpected.overqwil = ['aftermath'];
 const beforeWrathAbilities = exports.abilities;
-exports.abilities = (id, expected) => Object.assign(beforeWrathAbilities(id, expected), id === 'gyarados' ? {0: 'Intimidate'} : {});
+exports.abilities = (id, expected) => Object.assign(beforeWrathAbilities(id, expected), id === 'gyarados' ? {0: 'Unbridled Wrath'} : {});
 
 const beforeSwiftVenomAbilities = exports.abilities;
 exports.abilities = (id, expected) => Object.assign(beforeSwiftVenomAbilities(id, expected), id === 'overqwil' ? {1: 'Swift Venom'} : {});
@@ -88,3 +88,29 @@ exports.passives = expected => Object.assign(beforeSignaturePassives(expected), 
 const beforeSignatureAbilities = exports.abilities;
 const signatureSlots = {skarmory: {H: 'Burning Quake'}, kingdra: {H: 'Storm Drain'}, gallade: {S: 'Ruptured Heaven'}, dusknoir: {H: 'Soul Reaver'}, escavalier: {S: 'Ruined Sky'}, talonflame: {S: 'Burning Quake'}, corviknight: {H: 'Steelwing Escort', S: 'Burning Quake'}, sirfetchd: {S: 'Ruined Sky'}, tinkaton: {1: 'Apocalyptic Flame'}};
 exports.abilities = (id, expected) => Object.assign(beforeSignatureAbilities(id, expected), signatureSlots[id] || {});
+
+const beforeRoyalAegisAbilities=exports.abilities;
+exports.abilities=(id,expected)=>Object.assign(beforeRoyalAegisAbilities(id,expected),id==='nidoqueen'?{H:'Royal Aegis'}:{});
+
+const beforeSilentEchoAbilities=exports.abilities;
+exports.abilities=(id,expected)=>Object.assign(beforeSilentEchoAbilities(id,expected),{gliscor:{1:'Silent Hunter'},gliscoralt:{1:'Silent Hunter'},froslassaevian:{1:'Dissonant Echo'}}[id]||{});
+
+// Explicit approved revisions reconciled with their original evidence; no baseline regeneration.
+const starterFinish=require('./starter-finish-reviewed.json');
+Object.assign(megaExpected,starterFinish.passives);
+const beforeStarterFinishAbilities=exports.abilities;
+exports.abilities=(id,expected)=>Object.assign(beforeStarterFinishAbilities(id,expected),starterFinish.slots[id]||{});
+
+// Recorded roster revisions, shared by historical scope snapshots. Values are
+// fixed expectations from the approved roster, not read from the runtime Dex.
+megaExpected.mightyenagrim = ['rattled'];
+const reviewedStats = {
+ kingdra: [85,105,90,105,90,95],
+ mightyena: [90,115,80,60,80,125], mightyenadeso: [90,115,80,60,80,125], mightyenagrim: [90,115,80,60,80,125],
+ mightyenamega: [90,140,105,85,100,130],
+ cinccinodeso: [75,110,90,60,90,125], toxicroak: [83,121,70,111,70,95], toxicroakdeso: [83,121,70,111,70,95],
+ sevipermega: [75,140,120,90,120,65], staraptor: [85,120,80,50,70,100], staraptormega: [85,140,110,60,100,110],
+};
+exports.stats = (id, fallback) => reviewedStats[id] ? Object.fromEntries(['hp','atk','def','spa','spd','spe'].map((key,i)=>[key,reviewedStats[id][i]])) : fallback;
+exports.types = (id, fallback) => id === 'gorebyss' ? ['Water','Fairy'] : fallback;
+exports.snapshot = old => ({id: old.id, abilities: exports.abilities(old.id, {...old.abilities}), passives: exports.current(old.id, old.passives), types: exports.types(old.id, old.types), stats: exports.stats(old.id, old.stats)});

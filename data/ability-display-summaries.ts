@@ -43,7 +43,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"astralward": "Reflects status moves; Psychic-field Speed boost; reveals threats and Illusions.",
 	"moonlightvigil": "Blocks Intimidate; opposing moves spend extra PP; reveals Illusions.",
 	"neurotoxin": "Combines the listed abilities.",
-	"punchfiend": "1.4x punching power; no flinching or Intimidate Attack drop.",
+	"punchfiend": "Keen Eye, Unseen Fist and Inner Focus.",
 	"doublestrike": "Maximizes multi-hit counts; 1.5x weak-move and 1.4x punching power, stacking when both apply.",
 	"spinfiend": "1.5x power for moves at 60 power or less (80 on Factory); Prevents and cures sleep.",
 	"terragift": "Same-type moves gain 1.3x power.",
@@ -94,7 +94,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"battlebond": "A KO can trigger a Bond form; no lethal-hit survival.",
 	"shadowbond": "Water Shuriken hits 3 times at 30 power and always critically hits; 1.3x same-type move power.",
 	"apexbond": "Dual Chop cannot miss and always critically hits.",
-	"sacredbond": "Extreme Speed has 1.5x power and always critically hits.",
+	"sacredbond": "Extreme Speed always critically hits.",
 	"apexarmor": "Combines the listed abilities.",
 	"hardyskin": "No sleep; rain heals 1/8 HP per turn, sun costs 1/8; move KOs give +1 Attack.",
 	"solarhydra": "FFA singles hit all foes at 1.3x; Creates Grassy Terrain on entry; disabled on Cold Eclipse.",
@@ -657,3 +657,53 @@ AbilityDisplaySummaries.requiem = AbilityDescriptionOverrides.requiem.shortDesc;
 AbilityDisplaySummaries.soulreaver = AbilityDescriptionOverrides.soulreaver.shortDesc;
 AbilityDisplaySummaries.wickedsnare = AbilityDescriptionOverrides.wickedsnare.shortDesc;
 AbilityDisplaySummaries.sweetsanctuary = AbilityDescriptionOverrides.sweetsanctuary.shortDesc;
+
+AbilityDisplaySummaries.silenthunter = 'Biting moves gain another critical-hit stage.';
+
+import {DissonantEchoDescriptions} from './dissonant-echo';
+for (const [id, details] of Object.entries(DissonantEchoDescriptions)) AbilityDisplaySummaries[id] = details.shortDesc;
+
+import {PrimarinaApprovedDescriptions} from "./primarina-approved";
+for (const [id, text] of Object.entries(PrimarinaApprovedDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {QueuedAbilityDescriptions} from "./queued-abilities-approved";
+for (const [id, text] of Object.entries(QueuedAbilityDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {SwalotVespiquenDescriptions} from './swalot-vespiquen-approved';
+for (const [id, text] of Object.entries(SwalotVespiquenDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {FairyEclipseDescriptions} from './fairy-eclipse-approved';
+for (const [id, text] of Object.entries(FairyEclipseDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {RivalSupportDescriptions} from './rival-support-descriptions';
+for (const [id,text] of Object.entries(RivalSupportDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {PearlHydraulicDescriptions} from './pearl-hydraulic-approved';
+for (const [id,text] of Object.entries(PearlHydraulicDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {CalculatedTrajectoryDescriptions} from './calculated-trajectory-approved';
+for (const [id,text] of Object.entries(CalculatedTrajectoryDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {BoneSpoilsInfernalDescriptions} from './bone-spoils-infernal-approved';
+for (const [id,text] of Object.entries(BoneSpoilsInfernalDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {StarterFinishDescriptions} from './starter-finish-approved';
+for (const [id,text] of Object.entries(StarterFinishDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {AuraGazeDescriptions} from './aura-gaze-approved';
+for (const [id,text] of Object.entries(AuraGazeDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {WeatherChoiceDescriptions} from './weather-choice-approved';
+for (const [id,text] of Object.entries(WeatherChoiceDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {ChampionMeteorDescriptions} from './champion-meteor-approved';
+for (const [id,text] of Object.entries(ChampionMeteorDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {AdaptiveArsenalDescriptions} from './adaptive-arsenal-approved';
+for (const [id,text] of Object.entries(AdaptiveArsenalDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {GarchompPoiseDescriptions} from './garchomp-poise-approved';
+for (const [id,text] of Object.entries(GarchompPoiseDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {CramorantGoodraKommoDescriptions} from './cramorant-goodra-kommo-approved';
+for (const [id,text] of Object.entries(CramorantGoodraKommoDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;

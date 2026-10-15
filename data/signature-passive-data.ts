@@ -7,6 +7,7 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
+	noseformation: ['filter', 'elevate'],
 	unbridledwrath: ['sheerforce', 'innerfocus'],
 	eldritchremedy: ['owntempo', 'curiousmedicine'], pearlcurrent: ['waterabsorb'], saltbastion: ['sturdy'],
 	mirechorus: ['liquidvoice'],
@@ -37,3 +38,5 @@ export const SignaturePassiveDescriptions: { [id: string]: { shortDesc: string, 
 	mirechorus: { shortDesc: 'Sound becomes Water (Ice on Icy), 1.2x power; noncontact sound can poison.',
 		desc: 'Sound moves become Water-type, or Ice-type on Icy Field, and have 1.2x power. Each foe damaged by a noncontact sound hit has a 20% poison chance. Shield Dust and Covert Cloak prevent this added poison. This passive does not include contact Poison Touch.' },
 };
+
+SignaturePassiveComponents.bonewarrior = ['battlearmor'];

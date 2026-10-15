@@ -125,14 +125,15 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		assert.equal(battle.runEvent('ModifyAtk', p, t, m, 100), 200);
 		assert.equal(battle.runEvent('Effectiveness', p, 'Fire', Dex.getActiveMove('flamethrower'), 0), 0);
 	});
-	it('Nose Formation keeps Elevate, Filter and its existing mini-nose callbacks alongside passive Levitate', () => {
-		const [p] = setup('Probopass', 'Nose Formation');
-		assert.deepEqual(p.getPassives(), ['levitate']);
-		assert(p.hasAbility('levitate'));
-		assert(p.hasAbility('elevate'));
-		assert(p.hasAbility('filter'));
-		assert(p.getAbility().onSourceDamagingHit);
-		assert(p.getAbility().onSourceAfterFaint);
+	it('Nose Formation is the sole passive and retains Elevate, Filter and mini-nose callbacks', () => {
+		const [p] = setup('Probopass', 'Magnetic Command');
+		assert.deepEqual(p.getPassives(), ['noseformation']);
+		assert(p.hasAbilityOrPassive('elevate'));
+		assert(p.hasAbilityOrPassive('filter'));
+		assert(!p.isGrounded());
+		const passive = require('../../../dist/sim/species-passives').passiveEffect(battle, 'noseformation');
+		assert(passive.onSourceDamagingHit);
+		assert(passive.onSourceAfterFaint);
 	});
 	it('Void Omen triggers 3-turn Safeguard on a successful secondary and retains its ward', () => {
 		const [p, t] = setup('Togekiss', 'Void Omen');

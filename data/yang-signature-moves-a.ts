@@ -35,7 +35,7 @@ function finishInfernalField(this: Battle, source: Pokemon, move: ActiveMove) {
  this.field.clearTerrain();
 }
 export const YangSignatureMovesA: MoveDataTable = {
- kaboom: {num:10435,name:'KABOOM!!',type:'Electric',category:'Special',basePower:90,accuracy:100,pp:10,priority:0,target:'normal',flags,recoil:[1,4],onModifyMove(move){if(this.field.isTerrainOrAura('electricterrain'))delete move.recoil;},secondary:{chance:100,self:{boosts:{spa:1}}}},
+ kaboom: {num:10435,name:'KABOOM!!',type:'Electric',category:'Special',basePower:90,accuracy:100,pp:10,priority:0,target:'normal',flags,recoil:[1,4],onModifyMove(move,source){move.category=source.getStat('atk',false,true)>source.getStat('spa',false,true)?'Physical':'Special';if(this.field.isTerrainOrAura('electricterrain'))delete move.recoil;},secondary:{chance:100,self:{boosts:{spa:1}}}},
  cactibash: {num:10436,name:'Cacti Bash',type:'Grass',category:'Physical',basePower:50,accuracy:100,pp:10,priority:0,target:'normal',flags:contact,multihit:2,onBasePower(bp,source,target){if(this.field.isTerrain('desertterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},
   onAfterHit(target,source,move){const state=move as ActiveMove & {cactiSpikesSet?:boolean};if(target.hp||target.isAlly(source)||state.cactiSpikesSet||this.field.isTerrain(['watersurfaceterrain','murkwatersurfaceterrain','midnightzoneterrain']))return;state.cactiSpikesSet=true;target.side.addSideCondition('spikes',source,move);}},
  corrosivestrike: {num:10437,name:'Corrosive Strike',type:'Poison',category:'Physical',basePower:70,accuracy:100,pp:15,priority:0,target:'normal',flags:contact,ignoreImmunity:{Poison:true},onEffectiveness(typeMod,target,type){if(type==='Steel')return 1;},volatileStatus:'corrosivestrike',onBasePower(bp,source,target){if(this.field.isTerrain('corrosiveterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},
@@ -60,7 +60,7 @@ export const YangSignatureMovesA: MoveDataTable = {
   onAfterHit(target,source,move){if((target.getMoveHitData(move).damage||0)>0)clearField.call(this,target,source,move);},onAfterSubDamage(damage,target,source,move){if(damage>0)clearField.call(this,target,source,move);}},
 };
 export const YangSignatureLearnsetsA: {[id:string]:string[]} = {
- kaboom:['electrode','electrodehisui','golem','golemalola','bronzong','magnezone'],
+ kaboom:['electrode','electrodehisui','golem','golemalola','bronzong','magnezone','forretress','rotom','rotomheat','rotomwash','rotomfrost','rotomfan','rotommow'],
  cactibash:['cacturne','maractus','chesnaught'],
  corrosivestrike:['seviper','muk','mukalola','crobat','skuntank','grafaiai','sneasler','glimmora','toxapex'],
  toxicvial:['weezing','garbodor','toxapex','nidoqueen','toxicroak'],
@@ -74,7 +74,7 @@ export const YangSignatureLearnsetsA: {[id:string]:string[]} = {
 };
 export const YangSignatureDescriptionsA: {[id:string]:{shortDesc:string,desc:string}} = {};
 const descriptions: {[id:string]:[string,string]} = {
- kaboom:['Julia','Raises Sp. Atk by 1 as a guaranteed secondary effect; recoil is 1/4 damage dealt.'],
+ kaboom:['Julia','Uses the higher staged Attack or Sp. Atk (Special on ties), against the corresponding defense. Raises Sp. Atk by 1 as a guaranteed secondary effect; recoil is 1/4 damage dealt.'],
  cactibash:['Florinia','Hits twice. Knocking out the target adds one layer of Spikes to its side, at most once per use.'],
  corrosivestrike:['Corey','Super effective against Steel. Inflicts non-stacking corrosion dealing 1/16 maximum HP each turn until the target switches.'],
  toxicvial:['Corey','Badly poisons the target and lowers its Attack and Sp. Atk by 1. Normal status and stat-drop protections apply.'],

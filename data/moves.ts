@@ -1,3 +1,4 @@
+import {accumulationState} from './swalot-vespiquen-approved';
 import {skywardenDefog} from './approved-support-reworks';
 import type {PokemonConditionData, FieldConditionData, SideConditionData} from '../sim/dex-conditions';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
@@ -1490,17 +1491,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onDisableMove(pokemon) {
-			if (pokemon.hasAbility('accumulation')) return;
+			if (pokemon.hasAbilityOrPassive('accumulation')) return;
 			if (!pokemon.ateBerry) pokemon.disableMove('belch');
 		},
 		onAfterMove(source, target, move) {
-			if (!source.hasAbility('accumulation')) return;
-			if (source.abilityState.accumulationScriptedReleaseTurn === this.turn) return;
+			if (!source.hasAbilityOrPassive('accumulation')) return;
+			if (accumulationState(source).accumulationScriptedReleaseTurn === this.turn) return;
 			if (['accumulation', 'swallow'].includes(move.sourceEffect)) return;
-			if (source.abilityState.accumulationSuppressMoveChain) return;
-			source.abilityState.accumulationReleasedTurn = this.turn;
-			source.abilityState.accumulationAutoBelch = false;
-			source.abilityState.accumulationBelchTarget = null;
+			if (accumulationState(source).accumulationSuppressMoveChain) return;
+			accumulationState(source).accumulationReleasedTurn = this.turn;
+			accumulationState(source).accumulationAutoBelch = false;
+			accumulationState(source).accumulationBelchTarget = null;
 		},
 		target: "normal",
 		type: "Poison",
@@ -4382,7 +4383,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			if (attacker.hasAbility('gulpmissile') && attacker.species.name === 'Cramorant' && !attacker.transformed) {
+			if (attacker.hasAbilityOrPassive('gulpmissile') && attacker.species.name === 'Cramorant' && !attacker.transformed) {
 				const forme = this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain']) || attacker.hp > attacker.maxhp / 2 ? 'cramorantgulping' : 'cramorantgorging';
 				attacker.formeChange(forme, move);
 			}
@@ -14994,7 +14995,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	outrage: {
 		num: 200,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 140,
 		category: "Physical",
 		name: "Outrage",
 		pp: 10,
@@ -15213,7 +15214,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	petaldance: {
 		num: 80,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 140,
 		category: "Special",
 		name: "Petal Dance",
 		pp: 10,
@@ -16802,7 +16803,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	ragingfury: {
 		num: 833,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 140,
 		category: "Physical",
 		name: "Raging Fury",
 		pp: 10,
@@ -20482,8 +20483,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
 			if ((pokemon.volatiles['stockpile']?.layers || 0) >= 3 &&
-				!pokemon.abilityState.accumulationAutoSpitUp &&
-				!pokemon.abilityState.accumulationSuppressMoveChain) {
+				!accumulationState(pokemon).accumulationAutoSpitUp &&
+				!accumulationState(pokemon).accumulationSuppressMoveChain) {
 				move.breaksProtect = true;
 				(move as any).spitUpBreaksProtect = true;
 			}
@@ -20495,14 +20496,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return !!source.volatiles['stockpile'];
 		},
 		onAfterMove(pokemon, target, move) {
-			if (pokemon.hasAbility('accumulation')) {
-				pokemon.abilityState.accumulationReleasedTurn = this.turn;
-				if (!pokemon.abilityState.accumulationSuppressMoveChain && target && !target.fainted) {
-					pokemon.abilityState.accumulationAutoBelch = true;
-					pokemon.abilityState.accumulationNoSpitUpAfterBelch = true;
+			if (pokemon.hasAbilityOrPassive('accumulation')) {
+				accumulationState(pokemon).accumulationReleasedTurn = this.turn;
+				if (!accumulationState(pokemon).accumulationSuppressMoveChain && target && !target.fainted) {
+					accumulationState(pokemon).accumulationAutoBelch = true;
+					accumulationState(pokemon).accumulationNoSpitUpAfterBelch = true;
 					this.actions.useMove('belch', pokemon, { target });
-					pokemon.abilityState.accumulationAutoBelch = false;
-					pokemon.abilityState.accumulationNoSpitUpAfterBelch = false;
+					accumulationState(pokemon).accumulationAutoBelch = false;
+					accumulationState(pokemon).accumulationNoSpitUpAfterBelch = false;
 				}
 				consumeStockpileLayer(pokemon, this);
 				return;
@@ -21639,7 +21640,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp * modifier, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			if (!success) this.add('-fail', pokemon, 'heal');
-			if (pokemon.hasAbility('accumulation')) {
+			if (pokemon.hasAbilityOrPassive('accumulation')) {
 				const targets = pokemon.foes().filter(foe => foe && !foe.fainted);
 				let best: { target: Pokemon, damage: number } | null = null;
 				for (const target of targets) {
@@ -21653,20 +21654,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				if (best) {
 					this.add('-activate', pokemon, 'ability: Accumulation');
-					pokemon.abilityState.accumulationAutoSpitUp = true;
-					pokemon.abilityState.accumulationReleasedTurn = this.turn;
-					pokemon.abilityState.accumulationScriptedReleaseTurn = this.turn;
-					pokemon.abilityState.accumulationSuppressMoveChain = true;
+					accumulationState(pokemon).accumulationAutoSpitUp = true;
+					accumulationState(pokemon).accumulationReleasedTurn = this.turn;
+					accumulationState(pokemon).accumulationScriptedReleaseTurn = this.turn;
+					accumulationState(pokemon).accumulationSuppressMoveChain = true;
 					this.actions.useMove('spitup', pokemon, { target: best.target });
 					if (!best.target.fainted) {
-						pokemon.abilityState.accumulationAutoBelch = true;
+						accumulationState(pokemon).accumulationAutoBelch = true;
 						this.actions.useMove('belch', pokemon, { target: best.target });
 					}
-					pokemon.abilityState.accumulationSuppressMoveChain = false;
-					pokemon.abilityState.accumulationAutoBelch = false;
-					pokemon.abilityState.accumulationAutoSpitUp = false;
-					pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
-					pokemon.abilityState.accumulationNoSpitUpAfterBelch = false;
+					accumulationState(pokemon).accumulationSuppressMoveChain = false;
+					accumulationState(pokemon).accumulationAutoBelch = false;
+					accumulationState(pokemon).accumulationAutoSpitUp = false;
+					accumulationState(pokemon).accumulationNoBelchAfterSpitUp = false;
+					accumulationState(pokemon).accumulationNoSpitUpAfterBelch = false;
 				}
 			}
 			pokemon.removeVolatile('stockpile');
@@ -22583,7 +22584,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thrash: {
 		num: 37,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 140,
 		category: "Physical",
 		name: "Thrash",
 		pp: 10,
@@ -25080,3 +25081,19 @@ Object.assign(Moves, YangSignatureMoves);
 
 import {RejuvenationAdvancedMoves} from './rejuvenation-advanced-moves';
 Object.assign(Moves, RejuvenationAdvancedMoves);
+
+// One canonical Mud Barrage: preserve the approved Mud-Slap mechanics and classification.
+Moves.mudbarrage = {...Moves.mudslap, name: 'Mud Barrage'};
+delete Moves.mudslap;
+
+Moves.drakefang = {...Moves.poisonfang, num:11485, name:'Drake Fang', type:'Dragon', isNonstandard:'Custom'};
+
+import {installStarterFinishMoves} from './starter-finish-approved';
+installStarterFinishMoves(Moves);
+
+import {installFinisherMoves} from './finisher-moves-approved';
+installFinisherMoves(Moves);
+
+// Approved Order targeting; inherited healing, boosts and field callbacks remain intact.
+Moves.defendorder.target = 'adjacentAllyOrSelf';
+Moves.healorder.target = 'adjacentAllyOrSelf';

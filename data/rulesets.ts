@@ -1042,7 +1042,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	ohkoclause: {
 		effectType: 'ValidatorRule',
 		name: 'OHKO Clause',
-		desc: "Bans all OHKO moves, such as Fissure",
+		desc: "Bans moves that retain OHKO mechanics",
 		onBegin() {
 			this.add('rule', 'OHKO Clause: OHKO moves are banned');
 		},

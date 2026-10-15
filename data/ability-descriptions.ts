@@ -201,7 +201,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Cannot flinch; blocks Intimidate; Entry lowers foe defenses; opposing moves spend extra PP; No opposing accuracy drops; ignores evasion; reveals Illusions."
 	},
 	"hydrabond": {
-		"desc": "Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den.",
+		"desc": "Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Gilded Helix is the exception: three full 50-power hits in every format, with all-foes targeting in Free-for-All; suppression restores its native two hits.",
 		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x."
 	},
 	"neurotoxin": {
@@ -209,7 +209,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Heals 1/3 HP on switching out."
 	},
 	"punchfiend": {
-		"desc": "Punching moves have 1.4x power. Contact moves bypass protection except Max Guard. Prevents flinching and Intimidate's Attack drop.",
+		"desc": "Full Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions; Mirror Arena entry grants +1 accuracy and Laser Focus. Unseen Fist lets contact moves bypass protection except Max Guard. Inner Focus prevents flinching and Intimidate Attack drops. Hitmonchan receives Iron Fist separately as its species passive.",
 		"shortDesc": "1.4x punching power; contact bypasses protection; no flinching or Intimidate Attack drop."
 	},
 	"doublestrike": {
@@ -493,8 +493,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Dual Chop never misses and always critical."
 	},
 	"sacredbond": {
-		"desc": "Battle Bond's shared effects plus Magma Armor, Intimidate, and Flash Fire. Arcanine-Battle-Bond's Extreme Speed has 1.5x power and always critically hits.",
-		"shortDesc": "Extreme Speed is 1.5x power and always critical."
+		"desc": "Battle Bond's shared effects plus Magma Armor, Intimidate, and Flash Fire. Arcanine-Battle-Bond's Extreme Speed always critically hits.",
+		"shortDesc": "Extreme Speed always critically hits."
 	},
 	"berserk": {
 		"desc": "When an attack takes it from above half HP to half or less, gains +1 Attack and Sp. Atk after the move. Dragon's Den entry gives +2 Attack and Sp. Atk.",
@@ -1043,8 +1043,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Summons hail; Rock/critical-hit protection; 20% less damage; stronger Ice moves; field and Veil on fainting."
 	},
 	"prismscale": {
-		"desc": "Marvel Scale boosts Defense while statused or on supported fields. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Swift Swim boosts Speed in rain and supported water fields.",
-		"shortDesc": "Marvel Scale boosts Defense while statused or on supported fields. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop."
+		"desc": "Friend Guard reduces attack damage to allies by 25%. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Swift Swim boosts Speed in rain and supported water fields.",
+		"shortDesc": "Friend Guard reduces attack damage to allies by 25%. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop."
 	},
 	"royalscales": {
 		"desc": "Marvel Scale boosts Defense while statused or on supported fields. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Swift Swim boosts Speed in rain and supported water fields. Its Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. It gains STAB on Dragon-type moves. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage.",
@@ -3908,3 +3908,54 @@ AbilityDescriptionOverrides.requiem = {"desc":"Damaging attacks have a 30% chanc
 AbilityDescriptionOverrides.soulreaver = {shortDesc: 'Infiltrator; Ghost attacks drain at least 25% of damage dealt.', desc: 'Full Infiltrator: bypasses opposing Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Physical and special Ghost attacks, including Night Shade, restore HP equal to 25% of actual damage dealt. Uses the greater of native drain and 25%, never adds them; Spectral Scream remains 25%. Curse residual damage does not drain. Normal ability suppression disables both effects.'};
 AbilityDescriptionOverrides.wickedsnare = {shortDesc: 'Intimidate; damaging Dark moves lower each damaged foe\'s Defense after all hits.', desc: 'Full Intimidate lowers adjacent foes\' Attack by one stage on entry, respecting its normal protections. After a damaging Dark move finishes all hits, each opponent that took positive HP damage loses one Defense stage, once per target per move. Substitute-only damage, misses, protection and immunity do not trigger this effect. Native effects remain independent: Crunch can also cause its own Defense drop. Prankster remains the species passive.'};
 AbilityDescriptionOverrides.sweetsanctuary = {shortDesc: 'Ripen; successful Decorate heals its boosted target by 1/4 max HP.', desc: 'Full local Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries\' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current maximum HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing. Friend Guard remains the species passive; G-Max Finale retains its separate 1/6 active-side healing.'};
+
+AbilityDescriptionOverrides.silenthunter = {shortDesc: 'Super Luck; biting moves gain another critical-hit stage.', desc: 'Full Super Luck raises the critical-hit rate of all moves by one stage. Biting moves gain one additional critical-hit stage. In current-generation battles, ordinary biting moves have a 50% critical-hit chance, or 100% with Scope Lens or Razor Claw. Normal critical-hit damage and critical-hit prevention apply. No extra critical-damage multiplier or accuracy bonus.'};
+
+import {DissonantEchoDescriptions} from './dissonant-echo';
+Object.assign(AbilityDescriptionOverrides, DissonantEchoDescriptions);
+
+import {PrimarinaApprovedDescriptions} from "./primarina-approved";
+Object.assign(AbilityDescriptionOverrides, PrimarinaApprovedDescriptions);
+
+import {QueuedAbilityDescriptions} from "./queued-abilities-approved";
+Object.assign(AbilityDescriptionOverrides, QueuedAbilityDescriptions);
+
+import {SwalotVespiquenDescriptions} from './swalot-vespiquen-approved';
+Object.assign(AbilityDescriptionOverrides, SwalotVespiquenDescriptions);
+
+import {FairyEclipseDescriptions} from './fairy-eclipse-approved';
+Object.assign(AbilityDescriptionOverrides, FairyEclipseDescriptions);
+
+import {RivalSupportDescriptions} from './rival-support-descriptions';
+Object.assign(AbilityDescriptionOverrides, RivalSupportDescriptions);
+
+import {PearlHydraulicDescriptions} from './pearl-hydraulic-approved';
+Object.assign(AbilityDescriptionOverrides, PearlHydraulicDescriptions);
+
+import {CalculatedTrajectoryDescriptions} from './calculated-trajectory-approved';
+Object.assign(AbilityDescriptionOverrides, CalculatedTrajectoryDescriptions);
+
+import {BoneSpoilsInfernalDescriptions} from './bone-spoils-infernal-approved';
+Object.assign(AbilityDescriptionOverrides, BoneSpoilsInfernalDescriptions);
+
+import {StarterFinishDescriptions} from './starter-finish-approved';
+Object.assign(AbilityDescriptionOverrides, StarterFinishDescriptions);
+
+import {AuraGazeDescriptions} from './aura-gaze-approved';
+Object.assign(AbilityDescriptionOverrides, AuraGazeDescriptions);
+
+import {WeatherChoiceDescriptions, SoulCremationBypassDescription} from './weather-choice-approved';
+Object.assign(AbilityDescriptionOverrides, WeatherChoiceDescriptions);
+AbilityDescriptionOverrides.soulcremation.desc += SoulCremationBypassDescription;
+
+import {ChampionMeteorDescriptions} from './champion-meteor-approved';
+Object.assign(AbilityDescriptionOverrides, ChampionMeteorDescriptions);
+
+import {AdaptiveArsenalDescriptions} from './adaptive-arsenal-approved';
+Object.assign(AbilityDescriptionOverrides, AdaptiveArsenalDescriptions);
+
+import {GarchompPoiseDescriptions} from './garchomp-poise-approved';
+Object.assign(AbilityDescriptionOverrides, GarchompPoiseDescriptions);
+
+import {CramorantGoodraKommoDescriptions} from './cramorant-goodra-kommo-approved';
+Object.assign(AbilityDescriptionOverrides, CramorantGoodraKommoDescriptions);

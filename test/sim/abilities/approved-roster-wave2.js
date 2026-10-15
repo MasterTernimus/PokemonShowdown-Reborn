@@ -32,12 +32,12 @@ describe('Approved roster follow-up', () => {
 	}
 	it('assigns approved slots and searchable retained components', () => {
 		for (const [species, slot, ability, component] of [
-			['Nidoking', 'H', 'Sovereign Arsenal', 'Sovereign Arsenal'],
-			['Kingler', '1', 'Titan Pincer', 'Hyper Cutter'], ['Steelix', '1', 'Iron Lash', 'Whiplash'],
+			['Nidoking', 'H', "Patriarch's Wrath", 'Power Drill'],
+			['Kingler', '1', 'Hyper Cutter', 'Hyper Cutter'], ['Steelix', '1', 'Iron Lash', 'Whiplash'],
 			['Hariyama', 'H', 'Grit Grappler', 'Guts'], ['Krookodile', '1', 'Dread Jaw', 'Moxie'],
 			['Beartic', '1', 'Floe Hunter', 'Slush Rush'], ['Escavalier', 'H', 'Lanceguard', 'Shell Armor'],
 			['Primarina', 'H', 'Tidal Voice', 'Liquid Voice'], ['Vikavolt', '0', 'Hover Cannon', 'Levitate'],
-			['Vikavolt', 'H', 'Recharge Relay', 'Battery'], ['Houndstone', 'H', 'Mourning Coat', 'Fluffy'],
+			['Vikavolt', 'H', 'Battery', 'Battery'], ['Houndstone', 'H', 'Mourning Coat', 'Fluffy'],
 			['Dondozo', '1', 'Dozing Giant', 'Oblivious'], ['Clodsire', '1', 'Quill Reservoir', 'Water Absorb'],
 		]) {
 			assert.equal(Dex.species.get(species).abilities[slot], ability);
@@ -47,17 +47,17 @@ describe('Approved roster follow-up', () => {
 		assert.equal(Dex.species.get('Beautifly').abilities.H, 'Gale Bloom');
 		assert(!abilityIncludesComponent('Twin Blades', 'Dual Wield'));
 	});
-	it('boosts already-Water Sparkling Aria exactly 1.3x and spares allies', () => {
+	it('boosts already-Water Sparkling Aria exactly 1.2x and spares allies', () => {
 		const [p, ally, foe] = make('Tidal Voice', 'Primarina');
 		const move = battle.dex.getActiveMove('sparklingaria');
-		assert.equal(battle.runEvent('BasePower', p, foe, move, 100, true), 130);
+		assert.equal(battle.runEvent('BasePower', p, foe, move, 100, true), 120);
 		assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('surf'), 100, true), 100);
 		assert.equal(modify('sparklingaria', p, foe).target, 'allAdjacentFoes');
 		p.boosts.spe = -2;
 		const allyHP = ally.hp;
 		hit(move, p, foe);
 		assert.equal(ally.hp, allyHP);
-		assert.equal(p.boosts.spe, 0);
+		assert.equal(p.boosts.spe, -2);
 		p.boosts.spe = -1;
 		hit(move, p, foe);
 		assert.equal(p.boosts.spe, -1);
@@ -176,10 +176,10 @@ describe('Approved roster follow-up', () => {
 		battle.actions.switchIn(reserve, 0); battle.actions.runSwitch(reserve);
 		assert.equal(reserve.boosts.atk, -1); assert(!p.abilityState.charged);
 	});
-	it('Floe Hunter crits only slower targets with bites in snow', () => {
+	it('Floe Hunter no longer grants automatic biting critical hits', () => {
 		const [p, , foe] = make('Floe Hunter');
 		battle.field.setWeather('snow'); p.storedStats.spe = 400;
-		assert(modify('icefang', p, foe).willCrit);
+		assert(!modify('icefang', p, foe).willCrit);
 		assert(!modify('iciclecrash', p, foe).willCrit);
 		battle.field.clearWeather(); assert(!modify('icefang', p, foe).willCrit);
 	});

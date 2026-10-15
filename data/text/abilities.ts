@@ -609,8 +609,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	apexbond: {"name":"Apex Bond","desc":"Battle Bond's shared effects plus Supreme Overlord and Rough Skin. Garchomp-Battle-Bond's Dual Chop never misses and always critically hits. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier; unlocks at 2/4/5 are unchanged.","shortDesc":"Dual Chop never misses and always critical. Supreme Overlord caps at 5 effective faints (1.5x power)."},
 	sacredbond: {
 		name: "Sacred Bond",
-		desc: "Battle Bond's shared effects plus Magma Armor, Intimidate, and Flash Fire. Arcanine-Battle-Bond's Extreme Speed has 1.5x power and always critically hits.",
-		shortDesc: "Battle Bond + Magma Armor + Intimidate + Flash Fire; Extreme Speed is 1.5x power and always critical.",
+		desc: "Battle Bond's shared effects plus Magma Armor, Intimidate, and Flash Fire. Arcanine-Battle-Bond's Extreme Speed always critically hits.",
+		shortDesc: "Battle Bond + Magma Armor + Intimidate + Flash Fire; Extreme Speed always critically hits.",
 	},
 	beadsofruin: {
 		name: "Beads of Ruin",
@@ -1031,8 +1031,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	royalscales: {
 		name: "Royal Scales",
-		desc: "Prism Scale, Dragonize, and Self Sufficient. Status or Prism Scale's supported fields boost Defense by 1.5x. Blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Speed doubles in rain and Swift Swim's supported fields. Normal moves become Dragon and gain Dragonize's power boost. Restores 1/16 of this Pokemon's maximum HP at the end of each turn and prevents Sandstorm and Hail damage.",
-		shortDesc: "Prism Scale + Dragonize + Self Sufficient; heals 1/16 each turn; immune to Sandstorm and Hail.",
+		desc: "Marvel Scale, Oblivious, Swift Swim, Dragonize, and Self Sufficient. Status or Marvel Scale's supported fields boost Defense by 1.5x. Blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Speed doubles in rain and Swift Swim's supported fields. Normal moves become Dragon and gain Dragonize's power boost. Restores 1/16 of this Pokemon's maximum HP at the end of each turn and prevents Sandstorm and Hail damage.",
+		shortDesc: "Marvel Scale + Oblivious + Swift Swim + Dragonize + Self Sufficient; heals 1/16 each turn; immune to Sandstorm and Hail.",
 	},
 	toxicarmor: {
 		name: "Toxic Armor",
@@ -2048,8 +2048,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	prismscale: {
 		name: "Prism Scale",
-		desc: "Marvel Scale boosts Defense while statused or on supported fields. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Swift Swim boosts Speed in rain and supported water fields.",
-		shortDesc: "Marvel Scale + Oblivious + Swift Swim.",
+		desc: "Friend Guard reduces attack damage to allies by 25%. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Swift Swim boosts Speed in rain and supported water fields.",
+		shortDesc: "Friend Guard + Oblivious + Swift Swim.",
 	},
 	megalauncher: {
 		name: "Mega Launcher",
@@ -3870,7 +3870,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hydrabond: {
 		name: "Hydra Bond",
-		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power.",
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Gilded Helix is the exception: three full 50-power hits in every format, with all-foes targeting in Free-for-All; suppression restores its native two hits.",
 		shortDesc: "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x.",
 	},
 	hydraheart: {
@@ -4210,7 +4210,7 @@ AbilitiesText.soothingpresence = {
 };
 
 AbilitiesText.steelplumage = {"name":"Steel Plumage","desc":"Once per entry, after surviving an opposing contact move's full hit sequence and taking actual HP damage, sets one layer of Spikes on that attacker's side. Normal Spikes layer limit applies.","shortDesc":"Once/entry, surviving a foe contact attack sets Spikes on its side."};
-AbilitiesText.venomcanticle = {"name":"Venom Canticle","desc":"Damaging Normal-type sound moves become Poison-type, with no extra power boost. Status moves and targeting are unchanged.","shortDesc":"Damaging Normal sound moves become Poison; no extra power boost."};
+AbilitiesText.venomcanticle = {"name":"Venom Canticle","desc":"Damaging sound moves have 1.2x power. Damaging Normal-type sound moves become Poison-type. Status moves and targeting are unchanged.","shortDesc":"Sound attacks: 1.2x power; Normal sound attacks become Poison."};
 AbilitiesText.solarbud = {"name":"Solar Bud","desc":"Once per entry, finishing a turn in effective sun stores one bud. The next Grass attack dealing HP damage to a foe consumes it to cure status and restore 1/8 maximum HP.","shortDesc":"Once/entry: sun stores a bud; Grass HP damage spends it to cure status/heal 1/8."};
 AbilitiesText.solarhydra = {"name":"Solar Hydra","desc":"Hydra Bond + Grassy Surge + Solar Power + Solar Bud. Once per entry, finishing a turn in effective sun stores a bud; the next Grass attack dealing opposing HP damage consumes it to cure status and heal 1/8 maximum HP. Solar Power's HP cost and field effects remain. No Self Repair.","shortDesc":"Hydra Bond + Grassy Surge + Solar Power + one sun-charged Solar Bud per entry."};
 AbilitiesText.dissonantecho = {"name":"Dissonant Echo","desc":"Once per entry, the first resisted sound attack dealing opposing HP damage marks one foe after the attack. The next sound attack against that foe, through the end of the next turn, consumes the mark on attempt and treats resistance as neutral. Does not bypass immunity. Switching clears the mark. Spread attacks mark only their eligible primary foe, otherwise the first eligible foe in side order.","shortDesc":"Once/entry: resisted sound hit marks one foe; next sound attempt ignores its resistance."};
@@ -4601,7 +4601,7 @@ AbilitiesText.perfectillusion.name = 'Perfect Illusion';
 import {NidoDescriptions} from '../nido-approved';
 for (const [id, details] of Object.entries(NidoDescriptions)) AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...details};
 AbilitiesText.patriarchswrath.name = "Patriarch's Wrath";
-AbilitiesText.matriarchsvigil.name = "Matriarch's Vigil";
+AbilitiesText.matriarchsvigil.name = "Royal Aegis";
 
 for (const id of ['relentlesshunt', 'voidomen', 'venombastion']) Object.assign(AbilitiesText[id as ID], AbilityDescriptionOverrides[id]);
 
@@ -4631,3 +4631,55 @@ AbilitiesText.requiem = {name: 'Requiem', ...AbilityDescriptionOverrides.requiem
 AbilitiesText.soulreaver = {name: 'Soul Reaver', ...AbilityDescriptionOverrides.soulreaver};
 AbilitiesText.wickedsnare = {name: 'Wicked Snare', ...AbilityDescriptionOverrides.wickedsnare};
 AbilitiesText.sweetsanctuary = {name: 'Sweet Sanctuary', ...AbilityDescriptionOverrides.sweetsanctuary};
+
+AbilitiesText.silenthunter = {name: 'Silent Hunter', ...AbilityDescriptionOverrides.silenthunter};
+
+import {DissonantEchoDescriptions} from '../dissonant-echo';
+for (const [id, details] of Object.entries(DissonantEchoDescriptions)) AbilitiesText[id as ID] = {...AbilitiesText[id as ID], ...details};
+
+import {PrimarinaApprovedDescriptions} from "../primarina-approved";
+for (const [id, text] of Object.entries(PrimarinaApprovedDescriptions)) Object.assign(AbilitiesText[id as ID], text);
+
+import {QueuedAbilityDescriptions} from "../queued-abilities-approved";
+for (const [id, text] of Object.entries(QueuedAbilityDescriptions)) AbilitiesText[id as ID] = {name: ({seasonalstride: 'Seasonal Stride', sheddecoy: 'Shed Decoy', varietyrush: 'Variety Rush', springfur: 'Spring Fur', magneticcommand: 'Magnetic Command', noseformation: 'Nose Formation', plushwhiplash: 'Plush Whiplash', silkensalvo: 'Silken Salvo', abyssalclaws: 'Abyssal Claws', antlioninstinct: 'Antlion Instinct', burrowambush: 'Burrow Ambush', leviathanwake: 'Leviathan Wake', ringmaster: 'Ringmaster'} as {[id: string]: string})[id], ...text};
+
+import {SwalotVespiquenDescriptions} from '../swalot-vespiquen-approved';
+for (const [id, text] of Object.entries(SwalotVespiquenDescriptions)) AbilitiesText[id as ID] = text;
+
+import {FairyEclipseDescriptions} from '../fairy-eclipse-approved';
+for (const [id, text] of Object.entries(FairyEclipseDescriptions)) AbilitiesText[id as ID] = text;
+
+import {RivalSupportDescriptions} from '../rival-support-descriptions';
+for (const [id,text] of Object.entries(RivalSupportDescriptions)) AbilitiesText[id as ID] = text;
+
+import {PearlHydraulicDescriptions} from '../pearl-hydraulic-approved';
+for (const [id,text] of Object.entries(PearlHydraulicDescriptions)) AbilitiesText[id as ID] = text;
+
+import {CalculatedTrajectoryDescriptions} from '../calculated-trajectory-approved';
+for (const [id,text] of Object.entries(CalculatedTrajectoryDescriptions)) AbilitiesText[id as ID] = text;
+
+import {BoneSpoilsInfernalDescriptions} from '../bone-spoils-infernal-approved';
+for (const [id,text] of Object.entries(BoneSpoilsInfernalDescriptions)) AbilitiesText[id as ID] = text;
+
+import {StarterFinishDescriptions} from '../starter-finish-approved';
+for (const [id,text] of Object.entries(StarterFinishDescriptions)) AbilitiesText[id as ID] = text;
+
+import {AuraGazeDescriptions} from '../aura-gaze-approved';
+for (const [id,text] of Object.entries(AuraGazeDescriptions)) AbilitiesText[id as ID] = text;
+
+import {WeatherChoiceDescriptions} from '../weather-choice-approved';
+for (const [id,text] of Object.entries(WeatherChoiceDescriptions)) AbilitiesText[id as ID] = text;
+
+import {ChampionMeteorDescriptions} from '../champion-meteor-approved';
+for (const [id,text] of Object.entries(ChampionMeteorDescriptions)) AbilitiesText[id as ID] = text;
+
+import {AdaptiveArsenalDescriptions} from '../adaptive-arsenal-approved';
+for (const [id,text] of Object.entries(AdaptiveArsenalDescriptions)) AbilitiesText[id as ID] = text;
+
+import {GarchompPoiseDescriptions} from '../garchomp-poise-approved';
+for (const [id,text] of Object.entries(GarchompPoiseDescriptions)) AbilitiesText[id as ID] = text;
+
+AbilitiesText.gulpmissile.desc += ' Species passive on all three Cramorant forms, replacing Gluttony; works independently of the selected ability and preserves it through loading and discharge. Water Surface/Underwater force Gulping on entry or terrain change; Electric/Factory/Short-Circuit make Surf load Gorging. Underwater projectile damage is quarter target max HP multiplied by ordinary Water effectiveness (zero if Water-immune); other fields keep the ordinary quarter-HP projectile.';
+
+import {CramorantGoodraKommoDescriptions} from '../cramorant-goodra-kommo-approved';
+for (const [id,text] of Object.entries(CramorantGoodraKommoDescriptions)) AbilitiesText[id as ID] = text;

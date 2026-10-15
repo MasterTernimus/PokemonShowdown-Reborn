@@ -1,0 +1,457 @@
+{
+  "sources": {
+    "nido": "test/sim/abilities/nido-approved.js:approvedPassives and approvedSlots",
+    "queue": "artifacts/queued-abilities/frozen-final.json and test/sim/abilities/queued-abilities-approved.js",
+    "fairy": "artifacts/fairy-eclipse/verified-batch.json",
+    "rival": "artifacts/rival-support/verified-final.json",
+    "latest": "artifacts/calculated-hydraulic/verified-final.json",
+    "fish": "artifacts/gorebyss-huntail/verified-final.json",
+    "rampage": "test/sim/abilities/rampage-approved.js:ordinary Gyarados",
+    "stats": "test/sim/abilities/roster550.js",
+    "crestWeather": "User approval: base Tyranitar Sand Stream and base Abomasnow Snow Warning"
+  },
+  "passives": {
+    "swalot": [
+      "accumulation"
+    ],
+    "gyarados": [
+      "intimidate"
+    ],
+    "milotic": [
+      "marvelscale"
+    ],
+    "miloticmega": [
+      "marvelscale"
+    ],
+    "seviper": [
+      "rivalmalice"
+    ],
+    "sevipermega": [
+      "rivalmalice"
+    ],
+    "tinkaton": [
+      "moldbreaker"
+    ],
+    "probopass": [
+      "noseformation"
+    ],
+    "haxorus": [
+      "twinfang"
+    ],
+    "haxorusmega": [
+      "twinfang"
+    ],
+    "mightyena": [
+      "rattled"
+    ],
+    "mightyenadeso": [
+      "rattled"
+    ],
+    "cinccino": [
+      "shielddust"
+    ],
+    "cinccinodeso": [
+      "shielddust"
+    ],
+    "clefable": [
+      "magicguard"
+    ],
+    "marowak": [
+      "bonewarrior"
+    ],
+    "marowakalola": [
+      "bonewarrior"
+    ],
+    "parasect": [
+      "mycelialbond"
+    ],
+    "hitmonlee": [
+      "bruteforce"
+    ],
+    "hitmonchan": [
+      "ironfist"
+    ],
+    "hitmontop": [
+      "scrappy"
+    ],
+    "zangoose": [
+      "rivalresolve"
+    ],
+    "zangoosemega": [
+      "rivalresolve"
+    ],
+    "reuniclus": [
+      "adaptivecell"
+    ],
+    "wailord": [
+      "leviathanwake"
+    ],
+    "kecleon": [
+      "protean"
+    ],
+    "klinklang": [
+      "aimassist"
+    ],
+    "gorebyss": [
+      "pixilate"
+    ],
+    "huntail": [
+      "duskilate"
+    ],
+    "drifblim": [
+      "flareboost"
+    ],
+    "sawsbuck": [
+      "seasonalstride"
+    ],
+    "sawsbuckspring": [
+      "seasonalstride"
+    ],
+    "sawsbucksummer": [
+      "seasonalstride"
+    ],
+    "sawsbuckautumn": [
+      "seasonalstride"
+    ],
+    "sawsbuckwinter": [
+      "seasonalstride"
+    ],
+    "mrrime": [
+      "mimecraft"
+    ],
+    "shiinotic": [
+      "fairyring"
+    ],
+    "rapidashgalar": [
+      "pastelveil"
+    ],
+    "alakazam": [
+      "revealinggaze"
+    ],
+    "alakazammega": [
+      "revealinggaze"
+    ],
+    "gothitelle": [
+      "eclipsevision"
+    ],
+    "perrserker": [
+      "battlespoils"
+    ],
+    "arbok": [
+      "constrictingcoils"
+    ],
+    "parasectparasite": [
+      "mycelialbond"
+    ],
+    "parasectrejuv": [
+      "mycelialbond"
+    ],
+    "mrmimegalar": [
+      "mimecraft"
+    ],
+    "furret": [
+      "sheddecoy"
+    ],
+    "masquerain": [
+      "prismskimmer"
+    ],
+    "trapinch": [
+      "arenatrap"
+    ],
+    "miloticterajuma": [
+      "marvelscale"
+    ],
+    "miloticaevian": [
+      "marvelscale"
+    ],
+    "vespiquen": [
+      "royalhive"
+    ],
+    "tauros": [
+      "unbrokencharge"
+    ],
+    "taurospaldeacombat": [
+      "unbrokencharge"
+    ],
+    "taurospaldeablaze": [
+      "unbrokencharge"
+    ],
+    "taurospaldeaaqua": [
+      "unbrokencharge"
+    ],
+    "tyranitar": [
+      "sandstream"
+    ],
+    "abomasnow": [
+      "snowwarning"
+    ],
+    "lucario": [
+      "aurasight"
+    ],
+    "dragonite": [
+      "championscommand"
+    ],
+    "metagross": [
+      "meteorcore"
+    ],
+    "garchomp": [
+      "championspoise"
+    ],
+    "cramorant": [
+      "gulpmissile"
+    ],
+    "cramorantgulping": [
+      "gulpmissile"
+    ],
+    "cramorantgorging": [
+      "gulpmissile"
+    ],
+    "goodra": [
+      "thickfat"
+    ],
+    "kommoo": [
+      "overcoat"
+    ]
+  },
+  "slots": {
+    "swalot": {
+      "0": "Adhesive Armor",
+      "1": "Neutralization",
+      "H": "Caustic Ooze"
+    },
+    "gyarados": {
+      "0": "Unbridled Wrath",
+      "1": "Tempest Fury",
+      "H": "Moxie"
+    },
+    "mrmime": {
+      "0": "Invisible Wall",
+      "1": "Silent Act",
+      "H": "Trick Performer"
+    },
+    "huntail": {
+      "0": "Swift Swim",
+      "1": "Abyssal Fang",
+      "H": "Abyssal Current"
+    },
+    "rapidashgalar": {
+      "0": "Psychic Surge",
+      "1": "Speed Boost",
+      "H": "Rapid Response"
+    },
+    "venusaur": {
+      "0": "Pollen Bloom",
+      "1": "Soothing Bouquet",
+      "H": "Chlorophyll"
+    },
+    "nidoqueen": {
+      "H": "Royal Aegis"
+    },
+    "gorebyss": {
+      "0": "Swift Swim",
+      "1": "Pearl Siphon",
+      "H": "Pearl Tide"
+    },
+    "clefable": {
+      "1": "Friend Guard"
+    },
+    "marowak": {
+      "H": "Cursed Body"
+    },
+    "marowakalola": {
+      "1": "Cursed Body"
+    },
+    "mrmimegalar": {
+      "0": "Invisible Wall"
+    },
+    "trapinch": {
+      "0": "Burrow Ambush",
+      "1": "Huge Power",
+      "H": "Antlion Instinct"
+    },
+    "zangoose": {
+      "1": "Toxic Boost"
+    },
+    "armaldo": {
+      "0": "Abyssal Claws"
+    },
+    "kecleon": {
+      "1": "Pickpocket"
+    },
+    "vespiquen": {
+      "0": "Royal Presence",
+      "1": "Queenly Majesty",
+      "H": "Hive Sanctuary"
+    },
+    "drifblim": {
+      "H": "Aftermath"
+    },
+    "probopass": {
+      "1": "Magnetic Command"
+    },
+    "cinccino": {
+      "0": "Plush Whiplash",
+      "H": "Silken Salvo"
+    },
+    "cinccinodeso": {
+      "H": "Silken Salvo"
+    },
+    "gothitelle": {
+      "H": "Astral Concord"
+    },
+    "reuniclus": {
+      "0": "Cellular Concord"
+    },
+    "sawsbuck": {
+      "0": "Overcoat"
+    },
+    "sawsbuckspring": {
+      "0": "Overcoat"
+    },
+    "sawsbucksummer": {
+      "0": "Overcoat"
+    },
+    "sawsbuckautumn": {
+      "0": "Overcoat"
+    },
+    "sawsbuckwinter": {
+      "0": "Overcoat",
+      "1": "Slush Rush",
+      "H": "Ice Body"
+    },
+    "shiinotic": {
+      "0": "Guiding Glow",
+      "H": "Rainlit Growth"
+    },
+    "mrrime": {
+      "0": "Tap Tempo",
+      "1": "Curtain Call"
+    },
+    "tyranitar": {
+      "0": "Mountain Hide",
+      "1": "Mountainbreaker",
+      "H": "Dread Presence"
+    },
+    "abomasnow": {
+      "0": "Rimebark",
+      "1": "Evergreen",
+      "H": "Soundproof"
+    },
+    "garchomp": {
+      "0": "Pyrous Dominion",
+      "1": "Supreme Overlord",
+      "H": "Void Wrath",
+      "S": "Battle Bond"
+    },
+    "silvally": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallybug": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallydark": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallydragon": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyelectric": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyfairy": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyfighting": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyfire": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyflying": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyghost": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallygrass": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyground": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyice": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallypoison": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallypsychic": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallyrock": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallysteel": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "silvallywater": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    },
+    "kommoo": {
+      "0": "Bulletproof",
+      "1": "Soundproof",
+      "H": "Scale Rhythm"
+    },
+    "cramorant": {
+      "0": "Bottomless Gullet",
+      "1": "Dive Fisher",
+      "H": "Scatterbrain"
+    },
+    "cramorantgulping": {
+      "0": "Bottomless Gullet",
+      "1": "Dive Fisher",
+      "H": "Scatterbrain"
+    },
+    "cramorantgorging": {
+      "0": "Bottomless Gullet",
+      "1": "Dive Fisher",
+      "H": "Scatterbrain"
+    }
+  }
+}

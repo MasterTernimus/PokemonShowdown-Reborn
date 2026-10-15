@@ -1,0 +1,5 @@
+'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');let battle;
+describe('KABOOM adaptive category',()=>{
+ afterEach(()=>{battle?.destroy();battle=null;});
+ for(const[atk,spa,boost,expected]of [[120,100,0,'Physical'],[100,120,0,'Special'],[100,100,0,'Special'],[120,100,1,'Special']])it([atk,spa,boost].join('/')+' selects '+expected,()=>{battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Mew',ability:'No Ability',moves:['kaboom']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);battle.makeChoices('team 1','team 1');const p=battle.p1.active[0],q=battle.p2.active[0];p.storedStats.atk=atk;p.storedStats.spa=spa;p.boosts.spa=boost;const m=Dex.getActiveMove('kaboom');battle.singleEvent('ModifyMove',m,null,p,q,m,m);assert.equal(m.category,expected);assert.deepEqual(m.recoil,[1,4]);assert.equal(m.secondary.self.boosts.spa,1);battle.field.terrain='electricterrain';battle.singleEvent('ModifyMove',m,null,p,q,m,m);assert(!m.recoil);});
+});

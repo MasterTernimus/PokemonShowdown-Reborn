@@ -125,7 +125,8 @@ describe('Approved roster expansion and component search', () => {
 	});
 	it('Broodguard protects the ally and Sun Charm only extends its original sunlight once', () => {
 		let [p, ally, foe] = make('Nidoqueen', 'Broodguard');
-		assert.equal(battle.runEvent('ModifyDamage', foe, ally, battle.dex.getActiveMove('tackle'), 100), 75);
+		// Nidoqueen now supplies Rivalry's separate ally guard as a passive: 0.75 twice.
+		assert.equal(battle.runEvent('ModifyDamage', foe, ally, battle.dex.getActiveMove('tackle'), 100), 56);
 		assert(p.hasAbility('thickfat'));
 		battle.destroy();
 		battle = null;
@@ -219,16 +220,17 @@ describe('Approved roster expansion and component search', () => {
 		assert(p.hp > before);
 		assert.equal(ally.status, '');
 	});
-	it('Encore Aria requires an applied secondary; Void Omen wards only one ally drop', () => {
+	it('Encore Aria grants entry Safeguard; Void Omen wards only one ally drop', () => {
 		let [p, , foe] = make('Primarina', 'Encore Aria', 'Shield Dust');
 		const acid = battle.dex.getActiveMove('acid');
 		acid.target = 'normal';
 		acid.secondaries = [{ chance: 100, boosts: { spd: -1 } }];
 		hit(acid, p, foe);
-		assert(!p.side.sideConditions.safeguard);
+		assert.equal(p.side.sideConditions.safeguard.duration, 5);
+		p.side.sideConditions.safeguard.duration = 2;
 		foe.setAbility('No Ability');
 		hit(acid, p, foe);
-		assert.equal(p.side.sideConditions.safeguard.duration, 5);
+		assert.equal(p.side.sideConditions.safeguard.duration, 2);
 		battle.destroy();
 		battle = null;
 		let ally;
@@ -361,7 +363,7 @@ describe('Approved roster expansion and component search', () => {
 		const [p, , foe] = make('Archaludon', 'Rail Sight');
 		hit('followme', foe, foe);
 		const move = battle.dex.getActiveMove('dragonpulse');
-		event('ModifyMove', p, move, p, foe);
+		battle.runEvent('ModifyMove', p, foe, move, move);
 		assert(move.tracksTarget);
 		assert(!move.ignoreScreens);
 		assert(!move.infiltrates);

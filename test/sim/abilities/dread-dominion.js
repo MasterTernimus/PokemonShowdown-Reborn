@@ -19,7 +19,7 @@ describe('Mega Mightyena and Dread Dominion', () => {
 			battle.makeChoices('move 1 mega', 'move 1');
 			const mon = battle.p1.active[0];
 			assert.equal(mon.species.name, species === 'Mightyena-Grim' ? 'Mightyena-Mega-Grim' : 'Mightyena-Mega');
-			assert.deepEqual(mon.species.baseStats, {hp: 90, atk: 150, def: 115, spa: 85, spd: 100, spe: 130});
+			assert.deepEqual(mon.species.baseStats, {hp: 90, atk: 140, def: 105, spa: 85, spd: 100, spe: 130});
 			assert.equal(mon.species.bst, Dex.species.get('Mightyena').bst + 100);
 			assert.equal(mon.ability, 'dreaddominion');
 			assert.deepEqual(mon.species.passives, ['darkaura']);

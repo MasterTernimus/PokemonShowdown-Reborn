@@ -1,0 +1,9 @@
+'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');let b;
+describe('Sacred Bond Extreme Speed critical only',()=>{
+ afterEach(()=>{b?.destroy();b=null;});
+ function setup(foeAbility='No Ability'){b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Arcanine',ability:'Sacred Bond',moves:['extremespeed','tackle']}],[{species:'Mew',ability:foeAbility,moves:['splash']}]]);b.makeChoices('team 1','team 1');const p=b.p1.active[0],q=b.p2.active[0];p.formeChange('Arcanine-Battle-Bond',null,true);p.setAbility('Sacred Bond',null,null,true);b.field.terrain='';b.field.weather='';p.hp=p.maxhp=p.baseMaxhp=q.hp=q.maxhp=q.baseMaxhp=4000;return[p,q];}
+ it('retains guaranteed critical with no separate base-power multiplier',()=>{const[p,q]=setup(),m=Dex.getActiveMove('extremespeed');b.runEvent('ModifyMove',p,q,m,m);assert.equal(m.willCrit,true);assert.equal(b.runEvent('BasePower',p,q,m,80),80);b.actions.useMove(m,p,{target:q});assert(q.getMoveHitData(b.activeMove).crit);});
+ it('respects critical-hit prevention',()=>{const[p,q]=setup('Battle Armor');b.actions.runMove('extremespeed',p,p.getLocOf(q));assert.equal(q.getMoveHitData(b.activeMove).crit,false);assert(q.hp<4000);});
+ it('does not grant guaranteed critical to other moves',()=>{const[p,q]=setup(),m=Dex.getActiveMove('tackle');b.runEvent('ModifyMove',p,q,m,m);assert.notEqual(m.willCrit,true);assert.equal(b.runEvent('BasePower',p,q,m,100),100);});
+ it('preserves existing Sacred Bond component kit',()=>{const[p]=setup();for(const id of ['battlebond','filter','selfsufficient','magmaarmor','intimidate','flashfire'])assert(p.hasAbility(id),id);assert.equal(Dex.moves.get('extremespeed').basePower,80);for(const text of [Dex.abilities.get('sacredbond').desc,Dex.abilities.get('sacredbond').shortDesc,Dex.moves.get('extremespeed').desc]){assert(!text.includes('1.5x'));assert.match(text,/critic/);}});
+});

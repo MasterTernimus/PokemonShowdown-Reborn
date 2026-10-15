@@ -96,7 +96,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onBasePower(basePower, source, target, move) {
-				const uberboost = ['sandtomb', 'mudbomb', 'mudshot', 'mudslap'];
+				const uberboost = ['sandtomb', 'mudbomb', 'mudshot', 'mudbarrage'];
 				const megaboost = ['hiddenpower', 'landswrath', 'muddywater', 'strength', 'surf', 'thousandwaves', 'clangoroussoulblaze'];
 				const miniboost = ['aurasphere', 'focusblast', 'storedpower', 'zenheadbutt'];
 				const boost = ['psychic'];
@@ -991,7 +991,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (powderMoves.includes(move.id)) {
 					move.accuracy = 100;
 				}
-				const poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows', 'appleacid'];
+				const poisonedMoves = ['mudbomb', 'mudshot', 'mudbarrage', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows', 'appleacid'];
 				if (move.type === 'Grass') {
 					move.types = [move.type, 'Poison'];
 				}
@@ -1010,7 +1010,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const superStrong = ['acid', 'acidspray', 'grassknot', 'snaptrap'];
-				const poisonedMoves = ['mudbomb', 'mudshot', 'mudslap', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows', 'appleacid'];
+				const poisonedMoves = ['mudbomb', 'mudshot', 'mudbarrage', 'muddywater', 'smackdown', 'whirlpool', 'thousandarrows', 'appleacid'];
 				if (superStrong.includes(move.id)) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
 				}
@@ -2253,7 +2253,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyMove(move) {
-				const waterpoisonMoves = ['mudbomb', 'mudshot', 'mudbarrage', 'mudslap', 'thousandwaves'];
+				const waterpoisonMoves = ['mudbomb', 'mudshot', 'mudbarrage', 'thousandwaves'];
 				if (move.type === 'Water' || waterpoisonMoves.includes(move.id)) {
 					move.types = ['Water', 'Poison'];
 					move.type = 'Water';
@@ -2273,7 +2273,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const strengthenedMoves = ['mudbomb', 'mudshot', 'mudbarrage', 'mudslap', 'thousandwaves', 'acid', 'acidspray', 'brine', 'smackdown', 'wavecrash', 'appleacid'];
+				const strengthenedMoves = ['mudbomb', 'mudshot', 'mudbarrage', 'thousandwaves', 'acid', 'acidspray', 'brine', 'smackdown', 'wavecrash', 'appleacid'];
 				const change = ['whirlpool', 'blizzard', 'subzeroslammer', 'glaciate'];
 				if (move.type === 'Water') {
 					this.add('-message', 'The water move was aided by the poison!');
@@ -2744,7 +2744,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyMove(move) {
-				const slushMoves = ['bulldoze', 'earthquake', 'magnitude', 'mudbomb', 'mudshot', 'mudslap', 'sandtomb'];
+				const slushMoves = ['bulldoze', 'earthquake', 'magnitude', 'mudbomb', 'mudshot', 'mudbarrage', 'sandtomb'];
 				if ((move.type === 'Steel' && move.category === 'Physical') || slushMoves.includes(move.id)) {
 					move.types = [move.type, 'Ice'];
 				}
@@ -2753,7 +2753,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
 				const weak: string[] = ['scald', 'eruption', 'hydrosteam'];
-				const boost: string[] = ["blizzard", "fairywind", "gust", "icywind", "ominouswind", "razorwind", "powdersnow", "silverwind", "twister", "mudslap", "mudshot", "mudbomb", 'chillingwater'];
+				const boost: string[] = ["blizzard", "fairywind", "gust", "icywind", "ominouswind", "razorwind", "powdersnow", "silverwind", "twister", "mudbarrage", "mudshot", "mudbomb", 'chillingwater'];
 				const secondBoost: string[] = ["aeroblast", "aircutter", "airslash", "bleakwindstorm", "chillingwater", "fairywind", "glaciate", "gust", "hurricane", "ominouswind", "razorwind", "silverwind", "twister"];
 				const igniteMoves = ['infernalrage', 'eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				if (weak.includes(move.id) || move.type === 'Fire') {
@@ -2990,7 +2990,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, target, move) {
 				let modifier = 1;
-				const strengthenedMoves = ['thousandarrows', 'smackdown', 'brine', 'gunkshot', 'hydrovortex', 'mudbarrage', 'mudbomb', 'mudshot', 'mudslap', 'muddywater', 'savagespinout', 'sludgewave'];
+				const strengthenedMoves = ['thousandarrows', 'smackdown', 'brine', 'gunkshot', 'hydrovortex', 'mudbarrage', 'mudbomb', 'mudshot', 'mudbarrage', 'muddywater', 'savagespinout', 'sludgewave'];
 				const weakenedMoves = ['bulldoze', 'earthquake', 'magnitude'];
 				const igniteMoves = ['infernalrage', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				if (move.type === 'Poison' && target.isGrounded()) {
@@ -3440,7 +3440,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return duration + 3;
 			},
 			onModifyMove(move) {
-				const poisoned = ['mudbomb', 'mudshot', 'mudslap'];
+				const poisoned = ['mudbomb', 'mudshot', 'mudbarrage'];
 				if (poisoned.includes(move.id)) {
 					move.types = [move.type, 'Poison'];
 				}
@@ -3454,7 +3454,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePower(basePower, source, pokemon, move) {
 				let modifier = 1;
-				const boost = ['mudbomb', 'mudshot', 'mudslap', 'powerwhip', 'vinewhip'];
+				const boost = ['mudbomb', 'mudshot', 'mudbarrage', 'powerwhip', 'vinewhip'];
 				const miniboost = ['gunkshot', 'octazooka', 'sludge', 'sludgebomb', 'sludgewave'];
 				const weak = ['bulldoze', 'earthquake', 'magnitude'];
 				if (boost.includes(move.id)) {

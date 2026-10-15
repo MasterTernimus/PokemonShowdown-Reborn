@@ -99,10 +99,10 @@ it('Dredger removes one prioritized layer per turn and leaves other hazards', ()
 		hit(p, t, 'mudslap', { damage: 20 });
 		assert(!p.side.sideConditions.toxicspikes);
 	});
-it('Grappling Claws lowers Speed after the whole move without trapping or blocking healing', () => {
+it('old Grappling Claws spelling resolves Abyssal Claws without Speed drops, trapping or healing blocks', () => {
 		const [p, t] = setup('Grappling Claws'); t.hp = 5000;
 		const move = hit(p, t, 'tackle', {damage: 20, multihit: 3});
-		assert.equal(t.boosts.spe, 0); battle.runEvent('AfterMove', p, t, move); assert.equal(t.boosts.spe, -1);
+		assert.equal(t.boosts.spe, 0); battle.runEvent('AfterMove', p, t, move); assert.equal(t.boosts.spe, 0);
 		assert(!t.volatiles.grapplingclawslock); assert.equal(battle.heal(100, t, t), 100);
 		battle.runEvent('TrapPokemon', t); assert(!t.trapped);
 	});
@@ -144,63 +144,34 @@ it('Venams Kiss drain observes Liquid Ooze and Heal Block, and does not bypass p
 		t.setType('Steel');
 		assert.equal(t.trySetStatus('psn', p, Dex.getActiveMove('toxic')), false);
 	});
-it('preserves moves and learnsets apart from approved passive-aware ability checks', () => {
-		const fs = require('fs'), crypto = require('crypto'), before = require('./rejuvenation-events-before.json');
-		for (const [file, key] of [['data/moves.ts', 'movesHash'], ['data/learnsets.ts', 'learnsetsHash']]) {
-			let contents = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
-			const yangIntegration = key === 'movesHash' ? "\nimport {YangSignatureMoves} from './yang-signature-moves';\nObject.assign(Moves, YangSignatureMoves);\n" : "\nimport {YangSignatureLearnsets} from './yang-signature-moves';\nfor (const [move, species] of Object.entries(YangSignatureLearnsets)) {\n for (const id of species) {\n  Learnsets[id as ID] ||= {learnset: {}};\n  Learnsets[id as ID].learnset![move as ID] = ['9L1'];\n }\n}\n";
-			assert.equal(contents.split(yangIntegration).length, 2, key + ' has exactly one approved Yang integration');
-			contents = contents.replace(yangIntegration, '');
-			if (key === 'movesHash') {
-				const hazardList = "['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend']";
-				assert.equal(contents.split(hazardList).length - 1, 8);
-				contents = contents.replaceAll(hazardList, "['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge']");
-				assert.equal(contents.split("'gmaxsteelsurge', 'dragonrend', 'gmaxcannonade'").length, 2);
-				contents = contents.replace("'gmaxsteelsurge', 'dragonrend', 'gmaxcannonade'", "'gmaxsteelsurge', 'gmaxcannonade'");
-			}
-			// Remove only the approved additive signature-move integration, not existing move/learnset data.
-			const signatureIntegration = key === 'movesHash' ? "\nimport {RejuvenationSignatureMoves} from './rejuvenation-signature-moves';\nObject.assign(Moves, RejuvenationSignatureMoves);\n" : "\nimport {RejuvenationSignatureLearnsets} from './rejuvenation-signature-moves';\nfor (const [move, species] of Object.entries(RejuvenationSignatureLearnsets)) {\n for (const id of species) {\n  Learnsets[id as ID] ||= {learnset: {}};\n  Learnsets[id as ID].learnset![move as ID] = ['9L1'];\n }\n}\n";
-			assert.equal(contents.split(signatureIntegration).length, 2, key + ' has exactly one approved signature integration');
-			contents = contents.replace(signatureIntegration, '');
-			if (key === 'movesHash') {
-				// Reverse exactly the approved Frozen Aura move changes; retain the original hash.
-				const frozenSnowscape = "\tsnowscape: {\n  num: 883, accuracy: true, basePower: 0, category: \"Status\", name: \"Snowscape\", pp: 10,\n  priority: 0, flags: {}, target: \"all\", type: \"Ice\",\n  onTryMove() {\n   if (this.field.isTerrain(['volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain', 'starlightarenaterrain'])) {\n    const message = this.field.isTerrain('fairytaleterrain') ? 'The fairy tale rejected the changing season!' :\n     this.field.isTerrain('starlightarenaterrain') ? 'The starlight refused to be eclipsed!' : 'The intense heat prevented the snow from settling!';\n    this.add('-message', message);\n    return false;\n   }\n   if (this.field.isWeather('desolateland')) return null;\n  },\n  onHitField(target, source, move) {\n   return this.field.setAura('frozenaura', source.hasItem('amplifieldrock') ? 8 : 5, source, move);\n  },\n },\n";
-				assert(contents.includes(frozenSnowscape), 'Frozen Aura Snowscape changed outside the approved block');
-				contents = contents.replace(frozenSnowscape, "\tsnowscape: {\n\t\tnum: 883,\n\t\taccuracy: true,\n\t\tbasePower: 0,\n\t\tcategory: \"Status\",\n\t\tname: \"Snowscape\",\n\t\tpp: 10,\n\t\tpriority: 0,\n\t\tflags: {},\n\t\tonTryMove(attacker, defender, move) {\n\t\t\tconst blockedFields = [\n\t\t\t\t'volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain', 'starlightarenaterrain',\n\t\t\t];\n\t\t\tif (this.field.isTerrain(blockedFields)) {\n\t\t\t\tlet message = 'The intense heat prevented the snow from settling!';\n\t\t\t\tif (this.field.isTerrain('fairytaleterrain')) message = 'The fairy tale rejected the changing season!';\n\t\t\t\tif (this.field.isTerrain('starlightarenaterrain')) message = 'The starlight refused to be eclipsed!';\n\t\t\t\tthis.add('-message', message);\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\tconst icyFieldTerrain = [\n\t\t\t\t'watersurfaceterrain', 'murkwatersurfaceterrain', 'icyterrain', 'caveterrain',\n\t\t\t\t'crystalcavernterrain', 'darkcrystalcavernterrain', 'mistyterrain',\n\t\t\t];\n\t\t\tif (this.field.isTerrain(icyFieldTerrain)) {\n\t\t\t\tmove.terrain = 'icyterrain';\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tif (this.field.isWeather('desolateland')) return null;\n\t\t},\n\t\tterrain: \"coldeclipseterrain\",\n\t\ttarget: \"all\",\n\t\ttype: \"Ice\",\n\t},\n");
-				contents = contents.replace("   if (this.field.isAura('frozenaura')) move = this.field.getAura().naturePowerMove;\n", '');
-				contents = contents.replace(/(skullbash: \{[\s\S]*?basePower: )80,/, '$1130,');
-				contents = contents.replace(/(skullbash: \{[\s\S]*?if \(move.totalDamage\) this.heal\()source.baseMaxhp \* 3 \/ 20/, '$1source.baseMaxhp / 10');
-				contents = contents.replace("pokemon.getPassives().some(id => id === 'levitate' || id === 'elevate') ||\n\t\t\t\t\tpokemon.hasAbility(['levitate', 'elevate'])", "pokemon.getPassives().includes('levitate') || pokemon.hasAbility('levitate')");
-				contents = contents.replaceAll("hasAbilityOrPassive('sapsipper')", "hasAbility('sapsipper')")
-					.replaceAll("hasAbilityOrPassive('insomnia')", "hasAbility('insomnia')")
-					.replaceAll("hasAbilityOrPassive(['plus', 'minus'])", "hasAbility(['plus', 'minus'])")
-					.replaceAll("hasAbilityOrPassive('invigorate')", "hasAbility('invigorate')");
-				contents = contents.replace("import {crescentRendApplies, prepareCrescentRend} from '../sim/crescent-rend';\n", '')
-					.replaceAll('\t\t\t\t\t\tif (crescentRendApplies(source, move)) return;\n', '')
-					.replace('\t\t\t\t// Crescent Rend continues this original hit with its already calculated overflow.\n' +
-						'\t\t\t\tif (prepareCrescentRend(source, target, move, damage)) return;\n', '');
-			}
-			// Reverse only the two newly approved move changes before comparing the original fingerprint.
-			if (key === 'movesHash') contents = contents.replace("if (!source.hasAbility('cursedkeepsake'))", "if (!source.hasAbility(['cursedkeepsake', 'cursedmarionette']))").replace("\t\t\tmove.ignoreAbility = true;\n\t\t\tconst isAshGreninja", "\t\t\tconst isAshGreninja");
-			if (key === 'movesHash') contents = contents.replace("move: {...this.dex.getActiveMove(target.lastMove.id), sourceEffect: 'instruct'},", "moveid: target.lastMove.id,");
-			if (key === 'movesHash') contents = contents.replace("\nMoves.outrage.secondary = {chance: 30, boosts: {def: -1}};\nMoves.thrash.secondary = {chance: 30, boosts: {def: -1}};\nMoves.petaldance.secondary = {chance: 30, boosts: {spd: -1}};\nMoves.ragingfury.secondary = {chance: 30, status: 'brn'};\n", '');
-			// Reverse only the approved signature-Wish aura support, preserving the old fingerprint.
-			if (key === 'movesHash') {
-				contents = contents.replace(/(slotCondition: 'Wish',[\s\S]*?onStart\(pokemon, source), sourceEffect\)/, '$1)');
-				contents = contents.replace("'holyterrain', 'starlightarenaterrain']) ||\n\t\t\t\t\t(['nomoswish', 'nostraswish'].includes(sourceEffect?.id) &&\n\t\t\t\t\t(this.field.isAura('mistyterrain') || this.field.isAura('rainbowterrain'))))", "'holyterrain', 'starlightarenaterrain']))");
-			}
-			// Preserve the original fingerprint after the approved Psycho Boost removals.
-			if (key === 'learnsetsHash') {
-				for (const [species, nextMove] of [['gothitelle', 'psychup']]) {
-					const pattern = new RegExp('(\\t' + species + ': \{[\\s\\S]*?)(\\t\\t\\t' + nextMove + ':)');
-					assert(pattern.test(contents), species + ' learnset anchor');
-					contents = contents.replace(pattern, '$1\t\t\tpsychoboost: ["9M"],\n$2');
-				}
-			}
-			if (key === 'movesHash') contents = contents.replace("\t\t\tif (this.field.isTerrainOrAura('electricterrain')) return;\n", '');
-			assert.equal(crypto.createHash('sha256').update(contents).digest('hex'), before[key], key);
-		}
-	});
+it('preserves committed move sources outside explicit rampage, Accumulation and Mud changes', () => {
+ const fs = require('fs'), crypto = require('crypto'), baseline = require('./queued-move-source-baseline.json');
+ for (const [file, expected] of Object.entries(baseline.files)) {
+  let text = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+  text = text.replace(/\nAbilitiesText\.gulpmissile\.desc[^\n]*\n/g, '');
+  text = text.replace(/\nObject\.assign\(MovesText\.(?:attackorder|defendorder|healorder),[^\n]*\n/g, '\n');
+  text = text.replace("\n// Approved Order targeting; inherited healing, boosts and field callbacks remain intact.\nMoves.defendorder.target = 'adjacentAllyOrSelf';\nMoves.healorder.target = 'adjacentAllyOrSelf';\n", '');
+  if (file.endsWith('/text/moves.ts')) text = text.replace("\nMovesText.drakefang = {name: 'Drake Fang', shortDesc: 'Dragon-type biting attack; 50% chance to badly poison.', desc: '85-power physical Dragon-type biting contact attack with 100% accuracy and 15 PP. Has a 50% chance to badly poison the target. Uses ordinary Dragon effectiveness: Fairy immunity and Steel resistance apply. Mega Seviper converts its Poison Fang slot into this move while preserving PP; Sirius supplies its separately described signature and Strong Jaw multipliers.'};\n", '');
+  if (file.endsWith('/text/moves.ts')) text = text.replace("\nimport {FinisherMoveDescriptions} from '../finisher-moves-approved';\nfor (const [id,text] of Object.entries(FinisherMoveDescriptions)) MovesText[id as ID] = text;\n", '');
+  if (file.endsWith('/moves.ts')) {
+   text = text.replace("attacker.hasAbilityOrPassive('gulpmissile')", "attacker.hasAbility('gulpmissile')");
+   text = text.replace("\nimport {installFinisherMoves} from './finisher-moves-approved';\ninstallFinisherMoves(Moves);\n", '');
+   text = text.replace("\nimport {installStarterFinishMoves} from './starter-finish-approved';\ninstallStarterFinishMoves(Moves);\n", '');
+   text = text.replace("\t\t\tif (attacker.hasAbility('hydraulicarmor')) attacker.abilityState.hydraulicCharge = true;\n", '');
+   text = text.replace("\nMoves.drakefang = {...Moves.poisonfang, num:11485, name:'Drake Fang', type:'Dragon', isNonstandard:'Custom'};\n", '');
+   text = text.replace("import {accumulationState} from './swalot-vespiquen-approved';\n", '')
+    .replace(/accumulationState\((pokemon|source)\)\.(accumulation\w+)/g, '$1.abilityState.$2')
+    .replaceAll("hasAbilityOrPassive('accumulation')", "hasAbility('accumulation')");
+   text = text.replace(/((?:outrage|thrash|petaldance|ragingfury): \{[\s\S]*?basePower: )140,/g, '$1120,');
+   text = text.replace("\n// One canonical Mud Barrage: preserve the approved Mud-Slap mechanics and classification.\nMoves.mudbarrage = {...Moves.mudslap, name: 'Mud Barrage'};\ndelete Moves.mudslap;\n", '');
+  } else {
+   const marker = "\nimport {ApprovedMoveAdditions} from './move-distribution-approved';";
+   assert.equal(text.split(marker).length, 2);
+   text = text.slice(0, text.indexOf(marker));
+  }
+  assert.equal(crypto.createHash('sha256').update(text).digest('hex'), expected, file);
+ }
+});
  it('keeps the sixteen approved move recipient lists exact', () => {
   const actual = require('../../../dist/data/rejuvenation-signature-moves').RejuvenationSignatureLearnsets;
   assert.deepEqual(actual, require('./rejuv-move-learnsets-approved.json'));
@@ -218,17 +189,19 @@ it('preserves moves and learnsets apart from approved passive-aware ability chec
     assert(['S', 'E'].includes(slot), old.id + ':' + slot); delete abilities[slot]; removed++;
    }
    const current = Dex.species.get(old.id);
-   assert.deepEqual(current.abilities, abilities, old.id);
+   assert.deepEqual(current.abilities, require('./rejuv-migration-later-overrides.json')[old.id]?.abilities || abilities, old.id);
    // Later explicit Kingambit approval replaces Entrenched with Supreme Overlord.
    if (old.id === 'kingambit') assert.deepEqual(old.passives, ['entrenched']);
-   const expectedPassives = old.id === 'kingambit' ? ['supremeoverlord'] : old.passives;
+   const later = require('./rejuv-migration-later-overrides.json')[old.id];
+   const expectedPassives = later?.passives || (old.id === 'kingambit' ? ['supremeoverlord'] : old.passives);
    assert.deepEqual(current.passives, expectedPassives, old.id);
   }
   assert.equal(removed, 21);
   assert.equal(Dex.species.get('chandelure').abilities.S, 'Soul Fire');
  });
- it('retains Mega Seviper Venams Kiss and unrelated local ability definitions', () => {
-  assert.deepEqual(Dex.species.get('sevipermega').passives, ['venamskiss']);
+ it('retains Venams Kiss inside Sirius after the approved Rival Malice migration', () => {
+  assert.deepEqual(Dex.species.get('sevipermega').passives, ['rivalmalice']);
+  assert(require('../../../dist/data/ability-components').AbilityComponents.sirius.includes('venamskiss'));
   for (const id of ['venamskiss', 'deepchill', 'vendetta', 'silksights', 'steadyaim']) assert(Dex.abilities.get(id).exists, id);
   assert(Dex.moves.get('venamskiss').exists);
  });

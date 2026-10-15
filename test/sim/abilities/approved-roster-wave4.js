@@ -274,11 +274,12 @@ describe('Approved fourth roster pass', () => {
 		hit('thundershock', p, foe);
 		assert(p.hp < hp);
 	});
-	it('Ringmaster applies two-turn Taunt once per entry and respects Oblivious', () => {
+	it('Ringmaster Taunts each damaged foe and respects Oblivious on subsequent attacks', () => {
 		const [p, , foe, other] = make('Ringmaster');
 		hit('snarl', p, foe);
 		assert.equal(foe.volatiles.taunt.duration, 2);
-		assert(!other.volatiles.taunt);
+		assert.equal(other.volatiles.taunt.duration, 2);
+		other.removeVolatile('taunt');
 		start(p);
 		other.setAbility('Oblivious');
 		hit('bite', p, other);

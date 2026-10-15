@@ -4,6 +4,30 @@ import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+	moltenguard: {
+		name: 'Molten Guard', duration: 1, noCopy: true,
+		onStart(pokemon) { this.add('-start', pokemon, 'Molten Guard'); },
+		onTryHit(target, source, move) {
+			if (!target.hasAbility('infernaldominion') || target.isAlly(source) || move.category === 'Status' || !this.movehasType(move, 'Rock')) return;
+			target.removeVolatile('moltenguard');
+			this.add('-message', target.name + "'s heat melted the incoming rocks completely!");
+			this.add('-activate', target, 'Molten Guard');
+			return null;
+		},
+		onEnd(pokemon) { this.add('-end', pokemon, 'Molten Guard'); },
+	},
+	silentactready: {name: 'silentactready', noCopy: true},
+	ringmasterspent: {name: 'ringmasterspent', noCopy: true},
+ dissonantechomark: {name: 'dissonantechomark',
+  onResidual() {
+   const state = this.effectState;
+   if (this.turn >= state.expires || !state.source?.hp || !state.source.isActive ||
+    !state.source.hasAbility('dissonantecho') || !state.marked?.hp || !state.marked.isActive) {
+    state.target.removeSideCondition('dissonantechomark');
+   }
+  },
+ },
+ venompincerspent: {name: 'venompincerspent', noCopy: true},
  glacialheartice: {name: 'glacialheartice', noCopy: true,
   onStart(pokemon) {this.add('-start', pokemon, 'glacialheartice', '[silent]');},
   onEnd(pokemon) {this.add('-end', pokemon, 'glacialheartice', '[silent]');},
@@ -844,7 +868,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const stage = this.field.flowerGardenStage();
 			const divisor = this.effectState.sourceEffect.id === 'infestation' && stage >= 3 ?
 				({3: 6, 4: 4, 5: 3} as Record<number, number>)[stage] : this.effectState.boundDivisor;
-			this.damage(pokemon.baseMaxhp / divisor);
+			const bindingDamage = this.damage(pokemon.baseMaxhp / divisor);
+			if (typeof bindingDamage === 'number' && bindingDamage > 0 && source?.hp && source.isActive && source.hasAbilityOrPassive('constrictingcoils')) {
+				this.heal(bindingDamage, source, pokemon, 'drain');
+			}
 			if (pokemon.hp && this.effectState.sourceEffect.id === 'desertsmark' && this.field.isTerrain('ashenterrain')) {
 				this.boost({accuracy: -1}, pokemon, source, this.effectState.sourceEffect);
 			}
@@ -1163,7 +1190,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'RainDance',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
+		durationCallback(source, target, effect) {
+			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
 			if (source?.hasItem('damprock') || this.field.isTerrain(['bigtopterrain', 'coldeclipseterrain'])) {
 				return 8;
 			}
@@ -1242,7 +1270,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'SunnyDay',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
+		durationCallback(source, target, effect) {
+			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
 			if (source?.hasItem('heatrock') || this.field.isTerrain(['desertterrain', 'mountainterrain', 'snowymountainterrain'])) {
 				return 8;
 			}
@@ -1331,7 +1360,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'Sandstorm',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
+		durationCallback(source, target, effect) {
+			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
 			if (source?.hasItem('smoothrock') || this.field.isTerrain('desertterrain') || this.field.isTerrain('ashenbeachterrain')) {
 				return 8;
 			}
@@ -1377,6 +1407,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, target, effect) {
+			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
 			if (this.field.isTerrain('fairytaleterrain')) return 0;
 			if (effect?.id === 'mourningsnow') return 8;
 			if (source?.hasItem('icyrock') || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {

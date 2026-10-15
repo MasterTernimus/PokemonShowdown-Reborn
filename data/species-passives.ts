@@ -979,7 +979,7 @@ for (const [id, passive] of Object.entries({lycanroc: 'infiltrator', lycanrocmid
 	ThematicPassiveIds.add(passive);
 }
 for (const [id, passive] of Object.entries({
-	conkeldurr: 'stamina', gyarados: 'unbridledwrath', milotic: 'waterabsorb', raichualola: 'static',
+	conkeldurr: 'stamina', gyarados: 'intimidate', milotic: 'waterabsorb', raichualola: 'static',
 	wishiwashisevii: 'infiltrator', wishiwashiseviischooling: 'infiltrator',
 	gliscor: 'poisonheal', gliscoralt: 'poisonheal',
 })) {
@@ -1000,13 +1000,16 @@ SpeciesPassives.porygon2 = Object.freeze(['analytic']);
 SpeciesPassives.dusclops = Object.freeze(['unnerve']);
 SpeciesPassives.gligar = Object.freeze(['poisontouch']);
 SpeciesPassives.corsolagalar = Object.freeze(['infiltrator']);
-SpeciesPassives.mightyena = Object.freeze(['infiltrator']);
+SpeciesPassives.mightyena = Object.freeze(['rattled']);
+ThematicPassiveIds.add('rattled');
 SpeciesPassives.mightyenagrim = SpeciesPassives.mightyena;
 SpeciesPassives.mightyenamega = Object.freeze(['darkaura']);
 ThematicPassiveIds.add('darkaura');
-SpeciesPassives.mightyenadeso = Object.freeze(['infiltrator']);
+SpeciesPassives.mightyenadeso = Object.freeze(['rattled']);
 SpeciesPassives.toxicroakdeso = Object.freeze(['limber']);
-SpeciesPassives.cinccinodeso = Object.freeze(['overcoat']);
+SpeciesPassives.cinccino = Object.freeze(['shielddust']);
+SpeciesPassives.cinccinodeso = Object.freeze(['shielddust']);
+ThematicPassiveIds.add('shielddust');
 SpeciesPassives.ursaring = Object.freeze(['quickfeet']);
 ThematicPassiveIds.add('quickfeet');
 import {FinalPassiveMigrations} from './final-passive-migrations';
@@ -1028,9 +1031,88 @@ ThematicPassiveIds.add('mirrorarmor');
 ThematicPassiveIds.add('multiscale');
 SpeciesPassives.beartic = Object.freeze(['thickfat']);
 SpeciesPassives.overqwil = Object.freeze(['aftermath']);
+SpeciesPassives.rapidashgalar = Object.freeze(['pastelveil']);
+ThematicPassiveIds.add('pastelveil');
+SpeciesPassives.clefable = Object.freeze(['magicguard']);
+ThematicPassiveIds.add('magicguard');
+SpeciesPassives.hitmonlee = Object.freeze(['bruteforce']);
+SpeciesPassives.hitmonchan = Object.freeze(['ironfist']);
+ThematicPassiveIds.add('bruteforce');
+ThematicPassiveIds.add('ironfist');
+for (const id of ['milotic', 'miloticterajuma', 'miloticmega', 'miloticaevian']) {
+ SpeciesPassives[id] = Object.freeze(['marvelscale']);
+}
+ThematicPassiveIds.add('marvelscale');
+SpeciesPassives.kecleon = Object.freeze(['protean']);
+ThematicPassiveIds.add('protean');
+SpeciesPassives.drifblim = Object.freeze(['flareboost']);
+ThematicPassiveIds.add('flareboost');
 SpeciesPassives.golisopod = Object.freeze(['toughclaws']);
 ThematicPassiveIds.add('toughclaws');
 SpeciesPassives.mightyenagrim = Object.freeze([...(SpeciesPassives.mightyena || [])]);
 SpeciesPassives.mightyenamegagrim = Object.freeze([...(SpeciesPassives.mightyenamega || [])]);
+SpeciesPassives.hitmontop = Object.freeze(['scrappy']);
+ThematicPassiveIds.add('scrappy');
+SpeciesPassives.trapinch = Object.freeze(['arenatrap']);
+ThematicPassiveIds.add('arenatrap');
+SpeciesPassives.wailord = Object.freeze(['leviathanwake']);
+ThematicPassiveIds.add('leviathanwake');
+SpeciesPassives.furret = Object.freeze(['sheddecoy']);
+SpeciesPassives.probopass = Object.freeze(['noseformation']);
+ThematicPassiveIds.add('sheddecoy');
+ThematicPassiveIds.add('noseformation');
+for (const id of ['sawsbuck','sawsbuckspring','sawsbucksummer','sawsbuckautumn','sawsbuckwinter']) SpeciesPassives[id] = Object.freeze(['seasonalstride']);
+ThematicPassiveIds.add('seasonalstride');
+SpeciesPassives.swalot = Object.freeze(['accumulation']);
+SpeciesPassives.vespiquen = Object.freeze(['royalhive']);
+ThematicPassiveIds.add('accumulation');
+ThematicPassiveIds.add('royalhive');
+SpeciesPassives.shiinotic = Object.freeze(['fairyring']);
+SpeciesPassives.gothitelle = Object.freeze(['eclipsevision']);
+SpeciesPassives.reuniclus = Object.freeze(['adaptivecell']);
+SpeciesPassives.arbok = Object.freeze(['constrictingcoils']);
+SpeciesPassives.masquerain = Object.freeze(['prismskimmer']);
+ThematicPassiveIds.add('constrictingcoils');
+ThematicPassiveIds.add('prismskimmer');
+ThematicPassiveIds.add('adaptivecell');
+ThematicPassiveIds.add('fairyring');
+ThematicPassiveIds.add('eclipsevision');
+for (const id of ['mrrime','mrmimegalar']) SpeciesPassives[id] = Object.freeze(['mimecraft']);
+ThematicPassiveIds.add('mimecraft');
+for (const id of ['zangoose','zangoosemega']) SpeciesPassives[id] = Object.freeze(['rivalresolve']);
+for (const id of ['seviper','sevipermega']) SpeciesPassives[id] = Object.freeze(['rivalmalice']);
+for (const id of ['parasect','parasectrejuv','parasectparasite']) SpeciesPassives[id] = Object.freeze(['mycelialbond']);
+SpeciesPassives.tinkaton = Object.freeze(['moldbreaker']);
+for (const id of ['rivalresolve','rivalmalice','mycelialbond','moldbreaker']) ThematicPassiveIds.add(id);
+SpeciesPassives.klinklang = Object.freeze(['aimassist']);
+ThematicPassiveIds.add('aimassist');
+for (const id of ['haxorus','haxorusmega']) SpeciesPassives[id] = Object.freeze(['twinfang']);
+ThematicPassiveIds.add('twinfang');
+SpeciesPassives.gorebyss = Object.freeze(['pixilate']);
+SpeciesPassives.huntail = Object.freeze(['duskilate']);
+ThematicPassiveIds.add('pixilate');
+ThematicPassiveIds.add('duskilate');
+for (const id of ['alakazam','alakazammega']) SpeciesPassives[id] = Object.freeze(['revealinggaze']);
+ThematicPassiveIds.add('forewarn');
+for (const id of ['marowak','marowakalola']) SpeciesPassives[id] = Object.freeze(['bonewarrior']);
+SpeciesPassives.perrserker = Object.freeze(['battlespoils']);
+ThematicPassiveIds.add('bonewarrior');
+ThematicPassiveIds.add('battlespoils');
+for (const id of ['tauros','taurospaldeacombat','taurospaldeablaze','taurospaldeaaqua']) SpeciesPassives[id] = Object.freeze(['unbrokencharge']);
+ThematicPassiveIds.add('unbrokencharge');
+SpeciesPassives.tyranitar = Object.freeze(['sandstream']);
+SpeciesPassives.abomasnow = Object.freeze(['snowwarning']);
+SpeciesPassives.lucario = Object.freeze(['aurasight']);
+ThematicPassiveIds.add('aurasight');
+ThematicPassiveIds.add('revealinggaze');
+SpeciesPassives.dragonite = Object.freeze(['championscommand']);
+SpeciesPassives.metagross = Object.freeze(['meteorcore']);
+ThematicPassiveIds.add('championscommand');
+ThematicPassiveIds.add('meteorcore');
+SpeciesPassives.garchomp = Object.freeze(['championspoise']);
+ThematicPassiveIds.add('championspoise');
+for (const id of ['cramorant','cramorantgulping','cramorantgorging']) SpeciesPassives[id] = Object.freeze(['gulpmissile']);
+ThematicPassiveIds.add('gulpmissile');
+SpeciesPassives.goodra = Object.freeze(['thickfat']);
+SpeciesPassives.kommoo = Object.freeze(['overcoat']);
 Object.freeze(SpeciesPassives);
-

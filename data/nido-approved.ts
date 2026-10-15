@@ -11,7 +11,7 @@ export function installNidoApproved(abilities: AbilityDataTable) {
   onBasePowerPriority: 21,
   onBasePower(power, source, target, move) { abilities.powerdrill.onBasePower!.call(this, power, source, target, move); abilities.whiplash.onBasePower!.call(this, power, source, target, move); },
  };
- abilities.matriarchsvigil = {...abilities.thickfat, ...abilities.aromaveil, name: "Matriarch's Vigil", num: 11445,
+ abilities.matriarchsvigil = {...abilities.thickfat, ...abilities.aromaveil, id: "matriarchsvigil" as ID, name: "Royal Aegis", num: 11445,
   onAnyAfterDamageApplied(damage, target, source, effect) {
    const holder = this.effectState.target;
    if (holder.m.matriarchVigilUsed || damage <= 0 || !source || source.isAlly(target) || effect?.effectType !== 'Move' || effect.category === 'Status' || !target.isAlly(holder) || (target !== holder && !holder.isAdjacent(target)) || target.hp > target.maxhp / 2 || target.hp + damage <= target.maxhp / 2) return;

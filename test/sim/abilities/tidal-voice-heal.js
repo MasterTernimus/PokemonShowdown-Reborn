@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('assert').strict, common = require('../../common');
 const { calculateScenario } = require('../../../dist/sim/custom-calculator');
-describe('Tidal Voice Sparkling Aria ally healing', () => {
+describe('Tidal Voice removed ally-healing regression', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(doubles = true) {
@@ -17,16 +17,16 @@ describe('Tidal Voice Sparkling Aria ally healing', () => {
 		const m = battle.dex.getActiveMove(move); Object.assign(m, { basePower: 1, willCrit: false, accuracy: true }, extra);
 		battle.actions.runMove(m, p, 1);
 	}
-	it('heals an adjacent ally once across multiple targets/hits without healing self or bench', () => {
+	it('no longer heals allies, self or bench across multiple targets/hits', () => {
 		const [p, ally] = setup(), hp = ally.hp, own = p.hp, bench = battle.p1.pokemon[2].hp;
-		use(p, 'sparklingaria', { multihit: 3 }); assert.equal(ally.hp - hp, Math.floor(ally.maxhp / 8));
+		use(p, 'sparklingaria', { multihit: 3 }); assert.equal(ally.hp - hp, 0);
 		assert.equal(p.hp, own); assert.equal(battle.p1.pokemon[2].hp, bench);
-		assert(battle.log.some(x => x.includes('|-heal|') && x.includes('Tidal Voice')));
+		assert(!battle.log.some(x => x.includes('|-heal|') && x.includes('Tidal Voice')));
 	});
-	for (const kind of ['miss', 'protect', 'immune']) it('heals when an executed Aria is avoided by ' + kind, () => {
+	for (const kind of ['miss', 'protect', 'immune']) it('does not heal when an executed Aria is avoided by ' + kind, () => {
 		const [p, ally] = setup(), hp = ally.hp;
 		for (const foe of p.foes()) { if (kind === 'protect') foe.addVolatile('protect'); if (kind === 'immune') foe.setAbility('Water Absorb'); }
-		use(p, 'sparklingaria', kind === 'miss' ? { accuracy: 0 } : {}); assert.equal(ally.hp - hp, Math.floor(ally.maxhp / 8));
+		use(p, 'sparklingaria', kind === 'miss' ? { accuracy: 0 } : {}); assert.equal(ally.hp - hp, 0);
 	});
 	for (const kind of ['sleep', 'flinch', 'paralysis']) it('does not heal on prevention by ' + kind, () => {
 		const [p, ally] = setup(), hp = ally.hp;
@@ -43,7 +43,7 @@ describe('Tidal Voice Sparkling Aria ally healing', () => {
 		ally.removeVolatile('healblock');
 		ally.hp = ally.maxhp - 1;
 		use(p);
-		assert.equal(ally.hp, ally.maxhp);
+		assert.equal(ally.hp, ally.maxhp - 1);
 	});
 	it('does not heal in singles, with other sounds, or while Tidal Voice is suppressed', () => {
 		const [p, ally] = setup(), hp = ally.hp; use(p, 'hypervoice'); assert.equal(ally.hp, hp);
@@ -60,11 +60,11 @@ describe('Tidal Voice Sparkling Aria ally healing', () => {
 	it('retains Liquid Voice conversion, sound power, ally safety and first-hit stat restoration', () => {
 		const [p, ally, foe] = setup(); p.boosts.spa = -1;
 		const m = battle.dex.getActiveMove('hypervoice'); battle.runEvent('ModifyType', p, foe, m, m);
-		assert.equal(m.type, 'Water'); assert.equal(battle.runEvent('BasePower', p, foe, m, 100), 130);
+		assert.equal(m.type, 'Water'); assert.equal(battle.runEvent('BasePower', p, foe, m, 100), 120);
 		const hp = ally.hp;
 		use(p, 'hypervoice');
 		assert.equal(ally.hp, hp);
-		assert.equal(p.boosts.spa, 0);
+		assert.equal(p.boosts.spa, -1);
 		p.boosts.spa = -1; use(p, 'hypervoice'); assert.equal(p.boosts.spa, -1);
 	});
 	it('calculator reports ally healing from the real move execution', () => {
@@ -72,7 +72,7 @@ describe('Tidal Voice Sparkling Aria ally healing', () => {
 			actors: [{ species: 'Mew', ability: 'Tidal Voice' }, { species: 'Mew', ability: 'No Ability' },
 				{ species: 'Mew', ability: 'No Ability', hpPercent: 50 }, { species: 'Mew', ability: 'No Ability' }] };
 		const result = calculateScenario(input); assert.equal(result.results[2].max, 0);
-		assert(result.results[2].maxNetLoss < 0);
-		assert(result.exampleLog.some(x => x.includes('|-heal|p1b:') && x.includes('Tidal Voice')));
+		assert.equal(result.results[2].maxNetLoss, 0);
+		assert(!result.exampleLog.some(x => x.includes('|-heal|p1b:') && x.includes('Tidal Voice')));
 	});
 });

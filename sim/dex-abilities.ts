@@ -59,6 +59,8 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 
 	constructor(data: AnyObject) {
 		super(data);
+		// Display-only renames may explicitly retain their canonical ability ID.
+		if (data.id) Object.assign(this, {id: toID(data.id)});
 
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';

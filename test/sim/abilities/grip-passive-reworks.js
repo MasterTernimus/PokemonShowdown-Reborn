@@ -28,15 +28,15 @@ describe('Approved Grappling Claws, Lapras and Yanmega changes', () => {
 		for (const id of ['aquacutter', 'rockblast']) assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove(id), 100), 100);
 		assert(p.hasAbility('toughclaws'));
 	});
-	it('waits for all hits and spends only one per-turn drop, including ability replacement', () => {
+	it('obsolete Speed drop stays removed across hits, turns and ability replacement', () => {
 		const [p, q] = setup(); const during = [];
 		hit(p, q, 'tackle', { multihit: 3, onAfterHit(target) { during.push(target.boosts.spe); } });
-		assert.deepEqual(during, [0, 0, 0]); assert.equal(q.boosts.spe, -1);
-		p.setAbility('No Ability'); p.setAbility('Grappling Claws'); hit(p, q); assert.equal(q.boosts.spe, -1);
-		battle.turn++; hit(p, q); assert.equal(q.boosts.spe, -2);
+		assert.deepEqual(during, [0, 0, 0]); assert.equal(q.boosts.spe, 0);
+		p.setAbility('No Ability'); p.setAbility('Grappling Claws'); hit(p, q); assert.equal(q.boosts.spe, 0);
+		battle.turn++; hit(p, q); assert.equal(q.boosts.spe, 0);
 	});
-	it('executes the new effect during an ordinary queued turn', () => {
-		const [p, q] = setup(); battle.makeChoices('move 1', 'move 4'); assert.equal(q.boosts.spe, -1);
+	it('keeps the obsolete Speed drop absent during an ordinary queued turn', () => {
+		const [p, q] = setup(); battle.makeChoices('move 1', 'move 4'); assert.equal(q.boosts.spe, 0);
 		assert(!q.volatiles.grapplingclawslock); q.hp = 1000; assert.equal(battle.heal(100, q, q), 100);
 		battle.runEvent('TrapPokemon', q); assert(!q.trapped); assert(p.hp > 0);
 	});
@@ -52,14 +52,14 @@ describe('Approved Grappling Claws, Lapras and Yanmega changes', () => {
 			flags: kind === 'noncontact' ? { protect: 1 } : { contact: 1, protect: 1 } });
 		assert.equal(target.boosts.spe, 0); assert.equal(p.m.draggingGripTurn, undefined);
 	});
-	it('drops only one foe after a spread move', () => {
+	it('does not lower either foe Speed after a spread move', () => {
 		const [p, q] = setup('Armaldo', 'Grappling Claws', true);
 		hit(p, q, 'tackle', { target: 'allAdjacentFoes', multihit: 3 });
-		assert.equal(battle.p2.active.filter(t => t.boosts.spe === -1).length, 1);
+		assert.equal(battle.p2.active.filter(t => t.boosts.spe === -1).length, 0);
 	});
 	for (const ability of ['Clear Body', 'Mirror Armor']) it('respects ' + ability, () => {
 		const [p, q] = setup(); q.setAbility(ability); hit(p, q);
-		assert.equal(q.boosts.spe, 0); assert.equal(p.boosts.spe, ability === 'Mirror Armor' ? -1 : 0);
+		assert.equal(q.boosts.spe, 0); assert.equal(p.boosts.spe, 0);
 	});
 	it('has no obsolete lock conditions', () => {
 		for (const id of ['grapplingclawslock', 'grapplingclawsspent', 'grapplingclawsanchor']) assert(!Dex.data.Conditions[id]);

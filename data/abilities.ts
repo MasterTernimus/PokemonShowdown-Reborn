@@ -1,3 +1,4 @@
+import {accumulationState} from './swalot-vespiquen-approved';
 import {rememberWarning, protectsWarnedMove} from './warned-moves';
 import {applySereneGrace} from './ally-serene-grace';
 import {installLatestPassiveAbilities} from './latest-passive-abilities';
@@ -322,11 +323,27 @@ function getIllusionThreatScore(battle: Battle, candidate: Pokemon, foes: Pokemo
 	return score;
 }
 
-function getDualWieldModifier(move: ActiveMove, componentBoost = 1) {
-	if (move.multihitType !== 'dualwield') return componentBoost;
-	if (move.dualWieldFullPower) return componentBoost;
-	if (componentBoost !== 1) return move.hit > 1 ? 0.15 : componentBoost;
-	return 0.6;
+const sharpDualPowerEvents = new WeakSet<object>();
+function getDualWieldModifier(move: ActiveMove, componentBoost = 1, battle?: Battle, component = '') {
+ const holder = battle?.event?.target as Pokemon | undefined;
+ if (move.multihitType !== 'dualwield') return componentBoost;
+ // Preserve the existing first-hit boost/15% second hit regardless of component source.
+ if (move.flags.slicing && !battle?.field.isTerrain('coldeclipseterrain') && holder?.hasAbilityOrPassive?.('sharpness')) {
+  if (sharpDualPowerEvents.has(battle!.event)) return 1;
+  sharpDualPowerEvents.add(battle!.event);
+  let combined = 1.5;
+  const launcher = !!(move.flags.pulse || move.flags.bullet) && holder.hasAbilityOrPassive('megalauncher');
+  const drill = !!(move.flags.drill || move.flags.horn) && holder.hasAbilityOrPassive('powerdrill');
+  if (launcher) combined *= 1.5;
+  if (drill) combined *= battle!.field.isTerrain(['rockyterrain','mountainterrain','snowymountainterrain','caveterrain','volcanicterrain']) ? 2 : 1.5;
+  if (componentBoost !== 1 && component !== 'sharpness' && !(component === 'megalauncher' && launcher) && !(component === 'powerdrill' && drill)) combined *= componentBoost;
+  componentBoost = combined;
+ } else if (battle?.event?.id === 'BasePower' && skipPassiveComponent(battle, holder, 'dualwield')) {
+  return componentBoost;
+ }
+ if (move.dualWieldFullPower) return componentBoost;
+ if (componentBoost !== 1) return move.hit > 1 ? 0.15 : componentBoost;
+ return 0.6;
 }
 
 function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
@@ -1376,7 +1393,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-			if ((move.flags['slicing'] || move.id === 'steelwing') && !this.field.isTerrain('coldeclipseterrain')) {
+			if (move.flags.slicing) return this.dex.abilities.get('sharpness').onBasePower?.call(this, basePower, attacker, defender, move);
+			if (move.id === 'steelwing' && !this.field.isTerrain('coldeclipseterrain')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1541,18 +1559,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10353,
 	},
 	punchfiend: {
+		onStart(pokemon) { this.dex.abilities.get('keeneye').onStart?.call(this, pokemon); },
 		onModifyMove(move, pokemon, target) {
 			this.dex.abilities.get('unseenfist').onModifyMove?.call(this, move, pokemon, target );
+			this.dex.abilities.get('keeneye').onModifyMove?.call(this, move, pokemon, target);
 		},
 		onTryAddVolatile(status, pokemon, source, effect) {
 			return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon, source, effect);
 		},
 		onTryBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
-		},
-		onBasePowerPriority: 23,
-		onBasePower(basePower, source, target, move) {
-			return this.dex.abilities.get('ironfist').onBasePower?.call(this, basePower, source, target, move);
+			this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
+			this.dex.abilities.get('keeneye').onTryBoost?.call(this, boost, target, source, effect);
 		},
 		flags: { breakable: 1 },
 		name: "Punch Fiend",
@@ -2255,7 +2272,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
 			const spiralMove = move as typeof move & { spiralEvolutionProtectedTargets?: Pokemon[] };
-			let modifier = getDualWieldModifier(move);
+			let modifier = getDualWieldModifier(move, 1, this);
 			if (move.id === 'twineedle') modifier *= 2;
 			if (spiralMove.spiralEvolutionProtectedTargets?.includes(target)) modifier *= 0.5;
 			if (modifier !== 1) return this.chainModify(modifier);
@@ -2408,7 +2425,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let componentBoost = 1;
 			const minimum = this.field.isTerrain('factoryterrain') ? 80 : 60;
 			if (this.modify(basePower, this.event.modifier) <= minimum) componentBoost *= 1.5;
-			const modifier = getDualWieldModifier(move, componentBoost);
+			const modifier = getDualWieldModifier(move, componentBoost, this, 'technician');
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMove(move, source, target) { this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source, target); },
@@ -2489,7 +2506,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 20,
 		onBasePower(basePower, source, target, move) {
-			if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move));
+			if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move, 1, this));
 		},
 		flags: {},
 		name: "Dual Wield",
@@ -3324,7 +3341,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, source, target, move) {
 			this.dex.abilities.get('battlebond').onBasePower?.call(this, basePower, source, target, move);
-			if (move.id === 'extremespeed') return this.chainModify(1.5);
 		},
 		onModifyMove(move) {
 			if (move.id === 'extremespeed') move.willCrit = true;
@@ -3584,6 +3600,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	elevate: {
 		onSourceAfterFaint(length, target, source, effect) {
+			if (skipPassiveComponent(this, source, 'elevate')) return;
 			if (effect && effect.effectType === 'Move') {
 				const bestStat = source.getBestStat(true, true);
 				this.boost({ [bestStat]: length }, source);
@@ -4707,7 +4724,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	eclipsevision: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa) {
-			return this.chainModify(1.5);
+			return this.chainModify(1.3);
 		},
 		onStart(pokemon) {
 			const firstMove = pokemon.moveSlots[0] && this.dex.moves.get(pokemon.moveSlots[0].id);
@@ -4746,7 +4763,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 20,
 		onBasePower(basePower, source, target, move) {
 			if (move.id === 'metalclaw') return this.chainModify(1.5);
-			if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move));
+			if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move, 1, this));
 		},
 		onModifyDamage(damage, source, target, move) {
 			if (source.status && move.category === 'Physical') return this.chainModify(1.3);
@@ -4933,7 +4950,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Nested composite calls must not apply Proficient twice.
 			if (this.effect.id === 'fallenstar') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
-			let modifier = getDualWieldModifier(move);
+			let modifier = getDualWieldModifier(move, 1, this);
 			if (!arrowMoves.includes(move.id)) {
 				if (modifier !== 1) return this.chainModify(modifier);
 				return;
@@ -5181,8 +5198,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	apexcleave: {
 		onModifyMove(move, source, target) { this.dex.abilities.get('sharpness').onModifyMove?.call(this, move, source, target); this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source, target); },
 		onBasePower(basePower, source, target, move) {
+   if (move.multihitType !== 'dualwield') return this.dex.abilities.get('sharpness').onBasePower?.call(this, basePower, source, target, move);
 			const sharpnessBoost = move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain') ? 1.5 : 1;
-			const modifier = getDualWieldModifier(move, sharpnessBoost);
+			const modifier = getDualWieldModifier(move, sharpnessBoost, this, 'sharpness');
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onSourceAfterFaint(length, target, source, effect) { return this.dex.abilities.get('moxie').onSourceAfterFaint?.call(this, length, target, source, effect); },
@@ -5199,7 +5217,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('dualwield').onModifyMove?.call(this, move, source, target);
 		},
 		onBasePower(basePower, source, target, move) {
-			const modifier = getDualWieldModifier(move);
+			const modifier = getDualWieldModifier(move, 1, this);
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onDamage(damage, target, source, effect) { return this.dex.abilities.get('secondwind').onDamage?.call(this, damage, target, source, effect); },
@@ -5686,8 +5704,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
+   if (move.multihitType !== 'dualwield') return this.dex.abilities.get('sharpness').onBasePower?.call(this, basePower, attacker, defender, move);
 			const sharpnessBoost = move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain') ? 1.5 : 1;
-			const modifier = getDualWieldModifier(move, sharpnessBoost);
+			const modifier = getDualWieldModifier(move, sharpnessBoost, this, 'sharpness');
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		flags: { breakable: 1 },
@@ -5701,8 +5720,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
+   if (move.multihitType !== 'dualwield') return this.dex.abilities.get('sharpness').onBasePower?.call(this, basePower, attacker, defender, move);
 			let componentBoost = move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain') ? 1.5 : 1;
-			const modifier = getDualWieldModifier(move, componentBoost);
+			const modifier = getDualWieldModifier(move, componentBoost, this, 'sharpness');
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onFaint(pokemon) {
@@ -6356,41 +6376,41 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onResidual(pokemon) {
 			if (!pokemon.activeTurns) return;
-			if (pokemon.abilityState.accumulationReleasedTurn === this.turn) return;
+			if (accumulationState(pokemon).accumulationReleasedTurn === this.turn) return;
 			const lastMove = pokemon.lastMove?.id;
 			if (lastMove === 'spitup' || lastMove === 'swallow') return;
 			if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) {
-				delete pokemon.abilityState.accumulationReadyTurn;
+				delete accumulationState(pokemon).accumulationReadyTurn;
 				pokemon.addVolatile('stockpile', pokemon);
 				if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) return;
 			}
-			if (pokemon.abilityState.accumulationReadyTurn === undefined) {
-				pokemon.abilityState.accumulationReadyTurn = this.turn;
+			if (accumulationState(pokemon).accumulationReadyTurn === undefined) {
+				accumulationState(pokemon).accumulationReadyTurn = this.turn;
 				return;
 			}
-			if (pokemon.abilityState.accumulationReadyTurn >= this.turn) return;
-			if (pokemon.abilityState.accumulationLastAutoReleaseTurn === this.turn - 1) return;
+			if (accumulationState(pokemon).accumulationReadyTurn >= this.turn) return;
+			if (accumulationState(pokemon).accumulationLastAutoReleaseTurn === this.turn - 1) return;
 			const release = chooseAccumulationRelease(this, pokemon);
 			if (!release) return;
 			this.add('-activate', pokemon, 'ability: Accumulation');
-			pokemon.abilityState.accumulationAutoBelch = release.moveid === 'belch';
-			pokemon.abilityState.accumulationAutoSpitUp = release.moveid === 'spitup';
-			pokemon.abilityState.accumulationReleasedTurn = this.turn;
-			pokemon.abilityState.accumulationLastAutoReleaseTurn = this.turn;
-			pokemon.abilityState.accumulationScriptedReleaseTurn = this.turn;
-			pokemon.abilityState.accumulationSuppressMoveChain = true;
+			accumulationState(pokemon).accumulationAutoBelch = release.moveid === 'belch';
+			accumulationState(pokemon).accumulationAutoSpitUp = release.moveid === 'spitup';
+			accumulationState(pokemon).accumulationReleasedTurn = this.turn;
+			accumulationState(pokemon).accumulationLastAutoReleaseTurn = this.turn;
+			accumulationState(pokemon).accumulationScriptedReleaseTurn = this.turn;
+			accumulationState(pokemon).accumulationSuppressMoveChain = true;
 			this.actions.useMove(release.moveid, pokemon, { target: release.target });
 			if (release.moveid === 'spitup') {
 				pokemon.removeVolatile('stockpile');
 			} else {
 				consumeAccumulationStockpileLayer(this, pokemon);
 			}
-			pokemon.abilityState.accumulationSuppressMoveChain = false;
-			pokemon.abilityState.accumulationAutoBelch = false;
-			pokemon.abilityState.accumulationAutoSpitUp = false;
-			pokemon.abilityState.accumulationNoBelchAfterSpitUp = false;
-			pokemon.abilityState.accumulationNoSpitUpAfterBelch = false;
-			pokemon.abilityState.accumulationBelchTarget = null;
+			accumulationState(pokemon).accumulationSuppressMoveChain = false;
+			accumulationState(pokemon).accumulationAutoBelch = false;
+			accumulationState(pokemon).accumulationAutoSpitUp = false;
+			accumulationState(pokemon).accumulationNoBelchAfterSpitUp = false;
+			accumulationState(pokemon).accumulationNoSpitUpAfterBelch = false;
+			accumulationState(pokemon).accumulationBelchTarget = null;
 		},
 		flags: { breakable: 1 },
 		name: "Accumulation",
@@ -7895,6 +7915,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	filter: {
 		onSourceModifyDamage(damage, source, target, move) {
+			if (skipPassiveComponent(this, target, 'filter')) return;
 			let modifier = 0.8;
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Filter neutralize');
@@ -8177,13 +8198,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	royalscales: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon, source, move) {
-			return (this.dex.abilities.get('prismscale') as any).onModifyDef?.call(this, def, pokemon, source, move);
+			if (skipPassiveComponent(this, pokemon, 'marvelscale')) return;
+			return this.dex.abilities.get('marvelscale').onModifyDef?.call(this, def, pokemon, source, move);
 		},
 
 
 
 		onModifySpe(spe, pokemon) {
-			return this.dex.abilities.get('prismscale').onModifySpe?.call(this, spe, pokemon);
+			return this.dex.abilities.get('swiftswim').onModifySpe?.call(this, spe, pokemon);
 		},
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon, target) {
@@ -8285,6 +8307,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	flareboost: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
+			if (skipPassiveComponent(this, attacker, 'flareboost')) return;
 			if (this.movehasType(move, 'Fire')) {
 				return this.chainModify(1.5);
 			}
@@ -8594,7 +8617,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			// Nested composite calls must not apply Proficient twice.
 
-			let modifier = getDualWieldModifier(move);
+			let modifier = getDualWieldModifier(move, 1, this);
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMovePriority: 1,
@@ -9038,6 +9061,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {}, name: "Steel Plumage", rating: 3, num: 11201,
 	},
 	venomcanticle: {
+		onBasePower(basePower, source, target, move) {
+			if (move.category !== 'Status' && move.flags.sound) return this.chainModify(1.2);
+		},
 		onModifyTypePriority: -1,
 		onModifyType(move) {
 			if (move.category !== 'Status' && move.type === 'Normal' && move.flags.sound) move.type = 'Poison';
@@ -9553,24 +9579,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	gulpmissile: {
 		onStart(pokemon) {
+			if (skipPassiveComponent(this, pokemon, 'gulpmissile')) return;
 			if (!pokemon.transformed && pokemon.species.id !== 'cramorantgulping' &&
 				this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain']) && pokemon.species.baseSpecies === 'Cramorant') {
 				pokemon.formeChange('cramorantgulping', this.effect);
 			}
 		},
 		onTerrainChange(pokemon) {
+			if (skipPassiveComponent(this, pokemon, 'gulpmissile')) return;
 			if (pokemon.transformed || !['cramorant', 'cramorantgulping', 'cramorantgorging'].includes(pokemon.species.id)) return;
 			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain']) && pokemon.species.id !== 'cramorantgulping') {
 				pokemon.formeChange('cramorantgulping', this.effect);
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
+			if (skipPassiveComponent(this, target, 'gulpmissile')) return;
 			if (!source.hp || !source.isActive || target.isSemiInvulnerable()) return;
 			if (['cramorantgulping', 'cramorantgorging'].includes(target.species.id)) {
 				if (this.field.isTerrain('underwaterterrain')) {
-					if (!source.runImmunity('Water')) {
+					if (source.runImmunity('Water')) {
 						const typeMod = this.clampIntRange(this.dex.getEffectiveness('Water', source), -6, 6);
-						this.damage(source.baseMaxhp / 4 * typeMod, source, target);
+						this.damage(source.baseMaxhp / 4 * (2 ** typeMod), source, target);
 					}
 				} else {
 					this.damage(source.baseMaxhp / 4, source, target);
@@ -9585,7 +9614,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.ts
 		onSourceTryPrimaryHit(target, source, effect) {
-			if (effect?.id === 'surf' && source.hasAbility('gulpmissile') && source.species.name === 'Cramorant') {
+			if (skipPassiveComponent(this, source, 'gulpmissile')) return;
+			if (effect?.id === 'surf' && source.hasAbilityOrPassive('gulpmissile') && source.species.name === 'Cramorant') {
 				let forme = '';
 				if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) {
 					forme = 'cramorantgulping';
@@ -9760,7 +9790,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			const drillBoost = move.flags['drill'] || move.flags['horn'] ?
 				(this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain']) ? 2 : 1.5) : 1;
-			let modifier = getDualWieldModifier(move, drillBoost);
+			let modifier = getDualWieldModifier(move, drillBoost, this, 'powerdrill');
 			if (move && this.movehasType(move, 'Rock')) modifier *= 1.5;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
@@ -9848,6 +9878,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyMove(move, source) {
 			if (move.category === 'Status' || move.flags['noparentalbond'] || move.flags['charge'] ||
 				move.flags['futuremove'] || move.isZ || move.isMax) return;
+			if (move.id === 'gildedhelix') {
+				move.multihit = 3;
+				delete move.multihitType;
+				if (this.gameType === 'freeforall') {
+					move.target = 'allAdjacentFoes';
+					(move as any).fullDamageSpread = true;
+				}
+				return;
+			}
 			const spreadTargets = ['allAdjacent', 'allAdjacentFoes', 'foeSide'];
 			if (this.gameType !== 'freeforall' && (move.spreadHit || spreadTargets.includes(move.target))) return;
 			if (this.gameType === 'freeforall') {
@@ -10378,7 +10417,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-message', pokemon.name + '\'s Illuminate flared up with starlight!');
 				if (this.activePerHalf !== 1) {
 					this.add('-message', pokemon.name + '\'s dazzling shine put a spotlight on its partner!');
-					pokemon.adjacentAllies()[0].addVolatile('spotlight');
+					const ally = pokemon.adjacentAllies().find(p => p.hp && p.isActive);
+					if (ally && !ally.volatiles.spotlight) ally.addVolatile('spotlight');
 				}
 			}
 		},
@@ -11414,11 +11454,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 63,
 	},
 	prismscale: {
-		onModifyDefPriority: 6,
-		onModifyDef(def, pokemon) {
-			if (pokemon.status || this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'dragonsdenterrain', 'starlightarenaterrain'])) {
-				return this.chainModify(1.5);
-			}
+		onAnyModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move);
 		},
 		onUpdate(pokemon) {
 			if (pokemon.volatiles['attract']) {
@@ -11472,7 +11509,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['pulse'] || move.flags['bullet']) {
-				return this.chainModify(1.5);
+				if (move.multihitType === 'dualwield' && move.flags.slicing && attacker.hasAbilityOrPassive('sharpness') && !this.field.isTerrain('coldeclipseterrain')) return this.chainModify(getDualWieldModifier(move, 1.5, this, 'megalauncher'));
+    return this.chainModify(1.5);
 			}
 		},
 		flags: {},
@@ -13004,6 +13042,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['drill'] || move.flags['horn']) {
+    if (move.multihitType === 'dualwield' && move.flags.slicing && attacker.hasAbilityOrPassive('sharpness') && !this.field.isTerrain('coldeclipseterrain')) {
+     const boost = this.field.isTerrain(['rockyterrain','mountainterrain','snowymountainterrain','caveterrain','volcanicterrain']) ? 2 : 1.5;
+     return this.chainModify(getDualWieldModifier(move, boost, this, 'powerdrill'));
+    }
 				if (this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) return this.chainModify(2);
 				return this.chainModify(1.5);
 			}
@@ -14129,6 +14171,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sandstream: {
 		onStart(source) {
+   if (skipPassiveComponent(this, source, 'sandstream')) return;
 			this.field.setWeather('sandstorm');
 		},
 		flags: {},
@@ -14419,6 +14462,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	seasonalstride: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
+			if (skipPassiveComponent(this, pokemon, 'seasonalstride')) return;
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
@@ -14430,6 +14474,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
+			if (skipPassiveComponent(this, pokemon, 'seasonalstride')) return;
 			let modifier = 1;
 			if (move.typeChangerBoosted === this.effect) modifier *= 1.2;
 			if (move.flags['kick']) modifier *= 1.4;
@@ -14437,6 +14482,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifySpe(spe, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				if (skipPassiveComponent(this, pokemon, 'seasonalstride')) return;
 				return this.chainModify(2);
 			}
 		},
@@ -14546,7 +14592,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target === source || move.category === 'Status') return;
-			return this.chainModify(0.75);
+			return this.chainModify(0.8);
 		},
 		flags: { cantsuppress: 1 },
 		name: "Shadow Tag",
@@ -14587,6 +14633,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	sharpness: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
+   if (!move.flags.slicing || this.field.isTerrain('coldeclipseterrain')) return;
+   if (move.multihitType === 'dualwield') {
+    const modifier = getDualWieldModifier(move, 1, this);
+    if (modifier !== 1) return this.chainModify(modifier);
+    return;
+   }
+   if (skipPassiveComponent(this, attacker, 'sharpness')) return;
+   if (this.event?.id === 'BasePower') {
+    if (sharpDualPowerEvents.has(this.event)) return;
+    sharpDualPowerEvents.add(this.event);
+   }
 			if (move.flags['slicing'] && !this.field.isTerrain('coldeclipseterrain')) {
 				this.debug('Sharpness boost');
 				return this.chainModify(1.5);
@@ -15138,9 +15195,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	snowwarning: {
 		onStart(source) {
+   if (skipPassiveComponent(this, source, 'snowwarning')) return;
 			this.field.setWeather('hail');
 		},
 		onDamagingHit(damage, target, source, move) {
+   if (skipPassiveComponent(this, target, 'snowwarning')) return;
 			if (!this.field.isTerrain('coldeclipseterrain') || !move || move.category === 'Status') return;
 			if (source.volatiles['disable'] || move.isMax || move.flags['futuremove'] || move.id === 'struggle') return;
 			this.add('-activate', target, 'ability: Snow Warning');
@@ -15282,6 +15341,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryHit(target, source, move) {
+   if (source?.species.id === 'chandeluremega' && source.hasAbility('soulcremation') &&
+    move.category !== 'Status' && this.movehasType(move, ['Fire','Ghost'])) return;
 			if (source?.hasAbility('soulstrike') && this.movehasType(move, 'Ghost')) return;
 			if (source?.hasAbility('soulfire') && target.hasAbility('soulfire') && this.movehasType(move, ['Fire', 'Ghost'])) return;
 			if (target !== source && (this.movehasType(move, 'Fire') || this.movehasType(move, 'Ghost') || move.id === 'willowisp')) {
@@ -15471,6 +15532,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryHit(target, source, move) {
+			if (source?.species.id === 'chandeluremega' && source.hasAbility('soulcremation') &&
+				move.category !== 'Status' && this.movehasType(move, ['Fire', 'Ghost'])) return;
 			if (target !== source && (this.movehasType(move, 'Fire') || this.movehasType(move, 'Ghost') || move.id === 'willowisp')) {
 				if (!this.boost({ atk: 1, spa: 1 })) {
 					this.add('-immune', target, '[from] ability: Soul Tag');
@@ -15514,7 +15577,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Nested composite calls must not apply Proficient twice.
 			if (this.effect.id === 'highnoon') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			this.dex.abilities.get('megalauncher').onBasePower?.call(this, basePower, attacker, defender, move);
-			let modifier = getDualWieldModifier(move);
+			let modifier = getDualWieldModifier(move, 1, this);
 			if (this.movehasType(move, 'Water')) modifier *= 1.2;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
@@ -16381,7 +16444,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Nested composite calls must not apply Proficient twice.
 			if (this.effect.id === 'siegelauncher') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 			const launcherBoost = move.flags['pulse'] || move.flags['bullet'] ? 1.5 : 1;
-			let modifier = getDualWieldModifier(move, launcherBoost);
+			let modifier = getDualWieldModifier(move, launcherBoost, this, 'megalauncher');
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyMovePriority: 1,
@@ -16555,7 +16618,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePower(basePower, source, target, move) {
 			if (source.species.baseSpecies !== 'Aegislash' || source.transformed || move.category === 'Status') return;
-			let modifier = getDualWieldModifier(move);
+			let modifier = getDualWieldModifier(move, 1, this);
 			if (source.species.name === 'Aegislash-Blade') modifier *= 1.2;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
@@ -17270,7 +17333,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.debug(`basePower: ${basePowerAfterMultiplier}`);
 			if (basePowerAfterMultiplier <= minimum) {
 				this.debug('Technician boost');
-				return this.chainModify(1.5);
+				if (move.multihitType === 'dualwield' && move.flags.slicing && attacker.hasAbilityOrPassive('sharpness') && !this.field.isTerrain('coldeclipseterrain')) return this.chainModify(getDualWieldModifier(move, 1.5, this, 'technician'));
+    return this.chainModify(1.5);
 			}
 		},
 		flags: {},
@@ -21465,3 +21529,61 @@ installArbolivaAevianAbilities(Abilities);
 
 import {installApprovedSupportReworks} from './approved-support-reworks';
 installApprovedSupportReworks(Abilities);
+
+// Approved Gliscor option: full Super Luck plus one additional stage for bites.
+Abilities.silenthunter = {
+ name: 'Silent Hunter', num: 11460, rating: 3, flags: {},
+ onModifyCritRatio(critRatio, source, target, move) {
+  const ratio = Abilities.superluck.onModifyCritRatio!.call(this, critRatio, source, target, move);
+  return (ratio ?? critRatio) + (move.flags.bite ? 1 : 0);
+ },
+};
+
+import {installDissonantEcho} from './dissonant-echo';
+installDissonantEcho(Abilities);
+
+import {installPrimarinaApproved} from './primarina-approved';
+installPrimarinaApproved(Abilities);
+
+import {installQueuedAbilities} from './queued-abilities-approved';
+installQueuedAbilities(Abilities);
+
+import {installSwalotVespiquen} from './swalot-vespiquen-approved';
+installSwalotVespiquen(Abilities);
+
+import {installFairyEclipse} from './fairy-eclipse-approved';
+installFairyEclipse(Abilities);
+import {installRivalSupport} from './rival-support-approved';
+installRivalSupport(Abilities);
+import {installMimeAim} from './mime-aim-approved';
+installMimeAim(Abilities);
+
+import {installPearlHydraulic} from './pearl-hydraulic-approved';
+installPearlHydraulic(Abilities);
+
+import {installCalculatedTrajectory} from './calculated-trajectory-approved';
+installCalculatedTrajectory(Abilities);
+
+import {installBoneSpoilsInfernal} from './bone-spoils-infernal-approved';
+installBoneSpoilsInfernal(Abilities);
+
+import {installStarterFinish} from './starter-finish-approved';
+installStarterFinish(Abilities);
+
+import {installAuraGaze} from './aura-gaze-approved';
+installAuraGaze(Abilities);
+
+import {installWeatherChoices} from './weather-choice-approved';
+installWeatherChoices(Abilities);
+
+import {installChampionMeteor} from './champion-meteor-approved';
+installChampionMeteor(Abilities);
+
+import {installAdaptiveArsenal} from './adaptive-arsenal-approved';
+installAdaptiveArsenal(Abilities);
+
+import {installGarchompPoise} from './garchomp-poise-approved';
+installGarchompPoise(Abilities);
+
+import {installCramorantGoodraKommo} from './cramorant-goodra-kommo-approved';
+installCramorantGoodraKommo(Abilities);

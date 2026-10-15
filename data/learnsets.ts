@@ -113210,3 +113210,15 @@ Learnsets.emboarmegaego = {learnset: {...Learnsets.emboar.learnset}};
 
 Learnsets.mightyenagrim = {learnset: {...Learnsets.mightyena.learnset}};
 Learnsets.mightyenamegagrim = {learnset: {...Learnsets.mightyena.learnset}};
+
+import {ApprovedMoveAdditions} from './move-distribution-approved';
+for (const [move, species] of Object.entries(ApprovedMoveAdditions)) {
+ for (const id of species) { Learnsets[id as ID] ||= {learnset: {}}; Learnsets[id as ID].learnset![move as ID] = ['9L1']; }
+}
+// Union both historical rosters under the canonical move. Old spelling is a Dex alias.
+for (const data of Object.values(Learnsets)) {
+ const moves = data.learnset;
+ if (!moves?.mudslap) continue;
+ moves.mudbarrage = [...new Set([...(moves.mudbarrage || []), ...moves.mudslap])];
+ delete moves.mudslap;
+}

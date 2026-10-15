@@ -1,0 +1,1053 @@
+{
+  "venusaurgmax": {
+    "abilities": {
+      "0": "Ancient Bloom"
+    },
+    "passives": [
+      "overgrow"
+    ]
+  },
+  "charizardgmax": {
+    "abilities": {
+      "0": "Burning Crown"
+    },
+    "passives": [
+      "blaze"
+    ]
+  },
+  "blastoisegmax": {
+    "abilities": {
+      "0": "Fortress Shell"
+    },
+    "passives": [
+      "torrent"
+    ]
+  },
+  "nidoqueen": {
+    "abilities": {
+      "0": "Sheer Force",
+      "1": "Queenly Majesty",
+      "H": "Royal Aegis"
+    },
+    "passives": [
+      "rivalry"
+    ]
+  },
+  "clefable": {
+    "abilities": {
+      "0": "Moon Veil",
+      "1": "Friend Guard",
+      "H": "Void Promise"
+    },
+    "passives": [
+      "magicguard"
+    ]
+  },
+  "rapidashgalar": {
+    "abilities": {
+      "0": "Psychic Surge",
+      "1": "Speed Boost",
+      "H": "Rapid Response"
+    },
+    "passives": [
+      "pastelveil"
+    ]
+  },
+  "hitmonlee": {
+    "abilities": {
+      "0": "Unburden",
+      "1": "Ultra Instinct",
+      "H": "Kick Fiend"
+    },
+    "passives": [
+      "bruteforce"
+    ]
+  },
+  "hitmonchan": {
+    "abilities": {
+      "0": "Scrappy",
+      "1": "Ultra Ego",
+      "H": "Punch Fiend"
+    },
+    "passives": [
+      "ironfist"
+    ]
+  },
+  "rhydon": {
+    "abilities": {
+      "0": "Brute Force",
+      "1": "War Path",
+      "H": "Lightning Rod"
+    },
+    "passives": [
+      "powerdrill"
+    ]
+  },
+  "dragonitemega": {
+    "abilities": {
+      "0": "Celestial Heart"
+    },
+    "passives": [
+      "multiscale"
+    ]
+  },
+  "feraligatrgmax": {
+    "abilities": {
+      "0": "Tidal Jaw"
+    },
+    "passives": [
+      "torrent"
+    ]
+  },
+  "furret": {
+    "abilities": {
+      "0": "Spring Fur",
+      "1": "Simple",
+      "H": "Variety Rush"
+    },
+    "passives": [
+      "sheddecoy"
+    ]
+  },
+  "skarmory": {
+    "abilities": {
+      "0": "Fresh Plumage",
+      "1": "Sturdy",
+      "H": "Burning Quake"
+    },
+    "passives": [
+      "bigpecks"
+    ]
+  },
+  "kingdra": {
+    "abilities": {
+      "0": "Swift Swim",
+      "1": "Abyss Sniper",
+      "H": "Storm Drain"
+    },
+    "passives": [
+      "waterveil"
+    ]
+  },
+  "hitmontop": {
+    "abilities": {
+      "0": "Contrary",
+      "1": "Intimidate",
+      "H": "Spin Fiend"
+    },
+    "passives": [
+      "scrappy"
+    ]
+  },
+  "mightyena": {
+    "abilities": {
+      "0": "Intimidate",
+      "1": "Black Fang",
+      "H": "Stakeout"
+    },
+    "passives": [
+      "rattled"
+    ]
+  },
+  "mightyenadeso": {
+    "abilities": {
+      "0": "Intimidate",
+      "1": "Black Fang",
+      "H": "Stakeout"
+    },
+    "passives": [
+      "rattled"
+    ]
+  },
+  "swalot": {
+    "abilities": {
+      "0": "Adhesive Armor",
+      "1": "Neutralization",
+      "H": "Caustic Ooze"
+    },
+    "passives": [
+      "accumulation"
+    ]
+  },
+  "wailord": {
+    "abilities": {
+      "0": "Drizzle",
+      "1": "Stamina",
+      "H": "Deep Resonance"
+    },
+    "passives": [
+      "leviathanwake"
+    ]
+  },
+  "trapinch": {
+    "abilities": {
+      "0": "Burrow Ambush",
+      "1": "Huge Power",
+      "H": "Antlion Instinct"
+    },
+    "passives": [
+      "arenatrap"
+    ]
+  },
+  "armaldo": {
+    "abilities": {
+      "0": "Abyssal Claws",
+      "1": "Swift Swim",
+      "H": "Primeval Hunt"
+    },
+    "passives": [
+      "relicarmor"
+    ]
+  },
+  "milotic": {
+    "abilities": {
+      "0": "Prism Scale",
+      "1": "Competitive",
+      "H": "Queenly Majesty"
+    },
+    "passives": [
+      "marvelscale"
+    ]
+  },
+  "miloticterajuma": {
+    "abilities": {
+      "0": "Prism Scale",
+      "1": "Whiplash",
+      "H": "Queenly Majesty"
+    },
+    "passives": [
+      "marvelscale"
+    ]
+  },
+  "miloticmega": {
+    "abilities": {
+      "0": "Royal Scales"
+    },
+    "passives": [
+      "marvelscale"
+    ]
+  },
+  "miloticaevian": {
+    "abilities": {
+      "0": "Prism Scale",
+      "1": "Defiant",
+      "H": "Queenly Majesty"
+    },
+    "passives": [
+      "marvelscale"
+    ]
+  },
+  "kecleon": {
+    "abilities": {
+      "0": "Shed Skin",
+      "1": "Pickpocket",
+      "H": "Mimicry",
+      "S": "Adaptive Cycle"
+    },
+    "passives": [
+      "protean"
+    ]
+  },
+  "vespiquen": {
+    "abilities": {
+      "0": "Royal Presence",
+      "1": "Queenly Majesty",
+      "H": "Hive Sanctuary"
+    },
+    "passives": [
+      "royalhive"
+    ]
+  },
+  "drifblim": {
+    "abilities": {
+      "0": "Windy Surge",
+      "1": "Unburden",
+      "H": "Aftermath"
+    },
+    "passives": [
+      "flareboost"
+    ]
+  },
+  "honchkrow": {
+    "abilities": {
+      "0": "Pressure",
+      "1": "Void Command",
+      "H": "Supreme Overlord"
+    },
+    "passives": [
+      "stakeout"
+    ]
+  },
+  "gliscor": {
+    "abilities": {
+      "0": "Venom Pincer",
+      "1": "Silent Hunter",
+      "H": "Wind Rider"
+    },
+    "passives": [
+      "poisonheal"
+    ]
+  },
+  "gallade": {
+    "abilities": {
+      "0": "Dual Wield",
+      "1": "Knight's Guard",
+      "H": "Inner Focus",
+      "S": "Ruptured Heaven"
+    },
+    "passives": [
+      "steadfast"
+    ]
+  },
+  "probopass": {
+    "abilities": {
+      "0": "Magnet Pull",
+      "1": "Magnetic Command",
+      "H": "Heavy Metal"
+    },
+    "passives": [
+      "noseformation"
+    ]
+  },
+  "dusknoir": {
+    "abilities": {
+      "0": "Requiem",
+      "1": "Pressure",
+      "H": "Soul Reaver"
+    },
+    "passives": [
+      "levitate"
+    ]
+  },
+  "froslassaevian": {
+    "abilities": {
+      "0": "Adaptability",
+      "1": "Dissonant Echo",
+      "H": "Storm Power"
+    },
+    "passives": []
+  },
+  "cinccino": {
+    "abilities": {
+      "0": "Plush Whiplash",
+      "1": "Skill Link",
+      "H": "Silken Salvo"
+    },
+    "passives": [
+      "shielddust"
+    ]
+  },
+  "cinccinodeso": {
+    "abilities": {
+      "0": "Pixilate",
+      "1": "Skill Link",
+      "H": "Silken Salvo"
+    },
+    "passives": [
+      "shielddust"
+    ]
+  },
+  "sawsbuck": {
+    "abilities": {
+      "0": "Overcoat",
+      "1": "Swift Swim",
+      "H": "Sap Sipper"
+    },
+    "passives": [
+      "seasonalstride"
+    ]
+  },
+  "sawsbuckspring": {
+    "abilities": {
+      "0": "Overcoat",
+      "1": "Swift Swim",
+      "H": "Sap Sipper"
+    },
+    "passives": [
+      "seasonalstride"
+    ]
+  },
+  "sawsbucksummer": {
+    "abilities": {
+      "0": "Overcoat",
+      "1": "Flash Fire",
+      "H": "Rock Head"
+    },
+    "passives": [
+      "seasonalstride"
+    ]
+  },
+  "sawsbuckautumn": {
+    "abilities": {
+      "0": "Overcoat",
+      "1": "Sand Rush",
+      "H": "Stamina"
+    },
+    "passives": [
+      "seasonalstride"
+    ]
+  },
+  "sawsbuckwinter": {
+    "abilities": {
+      "0": "Overcoat",
+      "1": "Slush Rush",
+      "H": "Ice Body"
+    },
+    "passives": [
+      "seasonalstride"
+    ]
+  },
+  "escavalier": {
+    "abilities": {
+      "0": "Dual Wield",
+      "1": "Royal Decree",
+      "H": "Lanceguard",
+      "S": "Ruined Sky"
+    },
+    "passives": [
+      "overcoat"
+    ]
+  },
+  "beartic": {
+    "abilities": {
+      "0": "Raging Beast",
+      "1": "Floe Hunter",
+      "H": "Swift Swim"
+    },
+    "passives": [
+      "thickfat"
+    ]
+  },
+  "talonflame": {
+    "abilities": {
+      "0": "Open Sky",
+      "1": "Scorch Sweep",
+      "H": "Gale Wings",
+      "S": "Burning Quake"
+    },
+    "passives": [
+      "flamebody"
+    ]
+  },
+  "mudsdale": {
+    "abilities": {
+      "0": "Unyielding",
+      "1": "Battle Armor",
+      "H": "Surefoot"
+    },
+    "passives": [
+      "stamina"
+    ]
+  },
+  "golisopod": {
+    "abilities": {
+      "0": "Tactical Retreat",
+      "1": "Inner Focus",
+      "H": "Shell Armor"
+    },
+    "passives": [
+      "toughclaws"
+    ]
+  },
+  "rillaboomgmax": {
+    "abilities": {
+      "0": "Forest Surge"
+    },
+    "passives": [
+      "overgrow"
+    ]
+  },
+  "cinderacegmax": {
+    "abilities": {
+      "0": "Striker's Momentum"
+    },
+    "passives": [
+      "blaze"
+    ]
+  },
+  "inteleongmax": {
+    "abilities": {
+      "0": "High Noon"
+    },
+    "passives": [
+      "torrent"
+    ]
+  },
+  "corviknight": {
+    "abilities": {
+      "0": "Pressure",
+      "1": "Skywarden",
+      "H": "Steelwing Escort",
+      "S": "Burning Quake"
+    },
+    "passives": [
+      "mirrorarmor"
+    ]
+  },
+  "sirfetchd": {
+    "abilities": {
+      "0": "Royal Decree",
+      "1": "Sharpness",
+      "H": "Scrappy",
+      "S": "Ruined Sky"
+    },
+    "passives": [
+      "stickyhold"
+    ]
+  },
+  "overqwil": {
+    "abilities": {
+      "0": "Sea Fiend",
+      "1": "Swift Venom",
+      "H": "Intimidate"
+    },
+    "passives": [
+      "aftermath"
+    ]
+  },
+  "tinkaton": {
+    "abilities": {
+      "0": "Scrapbreaker",
+      "1": "Apocalyptic Flame",
+      "H": "Steely Spirit"
+    },
+    "passives": [
+      "moldbreaker"
+    ]
+  },
+  "kingambit": {
+    "abilities": {
+      "0": "Defiant",
+      "1": "Conqueror's Will",
+      "H": "Royal Decree"
+    },
+    "passives": [
+      "supremeoverlord"
+    ]
+  },
+  "archaludon": {
+    "abilities": {
+      "0": "Stamina",
+      "1": "Anchor Bridge",
+      "H": "Rail Sight"
+    },
+    "passives": [
+      "stalwart"
+    ]
+  },
+  "gliscoralt": {
+    "abilities": {
+      "0": "Venom Pincer",
+      "1": "Silent Hunter",
+      "H": "Wind Rider"
+    },
+    "passives": [
+      "poisonheal"
+    ]
+  },
+  "arbok": {
+    "abilities": {
+      "0": "Intimidate",
+      "1": "Shed Skin",
+      "H": "Accumulation"
+    },
+    "passives": [
+      "constrictingcoils"
+    ]
+  },
+  "masquerain": {
+    "abilities": {
+      "0": "Frightful Wings",
+      "1": "Scale Shelter",
+      "H": "Storm Drain"
+    },
+    "passives": [
+      "prismskimmer"
+    ]
+  },
+  "shiinotic": {
+    "abilities": {
+      "0": "Guiding Glow",
+      "1": "Neutralization",
+      "H": "Rainlit Growth"
+    },
+    "passives": [
+      "fairyring"
+    ]
+  },
+  "gothitelle": {
+    "abilities": {
+      "0": "Shadow Tag",
+      "1": "Temporal Shift",
+      "H": "Astral Concord"
+    },
+    "passives": [
+      "eclipsevision"
+    ]
+  },
+  "reuniclus": {
+    "abilities": {
+      "0": "Cellular Concord",
+      "1": "Magic Guard",
+      "H": "Regenerator"
+    },
+    "passives": [
+      "adaptivecell"
+    ]
+  },
+  "mrmime": {
+    "abilities": {
+      "0": "Invisible Wall",
+      "1": "Silent Act",
+      "H": "Trick Performer"
+    },
+    "passives": [
+      "mimecraft"
+    ]
+  },
+  "mrmimegalar": {
+    "abilities": {
+      "0": "Invisible Wall",
+      "1": "Screen Cleaner",
+      "H": "Ice Body"
+    },
+    "passives": [
+      "mimecraft"
+    ]
+  },
+  "mrrime": {
+    "abilities": {
+      "0": "Tap Tempo",
+      "1": "Curtain Call",
+      "H": "Stage Sweep"
+    },
+    "passives": [
+      "mimecraft"
+    ]
+  },
+  "zangoose": {
+    "abilities": {
+      "0": "Venom Armor",
+      "1": "Toxic Boost",
+      "H": "Scrappy"
+    },
+    "passives": [
+      "rivalresolve"
+    ]
+  },
+  "zangoosemega": {
+    "abilities": {
+      "0": "Toxic Armor"
+    },
+    "passives": [
+      "rivalresolve"
+    ]
+  },
+  "seviper": {
+    "abilities": {
+      "0": "Apex Venom",
+      "1": "Black Viper",
+      "H": "Accumulation"
+    },
+    "passives": [
+      "rivalmalice"
+    ]
+  },
+  "sevipermega": {
+    "abilities": {
+      "0": "Sirius"
+    },
+    "passives": [
+      "rivalmalice"
+    ]
+  },
+  "parasect": {
+    "abilities": {
+      "0": "Perish Body",
+      "1": "Poison Heal",
+      "H": "Parasitism"
+    },
+    "passives": [
+      "mycelialbond"
+    ]
+  },
+  "parasectrejuv": {
+    "abilities": {
+      "0": "Parasitism"
+    },
+    "passives": [
+      "mycelialbond"
+    ]
+  },
+  "parasectparasite": {
+    "abilities": {
+      "0": "Resuscitation"
+    },
+    "passives": [
+      "mycelialbond"
+    ]
+  },
+  "klinklang": {
+    "abilities": {
+      "0": "Closed Circuit",
+      "1": "Galvanize",
+      "H": "Light Metal"
+    },
+    "passives": [
+      "aimassist"
+    ]
+  },
+  "haxorus": {
+    "abilities": {
+      "0": "Sharpness",
+      "1": "Raging Storm",
+      "H": "Supreme Overlord"
+    },
+    "passives": [
+      "twinfang"
+    ]
+  },
+  "haxorusmega": {
+    "abilities": {
+      "0": "Raging Overlord"
+    },
+    "passives": [
+      "twinfang"
+    ]
+  },
+  "gorebyss": {
+    "abilities": {
+      "0": "Swift Swim",
+      "1": "Pearl Siphon",
+      "H": "Pearl Tide"
+    },
+    "passives": [
+      "pixilate"
+    ]
+  },
+  "huntail": {
+    "abilities": {
+      "0": "Swift Swim",
+      "1": "Abyssal Fang",
+      "H": "Abyssal Current"
+    },
+    "passives": [
+      "duskilate"
+    ]
+  },
+  "alakazam": {
+    "abilities": {
+      "0": "Insomnia",
+      "1": "Grandmaster",
+      "H": "Magic Guard"
+    },
+    "passives": [
+      "revealinggaze"
+    ]
+  },
+  "alakazammega": {
+    "abilities": {
+      "0": "Perfect Foresight"
+    },
+    "passives": [
+      "revealinggaze"
+    ]
+  },
+  "marowak": {
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Lightning Rod",
+      "H": "Cursed Body"
+    },
+    "passives": [
+      "bonewarrior"
+    ]
+  },
+  "marowakalola": {
+    "abilities": {
+      "0": "Lightning Rod",
+      "1": "Cursed Body",
+      "H": "Soul Fire"
+    },
+    "passives": [
+      "bonewarrior"
+    ]
+  },
+  "perrserker": {
+    "abilities": {
+      "0": "Battle Armor",
+      "1": "Tough Claws",
+      "H": "Steely Spirit"
+    },
+    "passives": [
+      "battlespoils"
+    ]
+  },
+  "venusaur": {
+    "abilities": {
+      "0": "Pollen Bloom",
+      "1": "Soothing Bouquet",
+      "H": "Chlorophyll"
+    },
+    "passives": [
+      "overgrow"
+    ]
+  },
+  "tauros": {
+    "abilities": {
+      "0": "Bull Rush",
+      "1": "Rousing Feast",
+      "H": "Brute Force"
+    },
+    "passives": [
+      "unbrokencharge"
+    ]
+  },
+  "taurospaldeacombat": {
+    "abilities": {
+      "0": "Bull Rush",
+      "1": "Rousing Feast",
+      "H": "Ultra Ego"
+    },
+    "passives": [
+      "unbrokencharge"
+    ]
+  },
+  "taurospaldeablaze": {
+    "abilities": {
+      "0": "Bull Rush",
+      "1": "Rousing Feast",
+      "H": "Fire Mane"
+    },
+    "passives": [
+      "unbrokencharge"
+    ]
+  },
+  "taurospaldeaaqua": {
+    "abilities": {
+      "0": "Bull Rush",
+      "1": "Rousing Feast",
+      "H": "Thick Fat"
+    },
+    "passives": [
+      "unbrokencharge"
+    ]
+  },
+  "tyranitar": {
+    "passives": [
+      "sandstream"
+    ],
+    "abilities": {
+      "0": "Mountain Hide",
+      "1": "Mountainbreaker",
+      "H": "Dread Presence"
+    }
+  },
+  "abomasnow": {
+    "passives": [
+      "snowwarning"
+    ],
+    "abilities": {
+      "0": "Rimebark",
+      "1": "Evergreen",
+      "H": "Soundproof"
+    }
+  },
+  "lucario": {
+    "passives": [
+      "aurasight"
+    ]
+  },
+  "dragonite": {
+    "passives": [
+      "championscommand"
+    ]
+  },
+  "metagross": {
+    "passives": [
+      "meteorcore"
+    ]
+  },
+  "garchomp": {
+    "passives": [
+      "championspoise"
+    ],
+    "abilities": {
+      "0": "Pyrous Dominion",
+      "1": "Supreme Overlord",
+      "H": "Void Wrath",
+      "S": "Battle Bond"
+    }
+  },
+  "silvally": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallybug": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallydark": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallydragon": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyelectric": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyfairy": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyfighting": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyfire": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyflying": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyghost": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallygrass": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyground": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyice": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallypoison": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallypsychic": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallyrock": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallysteel": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "silvallywater": {
+    "abilities": {
+      "0": "RKS System",
+      "1": "Adaptive Arsenal",
+      "H": "Memory Leak"
+    }
+  },
+  "cramorant": {
+    "passives": [
+      "gulpmissile"
+    ],
+    "abilities": {
+      "0": "Bottomless Gullet",
+      "1": "Dive Fisher",
+      "H": "Scatterbrain"
+    }
+  },
+  "cramorantgulping": {
+    "passives": [
+      "gulpmissile"
+    ],
+    "abilities": {
+      "0": "Bottomless Gullet",
+      "1": "Dive Fisher",
+      "H": "Scatterbrain"
+    }
+  },
+  "cramorantgorging": {
+    "passives": [
+      "gulpmissile"
+    ],
+    "abilities": {
+      "0": "Bottomless Gullet",
+      "1": "Dive Fisher",
+      "H": "Scatterbrain"
+    }
+  },
+  "goodra": {
+    "passives": [
+      "thickfat"
+    ]
+  },
+  "kommoo": {
+    "passives": [
+      "overcoat"
+    ],
+    "abilities": {
+      "0": "Bulletproof",
+      "1": "Soundproof",
+      "H": "Scale Rhythm"
+    }
+  }
+}

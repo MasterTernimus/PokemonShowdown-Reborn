@@ -1,4 +1,6 @@
+import {recordFinisherKO} from './finisher-cost';
 import {passiveEffect, passiveState, thematicPassives} from './species-passives';
+import {resolveBurrowAmbush} from '../data/queued-abilities-approved';
 import {updateStarterBoostIndicators} from './starter-boost-indicators';
 import {takeCrescentSubDamage} from './crescent-rend';
 import {adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCaptureMove, adaptiveSkipAbility, adaptiveIgnoresAbility, adaptiveCheckpoint, adaptiveResistsBypass, adaptiveAnalyzed, adaptivePreventDamage, adaptiveDamaged, adaptiveDamageMultiplier, adaptiveEnvironmentalContribution, adaptiveEnvironment, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
@@ -433,7 +435,10 @@ export class Battle {
 
 	suppressingAbility(target?: Pokemon, component?: Ability) {
 		if (target && adaptiveResistsBypass(target, this.activePokemon)) return false;
-		if ((component || target?.getAbility())?.flags['cantsuppress']) return false;
+		const ability = component || target?.getAbility();
+		// Disguise resists ongoing suppression, but its breakable attack callbacks
+		// still yield to Mold Breaker. Preserve other custom suppression protections.
+		if (ability?.flags['cantsuppress'] && !(ability.id === 'disguise' && ability.flags['breakable'])) return false;
 		return this.activePokemon && this.activePokemon.isActive && (this.activePokemon !== target || this.gen < 8) &&
 			this.activeMove && this.activeMove.ignoreAbility && !target?.hasItem('Ability Shield');
 	}
@@ -944,7 +949,7 @@ export class Battle {
 			const effect = handler.effect;
 			const effectHolder = handler.effectHolder;
 			// Keep damage reactions on the category already selected for this target.
-			if (((sourceEffect as any)?.auraCategories || sourceEffect?.id === 'beasthunter') && source instanceof Pokemon &&
+			if (((sourceEffect as any)?.auraCategories || ['beasthunter', 'attackorder'].includes(sourceEffect?.id || '')) && source instanceof Pokemon &&
 				this.event.target instanceof Pokemon &&
 				['DamagingHit', 'Damage', 'AfterDamage', 'AfterDamageApplied', 'AfterSubDamage', 'TryPrimaryHit'].includes(eventid)) {
 				const targetMove = adaptiveMoveView(sourceEffect as ActiveMove, source, this.event.target);
@@ -1485,7 +1490,7 @@ export class Battle {
 	}
 
 	checkMoveBypassesProtect(move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus = true) {
-		if (move.id === 'beasthunter' && !move.isZ && !move.isMax) {
+		if ((move.id === 'beasthunter' || move.id === 'hyperbeam' && attacker.hasAbilityOrPassive('championscommand')) && !move.isZ && !move.isMax) {
 			defender.getMoveHitData(move).bypassProtect = true;
 			return true;
 		}
@@ -2368,6 +2373,7 @@ export class Battle {
 			}
 
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
+			recordFinisherKO(this, source, target, effect, targetDamage);
 			adaptiveDamaged(target, source, source && effect.effectType === 'Move' ? adaptiveMoveView(effect as ActiveMove, source, target) : effect, targetDamage);
 			if (targetDamage > 0) this.runEvent('AfterDamageApplied', target, source, effect, targetDamage);
 			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
@@ -3268,6 +3274,7 @@ export class Battle {
 			}
 		}
 
+		resolveBurrowAmbush(this);
 		const switches = this.sides.map(
 			side => side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
 		);

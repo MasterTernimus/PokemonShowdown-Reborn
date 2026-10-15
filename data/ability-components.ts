@@ -43,7 +43,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	apexpredator: ['relicarmor', 'dragonize', 'windrider'],
 	tyrantdomain: ['relicarmor', 'supremeoverlord', 'selfsufficient', 'sandstream'],
 	auroradomain: ['relicarmor', 'refrigerate', 'selfsufficient', 'snowwarning'],
-	royalscales: ['prismscale', 'marvelscale', 'oblivious', 'swiftswim', 'dragonize', 'selfsufficient'],
+	royalscales: ['marvelscale', 'oblivious', 'swiftswim', 'dragonize', 'selfsufficient'],
 	aeviandream: ['baddreams', 'shedskin', 'toughclaws'],
 	wingedwraith: ['infiltrator', 'galewings'],
 	toxicsink: ['effectspore', 'invigorate'],
@@ -57,7 +57,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	witheringshell: ['crumblingshell', 'naturalrecovery', 'sturdy'],
 	argentdevotion: ['armorize', 'swornduty', 'serenegrace', 'moldbreaker'],
 	fluffyevo: ['overcoat'],
-	bonewarrior: ['battlearmor', 'selfsufficient'],
+	bonewarrior: ['battlearmor'],
 	seafiend: ['toxicdebris', 'waterbubble', 'waterveil'],
 	hisuianoath: ['swornduty', 'toughclaws', 'corrosion'],
 	abysslure: ['voltabsorb', 'waterabsorb', 'illuminate'],
@@ -215,7 +215,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	hardyskin: ['dryskin', 'vitalspirit', 'moxie'],
 	noseformation: ['filter', 'elevate'],
 	perfectego: ['ultraego'],
-	prismscale: ['marvelscale', 'oblivious', 'swiftswim'],
+	prismscale: ['friendguard', 'oblivious', 'swiftswim'],
 	queensguard: ['contrary', 'shedskin', 'intimidate', 'infiltrator', 'proficient'],
 	rainsovereign: ['drizzle'],
 	riotamp: ['galvanize', 'resonanceforce', 'voltabsorb'],
@@ -439,7 +439,7 @@ Object.assign(AbilityComponents, {
   "scorchsweep": [],
   "opensky": [],
   "tidalvoice": [
-    "liquidvoice"
+    "liquidvoice", "soundproof"
   ],
   "rechargerelay": [
     "battery"
@@ -800,7 +800,8 @@ AbilityComponents.sandsovereign = [...AbilityComponents.sandsovereign, 'mountain
 AbilityComponents.frostsovereign = [...AbilityComponents.frostsovereign, 'soundproof'];
 
 AbilityComponents.burningspirit = ['ultrainstinct', 'opportunist', 'magmaarmor'];
-AbilityComponents.venompincer = ['poisontouch', 'hypercutter'];
+AbilityComponents.venompincer = ['poisontouch'];
+AbilityComponents.punchfiend = ['keeneye', 'innerfocus', 'unseenfist'];
 
 AbilityComponents.unbridledwrath = ['sheerforce', 'innerfocus'];
 
@@ -832,3 +833,57 @@ AbilityComponents.steelwingescort = ['swornduty'];
 AbilityComponents.soulreaver = ['infiltrator'];
 AbilityComponents.wickedsnare = ['intimidate'];
 AbilityComponents.sweetsanctuary = ['ripen'];
+
+AbilityComponents.silenthunter = ['superluck'];
+
+AbilityComponents.abyssalclaws = ['toughclaws'];
+delete AbilityComponents.grapplingclaws;
+AbilityComponents.antlioninstinct = ['sheerforce'];
+AbilityComponents.burrowambush = ['eartheater'];
+
+AbilityComponents.plushwhiplash = ['whiplash', 'technician', 'fluffy'];
+AbilityComponents.silkensalvo = ['fluffy'];
+delete AbilityComponents.fluffycraft;
+
+AbilityComponents.magneticcommand = ['frisk', 'stalwart'];
+
+AbilityComponents.adhesivearmor = ['stickyhold'];
+AbilityComponents.causticooze = ['liquidooze'];
+AbilityComponents.royalpresence = ['pressure','unnerve'];
+AbilityComponents.hivesanctuary = ['sweetveil','friendguard'];
+delete AbilityComponents.royalescort;
+
+AbilityComponents.guidingglow = ['illuminate','sweetveil'];
+AbilityComponents.rainlitgrowth = ['raindish'];
+AbilityComponents.astralconcord = ['forewarn','competitive'];
+AbilityComponents.cellularconcord = ['naturalcure','analytic'];
+AbilityComponents.trickperformer = ['technician','prankster'];
+AbilityComponents.taptempo = ['owntempo'];
+
+AbilityComponents.venomarmor = ['dualwield','battlearmor'];
+AbilityComponents.toxicarmor = ['venomarmor','violentrush'];
+AbilityComponents.sirius = [...(AbilityComponents.sirius || []),'venamskiss'];
+AbilityComponents.mycelialbond = ['dryskin'];
+AbilityComponents.scrapbreaker = [];
+
+AbilityComponents.silentact = ['soundproof'];
+AbilityComponents.curtaincall = ['icebody','filter'];
+AbilityComponents.stagesweep = ['screencleaner','infiltrator'];
+
+AbilityComponents.pearlsiphon = ['competitive'];
+AbilityComponents.pearltide = ['hydration'];
+AbilityComponents.abyssalfang = ['strongjaw'];
+AbilityComponents.abyssalcurrent = ['waterabsorb'];
+
+AbilityComponents.soothingbouquet = ['friendguard','infiltrator'];
+
+AbilityComponents.mountainhide = ['solidrock','innerfocus'];
+AbilityComponents.rimebark = ['thickfat','icebody'];
+AbilityComponents.blademastery = ['sharpness','superluck'];
+AbilityComponents.goldentalons = ['stalwart','goodasgold','sharpness'];
+
+AbilityComponents.pyrousdominion = ['pressure'];
+
+AbilityComponents.bottomlessgullet = ['gluttony','cheekpouch'];
+AbilityComponents.divefisher = ['waterveil'];
+AbilityComponents.scatterbrain = ['oblivious','unaware'];

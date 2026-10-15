@@ -1,3 +1,4 @@
+import {arsenalType} from './adaptive-arsenal';
 import {getAbilityComponentExclusions, getAbilityComponentAdditions} from '../data/passive-ability-cleanup';
 import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
@@ -632,6 +633,7 @@ export class Pokemon {
 
 		// base stat
 		let stat = this.storedStats[statName];
+		if (statName === 'spa' && this.hasAbilityOrPassive('twinfang')) stat = this.storedStats.atk;
 
 		// Wonder Room swaps defenses before calculating anything else
 		if ('wonderroom' in this.battle.field.pseudoWeather) {
@@ -668,6 +670,7 @@ export class Pokemon {
 
 		// base stat
 		let stat = this.storedStats[statName];
+		if (statName === 'spa' && this.hasAbilityOrPassive('twinfang')) stat = this.storedStats.atk;
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
@@ -1623,6 +1626,7 @@ export class Pokemon {
 		if (!species) return null;
 		if (!isTransform && !this.checkPulseEvolution(species, source)) return null;
 		this.species = species;
+		if (!isTransform) this.syncDrakeFang();
 		if (this.isPulseOrRift() && this.volatiles['substitute']) this.removeVolatile('substitute');
 		if (!isTransform) this.applyPulseFixedMoves();
 
@@ -1738,6 +1742,17 @@ export class Pokemon {
 		}
 		startGainedPassives(this, [...previousPassives, 'electricsurge']);
 		return true;
+	}
+
+	syncDrakeFang() {
+		if (this.transformed) return;
+		const mega=this.species.id==='sevipermega';
+		for(const slots of [this.moveSlots,this.baseMoveSlots]) for(const slot of slots || []) {
+			if ((mega && slot.id==='poisonfang') || (!mega && slot.id==='drakefang')) {
+				const move=this.battle.dex.moves.get(mega?'drakefang':'poisonfang');
+				slot.id=move.id;slot.move=move.name;
+			}
+		}
 	}
 
 	updateMaxHp(preserveRatio = false) {
@@ -1980,7 +1995,7 @@ export class Pokemon {
 		);
 		if (
 			!ignoreImmunities && !soulFireBurn && status.id && !((source?.hasAbility(['corrosion', 'ancientbloom']) ||
-				(['venamskiss', 'speciespassivevenamskiss'].includes(sourceEffect?.id || '') &&
+				(['venamskiss', 'speciespassivevenamskiss', 'sirius'].includes(sourceEffect?.id || '') &&
 					source?.hasAbilityOrPassive('venamskiss'))) && ['tox', 'psn'].includes(status.id))
 		) {
 			// the game currently never ignores immunities
@@ -2472,6 +2487,8 @@ export class Pokemon {
 	}
 
 	getTypes(excludeAdded?: boolean, preterastallized?: boolean): string[] {
+		const temporary = arsenalType(this);
+		if (temporary && !preterastallized) return [temporary];
 		if (!preterastallized && this.terastallized && this.terastallized !== 'Stellar') {
 			return [this.terastallized];
 		}
@@ -2490,7 +2507,7 @@ export class Pokemon {
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 		if (this.getPassives().includes('levitate') && this.hasAbilityOrPassive('levitate')) return null;
-		if (this.getPassives().includes('elevate') && this.hasAbilityOrPassive('elevate')) return null;
+		if (this.getPassives().some(id => id === 'elevate' || id === 'noseformation') && this.hasAbilityOrPassive('elevate')) return null;
 		if (!this.getAbilityComponentExclusions().includes('levitate') && this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
 			'voidcraft', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;

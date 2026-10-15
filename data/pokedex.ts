@@ -1121,7 +1121,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fairy"],
 		genderRatio: { M: 0.25, F: 0.75 },
 		baseStats: { hp: 100, atk: 50, def: 95, spa: 95, spd: 113, spe: 55 },
-		abilities: { 0: "Moon Veil", 1: "Magic Guard", H: "Unaware" },
+		abilities: { 0: "Moon Veil", 1: "Friend Guard", H: "Unaware" },
 		heightm: 1.3,
 		weightkg: 40,
 		color: "Pink",
@@ -2162,7 +2162,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Galar",
 		types: ["Psychic", "Fairy"],
 		baseStats: { hp: 80, atk: 115, def: 70, spa: 80, spd: 80, spe: 125 },
-		abilities: { 0: "Pastel Veil", 1: "Speed Boost", H: "Rapid Response" },
+		abilities: { 0: "Psychic Surge", 1: "Speed Boost", H: "Rapid Response" },
 		heightm: 1.7,
 		weightkg: 80,
 		color: "White",
@@ -5874,7 +5874,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Mightyena",
 		forme: "Mega",
 		types: ["Dark", "Ghost"],
-		baseStats: { hp: 90, atk: 150, def: 115, spa: 85, spd: 100, spe: 130 },
+		baseStats: { hp: 90, atk: 140, def: 105, spa: 85, spd: 100, spe: 130 },
 		abilities: { 0: "Dread Dominion" },
 		heightm: 1,
 		weightkg: 37,
@@ -7550,7 +7550,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Kecleon",
 		types: ["Normal"],
 		baseStats: { hp: 90, atk: 115, def: 90, spa: 50, spd: 135, spe: 50 },
-		abilities: { 0: "Shed Skin", 1: "Protean", H: "Mimicry", S: "Adaptive Cycle" },
+		abilities: { 0: "Shed Skin", 1: "Pickpocket", H: "Mimicry", S: "Adaptive Cycle" },
 		heightm: 1,
 		weightkg: 22,
 		color: "Green",
@@ -9096,7 +9096,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Drifblim",
 		types: ["Ghost", "Flying"],
 		baseStats: { hp: 150, atk: 80, def: 54, spa: 90, spd: 74, spe: 80 },
-		abilities: { 0: "Windy Surge", 1: "Unburden", H: "Flare Boost" },
+		abilities: { 0: "Windy Surge", 1: "Unburden", H: "Aftermath" },
 		heightm: 1.2,
 		weightkg: 15,
 		color: "Purple",
@@ -23723,10 +23723,10 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	gourgeistsuper: {isNonstandard: null, tier: "RU"},
 	manectric: {abilities: {0: "Strong Jaw", 1: "Competitive", H: "Lightning Rod"}},
 	cacturne: {baseStats: {spa: 90}},
-	mightyena: {baseStats: {hp: 90, atk: 125, def: 90, spa: 60, spd: 80, spe: 125}},
-	mightyenadeso: {baseStats: {hp: 90, atk: 125, def: 85, spa: 60, spd: 80, spe: 125}},
+	mightyena: {baseStats: {hp: 90, atk: 115, def: 80, spa: 60, spd: 80, spe: 125}},
+	mightyenadeso: {baseStats: {hp: 90, atk: 115, def: 80, spa: 60, spd: 80, spe: 125}},
 	cinccino: {baseStats: {hp: 75, atk: 110, def: 85, spa: 70, spd: 85, spe: 125}},
-	cinccinodeso: {baseStats: {hp: 75, atk: 110, def: 100, spa: 60, spd: 100, spe: 125}},
+	cinccinodeso: {baseStats: {hp: 75, atk: 110, def: 90, spa: 60, spd: 90, spe: 125}},
 	exploud: {baseStats: {hp: 109, atk: 101, def: 73, spa: 116, spd: 73, spe: 78}},
 	infernape: {baseStats: {hp: 77, atk: 104, def: 71, spa: 104, spd: 71, spe: 108}},
 	machamp: {baseStats: {hp: 100, atk: 140, def: 95, spa: 65, spd: 75, spe: 75}},
@@ -23736,8 +23736,8 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	samurotthisui: {baseStats: { hp: 90, atk: 115, def: 80, spa: 105, spd: 65, spe: 95 }},
 	samurottalt: {baseStats: {hp: 90, atk: 105, def: 85, spa: 115, spd: 80, spe: 75}},
 	samurotthisuialt: {baseStats: {hp: 90, atk: 115, def: 80, spa: 105, spd: 65, spe: 95}},
-	toxicroak: {baseStats: {hp: 83, atk: 131, def: 70, spa: 121, spd: 70, spe: 95}},
-	toxicroakdeso: {baseStats: {hp: 83, atk: 126, def: 70, spa: 116, spd: 70, spe: 95}},
+	toxicroak: {baseStats: {hp: 83, atk: 121, def: 70, spa: 111, spd: 70, spe: 95}},
+	toxicroakdeso: {baseStats: {hp: 83, atk: 121, def: 70, spa: 111, spd: 70, spe: 95}},
 	alakazam: {baseStats: {hp: 80, atk: 50, def: 50, spa: 135, spd: 95, spe: 120}},
 	alakazammega: {baseStats: {hp: 80, atk: 55, def: 60, spa: 175, spd: 105, spe: 155}},
 	dodrio: {
@@ -24436,7 +24436,7 @@ Pokedex.gliscoralt.abilities![0] = 'Venom Pincer';
 
 // Mega Mismagius retains Dusk Stone while its dedicated stone is deferred.
 
-Pokedex.gyarados.abilities![0] = 'Intimidate';
+Pokedex.gyarados.abilities![0] = 'Unbridled Wrath';
 
 Pokedex.conkeldurr.abilities!['1'] = 'Rocky Payload';
 
@@ -24448,7 +24448,7 @@ Pokedex.zoroarkhisui.abilities![0] = 'Perfect Illusion';
 Pokedex.meowscarada.abilities!['H'] = 'Perfect Illusion';
 
 Pokedex.nidoking.abilities!['H'] = "Patriarch's Wrath";
-Pokedex.nidoqueen.abilities!['H'] = "Matriarch's Vigil";
+Pokedex.nidoqueen.abilities!['H'] = "Royal Aegis";
 
 import {FinalPassiveSlotChanges} from './final-passive-migrations';
 import {FamilyReplacementSlots} from './family-replacements';
@@ -24488,3 +24488,60 @@ Pokedex.overqwil.abilities!['1'] = 'Swift Venom';
 Pokedex.mightyenagrim = {...Pokedex.mightyena, name: 'Mightyena-Grim', baseSpecies: 'Mightyena', forme: 'Grim', spriteid: 'mightyena-grim', isCosmeticForme: false, otherFormes: ['Mightyena-Mega-Grim'], formeOrder: ['Mightyena-Grim', 'Mightyena-Mega-Grim'], isNonstandard: 'Custom'};
 Pokedex.mightyenamegagrim = {...Pokedex.mightyenamega, name: 'Mightyena-Mega-Grim', baseSpecies: 'Mightyena', forme: 'Mega-Grim', spriteid: 'mightyena-mega', battleOnly: 'Mightyena-Grim', changesFrom: 'Mightyena-Grim', isNonstandard: 'Custom'};
 Pokedex.mightyena = {...Pokedex.mightyena, otherFormes: [...(Pokedex.mightyena.otherFormes || []), 'Mightyena-Mega-Grim']};
+
+// Approved selected-slot replacements; other slots and species passives stay separate.
+Pokedex.gliscor.abilities!['1'] = 'Silent Hunter';
+Pokedex.gliscoralt.abilities!['1'] = 'Silent Hunter';
+Pokedex.froslassaevian.abilities!['1'] = 'Dissonant Echo';
+
+Pokedex.trapinch.abilities = {0: 'Burrow Ambush', 1: 'Huge Power', H: 'Antlion Instinct'};
+for (const species of Object.values(Pokedex)) { for (const slot of Object.keys(species.abilities || {})) { if ((species.abilities as any)[slot] === 'Grappling Claws') (species.abilities as any)[slot] = 'Abyssal Claws'; } }
+
+Pokedex.cinccino.abilities = {0: 'Plush Whiplash', 1: 'Skill Link', H: 'Silken Salvo'};
+Pokedex.cinccinodeso.abilities = {0: 'Pixilate', 1: 'Skill Link', H: 'Silken Salvo'};
+
+Pokedex.probopass.abilities = {0: 'Magnet Pull', 1: 'Magnetic Command', H: 'Heavy Metal'};
+
+for (const id of ['sawsbuck','sawsbuckspring','sawsbucksummer','sawsbuckautumn','sawsbuckwinter']) Pokedex[id as keyof typeof Pokedex].abilities!['0'] = 'Overcoat';
+Pokedex.sawsbuckwinter.abilities = {0: 'Overcoat', 1: 'Slush Rush', H: 'Ice Body'};
+
+Pokedex.swalot.abilities = {0: 'Adhesive Armor', 1: 'Neutralization', H: 'Caustic Ooze'};
+Pokedex.vespiquen.abilities = {0: 'Royal Presence', 1: 'Queenly Majesty', H: 'Hive Sanctuary'};
+
+Pokedex.shiinotic.abilities = {0: 'Guiding Glow', 1: 'Neutralization', H: 'Rainlit Growth'};
+Pokedex.gothitelle.abilities!.H = 'Astral Concord';
+Pokedex.reuniclus.abilities!['0'] = 'Cellular Concord';
+
+Pokedex.mrmimegalar.abilities!['0'] = 'Invisible Wall';
+Pokedex.mrmime.abilities!.H = 'Trick Performer';
+Pokedex.mrrime.abilities!['0'] = 'Tap Tempo';
+
+Pokedex.zangoose.abilities!['1'] = 'Toxic Boost';
+Pokedex.sevipermega.baseStats = {hp:75,atk:140,def:120,spa:90,spd:120,spe:65};
+
+Pokedex.mrmime.abilities!['1'] = 'Silent Act';
+Pokedex.mrrime.abilities!['1'] = 'Curtain Call';
+Pokedex.gorebyss.types = ['Water','Fairy'];
+Pokedex.huntail.types = ['Water','Dark'];
+
+Pokedex.gorebyss.abilities = {0:'Swift Swim',1:'Pearl Siphon',H:'Pearl Tide'};
+Pokedex.huntail.abilities = {0:'Swift Swim',1:'Abyssal Fang',H:'Abyssal Current'};
+
+Pokedex.marowak.abilities!.H = 'Cursed Body';
+Pokedex.marowakalola.abilities![1] = 'Cursed Body';
+
+Pokedex.venusaur.abilities![1] = 'Soothing Bouquet';
+
+Pokedex.tyranitar.abilities![0] = 'Mountain Hide';
+Pokedex.abomasnow.abilities![0] = 'Rimebark';
+
+for (const species of Object.values(Pokedex)) if ((species.name === 'Silvally' || species.baseSpecies === 'Silvally') && species.abilities?.[1] === 'Mimicry') species.abilities[1] = 'Adaptive Arsenal';
+
+Pokedex.garchomp.abilities![0] = 'Pyrous Dominion';
+
+// Approved Speed-only adjustments; no redistribution.
+Pokedex.staraptor.baseStats!.spe = 100;
+Pokedex.staraptormega.baseStats!.spe = 110;
+
+for (const id of ['cramorant','cramorantgulping','cramorantgorging'] as const) Pokedex[id].abilities = {0:'Bottomless Gullet',1:'Dive Fisher',H:'Scatterbrain'};
+Pokedex.kommoo.abilities!.H = 'Scale Rhythm';

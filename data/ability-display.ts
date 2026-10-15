@@ -37,7 +37,7 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 		"limber"
 	],
 	"punchfiend": [
-		"ironfist",
+		"keeneye",
 		"innerfocus",
 		"unseenfist"
 	],

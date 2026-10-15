@@ -25,8 +25,8 @@ describe('Corviknight and Mega Dragonite passive swaps', () => {
   p.hp--;
   assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 100);
  });
- it('preserves normal Dragonite and G-Max Corviknight passives', () => {
-  assert.deepEqual(Dex.species.get('dragonite').passives, ['overcoat']);
+ it('preserves the later approved Dragonite passive and G-Max Corviknight passive', () => {
+  assert.deepEqual(Dex.species.get('dragonite').passives, ['championscommand']);
   assert.deepEqual(Dex.species.get('corviknightgmax').passives, ['swornduty']);
  });
 });

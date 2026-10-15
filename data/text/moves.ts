@@ -1930,8 +1930,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	extremespeed: {
 		name: "Extreme Speed",
-		desc: "Nearly always goes first. With Sacred Bond, this move's power is multiplied by 1.5 and it always critically hits.",
-		shortDesc: "Nearly always goes first; Sacred Bond: 1.5x power, always critical.",
+		desc: "Nearly always goes first. With Sacred Bond, this move always critically hits; there is no separate power boost.",
+		shortDesc: "Nearly always goes first; Sacred Bond: always critical.",
 		gen4: {
 			shortDesc: "Usually goes first.",
 		},
@@ -7821,9 +7821,21 @@ for (const id of ['boneclub', 'bonerush', 'bonemerang'] as const) {
 	MovesText[id].desc += ' While Ground-type, this move bypasses field bans on Ground attacks and retains Ground typing instead of field-added Ice/Water typing or Midnight Zone conversion. Existing Bone-move immunity bypass, accuracy and protection rules are unchanged.';
 }
 
-for (const [id, effect] of Object.entries({outrage: "lower the target's Defense by 1", thrash: "lower the target's Defense by 1", petaldance: "lower the target's Sp. Def by 1", ragingfury: 'burn the target'})) {
- MovesText[id as ID].desc += ' Each hit has a 30% chance to ' + effect + '. Sheer Force removes this secondary and boosts power once, while retaining normal rampage locking and confusion. With Raging Storm, this move lasts one turn without rampage-ending confusion; existing confusion is not cured.';
- MovesText[id as ID].shortDesc = '120 BP; 30% to ' + effect + '. Locks 2-3 turns.';
+for (const [id, effect, compact] of [
+ ['outrage', "lower the target's Defense by 1", '-1 target Def'],
+ ['thrash', "lower the target's Defense by 1", '-1 target Def'],
+ ['petaldance', "lower the target's Sp. Def by 1", '-1 target SpD'],
+ ['ragingfury', 'burn the target', 'burn'],
+]) {
+ MovesText[id as ID].shortDesc = '30% ' + compact + '. Locks 2-3 turns, then confuses user.';
+ MovesText[id as ID].desc = 'Has a 30% chance to ' + effect + '. Targets a random adjacent opponent. '
+  + 'Locks the user into this move for 2-3 turns, then confuses the user if it is not already confused. '
+  + 'If the user cannot act, starts a turn asleep, or fails to hit before the final locked turn, the lock ends without confusion. Sleep Talk uses it once without confusion while the user is asleep. '
+  + 'Sheer Force removes the 30% effect and gives its normal power boost once; the lock and ending confusion remain. '
+  + 'Raging Storm makes it a single-turn attack with no lock or ending confusion; it does not cure existing confusion. '
+  + (id === 'ragingfury'
+   ? 'On Burning or Volcanic Field, ending the rampage does not cause confusion. On Volcanic Field, each use also raises the user\'s Attack by 1.'
+   : 'On Superheated Field, the lock ends after the attack; ending it early does not cause confusion.');
 }
 
 MovesText.snowscape.desc = 'Creates Frozen Aura for 5 turns, or 8 with Amplifield Rock, without replacing weather or the base field. Ice attacks have 1.2x power for both sides, including airborne Pokemon; Mimicry becomes Ice and Nature Power becomes Ice Beam. While active, successful Gravity, two Blizzard executions dealing opposing HP or Substitute damage, a damaging Ice Z-Move, or three consecutive end-of-turn Hail checks promote it to Cold Eclipse. Promotion consumes the aura and uses normal Cold Eclipse duration. Refreshing resets progress; interrupted Hail resets its count. Existing field locks apply; blocked promotion retains capped progress. The aura itself adds no Cold Eclipse defensive, healing or Speed effects.';
@@ -7846,3 +7858,15 @@ Object.assign(MovesText.meditate, {shortDesc: 'Heals 1/4 HP; +1 higher offense. 
 MovesText.tripledive.shortDesc = '3 hits: 20/40/60 power; each can miss. Creates water fields.';
 MovesText.tripledive.desc = 'Hits up to three times at 20, 40 and 60 base power, checking 90% accuracy for each hit. After protection, accuracy and immunity checks, the first hit creates Water Surface, the second creates Underwater, and the third retains Underwater; each triggering hit receives the resulting field effects. If the move starts on Icy Field, hit one preserves Icy, hit two breaks it into Water Surface, and hit three creates Underwater. Substitute hits count. Field locks apply. Newly generated fields last 5 turns, or 8 with Amplifield Rock; transformations of existing water or Icy fields preserve their duration. On Water Surface and Underwater, this move gains 1.5x power in addition to the existing generic Water boost (normally 2.25x total).';
 MovesText.shadowforce.desc += ' After this attack deals positive HP or Substitute damage, creates Midnight Zone for 5 turns, or 8 with Amplifield Rock, respecting field locks. The charge turn does not create a field.';
+
+MovesText.mudbarrage = {...MovesText.mudslap, name: 'Mud Barrage'};
+delete MovesText.mudslap;
+
+MovesText.drakefang = {name: 'Drake Fang', shortDesc: 'Dragon-type biting attack; 50% chance to badly poison.', desc: '85-power physical Dragon-type biting contact attack with 100% accuracy and 15 PP. Has a 50% chance to badly poison the target. Uses ordinary Dragon effectiveness: Fairy immunity and Steel resistance apply. Mega Seviper converts its Poison Fang slot into this move while preserving PP; Sirius supplies its separately described signature and Strong Jaw multipliers.'};
+
+import {FinisherMoveDescriptions} from '../finisher-moves-approved';
+for (const [id,text] of Object.entries(FinisherMoveDescriptions)) MovesText[id as ID] = text;
+
+Object.assign(MovesText.attackorder, {desc: "Chooses Physical or Special according to which deals greater calculated damage to the actual target, using both offense and matching defense; Special on ties. Retains its high critical-hit ratio and 50% chance to raise the user's Attack by 1.", shortDesc: 'Best damage category; high crit; 50% +1 Attack.'});
+Object.assign(MovesText.defendorder, {desc: "Selects the user or one adjacent ally. Raises that target's Defense and Sp. Def by 1 stage (2 on Forest Field) and heals 1/4 maximum HP. Retains its existing flags and normal healing/stat-change rules.", shortDesc: 'User/ally: +1 Def/SpD and heals 1/4 HP.'});
+Object.assign(MovesText.healorder, {desc: "Selects the user or one adjacent ally to heal 1/2 maximum HP (2/3 on Forest Field). Retains its party status cure and existing Soundproof/Good as Gold checks and flags.", shortDesc: 'User/ally: heals 1/2 HP; cures party status.'});

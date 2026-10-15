@@ -3012,3 +3012,14 @@ Aliases.guidingomen = "Void Omen";
 Aliases.sandshroud = "Void Drift";
 Aliases.faultline = "Void Wrath";
 Aliases.arcanepilfer = "Void Guile";
+
+// Display rename only: retain the canonical ability ID and old saved-team spelling.
+Aliases.royalaegis = 'matriarchsvigil';
+
+Aliases.grapplingclaws = 'Abyssal Claws';
+
+Aliases.mudslap = 'Mud Barrage';
+
+Aliases.fluffycraft = 'Silken Salvo';
+
+Aliases.royalescort = 'Royal Presence';

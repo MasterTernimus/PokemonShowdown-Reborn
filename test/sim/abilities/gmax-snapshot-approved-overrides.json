@@ -1,29 +1,199 @@
 {
   "passives": {
-    "golisopod": ["toughclaws"],
-    "venusaurgmax": ["overgrow"],
-    "charizardgmax": ["blaze"],
-    "blastoisegmax": ["torrent"],
-    "feraligatrgmax": ["torrent"],
-    "rillaboomgmax": ["overgrow"],
-    "cinderacegmax": ["blaze"],
-    "inteleongmax": ["torrent"],
-    "rhydon": ["powerdrill"],
-    "beartic": ["thickfat"],
-    "mudsdale": ["stamina"],
-    "archaludon": ["stalwart"]
+    "golisopod": [
+      "toughclaws"
+    ],
+    "venusaurgmax": [
+      "overgrow"
+    ],
+    "charizardgmax": [
+      "blaze"
+    ],
+    "blastoisegmax": [
+      "torrent"
+    ],
+    "feraligatrgmax": [
+      "torrent"
+    ],
+    "rillaboomgmax": [
+      "overgrow"
+    ],
+    "cinderacegmax": [
+      "blaze"
+    ],
+    "inteleongmax": [
+      "torrent"
+    ],
+    "rhydon": [
+      "powerdrill"
+    ],
+    "beartic": [
+      "thickfat"
+    ],
+    "mudsdale": [
+      "stamina"
+    ],
+    "archaludon": [
+      "stalwart"
+    ],
+    "clefable": [
+      "magicguard"
+    ],
+    "rapidashgalar": [
+      "pastelveil"
+    ],
+    "hitmonlee": [
+      "bruteforce"
+    ],
+    "hitmonchan": [
+      "ironfist"
+    ],
+    "milotic": [
+      "marvelscale"
+    ],
+    "miloticterajuma": [
+      "marvelscale"
+    ],
+    "miloticaevian": [
+      "marvelscale"
+    ],
+    "miloticmega": [
+      "marvelscale"
+    ],
+    "kecleon": [
+      "protean"
+    ],
+    "drifblim": [
+      "flareboost"
+    ],
+    "mightyena": [
+      "rattled"
+    ],
+    "mightyenagrim": [
+      "rattled"
+    ],
+    "mightyenadeso": [
+      "rattled"
+    ],
+    "cinccino": [
+      "shielddust"
+    ],
+    "cinccinodeso": [
+      "shielddust"
+    ],
+    "hitmontop": [
+      "scrappy"
+    ],
+    "gyarados": [
+      "intimidate"
+    ]
   },
   "abilities": {
-    "rhydon": {"0": "Brute Force", "1": "War Path", "H": "Lightning Rod"},
-    "skarmory": {"0": "Fresh Plumage", "1": "Sturdy", "H": "Burning Quake"},
-    "kingdra": {"0": "Swift Swim", "1": "Abyss Sniper", "H": "Storm Drain"},
-    "gallade": {"0": "Dual Wield", "1": "Knight's Guard", "H": "Inner Focus", "S": "Ruptured Heaven"},
-    "dusknoir": {"0": "Requiem", "1": "Pressure", "H": "Soul Reaver"},
-    "escavalier": {"0": "Dual Wield", "1": "Royal Decree", "H": "Lanceguard", "S": "Ruined Sky"},
-    "talonflame": {"0": "Open Sky", "1": "Scorch Sweep", "H": "Gale Wings", "S": "Burning Quake"},
-    "mudsdale": {"0": "Unyielding", "1": "Battle Armor", "H": "Surefoot"},
-    "corviknight": {"0": "Pressure", "1": "Skywarden", "H": "Steelwing Escort", "S": "Burning Quake"},
-    "sirfetchd": {"0": "Royal Decree", "1": "Sharpness", "H": "Scrappy", "S": "Ruined Sky"},
-    "tinkaton": {"0": "Scrapbreaker", "1": "Apocalyptic Flame", "H": "Steely Spirit"}
+    "rhydon": {
+      "0": "Brute Force",
+      "1": "War Path",
+      "H": "Lightning Rod"
+    },
+    "skarmory": {
+      "0": "Fresh Plumage",
+      "1": "Sturdy",
+      "H": "Burning Quake"
+    },
+    "kingdra": {
+      "0": "Swift Swim",
+      "1": "Abyss Sniper",
+      "H": "Storm Drain"
+    },
+    "gallade": {
+      "0": "Dual Wield",
+      "1": "Knight's Guard",
+      "H": "Inner Focus",
+      "S": "Ruptured Heaven"
+    },
+    "dusknoir": {
+      "0": "Requiem",
+      "1": "Pressure",
+      "H": "Soul Reaver"
+    },
+    "escavalier": {
+      "0": "Dual Wield",
+      "1": "Royal Decree",
+      "H": "Lanceguard",
+      "S": "Ruined Sky"
+    },
+    "talonflame": {
+      "0": "Open Sky",
+      "1": "Scorch Sweep",
+      "H": "Gale Wings",
+      "S": "Burning Quake"
+    },
+    "mudsdale": {
+      "0": "Unyielding",
+      "1": "Battle Armor",
+      "H": "Surefoot"
+    },
+    "corviknight": {
+      "0": "Pressure",
+      "1": "Skywarden",
+      "H": "Steelwing Escort",
+      "S": "Burning Quake"
+    },
+    "sirfetchd": {
+      "0": "Royal Decree",
+      "1": "Sharpness",
+      "H": "Scrappy",
+      "S": "Ruined Sky"
+    },
+    "tinkaton": {
+      "0": "Scrapbreaker",
+      "1": "Apocalyptic Flame",
+      "H": "Steely Spirit"
+    },
+    "clefable": {
+      "0": "Moon Veil",
+      "1": "Friend Guard",
+      "H": "Void Promise"
+    },
+    "rapidashgalar": {
+      "0": "Psychic Surge",
+      "1": "Speed Boost",
+      "H": "Rapid Response"
+    },
+    "drifblim": {
+      "0": "Windy Surge",
+      "1": "Unburden",
+      "H": "Aftermath"
+    },
+    "kecleon": {
+      "0": "Shed Skin",
+      "1": "Pickpocket",
+      "H": "Mimicry",
+      "S": "Adaptive Cycle"
+    },
+    "gyarados": {
+      "0": "Unbridled Wrath",
+      "1": "Tempest Fury",
+      "H": "Moxie"
+    },
+    "nidoqueen": {
+      "0": "Sheer Force",
+      "1": "Queenly Majesty",
+      "H": "Royal Aegis"
+    },
+    "gliscor": {
+      "0": "Venom Pincer",
+      "1": "Silent Hunter",
+      "H": "Wind Rider"
+    },
+    "gliscoralt": {
+      "0": "Venom Pincer",
+      "1": "Silent Hunter",
+      "H": "Wind Rider"
+    },
+    "froslassaevian": {
+      "0": "Adaptability",
+      "1": "Dissonant Echo",
+      "H": "Storm Power"
+    }
   }
 }

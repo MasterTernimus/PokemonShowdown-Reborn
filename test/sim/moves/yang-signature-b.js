@@ -29,7 +29,7 @@ describe('Yang signature moves 15–27',()=>{
    if(id==='swarmsnare')assert.equal(q.volatiles.partiallytrapped.duration,4);
    if(id==='wisteriamaelstrom')assert.equal(p.boosts[category==='Physical'?'atk':'spa'],mode==='tie'?1:2);
    if(id==='airstreamassault'){assert(!p.side.sideConditions.spikes);assert(p.side.sideConditions.tailwind);}
-   if(id==='dragonrend')assert(q.side.sideConditions.dragonrend);
+   if(id==='dragonrend')assert(!q.side.sideConditions.dragonrend);
    if(id==='sirenswrath')assert(p.volatiles.sirenswrath);
   });
  }
@@ -91,7 +91,7 @@ describe('Yang signature moves 15–27',()=>{
  it('Siren Wrath guard reduces a whole multihit attack once, then is consumed',()=>{const[p,q]=setup();use('sirenswrath',p,q);const guardMove=Dex.getActiveMove('tackle');assert.equal(battle.runEvent('ModifyDamage',q,p,guardMove,1000),750);delete p.volatiles.sirenswrath.guardedMove;delete p.volatiles.sirenswrath.guardedSource;const values=[];battle.onEvent('ModifyDamage',battle.format,-100,(damage,source,target)=>{if(target===p)values.push(damage);});use('tackle',q,p,{basePower:80,multihit:3});assert.equal(values.length,3);assert(!p.volatiles.sirenswrath);assert(values.every(n=>n>0));});
  it('Siren Wrath expires at the next own action, not after granting it',()=>{const[p,q]=setup();use('sirenswrath',p,q);assert(p.volatiles.sirenswrath);battle.actions.runMove('splash',p);assert(!p.volatiles.sirenswrath);});
  it('Rock n Roll lowers Defense and lays Stealth Rock',()=>{const[p,q]=setup();use('rocknroll',p,q);assert.equal(q.boosts.def,-1);assert(q.side.sideConditions.stealthrock);});
- for(const[type,item,expected]of [['Normal','',250],['Grass','',500],['Water','',125],['Flying','',0],['Grass','Heavy-Duty Boots',0]])it('Dragon Rend entry '+type+'/'+item,()=>{const[p,q]=setup();use('dragonrend',p,q);assert(q.side.sideConditions.dragonrend);q.setType(type);q.setItem(item);q.hp=2000;battle.singleEvent('SwitchIn',Dex.conditions.get('dragonrend'),q.side.sideConditions.dragonrend,q);assert.equal(q.hp,2000-expected);});
+ it('Dragon Rend leaves no entry hazard',()=>{const[p,q]=setup();use('dragonrend',p,q);assert(!q.side.sideConditions.dragonrend);const next=q.side.pokemon[1];battle.actions.switchIn(next,0);assert.equal(next.hp,2000);});
  it('Airstream Assault clears own hazards and starts Tailwind',()=>{const[p,q]=setup();p.side.addSideCondition('spikes',q);p.side.addSideCondition('dragonrend',q);use('airstreamassault',p,q);assert(!p.side.sideConditions.spikes);assert(!p.side.sideConditions.dragonrend);assert(p.side.sideConditions.tailwind);});
  it('Wisteria boosts each eligible ally only once over multiple hits',()=>{const[p,q]=setup('doubles'),a=battle.p1.active[1];p.setType('Grass');a.setType('Bug');p.storedStats.atk=200;p.storedStats.spa=100;a.storedStats.atk=100;a.storedStats.spa=200;use('wisteriamaelstrom',p,q,{damage:20,multihit:3});assert.equal(p.boosts.atk,1);assert.equal(a.boosts.spa,1);});
  it('Dei Ludicium cures its user after damaging a target',()=>{const[p,q]=setup();p.setStatus('psn',q);use('deiludicium',p,q);assert.equal(p.status,'');});
