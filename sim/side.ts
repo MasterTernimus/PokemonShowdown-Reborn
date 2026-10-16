@@ -90,6 +90,8 @@ export interface PokemonSwitchRequestData {
 	/** Private owner-side species traits; never announced through ability messages. */
 	passives?: readonly string[];
 	rageFistBonus?: number;
+	/** Owner-only projected stats for Seviper's Mega move preview. */
+	megaStats?: StatsExceptHPTable;
 	/** @see https://dex.pokemonshowdown.com/abilities/commander */
 	commanding?: boolean;
 	/** @see https://dex.pokemonshowdown.com/moves/revivalblessing */

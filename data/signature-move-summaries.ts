@@ -17,7 +17,7 @@ export const SignatureMoveSummaries: {[id: string]: string} = {
 	bunrakubeatdown: 'Adaptive; 80 +15 per fainted ally (max 140); bypasses Sub.',
 	matrixshot: 'Uses Attack against Sp. Def.',
 	pyrokinesis: '30% chance to burn.',
-	venamskiss: 'Bite/tail move; super effective on Steel; 30% poison, even Steel/Poison.',
+	venamskiss: 'Adaptive bite/tail; super effective on Steel; 30% poison.',
 	heavenlywing: 'Clears positive boosts after damaging opposing HP.',
 	uproot: 'Lowers target Sp. Def by 2.',
 	kaboom: 'Adaptive; +1 SpA; 1/4 recoil. Electric Terrain/Aura: no recoil.',

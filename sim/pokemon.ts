@@ -1342,6 +1342,9 @@ export class Pokemon {
 			pokeball: this.pokeball,
 		};
 		if (this.battle.gen > 6) entry.ability = this.ability;
+		if (!forAlly && this.species.id === 'seviper' && this.canMegaEvo === 'Seviper-Mega') {
+			entry.megaStats = this.battle.spreadModify(this.battle.dex.species.get(this.canMegaEvo).baseStats, this.set);
+		}
 		if (this.battle.gen >= 9) {
 			entry.commanding = !!this.volatiles['commanding'] && !this.fainted;
 			entry.reviving = this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'];
