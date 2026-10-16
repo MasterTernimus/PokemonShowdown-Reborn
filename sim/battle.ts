@@ -1,4 +1,5 @@
 import {recordFinisherKO} from './finisher-cost';
+import {recordRechargeKO} from './recharge';
 import {passiveEffect, passiveState, thematicPassives} from './species-passives';
 import {resolveBurrowAmbush} from '../data/queued-abilities-approved';
 import {updateStarterBoostIndicators} from './starter-boost-indicators';
@@ -2376,6 +2377,7 @@ export class Battle {
 
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
 			recordFinisherKO(this, source, target, effect, targetDamage);
+			recordRechargeKO(this, source, target, effect, targetDamage);
 			adaptiveDamaged(target, source, source && effect.effectType === 'Move' ? adaptiveMoveView(effect as ActiveMove, source, target) : effect, targetDamage);
 			if (targetDamage > 0) this.runEvent('AfterDamageApplied', target, source, effect, targetDamage);
 			if (targetDamage !== 0) target.hurtThisTurn = target.hp;

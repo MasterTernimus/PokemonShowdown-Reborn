@@ -1889,8 +1889,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eternabeam: {
 		name: "Eternabeam",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "After a successful hit, the user must recharge next turn unless this move directly knocks out an opponent.",
+		shortDesc: "Recharges next turn unless it KOs an opponent.",
 	},
 	expandingforce: {
 		name: "Expanding Force",
@@ -2491,8 +2491,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gigaimpact: {
 		name: "Giga Impact",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "After a successful hit, the user must recharge next turn unless this move directly knocks out an opponent.",
+		shortDesc: "Recharges next turn unless it KOs an opponent.",
 	},
 	gigatonhammer: {
 		name: "Gigaton Hammer",
@@ -3238,8 +3238,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperbeam: {
 		name: "Hyper Beam",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "After a successful hit, the user must recharge next turn unless this move directly knocks out an opponent.",
+		shortDesc: "Recharges next turn unless it KOs an opponent.",
 		gen1: {
 			desc: "If this move is successful, the user must recharge on the following turn and cannot select a move, unless the target or its substitute was knocked out by this move.",
 			shortDesc: "Can't move next turn if target or sub is not KOed.",
@@ -5416,7 +5416,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roaroftime: {
 		name: "Roar of Time",
-		desc: "Uses the user's higher offensive stat. When used by Dialga, Fairy-type targets take resisted Dragon damage instead of being immune, the move breaks protection, has +3 priority in Trick Room, and a non-KO hit queues another Roar of Time two turns later. A missed delayed hit is sent further into the future. If Dialga KOs, its recharge is removed.",
+		desc: "Uses the user's higher offensive stat. When used by Dialga, Fairy-type targets take resisted Dragon damage instead of being immune, the move breaks protection, has +3 priority in Trick Room, and a non-KO hit queues another Roar of Time two turns later. A missed delayed hit is sent further into the future. For any user, a direct opposing KO removes recharge.",
 		shortDesc: "Uses higher offense. Dialga: breaks Protect, future hit, Fairies resist, +3 in Trick Room.",
 	},
 	rockblast: {

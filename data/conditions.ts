@@ -1013,6 +1013,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(pokemon) {
 			this.add('-mustrecharge', pokemon);
 		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'mustrecharge', '[silent]');
+		},
 		onLockMove: 'recharge',
 	},
 	futuremove: {

@@ -10441,6 +10441,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				source.addVolatile('mustrecharge');
 			}
 		},
+		self: {
+			volatileStatus: 'mustrecharge',
+		},
 		target: "normal",
 		type: "Normal",
 		contestType: "Cool",

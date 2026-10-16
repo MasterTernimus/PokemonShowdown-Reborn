@@ -1,6 +1,7 @@
 import {radiantTarget} from './radiant-target';
 import {endArsenal} from './adaptive-arsenal';
 import {settleFinisherCost} from './finisher-cost';
+import {settleRecharge} from './recharge';
 import {adaptiveAnalyzed, adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
 import { Dex, toID } from './dex';
 import {takeCrescentOverflow, hasCrescentSubDamage} from './crescent-rend';
@@ -540,6 +541,7 @@ export class BattleActions {
 			this.attackResolutionDepth--;
 		}
 		const resolvedMove = this.battle.activeMove;
+		settleRecharge(pokemon, resolvedMove);
 		endArsenal(this.battle, resolvedMove);
 		this.battle.field.frozenAuraAfterAttack(pokemon, this.battle.activeMove!);
 		this.battle.runEvent('AfterAttackResolved', pokemon, this.battle.activeTarget, this.battle.activeMove);
