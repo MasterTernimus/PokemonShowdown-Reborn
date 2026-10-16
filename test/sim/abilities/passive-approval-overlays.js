@@ -117,3 +117,10 @@ const reviewedStats = {
 exports.stats = (id, fallback) => reviewedStats[id] ? Object.fromEntries(['hp','atk','def','spa','spd','spe'].map((key,i)=>[key,reviewedStats[id][i]])) : fallback;
 exports.types = (id, fallback) => id === 'gorebyss' ? ['Water','Fairy'] : fallback;
 exports.snapshot = old => ({id: old.id, abilities: exports.abilities(old.id, {...old.abilities}), passives: exports.current(old.id, old.passives), types: exports.types(old.id, old.types), stats: exports.stats(old.id, old.stats)});
+
+// Approved Talonflame swap: one Gale Wings passive, selectable Flame Body.
+megaExpected.talonflame = ['galewings'];
+const beforeTalonflamePassives = exports.passives;
+exports.passives = expected => Object.assign(beforeTalonflamePassives(expected), {talonflame: ['galewings']});
+const beforeTalonflameAbilities = exports.abilities;
+exports.abilities = (id, expected) => Object.assign(beforeTalonflameAbilities(id, expected), id === 'talonflame' ? {H: 'Flame Body'} : {});

@@ -24587,3 +24587,6 @@ Pokedex.staraptor.baseStats!.spe = 105;
 Pokedex.staraptormega.baseStats!.spe = 115;
 
 Pokedex.annihilape.abilities = {0:'Unbound Spirit', 1:'Raging Heart', H:'Defiant'};
+
+// Gale Wings is supplied by Talonflame's passive; Flame Body is selectable.
+Pokedex.talonflame.abilities!.H = 'Flame Body';

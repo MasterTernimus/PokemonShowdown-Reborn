@@ -113211,7 +113211,7 @@ Learnsets.emboarmegaego = {learnset: {...Learnsets.emboar.learnset}};
 Learnsets.mightyenagrim = {learnset: {...Learnsets.mightyena.learnset}};
 Learnsets.mightyenamegagrim = {learnset: {...Learnsets.mightyena.learnset}};
 
-import {ApprovedMoveAdditions} from './move-distribution-approved';
+import {ApprovedMoveAdditions, SafeguardSupportSpecies} from './move-distribution-approved';
 for (const [move, species] of Object.entries(ApprovedMoveAdditions)) {
  for (const id of species) { Learnsets[id as ID] ||= {learnset: {}}; Learnsets[id as ID].learnset![move as ID] = ['9L1']; }
 }
@@ -113227,3 +113227,8 @@ for (const [cosmetic,base] of [['laprasazzy','lapras'],['lanturnalt','lanturn']]
 
 // Approved: Mighty Cleave is unavailable to every Lycanroc form.
 for (const id of ['lycanroc', 'lycanrocmidnight', 'lycanrocdusk'] as const) delete Learnsets[id].learnset!.mightycleave;
+
+for (const id of SafeguardSupportSpecies) {
+	const learnset = Learnsets[id].learnset!;
+	learnset.safeguard = [...new Set([...(learnset.safeguard || []), '9M' as const])];
+}

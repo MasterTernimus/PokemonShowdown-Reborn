@@ -9313,6 +9313,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
+			if (skipPassiveComponent(this, pokemon, 'galewings')) return;
 			if (move?.type === 'Flying' && pokemon.hp >= 0.75 * pokemon.maxhp || (this.field.isTerrain(['mountainterrain', 'snowymountainterrain', 'coldeclipseterrain']) && this.field.weather === 'deltastream')) return priority + 1;
 		},
 		flags: {},

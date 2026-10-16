@@ -1154,4 +1154,6 @@ ThematicPassiveIds.add('eternalflower');
 ThematicPassiveIds.add('scarecrow');
 SpeciesPassives.annihilape = Object.freeze(['beyondfear']);
 ThematicPassiveIds.add('beyondfear');
+SpeciesPassives.talonflame = Object.freeze(['galewings']);
+ThematicPassiveIds.add('galewings');
 Object.freeze(SpeciesPassives);
