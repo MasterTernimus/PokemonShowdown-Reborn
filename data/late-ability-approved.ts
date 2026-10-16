@@ -11,7 +11,7 @@ export function installLateAbilityApproved(abilities: AbilityDataTable) {
   this.add('-activate', source, 'ability: Void Omen');
   return false;
  };
- table.voidomen.onModifyMove = function (this: Battle, move: ActiveMove) { applySereneGrace(move, false); };
+ table.voidomen.onModifyMove = function (this: Battle, move: ActiveMove) { applySereneGrace(move, false, 'voidomen'); };
  const reach = table.longreach;
  for (const key of Object.keys(reach).filter(key => key.startsWith('on'))) {
   const addition = reach[key], previous = table.heatcoil[key];
@@ -41,7 +41,7 @@ export function installLateAbilityApproved(abilities: AbilityDataTable) {
  table.voidomen.onAllyModifyMove = function (this: Battle, move: ActiveMove, source: Pokemon) {
   const holder = this.effectState.target;
   if (source === holder || !holder.hp || !holder.isActive || !source.isAlly(holder)) return;
-  applySereneGrace(move, false);
+  applySereneGrace(move, false, 'voidomen');
  };
  table.venombastion.onSourceAfterDamageApplied = function (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: ActiveMove) {
   if (damage <= 0 || !source || source.m.venomBastionSealUsed || source.isAlly(target) || !target.hp || !['psn', 'tox'].includes(target.status) || !(effect as any)?.venomBastionPoisonedTargets?.includes(target) || effect?.effectType !== 'Move' || effect.category === 'Status' || !(effect.types || [effect.type]).some(type => ['Poison', 'Steel'].includes(type))) return;

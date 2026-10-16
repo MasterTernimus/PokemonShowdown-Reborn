@@ -112,9 +112,9 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"venomarmor": "Poisons itself; status gives physical moves 1.3x power; boosts Metal Claw.",
 	"toxicarmor": "Combines the listed abilities.",
 	"corrosiveburn": "Fire damage 1.2x against poisoned targets.",
-	"noseformation": "Three adaptive 20 BP Mini-Noses chain after KOs and trigger Elevate.",
+	"noseformation": "Three adaptive 30 BP Mini-Noses chain after KOs and trigger Elevate.",
 	"mourningvessel": "Fainted allies increase power up to 2x; fainted foes restore HP.",
-	"fallenstar": "Arrow moves gain +1 priority at half HP or less; 1.3x power against trapped foes and for same-type moves.",
+	"fallenstar": "Arrow moves gain +1 priority at 1/4 max HP or less; 1.3x power against trapped foes and for same-type moves.",
 	"ragingstorm": "Bypasses screens and defensive stages; halves priority damage; KOs damage other foes.",
 	"ragingoverlord": "Combines the listed abilities.",
 	"vanguard": "Enhanced Extreme Speed; single-foe protection and a once-battle final stand.",
@@ -192,7 +192,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"truedevotion": "Status priority; stronger weak moves and secondary chances; switching cures status and heals.",
 	"ancientbloom": "Same-type moves gain 1.3x power; End-turn Grass damage to foes restores its HP.",
 	"pollenbloom": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA.",
-	"blazingmane": "Second hit 30%; Fire +1 priority at half HP; fire fields +1 Spe.",
+	"blazingmane": "Second hit 30%; Fire +1 priority at 1/4 max HP or less; fire fields +1 Spe.",
 	"plasmaeruption": "Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
 	"fortressshell": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption.",
 	"waterbarrage": "1.3x same-type power; eligible moves hit twice; cycling 1/16–3/16 Water damage to foes each turn.",
@@ -242,7 +242,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"seasonalstride": "Normal -> primary type 1.2x; kicks 1.4x; weather forms.",
 	"voidcraft": "20% less attack damage (40% if super effective); no sleep/stat drops; recurring Ghost Future Sight.",
 	"voidhex": "Direct damaging hits trap surviving foes through the next turn; further hits refresh the trap.",
-	"blademastery": "Below half HP, slicing moves gain +1 priority.",
+	"blademastery": "At 1/4 max HP or less, slicing moves gain +1 priority.",
 	"goldentalons": "Combines the listed abilities.",
 	"silkendecoy": "Cocoon blocks a move, status and secondaries.",
 	"cursedarmament": "Curse becomes a 100 BP spread Ghost attack using the higher Attack or Sp. Atk; curses foes; heals 1/4 damage; half HP/faint sets Haunted Field.",
@@ -734,3 +734,6 @@ AbilityDisplaySummaries.rimeboundspirit = "Heatproof; immune to wind moves. No W
 
 import {StunfiskDescriptions} from './stunfisk-approved';
 for(const[id,text]of Object.entries(StunfiskDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {LoreEntryDescriptions} from './lore-entry-approved';
+for (const [id, text] of Object.entries(LoreEntryDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;

@@ -125,11 +125,11 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		assert.equal(battle.runEvent('ModifyAtk', p, t, m, 100), 200);
 		assert.equal(battle.runEvent('Effectiveness', p, 'Fire', Dex.getActiveMove('flamethrower'), 0), 0);
 	});
-	it('Nose Formation is the sole passive and retains Elevate, Filter and mini-nose callbacks', () => {
+	it('Nose Formation is the sole passive and retains Elevate and mini-noses without Filter', () => {
 		const [p] = setup('Probopass', 'Magnetic Command');
 		assert.deepEqual(p.getPassives(), ['noseformation']);
 		assert(p.hasAbilityOrPassive('elevate'));
-		assert(p.hasAbilityOrPassive('filter'));
+		assert(!p.hasAbilityOrPassive('filter'));
 		assert(!p.isGrounded());
 		const passive = require('../../../dist/sim/species-passives').passiveEffect(battle, 'noseformation');
 		assert(passive.onSourceDamagingHit);

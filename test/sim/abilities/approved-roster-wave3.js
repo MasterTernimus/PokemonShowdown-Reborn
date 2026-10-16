@@ -41,7 +41,7 @@ describe('Approved third roster pass', () => {
 			['Magmortar', 'Blast Chamber', 'Vital Spirit'], ['Galvantula', 'Silk Sights', 'Compound Eyes'],
 			['Ferrothorn', 'Mineral Grip', 'Suction Cups'], ['Eelektross', 'Current Coil', 'Swift Swim'],
 			['Goodra', 'Toxic Serenity', 'Poison Heal'], ['Drednaw', 'River Shell', 'Shell Armor'],
-			['Mudsdale', 'Battle Armor', 'Battle Armor'], ['Annihilape', 'Beyond Fear', 'Inner Focus'],
+			['Mudsdale', 'Battle Armor', 'Battle Armor'], ['Annihilape', 'Unbound Spirit', 'Vital Spirit'],
 		]) {
 			assert(Object.values(Dex.species.get(species).abilities).includes(ability));
 			assert(abilityIncludesComponent(ability, component));
@@ -260,11 +260,15 @@ describe('Approved third roster pass', () => {
 		battle.boost({ atk: -1 }, p, foe); assert.equal(p.boosts.atk, 0);
 		p.clearBoosts(); assert(p.takeItem(foe));
 	});
-	it('Beyond Fear responds to one opposing offensive boost event, preserving Inner Focus', () => {
+	it('Beyond Fear retains flinch/Taunt protection without the retired defensive boosts or Inner Focus', () => {
 		const [p, , foe] = make('Beyond Fear');
-		hit('workup', foe, foe); assert.equal(p.boosts.def, 1); assert.equal(p.boosts.spd, 1);
-		hit('workup', foe, foe); assert.equal(p.boosts.def, 1);
-		assert(p.hasAbility('innerfocus'));
+		hit('workup', foe, foe); assert.equal(p.boosts.def, 0); assert.equal(p.boosts.spd, 0);
+		hit('workup', foe, foe); assert.equal(p.boosts.def, 0);
+		assert(!p.hasAbility('innerfocus'));
+		assert.equal(battle.runEvent('Flinch', p), false);
+		assert.equal(p.addVolatile('taunt', foe, battle.dex.moves.get('taunt')), false);
+		battle.boost({atk: -1}, p, foe, battle.dex.abilities.get('intimidate'));
+		assert.equal(p.boosts.atk, -1);
 	});
 	it('Stillwater requires full HP before absorbing and caps the boost once per turn', () => {
 		const [p, , foe] = make('Stillwater'); p.hp -= 10;

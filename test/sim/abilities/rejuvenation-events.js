@@ -66,7 +66,7 @@ it('Venams Kiss hits and poisons Steel, respects other typing and caps drain', (
 		assert.equal(t.status, 'psn');
 		assert.equal(p.hp, 5000);
 		hit(p, t, 'sludgebomb', { damage: 9000 });
-		assert.equal(p.hp, 7500);
+		assert.equal(p.hp, 6250);
 		assert(t.volatiles.healblock);
 		assert.equal(t.volatiles.healblock.duration, 2);
 	});
@@ -154,6 +154,17 @@ it('preserves committed move sources outside explicit rampage, Accumulation and 
   if (file.endsWith('/text/moves.ts')) text = text.replace("\nMovesText.drakefang = {name: 'Drake Fang', shortDesc: 'Dragon-type biting attack; 50% chance to badly poison.', desc: '85-power physical Dragon-type biting contact attack with 100% accuracy and 15 PP. Has a 50% chance to badly poison the target. Uses ordinary Dragon effectiveness: Fairy immunity and Steel resistance apply. Mega Seviper converts its Poison Fang slot into this move while preserving PP; Sirius supplies its separately described signature and Strong Jaw multipliers.'};\n", '');
   if (file.endsWith('/text/moves.ts')) text = text.replace("\nimport {FinisherMoveDescriptions} from '../finisher-moves-approved';\nfor (const [id,text] of Object.entries(FinisherMoveDescriptions)) MovesText[id as ID] = text;\n", '');
   if (file.endsWith('/moves.ts')) {
+   // Only the explicitly approved adaptive Pledge callback and text differ.
+   const pledgeBefore=require('../../../artifacts/adaptive-pledges/before.json');
+   for(const [id,row] of Object.entries(pledgeBefore.texts)){if(file==='data/text/moves.ts'){const a=text.indexOf('\t'+id+': {'),b=text.indexOf('\n\t},',a)+5;text=text.slice(0,a)+text.slice(a,b).replace(row.desc,row.old).replace(row.short,row.oldShort)+text.slice(b);}else if(file==='data/moves.ts'){const a=text.indexOf('\t'+id+': {'),b=text.indexOf('\n\t},',a)+5;text=text.slice(0,a)+text.slice(a,b).replace("\t\tonModifyMove(move, pokemon) {\n\t\t\tuseHigherOffensiveStat(pokemon, move);\n\t\t},\n",'')+text.slice(b);}}
+   if (file === 'data/moves.ts') text=text.replace("\t\t\tif (source.hasAbility('magneticbulwark') && !source.m.magneticBulwarkSpent) {\n\t\t\t\tconst targets = side.allies().filter(ally => (ally === source || source.isAdjacent(ally)) &&\n\t\t\t\t\t(!ally.volatiles.maxguard || this.runEvent('TryHit', ally, source, move)));\n\t\t\t\tfor (const target of targets) {\n\t\t\t\t\tdidSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;\n\t\t\t\t}\n\t\t\t\tif (didSomething) source.m.magneticBulwarkSpent = true;\n\t\t\t\treturn didSomething;\n\t\t\t}\n",'');
+   if (file === 'data/text/moves.ts') text=text.replace("Raises the Defense and Special Defense of allies with Plus or Minus by 1 stage. On the local Electric Field, normally raises both stats of all allies by 2 stages. A user's unspent Magnetic Bulwark instead allows one use per genuine entry to raise both stats of itself and adjacent allies by 1 regardless of Plus or Minus. Normal boost restrictions apply; an entirely failed use does not spend this benefit.","Raises the Defense and Special Defense of Pokemon on the user's side with the Plus or Minus Abilities by 1 stage.");
+   text=text.replace("import {radiantTarget} from '../sim/radiant-target';\n",'');
+   text=text.replace("\t\tonEffectiveness(typeMod, target, type) {\n\t\t\tif (target && radiantTarget(target)) return type === target.getTypes()[0] ? 1 : 0;\n\t\t},\n",'');
+
+   // Approved October 16: Poison Tail no longer has native drain.
+   if (file === 'data/moves.ts') { const i=text.indexOf('\n\tpoisontail: {'),j=text.indexOf('\n\t},',i);text=text.slice(0,i)+text.slice(i,j).replace('\n\t\ttarget:', '\n\t\tdrain: [1, 2],\n\t\ttarget:')+text.slice(j); }
+   if (file === 'data/text/moves.ts') text=text.replace('Has a high critical-hit ratio and a 50% chance to poison the target.','Has a high critical-hit ratio, a 50% chance to poison the target, and restores 50% of the damage dealt.').replace('High critical-hit ratio; 50% chance to poison.','High critical-hit ratio; 50% chance to poison; heals 1/2 damage dealt.');
    // Approved Pledge fix changes only the field-creation source to the triggering user.
    for (const id of ['firepledge','waterpledge','grasspledge']) {
     const start=text.indexOf('\n\t'+id+': {'),end=text.indexOf('\n\t},',start)+5;
@@ -170,10 +181,17 @@ it('preserves committed move sources outside explicit rampage, Accumulation and 
    text = text.replace(/((?:outrage|thrash|petaldance|ragingfury): \{[\s\S]*?basePower: )140,/g, '$1120,');
    text = text.replace("\n// One canonical Mud Barrage: preserve the approved Mud-Slap mechanics and classification.\nMoves.mudbarrage = {...Moves.mudslap, name: 'Mud Barrage'};\ndelete Moves.mudslap;\n", '');
   } else {
+   text=text.replace("\n// Approved: Mighty Cleave is unavailable to every Lycanroc form.\nfor (const id of ['lycanroc', 'lycanrocmidnight', 'lycanrocdusk'] as const) delete Learnsets[id].learnset!.mightycleave;\n", '');
    const marker = "\nimport {ApprovedMoveAdditions} from './move-distribution-approved';";
    assert.equal(text.split(marker).length, 2);
    text = text.slice(0, text.indexOf(marker));
   }
+  // Approved Lasting Promise hooks only; keep the original source preservation hash.
+  text=text.replace("\n\t\t\t\tthis.effectState.lastingPromiseSource = source.hasAbility('lastingpromise') && sourceEffect?.id === 'wish' ? source : null;",'');
+  text=text.replace("\n\t\t\t\t\t\tconst wisher = this.effectState.lastingPromiseSource as Pokemon | null;\n\t\t\t\t\t\tif (wisher && target !== wisher && target.isAlly(wisher)) target.cureStatus();",'');
+  text=text.replace('return 50 + (pokemon.m.rageFistBonus || 0);', 'return Math.min(350, 50 + 50 * pokemon.timesAttacked);');
+  text=text.replace("\nObject.assign(MovesText.ragefist, {\"shortDesc\":\"50 BP +20 per hit taken, max 150; switching halves bonus.\",\"desc\":\"Starts at 50 power and gains 20 power per qualifying hit taken, up to 150 after five hits. Switching out halves the accumulated bonus exactly: 150 becomes 100, then 75. New hits add 20 to the remaining bonus, capped at 100 bonus power. Fractional progress is retained; the normal damage engine rounds final power. Retains existing hit eligibility, Transform copying and progress through fainting/revival. In Free-for-All, hits all adjacent foes at full spread power.\"});\n",'');
+  text=text.replace("\nimport {installLoreScreenRules} from './lore-screen-rules';\ninstallLoreScreenRules(Moves);\n",'');
   assert.equal(crypto.createHash('sha256').update(text).digest('hex'), expected, file);
  }
 });

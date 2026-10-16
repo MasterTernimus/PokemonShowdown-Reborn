@@ -900,6 +900,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(target, source, effect) {
 			this.effectState.trueDuration = this.random(2, 4);
 			this.effectState.move = effect.id;
+			this.effectState.ragingHeartThrash = !!(effect as ActiveMove & {ragingHeartThrash?: boolean}).ragingHeartThrash;
 		},
 		onRestart() {
 			if (this.effectState.trueDuration >= 2) {
@@ -914,6 +915,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onEnd(target) {
 			if (this.effectState.trueDuration > 1) return;
 			if (this.field.isTerrain(['burningterrain', 'volcanicterrain']) && this.effectState.move === 'ragingfury') return;
+			if (this.effectState.ragingHeartThrash && target.hasAbility('ragingheart')) return;
 			target.addVolatile('confusion');
 		},
 		onLockMove(pokemon) {

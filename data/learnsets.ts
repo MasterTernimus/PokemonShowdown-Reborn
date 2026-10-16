@@ -113224,3 +113224,6 @@ for (const data of Object.values(Learnsets)) {
 }
 
 for (const [cosmetic,base] of [['laprasazzy','lapras'],['lanturnalt','lanturn']]) Learnsets[cosmetic as ID] = {...Learnsets[base as ID], learnset:{...Learnsets[base as ID].learnset}};
+
+// Approved: Mighty Cleave is unavailable to every Lycanroc form.
+for (const id of ['lycanroc', 'lycanrocmidnight', 'lycanrocdusk'] as const) delete Learnsets[id].learnset!.mightycleave;

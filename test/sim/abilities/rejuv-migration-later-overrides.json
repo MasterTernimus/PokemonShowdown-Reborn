@@ -182,7 +182,7 @@
   "trapinch": {
     "abilities": {
       "0": "Burrow Ambush",
-      "1": "Huge Power",
+      "1": "Hyper Cutter",
       "H": "Antlion Instinct"
     },
     "passives": [
@@ -303,7 +303,7 @@
     "abilities": {
       "0": "Magnet Pull",
       "1": "Magnetic Command",
-      "H": "Heavy Metal"
+      "H": "Magnetic Bulwark"
     },
     "passives": [
       "noseformation"
@@ -647,7 +647,7 @@
     "abilities": {
       "0": "Apex Venom",
       "1": "Black Viper",
-      "H": "Accumulation"
+      "H": "Venam's Kiss"
     },
     "passives": [
       "rivalmalice"
@@ -1291,5 +1291,40 @@
       "1": "Baited Counter",
       "S": "Adaptive Cycle"
     }
+  },
+  "floetteeternal": {
+    "passives": [
+      "eternalflower"
+    ],
+    "abilities": {
+      "0": "Symbiosis",
+      "1": "Magic Guard",
+      "H": "Lasting Promise"
+    }
+  },
+  "floettemega": {
+    "passives": [
+      "eternalflower"
+    ]
+  },
+  "cacturne": {
+    "passives": [
+      "scarecrow"
+    ],
+    "abilities": {
+      "0": "Desert Vigil",
+      "1": "Solar Rush",
+      "H": "Storm Drain"
+    }
+  },
+  "annihilape": {
+    "abilities": {
+      "0": "Unbound Spirit",
+      "1": "Raging Heart",
+      "H": "Defiant"
+    },
+    "passives": [
+      "beyondfear"
+    ]
   }
 }

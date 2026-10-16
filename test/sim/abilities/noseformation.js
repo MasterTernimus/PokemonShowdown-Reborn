@@ -15,10 +15,11 @@ describe('Nose Formation', function () {
 			{species: 'Probopass', ability: 'noseformation', moves: ['falseswipe']},
 		], [
 			{species: 'Mew', ability: 'noguard', moves: ['splash']},
+			{species: 'Mew', ability: 'noguard', moves: ['splash']},
 		]]);
 		battle.makeChoices('team 1', 'team 1');
 		const probopass = battle.p1.active[0];
-		battle.p2.active[0].sethp(1);
+		battle.p2.active[0].sethp(2);
 
 		battle.makeChoices('move falseswipe', 'move splash');
 		assert.statStage(probopass, probopass.getBestStat(true, true), 1);

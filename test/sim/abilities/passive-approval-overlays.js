@@ -14,6 +14,7 @@ exports.passives = expected => {
 	return expected;
 };
 exports.abilities = (id, expected) => {
+ if(id==='seviper') expected.H="Venam's Kiss";
 	if (require('./gmax-approved.json').abilities[id]) return {...require('./gmax-approved.json').abilities[id]};
 	if (id === 'mismagiusmega') expected[0] = 'Void Craft';
 	for (const [species, slot, , name] of require('./latest-passives-approved.json').slots) if (species === id) expected[slot] = name;
@@ -105,12 +106,13 @@ exports.abilities=(id,expected)=>Object.assign(beforeStarterFinishAbilities(id,e
 // fixed expectations from the approved roster, not read from the runtime Dex.
 megaExpected.mightyenagrim = ['rattled'];
 const reviewedStats = {
+ probopass: [75,35,150,110,155,25],
  stunfisk:[109,66,99,95,109,32],stunfiskgalar:[109,95,109,66,99,32],
  kingdra: [85,105,90,105,90,95],
  mightyena: [90,115,80,60,80,125], mightyenadeso: [90,115,80,60,80,125], mightyenagrim: [90,115,80,60,80,125],
  mightyenamega: [90,140,105,85,100,130],
  cinccinodeso: [75,110,90,60,90,125], toxicroak: [83,121,70,111,70,95], toxicroakdeso: [83,121,70,111,70,95],
- sevipermega: [75,140,120,90,120,65], staraptor: [85,120,80,50,70,100], staraptormega: [85,140,110,60,100,110],
+ sevipermega: [75,140,120,90,120,65], staraptor: [85,120,80,50,70,105], staraptormega: [85,140,110,60,100,115],
 };
 exports.stats = (id, fallback) => reviewedStats[id] ? Object.fromEntries(['hp','atk','def','spa','spd','spe'].map((key,i)=>[key,reviewedStats[id][i]])) : fallback;
 exports.types = (id, fallback) => id === 'gorebyss' ? ['Water','Fairy'] : fallback;

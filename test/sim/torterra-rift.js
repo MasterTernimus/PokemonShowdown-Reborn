@@ -33,7 +33,7 @@ describe('Torterra-Rift and Mountain Rift', () => {
 		const torterra = battle.p1.active[0];
 		assert.equal(torterra.species.id, 'torterrarift');
 		assert.deepEqual(torterra.getTypes(), ['Ground', 'Ice']);
-		assert.deepEqual(torterra.moveSlots.map(slot => slot.id), ['earthquake', 'sandtomb', 'mountaingale', 'stoneedge']);
+		assert.deepEqual(torterra.moveSlots.map(slot => slot.id), ['earthquake', 'desertsmark', 'mountaingale', 'stoneedge']);
 		assert(torterra.hasAbility('shellarmor'));
 		assert(torterra.hasAbility('selfsufficient'));
 		assert.equal(torterra.getAbility().onCriticalHit, false);

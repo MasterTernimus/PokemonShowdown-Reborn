@@ -657,16 +657,16 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Poison bypasses type immunity; poisoned foes lose defenses; No attraction/Taunt, Captivate or Intimidate Attack drop; Fire attacks deal 1.2x damage against poisoned targets — Fire damage 1.2x against poisoned targets."
 	},
 	"noseformation": {
-		"desc": "Takes 20% less attack damage, or 40% less from super-effective attacks. Airborne: immune to Ground attacks and grounded hazards unless grounded. Move KOs raise its highest stat by 1, ignoring stat stages when choosing the stat. After it hits, three 20 BP special Mini-Noses each select the strongest of Steel, Electric, or Rock against their current target. They chain to another valid foe after a KO, and their KOs trigger Elevate.",
-		"shortDesc": "20% less attack damage; 40% less if super effective; Airborne; move KOs raise its highest stat — three adaptive 20 BP Mini-Noses chain after KOs and trigger Elevate."
-	},
+  "shortDesc": "Elevate; successful opposing attacks trigger three 30 BP Special Mini-Noses.",
+  "desc": "Elevate grants airborne status, subject to grounding, and one highest-stat increase per move KO, using nature-adjusted stats while ignoring stages and other stat modifiers. After a successful opposing attack, fires one trio of 30 BP Special Mini-Noses, choosing Steel, Electric or Rock and retargeting living foes when needed. Each is a normal attack respecting protection, Substitute and immunity. No ally triggers or recursive trios. Does not include Filter."
+},
 	"mourningvessel": {
 		"desc": "Prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. Status moves gain +1 priority. Damaging moves gain 20% power per fainted ally, capped at double power. At turn end, heals 5% max HP per fainted foe, counting all opposing sides in Free-for-All.",
 		"shortDesc": "No indirect damage; +1 status priority; up to double power from fainted allies; fainted foes give healing."
 	},
 	"fallenstar": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Designated arrow moves gain +1 priority at half HP or less and 1.3x power against trapped foes: Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Scale Shot, Psycho Cut and Ceaseless Edge. Retains its arrow follow-up and protective effects.",
-		"shortDesc": "Mold Breaker; arrow moves: +1 priority at half HP or less; 1.3x power against trapped foes."
+		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Designated arrow moves gain +1 priority at 1/4 max HP or less and 1.3x power against trapped foes: Spirit Shackle, Thousand Arrows, Triple Arrows, Snipe Shot, Razor Leaf, Magical Leaf, Spike Cannon, Pin Missile, Icicle Spear, Rock Blast, Bullet Seed, Scale Shot, Psycho Cut and Ceaseless Edge. Retains its arrow follow-up and protective effects.",
+		"shortDesc": "Mold Breaker; arrow moves: +1 priority at 1/4 max HP or less; 1.3x power against trapped foes."
 	},
 	"eclipse": {
 		"desc": "This Ability cannot be suppressed. During weather, its attacks deal 1.5x damage. In clear weather, attacks deal 0.5x damage to it. Its Psychic-type moves become Dark type if Dark would do more damage, and its Dark-type moves become Psychic type if Psychic would do more damage. It restores 1/4 max HP instead of taking damage from Psychic- or Dark-type moves.",
@@ -1083,8 +1083,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Its Fire-type attacks have 1.5x power."
 	},
 	"blazingmane": {
-		"desc": "Fire attacks have 1.5x power and damaging moves hit twice, with the second hit at 30% power. At half HP or less, Fire attacks gain +1 priority. Burning and Volcanic Fields raise its Speed by 1 on entry or when the field starts.",
-		"shortDesc": "Fire 1.5x; second hit 30%; half-HP Fire +1 priority; fire fields +1 Spe."
+		"desc": "Fire attacks have 1.5x power and damaging moves hit twice, with the second hit at 30% power. At 1/4 max HP or less, Fire attacks gain +1 priority. Burning and Volcanic Fields raise its Speed by 1 on entry or when the field starts.",
+		"shortDesc": "Fire 1.5x; second hit 30%; at most 1/4-HP Fire +1 priority; fire fields +1 Spe."
 	},
 	"plasmaeruption": {
 		"desc": "Proficient boosts same-type attacks by 1.3x. Contact attackers have Static's chance to be paralyzed and Flame Body's chance to be burned. Fire moves may become Electric, and Electric moves may become Fire (50% chance each), unless the new type would make the target immune. After Burn Up removes Fire typing, Fire moves always become Electric; after Double Shock removes Electric typing, Electric moves always become Fire. Burn Up and Double Shock themselves keep their original type.",
@@ -1671,8 +1671,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Slicing moves have 1.5x power except on Cold Eclipse."
 	},
 	"blademastery": {
-		"desc": "Slicing moves have 1.5x power, except on Cold Eclipse. Raises critical-hit rate by one stage. Below half HP, its slicing moves have +1 priority.",
-		"shortDesc": "Slicing moves have 1.5x power except on Cold Eclipse; +1 critical-hit stage — below half HP, slicing moves gain +1 priority."
+		"desc": "Slicing moves have 1.5x power, except on Cold Eclipse. Raises critical-hit rate by one stage. At 1/4 max HP or less, its slicing moves have +1 priority.",
+		"shortDesc": "Slicing moves have 1.5x power except on Cold Eclipse; +1 critical-hit stage — at 1/4 max HP or less, slicing moves gain +1 priority."
 	},
 	"goodasgold": {
 		"desc": "It is immune to Status moves.",
@@ -2499,11 +2499,11 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Half Fire/Ice attacking stats; immune to hail damage — Force Palm always paralyzes when it lands."
 	},
 	"galvanicspirit": {
-		"desc": "Vital Spirit, including this server's sleep immunity, 1.3x Fighting attack-stat boost and 20% direct-damage reduction. Contact Electric hits lower the foe's Sp. Def by 1 stage once per turn.",
+		"desc": "Vital Spirit, including this server's sleep immunity, 1.3x Fighting attack-stat boost. Contact Electric hits lower the foe's Sp. Def by 1 stage once per turn.",
 		"shortDesc": "Electric contact hits lower Sp. Def once per turn."
 	},
 	"blastchamber": {
-		"desc": "Vital Spirit, including sleep immunity, 1.3x Fighting attack-stat boost and 20% direct-damage reduction. A landed Fire attack makes its next Fighting attack unable to miss, and a landed Fighting attack does the same for its next Fire attack. Charges end on switching.",
+		"desc": "Vital Spirit, including sleep immunity, 1.3x Fighting attack-stat boost. A landed Fire attack makes its next Fighting attack unable to miss, and a landed Fighting attack does the same for its next Fire attack. Charges end on switching.",
 		"shortDesc": "Fire and Fighting hits make the other type's next attack never miss."
 	},
 	"lastbrood": {
@@ -3571,7 +3571,7 @@ Object.assign(AbilityDescriptionOverrides, {
     ...AbilityDescriptionOverrides.deepchill
   },
   "venamskiss": {
-    "desc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types. Against a foe poisoned before the attack, they drain one-third actual HP damage and block healing through the following turn. Ability drain is capped at 1/4 max HP per turn and is not added to existing draining moves; Heal Block and Liquid Ooze apply. Active poisoned foes have 0.75x Speed; multiple holders do not stack.",
+    "desc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types. Against a foe poisoned before the attack, they drain one-third actual HP damage and block healing through the following turn. Ability drain is capped at 1/8 base max HP per turn and is not added to existing draining moves; Heal Block and Liquid Ooze apply. Active poisoned foes have 0.75x Speed; multiple holders do not stack.",
     "shortDesc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types."
   },
   "dredger": {
@@ -3988,3 +3988,8 @@ AbilityDescriptionOverrides.rimeboundspirit = {"shortDesc":"Heatproof; immune to
 
 import {StunfiskDescriptions} from './stunfisk-approved';
 Object.assign(AbilityDescriptionOverrides,StunfiskDescriptions);
+
+AbilityDescriptionOverrides.blackviper = {shortDesc:'Whiplash + Shed Skin; first tail hit each entry badly poisons.',desc:'Full local Whiplash and Shed Skin. Gains +1 accuracy on entry and 1.5x tail-move power; the first opposing HP-damaging tail hit each entry attempts bad poison. Shed Skin has one 50% end-turn activation chance when statused, afflicted, negatively boosted or at half HP or less: heals 1/4 max HP, cures status, removes its listed ailments and clears negative stages. Retains its guaranteed Dragon’s Den behavior. Sirius executes its inherited Shed Skin only once.'};
+
+import {LoreEntryDescriptions} from './lore-entry-approved';
+Object.assign(AbilityDescriptionOverrides, LoreEntryDescriptions);

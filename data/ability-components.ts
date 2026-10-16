@@ -213,7 +213,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	ironwill: ['prismarmor', 'secondwind', 'selfsufficient', 'whiplash'],
 	joyride: ['aerilate', 'violentrush', 'vitalspirit'],
 	hardyskin: ['dryskin', 'vitalspirit', 'moxie'],
-	noseformation: ['filter', 'elevate'],
+	noseformation: ['elevate'],
 	perfectego: ['ultraego'],
 	prismscale: ['friendguard', 'oblivious', 'swiftswim'],
 	queensguard: ['contrary', 'shedskin', 'intimidate', 'infiltrator', 'proficient'],
@@ -921,3 +921,19 @@ AbilityComponents.barbharvest = ['suctioncups'];
 AbilityComponents.rimeboundspirit = ['heatproof'];
 
 Object.assign(AbilityComponents,{livewiretrap:['static'],mudflatdynamo:['battlearmor'],ironclamp:['battlearmor'],baitedcounter:['filter']});
+
+AbilityComponents.blackviper = [...new Set([...(AbilityComponents.blackviper || []), 'shedskin'])];
+
+AbilityComponents.magneticbulwark = ['filter'];
+
+AbilityComponents.blademastery = ['sharpness'];
+AbilityComponents.ange = ['fairyaura'];
+AbilityComponents.lastingpromise = ['friendguard'];
+AbilityComponents.desertvigil = ['overcoat'];
+
+AbilityComponents.imperialprincess = ['striker', 'vitalspirit'];
+AbilityComponents.ragingcurrent = ['swiftswim', 'damp', 'dryskin', 'stamina'];
+
+AbilityComponents.beyondfear = [];
+AbilityComponents.unboundspirit = ['vitalspirit'];
+AbilityComponents.ragingheart = [];

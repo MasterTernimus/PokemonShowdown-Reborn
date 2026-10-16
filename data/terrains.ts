@@ -206,20 +206,20 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifyDef(def, pokemon) {
-				if (pokemon.hasAbilityOrPassive(['eternalflower', 'ange'])) return this.chainModify(1.5);
+				if (pokemon.hasAbilityOrPassive(['eternalflower'])) return this.chainModify(1.5);
 			},
 			onModifySpD(spd, pokemon) {
-				if (pokemon.hasAbilityOrPassive(['eternalflower', 'ange'])) return this.chainModify(1.5);
+				if (pokemon.hasAbilityOrPassive(['eternalflower'])) return this.chainModify(1.5);
 			},
 			onSetStatus(status, target, source, effect) {
-				if (target.hasAbilityOrPassive(['eternalflower', 'ange'])) return false;
+				if (target.hasAbilityOrPassive(['eternalflower'])) return false;
 			},
 			onResidual(pokemon) {
 				if (pokemon.getStatus().id === 'slp') {
 					this.damage(pokemon.baseMaxhp / 16, pokemon);
 					this.add('-message', pokemon.name + "'s dream is corrupted by the evil spirits!");
 				}
-				if (pokemon.hasAbilityOrPassive(['eternalflower', 'ange'])) {
+				if (pokemon.hasAbilityOrPassive(['eternalflower'])) {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				}
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable() && pokemon.hasType('Grass')) {
@@ -3629,3 +3629,13 @@ export const Terrains: { [k: string]: TerrainData } = {
 		},
 	},
 };
+
+import {skipClearingField} from './yang-aura-clear';
+for (const terrain of Object.values(Terrains)) {
+ const afterMove = terrain.condition?.onAfterMove;
+ if (typeof afterMove !== 'function') continue;
+ terrain.condition!.onAfterMove = function (source, target, move) {
+  if (skipClearingField(source, move)) return;
+  return afterMove.call(this, source, target, move);
+ };
+}

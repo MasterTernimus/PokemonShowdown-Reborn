@@ -1337,6 +1337,7 @@ export class Pokemon {
 			}),
 			baseAbility: this.baseAbility,
 			passives: this.getPassives(),
+			rageFistBonus: this.m.rageFistBonus || 0,
 			item: this.item,
 			pokeball: this.pokeball,
 		};
@@ -1545,6 +1546,7 @@ export class Pokemon {
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 		this.timesAttacked = pokemon.timesAttacked;
+		this.m.rageFistBonus = pokemon.m.rageFistBonus || 0;
 		for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
 			let moveName = moveSlot.move;
 			if (moveSlot.id === 'hiddenpower') {

@@ -1,3 +1,4 @@
+import {radiantTarget} from '../sim/radiant-target';
 import {accumulationState} from './swalot-vespiquen-approved';
 import {skywardenDefog} from './approved-support-reworks';
 import type {PokemonConditionData, FieldConditionData, SideConditionData} from '../sim/dex-conditions';
@@ -6179,6 +6180,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	firepledge: {
+		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
+		},
 		num: 519,
 		accuracy: 100,
 		basePower: 80,
@@ -8714,6 +8718,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	grasspledge: {
+		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
+		},
 		num: 520,
 		accuracy: 100,
 		basePower: 80,
@@ -12336,6 +12343,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, distance: 1, bypasssub: 1, metronome: 1 },
 		onHitSide(side, source, move) {
 			let didSomething = false;
+			if (source.hasAbility('magneticbulwark') && !source.m.magneticBulwarkSpent) {
+				const targets = side.allies().filter(ally => (ally === source || source.isAdjacent(ally)) &&
+					(!ally.volatiles.maxguard || this.runEvent('TryHit', ally, source, move)));
+				for (const target of targets) {
+					didSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;
+				}
+				if (didSomething) source.m.magneticBulwarkSpent = true;
+				return didSomething;
+			}
 			if (!this.field.isTerrain('electricterrain')) {
 				const targets = side.allies().filter(ally => (
 					ally.hasAbilityOrPassive(['plus', 'minus']) &&
@@ -15507,7 +15523,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 50,
 			status: 'psn',
 		},
-		drain: [1, 2],
 		target: "normal",
 		type: "Poison",
 		contestType: "Clever",
@@ -16691,7 +16706,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 50,
 		basePowerCallback(pokemon) {
-			return Math.min(350, 50 + 50 * pokemon.timesAttacked);
+			return 50 + (pokemon.m.rageFistBonus || 0);
 		},
 		category: "Physical",
 		name: "Rage Fist",
@@ -16907,6 +16922,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cool",
 	},
 	radiantassault: {
+		onEffectiveness(typeMod, target, type) {
+			if (target && radiantTarget(target)) return type === target.getTypes()[0] ? 1 : 0;
+		},
 		onModifyMove(move, pokemon) {
 			useHigherOffensiveStat(pokemon, move);
 		},
@@ -23879,6 +23897,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	waterpledge: {
+		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
+		},
 		num: 518,
 		accuracy: 100,
 		basePower: 80,
@@ -24324,6 +24345,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 2,
 			onStart(pokemon, source, sourceEffect) {
 				this.effectState.moonlitPromise = source.hasAbility('voidpromise');
+				this.effectState.lastingPromiseSource = source.hasAbility('lastingpromise') && sourceEffect?.id === 'wish' ? source : null;
 				if (source.hasAbility('restorativechime')) {
 					this.effectState.restorativeEntry = source.m.approvedSignatures ||= {};
 				}
@@ -24345,6 +24367,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
 						if (this.effectState.restorativeEntry) cureRestorativeStatus(target, this.effectState.restorativeEntry);
+						const wisher = this.effectState.lastingPromiseSource as Pokemon | null;
+						if (wisher && target !== wisher && target.isAlly(wisher)) target.cureStatus();
 						this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
 					}
 				}
@@ -25097,3 +25121,6 @@ installFinisherMoves(Moves);
 // Approved Order targeting; inherited healing, boosts and field callbacks remain intact.
 Moves.defendorder.target = 'adjacentAllyOrSelf';
 Moves.healorder.target = 'adjacentAllyOrSelf';
+
+import {installLoreScreenRules} from './lore-screen-rules';
+installLoreScreenRules(Moves);

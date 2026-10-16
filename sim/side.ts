@@ -89,6 +89,7 @@ export interface PokemonSwitchRequestData {
 	ability?: ID;
 	/** Private owner-side species traits; never announced through ability messages. */
 	passives?: readonly string[];
+	rageFistBonus?: number;
 	/** @see https://dex.pokemonshowdown.com/abilities/commander */
 	commanding?: boolean;
 	/** @see https://dex.pokemonshowdown.com/moves/revivalblessing */

@@ -2063,8 +2063,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firepledge: {
 		name: "Fire Pledge",
-		desc: "If one of the user's allies chose to use Grass Pledge or Water Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Grass Pledge, the ally uses Fire Pledge with 150 power and a sea of fire appears on the target's side for 4 turns, which causes damage to non-Fire types equal to 1/8 of their maximum HP, rounded down, at the end of each turn during effect, including the last turn. If combined with Water Pledge, the ally uses Water Pledge with 150 power and a rainbow appears on the user's side for 4 turns, which doubles secondary effect chances and stacks with the Serene Grace Ability, except effects that cause flinching can only have their chance doubled once. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Fire Gem.",
-		shortDesc: "Use with Grass or Water Pledge for added effect.",
+		desc: "Uses Attack and Defense if the user's stage-adjusted Attack is higher than its Special Attack; otherwise uses Special Attack and Special Defense, including ties. The comparison ignores ability, item and status stat multipliers. Preserves the local Pledge markers, combination power boost and field creation: Fire + Water creates Rainbow Field, Fire + Grass creates Burning Field, and Water + Grass creates Swamp Field. Fields last 4 turns, or 7 with the triggering user's Amplifield Rock; successful hits and Substitute damage retain the existing creation and refresh behavior.",
+		shortDesc: "Uses higher offensive stat; combines Pledges into fields.",
 
 		activate: "#waterpledge",
 		start: "  A sea of fire enveloped [TEAM]!",
@@ -2755,8 +2755,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grasspledge: {
 		name: "Grass Pledge",
-		desc: "If one of the user's allies chose to use Fire Pledge or Water Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Fire Pledge with 150 power and a sea of fire appears on the target's side for 4 turns, which causes damage to non-Fire types equal to 1/8 of their maximum HP, rounded down, at the end of each turn during effect, including the last turn. If combined with Water Pledge, the ally uses Grass Pledge with 150 power and a swamp appears on the target's side for 4 turns, which quarters the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Grass Gem.",
-		shortDesc: "Use with Fire or Water Pledge for added effect.",
+		desc: "Uses Attack and Defense if the user's stage-adjusted Attack is higher than its Special Attack; otherwise uses Special Attack and Special Defense, including ties. The comparison ignores ability, item and status stat multipliers. Preserves the local Pledge markers, combination power boost and field creation: Fire + Water creates Rainbow Field, Fire + Grass creates Burning Field, and Water + Grass creates Swamp Field. Fields last 4 turns, or 7 with the triggering user's Amplifield Rock; successful hits and Substitute damage retain the existing creation and refresh behavior.",
+		shortDesc: "Uses higher offensive stat; combines Pledges into fields.",
 
 		activate: "#waterpledge",
 		start: "  A swamp enveloped [TEAM]!",
@@ -3713,8 +3713,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	radiantassault: {
 		name: "Radiant Assault",
-		desc: "Hits all opposing Pokemon. Uses the user's higher offensive stat, including stat stages and field modifiers. If it does not knock out at least one target, the user must recharge next turn.",
-		shortDesc: "Hits all foes; uses higher offense; recharges unless it gets a KO.",
+		desc: "Hits all opposing Pokemon and uses the higher offensive stat, including stages and field modifiers. Against active Mega, Dynamax/Gmax or Stellar-Terastallized targets, is 2x effective and deals another 1.2x damage, each once even if states overlap. Other Tera types, Primal and Ultra forms do not qualify. Recharges unless it knocks out at least one target.",
+		shortDesc: "Adaptive spread; 2x effective and 1.2x damage vs Mega/Dynamax/Stellar Tera. Recharges unless KO.",
 	},
 	liquidation: {
 		name: "Liquidation",
@@ -3865,7 +3865,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magneticflux: {
 		name: "Magnetic Flux",
-		desc: "Raises the Defense and Special Defense of Pokemon on the user's side with the Plus or Minus Abilities by 1 stage.",
+		desc: "Raises the Defense and Special Defense of allies with Plus or Minus by 1 stage. On the local Electric Field, normally raises both stats of all allies by 2 stages. A user's unspent Magnetic Bulwark instead allows one use per genuine entry to raise both stats of itself and adjacent allies by 1 regardless of Plus or Minus. Normal boost restrictions apply; an entirely failed use does not spend this benefit.",
 		shortDesc: "Raises Def, Sp. Def of allies with Plus/Minus by 1.",
 	},
 	magnetrise: {
@@ -4839,8 +4839,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisontail: {
 		name: "Poison Tail",
-		desc: "Has a high critical-hit ratio, a 50% chance to poison the target, and restores 50% of the damage dealt.",
-		shortDesc: "High critical-hit ratio; 50% chance to poison; heals 1/2 damage dealt.",
+		desc: "Has a high critical-hit ratio and a 50% chance to poison the target.",
+		shortDesc: "High critical-hit ratio; 50% chance to poison.",
 	},
 	polarflare: {
 		name: "Polar Flare",
@@ -7453,8 +7453,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterpledge: {
 		name: "Water Pledge",
-		desc: "If one of the user's allies chose to use Fire Pledge or Grass Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Water Pledge with 150 power and a rainbow appears on the user's side for 4 turns, which doubles secondary effect chances and stacks with the Serene Grace Ability, except effects that cause flinching can only have their chance doubled once. If combined with Grass Pledge, the ally uses Grass Pledge with 150 power and a swamp appears on the target's side for 4 turns, which quarters the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Water Gem, and cannot be redirected by the Storm Drain Ability.",
-		shortDesc: "Use with Grass or Fire Pledge for added effect.",
+		desc: "Uses Attack and Defense if the user's stage-adjusted Attack is higher than its Special Attack; otherwise uses Special Attack and Special Defense, including ties. The comparison ignores ability, item and status stat multipliers. Preserves the local Pledge markers, combination power boost and field creation: Fire + Water creates Rainbow Field, Fire + Grass creates Burning Field, and Water + Grass creates Swamp Field. Fields last 4 turns, or 7 with the triggering user's Amplifield Rock; successful hits and Substitute damage retain the existing creation and refresh behavior.",
+		shortDesc: "Uses higher offensive stat; combines Pledges into fields.",
 
 		activate: "  [POKEMON] is waiting for [TARGET]'s move...",
 		start: "  A rainbow appeared in the sky on [TEAM]'s side!",
@@ -7870,3 +7870,5 @@ for (const [id,text] of Object.entries(FinisherMoveDescriptions)) MovesText[id a
 Object.assign(MovesText.attackorder, {desc: "Chooses Physical or Special according to which deals greater calculated damage to the actual target, using both offense and matching defense; Special on ties. Retains its high critical-hit ratio and 50% chance to raise the user's Attack by 1.", shortDesc: 'Best damage category; high crit; 50% +1 Attack.'});
 Object.assign(MovesText.defendorder, {desc: "Selects the user or one adjacent ally. Raises that target's Defense and Sp. Def by 1 stage (2 on Forest Field) and heals 1/4 maximum HP. Retains its existing flags and normal healing/stat-change rules.", shortDesc: 'User/ally: +1 Def/SpD and heals 1/4 HP.'});
 Object.assign(MovesText.healorder, {desc: "Selects the user or one adjacent ally to heal 1/2 maximum HP (2/3 on Forest Field). Retains its party status cure and existing Soundproof/Good as Gold checks and flags.", shortDesc: 'User/ally: heals 1/2 HP; cures party status.'});
+
+Object.assign(MovesText.ragefist, {"shortDesc":"50 BP +20 per hit taken, max 150; switching halves bonus.","desc":"Starts at 50 power and gains 20 power per qualifying hit taken, up to 150 after five hits. Switching out halves the accumulated bonus exactly: 150 becomes 100, then 75. New hits add 20 to the remaining bonus, capped at 100 bonus power. Fractional progress is retained; the normal damage engine rounds final power. Retains existing hit eligibility, Transform copying and progress through fainting/revival. In Free-for-All, hits all adjacent foes at full spread power."});

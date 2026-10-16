@@ -4712,3 +4712,6 @@ AbilitiesText.rimeboundspirit = {"name":"Rimebound Spirit","shortDesc":"Heatproo
 
 import {StunfiskDescriptions} from '../stunfisk-approved';
 for(const[id,text]of Object.entries(StunfiskDescriptions))AbilitiesText[id as ID]={name:({livewiretrap:'Livewire Trap',mudflatdynamo:'Mudflat Dynamo',ironclamp:'Iron Clamp',baitedcounter:'Baited Counter'} as {[id:string]:string})[id],...text};
+
+import {LoreEntryDescriptions} from '../lore-entry-approved';
+for (const [id, text] of Object.entries(LoreEntryDescriptions)) Object.assign(AbilitiesText[id as ID] ||= {name: id}, text);

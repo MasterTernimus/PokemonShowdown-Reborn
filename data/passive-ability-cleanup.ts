@@ -675,3 +675,9 @@ AbilityComponentExclusions.bonewarrior = ['selfsufficient'];
 
 import {SoulCremationBypassDescription} from './weather-choice-approved';
 SharedPassiveAbilityDescriptions.soulcremation.desc += SoulCremationBypassDescription;
+
+AbilityComponentExclusions.ange = [];
+AbilityComponentExclusions.ragingcurrent = (AbilityComponentExclusions.ragingcurrent || []).filter(id => id !== 'stamina');
+
+delete SharedPassiveComponents.ange;
+delete SharedPassiveAbilityDescriptions.ange;

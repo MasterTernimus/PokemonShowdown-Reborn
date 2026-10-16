@@ -77,7 +77,11 @@ export function installRivalSupport(a: AbilityDataTable) {
 			const first = old.apply(this,args), second = value.apply(this,args); return second === undefined ? first : second;
 		} : value;
 	}
-	a.sirius = {...a.sirius, flags: {...a.toxicarmor.flags}};
+	a.sirius = {...a.sirius, flags: {...a.toxicarmor.flags},
+		onResidualOrder: a.shedskin.onResidualOrder,
+		onResidualSubOrder: a.shedskin.onResidualSubOrder,
+		onResidual(pokemon) { return this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon); },
+	};
 
 	SignaturePassiveComponents.mycelialbond = ['dryskin'];
 	a.twinfang = {name:'Twin Fang',num:11486,rating:5,flags:{},

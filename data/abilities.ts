@@ -141,7 +141,7 @@ function setAnomalyMoveSlot(battle: Battle, pokemon: Pokemon, index: number, mov
 const DREAM_SICKNESS_TRANSFERS = new WeakSet<Battle>();
 
 function setMountainRiftMoves(battle: Battle, pokemon: Pokemon) {
-	for (const [index, moveid] of ['earthquake', 'sandtomb', 'mountaingale', 'stoneedge'].entries()) {
+	for (const [index, moveid] of ['earthquake', 'desertsmark', 'mountaingale', 'stoneedge'].entries()) {
 		setAnomalyMoveSlot(battle, pokemon, index, moveid);
 	}
 }
@@ -4844,7 +4844,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					name: 'Nose Bombardment',
 					type,
 					category: 'Special',
-					basePower: 20,
+					basePower: 30,
 					accuracy: true,
 					flags: {},
 				}));
@@ -4880,9 +4880,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					}
 				}
 			}
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			return this.dex.abilities.get('elevate').onSourceAfterFaint?.call(this, length, target, source, effect);
@@ -4961,7 +4958,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
-			if (arrowMoves.includes(move.id) && pokemon.hp <= pokemon.maxhp / 2) return priority + 1;
+			if (arrowMoves.includes(move.id) && pokemon.hp * 4 <= pokemon.maxhp) return priority + 1;
 		},
 		onSourceAfterMoveSecondarySelf(source, target, move) {
 			const arrowMoves = ['spiritshackle', 'thousandarrows', 'triplearrows', 'snipeshot', 'razorleaf', 'magicalleaf', 'spikecannon', 'pinmissile', 'iciclespear', 'rockblast', 'bulletseed', 'scaleshot', 'psychocut', 'ceaselessedge'];
@@ -8474,7 +8471,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifyPriority(priority, pokemon, target, move) {
-			if (pokemon.hp <= pokemon.maxhp / 2 && this.movehasType(move, 'Fire') && move.category !== 'Status') {
+			if (pokemon.hp * 4 <= pokemon.maxhp && this.movehasType(move, 'Fire') && move.category !== 'Status') {
 				return priority + 1;
 			}
 		},
@@ -14664,7 +14661,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return this.dex.abilities.get('superluck').onModifyCritRatio?.call(this, critRatio, source, target, move);
 		},
 		onModifyPriority(priority, source, target, move) {
-			if (source.hp * 2 < source.maxhp && move.flags['slicing']) return priority + 1;
+			if (source.hp * 4 <= source.maxhp && move.flags['slicing']) return priority + 1;
 		},
 		flags: {},
 		name: "Blade Mastery",
@@ -18624,9 +18621,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.3);
 			}
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.8);
-		},
 		flags: { breakable: 1 },
 		name: "Vital Spirit",
 		rating: 1.5,
@@ -21679,3 +21673,11 @@ Abilities.rimeboundspirit = {...Abilities.heatproof,name:'Rimebound Spirit',num:
 
 import {installStunfisk} from './stunfisk-approved';
 installStunfisk(Abilities);
+
+// Black Viper retains its tail package and delegates full local Shed Skin once.
+Abilities.blackviper.onResidualOrder = Abilities.shedskin.onResidualOrder;
+Abilities.blackviper.onResidualSubOrder = Abilities.shedskin.onResidualSubOrder;
+Abilities.blackviper.onResidual = function(pokemon) { return this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon); };
+
+import {installLoreEntryAbilities} from './lore-entry-approved';
+installLoreEntryAbilities(Abilities);

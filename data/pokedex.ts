@@ -24494,13 +24494,14 @@ Pokedex.gliscor.abilities!['1'] = 'Silent Hunter';
 Pokedex.gliscoralt.abilities!['1'] = 'Silent Hunter';
 Pokedex.froslassaevian.abilities!['1'] = 'Dissonant Echo';
 
-Pokedex.trapinch.abilities = {0: 'Burrow Ambush', 1: 'Huge Power', H: 'Antlion Instinct'};
+Pokedex.trapinch.abilities = {0: 'Burrow Ambush', 1: 'Hyper Cutter', H: 'Antlion Instinct'};
 for (const species of Object.values(Pokedex)) { for (const slot of Object.keys(species.abilities || {})) { if ((species.abilities as any)[slot] === 'Grappling Claws') (species.abilities as any)[slot] = 'Abyssal Claws'; } }
 
 Pokedex.cinccino.abilities = {0: 'Plush Whiplash', 1: 'Skill Link', H: 'Silken Salvo'};
 Pokedex.cinccinodeso.abilities = {0: 'Pixilate', 1: 'Skill Link', H: 'Silken Salvo'};
 
-Pokedex.probopass.abilities = {0: 'Magnet Pull', 1: 'Magnetic Command', H: 'Heavy Metal'};
+Pokedex.probopass.abilities = {0: 'Magnet Pull', 1: 'Magnetic Command', H: 'Magnetic Bulwark'};
+Pokedex.probopass.baseStats = {hp: 75, atk: 35, def: 150, spa: 110, spd: 155, spe: 25};
 
 for (const id of ['sawsbuck','sawsbuckspring','sawsbucksummer','sawsbuckautumn','sawsbuckwinter']) Pokedex[id as keyof typeof Pokedex].abilities!['0'] = 'Overcoat';
 Pokedex.sawsbuckwinter.abilities = {0: 'Overcoat', 1: 'Slush Rush', H: 'Ice Body'};
@@ -24574,3 +24575,15 @@ Pokedex.stunfisk.baseStats={hp:109,atk:66,def:99,spa:95,spd:109,spe:32};
 Pokedex.stunfiskgalar.baseStats={hp:109,atk:95,def:109,spa:66,spd:99,spe:32};
 Object.assign(Pokedex.stunfisk.abilities!,{0:'Livewire Trap',1:'Mudflat Dynamo'});
 Object.assign(Pokedex.stunfiskgalar.abilities!,{0:'Iron Clamp',1:'Baited Counter'});
+
+// Approved base Seviper: remove automatic Stockpile setup before Mega Evolution.
+Pokedex.seviper.abilities!.H = "Venam's Kiss";
+
+Pokedex.floetteeternal.abilities!.H = 'Lasting Promise';
+Pokedex.cacturne.abilities!['0'] = 'Desert Vigil';
+
+// Approved +5 Speed only; there are no Staraptor cosmetic variants in this roster.
+Pokedex.staraptor.baseStats!.spe = 105;
+Pokedex.staraptormega.baseStats!.spe = 115;
+
+Pokedex.annihilape.abilities = {0:'Unbound Spirit', 1:'Raging Heart', H:'Defiant'};

@@ -12,6 +12,7 @@ function veil(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) 
  }
 }
 function clearField(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
+ if (!source.hp || clearMoveAura.call(this, source, move)) return;
  const state = move as ActiveMove & {infernalFieldCleared?: boolean};
  if (state.infernalFieldCleared) return;
  state.infernalFieldCleared = true;
@@ -27,6 +28,7 @@ function clearField(this: Battle, target: Pokemon, source: Pokemon, move: Active
  if (source.addVolatile('infernalrage', source, move)) source.volatiles.infernalrage.startingField = this.field.terrain;
 }
 function finishInfernalField(this: Battle, source: Pokemon, move: ActiveMove) {
+ if (skipClearingField(source, move)) { source.removeVolatile('infernalrage'); return; }
  const original = source.volatiles.infernalrage?.startingField;
  source.removeVolatile('infernalrage');
  if (original !== this.field.terrain) return;
@@ -116,3 +118,7 @@ for (const [id, note] of Object.entries(YangSignatureFieldNotesA)) {
 export const YangSignatureCreditsA: {[id:string]:string} = Object.fromEntries(
  Object.entries(descriptions).map(([id,[credit]]) => [id,credit])
 );
+
+import {clearMoveAura, skipClearingField} from './yang-aura-clear';
+
+for (const id of ["infernalrage"]) YangSignatureDescriptionsA[id].desc += ' After successful HP or Substitute damage while the user survives, removes the active Aura once per whole move, preserving the underlying field. With no Aura, retains its normal field eligibility and transformations. Misses, protection and immunity do not clear it. Does not prevent later Auras.';

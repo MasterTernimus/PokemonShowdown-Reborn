@@ -14,6 +14,7 @@ function dragonField(this: Battle, target: Pokemon, source: Pokemon, move: Activ
 const hitFlags = {protect: 1, mirror: 1} as const;
 const hasHPDamage = (target: Pokemon, move: ActiveMove) => (target.getMoveHitData(move) as {damage?: number}).damage! > 0;
 function winds(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
+ clearMoveAura.call(this, source, move);
  if (this.field.setWeather('deltastream', source, move)) this.field.weatherState.duration = 4;
 }
 function wrathGuard(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
@@ -23,6 +24,7 @@ function wrathGuard(this: Battle, target: Pokemon, source: Pokemon, move: Active
 }
 const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'];
 function airstream(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
+ clearMoveAura.call(this, source, move);
  if (!source.hp) return;
  for (const hazard of hazards) {
   if (source.side.removeSideCondition(hazard)) this.add('-sideend', source.side, this.dex.conditions.get(hazard).name, '[from] move: Airstream Assault');
@@ -226,3 +228,7 @@ export const YangSignatureDescriptionsB: {[id: string]: {shortDesc: string, desc
 for (const [id, summary] of Object.entries(summaries)) {
  YangSignatureDescriptionsB[id] = signatureMoveText(id, YangSignatureCreditsB[id], summary);
 }
+
+import {clearMoveAura} from './yang-aura-clear';
+
+for (const id of ["winddance","airstreamassault"]) YangSignatureDescriptionsB[id].desc += ' After successful HP or Substitute damage while the user survives, removes the active Aura once per whole move, preserving the underlying field. With no Aura, retains its normal field eligibility and transformations. Misses, protection and immunity do not clear it. Does not prevent later Auras.';

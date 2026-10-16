@@ -364,6 +364,46 @@
       "0": "Iron Clamp",
       "1": "Baited Counter",
       "S": "Adaptive Cycle"
+    },
+    "seviper": {
+      "0": "Apex Venom",
+      "1": "Black Viper",
+      "H": "Venam's Kiss"
     }
+  },
+  "floetteeternal": {
+    "passives": [
+      "eternalflower"
+    ],
+    "abilities": {
+      "0": "Symbiosis",
+      "1": "Magic Guard",
+      "H": "Lasting Promise"
+    }
+  },
+  "floettemega": {
+    "passives": [
+      "eternalflower"
+    ]
+  },
+  "cacturne": {
+    "passives": [
+      "scarecrow"
+    ],
+    "abilities": {
+      "0": "Desert Vigil",
+      "1": "Solar Rush",
+      "H": "Storm Drain"
+    }
+  },
+  "annihilape": {
+    "abilities": {
+      "0": "Unbound Spirit",
+      "1": "Raging Heart",
+      "H": "Defiant"
+    },
+    "passives": [
+      "beyondfear"
+    ]
   }
 }

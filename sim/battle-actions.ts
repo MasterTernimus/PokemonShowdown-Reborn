@@ -1,3 +1,4 @@
+import {radiantTarget} from './radiant-target';
 import {endArsenal} from './adaptive-arsenal';
 import {settleFinisherCost} from './finisher-cost';
 import {adaptiveAnalyzed, adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
@@ -133,6 +134,7 @@ export class BattleActions {
 			}
 
 			// will definitely switch out at this point
+			oldActive.m.rageFistBonus = (oldActive.m.rageFistBonus || 0) / 2;
 			ringmasterSwitch(this.battle, oldActive, pokemon);
 			if (!isDrag) {
 				this.battle.singleEvent('AfterSwitchOut', oldActive.getAbility(), oldActive.abilityState,
@@ -1415,8 +1417,11 @@ export class BattleActions {
 			if (target && pokemon !== target) {
 				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
 				if (typeof moveDamage[i] === 'number') {
-					target.timesAttacked += move.smartTarget ? 1 :
-						(move.multihitType === 'dualwield' ? successfulDualWieldHits : hit - 1);
+					const receivedHits = move.smartTarget ? 1 : (move.multihitType === 'dualwield' ? successfulDualWieldHits : hit - 1);
+					target.timesAttacked += receivedHits;
+					target.m.rageFistBonus = Math.min(100, (target.m.rageFistBonus || 0) + 20 * receivedHits);
+					// HP messages alone cannot reconstruct hits that also break a Substitute.
+					this.battle.add('-ragefist', target, target.m.rageFistBonus);
 				}
 			}
 		}
@@ -2288,6 +2293,7 @@ export class BattleActions {
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = (move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive;
+		if (defenseStat === 'def' && move.flags.kick && source.hasAbility('imperialprincess')) ignorePositiveDefensive = true;
 		if (defender === target && ['def', 'spd'].includes(defenseStat) &&
 			predatorUltraMatch(this.battle, source, target)) ignorePositiveDefensive = true;
 		if (defenseStat === 'spd' && move.category === 'Special' && this.battle.movehasType(move, 'Electric') &&
@@ -2496,14 +2502,23 @@ export class BattleActions {
 		const targetIsMega = !!(target.species.isMega || target.species.forme === 'Mega');
 		const sourceIsGmax = isGigantamaxed(pokemon);
 		const sourceIsMega = !!(pokemon.species.isMega || pokemon.species.forme === 'Mega');
-		if (pokemon.terastallized === 'Stellar') {
+		// Divineon's form is exempt from extra Stellar/Z target bonuses, regardless of ability.
+		const targetIsDivineon = target.species.id === 'divineon';
+		if (move.id === 'radiantassault' && radiantTarget(target)) {
+			baseDamage = this.battle.modify(baseDamage, 1.2);
+		}
+		// One shared bonus, including when a Stellar user also uses a Z-Move.
+		if (!targetIsDivineon && target.hasType('???') && (pokemon.terastallized === 'Stellar' || move.isZ)) {
+			baseDamage = this.battle.modify(baseDamage, 1.5);
+		}
+		if (!targetIsDivineon && pokemon.terastallized === 'Stellar') {
 			if (targetIsGmax) {
 				baseDamage = this.battle.modify(baseDamage, 1.5);
 			} else if (targetIsMega) {
 				baseDamage = this.battle.modify(baseDamage, 1.3);
 			}
 		}
-		if (move.isZ && targetIsGmax && pokemon.terastallized !== 'Stellar') {
+		if (!targetIsDivineon && move.isZ && targetIsGmax && pokemon.terastallized !== 'Stellar') {
 			this.battle.debug('Z move Gmax damage boost');
 			baseDamage = this.battle.modify(baseDamage, 1.3);
 		}

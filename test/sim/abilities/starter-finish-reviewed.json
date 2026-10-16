@@ -274,6 +274,18 @@
     ],
     "froslassmega": [
       "rimeboundspirit"
+    ],
+    "floetteeternal": [
+      "eternalflower"
+    ],
+    "floettemega": [
+      "eternalflower"
+    ],
+    "cacturne": [
+      "scarecrow"
+    ],
+    "annihilape": [
+      "beyondfear"
     ]
   },
   "slots": {
@@ -329,7 +341,7 @@
     },
     "trapinch": {
       "0": "Burrow Ambush",
-      "1": "Huge Power",
+      "1": "Hyper Cutter",
       "H": "Antlion Instinct"
     },
     "zangoose": {
@@ -350,7 +362,9 @@
       "H": "Aftermath"
     },
     "probopass": {
-      "1": "Magnetic Command"
+      "0": "Magnet Pull",
+      "1": "Magnetic Command",
+      "H": "Magnetic Bulwark"
     },
     "cinccino": {
       "0": "Plush Whiplash",
@@ -622,6 +636,22 @@
       "0": "Iron Clamp",
       "1": "Baited Counter",
       "S": "Adaptive Cycle"
+    },
+    "seviper": {
+      "0": "Apex Venom",
+      "1": "Black Viper",
+      "H": "Venam's Kiss"
+    },
+    "floetteeternal": {
+      "H": "Lasting Promise"
+    },
+    "cacturne": {
+      "0": "Desert Vigil"
+    },
+    "annihilape": {
+      "0": "Unbound Spirit",
+      "1": "Raging Heart",
+      "H": "Defiant"
     }
   }
 }

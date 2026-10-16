@@ -1696,7 +1696,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		'allyanim', 'bypasssub', 'bite', 'bullet', 'cantusetwice', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore',
 		'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'metronome', 'mirror', 'mustpressure', 'noassist', 'nonsky',
 		'noparentalbond', 'nosketch', 'nosleeptalk', 'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing',
-		'snatch', 'sound', 'wind',
+		'snatch', 'sound', 'tail', 'wind',
 
 		// Not flags directly from move data, but still useful to sort by
 		'highcrit', 'multihit', 'ohko', 'protection', 'secondary',
@@ -1812,6 +1812,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
 			if (target === 'slices' || target === 'slice') target = 'slicing';
+			if (['fang', 'fangs', 'biting'].includes(target)) target = 'bite';
 			if (toID(target) === 'sheerforce') target = 'secondary';
 			if (target === 'bounceable' || toID(target) === 'magiccoat' || toID(target) === 'magicbounce') target = 'reflectable';
 			if (allFlags.includes(target)) {

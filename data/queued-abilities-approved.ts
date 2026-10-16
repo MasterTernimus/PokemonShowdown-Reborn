@@ -7,7 +7,8 @@ export const QueuedAbilityDescriptions = {
 	varietyrush: {shortDesc: 'First successful opposing attack of each non-Normal type per entry has 1.4x power.', desc: 'Each non-Normal type gets 1.4x power for its first successful attack against an opponent each genuine entry, across the whole move. Substitute damage counts. Misses, protection and immunity preserve the use; ally damage is not boosted. Ability restarts do not reset spent types.'},
 	springfur: {shortDesc: 'Fur Coat; once per entry, a foe breaking its Substitute grants +1 Attack after the move.', desc: 'Full Fur Coat. Once per genuine entry, after an opposing damaging move breaks its Substitute and the whole attack finishes, the living user attempts +1 Attack. Consumed even if blocked or capped. Self-removal, Tidy Up and bypassing the Substitute do not qualify; ability restarts do not reset it.'},
 	magneticcommand: {shortDesc: 'Full local Frisk + Stalwart.', desc: 'Full local Frisk and Stalwart, including their existing entry effects and targeting behavior.'},
-	noseformation: {shortDesc: 'Filter + Elevate; successful opposing attacks trigger three 20 BP Special Mini-Noses.', desc: 'Full local Filter reduces neutral attack damage to 0.8x and super-effective damage to 0.6x. Elevate grants airborne status, subject to grounding, and one highest-stat increase per move KO. After a successful opposing attack, fires one trio of 20 BP Special Mini-Noses, choosing Steel, Electric or Rock and retargeting living foes when needed. Each is a normal attack respecting protection, Substitute and immunity. No ally triggers or recursive trios.'},
+	noseformation: {"shortDesc":"Elevate; successful opposing attacks trigger three 30 BP Special Mini-Noses.","desc":"Elevate grants airborne status, subject to grounding, and one highest-stat increase per move KO, using nature-adjusted stats while ignoring stages and other stat modifiers. After a successful opposing attack, fires one trio of 30 BP Special Mini-Noses, choosing Steel, Electric or Rock and retargeting living foes when needed. Each is a normal attack respecting protection, Substitute and immunity. No ally triggers or recursive trios. Does not include Filter."},
+	magneticbulwark: {"shortDesc":"Full local Filter; once per entry, Magnetic Flux boosts self and adjacent allies without Plus/Minus.","desc":"Full local Filter reduces attack damage to 0.8x, or 0.6x when super effective. Once per genuine switch-in, its Magnetic Flux can raise its own and adjacent allies Defense and Special Defense by 1 regardless of Plus or Minus, using the normal move action and boost restrictions. This use is spent only if at least one stat boost succeeds. Later uses follow ordinary local Magnetic Flux rules, including field effects. Ability restarts, loss and regain do not reset the use."},
 	plushwhiplash: {shortDesc: 'Whiplash + Technician + Fluffy.', desc: 'Full local Whiplash, Technician and Fluffy: entry raises accuracy, tail attacks gain 1.5x power, Technician checks calculated power before the tail boost, contact damage is halved and Fire damage doubled.'},
 	silkensalvo: {shortDesc: 'Fluffy; eligible single-hit attacks hit 2–5 times at 40% power per hit.', desc: 'Full Fluffy. Eligible single-target, single-hit attacks become 2–5 hits at 40% calculated power each, rounded to nearest with ties down before modifiers. Hit distribution is 2, 2, 3, 3, 4, 5; Loaded Dice gives 5 hits for converted attacks only. One initial accuracy check, separate critical rolls and drain each hit; move secondaries run only on the first two hits. Fury Cutter and Stacking Shot advance their shared chain once per move. Native multi-hit moves are unchanged. Fixed-damage, OHKO, charge, recharge, self-KO, delayed, Z/Max moves and Fling, Endeavor, Beat Up, Rollout, Ice Ball and Uproar are excluded. Does not include Technician, Skill Link or Natural Cure.'},
 	abyssalclaws: {shortDesc: 'Tough Claws; Water STAB; halves Fire, Water, Ice and Steel damage.', desc: 'Full local Tough Claws boosts contact moves once. Water attacks receive ordinary 1.5x STAB without adding Water typing or stacking another STAB bonus if already Water-type. Incoming Fire, Water, Ice and Steel attacks receive one extra resistance factor. Does not add Water weaknesses or lower Speed.'},
@@ -33,6 +34,10 @@ function markNoses(this: Battle, damage: number, target: Pokemon, source: Pokemo
 
 export function resetQueuedEntry(pokemon: Pokemon) {
 	delete pokemon.m.accumulationState;
+	delete pokemon.m.magneticBulwarkSpent;
+	delete pokemon.m.imperialprincessSpent;
+ delete pokemon.m.blademasterySpent;
+	delete pokemon.m.desertvigilSpent;
 	delete pokemon.m.varietySpent;
 	delete pokemon.m.springFurSpent;
 	if (pokemon.baseSpecies.num === 586 && !pokemon.transformed && pokemon.m.seasonalSlot === undefined) {
@@ -50,6 +55,7 @@ export function shedDecoyEntry(battle: Battle, pokemon: Pokemon) {
 }
 
 export function installQueuedAbilities(abilities: AbilityDataTable) {
+	abilities.magneticbulwark = {...abilities.filter, name: 'Magnetic Bulwark', num: 11690, rating: 4};
 	abilities.seasonalstride.onResidual = function (pokemon) {
 		if (pokemon.baseSpecies.num !== 586 || pokemon.transformed || !pokemon.isActive) return;
 		const seasons: {[weather: string]: string} = {raindance: 'sawsbuckspring', primordialsea: 'sawsbuckspring', sunnyday: 'sawsbucksummer', desolateland: 'sawsbucksummer', sandstorm: 'sawsbuckautumn', hail: 'sawsbuckwinter', snow: 'sawsbuckwinter', snowscape: 'sawsbuckwinter'};
@@ -117,7 +123,7 @@ export function installQueuedAbilities(abilities: AbilityDataTable) {
 				for (let i = 0; i < 3 && source.hp && source.isActive; i++) {
 					if (!foe?.hp || !foe.isActive || foe.isAlly(source) || foe.isProtected() || foe.isSemiInvulnerable()) foe = source.foes().find(p => p.hp && !p.isProtected() && !p.isSemiInvulnerable())!;
 					if (!foe) break;
-					const candidates = ['Steel', 'Electric', 'Rock'].map(type => Object.assign(this.dex.getActiveMove('swift'), {name: 'Mini-Nose', type, basePower: 20, target: 'normal' as const, flags: {protect: 1}, noseFormationActivated: true, willCrit: false}));
+					const candidates = ['Steel', 'Electric', 'Rock'].map(type => Object.assign(this.dex.getActiveMove('swift'), {name: 'Mini-Nose', type, basePower: 30, target: 'normal' as const, flags: {protect: 1}, noseFormationActivated: true, willCrit: false}));
 					// Damage callbacks may consume berries or alter state. Score each candidate
 					// in its own detached snapshot; only the chosen real attack can do that here.
 					const snapshot = JSON.stringify(this.toJSON());

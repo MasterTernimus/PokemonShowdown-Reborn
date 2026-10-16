@@ -445,3 +445,12 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Retains full local Hydra Bond and Grassy Surge. Solar Bud is a separate species passive: after a sunny end turn, the next opposing Grass HP hit cures status and heals 1/8 max HP, once per entry. Solar Power is removed, including its offensive multiplier and HP cost.",
 	},
 };
+
+// Later explicitly approved replacements.
+SelectedComponentRemovals.ange = ['eternalflower', 'magicguard', 'moldbreaker'];
+SelectedExactComponents.ange = ['fairyaura'];
+SelectedComponentRemovals.ragingcurrent = (SelectedComponentRemovals.ragingcurrent || []).filter(id => id !== 'stamina');
+SelectedExactComponents.ragingcurrent = ['swiftswim', 'damp', 'dryskin', 'stamina'];
+
+SelectedComponentRemovals.beyondfear = ['innerfocus'];
+SelectedExactComponents.beyondfear = [];

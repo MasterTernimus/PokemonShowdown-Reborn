@@ -7,7 +7,7 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
-	noseformation: ['filter', 'elevate'],
+	noseformation: ['elevate'],
 	unbridledwrath: ['sheerforce', 'innerfocus'],
 	eldritchremedy: ['owntempo', 'curiousmedicine'], pearlcurrent: ['waterabsorb'], saltbastion: ['sturdy'],
 	mirechorus: ['liquidvoice'],

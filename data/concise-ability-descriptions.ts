@@ -77,9 +77,9 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Venom Armor + Violent Rush; priority HP hit prepares next-turn Dual Wield priority."
   },
   "noseformation": {
-    "desc": "Filter reduces neutral attack damage to 0.8x and super-effective damage to 0.6x. Elevate grants airborne status, subject to grounding, and one highest-stat increase per move KO. After a successful opposing attack, fires one trio of 20 BP Special Mini-Noses, choosing Steel, Electric or Rock and retargeting living foes when needed. Each is a normal attack respecting protection, Substitute and immunity. No ally triggers or recursive trios.",
-    "shortDesc": "Filter + Elevate; successful opposing attacks trigger three 20 BP Special Mini-Noses."
-  },
+  "shortDesc": "Elevate; successful opposing attacks trigger three 30 BP Special Mini-Noses.",
+  "desc": "Elevate grants airborne status, subject to grounding, and one highest-stat increase per move KO, using nature-adjusted stats while ignoring stages and other stat modifiers. After a successful opposing attack, fires one trio of 30 BP Special Mini-Noses, choosing Steel, Electric or Rock and retargeting living foes when needed. Each is a normal attack respecting protection, Substitute and immunity. No ally triggers or recursive trios. Does not include Filter."
+},
   "mourningvessel": {
     "desc": "Move power +20% per cumulative allied faint, capped at 2x. Heals 5% max HP per cumulative opposing faint each turn. Includes allied sides in Multi and all opposing sides in Free-for-All.",
     "shortDesc": "+20% power per allied faint, up to 2x; heals 5% HP per opposing faint."
