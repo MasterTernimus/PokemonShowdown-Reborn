@@ -6868,15 +6868,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			delete move.flags['protect'];
 		},
 		onBasePower(basePower, source, target) {
-			if (source.volatiles['focuspunch']?.lostFocus && !target?.volatiles['protect']) {
-				return this.chainModify(1 / 3);
+			if (['protect', 'kingsshield', 'spikyshield', 'banefulbunker', 'obstruct', 'silktrap', 'burningbulwark']
+				.some(id => target.volatiles[id]) || target.side.getSideCondition('matblock')) {
+				return this.chainModify(0.5);
 			}
 		},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('focuspunch');
 		},
 		beforeMoveCallback(pokemon) {
-			if (this.field.isTerrain('electricterrain')) {
+			if (this.field.isTerrain('electricterrain') ||
+				(pokemon.volatiles['focuspunch']?.lostFocus && !pokemon.volatiles['focusenergy'])) {
 				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
 				return true;
 			}
@@ -6887,9 +6889,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-singleturn', pokemon, 'move: Focus Punch');
 			},
 			onHit(pokemon, source, move) {
-				if (move.category !== 'Status') {
-					this.effectState.lostFocus = true;
-				}
+				if (move.category !== 'Status') this.effectState.lostFocus = true;
 			},
 			onTryAddVolatile(status, pokemon) {
 				if (status.id === 'flinch') return null;
@@ -14090,7 +14090,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 100,
 			status: 'psn',
 		},
-		target: "allAdjacentFoes",
+		target: "normal",
 		type: "Poison",
 	},
 	mountaingale: {

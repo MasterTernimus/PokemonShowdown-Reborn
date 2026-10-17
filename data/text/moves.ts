@@ -2283,8 +2283,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	focuspunch: {
 		name: "Focus Punch",
-		desc: "If the user is hit by a damaging move before it moves, this move's power is reduced to 50. It bypasses Protect at full power.",
-		shortDesc: "50 BP if interrupted; bypasses Protect at full power.",
+		desc: "Fails if the user is hit by a damaging move before attacking, unless Focus Energy is active. With Focus Energy, it keeps its full 150 power even when hit first. Hits through Protect and similar guards at half power (75). Works with Parental Bond. Fails on Electric Terrain.",
+		shortDesc: "Hit first: fails unless Focus Energy; 75 BP through Protect.",
 		gen4: {
 			desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move, but it still loses PP.",
 		},
@@ -4399,8 +4399,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mortalspin: {
 		name: "Mortal Spin",
-		desc: "If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field. Has a 100% chance to poison the target.",
-		shortDesc: "Poisons foes, frees user from hazards/bind/leech.",
+		desc: "Hits one adjacent target and has a 100% chance to poison it. If this move is successful and the user has not fainted, the effects of Leech Seed and binding moves end for the user, and all hazards are removed from the user's side of the field.",
+		shortDesc: "Poisons one target; clears user's hazards, bind and Leech Seed.",
 	},
 	mountaingale: {
 		name: "Mountain Gale",
