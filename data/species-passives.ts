@@ -1,3 +1,5 @@
+import {StanceDisguisePassives} from './stance-disguise-aggron';
+import {EeveeCloysterPassives} from './eeveelution-cloyster-approved';
 import {StarterPassives} from './starter-passives';
 
 /** Explicitly approved ordinary species; no evolution or battle-form inheritance. */
@@ -800,6 +802,7 @@ for (const [passive, ids] of Object.entries(LatestPassiveGroups)) {
  for (const id of ids) SpeciesPassives[id] = Object.freeze([passive]);
 }
 export const SettledPassiveGroups = {
+ piercingdrill: ['excadrillmega'],
  "steadyswimmer": ["seaking"],
   "freeflight": [
     "salamence"
@@ -814,8 +817,7 @@ export const SettledPassiveGroups = {
     "conkeldurr"
   ],
   "overcoat": [
-    "excadrill",
-    "excadrillmega"
+    "excadrill"
   ],
   "superluck": [
     "meowsticf",
@@ -1156,4 +1158,36 @@ SpeciesPassives.annihilape = Object.freeze(['beyondfear']);
 ThematicPassiveIds.add('beyondfear');
 SpeciesPassives.talonflame = Object.freeze(['galewings']);
 ThematicPassiveIds.add('galewings');
+/** Approved ordinary replacements; Bellibolt-Mega keeps its distinct Levitate passive. */
+export const GuardPassiveGroups = {
+	venomthread: ['ariados', 'ariadosmega'],
+	innerfocus: ['swellow'], threadshelter: ['spidops'], buriedtrio: ['wugtrio'],
+	elasticbelly: ['bellibolt'], comfortingpresence: ['delcatty'], rattled: ['purugly'],
+	feedback: ['toxtricity', 'toxtricitylowkey', 'toxtricitygmax', 'toxtricitylowkeygmax',
+		'toxtricityaevian', 'toxtricityaeviangmax'],
+} as const;
+for (const [passive, ids] of Object.entries(GuardPassiveGroups)) {
+	ThematicPassiveIds.add(passive);
+	for (const id of ids) SpeciesPassives[id] = Object.freeze([passive]);
+}
+SpeciesPassives.donphan = Object.freeze(['battlearmor']);
+for(const id of ['scolipedemega','scolipedemegaazzy'])SpeciesPassives[id]=Object.freeze(['merciless']);
+for(const id of ['sandslash','sandslashreborn','sandslashalola'])SpeciesPassives[id]=Object.freeze(['ironbarbs']);
+for(const [id,passive]of Object.entries(EeveeCloysterPassives)){SpeciesPassives[id]=Object.freeze([passive]);ThematicPassiveIds.add(passive);}
+for(const[id,passive]of Object.entries(StanceDisguisePassives)){SpeciesPassives[id]=Object.freeze([passive]);ThematicPassiveIds.add(passive);}
+SpeciesPassives.hydreigon=Object.freeze(['hydraflight']);ThematicPassiveIds.add('hydraflight');
+for(const id of ['meloetta','meloettapirouette','meloettaencore'])SpeciesPassives[id]=Object.freeze(['serenegrace']);
+ThematicPassiveIds.add('serenegrace');
+for(const id of ['mewtwo','mewtwomegax','mewtwomegay'])SpeciesPassives[id]=Object.freeze(['absolutepressure']);
+ThematicPassiveIds.add('absolutepressure');
+for(const[id,passive]of Object.entries({zapdos:'springpressure',moltres:'summerpressure',articuno:'winterpressure'})){SpeciesPassives[id]=Object.freeze([passive]);ThematicPassiveIds.add(passive);}
+for(const id of ['jirachi','jirachimega'])SpeciesPassives[id]=Object.freeze(['serenegrace']);
+for(const id of ['regirock','regice','registeel','regieleki','regidrago'])SpeciesPassives[id]=Object.freeze(['selfrepair']);
+ThematicPassiveIds.add('selfrepair');
+SpeciesPassives.regigigas=Object.freeze(['slowstart','ancientassembly']);
+ThematicPassiveIds.add('slowstart');
+ThematicPassiveIds.add('ancientassembly');
+SpeciesPassives.regigigasprimordial=Object.freeze(['primordialconstruct','ancientassembly']);
+ThematicPassiveIds.add('primordialconstruct');
 Object.freeze(SpeciesPassives);
+

@@ -22,10 +22,10 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 	it('keeps exact roster slots and component identities', () => {
 		const [p] = start('Moonlit Hide');
 		assert.deepEqual(battle.dex.species.get('Ursaluna').abilities, {0: 'Raging Beast', 1: 'Bulletproof', H: 'Territorial'});
-		assert.deepEqual(battle.dex.species.get('Ursaluna-Bloodmoon').abilities, {0: "Mind's Eye", 1: 'Lunar Dread', H: 'Moonlit Hide'});
+		assert.deepEqual(battle.dex.species.get('Ursaluna-Bloodmoon').abilities, {0: 'Bloodmoon Gaze', 1: 'Lunar Dread', H: 'Moonlit Hide'});
 		assert(Object.values(battle.dex.species.get('Cetitan').abilities).includes('Glacial Mass'));
 		assert.equal(battle.dex.species.get('Gyarados-Mega').abilities[0], 'Unleashed Ego');
-		for (const [ability, components] of [['Moonlit Hide', ['shadowshield','magicguard']], ['Glacial Mass',['heavymetal','thickfat']], ['Unleashed Ego',['ultraego','levitate','ragingstorm','battlearmor','moldbreaker']]]) {
+		for (const [ability, components] of [['Moonlit Hide', ['shadowshield','magicguard']], ['Glacial Mass',['heavymetal','thickfat']], ['Unleashed Ego',['ultraego','levitate','ragingstorm','moldbreaker']]]) {
 			p.setAbility(ability, p, p.getAbility(), true);
 			for (const c of components) assert(p.hasAbility(c), ability + ': ' + c);
 		}
@@ -95,22 +95,22 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		hit(p, foe, 'psychic'); assert.equal(p.boosts.spd, 1);
 		assert.equal(p.hp, 50 + Math.floor(p.baseMaxhp/4) + 2*Math.floor(p.baseMaxhp/16));
 	});
-	it('Unleashed Ego applies armor and priority reductions exactly once', () => {
+	it('Unleashed Ego preserves priority resistance without inherited Battle Armor', () => {
 		const [p, foe] = start('Unleashed Ego');
-		assert.equal(damage(p, foe), 800); assert.equal(damage(p, foe, 'quickattack'), 400);
-		assert.equal(battle.runEvent('CriticalHit', p, foe, battle.dex.getActiveMove('tackle')), false);
-		battle.boost({atk:-1}, p, foe); assert.equal(p.boosts.def, 2);
+		assert.equal(damage(p, foe), 1000); assert.equal(damage(p, foe, 'quickattack'), 500);
+		assert.notEqual(battle.runEvent('CriticalHit', p, foe, battle.dex.getActiveMove('tackle')), false);
+		battle.boost({atk:-1}, p, foe); assert.equal(p.boosts.def, 0);
 	});
 	it('Unleashed Ego removes Ultra authority bonuses but retains Raging Storm defenses', () => {
 		const [p, foe] = start('Unleashed Ego', 'Royal Decree');
 		assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('tackle'), 1000), 1000);
-		assert.equal(damage(p, foe), 800); assert.equal(damage(p, foe, 'quickattack'), 400);
+		assert.equal(damage(p, foe), 1000); assert.equal(damage(p, foe, 'quickattack'), 500);
 	});
 	for (const field of ['bewitchedwoodsterrain','hauntedterrain','holyterrain']) {
 		it(`Unleashed Ego disables only Ultra Ego on ${field}`, () => {
 			const [p, foe] = start('Unleashed Ego'); battle.field.setTerrain(field, p, p.getAbility()); p.hp = 100;
 			hit(p, foe); assert.equal(p.boosts.atk, 0); assert.equal(p.hp, 100);
-			assert.equal(damage(p, foe), 800); assert.equal(p.isGrounded(), null);
+			assert.equal(damage(p, foe), 1000); assert.equal(p.isGrounded(), null);
 		});
 	}
 	it('Unleashed Ego retains Raging Storm bypasses, crit ratio, hail immunity and suppression protection', () => {
@@ -144,11 +144,11 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		assert.equal(battle.runEvent('ModifySpD',p,null,null,100),150);
 		assert.equal(battle.runEvent('ModifySpe',p,null,null,100),100);
 	});
-	it('Unleashed Ego combines both Fairy Tale entry handlers once', () => {
+	it('Unleashed Ego retains Ultra Ego entry reset without Battle Armor Fairy Tale boost', () => {
 		const [p] = start('Unleashed Ego'); battle.field.setTerrain('fairytaleterrain',p,p.getAbility());
 		p.abilityState.ultraEgoHitTriggered=true;
 		battle.singleEvent('Start',p.getAbility(),p.abilityState,p);
-		assert.equal(p.boosts.def,1); assert.equal(p.abilityState.ultraEgoHitTriggered,false);
+		assert.equal(p.boosts.def,0); assert.equal(p.abilityState.ultraEgoHitTriggered,false);
 	});
 	it('Unleashed Ego excludes Battle Bond from conditional power', () => {
 		const [p,foe] = start('Unleashed Ego','Battle Bond');
@@ -175,7 +175,7 @@ describe('Approved Glacial Mass, Unleashed Ego and Moonlit Hide', () => {
 		const original=battle.getAllActive;
 		battle.getAllActive=()=>[...original.call(battle),{hasAbility:value=>value==='neutralization'}];
 		assert.equal(battle.runEvent('BasePower',p,foe,battle.dex.getActiveMove('tackle'),1000),1000);
-		assert.equal(damage(p,foe),800);
+		assert.equal(damage(p,foe),1000);
 	});
 	it('Glacial Mass heals exactly once in Cold Eclipse hail', () => {
 		const [p]=start('Glacial Mass'); battle.field.setTerrain('coldeclipseterrain',p,p.getAbility());

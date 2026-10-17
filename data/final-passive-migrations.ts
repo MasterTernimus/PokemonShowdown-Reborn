@@ -7,7 +7,7 @@ export const FinalPassiveMigrations: {[id: string]: string[]} = {
  porygon2: ['download'], porygonz: ['download'], medicham: ['purepower'],
 };
 export const FinalPassiveSlotChanges: {[id: string]: {[slot: string]: string}} = {
- rhydon: {0: 'Brute Force'}, ursalunabloodmoon: {0: 'Bloodmoon Gaze'}, porygonz: {1: 'Error Handler'}, medicham: {0: 'Still Mind'},
+ rhydon: {0: 'Grand Strategy', 1: 'Lightning Rod', H: 'Brute Force'}, ursalunabloodmoon: {0: 'Bloodmoon Gaze'}, porygonz: {1: 'Error Handler'}, medicham: {0: 'Still Mind'},
 };
 export const FinalPassiveComponents: {[id: string]: string[]} = {
  bloodmoongaze: ['infiltrator', 'competitive'], errorhandler: ['aromaveil', 'infiltrator'],

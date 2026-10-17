@@ -3,7 +3,12 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const approved = require('./selected-simplifications-approved.json');
+const historical = require('./selected-simplifications-approved.json');
+const approved = {...historical, exact: {...historical.exact}, removed: {...historical.removed}};
+// Later approvals replace Ange's selected/passive split and restore Stamina.
+approved.exact.ange = ['fairyaura'];
+approved.removed.ange = ['eternalflower', 'moldbreaker', 'magicguard'];
+approved.removed.ragingcurrent = approved.removed.ragingcurrent.filter(id => id !== 'stamina');
 let battle;
 function setup(species = 'Mew', ability = 'No Ability', doubles = false) {
 	const set = (species, ability) => ({ species, ability, moves: ['splash', 'tackle', 'protect', 'curse'] });
@@ -82,9 +87,9 @@ describe('Individually selected Mega simplifications', () => {
 			assert.equal(battle.runEvent('ModifyAtk', q, p, Dex.getActiveMove('earthquake'), 100), 100);
 		}
 	});
-	it('Lunar Orbit loses Triage and Serene Grace but keeps Gravity and Magic Guard', () => {
+	it('Lunar Orbit retains its revised secondary support, Gravity and Magic Guard', () => {
 		const [p, q] = setup('Clefable-Mega', 'Lunar Orbit'), move = Dex.getActiveMove('flamethrower');
-		battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.secondaries[0].chance, 10);
+		battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.secondaries[0].chance, 20);
 		assert.equal(battle.runEvent('ModifyPriority', p, q, Dex.getActiveMove('recover'), 0), 0);
 		assert(battle.field.getPseudoWeather('gravity'));
 		assert.equal(battle.damage(100, p, q, Dex.conditions.get('brn')), false);
@@ -102,10 +107,10 @@ describe('Individually selected Mega simplifications', () => {
 		q.setType('Psychic'); battle.actions.useMove('bite', p, { target: q });
 		assert(battle.log.some(line => line.includes('|-hitcount|') && line.endsWith('|2')));
 	});
-	it('Raging Current no longer raises Defense or heals on being hit', () => {
+	it('Raging Current restores Stamina healing and the first-hit Defense boost', () => {
 		const [p, q] = setup('Swampert-Mega', 'Raging Current'); p.hp = 800;
 		battle.runEvent('DamagingHit', p, q, Dex.getActiveMove('tackle'), 100);
-		assert.equal(p.hp, 800); assert.equal(p.boosts.def, 0);
+		assert.equal(p.hp, 900); assert.equal(p.boosts.def, 1);
 	});
 	it('Corrosive Touch cannot poison Steel and does not apply Corrosion stat drops', () => {
 		const [p, q] = setup('Breloom-Mega', 'Corrosive Touch'); q.setType('Steel');
@@ -196,21 +201,21 @@ describe('Individually selected Mega simplifications', () => {
 			const [p, q] = setup('Metagross-Mega', 'Cold Logic'); battle.field.terrain = terrain;
 			const move = Dex.getActiveMove('watergun'); move.hit = 1; p.getMoveHitData(move).typeMod = 0;
 			const reduced = battle.runEvent('ModifyDamage', q, p, move, 100);
-			assert.equal(reduced, terrain === 'darkcrystalcavernterrain' ? 60 : 80);
-			assert.equal(battle.runEvent('Damage', p, q, move, reduced), reduced);
+			assert.equal(reduced, 100);
+			assert.equal(battle.runEvent('Damage', p, q, move, reduced), 80);
 			const fixed = Dex.getActiveMove('seismictoss');
-			assert.equal(battle.runEvent('Damage', p, q, fixed, 100), terrain === 'psychicterrain' ? 80 : 100);
-			assert.equal(battle.runEvent('ModifyDef', p, q, move, 300), terrain === 'coldeclipseterrain' ? 600 : terrain === 'darkcrystalcavernterrain' ? 400 : 300);
+			assert.equal(battle.runEvent('Damage', p, q, fixed, 100), 80);
+			assert.equal(battle.runEvent('ModifyDef', p, q, move, 300), terrain === 'coldeclipseterrain' ? 450 : 300);
 		});
 	}
-	it('Ange delegates full Eternal Flower and keeps only the separate Fairy Aura passive', () => {
+	it('Ange supplies Fairy Aura and keeps Eternal Flower as its passive', () => {
 		const [p, q] = setup('Floette-Mega', 'Ange');
-		assert.deepEqual(p.getPassives(), ['fairyaura']); assert(p.hasAbility('eternalflower')); assert(p.hasAbility('moldbreaker'));
+		assert.deepEqual(p.getPassives(), ['eternalflower']); assert(p.hasAbility('fairyaura')); assert(p.hasAbilityOrPassive('eternalflower')); assert(!p.hasAbility('moldbreaker'));
 		for (const [field, mult] of [['', 1], ['fairytaleterrain', 2], ['coldeclipseterrain', 2], ['starlightarenaterrain', 1.5], ['newworldterrain', 1.5], ['bewitchedwoodsterrain', 1.5]]) {
 			battle.field.terrain = field;
 			assert.equal(battle.runEvent('ModifySpA', p, q, Dex.getActiveMove('energyball'), 100), 150 * mult);
 			const move = Dex.getActiveMove('focusblast'); battle.runEvent('ModifyMove', p, q, move, move);
-			assert.equal(move.ignoreAbility, true); const primitive = Dex.getActiveMove('focusblast'); p.setAbility('Eternal Flower'); battle.runEvent('ModifyMove', p, q, primitive, primitive); p.setAbility('Ange'); assert.equal(move.accuracy, primitive.accuracy);
+			assert.equal(move.ignoreAbility, true); const primitive = Dex.getActiveMove('focusblast'); p.setAbility('Fairy Aura'); battle.runEvent('ModifyMove', p, q, primitive, primitive); p.setAbility('Ange'); assert.equal(move.accuracy, primitive.accuracy);
 		}
 		battle.field.terrain = ''; assert.equal(battle.damage(100, p, q, Dex.conditions.get('brn')), 100);
 	});

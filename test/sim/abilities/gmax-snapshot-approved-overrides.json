@@ -149,13 +149,155 @@
     ],
     "froslassmega": [
       "rimeboundspirit"
+    ],
+    "talonflame": [
+      "galewings"
+    ],
+    "sandslash": [
+      "ironbarbs"
+    ],
+    "sandslashreborn": [
+      "ironbarbs"
+    ],
+    "sandslashalola": [
+      "ironbarbs"
+    ],
+    "jolteon": [
+      "voltabsorb"
+    ],
+    "flareon": [
+      "flashfire"
+    ],
+    "vaporeon": [
+      "waterabsorb"
+    ],
+    "glaceon": [
+      "icebody"
+    ],
+    "leafeon": [
+      "chlorophyll"
+    ],
+    "espeon": [
+      "magicbounce"
+    ],
+    "umbreon": [
+      "innerfocus"
+    ],
+    "sylveon": [
+      "pixilate"
+    ],
+    "cloyster": [
+      "waterabsorb"
+    ],
+    "articuno": [
+      "winterpressure"
+    ],
+    "zapdos": [
+      "springpressure"
+    ],
+    "moltres": [
+      "summerpressure"
+    ],
+    "jirachi": [
+      "serenegrace"
+    ],
+    "regirock": [
+      "selfrepair"
+    ],
+    "regice": [
+      "selfrepair"
+    ],
+    "registeel": [
+      "selfrepair"
+    ],
+    "regieleki": [
+      "selfrepair"
+    ],
+    "regidrago": [
+      "selfrepair"
+    ],
+    "regigigas": [
+      "slowstart",
+      "ancientassembly"
+    ],
+    "mewtwo": [
+      "absolutepressure"
+    ],
+    "mewtwomegax": [
+      "absolutepressure"
+    ],
+    "mewtwomegay": [
+      "absolutepressure"
+    ],
+    "hydreigon": [
+      "hydraflight"
+    ],
+    "meloetta": [
+      "serenegrace"
+    ],
+    "meloettapirouette": [
+      "serenegrace"
+    ],
+    "rotomheat": [
+      "levitate"
+    ],
+    "rotomwash": [
+      "levitate"
+    ],
+    "rotomfrost": [
+      "levitate"
+    ],
+    "rotommow": [
+      "levitate"
+    ],
+    "rotomfan": [
+      "levitate"
+    ],
+    "donphan": [
+      "battlearmor"
+    ],
+    "scolipedemega": [
+      "merciless"
+    ],
+    "scolipedemegaazzy": [
+      "merciless"
+    ],
+    "aggron": [
+      "heavymetal"
+    ],
+    "aggronmega": [
+      "stamina"
+    ],
+    "excadrillmega": [
+      "piercingdrill"
+    ],
+    "aegislash": [
+      "stancechange"
+    ],
+    "aegislashblade": [
+      "stancechange"
+    ],
+    "aegislashgmax": [
+      "cursedbody"
+    ],
+    "mimikyu": [
+      "disguise"
+    ],
+    "mimikyubusted": [
+      "disguise"
+    ],
+    "mimikyutotem": [
+      "disguise"
+    ],
+    "mimikyubustedtotem": [
+      "disguise"
     ]
   },
   "abilities": {
     "rhydon": {
-      "0": "Brute Force",
-      "1": "War Path",
-      "H": "Lightning Rod"
+      "0": "Grand Strategy",
+      "1": "Lightning Rod",
+      "H": "Brute Force"
     },
     "skarmory": {
       "0": "Fresh Plumage",
@@ -187,7 +329,7 @@
     "talonflame": {
       "0": "Open Sky",
       "1": "Scorch Sweep",
-      "H": "Gale Wings",
+      "H": "Flame Body",
       "S": "Burning Quake"
     },
     "mudsdale": {
@@ -369,6 +511,176 @@
       "0": "Apex Venom",
       "1": "Black Viper",
       "H": "Venam's Kiss"
+    },
+    "sandslash": {
+      "0": "Dune Claws",
+      "1": "Sand Rush",
+      "H": "Own Tempo"
+    },
+    "sandslashreborn": {
+      "0": "Dune Claws",
+      "1": "Sand Rush",
+      "H": "Own Tempo"
+    },
+    "sandslashalola": {
+      "0": "Glacier Claws",
+      "1": "Slush Rush",
+      "H": "Ice Body"
+    },
+    "articuno": {
+      "0": "Winter Herald",
+      "1": "Winter Refuge",
+      "H": "Mirror Armor"
+    },
+    "zapdos": {
+      "0": "Spring Herald",
+      "1": "Spring Tempest",
+      "H": "Competitive"
+    },
+    "moltres": {
+      "0": "Summer Herald",
+      "1": "Summer Renewal",
+      "H": "Berserk"
+    },
+    "jirachi": {
+      "0": "Comet Heart",
+      "1": "Wishkeeper",
+      "H": "Dream Sickness"
+    },
+    "regirock": {
+      "0": "Rubblewake",
+      "1": "Solid Rock",
+      "H": "Bulletproof"
+    },
+    "regice": {
+      "0": "Mirror Armor",
+      "1": "Ice Scales",
+      "H": "Eternal Ice"
+    },
+    "registeel": {
+      "0": "Clear Body",
+      "1": "Tempered Alloy",
+      "H": "Battle Armor"
+    },
+    "regieleki": {
+      "0": "Unsealed Current",
+      "1": "Transistor",
+      "H": "Electric Surge"
+    },
+    "regidrago": {
+      "0": "Crystal Focus",
+      "1": "Dragon's Maw",
+      "H": "Berserk"
+    },
+    "regigigas": {
+      "0": "Continental Pull",
+      "1": "Worldforged",
+      "H": "Colossal Frame"
+    },
+    "mewtwo": {
+      "0": "Perfected Genome",
+      "1": "Mind Mirror",
+      "H": "Unbound Will"
+    },
+    "mewtwomegax": {
+      "0": "Psyche Force"
+    },
+    "mewtwomegay": {
+      "0": "Psyche Dominion"
+    },
+    "hydreigon": {
+      "0": "Dark Aura",
+      "1": "Worldbreaker",
+      "H": "False Liberation"
+    },
+    "meloetta": {
+      "0": "Songstress"
+    },
+    "meloettapirouette": {
+      "0": "Dancer"
+    },
+    "rotomheat": {
+      "0": "Eject",
+      "1": "Drought",
+      "H": "Flame Body"
+    },
+    "rotomwash": {
+      "0": "Eject",
+      "1": "Storm Drain",
+      "H": "Drizzle"
+    },
+    "rotomfrost": {
+      "0": "Eject",
+      "1": "Refrigerate",
+      "H": "Snow Warning"
+    },
+    "rotommow": {
+      "0": "Eject",
+      "1": "Grassy Surge",
+      "H": "Seed Sower"
+    },
+    "rotomfan": {
+      "0": "Eject",
+      "1": "Windy Surge",
+      "H": "Air Lock"
+    },
+    "umbreon": {
+      "0": "Poison Heal",
+      "1": "Lunar Ward",
+      "G": "Ascendance",
+      "H": "Dark Aura",
+      "S": "Eclipse"
+    },
+    "donphan": {
+      "0": "Aevian Frost",
+      "1": "Rolling Fortress",
+      "H": "Siege Tusks"
+    },
+    "aggron": {
+      "0": "Lightning Rod",
+      "1": "Brute Force",
+      "H": "Soundproof"
+    },
+    "excadrillmega": {
+      "0": "Deep Bore"
+    },
+    "sylveon": {
+      "0": "Competitive",
+      "1": "Soothing Presence",
+      "H": "Healer"
+    },
+    "aegislash": {
+      "0": "Stalwart",
+      "1": "Cursed Body",
+      "H": "Infiltrator"
+    },
+    "aegislashblade": {
+      "0": "Stalwart",
+      "1": "Cursed Body",
+      "H": "Infiltrator"
+    },
+    "aegislashgmax": {
+      "0": "Imperial Mandate"
+    },
+    "mimikyu": {
+      "0": "Cursed Body",
+      "1": "Frisk",
+      "H": "Infiltrator"
+    },
+    "mimikyubusted": {
+      "0": "Cursed Body",
+      "1": "Frisk",
+      "H": "Infiltrator"
+    },
+    "mimikyutotem": {
+      "0": "Cursed Body",
+      "1": "Frisk",
+      "H": "Infiltrator"
+    },
+    "mimikyubustedtotem": {
+      "0": "Cursed Body",
+      "1": "Frisk",
+      "H": "Infiltrator"
     }
   },
   "floetteeternal": {

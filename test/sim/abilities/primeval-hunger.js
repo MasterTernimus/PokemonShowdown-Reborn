@@ -25,7 +25,15 @@ describe('Primeval Hunger', () => {
 	it('retains every Accumulation callback and component-aware move mechanics', () => {
 		const [p] = setup(); assert(p.hasAbility('accumulation'));
 		const base = Dex.abilities.get('accumulation'), hunger = Dex.abilities.get('primevalhunger');
-		for (const key of Object.keys(base)) if (key.startsWith('on')) assert.equal(hunger[key], base[key], key);
+		for (const key of Object.keys(base)) if (key.startsWith('on')) assert.equal(typeof hunger[key], typeof base[key], key);
+		for (const id of ['flamethrower', 'icebeam']) {
+			const m = Dex.getActiveMove(id);
+			assert.equal(battle.runEvent('ModifySpA', battle.p2.active[0], p, m, 1000), 500);
+		}
+		assert.equal(battle.runEvent('Immunity', p, null, null, 'sandstorm'), false);
+		assert.equal(battle.runEvent('Immunity', p, null, null, 'hail'), false);
+		battle.makeChoices('move splash', 'move splash'); assert(!p.volatiles.stockpile);
+		battle.makeChoices('move splash', 'move splash'); assert.equal(p.volatiles.stockpile.layers, 1);
 		battle.makeChoices('move splash', 'move splash'); assert.equal(p.volatiles.stockpile.layers, 1);
 		battle.makeChoices('move splash', 'move splash'); assert.equal(p.volatiles.stockpile.layers, 2);
 		assert.equal(Dex.species.get('cradily').abilities.H, 'Primeval Hunger');

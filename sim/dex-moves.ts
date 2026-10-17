@@ -343,6 +343,8 @@ interface MoveHitData {
 
 type MutableMove = BasicEffect & MoveData;
 export interface ActiveMove extends MutableMove {
+	/** Chosen moveset slot for PP accounting when multiple slots share an ID. */
+	ppSlot?: number;
 	/** Retains the Ground field bonus after Midnight Zone converts the move to Water. */
 	midnightGround?: boolean;
 	readonly name: string;

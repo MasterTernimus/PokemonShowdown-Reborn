@@ -85,24 +85,4 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 	};
 	abilities.nighthunt.onModifyMove = abilities.illuminate.onModifyMove;
 
-	// Preserve Prism Armor's field stats, immunity, and ordinary damage reduction.
-	// Record its actual contribution so fixed-damage attacks can still receive Forewarn.
-	const prismDamage = abilities.coldlogic.onSourceModifyDamage!;
-	const forewarnDamage = abilities.coldlogic.onDamage!;
-	abilities.coldlogic.onSourceModifyDamage = function (damage, source, target, move) {
-		const before = this.event.modifier;
-		const result = prismDamage.call(this, damage, source, target, move);
-		if (target.hasAbility('coldlogic')) {
-			this.effectState.prismAppliedMove = move;
-			this.effectState.prismAppliedHit = move.hit;
-			this.effectState.prismAppliedFactor = this.event.modifier / before;
-		}
-		return result;
-	};
-	abilities.coldlogic.onDamage = function (damage, target, source, effect) {
-		if (target.species.id === 'metagrossmega' && effect?.effectType === 'Move' &&
-			this.effectState.prismAppliedMove === effect && this.effectState.prismAppliedHit === effect.hit &&
-			this.effectState.prismAppliedFactor <= 3277 / 4096) return;
-		return forewarnDamage.call(this, damage, target, source, effect);
-	};
 }

@@ -149,12 +149,12 @@ describe('Approved roster follow-up', () => {
 		hit('shellsmash', p, p);
 		assert.equal(p.boosts.def, -1);
 	});
-	it('Trailbreaker spins against Ghosts and blocks hazard effects', () => {
+	it('Siege Tusks retains normal Ghost immunity and blocks hazard effects', () => {
 		const [p, , foe] = make('Trailbreaker');
 		foe.setType('Ghost');
 		p.side.addSideCondition('spikes', foe);
 		hit('rapidspin', p, foe);
-		assert(foe.hp < foe.maxhp); assert(!p.side.sideConditions.spikes);
+		assert.equal(foe.hp, foe.maxhp); assert(p.side.sideConditions.spikes);
 		const hp = p.hp;
 		battle.damage(20, p, foe, battle.dex.conditions.get('stealthrock'));
 		assert.equal(p.hp, hp);
@@ -189,19 +189,19 @@ describe('Approved roster follow-up', () => {
 		hit('tackle', foe, p);
 		assert.equal(p.hp, p.maxhp); assert.equal(foe.boosts.def, -1);
 	});
-	it('Headlong Resolve gains Defense from recoil and Herd Shelter protects an ally', () => {
+	it('Headlong Resolve retains recoil without Defense boosts and Herd Shelter protects an ally', () => {
 		const [p, ally, foe] = make('Headlong Resolve');
 		hit('takedown', p, foe);
-		assert.equal(p.boosts.def, 1); assert(p.hp < p.maxhp);
+		assert.equal(p.boosts.def, 0); assert(p.hp < p.maxhp);
 		p.setAbility('Herd Shelter');
 		hit('hypervoice', foe, ally);
 		assert.equal(ally.hp, ally.maxhp);
 	});
-	it('Scorch Sweep clears hazards with recoil and Open Sky preserves itemless contact immunity', () => {
+	it('Scorch Sweep clears hazards while preventing recoil and Open Sky preserves itemless contact immunity', () => {
 		const [p, , foe] = make('Scorch Sweep');
 		p.side.addSideCondition('stealthrock', foe);
 		hit('bravebird', p, foe);
-		assert(!p.side.sideConditions.stealthrock); assert(p.hp < p.maxhp);
+		assert(!p.side.sideConditions.stealthrock); assert.equal(p.hp, p.maxhp);
 		p.setAbility('Open Sky');
 		assert(!modify('acrobatics', p, foe).flags.contact);
 		p.setItem('leftovers');
@@ -227,11 +227,11 @@ describe('Approved roster follow-up', () => {
 		assert.equal(foe.hp, hp); assert.equal(other.boosts.spa, 1);
 		assert(!p.isGrounded());
 	});
-	it('Keen Hunt and Twilight Instinct retain Keen Hunt accuracy without the retired Twilight critical chain', () => {
+	it('Keen Hunt retains ordinary accuracy and Twilight Instinct has no retired critical chain', () => {
 		const [p, , foe, other] = make('Keen Hunt');
 		foe.hp = Math.floor(foe.maxhp / 2);
-		assert.equal(modify('stoneedge', p, foe).accuracy, true);
-		battle.boost({ spe: -1 }, p, foe); assert.equal(p.boosts.spe, 0);
+		assert.equal(modify('stoneedge', p, foe).accuracy, 80);
+		battle.boost({ spe: -1 }, p, foe); assert.equal(p.boosts.spe, -1);
 		p.setAbility('Twilight Instinct');
 		hit('tackle', p, foe);
 		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, battle.dex.getActiveMove('tackle'), 1), 1);

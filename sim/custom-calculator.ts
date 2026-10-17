@@ -1,3 +1,4 @@
+import {DisabledSpecies} from '../data/disabled-species';
 import {AbilityComponentExclusions, SharedPassiveComponents, SharedPassiveComponentAdditions, SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions} from '../data/passive-ability-cleanup';
 import { getAbilityDisplayComponents } from '../data/ability-display';
 /** Isolated, bounded single-action scenarios using the real battle engine. */
@@ -26,6 +27,10 @@ export interface CalcActor {
 	gimmick: string;
 	voidCrossingCurse: boolean;
 	rageFistBonus: number;
+	threadShelterGuard: boolean;
+	buriedTrioSpent: boolean;
+	elasticBellySpent: boolean;
+	feedbackMarked: boolean;
 }
 export interface CalcScenario {
 	format: Format;
@@ -69,12 +74,16 @@ function actor(input: unknown, move: string): CalcActor {
 	keys(data, [
 		'species', 'ability', 'item', 'nature', 'level', 'evs', 'ivs', 'boosts', 'hpPercent', 'status', 'gimmick',
 		'teraType', 'gender', 'moves', 'voidCrossingCurse', 'rageFistBonus',
+		'threadShelterGuard', 'buriedTrioSpent', 'elasticBellySpent', 'feedbackMarked',
 	]);
 	if (data.voidCrossingCurse !== undefined && typeof data.voidCrossingCurse !== 'boolean') {
 		throw new Error('Void Crossing curse must be a boolean.');
 	}
 	if (data.rageFistBonus !== undefined && (typeof data.rageFistBonus !== 'number' || !Number.isFinite(data.rageFistBonus) || data.rageFistBonus < 0 || data.rageFistBonus > 100)) throw new Error('Rage Fist bonus must be a finite number from 0 to 100.');
 	const species = Dex.species.get(name(data.species));
+	for (const key of ['threadShelterGuard', 'buriedTrioSpent', 'elasticBellySpent', 'feedbackMarked']) {
+		if (data[key] !== undefined && typeof data[key] !== 'boolean') throw new Error(`${key} must be a boolean.`);
+	}
 	if (!species.exists) throw new Error('Unknown species or form.');
 	const ability = Dex.abilities.get(name(data.ability) || species.abilities['0']);
 	if (!ability.exists) throw new Error('Unknown ability.');
@@ -120,6 +129,10 @@ function actor(input: unknown, move: string): CalcActor {
 		gimmick: choice(data.gimmick, '', ['', 'mega', 'tera', 'gmax']),
 		voidCrossingCurse: data.voidCrossingCurse === true,
 		rageFistBonus: data.rageFistBonus ?? 0,
+		threadShelterGuard: data.threadShelterGuard === true,
+		buriedTrioSpent: data.buriedTrioSpent === true,
+		elasticBellySpent: data.elasticBellySpent === true,
+		feedbackMarked: data.feedbackMarked === true,
 	};
 }
 
@@ -136,7 +149,7 @@ export function calculatorMetadata() {
 	return {
 		formats: calculatorFormats().map(f => ({ id: f.id, name: f.name, mode: f.gameType, field: f.terrain || '' })),
 		fields: [{id: '', name: 'No field'}, ...calculatorFieldIDs().map(id => ({id, name: Terrains[id]?.name || Dex.conditions.get(id).name || id}))],
-		species: Dex.species.all().filter(s => s.exists && (!s.isCosmeticForme || s.passives.length)).map(s => ({name: s.name, abilities: s.abilities, passives: s.passives})),
+		species: Dex.species.all().filter(s => s.exists && !DisabledSpecies.has(s.id) && (!s.isCosmeticForme || s.passives.length)).map(s => ({name: s.name, abilities: s.abilities, passives: s.passives})),
 		abilityComponentExclusions: AbilityComponentExclusions, sharedPassiveComponents: SharedPassiveComponents, sharedPassiveComponentAdditions: SharedPassiveComponentAdditions,
 		signaturePassiveComponents: SignaturePassiveComponents,
 		signaturePassiveRemovedComponents: SignaturePassiveRemovedComponents, signaturePassiveDescriptions: SignaturePassiveDescriptions,
@@ -213,6 +226,18 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 				throw new Error(`${mon.species.name} cannot receive the selected status in this position.`);
 			}
 			mon.m.rageFistBonus = spec.rageFistBonus;
+			mon.m.buriedTrioSpent = spec.buriedTrioSpent;
+			mon.m.elasticBellySpent = spec.elasticBellySpent;
+			if (spec.threadShelterGuard) {
+				if (!mon.hasAbilityOrPassive('threadshelter')) throw new Error('Thread Shelter guard requires Thread Shelter.');
+				mon.addVolatile('threadshelter');
+			}
+			if (spec.feedbackMarked) {
+				const providers = mons.filter(p => p?.hp && p.isActive && !p.isAlly(mon) && p.hasAbilityOrPassive('feedback'));
+				if (!providers.length) throw new Error('Feedback mark requires an active opposing Feedback holder.');
+				mon.addVolatile('feedback', providers[0]);
+				mon.volatiles.feedback.sources = new Map(providers.map(p => [p, p.m.feedbackEntry || 0]));
+			}
 			mon.updateSpeed();
 			if (spec.voidCrossingCurse &&
 				!mon.addVolatile('voidcrossingcurse', mons[1], battle.dex.abilities.get('voidcrossing'))) {

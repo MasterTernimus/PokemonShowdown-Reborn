@@ -1,3 +1,9 @@
+import {recordRegiEntry} from '../data/regi-approved';
+import {encoreAriaAfterHits} from './encore-aria';
+import {prepareMeloettaMove} from '../data/meloetta-encore';
+import {DisabledSpecies} from '../data/disabled-species';
+import {recordClawSTAB} from '../data/sandslash-rework';
+import {grandStrategyPrepared, grandStrategyRecordHit, grandStrategyAfterMove} from '../data/grand-strategy';
 import {radiantTarget} from './radiant-target';
 import {endArsenal} from './adaptive-arsenal';
 import {settleFinisherCost} from './finisher-cost';
@@ -8,6 +14,7 @@ import {takeCrescentOverflow, hasCrescentSubDamage} from './crescent-rend';
 import {predatorUltraMatch} from './predator';
 import {ultraRivalry, ultraGuardAvailable} from './ultra-rivalry';
 import {ringmasterSwitch, ringmasterEntry, resetQueuedEntry, shedDecoyEntry} from '../data/queued-abilities-approved';
+import {guardFixedDamage} from '../data/guard-passives-approved';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'normalOrSelf', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
@@ -224,8 +231,15 @@ export class BattleActions {
 		delete pokemon.m.skywardenDefogUsed;
 		delete pokemon.m.seaRescuerUsed;
 		delete pokemon.m.dreamRescueUsed;
+		delete pokemon.m.rubblewakeUsed;
+		recordRegiEntry(pokemon);
 		delete pokemon.m.slipstreamUsed;
 		delete pokemon.m.updraftUsed;
+		delete pokemon.m.clawsCleanupMove;
+		delete pokemon.m.scorchSweepUsed;
+		delete pokemon.m.falseLiberationUsed;
+		delete pokemon.m.dreadMawSealUsed;
+		delete pokemon.m.dreadMawSealPending;
 		delete pokemon.m.venomBastionSealUsed;
 		delete pokemon.m.venomBastionSealPending;
 		delete pokemon.m.familyGuardianUsed;
@@ -253,6 +267,8 @@ export class BattleActions {
 		delete pokemon.m.savageResolveUsed;
 		delete pokemon.m.holyCowMilkCuredEntry;
 		delete pokemon.m.pulseBulwarkScreenCuredEntry;
+		delete pokemon.m.deepBoreUsed;
+		delete pokemon.m.accumulationCadence;
 		pokemon.activeMoveActions = 0;
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
@@ -350,7 +366,7 @@ export class BattleActions {
 		moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
 		options?: {
 			sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean,
-			maxMove?: string, originalTarget?: Pokemon,
+			maxMove?: string, originalTarget?: Pokemon, moveSlot?: number,
 		}
 	) {
 		pokemon.activeMoveActions++;
@@ -361,6 +377,8 @@ export class BattleActions {
 		let sourceEffect = options?.sourceEffect;
 		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
+		delete (baseMove as any).dreamRescuedTargets;
+		prepareMeloettaMove(baseMove,pokemon);
 		const priority = baseMove.priority;
 		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
@@ -373,6 +391,10 @@ export class BattleActions {
 			}
 		}
 		let move = baseMove;
+		delete baseMove.ppSlot;
+		if (!externalMove && options?.moveSlot !== undefined && pokemon.moveSlots[options.moveSlot]?.id === baseMove.id) {
+			baseMove.ppSlot = options.moveSlot;
+		}
 		if (zMove) {
 			move = this.getActiveZMove(baseMove, pokemon);
 		} else if (maxMove) {
@@ -469,9 +491,11 @@ export class BattleActions {
 				this.battle.field.terrainState.zMoveTerrain = true;
 			}
 		}
+		encoreAriaAfterHits(move);
 		if (moveDidSomething) this.battle.field.flowerGardenAfterMove(pokemon, move);
 		this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.battle.runEvent('AfterMove', pokemon, target, move);
+		grandStrategyAfterMove(this.battle, pokemon, move);
 		adaptiveAfterMove(this.battle, pokemon, move, !!moveDidSomething);
 		if (move.flags['cantusetwice'] && pokemon.removeVolatile(move.id)) {
 			this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
@@ -479,11 +503,13 @@ export class BattleActions {
 
 		// TODO: Refactor to use BattleQueue#prioritizeAction in onAnyAfterMove handlers
 		// Dancer's activation order is completely different from any other event, so it's handled separately
-		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
+		const copyDance = move.flags.dance || (move as any).encoreDance;
+		const copySound = move.flags.sound || (move as any).encoreSound;
+		if ((copyDance || copySound) && moveDidSomething && !move.isExternal) {
 			const dancers = [];
 			for (const currentPoke of this.battle.getAllActive()) {
 				if (pokemon === currentPoke) continue;
-				if (currentPoke.hasAbilityOrPassive('dancer') && !currentPoke.isSemiInvulnerable()) {
+				if (((copyDance && currentPoke.hasAbilityOrPassive('dancer')) || (copySound && currentPoke.hasAbilityOrPassive('songstress'))) && !currentPoke.isSemiInvulnerable()) {
 					dancers.push(currentPoke);
 				}
 			}
@@ -498,12 +524,24 @@ export class BattleActions {
 			for (const dancer of dancers) {
 				if (this.battle.faintMessages()) break;
 				if (dancer.fainted) continue;
-				this.battle.add('-activate', dancer, 'ability: Dancer');
+				const copyAbility = dancer.hasAbility('performer') ? 'performer' : copyDance && dancer.hasAbilityOrPassive('dancer') ? 'dancer' : 'songstress';
+				this.battle.add('-activate', dancer, 'ability: ' + this.dex.abilities.get(copyAbility).name);
 				const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
 					targetOf1stDance :
 					pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-				this.runMove(move.id, dancer, dancersTargetLoc, { sourceEffect: this.dex.abilities.get('dancer'), externalMove: true });
+				const copiedMove=this.dex.getActiveMove(move.id);
+                if((move as any).meloettaResolved){Object.assign(copiedMove,{name:move.name});copiedMove.type=move.type;copiedMove.category=move.category;copiedMove.flags={...copiedMove.flags};delete copiedMove.flags.sound;delete copiedMove.flags.dance;if(move.flags.sound)copiedMove.flags.sound=1;if(move.flags.dance)copiedMove.flags.dance=1;(copiedMove as any).meloettaResolved=true;}
+                if ((move as any).encoreAdaptive) {
+                    delete copiedMove.flags.sound; delete copiedMove.flags.dance;
+                    if(copyAbility==='performer' && (move as any).encoreDance && (move as any).encoreSound) {
+                        (copiedMove as any).encoreAdaptive=true;
+                    } else {
+                        copiedMove.category=copyAbility==='dancer' || (copyAbility==='performer' && !copySound)?'Physical':'Special';
+                        copiedMove.flags[copiedMove.category==='Physical'?'dance':'sound']=1;
+                    }
+                }
+                this.runMove(copiedMove, dancer, dancersTargetLoc, { sourceEffect: this.dex.abilities.get(copyAbility), externalMove: true });
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -1587,6 +1625,7 @@ export class BattleActions {
 		}
 		const pokemonOriginalHP = pokemon.hp;
 		if (damagedDamage.length && !isSecondary && !isSelf) {
+			for (let i = 0; i < damagedTargets.length; i++) grandStrategyRecordHit(this.battle, pokemon, damagedTargets[i], move, damagedDamage[i]);
 			if (this.battle.gen >= 5) {
 				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			}
@@ -2196,12 +2235,12 @@ export class BattleActions {
 			return false;
 		}
 
-		if (move.ohko) return this.battle.gen === 3 ? target.hp : target.maxhp;
-		if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
+		if (move.ohko) return guardFixedDamage(this.battle, this.battle.gen === 3 ? target.hp : target.maxhp, source, target, move);
+		if (move.damageCallback) return guardFixedDamage(this.battle, move.damageCallback.call(this.battle, source, target), source, target, move);
 		if (move.damage === 'level') {
-			return source.level;
+			return guardFixedDamage(this.battle, source.level, source, target, move);
 		} else if (move.damage) {
-			return move.damage;
+			return guardFixedDamage(this.battle, move.damage, source, target, move);
 		}
 
 		const category = this.battle.getCategory(move);
@@ -2294,7 +2333,8 @@ export class BattleActions {
 		if (defBoosts > 0 && adaptiveSetup(source, defender)) defBoosts = 0;
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
-		let ignorePositiveDefensive = (move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive;
+		let ignorePositiveDefensive = grandStrategyPrepared(source, target, move) || ((move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive);
+		if (defenseStat === 'def' && this.battle.movehasType(move, 'Rock') && source.hasAbility('keenhunt') && !source.isAlly(target) && target.hp <= target.maxhp / 2) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && move.flags.kick && source.hasAbility('imperialprincess')) ignorePositiveDefensive = true;
 		if (defender === target && ['def', 'spd'].includes(defenseStat) &&
 			predatorUltraMatch(this.battle, source, target)) ignorePositiveDefensive = true;
@@ -2339,8 +2379,11 @@ export class BattleActions {
 
 		// Liquid Arsenal compares fully modified defenses per target/hit; category and offense are unchanged.
 		// Each defense's modifiers run once. Explicit move defense overrides retain precedence; ties keep normal defense.
-		if (source.hasAbility('liquidarsenal') && this.battle.movehasType(move, 'Water') && move.category !== 'Status' &&
-			!move.overrideDefensiveStat && !move.overrideDefensivePokemon) {
+		if (move.category !== 'Status' && !move.overrideDefensivePokemon && (
+            (source.hasAbility('liquidarsenal') && this.battle.movehasType(move, 'Water') && !move.overrideDefensiveStat) ||
+            (source.hasAbility('psychedominion') && this.battle.movehasType(move, 'Psychic')) ||
+            (move.id === 'psystrike' && ['mewtwo','mewtwomegax','mewtwomegay'].includes(source.species.id))
+        )) {
 			const alternateStat = defenseStat === 'def' ? 'spd' : 'def';
 			let alternateBoosts = defender.boosts[alternateStat];
 			if ((alternateBoosts > 0 && adaptiveSetup(source, defender)) || move.ignoreDefensive ||
@@ -2451,6 +2494,7 @@ export class BattleActions {
 				stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
 			}
 
+			recordClawSTAB(pokemon, target, move, stab, isSTAB);
 			baseDamage = this.battle.modify(baseDamage, stab);
 		}
 
@@ -2586,6 +2630,7 @@ export class BattleActions {
 	// ==================================================================
 
 	canMegaEvo(pokemon: Pokemon) {
+		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return null;
 		if (pokemon.m.parasectMegaUsed) return null;
 		const species = pokemon.baseSpecies;
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
@@ -2612,11 +2657,11 @@ export class BattleActions {
 		if (item.id === 'zygardite' && species.id !== 'zygardecomplete') return null;
 		// TODO confirm with generation shift
 		let megaEvolution = item.megaStone[species.name];
-		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;
+		if (megaEvolution && megaEvolution !== species.name && !DisabledSpecies.has(this.dex.species.get(megaEvolution).id)) return megaEvolution;
 		// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
 		// FIXME: Change to species.name when champions comes
 		megaEvolution = item.megaStone[species.baseSpecies];
-		if (megaEvolution && megaEvolution !== species.name) return megaEvolution;
+		if (megaEvolution && megaEvolution !== species.name && !DisabledSpecies.has(this.dex.species.get(megaEvolution).id)) return megaEvolution;
 		// These two Golisopod lines use different stones. Do not fall back to a form from the wrong line.
 		if (species.id === 'golisopod' || species.id === 'golisopodaevian') return null;
 		const megaFormes = species.otherFormes?.filter(forme => this.dex.species.get(forme).isMega);
@@ -2629,6 +2674,7 @@ export class BattleActions {
 	}
 
 	canMegaEvoX(pokemon: Pokemon) {
+		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return null;
 		const charizardFormes = ['Charizard', 'Charizard-Mega-X', 'Charizard-Mega-Y'];
 		if (
 			charizardFormes.includes(pokemon.baseSpecies.name) &&
@@ -2655,6 +2701,7 @@ export class BattleActions {
 	}
 
 	canMegaEvoY(pokemon: Pokemon) {
+		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return null;
 		const charizardFormes = ['Charizard', 'Charizard-Mega-X', 'Charizard-Mega-Y'];
 		if (
 			charizardFormes.includes(pokemon.baseSpecies.name) &&
@@ -2728,13 +2775,15 @@ export class BattleActions {
 	}
 
 	runMegaEvo(pokemon: Pokemon) {
+		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return false;
 		const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
-		if (!speciesid) return false;
+		if (!speciesid || DisabledSpecies.has(this.dex.species.get(speciesid).id)) return false;
 		const gimmick = pokemon.canMegaEvo ? 'Mega' : 'Ultraburst';
 		if (!this.battle.useGimmick(pokemon, gimmick)) return false;
 
 		if (!pokemon.checkPulseEvolution(this.dex.species.get(speciesid), pokemon.getItem())) return false;
 		this.clearDynamaxForMega(pokemon);
+		if (pokemon.species.id === 'mewtwo' && !pokemon.transformed) pokemon.m.mewtwoOriginalAbility ||= pokemon.baseAbility;
 		if (!pokemon.formeChange(speciesid, pokemon.getItem(), true)) return false;
 		if (toID(speciesid) === 'parasectmega') pokemon.m.parasectMegaUsed = true;
 		if (toID(speciesid) === 'gardevoirvoidmega') {
@@ -2748,12 +2797,14 @@ export class BattleActions {
 
 	// Let's Go
 	runMegaEvoX(pokemon: Pokemon) {
+		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return false;
 		const speciesid = pokemon.canMegaEvoX;
 		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
-		if (!speciesid) return false;
+		if (!speciesid || DisabledSpecies.has(this.dex.species.get(speciesid).id)) return false;
 
 		if (!pokemon.checkPulseEvolution(this.dex.species.get(speciesid), pokemon.getItem())) return false;
 		this.clearDynamaxForMega(pokemon);
+		if (pokemon.species.id === 'mewtwo' && !pokemon.transformed) pokemon.m.mewtwoOriginalAbility ||= pokemon.baseAbility;
 		if (!pokemon.formeChange(speciesid, pokemon.getItem(), true)) return false;
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');
@@ -2765,12 +2816,14 @@ export class BattleActions {
 	}
 
 	runMegaEvoY(pokemon: Pokemon) {
+		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return false;
 		const speciesid = pokemon.canMegaEvoY;
 		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
-		if (!speciesid) return false;
+		if (!speciesid || DisabledSpecies.has(this.dex.species.get(speciesid).id)) return false;
 
 		if (!pokemon.checkPulseEvolution(this.dex.species.get(speciesid), pokemon.getItem())) return false;
 		this.clearDynamaxForMega(pokemon);
+		if (pokemon.species.id === 'mewtwo' && !pokemon.transformed) pokemon.m.mewtwoOriginalAbility ||= pokemon.baseAbility;
 		if (!pokemon.formeChange(speciesid, pokemon.getItem(), true)) return false;
 		if (toID(speciesid) === 'gardevoirvoidmega') {
 			this.battle.add('-message', 'The Angel of Death has descended!');

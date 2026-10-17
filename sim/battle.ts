@@ -1,3 +1,5 @@
+import {finishRotomEjections} from '../data/rotom-eject';
+import {RipenSeedItems} from '../data/ripen-seeds';
 import {recordFinisherKO} from './finisher-cost';
 import {recordRechargeKO} from './recharge';
 import {passiveEffect, passiveState, thematicPassives} from './species-passives';
@@ -952,7 +954,7 @@ export class Battle {
 			if (eventid === 'WeatherModifyDamage' && effect.effectType === 'Weather' &&
 				[target, source].some(p => p instanceof Pokemon && p.hasAbilityOrPassive('solarmimicry') && p.effectiveWeather() === 'sunnyday')) continue;
 			// Keep damage reactions on the category already selected for this target.
-			if (((sourceEffect as any)?.auraCategories || ['beasthunter', 'attackorder'].includes(sourceEffect?.id || '')) && source instanceof Pokemon &&
+			if (((sourceEffect as any)?.auraCategories || (sourceEffect as any)?.encoreAdaptive || ['beasthunter', 'attackorder'].includes(sourceEffect?.id || '')) && source instanceof Pokemon &&
 				this.event.target instanceof Pokemon &&
 				['DamagingHit', 'Damage', 'AfterDamage', 'AfterDamageApplied', 'AfterSubDamage', 'TryPrimaryHit'].includes(eventid)) {
 				const targetMove = adaptiveMoveView(sourceEffect as ActiveMove, source, this.event.target);
@@ -2247,6 +2249,13 @@ export class Battle {
 		if (!target.isActive) return false;
 		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
 		boost = {...boost};
+		// Scale positive held-Seed stages once, before Simple/Contrary can change them.
+		// Identity lookup covers selected, composite and passive Ripen without stacking.
+		if (effect?.effectType === 'Item' && RipenSeedItems.has(effect.id) && target.hasAbilityOrPassive('ripen')) {
+			for (const stat of Object.keys(boost) as BoostID[]) {
+				if (boost[stat]! > 0) boost[stat]! *= 2;
+			}
+		}
 		if (effect?.effectType === 'Ability' && (adaptiveIgnoresAbility(target, source) ||
 			(this.effectState?.target instanceof Pokemon && adaptiveIgnoresAbility(target, this.effectState.target)))) return false;
 		for (const stat of Object.keys(boost) as BoostID[]) {
@@ -2375,6 +2384,11 @@ export class Battle {
 				}
 			}
 
+			// Dream Sickness buys survival through this attacking move, even if its holder stops providing the ability.
+			if (effect.effectType === 'Move' && effect.id === this.activeMove?.id && source === this.activePokemon &&
+				(this.activeMove as any)?.dreamRescuedTargets?.includes(target)) {
+				targetDamage = Math.min(targetDamage, Math.max(0, target.hp - 1));
+			}
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
 			recordFinisherKO(this, source, target, effect, targetDamage);
 			recordRechargeKO(this, source, target, effect, targetDamage);
@@ -3072,6 +3086,7 @@ export class Battle {
 			this.actions.runMove(action.move, action.pokemon, action.targetLoc, {
 				sourceEffect: action.sourceEffect, zMove: action.zmove,
 				maxMove: action.maxMove, originalTarget: action.originalTarget,
+				moveSlot: action.moveSlot,
 			});
 			// A completed move action (including a prevented attempt), never merely a switch or Mega Evolution.
 			action.pokemon.m.lastCompletedActionTurn = this.turn;
@@ -3208,6 +3223,7 @@ export class Battle {
 					this.field.changeTerrain('flowergarden1', null, null, true);
 				}
 			}
+			finishRotomEjections(this);
 			if (!this.ended) this.add('upkeep');
 			break;
 		}

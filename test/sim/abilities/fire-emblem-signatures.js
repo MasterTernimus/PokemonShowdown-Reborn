@@ -25,6 +25,6 @@ describe('Retained recipient passives function under signature suppression',()=>
  it('Tinkaton Sticky Hold prevents item removal',()=>{const[p,q]=setup('Tinkaton','Apocalyptic Flame');p.addVolatile('gastroacid',q);p.setItem('Leftovers');move(q,p,'knockoff');assert.equal(p.item,'leftovers');});
  it('Skarmory Big Pecks blocks foe Defense drops',()=>{const[p,q]=setup('Skarmory','Burning Quake');p.addVolatile('gastroacid',q);battle.boost({def:-1},p,q,Dex.moves.get('leer'));assert.equal(p.boosts.def,0);});
  it('Corviknight Mirror Armor reflects opposing drops under suppression',()=>{const[p,q]=setup('Corviknight','Burning Quake');p.addVolatile('gastroacid',q);battle.boost({atk:-1},p,q,Dex.moves.get('growl'));assert.equal(p.boosts.atk,0);assert.equal(q.boosts.atk,-1);});
- it('Talonflame Flame Body still burns contact attackers',()=>{const[p,q]=setup('Talonflame','Burning Quake');p.addVolatile('gastroacid',q);battle.randomChance=()=>true;move(q,p);assert.equal(q.status,'brn');});
+ it('Talonflame Gale Wings still grants Flying priority under suppression',()=>{const[p,q]=setup('Talonflame','Burning Quake');p.addVolatile('gastroacid',q);assert.deepEqual(p.getPassives(),['galewings']);assert.equal(battle.runEvent('ModifyPriority',p,q,Dex.getActiveMove('bravebird'),0),1);});
  it('Gallade Steadfast still boosts Speed on flinching',()=>{const[p,q]=setup('Gallade','Ruptured Heaven');p.addVolatile('gastroacid',q);battle.runEvent('Flinch',p);assert.equal(p.boosts.spe,1);});
 });

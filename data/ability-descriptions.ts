@@ -673,12 +673,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Cannot be suppressed; weather attacks 1.5x; clear damage halved; Psychic/Dark choose type."
 	},
 	"ragingstorm": {
-		"desc": "Moves ignore bypassable opposing abilities. Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks, in addition to its armor reduction. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed.",
-		"shortDesc": "Ignores abilities/screens/defensive stages; armor protection; half priority damage; KO splash damage."
+		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed.",
+		"shortDesc": "Ignores abilities/screens/defensive stages; half priority damage; KO splash damage."
 	},
 	"ragingoverlord": {
-		"desc": "Moves ignore bypassable opposing abilities. Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks, in addition to its armor reduction. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. It does not block stat drops.",
-		"shortDesc": "Ignores abilities/screens/defensive stages; armor protection; KO splash damage; fallen allies grant bonuses."
+		"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. It does not block stat drops.",
+		"shortDesc": "Ignores abilities/screens/defensive stages; KO splash damage; fallen allies grant bonuses."
 	},
 	"voltagevolley": {
 		"desc": "Its multi-hit moves become special attacks and use its Special Attack.",
@@ -705,8 +705,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "+1 Accuracy on entry; critical hits deal 2.25x damage; Ignores redirection; +1 Sp. Atk on specified fields."
 	},
 	"grandmaster": {
-		"desc": "Automatically marks the target of a direct damaging Psychic move with Miracle Eye. Successful direct single-target attacks store a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. One shared pending attack, arriving two turns later. Stored attacks snapshot its level, Special Attack, stages and typing, survive switching or fainting, and respect live target defenses. Independent of normal Future Sight. Retains flinch, powder and weather protection, status-turn guard, and its existing Psychic resistance and manual Miracle Eye utility.",
-		"shortDesc": "Automatic Miracle Eye; one stored 90 BP attack after 2 turns; independent of Future Sight."
+		"desc": "Automatically marks the target of a direct damaging Psychic move with Miracle Eye. Successful direct single-target attacks store a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Distinct qualifying attacks each queue a separate attack due two turns later, including against the same opponent. At most one stored attack releases per owner per turn; additional due attacks postpone to the next turn. Stored attacks snapshot its level, Special Attack, stages and typing, survive switching or fainting, and respect live target defenses. Independent of normal Future Sight. If its recorded slot has no living target when due, the same attack retries there next turn and remains queued until it can resolve or the battle ends. Full Inner Focus prevents flinching and Intimidate Attack drops. Immune to powder, sandstorm and hail. Takes 20% less attack damage on turns when it uses a status move. Its Psychic attacks ignore type resistances against foes that have not moved. Ordinary Miracle Eye utility remains.",
+		"shortDesc": "Inner Focus; automatic Miracle Eye; one stored 90 BP attack after 2 turns."
 	},
 	"warpath": {
 		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. It is immune to powder moves, hail damage, sandstorm damage, and flinching. Its moves have 1.3x accuracy and damaging moves have 1.3x power. Its Attack is 1.5x while statused; burn still reduces its physical damage normally. It takes 25% less damage from attacks. Its Rock-, Fighting-, and Ground-type moves and drill or horn moves bypass screens and Substitute and ignore defensive stat stages. When attacking, it ignores the target's Defense, Sp. Def, and evasion stages; when defending, it ignores the attacker's Attack, Sp. Atk, and accuracy stages.",
@@ -841,11 +841,11 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Airborne; immune to Ground attacks unless grounded; Prevents indirect damage; Fairy Tale entry gives +1 Sp. Def; No sleep or Yawn; 1.3x Dark/Ghost power — first Dark/Ghost attack pierces Substitute and screens."
 	},
 	"accumulation": {
-		"desc": "Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile each turn. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply.",
-		"shortDesc": "Fire/Ice protection; automatic Stockpiles; at 3, waits one turn then releases Belch or Spit Up every other turn."
+		"desc": "Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile every second eligible active turn, first gaining one after two eligible turns. Genuine switching resets this wait; ability restarts do not. Suppressed or otherwise ineligible turns do not advance the counter. Manual Stockpile is unchanged. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply.",
+		"shortDesc": "Fire/Ice protection; Stockpile every 2 eligible turns; at 3, waits one turn then auto-releases."
 	},
 	"rifteater": {
-		"desc": "Summons sandstorm on entry. It has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile each turn. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Once per battle, the first damaging hit that would cross below half HP stops at half HP, activates its awakening, then immediately heals 25% max HP. Its fourth move is always Sludge Wave. At half HP or less, it creates Desert Field, becomes Ground/Fire, and changes its fourth move to Heat Wave. If sandstorm has ended, it summons it again at that moment.",
+		"desc": "Summons sandstorm on entry. It has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile every second eligible active turn, first gaining one after two eligible turns. Genuine switching resets this wait; ability restarts do not. Suppressed or otherwise ineligible turns do not advance the counter. Manual Stockpile is unchanged. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Once per battle, the first damaging hit that would cross below half HP stops at half HP, activates its awakening, then immediately heals 25% max HP. Its fourth move is always Sludge Wave. At half HP or less, it creates Desert Field, becomes Ground/Fire, and changes its fourth move to Heat Wave. If sandstorm has ended, it summons it again at that moment.",
 		"shortDesc": "Summons sand; auto-Stockpile; once-battle half-HP guard and heal; awakens at half HP."
 	},
 	"mountainrift": {
@@ -869,7 +869,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "SpA equals Defense using Def stages; beam/Mega Launcher moves have 1.5x power."
 	},
 	"perfectforesight": {
-		"desc": "Includes Insomnia and retains its opposing-ability copying. Automatically applies target-specific Miracle Eye before a direct damaging Psychic move. Direct single-target HP damage stores a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Shares one pending attack per opposing trainer (one in singles, up to three in Free-for-All), released one per turn beginning next turn. Snapshots its own level, Special Attack, stages and typing, without copied offensive abilities or items. Queues survive switching/fainting and coexist with ordinary Future Sight; normal live defenses apply. Once per battle when Alakazam Mega Evolves, sets real Reflect and Light Screen for 5 turns without shortening longer screens.",
+		"desc": "Includes Insomnia and retains its opposing-ability copying. Automatically applies target-specific Miracle Eye before a direct damaging Psychic move. Direct single-target HP damage stores a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Distinct qualifying attacks each queue a separate attack due next turn, including against the same opponent. At most one stored attack releases per owner per turn; additional due attacks postpone to the next turn. Snapshots its own level, Special Attack, stages and typing, without copied offensive abilities or items. Queues survive switching/fainting and coexist with ordinary Future Sight; normal live defenses apply. If its recorded slot has no living target when due, the same attack retries there next turn and remains queued until it can resolve or the battle ends. Once per battle when Alakazam Mega Evolves, sets real Reflect and Light Screen for 5 turns without shortening longer screens.",
 		"shortDesc": "Insomnia + ability copy; Miracle Eye; stored attacks; once-per-battle Mega screens."
 	},
 	"doomwarning": {
@@ -1027,8 +1027,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Normal moves become Electric; stronger sound moves spare allies; absorbs Electric for 1/4 HP."
 	},
 	"relicarmor": {
-		"desc": "On entry on Desert, Fairy Tale, Cave, Crystal Cavern, New World or Volcanic, gains +1 Defense and Sp. Def. Rock typing adds no Fighting, Ground, Steel, Water or Grass weakness. Prevents critical hits and takes 20% less attack damage. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. After a foe lowers its stats, gains +1 Defense and Sp. Def. Lapras-Aevian gains Ice typing in hail or snow and on Icy, Snowy Mountain and Cold Eclipse.",
-		"shortDesc": "Rock weakness/critical-hit protection; 20% less damage; heals each turn; defensive boosts."
+		"desc": "On entry on Desert, Fairy Tale, Cave, Crystal Cavern, New World or Volcanic, gains +1 Defense and Sp. Def. Only on Rocky, Fairy Tale, Water Surface, Underwater, Murkwater Surface, Midnight Zone, Starlight Arena, New World, Holy, Mountain, Cave, Volcanic, Dragon's Den, Crystal Cavern and Dark Crystal Cavern, Rock typing adds no Fighting, Ground, Steel, Water or Grass weakness. Other type weaknesses, resistances and immunities remain. Auras do not enable this protection. Takes 10% less attack damage; does not prevent critical hits. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. After a foe lowers its stats, gains +1 Defense and Sp. Def. Lapras-Aevian gains Ice typing in hail or snow and on Icy, Snowy Mountain and Cold Eclipse.",
+		"shortDesc": "10% less damage; Rock-typing weakness protection on specified fields; recovery and defensive boosts."
 	},
 	"tyrantdomain": {
 		"desc": "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. Prevents critical hits and takes 20% less attack damage. Its Rock typing adds no Fighting, Ground, Steel, Water or Grass weakness. Immune to sandstorm and hail damage. Gains +1 Defense and Sp. Def when a foe lowers its stats, and on entry on Desert, Fairy Tale, Cave, Crystal Cavern, New World or Volcanic. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. It does not block stat drops. Heals 1/16 max HP each turn. On fainting, creates Dragon's Den for 5 turns.",
@@ -1491,8 +1491,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "No confusion or Intimidate Attack drop."
 	},
 	"piercingdrill": {
-		"desc": "Moves ignore bypassable abilities. Contact moves pierce protection at 1/4 damage. Drill and horn moves have 1.5x power, or 2x on Rocky, Mountain, Snowy Mountain, Cave and Volcanic, where they also bypass protection.",
-		"shortDesc": "Ignores abilities; contact pierces protection at 1/4 damage; stronger drill/horn moves."
+		"desc": "Contact moves pierce protection at 1/4 damage. Unprotected targets take normal damage.",
+		"shortDesc": "Contact moves pierce protection at 1/4 damage."
 	},
 	"pixilate": {
 		"desc": "Eligible Normal moves become Fairy and have 1.2x power, or 1.5x on Misty Terrain. Excludes moves whose type is set by their own effect, damaging Z-Moves and Terastallized Tera Blast.",
@@ -2071,7 +2071,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Poison attacks drain 1/3 actual foe HP damage; healing capped at 1/8 max HP each turn."
 	},
 	"solartrap": {
-		"desc": "It has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile each turn. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Direct Poison-type attacks heal it for 1/3 of actual opposing HP damage, capped at 1/8 of its max HP per turn across all hits and targets. Native draining moves do not receive additional healing. Does not drain substitutes, allies, or delayed attacks; normal healing prevention and Liquid Ooze apply. Draining moves, Leech Seed and Strength Sap damage their user by the HP they would restore. This damage doubles on Murkwater Surface and Wasteland. Poison attacks heal 1/3 of actual damage dealt to foes, capped at 1/8 max HP per turn; draining moves used on it hurt the user instead.",
+		"desc": "It has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile every second eligible active turn, first gaining one after two eligible turns. Genuine switching resets this wait; ability restarts do not. Suppressed or otherwise ineligible turns do not advance the counter. Manual Stockpile is unchanged. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Direct Poison-type attacks heal it for 1/3 of actual opposing HP damage, capped at 1/8 of its max HP per turn across all hits and targets. Native draining moves do not receive additional healing. Does not drain substitutes, allies, or delayed attacks; normal healing prevention and Liquid Ooze apply. Draining moves, Leech Seed and Strength Sap damage their user by the HP they would restore. This damage doubles on Murkwater Surface and Wasteland. Poison attacks heal 1/3 of actual damage dealt to foes, capped at 1/8 max HP per turn; draining moves used on it hurt the user instead.",
 		"shortDesc": "Fire/Ice protection; automatic Stockpiles/releases; Poison drain; draining moves hurt their user."
 	},
 	"pulsetriad": {
@@ -2195,8 +2195,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Reveals strongest move; 25% less damage from it, otherwise 20%."
 	},
 	"coldlogic": {
-		"desc": "Prism Armor + Forewarn + Aftermath. Takes 20% less attack damage, or 40% less against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern. Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow; immune to hail on Cold Eclipse. Forewarn reveals a strongest opposing move and removes foe Illusions; that move deals 25% less damage until switching out, excluding OHKO moves. Uses the stronger Prism Armor or learned-move reduction, not both. Psychic Terrain grants 2 Sp. Atk on a successful reveal and 20% Forewarn protection against moves, including fixed damage; a Psychic aura alone does not qualify. An opposing move that knocks it out triggers Aftermath even without contact: the attacker loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this, and indirect-damage protection applies. Tough Claws is supplied separately by Mega Metagross's passive.",
-		"shortDesc": "Prism Armor + Forewarn + Aftermath; Aftermath also triggers on noncontact KOs."
+		"desc": "Forewarn reveals a strongest opposing move and removes foe Illusions on entry. Takes 20% less move damage, or 25% less from the revealed move until switching out; these reductions do not stack, and OHKO moves are excluded from learned-move protection. A successful reveal on Psychic Terrain grants +2 Sp. Atk. Opponents cannot lower its accuracy stages. An opposing move that knocks it out triggers Aftermath even without contact: the attacker loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this, and indirect-damage protection applies. Tough Claws is supplied separately by Mega Metagross's passive.",
+		"shortDesc": "Forewarn + Aftermath; opposing accuracy-drop immunity; noncontact KO retaliation."
 	},
 	"whitesmoke": {
 		"desc": "Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry.",
@@ -2652,8 +2652,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Damaging attackers may sleep, be paralyzed or poisoned — takes 25% less damage from contact attacks."
 	},
 	"primevalhunt": {
-		"desc": "Multi-hit moves always use their maximum hit count and have 1.5x power. Moves that normally check accuracy per hit check only once. Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats. The final scheduled hit of a move with at least three hits is a guaranteed critical hit unless critical-hit immunity prevents it. Earlier hits retain normal critical chances; interruption does not promote an earlier hit.",
-		"shortDesc": "Maximum multi-hit count; 1.5x multi-hit power; No critical hits; 20% less damage; foe stat drops give +2 Defense — final scheduled hit of 3+ hit moves critically hits."
+		"desc": "Multi-hit moves always use their maximum hit count and have 1.5x power. Moves that normally check accuracy per hit check only once. Prevents and cures confusion and blocks Intimidate’s Attack drop. The final scheduled hit of a move with at least three hits is a guaranteed critical hit unless critical-hit immunity prevents it. Earlier hits retain normal critical chances; interruption does not promote an earlier hit.",
+		"shortDesc": "Maximum multi-hit count; 1.5x multi-hit power; No confusion or Intimidate Attack drop — final scheduled hit of 3+ hit moves critically hits."
 	},
 	"rimebreaker": {
 		"desc": "Full Refrigerate, including its field boosts only for converted moves. Once per turn, an Ice move dealing opposing HP damage removes this side's Stealth Rock and one Spikes layer. Toxic Spikes and Sticky Web remain. Natural Ice moves receive no extra ability damage boost.",
@@ -2680,8 +2680,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Sleeping foes lose 1/8 HP per turn, except on Rainbow — Ghost HP hits drain 25%; halves foe healing and takes prevented HP (combined cap 1/8 per turn)."
 	},
 	"primevalhunger": {
-		"desc": "Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile each turn. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Draining attacks that damage a foe's HP inflict Heal Block through the end of the following turn. After the whole move, lower one positive Attack or Sp. Atk stage of each damaged foe, choosing the more boosted stat and Sp. Atk on ties. Never lowers an unboosted stat or grants the user a boost. Substitute-only damage does not trigger these effects; normal stat-drop protections apply.",
-		"shortDesc": "Fire/Ice protection; automatic Stockpiles/releases; drain hits block healing and lower a positive attacking stage."
+		"desc": "Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile every second eligible active turn, first gaining one after two eligible turns. Genuine switching resets this wait; ability restarts do not. Suppressed or otherwise ineligible turns do not advance the counter. Manual Stockpile is unchanged. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Draining attacks that damage a foe's HP and successful new Leech Seed applications by Leech Seed or Sappy Seed inflict Heal Block through the end of the following turn. Failed, existing or reflected seeds and residual seed ticks do not trigger this effect. After the whole move, lower one positive Attack or Sp. Atk stage of each affected foe, choosing the more boosted stat and Sp. Atk on ties. Never lowers an unboosted stat or grants the user a boost. Substitute-only damage does not trigger these effects; normal stat-drop protections apply.",
+		"shortDesc": "Fire/Ice protection; automatic Stockpiles/releases; drain hits and new seeds block healing and lower a positive attacking stage."
 	},
 	"dawnherald": {
 		"desc": "On entry, summons sun for 5 turns, or 8 with Heat Rock. Allies take 25% less attack damage; the holder does not. Normal weather blocking, ability suppression and bypass rules apply.",
@@ -2705,8 +2705,8 @@ Object.assign(AbilityDescriptionOverrides, {
 	},
 	"unleashedego": {
 		"name": "Unleashed Ego",
-		"desc": "Ultra Ego + Levitate + Raging Storm. Airborne unless grounded. Damaging hits from foes raise Attack and Sp. Atk once until it uses an attack; heals 1/16 max HP on that hit and 1/20 on further hits. Dealing attack damage heals 1/16 once per turn. Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale add once-per-entry Defense/Sp. Def boosts for physical/special hits and a one-use 1/4-HP pinch heal. Royal Decree or Empress enables 1.3x power (except against Battle Bond) and 0.7x incoming damage unless Neutralization is active. Bewitched Woods, Haunted and Holy fields disable Ultra Ego effects. Raging Storm bypasses abilities, screens, Substitute and defensive stat stages; +1 critical-hit ratio. Attack KOs splash 60% of the recorded hit damage onto remaining foes, or grant +1 Attack if no splash damage is dealt. Battle Armor prevents critical hits, gives 0.8x incoming damage, +2 Defense after opposing stat drops, and +1 Defense on Fairy Tale entry. Incoming priority damage is further halved. Immune to hail; cannot be suppressed.",
-		"shortDesc": "Ultra Ego boosts/healing; airborne; bypasses defenses; KO splash; armor."
+		"desc": "Ultra Ego + Levitate + Raging Storm. Airborne unless grounded. Damaging hits from foes raise Attack and Sp. Atk once until it uses an attack; heals 1/16 max HP on that hit and 1/20 on further hits. Dealing attack damage heals 1/16 once per turn. Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale add once-per-entry Defense/Sp. Def boosts for physical/special hits and a one-use 1/4-HP pinch heal. Royal Decree or Empress enables 1.3x power (except against Battle Bond) and 0.7x incoming damage unless Neutralization is active. Bewitched Woods, Haunted and Holy fields disable Ultra Ego effects. Raging Storm bypasses abilities, screens, Substitute and defensive stat stages; +1 critical-hit ratio. Attack KOs splash 60% of the recorded hit damage onto remaining foes, or grant +1 Attack if no splash damage is dealt. Incoming priority damage is halved. Immune to hail; cannot be suppressed.",
+		"shortDesc": "Ultra Ego boosts/healing; airborne; bypasses defenses; KO splash."
 	},
 	"moonlithide": {
 		"name": "Moonlit Hide",
@@ -3108,8 +3108,8 @@ AbilityDescriptionOverrides.apexbond = {
 };
 
 AbilityDescriptionOverrides.ragingoverlord = {
-	"desc": "Moves ignore bypassable opposing abilities. Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks, in addition to its armor reduction. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. It does not block stat drops. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier; unlocks at 2/4/5 are unchanged.",
-	"shortDesc": "Ignores abilities/screens/defensive stages; armor protection; KO splash damage; fallen allies grant bonuses. Supreme Overlord caps at 5 effective faints (1.5x power)."
+	"desc": "Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. It does not block stat drops. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier; unlocks at 2/4/5 are unchanged.",
+	"shortDesc": "Ignores abilities/screens/defensive stages; KO splash damage; fallen allies grant bonuses. Supreme Overlord caps at 5 effective faints (1.5x power)."
 };
 
 AbilityDescriptionOverrides.shedskin = {
@@ -3263,8 +3263,8 @@ AbilityDescriptionOverrides.empress = {
 };
 
 AbilityDescriptionOverrides.coldlogic = {
-	"desc": "Contact moves have 1.3x power. Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Immune to hail damage on Cold Eclipse. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage. On entry, it reveals a strongest move known by an opposing Pokemon and removes foe Illusions. In Psychic Terrain, it gains 2 Sp. Atk and takes 0.8x damage from moves. Cold Logic applies Forewarn's additional 0.8x attack-damage factor only when the effective base field is Psychic Terrain; a Psychic aura alone does not qualify. Global Forewarn and all other Cold Logic effects are unchanged.",
-	"shortDesc": "Tough Claws + Prism Armor + Aftermath + Forewarn; extra Forewarn reduction only on Psychic Terrain."
+  "desc": "Forewarn reveals a strongest opposing move and removes foe Illusions on entry. Takes 20% less move damage, or 25% less from the revealed move until switching out; these reductions do not stack, and OHKO moves are excluded from learned-move protection. A successful reveal on Psychic Terrain grants +2 Sp. Atk. Opponents cannot lower its accuracy stages. An opposing move that knocks it out triggers Aftermath even without contact: the attacker loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this, and indirect-damage protection applies. Tough Claws is supplied separately by Mega Metagross's passive.",
+  "shortDesc": "Forewarn + Aftermath; opposing accuracy-drop immunity; noncontact KO retaliation."
 };
 
 AbilityDescriptionOverrides.updraft = {
@@ -3571,7 +3571,7 @@ Object.assign(AbilityDescriptionOverrides, {
     ...AbilityDescriptionOverrides.deepchill
   },
   "venamskiss": {
-    "desc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types. Against a foe poisoned before the attack, they drain one-third actual HP damage and block healing through the following turn. Ability drain is capped at 1/8 base max HP per turn and is not added to existing draining moves; Heal Block and Liquid Ooze apply. Active poisoned foes have 0.75x Speed; multiple holders do not stack.",
+    "desc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types. They drain one-third actual HP damage against any foe, capped at 1/4 base max HP per turn. Foes poisoned before the attack are also heal-blocked through the following turn. Ability drain is not added to existing draining moves; Heal Block and Liquid Ooze apply. Active poisoned foes have 0.75x Speed; multiple holders do not stack.",
     "shortDesc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types."
   },
   "dredger": {
@@ -3627,7 +3627,7 @@ if (AbilityDescriptionOverrides.pulseeruption) {
 }
 
 for (const [id, shortDesc] of Object.entries({
-  "venamskiss": "Poison hits can poison Steel/Poison; pre-poisoned foes are drained/heal-blocked. Poisoned foes are slower.",
+  "venamskiss": "Poison hits drain any foe (up to 1/4 base HP/turn); pre-poisoned foes are heal-blocked. Poisoned foes are slower.",
   "dredger": "First Ground HP hit each turn removes one own Spikes layer, then Toxic Spikes if none remain."
 })) AbilityDescriptionOverrides[id].shortDesc = shortDesc;
 
@@ -3993,3 +3993,59 @@ AbilityDescriptionOverrides.blackviper = {shortDesc:'Whiplash + Shed Skin; first
 
 import {LoreEntryDescriptions} from './lore-entry-approved';
 Object.assign(AbilityDescriptionOverrides, LoreEntryDescriptions);
+
+AbilityDescriptionOverrides.deepbore = {
+ desc: "Full Mold Breaker and Power Drill. Moves ignore bypassable opposing abilities. Drill and horn moves have 1.5x power, or 2x on Rocky, Mountain, Snowy Mountain, Cave and Volcanic, where they bypass protection at full damage. Once per entry, after a directly selected drill or horn move damages an opponent's HP and the holder survives, clears its side's entry hazards and its own Leech Seed and binding. Only spends the use when something is removed. Does not use Rapid Spin or raise Speed.",
+ shortDesc: "Mold Breaker + Power Drill; once per entry, a selected drill/horn HP hit clears own hazards, seed and binding."
+};
+
+import {GrandStrategyDescription} from './grand-strategy';
+AbilityDescriptionOverrides.grandstrategy = GrandStrategyDescription;
+delete AbilityDescriptionOverrides.warpath;
+
+import {ApprovedReworkDescriptions} from './approved-ability-reworks';
+Object.assign(AbilityDescriptionOverrides,ApprovedReworkDescriptions);
+delete AbilityDescriptionOverrides.armoredadvance; delete AbilityDescriptionOverrides.trailbreaker;
+
+import {SandslashDescriptions} from './sandslash-rework';
+Object.assign(AbilityDescriptionOverrides,SandslashDescriptions);
+for(const id of ['bedrockclaw','rimeclaw','dunerunner','frostrunner'])delete AbilityDescriptionOverrides[id];
+
+import {StanceDisguiseDescriptions} from './stance-disguise-aggron';
+Object.assign(AbilityDescriptionOverrides,StanceDisguiseDescriptions);
+
+import {HydreigonDescriptions} from './hydreigon-approved';
+Object.assign(AbilityDescriptionOverrides,HydreigonDescriptions);
+
+Object.assign(AbilityDescriptionOverrides.solarmimicry,{shortDesc:"Bug STAB and resistances. Always treated as sunny. Solar Blade lowers Speed by 1.",desc:"Bug STAB and resistances. Always treated as sunny. Solar Blade lowers Speed by 1."});
+
+import {MeloettaDescriptions} from './meloetta-encore';
+Object.assign(AbilityDescriptionOverrides,MeloettaDescriptions);
+
+import {AbilityProseAudit} from './ability-prose-audit';
+Object.assign(AbilityDescriptionOverrides,AbilityProseAudit);
+
+import {MewtwoDescriptions} from './mewtwo-approved';
+Object.assign(AbilityDescriptionOverrides,MewtwoDescriptions);
+
+import {SeasonalBirdDescriptions} from './seasonal-birds';
+Object.assign(AbilityDescriptionOverrides, SeasonalBirdDescriptions);
+
+import {JirachiDescriptions} from './jirachi-approved';
+Object.assign(AbilityDescriptionOverrides,JirachiDescriptions);
+
+import {RegiDescriptions} from './regi-approved';
+Object.assign(AbilityDescriptionOverrides,RegiDescriptions);
+
+import {EjectDescription} from './rotom-eject';
+AbilityDescriptionOverrides.eject=EjectDescription;
+
+import {ShortDescriptionAudit} from './short-description-audit';
+for(const[id,shortDesc]of Object.entries(ShortDescriptionAudit))AbilityDescriptionOverrides[id]={...AbilityDescriptionOverrides[id],shortDesc};
+for(const id of ['asoneglastrier','asonespectrier'])AbilityDescriptionOverrides[id].desc=ShortDescriptionAudit[id];
+
+import {RipenSeedDescriptions} from './ripen-seeds';
+Object.assign(AbilityDescriptionOverrides, RipenSeedDescriptions);
+
+import {PrimordialDescriptions} from './primordial-approved';
+Object.assign(AbilityDescriptionOverrides, PrimordialDescriptions);

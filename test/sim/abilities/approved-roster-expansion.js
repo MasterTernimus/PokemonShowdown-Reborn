@@ -93,11 +93,11 @@ describe('Approved roster expansion and component search', () => {
 		assert.equal(foe.volatiles.taunt.duration, 2);
 		assert(!p.abilityState.primed);
 	});
-	it('sand clearance is once per entry and frost hazard immunity needs snow', () => {
+	it('plain runners no longer clear or block hazards', () => {
 		let [p, , foe] = make('Sandslash', 'Dune Runner');
 		p.side.addSideCondition('spikes', foe);
 		battle.field.setWeather('sandstorm', foe);
-		assert(!p.side.sideConditions.spikes);
+		assert(p.side.sideConditions.spikes);
 		p.side.addSideCondition('spikes', foe);
 		event('WeatherChange', p, p);
 		assert(p.side.sideConditions.spikes);
@@ -105,16 +105,16 @@ describe('Approved roster expansion and component search', () => {
 		battle = null;
 		[p, , foe] = make('Sandslash-Alola', 'Frost Runner');
 		battle.field.setWeather('snow', foe);
-		assert.equal(battle.runEvent('Damage', p, foe, battle.dex.conditions.get('spikes'), 20), false);
+		assert.equal(battle.runEvent('Damage', p, foe, battle.dex.conditions.get('spikes'), 20), 20);
 		battle.field.clearWeather();
 		assert.equal(battle.runEvent('Damage', p, foe, battle.dex.conditions.get('spikes'), 20), 20);
 	});
-	it('claw abilities retain their contact boost and only spend their screen break once', () => {
+	it('claw abilities retain their contact boost without removing screens', () => {
 		for (const [species, ability, move] of [['Sandslash', 'Bedrock Claw', 'stompingtantrum'], ['Sandslash-Alola', 'Rime Claw', 'icepunch']]) {
 			const [p, , foe] = make(species, ability);
 			foe.side.addSideCondition('reflect', foe);
 			hit(move, p, foe);
-			assert(!foe.side.sideConditions.reflect);
+			assert(foe.side.sideConditions.reflect);
 			foe.side.addSideCondition('reflect', foe);
 			hit(move, p, foe);
 			assert(foe.side.sideConditions.reflect);

@@ -1,0 +1,338 @@
+{
+  "articuno": {
+    "abilities": {
+      "0": "Winter Herald",
+      "1": "Winter Refuge",
+      "H": "Mirror Armor"
+    },
+    "passives": [
+      "winterpressure"
+    ]
+  },
+  "zapdos": {
+    "abilities": {
+      "0": "Spring Herald",
+      "1": "Spring Tempest",
+      "H": "Competitive"
+    },
+    "passives": [
+      "springpressure"
+    ]
+  },
+  "moltres": {
+    "abilities": {
+      "0": "Summer Herald",
+      "1": "Summer Renewal",
+      "H": "Berserk"
+    },
+    "passives": [
+      "summerpressure"
+    ]
+  },
+  "jirachi": {
+    "abilities": {
+      "0": "Comet Heart",
+      "1": "Wishkeeper",
+      "H": "Dream Sickness"
+    },
+    "passives": [
+      "serenegrace"
+    ]
+  },
+  "regirock": {
+    "abilities": {
+      "0": "Rubblewake",
+      "1": "Solid Rock",
+      "H": "Bulletproof"
+    },
+    "passives": [
+      "selfrepair"
+    ]
+  },
+  "regice": {
+    "abilities": {
+      "0": "Mirror Armor",
+      "1": "Ice Scales",
+      "H": "Eternal Ice"
+    },
+    "passives": [
+      "selfrepair"
+    ]
+  },
+  "registeel": {
+    "abilities": {
+      "0": "Clear Body",
+      "1": "Tempered Alloy",
+      "H": "Battle Armor"
+    },
+    "passives": [
+      "selfrepair"
+    ]
+  },
+  "regieleki": {
+    "abilities": {
+      "0": "Unsealed Current",
+      "1": "Transistor",
+      "H": "Electric Surge"
+    },
+    "passives": [
+      "selfrepair"
+    ]
+  },
+  "regidrago": {
+    "abilities": {
+      "0": "Crystal Focus",
+      "1": "Dragon's Maw",
+      "H": "Berserk"
+    },
+    "passives": [
+      "selfrepair"
+    ]
+  },
+  "regigigas": {
+    "abilities": {
+      "0": "Continental Pull",
+      "1": "Worldforged",
+      "H": "Colossal Frame"
+    },
+    "passives": [
+      "slowstart",
+      "ancientassembly"
+    ]
+  },
+  "mewtwo": {
+    "abilities": {
+      "0": "Perfected Genome",
+      "1": "Mind Mirror",
+      "H": "Unbound Will"
+    },
+    "passives": [
+      "absolutepressure"
+    ]
+  },
+  "mewtwomegax": {
+    "abilities": {
+      "0": "Psyche Force"
+    },
+    "passives": [
+      "absolutepressure"
+    ]
+  },
+  "mewtwomegay": {
+    "abilities": {
+      "0": "Psyche Dominion"
+    },
+    "passives": [
+      "absolutepressure"
+    ]
+  },
+  "hydreigon": {
+    "abilities": {
+      "0": "Dark Aura",
+      "1": "Worldbreaker",
+      "H": "False Liberation"
+    },
+    "passives": [
+      "hydraflight"
+    ]
+  },
+  "meloetta": {
+    "abilities": {
+      "0": "Songstress"
+    },
+    "passives": [
+      "serenegrace"
+    ]
+  },
+  "meloettapirouette": {
+    "abilities": {
+      "0": "Dancer"
+    },
+    "passives": [
+      "serenegrace"
+    ]
+  },
+  "rotomheat": {
+    "abilities": {
+      "0": "Eject",
+      "1": "Drought",
+      "H": "Flame Body"
+    },
+    "passives": [
+      "levitate"
+    ]
+  },
+  "rotomwash": {
+    "abilities": {
+      "0": "Eject",
+      "1": "Storm Drain",
+      "H": "Drizzle"
+    },
+    "passives": [
+      "levitate"
+    ]
+  },
+  "rotomfrost": {
+    "abilities": {
+      "0": "Eject",
+      "1": "Refrigerate",
+      "H": "Snow Warning"
+    },
+    "passives": [
+      "levitate"
+    ]
+  },
+  "rotommow": {
+    "abilities": {
+      "0": "Eject",
+      "1": "Grassy Surge",
+      "H": "Seed Sower"
+    },
+    "passives": [
+      "levitate"
+    ]
+  },
+  "rotomfan": {
+    "abilities": {
+      "0": "Eject",
+      "1": "Windy Surge",
+      "H": "Air Lock"
+    },
+    "passives": [
+      "levitate"
+    ]
+  },
+  "umbreon": {
+    "abilities": {
+      "0": "Poison Heal",
+      "1": "Lunar Ward",
+      "G": "Ascendance",
+      "H": "Dark Aura",
+      "S": "Eclipse"
+    },
+    "passives": [
+      "innerfocus"
+    ]
+  },
+  "donphan": {
+    "abilities": {
+      "0": "Aevian Frost",
+      "1": "Rolling Fortress",
+      "H": "Siege Tusks"
+    },
+    "passives": [
+      "battlearmor"
+    ]
+  },
+  "scolipedemega": {
+    "passives": [
+      "merciless"
+    ]
+  },
+  "scolipedemegaazzy": {
+    "passives": [
+      "merciless"
+    ]
+  },
+  "aggron": {
+    "abilities": {
+      "0": "Lightning Rod",
+      "1": "Brute Force",
+      "H": "Soundproof"
+    },
+    "passives": [
+      "heavymetal"
+    ]
+  },
+  "aggronmega": {
+    "passives": [
+      "stamina"
+    ]
+  },
+  "excadrillmega": {
+    "abilities": {
+      "0": "Deep Bore"
+    },
+    "passives": [
+      "piercingdrill"
+    ]
+  },
+  "sylveon": {
+    "abilities": {
+      "0": "Competitive",
+      "1": "Soothing Presence",
+      "H": "Healer"
+    },
+    "passives": [
+      "pixilate"
+    ]
+  },
+  "aegislash": {
+    "abilities": {
+      "0": "Stalwart",
+      "1": "Cursed Body",
+      "H": "Infiltrator"
+    },
+    "passives": [
+      "stancechange"
+    ]
+  },
+  "aegislashblade": {
+    "abilities": {
+      "0": "Stalwart",
+      "1": "Cursed Body",
+      "H": "Infiltrator"
+    },
+    "passives": [
+      "stancechange"
+    ]
+  },
+  "aegislashgmax": {
+    "abilities": {
+      "0": "Imperial Mandate"
+    },
+    "passives": [
+      "cursedbody"
+    ]
+  },
+  "mimikyu": {
+    "abilities": {
+      "0": "Cursed Body",
+      "1": "Frisk",
+      "H": "Infiltrator"
+    },
+    "passives": [
+      "disguise"
+    ]
+  },
+  "mimikyubusted": {
+    "abilities": {
+      "0": "Cursed Body",
+      "1": "Frisk",
+      "H": "Infiltrator"
+    },
+    "passives": [
+      "disguise"
+    ]
+  },
+  "mimikyutotem": {
+    "abilities": {
+      "0": "Cursed Body",
+      "1": "Frisk",
+      "H": "Infiltrator"
+    },
+    "passives": [
+      "disguise"
+    ]
+  },
+  "mimikyubustedtotem": {
+    "abilities": {
+      "0": "Cursed Body",
+      "1": "Frisk",
+      "H": "Infiltrator"
+    },
+    "passives": [
+      "disguise"
+    ]
+  }
+}

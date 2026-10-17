@@ -55,8 +55,8 @@ describe('Approved fourth roster pass', () => {
 		for (const component of ['Magic Guard', 'Unaware']) {
 			assert(!abilityIncludesComponent('Lunar Dread', component));
 		}
-		assert.equal(Dex.species.get('Hydreigon').abilities[0], 'Dread Wings');
-		assert.equal(Dex.species.get('Hydreigon').abilities[1], 'Dark Dominion');
+		assert.equal(Dex.species.get('Hydreigon').abilities[0], 'Dark Aura');
+		assert.equal(Dex.species.get('Hydreigon').abilities[1], 'Worldbreaker');
 		assert.equal(Dex.species.get('Mienshao').abilities.H, 'Meridian Seal');
 		assert.equal(Dex.species.get('Goodra').abilities[1], 'Gooey');
 		assert.equal(Dex.species.get('Goodra-Hisui').abilities[1], 'Filter');

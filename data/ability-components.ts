@@ -1,6 +1,9 @@
 import {AbilityComponentExclusions} from './passive-ability-cleanup';
 /** Genuine mechanical components shared by battle identity and search. */
 export const AbilityComponents: { [id: string]: string[] } = {
+ piercingdrill: [],
+ deepbore: ['moldbreaker', 'powerdrill'],
+ grandmaster: ['innerfocus'],
  swiftvenom: ['swiftswim', 'merciless'],
 	dreaddominion: ['hydrabond', 'moxie', 'intimidate'],
 	eternalflower: ['moldbreaker'],
@@ -17,7 +20,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	strikersmomentum: ['proficient'],
 	forestsurge: ['proficient'],
 	exalt: ['defiant', 'sharpness', 'moldbreaker'],
-	warpath: ['moldbreaker'],
+	grandstrategy: ['moldbreaker'],
 	// Brute Force delegates power/recoil callbacks; it does not grant full Reckless/Rock Head field identities.
 	burningrage: ['proficient', 'bruteforce', 'ironfist', 'moldbreaker'],
 	terragift: ['hospitality', 'unaware', 'proficient'],
@@ -209,7 +212,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	heavenlychorus: ['pixilate', 'cloudnine', 'fluffy'],
 	voidomen: ['friendguard', 'serenegrace', 'moldbreaker'],
 	heatcoil: ['speedboost', 'magmaarmor', 'flamebody'],
-	coldlogic: ['toughclaws', 'prismarmor', 'aftermath', 'forewarn'],
+	coldlogic: ['toughclaws', 'aftermath', 'forewarn'],
 	ironwill: ['prismarmor', 'secondwind', 'selfsufficient', 'whiplash'],
 	joyride: ['aerilate', 'violentrush', 'vitalspirit'],
 	hardyskin: ['dryskin', 'vitalspirit', 'moxie'],
@@ -246,8 +249,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	woolyconductor: ['fluffy', 'moldbreaker', 'static'],
 	helios: ['drought', 'moldbreaker', 'berserk', 'swiftswim'],
 	rimeknuckle: ['ironfist', 'filter', 'icebody'],
-	ragingstorm: ['moldbreaker', 'battlearmor'],
-	ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker', 'battlearmor'],
+	ragingstorm: ['moldbreaker'],
+	ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker'],
 	abysssniper: ['sniper', 'stalwart'],
 	atrocity: ['moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient', 'toughclaws'],
 	streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
@@ -394,7 +397,7 @@ Object.assign(AbilityComponents, {
 
 export function abilityIncludesComponent(ability: string, component: string, seen = new Set<string>()): boolean {
 	const rawId = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
-	const id = ({mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
+	const id = ({bedrockclaw:'duneclaws',rimeclaw:'glacierclaws',dunerunner:'sandrush',frostrunner:'slushrush',mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
 	const query = component.toLowerCase().replace(/[^a-z0-9]/g, '');
 	if (id === query) return true;
 	if (AbilityComponentExclusions[id]?.includes(query)) return false;
@@ -598,7 +601,7 @@ Object.assign(AbilityComponents, {
 	],
 	"primevalhunt": [
 		"skilllink",
-		"battlearmor",
+		"owntempo",
 	],
 	"rimebreaker": [
 		"refrigerate",
@@ -937,3 +940,37 @@ AbilityComponents.ragingcurrent = ['swiftswim', 'damp', 'dryskin', 'stamina'];
 AbilityComponents.beyondfear = [];
 AbilityComponents.unboundspirit = ['vitalspirit'];
 AbilityComponents.ragingheart = [];
+AbilityComponents.silkendecoy = ['selfsufficient', 'swarm'];
+
+Object.assign(AbilityComponents,{rollingfortress:['rockhead'],siegetusks:['moldbreaker'],floehunter:['slushrush'],headlongresolve:['reckless'],scorchsweep:['rockhead'],keenhunt:['keeneye'],hyperdrill:['powerdrill'],venombastion:['stamina']});
+delete AbilityComponents.armoredadvance; delete AbilityComponents.trailbreaker;
+
+Object.assign(AbilityComponents,{duneclaws:['toughclaws'],glacierclaws:['toughclaws']});
+for(const id of ['bedrockclaw','rimeclaw','dunerunner','frostrunner'])delete AbilityComponents[id];
+
+import {EeveeCloysterComponents} from './eeveelution-cloyster-approved';
+Object.assign(AbilityComponents,EeveeCloysterComponents);
+
+
+AbilityComponents.ironmountain=['hypercutter','suctioncups'];
+AbilityComponents.disguise=[];
+AbilityComponents.stancechange=[];
+
+Object.assign(AbilityComponents,{hydraflight:['levitate','hydrabond'],worldbreaker:['berserk','merciless','duskilate'],falseliberation:['moldbreaker','berserk']});
+
+AbilityComponents.performer=['dancer','songstress'];
+
+import {MewtwoComponents} from './mewtwo-approved';
+Object.assign(AbilityComponents,MewtwoComponents);
+
+import {SeasonalBirdComponents} from './seasonal-birds';
+Object.assign(AbilityComponents, SeasonalBirdComponents);
+
+import {JirachiComponents} from './jirachi-approved';
+Object.assign(AbilityComponents,JirachiComponents);
+
+import {RegiComponents} from './regi-approved';
+Object.assign(AbilityComponents,RegiComponents);
+
+import {PrimordialComponents} from './primordial-approved';
+Object.assign(AbilityComponents, PrimordialComponents);

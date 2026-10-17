@@ -8802,3 +8802,13 @@ Items.emboarite.megaStone!['Emboar-Ego'] = 'Emboar-Mega-Ego';
 Items.emboarite = {...Items.emboarite, itemUser: [...(Items.emboarite.itemUser || []), 'Emboar-Ego']};
 
 Items.grimyinite.megaStone!['Mightyena-Grim'] = 'Mightyena-Mega-Grim';
+
+Items.jirachite={name:'Jirachite',spritenum:617,megaStone:{Jirachi:'Jirachi-Mega'},itemUser:['Jirachi'],onTakeItem(item,source){return !item.megaStone?.[source.baseSpecies.baseSpecies];},num:20001,gen:9};
+
+import {RegiAttackTypes} from './primordial-approved';
+Items.primordialorb={name:'Primordial Orb',spritenum:390,num:20002,gen:9,itemUser:['Regigigas'],isPrimalOrb:true,
+ onSwitchInPriority:-1,
+ onSwitchIn(pokemon){if(pokemon.isActive&&pokemon.baseSpecies.name==='Regigigas'&&!pokemon.transformed)pokemon.formeChange('Regigigas-Primordial',this.effect,true);},
+ onTakeItem(item,source){return source.baseSpecies.baseSpecies!=='Regigigas';},
+ onBasePower(basePower,pokemon,target,move){if(pokemon.baseSpecies.baseSpecies==='Regigigas'&&RegiAttackTypes.some(type=>this.movehasType(move,type)))return this.chainModify(1.5);},
+};

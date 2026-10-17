@@ -82,7 +82,9 @@ export class Field {
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
   if (aura.id === 'frozenaura' && (this.pulseBlockadeHolder(source, sourceEffect) || this.neutralizeTerrainChange())) return false;
   const previousSource = this.auraState.sourceEffect?.id;
-		if (aura.id !== 'frozenaura' && !noTerrainPromotion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
+		// Forest Surge installs its companion Aura without promoting an older Grassy Aura over Forest.
+		const forestCompanion = this.terrain === 'forestterrain' && aura.id === 'grassyterrain' && sourceEffect?.id === 'forestsurge';
+		if (aura.id !== 'frozenaura' && !noTerrainPromotion && !forestCompanion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
 			!['raindance', 'sunnyday'].includes(sourceEffect.id) &&
 			sourceEffect.id !== previousSource && this.promoteAura(source, sourceEffect)) return true;
 		if (this.auraField) this.clearAura(false);

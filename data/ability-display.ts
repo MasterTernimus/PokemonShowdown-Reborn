@@ -237,7 +237,7 @@ export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): 
 }
 
 export function getAbilityDisplayComponents(id: string, passives: readonly string[] = [], species = ''): string[] {
-	if (id === 'ironmountain') return passives.includes('hypercutter') ? [] : ['hypercutter'];
+	
 	if (id === 'perfectforecast') return PerfectForecastForms[canonicalAbilityDisplayID(species)]?.components || [];
 	const excluded = getAbilityComponentExclusions(id, passives, species);
 	const parts = Array.from(new Set([...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].map(canonicalAbilityDisplayID)))
@@ -250,7 +250,7 @@ export function getAbilityDisplayComponents(id: string, passives: readonly strin
 /** Short effects and component names are separate display fields. */
 export function getAbilitySelectorSummary(id: string, summary: string, _nameOf: (id: string) => string): string {
  id = canonicalAbilityDisplayID(id);
- if (AbilityDisplaySummaries[id]) return AbilityDisplaySummaries[id];
+ if (AbilityDisplaySummaries[id] && AbilityDisplaySummaries[id] !== 'Combines the listed abilities.') return AbilityDisplaySummaries[id];
  if (id === 'proficient') return summary;
  const closure = getAbilityDisplayClosure(id);
  const clauses = summary.split(/;\s*/).filter(clause => {
@@ -258,5 +258,5 @@ export function getAbilitySelectorSummary(id: string, summary: string, _nameOf: 
   return !parts.every(part => closure.has(canonicalAbilityDisplayID(part)));
  });
  const result = clauses.join('; ').replace(/\bProficient\b/gi, '1.3x same-type move power');
- return result ? result.replace(/^[a-z]/, letter => letter.toUpperCase()) : 'Combines the listed abilities.';
+ return result ? result.replace(/^[a-z]/, letter => letter.toUpperCase()) : summary;
 }

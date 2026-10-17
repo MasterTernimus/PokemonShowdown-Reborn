@@ -1,0 +1,32 @@
+{
+  "sandslash": {
+    "abilities": {
+      "0": "Dune Claws",
+      "1": "Sand Rush",
+      "H": "Own Tempo"
+    },
+    "passives": [
+      "ironbarbs"
+    ]
+  },
+  "sandslashreborn": {
+    "abilities": {
+      "0": "Dune Claws",
+      "1": "Sand Rush",
+      "H": "Own Tempo"
+    },
+    "passives": [
+      "ironbarbs"
+    ]
+  },
+  "sandslashalola": {
+    "abilities": {
+      "0": "Glacier Claws",
+      "1": "Slush Rush",
+      "H": "Ice Body"
+    },
+    "passives": [
+      "ironbarbs"
+    ]
+  }
+}

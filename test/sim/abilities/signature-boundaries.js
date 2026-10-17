@@ -4,14 +4,16 @@ const common = require('../../common');
 describe('Signature ability interaction boundaries', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
-	function setup(ability, attackerAbility = 'No Ability', gameType = 'singles') {
+	function setup(ability, attackerAbility = 'No Ability', gameType = 'singles', species = 'Mew') {
 		battle = common.createBattle({ formatid: gameType === 'doubles' ? 'gen9nofielddoublesbattle' : 'gen9nofieldsinglesgame' }, [
-			[{ species: 'Mew', ability, moves: ['splash', 'tackle'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
+			[{ species, ability, moves: ['splash', 'tackle'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 			[{ species: 'Mew', ability: attackerAbility, moves: ['splash', 'tackle'] }, { species: 'Mew', ability: 'No Ability', moves: ['splash'] }],
 		]);
 		if (battle.requestState === 'teampreview') battle.makeChoices('team 12', 'team 12');
 		battle.randomChance = () => true;
 		battle.randomizer = amount => amount;
+		// These copied-ability checks isolate the package from Mew's new Synchronize passive.
+        for (const pokemon of battle.getAllActive()) if (pokemon.species.id === 'mew') pokemon.getPassives = () => [];
 		return [battle.p1.active[0], battle.p2.active[0]];
 	}
 	function attack(source, target, id, overrides = {}) {
@@ -23,14 +25,15 @@ describe('Signature ability interaction boundaries', () => {
 		Object.assign(move, { accuracy: true, willCrit: false, basePower: 1 }, overrides);
 		battle.actions.runMove(move, source, source.getLocOf(target));
 	}
-	it('Cinder Scales keeps Flame Body under Mold Breaker while Shield Dust can be bypassed', () => {
-		const [holder, attacker] = setup('Cinder Scales', 'Mold Breaker');
+	it('native Cinder Scales retains Flame Body and passive Shield Dust against Mold Breaker', () => {
+		const [holder, attacker] = setup('Cinder Scales', 'Mold Breaker', 'singles', 'Volcarona');
+		assert.deepEqual(holder.getPassives(), ['shielddust']);
 		attack(attacker, holder, 'bodyslam');
-		assert.equal(attacker.status, 'brn'); assert.equal(holder.status, 'par');
+		assert.equal(attacker.status, 'brn'); assert.equal(holder.status, '');
 	});
-	it('Cinder Scales blocks secondaries normally and preserves Swarm pinch power', () => {
+	it('Copied Cinder Scales permits secondaries and preserves Swarm pinch power', () => {
 		const [holder, attacker] = setup('Cinder Scales');
-		attack(attacker, holder, 'bodyslam'); assert.equal(holder.status, '');
+		attack(attacker, holder, 'bodyslam'); assert.equal(holder.status, 'par');
 		holder.hp = Math.floor(holder.maxhp / 3);
 		const move = battle.dex.getActiveMove('bugbuzz');
 		assert.equal(battle.runEvent('ModifySpA', holder, attacker, move, 100), 150);
@@ -74,11 +77,11 @@ describe('Signature ability interaction boundaries', () => {
 		attack(attacker, holder, 'perishsong'); assert(!holder.volatiles.perishsong);
 		attack(holder, attacker, 'perishsong'); assert(holder.volatiles.perishsong);
 	});
-	it('Restorative Chime heals and cures the actual Heal Pulse recipient', () => {
+	it('Restorative Chime preserves Heal Pulse healing without a status cure', () => {
 		const [holder] = setup('Restorative Chime', 'No Ability', 'doubles');
 		const ally = holder.side.active[1]; ally.hp -= 100; ally.setStatus('brn');
 		attack(holder, ally, 'healpulse');
-		assert.equal(ally.status, ''); assert(holder.m.approvedSignatures.restorativeUsed);
+		assert.equal(ally.status, 'brn'); assert(!holder.m.approvedSignatures.restorativeUsed);
 	});
 	it('Restorative Chime adds no self-heal after Healing Wish self-KO', () => {
 		const [holder] = setup('Restorative Chime'); holder.hp -= 100;

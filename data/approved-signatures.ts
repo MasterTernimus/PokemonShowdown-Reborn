@@ -30,6 +30,16 @@ function budget(pokemon: Pokemon): EntryBudget {
 function foeHit(damage: number, target: Pokemon, source: Pokemon) {
 	return damage > 0 && !target.isAlly(source);
 }
+function primevalHungerHit(battle: Battle, target: Pokemon, source: Pokemon, state = battle.effectState) {
+	if (!target.hp || target.isAlly(source)) return;
+	state.hungerTargets?.add(target);
+	const previous = target.volatiles['healblock'];
+	if (!previous) {
+		if (target.addVolatile('healblock', source, battle.dex.abilities.get('primevalhunger'))) target.volatiles['healblock'].duration = 2;
+	} else if ((previous.duration ?? 0) < 2) {
+		previous.duration = 2;
+	}
+}
 function grantSteam(pokemon: Pokemon) {
 	const state = budget(pokemon);
 	if (state.steamGranted) return;
@@ -235,7 +245,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	});
 	add('primevalhunt', 'Primeval Hunt', {
 		...base.skilllink,
-		...base.battlearmor,
+		...base.owntempo,
 		onModifyCritRatio(ratio, source, target, move) {
 			if (typeof move.multihit === 'number' && move.multihit >= 3 && move.hit === move.multihit) return 4;
 		},
@@ -384,19 +394,31 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	});
 	add('primevalhunger', 'Primeval Hunger', {
 		...base.accumulation,
-		onModifyMove(move) {
+		onModifyMove(move, source) {
 			this.effectState.hungerMove = move;
 			this.effectState.hungerTargets = new Set<Pokemon>();
+			if (!['leechseed', 'sappyseed'].includes(move.id)) return;
+			const original = move.onHit;
+			const originalTryHit = move.onTryHit;
+			const unseeded = new Set<Pokemon>();
+			const state = this.effectState;
+			move.onTryHit = function (defender, attacker, activeMove) {
+				const result = typeof originalTryHit === 'function' ? originalTryHit.call(this, defender, attacker, activeMove) : originalTryHit;
+				if (!defender.volatiles['leechseed']) unseeded.add(defender);
+				return result;
+			};
+			move.onHit = function (defender, attacker, activeMove) {
+				const result = typeof original === 'function' ? original.call(this, defender, attacker, activeMove) : original;
+				if (unseeded.delete(defender) && attacker === source && !activeMove.hasBounced && defender.volatiles['leechseed']?.source === source &&
+					source.hasAbility('primevalhunger')) {
+					primevalHungerHit(this, defender, source, state);
+				}
+				return result;
+			};
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (!move.drain || !foeHit(damage, target, source) || !target.hp) return;
-			this.effectState.hungerTargets?.add(target);
-			const previous = target.volatiles['healblock'];
-			if (!previous) {
-				if (target.addVolatile('healblock', source, this.effect)) target.volatiles['healblock'].duration = 2;
-			} else if ((previous.duration ?? 0) < 2) {
-				previous.duration = 2;
-			}
+			if (!move.drain || !foeHit(damage, target, source)) return;
+			primevalHungerHit(this, target, source);
 		},
 		onAfterMove(source, target, move) {
 			if (move !== this.effectState.hungerMove) return;

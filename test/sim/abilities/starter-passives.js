@@ -41,7 +41,14 @@ describe('Starter species passives',()=>{
   battle.makeChoices('switch 2','move splash');battle.makeChoices('switch 2','move splash');assert.deepEqual(p.getPassives(),['blaze']);
   t.formeChange('Mew',null,true);t.setAbility('Blaze');assert.deepEqual(t.getPassives(),['synchronize']);
  });
- it('mechanical form changes add and remove Proficient; Illusion copies disguise passives without exposing the actual form',()=>{
+ it('ordinary Illusion retains actual species passives without revealing the disguise in public protocol',()=>{
+  const[p,t]=start('Charizard','Illusion');p.illusion=t;battle.debugMode=false;
+  const before=battle.log.length,stats={...p.storedStats};
+  assert.deepEqual(p.getPassives(),['blaze']);p.hp=1;
+  assert.equal(event(p,t),150);assert.deepEqual(p.storedStats,stats);
+  assert(!battle.log.slice(before).some(line=>/Blaze|passive/.test(line)));
+ });
+ it('mechanical form changes add and remove Proficient; Perfect Illusion copies disguise passives without exposing the actual form',()=>{
   const[p,t]=start('Charizard');p.m.perfectIllusion=true;p.illusion=t;assert.deepEqual(p.getPassives(),['synchronize']);assert.deepEqual(p.getSwitchRequestData().passives,['synchronize']);
   p.illusion=null;p.formeChange('Charizard-Mega-X',null,true);p.illusion=t;assert.deepEqual(p.getPassives(),['synchronize']);assert.deepEqual(p.getSwitchRequestData().passives,['synchronize']);p.setType('Normal');const disguisedPower=event(p,t,'BasePower','tackle');p.illusion=null;assert.equal(event(p,t,'BasePower','tackle'),220);assert.equal(disguisedPower,169); // Atrocity's independent 1.3 and contact 1.3 also apply.
   p.formeChange('Charizard',null,true);assert.deepEqual(p.getPassives(),['blaze']);

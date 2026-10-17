@@ -44,10 +44,7 @@ export function recordForesight(
 	if (!battle.field.pseudoWeather['foresightmemory']) battle.field.addPseudoWeather('foresightmemory', holder);
 	const state = battle.field.pseudoWeather['foresightmemory'];
 	const entries: ForesightMemory[] = state.entries || (state.entries = []);
-	const owned = entries.filter(entry => entry.owner === holder);
-	if (mode === 'grandmaster' ? owned.length > 0 :
-		owned.some(entry => entry.opponent === opponent.side.n) || owned.length >= (battle.gameType === 'freeforall' ? 3 : 1)) return;
-	const turn = Math.max(battle.turn + (mode === 'grandmaster' ? 2 : 1), ...owned.map(entry => entry.turn + 1));
+	const turn = battle.turn + (mode === 'grandmaster' ? 2 : 1);
 	entries.push({
 		owner: holder, slot: opponent.getSlot(), opponent: opponent.side.n, turn,
 		type: proactive ? 'Psychic' : move.type,
@@ -78,14 +75,19 @@ export function resolveForesight(battle: Battle) {
 	const entries: ForesightMemory[] = state?.entries || [];
 	const released = new Set<Pokemon>();
 	for (const entry of [...entries].sort((a, b) => a.turn - b.turn)) {
-		if (entry.turn > battle.turn || released.has(entry.owner)) continue;
-		if (!battle.sides[entry.opponent].pokemonLeft) {
-			entries.splice(entries.indexOf(entry), 1);
+		if (entry.turn > battle.turn) continue;
+		if (released.has(entry.owner)) {
+			entry.turn = battle.turn + 1;
+			battle.add('-message', `${entry.owner.name}'s stored ${entry.type} attack awaits its next release; postponed to turn ${entry.turn}.`);
+			continue;
+		}
+		const target = battle.getAtSlot(entry.slot);
+		if (!target?.hp || target.fainted) {
+			entry.turn = battle.turn + 1;
+			battle.add('-message', `${entry.owner.name}'s stored ${entry.type} attack has no living target; postponed to turn ${entry.turn}.`);
 			continue;
 		}
 		released.add(entry.owner);
-		const target = battle.getAtSlot(entry.slot);
-		if (!target?.hp || target.fainted) continue;
 		entries.splice(entries.indexOf(entry), 1);
 		// The snapshot is a calculation context only: never use it for hits, retaliation or faint bookkeeping.
 		// The real owner remains the source, as for ordinary delayed attacks.

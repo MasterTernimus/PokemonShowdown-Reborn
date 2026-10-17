@@ -1,4 +1,6 @@
-import {accumulationState} from './swalot-vespiquen-approved';
+import {GrandStrategy} from './grand-strategy';
+import {RelicArmorFields, updateRelicArmorIndicator, clearRelicArmorIndicators} from './relic-armor';
+import {accumulationState, accumulationStackReady} from './swalot-vespiquen-approved';
 import {rememberWarning, protectsWarnedMove} from './warned-moves';
 import {applySereneGrace} from './ally-serene-grace';
 import {installLatestPassiveAbilities} from './latest-passive-abilities';
@@ -4127,7 +4129,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Dancer",
 		// implemented in runMove in scripts.js
 		onAfterBoost(boost, target, source, effect) {
-			if (effect?.sourceEffect !== 'dancer' || !this.field.isTerrain('bigtopterrain')) return;
+			if (!['dancer','performer'].includes(effect?.sourceEffect || '') || !this.field.isTerrain('bigtopterrain')) return;
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! > 0) {
@@ -4137,7 +4139,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.boost({ spa: 1, atk: 1 }, source, source, null, false, true);
 		},
 		onAfterMove(source, target, move) {
-			if (move.flags.dance && source.hasAbility('dancer') && move.sourceEffect !== 'dancer') {
+			if ((move.flags.dance || (move as any).encoreDance) && source.hasAbility('dancer') && !['dancer','performer','songstress'].includes(move.sourceEffect || '')) {
 				this.boost({ spa: 1, spe: 1 }, source, source, null, false, true);
 			}
 		},
@@ -4199,6 +4201,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			this.dex.abilities.get('relicarmor').onStart?.call(this, pokemon);
 		},
+		onTerrainChange(pokemon) { updateRelicArmorIndicator(this, pokemon); },
+		onUpdate(pokemon) { updateRelicArmorIndicator(this, pokemon); },
+		onEnd(pokemon) { if (!pokemon.getPassives().includes('relicarmor')) clearRelicArmorIndicators(pokemon); },
+		onSwitchOut(pokemon) { clearRelicArmorIndicators(pokemon); },
 		onCriticalHit(target, source, move) {
 			return this.dex.abilities.getHandler('relicarmor', 'onCriticalHit')?.call(this, target, source, move);
 		},
@@ -5032,13 +5038,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10120,
 	},
 	ragingstorm: {
-		onStart(pokemon) { return this.dex.abilities.get('battlearmor').onStart?.call(this, pokemon); },
-		onCriticalHit() {
- if (!skipPassiveComponent(this, this.effectState.target, 'battlearmor')) return false;
- },
-		onAfterEachBoost(boost, target, source, effect) {
-			return this.dex.abilities.get('battlearmor').onAfterEachBoost?.call(this, boost, target, source, effect);
-		},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
 			move.infiltrates = true;
@@ -5067,7 +5066,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!dealtDamage) this.boost({ atk: 1 }, source, source);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			this.dex.abilities.get('battlearmor').onSourceModifyDamage?.call(this, damage, source, target, move);
 			if (move.priority > 0) return this.chainModify(0.5);
 		},
 		onImmunity(type, pokemon) {
@@ -5079,7 +5077,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10121,
 	},
 	ragingoverlord: {
-		onCriticalHit: false,
 		onAfterEachBoost(boost, target, source, effect) {
 			return this.dex.abilities.get('ragingstorm').onAfterEachBoost?.call(this, boost, target, source, effect);
 		},
@@ -5241,15 +5238,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10123,
 	},
 	grandmaster: {
-		onTryAddVolatile(status, pokemon) {
-			if (status.id === 'flinch') return null;
+		onTryAddVolatile(status, pokemon, source, effect) {
+			return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon, source, effect);
+		},
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		onModifyMove(move, pokemon) {
 			if (move.category === 'Status') pokemon.abilityState.grandmasterGuard = this.turn;
-			if (move.id === 'miracleeye') pokemon.abilityState.grandmasterMiracleEye = true;
 			if (this.movehasType(move, 'Psychic')) {
 				move.onEffectiveness = function (typeMod, target) {
 					if (typeMod < 0 && target && this.queue.willMove(target)) return 0;
@@ -5267,73 +5266,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyAfterDamageApplied(damage, target, source, effect) {
 			recordForesight(this, this.effectState.target, damage, target, source, effect, 'grandmaster');
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (type === 'Dark' && target?.abilityState.grandmasterMiracleEye) return typeMod - 1;
-		},
 		flags: { breakable: 1 },
 		name: "Grandmaster",
 		rating: 4,
 		num: 10124,
 	},
-	warpath: {
-		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
-		onImmunity(type) {
-			if (type === 'sandstorm' || type === 'hail') return false;
-		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, pokemon) {
-			if (pokemon.status) return this.chainModify(1.5);
-		},
-		onSourceModifyAccuracy(accuracy, target, source, move) {
-			if (typeof accuracy !== 'number') return;
-			return this.chainModify([5325, 4096]);
-		},
-		onBasePower(basePower, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(1.3);
-		},
-		onTryHitPriority: 1,
-		onTryHit(target, source, move) {
-			if (move.flags['powder'] && target !== source && this.dex.getImmunity('powder', target)) {
-				this.add('-immune', target, '[from] ability: War Path');
-				return null;
-			}
-		},
-		onModifyMove(move, source, target) {
-			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
-			if (this.movehasType(move, ['Rock', 'Fighting', 'Ground'])) {
-				move.infiltrates = true;
-				move.ignoreDefensive = true;
-			}
-			if (move.flags['drill'] || move.flags['horn']) {
-				move.infiltrates = true;
-				move.ignoreDefensive = true;
-			}
-		},
-		onTryAddVolatile(status, pokemon) {
-			if (status.id === 'flinch') return null;
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.75);
-		},
-		onAnyModifyBoost(boosts, pokemon) {
-			const warPathUser = this.effectState.target;
-			if (warPathUser === pokemon) return;
-			if (warPathUser === this.activePokemon && pokemon === this.activeTarget) {
-				boosts['def'] = 0;
-				boosts['spd'] = 0;
-				boosts['evasion'] = 0;
-			}
-			if (pokemon === this.activePokemon && warPathUser === this.activeTarget) {
-				boosts['atk'] = 0;
-				boosts['spa'] = 0;
-				boosts['accuracy'] = 0;
-			}
-		},
-		flags: {},
-		name: "War Path",
-		rating: 4,
-		num: 10125,
-	},
+	grandstrategy: GrandStrategy,
 	atrocity: {
 		onImmunity(type, pokemon) {
 			if (type === 'Ground') return false;
@@ -6288,6 +6226,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const cost = Math.max(1, Math.floor(pokemon.baseMaxhp / 4));
 			if (pokemon.hp <= cost) return;
 			pokemon.m.dreamRescueUsed = true;
+			if (this.activeMove && this.activePokemon === source && this.activeMove.id === effect.id) {
+				const move = this.activeMove as ActiveMove & {dreamRescuedTargets?: Pokemon[]};
+				(move.dreamRescuedTargets ||= []).push(target);
+			}
 			this.add('-activate', pokemon, 'ability: Dream Sickness');
 			this.add('-message', `${pokemon.name} pulled ${target.name} back from a fatal dream!`);
 			DREAM_SICKNESS_TRANSFERS.add(this);
@@ -6378,6 +6320,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (lastMove === 'spitup' || lastMove === 'swallow') return;
 			if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) {
 				delete accumulationState(pokemon).accumulationReadyTurn;
+				if (!accumulationStackReady(pokemon, this.turn)) return;
 				pokemon.addVolatile('stockpile', pokemon);
 				if ((pokemon.volatiles['stockpile']?.layers || 0) < 3) return;
 			}
@@ -8061,15 +8004,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	relicarmor: {
 		onStart(pokemon) {
+			updateRelicArmorIndicator(this, pokemon);
 			if (this.field.isTerrain(['desertterrain', 'fairytaleterrain', 'caveterrain', 'crystalcavernterrain', 'newworldterrain', 'volcanicterrain'])) {
 				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.dex.abilities.get('relicarmor'));
 			}
 		},
-		onCriticalHit() {
-			return false;
-		},
+		onTerrainChange(pokemon) { updateRelicArmorIndicator(this, pokemon); },
+		onUpdate(pokemon) { updateRelicArmorIndicator(this, pokemon); },
+		onEnd(pokemon) { if (!pokemon.getPassives().includes('relicarmor')) clearRelicArmorIndicators(pokemon); },
+		onSwitchOut(pokemon) { clearRelicArmorIndicators(pokemon); },
 		onEffectiveness(typeMod, target, type, move) {
-			if (type === 'Rock' && typeMod > 0 && ['Fighting', 'Ground', 'Steel', 'Water', 'Grass'].includes(move.type)) return 0;
+			if (this.field.isTerrain(RelicArmorFields) && type === 'Rock' && typeMod > 0 && ['Fighting', 'Ground', 'Steel', 'Water', 'Grass'].includes(move.type)) return 0;
 		},
 		onImmunity(type, pokemon) {
 			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
@@ -8093,7 +8038,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (lowered) this.boost({ def: 1, spd: 1 }, target, target);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category !== 'Status') return this.chainModify(0.8);
+			if (move.category !== 'Status') return this.chainModify(0.9);
 		},
 		flags: {},
 		name: "Relic Armor",
@@ -12870,20 +12815,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	piercingdrill: {
 		isNonstandard: "Future",
-		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Mold Breaker');
-		},
-		onModifyMove(move) {
-			move.ignoreAbility = true;
-			if ((move.flags['drill'] || move.flags['horn']) && this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) delete move.flags['protect'];
-		},
-		onBasePowerPriority: 19,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['drill'] || move.flags['horn']) {
-				if (this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) return this.chainModify(2);
-				return this.chainModify(1.5);
-			}
-		},
 		onHitProtect(source, target, move) {
 			if (move.flags['contact']) {
 				target.getMoveHitData(move).bypassProtect = this.effect;
@@ -12895,6 +12826,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Piercing Drill",
 		rating: 1,
 		num: 311,
+	},
+	deepbore: {
+		onStart(pokemon) { this.dex.abilities.get('moldbreaker').onStart?.call(this, pokemon); },
+		onModifyMove(move, source, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
+			this.dex.abilities.get('powerdrill').onModifyMove?.call(this, move, source, target);
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, source, target, move) {
+			return this.dex.abilities.get('powerdrill').onBasePower?.call(this, basePower, source, target, move);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (damage <= 0 || source.isAlly(target) || source.m.deepBoreUsed || move.category === 'Status' ||
+				!(move.flags.drill || move.flags.horn) || move.sourceEffect || move.isExternal || move.hasBounced || move.flags.futuremove) return;
+			(move as any).deepBoreDamaged = source;
+		},
+		onAfterMove(source, target, move) {
+			if (!source.hp || !source.isActive || source.m.deepBoreUsed || (move as any).deepBoreDamaged !== source) return;
+			delete (move as any).deepBoreDamaged;
+			let removed = false;
+			for (const id of ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend']) {
+				if (!source.side.removeSideCondition(id)) continue;
+				removed = true;
+				this.add('-sideend', source.side, this.dex.conditions.get(id).name, '[from] ability: Deep Bore', '[of] ' + source);
+			}
+			if (source.removeVolatile('leechseed')) {
+				removed = true;
+				this.add('-end', source, 'Leech Seed', '[from] ability: Deep Bore', '[of] ' + source);
+			}
+			if (source.removeVolatile('partiallytrapped')) removed = true;
+			if (removed) { source.m.deepBoreUsed = true; this.add('-activate', source, 'ability: Deep Bore'); }
+		},
+		flags: {}, name: 'Deep Bore', rating: 4, num: 11350,
 	},
 	pixilate: {
 		onModifyTypePriority: -1,
@@ -13045,6 +13009,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
      const boost = this.field.isTerrain(['rockyterrain','mountainterrain','snowymountainterrain','caveterrain','volcanicterrain']) ? 2 : 1.5;
      return this.chainModify(getDualWieldModifier(move, boost, this, 'powerdrill'));
     }
+				if (skipPassiveComponent(this, attacker, 'powerdrill')) return;
 				if (this.field.isTerrain(['rockyterrain', 'mountainterrain', 'snowymountainterrain', 'caveterrain', 'volcanicterrain'])) return this.chainModify(2);
 				return this.chainModify(1.5);
 			}
@@ -18920,19 +18885,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamage(damage, source, target, effect) {
 			return this.dex.abilities.get('forewarn').onDamage?.call(this, damage, source, target, effect);
 		},
-		onModifyDef(def, pokemon, source, move) {
-			return this.dex.abilities.get('prismarmor').onModifyDef?.call(this, def, pokemon, source, move);
+		onTryBoost(boost, target, source) {
+			if (source && !source.isAlly(target) && boost.accuracy && boost.accuracy < 0) {
+				delete boost.accuracy;
+				this.add('-fail', target, 'unboost', 'accuracy', '[from] ability: Cold Logic', '[of] ' + target);
+			}
 		},
-		onModifySpD(spd, pokemon, source, move) {
-			return this.dex.abilities.get('prismarmor').onModifySpD?.call(this, spd, pokemon, source, move);
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('prismarmor').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('prismarmor').onImmunity?.call(this, type, pokemon);
-		},
-		flags: { breakable: 1 },
+		flags: {},
 		name: "Cold Logic",
 		rating: 4.5,
 		num: 10128,
@@ -21042,9 +21001,6 @@ Abilities.mudmeditation.onModifyMove = function (move) {
 };
 
 // Six additional approved selections. Forewarn itself remains unchanged.
-Abilities.coldlogic.onDamage = function (damage, target, source, effect) {
- if (this.field.isTerrain('psychicterrain', target)) return Abilities.forewarn.onDamage?.call(this, damage, target, source, effect);
-};
 Abilities.updraft.onSourceDamagingHit = function (damage, target, source, move) {
  if (damage <= 0 || target.isAlly(source) || move.type !== 'Flying' || this.effectState.used) return;
  const ally = source.adjacentAllies().filter(pokemon => pokemon.hp && !pokemon.fainted)
@@ -21363,15 +21319,13 @@ for (const key of Object.keys(Abilities.relicarmor)) {
 }
 for (const id of ['apexpredator', 'tyrantdomain', 'auroradomain'] as const) delete Abilities[id].onCriticalHit;
 for (const id of ['tyrantdomain', 'auroradomain'] as const) delete Abilities[id].onResidual;
-for (const id of ['shellarmor', 'battlearmor', 'protectiveward', 'primevalhunt'] as const) {
+for (const id of ['shellarmor', 'battlearmor', 'protectiveward'] as const) {
  const reduction = Abilities[id].onSourceModifyDamage;
  if (reduction) Abilities[id].onSourceModifyDamage = function (damage, source, target, move) {
   if (target.getPassives().includes('relicarmor')) return;
   return reduction.call(this, damage, source, target, move);
  };
- Abilities[id].onCriticalHit = function (target) {
-  if (!target.getPassives().includes('relicarmor')) return false;
- };
+ // Separate Shell Armor, Battle Armor and Protective Ward retain their own critical protection.
 }
 for (const event of ['onResidual', 'onImmunity'] as const) {
  const callback = Abilities.selfsufficient[event] as Function;
@@ -21682,3 +21636,40 @@ Abilities.blackviper.onResidual = function(pokemon) { return this.dex.abilities.
 
 import {installLoreEntryAbilities} from './lore-entry-approved';
 installLoreEntryAbilities(Abilities);
+import {installGuardPassives} from './guard-passives-approved';
+installGuardPassives(Abilities);
+
+import {installApprovedReworks} from './approved-ability-reworks';
+installApprovedReworks(Abilities);
+
+import {installSandslashRework} from './sandslash-rework';
+installSandslashRework(Abilities);
+
+import {installEeveeCloyster} from './eeveelution-cloyster-approved';
+installEeveeCloyster(Abilities);
+
+import {installStanceDisguiseAggron} from './stance-disguise-aggron';
+installStanceDisguiseAggron(Abilities);
+
+import {installHydreigon} from './hydreigon-approved';
+installHydreigon(Abilities);
+
+Abilities.songstress={name:'Songstress',num:11724,flags:{},rating:3};
+Abilities.performer={...Abilities.dancer,name:'Performer',num:11725,rating:4};
+
+import {installMewtwo} from './mewtwo-approved';
+installMewtwo(Abilities);
+
+import {installSeasonalBirds} from './seasonal-birds';
+installSeasonalBirds(Abilities);
+
+import {installJirachiAbilities} from './jirachi-approved';
+installJirachiAbilities(Abilities);
+
+import {installRegis} from './regi-approved';
+installRegis(Abilities);
+
+Abilities.eject={name:'Eject',num:11750,rating:4,flags:{}};
+
+import {installPrimordialAbilities} from './primordial-approved';
+installPrimordialAbilities(Abilities);

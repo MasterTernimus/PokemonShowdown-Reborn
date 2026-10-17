@@ -121,7 +121,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"apexcleave": "1.5x slicing power; eligible moves hit twice; move KOs give +1 Attack.",
 	"aurainstinct": "Stronger STAB; eligible moves hit twice; one 50% roll per battle to survive a lethal attack.",
 	"abysssniper": "Critical hits deal 2.25x damage; +1 Sp. Atk on specified fields.",
-	"warpath": "Powder/weather/flinch immunity; accuracy/power 1.3x; status Atk 1.5x; attacks deal 25% less; stage/bypass effects.",
+ "grandstrategy": "Team HP hits prepare foes; consumes on a physical HP hit to bypass screens and positive defensive stages.",
 	"atrocity": "Stronger attacks and defenses; ignores bypassable abilities; heals 1/16 HP each turn.",
 	"wickedsnare": "Combines the listed abilities.",
 	"voidcommand": "20% less attack damage; KOs boost higher offense. First successful Z-Move also boosts it, without doubling a KO reward.",
@@ -150,7 +150,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"voidvoice": "Normal moves become Fairy; blocks foe priority; heals allies and can save one.",
 	"dreamsickness": "Heals its side 1/16 each turn; once per entry saves an ally at a 1/4 HP cost.",
 	"voidveil": "First Dark/Ghost hit bypasses barriers; Gardevoir ignores New World defense penalties.",
-	"rifteater": "Summons sand; auto-Stockpile; once-battle half-HP guard and heal; awakens at half HP.",
+	"rifteater": "Summons sand; Stockpile every 2 eligible turns; once-battle half-HP guard, heal and awakening.",
 	"mountainrift": "5-turn Mountain; half HP: Gravity + Mountain reset; first faint: full reset into Shatter.",
 	"desertrift": "5-turn Desert Field; fixed four-move set.",
 	"adaptivepower": "Double Attack; heals 1/3 HP on switching; no indirect damage.",
@@ -308,7 +308,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"burningego": "Combines the listed abilities.",
 	"waterbubble": "Doubles Water attacking stats; halves incoming Fire attacking stats.",
 	"stormsovereign": "Summons 8-turn Strong Winds; Flying priority; accuracy protection; moves never miss.",
-	"coldlogic": "Aftermath also triggers on noncontact KOs; learned move protection does not stack with Prism Armor.",
+	"coldlogic": "Opponents cannot lower accuracy; Aftermath also triggers on noncontact KOs.",
 	"layeredcoat": "Doubles Defense; immune to powder effects, sandstorm and hail damage.",
 	"empress": "Blocks foe priority; resets and controls stat changes/screens; Fighting STAB; Fairy weakness protection. Allows holder self boosts and move costs.",
 	"imperialprincess": "Stronger kicks/Fighting moves; no sleep; 20% less attack damage; KOs boost Attack; Fairy weakness protection.",
@@ -410,7 +410,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"evaporate": "Ends ordinary rain; once per stay, ending rain or absorbing Water gives a special-hit veil.",
 	"shattercrust": "First opposing physical HP hit each stay deals half damage and adds Spikes.",
 	"gravehunger": "Ghost HP hits drain 25%; halves foe healing and takes prevented HP (combined cap 1/8 per turn).",
-	"primevalhunger": "Automatic Stockpiles/releases; drain hits block healing and lower a positive attacking stage.",
+	"primevalhunger": "Stockpile every 2 eligible turns; drain hits and new seeds block healing and lower a positive attacking stage.",
 	"dawnherald": "Summons sun; allies take 25% less attack damage.",
 	"transfixinggaze": "Opposing moves cannot pivot while it stays active.",
 	"freshplumage": "First Flying attack has 1.2x power; successful Roost restores the charge once per entry.",
@@ -568,7 +568,7 @@ Object.assign(AbilityDisplaySummaries, {
 AbilityDisplaySummaries.grapplingclaws = "Physical contact HP hits prevent switching/healing through next turn, once per foe per stay.";
 
 Object.assign(AbilityDisplaySummaries, {
-  "venamskiss": "Poison hits can poison Steel/Poison; pre-poisoned foes are drained/heal-blocked. Poisoned foes are slower.",
+  "venamskiss": "Poison hits drain any foe (up to 1/4 base HP/turn); pre-poisoned foes are heal-blocked. Poisoned foes are slower.",
   "dredger": "First Ground HP hit each turn removes one own Spikes layer, then Toxic Spikes if none remain."
 });
 
@@ -737,3 +737,49 @@ for(const[id,text]of Object.entries(StunfiskDescriptions))AbilityDisplaySummarie
 
 import {LoreEntryDescriptions} from './lore-entry-approved';
 for (const [id, text] of Object.entries(LoreEntryDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {ApprovedReworkDescriptions} from './approved-ability-reworks';
+for(const[id,text]of Object.entries(ApprovedReworkDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+delete AbilityDisplaySummaries.armoredadvance; delete AbilityDisplaySummaries.trailbreaker;
+
+import {SandslashDescriptions} from './sandslash-rework';
+for(const[id,text]of Object.entries(SandslashDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+for(const id of ['bedrockclaw','rimeclaw','dunerunner','frostrunner'])delete AbilityDisplaySummaries[id];
+
+import {StanceDisguiseDescriptions} from './stance-disguise-aggron';
+for(const[id,text]of Object.entries(StanceDisguiseDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {HydreigonDescriptions} from './hydreigon-approved';
+for(const[id,text]of Object.entries(HydreigonDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+AbilityDisplaySummaries.solarmimicry="Bug STAB and resistances. Always treated as sunny. Solar Blade lowers Speed by 1.";
+
+import {MeloettaDescriptions} from './meloetta-encore';
+for(const[id,text]of Object.entries(MeloettaDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {AbilityProseAudit} from './ability-prose-audit';
+for(const[id,text]of Object.entries(AbilityProseAudit))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {MewtwoDescriptions} from './mewtwo-approved';
+for(const[id,text]of Object.entries(MewtwoDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {SeasonalBirdDescriptions} from './seasonal-birds';
+for(const[id,text]of Object.entries(SeasonalBirdDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {JirachiDescriptions} from './jirachi-approved';
+for(const[id,text]of Object.entries(JirachiDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {RegiDescriptions} from './regi-approved';
+for(const[id,text]of Object.entries(RegiDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {EjectDescription} from './rotom-eject';
+AbilityDisplaySummaries.eject=EjectDescription.shortDesc;
+
+import {ShortDescriptionAudit} from './short-description-audit';
+Object.assign(AbilityDisplaySummaries,ShortDescriptionAudit);
+
+import {RipenSeedDescriptions} from './ripen-seeds';
+for (const [id, text] of Object.entries(RipenSeedDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {PrimordialDescriptions} from './primordial-approved';
+for (const [id, text] of Object.entries(PrimordialDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;

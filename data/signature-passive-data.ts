@@ -53,3 +53,14 @@ SignaturePassiveComponents.racingspirit = ['rockhead','limber'];
 SignaturePassiveComponents.tirelessmuscle = ['innerfocus'];
 
 SignaturePassiveComponents.rimeboundspirit = ['heatproof'];
+
+SignaturePassiveComponents.hydraflight=['levitate','hydrabond'];
+
+SignaturePassiveComponents.absolutepressure=['pressure','innerfocus','insomnia','moldbreaker'];
+
+SignaturePassiveComponents.springpressure=['static','pressure'];
+SignaturePassiveComponents.summerpressure=['flamebody','pressure'];
+SignaturePassiveComponents.winterpressure=['icebody','pressure'];
+
+import {PassiveShortDescriptionAudit} from './short-description-audit';
+for(const[id,shortDesc]of Object.entries(PassiveShortDescriptionAudit))SignaturePassiveDescriptions[id]={...SignaturePassiveDescriptions[id],shortDesc};

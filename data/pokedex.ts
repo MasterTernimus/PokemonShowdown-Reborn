@@ -2884,7 +2884,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Rhydon",
 		types: ["Ground", "Rock"],
 		baseStats: { hp: 110, atk: 140, def: 130, spa: 35, spd: 75, spe: 60 },
-		abilities: { 0: "Lightning Rod", 1: "War Path", H: "Power Drill" },
+		abilities: { 0: "Grand Strategy", 1: "Lightning Rod", H: "Brute Force" },
 		heightm: 1.9,
 		weightkg: 120,
 		color: "Gray",
@@ -11491,7 +11491,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Ground", "Steel"],
 		baseStats: { hp: 110, atk: 165, def: 100, spa: 65, spd: 65, spe: 103 },
-		abilities: { 0: "Piercing Drill" },
+		abilities: { 0: "Deep Bore" },
 		heightm: 0.9,
 		weightkg: 60,
 		color: "Gray",
@@ -24590,3 +24590,52 @@ Pokedex.annihilape.abilities = {0:'Unbound Spirit', 1:'Raging Heart', H:'Defiant
 
 // Gale Wings is supplied by Talonflame's passive; Flame Body is selectable.
 Pokedex.talonflame.abilities!.H = 'Flame Body';
+
+Pokedex.donphan.abilities = {0:'Aevian Frost',1:'Rolling Fortress',H:'Siege Tusks'};
+
+for(const id of ['sandslash','sandslashalt','sandslashreborn'] as const)if(Pokedex[id])Pokedex[id].abilities={0:'Dune Claws',1:'Sand Rush',H:'Own Tempo'};
+Pokedex.sandslashalola.abilities={0:'Glacier Claws',1:'Slush Rush',H:'Ice Body'};
+
+Pokedex.umbreon.abilities!['1']='Lunar Ward';
+Pokedex.sylveon.abilities!.H='Healer';
+
+Pokedex.aggron.abilities={0:'Lightning Rod',1:'Brute Force',H:'Soundproof'};
+for(const id of ['mimikyu','mimikyubusted','mimikyutotem','mimikyubustedtotem'] as const)Pokedex[id].abilities={0:'Cursed Body',1:'Frisk',H:'Infiltrator'};
+for(const id of ['aegislash','aegislashblade'] as const)Pokedex[id].abilities={0:'Stalwart',1:'Cursed Body',H:'Infiltrator'};
+
+Pokedex.hydreigon.abilities={0:'Dark Aura',1:'Worldbreaker',H:'False Liberation'};
+
+Pokedex.meloetta.abilities={0:'Songstress'};
+Pokedex.meloettapirouette.abilities={0:'Dancer'};
+Pokedex.meloetta.otherFormes!.push('Meloetta-Encore');
+Pokedex.meloetta.formeOrder!.push('Meloetta-Encore');
+Pokedex.meloettaencore={num:648,name:'Meloetta-Encore',baseSpecies:'Meloetta',forme:'Encore',types:['Normal','Fairy'],gender:'N',baseStats:{hp:100,atk:103,def:84,spa:103,spd:102,spe:108},abilities:{0:'Performer'},heightm:0.6,weightkg:6.5,color:'White',eggGroups:['Undiscovered'],tags:['Mythical']};
+
+Pokedex.mewtwo.abilities={0:'Perfected Genome',1:'Mind Mirror',H:'Unbound Will'};
+Pokedex.mewtwomegax.abilities={0:'Psyche Force'};
+Pokedex.mewtwomegay.abilities={0:'Psyche Dominion'};
+
+Pokedex.mewtwomegax.baseStats={hp:106,atk:195,def:130,spa:99,spd:100,spe:150};
+Pokedex.mewtwomegay.baseStats={hp:106,atk:90,def:100,spa:199,spd:130,spe:155};
+
+Pokedex.zapdos.abilities={0:'Spring Herald',1:'Spring Tempest',H:'Competitive'};
+Pokedex.moltres.abilities={0:'Summer Herald',1:'Summer Renewal',H:'Berserk'};
+Pokedex.articuno.abilities={0:'Winter Herald',1:'Winter Refuge',H:'Mirror Armor'};
+
+Pokedex.jirachi.abilities={0:'Comet Heart',1:'Wishkeeper',H:'Dream Sickness'};
+Object.assign(Pokedex.jirachi,{otherFormes:['Jirachi-Mega'],formeOrder:['Jirachi','Jirachi-Mega']});
+Pokedex.jirachimega={...Pokedex.jirachi,name:'Jirachi-Mega',baseSpecies:'Jirachi',forme:'Mega',baseStats:{hp:100,atk:100,def:110,spa:140,spd:110,spe:140},abilities:{0:'Yearning Star'},requiredItem:'Jirachite',battleOnly:'Jirachi',otherFormes:undefined,formeOrder:undefined};
+
+Pokedex.regirock.abilities={0:'Rubblewake',1:'Solid Rock',H:'Bulletproof'};
+Pokedex.regice.abilities={0:'Mirror Armor',1:'Ice Scales',H:'Eternal Ice'};
+Pokedex.registeel.abilities={0:'Clear Body',1:'Tempered Alloy',H:'Battle Armor'};
+Pokedex.regieleki.abilities={0:'Unsealed Current',1:'Transistor',H:'Electric Surge'};
+Pokedex.regidrago.abilities={0:'Crystal Focus',1:"Dragon's Maw",H:'Berserk'};
+
+for(const id of ['rotomheat','rotomwash','rotomfrost','rotommow'] as const)Pokedex[id].abilities!['0']='Eject';
+
+Pokedex.rotomfan.abilities={0:'Eject',1:'Windy Surge',H:'Air Lock'};
+Pokedex.regigigas.abilities={0:'Continental Pull',1:'Worldforged',H:'Colossal Frame'};
+Object.assign(Pokedex.regigigas,{otherFormes:['Regigigas-Primordial'],formeOrder:['Regigigas','Regigigas-Primordial']});
+Pokedex.regigigasprimordial={...Pokedex.regigigas,name:'Regigigas-Primordial',baseSpecies:'Regigigas',forme:'Primordial',types:['Normal'],baseStats:{hp:110,atk:150,def:130,spa:150,spd:130,spe:100},abilities:{0:'Worldbinder'},requiredItem:'Primordial Orb',battleOnly:'Regigigas',otherFormes:undefined,formeOrder:undefined};
+

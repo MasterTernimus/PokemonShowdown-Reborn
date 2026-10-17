@@ -175,14 +175,17 @@ describe('Approved signature batch', () => {
 		target.setAbility('No Ability'); source.addVolatile('healblock'); const blocked = source.hp;
 		use(source, target, 'bite', { basePower: 10 }); assert.equal(source.hp, blocked);
 	});
-	it('Cinder Scales retains each full component including Cold Eclipse entry', () => {
+	it('Cinder Scales retains Flame Body and Swarm; Shield Dust is native only', () => {
 		const [source, target] = start('Cinder Scales');
-		for (const id of ['flamebody', 'swarm', 'shielddust']) assert(source.hasAbility(id));
+		for (const id of ['flamebody', 'swarm']) assert(source.hasAbility(id));
 		battle.field.setTerrain('coldeclipseterrain', source);
 		battle.singleEvent('Start', source.getAbility(), source.abilityState, source);
 		assert.equal(source.boosts.def, 1); assert.equal(source.boosts.spd, 1);
 		const secondary = [{ chance: 100, status: 'par' }];
-		assert.deepEqual(battle.runEvent('ModifySecondaries', source, target, battle.dex.getActiveMove('tackle'), secondary), []);
+		assert.deepEqual(battle.runEvent('ModifySecondaries', source, target, battle.dex.getActiveMove('tackle'), secondary), secondary);
+        source.formeChange('Volcarona', null, true); source.setAbility('Cinder Scales');
+        assert.deepEqual(source.getPassives(), ['shielddust']);
+        assert.deepEqual(battle.runEvent('ModifySecondaries', source, target, battle.dex.getActiveMove('tackle'), secondary), []);
 	});
 	it('Spore Shroud reduces contact attacks rather than all physical damage', () => {
 		const [source, target] = start('Spore Shroud');
@@ -198,7 +201,7 @@ describe('Approved signature batch', () => {
 		assert.deepEqual(crits, [false, false, false, false, true]);
 		crits.length = 0; target.setAbility('Battle Armor');
 		use(source, target, 'rockblast', { basePower: 1, willCrit: undefined });
-		assert(crits.every(crit => !crit)); assert(source.hasAbility('battlearmor'));
+		assert(crits.every(crit => !crit)); assert(source.hasAbility('owntempo')); assert(!source.hasAbility('battlearmor'));
 	});
 	it('Rimebreaker clears only Rocks and one Spikes layer once per turn', () => {
 		const [source, target] = start('Rimebreaker');
@@ -247,22 +250,22 @@ describe('Approved signature batch', () => {
 		use(target, source, 'tackle', { basePower: 1 }); assert(!target.side.sideConditions.stealthrock);
 		assert(!target.side.sideConditions.spikes); // Underwater also prevents ordinary Spikes placement.
 	});
-	it('Restorative Chime cures only on actual healing, once per entry, excluding Rest', () => {
+	it('Restorative Chime no longer cures healing recipients', () => {
 		const [source] = start('Restorative Chime'); source.setStatus('par');
 		use(source, source, 'recover'); assert.equal(source.status, 'par');
-		source.hp -= 50; use(source, source, 'recover'); assert.equal(source.status, '');
+		source.hp -= 50; use(source, source, 'recover'); assert.equal(source.status, 'par'); source.cureStatus();
 		source.setStatus('brn');
 		source.hp -= 50;
 		use(source, source, 'recover');
 		assert.equal(source.status, 'brn');
 	});
-	it('Restorative Chime Wish cures the eventual recipient at heal resolution', () => {
+	it('Restorative Chime Wish no longer cures its eventual recipient', () => {
 		const [source] = start('Restorative Chime');
 		use(source, source, 'wish'); assert(!source.m.approvedSignatures.restorativeUsed);
 		const recipient = source.side.pokemon[1]; recipient.hp -= 100; recipient.setStatus('brn');
 		battle.actions.switchIn(recipient, 0);
 		battle.fieldEvent('Residual'); battle.turn++; battle.fieldEvent('Residual');
-		assert.equal(recipient.status, ''); assert(source.m.approvedSignatures.restorativeUsed);
+		assert.equal(recipient.status, 'brn'); assert(!source.m.approvedSignatures.restorativeUsed);
 	});
 	it('Restorative Chime heals successful sound moves once per turn, not blocked sounds', () => {
 		const [source, target] = start('Restorative Chime', 'Soundproof'); source.hp -= 100; const hp = source.hp;

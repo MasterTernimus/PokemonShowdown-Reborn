@@ -14,6 +14,7 @@ describe('Approved Foresight memory and Vanguard',()=>{
   return [battle.p1.active[0],battle.p2.active[0]];
  }
  function hit(p,t,id='tackle',extra={}){
+  battle.clearActiveMove();
   const m=battle.dex.getActiveMove(id);Object.assign(m,{accuracy:true,willCrit:false,secondaries:undefined},extra);
   battle.actions.useMove(m,p,{target:t});return battle.activeMove;
  }
@@ -23,11 +24,11 @@ describe('Approved Foresight memory and Vanguard',()=>{
   if(m?.foresightStored)hits.push({turn:battle.turn,target:t,damage:d,source:s,type:m.type});
  });return hits;}
  for(const [ability,delay]of [['Grandmaster',2],['Perfect Foresight',1]]){
-  it(`${ability} shares its singles cap between proactive and reactive attacks`,()=>{
-   const [p,t]=setup(ability);const hits=storedHits();hit(p,t,'psychic');hit(t,p,'shadowball',{basePower:1,multihit:3});
-   assert.equal(entries().length,1);assert.equal(entries()[0].turn,1+delay);assert.equal(entries()[0].type,'Psychic');
-   for(let n=0;n<=delay;n++)advance();assert.equal(hits.length,1);assert.equal(entries().length,0);
-   advance();assert.equal(hits.length,1);
+  it(`${ability} queues proactive and reactive attacks independently, deduplicating multihit`,()=>{
+   const [p,t]=setup(ability);const hits=storedHits();hit(p,t,'psychic');hit(t,p,'surf',{basePower:1,multihit:3});
+   assert.equal(entries().length,2);assert(entries().every(e=>e.turn===1+delay));assert.equal(entries()[0].turn,1+delay);assert.equal(entries()[0].type,'Psychic');
+   for(let n=0;n<=delay+1;n++)advance();assert.equal(hits.length,2);assert.equal(entries().length,0);
+   advance();assert.equal(hits.length,2);
   });
  }
  it('stores reactive special attacks of any type without reducing incoming damage',()=>{
@@ -42,16 +43,16 @@ describe('Approved Foresight memory and Vanguard',()=>{
   hit(p,t,'psychic',{sourceEffect:'sleeptalk'});assert.equal(entries().length,0);
   hit(p,t,'toxic');assert.equal(entries().length,0);
  });
- it('FFA accepts all three opponents with one shared slot each and staggered release',()=>{
+ it('FFA accepts repeated opponents with independent queues and staggered release',()=>{
   const [p]=setup('Perfect Foresight',true);const foes=battle.sides.slice(1).map(s=>s.active[0]);const hits=storedHits();
-  for(const t of foes)hit(t,p,'shadowball',{basePower:1,multihit:2});
+  p.hp=p.maxhp=p.baseMaxhp=4000;for(const t of foes)hit(t,p,'surf',{basePower:10,multihit:2});
   for(const t of foes)hit(p,t,'tackle',{basePower:1});
-  assert.deepEqual(entries().map(e=>e.turn),[2,3,4]);assert.equal(entries().length,3);
-  for(let n=0;n<4;n++)advance();assert.deepEqual(hits.map(x=>x.turn),[2,3,4]);assert.equal(entries().length,0);
+  assert.deepEqual(entries().map(e=>e.turn),[2,2,2,2,2,2]);assert.equal(entries().length,6);
+  for(let n=0;n<7;n++)advance();assert.deepEqual(hits.map(x=>x.turn),[2,3,4,5,6,7]);assert.equal(entries().length,0);
  });
- it('Grandmaster retains one pending total even in FFA',()=>{
+ it('Grandmaster accepts multiple pending attacks in FFA',()=>{
   const [p]=setup('Grandmaster',true);for(const side of battle.sides.slice(1))hit(side.active[0],p,'shadowball',{basePower:10});
-  assert.equal(entries().length,1);assert.equal(entries()[0].turn,3);
+  assert.equal(entries().length,3);assert(entries().every(e=>e.turn===3));
  });
  it('stored attacks coexist with ordinary 120 BP Future Sight on the same slot and turn',()=>{
   const [p,t]=setup();const hits=[];battle.onEvent('AfterDamageApplied',battle.format,(d,target,source,m)=>{

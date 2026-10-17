@@ -53,17 +53,17 @@ export function installRejuvenationEvents(abilities: AbilityDataTable) {
 					else if (target.addVolatile('healblock', source, this.effect))
 						target.volatiles.healblock.duration = 2;
 				}
-				if (!move.drain) {
-					source.addVolatile('venamskissturn', source, this.effect);
-					const state = source.volatiles.venamskissturn;
-					const amount = Math.min(Math.round(damage / 3), Math.max(0, Math.floor(source.baseMaxhp / 8) - (state.healed || 0)));
-					if (amount > 0) {
-						state.healed = (state.healed || 0) + amount;
-						state.pendingRemaining = Math.max(0, Math.floor(source.baseMaxhp / 8) - (state.healed - amount));
-						const healed = this.heal(amount, source, target, 'drain');
-						if (healed && healed > amount) state.healed += healed - amount;
-						delete state.pendingRemaining;
-					}
+			}
+			if (!move.drain) {
+				source.addVolatile('venamskissturn', source, this.effect);
+				const state = source.volatiles.venamskissturn;
+				const amount = Math.min(Math.round(damage / 3), Math.max(0, Math.floor(source.baseMaxhp / 4) - (state.healed || 0)));
+				if (amount > 0) {
+					state.healed = (state.healed || 0) + amount;
+					state.pendingRemaining = Math.max(0, Math.floor(source.baseMaxhp / 4) - (state.healed - amount));
+					const healed = this.heal(amount, source, target, 'drain');
+					if (healed && healed > amount) state.healed += healed - amount;
+					delete state.pendingRemaining;
 				}
 			}
 			if (target.hp)

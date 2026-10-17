@@ -1,9 +1,18 @@
+import {updatePreparedIndicator} from './grand-strategy';
+import {updateRelicArmorIndicator} from './relic-armor';
 import {protectsWarnedMove} from './warned-moves';
 import {ShelterConditions} from './shelter-audit-reworks';
 import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+ prepared: {
+  name: 'Prepared', noCopy: true,
+  onStart(target, source) { this.effectState.owners = [source]; updatePreparedIndicator(this, target); },
+  onRestart(target, source) { if (!this.effectState.owners.includes(source)) this.effectState.owners.push(source); updatePreparedIndicator(this, target); },
+  onUpdate(target) { updatePreparedIndicator(this, target); },
+  onEnd(target) { if (this.effectState.visibleKey) this.add('-end', target, 'Prepared'); },
+ },
 	moltenguard: {
 		name: 'Molten Guard', duration: 1, noCopy: true,
 		onStart(pokemon) { this.add('-start', pokemon, 'Molten Guard'); },
@@ -43,6 +52,18 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 
  dredgerturn: {name: 'Dredger turn', noCopy: true, duration: 1},
 	venamskissturn: {name: 'venamskissturn', noCopy: true, duration: 1},
+	relicarmoractive: {
+		name: 'relicarmoractive', noCopy: true,
+		onStart(pokemon) { this.add('-start', pokemon, 'relicarmoractive', '[silent]'); },
+		onEnd(pokemon) { this.add('-end', pokemon, 'relicarmoractive', '[silent]'); },
+		onUpdate(pokemon) { updateRelicArmorIndicator(this, pokemon); },
+	},
+	relicarmorfield: {
+		name: 'relicarmorfield', noCopy: true,
+		onStart(pokemon) { this.add('-start', pokemon, 'relicarmorfield', '[silent]'); },
+		onEnd(pokemon) { this.add('-end', pokemon, 'relicarmorfield', '[silent]'); },
+		onUpdate(pokemon) { updateRelicArmorIndicator(this, pokemon); },
+	},
 	blazeactive: {
 		name: 'Blaze active', noCopy: true,
 		onStart(pokemon) {
@@ -72,12 +93,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (!protectsWarnedMove(target, source, effect)) return;
-			// Cold Logic already applied Prism Armor earlier in the damage pipeline.
-			const state = target.abilityState;
-			let applied = 1;
-			if (target.hasAbility('coldlogic') && state.prismAppliedMove === effect &&
-				state.prismAppliedHit === (effect as ActiveMove).hit) applied = state.prismAppliedFactor;
-			if (applied > 0.75) return this.chainModify(0.75 / applied);
+			return this.chainModify(0.75);
 		},
 	},
     artilleryreload: {
@@ -1876,3 +1892,5 @@ Conditions.voidomenchargespent = {name: 'voidomenchargespent', noCopy: true};
 
 import {installLostFourConditions} from './lost-four-approved';
 installLostFourConditions(Conditions);
+
+Conditions.ejecting={name:'Ejecting',noCopy:true,onStart(target){this.add('-start',target,'Ejecting');},onBeforeMovePriority:100,onBeforeMove(pokemon){this.add('cant',pokemon,'Ejecting');return false;},onDragOut(){return false;},onEnd(target){this.add('-end',target,'Ejecting');}};

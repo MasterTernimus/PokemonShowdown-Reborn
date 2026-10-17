@@ -1,3 +1,7 @@
+import {tryRotomEject} from '../data/rotom-eject';
+import {refillMewtwoShield} from '../data/mewtwo-approved';
+import {DisabledSpecies} from '../data/disabled-species';
+import {clearGrandStrategyMarks} from '../data/grand-strategy';
 import {arsenalType} from './adaptive-arsenal';
 import {getAbilityComponentExclusions, getAbilityComponentAdditions} from '../data/passive-ability-cleanup';
 import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
@@ -370,6 +374,7 @@ export class Pokemon {
 		this.set = set as PokemonSet;
 		if (this.baseSpecies.baseSpecies === 'Silvally') this.set.shiny = true;
 
+		if (DisabledSpecies.has(this.baseSpecies.id)) throw new Error(this.baseSpecies.name + ' is disabled.');
 		this.species = this.baseSpecies;
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseSpecies.baseSpecies;
@@ -759,7 +764,9 @@ export class Pokemon {
 	}
 
 	getMoveData(move: string | Move) {
+		const slot = typeof move === 'string' ? undefined : (move as ActiveMove).ppSlot;
 		move = this.battle.dex.moves.get(move);
+		if (slot !== undefined) return this.moveSlots[slot]?.id === move.id ? this.moveSlots[slot] : null;
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === move.id) {
 				return moveSlot;
@@ -997,7 +1004,6 @@ export class Pokemon {
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
-		move = this.battle.dex.moves.get(move);
 		const ppData = this.getMoveData(move);
 		if (!ppData) return 0;
 		ppData.used = true;
@@ -1092,6 +1098,7 @@ export class Pokemon {
 		let hasValidMove = false;
 		for (const moveSlot of this.moveSlots) {
 			let moveName = moveSlot.move;
+            if(moveSlot.id==='relicsong'){if(this.species.id==='meloettaencore')moveName='Encore Aria';else if(this.species.id==='meloettapirouette')moveName='Pirouette Dance';}
 			if (moveSlot.id === 'hiddenpower') {
 				moveName = `Hidden Power ${this.hpType}`;
 				if (this.battle.gen < 6) moveName += ` ${this.hpPower}`;
@@ -1630,7 +1637,7 @@ export class Pokemon {
 	 */
 	setSpecies(rawSpecies: Species, source: Effect | null = this.battle.effect, isTransform = false) {
 		const species = this.battle.runEvent('ModifySpecies', this, null, source, rawSpecies);
-		if (!species) return null;
+		if (!species || DisabledSpecies.has(species.id)) return null;
 		if (!isTransform && !this.checkPulseEvolution(species, source)) return null;
 		this.species = species;
 		if (!isTransform) this.syncDrakeFang();
@@ -1732,7 +1739,7 @@ export class Pokemon {
 		if (!previousPassives.includes('electricsurge') && this.getPassives().includes('electricsurge')) {
 			startGainedPassives(this, previousPassives, ['electricsurge']);
 		}
-		if (isPermanent && (!source || !['disguise', 'iceface'].includes(source.id))) {
+		if (isPermanent && (!source || !['disguise', 'speciespassivedisguise', 'iceface'].includes(source.id))) {
 			if (this.illusion && source) {
 				// Tera forme by Ogerpon or Terapagos breaks the Illusion
 				this.ability = ''; // Don't allow Illusion to wear off
@@ -1863,6 +1870,34 @@ export class Pokemon {
 	 */
 	faint(source: Pokemon | null = null, effect: Effect | null = null) {
 		if (this.fainted || this.faintQueued) return 0;
+		if (tryRotomEject(this)) return 0;
+		// Final Gambit requests its self-KO both in damageCallback and after the hit.
+		// Suppress only that duplicate request, not later damage in the same attack.
+		const activeMove = this.battle.activeMove;
+		if (source === this && effect?.id === activeMove?.id &&
+			(activeMove as any)?.mewtwoRefusedSelfKO === this) return 0;
+		// All faint causes enter here, including residual damage and self-KO effects.
+		// Transform copies neither this Pokemon's identity nor its one-use allowance.
+		if (!this.transformed && !this.m.mewtwoDefeatUsed &&
+			['mewtwomegax', 'mewtwomegay'].includes(this.species.id)) {
+			this.m.mewtwoDefeatUsed = true;
+			if (this.battle.activePokemon === this && activeMove?.selfdestruct) {
+				(activeMove as any).mewtwoRefusedSelfKO = this;
+			}
+			const original = this.m.mewtwoOriginalAbility || this.battle.dex.abilities.get(this.set.ability).id;
+			const base = this.battle.dex.species.get('Mewtwo');
+			const slot = Object.keys(base.abilities).find(key =>
+				this.battle.dex.abilities.get(base.abilities[key as keyof Species['abilities']]!).id === original
+			) || '0';
+			this.hp = Math.max(1, this.hp);
+			this.formeChange(base, null, true, slot);
+			this.hp = Math.max(1, Math.floor(this.maxhp / 2));
+			this.canMegaEvo = this.canMegaEvoX = this.canMegaEvoY = null;
+			this.battle.add('-message', 'The ultimate life-form refuses to fall!');
+			refillMewtwoShield(this.battle, this);
+			this.battle.add('-heal', this, this.getHealth, '[from] passive: Absolute Pressure');
+			return 0;
+		}
 		const d = this.hp;
 		this.hp = 0;
 		this.switchFlag = false;
@@ -1876,9 +1911,14 @@ export class Pokemon {
 	}
 
 	damage(d: number, source: Pokemon | null = null, effect: Effect | null = null) {
+		if (this.m.ejectWaiting) return 0;
 		if (!this.hp || isNaN(d) || d <= 0) return 0;
 		if (d < 1 && d > 0) d = 1;
 		d = this.battle.trunc(d);
+		if (d >= this.hp) {
+			const previousHP = this.hp;
+			if (tryRotomEject(this)) return Math.max(0, previousHP - this.hp);
+		}
 		this.hp -= d;
 		if (this.hp <= 0) {
 			d += this.hp;
@@ -2226,6 +2266,7 @@ export class Pokemon {
 		}
 		this.battle.singleEvent('End', oldAbility, this.abilityState, this, source);
 		this.ability = ability.id;
+		if (oldAbility.id === 'grandstrategy' && ability.id !== oldAbility.id) clearGrandStrategyMarks(this.battle, this);
 		this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 		if (sourceEffect && !isFromFormeChange && !isTransform) {
 			switch (sourceEffect.id) {
@@ -2273,7 +2314,7 @@ export class Pokemon {
 		return ids.some(id => {
 			const passive = this.getPassives().find(p => p === id || SignaturePassiveComponents[p]?.includes(id));
 			if (!passive) return this.hasAbility(id);
-			const component = this.battle.dex.abilities.get(passive);
+			const component = this.battle.dex.abilities.get(((passive === 'hydraflight' && id === 'levitate') || (passive === 'absolutepressure' && ['innerfocus', 'insomnia'].includes(id))) ? id : passive);
 			return !component.flags.breakable || !this.battle.suppressingAbility(this, component);
 		});
 	}
@@ -2513,7 +2554,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.getPassives().includes('levitate') && this.hasAbilityOrPassive('levitate')) return null;
+		if (this.getPassives().some(id => id === 'levitate' || id === 'hydraflight') && this.hasAbilityOrPassive('levitate')) return null;
 		if (this.getPassives().some(id => id === 'elevate' || id === 'noseformation') && this.hasAbilityOrPassive('elevate')) return null;
 		if (!this.getAbilityComponentExclusions().includes('levitate') && this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
 			'voidcraft', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
@@ -2626,9 +2667,9 @@ export class Pokemon {
 			if (notImmune) continue;
 			if (!message) return false;
 			if (notImmune === null) {
-				if (this.getPassives().some(id => id === 'levitate' || id === 'elevate')) {
+				if (this.getPassives().some(id => id === 'levitate' || id === 'elevate' || id === 'hydraflight')) {
 					if (this.illusion) this.battle.add('-immune', this);
-					else this.battle.add('-immune', this, `[from] passive: ${this.getPassives().includes('elevate') ? 'Elevate' : 'Levitate'}`);
+					else this.battle.add('-immune', this, `[from] passive: ${this.getPassives().includes('hydraflight') ? 'Hydra Flight' : this.getPassives().includes('elevate') ? 'Elevate' : 'Levitate'}`);
 				} else {
 					this.battle.add('-immune', this, '[from] ability: Levitate');
 				}

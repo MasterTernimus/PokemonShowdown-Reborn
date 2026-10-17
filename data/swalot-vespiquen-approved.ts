@@ -7,6 +7,15 @@ export function accumulationState(pokemon: Pokemon): any {
 	return pokemon.getPassives().includes('accumulation') ? (pokemon.m.accumulationState ||= {}) : pokemon.abilityState;
 }
 
+/** Shared by selected, inherited and passive callbacks; only genuine entry resets this counter. */
+export function accumulationStackReady(pokemon: Pokemon, turn: number): boolean {
+	const cadence = pokemon.m.accumulationCadence ||= {eligibleTurns: 0, lastTurn: -1};
+	if (cadence.lastTurn === turn) return false;
+	cadence.lastTurn = turn;
+	cadence.eligibleTurns++;
+	return cadence.eligibleTurns % 2 === 0;
+}
+
 export const SwalotVespiquenDescriptions = {
 	adhesivearmor: {name: 'Adhesive Armor', shortDesc: 'Sticky Hold; cannot be forced to switch.', desc: 'Full local Sticky Hold protects the held item. Opposing moves and effects cannot force this Pokemon to switch. Voluntary switches and its own pivot moves remain available.'},
 	causticooze: {name: 'Caustic Ooze', shortDesc: 'Liquid Ooze; Poison attacks have 1.3x power.', desc: 'Full local Liquid Ooze reverses healing from draining moves, Leech Seed and Strength Sap, including doubled damage on Murkwater Surface and Wasteland. Poison attacks have 1.3x power.'},

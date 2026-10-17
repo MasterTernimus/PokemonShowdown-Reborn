@@ -1,3 +1,4 @@
+import {DisabledSpecies} from '../data/disabled-species';
 import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 /**
  * Team Validator
@@ -582,6 +583,10 @@ export class TeamValidator {
 			return ['Mismagiusite is deferred. Mega Mismagius currently requires Dusk Stone; update this saved set manually.'];
 		}
 		let species = dex.species.get(set.species);
+		if (DisabledSpecies.has(species.id)) return [species.name + ' is disabled.'];
+		const stone = dex.items.get(set.item).megaStone;
+		const destination = stone && (stone[species.name] || stone[species.baseSpecies]);
+		if (destination && DisabledSpecies.has(dex.species.get(destination).id)) return [destination + ' is disabled; this Mega Evolution cannot be used.'];
 		const pulseMoves = PULSE_FIXED_MOVES[species.id];
 		if (pulseMoves && (!Array.isArray(set.moves) || set.moves.length !== 4 ||
 			pulseMoves.some(move => !set.moves.map(toID).includes(move as ID)))) {

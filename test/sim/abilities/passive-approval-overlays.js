@@ -106,6 +106,8 @@ exports.abilities=(id,expected)=>Object.assign(beforeStarterFinishAbilities(id,e
 // fixed expectations from the approved roster, not read from the runtime Dex.
 megaExpected.mightyenagrim = ['rattled'];
 const reviewedStats = {
+ mewtwomegax: [106,195,130,99,100,150],
+ mewtwomegay: [106,90,100,199,130,155],
  probopass: [75,35,150,110,155,25],
  stunfisk:[109,66,99,95,109,32],stunfiskgalar:[109,95,109,66,99,32],
  kingdra: [85,105,90,105,90,95],
@@ -124,3 +126,22 @@ const beforeTalonflamePassives = exports.passives;
 exports.passives = expected => Object.assign(beforeTalonflamePassives(expected), {talonflame: ['galewings']});
 const beforeTalonflameAbilities = exports.abilities;
 exports.abilities = (id, expected) => Object.assign(beforeTalonflameAbilities(id, expected), id === 'talonflame' ? {H: 'Flame Body'} : {});
+
+const guardPassives = require('./guard-passives-approved.json');
+Object.assign(megaExpected, guardPassives);
+const beforeGuardPassives = exports.passives;
+exports.passives = expected => Object.assign(beforeGuardPassives(expected), guardPassives);
+
+// Recorded Sandslash revision: artifacts/sandslash-rework/verified-final.json.
+const beforeClawAbilities=exports.abilities,beforeClawCurrent=exports.current,clawRevision=require('./sandslash-later-approval.json');
+exports.abilities=(id,fallback)=>clawRevision[id]?.abilities||beforeClawAbilities(id,fallback);
+exports.current=(id,fallback)=>clawRevision[id]?.passives||beforeClawCurrent(id,fallback);
+
+// Recorded Eeveelution/Cloyster approval: artifacts/eeveelution-cloyster/verified-final.json.
+const beforeEeveeCurrent=exports.current;const eeveeCurrent={"jolteon":["voltabsorb"],"flareon":["flashfire"],"vaporeon":["waterabsorb"],"glaceon":["icebody"],"leafeon":["chlorophyll"],"espeon":["magicbounce"],"umbreon":["innerfocus"],"sylveon":["pixilate"],"cloyster":["waterabsorb"]};exports.current=(id,fallback)=>eeveeCurrent[id]||beforeEeveeCurrent(id,fallback);
+
+// Recorded Grand Strategy approval: artifacts/grand-strategy/verified-final.json.
+const beforeGrandAbilities=exports.abilities,beforeGrandCurrent=exports.current;exports.abilities=(id,fallback)=>id==='rhydon'?{0:'Grand Strategy',1:'Lightning Rod',H:'Brute Force'}:beforeGrandAbilities(id,fallback);exports.current=(id,fallback)=>id==='rhydon'?['powerdrill']:beforeGrandCurrent(id,fallback);
+
+// Exact later approvals: Mewtwo, Hydreigon, Meloetta, legendary and Primordial checkpoints.
+const beforeLaterAbilities=exports.abilities,beforeLaterCurrent=exports.current,laterReviewed=require('./later-reviewed-rosters.json');exports.abilities=(id,fallback)=>laterReviewed[id]?.abilities||beforeLaterAbilities(id,fallback);exports.current=(id,fallback)=>laterReviewed[id]?.passives||beforeLaterCurrent(id,fallback);

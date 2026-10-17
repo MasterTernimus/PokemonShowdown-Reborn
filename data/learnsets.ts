@@ -113232,3 +113232,5 @@ for (const id of SafeguardSupportSpecies) {
 	const learnset = Learnsets[id].learnset!;
 	learnset.safeguard = [...new Set([...(learnset.safeguard || []), '9M' as const])];
 }
+
+Learnsets.meloettaencore={learnset:{...Learnsets.meloetta.learnset}};

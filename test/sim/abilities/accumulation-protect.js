@@ -16,8 +16,8 @@ describe('Accumulation end-of-turn attacks', function () {
 					battle.makeChoices('team 1', 'team 1');
 					const originalSample = battle.sample.bind(battle);
 					battle.sample = choices => choices.includes('belch') ? release : originalSample(choices);
-					for (let turn = 1; turn <= 4; turn++) {
-						battle.makeChoices('move splash', turn === 4 && protectedTarget ? 'move protect' : 'move splash');
+					for (let turn = 1; turn <= 7; turn++) {
+						battle.makeChoices('move splash', turn === 7 && protectedTarget ? 'move protect' : 'move splash');
 					}
 					const target = battle.p2.active[0];
 					if (protectedTarget) {

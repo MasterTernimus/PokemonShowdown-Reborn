@@ -1,4 +1,5 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
+ warpath: 'Grand Strategy',
 	serratedpincers: "Razor Reach",
 	debilitatingvenom: "Withering Touch",
 	dreadfulpresence: "Dishearten",
@@ -3029,3 +3030,10 @@ Aliases.royalonslaught = 'patriarchswrath';
 Aliases.masterptissier = 'masterpatissier';
 
 Aliases.mineralgrip = 'barbharvest';
+
+Aliases.armoredadvance = 'Rolling Fortress';
+Aliases.trailbreaker = 'Siege Tusks';
+
+Object.assign(Aliases,{bedrockclaw:'Dune Claws',rimeclaw:'Glacier Claws',dunerunner:'Sand Rush',frostrunner:'Slush Rush'});
+
+

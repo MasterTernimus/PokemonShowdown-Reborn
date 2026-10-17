@@ -340,7 +340,9 @@ export class Side {
 				if (action.zmove) details += ` zmove`;
 				if (action.maxMove) details += ` dynamax`;
 				if (action.terastallize) details += ` terastallize`;
-				return `move ${action.moveid}${details}`;
+				const duplicateSlot = action.moveSlot !== undefined &&
+					(action.pokemon?.moveSlots.filter(slot => slot.id === action.moveid).length || 0) > 1;
+				return `move ${duplicateSlot ? action.moveSlot! + 1 : action.moveid}${details}`;
 			case 'switch':
 			case 'instaswitch':
 			case 'revivalblessing':
@@ -666,7 +668,8 @@ export class Side {
 				break;
 			}
 		}
-		const move = this.battle.dex.moves.get(moveid);
+		const move = this.battle.dex.getActiveMove(moveid);
+		move.ppSlot = moveSlot;
 
 		// Z-move
 		const wantsZMove = event === 'zmove' || event === 'zmove-terastallize';
@@ -770,7 +773,8 @@ export class Side {
 			// Check for disabled moves
 			let isEnabled = false;
 			let disabledSource = '';
-			for (const m of moves) {
+			for (const [index, m] of moves.entries()) {
+				if (moveSlot !== undefined && index !== moveSlot) continue;
 				if (m.id !== moveid) continue;
 				if (!m.disabled) {
 					isEnabled = true;
@@ -784,7 +788,8 @@ export class Side {
 				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, { pokemon, update: req => {
 					let updated = this.updateDisabledRequest(pokemon, req);
-					for (const m of req.moves) {
+					for (const [index, m] of req.moves.entries()) {
+						if (moveSlot !== undefined && index !== moveSlot) continue;
 						if (m.id === moveid) {
 							if (!m.disabled) {
 								m.disabled = true;
@@ -899,8 +904,9 @@ export class Side {
 				delete req.maybeDisabled;
 				updated = true;
 			}
-			for (const m of req.moves) {
-				const disabled = pokemon.getMoveData(m.id)?.disabled;
+			for (const [index, m] of req.moves.entries()) {
+				const slot = pokemon.moveSlots[index];
+				const disabled = slot?.id === m.id ? slot.disabled : pokemon.getMoveData(m.id)?.disabled;
 				if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {
 					m.disabled = true;
 					updated = true;

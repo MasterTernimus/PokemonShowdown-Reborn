@@ -30,7 +30,7 @@ describe('Mega and G-Max component revisions', () => {
 			['Glalie-Aevian-Mega', 'Moss Armor', ['stamina', 'naturalcure', 'levitate']],
 			['Glalie-Mega', 'Freezer Burn', ['slushrush', 'refrigerate', 'levitate']],
 			['Golurk-Mega', 'Phantom Fist', ['unseenfist', 'selfsufficient', 'noguard', 'aftermath']],
-			['Metagross-Mega', 'Cold Logic', ['toughclaws', 'prismarmor', 'aftermath', 'forewarn']],
+			['Metagross-Mega', 'Cold Logic', ['toughclaws', 'aftermath', 'forewarn']],
 			['Slowbro-Mega', 'Slow Clamp', ['shellarmor', 'analytic', 'sweetveil']],
 			['Copperajah-Gmax', 'Treasure Titan', ['filter', 'eartheater', 'heavymetal', 'intimidate']],
 		];

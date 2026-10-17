@@ -2529,7 +2529,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onTryHit(target, source, move) {
-				if ((target.volatiles['substitute'] || target.boosts.def > 0) && move.flags['bullet']) {
+				if ((target.volatiles['substitute'] || target.boosts.def > 0) && (move.flags['bullet'] || move.flags['pulse'])) {
 					this.add('-message', 'The bullet-like move rebounded!');
 					return null;
 				}

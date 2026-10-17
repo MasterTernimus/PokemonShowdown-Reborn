@@ -1,0 +1,63 @@
+{
+  "basis": [
+    "Grand Strategy screen bypass: artifacts/grand-strategy/verified-final.json",
+    "Fickle Beam support: artifacts/hydreigon-approved/verified-final.json",
+    "Meloetta contextual moves: artifacts/encore-per-target/verified-final.json",
+    "Jirachi move hooks: artifacts/legendary-approved/verified-final.json",
+    "Previously accepted Restorative Chime and Triple Arrows revisions"
+  ],
+  "deltas": [
+    {
+      "before": "import {radiantTarget} from '../sim/radiant-target';\nimport {accumulationState} from './swalot-vespiquen-approved';\nimport {skywardenDefog} from './approved-support-reworks';\nimport type {PokemonConditionData, FieldConditionData, SideConditionData} from '../sim/dex-conditions';\nimport {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';\nimport {crescentRendApplies, prepareCrescentRend} from '../sim/crescent-rend';\nimport { cureRestorativeStatus } from './approved-signatures';\n/* eslint-disable @stylistic/max-len */\n// List of flags and their descriptions can be found in sim/dex-moves.ts\n\n",
+      "after": "import {prepareMeloettaMove} from './meloetta-encore';\nimport {allOutChance} from './hydreigon-approved';\nimport {grandStrategyPrepared} from './grand-strategy';\nimport {radiantTarget} from '../sim/radiant-target';\nimport {accumulationState} from './swalot-vespiquen-approved';\nimport {skywardenDefog} from './approved-support-reworks';\nimport type {PokemonConditionData, FieldConditionData, SideConditionData} from '../sim/dex-conditions';\nimport {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';\nimport {crescentRendApplies, prepareCrescentRend} from '../sim/crescent-rend';\n/* eslint-disable @stylistic/max-len */\n// List of flags and their descriptions can be found in sim/dex-moves.ts\n\n"
+    },
+    {
+      "before": "\t\t\t\t\t\t(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {\n\t\t\t\t\t\treturn;\n\t\t\t\t\t}\n\t\t\t\t\tif (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {\n\t\t\t\t\t\tthis.debug('Aurora Veil weaken');\n\t\t\t\t\t\tif (crescentRendApplies(source, move)) return;\n\t\t\t\t\t\tif (this.activePerHalf > 1) return this.chainModify([2732, 4096]);\n",
+      "after": "\t\t\t\t\t\t(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {\n\t\t\t\t\t\treturn;\n\t\t\t\t\t}\n\t\t\t\t\tif (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens && !grandStrategyPrepared(source, target, move)) {\n\t\t\t\t\t\tthis.debug('Aurora Veil weaken');\n\t\t\t\t\t\tif (crescentRendApplies(source, move)) return;\n\t\t\t\t\t\tif (this.activePerHalf > 1) return this.chainModify([2732, 4096]);\n"
+    },
+    {
+      "before": "\t\tpp: 5,\n\t\tpriority: 0,\n\t\tflags: { protect: 1, mirror: 1, metronome: 1 },\n\t\tonBasePower(basePower, pokemon) {\n\t\t\tif (this.randomChance(3, 10)) {\n\t\t\t\tthis.attrLastMove('[anim] Fickle Beam All Out');\n\t\t\t\tthis.add('-activate', pokemon, 'move: Fickle Beam');\n\t\t\t\treturn this.chainModify(2);\n",
+      "after": "\t\tpp: 5,\n\t\tpriority: 0,\n\t\tflags: { protect: 1, mirror: 1, metronome: 1 },\n\t\tonBasePower(basePower, pokemon, target, move) {\n\t\t\tif (this.randomChance(allOutChance(move), 10)) {\n\t\t\t\tthis.attrLastMove('[anim] Fickle Beam All Out');\n\t\t\t\tthis.add('-activate', pokemon, 'move: Fickle Beam');\n\t\t\t\treturn this.chainModify(2);\n"
+    },
+    {
+      "before": "\t\tflags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },\n\t\tonHit(target, source, move) {\n\t\t\tthis.add('-activate', source, 'move: Heal Bell');\n\t\t\tthis.heal(source.baseMaxhp / 4, source, source);\n\t\t\ttarget.side.addSideCondition('safeguard', source, move);\n\t\t\ttarget.side.allySide?.addSideCondition('safeguard', source, move);\n\t\t\tlet success = false;\n\t\t\tconst allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];\n\t\t\tfor (const ally of allies) {\n",
+      "after": "\t\tflags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },\n\t\tonHit(target, source, move) {\n\t\t\tthis.add('-activate', source, 'move: Heal Bell');\n\t\t\tconst healed = this.heal(source.baseMaxhp / 4, source, source);\n\t\t\tconst guarded = target.side.addSideCondition('safeguard', source, move);\n\t\t\tconst allyGuarded = target.side.allySide?.addSideCondition('safeguard', source, move);\n\t\t\tlet success = false;\n\t\t\tconst allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];\n\t\t\tfor (const ally of allies) {\n"
+    },
+    {
+      "before": "\t\t\t\t}\n\t\t\t\tif (ally.cureStatus()) success = true;\n\t\t\t}\n\t\t\treturn success;\n\t\t},\n\t\ttarget: \"allyTeam\",\n",
+      "after": "\t\t\t\t}\n\t\t\t\tif (ally.cureStatus()) success = true;\n\t\t\t}\n\t\t\tif (source.hasAbility('restorativechime')) (move as any).restorativeChimeSuccess = !!(success || healed || guarded || allyGuarded);\n\t\t\treturn success;\n\t\t},\n\t\ttarget: \"allyTeam\",\n"
+    },
+    {
+      "before": "\t\t\t},\n\t\t\tonAnyModifyDamage(damage, source, target, move) {\n\t\t\t\tif (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {\n\t\t\t\t\tif (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {\n\t\t\t\t\t\tthis.debug('Light Screen weaken');\n\t\t\t\t\t\tif (crescentRendApplies(source, move)) return;\n\t\t\t\t\t\tif (this.activePerHalf > 1) return this.chainModify([2732, 4096]);\n",
+      "after": "\t\t\t},\n\t\t\tonAnyModifyDamage(damage, source, target, move) {\n\t\t\t\tif (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {\n\t\t\t\t\tif (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens && !grandStrategyPrepared(source, target, move)) {\n\t\t\t\t\t\tthis.debug('Light Screen weaken');\n\t\t\t\t\t\tif (crescentRendApplies(source, move)) return;\n\t\t\t\t\t\tif (this.activePerHalf > 1) return this.chainModify([2732, 4096]);\n"
+    },
+    {
+      "before": "\t\t\t},\n\t\t\tonAnyModifyDamage(damage, source, target, move) {\n\t\t\t\tif (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {\n\t\t\t\t\tif (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {\n\t\t\t\t\t\tthis.debug('Reflect weaken');\n\t\t\t\t\t\tif (crescentRendApplies(source, move)) return;\n\t\t\t\t\t\tif (this.activePerHalf > 1) return this.chainModify([2732, 4096]);\n",
+      "after": "\t\t\t},\n\t\t\tonAnyModifyDamage(damage, source, target, move) {\n\t\t\t\tif (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {\n\t\t\t\t\tif (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens && !grandStrategyPrepared(source, target, move)) {\n\t\t\t\t\t\tthis.debug('Reflect weaken');\n\t\t\t\t\t\tif (crescentRendApplies(source, move)) return;\n\t\t\t\t\t\tif (this.activePerHalf > 1) return this.chainModify([2732, 4096]);\n"
+    },
+    {
+      "before": "\t\tcontestType: \"Cute\",\n\t},\n\trelicsong: {\n\t\tnum: 547,\n\t\taccuracy: 100,\n\t\tbasePower: 75,\n",
+      "after": "\t\tcontestType: \"Cute\",\n\t},\n\trelicsong: {\n        onModifyMove(move,pokemon){prepareMeloettaMove(move,pokemon);},\n        onPrepareHit(target,source,move){if(move.name!=='Relic Song')this.attrLastMove('[anim] Relic Song');},\n\t\tnum: 547,\n\t\taccuracy: 100,\n\t\tbasePower: 75,\n"
+    },
+    {
+      "before": "\t\t\tstatus: 'slp',\n\t\t},\n\t\tonAfterMoveSecondarySelf(pokemon) {\n\t\t\tif (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {\n\t\t\t\tconst meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';\n\t\t\t\tpokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '0', '[msg]');\n\t\t\t}\n\t\t},\n\t\ttarget: \"allAdjacentFoes\",\n",
+      "after": "\t\t\tstatus: 'slp',\n\t\t},\n\t\tonAfterMoveSecondarySelf(pokemon) {\n\t\t\tif (['meloetta','meloettapirouette'].includes(pokemon.species.id) && !pokemon.transformed) {\n\t\t\t\tconst meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';\n                const nativeAbility=pokemon.ability===(meloettaForme?'songstress':'dancer');\n                if(pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '0', '[msg]')&&nativeAbility)pokemon.setAbility(meloettaForme?'Dancer':'Songstress');\n\t\t\t}\n\t\t},\n\t\ttarget: \"allAdjacentFoes\",\n"
+    },
+    {
+      "before": "\t\tpriority: 0,\n\t\tflags: { protect: 1, mirror: 1, kick: 1, metronome: 1, arrow: 1 },\n\t\tcritRatio: 2,\n\t\tself: {\n\t\t\tonHit(source) {\n\t\t\t\t// Current species follows Transform; only current active allies receive each layer.\n\t\t\t\tif (['decidueyehisui', 'decidueyehisuialt'].includes(source.species.id)) {\n\t\t\t\t\tfor (const ally of source.alliesAndSelf()) {\n\t\t\t\t\t\tif (!ally.fainted) ally.addVolatile('triplearrows', source);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t},\n\t\tcondition: {\n\t\t\tnoCopy: true,\n\t\t\tonStart(target) {\n\t\t\t\tthis.effectState.layers = 1;\n\t\t\t\tthis.add('-start', target, 'move: Triple Arrows');\n\t\t\t},\n\t\t\tonRestart(target) {\n\t\t\t\tif (this.effectState.layers >= 3) return false;\n\t\t\t\tthis.effectState.layers++;\n\t\t\t\tthis.add('-start', target, 'move: Triple Arrows');\n\t\t\t},\n\t\t\tonModifyCritRatio(critRatio) {\n\t\t\t\treturn critRatio + this.effectState.layers;\n\t\t\t},\n\t\t},\n\t\tsecondaries: [\n\t\t\t{\n\t\t\t\tchance: 50,\n",
+      "after": "\t\tpriority: 0,\n\t\tflags: { protect: 1, mirror: 1, kick: 1, metronome: 1, arrow: 1 },\n\t\tcritRatio: 2,\n\t\tsecondaries: [\n\t\t\t{\n\t\t\t\tchance: 50,\n"
+    },
+    {
+      "before": "\t\t\tonStart(pokemon, source, sourceEffect) {\n\t\t\t\tthis.effectState.moonlitPromise = source.hasAbility('voidpromise');\n\t\t\t\tthis.effectState.lastingPromiseSource = source.hasAbility('lastingpromise') && sourceEffect?.id === 'wish' ? source : null;\n\t\t\t\tif (source.hasAbility('restorativechime')) {\n\t\t\t\t\tthis.effectState.restorativeEntry = source.m.approvedSignatures ||= {};\n\t\t\t\t}\n\t\t\t\tif (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']) ||\n\t\t\t\t\t(['nomoswish', 'nostraswish'].includes(sourceEffect?.id) &&\n\t\t\t\t\t(this.field.isAura('mistyterrain') || this.field.isAura('rainbowterrain'))))\n",
+      "after": "\t\t\tonStart(pokemon, source, sourceEffect) {\n\t\t\t\tthis.effectState.moonlitPromise = source.hasAbility('voidpromise');\n\t\t\t\tthis.effectState.lastingPromiseSource = source.hasAbility('lastingpromise') && sourceEffect?.id === 'wish' ? source : null;\n\t\t\t\tif (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']) ||\n\t\t\t\t\t(['nomoswish', 'nostraswish'].includes(sourceEffect?.id) &&\n\t\t\t\t\t(this.field.isAura('mistyterrain') || this.field.isAura('rainbowterrain'))))\n"
+    },
+    {
+      "before": "\t\t\t\t\t}\n\t\t\t\t\tconst damage = this.heal(this.effectState.hp, target, target);\n\t\t\t\t\tif (damage) {\n\t\t\t\t\t\tif (this.effectState.restorativeEntry) cureRestorativeStatus(target, this.effectState.restorativeEntry);\n\t\t\t\t\t\tconst wisher = this.effectState.lastingPromiseSource as Pokemon | null;\n\t\t\t\t\t\tif (wisher && target !== wisher && target.isAlly(wisher)) target.cureStatus();\n\t\t\t\t\t\tthis.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);\n",
+      "after": "\t\t\t\t\t}\n\t\t\t\t\tconst damage = this.heal(this.effectState.hp, target, target);\n\t\t\t\t\tif (damage) {\n\t\t\t\t\t\tconst wisher = this.effectState.lastingPromiseSource as Pokemon | null;\n\t\t\t\t\t\tif (wisher && target !== wisher && target.isAlly(wisher)) target.cureStatus();\n\t\t\t\t\t\tthis.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);\n"
+    },
+    {
+      "before": "\nimport {installLoreScreenRules} from './lore-screen-rules';\ninstallLoreScreenRules(Moves);\n",
+      "after": "\nimport {installLoreScreenRules} from './lore-screen-rules';\ninstallLoreScreenRules(Moves);\n\nMoves.encorearia={...Moves.relicsong,name:'Encore Aria',type:'Fairy',onAfterMoveSecondarySelf:undefined};\nMoves.pirouettedance={...Moves.relicsong,name:'Pirouette Dance',type:'Fighting',flags:{protect:1,mirror:1,dance:1,bypasssub:1}};\n\nimport {installJirachiMoves} from './jirachi-approved';\ninstallJirachiMoves(Moves);\n"
+    }
+  ]
+}

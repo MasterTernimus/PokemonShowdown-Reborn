@@ -2,6 +2,7 @@ import { AbilityDescriptionOverrides } from '../ability-descriptions';
 import { getAbilitySelectorSummary } from '../ability-display';
 import { RosterExpansionDescriptions, RosterExpansionShortDescriptions } from '../roster-expansion-text';
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+	deepbore: {name: 'Deep Bore', ...AbilityDescriptionOverrides.deepbore},
 	dreaddominion: {
 		name: 'Dread Dominion',
 		desc: 'Full Hydra Bond and Moxie. Full Intimidate lowers adjacent foes\' Attack by 1 on entry, respecting Substitute and normal Intimidate protections. Dark Aura remains a separate species passive. Does not change Dark/Fairy type matchups.',
@@ -452,8 +453,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	unleashedego: {
 		"name": "Unleashed Ego",
-		"desc": "Ultra Ego + Levitate + Raging Storm. Airborne unless grounded. Damaging hits from foes raise Attack and Sp. Atk once until it uses an attack; heals 1/16 max HP on that hit and 1/20 on further hits. Dealing attack damage heals 1/16 once per turn. Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale add once-per-entry Defense/Sp. Def boosts for physical/special hits and a one-use 1/4-HP pinch heal. Royal Decree or Empress enables 1.3x power (except against Battle Bond) and 0.7x incoming damage unless Neutralization is active. Bewitched Woods, Haunted and Holy fields disable Ultra Ego effects. Raging Storm bypasses abilities, screens, Substitute and defensive stat stages; +1 critical-hit ratio. Attack KOs splash 60% of the recorded hit damage onto remaining foes, or grant +1 Attack if no splash damage is dealt. Battle Armor prevents critical hits, gives 0.8x incoming damage, +2 Defense after opposing stat drops, and +1 Defense on Fairy Tale entry. Incoming priority damage is further halved. Immune to hail; cannot be suppressed.",
-		"shortDesc": "Ultra Ego boosts/healing; airborne; bypasses defenses; KO splash; armor."
+		"desc": "Ultra Ego + Levitate + Raging Storm. Airborne unless grounded. Damaging hits from foes raise Attack and Sp. Atk once until it uses an attack; heals 1/16 max HP on that hit and 1/20 on further hits. Dealing attack damage heals 1/16 once per turn. Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale add once-per-entry Defense/Sp. Def boosts for physical/special hits and a one-use 1/4-HP pinch heal. Royal Decree or Empress enables 1.3x power (except against Battle Bond) and 0.7x incoming damage unless Neutralization is active. Bewitched Woods, Haunted and Holy fields disable Ultra Ego effects. Raging Storm bypasses abilities, screens, Substitute and defensive stat stages; +1 critical-hit ratio. Attack KOs splash 60% of the recorded hit damage onto remaining foes, or grant +1 Attack if no splash damage is dealt. Incoming priority damage is halved. Immune to hail; cannot be suppressed.",
+		"shortDesc": "Ultra Ego boosts/healing; airborne; bypasses defenses; KO splash."
 	},
 	astralcore: {
 		name: "Astral Core",
@@ -904,8 +905,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	relicarmor: {
 		name: "Relic Armor",
-		desc: "In Desert, Fairy Tale, Cave, Crystal Cavern, New World, or Volcanic Field, this Pokemon's Defense and Special Defense rise by 1. Its Rock typing does not add weaknesses to Fighting, Ground, Steel, Water, or Grass. It cannot be critically hit, takes 0.8x damage from attacks, and has Self Sufficient's effects. After an opposing Pokemon lowers one of its stats, its Defense and Special Defense rise by 1.",
-		shortDesc: "Rock weaknesses removed; field +1 Def/SpD; no crits; 0.8x damage; Self Sufficient.",
+		desc: "On entry on Desert, Fairy Tale, Cave, Crystal Cavern, New World or Volcanic, gains +1 Defense and Sp. Def. Only on Rocky, Fairy Tale, Water Surface, Underwater, Murkwater Surface, Midnight Zone, Starlight Arena, New World, Holy, Mountain, Cave, Volcanic, Dragon's Den, Crystal Cavern and Dark Crystal Cavern, Rock typing adds no Fighting, Ground, Steel, Water or Grass weakness. Other type weaknesses, resistances and immunities remain. Auras do not enable this protection. Takes 10% less attack damage; does not prevent critical hits. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. After a foe lowers its stats, gains +1 Defense and Sp. Def. Lapras-Aevian gains Ice typing in hail or snow and on Icy, Snowy Mountain and Cold Eclipse.",
+		shortDesc: "10% less damage; Rock-typing weakness protection on specified fields; recovery and defensive boosts.",
 	},
 	relicmishap: {
 		name: "Relic Mishap",
@@ -974,10 +975,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingstorm: {
 		name: "Raging Storm",
-		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker and Battle Armor. Its attacks ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 60% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
-		shortDesc: "Cannot be suppressed; Mold Breaker + Battle Armor; attacks ignore screens/defensive boosts; KO bonus.",
+		desc: "This Ability cannot be suppressed. This Pokemon has Mold Breaker. Its attacks ignore Reflect, Light Screen, Aurora Veil, and defensive stat boosts. If this Pokemon gets a KO, it damages remaining foes for 60% of the last damage in multi battles, or raises Attack by 1 if there is no valid target or no damage is dealt. Magic Guard users do not take this damage.",
+		shortDesc: "Cannot be suppressed; Mold Breaker; attacks ignore screens/defensive boosts; KO bonus.",
 	},
-	ragingoverlord: {"name":"Raging Overlord","desc":"Moves ignore bypassable opposing abilities. Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks, in addition to its armor reduction. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. It does not block stat drops. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier; unlocks at 2/4/5 are unchanged.","shortDesc":"Ignores abilities/screens/defensive stages; armor protection; KO splash damage; fallen allies grant bonuses. Supreme Overlord caps at 5 effective faints (1.5x power)."},
+	ragingoverlord: {"name":"Raging Overlord","desc":"Moves ignore bypassable opposing abilities. Attacks bypass Substitute, screens and defensive stat stages and gain +1 critical-hit stage. Takes half damage from priority attacks. Immune to hail damage. Move KOs damage remaining foes by 60% of the last damage dealt; if there is no valid target or no damage is dealt, gains +1 Attack instead. Magic Guard prevents this splash damage. Cannot be suppressed. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity from Inner Focus; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. It does not block stat drops. Effective fallen count is capped at 5 after Free-for-All doubling, for a maximum 1.5x Supreme Overlord power multiplier; unlocks at 2/4/5 are unchanged.","shortDesc":"Ignores abilities/screens/defensive stages; KO splash damage; fallen allies grant bonuses. Supreme Overlord caps at 5 effective faints (1.5x power)."},
 	voltagevolley: {
 		name: "Voltage Volley",
 		desc: "This Pokemon's multi-hit moves become special attacks and use its Special Attack.",
@@ -1005,8 +1006,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	grandmaster: {
 		name: "Grandmaster",
-		desc: "Automatically marks the target of a direct damaging Psychic move with Miracle Eye. Successful direct single-target attacks store a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. One shared pending attack, arriving two turns later. Stored attacks snapshot this Pokemon's level, Special Attack, stages and typing, survive switching or fainting, and respect live target defenses. Independent of normal Future Sight. Retains flinch, powder and weather protection, status-turn guard, and its existing Psychic resistance and manual Miracle Eye utility.",
-		shortDesc: "Automatic Miracle Eye; one stored 90 BP attack after 2 turns; independent of Future Sight.",
+		desc: "Automatically marks the target of a direct damaging Psychic move with Miracle Eye. Successful direct single-target attacks store a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Distinct qualifying attacks each queue a separate attack due two turns later, including against the same opponent. At most one stored attack releases per owner per turn; additional due attacks postpone to the next turn. Stored attacks snapshot this Pokemon's level, Special Attack, stages and typing, survive switching or fainting, and respect live target defenses. Independent of normal Future Sight. If its recorded slot has no living target when due, the same attack retries there next turn and remains queued until it can resolve or the battle ends. Full Inner Focus prevents flinching and Intimidate Attack drops. Immune to powder, sandstorm and hail. Takes 20% less attack damage on turns when it uses a status move. Its Psychic attacks ignore type resistances against foes that have not moved. Ordinary Miracle Eye utility remains.",
+		shortDesc: "Inner Focus; automatic Miracle Eye; one stored 90 BP attack after 2 turns.",
 	},
 	warpath: {
 		name: "War Path",
@@ -1177,7 +1178,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	voidvoice: {name: "Void Voice", desc: "Pixilate + Queenly Majesty + Dream Sickness. Normal moves become Fairy and receive Pixilate power boosts. Blocks opposing priority moves targeting its side. Includes Telepathy and its field effects, 1/16 end-turn healing for itself and allies, and a once-per-switch-in rescue that leaves an ally at 1 HP and costs the holder 1/4 max HP.", shortDesc: "Pixilate + Queenly Majesty + Dream Sickness."},
 	perfectforesight: {
 		name: "Perfect Foresight",
-		desc: "Includes Insomnia and retains its opposing-ability copying. Automatically applies target-specific Miracle Eye before a direct damaging Psychic move. Direct single-target HP damage stores a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Shares one pending attack per opposing trainer (one in singles, up to three in Free-for-All), released one per turn beginning next turn. Snapshots its own level, Special Attack, stages and typing, without copied offensive abilities or items. Queues survive switching/fainting and coexist with ordinary Future Sight; normal live defenses apply. Once per battle when Alakazam Mega Evolves, sets real Reflect and Light Screen for 5 turns without shortening longer screens.",
+		desc: "Includes Insomnia and retains its opposing-ability copying. Automatically applies target-specific Miracle Eye before a direct damaging Psychic move. Direct single-target HP damage stores a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Distinct qualifying attacks each queue a separate attack due next turn, including against the same opponent. At most one stored attack releases per owner per turn; additional due attacks postpone to the next turn. Snapshots its own level, Special Attack, stages and typing, without copied offensive abilities or items. Queues survive switching/fainting and coexist with ordinary Future Sight; normal live defenses apply. If its recorded slot has no living target when due, the same attack retries there next turn and remains queued until it can resolve or the battle ends. Once per battle when Alakazam Mega Evolves, sets real Reflect and Light Screen for 5 turns without shortening longer screens.",
 		shortDesc: "Insomnia + ability copy; Miracle Eye; stored attacks; once-per-battle Mega screens.",
 	},
 	doomwarning: {
@@ -3960,8 +3961,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	accumulation: {
 		name: "Accumulation",
-		desc: "This Pokemon has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile each turn. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply.",
-		shortDesc: "Thick Fat; auto-Stockpiles; at 3 waits one turn, then auto-releases every other turn.",
+		desc: "This Pokemon has Thick Fat and is immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile every second eligible active turn, first gaining one after two eligible turns. Genuine switching resets this wait; ability restarts do not. Suppressed or otherwise ineligible turns do not advance the counter. Manual Stockpile is unchanged. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply.",
+		shortDesc: "Thick Fat; Stockpile every 2 eligible turns; at 3 waits one turn, then auto-releases every other turn.",
 	},
 	rifteater: {
 		name: "Rift Eater",
@@ -4423,8 +4424,8 @@ Object.assign(AbilitiesText, {
 
 AbilitiesText.primevalhunger = {
 	name: "Primeval Hunger",
-	desc: "Full Accumulation, including Stockpile, automatic releases, weather immunity and Fire/Ice damage protection. Draining attacks that damage a foe's HP inflict Heal Block through the end of the following turn. After the whole move, lower one positive Attack or Sp. Atk stage of each damaged foe, choosing the more boosted stat and Sp. Atk on ties. Never lowers an unboosted stat or grants the user a boost. Substitute-only damage does not trigger these effects; normal stat-drop protections apply.",
-	shortDesc: "Accumulation; draining hits briefly Heal Block and lower a foe's higher positive attacking stage.",
+	desc: "Full Accumulation, including Stockpile, automatic releases, weather immunity and Fire/Ice damage protection. Draining attacks that damage a foe's HP and successful new Leech Seed applications by Leech Seed or Sappy Seed inflict Heal Block through the end of the following turn. Failed, existing or reflected seeds and residual seed ticks do not trigger this effect. After the whole move, lower one positive Attack or Sp. Atk stage of each affected foe, choosing the more boosted stat and Sp. Atk on ties. Never lowers an unboosted stat or grants the user a boost. Substitute-only damage does not trigger these effects; normal stat-drop protections apply.",
+	shortDesc: "Accumulation; draining hits and new seeds briefly Heal Block and lower a positive attacking stage.",
 };
 
 AbilitiesText.razorreach = {
@@ -4715,3 +4716,62 @@ for(const[id,text]of Object.entries(StunfiskDescriptions))AbilitiesText[id as ID
 
 import {LoreEntryDescriptions} from '../lore-entry-approved';
 for (const [id, text] of Object.entries(LoreEntryDescriptions)) Object.assign(AbilitiesText[id as ID] ||= {name: id}, text);
+import {GuardPassiveDescriptions} from '../guard-passives-approved';
+for (const [id, text] of Object.entries(GuardPassiveDescriptions)) Object.assign(AbilitiesText[id as ID] ||= {name: id}, text);
+import {GrandStrategyDescription} from '../grand-strategy';
+AbilitiesText.grandstrategy = {name: 'Grand Strategy', ...GrandStrategyDescription};
+delete AbilitiesText.warpath;
+
+import {ApprovedReworkDescriptions} from '../approved-ability-reworks';
+Object.assign(AbilitiesText,ApprovedReworkDescriptions);
+delete AbilitiesText.armoredadvance; delete AbilitiesText.trailbreaker;
+
+import {SandslashDescriptions} from '../sandslash-rework';
+Object.assign(AbilitiesText,SandslashDescriptions);
+for(const id of ['bedrockclaw','rimeclaw','dunerunner','frostrunner'] as const)delete AbilitiesText[id];
+
+import {EeveeCloysterDescriptions} from '../eeveelution-cloyster-approved';
+Object.assign(AbilitiesText,EeveeCloysterDescriptions);
+
+
+import {StanceDisguiseDescriptions} from '../stance-disguise-aggron';
+Object.assign(AbilitiesText,StanceDisguiseDescriptions);
+
+import {HydreigonDescriptions} from '../hydreigon-approved';
+Object.assign(AbilitiesText,HydreigonDescriptions);
+
+Object.assign(AbilitiesText.solarmimicry,{shortDesc:"Bug STAB and resistances. Always treated as sunny. Solar Blade lowers Speed by 1.",desc:"Bug STAB and resistances. Always treated as sunny. Solar Blade lowers Speed by 1."});
+
+import {MeloettaDescriptions} from '../meloetta-encore';
+Object.assign(AbilitiesText,MeloettaDescriptions);
+
+import {AbilityProseAudit} from '../ability-prose-audit';
+Object.assign(AbilitiesText,AbilityProseAudit);
+
+import {MewtwoDescriptions} from '../mewtwo-approved';
+Object.assign(AbilitiesText,MewtwoDescriptions);
+
+import {SeasonalBirdDescriptions} from '../seasonal-birds';
+Object.assign(AbilitiesText, SeasonalBirdDescriptions);
+
+import {JirachiDescriptions} from '../jirachi-approved';
+Object.assign(AbilitiesText,JirachiDescriptions);
+
+import {RegiDescriptions} from '../regi-approved';
+Object.assign(AbilitiesText,RegiDescriptions);
+
+import {EjectDescription} from '../rotom-eject';
+AbilitiesText.eject=EjectDescription;
+
+import {ShortDescriptionAudit} from '../short-description-audit';
+for (const [id, shortDesc] of Object.entries(ShortDescriptionAudit)) {
+	const abilityId = id as Lowercase<string>;
+	AbilitiesText[abilityId] = {...AbilitiesText[abilityId], shortDesc};
+}
+for (const id of ['asoneglastrier', 'asonespectrier'] as const) AbilitiesText[id].desc = ShortDescriptionAudit[id];
+
+import {RipenSeedDescriptions} from '../ripen-seeds';
+Object.assign(AbilitiesText, RipenSeedDescriptions);
+
+import {PrimordialDescriptions} from '../primordial-approved';
+Object.assign(AbilitiesText, PrimordialDescriptions);

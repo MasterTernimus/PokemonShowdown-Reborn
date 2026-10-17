@@ -1,10 +1,12 @@
+import {prepareMeloettaMove} from './meloetta-encore';
+import {allOutChance} from './hydreigon-approved';
+import {grandStrategyPrepared} from './grand-strategy';
 import {radiantTarget} from '../sim/radiant-target';
 import {accumulationState} from './swalot-vespiquen-approved';
 import {skywardenDefog} from './approved-support-reworks';
 import type {PokemonConditionData, FieldConditionData, SideConditionData} from '../sim/dex-conditions';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import {crescentRendApplies, prepareCrescentRend} from '../sim/crescent-rend';
-import { cureRestorativeStatus } from './approved-signatures';
 /* eslint-disable @stylistic/max-len */
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
@@ -999,7 +1001,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
 					}
-					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens && !grandStrategyPrepared(source, target, move)) {
 						this.debug('Aurora Veil weaken');
 						if (crescentRendApplies(source, move)) return;
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -6027,8 +6029,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onBasePower(basePower, pokemon) {
-			if (this.randomChance(3, 10)) {
+		onBasePower(basePower, pokemon, target, move) {
+			if (this.randomChance(allOutChance(move), 10)) {
 				this.attrLastMove('[anim] Fickle Beam All Out');
 				this.add('-activate', pokemon, 'move: Fickle Beam');
 				return this.chainModify(2);
@@ -9497,9 +9499,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Heal Bell');
-			this.heal(source.baseMaxhp / 4, source, source);
-			target.side.addSideCondition('safeguard', source, move);
-			target.side.allySide?.addSideCondition('safeguard', source, move);
+			const healed = this.heal(source.baseMaxhp / 4, source, source);
+			const guarded = target.side.addSideCondition('safeguard', source, move);
+			const allyGuarded = target.side.allySide?.addSideCondition('safeguard', source, move);
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
@@ -9518,6 +9520,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				if (ally.cureStatus()) success = true;
 			}
+			if (source.hasAbility('restorativechime')) (move as any).restorativeChimeSuccess = !!(success || healed || guarded || allyGuarded);
 			return success;
 		},
 		target: "allyTeam",
@@ -11797,7 +11800,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
-					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens && !grandStrategyPrepared(source, target, move)) {
 						this.debug('Light Screen weaken');
 						if (crescentRendApplies(source, move)) return;
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -17078,7 +17081,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
-					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates && !move.ignoreScreens && !grandStrategyPrepared(source, target, move)) {
 						this.debug('Reflect weaken');
 						if (crescentRendApplies(source, move)) return;
 						if (this.activePerHalf > 1) return this.chainModify([2732, 4096]);
@@ -17169,6 +17172,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	relicsong: {
+        onModifyMove(move,pokemon){prepareMeloettaMove(move,pokemon);},
+        onPrepareHit(target,source,move){if(move.name!=='Relic Song')this.attrLastMove('[anim] Relic Song');},
 		num: 547,
 		accuracy: 100,
 		basePower: 75,
@@ -17182,9 +17187,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			status: 'slp',
 		},
 		onAfterMoveSecondarySelf(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Meloetta' && !pokemon.transformed) {
+			if (['meloetta','meloettapirouette'].includes(pokemon.species.id) && !pokemon.transformed) {
 				const meloettaForme = pokemon.species.id === 'meloettapirouette' ? '' : '-Pirouette';
-				pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '0', '[msg]');
+                const nativeAbility=pokemon.ability===(meloettaForme?'songstress':'dancer');
+                if(pokemon.formeChange('Meloetta' + meloettaForme, this.effect, false, '0', '[msg]')&&nativeAbility)pokemon.setAbility(meloettaForme?'Dancer':'Songstress');
 			}
 		},
 		target: "allAdjacentFoes",
@@ -23270,31 +23276,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, kick: 1, metronome: 1, arrow: 1 },
 		critRatio: 2,
-		self: {
-			onHit(source) {
-				// Current species follows Transform; only current active allies receive each layer.
-				if (['decidueyehisui', 'decidueyehisuialt'].includes(source.species.id)) {
-					for (const ally of source.alliesAndSelf()) {
-						if (!ally.fainted) ally.addVolatile('triplearrows', source);
-					}
-				}
-			},
-		},
-		condition: {
-			noCopy: true,
-			onStart(target) {
-				this.effectState.layers = 1;
-				this.add('-start', target, 'move: Triple Arrows');
-			},
-			onRestart(target) {
-				if (this.effectState.layers >= 3) return false;
-				this.effectState.layers++;
-				this.add('-start', target, 'move: Triple Arrows');
-			},
-			onModifyCritRatio(critRatio) {
-				return critRatio + this.effectState.layers;
-			},
-		},
 		secondaries: [
 			{
 				chance: 50,
@@ -24349,9 +24330,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onStart(pokemon, source, sourceEffect) {
 				this.effectState.moonlitPromise = source.hasAbility('voidpromise');
 				this.effectState.lastingPromiseSource = source.hasAbility('lastingpromise') && sourceEffect?.id === 'wish' ? source : null;
-				if (source.hasAbility('restorativechime')) {
-					this.effectState.restorativeEntry = source.m.approvedSignatures ||= {};
-				}
 				if (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']) ||
 					(['nomoswish', 'nostraswish'].includes(sourceEffect?.id) &&
 					(this.field.isAura('mistyterrain') || this.field.isAura('rainbowterrain'))))
@@ -24369,7 +24347,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
-						if (this.effectState.restorativeEntry) cureRestorativeStatus(target, this.effectState.restorativeEntry);
 						const wisher = this.effectState.lastingPromiseSource as Pokemon | null;
 						if (wisher && target !== wisher && target.isAlly(wisher)) target.cureStatus();
 						this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
@@ -25127,3 +25104,9 @@ Moves.healorder.target = 'adjacentAllyOrSelf';
 
 import {installLoreScreenRules} from './lore-screen-rules';
 installLoreScreenRules(Moves);
+
+Moves.encorearia={...Moves.relicsong,name:'Encore Aria',type:'Fairy',onAfterMoveSecondarySelf:undefined};
+Moves.pirouettedance={...Moves.relicsong,name:'Pirouette Dance',type:'Fighting',flags:{protect:1,mirror:1,dance:1,bypasssub:1}};
+
+import {installJirachiMoves} from './jirachi-approved';
+installJirachiMoves(Moves);

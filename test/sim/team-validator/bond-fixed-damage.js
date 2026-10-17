@@ -21,7 +21,7 @@ describe('Fixed-level moves with multi-strike Bond abilities', () => {
   for (const ability of ['Hydra Bond', 'Parental Bond']) it(`rejects ${move} with ${ability}`, () => banned({ability, moves: [move]}, move, ability));
   for (const ability of ['Dread Dominion', 'Pulse Triad', 'Sevii Schooling']) it(`rejects ${move} through ${ability}`, () => banned({ability, moves: [move]}, move, 'Hydra Bond'));
   it(`rejects ${move} through Mega Evolution`, () => banned({species: 'Kangaskhan', ability: 'Scrappy', item: 'Kangaskhanite', moves: [move]}, move, 'Parental Bond'));
-  it(`rejects ${move} through custom Mega Evolution`, () => banned({species: 'Mightyena', ability: 'Intimidate', item: 'Grimyinite', moves: [move]}, move, 'Hydra Bond'));
+  it(`rejects ${move} through custom Mega Evolution`, () => banned({species: 'Mightyena-Grim', ability: 'Intimidate', item: 'Grimyinite', moves: [move]}, move, 'Hydra Bond'));
   it(`rejects ${move} through Anomaly Core`, () => banned({species: 'Magnezone', ability: 'Sturdy', item: 'Anomaly Core', moves: [move]}, move, 'Hydra Bond'));
   it(`allows ${move} without Bond`, () => assert.deepEqual(errors({moves: [move]}), []));
  }

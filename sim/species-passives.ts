@@ -39,11 +39,12 @@ export function thematicPassives(pokemon: Pokemon) {
 
 const migratedEntryPassives = new Set(['supremeoverlord', 'unnerve', 'fairyaura', 'darkaura', 'contrary', 'moldbreaker', 'noguard',
 	'eldritchremedy', 'mimecraft', 'saltbastion', 'download', 'hospitality',
-	'frisk', 'oblivious', 'waterveil', 'drizzle', 'grassysurge', 'electricsurge', 'thermalexchange', 'flamebody', 'intimidate',
+	'frisk', 'oblivious', 'waterveil', 'drizzle', 'grassysurge', 'electricsurge', 'thermalexchange', 'flamebody', 'intimidate', 'slowstart',
 	'swornduty', 'gluttony', 'heavymetal', 'stalwart']);
 /** Entry effects in the approved Kalos/Alola and Paldea migrations run once when acquired. */
 export function startGainedPassives(pokemon: Pokemon, previous: readonly string[], only?: readonly string[]) {
 	if (!pokemon.isActive) return;
+	if (previous.includes('slowstart') && !pokemon.getPassives().includes('slowstart') && !pokemon.hasAbility('slowstart')) pokemon.removeVolatile('slowstart');
 	for (const id of thematicPassives(pokemon)) {
 		if (only && !only.includes(id)) continue;
 		if (previous.includes(id) || !migratedEntryPassives.has(id)) continue;

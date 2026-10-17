@@ -8,9 +8,13 @@ describe('Mega Mightyena and Dread Dominion', () => {
 	let battle;
 	afterEach(() => { if (battle) battle.destroy(); battle = null; });
 	for (const species of ['Mightyena', 'Mightyena-Grim', 'Mightyena-Deso']) {
-		it(`Mega Evolves ${species} with Grimyinite and swaps its passive`, () => {
+		it(`checks ${species} Grimyinite availability and passive`, () => {
 			const set = {species, ability: 'Intimidate', item: 'Grimyinite', moves: ['Protect']};
-			assert.equal(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]), null);
+            if (species !== 'Mightyena-Grim') {
+                assert(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]).some(error => error.includes('Mightyena-Mega is disabled')));
+                return;
+            }
+            assert.equal(TeamValidator.get('gen9nofieldsinglesgame').validateTeam([set]), null);
 			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[set], [
 				{species: 'Mew', ability: 'Synchronize', moves: ['Splash']},
 			]]);
@@ -78,8 +82,8 @@ describe('Mega Mightyena and Dread Dominion', () => {
 	});
 	it('does not stack Dark Aura passives and still supports Aura Break', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Mightyena-Mega', ability: 'Dread Dominion', moves: ['Splash']},
-			{species: 'Mightyena-Mega', ability: 'Dread Dominion', moves: ['Splash']},
+			{species: 'Mightyena-Mega-Grim', ability: 'Dread Dominion', moves: ['Splash']},
+			{species: 'Mightyena-Mega-Grim', ability: 'Dread Dominion', moves: ['Splash']},
 		], [
 			{species: 'Mew', ability: 'No Ability', moves: ['Splash']},
 			{species: 'Mew', ability: 'No Ability', moves: ['Splash']},

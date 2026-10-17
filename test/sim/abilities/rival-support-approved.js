@@ -90,9 +90,9 @@ describe('Rival/support boundary checks',()=>{
   const[p,q]=setup('Haxorus','No Ability');p.side.active[1].setAbility('Mycelial Bond');hit(p,q,'tackle');assert(battle.log.some(x=>x.includes('|-hitcount|')&&x.endsWith('|2')));
   const move=Dex.getActiveMove('surf');battle.runEvent('PrepareHit',p,q,move);assert(!move.twinFang);assert(!move.mycelialBond);
  });
- it('Raging Storm retains Battle Armor reduction after Haxorus passive replacement',()=>{
-  const[p,q]=setup('Haxorus','Raging Storm');assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),80);
-  assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('quickattack'),100),40);
+ it('Raging Storm retains priority protection after approved Battle Armor removal',()=>{
+  const[p,q]=setup('Haxorus','Raging Storm');assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),100);
+  assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('quickattack'),100),50);
  });
  it('Dragon Drake Fang retains normal Steel resistance while Poison Fang retains its override',()=>{
   const[p,q]=setup('Mew','Sirius');q.setType('Steel');

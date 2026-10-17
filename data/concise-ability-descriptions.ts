@@ -85,8 +85,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "+20% power per allied faint, up to 2x; heals 5% HP per opposing faint."
   },
   "ragingstorm": {
-    "desc": "Battle Armor prevents critical hits, reduces attack damage to 0.8x and retains its local field/stat-drop effects. Moves ignore bypassable abilities, Substitute, screens and defensive stages and gain one critical-hit stage. Incoming priority attack damage is additionally halved. Immune to hail damage. Move KOs retain the existing 60% damage splash or Attack increase. Cannot be suppressed. Battle Armor is no longer Haxorus’s passive.",
-    "shortDesc": "Battle Armor; bypasses screens/defensive stages; priority resistance and KO splash."
+    "desc": "Moves ignore bypassable abilities, Substitute, screens and defensive stages and gain one critical-hit stage. Incoming priority attack damage is halved. Immune to hail damage. Move KOs retain the existing 60% damage splash or Attack increase. Cannot be suppressed.",
+    "shortDesc": "bypasses screens/defensive stages; priority resistance and KO splash."
   },
   "wickedsnare": {
     "desc": "Intimidate lowers adjacent foes' Attack by one stage on entry, respecting its normal protections. After a damaging Dark move finishes all hits, each opponent that took positive HP damage loses one Defense stage, once per target per move. Substitute-only damage, misses, protection and immunity do not trigger this effect. Native effects remain independent: Crunch can also cause its own Defense drop. Prankster remains the species passive.",
@@ -533,8 +533,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "First successful ally Instruct each entry cures confusion before the repeated action."
   },
   "mindcurrent": {
-    "desc": "Inner Focus blocks flinching and Intimidate's Attack drop. Once per entry, a damaging Psychic move dealing damage to a foe or its Substitute grants Charge after the move finishes. The triggering move cannot consume the new Charge. Misses, Protect and immunity do not spend the use.",
-    "shortDesc": "First damaging Psychic move each entry grants Charge after the move completes."
+    "desc": "Inner Focus blocks flinching and Intimidate. Once per entry, Psychic damage to a foe or its Substitute grants Charge after the move ends, so the triggering move cannot consume it.",
+    "shortDesc": "Inner Focus; first Psychic damage each entry grants Charge after the move."
   },
   "afterlifegate": {
     "desc": "Once per turn after a whole special Ghost or Poison attack damages an opposing Pokemon's HP, curses one surviving active foe if it is not already cursed. This ability-sourced Curse deals 1/8 base max HP each turn and costs its user no HP. Once per turn, a foe knocked out by its own attack or its own Afterlife Gate Curse heals it for 1/8 max HP, only while it is alive and active. Other curses and unrelated knockouts do not qualify. Shadow Shield reduces attack damage by 20%, or 40% for super-effective attacks, at any HP; it retains its Cold Eclipse hail immunity. Cursed Body is supplied separately by the species passive. No Shadow Tag.",

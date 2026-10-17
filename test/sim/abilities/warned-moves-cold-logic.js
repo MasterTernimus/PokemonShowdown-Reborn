@@ -23,9 +23,9 @@ describe('Warned move protection and Cold Logic contingency',()=>{
  it('does not grant OHKO protection',()=>{
   const[p,q]=setup('Mew','Anticipation','No Ability','fissure');assert(!p.volatiles.warnedmoves);assert.equal(damage(p,q,'fissure'),1000);
  });
- it('Cold Logic uses 25% for warned neutral hits and retains stronger Prism reduction',()=>{
+ it('Cold Logic uses Forewarn protection without Prism Armor',()=>{
   const[p,q]=setup('Metagross-Mega','Cold Logic','No Ability','surf');
-  for(const [typeMod,expected] of [[0,750],[1,600]]) {
+  for(const [typeMod,expected] of [[0,750],[1,750]]) {
    const move=battle.dex.getActiveMove('surf');p.getMoveHitData(move).typeMod=typeMod;
    const modified=battle.runEvent('ModifyDamage',q,p,move,1000);
    assert.equal(battle.runEvent('Damage',p,q,move,modified),expected);

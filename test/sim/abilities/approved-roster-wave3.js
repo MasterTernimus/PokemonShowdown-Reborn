@@ -115,11 +115,11 @@ describe('Approved third roster pass', () => {
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		hit('seismictoss', foe, p); assert(!p.volatiles.substitute);
 	});
-	it('Venom Bastion retains Stamina but removes the old Bug multiplier and critical-hit effect', () => {
+	it('Venom Bastion retains Stamina without retaliation or a BasePower Bug multiplier', () => {
 		const [p, , foe] = make('Venom Bastion');
 		foe.setStatus('psn'); foe.storedStats.atk = 300; foe.storedStats.spa = 100;
 		hit('tackle', foe, p); hit('tackle', foe, p);
-		assert.equal(p.boosts.def, 1); assert.equal(foe.boosts.atk, -1);
+		assert.equal(p.boosts.def, 1); assert.equal(foe.boosts.atk, 0);
 		assert.equal(battle.runEvent('BasePower', p, foe, battle.dex.getActiveMove('bugbuzz'), 100, true), 100);
 		assert.equal(battle.runEvent('ModifyCritRatio', p, foe, battle.dex.getActiveMove('bugbuzz'), 1), 1);
 	});
