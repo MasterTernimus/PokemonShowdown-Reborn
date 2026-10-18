@@ -55,8 +55,8 @@ describe('Starter species passives',()=>{
   assert(!battle.log.some(line=>line.includes('|-ability|')&&line.includes('Proficient')));
  });
  it('Greninja Bond to Ash gains Proficient immediately',()=>{const[p]=start('Greninja-Bond','Battle Bond');assert.deepEqual(p.getPassives(),['proficient']);p.formeChange('Greninja-Ash',null,true);assert.deepEqual(p.getPassives(),['proficient']);});
- it('preserves custom field conditions, including broad Grassy Terrain Overgrow',()=>{
-  const[p,t]=start('Venusaur','Overgrow');battle.field.setTerrain('grassyterrain',p);assert.equal(event(p,t,'ModifySpA','flamethrower'),150);
+ it('preserves custom field conditions and restricts Grassy Terrain Overgrow to Grass moves',()=>{
+  const[p,t]=start('Venusaur','Overgrow');battle.field.setTerrain('grassyterrain',p);assert.equal(event(p,t,'ModifySpA','flamethrower'),100);assert.equal(event(p,t,'ModifySpA','energyball'),150);
   p.formeChange('Charizard',null,true);p.setAbility('Blaze');battle.field.setTerrain('burningterrain',p);assert.equal(event(p,t),150);assert.equal(event(p,t,'ModifySpA','surf'),100);
   p.hp=1;battle.field.setTerrain('coldeclipseterrain',p);assert.equal(event(p,t),100);
   p.formeChange('Blastoise',null,true);p.setAbility('Torrent');p.hp=p.maxhp;battle.field.setTerrain('midnightzoneterrain',p);assert.equal(event(p,t,'ModifySpA','surf'),150);

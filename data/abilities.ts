@@ -2796,6 +2796,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	angershell: {
 		onDamage(damage, target, source, effect) {
+			if (effect.effectType === 'Move' && damage > 0) {
+				const hit = target.getMoveHitData(effect);
+				hit.hpBeforeDamage = Math.max(hit.hpBeforeDamage || 0, target.hp);
+			}
 			this.effectState.checkedAngerShell = !(
 				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbilityOrPassive('sheerforce'))
@@ -2815,8 +2819,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
 			if (!lastAttackedBy) return;
-			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
-			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
+			const hpBeforeDamage = target.getMoveHitData(move).hpBeforeDamage;
+			if (hpBeforeDamage !== undefined && target.hp <= target.maxhp / 2 && hpBeforeDamage > target.maxhp / 2) {
 				this.boost({ atk: 1, spa: 1, spe: 1, def: -1, spd: -1 }, target, target);
 			}
 		},
@@ -3409,6 +3413,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onDamage(damage, target, source, effect) {
+			if (effect.effectType === 'Move' && damage > 0) {
+				const hit = target.getMoveHitData(effect);
+				hit.hpBeforeDamage = Math.max(hit.hpBeforeDamage || 0, target.hp);
+			}
 			this.effectState.checkedBerserk = !(
 				effect.effectType === "Move" && !effect.multihit &&
 				!(effect.hasSheerForce && source.hasAbilityOrPassive('sheerforce'))
@@ -3428,8 +3436,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
 			if (!lastAttackedBy) return;
-			const damage = move.multihit && !move.smartTarget ? move.totalDamage : lastAttackedBy.damage;
-			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
+			const hpBeforeDamage = target.getMoveHitData(move).hpBeforeDamage;
+			if (hpBeforeDamage !== undefined && target.hp <= target.maxhp / 2 && hpBeforeDamage > target.maxhp / 2) {
 				this.boost({ atk: 1, spa: 1 }, target, target);
 			}
 		},
@@ -12577,7 +12585,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move && this.movehasType(move, 'Grass') && (stage >= 4 || (stage === 2 && attacker.hp <= attacker.maxhp * 2 / 3))) {
 				return this.chainModify(stage === 5 ? 2 : stage === 4 ? 1.8 : 1.5);
 			}
-			if ((move && this.movehasType(move, 'Grass') && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
+			if (move && this.movehasType(move, 'Grass') &&
+				(attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('grassyterrain'))) {
 				this.debug('Overgrow boost');
 				return this.chainModify(1.5);
 			}
@@ -12590,7 +12599,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move && this.movehasType(move, 'Grass') && (stage >= 4 || (stage === 2 && attacker.hp <= attacker.maxhp * 2 / 3))) {
 				return this.chainModify(stage === 5 ? 2 : stage === 4 ? 1.8 : 1.5);
 			}
-			if ((move && this.movehasType(move, 'Grass') && attacker.hp <= attacker.maxhp / 3) || this.field.isTerrain('grassyterrain')) {
+			if (move && this.movehasType(move, 'Grass') &&
+				(attacker.hp <= attacker.maxhp / 3 || this.field.isTerrain('grassyterrain'))) {
 				this.debug('Overgrow boost');
 				return this.chainModify(1.5);
 			}

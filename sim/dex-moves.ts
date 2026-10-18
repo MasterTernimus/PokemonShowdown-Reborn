@@ -340,6 +340,8 @@ interface MoveHitData {
 		blockedByProtect?: boolean,
 		/** The greatest damage dealt by this move hit sequence to the target. */
 		damage?: number,
+		/** Highest HP before a direct hit, including healing between this move's hits. */
+		hpBeforeDamage?: number,
 	};
 }
 
