@@ -209,7 +209,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Heals 1/3 HP on switching out."
 	},
 	"punchfiend": {
-		"desc": "Full Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions; Mirror Arena entry grants +1 accuracy and Laser Focus. Unseen Fist lets contact moves bypass protection except Max Guard. Inner Focus prevents flinching and Intimidate Attack drops. Hitmonchan receives Iron Fist separately as its species passive.",
+		"desc": "Full Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions; Mirror Arena entry grants +1 accuracy and Laser Focus. Unseen Fist lets contact moves pierce protection at 1/4 damage; Max Guard blocks them. Inner Focus prevents flinching and Intimidate Attack drops. Hitmonchan receives Iron Fist separately as its species passive.",
 		"shortDesc": "1.4x punching power; contact bypasses protection; no flinching or Intimidate Attack drop."
 	},
 	"doublestrike": {
@@ -1491,7 +1491,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "No confusion or Intimidate Attack drop."
 	},
 	"piercingdrill": {
-		"desc": "Contact moves pierce protection at 1/4 damage. Unprotected targets take normal damage.",
+		"desc": "Contact moves pierce protection at 1/4 damage (75% less). Max Guard blocks them. Unprotected damage is unchanged.",
 		"shortDesc": "Contact moves pierce protection at 1/4 damage."
 	},
 	"pixilate": {
@@ -2119,12 +2119,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Ignores opposing combat/accuracy stages; reveals Illusions."
 	},
 	"unseenfist": {
-		"desc": "Contact moves bypass protection except Max Guard. Punching moves have 1.4x power.",
-		"shortDesc": "Contact bypasses protection; punches have 1.4x power."
+		"desc": "Contact moves pierce protection at 1/4 damage (75% less); Max Guard blocks them. Unprotected damage is unchanged. Punching moves have 1.4x power.",
+		"shortDesc": "Contact pierces protection at 1/4 damage; punches have 1.4x power."
 	},
 	"phantomfist": {
-		"desc": "Contact moves bypass protection except Max Guard. Punching moves have 1.4x power. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. Switching out cures major status and heals 1/3 max HP only if a status was cured. Bewitched Woods cures status at turn end without this extra heal. Takes 0.8x attack damage at any HP; super-effective attacks deal a further 0.75x damage (0.6x total). Ability-ignoring moves cannot bypass these reductions, but suppression disables them. Immune to hail damage on Cold Eclipse. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage. Its moves cannot miss, contact moves bypass Protect, it repairs itself, takes 0.8x attack damage at any HP (0.6x total from super-effective attacks), and damages contact attackers that knock it out.",
-		"shortDesc": "Contact bypasses protection; punches have 1.4x power; Heals 1/16 HP per turn; switching cures status and heals 1/3 HP if cured; no weather damage; 20% less attack damage at any HP; 40% less if super effective."
+		"desc": "Contact moves pierce protection at 1/4 damage (75% less); Max Guard blocks them. Unprotected damage is unchanged. Punching moves have 1.4x power. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. Switching out cures major status and heals 1/3 max HP only if a status was cured. Bewitched Woods cures status at turn end without this extra heal. Takes 0.8x attack damage at any HP; super-effective attacks deal a further 0.75x damage (0.6x total). Ability-ignoring moves cannot bypass these reductions, but suppression disables them. Immune to hail damage on Cold Eclipse. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage. Its moves cannot miss, contact moves pierce Protect at 1/4 damage, it repairs itself, takes 0.8x attack damage at any HP (0.6x total from super-effective attacks), and damages contact attackers that knock it out.",
+		"shortDesc": "Contact pierces protection at 1/4 damage; punches have 1.4x power; Heals 1/16 HP per turn; switching cures status and heals 1/3 HP if cured; no weather damage; 20% less attack damage at any HP; 40% less if super effective."
 	},
 	"ultraego": {
 		"desc": "Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field.",
@@ -4049,3 +4049,6 @@ Object.assign(AbilityDescriptionOverrides, RipenSeedDescriptions);
 
 import {PrimordialDescriptions} from './primordial-approved';
 Object.assign(AbilityDescriptionOverrides, PrimordialDescriptions);
+
+import {PowerDrillBatchDescriptions} from './power-drill-batch';
+Object.assign(AbilityDescriptionOverrides,PowerDrillBatchDescriptions);

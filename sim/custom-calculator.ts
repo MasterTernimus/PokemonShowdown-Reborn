@@ -1,3 +1,4 @@
+import {RKSSystemMemoryAbilities} from '../data/rks-system-memory';
 import {DisabledSpecies} from '../data/disabled-species';
 import {AbilityComponentExclusions, SharedPassiveComponents, SharedPassiveComponentAdditions, SignaturePassiveComponents, SignaturePassiveRemovedComponents, SignaturePassiveDescriptions} from '../data/passive-ability-cleanup';
 import { getAbilityDisplayComponents } from '../data/ability-display';
@@ -153,6 +154,7 @@ export function calculatorMetadata() {
 		abilityComponentExclusions: AbilityComponentExclusions, sharedPassiveComponents: SharedPassiveComponents, sharedPassiveComponentAdditions: SharedPassiveComponentAdditions,
 		signaturePassiveComponents: SignaturePassiveComponents,
 		signaturePassiveRemovedComponents: SignaturePassiveRemovedComponents, signaturePassiveDescriptions: SignaturePassiveDescriptions,
+		rksSystemMemoryAbilities: {...RKSSystemMemoryAbilities, '': ['scrappy']},
 		abilityComponents: Object.fromEntries(Object.keys(AbilityComponents).map(id =>
 			[id, getAbilityDisplayComponents(id).map(p => Dex.abilities.get(p).name)])),
 		auras: Object.values(Auras).map(a => ({ id: a.id, name: a.name })),

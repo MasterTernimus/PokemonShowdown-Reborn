@@ -1119,7 +1119,7 @@
     "abilities": {
       "0": "Fire Mane",
       "1": "Speed Boost",
-      "H": "Flame Body"
+      "H": "Power Drill"
     }
   },
   "parasectmega": {
@@ -1801,6 +1801,45 @@
   "gyaradosmega": {
     "passives": [
       "tempestfury"
+    ]
+  },
+  "fearow": {
+    "abilities": {
+      "0": "Power Drill",
+      "H": "Sniper"
+    },
+    "passives": [
+      "lancepoint"
+    ]
+  },
+  "beedrill": {
+    "abilities": {
+      "0": "Hive Courier",
+      "1": "Twin Drills",
+      "H": "Sniper"
+    },
+    "passives": [
+      "levitate"
+    ]
+  },
+  "dudunsparce": {
+    "abilities": {
+      "0": "Serene Grace",
+      "1": "Shed Skin",
+      "H": "Rattled"
+    },
+    "passives": [
+      "powerdrill"
+    ]
+  },
+  "dudunsparcethreesegment": {
+    "abilities": {
+      "0": "Serene Grace",
+      "1": "Shed Skin",
+      "H": "Rattled"
+    },
+    "passives": [
+      "powerdrill"
     ]
   }
 }

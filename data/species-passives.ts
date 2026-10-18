@@ -1191,5 +1191,7 @@ SpeciesPassives.regigigasprimordial=Object.freeze(['primordialconstruct','ancien
 ThematicPassiveIds.add('primordialconstruct');
 SpeciesPassives.gyaradosmega = Object.freeze(['tempestfury']);
 ThematicPassiveIds.add('tempestfury');
+for (const id of ['dudunsparce','dudunsparcethreesegment']) SpeciesPassives[id]=Object.freeze((SpeciesPassives[id] || []).map(passive => passive === 'runaway' ? 'powerdrill' : passive));
+ThematicPassiveIds.add('powerdrill');
 Object.freeze(SpeciesPassives);
 

@@ -26,6 +26,10 @@ export function guardFixedDamage(battle: Battle, damage: number | false | null, 
 	}
 	if (target.hasAbilityOrPassive('venomthread') && !target.isAlly(source) && ['psn', 'tox'].includes(source.status)) damage = battle.modify(damage, 0.8);
 	if (move.flags.sound && feedbackActive(source)) damage = battle.modify(damage, 0.8);
+	if (target.getMoveHitData(move).quarterContactProtect) {
+		damage = Math.max(1, battle.modify(damage, 0.25));
+		battle.add('-zbroken', target);
+	}
 	return damage;
 }
 function feedbackActive(source: Pokemon) {

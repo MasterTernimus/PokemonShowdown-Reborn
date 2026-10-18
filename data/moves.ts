@@ -1307,7 +1307,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+				if ((move.isZOrMaxPowered || target.getMoveHitData(move).quarterContactProtect) && this.checkMoveMakesContact(move, source, target)) {
 					source.trySetStatus('psn', target);
 				}
 			},
@@ -2426,7 +2426,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+				if ((move.isZOrMaxPowered || target.getMoveHitData(move).quarterContactProtect) && this.checkMoveMakesContact(move, source, target)) {
 					source.trySetStatus('brn', target);
 				}
 			},
@@ -11371,7 +11371,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+				if ((move.isZOrMaxPowered || target.getMoveHitData(move).quarterContactProtect) && this.checkMoveMakesContact(move, source, target)) {
 					if (this.field.isTerrain('fairytaleterrain')) {
 						this.boost({ spa: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 					}
@@ -14803,7 +14803,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+				if ((move.isZOrMaxPowered || target.getMoveHitData(move).quarterContactProtect) && this.checkMoveMakesContact(move, source, target)) {
 					this.boost({ def: -2 }, source, target, this.dex.getActiveMove("Obstruct"));
 				}
 			},
@@ -19082,7 +19082,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+				if ((move.isZOrMaxPowered || target.getMoveHitData(move).quarterContactProtect) && this.checkMoveMakesContact(move, source, target)) {
 					this.boost({ spe: -1 }, source, target, this.dex.getActiveMove("Silk Trap"));
 				}
 			},
@@ -20424,7 +20424,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+				if ((move.isZOrMaxPowered || target.getMoveHitData(move).quarterContactProtect) && this.checkMoveMakesContact(move, source, target)) {
 					this.damage(source.baseMaxhp / 8, source, target);
 				}
 			},

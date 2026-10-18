@@ -812,7 +812,7 @@ AbilityComponents.unbridledwrath = ['sheerforce', 'innerfocus'];
 AbilityComponents.toxicspines = [...AbilityComponents.toxicspines, 'ironbarbs'];
 
 AbilityComponents.patriarchswrath = ['powerdrill', 'whiplash'];
-AbilityComponents.matriarchsvigil = ['thickfat', 'aromaveil', 'friendguard'];
+AbilityComponents.matriarchsvigil = ['thickfat', 'powerdrill', 'friendguard'];
 
 AbilityComponents.heatcoil = [...AbilityComponents.heatcoil, 'longreach'];
 AbilityComponents.inversion = [...(AbilityComponents.inversion || []), 'infiltrator'];
@@ -974,3 +974,5 @@ Object.assign(AbilityComponents,RegiComponents);
 
 import {PrimordialComponents} from './primordial-approved';
 Object.assign(AbilityComponents, PrimordialComponents);
+
+AbilityComponents.twindrills=['dualwield','powerdrill'];

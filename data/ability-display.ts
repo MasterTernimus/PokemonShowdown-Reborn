@@ -1,3 +1,4 @@
+import {getRKSSystemMemoryAbilities} from './rks-system-memory';
 import {PerfectForecastForms} from './castform-split';
 import {AbilityComponentExclusions, getAbilityComponentAdditions, getAbilityComponentExclusions} from './passive-ability-cleanup';
 import {AbilityDisplaySummaries} from './ability-display-summaries';
@@ -236,8 +237,11 @@ export function getAbilityDisplayClosure(id: string, seen = new Set<string>()): 
 	return seen;
 }
 
-export function getAbilityDisplayComponents(id: string, passives: readonly string[] = [], species = ''): string[] {
+export function getAbilityDisplayComponents(id: string, passives: readonly string[] = [], species = '', item?: string): string[] {
 	
+	if (id === 'rkssystem' && /^silvally(?:bug|dark|dragon|electric|fairy|fighting|fire|flying|ghost|grass|ground|ice|poison|psychic|rock|steel|water)?$/.test(canonicalAbilityDisplayID(species))) {
+		return item === undefined ? [] : getRKSSystemMemoryAbilities(canonicalAbilityDisplayID(item));
+	}
 	if (id === 'perfectforecast') return PerfectForecastForms[canonicalAbilityDisplayID(species)]?.components || [];
 	const excluded = getAbilityComponentExclusions(id, passives, species);
 	const parts = Array.from(new Set([...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].map(canonicalAbilityDisplayID)))

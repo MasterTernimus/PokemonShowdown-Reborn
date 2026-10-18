@@ -301,6 +301,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	shadowCurrentExtraHitUsed?: boolean;
 	soulFireBurn?: boolean;
 	spilloverDamageModifier?: number;
+	quarterContactProtect?: boolean;
 	spitUpBreaksProtect?: boolean;
 	spitUpProtectedTargets?: Pokemon[];
 	noseFormationActivated?: boolean;
@@ -333,6 +334,7 @@ interface MoveHitData {
 		 * Is this move a Z-Move that broke the target's protection?
 		 * (does 0.25x regular damage)
 		 */
+		quarterContactProtect?: boolean,
 		bypassProtect: boolean | Effect,
 		/** Did a protection effect actually block this target's hit? */
 		blockedByProtect?: boolean,

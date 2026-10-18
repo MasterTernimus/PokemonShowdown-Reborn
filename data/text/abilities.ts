@@ -3687,12 +3687,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	unseenfist: {
 		name: "Unseen Fist",
-		desc: "This Pokemon's contact moves ignore the target's protection, except Max Guard, and its punching moves have Iron Fist's power boost.",
-		shortDesc: "Contact moves ignore protection; punching moves have Iron Fist's boost.",
+		desc: "Contact moves pierce protection at 1/4 damage (75% less); Max Guard blocks them. Unprotected damage is unchanged. Punching moves retain Iron Fist's power boost.",
+		shortDesc: "Contact pierces protection at 1/4 damage; punches retain Iron Fist.",
 	},
 	phantomfist: {
 		name: "Phantom Fist",
-		desc: "Unseen Fist + Self Repair + Shadow Shield + Aftermath. Its moves cannot miss, contact moves bypass Protect, it repairs itself, takes 0.8x attack damage at any HP (0.6x total from super-effective attacks), and damages contact attackers that knock it out.",
+		desc: "Unseen Fist + Self Repair + Shadow Shield + Aftermath. Its moves cannot miss, contact moves pierce Protect at 1/4 damage, it repairs itself, takes 0.8x attack damage at any HP (0.6x total from super-effective attacks), and damages contact attackers that knock it out.",
 		shortDesc: "Unseen Fist + Self Repair + Shadow Shield + Aftermath; moves cannot miss.",
 	},
 	vesselofruin: {
@@ -4775,3 +4775,6 @@ Object.assign(AbilitiesText, RipenSeedDescriptions);
 
 import {PrimordialDescriptions} from '../primordial-approved';
 Object.assign(AbilitiesText, PrimordialDescriptions);
+
+import {PowerDrillBatchDescriptions} from '../power-drill-batch';
+Object.assign(AbilitiesText,PowerDrillBatchDescriptions);

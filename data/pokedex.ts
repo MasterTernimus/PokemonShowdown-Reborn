@@ -24639,3 +24639,8 @@ Pokedex.regigigas.abilities={0:'Continental Pull',1:'Worldforged',H:'Colossal Fr
 Object.assign(Pokedex.regigigas,{otherFormes:['Regigigas-Primordial'],formeOrder:['Regigigas','Regigigas-Primordial']});
 Pokedex.regigigasprimordial={...Pokedex.regigigas,name:'Regigigas-Primordial',baseSpecies:'Regigigas',forme:'Primordial',types:['Normal'],baseStats:{hp:110,atk:150,def:130,spa:150,spd:130,spe:100},abilities:{0:'Worldbinder'},requiredItem:'Primordial Orb',battleOnly:'Regigigas',otherFormes:undefined,formeOrder:undefined};
 
+
+// Approved Power Drill roster changes; Mega and regional packages retain their own slots.
+Pokedex.fearow.abilities!['0']='Power Drill';
+Pokedex.beedrill.abilities!['1']='Twin Drills';
+Pokedex.rapidash.abilities!.H='Power Drill';

@@ -1499,6 +1499,13 @@ export class Battle {
 	}
 
 	checkMoveBypassesProtect(move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus = true) {
+		// One target-local final reduction, even when another package also removes protection.
+		if (move.quarterContactProtect || (move.flags.contact && attacker.hasAbilityOrPassive('piercingdrill'))) {
+			const hit = defender.getMoveHitData(move);
+			hit.bypassProtect = true;
+			hit.quarterContactProtect = true;
+			return true;
+		}
 		if ((move.id === 'beasthunter' || move.id === 'hyperbeam' && attacker.hasAbilityOrPassive('championscommand')) && !move.isZ && !move.isMax) {
 			defender.getMoveHitData(move).bypassProtect = true;
 			return true;

@@ -1,3 +1,4 @@
+import {getRKSSystemMemoryAbilities} from './rks-system-memory';
 import {updateCocoonIndicator} from '../sim/cocoon-indicator';
 import {GrandStrategy} from './grand-strategy';
 import {RelicArmorFields, updateRelicArmorIndicator, clearRelicArmorIndicators} from './relic-armor';
@@ -13805,26 +13806,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		// RKS System's type-changing itself is implemented in statuses.js
 		memoryAbilities(this: Battle, pokemon: Pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Silvally') return [];
-			const memoryAbilities: { [item: string]: string[] } = {
-				bugmemory: ['tintedlens', 'shielddust'],
-				darkmemory: ['pressure', 'intimidate'],
-				dragonmemory: ['marvelscale', 'toughclaws'],
-				electricmemory: ['transistor', 'lightningrod'],
-				fairymemory: ['invigorate', 'friendguard'],
-				fightingmemory: ['innerfocus', 'sheerforce'],
-				firememory: ['soulfire', 'flamebody'],
-				flyingmemory: ['galewings', 'airlock'],
-				ghostmemory: ['soulfire', 'cursedbody'],
-				grassmemory: ['hospitality', 'chlorophyll'],
-				groundmemory: ['sandrush', 'stamina'],
-				icememory: ['icebody', 'slushrush'],
-				poisonmemory: ['regenerator', 'corrosion'],
-				psychicmemory: ['magicbounce', 'magicguard'],
-				rockmemory: ['purifyingsalt', 'solidrock'],
-				steelmemory: ['swornduty', 'mirrorarmor'],
-				watermemory: ['swiftswim', 'waterveil'],
-			};
-			return memoryAbilities[pokemon.item] || ['scrappy'];
+			return getRKSSystemMemoryAbilities(pokemon.item);
 		},
 		callMemoryAbility(this: Battle, pokemon: Pokemon, eventName: string, ...args: unknown[]) {
 			for (const abilityid of (this.effect as RKSSystemAbility).memoryAbilities.call(this, pokemon)) {
@@ -18142,7 +18124,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	unseenfist: {
 		onModifyMove(move) {
-			if (move.flags['contact']) delete move.flags['protect'];
+			if (move.flags['contact']) move.quarterContactProtect = true;
 		},
 		onBasePower(basePower, source, target, move) {
 			return this.dex.abilities.get('ironfist').onBasePower?.call(this, basePower, source, target, move);
@@ -21668,3 +21650,6 @@ Abilities.eject={name:'Eject',num:11750,rating:4,flags:{}};
 
 import {installPrimordialAbilities} from './primordial-approved';
 installPrimordialAbilities(Abilities);
+
+import {installPowerDrillBatch} from './power-drill-batch';
+installPowerDrillBatch(Abilities);

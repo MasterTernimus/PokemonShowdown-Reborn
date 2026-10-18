@@ -147,3 +147,5 @@ const beforeGrandAbilities=exports.abilities,beforeGrandCurrent=exports.current;
 const beforeLaterAbilities=exports.abilities,beforeLaterCurrent=exports.current,laterReviewed=require('./later-reviewed-rosters.json');exports.abilities=(id,fallback)=>laterReviewed[id]?.abilities||beforeLaterAbilities(id,fallback);exports.current=(id,fallback)=>laterReviewed[id]?.passives||beforeLaterCurrent(id,fallback);
 
 const beforeMegaGyaradosRemoval=exports.current;exports.current=(id,original)=>id==='gyaradosmega'?['tempestfury']:beforeMegaGyaradosRemoval(id,original);
+
+const beforeDrillAbilities=exports.abilities,beforeDrillCurrent=exports.current;exports.abilities=(id,fallback)=>{const slots=beforeDrillAbilities(id,fallback);return id==='fearow'?{...slots,0:'Power Drill'}:id==='beedrill'?{...slots,1:'Twin Drills'}:id==='rapidash'?{...slots,H:'Power Drill'}:slots;};exports.current=(id,fallback)=>['dudunsparce','dudunsparcethreesegment'].includes(id)?['powerdrill']:beforeDrillCurrent(id,fallback);

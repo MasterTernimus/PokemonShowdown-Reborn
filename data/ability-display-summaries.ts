@@ -783,3 +783,6 @@ for (const [id, text] of Object.entries(RipenSeedDescriptions)) AbilityDisplaySu
 
 import {PrimordialDescriptions} from './primordial-approved';
 for (const [id, text] of Object.entries(PrimordialDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import {PowerDrillBatchDescriptions} from './power-drill-batch';
+for(const[id,text]of Object.entries(PowerDrillBatchDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
