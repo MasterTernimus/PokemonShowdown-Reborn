@@ -1797,5 +1797,10 @@
     "passives": [
       "disguise"
     ]
+  },
+  "gyaradosmega": {
+    "passives": [
+      "tempestfury"
+    ]
   }
 }

@@ -145,3 +145,5 @@ const beforeGrandAbilities=exports.abilities,beforeGrandCurrent=exports.current;
 
 // Exact later approvals: Mewtwo, Hydreigon, Meloetta, legendary and Primordial checkpoints.
 const beforeLaterAbilities=exports.abilities,beforeLaterCurrent=exports.current,laterReviewed=require('./later-reviewed-rosters.json');exports.abilities=(id,fallback)=>laterReviewed[id]?.abilities||beforeLaterAbilities(id,fallback);exports.current=(id,fallback)=>laterReviewed[id]?.passives||beforeLaterCurrent(id,fallback);
+
+const beforeMegaGyaradosRemoval=exports.current;exports.current=(id,original)=>id==='gyaradosmega'?['tempestfury']:beforeMegaGyaradosRemoval(id,original);

@@ -1,3 +1,4 @@
+import {MegaTempestFury} from '../data/mega-tempest-fury';
 import type { Battle } from './battle';
 import type { Pokemon } from './pokemon';
 import { Condition } from './dex-conditions';
@@ -21,6 +22,7 @@ export function passiveEffect(battle: Battle, id: string): Condition {
 		}
 		// Preserve Sirius's first-tail toxic before the passive attempts regular poison.
 		if (id === 'venamskiss') Object.assign(effect, { onSourceDamagingHitPriority: -1 });
+		if (id === 'tempestfury') Object.assign(effect, MegaTempestFury);
 		effects.set(ability, effect);
 	}
 	return effect;

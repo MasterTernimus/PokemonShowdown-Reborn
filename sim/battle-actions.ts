@@ -1054,6 +1054,8 @@ export class BattleActions {
 					this.battle.boost({ spe: 2 }, pokemon);
 				}
 				this.battle.runEvent('Miss', pokemon, target, move);
+				// This is the initial accuracy check, before the multihit loop.
+				if (move.id === 'beatdown') this.battle.boost({atk: 2}, pokemon, pokemon, move);
 				hitResults[i] = false;
 				continue;
 			}
@@ -2362,7 +2364,9 @@ export class BattleActions {
 		let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source);
 		let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
 
-		attackStat = (category === 'Physical' ? 'atk' : 'spa');
+		// Dark Clasp uses modified Sp. Def offensively, while remaining a special attack.
+		attackStat = move.id === 'darkclasp' && attackStat === 'spd' ? 'spd' :
+			(category === 'Physical' ? 'atk' : 'spa');
 
 		// Apply Stat Modifiers
 		attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);

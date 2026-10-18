@@ -1,0 +1,12 @@
+'use strict';
+const assert=require('assert').strict,common=require('../../common'),{Dex,TeamValidator}=require('../../../dist/sim');
+describe('Approved leader move follow-ups',()=>{
+ let b;afterEach(()=>{b?.destroy();b=null;});
+ function setup(field=''){const mon={species:'Mew',ability:'No Ability',moves:['splash']};b=common.createBattle({},[[mon],[mon]]);if(b.requestState==='teampreview')b.makeChoices();b.field.terrain=field;b.field.terrainState=b.initEffectState({id:field,terrainChanges:new Map()});const p=b.p1.active[0],q=b.p2.active[0];p.hp=p.maxhp=q.hp=q.maxhp=5000;return[p,q];}
+ function use(id,p,q,extra={}){b.actions.runMove(Object.assign(Dex.getActiveMove(id),{willCrit:false},extra),p,p.getLocOf(q),{externalMove:true});}
+ for(const field of ['', 'darkcrystalcavernterrain','crystalcavernterrain'])it('Dark Clasp direct multiplier on '+field,()=>{const[p,q]=setup(field),m=Dex.getActiveMove('darkclasp');assert.equal(b.runEvent('BasePower',p,q,m,100,true),field==='darkcrystalcavernterrain'?150:100);});
+ for(const mode of ['first miss','second miss','third miss','protect','immune','success'])it('Beatdown '+mode,()=>{const[p,q]=setup();let checks=0;b.randomChance=(n,d)=>{if(d===100&&n===95){checks++;return mode==='first miss'?false:mode==='second miss'?checks!==2:mode==='third miss'?checks!==3:true;}return false;};if(mode==='protect')q.addVolatile('protect');if(mode==='immune')q.setType('Ghost');use('beatdown',p,q);assert.equal(p.boosts.atk,mode==='first miss'?2:0);if(mode==='second miss'||mode==='third miss'||mode==='success')assert(q.volatiles.taunt);});
+ it('Clefable legally learns Nomos Wish and retains defensive boosts',()=>{const m=Dex.moves.get('nomoswish');assert(Dex.species.getLearnsetData('clefable').learnset.nomoswish);assert.equal(TeamValidator.get('gen9nofieldsinglesgame').checkCanLearn(m,Dex.species.get('clefable')),null);assert.deepEqual(m.boosts,{def:1,spd:1});});
+ for(const locked of [false,true])it('Seed Flare reaches Misty conversion, lock='+locked,()=>{const[p,q]=setup('corrosivemistterrain');if(locked)q.setAbility('Neutralization');use('seedflare',p,q,{accuracy:true});assert.equal(b.field.terrain,locked?'corrosivemistterrain':'mistyterrain');});
+ it('other Corrosive Mist clearing moves still clear',()=>{const[p,q]=setup('corrosivemistterrain');use('gust',p,q,{accuracy:true});assert.notEqual(b.field.terrain,'corrosivemistterrain');assert.notEqual(b.field.terrain,'mistyterrain');});
+});

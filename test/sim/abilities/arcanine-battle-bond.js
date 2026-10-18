@@ -11,7 +11,7 @@ describe('Arcanine Battle Bond', () => {
 		battle = null;
 	});
 
-	for (const species of ['Arcanine', 'Arcanine-Hisui']) {
+	for (const species of ['Arcanine', 'Arcanine-Alt', 'Arcanine-Hisui']) {
 		it(`${species} gains the shared form after a KO`, () => {
 			battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 				{ species, ability: 'Battle Bond', moves: ['flamethrower'] },
@@ -33,6 +33,57 @@ describe('Arcanine Battle Bond', () => {
 		});
 	}
 
+	for (const species of ['Arcanine', 'Arcanine-Alt', 'Arcanine-Hisui']) {
+		it(`${species} transforms after Sacred Fire KO on Rocky Terrain with Embargo and a held berry`, () => {
+			battle = common.createBattle({formatid: 'gen9doublesrockyfield'}, [[
+				{species, ability: 'Battle Bond', item: 'Sitrus Berry', moves: ['sacredfire']},
+				{species: 'Mew', ability: 'No Ability', moves: ['splash']},
+			], [
+				{species: 'Charizard-Mega-X', level: 1, ability: 'No Ability', moves: ['splash']},
+				{species: 'Venusaur-Mega', ability: 'No Ability', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 12', 'team 12');
+			const dog = battle.p1.active[0];
+			dog.addVolatile('embargo');
+			battle.p2.active[0].hp = 1;
+			battle.makeChoices('move sacredfire 1, move splash', 'move splash, move splash');
+			assert.equal(dog.species.id, 'arcaninebattlebond', battle.log.join('\n'));
+			assert.equal(dog.ability, 'sacredbond');
+			assert.equal(dog.item, 'sitrusberry');
+			assert.equal(dog.bondTriggered, true);
+		});
+	}
+
+	it('does not transform Arcanine-Alt without a knockout', () => {
+		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+			{species: 'Arcanine-Alt', ability: 'Battle Bond', moves: ['splash']},
+		], [{species: 'Mew', moves: ['splash']}]]);
+		battle.makeChoices('team 1', 'team 1');
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(battle.p1.active[0].species.id, 'arcaninealt');
+	});
+
+	for (const guard of ['indirect damage', 'transformed', 'fainted', 'already triggered', 'last opponent']) {
+		it(`does not transform Arcanine-Alt with ${guard}`, () => {
+			battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+				{species: 'Arcanine-Alt', ability: 'Battle Bond', moves: ['splash']},
+			], [
+				{species: 'Mew', moves: ['splash']},
+				{species: 'Pikachu', moves: ['splash']},
+			]]);
+			battle.makeChoices('team 1', 'team 1');
+			const dog = battle.p1.active[0];
+			if (guard === 'transformed') dog.transformed = true;
+			if (guard === 'fainted') dog.hp = 0;
+			if (guard === 'already triggered') dog.bondTriggered = true;
+			if (guard === 'last opponent') battle.p2.pokemonLeft = 0;
+			const effect = guard === 'indirect damage' ? Dex.conditions.get('brn') : Dex.moves.get('sacredfire');
+			Dex.abilities.get('battlebond').onSourceAfterFaint.call(battle, 1, battle.p2.active[0], dog, effect);
+			assert.equal(dog.species.id, 'arcaninealt');
+			assert.equal(dog.ability, 'battlebond');
+		});
+	}
+
 	it('keeps both original ability sets while adding Battle Bond', () => {
 		assert.equal(Dex.species.get('Arcanine').abilities.S, 'Battle Bond');
 		assert.equal(Dex.species.get('Arcanine-Hisui').abilities.S, 'Battle Bond');
@@ -40,7 +91,7 @@ describe('Arcanine Battle Bond', () => {
 		assert.equal(Dex.species.get('Arcanine-Hisui').abilities.H, 'Hisuian Resolve');
 	});
 
-	it('uses Filter instead of the previous flat damage reduction', () => {
+	it('takes full super-effective damage after Filter removal', () => {
 		battle = common.createBattle({ formatid: 'gen9nofielddoublesbattle' }, [
 			[
 				{ species: 'Arcanine', ability: 'Battle Bond', moves: ['splash'] },
@@ -55,7 +106,7 @@ describe('Arcanine Battle Bond', () => {
 		const [bond, plain] = battle.p1.active;
 		const bondDamage = bond.maxhp - bond.hp + Math.floor(bond.baseMaxhp / 16);
 		const plainDamage = plain.maxhp - plain.hp;
-		assert(bondDamage < plainDamage * 0.75, battle.log.join('\n'));
+		assert(bondDamage >= plainDamage * 0.85 && bondDamage <= plainDamage / 0.85, battle.log.join('\n'));
 	});
 
 	it('heals after a later KO in its Battle Bond form', () => {
@@ -94,7 +145,7 @@ describe('Arcanine Battle Bond', () => {
 			const pokemon = battle.p1.active[0];
 			assert.equal(pokemon.species.id, forme, battle.log.join('\n'));
 			assert.equal(pokemon.ability, ability);
-			for (const component of ['battlebond', 'filter', 'selfsufficient']) {
+			for (const component of ['battlebond', 'selfsufficient']) {
 				assert(pokemon.hasAbility(component), `${ability} is missing ${component}`);
 			}
 			battle.makeChoices('', 'switch 2');

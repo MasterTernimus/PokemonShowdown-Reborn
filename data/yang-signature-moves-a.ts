@@ -40,7 +40,7 @@ export const YangSignatureMovesA: MoveDataTable = {
  kaboom: {num:10435,name:'KABOOM!!',type:'Electric',category:'Special',basePower:90,accuracy:100,pp:10,priority:0,target:'normal',flags,recoil:[1,4],onModifyMove(move,source){move.category=source.getStat('atk',false,true)>source.getStat('spa',false,true)?'Physical':'Special';if(this.field.isTerrainOrAura('electricterrain'))delete move.recoil;},secondary:{chance:100,self:{boosts:{spa:1}}}},
  cactibash: {num:10436,name:'Cacti Bash',type:'Grass',category:'Physical',basePower:50,accuracy:100,pp:10,priority:0,target:'normal',flags:contact,multihit:2,onBasePower(bp,source,target){if(this.field.isTerrain('desertterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},
   onAfterHit(target,source,move){const state=move as ActiveMove & {cactiSpikesSet?:boolean};if(target.hp||target.isAlly(source)||state.cactiSpikesSet||this.field.isTerrain(['watersurfaceterrain','murkwatersurfaceterrain','midnightzoneterrain']))return;state.cactiSpikesSet=true;target.side.addSideCondition('spikes',source,move);}},
- corrosivestrike: {num:10437,name:'Corrosive Strike',type:'Poison',category:'Physical',basePower:70,accuracy:100,pp:15,priority:0,target:'normal',flags:contact,ignoreImmunity:{Poison:true},onEffectiveness(typeMod,target,type){if(type==='Steel')return 1;},volatileStatus:'corrosivestrike',onBasePower(bp,source,target){if(this.field.isTerrain('corrosiveterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},
+ corrosivestrike: {onModifyMove(move,source){move.category=source.getStat('atk',false,true)>source.getStat('spa',false,true)?'Physical':'Special';},num:10437,name:'Corrosive Strike',type:'Poison',category:'Physical',basePower:70,accuracy:100,pp:15,priority:0,target:'normal',flags:contact,ignoreImmunity:{Poison:true},onEffectiveness(typeMod,target,type){if(type==='Steel')return 1;},volatileStatus:'corrosivestrike',onBasePower(bp,source,target){if(this.field.isTerrain('corrosiveterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},
   condition:{noCopy:true,onStart(target){this.add('-start',target,'Corrosion');},onResidualOrder:9,onResidual(pokemon){this.damage(pokemon.baseMaxhp/16,pokemon,this.effectState.source);},onEnd(target){this.add('-end',target,'Corrosion');}}},
  toxicvial: {num:10438,name:'Toxic Vial',type:'Poison',category:'Status',basePower:0,accuracy:90,pp:10,priority:0,target:'normal',flags:{...flags,reflectable:1},status:'tox',boosts:{atk:-1,spa:-1}},
  flutterscales: {num:10439,name:'Flutter Scales',type:'Bug',category:'Special',basePower:75,accuracy:100,pp:10,priority:0,target:'allAdjacentFoes',flags,
@@ -54,7 +54,7 @@ export const YangSignatureMovesA: MoveDataTable = {
  nomoswish: {num:10444,name:"Nomos' Wish",type:'Normal',category:'Status',basePower:0,accuracy:100,pp:5,priority:0,target:'self',flags:{snatch:1,heal:1,metronome:1},boosts:{def:1,spd:1},slotCondition:'wish'},
  queensgambit: {num:10445,name:"Queen's Gambit",type:'Psychic',category:'Special',basePower:110,accuracy:100,pp:5,priority:0,target:'normal',flags,
   onTry(source){if(this.field.isTerrain('chessboardterrain')&&source.hasAbilityOrPassive('klutz'))return false;},onModifyMove(move,source){if(this.field.isTerrain('chessboardterrain')&&source.Role==='Queen')move.willCrit=true;move.category=source.getStat('atk',false,true)>source.getStat('spa',false,true)?'Physical':'Special';},self:{boosts:{def:-1,spd:-1}}},
- darkclasp: {num:10446,name:'Dark Clasp',type:'Dark',category:'Special',basePower:85,accuracy:100,pp:10,priority:0,target:'normal',flags,overrideOffensiveStat:'spd',onAfterHit(target,source,move){if((target.getMoveHitData(move).damage||0)<=0)return;const next=this.field.isTerrain(['caveterrain','crystalcavernterrain'])?'darkcrystalcavernterrain':this.field.isTerrain('factoryterrain')?'shortcircuitterrain':'';if(next)this.field.changeTerrain(next,source,move);},onAfterSubDamage(damage,target,source,move){if(damage<=0)return;const next=this.field.isTerrain(['caveterrain','crystalcavernterrain'])?'darkcrystalcavernterrain':this.field.isTerrain('factoryterrain')?'shortcircuitterrain':'';if(next)this.field.changeTerrain(next,source,move);}},
+ darkclasp: {num:10446,name:'Dark Clasp',type:'Dark',category:'Special',basePower:85,accuracy:100,pp:10,priority:0,target:'normal',flags,overrideOffensiveStat:'spd',onBasePower(bp,source,target){if(this.field.isTerrain('darkcrystalcavernterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},onAfterHit(target,source,move){if((target.getMoveHitData(move).damage||0)<=0)return;const next=this.field.isTerrain(['caveterrain','crystalcavernterrain'])?'darkcrystalcavernterrain':this.field.isTerrain('factoryterrain')?'shortcircuitterrain':'';if(next)this.field.changeTerrain(next,source,move);},onAfterSubDamage(damage,target,source,move){if(damage<=0)return;const next=this.field.isTerrain(['caveterrain','crystalcavernterrain'])?'darkcrystalcavernterrain':this.field.isTerrain('factoryterrain')?'shortcircuitterrain':'';if(next)this.field.changeTerrain(next,source,move);}},
  beatdown: {num:10447,name:'Beatdown',type:'Fighting',category:'Physical',basePower:30,accuracy:95,pp:10,priority:0,target:'normal',flags:contact,multihit:3,multiaccuracy:true,
   onHit(target,source,move){const state=move as ActiveMove & {beatdownTaunted?:boolean};if(state.beatdownTaunted||(target.getMoveHitData(move).damage||0)<=0)return;state.beatdownTaunted=true;target.addVolatile('taunt',source,move);}},
  infernalrage: {num:10448,name:'Infernal Rage',type:'Fire',category:'Special',basePower:90,accuracy:100,pp:10,priority:0,target:'allAdjacentFoes',flags,
@@ -70,7 +70,7 @@ export const YangSignatureLearnsetsA: {[id:string]:string[]} = {
  spiritmend:['dusknoir','cursola','gengar'],
  chistrike:['medicham','hariyama','machamp','lucario','hitmonlee','hitmonchan','hitmontop'],
  gunkrock:['toxtricity','skuntank'],
- frozenrefractals:['froslass','jynx','ninetalesalola'],nomoswish:['audino','wigglytuff'],
+ frozenrefractals:['froslass','jynx','ninetalesalola'],nomoswish:['audino','wigglytuff','clefable'],
  queensgambit:['metagross','slowking','gardevoir','gallade'],darkclasp:['umbreon','spiritomb'],
  beatdown:['conkeldurr','pangoro'],infernalrage:['chandelure','delphox','typhlosion','typhlosionhisui','ninetales'],
 };
@@ -78,7 +78,7 @@ export const YangSignatureDescriptionsA: {[id:string]:{shortDesc:string,desc:str
 const descriptions: {[id:string]:[string,string]} = {
  kaboom:['Julia','Uses the higher staged Attack or Sp. Atk (Special on ties), against the corresponding defense. Raises Sp. Atk by 1 as a guaranteed secondary effect; recoil is 1/4 damage dealt.'],
  cactibash:['Florinia','Hits twice. Knocking out the target adds one layer of Spikes to its side, at most once per use.'],
- corrosivestrike:['Corey','Super effective against Steel. Inflicts non-stacking corrosion dealing 1/16 maximum HP each turn until the target switches.'],
+ corrosivestrike:['Corey','Uses higher staged Attack or Special Attack, Special on ties. Super effective against Steel. Inflicts non-stacking corrosion dealing 1/16 maximum HP each turn until the target switches.'],
  toxicvial:['Corey','Badly poisons the target and lowers its Attack and Sp. Atk by 1. Normal status and stat-drop protections apply.'],
  flutterscales:['Shelly','Hits opposing Pokemon. Each damaged target has either Attack or Sp. Atk lowered by 1, chosen equally.'],
  spiritmend:['Shade','Heals half maximum HP and raises Sp. Def by 1.'],
@@ -88,7 +88,7 @@ const descriptions: {[id:string]:[string,string]} = {
  nomoswish:['Noel','Raises Defense and Sp. Def by 1 and sets native Wish in the user’s position, healing at the end of the following turn.'],
  queensgambit:['Radomus','Uses the higher current Attack or Sp. Atk and corresponding defense; ties use Special. Lowers the user’s Defense and Sp. Def by 1 afterward.'],
  darkclasp:['Luna','Uses the user’s Sp. Def instead of Sp. Atk against the target’s Sp. Def.'],
- beatdown:['Samson','Hits three times with a separate 95% accuracy check per hit, stopping on a miss. A successful hit applies Taunt once per use.'],
+ beatdown:['Samson','Hits three times with a separate 95% accuracy check per hit, stopping on a miss. If the first accuracy check misses, raises the user\'s Attack by 2; later misses, protection and immunity do not grant this boost. A successful hit applies Taunt once per use.'],
  infernalrage:['Charlotte','Hits opposing Pokemon and applies Torment to damaged targets. Clears a replaceable field after a hit, respecting field locks.'],
 };
 for (const [id, [credit, summary]] of Object.entries(descriptions)) {
@@ -107,7 +107,7 @@ export const YangSignatureFieldNotesA: {[id: string]: string | null} = {
   "frozenrefractals": null,
   "nomoswish": "Misty, Rainbow, Fairy Tale, Holy and Starlight Arena: native Wish restores 75% maximum HP. Misty Aura and Rainbow Aura also grant this healing snapshot.",
   "queensgambit": "Uses Chess move and piece rules. A Queen always lands a critical hit. Target Opportunist halves and Gorilla Tactics doubles the matchup modifier; user Klutz makes the move fail.",
-  "darkclasp": "Changes Cave or Crystal Cavern to Dark Crystal Cavern, and Factory to Short Circuit, after damage. Field locks apply.",
+  "darkclasp": "Dark Crystal Cavern: 1.5x power. Changes Cave or Crystal Cavern to Dark Crystal Cavern, and Factory to Short Circuit, after damage. Field locks apply.",
   "beatdown": null,
   "infernalrage": "Changes Cave to Volcanic. Flower Garden stage 3 or higher loses two stages unless rain or Water Sport prevents it. Uses native Ignite transformations before clearing other replaceable fields."
 };

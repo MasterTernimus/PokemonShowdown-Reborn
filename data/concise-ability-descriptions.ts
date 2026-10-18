@@ -29,8 +29,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Battle Armor; bone attacks heal 1/8 max HP once per turn after opposing HP damage."
   },
   "apexvenom": {
-    "desc": "Strong Jaw gives biting attacks 1.5x power. Poison Fang additionally receives a separate 1.5x signature multiplier, combining to 2.25x before STAB; Z/Max versions do not receive that signature bonus. Retains local Poison/Steel matchup overrides, bite protection bypass and toxic chance, and Shed Skin.",
-    "shortDesc": "Strong Jaw 1.5x; Poison Fang gets another 1.5x; retains poison matchups and Shed Skin."
+    "desc": "Strong Jaw gives biting attacks 1.5x power. Poison Fang has no separate signature multiplier. Retains local Poison/Steel matchup overrides, bite protection bypass and toxic chance, and Shed Skin.",
+    "shortDesc": "Strong Jaw 1.5x; retains poison matchups and Shed Skin."
   },
   "blaze": {
     "desc": "When this Pokemon has 1/3 or less of its max HP, rounded down, its offensive stat is multiplied by 1.5 while using a Fire-type attack.",
@@ -69,13 +69,13 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Ultra Instinct + Opportunist (five combat stats only) + Magma Armor."
   },
   "venomarmor": {
-    "desc": "Dual Wield and Battle Armor. Metal Claw has 1.5x power on both full hits, retaining existing local behavior. Does not automatically poison, heal or grant the former status-based damage boost.",
-    "shortDesc": "Dual Wield + Battle Armor; Metal Claw 1.5x."
+    "desc": "Dual Wield and Battle Armor. Metal Claw retains two 60%-power hits. Does not automatically poison, heal or grant the former status-based damage boost.",
+    "shortDesc": "Dual Wield + Battle Armor."
   },
   "toxicarmor": {
-    "desc": "revised Venom Armor and opening Violent Rush. A native positive-priority damaging attack that damages opposing HP prepares the next eligible Dual Wield attack on the following turn for +1 priority. Consumes on attempt, including miss, protection or immunity; expires at that turn end and clears on switching. No stacking, generated attacks, Z/Max attacks or self-rearming from the granted priority. Cannot be suppressed, replaced or bypassed by Mold Breaker.",
-    "shortDesc": "Venom Armor + Violent Rush; priority HP hit prepares next-turn Dual Wield priority."
-  },
+  "desc": "Full local Dual Wield, Metal Claw with two 60%-power hits, and opening Violent Rush. A native positive-priority damaging attack that damages opposing HP prepares the next eligible Dual Wield attack on the following turn for +1 priority. Consumes on attempt, including miss, protection or immunity; expires at that turn end and clears on switching. No stacking, generated attacks, Z/Max attacks or self-rearming from the granted priority. Cannot be suppressed, replaced or bypassed by Mold Breaker.",
+  "shortDesc": "Dual Wield + opening Violent Rush; priority hits prepare next-turn priority."
+},
   "noseformation": {
   "shortDesc": "Elevate; successful opposing attacks trigger three 30 BP Special Mini-Noses.",
   "desc": "Elevate grants airborne status, subject to grounding, and one highest-stat increase per move KO, using nature-adjusted stats while ignoring stages and other stat modifiers. After a successful opposing attack, fires one trio of 30 BP Special Mini-Noses, choosing Steel, Electric or Rock and retargeting living foes when needed. Each is a normal attack respecting protection, Substitute and immunity. No ally triggers or recursive trios. Does not include Filter."
@@ -117,7 +117,7 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Thick Fat, Unaware and Grass chip recovery."
   },
   "waterbarrage": {
-    "desc": "Stalwart bypasses redirection and grants +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. Separate bespoke composites can specify a boosted first hit and a 15% second hit. A literal Mega Launcher + Water Barrage combination instead boosts both eligible pulse/bullet hits by 1.5x: 0.9x each outside Free-for-All, or 1.5x each in Free-for-All. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP. Water immunities block it; type effectiveness scales it only in Free-for-All.",
+    "desc": "Stalwart bypasses redirection and grants +1 Sp. Atk on New World, Starlight Arena, Fairy Tale or Chessboard entry. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. A literal Mega Launcher + Water Barrage combination instead boosts both eligible pulse/bullet hits by 1.5x: 0.9x each in every battle format. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. At turn end, foes take cycling Water damage of 1/16, 2/16, then 3/16 max HP. Water immunities block it; type effectiveness scales it only in Free-for-All.",
     "shortDesc": "Dual Wield + Stalwart; cycling Water chip."
   },
   "gulpmissile": {

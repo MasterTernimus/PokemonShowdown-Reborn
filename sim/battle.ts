@@ -2793,6 +2793,10 @@ export class Battle {
 		) {
 			return move.flags['futuremove'] ? pokemon : null;
 		}
+		// Rampages allow an initial choice; forced continuation retains random opposing targeting.
+		if (pokemon.volatiles.lockedmove?.move === move.id && this.dex.moves.get(move.id).self?.volatileStatus === 'lockedmove') {
+			return this.getRandomTarget(pokemon, {...move, target: 'randomNormal'});
+		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			const target = pokemon.getAtLoc(targetLoc);
 			if (target?.fainted) {

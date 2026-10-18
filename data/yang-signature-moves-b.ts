@@ -13,6 +13,15 @@ function dragonField(this: Battle, target: Pokemon, source: Pokemon, move: Activ
 }
 const hitFlags = {protect: 1, mirror: 1} as const;
 const hasHPDamage = (target: Pokemon, move: ActiveMove) => (target.getMoveHitData(move) as {damage?: number}).damage! > 0;
+function timeBladeSplash(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
+ const state = move as ActiveMove & {timeBladeSplashed?: boolean};
+ if (state.timeBladeSplashed) return;
+ state.timeBladeSplashed = true;
+ const divisor = this.field.isTerrain('fairytaleterrain') ? 8 : 16;
+ for (const ally of target.adjacentAllies()) {
+  if (ally.hp) this.damage(ally.baseMaxhp / divisor, ally, source, this.dex.conditions.get('Time Blade'));
+ }
+}
 function winds(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
  clearMoveAura.call(this, source, move);
  if (this.field.setWeather('deltastream', source, move)) this.field.weatherState.duration = 4;
@@ -71,7 +80,9 @@ export const YangSignatureMovesB: MoveDataTable = {
   onModifyMove: adaptiveCategory,
   onHit(target, source, move) {
    if (target.hp && hasHPDamage(target, move) && target.addVolatile('encore', source, move)) target.volatiles.encore.duration = 2;
+   if (hasHPDamage(target, move)) timeBladeSplash.call(this, target, source, move);
   },
+  onAfterSubDamage(damage, target, source, move) { if (damage > 0) timeBladeSplash.call(this, target, source, move); },
  },
  crestcleave: {
   num: 10452, name: 'Crest Cleave', type: 'Steel', category: 'Physical', basePower: 65, accuracy: 100,
@@ -86,6 +97,16 @@ export const YangSignatureMovesB: MoveDataTable = {
  sirensveil: {
   num: 10453, name: "Siren's Veil", type: 'Water', category: 'Status', basePower: 0, accuracy: 100,
   pp: 10, priority: 0, target: 'self', flags: {snatch: 1}, boosts: {def: 1, spd: 1},
+  volatileStatus: 'sirensveil',
+  condition: {
+   noCopy: true,
+   onStart(pokemon) { this.add('-start', pokemon, 'Siren\'s Veil'); },
+   onBasePowerPriority: 9,
+   onBasePower(basePower, source, target, move) { if (move.category !== 'Status') return this.chainModify(1.3); },
+   onMoveAborted(pokemon, target, move) { if (move.category !== 'Status') pokemon.removeVolatile('sirensveil'); },
+   onAfterMove(pokemon, target, move) { if (move.category !== 'Status') pokemon.removeVolatile('sirensveil'); },
+   onEnd(pokemon) { this.add('-end', pokemon, 'Siren\'s Veil'); },
+  },
   onHit(source, user, move) {
    for (const foe of source.foes()) {
     if (!foe.hp || foe.getAbility().flags.cantsuppress || foe.hasItem('abilityshield') ||
@@ -212,9 +233,9 @@ export const YangSignatureLearnsetsB: {[id: string]: string[]} = {
 const summaries: {[id: string]: string} = {
  m3g4qu4k3: 'Hits all adjacent Pokemon; damaged opposing targets lose 1 Defense and Sp. Def. Glitch boosts power 1.3x; Big Top applies its Striker roll.',
  winddance: 'Dance move. After a hit, sets Strong Winds for 4 turns. +1 priority if Strong Winds are already active. Big Top boosts power 1.5x; Mountain and Snowy Mountain retain their normal Flying boost. Clears fields that existing blowing moves clear.',
- timeblade: 'Uses higher staged Attack or Sp. Atk (Special on ties). After damage, applies Encore for 2 turns if eligible.',
+ timeblade: 'Uses higher staged Attack or Sp. Atk (Special on ties). After damage, applies Encore for 2 turns if eligible. After HP or Substitute damage, splashes adjacent allies of the target for 1/16 of their maximum HP, or 1/8 on Fairy Tale, once per whole move. Splash is indirect damage like Flame Burst: it bypasses partner Protect and Substitute, but respects Magic Guard; it does not apply Encore or trigger another splash.',
  crestcleave: 'Uses higher staged Attack or Sp. Atk with the corresponding defense (Special on ties). Removes a removable held item after damage; drains 1/3 of damage dealt. No item-dependent power boost.',
- sirensveil: 'Raises Defense and Sp. Def by 1; suppresses active opposing abilities until they switch. Respects Ability Shield and unsuppressible abilities. On Short Circuit, a working Covert Cloak also prevents suppression.',
+ sirensveil: 'Raises Defense and Sp. Def by 1; suppresses active opposing abilities until they switch. Also readies 1.3x power for the user\'s next damaging move, including all hits and targets. This charge does not stack, survives status moves, clears on switching, and is spent on a damaging move attempt even if it misses or is blocked. Respects Ability Shield and unsuppressible abilities. On Short Circuit, a working Covert Cloak also prevents suppression.',
  sirenswrath: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Ignores defensive abilities for this attack. After damaging a foe, reduces the next opposing whole attack by 25% before the user next acts. Does not stack. Breaks Icy Field back into Water Surface only when that water is recorded underneath.',
  rocknroll: 'Lowers the target Defense by 1 and sets Stealth Rock on its side. Cannot place Stealth Rock in Midnight Zone.',
  dragonrend: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Treats Fairy as neutral while preserving the other defensive type: Fairy/Steel resists and Fairy/Dragon is weak. This exception does not carry to generic Z or Max moves. Turns Volcanic Field into Dragon\'s Den after a hit. Does not place an entry hazard.',

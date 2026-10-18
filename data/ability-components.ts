@@ -12,10 +12,10 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	savageresolve: ['guts'],
 	lancepoint: ['keeneye'],
 	anchoredbattery: ['megalauncher', 'suctioncups'],
-	shadowbond: ['battlebond', 'filter', 'selfsufficient', 'proficient', 'infiltrator'],
-	apexbond: ['battlebond', 'filter', 'selfsufficient', 'supremeoverlord', 'roughskin'],
-	sacredbond: ['battlebond', 'filter', 'selfsufficient', 'magmaarmor', 'intimidate', 'flashfire'],
-	battlebond: ['filter', 'selfsufficient'],
+	shadowbond: ['battlebond', 'selfsufficient', 'proficient', 'infiltrator'],
+	apexbond: ['battlebond', 'selfsufficient', 'supremeoverlord', 'roughskin'],
+	sacredbond: ['battlebond', 'selfsufficient', 'magmaarmor', 'intimidate', 'flashfire'],
+	battlebond: ['selfsufficient'],
 	highnoon: ['dualwield', 'megalauncher', 'proficient'],
 	strikersmomentum: ['proficient'],
 	forestsurge: ['proficient'],
@@ -284,7 +284,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	neurotoxin: ['hydrabond', 'shedskin', 'regenerator'],
 	patternshift: ['protean', 'shedskin', 'unaware'],
 	venomarmor: ['poisonheal', 'dualwield'],
-	toxicarmor: ['venomarmor', 'violentrush'],
+	toxicarmor: ['dualwield', 'violentrush'],
 	corrosiveburn: ['corrosion', 'oblivious', 'venomignition'],
 	solarrush: ['sandrush', 'chlorophyll'],
 	ultrainstinct: ['moldbreaker', 'innerfocus'],
@@ -865,7 +865,7 @@ AbilityComponents.trickperformer = ['technician','prankster'];
 AbilityComponents.taptempo = ['owntempo'];
 
 AbilityComponents.venomarmor = ['dualwield','battlearmor'];
-AbilityComponents.toxicarmor = ['venomarmor','violentrush'];
+AbilityComponents.toxicarmor = ['dualwield','violentrush'];
 AbilityComponents.sirius = [...(AbilityComponents.sirius || []),'venamskiss'];
 AbilityComponents.mycelialbond = ['dryskin'];
 AbilityComponents.scrapbreaker = [];

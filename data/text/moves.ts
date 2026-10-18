@@ -2740,8 +2740,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxspiritvolley: {
 		name: "G-Max Spirit Volley",
-		desc: "Ghost-type, 100 Base Power. Uses the user's higher offensive stat. Hits the selected foe at full power, then makes a separate 50 Base Power Ghost-type hit against one other adjacent foe, if present. The follow-up checks its own type immunity and protection. In a single battle, there is no follow-up.",
-		shortDesc: "100 BP Ghost to one foe; 50 BP Ghost follow-up to another foe.",
+		desc: "Ghost-type, 100 Base Power. Uses the user's higher offensive stat. Hits the selected foe, then makes a separate 50 Base Power Ghost-type hit against another living adjacent foe if present, otherwise the original target if it is still alive. The follow-up checks its own type immunity and protection and cannot trigger another follow-up.",
+		shortDesc: "100 BP Ghost; 50 BP follow-up to another foe, or the surviving target.",
 	},
 	gmaxdeathroll: {
 		name: "G-Max Death Roll",
@@ -7862,7 +7862,7 @@ MovesText.shadowforce.desc += ' After this attack deals positive HP or Substitut
 MovesText.mudbarrage = {...MovesText.mudslap, name: 'Mud Barrage'};
 delete MovesText.mudslap;
 
-MovesText.drakefang = {name: 'Drake Fang', shortDesc: 'Dragon-type biting attack; 50% chance to badly poison.', desc: '85-power physical Dragon-type biting contact attack with 100% accuracy and 15 PP. Has a 50% chance to badly poison the target. Uses ordinary Dragon effectiveness: Fairy immunity and Steel resistance apply. Mega Seviper converts its Poison Fang slot into this move while preserving PP; Sirius supplies its separately described signature and Strong Jaw multipliers.'};
+MovesText.drakefang = {name: 'Drake Fang', shortDesc: 'Dragon-type biting attack; 50% chance to badly poison.', desc: '85-power physical Dragon-type biting contact attack with 100% accuracy and 15 PP. Has a 50% chance to badly poison the target. Uses ordinary Dragon effectiveness: Fairy immunity and Steel resistance apply. Mega Seviper converts its Poison Fang slot into this move while preserving PP; Sirius supplies the normal Strong Jaw bite multiplier.'};
 
 import {FinisherMoveDescriptions} from '../finisher-moves-approved';
 for (const [id,text] of Object.entries(FinisherMoveDescriptions)) MovesText[id as ID] = text;
@@ -7875,3 +7875,8 @@ Object.assign(MovesText.ragefist, {"shortDesc":"50 BP +20 per hit taken, max 150
 
 MovesText.encorearia={name:'Encore Aria',shortDesc:'Fairy; per foe, stronger physical dance or special sound. 10% sleep.',desc:"Meloetta-Encore's Relic Song. For each foe, compares damage through the battle engine, including immunities, abilities, items and fields. Uses a physical dance or special sound branch, whichever deals more damage; Special wins ties. Each hit has only its chosen branch's flag. Has a 10% chance to put each target to sleep. Does not change form."};
 MovesText.pirouettedance={name:'Pirouette Dance',shortDesc:'Fighting dance; 10% sleep. Changes Meloetta back to Aria.',desc:'Meloetta-Pirouette’s Relic Song becomes a Fighting-type special dance move, with 75 power and a 10% sleep chance. Changes Meloetta back to Aria after a successful use.'};
+for (const id of ['outrage', 'thrash', 'petaldance', 'ragingfury']) {
+ const text = MovesText[id as ID];
+ text.desc = (text.desc || '').replace('Targets a random adjacent opponent.', 'Choose an adjacent opposing Pokemon on the initial turn. Forced continuation turns target an opposing Pokemon at random.');
+ text.shortDesc = (text.shortDesc || '') + ' Choose initial foe; later hits random.';
+}

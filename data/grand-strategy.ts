@@ -39,8 +39,8 @@ export const GrandStrategy: import('../sim/dex-abilities').AbilityData = {
  },
 };
 export const GrandStrategyDescription = {
- shortDesc: "Mold Breaker; team hits prepare foes; once-battle status cure grants Laser Focus.",
- desc: "Mold Breaker. Its team’s attacks dealing opposing HP damage prepare that foe for the holder, even while the holder is benched. Its next physical HP-damaging attack consumes the mark after the whole attack, ignoring positive defensive stages and Reflect, Light Screen and Aurora Veil. That attack cannot rearm the mark. Marks do not stack and clear when the foe switches or the holder loses this ability. Once per battle, an end-of-turn major-status cure clears negative accuracy stages and grants Laser Focus through the next turn; switching clears Laser Focus. Suppression delays the cure; other cures do not spend it.",
+ shortDesc: "Mold Breaker; team hits prepare foes while active; once-battle cure grants Laser Focus.",
+ desc: "Mold Breaker. While the holder is active, its team's attacks dealing opposing HP damage prepare that foe for the holder. Its next physical HP-damaging attack consumes the mark after the whole attack, ignoring positive defensive stages and Reflect, Light Screen and Aurora Veil. That attack cannot rearm the mark. Marks do not stack, survive the holder switching out, and clear when the foe switches or faints, or the holder faints or loses this ability. Once per battle, an end-of-turn major-status cure clears negative accuracy stages and grants Laser Focus through the next turn; switching clears Laser Focus. Suppression delays the cure; other cures do not spend it.",
 };
 
 export function updatePreparedIndicator(battle: Battle, target: Pokemon) {
@@ -59,8 +59,8 @@ export function grandStrategyRecordHit(battle: Battle, source: Pokemon, target: 
  if (!(damage > 0) || move.category === 'Status') return;
  const hits: {owner: Pokemon; target: Pokemon; consumed: boolean}[] = (move as any).grandStrategyHits ||= [];
  for (const side of battle.sides) for (const owner of side.pokemon) {
-  if (!owner.hp || !owner.isAlly(source) || owner.isAlly(target) ||
-   !(owner.isActive ? owner.hasAbility('grandstrategy') : owner.ability === 'grandstrategy')) continue;
+  if (!owner.hp || !owner.isActive || !owner.isAlly(source) || owner.isAlly(target) ||
+   !owner.hasAbility('grandstrategy')) continue;
   if (!hits.some(hit => hit.owner === owner && hit.target === target)) {
    hits.push({owner, target, consumed: owner === source && grandStrategyPrepared(source, target, move)});
   }
@@ -71,8 +71,8 @@ export function grandStrategyAfterMove(battle: Battle, source: Pokemon, move: Ac
  for (const hit of hits) {
   const {owner, target} = hit;
   if (hit.consumed) removeOwner(battle, target, owner);
-  else if (owner.hp && target.hp && target.isActive &&
-   (owner.isActive ? owner.hasAbility('grandstrategy') : owner.ability === 'grandstrategy') && !target.volatiles.prepared?.owners?.includes(owner)) {
+  else if (owner.hp && owner.isActive && target.hp && target.isActive &&
+   owner.hasAbility('grandstrategy') && !target.volatiles.prepared?.owners?.includes(owner)) {
    target.addVolatile('prepared', owner, battle.dex.abilities.get('grandstrategy'));
   }
   updatePreparedIndicator(battle, target);

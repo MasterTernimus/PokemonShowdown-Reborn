@@ -49,7 +49,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "On entry, heals each adjacent ally by 1/4 max HP, or 1/3 on Fairy Tale."
   },
   "aevianoath": {
-    "desc": "On entry, heals each adjacent ally by 1/4 max HP, or 1/3 on Fairy Tale. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. When combined with Sharpness, Mega Launcher, or Power Drill, the first hit receives that boost and the second hit deals 15% of the move's unboosted power. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats.",
+    "desc": "On entry, heals each adjacent ally by 1/4 max HP, or 1/3 on Fairy Tale. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. Separate power boosts apply to both 60%-power hits. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats.",
     "shortDesc": "On entry, heals each adjacent ally by 1/4 max HP, or 1/3 on Fairy Tale."
   },
   "hisuianvanguard": {
@@ -193,7 +193,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Sound moves become Water-type, or Ice-type on Icy Field, and have 1.2x power."
   },
   "sacrededge": {
-    "desc": "Slicing moves have 1.5x power, except on Cold Eclipse. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. When combined with Sharpness, Mega Launcher, or Power Drill, the first hit receives that boost and the second hit deals 15% of the move's unboosted power. In Free-for-All, both hits use full power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. On entry or Mega Evolution, heals adjacent allies by 1/4 max HP, or 1/3 on Fairy Tale.",
+    "desc": "Slicing moves have 1.5x power, except on Cold Eclipse. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. Separate power boosts apply to both 60%-power hits. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. On entry or Mega Evolution, heals adjacent allies by 1/4 max HP, or 1/3 on Fairy Tale.",
     "shortDesc": "Slicing moves have 1.5x power, except on Cold Eclipse."
   },
   "relentlesslink": {

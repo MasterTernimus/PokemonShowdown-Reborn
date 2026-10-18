@@ -1189,5 +1189,7 @@ ThematicPassiveIds.add('slowstart');
 ThematicPassiveIds.add('ancientassembly');
 SpeciesPassives.regigigasprimordial=Object.freeze(['primordialconstruct','ancientassembly']);
 ThematicPassiveIds.add('primordialconstruct');
+SpeciesPassives.gyaradosmega = Object.freeze(['tempestfury']);
+ThematicPassiveIds.add('tempestfury');
 Object.freeze(SpeciesPassives);
 

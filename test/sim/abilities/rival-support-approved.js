@@ -27,9 +27,9 @@ describe('Approved rival and support queue',()=>{
   const[p,q]=setup('Seviper','Rival Malice');assert.equal(battle.runEvent('ModifySpe',p,null,null,100),150);
   assert.equal(battle.runEvent('ModifyDamage',p,q,Dex.getActiveMove('tackle'),100),150);q.hp=500;assert.equal(battle.runEvent('ModifyDamage',p,q,Dex.getActiveMove('tackle'),100),125);
  });
- it('Apex signature and Strong Jaw multiply twice, not three times',()=>{
-  const[p,q]=setup('Mew','Apex Venom');assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('poisonfang'),100),225);
-  p.setAbility('Sirius');assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('drakefang'),100),225);
+ it('Fang attacks retain Strong Jaw without a signature multiplier',()=>{
+  const[p,q]=setup('Mew','Apex Venom');assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('poisonfang'),100),150);
+  p.setAbility('Sirius');assert.equal(battle.runEvent('BasePower',p,q,Dex.getActiveMove('drakefang'),100),150);
  });
  it('Drake Fang preserves slot and PP through actual Mega form changes',()=>{
   const[p,q]=setup('Seviper','Apex Venom','singles',['poisonfang','splash']);p.moveSlots[0].pp=7;
@@ -40,7 +40,7 @@ describe('Approved rival and support queue',()=>{
   const[p,q]=setup('Zangoose-Mega','Toxic Armor');hit(p,q,'quickattack');assert.equal(p.m.toxicPreparation,battle.turn+1);battle.turn++;
   const move=Dex.getActiveMove('metalclaw');for(let i=0;i<2;i++)assert.equal(battle.runEvent('ModifyPriority',p,q,move,0),1);
   hit(p,q,'metalclaw');assert.equal(p.m.toxicPreparation,undefined);
-  assert.equal(battle.runEvent('BasePower',p,q,Object.assign(Dex.getActiveMove('metalclaw'),{multihitType:'dualwield',hit:2}),100),150);
+  assert.equal(battle.runEvent('BasePower',p,q,Object.assign(Dex.getActiveMove('metalclaw'),{multihitType:'dualwield',hit:2}),100),60);
   assert(!p.setAbility('No Ability'));
  });
  for(const species of ['Parasect','Parasect-Rejuv','Parasect-Parasite','Parasect-Mega'])it(species+' has full Dry Skin without doubled Fire weakness',()=>{
@@ -100,9 +100,9 @@ describe('Rival/support boundary checks',()=>{
   q.setType('Fairy');const hp=q.hp;hit(p,q,'drakefang');assert.equal(q.hp,hp);
   p.setAbility('Apex Venom');q.setType('Steel');move=Dex.getActiveMove('poisonfang');battle.runEvent('ModifyMove',p,q,move,move);battle.actions.getDamage(p,q,move);assert.equal(q.getMoveHitData(move).typeMod,1);
  });
- it('Toxic Armor keeps Battle Armor reduction against protection-breaking Drake Fang',()=>{
+ it('Toxic Armor no longer reduces protection-breaking Drake Fang after the approved Battle Armor removal',()=>{
   const[p,q]=setup('Mew','Sirius');q.setAbility('Toxic Armor',null,null,true);const move=Dex.getActiveMove('drakefang');battle.runEvent('ModifyMove',p,q,move,move);assert(move.breaksProtect);
-  assert.equal(battle.runEvent('ModifyDamage',p,q,move,100),80);
+  assert.equal(battle.runEvent('ModifyDamage',p,q,move,100),100);
  });
  it('Sirius contains Venam poison bypass for Steel targets',()=>{
   const[p,q]=setup('Seviper-Mega','Sirius');q.setType('Steel');hit(p,q,'sludgebomb',{secondaries:[]});assert.equal(q.status,'psn');

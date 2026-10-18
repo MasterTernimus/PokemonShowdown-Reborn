@@ -329,7 +329,7 @@ const sharpDualPowerEvents = new WeakSet<object>();
 function getDualWieldModifier(move: ActiveMove, componentBoost = 1, battle?: Battle, component = '') {
  const holder = battle?.event?.target as Pokemon | undefined;
  if (move.multihitType !== 'dualwield') return componentBoost;
- // Preserve the existing first-hit boost/15% second hit regardless of component source.
+ // Combine independent boosts once; Dual Wield scales each generated hit equally.
  if (move.flags.slicing && !battle?.field.isTerrain('coldeclipseterrain') && holder?.hasAbilityOrPassive?.('sharpness')) {
   if (sharpDualPowerEvents.has(battle!.event)) return 1;
   sharpDualPowerEvents.add(battle!.event);
@@ -343,9 +343,9 @@ function getDualWieldModifier(move: ActiveMove, componentBoost = 1, battle?: Bat
  } else if (battle?.event?.id === 'BasePower' && skipPassiveComponent(battle, holder, 'dualwield')) {
   return componentBoost;
  }
- if (move.dualWieldFullPower) return componentBoost;
- if (componentBoost !== 1) return move.hit > 1 ? 0.15 : componentBoost;
- return 0.6;
+ // Siege Launcher alone keeps full-power pairs in Free-for-All.
+ const hitScale = battle?.gameType === 'freeforall' && holder?.hasAbilityOrPassive('siegelauncher') ? 1 : 0.6;
+ return hitScale * componentBoost;
 }
 
 function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
@@ -3185,7 +3185,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return;
 			}
 			if (source.bondTriggered) return;
-			if (['arcanine', 'arcaninehisui'].includes(source.species.id) &&
+			if (['arcanine', 'arcaninealt', 'arcaninehisui'].includes(source.species.id) &&
 				source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Arcanine-Battle-Bond', this.effect, true);
@@ -3220,10 +3220,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.category === 'Status') return;
-			return this.dex.abilities.get('filter').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
+
 		onImmunity(type, pokemon) {
 			return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
 		},
@@ -3305,11 +3302,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10409,
 	},
 	sacredbond: {
+		onSwitchIn(pokemon) {
+			this.dex.abilities.get('sacredbond').onStart?.call(this, pokemon);
+		},
 		onStart(pokemon) {
 			this.dex.abilities.get('magmaarmor').onStart?.call(this, pokemon);
 			this.dex.abilities.get('flashfire').onStart?.call(this, pokemon);
 			const hasAdjacentFoe = pokemon.adjacentFoes().some((foe: Pokemon) => foe.hp);
-			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
+			this.singleEvent('Start', this.dex.abilities.get('intimidate'), pokemon.abilityState, pokemon);
 			if (!hasAdjacentFoe) {
 				delete pokemon.abilityState.intimidateActivated;
 				pokemon.abilityState.sacredBondPendingIntimidate = true;
@@ -3320,7 +3320,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const pokemon = this.effectState.target;
 			if (!pokemon?.hp || !pokemon.adjacentFoes().some((foe: Pokemon) => foe.hp)) return;
 			delete this.effectState.sacredBondPendingIntimidate;
-			this.dex.abilities.get('intimidate').onStart?.call(this, pokemon);
+			this.singleEvent('Start', this.dex.abilities.get('intimidate'), pokemon.abilityState, pokemon);
 		},
 		onUpdate(pokemon) { return this.dex.abilities.get('magmaarmor').onUpdate?.call(this, pokemon); },
 		onTryHit(target, source, move) {
@@ -4768,7 +4768,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 20,
 		onBasePower(basePower, source, target, move) {
-			if (move.id === 'metalclaw') return this.chainModify(1.5);
 			if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move, 1, this));
 		},
 		onModifyDamage(damage, source, target, move) {

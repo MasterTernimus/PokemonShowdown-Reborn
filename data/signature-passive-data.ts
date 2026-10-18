@@ -64,3 +64,5 @@ SignaturePassiveComponents.winterpressure=['icebody','pressure'];
 
 import {PassiveShortDescriptionAudit} from './short-description-audit';
 for(const[id,shortDesc]of Object.entries(PassiveShortDescriptionAudit))SignaturePassiveDescriptions[id]={...SignaturePassiveDescriptions[id],shortDesc};
+
+SignaturePassiveDescriptions.tempestfury = {shortDesc: 'Once per battle: survive a foe hit to charge a Water critical hit.', desc: 'Once per battle, surviving opposing direct HP damage charges the next damaging Water move to critically hit, subject to normal critical-hit prevention. Opposing HP or Substitute damage spends the charge; misses, protection and immunity preserve it. The charge and spent acquisition persist through switching and form changes. Ordinary Gyarados active Tempest Fury remains repeatable; its charge is separate and does not transfer into this passive.'};

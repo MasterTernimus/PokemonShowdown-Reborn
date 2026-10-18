@@ -8636,8 +8636,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!target || !source.hp) return;
 			const otherFoes = source.foes().filter(pokemon =>
 				pokemon !== target && pokemon.hp && !pokemon.fainted && source.isAdjacent(pokemon));
-			if (!otherFoes.length) return;
-			const other = this.sample(otherFoes);
+			const other = otherFoes.length ? this.sample(otherFoes) :
+				(target.hp && !target.fainted && source.isAdjacent(target) ? target : null);
+			if (!other) return;
 			const followUp = this.dex.getActiveMove('gmaxspiritvolley');
 			followUp.basePower = 50;
 			followUp.category = move.category;
@@ -15031,7 +15032,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
-		target: "randomNormal",
+		target: "adjacentFoe",
 		type: "Dragon",
 		contestType: "Cool",
 	},
@@ -15250,7 +15251,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
-		target: "randomNormal",
+		target: "adjacentFoe",
 		type: "Grass",
 		contestType: "Beautiful",
 	},
@@ -16842,7 +16843,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			volatileStatus: 'lockedmove',
 		},
-		target: "randomNormal",
+		target: "adjacentFoe",
 		type: "Fire",
 	},
 	raindance: {
@@ -22625,7 +22626,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
-		target: "randomNormal",
+		target: "adjacentFoe",
 		type: "Normal",
 		contestType: "Tough",
 	},

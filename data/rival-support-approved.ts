@@ -27,7 +27,6 @@ export function installRivalSupport(a: AbilityDataTable) {
 		},
 		onBasePowerPriority:20,
 		onBasePower(power,source,target,move) {
-			if(!move.isZ&&!move.isMax&&['poisonfang','drakefang'].includes(move.id))return this.chainModify(2.25);
 			return a.strongjaw.onBasePower!.call(this,power,source,target,move);
 		},
 	};
@@ -48,7 +47,9 @@ export function installRivalSupport(a: AbilityDataTable) {
 		onBasePowerPriority: 20, onBasePower: venom.onBasePower,
 	};
 	const toxic = a.toxicarmor;
-	a.toxicarmor = {...a.venomarmor, name: 'Toxic Armor', num: toxic.num, rating: 5,
+	// Mega Zangoose retains the offensive Venom Armor hooks, not its Battle Armor callbacks.
+	a.toxicarmor = {...a.dualwield, name: 'Toxic Armor', num: toxic.num, rating: 5,
+		onBasePowerPriority: 20, onBasePower: venom.onBasePower,
 		flags: {cantsuppress: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1},
 		onModifySpe: toxic.onModifySpe, onModifyAtk: toxic.onModifyAtk,
 		onSwitchIn(p) { delete p.m.toxicPreparation; },

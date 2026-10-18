@@ -80,13 +80,14 @@ export function applyRosterWave2(base: AbilityDataTable) {
 	add('tempestfury', 'Tempest Fury', {
 		onStart() { this.effectState.charged = false; },
 		onDamagingHit(damage, target, source) {
-			if (target.hp && foeHit(damage, target, source)) this.effectState.charged = true;
+			if (!target.getPassives().includes('tempestfury') && target.hp && foeHit(damage, target, source)) this.effectState.charged = true;
 		},
-		onModifyMove(move) {
+		onModifyMove(move, pokemon) {
+			if (pokemon.getPassives().includes('tempestfury')) return;
 			if (this.effectState.charged && move.type === 'Water' && move.category !== 'Status') move.willCrit = true;
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			if (foeHit(damage, target, source) && move.type === 'Water') this.effectState.charged = false;
+			if (!source.getPassives().includes('tempestfury') && foeHit(damage, target, source) && move.type === 'Water') this.effectState.charged = false;
 		},
 		onSourceAfterSubDamage(damage, target, source, move) {
 			if (foeHit(damage, target, source) && move.type === 'Water') this.effectState.charged = false;

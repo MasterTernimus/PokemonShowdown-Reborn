@@ -951,12 +951,14 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (move.id === 'gravity')
 					this.field.changeTerrain('corrosiveterrain');
+				if (move.id === 'seedflare') {
+					this.field.changeTerrain('mistyterrain', source, move);
+					return;
+				}
 				if (terrainEndMoves.includes(move.id)) {
 					this.field.clearTerrain();
 					return;
 				}
-				if (move.id === 'seedflare')
-					this.field.changeTerrain('mistyterrain');
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,

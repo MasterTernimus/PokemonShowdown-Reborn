@@ -1086,6 +1086,7 @@ export class Pokemon {
 				return [{
 					move: moveSlot.move,
 					id: moveSlot.id,
+					target: this.volatiles.lockedmove?.move === lockedMove ? 'randomNormal' : undefined,
 				}];
 			}
 			// does this happen?
