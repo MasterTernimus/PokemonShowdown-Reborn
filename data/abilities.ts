@@ -16326,14 +16326,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10035,
 	},
 	ragingcurrent: {
-		onAnyTryMove(target, source, effect) { return this.dex.abilities.getHandler('damp', 'onAnyTryMove')?.call(this, target, source, effect); },
-		onAnyDamage(damage, target, source, effect) { return this.dex.abilities.get('damp').onAnyDamage?.call(this, damage, target, source, effect); },
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			return this.dex.abilities.get('damp').onSourceModifyAtk?.call(this, atk, attacker, defender, move);
-		},
-		onSourceModifySpA(spa, attacker, defender, move) {
-			return this.dex.abilities.get('damp').onSourceModifySpA?.call(this, spa, attacker, defender, move);
-		},
 		onBasePowerPriority: 22,
 		onBasePower(basePower, attacker, defender, move) {
 			if (this.effect.id === 'ragingcurrent') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);

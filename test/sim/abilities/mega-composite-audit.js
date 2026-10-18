@@ -40,16 +40,17 @@ describe('Mega composite ability components', () => {
 		}
 	});
 
-	it('Raging Current removes Water Veil while retaining Dry Skin and Damp', () => {
+	it('Raging Current retains Dry Skin without Damp or Water Veil', () => {
 		const [swampert, foe] = mega('Swampert', 'Swampertite', ['splash', 'explosion']);
 		assert.equal(swampert.ability, 'ragingcurrent');
 		assert(!swampert.volatiles.aquaring);
 		assert.equal(swampert.trySetStatus('brn', foe), true);
 		swampert.cureStatus();
-		assert.equal(battle.runEvent('SourceModifySpA', swampert, foe, battle.dex.getActiveMove('flamethrower'), 100), 50);
-		const foeHP = foe.hp;
+		assert.equal(battle.runEvent('SourceModifySpA', swampert, foe, battle.dex.getActiveMove('flamethrower'), 100), 100);
+		const swampertHP = swampert.hp;
 		battle.makeChoices('move splash', 'move explosion');
-		assert.equal(foe.hp, foeHP);
+		assert.equal(foe.hp, 0);
+		assert(swampert.hp < swampertHP);
 	});
 
 	it('Phantom Fist boosts punches through its Unseen Fist component', () => {

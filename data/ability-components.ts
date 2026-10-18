@@ -160,7 +160,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	wrathshield: ['bulletproof', 'dauntlessshield', 'selfrepair', 'proficient'],
 	shadowcurrent: ['protean', 'technician', 'anticipation', 'infiltrator', 'proficient'],
 	astralwitchcraft: ['levitate', 'magicguard', 'magicbounce', 'proficient'],
-	ragingcurrent: ['swiftswim', 'damp', 'dryskin', 'stamina', 'proficient'],
+	ragingcurrent: ['swiftswim', 'dryskin', 'stamina', 'proficient'],
 	calderacore: ['magmaarmor', 'sheerforce', 'drought'],
 	doublestrike: ['ironfist', 'technician', 'skilllink'],
 	siegelauncher: ['stalwart', 'proficient'],
@@ -935,7 +935,7 @@ AbilityComponents.lastingpromise = ['friendguard'];
 AbilityComponents.desertvigil = ['overcoat'];
 
 AbilityComponents.imperialprincess = ['striker', 'vitalspirit'];
-AbilityComponents.ragingcurrent = ['swiftswim', 'damp', 'dryskin', 'stamina'];
+AbilityComponents.ragingcurrent = ['swiftswim', 'dryskin', 'stamina'];
 
 AbilityComponents.beyondfear = [];
 AbilityComponents.unboundspirit = ['vitalspirit'];
@@ -956,7 +956,7 @@ AbilityComponents.ironmountain=['hypercutter','suctioncups'];
 AbilityComponents.disguise=[];
 AbilityComponents.stancechange=[];
 
-Object.assign(AbilityComponents,{hydraflight:['levitate','hydrabond'],worldbreaker:['berserk','merciless','duskilate'],falseliberation:['moldbreaker','berserk']});
+Object.assign(AbilityComponents,{hydraflight:['levitate','hydrabond','berserk'],worldbreaker:['merciless','duskilate'],falseliberation:['moldbreaker']});
 
 AbilityComponents.performer=['dancer','songstress'];
 

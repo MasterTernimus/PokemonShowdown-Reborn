@@ -54,7 +54,7 @@ SignaturePassiveComponents.tirelessmuscle = ['innerfocus'];
 
 SignaturePassiveComponents.rimeboundspirit = ['heatproof'];
 
-SignaturePassiveComponents.hydraflight=['levitate','hydrabond'];
+SignaturePassiveComponents.hydraflight=['levitate','hydrabond','berserk'];
 
 SignaturePassiveComponents.absolutepressure=['pressure','innerfocus','insomnia','moldbreaker'];
 

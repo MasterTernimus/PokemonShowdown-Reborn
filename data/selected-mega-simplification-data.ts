@@ -337,8 +337,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Gains +1 Speed at the end of each full turn it spends active. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def. Prevents other Pokemon's accuracy drops and ignores evasion boosts. Reveals opposing Illusions on activation. Mirror Arena entry gives +1 accuracy and Laser Focus. Gains +1 Speed at the end of each eligible turn.. Prevents freezing and Accuracy drops, and ignores the target's evasiveness. Magma Armor and Keen Eye also retain their field effects.",
 	},
 	"ragingcurrent": {
-		"shortDesc": "Swift Swim + Damp + Dry Skin.",
-		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Prevents Explosion, Self-Destruct, Mind Blown, Misty Explosion and Aftermath damage. Incoming Fire attacks use half the attacker's offensive stat. On Corrosive Mist, also prevents Eruption, Fire Pledge, Flame Burst, Heat Wave, Incinerate, Lava Plume, Searing Shot and Inferno Overdrive. Absorbs Water moves for 1/4 max HP; incoming Fire moves have 1.25x power. Effective rain heals 1/8 HP per turn; sun costs 1/8. Field healing per turn: 1/16 on Underwater, Swamp, Misty or grounded Water Surface; 1/8 when grounded and Poison-type on Murkwater. Corrosive Mist heals Poison types by 1/8 but damages non-Steel others by 1/8. Desert costs 1/8 HP per turn. Water Veil and its burn immunity are removed.",
+		"shortDesc": "Swift Swim + Dry Skin.",
+		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Absorbs Water moves for 1/4 max HP; incoming Fire moves have 1.25x power. Effective rain heals 1/8 HP per turn; sun costs 1/8. Field healing per turn: 1/16 on Underwater, Swamp, Misty or grounded Water Surface; 1/8 when grounded and Poison-type on Murkwater. Corrosive Mist heals Poison types by 1/8 but damages non-Steel others by 1/8. Desert costs 1/8 HP per turn. Water Veil and its burn immunity are removed.",
 	},
 	"corrosivetouch": {
 		"shortDesc": "Poison Touch and Grass STAB; Technician is passive.",
@@ -450,7 +450,7 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 SelectedComponentRemovals.ange = ['eternalflower', 'magicguard', 'moldbreaker'];
 SelectedExactComponents.ange = ['fairyaura'];
 SelectedComponentRemovals.ragingcurrent = (SelectedComponentRemovals.ragingcurrent || []).filter(id => id !== 'stamina');
-SelectedExactComponents.ragingcurrent = ['swiftswim', 'damp', 'dryskin', 'stamina'];
+SelectedExactComponents.ragingcurrent = ['swiftswim', 'dryskin', 'stamina'];
 
 SelectedComponentRemovals.beyondfear = ['innerfocus'];
 SelectedExactComponents.beyondfear = [];

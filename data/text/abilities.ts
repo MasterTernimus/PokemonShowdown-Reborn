@@ -3223,8 +3223,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ragingcurrent: {
 		name: "Raging Current",
-		desc: "Swift Swim + Damp + Dry Skin + Stamina + Proficient. Water Veil and its burn immunity are removed.",
-		shortDesc: "Swift Swim + Damp + Dry Skin + Stamina + Proficient.",
+		desc: "Swift Swim + Dry Skin + Stamina + Proficient. Water Veil and its burn immunity are removed.",
+		shortDesc: "Swift Swim + Dry Skin + Stamina + Proficient.",
 	},
 	toxicbloom: {
 		name: "Toxic Bloom",
