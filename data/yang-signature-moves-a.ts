@@ -72,7 +72,7 @@ export const YangSignatureLearnsetsA: {[id:string]:string[]} = {
  gunkrock:['toxtricity','skuntank'],
  frozenrefractals:['froslass','jynx','ninetalesalola'],nomoswish:['audino','wigglytuff','clefable'],
  queensgambit:['metagross','slowking','gardevoir','gallade'],darkclasp:['umbreon','spiritomb'],
- beatdown:['conkeldurr','pangoro'],infernalrage:['chandelure','delphox','typhlosion','typhlosionhisui','ninetales'],
+ beatdown:['conkeldurr','pangoro','chesnaught','hariyama','lucario','blaziken','lopunny'],infernalrage:['chandelure','delphox','typhlosion','typhlosionhisui','ninetales'],
 };
 export const YangSignatureDescriptionsA: {[id:string]:{shortDesc:string,desc:string}} = {};
 const descriptions: {[id:string]:[string,string]} = {

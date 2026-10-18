@@ -23070,7 +23070,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		status: 'tox',
 		boosts: {
-			spe: -2,
+			spe: -1,
 		},
 		target: "allAdjacentFoes",
 		type: "Poison",

@@ -7165,8 +7165,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxicthread: {
 		name: "Toxic Thread",
-		desc: "Poisons all adjacent foes and lowers their Speed by 2 stages.",
-		shortDesc: "Poisons all adjacent foes and lowers their Speed by 2.",
+		desc: "Poisons all adjacent foes and lowers their Speed by 1 stage.",
+		shortDesc: "Poisons all adjacent foes and lowers their Speed by 1.",
 	},
 	trailblaze: {
 		name: "Trailblaze",

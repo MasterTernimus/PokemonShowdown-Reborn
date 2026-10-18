@@ -5,6 +5,7 @@ import {recordRechargeKO} from './recharge';
 import {passiveEffect, passiveState, thematicPassives} from './species-passives';
 import {resolveBurrowAmbush} from '../data/queued-abilities-approved';
 import {updateStarterBoostIndicators} from './starter-boost-indicators';
+import {updateCocoonIndicator} from './cocoon-indicator';
 import {takeCrescentSubDamage} from './crescent-rend';
 import {adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCaptureMove, adaptiveSkipAbility, adaptiveIgnoresAbility, adaptiveCheckpoint, adaptiveResistsBypass, adaptiveAnalyzed, adaptivePreventDamage, adaptiveDamaged, adaptiveDamageMultiplier, adaptiveEnvironmentalContribution, adaptiveEnvironment, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 /* eslint-disable @stylistic/max-len */
@@ -553,7 +554,10 @@ export class Battle {
 			this.runEvent(eventid, pokemon, null, effect, relayVar);
 		}
 		if (eventid === 'Update') {
-			for (const pokemon of actives) updateStarterBoostIndicators(pokemon);
+			for (const pokemon of actives) {
+				updateStarterBoostIndicators(pokemon);
+				updateCocoonIndicator(pokemon);
+			}
 		}
 		if (eventid === 'Weather' && this.gen >= 7) {
 			// TODO: further research when updates happen

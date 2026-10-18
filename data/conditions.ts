@@ -64,6 +64,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onEnd(pokemon) { this.add('-end', pokemon, 'relicarmorfield', '[silent]'); },
 		onUpdate(pokemon) { updateRelicArmorIndicator(this, pokemon); },
 	},
+	cocoonactive: {
+		name: 'Cocoon active', noCopy: true,
+		onStart(pokemon) { this.add('-start', pokemon, 'cocoonactive', '[silent]'); },
+		onEnd(pokemon) { this.add('-end', pokemon, 'cocoonactive', '[silent]'); },
+	},
 	blazeactive: {
 		name: 'Blaze active', noCopy: true,
 		onStart(pokemon) {

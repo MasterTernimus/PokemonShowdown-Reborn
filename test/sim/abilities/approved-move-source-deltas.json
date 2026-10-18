@@ -6,7 +6,8 @@
     "Jirachi move hooks: artifacts/legendary-approved/verified-final.json",
     "Previously accepted Restorative Chime and Triple Arrows revisions",
     "User-approved Spirit Volley surviving-target fallback, 2026-10-18",
-    "User-approved initial selectable rampage target, 2026-10-18"
+    "User-approved initial selectable rampage target, 2026-10-18",
+    "User-approved Toxic Thread one-stage Speed reduction, 2026-10-18"
   ],
   "deltas": [
     {
@@ -88,6 +89,10 @@
     {
       "before": "\t\t\tif (!otherFoes.length) return;\n\t\t\tconst other = this.sample(otherFoes);",
       "after": "\t\t\tconst other = otherFoes.length ? this.sample(otherFoes) :\n\t\t\t\t(target.hp && !target.fainted && source.isAdjacent(target) ? target : null);\n\t\t\tif (!other) return;"
+    },
+    {
+      "before": "\ttoxicthread: {\n\t\tnum: 672,\n\t\taccuracy: 100,\n\t\tbasePower: 0,\n\t\tcategory: \"Status\",\n\t\tname: \"Toxic Thread\",\n\t\tpp: 20,\n\t\tpriority: 0,\n\t\tflags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },\n\t\tstatus: 'tox',\n\t\tboosts: {\n\t\t\tspe: -2,\n\t\t},\n\t\ttarget: \"allAdjacentFoes\",\n\t\ttype: \"Poison\",\n\t\tzMove: { boost: { spe: 1 } },\n\t\tcontestType: \"Tough\",\n\t},\n",
+      "after": "\ttoxicthread: {\n\t\tnum: 672,\n\t\taccuracy: 100,\n\t\tbasePower: 0,\n\t\tcategory: \"Status\",\n\t\tname: \"Toxic Thread\",\n\t\tpp: 20,\n\t\tpriority: 0,\n\t\tflags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },\n\t\tstatus: 'tox',\n\t\tboosts: {\n\t\t\tspe: -1,\n\t\t},\n\t\ttarget: \"allAdjacentFoes\",\n\t\ttype: \"Poison\",\n\t\tzMove: { boost: { spe: 1 } },\n\t\tcontestType: \"Tough\",\n\t},\n"
     }
   ]
 }

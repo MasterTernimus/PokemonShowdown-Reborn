@@ -1,3 +1,4 @@
+import {updateCocoonIndicator} from '../sim/cocoon-indicator';
 import {GrandStrategy} from './grand-strategy';
 import {RelicArmorFields, updateRelicArmorIndicator, clearRelicArmorIndicators} from './relic-armor';
 import {accumulationState, accumulationStackReady} from './swalot-vespiquen-approved';
@@ -14692,6 +14693,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-message', `${pokemon.name}'s Silken Decoy spun a protective cocoon.`);
 			}
 			pokemon.abilityState.silkenDecoyCocoon = !!pokemon.m.silkenDecoyCocoon;
+			updateCocoonIndicator(pokemon);
 		},
 		onAnyFaint(fainted) {
 			const holder = this.effectState.target;
@@ -14699,6 +14701,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (holder.m.silkenDecoyCocoon) return;
 			holder.m.silkenDecoyCocoon = true;
 			holder.abilityState.silkenDecoyCocoon = true;
+			updateCocoonIndicator(holder);
 			this.add('-message', `${holder.name}'s Silken Decoy spun a protective cocoon.`);
 		},
 		onDamagePriority: 1,
@@ -14709,6 +14712,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!damage || !target.m.silkenDecoyCocoon) return;
 			target.m.silkenDecoyCocoon = false;
 			target.abilityState.silkenDecoyCocoon = false;
+			updateCocoonIndicator(target);
 			target.abilityState.silkenDecoyBlockedMove = move.id;
 			this.add('-message', `${target.name}'s protective cocoon blocked the hit.`);
 			return 0;
