@@ -1,0 +1,183 @@
+{
+  "passives": {
+    "maractus": [
+      "cactuschorus"
+    ],
+    "corsola": [
+      "naturalrecovery"
+    ],
+    "corsolareborn": [
+      "naturalrecovery"
+    ],
+    "electivire": [
+      "static"
+    ],
+    "magmortar": [
+      "flamebody"
+    ],
+    "dusknoir": [
+      "soulescort"
+    ],
+    "garchomp": [
+      "roughskin"
+    ],
+    "garchompmegaz": [
+      "levitate"
+    ],
+    "ninetalesalola": [
+      "cursedbody"
+    ],
+    "grafaiai": [
+      "prankster"
+    ],
+    "jynx": [
+      "icebody"
+    ],
+    "heracross": [
+      "swarm"
+    ],
+    "scolipedemega": [
+      "shellarmor"
+    ],
+    "scolipedemegaazzy": [
+      "shellarmor"
+    ],
+    "krookodile": [
+      "angerpoint"
+    ],
+    "grimmsnarl": [
+      "prankster"
+    ],
+    "raichualola": [
+      "surgesurfer"
+    ],
+    "vanilluxe": [
+      "icebody"
+    ],
+    "skarmory": [
+      "thorntempered"
+    ],
+    "houndoommega": [
+      "solarpower"
+    ],
+    "pelipper": [
+      "drizzle"
+    ],
+    "pidgeot": [
+      "keeneye"
+    ],
+    "tauros": [
+      "controlledfury"
+    ],
+    "taurospaldeacombat": [
+      "controlledfury"
+    ],
+    "taurospaldeablaze": [
+      "controlledfury"
+    ],
+    "taurospaldeaaqua": [
+      "controlledfury"
+    ],
+    "bouffalant": [
+      "controlledfury"
+    ],
+    "hitmonlee": [
+      "limber"
+    ],
+    "mamoswine": [
+      "thickfat"
+    ],
+    "palafin": [
+      "zerotohero"
+    ],
+    "palafinhero": [
+      "zerotohero"
+    ],
+    "hydrapple": [
+      "supersweetsyrup"
+    ]
+  },
+  "abilities": {
+    "maractus": {
+      "1": "Iron Barbs"
+    },
+    "dodrio": {
+      "0": "Triple Threat",
+      "1": "Speed Boost",
+      "H": "Reckless"
+    },
+    "seismitoad": {
+      "H": "Marsh Hide"
+    },
+    "sceptilemega": {
+      "0": "Raging Thicket"
+    },
+    "blazikenmega": {
+      "0": "Raging Flame"
+    },
+    "venusaurgmax": {
+      "0": "Verdant Crown"
+    },
+    "blastoisegmax": {
+      "0": "Tidal Crown"
+    },
+    "venusaurmega": {
+      "0": "Virulence"
+    },
+    "blastoisemega": {
+      "0": "Bombardment"
+    },
+    "magmortar": {
+      "H": "Volcanic Spirit"
+    },
+    "heracross": {
+      "H": "Moxie"
+    },
+    "grafaiai": {
+      "H": "Sticky Hold"
+    },
+    "crustle": {
+      "H": "Weak Armor"
+    },
+    "grimmsnarl": {
+      "0": "Guts"
+    },
+    "raichualola": {
+      "0": "Static",
+      "1": "Telepathy"
+    },
+    "vanilluxe": {
+      "0": "Levitate"
+    },
+    "mienshao": {
+      "H": "Infiltrator"
+    },
+    "pelipper": {
+      "1": "Rain Dish"
+    },
+    "emboar": {
+      "0": "Controlled Fury"
+    },
+    "sylveon": {
+      "H": "Fairy Aura"
+    },
+    "palafin": {
+      "0": "Sworn Duty",
+      "1": "Friend Guard",
+      "H": "Inner Focus"
+    },
+    "palafinhero": {
+      "0": "Sworn Duty",
+      "1": "Friend Guard",
+      "H": "Inner Focus"
+    },
+    "hydrapple": {
+      "0": "Ripen",
+      "1": "Regenerator",
+      "H": "Hydra Heart"
+    },
+    "garchomp": {
+      "0": "Grounded Instinct"
+    }
+  }
+}

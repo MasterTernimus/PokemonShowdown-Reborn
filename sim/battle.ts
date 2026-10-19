@@ -603,6 +603,8 @@ export class Battle {
 			const handler = handlers[0];
 			handlers.shift();
 			const effect = handler.effect;
+   if (eventid === 'SwitchIn' && handler.effectHolder instanceof Pokemon && handler.effectHolder.m.soulEscortEntry &&
+    ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'dragonrend'].includes(effect.id)) continue;
 			if ((handler.effectHolder as Pokemon).fainted) {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
@@ -2891,6 +2893,7 @@ export class Battle {
 			this.faintQueue.pop();
 		}
 		let faintQueueLeft, faintData;
+		const completedFaints: Battle['faintQueue'] = [];
 		while (this.faintQueue.length) {
 			faintQueueLeft = this.faintQueue.length;
 			faintData = this.faintQueue.shift()!;
@@ -2928,9 +2931,12 @@ export class Battle {
 					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
+				completedFaints.push(faintData);
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
 			}
 		}
+
+		if (!completedFaints.length) return false;
 
 		if (this.gen <= 1) {
 			// in gen 1, fainting skips the rest of the turn
@@ -2960,10 +2966,12 @@ export class Battle {
 		if (this.gameType === 'multi' && this.format.name.startsWith('[Gen 9] Multi 1v2 ')) {
 			this.rebalanceSoloMultiTeam();
 		}
-		if (checkWin && this.checkWin(faintData)) return true;
+		if (checkWin && this.checkWin(completedFaints[completedFaints.length - 1])) return true;
 
-		if (faintData && length) {
-			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
+		// Each completed faint retains its own victim, attacker and cause. A prevented
+		// faint (including a Rift revival) must never grant a KO reward.
+		for (const completed of completedFaints) {
+			this.runEvent('AfterFaint', completed.target, completed.source, completed.effect, 1);
 		}
 		return false;
 	}
@@ -3697,6 +3705,20 @@ export class Battle {
 		return team as PokemonSet[];
 	}
 
+	showMoveSheets(generation: string, recipient = '') {
+  if (this.sides.length !== 2 || ['multi', 'freeforall'].includes(this.gameType) || this.ended) return;
+  const escape = (text: string) => text.replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]!));
+  let html = '<div class="infobox"><strong>Open Team Sheet — moves only</strong><p>Both players agreed. Original moves; private to the players.</p>';
+  for (const side of this.sides) {
+   html += '<details open><summary>' + escape(side.name) + '</summary><ul>';
+   for (const set of side.team) html += '<li><strong>' + escape(this.dex.species.get(set.species).name) + '</strong>: ' + set.moves.map(move => escape(this.dex.moves.get(move).name)).join(', ') + '</li>';
+   html += '</ul></details>';
+  }
+  html += '</div>';
+  for (const side of this.sides) if (!recipient || recipient === side.id) {
+   this.send('sideupdate', side.id + '\n|movesheetprivate|' + generation + '|' + html);
+  }
+ }
 	showOpenTeamSheets() {
 		if (this.turn !== 0) return;
 		for (const side of this.sides) {

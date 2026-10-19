@@ -45,7 +45,7 @@ describe('Approved roster expansion and component search', () => {
 		assert(battle.log.slice(start).find(line => line.startsWith('|move|')).includes('Deoxys'));
 	});
 	it('retains other ability options and exposes genuine components, including Tough Claws', () => {
-		for (const name of ['Bedrock Claw', 'Rime Claw', 'Pincer Crush', 'Snowpack'])
+		for (const name of ['Bedrock Claw', 'Rime Claw', 'Pincer Crush'])
 			assert(abilityIncludesComponent(name, 'Tough Claws'), name);
 		assert(!abilityIncludesComponent('Decoy Pincers', 'Tough Claws'));
 		assert(abilityIncludesComponent('Broodguard', 'Friend Guard'));
@@ -171,11 +171,11 @@ describe('Approved roster expansion and component search', () => {
 		assert.equal(battle.runEvent('ModifyDamage', foe, p, move, 100), 100);
 		assert.equal(foe.boosts.atk, -1);
 	});
-	it('Gem Eye bounces only one directly aimed status move; Last Laugh passes Substitute', () => {
+	it('Gem Eye no longer reflects status moves; Last Laugh passes Substitute', () => {
 		let [p, , foe] = make('Sableye', 'Gem Eye');
 		hit('toxic', foe, p);
-		assert.equal(foe.status, 'tox');
-		assert.equal(p.status, '');
+		assert.equal(foe.status, '');
+		assert.equal(p.status, 'tox');
 		hit('toxic', foe, p);
 		assert.equal(p.status, 'tox');
 		battle.destroy();
@@ -252,10 +252,11 @@ describe('Approved roster expansion and component search', () => {
 		hit(frost, p, foe);
 		assert.equal(p.side.sideConditions.safeguard.duration, 5);
 	});
-	it('Snowpack includes the real Thick Fat, Ice Body and Tough Claws components', () => {
+	it('Snowpack keeps Ice Body while Mamoswine supplies Thick Fat as its passive', () => {
 		const [p, , foe] = make('Mamoswine', 'Snowpack');
-		for (const id of ['thickfat', 'icebody', 'toughclaws'])
-			assert(p.hasAbility(id));
+		assert(p.hasAbility('icebody'));
+		assert(!p.hasAbility('thickfat'));
+		assert(p.hasAbilityOrPassive('thickfat'));
 		p.hp -= 80;
 		const before = p.hp;
 		battle.field.setWeather('snow', p);
@@ -307,13 +308,13 @@ describe('Approved roster expansion and component search', () => {
 		assert.equal(p.hp, before);
 		assert.equal(foe.boosts.spe, -1);
 	});
-	it('Rooted Iron distinguishes status turns from attack attempts', () => {
+	it('Rooted Iron compatibility has no idle-turn healing', () => {
 		const [p, , foe] = make('Ferrothorn', 'Rooted Iron');
 		p.hp -= 100;
 		let before = p.hp;
 		event('BeforeMove', p, p, foe, battle.dex.getActiveMove('protect'));
 		event('Residual', p, p);
-		assert(p.hp > before);
+		assert.equal(p.hp, before);
 		before = p.hp;
 		event('BeforeMove', p, p, foe, battle.dex.getActiveMove('tackle'));
 		event('Residual', p, p);

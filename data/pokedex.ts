@@ -9698,10 +9698,22 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		prevo: "Finneon",
 		evoLevel: 31,
-		otherFormes: ["Lumineon-Alt"],
-		formeOrder: ["Lumineon", "Lumineon-Alt"],
+		otherFormes: ["Lumineon-Alt", "Lumineon-Rift", "Chi Two"],
+		formeOrder: ["Lumineon", "Lumineon-Alt", "Lumineon-Rift", "Chi Two"],
 		eggGroups: ["Water 2"],
 	},
+	lumineonrift: {
+  num: 457, name: 'Lumineon-Rift', baseSpecies: 'Lumineon', forme: 'Rift',
+  types: ['Ice', 'Psychic'], baseStats: {hp:69, atk:131, def:69, spa:161, spd:69, spe:84},
+  abilities: {0:'Rift of Ruin'}, heightm:1.2, weightkg:24, color:'Purple', eggGroups:['Water 2'],
+  requiredItem:'Anomaly Core', changesFrom:'Lumineon', isMega:true, isNonstandard:'Custom',
+ },
+ chitwo: {
+  num:457, name:'Chi Two', baseSpecies:'Lumineon', forme:'Rift-Chi-Two',
+  types:['Fighting','Water'], baseStats:{hp:69, atk:161, def:69, spa:161, spd:69, spe:91},
+  abilities:{0:'Rift of Ruin'}, heightm:1.2, weightkg:24, color:'Purple', eggGroups:['Water 2'],
+  battleOnly:'Lumineon-Rift', changesFrom:'Lumineon-Rift', isMega:true, isNonstandard:'Custom',
+ },
 	lumineonalt: {
 		num: 457,
 		name: "Lumineon-Alt",
@@ -24538,7 +24550,7 @@ Pokedex.abomasnow.abilities![0] = 'Rimebark';
 
 for (const species of Object.values(Pokedex)) if ((species.name === 'Silvally' || species.baseSpecies === 'Silvally') && species.abilities?.[1] === 'Mimicry') species.abilities[1] = 'Adaptive Arsenal';
 
-Pokedex.garchomp.abilities![0] = 'Pyrous Dominion';
+Pokedex.garchomp.abilities![0] = 'Grounded Instinct';
 
 // Approved Speed-only adjustments; no redistribution.
 Pokedex.staraptor.baseStats!.spe = 100;
@@ -24644,3 +24656,47 @@ Pokedex.regigigasprimordial={...Pokedex.regigigas,name:'Regigigas-Primordial',ba
 Pokedex.fearow.abilities!['0']='Power Drill';
 Pokedex.beedrill.abilities!['1']='Twin Drills';
 Pokedex.rapidash.abilities!.H='Power Drill';
+
+// Approved simplification: normal local Filter, without the Magnetic Flux exception.
+Pokedex.probopass.abilities!.H = 'Filter';
+
+// Approved ordinary selections use their actual local primitives.
+Pokedex.ferrothorn.abilities!.H = 'Stamina';
+Pokedex.seismitoad.abilities!.H = 'Water Absorb';
+Pokedex.klefki.abilities!['0'] = 'Prankster';
+
+// Approved October 19 passive migration.
+Pokedex.maractus.abilities!['1'] = 'Iron Barbs';
+
+Pokedex.dodrio.abilities = {0: 'Triple Threat', 1: 'Speed Boost', H: 'Reckless'};
+Pokedex.seismitoad.abilities!.H = 'Marsh Hide';
+
+// Approved thematic display names; canonical ability IDs retain old-set compatibility.
+for (const [id, name] of Object.entries({sceptilemega:'Raging Thicket', blazikenmega:'Raging Flame', venusaurgmax:'Verdant Crown', blastoisegmax:'Tidal Crown', venusaurmega:'Virulence', blastoisemega:'Bombardment'})) Pokedex[id as ID].abilities!['0'] = name;
+
+Pokedex.magmortar.abilities!.H = 'Volcanic Spirit';
+
+Pokedex.heracross.abilities!.H = 'Moxie';
+
+Pokedex.grafaiai.abilities!.H = 'Sticky Hold';
+
+Pokedex.crustle.abilities!.H = 'Weak Armor';
+
+Pokedex.grimmsnarl.abilities![0] = 'Guts';
+
+Pokedex.raichualola.abilities![0] = 'Static';
+Pokedex.raichualola.abilities![1] = 'Telepathy';
+
+Pokedex.vanilluxe.abilities![0] = 'Levitate';
+
+Pokedex.mienshao.abilities!.H = 'Infiltrator';
+
+Pokedex.pelipper.abilities![1] = 'Rain Dish';
+// Emboar-Ego intentionally shares this ordinary ability table; Reborn and Megas do not.
+Pokedex.emboar.abilities![0] = 'Controlled Fury';
+Pokedex.sylveon.abilities!.H = 'Fairy Aura';
+
+for (const id of ['palafin', 'palafinhero'] as const) Pokedex[id].abilities = {0: 'Sworn Duty', 1: 'Friend Guard', H: 'Inner Focus'};
+Pokedex.palafinhero = {...Pokedex.palafinhero, requiredAbility: undefined};
+
+Pokedex.hydrapple.abilities = {0: 'Ripen', 1: 'Regenerator', H: 'Hydra Heart'};

@@ -50,7 +50,7 @@ describe('Starter species passives',()=>{
  });
  it('mechanical form changes add and remove Proficient; Perfect Illusion copies disguise passives without exposing the actual form',()=>{
   const[p,t]=start('Charizard');p.m.perfectIllusion=true;p.illusion=t;assert.deepEqual(p.getPassives(),['synchronize']);assert.deepEqual(p.getSwitchRequestData().passives,['synchronize']);
-  p.illusion=null;p.formeChange('Charizard-Mega-X',null,true);p.illusion=t;assert.deepEqual(p.getPassives(),['synchronize']);assert.deepEqual(p.getSwitchRequestData().passives,['synchronize']);p.setType('Normal');const disguisedPower=event(p,t,'BasePower','tackle');p.illusion=null;assert.equal(event(p,t,'BasePower','tackle'),220);assert.equal(disguisedPower,169); // Atrocity's independent 1.3 and contact 1.3 also apply.
+  p.illusion=null;p.formeChange('Charizard-Mega-X',null,true);p.illusion=t;assert.deepEqual(p.getPassives(),['synchronize']);assert.deepEqual(p.getSwitchRequestData().passives,['synchronize']);p.setType('Normal');const disguisedPower=event(p,t,'BasePower','tackle');p.illusion=null;assert.equal(event(p,t,'BasePower','tackle'),169);assert.equal(disguisedPower,130); // Atrocity's independent 1.3 remains; its contact multiplier was removed.
   p.formeChange('Charizard',null,true);assert.deepEqual(p.getPassives(),['blaze']);
   assert(!battle.log.some(line=>line.includes('|-ability|')&&line.includes('Proficient')));
  });

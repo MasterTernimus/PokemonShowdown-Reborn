@@ -17,10 +17,10 @@ describe('Four approved Sovereign additions', () => {
 		const before = require('../../../artifacts/sovereign-before.json');
 		for (const [id, events] of Object.entries({ rainsovereign: Object.keys(before.rainsovereign), sandsovereign: ['onStart', 'onResidual', 'onSourceModifyDamage'], frostsovereign: ['onStart', 'onWeather', 'onDamagingHit', 'onImmunity', 'onResidual', 'onSourceModifyDamage'], sunsovereign: Object.keys(before.sunsovereign).filter(k => k !== 'onStart') })) for (const event of events)assert.equal(Dex.abilities.get(id)[event].toString(), before[id][event], id + '/' + event);
 	});
-	for (const species of ['Charizard-Mega-Y', 'Mew'])it('Sun Sovereign applies one full Intimidate entry with ' + species, () => {
+	for (const species of ['Charizard-Mega-Y', 'Mew'])it('Sun Sovereign summons eight-turn sun without Intimidate with ' + species, () => {
 		const [p, q] = setup(species, 'Sun Sovereign', true); const foe = battle.p2.active[1]; q.boosts.atk = foe.boosts.atk = 0; delete p.abilityState.intimidateActivated;
-		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, -1); assert.equal(foe.boosts.atk, -1); assert.equal(battle.field.weather, 'sunnyday'); assert.equal(battle.field.weatherState.duration, 8);
-		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, -1); hit(p, q, 'flamethrower', { damage: 100 }); assert(!q.volatiles.partiallytrapped);
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, 0); assert.equal(foe.boosts.atk, 0); assert.equal(battle.field.weather, 'sunnyday'); assert.equal(battle.field.weatherState.duration, 8);
+		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, 0); hit(p, q, 'flamethrower', { damage: 100 }); assert(!q.volatiles.partiallytrapped);
 	});
 	for (const protection of ['Inner Focus', 'Substitute', 'Gastro Acid'])it('Sun Sovereign Intimidate respects ' + protection, () => {
 		const [p, q] = setup('Charizard-Mega-Y', 'Sun Sovereign'); q.boosts.atk = 0; delete p.abilityState.intimidateActivated;
@@ -53,9 +53,9 @@ describe('Four approved Sovereign additions', () => {
 		const move = Dex.getActiveMove('airslash'); assert.equal(battle.runEvent('ModifyPriority', p, q, move, 0), 0); assert.equal(battle.runEvent('Accuracy', q, p, move, 1), true);
 		battle.field.setWeather('raindance', q, Dex.abilities.get('drizzle')); assert.equal(battle.field.weather, 'raindance');
 	});
-	for (const types of [['Electric'], ['Fire', 'Flying'], ['Grass', 'Steel'], ['Rock'], ['Steel']])it('Sand Mountainbreaker keeps Rock type and uses the better chart against ' + types.join('/'), () => {
+	for (const types of [['Electric'], ['Fire', 'Flying'], ['Grass', 'Steel'], ['Rock'], ['Steel']])it('Sand Sovereign keeps its independent Rock/Ground chart and uses the better chart against ' + types.join('/'), () => {
 		const [p, q] = setup('Tyranitar-Mega', 'Sand Sovereign'); q.setType(types); const move = Dex.getActiveMove('rockslide'); battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.type, 'Rock');
-		const rock = Dex.getEffectiveness('Rock', q), ground = Dex.getEffectiveness('Ground', q); assert.equal(q.runEffectiveness(move), Dex.getImmunity('Ground', q) ? Math.max(rock, ground) : rock); assert(p.hasAbility('solidrock')); assert(p.hasAbility('mountainbreaker')); assert(!p.hasAbility('moldbreaker')); assert.deepEqual(p.getPassives(), ['sandstream']);
+		const rock = Dex.getEffectiveness('Rock', q), ground = Dex.getEffectiveness('Ground', q); assert.equal(q.runEffectiveness(move), Dex.getImmunity('Ground', q) ? Math.max(rock, ground) : rock); assert(p.hasAbility('solidrock')); assert(!p.hasAbility('mountainbreaker')); assert(!p.hasAbility('moldbreaker')); assert.deepEqual(p.getPassives(), ['sandstream']);
 	});
 	it('Sand retains eight-turn manual Arenite Wall and one Rock chip tick', () => {
 		const [p, q] = setup('Tyranitar-Mega', 'Sand Sovereign'); assert.equal(battle.field.weatherState.duration, 8); hit(p, p, 'arenitewall'); assert.equal(p.side.sideConditions.arenitewall.duration, 8); const hp = q.hp; battle.singleEvent('Residual', p.getAbility(), p.abilityState, p); assert.equal(hp - q.hp, 250);

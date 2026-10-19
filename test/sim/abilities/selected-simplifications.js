@@ -107,10 +107,10 @@ describe('Individually selected Mega simplifications', () => {
 		q.setType('Psychic'); battle.actions.useMove('bite', p, { target: q });
 		assert(battle.log.some(line => line.includes('|-hitcount|') && line.endsWith('|2')));
 	});
-	it('Raging Current restores Stamina healing and the first-hit Defense boost', () => {
+	it('Raging Current has no removed Stamina healing or Defense boost', () => {
 		const [p, q] = setup('Swampert-Mega', 'Raging Current'); p.hp = 800;
 		battle.runEvent('DamagingHit', p, q, Dex.getActiveMove('tackle'), 100);
-		assert.equal(p.hp, 900); assert.equal(p.boosts.def, 1);
+		assert.equal(p.hp, 800); assert.equal(p.boosts.def, 0);
 	});
 	it('Corrosive Touch cannot poison Steel and does not apply Corrosion stat drops', () => {
 		const [p, q] = setup('Breloom-Mega', 'Corrosive Touch'); q.setType('Steel');
@@ -177,14 +177,14 @@ describe('Individually selected Mega simplifications', () => {
 		battle.runEvent('ModifyMove', p, q, move, move); assert(!move.forceSTAB);
 		p.trapped = true; battle.runEvent('TrapPokemon', p); assert.equal(p.trapped, false);
 	});
-	for (const hp of [1600, 200]) it('ordinary Cursed Marionette Ghost Curse pays the local 1/4 cost at HP ' + hp, () => {
+	for (const hp of [1600, 200]) it('ordinary Cursed Marionette Ghost Curse pays the local 1/3 cost at HP ' + hp, () => {
 		const [p, q] = setup('Banette-Mega', 'Cursed Marionette'); p.hp = hp;
-		battle.actions.useMove('curse', p, { target: q }); assert.equal(p.hp, Math.max(0, hp - 400)); assert(q.volatiles.curse);
+		battle.actions.useMove('curse', p, { target: q }); assert.equal(p.hp, Math.max(0, hp - 533)); assert(q.volatiles.curse);
 	});
 	it('Magic Guard does not waive the ordinary local Ghost Curse HP cost', () => {
-		const [p, q] = setup('Gengar', 'Magic Guard'); battle.actions.useMove('curse', p, { target: q }); assert.equal(p.hp, 1200);
+		const [p, q] = setup('Gengar', 'Magic Guard'); battle.actions.useMove('curse', p, { target: q }); assert.equal(p.hp, 1067);
 	});
-	it('ordinary Blastoise Water Barrage owns one pair, separate accuracy and full FFA hits', () => {
+	it('ordinary Blastoise Water Barrage owns one pair, separate accuracy and 60% hits in singles and FFA', () => {
 		const [p, q] = setup('Blastoise', 'Water Barrage');
 		for (const gameType of ['singles', 'freeforall']) {
 			battle.gameType = gameType;
@@ -192,7 +192,7 @@ describe('Individually selected Mega simplifications', () => {
 			battle.runEvent('ModifyMove', p, q, move, move);
 			assert.equal(move.multihit, 2); assert.equal(move.multihitType, 'dualwield');
 			assert.equal(move.dualWieldAccuracy, 100); assert.equal(move.accuracy, true);
-			for (const hit of [1, 2]) { move.hit = hit; assert.equal(battle.runEvent('BasePower', p, q, move, 100), gameType === 'singles' ? 60 : 100); }
+			for (const hit of [1, 2]) { move.hit = hit; assert.equal(battle.runEvent('BasePower', p, q, move, 100), 60); }
 		}
 		assert(!p.hasAbilityOrPassive('proficient'));
 	});

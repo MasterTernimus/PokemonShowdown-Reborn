@@ -786,3 +786,6 @@ for (const [id, text] of Object.entries(PrimordialDescriptions)) AbilityDisplayS
 
 import {PowerDrillBatchDescriptions} from './power-drill-batch';
 for(const[id,text]of Object.entries(PowerDrillBatchDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
+
+import {AuditCleanupDescriptions} from './audit-cleanup-approved';
+for (const [id, text] of Object.entries(AuditCleanupDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;

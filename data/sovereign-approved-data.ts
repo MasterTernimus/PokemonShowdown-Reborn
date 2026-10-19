@@ -13,8 +13,8 @@ export const SovereignDescriptions: { [id: string]: { shortDesc: string, desc: s
 		desc: 'Summons replaceable Strong Winds for 8 turns on entry. ' + updraft + ' Mega Pidgeot receives No Guard from its species passive and has no Gale Wings priority. Other holders retain their existing full-HP Flying priority and never-miss effect when no No Guard passive is present. Keen Eye is removed.',
 	},
 	sandsovereign: {
-		shortDesc: 'Solid Rock + Mountainbreaker; eight-turn sand and Rock chip.',
-		desc: 'Sets or refreshes Sandstorm to 8 turns on entry, with native Sand Stream supplied separately by the species passive. Retains full local Solid Rock. Full Mountainbreaker keeps damaging Rock moves Rock-type with normal Rock STAB, but uses the better overall Rock or Ground type-chart matchup; Ground-immune typings do not replace the Rock matchup. No extra power multiplier or Mold Breaker. Manually used Arenite Wall lasts 8 turns. Each turn, non-immune foes take Rock damage equal to 1/16 max HP; type effectiveness scales this chip only in Free-for-All.',
+		shortDesc: 'Solid Rock; better Rock/Ground matchup; eight-turn sand and Rock chip.',
+		desc: 'Sets or refreshes Sandstorm to 8 turns on entry, with native Sand Stream supplied separately by the species passive. Retains full local Solid Rock. Its retained matchup effect keeps damaging Rock moves Rock-type with normal Rock STAB, but uses the better overall Rock or Ground type-chart matchup; Ground-immune typings do not replace the Rock matchup. No extra power multiplier or Mold Breaker. Manually used Arenite Wall lasts 8 turns. Each turn, non-immune foes take Rock damage equal to 1/16 max HP; type effectiveness scales this chip only in Free-for-All.',
 	},
 	frostsovereign: {
 		shortDesc: 'Ice Body + Filter + Soundproof; eight-turn snow and Ice chip.',

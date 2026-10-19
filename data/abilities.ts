@@ -443,14 +443,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	purifyingfrost: {
 		onStart(pokemon) {
-			this.effectState.safeguardUsed = false;
 			for (const ally of pokemon.alliesAndSelf()) {
 				if (ally.status) ally.cureStatus();
 			}
 		},
 		onAfterMove(source, target, move) {
-			if (this.effectState.safeguardUsed || move.type !== 'Ice') return;
-			this.effectState.safeguardUsed = true;
+			if (source.m.purifyingFrostEntry === source.previouslySwitchedIn || move.type !== 'Ice') return;
+			source.m.purifyingFrostEntry = source.previouslySwitchedIn;
 			if (!source.side.addSideCondition('safeguard', source, this.dex.getActiveMove('safeguard'))) {
 				this.add('-activate', source, 'ability: Purifying Frost');
 			}
@@ -1101,7 +1100,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move && this.movehasType(move, 'Steel')) {
 				modifier *= this.field.isTerrain('factoryterrain') ? 2 : 1.5;
 			}
-			if (!defender.activeTurns) modifier *= 2;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		onModifySpAPriority: 5,
@@ -1110,7 +1108,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move && this.movehasType(move, 'Steel')) {
 				modifier *= this.field.isTerrain('factoryterrain') ? 2 : 1.5;
 			}
-			if (!defender.activeTurns) modifier *= 2;
 			if (modifier !== 1) return this.chainModify(modifier);
 		},
 		flags: { breakable: 1 },
@@ -2114,6 +2111,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10340,
 	},
 	nobleconduit: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon, target, move) { return this.dex.abilities.get('solarpower').onModifyAtk?.call(this, atk, pokemon, target, move); },
 		onBasePowerPriority: 22,
 		onBasePower(basePower, attacker, defender, move) {
 			return this.dex.abilities.get('battery').onBasePower?.call(this, basePower, attacker, defender, move);
@@ -2680,7 +2679,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
 					return this.chainModify(1.5);
 				}
-			} return this.chainModify(1.2);
+				return this.chainModify(1.2);
+			}
 		},
 		flags: {},
 		name: "Aerilate",
@@ -2777,12 +2777,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	angerpoint: {
 		onStart(pokemon) {
-			pokemon.abilityState.angerpoint = false;
+			if (skipPassiveComponent(this, pokemon, 'angerpoint')) return;
+			this.effectState.angerpoint = false;
 		},
 		onHit(target, source, move) {
+			if (skipPassiveComponent(this, target, 'angerpoint')) return;
 			if (!target.hp) return;
-			if (!source.abilityState.angerpoint && move.category !== 'Status') {
-				source.abilityState.angerpoint = true;
+			if (!this.effectState.angerpoint && move.category !== 'Status') {
+				this.effectState.angerpoint = true;
 				this.boost({ atk: 1 }, target, target);
 			}
 			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
@@ -10788,6 +10790,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (skipPassiveComponent(this, this.effectState.target, 'ironbarbs')) return;
+			if (source.hasAbilityOrPassive('thorntempered')) return;
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
@@ -12261,7 +12264,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure', '[silent]');
 			pokemon.clearStatus();
-			if (!pokemon.hasAbility('witheringshell')) this.heal(pokemon.baseMaxhp / 3, pokemon, pokemon);
+			this.heal(pokemon.baseMaxhp / 3, pokemon, pokemon);
 
 			// only reset .showCure if it's false
 			// (once you know a Pokemon has Natural Cure, its cures are always known)
@@ -14025,6 +14028,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
 			if (skipPassiveComponent(this, this.effectState.target, 'roughskin')) return;
+			if (source.hasAbilityOrPassive('thorntempered')) return;
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
@@ -15170,6 +15174,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 117,
 	},
 		solarpower: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) && !this.field.isTerrain('coldeclipseterrain')) return this.chainModify(1.5);
+		},
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) && !this.field.isTerrain('coldeclipseterrain')) {
@@ -17010,13 +17018,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({ accuracy: -1 });
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			return this.dex.abilities.getHandler('stickyhold', 'onTakeItem')?.call(this, item, pokemon, source);
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (!source || source === target) return;
-			source.addVolatile('embargo', target, this.effect);
-		},
 		flags: {},
 		name: "Supersweet Syrup",
 		rating: 1.5,
@@ -17094,6 +17095,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	surgesurfer: {
 		onModifySpe(spe) {
+			if (skipPassiveComponent(this, this.effectState.target, 'surgesurfer')) return;
 			if (this.field.isTerrain(['electricterrain', 'watersurfaceterrain', 'underwaterterrain', 'murkwatersurfaceterrain', 'shortcircuitterrain'])) {
 				return this.chainModify(2);
 			}
@@ -19116,42 +19118,55 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 0,
 		num: 161,
 	},
+ riftofruin: {
+  name:'Rift of Ruin', num:11896, rating:5, flags:{},
+  onAnyModifySpe(spe, pokemon) {
+   if (pokemon !== this.effectState.target) return this.chainModify(0.75);
+  },
+  onStart(pokemon) {
+   if (pokemon.species.id === 'chitwo' && pokemon.m.chiTwoAwakened) pokemon.addVolatile('activenoguard');
+  },
+  onBeforeFaint(pokemon) {
+   if (pokemon.species.id !== 'lumineonrift' || pokemon.transformed || pokemon.m.lumineonRiftRevived) return;
+   const queuedMove = this.queue.willMove(pokemon);
+   const queuedSlot = queuedMove ? pokemon.moveSlots.findIndex(slot => slot.id === queuedMove.moveid) : -1;
+   pokemon.m.lumineonRiftRevived = true;
+   pokemon.hp = 1;
+   pokemon.faintQueued = false;
+   pokemon.cureStatus();
+   pokemon.clearVolatile(false);
+   this.add('-clearboost', pokemon);
+   this.add('-message', 'The King of Water flexes its mind!');
+   pokemon.formeChange('Chi Two', this.dex.abilities.get('riftofruin'), true);
+   if (queuedMove && queuedSlot >= 0) this.queue.changeAction(pokemon, {choice:'move', pokemon, moveid:pokemon.moveSlots[queuedSlot].id, targetLoc:queuedMove.targetLoc});
+   pokemon.hp = pokemon.maxhp;
+   this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Rift of Ruin');
+   this.actions.refreshMegaOptions(pokemon);
+   return false;
+  },
+ },
 	zerotohero: {
 		onModifySTAB(stab, source, target, move) {
 			if (this.movehasType(move, 'Fighting') && !source.hasType('Fighting')) return 1.5;
 		},
 		onSwitchOut(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
+			if (pokemon.species.baseSpecies !== 'Palafin') return;
 			if (pokemon.species.forme !== 'Hero') {
-				pokemon.formeChange('Palafin-Hero', this.effect, true);
+				pokemon.formeChange('Palafin-Hero', this.effect, !pokemon.transformed);
 				pokemon.heroMessageDisplayed = false;
 			}
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
+			if (pokemon.species.baseSpecies !== 'Palafin') return;
 			if (this.field.isTerrain(['murkwatersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'watersurfaceterrain'])) {
 				if (pokemon.species.forme !== 'Hero') {
-					pokemon.formeChange('Palafin-Hero', this.effect, true);
+					pokemon.formeChange('Palafin-Hero', this.effect, !pokemon.transformed);
 					pokemon.heroMessageDisplayed = false;
 				}
 			}
 			if (!pokemon.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
 				pokemon.heroMessageDisplayed = true;
-			}
-			if (pokemon.species.forme === 'Hero') {
-				for (const ally of pokemon.alliesAndSelf()) {
-					if (ally.fainted) continue;
-					this.heal(ally.baseMaxhp / 8, ally, pokemon, this.dex.abilities.get('zerotohero'));
-				}
-			}
-		},
-		onAnyModifyDamage(damage, source, target, move) {
-			const pokemon = this.effectState.target;
-			if (pokemon.species.forme !== 'Hero') return;
-			if (target !== pokemon && target.isAlly(pokemon)) {
-				this.debug('Zero to Hero Friend Guard weaken');
-				return this.chainModify(0.75);
 			}
 		},
 		onDamage(damage, target, source, effect) {
@@ -20324,20 +20339,6 @@ Abilities.eldritchremedy = {
 Abilities.infernaldominion = {
 	...Abilities.intimidate,
 	onStart(pokemon) { this.singleEvent('Start', this.dex.abilities.get('intimidate'), pokemon.abilityState, pokemon); },
-	onSourceDamagingHit(damage, target, source, move) {
-		if (damage <= 0 || !target.hp || target.isAlly(source) || !this.movehasType(move, 'Fire') || target.volatiles['partiallytrapped']) return;
-		if (!target.addVolatile('partiallytrapped', source, this.dex.getActiveMove('firespin'))) return;
-		const old = this.effectState.trappedFoe;
-		if (old && old !== target && old.volatiles['partiallytrapped']?.source === source && old.volatiles['partiallytrapped'].infernalDominionTurns) old.removeVolatile('partiallytrapped');
-		this.effectState.trappedFoe = target;
-		const trap = target.volatiles['partiallytrapped'] as any;
-		trap.infernalDominionTurns = 2;
-		trap.duration = 3;
-	},
-	onEnd(pokemon) {
-		const target = this.effectState.trappedFoe;
-		if (target?.volatiles['partiallytrapped']?.source === pokemon && target.volatiles['partiallytrapped'].infernalDominionTurns) target.removeVolatile('partiallytrapped');
-	},
 	flags: {}, name: 'Infernal Dominion', rating: 4, num: 11247,
 };
 Abilities.hydraulicarmor = {
@@ -21217,6 +21218,7 @@ Abilities.voidguile = {...Abilities.magician, ...Abilities.infiltrator, name: 'V
 
 // Drop pure inherited callbacks from exclusive packages; mixed callbacks retain only their unrelated effects.
 for (const [id, components] of Object.entries(AbilityComponentExclusions)) {
+ if (!Abilities[id as ID]) continue; // Later-installed composites apply their exclusions in their installer.
  for (const component of components) {
   for (const [event, callback] of Object.entries(Abilities[component as ID])) {
    if (event.startsWith('on') && typeof callback === 'function' && (Abilities[id as ID] as any)[event] === callback) {
@@ -21663,3 +21665,15 @@ installPrimordialAbilities(Abilities);
 
 import {installPowerDrillBatch} from './power-drill-batch';
 installPowerDrillBatch(Abilities);
+
+import {installAuditCleanup} from './audit-cleanup-approved';
+installAuditCleanup(Abilities);
+
+// Cacturne can hold the same package as a passive and selected ability.
+for (const [key, callback] of Object.entries(Abilities.scarecrow)) {
+	if (!key.startsWith('on') || typeof callback !== 'function') continue;
+	(Abilities.scarecrow as any)[key] = function (this: Battle, ...args: any[]) {
+		if (skipPassiveComponent(this, this.effectState.target, 'scarecrow')) return;
+		return (callback as Function).apply(this, args);
+	};
+}

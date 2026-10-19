@@ -3393,7 +3393,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supersweetsyrup: {
 		name: "Supersweet Syrup",
-		desc: "On switch-in, this Pokemon lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. This Pokemon has Sticky Hold. When this Pokemon is hit by an attack, the attacker is Embargoed for 5 turns.",
+		desc: "On switch-in, this Pokemon lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. Substitute blocks the drop. Flower Garden adds its existing stage-dependent drops; Misty Terrain lowers its accuracy.",
 		shortDesc: "On switch-in, lowers adjacent foes' evasiveness 1 stage; Sticky Hold; attackers are Embargoed for 5 turns.",
 
 		start: "  A supersweet aroma is wafting from the syrup covering [POKEMON]!",
@@ -4778,3 +4778,6 @@ Object.assign(AbilitiesText, PrimordialDescriptions);
 
 import {PowerDrillBatchDescriptions} from '../power-drill-batch';
 Object.assign(AbilitiesText,PowerDrillBatchDescriptions);
+
+import {AuditCleanupDescriptions} from '../audit-cleanup-approved';
+Object.assign(AbilitiesText, Object.fromEntries(Object.entries(AuditCleanupDescriptions).map(([id, text]) => [id, {...text}])));

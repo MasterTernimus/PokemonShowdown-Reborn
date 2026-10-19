@@ -37,7 +37,6 @@ export function resetQueuedEntry(pokemon: Pokemon) {
 	delete pokemon.m.elasticBellySpent;
 	pokemon.m.feedbackEntry = (pokemon.m.feedbackEntry || 0) + 1;
 	delete pokemon.m.accumulationState;
-	delete pokemon.m.magneticBulwarkSpent;
 	delete pokemon.m.imperialprincessSpent;
  delete pokemon.m.blademasterySpent;
 	delete pokemon.m.desertvigilSpent;

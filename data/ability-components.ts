@@ -269,7 +269,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	glacialmass: ['heavymetal', 'thickfat'],
 	unleashedego: ['ultraego', 'levitate', 'ragingstorm'],
 	moonlithide: ['shadowshield', 'magicguard'],
-	supersweetsyrup: ['stickyhold'],
+	supersweetsyrup: [],
 	naturalrecovery: ['naturalcure', 'regenerator'],
 	mossarmor: ['stamina', 'naturalrecovery', 'levitate'],
 	stormcalling: ['drizzle', 'liquidvoice', 'tintedlens'],
@@ -800,7 +800,7 @@ AbilityComponents.grapplingclaws = ['toughclaws'];
 AbilityComponents.baitedbloom = ['gluttony', 'regenerator'];
 AbilityComponents.sunsovereign = [...AbilityComponents.sunsovereign, 'intimidate'];
 AbilityComponents.stormsovereign = AbilityComponents.stormsovereign.filter(id => id !== 'keeneye').concat('updraft');
-AbilityComponents.sandsovereign = [...AbilityComponents.sandsovereign, 'mountainbreaker'];
+AbilityComponents.sandsovereign = AbilityComponents.sandsovereign.filter(id => id !== 'mountainbreaker');
 AbilityComponents.frostsovereign = [...AbilityComponents.frostsovereign, 'soundproof'];
 
 AbilityComponents.burningspirit = ['ultrainstinct', 'opportunist', 'magmaarmor'];
@@ -952,11 +952,11 @@ import {EeveeCloysterComponents} from './eeveelution-cloyster-approved';
 Object.assign(AbilityComponents,EeveeCloysterComponents);
 
 
-AbilityComponents.ironmountain=['hypercutter','suctioncups'];
+AbilityComponents.ironmountain=['hypercutter','bruteforce'];
 AbilityComponents.disguise=[];
 AbilityComponents.stancechange=[];
 
-Object.assign(AbilityComponents,{hydraflight:['levitate','hydrabond','berserk'],worldbreaker:['merciless','duskilate'],falseliberation:['moldbreaker']});
+Object.assign(AbilityComponents,{hydraflight:['levitate','hydrabond'],worldbreaker:['berserk','duskilate'],falseliberation:['moldbreaker']});
 
 AbilityComponents.performer=['dancer','songstress'];
 
@@ -976,3 +976,6 @@ import {PrimordialComponents} from './primordial-approved';
 Object.assign(AbilityComponents, PrimordialComponents);
 
 AbilityComponents.twindrills=['dualwield','powerdrill'];
+
+import {AuditCleanupComponents} from './audit-cleanup-approved';
+Object.assign(AbilityComponents, AuditCleanupComponents);

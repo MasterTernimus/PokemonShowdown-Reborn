@@ -1,3 +1,4 @@
+import {MoveSheetConsent} from './move-sheet-consent';
 /**
  * Room Battle
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -507,6 +508,32 @@ export interface RoomBattleOptions {
 }
 
 export class RoomBattle extends RoomGame<RoomBattlePlayer> {
+ readonly moveSheetConsent = new MoveSheetConsent();
+ moveSheets(user: User, action = '', token = '') {
+  const player = this.playerTable[user.id];
+  if (!player) throw new Error('Only battle players can use move sheets.');
+  if (this.ended) throw new Error('This battle has ended.');
+  if (!['singles', 'doubles', 'triples', 'rotation'].includes(this.gameType || '') || this.players.length !== 2 || this.players.some(p => !p.id)) {
+   throw new Error('Optional move sheets require two players; Multi and Free-for-All are not supported.');
+  }
+  const state = this.moveSheetConsent;
+  state.sync(this.players.map(p => p.id));
+  if (action && state.decide(player.id, this.players.map(p => p.id), action, Number(token))) {
+   void this.stream.write('>show-movesheets ' + state.generation);
+  } else if (!action && state.enabled) {
+   void this.stream.write('>show-movesheets ' + state.generation + ' ' + player.slot);
+  }
+  for (const recipient of action ? this.players : [player]) {
+   const button = (verb: string, label: string) => '<button class="button" name="send" value="/movesheets ' + verb + ' ' + state.generation + '" style="min-height:44px;margin:4px">' + label + '</button>';
+   let body = '<strong>Open Team Sheet — moves only</strong><br />';
+   if (state.enabled) body += 'Both players agreed. Moves are shared privately for this battle.';
+   else if (!state.accepted.size) body += 'Off. Share team species and original moves only after both players agree. ' + button('request', 'Request move sheets');
+   else if (state.accepted.has(recipient.id)) body += 'Waiting for your opponent. No moves shared yet. ' + button('cancel', 'Cancel request');
+   else body += 'Your opponent requests move sheets. Species and original moves will be shared with both players. ' + button('accept', 'Agree and share moves') + button('decline', 'Decline');
+   recipient.sendRoom('|uhtml|movesheet-consent|<div class="infobox">' + body + '</div>');
+  }
+ }
+
 	override readonly gameid = 'battle' as ID;
 	override readonly room!: GameRoom;
 	override readonly title: string;
@@ -897,6 +924,14 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		case 'sideupdate': {
 			const slot = lines[1] as SideID;
 			const player = this[slot];
+   if (lines[2].startsWith('|movesheetprivate|')) {
+    this.moveSheetConsent.sync(this.players.map(p => p.id));
+    const [, , generation, ...html] = lines[2].split('|');
+    if (!this.ended && this.moveSheetConsent.enabled && Number(generation) === this.moveSheetConsent.generation) {
+     player?.sendRoom('|uhtml|movesheet-data|' + html.join('|'));
+    }
+    break;
+   }
 			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
 				// ... should not happen
 			} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
@@ -1076,6 +1111,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const player = this.playerTable[user.id];
 		if (!player) return;
 		player.updateChannel(connection || user);
+  if (!this.ended && this.players.length === 2 && ['singles', 'doubles', 'triples', 'rotation'].includes(this.gameType || '')) {
+   try { this.moveSheets(user); } catch {}
+  }
 		const request = player.request;
 		if (request.request) {
 			let data = `|request|${request.request}`;
@@ -1284,6 +1322,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: { team?: string }) {
+  if (player.id !== user?.id || playerOpts?.team) this.moveSheetConsent.reset();
 		if (this.soloMulti && player === this.p4 && playerOpts?.team) {
 			playerOpts = { ...playerOpts, team: Teams.pack((Teams.unpack(playerOpts.team) || []).slice(0, 3)) };
 		}

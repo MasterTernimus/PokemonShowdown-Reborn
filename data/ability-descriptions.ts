@@ -317,8 +317,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Recoil/crash and explosion moves have 1.2x power; No move recoil except Struggle; Halves Water/Ice attacking stats; prevents freeze; field defenses."
 	},
 	"nobleconduit": {
-		"desc": "Special moves have 1.3x power, with a further 1.5x boost on Electric Terrain. Allies' special moves have 1.3x power. In effective sun, Sp. Atk is 1.5x and it loses 1/8 max HP each turn. Cold Eclipse disables both effects. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage.",
-		"shortDesc": "Boosts its own and allies' special moves; Sun: 1.5x Sp. Atk, loses 1/8 HP per turn; disabled on Cold Eclipse; Contact KO costs attacker 1/4 HP (1/2 on Corrosive Mist)."
+		"desc": "Special moves have 1.3x power, with a further 1.5x boost on Electric Terrain. Allies' special moves have 1.3x power. In effective sun, Attack and Sp. Atk are 1.5x and it loses 1/8 max HP each turn. Cold Eclipse disables both effects. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage.",
+		"shortDesc": "Boosts its own and allies' special moves; Sun: 1.5x Attack and Sp. Atk, loses 1/8 HP per turn; disabled on Cold Eclipse; Contact KO costs attacker 1/4 HP (1/2 on Corrosive Mist)."
 	},
 	"dancer": {
 		"desc": "After another Pokemon uses a dance move, it uses the same move. The copied move is subject to all effects that can prevent a move from being executed. A move used through this Ability cannot be copied again by other Pokemon with this Ability.",
@@ -525,8 +525,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Once/entry: sun stores a bud; Grass HP damage spends it to cure status/heal 1/8."
 	},
 	"solarhydra": {
-		"desc": "Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. On entry, creates Grassy Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules. In effective sun, Sp. Atk is 1.5x and it loses 1/8 max HP each turn. Cold Eclipse disables both effects. Once per entry, finishing a turn in effective sun stores one bud. The next Grass attack dealing HP damage to a foe consumes it to cure status and restore 1/8 max HP. Once per entry, finishing a turn in effective sun stores a bud; the next Grass attack dealing opposing HP damage consumes it to cure status and heal 1/8 max HP. Solar Power's HP cost and field effects remain. No Self Repair.",
-		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Creates Grassy Terrain on entry; Sun: 1.5x Sp. Atk, loses 1/8 HP per turn; disabled on Cold Eclipse; Once/entry: sun stores a bud."
+		"desc": "Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. On entry, creates Grassy Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules. In effective sun, Attack and Sp. Atk are 1.5x and it loses 1/8 max HP each turn. Cold Eclipse disables both effects. Once per entry, finishing a turn in effective sun stores one bud. The next Grass attack dealing HP damage to a foe consumes it to cure status and restore 1/8 max HP. Once per entry, finishing a turn in effective sun stores a bud; the next Grass attack dealing opposing HP damage consumes it to cure status and heal 1/8 max HP. Solar Power's HP cost and field effects remain. No Self Repair.",
+		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Creates Grassy Terrain on entry; Sun: 1.5x Attack and Sp. Atk, loses 1/8 HP per turn; disabled on Cold Eclipse; Once/entry: sun stores a bud."
 	},
 	"astralengine": {
 		"desc": "Airborne: immune to Ground attacks and grounded hazards unless grounded. Move KOs raise its highest stat by 1, ignoring stat stages when choosing the stat. Moves have 1.3x power if no other active Pokemon has a move left to use that turn. Allies' moves have 1.3x power, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields.",
@@ -645,7 +645,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Poisons itself; poison heals; eligible moves hit twice; 1.3x physical damage with status; stronger Metal Claw."
 	},
 	"toxicarmor": {
-  "desc": "Full local Dual Wield, Metal Claw with two 60%-power hits, and opening Violent Rush. A native positive-priority damaging attack that damages opposing HP prepares the next eligible Dual Wield attack on the following turn for +1 priority. Consumes on attempt, including miss, protection or immunity; expires at that turn end and clears on switching. No stacking, generated attacks, Z/Max attacks or self-rearming from the granted priority. Cannot be suppressed, replaced or bypassed by Mold Breaker.",
+  "desc": "Full local Dual Wield, Metal Claw with two 60%-power hits, and opening Violent Rush. While poisoned, opposing Pokemon cannot lower its Attack; self-inflicted drops remain. A native positive-priority damaging attack that damages opposing HP prepares the next eligible Dual Wield attack on the following turn for +1 priority. Consumes on attempt, including miss, protection or immunity; expires at that turn end and clears on switching. No stacking, generated attacks, Z/Max attacks or self-rearming from the granted priority. Cannot be suppressed, replaced or bypassed by Mold Breaker.",
   "shortDesc": "Dual Wield + opening Violent Rush; priority hits prepare next-turn priority."
 },
 	"venomignition": {
@@ -1719,8 +1719,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Double Speed; no Speed drops; tripled critical-hit damage; critical hits against poisoned or slowed foes."
 	},
 	"solarpower": {
-		"desc": "In effective sun, Sp. Atk is 1.5x and it loses 1/8 max HP each turn. Cold Eclipse disables both effects.",
-		"shortDesc": "Sun: 1.5x Sp. Atk, loses 1/8 HP per turn; disabled on Cold Eclipse."
+		"desc": "In effective sun, Attack and Sp. Atk are 1.5x and it loses 1/8 max HP each turn. Cold Eclipse disables both effects.",
+		"shortDesc": "Sun: 1.5x Attack and Sp. Atk, loses 1/8 HP per turn; disabled on Cold Eclipse."
 	},
 	"solarrecharge": {
 		"desc": "Its Fire-type moves have STAB. It is immune to Fire-type moves and restores 1/4 of its max HP when hit by one. In Sun, it restores 1/8 of its max HP at turn end.",
@@ -3323,8 +3323,8 @@ AbilityDescriptionOverrides.mindcurrent = {
 };
 
 AbilityDescriptionOverrides.zerotohero = {
-	"desc": "Gains Fighting-type STAB. Palafin changes to Hero Form after switching out or entering Water fields. In Doubles, Multi or Free-for-All, survives one KO at 1 HP. Hero Form retains Friend Guard and, on entry, heals itself and active allies by a flat 1/8 of each recipient's maximum HP, regardless of current HP.",
-	"shortDesc": "Palafin becomes Hero; Fighting STAB; Hero grants Friend Guard and heals self/active allies 1/8 on entry."
+	"desc": "Gains Fighting-type STAB. Palafin changes to Hero Form after switching out or entering Water fields. In Doubles, Multi or Free-for-All, survives one KO at 1 HP. Hero Form has no additional healing or ally damage reduction.",
+	"shortDesc": "Palafin becomes Hero; Fighting STAB; survives one KO in multiplayer battles."
 };
 
 AbilityDescriptionOverrides.voidhex = {
@@ -3771,7 +3771,7 @@ AbilityDescriptionOverrides.mastercourse = {"shortDesc":"Water/Dragon HP hits ch
 
 import {SelectedAbilityDescriptions} from './selected-mega-simplification-data';
 Object.assign(AbilityDescriptionOverrides, SelectedAbilityDescriptions);
-AbilityDescriptionOverrides.cursedmarionette.desc += ' Using ordinary Ghost Curse costs 1/4 max HP, matching other local Curse users; ability-applied curses do not pay this move cost.';
+AbilityDescriptionOverrides.cursedmarionette.desc += ' Using ordinary Ghost Curse costs 1/3 max HP, matching other local Curse users; ability-applied curses do not pay this move cost.';
 
 import {GmaxRedesignDescriptions} from './gmax-passive-data';
 Object.assign(AbilityDescriptionOverrides, GmaxRedesignDescriptions);
@@ -4052,3 +4052,8 @@ Object.assign(AbilityDescriptionOverrides, PrimordialDescriptions);
 
 import {PowerDrillBatchDescriptions} from './power-drill-batch';
 Object.assign(AbilityDescriptionOverrides,PowerDrillBatchDescriptions);
+
+import {AuditCleanupDescriptions} from './audit-cleanup-approved';
+Object.assign(AbilityDescriptionOverrides, Object.fromEntries(Object.entries(AuditCleanupDescriptions).map(([id, text]) => [id, {...text}])));
+
+AbilityDescriptionOverrides.riftofruin = {shortDesc:'All other active Pokemon have 0.75x Speed. Lumineon-Rift revives as Chi Two.',desc:'All other active Pokemon, including allies, have 0.75x Speed. Lumineon-Rift survives its first faint by becoming Chi Two at full HP. Once, damage that would take Chi Two below half HP stops at half (rounded down), raises Attack by 1 and grants visible Active No Guard: its own moves cannot miss; incoming attacks gain no accuracy benefit.'};

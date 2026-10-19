@@ -33,12 +33,6 @@ function foeHit(damage: number, target: Pokemon, source: Pokemon) {
 function primevalHungerHit(battle: Battle, target: Pokemon, source: Pokemon, state = battle.effectState) {
 	if (!target.hp || target.isAlly(source)) return;
 	state.hungerTargets?.add(target);
-	const previous = target.volatiles['healblock'];
-	if (!previous) {
-		if (target.addVolatile('healblock', source, battle.dex.abilities.get('primevalhunger'))) target.volatiles['healblock'].duration = 2;
-	} else if ((previous.duration ?? 0) < 2) {
-		previous.duration = 2;
-	}
 }
 function grantSteam(pokemon: Pokemon) {
 	const state = budget(pokemon);
@@ -98,10 +92,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	base.atrocity = {
 		...atrocity,
 		onImmunity: base.unboundblaze.onImmunity,
-		onBasePower(power, source, target, move) {
-			atrocity.onBasePower?.call(this, power, source, target, move);
-			return base.toughclaws.onBasePower?.call(this, power, source, target, move);
-		},
+		onBasePower: atrocity.onBasePower,
 	};
 
 	const add = (id: string, name: string, data: Partial<AbilityData>) => {

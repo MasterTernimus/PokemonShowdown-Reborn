@@ -3,7 +3,7 @@ const assert = require('assert').strict;
 const common = require('../../common');
 const {Dex} = require('../../../dist/sim');
 
-describe('Hydreigon passive Berserk', () => {
+describe('Hydreigon selected Berserk ownership', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 	function setup(ability, species = 'Hydreigon') {
@@ -21,28 +21,29 @@ describe('Hydreigon passive Berserk', () => {
 	}
 	for (const ability of ['Dark Aura', 'Worldbreaker', 'False Liberation', 'Berserk']) {
 		for (const suppressed of [false, true]) {
-			it(`${ability}, suppressed=${suppressed}: boosts once through Hydra Flight`, () => {
+			it(`${ability}, suppressed=${suppressed}: boosts only through unsuppressed selected Berserk`, () => {
 				const [p, q] = setup(ability);
 				if (suppressed) p.addVolatile('gastroacid', q);
 				assert.deepEqual(p.getPassives(), ['hydraflight']);
-				assert(p.hasAbilityOrPassive('berserk'));
+				const expected = !suppressed && ['Worldbreaker', 'Berserk'].includes(ability) ? 1 : 0;
+                assert.equal(p.hasAbilityOrPassive('berserk'), !!expected);
 				hit(p, q);
 				assert.equal(p.hp, 450);
-				assert.equal(p.boosts.atk, 1);
-				assert.equal(p.boosts.spa, 1);
+				assert.equal(p.boosts.atk, expected);
+				assert.equal(p.boosts.spa, expected);
 				hit(p, q);
-				assert.equal(p.boosts.atk, 1);
-				assert.equal(p.boosts.spa, 1);
+				assert.equal(p.boosts.atk, expected);
+				assert.equal(p.boosts.spa, expected);
 			});
 		}
 	}
 	for (const ability of ['Worldbreaker', 'False Liberation']) {
-		it(`${ability} no longer grants Berserk to another species`, () => {
+		it(`${ability} owns Berserk independently of species`, () => {
 			const [p, q] = setup(ability, 'Mew');
-			assert(!p.hasAbilityOrPassive('berserk'));
+			const expected = ability === 'Worldbreaker' ? 1 : 0; assert.equal(p.hasAbilityOrPassive('berserk'), !!expected);
 			hit(p, q);
-			assert.equal(p.boosts.atk, 0);
-			assert.equal(p.boosts.spa, 0);
+			assert.equal(p.boosts.atk, expected);
+			assert.equal(p.boosts.spa, expected);
 		});
 	}
 });

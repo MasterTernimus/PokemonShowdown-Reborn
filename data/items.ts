@@ -26,8 +26,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	anomalycore: {
 		name: "Anomaly Core",
 		spritenum: 0,
-		megaStone: { Camerupt: "Camerupt-Pulse", Swalot: "Swalot-Pulse", Hypno: "Hypno-Pulse", Lilligant: "Lilligant-Rift", "Lilligant-Hisui": "Lilligant-Hisui-Rift", Muk: "Muk-Pulse", "Muk-Alola": "Muk-Pulse", Hippowdon: "Hippowdon-Rift", Torterra: "Torterra-Rift", Avalugg: "Avalugg-Pulse", "Avalugg-Hisui": "Avalugg-Pulse", Magnezone: "Magnezone-Pulse", "Mr. Mime": "Mr. Mime-Pulse", "Mr. Mime-Galar": "Mr. Mime-Pulse" },
-		itemUser: ["Camerupt", "Swalot", "Hypno", "Lilligant", "Lilligant-Hisui", "Muk", "Muk-Alola", "Hippowdon", "Torterra", "Avalugg", "Avalugg-Hisui", "Magnezone", "Mr. Mime", "Mr. Mime-Galar"],
+		megaStone: { Lumineon: "Lumineon-Rift", Camerupt: "Camerupt-Pulse", Swalot: "Swalot-Pulse", Hypno: "Hypno-Pulse", Lilligant: "Lilligant-Rift", "Lilligant-Hisui": "Lilligant-Hisui-Rift", Muk: "Muk-Pulse", "Muk-Alola": "Muk-Pulse", Hippowdon: "Hippowdon-Rift", Torterra: "Torterra-Rift", Avalugg: "Avalugg-Pulse", "Avalugg-Hisui": "Avalugg-Pulse", Magnezone: "Magnezone-Pulse", "Mr. Mime": "Mr. Mime-Pulse", "Mr. Mime-Galar": "Mr. Mime-Pulse" },
+		itemUser: ["Lumineon", "Camerupt", "Swalot", "Hypno", "Lilligant", "Lilligant-Hisui", "Muk", "Muk-Alola", "Hippowdon", "Torterra", "Avalugg", "Avalugg-Hisui", "Magnezone", "Mr. Mime", "Mr. Mime-Galar"],
 		num: 2662,
 		gen: 9,
 		desc: "Allows designated Pokemon to undergo Pulse/Rift Evolution. Pulse and Rift forms cannot have a Substitute; existing or transferred substitutes break. Camerupt must be at full HP immediately before Pulse Evolution or it faints.",
@@ -5725,6 +5725,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onDamagingHitOrder: 2,
 		onDamagingHit(damage, target, source, move) {
+			if (source.hasAbilityOrPassive('thorntempered')) return;
 			if (this.checkMoveMakesContact(move, source, target)) {
 				this.damage(source.baseMaxhp / 6, source, target);
 			}

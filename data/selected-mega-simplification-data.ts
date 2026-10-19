@@ -454,3 +454,8 @@ SelectedExactComponents.ragingcurrent = ['swiftswim', 'dryskin', 'stamina'];
 
 SelectedComponentRemovals.beyondfear = ['innerfocus'];
 SelectedExactComponents.beyondfear = [];
+
+import {AuditCleanupComponents, AuditCleanupDescriptions, AuditCleanupRemovals} from './audit-cleanup-approved';
+for (const [id, parts] of Object.entries(AuditCleanupRemovals)) SelectedComponentRemovals[id] = [...new Set([...(SelectedComponentRemovals[id] || []), ...parts])];
+Object.assign(SelectedExactComponents, AuditCleanupComponents);
+Object.assign(SelectedAbilityDescriptions, Object.fromEntries(Object.entries(AuditCleanupDescriptions).map(([id, text]) => [id, {...text}])));

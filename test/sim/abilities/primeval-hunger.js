@@ -47,7 +47,7 @@ describe('Primeval Hunger', () => {
 			assert.equal(t.boosts.atk, atk - (stat === 'atk' ? 1 : 0));
 			assert.equal(t.boosts.spa, spa - (stat === 'spa' ? 1 : 0));
 			assert.equal(p.boosts.atk, 0); assert.equal(p.boosts.spa, 0);
-			assert.equal(t.volatiles.healblock.duration, 2);
+			assert(!t.volatiles.healblock);
 		});
 	}
 	it('does not lower neutral stages and respects Clear Body and Contrary', () => {
@@ -66,16 +66,14 @@ describe('Primeval Hunger', () => {
 		t.removeVolatile('substitute'); hit(p, t, { drain: undefined });
 		assert(!t.volatiles.healblock); assert.equal(t.boosts.spa, 2);
 	});
-	it('blocks healing through the following turn, then ends; switching also clears it', () => {
+	it('does not block healing after draining damage', () => {
 		const [p, t] = setup(); hit(p, t); t.hp = Math.floor(t.maxhp / 2);
-		assert.equal(battle.heal(10, t, t, battle.dex.moves.get('recover')), false);
-		battle.makeChoices('move splash', 'move splash'); assert(t.volatiles.healblock);
-		battle.makeChoices('move splash', 'move splash'); assert(!t.volatiles.healblock);
-		hit(p, t); battle.makeChoices('move splash', 'switch 2'); assert(!t.volatiles.healblock);
+		assert.equal(battle.heal(10, t, t, battle.dex.moves.get('recover')), 10);
+		assert(!t.volatiles.healblock);
 	});
-	it('refreshes its short block without shortening an existing longer Heal Block', () => {
+	it('does not refresh or shorten an independently applied Heal Block', () => {
 		const [p, t] = setup(); t.addVolatile('healblock', p, battle.dex.moves.get('healblock'));
 		hit(p, t); assert.equal(t.volatiles.healblock.duration, 5);
-		t.volatiles.healblock.duration = 1; hit(p, t); assert.equal(t.volatiles.healblock.duration, 2);
+		t.volatiles.healblock.duration = 1; hit(p, t); assert.equal(t.volatiles.healblock.duration, 1);
 	});
 });

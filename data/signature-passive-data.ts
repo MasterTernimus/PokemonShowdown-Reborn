@@ -7,6 +7,8 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
+	cactuschorus: ['waterabsorb', 'sandrush'],
+	naturalrecovery: ['naturalcure', 'regenerator'],
 	noseformation: ['elevate'],
 	unbridledwrath: ['sheerforce', 'innerfocus'],
 	eldritchremedy: ['owntempo', 'curiousmedicine'], pearlcurrent: ['waterabsorb'], saltbastion: ['sturdy'],
@@ -54,7 +56,7 @@ SignaturePassiveComponents.tirelessmuscle = ['innerfocus'];
 
 SignaturePassiveComponents.rimeboundspirit = ['heatproof'];
 
-SignaturePassiveComponents.hydraflight=['levitate','hydrabond','berserk'];
+SignaturePassiveComponents.hydraflight=['levitate','hydrabond'];
 
 SignaturePassiveComponents.absolutepressure=['pressure','innerfocus','insomnia','moldbreaker'];
 

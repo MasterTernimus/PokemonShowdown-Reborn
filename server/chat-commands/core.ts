@@ -973,6 +973,15 @@ export const commands: Chat.ChatCommands = {
 		game.confirmReady(user);
 	},
 
+	movesheets(target, room, user) {
+  const battle = this.requireRoom().battle;
+  if (!battle) throw new Chat.ErrorMessage('Must be in a battle room.');
+  const [action, token] = target.trim().split(/\s+/);
+  try { battle.moveSheets(user, action, token); } catch (error) {
+   throw new Chat.ErrorMessage((error as Error).message);
+  }
+ },
+ movesheetshelp: ['/movesheets - Request private species-and-moves-only team sheets. Both players must agree.'],
 	acceptopenteamsheets(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const battle = room.battle;

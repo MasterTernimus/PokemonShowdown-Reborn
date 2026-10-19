@@ -34,13 +34,13 @@ describe('Primeval Hunger seed applications', () => {
 			if (seeded) q.addVolatile('leechseed', p);
 			q.addVolatile('followme', q); q.boosts.spa = 2;
 			hit(p, original, id);
-			assert.equal(!!q.volatiles.healblock, !seeded);
+			assert(!q.volatiles.healblock);
 			assert.equal(q.boosts.spa, seeded ? 2 : 1);
 		});
 		it(id + ' applies the existing reward once and never on later seed ticks', () => {
 			const [p, q] = setup(); hit(p, q, id);
 			assert.equal(q.volatiles.leechseed.source, p);
-			assert.equal(q.volatiles.healblock.duration, 2);
+			assert(!q.volatiles.healblock);
 			assert.equal(q.boosts.atk, 2); assert.equal(q.boosts.spa, 1);
 			q.removeVolatile('healblock');
 			battle.fieldEvent('Residual');

@@ -36,9 +36,7 @@ export function installApprovedSovereigns(abilities: AbilityDataTable) {
 	abilities.stormsovereign.onSourceDamagingHit = function (damage, target, source, move) {
 		return this.dex.abilities.get('updraft').onSourceDamagingHit?.call(this, damage, target, source, move);
 	};
-	abilities.sandsovereign.onModifyMove = function (move, pokemon, target) {
-		return this.dex.abilities.get('mountainbreaker').onModifyMove?.call(this, move, pokemon, target);
-	};
+	abilities.sandsovereign.onModifyMove = abilities.mountainbreaker.onModifyMove;
 	abilities.frostsovereign.onTryHit = function (target, source, move) {
 		const callback = this.dex.abilities.get('soundproof').onTryHit;
 		if (typeof callback === 'function') return callback.call(this, target, source, move);

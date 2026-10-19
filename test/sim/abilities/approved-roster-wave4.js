@@ -57,7 +57,7 @@ describe('Approved fourth roster pass', () => {
 		}
 		assert.equal(Dex.species.get('Hydreigon').abilities[0], 'Dark Aura');
 		assert.equal(Dex.species.get('Hydreigon').abilities[1], 'Worldbreaker');
-		assert.equal(Dex.species.get('Mienshao').abilities.H, 'Meridian Seal');
+		assert.equal(Dex.species.get('Mienshao').abilities.H, 'Infiltrator');
 		assert.equal(Dex.species.get('Goodra').abilities[1], 'Gooey');
 		assert.equal(Dex.species.get('Goodra-Hisui').abilities[1], 'Filter');
 		assert.equal(Dex.species.get('Baxcalibur').abilities[1], 'Rimeplate');
@@ -85,7 +85,7 @@ describe('Approved fourth roster pass', () => {
 		const [p, , foe] = make('Meridian Seal');
 		foe.addVolatile('protect', foe);
 		hit('lowkick', p, foe);
-		assert(!p.abilityState.used);
+		assert.notEqual(p.m.coldOpenEntry, p.previouslySwitchedIn);
 		foe.removeVolatile('protect');
 		foe.addVolatile('substitute', foe);
 		hit('lowkick', p, foe);
@@ -159,11 +159,11 @@ describe('Approved fourth roster pass', () => {
 		foe.side.addSideCondition('reflect', foe);
 		const move = hit('doublehit', p, foe);
 		assert(move.ignorePositiveDefensive && move.ignoreScreens);
-		assert(p.abilityState.used);
+		assert.equal(p.m.coldOpenEntry,p.previouslySwitchedIn);
 		const next = modify('tackle', p, foe);
 		assert(!next.ignorePositiveDefensive && !next.ignoreScreens);
 		start(p);
-		assert(modify('tackle', p, foe).ignoreScreens);
+		assert(!modify('tackle', p, foe).ignoreScreens);
 	});
 	it('Cold Open does not bypass Substitute', () => {
 		const [p, , foe] = make('Cold Open');

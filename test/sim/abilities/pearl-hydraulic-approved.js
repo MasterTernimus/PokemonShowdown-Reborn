@@ -20,12 +20,10 @@ describe('Pearl/Abyssal and Hydraulic approved abilities',()=>{
  it('Abyssal Current retains Water Absorb and respects stat-drop protection',()=>{
   const[p,q]=setup('Huntail','Abyssal Current');p.hp=500;hit(q,p,'watergun');assert.equal(p.hp,1000);q.setAbility('Clear Body');hit(p,q,'darkpulse',{secondaries:[]});assert.equal(q.boosts.atk,0);q.setAbility('No Ability');hit(p,q,'darkpulse',{secondaries:[]});assert.equal(q.boosts.atk,0);
  });
- it('Hydraulic counts individual opposing HP hits while retaining Stamina',()=>{
-  const[p,q]=setup('Blastoise','Hydraulic Armor');p.hp=500;hit(q,p,'tackle',{damage:10});assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,0);hit(q,p,'tackle',{damage:10});assert.equal(p.boosts.spd,1);hit(q,p,'tackle',{damage:10,multihit:4});assert.equal(p.boosts.spd,1);assert(p.hp>500);
+ it('Hydraulic retains Stamina without building Special Defense',()=>{
+  const[p,q]=setup('Blastoise','Hydraulic Armor');p.hp=500;hit(q,p,'tackle',{damage:10});assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,0);hit(q,p,'tackle',{damage:10});assert.equal(p.boosts.spd,0);hit(q,p,'tackle',{damage:10,multihit:4});assert.equal(p.boosts.spd,0);assert(p.hp>500);
  });
- it('Hydraulic charge doubles one hit, does not stack, and clears on ability loss',()=>{
-  const[p,q]=setup('Blastoise','Hydraulic Armor','singles');battle.makeChoices('move withdraw','move splash');assert(p.abilityState.hydraulicCharge);hit(q,p,'tackle',{damage:10});assert.equal(p.boosts.spd,1);assert(!p.abilityState.hydraulicCharge);p.abilityState.hydraulicCharge=true;p.abilityState.hydraulicHits=1;p.setAbility('No Ability');p.setAbility('Hydraulic Armor');assert(!p.abilityState.hydraulicCharge);assert(!p.abilityState.hydraulicHits);
- });
+ it('Withdraw and ability changes do not create the removed counter or charge',()=>{const[p,q]=setup('Blastoise','Hydraulic Armor','singles');battle.makeChoices('move withdraw','move splash');assert.equal(p.abilityState.hydraulicCharge,undefined);hit(q,p,'tackle',{damage:10});assert.equal(p.boosts.spd,0);p.setAbility('No Ability');p.setAbility('Hydraulic Armor');assert.equal(p.abilityState.hydraulicCharge,undefined);assert.equal(p.abilityState.hydraulicHits,undefined);});
  it('Skull Bash preparation grants normal boosts but no charge or Hydro Pump',()=>{
   const[p,q]=setup('Blastoise','Hydraulic Armor','singles');battle.makeChoices('move skullbash','move splash');assert(!p.abilityState.hydraulicCharge);assert.equal(p.boosts.atk,1);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spd,1);assert(!battle.log.some(x=>x.includes('|move|')&&x.includes('|Hydro Pump|')));
   battle.makeChoices('move skullbash','move splash');assert.equal(battle.log.filter(x=>x.includes('|move|')&&x.includes('|Hydro Pump|')).length,1);

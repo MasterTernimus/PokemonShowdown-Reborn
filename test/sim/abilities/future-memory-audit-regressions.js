@@ -251,11 +251,18 @@ describe('Future attack queue and RKS Memory audit regressions', () => {
 	});
 
 	it('Psychic Memory bounces Toxic and blocks indirect damage', () => {
-		const holder = memory('Psychic Memory', ['splash'], { moves: ['toxic'] });
+		const holder = memory('Psychic Memory', ['splash'], { species: 'Chansey', moves: ['toxic'] });
 		battle.makeChoices('move splash', 'move toxic');
 		assert.equal(holder.status, '');
 		assert.equal(battle.p2.active[0].status, 'tox');
 		assert.equal(battle.damage(20, holder, holder, battle.dex.conditions.get('brn')), false);
+	});
+
+	it('Psychic Memory reflection still allows the original attacker to Synchronize Toxic back', () => {
+		const holder = memory('Psychic Memory', ['splash'], { moves: ['toxic'] });
+		battle.makeChoices('move splash', 'move toxic');
+		assert.equal(battle.p2.active[0].status, 'tox');
+		assert.equal(holder.status, 'tox');
 	});
 
 	it('Rock Memory blocks Yawn and direct status through Purifying Salt', () => {

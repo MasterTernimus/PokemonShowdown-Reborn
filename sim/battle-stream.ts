@@ -220,6 +220,9 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			const team = Teams.pack(side.team);
 			this.push(`requesteddata\n${team}`);
 			break;
+		case 'show-movesheets':
+			this.battle!.showMoveSheets(...message.trim().split(' ') as [string, string]);
+			break;
 		case 'show-openteamsheets':
 			this.battle!.showOpenTeamSheets();
 			break;

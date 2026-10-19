@@ -149,3 +149,13 @@ const beforeLaterAbilities=exports.abilities,beforeLaterCurrent=exports.current,
 const beforeMegaGyaradosRemoval=exports.current;exports.current=(id,original)=>id==='gyaradosmega'?['tempestfury']:beforeMegaGyaradosRemoval(id,original);
 
 const beforeDrillAbilities=exports.abilities,beforeDrillCurrent=exports.current;exports.abilities=(id,fallback)=>{const slots=beforeDrillAbilities(id,fallback);return id==='fearow'?{...slots,0:'Power Drill'}:id==='beedrill'?{...slots,1:'Twin Drills'}:id==='rapidash'?{...slots,H:'Power Drill'}:slots;};exports.current=(id,fallback)=>['dudunsparce','dudunsparcethreesegment'].includes(id)?['powerdrill']:beforeDrillCurrent(id,fallback);
+
+const beforePlainFilter=exports.abilities;exports.abilities=(id,original)=>id==='probopass'?{...beforePlainFilter(id,original),H:'Filter'}:beforePlainFilter(id,original);
+
+const beforeOrdinarySlots=exports.abilities;exports.abilities=(id,original)=>({...beforeOrdinarySlots(id,original),...{"ferrothorn":{"H":"Stamina"},"seismitoad":{"H":"Water Absorb"},"klefki":{"0":"Prankster"}}[id]});
+
+// October 19 review supersedes older slots and passive assignments.
+const oct19=require('./oct19-reviewed-rosters.json');
+const beforeOct19Abilities=exports.abilities,beforeOct19Current=exports.current;
+exports.abilities=(id,fallback)=>({...beforeOct19Abilities(id,fallback),...oct19.abilities[id]});
+exports.current=(id,fallback)=>oct19.passives[id]||beforeOct19Current(id,fallback);

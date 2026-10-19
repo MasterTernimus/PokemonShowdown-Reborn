@@ -37,19 +37,9 @@ export function installPearlHydraulic(a:AbilityDataTable){
  }
  const old=a.hydraulicarmor;
  a.hydraulicarmor={...old,
-  onSwitchIn(){this.effectState.hydraulicHits=0;this.effectState.hydraulicCharge=false;},
-  onEnd(){this.effectState.hydraulicHits=0;this.effectState.hydraulicCharge=false;},
-  onSwitchOut(){this.effectState.hydraulicHits=0;this.effectState.hydraulicCharge=false;},
-  onDamagingHit(damage,target,source,move){
-   old.onDamagingHit?.call(this,damage,target,source,move);
-   if(damage<=0||!target.hp||source.isAlly(target))return;
-   const count=(this.effectState.hydraulicHits||0)+(this.effectState.hydraulicCharge?2:1);this.effectState.hydraulicCharge=false;this.effectState.hydraulicHits=count%2;
-   if(count>=2&&target.m.hydraulicBoostTurn!==this.turn){target.m.hydraulicBoostTurn=this.turn;this.boost({spd:1},target,target,this.effect);}
-  },
   onModifyMove(move,pokemon,target){
    old.onModifyMove?.call(this,move,pokemon,target);
   },
-  onAfterMove(source,target,move){if(['withdraw','shelter'].includes(move.id)&&source.moveThisTurnResult===true)this.effectState.hydraulicCharge=true;},
   onSourceDamagingHit(damage,target,source,move){if(damage>0&&!target.isAlly(source)&&move.id==='skullbash'&&!move.isZ&&!move.isMax)(move as any).hydraulicPulse={source,target};},
   onAnyAfterAttackResolved(source,target,move){
    const pending=(move as any).hydraulicPulse;if(source!==this.effectState.target||pending?.source!==source)return;delete (move as any).hydraulicPulse;
@@ -65,5 +55,5 @@ export const PearlHydraulicDescriptions={
  pearltide:{name:'Pearl Tide',shortDesc:'Hydration; Water HP hit heals self and weakest adjacent ally 1/16 once per turn.',desc:'Full Hydration. Once per turn after a Water attack damages opposing HP, restores 1/16 max HP to this living active Pokemon and its lowest-HP-percentage adjacent living ally. Resolves after the whole attack; ordinary healing restrictions apply.'},
  abyssalfang:{name:'Abyssal Fang',shortDesc:'Strong Jaw; bite HP attack lowers one foe’s Sp. Def once per turn.',desc:'Full Strong Jaw. Once per turn after a biting attack damages opposing HP, attempts to lower one damaged surviving opponent’s Special Defense by one stage after the whole attack. No ally or Substitute-only trigger; normal stat-drop protection applies.'},
  abyssalcurrent:{name:'Abyssal Current',shortDesc:'Water Absorb; Dark HP attack lowers one foe’s Attack once per turn.',desc:'Full Water Absorb. Once per turn after a Dark attack damages opposing HP, attempts to lower one damaged surviving opponent’s Attack by one stage after the whole attack. No ally or Substitute-only trigger; normal stat-drop protection applies.'},
- hydraulicarmor:{name:'Hydraulic Armor',shortDesc:'Stamina; every second HP hit raises Sp. Def; Skull Bash strike follows with Hydro Pump.',desc:'Full local Stamina. Water Pulse and Hydro Pump retain the higher boosted Defense-or-Sp. Atk offensive stat, remaining Special and targeting Sp. Def. Every second opposing HP-damaging hit attempts +1 Sp. Def, at most once per turn; individual hits count. Successful Withdraw/Shelter stores one nonstacking charge, making the next qualifying hit count twice. Counter and charge clear on leaving or ability loss. After a Skull Bash strike damages opposing HP, the living active user uses one free ordinary Hydro Pump against the same surviving active target after the whole attack. No follow-up on preparation, miss, protection, immunity, Substitute-only damage or a KO. Hydro Pump costs no PP and retains ordinary accuracy, protection, abilities, secondary effects, Hydraulic Armor offense and Torrent.'},
+ hydraulicarmor:{name:'Hydraulic Armor',shortDesc:'Stamina; Skull Bash strike follows with Hydro Pump.',desc:'Full local Stamina. Water Pulse and Hydro Pump retain the higher boosted Defense-or-Sp. Atk offensive stat, remaining Special and targeting Sp. Def. After a Skull Bash strike damages opposing HP, the living active user uses one free ordinary Hydro Pump against the same surviving active target after the whole attack. No follow-up on preparation, miss, protection, immunity, Substitute-only damage or a KO. Hydro Pump costs no PP and retains ordinary accuracy, protection, abilities, secondary effects, Hydraulic Armor offense and Torrent.'},
 };

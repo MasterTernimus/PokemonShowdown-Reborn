@@ -18,8 +18,8 @@ describe('Toxic Bloom Poison drain', () => {
 		Object.assign(move, { basePower: 30, accuracy: true, willCrit: false, secondaries: undefined }, extra);
 		const before = t.hp; battle.actions.runMove(move, p, p.getLocOf(t)); return before - t.hp;
 	}
-	it('inherits Proficient and Thick Fat once through Pollen Bloom', () => {
-		const [p, t] = setup(); assert.deepEqual(AbilityComponents.toxicbloom, ['pollenbloom', 'selfsufficient']);
+	it('inherits Thick Fat and Unaware once while keeping Proficient as a separate passive', () => {
+		const [p, t] = setup(); assert.deepEqual(AbilityComponents.toxicbloom, ['pollenbloom']);
 		const damage = (source, target, id) => {
 			const move = battle.dex.getActiveMove(id);
 			move.willCrit = false;
@@ -27,31 +27,31 @@ describe('Toxic Bloom Poison drain', () => {
 		};
 		const outgoing = damage(p, t, 'tackle'), incoming = damage(t, p, 'flamethrower');
 		p.setAbility('Pollen Bloom'); assert.equal(damage(p, t, 'tackle'), outgoing); assert.equal(damage(t, p, 'flamethrower'), incoming);
-		assert(p.hasAbility('proficient')); assert(p.hasAbility('thickfat'));
-		assert.equal(Dex.species.all().filter(s => Object.values(s.abilities).includes('Toxic Bloom')).map(s => s.id).join(','), 'venusaurmega');
+		assert(!p.hasAbility('proficient')); assert(p.hasAbilityOrPassive('proficient'));
+		assert(p.hasAbility('thickfat')); assert(p.hasAbility('unaware'));
+		assert.equal(Dex.species.all().filter(s => Object.values(s.abilities).includes('Virulence')).map(s => s.id).join(','), 'venusaurmega');
 	});
-	it('heals 25% actual HP damage with normal rounding and missing-HP cap', () => {
+	it('does not heal from Poison attack damage at any missing-HP amount', () => {
 		const [p, t] = setup();
 		p.hp = 100;
 		const dealt = hit(p, t);
-		assert.equal(p.hp, 100 + Math.round(dealt / 4));
+		assert.equal(p.hp, 100);
 		p.hp = p.maxhp - 1;
 		t.hp = t.maxhp;
 		hit(p, t);
-		assert.equal(p.hp, p.maxhp);
+		assert.equal(p.hp, p.maxhp - 1);
 		p.hp = 100;
 		t.hp = 4;
 		hit(p, t);
-		assert.equal(p.hp, 101);
+		assert.equal(p.hp, 100);
 	});
-	it('uses Heal Block, Liquid Ooze and Big Root', () => {
+	it('has no extra drain interaction with Heal Block, Liquid Ooze or Big Root', () => {
 		for (const mode of ['block', 'ooze', 'root']) {
 			const [p, t] = setup(mode === 'ooze' ? 'Liquid Ooze' : 'No Ability', mode === 'root' ? 'Big Root' : '');
 			p.hp = 100; if (mode === 'block') p.addVolatile('healblock', t);
 			const dealt = hit(p, t), drain = Math.round(dealt / 4);
 			if (mode === 'block') assert.equal(p.hp, 100);
-			else if (mode === 'ooze') assert.equal(p.hp, 100 - drain);
-			else assert(p.hp > 100 + drain);
+			else assert.equal(p.hp, 100);
 			battle.destroy(); battle = null;
 		}
 	});

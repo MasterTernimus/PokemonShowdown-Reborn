@@ -6,6 +6,13 @@ import {resolveForesight} from './foresight-memory';
 /* eslint-disable @stylistic/max-len */
 import {toID} from '../sim/dex-data';
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+ activenoguard: {
+  name:'Active No Guard', noCopy:true,
+  onStart(pokemon) { this.add('-start', pokemon, 'Active No Guard'); },
+  onModifyMove(move) { move.accuracy = true; },
+  onAnyInvulnerability(target, source) { if (source === this.effectState.target) return 0; },
+  onEnd(pokemon) { this.add('-end', pokemon, 'Active No Guard'); },
+ },
  prepared: {
   name: 'Prepared', noCopy: true,
   onStart(target, source) { this.effectState.owners = [source]; updatePreparedIndicator(this, target); },
@@ -822,7 +829,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'Apex Flytrap Trapped',
 		duration: 2,
 		onTrapPokemon(pokemon) {
-			if (this.effectState.source?.isActive) pokemon.tryTrap();
+			if (this.effectState.source?.isActive && this.effectState.source.hp) pokemon.tryTrap();
+		},
+		onAnySwitchOut(pokemon) {
+			if (pokemon === this.effectState.source) this.effectState.target.removeVolatile('apexflytraptrapped');
 		},
 		onStart(target, source) {
 			this.add('-message', `${target.name} was caught by ${source.name}'s Apex Flytrap!`);
@@ -835,6 +845,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'trapper',
 		noCopy: true,
 	},
+	vendettaspent: {name: 'vendettaspent', noCopy: true},
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 5,
@@ -846,7 +857,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return this.random(5, 7);
 		},
 		onStart(pokemon, source, effect) {
-			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
+			const shortTrap = ['desertsmark', 'barbedweb', 'swarmsnare'].includes(effect.id) ||
+				(effect as ActiveMove & {approvedShortTrap?: boolean}).approvedShortTrap;
+			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`,
+				...(shortTrap ? [`[until] ${this.turn + 1}`] : []));
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 
 			const moveBoosts: Record<string, readonly string[]> = {
@@ -1899,3 +1913,6 @@ import {installLostFourConditions} from './lost-four-approved';
 installLostFourConditions(Conditions);
 
 Conditions.ejecting={name:'Ejecting',noCopy:true,onStart(target){this.add('-start',target,'Ejecting');},onBeforeMovePriority:100,onBeforeMove(pokemon){this.add('cant',pokemon,'Ejecting');return false;},onDragOut(){return false;},onEnd(target){this.add('-end',target,'Ejecting');}};
+
+// Vacated-slot token, consumed before the immediate replacement enters.
+Conditions.soulescort = {name: 'Soul Escort'};

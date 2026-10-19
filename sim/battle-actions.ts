@@ -276,6 +276,11 @@ export class BattleActions {
 		pokemon.passiveStates = {};
 		pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
 		pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
+  const soulEscort = side.slotConditions[pos].soulescort;
+  if (soulEscort) {
+   side.removeSlotCondition(pos, 'soulescort');
+   if (soulEscort.source === oldActive && oldActive && !oldActive.hp) pokemon.m.soulEscortEntry = true;
+  }
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
 		if (sourceEffect) {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
@@ -323,9 +328,16 @@ export class BattleActions {
 		for (const poke of switchersIn) {
    if (poke.m.steelwingEscortEntry) poke.addVolatile('steelwingescortentry');
    delete poke.m.steelwingEscortEntry;
+   if (poke.m.soulEscortEntry) this.battle.add('-message', `${(poke.illusion || poke).name} is protected from entry hazards by Soul Escort!`);
   }
   try { this.battle.fieldEvent('SwitchIn', switchersIn); } finally {
-   for (const poke of switchersIn) poke.removeVolatile('steelwingescortentry');
+   for (const poke of switchersIn) {
+    poke.removeVolatile('steelwingescortentry');
+    delete poke.m.soulEscortEntry;
+   }
+   for (const side of this.battle.sides) if (!side.pokemon.some(mon => mon.hp && !mon.isActive)) {
+    for (let slot = 0; slot < side.active.length; slot++) side.removeSlotCondition(slot, 'soulescort');
+   }
   }
 		for (const poke of switchersIn) poke.revertSuppressedRegionalForm();
 
@@ -2634,6 +2646,7 @@ export class BattleActions {
 	// ==================================================================
 
 	canMegaEvo(pokemon: Pokemon) {
+  if (pokemon.species.id === 'chitwo' || pokemon.m.lumineonRiftRevived) return null;
 		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return null;
 		if (pokemon.m.parasectMegaUsed) return null;
 		const species = pokemon.baseSpecies;

@@ -3037,3 +3037,8 @@ Aliases.trailbreaker = 'Siege Tusks';
 Object.assign(Aliases,{bedrockclaw:'Dune Claws',rimeclaw:'Glacier Claws',dunerunner:'Sand Rush',frostrunner:'Slush Rush'});
 
 
+
+Object.assign(Aliases, {ragingthicket:'verdantdrake', ragingflame:'blazingtempo', verdantcrown:'ancientbloom', tidalcrown:'fortressshell', virulence:'toxicbloom', bombardment:'siegelauncher'});
+
+Aliases.volcanicspirit = 'blastchamber';
+Aliases.groundedinstinct = 'pyrousdominion';

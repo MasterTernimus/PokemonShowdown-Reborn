@@ -36,8 +36,8 @@ describe('Approved signature batch', () => {
 		assert.deepEqual(Dex.species.get('magcargo').baseStats, { hp: 95, atk: 50, def: 145, spa: 115, spd: 105, spe: 30 });
 		assert.equal(Dex.species.get('magcargo').bst, 540);
 		assert.deepEqual(Dex.species.get('kleavor').abilities, { 0: 'Flint Fracture', 1: 'Sheer Force', H: 'Sharpness' });
-		assert.deepEqual(Dex.species.get('grafaiai').abilities, { 0: 'Unburden', 1: 'Toxic Signature', H: 'Prankster' });
-		assert.deepEqual(Dex.species.get('klefki').abilities, { 0: 'Vault Keeper', 1: 'Master Key', H: 'Magician' });
+		assert.deepEqual(Dex.species.get('grafaiai').abilities, { 0: 'Unburden', 1: 'Toxic Signature', H: 'Sticky Hold' });
+		assert.deepEqual(Dex.species.get('klefki').abilities, { 0: 'Prankster', 1: 'Master Key', H: 'Magician' });
 		assert.deepEqual(Dex.species.get('chimecho').abilities,
 			{ 0: 'Temple Chime', 1: 'Restorative Chime', H: 'Dissonant Chime' });
 		assert.equal(Dex.species.get('glaliemega').abilities[0], 'Freezer Burn');
@@ -111,10 +111,10 @@ describe('Approved signature batch', () => {
 			use(source, target, 'thunderwave'); assert.equal(target.status, '');
 		});
 	}
-	it('Vault Keeper preserves screens and item but permits Mold Breaker removal', () => {
-		const [keeper, attacker] = start('Vault Keeper'); screens(keeper); keeper.setItem('leftovers');
+	it('Klefki preserves its item through passive Sticky Hold but permits screen removal', () => {
+		const [keeper, attacker] = start('Prankster', 'No Ability', 'Klefki'); screens(keeper); keeper.setItem('leftovers');
 		use(attacker, keeper, 'brickbreak', { basePower: 1 });
-		assert(keeper.side.sideConditions.reflect);
+		assert(!keeper.side.sideConditions.reflect);
 		use(attacker, keeper, 'knockoff', { basePower: 1 }); assert.equal(keeper.item, 'leftovers');
 		attacker.setAbility('Mold Breaker');
 		use(attacker, keeper, 'brickbreak', { basePower: 1 }); assert(!keeper.side.sideConditions.reflect);
@@ -194,11 +194,11 @@ describe('Approved signature batch', () => {
 			assert.equal(battle.runEvent('ModifyDamage', target, source, battle.dex.getActiveMove(id), 100), expected);
 		}
 	});
-	it('Primeval Hunt makes only the scheduled final hit critical and respects Battle Armor', () => {
+	it('Primeval Hunt uses ordinary critical rolls and respects Battle Armor', () => {
 		const [source, target] = start('Primeval Hunt'); const crits = [];
 		battle.onEvent('DamagingHit', battle.format, (damage, defender, attacker, move) => crits.push(defender.getMoveHitData(move).crit));
 		use(source, target, 'rockblast', { basePower: 1, willCrit: undefined });
-		assert.deepEqual(crits, [false, false, false, false, true]);
+		assert.deepEqual(crits, [false, false, false, false, false]);
 		crits.length = 0; target.setAbility('Battle Armor');
 		use(source, target, 'rockblast', { basePower: 1, willCrit: undefined });
 		assert(crits.every(crit => !crit)); assert(source.hasAbility('owntempo')); assert(!source.hasAbility('battlearmor'));
@@ -238,12 +238,12 @@ describe('Approved signature batch', () => {
 		battle.singleEvent('Start', source.getAbility(), source.abilityState, source);
 		assert.equal(battle.field.weather, 'primordialsea');
 	});
-	it('Shattercrust halves only its first physical HP hit, sets Rocks and surviving-hit Spikes', () => {
+	it('Shattercrust takes normal physical damage and sets only Rocks', () => {
 		const [source, target] = start('Shattercrust'); const damages = [];
 		battle.onEvent('DamagingHit', battle.format, damage => damages.push(damage));
 		use(target, source, 'tackle', { basePower: 10, multihit: 3 });
-		assert(Math.abs(damages[0] * 2 - damages[1]) <= 1); assert.equal(damages[1], damages[2]);
-		assert(target.side.sideConditions.stealthrock); assert.equal(target.side.sideConditions.spikes.layers, 1);
+		assert.equal(damages[0], damages[1]); assert.equal(damages[1], damages[2]);
+		assert(target.side.sideConditions.stealthrock); assert(!target.side.sideConditions.spikes);
 	});
 	it('Shattercrust retains Crumbling Shell water-field exclusions', () => {
 		const [source, target] = start('Shattercrust'); battle.field.setTerrain('underwaterterrain', source);
@@ -274,14 +274,14 @@ describe('Approved signature batch', () => {
 		assert.equal(source.hp, hp + Math.floor(source.maxhp / 8)); const healed = source.hp;
 		use(source, target, 'hypervoice', { basePower: 1 }); assert.equal(source.hp, healed);
 	});
-	it('Dissonant Chime blocks enemy sound and spends its reset only when boosts are removed', () => {
+	it('Dissonant Chime blocks enemy sound and repeatedly removes positive boosts', () => {
 		const [source, target] = start('Dissonant Chime'); const hp = source.hp;
 		use(target, source, 'hypervoice'); assert.equal(source.hp, hp);
-		use(source, target, 'hypervoice', { basePower: 1 }); assert(!source.m.approvedSignatures.dissonantUsed);
+		use(source, target, 'hypervoice', { basePower: 1 }); assert(!source.m.approvedSignatures?.dissonantUsed);
 		target.boosts.atk = 2; target.boosts.spe = -1; target.addVolatile('substitute');
 		use(source, target, 'hypervoice', { basePower: 1 });
 		assert.equal(target.boosts.atk, 0); assert.equal(target.boosts.spe, -1);
-		assert(source.m.approvedSignatures.dissonantUsed);
+		target.boosts.def = 2; use(source, target, 'hypervoice', {basePower: 1}); assert.equal(target.boosts.def, 0);
 	});
 	it('Grave Hunger drains Ghost HP damage, steals actual prevented healing and caps combined gain', () => {
 		const [source, target] = start('Grave Hunger'); source.hp -= 150;
@@ -358,17 +358,17 @@ describe('Approved signature batch', () => {
 		battle.actions.switchIn(source, 0);
 		assert(!source.m.approvedSignatures.twilightGuardUsed);
 	});
-	it('Atrocity replaces only Levitate and preserves the 654 BST on both Mega X forms', () => {
+	it('Atrocity has neither Levitate nor Tough Claws and preserves the 654 BST', () => {
 		const [source, target] = start('Atrocity', 'No Ability', 'Charizard-Mega-X');
 		for (const id of ['charizardmegax', 'charizardmegaxalt']) {
 			assert.deepEqual(Dex.species.get(id).baseStats, { hp: 78, atk: 130, def: 110, spa: 125, spd: 106, spe: 105 });
 			assert.equal(Dex.species.get(id).bst, 654);
 		}
-		assert(!source.hasAbility('levitate')); assert(source.hasAbility('toughclaws')); assert(source.isGrounded());
+		assert(!source.hasAbility('levitate')); assert(!source.hasAbility('toughclaws')); assert(source.isGrounded());
 		assert(source.runImmunity('Ground'));
 		const contact = battle.runEvent('BasePower', source, target, battle.dex.getActiveMove('tackle'), 100);
 		const noncontact = battle.runEvent('BasePower', source, target, battle.dex.getActiveMove('swift'), 100);
-		assert(Math.abs(contact / noncontact - 1.3) < 0.02);
+		assert.equal(contact, noncontact);
 		source.addVolatile('magnetrise'); assert(!source.isGrounded());
 	});
 	it('Double Shock uses existing punch consumers and retains its Electric loss', () => {

@@ -9,7 +9,7 @@ function nostrasEffectiveness(this: Battle, typeMod: number, target: Pokemon | n
 import type {MoveDataTable} from '../sim/dex-moves';
 
 function dragonField(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
- if (this.field.isTerrain('volcanicterrain')) this.field.changeTerrain('dragonsdenterrain', source, move);
+ if (this.field.isTerrain(['volcanicterrain', 'caveterrain'])) this.field.changeTerrain('dragonsdenterrain', source, move);
 }
 const hitFlags = {protect: 1, mirror: 1} as const;
 const hasHPDamage = (target: Pokemon, move: ActiveMove) => (target.getMoveHitData(move) as {damage?: number}).damage! > 0;
@@ -37,10 +37,6 @@ function airstream(this: Battle, target: Pokemon, source: Pokemon, move: ActiveM
  if (!source.hp) return;
  for (const hazard of hazards) {
   if (source.side.removeSideCondition(hazard)) this.add('-sideend', source.side, this.dex.conditions.get(hazard).name, '[from] move: Airstream Assault');
- }
- if (source.side.addSideCondition('tailwind', source, move)) {
-  const tailwind = this.dex.getActiveMove('tailwind');
-  this.singleEvent('AfterMove', tailwind, {}, source, target, tailwind);
  }
 }
 function wisteria(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
@@ -88,11 +84,6 @@ export const YangSignatureMovesB: MoveDataTable = {
   num: 10452, name: 'Crest Cleave', type: 'Steel', category: 'Physical', basePower: 65, accuracy: 100,
   pp: 10, priority: 0, target: 'normal', flags: hitFlags, drain: [1, 3],
   onModifyMove: adaptiveCategory,
-  onHit(target, source, move) {
-   if (!hasHPDamage(target, move)) return;
-   const item = target.takeItem(source);
-   if (item) this.add('-enditem', target, item.name, '[from] move: Crest Cleave', `[of] ${source}`);
-  },
  },
  sirensveil: {
   num: 10453, name: "Siren's Veil", type: 'Water', category: 'Status', basePower: 0, accuracy: 100,
@@ -205,7 +196,7 @@ export const YangSignatureMovesB: MoveDataTable = {
   pp: 15, priority: 0, target: 'normal', flags: hitFlags,
   onModifyMove: adaptiveCategory,
   onHit(target, source, move) {
-   if (hasHPDamage(target, move) && target.addVolatile('partiallytrapped', source, move)) target.volatiles.partiallytrapped.duration = 4;
+   if (hasHPDamage(target, move) && target.addVolatile('partiallytrapped', source, move)) target.volatiles.partiallytrapped.duration = 2;
   },
  },
 };
@@ -234,16 +225,16 @@ const summaries: {[id: string]: string} = {
  m3g4qu4k3: 'Hits all adjacent Pokemon; damaged opposing targets lose 1 Defense and Sp. Def. Glitch boosts power 1.3x; Big Top applies its Striker roll.',
  winddance: 'Dance move. After a hit, sets Strong Winds for 4 turns. +1 priority if Strong Winds are already active. Big Top boosts power 1.5x; Mountain and Snowy Mountain retain their normal Flying boost. Clears fields that existing blowing moves clear.',
  timeblade: 'Uses higher staged Attack or Sp. Atk (Special on ties). After damage, applies Encore for 2 turns if eligible. After HP or Substitute damage, splashes adjacent allies of the target for 1/16 of their maximum HP, or 1/8 on Fairy Tale, once per whole move. Splash is indirect damage like Flame Burst: it bypasses partner Protect and Substitute, but respects Magic Guard; it does not apply Encore or trigger another splash.',
- crestcleave: 'Uses higher staged Attack or Sp. Atk with the corresponding defense (Special on ties). Removes a removable held item after damage; drains 1/3 of damage dealt. No item-dependent power boost.',
+ crestcleave: 'Uses higher staged Attack or Sp. Atk with the corresponding defense (Special on ties). Drains 1/3 of damage dealt.',
  sirensveil: 'Raises Defense and Sp. Def by 1; suppresses active opposing abilities until they switch. Also readies 1.3x power for the user\'s next damaging move, including all hits and targets. This charge does not stack, survives status moves, clears on switching, and is spent on a damaging move attempt even if it misses or is blocked. Respects Ability Shield and unsuppressible abilities. On Short Circuit, a working Covert Cloak also prevents suppression.',
  sirenswrath: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Ignores defensive abilities for this attack. After damaging a foe, reduces the next opposing whole attack by 25% before the user next acts. Does not stack. Breaks Icy Field back into Water Surface only when that water is recorded underneath.',
  rocknroll: 'Lowers the target Defense by 1 and sets Stealth Rock on its side. Cannot place Stealth Rock in Midnight Zone.',
- dragonrend: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Treats Fairy as neutral while preserving the other defensive type: Fairy/Steel resists and Fairy/Dragon is weak. This exception does not carry to generic Z or Max moves. Turns Volcanic Field into Dragon\'s Den after a hit. Does not place an entry hazard.',
- airstreamassault: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, clears own-side entry hazards and sets Tailwind. Bypasses accuracy checks in Strong Winds. New Tailwind lasts 6 turns on Mountain/Snowy Mountain and uses native Tailwind weather rules; existing Tailwind is not refreshed. Clears fields that existing blowing moves clear.',
+ dragonrend: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). Treats Fairy as neutral while preserving the other defensive type: Fairy/Steel resists and Fairy/Dragon is weak. This exception does not carry to generic Z or Max moves. Turns Volcanic Field or Cave into Dragon\'s Den after a hit. Does not place an entry hazard.',
+ airstreamassault: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, clears own-side entry hazards. Bypasses accuracy checks in Strong Winds. Clears fields that existing blowing moves clear.',
  wisteriamaelstrom: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After a hit, each active allied Grass or Bug Pokemon raises its higher staged offense by 1, once per use (Sp. Atk on ties). Grows Flower Garden by one stage per damaging use, up to stage 5.',
  deiludicium: 'After a hit, cures the user of its status condition. Uses Judgment\'s existing named field boosts without its held-item typing. Rainbow Aura also grants its named 1.5x boost; matching Rainbow Terrain and Aura do not duplicate it.',
  nostraswish: 'At +1 setup priority, schedules a 140-power Fairy attack on the opposing position 2 turns later, and a Wish on the user position at the end of the following turn. Ordinary healing stores half the original caster maximum HP rounded up; native field-enhanced healing is preserved. Misty Aura or Rainbow Aura stores 75% healing at setup. The two slots succeed independently. Setup does not count as a healing move. At impact, it is super effective against Steel only in Starlight Arena or New World. Its attack receives a total 2x field boost in weatherless Starlight Arena and 4x in New World.',
- swarmsnare: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After damage, binds the target for 4 turns using ordinary binding rules.',
+ swarmsnare: 'Uses higher staged Attack or Sp. Atk with matching defense (Special on ties). After damage, binds the target through the following turn using ordinary binding rules.',
 };
 export const YangSignatureDescriptionsB: {[id: string]: {shortDesc: string, desc: string}} = {};
 for (const [id, summary] of Object.entries(summaries)) {

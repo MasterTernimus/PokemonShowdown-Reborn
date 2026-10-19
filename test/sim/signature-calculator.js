@@ -11,7 +11,7 @@ describe('Approved signature calculator parity', () => {
 	it('exposes complete composite metadata and approved stats', () => {
 		const metadata = calculatorMetadata();
 		assert.deepEqual(metadata.abilityComponents.duskdrive, ['Battle Fervor', 'Precision', 'Opportunist']);
-		assert(metadata.abilityComponents.atrocity.includes('Tough Claws'));
+		assert(!metadata.abilityComponents.atrocity.includes('Tough Claws'));
 		assert(!metadata.abilityComponents.atrocity.includes('Levitate'));
 		assert.deepEqual(metadata.abilityComponents.cinderscales, ['Flame Body', 'Swarm']);
 		assert.equal(Dex.species.get('magcargo').bst, 540);

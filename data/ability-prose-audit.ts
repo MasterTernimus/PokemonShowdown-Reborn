@@ -69,7 +69,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Opposing status moves that check accuracy have 50% base accuracy."
   },
   "nobleconduit": {
-    "desc": "Special moves have 1.3x power, with a further 1.5x boost on Electric Terrain. Allies' special moves have 1.3x power. In effective sun, Sp. Atk is 1.5x and it loses 1/8 max HP each turn. Cold Eclipse disables both effects. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage.",
+    "desc": "Special moves have 1.3x power, with a further 1.5x boost on Electric Terrain. Allies' special moves have 1.3x power. In effective sun, Attack and Sp. Atk are 1.5x and it loses 1/8 max HP each turn. Cold Eclipse disables both effects. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this damage.",
     "shortDesc": "Special moves have 1.3x power, with a further 1.5x boost on Electric Terrain."
   },
   "crueltag": {
@@ -521,8 +521,8 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "It draws Water moves to itself to raise Atk and Sp. Atk by 1; Water immunity."
   },
   "supersweetsyrup": {
-    "desc": "On switch-in, it lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. It has Sticky Hold. When it is hit by an attack, the attacker is Embargoed for 5 turns.",
-    "shortDesc": "On switch-in, lowers adjacent foes' evasiveness 1 stage; attackers are Embargoed for 5 turns."
+    "desc": "On switch-in, it lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. Substitute blocks this. Flower Garden stages 3–5 add the existing stat drops; Misty Terrain lowers its accuracy.",
+    "shortDesc": "On every entry, lowers adjacent foes’ evasiveness 1 stage."
   },
   "symbiosis": {
     "desc": "If an ally uses its item, it gives its item to that ally immediately. Does not activate if the ally's item was stolen or knocked off, or if the ally used an Eject Button or Eject Pack.",

@@ -118,6 +118,14 @@
     {
       "before": "\ttoxicthread: {\n\t\tnum: 672,\n\t\taccuracy: 100,\n\t\tbasePower: 0,\n\t\tcategory: \"Status\",\n\t\tname: \"Toxic Thread\",\n\t\tpp: 20,\n\t\tpriority: 0,\n\t\tflags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },\n\t\tstatus: 'tox',\n\t\tboosts: {\n\t\t\tspe: -2,\n\t\t},\n\t\ttarget: \"allAdjacentFoes\",\n\t\ttype: \"Poison\",\n\t\tzMove: { boost: { spe: 1 } },\n\t\tcontestType: \"Tough\",\n\t},\n",
       "after": "\ttoxicthread: {\n\t\tnum: 672,\n\t\taccuracy: 100,\n\t\tbasePower: 0,\n\t\tcategory: \"Status\",\n\t\tname: \"Toxic Thread\",\n\t\tpp: 20,\n\t\tpriority: 0,\n\t\tflags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },\n\t\tstatus: 'tox',\n\t\tboosts: {\n\t\t\tspe: -1,\n\t\t},\n\t\ttarget: \"allAdjacentFoes\",\n\t\ttype: \"Poison\",\n\t\tzMove: { boost: { spe: 1 } },\n\t\tcontestType: \"Tough\",\n\t},\n"
+    },
+    {
+      "before": "\t\t\tlet didSomething = false;\n\t\t\tif (source.hasAbility('magneticbulwark') && !source.m.magneticBulwarkSpent) {\n\t\t\t\tconst targets = side.allies().filter(ally => (ally === source || source.isAdjacent(ally)) &&\n\t\t\t\t\t(!ally.volatiles.maxguard || this.runEvent('TryHit', ally, source, move)));\n\t\t\t\tfor (const target of targets) {\n\t\t\t\t\tdidSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;\n\t\t\t\t}\n\t\t\t\tif (didSomething) source.m.magneticBulwarkSpent = true;\n\t\t\t\treturn didSomething;\n\t\t\t}\n\t\t\tif (!this.field.isTerrain('electricterrain'))",
+      "after": "\t\t\tlet didSomething = false;\n\t\t\tif (!this.field.isTerrain('electricterrain'))"
+    },
+    {
+      "before": "const freshRoostHit = Moves.roost.onHit;\nMoves.roost.onHit = function (target, source, move) {\n\tconst result = typeof freshRoostHit === 'function' ? freshRoostHit.call(this, target, source, move) : freshRoostHit;\n\tif (result === false || result === null) return result;\n\tconst entry = target.m.approvedSignatures;\n\tif (target.hasAbility('freshplumage') && entry?.freshPlumageUsed && !entry.freshPlumageRestored) {\n\t\tentry.freshPlumageRestored = true;\n\t\tentry.freshPlumageUsed = false;\n\t\tdelete entry.freshPlumageMove;\n\t}\n\treturn result;\n};\nconst approvedWideGuard = Moves.wideguard.condition as SideConditionData;",
+      "after": "const approvedWideGuard = Moves.wideguard.condition as SideConditionData;"
     }
   ]
 }

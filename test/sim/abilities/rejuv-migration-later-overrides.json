@@ -303,7 +303,7 @@
     "abilities": {
       "0": "Magnet Pull",
       "1": "Magnetic Command",
-      "H": "Magnetic Bulwark"
+      "H": "Filter"
     },
     "passives": [
       "noseformation"
@@ -1266,7 +1266,7 @@
     "abilities": {
       "0": "Mineral Grip",
       "1": "Filter",
-      "H": "Rooted Iron"
+      "H": "Stamina"
     },
     "passives": [
       "ironbarbs"
@@ -1841,5 +1841,19 @@
     "passives": [
       "powerdrill"
     ]
+  },
+  "seismitoad": {
+    "abilities": {
+      "0": "Swift Swim",
+      "1": "Poison Touch",
+      "H": "Water Absorb"
+    }
+  },
+  "klefki": {
+    "abilities": {
+      "0": "Prankster",
+      "1": "Master Key",
+      "H": "Magician"
+    }
   }
 }

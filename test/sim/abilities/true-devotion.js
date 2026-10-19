@@ -26,8 +26,8 @@ describe('True Devotion', function () {
 		rose.setStatus('par');
 		const hp = rose.hp;
 		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(rose.status, '');
-		assert(rose.hp > hp);
+		assert.equal(rose.status, 'par');
+		assert.equal(rose.hp, hp);
 		assert(battle.dex.species.get('Zangoose').exists);
 		assert(battle.dex.species.getLearnsetData('zangoose').learnset.extremespeed);
 	});

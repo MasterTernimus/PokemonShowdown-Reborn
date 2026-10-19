@@ -42,7 +42,7 @@ export function thematicPassives(pokemon: Pokemon) {
 const migratedEntryPassives = new Set(['supremeoverlord', 'unnerve', 'fairyaura', 'darkaura', 'contrary', 'moldbreaker', 'noguard',
 	'eldritchremedy', 'mimecraft', 'saltbastion', 'download', 'hospitality',
 	'frisk', 'oblivious', 'waterveil', 'drizzle', 'grassysurge', 'electricsurge', 'thermalexchange', 'flamebody', 'intimidate', 'slowstart',
-	'swornduty', 'gluttony', 'heavymetal', 'stalwart']);
+	'zerotohero', 'supersweetsyrup', 'swornduty', 'gluttony', 'heavymetal', 'stalwart']);
 /** Entry effects in the approved Kalos/Alola and Paldea migrations run once when acquired. */
 export function startGainedPassives(pokemon: Pokemon, previous: readonly string[], only?: readonly string[]) {
 	if (!pokemon.isActive) return;

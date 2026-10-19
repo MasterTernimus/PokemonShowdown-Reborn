@@ -606,7 +606,7 @@ SharedPassiveComponents.enlightenment = ['purepower'];
 SharedPassiveComponents.stormfright = ['intimidate'];
 SharedPassiveComponents.royalsun = ['flamebody'];
 SharedPassiveComponents.toxicrenewal = ['regenerator'];
-SharedPassiveAbilityDescriptions.cursedmarionette.desc += ' Ordinary Ghost Curse costs 1/4 max HP; ability-applied curses retain their existing behavior.';
+SharedPassiveAbilityDescriptions.cursedmarionette.desc += ' Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses retain their existing behavior.';
 
 SharedPassiveComponents.solarhydra = ['solarbud'];
 
@@ -643,7 +643,7 @@ for (const id of ['sandsovereign', 'frostsovereign']) {
 SharedPassiveAbilityDescriptions.cursedmarionette = {
  passive: 'prankster',
  shortDesc: 'Curses opposing targets and attackers; cursed foes deal 20% less damage; Curse damage heals it.',
- desc: 'Full local Frisk reveals opposing held items on entry. Attacks and status moves curse opposing targets, and taking a damaging hit curses the attacker. Cursed foes deal 20% less damage to it. Its curses deal 1/8 max HP and restore half of that damage to it. After taking a hit at half HP or less, once per battle it creates Haunted Field for 3 turns or extends it to at least 3 turns. Fainting curses opposing Pokemon and creates Haunted Field for 5 turns, or extends an existing Haunted Field by 5 turns. Ordinary Ghost Curse costs 1/4 max HP; ability-applied curses do not pay that move cost. Prankster is supplied separately by the species passive.',
+ desc: 'Full local Frisk reveals opposing held items on entry. Attacks and status moves curse opposing targets, and taking a damaging hit curses the attacker. Cursed foes deal 20% less damage to it. Its curses deal 1/8 max HP and restore half of that damage to it. After taking a hit at half HP or less, once per battle it creates Haunted Field for 3 turns or extends it to at least 3 turns. Fainting curses opposing Pokemon and creates Haunted Field for 5 turns, or extends an existing Haunted Field by 5 turns. Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses do not pay that move cost. Prankster is supplied separately by the species passive.',
 };
 
 if (SharedPassiveAbilityDescriptions.toxicspines) {
@@ -686,3 +686,12 @@ delete SharedPassiveAbilityDescriptions.silkendecoy;
 
 import {ContextualShortDescriptionAudit} from './short-description-audit';
 for(const[id,shortDesc]of Object.entries(ContextualShortDescriptionAudit))SharedPassiveAbilityDescriptions[id]={...SharedPassiveAbilityDescriptions[id],shortDesc};
+
+import {AuditCleanupDescriptions, AuditCleanupRemovals} from './audit-cleanup-approved';
+for (const [id, parts] of Object.entries(AuditCleanupRemovals)) AbilityComponentExclusions[id] = [...new Set([...(AbilityComponentExclusions[id] || []), ...parts])];
+for (const [id, text] of Object.entries(AuditCleanupDescriptions)) if (SharedPassiveAbilityDescriptions[id]) Object.assign(SharedPassiveAbilityDescriptions[id], text);
+
+SharedPassiveAbilityDescriptions.witheringshell.passive = 'naturalrecovery';
+
+// Full Water Barrage now contributes Stalwart to Fortress Shell; Dual Wield stays excluded.
+AbilityComponentExclusions.fortressshell = AbilityComponentExclusions.fortressshell.filter(id => id !== 'stalwart');

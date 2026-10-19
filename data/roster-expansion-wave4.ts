@@ -11,15 +11,14 @@ export function applyRosterWave4(base: AbilityDataTable) {
 	base.sirius.onSourceDamagingHit = base.blackviper.onSourceDamagingHit;
 	// Black Viper retains Whiplash's power hook; keep Sirius's existing Apex Venom combination.
 	add('coldopen', 'Cold Open', {
-		onStart() { this.effectState.used = false; },
-		onModifyMove(move) {
-			if (!this.effectState.used && move.category !== 'Status') {
+		onModifyMove(move, source) {
+			if (source.m.coldOpenEntry !== source.previouslySwitchedIn && move.category !== 'Status') {
 				move.ignorePositiveDefensive = true;
 				move.ignoreScreens = true;
 			}
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (move.category !== 'Status' && move.totalDamage) this.effectState.used = true;
+			if (move.category !== 'Status' && move.totalDamage) source.m.coldOpenEntry = source.previouslySwitchedIn;
 		},
 	});
 	add('quarrycannon', 'Quarry Cannon', {

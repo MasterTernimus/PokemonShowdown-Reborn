@@ -1740,7 +1740,7 @@ export class Pokemon {
 		if (!previousPassives.includes('electricsurge') && this.getPassives().includes('electricsurge')) {
 			startGainedPassives(this, previousPassives, ['electricsurge']);
 		}
-		if (isPermanent && (!source || !['disguise', 'speciespassivedisguise', 'iceface'].includes(source.id))) {
+		if (isPermanent && (!source || !['disguise', 'speciespassivedisguise', 'iceface', 'zerotohero', 'speciespassivezerotohero'].includes(source.id))) {
 			if (this.illusion && source) {
 				// Tera forme by Ogerpon or Terapagos breaks the Illusion
 				this.ability = ''; // Don't allow Illusion to wear off
@@ -1916,6 +1916,17 @@ export class Pokemon {
 		if (!this.hp || isNaN(d) || d <= 0) return 0;
 		if (d < 1 && d > 0) d = 1;
 		d = this.battle.trunc(d);
+  // Species phase checkpoint also covers direct costs/Struggle; no other ability modifiers run here.
+  if (this.species.id === 'chitwo' && !this.transformed && !this.m.chiTwoAwakened) {
+   const half = Math.floor(this.maxhp / 2);
+   if (this.hp >= half && this.hp - d < half) {
+    this.m.chiTwoAwakened = true;
+    d = this.hp - half;
+    this.battle.add('-message', 'The King of Water brought out the BIG GUNS!!!!!!! UH OH!!!!');
+    this.battle.boost({atk:1}, this, this);
+    this.addVolatile('activenoguard');
+   }
+  }
 		if (d >= this.hp) {
 			const previousHP = this.hp;
 			if (tryRotomEject(this)) return Math.max(0, previousHP - this.hp);
@@ -2042,7 +2053,7 @@ export class Pokemon {
 			this.hasAbilityOrPassive(['comatose', 'purifyingsalt', 'ragingcurrent', 'thermalexchange', 'waterbubble', 'waterveil'])
 		);
 		if (
-			!ignoreImmunities && !soulFireBurn && status.id && !((source?.hasAbility(['corrosion', 'ancientbloom']) ||
+			!ignoreImmunities && !soulFireBurn && status.id && !((source?.hasAbility(['corrosion', 'ancientbloom', 'toxicspines']) ||
 				(['venamskiss', 'speciespassivevenamskiss', 'sirius'].includes(sourceEffect?.id || '') &&
 					source?.hasAbilityOrPassive('venamskiss'))) && ['tox', 'psn'].includes(status.id))
 		) {

@@ -36,7 +36,7 @@ export function installBoneSpoilsInfernal(a: AbilityDataTable) {
 			}
 		},
 		onSourceDamagingHit(damage, target, source, move) {
-			old.onSourceDamagingHit?.call(this, damage, target, source, move);
+			// Fire hits retain Molten Guard, but no longer generate Fire Spin or bind.
 			if (damage > 0 && !target.isAlly(source) && this.movehasType(move, 'Fire') &&
 				!move.sourceEffect && !move.flags.futuremove) (move as any).infernalGuardSource = source;
 		},
@@ -49,12 +49,12 @@ export function installBoneSpoilsInfernal(a: AbilityDataTable) {
 			source.m.moltenGuardTurn = this.turn;
 			source.addVolatile('moltenguard', source, this.effect);
 		},
-		onEnd(pokemon) { old.onEnd?.call(this, pokemon); pokemon.removeVolatile('moltenguard'); },
+		onEnd(pokemon) { pokemon.removeVolatile('moltenguard'); },
 		onSwitchOut(pokemon) { pokemon.removeVolatile('moltenguard'); },
 	};
 }
 export const BoneSpoilsInfernalDescriptions = {
 	bonewarrior: {name: 'Bone Warrior', shortDesc: 'Battle Armor; bone attacks heal 1/8 max HP once per turn after opposing HP damage.', desc: 'Full local Battle Armor, including critical-hit immunity, 0.8x incoming attack damage and field effects. Once per turn after a bone-flag attack damages opposing HP, the living active holder restores 1/8 max HP after the whole attack. Normal healing restrictions apply. No Self Sufficient recovery or weather immunity.'},
 	battlespoils: {name: 'Battle Spoils', shortDesc: 'Contact attacks heal 1/16 max HP once per turn after opposing HP damage.', desc: 'Once per turn after a contact attack damages opposing HP, the living active holder restores 1/16 max HP after the whole attack. No ally or Substitute-only trigger. Normal healing restrictions apply.'},
-	infernaldominion: {name: 'Infernal Dominion', shortDesc: 'Intimidate; Fire trap; Rock effectiveness capped at neutral; melts own Stealth Rock damage.', desc: 'Retains Intimidate and the two-turn Fire-hit trap. Incoming Rock attack effectiveness is capped at neutral, preserving stronger resistance or immunity. Prevents only this holder\'s Stealth Rock damage without removing the hazard. A direct Fire attack dealing opposing HP damage clears Sandstorm and, once per turn regardless of weather, grants Molten Guard until turn end. The guard blocks the next opposing Rock attack against this holder, including all hits, without shielding other spread targets. Generated attacks do not arm it. Leaving, ability loss and Mega Evolution clear the guard.'},
+	infernaldominion: {name: 'Infernal Dominion', shortDesc: 'Intimidate; Molten Guard; Rock effectiveness capped at neutral; melts own Stealth Rock damage.', desc: 'Retains Intimidate. Does not generate Fire Spin or trap foes. Incoming Rock attack effectiveness is capped at neutral, preserving stronger resistance or immunity. Prevents only this holder\'s Stealth Rock damage without removing the hazard. A direct Fire attack dealing opposing HP damage clears Sandstorm and, once per turn regardless of weather, grants Molten Guard until turn end. The guard blocks the next opposing Rock attack against this holder, including all hits, without shielding other spread targets. Generated attacks do not arm it. Leaving, ability loss and Mega Evolution clear the guard.'},
 };

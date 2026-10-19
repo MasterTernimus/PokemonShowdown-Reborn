@@ -3840,7 +3840,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onHit(target, source) {
 			if (!source.hasAbility('cursedkeepsake')) {
-				this.directDamage(source.maxhp / 4, source, source);
+				this.directDamage(source.maxhp / 3, source, source);
 			}
 		},
 		onAfterMove(source, target, move) {
@@ -12350,15 +12350,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, distance: 1, bypasssub: 1, metronome: 1 },
 		onHitSide(side, source, move) {
 			let didSomething = false;
-			if (source.hasAbility('magneticbulwark') && !source.m.magneticBulwarkSpent) {
-				const targets = side.allies().filter(ally => (ally === source || source.isAdjacent(ally)) &&
-					(!ally.volatiles.maxguard || this.runEvent('TryHit', ally, source, move)));
-				for (const target of targets) {
-					didSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;
-				}
-				if (didSomething) source.m.magneticBulwarkSpent = true;
-				return didSomething;
-			}
 			if (!this.field.isTerrain('electricterrain')) {
 				const targets = side.allies().filter(ally => (
 					ally.hasAbilityOrPassive(['plus', 'minus']) &&
@@ -25026,18 +25017,6 @@ frillElectrify.onAfterMove = function (pokemon, target, move) {
 	}
 };
 
-const freshRoostHit = Moves.roost.onHit;
-Moves.roost.onHit = function (target, source, move) {
-	const result = typeof freshRoostHit === 'function' ? freshRoostHit.call(this, target, source, move) : freshRoostHit;
-	if (result === false || result === null) return result;
-	const entry = target.m.approvedSignatures;
-	if (target.hasAbility('freshplumage') && entry?.freshPlumageUsed && !entry.freshPlumageRestored) {
-		entry.freshPlumageRestored = true;
-		entry.freshPlumageUsed = false;
-		delete entry.freshPlumageMove;
-	}
-	return result;
-};
 const approvedWideGuard = Moves.wideguard.condition as SideConditionData;
 const priorWideGuardHit = approvedWideGuard.onTryHit;
 approvedWideGuard.onTryHit = function (target, source, move) {

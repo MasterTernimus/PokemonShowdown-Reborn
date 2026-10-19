@@ -203,7 +203,8 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 		const mons = [battle.p1.active[0], battle.p2.active[0]];
 		if (scenario.format.gameType === 'doubles') mons.push(battle.p1.active[1], battle.p2.active[1]);
 		if (scenario.format.gameType === 'freeforall') mons.push(battle.sides[2].active[0], battle.sides[3].active[0]);
-		if (scenario.weather && battle.field.weather !== scenario.weather && !battle.field.setWeather(scenario.weather)) {
+		if (scenario.weather && battle.field.weather !== scenario.weather &&
+			!battle.field.setWeather(scenario.weather, mons[0], battle.dex.conditions.get(scenario.weather))) {
 			throw new Error('The scenario field or abilities prevented the requested weather.');
 		}
 		if (scenario.aura && !battle.field.setAura(scenario.aura, 5)) {
