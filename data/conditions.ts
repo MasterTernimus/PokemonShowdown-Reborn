@@ -1546,6 +1546,17 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			return 0;
 		},
+		onBasePowerPriority: 6,
+		onBasePower(basePower, source, target, move) {
+			if (!this.field.isWeather('deltastream')) return;
+			let modifier = 1;
+			if (['fairywind', 'gust', 'icywind', 'ominouswind', 'razorwind', 'silverwind', 'twister', 'heavenlywing', 'airstreamassault'].includes(move.id)) modifier *= 1.5;
+			if (move.category === 'Special' && move.type === 'Flying') modifier *= 1.5;
+			if (modifier !== 1) {
+				this.add('-message', 'The wind strengthened the attack!');
+				return this.chainModify(modifier);
+			}
+		},
 		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {

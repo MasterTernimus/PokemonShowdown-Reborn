@@ -8,10 +8,18 @@ import { Dex } from './dex';
 import { Auras } from '../data/auras';
 import { Terrains } from '../data/terrains';
 import { AbilityComponents } from '../data/ability-components';
+import { passiveEffect, passiveState } from './species-passives';
 
 const STATS = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
 const BOOSTS = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'] as const;
+const CALC_SIDE_CONDITIONS = ['reflect', 'lightscreen', 'auroraveil', 'tailwind', 'safeguard', 'mist'];
+const CALC_ROOMS = ['gravity', 'magicroom', 'wonderroom', 'trickroom'];
+const CALC_WEATHER = ['', 'raindance', 'sunnyday', 'sandstorm', 'hail', 'desolateland', 'primordialsea', 'deltastream'];
 const ASSUMPTIONS = [
+	'Strong Winds boosts Fairy Wind, Gust, Icy Wind, Ominous Wind, Razor Wind, Silver Wind, Twister, Heavenly Wing and Airstream Assault by 1.5x on every field. Special Flying moves independently gain 1.5x (2.25x when both apply). Cold Eclipse retains its separate wind boost; Snowy Mountain retains its extra Storm-move bonuses.',
+	'Multi-hit damage is reported separately for each affected actor. After a KO, remaining strikes may chain into another living opposing active Pokemon; they do not all necessarily hit the originally selected target. Native Hydra Bond variable hit counts are maximized in singles/doubles, but native accuracy checks and attacker-faint stopping remain.',
+	'Field stages are separate registry entries. Short-Circuit and Crystal Cavern starting cycle positions are configurable; transition counters, previous-field stacks, field duration/provenance and pending field collapses use fresh-entry defaults.',
+	'Screens and supported side conditions apply to the named side. Protect, remaining Substitute HP and consumed Decoy Pincers are explicit optional inputs. Entry hazards, Helping Hand and arbitrary mid-battle volatile states are not configurable. No repeated-hit KO estimates are made.',
 	'Adaptive Cycle starts with empty memory in this fresh-entry calculator; completed adaptations require battle history and are not assumed.',
 	'Sampled single-action outcomes, not guaranteed min/max damage or exact KO probabilities. Misses, critical hits and random redirects are included.',
 	'Fresh battle entry effects run first. Requested HP and stages then replace entry HP/stages. Selected statuses are applied through the engine.',
@@ -20,7 +28,13 @@ const ASSUMPTIONS = [
 	'Damage is actual HP removed during the action, capped by available HP, and includes immediate triggered damage. Net HP loss can differ because of healing.',
 ];
 
+const PUBLIC_STATE_ABILITIES = ['noability', 'synchronize', 'healer', 'intimidate', 'drizzle', 'drought', 'sandstream', 'snowwarning', 'deltastream', 'roughskin', 'toughclaws', 'skilllink', 'hydrabond', 'galewings', 'windpower', 'windrider', 'decoypincers', 'ironvise', 'silentflight', 'overgrow', 'blaze', 'torrent', 'levitate', 'cloudnine', 'airlock', 'soundproof', 'waterabsorb', 'technician', 'sharpness', 'swarm'];
+const PUBLIC_STATE_ITEMS = ['', 'leftovers', 'lifeorb', 'choicespecs', 'choiceband', 'choicescarf', 'heavydutyboots', 'rockyhelmet', 'loadeddice'];
+
 export interface CalcActor {
+	protect: boolean;
+	substituteHP: number;
+	decoyPincersSpent: boolean;
 	set: PokemonSet;
 	hpPercent: number;
 	boosts: SparseBoostsTable;
@@ -30,10 +44,12 @@ export interface CalcActor {
 	rageFistBonus: number;
 	threadShelterGuard: boolean;
 	buriedTrioSpent: boolean;
+	silentFlightSpent: boolean;
 	elasticBellySpent: boolean;
 	feedbackMarked: boolean;
 }
 export interface CalcScenario {
+	evaluationMode: string;
 	format: Format;
 	field: string;
 	actors: CalcActor[];
@@ -41,6 +57,9 @@ export interface CalcScenario {
 	weather: string;
 	aura: string;
 	screens: string[];
+	sideConditions: string[][];
+	rooms: string[];
+	fieldState: { shortCircuit: number, crystalCavern: number };
 	attackMode: string;
 	samples: number;
 	seed: number;
@@ -75,14 +94,14 @@ function actor(input: unknown, move: string): CalcActor {
 	keys(data, [
 		'species', 'ability', 'item', 'nature', 'level', 'evs', 'ivs', 'boosts', 'hpPercent', 'status', 'gimmick',
 		'teraType', 'gender', 'moves', 'voidCrossingCurse', 'rageFistBonus',
-		'threadShelterGuard', 'buriedTrioSpent', 'elasticBellySpent', 'feedbackMarked',
+		'threadShelterGuard', 'buriedTrioSpent', 'silentFlightSpent', 'elasticBellySpent', 'feedbackMarked', 'protect', 'substituteHP', 'decoyPincersSpent',
 	]);
 	if (data.voidCrossingCurse !== undefined && typeof data.voidCrossingCurse !== 'boolean') {
 		throw new Error('Void Crossing curse must be a boolean.');
 	}
 	if (data.rageFistBonus !== undefined && (typeof data.rageFistBonus !== 'number' || !Number.isFinite(data.rageFistBonus) || data.rageFistBonus < 0 || data.rageFistBonus > 100)) throw new Error('Rage Fist bonus must be a finite number from 0 to 100.');
 	const species = Dex.species.get(name(data.species));
-	for (const key of ['threadShelterGuard', 'buriedTrioSpent', 'elasticBellySpent', 'feedbackMarked']) {
+	for (const key of ['threadShelterGuard', 'buriedTrioSpent', 'silentFlightSpent', 'elasticBellySpent', 'feedbackMarked', 'protect', 'decoyPincersSpent']) {
 		if (data[key] !== undefined && typeof data[key] !== 'boolean') throw new Error(`${key} must be a boolean.`);
 	}
 	if (!species.exists) throw new Error('Unknown species or form.');
@@ -125,6 +144,7 @@ function actor(input: unknown, move: string): CalcActor {
 	const boosts: SparseBoostsTable = {};
 	for (const stat of BOOSTS) boosts[stat] = integer(rawBoosts[stat], 0, -6, 6);
 	return {
+		protect: data.protect === true, substituteHP: integer(data.substituteHP, 0, 0, 9999), decoyPincersSpent: data.decoyPincersSpent === true,
 		set, boosts, hpPercent: integer(data.hpPercent, 100, 1, 100),
 		status: choice(data.status, '', ['', 'brn', 'par', 'psn', 'tox', 'slp', 'frz']),
 		gimmick: choice(data.gimmick, '', ['', 'mega', 'tera', 'gmax']),
@@ -132,6 +152,7 @@ function actor(input: unknown, move: string): CalcActor {
 		rageFistBonus: data.rageFistBonus ?? 0,
 		threadShelterGuard: data.threadShelterGuard === true,
 		buriedTrioSpent: data.buriedTrioSpent === true,
+		silentFlightSpent: data.silentFlightSpent === true,
 		elasticBellySpent: data.elasticBellySpent === true,
 		feedbackMarked: data.feedbackMarked === true,
 	};
@@ -148,9 +169,10 @@ function calculatorFieldIDs() {
 }
 export function calculatorMetadata() {
 	return {
+		moves: Dex.moves.all().filter(m => m.exists).map(m => ({ id: m.id, name: m.name })),
 		formats: calculatorFormats().map(f => ({ id: f.id, name: f.name, mode: f.gameType, field: f.terrain || '' })),
 		fields: [{id: '', name: 'No field'}, ...calculatorFieldIDs().map(id => ({id, name: Terrains[id]?.name || Dex.conditions.get(id).name || id}))],
-		species: Dex.species.all().filter(s => s.exists && !DisabledSpecies.has(s.id) && (!s.isCosmeticForme || s.passives.length)).map(s => ({name: s.name, abilities: s.abilities, passives: s.passives})),
+		species: Dex.species.all().filter(s => s.exists && !DisabledSpecies.has(s.id) && (!s.isCosmeticForme || s.passives.length)).map(s => ({ name: s.name, abilities: s.abilities, passives: s.passives, baseStats: s.baseStats })),
 		abilityComponentExclusions: AbilityComponentExclusions, sharedPassiveComponents: SharedPassiveComponents, sharedPassiveComponentAdditions: SharedPassiveComponentAdditions,
 		signaturePassiveComponents: SignaturePassiveComponents,
 		signaturePassiveRemovedComponents: SignaturePassiveRemovedComponents, signaturePassiveDescriptions: SignaturePassiveDescriptions,
@@ -158,12 +180,18 @@ export function calculatorMetadata() {
 		abilityComponents: Object.fromEntries(Object.keys(AbilityComponents).map(id =>
 			[id, getAbilityDisplayComponents(id).map(p => Dex.abilities.get(p).name)])),
 		auras: Object.values(Auras).map(a => ({ id: a.id, name: a.name })),
+		weather: CALC_WEATHER, sideConditions: CALC_SIDE_CONDITIONS, rooms: CALC_ROOMS,
+		fieldStates: {
+			shortcircuitterrain: { key: 'shortCircuit', label: 'Starting electric cycle', options: ['0.8x', '1.5x', '0.5x', '1.2x', '2x'] },
+			crystalcavernterrain: { key: 'crystalCavern', label: 'Starting crystal type', options: ['Fire', 'Water', 'Grass', 'Psychic'] },
+		},
+		publicState: { abilities: PUBLIC_STATE_ABILITIES, items: PUBLIC_STATE_ITEMS, weatherClear: 'none', limitations: 'Bounded single-action state, not a complete battle snapshot. Unsupported abilities/items/passives and gimmick initialization are rejected. Historical move counters and field history remain unsupported unless explicitly supplied.' },
 		assumptions: ASSUMPTIONS,
 	};
 }
 export function validateScenario(input: unknown): CalcScenario {
 	const data = record(input);
-	keys(data, ['format', 'field', 'actors', 'move', 'weather', 'aura', 'screens', 'attackMode', 'samples', 'seed']);
+	keys(data, ['format', 'field', 'actors', 'move', 'weather', 'aura', 'screens', 'attackMode', 'samples', 'seed', 'sideConditions', 'rooms', 'fieldState', 'evaluationMode']);
 	const format = calculatorFormats().find(f => f.id === data.format);
 	if (!format) throw new Error('Unsupported calculator format. Select one from this server.');
 	const move = Dex.moves.get(name(data.move));
@@ -173,11 +201,20 @@ export function validateScenario(input: unknown): CalcScenario {
 	if (!Array.isArray(screens) || screens.length > 3 || screens.some(s => !['reflect', 'lightscreen', 'auroraveil'].includes(s))) {
 		throw new Error('Unsupported screens.');
 	}
+	const sideConditions = data.sideConditions ?? [[], screens];
+	if (!Array.isArray(sideConditions) || sideConditions.length !== 2 || sideConditions.some(side => !Array.isArray(side) || side.length > CALC_SIDE_CONDITIONS.length || side.some(c => !CALC_SIDE_CONDITIONS.includes(c)))) throw new Error('Unsupported side conditions.');
+	const rooms = data.rooms ?? [];
+	if (!Array.isArray(rooms) || rooms.length > CALC_ROOMS.length || rooms.some(c => !CALC_ROOMS.includes(c))) throw new Error('Unsupported room conditions.');
+	const fieldState = data.fieldState === undefined ? {} : record(data.fieldState);
+	keys(fieldState, ['shortCircuit', 'crystalCavern']);
 	const aura = name(data.aura);
 	if (aura && !Object.prototype.hasOwnProperty.call(Auras, aura)) throw new Error('Unknown aura.');
 	return {
+		evaluationMode: choice(data.evaluationMode, 'fresh-entry', ['fresh-entry', 'public-state']),
 		format, field: choice(data.field, format.terrain || '', ['', ...calculatorFieldIDs()]), actors: data.actors.map((a, i) => actor(a, i ? '' : move.name)), move: move.id,
-		weather: choice(data.weather, '', ['', 'raindance', 'sunnyday', 'sandstorm', 'hail']),
+		weather: choice(data.weather, '', [...CALC_WEATHER, 'none']),
+		sideConditions: sideConditions.map(side => [...new Set(side)] as string[]), rooms: [...new Set(rooms)] as string[],
+		fieldState: { shortCircuit: integer(fieldState.shortCircuit, 0, 0, 4), crystalCavern: integer(fieldState.crystalCavern, 0, 0, 3) },
 		aura, screens: [...new Set(screens)] as string[],
 		attackMode: choice(data.attackMode, '', ['', 'z', 'max']),
 		samples: integer(data.samples, 32, 8, 64), seed: integer(data.seed, 1, 1, 0x7fffffff),
@@ -191,7 +228,23 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 		format: Object.assign(Object.create(Object.getPrototypeOf(scenario.format)), scenario.format, {terrain: scenario.field}),
 		seed: `gen5,${seed >>> 16},${seed & 65535},${(seed ^ 0xa5a5) & 65535},${(seed ^ 0x5a5a) >>> 16}`,
 	});
+	const normalRunSwitch = battle.actions.runSwitch;
 	try {
+		if (scenario.evaluationMode === 'public-state') {
+			for (const spec of scenario.actors) {
+				if (['slp', 'tox', 'frz'].includes(spec.status)) throw new Error('Public-state sleep, toxic and frostbite counters are not supported.');
+				if (!PUBLIC_STATE_ABILITIES.includes(Dex.toID(spec.set.ability)) || !PUBLIC_STATE_ITEMS.includes(Dex.toID(spec.set.item)) || spec.gimmick) throw new Error('Unsupported public-state ability, item or gimmick; use a reviewed configuration.');
+				const species = Dex.species.get(spec.set.species);
+				if (species.passives.some(id => !PUBLIC_STATE_ABILITIES.includes(Dex.toID(id)))) throw new Error('Unsupported public-state species passive.');
+			}
+			// Isolated evaluator only: do not replay entry callbacks, seeds, weather setters or boosts.
+			battle.actions.runSwitch = function (pokemon) {
+				const entered = [pokemon];
+				while (battle.queue.peek()?.choice === 'runSwitch') entered.push(battle.queue.shift()!.pokemon!);
+				for (const mon of entered) { mon.isStarted = true; mon.draggedIn = null; }
+				return true;
+			};
+		}
 		const [a, d, extraA, extraD] = scenario.actors.map(spec => ({ ...spec, set: JSON.parse(JSON.stringify(spec.set)) as PokemonSet }));
 		battle.setPlayer('p1', { name: 'Attacker', team: [a.set, ...(scenario.format.gameType === 'doubles' ? [extraA.set] : [])] });
 		battle.setPlayer('p2', { name: 'Defender', team: [d.set, ...(scenario.format.gameType === 'doubles' ? [extraD.set] : [])] });
@@ -200,10 +253,12 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 			battle.setPlayer('p4', { name: 'Other foe 2', team: [extraD.set] });
 		}
 		if (battle.requestState === 'teampreview') battle.makeChoices(...battle.sides.map(() => 'team'));
+		battle.actions.runSwitch = normalRunSwitch;
 		const mons = [battle.p1.active[0], battle.p2.active[0]];
 		if (scenario.format.gameType === 'doubles') mons.push(battle.p1.active[1], battle.p2.active[1]);
 		if (scenario.format.gameType === 'freeforall') mons.push(battle.sides[2].active[0], battle.sides[3].active[0]);
-		if (scenario.weather && battle.field.weather !== scenario.weather &&
+		if (scenario.weather === 'none') battle.field.clearWeather();
+		if (scenario.weather && scenario.weather !== 'none' && battle.field.weather !== scenario.weather &&
 			!battle.field.setWeather(scenario.weather, mons[0], battle.dex.conditions.get(scenario.weather))) {
 			throw new Error('The scenario field or abilities prevented the requested weather.');
 		}
@@ -212,6 +267,7 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 		}
 		for (const [i, mon] of mons.entries()) {
 			const spec = scenario.actors[i];
+			if (scenario.evaluationMode === 'public-state') { mon.newlySwitched = false; mon.activeTurns = 1; }
 			if (!mon?.hp) throw new Error('An entry effect prevented this starting position.');
 			if (spec.gimmick === 'mega' && !battle.actions.runMegaEvo(mon)) throw new Error('Mega/Ultra activation is unavailable for this set.');
 			if (spec.gimmick === 'tera') {
@@ -224,12 +280,21 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 				if (!mon.volatiles['dynamax']) throw new Error('Gigantamax activation failed.');
 			}
 			mon.sethp(Math.max(1, Math.floor(mon.maxhp * spec.hpPercent / 100)));
+			if (mon.getPassives().includes('shieldsdown')) {
+				// Scenario HP describes the starting form; do not run healing residuals here.
+				battle.singleEvent('SwitchIn', passiveEffect(battle, 'shieldsdown'), passiveState(mon, 'shieldsdown'), mon);
+			}
 			Object.assign(mon.boosts, spec.boosts);
 			if (spec.status && mon.status !== spec.status && !mon.setStatus(spec.status)) {
 				throw new Error(`${mon.species.name} cannot receive the selected status in this position.`);
 			}
 			mon.m.rageFistBonus = spec.rageFistBonus;
 			mon.m.buriedTrioSpent = spec.buriedTrioSpent;
+			if (spec.silentFlightSpent) {
+				if (!mon.hasAbility('silentflight')) throw new Error('Silent Flight state requires Silent Flight.');
+				mon.addVolatile('silentflight');
+				mon.volatiles.silentflight.spent = true;
+			}
 			mon.m.elasticBellySpent = spec.elasticBellySpent;
 			if (spec.threadShelterGuard) {
 				if (!mon.hasAbilityOrPassive('threadshelter')) throw new Error('Thread Shelter guard requires Thread Shelter.');
@@ -241,13 +306,41 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 				mon.addVolatile('feedback', providers[0]);
 				mon.volatiles.feedback.sources = new Map(providers.map(p => [p, p.m.feedbackEntry || 0]));
 			}
+			if (spec.protect) mon.addVolatile('protect', mon, battle.dex.getActiveMove('protect'));
+			if (spec.substituteHP) {
+				if (spec.substituteHP > Math.floor(mon.maxhp / 4)) throw new Error('Substitute HP exceeds its supported maximum.');
+				mon.addVolatile('substitute', mon, battle.dex.getActiveMove('substitute'));
+				mon.volatiles.substitute.hp = spec.substituteHP;
+			}
+			if (spec.decoyPincersSpent) {
+				if (!mon.hasAbility(['decoypincers', 'ironvise'])) throw new Error('Consumed Decoy Pincers requires Decoy Pincers or Iron Vise.');
+				mon.abilityState.used = true;
+			}
 			mon.updateSpeed();
 			if (spec.voidCrossingCurse &&
 				!mon.addVolatile('voidcrossingcurse', mons[1], battle.dex.abilities.get('voidcrossing'))) {
 				throw new Error(`${mon.species.name} cannot receive Void Crossing curse in this position.`);
 			}
 		}
-		for (const screen of scenario.screens) battle.p2.addSideCondition(screen, mons[1]);
+		battle.ShortCircuitCounter = scenario.fieldState.shortCircuit;
+		battle.CrystalCavernCounter = scenario.fieldState.crystalCavern;
+		for (const room of scenario.rooms) battle.field.addPseudoWeather(room, mons[0]);
+		for (const [i, conditions] of scenario.sideConditions.entries()) {
+			const side = battle.sides[i];
+			for (const id of conditions) {
+				if (scenario.evaluationMode !== 'public-state') {
+					side.addSideCondition(id, mons[i]);
+					continue;
+				}
+				// These allowlisted conditions are already active; do not replay their start effects.
+				const condition = battle.dex.conditions.get(id);
+				side.sideConditions[condition.id] = battle.initEffectState({
+					id: condition.id, target: side, source: mons[i], sourceSlot: mons[i].getSlot(),
+					duration: condition.duration,
+				});
+			}
+		}
+		for (const mon of mons) mon.updateSpeed();
 		return { battle, mons };
 	} catch (error) {
 		battle.destroy();
@@ -260,14 +353,21 @@ export function calculateScenario(input: unknown) {
 	const outcomes: { damage: number[], loss: number[], ko: boolean[], maxhp: number[] }[] = [];
 	let exampleLog: string[] = [];
 	let resolved: unknown;
+	const assumptions = scenario.evaluationMode === 'public-state' ? ASSUMPTIONS.filter(text => !text.startsWith('Fresh battle entry')).concat(['Bounded public-state mode skips switch-in callbacks, initializes reviewed current states, and treats actors as already active for one turn. Unsupported ability/item/passive initialization, gimmicks and sleep/toxic/frostbite counters are rejected. Field history and unlisted move-history state remain unsupported; this is not a full mid-battle snapshot.']) : ASSUMPTIONS;
+	let incenseBranches = false;
+	const actionOutcomes: unknown[] = [];
+	const publicState = (battle: Battle, mons: Pokemon[]) => ({ field: battle.field.terrain, aura: battle.field.auraField, weather: battle.field.weather, actors: mons.map(mon => ({ hp: mon.hp, maxhp: mon.maxhp, status: mon.status, boosts: { ...mon.boosts }, substituteHP: mon.volatiles.substitute?.hp || 0, fainted: !mon.hp, abilitySuppressed: mon.ignoringAbility(), passives: mon.getPassives() })) });
 	for (let sample = 0; sample < scenario.samples; sample++) {
 		const { battle, mons } = buildCalculatorBattle(scenario, sample);
 		try {
 			const before = mons.map(mon => mon.hp);
+			const beforeState = publicState(battle, mons);
 			const maxhp = mons.map(mon => mon.maxhp);
 			if (!sample) {
 				resolved = {
 					field: battle.field.terrain, aura: battle.field.auraField, weather: battle.field.weather,
+					fieldState: { shortCircuit: battle.ShortCircuitCounter, crystalCavern: battle.CrystalCavernCounter },
+					rooms: Object.keys(battle.field.pseudoWeather), sideConditions: battle.sides.map(side => Object.keys(side.sideConditions)),
 					actors: mons.map(mon => ({
 						species: mon.species.name, ability: mon.getAbility().name, passives: mon.getPassives(), item: mon.getItem().name,
 						tera: mon.terastallized || '', hp: mon.hp, maxhp: mon.maxhp,
@@ -285,6 +385,7 @@ export function calculateScenario(input: unknown) {
 				};
 			}
 			const attacker = mons[0];
+			if (!sample && scenario.move === 'scentedgeyser' && scenario.attackMode === '' && attacker.hasItem('luckincense')) incenseBranches = true;
 			const logStart = battle.log.length;
 			const move = battle.dex.moves.get(scenario.move);
 			const options: { zMove?: string, maxMove?: string } = {};
@@ -301,6 +402,7 @@ export function calculateScenario(input: unknown) {
 			}
 			battle.actions.runMove(move, attacker, attacker.getLocOf(mons[1]), options);
 			battle.faintMessages();
+			actionOutcomes.push({ before: beforeState, after: publicState(battle, mons), log: battle.log.slice(logStart).slice(0, 100) });
 			outcomes.push({ damage, loss: mons.map((mon, i) => before[i] - mon.hp), ko: mons.map(mon => !mon.hp), maxhp });
 			if (!sample) {
 				exampleLog = battle.log.slice(logStart).slice(0, 100);
@@ -312,8 +414,8 @@ export function calculateScenario(input: unknown) {
 	const labels = scenario.format.gameType === 'freeforall' ? ['Attacker', 'Defender', 'Other foe 1', 'Other foe 2'] :
 		['Attacker', 'Defender', 'Attacker ally', 'Defender ally'];
 	return {
-		kind: 'sampled', samples: scenario.samples, seed: scenario.seed, format: scenario.format.name,
-		move: Dex.moves.get(scenario.move).name, assumptions: ASSUMPTIONS, resolved, exampleLog,
+		kind: 'sampled', evaluationMode: scenario.evaluationMode, actionOutcomes, samples: scenario.samples, seed: scenario.seed, format: scenario.format.name,
+		move: Dex.moves.get(scenario.move).name, assumptions: incenseBranches ? [...assumptions, 'Luck Incense Scented Geyser: 100 power with 60% probability, 160 power with 40%; each sampled execution rolls once. The displayed sampled range may omit either branch.'] : assumptions, powerDistribution: incenseBranches ? [{ power: 100, probability: 0.6 }, { power: 160, probability: 0.4 }] : undefined, resolved, exampleLog,
 		results: outcomes[0].damage.map((_, i) => {
 			const damage = outcomes.map(o => o.damage[i]);
 			const percent = outcomes.map(o => 100 * o.damage[i] / o.maxhp[i]);

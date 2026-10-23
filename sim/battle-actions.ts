@@ -1,4 +1,5 @@
 import {recordRegiEntry} from '../data/regi-approved';
+import { warnIncomingOpponents } from '../data/warned-moves';
 import {encoreAriaAfterHits} from './encore-aria';
 import {prepareMeloettaMove} from '../data/meloetta-encore';
 import {DisabledSpecies} from '../data/disabled-species';
@@ -142,7 +143,7 @@ export class BattleActions {
 			}
 
 			// will definitely switch out at this point
-			oldActive.m.rageFistBonus = (oldActive.m.rageFistBonus || 0) / 2;
+			// Rage Fist progress persists through voluntary and forced switches.
 			ringmasterSwitch(this.battle, oldActive, pokemon);
 			if (!isDrag) {
 				this.battle.singleEvent('AfterSwitchOut', oldActive.getAbility(), oldActive.abilityState,
@@ -223,6 +224,8 @@ export class BattleActions {
 			pokemon.setSpecies(baseSpecies);
 			pokemon.details = pokemon.getUpdatedDetails();
 		}
+		// Reset only on an actual entry, never on ability Start/resumption or transfer.
+		delete pokemon.m.controlledFurySpent;
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
@@ -340,6 +343,7 @@ export class BattleActions {
    }
   }
 		for (const poke of switchersIn) poke.revertSuppressedRegionalForm();
+		warnIncomingOpponents(this.battle, switchersIn);
 
 		for (const poke of switchersIn) {
 			if (!poke.hp) continue;
@@ -1226,6 +1230,7 @@ export class BattleActions {
 		targetHits = Math.floor(targetHits);
 		let nullDamage = true;
 		let successfulDualWieldHits = 0;
+		const receivedHits = new Map<Pokemon, {hits: number, damagedHP: boolean}>();
 		let moveDamage: (number | boolean | undefined)[] = [];
 		const originalMultihitTarget = targets.find(target => !!target) || null;
 		const twinStrike = ['twincannons', 'twinblades'].includes(move.multihitType || '');
@@ -1354,8 +1359,18 @@ export class BattleActions {
 			if (!moveData.flags) moveData.flags = {};
 
 			let moveDamageThisHit;
+			// Keep the original identities: Substitute hits replace their target with null.
+			const hitTargets = targetsCopy.slice();
 			// Modifies targetsCopy (which is why it's a copy)
 			[moveDamageThisHit, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
+			for (const [i, damageThisHit] of moveDamageThisHit.entries()) {
+				const hitTarget = hitTargets[i];
+				if (!hitTarget || hitTarget === pokemon || (typeof damageThisHit !== 'number' && damageThisHit !== true)) continue;
+				const record = receivedHits.get(hitTarget) || {hits: 0, damagedHP: false};
+				record.hits++;
+				record.damagedHP ||= typeof damageThisHit === 'number' && !!targetsCopy[i];
+				receivedHits.set(hitTarget, record);
+			}
 			// When Dragon Darts targets two different pokemon, targetsCopy is a length 1 array each hit
 			// so spreadMoveHit returns a length 1 damage array
 			if (move.smartTarget) {
@@ -1421,7 +1436,9 @@ export class BattleActions {
 					move.lastHit = false;
 				}
 			}
-			if (!pokemon.hp && targets.length === 1) {
+			// Singles/doubles must stop between strikes after the user faints, including split-target moves.
+			// FFA multi-target continuation is intentional and remains unchanged.
+			if (!pokemon.hp && (targets.length === 1 || this.battle.gameType === 'singles' || this.battle.gameType === 'doubles')) {
 				hit++; // report the correct number of hits for multihit moves
 				break;
 			}
@@ -1470,14 +1487,17 @@ export class BattleActions {
 		for (const [i, target] of targetsCopy.entries()) {
 			if (target && pokemon !== target) {
 				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
-				if (typeof moveDamage[i] === 'number') {
-					const receivedHits = move.smartTarget ? 1 : (move.multihitType === 'dualwield' ? successfulDualWieldHits : hit - 1);
-					target.timesAttacked += receivedHits;
-					target.m.rageFistBonus = Math.min(100, (target.m.rageFistBonus || 0) + 20 * receivedHits);
-					// HP messages alone cannot reconstruct hits that also break a Substitute.
-					this.battle.add('-ragefist', target, target.m.rageFistBonus);
-				}
+
 			}
+		}
+
+		for (const [target, record] of receivedHits) {
+			// Preserve local Substitute semantics: sub-only sequences do not add progress,
+			// but successful sub hits count if this target also took HP damage.
+			if (!record.damagedHP) continue;
+			target.timesAttacked += record.hits;
+			target.m.rageFistBonus = Math.min(100, (target.m.rageFistBonus || 0) + 20 * record.hits);
+			this.battle.add('-ragefist', target, target.m.rageFistBonus);
 		}
 
 		if (move.ohko && !targets[0].hp) this.battle.add('-ohko');

@@ -85,7 +85,11 @@ export function installRivalSupport(a: AbilityDataTable) {
 	};
 
 	SignaturePassiveComponents.mycelialbond = ['dryskin'];
+	SignaturePassiveComponents.twinfang = ['rivalry'];
 	a.twinfang = {name:'Twin Fang',num:11486,rating:5,flags:{},
+		onBasePowerPriority: a.rivalry.onBasePowerPriority,
+		onBasePower: a.rivalry.onBasePower,
+		onAnyModifyDamage: a.rivalry.onAnyModifyDamage,
 		onPrepareHit(source,target,move) { if(bondEligible(move) && move.flags.contact) {move.multihit=2;(move as any).twinFang=true;move.multiaccuracy=false;} },
 	};
 	a.mycelialbond = {...a.dryskin, name: 'Mycelial Bond', num: 11481, rating: 5,

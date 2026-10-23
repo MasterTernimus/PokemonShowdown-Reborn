@@ -6,6 +6,8 @@ export default configure([
 	{
 		ignores: [
 			"logs/",
+			"artifacts/",
+			"backups/",
 			"node_modules/",
 			"dist/",
 			"data/**/learnsets.ts",

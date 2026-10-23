@@ -215,7 +215,7 @@ export const YangSignatureLearnsetsB: {[id: string]: string[]} = {
  sirenswrath: ['primarina', 'palafin', 'swampert', 'lapras', 'blastoise', 'seismitoad', 'kingler', 'basculegion', 'basculegionf', 'crawdaunt'],
  rocknroll: ['lycanroc', 'lycanrocmidnight', 'lycanrocdusk', 'gigalith', 'aerodactyl'],
  dragonrend: ['cyclizar', 'dragonite', 'garchomp', 'charizard', 'goodrahisui', 'hydreigon'],
- airstreamassault: ['crobat', 'talonflame', 'salamence', 'sneasler', 'nidoking'],
+	airstreamassault: ['crobat', 'talonflame', 'salamence', 'sneasler', 'nidoking', 'pidgeot'],
  wisteriamaelstrom: ['kleavor', 'cherrim', 'lilliganthisui', 'lilligant', 'venusaur'],
  deiludicium: ['cyclizar', 'kommoo', 'goodrahisui', 'drampa', 'noivern'],
  nostraswish: ['jirachi', 'hatterene', 'altaria', 'gardevoir', 'ninetalesalola'],

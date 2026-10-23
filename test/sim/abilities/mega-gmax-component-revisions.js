@@ -31,7 +31,7 @@ describe('Mega and G-Max component revisions', () => {
 			['Glalie-Mega', 'Freezer Burn', ['slushrush', 'refrigerate', 'levitate']],
 			['Golurk-Mega', 'Phantom Fist', ['unseenfist', 'selfsufficient', 'noguard', 'aftermath']],
 			['Metagross-Mega', 'Cold Logic', ['toughclaws', 'aftermath', 'forewarn']],
-			['Slowbro-Mega', 'Slow Clamp', ['shellarmor', 'analytic', 'sweetveil']],
+			['Slowbro-Mega', 'Slow Clamp', ['shellarmor', 'analytic', 'owntempo']],
 			['Copperajah-Gmax', 'Treasure Titan', ['filter', 'eartheater', 'heavymetal', 'intimidate']],
 		];
 		for (const [species, name, components] of expected) {
@@ -90,10 +90,10 @@ describe('Mega and G-Max component revisions', () => {
 		assert.equal(battle.field.terrainState.duration, 5);
 	});
 
-	it('Mega Slowbro blocks sleep through Sweet Veil and confusion through Own Tempo', () => {
+	it('Mega Slowbro permits sleep and blocks confusion through Own Tempo', () => {
 		const [holder, foe] = start('Slowbro-Mega', 'Slow Clamp');
-		assert(!holder.trySetStatus('slp', foe));
-		assert(holder.addVolatile('confusion', foe));
+		assert(holder.trySetStatus('slp', foe));
+		assert(!holder.addVolatile('confusion', foe));
 	});
 
 	it('Mega Metagross reveals a foe move with Forewarn and uses Aftermath on contact knockout', () => {

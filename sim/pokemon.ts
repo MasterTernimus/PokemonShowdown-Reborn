@@ -60,6 +60,9 @@ export const RESTORATIVE_BERRIES = new Set([
 ] as ID[]);
 
 const ABILITY_REGIONAL_FORMS: {[ability: string]: [string, string]} = {
+	aevianking: ['politoed', 'politoedrejuv'],
+	aevianascendance: ['poliwrath', 'poliwrathrejuv'],
+	aevianweb: ['galvantula', 'galvantularejuv'],
 	aevianwing: ['unfezant', 'unfezantrejuv'],
 	aeviandream: ['musharna', 'musharnarejuv'],
 	aevianfrost: ['donphan', 'donphanrejuv'],
@@ -1787,9 +1790,6 @@ export class Pokemon {
 		this.illusion = null;
 		delete this.m.perfectIllusion;
 		this.passiveStates = {};
-		if (includeSwitchFlags && this.timesAttacked > 0) {
-			this.timesAttacked = Math.floor(this.timesAttacked / 2);
-		}
 		this.boosts = {
 			atk: 0,
 			def: 0,
@@ -2326,7 +2326,7 @@ export class Pokemon {
 		return ids.some(id => {
 			const passive = this.getPassives().find(p => p === id || SignaturePassiveComponents[p]?.includes(id));
 			if (!passive) return this.hasAbility(id);
-			const component = this.battle.dex.abilities.get(((passive === 'hydraflight' && id === 'levitate') || (passive === 'absolutepressure' && ['innerfocus', 'insomnia'].includes(id))) ? id : passive);
+			const component = this.battle.dex.abilities.get(((passive === 'hydraflight' && id === 'levitate') || (passive === 'serratedscales' && id === 'limber') || (passive === 'absolutepressure' && ['innerfocus', 'insomnia'].includes(id))) ? id : passive);
 			return !component.flags.breakable || !this.battle.suppressingAbility(this, component);
 		});
 	}
@@ -2569,7 +2569,7 @@ export class Pokemon {
 		if (this.getPassives().some(id => id === 'levitate' || id === 'hydraflight') && this.hasAbilityOrPassive('levitate')) return null;
 		if (this.getPassives().some(id => id === 'elevate' || id === 'noseformation') && this.hasAbilityOrPassive('elevate')) return null;
 		if (!this.getAbilityComponentExclusions().includes('levitate') && this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
-			'voidcraft', 'phantombarrage']) && !this.battle.suppressingAbility(this)) return null;
+			'voidcraft', 'phantombarrage', 'silentflight']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';
@@ -2663,7 +2663,7 @@ export class Pokemon {
 				if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
 					return true;
 				}
-				if (source.flags['bone'] && (type === 'Ground' || type === 'Ghost')) {
+				if (source.flags?.['bone'] && (type === 'Ground' || type === 'Ghost')) {
 					return true;
 				}
 			}

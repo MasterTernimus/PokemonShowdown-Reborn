@@ -1,8 +1,8 @@
 export const MovesText: { [id: IDEntry]: MoveText } = {
 	deluge: {
 		name: "Deluge",
-		desc: "Usually moves after other attacks (-4 priority). Power doubles from 65 to 130 if the target already damaged the user this turn.",
-		shortDesc: "Moves late. 2x power if the target hurt the user this turn.",
+		desc: "Usually moves after other attacks (-4 priority). Power doubles from 80 to 160 if the target already damaged the user this turn. Has a higher chance for a critical hit.",
+		shortDesc: "80 BP; 160 if target hurt user this turn. High crit.",
 	},
 	"10000000voltthunderbolt": {
 		name: "10,000,000 Volt Thunderbolt",
@@ -330,8 +330,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	avalanche: {
 		name: "Avalanche",
-		desc: "Power doubles if the user was hit by the target this turn.",
-		shortDesc: "Power doubles if user is damaged by the target.",
+		desc: "Usually moves after other attacks (-4 priority). Power doubles from 80 to 160 if the target already damaged the user this turn. Has a higher chance for a critical hit.",
+		shortDesc: "80 BP; 160 if target hurt user this turn. High crit.",
 		gen4: {
 			desc: "Power doubles if the user was hit by a Pokemon in the target's position this turn.",
 		},
@@ -4839,8 +4839,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisontail: {
 		name: "Poison Tail",
-		desc: "Has a high critical-hit ratio and a 50% chance to poison the target.",
-		shortDesc: "High critical-hit ratio; 50% chance to poison.",
+		desc: "Power doubles if the target has a non-volatile status condition, including frostbite. Confusion and other volatile conditions do not count.",
+		shortDesc: "Power doubles if the target has a major status.",
 	},
 	polarflare: {
 		name: "Polar Flare",
@@ -5363,8 +5363,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	revenge: {
 		name: "Revenge",
-		desc: "Power doubles if the user was hit by the target this turn.",
-		shortDesc: "Power doubles if user is damaged by the target.",
+		desc: "Usually moves after other attacks (-4 priority). Power doubles from 80 to 160 if the target already damaged the user this turn. Has a higher chance for a critical hit.",
+		shortDesc: "80 BP; 160 if target hurt user this turn. High crit.",
 		gen4: {
 			desc: "Power doubles if the user was hit by a Pokemon in the target's current position this turn.",
 		},
@@ -7871,7 +7871,7 @@ Object.assign(MovesText.attackorder, {desc: "Chooses Physical or Special accordi
 Object.assign(MovesText.defendorder, {desc: "Selects the user or one adjacent ally. Raises that target's Defense and Sp. Def by 1 stage (2 on Forest Field) and heals 1/4 maximum HP. Retains its existing flags and normal healing/stat-change rules.", shortDesc: 'User/ally: +1 Def/SpD and heals 1/4 HP.'});
 Object.assign(MovesText.healorder, {desc: "Selects the user or one adjacent ally to heal 1/2 maximum HP (2/3 on Forest Field). Retains its party status cure and existing Soundproof/Good as Gold checks and flags.", shortDesc: 'User/ally: heals 1/2 HP; cures party status.'});
 
-Object.assign(MovesText.ragefist, {"shortDesc":"50 BP +20 per hit taken, max 150; switching halves bonus.","desc":"Starts at 50 power and gains 20 power per qualifying hit taken, up to 150 after five hits. Switching out halves the accumulated bonus exactly: 150 becomes 100, then 75. New hits add 20 to the remaining bonus, capped at 100 bonus power. Fractional progress is retained; the normal damage engine rounds final power. Retains existing hit eligibility, Transform copying and progress through fainting/revival. In Free-for-All, hits all adjacent foes at full spread power."});
+Object.assign(MovesText.ragefist, { "shortDesc": "50 BP +20 per hit taken, max 150; progress persists on switching.", "desc": "Starts at 50 power and gains 20 power per qualifying hit taken, up to 150 after five hits. Switching preserves the accumulated bonus. New hits add 20, capped at 100 bonus power. Retains existing hit eligibility, Transform copying and progress through fainting/revival. In Free-for-All, hits all adjacent foes at full spread power." });
 
 MovesText.encorearia={name:'Encore Aria',shortDesc:'Fairy; per foe, stronger physical dance or special sound. 10% sleep.',desc:"Meloetta-Encore's Relic Song. For each foe, compares damage through the battle engine, including immunities, abilities, items and fields. Uses a physical dance or special sound branch, whichever deals more damage; Special wins ties. Each hit has only its chosen branch's flag. Has a 10% chance to put each target to sleep. Does not change form."};
 MovesText.pirouettedance={name:'Pirouette Dance',shortDesc:'Fighting dance; 10% sleep. Changes Meloetta back to Aria.',desc:'Meloetta-Pirouette’s Relic Song becomes a Fighting-type special dance move, with 75 power and a 10% sleep chance. Changes Meloetta back to Aria after a successful use.'};
@@ -7880,3 +7880,6 @@ for (const id of ['outrage', 'thrash', 'petaldance', 'ragingfury']) {
  text.desc = (text.desc || '').replace('Targets a random adjacent opponent.', 'Choose an adjacent opposing Pokemon on the initial turn. Forced continuation turns target an opposing Pokemon at random.');
  text.shortDesc = (text.shortDesc || '') + ' Choose initial foe; later hits random.';
 }
+
+MovesText.scentedgeyser = { name: 'Scented Geyser', shortDesc: 'Incense changes power/effectiveness; held item is not consumed.', desc: 'Normal special attack. No matching incense: 80 power. Pure: 100 power and Ghost typing is weak to this move. Rock/Rose/Odd: 100 power with additional Rock/Grass/Psychic effectiveness. Sea: 100 power without extra typing. Wave: 100 power with Water effectiveness; after damage, user loses 2 Special Attack stages once per move. Full: 150 power with the same self drop. Luck: one roll per use gives 160 power 40% of the time, otherwise 100; no self drop. Lax and unrelated items use 80. Extra effectiveness does not change Normal typing or grant extra STAB. Normal item effects still apply; suppressed items provide no incense effect. Incense is not consumed.' };
+MovesText.splinteredweb = { name: 'Splintered Web', shortDesc: 'Always critical if the target’s side has Stealth Rock.', desc: 'A 90-power Bug physical attack. If Stealth Rock is present on the target’s side when the move executes, it is a guaranteed critical hit unless critical hits are prevented. Otherwise it has the ordinary critical-hit chance. The target need not be grounded or vulnerable to entry hazards.' };

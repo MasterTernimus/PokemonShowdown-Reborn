@@ -427,6 +427,12 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 			base.longreach.onBasePower?.call(this, power, source, target, move);
 			return base.sharpness.onBasePower?.call(this, power, source, target, move);
 		},
+		onStart: base.keeneye.onStart,
+		onTryBoost: base.keeneye.onTryBoost,
+		onModifyMove(move, source, target) {
+			base.keeneye.onModifyMove?.call(this, move, source, target);
+			base.longreach.onModifyMove?.call(this, move, source, target);
+		},
 		name: 'Razor Reach', num: 11229,
 	};
 	base.witheringtouch = {
@@ -634,7 +640,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		base.illuminate.onModifyMove?.call(this, move, pokemon, target);
 	};
 
-	for (const id of ['silksights', 'longreach', 'razorreach', 'nighthunt'] as const) {
+	for (const id of ['silksights', 'razorreach', 'nighthunt'] as const) {
 		base[id] = { ...base[id], flags: { ...base[id].flags, breakable: 1 } };
 	}
 }

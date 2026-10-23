@@ -1,19 +1,27 @@
 'use strict';
-const assert = require('assert');
+const assert = require('assert').strict;
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const root = path.resolve(__dirname, '../..');
 function loadBuild() {
- const calls = {inputs: [], declarations: 0};
+	const calls = { inputs: [], declarations: 0, cacheRuns: [] };
  const exports = {};
+	const buildRequire = require('module').createRequire(path.join(root, 'tools/build-utils.js'));
+	const mockRequire = name => {
+		if (name === 'fs') return { ...fs, mkdirSync() {}, copyFileSync() {}, writeFileSync() {} };
+		if (name === 'esbuild') return { buildSync(options) { calls.inputs = options.entryPoints; } };
+		if (name === 'child_process') return { execFileSync() { calls.declarations++; throw new Error('declaration failed'); } };
+		if (name === './build-cache') return { run(inputs, force, compile) {
+			calls.cacheRuns.push({ inputs, force });
+			// Exercise compilation while keeping test output isolated from the real cache/dist.
+			calls.outputs = compile('test-build-stage', null);
+		} };
+		return buildRequire(name);
+	};
+	mockRequire.resolve = buildRequire.resolve;
  vm.runInNewContext(fs.readFileSync(path.join(root, 'tools/build-utils.js'), 'utf8'), {
-  exports, process, console: {log() {}}, require(name) {
-   if (name === 'fs') return {...fs, copyFileSync() {}};
-   if (name === 'esbuild') return {buildSync(options) {calls.inputs = options.entryPoints;}};
-   if (name === 'child_process') return {execFileSync() {calls.declarations++; throw new Error('declaration failed');}};
-   return require(name);
-  },
+		exports, process, console: { log() {} }, require: mockRequire,
  });
  return {build: exports, calls};
 }
@@ -42,25 +50,29 @@ describe('Build and reload reliability', () => {
  it('force builds skip declarations and exclude saved/generated TypeScript', () => {
   const {build, calls} = loadBuild();
   build.transpile(true, false);
-  assert.strictEqual(calls.declarations, 0);
+		assert.equal(calls.declarations, 0);
+		assert.equal(calls.cacheRuns.length, 1);
+		assert.equal(calls.cacheRuns[0].force, true);
+		assert(calls.cacheRuns[0].inputs.includes(require.resolve('esbuild/package.json')));
+		assert(calls.outputs.some(f => f.replace(/\\/g, '/') === 'dist/sim/battle.js'));
   assert(calls.inputs.some(f => f.replace(/\\/g, '/') === 'sim/battle.ts'));
   assert(calls.inputs.every(f => !/^(dist|artifacts|test|node_modules)[\\/]/.test(f)));
  });
  it('declaration failures propagate', () => {
   const {build, calls} = loadBuild();
   assert.throws(() => build.transpile(true, true), /declaration failed/);
-  assert.strictEqual(calls.declarations, 1);
+		assert.equal(calls.declarations, 1);
  });
  it('a failed build stops hotpatching before cache invalidation', async () => {
   const {commands, context, calls} = loadAdmin({code: 1});
   await assert.rejects(commands.hotpatch.call(context, 'all'), /Build failed/);
-  assert.strictEqual(calls.builds, 1);
-  assert.strictEqual(calls.clears, 0);
+		assert.equal(calls.builds, 1);
+		assert.equal(calls.clears, 0);
  });
  it('warnings alone do not fail a successful rebuild', async () => {
   const {commands, context, calls} = loadAdmin(null, 'warning');
   await commands.rebuild.call(context);
-  assert.deepStrictEqual(calls.replies, ['Rebuilt.']);
+		assert.deepEqual(calls.replies, ['Rebuilt.']);
  });
  it('a killed build without an exit code is still a failure', async () => {
   const {commands, context} = loadAdmin({killed: true});
@@ -70,11 +82,11 @@ describe('Build and reload reliability', () => {
   const {commands, context, calls, sandbox} = loadAdmin();
   sandbox.Monitor.hotpatchLock.chat = {by: 'test', reason: 'locked'};
   await assert.rejects(commands.hotpatch.call(context, 'all', null, {name: 'Test', getIdentity() {return 'Test';}}), /disabled/);
-  assert.strictEqual(calls.builds, 1);
-  assert.strictEqual(calls.clears, 2);
+		assert.equal(calls.builds, 1);
+		assert.equal(calls.clears, 2);
  });
  it('hotpatch all completes all nine components with one build', async () => {
-  const {commands, context, calls, sandbox, modules} = loadAdmin();
+  const {context, calls, sandbox, modules} = loadAdmin();
   const noop = () => {};
   class Stub {}
   const pm = Object.fromEntries(['QueryProcessManager', 'StreamProcessManager', 'ProcessManager', 'RawProcessManager', 'QueryProcessWrapper', 'StreamProcessWrapper', 'RawProcessWrapper'].map(name => [name, Stub]));
@@ -98,13 +110,13 @@ describe('Build and reload reliability', () => {
   });
   vm.runInNewContext('(function () {' + fs.readFileSync(path.join(root, 'dist/server/chat-commands/admin.js'), 'utf8') + '\n})()', sandbox);
   await sandbox.module.exports.commands.hotpatch.call(context, 'all', null, {name: 'Test', getIdentity() {return 'Test';}});
-  assert.strictEqual(calls.builds, 1);
+		assert.equal(calls.builds, 1);
   assert(calls.replies.includes('Hotpatching formats...'));
   assert(calls.replies.includes('Hotpatching user prototypes...'));
  });
  it('update errors always release the update lock', async () => {
   const {commands, context, sandbox} = loadAdmin();
   await assert.rejects(commands.updateserver.call(context, 'private'), /privatecodepath/);
-  assert.strictEqual(sandbox.Monitor.updateServerLock, false);
+		assert.equal(sandbox.Monitor.updateServerLock, false);
  });
 });

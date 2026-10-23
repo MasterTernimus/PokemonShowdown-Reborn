@@ -1,3 +1,6 @@
+import { AevianWebMoveSources, AevianWebExclusiveMoves } from '../data/aevian-web-moves';
+import { AevianAscendanceMoveSources, AevianAscendanceExclusiveMoves } from '../data/aevian-ascendance-moves';
+import { AevianKingMoveSources, AevianKingExclusiveMoves } from '../data/aevian-king-moves';
 import {DisabledSpecies} from '../data/disabled-species';
 import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
 /**
@@ -822,6 +825,21 @@ export class TeamValidator {
 		if (!set.moves?.length) {
 			problems.push(`${name} has no moves (it must have at least one to be usable).`);
 			set.moves = [];
+		}
+		if (toID(outOfBattleSpecies.baseSpecies) === 'politoed' && ability.id !== 'aevianking') {
+			for (const moveName of set.moves) if (AevianKingExclusiveMoves.includes(toID(moveName))) {
+				problems.push(name + ' requires Aevian King to use ' + dex.moves.get(moveName).name + '.');
+			}
+		}
+		if (toID(outOfBattleSpecies.baseSpecies) === 'poliwrath' && ability.id !== 'aevianascendance') {
+			for (const moveName of set.moves) if (AevianAscendanceExclusiveMoves.includes(toID(moveName))) {
+				problems.push(name + ' requires Aevian Ascendance to use ' + dex.moves.get(moveName).name + '.');
+			}
+		}
+		if (toID(outOfBattleSpecies.baseSpecies) === 'galvantula' && ability.id !== 'aevianweb') {
+			for (const moveName of set.moves) if (AevianWebExclusiveMoves.includes(toID(moveName))) {
+				problems.push(name + ' requires Aevian Web to use ' + dex.moves.get(moveName).name + '.');
+			}
 		}
 		if (toID(outOfBattleSpecies.baseSpecies) === 'sigilyph' && ability.id === 'aeviangrief') {
 			for (const moveName of set.moves) {
@@ -2591,6 +2609,9 @@ export class TeamValidator {
 		move = dex.moves.get(move);
 		const moveid = move.id;
 		const baseSpecies = dex.species.get(originalSpecies);
+		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'politoed' && toID(set.ability) === 'aevianking' && AevianKingMoveSources[moveid]) return null;
+		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'poliwrath' && toID(set.ability) === 'aevianascendance' && AevianAscendanceMoveSources[moveid]) return null;
+		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'galvantula' && toID(set.ability) === 'aevianweb' && AevianWebMoveSources[moveid]) return null;
 		if (dex.gen >= 9 && ['eeveestarter', 'eeveestarteralt', 'divineon'].includes(baseSpecies.id) &&
 			StarterEeveeMoveExceptions[toID(set.ability)]?.includes(moveid)) return null;
 

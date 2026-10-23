@@ -182,7 +182,7 @@ export class Field {
 		const type = move.type;
 		if (type === 'Ice' && ['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'].includes(this.terrain)) return 1.5;
 		if (move.id === 'deiludicium' && this.isTerrain('rainbowterrain') && type === 'Normal' && move.category === 'Special') return 1.5;
-		if (this.terrain === 'bewitchedwoodsterrain' && type === 'Fairy') return 1.5;
+		if (this.terrain === 'bewitchedwoodsterrain' && ['Fairy', 'Grass'].includes(type)) return 1.5;
 		if (this.terrain === 'glitchterrain' && type === 'Psychic') return 1.2;
 		if (this.terrain === 'factoryterrain' && type === 'Electric') return 1.2;
 		if (this.terrain === 'fairytaleterrain' && type === 'Fairy') return 1.5;

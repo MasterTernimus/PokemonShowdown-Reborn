@@ -1,0 +1,1115 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "sha256-json-canonical-runtime-files-v1",
+  "packageEngineRevision": "b8383f54a6e6f46a9ec48c768a16c5f6c905668070eb758b25a17dce00640f96",
+  "packageManifestSHA256": "cb7655e96fab4291eb673666af875d6d0a83ab70050fd1b136df9bca5d72290b",
+  "mechanicsSHA256": "58aa2ff11ff1b4d3f94b03804533e819d254f6df395aa36aa85410c87737ddf9",
+  "files": [
+    {
+      "file": "dist/config/formats.js",
+      "sha256": "d926cee0580cb1d00fd3d2fbbd40ae3db1ba2be13de42f3efd65ab304db11446"
+    },
+    {
+      "file": "dist/data/abilities.js",
+      "sha256": "0bb47f7c549f656dd76369e9e42593e752fcef704de11cc6da1b0251c4a95e3e"
+    },
+    {
+      "file": "dist/data/ability-components.js",
+      "sha256": "3ceb3f70f7742ab8c764dd193d1ad3c8c8e4acd7b9f8b8b4cd23e4febf7665a2"
+    },
+    {
+      "file": "dist/data/ability-display-summaries.js",
+      "sha256": "be739e7bb8f0e2e17f048b53df57d7717322105e337c8f530c3df067e84c196f"
+    },
+    {
+      "file": "dist/data/ability-display.js",
+      "sha256": "f5eb5a37b6489a04303c582218edf248c7d4cc8a940c70fa4f02d503ba3808a3"
+    },
+    {
+      "file": "dist/data/absorption.js",
+      "sha256": "73766e26ea6a7ac98cce70d9f2e173a6b8eeed3abbf6a297b6acb396a6bb48b8"
+    },
+    {
+      "file": "dist/data/adaptive-arsenal-approved.js",
+      "sha256": "0afc4654db5c9ed98c45184f0441e580a9d113c302bd1f929a510d7e694f2392"
+    },
+    {
+      "file": "dist/data/aevian-ascendance-moves.js",
+      "sha256": "266496bef3e6b02b314d16e5d40946e60f7f2c15db4cc96dcc0d3639c794246c"
+    },
+    {
+      "file": "dist/data/aevian-grief-moves.js",
+      "sha256": "1779bc812604d6b30a05bf0b53a5c61bdd7ec5d0092a18844cab17a55968e897"
+    },
+    {
+      "file": "dist/data/aevian-king-moves.js",
+      "sha256": "53cbe7ee49fe568231a91f034bf403a1968199a07613d608e5a7eca60732bb29"
+    },
+    {
+      "file": "dist/data/aevian-web-moves.js",
+      "sha256": "ef5c9e7c0f85d7449eee21e9c8fdaf0a2314f4b5f088154d36c75f1ee53c1e5a"
+    },
+    {
+      "file": "dist/data/alcremie-approved.js",
+      "sha256": "191de903fc617c7606ad951a2d6cf9b44b3a69a88aecdec0298da0901b8089fc"
+    },
+    {
+      "file": "dist/data/aliases.js",
+      "sha256": "5c2046e359ad435691bf515c6132b0bdd1b98142d02e20416e9826dc0226608c"
+    },
+    {
+      "file": "dist/data/ally-serene-grace.js",
+      "sha256": "4d4c0b8a834b7ea33b8b9187c2bfcea21c310f46f2056b29fb1f766c0a5f80a2"
+    },
+    {
+      "file": "dist/data/approved-ability-reworks.js",
+      "sha256": "9f56d3c33b54b2ebe8f880debf8262d2655e6d8f85883b04949fc3b6093f88b4"
+    },
+    {
+      "file": "dist/data/approved-signatures.js",
+      "sha256": "c5c592e955a9a21e08d9785bc3ef3cf429bb2e9381c08dc42e4fa5dcd93df20a"
+    },
+    {
+      "file": "dist/data/approved-support-reworks.js",
+      "sha256": "02994d407ca651f840258292fefd633fcbde47f9da02cf5e3042a7fcc766aefc"
+    },
+    {
+      "file": "dist/data/arboliva-aevian-abilities.js",
+      "sha256": "ce0a578b44f08e20bbb1a675dc65ba51a8941836172520937cac3c4e23e6e812"
+    },
+    {
+      "file": "dist/data/arboliva-aevian.js",
+      "sha256": "09b9b5e3d743c9e1f0e1e983b8f461a357c330b71aae9e998b72087dcd94dfc9"
+    },
+    {
+      "file": "dist/data/audit-cleanup-approved.js",
+      "sha256": "d21393adec52e6bbed661374792a02155574a55e5eb3536adf2b79f475726a80"
+    },
+    {
+      "file": "dist/data/aura-gaze-approved.js",
+      "sha256": "b8e706f58d41d739556fd4ccfaa1c57b07f3b5884f1b236f7eb9839622851dcd"
+    },
+    {
+      "file": "dist/data/auras.js",
+      "sha256": "877325e5a1d80a29e690be7f1e8a06d11d25131b19f055bdbef82000ce9e7eec"
+    },
+    {
+      "file": "dist/data/beautifly-carrion-approved.js",
+      "sha256": "09ba5d4cd20d321718d6c902fbbd4476bff37305157e9e8243ea591fb81e6bd7"
+    },
+    {
+      "file": "dist/data/bone-spoils-infernal-approved.js",
+      "sha256": "60babafea1668f25c9b52f0b9e84edd24f1489bea43712aff839bab6846b4456"
+    },
+    {
+      "file": "dist/data/burning-rage-display.js",
+      "sha256": "a9829478cb2df38e528d44e7cfe7eb2bc133e40fdbfaa83c2e39766fc9207415"
+    },
+    {
+      "file": "dist/data/calculated-trajectory-approved.js",
+      "sha256": "4d6c7b54181e462d5903a53a1f4a2fa74e28aba6362019de09d9d83cc6cbdfbd"
+    },
+    {
+      "file": "dist/data/castform-split.js",
+      "sha256": "6a36ea4305d5b80ba453086f9967523d3acae0436806c441226598f1381bfb21"
+    },
+    {
+      "file": "dist/data/cg-team-data.js",
+      "sha256": "5a03d5c5bba342821ba4b0fb536d654029690802ae659b4803e3afccc0833c42"
+    },
+    {
+      "file": "dist/data/cg-teams.js",
+      "sha256": "c5ae038f29c6f39a769e8cfa486f5376a7f2cc29c5824837431654933216d1ad"
+    },
+    {
+      "file": "dist/data/champion-meteor-approved.js",
+      "sha256": "b33a0bf2c1db12025a870cfb25e0adc0a1af8bc476195e45a442fd5ee3a793f4"
+    },
+    {
+      "file": "dist/data/concise-ability-descriptions.js",
+      "sha256": "4c2b207a47ae8d3d7f04cacfa1bbcf682175b1dda2d9c3aeccac65d9d2b1bbb2"
+    },
+    {
+      "file": "dist/data/conditions.js",
+      "sha256": "6b86f85644c2aa202b509d537643eb4e6f700938dc66138fe89a981f01599fff"
+    },
+    {
+      "file": "dist/data/cramorant-goodra-kommo-approved.js",
+      "sha256": "446cbb369a6b8323ed4faa6ac01e675ae80976a375f0499c4dcaff0ad392918b"
+    },
+    {
+      "file": "dist/data/current-ability-description-cleanup.js",
+      "sha256": "ce9678364df049577cb30e4d137eeba9a79279e8678cbee7ad85df630b45cdb7"
+    },
+    {
+      "file": "dist/data/cursed-armament.js",
+      "sha256": "616156c366a37e8e091381d67fbfc91a21f9099cfb4bbb6978ccfc50df99f011"
+    },
+    {
+      "file": "dist/data/disabled-custom-content.js",
+      "sha256": "ed374e75add3ac2622e433bc1dbbca0454af24697e7856dc950db9a0590b04f1"
+    },
+    {
+      "file": "dist/data/disabled-species.js",
+      "sha256": "f0c5470e497def8745a3ae783bbca02c1b70af663feb3b0e16c15db34a4201e1"
+    },
+    {
+      "file": "dist/data/dissonant-echo.js",
+      "sha256": "0eaf3f33d1d71fe2d667ac85abc5677e05cf1753fd6a5443521bdf40fceab103"
+    },
+    {
+      "file": "dist/data/dustox-approved.js",
+      "sha256": "330a046edf8662ee8320951146b4276bd2505f8e336db71c6ca7aabc933113b5"
+    },
+    {
+      "file": "dist/data/eevee-ability-move-exceptions.js",
+      "sha256": "599754d584a3f3368b27df9ab26dfa21948d944c0debf823d1f9eb4e68ba7b9e"
+    },
+    {
+      "file": "dist/data/eeveelution-cloyster-approved.js",
+      "sha256": "b92f41651026a722cd698003519242169f1a01d752965ca299aba1b3b47e2b57"
+    },
+    {
+      "file": "dist/data/fairy-eclipse-approved.js",
+      "sha256": "cf7f114be75f57e315dbf37340467073cfa56936e5476517cb5cf883a3780b3b"
+    },
+    {
+      "file": "dist/data/family-replacements.js",
+      "sha256": "b879efd070705ceb87214de2175eb0946fba4440476afd94a3e2f0a9bac858ab"
+    },
+    {
+      "file": "dist/data/field-guide-groups.js",
+      "sha256": "e915994d861440498b64250cf9dd5c0acba1570104b59a7a7b2fb5c0e2df0eba"
+    },
+    {
+      "file": "dist/data/field-guide-reference-details.js",
+      "sha256": "502aa227777f3a66581d90a94de09597bb86b934f72f6020fae91c24116be2c8"
+    },
+    {
+      "file": "dist/data/field-guide-reviewed-reference-data.js",
+      "sha256": "9bc53612cd86a4b95d3726fa27c93bdc416413b3e2c9de905162881be2487938"
+    },
+    {
+      "file": "dist/data/field-guide.js",
+      "sha256": "e9474e1d1af69b77c06267b69b2a086a1462c8fc7e7af61a4bd5184c00a8f0be"
+    },
+    {
+      "file": "dist/data/field-message-triggers.js",
+      "sha256": "bc4c1fc02b680fe2e03069c6f7c83b87bed3551922c774ab9bb904ab8edccc34"
+    },
+    {
+      "file": "dist/data/field-reference.json",
+      "sha256": "275a512f44cee30b9456f9e31c9d196ab9242cbae5d07e8a30d9b8ef92df4f61"
+    },
+    {
+      "file": "dist/data/final-passive-migrations.js",
+      "sha256": "6ef541ad99a03a92766eabc5f26d4ad9bcec488305d6d26678d3f585e05a877b"
+    },
+    {
+      "file": "dist/data/finisher-moves-approved.js",
+      "sha256": "aa1ed44311595e7b18721ea78e4bbb29c85b1eea7c7fd5e2f85bb742dd77079e"
+    },
+    {
+      "file": "dist/data/fire-emblem-signatures.js",
+      "sha256": "fcd9c6af5d40dd2394fdafd1dc7cf2f4bb623a4d82824e1eacf35eef8fe2da1c"
+    },
+    {
+      "file": "dist/data/foresight-memory.js",
+      "sha256": "671cb9a2ef1868e1c478e042c17bb60fd7b080b86c688b9f412c1fdd4ca52505"
+    },
+    {
+      "file": "dist/data/formats-data.js",
+      "sha256": "90dc82acd62248a167dd2416c2d247d94ccd01af728af38406064e78a94f1810"
+    },
+    {
+      "file": "dist/data/fossil-drain-approved.js",
+      "sha256": "93503a0998641b68ee3b63a65c3140844f0f414f4a81caf077c6a00b31b797d8"
+    },
+    {
+      "file": "dist/data/garchomp-poise-approved.js",
+      "sha256": "ae1e7ef2ed5f07d535fef5aa9c232256cbc9456b4da41024ac5a67aebbb55212"
+    },
+    {
+      "file": "dist/data/gmax-passive-abilities.js",
+      "sha256": "8ec6c63e960c028f95016cb0823b6f2e2ae748ba2151aed7e51e6e46606d15ee"
+    },
+    {
+      "file": "dist/data/gmax-passive-data.js",
+      "sha256": "206c5cca8360d8e577ed273f2911e13c9ffdcb239bff7f468cd6ea96a41374cf"
+    },
+    {
+      "file": "dist/data/gmax-passive-descriptions.js",
+      "sha256": "f1663761ec8a3681411c2d1f77e202228ed132c8c6dba2799e310f50c3a4b5df"
+    },
+    {
+      "file": "dist/data/gmax-selected-abilities.js",
+      "sha256": "6f4bde7aeeeb21676c7c6db7befe2fac31d2b990fc7f296ba119c5276a6a58ca"
+    },
+    {
+      "file": "dist/data/grand-strategy.js",
+      "sha256": "372c794953bd63383c597bd1258d68ffc7962950ca3dc95ef14c03e13f5271f2"
+    },
+    {
+      "file": "dist/data/ground-bone-moves.js",
+      "sha256": "64f0670f7165748ecd28b68c13c65206205d72890b31f08aa30186057403c2a0"
+    },
+    {
+      "file": "dist/data/guard-passives-approved.js",
+      "sha256": "c6c32f74c5a9e10271f3d228b6a1d14d55421f705ebb28ff2a18a57133748266"
+    },
+    {
+      "file": "dist/data/hydreigon-approved.js",
+      "sha256": "35359903482f7fb890c04feff86ad04d1290a29b30818a56f1862225576106a6"
+    },
+    {
+      "file": "dist/data/illusion-split.js",
+      "sha256": "3435bdf47510942034ee21e7eb54977441be6b0b6a902c77542a2811946b5419"
+    },
+    {
+      "file": "dist/data/items.js",
+      "sha256": "7b306fc058d5e27f56bfb2b866c768136ac02f6804cbc52e508323cebaafabe6"
+    },
+    {
+      "file": "dist/data/jirachi-approved.js",
+      "sha256": "93ccfc138880abe63d93bceaa50147e7eda31872b9b56874ad3bcefed7702e02"
+    },
+    {
+      "file": "dist/data/late-ability-approved.js",
+      "sha256": "a8d869023a6d94ec7e04f303d64d34e240664d457b11d34605d73ca2dd0cf651"
+    },
+    {
+      "file": "dist/data/late-display-clarifications.js",
+      "sha256": "4755c521aab213775c89d575c2db1202afa9460026eb3b1209dab2fb088281c9"
+    },
+    {
+      "file": "dist/data/latest-passive-abilities.js",
+      "sha256": "b98f27ab1168038acc892ead9c4003cab5c9ecd6b5c994e54879cd376a262141"
+    },
+    {
+      "file": "dist/data/learnsets.js",
+      "sha256": "5fa9d5433dce3fd306d1c4ef7c23f2e52bd1f41568d913cadee3a49b23f72107"
+    },
+    {
+      "file": "dist/data/legacy-gen8/bss-factory-sets.json",
+      "sha256": "4d5b9c3d808b3f4912076db65c537268c1c4d0af2aed39545ecc86f9b273cb4e"
+    },
+    {
+      "file": "dist/data/legacy-gen8/cap-1v1-sets.json",
+      "sha256": "2ec40da162cf613220241e622074de658a7894864d8a448793c9b6f08bc10f85"
+    },
+    {
+      "file": "dist/data/legacy-gen8/factory-sets.json",
+      "sha256": "b3d5a78bb0675c8395d61a7231d562aa8131169eae748f99cf6b333959acde8c"
+    },
+    {
+      "file": "dist/data/legacy-gen8/random-data.json",
+      "sha256": "36df0729df8453449466dbb8872a2bda4234cac206a5cdaeb74e061cc2ba9b56"
+    },
+    {
+      "file": "dist/data/legacy-gen8/random-teams.js",
+      "sha256": "b7abdc905f627080e1d04ed796064f2ce56909dcd8c216a74198a24d625d2d75"
+    },
+    {
+      "file": "dist/data/lore-entry-approved.js",
+      "sha256": "6a1523a78dc2dfbf2a62150f1c8a09d7d7e3154baabff4993c0bc94d111bd755"
+    },
+    {
+      "file": "dist/data/lore-screen-rules.js",
+      "sha256": "efa2759d1394f46d66daa73467afdd29216c178a83493fc5f86df2fb742f4acf"
+    },
+    {
+      "file": "dist/data/lost-four-approved.js",
+      "sha256": "0d3384fa0aaddff1ca9f419c45c7e34e7f4fb158296c8a1028b0b614175f55de"
+    },
+    {
+      "file": "dist/data/mega-passive-abilities.js",
+      "sha256": "e4cf017f211972db6b224edbf0ce2bc42cbbe497cdcf2b741e1e7269e7153d18"
+    },
+    {
+      "file": "dist/data/mega-signature-abilities.js",
+      "sha256": "e31248e24500c6bad935174dd4e41b790255460d4137a2705a2e322586336e39"
+    },
+    {
+      "file": "dist/data/mega-tempest-fury.js",
+      "sha256": "a868a96860e53326f401361fc0940fabebf58c3d67f6b758191ddf2d7588ce88"
+    },
+    {
+      "file": "dist/data/meloetta-encore.js",
+      "sha256": "d8fb678370b7320a629d5b8db96c3227349903e5aa078538efe05bce1dbc67b6"
+    },
+    {
+      "file": "dist/data/mewtwo-approved.js",
+      "sha256": "abfc9e9482070e895668eafc68fcd5f546755ab4bd21a497e95720f76a98eb5f"
+    },
+    {
+      "file": "dist/data/midnight-zone.js",
+      "sha256": "919f3730bdf720a25eeb7ac9868866e0148112ca90e21e49981fbb810789b324"
+    },
+    {
+      "file": "dist/data/mime-aim-approved.js",
+      "sha256": "7d43f68fd6d5508e08947d6e13e6fa943e304557f2a46ce6a41431c5271dcd2e"
+    },
+    {
+      "file": "dist/data/mods/gen7/abilities.js",
+      "sha256": "55a6ee55b3016988b2d0afbebd7cd2a071dfb38f726eb40dbe5f41efa67f4bc6"
+    },
+    {
+      "file": "dist/data/mods/gen7/bss-factory-sets.json",
+      "sha256": "7d4b010f47856cea4a6eb718e1d4770442e68582a126e6f4ea3332c1cc32b76c"
+    },
+    {
+      "file": "dist/data/mods/gen7/factory-sets.json",
+      "sha256": "8b8c38c2a48c1aa592c6fe116fe74f5c0d38ac57c0e0cd21fc2d3bed4c7e82e2"
+    },
+    {
+      "file": "dist/data/mods/gen7/formats-data.js",
+      "sha256": "9d9d7c9c23866a726be08b203a1ca8a8d8c3c6167413c8c683dfaa04d9593e41"
+    },
+    {
+      "file": "dist/data/mods/gen7/items.js",
+      "sha256": "c2046184eb765956b9ea5955d84d9223af73e1ef8f624579212040669867c371"
+    },
+    {
+      "file": "dist/data/mods/gen7/moves.js",
+      "sha256": "8685effea7e45b09d763ac6612841a890ab73fd14121754d08b4b83b1eaedb39"
+    },
+    {
+      "file": "dist/data/mods/gen7/pokedex.js",
+      "sha256": "d207a47a02914a3490205d83b429b892573b2f880c00567512abad382b3004f4"
+    },
+    {
+      "file": "dist/data/mods/gen7/random-doubles-data.json",
+      "sha256": "56c694b1524a19e759d02159237bbfdd2296b5de68909a412ff919eb8febcf4a"
+    },
+    {
+      "file": "dist/data/mods/gen7/random-doubles-teams.js",
+      "sha256": "1dbe949b5a57e6ecd941ce75c9d38ead69dc90db7f24a44116385e8d7c0769e2"
+    },
+    {
+      "file": "dist/data/mods/gen7/random-sets.json",
+      "sha256": "897396d23715fcb33022a769d87055214a9e515c445a2b84098ce18ae60544ff"
+    },
+    {
+      "file": "dist/data/mods/gen7/random-teams.js",
+      "sha256": "a12203f5a681a5fbd8f1c02aaa6ba227ee01084440c83e016e937cb19d877dcf"
+    },
+    {
+      "file": "dist/data/mods/gen7/rulesets.js",
+      "sha256": "efaa20906cae2a4d72a6b35467fa08780a65116bd9f213392aad1e60792403f2"
+    },
+    {
+      "file": "dist/data/mods/gen7/scripts.js",
+      "sha256": "06fc9d4c78804c98f83d3880f83a562a158b012c081567b2d7ff4efe65bc18a2"
+    },
+    {
+      "file": "dist/data/mods/gen8/abilities.js",
+      "sha256": "d95d914f49d87f285741acac098ee81f9c61e6523cdd67a5e5d4596f1fcc51ce"
+    },
+    {
+      "file": "dist/data/mods/gen8/formats-data.js",
+      "sha256": "e4f88fb7a57013cc23c4b8cb486fd6e94f47d572d0d75b65e9512992093aeb01"
+    },
+    {
+      "file": "dist/data/mods/gen8/items.js",
+      "sha256": "f7b28cf700cd2a26344ac39447ccceb5b2dfe5db6df46705e0dc416113534602"
+    },
+    {
+      "file": "dist/data/mods/gen8/learnsets.js",
+      "sha256": "a6368004ef2f04d623910001ec01fcc526041ce0992fdf53d9536ca016b385b1"
+    },
+    {
+      "file": "dist/data/mods/gen8/moves.js",
+      "sha256": "c9ad7051461c58fcf6450de30ae28fa1569bf435a57b8e593128e80142e9905d"
+    },
+    {
+      "file": "dist/data/mods/gen8/pokedex.js",
+      "sha256": "525ac5c8674482065371527541ae7cc66c392442d41c818d76af9fbe3569b007"
+    },
+    {
+      "file": "dist/data/mods/gen8/rulesets.js",
+      "sha256": "31f075e7d24df5dcb01b5ad284a77236fdece0e8fdcd2396ea71353fb5937664"
+    },
+    {
+      "file": "dist/data/mods/gen8/scripts.js",
+      "sha256": "475359acd54e17b2659ca8e42670f63adb42058e8cd24002e62c27bf12bf2349"
+    },
+    {
+      "file": "dist/data/mods/gen8/typechart.js",
+      "sha256": "95785ae8fbe175b38c281f8e5e160f24ffeb9512c292f392a4fc10604563d87f"
+    },
+    {
+      "file": "dist/data/mods/gen8bdsp/abilities.js",
+      "sha256": "f27fe9562579435f84cd7715bcf428e680658bb5167411ea9b5bf568228b66c4"
+    },
+    {
+      "file": "dist/data/mods/gen8bdsp/formats-data.js",
+      "sha256": "d61062ad99142eeeecf2af23b7ade62dd3bc870d07ae167927b5a095ad325229"
+    },
+    {
+      "file": "dist/data/mods/gen8bdsp/items.js",
+      "sha256": "d44983c0afd2fc895758bd3a8067e0172279f9c06944fa3d05afc5c652d5b8f1"
+    },
+    {
+      "file": "dist/data/mods/gen8bdsp/learnsets.js",
+      "sha256": "fd030f07ab86a9d1e3fa78d71045c1ac0924342d04758250ff33c58fbfabc451"
+    },
+    {
+      "file": "dist/data/mods/gen8bdsp/moves.js",
+      "sha256": "e8dad313bbd1616aec4613a41047d74f051fba26e33f0783dd0140ea9ea8d1fc"
+    },
+    {
+      "file": "dist/data/mods/gen8bdsp/pokedex.js",
+      "sha256": "6283c65a27549330bee0026f72598c14e2f7ff91d8c41e8a21d8d0ad806bbb59"
+    },
+    {
+      "file": "dist/data/mods/gen8bdsp/scripts.js",
+      "sha256": "20b7734e2ca5eaa8a21c86fcb0c2ca4b2f2bf3fa8a9664911b3649c9f4583044"
+    },
+    {
+      "file": "dist/data/mods/gen8legends/formats-data.js",
+      "sha256": "52e5a8fa123a939575678fdc36a2ad5421e521be06e40c7713e13720fe58d7b6"
+    },
+    {
+      "file": "dist/data/mods/gen8legends/learnsets.js",
+      "sha256": "ffa79081ed4aa87cd382d2315f14f0b0f3bf301d985b6810b3bdaf09b0b102d8"
+    },
+    {
+      "file": "dist/data/mods/gen8legends/scripts.js",
+      "sha256": "3f12a042b321899d1beca9846845aba2e053b2fc4bf1bece832bdfbe43abd829"
+    },
+    {
+      "file": "dist/data/moonlit-prowl.js",
+      "sha256": "7658f06a45fb45d3c1b1e89a670b72ef189b50c6b7106a6964a2b6aa052994c3"
+    },
+    {
+      "file": "dist/data/mothborn.js",
+      "sha256": "46375dd7c5f187530e5cbeb8b5effdd43944983f2f3d1efb348a9a95a3c2084a"
+    },
+    {
+      "file": "dist/data/move-distribution-approved.js",
+      "sha256": "a27782326b0f465f3eac5c7a2ab65520332b017ff175fbc6f2d3771354f1abd1"
+    },
+    {
+      "file": "dist/data/moves.js",
+      "sha256": "246eeeb48a0569852370f6432259f097aaecc6bb782d3d5312d7d1760d533682"
+    },
+    {
+      "file": "dist/data/natdex-gen8-gen9-learnsets.js",
+      "sha256": "f3b790dae7c333214e59eb44a7fc78bae603256d75705b463eb82448e89db8c3"
+    },
+    {
+      "file": "dist/data/nature-power.js",
+      "sha256": "160b2702c5f3bbf60ca50f07383bb9dafde5aefad691eadc89eea89ab4a6cbbf"
+    },
+    {
+      "file": "dist/data/natures.js",
+      "sha256": "9075adf12fb7dfdbdb215d553419c3faaad5fcd3007d2865dbaa52986c1da6d1"
+    },
+    {
+      "file": "dist/data/nido-approved.js",
+      "sha256": "6c52a7ec72ecc3bc59daf0c242b04c2aaeafd0aeccaf52f3aec6765d62e64085"
+    },
+    {
+      "file": "dist/data/ordinary-approved-reductions.js",
+      "sha256": "2d46d4bc000509b2c8537a2fa033adcb20532189a5ac564b3848ba751978fd25"
+    },
+    {
+      "file": "dist/data/passive-ability-cleanup.js",
+      "sha256": "ee49f0999ce4e2a223ba9686404e7465e5f7a40bb257650293905ea38ee52269"
+    },
+    {
+      "file": "dist/data/passive-cleanup-approved.js",
+      "sha256": "bc805ecb603fd4dbc2a0915c540226cc02d3e27c051fbf01691932a1555d71e5"
+    },
+    {
+      "file": "dist/data/pearl-hydraulic-approved.js",
+      "sha256": "6cbdfd2b9c22e530f32b5cf957e1b5443f086aa6f456e72a4e41b198e46f80cb"
+    },
+    {
+      "file": "dist/data/pokedex.js",
+      "sha256": "bd632ba9b58987fb362ef706c211c75a555326c2544636e7a541a6b1dd6f4033"
+    },
+    {
+      "file": "dist/data/pokemongo.js",
+      "sha256": "096db9e523acfa3b8a8eedcae4951190550206affbc0975f206188cb83658cab"
+    },
+    {
+      "file": "dist/data/power-drill-batch.js",
+      "sha256": "a150934286ce1e59eca942b8b1c277c1356251646bfdf37fea4963615d0d08f6"
+    },
+    {
+      "file": "dist/data/pressure-memory.js",
+      "sha256": "aa1994cd4c6cb7d71558acc22c95c3408032d8cd8c066c84dbd0334d8f9c7c1d"
+    },
+    {
+      "file": "dist/data/primarina-approved.js",
+      "sha256": "12fc7ddf70a936113d15e4799093b492a6d67f4ff0871eb8edd04c2ddeedf4fe"
+    },
+    {
+      "file": "dist/data/primordial-approved.js",
+      "sha256": "8de4b920799cbf79a73ad307e9f69d430fa6cfde76aa77138ba1de296d67fc12"
+    },
+    {
+      "file": "dist/data/public-field-guide-remaining.js",
+      "sha256": "3a81a181b9982f4c316978fc2a48106fba9bcf11218ed8ba1cf7007f57c72fb7"
+    },
+    {
+      "file": "dist/data/public-field-guide-shared.js",
+      "sha256": "4543999f9a1b4f7082abbf812bc38aa410c12af6e48f0ff4990480b806db1343"
+    },
+    {
+      "file": "dist/data/public-field-guide.js",
+      "sha256": "b01dacf89bf4a2b5e73c55b9d9c94996f1f95e54e932dea1cbbdf5e342637e4c"
+    },
+    {
+      "file": "dist/data/pulse-fixed-moves.js",
+      "sha256": "244f5b31aa22ef9320643201e87adef233702f417ac4f3b087c18bf1af62e7af"
+    },
+    {
+      "file": "dist/data/queued-abilities-approved.js",
+      "sha256": "431e4c324ffed9726e588f4de0dfd1d438fdef578a32336c44543e6b0367d4ff"
+    },
+    {
+      "file": "dist/data/raging-crowns-approved.js",
+      "sha256": "4933c7484a69efd7353344f09d044b8379d552903c8e130d2226a0b63f8517c6"
+    },
+    {
+      "file": "dist/data/random-doubles-sets.json",
+      "sha256": "2d02a8d0501d682c7ee3ef7f68d9ebe210248d1613d739084a6041cff61e47c9"
+    },
+    {
+      "file": "dist/data/random-sets.json",
+      "sha256": "21ed96b89a467a11cdfb57a3501d34f70b8a95d3c9e7ee1ab998b2d775547427"
+    },
+    {
+      "file": "dist/data/random-teams.js",
+      "sha256": "c27c4fa02ccf3ee1b49aa0cddbc168a73bf7d7385d7fbe76cfbcf9d79c5eeec5"
+    },
+    {
+      "file": "dist/data/reborn-avatars.js",
+      "sha256": "c94941514353cfa64d7b853b57666251a3354832982164530b8f906a6a871533"
+    },
+    {
+      "file": "dist/data/regi-approved.js",
+      "sha256": "85e8ce810ac4ad628572b52a69577b1b440ce75bb67b97252e52465bc6042a19"
+    },
+    {
+      "file": "dist/data/rejuvenation-advanced-moves.js",
+      "sha256": "86db464411f320f63880a4e71081d88ede66db379c697497404d00a4edb4863f"
+    },
+    {
+      "file": "dist/data/rejuvenation-event-abilities.js",
+      "sha256": "1420cd3cc64746c486215668e9ec68fd33b16b7d55ba85cc9005ff63d2c12c02"
+    },
+    {
+      "file": "dist/data/rejuvenation-signature-moves.js",
+      "sha256": "80c53004f9150062fab9f63abe8d7f5dbab05df76aacb861ca5ef44c8c805432"
+    },
+    {
+      "file": "dist/data/relic-armor.js",
+      "sha256": "b7c58a236bcf0c6a2a4e10a6bb0fa9e6b9c130ec9e4debb9cc8340d49aedff2f"
+    },
+    {
+      "file": "dist/data/ripen-seeds.js",
+      "sha256": "ee0b0bcd638db0cd410eb0a44fe1d7ace625a62740aebbcdc320259ca9b2bc51"
+    },
+    {
+      "file": "dist/data/rival-support-approved.js",
+      "sha256": "06f4bac04e715e498be243bf2641dbd1712e12f132f88d3fe64de4fd4260204e"
+    },
+    {
+      "file": "dist/data/rival-support-descriptions.js",
+      "sha256": "73a68c3613fab4c65ac780ea34ec2227c862d91fd6c9851811011366c82ba570"
+    },
+    {
+      "file": "dist/data/rks-system-memory.js",
+      "sha256": "83be3b4884d2664ba88d2cc7f12799217304f63256891d3c0d12aa1d33aca696"
+    },
+    {
+      "file": "dist/data/roster-expansion-text.js",
+      "sha256": "34888693ecbd4680f7e234526fa8aac706e10e769834b8c332312f9da67a0da3"
+    },
+    {
+      "file": "dist/data/roster-expansion-wave2.js",
+      "sha256": "1cac83f39e381ea2181101d8ff8903851c58363d5fbcc2e58e9413485302db03"
+    },
+    {
+      "file": "dist/data/roster-expansion-wave3.js",
+      "sha256": "6525dba210d3d478a2f092f43e2175df8b5daf85e4ccf116cbf5ac641957134c"
+    },
+    {
+      "file": "dist/data/roster-expansion-wave4.js",
+      "sha256": "0bc47916c9518f10eed4b99888cd6b7b150c81371ac8f5d4373fe1ec8d7314a5"
+    },
+    {
+      "file": "dist/data/roster-expansion.js",
+      "sha256": "31fee4513413c034651658e8204c19d1de1fd8ccccdf17835deb960a93c9a7c4"
+    },
+    {
+      "file": "dist/data/rotom-eject.js",
+      "sha256": "1e19e710299a6817c655b4a066f4be1be1782e91a9a70bc646816b49661884df"
+    },
+    {
+      "file": "dist/data/rulesets.js",
+      "sha256": "8599b1f13db58f81e1f0b6b48f6d9020c93d15a603a609c0f619a91f6adc7fe9"
+    },
+    {
+      "file": "dist/data/sandslash-rework.js",
+      "sha256": "ccf8b9af415020830ef435cb0a71d92f1fe0fdffb1d8d40b6be9587dfc0d75fa"
+    },
+    {
+      "file": "dist/data/scented-geyser.js",
+      "sha256": "294ee8dbde70b555a5540913f46a9d349ce8d94a25c51c7791754ebce028bf0f"
+    },
+    {
+      "file": "dist/data/scripts.js",
+      "sha256": "6c4c39184978eb3f308e60dbc21b1043cd03e57671959c210318d0e424627d39"
+    },
+    {
+      "file": "dist/data/seasonal-birds.js",
+      "sha256": "0a3af2624383cbfc43752792958812903e6d1e9493eaa2431dc75bb25fd0622a"
+    },
+    {
+      "file": "dist/data/selected-mega-simplification-data.js",
+      "sha256": "4603d0b04933ed48e7a9829aeabcaf2e65adb9db92eb17b3f20c6cda0872b014"
+    },
+    {
+      "file": "dist/data/selected-mega-simplifications.js",
+      "sha256": "4d233c26abdf978370026355585935f9f13a92dc4e404f36ccf2d58f8423698a"
+    },
+    {
+      "file": "dist/data/shelter-audit-reworks.js",
+      "sha256": "949d618bddd5c6762bca7bce43cf5d3e0b5e7c1be1e8254597e62d4247c90ae7"
+    },
+    {
+      "file": "dist/data/signature-move-summaries.js",
+      "sha256": "5c55fe1c75321e92e23f32218751ca7090c7e49e93d8bc1ca9ac4ed394ea32c1"
+    },
+    {
+      "file": "dist/data/signature-passive-abilities.js",
+      "sha256": "dca76f6ab254ab0849dbe59102ed06c4970b418a82a7313413e9cd8b2ef7e20a"
+    },
+    {
+      "file": "dist/data/signature-passive-data.js",
+      "sha256": "6cde1ffcf70072fd4b70908493393f2e2787ef2a9a05792f9c657b5bce315c86"
+    },
+    {
+      "file": "dist/data/simple-repeatable-abilities.js",
+      "sha256": "96fff3ce2f3a39c52b695887ff823796bf226c40b2c5d49d40d64762fdc647f3"
+    },
+    {
+      "file": "dist/data/sovereign-approved-data.js",
+      "sha256": "277f85828f5ff38f6ffe459c3b7a1207351a39f3e0f043dd3714bf5438f66f31"
+    },
+    {
+      "file": "dist/data/sovereign-approved.js",
+      "sha256": "22bb8d65257eea929d3ce27f4c96f8bc2448c72cef134b1a15f7e04ed48e5364"
+    },
+    {
+      "file": "dist/data/species-passives.js",
+      "sha256": "5f2c7c76c326d23e38495531c83b765070479b35695ae39529b846adfd09464e"
+    },
+    {
+      "file": "dist/data/stance-disguise-aggron.js",
+      "sha256": "17a2cadee6990981c24de086b5b3ad88e21a00b25f89cac90255a1c51050ca58"
+    },
+    {
+      "file": "dist/data/starter-finish-approved.js",
+      "sha256": "1d64d05f4b775ed4f56e1a110b592e479b61bad7c744adca643b309722ed440a"
+    },
+    {
+      "file": "dist/data/starter-passives.js",
+      "sha256": "5824dc2f736a5c900652061158d2a71a63acb8bd0b1019950976c3ad233980da"
+    },
+    {
+      "file": "dist/data/stunfisk-approved.js",
+      "sha256": "53bf35a9b98023c1df35948652c73950f1495f0809528ec0b7d70ee730942178"
+    },
+    {
+      "file": "dist/data/swalot-vespiquen-approved.js",
+      "sha256": "a2e448bb3ae0ead037f591b66afb86c900e8d7b703ce471517a893e5445b2bf2"
+    },
+    {
+      "file": "dist/data/tags.js",
+      "sha256": "2f4d63ab969021a4d99c0df6b791768fbd0778eed4bce2269f0ffc45519067ea"
+    },
+    {
+      "file": "dist/data/targeted-passive-reworks.js",
+      "sha256": "599e47a3792e1feb1604109ce535e8e797a4d3516320a9139048b2defa69c708"
+    },
+    {
+      "file": "dist/data/terrains.js",
+      "sha256": "15bab95343728535897ed9369f8a2ab834a7657beec0ee0d5082a7ac5b8ce22c"
+    },
+    {
+      "file": "dist/data/text/abilities.js",
+      "sha256": "e5e65d341fc67569f1dc159996642ad9671ccfd7b42d3c7a07dfc904b7d83406"
+    },
+    {
+      "file": "dist/data/text/default.js",
+      "sha256": "74557bde2ccaeb0c2958d6a5f381683cf37726a422de04dbc19394ef425606ff"
+    },
+    {
+      "file": "dist/data/text/items.js",
+      "sha256": "edd2eb3493f08eb340c36b797c6b266a0c526c8f0ef9b4eb77d2929139634d5e"
+    },
+    {
+      "file": "dist/data/text/moves.js",
+      "sha256": "bd561e254987da789cb0944ca3f66da0b75580db472462084e4b122c4e3652ef"
+    },
+    {
+      "file": "dist/data/text/pokedex.js",
+      "sha256": "b41e820eec6a60ab1c49e702d1d69e6665f2a1f4f41b24ee71ef0a89c0bd6a9e"
+    },
+    {
+      "file": "dist/data/text/terrains.js",
+      "sha256": "93356a7cd6d8b42db50f83c39371a9d279148bafe43d7a11225da6852ec6fc06"
+    },
+    {
+      "file": "dist/data/typechart.js",
+      "sha256": "7871f541822a95cb9288d89e98cd7f30cfa2ba94938711b3796999411215e05b"
+    },
+    {
+      "file": "dist/data/ultra-instinct-description.js",
+      "sha256": "46b9f186d12efe8bd4b7771d83a6be4b0c0e94f06d1826cdb1979d9a7756d71b"
+    },
+    {
+      "file": "dist/data/ultra-instinct-rework.js",
+      "sha256": "7b78f95ce28e350e906999d9a53c84da09732adf050ce29221f95fd6eb57bb2d"
+    },
+    {
+      "file": "dist/data/ultra-rivalry-description.js",
+      "sha256": "14e6321525ccd86e6c1341f72acba3c4b1f9972e20572a29443afdb142c12586"
+    },
+    {
+      "file": "dist/data/vital-signs.js",
+      "sha256": "80013338653d18eb97311d1cfd446a5caef2f0f7a7f84cb8384274b55e6652f1"
+    },
+    {
+      "file": "dist/data/warned-moves.js",
+      "sha256": "aa07b79fdf369b4e5faca940647b8fc593a9d51f1845a8cf68c90c58f1d10600"
+    },
+    {
+      "file": "dist/data/warning-descriptions.js",
+      "sha256": "7f021680ccab75e2a2097da5eb801334c3965474c3fd8ecf78605c7defac8f32"
+    },
+    {
+      "file": "dist/data/weather-choice-approved.js",
+      "sha256": "ab1e5f446820031ecc8d909accdb7fb4b0425f58d64c541257702ec32e7729e1"
+    },
+    {
+      "file": "dist/data/yang-aura-clear.js",
+      "sha256": "4d7de153681ea8c0e05843f7e30cc726631420e3423401c582565dab31b4a423"
+    },
+    {
+      "file": "dist/data/yang-signature-moves-a.js",
+      "sha256": "1103ac2c1ebbea61b08a5582f1bbbbfce360b8b1a756151995796de9ea7e8240"
+    },
+    {
+      "file": "dist/data/yang-signature-moves-b.js",
+      "sha256": "c3d3010ed7a0e3cc0d876c30cf8bdf3a73754978ef7f54dd47ab022c656a5d41"
+    },
+    {
+      "file": "dist/data/yang-signature-moves.js",
+      "sha256": "d4e2100b1e5774d137dc7f3cbab5f7ac554370c2fe687b95176c9f2658996fe2"
+    },
+    {
+      "file": "dist/lib/crashlogger.js",
+      "sha256": "91b453612cac5060e85df55453a2bbf7fb0cf6d7c41a79add711c121bec04252"
+    },
+    {
+      "file": "dist/lib/dashycode.js",
+      "sha256": "5549bb9b4d76c6acf36169def60c3e09a6decc5d9f44cbddbe396209dbc044d8"
+    },
+    {
+      "file": "dist/lib/database.js",
+      "sha256": "8ea299d01ee30ec204ae9c141e9d02da2def007ba3ce8ee5af60e263bbc6448e"
+    },
+    {
+      "file": "dist/lib/fs.js",
+      "sha256": "798782ffa8222b9d6023a2903cd29c2113de3c966b9286689383f38c3e83928a"
+    },
+    {
+      "file": "dist/lib/index.js",
+      "sha256": "cfcc2da1b42f994988c3b118dd30453ccd158442fd46a758eb0cdea96ddef9c3"
+    },
+    {
+      "file": "dist/lib/net.js",
+      "sha256": "ccd490fcd49b9be1e36b4fce7b91e06d5fe5fd29efad8b397aef2859a65f2903"
+    },
+    {
+      "file": "dist/lib/postgres.js",
+      "sha256": "62a13b0ebc62b35d2b8e0592a890fc392fa616e2991fad8a5780bd4f4ff92f25"
+    },
+    {
+      "file": "dist/lib/process-manager.js",
+      "sha256": "14b204ad40ca1b93891a93b3b538b38e1e02b4641ea47746cf819aa59c3b389f"
+    },
+    {
+      "file": "dist/lib/repl.js",
+      "sha256": "6be12a2f22f59a1b127ebbb0b226e2d41f27dd3627eba5ab2b133c1a5350d3ad"
+    },
+    {
+      "file": "dist/lib/sql.js",
+      "sha256": "a18ed0998f06eefc05acaaa56a0d5791ce049099e40689828853f493efc66f01"
+    },
+    {
+      "file": "dist/lib/static-server.js",
+      "sha256": "acdd097b5c956f4ed5e515ddf19679aa61f6e44d42178589206009c5c2e232c5"
+    },
+    {
+      "file": "dist/lib/streams.js",
+      "sha256": "a22f6d2b41d718052bc350b58ce499cc6b2e921f9a71d96e220a585d1bb1a6b0"
+    },
+    {
+      "file": "dist/lib/utils.js",
+      "sha256": "6e1f9eae4277090971d083977b6c221aa7492ad7711af30db9028dea00cb498a"
+    },
+    {
+      "file": "dist/sim/adaptive-arsenal.js",
+      "sha256": "630d480f1996641357831fb8ab64a9a8cb1329cd1883a2c2a72a5e819e064351"
+    },
+    {
+      "file": "dist/sim/adaptive-cycle.js",
+      "sha256": "58090a13a2ac5e5dc11713c2a4850caeedcbee39be25b7427b777e91d9ff758e"
+    },
+    {
+      "file": "dist/sim/aura-convergence.js",
+      "sha256": "ec3e93d87925faaeb21d3c2272263746ccb72da349ad454b257636a5fe2ef257"
+    },
+    {
+      "file": "dist/sim/battle-actions.js",
+      "sha256": "cb75ec117a66380495e7e6f27677e1393d5e27f5349bc20b2c2873e0d699996e"
+    },
+    {
+      "file": "dist/sim/battle-queue.js",
+      "sha256": "d8795514a94c4ae414c2faf7541659ed04bd57cbeda71c3303be02a60c3eda2b"
+    },
+    {
+      "file": "dist/sim/battle-stream.js",
+      "sha256": "22c66a6e76c0194ed1c1ded30828000a280444a8a3aaa90fbd1162c192e5b3d5"
+    },
+    {
+      "file": "dist/sim/battle.js",
+      "sha256": "d22975802c4a3121e9e601b60cb8bef28eefe58918ac487c37b2ef02528a24b7"
+    },
+    {
+      "file": "dist/sim/beast-hunter.js",
+      "sha256": "fef0694a60abf2772b8d34745bae579c7e47b53e61e9904e173336a5df7486ed"
+    },
+    {
+      "file": "dist/sim/challenge-options.js",
+      "sha256": "e034bd5f2268cd335c119cf5f44356bd4c1d367a1c47cd9838298b4529d1f391"
+    },
+    {
+      "file": "dist/sim/cocoon-indicator.js",
+      "sha256": "d5a6d7d57f47fc308bb0c2c438e3478df80d981e7dade7fee794249457861439"
+    },
+    {
+      "file": "dist/sim/crescent-rend.js",
+      "sha256": "f5d51899805e02dd8a8499a9b2fefd686a848908be78f7c8d85681c3563e775a"
+    },
+    {
+      "file": "dist/sim/dex-abilities.js",
+      "sha256": "4c43948c72ac0d3b253d9f7d95a6d55a51982e5214fc55ccee9bbffc2dc2637b"
+    },
+    {
+      "file": "dist/sim/dex-conditions.js",
+      "sha256": "8a15b4794698307a047694d51ac4396fab72e39ddd6139793deff22bbca44de3"
+    },
+    {
+      "file": "dist/sim/dex-data.js",
+      "sha256": "750fba875a44d41b086870d55642a630e3b2a9374c7be392e500b57cf1c3440c"
+    },
+    {
+      "file": "dist/sim/dex-formats.js",
+      "sha256": "4d0d9c122beadd84093adce1ac84e683af25495a27e7ecf3c6fb886c272e6d84"
+    },
+    {
+      "file": "dist/sim/dex-items.js",
+      "sha256": "77fa4f652971b9e9e67276c76fb7dfeb55535049649987f66b18f49f812be055"
+    },
+    {
+      "file": "dist/sim/dex-moves.js",
+      "sha256": "05ad18f84a343bab0e880736dde201089a6ffc17c82cdc93b18b99c5a5bbeada"
+    },
+    {
+      "file": "dist/sim/dex-species.js",
+      "sha256": "34ebddaf309543594e7a2d73c4201bb9a5c8ce947f4166bc82acc4f4e03ad209"
+    },
+    {
+      "file": "dist/sim/dex-terrains.js",
+      "sha256": "a19e42713f88a4d18163fb5b166c998adb3b2f5dc4d6001fdd81632973be2c26"
+    },
+    {
+      "file": "dist/sim/dex.js",
+      "sha256": "e958eba5d656084c93ecfd25c98b0bc2d1977c1e84d64b08dc8e029787e8ec0f"
+    },
+    {
+      "file": "dist/sim/encore-aria.js",
+      "sha256": "8f25dc5e3cec91cf4afb7e744dd4f5699569388d774d5eee82bd01c4126fe5ed"
+    },
+    {
+      "file": "dist/sim/examples/battle-stream-example.js",
+      "sha256": "8ed14e15674c66eafec1609975848b7d1ab3dd9b053b7d9189160ad5cccb4dbe"
+    },
+    {
+      "file": "dist/sim/expected-category.js",
+      "sha256": "b810a946d3506940605d3c7cd117cd65385c54098e4f7ada04ed5bcfe5a51b6e"
+    },
+    {
+      "file": "dist/sim/field.js",
+      "sha256": "6857b5cd0396032c8f0da9682b86f913c96848b29cb5c0a43b0a339350400288"
+    },
+    {
+      "file": "dist/sim/finisher-cost.js",
+      "sha256": "ec064d62ba206649478eaf9682f0edd254a3ef25dacbdb5de2b0b4df2d5ad77a"
+    },
+    {
+      "file": "dist/sim/index.js",
+      "sha256": "9f45e9b8f8574c00ceef424ccd84298ce09aab9f17854839767612d38307f4e6"
+    },
+    {
+      "file": "dist/sim/pokemon.js",
+      "sha256": "a1e1dd3feffd65e6d068726dc2aa05d59d575ad3a8f5a48bba7f9fa7d874713c"
+    },
+    {
+      "file": "dist/sim/predator.js",
+      "sha256": "3d98e60ffbc37e13b0002ca4a813715abc9d0279b52d2a8d0f545bc0b7b7f4cb"
+    },
+    {
+      "file": "dist/sim/prng.js",
+      "sha256": "327745d5c0bb090c8d1c0d52a89528533ca3822333dd5346e91c36bbbb4c15b8"
+    },
+    {
+      "file": "dist/sim/radiant-target.js",
+      "sha256": "f46407b4bf8c3b2469863749c7f6fc2d940ee53f28a5503e8f5b3f7274f9e391"
+    },
+    {
+      "file": "dist/sim/recharge.js",
+      "sha256": "a82a680552817145770fe52c2e3011648e12bee50b20d14c99c7d3d328e6968f"
+    },
+    {
+      "file": "dist/sim/side.js",
+      "sha256": "e2634f309549d3beccf674012d337257ac9992ef00971d0b2c12fc387800d0b3"
+    },
+    {
+      "file": "dist/sim/species-passives.js",
+      "sha256": "bf89fbba519f76af48b07a8d244ace298e2b3aaef6164e0f0cb3c8105975375a"
+    },
+    {
+      "file": "dist/sim/starter-boost-indicators.js",
+      "sha256": "b1dc2675111306b1269c61aa46cb87637b420271c0a96d60b0c0a00ce43e5fbc"
+    },
+    {
+      "file": "dist/sim/state.js",
+      "sha256": "def61927e8c462919259b95e12674c18b8d21db2c115ec3c2a01d10d43bba332"
+    },
+    {
+      "file": "dist/sim/team-validator.js",
+      "sha256": "3a7fa1b022a6e880bc86ddf7c697a36ce29e4fe9e8192e4b8b6ca446b99aee3c"
+    },
+    {
+      "file": "dist/sim/teams.js",
+      "sha256": "1c260f8f9d251f16c743ca1361041d3bbc6761869943decc9d5470cfe781c77d"
+    },
+    {
+      "file": "dist/sim/tools/exhaustive-runner.js",
+      "sha256": "038bd8dd5308a69f37450b723c895452c17bb34f7c31a55685a19be57f3adcea"
+    },
+    {
+      "file": "dist/sim/tools/multi-random-runner.js",
+      "sha256": "ae7ba872197c314711ed214826964f767349882da291fb1320e500fa4690175a"
+    },
+    {
+      "file": "dist/sim/tools/random-player-ai.js",
+      "sha256": "593a7598e855c9d8e74d7b83af3930a22deec96b04a0a6a8f72903197ae77b3a"
+    },
+    {
+      "file": "dist/sim/tools/runner.js",
+      "sha256": "db4c3e28e038cfbe82f926c9ca3d1dc1c2c9cc085e13c674585e8cc035d02906"
+    },
+    {
+      "file": "dist/sim/ultra-rivalry.js",
+      "sha256": "f4f0e2735a543e5db2624d27df9def4709d1721bdcad34ff6b1dcd94fb2a7d15"
+    },
+    {
+      "file": "node_modules/sql-template-strings/index.js",
+      "sha256": "9f94c2e555b556babbf246968db140b972e793ab9e7236930bb9c8510f759e1e"
+    },
+    {
+      "file": "node_modules/sql-template-strings/package.json",
+      "sha256": "5fd465b32bf27e7549eaf2aad03cf0b264aea1c7f68f8ae218478dc558f4b1d1"
+    },
+    {
+      "file": "node_modules/ts-chacha20/build/babel.config.js",
+      "sha256": "ff299e9a5c6c3f71ef98b756d7b7845df76f676dbd5056244b49bd362ee141f2"
+    },
+    {
+      "file": "node_modules/ts-chacha20/build/src/chacha20.js",
+      "sha256": "9c8aa114083d06946ba78c977244cf2a01a85d86ab49dfadf2dd4b0941ffb183"
+    },
+    {
+      "file": "node_modules/ts-chacha20/build/test/jschacha20.test.js",
+      "sha256": "85cd449bacf060c9bbe753fb63325c8146ebe6655a85ef0700d0202659f64146"
+    },
+    {
+      "file": "node_modules/ts-chacha20/package.json",
+      "sha256": "97076f95e09d0f27c00104cef6c17f3703950848827836cf95d9f7ff501575c0"
+    }
+  ],
+  "excludedOfflineSampler": {
+    "file": "dist/sim/custom-calculator.js",
+    "packagedSHA256": "bab8d9dbf797c3d6518d466e42bac0bdc5b38ed0fef9fd9581b9fc699c4eadd1",
+    "reason": "Reviewed offline public-state sampler is not a live battle-worker dependency."
+  },
+  "sourceCheckpoint": {
+    "engineSourceSnapshotSHA256": "cc8f340e5c0b05d29973994be80eb4ce7dc8b784ea9507e35a53fcf8cf18f4a0",
+    "synchronizedDataSHA256": "033a6c92e85912f7a905bd033e7377bed35276b42f3feab7e0ae95c388e2a2bb",
+    "verifiedFiles": 94,
+    "sourceHead": "68218303d1d379110dbabdcc3ee64abe31b6239a",
+    "includesUncommittedCheckpoint": true
+  },
+  "excludedNonmechanics": [
+    {
+      "file": "LICENSE",
+      "sha256": "5cc95d13b79c9fbcb21ca88273890aa002afdec8275e04c4b01b16c549c30d70",
+      "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
+    },
+    {
+      "file": "dist/data/ability-descriptions.js",
+      "sha256": "6786d0898eee83b8663aabd49c891063f1806e7c417a7eb75831add9a684b815",
+      "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
+    },
+    {
+      "file": "dist/data/ability-prose-audit.js",
+      "sha256": "1331f6d0f33e79cd9aeed33ea489f26d183b87f0414e49a2f5cc01ca669ac652",
+      "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
+    },
+    {
+      "file": "dist/data/short-description-audit.js",
+      "sha256": "959dad25de39892b3e72ad0ffe0f22f1b8b35b89f08e834a8624080c14f7d28a",
+      "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
+    },
+    {
+      "file": "node_modules/sql-template-strings/LICENSE.txt",
+      "sha256": "2537bb3d445dd08c12be3ec5c686f0394a3ccd6bfa94dac5d269940a9cb7ff98",
+      "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
+    },
+    {
+      "file": "node_modules/sql-template-strings/README.md",
+      "sha256": "7d51f5ee2fb1867e958a4f1aa92e6d624aaf111e5d10cf1716e998d7d72b4916",
+      "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
+    },
+    {
+      "file": "node_modules/ts-chacha20/LICENSE",
+      "sha256": "bd096308933828a112c5bd48eac0f8f49ccf7de63faea077f5246b7ad8738a40",
+      "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
+    },
+    {
+      "file": "node_modules/ts-chacha20/README.md",
+      "sha256": "7afc145fbbf4627e9b5a729b56fdf6564869c1c00ddb800335605409ddf36736",
+      "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
+    }
+  ]
+}

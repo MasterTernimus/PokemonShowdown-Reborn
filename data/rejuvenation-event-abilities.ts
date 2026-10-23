@@ -26,6 +26,11 @@ export function installRejuvenationEvents(abilities: AbilityDataTable) {
 	};
 
 	abilities.venamskiss = {
+		onResidualOrder: abilities.shedskin.onResidualOrder,
+		onResidualSubOrder: abilities.shedskin.onResidualSubOrder,
+		onResidual(pokemon) {
+			return this.dex.abilities.get('shedskin').onResidual?.call(this, pokemon);
+		},
 		onModifyMove(move) {
 			if (move.category !== 'Status' && this.movehasType(move, 'Poison')) {
 				if (move.ignoreImmunity !== true) {

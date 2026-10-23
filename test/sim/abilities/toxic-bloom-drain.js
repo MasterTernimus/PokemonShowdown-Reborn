@@ -19,7 +19,7 @@ describe('Toxic Bloom Poison drain', () => {
 		const before = t.hp; battle.actions.runMove(move, p, p.getLocOf(t)); return before - t.hp;
 	}
 	it('inherits Thick Fat and Unaware once while keeping Proficient as a separate passive', () => {
-		const [p, t] = setup(); assert.deepEqual(AbilityComponents.toxicbloom, ['pollenbloom']);
+		const [p, t] = setup(); assert.deepEqual(AbilityComponents.toxicbloom, ['pollenbloom', 'toxicsink']);
 		const damage = (source, target, id) => {
 			const move = battle.dex.getActiveMove(id);
 			move.willCrit = false;
@@ -34,7 +34,7 @@ describe('Toxic Bloom Poison drain', () => {
 	it('does not heal from Poison attack damage at any missing-HP amount', () => {
 		const [p, t] = setup();
 		p.hp = 100;
-		const dealt = hit(p, t);
+		hit(p, t);
 		assert.equal(p.hp, 100);
 		p.hp = p.maxhp - 1;
 		t.hp = t.maxhp;
@@ -49,7 +49,7 @@ describe('Toxic Bloom Poison drain', () => {
 		for (const mode of ['block', 'ooze', 'root']) {
 			const [p, t] = setup(mode === 'ooze' ? 'Liquid Ooze' : 'No Ability', mode === 'root' ? 'Big Root' : '');
 			p.hp = 100; if (mode === 'block') p.addVolatile('healblock', t);
-			const dealt = hit(p, t), drain = Math.round(dealt / 4);
+			hit(p, t);
 			if (mode === 'block') assert.equal(p.hp, 100);
 			else assert.equal(p.hp, 100);
 			battle.destroy(); battle = null;

@@ -184,8 +184,7 @@ export const RegionalPassiveGroups = {
     "wobbuffet",
     "illumise",
     "florges",
-    "aromatisse",
-    "ribombee"
+		"aromatisse",
   ],
   "flamebody": [
     "rapidash",
@@ -481,6 +480,7 @@ export const RegionalPassiveGroups = {
     "pawmot"
   ],
   "sweetveil": [
+		"ribombee",
     "audino",
     "alomomola",
     "furfroudebutante",
@@ -1233,5 +1233,38 @@ for (const id of ['palafin', 'palafinhero']) SpeciesPassives[id] = Object.freeze
 ThematicPassiveIds.add('zerotohero');
 SpeciesPassives.hydrapple = Object.freeze(['supersweetsyrup']);
 ThematicPassiveIds.add('supersweetsyrup');
+SpeciesPassives.golisopodmega = Object.freeze(['toughclaws']);
+for (const id of ['minior', 'miniororange', 'minioryellow', 'miniorgreen', 'miniorblue', 'miniorindigo', 'miniorviolet', 'miniormeteor']) SpeciesPassives[id] = Object.freeze(['shieldsdown']);
+ThematicPassiveIds.add('shieldsdown');
+SpeciesPassives.scyther = Object.freeze(['steadfast']);
+ThematicPassiveIds.add('steadfast');
+SpeciesPassives.hariyama = Object.freeze(['thickfat']);
+ThematicPassiveIds.add('suctioncups');
+SpeciesPassives.garchomp = Object.freeze(['serratedscales']);
+ThematicPassiveIds.add('serratedscales');
+SpeciesPassives.ribombee = Object.freeze(['sweetveil']);
+ThematicPassiveIds.add('sweetveil');
+SpeciesPassives.vileplume = Object.freeze(['effectspore']);
+ThematicPassiveIds.add('effectspore');
+// Klefki's status priority is independent of its selected ability.
+SpeciesPassives.klefki = Object.freeze(['prankster']);
+ThematicPassiveIds.add('prankster');
+SpeciesPassives.krookodile = Object.freeze(['controlledfury']);
+SpeciesPassives.annihilape = Object.freeze(['controlledfury']);
+
+// Approved Rivalry passives; Mega Haxorus retains its separate Twin Fang passive.
+for (const id of ['luxray', 'beautifly', 'dustox', 'pyroar', 'unfezant', 'unfezantrejuv', 'haxorus', 'braviary', 'braviaryhisui', 'mandibuzz', 'scrafty', 'mightyena', 'mightyenagrim', 'mightyenadeso']) {
+	SpeciesPassives[id] = Object.freeze(['rivalry']);
+}
+ThematicPassiveIds.add('rivalry');
+
+// Venomoth retains Bug STAB after its local typing change, alongside Shield Dust.
+SpeciesPassives.venomoth = Object.freeze(['mothborn']);
+ThematicPassiveIds.add('mothborn');
+
+// Explicit Delcatty redesign; does not distribute to Skitty.
+SpeciesPassives.delcatty = Object.freeze(['rivalry']);
+ThematicPassiveIds.add('rivalry');
+
 Object.freeze(SpeciesPassives);
 

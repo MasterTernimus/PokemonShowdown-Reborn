@@ -5,17 +5,6 @@ const child_process = require("child_process");
 const path = require("path");
 const esbuild = require('esbuild');
 
-const copyOverDataJSON = (file = 'data') => {
-	const files = fs.readdirSync(file);
-	for (const f of files) {
-		if (fs.statSync(`${file}/${f}`).isDirectory()) {
-			copyOverDataJSON(`${file}/${f}`);
-		} else if (f.endsWith('.json')) {
-			fs.copyFileSync(`${file}/${f}`, require('path').resolve('dist', `${file}/${f}`));
-		}
-	}
-};
-
 const shouldBeCompiled = file => {
 	if (file.includes('node_modules/')) return false;
 	if (file.endsWith('.tsx')) return true;
@@ -42,26 +31,40 @@ const findFilesForPath = directory => {
 };
 
 exports.transpile = (force = false, decl = false) => {
-	// esbuild always rebuilds all inputs; force must not enable declarations.
 	const started = Date.now();
 	const entryPoints = sourceRoots.filter(root => fs.existsSync(root)).flatMap(findFilesForPath);
-	const scanned = Date.now();
-	esbuild.buildSync({
-		entryPoints,
-		outdir: './dist',
-		outbase: '.',
-		format: 'cjs',
-		tsconfig: './tsconfig.json',
-		sourcemap: true,
+	const jsonFiles = [];
+	const scanJSON = dir => {
+		for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+			const file = path.join(dir, entry.name);
+			if (entry.isDirectory()) scanJSON(file); else if (file.endsWith('.json')) jsonFiles.push(file);
+		}
+	};
+	scanJSON('data');
+	const inputs = [...entryPoints, ...jsonFiles, 'config/config-example.js', 'tsconfig.json', 'tools/build-utils.js', 'tools/build-cache.js', 'build', 'package-lock.json'];
+	// Compiler upgrades and options invalidate cached output, even without source edits.
+	inputs.push(require.resolve('esbuild/package.json'));
+	require('./build-cache').run(inputs, force || decl, (stage, changed) => {
+		const allInputs = [...entryPoints, ...jsonFiles];
+		const full = changed === null || changed.some(file => !allInputs.includes(file));
+		const compileEntries = full ? entryPoints : entryPoints.filter(file => changed.includes(file));
+		const scanned = Date.now();
+		if (compileEntries.length) esbuild.buildSync({ entryPoints: compileEntries, outdir: stage, outbase: '.', format: 'cjs', tsconfig: './tsconfig.json', sourcemap: true });
+		const compiled = Date.now();
+		for (const file of ['config/config-example.js', ...jsonFiles].filter(file => full || changed.includes(file))) {
+			const destination = path.join(stage, file);
+			fs.mkdirSync(path.dirname(destination), { recursive: true });
+			if (file.endsWith('.json')) {
+				// Git checkout line endings must not change the runtime engine identity.
+				fs.writeFileSync(destination, fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n'));
+			} else {
+				fs.copyFileSync(file, destination);
+			}
+		}
+		console.log(`Build: ${compileEntries.length}/${entryPoints.length} sources; scan/wait ${scanned - started}ms, compile ${compiled - scanned}ms, assets ${Date.now() - compiled}ms.`);
+		return [...entryPoints.flatMap(file => [path.join('dist', file.replace(/\.tsx?$/, '.js')), path.join('dist', file.replace(/\.tsx?$/, '.js.map'))]), ...['config/config-example.js', ...jsonFiles].map(file => path.join('dist', file))];
 	});
-	const compiled = Date.now();
-	fs.copyFileSync('./config/config-example.js', './dist/config/config-example.js');
-	copyOverDataJSON();
-
-	console.log(`Build: ${entryPoints.length} sources; scan ${scanned - started}ms, compile ${compiled - scanned}ms, assets ${Date.now() - compiled}ms.`);
-	if (decl) {
-		exports.buildDecls();
-	}
+	if (decl) exports.buildDecls();
 };
 
 exports.buildDecls = () => {

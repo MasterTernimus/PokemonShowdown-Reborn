@@ -1,3 +1,4 @@
+import {invalidateBattleEngineGuards} from './battle-engine-guard';
 /**
  * Rooms
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -29,6 +30,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 const RETRY_AFTER_LOGIN = null;
 
 import { FS, Utils, Streams } from '../lib';
+import { LockdownDrain, unfinishedBattleRooms } from './lockdown-drain';
 import { type RoomSection, RoomSections } from './chat-commands/room-settings';
 import { type QueuedHunt } from './chat-plugins/scavengers';
 import { type ScavengerGameTemplate } from './chat-plugins/scavenger-games';
@@ -1202,6 +1204,16 @@ export class GlobalRoomState {
 	readonly ladderIpLog: Streams.WriteStream;
 	readonly reportUserStatsInterval: NodeJS.Timeout;
 	lockdown: boolean | 'pre' | 'ddos';
+	slowLockdown = false;
+	readonly lockdownDrain = new LockdownDrain({
+		enabled: () => this.lockdown === true && !this.slowLockdown && Config.autolockdown !== false,
+		drained: () => this.getUnfinishedBattleRooms().length === 0,
+		updating: () => !!Monitor.updateServerLock,
+		notify: message => this.notifyRooms(['development', 'staff', 'upperstaff'], message === 'warning' ?
+			'|html|<div class="broadcast-red"><b>The server is about to automatically kill itself in 10 seconds.</b></div>' :
+			'|html|<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br />The drain state, update lock or automatic restart setting changed.</div>'),
+		exit: () => process.exit(),
+	});
 	battleCount: number;
 	lastReportedCrash: number;
 	lastBattle: number;
@@ -1761,7 +1773,10 @@ export class GlobalRoomState {
 		}
 	}
 	startLockdown(err: Error | null = null, slow = false) {
+  invalidateBattleEngineGuards();
 		if (this.lockdown && err) return;
+		this.cancelAutomaticKill();
+		this.slowLockdown = slow;
 		const devRoom = Rooms.get('development');
 		const stack = (err ? Utils.escapeHTML(err.stack!).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
@@ -1784,41 +1799,17 @@ export class GlobalRoomState {
 		this.lockdown = true;
 		this.writeNumRooms();
 		this.lastReportedCrash = Date.now();
+		this.automaticKillRequest();
+	}
+	getUnfinishedBattleRooms() {
+		return unfinishedBattleRooms(Rooms.rooms.values());
+	}
+	cancelAutomaticKill() {
+		this.lockdownDrain.cancel();
 	}
 	automaticKillRequest() {
-		const notifyPlaces: RoomID[] = ['development', 'staff', 'upperstaff'];
 		if (Config.autolockdown === undefined) Config.autolockdown = true; // on by default
-
-		if (Config.autolockdown && Rooms.global.lockdown === true && Rooms.global.battleCount === 0) {
-			// The server is in lockdown, the final battle has finished, and the option is set
-			// so we will now automatically kill the server here if it is not updating.
-			if (Monitor.updateServerLock) {
-				this.notifyRooms(
-					notifyPlaces,
-					`|html|<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br /><br />The server tried to automatically kill itself upon the final battle finishing, but the server was updating while trying to kill itself.</div>`
-				);
-				return;
-			}
-
-			// final warning
-			this.notifyRooms(
-				notifyPlaces,
-				`|html|<div class="broadcast-red"><b>The server is about to automatically kill itself in 10 seconds.</b></div>`
-			);
-
-			// kill server in 10 seconds if it's still set to
-			setTimeout(() => {
-				if (Config.autolockdown && Rooms.global.lockdown === true) {
-					// finally kill the server
-					process.exit();
-				} else {
-					this.notifyRooms(
-						notifyPlaces,
-						`|html|<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`
-					);
-				}
-			}, 10 * 1000);
-		}
+		this.lockdownDrain.request();
 	}
 	notifyRooms(rooms: RoomID[], message: string) {
 		if (!rooms || !message) return;

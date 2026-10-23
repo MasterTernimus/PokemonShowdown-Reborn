@@ -13,10 +13,18 @@ import {MoveSheetConsent} from './move-sheet-consent';
  */
 
 import { execSync } from "child_process";
-import { ProcessManager, Utils, type Streams } from '../lib';
+import { FS, ProcessManager, Utils, type Streams } from '../lib';
 import { BattleStream } from "../sim/battle-stream";
 import { RoomGamePlayer, RoomGame } from "./room-game";
 import * as ConfigLoader from './config-loader';
+import * as path from 'path';
+import {captureEngineSnapshot, type EngineSnapshot, type EngineIdentity} from './battle-engine-snapshot';
+import {BattleEngineStreamControl} from './battle-engine-stream';
+import {configureBattleEngineGuard, battleEngineGeneration, invalidateBattleEngineGuards, currentBattleEngineIntent,
+ assertBattleEngineIntent, getBattleEngineExpected, type BattleEngineIntent} from './battle-engine-guard';
+let workerSnapshot: EngineSnapshot | null = null;
+const workerIdentities = new WeakMap<ProcessManager.StreamProcessWrapper, Readonly<EngineIdentity> | null>();
+const streamWorkers = new WeakMap<Streams.ObjectReadWriteStream<string>, ProcessManager.StreamProcessWrapper>();
 import type { Tournament } from './tournaments/index';
 import type { RoomSettings } from './rooms';
 import type { BestOfGame } from './room-battle-bestof';
@@ -478,6 +486,7 @@ export interface RoomBattlePlayerOptions {
 }
 
 export interface RoomBattleOptions {
+ engineGuardIntent?: BattleEngineIntent;
 	challengeOptions?: import('../sim/challenge-options').ChallengeOptions;
 	format: string;
 	/**
@@ -555,6 +564,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	 */
 	readonly allowExtraction: { [k: string]: Set<ID> } = {};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
+ engineIdentity: Readonly<EngineIdentity> | null = null;
 	override readonly timer: RoomBattleTimer;
 	started = false;
 	active = false;
@@ -596,7 +606,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
 		this.playerCap = format.playerCount;
 
-		this.stream = PM.createStream();
+  const expected = getBattleEngineExpected(options.engineGuardIntent);
+  this.stream = expected ? PM.createExpectedStream(expected) : PM.createStream();
+  const selectedWorker = streamWorkers.get(this.stream);
+  const selectedIdentity = selectedWorker ? workerIdentities.get(selectedWorker) : null;
 
 		let ratedMessage = options.ratedMessage || '';
 		if (this.rated) {
@@ -617,7 +630,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (options.inputLog) {
 			void this.stream.write(options.inputLog);
 		} else {
-			void this.stream.write(`>start ` + JSON.stringify(battleOptions));
+   const start = '>start ' + JSON.stringify(battleOptions);
+   void this.stream.write(expected && selectedIdentity ? '>engineguard ' + JSON.stringify({identity: selectedIdentity, command: start}) : start);
 		}
 
 		void this.listen();
@@ -700,7 +714,16 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		request.isWait = true;
 		request.choice = choice;
 
-		void this.stream.write(`>${player.slot} ${choice}`);
+  const intent = currentBattleEngineIntent();
+  if (intent) {
+   assertBattleEngineIntent(intent);
+   if (intent.scope !== this.roomid || intent.lease.rqid !== request.rqid || intent.lease.slot !== player.slot ||
+    (rqid && rqid !== String(intent.lease.rqid)) || !this.engineIdentity || !intent.lease.requestToken) {
+    request.isWait = false; request.choice = ''; sendError('Battle request changed; verify again.'); return;
+   }
+   void this.stream.write('>engineguard ' + JSON.stringify({identity: this.engineIdentity, command: '>' + player.slot + ' ' + choice,
+    slot: player.slot, requestToken: intent.lease.requestToken}));
+  } else void this.stream.write('>' + player.slot + ' ' + choice);
 		if (this.soloMulti && player === this.p3) this.sendSoloControls();
 	}
 	override undo(user: User, data: string) {
@@ -726,7 +749,15 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		request.isWait = false;
 
-		void this.stream.write(`>${player.slot} undo`);
+  const intent = currentBattleEngineIntent();
+  if (intent) {
+   assertBattleEngineIntent(intent);
+   if (intent.scope !== this.roomid || intent.lease.rqid !== request.rqid || !this.engineIdentity || !intent.lease.requestToken) {
+    request.isWait = true; sendError('Battle request changed; verify again.'); return;
+   }
+   void this.stream.write('>engineguard ' + JSON.stringify({identity: this.engineIdentity, command: '>' + player.slot + ' undo',
+    slot: player.slot, requestToken: intent.lease.requestToken}));
+  } else void this.stream.write('>' + player.slot + ' undo');
 		if (this.soloMulti && player === this.p3) this.sendSoloControls();
 	}
 	/** The solo player's second slot has its own simulator request and private controls. */
@@ -901,6 +932,17 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
+  case 'engineidentity': {
+   const actual = JSON.parse(lines[1] || '{}');
+   const worker = streamWorkers.get(this.stream);
+   const expected = worker && workerIdentities.get(worker);
+   if (!expected || actual.algorithm !== expected.algorithm || actual.mechanicsSHA256 !== expected.mechanicsSHA256 || actual.generation !== expected.generation) {
+    this.engineIdentity = null;
+    invalidateBattleEngineGuards();
+    if (!this.ended) {this.room.add('|bigerror|Guarded battle engine is unavailable.'); this.setEnded();}
+   } else this.engineIdentity = Object.freeze(actual);
+   break;
+  }
 		case 'requesteddata':
 			lines = lines.slice(1);
 			const [resolver] = this.dataResolvers!.shift()!;
@@ -1507,13 +1549,21 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 }
 
 export class RoomBattleStream extends BattleStream {
+ override _destroy() {
+  if (this.engineControl.destroy()) {(this as any).battle = null; return;}
+  super._destroy();
+ }
 	override readonly battle: Battle;
-	constructor() {
-		super({ keepAlive: true });
-		this.battle = null!;
-	}
+ private readonly engineControl: BattleEngineStreamControl;
+ constructor() {
+  super({keepAlive: true});
+  this.battle = null!;
+  this.engineControl = new BattleEngineStreamControl(workerSnapshot, value => this.push(value),
+   battle => {(this as any).battle = battle;}, () => {process.send?.('CALLBACK\nENGINE\nnull');});
+ }
 
 	override _write(chunk: string) {
+  if (this.engineControl.handle(chunk)) return;
 		const startTime = Date.now();
 		if (this.battle && Config.debugsimprocesses && process.send) {
 			process.send('DEBUG\n' + this.battle.inputLog.join('\n') + '\n' + chunk);
@@ -1551,18 +1601,78 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.StreamProcessManager('sim', module, () => new RoomBattleStream(), message => {
+export class GuardedSimulatorProcessManager extends ProcessManager.StreamProcessManager {
+ override createProcess() {
+  let wrapper: ProcessManager.StreamProcessWrapper;
+  wrapper = new ProcessManager.StreamProcessWrapper(this.filename, message => {
+   if (message.startsWith('ENGINE\n')) {
+    let identity: EngineIdentity | null = null;
+    try {
+     if (message.length > 600) throw new Error('Invalid identity');
+     const value = JSON.parse(message.slice(7));
+     if (value && value.algorithm === 'sha256-json-canonical-runtime-files-v1' && /^[a-f0-9]{64}$/.test(value.mechanicsSHA256) && /^[a-f0-9]{32}$/.test(value.generation)) identity = Object.freeze(value);
+    } catch {}
+    workerIdentities.set(wrapper, identity); invalidateBattleEngineGuards();
+   } else this.messageCallback?.(message);
+  });
+  workerIdentities.set(wrapper, null);
+  wrapper.process.on('disconnect', () => {workerIdentities.delete(wrapper); invalidateBattleEngineGuards();});
+  invalidateBattleEngineGuards();
+  return wrapper;
+ }
+ override destroyProcess(wrapper: ProcessManager.StreamProcessWrapper) {
+  // Draining workers retain their actual immutable identity until disconnect.
+  // They leave the eligible pool immediately, but their existing battles can reverify.
+  invalidateBattleEngineGuards();
+ }
+ createExpectedStream(expected: EngineIdentity) {
+  const scope = simulatorPoolScope();
+  if (!scope.identity || scope.identity.mechanicsSHA256 !== expected.mechanicsSHA256 || scope.identity.generation !== expected.generation) throw new Error('Battle engine pool changed');
+  const candidates = this.processes.filter(worker => worker.getProcess().connected && workerIdentities.get(worker)?.mechanicsSHA256 === expected.mechanicsSHA256);
+  candidates.sort((a, b) => a.getLoad() - b.getLoad());
+  const worker = candidates[0];
+  if (!worker) throw new Error('No attested simulator worker is available');
+  const stream = worker.createStream(); streamWorkers.set(stream, worker); return stream;
+ }
+}
+function simulatorPoolScope() {
+ if (!PM.processes.length) return {identity: null};
+ const identities = PM.processes.map(worker => worker.getProcess().connected ? workerIdentities.get(worker) : null);
+ const identity = identities[0];
+ if (!identity || identities.some(value => !value || value.mechanicsSHA256 !== identity.mechanicsSHA256 || value.algorithm !== identity.algorithm)) return {identity: null};
+ return {identity: {...identity, generation: battleEngineGeneration()}};
+}
+export const PM = new GuardedSimulatorProcessManager('sim', module, () => new RoomBattleStream(), message => {
 	if (message.startsWith(`SLOW\n`)) {
 		Monitor.slow(message.slice(5));
 	}
 });
+
+configureBattleEngineGuard({pool: simulatorPoolScope, room(connection, roomid) {
+ const room = Rooms.get(roomid as RoomID);
+ const battle = room?.battle;
+ const player = battle?.playerTable[connection.user?.id];
+ if (!battle || battle.ended || !player || !connection.user?.games.has(roomid as RoomID)) return {identity: null};
+ const worker = streamWorkers.get(battle.stream);
+ const current = worker && worker.getProcess().connected && workerIdentities.get(worker);
+ if (!current || !battle.engineIdentity || current.generation !== battle.engineIdentity.generation) return {identity: null};
+ let request: any;
+ try {request = JSON.parse(player.request.request);} catch {return {identity: null};}
+ if (!request?.engineRequestToken) return {identity: null};
+ return {identity: battle.engineIdentity, rqid: player.request.rqid, requestToken: request.engineRequestToken, slot: player.slot};
+}});
 
 export function start(processCount: ConfigLoader.SubProcessesConfig) {
 	PM.spawn(processCount['simulator'] ?? 1);
 }
 
 if (!PM.isParentProcess) {
-	ConfigLoader.ensureLoaded();
+ ConfigLoader.ensureLoaded();
+ try {
+  if (Config.potd || (Config as any).usesqliteleveling) throw new Error('Unsupported external mechanics configuration');
+  workerSnapshot = captureEngineSnapshot(FS.ROOT_PATH, path.join(FS.ROOT_PATH, 'config/battle-engine-identity.json'));
+  process.send?.('CALLBACK\nENGINE\n' + JSON.stringify(workerSnapshot.identity));
+ } catch {workerSnapshot = null; process.send?.('CALLBACK\nENGINE\nnull');}
 	try {
 		require('source-map-support').install();
 	} catch {}

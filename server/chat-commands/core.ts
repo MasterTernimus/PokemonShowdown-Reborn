@@ -15,6 +15,7 @@
 
 /* eslint no-else-return: "error" */
 import { Utils, ProcessManager } from '../../lib';
+import {battleEngineQuery} from '../battle-engine-guard';
 import { queryCalculator } from '../custom-calculator';
 import type { UserSettings } from '../users';
 import { describeChallengeOptions, validateChallengeOptions, type ChallengeOptions } from '../../sim/challenge-options';
@@ -22,6 +23,7 @@ import type { GlobalPermission, RoomPermission } from '../user-groups';
 
 const calculatorRequests = new WeakMap<User, number>();
 export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
+ battleengine(target, user, trustable) {return battleEngineQuery(this.connection, target, !!trustable);},
 	challengeoptions(target, user, trustable) {
 		if (!trustable || target.length > 2000) return null;
 		try {

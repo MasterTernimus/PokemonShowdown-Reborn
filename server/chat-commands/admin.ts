@@ -1151,27 +1151,36 @@ export const commands: Chat.ChatCommands = {
 		if (Config.autolockdown === undefined) Config.autolockdown = true;
 		if (this.meansYes(target)) {
 			if (Config.autolockdown) {
-				throw new Chat.ErrorMessage("The server is already set to automatically kill itself upon the final battle finishing.");
+				throw new Chat.ErrorMessage(Rooms.global.slowLockdown && Rooms.global.lockdown === true ?
+					"The automatic restart preference is already on, but this slow lockdown remains manual. Use /lockdown to enable automatic draining for this session." :
+					"The server is already set to automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = true;
+			Rooms.global.cancelAutomaticKill();
+			Rooms.global.automaticKillRequest();
+			if (Rooms.global.slowLockdown && Rooms.global.lockdown === true) {
+				this.sendReply("The automatic restart preference is on, but this slow lockdown remains manual. Use /lockdown to enable automatic draining for this session.");
+			}
 			this.privateGlobalModAction(`${user.name} used /autolockdownkill on (autokill on final battle finishing)`);
 		} else if (this.meansNo(target)) {
 			if (!Config.autolockdown) {
 				throw new Chat.ErrorMessage("The server is already set to not automatically kill itself upon the final battle finishing.");
 			}
 			Config.autolockdown = false;
+			Rooms.global.cancelAutomaticKill();
 			this.privateGlobalModAction(`${user.name} used /autolockdownkill off (no autokill on final battle finishing)`);
 		} else {
 			return this.parse('/help autolockdownkill');
 		}
 	},
 	autolockdownkillhelp: [
-		`/autolockdownkill on - Turns on the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~`,
+		`/autolockdownkill on - Turns on the setting to enable the server to automatically kill itself upon the final battle finishing. Slow lockdown remains manual until /lockdown is used. Requires ~`,
 		`/autolockdownkill off - Turns off the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~`,
 	],
 
 	prelockdown(target, room, user) {
 		this.checkCan('lockdown');
+		Rooms.global.cancelAutomaticKill();
 		Rooms.global.lockdown = 'pre';
 
 		this.privateGlobalModAction(`${user.name} used /prelockdown (disabled tournaments in preparation for server restart)`);
@@ -1186,7 +1195,7 @@ export const commands: Chat.ChatCommands = {
 		this.privateGlobalModAction(`${user.name} used /slowlockdown (lockdown without auto-restart)`);
 	},
 	slowlockdownhelp: [
-		`/slowlockdown - Locks down the server, but disables the automatic restart after all battles end.`,
+		`/slowlockdown - Locks down the server without automatic restart for this session, preserving the autolockdownkill preference. Use /lockdown to restore normal automatic draining.`,
 		`Requires: ~`,
 	],
 
@@ -1214,6 +1223,7 @@ export const commands: Chat.ChatCommands = {
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
 		}
+		Rooms.global.cancelAutomaticKill();
 		Rooms.global.lockdown = false;
 
 		this.stafflog(`${user.name} used /endlockdown`);
@@ -1264,19 +1274,21 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage("The server is not under lockdown right now.");
 		}
 
-		const battleRooms = [...Rooms.rooms.values()].filter(x => x.battle?.rated && !x.battle?.ended);
-		let buf = `Total remaining rated battles: <b>${battleRooms.length}</b>`;
-		if (battleRooms.length > 10) buf += `<details><summary>View all battles</summary>`;
-		for (const battle of battleRooms) {
-			buf += `<br />`;
-			buf += `<a href="${battle.roomid}">${battle.title}</a>`;
-			if (battle.settings.isPrivate) buf += ' (Private)';
+		const battleRooms = Rooms.global.getUnfinishedBattleRooms();
+		let buf = `Total unfinished battle/match rooms: <b>${battleRooms.length}</b>`;
+		if (battleRooms.length > 10) buf += '<details><summary>View all battle and match rooms</summary>';
+		for (const curRoom of battleRooms) {
+			const isMatch = !!curRoom.bestOf || curRoom.game?.gameid === 'bestof';
+			buf += `<br /><a href="/${Utils.escapeHTML(curRoom.roomid)}">${Utils.escapeHTML(curRoom.title)}</a>`;
+			buf += isMatch ? ' (Best-of match)' : ' (Battle)';
+			if (!isMatch && !curRoom.battle?.rated) buf += ' (Unrated)';
+			if (curRoom.settings.isPrivate) buf += ' (Private)';
 		}
-		if (battleRooms.length > 10) buf += `</details>`;
+		if (battleRooms.length > 10) buf += '</details>';
 		this.sendReplyBox(buf);
 	},
 	remainingbattleshelp: [
-		`/remainingbattles - View a list of the remaining battles during lockdown. Requires: ~`,
+		`/remainingbattles - View all unfinished battle rooms and best-of matches, including unrated/private games, during lockdown. Requires: ~`,
 	],
 
 	async savebattles(target, room, user) {

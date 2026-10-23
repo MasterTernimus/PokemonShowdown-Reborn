@@ -105,7 +105,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Absorbs Grass for +1 Attack/Sp. Atk; grassy-field healing; Cannot flinch; blocks Intimidate; Half contact damage; double Fire damage."
 	},
 	"scarecrow": {
-		"desc": "Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack each turn, plus +1 Sp. Atk on Mountain or Snowy Mountain. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Adds Steel resistances and Poison immunity without Steel weaknesses. Attacks use double the offensive stat against targets that entered this turn.",
+		"desc": "Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Adds Steel resistances and Poison immunity without Steel weaknesses. Attacks use double the offensive stat against targets that entered this turn.",
 		"shortDesc": "Wind/Tailwind boosts Attack; Steel offense/resistances; double attacking stats against new entrants."
 	},
 	"bruteforce": {
@@ -202,7 +202,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 	},
 	"hydrabond": {
 		"desc": "Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Gilded Helix is the exception: three full 50-power hits in every format, with all-foes targeting in Free-for-All; suppression restores its native two hits.",
-		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x."
+		"shortDesc": "Eligible single hits strike 3x; native variable hits maximize in singles/doubles; remaining hits chain after KO.",
 	},
 	"neurotoxin": {
 		"desc": "Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. Heals 1/3 max HP on switching out.",
@@ -249,11 +249,11 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Entry heals adjacent allies by 1/4 HP (1/3 on Fairy Tale); Two 60% independent rolls; separate boosts apply to both hits; FFA: two 60%-power targets; No critical hits; 20% less damage; foe stat drops give +2 Defense."
 	},
 	"hisuianvanguard": {
-		"desc": "On its first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Sp. Atk each turn, plus +1 Attack on Mountain or Snowy Mountain.",
+		"desc": "On its first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
 		"shortDesc": "First active turn: 1.5x Spe and 1.2x Sp. Atk; Absorbs wind; Tailwind/Strong Winds raise Sp. Atk."
 	},
 	"unovavanguard": {
-		"desc": "On its first active turn, its Speed is 1.5x and its Attack is 1.2x. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack each turn, plus +1 Sp. Atk on Mountain or Snowy Mountain.",
+		"desc": "On its first active turn, its Speed is 1.5x and its Attack is 1.2x. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
 		"shortDesc": "First active turn: 1.5x Spe and 1.2x Atk; Absorbs wind; Tailwind/Strong Winds raise Attack."
 	},
 	"unovawing": {
@@ -345,8 +345,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Traps foes; takes 0.75x damage from attacks."
 	},
 	"crueltag": {
-		"desc": "Prevents opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability. It takes 0.75x damage from attacks. On Haunted Field, it reveals foes' held items on entry. This Ability cannot be suppressed. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Sleeping foes, including Comatose users, lose 1/8 max HP each turn. Disabled on Rainbow Field.",
-		"shortDesc": "Traps foes; takes 0.75x damage from attacks; Moves bypass Substitute and opposing screens; Sleeping foes lose 1/8 HP per turn, except on Rainbow."
+		"desc": "Prevents opposing Pokemon from choosing to switch out, unless they are holding a Shed Shell, are a Ghost type, or also have this Ability. It takes 0.8x damage from attacks. On Haunted Field, it reveals foes' held items on entry. This Ability cannot be suppressed. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Sleeping foes, including Comatose users, lose 1/8 max HP each turn. Disabled on Rainbow Field.",
+		"shortDesc": "Traps foes; takes 0.8x damage from attacks; Moves bypass Substitute and opposing screens; Sleeping foes lose 1/8 HP per turn, except on Rainbow."
 	},
 	"angershell": {
 		"desc": "When it has more than 1/2 its max HP and takes damage from an attack bringing it to 1/2 or less of its max HP, its Attack, Special Attack, and Speed are raised by 1 stage, and its Defense and Special Defense are lowered by 1 stage. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
@@ -389,7 +389,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Normal moves become Steel; boosted sound moves; half sound damage; airborne."
 	},
 	"hauntedchime": {
-		"desc": "Airborne: immune to Ground attacks and grounded hazards unless grounded. Move KOs raise its highest stat by 1, ignoring stat stages when choosing the stat. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Sp. Atk each turn, plus +1 Attack on Mountain or Snowy Mountain. Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. On fainting, curses all active foes.",
+		"desc": "Airborne: immune to Ground attacks and grounded hazards unless grounded. Move KOs raise its highest stat by 1, ignoring stat stages when choosing the stat. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. On fainting, curses all active foes.",
 		"shortDesc": "Airborne; move KOs raise its highest stat; Absorbs wind; Tailwind/Strong Winds raise Sp. Atk; 30% chance to disable attacks; curses foes on faint."
 	},
 	"auramaster": {
@@ -405,8 +405,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "No critical hits; 20% less damage; foe stat drops give +2 Defense; Heals 1/16 HP each turn; immune to sandstorm and hail damage."
 	},
 	"ironvise": {
-		"desc": "Contact moves have 1.3x power. Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale entry and +2 Defense when a foe lowers its stats. Halves weight. Speed is 1.25x while free of major status. Factory entry gives +1 Speed. On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply.",
-		"shortDesc": "Contact moves have 1.3x power; No critical hits; 20% less damage; foe stat drops give +2 Defense; Half weight; 1.25x Speed without status; Factory entry +1 Speed; Entry lowers adjacent foes' Attack by 1."
+		"desc": "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit. Intimidate is supplied separately by Mega Scizor's passive.",
+		"shortDesc": "Tough Claws + Decoy Pincers.",
 	},
 	"apexvenom": {
 		"desc": "Biting moves have 1.5x power. At turn end, if statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to heal 1/4 max HP, cure status, clear negative stages and remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn. On Dragon's Den, activation is guaranteed but only cures status and heals, then raises its higher attacking stat by 1 and lowers both defenses by 1. Poison moves, including Poison Fang, are super effective against Poison- and Steel-type Pokemon. Poison Fang has 1.5x power. Biting moves bypass protection and have a 30% chance to badly poison the target.",
@@ -425,7 +425,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Normal moves become Dragon type; Dragon STAB; converted moves 1.2x."
 	},
 	"apexpredator": {
-		"desc": "Prevents critical hits and takes 20% less attack damage. Its Rock typing adds no Fighting, Ground, Steel, Water or Grass weakness. Immune to sandstorm and hail damage. Gains +1 Defense and Sp. Def when a foe lowers its stats, and on entry on Desert, Fairy Tale, Cave, Crystal Cavern, New World or Volcanic. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack each turn, plus +1 Sp. Atk on Mountain or Snowy Mountain.",
+		"desc": "Prevents critical hits and takes 20% less attack damage. Its Rock typing adds no Fighting, Ground, Steel, Water or Grass weakness. Immune to sandstorm and hail damage. Gains +1 Defense and Sp. Def when a foe lowers its stats, and on entry on Desert, Fairy Tale, Cave, Crystal Cavern, New World or Volcanic. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
 		"shortDesc": "Rock weaknesses neutralized; critical-hit/weather protection; stronger Dragon moves; wind boosts Attack."
 	},
 	"bullrush": {
@@ -685,8 +685,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Multi-hit moves become special and use Sp. Atk."
 	},
 	"vanguard": {
-		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Extreme Speed has 1.5x power and becomes Fire when its matchup is better, including against Normal immunity. Direct single-target opposing HP damage grants one 50% guard against the next damaging hit from that opponent that turn. After a successful attack, lethal damage can trigger a once-per-battle final stand: all direct and residual damage leaves at least 1 HP for the rest of that turn. Does not prevent non-damage faint effects. No extra critical-hit reward, permanent indirect immunity or stat-drop protection.",
-		"shortDesc": "Entry lowers adjacent foes' Attack by 1 — enhanced Extreme Speed; one-foe guard and once-per-battle final stand."
+		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Extreme Speed has 1.5x power and becomes Fire when its matchup is better, including against Normal immunity. Direct single-target opposing HP damage grants one 50% guard against the next damaging hit from that opponent that turn. No extra critical-hit reward, permanent indirect immunity or stat-drop protection.",
+		"shortDesc": "Entry lowers adjacent foes' Attack by 1 — enhanced Extreme Speed; one-foe guard.",
 	},
 	"apexcleave": {
 		"desc": "Slicing moves have 1.5x power, except on Cold Eclipse. Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. Separate power boosts apply to both 60%-power hits. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. Gains +1 Attack for each Pokemon knocked out by its move.",
@@ -1099,8 +1099,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "1.3x same-type power; eligible moves hit twice; cycling 1/16–3/16 Water damage to foes each turn."
 	},
 	"livinglegend": {
-		"desc": "Absorbs Fire moves and gains a 1.5x Fire boost until switching out or losing the ability. Burning Field or grounded Volcanic Field also grants the boost. On Cold Eclipse, Fire absorption is disabled and entry gives +1 Defense and Sp. Def. On entry, compares foes' combined Defense and Sp. Def: gains +1 Attack if Defense is lower, otherwise +1 Sp. Atk; Factory grants +2 instead. Short-Circuit grants +1 to both. Glitch grants +1 to both; Genesect holding a Drive gains another +1 to both and changes ability according to its Drive. Its attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Anger Shell, Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating. Extreme Speed has 1.5x power and +2 critical-hit stages.",
-		"shortDesc": "Absorbs Fire; entry boosts an attacking stat; stronger moves without secondary effects; stronger Extreme Speed."
+		"desc": "Flash Fire + Download. Extreme Speed has 1.5x power and +2 critical-hit stages.",
+		"shortDesc": "Flash Fire + Download; stronger Extreme Speed.",
 	},
 	"flashfire": {
 		"desc": "Absorbs Fire moves and gains a 1.5x Fire boost until switching out or losing the ability. Burning Field or grounded Volcanic Field also grants the boost. On Cold Eclipse, Fire absorption is disabled and entry gives +1 Defense and Sp. Def.",
@@ -1151,12 +1151,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Doubles Defense."
 	},
 	"galewings": {
-		"desc": "If it is at full HP, its Flying-type moves have their priority increased by 1.",
-		"shortDesc": "If it is at full HP, its Flying-type moves have their priority increased by 1."
+		"desc": "Flying moves gain +1 priority at 75% HP or more. During unsuppressed Strong Winds, all moves gain +1 priority at any HP.",
+		"shortDesc": "Flying moves gain +1 priority at 75% HP or more. During unsuppressed Strong Winds, all moves gain +1 priority at any HP.",
 	},
 	"wingedwraith": {
-		"desc": "Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. If it is at full HP, its Flying-type moves have their priority increased by 1.",
-		"shortDesc": "Moves bypass Substitute and opposing screens; If it is at full HP, its Flying-type moves have their priority increased by 1."
+		"desc": "Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Flying moves gain +1 priority at 75% HP or more. During unsuppressed Strong Winds, all moves gain +1 priority at any HP.",
+		"shortDesc": "Moves bypass Substitute and opposing screens; Flying moves gain +1 priority at 75% HP or more. During unsuppressed Strong Winds, all moves gain +1 priority at any HP.",
 	},
 	"galvanize": {
 		"desc": "Eligible Normal moves become Electric and have 1.2x power, 1.5x on Factory or Electric Terrain, or 2x on Short-Circuit. Excludes moves whose type is set by their own effect, damaging Z-Moves and Terastallized Tera Blast.",
@@ -1699,8 +1699,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "No critical hits; 20% less damage; foe stat drops give +2 Sp. Def."
 	},
 	"slowclamp": {
-		"desc": "Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale or Dragon's Den entry and +2 Sp. Def when a foe lowers its stats. Prevents and cures confusion and blocks Intimidate's Attack drop. Moves have 1.3x power if no other active Pokemon has a move left to use that turn. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure existing sleep.",
-		"shortDesc": "No critical hits; 20% less damage; foe stat drops give +2 Sp. Def; No confusion or Intimidate Attack drop; 1.3x power when no other active Pokemon has a move left; Prevents sleep and Yawn for itself and allies."
+		"desc": "Full local Own Tempo prevents and cures confusion and blocks Intimidate's Attack drop, subject to normal suppression and ability bypass. Analytic retains its 1.3x power when no other active Pokemon has a move left to use that turn. Shell Armor is supplied separately by Mega Slowbro's species passive, retaining critical-hit protection, 20% attack-damage reduction and its local field/stat-drop effects. Does not grant Sweet Veil or sleep/Yawn protection.",
+		"shortDesc": "Own Tempo + Analytic; Shell Armor is supplied by the species passive."
 	},
 	"shielddust": {
 		"desc": "Blocks secondary effects of other Pokemon's attacks that affect it; effects on the attacker still work.",
@@ -2095,7 +2095,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "5-turn Short-Circuit; +1-priority screens; first new screen per entry cures active allies' status."
 	},
 	"soaringspirit": {
-		"desc": "Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Sp. Atk each turn, plus +1 Attack on Mountain or Snowy Mountain. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage.",
+		"desc": "Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage.",
 		"shortDesc": "Absorbs wind; Tailwind/Strong Winds raise Sp. Atk; Heals 1/16 HP each turn; immune to sandstorm and hail damage."
 	},
 	"angerpoint": {
@@ -2187,7 +2187,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Absorbs Fire for +2 Defense; hot fields raise Defense."
 	},
 	"stormsovereign": {
-		"desc": "On entry, summons replaceable Strong Winds for 8 turns. If it is at full HP, its Flying-type moves have their priority increased by 1. Prevents other Pokemon's accuracy drops and ignores evasion boosts. Reveals opposing Illusions on activation. Mirror Arena entry gives +1 accuracy and Laser Focus. Moves cannot miss.",
+		"desc": "On entry, summons replaceable Strong Winds for 8 turns. Flying moves gain +1 priority at 75% HP or more. During unsuppressed Strong Winds, all moves gain +1 priority at any HP. Prevents other Pokemon's accuracy drops and ignores evasion boosts. Reveals opposing Illusions on activation. Mirror Arena entry gives +1 accuracy and Laser Focus. Moves cannot miss.",
 		"shortDesc": "Summons 8-turn Strong Winds; Flying priority; accuracy protection; moves never miss."
 	},
 	"forewarn": {
@@ -2203,11 +2203,11 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Blocks other Pokemon's stat drops; Volcanic entry boosts attacks."
 	},
 	"windpower": {
-		"desc": "Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Sp. Atk each turn, plus +1 Attack on Mountain or Snowy Mountain.",
+		"desc": "Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
 		"shortDesc": "Absorbs wind; Tailwind/Strong Winds raise Sp. Atk."
 	},
 	"windrider": {
-		"desc": "Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack each turn, plus +1 Sp. Atk on Mountain or Snowy Mountain.",
+		"desc": "Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
 		"shortDesc": "Absorbs wind; Tailwind/Strong Winds raise Attack."
 	},
 	"wonderskin": {
@@ -2259,7 +2259,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Moves never miss; stronger Ice moves; Ice healing/protection; reflects status moves."
 	},
 	"islandcurrent": {
-		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack each turn, plus +1 Sp. Atk on Mountain or Snowy Mountain.",
+		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
 		"shortDesc": "Double Speed in rain and water fields; Absorbs wind; Tailwind/Strong Winds raise Attack."
 	},
 	"oceanicwings": {
@@ -3001,12 +3001,12 @@ AbilityDescriptionOverrides.gentlegiant = {
 };
 
 AbilityDescriptionOverrides.rousingfeast = {
-	"desc": "Full Gluttony. Consuming a Berry clears its negative Attack and Speed stages, preserving positive stages and all other stats.",
-	"shortDesc": "Gluttony; eating a Berry clears its negative Attack and Speed stages."
+	"desc": "Full local Gluttony and Cud Chew. Eating a Berry clears its negative Attack and Speed stages, preserving positive stages and all other stats. Cud Chew repeats the last eligible Berry once at the end of the next turn; that repeat also clears negative Attack and Speed. Bug Bite and Pluck consumption does not schedule a repeat. Switching or losing the ability clears the pending repeat; suppression pauses it.",
+	"shortDesc": "Gluttony + Cud Chew; eating a Berry clears negative Attack and Speed."
 };
 
 AbilityDescriptionOverrides.windpower = {
-	"desc": "Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Sp. Atk each turn, plus +1 Attack on Mountain or Snowy Mountain. Successfully establishing Tailwind itself also clears its own confusion and negative accuracy stages, preserving positive accuracy.",
+	"desc": "Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Successfully establishing Tailwind itself also clears its own confusion and negative accuracy stages, preserving positive accuracy.",
 	"shortDesc": "Absorbs wind for Sp. Atk; Tailwind and Strong Winds boost it. Its successful Tailwind also clears confusion/accuracy drops."
 };
 
@@ -3571,7 +3571,7 @@ Object.assign(AbilityDescriptionOverrides, {
     ...AbilityDescriptionOverrides.deepchill
   },
   "venamskiss": {
-    "desc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types. They drain one-third actual HP damage against any foe, capped at 1/4 base max HP per turn. Foes poisoned before the attack are also heal-blocked through the following turn. Ability drain is not added to existing draining moves; Heal Block and Liquid Ooze apply. Active poisoned foes have 0.75x Speed; multiple holders do not stack.",
+    "desc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types. They drain one-third actual HP damage against any foe, capped at 1/4 base max HP per turn. Foes poisoned before the attack are also heal-blocked through the following turn. Ability drain is not added to existing draining moves; Heal Block and Liquid Ooze apply. Active poisoned foes have 0.75x Speed; multiple holders do not stack. Full local Shed Skin: at turn end, when statused, affected by a listed ailment, negatively boosted or at half HP or less, has a 50% chance to cure status (including frostbite), clear negative stages, remove Attract, confusion, Curse, Disable, Encore, Heal Block, Leech Seed, Nightmare, Perish Song, Taunt, Torment and Yawn, and heal 1/4 max HP. On Dragon's Den, eligible activation is guaranteed; instead it cures status, heals 1/4 max HP, raises its higher staged attacking stat by 1 (Attack on ties), and lowers both defenses by 1 without clearing other ailments or negative stages.",
     "shortDesc": "Poison attacks treat Steel typing as a weakness, with other typing counted normally, and actual opposing HP damage attempts regular poison even on Steel/Poison types."
   },
   "dredger": {
@@ -3582,7 +3582,7 @@ Object.assign(AbilityDescriptionOverrides, {
 
 Object.assign(AbilityDescriptionOverrides, {
   "apexpredator": {
-    "desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack each turn, plus +1 Sp. Atk on Mountain or Snowy Mountain.",
+		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
     "shortDesc": "Dragon conversion/STAB and wind boosts."
   },
   "tyrantdomain": {
@@ -3627,7 +3627,7 @@ if (AbilityDescriptionOverrides.pulseeruption) {
 }
 
 for (const [id, shortDesc] of Object.entries({
-  "venamskiss": "Poison hits drain any foe (up to 1/4 base HP/turn); pre-poisoned foes are heal-blocked. Poisoned foes are slower.",
+  "venamskiss": "Shed Skin; Poison hits drain any foe (up to 1/4 base HP/turn); pre-poisoned foes are heal-blocked. Poisoned foes are slower.",
   "dredger": "First Ground HP hit each turn removes one own Spikes layer, then Toxic Spikes if none remain."
 })) AbilityDescriptionOverrides[id].shortDesc = shortDesc;
 
@@ -4057,3 +4057,49 @@ import {AuditCleanupDescriptions} from './audit-cleanup-approved';
 Object.assign(AbilityDescriptionOverrides, Object.fromEntries(Object.entries(AuditCleanupDescriptions).map(([id, text]) => [id, {...text}])));
 
 AbilityDescriptionOverrides.riftofruin = {shortDesc:'All other active Pokemon have 0.75x Speed. Lumineon-Rift revives as Chi Two.',desc:'All other active Pokemon, including allies, have 0.75x Speed. Lumineon-Rift survives its first faint by becoming Chi Two at full HP. Once, damage that would take Chi Two below half HP stops at half (rounded down), raises Attack by 1 and grants visible Active No Guard: its own moves cannot miss; incoming attacks gain no accuracy benefit.'};
+
+AbilityDescriptionOverrides.aevianking = { shortDesc: 'Guardian Presence + Soundproof + Water Absorb. Politoed becomes Rejuv.', desc: 'Transforms Politoed into Politoed-Rejuv on entry. Full Guardian Presence, Soundproof and Water Absorb: allies take 25% less attack damage and their moves have 1.3x power (1.5x on Haunted, Bewitched Woods, Holy and Psychic fields). Sound moves from other Pokemon fail. Water moves heal 1/4 max HP instead of dealing damage; heals 1/16 base max HP each turn on Underwater, grounded on Water Surface, or grounded and Poison-type on Murkwater Surface. Available as a Special Event Ability; regular Politoed abilities are unchanged.' };
+
+import { CurrentAbilityDescriptionCleanup } from './current-ability-description-cleanup';
+Object.assign(AbilityDescriptionOverrides, CurrentAbilityDescriptionCleanup);
+
+AbilityDescriptionOverrides.serratedscales = { "shortDesc": "Rough Skin + Limber.", "desc": "Contact attackers lose 1/8 base max HP per triggering hit; Thorn Tempered users are exempt. Prevents and cures paralysis. Other Pokemon and field effects cannot lower its Speed; self-inflicted costs and item slowdowns still apply. Trick Room and removal of Speed boosts or Tailwind still work. Limber retains its normal ability-bypass rules; Rough Skin retaliation is not bypassed." };
+
+AbilityDescriptionOverrides.aevianascendance = { "shortDesc": "Cloud Nine + Mind's Eye + Water Absorb. Poliwrath becomes Rejuv.", "desc": "Transforms Poliwrath into Normal/Dragon Poliwrath-Rejuv on entry. Suppresses weather effects; Rainbow Field grants one random non-maxed stat stage other than evasion each turn. Full local Mind's Eye: Normal/Fighting attacks can hit Ghosts, Fairy/Dark moves gain STAB, moves ignore evasion boosts, and external accuracy drops fail. Heals 1/16 base max HP each turn and after damaging hits; Cold Eclipse gives 30% damage reduction, 1/8 hit healing and 1.3x damaging move power. Water moves heal 1/4 base max HP instead of hitting; Water Absorb also heals 1/16 each turn on Underwater, grounded Water Surface, or grounded Poison types on Murkwater. Event option; ordinary Poliwrath slots are unchanged." };
+
+AbilityDescriptionOverrides.aevianweb = { shortDesc: 'Guts + Keen Eye + Solid Rock; Galvantula becomes Rejuv.', desc: 'Transforms Galvantula into Bug/Rock Galvantula-Rejuv on entry. Full local Guts gives 1.5x Attack while statused and ignores the burn damage penalty. Keen Eye prevents external accuracy drops, ignores evasion boosts and reveals opposing Illusions; Mirror Arena entry grants +1 accuracy and Laser Focus. Solid Rock reduces attack damage by 20%, or 40% total for super-effective attacks. Available as a Special Event Ability; regular Galvantula ability slots remain unchanged.' };
+
+AbilityDescriptionOverrides.longreach = { shortDesc: 'Moves do not make contact.', desc: 'Moves used by this Pokemon do not make contact.' };
+
+AbilityDescriptionOverrides.razorreach = { "shortDesc": "Sharpness + Long Reach + Keen Eye.", "desc": "Slicing moves have 1.5x power except on Cold Eclipse. Moves do not make contact. Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions on activation; Mirror Arena grants one Accuracy stage and Laser Focus." };
+
+AbilityDescriptionOverrides.silentflight = { "shortDesc": "Levitate; immune to entry hazards; first HP hit each entry deals 25% less.", "desc": "Levitate makes this Pokemon airborne unless grounded. It is immune to entry hazards even while grounded. The first damaging hit to its HP each switch-in deals 25% less damage; only that hit of a multi-hit move is reduced. Hits absorbed by Substitute are reduced but do not spend the protection. Suppression disables these effects without resetting spent protection. Switching out resets the protection." };
+
+AbilityDescriptionOverrides.toxicsink = { shortDesc: 'Redirects and absorbs Poison moves; absorption raises Sp. Atk by 1.', desc: 'Absorbs other Pokemon Poison-type moves instead of being hit, raising Special Attack by 1 stage. Redirects eligible single-target Poison moves within range to itself. Spread moves are not redirected, but their Poison hits are absorbed for this holder. Uses normal ability suppression and bypass rules.' };
+AbilityDescriptionOverrides.toxicbloom = { ...AbilityDescriptionOverrides.toxicbloom, shortDesc: AbilityDescriptionOverrides.toxicbloom.shortDesc + ' Toxic Sink.', desc: AbilityDescriptionOverrides.toxicbloom.desc + ' Toxic Sink redirects eligible single-target Poison moves and absorbs other Pokemon Poison moves, raising Special Attack by 1 stage per absorption.' };
+
+AbilityDescriptionOverrides.siegelauncher = { ...AbilityDescriptionOverrides.siegelauncher, shortDesc: 'Mega Launcher + Water Barrage + Overcoat.', desc: AbilityDescriptionOverrides.siegelauncher.desc + ' Overcoat prevents powder moves, Rage Powder redirection, Effect Spore, sandstorm damage and hail damage.' };
+
+import { applyWarningDescriptions } from './warning-descriptions';
+applyWarningDescriptions(AbilityDescriptionOverrides);
+
+// Approved Cud Chew second-bite guard, inherited by Rousing Feast.
+AbilityDescriptionOverrides.cudchew = {"shortDesc":"Repeats a Berry next turn, then guards the next damaging move by 25%.","desc":"After eating a Berry, repeats the last eligible Berry once at the end of the next turn. A successful delayed Eat event grants a nonstacking guard that reduces damage to its HP by 25% from the next damaging move that hits it, including all hits of that move. Successful reconsumption grants the guard even if the Berry gives no benefit; a rejected Eat event does not. Protect, misses, immunities, Substitute-only hits, status moves and indirect damage do not spend the guard. Suppression pauses the repeat and guard; switching or losing the ability clears them. Bug Bite and Pluck do not schedule a repeat."};
+AbilityDescriptionOverrides.rousingfeast = {"shortDesc":"Gluttony + Cud Chew guard; eating a Berry clears negative Attack and Speed.","desc":"Full local Gluttony and Cud Chew. Eating a Berry clears its negative Attack and Speed stages, preserving positive stages and all other stats. After eating a Berry, repeats the last eligible Berry once at the end of the next turn. A successful delayed Eat event grants a nonstacking guard that reduces damage to its HP by 25% from the next damaging move that hits it, including all hits of that move. Successful reconsumption grants the guard even if the Berry gives no benefit; a rejected Eat event does not. Protect, misses, immunities, Substitute-only hits, status moves and indirect damage do not spend the guard. Suppression pauses the repeat and guard; switching or losing the ability clears them. Bug Bite and Pluck do not schedule a repeat."};
+
+// Explicit approved Gale Bloom Shield Dust and Twin Fang Rivalry additions.
+AbilityDescriptionOverrides.galebloom = {"shortDesc":"Shield Dust; first Flying HP hit per entry boosts an adjacent ally's Sp. Atk.","desc":"Full local Shield Dust blocks incoming move secondary effects on this Pokemon, while retaining effects on the attacker. Primary move effects are unchanged. Shield Dust yields to normal ability bypass; the existing support effect retains its own rules. Once per switch-in, its first Flying attack to damage a foe raises an adjacent ally's Sp. Atk by 1 stage."};
+AbilityDescriptionOverrides.twinfang = {"shortDesc":"Rivalry; Sp. Atk copies unboosted Attack; eligible contact attacks gain a 30% second hit.","desc":"Special Attack uses calculated unboosted Attack, including Attack EVs, IVs and nature, then applies its own Special Attack stages and modifiers. Attack stages and Attack-only multipliers are not copied; species base stats remain unchanged. Normally single-hit contact attacks gain a second hit at 30% calculated damage. No stacking with other extra-hit effects, retargeting after KO, recursive hits, extra secondaries or self-stat rolls. Excludes native multihit, spread, fixed/OHKO, Z/Max, delayed, charge/recharge, self-KO and item-consuming/repeating exceptions. Full local Rivalry gives damaging moves 1.3x power against a same-gender or genderless target, with no opposite-gender penalty. Other active allies take 25% less calculated attack damage, including friendly fire; the holder is not protected by its own Rivalry. Separate holders retain normal stacking. Selected-ability suppression disables these added effects; native Twin Fang remains a separate species passive."};
+
+import {DustoxAbilityDescriptions} from './dustox-approved';
+Object.assign(AbilityDescriptionOverrides, DustoxAbilityDescriptions);
+
+AbilityDescriptionOverrides.mothborn = {"shortDesc":"Bug attacks gain STAB without stacking; Shield Dust.","desc":"Bug-type damaging moves receive STAB through the normal custom STAB rules, without changing this Pokemon's types or stacking with existing Bug STAB. Adaptability, Terastallization and form changes retain their normal interactions. Full local Shield Dust blocks incoming move secondary effects on this Pokemon, while preserving effects on the attacker and primary move effects. Shield Dust follows normal ability bypass and suppression rules; native Mothborn remains a separate species passive."};
+AbilityDescriptionOverrides.prismwings = {"shortDesc":"Tinted Lens; first resisted foe HP hit after activation gives +1 Speed.","desc":"Tinted Lens doubles calculated damage from resisted attacks. Its first resisted attack hit that deals positive damage to a foe's HP after ability activation raises its Speed by 1 stage immediately after that hit, once per activation, including only once during a multi-hit move. Misses, protection, immunity, Substitute-only hits and allied hits do not trigger the boost. Selected-ability suppression disables these effects. Entry, acquiring this ability, or restarting it after Neutralizing Gas renews the Speed boost; removing Gastro Acid without restarting the ability does not."};
+
+AbilityDescriptionOverrides.causticscales = {"shortDesc":"Once per entry, first opposing contact HP hit poisons attacker and lowers Sp. Def.","desc":"Once per actual switch-in, the first opposing contact attack to damage this Pokemon's HP attempts to poison the attacker and lowers that same attacker's Special Defense by 1 stage. Poison immunity does not prevent the stat drop; stat-drop prevention does not prevent the poison attempt. Normal status immunity, contact protection, stat-drop prevention, reflection and reactions apply. Substitute-only hits, allied hits and noncontact attacks do not spend the effect. Suppression disables it without renewing a spent trigger; losing and reacquiring the ability during the same entry does not renew it. Switching out and back in renews the trigger."};
+
+import {BeautiflyCarrionDescriptions} from './beautifly-carrion-approved';
+Object.assign(AbilityDescriptionOverrides, BeautiflyCarrionDescriptions);
+
+AbilityDescriptionOverrides.moonlitprowl = {"shortDesc":"Infiltrator + full local Limber: paralysis immunity/cure and external Speed-drop protection.","desc":"Full local Infiltrator and Limber. Its moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist through the normal Infiltrator rules. Prevents and cures paralysis, and prevents externally caused Speed stage drops, including Terrain effects. Self-inflicted Speed drops and held-item Speed effects retain their normal behavior. Limber follows its normal ability bypass rules; bypassing Limber does not remove Infiltrator. Selected-ability suppression disables both components. Delcatty's Rivalry is supplied independently by its species passive and is not duplicated by this ability."};

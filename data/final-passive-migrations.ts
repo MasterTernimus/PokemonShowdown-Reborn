@@ -37,7 +37,7 @@ export function installFinalPassiveMigrations(abilities: AbilityDataTable) {
  };
  abilities.empress.onStart = function (pokemon) {
   oldEmpress.onStart!.call(this, pokemon);
-  abilities.longreach.onStart!.call(this, pokemon);
+		abilities.longreach.onStart?.call(this, pokemon);
  };
  abilities.empress.onTryBoost = abilities.longreach.onTryBoost;
  abilities.empress.onBasePower = abilities.longreach.onBasePower;

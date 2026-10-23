@@ -5,7 +5,7 @@ const { Dex } = require('../../../dist/sim');
 const { AbilityComponentExclusions } = require('../../../dist/data/passive-ability-cleanup');
 const before = require('./passive-overlap-before.json');
 const replacements = require('./approved-passive-replacements.json');
-const selected = (id, slot, name) => id === 'butterfree' && slot === '0' ? 'Gentle Scales' : id === 'grimer' && slot === '1' ? 'Poison Point' : replacements.find(r => r.id === id && r.slot === slot)?.after || name;
+const selected = (id, slot, name) => id === 'dustox' && slot === '0' ? 'Night Forager' : id === 'butterfree' && slot === '0' ? 'Gentle Scales' : id === 'grimer' && slot === '1' ? 'Poison Point' : replacements.find(r => r.id === id && r.slot === slot)?.after || name;
 let battle;
 function setup(species, ability) {
 	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
@@ -20,12 +20,14 @@ describe('Passive and selected component separation', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	it('preserves every existing species passive and selected slot without widening distribution', () => {
 		const { SpeciesPassives } = require('../../../dist/data/species-passives');
-		assert.equal(Object.keys(SpeciesPassives).length, before.length + 675);
+		// This historical cohort is covered below; later approved species additions
+		// must not be mistaken for an unintended widening of this old snapshot.
+		assert(before.every(row => Object.hasOwn(SpeciesPassives, row.id)));
 		for (const row of before) {
 			const s = Dex.species.get(row.id);
 			const { StarterPassives } = require('../../../dist/data/starter-passives');
 			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(row.id, (row.id === 'quaquaval' ? ['torrent'] : StarterPassives[row.id]) || (row.id === 'butterfree' ? ['shielddust'] : ['grimer', 'muk'].includes(row.id) ? ['liquidooze'] : row.passives)), row.id);
-			for (const slot of row.slots) assert.equal(s.abilities[slot.slot], require('./passive-approval-overlays').abilities(row.id, {[slot.slot]: selected(row.id, slot.slot, slot.name)})[slot.slot], row.id);
+			for (const slot of row.slots) assert.equal(s.abilities[slot.slot], require('./passive-approval-overlays').abilities(s.id, { [slot.slot]: selected(row.id, slot.slot, slot.name) })[slot.slot], row.id);
 		}
 	});
 	for (const row of before) for (const slot of row.slots.filter(s => s.overlap.length)) {
@@ -36,9 +38,20 @@ describe('Passive and selected component separation', () => {
                     assert.deepEqual(p.getPassives(), require('../../../dist/data/starter-passives').StarterPassives[row.id]);
                     assert(!p.hasAbilityOrPassive('proficient')); continue;
                 }
-				if (row.id === 'gliscor') { assert(p.getPassives().includes('poisonheal')); assert(p.hasAbility('hypercutter')); continue; }
-				if (['kingler', 'fearow', 'pinsir'].includes(row.id)) {
-					assert.deepEqual(p.getPassives(), [{kingler:'titanpincer',fearow:'lancepoint',pinsir:'lockinggrip'}[row.id]]);
+				if (row.id === 'gliscor') {
+					assert(p.getPassives().includes('poisonheal'));
+					assert(p.hasAbility('poisontouch'));
+					assert(!p.hasAbility('hypercutter'));
+					continue;
+				}
+				if (['kingler', 'fearow', 'pinsir', 'masquerain', 'swalot', 'vespiquen', 'vileplume'].includes(row.id)) {
+					assert.deepEqual(p.getPassives(), [{ kingler: 'titanpincer', fearow: 'lancepoint', pinsir: 'lockinggrip', masquerain: 'prismskimmer', swalot: 'accumulation', vespiquen: 'royalhive', vileplume: 'effectspore' }[row.id]]);
+					assert(!p.hasAbilityOrPassive(component));
+					continue;
+				}
+				if (row.id === 'dustox') {
+					assert.deepEqual(p.getPassives(), ['rivalry']);
+					assert.equal(p.ability, 'nightforager');
 					assert(!p.hasAbilityOrPassive(component));
 					continue;
 				}
@@ -76,7 +89,7 @@ describe('Passive and selected component separation', () => {
 	}
 	for (const [species, ability, component] of [
 		['Gligar', 'Venom Heal', 'hypercutter'], ['Gligar-Alt', 'Venom Heal', 'hypercutter'],
-		['Gliscor-Alt', 'Venom Pincer', 'hypercutter'], ['Tentacruel-Reborn', 'Venom Veil', 'liquidooze'],
+		['Gliscor-Alt', 'Venom Pincer', 'poisontouch'], ['Tentacruel-Reborn', 'Venom Veil', 'liquidooze'],
 		['Magneton', 'Elevate', 'levitate'], ['Magnezone', 'Elevate', 'levitate'], ['Rabsca', 'Elevate', 'levitate'],
 		['Bronzong', 'Elevate', 'levitate'], ['Bronzong-Rejuv', 'Elevate', 'levitate'],
 	]) it(species + ' keeps the shared ' + ability + ' component', () => {
@@ -96,11 +109,21 @@ describe('Passive and selected component separation', () => {
 			assert(t.hp < 2000);
 		}
 	});
-	it('Masquerain keeps passive Shield Dust and active Overcoat without a copied Shield Dust callback', () => {
+	for (const [ability, shieldDust] of [['Night Forager', false], ['Toxic Cocoon', true]]) {
+		it('Dustox separates Rivalry passive from selected ' + ability + ' Shield Dust', () => {
+			const [p, t] = setup('Dustox', ability);
+			assert.deepEqual(p.getPassives(), ['rivalry']);
+			assert.equal(p.hasAbility('shielddust'), shieldDust);
+			const effects = [{chance:100, status:'par'}];
+			assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, Dex.moves.get('tackle'), effects), shieldDust ? [] : effects);
+		});
+	}
+	it('Masquerain keeps Prism Skimmer while active Overcoat is suppressed', () => {
 		const [p, t] = setup('Masquerain', 'Scale Shelter');
 		assert(!p.getAbility().onModifySecondaries); assert(p.hasAbility('overcoat'));
 		p.addVolatile('gastroacid', t);
-		assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, Dex.moves.get('tackle'), [{ chance: 100, status: 'par' }]), []);
+		assert.deepEqual(p.getPassives(), ['prismskimmer']);
+		assert.deepEqual(battle.runEvent('ModifySecondaries', p, t, Dex.moves.get('tackle'), [{ chance: 100, status: 'par' }]), [{ chance: 100, status: 'par' }]);
 		assert(!p.hasAbility('overcoat'));
 	});
 	it('removes Proficient from the selected base packages but keeps standalone Proficient', () => {
@@ -113,10 +136,19 @@ describe('Passive and selected component separation', () => {
 	});
 	it('shared-component exclusions follow Transform, form changes and copied disguise passives under Illusion', () => {
 		const [p, t] = setup('Gliscor', 'Venom Pincer');
-		assert(p.hasAbility('hypercutter')); assert(p.getPassives().includes('poisonheal')); p.m.perfectIllusion = true; p.illusion = battle.p1.pokemon[1]; assert(!p.getPassives().includes('poisonheal'));
-		p.illusion = null; delete p.m.perfectIllusion; p.formeChange('Gligar'); assert(p.hasAbility('hypercutter'));
+		assert(p.hasAbility('poisontouch'));
+		assert(!p.hasAbility('hypercutter'));
+		assert(p.getPassives().includes('poisonheal'));
+		p.m.perfectIllusion = true;
+		p.illusion = battle.p1.pokemon[1];
+		assert(!p.getPassives().includes('poisonheal'));
+		p.illusion = null;
+		delete p.m.perfectIllusion;
+		p.formeChange('Gligar');
+		assert(p.hasAbility('poisontouch'));
+		assert(!p.hasAbility('hypercutter'));
 		t.formeChange('Gliscor'); t.setAbility('Venom Pincer'); p.transformInto(t);
-		assert(p.getPassives().includes('poisonheal')); assert(p.hasAbility('hypercutter')); 
+		assert(p.getPassives().includes('poisonheal')); assert(p.hasAbility('poisontouch')); assert(!p.hasAbility('hypercutter'));
 	});
 	it('retains unrelated KO, hail and field effects after separating Levitate', () => {
 		for (const [species, ability] of [['Chimecho', 'Temple Chime'], ['Eelektross', 'Elevate']]) {

@@ -37,6 +37,15 @@ export function installAuditCleanup(abilities: AbilityDataTable) {
   if (pokemon.hp <= pokemon.maxhp / 2) this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
  };
  delete abilities.primevalhunt.onModifyCritRatio;
+	for (const key of ['onUpdate', 'onTryAddVolatile', 'onHit', 'onTryBoost'] as const) delete abilities.primevalhunt[key];
+	Object.assign(abilities.primevalhunt, { flags: {} });
+	abilities.primevalhunt.onStart = function (pokemon) {
+		return this.dex.abilities.get('steadfast').onStart?.call(this, pokemon);
+	};
+	abilities.primevalhunt.onFlinch = function (pokemon) {
+		const callback = this.dex.abilities.get('steadfast').onFlinch;
+		if (typeof callback === 'function') return callback.call(this, pokemon);
+	};
  abilities.doublestrike.onBasePower = function (power, source, target, move) {
   const minimum = this.field.isTerrain('factoryterrain') ? 80 : 60;
   if (this.modify(power, this.event.modifier) <= minimum) return this.chainModify(1.5);
@@ -112,7 +121,7 @@ export function installAuditCleanup(abilities: AbilityDataTable) {
 export const AuditCleanupComponents: {[id: string]: string[]} = {
 	...RepeatableComponents,
  ...OrdinaryComponents,
- witheringshell: ['crumblingshell', 'cursedbody', 'raindish'], primevalhunt: ['skilllink', 'owntempo'], doublestrike: ['skilllink', 'technician'],
+	witheringshell: ['crumblingshell', 'cursedbody', 'raindish'], primevalhunt: ['skilllink', 'steadfast'], doublestrike: ['skilllink', 'technician'],
 	webassassin: [], pendulumswing: ['insomnia'], caverndrake: ['eartheater', 'solidrock'],
 	plushwhiplash: ['whiplash', 'technician'], resonanceforce: [], magneticbulwark: ['filter'],
 	cactuschorus: ['waterabsorb', 'sandrush'], noblearmor: ['prismarmor'],
@@ -129,7 +138,7 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
  ...OrdinaryDescriptions,
  witheringshell: {shortDesc: 'Crumbling Shell + Cursed Body + Rain Dish.', desc: 'Physical HP hits set opposing Stealth Rock except on water fields. Damaging attacks have a 30% Disable chance, guaranteed on Haunted and blocked on Holy; normal Cursed Body exclusions apply. Fainting curses active foes. Heals 1/16 max HP in effective rain. Natural Recovery is the separate Corsola and Corsola-Reborn passive.'},
  relicinstinct: {shortDesc: 'Above half HP: ignores abilities. At half HP or less: defensive mode.', desc: 'Above half HP, attacks ignore target abilities. At half HP or less, takes 25% less attack damage, cannot be critically hit, heals 1/16 maximum HP each turn, and halves Attack and Sp. Atk. No emergency heal or stat reset. Rattled remains a separate passive.'},
- primevalhunt: {shortDesc: 'Skill Link + Own Tempo.', desc: 'Full local Skill Link and Own Tempo, including their existing multihit, accuracy and confusion rules. The final hit has no guaranteed critical hit.'},
+	primevalhunt: { shortDesc: 'Skill Link + Steadfast.', desc: 'Multi-hit moves use their maximum hit count, gain 1.5x power and check accuracy once. Flinching raises Speed by one stage but still prevents acting. Electric Terrain entry raises Speed by one stage. Ashen Beach accuracy checks succeed unless the target has Unnerve; Rocky Terrain adds no flinch damage. No confusion immunity, Intimidate protection or guaranteed final-hit critical hit.' },
  doublestrike: {shortDesc: 'Skill Link; moves at 60 effective BP or less gain 1.5x power.', desc: 'Retains local Skill Link multihit and accuracy handling. Moves at 60 effective base power or less gain 1.5x power; the threshold is 80 on Factory Field. Punching moves receive no additional multiplier.'},
 	webassassin: {
 		shortDesc: 'Double Speed; maximum critical-hit ratio against poisoned or slowed foes.',
@@ -193,7 +202,7 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	scarecrow: {
 		shortDesc: 'Wind Rider and Steelworker.',
-		desc: 'Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack each turn, plus +1 Sp. Atk on Mountain or Snowy Mountain. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Adds Steel resistances and Poison immunity without Steel weaknesses.',
+		desc: 'Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Adds Steel resistances and Poison immunity without Steel weaknesses.',
 	},
 	kickfiend: {
 		shortDesc: 'Striker and Limber.',
@@ -220,6 +229,7 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 AuditCleanupDescriptions.primevalhunger = {"shortDesc":"Accumulation; draining hits and new seeds lower one positive offensive stage.","desc":"Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile every second eligible active turn, first gaining one after two eligible turns. Genuine switching resets this wait; ability restarts do not. Suppressed or otherwise ineligible turns do not advance the counter. Manual Stockpile is unchanged. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Draining attacks that damage a foe's HP and successful new Leech Seed applications by Leech Seed or Sappy Seed mark affected foes. Failed, existing or reflected seeds and residual seed ticks do not trigger this effect. After the whole move, lower one positive Attack or Sp. Atk stage of each affected foe, choosing the more boosted stat and Sp. Atk on ties. Never lowers an unboosted stat or grants the user a boost. Substitute-only damage does not trigger these effects; normal stat-drop protections apply."};
 
 export const AuditCleanupRemovals: {[id: string]: string[]} = {
+	primevalhunt: ['owntempo'],
 	...RepeatableRemovals,
  ...OrdinaryRemovals,
  witheringshell: ['sturdy', 'naturalrecovery', 'naturalcure', 'regenerator'], doublestrike: ['ironfist'],

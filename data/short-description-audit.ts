@@ -1,6 +1,6 @@
 /** Brief default copy; detailed field rules remain available through explicit details. */
 export const ShortDescriptionAudit: Record<string,string> = {
-  "crueltag": "Traps foes; 25% less damage; Infiltrator; sleeping foes lose 1/8 HP/turn except on Rainbow. Unsuppressible.",
+  "crueltag": "Traps foes; 20% less damage; Infiltrator; sleeping foes lose 1/8 HP/turn except on Rainbow. Unsuppressible.",
   "asoneglastrier": "Blocks opposing Berries; move KOs give +1 Attack per knockout.",
   "asonespectrier": "Blocks opposing Berries; move KOs give +1 Sp. Atk per knockout.",
   "relicinstinct": "Above 1/2 HP: bypass abilities. At/below: half offenses, 25% guard, no crits, 1/16 healing. Once/battle at 1/4 HP: heal to 60%, clear drops.",

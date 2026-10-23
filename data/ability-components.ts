@@ -98,7 +98,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	treasuretitan: ['filter', 'eartheater', 'heavymetal', 'intimidate'],
 	royalsun: ['drought', 'supremeoverlord', 'unnerve', 'flamebody'],
 	ragingfists: ['hydrabond', 'scrappy'],
-	aquashell: ['waterveil', 'toughclaws', 'innerfocus'],
+	aquashell: ['heatproof', 'steadfast'],
 	warship: ['swiftswim', 'solidrock', 'strongjaw'],
 	sweetdecay: ['hustle', 'gluttony', 'sweetveil', 'corrosion'],
 	bakedbliss: ['wellbakedbody', 'thickfat', 'sweetveil', 'gluttony'],
@@ -113,9 +113,9 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	swiftdrill: ['swiftswim', 'powerdrill', 'raindish'],
 	bullrush: ['violentrush', 'intimidate'],
 	safeharbor: ['icebody', 'waterabsorb', 'hydration'],
-	ironvise: ['toughclaws', 'battlearmor', 'lightmetal', 'intimidate'],
+	ironvise: ['toughclaws', 'decoypincers'],
 	razorcurrent: ['drizzle', 'strongjaw', 'speedboost'],
-	longreach: ['superluck', 'keeneye'],
+	longreach: [],
 	paradoxengine: [],
 	greatmarsh: ['anticipation', 'dryskin', 'adaptability', 'toxicchain'],
 	lifeguard: ['friendguard', 'swornduty', 'propellertail'],
@@ -232,7 +232,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	royalarmament: ['powerdrill'],
 	seablessing: ['waterveil', 'raindish'],
 	seasonalstride: ['chlorophyll'],
-	slowclamp: ['shellarmor', 'owntempo', 'analytic', 'sweetveil'],
+	slowclamp: ['shellarmor', 'owntempo', 'analytic'],
 	soaringspirit: ['windpower', 'selfsufficient'],
 	solartrap: ['accumulation', 'digestivesap', 'liquidooze'],
 	spiralevolution: ['moldbreaker', 'adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
@@ -291,7 +291,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	unovawing: ['superluck', 'competitive'],
 	aevianwing: ['rockhead', 'defiant'],
 	resuscitation: ['selfrepair', 'magicguard'],
-	shieldsdown: ['shellarmor', 'selfrepair', 'crumblingshell'],
+	shieldsdown: ['crumblingshell'],
 	schooling: ['hydrabond', 'selfrepair', 'moldbreaker'],
 	seviischooling: ['schooling', 'hydrabond', 'selfrepair', 'moldbreaker'],
 };
@@ -331,7 +331,7 @@ Object.assign(AbilityComponents, {
 		"toughclaws",
 	],
 	"decoypincers": [],
-	"toxiccocoon": [],
+	"toxiccocoon": ["shielddust"],
 	"galebloom": [],
 	"gemeye": [
 		"keeneye",
@@ -730,12 +730,12 @@ Object.assign(AbilityComponents, {
 
 Object.assign(AbilityComponents, {"pridecall":["competitive","unnerve"],"hydroelectric":["dryskin"],"solarstride":["chlorophyll"],"frillflash":["dazzling"]});
 
-Object.assign(AbilityComponents, {"stokebelly":["gluttony"],"rousingfeast":["gluttony"],"invisiblewall":["soundproof"],"sentinelfist":["ironfist"],"pursuitwake":["infiltrator"],"gentlegiant":["cloudnine"],"ringcraft":["limber"],"constrictingheat":["whitesmoke"]});
+Object.assign(AbilityComponents, {"stokebelly":["gluttony"],"rousingfeast":["gluttony","cudchew"],"invisiblewall":["soundproof"],"sentinelfist":["ironfist"],"pursuitwake":["infiltrator"],"gentlegiant":["cloudnine"],"ringcraft":["limber"],"constrictingheat":["whitesmoke"]});
 
 AbilityComponents.voidreprisal = ['guts'];
 AbilityComponents.wreckingcrew = ['ironfist'];
 
-Object.assign(AbilityComponents, {"evergreen":["overcoat","ripen"],"battlegrip":["moxie"],"scentscout":["frisk"],"surefoot":[],"baitedbloom":["gluttony","stickyhold"],"guidinggallop":["pastelveil"],"carrionwatch":["frisk","unnerve"]});
+Object.assign(AbilityComponents, {"evergreen":["overcoat","ripen"],"battlegrip":["moxie"],"scentscout":["frisk"],"surefoot":[],"baitedbloom":["gluttony","stickyhold"],"guidinggallop":["pastelveil"],"carrionwatch":["frisk","overcoat"]});
 
 Object.assign(AbilityComponents, {"scaleshelter":["shielddust","overcoat"],"stagesweep":["screencleaner"],"icebreaker":["hypercutter"],"cactuschorus":["waterabsorb","sandrush"],"crushingvenom":["strongjaw"],"crosswire":["ironfist"],"deepchill":["oblivious"],"climatereserve":[]});
 
@@ -939,7 +939,7 @@ AbilityComponents.ragingcurrent = ['swiftswim', 'dryskin', 'stamina'];
 
 AbilityComponents.beyondfear = [];
 AbilityComponents.unboundspirit = ['vitalspirit'];
-AbilityComponents.ragingheart = [];
+AbilityComponents.ragingheart = ['innerfocus'];
 AbilityComponents.silkendecoy = ['selfsufficient', 'swarm'];
 
 Object.assign(AbilityComponents,{rollingfortress:['rockhead'],siegetusks:['moldbreaker'],floehunter:['slushrush'],headlongresolve:['reckless'],scorchsweep:['rockhead'],keenhunt:['keeneye'],hyperdrill:['powerdrill'],venombastion:['stamina']});
@@ -979,3 +979,36 @@ AbilityComponents.twindrills=['dualwield','powerdrill'];
 
 import {AuditCleanupComponents} from './audit-cleanup-approved';
 Object.assign(AbilityComponents, AuditCleanupComponents);
+
+AbilityComponents.aevianking = ['guardianpresence', 'soundproof', 'waterabsorb'];
+
+AbilityComponents.serratedscales = ['roughskin', 'limber'];
+
+AbilityComponents.aevianascendance = ['cloudnine', 'mindseye', 'waterabsorb'];
+
+AbilityComponents.aevianweb = ['guts', 'keeneye', 'solidrock'];
+
+AbilityComponents.canopyarcher = ['scrappy', 'longreach'];
+
+AbilityComponents.silentflight = ['levitate'];
+
+AbilityComponents.toxicsink = [];
+AbilityComponents.toxicbloom = [...new Set([...AbilityComponents.toxicbloom, 'toxicsink'])];
+
+AbilityComponents.siegelauncher = ['megalauncher', 'waterbarrage', 'overcoat'];
+
+AbilityComponents.livinglegend = ['flashfire', 'download'];
+
+AbilityComponents.venamskiss = ['shedskin'];
+
+// Explicit approved Gale Bloom Shield Dust and Twin Fang Rivalry additions.
+AbilityComponents.galebloom = ["shielddust"];
+AbilityComponents.twinfang = ["rivalry"];
+
+AbilityComponents.nightforager = [];
+
+AbilityComponents.mothborn = ['shielddust'];
+
+AbilityComponents.pastelsanctuary = ['pastelveil'];
+
+AbilityComponents.moonlitprowl = ['infiltrator', 'limber'];

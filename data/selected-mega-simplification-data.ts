@@ -98,7 +98,7 @@ export const SelectedComponentRemovals: { [id: string]: string[] } = {
 		"insomnia",
 	],
 	"slowclamp": [
-		"owntempo",
+		"sweetveil",
 	],
 	"parentalbond": [
 		"moldbreaker",
@@ -301,8 +301,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Retains its opposing-ability copying. Automatically applies target-specific Miracle Eye before a direct damaging Psychic move. Direct single-target HP damage stores a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Distinct qualifying attacks each queue a separate attack due next turn, including against the same opponent. At most one stored attack releases per owner per turn; additional due attacks postpone to the next turn. Snapshots its own level, Special Attack, stages and typing, without copied offensive abilities or items. Queues survive switching/fainting and coexist with ordinary Future Sight; normal live defenses apply. If its recorded slot has no living target when due, the same attack retries there next turn and remains queued until it can resolve or the battle ends. Once per battle when Alakazam Mega Evolves, sets real Reflect and Light Screen for 5 turns without shortening longer screens.",
 	},
 	"slowclamp": {
-		"shortDesc": "Analytic + Sweet Veil.",
-		"desc": "Prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale or Dragon's Den entry and +2 Sp. Def when a foe lowers its stats. Moves have 1.3x power if no other active Pokemon has a move left to use that turn. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure existing sleep.",
+		"shortDesc": "Own Tempo + Analytic; Shell Armor is supplied by the species passive.",
+		"desc": "Full local Own Tempo prevents and cures confusion and blocks Intimidate's Attack drop, subject to normal suppression and ability bypass. Analytic retains its 1.3x power when no other active Pokemon has a move left to use that turn. Shell Armor is supplied separately by Mega Slowbro's species passive, retaining critical-hit protection, 20% attack-damage reduction and its local field/stat-drop effects. Does not grant Sweet Veil or sleep/Yawn protection.",
 	},
 	"parentalbond": {
 		"shortDesc": "Eligible attacks hit twice; the second hit deals 80% damage.",
@@ -321,8 +321,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Mega Ariados spins a persistent cocoon, renewed when another Pokemon faints. It blocks status moves and status conditions while intact, and absorbs one damaging move including all its hits and secondary effects. Retains Swarm; Self Sufficient is supplied separately by the species passive.",
 	},
 	"ironvise": {
-		"shortDesc": "Tough Claws + Light Metal.",
-		"desc": "Contact moves have 1.3x power. Halves weight. Speed is 1.25x while free of major status. Factory entry gives +1 Speed. On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply.",
+		"desc": "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit. Intimidate is supplied separately by Mega Scizor's passive.",
+		"shortDesc": "Tough Claws + Decoy Pincers.",
 	},
 	"sandsovereign": {
 		"shortDesc": "Solid Rock, eight-turn sand and Rock chip.",
@@ -374,7 +374,7 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"hauntedchime": {
 		"shortDesc": "Wind Power + Cursed Body.",
-		"desc": "Airborne: immune to Ground attacks and grounded hazards unless grounded. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Sp. Atk each turn, plus +1 Attack on Mountain or Snowy Mountain. Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. On fainting, curses all active foes.",
+		"desc": "Airborne: immune to Ground attacks and grounded hazards unless grounded. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Damaging attacks have a 30% chance to be disabled, guaranteed on Haunted and disabled on Holy Field. Excludes Max moves, delayed attacks and Struggle. On fainting, curses all active foes.",
 	},
 	"freezerburn": {
 		"shortDesc": "Slush Rush + Levitate; Ice damage is 1.2x against burned targets.",

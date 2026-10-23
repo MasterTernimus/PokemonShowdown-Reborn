@@ -1,3 +1,5 @@
+import { resolveNaturePowerMove } from './nature-power';
+import { tidalSoundproofSource } from './primarina-approved';
 import {prepareMeloettaMove} from './meloetta-encore';
 import {allOutChance} from './hydreigon-approved';
 import {grandStrategyPrepared} from './grand-strategy';
@@ -1130,7 +1132,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal", type: "Rock", isNonstandard: "Custom",
 	},
 	deluge: {
-		num: 10416, accuracy: 100, basePower: 65, category: "Physical", name: "Deluge", pp: 10,
+		num: 10416, accuracy: 100, basePower: 80,
+		critRatio: 2, category: "Physical", name: "Deluge", pp: 10,
 		basePowerCallback(pokemon, target, move) {
 			const damagedByTarget = pokemon.attackedBy.some(
 				p => p.source === target && p.damage > 0 && p.thisTurn
@@ -1180,7 +1183,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	avalanche: {
 		num: 419,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 80,
+		critRatio: 2,
 		basePowerCallback(pokemon, target, move) {
 			const damagedByTarget = pokemon.attackedBy.some(
 				p => p.source === target && p.damage > 0 && p.thisTurn
@@ -8225,7 +8229,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) return;
+				if (pokemon.hasItem('heavydutyboots') || (pokemon.hasAbilityOrPassive('runaway') || (pokemon.hasAbility('silentflight') && !this.suppressingAbility(pokemon)))) return;
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
 				// They don't get typed damage from Steelsurge because Steelsurge doesn't,
@@ -9507,7 +9511,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally !== source && !this.suppressingAbility(ally)) {
-					if (ally.hasAbilityOrPassive('soundproof')) {
+					if (ally.hasAbilityOrPassive('soundproof') || tidalSoundproofSource(this, ally)) {
 						if (ally.getPassives().includes('soundproof')) {
 							if (ally.illusion) this.add('-immune', ally);
 							else this.add('-immune', ally, '[from] passive: Soundproof');
@@ -14387,55 +14391,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onTryHit(target, pokemon) {
-			let move = 'triattack';
-			const terrainMoveMap = new Map<string, string>([
-				['flowergarden1', 'growth'],
-				['flowergarden5', 'petalblizzard'],
-				['ashenbeachterrain', 'meditate'],
-				['bewitchedwoodsterrain', 'alluringvoice'],
-				['bigtopterrain', 'acrobatics'],
-				['burningterrain', 'flamethrower'],
-				['caveterrain', 'rocktomb'],
-				['chessboardterrain', 'ancientpower'],
-				['coldeclipseterrain', 'icywind'],
-				['corrosivemistterrain', 'venoshock'],
-				['corrosiveterrain', 'acid'],
-				['crystalcavernterrain', 'powergem'],
-				['darkcrystalcavernterrain', 'darkpulse'],
-				['desertterrain', 'sandtomb'],
-				['dragonsdenterrain', 'dragonpulse'],
-				['electricterrain', 'thunderbolt'],
-				['factoryterrain', 'geargrind'],
-				['fairytaleterrain', 'secretsword'],
-				['forestterrain', 'woodhammer'],
-				['glitchterrain', 'metronome'],
-				['grassyterrain', 'energyball'],
-				['hauntedterrain', 'phantomforce'],
-				['holyterrain', 'judgment'],
-				['icyterrain', 'icebeam'],
-				['inverseterrain', 'trickroom'],
-				['mirrorarenaterrain', 'mirrorshot'],
-				['mountainterrain', 'rockslide'],
-				['murkwatersurfaceterrain', 'sludgewave'],
-				['mistyterrain', 'mistball'],
-				['newworldterrain', 'spacialrend'],
-				['psychicterrain', 'psychic'],
-				['rainbowterrain', 'aurorabeam'],
-				['rockyterrain', 'rocksmash'],
-				['shortcircuitterrain', 'discharge'],
-				['snowymountainterrain', 'avalanche'],
-				['starlightarenaterrain', 'moonblast'],
-				['superheatedterrain', 'heatwave'],
-				['swampterrain', 'muddywater'],
-				['underwaterterrain', 'waterpulse'],
-				['midnightzoneterrain', 'anchorshot'],
-				['volcanicterrain', 'flamethrower'],
-				['wastelandterrain', 'gunkshot'],
-				['watersurfaceterrain', 'whirlpool'],
-			]);
-			const newMove = terrainMoveMap.get(this.field.getTerrain().id);
-			move = newMove !== undefined ? newMove : move;
-   if (this.field.isAura('frozenaura')) move = this.field.getAura().naturePowerMove;
+			const move = resolveNaturePowerMove(this.field.getTerrain().id,
+				this.field.isAura('frozenaura') ? this.field.getAura() : null);
 			this.actions.useMove(move, pokemon, { target: move === 'growth' ? pokemon : target });
 			return null;
 		},
@@ -15510,17 +15467,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	poisontail: {
 		num: 342,
 		accuracy: 100,
-		basePower: 85,
+		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			return target.status ? move.basePower * 2 : move.basePower;
+		},
 		category: "Physical",
 		name: "Poison Tail",
-		pp: 25,
+		pp: 15,
 		priority: 0,
 		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, slicing: 1, metronome: 1 },
-		critRatio: 2,
-		secondary: {
-			chance: 50,
-			status: 'psn',
-		},
+		secondary: null,
 		target: "normal",
 		type: "Poison",
 		contestType: "Clever",
@@ -17288,7 +17244,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	revenge: {
 		num: 279,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 80,
+		critRatio: 2,
 		basePowerCallback(pokemon, target, move) {
 			const damagedByTarget = pokemon.attackedBy.some(
 				p => p.source === target && p.damage > 0 && p.thisTurn
@@ -19717,7 +19674,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onStart(pokemon) {
 				let applies = false;
 				if (pokemon.hasType('Flying') || pokemon.getPassives().some(id => id === 'levitate' || id === 'elevate') ||
-					pokemon.hasAbility(['levitate', 'elevate'])) applies = true;
+					pokemon.hasAbility(['levitate', 'elevate', 'silentflight'])) applies = true;
 				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] ||
 					this.field.getPseudoWeather('gravity')) applies = false;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
@@ -20352,7 +20309,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
-				if ((!pokemon.isGrounded() && !this.field.isTerrain('electricterrain')) || pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) return;
+				if ((!pokemon.isGrounded() && !this.field.isTerrain('electricterrain')) || pokemon.hasItem('heavydutyboots') || (pokemon.hasAbilityOrPassive('runaway') || (pokemon.hasAbility('silentflight') && !this.suppressingAbility(pokemon)))) return;
 				let typeMod = 1;
 				if (this.field.isTerrain('electricterrain')) {
 					if (!pokemon.runImmunity('Electric')) {
@@ -20763,7 +20720,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSwitchIn(pokemon) {
 				const counter = ['Fire', 'Water', 'Grass', 'Psychic'];
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) return;
+				if (pokemon.hasItem('heavydutyboots') || (pokemon.hasAbilityOrPassive('runaway') || (pokemon.hasAbility('silentflight') && !this.suppressingAbility(pokemon)))) return;
 				let typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				if (this.field.isTerrain('crystalcavernterrain')) {
 					if (!pokemon.runImmunity(counter[this.CrystalCavernCounter])) {
@@ -20932,7 +20889,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasAbility('parasitism') && pokemon.hp > pokemon.maxhp / 2) return;
-				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) return;
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || (pokemon.hasAbilityOrPassive('runaway') || (pokemon.hasAbility('silentflight') && !this.suppressingAbility(pokemon)))) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				const webSetter = this.effectState.source;
 				if (webSetter?.isActive && webSetter.hp && webSetter.hasAbility('livenet') &&
@@ -22028,6 +21985,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 4,
 			durationCallback(target, source, effect) {
+				if (effect?.id === 'windysurge') return 2;
 				const baseDuration = effect?.id === 'razorwind' ? 2 : 4;
 				if (source?.hasAbility('persistent') || this.field.isTerrain('mountainterrain') || this.field.isTerrain('snowymountainterrain')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
@@ -22036,10 +21994,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return baseDuration;
 			},
 			onSideStart(side, source) {
+				const turns = `[turns] ${this.effectState.duration}`;
 				if (source?.hasAbility('persistent')) {
-					this.add('-sidestart', side, 'move: Tailwind', '[persistent]');
+					this.add('-sidestart', side, 'move: Tailwind', '[persistent]', turns);
 				} else {
-					this.add('-sidestart', side, 'move: Tailwind');
+					this.add('-sidestart', side, 'move: Tailwind', turns);
 				}
 			},
 			onModifySpe(spe, pokemon) {
@@ -23036,7 +22995,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hasType('Poison') && !this.field.isTerrain('corrosiveterrain')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbilityOrPassive('runaway')) {
+				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || (pokemon.hasAbilityOrPassive('runaway') || (pokemon.hasAbility('silentflight') && !this.suppressingAbility(pokemon)))) {
 					return;
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -25090,3 +25049,7 @@ Moves.pirouettedance={...Moves.relicsong,name:'Pirouette Dance',type:'Fighting',
 
 import {installJirachiMoves} from './jirachi-approved';
 installJirachiMoves(Moves);
+
+import { ScentedGeyser } from './scented-geyser';
+Moves.scentedgeyser = ScentedGeyser;
+Moves.splinteredweb = { num: 20051, name: 'Splintered Web', type: 'Bug', category: 'Physical', basePower: 90, accuracy: 100, pp: 10, priority: 0, target: 'normal', flags: { protect: 1, mirror: 1 }, onPrepareHit(target, source, move) { if (target.side.sideConditions.stealthrock) move.willCrit = true; } };

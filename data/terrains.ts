@@ -172,7 +172,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'The fairy aura amplified the attack\'s power!');
 				}
-				if (move.type === 'Grassy') {
+				if (move.type === 'Grass') {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 					this.add('-message', 'Flourish!');
 				}
@@ -2053,6 +2053,12 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onEffectivenessPriority: 1,
 			onEffectiveness(typeMod, target, type, move) {
+				// Reverse each effectiveness component independently, including immunity becoming weakness.
+				const extraType = (move as any)?.scentedExtraType;
+				if (move?.id === 'scentedgeyser' && extraType) {
+					return [move.type, extraType].reduce((modifier, attackType) => modifier +
+						(this.dex.getImmunity(attackType, type) ? -this.dex.getEffectiveness(attackType, type) : 1), 0);
+				}
 				// The effectiveness of Freeze Dry on Water isn't reverted
 				if (move && move.id === 'freezedry' && type === 'Water') return;
 				if (move && !this.dex.getImmunity(move, type)) return 1;
@@ -2190,7 +2196,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				let modifier = 1;
 				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "thunder", "eruption", "avalanche", "hypervoice"];
-				const wind_boost = ['fairywind', 'gust', 'icywind', 'ominouswind', 'razorwind', 'silverwind', 'twister'];
 				const snow = ['blizzard', 'glaciate', 'subzeroslammer', 'mountaingale'];
 				if (move.type === 'Rock' || move.type === 'Flying') {
 					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
@@ -2198,16 +2203,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 				if (boost.includes(move.id)) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-				}
-				if (this.field.weather === 'deltastream') {
-					if (wind_boost.includes(move.id)) {
-						this.add('-message', 'The wind strengthened the attack!');
-						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-					}
-					if (move.category === 'Special' && move.type === 'Flying') {
-						this.add('-message', 'The wind strengthened the attack!');
-						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-					}
 				}
 				if (snow.includes(move.id)) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
@@ -2666,7 +2661,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				let modifier = 1;
 				const boost_types = ['Rock', 'Ice', 'Flying'];
 				const boost = ["vitalthrow", "circlethrow", "stormthrow", "ominouswind", "silverwind", "twister", "razorwind", "fairywind", "avalanche", "powdersnow", "hypervoice", "glaciate", 'bittermalice'];
-				const wind_boost = ["ominouswind", "icywind", "silverwind", "twister", "razorwind", "fairywind", "gust", "bleakwindstorm", "sandsearstorm", "wildboltstorm"];
 				const igniteMoves = ['infernalrage', 'eruption', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'infernooverdrive'];
 				if (boost_types.includes(move.type)) {
 					this.add('-message', 'The field strengthened the move\'s ' + move.type + ' typing');
@@ -2686,15 +2680,9 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
-				if (this.field.weather === 'deltastream') {
-					if (wind_boost.includes(move.id)) {
-						this.add('-message', 'The wind strengthened the attack!');
-						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-					}
-					if (move.category === 'Special' && move.type === 'Flying') {
-						this.add('-message', 'The wind strengthened the attack!');
-						modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-					}
+				if (this.field.isWeather('deltastream') && ['bleakwindstorm', 'sandsearstorm', 'wildboltstorm'].includes(move.id)) {
+					this.add('-message', 'The wind strengthened the attack!');
+					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				}
 				if (move.id === 'icywind') {
 					modifier *= adaptiveFieldMultiplier(this, source, target, 2);

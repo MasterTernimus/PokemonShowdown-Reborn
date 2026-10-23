@@ -8813,3 +8813,7 @@ Items.primordialorb={name:'Primordial Orb',spritenum:390,num:20002,gen:9,itemUse
  onTakeItem(item,source){return source.baseSpecies.baseSpecies!=='Regigigas';},
  onBasePower(basePower,pokemon,target,move){if(pokemon.baseSpecies.baseSpecies==='Regigigas'&&RegiAttackTypes.some(type=>this.movehasType(move,type)))return this.chainModify(1.5);},
 };
+
+// Battle-inert incenses used by the approved Scented Geyser mapping.
+Items.pureincense = { name: 'Pure Incense', num: 20003, gen: 9, isNonstandard: 'Custom' };
+Items.luckincense = { name: 'Luck Incense', num: 20004, gen: 9, isNonstandard: 'Custom' };

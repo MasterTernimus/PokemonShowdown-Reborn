@@ -847,8 +847,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	livinglegend: {
 		name: "Living Legend",
-		desc: "This Pokemon has Flash Fire, Download, and Sheer Force. Hidden effect: Extreme Speed has 1.5x power.",
-		shortDesc: "Flash Fire + Download + Sheer Force; Extreme Speed 1.5x.",
+		desc: "Flash Fire + Download. Extreme Speed has 1.5x power and +2 critical-hit stages.",
+		shortDesc: "Flash Fire + Download; stronger Extreme Speed.",
 	},
 	dragonize: {
 		name: "Dragonize",
@@ -986,8 +986,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vanguard: {
 		name: "Vanguard",
-		desc: "Intimidate; Extreme Speed has 1.5x power and becomes Fire when its matchup is better, including against Normal immunity. Direct single-target opposing HP damage grants one 50% guard against the next damaging hit from that opponent that turn. After a successful attack, lethal damage can trigger a once-per-battle final stand: all direct and residual damage leaves at least 1 HP for the rest of that turn. Does not prevent non-damage faint effects. No extra critical-hit reward, permanent indirect immunity or stat-drop protection.",
-		shortDesc: "Intimidate; enhanced Extreme Speed; one-foe guard and once-per-battle final stand.",
+		desc: "Intimidate; Extreme Speed has 1.5x power and becomes Fire when its matchup is better, including against Normal immunity. Direct single-target opposing HP damage grants one 50% guard against the next damaging hit from that opponent that turn. No extra critical-hit reward, permanent indirect immunity or stat-drop protection.",
+		shortDesc: "Intimidate; enhanced Extreme Speed; one-foe guard.",
 	},
 	apexcleave: {
 		name: "Apex Cleave",
@@ -1605,7 +1605,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	galewings: {
 		name: "Gale Wings",
-		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
+		shortDesc: "Flying moves gain +1 priority at 75% HP or more; during Strong Winds, all moves gain +1 priority.",
 		gen6: {
 			shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		},
@@ -3775,12 +3775,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	windpower: {
 		name: "Wind Power",
-		desc: "This Pokemon is immune to wind moves and raises its Special Attack by 1 stage when hit by a wind move, when Tailwind begins on this Pokemon's side, or when it switches in while Tailwind is active.",
+		desc: "This Pokemon is immune to wind moves and raises its Special Attack by 1 stage when hit by a wind move, when Tailwind begins on this Pokemon's side, or when it switches in while Tailwind is active. During Strong Winds, Attack and Special Attack rise by 1 stage each turn.",
 		shortDesc: "Wind move immunity; +1 Sp. Atk from wind moves or allied Tailwind.",
 	},
 	windrider: {
 		name: "Wind Rider",
-		desc: "This Pokemon is immune to wind moves and raises its Attack by 1 stage when hit by a wind move or when Tailwind begins on this Pokemon's side.",
+		desc: "This Pokemon is immune to wind moves and raises its Attack by 1 stage when hit by a wind move, when Tailwind begins on this Pokemon's side, or when it enters during Tailwind. During Strong Winds, Attack and Special Attack rise by 1 stage each turn.",
 		shortDesc: "Attack raised by 1 if hit by a wind move or Tailwind begins. Wind move immunity.",
 	},
 	wonderguard: {
@@ -3872,7 +3872,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	hydrabond: {
 		name: "Hydra Bond",
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit three times. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Gilded Helix is the exception: three full 50-power hits in every format, with all-foes targeting in Free-for-All; suppression restores its native two hits.",
-		shortDesc: "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x.",
+		shortDesc: "Eligible single hits strike 3x; native variable hits maximize in singles/doubles; remaining hits chain after KO.",
 	},
 	hydraheart: {
 		name: "Hydra Heart",
@@ -4781,3 +4781,38 @@ Object.assign(AbilitiesText,PowerDrillBatchDescriptions);
 
 import {AuditCleanupDescriptions} from '../audit-cleanup-approved';
 Object.assign(AbilitiesText, Object.fromEntries(Object.entries(AuditCleanupDescriptions).map(([id, text]) => [id, {...text}])));
+
+import { CurrentAbilityDescriptionCleanup } from '../current-ability-description-cleanup';
+Object.assign(AbilitiesText, CurrentAbilityDescriptionCleanup);
+
+AbilitiesText.aevianking = { name: 'Aevian King', ...AbilityDescriptionOverrides.aevianking };
+AbilitiesText.serratedscales = { name: 'Serrated Scales', ...AbilityDescriptionOverrides.serratedscales };
+
+AbilitiesText.aevianascendance = { name: 'Aevian Ascendance', ...AbilityDescriptionOverrides.aevianascendance };
+
+AbilitiesText.aevianweb = { name: 'Aevian Web', ...AbilityDescriptionOverrides.aevianweb };
+
+AbilitiesText.longreach = { name: 'Long Reach', shortDesc: 'Moves do not make contact.', desc: 'Moves used by this Pokemon do not make contact.' };
+
+AbilitiesText.razorreach = { "name": "Razor Reach", "shortDesc": "Sharpness + Long Reach + Keen Eye.", "desc": "Slicing moves have 1.5x power except on Cold Eclipse. Moves do not make contact. Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions on activation; Mirror Arena grants one Accuracy stage and Laser Focus." };
+
+AbilitiesText.silentflight = { name: "Silent Flight", "shortDesc": "Levitate; immune to entry hazards; first HP hit each entry deals 25% less.", "desc": "Levitate makes this Pokemon airborne unless grounded. It is immune to entry hazards even while grounded. The first damaging hit to its HP each switch-in deals 25% less damage; only that hit of a multi-hit move is reduced. Hits absorbed by Substitute are reduced but do not spend the protection. Suppression disables these effects without resetting spent protection. Switching out resets the protection." };
+
+import { applyWarningDescriptions } from '../warning-descriptions';
+applyWarningDescriptions(AbilitiesText);
+
+// Keep the registered ability linked to its already-reviewed mechanics text.
+AbilitiesText.riftofruin = { name: 'Rift of Ruin', ...AbilityDescriptionOverrides.riftofruin };
+
+Object.assign(AbilitiesText.cudchew, {"shortDesc":"Repeats a Berry next turn, then guards the next damaging move by 25%.","desc":"After eating a Berry, repeats the last eligible Berry once at the end of the next turn. A successful delayed Eat event grants a nonstacking guard that reduces damage to its HP by 25% from the next damaging move that hits it, including all hits of that move. Successful reconsumption grants the guard even if the Berry gives no benefit; a rejected Eat event does not. Protect, misses, immunities, Substitute-only hits, status moves and indirect damage do not spend the guard. Suppression pauses the repeat and guard; switching or losing the ability clears them. Bug Bite and Pluck do not schedule a repeat."});
+Object.assign(AbilitiesText.rousingfeast, {"shortDesc":"Gluttony + Cud Chew guard; eating a Berry clears negative Attack and Speed.","desc":"Full local Gluttony and Cud Chew. Eating a Berry clears its negative Attack and Speed stages, preserving positive stages and all other stats. After eating a Berry, repeats the last eligible Berry once at the end of the next turn. A successful delayed Eat event grants a nonstacking guard that reduces damage to its HP by 25% from the next damaging move that hits it, including all hits of that move. Successful reconsumption grants the guard even if the Berry gives no benefit; a rejected Eat event does not. Protect, misses, immunities, Substitute-only hits, status moves and indirect damage do not spend the guard. Suppression pauses the repeat and guard; switching or losing the ability clears them. Bug Bite and Pluck do not schedule a repeat."});
+
+AbilitiesText.mothborn = {name: 'Mothborn', ...{"shortDesc":"Bug attacks gain STAB without stacking; Shield Dust.","desc":"Bug-type damaging moves receive STAB through the normal custom STAB rules, without changing this Pokemon's types or stacking with existing Bug STAB. Adaptability, Terastallization and form changes retain their normal interactions. Full local Shield Dust blocks incoming move secondary effects on this Pokemon, while preserving effects on the attacker and primary move effects. Shield Dust follows normal ability bypass and suppression rules; native Mothborn remains a separate species passive."}};
+Object.assign(AbilitiesText.prismwings, {"shortDesc":"Tinted Lens; first resisted foe HP hit after activation gives +1 Speed.","desc":"Tinted Lens doubles calculated damage from resisted attacks. Its first resisted attack hit that deals positive damage to a foe's HP after ability activation raises its Speed by 1 stage immediately after that hit, once per activation, including only once during a multi-hit move. Misses, protection, immunity, Substitute-only hits and allied hits do not trigger the boost. Selected-ability suppression disables these effects. Entry, acquiring this ability, or restarting it after Neutralizing Gas renews the Speed boost; removing Gastro Acid without restarting the ability does not."});
+
+Object.assign(AbilitiesText.causticscales, {"shortDesc":"Once per entry, first opposing contact HP hit poisons attacker and lowers Sp. Def.","desc":"Once per actual switch-in, the first opposing contact attack to damage this Pokemon's HP attempts to poison the attacker and lowers that same attacker's Special Defense by 1 stage. Poison immunity does not prevent the stat drop; stat-drop prevention does not prevent the poison attempt. Normal status immunity, contact protection, stat-drop prevention, reflection and reactions apply. Substitute-only hits, allied hits and noncontact attacks do not spend the effect. Suppression disables it without renewing a spent trigger; losing and reacquiring the ability during the same entry does not renew it. Switching out and back in renews the trigger."});
+
+AbilitiesText.moonlitprowl = {name: 'Moonlit Prowl', ...{"shortDesc":"Infiltrator + full local Limber: paralysis immunity/cure and external Speed-drop protection.","desc":"Full local Infiltrator and Limber. Its moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist through the normal Infiltrator rules. Prevents and cures paralysis, and prevents externally caused Speed stage drops, including Terrain effects. Self-inflicted Speed drops and held-item Speed effects retain their normal behavior. Limber follows its normal ability bypass rules; bypassing Limber does not remove Infiltrator. Selected-ability suppression disables both components. Delcatty's Rivalry is supplied independently by its species passive and is not duplicated by this ability."}};
+
+// Keep the approved Carrion Watch components authoritative after legacy prose passes.
+AbilitiesText.carrionwatch = {name: 'Carrion Watch', ...AbilityDescriptionOverrides.carrionwatch};

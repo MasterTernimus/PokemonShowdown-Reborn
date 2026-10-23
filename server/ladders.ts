@@ -1,3 +1,4 @@
+import { currentBattleEngineIntent, assertBattleEngineIntent, pendingBattleEngineIntent } from './battle-engine-guard';
 /**
  * Matchmaker
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -133,10 +134,13 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
+		const engineGuardIntent = pendingBattleEngineIntent(currentBattleEngineIntent());
 		const settings = { ...user.battleSettings, team: valResult.slice(1) };
 		user.battleSettings.inviteOnly = false;
 		user.battleSettings.hidden = false;
-		return new BattleReady(userid, this.formatid, settings, rating, challengeType);
+		const ready = new BattleReady(userid, this.formatid, settings, rating, challengeType);
+		ready.engineGuardIntent = engineGuardIntent;
+		return ready;
 	}
 
 	static getChallenging(userid: ID) {
@@ -272,6 +276,16 @@ class Ladder extends LadderStore {
 				user.popup(`You changed your name and are no longer looking for a battle in ${formatid}`);
 				Ladder.updateSearch(user);
 			}
+			return null;
+		}
+		try {
+			assertBattleEngineIntent(search.engineGuardIntent);
+		} catch {
+			if (Ladders.searches.get(formatid)?.searches.get(search.userid) === search) {
+				Ladders.searches.get(formatid)!.searches.delete(search.userid);
+			}
+			user.popup('Your battle search was canceled because its verified engine changed. Verify again before searching.');
+			Ladder.updateSearch(user);
 			return null;
 		}
 		return user;
@@ -411,12 +425,12 @@ class Ladder extends LadderStore {
 				matches.push(search);
 			}
 			if (matches.length >= formatTable.playerCount) {
-				for (const matchedSearch of matches) formatTable.searches.delete(matchedSearch.userid);
-				Ladder.match(matches);
-				return;
+				if (Ladder.match(matches)) return;
+				break;
 			}
 		}
 
+		if (!this.getSearcher(newSearch)) return;
 		formatTable.searches.set(newSearch.userid, newSearch);
 		Ladder.updateSearch(user);
 	}
@@ -445,8 +459,6 @@ class Ladder extends LadderStore {
 				const [longestSearch, longestSearcher] = longest;
 				const matched = matchmaker.matchmakingOK([[search, searcher], [longestSearch, longestSearcher]]);
 				if (matched) {
-					formatTable.searches.delete(search.userid);
-					formatTable.searches.delete(longestSearch.userid);
 					Ladder.match([longestSearch, search]);
 					return;
 				}
@@ -455,6 +467,23 @@ class Ladder extends LadderStore {
 	}
 
 	static match(readies: BattleReady[]) {
+		const guarded = readies.map(ready => ready.engineGuardIntent).filter(Boolean);
+		let invalid = false;
+		for (const ready of readies) {
+			try {
+				assertBattleEngineIntent(ready.engineGuardIntent);
+			} catch {
+				invalid = true;
+				const queuedSearches = Ladders.searches.get(ready.formatid)?.searches;
+				if (queuedSearches?.get(ready.userid) === ready) queuedSearches.delete(ready.userid);
+				const user = Users.get(ready.userid);
+				if (user) {
+					Ladder.updateSearch(user);
+					user.popup('The battle could not start because your verified engine changed. Verify again and retry.');
+				}
+			}
+		}
+		if (invalid) return undefined;
 		const formatid = readies[0].formatid;
 		if (readies.some(ready => ready.formatid !== formatid)) throw new Error(`Format IDs don't match`);
 		const players = [];
@@ -489,6 +518,7 @@ class Ladder extends LadderStore {
 			rated: minRating,
 			challengeType: readies[0].challengeType,
 			challengeOptions: readies[0].challengeOptions,
+			engineGuardIntent: guarded[0],
 			delayedStart,
 		});
 	}

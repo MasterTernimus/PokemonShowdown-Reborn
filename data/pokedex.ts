@@ -3099,7 +3099,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Scyther",
 		types: ["Bug", "Flying"],
 		baseStats: { hp: 70, atk: 110, def: 80, spa: 55, spd: 80, spe: 105 },
-		abilities: { 0: "Swarm", 1: "Technician", H: "Dual Wield" },
+		abilities: { 0: "Technician", 1: "Sharpness", H: "Swarm" },
 		heightm: 1.5,
 		weightkg: 56,
 		color: "Green",
@@ -5995,8 +5995,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 267,
 		name: "Beautifly",
 		types: ["Psychic", "Bug"],
-		baseStats: {"hp":80,"atk":40,"def":70,"spa":150,"spd":75,"spe":115},
-		abilities: {"0":"Windy Surge","1":"Pastel Veil","H":"Gale Bloom"},
+		baseStats: {"hp":80,"atk":50,"def":85,"spa":125,"spd":75,"spe":115},
+		abilities: {"0":"Windy Surge","1":"Pastel Sanctuary","H":"Gale Bloom"},
 		heightm: 1,
 		weightkg: 28.4,
 		color: "Yellow",
@@ -6513,10 +6513,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	delcatty: {
 		num: 301,
 		name: "Delcatty",
-		types: ["Normal"],
+		types: ["Normal", "Ghost"],
 		genderRatio: { M: 0.25, F: 0.75 },
-		baseStats: { hp: 70, atk: 65, def: 65, spa: 55, spd: 55, spe: 90 },
-		abilities: { 0: "Cute Charm", 1: "Fur Coat", H: "Wonder Skin" },
+		baseStats: { hp: 90, atk: 70, def: 75, spa: 100, spd: 100, spe: 115 },
+		abilities: { 0: "Moonlit Prowl", 1: "Natural Cure", H: "Wonder Skin" },
 		heightm: 1.1,
 		weightkg: 32.6,
 		color: "Purple",
@@ -16168,7 +16168,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Ribombee",
 		types: ["Bug", "Fairy"],
 		baseStats: { hp: 65, atk: 55, def: 60, spa: 90, spd: 105, spe: 125 },
-		abilities: { 0: "Shield Dust", 1: "Sweet Veil", H: "Friend Guard" },
+		abilities: { 0: "Shield Dust", 1: "Aroma Veil", H: "Friend Guard" },
 		heightm: 0.2,
 		weightkg: 0.5,
 		color: "Yellow",
@@ -24142,14 +24142,6 @@ const cosmeticBattleCounterparts: {[id: string]: string} = {
   "gligaralt": "gligar",
   "gliscoralt": "gliscor"
 };
-for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)) {
-	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;
-	const counterpart = Pokedex[counterpartId as ID] as import('../sim/dex-species').SpeciesData;
-	skin.types = [...counterpart.types];
-	skin.baseStats = {...counterpart.baseStats};
-	skin.abilities = {...counterpart.abilities};
-	if (counterpart.canGigantamax) Object.assign(skin, {canGigantamax: counterpart.canGigantamax});
-}
 
 // Explicitly approved base-species signature slots.
 Object.assign(Pokedex.tinkaton.abilities!, { "0": "Scrapbreaker" });
@@ -24317,7 +24309,7 @@ Pokedex.koffing.abilities!['0'] = 'Aftermath';
 // Approved replacements for 38 redundant selected slots; species passives stay unchanged.
 Pokedex.butterfree.abilities = {"0":"Compound Eyes","1":"Tinted Lens","H":"Magic Guard"};
 Pokedex.vivillon.abilities = {"0":"Tinted Lens","1":"Compound Eyes","H":"Friend Guard"};
-Pokedex.dustox.abilities = {"0":"Compound Eyes","1":"Unaware","H":"Toxic Cocoon"};
+Pokedex.dustox.abilities = {"0":"Night Forager","1":"Unaware","H":"Toxic Cocoon"};
 Pokedex.swalot.abilities = {"0":"Sticky Hold","1":"Neutralization","H":"Accumulation"};
 Pokedex.gulpin.abilities = {"0":"Corrosion","1":"Sticky Hold","H":"Gluttony"};
 Pokedex.tentacool.abilities = {"0":"Clear Body","1":"Water Veil","H":"Rain Dish"};
@@ -24431,7 +24423,7 @@ Pokedex.vikavolt.abilities!['H'] = 'Battery';
 Pokedex.jellicent.abilities!['0'] = 'Water Absorb';
 Pokedex.jellicentazzy.abilities!['0'] = 'Water Absorb';
 Pokedex.pinsir.abilities!['0'] = 'Hyper Cutter';
-Pokedex.hariyama.abilities!['0'] = 'Thick Fat';
+Pokedex.hariyama.abilities = { 0: 'Grit Grappler', 1: 'Sheer Force', H: 'Stamina' };
 Pokedex.drednaw.abilities!['0'] = 'Strong Jaw';
 Pokedex.mudsdale.abilities = {0: 'Unyielding', 1: 'Battle Armor', H: 'Surefoot'};
 Pokedex.rhydon.abilities!['H'] = 'Lightning Rod';
@@ -24565,7 +24557,7 @@ Pokedex.spiritomb.abilities = {0:'Keystone Seal',1:'Bound Spirits',H:'Pressure'}
 
 Pokedex.rapidash.abilities!.H = 'Flame Body';
 
-Pokedex.alcremie.abilities = {0:'Soothing Cream',H:'Master Pâtissier'};
+Pokedex.alcremie.abilities = { 0: 'Soothing Cream', 1: 'Sticky Hold', H: 'Master Pâtissier' };
 
 Pokedex.victreebel.abilities!['1'] = 'Corrosion';
 
@@ -24696,7 +24688,50 @@ Pokedex.pelipper.abilities![1] = 'Rain Dish';
 Pokedex.emboar.abilities![0] = 'Controlled Fury';
 Pokedex.sylveon.abilities!.H = 'Fairy Aura';
 
-for (const id of ['palafin', 'palafinhero'] as const) Pokedex[id].abilities = {0: 'Sworn Duty', 1: 'Friend Guard', H: 'Inner Focus'};
+for (const id of ['palafin', 'palafinhero'] as const) Pokedex[id].abilities = { 0: 'Sworn Duty', 1: 'Friend Guard', H: 'Hydration' };
 Pokedex.palafinhero = {...Pokedex.palafinhero, requiredAbility: undefined};
 
 Pokedex.hydrapple.abilities = {0: 'Ripen', 1: 'Regenerator', H: 'Hydra Heart'};
+
+for (const id of ['minior', 'miniororange', 'minioryellow', 'miniorgreen', 'miniorblue', 'miniorindigo', 'miniorviolet', 'miniormeteor'] as const) Pokedex[id].abilities = { 0: 'Light Metal', 1: 'Self Repair', H: 'Brute Force' };
+Pokedex.miniormeteor = { ...Pokedex.miniormeteor, requiredAbility: undefined };
+
+// Approved event-only selectable slot; regular Politoed choices are unchanged.
+Pokedex.politoed.abilities!.S = 'Aevian King';
+Pokedex.politoed = { ...Pokedex.politoed, otherFormes: [...(Pokedex.politoed.otherFormes || []), 'Politoed-Rejuv'] };
+Pokedex.politoedrejuv = {
+	num: 186, name: 'Politoed-Rejuv', baseSpecies: 'Politoed', forme: 'Rejuv', types: ['Water'],
+	baseStats: { hp: 110, atk: 70, def: 105, spa: 95, spd: 85, spe: 70 }, abilities: { 0: 'Aevian King' },
+	heightm: 1.1, weightkg: 33.9, color: 'Green', eggGroups: ['Water 1'],
+	requiredAbility: 'Aevian King', battleOnly: 'Politoed', isNonstandard: 'Custom',
+};
+
+Pokedex.politoedrejuv = { ...Pokedex.politoedrejuv, types: ['Normal', 'Dragon'] };
+Pokedex.poliwrath.abilities!.S = 'Aevian Ascendance';
+Pokedex.poliwrath = { ...Pokedex.poliwrath, otherFormes: [...(Pokedex.poliwrath.otherFormes || []), 'Poliwrath-Rejuv'] };
+Pokedex.poliwrathrejuv = { num: 62, name: 'Poliwrath-Rejuv', baseSpecies: 'Poliwrath', forme: 'Rejuv', types: ['Normal', 'Dragon'], baseStats: { hp: 100, atk: 55, def: 100, spa: 160, spd: 90, spe: 55 }, abilities: { 0: 'Aevian Ascendance' }, heightm: 1.3, weightkg: 54, color: 'Blue', eggGroups: ['Water 1'], requiredAbility: 'Aevian Ascendance', battleOnly: 'Poliwrath', isNonstandard: 'Custom' };
+
+Pokedex.galvantula.abilities!.S = 'Aevian Web';
+Pokedex.galvantula = { ...Pokedex.galvantula, otherFormes: [...(Pokedex.galvantula.otherFormes || []), 'Galvantula-Rejuv'] };
+Pokedex.galvantularejuv = { num: 596, name: 'Galvantula-Rejuv', baseSpecies: 'Galvantula', forme: 'Rejuv', types: ['Bug', 'Rock'], baseStats: { hp: 70, atk: 127, def: 60, spa: 47, spd: 60, spe: 108 }, abilities: { 0: 'Aevian Web' }, heightm: 0.8, weightkg: 14.3, color: 'Yellow', eggGroups: ['Bug'], requiredAbility: 'Aevian Web', battleOnly: 'Galvantula', isNonstandard: 'Custom' };
+
+Pokedex.decidueyehisui.abilities = { ...Pokedex.decidueyehisui.abilities!, H: 'Canopy Archer' };
+
+Pokedex.decidueye.abilities![1] = 'Silent Flight';
+
+// Prankster is Klefki's passive; this option retains item and phazing utility.
+Pokedex.klefki.abilities!['0'] = 'Adhesive Armor';
+
+// Replace only these requested Anger Point slots; related species stay unchanged.
+Pokedex.crabominable.abilities!.H = 'Controlled Fury';
+Pokedex.primeape.abilities!['1'] = 'Controlled Fury';
+
+// Apply cosmetic equivalence after all approved base-species revisions.
+for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)) {
+	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;
+	const counterpart = Pokedex[counterpartId as ID] as import('../sim/dex-species').SpeciesData;
+	skin.types = [...counterpart.types];
+	skin.baseStats = { ...counterpart.baseStats };
+	skin.abilities = { ...counterpart.abilities };
+	if (counterpart.canGigantamax) Object.assign(skin, { canGigantamax: counterpart.canGigantamax });
+}

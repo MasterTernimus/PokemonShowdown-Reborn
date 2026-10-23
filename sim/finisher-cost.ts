@@ -15,6 +15,6 @@ export function settleFinisherCost(battle: Battle, source: Pokemon, move: Active
 	if (!move || !finishers.has(move.id) || move.isZ || move.isMax || settled.has(move)) return;
 	settled.add(move);
 	if (source.hp && !knockouts.has(move)) {
-		battle.directDamage(Math.max(1, Math.floor(source.maxhp / 8)), source, source, move);
+		battle.directDamage(Math.max(1, Math.floor(source.maxhp / 4)), source, source, move);
 	}
 }

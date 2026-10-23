@@ -35,6 +35,8 @@ config.noguestsecurity = true;
 config.fakeladder = false;
 // Don't log monitor messages to the console (necessary so that chat monitor tests don't clog up stdout)
 config.loglevel = 3;
+// Socket tests start their own listeners; other suites need no automatic listener.
+config.lazysockets = true;
 
 require('./../dist/lib/process-manager').ProcessManager.disabled = true;
 

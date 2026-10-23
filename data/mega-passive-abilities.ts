@@ -142,7 +142,7 @@ export function installMegaPassiveAbilities(abilities: AbilityDataTable) {
 	const additions: [string, string, string, string[]][] = [
 		['dreadmaw', 'hugepower', 'strongjaw', ['onBasePower']],
 		['heavenlychorus', 'pixilate', 'naturalcure', ['onCheckShow', 'onSwitchOut', 'onResidual']],
-		['doomwarning', 'magicbounce', 'anticipation', ['onStart']],
+		// Doom Warning already delegates Anticipation in approved-signatures; do not run it twice.
 		['uncheckedassault', 'scrappy', 'limber', ['onUpdate', 'onSetStatus', 'onTryBoost', 'onModifySpe']],
 	];
 	for (const [id, passive, component, keys] of additions) {

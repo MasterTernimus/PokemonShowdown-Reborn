@@ -56,14 +56,13 @@ class TestTools {
 		return true;
 	}
 
+	// Missing generation data must remain a visible test failure.
 	itGen(genNum, title, callback) {
-		const supported = this.hasGeneration(genNum);
-		return (supported ? it : it.skip)(`${title} [Gen ${genNum}${supported ? '' : ': unsupported module'}]`, callback);
+		return it(`${title} [Gen ${genNum}]`, callback);
 	}
 
 	describeGen(genNum, title, callback) {
-		const supported = this.hasGeneration(genNum);
-		return (supported ? describe : describe.skip)(`${title} [Gen ${genNum}${supported ? '' : ': unsupported module'}]`, callback);
+		return describe(`${title} [Gen ${genNum}]`, callback);
 	}
 
 	getFormat(options) {
@@ -134,7 +133,7 @@ class TestTools {
 
 		const battleOptions = {
 			debug: true,
-			forceRandomChance: null || options.forceRandomChance,
+			forceRandomChance: options.forceRandomChance,
 			format: format,
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)

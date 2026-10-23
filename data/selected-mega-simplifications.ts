@@ -31,7 +31,7 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 		table[id] = result;
 	};
 	// Water Barrage owns Stalwart; dispatch that component exactly once.
-	compose('siegelauncher', ['megalauncher', 'waterbarrage']);
+	compose('siegelauncher', ['megalauncher', 'waterbarrage', 'overcoat']);
 	compose('neurotoxin', ['hydrabond', 'regenerator']);
 	compose('surgeconduit', ['lightningrod', 'rockhead']);
 	compose('railguncircuit', ['lightningrod', 'transistor']);
@@ -63,11 +63,14 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 	const uncheckedVolatile = abilities.uncheckedassault.onTryAddVolatile;
 	abilities.uncheckedassault.onUpdate = function (pokemon) {
 		uncheckedUpdate?.call(this, pokemon);
+		this.dex.abilities.get('limber').onUpdate?.call(this, pokemon);
 		this.dex.abilities.get('vitalspirit').onUpdate?.call(this, pokemon);
 	};
 	abilities.uncheckedassault.onSetStatus = function (status, target, source, effect) {
 		const result = uncheckedStatus?.call(this, status, target, source, effect);
 		if (result !== undefined) return result;
+		const limberResult = this.dex.abilities.get('limber').onSetStatus?.call(this, status, target, source, effect);
+		if (limberResult !== undefined) return limberResult;
 		return this.dex.abilities.get('vitalspirit').onSetStatus?.call(this, status, target, source, effect);
 	};
 	abilities.uncheckedassault.onTryAddVolatile = function (status, target, source, effect) {
@@ -75,6 +78,9 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 		if (result !== undefined) return result;
 		return this.dex.abilities.get('vitalspirit').onTryAddVolatile?.call(this, status, target, source, effect);
 	};
+	// The earlier passive-separation override removed this handler. The final
+	// approved composition retains full Limber alongside Vital Spirit.
+	abilities.uncheckedassault.onTryBoost = abilities.limber.onTryBoost;
 	abilities.uncheckedassault.onModifyAtkPriority = 5;
 	abilities.uncheckedassault.onModifySpAPriority = 5;
 	abilities.uncheckedassault.onModifyAtk = abilities.vitalspirit.onModifyAtk;

@@ -15,7 +15,7 @@ export const RosterExpansionDescriptions: { [id: string]: string } = {
 	pincercrush: 'Tough Claws. Once per switch-in, its first Steel-type contact attack to damage a foe lowers the foe\'s Defense by 1 stage.',
 	decoypincers: 'Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker\'s Attack by 1 stage. Multi-hit moves spend this protection on the first hit.',
 	toxiccocoon: 'Once per switch-in, the first opposing special hit deals half damage. Separately, the first opposing contact hit each switch-in poisons its attacker, subject to normal immunity.',
-	galebloom: 'Once per switch-in, its first Flying attack to damage a foe raises an adjacent ally\'s Sp. Atk by 1 stage.',
+	galebloom: "Full local Shield Dust blocks incoming move secondary effects on this Pokemon, while retaining effects on the attacker. Primary move effects are unchanged. Shield Dust yields to normal ability bypass; the existing support effect retains its own rules. Once per switch-in, its first Flying attack to damage a foe raises an adjacent ally's Sp. Atk by 1 stage.",
 	gemeye: 'Keen Eye + Magic Guard. Once per switch-in, reflects the first reflectable opposing status move aimed directly at this Pokemon. Side-targeting hazards do not use this reflection.',
 	lastlaugh: 'If no other active Pokemon has a move left to use this turn, this Pokemon\'s damaging attack bypasses Substitute. Damaging a foe with that attack restores 1/8 maximum HP, once per turn.',
 	openingoverture: 'Once per switch-in, successfully using a sound move starts Tailwind for 3 turns. An existing longer Tailwind is not shortened.',
@@ -220,3 +220,18 @@ export const RosterExpansionShortDescriptions: { [id: string]: string } = {
 
 RosterExpansionDescriptions.dishearten = 'On entry, lowers adjacent opposing Pokemon Sp. Atk by 1 stage. Blocked by Substitute and normal stat-drop protection; normal stat-drop reflection and reactions apply. Intimidate-specific immunities and reactions do not apply.';
 RosterExpansionShortDescriptions.dishearten = "On entry, lowers adjacent foes Sp. Atk by 1 stage.";
+
+import {DustoxAbilityDescriptions} from './dustox-approved';
+for (const [id, text] of Object.entries(DustoxAbilityDescriptions)) {
+ RosterExpansionDescriptions[id] = text.desc;
+ RosterExpansionShortDescriptions[id] = text.shortDesc;
+}
+
+RosterExpansionDescriptions.prismwings = "Tinted Lens doubles calculated damage from resisted attacks. Its first resisted attack hit that deals positive damage to a foe's HP after ability activation raises its Speed by 1 stage immediately after that hit, once per activation, including only once during a multi-hit move. Misses, protection, immunity, Substitute-only hits and allied hits do not trigger the boost. Selected-ability suppression disables these effects. Entry, acquiring this ability, or restarting it after Neutralizing Gas renews the Speed boost; removing Gastro Acid without restarting the ability does not.";
+RosterExpansionShortDescriptions.prismwings = "Tinted Lens; first resisted foe HP hit after activation gives +1 Speed.";
+
+RosterExpansionDescriptions.causticscales = "Once per actual switch-in, the first opposing contact attack to damage this Pokemon's HP attempts to poison the attacker and lowers that same attacker's Special Defense by 1 stage. Poison immunity does not prevent the stat drop; stat-drop prevention does not prevent the poison attempt. Normal status immunity, contact protection, stat-drop prevention, reflection and reactions apply. Substitute-only hits, allied hits and noncontact attacks do not spend the effect. Suppression disables it without renewing a spent trigger; losing and reacquiring the ability during the same entry does not renew it. Switching out and back in renews the trigger.";
+RosterExpansionShortDescriptions.causticscales = "Once per entry, first opposing contact HP hit poisons attacker and lowers Sp. Def.";
+
+import {BeautiflyCarrionDescriptions} from './beautifly-carrion-approved';
+for (const [id, text] of Object.entries(BeautiflyCarrionDescriptions)) RosterExpansionDescriptions[id] = text.desc;

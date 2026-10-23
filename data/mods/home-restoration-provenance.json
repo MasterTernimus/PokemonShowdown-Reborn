@@ -1,0 +1,121 @@
+{
+  "source": "https://github.com/smogon/pokemon-showdown/commit/3e54bbfc356e539c94905eefdd8e1df6a7816845",
+  "pin": "3e54bbfc356e539c94905eefdd8e1df6a7816845",
+  "files": [
+    {
+      "path": "data/mods/gen8/abilities.ts",
+      "blob": "8a1e74f466bb49da7d814df5ece29ac46a33251f",
+      "sha256": "74b9eafe94671b45e58d960243ed1f67b0c2d879c1ffa1e16710b798048e4292",
+      "installedSha256": "74b9eafe94671b45e58d960243ed1f67b0c2d879c1ffa1e16710b798048e4292"
+    },
+    {
+      "path": "data/mods/gen8/formats-data.ts",
+      "blob": "373fb35bd0cdbfbf19647f05293a55f565e1d255",
+      "sha256": "4ec8b32f253a42f40673c79abf5c95a6a3d8e79b40e87523e016c5f028ff86fe",
+      "installedSha256": "4ec8b32f253a42f40673c79abf5c95a6a3d8e79b40e87523e016c5f028ff86fe"
+    },
+    {
+      "path": "data/mods/gen8/items.ts",
+      "blob": "59dc8c70a5956f9097f2c39e8e736414e2aa7825",
+      "sha256": "a25ed92ee7583d2e94694d0c816fbe1f2dd9159ac3dfeeb5b24f3f273a256bcd",
+      "installedSha256": "a25ed92ee7583d2e94694d0c816fbe1f2dd9159ac3dfeeb5b24f3f273a256bcd"
+    },
+    {
+      "path": "data/mods/gen8/learnsets.ts",
+      "blob": "ad2ee795440f8f5e67e74c5240e93013677d494c",
+      "sha256": "0449efbed92facdda2cdfc03dbdeee5aeea186bca41600c91f26360f10f5d79e",
+      "installedSha256": "0449efbed92facdda2cdfc03dbdeee5aeea186bca41600c91f26360f10f5d79e"
+    },
+    {
+      "path": "data/mods/gen8/moves.ts",
+      "blob": "b7bf08fa4f20d2c5a21dd7b24e45db44ccc71a78",
+      "sha256": "3ee2f624ed37a8dfa86fd67d6763cc303794ce7c173f9c47d1584e10936becf1",
+      "installedSha256": "3ee2f624ed37a8dfa86fd67d6763cc303794ce7c173f9c47d1584e10936becf1"
+    },
+    {
+      "path": "data/mods/gen8/pokedex.ts",
+      "blob": "4b0acb59d809ae06657b63c4748aeecf6bd37f7d",
+      "sha256": "9257142c331194bb75a5e386d137bf2a59d2561b641f9196024e8ad56515c54c",
+      "installedSha256": "9257142c331194bb75a5e386d137bf2a59d2561b641f9196024e8ad56515c54c"
+    },
+    {
+      "path": "data/mods/gen8/rulesets.ts",
+      "blob": "436f824a5b62cf0cf60e2c8318787862838cef68",
+      "sha256": "3849952b03981ef6d7016983ebe92737af1631dc06ba93a50646ffd73ccb23f7",
+      "installedSha256": "46ff04456b1723de20b4b2ae19b202cdb7e8bf6e4922f7224ebaad12607dae7e"
+    },
+    {
+      "path": "data/mods/gen8/scripts.ts",
+      "blob": "bf221e74c49e1d14efecfb891769fc40f1c8bfc5",
+      "sha256": "485d3e8f42af1ec4e1703f3f953ec21f2adf6e2395eebc26906009135dc0dd99",
+      "installedSha256": "485d3e8f42af1ec4e1703f3f953ec21f2adf6e2395eebc26906009135dc0dd99"
+    },
+    {
+      "path": "data/mods/gen8/typechart.ts",
+      "blob": "8ddf618a16a0ef558731daf3f64e4972a7a817d2",
+      "sha256": "cce8b487a56b13a05440e070bb7fadba6d7b625a9a78721f127b5139b03c739a",
+      "installedSha256": "cce8b487a56b13a05440e070bb7fadba6d7b625a9a78721f127b5139b03c739a"
+    },
+    {
+      "path": "data/mods/gen8bdsp/abilities.ts",
+      "blob": "d05958a97529936d4231659853c6ace791e08f03",
+      "sha256": "0a37e5114cdcf3a15721740e3251d52774b3be392f1f482537222bb3b8285fbe",
+      "installedSha256": "0a37e5114cdcf3a15721740e3251d52774b3be392f1f482537222bb3b8285fbe"
+    },
+    {
+      "path": "data/mods/gen8bdsp/formats-data.ts",
+      "blob": "83788043c7802b2d38bd5ce46e42e6e0251683ae",
+      "sha256": "17a159c558c1a81afe1a7d98389cf0f67ce7db357906f583295dd91fe1de78b4",
+      "installedSha256": "17a159c558c1a81afe1a7d98389cf0f67ce7db357906f583295dd91fe1de78b4"
+    },
+    {
+      "path": "data/mods/gen8bdsp/items.ts",
+      "blob": "c885950100978fc134ee2f62308a6b5b1a966600",
+      "sha256": "6bf313209951c69b5a5b8a7ad215eedec457c65742faf312d8f6b7627ee37f76",
+      "installedSha256": "6bf313209951c69b5a5b8a7ad215eedec457c65742faf312d8f6b7627ee37f76"
+    },
+    {
+      "path": "data/mods/gen8bdsp/learnsets.ts",
+      "blob": "ddb5918f89182cdde2fb51e6e0ced9733c1dfa6b",
+      "sha256": "425724e8730670e0853728033f4f39ee1f995d4368bc317e8fe503b9da58b728",
+      "installedSha256": "425724e8730670e0853728033f4f39ee1f995d4368bc317e8fe503b9da58b728"
+    },
+    {
+      "path": "data/mods/gen8bdsp/moves.ts",
+      "blob": "652300f589ca4ae67a3c1166576cc66388d95407",
+      "sha256": "da8a88be6da5bfd83350433a35665522978f2e551946083042deedb8b4250352",
+      "installedSha256": "da8a88be6da5bfd83350433a35665522978f2e551946083042deedb8b4250352"
+    },
+    {
+      "path": "data/mods/gen8bdsp/pokedex.ts",
+      "blob": "a804a714cc721b4773dfd2b4bd9fcfbe01027222",
+      "sha256": "01c5fc272227100963b5e6c3e65130d69bc63d423a258676d7738640d0ee105a",
+      "installedSha256": "01c5fc272227100963b5e6c3e65130d69bc63d423a258676d7738640d0ee105a"
+    },
+    {
+      "path": "data/mods/gen8bdsp/scripts.ts",
+      "blob": "919ec7d7ef1f44ec61667edccd9fb4e972a73743",
+      "sha256": "cd2df1a0f81b39cf22735a402d8ba633292e2c892c357706e31c5ceeb65a4565",
+      "installedSha256": "cd2df1a0f81b39cf22735a402d8ba633292e2c892c357706e31c5ceeb65a4565"
+    },
+    {
+      "path": "data/mods/gen8legends/formats-data.ts",
+      "blob": "1a85ef616a914b599030c950f5e26975147af043",
+      "sha256": "cf8a7eb14c876ac27427708eab14567a106365445f3d059c25c4fd6acf7dc7c9",
+      "installedSha256": "cf8a7eb14c876ac27427708eab14567a106365445f3d059c25c4fd6acf7dc7c9"
+    },
+    {
+      "path": "data/mods/gen8legends/learnsets.ts",
+      "blob": "e1b3668e6d3d571ae2b3d97fcb1cc4175af07423",
+      "sha256": "e9e488cfdb3e32fdd8987782d7327a1c2fc0ab48bfcbf14edd3331d7a78e915d",
+      "installedSha256": "e9e488cfdb3e32fdd8987782d7327a1c2fc0ab48bfcbf14edd3331d7a78e915d"
+    },
+    {
+      "path": "data/mods/gen8legends/scripts.ts",
+      "blob": "01b6d101e520cfca3530e4f9c4aa6eb7ffd089b7",
+      "sha256": "f80df3982008a3b29957ad137f20927ec19b966256cf1e4183b864d95c68b221",
+      "installedSha256": "f80df3982008a3b29957ad137f20927ec19b966256cf1e4183b864d95c68b221"
+    }
+  ],
+  "adaptation": "gen8/rulesets.ts only: replace two upstream megaEvolves/scalar megaStone lookups with species-keyed megaStone mapping lookups. No current custom data overwritten."
+}

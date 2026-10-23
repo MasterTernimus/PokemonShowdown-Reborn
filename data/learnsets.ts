@@ -10734,7 +10734,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			ironhead: ["9M"],
 			irontail: [],
 			leer: ["9L1"],
-			mightycleave: ["9M"],
 			mimic: [],
 			mudslap: [],
 			outrage: [],
@@ -21468,6 +21467,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	scyther: {
 		learnset: {
+			stackingshot: ["9M"],
 			sacredsword: [],
 			skullbash: ["9M"],
 			acrobatics: ["9M", "8M"],
@@ -21575,6 +21575,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	scizor: {
 		learnset: {
+			stackingshot: ["9M"],
 			sacredsword: [],
 			skullbash: ["9M"],
 			meteormash: ["9M"],
@@ -21771,7 +21772,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		sleeptalk: ["9M"],
 			smackdown: ["9L1"],
          snore: ["9M"], 
-			stackingshot: [],
+			stackingshot: ["9M"],
 		stealthrock: ["9L1"],
          steelwing: ["9M"], 
 			stoneaxe: ["9L55"],
@@ -22885,7 +22886,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			endure: ["9M", "8M", "7V", "4M", "3T"],
 			facade: ["9M", "8M", "8V", "7M", "6M", "5M", "4M", "3M"],
 			fireblast: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
-			fissure: ["7V"],
+			fissure: ["9M", "7V"],
 			flameburst: ["9M"],
 			flamethrower: ["9M", "8M", "8V", "7M", "6M", "5M", "4M", "3M"],
 			flareblitz: ["9M"],
@@ -22898,7 +22899,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hiddenpower: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			highhorsepower: ["9M", "8M"],
 			hornattack: ["9L8", "8L20", "8V", "7L8", "7V", "6L8", "5L8", "4L8", "3L8", "3S0", "3S1"],
-			horndrill: ["7V"],
+			horndrill: ["9M", "7V"],
 			hyperbeam: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			hyperdrill: ["9M"],
 			icebeam: ["9M", "8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -23004,7 +23005,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			endure: [],
 			facade: [],
 			fireblast: [],
-			fissure: [],
+			fissure: ["9M"],
 			flameburst: ["9M"],
 			flamethrower: [],
 			flareblitz: ["9M"],
@@ -23017,7 +23018,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hiddenpower: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			highhorsepower: [],
 			hornattack: ["9L8", "8L20", "8V", "7L8", "7V", "6L8", "5L8", "4L8", "3L8", "3S0", "3S1"],
-			horndrill: [],
+			horndrill: ["9M"],
 			hyperbeam: [],
 			hyperdrill: ["9M"],
 			icebeam: [],
@@ -23045,7 +23046,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			return: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			revenge: [],
 			reversal: [],
-			rockclimb: [],
+			rockclimb: ["9M"],
 			rockslide: [],
 			rocksmash: [],
 			rocktomb: [],
@@ -23116,7 +23117,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			facade: [],
 			fireblast: [],
 			firespin: [],
-			fissure: [],
+			fissure: ["9M"],
 			flameburst: ["9M"],
 			flamecharge: ["9L15"],
 			flamethrower: [],
@@ -23130,7 +23131,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hiddenpower: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			highhorsepower: [],
 			hornattack: ["9L8", "8L20", "8V", "7L8", "7V", "6L8", "5L8", "4L8", "3L8", "3S0", "3S1"],
-			horndrill: [],
+			horndrill: ["9M"],
 			hyperbeam: [],
 			hyperdrill: ["9M"],
 			icebeam: [],
@@ -23160,7 +23161,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			return: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			revenge: [],
 			reversal: [],
-			rockclimb: [],
+			rockclimb: ["9M"],
 			rockslide: [],
 			rocksmash: [],
 			rocktomb: [],
@@ -23235,7 +23236,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			endure: [],
 			facade: [],
 			fireblast: [],
-			fissure: [],
+			fissure: ["9M"],
 			flameburst: ["9M"],
 			flamethrower: [],
 			flareblitz: ["9M"],
@@ -23248,7 +23249,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hiddenpower: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			highhorsepower: [],
 			hornattack: ["9L8", "8L20", "8V", "7L8", "7V", "6L8", "5L8", "4L8", "3L8", "3S0", "3S1"],
-			horndrill: [],
+			horndrill: ["9M"],
 			hydropump: [],
 			hyperbeam: [],
 			hyperdrill: ["9M"],
@@ -23278,7 +23279,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			return: ["9M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			revenge: [],
 			reversal: [],
-			rockclimb: [],
+			rockclimb: ["9M"],
 			rockslide: [],
 			rocksmash: [],
 			rocktomb: [],
@@ -35363,6 +35364,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			faketears: ["9L7", "7L1", "6L1", "5L1", "4L1", "3L19"],
 			feintattack: ["9L31", "7L15", "7V", "6L15", "5L15", "4L15", "3L25"],
 			firepunch: ["9M", "7T", "7V", "6T", "5T", "4T", "3T"],
+			fissure: ["9M"],
 			fling: ["9L19", "7M", "6M", "5M", "4M"],
 			focusblast: ["9M", "7M", "6M", "5M", "4M"],
 			focusenergy: ["9M"],
@@ -35484,6 +35486,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			faketears: ["9L7"],
 			feintattack: ["9L31"],
 			firepunch: ["9M"],
+			fissure: ["9M"],
 			fling: ["9L19"],
 			focusblast: ["9M"],
 			focusenergy: ["9M"],
@@ -35607,6 +35610,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			faketears: ["9L7"],
 			feintattack: ["9L31"],
 			firepunch: [],
+			fissure: ["9M"],
 			fling: ["9L19"],
 			focusblast: [],
 			focusenergy: [],
@@ -44271,6 +44275,11 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	delcatty: {
 		learnset: {
+			astonish: ["9L1"],
+			disable: ["9M"],
+			encore: ["9M"],
+			partingshot: ["9M"],
+			willowisp: ["9M"],
          assist: ["9L21"], 
 			agility: [],
 		attract: ["9L3", "7M", "7L1", "6M", "6L1", "5M", "5L1", "4M", "4L1", "3M", "3L1", "3S0"],
@@ -113234,3 +113243,16 @@ for (const id of SafeguardSupportSpecies) {
 }
 
 Learnsets.meloettaencore={learnset:{...Learnsets.meloetta.learnset}};
+
+import {AevianKingMoveSources} from './aevian-king-moves';
+Learnsets.politoedrejuv = {learnset: AevianKingMoveSources as NonNullable<import('../sim/dex-species').LearnsetData['learnset']>};
+
+import {AevianAscendanceMoveSources} from './aevian-ascendance-moves';
+Learnsets.poliwrathrejuv = {learnset:AevianAscendanceMoveSources as NonNullable<import('../sim/dex-species').LearnsetData['learnset']>};
+
+import {AevianWebMoveSources} from './aevian-web-moves';
+Learnsets.galvantularejuv = {learnset: AevianWebMoveSources as NonNullable<import('../sim/dex-species').LearnsetData['learnset']>};
+
+// Approved Ribombee-only movepool removal, after all distribution overlays.
+delete Learnsets.ribombee.learnset!.hydropump;
+delete Learnsets.ribombee.learnset!.fakeout;

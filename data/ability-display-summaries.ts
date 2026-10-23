@@ -90,7 +90,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"joyride": "Combines the listed abilities.",
 	"asoneglastrier": "Combines the listed abilities.",
 	"asonespectrier": "Combines the listed abilities.",
-	"aquashell": "Water-field status cure; Contact moves have 1.3x power; blocks Intimidate.",
+	"aquashell": "Heatproof + Steadfast.",
 	"battlebond": "A KO can trigger a Bond form; no lethal-hit survival.",
 	"shadowbond": "Water Shuriken hits 3 times at 30 power and always critically hits; 1.3x same-type move power.",
 	"apexbond": "Dual Chop cannot miss and always critically hits.",
@@ -117,7 +117,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"fallenstar": "Arrow moves gain +1 priority at 1/4 max HP or less; 1.3x power against trapped foes and for same-type moves.",
 	"ragingstorm": "Bypasses screens and defensive stages; halves priority damage; KOs damage other foes.",
 	"ragingoverlord": "Combines the listed abilities.",
-	"vanguard": "Enhanced Extreme Speed; single-foe protection and a once-battle final stand.",
+	"vanguard": "Enhanced Extreme Speed; single-foe protection.",
 	"apexcleave": "1.5x slicing power; eligible moves hit twice; move KOs give +1 Attack.",
 	"aurainstinct": "Stronger STAB; eligible moves hit twice; one 50% roll per battle to survive a lethal attack.",
 	"abysssniper": "Critical hits deal 2.25x damage; +1 Sp. Atk on specified fields.",
@@ -453,7 +453,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"solarstride": "In effective sun, Electric attacks break opposing screens before damage.",
 	"frillflash": "Its Electrify conversion Disables the opposing move after execution through next turn.",
 	"stokebelly": "Eating a Berry clears its negative Attack stages.",
-	"rousingfeast": "Eating a Berry clears its negative Attack and Speed stages.",
+	"rousingfeast": "Gluttony + Cud Chew; eating a Berry clears negative Attack and Speed.",
 	"invisiblewall": "Its first Wide Guard block each entry sets five-turn Safeguard.",
 	"sentinelfist": "Its first Wide Guard block each entry heals 1/8 maximum HP.",
 	"pursuitwake": "Damaging Aqua Jet clears its negative Speed stages.",
@@ -568,7 +568,7 @@ Object.assign(AbilityDisplaySummaries, {
 AbilityDisplaySummaries.grapplingclaws = "Physical contact HP hits prevent switching/healing through next turn, once per foe per stay.";
 
 Object.assign(AbilityDisplaySummaries, {
-  "venamskiss": "Poison hits drain any foe (up to 1/4 base HP/turn); pre-poisoned foes are heal-blocked. Poisoned foes are slower.",
+  "venamskiss": "Shed Skin; Poison hits drain any foe (up to 1/4 base HP/turn); pre-poisoned foes are heal-blocked. Poisoned foes are slower.",
   "dredger": "First Ground HP hit each turn removes one own Spikes layer, then Toxic Spikes if none remain."
 });
 
@@ -789,3 +789,47 @@ for(const[id,text]of Object.entries(PowerDrillBatchDescriptions))AbilityDisplayS
 
 import {AuditCleanupDescriptions} from './audit-cleanup-approved';
 for (const [id, text] of Object.entries(AuditCleanupDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+import { CurrentAbilityDescriptionCleanup } from './current-ability-description-cleanup';
+for (const [id, text] of Object.entries(CurrentAbilityDescriptionCleanup)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+for (const id of ['aevianking', 'serratedscales']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+AbilityDisplaySummaries.aevianascendance = AbilityDescriptionOverrides.aevianascendance.shortDesc;
+
+AbilityDisplaySummaries.aevianweb = AbilityDescriptionOverrides.aevianweb.shortDesc;
+
+AbilityDisplaySummaries.longreach = 'Moves do not make contact.';
+AbilityDisplaySummaries.canopyarcher = 'Flying STAB/resistances; accurate arrows; Scrappy + Long Reach.';
+
+AbilityDisplaySummaries.razorreach = 'Sharpness + Long Reach + Keen Eye.';
+
+AbilityDisplaySummaries.silentflight = "Levitate; immune to entry hazards; first HP hit each entry deals 25% less.";
+
+AbilityDisplaySummaries.toxicsink = AbilityDescriptionOverrides.toxicsink.shortDesc;
+AbilityDisplaySummaries.toxicbloom = AbilityDescriptionOverrides.toxicbloom.shortDesc;
+
+AbilityDisplaySummaries.siegelauncher = AbilityDescriptionOverrides.siegelauncher.shortDesc;
+
+AbilityDisplaySummaries.livinglegend = 'Flash Fire + Download; stronger Extreme Speed.';
+
+// Approved Cud Chew second-bite guard, inherited by Rousing Feast.
+AbilityDisplaySummaries.cudchew = "Repeats a Berry next turn, then guards the next damaging move by 25%.";
+AbilityDisplaySummaries.rousingfeast = "Gluttony + Cud Chew guard; eating a Berry clears negative Attack and Speed.";
+
+// Explicit approved Gale Bloom Shield Dust and Twin Fang Rivalry additions.
+AbilityDisplaySummaries.galebloom = "Shield Dust; first Flying HP hit per entry boosts an adjacent ally's Sp. Atk.";
+AbilityDisplaySummaries.twinfang = "Rivalry; Sp. Atk copies unboosted Attack; eligible contact attacks gain a 30% second hit.";
+
+import {DustoxAbilityDescriptions} from './dustox-approved';
+for (const [id, text] of Object.entries(DustoxAbilityDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+AbilityDisplaySummaries.mothborn = "Bug attacks gain STAB without stacking; Shield Dust.";
+AbilityDisplaySummaries.prismwings = "Tinted Lens; first resisted foe HP hit after activation gives +1 Speed.";
+
+AbilityDisplaySummaries.causticscales = "Once per entry, first opposing contact HP hit poisons attacker and lowers Sp. Def.";
+
+import {BeautiflyCarrionDescriptions} from './beautifly-carrion-approved';
+for (const [id, text] of Object.entries(BeautiflyCarrionDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
+
+AbilityDisplaySummaries.moonlitprowl = "Infiltrator + full local Limber: paralysis immunity/cure and external Speed-drop protection.";

@@ -32,6 +32,8 @@ function finishInfernalField(this: Battle, source: Pokemon, move: ActiveMove) {
  const original = source.volatiles.infernalrage?.startingField;
  source.removeVolatile('infernalrage');
  if (original !== this.field.terrain) return;
+ // Burning Field established by a Z-Move retains its own duration and ownership.
+ if (this.field.isTerrain('burningterrain') && this.field.terrainState.zMoveTerrain) return;
  // Use ordinary replacement eligibility before the native clear path (which also checks Neutralization).
  if (!this.field.canSetTerrain('', source, move) || this.field.isTerrain(['chessboardterrain', 'glitchterrain'])) return;
  this.field.clearTerrain();
@@ -109,7 +111,7 @@ export const YangSignatureFieldNotesA: {[id: string]: string | null} = {
   "queensgambit": "Uses Chess move and piece rules. A Queen always lands a critical hit. Target Opportunist halves and Gorilla Tactics doubles the matchup modifier; user Klutz makes the move fail.",
   "darkclasp": "Dark Crystal Cavern: 1.5x power. Changes Cave or Crystal Cavern to Dark Crystal Cavern, and Factory to Short Circuit, after damage. Field locks apply.",
   "beatdown": null,
-  "infernalrage": "Changes Cave to Volcanic. Flower Garden stage 3 or higher loses two stages unless rain or Water Sport prevents it. Uses native Ignite transformations before clearing other replaceable fields."
+  "infernalrage": "Changes Cave to Volcanic. Flower Garden stage 3 or higher loses two stages unless rain or Water Sport prevents it. Uses native Ignite transformations before clearing other replaceable fields. Does not clear Burning Field established by a Z-Move."
 };
 for (const [id, note] of Object.entries(YangSignatureFieldNotesA)) {
  if (note) YangSignatureDescriptionsA[id].desc += ' Field effects: ' + note;

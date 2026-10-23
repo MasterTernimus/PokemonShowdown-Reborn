@@ -159,3 +159,35 @@ const oct19=require('./oct19-reviewed-rosters.json');
 const beforeOct19Abilities=exports.abilities,beforeOct19Current=exports.current;
 exports.abilities=(id,fallback)=>({...beforeOct19Abilities(id,fallback),...oct19.abilities[id]});
 exports.current=(id,fallback)=>oct19.passives[id]||beforeOct19Current(id,fallback);
+
+// Explicit October 22 approvals: regular Decidueye Silent Flight; Hisuian Canopy Archer.
+const beforeDecidueyeSlots = exports.abilities;
+exports.abilities = (id, fallback) => ({ ...beforeDecidueyeSlots(id, fallback), ...({ decidueye: { 1: 'Silent Flight' }, decidueyehisui: { H: 'Canopy Archer' } }[id] || {}) });
+
+const beforeVileplumeEffectSpore = exports.current; exports.current = (id, fallback) => id === 'vileplume' ? ['effectspore'] : beforeVileplumeEffectSpore(id, fallback);
+
+// Reviewed cosmetic equivalence and the explicit Klefki passive/slot request.
+const beforeCosmeticSlots = exports.abilities;
+const cosmeticSlots = {
+	decidueyealt: { 1: 'Silent Flight', H: 'Canopy Archer' },
+	decidueyehisuialt: { H: 'Canopy Archer' },
+	emboaralt: { 0: 'Controlled Fury' }, emboarreborn: { 0: 'Controlled Fury' }, grimmsnarlazzy: { 0: 'Guts' },
+	galladeazzy: { S: 'Ruptured Heaven' }, klefki: { 0: 'Adhesive Armor' },
+};
+exports.abilities = (id, fallback) => ({ ...beforeCosmeticSlots(id, fallback), ...cosmeticSlots[id] });
+const beforeKlefkiCurrent = exports.current;
+exports.current = (id, fallback) => id === 'klefki' ? ['prankster'] : beforeKlefkiCurrent(id, fallback);
+const beforeKlefkiPassives = exports.passives;
+exports.passives = expected => ({ ...beforeKlefkiPassives(expected), klefki: ['prankster'] });
+
+{const prior={abilities:exports.abilities,passives:exports.passives};
+exports.abilities=(id,f)=>({...prior.abilities(id,f),...({crabominable:{H:'Controlled Fury'},primeape:{1:'Controlled Fury'}}[id]||{})});
+exports.passives=(id,f)=>['krookodile','annihilape'].includes(id)?['controlledfury']:prior.passives(id,f);}
+
+// Explicit later Rivalry distributions and Dustox selected-slot approval.
+const newRivalryDistribution = Object.fromEntries(['luxray', 'beautifly', 'dustox', 'pyroar', 'unfezant', 'unfezantrejuv', 'haxorus', 'braviary', 'braviaryhisui', 'mandibuzz', 'scrafty', 'mightyena', 'mightyenagrim', 'mightyenadeso', 'delcatty'].map(id => [id, ['rivalry']]));
+const beforeNewRivalry = {current: exports.current, passives: exports.passives, abilities: exports.abilities, stats: exports.stats};
+exports.current = (id, fallback) => newRivalryDistribution[id] || beforeNewRivalry.current(id, fallback);
+exports.passives = expected => Object.assign(beforeNewRivalry.passives(expected), newRivalryDistribution);
+exports.abilities = (id, fallback) => ({...beforeNewRivalry.abilities(id, fallback), ...({dustox:{0:'Night Forager'},beautifly:{1:'Pastel Sanctuary'}}[id] || {})});
+exports.stats = (id, fallback) => id === 'beautifly' ? {hp:80, atk:50, def:85, spa:125, spd:75, spe:115} : beforeNewRivalry.stats(id, fallback);

@@ -2559,6 +2559,9 @@ export class Battle {
 			effect ||= this.effect;
 		}
 		if (effect === 'drain') effect = this.dex.conditions.getByID(effect as ID);
+		// Keep the healing effect identity intact; only the visible Aura attribution is specific.
+		const healingSource = effect?.id === 'terrainaura' && this.field.isAura('grassyterrain') ?
+			this.field.getAura().name : effect?.fullname;
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
@@ -2593,9 +2596,9 @@ export class Battle {
 			if (effect.effectType === 'Move') {
 				this.add('-heal', target, target.getHealth);
 			} else if (source && source !== target) {
-				this.add('-heal', target, target.getHealth, `[from] ${effect.fullname}`, `[of] ${source}`);
+				this.add('-heal', target, target.getHealth, `[from] ${healingSource}`, `[of] ${source}`);
 			} else {
-				this.add('-heal', target, target.getHealth, `[from] ${effect.fullname}`);
+				this.add('-heal', target, target.getHealth, `[from] ${healingSource}`);
 			}
 			break;
 		}

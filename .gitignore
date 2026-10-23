@@ -1,4 +1,5 @@
 /config/*
+!/config/battle-engine-identity.json
 !/config/formats.ts
 !/config/config-example.js
 /logs/**/*

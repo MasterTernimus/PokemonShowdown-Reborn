@@ -1,4 +1,5 @@
 import type {AbilityDataTable} from '../sim/dex-abilities';
+import {skipPassiveComponent} from './passive-ability-cleanup';
 const controlledRampages = new Set(['outrage', 'thrash', 'petaldance', 'ragingfury']);
 function clearControlledRampage(pokemon: Pokemon) {
  const lock = pokemon.volatiles.lockedmove;
@@ -11,6 +12,7 @@ export const RagingCrownNames: {[id: string]: string} = {
  fortressshell: 'Tidal Crown', blastchamber: 'Volcanic Spirit', toxicbloom: 'Virulence', siegelauncher: 'Bombardment',
 };
 export function installRagingCrowns(a: AbilityDataTable) {
+	a.aquashell = { ...a.heatproof, ...a.steadfast, name: a.aquashell.name, num: a.aquashell.num, rating: 3, flags: { breakable: 1 } };
  const oldMountain = a.mountainbreaker;
  a.mountainbreaker = {...a.eartheater, ...a.battlearmor, name: oldMountain.name, num: oldMountain.num, rating: 4};
  a.dreadpresence = {...a.unnerve, ...a.darkaura, name: a.dreadpresence.name, num: a.dreadpresence.num, rating: 4, onStart(pokemon) { a.unnerve.onStart?.call(this, pokemon); a.darkaura.onStart?.call(this, pokemon); }, onEnd: a.unnerve.onEnd};
@@ -18,7 +20,29 @@ export function installRagingCrowns(a: AbilityDataTable) {
  delete a.snowpack.onSourceModifySpA;
  a.controlledfury = {
   name: 'Controlled Fury', num: 11895, rating: 3, flags: {},
-  onStart: clearControlledRampage,
+  onStart(pokemon) {
+   clearControlledRampage(pokemon);
+   a.angerpoint.onStart?.call(this, pokemon);
+   this.effectState.angerpoint = !!pokemon.m.controlledFurySpent;
+  },
+  onHit(target, source, move) {
+   if (skipPassiveComponent(this, target, 'angerpoint') || !target.hp) return;
+   // A critical hit consumes eligibility and maximizes Attack without a separate +1.
+   if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
+    target.m.controlledFurySpent = true;
+    this.effectState.angerpoint = true;
+    this.boost({atk: 12}, target, target);
+    return;
+   }
+   const handler = a.angerpoint.onHit;
+   // Suppression and ability transfers must not replenish this entry's first-hit bonus.
+   this.effectState.angerpoint = !!target.m.controlledFurySpent;
+   if (typeof handler === 'function') {
+    const result = handler.call(this, target, source, move);
+    if (this.effectState.angerpoint) target.m.controlledFurySpent = true;
+    return result;
+   }
+  },
   onUpdate: clearControlledRampage,
   onTryAddVolatile(status) { if (status.id === 'lockedmove') return null; },
   onModifyMove(move) {
@@ -162,6 +186,9 @@ export function installRagingCrowns(a: AbilityDataTable) {
  a.wisecounsel.onAnyModifyDamage = a.guardianpresence.onAnyModifyDamage;
 }
 export const RagingCrownComponents = {
+ controlledfury: ['angerpoint'],
+	aquashell: ['heatproof', 'steadfast'],
+	shieldsdown: ['crumblingshell'],
  mountainbreaker: ['eartheater', 'battlearmor'], dreadpresence: ['unnerve', 'darkaura'],
  snowpack: ['icebody'],
  hellfireeclipse: ['darkaura', 'agonyflame', 'intimidate'],
@@ -184,6 +211,8 @@ export const RagingCrownComponents = {
  wisecounsel: ['innerfocus', 'guardianpresence'],
 };
 export const RagingCrownRemovals = {
+	aquashell: ['waterveil', 'toughclaws', 'innerfocus', 'hypercutter'],
+	shieldsdown: ['shellarmor', 'selfrepair', 'naturalcure', 'selfsufficient'],
  snowpack: ['toughclaws', 'thickfat'],
  hellfireeclipse: ['solarpower', 'flashfire'],
  venomarmor: ['battlearmor'],
@@ -195,10 +224,12 @@ export const RagingCrownRemovals = {
  verdantdrake: ['limber', 'dualwield'], blazingtempo: ['keeneye', 'striker'],
 };
 export const RagingCrownDescriptions = {
+	shieldsdown: { shortDesc: 'HP-based form change; Meteor blocks status. Crumbling Shell.', desc: 'Minior changes to Meteor above half HP and its original core at half HP or below, on entry and at turn end. Meteor form blocks major status and Yawn. Retains Crumbling Shell: physical hits place Stealth Rock on the attacker’s side (opposing side for allied hits), except on Water Surface, Underwater, Murkwater Surface or Swamp. No Shell Armor or Self Repair effects.' },
+	aquashell: { shortDesc: 'Heatproof + Steadfast.', desc: 'Full local Heatproof and Steadfast. Incoming Fire attacks use half the attacker’s Attack or Special Attack; burn damage is halved. Flinching raises Speed by one stage but still prevents acting. Electric Terrain entry raises Speed by one stage. Ashen Beach accuracy checks succeed unless the target has Unnerve; Rocky Terrain adds no flinch damage. Tough Claws is a separate species passive. No Water Veil, Inner Focus or Attack-drop protection.' },
  mountainbreaker: {shortDesc: 'Earth Eater + Battle Armor.', desc: 'Full local Earth Eater + Battle Armor: absorbs Ground moves for 1/4 HP; heals 1/16 on Cave and Desert. Prevents critical hits, retains Battle Armor damage reduction, Fairy Tale entry Defense and Defense response to opposing stat drops. No Rock/Ground matchup substitution.'},
  dreadpresence: {shortDesc: 'Unnerve + Dark Aura.', desc: 'Full local Unnerve + Dark Aura. Blocks opposing Berries and field Seeds; Cold Eclipse entry lowers opposing Speed. Boosts Dark moves on both sides by 4/3, reversed by Aura Break, without stacking. Immune to hail on Cold Eclipse. No punishment for opposing status moves.'},
  snowpack: {shortDesc: 'Ice Body.', desc: 'Full local Ice Body: immune to hail; contact attackers have a 30% frostbite chance. Heals 1/16 max HP in hail/snow, or on Icy, Snowy Mountain and Cold Eclipse without those weathers; hail on Cold Eclipse heals 1/8. No Fire/Ice reduction or contact power multiplier. Mamoswine supplies Thick Fat separately as its species passive.'},
- controlledfury: {shortDesc: 'Rampaging moves don’t lock the user in or cause ending confusion.', desc: 'Outrage, Thrash, Petal Dance and Raging Fury do not lock the user in or cause ending confusion, including repeated manual uses. Acquiring this effect during a rampage clears only that rampage lock without confusion. Existing confusion, Choice locks, Encore and move field effects remain unchanged.'},
+ controlledfury: {"shortDesc":"Anger Point; no rampage lock or ending confusion.","desc":"Full local Anger Point: the first damaging hit after entry raises Attack by 1 stage; surviving a critical hit raises Attack to maximum. Outrage, Thrash, Petal Dance and Raging Fury do not lock the user in or cause ending confusion, including repeated manual uses. Acquiring this effect during a rampage clears only that rampage lock without confusion. Existing confusion, Choice locks, Encore and move field effects remain unchanged."},
  cursedmarionette: {shortDesc: 'Curses foes; cursed foes deal 20% less damage. No Curse healing.', desc: 'Its attacks and status moves curse opposing targets, and being hit curses the attacker. Cursed foes deal 0.8x damage to it. Its Curse deals 1/8 max HP; it does not heal from Curse damage. When it faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization. Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses do not pay this cost. Prankster remains its separate species passive.'},
  hellfireeclipse: {shortDesc: 'Dark Aura + Agony Flame + Intimidate.', desc: 'On entry, lowers adjacent foes Attack by 1 under normal Intimidate rules. Dark Aura boosts all damaging Dark moves by 4/3, or multiplies them by 0.75 with Aura Break; multiple users do not stack. Immune to hail damage on Cold Eclipse. After a damaging Fire move finishes, Agony Flame burns each surviving active opponent that lost HP and applies Heal Block for 2 turns including the current turn. Normal protections apply; longer Heal Block is preserved and a move burn cured by a Berry is not reapplied. No Fire absorption or automatic sunlight. Solar Power is the separate species passive.'},
  vendetta: {shortDesc: 'Inner Focus; once per entry, surviving an opposing hit Taunts its attacker.', desc: 'Full Inner Focus prevents flinching and Intimidate Attack drops. Once per entry, surviving an opposing damaging hit that removes HP attempts to Taunt its living attacker under normal Taunt protections. The attempt spends the use even if blocked; Substitute-only damage does not trigger it. Switching resets the use; ability changes do not. No retaliation mark or trapping.'},

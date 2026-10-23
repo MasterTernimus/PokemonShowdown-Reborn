@@ -81,13 +81,18 @@ describe('Approved rival and support queue',()=>{
 
 describe('Rival/support boundary checks',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
- for(const species of ['Haxorus','Haxorus-Mega'])it(species+' copies unboosted Attack into SpA with independent stages',()=>{
+ for(const species of ['Haxorus-Mega'])it(species+' copies unboosted Attack into SpA with independent stages',()=>{
   const[p,q]=setup(species,'No Ability');assert.deepEqual(p.getPassives(),['twinfang']);p.boosts.atk=2;p.boosts.spa=-1;
   assert.equal(p.getStat('spa',true),p.storedStats.atk);assert.equal(p.getStat('spa'),Math.floor(p.storedStats.atk/1.5));assert.equal(p.calculateStat('spa',2),p.storedStats.atk*2);
   p.addVolatile('gastroacid');assert.equal(p.getStat('spa',true),p.storedStats.atk);
  });
+ it('regular Haxorus has Rivalry without Twin Fang stat copying or contact follow-up',()=>{
+  const[p,q]=setup('Haxorus','No Ability');assert.deepEqual(p.getPassives(),['rivalry']);
+  assert.equal(p.getStat('spa',true),p.storedStats.spa);
+  const move=Dex.getActiveMove('tackle');battle.runEvent('PrepareHit',p,q,move);assert(!move.twinFang);
+ });
  it('Twin Fang adds exactly one contact hit and does not stack with allied Mycelial Bond',()=>{
-  const[p,q]=setup('Haxorus','No Ability');p.side.active[1].setAbility('Mycelial Bond');hit(p,q,'tackle');assert(battle.log.some(x=>x.includes('|-hitcount|')&&x.endsWith('|2')));
+  const[p,q]=setup('Haxorus-Mega','No Ability');p.side.active[1].setAbility('Mycelial Bond');hit(p,q,'tackle');assert(battle.log.some(x=>x.includes('|-hitcount|')&&x.endsWith('|2')));
   const move=Dex.getActiveMove('surf');battle.runEvent('PrepareHit',p,q,move);assert(!move.twinFang);assert(!move.mycelialBond);
  });
  it('Raging Storm retains priority protection after approved Battle Armor removal',()=>{

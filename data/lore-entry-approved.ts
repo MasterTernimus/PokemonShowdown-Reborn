@@ -53,7 +53,7 @@ export function installLoreEntryAbilities(abilities: AbilityDataTable) {
   onTryAddVolatile(status, target, source) { if (status.id === 'taunt' && source && !source.isAlly(target)) return false; },
  };
  abilities.unboundspirit = {...abilities.vitalspirit, name:'Unbound Spirit', num:11693, rating:4};
- abilities.ragingheart = {name:'Raging Heart', num:11694, rating:4, flags:{},
+ abilities.ragingheart = {...abilities.innerfocus, name:'Raging Heart', num:11694, rating:4,
   onModifyType(move) { if (move.id === 'thrash' && selectedHit(move)) { move.type = 'Ghost'; (move as any).ragingHeartThrash = true; } },
  };
 
@@ -141,9 +141,9 @@ Object.assign(LoreEntryDescriptions, {
 });
 
 Object.assign(LoreEntryDescriptions, {
- beyondfear:{shortDesc:'Immune to flinching and opposing Taunt.',desc:'Immune to flinching and opposing Taunt. Does not prevent Intimidate or other stat drops and does not raise defenses in response. As Annihilape\'s species passive, remains active through selected-ability suppression.'},
+ beyondfear:{shortDesc:'Immune to flinching and opposing Taunt.',desc:'Immune to flinching and opposing Taunt. Does not prevent Intimidate or other stat drops and does not raise defenses in response. When supplied as a species passive, remains active through selected-ability suppression.'},
  unboundspirit:{shortDesc:'Vital Spirit; Ghost attacks ignore Reflect and Light Screen.',desc:'Full revised Vital Spirit prevents and cures sleep, blocks Yawn, and gives Fighting attacks 1.3x Attack or Sp. Atk. Ghost attacks ignore Reflect and Light Screen only. Does not bypass Aurora Veil, Substitute, type immunities or abilities.'},
- ragingheart:{shortDesc:'Selected Thrash becomes Ghost and causes no ending confusion.',desc:'Directly selected Thrash becomes Ghost type, retaining its physical category, 140 power, random opposing target, 2–3-turn lock and 30% Defense-drop chance. While this ability is active, that Thrash does not cause its own ending confusion. External confusion and confusion from other moves remain. Normal types remain immune; no extra power multiplier.'},
+ ragingheart:{"shortDesc":"Inner Focus; selected Thrash becomes Ghost with no ending confusion.","desc":"Full local Inner Focus prevents flinching and Intimidate Attack drops, subject to normal suppression and ability bypass. Directly selected Thrash becomes Ghost type, retaining its physical category, 140 power, chosen adjacent opposing target and 30% Defense-drop chance, with no extra power multiplier. Without separate Controlled Fury it retains its 2-3-turn rampage lock but does not cause its own ending confusion while Raging Heart is active. External confusion remains. Annihilape supplies Controlled Fury separately as its species passive."},
 });
 
 Object.assign(LoreEntryDescriptions, {

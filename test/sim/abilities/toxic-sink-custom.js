@@ -17,7 +17,7 @@ describe('Toxic Sink custom effects', () => {
 		});
 	});
 
-	it('should absorb Poison moves and raise both offenses', () => {
+	it('should absorb Poison moves and raise only Special Attack', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Vileplume', ability: 'Toxic Sink', moves: ['splash']},
 		], [
@@ -28,10 +28,11 @@ describe('Toxic Sink custom effects', () => {
 		const hpBefore = vileplume.hp;
 		battle.makeChoices('move splash', 'move sludgebomb');
 		assert.equal(vileplume.hp, hpBefore);
-		assert.equal(vileplume.boosts.atk, 1);
+		assert.equal(vileplume.boosts.atk, 0);
 		assert.equal(vileplume.boosts.spa, 1);
-		assert(vileplume.hasAbility('effectspore'));
-		assert(vileplume.hasAbility('invigorate'));
+		assert(vileplume.getPassives().includes('effectspore'));
+		assert(!vileplume.hasAbility('effectspore'));
+		assert(!vileplume.hasAbility('invigorate'));
 		assert(!vileplume.hasAbility('stormdrain'));
 	});
 
@@ -51,11 +52,11 @@ describe('Toxic Sink custom effects', () => {
 		const [vileplume, chansey] = battle.p1.active;
 		battle.makeChoices('move splash, move splash', 'move sludgebomb 2, move splash');
 		assert.fullHP(chansey);
-		assert.statStage(vileplume, 'atk', 1);
+		assert.statStage(vileplume, 'atk', 0);
 		assert.statStage(vileplume, 'spa', 1);
 	});
 
-	it('should retain Effect Spore and Invigorate behavior', () => {
+	it('should retain passive Effect Spore without amplifying healing', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Vileplume', ability: 'Toxic Sink', moves: ['recover']},
 		], [
@@ -69,7 +70,7 @@ describe('Toxic Sink custom effects', () => {
 		battle.random = () => 15;
 		battle.makeChoices('move recover', 'move tackle');
 		assert.equal(mew.status, 'par');
-		assert(vileplume.hp - hpBefore > vileplume.maxhp / 2, 'Invigorate should amplify Recover');
+		assert(vileplume.hp - hpBefore <= Math.ceil(vileplume.maxhp / 2), 'Recover is not amplified');
 	});
 
 	it('should let poison field-changing moves pollute water through Toxic Sink', () => {

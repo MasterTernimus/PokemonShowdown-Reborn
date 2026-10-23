@@ -1,0 +1,1726 @@
+{
+  "fingerprint": "e31889da2bd9a365f80f80e07761073d1dcfb64f30e3f471e580b9fc0683e1a2",
+  "fields": {
+    "flowergarden1": {
+      "abilities": [
+        "flowergift",
+        "mimicry",
+        "riftdancer",
+        "swarm"
+      ],
+      "moves": [
+        "growth",
+        "rototiller",
+        "secretpower",
+        "naturepower"
+      ],
+      "items": [
+        "syntheticseed"
+      ]
+    },
+    "flowergarden2": {
+      "abilities": [
+        "harvest",
+        "leafguard"
+      ],
+      "moves": [
+        "ingrain"
+      ],
+      "items": []
+    },
+    "flowergarden3": {
+      "abilities": [
+        "flowerveil"
+      ],
+      "moves": [
+        "floralhealing",
+        "sweetscent"
+      ],
+      "items": []
+    },
+    "flowergarden4": {
+      "abilities": [
+        "chlorophyll"
+      ],
+      "moves": [
+        "ingrain"
+      ],
+      "items": []
+    },
+    "flowergarden5": {
+      "abilities": [],
+      "moves": [
+        "secretpower",
+        "naturepower"
+      ],
+      "items": []
+    },
+    "ashenbeachterrain": {
+      "abilities": [
+        "battlefervor",
+        "costar",
+        "perfectforesight",
+        "perfectego",
+        "forecast",
+        "mimicry",
+        "relentlesshunt",
+        "sandforce",
+        "sandrush",
+        "sandspit",
+        "sandveil",
+        "tremor",
+        "ultraego",
+        "ultrainstinct",
+        "burningego",
+        "watercompaction",
+        "zenmode"
+      ],
+      "moves": [
+        "arenitewall",
+        "calmmind",
+        "camouflage",
+        "coaching",
+        "focusblast",
+        "focusenergy",
+        "kinesis",
+        "psychup",
+        "sandattack",
+        "shoreup",
+        "strength",
+        "terrainpulse",
+        "dustydrift",
+        "naturepower"
+      ],
+      "items": [
+        "shellbell",
+        "telluricseed"
+      ]
+    },
+    "bewitchedwoodsterrain": {
+      "abilities": [
+        "cottondown",
+        "bewitchingmajesty",
+        "duskilate",
+        "execution",
+        "eternalflower",
+        "ange",
+        "flowergift",
+        "flowerveil",
+        "magician",
+        "mimicry",
+        "naturalcure",
+        "pastelveil",
+        "powerspot",
+        "prankster",
+        "soulfire",
+        "soultag",
+        "royaldecree"
+      ],
+      "moves": [
+        "camouflage",
+        "curse",
+        "forestscurse",
+        "grasswhistle",
+        "headsmash",
+        "magicpowder",
+        "mist",
+        "moonlight",
+        "poisonpowder",
+        "sleeppowder",
+        "strengthsap",
+        "stunspore",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "bigtopterrain": {
+      "abilities": [
+        "dancer",
+        "mimicry",
+        "predator",
+        "punkrock",
+        "relentlesshunt",
+        "tangledfeet"
+      ],
+      "moves": [
+        "acrobatics",
+        "bellydrum",
+        "camouflage",
+        "clangoroussoul",
+        "dragondance",
+        "encore",
+        "featherdance",
+        "quiverdance",
+        "sing",
+        "spotlight",
+        "swordsdance",
+        "terrainpulse",
+        "tripleaxel",
+        "victorydance",
+        "naturepower"
+      ],
+      "items": [
+        "syntheticseed"
+      ]
+    },
+    "burningterrain": {
+      "abilities": [
+        "blaze",
+        "flareboost",
+        "flashfire",
+        "goodasgold",
+        "mimicry",
+        "relentlesshunt",
+        "sinisterblaze",
+        "soulfire",
+        "soultag",
+        "steamengine",
+        "thermalexchange",
+        "wellbakedbody"
+      ],
+      "moves": [
+        "camouflage",
+        "firepledge",
+        "grasspledge",
+        "grassyterrain",
+        "smokescreen",
+        "snowscape",
+        "tarshot",
+        "terrainpulse",
+        "willowisp",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed",
+        "telluricseed"
+      ]
+    },
+    "caveterrain": {
+      "abilities": [
+        "auroracurrent",
+        "eartheater",
+        "echofiend",
+        "relicarmor",
+        "hyperdrill",
+        "mimicry",
+        "powerdrill",
+        "punkrock",
+        "relentlesshunt",
+        "royaldecree"
+      ],
+      "moves": [
+        "bounce",
+        "camouflage",
+        "fly",
+        "rockclimb",
+        "skydrop",
+        "stealthrock",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "chessboardterrain": {
+      "abilities": [
+        "unovawing",
+        "competitive",
+        "fossilfrenzy",
+        "tyrantstream",
+        "gorillatactics",
+        "imperialmandate",
+        "illusion",
+        "klutz",
+        "merciless",
+        "mimicry",
+        "queenlymajesty",
+        "reckless",
+        "royaldecree",
+        "stall",
+        "stalwart",
+        "stancechange"
+      ],
+      "moves": [
+        "calmmind",
+        "camouflage",
+        "falsesurrender",
+        "kingsshield",
+        "nastyplot",
+        "noretreat",
+        "terrainpulse",
+        "trickroom",
+        "naturepower"
+      ],
+      "items": [
+        "syntheticseed"
+      ]
+    },
+    "coldeclipseterrain": {
+      "abilities": [
+        "exalt",
+        "battlefervor",
+        "battlebond",
+        "blaze",
+        "darkaura",
+        "apexcleave",
+        "atrocity",
+        "sacrededge",
+        "omenedge",
+        "defragment",
+        "perfectforesight",
+        "perfectego",
+        "irondominion",
+        "duskilate",
+        "execution",
+        "eternalflower",
+        "mindfreeze",
+        "relicarmor",
+        "windysurge",
+        "flamebody",
+        "flareboost",
+        "ancientbloom",
+        "fortressshell",
+        "flashfire",
+        "forecast",
+        "fullmetalbody",
+        "imperialmandate",
+        "icebody",
+        "iceface",
+        "icescales",
+        "illusion",
+        "burningcrown",
+        "armorize",
+        "argentdevotion",
+        "magmaarmor",
+        "megalauncher",
+        "mimicry",
+        "mindseye",
+        "powerdrill",
+        "pressure",
+        "prismarmor",
+        "relentlesshunt",
+        "shadowshield",
+        "sharpness",
+        "slushrush",
+        "snowcloak",
+        "snowwarning",
+        "solarpower",
+        "sinisterblaze",
+        "soulfire",
+        "wrathshield",
+        "technician",
+        "turboblaze",
+        "unnerve",
+        "ultraego",
+        "ultrainstinct",
+        "burningego",
+        "zenmode",
+        "amethystglow"
+      ],
+      "moves": [
+        "auroraveil",
+        "arenitewall",
+        "bleakwindstorm",
+        "blizzard",
+        "camouflage",
+        "chillingwater",
+        "coldsnap",
+        "darkvoid",
+        "dragonrage",
+        "freezeshock",
+        "iceburn",
+        "icywind",
+        "moonlight",
+        "morningsun",
+        "nightshade",
+        "powertrip",
+        "shelter",
+        "snarl",
+        "soak",
+        "stealthrock",
+        "synthesis",
+        "tailwind",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed",
+        "snowball"
+      ]
+    },
+    "corrosivemistterrain": {
+      "abilities": [
+        "aftermath",
+        "corrosion",
+        "damp",
+        "dryskin",
+        "merciless",
+        "mimicry",
+        "poisonheal",
+        "poisonpuppeteer",
+        "toxicchain",
+        "watercompaction",
+        "coldlogic"
+      ],
+      "moves": [
+        "acidarmor",
+        "aquaring",
+        "barbbarrage",
+        "camouflage",
+        "floralhealing",
+        "lifedew",
+        "mistyexplosion",
+        "mistyterrain",
+        "smokescreen",
+        "terrainpulse",
+        "toxic",
+        "venomdrench",
+        "venoshock",
+        "ickyinjection",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed"
+      ]
+    },
+    "corrosiveterrain": {
+      "abilities": [
+        "corrosion",
+        "grasspelt",
+        "merciless",
+        "mimicry",
+        "neutralizinggas",
+        "poisonheal",
+        "toxicboost"
+      ],
+      "moves": [
+        "acidarmor",
+        "barbbarrage",
+        "camouflage",
+        "floralhealing",
+        "grassyterrain",
+        "ingrain",
+        "terrainpulse",
+        "toxicspikes",
+        "venomdrench",
+        "venoshock",
+        "ickyinjection",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "crystalcavernterrain": {
+      "abilities": [
+        "auroracurrent",
+        "echofiend",
+        "relicarmor",
+        "mimicry",
+        "prismarmor",
+        "royaldecree"
+      ],
+      "moves": [
+        "auroraveil",
+        "camouflage",
+        "meteorbeam",
+        "rockpolish",
+        "stealthrock",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "darkcrystalcavernterrain": {
+      "abilities": [
+        "auroracurrent",
+        "duskilate",
+        "execution",
+        "mimicry",
+        "prismarmor"
+      ],
+      "moves": [
+        "auroraveil",
+        "camouflage",
+        "darkvoid",
+        "flash",
+        "moonlight",
+        "morningsun",
+        "solarbeam",
+        "solarblade",
+        "synthesis",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "desertterrain": {
+      "abilities": [
+        "auroracurrent",
+        "desertrift",
+        "perfectforesight",
+        "duneterror",
+        "dryskin",
+        "eartheater",
+        "relicarmor",
+        "forecast",
+        "mimicry",
+        "relentlesshunt",
+        "sandforce",
+        "sandrush",
+        "sandspit",
+        "sandveil",
+        "royaldecree",
+        "tremor",
+        "wanderingspirit"
+      ],
+      "moves": [
+        "arenitewall",
+        "camouflage",
+        "dig",
+        "grassyterrain",
+        "rockclimb",
+        "sandattack",
+        "shoreup",
+        "terrainpulse",
+        "dustydrift",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "dragonsdenterrain": {
+      "abilities": [
+        "berserk",
+        "dragonize",
+        "draconicforce",
+        "dragonsmaw",
+        "atrocity",
+        "ragingfists",
+        "tyrantdomain",
+        "goodasgold",
+        "hydrabond",
+        "unboundblaze",
+        "armorize",
+        "argentdevotion",
+        "magmaarmor",
+        "marvelscale",
+        "mimicry",
+        "predator",
+        "relentlesshunt",
+        "shedskin",
+        "shellarmor",
+        "thermalexchange",
+        "wellbakedbody"
+      ],
+      "moves": [
+        "bounce",
+        "camouflage",
+        "coil",
+        "dragondance",
+        "dragonrush",
+        "fly",
+        "nobleroar",
+        "skydrop",
+        "stealthrock",
+        "terrainpulse",
+        "scalyscorn",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed",
+        "amuletcoin"
+      ]
+    },
+    "factoryterrain": {
+      "abilities": [
+        "scarecrow",
+        "doublestrike",
+        "aevianspark",
+        "auramaster",
+        "download",
+        "defragment",
+        "electromorphosis",
+        "fortressshell",
+        "galvanize",
+        "gulpmissile",
+        "heavymetal",
+        "armorize",
+        "argentdevotion",
+        "lightmetal",
+        "mimicry",
+        "motordrive",
+        "steelworker",
+        "technician",
+        "transistor",
+        "railguncircuit",
+        "pulsetriad"
+      ],
+      "moves": [
+        "autotomize",
+        "camouflage",
+        "electroshot",
+        "gearup",
+        "irondefense",
+        "magnetrise",
+        "metalsound",
+        "shiftgear",
+        "steelbeam",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "syntheticseed"
+      ]
+    },
+    "fairytaleterrain": {
+      "abilities": [
+        "armortail",
+        "battlearmor",
+        "apexarmor",
+        "dauntlessshield",
+        "dragonize",
+        "draconicforce",
+        "dragonsmaw",
+        "atrocity",
+        "sacrededge",
+        "defragment",
+        "perfectego",
+        "irondominion",
+        "eternalflower",
+        "ange",
+        "fairyaura",
+        "relicarmor",
+        "auroradomain",
+        "ancientbloom",
+        "fortressshell",
+        "swornduty",
+        "imperialmandate",
+        "unboundblaze",
+        "intrepidsword",
+        "armorize",
+        "argentdevotion",
+        "magicbounce",
+        "magicguard",
+        "magician",
+        "marvelscale",
+        "mimicry",
+        "mirrorarmor",
+        "pastelveil",
+        "powerofalchemy",
+        "predator",
+        "queenlymajesty",
+        "relentlesshunt",
+        "shellarmor",
+        "sinisterblaze",
+        "royaldecree",
+        "wrathshield",
+        "astralwitchcraft",
+        "stalwart",
+        "stancechange",
+        "steelyspirit",
+        "ultraego",
+        "burningego"
+      ],
+      "moves": [
+        "acidarmor",
+        "camouflage",
+        "craftyshield",
+        "drainingkiss",
+        "floralhealing",
+        "flowershield",
+        "forestscurse",
+        "healingwish",
+        "kingsshield",
+        "miracleeye",
+        "nobleroar",
+        "snowscape",
+        "strangesteam",
+        "sweetkiss",
+        "swordsdance",
+        "terrainpulse",
+        "wish",
+        "steelystrike",
+        "scalyscorn",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "forestterrain": {
+      "abilities": [
+        "grasspelt",
+        "leafguard",
+        "mimicry",
+        "relentlesshunt",
+        "sapsipper",
+        "forestsurge",
+        "swarm"
+      ],
+      "moves": [
+        "bloomdoom",
+        "camouflage",
+        "curse",
+        "defendorder",
+        "forestscurse",
+        "growth",
+        "healorder",
+        "ingrain",
+        "naturesmadness",
+        "stickyweb",
+        "strengthsap",
+        "terrainpulse",
+        "stabbyswarm",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "glitchterrain": {
+      "abilities": [
+        "download",
+        "defragment",
+        "mimicry"
+      ],
+      "moves": [
+        "blizzard",
+        "camouflage",
+        "conversion",
+        "conversion2",
+        "hyperbeam",
+        "metronome",
+        "rest",
+        "terrainpulse",
+        "glitchygraphics",
+        "naturepower"
+      ],
+      "items": [
+        "syntheticseed"
+      ]
+    },
+    "hauntedterrain": {
+      "abilities": [
+        "cursedbody",
+        "soulstrike",
+        "cursedkeepsake",
+        "curseddoll",
+        "cursedmarionette",
+        "duskilate",
+        "execution",
+        "magician",
+        "mimicry",
+        "requiem",
+        "reapersgrip",
+        "perishbody",
+        "powerspot",
+        "rattled",
+        "shadowtag",
+        "soulfire",
+        "soultag",
+        "nightmarepulse",
+        "royaldecree",
+        "wanderingspirit"
+      ],
+      "moves": [
+        "bittermalice",
+        "camouflage",
+        "curse",
+        "destinybond",
+        "firespin",
+        "grudge",
+        "hypnosis",
+        "infernalparade",
+        "lick",
+        "magicpowder",
+        "meanlook",
+        "nightmare",
+        "nightshade",
+        "phantomforce",
+        "scaryface",
+        "shadowforce",
+        "spiritbreak",
+        "spite",
+        "terrainpulse",
+        "willowisp",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "holyterrain": {
+      "abilities": [
+        "ascendance",
+        "battlefervor",
+        "cursedbody",
+        "auroracurrent",
+        "perfectego",
+        "duskilate",
+        "execution",
+        "holycow",
+        "armorize",
+        "argentdevotion",
+        "justified",
+        "mimicry",
+        "perishbody",
+        "powerspot",
+        "slowstart",
+        "ultraego",
+        "ultrainstinct",
+        "burningego"
+      ],
+      "moves": [
+        "camouflage",
+        "cosmicpower",
+        "curse",
+        "lifedew",
+        "lightthatburnsthesky",
+        "miracleeye",
+        "naturesmadness",
+        "spiritbreak",
+        "terrainpulse",
+        "wish",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "icyterrain": {
+      "abilities": [
+        "perfectforesight",
+        "rimeknuckle",
+        "mindfreeze",
+        "relicarmor",
+        "forecast",
+        "icebody",
+        "icescales",
+        "liquidvoice",
+        "mimicry",
+        "refrigerate",
+        "slushrush",
+        "snowcloak",
+        "sinisterblaze",
+        "zenmode",
+        "amethystglow"
+      ],
+      "moves": [
+        "auroraveil",
+        "camouflage",
+        "coldsnap",
+        "freezeshock",
+        "iceburn",
+        "mountaingale",
+        "secretpower",
+        "snipeshot",
+        "terrainpulse",
+        "tripledive",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed"
+      ]
+    },
+    "inverseterrain": {
+      "abilities": [
+        "inversion",
+        "mimicry"
+      ],
+      "moves": [
+        "camouflage",
+        "terrainpulse",
+        "topsyturvy",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "mirrorarenaterrain": {
+      "abilities": [
+        "colorchange",
+        "compoundeyes",
+        "irondominion",
+        "icescales",
+        "illuminate",
+        "illusion",
+        "keeneye",
+        "magicbounce",
+        "lunarorbit",
+        "mimicry",
+        "mirrorarmor",
+        "sandveil",
+        "snowcloak",
+        "royaldecree",
+        "tangledfeet"
+      ],
+      "moves": [
+        "auroraveil",
+        "baddybad",
+        "camouflage",
+        "doubleteam",
+        "flash",
+        "glitzyglow",
+        "lightscreen",
+        "mirrorcoat",
+        "mirrormove",
+        "mirrorshot",
+        "reflect",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "syntheticseed"
+      ]
+    },
+    "mountainterrain": {
+      "abilities": [
+        "aerilate",
+        "echofiend",
+        "windysurge",
+        "hyperdrill",
+        "mimicry",
+        "powerdrill",
+        "predator",
+        "relentlesshunt"
+      ],
+      "moves": [
+        "camouflage",
+        "mountaingale",
+        "razorwind",
+        "rockclimb",
+        "tailwind",
+        "terrainpulse",
+        "thunder",
+        "wildboltstorm",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "murkwatersurfaceterrain": {
+      "abilities": [
+        "crosscurrent",
+        "crumblingshell",
+        "perfectforesight",
+        "dryskin",
+        "fortressshell",
+        "gooey",
+        "liquidooze",
+        "merciless",
+        "mimicry",
+        "poisonheal",
+        "schooling",
+        "seviischooling",
+        "pulsewaste",
+        "steamengine",
+        "stench",
+        "surgesurfer",
+        "swiftswim",
+        "toxicboost",
+        "wastingsurge",
+        "waterabsorb",
+        "watercompaction",
+        "zerotohero"
+      ],
+      "moves": [
+        "acidarmor",
+        "aquaring",
+        "atlantiswall",
+        "barbbarrage",
+        "camouflage",
+        "gmaxfoamburst",
+        "lifedew",
+        "purify",
+        "shoreup",
+        "spikes",
+        "stealthrock",
+        "tarshot",
+        "terrainpulse",
+        "tidyup",
+        "toxicspikes",
+        "venomdrench",
+        "venoshock",
+        "ickyinjection",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed"
+      ]
+    },
+    "newworldterrain": {
+      "abilities": [
+        "battlefervor",
+        "beadsofruin",
+        "auroracurrent",
+        "defragment",
+        "perfectego",
+        "duskilate",
+        "execution",
+        "eternalflower",
+        "relicarmor",
+        "ancientbloom",
+        "fortressshell",
+        "imperialmandate",
+        "burningcrown",
+        "armorize",
+        "argentdevotion",
+        "magician",
+        "mimicry",
+        "relentlesshunt",
+        "sinisterblaze",
+        "solaridol",
+        "lunaridol",
+        "royaldecree",
+        "wrathshield",
+        "astralwitchcraft",
+        "stalwart",
+        "tabletsofruin",
+        "ultraego",
+        "ultrainstinct",
+        "burningego",
+        "vesselofruin",
+        "victorystar"
+      ],
+      "moves": [
+        "camouflage",
+        "cosmicpower",
+        "darkvoid",
+        "doomdesire",
+        "fissure",
+        "flash",
+        "gravity",
+        "heartswap",
+        "lunardance",
+        "magicroom",
+        "meteorbeam",
+        "moonlight",
+        "naturesmadness",
+        "ruination",
+        "takeheart",
+        "terrainpulse",
+        "trickroom",
+        "wonderroom",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "rainbowterrain": {
+      "abilities": [
+        "baddreams",
+        "cloudnine",
+        "duskilate",
+        "execution",
+        "marvelscale",
+        "mimicry",
+        "neutralization",
+        "pastelveil",
+        "prismarmor",
+        "soulheart",
+        "wonderskin"
+      ],
+      "moves": [
+        "auroraveil",
+        "camouflage",
+        "cosmicpower",
+        "firepledge",
+        "lifedew",
+        "nightmare",
+        "solarbeam",
+        "solarblade",
+        "sonicboom",
+        "terrainpulse",
+        "waterpledge",
+        "weatherball",
+        "wish",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "rockyterrain": {
+      "abilities": [
+        "hyperdrill",
+        "mimicry",
+        "powerdrill",
+        "predator",
+        "relentlesshunt",
+        "rockypayload"
+      ],
+      "moves": [
+        "arenitewall",
+        "camouflage",
+        "rockclimb",
+        "rockpolish",
+        "splinteredstormshards",
+        "stealthrock",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "shortcircuitterrain": {
+      "abilities": [
+        "download",
+        "defragment",
+        "perfectforesight",
+        "duskilate",
+        "execution",
+        "electromorphosis",
+        "fortressshell",
+        "galvanize",
+        "gulpmissile",
+        "armorize",
+        "argentdevotion",
+        "mimicry",
+        "motordrive",
+        "static",
+        "steelworker",
+        "surgesurfer",
+        "woolyconductor",
+        "pulsebulwark",
+        "voltabsorb"
+      ],
+      "moves": [
+        "camouflage",
+        "flash",
+        "magnetrise",
+        "metalsound",
+        "steelbeam",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "syntheticseed"
+      ]
+    },
+    "snowymountainterrain": {
+      "abilities": [
+        "aerilate",
+        "perfectforesight",
+        "echofiend",
+        "mindfreeze",
+        "relicarmor",
+        "windysurge",
+        "forecast",
+        "hyperdrill",
+        "icebody",
+        "icescales",
+        "mimicry",
+        "powerdrill",
+        "predator",
+        "refrigerate",
+        "relentlesshunt",
+        "slushrush",
+        "snowcloak",
+        "sinisterblaze",
+        "pulseblockade",
+        "zenmode",
+        "amethystglow"
+      ],
+      "moves": [
+        "auroraveil",
+        "bleakwindstorm",
+        "camouflage",
+        "mountaingale",
+        "tailwind",
+        "terrainpulse",
+        "thunder",
+        "wildboltstorm",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "snowyterrain": {
+      "abilities": [],
+      "moves": [],
+      "items": []
+    },
+    "starlightarenaterrain": {
+      "abilities": [
+        "battlefervor",
+        "auroracurrent",
+        "defragment",
+        "perfectego",
+        "irondominion",
+        "duskilate",
+        "execution",
+        "eternalflower",
+        "ancientbloom",
+        "fortressshell",
+        "imperialmandate",
+        "illuminate",
+        "burningcrown",
+        "armorize",
+        "argentdevotion",
+        "marvelscale",
+        "mimicry",
+        "mirrorarmor",
+        "relentlesshunt",
+        "sinisterblaze",
+        "solaridol",
+        "lunaridol",
+        "royaldecree",
+        "wrathshield",
+        "stalwart",
+        "ultraego",
+        "ultrainstinct",
+        "burningego",
+        "victorystar"
+      ],
+      "moves": [
+        "auroraveil",
+        "camouflage",
+        "cosmicpower",
+        "doomdesire",
+        "flash",
+        "geomancy",
+        "gravity",
+        "healingwish",
+        "lightthatburnsthesky",
+        "lunarblessing",
+        "lunardance",
+        "meteorbeam",
+        "moonlight",
+        "snowscape",
+        "solarbeam",
+        "solarblade",
+        "takeheart",
+        "terrainpulse",
+        "wish",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "superheatedterrain": {
+      "abilities": [
+        "mimicry",
+        "relentlesshunt",
+        "sinisterblaze",
+        "steamengine",
+        "thermalexchange",
+        "wellbakedbody"
+      ],
+      "moves": [
+        "camouflage",
+        "outrage",
+        "petaldance",
+        "snowscape",
+        "terrainpulse",
+        "thrash",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "swampterrain": {
+      "abilities": [
+        "crumblingshell",
+        "dryskin",
+        "gulpmissile",
+        "mimicry",
+        "myceliummight",
+        "rattled",
+        "pulsewaste",
+        "watercompaction"
+      ],
+      "moves": [
+        "aquaring",
+        "camouflage",
+        "grasspledge",
+        "grassyterrain",
+        "ingrain",
+        "mudshot",
+        "strengthsap",
+        "strugglebug",
+        "terrainpulse",
+        "waterpledge",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "midnightzoneterrain": {
+      "abilities": [
+        "crosscurrent",
+        "perfectforesight",
+        "fortressshell",
+        "hydration",
+        "mimicry",
+        "pressure",
+        "propellertail",
+        "schooling",
+        "seviischooling",
+        "steamengine",
+        "swiftswim",
+        "torrent",
+        "watercompaction",
+        "zerotohero"
+      ],
+      "moves": [
+        "aquaring",
+        "atlantiswall",
+        "camouflage",
+        "dive",
+        "lifedew",
+        "phantomforce",
+        "shadowforce",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed"
+      ]
+    },
+    "underwaterterrain": {
+      "abilities": [
+        "crosscurrent",
+        "crumblingshell",
+        "perfectforesight",
+        "dryskin",
+        "fortressshell",
+        "gulpmissile",
+        "hydration",
+        "mimicry",
+        "pressure",
+        "propellertail",
+        "schooling",
+        "seviischooling",
+        "steamengine",
+        "stormdrain",
+        "surgesurfer",
+        "swiftswim",
+        "torrent",
+        "wastingsurge",
+        "waterabsorb",
+        "watercompaction",
+        "waterveil",
+        "zerotohero"
+      ],
+      "moves": [
+        "aquaring",
+        "atlantiswall",
+        "camouflage",
+        "dive",
+        "lifedew",
+        "octolock",
+        "phantomforce",
+        "shoreup",
+        "takeheart",
+        "terrainpulse",
+        "tripledive",
+        "wavecrash",
+        "whirlpool",
+        "naturepower"
+      ],
+      "items": [
+        "absorbbulb",
+        "elementalseed"
+      ]
+    },
+    "volcanicterrain": {
+      "abilities": [
+        "smolderingshroud",
+        "blaze",
+        "auroracurrent",
+        "echofiend",
+        "relicarmor",
+        "flamebody",
+        "flareboost",
+        "flashfire",
+        "hyperdrill",
+        "iceface",
+        "magmaarmor",
+        "mimicry",
+        "powerdrill",
+        "sinisterblaze",
+        "soulfire",
+        "soultag",
+        "royaldecree",
+        "steamengine",
+        "thermalexchange",
+        "wellbakedbody",
+        "whitesmoke"
+      ],
+      "moves": [
+        "burningjealousy",
+        "camouflage",
+        "firespin",
+        "flameburst",
+        "inferno",
+        "ragingfury",
+        "smokescreen",
+        "snowscape",
+        "stealthrock",
+        "tarshot",
+        "terrainpulse",
+        "willowisp",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed"
+      ]
+    },
+    "wastelandterrain": {
+      "abilities": [
+        "corrosion",
+        "liquidooze",
+        "merciless",
+        "mimicry",
+        "poisonheal",
+        "poisonpoint",
+        "poisonpuppeteer",
+        "stench",
+        "toxicboost",
+        "toxicchain",
+        "wastingsurge"
+      ],
+      "moves": [
+        "aciddownpour",
+        "barbbarrage",
+        "camouflage",
+        "direclaw",
+        "gunkshot",
+        "leechseed",
+        "octazooka",
+        "sludge",
+        "sludgebomb",
+        "sludgewave",
+        "spikes",
+        "stealthrock",
+        "stickyweb",
+        "swallow",
+        "terrainpulse",
+        "toxicspikes",
+        "venomdrench",
+        "venoshock",
+        "ickyinjection",
+        "naturepower"
+      ],
+      "items": [
+        "telluricseed"
+      ]
+    },
+    "watersurfaceterrain": {
+      "abilities": [
+        "crosscurrent",
+        "crumblingshell",
+        "perfectforesight",
+        "dryskin",
+        "fortressshell",
+        "gulpmissile",
+        "hydration",
+        "mimicry",
+        "propellertail",
+        "relentlesshunt",
+        "schooling",
+        "seviischooling",
+        "steamengine",
+        "surgesurfer",
+        "swiftswim",
+        "torrent",
+        "wastingsurge",
+        "waterabsorb",
+        "watercompaction",
+        "waterveil",
+        "zerotohero"
+      ],
+      "moves": [
+        "aquaring",
+        "atlantiswall",
+        "camouflage",
+        "dive",
+        "gmaxfoamburst",
+        "lifedew",
+        "purify",
+        "shoreup",
+        "spikes",
+        "splash",
+        "stealthrock",
+        "takeheart",
+        "terrainpulse",
+        "tidyup",
+        "toxicspikes",
+        "tripledive",
+        "wavecrash",
+        "whirlpool",
+        "naturepower"
+      ],
+      "items": [
+        "absorbbulb",
+        "elementalseed"
+      ]
+    },
+    "adriennterrain": {
+      "abilities": [],
+      "moves": [],
+      "items": []
+    },
+    "electricterrain": {
+      "abilities": [
+        "battery",
+        "perfectforesight",
+        "electricsurge",
+        "fortressshell",
+        "galvanize",
+        "gulpmissile",
+        "hadronengine",
+        "lightningrod",
+        "mimicry",
+        "minus",
+        "motordrive",
+        "plus",
+        "paradoxengine",
+        "quarkdrive",
+        "quickfeet",
+        "slowstart",
+        "static",
+        "steadfast",
+        "surgesurfer",
+        "teravolt",
+        "transistor",
+        "railguncircuit",
+        "woolyconductor",
+        "surgeconduit",
+        "voltabsorb"
+      ],
+      "moves": [
+        "camouflage",
+        "charge",
+        "eerieimpulse",
+        "electricterrain",
+        "electrify",
+        "electroshot",
+        "electroweb",
+        "focuspunch",
+        "iondeluge",
+        "irontail",
+        "magneticflux",
+        "magnetrise",
+        "maxlightning",
+        "mudsport",
+        "paraboliccharge",
+        "plasmafists",
+        "psyblade",
+        "risingvoltage",
+        "spikes",
+        "stokedsparksurfer",
+        "tectonicrage",
+        "terrainpulse",
+        "volttackle",
+        "wildboltstorm",
+        "wildcharge",
+        "naturepower"
+      ],
+      "items": [
+        "boosterenergy",
+        "cellbattery",
+        "elementalseed"
+      ]
+    },
+    "grassyterrain": {
+      "abilities": [
+        "cottondown",
+        "verdantsanctuary",
+        "grasspelt",
+        "grassysurge",
+        "harvest",
+        "leafguard",
+        "mimicry",
+        "overgrow",
+        "sapsipper",
+        "seedsower",
+        "forestsurge",
+        "swarm"
+      ],
+      "moves": [
+        "bloomdoom",
+        "camouflage",
+        "coil",
+        "cottonspore",
+        "floralhealing",
+        "grasswhistle",
+        "grassyglide",
+        "grassyterrain",
+        "growth",
+        "ingrain",
+        "leechseed",
+        "maxovergrowth",
+        "naturesmadness",
+        "razorwind",
+        "terrainpulse",
+        "worryseed",
+        "naturepower"
+      ],
+      "items": [
+        "bigroot",
+        "elementalseed"
+      ]
+    },
+    "mistyterrain": {
+      "abilities": [
+        "dryskin",
+        "magician",
+        "marvelscale",
+        "mimicry",
+        "mistysurge",
+        "pastelveil",
+        "pixilate",
+        "soulheart",
+        "royaldecree",
+        "supersweetsyrup",
+        "watercompaction"
+      ],
+      "moves": [
+        "aquaring",
+        "aromaticmist",
+        "atlantiswall",
+        "camouflage",
+        "cosmicpower",
+        "maxstarfall",
+        "mist",
+        "mistyexplosion",
+        "mistyterrain",
+        "springtidestorm",
+        "strangesteam",
+        "sweetkiss",
+        "sweetscent",
+        "terrainpulse",
+        "wish",
+        "naturepower"
+      ],
+      "items": [
+        "absorbbulb",
+        "elementalseed"
+      ]
+    },
+    "psychicterrain": {
+      "abilities": [
+        "anticipation",
+        "perfectforesight",
+        "forewarn",
+        "magician",
+        "mimicry",
+        "powerspot",
+        "psychicsurge",
+        "purepower",
+        "telepathy",
+        "zenmode"
+      ],
+      "moves": [
+        "calmmind",
+        "camouflage",
+        "cosmicpower",
+        "esperwing",
+        "expandingforce",
+        "genesissupernova",
+        "gravity",
+        "hypnosis",
+        "kinesis",
+        "magicroom",
+        "maxmindstorm",
+        "mindreader",
+        "miracleeye",
+        "mysticalpower",
+        "nastyplot",
+        "psychup",
+        "psychicterrain",
+        "psyshieldbash",
+        "shatteredpsyche",
+        "takeheart",
+        "telekinesis",
+        "terrainpulse",
+        "trickroom",
+        "wonderroom",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    }
+  },
+  "fieldStartMessages": {
+    "ashenbeachterrain": [
+      "Dust swirled around the battlefield..."
+    ],
+    "bewitchedwoodsterrain": [
+      "Evil spirits gathered!"
+    ],
+    "bigtopterrain": [
+      "Now presenting!"
+    ],
+    "caveterrain": [
+      "The cave echoes dully..."
+    ],
+    "chessboardterrain": [
+      "Opening variation set"
+    ],
+    "crystalcavernterrain": [
+      "The cave is littered with crystals."
+    ],
+    "darkcrystalcavernterrain": [
+      "The darkness is gathering..."
+    ],
+    "dragonsdenterrain": [
+      "If you wish to slay a dragon..."
+    ],
+    "glitchterrain": [
+      "1n!taliz3 .b//////attl3"
+    ],
+    "hauntedterrain": [
+      "Evil spirits gathered!"
+    ],
+    "holyterrain": [
+      "Benedictus Sanctus Spiritus..."
+    ],
+    "icyterrain": [
+      "The field is covered in ice."
+    ],
+    "mountainterrain": [
+      "Adieu to disappointment and spleen; What are men to rocks and mountains?"
+    ],
+    "murkwatersurfaceterrain": [
+      "The water is tainted..."
+    ],
+    "newworldterrain": [
+      "From darkness, from stardust. From memories of eons past and visions yet to come..."
+    ],
+    "snowymountainterrain": [
+      "The snow glows white on the mountain..."
+    ],
+    "snowyterrain": [
+      "Snow swirls around the pokemon"
+    ],
+    "starlightarenaterrain": [
+      "Starlight fills the battlefield."
+    ],
+    "underwaterterrain": [
+      "Blub blub..."
+    ],
+    "watersurfaceterrain": [
+      "The water's surface is calm."
+    ]
+  }
+}

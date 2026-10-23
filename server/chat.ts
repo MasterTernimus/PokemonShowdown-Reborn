@@ -23,6 +23,7 @@ To reload chat commands:
 
 */
 
+import {runBattleEngineCommand} from './battle-engine-guard';
 import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
@@ -726,7 +727,7 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage([`The command "${this.fullCmd}" can't be broadcast.`,
 				`Use /${this.fullCmd} instead.`]);
 		}
-		let result: any = handler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
+		let result: any = runBattleEngineCommand(this, () => handler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message));
 		if (result === undefined) result = false;
 
 		return result;

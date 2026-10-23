@@ -23,6 +23,9 @@ export function passiveEffect(battle: Battle, id: string): Condition {
 		// Preserve Sirius's first-tail toxic before the passive attempts regular poison.
 		if (id === 'venamskiss') Object.assign(effect, { onSourceDamagingHitPriority: -1 });
 		if (id === 'tempestfury') Object.assign(effect, MegaTempestFury);
+		// Selected Self Repair has an unordered residual heal. Check the shell after it,
+		// so crossing half HP restores Meteor during this same turn.
+		if (id === 'shieldsdown') Object.assign(effect, { onResidualOrder: 0, onResidualPriority: -100 });
 		effects.set(ability, effect);
 	}
 	return effect;

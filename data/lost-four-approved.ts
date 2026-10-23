@@ -13,7 +13,7 @@ export const LostFourDescriptions = {
  cushionchorus: {name:'Cushion Chorus',shortDesc:'Full Friend Guard + Aroma Veil.',desc:'Full local Friend Guard and Aroma Veil. Allies take 25% less attack damage; protects the holder and allies from the mental effects covered by Aroma Veil. Fluffy is supplied separately as the species passive.'},
  perfectapple: {name:'Perfect Apple',shortDesc:'Full Pure Power + Self Sufficient + Anger Shell.',desc:'Full local Pure Power, Self Sufficient and Anger Shell: doubles Attack (Sp. Atk instead on Psychic Terrain), heals 1/16 maximum HP per turn and prevents sand/hail damage. Crossing from above half HP to half HP or below through qualifying attack damage triggers normal Anger Shell: +1 Attack, Sp. Atk and Speed; -1 Defense and Sp. Def.'},
  solarmimicry: {name:'Solar Mimicry',shortDesc:'Bug STAB/resistances; personal sun; Solar Blade lowers own Speed.',desc:'Bug attacks receive ordinary STAB without doubling existing Bug STAB. Gains Bug resistances to Fighting, Grass and Ground without Bug weaknesses. Personally treats weather as sunny without changing the field or other Pokémon; normal weather suppression and Utility Umbrella apply. After using ordinary Solar Blade, lowers its own Speed by 1 stage once after the whole use; Contrary and normal stat-change rules apply.'},
- canopyarcher: {name:'Canopy Archer',shortDesc:'Flying STAB/resistances; classified arrow moves never miss.',desc:'Flying attacks receive ordinary STAB without doubling existing Flying STAB. Gains Flying resistances to Bug, Fighting and Grass, without Flying weaknesses or Ground immunity. The established arrow-classified moves bypass accuracy/evasion checks; ordinary protection and type/ability immunities remain.'},
+	canopyarcher: { name: 'Canopy Archer', shortDesc: 'Flying STAB/resistances; accurate arrows; Scrappy + Long Reach.', desc: 'Flying attacks receive ordinary STAB without doubling existing Flying STAB. Gains Flying resistances to Bug, Fighting and Grass, without Flying weaknesses or Ground immunity. The established arrow-classified moves bypass accuracy/evasion checks; ordinary protection and ability immunities remain. Normal and Fighting moves can hit Ghost types, Intimidate cannot lower Attack, and moves do not make contact.' },
  mourningvessel: {name:'Mourning Vessel',shortDesc:'+20% power per allied faint, up to 2x; heals 5% HP per opposing faint.',desc:'Damaging moves gain 20% power per recorded allied faint, including the allied side in multi battles, capped at double power. At turn end, heals 5% maximum HP per recorded opposing faint, counting all opposing sides in Free-for-All. Preserves the existing cumulative faint counters. No Prankster or Magic Guard; these belong to the selected Bound Spirits ability.'},
  boundspirits: {name:'Bound Spirits',shortDesc:'Full Prankster + Magic Guard.',desc:'Full local Prankster and Magic Guard: status moves gain +1 priority under normal Prankster rules, and indirect damage is prevented. Normal HP costs, Pain Split, confusion and Struggle recoil remain. Mourning Vessel is a separate species passive.'},
  keystoneseal: {name:'Keystone Seal',shortDesc:'Cursed Body; continuous Imprison; blocks opposing forced switches.',desc:'Full local Cursed Body. While active, continuously prevents opponents from using moves shared with its current moveset, following ordinary Imprison rules. Blocks opposing forced switches, but not voluntary switches or self-pivots. Suppression disables the seal. The public Sealing indicator never discloses unrevealed moves. No first-hit shield.'},
@@ -75,7 +75,14 @@ export function installLostFour(abilities: AbilityDataTable) {
   onAnyAfterAttackResolved(pokemon,target,move) {if(pokemon!==this.effectState.target||skipPassiveComponent(this,pokemon,'solarmimicry')||!pokemon.hp||!pokemon.isActive||move.id!=='solarblade'||move.isZ||move.isMax||(move as any).solarMimicrySpent)return;(move as any).solarMimicrySpent=true;this.boost({spe:-1},pokemon,pokemon,this.effect);},
  };
  abilities.canopyarcher = {name:'Canopy Archer',num:11511,rating:4,flags:{breakable:1},
-  onModifyMove(move) {if(this.movehasType(move,'Flying'))move.forceSTAB=true;if(CanopyArrowMoves.includes(move.id)&&!move.isZ&&!move.isMax)move.accuracy=true;},
+		onModifyMovePriority: -5,
+		onModifyMove(move, pokemon, target) {
+			if (this.movehasType(move, 'Flying'))move.forceSTAB = true;
+			if (CanopyArrowMoves.includes(move.id) && !move.isZ && !move.isMax)move.accuracy = true;
+			abilities.scrappy.onModifyMove?.call(this, move, pokemon, target);
+			abilities.longreach.onModifyMove?.call(this, move, pokemon, target);
+		},
+		onTryBoost: abilities.scrappy.onTryBoost,
  };
  const mourning=abilities.mourningvessel;
  abilities.mourningvessel={...mourning};delete abilities.mourningvessel.onDamage;delete abilities.mourningvessel.onModifyPriority;

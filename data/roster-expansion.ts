@@ -125,11 +125,13 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 		},
 	});
 	add('causticscales', 'Caustic Scales', {
-		onStart() { this.effectState.used = false; },
 		onDamagingHit(damage, target, source, move) {
-			if (this.effectState.used || source.isAlly(target) || !this.checkMoveMakesContact(move, source, target)) return;
-			this.effectState.used = true;
+			if (damage <= 0 || target.m.causticScalesEntry === target.previouslySwitchedIn ||
+				source.isAlly(target) || !this.checkMoveMakesContact(move, source, target)) return;
+			// The entry counter survives ability suppression, replacement and reacquisition.
+			target.m.causticScalesEntry = target.previouslySwitchedIn;
 			source.trySetStatus('psn', target, this.effect);
+			this.boost({spd: -1}, source, target, this.effect);
 		},
 	});
 	add('prismwings', 'Prism Wings', {
@@ -186,6 +188,11 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 		},
 	});
 	add('galebloom', 'Gale Bloom', {
+		onModifySecondaries(secondaries, target, source, move) {
+			// Only Shield Dust is bypassable; the existing Flying support effect keeps its rules.
+			if (this.suppressingAbility(this.effectState.target, this.dex.abilities.get('shielddust'))) return;
+			return this.dex.abilities.get('shielddust').onModifySecondaries?.call(this, secondaries, target, source, move);
+		},
 		onStart() { this.effectState.used = false; },
 		onSourceDamagingHit(damage, target, source, move) {
 			if (!foeHit(damage, target, source) || move.type !== 'Flying' || this.effectState.used) return;
