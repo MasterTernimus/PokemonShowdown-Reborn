@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "b8383f54a6e6f46a9ec48c768a16c5f6c905668070eb758b25a17dce00640f96",
-  "packageManifestSHA256": "cb7655e96fab4291eb673666af875d6d0a83ab70050fd1b136df9bca5d72290b",
-  "mechanicsSHA256": "58aa2ff11ff1b4d3f94b03804533e819d254f6df395aa36aa85410c87737ddf9",
+  "packageEngineRevision": "64ca46e133923f87f133b3020956e18b0e97baf60f868e0bba87e65f7855dc8c",
+  "packageManifestSHA256": "607970611f5f8b75eb059748bf4c1cd4fea94d2700d907b05564a0dc528c83a5",
+  "mechanicsSHA256": "b2409b396de8f784b4096512e6566e549dc8e7f94674d47b72d76cf0580b6873",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,15 +11,15 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "0bb47f7c549f656dd76369e9e42593e752fcef704de11cc6da1b0251c4a95e3e"
+      "sha256": "3fd2ca23dc58b8a92b0996c3df27f687d7a41dcc18d6d7c63a6aca8309789d3d"
     },
     {
       "file": "dist/data/ability-components.js",
-      "sha256": "3ceb3f70f7742ab8c764dd193d1ad3c8c8e4acd7b9f8b8b4cd23e4febf7665a2"
+      "sha256": "6389004bc1745b2a7103252d8526dd0f10e8b206f482519dfdf5c0ed39116e77"
     },
     {
       "file": "dist/data/ability-display-summaries.js",
-      "sha256": "be739e7bb8f0e2e17f048b53df57d7717322105e337c8f530c3df067e84c196f"
+      "sha256": "93853ed72dfb208e47aaa13b8862cac493c95d367a9201aea7e6a8947fa624fb"
     },
     {
       "file": "dist/data/ability-display.js",
@@ -331,7 +331,7 @@
     },
     {
       "file": "dist/data/mega-tempest-fury.js",
-      "sha256": "a868a96860e53326f401361fc0940fabebf58c3d67f6b758191ddf2d7588ce88"
+      "sha256": "39367cd5a503218ed3c7a32e863f90351c385b457e10882ce8dcdf6a207c38d9"
     },
     {
       "file": "dist/data/meloetta-encore.js",
@@ -491,7 +491,7 @@
     },
     {
       "file": "dist/data/moves.js",
-      "sha256": "246eeeb48a0569852370f6432259f097aaecc6bb782d3d5312d7d1760d533682"
+      "sha256": "da6787c075f23d5db5357c1e32053d78b98b9d96ceb786dfa60641d6b5f495ec"
     },
     {
       "file": "dist/data/natdex-gen8-gen9-learnsets.js",
@@ -527,7 +527,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "bd632ba9b58987fb362ef706c211c75a555326c2544636e7a541a6b1dd6f4033"
+      "sha256": "cf8adc91cf049825256a9aba25510967cf16d7f21beacb40aeda5e6412916b77"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -627,11 +627,11 @@
     },
     {
       "file": "dist/data/roster-expansion-text.js",
-      "sha256": "34888693ecbd4680f7e234526fa8aac706e10e769834b8c332312f9da67a0da3"
+      "sha256": "77b13e3f84ecb784ecb9c1e4d326fa7ac43bb718a2e9f943d1529bfcbb009a7f"
     },
     {
       "file": "dist/data/roster-expansion-wave2.js",
-      "sha256": "1cac83f39e381ea2181101d8ff8903851c58363d5fbcc2e58e9413485302db03"
+      "sha256": "8737de41d301ee60992c48f96ef863ad3e6f4eac47a9015fa858bf06b56c7645"
     },
     {
       "file": "dist/data/roster-expansion-wave3.js",
@@ -683,7 +683,7 @@
     },
     {
       "file": "dist/data/signature-move-summaries.js",
-      "sha256": "5c55fe1c75321e92e23f32218751ca7090c7e49e93d8bc1ca9ac4ed394ea32c1"
+      "sha256": "c04963fd9bdf00215bde9c84b450b013463f5a17abeda09b2d56cab7179e2ce8"
     },
     {
       "file": "dist/data/signature-passive-abilities.js",
@@ -691,7 +691,7 @@
     },
     {
       "file": "dist/data/signature-passive-data.js",
-      "sha256": "6cde1ffcf70072fd4b70908493393f2e2787ef2a9a05792f9c657b5bce315c86"
+      "sha256": "41221c135cb86f2114b57729e1fccc33f46d658c0280f6280556329d4db69b7f"
     },
     {
       "file": "dist/data/simple-repeatable-abilities.js",
@@ -707,7 +707,7 @@
     },
     {
       "file": "dist/data/species-passives.js",
-      "sha256": "5f2c7c76c326d23e38495531c83b765070479b35695ae39529b846adfd09464e"
+      "sha256": "af5fc24bfde20533790c842ee83cfd02262f634fff3628f506dc220ef0e3c5e8"
     },
     {
       "file": "dist/data/stance-disguise-aggron.js",
@@ -743,7 +743,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "e5e65d341fc67569f1dc159996642ad9671ccfd7b42d3c7a07dfc904b7d83406"
+      "sha256": "f9e555c032619dc6015b17af65c8492385ab662a9aeeddb9f93f15e96a91d8d7"
     },
     {
       "file": "dist/data/text/default.js",
@@ -755,7 +755,7 @@
     },
     {
       "file": "dist/data/text/moves.js",
-      "sha256": "bd561e254987da789cb0944ca3f66da0b75580db472462084e4b122c4e3652ef"
+      "sha256": "1056b91bb3a8b4ffe0c73e479b8c4d33308aa389233dd485ad06dcc88143e6ee"
     },
     {
       "file": "dist/data/text/pokedex.js",
@@ -803,11 +803,11 @@
     },
     {
       "file": "dist/data/yang-signature-moves-a.js",
-      "sha256": "1103ac2c1ebbea61b08a5582f1bbbbfce360b8b1a756151995796de9ea7e8240"
+      "sha256": "6c9842fe04928d39baadbaaa75d633a0a7caadfc4bf308630d5f321ea15af56a"
     },
     {
       "file": "dist/data/yang-signature-moves-b.js",
-      "sha256": "c3d3010ed7a0e3cc0d876c30cf8bdf3a73754978ef7f54dd47ab022c656a5d41"
+      "sha256": "4dad59b2a19d4d8f53e5024cc894f160b0a66f550e400a9ad5bc3626282fd1e6"
     },
     {
       "file": "dist/data/yang-signature-moves.js",
@@ -879,7 +879,7 @@
     },
     {
       "file": "dist/sim/battle-actions.js",
-      "sha256": "cb75ec117a66380495e7e6f27677e1393d5e27f5349bc20b2c2873e0d699996e"
+      "sha256": "d2053a873efe526b32801fc134ece752086dc664fbde0820af797d58a8888fcb"
     },
     {
       "file": "dist/sim/battle-queue.js",
@@ -931,7 +931,7 @@
     },
     {
       "file": "dist/sim/dex-moves.js",
-      "sha256": "05ad18f84a343bab0e880736dde201089a6ffc17c82cdc93b18b99c5a5bbeada"
+      "sha256": "bc850b8c1526a269b2c6cbd7964f3b3047691dffaf447fa17ebdc4bec7d707d1"
     },
     {
       "file": "dist/sim/dex-species.js",
@@ -1064,11 +1064,9 @@
     "reason": "Reviewed offline public-state sampler is not a live battle-worker dependency."
   },
   "sourceCheckpoint": {
-    "engineSourceSnapshotSHA256": "cc8f340e5c0b05d29973994be80eb4ce7dc8b784ea9507e35a53fcf8cf18f4a0",
-    "synchronizedDataSHA256": "033a6c92e85912f7a905bd033e7377bed35276b42f3feab7e0ae95c388e2a2bb",
-    "verifiedFiles": 94,
-    "sourceHead": "68218303d1d379110dbabdcc3ee64abe31b6239a",
-    "includesUncommittedCheckpoint": true
+    "sourceHead": "90ea5ad497e8967cf2d68a0e759491acdf35b763",
+    "verifiedRuntimeFiles": 263,
+    "includesUncommittedCheckpoint": false
   },
   "excludedNonmechanics": [
     {
@@ -1078,12 +1076,12 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "6786d0898eee83b8663aabd49c891063f1806e7c417a7eb75831add9a684b815",
+      "sha256": "670d7c81cac73a8778870421369e2668c80e4a88310c108f267be1881c326477",
       "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
     },
     {
       "file": "dist/data/ability-prose-audit.js",
-      "sha256": "1331f6d0f33e79cd9aeed33ea489f26d183b87f0414e49a2f5cc01ca669ac652",
+      "sha256": "f72561bc42d6d93392d864648879c4ff1b6b7c6c935c9c8eb5c16b2ba9070d36",
       "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
     },
     {
