@@ -981,7 +981,7 @@ for (const [id, passive] of Object.entries({lycanroc: 'infiltrator', lycanrocmid
 	ThematicPassiveIds.add(passive);
 }
 for (const [id, passive] of Object.entries({
-	conkeldurr: 'stamina', gyarados: 'intimidate', milotic: 'waterabsorb', raichualola: 'static',
+	conkeldurr: 'stamina', gyarados: 'tempestfury', milotic: 'waterabsorb', raichualola: 'static',
 	wishiwashisevii: 'infiltrator', wishiwashiseviischooling: 'infiltrator',
 	gliscor: 'poisonheal', gliscoralt: 'poisonheal',
 })) {

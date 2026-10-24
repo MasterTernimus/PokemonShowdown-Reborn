@@ -67,10 +67,14 @@ SignaturePassiveComponents.winterpressure=['icebody','pressure'];
 import {PassiveShortDescriptionAudit} from './short-description-audit';
 for(const[id,shortDesc]of Object.entries(PassiveShortDescriptionAudit))SignaturePassiveDescriptions[id]={...SignaturePassiveDescriptions[id],shortDesc};
 
-SignaturePassiveDescriptions.tempestfury = {shortDesc: 'Once per battle: survive a foe hit to charge a Water critical hit.', desc: 'Once per battle, surviving opposing direct HP damage charges the next damaging Water move to critically hit, subject to normal critical-hit prevention. Opposing HP or Substitute damage spends the charge; misses, protection and immunity preserve it. The charge and spent acquisition persist through switching and form changes. Ordinary Gyarados active Tempest Fury remains repeatable; its charge is separate and does not transfer into this passive.'};
+SignaturePassiveDescriptions.tempestfury = {shortDesc: 'Once per battle: survive a foe hit to charge a Water critical hit.', desc: 'Once per battle, surviving opposing direct HP damage charges the next damaging Water move to critically hit, subject to normal critical-hit prevention. Opposing HP or Substitute damage spends the charge; misses, protection and immunity preserve it. The charge and spent acquisition persist through switching and form changes. Selected Tempest Fury, when supplied separately, remains repeatable; its charge is separate and does not transfer into this passive.'};
 
 SignaturePassiveComponents.serratedscales = ['roughskin', 'limber'];
 SignaturePassiveDescriptions.serratedscales = { "shortDesc": "Rough Skin + Limber.", "desc": "Contact attackers lose 1/8 base max HP per triggering hit; Thorn Tempered users are exempt. Prevents and cures paralysis. Other Pokemon and field effects cannot lower its Speed; self-inflicted costs and item slowdowns still apply. Trick Room and removal of Speed boosts or Tailwind still work. Limber retains its normal ability-bypass rules; Rough Skin retaliation is not bypassed." };
 
 SignaturePassiveComponents.controlledfury = ['angerpoint'];
 SignaturePassiveDescriptions.controlledfury = {"shortDesc":"Anger Point; no rampage lock or ending confusion.","desc":"Full local Anger Point: the first damaging hit after entry raises Attack by 1 stage; surviving a critical hit raises Attack to maximum. Outrage, Thrash, Petal Dance and Raging Fury do not lock the user in or cause ending confusion, including repeated manual uses. Acquiring this effect during a rampage clears only that rampage lock without confusion. Existing confusion, Choice locks, Encore and move field effects remain unchanged."};
+
+SignaturePassiveComponents.tempestfury = ['angerpoint'];
+SignaturePassiveDescriptions.tempestfury.shortDesc += ' Anger Point.';
+SignaturePassiveDescriptions.tempestfury.desc += ' Includes full local Anger Point: the first damaging hit after activation raises Attack by 1, and a surviving critical hit maximizes Attack at the normal +6 cap.';

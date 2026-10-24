@@ -19225,6 +19225,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, charge: 1, protect: 1, mirror: 1, metronome: 1, nosleeptalk: 1, failinstruct: 1 },
+		onDisableMove(pokemon) {
+			// The forced release remains usable; only a fresh consecutive use is disabled.
+			if (pokemon.lastMove?.id === 'skullbash' && pokemon.volatiles['twoturnmove']?.move !== 'skullbash') {
+				pokemon.disableMove('skullbash');
+			}
+		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;

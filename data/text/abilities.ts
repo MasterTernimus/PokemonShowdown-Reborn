@@ -342,8 +342,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	seafiend: {"name":"Sea Fiend","desc":"Physical HP hits set Toxic Spikes on the attacker's side, up to two layers; allied hits use the opposing side. Contact attackers lose 1/6 max HP. Water moves use double Attack or Sp. Atk; incoming Fire attacks use half the attacker's offensive stat. Prevents and cures burns, ignores hail and sandstorm damage, and gains Aqua Ring on entry. Does not grant Water STAB; natural STAB is unchanged.","shortDesc":"Physical hits set Toxic Spikes; contact damage; doubled Water attacking stats; Fire/burn/weather protection."},
 	hisuianoath: { name: "Hisuian Oath", desc: "This Pokemon has Sworn Duty, Tough Claws, and Corrosion's effects.", shortDesc: "Sworn Duty + Tough Claws + Corrosion." },
 	aevianoath: { name: "Aevian Oath", desc: "This Pokemon has Sworn Duty, Dual Wield, and Battle Armor's effects.", shortDesc: "Sworn Duty + Dual Wield + Battle Armor." },
-	hisuianvanguard: { name: "Hisuian Vanguard", desc: "This Pokemon has Rapid Response and Wind Power's effects.", shortDesc: "Rapid Response + Wind Power." },
-	unovavanguard: { name: "Unova Vanguard", desc: "This Pokemon has Violent Rush and Wind Rider's effects.", shortDesc: "Violent Rush + Wind Rider." },
+	hisuianvanguard: { name: "Hisuian Vanguard", desc: "This Pokemon has Rapid Response and Inner Focus's effects.", shortDesc: "Rapid Response + Inner Focus." },
+	unovavanguard: { name: "Unova Vanguard", desc: "This Pokemon has Violent Rush and Inner Focus's effects.", shortDesc: "Violent Rush + Inner Focus." },
 	unovawing: {
 		name: "Unova Wing",
 		desc: "Critical-hit and Competitive effects; no Unburden. Stat drops can raise Special Attack, but item use or loss no longer doubles Speed.",

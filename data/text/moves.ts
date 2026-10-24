@@ -5955,8 +5955,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "Charges with +2 priority, raising the user's Attack, Defense, and Special Defense by 1 stage each. While charging, the user takes 20% less damage from attacks. Attacks at normal priority on the next turn. After dealing damage, restores 15% of the user's base maximum HP. Skipping the charge, such as with Power Herb, keeps the stat boosts but does not grant charge-turn priority or the charging damage reduction.",
-		shortDesc: "+2 charge: +1 Atk/Def/SpD, 20% less damage. Hit heals 15%.",
+		desc: "Charges with +2 priority, raising the user's Attack, Defense, and Special Defense by 1 stage each. While charging, the user takes 20% less damage from attacks. Attacks at normal priority on the next turn. After dealing damage, restores 15% of the user's base maximum HP. Skipping the charge, such as with Power Herb, keeps the stat boosts but does not grant charge-turn priority or the charging damage reduction. Cannot be selected for a fresh use immediately after completing it; the forced second-turn release remains usable.",
+		shortDesc: "+2 charge: +1 Atk/Def/SpD, 20% less damage. Hit heals 15%. No consecutive fresh uses.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},

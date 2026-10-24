@@ -249,12 +249,12 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Entry heals adjacent allies by 1/4 HP (1/3 on Fairy Tale); Two 60% independent rolls; separate boosts apply to both hits; FFA: two 60%-power targets; No critical hits; 20% less damage; foe stat drops give +2 Defense."
 	},
 	"hisuianvanguard": {
-		"desc": "On its first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
-		"shortDesc": "First active turn: 1.5x Spe and 1.2x Sp. Atk; Absorbs wind; Tailwind/Strong Winds raise Sp. Atk."
+		"desc": "On its first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x. Prevents flinching and Attack drops from Intimidate.",
+		"shortDesc": "Entry: 1.5x Spe, 1.2x SpA. Inner Focus."
 	},
 	"unovavanguard": {
-		"desc": "On its first active turn, its Speed is 1.5x and its Attack is 1.2x. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
-		"shortDesc": "First active turn: 1.5x Spe and 1.2x Atk; Absorbs wind; Tailwind/Strong Winds raise Attack."
+		"desc": "On its first active turn, its Speed is 1.5x and its Attack is 1.2x. Prevents flinching and Attack drops from Intimidate.",
+		"shortDesc": "Entry: 1.5x Spe, 1.2x Atk. Inner Focus."
 	},
 	"unovawing": {
 		"desc": "Critical-hit and Competitive effects; no Unburden. Stat drops can raise Special Attack, but item use or loss no longer doubles Speed.",

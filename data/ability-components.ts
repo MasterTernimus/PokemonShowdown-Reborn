@@ -79,8 +79,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	boretunnel: ['eartheater'],
 	duneterror: ['sandstream', 'shedskin', 'sandspit'],
 	waterbubble: ['waterveil'],
-	hisuianvanguard: ['rapidresponse', 'windpower'],
-	unovavanguard: ['violentrush', 'windrider'],
+	hisuianvanguard: ['rapidresponse', 'innerfocus'],
+	unovavanguard: ['violentrush', 'innerfocus'],
 	hisuianresolve: ['bruteforce', 'reckless', 'rockhead', 'magmaarmor'],
 	nobleconduit: ['battery', 'solarpower', 'aftermath'],
 	nobledance: ['dancer', 'hospitality', 'owntempo'],
@@ -418,7 +418,7 @@ Object.assign(AbilityComponents, {
   "tidaldominion": [
     "swiftswim"
   ],
-  "tempestfury": [],
+  "tempestfury": ["angerpoint"],
   "ironlash": [
     "whiplash"
   ],

@@ -78,7 +78,8 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		},
 	});
 	add('tempestfury', 'Tempest Fury', {
-		onStart() { this.effectState.charged = false; },
+		onStart(pokemon) { this.effectState.charged = false; this.dex.abilities.get('angerpoint').onStart?.call(this, pokemon); },
+		onHit(target, source, move) { this.dex.abilities.getHandler('angerpoint', 'onHit')?.call(this, target, source, move); },
 		onDamagingHit(damage, target, source) {
 			if (!target.getPassives().includes('tempestfury') && target.hp && foeHit(damage, target, source)) this.effectState.charged = true;
 		},

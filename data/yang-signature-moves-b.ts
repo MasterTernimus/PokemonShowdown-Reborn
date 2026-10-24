@@ -208,7 +208,7 @@ export const YangSignatureCreditsB: {[id: string]: string} = {
 };
 export const YangSignatureLearnsetsB: {[id: string]: string[]} = {
  m3g4qu4k3: ['garchomp', 'hippowdon', 'quagsire'],
- winddance: ['oricorio', 'oricoriopompom', 'oricoriopau', 'oricoriosensu', 'altaria', 'togekiss', 'kilowattrel', 'braviaryhisui', 'noivern', 'honchkrow'],
+ winddance: ['oricorio', 'oricoriopompom', 'oricoriopau', 'oricoriosensu', 'altaria', 'togekiss', 'braviaryhisui', 'noivern', 'honchkrow'],
  timeblade: ['mawile', 'tinkaton', 'rapidashgalar', 'granbull', 'togekiss', 'whimsicott', 'florges', 'sylveon'],
  crestcleave: ['aegislash', 'escavalier', 'empoleon', 'kingambit', 'corviknight', 'scizor'],
  sirensveil: ['primarina', 'palafin', 'dondozo', 'basculegion', 'basculegionf', 'lapras', 'tatsugiri', 'seismitoad', 'drednaw'],

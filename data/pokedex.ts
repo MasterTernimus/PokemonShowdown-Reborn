@@ -15538,7 +15538,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Noivern",
 		types: ["Flying", "Dragon"],
 		baseStats: { hp: 85, atk: 60, def: 80, spa: 105, spd: 80, spe: 125 },
-		abilities: { 0: "Dragonize", 1: "Wind Power", H: "Echo Fiend" },
+		abilities: { 0: "Dragonize", 1: "Infiltrator", H: "Echo Fiend" },
 		heightm: 1.5,
 		weightkg: 85,
 		color: "Purple",
@@ -19836,7 +19836,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 901,
 		name: "Ursaluna",
 		types: ["Ground", "Normal"],
-		baseStats: { hp: 150, atk: 145, def: 110, spa: 25, spd: 120, spe: 50 },
+		baseStats: { hp: 140, atk: 150, def: 115, spa: 45, spd: 100, spe: 50 },
 		abilities: { 0: "Raging Beast", 1: "Bulletproof", H: "Territorial" },
 		heightm: 2.4,
 		weightkg: 290,
@@ -19855,7 +19855,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Bloodmoon",
 		types: ["Ground", "Normal"],
 		gender: "M",
-		baseStats: { hp: 133, atk: 40, def: 130, spa: 135, spd: 110, spe: 52 },
+		baseStats: { hp: 123, atk: 65, def: 130, spa: 135, spd: 95, spe: 52 },
 		abilities: { 0: "Mind's Eye", 1: "Lunar Dread", H: "Moonlit Hide" },
 		heightm: 2.7,
 		weightkg: 333,
@@ -23942,7 +23942,7 @@ for (const [id, abilities] of Object.entries({
     "0": "Tidal Dominion"
   },
   "gyarados": {
-    "1": "Tempest Fury"
+    "1": "Intimidate"
   },
   "steelix": {
     "1": "Iron Lash"

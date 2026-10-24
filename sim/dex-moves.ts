@@ -598,7 +598,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 			}
 		}
 		if (
-			this.category !== 'Status' && (!data.zMove || typeof data.multihit === 'number') &&
+			this.category !== 'Status' && (!data.zMove || (typeof data.multihit === 'number' && this.id !== 'beatdown')) &&
 			!this.isZ && !this.isMax && this.id !== 'struggle'
 		) {
 			let basePower = this.basePower;

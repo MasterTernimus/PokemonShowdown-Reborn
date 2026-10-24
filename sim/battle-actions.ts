@@ -79,6 +79,7 @@ export class BattleActions {
 	}
 
 	getZMoveBasePower(move: Move) {
+		if (move.id === 'beatdown' && move.zMove?.basePower) return move.zMove.basePower;
 		let basePower = move.basePower;
 		if (typeof move.multihit === 'number') {
 			basePower *= move.multihit;
@@ -226,6 +227,7 @@ export class BattleActions {
 		}
 		// Reset only on an actual entry, never on ability Start/resumption or transfer.
 		delete pokemon.m.controlledFurySpent;
+		delete pokemon.m.beatdownMissSpent;
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
@@ -1009,6 +1011,12 @@ export class BattleActions {
 		}
 		return hitResults;
 	}
+	applyBeatdownMissBoost(pokemon: Pokemon, move: ActiveMove) {
+		if (!pokemon.hp || pokemon.fainted || pokemon.m.beatdownMissSpent) return;
+		// A capped or prevented boost still spends this actual entry's one opportunity.
+		pokemon.m.beatdownMissSpent = true;
+		this.battle.boost({atk: 2}, pokemon, pokemon, move);
+	}
 	hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		const hitResults = [];
 		for (const [i, target] of targets.entries()) {
@@ -1070,8 +1078,8 @@ export class BattleActions {
 					this.battle.boost({ spe: 2 }, pokemon);
 				}
 				this.battle.runEvent('Miss', pokemon, target, move);
-				// This is the initial accuracy check, before the multihit loop.
-				if (move.id === 'beatdown') this.battle.boost({atk: 2}, pokemon, pokemon, move);
+				// First-hit and later-hit misses share one budget for this actual entry.
+				if (move.id === 'beatdown') this.applyBeatdownMissBoost(pokemon, move);
 				hitResults[i] = false;
 				continue;
 			}
@@ -1344,7 +1352,17 @@ export class BattleActions {
 				if (!move.alwaysHit) {
 					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 					if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
-						if (!dualWieldAccuracyCheck) break;
+						if (!dualWieldAccuracyCheck) {
+							if (move.id === 'beatdown') {
+								this.battle.add('-miss', pokemon, target);
+								if (!target.isSemiInvulnerable() && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
+									this.battle.boost({spe: 2}, pokemon);
+								}
+								this.battle.runEvent('Miss', pokemon, target, move);
+								this.applyBeatdownMissBoost(pokemon, move);
+							}
+							break;
+						}
 						this.battle.add('-miss', pokemon, target);
 						if (pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
 							this.battle.boost({ spe: 2 }, pokemon);

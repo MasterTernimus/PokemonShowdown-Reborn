@@ -1741,34 +1741,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10363,
 	},
 	hisuianvanguard: {
-		onStart(pokemon) {
-			this.dex.abilities.get('windpower').onStart?.call(this, pokemon);
-		},
 		onModifySpe(spe, pokemon) { return this.dex.abilities.get('rapidresponse').onModifySpe?.call(this, spe, pokemon); },
 		onModifySpA(spa, pokemon, target, move) { return this.dex.abilities.get('rapidresponse').onModifySpA?.call(this, spa, pokemon, target, move); },
-		onAfterMove(source, target, move) { this.dex.abilities.get('rapidresponse').onAfterMove?.call(this, source, target, move); },
-		onTryHit(target, source, move) { return this.dex.abilities.getHandler('windpower', 'onTryHit')?.call(this, target, source, move); },
-		onSideConditionStart(side, source, sideCondition) {
-			this.dex.abilities.get('windpower').onSideConditionStart?.call(this, side, source, sideCondition);
+		onTryAddVolatile(status, pokemon, source, effect) {
+			return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon, source, effect);
 		},
-		onResidual(pokemon) { this.dex.abilities.get('windpower').onResidual?.call(this, pokemon); },
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
+		},
 		flags: { breakable: 1 },
 		name: "Hisuian Vanguard",
 		rating: 5,
 		num: 10338,
 	},
 	unovavanguard: {
-		onStart(pokemon) {
-			this.dex.abilities.get('windrider').onStart?.call(this, pokemon);
-		},
 		onModifySpe(spe, pokemon) { return this.dex.abilities.get('violentrush').onModifySpe?.call(this, spe, pokemon); },
 		onModifyAtk(atk, pokemon, target, move) { return this.dex.abilities.get('violentrush').onModifyAtk?.call(this, atk, pokemon, target, move); },
-		onAfterMove(source, target, move) { this.dex.abilities.get('violentrush').onAfterMove?.call(this, source, target, move); },
-		onTryHit(target, source, move) { return this.dex.abilities.getHandler('windrider', 'onTryHit')?.call(this, target, source, move); },
-		onSideConditionStart(side, source, sideCondition) {
-			this.dex.abilities.get('windrider').onSideConditionStart?.call(this, side, source, sideCondition);
+		onTryAddVolatile(status, pokemon, source, effect) {
+			return this.dex.abilities.get('innerfocus').onTryAddVolatile?.call(this, status, pokemon, source, effect);
 		},
-		onResidual(pokemon) { this.dex.abilities.get('windrider').onResidual?.call(this, pokemon); },
+		onTryBoost(boost, target, source, effect) {
+			return this.dex.abilities.get('innerfocus').onTryBoost?.call(this, boost, target, source, effect);
+		},
 		flags: { breakable: 1 },
 		name: "Unova Vanguard",
 		rating: 5,

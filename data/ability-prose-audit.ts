@@ -53,8 +53,8 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "On entry, heals each adjacent ally by 1/4 max HP, or 1/3 on Fairy Tale."
   },
   "hisuianvanguard": {
-		"desc": "On its first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x. Absorbs wind moves for +1 Sp. Atk. Gains +1 Sp. Atk when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
-    "shortDesc": "On its first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x."
+		"desc": "On its first active turn, its Speed is 1.5x and its Sp. Atk is 1.2x. Prevents flinching and Attack drops from Intimidate.",
+    "shortDesc": "Entry: 1.5x Spe, 1.2x SpA. Inner Focus."
   },
   "unovawing": {
     "desc": "Critical-hit and Competitive effects; no Unburden. Stat drops can raise Special Attack, but item use or loss no longer doubles Speed.",
