@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "b96611a95435834d667d5b9c5daf43243f2bad51461619849edfdf16545156f5",
-  "packageManifestSHA256": "6a48965e6ccbcfd98cc6f63bdd7e99282430a6daf1632928657ebcdc1b04dba4",
-  "mechanicsSHA256": "e3d635256d46de72b18743b851b1aa949e40191f2e5793029fe5fb7f5ce9d4a0",
+  "packageEngineRevision": "d361dff74cdcc33cc1ce8efa14eef9ef6a4aa587eccd643de139d98a5094dae6",
+  "packageManifestSHA256": "6fb66ac11e02445a36aa72ae64af7882de113bf08f75e9c886df74b9ecd10dc2",
+  "mechanicsSHA256": "e85cd5ab2d821b2677cc23caed2c8181969889b14ebf5fd4a91fd2a037022f0b",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "2dab03d496c11ae53f99d71761e56700165ab8a8da0f895824979b328c9c0318"
+      "sha256": "027da890fde585c3f3c7cad978be0f45b521f19fda1f245d3735230558c0f31e"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -1072,7 +1072,7 @@
     "reason": "Reviewed offline public-state sampler is not a live battle-worker dependency."
   },
   "sourceCheckpoint": {
-    "sourceHead": "a221c1fd208d9e9a8e17a4fbf47aa541a14f30cc",
+    "sourceHead": "3e0d2595e313378eec4aea929cb5671bc99580c6",
     "verifiedRuntimeFiles": 265,
     "includesUncommittedCheckpoint": true
   },

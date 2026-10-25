@@ -21733,6 +21733,6 @@ Abilities.venomarmor.onMaybeTrapPokemon = function(pokemon) {
 };
 
 import {AbilityDescriptionOverrides as GuardianCurrentDescriptions} from './ability-descriptions';
-for (const id of ['knightsguard', 'dreamsickness', 'voidveil']) {
+for (const id of ['knightsguard', 'dreamsickness', 'voidveil', 'insight']) {
 	Object.assign(Abilities[id as Lowercase<string>], GuardianCurrentDescriptions[id]);
 }
