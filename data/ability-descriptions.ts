@@ -3752,8 +3752,8 @@ AbilityDescriptionOverrides.auraguard = {
  desc: 'Damage taken from contact moves is halved, whether the move is physical or special. Noncontact moves are unaffected.',
 };
 AbilityDescriptionOverrides.auraprecision = {
- shortDesc: 'Shield Dust and Technician.',
- desc: 'Shield Dust blocks secondary effects aimed at this Pokemon while retaining attacker self-effects. Technician multiplies eligible move power by 1.5 at effective base power 60 or less, or 80 or less on Factory Terrain. Does not add extra hits or Inner Focus. Aura Guard is a separate species passive.',
+ shortDesc: "Ultra Instinct + Shield Dust + Mind's Eye.",
+ desc: "Full local Ultra Instinct, Shield Dust and Mind's Eye. Ultra Instinct supplies its own whole-attack recovery, first-attack reduction and field interactions. Shield Dust blocks secondary effects aimed at this Pokemon while retaining attacker self-effects. Mind's Eye lets Normal and Fighting moves hit Ghosts, supplies Fairy and Dark STAB, ignores evasion boosts, prevents external accuracy drops, reveals opposing Illusions and applies its Cold Eclipse power and damage reduction. Aura Guard is its separate species passive.",
 };
 AbilityDescriptionOverrides.predator = {
  shortDesc: 'Extra power against authority and active Ultra abilities, or foes that have not acted.',
@@ -4156,3 +4156,7 @@ Object.assign(AbilityDescriptionOverrides, {
 });
 
 AbilityDescriptionOverrides.venomarmor = {shortDesc: 'Dual Wield + Run Away on regular Zangoose.', desc: 'Full local Dual Wield: eligible moves hit twice at 60% power with independent accuracy checks; Metal Claw retains its two 60%-power hits. Regular Zangoose also has Run Away: it can switch despite trapping and bypasses entry hazards, including field variants. Rival Resolve is its separate passive.'};
+
+AbilityDescriptionOverrides.insight = {shortDesc: 'Ultra Ego + Telepathy + Inner Focus.', desc: 'Full local Ultra Ego, Telepathy and Inner Focus. Ultra Ego supplies its attack power, whole-attack recovery, defensive triggers and field interactions. Telepathy prevents allied damaging moves and doubles Speed on Psychic Terrain or Psychic Aura. Inner Focus prevents flinching and Intimidate.'};
+
+AbilityDescriptionOverrides.voidveil = {shortDesc: 'Levitate + Telepathy; Gravity immunity; airborne terrain and aura benefits.', desc: 'Levitate and Telepathy. Ordinary Gardevoir ignores Gravity grounding and airborne-move restrictions and receives beneficial terrain and aura eligibility while airborne: power bonuses, status and priority protection, and Grassy recovery. It remains airborne for Ground immunity and entry hazards. Other grounding effects and ability suppression remain effective. Misty Fairy Special Defense and move bonuses follow the existing field rules.'};

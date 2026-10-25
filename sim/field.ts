@@ -221,7 +221,7 @@ export class Field {
   }
   if (multiplier !== 1) this.battle.add('-message', aura.moveMessages[move.id] || aura.typeMessage);
 		const types = move.types || [move.type];
-		const grounded = source.isGrounded() && !source.isSemiInvulnerable();
+		const grounded = source.canBenefitFromTerrain() && !source.isSemiInvulnerable();
 		const typeAllowed = aura.typeCondition === 'none' ||
 			(aura.typeCondition === 'special' ? move.category === 'Special' : grounded);
 		if (!typeAllowed || (this.auraField === 'electricterrain' && this.terrain === 'shortcircuitterrain')) return multiplier;

@@ -777,7 +777,8 @@ AbilityComponents.voidomen = ['friendguard', 'serenegrace'];
 AbilityComponents.hauntingveil = ['cursedbody', 'infiltrator'];
 
 AbilityComponents.solartrap = ['accumulation', 'liquidooze'];
-AbilityComponents.auraprecision = ['shielddust', 'technician'];
+AbilityComponents.auraprecision = ['ultrainstinct', 'shielddust', 'mindseye'];
+AbilityComponents.insight = ['ultraego', 'telepathy', 'innerfocus'];
 
 import {SelectedComponentRemovals, SelectedExactComponents} from './selected-mega-simplification-data';
 for (const [id, removed] of Object.entries(SelectedComponentRemovals)) {

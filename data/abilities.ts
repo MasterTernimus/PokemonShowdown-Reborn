@@ -21689,6 +21689,10 @@ import {installMoonlitProwl} from './moonlit-prowl';
 installMoonlitProwl(Abilities);
 
 // Individually approved packages; install after their current local primitives.
+Abilities.insight = {name: 'Insight', num: 11979, rating: 4, flags: {}};
+composeSelectedAbility(Abilities, 'insight', ['ultraego', 'telepathy', 'innerfocus'], true);
+composeSelectedAbility(Abilities, 'auraprecision', ['ultrainstinct', 'shielddust', 'mindseye'], true);
+Abilities.auraprecision = {...Abilities.auraprecision, flags: {}};
 composeSelectedAbility(Abilities, 'duskdrive', ['opportunist', 'ultraego'], true);
 composeSelectedAbility(Abilities, 'twilightinstinct', ['ultrainstinct', 'battlefervor'], true);
 Abilities.twilightinstinct = {...Abilities.twilightinstinct, flags: {}};

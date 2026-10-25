@@ -190,6 +190,22 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	},
 	terrainaura: {
 		name: 'Terrain Aura',
+  onSetStatus(status, target) {
+   if (!target.hasGravityExemption() || target.isSemiInvulnerable()) return;
+   if (this.field.isAura('mistyterrain') || (this.field.isAura('electricterrain') && status.id === 'slp')) return false;
+  },
+  onTryAddVolatile(status, target) {
+   if (!target.hasGravityExemption() || target.isSemiInvulnerable()) return;
+   if ((this.field.isAura('mistyterrain') && status.id === 'confusion') || (this.field.isAura('electricterrain') && status.id === 'yawn')) return null;
+  },
+  onTryHitPriority: 4,
+  onTryHit(target, source, move) {
+   if (!target.hasGravityExemption() || target.isSemiInvulnerable() || !this.field.isAura('psychicterrain') ||
+    !source || target.isAlly(source) || !move || move.priority <= 0.1 || move.target === 'self' ||
+    ['followme', 'ragepowder', 'spotlight'].includes(move.id)) return;
+   this.add('-activate', target, 'move: Psychic Terrain');
+   return null;
+  },
   onAfterDamageApplied(damage, target, source, move) {
    if (damage > 0 && source && !target.isAlly(source) && move?.effectType === 'Move' && this.field.isAura('frozenaura')) {
     (move as any).frozenAuraDamage = true;
@@ -226,7 +242,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (this.field.isAura('grassyterrain') && pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+			if (this.field.isAura('grassyterrain') && pokemon.canBenefitFromTerrain() && !pokemon.isSemiInvulnerable()) {
 				this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 			}
 		},

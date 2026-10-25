@@ -5243,7 +5243,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return duration;
 			},
 			onSetStatus(status, target, source, effect) {
-				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+				if (status.id === 'slp' && target.canBenefitFromTerrain() && !target.isSemiInvulnerable()) {
 					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
 						this.add('-activate', target, 'move: Electric Terrain');
 					}
@@ -5251,7 +5251,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onTryAddVolatile(status, target) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (!target.canBenefitFromTerrain() || target.isSemiInvulnerable()) return;
 				if (status.id === 'yawn') {
 					this.add('-activate', target, 'move: Electric Terrain');
 					return null;
@@ -5267,7 +5267,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onBasePower(basePower, attacker, defender, move) {
 				let modifier = 1;
 				const electrified = ['explosion', 'hurricane', 'muddywater', 'selfdestruct', 'smackdown', 'thousandarrows', 'surf', 'overdrive', 'wildboltstorm'];
-				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+				if (move.type === 'Electric' && attacker.canBenefitFromTerrain() && !attacker.isSemiInvulnerable()) {
 					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
 				if (move.id === 'magnetbomb') {
@@ -5737,13 +5737,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, source, target) {
 			if (adaptiveEnvironment(target, 'fields') && !this.field.isAura('psychicterrain')) return;
-			if (this.field.isTerrainOrAura('psychicterrain') && source.isGrounded()) {
+			if (this.field.isTerrainOrAura('psychicterrain') && source.canBenefitFromTerrain()) {
 				this.debug('terrain buff');
 				return this.chainModify(1.5);
 			}
 		},
 		onModifyMove(move, source, target) {
-			if (this.field.isAura('psychicterrain') || (this.field.isTerrain('psychicterrain') && source.isGrounded())) {
+			if (this.field.isAura('psychicterrain') || (this.field.isTerrain('psychicterrain') && source.canBenefitFromTerrain())) {
 				move.target = 'allAdjacentFoes';
 			}
 		},
@@ -8804,7 +8804,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyPriority(priority, source, target, move) {
-			if (this.field.isAura('grassyterrain') || (this.field.isTerrain('grassyterrain') && source.isGrounded())) {
+			if (this.field.isAura('grassyterrain') || (this.field.isTerrain('grassyterrain') && source.canBenefitFromTerrain())) {
 				return priority + 1;
 			}
 		},
@@ -8851,7 +8851,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.debug('move weakened by grassy terrain');
 					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 0.5);
 				}
-				if (move.type === 'Grass' && attacker.isGrounded()) {
+				if (move.type === 'Grass' && attacker.canBenefitFromTerrain()) {
 					this.debug('grassy terrain boost');
 					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}
@@ -8910,7 +8910,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 2,
 			onResidual(pokemon) {
-				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
+				if (pokemon.canBenefitFromTerrain() && !pokemon.isSemiInvulnerable()) {
 					this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon);
 				} else {
 					this.debug(`Pokemon semi-invuln or not grounded; Grassy Terrain skipped`);
@@ -13807,7 +13807,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		selfdestruct: "always",
 		onBasePower(basePower, source, target) {
 			if (adaptiveEnvironment(target, 'fields') && !this.field.isAura('mistyterrain')) return;
-			if ((this.field.isTerrain(['mistyterrain', 'corrosivemistterrain']) || this.field.isAura('mistyterrain')) && source.isGrounded()) {
+			if ((this.field.isTerrain(['mistyterrain', 'corrosivemistterrain']) || this.field.isAura('mistyterrain')) && source.canBenefitFromTerrain()) {
 				this.debug('misty terrain boost');
 				return this.chainModify(1.5);
 			}
@@ -13846,14 +13846,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSetStatus(status, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (!target.canBenefitFromTerrain() || target.isSemiInvulnerable()) return;
 				if (effect && ((effect as Move).status || effect.id === 'yawn')) {
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
 				return false;
 			},
 			onTryAddVolatile(status, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (!target.canBenefitFromTerrain() || target.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
 					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
 					return null;
@@ -16151,7 +16151,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return;
 				}
 				if (target.isSemiInvulnerable() || target.isAlly(source)) return;
-				if (!target.isGrounded()) {
+				if (!target.canBenefitFromTerrain()) {
 					const baseMove = this.dex.moves.get(effect.id);
 					if (baseMove.priority > 0) {
 						this.hint("Psychic Terrain doesn't affect Pokémon immune to Ground.");
@@ -16165,7 +16165,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onBasePower(basePower, attacker, defender, move) {
 				const strengthenedMoves = ['aurasphere', 'hex', 'magicalleaf', 'mindblown', 'moonblast', 'mysticalfire'];
 				let modifier = 1;
-				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+				if (move.type === 'Psychic' && attacker.canBenefitFromTerrain() && !attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
 					modifier *= adaptiveFieldMultiplier(this, attacker, defender, 1.5);
 				}

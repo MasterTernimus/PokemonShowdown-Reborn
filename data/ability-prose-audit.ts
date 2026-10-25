@@ -677,8 +677,8 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Frisk + Unnerve."
   },
   "auraprecision": {
-    "desc": "Shield Dust blocks secondary effects aimed at it while retaining attacker self-effects. Technician multiplies eligible move power by 1.5 at effective base power 60 or less, or 80 or less on Factory Terrain. Does not add extra hits or Inner Focus. Aura Guard is a separate species passive.",
-    "shortDesc": "Shield Dust and Technician."
+    "desc": "Full local Ultra Instinct, Shield Dust and Mind's Eye. Ultra Instinct supplies its own whole-attack recovery, first-attack reduction and field interactions. Shield Dust blocks secondary effects aimed at this Pokemon while retaining attacker self-effects. Mind's Eye lets Normal and Fighting moves hit Ghosts, supplies Fairy and Dark STAB, ignores evasion boosts, prevents external accuracy drops, reveals opposing Illusions and applies its Cold Eclipse power and damage reduction. Aura Guard is its separate species passive.",
+    "shortDesc": "Ultra Instinct + Shield Dust + Mind's Eye."
   },
   "matriarchsvigil": {
     "desc": "Full local Thick Fat, Aroma Veil and Friend Guard. Once per genuine entry, after it or an adjacent ally survives an opposing whole damaging move that takes it from above half HP to half HP or less, the injured Pokemon gains +1 Defense and +1 Sp. Def after all hits. One shared activation per entry. Residual damage, friendly fire and Substitute-only damage do not qualify. Ability restarts do not reset the budget. Friend Guard reduces damage to other allies by 25%, independently stacking with the separate Rivalry passive. Neither ally reduction protects its own holder.",

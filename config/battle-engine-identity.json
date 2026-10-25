@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "64ca46e133923f87f133b3020956e18b0e97baf60f868e0bba87e65f7855dc8c",
-  "packageManifestSHA256": "607970611f5f8b75eb059748bf4c1cd4fea94d2700d907b05564a0dc528c83a5",
-  "mechanicsSHA256": "de1f8e73552ab6bfc5fe63683a2a98817c85ac8d12401cb475513d460fb99db9",
+  "packageEngineRevision": "b96611a95435834d667d5b9c5daf43243f2bad51461619849edfdf16545156f5",
+  "packageManifestSHA256": "6a48965e6ccbcfd98cc6f63bdd7e99282430a6daf1632928657ebcdc1b04dba4",
+  "mechanicsSHA256": "e3d635256d46de72b18743b851b1aa949e40191f2e5793029fe5fb7f5ce9d4a0",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,11 +11,11 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "83c5c1512b29bf017bf462921421f3053ee642cc355fd193289d4dd6f462ab10"
+      "sha256": "2dab03d496c11ae53f99d71761e56700165ab8a8da0f895824979b328c9c0318"
     },
     {
       "file": "dist/data/ability-components.js",
-      "sha256": "3d159c4b6292de709410592dc2e01b5c3c4944ac744cf9721b82a252bacefd90"
+      "sha256": "e8265332e13e0531e225007ae0bfaa693bdfe8f80b6071128a86b051ca5a1dec"
     },
     {
       "file": "dist/data/ability-display-summaries.js",
@@ -139,7 +139,7 @@
     },
     {
       "file": "dist/data/conditions.js",
-      "sha256": "1408193da0472d33369e9206cacb3e7584588571f7738ec7010850bfe4f35001"
+      "sha256": "7f33d2a095d17475a3b8fba5f5d622390675022e8c358fdc33e4738b0e8aa524"
     },
     {
       "file": "dist/data/cramorant-goodra-kommo-approved.js",
@@ -499,7 +499,7 @@
     },
     {
       "file": "dist/data/moves.js",
-      "sha256": "108a47ff4a75b6e52fa4c9783503ea3d60948f53ae44ade4b8a827cd037e0b55"
+      "sha256": "34359bc549d46548e84d9c36c7d2f789d4959752541f3dbe50a322aa337c225a"
     },
     {
       "file": "dist/data/natdex-gen8-gen9-learnsets.js",
@@ -535,7 +535,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "5dab7900b76baefc3ec7cf650c62b795a04c641bbd98307b52814cee9b30d0d8"
+      "sha256": "894aa0767c06ada79231468cdc8b2a0be00ff923dd36aae0879f65390a34293f"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -967,7 +967,7 @@
     },
     {
       "file": "dist/sim/field.js",
-      "sha256": "6857b5cd0396032c8f0da9682b86f913c96848b29cb5c0a43b0a339350400288"
+      "sha256": "81a5bbc5b164f065e68c1ea77cb5fbd61ff7a7ea5b4d26572b7c2b5d18b94e93"
     },
     {
       "file": "dist/sim/finisher-cost.js",
@@ -979,7 +979,7 @@
     },
     {
       "file": "dist/sim/pokemon.js",
-      "sha256": "af89439a99f758e720461d4944ec2645c3ce073adf2059810f1f14ab8de854a2"
+      "sha256": "4fdd7d06135b091cc8c2dd6c9900d0d01f98d52337d24793bb3c7607e74df49f"
     },
     {
       "file": "dist/sim/predator.js",
@@ -1072,7 +1072,7 @@
     "reason": "Reviewed offline public-state sampler is not a live battle-worker dependency."
   },
   "sourceCheckpoint": {
-    "sourceHead": "b8d3c25276cf028bfca147415457750dae58f385",
+    "sourceHead": "a221c1fd208d9e9a8e17a4fbf47aa541a14f30cc",
     "verifiedRuntimeFiles": 265,
     "includesUncommittedCheckpoint": true
   },
@@ -1084,12 +1084,12 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "c8e4c32f5c9b427841b4f94353af867be157a4cbd2df9481d521078caabdd20a",
+      "sha256": "773825905895da09a68dac338a05bfa570f071e74f1ad9184a302e26a8ec1f8e",
       "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
     },
     {
       "file": "dist/data/ability-prose-audit.js",
-      "sha256": "9dfcce938afcfb218dd658fa999e09927bcc06ac236db0da2b1cf2a5d26a8918",
+      "sha256": "d630f6f33c421a8929f8de2f8b11abe717c005695bd982d03bdf36cca18bd536",
       "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
     },
     {

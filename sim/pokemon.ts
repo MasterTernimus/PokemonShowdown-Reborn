@@ -2566,6 +2566,10 @@ export class Pokemon {
 		return this.species.id === 'gardevoir' && this.hasAbility('voidveil') && !this.battle.suppressingAbility(this);
 	}
 
+	canBenefitFromTerrain() {
+		return !!this.isGrounded() || this.hasGravityExemption();
+	}
+
 	isGrounded(negateImmunity = false) {
 		if ('gravity' in this.battle.field.pseudoWeather && !this.hasGravityExemption()) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;

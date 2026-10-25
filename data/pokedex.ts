@@ -24739,4 +24739,5 @@ for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)
 // Cold Expertise is supplied only by the innate/passive slot.
 Pokedex.mamoswine.abilities = {0: 'Forsaken Sleeper', 1: 'Old North', H: 'Glacial Prime'};
 
-Pokedex.lucario.abilities = {0: 'Carry On'};
+Pokedex.lucario.abilities = {0: 'Carry On', 1: 'Sworn Duty', H: 'Armorize'};
+Pokedex.lucariomega.abilities = {0: 'Insight'};
