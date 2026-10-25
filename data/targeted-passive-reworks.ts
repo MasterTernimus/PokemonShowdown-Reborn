@@ -7,7 +7,7 @@ export const GrapplingClawsDescription = {
 export const NativeSlipstreamDescription = {
 	passive: 'levitate',
 	shortDesc: 'Keen Eye; first Flying HP hit each entry sets three-turn Tailwind.',
-	desc: 'Full local Keen Eye prevents opposing accuracy drops, ignores opposing evasion boosts and reveals opposing Illusions on activation. Mirror Arena entry grants +1 accuracy and Laser Focus, with shared entry rewards applied once. Once per switch-in, its first Flying-type attack to damage opposing HP sets Tailwind on its side for 3 turns; existing Tailwind is extended to at least 3 turns, never shortened. Levitate is supplied separately by the species passive.',
+	desc: "Full local Keen Eye prevents opposing accuracy drops, ignores opposing evasion boosts and reveals opposing Illusions on activation. Mirror Arena entry grants +1 accuracy and Laser Focus, with shared entry rewards applied once. Once per switch-in, its first Flying-type attack to damage opposing HP sets Tailwind on its side for 3 turns; Tailwind is extended to at least 3 turns, never shortened. Levitate is supplied separately by the species passive.",
 };
 
 function finishGrip(this: Battle, source: Pokemon) {

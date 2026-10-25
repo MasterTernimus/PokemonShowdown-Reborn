@@ -14,11 +14,11 @@ export const SovereignDescriptions: { [id: string]: { shortDesc: string, desc: s
 	},
 	sandsovereign: {
 		shortDesc: 'Solid Rock; better Rock/Ground matchup; eight-turn sand and Rock chip.',
-		desc: 'Sets or refreshes Sandstorm to 8 turns on entry, with native Sand Stream supplied separately by the species passive. Retains full local Solid Rock. Its retained matchup effect keeps damaging Rock moves Rock-type with normal Rock STAB, but uses the better overall Rock or Ground type-chart matchup; Ground-immune typings do not replace the Rock matchup. No extra power multiplier or Mold Breaker. Manually used Arenite Wall lasts 8 turns. Each turn, non-immune foes take Rock damage equal to 1/16 max HP; type effectiveness scales this chip only in Free-for-All.',
+		desc: "Sets or refreshes Sandstorm to 8 turns on entry, with native Sand Stream supplied separately by the species passive. Full local Solid Rock. Its retained matchup effect keeps damaging Rock moves Rock-type with normal Rock STAB, but uses the better overall Rock or Ground type-chart matchup; Ground-immune typings do not replace the Rock matchup. Manually used Arenite Wall lasts 8 turns. Each turn, non-immune foes take Rock damage equal to 1/16 max HP; type effectiveness scales this chip only in Free-for-All.",
 	},
 	frostsovereign: {
 		shortDesc: 'Ice Body + Filter + Soundproof; eight-turn snow and Ice chip.',
-		desc: 'Sets or refreshes Snow Warning weather to 8 turns on entry; native Snow Warning is supplied separately by the species passive, retaining its Cold Eclipse behavior. Retains full local Ice Body and Filter, and gains full Soundproof immunity to other Pokemon\'s sound moves. Manually used Aurora Veil lasts 8 turns. Each turn, non-immune foes take Ice damage equal to 1/16 max HP; type effectiveness scales this chip only in Free-for-All.',
+		desc: "Sets or refreshes Snow Warning weather to 8 turns on entry; native Snow Warning is supplied separately by the species passive, retaining its Cold Eclipse behavior. Full local Ice Body and Filter, and gains full Soundproof immunity to other Pokemon's sound moves. Manually used Aurora Veil lasts 8 turns. Each turn, non-immune foes take Ice damage equal to 1/16 max HP; type effectiveness scales this chip only in Free-for-All.",
 	},
 };
 export const NativeStormDescription = {

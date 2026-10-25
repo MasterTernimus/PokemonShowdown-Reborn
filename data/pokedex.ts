@@ -4026,10 +4026,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Typhlosion-Mega",
 		baseSpecies: "Typhlosion",
 		forme: "Mega",
-		types: ["Fire", "Electric"],
+		types: ["Fire", "Psychic"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 83, atk: 138, def: 85, spa: 139, spd: 70, spe: 130 },
-		abilities: { 0: "Plasma Eruption" },
+		abilities: { 0: "Corona Furnace" },
 		heightm: 1.7,
 		weightkg: 79.5,
 		color: "Yellow",
@@ -24735,3 +24735,8 @@ for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)
 	skin.abilities = { ...counterpart.abilities };
 	if (counterpart.canGigantamax) Object.assign(skin, { canGigantamax: counterpart.canGigantamax });
 }
+
+// Cold Expertise is supplied only by the innate/passive slot.
+Pokedex.mamoswine.abilities = {0: 'Forsaken Sleeper', 1: 'Old North', H: 'Glacial Prime'};
+
+Pokedex.lucario.abilities = {0: 'Carry On'};

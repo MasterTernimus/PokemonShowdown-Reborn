@@ -434,6 +434,15 @@ export class TeamValidator {
 		for (const set of team) {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 
+			if (set.initialDisguise !== undefined) {
+				const slot = set.initialDisguise;
+				const providers = [set.ability, ...(dex.species.get(set.species).passives || [])];
+				if (!Number.isInteger(slot) || slot < 1 || slot > team.length || team[slot - 1] === set) {
+					problems.push('Initial Disguise must select another teammate by its team slot.');
+				} else if (!providers.some(id => id && (abilityIncludesComponent(id, 'illusion') || abilityIncludesComponent(id, 'perfectillusion')))) {
+					problems.push('Initial Disguise requires Illusion or Perfect Illusion.');
+				}
+			}
 			let setProblems: string[] | null = null;
 			if (options.skipSets?.[set.name]) {
 				for (const i in options.skipSets[set.name]) {

@@ -19,9 +19,10 @@ describe('Dream Sickness ally rescue', () => {
 		return [battle.p1.active[0], battle.p1.active[1], battle.p2.active[0]];
 	}
 
-	it('leaves an ally at 1 HP, costs 1/4 HP, and rescues only once per switch-in', () => {
+	it('leaves an ally at 1 HP, costs 1/4 HP, and rescues only once per battle', () => {
 		const [holder, ally, foe] = start();
-		assert(holder.hasAbility('telepathy'));
+		assert(holder.hasAbility('insomnia'));
+		assert(!holder.hasAbility('telepathy'));
 		const tackle = battle.dex.getActiveMove('tackle');
 		ally.hp = 10;
 		const before = holder.hp;

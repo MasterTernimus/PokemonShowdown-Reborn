@@ -27,7 +27,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	blazingtempo: ['proficient', 'speedboost', 'striker', 'magmaarmor', 'keeneye'],
 	verdantdrake: ['proficient', 'dualwield', 'regenerator', 'lightningrod', 'limber'],
 	mightyjaw: ['proficient'],
-	blazingmane: ['proficient'],
+	blazingmane: ['firemane'],
+	coronafurnace: ['flamebody'],
 	plasmaeruption: ['proficient', 'static', 'flamebody'],
 	gigavolt: ['moldbreaker', 'lightningrod', 'static'],
 	verdantedge: ['chlorophyll', 'grasspelt', 'sharpness'],
@@ -98,7 +99,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	treasuretitan: ['filter', 'eartheater', 'heavymetal', 'intimidate'],
 	royalsun: ['drought', 'supremeoverlord', 'unnerve', 'flamebody'],
 	ragingfists: ['hydrabond', 'scrappy'],
-	aquashell: ['heatproof', 'steadfast'],
+	aquashell: ['heatproof', 'frisk'],
 	warship: ['swiftswim', 'solidrock', 'strongjaw'],
 	sweetdecay: ['hustle', 'gluttony', 'sweetveil', 'corrosion'],
 	bakedbliss: ['wellbakedbody', 'thickfat', 'sweetveil', 'gluttony'],
@@ -1012,3 +1013,17 @@ AbilityComponents.mothborn = ['shielddust'];
 AbilityComponents.pastelsanctuary = ['pastelveil'];
 
 AbilityComponents.moonlitprowl = ['infiltrator', 'limber'];
+
+AbilityComponents.dreepyvanguard = ['stalwart', 'technician'];
+AbilityComponents.duskdrive = ['opportunist', 'ultraego'];
+AbilityComponents.twilightinstinct = ['ultrainstinct', 'battlefervor'];
+AbilityComponents.forsakensleeper = ['comatose', 'soundproof', 'rattled'];
+AbilityComponents.coldexpertise = ['oblivious', 'thickfat'];
+AbilityComponents.oldnorth = ['icebody', 'icescales', 'technician'];
+AbilityComponents.glacialprime = ['slushrush', 'refrigerate'];
+
+AbilityComponents.atrocity = ['unboundblaze', 'toughclaws', 'fireward'];
+
+AbilityComponents.apexpredator = ['windrider', 'toughclaws'];
+
+AbilityComponents.carryon = ['innerfocus', 'healer'];

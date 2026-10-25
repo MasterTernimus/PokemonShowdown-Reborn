@@ -3,7 +3,7 @@ import {AbilityDescriptionOverrides} from './ability-descriptions';
 export const AbilityDisplaySummaries: Record<string, string> = {
 	dreaddominion: 'Hydra Bond, Moxie and Intimidate.',
 	"selfrepair": "Combines the listed abilities.",
-	"naturalrecovery": "Switching out heals an extra 1/3 HP if a major status was cured.",
+	"naturalrecovery": "Switching out heals an extra 1/8 HP if a major status was cured.",
 	"smolderingshroud": "First blocked opposing stat drop each entry raises Sp. Atk by 1.",
 	"springfur": "Surviving the first opposing physical move each entry gives +1 Attack.",
 	"knuckletide": "A damaging punch lets the next Water hit ignore positive defensive stages.",
@@ -90,7 +90,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"joyride": "Combines the listed abilities.",
 	"asoneglastrier": "Combines the listed abilities.",
 	"asonespectrier": "Combines the listed abilities.",
-	"aquashell": "Heatproof + Steadfast.",
+	"aquashell": "Heatproof + Frisk.",
 	"battlebond": "A KO can trigger a Bond form; no lethal-hit survival.",
 	"shadowbond": "Water Shuriken hits 3 times at 30 power and always critically hits; 1.3x same-type move power.",
 	"apexbond": "Dual Chop cannot miss and always critically hits.",
@@ -192,7 +192,8 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"truedevotion": "Status priority; stronger weak moves and secondary chances; switching cures status and heals.",
 	"ancientbloom": "Same-type moves gain 1.3x power; End-turn Grass damage to foes restores its HP.",
 	"pollenbloom": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA.",
-	"blazingmane": "Second hit 30%; Fire +1 priority at 1/4 max HP or less; fire fields +1 Spe.",
+	"blazingmane": "Fire Mane; damaging Fire moves gain +1 priority at 1/4 HP or less.",
+	"coronafurnace": "Flame Body; damaging Fire moves ignore positive defensive stages.",
 	"plasmaeruption": "Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
 	"fortressshell": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption.",
 	"waterbarrage": "1.3x same-type power; eligible moves hit twice; cycling 1/16–3/16 Water damage to foes each turn.",
@@ -299,7 +300,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"vendetta": "Critical hits: +12 Attack; one roll per battle; immune to sandstorm and hail damage.",
 	"phantomfist": "Punches have 1.4x power; no weather damage; 40% less if super effective.",
 	"territorial": "Blocks Berries and forced switching; HP hits heal 1/16, +1 Defense once per turn; Intimidate gives +1 Attack.",
-	"lunardread": "Retains their local field effects.",
+	"lunardread": "Has their local field effects.",
 	"stillwaters": "Combines the listed abilities.",
 	"ragingbeast": "Ignores burn attack penalty; Moves ignore bypassable abilities.",
 	"scavenger": "Combines the listed abilities.",
@@ -833,3 +834,20 @@ import {BeautiflyCarrionDescriptions} from './beautifly-carrion-approved';
 for (const [id, text] of Object.entries(BeautiflyCarrionDescriptions)) AbilityDisplaySummaries[id] = text.shortDesc;
 
 AbilityDisplaySummaries.moonlitprowl = "Infiltrator + full local Limber: paralysis immunity/cure and external Speed-drop protection.";
+
+for (const id of ["duskdrive","twilightinstinct","forsakensleeper","coldexpertise","oldnorth","glacialprime","dreepyvanguard"]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+
+Object.assign(AbilityDisplaySummaries, {
+	atrocity: 'Unbound Blaze + Tough Claws + Fire Ward',
+	fireward: 'Defense and Sp. Def 1.3x; 1.5x on Cold Eclipse or Dragon’s Den.',
+	witheringshell: 'Crumbling Shell + Rain Dish + Sticky Hold.',
+	apexpredator: 'Wind Rider + Tough Claws.',
+});
+
+Object.assign(AbilityDisplaySummaries, {
+	"knightsguard": "Sworn Duty; opposing HP damage earns an adjacent ally a 25% attack guard once per turn.",
+	"dreamsickness": "Insomnia + Sworn Duty; once per battle rescues an adjacent ally from a lethal attack.",
+	"voidveil": "Levitate + Telepathy; Gravity does not ground it or disable its airborne moves."
+});
+
+AbilityDisplaySummaries.venomarmor = 'Dual Wield + Run Away on regular Zangoose.';

@@ -142,10 +142,10 @@ describe('Individually selected Mega simplifications', () => {
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('highjumpkick'), 100), 100);
 		assert.equal(battle.runEvent('ModifyAtk', p, q, Dex.getActiveMove('highjumpkick'), 100), 130);
 	});
-	it('Street Tyrant respects full local Intimidate protections and keeps 1/8 passive recovery', () => {
+	it('Street Tyrant respects full local Intimidate protections and keeps normal 1/4 passive recovery', () => {
 		const [p, q] = setup('Scrafty-Mega', 'Street Tyrant'); q.setAbility('Inner Focus'); q.boosts.atk = 0;
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p); assert.equal(q.boosts.atk, 0);
-		p.hp = 400; battle.randomChance = () => true; battle.runEvent('Residual', p); assert.equal(p.hp, 600);
+		p.hp = 400; battle.randomChance = () => true; battle.runEvent('Residual', p); assert.equal(p.hp, 800);
 	});
 	it('Phantom Fist keeps Self Sufficient but loses repair, Shadow Shield and status cure', () => {
 		const [p, q] = setup('Golurk-Mega', 'Phantom Fist'); p.hp = 400; p.status = 'brn'; residual(p);

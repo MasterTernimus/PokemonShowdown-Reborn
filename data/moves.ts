@@ -681,10 +681,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, distance: 1, metronome: 1 },
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
-			this.heal(source.baseMaxhp / 4, source, source);
 			target.side.addSideCondition('safeguard', source, move);
 			target.side.allySide?.addSideCondition('safeguard', source, move);
 			let success = false;
+			let sourceCured = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally !== source && !this.suppressingAbility(ally)) {
@@ -698,8 +698,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					if (ally.volatiles['substitute'] && !move.infiltrates) continue;
 				}
-				if (ally.cureStatus()) success = true;
+				if (ally.cureStatus()) {
+					success = true;
+					if (ally === source) sourceCured = true;
+				}
 			}
+			this.heal(source.baseMaxhp / (sourceCured ? 4 : 8), source, source);
 			return success || this.NOT_FAIL;
 		},
 		target: "allyTeam",
@@ -4787,7 +4791,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	dragondarts: {
 		num: 751,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 60,
 		category: "Physical",
 		name: "Dragon Darts",
 		pp: 10,
@@ -8989,6 +8993,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				if (source) this.field.applyGravityTerrainChange(source, effect);
 				for (const pokemon of this.getAllActive()) {
+					if (pokemon.hasGravityExemption()) continue;
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 						applies = true;
@@ -9021,6 +9026,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.chainModify([6840, 4096]);
 			},
 			onDisableMove(pokemon) {
+				if (pokemon.hasGravityExemption()) return;
 				for (const moveSlot of pokemon.moveSlots) {
 					if (this.dex.moves.get(moveSlot.id).flags['gravity']) {
 						pokemon.disableMove(moveSlot.id);
@@ -9030,12 +9036,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
+				if (pokemon.hasGravityExemption()) return;
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
 				}
 			},
 			onModifyMove(move, pokemon, target) {
+				if (pokemon.hasGravityExemption()) return;
 				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
@@ -9504,10 +9512,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Heal Bell');
-			const healed = this.heal(source.baseMaxhp / 4, source, source);
 			const guarded = target.side.addSideCondition('safeguard', source, move);
 			const allyGuarded = target.side.allySide?.addSideCondition('safeguard', source, move);
 			let success = false;
+			let sourceCured = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally !== source && !this.suppressingAbility(ally)) {
@@ -9523,8 +9531,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						continue;
 					}
 				}
-				if (ally.cureStatus()) success = true;
+				if (ally.cureStatus()) {
+					success = true;
+					if (ally === source) sourceCured = true;
+				}
 			}
+			const healed = this.heal(source.baseMaxhp / (sourceCured ? 4 : 8), source, source);
 			if (source.hasAbility('restorativechime')) (move as any).restorativeChimeSuccess = !!(success || healed || guarded || allyGuarded);
 			return success;
 		},
@@ -11269,8 +11281,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { heal: 1, bypasssub: 1, allyanim: 1 },
 		onHit(pokemon) {
-			const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
-			return pokemon.cureStatus() || success;
+			const cured = pokemon.cureStatus();
+			const healed = !!this.heal(this.modify(pokemon.maxhp, cured ? 0.25 : 0.125));
+			return cured || healed;
 		},
 		target: "allies",
 		type: "Grass",
@@ -12052,13 +12065,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
-			let success;
-			if (this.field.isTerrain('starlightarenaterrain')) {
-				success = !!this.heal(this.modify(pokemon.maxhp, 0.33));
-			} else {
-				success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
-			}
-			return pokemon.cureStatus() || success;
+			const cured = pokemon.cureStatus();
+			const healed = !!this.heal(this.modify(pokemon.maxhp, cured ? 0.25 : 0.125));
+			return cured || healed;
 		},
 		target: "allies",
 		type: "Psychic",
@@ -13962,7 +13971,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Moonlight",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -14007,7 +14016,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Morning Sun",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		onHit(pokemon) {
@@ -17107,8 +17116,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onHit(pokemon) {
-			if (pokemon.status) {
-				pokemon.cureStatus();
+			if (pokemon.cureStatus()) {
 				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
 				return;
 			}
@@ -19227,7 +19235,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, charge: 1, protect: 1, mirror: 1, metronome: 1, nosleeptalk: 1, failinstruct: 1 },
 		onDisableMove(pokemon) {
 			// The forced release remains usable; only a fresh consecutive use is disabled.
-			if (pokemon.lastMove?.id === 'skullbash' && pokemon.volatiles['twoturnmove']?.move !== 'skullbash') {
+			if (pokemon.volatiles['skullbashcooldown'] && pokemon.volatiles['twoturnmove']?.move !== 'skullbash') {
 				pokemon.disableMove('skullbash');
 			}
 		},
@@ -19244,6 +19252,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onAfterMove(source, target, move) {
+			if (!source.volatiles['skullbash']) source.addVolatile('skullbashcooldown');
 			if (move.totalDamage) this.heal(source.baseMaxhp * 3 / 20, source, source);
 		},
 		condition: {
@@ -19682,7 +19691,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hasType('Flying') || pokemon.getPassives().some(id => id === 'levitate' || id === 'elevate') ||
 					pokemon.hasAbility(['levitate', 'elevate', 'silentflight'])) applies = true;
 				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] ||
-					this.field.getPseudoWeather('gravity')) applies = false;
+					(this.field.getPseudoWeather('gravity') && !pokemon.hasGravityExemption())) applies = false;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					this.queue.cancelMove(pokemon);

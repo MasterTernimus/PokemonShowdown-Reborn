@@ -1266,5 +1266,12 @@ ThematicPassiveIds.add('mothborn');
 SpeciesPassives.delcatty = Object.freeze(['rivalry']);
 ThematicPassiveIds.add('rivalry');
 
+// Individually approved Mamoswine innate package; pre-evolutions stay unchanged.
+SpeciesPassives.mamoswine = Object.freeze(['coldexpertise']);
+ThematicPassiveIds.add('coldexpertise');
+
+SpeciesPassives.lucario = Object.freeze(['mindseye']);
+ThematicPassiveIds.add('mindseye');
+
 Object.freeze(SpeciesPassives);
 

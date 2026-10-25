@@ -1352,6 +1352,10 @@ export class Pokemon {
 			item: this.item,
 			pokeball: this.pokeball,
 		};
+		if (!forAlly && this.isActive && this.illusion && !this.fainted) {
+			entry.disguise = {name: this.illusion.name, species: this.illusion.species.name,
+				mode: this.m.perfectIllusion ? 'perfectillusion' : 'illusion'};
+		}
 		if (this.battle.gen > 6) entry.ability = this.ability;
 		if (!forAlly && this.species.id === 'seviper' && this.canMegaEvo === 'Seviper-Mega') {
 			entry.megaStats = this.battle.spreadModify(this.battle.dex.species.get(this.canMegaEvo).baseStats, this.set);
@@ -2349,7 +2353,7 @@ export class Pokemon {
 			(this.getAbility() as RKSSystemAbility).memoryAbilities.call(this.battle, this) : [];
 		// Identity lookup only: composites still dispatch their own component callbacks.
 		const components = new Set<string>();
-		const pending: string[] = [this.ability, ...memoryComponents, ...getAbilityComponentAdditions(this.ability, this.getPassives())];
+		const pending: string[] = [this.ability, ...(this.species.id === 'zangoose' && this.ability === 'venomarmor' ? ['runaway'] : []), ...(this.species.id === 'gardevoir' && this.ability === 'dreamsickness' ? ['insomnia','swornduty'] : []), ...(this.species.id === 'gardevoir' && this.ability === 'voidveil' ? ['telepathy'] : []), ...(this.ability === 'carryon' && !this.transformed && this.m.carryOnAbility ? [this.m.carryOnAbility] : []), ...memoryComponents, ...getAbilityComponentAdditions(this.ability, this.getPassives())];
 		if (this.ability === 'perfectforesight' && this.m.perfectForesightAbility) {
 			pending.push(this.m.perfectForesightAbility);
 		}
@@ -2558,8 +2562,12 @@ export class Pokemon {
 		return types;
 	}
 
+	hasGravityExemption() {
+		return this.species.id === 'gardevoir' && this.hasAbility('voidveil') && !this.battle.suppressingAbility(this);
+	}
+
 	isGrounded(negateImmunity = false) {
-		if ('gravity' in this.battle.field.pseudoWeather) return true;
+		if ('gravity' in this.battle.field.pseudoWeather && !this.hasGravityExemption()) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
 		const item = (this.ignoringItem() ? '' : this.item);

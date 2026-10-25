@@ -211,8 +211,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromatherapy: {
 		name: "Aromatherapy",
-		desc: "The user heals 1/4 max HP, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Sap Sipper are not cured unless they are the user.",
-		shortDesc: "Heals 25%, starts Safeguard, and cures party status.",
+		desc: "The user heals 1/8 max HP, or 1/4 total if its own status is cured, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Sap Sipper are not cured unless they are the user.",
+		shortDesc: "Heals user 1/8, or 1/4 if cured; Safeguard + party cure.",
 		gen5: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition.",
 		},
@@ -2964,8 +2964,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healbell: {
 		name: "Heal Bell",
-		desc: "The user heals 1/4 max HP, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Soundproof are not cured unless they are the user.",
-		shortDesc: "Heals 25%, starts Safeguard, and cures party status.",
+		desc: "The user heals 1/8 max HP, or 1/4 total if its own status is cured, starts Safeguard on its side, and cures non-volatile status from its party. Active Pokemon with Soundproof are not cured unless they are the user.",
+		shortDesc: "Heals user 1/8, or 1/4 if cured; Safeguard + party cure.",
 		gen7: {
 			desc: "Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Soundproof Ability are not cured.",
 		},
@@ -3516,8 +3516,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	junglehealing: {
 		name: "Jungle Healing",
-		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up, and has its status condition cured.",
-		shortDesc: "User and allies: healed 1/4 max HP, status cured.",
+		desc: "Each affected ally has its major status cured and restores 1/8 max HP, or 1/4 total if a status was actually cured.",
+		shortDesc: "Allies heal 1/8, or 1/4 total if status is cured.",
 	},
 	karatechop: {
 		name: "Karate Chop",
@@ -3768,8 +3768,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lunarblessing: {
 		name: "Lunar Blessing",
-		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up, and has its status condition cured.",
-		shortDesc: "User and allies: healed 1/4 max HP, status cured.",
+		desc: "Each affected ally has its major status cured and restores 1/8 max HP, or 1/4 total if a status was actually cured.",
+		shortDesc: "Allies heal 1/8, or 1/4 total if status is cured.",
 	},
 	lunardance: {
 		name: "Lunar Dance",
@@ -5955,8 +5955,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skullbash: {
 		name: "Skull Bash",
-		desc: "Charges with +2 priority, raising the user's Attack, Defense, and Special Defense by 1 stage each. While charging, the user takes 20% less damage from attacks. Attacks at normal priority on the next turn. After dealing damage, restores 15% of the user's base maximum HP. Skipping the charge, such as with Power Herb, keeps the stat boosts but does not grant charge-turn priority or the charging damage reduction. Cannot be selected for a fresh use immediately after completing it; the forced second-turn release remains usable.",
-		shortDesc: "+2 charge: +1 Atk/Def/SpD, 20% less damage. Hit heals 15%. No consecutive fresh uses.",
+		desc: "Charges on the first turn, raising Attack, Defense and Sp. Def by 1, then attacks. While charging, takes 20% less attack damage. Attack damage heals the user by 15% maximum HP. After release, cannot be selected again until it completes a different damaging move or switches out.",
+		shortDesc: "Charges, attacks; needs another damaging move before reuse.",
 		gen3: {
 			desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn.",
 		},

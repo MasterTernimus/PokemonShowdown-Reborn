@@ -1927,3 +1927,36 @@ Conditions.ejecting={name:'Ejecting',noCopy:true,onStart(target){this.add('-star
 
 // Vacated-slot token, consumed before the immediate replacement enters.
 Conditions.soulescort = {name: 'Soul Escort'};
+
+Conditions.skullbashcooldown = {
+	name: 'Skull Bash cooldown', noCopy: true,
+	onDisableMove(pokemon) {
+		if (pokemon.volatiles['twoturnmove']?.move !== 'skullbash') pokemon.disableMove('skullbash');
+	},
+	onAfterMove(pokemon, target, move) {
+		if (move.id !== 'skullbash' && move.category !== 'Status' && !(move.flags.charge && pokemon.volatiles[move.id])) {
+			pokemon.removeVolatile('skullbashcooldown');
+		}
+	},
+};
+
+Conditions.knightsguardearned = {
+	name: 'Knight’s Guard earned', duration: 2, noCopy: true,
+	onSourceModifyDamage(damage, source, target, move) {
+		if (source === target || source.isAlly(target) || move.category === 'Status') return;
+		if (!this.effectState.protectedMove) { this.effectState.protectedMove = move; this.effectState.protectedSource = source; }
+		if (this.effectState.protectedMove === move && this.effectState.protectedSource === source) return this.chainModify(0.75);
+	},
+	onAnyAfterMove(source, target, move) {
+		if (move === this.effectState.protectedMove && source === this.effectState.protectedSource) this.effectState.target.removeVolatile('knightsguardearned');
+	},
+};
+Conditions.dreamsicknessrescueguard = {
+	name: 'Dream Sickness rescue guard', duration: 1, noCopy: true,
+	onDamage(damage, target, source, effect) {
+		if (effect?.effectType === 'Move' && this.activeMove === this.effectState.protectedMove && source === this.effectState.protectedSource) return Math.min(damage, Math.max(0, target.hp - 1));
+	},
+	onAnyAfterMove(source, target, move) {
+		if (move === this.effectState.protectedMove && source === this.effectState.protectedSource) this.effectState.target.removeVolatile('dreamsicknessrescueguard');
+	},
+};

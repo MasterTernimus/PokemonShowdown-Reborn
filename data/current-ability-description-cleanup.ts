@@ -13,15 +13,15 @@ export const CurrentAbilityDescriptionCleanup = {
 		"shortDesc": "Multi-hit moves always use their maximum hit count and have 1.5x power.",
 	},
 	"completeparasitism": {
-		"desc": "While above half HP, weaknesses are neutralized, indirect damage is blocked and opposing status moves fail. Retains its lethal-hit fake faint and full-HP Parasect-Parasite revival, including the separate Mega revival allowance. Cannot be suppressed and remains immune to Neutralization. Heals 1/16 max HP each turn and ignores sandstorm/hail. Switching cures major status and heals 1/3 max HP only when curing status; Bewitched Woods retains its end-turn cure without that extra heal. Dry Skin remains the separate species passive.",
+		"desc": "While above half HP, weaknesses are neutralized, indirect damage is blocked and opposing status moves fail. Has its lethal-hit fake faint and full-HP Parasect-Parasite revival, including the separate Mega revival allowance. Cannot be suppressed and remains immune to Neutralization. Heals 1/16 max HP each turn and ignores sandstorm/hail. Switching cures major status and heals 1/8 max HP only when curing status; Bewitched Woods has its end-turn cure without that extra heal. Dry Skin remains the separate species passive.",
 		"shortDesc": "Above half HP: neutralizes weaknesses, blocks indirect damage and opposing status moves.",
 	},
 	"stillwaters": {
-		"desc": "Suppresses weather effects. On Rainbow Field, gains a random eligible stat stage each turn. Ignores opposing stat changes through local Unaware and reveals Illusions on entry. Fairy Tale entry retains +1 Sp. Def.",
+		"desc": "Suppresses weather effects. On Rainbow Field, gains a random eligible stat stage each turn. Ignores opposing stat changes through local Unaware and reveals Illusions on entry. Fairy Tale entry has +1 Sp. Def.",
 		"shortDesc": "Cloud Nine + Unaware; Fairy Tale entry grants +1 Sp. Def.",
 	},
 	"stormsovereign": {
-		"desc": "Summons replaceable Strong Winds for 8 turns on entry. Each turn, non-immune foes take Flying damage equal to 1/16 base maximum HP; type effectiveness scales this chip only in Free-for-All. Flying-type foes are immune. Updraft: Competitive: opposing stat drops raise Special Attack by 2 outside Chessboard; on Chessboard, instead boosts damage with missing HP up to 2x at 20% HP. Flying moves ignore evasion boosts. Once per switch-in, the first Flying attack dealing opposing HP damage raises the living adjacent ally with the lowest HP percentage by 1 Speed stage, or the holder if no such ally exists. Only one recipient is boosted; ability restarts and Mega Evolution do not reset the entry allowance. Mega Pidgeot receives No Guard from its species passive and has no Gale Wings priority. Other holders retain their existing full-HP Flying priority and never-miss effect when no No Guard passive is present.",
+		"desc": "Summons replaceable Strong Winds for 8 turns on entry. Each turn, non-immune foes take Flying damage equal to 1/16 base maximum HP; type effectiveness scales this chip only in Free-for-All. Flying-type foes are immune. Updraft: Competitive: opposing stat drops raise Special Attack by 2 outside Chessboard; on Chessboard, instead boosts damage with missing HP up to 2x at 20% HP. Flying moves ignore evasion boosts. Once per switch-in, the first Flying attack dealing opposing HP damage raises the living adjacent ally with the lowest HP percentage by 1 Speed stage, or the holder if no such ally exists. Only one recipient is boosted; ability restarts and Mega Evolution do not reset the entry allowance. Mega Pidgeot receives No Guard from its species passive and has no Gale Wings priority. Other holders retain their full-HP Flying priority and never-miss effect when no No Guard passive is present.",
 		"shortDesc": "Updraft (Competitive), eight-turn Strong Winds and opposing Flying chip.",
 	},
 	"abysslure": {
@@ -34,11 +34,11 @@ export const CurrentAbilityDescriptionCleanup = {
 	},
 	"venomarmor": {
 		"shortDesc": "Dual Wield; poisoned holder blocks opposing Attack drops.",
-		"desc": "Full local Dual Wield: eligible moves hit twice at 60% power with independent accuracy checks; Metal Claw retains its two 60%-power hits. While poisoned, opposing Pokemon cannot lower its Attack; self-inflicted drops remain. Rival Resolve remains separate.",
+		"desc": "Full local Dual Wield: eligible moves hit twice at 60% power with independent accuracy checks; Metal Claw has its two 60%-power hits. While poisoned, opposing Pokemon cannot lower its Attack; self-inflicted drops remain. Rival Resolve remains separate.",
 	},
 	"shieldsdown": {
 		"shortDesc": "HP-based form change; Meteor blocks status. Crumbling Shell.",
-		"desc": "Minior changes to Meteor above half HP and its original core at half HP or below, on entry and at turn end. Meteor form blocks major status and Yawn. Retains Crumbling Shell: physical hits place Stealth Rock on the attacker’s side (opposing side for allied hits), except on Water Surface, Underwater, Murkwater Surface or Swamp.",
+		"desc": "Minior changes to Meteor above half HP and its original core at half HP or below, on entry and at turn end. Meteor form blocks major status and Yawn. Has Crumbling Shell: physical hits place Stealth Rock on the attacker’s side (opposing side for allied hits), except on Water Surface, Underwater, Murkwater Surface or Swamp.",
 	},
 	"primevalhunt": {
 		"shortDesc": "Skill Link + Steadfast.",

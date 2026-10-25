@@ -1,4 +1,4 @@
-'use strict'; const assert = require('assert').strict, common = require('../../common'), { Dex } = require('../../../dist/sim'); describe('Mega Golisopod passive and Heatproof plus Steadfast', () => {
+'use strict'; const assert = require('assert').strict, common = require('../../common'), { Dex } = require('../../../dist/sim'); describe('Mega Golisopod passive and Heatproof plus Frisk', () => {
 	let b;
 	afterEach(() => {
 		b?.destroy();
@@ -35,7 +35,7 @@
 		assert.equal(p.boosts.atk, -1);
 		assert(p.addVolatile('flinch', q));
 	});
-	it('real flinch consumes the action and grants Speed; Intimidate lowers Attack', () => {
+	it('real flinch consumes the action without Speed; Intimidate lowers Attack', () => {
 		const [p, q] = setup();
 		q.setAbility('Intimidate');
 		assert.equal(p.boosts.atk, -1);
@@ -43,24 +43,25 @@
 		p.addVolatile('flinch', q);
 		b.makeChoices('move tackle', 'move sandattack');
 		assert.equal(q.hp, hp);
-		assert.equal(p.boosts.spe, 1);
+		assert.equal(p.boosts.spe, 0);
 		assert(b.log.some(l => l.includes('|cant|p1a:') && l.includes('|flinch')));
 	});
-	it('Electric entry, Ashen Beach accuracy and Rocky flinch damage retain local behavior', () => {
+	it('loses Steadfast Electric/Ashen perks and Rocky flinch-chip protection', () => {
 		const [p, q] = setup();
-		assert(p.hasAbilityOrPassive('steadfast'));
+		assert(!p.hasAbilityOrPassive('steadfast'));
+		assert(p.hasAbilityOrPassive('frisk'));
 		b.field.setTerrain('electricterrain', p);
 		p.boosts.spe = 0;
 		b.singleEvent('Start', p.getAbility(), p.abilityState, p);
-		assert.equal(p.boosts.spe, 1);
+		assert.equal(p.boosts.spe, 0);
 		b.field.setTerrain('ashenbeachterrain', p);
-		assert.equal(b.runEvent('Accuracy', q, p, Dex.getActiveMove('tackle'), 1), true);
+		assert.equal(b.runEvent('Accuracy', q, p, Dex.getActiveMove('tackle'), 1), 1);
 		q.setAbility('Unnerve');
 		assert.equal(b.runEvent('Accuracy', q, p, Dex.getActiveMove('tackle'), 1), 1);
 		b.field.setTerrain('rockyterrain', p);
 		const hp = p.hp;
 		b.runEvent('Flinch', p);
-		assert.equal(p.hp, hp);
+		assert(p.hp < hp);
 		p.addVolatile('gastroacid');
 		b.runEvent('Flinch', p);
 		assert(p.hp < hp);

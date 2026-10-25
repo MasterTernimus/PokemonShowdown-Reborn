@@ -113256,3 +113256,21 @@ Learnsets.galvantularejuv = {learnset: AevianWebMoveSources as NonNullable<impor
 // Approved Ribombee-only movepool removal, after all distribution overlays.
 delete Learnsets.ribombee.learnset!.hydropump;
 delete Learnsets.ribombee.learnset!.fakeout;
+
+// Living Corsola movepool cleanup, after all distribution and cosmetic-copy overlays.
+// Galarian Corsola and Cursola keep their independent Ghost movepools.
+for (const id of ['corsola', 'corsolaalt'] as const) {
+	for (const move of ['hex', 'nightshade', 'willowisp', 'trickroom', 'shadowball'] as const) {
+		delete Learnsets[id].learnset![move];
+	}
+}
+
+// Revival support and Typhlosion Electric additions cleanup, after distribution overlays.
+for (const id of ['roserade', 'meowstic', 'meowsticf'] as const) {
+	Learnsets[id].learnset!.revivalblessing = ['9M'];
+}
+for (const id of ['typhlosion', 'typhlosionhisui'] as const) {
+	for (const move of ['chargebeam', 'doubleshock', 'electroball', 'risingvoltage', 'shockwave', 'thunder', 'thunderbolt', 'thunderfang'] as const) {
+		delete Learnsets[id].learnset![move];
+	}
+}

@@ -12,8 +12,8 @@ export const GmaxPassiveDescriptions = {
 	},
 	"irondominion": {
 		"passive": "swornduty",
-		"shortDesc": "Pressure, stat-drop reflection and existing field bonuses.",
-		"desc": "On entry, lowers adjacent foes' Defense and Sp. Def by 1, or 2 on Cold Eclipse. Pressure increases opposing PP use. Reflects opposing stat drops. Fairy Tale entry grants +1 Defense and Sp. Def; Mirror Arena grants +1 evasion. Retains Starlight Arena priority protection. Sworn Duty is supplied separately by the species passive.",
+		"shortDesc": "Pressure, stat-drop reflection and field bonuses.",
+		"desc": "On entry, lowers adjacent foes' Defense and Sp. Def by 1, or 2 on Cold Eclipse. Pressure increases opposing PP use. Reflects opposing stat drops. Fairy Tale entry grants +1 Defense and Sp. Def; Mirror Arena grants +1 evasion. Has Starlight Arena priority protection. Sworn Duty is supplied separately by the species passive.",
 	},
 	"astralwatcher": {
 		"passive": "frisk",
@@ -33,12 +33,12 @@ export const GmaxPassiveDescriptions = {
 	"sweetdecay": {
 		"passive": "gluttony",
 		"shortDesc": "Hustle, Sweet Veil and Corrosion.",
-		"desc": "Attack is 1.5x, but physical moves have 0.8x accuracy. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure existing sleep. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5. Gluttony is supplied separately by the species passive.",
+		"desc": "Attack is 1.5x, but physical moves have 0.8x accuracy. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure sleep. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5. Gluttony is supplied separately by the species passive.",
 	},
 	"bakedbliss": {
 		"passive": "gluttony",
 		"shortDesc": "Well-Baked Body, Thick Fat and Sweet Veil.",
-		"desc": "Absorbs Fire moves for +2 Defense. Gains +1 Defense each turn on Burning, Superheated, Dragon's Den and Volcanic. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure existing sleep. Gluttony is supplied separately by the species passive.",
+		"desc": "Absorbs Fire moves for +2 Defense. Gains +1 Defense each turn on Burning, Superheated, Dragon's Den and Volcanic. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure sleep. Gluttony is supplied separately by the species passive.",
 	},
 	"duneterror": {
 		"passive": "shedskin",
@@ -53,7 +53,7 @@ export const GmaxPassiveDescriptions = {
 	"heatcoil": {
 		"passive": "flamebody",
 		"shortDesc": "Speed Boost; freeze cure and Water/Ice damage reduction.",
-		"desc": "Gains +1 Speed at the end of each full turn it spends active. Cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Flame Body is supplied separately by the species passive.",
+		"desc": "Gains +1 Speed at the end of each full turn it spends active. Cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Flame Body is supplied separately by the species passive.",
 	},
 	"wickedsnare": {
   "passive": "prankster",
@@ -63,7 +63,7 @@ export const GmaxPassiveDescriptions = {
 	"sweetsanctuary": {
   "passive": "friendguard",
   "shortDesc": "Ripen; successful Decorate heals its boosted target by 1/4 max HP.",
-  "desc": "Full local Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current maximum HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing. Friend Guard remains the species passive; G-Max Finale retains its separate 1/6 active-side healing."
+  "desc": "Full local Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current maximum HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing. Friend Guard remains the species passive; G-Max Finale has its separate 1/6 active-side healing."
 },
 	"treasuretitan": {
 		"passive": "heavymetal",
@@ -78,11 +78,11 @@ export const GmaxPassiveDescriptions = {
 	"phantombarrage": {
 		"passive": "levitate",
 		"shortDesc": "Hydra Bond, Clear Body and Infiltrator; adaptive Dragon Darts/Spirit Volley.",
-		"desc": "Other Pokemon cannot lower its stat stages. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Dragon Darts and G-Max Spirit Volley use its higher offensive stat and gain 20% power from Hydra Bond instead of extra hits. Dragon Darts keeps its two-hit pattern; Spirit Volley keeps its full-power hit and weaker follow-up against another foe. In Free-for-All battles, Dragon Darts hits all opposing Pokemon twice. Levitate is supplied separately by the species passive.",
+		"desc": "Other Pokemon cannot lower its stat stages. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Dragon Darts and G-Max Spirit Volley use its higher offensive stat and gain 20% power from Hydra Bond instead of extra hits. Dragon Darts keeps its two-hit pattern; Spirit Volley keeps its full-power hit and weaker follow-up against another foe. In Free-for-All battles, Dragon Darts hits all opposing Pokemon twice. Levitate is supplied separately by the species passive.",
 	},
 	"sweetresonance": {
 		"passive": "selfsufficient",
 		"shortDesc": "Super Sweet Syrup, Hydra Bond and ally Dragon Cheer.",
-		"desc": "On entry, it lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. Other Pokemon cannot remove its held item. When it is hit by an attack, the attacker is Embargoed for 5 turns. Eligible single-target damaging moves hit three times; existing multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. On entry, gives the first adjacent ally Dragon Cheer. Flower Garden entry also lowers foes' Defense and Sp. Def at stage 3+, Attack and Sp. Atk at stage 4+, and Speed and accuracy at stage 5, all by 1; Substitute blocks these entry drops. Misty Terrain entry lowers its own accuracy by 1. Self Sufficient is supplied separately by the species passive.",
+		"desc": "On entry, it lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. Other Pokemon cannot remove its held item. When it is hit by an attack, the attacker is Embargoed for 5 turns. Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. On entry, gives the first adjacent ally Dragon Cheer. Flower Garden entry also lowers foes' Defense and Sp. Def at stage 3+, Attack and Sp. Atk at stage 4+, and Speed and accuracy at stage 5, all by 1; Substitute blocks these entry drops. Misty Terrain entry lowers its own accuracy by 1. Self Sufficient is supplied separately by the species passive.",
 	},
 };

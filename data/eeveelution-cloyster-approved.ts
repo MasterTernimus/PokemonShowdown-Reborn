@@ -9,7 +9,7 @@ export const EeveeCloysterDescriptions = {
  permafrost:{name:'Permafrost',shortDesc:'Ice Scales + Refrigerate.',desc:'Full local Ice Scales and Refrigerate, including their field effects. Ice Body is a separate species passive.'},
  verdantedge:{name:'Verdant Edge',shortDesc:'Sharpness + Grass Pelt.',desc:'Full local Sharpness and Grass Pelt, including their field effects. Chlorophyll is a separate species passive.'},
  astralward:{name:'Astral Ward',shortDesc:"Prevents opposing accuracy drops; ignores opposing evasion boosts.",desc:"Opponents cannot lower its accuracy. Its moves ignore opposing positive evasion stages."},
- lunarward:{name:'Lunar Ward',shortDesc:'Pressure + Illuminate.',desc:'Full local Pressure and Illuminate, including field effects. Pressure retains its once-per-opponent battle memory. Inner Focus is a separate species passive.'},
+ lunarward:{name:'Lunar Ward',shortDesc:'Pressure + Illuminate.',desc:"Full local Pressure and Illuminate, including field effects. Pressure has its once-per-opponent battle memory. Inner Focus is a separate species passive."},
  frozenfortress:{name:'Frozen Fortress',shortDesc:'Ice Body. Physical hits scatter Stealth Rock on the attacker’s side.',desc:'Full local Ice Body heals in hail, snow and icy fields, prevents hail damage and may inflict frostbite on contact attackers. Crumbling Shell sets Stealth Rock after physical hits if that side has none, except on Water Surface, Underwater, Murkwater Surface and Swamp fields. Allied hits place it on the opposing side. No critical-hit immunity.'},
 };
 export function installEeveeCloyster(abilities:AbilityDataTable) {

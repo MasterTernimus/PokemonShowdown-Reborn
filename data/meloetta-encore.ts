@@ -1,6 +1,6 @@
 export const MeloettaDescriptions={
  songstress:{name:'Songstress',shortDesc:'Copies another Pokemon’s sound move immediately after it succeeds.',desc:'Copies another Pokemon’s successful sound move without spending PP or its turn. Copies cannot trigger further copies.'},
- performer:{name:'Performer',shortDesc:'Dancer + Songstress.',desc:'Copies another Pokemon’s successful dance or sound move once, without spending PP or its turn. Copies cannot trigger further copies. Retains Dancer’s local dance bonuses.'},
+ performer:{name:'Performer',shortDesc:'Dancer + Songstress.',desc:"Copies another Pokemon’s successful dance or sound move once, without spending PP or its turn. Copies cannot trigger further copies. Has Dancer’s local dance bonuses."},
 };
 
 export function prepareMeloettaMove(move:ActiveMove,source:Pokemon){

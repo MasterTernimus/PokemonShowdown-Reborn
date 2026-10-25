@@ -1,11 +1,11 @@
 /** Presentation-only wording pass over all 1072 resolved abilities. No callback or component changes. */
 export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = {
   "selfrepair": {
-    "desc": "Heals 1/16 max HP each turn and ignores sandstorm and hail damage. Switching out cures major status and heals 1/3 max HP only if a status was cured. Bewitched Woods cures status at turn end without this extra heal.",
+    "desc": "Heals 1/16 max HP each turn and ignores sandstorm and hail damage. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this extra heal.",
     "shortDesc": "Heals 1/16 max HP each turn and ignores sandstorm and hail damage."
   },
   "mossarmor": {
-    "desc": "Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Switching out cures major status and heals 1/3 max HP only if a status was cured. Bewitched Woods cures status at turn end without this heal. switching out heals 1/8 max HP only after a Grass attack dealt opposing HP damage on the current or immediately preceding turn, with no intervening action.",
+    "desc": "Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this heal. switching out heals 1/8 max HP only after a Grass attack dealt opposing HP damage on the current or immediately preceding turn, with no intervening action.",
     "shortDesc": "Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded."
   },
   "hisuianpath": {
@@ -81,7 +81,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Prevents critical hits and takes 20% less attack damage."
   },
   "alchemistsurge": {
-		"desc": "On entry, creates Psychic Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules. Foe stat drops give +2 Sp. Atk, except on Chessboard. On Chessboard, move power instead rises with missing HP, from 1x at full HP to 2x at 20% HP or less. Eligible single-target attacks hit three times. In singles and doubles, native variable multi-hit moves use their maximum hit count, keeping native per-hit accuracy and damage. Remaining native hits can continue into another living opposing active Pokemon after a KO at 70% damage. Excludes non-FFA spread, charge, delayed, Z/Max and extra-hit-barred moves. Follow-ups deal 30% damage, retargeting another living opposing active Pokemon after a KO. In FFA, single-target moves hit all foes at 1.3x power; spread moves hit all foes three times with 30% follow-ups. Full-power spread stays full power. Moves have 1.2x power on Dragon's Den. Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods. Psychic Surge follows the existing field/Aura rules: it can create Psychic Terrain on an empty field or Psychic Aura over a compatible field. No Neuroforce.",
+		"desc": "On entry, creates Psychic Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules. Foe stat drops give +2 Sp. Atk, except on Chessboard. On Chessboard, move power instead rises with missing HP, from 1x at full HP to 2x at 20% HP or less. Eligible single-target attacks hit three times. In singles and doubles, native variable multi-hit moves use their maximum hit count, keeping native per-hit accuracy and damage. Remaining native hits can continue into another living opposing active Pokemon after a KO at 70% damage. Excludes non-FFA spread, charge, delayed, Z/Max and extra-hit-barred moves. Follow-ups deal 30% damage, retargeting another living opposing active Pokemon after a KO. In FFA, single-target moves hit all foes at 1.3x power; spread moves hit all foes three times with 30% follow-ups. Full-power spread stays full power. Moves have 1.2x power on Dragon's Den. Status moves gain +1 priority. Opposing Dark types block these moves except on Bewitched Woods. Psychic Surge follows the field/Aura rules: it can create Psychic Terrain on an empty field or Psychic Aura over a compatible field. No Neuroforce.",
     "shortDesc": "On entry, creates Psychic Terrain for 5 turns, or 8 with Amplifield Rock, subject to field and Aura rules."
   },
   "joyride": {
@@ -205,11 +205,11 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Reflects eligible status moves and entry hazards once; reflected moves cannot bounce again."
   },
   "sweetdecay": {
-    "desc": "Attack is 1.5x, but physical moves have 0.8x accuracy. Berries normally eaten at 1/4 HP activate at 1/2 HP instead. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure existing sleep. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5.",
+    "desc": "Attack is 1.5x, but physical moves have 0.8x accuracy. Berries normally eaten at 1/4 HP activate at 1/2 HP instead. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure sleep. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5.",
     "shortDesc": "Attack is 1.5x, but physical moves have 0.8x accuracy."
   },
   "bakedbliss": {
-    "desc": "Absorbs Fire moves for +2 Defense. Gains +1 Defense each turn on Burning, Superheated, Dragon's Den and Volcanic. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure existing sleep. Berries normally eaten at 1/4 HP activate at 1/2 HP instead.",
+    "desc": "Absorbs Fire moves for +2 Defense. Gains +1 Defense each turn on Burning, Superheated, Dragon's Den and Volcanic. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure sleep. Berries normally eaten at 1/4 HP activate at 1/2 HP instead.",
     "shortDesc": "Absorbs Fire moves for +2 Defense."
   },
   "electromorphosis": {
@@ -390,7 +390,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
   },
   "perishbody": {
     "desc": "If an enemy hits it with a damaging move, all opposing Pokemon get Perish Song. If an affected opposing Pokemon already has Perish Song, its countdown is reduced by 1 instead. During Haunted Field, affected foes are trapped while adjacent to it. This effect is blocked by Holy Field and does not trigger from allies. Cursola and its forms never shorten an existing Perish Song countdown.",
-    "shortDesc": "Enemy hits apply Perish Song to foes; Cursola never shortens existing countdowns."
+    "shortDesc": "Enemy hits apply Perish Song to foes; Cursola never shortens countdowns."
   },
   "pickpocket": {
     "desc": "If it has no item and is hit by a contact move, it steals the attacker's item. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
@@ -414,7 +414,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
   },
   "powerofalchemy": {
     "desc": "It has Self Sufficient and Regenerator's effects. It copies a fainted ally's Ability while retaining both built-in effects until it switches out.",
-    "shortDesc": "Self Sufficient + Regenerator; copies a fainted ally's Ability and retains both."
+    "shortDesc": "Self Sufficient + Regenerator; copies a fainted ally's Ability and has both."
   },
   "protosynthesis": {
     "desc": "If Sunny Day is active or it uses a held Booster Energy, its highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Sunny Day, a held Booster Energy will not activate and the effect ends when Sunny Day is no longer active. If this effect was started by a held Booster Energy, it ends when it is no longer active.",
@@ -469,7 +469,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Moves cannot be redirected."
   },
   "silkendecoy": {
-    "desc": "Mega Ariados spins a persistent cocoon, renewed when another Pokemon faints. It blocks status moves and status conditions while intact, and absorbs one damaging move including all its hits and secondary effects. Retains full local Swarm and Self Sufficient exactly once: restores 1/16 base max HP each turn and prevents sandstorm and hail damage. Venom Thread is its separate species passive.",
+    "desc": "Mega Ariados spins a persistent cocoon, renewed when another Pokemon faints. It blocks status moves and status conditions while intact, and absorbs one damaging move including all its hits and secondary effects. Full local Swarm and Self Sufficient exactly once: restores 1/16 base max HP each turn and prevents sandstorm and hail damage. Venom Thread is its separate species passive.",
     "shortDesc": "Protective cocoon + Swarm + Self Sufficient; other faints renew the cocoon."
   },
   "shieldsdown": {
@@ -521,7 +521,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "It draws Water moves to itself to raise Atk and Sp. Atk by 1; Water immunity."
   },
   "supersweetsyrup": {
-    "desc": "On switch-in, it lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. Substitute blocks this. Flower Garden stages 3–5 add the existing stat drops; Misty Terrain lowers its accuracy.",
+    "desc": "On switch-in, it lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. Substitute blocks this. Flower Garden stages 3–5 add the stat drops; Misty Terrain lowers its accuracy.",
     "shortDesc": "On every entry, lowers adjacent foes’ evasiveness 1 stage."
   },
   "symbiosis": {
@@ -577,7 +577,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Battle Fervor, Precision and Opportunist, including their field effects, entry behavior, item blocking, damage modifiers and boost-copy timing."
   },
   "burningego": {
-    "desc": "Contact attackers have a 30% burn chance, or 60% on Volcanic. On Cold Eclipse, gains +1 Defense and Sp. Def on entry instead and cannot burn through contact. Prevents freezing outside Cold Eclipse and cures existing freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. On Cold Eclipse, the two entry effects together give +2 Defense and Sp. Def. Against an opposing effective Ultra Instinct (including composites), its attacks ignore its own negative Attack and Sp. Atk stages. Ultra Instinct instead reduces its first HP-damaging move each turn by 40% and ignores positive Attack or Sp. Atk stages for that protected move. Stored stages are unchanged; normal +1 retaliation is unchanged. The rivalry is disabled on Bewitched Woods, Haunted and Holy.",
+    "desc": "Contact attackers have a 30% burn chance, or 60% on Volcanic. On Cold Eclipse, gains +1 Defense and Sp. Def on entry instead and cannot burn through contact. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. On Cold Eclipse, the two entry effects together give +2 Defense and Sp. Def. Against an opposing effective Ultra Instinct (including composites), its attacks ignore its own negative Attack and Sp. Atk stages. Ultra Instinct instead reduces its first HP-damaging move each turn by 40% and ignores positive Attack or Sp. Atk stages for that protected move. Stored stages are unchanged; normal +1 retaliation is unchanged. The rivalry is disabled on Bewitched Woods, Haunted and Holy.",
     "shortDesc": "Contact attackers have a 30% burn chance, or 60% on Volcanic."
   },
   "victorystar": {
@@ -637,15 +637,15 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Inner Focus; opponents cannot force it to switch."
   },
   "cinderscales": {
-    "desc": "Flame Body and Swarm, including their existing field effects. Prevents externally inflicted accuracy-stage drops; self-inflicted accuracy costs still apply.",
-    "shortDesc": "Flame Body and Swarm, including their existing field effects."
+    "desc": "Flame Body and Swarm, including their field effects. Prevents externally inflicted accuracy-stage drops; self-inflicted accuracy costs still apply.",
+    "shortDesc": "Flame Body and Swarm, including their field effects."
   },
   "restorativechime": {
     "desc": "Once per turn, a successful sound move restores 1/8 base max HP to the living active user and each living adjacent active ally. Damaging sound moves must connect with an opponent; ally-only hits do not count. Heal Bell qualifies if it cures status, restores HP or establishes Safeguard. Fully failed moves do not trigger healing. No longer cures healing recipients' status. Levitate remains Chimecho's separate passive.",
     "shortDesc": "Successful sound moves heal it and adjacent active allies by 1/8 max HP, once per turn."
   },
   "slumberinggiant": {
-    "desc": "Comatose + Thick Fat: always considered asleep for relevant moves and fields while able to act normally; cannot receive major status or Yawn. Fire and Ice attacks use half offensive power against it, and hail cannot damage it. Retains Comatose's suppression and ability-replacement restrictions.",
+    "desc": "Comatose + Thick Fat: always considered asleep for relevant moves and fields while able to act normally; cannot receive major status or Yawn. Fire and Ice attacks use half offensive power against it, and hail cannot damage it. Has Comatose's suppression and ability-replacement restrictions.",
     "shortDesc": "Comatose + Thick Fat: always considered asleep for relevant moves and fields while able to act normally; cannot receive major status or Yawn."
   },
   "voidguile": {
@@ -661,7 +661,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Soundproof + full local Anticipation."
   },
   "pridecall": {
-    "desc": "Competitive + Unnerve. Opposing stat drops grant +2 Sp. Atk outside Chess Board; on Chess Board, retains Competitive's missing-HP power boost instead. Foes cannot eat Berries or use field seeds while Unnerve is active; retains its Cold Eclipse entry Speed drops.",
+    "desc": "Competitive + Unnerve. Opposing stat drops grant +2 Sp. Atk outside Chess Board; on Chess Board, has Competitive's missing-HP power boost instead. Foes cannot eat Berries or use field seeds while Unnerve is active; has its Cold Eclipse entry Speed drops.",
     "shortDesc": "Competitive + Unnerve."
   },
   "evergreen": {
@@ -673,7 +673,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Once per entry, reveals the first incoming opponent's item while already active."
   },
   "carrionwatch": {
-    "desc": "Frisk + Unnerve. Entry reveals opposing active Illusions and held items, with each item holder independently having a 30% chance of five-turn Embargo. Foes cannot eat Berries or use field seeds while Unnerve is active; retains its Cold Eclipse entry Speed drops.",
+    "desc": "Frisk + Unnerve. Entry reveals opposing active Illusions and held items, with each item holder independently having a 30% chance of five-turn Embargo. Foes cannot eat Berries or use field seeds while Unnerve is active; has its Cold Eclipse entry Speed drops.",
     "shortDesc": "Frisk + Unnerve."
   },
   "auraprecision": {
@@ -701,7 +701,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Technician + Prankster; Mimecraft screens total +1 priority."
   },
   "fairyring": {
-    "desc": "Special Defense is multiplied by 1.3. Recovery from draining moves, Strength Sap, Leech Seed, Ingrain and Aqua Ring is multiplied by 1.3, stacking once with Big Root. Each turn, each major-statused opposing Pokemon loses 1/16 max HP and it drains the actual HP lost with its recovery bonus. Magic Guard prevents the residual loss; Liquid Ooze reverses draining recovery. Heal Block prevents recovery, not opposing residual damage. On genuine entry, applies ordinary Spotlight to one living adjacent ally until the end of the turn; does not repeat Illuminate's existing Spotlight.",
+    "desc": "Special Defense is multiplied by 1.3. Recovery from draining moves, Strength Sap, Leech Seed, Ingrain and Aqua Ring is multiplied by 1.3, stacking once with Big Root. Each turn, each major-statused opposing Pokemon loses 1/16 max HP and it drains the actual HP lost with its recovery bonus. Magic Guard prevents the residual loss; Liquid Ooze reverses draining recovery. Heal Block prevents recovery, not opposing residual damage. On genuine entry, applies ordinary Spotlight to one living adjacent ally until the end of the turn; does not repeat Illuminate's Spotlight.",
     "shortDesc": "Sp. Def 1.3x; draining healing 1.3x; drains statused foes; entry Spotlights an ally."
   },
   "crystalward": {

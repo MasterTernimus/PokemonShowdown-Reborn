@@ -203,9 +203,9 @@ const DisplayComponentOverrides: {[id: string]: string[]} = {
  astralwatcher: ['frisk'],
  roughscale: ['roughskin', 'toughclaws'],
  templechime: [],
- blazingmane: ['firemane', 'proficient'],
+ blazingmane: ['firemane'],
  pollenbloom: ['thickfat', 'unaware', 'proficient'],
- atrocity: ['unboundblaze', 'toughclaws'],
+ atrocity: ['unboundblaze', 'toughclaws', 'fireward'],
  unboundblaze: ['dragonize', 'magmaarmor', 'proficient'],
  soulcremation: ['soulsiphon', 'soulpyre', 'malicewell'],
  burningcrown: ['intimidate', 'whitesmoke', 'moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient'],
@@ -243,6 +243,9 @@ export function getAbilityDisplayComponents(id: string, passives: readonly strin
 		return item === undefined ? [] : getRKSSystemMemoryAbilities(canonicalAbilityDisplayID(item));
 	}
 	if (id === 'perfectforecast') return PerfectForecastForms[canonicalAbilityDisplayID(species)]?.components || [];
+	if ((!species || species === 'gardevoir') && id === 'dreamsickness') return ['insomnia', 'swornduty'];
+	if ((!species || species === 'gardevoir') && id === 'voidveil') return ['levitate', 'telepathy'];
+	if (id === 'venomarmor' && (!species || species === 'zangoose')) return ['dualwield', 'runaway'];
 	const excluded = getAbilityComponentExclusions(id, passives, species);
 	const parts = Array.from(new Set([...directDisplayComponents(id), ...getAbilityComponentAdditions(id, passives)].map(canonicalAbilityDisplayID)))
 		.filter(part => !passives.includes(part) && !excluded.includes(part) && !(id === 'heatcoil' && part === 'magmaarmor'));

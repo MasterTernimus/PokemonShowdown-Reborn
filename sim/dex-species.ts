@@ -418,6 +418,82 @@ export class Learnset {
 	}
 }
 
+// Current custom movepool removals are scoped to the original queried form.
+// Filter inherited sources without deleting access from unlisted ancestors or regional forms.
+export const Gen9MoveLearnsetExclusions: {[id: string]: readonly string[]} = {
+	absol: ["tachyoncutter"],
+	absolmega: ["tachyoncutter"],
+	absolmegaz: ["tachyoncutter"],
+	aegislash: ["tachyoncutter"],
+	aegislashblade: ["tachyoncutter"],
+	aegislashgmax: ["tachyoncutter"],
+	altaria: ["bleakwindstorm"],
+	altariamega: ["bleakwindstorm"],
+	aurorus: ["diamondstorm"],
+	aurorusmega: ["diamondstorm"],
+	banette: ["magicpowder","spectralthief"],
+	banettemega: ["magicpowder","spectralthief"],
+	banettemegaz: ["magicpowder","spectralthief"],
+	beautifly: ["magicpowder"],
+	breloom: ["barbbarrage"],
+	breloommega: ["barbbarrage"],
+	delibird: ["bleakwindstorm"],
+	doublade: ["tachyoncutter"],
+	dragalge: ["clangingscales"],
+	dragalgemega: ["clangingscales"],
+	drapion: ["direclaw"],
+	dustox: ["magicpowder"],
+	feraligatr: ["aquastep"],
+	feraligatrgmax: ["aquastep"],
+	feraligatrmega: ["aquastep"],
+	floatzel: ["aquastep"],
+	florges: ["magicpowder"],
+	florgesblue: ["magicpowder"],
+	florgesorange: ["magicpowder"],
+	florgeswhite: ["magicpowder"],
+	florgesyellow: ["magicpowder"],
+	flygon: ["clangingscales"],
+	flygonmega: ["clangingscales"],
+	flygonmegaz: ["clangingscales"],
+	froslass: ["bleakwindstorm","magicpowder"],
+	froslassmega: ["bleakwindstorm","magicpowder"],
+	gardevoir: ["darkvoid"],
+	gardevoirmega: ["darkvoid"],
+	gardevoirmegaalt: ["darkvoid"],
+	gardevoirmegaz: ["darkvoid"],
+	gardevoirvoid: ["darkvoid"],
+	gardevoirvoidmega: ["darkvoid"],
+	gengar: ["spectralthief"],
+	gengargmax: ["spectralthief"],
+	gengarmega: ["spectralthief"],
+	gligar: ["direclaw"],
+	gligaralt: ["direclaw"],
+	gliscor: ["direclaw"],
+	gliscoralt: ["direclaw"],
+	haxorus: ["mightycleave"],
+	haxorusmega: ["mightycleave"],
+	meganium: ["magicpowder"],
+	meganiummega: ["magicpowder"],
+	meganiummegay: ["magicpowder"],
+	mimikyu: ["astralbarrage"],
+	mimikyubusted: ["astralbarrage"],
+	mimikyubustedtotem: ["astralbarrage"],
+	mimikyutotem: ["astralbarrage"],
+	ninetales: ["bleakwindstorm"],
+	ninetalesalola: ["bleakwindstorm"],
+	noivern: ["clangingscales"],
+	noivernmega: ["clangingscales"],
+	probopass: ["diamondstorm"],
+	typhlosion: ["bitterblade"],
+	typhlosionalt: ["bitterblade"],
+	typhlosionhisui: ["bitterblade"],
+	typhlosionmega: ["bitterblade"],
+	venusaur: ["magicpowder"],
+	venusaurgmax: ["magicpowder"],
+	venusaurmega: ["magicpowder"],
+	volcarona: ["blueflare"],
+};
+
 export class DexSpecies {
 	readonly dex: ModdedDex;
 	readonly speciesCache = new Map<ID, Species>();
@@ -741,7 +817,7 @@ export class DexSpecies {
 
 				// Formats should replace the `Obtainable Moves` rule if they want to
 				// allow pokemon without learnsets.
-				return out;
+				break;
 			}
 			if (species.prevo && this.getLearnsetData(toID(species.prevo)).learnset) {
 				species = this.get(toID(species.prevo));
@@ -752,7 +828,11 @@ export class DexSpecies {
 			throw new Error(`Species with no learnset data: ${species.id}`);
 		}
 
-		return out;
+		const excluded = this.dex.gen >= 9 ? Gen9MoveLearnsetExclusions[originalSpecies.id] : undefined;
+		if (!excluded) return out;
+		return out.map(entry => ({...entry,
+			learnset: Object.fromEntries(Object.entries(entry.learnset).filter(([move]) => !excluded.includes(move))),
+		}));
 	}
 
 	learnsetParent(species: Species, checkingMoves = false) {

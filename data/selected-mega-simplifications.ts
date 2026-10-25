@@ -1,35 +1,38 @@
 import type { AbilityDataTable } from '../sim/dex-abilities';
 import { installCursedArmament } from './cursed-armament';
 
+export function composeSelectedAbility(abilities: AbilityDataTable, id: string, parts: string[], checkSuppression = false) {
+	const table = abilities as any;
+	const previous = table[id];
+	const result: any = Object.fromEntries(Object.entries(previous).filter(([key]) => !key.startsWith('on')));
+	const keys = new Set(parts.flatMap(part => Object.keys(table[part]).filter(key => key.startsWith('on'))));
+	for (const key of keys) {
+		const handlers = parts.map(part => table[part][key]).filter(value => value !== undefined);
+		if (!handlers.some(value => typeof value === 'function')) {
+			result[key] = handlers[0];
+			continue;
+		}
+		result[key] = function (this: Battle, ...args: any[]) {
+			let returned;
+			for (const part of parts) {
+				const component = this.dex.abilities.get(part);
+				if (checkSuppression && component.flags.breakable && this.suppressingAbility(this.effectState.target, component)) continue;
+				const handler = (component as any)[key];
+				if (handler === undefined) continue;
+				const value = typeof handler === 'function' ? handler.apply(this, args) : handler;
+				if (value === false || value === null || value === 0) return value;
+				if (value !== undefined) returned = value;
+			}
+			return returned;
+		};
+	}
+	table[id] = result;
+}
+
 /** Only the individually selected component changes; no broad audit cuts. */
 export function installSelectedMegaSimplifications(abilities: AbilityDataTable) {
 	installCursedArmament(abilities);
-	const table = abilities as any;
-	// Compose existing primitives once, retaining package identity and suppression flags.
-	const compose = (id: string, parts: string[]) => {
-		const previous = table[id];
-		const result: any = Object.fromEntries(Object.entries(previous).filter(([key]) => !key.startsWith('on')));
-		const keys = new Set(parts.flatMap(part => Object.keys(table[part]).filter(key => key.startsWith('on'))));
-		for (const key of keys) {
-			const handlers = parts.map(part => table[part][key]).filter(value => value !== undefined);
-			if (!handlers.some(value => typeof value === 'function')) {
-				result[key] = handlers[0];
-				continue;
-			}
-			result[key] = function (this: Battle, ...args: any[]) {
-				let returned;
-				for (const part of parts) {
-					const handler = (this.dex.abilities.get(part) as any)[key];
-					if (handler === undefined) continue;
-					const value = typeof handler === 'function' ? handler.apply(this, args) : handler;
-					if (value === false || value === null || value === 0) return value;
-					if (value !== undefined) returned = value;
-				}
-				return returned;
-			};
-		}
-		table[id] = result;
-	};
+	const compose = (id: string, parts: string[]) => composeSelectedAbility(abilities, id, parts);
 	// Water Barrage owns Stalwart; dispatch that component exactly once.
 	compose('siegelauncher', ['megalauncher', 'waterbarrage', 'overcoat']);
 	compose('neurotoxin', ['hydrabond', 'regenerator']);

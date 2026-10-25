@@ -15,13 +15,13 @@
     "id": "dustox",
     "slot": "0",
     "before": "Shield Dust",
-    "after": "Compound Eyes"
+    "after": "Night Forager"
   },
   {
     "id": "swalot",
     "slot": "0",
     "before": "Liquid Ooze",
-    "after": "Sticky Hold"
+    "after": "Adhesive Armor"
   },
   {
     "id": "gulpin",
@@ -45,7 +45,7 @@
     "id": "alcremie",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   },
   {
     "id": "milcery",
@@ -183,48 +183,48 @@
     "id": "alcremierubycream",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   },
   {
     "id": "alcremiematchacream",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   },
   {
     "id": "alcremiemintcream",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   },
   {
     "id": "alcremielemoncream",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   },
   {
     "id": "alcremiesaltedcream",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   },
   {
     "id": "alcremierubyswirl",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   },
   {
     "id": "alcremiecaramelswirl",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   },
   {
     "id": "alcremierainbowswirl",
     "slot": "0",
     "before": "Sweet Veil",
-    "after": "Ripen"
+    "after": "Soothing Cream"
   }
 ]

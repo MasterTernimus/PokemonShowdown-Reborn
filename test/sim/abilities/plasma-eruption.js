@@ -6,7 +6,7 @@ const { Dex } = require('../../../dist/sim');
 
 let battle;
 
-function start(species = 'Typhlosion', moves = ['splash', 'flamethrower', 'thunderbolt'], foeSpecies = 'Mew') {
+function start(species = 'Typhlosion', moves = ['splash', 'flamethrower', 'thunderbolt'], foeSpecies = 'Mew', legacy = true) {
 	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[
 		{ species, item: 'Typhlosionite', moves },
 	], [
@@ -15,7 +15,10 @@ function start(species = 'Typhlosion', moves = ['splash', 'flamethrower', 'thund
 	battle.makeChoices('team 1', 'team 1');
 	assert.equal(battle.p1.active[0].canMegaEvo, 'Typhlosion-Mega');
 	battle.makeChoices('move splash mega', 'move splash');
-	return [battle.p1.active[0], battle.p2.active[0]];
+	const holder = battle.p1.active[0];
+	// Legacy Plasma Eruption remains independently testable after the Mega rework.
+	if (legacy) {holder.setAbility('Plasma Eruption'); holder.setType(['Fire', 'Electric']);}
+	return [holder, battle.p2.active[0]];
 }
 
 describe('Typhlosionite and Plasma Eruption', () => {
@@ -36,27 +39,28 @@ describe('Typhlosionite and Plasma Eruption', () => {
 		assert.deepEqual(Dex.species.get('Typhlosion-Hisui').baseStats,
 			{ hp: 83, atk: 95, def: 80, spa: 127, spd: 65, spe: 95 });
 		const mega = Dex.species.get('Typhlosion-Mega');
-		assert.deepEqual(mega.types, ['Fire', 'Electric']);
+		assert.deepEqual(mega.types, ['Fire', 'Psychic']);
 		assert.deepEqual(mega.baseStats, { hp: 83, atk: 138, def: 85, spa: 139, spd: 70, spe: 130 });
 		assert.equal(Object.values(mega.baseStats).reduce((sum, stat) => sum + stat, 0), 645);
-		assert.equal(mega.abilities[0], 'Plasma Eruption');
+		assert.equal(mega.abilities[0], 'Corona Furnace');
 		assert.equal(mega.requiredItem, 'Typhlosionite');
 		for (const name of ['Typhlosion', 'Typhlosion-Alt', 'Typhlosion-Hisui']) {
-			const [holder] = start(name);
+			const [holder] = start(name, undefined, undefined, false);
 			assert.equal(holder.species.id, 'typhlosionmega');
-			assert.equal(holder.ability, 'plasmaeruption');
+			assert.equal(holder.ability, 'coronafurnace');
 			battle.destroy();
 			battle = null;
 		}
 	});
 
-	it('gives both forms the requested Electric moves', () => {
+	it('removes the withdrawn Electric pack while preserving existing Electric coverage', () => {
 		for (const name of ['Typhlosion', 'Typhlosion-Hisui']) {
 			const learnset = Dex.species.getLearnsetData(name.toLowerCase().replace(/[^a-z0-9]/g, '')).learnset;
 			for (const move of ['thunderbolt', 'doubleshock', 'thunder', 'risingvoltage',
 				'chargebeam', 'electroball', 'shockwave', 'thunderfang']) {
-				assert(learnset[move]?.length, `${name} is missing ${move}`);
+				assert(!learnset[move], `${name} still has ${move}`);
 			}
+			assert(learnset.thunderpunch?.length); assert(learnset.wildcharge?.length);
 		}
 	});
 

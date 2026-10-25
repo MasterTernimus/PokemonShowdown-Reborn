@@ -25,10 +25,14 @@ export function installAuditCleanup(abilities: AbilityDataTable) {
  delete abilities.witheringshell.onResidual;
  abilities.witheringshell.onDamagingHit = function (damage, target, source, move) {
   this.dex.abilities.get('crumblingshell').onDamagingHit?.call(this, damage, target, source, move);
-  this.dex.abilities.get('cursedbody').onDamagingHit?.call(this, damage, target, source, move);
  };
- abilities.witheringshell.onFaint = abilities.cursedbody.onFaint;
+ delete abilities.witheringshell.onFaint;
  abilities.witheringshell.onWeather = abilities.raindish.onWeather;
+ abilities.witheringshell.onTakeItem = function (item, pokemon, source) {
+  const component = this.dex.abilities.get('stickyhold');
+  if (this.suppressingAbility(pokemon, component)) return;
+  if (typeof component.onTakeItem === 'function') return component.onTakeItem.call(this, item, pokemon, source);
+ };
 
  delete abilities.relicinstinct.onUpdate;
  delete abilities.relicinstinct.onAnyAfterAttackResolved;
@@ -121,7 +125,7 @@ export function installAuditCleanup(abilities: AbilityDataTable) {
 export const AuditCleanupComponents: {[id: string]: string[]} = {
 	...RepeatableComponents,
  ...OrdinaryComponents,
-	witheringshell: ['crumblingshell', 'cursedbody', 'raindish'], primevalhunt: ['skilllink', 'steadfast'], doublestrike: ['skilllink', 'technician'],
+	witheringshell: ['crumblingshell', 'raindish', 'stickyhold'], primevalhunt: ['skilllink', 'steadfast'], doublestrike: ['skilllink', 'technician'],
 	webassassin: [], pendulumswing: ['insomnia'], caverndrake: ['eartheater', 'solidrock'],
 	plushwhiplash: ['whiplash', 'technician'], resonanceforce: [], magneticbulwark: ['filter'],
 	cactuschorus: ['waterabsorb', 'sandrush'], noblearmor: ['prismarmor'],
@@ -133,13 +137,13 @@ export const AuditCleanupComponents: {[id: string]: string[]} = {
 };
 
 export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: string}} = {
- marshhide: {shortDesc: 'Water Absorb + Poison Point.', desc: 'Absorbs other Pokemon Water moves to heal 1/4 max HP. Retains Water Absorb field healing: 1/16 on Underwater, grounded Water Surface and grounded Poison-type Murkwater. Contact attackers have a 30% poison chance, or 60% on Wasteland.'},
+ marshhide: {shortDesc: 'Water Absorb + Poison Point.', desc: "Absorbs other Pokemon Water moves to heal 1/4 max HP. Has Water Absorb field healing: 1/16 on Underwater, grounded Water Surface and grounded Poison-type Murkwater. Contact attackers have a 30% poison chance, or 60% on Wasteland."},
 	...RepeatableDescriptions,
  ...OrdinaryDescriptions,
- witheringshell: {shortDesc: 'Crumbling Shell + Cursed Body + Rain Dish.', desc: 'Physical HP hits set opposing Stealth Rock except on water fields. Damaging attacks have a 30% Disable chance, guaranteed on Haunted and blocked on Holy; normal Cursed Body exclusions apply. Fainting curses active foes. Heals 1/16 max HP in effective rain. Natural Recovery is the separate Corsola and Corsola-Reborn passive.'},
- relicinstinct: {shortDesc: 'Above half HP: ignores abilities. At half HP or less: defensive mode.', desc: 'Above half HP, attacks ignore target abilities. At half HP or less, takes 25% less attack damage, cannot be critically hit, heals 1/16 maximum HP each turn, and halves Attack and Sp. Atk. No emergency heal or stat reset. Rattled remains a separate passive.'},
-	primevalhunt: { shortDesc: 'Skill Link + Steadfast.', desc: 'Multi-hit moves use their maximum hit count, gain 1.5x power and check accuracy once. Flinching raises Speed by one stage but still prevents acting. Electric Terrain entry raises Speed by one stage. Ashen Beach accuracy checks succeed unless the target has Unnerve; Rocky Terrain adds no flinch damage. No confusion immunity, Intimidate protection or guaranteed final-hit critical hit.' },
- doublestrike: {shortDesc: 'Skill Link; moves at 60 effective BP or less gain 1.5x power.', desc: 'Retains local Skill Link multihit and accuracy handling. Moves at 60 effective base power or less gain 1.5x power; the threshold is 80 on Factory Field. Punching moves receive no additional multiplier.'},
+ witheringshell: {shortDesc: 'Crumbling Shell + Rain Dish + Sticky Hold.', desc: 'Physical HP hits set opposing Stealth Rock except on water fields. Heals 1/16 max HP in effective rain. Sticky Hold prevents other Pokemon from removing its item under the normal local rules. Natural Recovery is the separate Corsola and Corsola-Reborn passive.'},
+ relicinstinct: {shortDesc: 'Above half HP: ignores abilities. At half HP or less: defensive mode.', desc: "Above half HP, attacks ignore target abilities. At half HP or less, takes 25% less attack damage, cannot be critically hit, heals 1/16 maximum HP each turn, and halves Attack and Sp. Atk. Rattled remains a separate passive."},
+	primevalhunt: { shortDesc: 'Skill Link + Steadfast.', desc: "Multi-hit moves use their maximum hit count, gain 1.5x power and check accuracy once. Flinching raises Speed by one stage but still prevents acting. Electric Terrain entry raises Speed by one stage. Ashen Beach accuracy checks succeed unless the target has Unnerve; Rocky Terrain adds no flinch damage." },
+ doublestrike: {shortDesc: 'Skill Link; moves at 60 effective BP or less gain 1.5x power.', desc: "Local Skill Link multihit and accuracy handling. Moves at 60 effective base power or less gain 1.5x power; the threshold is 80 on Factory Field."},
 	webassassin: {
 		shortDesc: 'Double Speed; maximum critical-hit ratio against poisoned or slowed foes.',
 		desc: 'Doubles Speed. Attacks have maximum critical-hit ratio against poisoned foes or foes with lowered Speed. Critical-hit damage uses the normal multiplier.',
@@ -166,7 +170,7 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	cactuschorus: {
 		shortDesc: 'Water Absorb + Sand Rush.',
-		desc: 'Absorbs Water moves for 1/4 max HP and retains Water Absorb\'s field healing. Doubles Speed in sandstorm, Desert and Ashen Beach; prevents sandstorm damage.',
+		desc: "Absorbs Water moves for 1/4 max HP and has Water Absorb's field healing. Doubles Speed in sandstorm, Desert and Ashen Beach; prevents sandstorm damage.",
 	},
 	noblearmor: {
 		shortDesc: 'Reduces damage; boosts defenses on certain fields; recovers in cold conditions.',
@@ -174,11 +178,11 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	falsedevotion: {
 		shortDesc: 'Prankster + Serene Grace: priority status; capped secondary boosts; skips charge turns.',
-		desc: 'Full local Prankster and Serene Grace. Status moves gain +1 priority with Prankster targeting rules and its existing Bewitched Woods exception. Doubles secondary-effect chances up to 60%, preserving effects already above the cap, including guaranteed effects. Skips move charge turns. Repeated Serene Grace applications do not multiply the same effect again.',
+		desc: "Full local Prankster and Serene Grace. Status moves gain +1 priority with Prankster targeting rules and its Bewitched Woods exception. Doubles secondary-effect chances up to 60%, preserving effects already above the cap, including guaranteed effects. Skips move charge turns. Repeated Serene Grace applications do not multiply the same effect again.",
 	},
 	truedevotion: {
 		shortDesc: 'Prankster + Serene Grace + Technician.',
-		desc: 'Full local Prankster, Serene Grace and Technician. Status moves gain +1 priority with Prankster targeting rules and its existing Bewitched Woods exception. Doubles secondary-effect chances up to 60%, preserving effects already above the cap, including guaranteed effects. Skips move charge turns. Repeated Serene Grace applications do not multiply the same effect again. Moves with 60 or less effective base power (80 on Factory) gain Technician\'s 1.5x power boost, retaining its existing multi-hit interactions.',
+		desc: "Full local Prankster, Serene Grace and Technician. Status moves gain +1 priority with Prankster targeting rules and its Bewitched Woods exception. Doubles secondary-effect chances up to 60%, preserving effects already above the cap, including guaranteed effects. Skips move charge turns. Repeated Serene Grace applications do not multiply the same effect again. Moves with 60 or less effective base power (80 on Factory) gain Technician's 1.5x power boost, retaining its multi-hit interactions.",
 	},
 	gooey: {
 		shortDesc: 'After an opposing damaging move hits, lowers its user\'s Speed by 2.',
@@ -186,7 +190,7 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	triplethreat: {
 		shortDesc: 'Hydra Bond; Keen Eye, Inner Focus and Own Tempo.',
-		desc: 'Prevents flinching, confusion and Intimidate Attack drops; cures confusion. Retains full local Hydra Bond and Keen Eye: eligible attacks gain Hydra Bond\'s extra hits and format/field behavior. Prevents opposing accuracy drops, ignores evasion boosts, reveals opposing Illusions on activation, and gains accuracy and Laser Focus on Mirror Arena entry.',
+		desc: "Prevents flinching, confusion and Intimidate Attack drops; cures confusion. Full local Hydra Bond and Keen Eye: eligible attacks gain Hydra Bond's extra hits and format/field behavior. Prevents opposing accuracy drops, ignores evasion boosts, reveals opposing Illusions on activation, and gains accuracy and Laser Focus on Mirror Arena entry.",
 	},
 	ragingcurrent: {
 		shortDesc: 'Swift Swim and Dry Skin.',
@@ -194,11 +198,11 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	stormbell: {
 		shortDesc: 'Drizzle and Levitate.',
-		desc: 'Sets rain with full local Drizzle and grants Levitate\'s Ground immunity. Does not raise a stat after a KO. Mega Bronzong retains its separate Mirror Armor passive and its existing field behavior.',
+		desc: "Sets rain with full local Drizzle and grants Levitate's Ground immunity. Does not raise a stat after a KO. Mega Bronzong has its separate Mirror Armor passive and its field behavior.",
 	},
 	astralengine: {
 		shortDesc: 'Power Spot; Levitate is a separate species passive.',
-		desc: 'Allies\' moves have 1.3x power, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields. Mega Claydol retains its separate Levitate passive. No KO stat boost or additional airborne component.',
+		desc: "Allies' moves have 1.3x power, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields. Mega Claydol has its separate Levitate passive.",
 	},
 	scarecrow: {
 		shortDesc: 'Wind Rider and Steelworker.',
@@ -206,15 +210,15 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	kickfiend: {
 		shortDesc: 'Striker and Limber.',
-		desc: 'Retains full local Striker and Limber, including existing field behavior. Does not grant Violent Rush\'s opening Attack or Speed multiplier.',
+		desc: "Full local Striker and Limber, including field behavior. Does not grant Violent Rush's opening Attack or Speed multiplier.",
 	},
 	cruelshell: {
 		shortDesc: 'Prevents critical hits; takes 20% less attack damage. Field effects vary.',
-		desc: 'Retains full local Shell Armor: prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale or Dragon\'s Den entry and +2 Sp. Def when a foe lowers its stats. Does not trigger Anger Shell.',
+		desc: "Full local Shell Armor: prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale or Dragon's Den entry and +2 Sp. Def when a foe lowers its stats. Does not trigger Anger Shell.",
 	},
 	sweetresonance: {
 		shortDesc: 'Hydra Bond; lowers adjacent foes\' evasion on entry. Field effects vary.',
-		desc: 'Retains full local Hydra Bond. On entry, lowers adjacent foes\' evasion by 1 unless protected by Substitute. The entry effect retains its Flower Garden and Misty field extensions. Does not protect held items, inflict retaliatory Embargo or automatically grant Dragon Cheer. Dipplin-Gmax retains its separate Self-Sufficient passive.',
+		desc: "Full local Hydra Bond. On entry, lowers adjacent foes' evasion by 1 unless protected by Substitute. The entry effect has its Flower Garden and Misty field extensions. Does not protect held items, inflict retaliatory Embargo or automatically grant Dragon Cheer. Dipplin-Gmax has its separate Self-Sufficient passive.",
 	},
 	coldopen: {
 		shortDesc: 'First successful damaging move each entry ignores boosted defenses and screens.',
@@ -226,7 +230,7 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 };
 
-AuditCleanupDescriptions.primevalhunger = {"shortDesc":"Accumulation; draining hits and new seeds lower one positive offensive stage.","desc":"Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile every second eligible active turn, first gaining one after two eligible turns. Genuine switching resets this wait; ability restarts do not. Suppressed or otherwise ineligible turns do not advance the counter. Manual Stockpile is unchanged. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Draining attacks that damage a foe's HP and successful new Leech Seed applications by Leech Seed or Sappy Seed mark affected foes. Failed, existing or reflected seeds and residual seed ticks do not trigger this effect. After the whole move, lower one positive Attack or Sp. Atk stage of each affected foe, choosing the more boosted stat and Sp. Atk on ties. Never lowers an unboosted stat or grants the user a boost. Substitute-only damage does not trigger these effects; normal stat-drop protections apply."};
+AuditCleanupDescriptions.primevalhunger = {"shortDesc":"Accumulation; draining hits and new seeds lower one positive offensive stage.","desc":"Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to sandstorm and hail damage. It can use Belch without eating a Berry and automatically gains one Stockpile every second eligible active turn, first gaining one after two eligible turns. Genuine switching resets this wait; ability restarts do not. Suppressed or otherwise ineligible turns do not advance the counter. Manual Stockpile is unchanged. After reaching 3 Stockpiles, it waits one full turn before randomly choosing Belch or Spit Up with equal odds, then can release every other turn. Its established Spit Up and Swallow combinations still apply. Draining attacks that damage a foe's HP and successful new Leech Seed applications by Leech Seed or Sappy Seed mark affected foes. Failed, or reflected seeds and residual seed ticks do not trigger this effect. After the whole move, lower one positive Attack or Sp. Atk stage of each affected foe, choosing the more boosted stat and Sp. Atk on ties. Never lowers an unboosted stat or grants the user a boost. Substitute-only damage does not trigger these effects; normal stat-drop protections apply."};
 
 export const AuditCleanupRemovals: {[id: string]: string[]} = {
 	primevalhunt: ['owntempo'],

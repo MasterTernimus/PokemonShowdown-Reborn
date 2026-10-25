@@ -638,7 +638,8 @@ export class Battle {
 					) {
 						expectedStateLocation = stateTarget.m.perfectForesightAbilityState;
 					} else {
-						expectedStateLocation = stateTarget.abilityState;
+						expectedStateLocation = stateTarget.ability === 'carryon' && stateTarget.m.carryOnAbility === effect.id ?
+							stateTarget.m.carryOnAbilityState : stateTarget.abilityState;
 					}
 				} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
 					expectedStateLocation = handler.state.target.itemState;
@@ -1314,6 +1315,15 @@ export class Battle {
 				}, callbackName));
 			}
 		}
+		if (ability.id === 'carryon' && !pokemon.transformed && callbackName !== 'onSwitchIn' && pokemon.m.carryOnAbility) {
+			const copiedAbility = this.dex.abilities.get(pokemon.m.carryOnAbility);
+			const copiedState = pokemon.m.carryOnAbilityState;
+			callback = this.getCallback(pokemon, copiedAbility, callbackName);
+			if (callback !== undefined || (getKey && copiedState?.[getKey])) {
+				handlers.push(this.resolvePriority({effect: copiedAbility, callback, state: copiedState, end: null, effectHolder: pokemon}, callbackName));
+			}
+		}
+
 		const item = pokemon.getItem();
 		callback = this.getCallback(pokemon, item, callbackName);
 		if (callback !== undefined || (getKey && pokemon.itemState[getKey])) {

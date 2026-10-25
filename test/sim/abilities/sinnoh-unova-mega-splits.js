@@ -155,7 +155,7 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		battle.runEvent('DamagingHit', p, q, Dex.getActiveMove('tackle'), 1);
 		assert.equal(battle.field.terrain, 'hauntedterrain');
 	});
-	it('Scrafty preserves one-eighth healing and cleansing after suppression and ability changes', () => {
+	it('Scrafty preserves shared one-quarter healing and cleansing after suppression and ability changes', () => {
 		const [p] = setup('Scrafty-Mega');
 		battle.randomChance = () => true;
 		for (const ability of ['Street Tyrant', 'Shed Skin', 'No Ability']) {
@@ -164,7 +164,7 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 			p.status = 'brn';
 			p.boosts.def = -2;
 			battle.runEvent('Residual', p);
-			assert.equal(p.hp, 250);
+			assert.equal(p.hp, 400);
 			assert.equal(p.status, '');
 			assert.equal(p.boosts.def, 0);
 		}
@@ -172,7 +172,7 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		p.hp = 100;
 		battle.field.terrain = 'dragonsdenterrain';
 		battle.runEvent('Residual', p);
-		assert.equal(p.hp, 250);
+		assert.equal(p.hp, 400);
 		assert.equal(p.boosts.def, -1);
 		assert.equal(p.boosts.spd, -1);
 	});
@@ -263,7 +263,7 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		const [p, q] = setup('Mew', 'Aura Master');
 		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 50);
 	});
-	it('Perfect Illusion uses the disguise passive including Scraftys one-eighth recovery variant', () => {
+	it('Perfect Illusion uses the disguise passive including Scraftys shared quarter recovery', () => {
 		const [p, q] = setup('Mew');
 		q.formeChange('Scrafty-Mega', null, true);
 		p.illusion = q;
@@ -272,7 +272,7 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		battle.randomChance = () => true;
 		assert.deepEqual(p.getPassives(), ['shedskin']);
 		battle.runEvent('Residual', p);
-		assert.equal(p.hp, 250);
+		assert.equal(p.hp, 400);
 		p.illusion = null;
 		assert.deepEqual(p.getPassives(), ['synchronize']);
 	});

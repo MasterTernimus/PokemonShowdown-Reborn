@@ -9,9 +9,9 @@ export const SeasonalBirdComponents = {
 };
 export const SeasonalBirdPassives = {zapdos: 'springpressure', moltres: 'summerpressure', articuno: 'winterpressure'};
 export const SeasonalBirdDescriptions = {
-	springpressure: {name: 'Spring Pressure', shortDesc: 'Static + Pressure.', desc: 'Full local Static and Pressure, including their field effects. Pressure retains its once-per-opponent entry memory.'},
-	summerpressure: {name: 'Summer Pressure', shortDesc: 'Flame Body + Pressure.', desc: 'Full local Flame Body and Pressure, including their field effects. Pressure retains its once-per-opponent entry memory.'},
-	winterpressure: {name: 'Winter Pressure', shortDesc: 'Ice Body + Pressure.', desc: 'Full local Ice Body and Pressure, including their field effects. Pressure retains its once-per-opponent entry memory.'},
+	springpressure: {name: 'Spring Pressure', shortDesc: 'Static + Pressure.', desc: "Full local Static and Pressure, including their field effects. Pressure has its once-per-opponent entry memory."},
+	summerpressure: {name: 'Summer Pressure', shortDesc: 'Flame Body + Pressure.', desc: "Full local Flame Body and Pressure, including their field effects. Pressure has its once-per-opponent entry memory."},
+	winterpressure: {name: 'Winter Pressure', shortDesc: 'Ice Body + Pressure.', desc: "Full local Ice Body and Pressure, including their field effects. Pressure has its once-per-opponent entry memory."},
 	springherald: {name: 'Spring Herald', shortDesc: 'Drizzle. Its Electric attacks spare allies.', desc: 'Full local Drizzle. Its damaging Electric moves do not hit allies.'},
 	springtempest: {name: 'Spring Tempest', shortDesc: 'Lightning Rod + Storm Power.', desc: 'Full local Lightning Rod and Storm Power: redirects and absorbs Electric moves; rain boosts Sp. Atk by 1.5x and costs 1/8 max HP each turn.'},
 	summerherald: {name: 'Summer Herald', shortDesc: 'Drought. Fire immunity; opposing Fire heals 1/8 HP once per turn.', desc: 'Full local Drought. Immune to Fire moves. An opposing Fire move heals 1/8 max HP, at most once per turn; allied Fire moves do not heal it.'},
