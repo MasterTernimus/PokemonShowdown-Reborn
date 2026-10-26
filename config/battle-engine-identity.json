@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "4e1c8d0298102c476fb4864f702747d48f3321e232c48eea250cb8eb820ec74b",
-  "packageManifestSHA256": "7cab5ad2f48834bc2c51959873d5b350ec26d67754cfc753163d3af43c758bf3",
+  "packageEngineRevision": "b271c9d26c43af05c5758b27cd51094eb9ede6b935636b2365057264c6223a0d",
+  "packageManifestSHA256": "d3e1fde022435a64c1e7b553cc9f2eb0c3e8e88a6da14f54cac77fa3be16b0f2",
   "mechanicsSHA256": "dfcd0b3aba0cfb7c9827003cdaeb4153a25347291fa6d78c60f672b164799b1e",
   "files": [
     {
@@ -1076,7 +1076,7 @@
     "reason": "Reviewed offline public-state sampler is not a live battle-worker dependency."
   },
   "sourceCheckpoint": {
-    "sourceHead": "b2cc838e2688fca17887f7039f585d04299851cc",
+    "sourceHead": "f8f789c6790681c29c4bc257dadec2a5a55617cb",
     "verifiedRuntimeFiles": 266,
     "includesUncommittedCheckpoint": true
   },
@@ -1088,7 +1088,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "0bf31a622bbec458a15fc5c59fb4f4ad3a3d02d71bcff1a3ca1805da5a54c051",
+      "sha256": "6ec889eda1529261ba852fec31be44d1f60443016678bfa4261fa15fa9e473fa",
       "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
     },
     {
