@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "e25b3ce60f48755b51079acaf109217ca255f6c916bbc3d7ce8cdba35bfadc7e",
-  "packageManifestSHA256": "42925a29a8262c679a7d4d82776cf11e09322ebb90b300cc56505ee9dce836ed",
-  "mechanicsSHA256": "2334f6b014902fc97dd976470cbb6045a479ca551868e131fafac031c4b46c16",
+  "packageEngineRevision": "4e1c8d0298102c476fb4864f702747d48f3321e232c48eea250cb8eb820ec74b",
+  "packageManifestSHA256": "7cab5ad2f48834bc2c51959873d5b350ec26d67754cfc753163d3af43c758bf3",
+  "mechanicsSHA256": "dfcd0b3aba0cfb7c9827003cdaeb4153a25347291fa6d78c60f672b164799b1e",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -751,7 +751,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "efb85bd0db73150159f4480644b382cbd14c92436468f0fa54d42e313a0c362d"
+      "sha256": "7dd13f815f70f36405ce14e6d7ade7f81e2042b130a5d1b5f27070f4f45dc30b"
     },
     {
       "file": "dist/data/text/default.js",
@@ -1076,7 +1076,7 @@
     "reason": "Reviewed offline public-state sampler is not a live battle-worker dependency."
   },
   "sourceCheckpoint": {
-    "sourceHead": "22049e8bbc3cae437790269b4360f7c8eaf5da22",
+    "sourceHead": "b2cc838e2688fca17887f7039f585d04299851cc",
     "verifiedRuntimeFiles": 266,
     "includesUncommittedCheckpoint": true
   },
@@ -1088,7 +1088,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "6600bdde47a916955190255c9db4eb4117384e5c732d9de9f847811494f06c22",
+      "sha256": "0bf31a622bbec458a15fc5c59fb4f4ad3a3d02d71bcff1a3ca1805da5a54c051",
       "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
     },
     {
