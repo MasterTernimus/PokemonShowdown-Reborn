@@ -2352,8 +2352,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "No opposing accuracy drops; ignores evasion; reveals Illusions — reflects the first direct opposing status move each entry."
 	},
 	"lastlaugh": {
-		"desc": "If no other active Pokemon has a move left to use this turn, its damaging attack bypasses Substitute. Damaging a foe with that attack restores 1/8 max HP, once per turn.",
-		"shortDesc": "When no other Pokemon will move this turn, its hit bypasses Substitute and heals 1/8."
+		"desc": "Moves last within its priority bracket. On Chessboard entry, raises Defense by one stage. Its attacks deal 1.3x damage to a foe that has completed its move action this turn. If no other active Pokemon has a queued move remaining, its damaging move bypasses Substitute; damaging a foe with that move heals 1/8 max HP, once per turn.",
+		"shortDesc": "Stall; 1.3x after the target acts; last-action attacks bypass Substitute and heal 1/8 once/turn."
 	},
 	"livingtangle": {
 		"desc": "Contact attackers lose 1 Speed stage. Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move.",
@@ -3299,8 +3299,8 @@ AbilityDescriptionOverrides.raincourier = {
 };
 
 AbilityDescriptionOverrides.lastlaugh = {
-	"desc": "If no other active Pokemon has a move left to use this turn, its damaging attack bypasses Substitute. Damaging a foe with that attack restores 1/8 max HP, once per turn. Once per entry, a damaging attack that hits a foe after that foe has completed its move action this turn applies Torment after damage, subject to normal eligibility. Merely switching in does not qualify. Deals 2x damage to foes already affected by Torment.",
-	"shortDesc": "2x damage to Tormented foes; last-action hits bypass Substitute and heal 1/8; Torment once/entry."
+	"desc": "Moves last within its priority bracket. On Chessboard entry, raises Defense by one stage. Its attacks deal 1.3x damage to a foe that has completed its move action this turn. If no other active Pokemon has a queued move remaining, its damaging move bypasses Substitute; damaging a foe with that move heals 1/8 max HP, once per turn.",
+	"shortDesc": "Stall; 1.3x after the target acts; last-action attacks bypass Substitute and heal 1/8 once/turn."
 };
 
 AbilityDescriptionOverrides.fortunatewing = {

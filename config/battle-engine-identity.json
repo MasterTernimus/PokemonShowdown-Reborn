@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "d361dff74cdcc33cc1ce8efa14eef9ef6a4aa587eccd643de139d98a5094dae6",
-  "packageManifestSHA256": "6fb66ac11e02445a36aa72ae64af7882de113bf08f75e9c886df74b9ecd10dc2",
-  "mechanicsSHA256": "e85cd5ab2d821b2677cc23caed2c8181969889b14ebf5fd4a91fd2a037022f0b",
+  "packageEngineRevision": "8e63cce61ff87e0f05c79c7b6e3b50af7bb57ef2fca0aaa26d2968dc4b62b0a7",
+  "packageManifestSHA256": "435e130d6d729d7c0791c574a3b865b699fc8f98f0c815a88b5231b0620a313d",
+  "mechanicsSHA256": "a47881d86cff7e60e0bd45a65be9608131a7014823331a8b6f4eae8951a3e6f8",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,11 +11,11 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "027da890fde585c3f3c7cad978be0f45b521f19fda1f245d3735230558c0f31e"
+      "sha256": "b7fc085ae9e34616b8ea68ab70f3fa2901fce5d31ff0de9f1f2914442ad661a0"
     },
     {
       "file": "dist/data/ability-components.js",
-      "sha256": "e8265332e13e0531e225007ae0bfaa693bdfe8f80b6071128a86b051ca5a1dec"
+      "sha256": "bd2477c30c850a94386c86cd4f6bdf0f3eac5427c22d6cc06661ee0d914e4984"
     },
     {
       "file": "dist/data/ability-display-summaries.js",
@@ -535,7 +535,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "894aa0767c06ada79231468cdc8b2a0be00ff923dd36aae0879f65390a34293f"
+      "sha256": "7007f64dac588d30f1d582be828863f78260e567fa96b4ed8425449db02c074d"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -635,7 +635,7 @@
     },
     {
       "file": "dist/data/roster-expansion-text.js",
-      "sha256": "77b13e3f84ecb784ecb9c1e4d326fa7ac43bb718a2e9f943d1529bfcbb009a7f"
+      "sha256": "7d366b3e5fa19b929256643473022bfae9d8d744002caedac4ef30659d2b99ff"
     },
     {
       "file": "dist/data/roster-expansion-wave2.js",
@@ -651,7 +651,7 @@
     },
     {
       "file": "dist/data/roster-expansion.js",
-      "sha256": "31fee4513413c034651658e8204c19d1de1fd8ccccdf17835deb960a93c9a7c4"
+      "sha256": "25d2dd330ac8ee4ef86c58e596e88fe27f9f30309db56b0c0579f4fcc0d6ee9e"
     },
     {
       "file": "dist/data/rotom-eject.js",
@@ -715,7 +715,7 @@
     },
     {
       "file": "dist/data/species-passives.js",
-      "sha256": "269f83c886aa1ff4454caf4cacf9dc3594e81e3092e85d20ada8f1f911e53cb9"
+      "sha256": "4f507cee67f685dd4ad6ce7ff36dda2068ce1e191461691238f641c1cede8093"
     },
     {
       "file": "dist/data/stance-disguise-aggron.js",
@@ -751,7 +751,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "c220cebf21de37a43304e89670a43206c21451754bc12f3250c378c418a1e422"
+      "sha256": "efb85bd0db73150159f4480644b382cbd14c92436468f0fa54d42e313a0c362d"
     },
     {
       "file": "dist/data/text/default.js",
@@ -1072,7 +1072,7 @@
     "reason": "Reviewed offline public-state sampler is not a live battle-worker dependency."
   },
   "sourceCheckpoint": {
-    "sourceHead": "3e0d2595e313378eec4aea929cb5671bc99580c6",
+    "sourceHead": "6b25836bbbec6ef83ce695d967c4c0a192a6b549",
     "verifiedRuntimeFiles": 265,
     "includesUncommittedCheckpoint": true
   },
@@ -1084,7 +1084,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "773825905895da09a68dac338a05bfa570f071e74f1ad9184a302e26a8ec1f8e",
+      "sha256": "6600bdde47a916955190255c9db4eb4117384e5c732d9de9f847811494f06c22",
       "reason": "Reviewed pure description table or license/readme; not a battle mechanics input."
     },
     {

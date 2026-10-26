@@ -4591,7 +4591,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Jumpluff",
 		types: ["Grass", "Flying"],
 		baseStats: { hp: 75, atk: 70, def: 95, spa: 55, spd: 105, spe: 110 },
-		abilities: { 0: "Chlorophyll", 1: "Wind Rider", H: "Windy Surge" },
+		abilities: { 0: "Chlorophyll", 1: "Infiltrator", H: "Windy Surge" },
 		heightm: 0.8,
 		weightkg: 3,
 		color: "Blue",

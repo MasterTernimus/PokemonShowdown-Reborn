@@ -332,7 +332,7 @@ const sharpDualPowerEvents = new WeakSet<object>();
 function getDualWieldModifier(move: ActiveMove, componentBoost = 1, battle?: Battle, component = '') {
  const holder = battle?.event?.target as Pokemon | undefined;
  if (move.multihitType !== 'dualwield') return componentBoost;
- // Combine independent boosts once; Dual Wield scales each generated hit equally.
+ // Combine independent boosts once; Sharpness slicing pairs use an asymmetric follow-up.
  if (move.flags.slicing && !battle?.field.isTerrain('coldeclipseterrain') && holder?.hasAbilityOrPassive?.('sharpness')) {
   if (sharpDualPowerEvents.has(battle!.event)) return 1;
   sharpDualPowerEvents.add(battle!.event);
@@ -347,7 +347,11 @@ function getDualWieldModifier(move: ActiveMove, componentBoost = 1, battle?: Bat
   return componentBoost;
  }
  // Siege Launcher alone keeps full-power pairs in Free-for-All.
- const hitScale = battle?.gameType === 'freeforall' && holder?.hasAbilityOrPassive('siegelauncher') ? 1 : 0.6;
+ const siegeFullPower = battle?.gameType === 'freeforall' && holder?.hasAbilityOrPassive('siegelauncher');
+ if (!siegeFullPower && move.flags.slicing && !battle?.field.isTerrain('coldeclipseterrain') && holder?.hasAbilityOrPassive('sharpness')) {
+  return move.hit > 1 ? 0.15 : componentBoost;
+ }
+ const hitScale = siegeFullPower ? 1 : 0.6;
  return hitScale * componentBoost;
 }
 
@@ -18881,7 +18885,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	windrider: {
 		onStart(pokemon) {
-			if (pokemon.side.sideConditions['tailwind']) {
+			if (pokemon.side.sideConditions['tailwind'] && this.effectState.windRiderTailwind !== pokemon.side.sideConditions['tailwind']) {
+				this.effectState.windRiderTailwind = pokemon.side.sideConditions['tailwind'];
 				this.boost({ atk: 1 }, pokemon, pokemon);
 			}
 		},
@@ -18896,6 +18901,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSideConditionStart(side, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
+				this.effectState.windRiderTailwind = pokemon.side.sideConditions['tailwind'];
 				this.boost({ atk: 1 }, pokemon, pokemon);
 			}
 		},
@@ -20972,14 +20978,6 @@ Abilities.raincourier = {
 };
 
 // Six approved follow-ups: no other roster proposals are included.
-const approvedLastLaughHit = Abilities.lastlaugh.onSourceDamagingHit;
-Abilities.lastlaugh.onSourceDamagingHit = function (damage, target, source, move) {
- approvedLastLaughHit?.call(this, damage, target, source, move);
- if (damage <= 0 || target.isAlly(source) || move.category === 'Status' || source.volatiles['lastlaughtormentspent'] ||
-  target.m.lastCompletedActionTurn !== this.turn || target.m.lastCompletedActionEntry !== target.previouslySwitchedIn) return;
- source.addVolatile('lastlaughtormentspent', source, this.effect);
- if (target.hp) target.addVolatile('torment', source, this.effect);
-};
 const approvedFortunateWingHit = Abilities.fortunatewing.onSourceDamagingHit;
 Abilities.fortunatewing.onSourceDamagingHit = function (damage, target, source, move) {
  if (source.volatiles['fortunatewingspent']) return;
@@ -21735,4 +21733,10 @@ Abilities.venomarmor.onMaybeTrapPokemon = function(pokemon) {
 import {AbilityDescriptionOverrides as GuardianCurrentDescriptions} from './ability-descriptions';
 for (const id of ['knightsguard', 'dreamsickness', 'voidveil', 'insight']) {
 	Object.assign(Abilities[id as Lowercase<string>], GuardianCurrentDescriptions[id]);
+}
+
+for (const ability of Object.values(Abilities)) {
+ if (ability.desc && /Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60%/.test(ability.desc)) {
+  Object.assign(ability, {desc: ability.desc + " When Sharpness applies to an eligible slicing pair, the first hit receives the full applicable component boosts and the second hit uses 15% of the original move power. Siege Launcher's Free-for-All full-power pair remains."});
+ }
 }

@@ -338,7 +338,7 @@ Object.assign(AbilityComponents, {
 		"keeneye",
 		"magicguard",
 	],
-	"lastlaugh": [],
+	"lastlaugh": ["stall"],
 	"openingoverture": [],
 	"resonantblade": [],
 	"finalnote": [],

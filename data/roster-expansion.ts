@@ -213,10 +213,15 @@ export function applyApprovedRosterAbilities(base: AbilityDataTable) {
 		},
 	});
 	add('lastlaugh', 'Last Laugh', {
+		onFractionalPriority: base.stall.onFractionalPriority,
 		onBasePower(basePower, source, target) {
-			if (target?.volatiles.torment && !source.isAlly(target)) return this.chainModify(2);
+			if (target && !source.isAlly(target) && target.m.lastCompletedActionTurn === this.turn &&
+				target.m.lastCompletedActionEntry === target.previouslySwitchedIn) return this.chainModify(1.3);
 		},
-		onStart() { this.effectState.healTurn = -1; },
+		onStart(pokemon) {
+			this.effectState.healTurn = -1;
+			base.stall.onStart?.call(this, pokemon);
+		},
 		onModifyMove(move, pokemon) {
 			if (move.category !== 'Status' &&
 				this.getAllActive().every(other => other === pokemon || !this.queue.willMove(other))) {

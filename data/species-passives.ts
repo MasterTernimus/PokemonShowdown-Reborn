@@ -4,6 +4,7 @@ import {StarterPassives} from './starter-passives';
 
 /** Explicitly approved ordinary species; no evolution or battle-form inheritance. */
 export const ThematicPassiveGroups = {
+	windrider: ['jumpluff'],
 	hypercutter: ['kingler', 'pinsir', 'crawdaunt', 'gliscor'],
 	shielddust: ['butterfree', 'vivillon', 'dustox', 'mothim', 'masquerain'],
 	overcoat: ['cacnea', 'cacturne', 'maractus'],
@@ -515,8 +516,7 @@ export const RegionalPassiveGroups = {
     "comfey",
     "flapple",
     "appletun",
-    "exeggutoralola",
-    "jumpluff"
+    "exeggutoralola"
   ],
   "suctioncups": [
     "barbaracle",
