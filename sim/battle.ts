@@ -1,3 +1,13 @@
+import {
+	dualWieldContext,
+	setDualWieldContext,
+	restoreDualWieldContext,
+	ownOffensiveAbility,
+	dualWieldFinalDamageBoost,
+	recordDualWieldModifier,
+	recordDualWieldReturn,
+	finishDualWieldPower,
+} from './dual-wield-power';
 import {finishRotomEjections} from '../data/rotom-eject';
 import {RipenSeedItems} from '../data/ripen-seeds';
 import {recordFinisherKO} from './finisher-cost';
@@ -899,10 +909,19 @@ export class Battle {
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
 		}
+		const preparingDualDamage = eventid === 'DualWieldDamageBoost';
+		if (preparingDualDamage) eventid = 'ModifyDamage';
+		let temporaryDualContext = false;
+		if (eventid === 'BasePower' && (sourceEffect as ActiveMove)?.multihitType === 'dualwield' && !dualWieldContext(this) && target instanceof Pokemon && source instanceof Pokemon) {
+			setDualWieldContext(this, sourceEffect as ActiveMove, target, source); temporaryDualContext = true;
+		}
+		const dualContext = dualWieldContext(this);
 		if (!target) target = this;
 		let effectSource = null;
 		if (source instanceof Pokemon) effectSource = source;
-		const handlers = this.findEventHandlers(target, eventid, effectSource);
+		const handlers = preparingDualDamage && dualContext ?
+			this.findPokemonEventHandlers(dualContext.source, 'onModifyDamage').filter(handler => ownOffensiveAbility(dualContext, handler.effect, handler.state, handler.effectHolder)) :
+			this.findEventHandlers(target, eventid, effectSource);
 		if (onEffect) {
 			if (!sourceEffect) throw new Error("onEffect passed without an effect");
 			const callback = (sourceEffect as any)[`on${eventid}`];
@@ -937,6 +956,7 @@ export class Battle {
 		const zMoveDamageModifier = eventid.endsWith('ModifyDamage') &&
 			sourceEffect?.effectType === 'Move' && !!(sourceEffect as any).isZ;
 
+		if (dualContext && preparingDualDamage) dualContext.preparing = true;
 		let targetRelayVars = [];
 		if (Array.isArray(target)) {
 			if (Array.isArray(relayVar)) {
@@ -1058,7 +1078,12 @@ export class Battle {
 				this.effectState = handler.state || this.initEffectState({});
 				this.effectState.target = effectHolder;
 
-				returnVal = handler.callback.apply(this, args);
+				if (preparingDualDamage && dualContext) {
+					const id = handler.state?.speciesPassive || handler.effect.id;
+					if (dualWieldFinalDamageBoost(this, id, dualContext.source, dualContext.target, dualContext.move)) this.chainModify(2);
+				} else {
+					returnVal = handler.callback.apply(this, args);
+				}
 
 				this.effect = parentEffect;
 				this.effectState = parentEffectState;
@@ -1074,6 +1099,7 @@ export class Battle {
 				this.event.modifier = previousModifier;
 			}
 
+			returnVal = recordDualWieldReturn(this, effect, handler.state, effectHolder, args[0], returnVal);
 			if (returnVal !== undefined) {
 				relayVar = returnVal;
 				if (!relayVar || fastExit) {
@@ -1090,6 +1116,8 @@ export class Battle {
 			}
 		}
 
+		if (dualContext && preparingDualDamage) dualContext.preparing = false;
+		finishDualWieldPower(this);
 		this.eventDepth--;
 		if (typeof relayVar === 'number' && relayVar === Math.abs(Math.floor(relayVar))) {
 			// this.debug(eventid + ' modifier: 0x' +
@@ -1097,6 +1125,7 @@ export class Battle {
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
 		this.event = parentEvent;
+		if (temporaryDualContext) restoreDualWieldContext(this);
 
 		return Array.isArray(target) ? targetRelayVars : relayVar;
 	}
@@ -2633,6 +2662,7 @@ export class Battle {
 	}
 
 	chainModify(numerator: number | number[], denominator = 1) {
+		if (!recordDualWieldModifier(this, numerator, denominator)) return;
 		const previousMod = this.trunc(this.event.modifier * 4096);
 
 		if (Array.isArray(numerator)) {

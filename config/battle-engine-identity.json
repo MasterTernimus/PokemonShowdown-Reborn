@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "8e63cce61ff87e0f05c79c7b6e3b50af7bb57ef2fca0aaa26d2968dc4b62b0a7",
-  "packageManifestSHA256": "435e130d6d729d7c0791c574a3b865b699fc8f98f0c815a88b5231b0620a313d",
-  "mechanicsSHA256": "a47881d86cff7e60e0bd45a65be9608131a7014823331a8b6f4eae8951a3e6f8",
+  "packageEngineRevision": "e25b3ce60f48755b51079acaf109217ca255f6c916bbc3d7ce8cdba35bfadc7e",
+  "packageManifestSHA256": "42925a29a8262c679a7d4d82776cf11e09322ebb90b300cc56505ee9dce836ed",
+  "mechanicsSHA256": "2334f6b014902fc97dd976470cbb6045a479ca551868e131fafac031c4b46c16",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "b7fc085ae9e34616b8ea68ab70f3fa2901fce5d31ff0de9f1f2914442ad661a0"
+      "sha256": "6474f0ce21c17f826a07bf7efb6b614d1c259800d1710c50bd71d37445411a33"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -887,7 +887,7 @@
     },
     {
       "file": "dist/sim/battle-actions.js",
-      "sha256": "d11094bd6ad0fc7ece615eae45dc0aba75b8f73fd4506debfae0e90dc65c3f19"
+      "sha256": "65664e66de27d5a914a5bd6ff7ec28dff99377588a0a0060527524735bf72601"
     },
     {
       "file": "dist/sim/battle-queue.js",
@@ -899,7 +899,7 @@
     },
     {
       "file": "dist/sim/battle.js",
-      "sha256": "025e5a10cf3bb7a561ab253fa8dcaec948edff1c616c8f123b3bf0f42fb3c5bf"
+      "sha256": "36a9c45f156736a16b3660639b4befe32bc269b5b6f03da6e06890b8284745e8"
     },
     {
       "file": "dist/sim/beast-hunter.js",
@@ -952,6 +952,10 @@
     {
       "file": "dist/sim/dex.js",
       "sha256": "e958eba5d656084c93ecfd25c98b0bc2d1977c1e84d64b08dc8e029787e8ec0f"
+    },
+    {
+      "file": "dist/sim/dual-wield-power.js",
+      "sha256": "699e72f36034ea7975665955cf9d1445c31f8ecb36d2f23b9739c451bc14fb45"
     },
     {
       "file": "dist/sim/encore-aria.js",
@@ -1072,8 +1076,8 @@
     "reason": "Reviewed offline public-state sampler is not a live battle-worker dependency."
   },
   "sourceCheckpoint": {
-    "sourceHead": "6b25836bbbec6ef83ce695d967c4c0a192a6b549",
-    "verifiedRuntimeFiles": 265,
+    "sourceHead": "22049e8bbc3cae437790269b4360f7c8eaf5da22",
+    "verifiedRuntimeFiles": 266,
     "includesUncommittedCheckpoint": true
   },
   "excludedNonmechanics": [

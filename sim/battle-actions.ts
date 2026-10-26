@@ -1,3 +1,4 @@
+import { dualWieldContext, setDualWieldContext, restoreDualWieldContext } from './dual-wield-power';
 import {recordRegiEntry} from '../data/regi-approved';
 import { warnIncomingOpponents } from '../data/warned-moves';
 import {encoreAriaAfterHits} from './encore-aria';
@@ -2266,8 +2267,17 @@ export class BattleActions {
 	 * undefined = success, null = silent failure, false = loud failure
 	 */
 	getDamage(
-		source: Pokemon, target: Pokemon, move: string | number | ActiveMove,
-		suppressMessages = false
+		source: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages = false
+	): number | undefined | null | false {
+		const previous = dualWieldContext(this.battle);
+		try {
+			return this.getDamageWithAbilityPower(source, target, move, suppressMessages);
+		} finally {
+			restoreDualWieldContext(this.battle, previous);
+		}
+	}
+	private getDamageWithAbilityPower(
+		source: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages = false
 	): number | undefined | null | false {
 		if (typeof move === 'string') move = this.dex.getActiveMove(move);
 
@@ -2283,6 +2293,7 @@ export class BattleActions {
 		}
 
 		move = adaptiveMoveView(move, source, target);
+		setDualWieldContext(this.battle, move, source, target);
 		if (!target.runImmunity(move, !suppressMessages)) {
 			return false;
 		}
@@ -2334,6 +2345,24 @@ export class BattleActions {
 			moveHit.crit = this.battle.runEvent('CriticalHit', target, null, move);
 		}
 
+		const dualContext = dualWieldContext(this.battle);
+		let dualTypeMod: number | undefined;
+		if (dualContext) {
+			dualTypeMod = target.runEffectiveness(move);
+			let previewType = dualTypeMod;
+			if ((move as any).dissonantEchoTarget === target && (move as any).dissonantEchoProvider?.hasAbility('dissonantecho') &&
+				previewType < 0) previewType = 0;
+			if (adaptiveAnalyzed(target, source)) previewType = Math.min(previewType, -1);
+			else if (adaptiveAnalyzed(source, target)) previewType = Math.max(previewType, 1);
+			previewType = this.battle.clampIntRange(previewType, -6, 6);
+			if (this.battle.movehasType(move, 'Poison') && target.hasAbilityOrPassive('rivalresolve')) {
+				previewType = Math.min(previewType, -1);
+			}
+			if (this.battle.movehasType(move, 'Rock') && target.hasAbility('infernaldominion') && previewType > 0) previewType = 0;
+			moveHit.typeMod = previewType;
+			dualContext.typeMod = dualTypeMod;
+			this.battle.runEvent('DualWieldDamageBoost', source, target, move, 4096);
+		}
 		// happens after crit calculation
 		basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
 
@@ -2554,7 +2583,7 @@ export class BattleActions {
 		}
 
 		// types
-		let typeMod = target.runEffectiveness(move);
+		let typeMod = dualWieldContext(this.battle)?.typeMod ?? target.runEffectiveness(move);
 		if ((move as any).dissonantEchoTarget === target && (move as any).dissonantEchoProvider?.hasAbility('dissonantecho') && typeMod < 0) {
 			typeMod = 0;
 		}

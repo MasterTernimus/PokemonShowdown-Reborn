@@ -1,3 +1,4 @@
+import { markDualWieldScale } from '../sim/dual-wield-power';
 import {absorbHit} from './absorption';
 import {getRKSSystemMemoryAbilities} from './rks-system-memory';
 import {updateCocoonIndicator} from '../sim/cocoon-indicator';
@@ -329,30 +330,18 @@ function getIllusionThreatScore(battle: Battle, candidate: Pokemon, foes: Pokemo
 }
 
 const sharpDualPowerEvents = new WeakSet<object>();
+const dualWieldComponentEvents = new WeakMap<object, Set<string>>();
 function getDualWieldModifier(move: ActiveMove, componentBoost = 1, battle?: Battle, component = '') {
- const holder = battle?.event?.target as Pokemon | undefined;
  if (move.multihitType !== 'dualwield') return componentBoost;
- // Combine independent boosts once; Sharpness slicing pairs use an asymmetric follow-up.
- if (move.flags.slicing && !battle?.field.isTerrain('coldeclipseterrain') && holder?.hasAbilityOrPassive?.('sharpness')) {
-  if (sharpDualPowerEvents.has(battle!.event)) return 1;
-  sharpDualPowerEvents.add(battle!.event);
-  let combined = 1.5;
-  const launcher = !!(move.flags.pulse || move.flags.bullet) && holder.hasAbilityOrPassive('megalauncher');
-  const drill = !!(move.flags.drill || move.flags.horn) && holder.hasAbilityOrPassive('powerdrill');
-  if (launcher) combined *= 1.5;
-  if (drill) combined *= battle!.field.isTerrain(['rockyterrain','mountainterrain','snowymountainterrain','caveterrain','volcanicterrain']) ? 2 : 1.5;
-  if (componentBoost !== 1 && component !== 'sharpness' && !(component === 'megalauncher' && launcher) && !(component === 'powerdrill' && drill)) combined *= componentBoost;
-  componentBoost = combined;
- } else if (battle?.event?.id === 'BasePower' && skipPassiveComponent(battle, holder, 'dualwield')) {
-  return componentBoost;
- }
- // Siege Launcher alone keeps full-power pairs in Free-for-All.
- const siegeFullPower = battle?.gameType === 'freeforall' && holder?.hasAbilityOrPassive('siegelauncher');
- if (!siegeFullPower && move.flags.slicing && !battle?.field.isTerrain('coldeclipseterrain') && holder?.hasAbilityOrPassive('sharpness')) {
-  return move.hit > 1 ? 0.15 : componentBoost;
- }
- const hitScale = siegeFullPower ? 1 : 0.6;
- return hitScale * componentBoost;
+	if (battle) markDualWieldScale(battle, move);
+	if (!battle || !component || componentBoost === 1) return componentBoost;
+	const holder = battle.event?.target as Pokemon | undefined;
+	if (skipPassiveComponent(battle, holder, component)) return 1;
+	let seen = dualWieldComponentEvents.get(battle.event);
+	if (!seen) dualWieldComponentEvents.set(battle.event, seen = new Set());
+	if (seen.has(component)) return 1;
+	seen.add(component);
+	return componentBoost;
 }
 
 function chooseAccumulationRelease(battle: Battle, pokemon: Pokemon) {
@@ -11397,7 +11386,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['pulse'] || move.flags['bullet']) {
-				if (move.multihitType === 'dualwield' && move.flags.slicing && attacker.hasAbilityOrPassive('sharpness') && !this.field.isTerrain('coldeclipseterrain')) return this.chainModify(getDualWieldModifier(move, 1.5, this, 'megalauncher'));
+				if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move, 1.5, this, 'megalauncher'));
     return this.chainModify(1.5);
 			}
 		},
@@ -12952,7 +12941,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['drill'] || move.flags['horn']) {
-    if (move.multihitType === 'dualwield' && move.flags.slicing && attacker.hasAbilityOrPassive('sharpness') && !this.field.isTerrain('coldeclipseterrain')) {
+				if (move.multihitType === 'dualwield') {
      const boost = this.field.isTerrain(['rockyterrain','mountainterrain','snowymountainterrain','caveterrain','volcanicterrain']) ? 2 : 1.5;
      return this.chainModify(getDualWieldModifier(move, boost, this, 'powerdrill'));
     }
@@ -14528,7 +14517,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
    if (!move.flags.slicing || this.field.isTerrain('coldeclipseterrain')) return;
    if (move.multihitType === 'dualwield') {
-    const modifier = getDualWieldModifier(move, 1, this);
+				const modifier = getDualWieldModifier(move, 1.5, this, 'sharpness');
     if (modifier !== 1) return this.chainModify(modifier);
     return;
    }
@@ -17204,7 +17193,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.debug(`basePower: ${basePowerAfterMultiplier}`);
 			if (basePowerAfterMultiplier <= minimum) {
 				this.debug('Technician boost');
-				if (move.multihitType === 'dualwield' && move.flags.slicing && attacker.hasAbilityOrPassive('sharpness') && !this.field.isTerrain('coldeclipseterrain')) return this.chainModify(getDualWieldModifier(move, 1.5, this, 'technician'));
+				if (move.multihitType === 'dualwield') return this.chainModify(getDualWieldModifier(move, 1.5, this, 'technician'));
     return this.chainModify(1.5);
 			}
 		},
@@ -21737,6 +21726,6 @@ for (const id of ['knightsguard', 'dreamsickness', 'voidveil', 'insight']) {
 
 for (const ability of Object.values(Abilities)) {
  if (ability.desc && /Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60%/.test(ability.desc)) {
-  Object.assign(ability, {desc: ability.desc + " When Sharpness applies to an eligible slicing pair, the first hit receives the full applicable component boosts and the second hit uses 15% of the original move power. Siege Launcher's Free-for-All full-power pair remains."});
+		Object.assign(ability, { desc: ability.desc + " When an offensive ability power or damage multiplier applies, the first hit retains its full ability boosts and the second uses 15% of original move power without those offensive ability multipliers. Stat multipliers, items, STAB, weather and field modifiers remain separate. Siege Launcher uses full-power pairs in Free-for-All." });
  }
 }
