@@ -1545,7 +1545,7 @@ export class BattleActions {
 	}
 
 	getMultihitSpilloverTarget(originalTarget: Pokemon, pokemon: Pokemon, move: ActiveMove, hit: number, targetHits: number) {
-		if ((move as any).mycelialBond || (move as any).twinFang) return null;
+		if ((move as any).mycelialBond || (move as any).twinFang || (move as any).exaltedAether || (move as any).wraithProcession) return null;
 		if (hit > targetHits || move.multihitType === 'starboxer') return null;
 		const parentalLike = ['parentalbond', 'hydrabond'].includes(move.multihitType || '');
 		if (!parentalLike && !move.multihit) return null;
@@ -1929,7 +1929,7 @@ export class BattleActions {
 			return;
 		}
 		// Split-hit abilities split damage, not Armor Cannon's self-drop or other self effects.
-		if (((move as any).mycelialBond || (move as any).twinFang) && move.hit > 1) return;
+		if (((move as any).mycelialBond || (move as any).twinFang || (move as any).exaltedAether || (move as any).wraithProcession) && move.hit > 1) return;
 		if (['twincannons', 'twinblades'].includes(move.multihitType || '') && move.hit > 1) return;
 		for (const target of targets) {
 			if (target === false) continue;
@@ -1948,7 +1948,7 @@ export class BattleActions {
 	}
 	secondaries(targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSelf?: boolean) {
 		if (!moveData.secondaries) return;
-		if (((move as any).mycelialBond || (move as any).twinFang) && move.hit > 1) return;
+		if (((move as any).mycelialBond || (move as any).twinFang || (move as any).exaltedAether) && move.hit > 1) return;
 		if ((move as any).silkenSalvo && move.hit > 2) return;
 		if (move.multihitType === 'starboxer' && !(move as any).starBoxerFinishing) {
 			(move as any).starBoxerSecondaryTargets = targets;
@@ -1960,6 +1960,7 @@ export class BattleActions {
 			const secondaries: Dex.SecondaryEffect[] =
 				this.battle.runEvent('ModifySecondaries', target, source, moveData, (target ? adaptiveWeatherSecondaries(this.battle, source, target, adaptiveMoveView(moveData, source, target)) : moveData.secondaries)?.slice() || []);
 			for (const secondary of secondaries) {
+				if ((move as any).wraithProcession && move.hit > 1 && secondary.self) continue;
 				if (target && !secondary.self && adaptiveKnownMove(target, source, move)) continue;
 				// Hydra Bond repeats stat-boost effects with their normal chance, but not other effects.
 				const repeatsOnHydraFollowUp = secondary.boosts || secondary.self?.boosts;
@@ -2299,11 +2300,13 @@ export class BattleActions {
 		}
 
 		if (move.ohko) return guardFixedDamage(this.battle, this.battle.gen === 3 ? target.hp : target.maxhp, source, target, move);
-		if (move.damageCallback) return guardFixedDamage(this.battle, move.damageCallback.call(this.battle, source, target), source, target, move);
-		if (move.damage === 'level') {
-			return guardFixedDamage(this.battle, source.level, source, target, move);
-		} else if (move.damage) {
-			return guardFixedDamage(this.battle, move.damage, source, target, move);
+		if (move.damageCallback || move.damage) {
+			let damage = move.damageCallback ? move.damageCallback.call(this.battle, source, target) :
+				move.damage === 'level' ? source.level : move.damage!;
+			if (((move as any).wraithProcession || (move as any).exaltedAether) && move.hit > 1 && typeof damage === 'number' && damage > 0) {
+				damage = Math.max(1, this.battle.modify(damage, (move as any).exaltedAether ? 0.25 : 0.5));
+			}
+			return guardFixedDamage(this.battle, damage, source, target, move);
 		}
 
 		const category = this.battle.getCategory(move);
@@ -2414,7 +2417,7 @@ export class BattleActions {
 		if (defBoosts > 0 && adaptiveSetup(source, defender)) defBoosts = 0;
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
-		let ignorePositiveDefensive = grandStrategyPrepared(source, target, move) || ((move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive);
+		let ignorePositiveDefensive = (!!(move as any).exaltedAether && move.hit > 1) || grandStrategyPrepared(source, target, move) || ((move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive);
 		if (move.category !== 'Status' && this.battle.movehasType(move, 'Fire') && source.hasAbilityOrPassive('coronafurnace')) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && this.battle.movehasType(move, 'Rock') && source.hasAbility('keenhunt') && !source.isAlly(target) && target.hp <= target.maxhp / 2) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && move.flags.kick && source.hasAbility('imperialprincess')) ignorePositiveDefensive = true;
@@ -2513,6 +2516,10 @@ export class BattleActions {
 			}
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
+		} else if ((move as any).exaltedAether && move.hit > 1) {
+			baseDamage = this.battle.modify(baseDamage, 0.25);
+		} else if ((move as any).wraithProcession && move.hit > 1) {
+			baseDamage = this.battle.modify(baseDamage, 0.5);
 		} else if ((move.multihitType === 'parentalbond' || move.multihitType === 'hydrabond') && move.hit > 1) {
 			// Parental Bond / Hydra Bond modifier
 			const bondModifier = (move as any).spilloverDamageModifier || (move.multihitType === 'hydrabond' ? 0.3 : 0.8);
@@ -2732,7 +2739,7 @@ export class BattleActions {
 		// Mega Rayquaza
 		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
 			this.battle.ruleTable.has('+pokemontag:future')) &&
-			altForme?.isMega && altForme?.requiredMove &&
+			altForme?.isMega && !DisabledSpecies.has(altForme.id) && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
@@ -2749,7 +2756,8 @@ export class BattleActions {
 		if (megaEvolution && megaEvolution !== species.name && !DisabledSpecies.has(this.dex.species.get(megaEvolution).id)) return megaEvolution;
 		// These two Golisopod lines use different stones. Do not fall back to a form from the wrong line.
 		if (species.id === 'golisopod' || species.id === 'golisopodaevian') return null;
-		const megaFormes = species.otherFormes?.filter(forme => this.dex.species.get(forme).isMega);
+		const megaFormes = species.otherFormes?.filter(forme =>
+			this.dex.species.get(forme).isMega && !DisabledSpecies.has(this.dex.species.get(forme).id));
 		if (megaFormes?.length && item.megaStone) {
 			const fallbackMega = megaFormes.map(forme => this.dex.species.get(forme)).find(forme =>
 				forme.requiredItem === item.name || forme.requiredItems?.includes(item.name));
@@ -2884,8 +2892,8 @@ export class BattleActions {
 	runMegaEvoX(pokemon: Pokemon) {
 		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return false;
 		const speciesid = pokemon.canMegaEvoX;
-		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid || DisabledSpecies.has(this.dex.species.get(speciesid).id)) return false;
+		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 
 		if (!pokemon.checkPulseEvolution(this.dex.species.get(speciesid), pokemon.getItem())) return false;
 		this.clearDynamaxForMega(pokemon);
@@ -2903,8 +2911,8 @@ export class BattleActions {
 	runMegaEvoY(pokemon: Pokemon) {
 		if (pokemon.m.mewtwoDefeatUsed && pokemon.species.baseSpecies === 'Mewtwo') return false;
 		const speciesid = pokemon.canMegaEvoY;
-		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 		if (!speciesid || DisabledSpecies.has(this.dex.species.get(speciesid).id)) return false;
+		if (!this.battle.useGimmick(pokemon, 'Mega')) return false;
 
 		if (!pokemon.checkPulseEvolution(this.dex.species.get(speciesid), pokemon.getItem())) return false;
 		this.clearDynamaxForMega(pokemon);

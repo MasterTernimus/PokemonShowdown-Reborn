@@ -128,6 +128,10 @@ function setupGlobals() {
 
 	global.Sockets = Sockets;
 	if (!Config.lazysockets) {
+		// Building the format rule tables is synchronous and expensive on first
+		// use. Prepare the cached handshake before accepting connections so the
+		// first player's challenge is not blocked by this startup work.
+		void Rooms.global.formatListText;
 		Sockets.start(Config.subprocessescache);
 	}
 }

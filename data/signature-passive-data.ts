@@ -7,6 +7,8 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
+	royalremedy: ['naturalcure', 'healer'],
+	freeflight: ['windpower', 'moxie'],
 	cactuschorus: ['waterabsorb', 'sandrush'],
 	naturalrecovery: ['naturalcure', 'regenerator'],
 	noseformation: ['elevate'],
@@ -28,17 +30,17 @@ export const SignaturePassiveRemovedComponents: { [id: string]: readonly string[
 };
 export const SignaturePassiveDescriptions: { [id: string]: { shortDesc: string, desc: string } } = {
 	rechargerelay: { shortDesc: 'Volt Switch heals the incoming teammate by 1/8 max HP.',
-		desc: 'Switching with Volt Switch heals the incoming teammate by 1/8 of its base maximum HP. This passive does not include Battery.' },
+		desc: "Switching with Volt Switch heals the incoming teammate by 1/8 of its base maximum HP." },
 	undertow: { shortDesc: 'Water attacks dealing HP damage ground surviving foes.',
-		desc: 'Water attacks that deal HP damage ground surviving foes as with Smack Down. Does not trap foes or bypass protection, Substitute or Water immunity. This passive does not include Water Absorb.' },
+		desc: "Water attacks that deal HP damage ground surviving foes as with Smack Down. Does not trap foes or bypass protection, Substitute or Water immunity." },
 	lockinggrip: { shortDesc: 'First damaging Bug attack per entry can Torment; Substitute spends the use.',
-		desc: 'Once per entry, its first damaging Bug attack against a foe applies Torment after HP damage if the foe survives. Substitute damage spends the use without tormenting its holder, including before later hits. Misses, protection and immunity preserve the use. Ability replacement does not reset it; switching does. This passive does not include Hyper Cutter.' },
+		desc: "Once per entry, its first damaging Bug attack against a foe applies Torment after HP damage if the foe survives. Substitute damage spends the use without tormenting its holder, including before later hits. Misses, protection and immunity preserve the use. Ability replacement does not reset it; switching does." },
 	palmmastery: { shortDesc: 'Force Palm always paralyzes when it lands, subject to immunity.',
-		desc: "Force Palm paralysis is a primary move effect rather than a secondary roll. It always paralyzes when it lands, subject to status immunity and status. This passive does not include Thick Fat." },
+		desc: "Force Palm paralysis is a primary move effect rather than a secondary roll. It always paralyzes when it lands, subject to status immunity and status." },
 	lockjaw: { shortDesc: 'Biting HP hits Torment surviving foes for 2 turns.',
-		desc: 'Biting attacks that deal HP damage apply Torment to surviving foes for 2 turns. Does not prevent switching or bypass Substitute. This passive does not include Strong Jaw.' },
+		desc: "Biting attacks that deal HP damage apply Torment to surviving foes for 2 turns. Does not prevent switching or bypass Substitute." },
 	mirechorus: { shortDesc: 'Sound becomes Water (Ice on Icy), 1.2x power; noncontact sound can poison.',
-		desc: 'Sound moves become Water-type, or Ice-type on Icy Field, and have 1.2x power. Each foe damaged by a noncontact sound hit has a 20% poison chance. Shield Dust and Covert Cloak prevent this added poison. This passive does not include contact Poison Touch.' },
+		desc: "Sound moves become Water-type, or Ice-type on Icy Field, and have 1.2x power. Each foe damaged by a noncontact sound hit has a 20% poison chance. Shield Dust and Covert Cloak prevent this added poison." },
 };
 
 SignaturePassiveComponents.bonewarrior = ['battlearmor'];
@@ -57,6 +59,7 @@ SignaturePassiveComponents.tirelessmuscle = ['innerfocus'];
 SignaturePassiveComponents.rimeboundspirit = ['heatproof'];
 
 SignaturePassiveComponents.hydraflight=['levitate','hydrabond'];
+SignaturePassiveComponents.abyssalrebirth = ['levitate', 'hydrabond'];
 
 SignaturePassiveComponents.absolutepressure=['pressure','innerfocus','insomnia','moldbreaker'];
 

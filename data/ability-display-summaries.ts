@@ -194,7 +194,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"pollenbloom": "Same-type attacks gain 30% power. Each turn, drains 1/16 HP from eligible foes and heals that amount; Grass matchups scale the drain only in FFA.",
 	"blazingmane": "Fire Mane; damaging Fire moves gain +1 priority at 1/4 HP or less.",
 	"coronafurnace": "Flame Body; damaging Fire moves ignore positive defensive stages.",
-	"plasmaeruption": "Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
+
 	"fortressshell": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption.",
 	"waterbarrage": "1.3x same-type power; eligible moves hit twice; cycling 1/16–3/16 Water damage to foes each turn.",
 	"dreepyvanguard": "Once per entry, Dragon Darts damage breaks the matching screen.",
@@ -252,7 +252,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"soulsiphon": "Absorbs Fire; Fire/Ghost hits drain 1/3 damage, capped at 1/6 HP per turn, and block healing.",
 	"malicewell": "Contact may burn; surviving the first opposing damaging move each entry gives +1 Sp. Atk, even after Protect.",
 	"soulcremation": "Combines the listed abilities.",
-	"soultag": "25% less damage; absorbs Fire/Ghost for attacking boosts; contact burns and field bonuses.",
+
 	"highnoon": "Accurate attacks; stronger same-type, pulse/bullet and Water moves; eligible moves hit twice.",
 	"forestsurge": "Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock; 1.3x same-type power.",
 	"parasitism": "Above half: defensive protection; first KO triggers Resuscitation.",
@@ -296,7 +296,6 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"pulsetriad": "5-turn Factory Field on entry.",
 	"razorreach": "All attacks non-contact; +1 accuracy on entry.",
 	"witheringtouch": "Poison HP hits on already-poisoned foes lower Attack once/turn.",
-	"soaringspirit": "Absorbs wind; Tailwind/Strong Winds raise Sp. Atk; immune to sandstorm and hail damage.",
 	"vendetta": "Critical hits: +12 Attack; one roll per battle; immune to sandstorm and hail damage.",
 	"phantomfist": "Punches have 1.4x power; no weather damage; 40% less if super effective.",
 	"territorial": "Blocks Berries and forced switching; HP hits heal 1/16, +1 Defense once per turn; Intimidate gives +1 Attack.",
@@ -512,7 +511,7 @@ Object.assign(AbilityDisplaySummaries, {
 	"atrocity": "Stronger attacks and defenses; ignores bypassable abilities; heals 1/16 HP each turn.",
 	"sunsovereign": "Summons 8-turn sunlight on entry.",
 	"burningcrown": "Takes 20% less attack damage.",
-	"plasmaeruption": "Fire may turn Electric or vice versa (50%). Type loss forces it unless immune.",
+
 	"blazingtempo": "+1 Speed after each full active turn; kicks have 1.4x power; field defenses; reveals Illusions.",
 	"burningspirit": "Combines the listed abilities.",
 	"burningego": "Combines the listed abilities.",
@@ -581,7 +580,7 @@ Object.assign(AbilityDisplaySummaries, {
   "silksights": "Keen Eye; Electric bypasses slowed foes' boosts; once/entry Bug HP hit on slowed foe Disables its last move."
 });
 
-Object.assign(AbilityDisplaySummaries, {"freeflight":"While airborne, can switch despite opposing trapping; binding damage remains.","entrenched":"Opposing moves and items cannot force it to switch."});
+Object.assign(AbilityDisplaySummaries, {"freeflight":"Wind Power + Moxie.","entrenched":"Opposing moves and items cannot force it to switch."});
 AbilityDisplaySummaries.voidomen = 'First successful secondary or self status move: 3-turn Safeguard once/entry; secondary also grants stat-drop ward.';
 
 AbilityDisplaySummaries.hydroelectric = "Water HP hits heal 1/8 once/turn; first Water attack dealing opposing HP damage grants +1 Speed after the move.";
@@ -731,7 +730,7 @@ AbilityDisplaySummaries.crystalward = "Blocks opposing ball/bomb moves for itsel
 
 AbilityDisplaySummaries.barbharvest = "Suction Cups; removes own-side Stealth Rock before taking entry damage.";
 
-AbilityDisplaySummaries.rimeboundspirit = "Heatproof; immune to wind moves. No Wind Rider boosts.";
+AbilityDisplaySummaries.rimeboundspirit = "Heatproof; immune to wind moves.";
 
 import {StunfiskDescriptions} from './stunfisk-approved';
 for(const[id,text]of Object.entries(StunfiskDescriptions))AbilityDisplaySummaries[id]=text.shortDesc;
@@ -851,3 +850,6 @@ Object.assign(AbilityDisplaySummaries, {
 });
 
 AbilityDisplaySummaries.venomarmor = 'Dual Wield + Run Away on regular Zangoose.';
+
+import {ReadableAbilitySummaries} from './ability-readability';
+Object.assign(AbilityDisplaySummaries, ReadableAbilitySummaries);

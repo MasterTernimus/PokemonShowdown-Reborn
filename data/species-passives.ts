@@ -1176,6 +1176,8 @@ for(const id of ['sandslash','sandslashreborn','sandslashalola'])SpeciesPassives
 for(const [id,passive]of Object.entries(EeveeCloysterPassives)){SpeciesPassives[id]=Object.freeze([passive]);ThematicPassiveIds.add(passive);}
 for(const[id,passive]of Object.entries(StanceDisguisePassives)){SpeciesPassives[id]=Object.freeze([passive]);ThematicPassiveIds.add(passive);}
 SpeciesPassives.hydreigon=Object.freeze(['hydraflight']);ThematicPassiveIds.add('hydraflight');
+SpeciesPassives.hydreigonmega = Object.freeze(['abyssalrebirth']);
+ThematicPassiveIds.add('abyssalrebirth');
 for(const id of ['meloetta','meloettapirouette','meloettaencore'])SpeciesPassives[id]=Object.freeze(['serenegrace']);
 ThematicPassiveIds.add('serenegrace');
 for(const id of ['mewtwo','mewtwomegax','mewtwomegay'])SpeciesPassives[id]=Object.freeze(['absolutepressure']);
@@ -1272,6 +1274,12 @@ ThematicPassiveIds.add('coldexpertise');
 
 SpeciesPassives.lucario = Object.freeze(['mindseye']);
 ThematicPassiveIds.add('mindseye');
+
+import {RejuvPassives} from './rejuv-passives';
+for (const [id, passives] of Object.entries(RejuvPassives)) {
+	SpeciesPassives[id] = Object.freeze([...passives]);
+	for (const passive of passives) ThematicPassiveIds.add(passive);
+}
 
 Object.freeze(SpeciesPassives);
 

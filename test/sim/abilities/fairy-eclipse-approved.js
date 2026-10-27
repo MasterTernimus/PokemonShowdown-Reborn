@@ -21,7 +21,7 @@ describe('Fairy Ring approved passive',()=>{
 describe('Approved Eclipse and Shadow Tag numeric/passive changes',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('Gothitelle replaces Forewarn with Eclipse Vision and uses Astral Concord in the vacated slot',()=>{const[p,q]=setup('Gothitelle','Eclipse Vision');assert.deepEqual(p.getPassives(),['eclipsevision']);assert.equal(p.species.abilities.H,'Astral Concord');assert.equal(battle.runEvent('ModifySpA',p,q,Dex.getActiveMove('psychic'),100),130);p.addVolatile('gastroacid');assert.equal(battle.runEvent('ModifySpA',p,q,Dex.getActiveMove('psychic'),100),130);use(p,q,'darkpulse');assert(p.hasType('Dark'));use(p,q,'psychic');assert(p.hasType('Psychic'));});
- for(const ability of ['Shadow Tag','Cruel Tag','Soul Tag'])it(ability+' retains the shared 0.8 attack multiplier',()=>{const[p,q]=setup('Mew',ability);assert(p.hasAbility('shadowtag'),ability);assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),80);});
+ for(const ability of ['Shadow Tag','Cruel Tag'])it(ability+' retains the shared 0.8 attack multiplier',()=>{const[p,q]=setup('Mew',ability);assert(p.hasAbility('shadowtag'),ability);assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),80);});
  it('Shadow Tag trapping and unsuppressibility remain',()=>{const[p,q]=setup('Mew','Shadow Tag');use(q,p,'gastroacid');assert(!p.volatiles.gastroacid);battle.runEvent('TrapPokemon',q);assert(q.trapped);q.setType('Ghost');q.trapped=false;battle.runEvent('TrapPokemon',q);assert(!q.trapped);});
 });
 describe('Approved Mime family passive migration',()=>{
@@ -47,7 +47,8 @@ describe('Approved paired Concord abilities',()=>{
   const[p,q]=setup('Reuniclus','Cellular Concord');
   p.hp=100;p.status='brn';
   battle.singleEvent('SwitchOut',p.getAbility(),p.abilityState,p);
-  assert.equal(p.status,'');assert.equal(p.hp,433);
+  assert.equal(p.status,'');assert.equal(p.hp,225); // 100 + 1/8 of the fixture's 1000 max HP.
+  battle.singleEvent('SwitchOut',p.getAbility(),p.abilityState,p);assert.equal(p.hp,225);
   assert.equal(Dex.abilities.get('cellularconcord').onBasePower,Dex.abilities.get('analytic').onBasePower);
   assert.equal(Dex.abilities.get('cellularconcord').onResidual,Dex.abilities.get('naturalcure').onResidual);
  });

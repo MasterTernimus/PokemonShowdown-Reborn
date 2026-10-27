@@ -3389,8 +3389,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	infernalparade: {
 		name: "Infernal Parade",
-		desc: "Has a 30% chance to burn the target. Power doubles if the target has a non-volatile status condition, or if the user has Soul Fire or Sinister Blaze.",
-		shortDesc: "30% burn. 2x if statused or Soul Fire/Sinister Blaze.",
+		desc: "Has a 30% chance to burn the target. Power doubles if the target has a non-volatile status condition or Comatose, if the user has Sinister Blaze, or on Haunted Field unless the target ignores field effects. Soul Fire does not independently double its power.",
+		shortDesc: "30% burn. 2x: status/Comatose, Sinister Blaze, Haunted.",
 	},
 	inferno: {
 		name: "Inferno",
@@ -4684,8 +4684,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	payback: {
 		name: "Payback",
-		desc: "Power doubles if the user moves after the target this turn, including actions taken through Instruct or the Dancer Ability. Switching in does not count as an action.",
-		shortDesc: "Power doubles if the user moves after the target.",
+		desc: "Usually moves after other attacks (-4 priority). Power doubles from 80 to 160 if the target already damaged the user this turn. Has a higher chance for a critical hit.",
+		shortDesc: "80 BP; 160 if target hurt user this turn. High crit.",
 		gen6: {
 			desc: "Power doubles if the user moves after the target this turn. Switching in does not count as an action.",
 		},

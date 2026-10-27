@@ -14,7 +14,7 @@ export const PassiveCleanupDescriptions = {
 
 	venompincer: {
 		shortDesc: 'Poison Touch; first opposing contact HP hit per entry lowers target Speed.',
-		desc: "Full Poison Touch: contact attacks have a 30% poison chance, subject to Shield Dust, Covert Cloak and normal poison immunities. The first damaging contact hit dealing opposing HP damage each entry lowers that target's Speed by 1. Switching resets this allowance; ability changes do not. Misses, protection, immunity and Substitute-only damage do not spend it. A knockout spends it without lowering a fainted target's Speed. Poison Heal remains a separate passive. No Hyper Cutter or bonus Poison STAB.",
+		desc: "Full Poison Touch: contact attacks have a 30% poison chance, subject to Shield Dust, Covert Cloak and normal poison immunities. The first damaging contact hit dealing opposing HP damage each entry lowers that target's Speed by 1. Switching resets this allowance; ability changes do not. Misses, protection, immunity and Substitute-only damage do not spend it. A knockout spends it without lowering a fainted target's Speed.",
 	},
 	surgesurfer: {
 		shortDesc: 'Doubles Speed on Electric, Water Surface, Underwater, Murkwater Surface and Short-Circuit fields.',

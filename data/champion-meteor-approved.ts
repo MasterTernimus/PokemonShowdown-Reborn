@@ -2,7 +2,7 @@ import type {AbilityDataTable} from '../sim/dex-abilities';
 import {skipPassiveComponent} from './passive-ability-cleanup';
 export const ChampionMeteorDescriptions = {
  championscommand: {name: "Champion's Command", shortDesc: 'Physical STAB Hyper Beam; 25% through Protect; direct opposing KO skips recharge.', desc: "Ordinary Hyper Beam remains Normal, uses Attack against Defense and receives ordinary STAB without stacking with Normal typing. Deals 25% damage through ordinary Protect without removing it; Max Guard blocks. Only a direct opposing KO skips recharge."},
- meteorcore: {name: 'Meteor Core', shortDesc: 'Meteor Mash: +1 Attack after opposing HP damage if its own boost did not trigger.', desc: 'After an ordinary Meteor Mash damages opposing HP, the living active user attempts one +1 Attack boost if that use did not already trigger its Attack boost. Once per entire move, including extra hits. Normal stat-change rules apply. No Iron Fist.'},
+ meteorcore: {name: 'Meteor Core', shortDesc: 'Meteor Mash: +1 Attack after opposing HP damage if its own boost did not trigger.', desc: "After an ordinary Meteor Mash damages opposing HP, the living active user attempts one +1 Attack boost if that use did not already trigger its Attack boost. Once per entire move, including extra hits. Normal stat-change rules apply."},
 };
 export function installChampionMeteor(abilities: AbilityDataTable) {
  abilities.championscommand = {

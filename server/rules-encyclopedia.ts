@@ -1,6 +1,7 @@
 /** Public, read-only rules views. Validation never writes back into the submitted team. */
 import { Dex, Teams, TeamValidator, toID } from '../sim';
 import { AbilityComponents } from '../data/ability-components';
+import { DisabledSpecies } from '../data/disabled-species';
 import { resolveNaturePowerMove } from '../data/nature-power';
 import { Auras } from '../data/auras';
 import * as King from '../data/aevian-king-moves';
@@ -22,7 +23,7 @@ function abilityDetail(id: string) {
 }
 export function rulesCatalog() {
 	const guide = publicFieldGuide();
-	return { species: Dex.species.all().filter(s => s.exists).map(s => ({ id: s.id, name: s.name, types: s.types })),
+	return { species: Dex.species.all().filter(s => s.exists && !DisabledSpecies.has(s.id)).map(s => ({ id: s.id, name: s.name, types: s.types })),
 		abilities: Dex.abilities.all().filter(a => a.exists).map(a => ({ id: a.id, name: displayName(a.id) })),
 		fields: guide.entries.filter(e => e.kind === 'field').map(e => ({ id: e.id, name: e.name, group: e.group })),
 		auras: Object.values(Auras).map(a => ({ id: a.id, name: a.name })),
@@ -38,12 +39,12 @@ export function rulesDetail(kind: string, query: string) {
 			'referenceDetails' in e && (e.referenceDetails.abilities || []).some(a => a.id === ability.id)).map(e => ({ id: e.id, name: e.name })) };
 	}
 	const species = Dex.species.get(query);
-	if (!species.exists) throw new Error('Unknown Pokémon.');
+	if (!species.exists || DisabledSpecies.has(species.id)) throw new Error('Unknown Pokémon.');
 	const gate = gates.find(g => toID(species.baseSpecies) === g.species);
 	return { kind: 'species', id: species.id, name: species.name, types: species.types, stats: species.baseStats,
 		abilities: Object.entries(species.abilities).map(([slot, name]) => ({ slot, ...abilityDetail(toID(name)) })),
 		passives: (species.passives || []).map(abilityDetail),
-		forms: [...new Set([species.baseSpecies, ...(Dex.species.get(species.baseSpecies).otherFormes || [])])],
+		forms: [...new Set([species.baseSpecies, ...(Dex.species.get(species.baseSpecies).otherFormes || [])])].filter(name => !DisabledSpecies.has(Dex.species.get(name).id)),
 		event: gate ? { ability: abilityDetail(gate.ability), moves: Object.entries(gate.sources).map(([id, sources]) => ({ id, name: Dex.moves.get(id).name, sources, exclusive: gate.exclusive.includes(id) })) } : null };
 }
 export function teamClinic(input: { team: string, format: string, field?: string, aura?: string }) {

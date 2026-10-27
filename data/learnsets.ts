@@ -111951,7 +111951,6 @@ const latestLearnsetAdditions: {[id: string]: string[]} = {
 	],
 	gligar: ['barbbarrage'],
 	gliscor: ['barbbarrage', 'poisonfang', 'toxicthread', 'sludgewave', 'clearsmog', 'poisonjab', 'poisontail', 'venomdrench'],
-	salamence: ['bloodmoon', 'moongeistbeam'],
 	ursalunabloodmoon: ['moongeistbeam'],
 	alakazam: ['darkpulse', 'snarl'],
 	misdreavus: ['drainingkiss'],

@@ -3,11 +3,11 @@ import type {AbilityDataTable} from '../sim/dex-abilities';
 export const WeatherChoiceDescriptions = {
 	mountainhide: {
 		name: 'Mountain Hide', shortDesc: 'Full Solid Rock + Inner Focus.',
-		desc: 'Full local Solid Rock and Inner Focus: takes 20% less attack damage, or 40% less from super-effective attacks, and prevents flinching and Intimidate Attack drops. Sand Stream is supplied separately by base Tyranitar\'s species passive.',
+		desc: "Full local Solid Rock and Inner Focus: takes 20% less attack damage, or 40% less from super-effective attacks, and prevents flinching and Intimidate Attack drops.",
 	},
 	rimebark: {
 		name: 'Rimebark', shortDesc: 'Full Thick Fat + Ice Body.',
-		desc: 'Full local Thick Fat and Ice Body: incoming Fire and Ice attacks use half the attacker\'s offensive stat; immune to hail damage. Contact attackers have a 30% frostbite chance. Heals 1/16 max HP in hail/snow or qualifying cold fields, and 1/8 in hail on Cold Eclipse. Snow Warning is supplied separately by base Abomasnow\'s species passive.',
+		desc: "Full local Thick Fat and Ice Body: incoming Fire and Ice attacks use half the attacker's offensive stat; immune to hail damage. Contact attackers have a 30% frostbite chance. Heals 1/16 max HP in hail/snow or qualifying cold fields, and 1/8 in hail on Cold Eclipse.",
 	},
 };
 

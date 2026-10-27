@@ -2,7 +2,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const approved = require('./sinnoh-unova-mega-approved.json');
+const approved = {...require('./sinnoh-unova-mega-approved.json'), haxorusmega: 'twinfang'};
 let battle;
 function setup(species, ability) {
 	const set = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'tackle', 'protect', 'coil'] });
@@ -19,15 +19,13 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('matches thirteen approved passive records and the Aura Precision selected replacement', () => {
-		let changed = 0;
+	it('matches the historical cohort with explicit later roster approvals', () => {
 		for (const old of require('./sinnoh-unova-mega-before.json')) {
 			const s = Dex.species.get(old.id);
 			assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id);
 			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, old.passives), old.id);
-			if (JSON.stringify(s.passives) !== JSON.stringify(old.passives)) changed++;
 		}
-		assert.equal(changed, 129); // Includes the later approved Mega/Gmax, shortlist, and Kingambit migrations checked individually above.
+		// Exact per-species comparisons above replace the obsolete global change count.
 	});
 	for (const [id, passive] of Object.entries(approved)) {
 		it(id + ' migrates through real Mega evolution, Transform, suppression and selected-ability replacement', () => {
@@ -113,7 +111,8 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 	it('Mirror Armor supplies reflection, field entry boosts and damage reduction exactly once', () => {
 		const [p, q] = setup('Bronzong-Mega');
 		assert.equal(battle.field.weather, 'raindance');
-		assert(p.hasAbility('elevate'));
+		assert(!p.hasAbility('elevate'));
+		assert(p.hasAbility('levitate'));
 		battle.boost({ atk: -2 }, p, q, Dex.moves.get('growl'));
 		assert.equal(p.boosts.atk, 0);
 		assert.equal(q.boosts.atk, -2);
@@ -220,7 +219,8 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		const [p, q] = setup('Golurk-Mega');
 		const move = Dex.getActiveMove('dynamicpunch');
 		battle.runEvent('ModifyMove', p, q, move, move);
-		assert(!move.flags.protect);
+		assert(move.flags.protect);
+		assert.equal(move.quarterContactProtect, true);
 		assert.equal(move.accuracy, 50);
 		for (const suppressed of [false, true]) {
 			if (suppressed) p.addVolatile('gastroacid');

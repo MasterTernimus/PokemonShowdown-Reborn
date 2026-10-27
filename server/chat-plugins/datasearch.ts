@@ -1,4 +1,5 @@
 import { abilityIncludesComponent } from '../../data/ability-components';
+import { DisabledSpecies } from '../../data/disabled-species';
 /**
  * Data searching commands.
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -1334,6 +1335,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 
 	const dex: { [k: string]: Species } = {};
 	for (const species of mod.species.all()) {
+		if (DisabledSpecies.has(species.id)) continue;
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
 		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;

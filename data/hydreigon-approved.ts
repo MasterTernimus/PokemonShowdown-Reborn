@@ -3,8 +3,8 @@ import {skipPassiveComponent} from './passive-ability-cleanup';
 /** Independent of secondary-effect multipliers; either support sets the final chance. */
 export function allOutChance(move:ActiveMove){return (move as any).sereneGraceProviders?.some((id:string)=>id==='voidomen'||id==='lunarorbit')?5:3;}
 export const HydreigonDescriptions={
- hydraflight:{name:'Hydra Flight',shortDesc:'Levitate + Hydra Bond.',desc:'Full local Levitate and Hydra Bond. Ground immunity can be bypassed normally; Hydra Bond remains active. Eligible attacks retain three hits, 30% follow-ups, spread and Free-for-All rules, the full-power Gilded Helix exception and Dragon Den power boost. No Berserk boosts.'},
- worldbreaker:{name:'Worldbreaker',shortDesc:'Berserk + Duskilate; 30% double power per hit, except Fickle Beam.',desc:'Full local Berserk and Duskilate. Surviving a move crossing half HP grants +1 Attack and Sp. Atk; Dragon Den entry grants +2 to both. Each damaging hit independently has a 30% chance to double base power, except Fickle Beam uses only its own all-out roll. No Merciless critical-hit bonus.'},
+ hydraflight:{name:'Hydra Flight',shortDesc:'Levitate + Hydra Bond.',desc:"Full local Levitate and Hydra Bond. Ground immunity can be bypassed normally; Hydra Bond remains active. Eligible attacks retain three hits, 30% follow-ups, spread and Free-for-All rules, the full-power Gilded Helix exception and Dragon Den power boost."},
+ worldbreaker:{name:'Worldbreaker',shortDesc:'Berserk + Duskilate; 30% double power per hit, except Fickle Beam.',desc:"Full local Berserk and Duskilate. Surviving a move crossing half HP grants +1 Attack and Sp. Atk; Dragon Den entry grants +2 to both. Each damaging hit independently has a 30% chance to double base power, except Fickle Beam uses only its own all-out roll."},
  falseliberation:{name:'False Liberation',shortDesc:"Mold Breaker; once per entry, a Dark HP hit inflicts Torment.",desc:"Mold Breaker. Once per entry, Dark damage to a foe’s HP inflicts Torment. Only a newly applied Torment spends the use; Torment is not refreshed."},
 };
 export function installHydreigon(abilities:AbilityDataTable){const a=abilities as any;

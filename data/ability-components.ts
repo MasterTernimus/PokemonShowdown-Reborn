@@ -29,7 +29,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	mightyjaw: ['proficient'],
 	blazingmane: ['firemane'],
 	coronafurnace: ['flamebody'],
-	plasmaeruption: ['proficient', 'static', 'flamebody'],
+
 	gigavolt: ['moldbreaker', 'lightningrod', 'static'],
 	verdantedge: ['chlorophyll', 'grasspelt', 'sharpness'],
 	permafrost: ['icebody', 'icescales', 'refrigerate'],
@@ -105,7 +105,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	bakedbliss: ['wellbakedbody', 'thickfat', 'sweetveil', 'gluttony'],
 	hydraheart: ['hydrabond', 'stamina'],
 	truehydra: ['hydrabond', 'regenerator', 'shedskin', 'selfsufficient'],
-	moonveil: ['pastelveil', 'mistysurge', 'friendguard'],
+	moonveil: ['pastelveil', 'mistysurge'],
 	aevianspark: ['technician', 'static', 'earlybird'],
 	aeviangrief: ['magicguard', 'cursedbody', 'wonderskin', 'levitate'],
 	aevianrocket: ['bruteforce', 'reckless', 'rockhead', 'regenerator', 'moldbreaker', 'swiftswim'],
@@ -167,7 +167,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	siegelauncher: ['stalwart', 'proficient'],
 	soulcremation: ['soulsiphon', 'soulpyre', 'malicewell'],
 	malicewell: ['flamebody'],
-	soultag: ['soulfire', 'shadowtag', 'flamebody'],
+
 	deserttyrant: ['sandstream'],
 	desertspirit: ['levitate', 'sandstream', 'overcoat', 'tintedlens'],
 	tremor: ['levitate', 'resonanceforce', 'sandforce'],
@@ -234,7 +234,6 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	seablessing: ['waterveil', 'raindish'],
 	seasonalstride: ['chlorophyll'],
 	slowclamp: ['shellarmor', 'owntempo', 'analytic'],
-	soaringspirit: ['windpower', 'selfsufficient'],
 	solartrap: ['accumulation', 'digestivesap', 'liquidooze'],
 	spiralevolution: ['moldbreaker', 'adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
 	stormsovereign: ['galewings', 'keeneye'],
@@ -415,7 +414,7 @@ Object.assign(AbilityComponents, {
   "titanpincer": [
     "hypercutter"
   ],
-  "shellcracker": [],
+  "shellcracker": ['moldbreaker'],
   "tidaldominion": [
     "swiftswim"
   ],
@@ -1028,3 +1027,12 @@ AbilityComponents.atrocity = ['unboundblaze', 'toughclaws', 'fireward'];
 AbilityComponents.apexpredator = ['windrider', 'toughclaws'];
 
 AbilityComponents.carryon = ['innerfocus', 'healer'];
+AbilityComponents.expiration = ['worldbreaker', 'controlledfury'];
+AbilityComponents.abyssalrebirth = ['hydrabond', 'levitate'];
+AbilityComponents.primevalskull = ['rockhead'];
+AbilityComponents.primevalshield = [];
+AbilityComponents.wraithprocession = [];
+AbilityComponents.freeflight = ['windpower', 'moxie'];
+AbilityComponents.rightfulexalt = ['serenegrace', 'innerfocus'];
+
+AbilityComponents.royalremedy = ['naturalcure', 'healer'];

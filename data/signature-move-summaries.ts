@@ -20,7 +20,7 @@ export const SignatureMoveSummaries: {[id: string]: string} = {
 	venamskiss: 'Adaptive bite/tail; super effective on Steel; 30% poison.',
 	heavenlywing: 'Clears positive boosts after damaging opposing HP.',
 	uproot: 'Lowers target Sp. Def by 2.',
-	kaboom: 'Adaptive; +1 SpA; 1/4 recoil. Electric Terrain/Aura: no recoil.',
+	kaboom: 'Adaptive; +1 matching Atk/SpA; 1/4 recoil. Electric Terrain/Aura: no recoil.',
 	cactibash: 'Hits twice; a KO sets one layer of Spikes.',
 	corrosivestrike: 'Adaptive; Super effective on Steel; corrosion drains 1/16 HP per turn.',
 	toxicvial: 'Badly poisons; lowers Attack and Sp. Atk by 1.',

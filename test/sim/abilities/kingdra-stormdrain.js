@@ -8,5 +8,5 @@ describe('Approved Kingdra Storm Drain slot',()=>{
 });
 
 describe('Kingdra obtainable ability validation',()=>{
- it('accepts all three approved abilities and rejects Backwash when ability legality is enforced',()=>{const{TeamValidator}=require('../../../dist/sim');const v=new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities');const set=ability=>({species:'Kingdra',ability,moves:['surf'],nature:'Modest',evs:{spa:252,spe:252,hp:4}});for(const ability of ['Swift Swim','Abyss Sniper','Storm Drain'])assert.equal(v.validateSet(set(ability)),null);assert(v.validateSet(set('Backwash')).includes("Kingdra can't have Backwash."));});
+ it('accepts all three approved abilities and rejects Backwash when ability legality is enforced',()=>{const{TeamValidator}=require('../../../dist/sim');const v=new TeamValidator('gen9nofieldsinglesgame@@@Obtainable Abilities');const set=ability=>({species:'Kingdra',ability,moves:['surf'],nature:'Modest',evs:{spa:252,spe:252,hp:4}});for(const ability of ['Swift Swim','Abyss Sniper','Storm Drain'])assert.equal(v.validateSet(set(ability)),null);assert(!Dex.abilities.get('Backwash').exists);assert(v.validateSet(set('Backwash')).some(error=>/backwash/i.test(error)));});
 });

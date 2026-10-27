@@ -1239,9 +1239,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 11129,
 	},
 	moonveil: {
-		onAnyModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('friendguard').onAnyModifyDamage?.call(this, damage, source, target, move);
-		},
 		onStart(pokemon) {
 			this.dex.abilities.get('pastelveil').onStart?.call(this, pokemon);
 			this.dex.abilities.get('mistysurge').onStart?.call(this, pokemon);
@@ -5138,17 +5135,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 10385,
 	},
-	voltagevolley: {
-		onModifyMove(move) {
-			if (!move.multihit) return;
-			move.category = 'Special';
-			move.overrideOffensiveStat = 'spa';
-		},
-		flags: {},
-		name: "Voltage Volley",
-		rating: 3.5,
-		num: 10178,
-	},
 	vanguard: {
 		onStart(pokemon) { (this.dex.abilities.get('intimidate') as any).onStart?.call(this, pokemon); },
 		onPrepareHit(source, target, move) {
@@ -8417,53 +8403,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) { this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move); },
 		name: 'Corona Furnace', num: 11972, rating: 4, flags: {},
 		shortDesc: "Flame Body; damaging Fire moves ignore positive defensive stages.",
-		desc: "Full local Flame Body: eligible contact attackers have a 30% burn chance, or 60% on Volcanic Field. On Cold Eclipse, ability activation instead grants +1 Defense and Sp. Def and contact burns are disabled. Damaging moves with effective Fire typing ignore only positive defensive stages. Negative stages, screens, type effectiveness and defensive abilities still apply. Proficient remains the separate species passive.",
+		desc: "Full local Flame Body: eligible contact attackers have a 30% burn chance, or 60% on Volcanic Field. On Cold Eclipse, ability activation instead grants +1 Defense and Sp. Def and contact burns are disabled. Damaging moves with effective Fire typing ignore only positive defensive stages. Negative stages, screens, type effectiveness and defensive abilities still apply.",
 	},
-	plasmaeruption: {
-		onModifyMove(move, source, target) {
-			if (move.id === 'burnup' || move.id === 'doubleshock' || (move as any).plasmaEruptionChecked) return;
-			(move as any).plasmaEruptionChecked = true;
-			const fire = source.hasType('Fire');
-			const electric = source.hasType('Electric');
-			let newType: 'Fire' | 'Electric' | '' = '';
-			if (!fire && electric && move.type === 'Fire') {
-				newType = 'Electric';
-			} else if (fire && !electric && move.type === 'Electric') {
-				newType = 'Fire';
-			} else if (fire && electric && this.randomChance(1, 2)) {
-				if (move.type === 'Fire') newType = 'Electric';
-				if (move.type === 'Electric') newType = 'Fire';
-			}
-			if (!newType) return;
-			const possibleTargets = target ? [target] : source.foes();
-			if (possibleTargets.some(foe => foe.hp && (
-				!foe.runImmunity(newType, false) ||
-				(newType === 'Electric' && foe.hasAbility(['voltabsorb', 'lightningrod', 'motordrive'])) ||
-				(newType === 'Fire' && foe.hasAbility(['flashfire', 'wellbakedbody']))
-			))) return;
-			move.type = newType;
-			if (!fire && newType === 'Electric') {
-				this.add('-message', 'Plasma Eruption turned Fire into Electricity!');
-			} else if (!electric && newType === 'Fire') {
-				this.add('-message', 'Plasma Eruption turned Electricity into Fire!');
-			}
-		},
-		onBasePowerPriority: 22,
-		onBasePower(basePower, attacker, defender, move) {
-			return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
-		},
-		onStart(pokemon) {
-			this.dex.abilities.get('flamebody').onStart?.call(this, pokemon);
-		},
-		onDamagingHit(damage, target, source, move) {
-			this.dex.abilities.get('static').onDamagingHit?.call(this, damage, target, source, move);
-			this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move);
-		},
-		flags: {},
-		name: "Plasma Eruption",
-		rating: 5,
-		num: 10149,
-	},
+
 	fortressshell: {
 		onStart(pokemon) {
 			const terrain = this.field.terrain;
@@ -15363,79 +15305,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 5,
 		num: 11259,
 	},
-	soultag: {
-		onStart(pokemon) {
-			this.dex.abilities.get('soulfire').onStart?.call(this, pokemon);
-			this.dex.abilities.get('shadowtag').onStart?.call(this, pokemon);
-			this.dex.abilities.get('flamebody').onStart?.call(this, pokemon);
-		},
-		onDamagingHit(damage, target, source, move) {
-			this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move);
-		},
-		onFaint(pokemon, source, effect) { return this.dex.abilities.get('shadowtag').onFaint?.call(this, pokemon, source, effect); },
-		onSourceModifyDamage(damage, source, target, move) {
-			this.dex.abilities.get('soulfire').onSourceModifyDamage?.call(this, damage, source, target, move);
-			return this.dex.abilities.get('shadowtag').onSourceModifyDamage?.call(this, damage, source, target, move);
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail') return false;
-		},
-		onFoeTrapPokemon(pokemon) {
-			if (pokemon.isAdjacent(this.effectState.target)) {
-				pokemon.tryTrap(true);
-			}
-		},
-		onFoeMaybeTrapPokemon(pokemon, source) {
-			if (!source) source = this.effectState.target;
-			if (!source || !pokemon.isAdjacent(source)) return;
-			pokemon.maybeTrapped = true;
-		},
-		onResidual(pokemon) {
-			if (this.field.isTerrain(['hauntedterrain', 'burningterrain', 'volcanicterrain', 'bewitchedwoodsterrain'])) this.boost({ atk: 1, spa: 1 }, pokemon, pokemon);
-		},
-		onFoeEffectiveness(typeMod, target, type, move) {
-			if (move && move.effectType === 'Move' && move.category !== 'Status' && move.type === 'Fire' && typeMod < 0) {
-				return 0;
-			}
-		},
-		onModifyMove(move) {
-			if (move.type === 'Fire') {
-				move.ignoreAbility = true;
-				move.ignoreImmunity = true;
-			}
-			if (move.type === 'Ghost' || move.types?.includes('Ghost')) {
-				move.onEffectiveness = function (typeMod, target, type) {
-					if (type === 'Normal') return typeMod;
-					return 0;
-				};
-			}
-		},
-		onTryHit(target, source, move) {
-			if (source?.species.id === 'chandeluremega' && source.hasAbility('soulcremation') &&
-				move.category !== 'Status' && this.movehasType(move, ['Fire', 'Ghost'])) return;
-			if (target !== source && (this.movehasType(move, 'Fire') || this.movehasType(move, 'Ghost') || move.id === 'willowisp')) {
-				if (!this.boost({ atk: 1, spa: 1 })) {
-					this.add('-immune', target, '[from] ability: Soul Tag');
-				}
-				return null;
-			}
-		},
-		onAnyRedirectTarget(target, source, source2, move) {
-			if (!this.movehasType(move, 'Fire') && !this.movehasType(move, 'Ghost')) return;
-			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
-			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
-				if (move.smartTarget) move.smartTarget = false;
-				if (this.effectState.target !== target) {
-					this.add('-activate', this.effectState.target, 'ability: Soul Tag');
-				}
-				return this.effectState.target;
-			}
-		},
-		flags: { breakable: 1 },
-		name: "Soul Tag",
-		rating: 5,
-		num: 10029,
-	},
+
 	soulheart: {
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
@@ -17844,22 +17714,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		flags: {}, name: "Pulse Bulwark", rating: 4.5, num: 11231,
 	},
-	soaringspirit: {
-		onStart(pokemon) { return this.dex.abilities.get('windpower').onStart?.call(this, pokemon); },
-		onTryHit(target, source, move) { return this.dex.abilities.getHandler('windpower', 'onTryHit')?.call(this, target, source, move); },
-		onSideConditionStart(side, source, sideCondition) {
-			return this.dex.abilities.get('windpower').onSideConditionStart?.call(this, side, source, sideCondition);
-		},
-		onImmunity(type, pokemon) { return this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon); },
-		onResidual(pokemon) {
-			this.dex.abilities.get('windpower').onResidual?.call(this, pokemon);
-			this.dex.abilities.get('selfsufficient').onResidual?.call(this, pokemon);
-		},
-		flags: {},
-		name: "Soaring Spirit",
-		rating: 4,
-		num: 10159,
-	},
 	vendetta: {
 		onStart(pokemon) { return this.dex.abilities.get('angerpoint').onStart?.call(this, pokemon); },
 		onHit(target, source, move) { return this.dex.abilities.getHandler('angerpoint', 'onHit')?.call(this, target, source, move); },
@@ -19833,31 +19687,6 @@ Abilities.gildedgrace = {
 	num: 11215,
 };
 
-Abilities.backwash = {
-	onAnyAfterDamageApplied(damage, target, source, effect) {
-		const holder = this.effectState.target;
-		if (source !== holder || !source.hp || !source.isActive || source.isAlly(target) || damage <= 0 || effect.effectType !== 'Move') return;
-		const move = effect as ActiveMove;
-		if (move.category === 'Status' || !this.movehasType(move, 'Water') || move.flags['futuremove']) return;
-		this.effectState.backwashMove = move;
-	},
-	onAfterMove(pokemon, target, move) {
-		const pending = this.effectState.backwashMove;
-		delete this.effectState.backwashMove;
-		if (pending !== move || !pokemon.hp || !pokemon.isActive || pokemon.m.backwashTurn === this.turn) return;
-		pokemon.m.backwashTurn = this.turn;
-		for (const stat of ['atk', 'spa'] as const) {
-			if (pokemon.boosts[stat] >= 0) continue;
-			pokemon.setBoost({[stat]: 0});
-			this.add('-setboost', pokemon, stat, 0, '[from] ability: Backwash');
-		}
-	},
-	flags: {},
-	name: "Backwash",
-	rating: 3.5,
-	num: 11216,
-};
-
 Abilities.spentforce = {
 	onAfterMove(pokemon, target, move) {
 		if (move.category === 'Status' || !pokemon.hp || !pokemon.isActive || (move.flags['charge'] && pokemon.volatiles[move.id])) return;
@@ -21704,6 +21533,18 @@ Abilities.fireward = {
 
 composeSelectedAbility(Abilities, 'apexpredator', ['windrider', 'toughclaws'], true);
 
+import {installMegaHydreigon} from './mega-hydreigon';
+installMegaHydreigon(Abilities);
+
+import {installPrimevalFossils} from './primeval-fossils';
+installPrimevalFossils(Abilities);
+import {installWraithProcession} from './wraith-procession';
+installWraithProcession(Abilities);
+// Free Flight is the regular Salamence passive: full local Wind Power and Moxie.
+composeSelectedAbility(Abilities, 'freeflight', ['windpower', 'moxie'], true);
+import {installAwakeningDragons} from './awakening-dragons';
+installAwakeningDragons(Abilities);
+
 import {installCarryOn} from './carry-on';
 installCarryOn(Abilities);
 
@@ -21729,3 +21570,17 @@ for (const ability of Object.values(Abilities)) {
 		Object.assign(ability, { desc: ability.desc + " When an offensive ability power or damage multiplier applies, the first hit retains its full ability boosts and the second uses 15% of original move power without those offensive ability multipliers. Stat multipliers, items, STAB, weather and field modifiers remain separate. Siege Launcher uses full-power pairs in Free-for-All." });
  }
 }
+
+// Keep player summaries consistent without changing any battle callbacks.
+import {ReadableAbilitySummaries} from './ability-readability';
+for (const [id, shortDesc] of Object.entries(ReadableAbilitySummaries)) {
+	if (Abilities[id as ID]?.shortDesc) Abilities[id as ID].shortDesc = shortDesc;
+}
+
+// Politoed-Rejuv's stronger support passive uses the full local component rules.
+Abilities.royalremedy = {
+ name: 'Royal Remedy', num: 11987, rating: 3, flags: {},
+ shortDesc: 'Natural Cure + Healer.',
+ desc: 'Switching out cures its status and heals 1/8 max HP only if a status was cured. At turn end, each adjacent ally has a 30% chance to have its status cured. Bewitched Woods also cures the holder at turn end without the switch-out heal. Includes full local Natural Cure and Healer; overlapping copies do not stack.',
+};
+composeSelectedAbility(Abilities, 'royalremedy', ['naturalcure', 'healer'], true);

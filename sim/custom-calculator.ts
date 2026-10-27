@@ -104,7 +104,7 @@ function actor(input: unknown, move: string): CalcActor {
 	for (const key of ['threadShelterGuard', 'buriedTrioSpent', 'silentFlightSpent', 'elasticBellySpent', 'feedbackMarked', 'protect', 'decoyPincersSpent']) {
 		if (data[key] !== undefined && typeof data[key] !== 'boolean') throw new Error(`${key} must be a boolean.`);
 	}
-	if (!species.exists) throw new Error('Unknown species or form.');
+	if (!species.exists || DisabledSpecies.has(species.id)) throw new Error('Unknown species or form.');
 	const ability = Dex.abilities.get(name(data.ability) || species.abilities['0']);
 	if (!ability.exists) throw new Error('Unknown ability.');
 	const itemName = name(data.item);

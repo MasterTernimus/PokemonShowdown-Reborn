@@ -21,7 +21,7 @@ function setup() {
 			const p = b.p1.active[0];
 			assert.equal(p.species.id, 'poliwrathrejuv');
 			assert.equal(p.ability, 'aevianascendance');
-			assert.deepEqual(p.getPassives(), []);
+			assert.deepEqual(p.getPassives(), ['innerfocus']);
 		} finally {
 			b.destroy();
 		}
@@ -38,7 +38,7 @@ function setup() {
 			b.destroy();
 		}
 	});
-	it('retains full Mind Eye Ghost bypass, hit healing and extra STAB', () => {
+	it('retains Mind Eye Ghost bypass and extra STAB without restoring removed hit healing', () => {
 		const b = setup();
 		try {
 			const p = b.p1.active[0], q = b.p2.active[0];
@@ -47,13 +47,13 @@ function setup() {
 			const hp = p.hp, targethp = q.hp;
 			b.actions.useMove('tackle', p, q);
 			assert(q.hp < targethp);
-			assert.equal(p.hp - hp, Math.floor(p.baseMaxhp / 16));
+			assert.equal(p.hp, hp);
 			assert.equal(b.runEvent('ModifySTAB', p, q, Dex.getActiveMove('moonblast'), 1), 1.5);
 		} finally {
 			b.destroy();
 		}
 	});
-	it('retains Water Absorb once plus independent Self Sufficient recovery', () => {
+	it('retains one Water Absorb heal without restoring removed Self Sufficient recovery', () => {
 		const b = setup();
 		try {
 			const p = b.p1.active[0], q = b.p2.active[0];
@@ -61,10 +61,34 @@ function setup() {
 			let hp = p.hp;
 			b.actions.useMove('watergun', q, p);
 			assert.equal(p.hp - hp, Math.floor(p.baseMaxhp / 4));
+			hp = p.hp;
+			b.makeChoices('move 2', 'move 2');
+			assert.equal(p.hp, hp, 'No passive turn healing outside an eligible Water Absorb field');
 			b.field.setTerrain('underwaterterrain', p);
 			hp = p.hp;
 			b.makeChoices('move 2', 'move 2');
-			assert.equal(p.hp - hp, 2 * Math.floor(p.baseMaxhp / 16));
+			assert.equal(p.hp - hp, Math.floor(p.baseMaxhp / 16));
+			assert(!p.hasAbilityOrPassive('selfsufficient'));
+		} finally {
+			b.destroy();
+		}
+	});
+	for (const [field, airborne, expectedHeals] of [
+		['watersurfaceterrain', false, 1],
+		['watersurfaceterrain', true, 0],
+		['underwaterterrain', true, 1],
+	]) it(`Water Absorb heals ${expectedHeals} time per turn on ${field}, airborne=${airborne}`, () => {
+		const b = setup();
+		try {
+			const p = b.p1.active[0];
+			p.hp = 1;
+			if (airborne) p.setItem('Air Balloon');
+			b.field.setTerrain(field, p);
+			for (let turn = 0; turn < 2; turn++) {
+				const hp = p.hp;
+				b.makeChoices('move 2', 'move 2');
+				assert.equal(p.hp - hp, expectedHeals * Math.floor(p.baseMaxhp / 16));
+			}
 		} finally {
 			b.destroy();
 		}

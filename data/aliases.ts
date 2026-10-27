@@ -1,4 +1,6 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
+	tauroscombat: 'Tauros-Paldea-Combat',
+	passimiam: 'Passimian',
  warpath: 'Grand Strategy',
 	serratedpincers: "Razor Reach",
 	debilitatingvenom: "Withering Touch",

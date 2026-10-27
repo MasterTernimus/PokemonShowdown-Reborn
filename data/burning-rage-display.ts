@@ -8,5 +8,5 @@ export const BurningRageDescription = {
 export const BurningRagePassiveDescription = {
 	passive: 'proficient',
 	shortDesc: 'Brute Force (Reckless + Rock Head), Iron Fist and Mold Breaker.',
-	desc: components + effects + ' Proficient is supplied separately by the species passive.',
+	desc: components + effects + "",
 };

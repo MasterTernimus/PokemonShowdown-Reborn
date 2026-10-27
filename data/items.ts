@@ -1,12 +1,10 @@
 /* eslint-disable @stylistic/max-len */
 
-import { ENABLE_MEGA_HYDREIGON_X } from './disabled-custom-content';
-
 export const Items: import('../sim/dex-items').ItemDataTable = {
 	hydreigonite: {
 		name: "Hydreigonite",
 		spritenum: 0,
-		megaStone: { Hydreigon: "Hydreigon-Mega-X" },
+		megaStone: { Hydreigon: "Hydreigon-Mega" },
 		itemUser: ["Hydreigon"],
 		onTakeItem(item, source) { return !item.megaStone?.[source.baseSpecies.baseSpecies]; },
 		num: 2714,
@@ -3907,7 +3905,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 2641,
 		gen: 9,
-		isNonstandard: "Future",
+		isNonstandard: "Custom",
 	},
 	luckypunch: {
 		name: "Lucky Punch",
@@ -8796,7 +8794,6 @@ const redundantItemIds = [
 
 for (const itemId of redundantItemIds) delete Items[itemId];
 
-if (!ENABLE_MEGA_HYDREIGON_X) delete Items.hydreigonite;
 
 
 Items.emboarite.megaStone!['Emboar-Ego'] = 'Emboar-Mega-Ego';

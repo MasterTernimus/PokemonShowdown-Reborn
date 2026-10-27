@@ -1,1 +1,61 @@
-'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex,TeamValidator}=require('../../../dist/sim');describe('Disabled ordinary Mightyena-Mega',()=>{let b;afterEach(()=>b?.destroy());it('retains data but validation rejects direct/alias inputs and stone route',()=>{const validator=new TeamValidator('gen9nofieldsinglesgame');for(const species of ['Mightyena-Mega','mightyenamega']){assert(Dex.species.get(species).exists);const errors=validator.validateSet({species,ability:'No Ability',moves:['tackle']},{});assert(errors.some(s=>s.includes('disabled')));}const item=Dex.items.all().find(i=>i.megaStone?.Mightyena==='Mightyena-Mega');assert(item);assert(validator.validateSet({species:'Mightyena',ability:'Intimidate',item:item.name,moves:['tackle']},{}).some(s=>s.includes('disabled')));assert(!(validator.validateSet({species:'Mightyena-Grim',ability:Dex.species.get('Mightyena-Grim').abilities[0],item:'Grimyinite',moves:['tackle']},{})||[]).some(s=>s.includes('disabled')));});it('prevents direct unchecked battles and form changes, preserves Grim route',()=>{assert.throws(()=>common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Mightyena-Mega',ability:'No Ability',moves:['tackle']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]),/disabled/);b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Mightyena',ability:'Intimidate',item:'Grimyinite',moves:['tackle']}],[{species:'Mew',ability:'No Ability',moves:['splash']}]]);b.makeChoices('team 1','team 1');const p=b.p1.active[0];assert(!p.formeChange('Mightyena-Mega'));p.canMegaEvo='Mightyena-Mega';assert.equal(b.actions.runMegaEvo(p),false);assert(p.formeChange('Mightyena-Mega-Grim'));});});
+'use strict';
+const assert = require('assert').strict;
+const common = require('../../common');
+const {Dex, TeamValidator} = require('../../../dist/sim');
+const hidden = ['Mightyena-Mega', 'Mightyena-Grim', 'Mightyena-Mega-Grim'];
+
+describe('Hidden Mightyena forms', () => {
+ let battle;
+ afterEach(() => { battle?.destroy(); battle = null; });
+ const set = species => ({species, ability: Dex.species.get(species).abilities[0], moves: ['tackle']});
+ it('retains historical data while rejecting named and ID imports', () => {
+  const validator = new TeamValidator('gen9nofieldsinglesgame');
+  for (const name of hidden) {
+   const species = Dex.species.get(name);
+   assert(species.exists);
+   for (const input of [name, species.id]) {
+    assert(validator.validateSet(set(input), {}).some(error => error.includes('disabled')), input);
+   }
+  }
+  for (const name of ['Mightyena', 'Mightyena-Deso']) {
+   assert(!(validator.validateSet(set(name), {}) || []).some(error => error.includes('disabled')), name);
+  }
+ });
+ it('rejects every item route to a hidden Mega', () => {
+  const validator = new TeamValidator('gen9nofieldsinglesgame');
+  const routes = Dex.items.all().flatMap(item => Object.entries(item.megaStone || {})
+   .filter(([, target]) => hidden.includes(target)).map(([species]) => ({species, item: item.name})));
+  assert(routes.length);
+  for (const {species, item} of routes) {
+   assert(validator.validateSet({...set(species), item}, {}).some(error => error.includes('disabled')), species + ': ' + item);
+  }
+ });
+ it('rejects unchecked battle creation and forced form or Mega changes', () => {
+  for (const name of hidden) {
+   assert.throws(() => common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[set(name)], [set('Mew')]]), /disabled/);
+  }
+  battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[set('Mightyena')], [set('Mew')]]);
+  battle.makeChoices('team 1', 'team 1');
+  const pokemon = battle.p1.active[0];
+  for (const name of hidden) {
+   assert(!pokemon.formeChange(name), name);
+   pokemon.canMegaEvo = name;
+   assert.equal(battle.actions.runMegaEvo(pokemon), false, name);
+  }
+ });
+ it('omits hidden forms from calculator and public rules, including family links', () => {
+  const calculator = require('../../../dist/sim/custom-calculator').calculatorMetadata();
+  const rules = require('../../../dist/server/rules-encyclopedia');
+  const catalog = rules.rulesCatalog();
+  for (const name of hidden) {
+   assert(!calculator.species.some(species => species.name === name));
+   assert(!catalog.species.some(species => species.name === name));
+   assert(!rules.rulesDetail('species', 'Mightyena').forms.includes(name));
+   assert.throws(() => rules.rulesDetail('species', name), /Unknown Pokémon/);
+  }
+  for (const name of ['Mightyena', 'Mightyena-Deso']) {
+   assert(calculator.species.some(species => species.name === name), name);
+   assert(catalog.species.some(species => species.name === name), name);
+  }
+ });
+});

@@ -278,15 +278,15 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"neurotoxin": {
 		"shortDesc": "Hydra Bond + Regenerator.",
-		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Heals 1/3 max HP on switching out. Shed Skin is supplied separately by the species passive.",
+		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Heals 1/3 max HP on switching out.",
 	},
 	"surgeconduit": {
 		"shortDesc": "Lightning Rod + Rock Head.",
-		"desc": "Redirects eligible Electric moves, including allied moves, and absorbs Electric hits for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. Rock Head prevents move recoil except Struggle. Electric Surge is supplied separately by the species passive.",
+		"desc": "Redirects eligible Electric moves, including allied moves, and absorbs Electric hits for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. Rock Head prevents move recoil except Struggle.",
 	},
 	"railguncircuit": {
 		"shortDesc": "Lightning Rod + Transistor.",
-		"desc": "Redirects eligible Electric moves, including allied moves, and absorbs Electric hits for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. Electric attacks use 1.3x Attack or Sp. Atk, or 2x on Electric Terrain and Factory. No Guard is supplied separately by the species passive.",
+		"desc": "Redirects eligible Electric moves, including allied moves, and absorbs Electric hits for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. Electric attacks use 1.3x Attack or Sp. Atk, or 2x on Electric Terrain and Factory.",
 	},
 	"lunarorbit": {
 		"shortDesc": "Magic Guard and five-turn Gravity entry.",
@@ -301,8 +301,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Has its opposing-ability copying. Automatically applies target-specific Miracle Eye before a direct damaging Psychic move. Direct single-target HP damage stores a 90 BP Psychic special attack; opposing special HP damage stores a 90 BP special attack of the incoming type. Distinct qualifying attacks each queue a separate attack due next turn, including against the same opponent. At most one stored attack releases per owner per turn; additional due attacks postpone to the next turn. Snapshots its own level, Special Attack, stages and typing, without copied offensive abilities or items. Queues survive switching/fainting and coexist with ordinary Future Sight; normal live defenses apply. If its recorded slot has no living target when due, the same attack retries there next turn and remains queued until it can resolve or the battle ends. Once per battle when Alakazam Mega Evolves, sets real Reflect and Light Screen for 5 turns without shortening longer screens.",
 	},
 	"slowclamp": {
-		"shortDesc": "Own Tempo + Analytic; Shell Armor is supplied by the species passive.",
-		"desc": "Full local Own Tempo prevents and cures confusion and blocks Intimidate's Attack drop, subject to normal suppression and ability bypass. Analytic has its 1.3x power when no other active Pokemon has a move left to use that turn. Shell Armor is supplied separately by Mega Slowbro's species passive, retaining critical-hit protection, 20% attack-damage reduction and its local field/stat-drop effects. Does not grant Sweet Veil or sleep/Yawn protection.",
+		"shortDesc": "Own Tempo + Analytic.",
+		"desc": "Full local Own Tempo prevents and cures confusion and blocks Intimidate's Attack drop, subject to normal suppression and ability bypass. Analytic has its 1.3x power when no other active Pokemon has a move left to use that turn.",
 	},
 	"parentalbond": {
 		"shortDesc": "Eligible attacks hit twice; the second hit deals 80% damage.",
@@ -321,7 +321,7 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Mega Ariados spins a persistent cocoon, renewed when another Pokemon faints. It blocks status moves and status conditions while intact, and absorbs one damaging move including all its hits and secondary effects. Has Swarm; Self Sufficient is supplied separately by the species passive.",
 	},
 	"ironvise": {
-		"desc": "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit. Intimidate is supplied separately by Mega Scizor's passive.",
+		"desc": "Contact moves have 1.3x power. Once per switch-in, the first opposing direct hit deals 25% less damage and lowers the attacker's Attack by 1 stage. Multi-hit moves spend this protection on the first hit.",
 		"shortDesc": "Tough Claws + Decoy Pincers.",
 	},
 	"sandsovereign": {
@@ -341,12 +341,12 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Absorbs Water moves for 1/4 max HP; incoming Fire moves have 1.25x power. Effective rain heals 1/8 HP per turn; sun costs 1/8. Field healing per turn: 1/16 on Underwater, Swamp, Misty or grounded Water Surface; 1/8 when grounded and Poison-type on Murkwater. Corrosive Mist heals Poison types by 1/8 but damages non-Steel others by 1/8. Desert costs 1/8 HP per turn. Water Veil and its burn immunity are removed.",
 	},
 	"corrosivetouch": {
-		"shortDesc": "Poison Touch and Grass STAB; Technician is passive.",
-		"desc": "Contact hits have a 30% chance to poison the target. Shield Dust and Covert Cloak block this effect. Grass attacks receive a 1.5x same-type attack bonus. Technician is supplied separately by the species passive.",
+		"shortDesc": "Poison Touch and Grass STAB.",
+		"desc": "Contact hits have a 30% chance to poison the target. Shield Dust and Covert Cloak block this effect. Grass attacks receive a 1.5x same-type attack bonus.",
 	},
 	"dreadmaw": {
 		"shortDesc": "Strong Jaw + Invigorate.",
-		"desc": "Biting moves have 1.5x power. Healing received by it and its allies is multiplied by 1.3. At turn end, it has a 50% chance to cure each adjacent ally's status condition. Huge Power is supplied separately by the species passive.",
+		"desc": "Biting moves have 1.5x power. Healing received by it and its allies is multiplied by 1.3. At turn end, it has a 50% chance to cure each adjacent ally's status condition.",
 	},
 	"ironmountain": {
 		"shortDesc": "Super-effective protection; one defensive boost/heal per turn.",
@@ -354,15 +354,15 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"enlightenment": {
 		"shortDesc": "Inner Focus + Technician.",
-		"desc": "Prevents flinching and Intimidate's Attack drop. Moves with effective power of 60 or less have 1.5x power; the threshold is 80 on Factory. Pure Power is supplied separately by the species passive, including its Psychic Terrain Sp. Atk behavior.",
+		"desc": "Prevents flinching and Intimidate's Attack drop. Moves with effective power of 60 or less have 1.5x power; the threshold is 80 on Factory.",
 	},
 	"stormfright": {
 		"shortDesc": "Storm Power + Lightning Rod.",
-		"desc": "Rain multiplies Sp. Atk by 1.5 and costs 1/8 max HP at turn end. Redirects eligible Electric moves, including allied moves, and absorbs them for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. Intimidate is supplied separately by the species passive.",
+		"desc": "Rain multiplies Sp. Atk by 1.5 and costs 1/8 max HP at turn end. Redirects eligible Electric moves, including allied moves, and absorbs them for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts.",
 	},
 	"heavenlychorus": {
 		"shortDesc": "Fluffy + Natural Cure.",
-		"desc": "Takes half contact damage and double Fire damage; contact Fire attacks deal normal damage. Switching out cures status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this heal. Pixilate is supplied separately by the species passive.",
+		"desc": "Takes half contact damage and double Fire damage; contact Fire attacks deal normal damage. Switching out cures status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this heal.",
 	},
 	"astralengine": {
 		"shortDesc": "Elevate + Power Spot.",
@@ -378,11 +378,11 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"freezerburn": {
 		"shortDesc": "Slush Rush + Levitate; Ice damage is 1.2x against burned targets.",
-		"desc": "Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Levitate makes it airborne and immune to Ground attacks and grounded hazards unless grounded. Its Ice-type attacks deal 1.2x damage against targets that are already burned, including Normal moves converted to Ice by its separate Refrigerate passive. Other move types and other target statuses receive no extra damage; this ability does not inflict burn. Refrigerate is supplied separately by the species passive.",
+		"desc": "Doubles Speed in hail, snow or on Icy, Snowy Mountain and Cold Eclipse. Levitate makes it airborne and immune to Ground attacks and grounded hazards unless grounded. Its Ice-type attacks deal 1.2x damage against targets that are already burned, including Normal moves converted to Ice by its separate Refrigerate passive. Other move types and other target statuses receive no extra damage; this ability does not inflict burn.",
 	},
 	"coldlogic": {
 		"shortDesc": "Forewarn + Aftermath; opposing accuracy-drop immunity; noncontact KO retaliation.",
-		"desc": "Forewarn reveals a strongest opposing move and removes foe Illusions on entry. Takes 20% less move damage, or 25% less from the revealed move until switching out; these reductions do not stack, and OHKO moves are excluded from learned-move protection. A successful reveal on Psychic Terrain grants +2 Sp. Atk. Opponents cannot lower its accuracy stages. An opposing move that knocks it out triggers Aftermath even without contact: the attacker loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this, and indirect-damage protection applies. Tough Claws is supplied separately by Mega Metagross's passive.",
+		"desc": "Forewarn reveals a strongest opposing move and removes foe Illusions on entry. Takes 20% less move damage, or 25% less from the revealed move until switching out; these reductions do not stack, and OHKO moves are excluded from learned-move protection. A successful reveal on Psychic Terrain grants +2 Sp. Atk. Opponents cannot lower its accuracy stages. An opposing move that knocks it out triggers Aftermath even without contact: the attacker loses 1/4 max HP, or 1/2 on Corrosive Mist. Damp prevents this, and indirect-damage protection applies.",
 	},
 	"nighthunt": {
 		"shortDesc": "Intimidate + Illuminate.",
@@ -390,11 +390,11 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"uncheckedassault": {
 		"shortDesc": "Vital Spirit + Opportunist + Limber.",
-		"desc": "Vital Spirit prevents and cures sleep, blocks Yawn, and gives Fighting attacks 1.3x Attack or Sp. Atk. Opportunist copies opposing positive stat changes after moves, entries, transformations and at turn end. Limber prevents and cures paralysis and has its Speed-drop protection. Existing confusion prevention and cure remain. Scrappy is supplied separately by the species passive.",
+		"desc": "Vital Spirit prevents and cures sleep, blocks Yawn, and gives Fighting attacks 1.3x Attack or Sp. Atk. Opportunist copies opposing positive stat changes after moves, entries, transformations and at turn end. Limber prevents and cures paralysis and has its Speed-drop protection. Existing confusion prevention and cure remain.",
 	},
 	"apexcleave": {
 		"shortDesc": "Dual Wield + Moxie.",
-		"desc": "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. Separate power boosts apply to both 60%-power hits. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. Gains +1 Attack per move KO. Sand Force is supplied separately by the species passive.",
+		"desc": "Eligible slicing, pulse, bullet, horn, drill, and Arrow moves hit twice at 60% power, with an independent accuracy check for each hit. Separate power boosts apply to both 60%-power hits. In Free-for-All, both hits still use 60% power: the first hits the selected foe and the second targets another random living foe when possible. Existing multi-hit moves are not given an additional Dual Wield pair. Gains +1 Attack per move KO.",
 	},
 	"queensguard": {
 		"shortDesc": "Contrary + Shed Skin + Intimidate.",
@@ -402,15 +402,15 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"streettyrant": {
 		"shortDesc": "Intimidate + Mold Breaker.",
-		"desc": "On entry, lowers adjacent foes' Attack by 1 with normal Substitute and Intimidate protections. Moves ignore bypassable opposing abilities. Shed Skin is supplied separately by the species passive, including its shared 1/4 max HP recovery.",
+		"desc": "On entry, lowers adjacent foes' Attack by 1 with normal Substitute and Intimidate protections. Moves ignore bypassable opposing abilities.",
 	},
 	"adaptivepower": {
 		"shortDesc": "Magic Guard + Huge Power.",
-		"desc": "Doubles Attack. Prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. Fairy Tale entry grants +1 Sp. Def. Regenerator is supplied separately by the species passive.",
+		"desc": "Doubles Attack. Prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. Fairy Tale entry grants +1 Sp. Def.",
 	},
 	"phantomfist": {
 		"shortDesc": "Unseen Fist + Aftermath + Self Sufficient.",
-		"desc": "Contact moves pierce protection at 1/4 damage (75% less); Max Guard blocks them. Unprotected damage is unchanged. Punching moves have 1.4x power. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist; Damp prevents this damage. No Guard is supplied separately by the species passive.",
+		"desc": "Contact moves pierce protection at 1/4 damage (75% less); Max Guard blocks them. Unprotected damage is unchanged. Punching moves have 1.4x power. Heals 1/16 max HP each turn and ignores sandstorm and hail damage. A contact attacker that knocks it out loses 1/4 max HP, or 1/2 on Corrosive Mist; Damp prevents this damage.",
 	},
 	"shadowcurrent": {
 		"shortDesc": "Protean, Technician and Anticipation.",
@@ -418,11 +418,11 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"royalsun": {
 		"shortDesc": "Drought + Supreme Overlord.",
-		"desc": "Summons sun for 5 turns, or 8 with Heat Rock. Each fainted ally adds 10% move power, capped at 5 after Free-for-All doubles the effective count, for at most 1.5x power. At 2 fallen allies, gains Infiltrator; at 4, flinch immunity; at 5, Magic Guard and a one-time +1 Attack and Sp. Atk. Flame Body is supplied separately by the species passive.",
+		"desc": "Summons sun for 5 turns, or 8 with Heat Rock. Each fainted ally adds 10% move power, capped at 5 after Free-for-All doubles the effective count, for at most 1.5x power. At 2 fallen allies, gains Infiltrator; at 4, flinch immunity; at 5, Magic Guard and a one-time +1 Attack and Sp. Atk.",
 	},
 	"toxicrenewal": {
 		"shortDesc": "Adaptability + Poison Touch.",
-		"desc": "Uses full local Adaptability for same-type moves, including its higher-STAB interaction. Contact hits have a 30% chance to poison; Shield Dust and Covert Cloak block this effect. Regenerator is supplied separately by the species passive.",
+		"desc": "Uses full local Adaptability for same-type moves, including its higher-STAB interaction. Contact hits have a 30% chance to poison; Shield Dust and Covert Cloak block this effect.",
 	},
 	"heavyartillery": {
 		"shortDesc": "Unaware and custom pulse/bullet artillery.",
@@ -438,11 +438,11 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 	},
 	"cursedarmament": {
 		"shortDesc": "Ghost/Steel attacks gain 20% power; stolen PP charges a 40% attack.",
-		"desc": "Own non-fixed, non-delayed Ghost and Steel attacks gain 20% power, retaining their physical or special category. Once per turn after a whole attack damages a surviving active foe, steal up to 2 PP from its queued move; a newly entered foe without a queued move instead loses up to 2 PP from one random damaging move. Stealing PP stores one charge. The next eligible attack consumes it on attempt, including a miss, protection or immunity, and gains 40% power instead of 20%. A successful charged attack steals up to 3 PP from the last attempted current move, or the queued move if none was used, plus 1 PP from every other current move. Newly entered foes always use one random damaging move as the charged primary, even with earlier move history. Charged attacks cannot recharge themselves. Both drains share one use per turn and affect one surviving foe; Substitute-only damage and KOs do not qualify. No healing or PP refund. Switching, fainting, suppression or losing the ability clears the charge. Frisk is supplied separately by the species passive. Curse has its ordinary local behavior and HP cost.",
+		"desc": "Own non-fixed, non-delayed Ghost and Steel attacks gain 20% power, retaining their physical or special category. Once per turn after a whole attack damages a surviving active foe, steal up to 2 PP from its queued move; a newly entered foe without a queued move instead loses up to 2 PP from one random damaging move. Stealing PP stores one charge. The next eligible attack consumes it on attempt, including a miss, protection or immunity, and gains 40% power instead of 20%. A successful charged attack steals up to 3 PP from the last attempted current move, or the queued move if none was used, plus 1 PP from every other current move. Newly entered foes always use one random damaging move as the charged primary, even with earlier move history. Charged attacks cannot recharge themselves. Both drains share one use per turn and affect one surviving foe; Substitute-only damage and KOs do not qualify. Switching, fainting, suppression or losing the ability clears the charge. Curse has its ordinary local behavior and HP cost.",
 	},
 	"solarhydra": {
 		"shortDesc": "Hydra Bond + Grassy Surge.",
-		"desc": "Full local Hydra Bond and Grassy Surge. Solar Bud is a separate species passive: after a sunny end turn, the next opposing Grass HP hit cures status and heals 1/8 max HP, once per entry.",
+		"desc": "Full local Hydra Bond and Grassy Surge.",
 	},
 };
 

@@ -18,16 +18,16 @@ export const FamilyReplacementComponents = {
 };
 export const FamilyReplacementDescriptions = {
  shellderartillery: {
-  shortDesc: 'Mega Launcher + Oblivious; Quick Draw is a separate passive.',
-  desc: "Full local Mega Launcher gives pulse and bullet moves 1.5x power. Full local Oblivious prevents infatuation, Captivate, Taunt and Intimidate Attack drops, and cures infatuation and Taunt. Quick Draw is supplied separately as a species passive.",
+  shortDesc: "Mega Launcher + Oblivious.",
+  desc: "Full local Mega Launcher gives pulse and bullet moves 1.5x power. Full local Oblivious prevents infatuation, Captivate, Taunt and Intimidate Attack drops, and cures infatuation and Taunt.",
  },
  teaceremony: {
-  shortDesc: 'Sticky Hold + Aroma Veil; Hospitality is a separate passive.',
-  desc: 'Full local Sticky Hold protects the held item from removal. Full local Aroma Veil protects the user and allies from infatuation, Disable, Encore, Heal Block, Taunt and Torment. Hospitality is supplied separately as a species passive.',
+  shortDesc: "Sticky Hold + Aroma Veil.",
+  desc: "Full local Sticky Hold protects the held item from removal. Full local Aroma Veil protects the user and allies from infatuation, Disable, Encore, Heal Block, Taunt and Torment.",
  },
  familyguardian: {
   shortDesc: 'Friend Guard + Healer; once/entry, rescues self or an adjacent ally crossing half HP with 1/4 healing.',
-  desc: "Full local Friend Guard reduces damage to other allies by 25%; full local Healer gives each adjacent statused ally a 30% chance to be cured each turn. Once per genuine entry, after the user or an adjacent ally survives an opposing whole damaging attack that takes it from above half HP to half HP or less, it heals 1/4 of its maximum HP after all hits. One shared budget is spent only when healing succeeds. Heal Block prevents healing; residual damage, friendly fire and Substitute-only damage do not qualify. Ability restarts do not refresh the budget. Parental Bond is a separate species passive and has its local 80% follow-up and exclusions.",
+  desc: "Full local Friend Guard reduces damage to other allies by 25%; full local Healer gives each adjacent statused ally a 30% chance to be cured each turn. Once per genuine entry, after the user or an adjacent ally survives an opposing whole damaging attack that takes it from above half HP to half HP or less, it heals 1/4 of its maximum HP after all hits. One shared budget is spent only when healing succeeds. Heal Block prevents healing; residual damage, friendly fire and Substitute-only damage do not qualify. Ability restarts do not refresh the budget.",
  },
 };
 

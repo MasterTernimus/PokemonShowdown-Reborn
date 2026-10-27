@@ -64,7 +64,7 @@ export function installBeautiflyCarrion(abilities: AbilityDataTable) {
 export const BeautiflyCarrionDescriptions = {
  pastelsanctuary: {
   shortDesc: 'Pastel Veil; actual entry heals itself and adjacent allies by 1/8 max HP.',
-  desc: 'Full local Pastel Veil, including poison prevention and cures for itself and allies, opposing Poison-move Attack and Sp. Atk drops, and all field effects. Once per actual entry, attempts to heal itself and each adjacent living ally by 1/8 of that target\'s current maximum HP. Normal healing prevention applies; full HP or a blocked heal still spends the entry activation. Other Pokemon entering, ability acquisition and restarting after suppression do not trigger this heal; an entry while suppressed does not postpone it. Global Pastel Veil is unchanged.',
+  desc: "Full local Pastel Veil, including poison prevention and cures for itself and allies, opposing Poison-move Attack and Sp. Atk drops, and all field effects. Once per actual entry, attempts to heal itself and each adjacent living ally by 1/8 of that target's current maximum HP. Normal healing prevention applies; full HP or a blocked heal still spends the entry activation. Other Pokemon entering, ability acquisition and restarting after suppression do not trigger this heal; an entry while suppressed does not postpone it.",
  },
  galebloom: {
   shortDesc: 'Shield Dust; first Flying foe HP hit each entry gives +1 Speed and boosts an ally\'s Sp. Atk.',
@@ -72,6 +72,6 @@ export const BeautiflyCarrionDescriptions = {
  },
  carrionwatch: {
   shortDesc: 'Frisk + Overcoat, including their full local entry and protection effects.',
-  desc: 'Full local Frisk + Overcoat. Entry reveals opposing active Illusions and held items, with each item holder independently having a 30% chance of five-turn Embargo. Overcoat prevents powder moves, Rage Powder redirection, Effect Spore, sandstorm damage and hail damage, with its normal ability suppression, bypass and native-passive overlap rules. Carrion Watch no longer includes Unnerve, its Berry and field-seed restrictions, or its Cold Eclipse entry Speed drops. Normal item rules, actual opposing Unnerve, and any Frisk-inflicted Embargo still apply.',
+  desc: "Full local Frisk + Overcoat. Entry reveals opposing active Illusions and held items, with each item holder independently having a 30% chance of five-turn Embargo. Overcoat prevents powder moves, Rage Powder redirection, Effect Spore, sandstorm damage and hail damage, with its normal ability suppression, bypass and native-passive overlap rules.",
  },
 };

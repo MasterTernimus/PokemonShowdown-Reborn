@@ -140,8 +140,8 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
  marshhide: {shortDesc: 'Water Absorb + Poison Point.', desc: "Absorbs other Pokemon Water moves to heal 1/4 max HP. Has Water Absorb field healing: 1/16 on Underwater, grounded Water Surface and grounded Poison-type Murkwater. Contact attackers have a 30% poison chance, or 60% on Wasteland."},
 	...RepeatableDescriptions,
  ...OrdinaryDescriptions,
- witheringshell: {shortDesc: 'Crumbling Shell + Rain Dish + Sticky Hold.', desc: 'Physical HP hits set opposing Stealth Rock except on water fields. Heals 1/16 max HP in effective rain. Sticky Hold prevents other Pokemon from removing its item under the normal local rules. Natural Recovery is the separate Corsola and Corsola-Reborn passive.'},
- relicinstinct: {shortDesc: 'Above half HP: ignores abilities. At half HP or less: defensive mode.', desc: "Above half HP, attacks ignore target abilities. At half HP or less, takes 25% less attack damage, cannot be critically hit, heals 1/16 maximum HP each turn, and halves Attack and Sp. Atk. Rattled remains a separate passive."},
+ witheringshell: {shortDesc: 'Crumbling Shell + Rain Dish + Sticky Hold.', desc: "Physical HP hits set opposing Stealth Rock except on water fields. Heals 1/16 max HP in effective rain. Sticky Hold prevents other Pokemon from removing its item under the normal local rules."},
+ relicinstinct: {shortDesc: 'Above half HP: ignores abilities. At half HP or less: defensive mode.', desc: "Above half HP, attacks ignore target abilities. At half HP or less, takes 25% less attack damage, cannot be critically hit, heals 1/16 maximum HP each turn, and halves Attack and Sp. Atk."},
 	primevalhunt: { shortDesc: 'Skill Link + Steadfast.', desc: "Multi-hit moves use their maximum hit count, gain 1.5x power and check accuracy once. Flinching raises Speed by one stage but still prevents acting. Electric Terrain entry raises Speed by one stage. Ashen Beach accuracy checks succeed unless the target has Unnerve; Rocky Terrain adds no flinch damage." },
  doublestrike: {shortDesc: 'Skill Link; moves at 60 effective BP or less gain 1.5x power.', desc: "Local Skill Link multihit and accuracy handling. Moves at 60 effective base power or less gain 1.5x power; the threshold is 80 on Factory Field."},
 	webassassin: {
@@ -186,7 +186,7 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	gooey: {
 		shortDesc: 'After an opposing damaging move hits, lowers its user\'s Speed by 2.',
-		desc: 'After an opposing damaging move hits, lowers the attacker\'s Speed by 2 stages, once per move. On Murkwater Surface the drop is 4 stages. Does not absorb Grass moves or cure status in rain.',
+		desc: "After an opposing damaging move hits, lowers the attacker's Speed by 2 stages, once per move. On Murkwater Surface the drop is 4 stages.",
 	},
 	triplethreat: {
 		shortDesc: 'Hydra Bond; Keen Eye, Inner Focus and Own Tempo.',
@@ -198,11 +198,11 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	stormbell: {
 		shortDesc: 'Drizzle and Levitate.',
-		desc: "Sets rain with full local Drizzle and grants Levitate's Ground immunity. Does not raise a stat after a KO. Mega Bronzong has its separate Mirror Armor passive and its field behavior.",
+		desc: "Sets rain with full local Drizzle and grants Levitate's Ground immunity.",
 	},
 	astralengine: {
-		shortDesc: 'Power Spot; Levitate is a separate species passive.',
-		desc: "Allies' moves have 1.3x power, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields. Mega Claydol has its separate Levitate passive.",
+		shortDesc: "Power Spot.",
+		desc: "Allies' moves have 1.3x power, or 1.5x on Haunted, Bewitched Woods, Holy and Psychic fields.",
 	},
 	scarecrow: {
 		shortDesc: 'Wind Rider and Steelworker.',
@@ -210,15 +210,15 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	kickfiend: {
 		shortDesc: 'Striker and Limber.',
-		desc: "Full local Striker and Limber, including field behavior. Does not grant Violent Rush's opening Attack or Speed multiplier.",
+		desc: "Full local Striker and Limber, including field behavior.",
 	},
 	cruelshell: {
 		shortDesc: 'Prevents critical hits; takes 20% less attack damage. Field effects vary.',
-		desc: "Full local Shell Armor: prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale or Dragon's Den entry and +2 Sp. Def when a foe lowers its stats. Does not trigger Anger Shell.",
+		desc: "Full local Shell Armor: prevents critical hits and takes 20% less attack damage. Gains +1 Defense on Fairy Tale or Dragon's Den entry and +2 Sp. Def when a foe lowers its stats.",
 	},
 	sweetresonance: {
 		shortDesc: 'Hydra Bond; lowers adjacent foes\' evasion on entry. Field effects vary.',
-		desc: "Full local Hydra Bond. On entry, lowers adjacent foes' evasion by 1 unless protected by Substitute. The entry effect has its Flower Garden and Misty field extensions. Does not protect held items, inflict retaliatory Embargo or automatically grant Dragon Cheer. Dipplin-Gmax has its separate Self-Sufficient passive.",
+		desc: "Full local Hydra Bond. On entry, lowers adjacent foes' evasion by 1 unless protected by Substitute. The entry effect has its Flower Garden and Misty field extensions.",
 	},
 	coldopen: {
 		shortDesc: 'First successful damaging move each entry ignores boosted defenses and screens.',

@@ -66,7 +66,11 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		},
 	});
 	add('shellcracker', 'Shellcracker', {
-		onModifyMove(move) { if (move.id === 'crabhammer') { move.accuracy = 100; move.willCrit = true; } },
+		onStart: base.moldbreaker.onStart,
+		onModifyMove(move, source, target) {
+			this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, source, target);
+			if (move.id === 'crabhammer') { move.accuracy = 100; move.willCrit = true; }
+		},
 	});
 	add('tidaldominion', 'Tidal Dominion', {
 		...base.swiftswim,

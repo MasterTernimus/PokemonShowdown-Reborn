@@ -15,11 +15,11 @@ function setup(ability, format = 'gen9nofielddoublesbattle') {
 }
 describe('Approved support ability buffs', () => {
 	afterEach(() => battle?.destroy());
-	it('Moon Veil reduces ally damage once, not holder or opposing damage; suppression disables it', () => {
+	it('Moon Veil no longer grants Friend Guard or reduces ordinary ally damage', () => {
 		const [holder, foe] = setup('Moon Veil'), ally = holder.allies()[0];
 		const move = battle.dex.getActiveMove('tackle');
-		assert(holder.hasAbility('friendguard'));
-		assert.equal(battle.runEvent('ModifyDamage', foe, ally, move, 100), 75);
+		assert(!holder.hasAbility('friendguard'));
+		assert.equal(battle.runEvent('ModifyDamage', foe, ally, move, 100), 100);
 		assert.equal(battle.runEvent('ModifyDamage', foe, holder, move, 100), 100);
 		assert.equal(battle.runEvent('ModifyDamage', holder, foe, move, 100), 100);
 		holder.addVolatile('gastroacid', foe);
@@ -29,14 +29,15 @@ describe('Approved support ability buffs', () => {
 		const [holder, foe] = setup('Moon Veil', 'gen9freeforall4pmistyfieldadrienn');
 		assert.equal(battle.runEvent('ModifyDamage', holder, foe, battle.dex.getActiveMove('tackle'), 100), 100);
 	});
-	it('Gem Eye prevents residual damage while retaining its one reflection per entry', () => {
+	it('Gem Eye prevents residual damage without reflecting status moves', () => {
 		const [holder, foe] = setup('Gem Eye');
 		assert(holder.hasAbility('magicguard'));
 		const hp = holder.hp;
 		battle.damage(50, holder, holder, battle.dex.conditions.get('brn'));
 		assert.equal(holder.hp, hp);
 		battle.actions.useMove('toxic', foe, {target: holder});
-		assert.equal(holder.status, ''); assert.equal(foe.status, 'tox');
+		assert.equal(holder.status, 'tox'); assert.equal(foe.status, '');
+		holder.cureStatus();
 		foe.cureStatus();
 		battle.actions.useMove('toxic', foe, {target: holder});
 		assert.equal(holder.status, 'tox');
@@ -44,12 +45,15 @@ describe('Approved support ability buffs', () => {
 		battle.damage(50, holder, holder, battle.dex.conditions.get('brn'));
 		assert.equal(holder.hp, hp - 50);
 	});
-	it('Last Laugh doubles power only against Tormented foes and respects suppression', () => {
+	it('Last Laugh boosts completed-action foes, not Torment alone, and respects suppression', () => {
 		const [holder, foe] = setup('Last Laugh'), ally = holder.allies()[0];
 		const move = battle.dex.getActiveMove('tackle');
 		assert.equal(battle.runEvent('BasePower', holder, foe, move, 100), 100);
 		foe.addVolatile('torment', holder);
-		assert.equal(battle.runEvent('BasePower', holder, foe, move, 100), 200);
+		assert.equal(battle.runEvent('BasePower', holder, foe, move, 100), 100);
+		foe.m.lastCompletedActionTurn = battle.turn;
+		foe.m.lastCompletedActionEntry = foe.previouslySwitchedIn;
+		assert.equal(battle.runEvent('BasePower', holder, foe, move, 100), 130);
 		ally.addVolatile('torment', foe);
 		assert.equal(battle.runEvent('BasePower', holder, ally, move, 100), 100);
 		holder.addVolatile('gastroacid', foe);

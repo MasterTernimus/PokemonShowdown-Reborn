@@ -3,82 +3,82 @@ export const GmaxPassiveDescriptions = {
 	"gigavolt": {
 		"passive": "static",
 		"shortDesc": "Mold Breaker and Lightning Rod.",
-		"desc": "Moves ignore bypassable opposing abilities. Redirects single-target Electric moves to itself and absorbs Electric moves for +1 Attack and Sp. Atk. Electric Terrain entry also grants both boosts. Static is supplied separately by the species passive.",
+		"desc": "Moves ignore bypassable opposing abilities. Redirects single-target Electric moves to itself and absorbs Electric moves for +1 Attack and Sp. Atk. Electric Terrain entry also grants both boosts.",
 	},
 	"fluffyevo": {
 		"passive": "overcoat",
 		"shortDesc": "Off-type moves gain STAB; damaging moves ignore type immunities.",
-		"desc": "Moves that do not match its type gain STAB. Its damaging moves ignore type immunities while respecting resistances. Overcoat is supplied separately by the species passive.",
+		"desc": "Moves that do not match its type gain STAB. Its damaging moves ignore type immunities while respecting resistances.",
 	},
 	"irondominion": {
 		"passive": "swornduty",
 		"shortDesc": "Pressure, stat-drop reflection and field bonuses.",
-		"desc": "On entry, lowers adjacent foes' Defense and Sp. Def by 1, or 2 on Cold Eclipse. Pressure increases opposing PP use. Reflects opposing stat drops. Fairy Tale entry grants +1 Defense and Sp. Def; Mirror Arena grants +1 evasion. Has Starlight Arena priority protection. Sworn Duty is supplied separately by the species passive.",
+		"desc": "On entry, lowers adjacent foes' Defense and Sp. Def by 1, or 2 on Cold Eclipse. Pressure increases opposing PP use. Reflects opposing stat drops. Fairy Tale entry grants +1 Defense and Sp. Def; Mirror Arena grants +1 evasion. Has Starlight Arena priority protection.",
 	},
 	"astralwatcher": {
 		"passive": "frisk",
 		"shortDesc": "Status moves gain +1 priority.",
-		"desc": "Status moves gain +1 priority. Frisk is supplied separately by the species passive.",
+		"desc": "Status moves gain +1 priority.",
 	},
 	"warship": {
 		"passive": "strongjaw",
 		"shortDesc": "Swift Swim and Solid Rock.",
-		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Takes 20% less attack damage, or 40% less from super-effective attacks. Strong Jaw is supplied separately by the species passive.",
+		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Takes 20% less attack damage, or 40% less from super-effective attacks.",
 	},
 	"furnaceengine": {
 		"passive": "flamebody",
 		"shortDesc": "Steam Engine, healing, damage reduction and Fire/Rock HP-hit chip.",
-		"desc": "Fire or Water HP hits give +6 Speed. Entry on Burning, Superheated or Volcanic gives +6 Speed; Dragon's Den and Volcanic give +1 Defense and Sp. Def; Cold Eclipse entry uses only passive Flame Body's +1 Defense and Sp. Def. Midnight Zone entry makes it Water-type. Water Surface, Underwater and Volcanic give +1 Speed each turn. Heals 1/16 max HP each turn. Takes 20% less attack damage, or 40% less from super-effective attacks. If it dealt Fire- or Rock-type move damage to opposing HP that turn, at the end of the turn opposing Pokemon take Fire-type damage equal to 1/16 max HP, blocked by Fire immunities. Only in Free-for-All does Fire type effectiveness scale this chip. Flame Body is supplied separately by the species passive.",
+		"desc": "Fire or Water HP hits give +6 Speed. Entry on Burning, Superheated or Volcanic gives +6 Speed; Dragon's Den and Volcanic give +1 Defense and Sp. Def; Cold Eclipse entry uses only passive Flame Body's +1 Defense and Sp. Def. Midnight Zone entry makes it Water-type. Water Surface, Underwater and Volcanic give +1 Speed each turn. Heals 1/16 max HP each turn. Takes 20% less attack damage, or 40% less from super-effective attacks. If it dealt Fire- or Rock-type move damage to opposing HP that turn, at the end of the turn opposing Pokemon take Fire-type damage equal to 1/16 max HP, blocked by Fire immunities. Only in Free-for-All does Fire type effectiveness scale this chip.",
 	},
 	"sweetdecay": {
 		"passive": "gluttony",
 		"shortDesc": "Hustle, Sweet Veil and Corrosion.",
-		"desc": "Attack is 1.5x, but physical moves have 0.8x accuracy. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure sleep. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5. Gluttony is supplied separately by the species passive.",
+		"desc": "Attack is 1.5x, but physical moves have 0.8x accuracy. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure sleep. Can poison Poison and Steel types; Poison moves bypass Steel immunity. Newly poisoned foes lose 1 Defense and Sp. Def. On Wasteland, move secondary effects become separate 2.5% frostbite, burn, paralysis and poison chances. On Corrosive and Corrosive Mist, incoming damage is multiplied by 1.5.",
 	},
 	"bakedbliss": {
 		"passive": "gluttony",
 		"shortDesc": "Well-Baked Body, Thick Fat and Sweet Veil.",
-		"desc": "Absorbs Fire moves for +2 Defense. Gains +1 Defense each turn on Burning, Superheated, Dragon's Den and Volcanic. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure sleep. Gluttony is supplied separately by the species passive.",
+		"desc": "Absorbs Fire moves for +2 Defense. Gains +1 Defense each turn on Burning, Superheated, Dragon's Den and Volcanic. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. Prevents sleep and Yawn for itself and allies, including Rest. Does not cure sleep.",
 	},
 	"duneterror": {
 		"passive": "shedskin",
 		"shortDesc": "Summons sand, Ground chip in sand, Desert Field on fainting.",
-		"desc": "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. When it is hit by an attack, the effect of Sandstorm begins. Summons sand on entry and when hit; during Sandstorm, opposing Pokemon take Ground-type damage equal to 1/16 max HP, blocked by Ground immunities. On fainting, creates Desert Field for 5 turns. Shed Skin is supplied separately by the species passive.",
+		"desc": "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. When it is hit by an attack, the effect of Sandstorm begins. Summons sand on entry and when hit; during Sandstorm, opposing Pokemon take Ground-type damage equal to 1/16 max HP, blocked by Ground immunities. On fainting, creates Desert Field for 5 turns.",
 	},
 	"riotamp": {
 		"passive": "voltabsorb",
 		"shortDesc": "Converts Normal moves to Electric; amplifies sound moves.",
-		"desc": "Eligible Normal moves become Electric with 1.2x power. Its side's sound moves have 1.5x power and cannot damage allies; its sound moves use its higher attacking stat. Volt Absorb is supplied separately by the species passive.",
+		"desc": "Eligible Normal moves become Electric with 1.2x power. Its side's sound moves have 1.5x power and cannot damage allies; its sound moves use its higher attacking stat.",
 	},
 	"heatcoil": {
 		"passive": "flamebody",
 		"shortDesc": "Speed Boost; freeze cure and Water/Ice damage reduction.",
-		"desc": "Gains +1 Speed at the end of each full turn it spends active. Cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Flame Body is supplied separately by the species passive.",
+		"desc": "Gains +1 Speed at the end of each full turn it spends active. Cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat.",
 	},
 	"wickedsnare": {
   "passive": "prankster",
   "shortDesc": "Intimidate; damaging Dark moves lower each damaged foe's Defense after all hits.",
-  "desc": "Full Intimidate lowers adjacent foes' Attack by one stage on entry, respecting its normal protections. After a damaging Dark move finishes all hits, each opponent that took positive HP damage loses one Defense stage, once per target per move. Substitute-only damage, misses, protection and immunity do not trigger this effect. Native effects remain independent: Crunch can also cause its own Defense drop. Prankster remains the species passive."
+  "desc": "Full Intimidate lowers adjacent foes' Attack by one stage on entry, respecting its normal protections. After a damaging Dark move finishes all hits, each opponent that took positive HP damage loses one Defense stage, once per target per move. Substitute-only damage, misses, protection and immunity do not trigger this effect. Native effects remain independent: Crunch can also cause its own Defense drop."
 },
 	"sweetsanctuary": {
   "passive": "friendguard",
   "shortDesc": "Ripen; successful Decorate heals its boosted target by 1/4 max HP.",
-  "desc": "Full local Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current maximum HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing. Friend Guard remains the species passive; G-Max Finale has its separate 1/6 active-side healing."
+  "desc": "Full local Ripen doubles HP restored and stat boosts from Berries, and doubles resistance Berries' damage reduction. When Decorate actually raises at least one stat, heals that target by 1/4 of its current maximum HP once after the move. Failed or blocked Decorate, or no actual positive boost, grants no healing. Normal healing restrictions apply. Ripen does not multiply this healing."
 },
 	"treasuretitan": {
 		"passive": "heavymetal",
 		"shortDesc": "Intimidate, super-effective reduction, Ground absorption and weight-move floor.",
-		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Takes 25% less super-effective attack damage. Absorbs Ground moves from other Pokemon and heals 1/4 max HP. Copperajah-Gmax's weight-based moves have at least 120 power. Heavy Metal is supplied separately by the species passive.",
+		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Takes 25% less super-effective attack damage. Absorbs Ground moves from other Pokemon and heals 1/4 max HP. Copperajah-Gmax's weight-based moves have at least 120 power.",
 	},
 	"alloycore": {
 		"passive": "stalwart",
 		"shortDesc": "Magic Guard and Self-Sufficient.",
-		"desc": "Prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Stalwart is supplied separately by the species passive.",
+		"desc": "Prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage.",
 	},
 	"phantombarrage": {
 		"passive": "levitate",
 		"shortDesc": "Hydra Bond, Clear Body and Infiltrator; adaptive Dragon Darts/Spirit Volley.",
-		"desc": "Other Pokemon cannot lower its stat stages. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Dragon Darts and G-Max Spirit Volley use its higher offensive stat and gain 20% power from Hydra Bond instead of extra hits. Dragon Darts keeps its two-hit pattern; Spirit Volley keeps its full-power hit and weaker follow-up against another foe. In Free-for-All battles, Dragon Darts hits all opposing Pokemon twice. Levitate is supplied separately by the species passive.",
+		"desc": "Other Pokemon cannot lower its stat stages. Moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist. Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Dragon Darts and G-Max Spirit Volley use its higher offensive stat and gain 20% power from Hydra Bond instead of extra hits. Dragon Darts keeps its two-hit pattern; Spirit Volley keeps its full-power hit and weaker follow-up against another foe. In Free-for-All battles, Dragon Darts hits all opposing Pokemon twice.",
 	},
 	"sweetresonance": {
 		"passive": "selfsufficient",

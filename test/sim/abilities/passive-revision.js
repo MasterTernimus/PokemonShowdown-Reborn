@@ -1,9 +1,9 @@
 'use strict';
 const assert = require('assert').strict, common = require('../../common'), { Dex } = require('../../../dist/sim');
 let battle;
-function setup(s = 'Beedrill-Mega', a = 'Spiral Evolution') {
+function setup(s = 'Beedrill-Mega', a = 'Spiral Evolution', foeAbility = 'No Ability') {
 	const mon = (s = 'Chansey', a = 'No Ability') => ({ species: s, ability: a, moves: ['tackle', 'swordsdance', 'protect', 'quickattack'] });
-	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[mon(s, a), mon()], [mon(), mon()]]);
+	battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[mon(s, a), mon()], [mon('Chansey', foeAbility), mon()]]);
 	battle.makeChoices('team 12', 'team 12');
 	battle.field.terrain = '';
 	for (const side of battle.sides)
@@ -31,11 +31,11 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		for (const [id, p] of Object.entries(rev.overrides))
 			assert.deepEqual(Dex.species.get(id).passives, p, id);
 	});
-	it('Spiral loses Shield Dust and retains normal Lunge with neither Infiltrator nor Power Drill', () => {
+	it('Spiral loses Shield Dust and retains normal Lunge without Infiltrator and with Power Drill', () => {
 		const [p, t] = setup();
 		assert(!p.hasAbility('infiltrator'));
 		assert(!p.hasAbility('shielddust'));
-		assert(!p.hasAbility('powerdrill'));
+		assert(p.hasAbility('powerdrill'));
 		assert(!Dex.moves.get('lunge').flags.drill);
 		const m = Dex.getActiveMove('lunge');
 		battle.runEvent('ModifyMove', p, t, m, m);
@@ -71,11 +71,11 @@ describe('Final starter/insect revision and settled passive choices', () => {
 	for (const [passive, ids] of Object.entries(require('./settled-passives-approved.json').groups))
 		for (const id of ids)
 			it(id + ' receives its current approved passive', () => assert.deepEqual(Dex.species.get(id).passives, require('./passive-approval-overlays').current(id,[passive])));
-	it('Free Flight allows airborne voluntary escape while preserving binding damage and grounding', () => {
+	it('Free Flight no longer bypasses binding traps, while binding damage and grounding remain', () => {
 		const [p, t] = setup('Salamence', 'No Ability');
 		p.addVolatile('partiallytrapped', t, Dex.moves.get('firespin'));
 		battle.runEvent('TrapPokemon', p);
-		assert(!p.trapped);
+		assert(p.trapped);
 		const hp = p.hp;
 		battle.fieldEvent('Residual');
 		assert(p.hp < hp);
@@ -85,12 +85,11 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		assert(p.trapped);
 		assert(p.isGrounded());
 	});
-	it('Free Flight handles opposing Shadow Tag and retains self trapping', () => {
-		const [p, t] = setup('Salamence', 'No Ability');
-		t.setAbility('Shadow Tag');
+	it('Free Flight no longer bypasses Shadow Tag and retains self trapping', () => {
+		const [p, t] = setup('Salamence', 'No Ability', 'Shadow Tag');
 		p.trapped = false;
 		battle.runEvent('TrapPokemon', p);
-		assert(!p.trapped);
+		assert(p.trapped);
 		p.addVolatile('noretreat', p);
 		battle.runEvent('TrapPokemon', p);
 		assert(p.trapped);

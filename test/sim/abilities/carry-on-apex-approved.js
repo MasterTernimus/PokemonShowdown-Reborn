@@ -15,7 +15,7 @@ function start(ability='Carry On'){
 describe('Carry On and Apex Predator approved packages',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
  it('uses only base Lucario assignments; Mega passives remain unchanged',()=>{
-  assert.deepEqual(Dex.species.get('lucario').abilities,{0:'Carry On'});
+  assert.deepEqual(Dex.species.get('lucario').abilities,{0:'Carry On',1:'Sworn Duty',H:'Armorize'});
   assert.deepEqual(Dex.species.get('lucario').passives,['mindseye']);
   assert.deepEqual(Dex.species.get('lucariomega').passives,['adaptability']);
  });

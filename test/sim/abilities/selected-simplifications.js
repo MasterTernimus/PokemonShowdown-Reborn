@@ -6,6 +6,7 @@ const { Dex } = require('../../../dist/sim');
 const historical = require('./selected-simplifications-approved.json');
 const approved = {...historical, exact: {...historical.exact}, removed: {...historical.removed}};
 // Later approvals replace Ange's selected/passive split and restore Stamina.
+approved.exact.siegelauncher = ['megalauncher', 'waterbarrage', 'overcoat'];
 approved.exact.ange = ['fairyaura'];
 approved.removed.ange = ['eternalflower', 'moldbreaker', 'magicguard'];
 approved.removed.ragingcurrent = approved.removed.ragingcurrent.filter(id => id !== 'stamina');
@@ -60,10 +61,10 @@ describe('Individually selected Mega simplifications', () => {
 		const [p, q] = setup('Venusaur-Mega', 'Toxic Bloom'); p.hp = 400; residual(p);
 		assert.equal(q.hp, 1500); assert.equal(p.hp, 500);
 	});
-	it('Siege Launcher delegates one Dual Wield pair at 0.9/0.9 with its separate Proficient passive', () => {
+	it('Siege Launcher delegates one Dual Wield pair with boosted first hit and unboosted 15% follow-up with its separate Proficient passive', () => {
 		const [p, q] = setup('Blastoise-Mega', 'Siege Launcher'), move = Dex.getActiveMove('darkpulse');
 		battle.runEvent('ModifyMove', p, q, move, move); assert.equal(move.multihit, 2); assert.equal(move.multihitType, 'dualwield');
-		for (const hit of [1, 2]) { move.hit = hit; assert.equal(battle.runEvent('BasePower', p, q, move, 100), 90); }
+		for (const hit of [1, 2]) { move.hit = hit; assert.equal(battle.runEvent('BasePower', p, q, move, 100), hit === 1 ? 150 : 15); }
 		assert.equal(move.tracksTarget, true);
 		p.hp = 400; residual(p); assert.equal(p.hp, 400); assert.equal(q.hp, 1500);
 	});
@@ -126,7 +127,7 @@ describe('Individually selected Mega simplifications', () => {
 	it('Heavenly Chorus permits weather and retains Natural Cure', () => {
 		const [p] = setup('Altaria-Mega', 'Heavenly Chorus'); battle.field.setWeather('raindance', p);
 		assert.equal(p.effectiveWeather(), 'raindance'); p.setStatus('psn'); p.hp = 400;
-		battle.runEvent('SwitchOut', p); assert.equal(p.status, ''); assert.equal(p.hp, 933);
+		battle.runEvent('SwitchOut', p); assert.equal(p.status, ''); assert.equal(p.hp, 600);
 	});
 	it('Royal Scales keeps Swift Swim and permits Taunt after losing nested Oblivious', () => {
 		const [p, q] = setup('Milotic-Mega', 'Royal Scales');

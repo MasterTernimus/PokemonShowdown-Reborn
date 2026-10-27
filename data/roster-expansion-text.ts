@@ -50,7 +50,7 @@ Object.assign(RosterExpansionDescriptions, {
 	suncharm: 'Drought. Its first landed Fire hit each entry extends the sunlight it summoned by 1 turn, capped at 8 remaining turns. Once per entry, burning a foe also curses it: 1/8 maximum HP lost per turn under this server\'s ability-Curse rules. No HP cost to Ninetales.',
 	pollenengine: 'Chlorophyll. Once per turn, successfully hitting a foe with a powder move or damaging Grass move heals itself and adjacent allies by 1/16 maximum HP, or 1/8 in sunlight.',
 	titanpincer: 'Hyper Cutter. Crabhammer and physical Steel-type moves use this Pokemon\'s Defense instead of Attack when its Defense is higher. Retains all Hyper Cutter effects.',
-	shellcracker: 'Crabhammer has 100% base accuracy and always critically hits, unless critical hits are prevented.',
+	shellcracker: 'Mold Breaker: its moves ignore other Pokemon\'s bypassable abilities. Crabhammer has 100% base accuracy and always critically hits, unless critical hits are prevented by an effect that is not bypassed. Ability Shield still protects those abilities. Suppression disables both effects.',
 	tidaldominion: 'Swift Swim. Opponents with a lowered Speed stage cannot hit this Pokemon or its allies with priority moves. Pairs with G-Max Foam Burst\'s existing Speed drops.',
 	tempestfury: 'Surviving an opposing direct attack charges its next damaging Water move to critically hit. A landed Water hit spends the non-stacking charge; misses and Protect do not. Includes full local Anger Point: the first damaging hit after activation raises Attack by 1, and a surviving critical hit maximizes Attack at the normal +6 cap.',
 	ironlash: 'Whiplash. Gains +1 accuracy on entry and tail moves have 1.5x power. Once per turn, damaging a foe with a tail move also raises its Sp. Def by 1 stage.',
@@ -115,13 +115,13 @@ Object.assign(RosterExpansionDescriptions, {
 Object.assign(RosterExpansionDescriptions, {
 	sirius: 'Apex Venom + Black Viper. Retains Apex Venom, Dragon-type Poison Fang, +1 accuracy on entry and 1.5x tail power. Its first tail hit against a foe each entry also badly poisons it, subject to status immunities.',
 	coldopen: 'Its first successful damaging move each entry ignores positive defensive stat stages and screens. All hits of that move benefit. Misses and Protect preserve the effect; it does not bypass Substitute.',
-	quarrycannon: "Full Mega Launcher: pulse and bullet moves gain 50% power. Damaging pulse and bullet moves become Physical, using Attack against Defense, except Z/Max moves. Accuracy, secondary effects, hit counts, and recharge rules are unchanged. Solid Rock remains a separate species passive.",
+	quarrycannon: "Full Mega Launcher: pulse and bullet moves gain 50% power. Damaging pulse and bullet moves become Physical, using Attack against Defense, except Z/Max moves. Accuracy, secondary effects, hit counts, and recharge rules are unchanged.",
 	tundramarch: 'Oblivious. Landing a Ground attack on a foe removes Spikes, Toxic Spikes and Sticky Web from its own side. Ground immunity, Protect and Substitute prevent this activation. Stealth Rock remains.',
 	undertow: 'Water Absorb, including its field effects. Damaging Water hits ground surviving foes as with Smack Down. Does not trap them or bypass protection, Substitute or Water immunity.',
 	deadwater: 'Foes receive half their normal passive end-of-turn healing. Absorbs the HP actually prevented, capped at 1/8 of its maximum HP per turn. Excludes healing moves, Wish, draining, Leech Seed and switching recovery. Multiple Deadwater holders do not stack.',
 	vitalcircuit: 'Electric attacks without an existing drain effect restore 25% of damage dealt to foes, capped at 1/8 maximum HP per turn, including Big Root. Respects Liquid Ooze and Heal Block. Does not add to or cap a move\'s existing drain effect.',
 	ringmaster: 'Tough Claws. Its first damaging Dark hit against a surviving foe each entry attempts to inflict Taunt for 2 turns. Normal Taunt immunities apply; no Fake Out requirement.',
-	unyielding: "Inner Focus prevents flinching and Intimidate Attack drops. Opponents cannot force this Pokemon to switch, regardless of its stat stages. Voluntary switching still works. Stamina is a separate species passive on Mudsdale.",
+	unyielding: "Inner Focus prevents flinching and Intimidate Attack drops. Opponents cannot force this Pokemon to switch, regardless of its stat stages. Voluntary switching still works.",
 	primalrhythm: 'Damaging sound moves become physical and use Attack. These moves spare allies. Retains normal sound interactions, including Soundproof and Throat Chop.',
 	setpiece: 'Successfully using Court Change or damaging a target with Feint primes its next Fire attack to gain +1 priority and never miss. One non-stacking charge; used when the attack is attempted, and cleared on switching. Protect and immunities still work.',
 	calculatedshot: 'Damaging Water moves gain +1 critical-hit stage and always use the highest normal damage roll. Does not increase fixed damage or bypass accuracy checks.',
@@ -129,7 +129,7 @@ Object.assign(RosterExpansionDescriptions, {
 	lunardread: 'Dishearten + Insomnia + Pressure. On entry, lowers adjacent foes Sp. Atk by 1 stage, blocked by Substitute and normal stat-drop protection. Prevents sleep and Yawn; Dark and Ghost attacks have 1.3x power. Retains local Pressure: lowers foes Defense and Sp. Def by 1 stage on entry (2 on Cold Eclipse), costs foes 1 extra PP (2 on Midnight Zone), and changes Underwater to Midnight Zone. No mark, damage-reduction or Ground critical-hit effects.',
 	falsebouquet: 'Its first damaging Flower Trick against a surviving foe each entry also attempts to plant Leech Seed. Grass-type immunity and Substitute still apply.',
 	funeralchoir: 'Damaging sound moves restore 1/32 maximum HP per currently fainted teammate, capped at 1/8 and once per turn. While a teammate is fainted, damaging Ghost moves also become sound moves, including sound interactions such as Soundproof and Substitute bypass.',
-	voidtyrant: 'Hydra Bond + Berserk. Once per battle, after Draco Meteor applies its Sp. Atk drops, restores all negative stat stages to zero after the entire attack finishes. Positive stages remain. No Self Sufficient healing or immunity.',
+	voidtyrant: "Hydra Bond + Berserk. Once per battle, after Draco Meteor applies its Sp. Atk drops, restores all negative stat stages to zero after the entire attack finishes. Positive stages remain.",
 	meridianseal: 'Its first Fighting hit against a surviving foe each entry attempts to suppress that foe\'s Ability for 2 turns, including the current turn. Protect, Substitute, Ability Shield and unsuppressible Abilities prevent suppression. Switching clears the seal.',
 	rimeplate: 'Takes 75% less damage from hits after the first hit of a multi-hit attack. The first hit and separate attacks deal normal damage. Does not change Glaive Rush\'s effects.',
 	darkdominion: 'Dark Aura. Damaging Dark hits inflict Heal Block on surviving foes for 2 turns, including the current turn. Respects protection and Substitute; does not shorten a longer existing Heal Block.',
@@ -137,6 +137,7 @@ Object.assign(RosterExpansionDescriptions, {
 
 /** Selector previews; the complete mechanics remain in RosterExpansionDescriptions. */
 export const RosterExpansionShortDescriptions: { [id: string]: string } = {
+	shellcracker: 'Mold Breaker; Crabhammer has 100% base accuracy and guaranteed critical hits.',
 	sushitrick: "On entry, heals adjacent allies by 1/4 max HP and cures confusion.",
 	suncharm: 'Drought; first Fire hit adds 1 sun turn (max 8); first burn also curses the foe.',
 	voidomen: 'Mold Breaker + Friend Guard + Serene Grace; first secondary effect shields an ally from a stat drop.',

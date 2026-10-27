@@ -22,10 +22,10 @@ export const GmaxExtractedComponents: Record<string, string[]> = {
 export const GmaxRedesignDescriptions: Record<string, { shortDesc: string, desc: string }> = {
 	crushingdepths: {
 		shortDesc: 'Physical Water HP hits lower Defense once per turn; Steel hits exploit lowered Defense.',
-		desc: 'Once per turn after a whole physical Water attack damages an opposing Pokemon\'s HP, lowers one surviving active target\'s Defense by 1. Normal stat-drop prevention and reflection apply. Physical Steel attacks deal 1.3x damage to targets whose Defense stage is already negative. Multi-hit and spread attacks do not repeat the Defense drop. Substitute-only damage, protection, misses and immunities do not qualify. Swift Swim is supplied separately by the species passive.',
+		desc: "Once per turn after a whole physical Water attack damages an opposing Pokemon's HP, lowers one surviving active target's Defense by 1. Normal stat-drop prevention and reflection apply. Physical Steel attacks deal 1.3x damage to targets whose Defense stage is already negative. Multi-hit and spread attacks do not repeat the Defense drop. Substitute-only damage, protection, misses and immunities do not qualify.",
 	},
 	afterlifegate: {
 		shortDesc: 'Special Ghost/Poison HP hits curse once per turn; own KOs heal; Shadow Shield.',
-		desc: "Once per turn after a whole special Ghost or Poison attack damages an opposing Pokemon's HP, curses one surviving active foe if it is not already cursed. This ability-sourced Curse deals 1/8 base max HP each turn and costs its user no HP. Once per turn, a foe knocked out by its own attack or its own Afterlife Gate Curse heals it for 1/8 max HP, only while it is alive and active. Other curses and unrelated knockouts do not qualify. Full local Shadow Shield reduces attack damage by 20%, or 40% for super-effective attacks, at any HP; it has its Cold Eclipse hail immunity. Cursed Body is supplied separately by the species passive. No Shadow Tag.",
+		desc: "Once per turn after a whole special Ghost or Poison attack damages an opposing Pokemon's HP, curses one surviving active foe if it is not already cursed. This ability-sourced Curse deals 1/8 base max HP each turn and costs its user no HP. Once per turn, a foe knocked out by its own attack or its own Afterlife Gate Curse heals it for 1/8 max HP, only while it is alive and active. Other curses and unrelated knockouts do not qualify. Full local Shadow Shield reduces attack damage by 20%, or 40% for super-effective attacks, at any HP; it has its Cold Eclipse hail immunity.",
 	},
 };

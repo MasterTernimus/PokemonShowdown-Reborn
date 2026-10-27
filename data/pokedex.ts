@@ -4013,7 +4013,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Fire", "Ghost"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 83, atk: 95, def: 80, spa: 127, spd: 65, spe: 95 },
-		abilities: { 0: "Blazing Mane", 1: "Soul Fire", H: "Supreme Overlord" },
+		abilities: { 0: "Blazing Mane", 1: "Soul Fire", H: "Wraith Procession" },
 		heightm: 1.6,
 		weightkg: 69.8,
 		color: "Yellow",
@@ -7945,7 +7945,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Salamence",
 		types: ["Dragon", "Flying"],
 		baseStats: { hp: 95, atk: 135, def: 80, spa: 110, spd: 80, spe: 100 },
-		abilities: { 0: "Intimidate", 1: "Wind Rider", H: "Soaring Spirit" },
+		abilities: { 0: "Intimidate", 1: "Wind Rider", H: "Rightful Exalt" },
 		heightm: 1.5,
 		weightkg: 102.6,
 		color: "Blue",
@@ -8738,10 +8738,10 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	rampardos: {
 		num: 409,
 		name: "Rampardos",
-		types: ["Rock", "Fighting"],
+		types: ["Rock", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
 		baseStats: { hp: 87, atk: 165, def: 80, spa: 30, spd: 75, spe: 93 },
-		abilities: { 0: "Intrepid Sword", 1: "Relic Armor", H: "Steelworker" },
+		abilities: { 0: "Intrepid Sword", 1: "Relic Armor", H: "Primeval Skull" },
 		heightm: 1.6,
 		weightkg: 102.5,
 		color: "Blue",
@@ -8767,8 +8767,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Bastiodon",
 		types: ["Rock", "Steel"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 90, atk: 40, def: 180, spa: 25, spd: 165, spe: 30 },
-		abilities: { 0: "Dauntless Shield", 1: "Relic Armor", H: "Soundproof" },
+		baseStats: { hp: 80, atk: 65, def: 168, spa: 49, spd: 138, spe: 30 },
+		abilities: { 0: "Dauntless Shield", 1: "Relic Armor", H: "Primeval Shield" },
 		heightm: 1.3,
 		weightkg: 149.5,
 		color: "Gray",
@@ -9449,7 +9449,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Garchomp",
 		forme: "Battle-Bond",
 		types: ["Dragon", "Ground"],
-		baseStats: { hp: 108, atk: 160, def: 100, spa: 130, spd: 110, spe: 122 },
+		baseStats: { hp: 108, atk: 155, def: 100, spa: 125, spd: 110, spe: 112 },
 		abilities: { 0: "Apex Bond" },
 		heightm: 1.9,
 		weightkg: 95,
@@ -13459,6 +13459,22 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Dark", "Dragon"],
 		baseStats: { hp: 92, atk: 155, def: 115, spa: 135, spd: 115, spe: 88 },
 		abilities: { 0: "True Hydra" },
+		heightm: 1.8,
+		weightkg: 160,
+		color: "Blue",
+		eggGroups: ["Dragon"],
+		requiredItem: "Hydreigonite",
+		battleOnly: "Hydreigon",
+		isNonstandard: "Custom",
+	},
+	hydreigonmega: {
+		num: 635,
+		name: "Hydreigon-Mega",
+		baseSpecies: "Hydreigon",
+		forme: "Mega",
+		types: ["Dark", "Dragon"],
+		baseStats: {hp: 92, atk: 110, def: 125, spa: 130, spd: 125, spe: 118},
+		abilities: {0: "Expiration"},
 		heightm: 1.8,
 		weightkg: 160,
 		color: "Blue",
@@ -23677,8 +23693,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 
 if (!ENABLE_MEGA_HYDREIGON_X) {
 	delete Pokedex.hydreigonmegax;
-	Object.assign(Pokedex.hydreigon, {otherFormes: []});
-	Object.assign(Pokedex.hydreigon, {formeOrder: ['Hydreigon']});
+	Object.assign(Pokedex.hydreigon, {otherFormes: ['Hydreigon-Mega']});
+	Object.assign(Pokedex.hydreigon, {formeOrder: ['Hydreigon', 'Hydreigon-Mega']});
 }
 
 const latestSpeciesUpdates: {[id: string]: any} = {
@@ -23728,7 +23744,7 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 		baseStats: {hp: 118, atk: 127},
 		abilities: {0: "Sand Stream", 1: "Ruin Jaw", H: "Accumulation"},
 	},
-	garchompbattlebond: {baseStats: {spe: 122}},
+	garchompbattlebond: {baseStats: {spe: 112}},
 	gourgeist: {isNonstandard: "Unobtainable", tier: "Illegal"},
 	gourgeistsmall: {isNonstandard: null, tier: "RU"},
 	gourgeistlarge: {isNonstandard: "Unobtainable", tier: "Illegal"},
@@ -24395,7 +24411,7 @@ Pokedex.scovillainmega.abilities!['0'] = 'Crossfire';
 
 Pokedex.lucariomega.abilities!['0'] = 'Aura Convergence';
 
-Pokedex.salamencemega.abilities!['0'] = 'Crescent Rend';
+Pokedex.salamencemega.abilities!['0'] = 'Exalted Aether';
 
 // Explicit Gmax-only selections; no base, Mega, excluded branch or movepool changes.
 Pokedex.kinglergmax.types = ['Water', 'Steel'];

@@ -1,4 +1,5 @@
 import { Utils } from '../../lib';
+import { DisabledSpecies } from '../../data/disabled-species';
 
 /** Public form discovery; canonical species data remains authoritative. */
 export const commands: Chat.ChatCommands = {
@@ -11,8 +12,8 @@ export const commands: Chat.ChatCommands = {
 	formlist(target) {
 		if (!this.runBroadcast()) return;
 		const species = target.trim() ? Dex.species.get(target) : null;
-		if (species && !species.exists) return this.errorReply('Pokémon not found. Use /formshortcuts for accepted shortcuts.');
-		const rows = Dex.species.all().filter(row => row.exists && (species ? row.baseSpecies === species.baseSpecies : row.isMega || row.forme === 'Gmax'));
+		if (species && (!species.exists || DisabledSpecies.has(species.id))) return this.errorReply('Pokémon not found. Use /formshortcuts for accepted shortcuts.');
+		const rows = Dex.species.all().filter(row => row.exists && !DisabledSpecies.has(row.id) && (species ? row.baseSpecies === species.baseSpecies : row.isMega || row.forme === 'Gmax'));
 		const groups: { [label: string]: string[] } = {};
 		for (const row of rows) {
 			const kind = row.isMega ? 'Mega Evolutions' : row.forme === 'Gmax' ? 'Gigantamax forms' : 'Base and other forms';

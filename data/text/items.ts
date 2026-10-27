@@ -953,7 +953,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	hydreigonite: {
 		name: "Hydreigonite",
-		shortDesc: "Allows Hydreigon to Mega Evolve into Hydreigon-Mega-X.",
+		shortDesc: "Allows Hydreigon to Mega Evolve into Hydreigon-Mega.",
 	},
 	iapapaberry: {
 		name: "Iapapa Berry",

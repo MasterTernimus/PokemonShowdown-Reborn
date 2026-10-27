@@ -1944,10 +1944,6 @@ export class Pokemon {
 	}
 
 	tryTrap(isHidden = false) {
-  // Only opposing trapping is bypassed. Binding damage and airborne/grounding rules are unchanged.
-  const trapper = this.battle.effectState.source || this.battle.effectState.target;
-  if (trapper && typeof trapper.isAlly === 'function' && !trapper.isAlly(this) &&
-   this.hasAbilityOrPassive('freeflight') && !this.isGrounded()) return false;
 		if (!this.runStatusImmunity('trapped')) return false;
 		if (this.trapped && isHidden) return true;
 		this.trapped = isHidden ? 'hidden' : true;
@@ -2330,7 +2326,7 @@ export class Pokemon {
 		return ids.some(id => {
 			const passive = this.getPassives().find(p => p === id || SignaturePassiveComponents[p]?.includes(id));
 			if (!passive) return this.hasAbility(id);
-			const component = this.battle.dex.abilities.get(((passive === 'hydraflight' && id === 'levitate') || (passive === 'serratedscales' && id === 'limber') || (passive === 'absolutepressure' && ['innerfocus', 'insomnia'].includes(id))) ? id : passive);
+			const component = this.battle.dex.abilities.get(((['hydraflight', 'abyssalrebirth'].includes(passive) && id === 'levitate') || (passive === 'serratedscales' && id === 'limber') || (passive === 'absolutepressure' && ['innerfocus', 'insomnia'].includes(id))) ? id : passive);
 			return !component.flags.breakable || !this.battle.suppressingAbility(this, component);
 		});
 	}
@@ -2578,7 +2574,7 @@ export class Pokemon {
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
-		if (this.getPassives().some(id => id === 'levitate' || id === 'hydraflight') && this.hasAbilityOrPassive('levitate')) return null;
+		if (this.getPassives().some(id => ['levitate', 'hydraflight', 'abyssalrebirth'].includes(id)) && this.hasAbilityOrPassive('levitate')) return null;
 		if (this.getPassives().some(id => id === 'elevate' || id === 'noseformation') && this.hasAbilityOrPassive('elevate')) return null;
 		if (!this.getAbilityComponentExclusions().includes('levitate') && this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
 			'voidcraft', 'phantombarrage', 'silentflight']) && !this.battle.suppressingAbility(this)) return null;
@@ -2691,9 +2687,9 @@ export class Pokemon {
 			if (notImmune) continue;
 			if (!message) return false;
 			if (notImmune === null) {
-				if (this.getPassives().some(id => id === 'levitate' || id === 'elevate' || id === 'hydraflight')) {
+				if (this.getPassives().some(id => ['levitate', 'elevate', 'hydraflight', 'abyssalrebirth'].includes(id))) {
 					if (this.illusion) this.battle.add('-immune', this);
-					else this.battle.add('-immune', this, `[from] passive: ${this.getPassives().includes('hydraflight') ? 'Hydra Flight' : this.getPassives().includes('elevate') ? 'Elevate' : 'Levitate'}`);
+					else this.battle.add('-immune', this, `[from] passive: ${this.getPassives().includes('abyssalrebirth') ? 'Abyssal Rebirth' : this.getPassives().includes('hydraflight') ? 'Hydra Flight' : this.getPassives().includes('elevate') ? 'Elevate' : 'Levitate'}`);
 				} else {
 					this.battle.add('-immune', this, '[from] ability: Levitate');
 				}

@@ -3,14 +3,14 @@ import {skipPassiveComponent} from './passive-ability-cleanup';
 export const EeveeCloysterPassives: {[id:string]:string} = {jolteon:'voltabsorb',flareon:'flashfire',vaporeon:'waterabsorb',glaceon:'icebody',leafeon:'chlorophyll',espeon:'magicbounce',umbreon:'innerfocus',sylveon:'pixilate',cloyster:'waterabsorb'};
 export const EeveeCloysterComponents: {[id:string]:string[]} = {livewire:['transistor','quickfeet','ironbarbs'],kindledfury:['fluffy','guts'],tidalwave:['hydration','raindish'],permafrost:['icescales','refrigerate'],verdantedge:['sharpness','grasspelt'],astralward:[],lunarward:['pressure','illuminate'],frozenfortress:['icebody','crumblingshell']};
 export const EeveeCloysterDescriptions = {
- livewire:{name:'Livewire',shortDesc:'Transistor + Quick Feet + Iron Barbs.',desc:'Full local Transistor, Quick Feet and Iron Barbs. Volt Absorb is a separate species passive.'},
- kindledfury:{name:'Kindled Fury',shortDesc:'Fluffy + Guts.',desc:'Full local Fluffy and Guts. Flash Fire is a separate species passive.'},
- tidalwave:{name:'Tidal Wave',shortDesc:'Hydration + Rain Dish.',desc:'Full local Hydration and Rain Dish. Water Absorb is a separate species passive.'},
- permafrost:{name:'Permafrost',shortDesc:'Ice Scales + Refrigerate.',desc:'Full local Ice Scales and Refrigerate, including their field effects. Ice Body is a separate species passive.'},
- verdantedge:{name:'Verdant Edge',shortDesc:'Sharpness + Grass Pelt.',desc:'Full local Sharpness and Grass Pelt, including their field effects. Chlorophyll is a separate species passive.'},
+ livewire:{name:'Livewire',shortDesc:'Transistor + Quick Feet + Iron Barbs.',desc:"Full local Transistor, Quick Feet and Iron Barbs."},
+ kindledfury:{name:'Kindled Fury',shortDesc:'Fluffy + Guts.',desc:"Full local Fluffy and Guts."},
+ tidalwave:{name:'Tidal Wave',shortDesc:'Hydration + Rain Dish.',desc:"Full local Hydration and Rain Dish."},
+ permafrost:{name:'Permafrost',shortDesc:'Ice Scales + Refrigerate.',desc:"Full local Ice Scales and Refrigerate, including their field effects."},
+ verdantedge:{name:'Verdant Edge',shortDesc:'Sharpness + Grass Pelt.',desc:"Full local Sharpness and Grass Pelt, including their field effects."},
  astralward:{name:'Astral Ward',shortDesc:"Prevents opposing accuracy drops; ignores opposing evasion boosts.",desc:"Opponents cannot lower its accuracy. Its moves ignore opposing positive evasion stages."},
- lunarward:{name:'Lunar Ward',shortDesc:'Pressure + Illuminate.',desc:"Full local Pressure and Illuminate, including field effects. Pressure has its once-per-opponent battle memory. Inner Focus is a separate species passive."},
- frozenfortress:{name:'Frozen Fortress',shortDesc:'Ice Body. Physical hits scatter Stealth Rock on the attacker’s side.',desc:'Full local Ice Body heals in hail, snow and icy fields, prevents hail damage and may inflict frostbite on contact attackers. Crumbling Shell sets Stealth Rock after physical hits if that side has none, except on Water Surface, Underwater, Murkwater Surface and Swamp fields. Allied hits place it on the opposing side. No critical-hit immunity.'},
+ lunarward:{name:'Lunar Ward',shortDesc:'Pressure + Illuminate.',desc:"Full local Pressure and Illuminate, including field effects. Pressure has its once-per-opponent battle memory."},
+ frozenfortress:{name:'Frozen Fortress',shortDesc:'Ice Body. Physical hits scatter Stealth Rock on the attacker’s side.',desc:"Full local Ice Body heals in hail, snow and icy fields, prevents hail damage and may inflict frostbite on contact attackers. Crumbling Shell sets Stealth Rock after physical hits if that side has none, except on Water Surface, Underwater, Murkwater Surface and Swamp fields. Allied hits place it on the opposing side."},
 };
 export function installEeveeCloyster(abilities:AbilityDataTable) {
  const a=abilities as any;

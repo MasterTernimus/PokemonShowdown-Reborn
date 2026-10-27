@@ -18,12 +18,12 @@ describe('Requested ability changes', () => {
 			['Tauros', 'H', 'Brute Force'],
 			['Tauros-Paldea-Combat', 'H', 'Ultra Ego'],
 			['Tauros-Paldea-Blaze', 'H', 'Fire Mane'],
-			['Typhlosion-Hisui', 'H', 'Supreme Overlord'],
+			['Typhlosion-Hisui', 'H', 'Wraith Procession'],
 			['Politoed', '0', 'Zen'],
 			['Politoed', 'H', 'Storm Song'],
 			['Espeon', '1', 'Astral Ward'],
 			['Espeon', 'H', 'Psychic Surge'],
-			['Umbreon', '1', 'Moonlight Vigil'],
+			['Umbreon', '1', 'Lunar Ward'],
 			['Umbreon', 'H', 'Dark Aura'],
 			['Octillery', '0', 'Anchored Battery'],
 			['Scizor-Mega', '0', 'Iron Vise'],
@@ -58,7 +58,7 @@ describe('Requested ability changes', () => {
 		assert(mon.hp < mon.maxhp);
 	});
 
-	it('lets Astral Ward protect Espeon from an ally spread attack', () => {
+	it('Astral Ward permits ally spread damage and protects accuracy instead', () => {
 		battle = common.createBattle({formatid: 'gen9nofielddoublesbattle'}, [
 			[{species: 'Espeon', ability: 'Astral Ward', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['surf']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}, {species: 'Mew', ability: 'No Ability', moves: ['splash']}],
@@ -66,7 +66,9 @@ describe('Requested ability changes', () => {
 		battle.makeChoices('team 12', 'team 12');
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move splash, move surf', 'move splash, move splash');
-		assert.equal(holder.hp, holder.maxhp);
+		assert(holder.hp < holder.maxhp);
+		battle.boost({accuracy:-1},holder,battle.p2.active[0],Dex.moves.get('sandattack'));
+		assert.equal(holder.boosts.accuracy,0);
 		assert(battle.p2.active.some(foe => foe.hp < foe.maxhp));
 	});
 
@@ -168,7 +170,7 @@ describe('Requested ability changes', () => {
 		assert.equal(battle.runEvent('ModifyDamage', attacker, holder, tackle, 100), 100);
 	});
 
-	it('makes Long Reach use Super Luck without tripling critical damage', () => {
+	it('Long Reach removes contact without adding critical-hit bonuses', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [
 			[{species: 'Decidueye', ability: 'Long Reach', moves: ['tackle']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}],
@@ -179,7 +181,7 @@ describe('Requested ability changes', () => {
 		battle.singleEvent('ModifyMove', holder.getAbility(), holder.abilityState, tackle, holder, foe);
 		assert(!tackle.flags.contact);
 		assert.equal(tackle.critModifier, undefined);
-		assert.equal(battle.runEvent('ModifyCritRatio', holder, foe, tackle, 0), 1);
+		assert.equal(battle.runEvent('ModifyCritRatio', holder, foe, tackle, 0), 0);
 	});
 
 	it('uses five turns for both Mega domain faint effects', () => {

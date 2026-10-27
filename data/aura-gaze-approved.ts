@@ -10,7 +10,7 @@ export const AuraGazeDescriptions = {
 	revealinggaze: {
 		name: 'Revealing Gaze',
 		shortDesc: 'Entry Miracle Eye; own Psychic attacks ignore marked targets\' positive Sp. Def stages.',
-		desc: 'On genuine entry, uses ordinary Miracle Eye on the living legal opposing target directly across from it, falling back to the first living legal opposing target. Normal protection and reflection apply; costs no PP and does not repeat on selected-ability restart. Its own Psychic attacks ignore positive Sp. Def stages only while the target has Miracle Eye; negative stages and Defense remain unchanged. Ordinary Miracle Eye lets all allies ignore the marked target\'s positive evasion and Dark immunity to Psychic attacks, and its mark clears when the target leaves. It also gives the user half incoming Ghost damage until switching and +2 Sp. Atk on Psychic Terrain, Fairy Tale or Holy Field. No Kinesis or Future Sight advancement.',
+		desc: "On genuine entry, uses ordinary Miracle Eye on the living legal opposing target directly across from it, falling back to the first living legal opposing target. Normal protection and reflection apply; costs no PP and does not repeat on selected-ability restart. Its own Psychic attacks ignore positive Sp. Def stages only while the target has Miracle Eye; negative stages and Defense remain unchanged. Ordinary Miracle Eye lets all allies ignore the marked target's positive evasion and Dark immunity to Psychic attacks, and its mark clears when the target leaves. It also gives the user half incoming Ghost damage until switching and +2 Sp. Atk on Psychic Terrain, Fairy Tale or Holy Field.",
 	},
 };
 

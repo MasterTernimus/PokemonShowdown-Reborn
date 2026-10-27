@@ -10906,11 +10906,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback(pokemon, target, move) {
-			if (adaptiveEnvironment(target, 'fields') && !target.status && !target.hasAbility('comatose') && !pokemon.hasAbility(['soulfire', 'sinisterblaze'])) return move.basePower;
+			if (adaptiveEnvironment(target, 'fields') && !target.status && !target.hasAbility('comatose') && !pokemon.hasAbility('sinisterblaze')) return move.basePower;
 			if (
 				target.status || target.hasAbility('comatose') ||
 				this.field.isTerrain('hauntedterrain') ||
-				pokemon.hasAbility(['soulfire', 'sinisterblaze'])
+				pokemon.hasAbility('sinisterblaze')
 			) return move.basePower * 2;
 			return move.basePower;
 		},
@@ -15089,19 +15089,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	payback: {
 		num: 371,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 80,
+		critRatio: 2,
 		basePowerCallback(pokemon, target, move) {
-			if (target.newlySwitched || this.queue.willMove(target)) {
-				this.debug('Payback NOT boosted');
-				return move.basePower;
-			}
-			this.debug('Payback damage boost');
-			return move.basePower * 2;
+			const damagedByTarget = pokemon.attackedBy.some(p => p.source === target && p.damage > 0 && p.thisTurn);
+			return damagedByTarget ? move.basePower * 2 : move.basePower;
 		},
 		category: "Physical",
 		name: "Payback",
 		pp: 10,
-		priority: 0,
+		priority: -4,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		target: "normal",
 		type: "Dark",

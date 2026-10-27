@@ -21,7 +21,7 @@ describe('Politoed event Aevian King', () => {
 			const p = b.p1.active[0];
 			assert.equal(p.species.id, 'politoedrejuv');
 			assert.equal(p.ability, 'aevianking');
-			assert.deepEqual(p.getPassives(), []);
+			assert.deepEqual(p.getPassives(), ['royalremedy']);
 			b.makeChoices('switch 3, move 1 1', 'move 3, move 1');
 			b.makeChoices('switch 3, move 1 1', 'move 3, move 1');
 			assert.equal(b.p1.active[0].species.id, 'politoedrejuv');

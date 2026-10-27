@@ -1465,9 +1465,7 @@ export const ReviewedReferenceDetails = {
 			"soulfire": [
 				"Haunted and Cold Eclipse grant +1 Defense and Sp. Def on entry. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack and Sp. Atk each turn. These are additional to ordinary Fire/Ghost redirection, absorption and attack rules.",
 			],
-			"soultag": [
-				"Haunted entry reveals opposing items through Shadow Tag. Haunted and Cold Eclipse grant Soul Fire’s +1 Defense/Sp. Def; Cold Eclipse also grants Flame Body’s +1 Defense/Sp. Def instead of contact burning, for +2 each in total. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack/Sp. Atk each turn. Volcanic raises contact-burn chance to 60%.",
-			],
+
 			"duskilate": [
 				"Eligible Normal moves become Fairy on Holy and Rainbow, otherwise Dark. Their conversion bonus is 1.5× on Dark Crystal Cavern, New World, Starlight Arena, Cold Eclipse, Short-Circuit, Haunted, Bewitched Woods, Holy and Rainbow, instead of 1.3×. Cold Eclipse additionally grants hail immunity. Cold Eclipse also recognizes Duskilate for its 1.5× defenses and exemption from the grounded Speed penalty.",
 			],
@@ -1546,9 +1544,7 @@ export const ReviewedReferenceDetails = {
 			"soulfire": [
 				"Haunted and Cold Eclipse grant +1 Defense and Sp. Def on entry. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack and Sp. Atk each turn. These are additional to ordinary Fire/Ghost redirection, absorption and attack rules.",
 			],
-			"soultag": [
-				"Haunted entry reveals opposing items through Shadow Tag. Haunted and Cold Eclipse grant Soul Fire’s +1 Defense/Sp. Def; Cold Eclipse also grants Flame Body’s +1 Defense/Sp. Def instead of contact burning, for +2 each in total. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack/Sp. Atk each turn. Volcanic raises contact-burn chance to 60%.",
-			],
+
 			"flashfire": [
 				"Burning, or Volcanic while grounded, grants its Fire-power charge at turn end without needing an incoming Fire move. Cold Eclipse disables Fire absorption and grants +1 Defense and Special Defense on entry instead. The charge still follows its ordinary loss/switch rules.",
 			],
@@ -1612,9 +1608,7 @@ export const ReviewedReferenceDetails = {
 			"soulfire": [
 				"Haunted and Cold Eclipse grant +1 Defense and Sp. Def on entry. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack and Sp. Atk each turn. These are additional to ordinary Fire/Ghost redirection, absorption and attack rules.",
 			],
-			"soultag": [
-				"Haunted entry reveals opposing items through Shadow Tag. Haunted and Cold Eclipse grant Soul Fire’s +1 Defense/Sp. Def; Cold Eclipse also grants Flame Body’s +1 Defense/Sp. Def instead of contact burning, for +2 each in total. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack/Sp. Atk each turn. Volcanic raises contact-burn chance to 60%.",
-			],
+
 			"flamebody": [
 				"Volcanic raises the contact burn chance from 30% to 60%. Cold Eclipse instead grants +1 Defense and Special Defense on entry and disables the contact burn effect.",
 			],
@@ -2562,9 +2556,7 @@ export const ReviewedReferenceDetails = {
 			"soulfire": [
 				"Haunted and Cold Eclipse grant +1 Defense and Sp. Def on entry. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack and Sp. Atk each turn. These are additional to ordinary Fire/Ghost redirection, absorption and attack rules.",
 			],
-			"soultag": [
-				"Haunted entry reveals opposing items through Shadow Tag. Haunted and Cold Eclipse grant Soul Fire’s +1 Defense/Sp. Def; Cold Eclipse also grants Flame Body’s +1 Defense/Sp. Def instead of contact burning, for +2 each in total. Haunted, Burning, Volcanic and Bewitched Woods grant +1 Attack/Sp. Atk each turn. Volcanic raises contact-burn chance to 60%.",
-			],
+
 			"soulstrike": [
 				"On fainting, creates Haunted for five turns while ignoring Neutralization’s field block. If Haunted already exists, its remaining duration is raised to at least five turns rather than shortened. Other applicable field locks still matter.",
 			],
@@ -2607,7 +2599,7 @@ export const ReviewedReferenceDetails = {
 				"When a qualifying knockout successfully empties the attacker’s move PP, prints the haunting message and creates three-turn Haunted Field or refreshes it to at least three. Banette and Mega Banette create six turns or add three after that minimum refresh. Z-powered Grudge does not create/extend the field.",
 			],
 			"infernalparade": [
-				"Haunted doubles power without requiring status. Adaptive Cycle field protection removes only that field-based qualification; status, Comatose, Soul Fire or Sinister Blaze can still independently double it.",
+				"Haunted doubles power without requiring status. Adaptive Cycle field protection removes only that field-based qualification; status, Comatose or Sinister Blaze can still independently double it.",
 			],
 			"meanlook": [
 				"On Haunted, targets all adjacent foes rather than one. Each target still must be eligible for its trapping volatile.",
