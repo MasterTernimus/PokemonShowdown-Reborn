@@ -45,7 +45,7 @@ export function captureEngineSnapshot(root: string, pinFile: string): EngineSnap
 	const reviewedDisplay: {
 		[id: string]: string,
 	} = {
-		'dist/data/ability-descriptions.js': '63732f3a6a9be6bfaeb43e78bc18a0cf353dbc3548946d045c036df3b75fcd31',
+		'dist/data/ability-descriptions.js': '79f5c732065d36a549fb88c2a54cb9750400ea07a561aeb27cfc13a7087fd469',
 		'dist/data/ability-prose-audit.js': '86afb47c07f45831527663313ce5a5ef54179891fb3c9ce9fbda45aa7a38c41e',
 		'dist/data/short-description-audit.js': '959dad25de39892b3e72ad0ffe0f22f1b8b35b89f08e834a8624080c14f7d28a',
 	};

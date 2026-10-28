@@ -1557,6 +1557,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "This Pokemon's allies receive 3/4 damage from other Pokemon's attacks.",
 	},
 	verdanthospitality: {"name":"Verdant Hospitality","desc":"Same-type moves have 1.3x power. Allies take 25% less attack damage. On entry, heals active allies by 1/8 max HP. At turn end, heals itself by 1/16 max HP and active allies by 1/16.","shortDesc":"1.3x same-type power; allies take 25% less damage; entry and end-turn healing."},
+	plasmaeruption: { name: "Plasma Eruption", activate: "  [POKEMON] unleashed a Plasma Eruption!" },
+	plasmapressure1: { name: "Plasma Pressure 1", start: "  [POKEMON]'s core reached Pressure 1/3!" },
+	plasmapressure2: { name: "Plasma Pressure 2", start: "  [POKEMON]'s core reached Pressure 2/3!" },
+	plasmapressure3: { name: "Plasma Pressure 3", start: "  [POKEMON]'s core is ready to erupt!" },
+	plasmaairborne: { name: "Plasma Airborne", start: "  [POKEMON] rose on plasma jets!", end: "  [POKEMON] landed!" },
+	plasmalanding: { name: "Plasma Landing", start: "  [POKEMON]'s next Fire attack is powered up!" },
 	coronafurnace: {"name":"Corona Furnace","shortDesc":"Flame Body; damaging Fire moves ignore positive defensive stages.","desc":"Full local Flame Body: eligible contact attackers have a 30% burn chance, or 60% on Volcanic Field. On Cold Eclipse, ability activation instead grants +1 Defense and Sp. Def and contact burns are disabled. Damaging moves with effective Fire typing ignore only positive defensive stages. Negative stages, screens, type effectiveness and defensive abilities still apply."},
 
 	verdantsanctuary: {
@@ -3821,6 +3827,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "This Pokemon has Hydra Bond, Grassy Surge, Solar Power, and Self Repair's effects.",
 		shortDesc: "Hydra Bond + Grassy Surge + Solar Power + Self Repair.",
 	},
+	worldaxis: {
+		name: "World Axis",
+		start: "  [POKEMON] stored energy with World Axis! Its next attack is powered up!",
+		end: "  [POKEMON]'s World Axis charge ended!",
+	},
 	astralengine: {
 		name: "Astral Engine",
 		desc: "Elevate + Analytic + Power Spot. Boosts allied move power. Filter is removed.",
@@ -4811,3 +4822,21 @@ import {ReadableAbilitySummaries} from '../ability-readability';
 for (const [id, shortDesc] of Object.entries(ReadableAbilitySummaries)) {
 	if (AbilitiesText[id as ID]) AbilitiesText[id as ID].shortDesc = shortDesc;
 }
+
+import {HitmonDescriptions} from "../hitmon-rework";
+const hitmonNames = {punchfiend: 'Punch Fiend', kickfiend: 'Kick Fiend', spinfiend: 'Spin Fiend', checkhook: 'Check Hook', springheel: 'Springheel', cyclonerhythm: 'Cyclone Rhythm'};
+for (const [id, text] of Object.entries(HitmonDescriptions)) {
+	Object.assign(AbilitiesText[id as ID] ||= {name: hitmonNames[id as keyof typeof hitmonNames]}, text);
+}
+
+AbilitiesText.checkhook.activate = "  [POKEMON] read the attack and answered with Sucker Punch at double PP!";
+
+import {OracularChorusDescription} from '../oracular-chorus';
+AbilitiesText.oraclesrefrain = {name:"Oracle's Refrain",...OracularChorusDescription};
+
+import {EmpoleonDescriptions} from '../empoleon-megas';
+AbilitiesText.imperialedge={...AbilitiesText.exalt,name:'Imperial Edge'}; delete AbilitiesText.exalt;
+AbilitiesText.monarchofice={name:'Monarch of Ice',...EmpoleonDescriptions.monarchofice};
+Object.assign(AbilitiesText.emperorsresolve,EmpoleonDescriptions.emperorsresolve);
+
+for (const id of ['serenegrace', 'fortunatewing', 'voidomen', 'lunarorbit']) Object.assign(AbilitiesText[id as ID], AbilityDescriptionOverrides[id]);

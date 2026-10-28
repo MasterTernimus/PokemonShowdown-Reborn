@@ -3047,3 +3047,7 @@ Object.assign(Aliases, {ragingthicket:'verdantdrake', ragingflame:'blazingtempo'
 
 Aliases.volcanicspirit = 'blastchamber';
 Aliases.groundedinstinct = 'pyrousdominion';
+
+Object.assign(Aliases, {empoleonmega:'Empoleon-Mega-Y', empoleonite:'Empoleonite Y', exalt:'Imperial Edge'});
+
+Aliases.oracularchorus = "Oracle's Refrain";

@@ -2,7 +2,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const { Dex } = require('../../../dist/sim');
-const approved = {...require('./hoenn-mega-approved.json'), ...require('./sinnoh-unova-mega-approved.json')};
+const approved = {...require('./hoenn-mega-approved.json'), ...require('./sinnoh-unova-mega-approved.json'), sevipermega: 'rivalmalice', haxorusmega: 'twinfang'};
 let battle;
 function setup(species, ability, doubles = false) {
 	const set = (species = 'Mew', ability = 'No Ability') => ({ species, ability, moves: ['splash', 'tackle', 'protect', 'poisonfang'] });
@@ -107,14 +107,14 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		assert(p.hasAbility('poisontouch'));
 		assert(!p.hasAbility('corrosion'));
 	});
-	it('Desert Spirit retains one sandstorm, Overcoat and extra Ground STAB', () => {
+	it('Desert Spirit retains sandstorm, Overcoat, Ground STAB and Tinted Lens', () => {
 		const [p, q] = setup('Flygon-Mega');
 		assert.equal(battle.field.weather, 'sandstorm');
 		const move = Dex.getActiveMove('earthquake');
 		battle.runEvent('ModifyMove', p, q, move, move);
 		assert(move.forceSTAB);
 		q.getMoveHitData(move).typeMod = -1;
-		assert.equal(battle.runEvent('ModifyDamage', p, q, move, 100), 100);
+		assert.equal(battle.runEvent('ModifyDamage', p, q, move, 100), 200);
 	});
 	it('Tremor retains higher-stat sound attacks without category changes or Soundproof bypass', () => {
 		const [p, q] = setup('Flygon-Mega-Z');
@@ -175,13 +175,13 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		battle.actions.useMove(Object.assign(Dex.getActiveMove('irontail'), { accuracy: true }), p, { target: q });
 		assert.equal(q.status, 'tox');
 	});
-	for (const id of ['claydolmega', 'chimechomegay']) it(id + ' deliberately retains full Elevate beside passive Levitate with only one KO boost', () => {
+	for (const id of ['claydolmega', 'chimechomegay']) it(id + ' retains passive Levitate without the removed Elevate KO boost', () => {
 		const [p, q] = setup(id);
-		assert.equal(p.hasAbility('elevate'), id === 'claydolmega');
+		assert.equal(p.hasAbility('elevate'), false);
 		assert(p.hasAbilityOrPassive('levitate'));
 		assert(!p.getAbilityComponentExclusions().includes('levitate'));
 		battle.runEvent('AfterFaint', q, p, Dex.getActiveMove('tackle'), 1);
-		assert.equal(Object.values(p.boosts).reduce((a, b) => a + b, 0), id === 'claydolmega' ? 1 : 0);
+		assert.equal(Object.values(p.boosts).reduce((a, b) => a + b, 0), 0);
 	});
 	it('Wind Chime retains Armorize and Punk Rock, while Haunted Chime keeps Wind Power and Cursed Body', () => {
 		const [p, q] = setup('Chimecho-Mega');
@@ -199,18 +199,19 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		const [p, q] = setup('Mew', 'Sirius');
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('poisonfang'), 100), 150);
 		for (const ability of ['Tremor', 'Wind Chime']) {
-			p.setAbility(ability);
-			assert(!p.runImmunity('Ground'));
+			battle.destroy();
+			const [holder] = setup('Mew', ability);
+			assert(!holder.runImmunity('Ground'));
 		}
 	});
 	it('calculator resolves the approved Seviper passive without replacing Sirius', () => {
 		const { calculateScenario } = require('../../../dist/sim/custom-calculator');
-		const input = { format: 'gen9nofieldsinglesgame', move: 'Poison Fang', samples: 16, seed: 42, actors: [{ species: 'Seviper-Mega', ability: 'Sirius' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }] };
+		const input = { format: 'gen9nofieldsinglesgame', move: 'Drake Fang', samples: 16, seed: 42, actors: [{ species: 'Seviper-Mega', ability: 'Sirius' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }] };
 		const result = calculateScenario(input);
-		assert.deepEqual(result.resolved.actors[0].passives, ['venamskiss']);
+		assert.deepEqual(result.resolved.actors[0].passives, ['rivalmalice']);
 		assert(result.results[1].max > 0);
 	});
-	it('Venams Kiss passive poisons Steel and Poison foes once, drains only pre-poisoned HP hits and slows them', () => {
+	it('Sirius Venams Kiss poisons, drains every HP hit and slows poisoned foes', () => {
 		const [p, q] = setup('Seviper-Mega');
 		p.hp = 100;
 		q.setType(['Steel', 'Poison']);
@@ -220,14 +221,14 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		};
 		hit();
 		assert.equal(q.status, 'psn');
-		assert.equal(p.hp, 100);
+		assert.equal(p.hp, 120);
 		assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 75);
 		hit();
-		assert.equal(p.hp, 120);
+		assert.equal(p.hp, 140);
 		assert.equal(q.volatiles.healblock.duration, 2);
 		p.addVolatile('gastroacid');
 		hit();
-		assert.equal(p.hp, 140);
+		assert.equal(p.hp, 160);
 		assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 75);
 	});
 	it('Venams Kiss Steel matchup overlaps Apex Venom once and preserves other type contributions', () => {
@@ -328,18 +329,18 @@ describe('Approved nine Hoenn Mega passive migrations', () => {
 		assert.equal(attempts, 1);
 		assert.equal(p.hp, 120);
 	});
-	it('Venams Kiss follows Perfect Illusion disguise passives and restores actual passives on reveal', () => {
+	it('Rival Malice follows Perfect Illusion disguise passives and restores actual passives on reveal', () => {
 		const [p, q] = setup('Mew');
 		q.formeChange('Seviper-Mega', null, true);
 		p.illusion = q;
 		p.m.perfectIllusion = true;
-		assert.deepEqual(p.getPassives(), ['venamskiss']);
-		assert.deepEqual(p.getSwitchRequestData().passives, ['venamskiss']);
+		assert.deepEqual(p.getPassives(), ['rivalmalice']);
+		assert.deepEqual(p.getSwitchRequestData().passives, ['rivalmalice']);
 		q.status = 'psn';
-		assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 75);
+		assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 150);
 		p.illusion = null;
 		assert.deepEqual(p.getPassives(), ['synchronize']);
-		assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 100);
+		assert.equal(battle.runEvent('ModifySpe', q, null, null, 100), 150);
 	});
 	for (const move of ['Poison Fang', 'Sludge Bomb']) it(move + ' calculator damage matches direct seeded battle execution', () => {
 		const { calculateScenario, validateScenario, buildCalculatorBattle } = require('../../../dist/sim/custom-calculator');

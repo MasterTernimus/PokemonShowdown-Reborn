@@ -69,7 +69,14 @@ export function installOrdinaryReductions(a: AbilityDataTable) {
  delete a.joyride.onTryAddVolatile;
  delete a.joyride.onUpdate;
  delete a.joyride.onSetStatus;
- // Its explicit Fighting bonus remains; Vital Spirit's sleep/Yawn protection is removed.
+ // Its explicit Fighting bonus is independent of Vital Spirit's removed protection.
+ a.joyride.onModifyAtk = function (atk, pokemon, target, move) {
+  this.dex.abilities.get('violentrush').onModifyAtk?.call(this, atk, pokemon, target, move);
+  if (move.type === 'Fighting') return this.chainModify(1.3);
+ };
+ a.joyride.onModifySpA = function (spa, pokemon, target, move) {
+  if (move.type === 'Fighting') return this.chainModify(1.3);
+ };
 
  delete a.toxicsink.onAnyTryHeal;
  delete a.toxicsink.onResidual;

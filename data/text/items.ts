@@ -2741,3 +2741,6 @@ ItemsText.mismagiusite = {name: 'Mismagiusite', desc: 'If held by Mismagius, all
 
 ItemsText.pureincense = { name: 'Pure Incense', shortDesc: 'Scented Geyser: 100 power; Ghost typing becomes weak to it.', desc: 'While effective, gives Scented Geyser 100 power and makes it super effective against Ghost typing. It is not consumed and has no separate in-battle effect.' };
 ItemsText.luckincense = { name: 'Luck Incense', shortDesc: 'Scented Geyser: 40% 160 power, otherwise 100; not consumed.', desc: 'While effective, Scented Geyser rolls once per execution: 40% chance of 160 power, otherwise 100. It is not consumed and has no separate in-battle effect.' };
+
+ItemsText.empoleonitex={name:'Empoleonite X',desc:'Allows Empoleon to Mega Evolve into Mega Empoleon X.',shortDesc:'Empoleon: Mega Evolves into Mega Empoleon X.'};
+ItemsText.empoleonitey={name:'Empoleonite Y',desc:'Allows Empoleon to Mega Evolve into Mega Empoleon Y.',shortDesc:'Empoleon: Mega Evolves into Mega Empoleon Y.'};

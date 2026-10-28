@@ -178,11 +178,11 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	falsedevotion: {
 		shortDesc: 'Prankster + Serene Grace: priority status; capped secondary boosts; skips charge turns.',
-		desc: "Full local Prankster and Serene Grace. Status moves gain +1 priority with Prankster targeting rules and its Bewitched Woods exception. Doubles secondary-effect chances up to 60%, preserving effects already above the cap, including guaranteed effects. Skips move charge turns. Repeated Serene Grace applications do not multiply the same effect again.",
+		desc: "Full local Prankster and Serene Grace. Status moves gain +1 priority with Prankster targeting rules and its Bewitched Woods exception. Doubles move secondary-effect chances up to 100%. Repeated Serene Grace applications do not multiply the same effect again.",
 	},
 	truedevotion: {
 		shortDesc: 'Prankster + Serene Grace + Technician.',
-		desc: "Full local Prankster, Serene Grace and Technician. Status moves gain +1 priority with Prankster targeting rules and its Bewitched Woods exception. Doubles secondary-effect chances up to 60%, preserving effects already above the cap, including guaranteed effects. Skips move charge turns. Repeated Serene Grace applications do not multiply the same effect again. Moves with 60 or less effective base power (80 on Factory) gain Technician's 1.5x power boost, retaining its multi-hit interactions.",
+		desc: "Full local Prankster, Serene Grace and Technician. Status moves gain +1 priority with Prankster targeting rules and its Bewitched Woods exception. Doubles move secondary-effect chances up to 100%. Repeated Serene Grace applications do not multiply the same effect again. Moves with 60 or less effective base power (80 on Factory) gain Technician's 1.5x power boost, retaining its multi-hit interactions.",
 	},
 	gooey: {
 		shortDesc: 'After an opposing damaging move hits, lowers its user\'s Speed by 2.',

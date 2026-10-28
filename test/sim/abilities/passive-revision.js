@@ -22,12 +22,12 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		battle?.destroy();
 		battle = null;
 	});
-	it('uses only Proficient on exactly 27 explicit gimmick records and family traits on the remaining 49', () => {
+	it('uses only Proficient on exactly 28 explicit gimmick records and family traits on the remaining 49', () => {
 		const { StarterPassives, ProficientPassiveForms } = require('../../../dist/data/starter-passives'), rev = require('./passive-revision-approved.json');
-		assert.deepEqual([...ProficientPassiveForms].sort(), rev.proficientForms.sort());
-		assert.equal(Object.keys(StarterPassives).length, 76);
+		assert.deepEqual([...ProficientPassiveForms].sort(), rev.proficientForms.flatMap(id => id === 'empoleonmega' ? ['empoleonmegax','empoleonmegay'] : [id]).sort());
+		assert.equal(Object.keys(StarterPassives).length, 77);
 		for (const [id, p] of Object.entries(StarterPassives))
-			assert.deepEqual(p, rev.proficientForms.includes(id) ? ['proficient'] : [id.match(/^(charizard|typhlosion|blaziken|infernape|emboar|delphox|incineroar|cinderace|skeledirge)/) ? 'blaze' : id.match(/^(blastoise|feraligatr|swampert|empoleon|samurott|greninja|primarina|inteleon|quaquaval)/) ? 'torrent' : 'overgrow']);
+			assert.deepEqual(p, (rev.proficientForms.includes(id) || ['empoleonmegax','empoleonmegay'].includes(id)) ? ['proficient'] : [id.match(/^(charizard|typhlosion|blaziken|infernape|emboar|delphox|incineroar|cinderace|skeledirge)/) ? 'blaze' : id.match(/^(blastoise|feraligatr|swampert|empoleon|samurott|greninja|primarina|inteleon|quaquaval)/) ? 'torrent' : 'overgrow']);
 		for (const [id, p] of Object.entries(rev.overrides))
 			assert.deepEqual(Dex.species.get(id).passives, p, id);
 	});

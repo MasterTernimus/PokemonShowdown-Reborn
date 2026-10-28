@@ -522,7 +522,7 @@ export class Field {
 		if (this.isTerrain('corrosivemistterrain')) {
 			return this.changeTerrain('corrosiveterrain', source, sourceEffect);
 		}
-		if (sourceEffect && ['gravity', 'lunarorbit', 'gmaxgravitas'].includes(sourceEffect.id) && this.auraField) {
+		if (sourceEffect && ['gravity', 'lunarorbit', 'gravitywell', 'gmaxgravitas'].includes(sourceEffect.id) && this.auraField) {
 			return this.promoteAura(source, sourceEffect);
 		}
 		return false;

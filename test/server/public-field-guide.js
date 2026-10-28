@@ -4,7 +4,7 @@ describe('Public Field Guide', () => {
 		const g = publicFieldGuide(), m = calculatorMetadata();
 		for (const f of m.fields.filter(f => f.id))assert(g.entries.some(e => e.kind === 'field' && e.id === f.id));
 		for (const a of m.auras)assert(g.entries.some(e => e.kind === 'aura' && e.id === a.id));
-		assert.equal(g.entries.length, 54);
+		assert.equal(g.entries.length, 58);
 	});
 	it('reviews every field without claiming exhaustive coverage', () => {
 		const g = publicFieldGuide();
@@ -17,9 +17,9 @@ describe('Public Field Guide', () => {
 		} const n = g.entries.find(e => e.id === 'newworldterrain');
 		assert(!JSON.stringify(n.sections).match(/Void Crossing|voidcrossing/));
 	});
-	it('groups every entry into the four seed families and keeps garden stages together', () => {
+	it('groups fields by seed family and keeps rooms separate', () => {
 		const g = publicFieldGuide();
-		for (const e of g.entries)assert(['Elemental', 'Magical', 'Synthetic', 'Telluric'].includes(e.group), e.id);
+		for (const e of g.entries)assert(['Rooms & Gravity', 'Elemental', 'Magical', 'Synthetic', 'Telluric'].includes(e.group), e.id);
 		for (let i = 1;
 			i <= 5;
 			i++)assert.equal(g.entries.find(e => e.id === 'flowergarden' + i).group, 'Synthetic');
@@ -30,7 +30,7 @@ describe('Public Field Guide', () => {
 		let output;
 		cmd.call({}, '', null, {}, { send: s => (output = s) });
 		assert(output.startsWith('|queryresponse|fieldguide|'));
-		assert.equal(JSON.parse(output.split('|').slice(3).join('|')).entries.length, 54);
+		assert.equal(JSON.parse(output.split('|').slice(3).join('|')).entries.length, 58);
 	});
 });
 
@@ -71,3 +71,21 @@ describe('Field message trigger explanations', () => {
 		}
 	});
 });
+
+ describe('Rooms and Gravity reference', () => {
+  it('lists all four effects separately from fields and auras', () => {
+   const guide=publicFieldGuide(), rooms=guide.entries.filter(e=>e.kind==='effect');
+   assert.equal(guide.coverage.rooms,4);
+   assert.deepEqual(rooms.map(e=>e.id),['trickroom','wonderroom','magicroom','gravity']);
+   for(const e of rooms){assert.equal(e.group,'Rooms & Gravity');assert(e.summary);assert(e.sections.Duration.length);assert(e.review.includes('Cold Eclipse'));}
+  });
+  it('keeps the impact list synchronized with the battle move flags', () => {
+   const {Dex}=require('../../dist/sim');const gravity=publicFieldGuide().entries.find(e=>e.id==='gravity');
+   for(const move of Dex.moves.all().filter(m=>m.flags.gravityboost))assert(gravity.sections['Impact moves'][0].includes(move.name));
+  });
+  it('documents current Trick Room exceptions and Magic Room walls', () => {
+   const entries=publicFieldGuide().entries;
+   assert(entries.find(e=>e.id==='trickroom').sections.Duration.join(' ').includes('Amplifield Rock does not extend'));
+   const magic=JSON.stringify(entries.find(e=>e.id==='magicroom').sections);assert(magic.includes('Arenite Wall'));assert(magic.includes('Atlantis Wall'));
+  });
+ });

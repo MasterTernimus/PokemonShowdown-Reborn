@@ -7,12 +7,12 @@ import { type Battle } from '../sim/battle';
 import { type Pokemon } from '../sim/pokemon';
 
 function benefitsFromColdEclipseIce(pokemon: Pokemon) {
-	return pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive(['mindfreeze', 'icebody', 'thickfat', 'sinisterblaze']);
+	return pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'icebody', 'thickfat', 'sinisterblaze']);
 }
 
 function benefitsFromColdEclipseDefense(pokemon: Pokemon) {
 	return pokemon.hasType(['Ice', 'Ghost', 'Fire', 'Steel', 'Dragon']) ||
-		pokemon.hasAbilityOrPassive(['mindfreeze', 'thickfat', 'sinisterblaze', 'illusion', 'ascendance', 'duskilate', 'armorize']);
+		pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'thickfat', 'sinisterblaze', 'illusion', 'ascendance', 'duskilate', 'armorize']);
 }
 
 function startColdEclipseRainWaterSport(battle: Battle) {
@@ -711,7 +711,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onEffectiveness(typeMod, target, type, move) {
 				const moveTypes = move?.types || (move ? [move.type] : []);
 				// `type` is one defensive type; preserve every other component of multi-type attacks.
-				if (type === 'Ice') return typeMod - moveTypes.filter(t => t === 'Fighting').length;
+				if (type === 'Ice' || target && !target.hasType('Ice') && type === target.getTypes()[0] && target.hasAbilityOrPassive('monarchofice')) return typeMod - moveTypes.filter(t => t === 'Fighting').length;
 				if (type === 'Dragon') return typeMod - 2 * moveTypes.filter(t => t === 'Ice').length;
 			},
 			onTryMove(source, target, move) {
@@ -1867,7 +1867,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePowerPriority: 6,
 			onModifyDef(def, pokemon) {
-				if (pokemon.types.includes('Ice') && this.field.isWeather('hail')) {
+				if ((pokemon.types.includes('Ice') || pokemon.hasAbilityOrPassive('monarchofice')) && this.field.isWeather('hail')) {
 					return this.chainModify(1.5);
 				}
 			},
@@ -2723,7 +2723,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifySpD(def, pokemon) {
-				if (pokemon.hasType('Ice') && this.field.isWeather('hail')) {
+				if ((pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive('monarchofice')) && this.field.isWeather('hail')) {
 					return this.chainModify(1.5);
 				}
 			},

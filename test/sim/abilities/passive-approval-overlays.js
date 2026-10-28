@@ -195,10 +195,30 @@ exports.stats = (id, fallback) => id === 'beautifly' ? {hp:80, atk:50, def:85, s
 // October revisions: fixed expectations for the newer roster packages.
 // Keep historical snapshots intact; these values are independent of runtime Dex.
 const october27Passives = {venomoth:['mothborn'],scyther:['steadfast'],gyarados:['tempestfury'],jumpluff:['windrider'],hariyama:['thickfat'],garchomp:['serratedscales'],lucario:['mindseye'],mamoswine:['coldexpertise'],krookodile:['controlledfury'],ribombee:['sweetveil'],golisopodmega:['toughclaws'],annihilape:['controlledfury'],haxorusmega:['twinfang'],donphanrejuv:['heatproof'],breloomrejuv:['owntempo'],bronzongrejuv:['clearbody'],drapionrejuv:['stickyhold'],musharnarejuv:['synchronize'],sigilyphrejuv:['frisk'],druddigonrejuv:['raindish'],turtonatorrejuv:['oblivious'],veluzarejuv:['unnerve']};
-const october27Slots = {poliwrath:{S:'Aevian Ascendance'},scyther:{0:'Technician',1:'Sharpness',H:'Swarm'},gyarados:{1:'Intimidate'},typhlosionhisui:{H:'Wraith Procession'},typhlosionmega:{0:'Corona Furnace'},politoed:{S:'Aevian King'},jumpluff:{0:'Chlorophyll',1:'Infiltrator',H:'Windy Surge'},umbreon:{1:'Lunar Ward'},hariyama:{0:'Grit Grappler',1:'Sheer Force',H:'Stamina'},delcatty:{0:'Moonlit Prowl',1:'Natural Cure'},salamence:{H:'Rightful Exalt'},salamencemega:{0:'Exalted Aether'},rampardos:{H:'Primeval Skull'},bastiodon:{H:'Primeval Shield'},lucario:{0:'Carry On',1:'Sworn Duty',H:'Armorize'},lucariomega:{0:'Insight'},mamoswine:{0:'Forsaken Sleeper',1:'Old North',H:'Glacial Prime'},galvantula:{S:'Aevian Web'},noivern:{1:'Infiltrator'},ribombee:{0:'Shield Dust',1:'Aroma Veil',H:'Friend Guard'},palafin:{0:'Sworn Duty',1:'Friend Guard',H:'Hydration'},palafinhero:{0:'Sworn Duty',1:'Friend Guard',H:'Hydration'}};
+const october27Slots = {poliwrath:{S:'Aevian Ascendance'},scyther:{0:'Technician',1:'Sharpness',H:'Swarm'},gyarados:{1:'Intimidate'},typhlosionhisui:{H:'Wraith Procession'},typhlosionmega:{0:'Plasma Eruption'},politoed:{S:'Aevian King'},jumpluff:{0:'Chlorophyll',1:'Infiltrator',H:'Windy Surge'},umbreon:{1:'Lunar Ward'},hariyama:{0:'Grit Grappler',1:'Sheer Force',H:'Stamina'},delcatty:{0:'Moonlit Prowl',1:'Natural Cure'},salamence:{H:'Rightful Exalt'},salamencemega:{0:'Exalted Aether'},rampardos:{H:'Primeval Skull'},bastiodon:{H:'Primeval Shield'},lucario:{0:'Carry On',1:'Sworn Duty',H:'Armorize'},lucariomega:{0:'Insight'},mamoswine:{0:'Forsaken Sleeper',1:'Old North',H:'Glacial Prime'},galvantula:{S:'Aevian Web'},noivern:{1:'Infiltrator'},ribombee:{0:'Shield Dust',1:'Aroma Veil',H:'Friend Guard'},palafin:{0:'Sworn Duty',1:'Friend Guard',H:'Hydration'},palafinhero:{0:'Sworn Duty',1:'Friend Guard',H:'Hydration'}};
 for(const id of ['minior','miniororange','minioryellow','miniorgreen','miniorblue','miniorindigo','miniorviolet','miniormeteor']){october27Passives[id]=['shieldsdown'];october27Slots[id]={0:'Light Metal',1:'Self Repair',H:'Brute Force'};}
 for(const id of ['alcremie','alcremierubycream','alcremiematchacream','alcremiemintcream','alcremielemoncream','alcremierubyswirl','alcremiecaramelswirl','alcremierainbowswirl','alcremiesaltedcream'])october27Slots[id]={0:'Soothing Cream',1:'Sticky Hold',H:'Master Pâtissier'};
 const beforeOctober27 = {current:exports.current,abilities:exports.abilities,passives:exports.passives};
 exports.current=(id,fallback)=>october27Passives[id]||beforeOctober27.current(id,fallback);
 exports.abilities=(id,fallback)=>({...beforeOctober27.abilities(id,fallback),...october27Slots[id]});
 exports.passives=expected=>Object.assign(beforeOctober27.passives(expected),october27Passives);
+
+// Approved Hitmon Fiend passives and replacement hidden abilities.
+const beforeHitmon = {current:exports.current, abilities:exports.abilities, passives:exports.passives};
+const hitmonPassives = {hitmonchan:['punchfiend'], hitmonlee:['kickfiend'], hitmontop:['spinfiend']};
+exports.current=(id,fallback)=>hitmonPassives[id]||beforeHitmon.current(id,fallback);
+exports.abilities=(id,fallback)=>({...beforeHitmon.abilities(id,fallback),...({hitmonchan:{H:'Check Hook'},hitmonlee:{H:'Springheel'},hitmontop:{H:'Cyclone Rhythm'}}[id]||{})});
+exports.passives=expected=>Object.assign(beforeHitmon.passives(expected),hitmonPassives);
+
+const beforeOracular = {current:exports.current,passives:exports.passives};
+exports.current=(id,fallback)=>id==='politoed'?['oraclesrefrain']:beforeOracular.current(id,fallback);
+exports.passives=expected=>Object.assign(beforeOracular.passives(expected),{politoed:['oraclesrefrain']});
+
+const beforeEmpoleonSplit={abilities:exports.abilities,current:exports.current,passives:exports.passives};
+exports.abilities=(id,fallback)=>({...beforeEmpoleonSplit.abilities(id,fallback),...(id==='empoleon'?{1:'Imperial Edge'}:{})});
+exports.current=(id,fallback)=>['empoleonmegax','empoleonmegay'].includes(id)?['proficient']:beforeEmpoleonSplit.current(id,fallback);
+exports.passives=expected=>Object.assign(beforeEmpoleonSplit.passives(expected),{empoleonmegax:['proficient'],empoleonmegay:['proficient']});
+
+// Later explicit room-setter roster approvals.
+const beforeRooms = exports.abilities;
+exports.abilities = (id, fallback) => ({...beforeRooms(id, fallback), ...({unown:{0:'Lost Epoch'},claydolmega:{0:'World Axis'},lunatone:{1:'Gravity Well'},solrock:{1:'Gravity Well'},carbink:{0:'Arcane Chamber'},beheeyem:{0:'Mirror Chamber'}}[id] || {})});

@@ -5,7 +5,7 @@ const {AbilityComponents} = require('../../dist/data/ability-components');
 const {AbilitiesText} = require('../../dist/data/text/abilities');
 const {SignaturePassiveComponents} = require('../../dist/data/signature-passive-data');
 
-const retired = ['voltagevolley', 'soaringspirit', 'backwash', 'plasmaeruption', 'soultag'];
+const retired = ['voltagevolley', 'soaringspirit', 'backwash', 'soultag'];
 describe('Individually verified unused ability retirement', () => {
 	it('removes definitions, text and component catalog rows', () => {
 		for (const id of retired) {

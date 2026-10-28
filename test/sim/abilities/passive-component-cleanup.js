@@ -22,9 +22,10 @@ describe('Passive and selected component separation', () => {
 		const { SpeciesPassives } = require('../../../dist/data/species-passives');
 		// This historical cohort is covered below; later approved species additions
 		// must not be mistaken for an unintended widening of this old snapshot.
-		assert(before.every(row => Object.hasOwn(SpeciesPassives, row.id)));
+		assert(before.every(row => Object.hasOwn(SpeciesPassives, row.id === 'empoleonmega' ? 'empoleonmegay' : row.id)));
 		for (const row of before) {
 			const s = Dex.species.get(row.id);
+ if (row.id === 'empoleonmega') {assert.equal(s.id, 'empoleonmegay');assert.deepEqual(s.passives,['proficient']);assert.deepEqual(s.abilities,{0:"Emperor's Resolve"});continue;}
 			const { StarterPassives } = require('../../../dist/data/starter-passives');
 			assert.deepEqual(s.passives, require('./passive-approval-overlays').current(row.id, (row.id === 'quaquaval' ? ['torrent'] : StarterPassives[row.id]) || (row.id === 'butterfree' ? ['shielddust'] : ['grimer', 'muk'].includes(row.id) ? ['liquidooze'] : row.passives)), row.id);
 			for (const slot of row.slots) assert.equal(s.abilities[slot.slot], require('./passive-approval-overlays').abilities(s.id, { [slot.slot]: selected(row.id, slot.slot, slot.name) })[slot.slot], row.id);

@@ -19,13 +19,13 @@ describe('Audit A1 Controlled Fury entry state', () => {
   battle.actions.useMove(move,source,{target});
  }
  it('does not replenish a spent bonus when opposing Neutralizing Gas naturally leaves', () => {
-  const [p] = setup();
-  battle.makeChoices('move splash','move watergun');
+  const [p, q] = setup();
+  hit(q, p);
   assert.equal(p.boosts.atk,1);
   battle.makeChoices('move splash','switch 2');
   assert(p.ignoringAbility());
   battle.makeChoices('move splash','switch 2');
-  battle.makeChoices('move splash','move watergun');
+  hit(q, p);
   assert.equal(p.boosts.atk,1);
  });
  for (const [species,ability] of [['Emboar','Controlled Fury'],['Tauros','No Ability']]) for (const initial of [-6,6]) {

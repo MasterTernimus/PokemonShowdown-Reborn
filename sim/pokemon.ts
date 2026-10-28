@@ -1102,6 +1102,7 @@ export class Pokemon {
 		let hasValidMove = false;
 		for (const moveSlot of this.moveSlots) {
 			let moveName = moveSlot.move;
+			if (moveSlot.id === 'wavecrash' && this.hasAbilityOrPassive('monarchofice')) moveName = 'Royal Collision';
             if(moveSlot.id==='relicsong'){if(this.species.id==='meloettaencore')moveName='Encore Aria';else if(this.species.id==='meloettapirouette')moveName='Pirouette Dance';}
 			if (moveSlot.id === 'hiddenpower') {
 				moveName = `Hidden Power ${this.hpType}`;
@@ -1406,12 +1407,21 @@ export class Pokemon {
 		let boostName: BoostID;
 		for (boostName in boosts) {
 			delta = boosts[boostName]!;
+			const core = this.volatiles.plasmacore;
+			if (core && (boostName === 'spe' || boostName === 'spa')) {
+				const key = `${boostName}Credit`, credit = core[key] || 0;
+				if (credit > 0 && delta < 0) core[key] = Math.max(0, credit + delta);
+				if (credit < 0 && delta > 0) core[key] = Math.min(0, credit + delta);
+			}
 			this.boosts[boostName] += delta;
 		}
 		return delta;
 	}
 
 	clearBoosts() {
+		if (this.volatiles.plasmacore) {
+			this.volatiles.plasmacore.speCredit = this.volatiles.plasmacore.spaCredit = 0;
+		}
 		this.removeVolatile('artilleryreload');
 		this.removeVolatile('artilleryfired');
 		let boostName: BoostID;
@@ -1424,6 +1434,9 @@ export class Pokemon {
 		if (boosts.def !== undefined || boosts.spd !== undefined) { this.removeVolatile('artilleryreload'); this.removeVolatile('artilleryfired'); }
 		let boostName: BoostID;
 		for (boostName in boosts) {
+			if (this.volatiles.plasmacore && (boostName === 'spe' || boostName === 'spa')) {
+				this.volatiles.plasmacore[`${boostName}Credit`] = 0;
+			}
 			this.boosts[boostName] = boosts[boostName]!;
 		}
 	}
@@ -2579,6 +2592,7 @@ export class Pokemon {
 		if (!this.getAbilityComponentExclusions().includes('levitate') && this.hasAbility(['levitate', 'elevate', 'solaridol', 'lunaridol', 'burningcrown', 'astralwitchcraft',
 			'voidcraft', 'phantombarrage', 'silentflight']) && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
+		if ('plasmaairborne' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';
 	}

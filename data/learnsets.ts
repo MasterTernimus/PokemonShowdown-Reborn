@@ -113269,7 +113269,15 @@ for (const id of ['roserade', 'meowstic', 'meowsticf'] as const) {
 	Learnsets[id].learnset!.revivalblessing = ['9M'];
 }
 for (const id of ['typhlosion', 'typhlosionhisui'] as const) {
-	for (const move of ['chargebeam', 'doubleshock', 'electroball', 'risingvoltage', 'shockwave', 'thunder', 'thunderbolt', 'thunderfang'] as const) {
+	for (const move of ['chargebeam', 'doubleshock', 'electroball', 'risingvoltage', 'thunderbolt', 'thunderfang'] as const) {
 		delete Learnsets[id].learnset![move];
 	}
+	for (const move of ['zapcannon', 'shockwave', 'thunder'] as const) {
+		Learnsets[id].learnset![move] = [...new Set([...(Learnsets[id].learnset![move] || []), '9M' as const])];
+	}
+}
+
+// Explicit regular Politoed and Hitmonchan additions; regional forms keep their own lists.
+for (const [id, moves] of Object.entries({politoed:['sparklingaria','boomburst','alluringvoice'],hitmonchan:['meteormash','shadowpunch','surgingstrikes','suckerpunch']})) {
+ for (const move of moves) Learnsets[id as ID].learnset![move as ID] = [...new Set([...(Learnsets[id as ID].learnset![move as ID] || []), '9M' as const])];
 }

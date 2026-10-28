@@ -1350,10 +1350,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 9,
 		isNonstandard: "Custom",
 	},
-	empoleonite: {
-		name: "Empoleonite",
+	empoleonitex: {
+		name: "Empoleonite X",
 		spritenum: 0,
-		megaStone: { Empoleon: "Empoleon-Mega" },
+		megaStone: { Empoleon: "Empoleon-Mega-X" },
+		itemUser: ["Empoleon"],
+		onTakeItem(item, source) {
+			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		},
+		num: 12100,
+		gen: 9,
+		isNonstandard: "Custom",
+	},	empoleonitey: {
+		name: "Empoleonite Y",
+		spritenum: 0,
+		megaStone: { Empoleon: "Empoleon-Mega-Y" },
 		itemUser: ["Empoleon"],
 		onTakeItem(item, source) {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];

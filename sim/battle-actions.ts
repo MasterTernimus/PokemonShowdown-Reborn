@@ -727,6 +727,21 @@ export class BattleActions {
 		}
 
 		const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
+		if (sourceEffect?.id === 'checkhook') {
+			let cost = 2;
+			for (const pressureTarget of pressureTargets) {
+				const extra = this.battle.runEvent('DeductPP', pressureTarget, pokemon, move);
+				if (typeof extra === 'number') cost += 2 * extra;
+			}
+			// Use the actual redirected targets, and never spend a partial counter cost.
+			if ((pokemon.getMoveData(move)?.pp || 0) < cost) {
+				this.battle.add('-fail', pokemon);
+				this.battle.attrLastMove('[still]');
+				return false;
+			}
+			pokemon.deductPP(move, cost);
+			this.battle.add('-activate', pokemon, 'ability: Check Hook', '[move] Sucker Punch', `[number] ${cost}`);
+		}
 		if (!sourceEffect || callerMoveForPressure || sourceEffect.id === 'pursuit') {
 			let extraPP = 0;
 			for (const source of pressureTargets) {
@@ -852,6 +867,12 @@ export class BattleActions {
 
 		// Targets have been resolved and the move is executing, before protection/immunity/accuracy.
 		this.battle.runEvent('MoveTargeted', targets, pokemon, move);
+		// Check Hook can KO the attacker before its already-announced move hits.
+		if ((move as any).checkHookInterrupted) return false;
+		if ((move as any).checkHookTargets?.length) {
+			targets = targets.filter(target => target.hp && target.isActive);
+			if (!targets.length) return false;
+		}
 		let atLeastOneFailure = false;
 		for (const step of moveSteps) {
 			const hitResults: (number | boolean | "" | undefined)[] | undefined = step.call(this, targets, pokemon, move);

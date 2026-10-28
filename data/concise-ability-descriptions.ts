@@ -261,7 +261,7 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Competitive; Flying ignores evasion; one ally Speed boost per entry."
   },
   "encorearia": {
-    "desc": "Serene Grace doubles secondary-effect chances, including chance-based self effects, and removes charge flags. On genuine switch-in, grants the team Safeguard for 5 turns, preserving any longer duration. Ending suppression or restarting/copying the ability does not refresh Safeguard.",
+    "desc": "Serene Grace doubles secondary-effect chances, including chance-based self effects. On genuine switch-in, grants the team Safeguard for 5 turns, preserving any longer duration. Ending suppression or restarting/copying the ability does not refresh Safeguard.",
     "shortDesc": "Serene Grace; genuine switch-in grants at least 5-turn team Safeguard."
   },
   "sushitrick": {

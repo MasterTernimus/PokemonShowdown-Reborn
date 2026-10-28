@@ -1,3 +1,4 @@
+import { clearWonderRoomDrops, wonderRoomPowerTrick } from './room-move-effects';
 import { resolveNaturePowerMove } from './nature-power';
 import { tidalSoundproofSource } from './primarina-approved';
 import {prepareMeloettaMove} from './meloetta-encore';
@@ -994,6 +995,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
+				if (this.field.getPseudoWeather('magicroom')) return 8;
 				if (effect && ['gmaxresonance', 'gmaxechoresonance'].includes(effect.id)) return 4;
 				if (source?.hasAbility(['mourningsnow', 'frostsovereign'])) return 8;
 				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
@@ -1021,7 +1023,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-fail', source, 'move: Aurora Veil', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
 				}
-				this.add('-sidestart', side, 'move: Aurora Veil');
+				this.add('-sidestart', side, 'move: Aurora Veil', ...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) this.add('-message', "Magic Room wove Aurora Veil into an 8-turn barrier!");
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 10,
@@ -1058,6 +1061,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
+				if (this.field.getPseudoWeather('magicroom')) return 8;
 				if (source?.hasAbility('sandsovereign') || source?.hasItem('lightclay') ||
 					this.field.isTerrain(['desertterrain', 'rockyterrain', 'ashenbeachterrain'])) {
 					return 8;
@@ -1073,9 +1077,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSideStart(side) {
 				if ((this.effectState?.duration ?? 5) > 5) {
-					this.add('-sidestart', side, 'move: Arenite Wall', '[persistent]');
+					this.add('-sidestart', side, 'move: Arenite Wall', '[persistent]', ...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) this.add('-message', "Magic Room wove Arenite Wall into an 8-turn barrier!");
 				} else {
-					this.add('-sidestart', side, 'move: Arenite Wall');
+					this.add('-sidestart', side, 'move: Arenite Wall', ...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) this.add('-message', "Magic Room wove Arenite Wall into an 8-turn barrier!");
 				}
 			},
 			onSideResidualOrder: 26,
@@ -1106,6 +1112,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source) {
+				if (this.field.getPseudoWeather('magicroom')) return 8;
 				if (source?.hasItem('lightclay') || ['raindance', 'primordialsea'].includes(source?.effectiveWeather() || '') ||
 					this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'])) return 8;
 				return 5;
@@ -1118,9 +1125,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSideStart(side) {
 			if ((this.effectState?.duration ?? 5) > 5) {
-				this.add('-sidestart', side, 'move: Atlantis Wall', '[persistent]');
+				this.add('-sidestart', side, 'move: Atlantis Wall', '[persistent]', ...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) this.add('-message', "Magic Room wove Atlantis Wall into an 8-turn barrier!");
 			} else {
-				this.add('-sidestart', side, 'move: Atlantis Wall');
+				this.add('-sidestart', side, 'move: Atlantis Wall', ...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) this.add('-message', "Magic Room wove Atlantis Wall into an 8-turn barrier!");
 			}
 			},
 			onSideResidualOrder: 26,
@@ -1203,7 +1212,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Avalanche",
 		pp: 10,
 		priority: -4,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		target: "normal",
 		type: "Ice",
 		contestType: "Beautiful",
@@ -1940,7 +1949,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Body Slam",
 		pp: 15,
 		priority: 0,
-		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { gravityboost: 1, tail: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -4204,7 +4213,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain('desertterrain')) {
+			if (this.field.getPseudoWeather('gravity') || this.field.isTerrain('desertterrain')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -4399,7 +4408,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				attacker.formeChange(forme, move);
 			}
 			this.add('-prepare', attacker, move.name);
-			if (this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'])) {
+			if (this.field.getPseudoWeather('gravity') ||
+				this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain'])) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -4665,7 +4675,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Draco Meteor",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, protect: 1, mirror: 1, metronome: 1 },
 		self: {
 			boosts: {
 				spa: -2,
@@ -4831,7 +4841,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Dragon Hammer",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		target: "normal",
 		type: "Dragon",
 		contestType: "Tough",
@@ -4884,7 +4894,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Dragon Rush",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
 			if (this.field.isTerrain('dragonsdenterrain')) {
 				move.accuracy = 100;
@@ -6151,7 +6161,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	firefang: {
 		num: 424,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 75,
 		category: "Physical",
 		name: "Fire Fang",
 		pp: 15,
@@ -6159,7 +6169,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
 		secondaries: [
 			{
-				chance: 10,
+				chance: 20,
 				status: 'brn',
 			}, {
 				chance: 10,
@@ -6234,15 +6244,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	firepunch: {
 		num: 7,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 85,
 		category: "Physical",
 		name: "Fire Punch",
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		secondary: {
-			chance: 10,
-			status: 'brn',
+			chance: 20,
+			boosts: {def: -1},
 		},
 		target: "normal",
 		type: "Fire",
@@ -7568,7 +7578,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Gigaton Hammer",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, cantusetwice: 1 },
+		flags: { gravityboost: 1, protect: 1, mirror: 1, metronome: 1, cantusetwice: 1 },
 		target: "normal",
 		type: "Steel",
 	},
@@ -8986,7 +8996,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.field.promoteAura(source, effect);
 			},
 			onFieldStart(target, source, effect) {
-				if (source?.hasAbility('persistent')) {
+				if (effect?.id === 'gravitywell') {
+					this.add('-fieldstart', 'move: Gravity', `[of] ${source}`, '[from] ability: Gravity Well', '[turns] ' + this.effectState.duration);
+				} else if (source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Gravity', '[persistent]');
 				} else {
 					this.add('-fieldstart', 'move: Gravity');
@@ -9020,6 +9032,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					if (applies) this.add('-activate', pokemon, 'move: Gravity');
 				}
+			},
+			onBasePower(basePower, source, target, move) {
+				if (move.isZ || move.isMax) return;
+				if (move.flags.gravityboost) this.chainModify([5325, 4096]);
+				if (move.flags.wind) this.chainModify(0.75);
+			},
+			onModifyBoost(boosts, pokemon) {
+				if (!pokemon.hasGravityExemption() && (boosts.evasion ?? 0) > 0) boosts.evasion = 0;
+			},
+			onModifyWeight(weighthg, pokemon) {
+				if (!pokemon.hasGravityExemption()) return weighthg * 2;
 			},
 			onModifyAccuracy(accuracy) {
 				if (typeof accuracy !== 'number') return;
@@ -9202,6 +9225,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target.storedStats.spd = newspd;
 			source.storedStats.spd = newspd;
 			this.add('-activate', source, 'move: Guard Split', `[of] ${target}`);
+			if (this.field.getPseudoWeather('wonderroom')) {
+				this.boost({ def: 1, spd: 1 }, source, source);
+				this.boost({ def: 1, spd: 1 }, target, source);
+				this.add('-message', "Wonder Room reshaped both Pokemon's defenses!");
+			}
 		},
 		target: "normal",
 		type: "Psychic",
@@ -9231,6 +9259,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target.setBoost(sourceBoosts);
 
 			this.add('-swapboost', source, target, 'def, spd', '[from] move: Guard Swap');
+			clearWonderRoomDrops(this, source, defSpd);
 		},
 		target: "normal",
 		type: "Psychic",
@@ -9351,7 +9380,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Hammer Arm",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
+		flags: { gravityboost: 1, contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		self: {
 			boosts: {
 				spe: -1,
@@ -9712,7 +9741,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, distance: 1, heal: 1, allyanim: 1, metronome: 1, pulse: 1 },
 		onHit(target, source) {
 			let success = false;
-			if (source.hasAbility('megalauncher')) {
+			if (this.field.getPseudoWeather('magicroom') || source.hasAbility('megalauncher')) {
 				success = !!this.heal(this.modify(target.baseMaxhp, 0.75));
 			} else {
 				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
@@ -9772,6 +9801,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			source.setBoost(targetBoosts);
 
 			this.add('-swapboost', source, target, '[from] move: Heart Swap');
+			clearWonderRoomDrops(this, source, Object.keys(source.boosts) as BoostID[]);
 			if (this.field.isTerrain('newworldterrain')) {
 				const targetHP = target.getUndynamaxedHP();
 				const averagehp = Math.floor((targetHP + source.hp) / 2) || 1;
@@ -9813,7 +9843,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Heat Crash",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { gravityboost: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', pokemon, 'Dynamax');
@@ -9870,7 +9900,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Heavy Slam",
 		pp: 10,
 		priority: 0,
-		flags: { tail: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
+		flags: { gravityboost: 1, tail: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, metronome: 1 },
 		onTryHit(target, pokemon, move) {
 			if (target.volatiles['dynamax']) {
 				this.add('-fail', pokemon, 'Dynamax');
@@ -10699,7 +10729,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	icefang: {
 		num: 423,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 75,
 		category: "Physical",
 		name: "Ice Fang",
 		pp: 15,
@@ -10726,7 +10756,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Ice Hammer",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
+		flags: { gravityboost: 1, contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		self: {
 			boosts: {
 				spe: -1,
@@ -10739,15 +10769,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	icepunch: {
 		num: 8,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 85,
 		category: "Physical",
 		name: "Ice Punch",
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		secondary: {
-			chance: 10,
-			status: 'frz',
+			chance: 20,
+			boosts: {def: -1},
 		},
 		target: "normal",
 		type: "Ice",
@@ -10796,7 +10826,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Icicle Crash",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -11262,7 +11292,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Jump Kick",
 		pp: 10,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, gravity: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1, kick: 1, gravity: 1, metronome: 1 },
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
 			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Jump Kick'));
@@ -11811,6 +11841,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
+				if (this.field.getPseudoWeather('magicroom')) return 8;
 				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
 					return 8;
 				}
@@ -11832,7 +11863,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-fail', source, 'move: Light Screen', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
 				}
-				this.add('-sidestart', side, 'move: Light Screen');
+				this.add('-sidestart', side, 'move: Light Screen', ...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) this.add('-message', "Magic Room wove Light Screen into an 8-turn barrier!");
 				if (this.field.isTerrain('mirrorarenaterrain')) {
 					this.boost({ evasion: 1 }, source);
 				}
@@ -12214,6 +12246,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 4,
 		flags: { metronome: 1 },
 		volatileStatus: 'magiccoat',
+		onHit(pokemon, source, move) {
+			if (!this.field.getPseudoWeather('magicroom')) return;
+			let shared = false;
+			for (const ally of pokemon.allies()) {
+				if (ally.hp && ally.addVolatile('magiccoat', source, move)) shared = true;
+			}
+			if (shared) this.add('-message', 'Magic Room spread the reflective veil across the team!');
+		},
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
@@ -12291,7 +12331,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (this.field.terrain === 'psychicterrain' || source.hasItem('amplifieldrock') || this.field.isTerrain('newworldterrain'))
+				// The new room is already registered; inspect the rock before its own suppression.
+				const rockActive = source?.item === 'amplifieldrock' && source.isActive &&
+					!source.volatiles.embargo && !source.hasAbility(['klutz', 'fossilfrenzy']);
+				if (this.field.isTerrain('psychicterrain') || rockActive || this.field.isTerrain('newworldterrain'))
 					return 8;
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
@@ -12299,8 +12342,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				return 5;
 			},
-			onFieldStart(target, source) {
-				if (source?.hasAbility('persistent')) {
+			onBasePower(basePower, source, target, move) {
+				if (['Psychic', 'Ghost', 'Fairy'].includes(move.type)) return this.chainModify([4915, 4096]);
+			},
+			onFieldStart(target, source, effect) {
+				if (effect?.id === 'arcanechamber') {
+					this.add('-fieldstart', 'move: Magic Room', `[of] ${source}`, '[from] ability: Arcane Chamber', '[turns] ' + this.effectState.duration);
+				} else if (source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Magic Room', `[of] ${source}`, '[persistent]');
 				} else {
 					this.add('-fieldstart', 'move: Magic Room', `[of] ${source}`);
@@ -13735,6 +13783,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source) {
+				if (this.field.getPseudoWeather('magicroom')) return 8;
 				if (source?.effectiveWeather && ['hail', 'snow'].includes(source.effectiveWeather())) return 8;
 				return 5;
 			},
@@ -13758,7 +13807,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (target.side === this.effectState.target && move.spreadHit) return this.chainModify(0.75);
 			},
 			onSideStart(side) {
-				this.add('-sidestart', side, 'Mist');
+				this.add('-sidestart', side, 'Mist',
+					...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) {
+					this.add('-message', 'Magic Room wove Mist into an 8-turn barrier!');
+				}
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 4,
@@ -14106,7 +14159,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Mountain Gale",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, protect: 1, mirror: 1, metronome: 1 },
 		onModifyMove(move) {
 			if (this.field.isTerrain(['icyterrain', 'mountainterrain', 'snowymountainterrain'])) {
 				move.accuracy = 100;
@@ -15040,6 +15093,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.add('-sethp', target, target.getHealth, '[from] move: Pain Split', '[silent]');
 			pokemon.sethp(averagehp);
 			this.add('-sethp', pokemon, pokemon.getHealth, '[from] move: Pain Split');
+			if (this.field.getPseudoWeather('wonderroom')) {
+				pokemon.removeVolatile('confusion');
+				target.removeVolatile('confusion');
+			}
 		},
 		target: "normal",
 		type: "Normal",
@@ -15691,17 +15748,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'powershift',
 		condition: {
 			onStart(pokemon) {
-				this.add('-start', pokemon, 'Power Shift');
+				this.effectState.fullShift = !!this.field.getPseudoWeather('wonderroom');
+				this.add('-start', pokemon, 'Power Shift', ...(this.effectState.fullShift ? ['[fullshift]'] : []));
+				if (this.effectState.fullShift) this.add('-message', 'Wonder Room exchanged both offensive and defensive stat pairs!');
 				const newatk = pokemon.storedStats.def;
 				const newdef = pokemon.storedStats.atk;
 				pokemon.storedStats.atk = newatk;
 				pokemon.storedStats.def = newdef;
+				if (this.effectState.fullShift) {
+					[pokemon.storedStats.spa, pokemon.storedStats.spd] = [pokemon.storedStats.spd, pokemon.storedStats.spa];
+				}
 			},
 			onCopy(pokemon) {
 				const newatk = pokemon.storedStats.def;
 				const newdef = pokemon.storedStats.atk;
 				pokemon.storedStats.atk = newatk;
 				pokemon.storedStats.def = newdef;
+				if (this.effectState.fullShift) {
+					[pokemon.storedStats.spa, pokemon.storedStats.spd] = [pokemon.storedStats.spd, pokemon.storedStats.spa];
+				}
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Power Shift');
@@ -15709,6 +15774,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const newdef = pokemon.storedStats.atk;
 				pokemon.storedStats.atk = newatk;
 				pokemon.storedStats.def = newdef;
+				if (this.effectState.fullShift) {
+					[pokemon.storedStats.spa, pokemon.storedStats.spd] = [pokemon.storedStats.spd, pokemon.storedStats.spa];
+				}
 			},
 			onRestart(pokemon) {
 				pokemon.removeVolatile('Power Shift');
@@ -15734,6 +15802,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target.storedStats.spa = newspa;
 			source.storedStats.spa = newspa;
 			this.add('-activate', source, 'move: Power Split', `[of] ${target}`);
+			if (this.field.getPseudoWeather('wonderroom')) {
+				this.boost({ atk: -1, spa: -1 }, source, source);
+				this.boost({ atk: -1, spa: -1 }, target, source);
+				this.add('-message', "Wonder Room reshaped both Pokemon's offensive power!");
+			}
 		},
 		target: "normal",
 		type: "Psychic",
@@ -15763,6 +15836,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target.setBoost(sourceBoosts);
 
 			this.add('-swapboost', source, target, 'atk, spa', '[from] move: Power Swap');
+			clearWonderRoomDrops(this, source, atkSpa);
 		},
 		target: "normal",
 		type: "Psychic",
@@ -15782,6 +15856,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Power Trick');
+				wonderRoomPowerTrick(this, pokemon);
 				const newatk = pokemon.storedStats.def;
 				const newdef = pokemon.storedStats.atk;
 				pokemon.storedStats.atk = newatk;
@@ -15801,6 +15876,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.storedStats.def = newdef;
 			},
 			onRestart(pokemon) {
+				wonderRoomPowerTrick(this, pokemon);
 				pokemon.removeVolatile('Power Trick');
 			},
 		},
@@ -17028,6 +17104,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
+				if (this.field.getPseudoWeather('magicroom')) return 8;
 				if (source?.hasItem('lightclay') || this.field.isTerrain('mirrorarenaterrain')) {
 					return 8;
 				}
@@ -17049,7 +17126,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-fail', source, 'move: Reflect', '[from] ability: Royal Decree', `[of] ${decree}`);
 					return false;
 				}
-				this.add('-sidestart', side, 'Reflect');
+				this.add('-sidestart', side, 'Reflect', ...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) this.add('-message', "Magic Room wove Reflect into an 8-turn barrier!");
 				if (this.field.isTerrain('mirrorarenaterrain')) {
 					this.boost({ evasion: 1 }, source);
 				}
@@ -17495,7 +17573,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Rock Slide",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch',
@@ -17558,7 +17636,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Rock Tomb",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -17577,7 +17655,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Rock Wrecker",
 		pp: 5,
 		priority: 0,
-		flags: { recharge: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1, cantusetwice: 1 },
+		flags: { gravityboost: 1, recharge: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1, cantusetwice: 1 },
 		secondary: {chance: 60, status: 'par'},
 		onAfterMove(source, target, move) {
 			if (target.fainted) {
@@ -17860,6 +17938,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 3,
 			durationCallback(target, source) {
+				if (this.field.getPseudoWeather('magicroom')) return 8;
 				if (source?.hasAbilityOrPassive('invigorate')) return 5;
 				return 3;
 			},
@@ -17902,7 +17981,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (target.side === this.effectState.target && move.category !== 'Status') return this.chainModify(0.9);
 			},
 			onSideStart(side, source) {
-				this.add('-sidestart', side, 'Safeguard');
+				this.add('-sidestart', side, 'Safeguard',
+					...(this.field.getPseudoWeather('magicroom') ? ['[turns] ' + this.effectState.duration] : []));
+				if (this.field.getPseudoWeather('magicroom')) {
+					this.add('-message', 'Magic Room wove Safeguard into an 8-turn barrier!');
+				}
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 3,
@@ -20231,6 +20314,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target.storedStats.spe = source.storedStats.spe;
 			source.storedStats.spe = targetSpe;
 			this.add('-activate', source, 'move: Speed Swap', `[of] ${target}`);
+			if (this.field.getPseudoWeather('wonderroom')) {
+				const sourceSpeed = source.boosts.spe;
+				source.setBoost({ spe: target.boosts.spe });
+				target.setBoost({ spe: sourceSpeed });
+				this.add('-swapboost', source, target, 'spe', '[from] move: Speed Swap');
+				clearWonderRoomDrops(this, source, ['spe']);
+			}
 		},
 		target: "normal",
 		type: "Psychic",
@@ -21016,7 +21106,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Stomp",
 		pp: 20,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, nonsky: 1, kick: 1, metronome: 1 },
+		flags: { gravityboost: 1, contact: 1, protect: 1, mirror: 1, nonsky: 1, kick: 1, metronome: 1 },
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -21724,11 +21814,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Cute",
 	},
 	swift: {
+		onModifyMove(move, pokemon) {
+			useHigherOffensiveStat(pokemon, move);
+		},
 		num: 129,
 		accuracy: true,
 		basePower: 60,
 		category: "Special",
 		name: "Swift",
+		critRatio: 2,
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
@@ -22725,7 +22819,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thunderfang: {
 		num: 422,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 75,
 		category: "Physical",
 		name: "Thunder Fang",
 		pp: 15,
@@ -22733,7 +22827,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
 		secondaries: [
 			{
-				chance: 10,
+				chance: 20,
 				status: 'par',
 			}, {
 				chance: 10,
@@ -22765,15 +22859,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thunderpunch: {
 		num: 9,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 85,
 		category: "Physical",
 		name: "Thunder Punch",
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		secondary: {
-			chance: 10,
-			status: 'par',
+			chance: 20,
+			boosts: {def: -1},
 		},
 		target: "normal",
 		type: "Electric",
@@ -23199,6 +23293,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, target, effect) {
+				if (effect?.id === 'lostepoch') return 5;
 				if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain') || this.field.isTerrain('newworldterrain'))
 					return 8;
 				if (source?.hasAbility('persistent')) {
@@ -23207,8 +23302,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				return 5;
 			},
-			onFieldStart(target, source) {
-				if (source?.hasAbility('persistent')) {
+			onFieldStart(target, source, effect) {
+				if (effect?.id === 'lostepoch') {
+					this.add('-fieldstart', 'move: Trick Room', `[of] ${source}`, '[from] ability: Lost Epoch', '[turns] 5');
+				} else if (source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Trick Room', `[of] ${source}`, '[persistent]');
 				} else {
 					this.add('-fieldstart', 'move: Trick Room', `[of] ${source}`);
@@ -24360,6 +24457,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				return 5;
 			},
+			onCriticalHit() {
+				return false;
+			},
+			onBasePower(basePower, source, target, move) {
+				if (move.overrideOffensiveStat && ['def', 'spd'].includes(move.overrideOffensiveStat) && !move.isZ && !move.isMax) {
+					return this.chainModify([4915, 4096]);
+				}
+			},
 			onModifyMove(move, source, target) {
 				// This code is for moves that use defensive stats as the attacking stat; see below for most of the implementation
 				if (!move.overrideOffensiveStat) return;
@@ -24368,8 +24473,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.overrideOffensiveStat = statAndBoosts === 'def' ? 'spd' : 'def';
 				this.hint(`${move.name} uses ${statAndBoosts === 'def' ? '' : 'Sp. '}Def boosts when Wonder Room is active.`);
 			},
-			onFieldStart(field, source) {
-				if (source?.hasAbility('persistent')) {
+			onFieldStart(target, source, effect) {
+				if (effect?.id === 'mirrorchamber') {
+					this.add('-fieldstart', 'move: Wonder Room', `[of] ${source}`, '[from] ability: Mirror Chamber', '[turns] ' + this.effectState.duration);
+				} else if (source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Wonder Room', `[of] ${source}`, '[persistent]');
 				} else {
 					this.add('-fieldstart', 'move: Wonder Room', `[of] ${source}`);
@@ -24398,7 +24505,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Wood Hammer",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { gravityboost: 1, contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		recoil: [33, 100],
 		target: "normal",
 		type: "Grass",
@@ -25065,3 +25172,5 @@ installJirachiMoves(Moves);
 import { ScentedGeyser } from './scented-geyser';
 Moves.scentedgeyser = ScentedGeyser;
 Moves.splinteredweb = { num: 20051, name: 'Splintered Web', type: 'Bug', category: 'Physical', basePower: 90, accuracy: 100, pp: 10, priority: 0, target: 'normal', flags: { protect: 1, mirror: 1 }, onPrepareHit(target, source, move) { if (target.side.sideConditions.stealthrock) move.willCrit = true; } };
+
+Moves.royalcollision = {...Moves.wavecrash, name:'Royal Collision', num:20090, types:['Water','Ice'], recoil:[1,10], ignoreAbility:true, isNonstandard:'Custom'};

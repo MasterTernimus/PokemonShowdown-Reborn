@@ -21584,3 +21584,24 @@ Abilities.royalremedy = {
  desc: 'Switching out cures its status and heals 1/8 max HP only if a status was cured. At turn end, each adjacent ally has a 30% chance to have its status cured. Bewitched Woods also cures the holder at turn end without the switch-out heal. Includes full local Natural Cure and Healer; overlapping copies do not stack.',
 };
 composeSelectedAbility(Abilities, 'royalremedy', ['naturalcure', 'healer'], true);
+
+import {installWorldAxis} from './world-axis';
+installWorldAxis(Abilities);
+
+import {installRoomSetters} from './room-setters';
+installRoomSetters(Abilities);
+
+import {installPlasmaEruption} from './plasma-eruption';
+installPlasmaEruption(Abilities);
+
+import {installHitmonRework} from './hitmon-rework';
+installHitmonRework(Abilities);
+
+import {installOracularChorus} from './oracular-chorus';
+installOracularChorus(Abilities);
+
+import {installEmpoleonMegas} from './empoleon-megas';
+installEmpoleonMegas(Abilities);
+
+import {installGraceSupport} from './grace-support';
+installGraceSupport(Abilities);

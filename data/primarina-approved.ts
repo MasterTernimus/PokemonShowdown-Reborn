@@ -10,7 +10,7 @@ const tidalVoiceHits = new WeakMap<object, Map<Pokemon, Map<Pokemon, Set<number>
 export const PrimarinaApprovedDescriptions = {
 	encorearia: {
 		shortDesc: 'Full Serene Grace; genuine switch-in grants at least 5-turn team Safeguard.',
-		desc: 'Full local Serene Grace doubles secondary-effect chances, including chance-based self effects, and removes charge flags. On genuine switch-in, grants the team Safeguard for 5 turns, preserving any longer duration. Ending suppression or restarting/copying the ability does not refresh Safeguard.',
+		desc: 'Serene Grace doubles secondary-effect chances, including chance-based self effects. On genuine switch-in, grants the team Safeguard for 5 turns, preserving any longer duration. Ending suppression or restarting/copying the ability does not refresh Safeguard.',
 	},
 	tidalvoice: {
 		shortDesc: 'Liquid Voice; team Soundproof; sound bypasses guards; each foe HP hit: 30% +1 SpA.',

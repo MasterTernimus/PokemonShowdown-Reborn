@@ -9,6 +9,7 @@ import { calculatorMetadata } from '../sim/custom-calculator';
 import { Auras } from '../data/auras';
 import { FieldNotes } from '../data/field-guide';
 import { ReviewedFieldGuide } from '../data/public-field-guide';
+import { RoomReference } from '../data/room-reference';
 const index = JSON.parse(FS('data/field-guide-index.json').readSync());
 export function publicFieldGuide() {
 	const fields = calculatorMetadata().fields.filter(f => f.id).map(field => ({
@@ -25,7 +26,14 @@ export function publicFieldGuide() {
 		'Seeds and other effects': [`Temporary aura, distinct from a full field. Registry duration: ${aura.turns} turns; the observed battle duration can differ. Mimicry type: ${aura.mimicryType}.`, 'Compatibility, conversion, source provenance and paused timers follow the engine. These registry values are not an exhaustive description of shared handlers.'],
 		'Battle messages': [...new Set(Object.values(aura.moveMessages))].map(message => '"' + message + '" — the named aura power modifier is evaluated for ' + Object.entries(aura.moveMessages).filter(([,text]) => text === message).map(([id]) => Dex.moves.get(id).name).join(', ') + '. Its exact multiplier is listed in Moves; the message does not confirm a hit.').concat(['"' + aura.typeMessage + '" — a matching type attack passes the aura type conditions above, or a named move without a separate message receives its aura modifier. Shared field/aura reconciliation can reduce the extra multiplier.', '"' + aura.endMessage + '" — this aura ends or is cleared; it does not itself inflict damage.']),
 	} }));
-	return { fingerprint: index.fingerprint, entries: [...fields, ...auras], coverage: { fields: fields.length, auras: auras.length, reviewedFields: Object.keys(ReviewedFieldGuide).length, exhaustive: false }, notice: 'Every field has source-reviewed sections and indexed interaction details. Battle messages are explained separately from mechanics. The indexed review is not a guarantee of exhaustive cross-file coverage; documented discrepancies describe current behavior rather than intended balance.' };
+	const rooms = Object.entries(RoomReference).map(([id, entry]) => ({
+		id, name: Dex.moves.get(id).name, kind: 'effect', group: 'Rooms & Gravity',
+		summary: entry.summary, review: 'Applies to all sides. Cold Eclipse blocks and removes all four effects.',
+		groupingNote: 'A separate battle effect with its own timer, alongside the main field and aura.',
+		sections: {...entry.sections, ...(id === 'gravity' ? {'Impact moves': [Dex.moves.all().filter(move => move.flags.gravityboost).map(move => move.name).join(', ') + '.']} : {})},
+		legacyNotes: [], references: {}, referenceDetails: {} as ReturnType<typeof fieldReferenceDetails>,
+	}));
+	return { fingerprint: index.fingerprint, entries: [...fields, ...auras, ...rooms], coverage: { fields: fields.length, auras: auras.length, rooms: rooms.length, reviewedFields: Object.keys(ReviewedFieldGuide).length, exhaustive: false }, notice: 'Every field has source-reviewed sections and indexed interaction details. Battle messages are explained separately from mechanics. The indexed review is not a guarantee of exhaustive cross-file coverage; documented discrepancies describe current behavior rather than intended balance.' };
 }
 
 function fieldReferenceDetails(field: string) {

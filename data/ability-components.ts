@@ -1036,3 +1036,13 @@ AbilityComponents.freeflight = ['windpower', 'moxie'];
 AbilityComponents.rightfulexalt = ['serenegrace', 'innerfocus'];
 
 AbilityComponents.royalremedy = ['naturalcure', 'healer'];
+
+import {HitmonComponents} from './hitmon-rework';
+Object.assign(AbilityComponents, HitmonComponents);
+
+AbilityComponents.oraclesrefrain = ['resonanceforce', 'soundproof'];
+
+AbilityComponents.monarchofice = ['slushrush'];
+AbilityComponents.emperorsresolve = ['swiftswim','competitive'];
+
+AbilityComponents.imperialedge=AbilityComponents.exalt; delete AbilityComponents.exalt;

@@ -37,28 +37,29 @@ describe('Current Typhlosionite forms', () => {
 		assert.deepEqual(Dex.species.get('Typhlosion-Hisui').baseStats,
 			{ hp: 83, atk: 95, def: 80, spa: 127, spd: 65, spe: 95 });
 		const mega = Dex.species.get('Typhlosion-Mega');
-		assert.deepEqual(mega.types, ['Fire', 'Psychic']);
+		assert.deepEqual(mega.types, ['Fire', 'Electric']);
 		assert.deepEqual(mega.baseStats, { hp: 83, atk: 138, def: 85, spa: 139, spd: 70, spe: 130 });
 		assert.equal(Object.values(mega.baseStats).reduce((sum, stat) => sum + stat, 0), 645);
-		assert.equal(mega.abilities[0], 'Corona Furnace');
+		assert.equal(mega.abilities[0], 'Plasma Eruption');
 		assert.equal(mega.requiredItem, 'Typhlosionite');
 		for (const name of ['Typhlosion', 'Typhlosion-Alt', 'Typhlosion-Hisui']) {
 			const [holder] = start(name);
 			assert.equal(holder.species.id, 'typhlosionmega');
-			assert.equal(holder.ability, 'coronafurnace');
+			assert.equal(holder.ability, 'plasmaeruption');
 			battle.destroy();
 			battle = null;
 		}
 	});
 
-	it('removes the withdrawn Electric pack while preserving existing Electric coverage', () => {
+	it('keeps withdrawn Electric moves excluded while granting the three approved attacks', () => {
 		for (const name of ['Typhlosion', 'Typhlosion-Hisui']) {
 			const learnset = Dex.species.getLearnsetData(name.toLowerCase().replace(/[^a-z0-9]/g, '')).learnset;
-			for (const move of ['thunderbolt', 'doubleshock', 'thunder', 'risingvoltage',
-				'chargebeam', 'electroball', 'shockwave', 'thunderfang']) {
+			for (const move of ['thunderbolt', 'doubleshock', 'risingvoltage',
+				'chargebeam', 'electroball', 'thunderfang']) {
 				assert(!learnset[move], `${name} still has ${move}`);
 			}
 			assert(learnset.thunderpunch?.length); assert(learnset.wildcharge?.length);
+			for (const move of ['zapcannon', 'shockwave', 'thunder']) assert(learnset[move].includes('9M'));
 		}
 	});
 

@@ -25,7 +25,7 @@ describe('Approved Rejuv passives', () => {
 	it('covers every Rejuv form and leaves ordinary forms unchanged', () => {
 		assert.deepEqual(Dex.species.all().filter(s => s.id.endsWith('rejuv')).map(s => s.id).sort(), Object.keys(expected).sort());
 		for (const [id, passive] of Object.entries(expected)) assert.deepEqual(Dex.species.get(id).passives, [passive], id);
-		for (const [id, passive] of Object.entries({parasect: 'mycelialbond', poliwrath: 'tirelessmuscle', politoed: 'soundproof', donphan: 'battlearmor', breloom: 'effectspore', bronzong: 'clearbody', drapion: 'keeneye', musharna: 'owntempo', unfezant: 'rivalry', sigilyph: 'anticipation', galvantula: 'compoundeyes', druddigon: 'roughskin', turtonator: 'aftermath', veluza: 'keeneye'})) {
+		for (const [id, passive] of Object.entries({parasect: 'mycelialbond', poliwrath: 'tirelessmuscle', politoed: 'oraclesrefrain', donphan: 'battlearmor', breloom: 'effectspore', bronzong: 'clearbody', drapion: 'keeneye', musharna: 'owntempo', unfezant: 'rivalry', sigilyph: 'anticipation', galvantula: 'compoundeyes', druddigon: 'roughskin', turtonator: 'aftermath', veluza: 'keeneye'})) {
 			assert.deepEqual(Dex.species.get(id).passives, [passive], id);
 		}
 	});
@@ -86,7 +86,7 @@ describe('Approved Rejuv passives', () => {
 	it('loses the Rejuv passive on suppression and regains it on a fresh entry', () => {
 		const [p, q] = setup();
 		p.addVolatile('gastroacid', q); battle.runEvent('Update');
-		assert.equal(p.species.id, 'politoed'); assert.deepEqual(p.getPassives(), ['soundproof']);
+		assert.equal(p.species.id, 'politoed'); assert.deepEqual(p.getPassives(), ['oraclesrefrain']);
 		assert(!p.hasAbilityOrPassive('naturalcure'));
 		battle.makeChoices('switch 2', 'move splash');
 		battle.makeChoices('switch 2', 'move splash');

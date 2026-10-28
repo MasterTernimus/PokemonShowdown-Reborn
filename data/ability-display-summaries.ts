@@ -853,3 +853,9 @@ AbilityDisplaySummaries.venomarmor = 'Dual Wield + Run Away on regular Zangoose.
 
 import {ReadableAbilitySummaries} from './ability-readability';
 Object.assign(AbilityDisplaySummaries, ReadableAbilitySummaries);
+
+
+AbilityDisplaySummaries.imperialedge = AbilityDisplaySummaries.exalt;
+delete AbilityDisplaySummaries.exalt;
+
+for (const id of ['serenegrace', 'fortunatewing', 'voidomen']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;

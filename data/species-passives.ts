@@ -1281,5 +1281,13 @@ for (const [id, passives] of Object.entries(RejuvPassives)) {
 	for (const passive of passives) ThematicPassiveIds.add(passive);
 }
 
+for (const [species, passive] of [['hitmonchan', 'punchfiend'], ['hitmonlee', 'kickfiend'], ['hitmontop', 'spinfiend']]) {
+	SpeciesPassives[species] = Object.freeze([passive]);
+	ThematicPassiveIds.add(passive);
+}
+
+SpeciesPassives.politoed = Object.freeze(['oraclesrefrain']);
+ThematicPassiveIds.add('oraclesrefrain');
+
 Object.freeze(SpeciesPassives);
 

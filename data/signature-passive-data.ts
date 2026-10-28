@@ -7,6 +7,9 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
+	punchfiend: ['ironfist', 'serenegrace', 'keeneye'],
+	kickfiend: ['striker', 'limber', 'serenegrace'],
+	spinfiend: ['technician', 'vitalspirit', 'steadfast'],
 	royalremedy: ['naturalcure', 'healer'],
 	freeflight: ['windpower', 'moxie'],
 	cactuschorus: ['waterabsorb', 'sandrush'],
@@ -81,3 +84,5 @@ SignaturePassiveDescriptions.controlledfury = {"shortDesc":"Anger Point; no ramp
 SignaturePassiveComponents.tempestfury = ['angerpoint'];
 SignaturePassiveDescriptions.tempestfury.shortDesc += ' Anger Point.';
 SignaturePassiveDescriptions.tempestfury.desc += ' Includes full local Anger Point: the first damaging hit after activation raises Attack by 1, and a surviving critical hit maximizes Attack at the normal +6 cap.';
+
+SignaturePassiveComponents.oraclesrefrain = ['resonanceforce', 'soundproof'];

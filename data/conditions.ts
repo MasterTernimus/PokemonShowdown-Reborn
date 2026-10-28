@@ -1016,7 +1016,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		noCopy: true,
 		onStart(pokemon) {
 			if (!this.activeMove) throw new Error("Battle.activeMove is null");
-			if (!this.activeMove.id || this.activeMove.hasBounced || this.activeMove.sourceEffect === 'snatch') return false;
+			if (!this.activeMove.id || this.activeMove.hasBounced ||
+				['snatch', 'checkhook'].includes(this.activeMove.sourceEffect || '')) return false;
 			this.effectState.move = this.activeMove.id;
 		},
 		onBeforeMove(pokemon, target, move) {
@@ -1473,7 +1474,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbilityOrPassive(['mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
+			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
 			if (iceBeneficiary && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);
@@ -1531,7 +1532,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Ice') && this.field.isWeather('snowscape')) {
+			if ((pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive('monarchofice')) && this.field.isWeather('snowscape')) {
 				return this.modify(def, 1.5);
 			}
 		},
@@ -1976,3 +1977,6 @@ Conditions.dreamsicknessrescueguard = {
 		if (move === this.effectState.protectedMove && source === this.effectState.protectedSource) this.effectState.target.removeVolatile('dreamsicknessrescueguard');
 	},
 };
+
+import {PlasmaConditions} from './plasma-eruption';
+Object.assign(Conditions, PlasmaConditions);

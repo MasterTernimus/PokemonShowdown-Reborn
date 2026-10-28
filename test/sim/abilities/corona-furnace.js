@@ -22,8 +22,8 @@ describe('Mega Typhlosion Corona Furnace', () => {
 	});
 	it('keeps stats and Proficient while changing only Mega typing and selected ability', () => {
 		const s = Dex.species.get('typhlosionmega');
-		assert.deepEqual(s.types, ['Fire', 'Psychic']);
-		assert.deepEqual(s.abilities, { 0: 'Corona Furnace' });
+		assert.deepEqual(s.types, ['Fire', 'Electric']);
+		assert.deepEqual(s.abilities, { 0: 'Plasma Eruption' });
 		assert.deepEqual(s.baseStats, { hp: 83, atk: 138, def: 85, spa: 139, spd: 70, spe: 130 });
 		assert.deepEqual(s.passives, ['proficient']);
 		for (const id of ['typhlosion', 'typhlosionalt', 'typhlosionhisui']) {
@@ -124,20 +124,20 @@ describe('Mega Typhlosion Corona Furnace', () => {
 	it('adds no extra power, hits or priority beyond the separate Proficient passive', () => {
 		const [p, q] = setup('Typhlosion-Mega');
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('flamethrower'), 100), 130);
-		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('psychic'), 100), 130);
+		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('psychic'), 100), 100);
 		p.hp = 1;
 		assert.equal(battle.runEvent('ModifyPriority', p, q, Dex.getActiveMove('flamethrower'), 0), 0);
 		assert(!Dex.abilities.get('coronafurnace').onPrepareHit);
 		assert.deepEqual(require('../../../dist/data/ability-components').AbilityComponents.coronafurnace, ['flamebody']);
 	});
-	for (const species of ['Typhlosion', 'Typhlosion-Alt', 'Typhlosion-Hisui']) it(species + ' Mega route reaches the same Corona Furnace form', () => {
+	for (const species of ['Typhlosion', 'Typhlosion-Alt', 'Typhlosion-Hisui']) it(species + ' Mega route reaches the same Plasma Eruption form', () => {
 		battle = common.createBattle({ formatid: 'gen9nofieldsinglesgame' }, [[{ species, ability: 'Blazing Mane', item: 'Typhlosionite', moves: ['splash'] }], [{ species: 'Mew', ability: 'No Ability', moves: ['splash'] }]]);
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash mega', 'move splash');
 		const p = battle.p1.active[0];
 		assert.equal(p.species.id, 'typhlosionmega');
-		assert.equal(p.ability, 'coronafurnace');
-		assert.deepEqual(p.getTypes(), ['Fire', 'Psychic']);
+		assert.equal(p.ability, 'plasmaeruption');
+		assert.deepEqual(p.getTypes(), ['Fire', 'Electric']);
 		assert.deepEqual(p.getPassives(), ['proficient']);
 	});
 });

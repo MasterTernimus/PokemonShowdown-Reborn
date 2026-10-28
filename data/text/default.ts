@@ -342,30 +342,30 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 
 	// field effects
 	gravity: {
-		start: "  Gravity intensified!",
-		end: "  Gravity returned to normal!",
+		start: "  Gravity bears down! Weight doubles, impacts strengthen, winds weaken, and raised evasion is suppressed!",
+		end: "  Gravity's crushing pressure lifted! Weight, move power, and evasion returned to normal!",
 		cant: "[POKEMON] can't use [MOVE] because of gravity!",
-		activate: "[POKEMON] fell from the sky due to the gravity!",
+		activate: "Gravity dragged [POKEMON] back to the ground!",
 	},
 	magicroom: {
-		start: "  It created a bizarre area in which Pok\u00E9mon's held items lose their effects!",
-		end: "  Magic Room wore off, and held items' effects returned to normal!",
+		start: "  Magic Room sealed held items! Psychic, Ghost, and Fairy attacks grow stronger, and new barriers last longer!",
+		end: "  Magic Room's seal broke! Its attack boost ended and held items can work again!",
 	},
 	mudsport: {
 		start: "  Electricity's power was weakened!",
 		end: "  The effects of Mud Sport have faded.",
 	},
 	trickroom: {
-		start: "  [POKEMON] twisted the dimensions!",
-		end: "  The twisted dimensions returned to normal!",
+		start: "  Time bent around [POKEMON]! Trick Room reversed the Speed order!",
+		end: "  Time flowed normally again! Trick Room ended!",
 	},
 	watersport: {
 		start: "  Fire's power was weakened!",
 		end: "  The effects of Water Sport have faded.",
 	},
 	wonderroom: {
-		start: "  It created a bizarre area in which Defense and Sp. Def stats are swapped!",
-		end: "  Wonder Room wore off, and Defense and Sp. Def stats returned to normal!",
+		start: "  Wonder Room turned defenses inside out! Critical hits are sealed and defense-powered attacks grow stronger!",
+		end: "  Wonder Room's distortion faded! Defenses returned to normal, critical hits can land, and its attack boost ended!",
 	},
 
 	// misc

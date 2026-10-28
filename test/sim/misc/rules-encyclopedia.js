@@ -13,7 +13,7 @@ describe('Public custom rules and read-only team clinic', () => {
 	it('shows Politoed regular slots, passive, forms and event distinctions', () => {
 		const d = rulesDetail('species', 'Politoed');
 		assert.deepEqual(d.abilities.filter(a => a.slot !== 'S').map(a => a.name), ['Zen', 'Royal Decree', 'Storm Song']);
-		assert.equal(d.passives[0].name, 'Soundproof');
+		assert.equal(d.passives[0].name, "Oracle's Refrain");
 		assert(d.forms.includes('Politoed-Rejuv'));
 		assert(d.event.moves.find(m => m.id === 'dragoncheer').exclusive);
 		assert(!d.event.moves.find(m => m.id === 'round').exclusive);

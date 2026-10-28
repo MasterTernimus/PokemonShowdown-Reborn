@@ -32,12 +32,12 @@ function finishEntryStrike(this: Battle, source: Pokemon, target: Pokemon, move:
 export function installLoreEntryAbilities(abilities: AbilityDataTable) {
  abilities.voidomen.onModifyMovePriority = -2;
  abilities.lunarorbit.onModifyMovePriority = -2;
- abilities.lunarorbit.onModifyMove = function (move) { applySereneGrace(move, false, 'lunarorbit'); };
+ abilities.lunarorbit.onModifyMove = function (move) { applySereneGrace(move, 'lunarorbit'); };
  Object.assign(abilities.lunarorbit, {onAllyModifyMovePriority: -2, onAllyChargeMovePriority: -100});
  abilities.lunarorbit.onAllyModifyMove = function (move, source) {
   const holder = this.effectState.target as Pokemon;
   if (source === holder || !holder.hp || !holder.isActive || !source.isAlly(holder)) return;
-  applySereneGrace(move, false, 'lunarorbit');
+  applySereneGrace(move, 'lunarorbit');
  };
 
  abilities.lunarorbit.onAllyChargeMove = function (source) {

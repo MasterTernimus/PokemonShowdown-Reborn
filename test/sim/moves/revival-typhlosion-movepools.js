@@ -1,7 +1,8 @@
 'use strict';
 const assert = require('assert').strict;
 const { Dex, Teams, TeamValidator } = require('../../../dist/sim');
-const removed = ['Charge Beam', 'Double Shock', 'Electro Ball', 'Rising Voltage', 'Shock Wave', 'Thunder', 'Thunderbolt', 'Thunder Fang'];
+const removed = ['Charge Beam', 'Double Shock', 'Electro Ball', 'Rising Voltage', 'Thunderbolt', 'Thunder Fang'];
+const added = ['Zap Cannon', 'Shock Wave', 'Thunder'];
 const strict = 'gen9doublesrockyfield@@@Obtainable Moves';
 const partner = '\n\nPikachu\nAbility: Static\n- Protect';
 describe('Revival support and Typhlosion coverage boundaries', () => {
@@ -12,16 +13,21 @@ describe('Revival support and Typhlosion coverage boundaries', () => {
 		});
 	}
 	for (const species of ['Typhlosion', 'Typhlosion-Hisui']) {
+		for (const move of added) it(species + ' can legally select ' + move, () => {
+			const ability = Dex.species.get(species).abilities[0];
+			assert.equal(TeamValidator.get(strict).validateTeam(Teams.import(species + '\nAbility: ' + ability + '\n- ' + move + partner)), null);
+		});
 		for (const move of removed) it(species + ' rejects the added ' + move, () => {
 			const errors = TeamValidator.get(strict).validateTeam(Teams.import(species + '\nAbility: Blazing Mane\n- ' + move + partner));
 			assert(errors?.some(e => e.includes(move)), JSON.stringify(errors));
 		});
 	}
 	for (const id of ['typhlosion', 'typhlosionalt', 'typhlosionhisui', 'typhlosionmega']) {
-		it(id + ' preserves legacy Electric coverage without inherited added attacks', () => {
+		it(id + ' inherits only the approved Electric coverage', () => {
 			const entries = Dex.species.getFullLearnset(id);
 			for (const move of removed) assert(!entries.some(e => e.learnset[Dex.toID(move)]), id + ': ' + move);
 			for (const move of ['thunderpunch', 'wildcharge']) assert(entries.some(e => e.learnset[move]), id + ': ' + move);
+			for (const move of added) assert(entries.some(e => e.learnset[Dex.toID(move)]), id + ': ' + move);
 		});
 	}
 	it('keeps pre-evolutions and Aevian Roserade outside the new grant', () => {

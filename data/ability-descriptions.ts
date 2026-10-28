@@ -3820,7 +3820,7 @@ for (const [id, details] of Object.entries({...FinalPassiveDescriptions, ...Fami
 Object.assign(AbilityDescriptionOverrides, {
   "encorearia": {
     "shortDesc": "Serene Grace; first successful secondary after activation grants at least 5-turn Safeguard.",
-    "desc": "Full local Serene Grace doubles secondary-effect chances, including chance-based self effects, and removes charge flags. The first successfully applied secondary effect after activation sets or refreshes the user's side's Safeguard to at least 5 turns, preserving longer durations. Blocked secondary effects do not trigger it. Reactivating the ability resets this allowance."
+    "desc": "Full local Serene Grace doubles secondary-effect chances, including chance-based self effects. The first successfully applied secondary effect after activation sets or refreshes the user's side's Safeguard to at least 5 turns, preserving longer durations. Blocked secondary effects do not trigger it. Reactivating the ability resets this allowance."
   },
   "marvelscale": {
     "shortDesc": "1.5x Defense while statused or on Misty, Rainbow, Fairy Tale, Dragon’s Den or Starlight fields.",
@@ -4157,3 +4157,18 @@ for (const text of Object.values(AbilityDescriptionOverrides)) {
 		.split(" The weak-move bonus applies to both 60%-power hits.").join("")
 		.split("the boost applies to both 60%-power hits.").join("the offensive ability follow-up rule applies.");
 }
+
+import {HitmonDescriptions} from "./hitmon-rework";
+Object.assign(AbilityDescriptionOverrides, HitmonDescriptions);
+
+import {OracularChorusDescription} from './oracular-chorus';
+AbilityDescriptionOverrides.oraclesrefrain = OracularChorusDescription;
+
+import {EmpoleonDescriptions} from './empoleon-megas';
+Object.assign(AbilityDescriptionOverrides,EmpoleonDescriptions);
+
+AbilityDescriptionOverrides.imperialedge=AbilityDescriptionOverrides.exalt; delete AbilityDescriptionOverrides.exalt;
+
+import {GraceSupportDescriptions} from './grace-support';
+Object.assign(AbilityDescriptionOverrides, GraceSupportDescriptions);
+AbilityDescriptionOverrides.lunarorbit.desc = "Magic Guard prevents indirect damage. On entry or Mega Evolution, sets Gravity for 5 turns with its field transformations. The holder and active allies gain Serene Grace; multiple sources do not stack. Grants each recipient one charge-turn skip per stay, shared with Void Omen. Only the recipient switching resets it. Independent field and Power Herb skips do not spend the allowance. Suppression disables the grant.";

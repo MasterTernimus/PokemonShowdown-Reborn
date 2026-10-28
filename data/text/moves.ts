@@ -54,13 +54,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	arenitewall: {
 		name: "Arenite Wall",
-		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during Sandstorm or on Desert Field, Rocky Field, Ashen Beach, or Cold Eclipse. If the user is holding Light Clay, or if used on Desert Field, Rocky Field, or Ashen Beach, the duration is 8 turns. Critical hits and moves that bypass screens ignore this effect.",
-		shortDesc: "5 turns (8 when extended): side takes 0.5x from super-effective hits.",
+		desc: "For 5 turns, the user's side takes half damage from super-effective attacks. This move can only be used during Sandstorm or on Desert Field, Rocky Field, Ashen Beach, or Cold Eclipse. If the user is holding Light Clay, or if used on Desert Field, Rocky Field, or Ashen Beach, the duration is 8 turns. Critical hits and moves that bypass screens ignore this effect. Lasts 8 turns when created during Magic Room; its normal use requirements still apply.",
+		shortDesc: "Halves super-effective damage for 5 turns (8 when extended).",
 	},
 	atlantiswall: {
 		name: "Atlantis Wall",
-		desc: "Protects the user's side for 5 turns, halving damage from super-effective attacks, whether physical or special. Critical hits and attacks that bypass screens ignore the wall; screen-breaking moves remove it. Can be used only during effective rain or on Water Surface, Underwater, Misty Terrain, Murkwater Surface, or Midnight Zone; fails if Atlantis Wall is already active. Lasts 8 turns with Light Clay, during effective rain, or on Water Surface, Underwater, or Midnight Zone. Has +1 priority on any of the listed terrains. Air Lock and Cloud Nine suppress rain as a use condition.",
-		shortDesc: "5 turns (8 with Light Clay, rain, Water Surface, Underwater, or Midnight Zone); halves super-effective damage.",
+		desc: "Protects the user's side for 5 turns, halving damage from super-effective attacks, whether physical or special. Critical hits and attacks that bypass screens ignore the wall; screen-breaking moves remove it. Can be used only during effective rain or on Water Surface, Underwater, Misty Terrain, Murkwater Surface, or Midnight Zone; fails if Atlantis Wall is already active. Lasts 8 turns with Light Clay, during effective rain, or on Water Surface, Underwater, or Midnight Zone. Has +1 priority on any of the listed terrains. Air Lock and Cloud Nine suppress rain as a use condition. Lasts 8 turns when created during Magic Room; its normal use requirements still apply.",
+		shortDesc: "Halves super-effective damage for 5 turns (8 when extended).",
 	},
 	aciddownpour: {
 		name: "Acid Downpour",
@@ -311,7 +311,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	auroraveil: {
 		name: "Aurora Veil",
-		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Snow.",
+		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Snow. Lasts 8 turns when created during Magic Room; its normal use requirements still apply.",
 		shortDesc: "For 5 turns, damage to allies halved. Snow only.",
 		gen8: {
 			desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
@@ -330,7 +330,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	avalanche: {
 		name: "Avalanche",
-		desc: "Usually moves after other attacks (-4 priority). Power doubles from 80 to 160 if the target already damaged the user this turn. Has a higher chance for a critical hit.",
+		desc: "Usually moves after other attacks (-4 priority). Power doubles from 80 to 160 if the target already damaged the user this turn. Has a higher chance for a critical hit. During Gravity, its power is boosted by 30%.",
 		shortDesc: "80 BP; 160 if target hurt user this turn. High crit.",
 		gen4: {
 			desc: "Power doubles if the user was hit by a Pokemon in the target's position this turn.",
@@ -622,7 +622,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bodyslam: {
 		name: "Body Slam",
-		desc: "Has a 30% chance to paralyze the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		desc: "Has a 30% chance to paralyze the target. Damage doubles and no accuracy check is done if the target has used Minimize while active. During Gravity, its power is boosted by 30%.",
 		shortDesc: "30% chance to paralyze the target.",
 		gen5: {
 			desc: "Has a 30% chance to paralyze the target.",
@@ -1394,8 +1394,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dig: {
 		name: "Dig",
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Digs underground turn 1, strikes turn 2.",
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn. Executes in one turn during Gravity or on Desert Field without consuming Power Herb.",
+		shortDesc: "Charges, then hits. Instant in Gravity or Desert.",
 		gen4: {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude, which have doubled power when used against it, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -1459,8 +1459,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dive: {
 		name: "Dive",
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Dives underwater turn 1, strikes turn 2.",
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn. Executes in one turn during Gravity or on Water Surface, Underwater, or Midnight Zone without consuming Power Herb.",
+		shortDesc: "Charges, then hits. Instant in Gravity or water fields.",
 		gen4: {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool, which have doubled power when used against it, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -1566,7 +1566,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dracometeor: {
 		name: "Draco Meteor",
-		desc: "Lowers the user's Special Attack by 2 stages.",
+		desc: "Lowers the user's Special Attack by 2 stages. During Gravity, its power is boosted by 30%.",
 		shortDesc: "Lowers the user's Sp. Atk by 2.",
 	},
 	dragonascent: {
@@ -1622,7 +1622,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonrush: {
 		name: "Dragon Rush",
-		desc: "Has a higher chance for a critical hit and a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active. Accuracy becomes 100 on Dragon's Den.",
+		desc: "Has a higher chance for a critical hit and a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active. Accuracy becomes 100 on Dragon's Den. During Gravity, its power is boosted by 30%.",
 		shortDesc: "High crit; 30% flinch. Doubles damage against Minimize.",
 		gen5: {
 			desc: "Has a 20% chance to make the target flinch.",
@@ -2050,8 +2050,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firefang: {
 		name: "Fire Fang",
-		desc: "Has a 10% chance to burn the target and a 10% chance to make it flinch.",
-		shortDesc: "10% chance to burn. 10% chance to flinch.",
+		desc: "Has a 20% chance to burn the target and a 10% chance to make it flinch.",
+		shortDesc: "20% chance to burn. 10% chance to flinch.",
 		gen4: {
 			desc: "Has a 10% chance to burn the target and a 10% chance to make it flinch. This move can hit Pokemon with the Wonder Guard Ability regardless of their typing.",
 		},
@@ -2073,8 +2073,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firepunch: {
 		name: "Fire Punch",
-		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the target.",
+		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "20% chance to lower the target's Defense by 1.",
 	},
 	firespin: {
 		name: "Fire Spin",
@@ -2786,8 +2786,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gravity: {
 		name: "Gravity",
-		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
-		shortDesc: "5 turns: no Ground immunities, 1.67x accuracy.",
+		desc: "For 5 turns, accuracy is multiplied by 1.67, Pokemon are grounded, and airborne moves are disabled. Positive evasion stages are ignored without removing them; negative evasion stages still apply. Wind moves deal 25% less damage, excluding Z-Moves and Max Moves. Effective weight is doubled, except for Pokemon exempt from Gravity. Rock Slide, Rock Tomb, Rock Wrecker, Avalanche, Icicle Crash, Mountain Gale, Body Slam, Stomp, Dragon Rush, Heavy Slam, Heat Crash, Hammer Arm, Ice Hammer, Dragon Hammer, Wood Hammer, Gigaton Hammer, and Draco Meteor gain 30% power. These effects apply to both sides; the power bonus does not carry over to Z-Moves or Max Moves. Lasts 8 turns on Psychic Terrain or with Amplifield Rock, or 7 with Persistent otherwise. Using Gravity promotes an active Aura to the main field and retains its existing field transformations. Reuse fails while Gravity is active unless there is an Aura to promote. Dig and Dive execute in one turn without consuming Power Herb.",
+		shortDesc: "Gravity: heavier, grounded; impacts stronger, wind weaker; ignores +Evasion.",
 		gen7: {
 			desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
 		},
@@ -2843,14 +2843,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	guardsplit: {
 		name: "Guard Split",
-		desc: "The user and the target have their Defense and Special Defense stats set to be equal to the average of the user and the target's Defense and Special Defense stats, respectively, rounded down. Stat stage changes are unaffected.",
+		desc: "The user and the target have their Defense and Special Defense stats set to be equal to the average of the user and the target's Defense and Special Defense stats, respectively, rounded down. Stat stage changes are unaffected. During Wonder Room, after a successful split, both participants gain 1 Defense and 1 Special Defense stage. These boosts follow normal Ability and stat-stage rules.",
 		shortDesc: "Averages Defense and Sp. Def stats with target.",
 
 		activate: "  [POKEMON] shared its guard with the target!",
 	},
 	guardswap: {
 		name: "Guard Swap",
-		desc: "The user swaps its Defense and Special Defense stat stage changes with the target.",
+		desc: "The user swaps its Defense and Special Defense stat stage changes with the target. During Wonder Room, after a successful swap, the user resets any negative Defense and Special Defense stages it received to 0. Positive stages, other stats, and the target's resulting stages are unchanged.",
 		shortDesc: "Swaps Defense and Sp. Def changes with target.",
 	},
 	guillotine: {
@@ -2908,7 +2908,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hammerarm: {
 		name: "Hammer Arm",
-		desc: "Lowers the user's Speed by 1 stage.",
+		desc: "Lowers the user's Speed by 1 stage. During Gravity, its power is boosted by 30%.",
 		shortDesc: "Lowers the user's Speed by 1.",
 	},
 	happyhour: {
@@ -3028,7 +3028,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healpulse: {
 		name: "Heal Pulse",
-		desc: "The target restores 1/2 of its maximum HP, rounded half up. If the user has the Mega Launcher Ability, the target instead restores 3/4 of its maximum HP, rounded half down.",
+		desc: "The target restores 1/2 of its maximum HP, rounded half up. If the user has the Mega Launcher Ability, the target instead restores 3/4 of its maximum HP, rounded half down. During Magic Room, restores 3/4 maximum HP. This does not stack with Mega Launcher.",
 		shortDesc: "Heals the target by 50% of its max HP.",
 		gen5: {
 			desc: "The target restores 1/2 of its maximum HP, rounded half up.",
@@ -3041,12 +3041,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	heartswap: {
 		name: "Heart Swap",
-		desc: "The user swaps all its stat stage changes with the target.",
+		desc: "The user swaps all its stat stage changes with the target. During Wonder Room, after a successful swap, clears all the user's negative stat stages. Positive stages and the target's resulting stages remain unchanged.",
 		shortDesc: "Swaps all stat changes with target.",
 	},
 	heatcrash: {
 		name: "Heat Crash",
-		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active. During Gravity, its power is boosted by 30%.",
 		shortDesc: "More power the heavier the user than the target.",
 		gen5: {
 			desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less.",
@@ -3059,7 +3059,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	heavyslam: {
 		name: "Heavy Slam",
-		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active. During Gravity, its power is boosted by 30%.",
 		shortDesc: "More power the heavier the user than the target.",
 		gen6: {
 			desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less.",
@@ -3314,13 +3314,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icehammer: {
 		name: "Ice Hammer",
-		desc: "Lowers the user's Speed by 1 stage.",
+		desc: "Lowers the user's Speed by 1 stage. During Gravity, its power is boosted by 30%.",
 		shortDesc: "Lowers the user's Speed by 1.",
 	},
 	icepunch: {
 		name: "Ice Punch",
-		desc: "Has a 10% chance to freeze the target.",
-		shortDesc: "10% chance to freeze the target.",
+		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "20% chance to lower the target's Defense by 1.",
 	},
 	iceshard: {
 		name: "Ice Shard",
@@ -3334,7 +3334,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iciclecrash: {
 		name: "Icicle Crash",
-		desc: "Has a 30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch. During Gravity, its power is boosted by 30%.",
 		shortDesc: "30% chance to make the target flinch.",
 	},
 	iciclespear: {
@@ -3682,7 +3682,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lightscreen: {
 		name: "Light Screen",
-		desc: "For 5 turns, the user and its party members take 0.5x damage from special attacks, or 0.66x damage if in a Double Battle. Damage is not reduced further with Aurora Veil. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
+		desc: "For 5 turns, the user and its party members take 0.5x damage from special attacks, or 0.66x damage if in a Double Battle. Damage is not reduced further with Aurora Veil. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side. Lasts 8 turns when created during Magic Room; its normal use requirements still apply.",
 		shortDesc: "For 5 turns, special damage to allies is halved.",
 		gen6: {
 			desc: "For 5 turns, the user and its party members take 0.5x damage from special attacks, or 0.66x damage if in a Double or Triple Battle. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
@@ -3811,7 +3811,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magiccoat: {
 		name: "Magic Coat",
-		desc: "Until the end of the turn, the user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. Moves reflected in this way are unable to be reflected again by this or the Magic Bounce Ability's effect. Spikes, Stealth Rock, Sticky Web, and Toxic Spikes can only be reflected once per side, by the leftmost Pokemon under this or the Magic Bounce Ability's effect. The Lightning Rod and Storm Drain Abilities redirect their respective moves before this move takes effect.",
+		desc: "Until the end of the turn, the user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. Moves reflected in this way are unable to be reflected again by this or the Magic Bounce Ability's effect. Spikes, Stealth Rock, Sticky Web, and Toxic Spikes can only be reflected once per side, by the leftmost Pokemon under this or the Magic Bounce Ability's effect. The Lightning Rod and Storm Drain Abilities redirect their respective moves before this move takes effect. During Magic Room, also gives Magic Coat to all current active allies for the rest of the turn. This protection remains if Magic Room ends that turn, but does not automatically cover later switch-ins. Reflected moves cannot bounce again.",
 		shortDesc: "Bounces back certain non-damaging moves.",
 		gen5: {
 			desc: "Until the end of the turn, the user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. Moves reflected in this way are unable to be reflected again by this or the Magic Bounce Ability's effect. Spikes, Stealth Rock, and Toxic Spikes can only be reflected once per side, by the leftmost Pokemon under this or the Magic Bounce Ability's effect. The Lightning Rod and Storm Drain Abilities redirect their respective moves before this move takes effect.",
@@ -3836,8 +3836,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magicroom: {
 		name: "Magic Room",
-		desc: "For 5 turns, the held items of all active Pokemon have no effect. An item's effect of causing forme changes is unaffected, but any other effects from such items are negated. During the effect, Fling and Natural Gift are prevented from being used by all active Pokemon. If this move is used during the effect, the effect ends.",
-		shortDesc: "For 5 turns, all held items have no effect.",
+		desc: "For 5 turns, held items are suppressed and Psychic-, Ghost-, and Fairy-type attacks gain 20% power. Newly created Reflect, Light Screen, Aurora Veil, Arenite Wall, Atlantis Wall, Safeguard, and Mist last 8 turns, including barriers created by other moves or Abilities. Their normal weather, field, and blocking requirements still apply. Existing barriers are not extended, and extended barriers keep their duration after Magic Room ends. These effects apply to all sides and can coexist with Gravity, other rooms, fields, and Auras. Lasts 8 turns on Psychic Terrain or New World, or with Amplifield Rock; otherwise 7 with Persistent. Using Magic Room again ends it. Magic Coat also protects current active allies for that turn. Heal Pulse restores 75% maximum HP, without stacking with Mega Launcher.",
+		shortDesc: "Items suppressed; Psychic/Ghost/Fairy +20%; new barriers last 8 turns.",
 	},
 	magmastorm: {
 		name: "Magma Storm",
@@ -4311,7 +4311,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mist: {
 		name: "Mist",
-		desc: "For 5 turns, or 8 turns during Snow or Hail, the user and its party members are protected from stat drops by opposing Pokemon and opposing Abilities. Allies take 0.75x damage from spread moves, Ice- and Fairy-type allies restore 1/16 max HP each turn, and Misty Terrain is created for 3 turns. On Bewitched Woods, this extends Bewitched Woods instead of creating Misty Terrain. Fails if the effect is already active on the user's side.",
+		desc: "For 5 turns, or 8 turns during Snow or Hail, the user and its party members are protected from stat drops by opposing Pokemon and opposing Abilities. Allies take 0.75x damage from spread moves, Ice- and Fairy-type allies restore 1/16 max HP each turn, and Misty Terrain is created for 3 turns. On Bewitched Woods, this extends Bewitched Woods instead of creating Misty Terrain. Fails if the effect is already active on the user's side. Lasts 8 turns when created during Magic Room; existing Mist is not extended.",
 		shortDesc: "Blocks stat drops; weakens spread; heals Ice/Fairy allies.",
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
@@ -4404,7 +4404,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mountaingale: {
 		name: "Mountain Gale",
-		desc: "Has a 30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch. During Gravity, its power is boosted by 30%.",
 		shortDesc: "30% chance to make the target flinch.",
 	},
 	mudbomb: {
@@ -4656,7 +4656,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	painsplit: {
 		name: "Pain Split",
-		desc: "The user and the target's HP become the average of their current HP, rounded down, but not more than the maximum HP of either one.",
+		desc: "The user and the target's HP become the average of their current HP, rounded down, but not more than the maximum HP of either one. During Wonder Room, a successful split also removes confusion from both participants.",
 		shortDesc: "Shares HP of user and target equally.",
 
 		activate: "  The battlers shared their pain!",
@@ -4897,27 +4897,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powersplit: {
 		name: "Power Split",
-		desc: "The user and the target have their Attack and Special Attack stats set to be equal to the average of the user and the target's Attack and Special Attack stats, respectively, rounded down. Stat stage changes are unaffected.",
+		desc: "The user and the target have their Attack and Special Attack stats set to be equal to the average of the user and the target's Attack and Special Attack stats, respectively, rounded down. Stat stage changes are unaffected. During Wonder Room, after a successful split, both participants lose 1 Attack and 1 Special Attack stage. These drops follow normal Ability, protection, and stat-stage rules.",
 		shortDesc: "Averages Attack and Sp. Atk stats with target.",
 
 		activate: "  [POKEMON] shared its power with the target!",
 	},
 	powerswap: {
 		name: "Power Swap",
-		desc: "The user swaps its Attack and Special Attack stat stage changes with the target.",
+		desc: "The user swaps its Attack and Special Attack stat stage changes with the target. During Wonder Room, after a successful swap, clears the user's negative Attack and Special Attack stages. Positive stages and the target's resulting stages remain unchanged.",
 		shortDesc: "Swaps Attack and Sp. Atk stat stages with target.",
 	},
 	powershift: {
 		name: "Power Shift",
-		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass.",
-		shortDesc: "Switches user's Attack and Defense stats.",
+		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass. If activated during Wonder Room, also swaps Special Attack and Special Defense. Both stat-pair swaps remain after Wonder Room ends and are reversed when Power Shift is used again. Switching out clears the effect; Baton Pass transfers both swaps. Stat stages remain on their respective stats.",
+		shortDesc: "Swaps Atk/Def; also SpA/SpD if started in Wonder Room.",
 
-		start: "  [POKEMON] swapped its offensive stats with its defensive stats!",
+		start: "  [POKEMON] shifted its offensive and defensive stats!",
 		end: "#.start",
 	},
 	powertrick: {
 		name: "Power Trick",
-		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass.",
+		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass. If toggled on or off during Wonder Room, also exchanges the user's current Attack and Defense stat stages. Ending Wonder Room does not undo these stage changes. Baton Pass transfers the existing stages without exchanging them again.",
 		shortDesc: "Switches user's Attack and Defense stats.",
 
 		start: "  [POKEMON] switched its Attack and Defense!",
@@ -5288,7 +5288,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reflect: {
 		name: "Reflect",
-		desc: "For 5 turns, the user and its party members take 0.5x damage from physical attacks, or 0.66x damage if in a Double Battle. Damage is not reduced further with Aurora Veil. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
+		desc: "For 5 turns, the user and its party members take 0.5x damage from physical attacks, or 0.66x damage if in a Double Battle. Damage is not reduced further with Aurora Veil. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side. Lasts 8 turns when created during Magic Room; its normal use requirements still apply.",
 		shortDesc: "For 5 turns, physical damage to allies is halved.",
 		gen6: {
 			desc: "For 5 turns, the user and its party members take 0.5x damage from physical attacks, or 0.66x damage if in a Double or Triple Battle. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
@@ -5445,7 +5445,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockslide: {
 		name: "Rock Slide",
-		desc: "Has a 20% chance to make each target flinch.",
+		desc: "Has a 20% chance to make each target flinch. During Gravity, its power is boosted by 30%.",
 		shortDesc: "20% chance to make the foe(s) flinch.",
 		gen1: {
 			desc: "No additional effect.",
@@ -5466,12 +5466,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rocktomb: {
 		name: "Rock Tomb",
-		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage. During Gravity, its power is boosted by 30%.",
 		shortDesc: "100% chance to lower the target's Speed by 1.",
 	},
 	rockwrecker: {
 		name: "Rock Wrecker",
-		desc: "A successful hit has a 60% chance to paralyze the surviving target. Protect, misses, immunity and Substitute prevent paralysis; Shield Dust and Covert Cloak block this secondary effect. The user must recharge after a successful hit unless the target faints.",
+		desc: "A successful hit has a 60% chance to paralyze the surviving target. Protect, misses, immunity and Substitute prevent paralysis; Shield Dust and Covert Cloak block this secondary effect. The user must recharge after a successful hit unless the target faints. During Gravity, its power is boosted by 30%.",
 		shortDesc: "60% paralysis on hit; recharge unless it KOs.",
 	},
 	roleplay: {
@@ -5555,8 +5555,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	safeguard: {
 		name: "Safeguard",
-		desc: "This move has 5 base PP. For 3 turns, or 5 turns if used by a Pokemon with Invigorate, the user's side blocks opposing status, confusion, Yawn, and stat drops. Active Pokemon on that side take 0.9x damage from attacks and heal 1/16 max HP each turn. When Safeguard ends, they heal 1/8 max HP. Defog removes this effect. Fails if already active.",
-		shortDesc: "5 PP. 3 turns, Invigorate 5: blocks status/stat drops, 0.9x damage, heals.",
+		desc: "This move has 5 base PP. For 3 turns, or 5 turns if used by a Pokemon with Invigorate, the user's side blocks opposing status, confusion, Yawn, and stat drops. Active Pokemon on that side take 0.9x damage from attacks and heal 1/16 max HP each turn. When Safeguard ends, they heal 1/8 max HP. Defog removes this effect. Fails if already active. Lasts 8 turns when created during Magic Room; existing Safeguard is not extended.",
+		shortDesc: "Blocks status/stat drops; reduces damage; heals. 3-8 turns.",
 		gen3: {
 			desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. Fails if the effect is already active on the user's side.",
 		},
@@ -6251,7 +6251,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	speedswap: {
 		name: "Speed Swap",
-		desc: "The user swaps its Speed stat with the target. Stat stage changes are unaffected.",
+		desc: "The user swaps its Speed stat with the target. Stat stage changes are unaffected. During Wonder Room, also exchanges Speed stat stages, then clears any negative Speed stage the user received. The target keeps its received Speed stage.",
 		shortDesc: "Swaps Speed stat with target.",
 
 		activate: "  [POKEMON] switched Speed with its target!",
@@ -6483,7 +6483,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stomp: {
 		name: "Stomp",
-		desc: "Has a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		desc: "Has a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active. During Gravity, its power is boosted by 30%.",
 		shortDesc: "30% chance to make the target flinch.",
 		gen5: {
 			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
@@ -6746,8 +6746,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swift: {
 		name: "Swift",
-		desc: "This move does not check accuracy.",
-		shortDesc: "This move does not check accuracy. Hits foes.",
+		desc: "Uses the higher of the user's Attack and Special Attack, including stat stages but excluding Ability, item, and status modifiers. Physical if Attack is higher; otherwise Special. Targets the corresponding defensive stat. Has a high critical-hit ratio and does not check accuracy. Hits all adjacent opponents.",
+		shortDesc: "Adaptive; high critical-hit ratio; never misses. Hits foes.",
 		gen1: {
 			desc: "This move does not check accuracy and hits even if the target is using Dig or Fly.",
 			shortDesc: "Never misses, even against Dig and Fly.",
@@ -7084,8 +7084,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunderfang: {
 		name: "Thunder Fang",
-		desc: "Has a 10% chance to paralyze the target and a 10% chance to make it flinch.",
-		shortDesc: "10% chance to paralyze. 10% chance to flinch.",
+		desc: "Has a 20% chance to paralyze the target and a 10% chance to make it flinch.",
+		shortDesc: "20% chance to paralyze. 10% chance to flinch.",
 	},
 	thunderouskick: {
 		name: "Thunderous Kick",
@@ -7094,8 +7094,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunderpunch: {
 		name: "Thunder Punch",
-		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze the target.",
+		desc: "Has a 20% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "20% chance to lower the target's Defense by 1.",
 	},
 	thundershock: {
 		name: "Thunder Shock",
@@ -7677,12 +7677,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wonderroom: {
 		name: "Wonder Room",
-		desc: "For 5 turns, all active Pokemon have their Defense and Special Defense stats swapped. Stat stage changes are unaffected. If this move is used during the effect, the effect ends.",
-		shortDesc: "For 5 turns, all Defense and Sp. Def stats switch.",
+		desc: "For 5 turns, swaps Defense and Special Defense stats, prevents critical hits, and boosts attacks that use Defense or Special Defense as their attacking stat by 20%. Defense-based attacks use the opposite defensive stat under the existing Wonder Room rules. Stat stages are not permanently changed. The defensive-attack bonus does not carry over to Z-Moves or Max Moves. These effects apply to all sides and can coexist with Gravity, other rooms, fields, and Auras. Lasts 8 turns on Psychic Terrain or New World, or with Amplifield Rock; otherwise 7 with Persistent. Using Wonder Room again ends it. After a successful Guard Swap, its user resets any remaining negative Defense and Special Defense stages to 0. Guard Split also raises both participants' Defense and Special Defense by 1 stage; Power Split lowers both participants' Attack and Special Attack by 1 stage. These boosts and drops follow normal rules. Power Swap clears the user's negative offensive stages after swapping; Heart Swap clears all its negative stages. Speed Swap also exchanges Speed stages, then clears the user's negative Speed. Successful Pain Split clears both participants' confusion. Power Trick also exchanges Attack and Defense stages when toggled during the room. Power Shift activated during the room also swaps Special Attack and Special Defense, retaining both swaps until toggled off or switched out; Baton Pass transfers them.",
+		shortDesc: "Swaps defenses; blocks critical hits; defense-based attacks +20%.",
 	},
 	woodhammer: {
 		name: "Wood Hammer",
-		desc: "If the target lost HP, the user takes recoil damage equal to 33% the HP lost by the target, rounded half up, but not less than 1 HP.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 33% the HP lost by the target, rounded half up, but not less than 1 HP. During Gravity, its power is boosted by 30%.",
 		shortDesc: "Has 33% recoil.",
 		gen4: {
 			desc: "If the target lost HP, the user takes recoil damage equal to 1/3 the HP lost by the target, rounded down, but not less than 1 HP.",
@@ -7883,3 +7883,5 @@ for (const id of ['outrage', 'thrash', 'petaldance', 'ragingfury']) {
 
 MovesText.scentedgeyser = { name: 'Scented Geyser', shortDesc: 'Incense changes power/effectiveness; held item is not consumed.', desc: 'Normal special attack. No matching incense: 80 power. Pure: 100 power and Ghost typing is weak to this move. Rock/Rose/Odd: 100 power with additional Rock/Grass/Psychic effectiveness. Sea: 100 power without extra typing. Wave: 100 power with Water effectiveness; after damage, user loses 2 Special Attack stages once per move. Full: 150 power with the same self drop. Luck: one roll per use gives 160 power 40% of the time, otherwise 100; no self drop. Lax and unrelated items use 80. Extra effectiveness does not change Normal typing or grant extra STAB. Normal item effects still apply; suppressed items provide no incense effect. Incense is not consumed.' };
 MovesText.splinteredweb = { name: 'Splintered Web', shortDesc: 'Always critical if the target’s side has Stealth Rock.', desc: 'A 90-power Bug physical attack. If Stealth Rock is present on the target’s side when the move executes, it is a guaranteed critical hit unless critical hits are prevented. Otherwise it has the ordinary critical-hit chance. The target need not be grounded or vulnerable to entry hazards.' };
+
+MovesText.royalcollision={name:'Royal Collision',shortDesc:'Water/Ice effectiveness; 10% recoil; ignores abilities.',desc:'Monarch of Ice changes Wave Crash into this attack. Remains a Water move, combines Water and Ice effectiveness, ignores the target\'s ability, and deals 10% of damage dealt as recoil.'};
