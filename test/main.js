@@ -4,8 +4,6 @@ require('child_process').execSync('node "' + __dirname + '/../build"');
 const path = require('path');
 const fs = require('fs');
 
-const noop = () => {};
-
 // Load and override configuration before starting the server
 let config;
 try {
@@ -46,8 +44,8 @@ try {
 	chatrooms.splice(0, chatrooms.length);
 } catch {}
 
-// Don't create a REPL
-require('../dist/lib/repl').Repl.start = noop;
+// Don't create a REPL or clean up sockets from a real server.
+config.repl = false;
 
 // Start the server.
 // NOTE: This used "server" before when we needed "server"
