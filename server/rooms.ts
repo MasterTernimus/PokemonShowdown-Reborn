@@ -81,6 +81,10 @@ interface BattleRoomTable {
 	p1?: string;
 	p2?: string;
 	minElo?: 'tour' | number;
+	official?: boolean;
+	active?: boolean;
+	visibility?: 'public';
+	format?: string;
 }
 
 interface UserTable {
@@ -1581,6 +1585,12 @@ export class GlobalRoomState {
 			const room = rooms[i];
 			const roomData: BattleRoomTable = {};
 			if (room.active && room.battle) {
+				// Explicit public metadata; callers must not infer official matches
+				// from the format, rating, player names or tournament membership.
+				roomData.official = room.official === true;
+				roomData.active = room.battle.started && !room.battle.ended;
+				roomData.visibility = 'public';
+				roomData.format = room.format;
 				if (room.battle.p1) roomData.p1 = room.battle.p1.name;
 				if (room.battle.p2) roomData.p2 = room.battle.p2.name;
 				if (room.tour) roomData.minElo = 'tour';

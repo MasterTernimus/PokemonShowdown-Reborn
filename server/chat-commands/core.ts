@@ -107,7 +107,11 @@ export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
 	},
 	roomlist(target, user, trustable) {
 		if (!trustable) return false;
-		return { rooms: Rooms.global.getBattles(target) };
+		// Optional fourth argument lets consumers reject stale replies while
+		// preserving the existing format, rating and username filters.
+		const requestId = target.split(',')[3]?.trim();
+		if (requestId && !/^[a-zA-Z0-9_-]{1,64}$/.test(requestId)) return null;
+		return { rooms: Rooms.global.getBattles(target), officialLiveVersion: 1, requestId: requestId || undefined };
 	},
 	rooms(target, user, trustable) {
 		if (!trustable) return false;
