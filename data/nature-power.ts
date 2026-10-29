@@ -8,7 +8,10 @@ const fieldMoves = new Map<string, string>([
 	['burningterrain', 'flamethrower'],
 	['caveterrain', 'rocktomb'],
 	['chessboardterrain', 'ancientpower'],
-	['coldeclipseterrain', 'icywind'],
+	['coldeclipseterrain', 'icebeam'],
+	['rifteclipseterrain', 'darkpulse'],
+	['infernaleclipseterrain', 'infernalparade'],
+	['snowyterrain', 'powdersnow'],
 	['corrosivemistterrain', 'venoshock'],
 	['corrosiveterrain', 'acid'],
 	['crystalcavernterrain', 'powergem'],
@@ -46,12 +49,12 @@ const fieldMoves = new Map<string, string>([
 ]);
 
 /** Returns the called move ID; the Nature Power Status wrapper still runs normally.
- * Only Frozen Aura overrides the field, using its authoritative registry value.
+ * Frozen and Ashen Auras override the field, using its authoritative registry value.
  * Flower Garden stages 2-4 intentionally retain the existing Tri Attack fallback.
  */
 export function resolveNaturePowerMove(
 	fieldId: string, aura?: { id: string, naturePowerMove: string } | null
 ): string {
-	if (aura?.id === 'frozenaura') return aura.naturePowerMove;
+	if (aura && ['frozenaura', 'ashenaura'].includes(aura.id)) return aura.naturePowerMove;
 	return fieldMoves.get(fieldId) ?? 'triattack';
 }

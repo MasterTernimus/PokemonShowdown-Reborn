@@ -110,6 +110,11 @@ function queueRoarOfTimeFuture(battle: Battle, source: Pokemon, target: Pokemon)
 }
 
 export const Moves: import('../sim/dex-moves').MoveDataTable = {
+	riftopening: {
+		num: 31001, name: 'Rift Opening', accuracy: true, basePower: 0, category: 'Status',
+		pp: 5, priority: 0, flags: {}, target: 'all', type: 'Dark',
+		onHitField(target, source, move) { return this.field.openRiftEclipse(source, move); },
+	},
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,
@@ -487,9 +492,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 100,
 			onHit(target, source, move) {
 				if (source.isActive && target.addVolatile('trapped', source, move, 'trapper') &&
-					source.hasAbility('soulanchor') && !target.isAlly(source) && target.runStatusImmunity('trapped') && !target.hasItem('shedshell')) {
+					source.hasAbility(['soulanchor', 'blackwateranchor']) && !target.isAlly(source) && target.runStatusImmunity('trapped') && !target.hasItem('shedshell')) {
 					source.removeVolatile('soulanchortether');
-					source.addVolatile('soulanchortether', target, this.dex.abilities.get('soulanchor'));
+					source.addVolatile('soulanchortether', target, this.dex.abilities.get(source.hasAbility('blackwateranchor') ? 'blackwateranchor' : 'soulanchor'));
 				}
 			},
 		},
@@ -987,7 +992,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		sideCondition: 'auroraveil',
 		onTry(source) {
 			if (source?.hasAbility('protectiveward')) return true;
-			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['rainbowterrain', 'icyterrain', 'mirrorarenaterrain', 'darkcrystalcavernterrain', 'crystalcavernterrain', 'snowymountainterrain', 'starlightarenaterrain', 'coldeclipseterrain'])) {
+			if (this.field.isWeather(['hail', 'snow']) || this.field.isTerrain(['rainbowterrain', 'icyterrain', 'mirrorarenaterrain', 'darkcrystalcavernterrain', 'crystalcavernterrain', 'snowymountainterrain', 'starlightarenaterrain', 'coldeclipseterrain', 'snowyterrain'])) {
 				return true;
 			}
 			return false;
@@ -2490,8 +2495,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		self: {
 			onHit(pokemon) {
+    const originalTypes = pokemon.getTypes(true).slice();
 				pokemon.setType(pokemon.getTypes(true).map(type => type === "Fire" ? "???" : type));
 				this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[from] move: Burn Up');
+    if (this.field.isTerrain('infernaleclipseterrain') && pokemon.addVolatile('infernalburnup')) {
+     pokemon.volatiles.infernalburnup.originalTypes = originalTypes;
+     pokemon.volatiles.infernalburnup.burnedTypes = pokemon.getTypes(true).slice();
+    }
 			},
 		},
 		target: "normal",
@@ -2562,6 +2572,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				['caveterrain', 'Rock'],
 				['chessboardterrain', 'Psychic'],
 				['coldeclipseterrain', 'Ice'],
+				['rifteclipseterrain', 'Dark'],
+				['infernaleclipseterrain', 'Fire'],
+				['snowyterrain', 'Ice'],
 				['corrosivemistterrain', 'Poison'],
 				['corrosiveterrain', 'Poison'],
 				['darkcrystalcavernterrain', 'Dark'],
@@ -8888,6 +8901,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(target, source, move) {
+				if (target.moveThisTurnResult === true && ['blizzard', 'avalanche', 'subzeroslammer', 'powdersnow'].includes(move.id)) {
+					const count = (this.field.terrainState.terrainChanges.get('snowyPowder') || 0) + (move.id === 'powdersnow' ? 1 : 2);
+					this.field.terrainState.terrainChanges.set('snowyPowder', count);
+					if (count >= 2 && this.field.changeTerrain('snowyterrain', target, move)) this.field.setTerrainDuration(5);
+					return;
+				}
 				const igniteMoves = ['eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
 				const swampMoves = ['surf', 'muddywater'];
 				const currentCounter = this.field.terrainState.terrainChanges?.get('swampterrain') ?? 0;
@@ -9953,7 +9972,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback(pokemon, target, move) {
-			if (target.status || target.hasAbility('comatose') || (pokemon.hasAbility('hauntingpresence') &&
+			if (target.status || target.hasAbility('comatose') || this.field.isTerrain('infernaleclipseterrain') || (pokemon.hasAbility('hauntingpresence') &&
 				['taunt', 'encore', 'disable', 'healblock'].some(id => !!target.volatiles[id]))) {
 				this.debug('BP doubled from status condition');
 				return move.basePower * 2;
@@ -14395,7 +14414,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move) {
-			if (this.field.isTerrain('psychicterrain') || this.field.isTerrain('chessboardterrain')) {
+			if (this.field.isTerrain(['psychicterrain', 'chessboardterrain', 'infernaleclipseterrain'])) {
 				move.boosts = {
 					spa: 3,
 				};
@@ -14454,7 +14473,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onTryHit(target, pokemon) {
 			const move = resolveNaturePowerMove(this.field.getTerrain().id,
-				this.field.isAura('frozenaura') ? this.field.getAura() : null);
+				this.field.getAura());
 			this.actions.useMove(move, pokemon, { target: move === 'growth' ? pokemon : target });
 			return null;
 		},
@@ -14573,13 +14592,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			noCopy: true,
 			onStart(pokemon, source) {
-				if ((pokemon.status !== 'slp' && !pokemon.hasAbility('comatose') && !source?.hasAbility('nightrealm')) || this.field.isTerrain('rainbowterrain')) {
+				if ((pokemon.status !== 'slp' && !pokemon.hasAbility('comatose') && !source?.hasAbility('nightrealm') && !this.field.isTerrain('infernaleclipseterrain')) || this.field.isTerrain('rainbowterrain')) {
 					return false;
 				}
+				this.effectState.nightRealm = !!source?.hasAbility('nightrealm');
 				this.add('-start', pokemon, 'Nightmare');
 			},
 			onResidualOrder: 11,
 			onResidual(pokemon) {
+    if (!this.field.isTerrain('infernaleclipseterrain') && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose') && !this.effectState.nightRealm) {
+     pokemon.removeVolatile('nightmare'); this.add('-end', pokemon, 'Nightmare'); return;
+    }
 				if (this.field.isTerrain('hauntedterrain')) {
 					this.damage(pokemon.baseMaxhp / 3);
 				} else {
@@ -16448,7 +16471,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, reflectable: 1, heal: 1, metronome: 1 },
 		onHit(target, source) {
+			const purified = this.field.purifyEclipse(source, this.effect);
 			if (!target.cureStatus()) {
+				if (purified) return true;
 				this.add('-fail', source);
 				this.attrLastMove('[still]');
 				return this.NOT_FAIL;
@@ -18337,6 +18362,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				caveterrain: [{ chance: 30, volatileStatus: 'flinch' }],
 				chessboardterrain: [{ chance: 30, boosts: { def: -1 } }],
 				coldeclipseterrain: [{ chance: 30, status: 'frz' }],
+				rifteclipseterrain: [{chance: 30, volatileStatus: 'flinch'}],
+				infernaleclipseterrain: [{chance: 30, status: 'brn'}],
+				snowyterrain: [{chance: 30, status: 'frz'}],
 				corrosivemistterrain: [{ chance: 30, status: 'psn' }],
 				corrosiveterrain: [{ chance: 30, status: 'psn' }],
 				crystalcavernterrain: [
@@ -20000,22 +20028,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Normal",
 		contestType: "Cute",
 	},
-	snowscape: {
-  num: 883, accuracy: true, basePower: 0, category: "Status", name: "Snowscape", pp: 10,
-  priority: 0, flags: {}, target: "all", type: "Ice",
-  onTryMove() {
-   if (this.field.isTerrain(['volcanicterrain', 'superheatedterrain', 'burningterrain', 'fairytaleterrain', 'starlightarenaterrain'])) {
-    const message = this.field.isTerrain('fairytaleterrain') ? 'The fairy tale rejected the changing season!' :
-     this.field.isTerrain('starlightarenaterrain') ? 'The starlight refused to be eclipsed!' : 'The intense heat prevented the snow from settling!';
-    this.add('-message', message);
-    return false;
-   }
-   if (this.field.isWeather('desolateland')) return null;
-  },
-  onHitField(target, source, move) {
-   return this.field.setAura('frozenaura', source.hasItem('amplifieldrock') ? 8 : 5, source, move);
-  },
- },
 	soak: {
 		num: 487,
 		accuracy: 100,
@@ -20043,6 +20055,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: { boost: { spa: 1 } },
 		contestType: "Cute",
 	},
+	snowscape: {
+  num: 883, accuracy: true, basePower: 0, category: "Status", name: "Snowscape", pp: 10,
+  priority: 0, flags: {}, target: "all", type: "Ice",
+  onHitField(target, source, move) {
+   if (this.field.isTerrain('snowyterrain')) { this.field.setTerrainDuration(5); return true; }
+   return this.field.setFieldOrAura('snowyterrain', 5, source, move, true);
+  },
+ },
 	softboiled: {
 		num: 135,
 		accuracy: true,
@@ -20834,7 +20854,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.CrystalCavernCounter %= 4;
 				} else if (this.field.isTerrain('rockyterrain') || this.field.isTerrain('caveterrain')) {
 					typeMod *= 2;
-				} else if (this.field.isTerrain(['dragonsdenterrain', 'volcanicterrain'])) {
+				} else if (this.field.isTerrain(['dragonsdenterrain', 'volcanicterrain', 'infernaleclipseterrain'])) {
 					if (!pokemon.runImmunity('Fire')) {
 						return;
 					}
@@ -20937,7 +20957,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onTry() {
-			return !!this.field.auraField || (!!this.field.terrain && !(this.field.terrainState?.duration && this.field.terrainState?.duration > 10));
+			return !!this.field.terrainState.purifiedEclipse || !!this.field.auraField || (!!this.field.terrain && !(this.field.terrainState?.duration && this.field.terrainState?.duration > 10));
 		},
 		onHit() {
 			this.field.clearTerrain("mid");
@@ -22543,6 +22563,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				["caveterrain", "Rock"],
 				["chessboardterrain", "Psychic"],
 				["coldeclipseterrain", "Ice"],
+				["rifteclipseterrain", "Dark"],
+				["infernaleclipseterrain", "Fire"],
+				["snowyterrain", "Ice"],
 				["corrosivemistterrain", "Poison"],
 				["corrosiveterrain", "Poison"],
 				["darkcrystalcavernterrain", "Dark"],
@@ -23023,6 +23046,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'torment',
 		condition: {
 			noCopy: true,
+   onResidualOrder: 12,
+   onResidual(pokemon) {
+    if (this.field.isTerrain('infernaleclipseterrain')) this.damage(pokemon.baseMaxhp / 8, pokemon);
+   },
 			onStart(pokemon, source, effect) {
 				if (pokemon.volatiles['dynamax']) {
 					delete pokemon.volatiles['torment'];

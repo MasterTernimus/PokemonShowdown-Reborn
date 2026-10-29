@@ -1,4 +1,5 @@
 export const MovesText: { [id: IDEntry]: MoveText } = {
+ riftopening: {name: 'Rift Opening', shortDesc: 'Creates Rift Eclipse for 5 turns (8 with rock).', desc: 'Creates Rift Eclipse for 5 turns, or 8 with Amplifield Rock. Changes another eclipse to Rift Eclipse without refreshing its duration. Field locks apply.'},
 	deluge: {
 		name: "Deluge",
 		desc: "Usually moves after other attacks (-4 priority). Power doubles from 80 to 160 if the target already damaged the user this turn. Has a higher chance for a critical hit.",
@@ -6138,12 +6139,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a 30% chance to make the target flinch. Fails if the user is not asleep.",
 		shortDesc: "User must be asleep. 30% chance to flinch target.",
 	},
-	snowscape: {
-		name: "Snowscape",
-		desc: "For 5 turns, the weather becomes Snow. During the effect, the Defense of Ice-type Pokemon is multiplied by 1.5 when taking damage from a physical attack. Lasts for 8 turns if the user is holding Icy Rock. Fails if the current weather is Snow.",
-		shortDesc: "For 5 turns, snow falls. Ice: 1.5x Def.",
-	},
-	soak: {
+	snowscape: {name: 'Snowscape', shortDesc: 'Creates Snowy Field for 5 turns. No hail.', desc: 'Creates Snowy Field for 5 turns. Does not summon hail or Frozen Aura. Rain becomes hail at the end of the turn on Snowy Field.'},	soak: {
 		name: "Soak",
 		desc: "Causes the target to become a Water type. Fails if the target is an Arceus or a Silvally, if the target is already purely Water type, or if the target is Terastallized.",
 		shortDesc: "Changes the target's type to Water.",
@@ -7838,8 +7834,6 @@ for (const [id, effect, compact] of [
    : 'On Superheated Field, the lock ends after the attack; ending it early does not cause confusion.');
 }
 
-MovesText.snowscape.desc = 'Creates Frozen Aura for 5 turns, or 8 with Amplifield Rock, without replacing weather or the base field. Ice attacks have 1.2x power for both sides, including airborne Pokemon; Mimicry becomes Ice and Nature Power becomes Ice Beam. While active, successful Gravity, two Blizzard executions dealing opposing HP or Substitute damage, a damaging Ice Z-Move, or three consecutive end-of-turn Hail checks promote it to Cold Eclipse. Promotion consumes the aura and uses normal Cold Eclipse duration. Refreshing resets progress; interrupted Hail resets its count. Existing field locks apply; blocked promotion retains capped progress. The aura itself adds no Cold Eclipse defensive, healing or Speed effects.';
-MovesText.snowscape.shortDesc = 'Frozen Aura 5/8 turns: Ice 1.2x; qualifying moves or 3 Hail turns make Cold Eclipse.';
 
 import {RejuvenationSignatureDescriptions} from '../rejuvenation-signature-moves';
 for (const [id, details] of Object.entries(RejuvenationSignatureDescriptions)) MovesText[id as ID] = {...MovesText[id as ID], ...details};
@@ -7849,8 +7843,6 @@ for (const [id, details] of Object.entries(YangSignatureDescriptions)) MovesText
 
 import {RejuvenationAdvancedDescriptions} from '../rejuvenation-advanced-moves';
 for (const [id, details] of Object.entries(RejuvenationAdvancedDescriptions)) MovesText[id as ID] = {...MovesText[id as ID], ...details};
-MovesText.snowscape.desc = 'Creates Frozen Aura for 5 turns, or 8 with Amplifield Rock, preserving weather and the base field. Ice attacks gain 1.3x power; Ice Beam, Blizzard, Frost Breath and Aurora Beam gain an additional 1.2x (1.56x total). Dark Pulse, Snarl, Night Daze, Night Slash, Lash Out, Stomping Tantrum, Raging Fury, Thrash, Outrage, Rage, Freezing Glare, Fiery Wrath, Roar of Time, Bitter Blade and Bitter Malice gain 1.5x; Chilling Water gains 2x. Freeze Shock and Ice Burn skip charging; Dragon Rage deals 140 fixed damage. Existing promotion conditions are unchanged. Does not summon hail.';
-MovesText.snowscape.shortDesc = 'Frozen Aura 5/8 turns: Ice 1.3x, named move boosts; existing Cold Eclipse promotion rules.';
 MovesText.aquabatics.desc = (MovesText.aquabatics.desc || '') + ' This is a dance move and can be copied by Dancer.';
 
 Object.assign(MovesText.meditate, {shortDesc: 'Heals 1/4 HP; +1 higher offense. Cannot repeat next turn.', desc: 'Heals one quarter of maximum HP and raises the higher staged Attack or Special Attack by one stage (Attack on ties). Either effect can succeed independently. After a successful use, cannot be used again that turn or the following turn; an intervening turn without acting also clears this restriction. Switching out clears it. Subject to Heal Block and healing-move priority effects.'});

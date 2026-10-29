@@ -2148,7 +2148,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain', 'snowyterrain', 'infernaleclipseterrain'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
@@ -2206,8 +2206,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (this.field.isTerrain('coldeclipseterrain')) {
 				this.add('-message', pokemon.name + ' is imbued and sped up by the icy surface!');
-				this.boost({ spe: 1 });
-				this.actions.useMove('soak', pokemon, { target: pokemon, sourceEffect: item });
+				this.boost({ spe: 2 });
+				pokemon.addVolatile('torment', pokemon, item);
+			}
+			if (this.field.isTerrain('snowyterrain')) {
+				this.boost({spd: 1}, pokemon);
+				pokemon.side.addSlotCondition(pokemon, 'wish', pokemon, item);
+				pokemon.side.addSideCondition('safeguard', pokemon, item);
+			}
+			if (this.field.isTerrain('infernaleclipseterrain')) {
+				this.boost({atk: 1, spa: 1}, pokemon);
+				pokemon.addVolatile('partiallytrapped', pokemon, this.dex.getActiveMove('firespin'));
+				if (pokemon.volatiles.partiallytrapped) pokemon.volatiles.partiallytrapped.duration = 4;
 			}
 			if (this.field.isTerrain('volcanicterrain')) {
 				this.boost({ atk: 1, spa: 1, spe: 1 });
@@ -2215,7 +2225,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onTerrainChange(pokemon) {
-			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain'];
+			const fields = ['grassyterrain', 'electricterrain', 'mistyterrain', 'burningterrain', 'corrosivemistterrain', 'watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain', 'icyterrain', 'murkwatersurfaceterrain', 'dragonsdenterrain', 'coldeclipseterrain', 'volcanicterrain', 'snowyterrain', 'infernaleclipseterrain'];
 			if (!pokemon.ignoringItem() && this.field.isTerrain(fields)) {
 				pokemon.useItem();
 			}
@@ -4068,12 +4078,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			const terrains: string[] = ["psychicterrain", "rainbowterrain", "fairytaleterrain", "darkcrystalcavernterrain", "crystalcavernterrain", "holyterrain", "newworldterrain", "starlightarenaterrain", "inverseterrain", 'hauntedterrain', 'bewitchedwoodsterrain'];
+			const terrains: string[] = ["psychicterrain", "rainbowterrain", "fairytaleterrain", "darkcrystalcavernterrain", "crystalcavernterrain", "holyterrain", "newworldterrain", "rifteclipseterrain", "starlightarenaterrain", "inverseterrain", 'hauntedterrain', 'bewitchedwoodsterrain'];
 			if (terrains.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}
 		},
 		onUseItem(item, pokemon) {
+			if (this.field.isTerrain('rifteclipseterrain')) {
+				this.boost({def: 1}, pokemon);
+				this.field.addPseudoWeather('trickroom', pokemon, item);
+			}
 			if (this.field.isTerrain('psychicterrain')) {
 				this.boost({ spa: 2 });
 				pokemon.addVolatile('confusion');
@@ -4116,7 +4130,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onTerrainChange(pokemon) {
-			const terrains: string[] = ["psychicterrain", "rainbowterrain", "fairytaleterrain", "darkcrystalcavernterrain", "crystalcavernterrain", "holyterrain", "newworldterrain", "starlightarenaterrain", "inverseterrain", 'hauntedterrain', 'bewitchedwoodsterrain'];
+			const terrains: string[] = ["psychicterrain", "rainbowterrain", "fairytaleterrain", "darkcrystalcavernterrain", "crystalcavernterrain", "holyterrain", "newworldterrain", "rifteclipseterrain", "starlightarenaterrain", "inverseterrain", 'hauntedterrain', 'bewitchedwoodsterrain'];
 			if (terrains.includes(this.field.terrain)) {
 				pokemon.useItem();
 			}

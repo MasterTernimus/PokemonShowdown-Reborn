@@ -2,6 +2,7 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const forms = [
+	['Alakazam', 'Aevian Discipline'],
 	['Unfezant', 'Aevian Wing'], ['Musharna', 'Aevian Dream'], ['Donphan', 'Aevian Frost'],
 	['Drapion', 'Aevian Toxin'], ['Breloom', 'Aevian Spark'], ['Sigilyph', 'Aevian Grief'],
 	['Veluza', 'Aevian Rocket'], ['Turtonator', 'Aevian Glacier'], ['Druddigon', 'Aevian Bolt'],

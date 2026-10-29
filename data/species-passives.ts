@@ -1289,5 +1289,14 @@ for (const [species, passive] of [['hitmonchan', 'punchfiend'], ['hitmonlee', 'k
 SpeciesPassives.politoed = Object.freeze(['oraclesrefrain']);
 ThematicPassiveIds.add('oraclesrefrain');
 
+SpeciesPassives.chatot = Object.freeze(['opencage']);
+ThematicPassiveIds.add('opencage');
+
+SpeciesPassives.gardevoir = Object.freeze(['breakingnews']);
+ThematicPassiveIds.add('breakingnews');
+
+SpeciesPassives.alakazamrejuv = Object.freeze(['composed']);
+ThematicPassiveIds.add('composed');
+
 Object.freeze(SpeciesPassives);
 

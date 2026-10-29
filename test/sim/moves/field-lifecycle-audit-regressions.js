@@ -126,7 +126,7 @@ describe('Field lifecycle audit regressions', () => {
 			battle.makeChoices('move recover', 'switch 2');
 			for (let elapsed = 3; elapsed <= 5; elapsed++) battle.makeChoices('move recover', 'move protect');
 			assert.equal(battle.field.weather, battle.dex.toID(ability));
-			assert.equal(battle.field.terrain, ability === 'Desolate Land' ? '' : 'coldeclipseterrain');
+			assert.equal(battle.field.terrain, 'coldeclipseterrain');
 			if (ability !== 'Desolate Land') {
 				battle.makeChoices('move recover', 'switch 2');
 				assert.equal(battle.field.weather, 'hail');

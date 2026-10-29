@@ -4,11 +4,11 @@ describe('Public Field Guide', () => {
 		const g = publicFieldGuide(), m = calculatorMetadata();
 		for (const f of m.fields.filter(f => f.id))assert(g.entries.some(e => e.kind === 'field' && e.id === f.id));
 		for (const a of m.auras)assert(g.entries.some(e => e.kind === 'aura' && e.id === a.id));
-		assert.equal(g.entries.length, 58);
+		assert.equal(g.entries.length, 61);
 	});
 	it('reviews every field without claiming exhaustive coverage', () => {
 		const g = publicFieldGuide();
-		assert.equal(g.coverage.reviewedFields, 48);
+		assert.equal(g.coverage.reviewedFields, 50);
 		assert.equal(g.coverage.exhaustive, false);
 		for (const e of g.entries.filter(e => e.kind === 'field')) {
 			assert(Object.keys(e.sections).length >= 3, e.id);
@@ -30,7 +30,7 @@ describe('Public Field Guide', () => {
 		let output;
 		cmd.call({}, '', null, {}, { send: s => (output = s) });
 		assert(output.startsWith('|queryresponse|fieldguide|'));
-		assert.equal(JSON.parse(output.split('|').slice(3).join('|')).entries.length, 58);
+		assert.equal(JSON.parse(output.split('|').slice(3).join('|')).entries.length, 61);
 	});
 });
 
@@ -48,6 +48,51 @@ describe('Field Guide reference explanations', () => {
 		for (const e of publicFieldGuide().entries) for (const rows of Object.values(e.referenceDetails || {})) for (const row of rows) {
 			assert.equal(row.reviewed, !!row.fieldEffects.length);
 			assert(row.name);
+		}
+	});
+});
+
+describe('Eclipse guide sections', () => {
+	const entry = id => publicFieldGuide().entries.find(e => e.id === id);
+	for (const id of ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain']) {
+		it('separates effects, transitions and timer rules for ' + id, () => {
+			const sections = entry(id).sections;
+			for (const name of ['Boosts and general effects', 'Weather, rooms and Gravity', 'Transitions', 'Moves', 'Abilities', 'Seeds and other effects', 'Shared rules and limitations']) {
+				assert(sections[name].length, name);
+			}
+			assert.match(sections['Shared rules and limitations'].join(' '), /remaining turns/);
+			assert.match(sections['Shared rules and limitations'].join(' '), /at most one field change/);
+		});
+	}
+	for (const [id, ability, moves] of [
+		['frozenaura', 'Bad Seeds', ['Blizzard', 'Glaciate', 'Sheer Cold']],
+		['ashenaura', 'Ashen Seeds', ['Infernal Parade', 'Eruption']],
+	]) {
+		it('documents all development moves and both timer routes for ' + id, () => {
+			const sections = entry(id).sections, development = sections.Transitions;
+			assert(development[0].includes(ability));
+			for (const move of moves) assert(development[0].includes(move), move);
+			assert.match(development[1], /remaining turns/);
+			assert.match(development[2], /any user/);
+			assert.match(development[2], /FIELD timer, not the aura timer/);
+			assert.match(development.join(' '), /blocked conversions leave the aura intact/);
+			assert.match(sections.Duration.join(' '), /5 turns, or 8 with Amplifield Rock/);
+		});
+	}
+	it('keeps full-field seed effects separate from auras and documents shared move hooks', () => {
+		for (const id of ['frozenaura', 'ashenaura']) {
+			assert.match(entry(id).sections['Boosts and general effects'].join(' '), /does not grant the full Eclipse field/);
+			assert.match(entry(id).sections.Moves.join(' '), /animation; this does not turn it into that move/);
+		}
+		assert.match(entry('frozenaura').sections.Moves.join(' '), /Dragon Rage deals 140/);
+		assert.match(entry('coldeclipseterrain').sections.Moves.join(' '), /Dragon Rage deals 140/);
+		assert.match(entry('infernaleclipseterrain').sections.Abilities.join(' '), /Ashen Seeds halves damage/);
+	});
+	it('puts room and Gravity Eclipse rules in visible sections, not review metadata alone', () => {
+		for (const id of ['trickroom', 'wonderroom', 'magicroom', 'gravity']) {
+			const notes = entry(id).sections['Eclipse interactions'].join(' ');
+			assert.match(notes, /remain active, but their timers pause/);
+			assert.match(notes, /Rift Eclipse gives new uses 8 turns/);
 		}
 	});
 });

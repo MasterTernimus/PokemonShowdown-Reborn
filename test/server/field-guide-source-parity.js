@@ -57,14 +57,16 @@ describe('Field Guide checked source facts', () => {
 			b.destroy();
 		}
 	});
-	it('checks the two successful Cold Eclipse heat uses', () => {
+	it('checks Cold Eclipse thawing and subsequent Rift heating', () => {
 		const { battle: b, mons: [p, q] } = setup('');
 		try {
 			b.field.setTerrain('coldeclipseterrain', p, Dex.moves.get('snowscape'));
 			after(b, p, q, 'heatwave');
-			assert.equal(b.field.terrain, 'coldeclipseterrain');
+			assert.equal(b.field.terrain, 'rifteclipseterrain');
 			after(b, p, q, 'heatwave');
-			assert.notEqual(b.field.terrain, 'coldeclipseterrain');
+			assert.equal(b.field.terrain, 'rifteclipseterrain');
+			after(b, p, q, 'heatwave');
+			assert.equal(b.field.terrain, 'infernaleclipseterrain');
 		} finally {
 			b.destroy();
 		}

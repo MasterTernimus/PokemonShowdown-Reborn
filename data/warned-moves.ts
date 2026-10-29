@@ -39,6 +39,9 @@ export function checkWarning(battle: Battle, pokemon: Pokemon, target: Pokemon, 
 		const move = battle.sample(moves);
 		rememberWarning(pokemon, ability, move);
 		battle.add('-activate', pokemon, 'ability: Forewarn', move, `[of] ${target}`);
+		if (pokemon.hasAbilityOrPassive('breakingnews')) {
+			battle.add('-message', `Gossip Gardevoir reports: ${target.name} carries ${move.name}!`);
+		}
 	}
 	if (battle.field.isTerrain('psychicterrain')) battle.boost({ spa: 2 }, pokemon, pokemon, effect);
 }

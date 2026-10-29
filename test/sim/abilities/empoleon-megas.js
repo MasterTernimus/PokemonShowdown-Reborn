@@ -15,9 +15,31 @@ describe('Empoleon Mega split',()=>{
   for(const id of ['empoleonmegax','empoleonmegay']){assert.equal(Dex.species.get(id).bst,635);assert.deepEqual(Dex.species.get(id).types,['Water','Steel']);assert.deepEqual(Dex.species.get(id).passives,['proficient']);}
   assert.equal(Dex.species.get('Empoleon-Mega').id,'empoleonmegay');assert.equal(Dex.items.get('Empoleonite').id,'empoleonitey');
  });
- for(const [stone,form] of [['Empoleonite X','empoleonmegax'],['Empoleonite Y','empoleonmegay'],['Empoleonite','empoleonmegay']])it(stone+' evolves to the correct Mega',()=>{
+ for(const [stone,form] of [['Empoleonite Y','empoleonmegay'],['Empoleonite','empoleonmegay']])it(stone+' evolves to the correct Mega',()=>{
   battle=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{species:'Empoleon',ability:'Competitive',item:stone,moves:['splash']}],[{species:'Mew',moves:['splash']}]]);
   battle.makeChoices('team 1','team 1');battle.makeChoices('move splash mega','move splash');assert.equal(battle.p1.active[0].species.id,form);
+ });
+ it('blocks disabled X imports, its stone and forced Mega routes',()=>{
+  const {TeamValidator}=require('../../../dist/sim');
+  const validator=new TeamValidator('gen9nofieldsinglesgame');
+  const set=(species='Empoleon',item='')=>({species,item,ability:Dex.species.get(species).abilities[0],moves:['surf']});
+  for(const species of ['Empoleon-Mega-X','empoleonmegax'])assert(validator.validateSet(set(species),{}).some(e=>e.includes('disabled')));
+  assert(validator.validateSet(set('Empoleon','Empoleonite X'),{}).some(e=>e.includes('disabled')));
+  assert.throws(()=>common.createBattle({},[[set('Empoleon-Mega-X')],[set('Mew')]]),/disabled/);
+  battle=common.createBattle({},[[set('Empoleon','Empoleonite X')],[set('Mew')]]);
+  const p=battle.p1.active[0];assert.equal(battle.actions.canMegaEvo(p),null);assert(!p.formeChange('Empoleon-Mega-X'));
+  for(const suffix of ['','X','Y']){p['canMegaEvo'+suffix]='Empoleon-Mega-X';assert.equal(battle.actions['runMegaEvo'+suffix](p),false);}
+  assert.equal(p.species.id,'empoleon');
+ });
+ it('hides X in public catalogs and family links while keeping normal and Y',()=>{
+  const rules=require('../../../dist/server/rules-encyclopedia');
+  const calc=require('../../../dist/sim/custom-calculator');
+  for(const list of [calc.calculatorMetadata().species,rules.rulesCatalog().species]){
+   assert(!list.some(s=>s.name==='Empoleon-Mega-X'));
+   for(const name of ['Empoleon','Empoleon-Mega-Y'])assert(list.some(s=>s.name===name));
+  }
+  assert(!rules.rulesDetail('species','Empoleon').forms.includes('Empoleon-Mega-X'));
+  assert.throws(()=>rules.rulesDetail('species','Empoleon-Mega-X'),/Unknown/);
  });
  it('renames Exalt without removing its component effects',()=>{
   assert.equal(Dex.abilities.get('Imperial Edge').id,'imperialedge');assert.equal(Dex.abilities.get('Exalt').name,'Imperial Edge');

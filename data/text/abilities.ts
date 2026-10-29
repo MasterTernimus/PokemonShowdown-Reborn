@@ -1,7 +1,9 @@
 import { AbilityDescriptionOverrides } from '../ability-descriptions';
 import { getAbilitySelectorSummary } from '../ability-display';
 import { RosterExpansionDescriptions, RosterExpansionShortDescriptions } from '../roster-expansion-text';
+import {OpenCageText} from '../open-cage';
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+	opencage: OpenCageText,
 	deepbore: {name: 'Deep Bore', ...AbilityDescriptionOverrides.deepbore},
 	dreaddominion: {
 		name: 'Dread Dominion',
@@ -875,7 +877,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 		sunsovereign: {
 		"name": "Sun Sovereign",
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP at turn end.",
+		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP at turn end.",
 		"shortDesc": "Mold Breaker; 8-turn sun, stronger Dragon moves, healing and Fire chip."
 	},
 	eternalflower: {
@@ -4527,7 +4529,7 @@ for (const [id, name] of [['freeflight', 'Free Flight'], ['entrenched', 'Entrenc
 
 AbilitiesText.steadyswimmer = {name: 'Steady Swimmer', ...AbilityDescriptionOverrides.steadyswimmer};
 
-Object.assign(AbilitiesText, {"hauntingveil":{"desc":"Cursed Body + Infiltrator. Damaging hits have a 30% chance to Disable the attacker's move. Its moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist.","shortDesc":"Cursed Body + Infiltrator."},"parentalbond":{"desc":"Mold Breaker: moves ignore bypassable opposing abilities. Eligible attacks hit twice; the second hit deals 80% damage. Existing multi-hit moves, spread hits, charging or delayed attacks, Z/Max moves and moves barred from extra hits are excluded. Contact moves have 1.3x power. Normal- and Fighting-type moves can hit Ghosts. Cannot be suppressed.","shortDesc":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts."},"ironwill":{"desc":"Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Gains +1 accuracy on entry; tail moves have 1.5x power.","shortDesc":"Prism Armor, Self-Sufficient and Whiplash."},"calderacore":{"desc":"Full Drought and Magma Armor. On entry, summons sun for 5 turns, or 8 with Heat Rock. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den blocks Fire moves. On Dragon's Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Sp. Def.","shortDesc":"Drought + Magma Armor."},"razorcurrent":{"desc":"On entry, summons rain for 5 turns, or 8 with Damp Rock. Gains +1 Speed at the end of each full turn it spends active.","shortDesc":"Summons rain; gains Speed each full active turn."}});
+Object.assign(AbilitiesText, {"hauntingveil":{"desc":"Cursed Body + Infiltrator. Damaging hits have a 30% chance to Disable the attacker's move. Its moves bypass Substitute, Reflect, Light Screen, Aurora Veil, Safeguard and Mist.","shortDesc":"Cursed Body + Infiltrator."},"parentalbond":{"desc":"Mold Breaker: moves ignore bypassable opposing abilities. Eligible attacks hit twice; the second hit deals 80% damage. Existing multi-hit moves, spread hits, charging or delayed attacks, Z/Max moves and moves barred from extra hits are excluded. Contact moves have 1.3x power. Normal- and Fighting-type moves can hit Ghosts. Cannot be suppressed.","shortDesc":"Mold Breaker; eligible attacks hit twice; stronger contact moves; hits Ghosts."},"ironwill":{"desc":"Takes 20% less attack damage, plus a further 25% reduction against super-effective attacks or on Crystal Cavern and Dark Crystal Cavern (40% total). Defense and Sp. Def are 4/3x on Cold Eclipse, Dark Crystal Cavern and Rainbow. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Gains +1 accuracy on entry; tail moves have 1.5x power.","shortDesc":"Prism Armor, Self-Sufficient and Whiplash."},"calderacore":{"desc":"Full Drought and Magma Armor. On entry, summons sun for 5 turns, or 8 with Heat Rock. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def.","shortDesc":"Drought + Magma Armor."},"razorcurrent":{"desc":"On entry, summons rain for 5 turns, or 8 with Damp Rock. Gains +1 Speed at the end of each full turn it spends active.","shortDesc":"Summons rain; gains Speed each full active turn."}});
 
 for (const [id, name] of [['shadowdouble', 'Shadow Double'], ['crossfire', 'Crossfire'], ['hauntingveil', 'Haunting Veil']]) AbilitiesText[id as ID] = {name, ...AbilityDescriptionOverrides[id]};
 
@@ -4840,3 +4842,9 @@ AbilitiesText.monarchofice={name:'Monarch of Ice',...EmpoleonDescriptions.monarc
 Object.assign(AbilitiesText.emperorsresolve,EmpoleonDescriptions.emperorsresolve);
 
 for (const id of ['serenegrace', 'fortunatewing', 'voidomen', 'lunarorbit']) Object.assign(AbilitiesText[id as ID], AbilityDescriptionOverrides[id]);
+
+import {PlainLanguageAbilityDescriptions} from '../ability-readability';
+for (const [id, text] of Object.entries(PlainLanguageAbilityDescriptions)) Object.assign(AbilitiesText[id as ID], text);
+
+import {LoreDescriptions} from '../lore-pairs';
+for (const [id, text] of Object.entries(LoreDescriptions)) AbilitiesText[id as ID] = {...text};

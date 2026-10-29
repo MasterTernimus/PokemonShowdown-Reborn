@@ -501,7 +501,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.effectState.startTime = this.random(2, 5);
 			this.effectState.time = this.effectState.startTime;
 
-			if (target.removeVolatile('nightmare')) {
+			if (!this.field.isTerrain('infernaleclipseterrain') && target.removeVolatile('nightmare')) {
 				this.add('-end', target, 'Nightmare', '[silent]');
 			}
 		},
@@ -665,10 +665,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				holder.removeVolatile('soulanchortether');
 				return;
 			}
-			if (!holder.hasAbility('soulanchor')) return;
-			const effect = this.dex.abilities.get('soulanchor');
+			if (!holder.hasAbility(['soulanchor', 'blackwateranchor'])) return;
+			const coordinated = holder.hasAbility('blackwateranchor');
+			const effect = this.dex.abilities.get(coordinated ? 'blackwateranchor' : 'soulanchor');
 			const damage = this.damage(target.baseMaxhp / 16, target, holder, effect);
 			if (damage) this.heal(damage, holder, target, effect);
+			if (damage && coordinated && ['psn', 'tox'].includes(target.status) &&
+				this.field.isTerrain(['watersurfaceterrain', 'underwaterterrain'])) {
+				for (const ally of holder.adjacentAllies()) this.heal(damage, ally, target, effect);
+			}
 		},
 	},
 	guidinglightguard: {
@@ -744,6 +749,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	wisecounselspent: {name: 'wisecounselspent', noCopy: true},
 	mindcurrentspent: {name: 'mindcurrentspent', noCopy: true},
 	fortunatewingspent: {name: 'fortunatewingspent', noCopy: true},
+ infernalburnup: {
+  name: 'Infernal Burn Up', noCopy: true, duration: 1,
+  onResidualOrder: 28,
+  onEnd(pokemon) {
+   if (!this.field.isTerrain('infernaleclipseterrain') ||
+    pokemon.getTypes(true).join('/') !== this.effectState.burnedTypes?.join('/')) return;
+   if (pokemon.setType(this.effectState.originalTypes)) this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[from] move: Burn Up');
+  },
+ },
 	trapped: {
 		name: 'trapped',
 		noCopy: true,
@@ -1249,7 +1263,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		duration: 5,
 		durationCallback(source, target, effect) {
 			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
-			if (source?.hasItem('damprock') || this.field.isTerrain(['bigtopterrain', 'coldeclipseterrain'])) {
+			if (source?.hasItem('damprock') || this.field.isTerrain(['bigtopterrain', 'snowyterrain'])) {
 				return 8;
 			}
 			return 5;
@@ -1467,14 +1481,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (effect?.id === 'climatereserve' && effect.effectType === 'Ability') return 5;
 			if (this.field.isTerrain('fairytaleterrain')) return 0;
 			if (effect?.id === 'mourningsnow') return 8;
-			if (source?.hasItem('icyrock') || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain'])) {
+			if (source?.hasItem('icyrock') || this.field.isTerrain(['icyterrain', 'snowymountainterrain', 'coldeclipseterrain', 'snowyterrain'])) {
 				return 8;
 			}
 			return 5;
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
+			const iceBeneficiary = pokemon.hasType('Ice') || (!pokemon.hasType('Ice') && !this.field.isTerrain('coldeclipseterrain') && pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'icebody', 'thickfat', 'execution', 'argentdevotion', 'unboundblaze', 'waterbarrage', 'atrocity', 'sunsovereign', 'siegelauncher', 'fortressshell']));
 			if (iceBeneficiary && this.field.isWeather('hail')) {
 				if (this.field.isTerrain('snowymountainterrain')) {
 					return this.modify(def, 2.25);
@@ -1980,3 +1994,6 @@ Conditions.dreamsicknessrescueguard = {
 
 import {PlasmaConditions} from './plasma-eruption';
 Object.assign(Conditions, PlasmaConditions);
+
+import {LoreConditions} from './lore-pairs';
+Object.assign(Conditions, LoreConditions);

@@ -13,8 +13,8 @@ function entry(p) { battle.singleEvent('Start', p.getAbility(), p.abilityState, 
 describe('Authorized Cold Eclipse corrections', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 	for (const [attack, types, expected] of [
-		['Fighting', ['Ice'], 0], ['Fighting', ['Ice', 'Steel'], 1], ['Fighting', ['Ice', 'Fighting'], 0], ['Fighting', ['Ice', 'Dragon'], 0],
-		['Fighting', ['Ice', 'Flying'], -1], ['Fighting', ['Normal', 'Ice'], 1], ['Ice', ['Dragon'], -1], ['Ice', ['Dragon', 'Flying'], 0],
+		['Fighting', ['Ice'], 1], ['Fighting', ['Ice', 'Steel'], 2], ['Fighting', ['Ice', 'Fighting'], 1], ['Fighting', ['Ice', 'Dragon'], 1],
+		['Fighting', ['Ice', 'Flying'], 0], ['Fighting', ['Normal', 'Ice'], 2], ['Ice', ['Dragon'], -1], ['Ice', ['Dragon', 'Flying'], 0],
 		['Ice', ['Dragon', 'Ice'], -2], ['Ice', ['Dragon', 'Steel'], -2], ['Ice', ['Dragon', 'Water'], -2], ['Ice', ['Ice'], -1],
 		['Fighting', ['Steel'], 1], ['Ice', ['Flying'], 1],
 	])it(attack + ' against ' + types.join('/') + ' changes only the intended defensive type', () => {
@@ -23,7 +23,7 @@ describe('Authorized Cold Eclipse corrections', () => {
 	for (const attacks of [['Fighting', 'Fire'], ['Ice', 'Fire'], ['Fighting', 'Ice'], ['Dragon', 'Ice'], ['Normal', 'Ice']])it('preserves other components of multi-type ' + attacks.join('/'), () => {
 		const [,q] = setup(); for (const types of [['Ice'], ['Dragon'], ['Ice', 'Dragon'], ['Dragon', 'Flying'], ['Ice', 'Steel']]) {
 			q.setType(types); const move = Object.assign(Dex.getActiveMove('tackle'), { type: attacks[0], types: attacks });
-			const correction = (types.includes('Ice') && attacks.includes('Fighting') ? 1 : 0) + (types.includes('Dragon') && attacks.includes('Ice') ? 2 : 0);
+			const correction = (types.includes('Dragon') && attacks.includes('Ice') ? 2 : 0);
 			assert.equal(q.runEffectiveness(move), Dex.getEffectiveness(move, q) - correction, types.join('/'));
 		}
 	});
@@ -42,23 +42,23 @@ describe('Authorized Cold Eclipse corrections', () => {
 		battle.field.clearTerrain(); entry(p); assert.equal(q.boosts.def, 0); assert.equal(other.boosts.def, -3); q.removeVolatile('substitute'); entry(p); assert.equal(q.boosts.def, 0);
 		battle.field.setTerrain('coldeclipseterrain', p); entry(p); assert.equal(q.boosts.def, -2); assert.equal(other.boosts.def, -5);
 	});
-	for (const [field, power, limit] of [['', 100, 60], ['coldeclipseterrain', 200, 80], ['fairytaleterrain', 200, 60], ['forestterrain', 150, 60]])it('Relentless Hunt applies one power/priority benefit on ' + (field || 'ordinary field'), () => {
+	for (const [field, power, limit] of [['', 100, 60], ['coldeclipseterrain', 100, 0], ['fairytaleterrain', 200, 60], ['forestterrain', 150, 60]])it('Relentless Hunt applies one power/priority benefit on ' + (field || 'ordinary field'), () => {
 		const [p, q] = setup(field); p.setAbility('Relentless Hunt');
 		for (const bp of [40, 60, 61, 80, 81, 100]) { const move = Object.assign(Dex.getActiveMove('tackle'), { basePower: bp }); assert.equal(battle.runEvent('BasePower', p, q, move, 100), power); assert.equal(battle.runEvent('ModifyPriority', p, q, move, 0), bp <= limit ? 1 : 0); }
 		if (field === 'coldeclipseterrain') { p.addVolatile('gastroacid'); const move = Dex.getActiveMove('tackle'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), 100); assert.equal(battle.runEvent('ModifyPriority', p, q, move, 0), 0); }
 	});
 	it('Relentless Hunt retains independent Ice and Dragon field boosts once each', () => {
-		const [p, q] = setup(); p.setAbility('Relentless Hunt'); for (const [type, expected] of [['Ice', 300], ['Dragon', 400], ['Fighting', 100], ['Normal', 200]]) {
+		const [p, q] = setup(); p.setAbility('Relentless Hunt'); for (const [type, expected] of [['Ice', 120], ['Dragon', 200], ['Fighting', 100], ['Normal', 100]]) {
 			const move = Object.assign(Dex.getActiveMove('tackle'), { type }); assert.equal(battle.runEvent('BasePower', p, q, move, 100), expected, type);
 		}
 	});
-	it('calculator damage uses one Relentless Hunt bonus on Cold Eclipse', () => {
+	it('calculator does not retain the removed Relentless Hunt field power bonus', () => {
 		const { calculateScenario } = require('../../../dist/sim/custom-calculator');
 		const scenario = { format: 'gen9nofieldsinglesgame', field: 'coldeclipseterrain', move: 'Tackle', samples: 16, seed: 42, actors: Array.from({ length: 4 }, () => ({ species: 'Mew', ability: 'No Ability' })) };
 		const plain = calculateScenario(scenario).results[1]; scenario.actors[0].ability = 'Relentless Hunt'; const boosted = calculateScenario(scenario).results[1];
-		for (const key of ['min', 'max'])assert(Math.abs(boosted[key] - 2 * plain[key]) <= 3, key);
+		for (const key of ['min', 'max'])assert(Math.abs(boosted[key] - plain[key]) <= 3, key);
 	});
-	for (const [attack, defender, ratio] of [['Fighting', 'Ice', 0.5], ['Ice', 'Dragon', 0.25]])it('real damage honors corrected ' + attack + '/' + defender + ' effectiveness', () => {
+	for (const [attack, defender, ratio] of [['Fighting', 'Ice', 1], ['Ice', 'Dragon', 0.25]])it('real damage honors corrected ' + attack + '/' + defender + ' effectiveness', () => {
 		const [p, q] = setup(); q.setType(defender); p.setType('Normal'); battle.randomizer = n => n;
 		const move = Object.assign(Dex.getActiveMove('tackle'), { type: attack, basePower: 100, willCrit: false });
 		const fixed = battle.actions.getDamage(p, q, move);

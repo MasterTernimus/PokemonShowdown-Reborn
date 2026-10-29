@@ -28,6 +28,13 @@ const rainbowMoves = ['silverwind', 'mysticalfire', 'dragonpulse', 'triattack', 
 const psychicMoves = ['secretpower', 'hiddenpower', 'hex', 'magicalleaf', 'mysticalfire', 'moonblast', 'aurasphere', 'focusblast', 'mindblown'];
 
 export const Auras: {[id: string]: AuraData} = {
+ ashenaura: {
+  id: 'ashenaura', name: 'Ashen Aura', turns: 5, mimicryType: 'Fire',
+  secretPowerMove: 'incinerate', naturePowerMove: 'infernalparade',
+  damageMultipliers: values(['darkpulse', 'snarl', 'nightdaze', 'nightslash', 'lashout', 'fierywrath', 'bitterblade', 'infernalparade'], 1.5),
+  secondaryTypeAdditions: {}, typeMultipliers: {Fire: 1.3}, typeCondition: 'none', moveMessages: {},
+  typeMessage: 'The Ashen Aura strengthened the attack!', endMessage: 'The Ashen Aura faded.', statusBuffs: [], statusNerfs: [],
+ },
  frozenaura: {
   id: 'frozenaura', name: 'Frozen Aura', turns: 5, mimicryType: 'Ice',
   secretPowerMove: 'bodyslam', naturePowerMove: 'icebeam', damageMultipliers: {

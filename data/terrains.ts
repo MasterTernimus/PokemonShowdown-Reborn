@@ -1,3 +1,5 @@
+import {SnowyField} from './snowy-field';
+import {EclipseTerrains} from './eclipse-fields';
 import { isGroundBoneMove } from './ground-bone-moves';
 import {adaptiveFieldMultiplier, adaptiveEnvironment} from '../sim/adaptive-cycle';
 import { MidnightZone } from './midnight-zone';
@@ -5,22 +7,6 @@ import { MidnightZone } from './midnight-zone';
 import { type TerrainData } from "../sim/dex-terrains";
 import { type Battle } from '../sim/battle';
 import { type Pokemon } from '../sim/pokemon';
-
-function benefitsFromColdEclipseIce(pokemon: Pokemon) {
-	return pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'icebody', 'thickfat', 'sinisterblaze']);
-}
-
-function benefitsFromColdEclipseDefense(pokemon: Pokemon) {
-	return pokemon.hasType(['Ice', 'Ghost', 'Fire', 'Steel', 'Dragon']) ||
-		pokemon.hasAbilityOrPassive(['monarchofice', 'mindfreeze', 'thickfat', 'sinisterblaze', 'illusion', 'ascendance', 'duskilate', 'armorize']);
-}
-
-function startColdEclipseRainWaterSport(battle: Battle) {
-	const field = battle.field;
-	if (!field.isWeather('raindance') || !field.addPseudoWeather('watersport', field.weatherState.source, field.getWeather())) return;
-	field.pseudoWeather.watersport.duration = 3;
-	battle.add('-message', 'The battlefield became wet!');
-}
 
 function flowerGardenStage(stage: number): TerrainData {
 	const name = `Flower Garden ${stage}`;
@@ -339,7 +325,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onBasePower(basePower, source, target, move) {
-				const terrainEndMoves = ['defog', 'gust', 'winddance', 'airstreamassault', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
+				const terrainEndMoves = ['defog', 'gust', 'winddance', 'airstreamassault', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperetta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
 				const rockfireMoves = ['rockslide', 'smackdown', 'thousandarrows'];
 				const smogfireMoves = ['smog', 'clearsmog'];
 				let modifier = 1;
@@ -367,7 +353,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				return this.chainModify(modifier);
 			},
 			onAfterMove(source, target, move) {
-				const terrainEndMoves = ['defog', 'gust', 'winddance', 'airstreamassault', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperatta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
+				const terrainEndMoves = ['defog', 'gust', 'winddance', 'airstreamassault', 'hurricane', 'muddywater', 'sandtomb', 'razorwind', 'sludgewave', 'sparklingaria', 'surf', 'waterpledge', 'watersport', 'waterspout', 'hydrovortex', 'tailwind', 'twister', 'whirlwind', 'oceanicoperetta', 'continentalcrush', 'supersonicskystrike', 'gmaxwindrage'];
 				if (this.field.terrainState.gardenBurnStage) return;
 				if (terrainEndMoves.includes(move.id)) {
 					if (this.field.terrainState.prevTerrain) {
@@ -681,210 +667,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		},
 	},
-	coldeclipseterrain: {
-		name: "Cold Eclipse Terrain",
-		condition: {
-			effectType: "Terrain",
-			durationCallback() {
-				return this.field.isWeather('hail') ? 8 : 5;
-			},
-			onModifyDef(def, pokemon) {
-				let modifier = 1;
-				if (benefitsFromColdEclipseDefense(pokemon)) {
-					modifier *= 1.5;
-				}
-				if (pokemon.hasAbilityOrPassive('icescales')) modifier *= 2;
-				if (modifier !== 1) return this.chainModify(modifier);
-			},
-			onModifySpD(spd, pokemon) {
-				if (benefitsFromColdEclipseDefense(pokemon)) {
-					return this.chainModify(1.5);
-				}
-			},
-			onModifySpe(spe, pokemon) {
-				if (pokemon.hasAbilityOrPassive('limber')) return;
-				const immune = ['slushrush', 'icebody', 'mindfreeze', 'thickfat', 'illusion', 'duskilate', 'armorize', 'webassassin', 'spiralevolution'];
-				if (!(pokemon.hasAbilityOrPassive(immune) || !pokemon.isGrounded() || pokemon.hasType(['Ice', 'Dragon']))) {
-					return this.chainModify(0.75);
-				}
-			},
-			onEffectiveness(typeMod, target, type, move) {
-				const moveTypes = move?.types || (move ? [move.type] : []);
-				// `type` is one defensive type; preserve every other component of multi-type attacks.
-				if (type === 'Ice' || target && !target.hasType('Ice') && type === target.getTypes()[0] && target.hasAbilityOrPassive('monarchofice')) return typeMod - moveTypes.filter(t => t === 'Fighting').length;
-				if (type === 'Dragon') return typeMod - 2 * moveTypes.filter(t => t === 'Ice').length;
-			},
-			onTryMove(source, target, move) {
-				const failMoves = ['trickroom', 'wonderroom', 'gravity', 'magicroom'];
-				if (failMoves.includes(move.id)) {
-					this.add('-message', 'The cold reality did not change');
-					return null;
-				}
-				if (['solarbeam', 'solarblade'].includes(move.id) && !this.field.isWeather(['sunnyday', 'desolateland'])) {
-					this.add('-message', 'The cold eclipse swallowed the sunlight!');
-					return null;
-				}
-			},
-			onModifyMovePriority: -1,
-			onModifyMove(move, pokemon) {
-				const iceSubTypes = ['Rock', 'Steel', 'Ground', 'Water'];
-				const armorizeSteel = pokemon.hasAbilityOrPassive('armorize') && move.type === 'Steel';
-				if (iceSubTypes.includes(move.type) && !isGroundBoneMove(move) && !armorizeSteel && !move.types?.includes('Ice')) {
-					move.types = [move.type, 'Ice'];
-				}
-				if (move.id === 'freezeshock' || move.id === 'iceburn') {
-					delete move.flags['charge'];
-				}
-				if (move.id === 'rage') {
-					move.basePower = 60;
-					move.type = 'Dark';
-					move.category = 'Physical';
-					move.self = { boosts: { atk: 1 } };
-				}
-				if (move.id === 'chillingwater') {
-					move.secondaries = [{ chance: 100, boosts: { atk: -2 } }];
-				}
-				if (move.id === 'snarl') {
-					move.secondaries = [{ chance: 100, boosts: { spa: -2 } }];
-				}
-			},
-			onBasePowerPriority: 6,
-			onBasePower(basePower, source, target, move) {
-				let modifier = 1;
-				const moveTypes = move.types || [move.type];
-				const twoTimes = ['razorwind', 'silverwind', 'ominouswind', 'chillingwater', 'subzeroslammer', 'nightslash', 'rage'];
-				const onePointFive = ['bittermalice', 'bloodmoon', 'freezingglare', 'moongeistbeam', 'fierywrath', 'roaroftime', 'freezeshock', 'iceburn', 'menacingmoonrazemaelstrom'];
-				const reduced = ['hydrosteam', 'scald', 'steameruption', 'lightthatburnsthesky'];
-				if (moveTypes.includes('Ice')) {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-				}
-				if (moveTypes.includes('Dragon')) {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
-				}
-				if (moveTypes.includes('Rock') || moveTypes.includes('Fighting')) {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
-				}
-				if (moveTypes.includes('Fire')) {
-					if (source.hasAbilityOrPassive(['fullmetalbody', 'turboblaze', 'atrocity'])) {
-						modifier *= adaptiveFieldMultiplier(this, source, target, 2);
-						this.add('-message', source.name + '\'s ' + source.ability + ' defies the frozen night!');
-					} else {
-						this.add('-message', 'The heat was swallowed by the frozen night!');
-						modifier *= adaptiveFieldMultiplier(this, source, target, source.hasAbilityOrPassive('soulfire') ? 0.75 : 0.5);
-					}
-				}
-				if (moveTypes.includes('Ghost') && source.hasAbilityOrPassive('soulfire')) {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-				}
-				if (reduced.includes(move.id)) {
-					this.add('-message', 'The heat was swallowed by the frozen night!');
-					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
-				}
-				if (move.flags['wind'] || twoTimes.includes(move.id)) {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
-				}
-				if (onePointFive.includes(move.id)) {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-				}
-				if (source.hasAbilityOrPassive('relentlesshunt')) {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 2);
-				}
-				return this.chainModify(modifier);
-			},
-			onModifyPriority(priority, pokemon, target, move) {
-				if (pokemon.hasAbilityOrPassive('relentlesshunt') && move.basePower <= 80) return priority + 1;
-			},
-			onAccuracy(accuracy, target, source, move) {
-				if (['blizzard', 'bleakwindstorm', 'icywind', 'coldsnap', 'darkvoid'].includes(move.id)) return true;
-				return accuracy;
-			},
-			onAfterMove(source, target, move) {
-				const infernoMoves = ['heatwave', 'eruption', 'searingshot', 'searingsunrazesmash', 'flameburst', 'lavaplume', 'firepledge', 'mindblown', 'incinerate', 'infernooverdrive'];
-				if (source.moveThisTurnResult === true && infernoMoves.includes(move.id) &&
-					!this.field.isWeather(['raindance', 'primordialsea']) && !this.field.pseudoWeather['watersport']) {
-					const count = (this.field.terrainState.terrainChanges?.get('coldEclipseHeat') ?? 0) + 1;
-					if (count >= 2) {
-						this.field.clearTerrain();
-					} else {
-						this.field.terrainState.terrainChanges?.set('coldEclipseHeat', count);
-					}
-				}
-				if (source.moveThisTurnResult === true && (move.id === 'geomancy' || move.id === 'lightofruin')) {
-					this.add('-message', 'Starlight began to shine!');
-					this.field.changeTerrain('starlightarenaterrain');
-					if (this.field.terrainState?.duration) {
-						this.field.setTerrainDuration(9999);
-					}
-				}
-			},
-			onImmunity(type, pokemon) {
-				if (type === 'hail' && pokemon.hasType('Dragon')) {
-					return false;
-				}
-			},
-			onFieldResidualOrder: 27,
-			onFieldResidualSubOrder: 7,
-			onFieldResidual() {
-				if (this.field.isWeather(['raindance', 'sandstorm'])) {
-					this.field.changeWeather('hail');
-				}
-				if (this.field.isWeather('primordialsea')) {
-					this.add('-message', 'The heavy rain refused to freeze!');
-				}
-				if (this.field.isWeather('sunnyday') && this.field.terrainState.terrainChanges?.get('sunnyday') === 1) {
-					this.add('-message', 'The morning has arrived!');
-					this.field.clearTerrain();
-				} else if (this.field.isWeather('sunnyday')) {
-					this.field.terrainState.terrainChanges?.set('sunnyday', 1);
-				}
-			},
-			onResidual(pokemon) {
-				if (this.field.isWeather('hail') && benefitsFromColdEclipseIce(pokemon)) {
-					this.heal(pokemon.baseMaxhp / 10, pokemon, pokemon);
-				}
-			},
-			onWeatherChange() {
-				if (!this.field.isWeather('sunnyday')) this.field.terrainState.terrainChanges?.delete('sunnyday');
-				if (this.field.isWeather('desolateland')) {
-					this.add('-message', 'The morning has arrived!');
-					this.field.clearTerrain();
-				}
-				if (this.field.isWeather('hail') && !this.field.terrainState.terrainChanges?.get('coldEclipseHailExtended')) {
-					this.field.terrainState.duration! += 3;
-					this.field.terrainState.terrainChanges?.set('coldEclipseHailExtended', 1);
-					this.add('-message', 'The hail deepened the Cold Eclipse!');
-				}
-				startColdEclipseRainWaterSport(this);
-			},
-			onFieldStart() {
-				if (this.field.isWeather('desolateland')) {
-					this.add('-message', 'The harsh sun melted the snow before it could form!');
-					return false;
-				}
-				const failMoves = ['trickroom', 'wonderroom', 'gravity', 'magicroom'];
-				this.add('-fieldstart', "Cold Eclipse Terrain");
-				this.field.terrainState.terrainChanges?.set('coldEclipseHailExtended', this.field.isWeather('hail') ? 1 : 0);
-				this.field.terrainState.terrainChanges?.set('coldEclipseHeat', 0);
-				startColdEclipseRainWaterSport(this);
-				for (const pseudoWeather of failMoves) {
-					this.field.removePseudoWeather(pseudoWeather);
-				}
-				for (const pokemon of this.getAllActive()) {
-					if (!pokemon.hasAbilityOrPassive('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'coldeclipseterrain') continue;
-					pokemon.abilityState.fortressShellBoostedTerrain = 'coldeclipseterrain';
-					this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
-				}
-			},
-			onSwitchIn(pokemon) {
-				if (!pokemon.hasAbilityOrPassive('fortressshell') || pokemon.abilityState.fortressShellBoostedTerrain === 'coldeclipseterrain') return;
-				pokemon.abilityState.fortressShellBoostedTerrain = 'coldeclipseterrain';
-				this.boost({ def: 1, spd: 1 }, pokemon, pokemon, this.field.getTerrain());
-			},
-			onFieldEnd() {
-				this.add('-fieldend', 'Cold Eclipse Terrain');
-			},
-		},
-	},
+	...EclipseTerrains,
 	corrosivemistterrain: {
 		name: "Corrosive Mist Terrain",
 		condition: {
@@ -2711,89 +2494,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 		},
 	},
-	snowyterrain: {
-		name: "Snowy Terrain",
-		condition: {
-			effectType: "Terrain",
-			onModifySpe(spe, pokemon) {
-				if (pokemon.hasAbilityOrPassive('limber')) return;
-				const immuneAbiltiy = ['slushrush', 'icebody', 'snowcloak', 'limber', 'webassassin', 'spiralevolution'];
-				if (!(pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive(immuneAbiltiy)) && pokemon.isGrounded()) {
-					return this.chainModify(0.75);
-				}
-			},
-			onModifySpD(def, pokemon) {
-				if ((pokemon.hasType('Ice') || pokemon.hasAbilityOrPassive('monarchofice')) && this.field.isWeather('hail')) {
-					return this.chainModify(1.5);
-				}
-			},
-			onModifyMove(move) {
-				const slushMoves = ['bulldoze', 'earthquake', 'magnitude', 'mudbomb', 'mudshot', 'mudbarrage', 'sandtomb'];
-				if ((move.type === 'Steel' && move.category === 'Physical') || slushMoves.includes(move.id)) {
-					move.types = [move.type, 'Ice'];
-				}
-			},
-			onBasePowerPriority: 6,
-			onBasePower(basePower, source, target, move) {
-				let modifier = 1;
-				const weak: string[] = ['scald', 'eruption', 'hydrosteam'];
-				const boost: string[] = ["blizzard", "fairywind", "gust", "icywind", "ominouswind", "razorwind", "powdersnow", "silverwind", "twister", "mudbarrage", "mudshot", "mudbomb", 'chillingwater'];
-				const secondBoost: string[] = ["aeroblast", "aircutter", "airslash", "bleakwindstorm", "chillingwater", "fairywind", "glaciate", "gust", "hurricane", "ominouswind", "razorwind", "silverwind", "twister"];
-				const igniteMoves = ['infernalrage', 'eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
-				if (weak.includes(move.id) || move.type === 'Fire') {
-					this.add('-message', "The fire was doused by the snow!");
-					modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
-				}
-				if (igniteMoves.includes(move.id) || (move.isMax && move.type === 'Fire')) {
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
-				}
-				if (boost.includes(move.id) || (move.category === 'Special' && move.type === 'Flying')) {
-					this.add('-message', 'The snowy terrain charged up the attack!');
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-				}
-				if (secondBoost.includes(move.id)) {
-					this.add('-message', 'The snowy terrain charged up the attack!');
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-				}
-				return this.chainModify(modifier);
-			},
-			onAfterMove(source, target, move) {
-				if (move.id === 'infernalrage' && !(move as ActiveMove & {infernalFieldCleared?: boolean}).infernalFieldCleared) return;
-				const igniteMoves = ['infernalrage', 'eruption', 'explosion', 'firepledge', 'flameburst', 'heatwave', 'incinerate', 'lavaplume', 'mindblown', 'searingshot', 'selfdestruct', 'infernooverdrive'];
-				if (igniteMoves.includes(move.id) && !this.field.getPseudoWeather('watersport') || (move.isMax && move.type === 'Fire')) {
-					this.field.clearTerrain();
-				}
-				if (move.id === 'powdersnow' || (move.category === 'Special' && move.type === 'Flying')) {
-					for (const pokemon of this.getAllActive()) {
-						this.boost({ accuracy: -1 }, pokemon, null, move, false, false);
-					}
-				}
-			},
-			onFieldResidual() {
-				if (this.field.weather === 'raindance') {
-					this.field.changeWeather('hail');
-				}
-				if ((this.field.weather === 'sunnyday' || this.field.weather === 'desolateland') && !this.field.getPseudoWeather('watersport')) {
-					if (this.field.terrainState?.terrainChanges?.get('sun') === 1) {
-						this.field.clearTerrain();
-					} else {
-						this.field.terrainState?.terrainChanges?.set('sun', 1);
-					}
-				}
-			},
-			onFieldStart(field, source, effect) {
-				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'Snowy Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
-				} else {
-					this.add('-fieldstart', 'Snowy Terrain');
-				}
-				this.add('-message', 'Snow swirls around the pokemon');
-			},
-			onFieldEnd() {
-				this.add('-fieldend', 'Snowy Terrain');
-			},
-		},
-	},
+	snowyterrain: SnowyField,
 	starlightarenaterrain: {
 		name: "Starlight Arena Terrain",
 		condition: {
@@ -3092,7 +2793,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onModifySpe(spe, pokemon) {
 				if (pokemon.hasAbilityOrPassive('limber')) return;
 				if (pokemon.hasAbilityOrPassive(['webassassin', 'spiralevolution'])) return;
-				const immune = ['elevate', 'swiftswim', 'steelworker', 'spiralevolution'];
+				const immune = ['elevate', 'swiftswim', 'steelworker', 'spiralevolution', 'blackwatervenom'];
 				if (
 					!pokemon.getTypes().includes('Water') &&
 					!pokemon.hasAbilityOrPassive(immune) &&
@@ -3507,7 +3208,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			onBasePowerPriority: 6,
 			onModifySpe(spe, pokemon) {
 				if (pokemon.hasAbilityOrPassive('limber')) return;
-				const immune = ['swiftswim', 'surgesurfer', 'limber', 'webassassin', 'spiralevolution'];
+				const immune = ['swiftswim', 'surgesurfer', 'limber', 'webassassin', 'spiralevolution', 'blackwatervenom'];
 				if (pokemon.isGrounded() && !pokemon.getTypes().includes('Water') && !pokemon.hasAbilityOrPassive(immune)) {
 					return this.chainModify(0.75);
 				}

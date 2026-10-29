@@ -47,12 +47,19 @@ const allGenFfaTeamPreview = function (this: any) {
 	this.makeRequest('teampreview');
 };
 
+const ADDITIONAL_ELEMENTAL_FIELDS = [
+	["Rift Eclipse", "rifteclipseterrain"],
+	["Infernal Eclipse", "infernaleclipseterrain"],
+	["Snowy Field", "snowyterrain"],
+] as const;
+
 const FIELD_GROUPS = [
 	{
 		subsection: "Elemental",
 		fields: [
 			["Misty Field [Adrienn]", "adriennterrain"],
 			["Cold Eclipse", "coldeclipseterrain"],
+			...ADDITIONAL_ELEMENTAL_FIELDS,
 			["Dragon's Den", "dragonsdenterrain"],
 			["Water Surface", "watersurfaceterrain"],
 			["Midnight Zone", "midnightzoneterrain"],
@@ -92,6 +99,20 @@ const FIELD_GROUPS = [
 
 function fieldRuleset(baseRuleset: readonly string[], terrain: string) {
 	return terrain === 'chessboardterrain' ? ['Assign Roles', ...baseRuleset] : [...baseRuleset];
+}
+
+function makeAdditionalElementalFormats(gameType: 'singles' | 'doubles'): FormatList {
+	return ADDITIONAL_ELEMENTAL_FIELDS.map(([fieldName, terrain]) => ({
+		name: `[Gen 9] ${gameType === 'doubles' ? 'Doubles ' : ''}${fieldName}${fieldName.endsWith('Field') ? '' : ' Field'}`,
+		mod: 'gen9',
+		terrain,
+		gameType,
+		searchShow: true,
+		challengeShow: true,
+		debug: true,
+		battle: { trunc: Math.trunc },
+		ruleset: fieldRuleset(ALLGEN_FIELD_RULESET, terrain),
+	}));
 }
 
 function makeFfaFieldFormats(): FormatList {
@@ -195,6 +216,7 @@ const FORMAT_LIST: FormatList = [
 		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
+	...makeAdditionalElementalFormats('singles'),
 	{
 		name: "[Gen 9] Corrosive Mist Field",
 		mod: 'gen9',
@@ -598,6 +620,7 @@ const FORMAT_LIST: FormatList = [
 		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Evasion Clause', 'Cancel Mod', 'Sleep Clause Mod', 'Fighting Clause', 'Authority Clause', 'Max Team Size = 6', 'Max Move Count = 4', 'Max Level = 100', 'Default Level = 100', '+Unobtainable', '+Past'],
 	},
+	...makeAdditionalElementalFormats('doubles'),
 	{
 		name: "[Gen 9] Doubles Corrosive Mist Field",
 		mod: 'gen9',

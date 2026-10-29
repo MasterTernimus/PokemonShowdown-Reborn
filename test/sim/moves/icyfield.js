@@ -102,7 +102,7 @@ describe('Icy Field interactions', () => {
 		assert(battle.field.isTerrain('murkwatersurfaceterrain'));
 	});
 
-	it('creates Frozen Aura over the requested terrains without replacing them', () => {
+	it('Snowscape places Snowy Field over eligible existing fields', () => {
 		for (const underlyingTerrain of [
 			'watersurfaceterrain', 'murkwatersurfaceterrain', 'caveterrain',
 			'crystalcavernterrain', 'darkcrystalcavernterrain', 'mistyterrain',
@@ -110,58 +110,34 @@ describe('Icy Field interactions', () => {
 			const [source, target] = createBattle();
 			battle.field.changeTerrain(underlyingTerrain, source);
 			battle.actions.useMove('snowscape', source, {target});
-			assert(battle.field.isTerrain(underlyingTerrain));
-   assert(battle.field.isAura('frozenaura'));
+			assert(battle.field.isTerrain('snowyterrain'));
+   assert(!battle.field.isAura('frozenaura'));
 			battle.destroy();
 			battle = null;
 		}
 	});
 
-	it('creates Frozen Aura through the full Snowscape move pipeline', () => {
+	it('creates Snowy Field through the full Snowscape move pipeline', () => {
 		const [source] = createBattle([
 			[{ species: 'Mew', moves: ['snowscape'] }],
 			[{ species: 'Mew', moves: ['splash'] }],
 		]);
 		battle.field.changeTerrain('crystalcavernterrain', source);
 		battle.makeChoices('move snowscape', 'move splash');
-		assert(battle.field.isTerrain('crystalcavernterrain'));
-  assert(battle.field.isAura('frozenaura'));
+		assert(battle.field.isTerrain('snowyterrain'));
+  assert(!battle.field.isAura('frozenaura'));
 	});
 
-	it('makes Snowscape fail on heat fields, Fairy Tale, and Starlight Arena', () => {
-		for (const blockedField of [
-			'burningterrain', 'superheatedterrain', 'volcanicterrain', 'fairytaleterrain', 'starlightarenaterrain',
-		]) {
-			const [source] = createBattle([
-				[{ species: 'Mew', moves: ['snowscape'] }],
-				[{ species: 'Mew', moves: ['splash'] }],
-			]);
-			battle.field.changeTerrain(blockedField, source);
-			battle.makeChoices('move snowscape', 'move splash');
-			assert(battle.field.isTerrain(blockedField));
-			let expectedMessage = '|-message|The intense heat prevented the snow from settling!';
-			if (blockedField === 'fairytaleterrain') {
-				expectedMessage = '|-message|The fairy tale rejected the changing season!';
-			}
-			if (blockedField === 'starlightarenaterrain') {
-				expectedMessage = '|-message|The starlight refused to be eclipsed!';
-			}
-			assert(battle.log.includes(expectedMessage));
-			battle.destroy();
-			battle = null;
-		}
-	});
-
-	it('keeps Icy Field under Frozen Aura without creating Cold Eclipse', () => {
+	it('Snowscape creates Snowy Field over Icy without creating Cold Eclipse', () => {
 		const [source] = createBattle([
 			[{ species: 'Mew', moves: ['snowscape'] }],
 			[{ species: 'Mew', moves: ['splash'] }],
 		]);
 		setIcyField(source);
 		battle.makeChoices('move snowscape', 'move splash');
-		assert(battle.field.isTerrain('icyterrain'));
+		assert(battle.field.isTerrain('snowyterrain'));
 		assert(!battle.field.isTerrain('coldeclipseterrain'));
-		assert(battle.field.isAura('frozenaura'));
+		assert(!battle.field.isAura('frozenaura'));
 	});
 
 	it('restores Misty Terrain and carries Icy Field Spikes through a break', () => {

@@ -6,12 +6,13 @@ export function installArbolivaAevianAbilities(abilities: AbilityDataTable) {
   onStart(pokemon) {
    if (pokemon.m.badSeedsContact || this.field.isAura('frozenaura') || this.field.isTerrain(['dragonsdenterrain', 'coldeclipseterrain'])) return;
    const duration = pokemon.hasItem('amplifieldrock') ? 8 : 5;
-   if (!this.field.terrain || this.field.isTerrain(['icyterrain', 'snowymountainterrain'])) {
+   if (!this.field.terrain || this.field.isTerrain(['icyterrain'])) {
     this.field.setFieldOrAura('coldeclipseterrain', duration, pokemon, this.effect, true);
    } else {
     this.field.setAura('frozenaura', duration, pokemon, this.effect);
    }
   },
+  onAfterMove(source, target, move) { this.field.promoteSeedAura(source, move); },
   // Observe the normal effectiveness event once, after field rules; never rerun it for damage protection.
   onEffectivenessPriority: -100,
   onEffectiveness(typeMod, target, type, move) {

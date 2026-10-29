@@ -7,7 +7,7 @@ export function updateStarterBoostIndicators(pokemon: Pokemon) {
 	const garden = field.flowerGardenStage();
 	const lowHP = pokemon.hp <= pokemon.maxhp / 3;
 	const active = {
-		blaze: (lowHP || field.isTerrain(['burningterrain', 'volcanicterrain'])) && !field.isTerrain('coldeclipseterrain'),
+		blaze: (lowHP || field.isTerrain(['burningterrain', 'volcanicterrain', 'infernaleclipseterrain'])) && !field.isTerrain('coldeclipseterrain'),
 		torrent: lowHP || field.isTerrain(['watersurfaceterrain', 'underwaterterrain', 'midnightzoneterrain']),
 		overgrow: lowHP || field.isTerrain('grassyterrain') || garden >= 4 || (garden === 2 && pokemon.hp <= pokemon.maxhp * 2 / 3),
 	};

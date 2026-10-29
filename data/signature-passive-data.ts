@@ -7,6 +7,7 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
+	breakingnews: ['forewarn'],
 	punchfiend: ['ironfist', 'serenegrace', 'keeneye'],
 	kickfiend: ['striker', 'limber', 'serenegrace'],
 	spinfiend: ['technician', 'vitalspirit', 'steadfast'],
@@ -16,6 +17,7 @@ export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
 	naturalrecovery: ['naturalcure', 'regenerator'],
 	noseformation: ['elevate'],
 	unbridledwrath: ['sheerforce', 'innerfocus'],
+	composed: ['innerfocus', 'magicguard'],
 	eldritchremedy: ['owntempo', 'curiousmedicine'], pearlcurrent: ['waterabsorb'], saltbastion: ['sturdy'],
 	mirechorus: ['liquidvoice'],
 };
@@ -86,3 +88,6 @@ SignaturePassiveDescriptions.tempestfury.shortDesc += ' Anger Point.';
 SignaturePassiveDescriptions.tempestfury.desc += ' Includes full local Anger Point: the first damaging hit after activation raises Attack by 1, and a surviving critical hit maximizes Attack at the normal +6 cap.';
 
 SignaturePassiveComponents.oraclesrefrain = ['resonanceforce', 'soundproof'];
+
+import {PlainLanguagePassiveDescriptions} from './ability-readability';
+Object.assign(SignaturePassiveDescriptions, PlainLanguagePassiveDescriptions);

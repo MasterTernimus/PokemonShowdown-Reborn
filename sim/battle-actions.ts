@@ -600,7 +600,6 @@ export class BattleActions {
 		const resolvedMove = this.battle.activeMove;
 		settleRecharge(pokemon, resolvedMove);
 		endArsenal(this.battle, resolvedMove);
-		this.battle.field.frozenAuraAfterAttack(pokemon, this.battle.activeMove!);
 		this.battle.runEvent('AfterAttackResolved', pokemon, this.battle.activeTarget, this.battle.activeMove);
 		settleFinisherCost(this.battle, pokemon, resolvedMove);
 		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;

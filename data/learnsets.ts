@@ -113281,3 +113281,20 @@ for (const id of ['typhlosion', 'typhlosionhisui'] as const) {
 for (const [id, moves] of Object.entries({politoed:['sparklingaria','boomburst','alluringvoice'],hitmonchan:['meteormash','shadowpunch','surgingstrikes','suckerpunch']})) {
  for (const move of moves) Learnsets[id as ID].learnset![move as ID] = [...new Set([...(Learnsets[id as ID].learnset![move as ID] || []), '9M' as const])];
 }
+
+// Rift Eclipse's dedicated setter is restricted to spatial and occult specialists.
+for (const id of [
+	'hoopa', 'palkia', 'giratina', 'darkrai', 'mismagius', 'bronzong',
+	'dialga', 'deoxys', 'lunala', 'solgaleo', 'necrozma', 'beheeyem',
+	'claydol', 'dusknoir', 'spiritomb', 'gothitelle', 'alakazam', 'gengar',
+	'cresselia', 'hatterene',
+] as const) {
+	if (Learnsets[id]?.learnset) Learnsets[id].learnset.riftopening = ['9L1'];
+}
+
+// Approved seed-holder additions; related regional forms retain their independent learnsets.
+Learnsets.weavile.learnset!.sheercold = ['9L1'];
+Learnsets.ninetales.learnset!.eruption = ['9L1'];
+
+import {AevianDisciplineMoves} from './alakazam-rejuv';
+Learnsets.alakazamrejuv = {learnset: Object.fromEntries(AevianDisciplineMoves.map(id => [id, ['9M']]))};

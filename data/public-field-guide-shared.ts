@@ -3,7 +3,7 @@ export const FieldMoveMappings: { [id: string]: { camouflage: string, mimicry: s
 const mappings = [
 	['ashenbeach', 'Ground', 'Meditate'], ['bewitchedwoods', 'Fairy', 'Alluring Voice'],
 	['bigtop', 'Fighting', 'Acrobatics'], ['burning', 'Fire', 'Flamethrower'], ['cave', 'Rock', 'Rock Tomb'],
-	['chessboard', 'Psychic', 'Ancient Power'], ['coldeclipse', 'Ice', 'Icy Wind'],
+	['chessboard', 'Psychic', 'Ancient Power'], ['coldeclipse', 'Ice', 'Ice Beam'], ['rifteclipse', 'Dark', 'Dark Pulse'], ['infernaleclipse', 'Fire', 'Infernal Parade'],
 	['corrosivemist', 'Poison', 'Venoshock'], ['corrosive', 'Poison', 'Acid'],
 	['darkcrystalcavern', 'Dark', 'Dark Pulse'], ['desert', 'Ground', 'Sand Tomb'],
 	['dragonsden', 'Dragon', 'Dragon Pulse'], ['electric', 'Electric', 'Thunderbolt'],
@@ -16,7 +16,7 @@ const mappings = [
 	['snowymountain', 'Ice', 'Avalanche'], ['starlightarena', 'Dark', 'Moonblast'],
 	['superheated', 'Fire', 'Heat Wave'], ['swamp', 'Water', 'Muddy Water'], ['underwater', 'Water', 'Water Pulse'],
 	['midnightzone', 'Water', 'Anchor Shot'], ['volcanic', 'Fire', 'Flamethrower'],
-	['wasteland', 'Poison', 'Gunk Shot'], ['watersurface', 'Water', 'Whirlpool'], ['snowy', 'Normal', 'Tri Attack'],
+	['wasteland', 'Poison', 'Gunk Shot'], ['watersurface', 'Water', 'Whirlpool'], ['snowy', 'Ice', 'Powder Snow'],
 ];
 for (const [id, type, nature] of mappings) FieldMoveMappings[id + 'terrain'] = { camouflage: type, mimicry: type, pulse: type, nature };
 FieldMoveMappings.forestterrain.mimicry = 'Grass';
@@ -77,7 +77,7 @@ export function appendSharedFieldGuide(sections: { [id: string]: { [section: str
 		const mapping = FieldMoveMappings[id];
 		if (mapping) entry['Shared move and ability mappings'] = [
 			`Camouflage changes its user to ${mapping.camouflage}; Mimicry selects ${mapping.mimicry}; Terrain Pulse becomes ${mapping.pulse}. These are distinct mappings, not a shared type assumption. Type-changing restrictions still apply. An active aura overrides Camouflage, Mimicry and Terrain Pulse with its own type.`,
-			`Nature Power calls ${mapping.nature}. Frozen Aura overrides this with its own Nature Power move; the other auras do not replace this field lookup in the current move handler.`,
+			`Nature Power calls ${mapping.nature}. Frozen Aura overrides this with Ice Beam and Ashen Aura with Infernal Parade; other auras do not replace this field lookup.`,
 		];
 		if (['electricterrain', 'grassyterrain', 'mistyterrain', 'psychicterrain', 'rainbowterrain'].includes(id)) entry['Shared move and ability mappings'].push('Without an aura, Terrain Pulse doubles its base power here unless the target has adaptive field protection. This power check does not require grounding.');
 		if (FieldSeedNotes[id]) entry['Seeds and other effects'] = [FieldSeedNotes[id], ...(entry['Seeds and other effects'] || []).filter(s => !/^(Elemental|Magical|Synthetic|Telluric) Seed/.test(s)), 'Seed effects require the item to activate and be consumed. Type, status, healing, trapping and stat-change restrictions still apply; a listed attempt is not a guarantee against immunity.'];
@@ -173,3 +173,8 @@ export const FieldSecretPowerNotes: { [id: string]: string } = {
 	"snowyterrain": "Secret Power has no field-specific secondary assigned here; the current handler clears its secondary list.",
 };
 export function appendSecretPowerGuide(sections: { [id: string]: { [section: string]: string[] } }) { for (const [id, text] of Object.entries(FieldSecretPowerNotes)) (sections[id].Moves ||= []).push(text); }
+
+FieldSeedNotes.coldeclipseterrain = 'Elemental Seed grants +2 Speed and Torment; it does not change typing.';
+FieldSeedNotes.rifteclipseterrain = 'Magical Seed grants +1 Defense and establishes eight-turn Trick Room.';
+FieldSeedNotes.infernaleclipseterrain = 'Elemental Seed grants +1 Attack and Special Attack and a four-turn Fire Spin effect.';
+FieldSeedNotes.snowyterrain = 'Elemental Seed grants +1 Special Defense, Wish, and five-turn Safeguard.';

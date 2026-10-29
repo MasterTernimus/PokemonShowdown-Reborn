@@ -76,7 +76,7 @@ describe('Terrain Auras', () => {
 	it('stacks move-specific boosts with the base field', () => {
 		const [p] = setup('coldeclipseterrain');
 		battle.field.setAura('grassyterrain', 5, p);
-		assert.equal(power('icywind').power, 450);
+		assert.equal(power('icywind').power, 180);
 	});
 	it('preserves base-field secondary types when Electric Aura adds its type', () => {
 		const [p] = setup('coldeclipseterrain');
@@ -153,13 +153,11 @@ describe('Aura follow-up fixes', () => {
    assert.equal(battle.field.auraField, 'electricterrain'); assert.equal(battle.field.terrain, field);
   });
  }
- it('keeps an Aura indefinitely on Cold Eclipse but permits removal and resumes its timer after leaving', () => {
+ it('Auras count down normally on Cold Eclipse', () => {
   const [p] = setup('coldeclipseterrain'); battle.field.setAura('grassyterrain', 2, p);
-  for (let i=0;i<8;i++) battle.field.tickAura();
-  assert.equal(battle.field.auraTurns, 2);
-  assert(battle.log.some(line => line.includes('Grassy Aura|[aura] 0')));
-  battle.field.changeTerrain('rockyterrain',p); battle.field.tickAura();
-  assert.equal(battle.field.auraTurns,1); battle.field.clearAura(); assert.equal(battle.field.auraField,'');
+  battle.field.tickAura(); assert.equal(battle.field.auraTurns, 1);
+  battle.field.tickAura(); assert.equal(battle.field.auraField, '');
+  assert.equal(battle.field.terrain, 'coldeclipseterrain');
  });
  it('preserves Booster Energy until Electric Aura ends', () => {
   const [p] = setup('factoryterrain'); battle.field.setAura('electricterrain',5,p);

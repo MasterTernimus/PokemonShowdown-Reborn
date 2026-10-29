@@ -103,7 +103,7 @@ describe('Audit server lifecycle regressions', () => {
 		const [, html] = await store.getTop('yes');
 		assert.equal((html.match(/<tr><td>/g) || []).length, 100);
 		assert.match(html, /<td>200<\/td>/);
-		assert.ok(html.endsWith('</table>'));
+		assert(html.endsWith('</table>'));
 	});
 	it('frames fragmented and coalesced Artemis records and preserves pending malformed replies', () => {
 		class Stream {}
@@ -231,7 +231,7 @@ describe('Durable official report delivery', () => {
 		for (const box of boxes) box.stop();
 		boxes.length = 0;
 		assert.equal(path.dirname(path.resolve(directory)), path.resolve(os.tmpdir()));
-		assert.ok(path.basename(directory).startsWith('showdown-report-test-'));
+		assert(path.basename(directory).startsWith('showdown-report-test-'));
 		fs.rmSync(directory, { recursive: true, force: true });
 	});
 	const payload = { roomid: 'battle-test-1', official: true, p1: 'A', p2: 'B' };

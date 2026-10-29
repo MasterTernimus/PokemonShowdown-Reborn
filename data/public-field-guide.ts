@@ -1,3 +1,4 @@
+import {FieldNotes} from './field-guide';
 import { RemainingFieldGuide } from './public-field-guide-remaining';
 import { appendSharedFieldGuide, appendReviewedHazards, appendSecretPowerGuide } from './public-field-guide-shared';
 /** Reviewed entries are deliberately separate from legacy notes and generated indexes. */
@@ -662,3 +663,151 @@ for (const [id, lines] of Object.entries({
 	"grassyterrain": [
 	],
 })) (ReviewedFieldGuide[id].Abilities ||= []).push(...lines);
+
+// Keep Eclipse rules in player-facing sections instead of multi-topic summary paragraphs.
+const eclipseHeatingMoves = [
+	'Heat Wave', 'Lava Plume', 'Fire Pledge', 'Infernal Parade', 'Raging Fury', 'Flame Burst',
+	'Incinerate', 'Burning Jealousy', 'Mystical Fire', 'Searing Shot',
+];
+const eclipseStrongHeatingMoves = ['Precipice Blades', 'Eruption', 'Magma Storm', 'Inferno Overdrive', 'Blast Burn', 'Mind Blown'];
+ReviewedFieldGuide.coldeclipseterrain = {
+	'Boosts and general effects': [
+		'Ice attacks: 1.2x power. Dark attacks: 1.5x. Dragon attacks: 2x.',
+		'Ice types gain 1.2x Defense and Sp. Def. Ghost types gain the same bonus; Ice/Ghost types receive 1.44x. Fire types receive 0.8x Defense and Sp. Def.',
+		'Dragon typing resists Ice, including added Ice typing. Dragon types are protected from hail and frostbite.',
+	],
+	'Weather, rooms and Gravity': [
+		'New Trick Room, Wonder Room, Magic Room and Gravity fail.',
+		'Existing rooms and Gravity keep working, but their timers pause until Cold Eclipse ends. Aura timers keep counting down.',
+		'New hail lasts 8 turns. Hail damage is 1/8 max HP for susceptible targets.',
+		'Rain and sandstorm work normally. Sun does not remove Cold Eclipse.',
+	],
+	Transitions: [
+		'One successful heating move thaws Cold Eclipse into Rift Eclipse.',
+		'Heating moves: ' + [...eclipseHeatingMoves, ...eclipseStrongHeatingMoves].join(', ') + '.',
+		'Direct change to Infernal Eclipse: use Eruption successfully while Ashen Aura is active. This consumes Ashen Aura and keeps the field\'s remaining turns. The user does not need Ashen Seeds.',
+		'Purify leaves a permanent Icy Field with Cave underneath. It has no expiry timer, but normal Cave transitions, Ice Spinner and Steel Roller can still change or clear it.',
+		'Geomancy or Light of Ruin creates permanent Starlight Arena.',
+	],
+	Moves: [
+		'Rock, Steel, Ground and Water attacks gain an additional Ice type. Ground bone moves and Steel moves used with Armorize are exempt.',
+		'Fiery Wrath, Freezing Glare, Lash Out, Outrage, Raging Fury, Rage, Roar of Time, Stomping Tantrum, Thrash and Bitter Malice gain an additional 1.5x power.',
+		'Hyperspace Hole and Hyperspace Fury gain an additional 1.2x power. Named move bonuses stack with type bonuses.',
+		'Blizzard, Icy Wind, Cold Snap and Dark Void bypass accuracy checks.',
+		'Freeze Shock and Ice Burn skip their charging turn.',
+		'Dragon Rage deals 140 fixed damage.',
+		'Rage becomes a 60-power physical Dark move and raises the user\'s Attack by 1 stage.',
+		'Snarl lowers Sp. Atk by 2 stages. Chilling Water lowers Attack by 2 stages. Parting Shot also lowers Speed by 1 stage.',
+		'Nature Power calls Ice Beam. An active Ashen Aura overrides it with Infernal Parade.',
+	],
+	Abilities: [
+		'Ice Scales doubles Defense. Prism Armor multiplies Defense and Sp. Def by 4/3. These stack with the field\'s type-based defense bonuses and the abilities\' ordinary damage reduction.',
+		'Bad Seeds prevents field changes, purification and destruction while an active, unsuppressed holder remains. It does not prevent natural expiry.',
+		'Bad Seeds halves damage exploiting its holder\'s Ice-type weakness unless bypassed. Eligible non-Ice contact attackers acquire Bad Seeds; non-Ice holders lose 1 Attack and Sp. Atk each turn. These effects require full Cold Eclipse, not Frozen Aura alone.',
+	],
+	'Seeds and other effects': [
+		'Elemental Seed raises Speed by 2 stages and applies Torment. It does not change the holder\'s type.',
+	],
+};
+ReviewedFieldGuide.rifteclipseterrain = {
+	'Boosts and general effects': [
+		'Dark attacks: 1.5x power. Ghost attacks: 1.2x. Fairy attacks: 0.75x.',
+		'Ghost types gain 1.2x Defense and Sp. Def.',
+		'Sleeping Pokemon and Comatose holders lose 1/16 max HP each turn. Indirect-damage immunity still applies.',
+	],
+	'Weather, rooms and Gravity': [
+		'New Trick Room, Wonder Room, Magic Room and Gravity last 8 turns. Existing effects are not extended.',
+		'Weather and auras work normally.',
+	],
+	Transitions: [
+		'Accumulate 2 heating points to become Infernal Eclipse, or 2 freezing points to become Cold Eclipse. Heating and freezing cancel each other.',
+		'Heating +1: ' + eclipseHeatingMoves.join(', ') + '.',
+		'Heating +2: ' + eclipseStrongHeatingMoves.join(', ') + '.',
+		'Freezing +1: Blizzard, Cold Truth, Sheer Cold, Avalanche, Freezing Glare, Cold Snap.',
+		'Freezing +2: Glaciate, Freeze Shock, Ice Burn, Subzero Slammer.',
+		'Purify or Seed Flare clears Rift Eclipse.',
+	],
+	Moves: [
+		'Spacial Rend, Roar of Time, Hyperspace Hole, Hyperspace Fury, Shadow Force, Phantom Force, Dynamax Cannon and Eternabeam gain an additional 1.5x power. This stacks with type bonuses.',
+		'Dark Pulse and Night Daze bypass accuracy checks. Quash gains +1 priority.',
+		'Rage becomes a 60-power physical Dark move and raises the user\'s Attack by 1 stage.',
+		'Nature Power calls Dark Pulse. Frozen Aura overrides it with Ice Beam; Ashen Aura overrides it with Infernal Parade.',
+	],
+	Abilities: [
+		'On switch-in: Rattled raises Speed by 1 stage; Berserk raises Sp. Atk by 1 stage; Justified raises Attack by 1 stage.',
+		'Rift Herald creates Rift Eclipse on entry for 5 turns, or 8 with Amplifield Rock. It does not refresh an existing Rift Eclipse. Changing another Eclipse keeps its remaining turns.',
+	],
+	'Seeds and other effects': [
+		'Magical Seed raises Defense by 1 stage and starts an 8-turn Trick Room.',
+		'Rift Opening creates Rift Eclipse for 5 turns, or 8 with Amplifield Rock. Establishing Trick Room and Magic Room together can also open Rift Eclipse.',
+	],
+};
+ReviewedFieldGuide.infernaleclipseterrain = {
+	'Boosts and general effects': [
+		'Fire and Dark attacks: 1.5x power. Dragon attacks: 2x. Water, Ice and Fairy attacks: 0.5x. Spirit Break avoids the Fairy penalty.',
+		'Fire types gain 1.2x Defense and Sp. Def. Ghost types gain the same bonus; Fire/Ghost types receive 1.44x. Ice types receive 0.8x Defense and Sp. Def.',
+		'Fire becomes super effective against Ghost typing.',
+	],
+	'End-of-turn damage': [
+		'Grounded non-Fire Pokemon take damage based on 1/16 max HP, scaled by Fire effectiveness and capped at 1/8 max HP.',
+		'Airborne or semi-invulnerable Pokemon, Fire types and Aqua Ring users avoid this damage.',
+		'Protective abilities: Magic Guard, Flame Body, Flare Boost, Flash Fire, Heatproof, Magma Armor, Water Bubble, Water Veil and Well-Baked Body.',
+	],
+	'Weather, rooms and Gravity': [
+		'Rain, heavy rain and hail are removed when the field starts. New attempts to start them fail.',
+		'The field does not summon sun. Rooms and Gravity follow their normal rules.',
+	],
+	Transitions: [
+		'Accumulate 2 cooling points to return to Rift Eclipse. Heating moves cancel cooling progress.',
+		'Cooling +1: Surf, Muddy Water, Sparkling Aria, Water Pledge, Blizzard, Chilling Water, Hydro Pump, Sheer Cold.',
+		'Cooling +2: Glaciate, Water Spout, Hydro Vortex, Oceanic Operetta, Subzero Slammer.',
+		'Heating -1 cooling point: ' + eclipseHeatingMoves.join(', ') + '.',
+		'Heating -2 cooling points: ' + eclipseStrongHeatingMoves.join(', ') + '. Cooling cannot fall below zero.',
+		'Direct change to Cold Eclipse: use Glaciate or Sheer Cold successfully while Frozen Aura is active. This consumes Frozen Aura and keeps the field\'s remaining turns. The user does not need Bad Seeds.',
+		'Purify, Judgment or Origin Pulse leaves a permanent Volcanic Field with Cave underneath. It has no expiry timer, but normal Cave transitions, Ice Spinner and Steel Roller can still change or clear it.',
+		'Geomancy or Light of Ruin creates permanent Starlight Arena.',
+	],
+	Moves: [
+		'Rock, Steel, Ground and Ice attacks gain an additional Fire type. Ground bone moves and Steel moves used with Armorize are exempt.',
+		'Aura Sphere, Frustration and Spirit Break gain an additional Dark type.',
+		'Blast Burn, Infernal Parade, Inferno, Inferno Overdrive, Earth Power, Precipice Blades and Raging Fury gain an additional 1.5x power.',
+		'Punishment, Smog and Dream Eater gain an additional 2x power. Named move bonuses stack with type bonuses.',
+		'Inferno, Will-O-Wisp and Dark Void bypass accuracy checks. Infernal Parade always attempts to burn; normal burn protections still apply.',
+		'Hex doubles in power even against a healthy target. It does not double again against a statused target.',
+		'Nasty Plot raises Sp. Atk by 3 stages.',
+		'Torment also deals 1/8 max HP each turn. Magic Guard prevents this damage.',
+		'Nightmare works on awake targets and deals 1/4 max HP each turn. After leaving the field, awake targets lose Nightmare at the next end-of-turn check unless another effect sustains it. Indirect-damage immunity applies.',
+		'Burn Up restores the saved typing at turn end if this field remains and no other type change intervenes.',
+		'Stealth Rock uses Fire effectiveness with its usual 1/8 max HP basis. Normal hazard protections apply.',
+		'Nature Power calls Infernal Parade. Frozen Aura overrides it with Ice Beam. Secret Power has a 30% burn chance.',
+		'Camouflage and Mimicry select Fire; Terrain Pulse becomes Fire. An active aura overrides these types.',
+	],
+	Abilities: [
+		'Blaze and Flare Boost activate without their usual HP or status requirement. Steam Engine raises Speed by 1 stage each turn.',
+		'Ice Scales doubles Defense. Prism Armor multiplies Defense and Sp. Def by 4/3. These stack with type-based defense bonuses and the abilities\' ordinary damage reduction.',
+		'Perish Body affects only the opponent that lands a damaging contact attack. That attacker is trapped and faints at the end of the following turn if still active. Ghost, Shed Shell and other escape exceptions still apply; a shorter existing countdown is not extended.',
+		'Bad Dreams deals 1/4 max HP to sleeping or Comatose foes each turn and traps adjacent ones. Indirect-damage immunity and escape exceptions still apply.',
+		'Flash Fire activates on entry or field change. A field-only charge ends on leaving; absorbing a Fire attack gives the normal lasting charge.',
+		'Desolate Land, Flame Body and Magma Armor raise Defense and Sp. Def by 1 stage on entry. Magma Armor also nullifies Fire attacks. Desolate Land still creates its own harsh sunlight.',
+		'Ice Face melts on entry or field change and cannot rebuild in hail here. Pastel Veil provides no status protection or curing.',
+		'Active, unsuppressed Ashen Seeds prevents cooling, purification and destruction. It does not prevent natural expiry.',
+		'Ashen Seeds halves damage exploiting its holder\'s Fire-type weakness unless bypassed. Eligible non-Fire contact attackers acquire Ashen Seeds; non-Fire holders lose 1 Attack and Sp. Atk each turn. These effects require full Infernal Eclipse, not Ashen Aura alone.',
+	],
+	'Seeds and other effects': [
+		'Elemental Seed raises Attack and Sp. Atk by 1 stage and applies Fire Spin for 4 turns.',
+	],
+};
+for (const id of ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain']) {
+	ReviewedFieldGuide[id]['Shared rules and limitations'] = [
+		'Changing between Eclipse fields keeps the field\'s remaining turns; it does not start a fresh timer.',
+		'Only successful moves trigger transitions. Failed, fully blocked or charge-only uses do not count. One move use causes at most one field change.',
+		'Bad Seeds can develop Frozen Aura using Blizzard, Glaciate or Sheer Cold. Ashen Seeds can develop Ashen Aura using Infernal Parade or Eruption. The matching ability must be active on the move user.',
+		'Ordinary aura development consumes the aura and keeps its remaining turns. The direct Eclipse-to-Eclipse aura combinations listed above instead keep the field timer and do not require the matching ability.',
+		'All transitions respect field locks. A failed or blocked aura conversion leaves the aura intact.',
+	];
+}
+ReviewedFieldGuide.snowyterrain = {
+	'Boosts and general effects': [...FieldNotes.snowyterrain],
+	Transitions: [], Moves: [], Abilities: [], 'Seeds and other effects': [],
+	'Shared rules and limitations': ['Full fields and auras are separate effects. Field locks, move success and ability suppression still apply.'],
+};

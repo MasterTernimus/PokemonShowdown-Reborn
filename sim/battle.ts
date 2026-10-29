@@ -449,6 +449,9 @@ export class Battle {
 
 	suppressingAbility(target?: Pokemon, component?: Ability) {
 		if (target && adaptiveResistsBypass(target, this.activePokemon)) return false;
+		// Active Ultra Instinct protects the holder's composite components and passives from move bypass.
+		if (target?.hasAbility('ultrainstinct') &&
+			!['bewitchedwoodsterrain', 'hauntedterrain', 'holyterrain'].includes(this.field.terrain)) return false;
 		const ability = component || target?.getAbility();
 		// Disguise resists ongoing suppression, but its breakable attack callbacks
 		// still yield to Mold Breaker. Preserve other custom suppression protections.
@@ -619,7 +622,8 @@ export class Battle {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
 			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
-				let elapsedTurns = 1;
+				let elapsedTurns = this.field.isTerrain('coldeclipseterrain') &&
+					['trickroom', 'magicroom', 'wonderroom', 'gravity'].includes(effect.id) ? 0 : 1;
 				if (effect.effectType === 'Terrain' && handler.effectHolder instanceof Field) {
 					elapsedTurns = handler.state.permanent ? 0 :
 						Math.max(0, this.turn - (handler.state.durationUpdatedTurn ?? this.turn - 1));
@@ -3290,7 +3294,13 @@ export class Battle {
 				}
 			}
 			finishRotomEjections(this);
-			if (!this.ended) this.add('upkeep');
+			if (!this.ended) {
+				// Cold Eclipse can expire after these timers pause but before the client receives upkeep.
+				const roomTurns = Object.fromEntries(['trickroom', 'magicroom', 'wonderroom', 'gravity']
+					.filter(id => this.field.pseudoWeather[id]?.duration)
+					.map(id => [id, this.field.pseudoWeather[id].duration]));
+				this.add('upkeep', ...(Object.keys(roomTurns).length ? [`[roomturns] ${JSON.stringify(roomTurns)}`] : []));
+			}
 			break;
 		}
 

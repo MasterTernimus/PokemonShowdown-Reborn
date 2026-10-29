@@ -21,6 +21,7 @@ import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
 import { StarterEeveeMoveExceptions } from '../data/eevee-ability-move-exceptions';
 import { AEVIAN_GRIEF_MOVES } from '../data/aevian-grief-moves';
+import {AevianDisciplineMoves} from '../data/alakazam-rejuv';
 import { abilityIncludesComponent } from '../data/ability-components';
 
 /**
@@ -855,6 +856,14 @@ export class TeamValidator {
 				const move = dex.moves.get(moveName);
 				if (move.exists && !AEVIAN_GRIEF_MOVES.has(move.id)) {
 					problems.push(`${name} can't use ${move.name} with Aevian Grief.`);
+				}
+			}
+		}
+		if (toID(outOfBattleSpecies.baseSpecies) === 'alakazam' && ability.id === 'aeviandiscipline') {
+			for (const moveName of set.moves) {
+				const move = dex.moves.get(moveName);
+				if (move.exists && !AevianDisciplineMoves.includes(move.id)) {
+					problems.push(`${name} can't use ${move.name} with Aevian Discipline.`);
 				}
 			}
 		}
@@ -2048,7 +2057,9 @@ export class TeamValidator {
 		setHas['move:' + move.id] = true;
 		const aevianGastrodonHiddenPower = move.id === 'hiddenpower' &&
 			['gastrodonaevian', 'gastrodoneastaevian'].includes(dex.species.get(set.species).id);
-		if (move.id.startsWith('hiddenpower') && !aevianGastrodonHiddenPower) {
+		const rejuvAlakazamHiddenPower = move.id === 'hiddenpower' &&
+			toID(dex.species.get(set.species).baseSpecies) === 'alakazam' && toID(set.ability) === 'aeviandiscipline';
+		if (move.id.startsWith('hiddenpower') && !aevianGastrodonHiddenPower && !rejuvAlakazamHiddenPower) {
 			return `${set.name}'s move ${move.name} is unavailable.`;
 		}
 
@@ -2618,6 +2629,7 @@ export class TeamValidator {
 		move = dex.moves.get(move);
 		const moveid = move.id;
 		const baseSpecies = dex.species.get(originalSpecies);
+		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'alakazam' && toID(set.ability) === 'aeviandiscipline' && AevianDisciplineMoves.includes(moveid)) return null;
 		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'politoed' && toID(set.ability) === 'aevianking' && AevianKingMoveSources[moveid]) return null;
 		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'poliwrath' && toID(set.ability) === 'aevianascendance' && AevianAscendanceMoveSources[moveid]) return null;
 		if (dex.gen >= 9 && toID(baseSpecies.baseSpecies) === 'galvantula' && toID(set.ability) === 'aevianweb' && AevianWebMoveSources[moveid]) return null;

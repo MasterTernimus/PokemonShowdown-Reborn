@@ -108,6 +108,8 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	moonveil: ['pastelveil', 'mistysurge'],
 	aevianspark: ['technician', 'static', 'earlybird'],
 	aeviangrief: ['magicguard', 'cursedbody', 'wonderskin', 'levitate'],
+	aeviandiscipline: ['ironfist', 'owntempo'],
+	composed: ['innerfocus', 'magicguard'],
 	aevianrocket: ['bruteforce', 'reckless', 'rockhead', 'regenerator', 'moldbreaker', 'swiftswim'],
 	railguncircuit: ['lightningrod'],
 	wreckingball: ['sturdy', 'selfsufficient', 'crumblingshell'],
@@ -1046,3 +1048,6 @@ AbilityComponents.monarchofice = ['slushrush'];
 AbilityComponents.emperorsresolve = ['swiftswim','competitive'];
 
 AbilityComponents.imperialedge=AbilityComponents.exalt; delete AbilityComponents.exalt;
+
+import {LoreComponents} from './lore-pairs';
+Object.assign(AbilityComponents, LoreComponents);

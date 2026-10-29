@@ -1,5 +1,5 @@
 {
-  "fingerprint": "e31889da2bd9a365f80f80e07761073d1dcfb64f30e3f471e580b9fc0683e1a2",
+  "fingerprint": "d6e6da1a6b1d5417372104ade7ff2b24f458e1d6089a5bd3c4262e6150111ef9",
   "fields": {
     "flowergarden1": {
       "abilities": [
@@ -185,7 +185,6 @@
         "grasspledge",
         "grassyterrain",
         "smokescreen",
-        "snowscape",
         "tarshot",
         "terrainpulse",
         "willowisp",
@@ -265,10 +264,8 @@
         "blaze",
         "darkaura",
         "apexcleave",
-        "atrocity",
         "sacrededge",
         "omenedge",
-        "defragment",
         "perfectforesight",
         "perfectego",
         "irondominion",
@@ -294,12 +291,11 @@
         "armorize",
         "argentdevotion",
         "magmaarmor",
-        "megalauncher",
         "mimicry",
         "mindseye",
-        "powerdrill",
         "pressure",
         "prismarmor",
+        "refrigerate",
         "relentlesshunt",
         "shadowshield",
         "sharpness",
@@ -308,9 +304,6 @@
         "snowwarning",
         "solarpower",
         "sinisterblaze",
-        "soulfire",
-        "wrathshield",
-        "technician",
         "turboblaze",
         "unnerve",
         "ultraego",
@@ -348,6 +341,37 @@
       "items": [
         "elementalseed",
         "snowball"
+      ]
+    },
+    "rifteclipseterrain": {
+      "abilities": [
+        "mimicry"
+      ],
+      "moves": [
+        "camouflage",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "magicalseed"
+      ]
+    },
+    "infernaleclipseterrain": {
+      "abilities": [
+        "blaze",
+        "flareboost",
+        "icescales",
+        "mimicry",
+        "prismarmor"
+      ],
+      "moves": [
+        "camouflage",
+        "hex",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed"
       ]
     },
     "corrosivemistterrain": {
@@ -641,7 +665,6 @@
         "kingsshield",
         "miracleeye",
         "nobleroar",
-        "snowscape",
         "strangesteam",
         "sweetkiss",
         "swordsdance",
@@ -1148,9 +1171,25 @@
       ]
     },
     "snowyterrain": {
-      "abilities": [],
-      "moves": [],
-      "items": []
+      "abilities": [
+        "rimeknuckle",
+        "icebody",
+        "mimicry",
+        "refrigerate",
+        "slushrush",
+        "snowcloak"
+      ],
+      "moves": [
+        "auroraveil",
+        "camouflage",
+        "grassyterrain",
+        "snowscape",
+        "terrainpulse",
+        "naturepower"
+      ],
+      "items": [
+        "elementalseed"
+      ]
     },
     "starlightarenaterrain": {
       "abilities": [
@@ -1194,11 +1233,9 @@
         "gravity",
         "healingwish",
         "lightthatburnsthesky",
-        "lunarblessing",
         "lunardance",
         "meteorbeam",
         "moonlight",
-        "snowscape",
         "solarbeam",
         "solarblade",
         "takeheart",
@@ -1223,7 +1260,6 @@
         "camouflage",
         "outrage",
         "petaldance",
-        "snowscape",
         "terrainpulse",
         "thrash",
         "naturepower"
@@ -1368,7 +1404,6 @@
         "inferno",
         "ragingfury",
         "smokescreen",
-        "snowscape",
         "stealthrock",
         "tarshot",
         "terrainpulse",
@@ -1614,9 +1649,7 @@
     },
     "psychicterrain": {
       "abilities": [
-        "anticipation",
         "perfectforesight",
-        "forewarn",
         "magician",
         "mimicry",
         "powerspot",
@@ -1705,9 +1738,6 @@
     ],
     "snowymountainterrain": [
       "The snow glows white on the mountain..."
-    ],
-    "snowyterrain": [
-      "Snow swirls around the pokemon"
     ],
     "starlightarenaterrain": [
       "Starlight fills the battlefield."

@@ -1798,16 +1798,16 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Psychic", "Dark"],
 		genderRatio: { M: 0.75, F: 0.25 },
 		baseStats: { hp: 80, atk: 50, def: 50, spa: 135, spd: 95, spe: 120 },
-		abilities: { 0: "Insomnia", 1: "Grandmaster", H: "Magic Guard" },
+		abilities: { 0: "Insomnia", 1: "Grandmaster", H: "Magic Guard", S: "Aevian Discipline" },
 		heightm: 1.5,
 		weightkg: 48,
 		color: "Brown",
 		prevo: "Kadabra",
 		evoType: "trade",
 		eggGroups: ["Human-Like"],
-		otherFormes: ["Alakazam-Mega"],
+		otherFormes: ["Alakazam-Mega", "Alakazam-Rejuv"],
 		cosmeticFormes: ["Alakazam-Alt"],
-		formeOrder: ["Alakazam", "Alakazam-Mega", "Alakazam-Alt"],
+		formeOrder: ["Alakazam", "Alakazam-Mega", "Alakazam-Alt", "Alakazam-Rejuv"],
 	},
 	alakazammega: {
 		num: 65,
@@ -1823,6 +1823,13 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		eggGroups: ["Human-Like"],
 		requiredItem: "Alakazite",
+	},
+	alakazamrejuv: {
+		num: 65, name: 'Alakazam-Rejuv', baseSpecies: 'Alakazam', forme: 'Rejuv',
+		types: ['Fighting'], genderRatio: {M: 0.75, F: 0.25},
+		baseStats: {hp: 80, atk: 130, def: 100, spa: 25, spd: 95, spe: 128},
+		abilities: {0: 'Aevian Discipline'}, heightm: 1.5, weightkg: 48, color: 'Red',
+		eggGroups: ['Human-Like'], requiredAbility: 'Aevian Discipline', battleOnly: 'Alakazam', isNonstandard: 'Custom',
 	},
 	alakazamalt: {
 		num: 65,
@@ -24508,7 +24515,7 @@ Pokedex.talonflame.abilities!['S'] = 'Burning Quake';
 Pokedex.arbolivaaevian = {
  num: 930, name: 'Arboliva-Aevian', baseSpecies: 'Arboliva-Aevian', forme: 'Aevian', spriteid: 'arboliva-aevian',
  types: ['Ice', 'Dark'], baseStats: {hp: 78, atk: 69, def: 90, spa: 125, spd: 109, spe: 39},
- abilities: {0: 'Harvest', 1: 'Bad Seeds', H: "Winter's Malice", S: 'Arena Trap'},
+ abilities: {0: 'Harvest', 1: 'Arena Trap', H: "Winter's Malice", S: 'Bad Seeds'},
  heightm: 1.4, weightkg: 48.2, color: 'Blue', eggGroups: ['Grass'], isNonstandard: 'Custom',
 };
 // Cosmetic Ego variants retain the exact current ordinary and Mega mechanical data.
@@ -24759,6 +24766,16 @@ Pokedex.klefki.abilities!['0'] = 'Adhesive Armor';
 Pokedex.crabominable.abilities!.H = 'Controlled Fury';
 Pokedex.primeape.abilities!['1'] = 'Controlled Fury';
 
+// Lore partnerships: preserve other ordinary, event and Mega options.
+Pokedex.flygon.abilities = {...Pokedex.flygon.abilities!, 0: 'Mirage Drift', H: 'Dune Caller'};
+Pokedex.krookodile.abilities!.H = 'Dune Hunter';
+Pokedex.dhelmise.abilities![1] = 'Blackwater Anchor';
+Pokedex.dragalge.abilities![1] = 'Blackwater Venom';
+Pokedex.espeon.abilities![1] = 'Remembered Step';
+Pokedex.arcanine.abilities![0] = 'Remembered Flame';
+Pokedex.lapras.abilities!.H = 'Storm Memory';
+Pokedex.swanna.abilities![0] = 'Jetstream Ballet';
+
 // Apply cosmetic equivalence after all approved base-species revisions.
 for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)) {
 	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;
@@ -24781,3 +24798,14 @@ Pokedex.solrock.abilities!['1'] = 'Gravity Well';
 Pokedex.carbink.abilities!['0'] = 'Arcane Chamber';
 Pokedex.beheeyem.abilities!['0'] = 'Mirror Chamber';
 Pokedex.unown.abilities!['0'] = 'Lost Epoch';
+
+// Seed field setters occupy the Special Event slot; ordinary and form-specific choices stay intact.
+for (const id of ['froslass', 'glalie', 'weavile'] as const) {
+	Pokedex[id].abilities = {...Pokedex[id].abilities!, S: 'Bad Seeds'};
+}
+for (const id of ['typhlosionhisui', 'ninetales', 'camerupt', 'torkoal'] as const) {
+	Pokedex[id].abilities = {...Pokedex[id].abilities!, S: 'Ashen Seeds'};
+}
+for (const id of ['hoopa', 'bronzong', 'mismagius'] as const) {
+	Pokedex[id].abilities = {...Pokedex[id].abilities!, S: 'Rift Herald'};
+}
