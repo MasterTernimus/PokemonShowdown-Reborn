@@ -92,39 +92,38 @@ export const Replays = new class {
 	}
 
 	async add(replay: Replay) {
-		// obviously upsert exists but this is the easiest way when multiple things need to be changed
 		const replayData = this.toReplayRow(replay);
+		const connection = await replaysDB.connection.connect();
+		const query = (statement: ReturnType<typeof SQL>) => connection.query(...replaysDB._resolveSQL(statement));
 		try {
-			await replays.insert(replayData);
-			for (const playerName of replay.players) {
-				await replayPlayers.insert({
-					playerid: toID(playerName),
-					formatid: replayData.formatid,
-					id: replayData.id,
-					rating: replayData.rating,
-					uploadtime: replayData.uploadtime,
-					private: replayData.private,
-					password: replayData.password,
-					format: replayData.format,
-					players: replayData.players,
-				});
+			await connection.query('BEGIN');
+			// A reupload is normal (mid-battle -> final). Upsert and indexes share one transaction.
+			const result = await query(SQL`INSERT INTO replays (${replayData})
+				ON CONFLICT (id) DO UPDATE SET
+				log = EXCLUDED.log, inputlog = EXCLUDED.inputlog, rating = EXCLUDED.rating,
+				format = EXCLUDED.format, formatid = EXCLUDED.formatid, players = EXCLUDED.players,
+				private = EXCLUDED.private,
+				password = CASE WHEN replays.private = 1 AND EXCLUDED.private = 1
+					THEN COALESCE(replays.password, EXCLUDED.password) ELSE EXCLUDED.password END
+				RETURNING *`);
+			const saved = result.rows[0] as ReplayRow;
+			await query(SQL`DELETE FROM replayplayers WHERE id = ${replay.id}`);
+			for (const playerid of new Set(replay.players.map(player => toID(player)))) {
+				const row = {
+					playerid, formatid: saved.formatid, id: saved.id, rating: saved.rating,
+					uploadtime: saved.uploadtime, private: saved.private, password: saved.password,
+					format: saved.format, players: saved.players,
+				};
+				await query(SQL`INSERT INTO replayplayers (${row})`);
 			}
-		} catch (e: any) {
-			if (e?.routine !== 'NewUniquenessConstraintViolationError') throw e;
-			await replays.update(replay.id, {
-				log: replayData.log,
-				inputlog: replayData.inputlog,
-				rating: replayData.rating,
-				private: replayData.private,
-				password: replayData.password,
-			});
-			await replayPlayers.updateAll({
-				rating: replayData.rating,
-				private: replayData.private,
-				password: replayData.password,
-			})`WHERE id = ${replay.id}`;
+			await connection.query('COMMIT');
+			return saved.id + (saved.password ? `-${saved.password}pw` : '');
+		} catch (error) {
+			await connection.query('ROLLBACK');
+			throw error;
+		} finally {
+			connection.release();
 		}
-		return replayData.id + (replayData.password ? `-${replayData.password}pw` : '');
 	}
 
 	async get(id: string): Promise<Replay | null> {
@@ -144,7 +143,7 @@ export const Replays = new class {
 	generatePassword(length = 31) {
 		let password = '';
 		for (let i = 0; i < length; i++) {
-			password += this.passwordCharacters[crypto.randomInt(0, this.passwordCharacters.length - 1)];
+			password += this.passwordCharacters[crypto.randomInt(0, this.passwordCharacters.length)];
 		}
 
 		return password;

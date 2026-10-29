@@ -144,6 +144,7 @@ export const readyPromise = cleanupStale().then(() => {
 	}
 
 	Rooms.global.start(Config.subprocessescache);
+	if (!Config.nofswriting) require('./official-report-outbox').officialReports.start();
 	Verifier.start(Config.subprocessescache);
 	TeamValidatorAsync.start(Config.subprocessescache);
 	Chat.start(Config.subprocessescache);

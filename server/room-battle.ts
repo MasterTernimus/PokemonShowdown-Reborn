@@ -1,3 +1,4 @@
+import { officialReports } from './official-report-outbox';
 import {MoveSheetConsent} from './move-sheet-consent';
 /**
  * Room Battle
@@ -1048,7 +1049,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (this.room.rated && !this.options.isBestOfSubBattle) {
 			void this.updateLadder(p1score, winnerid);
 		} else if (Config.logchallenges) {
-			void this.logBattle(p1score);
+			void this.logBattle(p1score).catch(error => Monitor.crashlog(error, 'Battle log persistence'));
 		} else if (!this.options.isBestOfSubBattle) {
 			this.logData = null;
 		}
@@ -1084,7 +1085,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(
 			p1, p2, p1score, this.room
 		);
-		void this.logBattle(score, p1rating, p2rating);
+		void this.logBattle(score, p1rating, p2rating).catch(error => Monitor.crashlog(error, 'Battle log persistence'));
 		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1, p2].map(toID));
 	}
 	async logBattle(
@@ -1129,17 +1130,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		await Monitor.logPath(logpath).mkdirp();
 		await Monitor.logPath(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
-		if (logData.official) {
-			const response = await fetch("https://leaf-bot-production.up.railway.app/officialLogs", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(logData),
-			});
-
-			console.log(await response.text());
+		if (logData.official && !Config.nofswriting) {
+			await officialReports.enqueue(logData as { roomid: string });
 		}
+
 		// console.log(JSON.stringify(logData));
 	}
 	override onConnect(user: User, connection: Connection | null = null) {

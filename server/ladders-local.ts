@@ -25,6 +25,7 @@ type LadderRow = [string, number, string, number, number, number, string];
 type LadderCache = Map<string, LadderRow[] | Promise<LadderRow[]>>;
 
 const ladderCaches: LadderCache = new Map();
+const ladderSaves = new Map<string, Promise<void>>();
 
 export class LadderStore {
 	formatid: string;
@@ -50,16 +51,10 @@ export class LadderStore {
 	 * Internal function, returns a Promise for a ladder
 	 */
 	async load() {
-		// ladderCaches[formatid]
-		const cachedLadder = ladderCaches.get(this.formatid);
-		if (cachedLadder) {
-			if ((cachedLadder as Promise<LadderRow[]>).then) {
-				const ladder = await cachedLadder;
-				return (this.ladder = ladder);
-			}
-			return (this.ladder = cachedLadder as LadderRow[]);
-		}
-		try {
+		const cached = ladderCaches.get(this.formatid);
+		if (cached) return (this.ladder = await cached);
+		const loading = (async () => {
+			// readIfExists handles ENOENT only. Other I/O errors must not erase ratings.
 			const data = await FS('config/ladders/' + this.formatid + '.tsv').readIfExists();
 			const ladder: LadderRow[] = [];
 			for (const dataLine of data.split('\n').slice(1)) {
@@ -68,14 +63,18 @@ export class LadderStore {
 				const row = line.split('\t');
 				ladder.push([toID(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
 			}
-			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.ladder));
-			ladderCaches.set(this.formatid, (this.ladder = ladder));
-			return this.ladder;
-		} catch {
-			// console.log('Ladders(' + this.formatid + ') err loading tsv: ' + JSON.stringify(this.ladder));
+			return ladder;
+		})();
+		ladderCaches.set(this.formatid, loading);
+		try {
+			const ladder = await loading;
+			ladderCaches.set(this.formatid, ladder);
+			return (this.ladder = ladder);
+		} catch (error) {
+			if (ladderCaches.get(this.formatid) === loading) ladderCaches.delete(this.formatid);
+			this.ladderPromise = null;
+			throw error;
 		}
-		ladderCaches.set(this.formatid, (this.ladder = []));
-		return this.ladder;
 	}
 
 	/**
@@ -85,20 +84,22 @@ export class LadderStore {
 	 * call this.
 	 */
 	async save() {
-		if (this.saving) return;
+		// Stores are short-lived; serialize all writes for a format across instances.
+		const previous = ladderSaves.get(this.formatid) || Promise.resolve();
+		const saving = previous.catch(() => {}).then(async () => {
+			const ladder = await this.getLadder();
+			const data = 'Elo\tUsername\tW\tL\tT\tLast update\r\n' +
+				ladder.map(row => row.slice(1).join('\t') + '\r\n').join('');
+			await FS(`config/ladders/${this.formatid}.tsv`).safeWrite(data);
+		});
+		ladderSaves.set(this.formatid, saving);
 		this.saving = true;
-		const ladder = await this.getLadder();
-		if (!ladder.length) {
+		try {
+			await saving;
+		} finally {
 			this.saving = false;
-			return;
+			if (ladderSaves.get(this.formatid) === saving) ladderSaves.delete(this.formatid);
 		}
-		const stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
-		void stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
-		for (const row of ladder) {
-			void stream.write(row.slice(1).join('\t') + '\r\n');
-		}
-		void stream.writeEnd();
-		this.saving = false;
 	}
 
 	/**
@@ -133,13 +134,15 @@ export class LadderStore {
 		let buf = `<h3>${name} Top 100</h3>`;
 		buf += `<table>`;
 		buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
+		let shown = 0;
 		for (const [i, row] of ladder.entries()) {
 			if (prefix && !row[0].startsWith(prefix)) continue;
+			if (shown++ >= 100) break;
 			buf += `<tr><td>` + [
-				i + 1, row[2], `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
+				i + 1, Utils.escapeHTML(row[2]), `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
 			].join(`</td><td>`) + `</td></tr>`;
 		}
-		return [formatid, buf];
+		return [formatid, buf + '</table>'];
 	}
 
 	/**
@@ -250,7 +253,7 @@ export class LadderStore {
 			if (p1) p1.mmrCache[formatid] = +p1newElo;
 			const p2 = Users.getExact(p2name);
 			if (p2) p2.mmrCache[formatid] = +p2newElo;
-			void this.save();
+			await this.save();
 
 			if (!room.battle) {
 				Monitor.warn(`room expired before ladder update was received`);

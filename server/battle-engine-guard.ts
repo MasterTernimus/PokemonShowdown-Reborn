@@ -19,8 +19,6 @@ interface Session {
 	epoch: number;
 	user: User;
 	leases: Map<string, Lease>;
-	lastQuery: number;
-	pending: number;
 }
 export interface BattleEngineIntent {
 	connection: Connection;
@@ -137,7 +135,7 @@ export function battleEngineQuery(connection: Connection, text: string, trustabl
 	const reply = { schemaVersion: 1, requestId: request.requestId, roomId: request.roomId, algorithm: ENGINE_ALGORITHM };
 	let session = sessions.get(connection);
 	if (!session || session.user !== connection.user) {
-		session = { epoch: 0, user: connection.user, leases: new Map(), lastQuery: 0, pending: 0 };
+		session = { epoch: 0, user: connection.user, leases: new Map() };
 		sessions.set(connection, session);
 		(connection as any)[optIn] = true;
 		optedConnections.add(connection);

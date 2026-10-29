@@ -83,34 +83,38 @@ export class LadderTracker {
 
 	setDeadline(argument: string, save = true) {
 		const date = new Date(argument);
-		if (!+date) throw new Chat.ErrorMessage(`Invalid date: ${argument}`);
-
+		if (!Number.isFinite(+date)) throw new Chat.ErrorMessage(`Invalid date: ${argument}`);
 		this.deadline = date;
-		if (this.final) clearTimeout(this.final);
-		const timeDiff = (+this.deadline - Date.now()) - 500;
-		if (timeDiff >= Number.MAX_SAFE_INTEGER) {
-			throw new Chat.ErrorMessage("Deadline is too far away. Please wait and set it later.");
-		}
-		// We set the timer to fire slightly before the deadline and then
-		// repeatedly do process.nextTick checks for accuracy
-		this.final = setTimeout(() => {
-			this.stop();
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
-			this.captureFinalLeaderboard();
-		}, timeDiff);
-
+		this.config.deadline = date.toISOString();
+		this.scheduleDeadline();
 		if (save) LadderTracker.save();
 	}
 
+	private scheduleDeadline() {
+		if (this.final) clearTimeout(this.final);
+		if (!this.deadline) return;
+		// Node clamps overflowing delays to 1ms; long deadlines need bounded chunks.
+		const remaining = Math.max(0, +this.deadline - Date.now());
+		this.final = setTimeout(() => {
+			this.final = undefined;
+			void this.captureFinalLeaderboard().catch(error => Monitor.crashlog(error, 'Ladder tournament deadline'));
+		}, Math.min(remaining, 0x7fffffff));
+	}
+
 	async captureFinalLeaderboard() {
-		const now = new Date();
-		if (now < this.deadline!) {
-			process.nextTick(this.captureFinalLeaderboard.bind(this));
+		const deadline = this.deadline;
+		if (!deadline) return;
+		if (Date.now() < +deadline) {
+			this.scheduleDeadline();
 			return;
 		}
 		const leaderboard = await this.getLeaderboard();
-		this.addHTML(this.styleLeaderboard(leaderboard, +now), true);
-		this.deadline = undefined;
+		// A stopped or rescheduled tracker must not publish an obsolete response.
+		if (this.deadline !== deadline) return;
+		this.stop();
+		delete this.config.deadline;
+		this.addHTML(this.styleLeaderboard(leaderboard, +deadline), true);
+		LadderTracker.save();
 	}
 
 	handleBattleEnd(battle: Rooms.RoomBattle) {
@@ -184,8 +188,8 @@ export class LadderTracker {
 		}
 
 		// If a player has an our prefix, report if the battle is above the required rating
-		if (p1.startsWith(this.prefix) || p2.startsWith(this.prefix)) {
-			return rating >= this.rating;
+		if ((p1.startsWith(this.prefix) || p2.startsWith(this.prefix)) && rating >= this.rating) {
+			return true;
 		}
 
 		// Report if a cutoff has been set and both prefixed players are within a factor of the cutoff
@@ -402,6 +406,7 @@ export class LadderTracker {
 
 	start() {
 		if (this.started) return;
+		if (!this.deadline && this.config.deadline) this.setDeadline(this.config.deadline, false);
 
 		this.togglePrefix();
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -415,6 +420,9 @@ export class LadderTracker {
 	}
 
 	stop() {
+		if (this.final) clearTimeout(this.final);
+		this.final = undefined;
+		this.deadline = undefined;
 		if (this.started) {
 			clearInterval(this.started);
 			this.started = undefined;
@@ -460,10 +468,10 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("Invalid rating. Must be a number above 1000.");
 			}
 			config.rating = rating;
-			const rawCutoff = /cutoff=([0-9]+)/.exec(target)?.[1];
+			const rawCutoff = /cutoff=([^,\s]+)/.exec(target)?.[1];
 			const cutoff = Number(rawCutoff);
-			if (rawCutoff && (!cutoff || cutoff < 1000)) {
-				return this.errorReply("Invalid cutoff. Must be a number above 1000.");
+			if (rawCutoff && (!Number.isSafeInteger(cutoff) || cutoff < 1)) {
+				return this.errorReply("Invalid cutoff. Must be a positive whole-number rank.");
 			}
 			if (cutoff) {
 				config.cutoff = cutoff;
@@ -558,7 +566,7 @@ export const commands: Chat.ChatCommands = {
 			if (!tracker) return;
 			const rating = Number(target);
 			if (target) {
-				if (!rating) return this.errorReply("Invalid cutoff.");
+				if (!Number.isSafeInteger(rating) || rating < 1) return this.errorReply("Invalid cutoff.");
 				this.checkCan('mute', null, tracker.room);
 				tracker.config.cutoff = rating;
 				LadderTracker.save();

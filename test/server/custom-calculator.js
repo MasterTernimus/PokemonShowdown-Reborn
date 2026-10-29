@@ -6,14 +6,20 @@ describe('Calculator isolation and admission', function () {
 	it('bounds payloads before spawning', async () => {
 		assert.match((await queryCalculator('x'.repeat(16001))).error, /16 KB/);
 	});
-	it('limits concurrent workers and reports compiled engine identity', async () => {
+	it('deduplicates metadata and reports compiled engine identity', async () => {
 		const first = queryCalculator('');
 		const second = queryCalculator('');
-		assert.match((await queryCalculator('')).error, /busy/);
+		assert.equal(queryCalculator(''), first);
 		const [a, b] = await Promise.all([first, second]);
 		assert.match(a.version.engine, /^[a-f0-9]{16}$/);
 		assert.equal(a.version.engine, b.version.engine);
 		assert(a.formats.length);
+	});
+	it('still limits concurrent calculation workers', async () => {
+		const first = queryCalculator('{');
+		const second = queryCalculator('{');
+		assert.match((await queryCalculator('{')).error, /busy/);
+		await Promise.all([first, second]);
 	});
 	it('contains malformed input and allows subsequent requests', async () => {
 		assert((await queryCalculator('{')).error);
