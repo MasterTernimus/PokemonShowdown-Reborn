@@ -1082,10 +1082,16 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		const p1 = this.p1.name;
 		const p2 = this.p2.name;
-		const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(
-			p1, p2, p1score, this.room
-		);
-		void this.logBattle(score, p1rating, p2rating).catch(error => Monitor.crashlog(error, 'Battle log persistence'));
+		let score = p1score;
+		let p1rating = null;
+		let p2rating = null;
+		try {
+			[score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(p1, p2, p1score, this.room);
+		} catch (error: any) {
+			Monitor.crashlog(error, 'Battle rating update');
+			this.room.addRaw(`Ratings could not be updated. The battle result will still be logged.`).update();
+		}
+		await this.logBattle(score, p1rating, p2rating).catch(error => Monitor.crashlog(error, 'Battle log persistence'));
 		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1, p2].map(toID));
 	}
 	async logBattle(

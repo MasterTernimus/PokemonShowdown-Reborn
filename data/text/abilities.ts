@@ -4152,7 +4152,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "Mold Breaker + Inner Focus; screen and timing boosts; field defenses.",
 	},
 	duskdrive: {
-		name: "Dusk Drive",
+		name: "Dusk Ego",
 		desc: "This Pokemon has Precision, Opportunist, and Battle Fervor built in.",
 		shortDesc: "Precision + Opportunist + Battle Fervor.",
 	},
@@ -4376,7 +4376,7 @@ Object.assign(AbilitiesText, {
 		"shortDesc": "First foe hit each stay deals 25% less; hit before acting readies a next-turn priority attack.",
 	},
 	"duskdrive": {
-		"name": "Dusk Drive",
+		"name": "Dusk Ego",
 		"desc": "Full Battle Fervor, Precision and Opportunist, including their field effects, entry behavior, item blocking, damage modifiers and boost-copy timing.",
 		"shortDesc": "Battle Fervor + Precision + Opportunist.",
 	},
@@ -4810,7 +4810,7 @@ AbilitiesText.carrionwatch = {name: 'Carrion Watch', ...AbilityDescriptionOverri
 for (const [id, text] of Object.entries({"illusion":{"desc":"Disguises itself as a teammate without copying mechanical traits. The optional Initial Disguise teammate is used on the holder’s first entry only; if unavailable, normal automatic selection applies. Auto and later entries use the last eligible healthy teammate in battle order. Direct damaging hits and normal reveal effects, including opposing Mind’s Eye, break the disguise. Types, STAB, abilities and passives are not copied.","shortDesc":"Teammate disguise only; optional initial teammate, then Auto."},"perfectillusion":{"desc":"Advanced disguise copies its teammate’s STAB types, eligible selected ability and species passives until revealed. The optional Initial Disguise teammate is used on the holder’s first entry only; if unavailable, normal automatic selection applies. Auto uses the last healthy teammate on first entry, then the best threat-scored healthy teammate when possible. Blacklisted form and copying abilities are not copied. Mirror Arena entry grants +1 evasion; Chessboard grants 1.2x move power while disguised; Cold Eclipse prevents hail damage. Direct damage and reveal effects, including opposing Mind’s Eye, remove the disguise and copied traits.","shortDesc":"Advanced teammate disguise copies STAB, eligible ability and passives until revealed."},"mindseye": {"desc":"Normal and Fighting moves can hit Ghost types; gains Fairy and Dark STAB, ignores target evasion boosts, and prevents external accuracy drops. On Cold Eclipse, has 30% damage reduction and 1.3x damaging move power. Reveals opposing Illusion and Perfect Illusion on activation and after each opposing entry; does not reveal allies. Suppression disables the selected ability’s reveal effects.","shortDesc":"Normal/Fighting hit Ghost; Fairy/Dark STAB; accuracy protection. Reveals opposing disguises."}})) Object.assign(AbilitiesText[id as Lowercase<string>], text);
 
 // Latest approved replacement definitions, after historical prose overrides.
-for (const [id, name] of Object.entries({"duskdrive":"Dusk Drive","twilightinstinct":"Twilight Instinct","forsakensleeper":"Forsaken Sleeper","coldexpertise":"Cold Expertise","oldnorth":"Old North","glacialprime":"Glacial Prime","dreepyvanguard":"Dreepy Vanguard"})) AbilitiesText[id as IDEntry] = {name, ...AbilityDescriptionOverrides[id]};
+for (const [id, name] of Object.entries({"duskdrive":"Dusk Ego","twilightinstinct":"Twilight Instinct","forsakensleeper":"Forsaken Sleeper","coldexpertise":"Cold Expertise","oldnorth":"Old North","glacialprime":"Glacial Prime","dreepyvanguard":"Dreepy Vanguard"})) AbilitiesText[id as IDEntry] = {name, ...AbilityDescriptionOverrides[id]};
 
 AbilitiesText.fireward = {
 	name: 'Fire Ward',
@@ -4848,3 +4848,6 @@ for (const [id, text] of Object.entries(PlainLanguageAbilityDescriptions)) Objec
 
 import {LoreDescriptions} from '../lore-pairs';
 for (const [id, text] of Object.entries(LoreDescriptions)) AbilitiesText[id as ID] = {...text};
+
+import { TidalPoiseDescription } from '../terajuma-poise';
+AbilitiesText.tidalpoise = TidalPoiseDescription;

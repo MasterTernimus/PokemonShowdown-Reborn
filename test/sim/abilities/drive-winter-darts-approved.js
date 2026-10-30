@@ -41,12 +41,12 @@ describe('Approved Darts, Drive and Mamoswine packages', () => {
 	});
 	it('replaces the Drive packages rather than keeping removed components', () => {
 		assert.deepEqual(AbilityComponents.duskdrive, ['opportunist', 'ultraego']);
-		assert.deepEqual(AbilityComponents.twilightinstinct, ['ultrainstinct', 'battlefervor']);
+		assert.deepEqual(AbilityComponents.twilightinstinct, ['ultrainstinct', 'keeneye']);
 		assert(!Dex.abilities.get('duskdrive').onModifyCritRatio);
 		assert(Dex.abilities.get('duskdrive').desc.includes('Ultra Ego'));
 	});
-	it('Dusk Drive retains native Ultra Ego hit retaliation once', () => {
-		const [p, q] = start('Dusk Drive');
+	it('Dusk Ego retains native Ultra Ego hit retaliation once', () => {
+		const [p, q] = start('Dusk Ego');
 		battle.actions.useMove('tackle', q, {target: p});
 		assert.equal(p.boosts.atk, 1);
 		assert.equal(p.boosts.spa, 1);
@@ -55,11 +55,11 @@ describe('Approved Darts, Drive and Mamoswine packages', () => {
 		battle.actions.useMove('tackle', q, {target: p});
 		assert.equal(p.boosts.atk, 0);
 	});
-	it('Twilight Instinct retains both timing power modifiers once', () => {
+	it('Twilight Instinct retains Ultra Instinct timing power without Battle Fervor', () => {
 		const [p, q] = start('Twilight Instinct');
 		p.storedStats.spe = 500; q.storedStats.spe = 100;
 		battle.queue.insertChoice({choice: 'move', pokemon: q, moveid: 'splash'});
-		assert.equal(power(p, q, 'tackle', 100), 156);
+		assert.equal(power(p, q, 'tackle', 100), 130);
 	});
 	it('uses only the final Mamoswine slot layout and passive', () => {
 		assert.deepEqual(Dex.species.get('mamoswine').abilities, {0: 'Forsaken Sleeper', 1: 'Old North', H: 'Glacial Prime'});

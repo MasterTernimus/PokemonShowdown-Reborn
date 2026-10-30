@@ -13,7 +13,7 @@ describe('Three exact Lycanroc passive replacements', () => {
 	it('changes only the three approved passives and the Dusk slot, preserving stats and typings', () => {
 		const before = require('../../../artifacts/lycanroc-before.json'), passives = { lycanroc: ['infiltrator'], lycanrocmidnight: ['defiant'], lycanrocdusk: ['toughclaws'] }; let changes = 0;
 		for (const old of before) { const s = Dex.species.get(old.id); assert.deepEqual(s.abilities, require('./passive-approval-overlays').abilities(old.id, {...old.abilities}), old.id); assert.deepEqual(s.baseStats, old.stats, old.id); assert.deepEqual(s.types, old.types, old.id); assert.deepEqual(s.passives, require('./passive-approval-overlays').current(old.id, passives[old.id] || old.passives), old.id); if (passives[old.id])changes++; }assert.equal(changes, 3);
-		assert.deepEqual(Dex.species.get('lycanrocdusk').abilities, { 0: 'Scrappy', 1: 'Twilight Instinct', H: 'Dusk Drive' });
+		assert.deepEqual(Dex.species.get('lycanrocdusk').abilities, { 0: 'Scrappy', 1: 'Twilight Instinct', H: 'Dusk Ego' });
 	});
 	for (const suppressed of [false, true]) it('Dusk selected Scrappy respects suppression independently of Tough Claws ' + suppressed, () => {
 		const [p, q] = setup('Lycanroc-Dusk', 'Scrappy'); if (suppressed) p.addVolatile('gastroacid'); q.setType('Ghost');
@@ -24,7 +24,7 @@ describe('Three exact Lycanroc passive replacements', () => {
 		p.boosts.atk = 0; q.setAbility('Intimidate'); assert.equal(p.boosts.atk, suppressed ? -1 : 0);
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 130);
 	});
-	for (const ability of ['No Ability', 'Scrappy', 'Tough Claws', 'Twilight Instinct', 'Dusk Drive']) for (const suppressed of [false, true])it('Dusk Tough Claws boosts contact exactly once with ' + ability + (suppressed ? ' suppressed' : ''), () => {
+	for (const ability of ['No Ability', 'Scrappy', 'Tough Claws', 'Twilight Instinct', 'Dusk Ego']) for (const suppressed of [false, true])it('Dusk Tough Claws boosts contact exactly once with ' + ability + (suppressed ? ' suppressed' : ''), () => {
 		const [p, q] = setup('Lycanroc-Dusk', ability); if (suppressed)p.addVolatile('gastroacid'); const contact = Dex.getActiveMove('tackle'), ranged = Dex.getActiveMove('rockslide');
 		assert.equal(battle.runEvent('BasePower', p, q, contact, 100), 130); assert.equal(battle.runEvent('BasePower', p, q, ranged, 100), 100);
 	});

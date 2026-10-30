@@ -4086,7 +4086,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onUseItem(item, pokemon) {
 			if (this.field.isTerrain('rifteclipseterrain')) {
 				this.boost({def: 1}, pokemon);
-				this.field.addPseudoWeather('trickroom', pokemon, item);
+				// A seed establishes Trick Room; only the move should toggle an existing room off.
+				if (!this.field.getPseudoWeather('trickroom')) {
+					this.field.addPseudoWeather('trickroom', pokemon, item);
+				}
 			}
 			if (this.field.isTerrain('psychicterrain')) {
 				this.boost({ spa: 2 });

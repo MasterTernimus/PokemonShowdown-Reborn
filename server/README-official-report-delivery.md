@@ -1,9 +1,18 @@
 # Official report delivery
 
-The server persists official results in `logs/official-report-outbox` before
-attempting delivery. Keep that directory on the same persistent volume as battle
-logs. Restarting the process resumes queued deliveries. Leaf deduplicates accepted
+The server persists official results in `official-report-outbox` under the configured
+`Config.logsdir` (default: `logs`) before attempting delivery. Keep that log directory
+on persistent storage. Restarting the process resumes queued deliveries. Leaf deduplicates accepted
 reports by the stable battle room ID, including retries after lost acknowledgements.
+
+When upgrading from the checkout-local queue, startup copies existing queue records
+from `logs/official-report-outbox` to temporary files in the configured directory,
+then atomically publishes each complete file without replacing any existing record.
+It removes each old file only after its complete copy exists. Identical copies are safe
+to resume after an interrupted migration. Conflicting records are never overwritten:
+the old file is retained and its path is warned for operator review. Keep the old
+checkout/volume available for that first startup; files already lost before upgrading
+cannot be recovered by migration.
 
 Operator-provisioned settings (no values are stored in Git):
 

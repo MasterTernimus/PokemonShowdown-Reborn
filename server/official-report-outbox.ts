@@ -1,5 +1,5 @@
 /** Durable official result delivery. Credentials remain operator-provisioned. */
-import { promises as fs } from 'fs';
+import { promises as fs, constants as fsConstants } from 'fs';
 import * as path from 'path';
 import { createHmac, randomBytes } from 'crypto';
 
@@ -11,6 +11,7 @@ interface Report {
 }
 interface Options {
 	directory: string;
+	legacyDirectory?: string;
 	url?: string;
 	secret?: string;
 	mode?: string;
@@ -24,8 +25,53 @@ export class OfficialReportOutbox {
 	private draining = false;
 	private stopped = false;
 	private writes = new Map<string, Promise<void>>();
+	private prepared?: Promise<void>;
 	private options: Options;
 	constructor(options: Options) { this.options = options; }
+	private async prepareDirectory() {
+		if (!this.prepared) {
+			this.prepared = (async () => {
+				await fs.mkdir(this.options.directory, { recursive: true });
+				const legacy = this.options.legacyDirectory;
+				if (!legacy || path.resolve(legacy) === path.resolve(this.options.directory)) return;
+				let names: string[];
+				try {
+					names = await fs.readdir(legacy);
+				} catch (error: any) {
+					if (error.code === 'ENOENT') return;
+					throw error;
+				}
+				for (const name of names) {
+					if (!/^battle-[a-z0-9-]+\.json$/.test(name)) continue;
+					const source = path.join(legacy, name);
+					const target = path.join(this.options.directory, name);
+					const temporary = `${target}.${randomBytes(6).toString('hex')}.tmp`;
+					try {
+						// Copy across mounts, then publish the complete destination file atomically.
+						// Linking within the destination directory never overwrites an existing report.
+						await fs.copyFile(source, temporary, fsConstants.COPYFILE_EXCL);
+						try {
+							await fs.link(temporary, target);
+						} catch (error: any) {
+							if (error.code !== 'EEXIST') throw error;
+							if (!(await fs.readFile(temporary)).equals(await fs.readFile(target))) {
+								this.warn(`Official report ${name}: conflicting legacy queue file retained at ${source}; operator review required.`);
+								continue;
+							}
+						}
+						// The complete copy exists; an interrupted migration can safely resume.
+						await fs.unlink(source);
+					} finally {
+						await fs.unlink(temporary).catch(() => {});
+					}
+				}
+			})().catch(error => {
+				this.prepared = undefined;
+				throw error;
+			});
+		}
+		await this.prepared;
+	}
 	private file(roomid: string) {
 		if (!/^battle-[a-z0-9-]+$/.test(roomid)) throw new Error('Invalid official battle room ID');
 		return path.join(this.options.directory, `${roomid}.json`);
@@ -44,7 +90,7 @@ export class OfficialReportOutbox {
 		const existing = this.writes.get(file);
 		if (existing) return existing;
 		const write = (async () => {
-			await fs.mkdir(this.options.directory, { recursive: true });
+			await this.prepareDirectory();
 			try {
 				await fs.access(file);
 				return;
@@ -78,7 +124,7 @@ export class OfficialReportOutbox {
 		if (this.draining) return;
 		this.draining = true;
 		try {
-			await fs.mkdir(this.options.directory, { recursive: true });
+			await this.prepareDirectory();
 			for (const name of await fs.readdir(this.options.directory)) {
 				if (!/^battle-[a-z0-9-]+\.json$/.test(name)) continue;
 				const file = path.join(this.options.directory, name);
@@ -135,7 +181,9 @@ export class OfficialReportOutbox {
 }
 
 export const officialReports = new OfficialReportOutbox({
-	directory: path.resolve(__dirname, '../../logs/official-report-outbox'),
+	// Config is loaded before room-battle imports this module. Match FS/Monitor.logPath's root.
+	directory: path.resolve(__dirname, '../../', typeof Config === 'object' && Config.logsdir || 'logs', 'official-report-outbox'),
+	legacyDirectory: path.resolve(__dirname, '../../logs/official-report-outbox'),
 	url: process.env.OFFICIAL_LOGS_URL,
 	secret: process.env.OFFICIAL_LOGS_SECRET,
 	mode: process.env.OFFICIAL_LOGS_MODE,

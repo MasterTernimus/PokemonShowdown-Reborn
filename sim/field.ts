@@ -328,6 +328,10 @@ export class Field {
 			let baseBoost = move.type === type ? this.baseAuraTypeBoost(move, source, target) : 1;
 			// Infernal Eclipse also boosts added Fire effectiveness types; Ashen Aura shares that type bonus.
 			if (this.isAura('ashenaura') && type === 'Fire') baseBoost = this.baseAuraTypeBoost({...move, type: 'Fire'}, source, target);
+			// Cold Eclipse likewise boosts added Ice typing, so Frozen Aura must share that bonus.
+			if (this.isAura('frozenaura') && this.terrain === 'coldeclipseterrain' && type === 'Ice') {
+				baseBoost = this.baseAuraTypeBoost({...move, type: 'Ice'}, source, target);
+			}
 			multiplier *= baseBoost > 1 && boost > 1 ? Math.max(1.5, baseBoost, boost) / baseBoost : boost;
 			this.battle.add('-message', aura.typeMessage);
 		}

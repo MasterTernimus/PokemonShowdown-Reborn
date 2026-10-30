@@ -4100,7 +4100,7 @@ Object.assign(AbilityDescriptionOverrides, {
 // Individually approved replacement packages.
 Object.assign(AbilityDescriptionOverrides, {
 	duskdrive: {"shortDesc":"Opportunist + Ultra Ego.","desc":"Full local Opportunist and Ultra Ego. Copies opposing positive stat changes at normal flush events; ability-bypassing attacks, damage-triggered attack boosts and recovery retain Ultra Ego's local field and rivalry rules."},
-	twilightinstinct: {"shortDesc":"Ultra Instinct + Battle Fervor.","desc":"Full local Ultra Instinct and Battle Fervor, including their timing power, incoming-damage protection, recovery, first-hit attacking boosts and berry/seed prevention. Has their field suppression and Ultra Ego rivalry rules."},
+	twilightinstinct: {"shortDesc":"Ultra Instinct + Keen Eye.","desc":"Ultra Instinct + Keen Eye. Keeps Ultra Instinct's attack timing bonus, first-attack protection, healing and field/rivalry effects. Prevents opposing accuracy drops, ignores evasion boosts and reveals opposing disguises. Mirror Arena grants +1 accuracy and Laser Focus."},
 	forsakensleeper: {"shortDesc":"Comatose + Soundproof + Rattled.","desc":"Full local Comatose, Soundproof and Rattled. Counts as asleep without a normal status and blocks major status; immune to other Pokemon's sound moves; Bug, Dark or Ghost hits and opposing Intimidate can raise Speed."},
 	coldexpertise: {"shortDesc":"Oblivious + Thick Fat.","desc":"Full local Oblivious and Thick Fat: prevents and cures attraction and Taunt, blocks Captivate and Intimidate's Attack drop. Fire and Ice attacks use half the attacker's offensive stat; immune to hail damage. Mamoswine's passive."},
 	oldnorth: {"shortDesc":"Ice Body + Ice Scales + Technician.","desc":"Full local Ice Body, Ice Scales and Technician. Half special attack damage; hail immunity, contact frostbite and cold-weather/field recovery. Mirror Arena grants +2 evasion; Icy/Snowy Mountain neutralize Ice weaknesses; Cold Eclipse doubles Defense. Moves at most 60 effective BP (80 on Factory) receive Technician's 1.5x boost."},
@@ -4200,3 +4200,6 @@ AbilityDescriptionOverrides.icescales.desc += ' On Cold Eclipse and Infernal Ecl
 AbilityDescriptionOverrides.prismarmor.desc = AbilityDescriptionOverrides.prismarmor.desc.replace('on Cold Eclipse,', 'on Cold Eclipse, Infernal Eclipse,');
 AbilityDescriptionOverrides.icescales.shortDesc = 'Halves special damage; Cold/Infernal Eclipse: 2x Defense. Hail immunity.';
 AbilityDescriptionOverrides.prismarmor.shortDesc = '20% less damage; extra 25% vs super effective. Eclipse defenses: 4/3x.';
+
+import { TidalPoiseDescription } from './terajuma-poise';
+AbilityDescriptionOverrides.tidalpoise = TidalPoiseDescription;

@@ -222,3 +222,11 @@ exports.passives=expected=>Object.assign(beforeEmpoleonSplit.passives(expected),
 // Later explicit room-setter roster approvals.
 const beforeRooms = exports.abilities;
 exports.abilities = (id, fallback) => ({...beforeRooms(id, fallback), ...({unown:{0:'Lost Epoch'},claydolmega:{0:'World Axis'},lunatone:{1:'Gravity Well'},solrock:{1:'Gravity Well'},carbink:{0:'Arcane Chamber'},beheeyem:{0:'Mirror Chamber'}}[id] || {})});
+
+// Dusk Ego is the approved display rename; the battle ID remains duskdrive.
+const beforeDuskEgoAbilities = exports.abilities;
+exports.abilities = (id, expected) => {
+	const result = beforeDuskEgoAbilities(id, expected);
+	if (id === 'lycanrocdusk') result.H = 'Dusk Ego';
+	return result;
+};

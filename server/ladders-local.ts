@@ -201,11 +201,10 @@ export class LadderStore {
 			p1score = 0;
 			p2score = 0;
 		}
-		const ladder = await this.getLadder();
-
 		let p1newElo;
 		let p2newElo;
 		try {
+			const ladder = await this.getLadder();
 			const p1index = this.indexOfUser(p1name, true);
 			const p1elo = ladder[p1index][1];
 
@@ -278,6 +277,7 @@ export class LadderStore {
 			room.addRaw(`There was an error calculating rating changes:`);
 			room.add(e.stack);
 			room.update();
+			return [p1score, null, null];
 		}
 
 		return [p1score, p1newElo, p2newElo];

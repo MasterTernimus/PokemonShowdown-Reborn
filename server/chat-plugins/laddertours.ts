@@ -17,6 +17,7 @@ interface TrackerConfig {
 	cutoff?: number;
 	users?: ID[];
 	showdiffs?: boolean;
+	paused?: boolean;
 }
 
 interface Leaderboard {
@@ -47,6 +48,7 @@ export class LadderTracker {
 	showdiffs?: boolean;
 	private started?: NodeJS.Timeout;
 	private final?: NodeJS.Timeout;
+	private finalPending = false;
 
 	leaderboard: Leaderboard;
 
@@ -84,17 +86,19 @@ export class LadderTracker {
 	setDeadline(argument: string, save = true) {
 		const date = new Date(argument);
 		if (!Number.isFinite(+date)) throw new Chat.ErrorMessage(`Invalid date: ${argument}`);
-		this.deadline = date;
+		this.deadline = this.config.paused ? undefined : date;
 		this.config.deadline = date.toISOString();
+		this.finalPending = false;
 		this.scheduleDeadline();
 		if (save) LadderTracker.save();
 	}
 
-	private scheduleDeadline() {
+	private scheduleDeadline(retryDelay?: number) {
 		if (this.final) clearTimeout(this.final);
+		this.final = undefined;
 		if (!this.deadline) return;
 		// Node clamps overflowing delays to 1ms; long deadlines need bounded chunks.
-		const remaining = Math.max(0, +this.deadline - Date.now());
+		const remaining = retryDelay ?? Math.max(0, +this.deadline - Date.now());
 		this.final = setTimeout(() => {
 			this.final = undefined;
 			void this.captureFinalLeaderboard().catch(error => Monitor.crashlog(error, 'Ladder tournament deadline'));
@@ -108,7 +112,19 @@ export class LadderTracker {
 			this.scheduleDeadline();
 			return;
 		}
-		const leaderboard = await this.getLeaderboard();
+		let leaderboard: LeaderboardEntry[];
+		try {
+			leaderboard = await this.getLeaderboard();
+		} catch (error: any) {
+			if (this.deadline !== deadline) return;
+			if (!this.finalPending) {
+				this.addHTML(`Final leaderboard is temporarily unavailable. Retrying in one minute.`, true);
+				Monitor.warn(`Ladder tracker ${this.room.roomid}: final leaderboard pending (${error.message}).`);
+			}
+			this.finalPending = true;
+			this.scheduleDeadline(INTERVAL);
+			return;
+		}
 		// A stopped or rescheduled tracker must not publish an obsolete response.
 		if (this.deadline !== deadline) return;
 		this.stop();
@@ -212,10 +228,13 @@ export class LadderTracker {
 	}
 
 	getDeadline(now: Date) {
-		if (!this.deadline) {
+		const deadline = this.config.deadline && new Date(this.config.deadline);
+		if (!deadline) {
 			return ('No deadline has been set.');
+		} else if (+deadline <= +now) {
+			return ('The deadline has passed; final standings are pending.');
 		} else {
-			return (`**Time Remaining:** ${this.formatTimeRemaining(+this.deadline - +now, true)}`);
+			return (`**Time Remaining:** ${this.formatTimeRemaining(+deadline - +now, true)}${this.config.paused ? ' (paused)' : ''}`);
 		}
 	}
 
@@ -235,30 +254,34 @@ export class LadderTracker {
 		let response;
 		try {
 			response = await Net(url).get().then(JSON.parse);
-		} catch (e: any) {
-			if (e.name === 'SyntaxError') { // sometimes the page 404s, meaning invalid json. skip!
-				response = { toplist: [] };
-			} else {
-				if (display) throw new Chat.ErrorMessage('Failed to fetch leaderboard. Try again later.');
-				return leaderboard;
+			if (!response || !Array.isArray(response.toplist)) throw new Error('Missing toplist');
+			for (const data of response.toplist) {
+				if (!data || typeof data.userid !== 'string' || !data.userid ||
+					typeof data.username !== 'string' || !data.username ||
+					!['elo', 'gxe', 'rpr', 'rprd'].every(key =>
+						(typeof data[key] === 'number' || typeof data[key] === 'string' && data[key].trim() !== '') &&
+						Number.isFinite(Number(data[key])))) throw new Error('Invalid leaderboard entry');
 			}
+		} catch {
+			throw new Chat.ErrorMessage('Failed to fetch leaderboard. Try again later.');
 		}
 
-		this.leaderboard.lookup = new Map();
+		const lookup = new Map<string, LeaderboardEntry>();
 		for (const data of response.toplist) {
 			// TODO: move the rounding until later
 			const entry: LeaderboardEntry = {
 				name: data.username,
 				elo: Math.round(data.elo),
-				gxe: data.gxe,
+				gxe: Number(data.gxe),
 				glicko: Math.round(data.rpr),
 				glickodev: Math.round(data.rprd),
 			};
-			this.leaderboard.lookup.set(data.userid, entry);
+			lookup.set(data.userid, entry);
 			if (!data.userid.startsWith(this.prefix)) continue;
 			entry.rank = leaderboard.length + 1;
 			leaderboard.push(entry);
 		}
+		this.leaderboard.lookup = lookup;
 		if (display) {
 			this.leaderboard.last = leaderboard;
 			this.changed = false;
@@ -290,7 +313,8 @@ export class LadderTracker {
 		this.config.showdiffs = this.showdiffs;
 		this.config.rating = this.rating;
 		this.config.prefix = this.prefix;
-		this.config.deadline = this.deadline?.toString();
+		// stop() cancels active work but retains the configured date for resume.
+		if (this.deadline) this.config.deadline = this.deadline.toISOString();
 	}
 
 	styleLeaderboard(leaderboard: LeaderboardEntry[], final?: number) {
@@ -406,23 +430,33 @@ export class LadderTracker {
 
 	start() {
 		if (this.started) return;
+		this.config.paused = false;
 		if (!this.deadline && this.config.deadline) this.setDeadline(this.config.deadline, false);
 
 		this.togglePrefix();
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
 		this.started = setInterval(async () => {
 			// Leaderboard
-			const leaderboard = await this.getLeaderboard();
-			if (!leaderboard.length) return;
+			const generation = this.started;
+			let leaderboard: LeaderboardEntry[];
+			try {
+				leaderboard = await this.getLeaderboard();
+			} catch {
+				// Preserve the last known standings during upstream outages.
+				return;
+			}
+			if (this.started !== generation) return;
 			if (this.leaderboard) this.trackChanges(leaderboard, this.showdiffs);
 			this.leaderboard.current = leaderboard;
 		}, INTERVAL);
 	}
 
 	stop() {
+		this.config.paused = true;
 		if (this.final) clearTimeout(this.final);
 		this.final = undefined;
 		this.deadline = undefined;
+		this.finalPending = false;
 		if (this.started) {
 			clearInterval(this.started);
 			this.started = undefined;
@@ -442,7 +476,7 @@ try {
 			continue;
 		}
 		trackers[roomid] = new LadderTracker(room, data[roomid]);
-		trackers[roomid].start();
+		if (!data[roomid].paused) trackers[roomid].start();
 	}
 } catch {}
 

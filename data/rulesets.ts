@@ -1,6 +1,8 @@
 // Note: These are the rules that formats use
 
 import type { Learnset } from "../sim/dex-species";
+import {abilityIncludesComponent} from './ability-components';
+import {authorityForms} from './authority-clause';
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
@@ -852,27 +854,23 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	fightingclause: {
 		effectType: 'ValidatorRule',
 		name: 'Fighting Clause',
-		desc: "Prevents teams from having more than one Pokemon with Ultra Ego, Ultra Instinct, Battle Fervor, or Dusk Drive.",
+		desc: "Limits teams to one Battle Fervor or Dusk Ego user. Ultra Ego and Ultra Instinct use Authority Clause's separate team-wide limits.",
 		onBegin() {
-			this.add('rule', 'Fighting Clause: Limit one Pokemon with Ultra Ego, Ultra Instinct, Battle Fervor, or Dusk Drive');
+			this.add('rule', 'Fighting Clause: Limit one Battle Fervor or Dusk Ego user');
 		},
 		onValidateTeam(team) {
-			const restrictedAbilities = new Set<ID>(['ultraego', 'ultrainstinct', 'battlefervor', 'duskdrive'] as ID[]);
-			const compositeRestrictedAbilities: { [abilityid: string]: ID[] } = {
-				perfectego: ['ultraego'] as ID[],
-				ragingfists: ['ultraego'] as ID[],
-			};
+			const restrictedAbilities = new Set<ID>(['battlefervor', 'duskdrive'] as ID[]);
 			const restrictedPokemon: string[] = [];
 			for (const set of team) {
 				const abilities = new Set<ID>();
-				const setAbility = this.toID(set.ability);
+				const setAbility = this.dex.abilities.get(set.ability).id;
 				if (setAbility) abilities.add(setAbility);
 				const species = this.dex.species.get(set.species);
 				const item = this.dex.items.get(set.item);
 				if (item.megaStone?.[species.name]) {
 					const megaSpecies = this.dex.species.get(item.megaStone[species.name]);
 					for (const ability of Object.values(megaSpecies.abilities)) {
-						abilities.add(this.toID(ability));
+						abilities.add(this.dex.abilities.get(ability).id);
 					}
 				}
 				let restrictedAbility = '';
@@ -881,20 +879,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						restrictedAbility = this.dex.abilities.get(ability).name;
 						break;
 					}
-					const compositeAbilities = compositeRestrictedAbilities[ability];
-					if (compositeAbilities) {
-						restrictedAbility = `${this.dex.abilities.get(ability).name}: ${
-							compositeAbilities.map(id => this.dex.abilities.get(id).name).join(' + ')
-						}`;
-						break;
-					}
 				}
 				if (!restrictedAbility) continue;
 				restrictedPokemon.push(`${set.name || set.species} (${restrictedAbility})`);
 			}
 			if (restrictedPokemon.length > 1) {
 				return [
-					`You are limited to one Pokemon with Ultra Ego, Ultra Instinct, Battle Fervor, or Dusk Drive by Fighting Clause.`,
+					`You are limited to one Pokemon with Battle Fervor or Dusk Ego by Fighting Clause.`,
 					`(You have ${restrictedPokemon.join(', ')})`,
 				];
 			}
@@ -903,37 +894,52 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	authorityclause: {
 		effectType: 'ValidatorRule',
 		name: 'Authority Clause',
-		desc: "Prevents teams from having more than one Pokemon with Neutralization, Royal Decree, Burning Ego, or Perfect Ego combined.",
+		desc: "One Ultra Ego user and one Ultra Instinct user per team, including ordinary forms, components, passives and available Mega/Gmax forms. Also limits Neutralization, Royal Decree, Burning Ego, and Perfect Ego to one user combined.",
 		onBegin() {
 			this.add('rule', 'Authority Clause: Limit one Neutralization, Royal Decree, Burning Ego, or Perfect Ego user per team');
+			this.add('rule', 'Authority Clause: Limit one Ultra Ego user and one Ultra Instinct user, including ordinary and Mega/Gmax forms');
 		},
 		onValidateTeam(team) {
 			const limitedAbilities = new Set(['neutralization', 'royaldecree', 'burningego', 'perfectego']);
 			const seen: string[] = [];
+			const ultraUsers: {[component: string]: string[]} = {ultraego: [], ultrainstinct: []};
 			for (const set of team) {
 				const abilities = new Set<ID>();
-				const setAbility = this.toID(set.ability);
+				const setAbility = this.dex.abilities.get(set.ability).id;
 				if (setAbility) abilities.add(setAbility);
 				const species = this.dex.species.get(set.species);
-				const item = this.dex.items.get(set.item);
-				if (item.megaStone?.[species.name]) {
-					const megaSpecies = this.dex.species.get(item.megaStone[species.name]);
-					for (const ability of Object.values(megaSpecies.abilities)) {
-						abilities.add(this.toID(ability));
-					}
+				const forms = authorityForms(this.dex, set);
+				for (const form of forms) {
+					abilities.add(this.toID(form.abilities[0]));
+				}
+				for (const component of Object.keys(ultraUsers)) {
+					const form = [species, ...forms].find(candidate => {
+						const active = candidate.id === species.id ? set.ability || candidate.abilities[0] : candidate.abilities[0];
+						return [active, ...candidate.passives].some(ability => abilityIncludesComponent(ability, component));
+					});
+					if (form) ultraUsers[component].push(`${set.name || set.species} (${form.name})`);
 				}
 				for (const ability of abilities) {
 					if (!limitedAbilities.has(ability)) continue;
 					const id = ability;
 					seen.push(`${set.name || set.species} (${this.dex.abilities.get(id).name})`);
+					break; // A single set may reach several restricted forms; count it once.
+				}
+			}
+			const problems: string[] = [];
+			for (const [component, users] of Object.entries(ultraUsers)) {
+				if (users.length > 1) {
+					problems.push(`Authority Clause allows only one ${this.dex.abilities.get(component).name} user per team, including ordinary and Mega/Gmax forms.`,
+						`(You have ${users.join(', ')})`);
 				}
 			}
 			if (seen.length > 1) {
-				return [
+				problems.push(
 					`You are limited to one Pokemon with Neutralization, Royal Decree, Burning Ego, or Perfect Ego by Authority Clause.`,
 					`(You have ${seen.join(', ')})`,
-				];
+				);
 			}
+			return problems.length ? problems : undefined;
 		},
 	},
 	nicknameclause: {

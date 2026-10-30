@@ -18209,7 +18209,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) { return (this.dex.abilities.get('opportunist') as any).onResidual?.call(this, pokemon); },
 		onModifyAtk(atk, pokemon, target, move) { return this.dex.abilities.get('battlefervor').onModifyAtk?.call(this, atk, pokemon, target, move); },
 		flags: {},
-		name: "Dusk Drive",
+		name: "Dusk Ego",
 		rating: 4,
 		num: 10166,
 	},
@@ -21545,7 +21545,9 @@ composeSelectedAbility(Abilities, 'insight', ['ultraego', 'telepathy', 'innerfoc
 composeSelectedAbility(Abilities, 'auraprecision', ['ultrainstinct', 'shielddust', 'mindseye'], true);
 Abilities.auraprecision = {...Abilities.auraprecision, flags: {}};
 composeSelectedAbility(Abilities, 'duskdrive', ['opportunist', 'ultraego'], true);
-composeSelectedAbility(Abilities, 'twilightinstinct', ['ultrainstinct', 'battlefervor'], true);
+// Keep the legacy ID for saved teams and replays; only its public name changes.
+Abilities.duskdrive = {...Abilities.duskdrive, id: 'duskdrive' as ID, name: 'Dusk Ego'};
+composeSelectedAbility(Abilities, 'twilightinstinct', ['ultrainstinct', 'keeneye'], true);
 Abilities.twilightinstinct = {...Abilities.twilightinstinct, flags: {}};
 Abilities.forsakensleeper = {name: 'Forsaken Sleeper', num: 11973, rating: 4, flags: {...Abilities.comatose.flags}};
 Abilities.coldexpertise = {name: 'Cold Expertise', num: 11974, rating: 4, flags: {}};
@@ -21656,3 +21658,6 @@ Abilities.ashenseeds = AshenSeeds;
 
 import {installAlakazamRejuv} from './alakazam-rejuv';
 installAlakazamRejuv(Abilities);
+
+import { installTidalPoise } from './terajuma-poise';
+installTidalPoise(Abilities);

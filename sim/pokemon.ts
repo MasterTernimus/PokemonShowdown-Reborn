@@ -9,6 +9,7 @@ import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCond
 import { AbilityComponents } from '../data/ability-components';
 import {startGainedPassives} from './species-passives';
 import {SignaturePassiveComponents} from '../data/signature-passive-data';
+import {getGigantamaxForm} from './gigantamax';
 /**
  * Simulator Pokemon
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -548,17 +549,8 @@ export class Pokemon {
 		this.canUltraBurst = this.battle.actions.canUltraBurst(this);
 		this.canGigantamax = this.baseSpecies.canGigantamax || null;
 		this.canTerastallize = this.battle.actions.canTerastallize(this);
-		const pikachuGmaxForms = ['pikachu', 'pikachucosplay', 'pikachurockstar', 'pikachubelle', 'pikachupopstar', 'pikachuphd', 'pikachulibre', 'pikachupartner', 'pikachustarter'];
 		const originalSpecies = toID(this.set.species);
-		let defaultGmax = this.baseSpecies.id + 'gmax';
-		if (!this.battle.dex.species.get(defaultGmax).exists) {
-			const declaredBaseSpecies = this.battle.dex.species.get(this.baseSpecies.baseSpecies);
-			if (declaredBaseSpecies.exists) defaultGmax = declaredBaseSpecies.id + 'gmax';
-		}
-		this.canDynamax = this.baseSpecies.id === 'machampalt' ? 'machampgmaxalt' :
-			this.baseSpecies.id === 'grimmsnarlazzy' ? 'grimmsnarlgmaxazzy' :
-			['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) ? 'eeveegmax' :
-			pikachuGmaxForms.includes(this.baseSpecies.id) ? 'pikachugmax' : defaultGmax;
+		this.canDynamax = getGigantamaxForm(this.battle.dex, this.baseSpecies, originalSpecies);
 		if (['eeveestarter', 'eeveestarteralt'].includes(originalSpecies) && this.ability === 'unstableevo') {
 			this.canMegaEvo = false;
 			this.canMegaEvoX = false;
@@ -2358,7 +2350,8 @@ export class Pokemon {
 		}
 		const abilityAliases = AbilityComponents;
 		const excluded = this.getAbilityComponentExclusions();
-		const abilityids = Array.isArray(ability) ? ability.map(toID) : [toID(ability)];
+		const abilityids = (Array.isArray(ability) ? ability.map(toID) : [toID(ability)])
+			.map(id => id === 'duskego' ? 'duskdrive' : id);
 		const memoryComponents: string[] = this.ability === 'rkssystem' ?
 			(this.getAbility() as RKSSystemAbility).memoryAbilities.call(this.battle, this) : [];
 		// Identity lookup only: composites still dispatch their own component callbacks.

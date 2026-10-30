@@ -399,8 +399,9 @@ Object.assign(AbilityComponents, {
 
 export function abilityIncludesComponent(ability: string, component: string, seen = new Set<string>()): boolean {
 	const rawId = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
-	const id = ({bedrockclaw:'duneclaws',rimeclaw:'glacierclaws',dunerunner:'sandrush',frostrunner:'slushrush',mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
-	const query = component.toLowerCase().replace(/[^a-z0-9]/g, '');
+	const id = ({duskego:'duskdrive',bedrockclaw:'duneclaws',rimeclaw:'glacierclaws',dunerunner:'sandrush',frostrunner:'slushrush',mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
+	const queryID = component.toLowerCase().replace(/[^a-z0-9]/g, '');
+	const query = queryID === 'duskego' ? 'duskdrive' : queryID;
 	if (id === query) return true;
 	if (AbilityComponentExclusions[id]?.includes(query)) return false;
 	if (seen.has(id)) return false;
@@ -1018,7 +1019,7 @@ AbilityComponents.moonlitprowl = ['infiltrator', 'limber'];
 
 AbilityComponents.dreepyvanguard = ['stalwart', 'technician'];
 AbilityComponents.duskdrive = ['opportunist', 'ultraego'];
-AbilityComponents.twilightinstinct = ['ultrainstinct', 'battlefervor'];
+AbilityComponents.twilightinstinct = ['ultrainstinct', 'keeneye'];
 AbilityComponents.forsakensleeper = ['comatose', 'soundproof', 'rattled'];
 AbilityComponents.coldexpertise = ['oblivious', 'thickfat'];
 AbilityComponents.oldnorth = ['icebody', 'icescales', 'technician'];
@@ -1051,3 +1052,6 @@ AbilityComponents.imperialedge=AbilityComponents.exalt; delete AbilityComponents
 
 import {LoreComponents} from './lore-pairs';
 Object.assign(AbilityComponents, LoreComponents);
+
+import { TidalPoiseComponents } from './terajuma-poise';
+AbilityComponents.tidalpoise = TidalPoiseComponents;
