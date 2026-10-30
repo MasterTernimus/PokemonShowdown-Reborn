@@ -399,7 +399,7 @@ Object.assign(AbilityComponents, {
 
 export function abilityIncludesComponent(ability: string, component: string, seen = new Set<string>()): boolean {
 	const rawId = ability.toLowerCase().replace(/[^a-z0-9]/g, '');
-	const id = ({duskego:'duskdrive',bedrockclaw:'duneclaws',rimeclaw:'glacierclaws',dunerunner:'sandrush',frostrunner:'slushrush',mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
+	const id = ({duskego: 'duskdrive', bedrockclaw:'duneclaws',rimeclaw:'glacierclaws',dunerunner:'sandrush',frostrunner:'slushrush',mineralgrip:'barbharvest',royalonslaught:'patriarchswrath',royalaegis:'matriarchsvigil',masterptissier:'masterpatissier'} as {[id:string]:string})[rawId] || rawId;
 	const queryID = component.toLowerCase().replace(/[^a-z0-9]/g, '');
 	const query = queryID === 'duskego' ? 'duskdrive' : queryID;
 	if (id === query) return true;

@@ -182,7 +182,9 @@ export class OfficialReportOutbox {
 
 export const officialReports = new OfficialReportOutbox({
 	// Config is loaded before room-battle imports this module. Match FS/Monitor.logPath's root.
-	directory: path.resolve(__dirname, '../../', typeof Config === 'object' && Config.logsdir || 'logs', 'official-report-outbox'),
+	directory: path.resolve(
+		__dirname, '../../', typeof Config === 'object' && Config.logsdir || 'logs', 'official-report-outbox'
+	),
 	legacyDirectory: path.resolve(__dirname, '../../logs/official-report-outbox'),
 	url: process.env.OFFICIAL_LOGS_URL,
 	secret: process.env.OFFICIAL_LOGS_SECRET,

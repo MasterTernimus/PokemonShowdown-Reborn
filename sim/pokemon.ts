@@ -9,7 +9,7 @@ import {adaptiveIgnoresAbility, adaptiveSuppressionException, adaptiveBlocksCond
 import { AbilityComponents } from '../data/ability-components';
 import {startGainedPassives} from './species-passives';
 import {SignaturePassiveComponents} from '../data/signature-passive-data';
-import {getGigantamaxForm} from './gigantamax';
+import { getGigantamaxForm } from './gigantamax';
 /**
  * Simulator Pokemon
  * Pokemon Showdown - http://pokemonshowdown.com/

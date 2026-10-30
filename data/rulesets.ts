@@ -1,8 +1,8 @@
 // Note: These are the rules that formats use
 
 import type { Learnset } from "../sim/dex-species";
-import {abilityIncludesComponent} from './ability-components';
-import {authorityForms} from './authority-clause';
+import { abilityIncludesComponent } from './ability-components';
+import { authorityForms } from './authority-clause';
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
@@ -902,7 +902,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onValidateTeam(team) {
 			const limitedAbilities = new Set(['neutralization', 'royaldecree', 'burningego', 'perfectego']);
 			const seen: string[] = [];
-			const ultraUsers: {[component: string]: string[]} = {ultraego: [], ultrainstinct: []};
+			const ultraUsers: { [component: string]: string[] } = { ultraego: [], ultrainstinct: [] };
 			for (const set of team) {
 				const abilities = new Set<ID>();
 				const setAbility = this.dex.abilities.get(set.ability).id;

@@ -234,7 +234,9 @@ export class LadderTracker {
 		} else if (+deadline <= +now) {
 			return ('The deadline has passed; final standings are pending.');
 		} else {
-			return (`**Time Remaining:** ${this.formatTimeRemaining(+deadline - +now, true)}${this.config.paused ? ' (paused)' : ''}`);
+			return (
+				`**Time Remaining:** ${this.formatTimeRemaining(+deadline - +now, true)}${this.config.paused ? ' (paused)' : ''}`
+			);
 		}
 	}
 

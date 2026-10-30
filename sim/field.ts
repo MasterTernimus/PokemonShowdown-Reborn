@@ -330,7 +330,7 @@ export class Field {
 			if (this.isAura('ashenaura') && type === 'Fire') baseBoost = this.baseAuraTypeBoost({...move, type: 'Fire'}, source, target);
 			// Cold Eclipse likewise boosts added Ice typing, so Frozen Aura must share that bonus.
 			if (this.isAura('frozenaura') && this.terrain === 'coldeclipseterrain' && type === 'Ice') {
-				baseBoost = this.baseAuraTypeBoost({...move, type: 'Ice'}, source, target);
+				baseBoost = this.baseAuraTypeBoost({ ...move, type: 'Ice' }, source, target);
 			}
 			multiplier *= baseBoost > 1 && boost > 1 ? Math.max(1.5, baseBoost, boost) / baseBoost : boost;
 			this.battle.add('-message', aura.typeMessage);

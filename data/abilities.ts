@@ -21546,7 +21546,7 @@ composeSelectedAbility(Abilities, 'auraprecision', ['ultrainstinct', 'shielddust
 Abilities.auraprecision = {...Abilities.auraprecision, flags: {}};
 composeSelectedAbility(Abilities, 'duskdrive', ['opportunist', 'ultraego'], true);
 // Keep the legacy ID for saved teams and replays; only its public name changes.
-Abilities.duskdrive = {...Abilities.duskdrive, id: 'duskdrive' as ID, name: 'Dusk Ego'};
+Abilities.duskdrive = { ...Abilities.duskdrive, id: 'duskdrive' as ID, name: 'Dusk Ego' };
 composeSelectedAbility(Abilities, 'twilightinstinct', ['ultrainstinct', 'keeneye'], true);
 Abilities.twilightinstinct = {...Abilities.twilightinstinct, flags: {}};
 Abilities.forsakensleeper = {name: 'Forsaken Sleeper', num: 11973, rating: 4, flags: {...Abilities.comatose.flags}};
