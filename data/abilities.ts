@@ -13014,12 +13014,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (target.hasAbility('neutralization') || (target.hasAbility(['royaldecree', 'empress']) && !this.getAllActive().some(pokemon => pokemon.hasAbility('neutralization')))) {
 				this.debug('Predator anti-authority boost');
-				return this.chainModify(2);
+				return this.chainModify(1.5);
 			}
 			if (target.newlySwitched || this.queue.willMove(target)) {
 				this.debug('Predator damage boost');
-				if (this.field.isTerrain(['mountainterrain', 'snowymountainterrain', 'rockyterrain'])) return this.chainModify(2);
-				if (this.field.isTerrain(['fairytaleterrain', 'dragonsdenterrain', 'bigtopterrain'])) return this.chainModify(1.5);
+				if (this.field.isTerrain(['mountainterrain', 'snowymountainterrain', 'rockyterrain'])) return this.chainModify(1.5);
 				return this.chainModify(1.3);
 			}
 		},

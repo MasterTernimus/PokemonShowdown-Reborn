@@ -111,7 +111,7 @@ const reviewedStats = {
  probopass: [75,35,150,110,155,25],
  stunfisk:[109,66,99,95,109,32],stunfiskgalar:[109,95,109,66,99,32],
  kingdra: [85,105,90,105,90,95],
- mightyena: [90,115,80,60,80,125], mightyenadeso: [90,115,80,60,80,125], mightyenagrim: [90,115,80,60,80,125],
+ mightyena: [90,115,80,75,80,110], mightyenadeso: [90,115,80,75,80,110], mightyenagrim: [90,115,80,75,80,110],
  mightyenamega: [90,140,105,85,100,130],
  cinccinodeso: [75,110,90,60,90,125], toxicroak: [83,121,70,111,70,95], toxicroakdeso: [83,121,70,111,70,95],
  sevipermega: [75,140,120,90,120,65], staraptor: [85,120,80,50,70,105], staraptormega: [85,140,110,60,100,115],

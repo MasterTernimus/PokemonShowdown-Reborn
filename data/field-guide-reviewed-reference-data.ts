@@ -539,7 +539,7 @@ export const ReviewedReferenceDetails = {
 				"Once per battle per holder, entry attempts to create or refresh Snowy Mountain for exactly three turns. A blocked attempt spends the allowance and Amplifield Rock does not extend it. While the ability remains effective, its separate field lock prevents new/replacement fields; auras, natural expiry and restoration of an underlying field still work.",
 			],
 			"predator": [
-				"Against newly switched or still-pending-action targets, its ordinary conditional power multiplier becomes 2× on Mountain, Snowy Mountain and Rocky, or 1.5× on Fairy Tale, Dragon’s Den and Big Top. Its 2× authority/Ultra matchup bonuses replace this conditional bonus rather than stacking with it; Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
+				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
 			],
 			"relicarmor": [
 				"Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic entry grant +1 Defense and Special Defense. Its Rock-typing weakness protection applies on Rocky, Fairy Tale, Water Surface, Underwater, Murkwater, Midnight Zone, Starlight Arena, New World, Holy, Mountain, Cave, Volcanic, Dragon’s Den, Crystal Cavern and Dark Crystal Cavern. Desert, Icy, Snowy Mountain and Cold Eclipse do not grant that protection by themselves. Aevian Lapras additionally gains Ice typing on Icy/Snowy Mountain/Cold Eclipse or in hail/snow. The visible Rock-protection message announces actual protection and is withheld during Illusion.",
@@ -1510,7 +1510,7 @@ export const ReviewedReferenceDetails = {
 				"On Dragon’s Den or Fairy Tale entry, gains +1 Defense. Its ordinary critical-hit prevention, 20% attack-damage reduction and +2 Special Defense response to an opposing stat drop remain.",
 			],
 			"predator": [
-				"Against newly switched or still-pending-action targets, its ordinary conditional power multiplier becomes 2× on Mountain, Snowy Mountain and Rocky, or 1.5× on Fairy Tale, Dragon’s Den and Big Top. Its 2× authority/Ultra matchup bonuses replace this conditional bonus rather than stacking with it; Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
+				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
 			],
 			"atrocity": [
 				"Its converted Dragon attacks gain a 1.5x conversion modifier on Dragon Den and Fairy Tale instead of 1.2x. Cold Eclipse adds a 1.3x power modifier and raises its defensive multiplier to 1.5x instead of 1.3x. Its inherited Magma Armor field behavior remains: entry defenses on Dragon Den, Volcanic Summit and Infernal Eclipse, with Dragon Den and Infernal Eclipse Fire protection and Cold Eclipse’s freeze exception. Dragon Rush additionally receives its existing 1.5x modifier. Royal Decree/Empress adds the existing authority bonus only while Neutralization is absent.",
@@ -1656,7 +1656,7 @@ export const ReviewedReferenceDetails = {
 				"On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special HP hits after activation additionally grant +1 Defense and Special Defense respectively. A qualifying hit at half HP or less instead heals 1/4 base max HP once per activation; blocked healing does not spend that recovery. Bewitched Woods, Haunted and Holy disable its Ultra Ego effects, including its rivalry with Ultra Instinct. Its Flame Body and Magma Armor components give a combined +2 Defense and Special Defense on Infernal Eclipse entry. Cold Eclipse disables contact burns and allows new frostbite. Volcanic gives a 60% contact burn chance and +1 Defense/Special Defense on entry; Dragon’s Den grants those entry defenses and Fire immunity.",
 			],
 			"predator": [
-				"Against newly switched or still-pending-action targets, its ordinary conditional power multiplier becomes 2× on Mountain, Snowy Mountain and Rocky, or 1.5× on Fairy Tale, Dragon’s Den and Big Top. Its 2× authority/Ultra matchup bonuses replace this conditional bonus rather than stacking with it; Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
+				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
 			],
 			"relicarmor": [
 				"Desert, Fairy Tale, Cave, Crystal Cavern, New World and Volcanic entry grant +1 Defense and Special Defense. Its Rock-typing weakness protection applies on Rocky, Fairy Tale, Water Surface, Underwater, Murkwater, Midnight Zone, Starlight Arena, New World, Holy, Mountain, Cave, Volcanic, Dragon’s Den, Crystal Cavern and Dark Crystal Cavern. Desert, Icy, Snowy Mountain and Cold Eclipse do not grant that protection by themselves. Aevian Lapras additionally gains Ice typing on Icy/Snowy Mountain/Cold Eclipse or in hail/snow. The visible Rock-protection message announces actual protection and is withheld during Illusion.",
@@ -2256,7 +2256,7 @@ export const ReviewedReferenceDetails = {
 				"During effective Strong Winds on any field, gains +1 Attack and +1 Special Attack at turn end. Its wind-move absorption and Tailwind activation are independent triggers.",
 			],
 			"predator": [
-				"Against newly switched or still-pending-action targets, its ordinary conditional power multiplier becomes 2× on Mountain, Snowy Mountain and Rocky, or 1.5× on Fairy Tale, Dragon’s Den and Big Top. Its 2× authority/Ultra matchup bonuses replace this conditional bonus rather than stacking with it; Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
+				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
 			],
 		},
 		"moves": {
@@ -2283,7 +2283,7 @@ export const ReviewedReferenceDetails = {
 				"On Rocky Field, Rock attacks use 2× Attack or Special Attack instead of 1.5×. The ordinary Rock STAB grant remains separate.",
 			],
 			"predator": [
-				"Against newly switched or still-pending-action targets, its ordinary conditional power multiplier becomes 2× on Mountain, Snowy Mountain and Rocky, or 1.5× on Fairy Tale, Dragon’s Den and Big Top. Its 2× authority/Ultra matchup bonuses replace this conditional bonus rather than stacking with it; Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
+				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
 			],
 		},
 		"moves": {
@@ -2304,7 +2304,7 @@ export const ReviewedReferenceDetails = {
 				"On Big Top, after a copied Dancer/Performer action processes a stat change with no positive stages in that change, the handler attempts +1 Attack and Sp. Atk on its source. A copied stat change already containing a positive boost does not receive this bonus. Ordinary dance-copy targeting and restrictions remain.",
 			],
 			"predator": [
-				"Against newly switched or still-pending-action targets, its ordinary conditional power multiplier becomes 2× on Mountain, Snowy Mountain and Rocky, or 1.5× on Fairy Tale, Dragon’s Den and Big Top. Its 2× authority/Ultra matchup bonuses replace this conditional bonus rather than stacking with it; Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
+				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
 			],
 		},
 		"moves": {

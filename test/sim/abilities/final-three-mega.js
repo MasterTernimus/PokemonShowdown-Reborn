@@ -39,9 +39,9 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 		const [p, q] = setup('Staraptor-Mega', 'Predator', ability);
 		q.newlySwitched = true;
 		assert(predatorUltraMatch(battle, p, q));
-		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 200);
+		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 150);
 		battle.field.terrain = 'mountainterrain';
-		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 200);
+		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 150);
 		assert(!p.hasAbility('ultraego'));
 		assert(!p.hasAbility('ultrainstinct'));
 		assert.deepEqual(p.getPassives(), ['contrary']);
@@ -64,6 +64,27 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 		q.boosts.def = 4;
 		assert(damage(p, q) < base * 0.5);
 	});
+	for (const field of ['', 'mountainterrain', 'snowymountainterrain', 'rockyterrain', 'fairytaleterrain', 'dragonsdenterrain', 'bigtopterrain']) {
+		for (const ability of ['No Ability', 'Neutralization', 'Royal Decree', 'Empress', 'Ultra Ego', 'Ultra Instinct']) {
+			it(`caps Predator against ${ability} on ${field || 'no field'} without stacking timing and matchup bonuses`, () => {
+				const [p, q] = setup('Mew', 'Predator', ability);
+				battle.field.terrain = field;
+				q.newlySwitched = true;
+				const rocky = ['mountainterrain', 'snowymountainterrain', 'rockyterrain'].includes(field);
+				const expected = ability !== 'No Ability' || rocky ? 150 : 130;
+				assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), expected);
+			});
+		}
+		it(`requires switching or a pending action for ordinary Predator power on ${field || 'no field'}`, () => {
+			const [p, q] = setup('Mew', 'Predator', 'No Ability');
+			battle.field.terrain = field;
+			battle.queue.willMove = () => null;
+			assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 100);
+			battle.queue.willMove = target => target === q ? {pokemon: q} : null;
+			const expected = ['mountainterrain', 'snowymountainterrain', 'rockyterrain'].includes(field) ? 150 : 130;
+			assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), expected);
+		});
+	}
 	it('preserves recursive component exclusions and ordinary ability suppression', () => {
 		const [p, q] = setup('Mew', 'Predator', 'Burning Ego');
 		const original = q.getAbilityComponentExclusions;
@@ -112,7 +133,7 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 		const [p, q] = setup('Mew', 'Predator', 'Ultra Instinct', true), other = battle.p2.active[1];
 		other.newlySwitched = false;
 		const move = Dex.getActiveMove('earthquake');
-		assert.equal(battle.runEvent('BasePower', p, q, move, 100), 200);
+		assert.equal(battle.runEvent('BasePower', p, q, move, 100), 150);
 		assert.equal(battle.runEvent('BasePower', p, other, move, 100), 100);
 		assert(!move.ignoreAbility && !move.ignoreDefensive && !move.ignorePositiveDefensive);
 	});

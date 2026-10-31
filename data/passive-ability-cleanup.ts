@@ -558,8 +558,8 @@ SharedPassiveAbilityDescriptions.auramaster = {
  desc: "Has its paired attacks, Technician power and Inner Focus.",
 };
 SharedPassiveAbilityDescriptions.predator = {
- passive: 'contrary', shortDesc: "2x power and targeted defense bypass against active Ultra abilities; has authority and first-action bonuses.",
- desc: "Against active Ultra Ego, Ultra Instinct or composites containing them, attacks have 2x power, ignore positive Defense/Sp. Def stages and bypass only Ultra incoming-damage reductions. This replaces the first-action bonus. Negative defensive stages, unrelated ability effects, screens, Substitute, Protect, type immunities and post-hit healing remain. The matchup is disabled by ordinary component suppression and Bewitched Woods, Haunted or Holy Terrain. Existing authority and ordinary first-action bonuses are unchanged.",
+ passive: 'contrary', shortDesc: "1.3x timing power; 1.5x on rocky fields or against authority/Ultra abilities; no stacking.",
+ desc: "Against active Ultra Ego, Ultra Instinct or composites containing them, attacks have 1.5x power, ignore positive Defense/Sp. Def stages and bypass only Ultra incoming-damage reductions. Against Neutralization, or Royal Decree/Empress while no Neutralization is active, attacks have 1.5x power. Otherwise, newly switched or pending-action targets take 1.3x power, or 1.5x on Mountain, Snowy Mountain and Rocky. Fairy Tale, Dragon's Den and Big Top use 1.3x. These bonuses replace one another; Predator never adds more than 1.5x power. Negative defensive stages, unrelated ability effects, screens, Substitute, Protect, type immunities and post-hit healing remain. The Ultra matchup is disabled by ordinary component suppression and Bewitched Woods, Haunted or Holy Terrain.",
 };
 // Approved Kalos/Alola recipients; unrelated holders retain their original packages.
 Object.assign(SharedPassiveComponents, {

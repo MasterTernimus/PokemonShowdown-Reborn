@@ -58,7 +58,7 @@ describe('Approved thirteen Sinnoh Unova Mega passive migrations', () => {
 		q.newlySwitched = true;
 		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 130);
 		battle.field.terrain = 'mountainterrain';
-		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 200);
+		assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 150);
 		assert(!p.hasAbility('ultraego'));
 		assert(!p.hasAbility('ultrainstinct'));
 		p.setAbility('Contrary');

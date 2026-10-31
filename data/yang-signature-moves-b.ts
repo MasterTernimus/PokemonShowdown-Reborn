@@ -1,4 +1,5 @@
-import {YangMove, yangMessage} from './yang-field-bonuses';
+import {yangMessage} from './yang-field-bonuses';
+import type {YangMove} from './yang-field-bonuses';
 import {announceYangImpact} from './yang-field-context';
 import {adaptiveFieldMultiplier} from '../sim/adaptive-cycle';
 import {signatureMoveText} from './signature-move-summaries';
@@ -28,7 +29,7 @@ function winds(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove)
  clearMoveAura.call(this, source, move);
  if (!this.field.isWeather('deltastream') && this.field.setWeather('deltastream', source, move)) {
   this.field.weatherState.duration = (move as YangMove).yang?.eligible ? 5 : 4;
-  this.add('-weather', 'DeltaStream', '[from] move: Wind Dance', '[of] ' + source, '[turns] ' + this.field.weatherState.duration, '[silent]');
+  this.add('-weather', 'DeltaStream', '[from] move: Wind Dance', `[of] ${source}`, `[turns] ${this.field.weatherState.duration}`, '[silent]');
   if (this.field.weatherState.duration === 5) yangMessage(this, move, 'Ciel’s aerial dance sustained the winds!');
  }
 }

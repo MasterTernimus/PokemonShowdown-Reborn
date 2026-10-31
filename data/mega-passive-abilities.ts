@@ -13,7 +13,7 @@ export function installMegaPassiveAbilities(abilities: AbilityDataTable) {
 	}
 	const predatorPower = abilities.predator.onBasePower!;
 	abilities.predator.onBasePower = function (power, source, target, move) {
-		if (move.category !== 'Status' && predatorUltraMatch(this, source, target)) return this.chainModify(2);
+		if (move.category !== 'Status' && predatorUltraMatch(this, source, target)) return this.chainModify(1.5);
 		return predatorPower.call(this, power, source, target, move);
 	};
 	// Perfect Ego hand-codes Ultra Ego's reduction; other composites delegate the primitive.

@@ -1517,8 +1517,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Status moves gain +1 priority; Dark foes usually block them."
 	},
 	"predator": {
-		"desc": "Stat changes it receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, its attacks deal 1.3x damage. Attacks deal 2x damage to targets with Neutralization or Royal Decree.",
-		"shortDesc": "Has Contrary; boosts attacks into slower/new targets; 2x into authority abilities."
+		"desc": "Stat changes it receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, its attacks deal 1.3x damage. Attacks deal 1.5x damage to targets with Neutralization or Royal Decree.",
+		"shortDesc": "Has Contrary; boosts attacks into slower/new targets; 1.5x into authority abilities."
 	},
 	"royalarmament": {
 		"desc": "Steel moves receive STAB. Drill and horn moves have 1.5x power, or 2x on Rocky, Mountain, Snowy Mountain, Cave and Volcanic, where they also bypass protection.",
@@ -3735,8 +3735,8 @@ AbilityDescriptionOverrides.auraprecision = {
  desc: "Full local Ultra Instinct, Shield Dust and Mind's Eye. Ultra Instinct supplies its own whole-attack recovery, first-attack reduction and field interactions. Shield Dust blocks secondary effects aimed at this Pokemon while retaining attacker self-effects. Mind's Eye lets Normal and Fighting moves hit Ghosts, supplies Fairy and Dark STAB, ignores evasion boosts, prevents external accuracy drops, reveals opposing Illusions and applies its Cold Eclipse power and damage reduction.",
 };
 AbilityDescriptionOverrides.predator = {
- shortDesc: 'Extra power against authority and active Ultra abilities, or foes that have not acted.',
- desc: "Doubles attack power against active Ultra Ego, Ultra Instinct and composites containing them. In this matchup only, ignores positive Defense and Special Defense stages and those Ultra damage reductions; negative stages, unrelated defenses and post-hit healing remain. This replaces its first-action bonus and is disabled when the Ultra component is suppressed, including Bewitched Woods, Haunted and Holy Terrain. Existing authority bonus remains: 2x against Neutralization, or Royal Decree/Empress without active Neutralization. Otherwise newly switched or pending-action targets take 1.3x power, 2x on Mountain/Snowy Mountain/Rocky, or 1.5x on Fairy Tale/Dragon's Den/Big Top. Reverses received stat-stage changes without stacking with Contrary.",
+ shortDesc: '1.3x timing power, or 1.5x on rocky fields or against authority/Ultra abilities; no stacking.',
+ desc: "Attacks have 1.5x power against active Ultra Ego, Ultra Instinct and composites containing them. In this matchup only, ignores positive Defense and Special Defense stages and those Ultra damage reductions; negative stages, unrelated defenses and post-hit healing remain. This replaces its first-action bonus and is disabled when the Ultra component is suppressed, including Bewitched Woods, Haunted and Holy Terrain. Against Neutralization, or Royal Decree/Empress without active Neutralization, attacks also have 1.5x power. Otherwise newly switched or pending-action targets take 1.3x power, or 1.5x on Mountain/Snowy Mountain/Rocky. Fairy Tale/Dragon's Den/Big Top use the ordinary 1.3x bonus. Predator's bonuses never stack and never exceed 1.5x. Reverses received stat-stage changes without stacking with Contrary.",
 };
 AbilityDescriptionOverrides.divinemockery = {
  shortDesc: 'Hydra Bond, Mold Breaker and extra Water STAB.',

@@ -1,4 +1,5 @@
-import {YangMove, yangMessage} from './yang-field-bonuses';
+import {yangMessage} from './yang-field-bonuses';
+import type {YangMove} from './yang-field-bonuses';
 import {adaptiveFieldMultiplier} from '../sim/adaptive-cycle';
 import type {MoveDataTable} from '../sim/dex-moves';
 import {signatureMoveText} from './signature-move-summaries';
@@ -11,7 +12,7 @@ function veil(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) 
   const duration = (move as YangMove).yang?.eligible ? 4 : 3;
   source.side.sideConditions.auroraveil.duration = duration;
   if (duration === 4) yangMessage(this, move, 'Serra’s frozen reflections held the veil in place!');
-  this.add('-sidestart', source.side, 'move: Aurora Veil', '[turns] ' + source.side.sideConditions.auroraveil.duration, '[silent]');
+  this.add('-sidestart', source.side, 'move: Aurora Veil', `[turns] ${source.side.sideConditions.auroraveil.duration}`, '[silent]');
  }
 }
 function clearField(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {

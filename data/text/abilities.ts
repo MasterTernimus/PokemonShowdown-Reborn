@@ -4058,8 +4058,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	predator: {
 		name: "Predator",
-		desc: "Stat changes this Pokemon receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, this Pokemon's attacks deal 1.3x damage. Attacks deal 2x damage to targets with Neutralization or Royal Decree.",
-		shortDesc: "Has Contrary; boosts attacks into slower/new targets; 2x into authority abilities.",
+		desc: "Stat changes this Pokemon receives are inverted, except those from Z-Power effects. If the target has not moved yet or just switched in, this Pokemon's attacks deal 1.3x damage. Attacks deal 1.5x damage to targets with Neutralization or Royal Decree.",
+		shortDesc: "Has Contrary; boosts attacks into slower/new targets; 1.5x into authority abilities.",
 	},
 	royalarmament: {
 		name: "Royal Armament",

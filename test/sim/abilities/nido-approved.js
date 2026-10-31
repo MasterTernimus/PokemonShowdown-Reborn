@@ -12,8 +12,8 @@ describe('Approved Nido pair and defensive passive swaps',()=>{afterEach(()=>{ba
   // Later explicit approvals override only these expectations; retain the historical fixture.
   const approvedStats={mewtwomegax:{hp:106,atk:195,def:130,spa:99,spd:100,spe:150},mewtwomegay:{hp:106,atk:90,def:100,spa:199,spd:130,spe:155},probopass:{hp:75,atk:35,def:150,spa:110,spd:155,spe:25},stunfisk:{hp:109,atk:66,def:99,spa:95,spd:109,spe:32},stunfiskgalar:{hp:109,atk:95,def:109,spa:66,spd:99,spe:32},staraptor:{hp:85,atk:120,def:80,spa:50,spd:70,spe:105},staraptormega:{hp:85,atk:140,def:110,spa:60,spd:100,spe:115},
    sevipermega:{hp:75,atk:140,def:120,spa:90,spd:120,spe:65},
-   mightyena:{hp:90,atk:115,def:80,spa:60,spd:80,spe:125},
-   mightyenadeso:{hp:90,atk:115,def:80,spa:60,spd:80,spe:125},
+   mightyena:{hp:90,atk:115,def:80,spa:75,spd:80,spe:110},
+   mightyenadeso:{hp:90,atk:115,def:80,spa:75,spd:80,spe:110},
    toxicroak:{hp:83,atk:121,def:70,spa:111,spd:70,spe:95},
    toxicroakdeso:{hp:83,atk:121,def:70,spa:111,spd:70,spe:95},
    cinccinodeso:{hp:75,atk:110,def:90,spa:60,spd:90,spe:125},
