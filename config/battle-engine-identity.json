@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "94eae9deea90d15e2e18449c7fd1cc651dde9314b544f4dd8d1419de2505a0b5",
-  "packageManifestSHA256": "3127980d212baf6fe2de970b8e24ca1a0998ea3a1991dd2dd9008a4f182dd7a0",
-  "mechanicsSHA256": "925efad1d6d7e25ae359607093a6fe9fd186cf53078479c7e3df5121aae2f849",
+  "packageEngineRevision": "b3e1fd68bfad9c7f5804703eadb75399a46077d0b92a42e1e8e1ddcfb6a0f894",
+  "packageManifestSHA256": "2d8a21e5a5ffb819393091c966ab8c8406c8e5dcebce4267bcb0957546f80a72",
+  "mechanicsSHA256": "9f3d4c4e55031bf62b8503877419e5fbc585097fda7fcb24e167b9e2fde5fe3d",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "b5629243fb07d857bdf1b5ef2f55cf0da9b86f17e106a2d8b2384d88b15a419e"
+      "sha256": "0dfac3034137b2cdac61d24120c90c082cb0157a10e69d9d149904072b4dff4e"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -19,7 +19,7 @@
     },
     {
       "file": "dist/data/ability-display-summaries.js",
-      "sha256": "d3c64e44daa64f9357ad0549b3bfe5311fcdf5906f900f00bf51ad33c657e30d"
+      "sha256": "9ec4a042857d4d1d0066c4d89fcb3d541142298f6cbb3635e5ee9dea2ecc22be"
     },
     {
       "file": "dist/data/ability-display.js",
@@ -155,7 +155,7 @@
     },
     {
       "file": "dist/data/concise-ability-descriptions.js",
-      "sha256": "d66eaf525c3e7ffc1fe85129e7e70d73fc98179e7d3c184f23d87c2bb33b5c8b"
+      "sha256": "f02eb425ee38a5bbbf0d13ace13090c2c3e8347d7153147e55b52f0cad4bcc20"
     },
     {
       "file": "dist/data/conditions.js",
@@ -675,7 +675,7 @@
     },
     {
       "file": "dist/data/raging-crowns-approved.js",
-      "sha256": "6ba5d48b53578ea3653afc734080582918617c31ae543e47700106c80cc07e6c"
+      "sha256": "882f828fbf24aea24d99cd8c17426f8d775b6823817c3c6a55fb4b8d4208c98b"
     },
     {
       "file": "dist/data/random-doubles-sets.json",
@@ -727,7 +727,7 @@
     },
     {
       "file": "dist/data/rival-support-descriptions.js",
-      "sha256": "50168eeeb2ce63a062143c71bf34a46518c651b3aeb584e818d169a579c917ed"
+      "sha256": "1df8589f6369aea5b55f9804396cf0cb83d3e1bd32a56b841e7c33d7cfbf2948"
     },
     {
       "file": "dist/data/rks-system-memory.js",
@@ -875,7 +875,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "d7591db53d6d80698cbe13ca7de1081a802c4b6f5d3de1cbba8230d7f7d1cec8"
+      "sha256": "f28a74553347062e0d295e9399834dde8157b269889da6bc57ff54d0ccb2910b"
     },
     {
       "file": "dist/data/text/default.js",
@@ -1226,7 +1226,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "c5af48dda74137dba333edada44bbb23a5af08d8060c0e2c457ee759c4d18fef",
+      "sha256": "caeb743312f8e27a14b0a2e9f8dbad90997f9147d81e01d5b1e258c5b88d291d",
       "reason": "Reviewed description-only table or license/readme."
     },
     {
