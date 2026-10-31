@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "997088b66fcb0abb24a516aa36d3f978f1bff5d989cd3733c2f869c8158998c8",
-  "packageManifestSHA256": "d1f10b8987fc192b26ef133e2358adaea775146b19379ff5189d783640a91a0f",
-  "mechanicsSHA256": "b78b0e12ec6826e48350694baecda3a93b7c176720f7cde18fa63c10a6b6535a",
+  "packageEngineRevision": "d16e3434f42cdad1ee3ff7c5fb603f1ec9d3118a0b8f6493653e121e925b9e3e",
+  "packageManifestSHA256": "955cc6912f80c3bdf8c31f2632fa1780a99c94ce0d8a6df5ef069474185324a4",
+  "mechanicsSHA256": "0b79dc6b4de42e42dd2a2f7aecc78976f1307cef63394a7b9b48724520db51ae",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -247,7 +247,7 @@
     },
     {
       "file": "dist/data/field-setter-reductions.js",
-      "sha256": "ba3bab9f75702b0a78c7514164034c7241d641e407418aac2718acabff5d3caa"
+      "sha256": "c2be1328489e73c5e7c6516ee90aab5b57e4fed51a60ff0f4a2f6ac6102fba00"
     },
     {
       "file": "dist/data/final-passive-migrations.js",
