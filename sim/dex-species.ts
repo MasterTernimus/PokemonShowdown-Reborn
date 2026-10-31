@@ -423,8 +423,6 @@ export class Learnset {
 export const Gen9MoveLearnsetExclusions: {[id: string]: readonly string[]} = {
 	pidgey: ['sing'],
 	pidgeotto: ['sing'],
-	pidgeot: ['sing'],
-	pidgeotmega: ['sing'],
 	raichu: ['sing'],
 	raichualola: ['sing'],
 	raichumegax: ['sing'],

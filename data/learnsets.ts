@@ -113303,4 +113303,5 @@ Learnsets.lapras.learnset!.wildcharge = ['9M'];
 // Remove direct access; the Dex exclusion also blocks inherited/event sources for these forms.
 for (const id of ['raichu', 'raichualola'] as const) delete Learnsets[id].learnset!.sing;
 
-for (const id of ['pidgey', 'pidgeotto', 'pidgeot'] as const) delete Learnsets[id].learnset!.sing;
+for (const id of ['pidgey', 'pidgeotto'] as const) delete Learnsets[id].learnset!.sing;
+Learnsets.pidgeot.learnset!.sing = ['9L1'];
