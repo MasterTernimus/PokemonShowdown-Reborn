@@ -17,5 +17,5 @@ export function clearMoveAura(this: Battle, source: Pokemon, move: ActiveMove): 
 
 export function skipClearingField(source: Pokemon, move: ActiveMove): boolean {
  const state = move as ActiveMove & {loreFieldHit?: boolean; loreAuraConsumed?: boolean};
- return auraClearingMoves.has(move.id) && (!source.hp || !state.loreFieldHit || !!state.loreAuraConsumed);
+ return auraClearingMoves.has(move.id) && (!source.hp || !state.loreFieldHit || !!state.loreAuraConsumed || !!(move as ActiveMove & {yangPreserveField?: boolean}).yangPreserveField);
 }

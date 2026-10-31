@@ -1,5 +1,6 @@
 import { dualWieldContext, setDualWieldContext, restoreDualWieldContext } from './dual-wield-power';
 import {recordRegiEntry} from '../data/regi-approved';
+import {takeFarewellGift, resolveFarewellGift} from '../data/field-setter-reductions';
 import { warnIncomingOpponents } from '../data/warned-moves';
 import {encoreAriaAfterHits} from './encore-aria';
 import {prepareMeloettaMove} from '../data/meloetta-encore';
@@ -287,6 +288,7 @@ export class BattleActions {
    side.removeSlotCondition(pos, 'soulescort');
    if (soulEscort.source === oldActive && oldActive && !oldActive.hp) pokemon.m.soulEscortEntry = true;
   }
+		takeFarewellGift(pokemon, oldActive, pos);
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
 		if (sourceEffect) {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
@@ -342,9 +344,12 @@ export class BattleActions {
     delete poke.m.soulEscortEntry;
    }
    for (const side of this.battle.sides) if (!side.pokemon.some(mon => mon.hp && !mon.isActive)) {
-    for (let slot = 0; slot < side.active.length; slot++) side.removeSlotCondition(slot, 'soulescort');
+    for (let slot = 0; slot < side.active.length; slot++) {
+     for (const id of ['soulescort', 'lastbloom', 'tyrantlegacy']) side.removeSlotCondition(slot, id);
+    }
    }
   }
+		for (const poke of switchersIn) resolveFarewellGift(poke);
 		for (const poke of switchersIn) poke.revertSuppressedRegionalForm();
 		warnIncomingOpponents(this.battle, switchersIn);
 
@@ -1264,7 +1269,6 @@ export class BattleActions {
 		const originalMultihitTarget = targets.find(target => !!target) || null;
 		const twinStrike = ['twincannons', 'twinblades'].includes(move.multihitType || '');
 		// Snapshot identities: a switch-in must never inherit the second strike.
-		const twinStrikeFoes = twinStrike ? pokemon.foes().slice() : [];
 		const battleBondFoes = move.id === 'watershuriken' ? pokemon.foes().slice() : [];
 		let battleBondHitOffset = 0;
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
@@ -1278,17 +1282,7 @@ export class BattleActions {
 			if (twinStrike && (!pokemon.hp || pokemon.fainted || !pokemon.isActive)) break;
 			if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
 			(move as any).spilloverDamageModifier = undefined;
-			if (twinStrike && hit > 1 &&
-				(this.battle.gameType === 'freeforall' || !originalMultihitTarget?.hp)) {
-				const livingFoes = twinStrikeFoes.filter(foe => foe.isActive && !foe.isAlly(pokemon) &&
-					this.canChainHitTarget(foe, pokemon, move));
-				const otherFoes = livingFoes.filter(foe => foe !== originalMultihitTarget);
-				const candidates = otherFoes.length ? otherFoes : livingFoes;
-				if (!candidates.length) break;
-				targets = [this.battle.sample(candidates)];
-				damage = [0];
-				move.smartTarget = false;
-			}
+			if (twinStrike && hit > 1 && (!originalMultihitTarget?.hp || !originalMultihitTarget.isActive)) break;
 			if (hit > 1 && move.multihitType === 'dualwield' && !move.dualWieldFullPower && !(move as any).fallenStarSpread) {
 				const livingFoes = pokemon.foes().filter(foe => this.canChainHitTarget(foe, pokemon, move));
 				if (!livingFoes.length) break;
@@ -1977,6 +1971,12 @@ export class BattleActions {
 		const hydraBondFollowUp = move.multihitType === 'hydrabond' && move.hit > 1;
 		for (const target of targets) {
 			if (target === false) continue;
+			// The approved Yang status bonuses roll once per damaged opponent, not per hit.
+			const yangTargets = (move as ActiveMove & {yangSecondaryTargets?: Set<Pokemon>}).yangSecondaryTargets;
+			if (yangTargets && target) {
+				if (target.isAlly(source) || (target.getMoveHitData(move).damage || 0) <= 0 || yangTargets.has(target)) continue;
+				yangTargets.add(target);
+			}
 			const secondaries: Dex.SecondaryEffect[] =
 				this.battle.runEvent('ModifySecondaries', target, source, moveData, (target ? adaptiveWeatherSecondaries(this.battle, source, target, adaptiveMoveView(moveData, source, target)) : moveData.secondaries)?.slice() || []);
 			for (const secondary of secondaries) {
@@ -2439,7 +2439,7 @@ export class BattleActions {
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = (!!(move as any).exaltedAether && move.hit > 1) || grandStrategyPrepared(source, target, move) || ((move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive);
 		if (move.category !== 'Status' && this.battle.movehasType(move, 'Fire') && source.hasAbilityOrPassive('coronafurnace')) ignorePositiveDefensive = true;
-		if (defenseStat === 'def' && this.battle.movehasType(move, 'Rock') && source.hasAbility('keenhunt') && !source.isAlly(target) && target.hp <= target.maxhp / 2) ignorePositiveDefensive = true;
+		if (defenseStat === 'def' && this.battle.movehasType(move, 'Rock') && source.hasAbility('keenhunt') && !source.isAlly(target)) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && move.flags.kick && source.hasAbility('imperialprincess')) ignorePositiveDefensive = true;
 		if (defender === target && ['def', 'spd'].includes(defenseStat) &&
 			predatorUltraMatch(this.battle, source, target)) ignorePositiveDefensive = true;

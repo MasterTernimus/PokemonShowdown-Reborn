@@ -23,22 +23,22 @@ describe('Approved calculator ability followups', () => {
 				assert(Math.abs(reduced.max - base.max * mult) < 2);
 			});
 
-	it('resolves Voidcraft and exposes new Exalt components', () => {
+	it('resolves Voidcraft and exposes new Imperial Edge components', () => {
 		const s = scenario();
 		s.actors[1].ability = 'Shadow Guard';
 		assert.equal(calculateScenario(s).resolved.actors[1].ability, 'Void Craft');
 
 		const m = calculatorMetadata();
-		assert.deepEqual(m.abilityComponents.exalt, ['Defiant', 'Sharpness', 'Mold Breaker']);
+		assert.deepEqual(m.abilityComponents.imperialedge, ['Defiant', 'Sharpness', 'Mold Breaker']);
 		assert(m.abilityComponents.voidcraft.includes('Shadow Shield'));
 		assert(!m.abilityComponents.shadowguard);
 	});
 
-	it('Exalt boosts Steel Wing without globally changing it', () => {
+	it('Imperial Edge boosts Steel Wing without globally changing it', () => {
 		const s = scenario();
 		s.move = 'Steel Wing';
 		const base = calculateScenario(s).results[1];
-		s.actors[0].ability = 'Exalt';
+		s.actors[0].ability = 'Imperial Edge';
 		const boosted = calculateScenario(s).results[1];
 		assert(boosted.max > base.max * 1.4);
 	});

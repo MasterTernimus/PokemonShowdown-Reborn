@@ -42,21 +42,21 @@ describe('Authorized Cold Eclipse corrections', () => {
 		battle.field.clearTerrain(); entry(p); assert.equal(q.boosts.def, 0); assert.equal(other.boosts.def, -3); q.removeVolatile('substitute'); entry(p); assert.equal(q.boosts.def, 0);
 		battle.field.setTerrain('coldeclipseterrain', p); entry(p); assert.equal(q.boosts.def, -2); assert.equal(other.boosts.def, -5);
 	});
-	for (const [field, power, limit] of [['', 100, 60], ['coldeclipseterrain', 100, 0], ['fairytaleterrain', 200, 60], ['forestterrain', 150, 60]])it('Relentless Hunt applies one power/priority benefit on ' + (field || 'ordinary field'), () => {
+	for (const [field, power, limit] of [['', 100, 60], ['coldeclipseterrain', 150, 80], ['fairytaleterrain', 150, 60], ['forestterrain', 130, 60]])it('Relentless Hunt applies one power/priority benefit on ' + (field || 'ordinary field'), () => {
 		const [p, q] = setup(field); p.setAbility('Relentless Hunt');
 		for (const bp of [40, 60, 61, 80, 81, 100]) { const move = Object.assign(Dex.getActiveMove('tackle'), { basePower: bp }); assert.equal(battle.runEvent('BasePower', p, q, move, 100), power); assert.equal(battle.runEvent('ModifyPriority', p, q, move, 0), bp <= limit ? 1 : 0); }
 		if (field === 'coldeclipseterrain') { p.addVolatile('gastroacid'); const move = Dex.getActiveMove('tackle'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), 100); assert.equal(battle.runEvent('ModifyPriority', p, q, move, 0), 0); }
 	});
 	it('Relentless Hunt retains independent Ice and Dragon field boosts once each', () => {
-		const [p, q] = setup(); p.setAbility('Relentless Hunt'); for (const [type, expected] of [['Ice', 120], ['Dragon', 200], ['Fighting', 100], ['Normal', 100]]) {
+		const [p, q] = setup(); p.setAbility('Relentless Hunt'); for (const [type, expected] of [['Ice', 180], ['Dragon', 300], ['Fighting', 150], ['Normal', 150]]) {
 			const move = Object.assign(Dex.getActiveMove('tackle'), { type }); assert.equal(battle.runEvent('BasePower', p, q, move, 100), expected, type);
 		}
 	});
-	it('calculator does not retain the removed Relentless Hunt field power bonus', () => {
+	it('calculator applies the approved 1.5x Relentless Hunt bonus', () => {
 		const { calculateScenario } = require('../../../dist/sim/custom-calculator');
 		const scenario = { format: 'gen9nofieldsinglesgame', field: 'coldeclipseterrain', move: 'Tackle', samples: 16, seed: 42, actors: Array.from({ length: 4 }, () => ({ species: 'Mew', ability: 'No Ability' })) };
 		const plain = calculateScenario(scenario).results[1]; scenario.actors[0].ability = 'Relentless Hunt'; const boosted = calculateScenario(scenario).results[1];
-		for (const key of ['min', 'max'])assert(Math.abs(boosted[key] - plain[key]) <= 3, key);
+		for (const key of ['min', 'max'])assert(Math.abs(boosted[key] - plain[key] * 1.5) <= 3, key);
 	});
 	for (const [attack, defender, ratio] of [['Fighting', 'Ice', 1], ['Ice', 'Dragon', 0.25]])it('real damage honors corrected ' + attack + '/' + defender + ' effectiveness', () => {
 		const [p, q] = setup(); q.setType(defender); p.setType('Normal'); battle.randomizer = n => n;

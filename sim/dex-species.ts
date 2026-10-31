@@ -421,6 +421,14 @@ export class Learnset {
 // Current custom movepool removals are scoped to the original queried form.
 // Filter inherited sources without deleting access from unlisted ancestors or regional forms.
 export const Gen9MoveLearnsetExclusions: {[id: string]: readonly string[]} = {
+	pidgey: ['sing'],
+	pidgeotto: ['sing'],
+	pidgeot: ['sing'],
+	pidgeotmega: ['sing'],
+	raichu: ['sing'],
+	raichualola: ['sing'],
+	raichumegax: ['sing'],
+	raichumegay: ['sing'],
 	absol: ["tachyoncutter"],
 	absolmega: ["tachyoncutter"],
 	absolmegaz: ["tachyoncutter"],

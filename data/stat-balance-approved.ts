@@ -1,0 +1,23 @@
+/** Approved stat changes and redistributions. */
+export const ApprovedStatRebalances: Record<string, StatsTable> = {
+	luvdisc: {hp: 63, atk: 30, def: 55, spa: 40, spd: 65, spe: 97},
+	spinda: {hp: 70, atk: 60, def: 70, spa: 60, spd: 70, spe: 60},
+	farfetchd: {hp: 67, atk: 90, def: 55, spa: 58, spd: 62, spe: 60},
+	froslassmega: {hp: 70, atk: 80, def: 80, spa: 140, spd: 100, spe: 130},
+	glalie: {hp: 80, atk: 80, def: 85, spa: 80, spd: 85, spe: 90},
+	glaliemega: {hp: 80, atk: 120, def: 90, spa: 120, spd: 90, spe: 100},
+	garchompmega: {hp: 108, atk: 145, def: 120, spa: 115, spd: 115, spe: 97},
+	chandeluremega: {hp: 80, atk: 50, def: 120, spa: 175, spd: 120, spe: 95},
+	venusaurmega: {hp: 80, atk: 80, def: 133, spa: 122, spd: 130, spe: 80},
+	dusknoirmega: {hp: 65, atk: 165, def: 145, spa: 90, spd: 150, spe: 55},
+	ariadosmega: {hp: 80, atk: 120, def: 115, spa: 60, spd: 115, spe: 85},
+	breloommega: {hp: 80, atk: 145, def: 90, spa: 75, spd: 105, spe: 105},
+	sharpedomegay: {hp: 70, atk: 65, def: 115, spa: 140, spd: 115, spe: 95},
+	rampardos: {hp: 87, atk: 155, def: 80, spa: 50, spd: 75, spe: 83},
+	arcaninehisui: {hp: 110, atk: 125, def: 105, spa: 65, spd: 100, spe: 95},
+	delibird: {hp: 75, atk: 114, def: 70, spa: 35, spd: 80, spe: 116},
+	trevenant: {hp: 108, atk: 120, def: 95, spa: 50, spd: 101, spe: 76},
+	mudsdale: {hp: 120, atk: 130, def: 110, spa: 55, spd: 100, spe: 35},
+	alakazamrejuv: {hp: 80, atk: 120, def: 95, spa: 45, spd: 95, spe: 123},
+	poliwrathrejuv: {hp: 100, atk: 75, def: 95, spa: 145, spd: 90, spe: 55},
+};

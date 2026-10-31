@@ -240,7 +240,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	bugmemory: {
 		name: "Bug Memory",
-		shortDesc: "Holder's Multi-Attack is Bug type. RKS System gives Tinted Lens and Shield Dust.",
+		shortDesc: "Holder's Multi-Attack is Bug type. RKS System gives Tinted Lens.",
 	},
 	burndrive: {
 		name: "Burn Drive",
@@ -407,7 +407,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	darkmemory: {
 		name: "Dark Memory",
-		shortDesc: "Holder's Multi-Attack is Dark type. RKS System gives Pressure and Intimidate.",
+		shortDesc: "Holder's Multi-Attack is Dark type. RKS System gives Pressure.",
 	},
 	darkranite: {
 		name: "Darkranite",
@@ -491,7 +491,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dragonmemory: {
 		name: "Dragon Memory",
-		shortDesc: "Holder's Multi-Attack is Dragon type. RKS System gives Marvel Scale and Tough Claws.",
+		shortDesc: "Holder's Multi-Attack is Dragon type. RKS System gives Marvel Scale.",
 	},
 	dragonscale: {
 		name: "Dragon Scale",
@@ -569,7 +569,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	electricmemory: {
 		name: "Electric Memory",
-		desc: "Holder's Multi-Attack is Electric type. RKS System gives Transistor and Lightning Rod.",
+		desc: "Holder's Multi-Attack is Electric type. RKS System gives Lightning Rod.",
 	},
 	electriumz: {
 		name: "Electrium Z",
@@ -612,7 +612,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	fairymemory: {
 		name: "Fairy Memory",
-		shortDesc: "Holder's Multi-Attack is Fairy type. RKS System gives Invigorate and Friend Guard.",
+		shortDesc: "Holder's Multi-Attack is Fairy type. RKS System gives Misty Surge.",
 	},
 	falinksite: {
 		name: "Falinksite",
@@ -635,7 +635,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	fightingmemory: {
 		name: "Fighting Memory",
-		shortDesc: "Holder's Multi-Attack is Fighting type. RKS System gives Inner Focus and Sheer Force.",
+		shortDesc: "Holder's Multi-Attack is Fighting type. RKS System gives Inner Focus.",
 	},
 	fightiniumz: {
 		name: "Fightinium Z",
@@ -660,7 +660,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	firememory: {
 		name: "Fire Memory",
-		shortDesc: "Holder's Multi-Attack is Fire type. RKS System gives Soul Fire and Flame Body.",
+		shortDesc: "Holder's Multi-Attack is Fire type. RKS System gives Flash Fire.",
 	},
 	firestone: {
 		name: "Fire Stone",
@@ -704,7 +704,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	flyingmemory: {
 		name: "Flying Memory",
-		shortDesc: "Holder's Multi-Attack is Flying type. RKS System gives Gale Wings and Air Lock.",
+		shortDesc: "Holder's Multi-Attack is Flying type. RKS System gives Wind Rider.",
 	},
 	flygonite: {
 		name: "Flygonite",
@@ -805,7 +805,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	ghostmemory: {
 		name: "Ghost Memory",
-		shortDesc: "Holder's Multi-Attack is Ghost type. RKS System gives Soul Fire and Cursed Body.",
+		shortDesc: "Holder's Multi-Attack is Ghost type. RKS System gives Infiltrator.",
 	},
 	glalitite: {
 		name: "Glalitite",
@@ -844,7 +844,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	grassmemory: {
 		name: "Grass Memory",
-		shortDesc: "Holder's Multi-Attack is Grass type. RKS System gives Hospitality and Chlorophyll.",
+		shortDesc: "Holder's Multi-Attack is Grass type. RKS System gives Hospitality.",
 	},
 	grassyseed: {
 		name: "Grassy Seed",
@@ -890,7 +890,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	groundmemory: {
 		name: "Ground Memory",
-		shortDesc: "Holder's Multi-Attack is Ground type. RKS System gives Sand Rush and Stamina.",
+		shortDesc: "Holder's Multi-Attack is Ground type. RKS System gives Earth Eater.",
 	},
 	gyaradosite: {
 		name: "Gyaradosite",
@@ -974,7 +974,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icememory: {
 		name: "Ice Memory",
-		shortDesc: "Holder's Multi-Attack is Ice type. RKS System gives Ice Body and Slush Rush.",
+		shortDesc: "Holder's Multi-Attack is Ice type. RKS System gives Thermal Exchange.",
 	},
 	icestone: {
 		name: "Ice Stone",
@@ -1515,7 +1515,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	poisonmemory: {
 		name: "Poison Memory",
-		shortDesc: "Holder's Multi-Attack is Poison type. RKS System gives Regenerator and Corrosion.",
+		shortDesc: "Holder's Multi-Attack is Poison type. RKS System gives Regenerator.",
 	},
 	pokeball: {
 		name: "Poke Ball",
@@ -1590,7 +1590,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	psychicmemory: {
 		name: "Psychic Memory",
-		shortDesc: "Holder's Multi-Attack is Psychic type. RKS System gives Magic Bounce and Magic Guard.",
+		shortDesc: "Holder's Multi-Attack is Psychic type. RKS System gives Magic Bounce.",
 	},
 	psychicseed: {
 		name: "Psychic Seed",
@@ -1710,7 +1710,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	rockmemory: {
 		name: "Rock Memory",
-		shortDesc: "Holder's Multi-Attack is Rock type. RKS System gives Purifying Salt and Solid Rock.",
+		shortDesc: "Holder's Multi-Attack is Rock type. RKS System gives Purifying Salt.",
 	},
 	rockyhelmet: {
 		name: "Rocky Helmet",
@@ -1964,7 +1964,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	steelmemory: {
 		name: "Steel Memory",
-		shortDesc: "Holder's Multi-Attack is Steel type. RKS System gives Sworn Duty and Mirror Armor.",
+		shortDesc: "Holder's Multi-Attack is Steel type. RKS System gives Sworn Duty.",
 	},
 	stick: {
 		name: "Stick",
@@ -2533,7 +2533,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	watermemory: {
 		name: "Water Memory",
-		shortDesc: "Holder's Multi-Attack is Water type. RKS System gives Swift Swim and Water Veil.",
+		shortDesc: "Holder's Multi-Attack is Water type. RKS System gives Swift Swim.",
 	},
 	waterstone: {
 		name: "Water Stone",

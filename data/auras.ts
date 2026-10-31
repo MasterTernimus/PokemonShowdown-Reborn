@@ -28,6 +28,12 @@ const rainbowMoves = ['silverwind', 'mysticalfire', 'dragonpulse', 'triattack', 
 const psychicMoves = ['secretpower', 'hiddenpower', 'hex', 'magicalleaf', 'mysticalfire', 'moonblast', 'aurasphere', 'focusblast', 'mindblown'];
 
 export const Auras: {[id: string]: AuraData} = {
+	riftaura: {
+		id: 'riftaura', name: 'Rift Aura', turns: 5, mimicryType: 'Dark',
+		secretPowerMove: 'astonish', naturePowerMove: 'darkpulse', damageMultipliers: {},
+		secondaryTypeAdditions: {}, typeMultipliers: {Dark: 1.3, Ghost: 1.2, Fairy: 0.75}, typeCondition: 'none', moveMessages: {},
+		typeMessage: 'The Rift Aura altered the attack\'s power!', endMessage: 'The Rift Aura faded.', statusBuffs: [], statusNerfs: [],
+	},
  ashenaura: {
   id: 'ashenaura', name: 'Ashen Aura', turns: 5, mimicryType: 'Fire',
   secretPowerMove: 'incinerate', naturePowerMove: 'infernalparade',
@@ -100,3 +106,5 @@ export const Auras: {[id: string]: AuraData} = {
 		statusBuffs: ['expandingforce'], statusNerfs: [],
 	},
 };
+
+Object.assign(Auras, {"hauntedaura":{"turns":5,"damageMultipliers":{},"secondaryTypeAdditions":{},"typeCondition":"none","moveMessages":{},"statusBuffs":[],"statusNerfs":[],"id":"hauntedaura","name":"Haunted Aura","mimicryType":"Ghost","secretPowerMove":"astonish","naturePowerMove":"shadowball","typeMultipliers":{"Ghost":1.2},"typeMessage":"Wandering spirits empowered the attack!","endMessage":"The wandering spirits departed."},"bewitchedaura":{"turns":5,"damageMultipliers":{},"secondaryTypeAdditions":{},"typeCondition":"none","moveMessages":{},"statusBuffs":[],"statusNerfs":[],"id":"bewitchedaura","name":"Bewitched Aura","mimicryType":"Fairy","secretPowerMove":"confusion","naturePowerMove":"psychic","typeMultipliers":{"Psychic":1.2,"Fairy":1.2},"typeMessage":"The strange hush empowered the attack!","endMessage":"The bewitching hush faded."}});

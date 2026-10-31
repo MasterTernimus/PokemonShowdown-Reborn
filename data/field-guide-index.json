@@ -1,5 +1,5 @@
 {
-  "fingerprint": "d6e6da1a6b1d5417372104ade7ff2b24f458e1d6089a5bd3c4262e6150111ef9",
+  "fingerprint": "255ad1a6f4cd104deccf8d2dece897071fd138566defc7b9873490df288f1fe2",
   "fields": {
     "flowergarden1": {
       "abilities": [
@@ -358,16 +358,29 @@
     },
     "infernaleclipseterrain": {
       "abilities": [
+        "baddreams",
         "blaze",
+        "desolateland",
+        "flamebody",
         "flareboost",
+        "flashfire",
+        "iceface",
         "icescales",
+        "magmaarmor",
         "mimicry",
+        "pastelveil",
+        "perishbody",
         "prismarmor"
       ],
       "moves": [
+        "burnup",
         "camouflage",
         "hex",
+        "nastyplot",
+        "nightmare",
+        "stealthrock",
         "terrainpulse",
+        "torment",
         "naturepower"
       ],
       "items": [
@@ -937,7 +950,6 @@
         "perfectforesight",
         "dryskin",
         "fortressshell",
-        "gooey",
         "liquidooze",
         "merciless",
         "mimicry",

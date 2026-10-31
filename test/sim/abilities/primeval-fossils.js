@@ -59,18 +59,18 @@ describe('Primeval fossil pair', () => {
 		if (suppression === 'gastroacid') p.addVolatile('gastroacid', q);
 		hit(q, p, 1000); assert.equal(p.hp, 0); assert(!p.m.primevalSkullSpent);
 	});
-	for (const category of ['Physical', 'Special']) it(`Shield reflects and heals half of ${category} HP damage without a contact requirement`, () => {
+	for (const category of ['Physical', 'Special']) it(`Shield reflects half and heals 30% of ${category} HP damage without a contact requirement`, () => {
 		const [p, q] = setup('Primeval Shield');
 		hit(q, p, 200, {category, flags: {protect: 1}});
-		assert.equal(p.hp, 900); assert.equal(q.hp, 900);
+		assert.equal(p.hp, 860); assert.equal(q.hp, 900);
 	});
 	it('Shield processes each hit without recursively reflecting recoil', () => {
 		const [p, q] = setup('Primeval Shield', 'Primeval Shield');
-		hit(q, p, 200, {multihit: 3}); assert.equal(p.hp, 700); assert.equal(q.hp, 700);
+		hit(q, p, 200, {multihit: 3}); assert.equal(p.hp, 580); assert.equal(q.hp, 700);
 	});
 	it('Shield stops the remaining hits if recoil knocks out the attacker', () => {
 		const [p, q] = setup('Primeval Shield'); q.hp = 100;
-		hit(q, p, 200, {multihit: 3}); assert.equal(p.hp, 900); assert.equal(q.hp, 0);
+		hit(q, p, 200, {multihit: 3}); assert.equal(p.hp, 860); assert.equal(q.hp, 0);
 	});
 	it('Shield reflects actual damage from a lethal hit but cannot revive its holder', () => {
 		const [p, q] = setup('Primeval Shield'); p.hp = 100;
@@ -88,7 +88,7 @@ describe('Primeval fossil pair', () => {
 	});
 	for (const ability of ['Rock Head', 'Primeval Skull', 'Magic Guard']) it(`${ability} blocks Shield recoil while recovery remains independent`, () => {
 		const [p, q] = setup('Primeval Shield', ability);
-		hit(q, p); assert.equal(p.hp, 900); assert.equal(q.hp, 1000);
+		hit(q, p); assert.equal(p.hp, 860); assert.equal(q.hp, 1000);
 	});
 	it('Heal Block stops Shield healing without stopping its recoil', () => {
 		const [p, q] = setup('Primeval Shield'); p.addVolatile('healblock', q);
@@ -101,12 +101,12 @@ describe('Primeval fossil pair', () => {
 	});
 	it('Shield applies to allied hits in doubles', () => {
 		const [p] = setup('Primeval Shield', 'No Ability', 'doubles'); const ally = battle.p1.active[1];
-		hit(ally, p); assert.equal(p.hp, 900); assert.equal(ally.hp, 900);
+		hit(ally, p); assert.equal(p.hp, 860); assert.equal(ally.hp, 900);
 	});
 	it('Shield recognizes every attacker in Free-for-All', () => {
 		const [p] = setup('Primeval Shield', 'No Ability', 'freeforall');
 		for (const side of [battle.p2, battle.p3, battle.p4]) { hit(side.active[0], p); assert.equal(side.active[0].hp, 900); }
-		assert.equal(p.hp, 700);
+		assert.equal(p.hp, 580);
 	});
 	it('Shield rounds odd damage down and retains a minimum of one', () => {
 		const [p, q] = setup('Primeval Shield');

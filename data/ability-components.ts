@@ -68,7 +68,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	celestialheart: ['soulheart', 'friendguard', 'serenegrace'],
 	phalanxform: ['hydrabond', 'friendguard', 'battlearmor'],
 	astralcore: ['purepower', 'naturalcure', 'illuminate'],
-	doomwarning: ['magicbounce', 'magicguard', 'anticipation'],
+	doomwarning: ['magicbounce', 'magicguard'],
 	ancientbloom: ['effectspore', 'selfsufficient', 'proficient'],
 	furnaceengine: ['steamengine', 'flamebody', 'selfsufficient', 'solidrock'],
 	apexflytrap: ['levitate'],
@@ -87,7 +87,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	nobledance: ['dancer', 'hospitality', 'owntempo'],
 	noblearmor: ['prismarmor', 'icebody'],
 	noblerider: ['swiftswim', 'moldbreaker'],
-	gooey: ['hydration', 'sapsipper'],
+	gooey: [],
 	irondominion: ['pressure', 'swornduty', 'mirrorarmor'],
 	bewitchingmajesty: ['magicbounce', 'queenlymajesty'],
 	soulstrike: [],
@@ -1055,3 +1055,29 @@ Object.assign(AbilityComponents, LoreComponents);
 
 import { TidalPoiseComponents } from './terajuma-poise';
 AbilityComponents.tidalpoise = TidalPoiseComponents;
+
+AbilityComponents.omensight = ['anticipation', 'forewarn'];
+AbilityComponents.gentleembrace = ['hydration'];
+AbilityComponents.shellboundfury = [];
+AbilityComponents.soulforgedarmor = [];
+AbilityComponents.dunecarver = [];
+AbilityComponents.tatteredmemory = ['cursedbody', 'frisk'];
+AbilityComponents.spinyhide = ['roughskin', 'poisonpoint'];
+AbilityComponents.triplethreat = ['innerfocus', 'keeneye', 'earlybird'];
+AbilityComponents.longstride = ['striker'];
+AbilityComponents.safeharbor = ['waterabsorb', 'hydration'];
+AbilityComponents.oceanlullaby = ['shellarmor', 'icebody'];
+AbilityComponents.auroraresonance = [];
+AbilityComponents.canopymastery = ['dualwield'];
+AbilityComponents.blazemastery = ['striker'];
+AbilityComponents.tidalmastery = ['damp'];
+
+AbilityComponents.gritandglory = ['guts'];
+AbilityComponents.fourthholdguard = []; // Approved critical immunity only, not the local Battle Armor damage multiplier.
+AbilityComponents.perfectform = ['ironfist'];
+AbilityComponents.titansknuckles = ['ironfist'];
+
+AbilityComponents.cursedkeepsake = [];
+AbilityComponents.cursedmarionette = [];
+AbilityComponents.reapersgrip = ['selfsufficient'];
+AbilityComponents.bewitchingmajesty = ['magicbounce','queenlymajesty'];

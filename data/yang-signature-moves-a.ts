@@ -1,3 +1,4 @@
+import {YangMove, yangMessage} from './yang-field-bonuses';
 import {adaptiveFieldMultiplier} from '../sim/adaptive-cycle';
 import type {MoveDataTable} from '../sim/dex-moves';
 import {signatureMoveText} from './signature-move-summaries';
@@ -7,12 +8,15 @@ const contact = {...flags, contact: 1} as const;
 function veil(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
  if (source.side.getSideCondition('auroraveil')) return;
  if (source.side.addSideCondition('auroraveil', source, move)) {
-  source.side.sideConditions.auroraveil.duration = 3;
-  this.add('-sidestart', source.side, 'move: Aurora Veil', '[turns] 3', '[silent]');
+  const duration = (move as YangMove).yang?.eligible ? 4 : 3;
+  source.side.sideConditions.auroraveil.duration = duration;
+  if (duration === 4) yangMessage(this, move, 'Serra’s frozen reflections held the veil in place!');
+  this.add('-sidestart', source.side, 'move: Aurora Veil', '[turns] ' + source.side.sideConditions.auroraveil.duration, '[silent]');
  }
 }
 function clearField(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
  if (!source.hp || clearMoveAura.call(this, source, move)) return;
+ if ((move as YangMove).yangPreserveField) { yangMessage(this, move, 'Charlotte’s furnace refused to die down!'); return; }
  const state = move as ActiveMove & {infernalFieldCleared?: boolean};
  if (state.infernalFieldCleared) return;
  state.infernalFieldCleared = true;
@@ -53,14 +57,14 @@ export const YangSignatureMovesA: MoveDataTable = {
  cactibash: {num:10436,name:'Cacti Bash',type:'Grass',category:'Physical',basePower:50,accuracy:100,pp:10,priority:0,target:'normal',flags:contact,multihit:2,onBasePower(bp,source,target){if(this.field.isTerrain('desertterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},
   onAfterHit(target,source,move){const state=move as ActiveMove & {cactiSpikesSet?:boolean};if(target.hp||target.isAlly(source)||state.cactiSpikesSet||this.field.isTerrain(['watersurfaceterrain','murkwatersurfaceterrain','midnightzoneterrain']))return;state.cactiSpikesSet=true;target.side.addSideCondition('spikes',source,move);}},
  corrosivestrike: {onModifyMove(move,source){move.category=source.getStat('atk',false,true)>source.getStat('spa',false,true)?'Physical':'Special';},num:10437,name:'Corrosive Strike',type:'Poison',category:'Physical',basePower:70,accuracy:100,pp:15,priority:0,target:'normal',flags:contact,ignoreImmunity:{Poison:true},onEffectiveness(typeMod,target,type){if(type==='Steel')return 1;},volatileStatus:'corrosivestrike',onBasePower(bp,source,target){if(this.field.isTerrain('corrosiveterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},
-  condition:{noCopy:true,onStart(target){this.add('-start',target,'Corrosion');},onResidualOrder:9,onResidual(pokemon){this.damage(pokemon.baseMaxhp/16,pokemon,this.effectState.source);},onEnd(target){this.add('-end',target,'Corrosion');}}},
+  condition:{noCopy:true,onStart(target){this.add('-start',target,'Corrosion');if(this.field.isTerrain(['corrosiveterrain','corrosivemistterrain']))this.add('-message','Corey’s fumes seeped deeper into the wound!');},onResidualOrder:9,onResidual(pokemon){this.damage(pokemon.baseMaxhp/(this.field.isTerrain(['corrosiveterrain','corrosivemistterrain'])?12:16),pokemon,this.effectState.source);},onEnd(target){this.add('-end',target,'Corrosion');}}},
  toxicvial: {num:10438,name:'Toxic Vial',type:'Poison',category:'Status',basePower:0,accuracy:90,pp:10,priority:0,target:'normal',flags:{...flags,reflectable:1},status:'tox',boosts:{atk:-1,spa:-1}},
  flutterscales: {num:10439,name:'Flutter Scales',type:'Bug',category:'Special',basePower:75,accuracy:100,pp:10,priority:0,target:'allAdjacentFoes',flags,
   onBasePower(bp,source,target){if(this.field.isTerrainOrAura('rainbowterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},
   onHit(target,source,move){if((target.getMoveHitData(move).damage||0)>0)this.boost({[this.sample(['atk','spa'])]:-1},target,source,move);}},
  spiritmend: {num:10440,name:'Spirit Mend',type:'Ghost',category:'Status',basePower:0,accuracy:100,pp:5,priority:0,target:'self',flags:{snatch:1,heal:1,metronome:1},heal:[1,2],onTry(source){if(this.field.isTerrain('holyterrain'))return false;},onModifyMove(move){if(this.field.isTerrain(['darkcrystalcavernterrain','shortcircuitterrain','newworldterrain']))move.heal=[66,100];},onHit(target,source,move){if(this.field.isTerrain('factoryterrain'))this.field.changeTerrain('shortcircuitterrain',source,move);}},
  chistrike: {num:10441,name:'Chi Strike',type:'Fighting',category:'Physical',basePower:75,accuracy:true,pp:15,priority:0,target:'normal',flags:contact,critModifier:2,onBasePower(bp,source,target){if(this.field.isTerrain('ashenbeachterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.3));}},
- gunkrock: {num:10442,name:'Gunk Rock',type:'Poison',category:'Special',basePower:80,accuracy:100,pp:10,priority:0,target:'allAdjacentFoes',flags:{...flags,sound:1},onBasePower(bp,source,target){if(this.field.isTerrain('wastelandterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},secondary:{chance:30,onHit(target,source,move){target.trySetStatus(this.sample(['brn','psn','par']),source,move);}}},
+ gunkrock: {num:10442,name:'Gunk Rock',type:'Poison',category:'Special',basePower:80,accuracy:100,pp:10,priority:0,target:'allAdjacentFoes',flags:{...flags,sound:1},onBasePower(bp,source,target){if(this.field.isTerrain('wastelandterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},secondary:{chance:30,onHit(target,source,move){if(target.trySetStatus(this.sample(['brn','psn','par']),source,move)&&(move as YangMove).yang?.eligible)yangMessage(this,move,'Aya’s toxic riff left its mark!');}}},
  frozenrefractals: {num:10443,name:'Frozen Refractals',type:'Ice',category:'Special',basePower:75,accuracy:100,pp:10,priority:0,target:'normal',flags,
   onAfterHit(target,source,move){if((target.getMoveHitData(move).damage||0)>0)veil.call(this,target,source,move);},onAfterSubDamage(damage,target,source,move){if(damage>0)veil.call(this,target,source,move);}},
  nomoswish: {num:10444,name:"Nomos' Wish",type:'Normal',category:'Status',basePower:0,accuracy:100,pp:5,priority:0,target:'self',flags:{snatch:1,heal:1,metronome:1},boosts:{def:1,spd:1},slotCondition:'wish'},

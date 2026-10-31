@@ -12,7 +12,7 @@ describe('Torterra-Mega-X and Primal Ego', () => {
 	it('uses the requested spread and shares Torterranite with Mega Y', () => {
 		const mega = Dex.species.get('Torterra-Mega-X');
 		assert.deepEqual(mega.types, ['Grass', 'Ground']);
-		assert.deepEqual(mega.baseStats, {hp: 95, atk: 139, def: 135, spa: 75, spd: 105, spe: 86});
+		assert.deepEqual(mega.baseStats, {hp: 95, atk: 129, def: 130, spa: 90, spd: 105, spe: 86});
 		assert.equal(mega.bst, 635);
 		assert.equal(mega.abilities[0], 'Primal Ego');
 		assert.equal(mega.requiredItem, 'Torterranite');
@@ -33,7 +33,9 @@ describe('Torterra-Mega-X and Primal Ego', () => {
 		const torterra = battle.p1.active[0];
 		const foe = battle.p2.active[0];
 		assert.equal(torterra.species.name, 'Torterra-Mega-X');
-		for (const ability of ['unaware', 'proficient', 'ultraego', 'moldbreaker']) {
+		assert(torterra.getPassives().includes('proficient'));
+		assert(torterra.hasAbilityOrPassive('proficient'));
+		for (const ability of ['unaware', 'ultraego', 'moldbreaker']) {
 			assert(torterra.hasAbility(ability), ability);
 		}
 		assert.equal(torterra.boosts.atk, 1);

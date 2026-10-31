@@ -265,8 +265,8 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Prevents other Pokemon from lowering its stat stages."
   },
   "gooey": {
-    "desc": "When it is hit by an opposing damaging move, once per attacking move, the attacker's Speed is lowered by 2 stages, or 4 stages on Murkwater Surface. It also has Hydration and Sap Sipper's effects.",
-    "shortDesc": "Damaging hit: attacker -2 Spe (-4 on Murkwater)."
+    "desc": "Each contact hit lowers the attacker's Speed by one stage.",
+    "shortDesc": "Contact hits lower the attacker's Speed by 1."
   },
   "gorillatactics": {
     "desc": "Its Attack is multiplied by 1.5, but it can only select the first move it executes. These effects are prevented while it is Dynamaxed.",

@@ -230,3 +230,7 @@ exports.abilities = (id, expected) => {
 	if (id === 'lycanrocdusk') result.H = 'Dusk Ego';
 	return result;
 };
+
+const beforeGolemGalvanize = {current: exports.current, passives: exports.passives};
+exports.current = (id, fallback) => id === 'golemalola' ? ['galvanize'] : beforeGolemGalvanize.current(id, fallback);
+exports.passives = expected => Object.assign(beforeGolemGalvanize.passives(expected), {golemalola: ['galvanize']});

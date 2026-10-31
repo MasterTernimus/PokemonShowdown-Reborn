@@ -1298,5 +1298,40 @@ ThematicPassiveIds.add('breakingnews');
 SpeciesPassives.alakazamrejuv = Object.freeze(['composed']);
 ThematicPassiveIds.add('composed');
 
+for (const id of ['goodra', 'goodrahisui', 'goodrahisuialt']) SpeciesPassives[id] = Object.freeze(['gooey']);
+ThematicPassiveIds.add('gooey');
+
+for (const id of ['armarouge', 'ceruledge']) SpeciesPassives[id] = Object.freeze(['soulforgedarmor']);
+ThematicPassiveIds.add('soulforgedarmor');
+
+for (const id of ['absol', 'absolmega', 'absolmegaz']) SpeciesPassives[id] = Object.freeze(['omensight']);
+ThematicPassiveIds.add('omensight');
+
+SpeciesPassives.garchompmega = Object.freeze(['sharpness']);
+ThematicPassiveIds.add('sharpness');
+
+SpeciesPassives.banette = Object.freeze(['tatteredmemory']);
+ThematicPassiveIds.add('tatteredmemory');
+
+SpeciesPassives.qwilfish = Object.freeze(['spinyhide']);
+ThematicPassiveIds.add('spinyhide');
+
+SpeciesPassives.dodrio = Object.freeze(['hydrabond']);
+ThematicPassiveIds.add('hydrabond');
+
+SpeciesPassives.shelgon = Object.freeze(['shellarmor']);
+SpeciesPassives.pupitar = Object.freeze(['eartheater']);
+SpeciesPassives.zweilous = Object.freeze(['hydrabond']);
+ThematicPassiveIds.add('shellarmor');
+ThematicPassiveIds.add('eartheater');
+
+SpeciesPassives.golemalola = Object.freeze(['galvanize']);
+ThematicPassiveIds.add('galvanize');
+
+SpeciesPassives.laprasgmax = Object.freeze(['liquidvoice']);
+ThematicPassiveIds.add('liquidvoice');
+
+for (const id of ['machamp', 'machampalt', 'machampgmax', 'machampgmaxalt']) SpeciesPassives[id] = Object.freeze(['innerfocus']);
+ThematicPassiveIds.add('innerfocus');
 Object.freeze(SpeciesPassives);
 

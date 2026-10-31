@@ -7,6 +7,9 @@ export const SignaturePassiveSelections: { [id: string]: string } = {
 };
 /** Only full primitive components actually retained by these seven signatures. */
 export const SignaturePassiveComponents: { [id: string]: readonly string[] } = {
+	tatteredmemory: ['cursedbody', 'frisk'],
+	spinyhide: ['roughskin', 'poisonpoint'],
+	omensight: ['anticipation', 'forewarn'],
 	breakingnews: ['forewarn'],
 	punchfiend: ['ironfist', 'serenegrace', 'keeneye'],
 	kickfiend: ['striker', 'limber', 'serenegrace'],

@@ -694,5 +694,14 @@ for (const [id, text] of Object.entries(AuditCleanupDescriptions)) if (SharedPas
 
 SharedPassiveAbilityDescriptions.witheringshell.passive = 'naturalrecovery';
 
+// Absol's sensing belongs to Omen Sight; Doom Warning retains Magic Bounce and Magic Guard.
+SharedPassiveComponents.doomwarning = ['magicbounce'];
+delete SharedPassiveComponentAdditions.doomwarning;
+delete SharedPassiveAbilityDescriptions.doomwarning;
+
 // Full Water Barrage now contributes Stalwart to Fortress Shell; Dual Wield stays excluded.
 AbilityComponentExclusions.fortressshell = AbilityComponentExclusions.fortressshell.filter(id => id !== 'stalwart');
+
+// The approved Marionette rework has Prankster only in its native passive slot.
+delete SharedPassiveComponentAdditions.cursedmarionette;
+delete SharedPassiveAbilityDescriptions.cursedmarionette;

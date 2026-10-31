@@ -129,22 +129,22 @@ describe('Mega composite ability components', () => {
 		assert.equal(aggron.getWeight(), aggron.species.weightkg * 10);
 	});
 
-	it('Joyride retains Aerilate and Violent Rush without sleep protection or generic damage reduction', () => {
+	it('Unbridled Flight retains Aerilate without Violent Rush without sleep protection or generic damage reduction', () => {
 		const [pinsir, foe] = mega('Pinsir', 'Pinsirite');
-		assert.equal(pinsir.ability, 'joyride');
+		assert.equal(pinsir.ability, 'unbridledflight');
 		assert.deepEqual(pinsir.getPassives(), ['aerilate']);
 		assert(!pinsir.hasAbility('vitalspirit'));
 		assert.equal(pinsir.trySetStatus('slp', foe), true);
 		battle.singleEvent('Update', pinsir.getAbility(), pinsir.abilityState, pinsir);
-		assert.equal(pinsir.status, 'slp', 'Joyride does not cure sleep');
+		assert.equal(pinsir.status, 'slp', 'Unbridled Flight does not cure sleep');
 		pinsir.cureStatus();
 		assert(pinsir.addVolatile('yawn', foe));
 		pinsir.removeVolatile('yawn');
 		assert.equal(battle.runEvent('ModifyDamage', foe, pinsir, battle.dex.getActiveMove('tackle'), 100), 100);
 		pinsir.activeTurns = 0;
-		assert.equal(battle.runEvent('ModifySpe', pinsir, null, null, 100), 150);
-		assert.equal(battle.runEvent('ModifyAtk', pinsir, foe, battle.dex.getActiveMove('tackle'), 100), 120);
-		assert.equal(battle.runEvent('ModifySpA', pinsir, foe, battle.dex.getActiveMove('aurasphere'), 100), 130);
+		assert.equal(battle.runEvent('ModifySpe', pinsir, null, null, 100), 100);
+		assert.equal(battle.runEvent('ModifyAtk', pinsir, foe, battle.dex.getActiveMove('tackle'), 100), 100);
+		assert.equal(battle.runEvent('ModifySpA', pinsir, foe, battle.dex.getActiveMove('aurasphere'), 100), 100);
 		assert(pinsir.addVolatile('gastroacid', foe));
 		assert.equal(battle.runEvent('ModifySpe', pinsir, null, null, 100), 100);
 		assert.equal(battle.runEvent('ModifyAtk', pinsir, foe, battle.dex.getActiveMove('tackle'), 100), 100);
@@ -154,12 +154,13 @@ describe('Mega composite ability components', () => {
 		assert.equal(normal.type, 'Flying', 'native Aerilate persists under selected suppression');
 	});
 
-	it('Relentless Link retains Skill Link power and replaces Battle Armor with Power Drill', () => {
+	it('Herculean Might retains native Skill Link without the old selected components', () => {
 		const [heracross, foe] = mega('Heracross', 'Heracronite');
-		assert.equal(heracross.ability, 'relentlesslink');
+		assert.equal(heracross.ability, 'herculeanmight');
 		assert.equal(battle.runEvent('BasePower', heracross, foe, battle.dex.getActiveMove('bulletseed'), 100), 150);
-		assert.equal(battle.runEvent('SourceModifyDamage', heracross, foe, battle.dex.getActiveMove('tackle'), 100), 100);
-		assert(heracross.hasAbility('powerdrill'));
+		assert.equal(battle.runEvent('SourceModifyDamage', heracross, foe, battle.dex.getActiveMove('tackle'), 100), 80);
+		assert(!heracross.hasAbility('powerdrill'));
+		assert(!heracross.hasAbility('moldbreaker'));
 		assert(!heracross.hasAbility('battlearmor'));
 	});
 

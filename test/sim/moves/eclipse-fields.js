@@ -45,11 +45,12 @@ describe('Eclipse field rework', () => {
 			assert.equal(battle.field.terrainState.duration, duration - 1);
 		});
 	}
-	it('Rift Herald respects the Bad Seeds field lock', () => {
+	it('Rift Herald preserves the Bad Seeds field lock while adding its Aura', () => {
 		const [p] = setup(['splash'], ['splash'], {ability: 'riftherald'}, {ability: 'badseeds'});
 		battle.field.clearAura(); field('coldeclipseterrain');
 		battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
 		assert.equal(battle.field.terrain, 'coldeclipseterrain');
+		assert.equal(battle.field.auraField, 'riftaura');
 	});
 	it('creates Rift Eclipse with its dedicated move and preserves the timer through heat/cooling', () => {
 		setup(['riftopening', 'heatwave', 'eruption', 'glaciate']);

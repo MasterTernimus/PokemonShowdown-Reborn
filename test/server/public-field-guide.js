@@ -4,7 +4,7 @@ describe('Public Field Guide', () => {
 		const g = publicFieldGuide(), m = calculatorMetadata();
 		for (const f of m.fields.filter(f => f.id))assert(g.entries.some(e => e.kind === 'field' && e.id === f.id));
 		for (const a of m.auras)assert(g.entries.some(e => e.kind === 'aura' && e.id === a.id));
-		assert.equal(g.entries.length, 61);
+		assert.equal(g.entries.length, 64);
 	});
 	it('reviews every field without claiming exhaustive coverage', () => {
 		const g = publicFieldGuide();
@@ -30,7 +30,7 @@ describe('Public Field Guide', () => {
 		let output;
 		cmd.call({}, '', null, {}, { send: s => (output = s) });
 		assert(output.startsWith('|queryresponse|fieldguide|'));
-		assert.equal(JSON.parse(output.split('|').slice(3).join('|')).entries.length, 61);
+		assert.equal(JSON.parse(output.split('|').slice(3).join('|')).entries.length, 64);
 	});
 });
 
@@ -79,8 +79,34 @@ describe('Eclipse guide sections', () => {
 			assert.match(sections.Duration.join(' '), /5 turns, or 8 with Amplifield Rock/);
 		});
 	}
+	it('documents Rift Herald entry, aura development and offensive-only Rift Aura', () => {
+		const aura = entry('riftaura'), sections = aura.sections;
+		assert.equal(aura.group, 'Magical');
+		assert.match(sections.Duration.join(' '), /Rift Herald.*5 turns, or 8 with Amplifield Rock/);
+		assert.match(sections.Duration.join(' '), /On no field.*full Rift Eclipse/);
+		assert.match(sections.Duration.join(' '), /without replacing the base field/);
+		assert.match(sections.Duration.join(' '), /not refreshed/);
+		assert.match(sections.Transitions.join(' '), /Any user.*Rift Opening.*Rift Herald is not required/);
+		assert.match(sections.Transitions.join(' '), /consumes the aura and keeps its remaining turns/);
+		assert.match(sections.Transitions.join(' '), /once to create Rift Aura, then again to develop it/);
+		assert.match(sections.Transitions.join(' '), /repeated ability entry do not develop/);
+		assert.match(sections.Duration.join(' '), /Rift Opening also creates Rift Aura over another field/);
+		assert.match(entry('rifteclipseterrain').sections['Seeds and other effects'].join(' '), /any user.*Rift Opening.*develops full Rift Eclipse/);
+		assert.match(sections.Transitions.join(' '), /blocked conversions leave the aura intact/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Dark attacks: 1.3x/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Ghost attacks: 1.2x/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Fairy attacks: weakened to 0.75x/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Fairy penalties do not multiply together/);
+		assert.match(sections['Boosts and general effects'].join(' '), /stronger 0.5x on full Rift Eclipse or Infernal Eclipse/);
+		assert.match(entry('rifteclipseterrain').sections['Boosts and general effects'].join(' '), /Fairy attacks: 0.5x/);
+		assert.match(sections['Boosts and general effects'].join(' '), /Spirit Break.*Rift Aura applies its own 0.75x penalty/);
+		assert.match(sections['Boosts and general effects'].join(' '), /does not apply.*sleeping damage.*Room and Gravity/);
+		assert.match(sections.Moves.join(' '), /Nature Power calls Dark Pulse/);
+		assert.match(entry('rifteclipseterrain').sections.Abilities.join(' '), /Rift Herald creates full Rift Eclipse.*only on an empty field/);
+		assert(!JSON.stringify(entry('rifteclipseterrain').sections).includes('Rift Seeds'));
+	});
 	it('keeps full-field seed effects separate from auras and documents shared move hooks', () => {
-		for (const id of ['frozenaura', 'ashenaura']) {
+		for (const id of ['frozenaura', 'ashenaura', 'riftaura']) {
 			assert.match(entry(id).sections['Boosts and general effects'].join(' '), /does not grant the full Eclipse field/);
 			assert.match(entry(id).sections.Moves.join(' '), /animation; this does not turn it into that move/);
 		}

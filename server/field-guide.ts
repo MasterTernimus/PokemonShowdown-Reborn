@@ -21,30 +21,35 @@ export function publicFieldGuide() {
 			(ids as string[]).map(id => (kind === 'abilities' ? Dex.abilities : kind === 'moves' ? Dex.moves : Dex.items).get(id).name)])),
 	}));
 	const auras = Object.values(Auras).map(aura => {
-		const frozen = aura.id === 'frozenaura', ashen = aura.id === 'ashenaura';
+		const frozen = aura.id === 'frozenaura', ashen = aura.id === 'ashenaura', rift = aura.id === 'riftaura';
 		const sections: Record<string, string[]> = {
 			'Boosts and general effects': [
-				...Object.entries(aura.typeMultipliers).map(([type, n]) => `${type} attacks: ${n}x power` + (aura.typeCondition === 'none' ? ', including airborne users.' : aura.typeCondition === 'special' ? ', for special attacks only.' : ', while the attacker is grounded and not semi-invulnerable.')),
+				...Object.entries(aura.typeMultipliers).map(([type, n]) => `${type} attacks: ${n < 1 ? 'weakened to ' : ''}${n}x power` + (aura.typeCondition === 'none' ? ', including airborne users.' : aura.typeCondition === 'special' ? ', for special attacks only.' : ', while the attacker is grounded and not semi-invulnerable.')),
 				'Matching field and aura type bonuses do not multiply together. Named move bonuses are separate.',
 				...(aura.id === 'electricterrain' ? ['Electric Aura adds no type-wide bonus over Short-Circuit.'] : []),
-				...(frozen || ashen ? ['This aura does not grant the full Eclipse field\'s defenses, weather rules, field lock or seed-ability contact effects.'] : []),
+				...(frozen || ashen || rift ? ['This aura does not grant the full Eclipse field\'s defenses, weather rules, field lock or seed-ability contact effects.'] : []),
+				...(rift ? [
+					'Both sides receive the Dark and Ghost attack bonuses and the Fairy power reduction. Rift Aura does not apply the full field\'s sleeping damage, entry bonuses or extended Room and Gravity duration.',
+					'Matching Fairy penalties do not multiply together: Fairy attacks remain at the stronger 0.5x on full Rift Eclipse or Infernal Eclipse. Spirit Break avoids Infernal Eclipse\'s Fairy penalty, so Rift Aura applies its own 0.75x penalty to that move.',
+				] : []),
 			],
 			Moves: Object.entries(aura.damageMultipliers).map(([id, n]) => `${Dex.moves.get(id).name}: ${n}x power from its named move bonus.`),
 			'Seeds and other effects': [`Mimicry selects ${aura.mimicryType}. An active aura also controls Camouflage and Terrain Pulse typing.`],
 			Duration: [`Normally ${aura.turns} turns; the source can change this duration. The aura has a separate timer and does not replace the main field.`],
 			'Battle messages': [...new Set(Object.values(aura.moveMessages))].map(message => '"' + message + '" - the named power bonus applies to ' + Object.entries(aura.moveMessages).filter(([, text]) => text === message).map(([id]) => Dex.moves.get(id).name).join(', ') + '. This does not confirm a hit.').concat(['"' + aura.typeMessage + '" - a matching attack receives an aura power modifier. Matching field bonuses can reduce the extra multiplier.', '"' + aura.endMessage + '" - the aura ends or is cleared. This message causes no damage.']),
 		};
-		if (frozen || ashen) {
+		if (frozen || ashen || rift) {
 			sections.Duration = [
-				`${frozen ? 'Bad Seeds' : 'Ashen Seeds'} creates this aura on entry for 5 turns, or 8 with Amplifield Rock. An existing matching aura or Eclipse is not refreshed.`,
-				`On no field or ${frozen ? 'Icy' : 'Volcanic'} Field, the ability instead creates full ${frozen ? 'Cold' : 'Infernal'} Eclipse. Field restrictions still apply.`,
+				`${frozen ? 'Bad Seeds' : ashen ? 'Ashen Seeds' : 'Rift Herald'} creates this aura on entry for 5 turns, or 8 with Amplifield Rock. An existing matching aura or Eclipse is not refreshed.`,
+				rift ? 'On no field, Rift Herald instead creates full Rift Eclipse. Over other fields, it creates Rift Aura without replacing the base field. Field restrictions still apply.' : `On no field or ${frozen ? 'Icy' : 'Volcanic'} Field, the ability instead creates full ${frozen ? 'Cold' : 'Infernal'} Eclipse. Field restrictions still apply.`,
+				...(rift ? ['Rift Opening also creates Rift Aura over another field for 5 turns, or 8 with Amplifield Rock. On an empty field without Rift Aura, it creates full Rift Eclipse instead. It does not refresh an existing full Rift Eclipse.'] : []),
 				'The aura and main field have separate timers. Cold Eclipse does not pause the aura timer.',
 			];
 			sections.Transitions = [
-				frozen ? 'An unsuppressed Bad Seeds holder can develop Frozen Aura into Cold Eclipse with successful Blizzard, Glaciate or Sheer Cold.' : 'An unsuppressed Ashen Seeds holder can develop Ashen Aura into Infernal Eclipse with successful Infernal Parade or Eruption.',
-				'Ordinary development consumes the aura and keeps its remaining turns. The matching ability must belong to the move user.',
-				frozen ? 'Direct Eclipse change: on Infernal Eclipse, any user can successfully use Glaciate or Sheer Cold with Frozen Aura to create Cold Eclipse. This consumes the aura but keeps the FIELD timer, not the aura timer.' : 'Direct Eclipse change: on Cold Eclipse, any user can successfully use Eruption with Ashen Aura to create Infernal Eclipse. This consumes the aura but keeps the FIELD timer, not the aura timer.',
-				'Field locks still apply. Failed or blocked conversions leave the aura intact. Gravity, weather and repeated aura-setting attempts do not develop this aura.',
+				frozen ? 'An unsuppressed Bad Seeds holder can develop Frozen Aura into Cold Eclipse with successful Blizzard, Glaciate or Sheer Cold.' : ashen ? 'An unsuppressed Ashen Seeds holder can develop Ashen Aura into Infernal Eclipse with successful Infernal Parade or Eruption.' : 'Any user can develop an existing Rift Aura into Rift Eclipse with successful Rift Opening. Rift Herald is not required.',
+				rift ? 'Development consumes the aura and keeps its remaining turns, including when the underlying field is another Eclipse.' : 'Ordinary development consumes the aura and keeps its remaining turns. The matching ability must belong to the move user.',
+				...(rift ? ['Over another field, use Rift Opening once to create Rift Aura, then again to develop it. Rift Herald can prepare the aura on entry so that only one move use is needed.'] : [frozen ? 'Direct Eclipse change: on Infernal Eclipse, any user can successfully use Glaciate or Sheer Cold with Frozen Aura to create Cold Eclipse. This consumes the aura but keeps the FIELD timer, not the aura timer.' : 'Direct Eclipse change: on Cold Eclipse, any user can successfully use Eruption with Ashen Aura to create Infernal Eclipse. This consumes the aura but keeps the FIELD timer, not the aura timer.']),
+				rift ? 'Field locks still apply. Failed or blocked conversions leave the aura intact. Gravity, weather and repeated ability entry do not develop this aura.' : 'Field locks still apply. Failed or blocked conversions leave the aura intact. Gravity, weather and repeated aura-setting attempts do not develop this aura.',
 				'Ordinary development is blocked by a Flower Garden base, Chessboard, Glitch, Bewitched Woods, Haunted, New World, Underwater, Midnight Zone and Dragon\'s Den.',
 			];
 			sections.Moves.push(`Nature Power calls ${Dex.moves.get(aura.naturePowerMove).name}, overriding the main field. Terrain Pulse becomes ${aura.mimicryType} and gains its aura-based 2x power bonus.`);
@@ -79,7 +84,7 @@ function fieldReferenceDetails(field: string) {
 		const mapping = FieldMoveMappings[field];
 		if (!notes && mapping && kind === 'moves') {
 			if (id === 'camouflage') notes = ['Changes the user to ' + mapping.camouflage + '. An active aura overrides the type; type-change restrictions apply.'];
-			if (id === 'naturepower') notes = ['Calls ' + mapping.nature + '. Frozen Aura and Ashen Aura override this lookup with their own Nature Power moves.'];
+			if (id === 'naturepower') notes = ['Calls ' + mapping.nature + '. Frozen Aura, Ashen Aura and Rift Aura override this lookup with their own Nature Power moves.'];
 			if (id === 'terrainpulse') notes = ['Becomes ' + mapping.pulse + '. An active aura overrides its type. Only Electric, Grassy, Misty, Psychic and Rainbow full fields activate its separate doubled-power check, with no aura and no adaptive protection on the target.'];
 			if (id === 'secretpower' && FieldSecretPowerNotes[field]) notes = [FieldSecretPowerNotes[field]];
 		}

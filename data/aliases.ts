@@ -1,6 +1,7 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
 	// Display rename; retain the existing ability ID for old teams and replays.
 	duskego: 'Dusk Drive',
+	riftseeds: 'Rift Herald',
 	tauroscombat: 'Tauros-Paldea-Combat',
 	passimiam: 'Passimian',
  warpath: 'Grand Strategy',

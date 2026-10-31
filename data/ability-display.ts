@@ -173,11 +173,9 @@ const AdditionalDisplayComponents: {[id: string]: string[]} = {
 		"eartheater"
 	],
 	"triplethreat": [
-		"hydrabond",
-		"tangledfeet",
+		"innerfocus",
 		"keeneye",
-		"bigpecks",
-		"limber"
+		"earlybird"
 	],
 	"strikerfrenzy": [
 		"striker",
@@ -203,6 +201,9 @@ const DisplayComponentOverrides: {[id: string]: string[]} = {
  astralwatcher: ['frisk'],
  roughscale: ['roughskin', 'toughclaws'],
  templechime: [],
+ safeharbor: ['waterabsorb', 'hydration'],
+ oceanlullaby: ['shellarmor', 'icebody'],
+ auroraresonance: [],
  blazingmane: ['firemane'],
  pollenbloom: ['thickfat', 'unaware', 'proficient'],
  atrocity: ['unboundblaze', 'toughclaws', 'fireward'],

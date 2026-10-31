@@ -185,8 +185,8 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 		desc: "Full local Prankster, Serene Grace and Technician. Status moves gain +1 priority with Prankster targeting rules and its Bewitched Woods exception. Doubles move secondary-effect chances up to 100%. Repeated Serene Grace applications do not multiply the same effect again. Moves with 60 or less effective base power (80 on Factory) gain Technician's 1.5x power boost, retaining its multi-hit interactions.",
 	},
 	gooey: {
-		shortDesc: 'After an opposing damaging move hits, lowers its user\'s Speed by 2.',
-		desc: "After an opposing damaging move hits, lowers the attacker's Speed by 2 stages, once per move. On Murkwater Surface the drop is 4 stages.",
+		shortDesc: "Contact hits lower the attacker's Speed by 1.",
+		desc: "Each contact hit lowers the attacker's Speed by one stage.",
 	},
 	triplethreat: {
 		shortDesc: 'Hydra Bond; Keen Eye, Inner Focus and Own Tempo.',

@@ -1,4 +1,6 @@
 import { ENABLE_MEGA_HYDREIGON_X } from './disabled-custom-content';
+import {ApprovedStatRebalances} from './stat-balance-approved';
+import {MiddleStageReworks} from './middle-stage-reworks';
 
 export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	bulbasaur: {
@@ -8349,7 +8351,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-X",
 		types: ["Grass", "Ground"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 95, atk: 139, def: 135, spa: 75, spd: 105, spe: 86 },
+		baseStats: { hp: 95, atk: 129, def: 130, spa: 90, spd: 105, spe: 86 },
 		abilities: { 0: "Primal Ego" },
 		heightm: 2.2,
 		weightkg: 310,
@@ -8367,7 +8369,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega-Y",
 		types: ["Grass", "Rock"],
 		genderRatio: { M: 0.875, F: 0.125 },
-		baseStats: { hp: 95, atk: 95, def: 135, spa: 159, spd: 105, spe: 46 },
+		baseStats: { hp: 95, atk: 105, def: 130, spa: 144, spd: 105, spe: 56 },
 		abilities: { 0: "Terra Resolve" },
 		heightm: 2.2,
 		weightkg: 310,
@@ -9445,7 +9447,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Dragon", "Ground"],
 		baseStats: { hp: 108, atk: 170, def: 125, spa: 70, spd: 125, spe: 102 },
-		abilities: { 0: "Apex Cleave" },
+		abilities: { 0: "Dune Carver" },
 		heightm: 1.9,
 		weightkg: 95,
 		color: "Blue",
@@ -15314,7 +15316,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Goodra",
 		types: ["Dragon", "Water"],
 		baseStats: { hp: 90, atk: 100, def: 70, spa: 110, spd: 150, spe: 80 },
-		abilities: { 0: "Regenerator", 1: "Gooey", H: "Poison Heal" },
+		abilities: { 0: "Regenerator", 1: "Gentle Embrace", H: "Poison Heal" },
 		heightm: 2,
 		weightkg: 150.5,
 		color: "Purple",
@@ -15332,7 +15334,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Hisui",
 		types: ["Steel", "Dragon"],
 		baseStats: { hp: 80, atk: 100, def: 100, spa: 110, spd: 150, spe: 60 },
-		abilities: { 0: "Armorize", 1: "Filter", H: "Gooey" },
+		abilities: { 0: "Armorize", 1: "Filter", H: "Shellbound Fury" },
 		heightm: 1.7,
 		weightkg: 334.1,
 		color: "Purple",
@@ -23781,8 +23783,8 @@ const latestSpeciesUpdates: {[id: string]: any} = {
 	cinccinodeso: {baseStats: {hp: 75, atk: 110, def: 90, spa: 60, spd: 90, spe: 125}},
 	exploud: {baseStats: {hp: 109, atk: 101, def: 73, spa: 116, spd: 73, spe: 78}},
 	infernape: {baseStats: {hp: 77, atk: 104, def: 71, spa: 104, spd: 71, spe: 108}},
-	machamp: {baseStats: {hp: 100, atk: 140, def: 95, spa: 65, spd: 75, spe: 75}},
-	machampgmax: {baseStats: {hp: 150, atk: 140, def: 95, spa: 65, spd: 75, spe: 75}},
+	machamp: {baseStats: {hp: 100, atk: 130, def: 90, spa: 70, spd: 85, spe: 75}},
+	machampgmax: {baseStats: {hp: 150, atk: 130, def: 90, spa: 70, spd: 85, spe: 75}},
 	probopass: {baseStats: {hp: 75, atk: 50, def: 150, spa: 95, spd: 155, spe: 25}},
 	samurott: {baseStats: { hp: 90, atk: 105, def: 85, spa: 115, spd: 80, spe: 75 }},
 	samurotthisui: {baseStats: { hp: 90, atk: 115, def: 80, spa: 105, spd: 65, spe: 95 }},
@@ -24777,6 +24779,20 @@ Pokedex.lapras.abilities!.H = 'Storm Memory';
 Pokedex.swanna.abilities![0] = 'Jetstream Ballet';
 
 // Apply cosmetic equivalence after all approved base-species revisions.
+Pokedex.machamp.abilities = {0: 'Grit and Glory', 1: 'Fourthhold Guard', H: 'Perfect Form'};
+Pokedex.machampgmax.abilities = {0: "Titan's Knuckles"};
+Pokedex.pinsirmega.abilities = {0: 'Unbridled Flight'};
+Pokedex.heracrossmega.abilities = {0: 'Herculean Might'};
+Pokedex.sceptile.abilities!['1'] = 'Canopy Mastery';
+Pokedex.blaziken.abilities!['1'] = 'Blaze Mastery';
+Pokedex.swampert.abilities!.H = 'Tidal Mastery';
+Pokedex.dodrio.abilities = {0: 'Triple Threat', 1: 'Speed Boost', H: 'Long Stride'};
+for (const [id, change] of Object.entries(MiddleStageReworks)) {
+	const [hp, atk, def, spa, spd, spe] = change.stats;
+	Pokedex[id as ID].baseStats = {hp, atk, def, spa, spd, spe};
+	Pokedex[id as ID].abilities = {...Pokedex[id as ID].abilities!, [change.slot]: change.ability};
+}
+for (const [id, stats] of Object.entries(ApprovedStatRebalances)) Pokedex[id as ID].baseStats = {...stats};
 for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)) {
 	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;
 	const counterpart = Pokedex[counterpartId as ID] as import('../sim/dex-species').SpeciesData;
@@ -24809,3 +24825,11 @@ for (const id of ['typhlosionhisui', 'ninetales', 'camerupt', 'torkoal'] as cons
 for (const id of ['hoopa', 'bronzong', 'mismagius'] as const) {
 	Pokedex[id].abilities = {...Pokedex[id].abilities!, S: 'Rift Herald'};
 }
+
+// Approved selectable replacements; innate passives remain unchanged.
+Pokedex.raikou.abilities!.H = 'Volt Absorb';
+Pokedex.entei.abilities!.H = 'Flash Fire';
+Pokedex.suicune.abilities!.H = 'Water Veil';
+Pokedex.golemalola.abilities!.H = 'Rock Head';
+Pokedex.mew.abilities![0] = 'Natural Cure';
+Pokedex.golduck.abilities!.H = 'Cloud Nine';

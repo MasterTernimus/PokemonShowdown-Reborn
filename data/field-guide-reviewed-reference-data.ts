@@ -337,9 +337,6 @@ export const ReviewedReferenceDetails = {
 			"crumblingshell": [
 				"Water Surface, Murkwater Surface, Underwater and Swamp disable the physical-hit Stealth Rock trigger. Outside them, a physical hit places rocks on the attacker’s side; an allied attacker redirects the placement to the opposing side. Existing rocks are not duplicated.",
 			],
-			"gooey": [
-				"On Murkwater Surface, a qualifying opposing damaging move attempts -4 Speed on its attacker instead of -2, once per move. The accompanying Gooey message describes the Speed change; Contrary can reverse it and ordinary stat-drop protection still applies.",
-			],
 			"liquidooze": [
 				"On Murkwater Surface and Wasteland, draining moves, Leech Seed and Strength Sap damage their user for twice the HP they would have restored instead of restoring it.",
 			],

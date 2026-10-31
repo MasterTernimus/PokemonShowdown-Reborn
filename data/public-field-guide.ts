@@ -698,7 +698,7 @@ ReviewedFieldGuide.coldeclipseterrain = {
 		'Dragon Rage deals 140 fixed damage.',
 		'Rage becomes a 60-power physical Dark move and raises the user\'s Attack by 1 stage.',
 		'Snarl lowers Sp. Atk by 2 stages. Chilling Water lowers Attack by 2 stages. Parting Shot also lowers Speed by 1 stage.',
-		'Nature Power calls Ice Beam. An active Ashen Aura overrides it with Infernal Parade.',
+		'Nature Power calls Ice Beam. Ashen Aura overrides it with Infernal Parade; Rift Aura overrides it with Dark Pulse.',
 	],
 	Abilities: [
 		'Ice Scales doubles Defense. Prism Armor multiplies Defense and Sp. Def by 4/3. These stack with the field\'s type-based defense bonuses and the abilities\' ordinary damage reduction.',
@@ -711,7 +711,7 @@ ReviewedFieldGuide.coldeclipseterrain = {
 };
 ReviewedFieldGuide.rifteclipseterrain = {
 	'Boosts and general effects': [
-		'Dark attacks: 1.5x power. Ghost attacks: 1.2x. Fairy attacks: 0.75x.',
+		'Dark attacks: 1.5x power. Ghost attacks: 1.2x. Fairy attacks: 0.5x.',
 		'Ghost types gain 1.2x Defense and Sp. Def.',
 		'Sleeping Pokemon and Comatose holders lose 1/16 max HP each turn. Indirect-damage immunity still applies.',
 	],
@@ -735,11 +735,13 @@ ReviewedFieldGuide.rifteclipseterrain = {
 	],
 	Abilities: [
 		'On switch-in: Rattled raises Speed by 1 stage; Berserk raises Sp. Atk by 1 stage; Justified raises Attack by 1 stage.',
-		'Rift Herald creates Rift Eclipse on entry for 5 turns, or 8 with Amplifield Rock. It does not refresh an existing Rift Eclipse. Changing another Eclipse keeps its remaining turns.',
+		'Rift Herald creates full Rift Eclipse on entry only on an empty field. Over another field it creates Rift Aura, preserving the base field. Both last 5 turns, or 8 with Amplifield Rock. Existing Rift Aura or Rift Eclipse is not refreshed; field restrictions apply.',
+		'Rift Herald prepares Rift Aura so that one successful Rift Opening can develop full Rift Eclipse. Any move user can develop the Aura; the ability is not required. This consumes the Aura and uses its remaining turns. Repeated ability entry does not develop it.',
 	],
 	'Seeds and other effects': [
 		'Magical Seed raises Defense by 1 stage and starts an 8-turn Trick Room.',
-		'Rift Opening creates Rift Eclipse for 5 turns, or 8 with Amplifield Rock. Establishing Trick Room and Magic Room together can also open Rift Eclipse.',
+		'Rift Opening creates full Rift Eclipse on an empty field without Rift Aura; over another field it creates Rift Aura, preserving the base. New effects last 5 turns, or 8 with Amplifield Rock. If Rift Aura is already active, any user\'s successful Rift Opening instead develops full Rift Eclipse, consuming the Aura and using its remaining turns. An existing full Rift Eclipse is not refreshed. All field and development restrictions still apply.',
+		'Establishing Trick Room and Magic Room together can still open full Rift Eclipse directly.',
 	],
 };
 ReviewedFieldGuide.infernaleclipseterrain = {
@@ -779,7 +781,7 @@ ReviewedFieldGuide.infernaleclipseterrain = {
 		'Nightmare works on awake targets and deals 1/4 max HP each turn. After leaving the field, awake targets lose Nightmare at the next end-of-turn check unless another effect sustains it. Indirect-damage immunity applies.',
 		'Burn Up restores the saved typing at turn end if this field remains and no other type change intervenes.',
 		'Stealth Rock uses Fire effectiveness with its usual 1/8 max HP basis. Normal hazard protections apply.',
-		'Nature Power calls Infernal Parade. Frozen Aura overrides it with Ice Beam. Secret Power has a 30% burn chance.',
+		'Nature Power calls Infernal Parade. Frozen Aura overrides it with Ice Beam; Rift Aura overrides it with Dark Pulse. Secret Power has a 30% burn chance.',
 		'Camouflage and Mimicry select Fire; Terrain Pulse becomes Fire. An active aura overrides these types.',
 	],
 	Abilities: [
@@ -801,7 +803,7 @@ for (const id of ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipsete
 	ReviewedFieldGuide[id]['Shared rules and limitations'] = [
 		'Changing between Eclipse fields keeps the field\'s remaining turns; it does not start a fresh timer.',
 		'Only successful moves trigger transitions. Failed, fully blocked or charge-only uses do not count. One move use causes at most one field change.',
-		'Bad Seeds can develop Frozen Aura using Blizzard, Glaciate or Sheer Cold. Ashen Seeds can develop Ashen Aura using Infernal Parade or Eruption. The matching ability must be active on the move user.',
+		'Bad Seeds can develop Frozen Aura using Blizzard, Glaciate or Sheer Cold. Ashen Seeds can develop Ashen Aura using Infernal Parade or Eruption. These require the matching active ability on the move user. Any user can develop an existing Rift Aura using Rift Opening, without Rift Herald.',
 		'Ordinary aura development consumes the aura and keeps its remaining turns. The direct Eclipse-to-Eclipse aura combinations listed above instead keep the field timer and do not require the matching ability.',
 		'All transitions respect field locks. A failed or blocked aura conversion leaves the aura intact.',
 	];

@@ -49,12 +49,12 @@ const fieldMoves = new Map<string, string>([
 ]);
 
 /** Returns the called move ID; the Nature Power Status wrapper still runs normally.
- * Frozen and Ashen Auras override the field, using its authoritative registry value.
+ * Seed Auras override the field, using their authoritative registry value.
  * Flower Garden stages 2-4 intentionally retain the existing Tri Attack fallback.
  */
 export function resolveNaturePowerMove(
 	fieldId: string, aura?: { id: string, naturePowerMove: string } | null
 ): string {
-	if (aura && ['frozenaura', 'ashenaura'].includes(aura.id)) return aura.naturePowerMove;
+	if (aura && ['frozenaura', 'ashenaura', 'riftaura'].includes(aura.id)) return aura.naturePowerMove;
 	return fieldMoves.get(fieldId) ?? 'triattack';
 }

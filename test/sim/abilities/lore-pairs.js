@@ -299,7 +299,7 @@ describe('Lore partnership reworks', () => {
 		assert(guarded < unguarded * 0.8);
 		const before = p.hp, foeBefore = t.hp;
 		hit(p, t, 'thunderbolt');
-		assert.equal(p.hp - before, Math.floor((foeBefore - t.hp) / 4));
+		assert.equal(p.hp, before); assert(t.hp < foeBefore);
 		assert(!p.volatiles.stormcharge);
 		hit(t, p, 'bulletseed', { multihit: 1 }); assert(!p.volatiles.stormcharge);
 	});
@@ -311,13 +311,13 @@ describe('Lore partnership reworks', () => {
 		hit(t, p, 'thunderbolt', { basePower: 1 }); assert(!p.volatiles.stormmemoryspent);
 		p.removeVolatile('substitute'); hit(p.allies()[0], p, 'thunderbolt'); assert(!p.volatiles.stormmemoryspent);
 	});
-	it('Storm Charge is consumed on immunity and healing uses actual damage, including a nearly fainted foe', () => {
+	it('Storm Charge survives immunity and is consumed by damage without healing', () => {
 		const [p, t] = start('Lapras', 'Storm Memory');
 		hit(t, p, 'thunderbolt'); t.setType('Ground');
-		hit(p, t, 'thunderbolt'); assert(!p.volatiles.stormcharge);
+		hit(p, t, 'thunderbolt'); assert(p.volatiles.stormcharge);
 		t.setType('Normal'); p.addVolatile('stormcharge');
 		p.hp = 2000; t.hp = 7;
-		hit(p, t, 'thunderbolt'); assert.equal(p.hp, 2001);
+		hit(p, t, 'thunderbolt'); assert.equal(p.hp, 2000); assert(!p.volatiles.stormcharge);
 	});
 	it('Storm guard survives ability changes as spent, but resets on a real switch', () => {
 		const [p, t] = start('Lapras', 'Storm Memory');
@@ -327,13 +327,13 @@ describe('Lore partnership reworks', () => {
 		assert.equal(battle.p1.active[0], p); assert(!p.volatiles.stormmemoryspent);
 		hit(t, p, 'thunderbolt'); assert(p.volatiles.stormcharge);
 	});
-	for (const blocker of ['healblock', 'liquidooze']) it(`Storm Charge healing respects ${blocker}`, () => {
+	for (const blocker of ['healblock', 'liquidooze']) it(`Storm Charge does not drain against ${blocker}`, () => {
 		const [p, t] = start('Lapras', 'Storm Memory');
 		p.addVolatile('stormcharge'); p.hp = 2048;
 		if (blocker === 'healblock') p.addVolatile('healblock', t); else t.setAbility('Liquid Ooze');
 		const damage = hit(p, t, 'thunderbolt').damage;
 		assert(damage > 0);
-		if (blocker === 'healblock') assert.equal(p.hp, 2048); else assert(p.hp < 2048);
+		assert.equal(p.hp, 2048);
 		assert(!p.volatiles.stormcharge);
 	});
 	for (const mode of ['gastroacid', 'moldbreaker']) it(`Storm Memory respects ${mode}`, () => {

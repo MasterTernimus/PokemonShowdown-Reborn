@@ -25,7 +25,7 @@ export const CheckedFieldReferences: { [field: string]: { [kind: string]: { [id:
 			freezeshock: ['Skips its charging turn here. Its ordinary paralysis secondary remains; this does not make the move always hit.'],
 			iceburn: ['Skips its charging turn here. Its ordinary burn secondary remains; this does not make the move always hit.'],
 			mountaingale: ['Has 100 accuracy here instead of its ordinary accuracy. Its 30% flinch secondary remains.'],
-			naturepower: ['Calls Ice Beam here. Frozen Aura overrides it with that aura’s Nature Power move.'],
+			naturepower: ['Calls Ice Beam here. Frozen Aura, Ashen Aura and Rift Aura override it with their own Nature Power move.'],
 			secretpower: ['Takes Ice Shard’s type, power, accuracy and priority, with a 30% frostbite secondary. Ordinary secondary-effect and status protections apply.'],
 			snipeshot: ['Adds Ice typing to its Water attack here. It retains its ordinary category choice, critical-hit bonus and redirection protection.'],
 			terrainpulse: ['Becomes Ice unless an aura supplies the type. Icy Terrain does not itself trigger Terrain Pulse’s separate doubled-base-power rule; the ordinary field Ice bonus still applies.'],

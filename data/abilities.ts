@@ -5,7 +5,7 @@ import {updateCocoonIndicator} from '../sim/cocoon-indicator';
 import {GrandStrategy} from './grand-strategy';
 import {RelicArmorFields, updateRelicArmorIndicator, clearRelicArmorIndicators} from './relic-armor';
 import {accumulationState, accumulationStackReady, installSwalotVespiquen} from './swalot-vespiquen-approved';
-import { checkWarning, protectsWarnedMove } from './warned-moves';
+import { checkWarning, checkOmenSight, protectsWarnedMove } from './warned-moves';
 import {applySereneGrace} from './ally-serene-grace';
 import {installLatestPassiveAbilities} from './latest-passive-abilities';
 import {pressureAttempt} from './pressure-memory';
@@ -125,13 +125,18 @@ function setPulseMurkwater(battle: Battle, pokemon: Pokemon, terrain = 'murkwate
 }
 
 function setAnomalyMoveSlot(battle: Battle, pokemon: Pokemon, index: number, moveid: string) {
+	// Keep short legal movesets dense, and reuse the inserted slot on awakening/re-entry.
+	const anomalyIndex = index;
+	const existing = pokemon.moveSlots.findIndex(slot =>
+		(slot as typeof slot & {anomalyIndex?: number})?.anomalyIndex === anomalyIndex);
+	index = existing >= 0 ? existing : Math.min(index, pokemon.moveSlots.length);
 	const move = battle.dex.moves.get(moveid);
 	const current = pokemon.moveSlots[index];
 	if (current?.id === move.id) return;
 	const maxpp = pokemon.transformed ? Math.min(5, move.pp) : battle.calculatePP(move, 3);
 	const pp = Math.max(0, maxpp - (current ? current.maxpp - current.pp : 0));
 	const slot = {
-		move: move.name, id: move.id, pp, maxpp, target: move.target,
+		move: move.name, id: move.id, pp, maxpp, target: move.target, anomalyIndex,
 		disabled: false, disabledSource: '', used: false,
 		...(pokemon.transformed ? { virtual: true } : {}),
 	};
@@ -204,7 +209,7 @@ function awakenRiftEater(battle: Battle, pokemon: Pokemon) {
 	battle.add('-start', pokemon, 'typechange', 'Ground/Fire', '[from] ability: Rift Eater');
 	battle.add('-message', `${pokemon.name} changed from Ground/Poison to Ground/Fire!`);
 	setAnomalyMoveSlot(battle, pokemon, 3, 'heatwave');
-	battle.add('-message', `${pokemon.name}'s fourth move changed from Sludge Wave to Heat Wave!`);
+	battle.add('-message', `${pokemon.name}'s Sludge Wave changed to Heat Wave!`);
 	if (claimAnomalyField(pokemon) && battle.field.setTerrain('desertterrain', pokemon, battle.dex.abilities.get('rifteater'))) {
 		battle.add('-message', 'Rift Eater created Desert Field!');
 	}
@@ -2813,6 +2818,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Anger Shell",
 		rating: 3,
 		num: 271,
+	},
+	omensight: {
+		name: 'Omen Sight', num: 11401, rating: 4, flags: {},
+		onStart(pokemon) {
+			if (skipPassiveComponent(this, pokemon, 'omensight')) return;
+			for (const target of pokemon.foes()) checkOmenSight(this, pokemon, target);
+		},
+		onDamage(damage, target, source, effect) {
+			return this.dex.abilities.get('forewarn').onDamage?.call(this, damage, target, source, effect);
+		},
 	},
 	anticipation: {
 		onStart(pokemon) {
@@ -9260,28 +9275,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	gooey: {
 		onDamagingHit(damage, target, source, move) {
-			if (!source || source === target || source.isAlly(target) || move.category === 'Status') return;
-			if (this.effectState.gooeyMove === move) return;
-			this.effectState.gooeyMove = move;
-			this.add('-ability', target, 'Gooey');
-			const speedDrop = this.field.isTerrain('murkwatersurfaceterrain') ? 4 : 2;
-			this.add('-message', `${target.name}'s Gooey ${source.hasAbility('contrary') ? 'sharply boosted' : 'harshly lowered'} ${source.name}'s Speed!`);
-			this.boost({ spe: -speedDrop }, source, target, null, true);
+			if (this.effect.effectType === 'Ability' && target.getPassives().includes('gooey')) return;
+			if (this.checkMoveMakesContact(move, source, target, true)) {
+				this.add('-ability', target, 'Gooey');
+				this.boost({spe: -1}, source, target, null, true);
+			}
 		},
-		onTryHitPriority: 1,
-		onTryHit(target, source, move) {
-			return this.dex.abilities.getHandler('sapsipper', 'onTryHit')?.call(this, target, source, move);
-		},
-		onAllyTryHitSide(target, source, move) {
-			return this.dex.abilities.getHandler('sapsipper', 'onAllyTryHitSide')?.call(this, target, source, move);
-		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			this.dex.abilities.get('hydration').onResidual?.call(this, pokemon);
-			this.dex.abilities.get('sapsipper').onResidual?.call(this, pokemon);
-		},
-		flags: { breakable: 1 },
+		flags: {},
 		name: "Gooey",
 		rating: 2,
 		num: 183,
@@ -9732,6 +9732,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	hydrabond: {
 		onModifyMove(move, source) {
+			if (skipPassiveComponent(this, source, 'hydrabond')) return;
 			if (move.category === 'Status' || move.flags['noparentalbond'] || move.flags['charge'] ||
 				move.flags['futuremove'] || move.isZ || move.isMax) return;
 			if (move.id === 'gildedhelix') {
@@ -9775,6 +9776,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		// Damage modifier implemented in BattleActions#modifyDamage()
 		onBasePower(basePower, source) {
+			if (skipPassiveComponent(this, source, 'hydrabond')) return;
 			if (this.field.isTerrain('dragonsdenterrain')) {
 				return this.chainModify(1.2);
 			}
@@ -13749,6 +13751,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false;
 			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onStart', pokemon);
+		},
+		onTerrainChange(pokemon, source, effect) {
+			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onTerrainChange', pokemon, source, effect);
+		},
+		onSideConditionStart(side, source, sideCondition) {
+			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, this.effectState.target, 'onSideConditionStart', side, source, sideCondition);
 		},
 		onEnd(pokemon) {
 			(this.effect as RKSSystemAbility).callMemoryAbility.call(this, pokemon, 'onEnd', pokemon);
@@ -21661,3 +21669,64 @@ installAlakazamRejuv(Abilities);
 
 import { installTidalPoise } from './terajuma-poise';
 installTidalPoise(Abilities);
+
+import {installGoodraArmorReworks} from './goodra-armor-reworks';
+installGoodraArmorReworks(Abilities);
+
+import {DuneCarver} from './dune-carver';
+Abilities.dunecarver = DuneCarver;
+
+import {installFieldSetterReductions} from './field-setter-reductions';
+installFieldSetterReductions(Abilities);
+
+import {installLycanrocQwilfishReworks} from './lycanroc-qwilfish-reworks';
+installLycanrocQwilfishReworks(Abilities);
+
+import {installMiddleStageReworks} from './middle-stage-reworks';
+installMiddleStageReworks(Abilities);
+
+import {installLaprasRework} from './lapras-rework';
+installLaprasRework(Abilities);
+
+import {installHoennMastery} from './hoenn-mastery';
+installHoennMastery(Abilities);
+
+// Mega Heracross: muscular strength complements its native Skill Link passive.
+Abilities.herculeanmight = {
+ name: 'Herculean Might', num: 12081, rating: 4, flags: {breakable: 1},
+ shortDesc: 'Physical attacks ignore Defense boosts. Takes 20% less contact damage; cannot be forced out.',
+ desc: 'Physical attacks ignore positive Defense stages. Takes 20% less damage from contact attacks. Opposing moves and abilities cannot force it to switch out; it can still switch normally.',
+ onModifyMove(move) {
+  if (move.category === 'Physical') move.ignorePositiveDefensive = true;
+ },
+ onSourceModifyDamage(damage, source, target, move) {
+  if (move.flags.contact) return this.chainModify(0.8);
+ },
+ onDragOutPriority: 1,
+ onDragOut(pokemon) {
+  this.add('-activate', pokemon, 'ability: Herculean Might');
+  return null;
+ },
+};
+
+// Mega Pinsir's freedom of flight complements its native Aerilate.
+Abilities.unbridledflight = {
+ name: 'Unbridled Flight', num: 12082, rating: 3, flags: {breakable: 1},
+ shortDesc: 'Flying attacks make no contact. Opponents cannot lower its Speed.',
+ desc: 'Flying attacks do not make contact, including moves converted by Aerilate. Opponents cannot lower its Speed stages.',
+ onModifyMove(move) {
+  if (move.category !== 'Status' && this.movehasType(move, 'Flying')) delete move.flags.contact;
+ },
+ onTryBoost(boost, target, source) {
+  if (source && !source.isAlly(target) && boost.spe && boost.spe < 0) {
+   delete boost.spe;
+   this.add('-fail', target, 'unboost', 'spe', '[from] ability: Unbridled Flight');
+  }
+ },
+};
+
+import {installMachampRework} from './machamp-rework';
+installMachampRework(Abilities);
+
+import {installAuditReworks} from './audit-reworks-approved';
+installAuditReworks(Abilities);

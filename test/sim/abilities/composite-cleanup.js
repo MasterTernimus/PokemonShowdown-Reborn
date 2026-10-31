@@ -200,7 +200,7 @@ describe('Composite ability cleanup', function () {
 		assert.equal(coalossal.hp, coalossalHP);
 	});
 
-	it('should make Gooey lower only Speed after a damaging hit', function () {
+	it('should make Gooey lower only Speed by one after a contact hit', function () {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Goodra', ability: 'gooey', moves: ['splash']},
 		], [
@@ -209,7 +209,7 @@ describe('Composite ability cleanup', function () {
 		battle.makeChoices('team 1', 'team 1');
 		battle.makeChoices('move splash', 'move tackle');
 		assert.deepEqual(battle.p2.active[0].boosts, {
-			atk: 0, def: 0, spa: 0, spd: 0, spe: -2, accuracy: 0, evasion: 0,
+			atk: 0, def: 0, spa: 0, spd: 0, spe: -1, accuracy: 0, evasion: 0,
 		});
 	});
 
@@ -493,7 +493,7 @@ describe('Composite ability cleanup', function () {
 			0: 'Pincer Crush', 1: 'Technician', H: 'Decoy Pincers',
 		});
 		assert.deepEqual(battle.dex.species.get('Swampert').abilities, {
-			0: 'Dry Skin', 1: 'Regenerator', H: 'Damp',
+			0: 'Dry Skin', 1: 'Regenerator', H: 'Tidal Mastery',
 		});
 		assert.deepEqual(battle.dex.species.get('Crawdaunt').abilities, {
 			0: 'Adaptability', 1: 'Swift Swim', H: 'Cruel Shell',

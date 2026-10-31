@@ -7,6 +7,7 @@ export const FieldGuideGroups: { [group: string]: string[] } = {
 };
 export function fieldGuideGroup(id: string) {
 	if (['frozenaura', 'ashenaura'].includes(id)) return 'Elemental';
+	if (['riftaura', 'hauntedaura', 'bewitchedaura'].includes(id)) return 'Magical';
 	return Object.keys(FieldGuideGroups).find(group => FieldGuideGroups[group].includes(id)) || '';
 }
 export const FieldGuideGroupingNotes: { [id: string]: string } = {

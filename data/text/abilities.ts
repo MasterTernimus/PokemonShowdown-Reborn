@@ -1621,8 +1621,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	gooey: {
 		name: "Gooey",
-		desc: "When this Pokemon is hit by an opposing damaging move, once per attacking move, the attacker's Speed is lowered by 2 stages, or 4 stages on Murkwater Surface. This Pokemon also has Hydration and Sap Sipper's effects.",
-		shortDesc: "Damaging hit: attacker -2 Spe (-4 on Murkwater); Hydration + Sap Sipper.",
+		desc: "Each contact hit lowers the attacker's Speed by one stage.",
+		shortDesc: "Contact hits lower the attacker's Speed by 1.",
 	},
 	fluffycraft: {
 		name: "Fluffy Craft",
@@ -4469,7 +4469,6 @@ for (const [id, extra] of Object.entries({
 	"silksights": " Full local Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions on activation. Mirror Arena grants +1 accuracy and Laser Focus; shared accuracy entry rewards apply once.",
 	"longreach": " Full local Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions on activation. Mirror Arena grants +1 accuracy and Laser Focus; shared accuracy entry rewards apply once.",
 	"astralward": " Full local Anticipation reveals opposing Illusions and alerts to a super-effective or OHKO move. On Psychic Terrain, it gains +2 Special Attack only if no threat triggered the early alert.",
-	"doomwarning": " Full local Anticipation reveals opposing Illusions and alerts to a super-effective or OHKO move. On Psychic Terrain, it gains +2 Special Attack only if no threat triggered the early alert.",
 	"calculatedshot": " Full local Frisk reveals opposing Illusions (including itemless foes), reveals held items and independently has a 30% chance to Embargo each opposing item holder for 5 turns.",
 	"slipstream": " Full local Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals opposing Illusions on activation. Mirror Arena grants +1 accuracy and Laser Focus; shared accuracy entry rewards apply once.",
 	"nighthunt": " Full local Frisk reveals opposing Illusions (including itemless foes), reveals held items and independently has a 30% chance to Embargo each opposing item holder for 5 turns. Full local Illuminate prevents opposing accuracy drops and ignores evasion boosts. Mirror Arena lowers opposing accuracy by 1; Starlight Arena raises Special Attack by 2 and places Spotlight on the first adjacent ally in multi-active battles. Shared Illusion reveals occur once.",
@@ -4788,7 +4787,7 @@ AbilitiesText.razorreach = { "name": "Razor Reach", "shortDesc": "Sharpness + Lo
 
 AbilitiesText.silentflight = { name: "Silent Flight", "shortDesc": "Levitate; immune to entry hazards; first HP hit each entry deals 25% less.", "desc": "Levitate makes this Pokemon airborne unless grounded. It is immune to entry hazards even while grounded. The first damaging hit to its HP each switch-in deals 25% less damage; only that hit of a multi-hit move is reduced. Hits absorbed by Substitute are reduced but do not spend the protection. Suppression disables these effects without resetting spent protection. Switching out resets the protection." };
 
-import { applyWarningDescriptions } from '../warning-descriptions';
+import { applyWarningDescriptions, WarningDescriptions } from '../warning-descriptions';
 applyWarningDescriptions(AbilitiesText);
 
 // Keep the registered ability linked to its already-reviewed mechanics text.
@@ -4851,3 +4850,6 @@ for (const [id, text] of Object.entries(LoreDescriptions)) AbilitiesText[id as I
 
 import { TidalPoiseDescription } from '../terajuma-poise';
 AbilitiesText.tidalpoise = TidalPoiseDescription;
+
+AbilitiesText.omensight = {name: 'Omen Sight', ...WarningDescriptions.omensight,
+	activate: "  [TARGET]'s [MOVE] was revealed!"};

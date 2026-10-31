@@ -48,6 +48,18 @@ export class Field {
 		return ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(this.terrain);
 	}
 
+	/** Rift Opening prepares an Aura over a field; a later use develops that Aura. */
+	useRiftOpening(source: Pokemon, move: ActiveMove) {
+		// onHitField runs before the move result is set. A blocked development must not
+		// fall through to an Aura refresh or the direct full-field setter.
+		if (this.isAura('riftaura')) return this.developSeedAura(source, move);
+		if (this.isTerrain('rifteclipseterrain')) return false;
+		const duration = source.hasItem('amplifieldrock') ? 8 : 5;
+		if (this.terrain) return this.setAura('riftaura', duration, source, move);
+		return this.openRiftEclipse(source, move);
+	}
+
+	/** Direct setup is still used by an empty-field move or the two-Room combination. */
 	openRiftEclipse(source: Pokemon, effect: Effect) {
 		if (this.isEclipse()) return this.changeTerrain('rifteclipseterrain', source, effect);
 		const duration = source.hasItem('amplifieldrock') ? 8 : 5;
@@ -161,7 +173,7 @@ export class Field {
 	isTerrainOrAura(id: string) { return this.isTerrain(id) || this.isAura(id); }
 
 	canSupportAura(id: string, allowEmptyField = false) {
-		if ((!this.terrain && !allowEmptyField && !['frozenaura', 'ashenaura'].includes(id)) || this.terrain === id || this.isFlowerGardenBase()) return false;
+		if ((!this.terrain && !allowEmptyField && !['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(id)) || this.terrain === id || this.isFlowerGardenBase()) return false;
 		if (['newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
 		if (this.terrain === 'corrosivemistterrain' && id === 'mistyterrain') return false;
 		return true;
@@ -178,11 +190,11 @@ export class Field {
 		if (!this.aurasEnabled || !aura || !Number.isFinite(turns) || turns < 1 ||
 			!this.canSupportAura(aura.id, noTerrainPromotion)) return false;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
-  if (['frozenaura', 'ashenaura'].includes(aura.id) && this.pulseBlockadeHolder(source, sourceEffect)) return false;
+  if (['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(aura.id) && this.pulseBlockadeHolder(source, sourceEffect)) return false;
   const previousSource = this.auraState.sourceEffect?.id;
 		// Forest Surge installs its companion Aura without promoting an older Grassy Aura over Forest.
 		const forestCompanion = this.terrain === 'forestterrain' && aura.id === 'grassyterrain' && sourceEffect?.id === 'forestsurge';
-		if (!['frozenaura', 'ashenaura'].includes(aura.id) && !noTerrainPromotion && !forestCompanion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
+		if (!['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(aura.id) && !noTerrainPromotion && !forestCompanion && this.auraField === aura.id && source && sourceEffect?.id && previousSource &&
 			!['raindance', 'sunnyday'].includes(sourceEffect.id) &&
 			sourceEffect.id !== previousSource && this.promoteAura(source, sourceEffect)) return true;
 		if (this.auraField) this.clearAura(false);
@@ -196,7 +208,7 @@ export class Field {
 	}
 
 	promoteAura(source: Pokemon, sourceEffect: Effect) {
-		if (!this.auraField || ['frozenaura', 'ashenaura'].includes(this.auraField) || this.auraState.noTerrainPromotion) return false;
+		if (!this.auraField || ['frozenaura', 'ashenaura', 'riftaura', 'hauntedaura', 'bewitchedaura'].includes(this.auraField) || this.auraState.noTerrainPromotion) return false;
 		// Aura permission does not remove full-field replacement restrictions.
 		if (this.isFlowerGardenBase() || ['chessboardterrain', 'glitchterrain', 'bewitchedwoodsterrain',
 			'newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
@@ -211,21 +223,28 @@ export class Field {
 	}
 
 
- /** Only the matching unsuppressed seed holder can develop these independent Auras. */
+ /** The elemental Seeds develop after a successful move; Rift Opening resolves on hit. */
  promoteSeedAura(source: Pokemon, move: ActiveMove) {
   if (source.moveThisTurnResult !== true || source.volatiles.twoturnmove || this.auraTurns < 1) return false;
   // Use the shared Eclipse clock even when a seed holder triggers the direct swap first.
   if (this.shiftEclipseWithAura(source, move)) return true;
+  return this.developSeedAura(source, move);
+ }
+
+ private developSeedAura(source: Pokemon, move: ActiveMove) {
+  if (this.auraTurns < 1) return false;
   const frozen = this.isAura('frozenaura') && source.hasAbility('badseeds') && ['blizzard', 'glaciate', 'sheercold'].includes(move.id);
   const ashen = this.isAura('ashenaura') && source.hasAbility('ashenseeds') && ['infernalparade', 'eruption'].includes(move.id);
-  if ((!frozen && !ashen) || this.moveTransitionBlocked(source, move)) return false;
+  const rift = this.isAura('riftaura') && move.id === 'riftopening';
+  if ((!frozen && !ashen && !rift) || this.moveTransitionBlocked(source, move)) return false;
   // Match ordinary Aura conversion restrictions even where a direct field setter has exceptions.
   if (this.isFlowerGardenBase() || ['chessboardterrain', 'glitchterrain', 'bewitchedwoodsterrain',
    'hauntedterrain', 'newworldterrain', 'underwaterterrain', 'midnightzoneterrain', 'dragonsdenterrain'].includes(this.terrain)) return false;
   const aura = this.auraField, duration = this.auraTurns;
-  if (!this.setFieldOrAura(frozen ? 'coldeclipseterrain' : 'infernaleclipseterrain', duration, source, move, true)) return false;
+  if (!this.setFieldOrAura(frozen ? 'coldeclipseterrain' : ashen ? 'infernaleclipseterrain' : 'rifteclipseterrain', duration, source, move, true)) return false;
   if (this.auraField === aura) this.clearAura();
-  this.battle.add('-message', frozen ? 'Bad Seeds developed the Frozen Aura into Cold Eclipse!' : 'Ashen Seeds developed the Ashen Aura into Infernal Eclipse!');
+  this.battle.add('-message', frozen ? 'Bad Seeds developed the Frozen Aura into Cold Eclipse!' : ashen ?
+   'Ashen Seeds developed the Ashen Aura into Infernal Eclipse!' : 'Rift Opening developed the Rift Aura into Rift Eclipse!');
   return true;
  }
 
@@ -280,6 +299,9 @@ export class Field {
 		if (type === 'Ice' && this.terrain === 'coldeclipseterrain') return 1.2;
 		if (type === 'Fire' && ['burningterrain', 'volcanicterrain', 'infernaleclipseterrain'].includes(this.terrain)) return 1.5;
 		if (type === 'Dark' && ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(this.terrain)) return 1.5;
+		if (type === 'Ghost' && this.terrain === 'rifteclipseterrain') return 1.2;
+		if (type === 'Ghost' && this.terrain === 'hauntedterrain') return 1.5;
+		if (type === 'Dark' && this.terrain === 'bewitchedwoodsterrain') return 1.3;
 		if (move.id === 'deiludicium' && this.isTerrain('rainbowterrain') && type === 'Normal' && move.category === 'Special') return 1.5;
 		if (this.terrain === 'bewitchedwoodsterrain' && ['Fairy', 'Grass'].includes(type)) return 1.5;
 		if (this.terrain === 'glitchterrain' && type === 'Psychic') return 1.2;
@@ -292,7 +314,7 @@ export class Field {
 			if (type === 'Psychic') return 1.2;
 		}
 		if (this.terrain === 'starlightarenaterrain' && !this.weather) {
-			if (type === 'Psychic') return 1.5;
+			if (type === 'Psychic' || type === 'Dark') return 1.5;
 			if (type === 'Fairy') return 1.3;
 		}
 		if (type === 'Electric' && target.isGrounded()) {
@@ -303,6 +325,12 @@ export class Field {
 	}
 
 	auraPowerMultiplier(source: Pokemon, target: Pokemon, move: ActiveMove) {
+		if (this.isAura('hauntedaura') || this.isAura('bewitchedaura')) {
+			const haunted = this.isAura('hauntedaura');
+			if (this.isTerrain(haunted ? 'hauntedterrain' : 'bewitchedwoodsterrain')) return 1;
+			if ((move.types || [move.type]).some(type => (haunted ? ['Ghost'] : ['Psychic','Fairy']).includes(type))) {this.battle.add('-message', this.getAura().typeMessage);return 1.2;}
+			return 1;
+		}
 		const aura = this.getAura();
 		if (!aura || move.category === 'Status') return 1;
 		let multiplier = aura.damageMultipliers[move.id] || 1;
@@ -325,6 +353,16 @@ export class Field {
 		if (!typeAllowed || (this.auraField === 'electricterrain' && this.terrain === 'shortcircuitterrain')) return multiplier;
 		for (const [type, boost] of Object.entries(aura.typeMultipliers)) {
 			if (!types.includes(type)) continue;
+			if (this.isAura('riftaura') && type === 'Fairy') {
+				// Share the stronger Fairy penalty; Adaptive Cycle can ignore the base
+				// field's reduction, but the independent Aura still applies its own.
+				const basePenalty = adaptiveEnvironment(source, 'fields') ? 1 :
+					this.terrain === 'rifteclipseterrain' ? 0.5 :
+					this.terrain === 'infernaleclipseterrain' && move.id !== 'spiritbreak' ? 0.5 : 1;
+				multiplier *= Math.min(basePenalty, boost) / basePenalty;
+				this.battle.add('-message', aura.typeMessage);
+				continue;
+			}
 			let baseBoost = move.type === type ? this.baseAuraTypeBoost(move, source, target) : 1;
 			// Infernal Eclipse also boosts added Fire effectiveness types; Ashen Aura shares that type bonus.
 			if (this.isAura('ashenaura') && type === 'Fire') baseBoost = this.baseAuraTypeBoost({...move, type: 'Fire'}, source, target);
@@ -332,7 +370,11 @@ export class Field {
 			if (this.isAura('frozenaura') && this.terrain === 'coldeclipseterrain' && type === 'Ice') {
 				baseBoost = this.baseAuraTypeBoost({ ...move, type: 'Ice' }, source, target);
 			}
-			multiplier *= baseBoost > 1 && boost > 1 ? Math.max(1.5, baseBoost, boost) / baseBoost : boost;
+			if (this.isAura('riftaura') && ['coldeclipseterrain', 'rifteclipseterrain', 'infernaleclipseterrain'].includes(this.terrain)) {
+				baseBoost = this.baseAuraTypeBoost({...move, type}, source, target);
+			}
+			const overlapFloor = this.isAura('riftaura') ? 1 : 1.5;
+			multiplier *= baseBoost > 1 && boost > 1 ? Math.max(overlapFloor, baseBoost, boost) / baseBoost : boost;
 			this.battle.add('-message', aura.typeMessage);
 		}
 		return multiplier;

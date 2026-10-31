@@ -1282,6 +1282,7 @@
         "Hurricane",
         "Hydro Vortex",
         "Muddy Water",
+        "Oceanic Operetta",
         "Plasma Fists",
         "Razor Wind",
         "Sand Tomb",
@@ -4709,7 +4710,7 @@
   "rifteclipseterrain": {
     "name": "Rift Eclipse Terrain",
     "moves": {
-      "power ×0.75": [
+      "power ×0.5": [
         "Alluring Voice",
         "Dazzling Gleam",
         "Disarming Voice",
@@ -4854,7 +4855,7 @@
       "becomes Physical OR no modifier [field cycle/history may vary]": [
         "Super U.M.D. Move"
       ],
-      "power ×0.75; secondary effects: 30% inflicts flinch": [
+      "power ×0.5; secondary effects: 30% inflicts flinch": [
         "Vorpal Blade"
       ],
       "dual typing: Water / Ice": [

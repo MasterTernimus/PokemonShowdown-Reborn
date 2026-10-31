@@ -16,7 +16,7 @@ describe('Torterra and Torterra-Mega-Y', () => {
 		assert.deepEqual(base.abilities, {'0': 'Stamina', '1': 'Shell Armor', H: 'Terra Gift'});
 		assert.deepEqual(base.otherFormes, ['Torterra-Mega-X', 'Torterra-Mega-Y', 'Torterra-Rift', 'Torterra-Rift-Shatter']);
 		assert.deepEqual(mega.types, ['Grass', 'Rock']);
-		assert.deepEqual(mega.baseStats, {hp: 95, atk: 95, def: 135, spa: 159, spd: 105, spe: 46});
+		assert.deepEqual(mega.baseStats, {hp: 95, atk: 105, def: 130, spa: 144, spd: 105, spe: 56});
 		assert.equal(mega.bst, 635);
 		assert.equal(mega.abilities[0], 'Terra Resolve');
 		assert.equal(mega.requiredItem, 'Torterranite');
@@ -25,7 +25,7 @@ describe('Torterra and Torterra-Mega-Y', () => {
 		assert.equal(Dex.species.get('Torterra-Reborn').exists, false);
 	});
 
-	it('Mega Evolves with Terra Resolve and gains its four component effects', () => {
+	it('Mega Evolves with Terra Resolve and the Proficient passive', () => {
 		battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
 			{species: 'Torterra', item: 'Torterranite', moves: ['splash', 'energyball', 'rockslide']},
 		], [{species: 'Mew', moves: ['tackle']}]]);
@@ -35,7 +35,10 @@ describe('Torterra and Torterra-Mega-Y', () => {
 		battle.makeChoices('move splash megay', 'move tackle');
 		const torterra = battle.p1.active[0];
 		assert.equal(torterra.species.name, 'Torterra-Mega-Y');
-		for (const ability of ['stamina', 'rockypayload', 'solidrock', 'proficient']) {
+		assert(torterra.getPassives().includes('proficient'));
+		assert(torterra.hasAbilityOrPassive('proficient'));
+		assert(!torterra.hasAbility('rockypayload'));
+		for (const ability of ['stamina', 'solidrock']) {
 			assert(torterra.hasAbility(ability), ability);
 		}
 		assert(!torterra.hasAbility('selfsufficient'));
@@ -46,7 +49,7 @@ describe('Torterra and Torterra-Mega-Y', () => {
 		const withoutStab = battle.runEvent('BasePower', torterra, battle.p2.active[0], move, 100);
 		assert(Math.abs(withStab - withoutStab * 1.3) <= 1, 'Proficient increases matching-type move power');
 		const rockMove = battle.dex.getActiveMove('rockslide');
-		assert.equal(battle.runEvent('ModifySpA', torterra, battle.p2.active[0], rockMove, 100), 150);
+		assert.equal(battle.runEvent('ModifySpA', torterra, battle.p2.active[0], rockMove, 100), 100);
 		assert.equal(battle.runEvent('ModifySpA', torterra, battle.p2.active[0], move, 100), 100);
 		const incoming = battle.dex.getActiveMove('tackle');
 		assert.equal(battle.runEvent('SourceModifyDamage', torterra, battle.p2.active[0], incoming, 100), 80);

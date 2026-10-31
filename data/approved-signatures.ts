@@ -612,7 +612,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 	base.silksights.onStart = base.keeneye.onStart;
 	base.silksights.onTryBoost = base.keeneye.onTryBoost;
 	base.silksights.onModifyMove = base.keeneye.onModifyMove;
-	for (const id of ['astralward', 'doomwarning'] as const) {
+	for (const id of ['astralward'] as const) {
 		const priorStart = base[id].onStart;
 		base[id].onStart = function (pokemon) {
 			priorStart?.call(this, pokemon);

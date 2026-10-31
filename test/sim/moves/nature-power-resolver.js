@@ -17,7 +17,7 @@ describe('Shared Nature Power resolver', () => {
 			} } };
 			Dex.moves.get('naturepower').onTryHit.call(ctx, target, source);
 			assert.equal(called, resolveNaturePowerMove(field, aura));
-			const expected = aura?.id === 'frozenaura' ? 'icebeam' : FieldMoveMappings[field] ? Dex.toID(FieldMoveMappings[field].nature) : ({ crystalcavernterrain: 'powergem', newworldterrain: 'spacialrend' }[field] || 'triattack');
+			const expected = ({frozenaura: 'icebeam', ashenaura: 'infernalparade', riftaura: 'darkpulse'})[aura?.id] || (FieldMoveMappings[field] ? Dex.toID(FieldMoveMappings[field].nature) : ({ crystalcavernterrain: 'powergem', newworldterrain: 'spacialrend' }[field] || 'triattack'));
 			assert.equal(called, expected); assert.equal(options.target, called === 'growth' ? source : target);
 		}
 	});

@@ -113,7 +113,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	riftopening: {
 		num: 31001, name: 'Rift Opening', accuracy: true, basePower: 0, category: 'Status',
 		pp: 5, priority: 0, flags: {}, target: 'all', type: 'Dark',
-		onHitField(target, source, move) { return this.field.openRiftEclipse(source, move); },
+		onHitField(target, source, move) { return this.field.useRiftOpening(source, move); },
 	},
 	"10000000voltthunderbolt": {
 		num: 719,
@@ -3889,7 +3889,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onResidual(pokemon) {
 				const sourceEffect = this.effectState.sourceEffect;
 				const damageDivisor = sourceEffect?.effectType === 'Ability' ? 8 : 4;
-				this.damage(pokemon.baseMaxhp / damageDivisor);
+				const dealt = this.damage(pokemon.baseMaxhp / damageDivisor);
+				const caster = this.effectState.source;
+				if (sourceEffect?.id === 'cursedkeepsake' && caster?.hp && caster.isActive && caster.hasAbility('cursedkeepsake') && typeof dealt === 'number' && dealt > 0) this.heal(dealt / 2, caster, pokemon, 'drain');
 				if (this.field.isTerrain('holyterrain')) {
 					pokemon.removeVolatile('curse');
 				}
@@ -9585,7 +9587,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 			const healed = this.heal(source.baseMaxhp / (sourceCured ? 4 : 8), source, source);
-			if (source.hasAbility('restorativechime')) (move as any).restorativeChimeSuccess = !!(success || healed || guarded || allyGuarded);
+			if (source.hasAbility(['restorativechime', 'oceanlullaby'])) (move as any).restorativeChimeSuccess = !!(success || healed || guarded || allyGuarded);
 			return success;
 		},
 		target: "allyTeam",
@@ -24415,6 +24417,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 2,
 			onStart(pokemon, source, sourceEffect) {
+				this.effectState.yangWish = sourceEffect?.id;
+				this.effectState.yangNomos = sourceEffect?.id === 'nomoswish' && (this.field.isTerrain(['grassyterrain','forestterrain','starlightarenaterrain']) || this.field.isAura('grassyterrain'));
 				this.effectState.moonlitPromise = source.hasAbility('voidpromise');
 				this.effectState.lastingPromiseSource = source.hasAbility('lastingpromise') && sourceEffect?.id === 'wish' ? source : null;
 				if (this.field.isTerrain(['mistyterrain', 'rainbowterrain', 'fairytaleterrain', 'holyterrain', 'starlightarenaterrain']) ||
@@ -24423,6 +24427,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.effectState.hp = source.maxhp * 3 / 4;
 				else
 					this.effectState.hp = source.maxhp / 2;
+				if (this.effectState.yangNomos) this.effectState.hp = Math.max(this.effectState.hp, source.maxhp * 5 / 8);
 			},
 			onResidualOrder: 4,
 			onEnd(target) {
@@ -24434,6 +24439,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
+						if (this.effectState.yangNomos && target.removeVolatile('confusion')) this.add('-message', 'Noel’s wish brought a moment of peace!');
+						if (this.effectState.yangWish === 'nostraswish' && this.field.isTerrain(['starlightarenaterrain','newworldterrain'])) {
+							const status = target.cureStatus();
+							const confusion = target.removeVolatile('confusion');
+							if (status || confusion) this.add('-message', 'Anna’s wish banished pain beneath the stars!');
+						}
 						const wisher = this.effectState.lastingPromiseSource as Pokemon | null;
 						if (wisher && target !== wisher && target.isAlly(wisher)) target.cureStatus();
 						this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);

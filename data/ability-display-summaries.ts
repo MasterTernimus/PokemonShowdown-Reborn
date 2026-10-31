@@ -155,7 +155,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"desertrift": "5-turn Desert Field; fixed four-move set.",
 	"adaptivepower": "Double Attack; heals 1/3 HP on switching; no indirect damage.",
 	"perfectforesight": "Ability copy; Miracle Eye; stored attacks; once-per-battle Mega screens.",
-	"doomwarning": "Reflects status moves; no indirect damage; reveals threats; Doom Desire against foes on fainting.",
+	"doomwarning": "Magic Bounce + Magic Guard; fainting sets Doom Desire against each foe.",
 	"perfectego": "Never misses; heals and gains stats in combat.",
 	"heavenlychorus": "Half contact damage, double Fire damage.",
 	"mourningsnow": "8-turn Hail/Veil; damaging moves add 30% frostbite; faint healing/curse; hit Disable.",
@@ -204,7 +204,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"verdantsanctuary": "Grassy Terrain on entry; Hospitality and Friend Guard.",
 	"echosense": "Allies avoid own sound damage; 30% chance of 5-turn Embargo; double Speed on Psychic field/aura.",
 	"wingedwraith": "Moves bypass Substitute and opposing screens; If it is at full HP, its Flying-type moves have their priority increased by 1.",
-	"gooey": "Damaging hit: attacker -2 Spe (-4 on Murkwater).",
+	"gooey": "Contact hits lower the attacker's Speed by 1.",
 	"hydraheart": "FFA singles hit all foes at 1.3x; +1 Defense once per turn.",
 	"sweetresonance": "Lowers foe evasion; protects item; attackers receive Embargo; heals; three-hit moves; ally Dragon Cheer.",
 	"phantombarrage": "Blocks foe stat drops; bypasses screens/Substitute; extra hits, or 1.2x power for signature moves.",
@@ -859,3 +859,6 @@ AbilityDisplaySummaries.imperialedge = AbilityDisplaySummaries.exalt;
 delete AbilityDisplaySummaries.exalt;
 
 for (const id of ['serenegrace', 'fortunatewing', 'voidomen']) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
+AbilityDisplaySummaries.safeharbor = 'Switching out heals its immediate replacement by 1/8 HP after hazards.';
+AbilityDisplaySummaries.oceanlullaby = 'Successful sound moves heal active allies and itself by 1/16 HP and clear confusion once per turn.';
+AbilityDisplaySummaries.auroraresonance = 'Water/Ice hits cure its active side’s status; 30% more power during Aurora Veil.';

@@ -1,7 +1,7 @@
 import type { Pokemon } from '../sim/pokemon';
 
-/** One independent check; warning storage and damage protection stay unchanged. */
-export function checkWarning(battle: Battle, pokemon: Pokemon, target: Pokemon, ability: 'anticipation' | 'forewarn') {
+/** One independent check; Omen Sight shares announcements but keeps per-foe memory. */
+export function checkWarning(battle: Battle, pokemon: Pokemon, target: Pokemon, ability: 'anticipation' | 'forewarn', omenReports?: Set<string>) {
 	if (!pokemon.hp || !target.hp || !target.isActive || pokemon.isAlly(target)) return;
 	const effect = battle.dex.abilities.get(ability);
 	if (target.illusion) {
@@ -13,9 +13,12 @@ export function checkWarning(battle: Battle, pokemon: Pokemon, target: Pokemon, 
 			if (move.category === 'Status') continue;
 			const type = move.id === 'hiddenpower' ? target.hpType : move.type;
 			if ((battle.dex.getImmunity(type, pokemon) && battle.dex.getEffectiveness(type, pokemon) > 0) || move.ohko) {
-				battle.add('-activate', pokemon, 'ability: Anticipation', move.name, `[of] ${target}`);
-				rememberWarning(pokemon, ability, move);
-				battle.add('-message', `${pokemon.name} anticipated ${move.name}!`);
+				rememberWarning(pokemon, ability, move, omenReports ? target : undefined);
+				if (omenReports) reportOmen(battle, pokemon, target, move, omenReports);
+				else {
+					battle.add('-activate', pokemon, 'ability: Anticipation', move.name, `[of] ${target}`);
+					battle.add('-message', `${pokemon.name} anticipated ${move.name}!`);
+				}
 				return;
 			}
 		}
@@ -37,8 +40,9 @@ export function checkWarning(battle: Battle, pokemon: Pokemon, target: Pokemon, 
 		}
 		if (!moves.length) return;
 		const move = battle.sample(moves);
-		rememberWarning(pokemon, ability, move);
-		battle.add('-activate', pokemon, 'ability: Forewarn', move, `[of] ${target}`);
+		rememberWarning(pokemon, ability, move, omenReports ? target : undefined);
+		if (omenReports) reportOmen(battle, pokemon, target, move, omenReports);
+		else battle.add('-activate', pokemon, 'ability: Forewarn', move, `[of] ${target}`);
 		if (pokemon.hasAbilityOrPassive('breakingnews')) {
 			battle.add('-message', `Gossip Gardevoir reports: ${target.name} carries ${move.name}!`);
 		}
@@ -46,11 +50,28 @@ export function checkWarning(battle: Battle, pokemon: Pokemon, target: Pokemon, 
 	if (battle.field.isTerrain('psychicterrain')) battle.boost({ spa: 2 }, pokemon, pokemon, effect);
 }
 
+function reportOmen(battle: Battle, pokemon: Pokemon, target: Pokemon, move: Move, reports: Set<string>) {
+	if (reports.has(move.id)) return;
+	if (!reports.size) battle.add('-message', `${pokemon.name} sensed danger approaching!`);
+	reports.add(move.id);
+	battle.add('-activate', pokemon, 'ability: Omen Sight', move.name, `[of] ${target}`);
+}
+
+export function checkOmenSight(battle: Battle, pokemon: Pokemon, target: Pokemon) {
+	const reports = new Set<string>();
+	checkWarning(battle, pokemon, target, 'anticipation', reports);
+	checkWarning(battle, pokemon, target, 'forewarn', reports);
+}
+
 /** Incoming holders already checked all foes through their ordinary entry callbacks. */
 export function warnIncomingOpponents(battle: Battle, entrants: Pokemon[]) {
 	if (battle.gen !== 9) return;
 	for (const holder of battle.getAllActive()) {
 		if (entrants.includes(holder) || !holder.isStarted || !holder.hp) continue;
+		if (holder.hasAbilityOrPassive('omensight')) {
+			for (const entrant of entrants) checkOmenSight(battle, holder, entrant);
+			continue;
+		}
 		for (const ability of ['anticipation', 'forewarn'] as const) {
 			if (!holder.hasAbilityOrPassive(ability)) continue;
 			for (const entrant of entrants) checkWarning(battle, holder, entrant, ability);
@@ -58,16 +79,29 @@ export function warnIncomingOpponents(battle: Battle, entrants: Pokemon[]) {
 	}
 }
 
-export function rememberWarning(pokemon: Pokemon, ability: 'forewarn' | 'anticipation', move: Move) {
+export function rememberWarning(pokemon: Pokemon, ability: 'forewarn' | 'anticipation', move: Move, foe?: Pokemon) {
 	// Percentage damage reduction is not protection against an OHKO move.
 	if (move.ohko || move.category === 'Status') return;
 	if (!pokemon.volatiles.warnedmoves) pokemon.addVolatile('warnedmoves', pokemon);
-	if (pokemon.volatiles.warnedmoves) pokemon.volatiles.warnedmoves[ability] = move.id;
+	const memory = pokemon.volatiles.warnedmoves;
+	if (!memory) return;
+	if (foe) {
+		const opponents: Map<Pokemon, Partial<Record<'anticipation' | 'forewarn', string>>> = memory.omenOpponents ||= new Map();
+		const warnings = opponents.get(foe) || {};
+		warnings[ability] = move.id;
+		opponents.set(foe, warnings);
+	} else {
+		memory[ability] = move.id;
+	}
 }
 
 export function protectsWarnedMove(pokemon: Pokemon, source: Pokemon | null, effect: Effect | null) {
 	if (!source || pokemon.isAlly(source) || effect?.effectType !== 'Move' || effect.ohko) return false;
 	const memory = pokemon.volatiles.warnedmoves;
+	if (memory?.omenOpponents && pokemon.hasAbilityOrPassive('omensight')) {
+		const warnings = memory.omenOpponents.get(source);
+		if (warnings && Object.values(warnings).includes(effect.id)) return true;
+	}
 	return !!memory && (['forewarn', 'anticipation'] as const).some(id =>
 		memory[id] === effect.id && pokemon.hasAbilityOrPassive(id));
 }

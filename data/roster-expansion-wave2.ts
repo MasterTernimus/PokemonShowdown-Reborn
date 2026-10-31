@@ -276,10 +276,11 @@ export function applyRosterWave2(base: AbilityDataTable) {
 		add(id, name, {
 			onModifyMove(move) {
 				if (move.category === 'Status' || move.multihit || move.isZ || move.isMax || move.damage || move.damageCallback ||
+					move.flags.charge || move.flags.futuremove || move.flags.noparentalbond || move.ohko ||
 					!['normal', 'any', 'adjacentFoe'].includes(move.target)) return;
 				const cannons = id === 'twincannons';
 				if (cannons ? move.category !== 'Special' || !['Fire', 'Psychic'].includes(move.type) :
-					!move.flags['slicing'] || !['Fire', 'Ghost'].includes(move.type)) return;
+					move.category !== 'Physical' || !move.flags['slicing'] || !['Fire', 'Ghost'].includes(move.type)) return;
 				move.multihit = 2;
 				move.multihitType = cannons ? 'twincannons' : 'twinblades';
 			},
@@ -288,7 +289,7 @@ export function applyRosterWave2(base: AbilityDataTable) {
 				if (move.multihitType !== id) return;
 				if (id === 'twincannons') move.overrideDefensiveStat = move.hit > 1 ? 'def' : 'spd';
 				else move.ignorePositiveDefensive = move.hit > 1;
-				return this.chainModify(this.gameType === 'freeforall' ? (id === 'twinblades' ? 0.6 : 1) : 0.5);
+				return this.chainModify(move.hit > 1 ? 0.4 : 0.6);
 			},
 			onSourceModifySecondaries(secondaries, target, source, move) {
 				if (move.multihitType === id && move.hit > 1) return [];

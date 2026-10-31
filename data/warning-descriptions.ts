@@ -1,14 +1,18 @@
 import { AbilityComponents } from './ability-components';
 
-const timing = 'Checks each active opponent separately when the holder enters, and rechecks each incoming opponent on every switch-in, including repeat entries. Allies are not checked, and initial checks do not trigger twice.';
+const timing = 'On entry and opposing switch-ins, reveals foes\' Illusions';
 export const WarningDescriptions = {
 	anticipation: {
-		desc: `${timing} For each check, removes that opponent's Illusion and reveals one super-effective damaging move or OHKO threat. If that opponent has no threat, Psychic Terrain grants +2 Sp. Atk. Until switching out, takes 25% less damage from opposing uses of the most recently revealed damaging non-OHKO move. This replaces weaker Forewarn protection rather than stacking with it.`,
-		shortDesc: 'Checks each foe on entry and every foe switch-in; warns of danger and protects against its latest warned move.',
+		desc: `${timing} and a super-effective or OHKO move. Takes 25% less damage from the latest warned move until switching out, excluding OHKO moves. On Psychic Terrain, gains +2 Sp. Atk for each foe with no threat.`,
+		shortDesc: 'Reveals dangerous moves; takes 25% less damage from the latest warning.',
 	},
 	forewarn: {
-		desc: `${timing} For each check, removes that opponent's Illusion and reveals one of its strongest damaging moves, choosing randomly among ties. Each successful reveal on Psychic Terrain grants +2 Sp. Atk. Takes 20% less move damage, or 25% less from opposing uses of the most recently revealed damaging non-OHKO move until switching out. These reductions do not stack; OHKO moves receive no learned-move protection.`,
-		shortDesc: 'Checks each foe on entry and every foe switch-in; latest warned move deals 25% less damage, otherwise 20%.',
+		desc: `${timing} and a strongest damaging move. Takes 20% less move damage, or 25% less from the latest warned move until switching out, excluding OHKO moves. Each reveal on Psychic Terrain grants +2 Sp. Atk.`,
+		shortDesc: 'Reveals strongest moves; takes 20% less move damage, or 25% less from the latest warning.',
+	},
+	omensight: {
+		desc: `${timing}, a super-effective or OHKO move, and a strongest damaging move. Takes 20% less move damage, or 25% less from each foe's warned moves until switching out, excluding OHKO moves. On Psychic Terrain, gains +2 Sp. Atk for each strongest-move reveal and each foe with no super-effective or OHKO threat.`,
+		shortDesc: 'Anticipation + Forewarn. Takes 20% less move damage, or 25% less from warned moves.',
 	},
 };
 
@@ -26,7 +30,7 @@ export function applyWarningDescriptions(texts: Record<string, { desc?: string, 
 		}
 		const names = ['anticipation', 'forewarn'].filter(name => seen.has(name));
 		if (!names.length) continue;
-		const note = ` Its ${names.map(name => name === 'anticipation' ? 'Anticipation' : 'Forewarn').join(' and ')} component: ${timing} Each check retains its usual Psychic Terrain bonus condition and latest-warned-move protection.`;
+		const note = ' Rechecks incoming foes on every switch-in.';
 		if (!text.desc.includes(note)) texts[id] = { ...text, desc: text.desc + note };
 	}
 }

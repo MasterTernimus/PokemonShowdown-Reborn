@@ -890,7 +890,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const shortTrap = ['desertsmark', 'barbedweb', 'swarmsnare'].includes(effect.id) ||
 				(effect as ActiveMove & {approvedShortTrap?: boolean}).approvedShortTrap;
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`,
-				...(shortTrap ? [`[until] ${this.turn + 1}`] : []));
+				...(shortTrap ? [`[until] ${this.turn + (effect.id === 'swarmsnare' && (effect as ActiveMove & {yang?: {eligible: boolean}}).yang?.eligible ? 2 : 1)}`] : []));
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 
 			const moveBoosts: Record<string, readonly string[]> = {
@@ -934,6 +934,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const divisor = this.effectState.sourceEffect.id === 'infestation' && stage >= 3 ?
 				({3: 6, 4: 4, 5: 3} as Record<number, number>)[stage] : this.effectState.boundDivisor;
 			const bindingDamage = this.damage(pokemon.baseMaxhp / divisor);
+			if (this.effectState.sourceEffect.id === 'swarmsnare' && (this.field.isTerrain('forestterrain') || stage) && typeof bindingDamage === 'number' && bindingDamage > 0 && source?.hp && source.isActive && !source.isAlly(pokemon)) {
+				if (this.heal(bindingDamage / 2, source, pokemon, 'drain')) this.add('-message', 'The swarm carried stolen strength back to its keeper!');
+			}
 			if (typeof bindingDamage === 'number' && bindingDamage > 0 && source?.hp && source.isActive && source.hasAbilityOrPassive('constrictingcoils')) {
 				this.heal(bindingDamage, source, pokemon, 'drain');
 			}
@@ -1997,3 +2000,7 @@ Object.assign(Conditions, PlasmaConditions);
 
 import {LoreConditions} from './lore-pairs';
 Object.assign(Conditions, LoreConditions);
+
+Conditions.lastbloom = {name: 'Last Bloom'};
+Conditions.tyrantlegacy = {name: 'Tyrant Legacy'};
+Conditions.harborpassage = {name: 'Harbor Passage'};

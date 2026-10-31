@@ -79,7 +79,7 @@ export const EclipseTerrains: {[id: string]: TerrainData} = {
 				const types = move.types || [move.type];
 				if (types.includes('Dark')) modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				if (types.includes('Ghost')) modifier *= adaptiveFieldMultiplier(this, source, target, 1.2);
-				if (types.includes('Fairy')) modifier *= adaptiveFieldMultiplier(this, source, target, 0.75);
+				if (types.includes('Fairy')) modifier *= adaptiveFieldMultiplier(this, source, target, 0.5);
 				if (['spacialrend', 'roaroftime', 'hyperspacehole', 'hyperspacefury', 'shadowforce', 'phantomforce',
 					'dynamaxcannon', 'eternabeam'].includes(move.id)) modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
 				return this.chainModify(modifier);

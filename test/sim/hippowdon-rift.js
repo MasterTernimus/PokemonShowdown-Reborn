@@ -9,6 +9,33 @@ describe('Hippowdon-Rift and Rift Eater', () => {
 	let battle;
 	afterEach(() => { battle?.destroy(); battle = null; });
 
+
+ for (const count of [1, 2, 3, 4]) it('keeps a '+count+'-move set dense through awakening and re-entry', () => {
+  const moves = ['protect', 'earthquake', 'slackoff', 'sludgewave'].slice(0, count);
+  battle = common.createBattle({formatid: 'gen9nofieldsinglesgame'}, [[
+   {species: 'Hippowdon', ability: 'Ruin Jaw', item: 'Anomaly Core', moves},
+   {species: 'Mew', ability: 'No Ability', moves: ['splash']},
+  ], [{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
+  battle.makeChoices('team 12', 'team 1');
+  battle.makeChoices('move protect mega', 'move splash');
+  const p = battle.p1.active[0], index = Math.min(count, 3), length = Math.min(count + 1, 4);
+  assert.equal(p.moveSlots.length, length);
+  for (let i = 0; i < length; i++) assert(p.moveSlots[i]);
+  assert.equal(p.moveSlots[index].id, 'sludgewave');
+  p.deductPP('sludgewave', 2);
+  battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+  assert.equal(p.moveSlots.length, length);
+  p.hp = Math.floor(p.maxhp / 2);
+  battle.runEvent('Update', p);
+  assert.equal(p.moveSlots[index].id, 'heatwave');
+  assert.equal(p.moveSlots[index].pp, p.moveSlots[index].maxpp - 2);
+  battle.makeChoices('switch 2', 'move splash');
+  battle.makeChoices('switch 2', 'move splash');
+  assert.equal(p.moveSlots.length, length);
+  assert.equal(p.moveSlots[index].id, 'heatwave');
+  assert.equal(p.moveSlots[index].pp, p.moveSlots[index].maxpp - 2);
+ });
+
 	it('has the requested Anomaly Core form and a legal Sludge Wave', () => {
 		const rift = Dex.species.get('Hippowdon-Rift');
 		assert.deepEqual(rift.types, ['Ground', 'Poison']);
@@ -38,7 +65,9 @@ describe('Hippowdon-Rift and Rift Eater', () => {
 		assert(hippo.hasAbility('accumulation'));
 		assert(hippo.hasAbility('sandstream'));
 		assert(battle.field.isWeather('sandstorm'));
-		assert(hippo.volatiles.stockpile, 'Accumulation stockpiles at turn end');
+		assert(!hippo.volatiles.stockpile, 'Accumulation waits two eligible turns');
+		battle.makeChoices('move splash', 'move splash');
+		assert.equal(hippo.volatiles.stockpile.layers, 1);
 	});
 
 	it('at half HP announces the transformation and refreshes missing sand', () => {
@@ -61,7 +90,7 @@ describe('Hippowdon-Rift and Rift Eater', () => {
 		assert.equal(hippo.moveSlots[3].id, 'heatwave');
 		assert.equal(hippo.baseMoveSlots[3].id, 'heatwave');
 		assert.match(battle.log.join('\n'), /changed from Ground\/Poison to Ground\/Fire/);
-		assert.match(battle.log.join('\n'), /fourth move changed from Sludge Wave to Heat Wave/);
+		assert.match(battle.log.join('\n'), /Sludge Wave changed to Heat Wave/);
 		assert.match(battle.log.join('\n'), /summoned a new sandstorm/);
 		const announcements = battle.log.filter(line => line.includes('awakened at half HP'));
 		battle.runEvent('Update', hippo);

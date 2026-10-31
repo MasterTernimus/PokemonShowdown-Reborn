@@ -1,5 +1,5 @@
 export const MovesText: { [id: IDEntry]: MoveText } = {
- riftopening: {name: 'Rift Opening', shortDesc: 'Creates Rift Eclipse for 5 turns (8 with rock).', desc: 'Creates Rift Eclipse for 5 turns, or 8 with Amplifield Rock. Changes another eclipse to Rift Eclipse without refreshing its duration. Field locks apply.'},
+ riftopening: {name: 'Rift Opening', shortDesc: 'Creates Rift Aura; another use develops Rift Eclipse.', desc: 'On an empty field without Rift Aura, creates full Rift Eclipse for 5 turns, or 8 with Amplifield Rock. Over another field, creates Rift Aura for the same duration without replacing the base field. If Rift Aura is already active, a successful use instead develops full Rift Eclipse, consuming the Aura and preserving its remaining turns; Rift Herald is not required. Does not refresh an existing full Rift Eclipse. Normal Aura, field and development restrictions apply; blocked development leaves the Aura intact.'},
 	deluge: {
 		name: "Deluge",
 		desc: "Usually moves after other attacks (-4 priority). Power doubles from 80 to 160 if the target already damaged the user this turn. Has a higher chance for a critical hit.",

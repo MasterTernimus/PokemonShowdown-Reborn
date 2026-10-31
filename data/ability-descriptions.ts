@@ -869,8 +869,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Insomnia + ability copy; Miracle Eye; stored attacks; once-per-battle Mega screens."
 	},
 	"doomwarning": {
-		"desc": "Reflects eligible status moves and hazards once. On Mirror Arena, reflecting a directly targeted move gives its original user +1 evasion. Prevents indirect damage; HP costs, Pain Split, confusion and Struggle recoil still apply. On entry, reveals opposing Illusions and alerts to an opposing super-effective or OHKO move. If no threat is found, Psychic Terrain grants +2 Sp. Atk. On fainting, schedules a special, 140-power Steel Doom Desire against each foe. An existing delayed attack is delayed by another 2 turns instead.",
-		"shortDesc": "Reflects status moves; no indirect damage; reveals threats; Doom Desire against foes on fainting."
+		"desc": "Magic Bounce + Magic Guard. On fainting, sets a special, 140-power Steel Doom Desire against each foe; an existing delayed attack is delayed by 2 turns instead. On Mirror Arena, reflecting a targeted move raises its original user's evasion by 1.",
+		"shortDesc": "Magic Bounce + Magic Guard; fainting sets Doom Desire against each foe."
 	},
 	"perfectego": {
 		"desc": "Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. Moves cannot miss, including on the suppressing fields.",
@@ -4203,3 +4203,6 @@ AbilityDescriptionOverrides.prismarmor.shortDesc = '20% less damage; extra 25% v
 
 import { TidalPoiseDescription } from './terajuma-poise';
 AbilityDescriptionOverrides.tidalpoise = TidalPoiseDescription;
+
+import {AuditReworkDescriptions} from './audit-reworks-approved';
+Object.assign(AbilityDescriptionOverrides, AuditReworkDescriptions);

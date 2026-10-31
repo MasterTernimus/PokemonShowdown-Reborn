@@ -6,8 +6,8 @@ export const PrimevalFossilDescriptions = {
 		desc: 'Once per battle, a damaging move that would knock this Pokemon out instead leaves it at 1 HP, even if it already has only 1 HP. No chance roll or full-HP requirement. Switching and ability changes do not reset the use. Later hits of a multi-hit move can still knock it out. Suppression prevents activation without consuming the use. Includes Rock Head: prevents ordinary recoil, including Primeval Shield recoil; does not prevent Struggle recoil, crash damage, self-KO costs, weather, status or other indirect damage.',
 	},
 	primevalshield: {
-		shortDesc: 'Each hit: attacker takes 50% damage as recoil; holder heals the same amount.',
-		desc: 'After each damaging hit from another Pokemon, that attacker takes recoil equal to half the actual HP damage dealt, rounded down with a minimum of 1. The holder recovers the same calculated amount if it survives. Applies to contact and noncontact hits, including allied hits, independently for each hit of multi-hit moves. Substitute-only damage, self-damage and indirect damage do not trigger it. A lethal hit can recoil onto the attacker but cannot revive the holder. Rock Head and Magic Guard can prevent the recoil; normal healing prevention and modifiers apply independently to recovery. Suppression disables both effects.',
+		shortDesc: 'Each hit: attacker takes 50% damage as recoil; holder heals 30% of damage received.',
+		desc: 'After each damaging hit from another Pokemon, that attacker takes recoil equal to half the actual HP damage dealt, rounded down with a minimum of 1. The holder recovers 30% of the actual HP damage received, rounded down with a minimum of 1, if it survives. Applies to contact and noncontact hits, including allied hits, independently for each hit of multi-hit moves. Substitute-only damage, self-damage and indirect damage do not trigger it. A lethal hit can recoil onto the attacker but cannot revive the holder. Rock Head and Magic Guard can prevent the recoil; normal healing prevention and modifiers apply independently to recovery. Suppression disables both effects.',
 	},
 };
 
@@ -30,7 +30,7 @@ export function installPrimevalFossils(abilities: AbilityDataTable) {
 			const amount = Math.max(1, Math.floor(damage / 2));
 			this.add('-activate', target, 'ability: Primeval Shield');
 			this.damage(amount, source, target, 'recoil');
-			if (target.hp) this.heal(amount, target, target, this.effect);
+			if (target.hp) this.heal(Math.max(1, Math.floor(damage * 0.3)), target, target, this.effect);
 		},
 	};
 	for (const [id, text] of Object.entries(PrimevalFossilDescriptions)) {

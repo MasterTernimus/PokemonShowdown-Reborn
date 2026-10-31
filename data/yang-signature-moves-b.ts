@@ -1,3 +1,5 @@
+import {YangMove, yangMessage} from './yang-field-bonuses';
+import {announceYangImpact} from './yang-field-context';
 import {adaptiveFieldMultiplier} from '../sim/adaptive-cycle';
 import {signatureMoveText} from './signature-move-summaries';
 function adaptiveCategory(move: ActiveMove, source: Pokemon) {
@@ -24,10 +26,18 @@ function timeBladeSplash(this: Battle, target: Pokemon, source: Pokemon, move: A
 }
 function winds(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
  clearMoveAura.call(this, source, move);
- if (this.field.setWeather('deltastream', source, move)) this.field.weatherState.duration = 4;
+ if (!this.field.isWeather('deltastream') && this.field.setWeather('deltastream', source, move)) {
+  this.field.weatherState.duration = (move as YangMove).yang?.eligible ? 5 : 4;
+  this.add('-weather', 'DeltaStream', '[from] move: Wind Dance', '[of] ' + source, '[turns] ' + this.field.weatherState.duration, '[silent]');
+  if (this.field.weatherState.duration === 5) yangMessage(this, move, 'Ciel’s aerial dance sustained the winds!');
+ }
 }
 function wrathGuard(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
- if (!source.isAlly(target) && source.hp) source.addVolatile('sirenswrath', source, move);
+ if (!source.isAlly(target) && source.hp && source.addVolatile('sirenswrath', source, move)) {
+  const state = (move as YangMove).yang;
+  source.volatiles.sirenswrath.reduction = state?.full ? 0.65 : state?.eligible ? 0.7 : 0.75;
+  if (state?.eligible) yangMessage(this, move, 'Amaria’s undertow braced against the counterblow!');
+ }
  const underlying = this.field.terrainState.underlyingTerrain || this.field.terrainStack[1]?.id || this.field.terrainState.prevTerrain;
  if (this.field.isTerrain('icyterrain') && underlying === 'watersurfaceterrain') this.field.changeTerrain('watersurfaceterrain', source, move);
 }
@@ -35,6 +45,11 @@ const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteel
 function airstream(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
  clearMoveAura.call(this, source, move);
  if (!source.hp) return;
+ if ((move as YangMove).yang?.eligible && !source.side.getSideCondition('tailwind') && source.side.addSideCondition('tailwind', source, move)) {
+  source.side.sideConditions.tailwind.duration = 3;
+  this.add('-sidestart', source.side, 'move: Tailwind', '[turns] 3', '[silent]');
+  yangMessage(this, move, 'Heather’s mountain gale carried the team forward!');
+ }
  for (const hazard of hazards) {
   if (source.side.removeSideCondition(hazard)) this.add('-sideend', source.side, this.dex.conditions.get(hazard).name, '[from] move: Airstream Assault');
  }
@@ -75,7 +90,10 @@ export const YangSignatureMovesB: MoveDataTable = {
   pp: 10, priority: 0, target: 'normal', flags: hitFlags,
   onModifyMove: adaptiveCategory,
   onHit(target, source, move) {
-   if (target.hp && hasHPDamage(target, move) && target.addVolatile('encore', source, move)) target.volatiles.encore.duration = 2;
+   if (target.hp && !target.getVolatile('encore') && hasHPDamage(target, move) && target.addVolatile('encore', source, move)) {
+    target.volatiles.encore.duration = (move as YangMove).yang?.eligible && target.moveThisTurn ? 3 : 2;
+    if (target.volatiles.encore.duration === 3) yangMessage(this, move, 'Adrienn caught the moment in an endless refrain!');
+   }
    if (hasHPDamage(target, move)) timeBladeSplash.call(this, target, source, move);
   },
   onAfterSubDamage(damage, target, source, move) { if (damage > 0) timeBladeSplash.call(this, target, source, move); },
@@ -126,7 +144,7 @@ export const YangSignatureMovesB: MoveDataTable = {
     if (this.effectState.guardedMove && this.effectState.guardedMove !== move) return;
     this.effectState.guardedMove = move;
     this.effectState.guardedSource = source;
-    return this.chainModify(0.75);
+    return this.chainModify(this.effectState.reduction ?? 0.75);
    },
    onAnyAfterAttackResolved(source, target, move) {
     if (this.effectState.guardedMove === move && this.effectState.guardedSource === source) this.effectState.target.removeVolatile('sirenswrath');
@@ -178,7 +196,13 @@ export const YangSignatureMovesB: MoveDataTable = {
     Object.assign(target.side.slotConditions[target.position].futuremove, {
      move: 'nostraswish', source, endingTurn: (this.turn - 1) + 2,
      moveData: {id: 'nostraswish', name: "Nostras Wish", type: 'Fairy', category: 'Special', basePower: 140,
-      accuracy: 100, priority: 0, flags: {futuremove: 1}, effectType: 'Move', onEffectiveness: nostrasEffectiveness},
+      accuracy: 100, priority: 0, flags: {futuremove: 1}, effectType: 'Move', onEffectiveness: nostrasEffectiveness,
+      onAfterHit(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
+       if ((target.getMoveHitData(move).damage || 0) > 0) announceYangImpact(this, 'nostraswish', move);
+      },
+      onAfterSubDamage(this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) {
+       if (damage > 0) announceYangImpact(this, 'nostraswish', move);
+      }},
     });
     this.add('-start', source, "move: Nostras Wish");
    }
@@ -196,7 +220,10 @@ export const YangSignatureMovesB: MoveDataTable = {
   pp: 15, priority: 0, target: 'normal', flags: hitFlags,
   onModifyMove: adaptiveCategory,
   onHit(target, source, move) {
-   if (hasHPDamage(target, move) && target.addVolatile('partiallytrapped', source, move)) target.volatiles.partiallytrapped.duration = 2;
+   if (!target.isAlly(source) && !target.getVolatile('partiallytrapped') && hasHPDamage(target, move) && target.addVolatile('partiallytrapped', source, move)) {
+    target.volatiles.partiallytrapped.duration = (move as YangMove).yang?.eligible ? 3 : 2;
+    if (target.volatiles.partiallytrapped.duration === 3) yangMessage(this, move, 'Bennett’s swarm tightened its woven prison!');
+   }
   },
  },
 };
