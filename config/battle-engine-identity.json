@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "b3e1fd68bfad9c7f5804703eadb75399a46077d0b92a42e1e8e1ddcfb6a0f894",
-  "packageManifestSHA256": "2d8a21e5a5ffb819393091c966ab8c8406c8e5dcebce4267bcb0957546f80a72",
-  "mechanicsSHA256": "9f3d4c4e55031bf62b8503877419e5fbc585097fda7fcb24e167b9e2fde5fe3d",
+  "packageEngineRevision": "98010df6235610bf97084e7bced0cd770e768ba55371953ec545da8036b30846",
+  "packageManifestSHA256": "471de3ea4108fae1aa79cf9841f48c2a95bdb276b3f04ad80156d933438ffd07",
+  "mechanicsSHA256": "af40430cbf86b018dcd7a39ac64a28795ea3639dbb1eb91fc08ebc0280702c89",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -355,7 +355,7 @@
     },
     {
       "file": "dist/data/learnsets.js",
-      "sha256": "519b202870ad3fda917e7254d2db588e9459953cff257456b143fe447fa791ee"
+      "sha256": "79efc8f7be4e331f5e78b6db82d86f48ceabff299fb2a61f538ec902eec080eb"
     },
     {
       "file": "dist/data/legacy-gen8/bss-factory-sets.json",
@@ -1087,7 +1087,7 @@
     },
     {
       "file": "dist/sim/dex-species.js",
-      "sha256": "87f4ec6df5cbcf5ee403e65af30778f052272c975193a71f8ace7f495ba4ae46"
+      "sha256": "ea8ecbf1f779522197de051fbec08e3cc1eab28c491572df141b9f43a19003ad"
     },
     {
       "file": "dist/sim/dex-terrains.js",
