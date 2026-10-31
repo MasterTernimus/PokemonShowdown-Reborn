@@ -67,13 +67,18 @@ export function installRagingCrowns(a: AbilityDataTable) {
    source.addVolatile('taunt', target, this.effect);
   },
  };
- for (const id of ['venomarmor', 'toxicarmor'] as const) {
-  const previous = a[id].onTryBoost;
-  a[id].onTryBoost = function (boost, target, source, effect) {
-   previous?.call(this, boost, target, source, effect);
-   if (target.species.id !== 'zangoose' && source && !source.isAlly(target) && ['psn', 'tox'].includes(target.status) && boost.atk && boost.atk < 0) delete boost.atk;
-  };
- }
+	for (const id of ['venomarmor', 'toxicarmor'] as const) {
+		const previous = a[id].onTryBoost;
+		a[id].onTryBoost = function (boost, target, source, effect) {
+			previous?.call(this, boost, target, source, effect);
+			if (!source || source.isAlly(target) || !boost.atk || boost.atk >= 0) return;
+			if (id === 'toxicarmor') {
+				if (effect?.id === 'intimidate') delete boost.atk;
+			} else if (target.species.id !== 'zangoose' && ['psn', 'tox'].includes(target.status)) {
+				delete boost.atk;
+			}
+		};
+	}
  a.thorntempered = {name: 'Thorn-Tempered', num: 11894, rating: 2, flags: {}};
  delete a.scaleshelter.onSourceModifyDamage;
  a.scaleshelter.onTryBoost = function (boost, target, source) {

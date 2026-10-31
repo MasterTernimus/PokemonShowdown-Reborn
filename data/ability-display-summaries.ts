@@ -110,7 +110,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"terraresolve": "Same-type moves gain 1.3x power.",
 	"primalego": "Same-type moves gain 1.3x power.",
 	"venomarmor": "Dual Wield and Battle Armor; Metal Claw hits twice at 60% power.",
-	"toxicarmor": "Dual Wield + opening Violent Rush; priority hits prepare next-turn priority.",
+	"toxicarmor": "Dual Wield + opening Violent Rush; blocks Intimidate; priority preparation.",
 	"corrosiveburn": "Fire damage 1.2x against poisoned targets.",
 	"noseformation": "Three adaptive 30 BP Mini-Noses chain after KOs and trigger Elevate.",
 	"mourningvessel": "Fainted allies increase power up to 2x; fainted foes restore HP.",

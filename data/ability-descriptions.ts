@@ -645,8 +645,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Poisons itself; poison heals; eligible moves hit twice; 1.3x physical damage with status; stronger Metal Claw."
 	},
 	"toxicarmor": {
-  "desc": "Full local Dual Wield, Metal Claw with two 60%-power hits, and opening Violent Rush. While poisoned, opposing Pokemon cannot lower its Attack; self-inflicted drops remain. A native positive-priority damaging attack that damages opposing HP prepares the next eligible Dual Wield attack on the following turn for +1 priority. Consumes on attempt, including miss, protection or immunity; expires at that turn end and clears on switching. No stacking, generated attacks, Z/Max attacks or self-rearming from the granted priority. Cannot be suppressed, replaced or bypassed by Mold Breaker.",
-  "shortDesc": "Dual Wield + opening Violent Rush; priority hits prepare next-turn priority."
+  "desc": "Full local Dual Wield, Metal Claw with two 60%-power hits, and opening Violent Rush. Immune to Intimidate regardless of status. Other opposing and self-inflicted Attack drops still apply. A native positive-priority damaging attack that damages opposing HP prepares the next eligible Dual Wield attack on the following turn for +1 priority. Consumes on attempt, including miss, protection or immunity; expires at that turn end and clears on switching. No stacking, generated attacks, Z/Max attacks or self-rearming from the granted priority. Cannot be suppressed, replaced or bypassed by Mold Breaker.",
+  "shortDesc": "Dual Wield + opening Violent Rush; blocks Intimidate; priority preparation."
 },
 	"venomignition": {
 		"desc": "Fire attacks deal 1.2x damage to poisoned or badly poisoned targets. Checks status separately for each hit; poison is not consumed.",

@@ -1034,8 +1034,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicarmor: {
   "name": "Toxic Armor",
-  "shortDesc": "Dual Wield + opening Violent Rush; priority hits prepare next-turn priority.",
-  "desc": "Full local Dual Wield, Metal Claw with two 60%-power hits, and opening Violent Rush. A native positive-priority damaging attack that damages opposing HP prepares the next eligible Dual Wield attack on the following turn for +1 priority. Consumes on attempt, including miss, protection or immunity; expires at that turn end and clears on switching. No stacking, generated attacks, Z/Max attacks or self-rearming from the granted priority. Cannot be suppressed, replaced or bypassed by Mold Breaker."
+  "shortDesc": "Dual Wield + opening Violent Rush; blocks Intimidate; priority preparation.",
+  "desc": "Full local Dual Wield, Metal Claw with two 60%-power hits, and opening Violent Rush. Immune to Intimidate regardless of status. Other opposing and self-inflicted Attack drops still apply. A native positive-priority damaging attack that damages opposing HP prepares the next eligible Dual Wield attack on the following turn for +1 priority. Consumes on attempt, including miss, protection or immunity; expires at that turn end and clears on switching. No stacking, generated attacks, Z/Max attacks or self-rearming from the granted priority. Cannot be suppressed, replaced or bypassed by Mold Breaker."
 },
 	corrosiveburn: {
 		name: "Corrosive Burn",

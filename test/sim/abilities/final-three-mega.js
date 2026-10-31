@@ -80,7 +80,7 @@ describe('Final approved Predator Aura Precision and Entrenched designs', () => 
 			battle.field.terrain = field;
 			battle.queue.willMove = () => null;
 			assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), 100);
-			battle.queue.willMove = target => target === q ? {pokemon: q} : null;
+			battle.queue.willMove = target => target === q ? { pokemon: q } : null;
 			const expected = ['mountainterrain', 'snowymountainterrain', 'rockyterrain'].includes(field) ? 150 : 130;
 			assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('tackle'), 100), expected);
 		});

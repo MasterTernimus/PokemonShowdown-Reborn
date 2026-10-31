@@ -1,5 +1,4 @@
-import {yangMessage} from './yang-field-bonuses';
-import type {YangMove} from './yang-field-bonuses';
+import { yangMessage, type YangMove } from './yang-field-bonuses';
 import {announceYangImpact} from './yang-field-context';
 import {adaptiveFieldMultiplier} from '../sim/adaptive-cycle';
 import {signatureMoveText} from './signature-move-summaries';
