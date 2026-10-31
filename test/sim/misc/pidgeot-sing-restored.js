@@ -1,13 +1,13 @@
 'use strict';
 const assert = require('assert').strict;
-const {Dex, TeamValidator, Teams} = require('../../../dist/sim');
+const { Dex, TeamValidator, Teams } = require('../../../dist/sim');
 
 describe('Pidgeot Sing restoration', () => {
 	for (const format of ['gen9nofieldsinglesgame', 'gen9nofielddoublesbattle', 'gen9freeforall4pmistyfieldadrienn']) {
 		for (const item of ['', 'Pidgeotite']) {
 			it(`${format}: permits Sing ${item ? 'with Mega Evolution' : 'without a stone'}`, () => {
-				const team = [{species: 'Pidgeot', ability: 'Updraft', item, moves: ['Sing']},
-					{species: 'Mew', ability: 'Natural Cure', moves: ['Protect']}];
+				const team = [{ species: 'Pidgeot', ability: 'Updraft', item, moves: ['Sing'] },
+					{ species: 'Mew', ability: 'Natural Cure', moves: ['Protect'] }];
 				assert.equal(new TeamValidator(format).validateTeam(team), null);
 			});
 		}
