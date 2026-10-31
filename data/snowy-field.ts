@@ -14,7 +14,7 @@ export const SnowyField: TerrainData = {
 		},
 		onModifyMovePriority: -1,
 		onModifyMove(move) {
-			if (['anchorshot', 'ironhead', 'irontail', 'steelroller', 'gyroball', 'geargrind', 'mudslap', 'sandtomb',
+			if (['anchorshot', 'ironhead', 'irontail', 'steelroller', 'gyroball', 'geargrind', 'mudbarrage', 'sandtomb',
 				'chillingwater', 'magnetbomb', 'metalclaw', 'doubleironbash', 'bulletpunch', 'mudshot', 'mudbomb', 'earthquake',
 				'gigatonhammer', 'steelwing', 'smartstrike', 'sunsteelstrike', 'meteormash', 'magnitude', 'bulldoze'].includes(move.id)) {
 				move.type = 'Ice'; move.types = ['Ice'];

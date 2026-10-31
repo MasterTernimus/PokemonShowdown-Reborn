@@ -28,7 +28,10 @@ function loadSource(relative, replacements = {}, globals = {}, source) {
 function trackerHarness(saved) {
 	let now = 1000, next = 0, response = JSON.stringify({ toplist: [] }), stored;
 	const timers = new Map(), intervals = new Map(), html = [], warnings = [];
-	const room = { roomid: 'test', settings: { isPrivate: true }, add: message => { html.push(message); return { update() {} }; } };
+	const room = {
+		roomid: 'test', settings: { isPrivate: true }, toString() { return this.roomid; },
+		add: message => { html.push(message); return { update() {} }; },
+	};
 	class Clock extends Date { static now() { return now; } }
 	const mod = loadSource('server/chat-plugins/laddertours.ts', {
 		'../../lib': {
@@ -45,9 +48,19 @@ function trackerHarness(saved) {
 		format: 'gen9ou', prefix: 'lt', rating: 1000, deadline: new Date(now + 60000).toISOString(),
 	});
 	mod.trackers.test = tracker;
+	const context = {
+		requireRoom: () => room, checkCan() {}, sendReply() {}, modlog() {},
+		errorReply(message) { throw new Error(message); },
+	};
 	return {
 		mod, tracker, timers, intervals, html, warnings, get stored() { return stored; },
 		setResponse: value => { response = value; }, advance: ms => { now += ms; },
+		command: (name, target = '') => mod.commands.laddertrack[name === 'override' ? '' : name]
+			.call(context, target, room, { name: 'Staff' }, {}, name),
+		battleCreated: id => mod.handlers.onBattleCreate({
+			roomid: `battle-gen9ou-${id}`, format: 'gen9ou', rated: 1600,
+			p1: { name: 'ltAlice' }, p2: { name: 'ltBob' },
+		}, []),
 	};
 }
 
@@ -113,6 +126,89 @@ describe('Audit result durability regressions', () => {
 		assert.equal(h.html.length, 0);
 		assert.equal(h.timers.size, 0);
 		assert(h.tracker.config.deadline);
+	});
+	it('stops the previous tracker when the override command installs a replacement', async () => {
+		const h = trackerHarness();
+		h.tracker.start();
+		h.command('override', 'rating=1000, prefix=new, format=gen9ou, deadline=1970-01-01T01:00:00Z');
+		assert.notEqual(h.mod.trackers.test, h.tracker);
+		assert.equal(h.mod.trackers.test.prefix, 'new');
+		assert.equal(h.tracker.config.paused, true);
+		assert.equal(h.timers.size, 1);
+		assert.equal(h.intervals.size, 1);
+		h.advance(60000);
+		await h.tracker.captureFinalLeaderboard();
+		assert.equal(h.html.length, 0);
+		assert.equal(h.stored.test.prefix, 'new');
+		assert.equal(h.stored.test.paused, false);
+	});
+	it('keeps the running tracker when replacement configuration is invalid', () => {
+		const h = trackerHarness();
+		h.tracker.start();
+		const deadline = h.tracker.config.deadline;
+		assert.throws(() => h.command('override', 'rating=1000, prefix=new, format=gen9ou, deadline=invalid'), /Invalid date/);
+		assert.equal(h.mod.trackers.test, h.tracker);
+		assert.equal(h.tracker.config.paused, false);
+		assert.equal(h.tracker.config.deadline, deadline);
+		assert.equal(h.timers.size, 1);
+		assert.equal(h.intervals.size, 1);
+	});
+	for (const fails of [false, true]) {
+		it(`invalidates an overridden tracker's in-flight final ${fails ? 'failure' : 'success'}`, async () => {
+			const h = trackerHarness();
+			h.tracker.start(); h.advance(60000);
+			let resolve, reject;
+			h.tracker.getLeaderboard = () => new Promise((res, rej) => { resolve = res; reject = rej; });
+			const pending = h.tracker.captureFinalLeaderboard();
+			h.command('override', 'rating=1000, prefix=new, format=gen9ou, deadline=1970-01-01T01:00:00Z');
+			if (fails) reject(new Error('Old request failed')); else resolve([]);
+			await pending;
+			assert.equal(h.html.length, 0);
+			assert.equal(h.warnings.length, 0);
+			assert.equal(h.timers.size, 1);
+			assert.equal(h.intervals.size, 1);
+			assert.equal(h.stored.test.prefix, 'new');
+			assert.equal(h.stored.test.paused, false);
+		});
+	}
+	it('invalidates an overridden tracker\'s in-flight polling response', async () => {
+		const h = trackerHarness();
+		h.tracker.start();
+		let finish, changes = 0;
+		h.tracker.getLeaderboard = () => new Promise(resolve => { finish = resolve; });
+		h.tracker.trackChanges = () => { changes++; };
+		const pending = [...h.intervals.values()][0]();
+		h.command('override', 'rating=1000, prefix=new, format=gen9ou');
+		finish([]); await pending;
+		assert.equal(changes, 0);
+		assert.equal(h.tracker.leaderboard.current, undefined);
+		assert.equal(h.timers.size, 0);
+		assert.equal(h.intervals.size, 1);
+	});
+	it('pauses battle announcements through the command and restores them on explicit resume', () => {
+		const h = trackerHarness();
+		h.command('start'); h.battleCreated(1);
+		assert.equal(h.html.filter(line => line.includes('Battle started')).length, 1);
+		h.command('pause'); h.battleCreated(2);
+		assert.equal(h.html.filter(line => line.includes('Battle started')).length, 1);
+		assert.equal(h.timers.size, 0);
+		assert.equal(h.intervals.size, 0);
+		h.command('start'); h.battleCreated(2);
+		assert.equal(h.html.filter(line => line.includes('Battle started')).length, 2);
+	});
+	it('stops battle announcements after finalization until explicitly resumed', async () => {
+		const h = trackerHarness();
+		h.command('start'); h.advance(60000);
+		await h.tracker.captureFinalLeaderboard();
+		assert.equal(h.html.filter(line => line.includes('Final Leaderboard -')).length, 1);
+		assert.equal(h.stored.test.paused, true);
+		assert.equal(h.stored.test.deadline, undefined);
+		h.battleCreated(1);
+		assert.equal(h.html.filter(line => line.includes('Battle started')).length, 0);
+		h.command('start'); h.battleCreated(1);
+		assert.equal(h.html.filter(line => line.includes('Battle started')).length, 1);
+		assert.equal(h.timers.size, 0);
+		assert.equal(h.intervals.size, 1);
 	});
 	for (const unexpected of [false, true]) {
 		it(`logs ranked completion despite ${unexpected ? 'an unexpected rating rejection' : 'a failed local ladder read'}`, async () => {

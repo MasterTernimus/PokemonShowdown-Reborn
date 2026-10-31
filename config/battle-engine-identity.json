@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "47e51a3e868e75def5d350b394d47e26d3d1afa707f711c284e7e18422820e6e",
-  "packageManifestSHA256": "53bee3daec7a2abeeb3e367cf576300aaa6fbcea2888bb73716e78dc7e50facb",
-  "mechanicsSHA256": "fc0f7c890933c866ec801fc0fd2a5aa4ae934c3d7bad59c86c9dced2d97b10dd",
+  "packageEngineRevision": "4ef657b6f2b05d2adf5d49cad77f96fdf2ea52fd4e215c28e17ec7b29fea3366",
+  "packageManifestSHA256": "4465924cb125527c71121a3b8200abca0b9a7fca8730aec882d2a6778aba4408",
+  "mechanicsSHA256": "b9030a5719d28709b430465ddd1734f6574ddb30ae19346100f9200ab954ed82",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -783,7 +783,7 @@
     },
     {
       "file": "dist/data/snowy-field.js",
-      "sha256": "79313dea7f0cd42b4de015a9eff0166104c3f2a8bcb9ed7b5c25a2cec177b22b"
+      "sha256": "4aaf342f556d0efbef76a7220f5ffc7bbb03ba0c50c1eab070dd48946ad6419e"
     },
     {
       "file": "dist/data/sovereign-approved-data.js",

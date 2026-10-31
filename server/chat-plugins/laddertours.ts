@@ -134,6 +134,7 @@ export class LadderTracker {
 	}
 
 	handleBattleEnd(battle: Rooms.RoomBattle) {
+		if (!this.started) return;
 		const skipid = this.lastid;
 		const roomid = battle.roomid;
 
@@ -531,8 +532,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			config.prefix = prefix;
 
-			trackers[room.roomid] = new LadderTracker(room, config as TrackerConfig);
-			trackers[room.roomid].start();
+			const tracker = new LadderTracker(room, config as TrackerConfig);
+			// Stop only after replacement validation; this also invalidates pending responses.
+			trackers[room.roomid]?.stop();
+			trackers[room.roomid] = tracker;
+			tracker.start();
 			LadderTracker.save();
 
 			this.sendReply("Ladder tracking started.");

@@ -33,6 +33,28 @@ function power(id, source = battle.p1.active[0], target = battle.p2.active[0]) {
 describe('Eclipse audit regressions', () => {
 	afterEach(() => { battle?.destroy(); battle = null; });
 
+	for (const move of ['Mud Barrage', 'Mud-Slap']) {
+		it(`converts ${move} to Ice on Snowy Field and hits a Flying opponent`, () => {
+			const format = 'gen9snowyfield';
+			const teams = [
+				[{ species: 'Alakazam', ability: 'Aevian Discipline', moves: [move] }],
+				[{ species: 'Pidgeot', ability: 'Keen Eye', moves: ['Work Up'] }],
+			];
+			validate(format, teams);
+			battle = common.createBattle({ formatid: format }, teams);
+			battle.makeChoices('team 1', 'team 1');
+			const result = power(move);
+			assert.equal(result.move.id, 'mudbarrage');
+			assert.equal(result.move.type, 'Ice');
+			assert.deepEqual(result.move.types, ['Ice']);
+			assert.equal(result.power, 150);
+			battle.makeChoices('move 1', 'move workup');
+			const target = battle.p2.active[0];
+			assert(target.hp < target.maxhp);
+			assert(!battle.log.some(line => line.startsWith('|-immune|p2a: Pidgeot')));
+		});
+	}
+
 	it('opposing Magical Seeds establish one Trick Room without cancelling it', () => {
 		const format = 'gen9doublesrifteclipsefield';
 		const teams = [
