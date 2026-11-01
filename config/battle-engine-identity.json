@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "98010df6235610bf97084e7bced0cd770e768ba55371953ec545da8036b30846",
-  "packageManifestSHA256": "471de3ea4108fae1aa79cf9841f48c2a95bdb276b3f04ad80156d933438ffd07",
-  "mechanicsSHA256": "af40430cbf86b018dcd7a39ac64a28795ea3639dbb1eb91fc08ebc0280702c89",
+  "packageEngineRevision": "646adc37631eca347bc0b0f200261534999d5acd35f94f3d154f485af536ff05",
+  "packageManifestSHA256": "b91e43a3d2b0ac190b9c5470a3eca55f1f87ecf2ecfb214398101ca290c11dc1",
+  "mechanicsSHA256": "7598d83f8acf8358012026f2d2925c07661feb30f58fc3bc3bcd0a6ca3730272",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -1167,7 +1167,7 @@
     },
     {
       "file": "dist/sim/team-validator.js",
-      "sha256": "ccaf018e5a413176471ef754d1acbfcfb7dc0fafe2cbf84b27e289a2ede0211a"
+      "sha256": "91952983f8f45ac1d6f14054b4fa70730d587faec43cb8ef78b4e34d6be694ee"
     },
     {
       "file": "dist/sim/teams.js",
