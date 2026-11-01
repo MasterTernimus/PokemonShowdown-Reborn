@@ -634,6 +634,11 @@ export class TeamValidator {
 		let nature = dex.natures.get(Utils.getString(set.nature));
 		set.nature = nature.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
+		// Reborn formats intentionally allow custom movepools without Obtainable
+		// Moves. Enforce this explicit removal even for pasted/packed teams.
+		if (dex.gen >= 9 && species.baseSpecies === 'Raichu' && set.moves.some(move => toID(move) === 'sing')) {
+			problems.push(`${species.name} can't learn Sing.`);
+		}
 
 		set.name = set.name || species.baseSpecies;
 		let name = set.species;
