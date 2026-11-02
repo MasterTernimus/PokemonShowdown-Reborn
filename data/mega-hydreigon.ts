@@ -4,7 +4,7 @@ import {composeSelectedAbility} from './selected-mega-simplifications';
 export const MegaHydreigonDescriptions = {
 	expiration: {
 		shortDesc: 'Worldbreaker + Controlled Fury.',
-		desc: 'Full local Worldbreaker and Controlled Fury. Berserk raises Attack and Sp. Atk by 1 after surviving a move crossing half HP, and by 2 on Dragon Den entry. Duskilate converts Normal moves to Dark with its normal power and field effects. Each damaging hit independently has a 30% chance to double base power; Fickle Beam uses only its own all-out roll. The first damaging hit received each entry raises Attack by 1; surviving a critical hit instead maximizes Attack. Outrage, Thrash, Petal Dance and Raging Fury cause no rampage lock or ending confusion. Existing confusion and other move locks remain unchanged.',
+		desc: 'Full local Worldbreaker and Controlled Fury. Berserk raises Attack and Sp. Atk by 1 after surviving a move crossing half HP, or only Sp. Atk by 2 on Dragon’s Den. Duskilate converts Normal moves to Dark with its normal power and field effects. Each damaging hit independently has a 30% chance (50% on Dragon’s Den) to double base power; Fickle Beam uses only its own all-out roll. The first damaging hit received each entry raises Attack by 1; surviving a critical hit instead maximizes Attack. Outrage, Thrash, Petal Dance and Raging Fury cause no rampage lock or ending confusion. Existing confusion and other move locks remain unchanged.',
 	},
 	abyssalrebirth: {
 		shortDesc: 'Hydra Bond + Levitate; once/battle, survive crossing half HP to heal 25%.',

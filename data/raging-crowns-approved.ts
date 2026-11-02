@@ -13,9 +13,24 @@ export const RagingCrownNames: {[id: string]: string} = {
 };
 export function installRagingCrowns(a: AbilityDataTable) {
 	a.aquashell = { ...a.heatproof, ...a.frisk, name: a.aquashell.name, num: a.aquashell.num, rating: 3, flags: { breakable: 1 } };
- const oldMountain = a.mountainbreaker;
- a.mountainbreaker = {...a.eartheater, ...a.battlearmor, name: oldMountain.name, num: oldMountain.num, rating: 4};
- a.dreadpresence = {...a.unnerve, ...a.darkaura, name: a.dreadpresence.name, num: a.dreadpresence.num, rating: 4, onStart(pokemon) { a.unnerve.onStart?.call(this, pokemon); a.darkaura.onStart?.call(this, pokemon); }, onEnd: a.unnerve.onEnd};
+ a.mountainbreaker = {
+  name: 'Mountainbreaker', num: a.mountainbreaker.num, rating: 4, flags: {},
+  onModifyMove(move) {
+   if (move.category === 'Physical' && ['Rock', 'Ground'].includes(move.type)) move.ignoreAbility = true;
+  },
+  onSourceDamagingHit(damage, target, source, move) {
+   if (!damage || target.isAlly(source) || move.category !== 'Physical' || !['Rock', 'Ground'].includes(move.type)) return;
+   for (const screen of ['reflect', 'lightscreen', 'auroraveil', 'arenitewall', 'atlantiswall']) {
+    target.side.removeSideCondition(screen);
+   }
+  },
+ };
+ a.dreadpresence = {
+  ...a.unnerve, name: 'Dread Presence', num: a.dreadpresence.num, rating: 4,
+  onBasePower(power, source, target, move) {
+   if (target && !source.isAlly(target) && target.hp * 2 <= target.maxhp && this.movehasType(move, 'Dark')) return this.chainModify(1.3);
+  },
+ };
  delete a.snowpack.onSourceModifyAtk;
  delete a.snowpack.onSourceModifySpA;
  a.controlledfury = {
@@ -194,7 +209,7 @@ export const RagingCrownComponents = {
  controlledfury: ['angerpoint'],
 	aquashell: ['heatproof', 'frisk'],
 	shieldsdown: ['crumblingshell'],
- mountainbreaker: ['eartheater', 'battlearmor'], dreadpresence: ['unnerve', 'darkaura'],
+ mountainbreaker: [], dreadpresence: ['unnerve'],
  snowpack: ['icebody'],
  hellfireeclipse: ['darkaura', 'agonyflame', 'intimidate'],
  vendetta: ['innerfocus'],
@@ -231,8 +246,8 @@ export const RagingCrownRemovals = {
 export const RagingCrownDescriptions = {
 	shieldsdown: { shortDesc: 'HP-based form change; Meteor blocks status. Crumbling Shell.', desc: "Minior changes to Meteor above half HP and its original core at half HP or below, on entry and at turn end. Meteor form blocks major status and Yawn. Has Crumbling Shell: physical hits place Stealth Rock on the attacker’s side (opposing side for allied hits), except on Water Surface, Underwater, Murkwater Surface or Swamp. No Shell Armor or Self Repair effects." },
 	aquashell: { shortDesc: "Heatproof + Frisk.", desc: "Full local Heatproof and Frisk. Incoming Fire attacks use half the attacker’s Attack or Special Attack; burn damage is halved. On activation, reveals opposing active Illusions and held items; each opposing item holder independently has a 30% chance of five-turn Embargo." },
- mountainbreaker: {shortDesc: 'Earth Eater + Battle Armor.', desc: "Full local Earth Eater + Battle Armor: absorbs Ground moves for 1/4 HP; heals 1/16 on Cave and Desert. Prevents critical hits, has Battle Armor damage reduction, Fairy Tale entry Defense and Defense response to opposing stat drops."},
- dreadpresence: {shortDesc: 'Unnerve + Dark Aura.', desc: "Full local Unnerve + Dark Aura. Blocks opposing Berries and field Seeds; Cold Eclipse entry lowers opposing Speed. Boosts Dark moves on both sides by 4/3, reversed by Aura Break, without stacking. Immune to hail on Cold Eclipse."},
+ mountainbreaker: {shortDesc: 'Physical Rock/Ground attacks bypass abilities and break screens after damage.', desc: 'Physical Rock and Ground attacks ignore bypassable abilities. After damaging a foe directly, remove Reflect, Light Screen, Aurora Veil, Arenite Wall and Atlantis Wall from its side.'},
+ dreadpresence: {shortDesc: 'Unnerve; Dark attacks gain 30% power against foes at half HP or less.', desc: 'Blocks opposing Berries and field Seeds. On Cold Eclipse entry, lowers opposing Speed. Its Dark attacks gain 30% power against foes at half HP or less.'},
  snowpack: {shortDesc: 'Ice Body.', desc: "Full local Ice Body: immune to hail; contact attackers have a 30% frostbite chance. Heals 1/16 max HP in hail/snow, or on Icy, Snowy Mountain and Cold Eclipse without those weathers; hail on Cold Eclipse heals 1/8. Mamoswine supplies Thick Fat separately as its species passive."},
  controlledfury: {"shortDesc":"Anger Point; no rampage lock or ending confusion.","desc":"Full local Anger Point: the first damaging hit after entry raises Attack by 1 stage; surviving a critical hit raises Attack to maximum. Outrage, Thrash, Petal Dance and Raging Fury do not lock the user in or cause ending confusion, including repeated manual uses. Acquiring this effect during a rampage clears only that rampage lock without confusion. Existing confusion, Choice locks, Encore and move field effects remain unchanged."},
  cursedmarionette: {shortDesc: "Curses foes; cursed foes deal 20% less damage.", desc: "Its attacks and status moves curse opposing targets, and being hit curses the attacker. Cursed foes deal 0.8x damage to it. Its Curse deals 1/8 max HP. When it faints, opposing Pokemon become cursed and it creates Haunted Field for 5 turns, ignoring Neutralization. Ordinary Ghost Curse costs 1/3 max HP; ability-applied curses do not pay this cost."},
@@ -245,7 +260,7 @@ export const RagingCrownDescriptions = {
  venomarmor: {shortDesc: 'Dual Wield; poisoned holder blocks opposing Attack drops.', desc: "Full local Dual Wield: eligible moves hit twice at 60% power with independent accuracy checks; Metal Claw has its two 60%-power hits. While poisoned, opposing Pokemon cannot lower its Attack; self-inflicted drops remain. No Battle Armor critical immunity, damage reduction or Defense boosts. Rival Resolve remains separate."},
  spiralevolution: {shortDesc: 'Power Drill + Adaptability; double Twineedle power; protection piercing.', desc: "Full local Power Drill: drill and horn moves have 1.5x power, or 2x on Rocky, Mountain, Snowy Mountain, Cave and Volcanic, where they bypass protection at full power. Has Adaptability and double Twineedle power with its native hit count. Other damaging moves pierce protection at half power. Normal-priority moves act first in Trick Room without gaining priority. Ignores field Speed penalties and takes 20% less attack damage. Levitate remains separate."},
  astralwitchcraft: {shortDesc: 'Levitate + Magic Guard + Void Guile (Magician + Infiltrator).', desc: "Levitate grants Ground immunity and airborne benefits unless grounded. Magic Guard prevents indirect damage under its normal rules. Void Guile provides Magician item theft and Infiltrator screen, Substitute, Safeguard and Mist bypass. Entry grants +1 Sp. Atk on Fairy Tale, Bewitched Woods, Haunted, Misty or New World; on Psychic, incoming status moves with numeric accuracy use 50 accuracy. Its separate Fairy Tale and New World entry bonus grants another +1 Sp. Atk and +1 Sp. Def."},
- wrathshield: {shortDesc: 'Bulletproof + Stamina + Friend Guard; 20% less attack damage.', desc: "Immune to bullet, pulse and Mega Launcher-boosted moves; takes 20% less attack damage. Stamina heals 1/16 maximum HP after each opposing damaging hit and raises Defense once per turn on the first such hit. Friend Guard reduces allies attack damage by 25%, not the holder. Entry grants +1 Sp. Def on Cold Eclipse, New World, Starlight Arena or Fairy Tale. Proficient remains separate."},
+ wrathshield: {shortDesc: 'Bulletproof + Stamina + Friend Guard; 20% less attack damage.', desc: "Immune to bullet, pulse and Mega Launcher-boosted moves; takes 20% less attack damage. Stamina heals 1/16 maximum HP once per opposing HP-damaging attack and raises Defense once per turn on the first such hit. Friend Guard reduces allies attack damage by 25%, not the holder. Entry grants +1 Sp. Def on Cold Eclipse, New World, Starlight Arena or Fairy Tale. Proficient remains separate."},
  lunardread: {shortDesc: 'Dishearten + Insomnia; Dark and Ghost moves have 1.3x power.', desc: "On entry, lowers adjacent foes Sp. Atk by 1 stage, blocked by Substitute and normal stat-drop protection. Prevents and cures sleep and blocks Yawn. Dark and Ghost attacks have 1.3x power."},
  mindseye: {shortDesc: 'Self Sufficient; Normal/Fighting hit Ghost; Fairy/Dark STAB; accuracy protection; hit healing.', desc: "Has Self Sufficient. Normal and Fighting moves can hit Ghost types; gains Fairy and Dark STAB, ignores target evasion boosts, and prevents external accuracy drops. Heals 1/16 maximum HP after its damaging moves hit. No ordinary damage reduction. On Cold Eclipse, has 30% damage reduction, 1/8 hit healing and 1.3x damaging move power."},
  relentlesshunt: {shortDesc: 'Rough Skin; low-power moves gain +1 priority; field damage bonuses.', desc: "Contact attackers lose 1/8 of their maximum HP through Rough Skin. Moves with 60 or less Base Power gain +1 priority; Cold Eclipse raises the threshold to 80 without stacking another priority boost. Damaging moves deal 2x damage on Rocky, Fairy Tale, Big Top, Dragon Den, Mountain, Snowy Mountain or Cold Eclipse, applied once; 1.5x on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena or New World."},

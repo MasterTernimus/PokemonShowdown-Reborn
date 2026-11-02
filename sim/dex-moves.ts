@@ -343,6 +343,8 @@ interface MoveHitData {
 		damage?: number,
 		/** Highest HP before a direct hit, including healing between this move's hits. */
 		hpBeforeDamage?: number,
+		staminaTriggered?: boolean,
+		ultraEgoTriggered?: boolean,
 	};
 }
 

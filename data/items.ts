@@ -6858,7 +6858,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return;
 			}
 			if (this.field.isTerrain('rockyterrain')) {
-				this.boost({ def: 1 });
+				this.boost({ def: 1, spd: 1 });
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * 2 ** typeMod / 4);
 				return;

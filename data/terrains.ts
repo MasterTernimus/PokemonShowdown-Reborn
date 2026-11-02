@@ -1083,6 +1083,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 			},
 			onBasePowerPriority: 6,
 			onModifyMove(move) {
+				if (move.id === 'scaleshot') move.selfBoost = {boosts: {spe: 1}};
 				const fire_moves = ['smackdown', 'thousandarrows', 'continentalcrush', 'tectonicrage', 'rockclimb', 'earthquake'];
 				if (fire_moves.includes(move.id)) {
 					move.types = [move.type, 'Fire'];
@@ -1103,10 +1104,6 @@ export const Terrains: { [k: string]: TerrainData } = {
 				if (move.type === 'Dragon' || move.type === 'Fire') {
 					this.add('-message', 'The ambient dragon fire boosted the attack!');
 					modifier *= adaptiveFieldMultiplier(this, source, target, 1.5);
-				}
-				if (move.type === 'Rock') {
-					this.add('-message', 'The super hot rocks boosted the attack!');
-					modifier *= adaptiveFieldMultiplier(this, source, target, 1.3);
 				}
 				if (move.type === 'Ice' || move.type === 'Water') {
 					this.add('-message', 'The lava\'s heat softened the attack...');
@@ -1159,25 +1156,25 @@ export const Terrains: { [k: string]: TerrainData } = {
 				const forwardChange = terrain_change1.includes(move.id) ? 1 : (move.id === 'sparklingaria' ? 2 : 0);
 				const current = this.field.terrainState.terrainChanges?.get('caveterrain') ?? 0;
 				if ((current + forwardChange >= 3)) {
-					this.add('-message', 'The lava solidified!');
-					this.field.changeTerrain('caveterrain');
+					if (this.field.changeTerrain('caveterrain')) this.add('-message', 'The lava solidified!');
 					return;
 				} else if (move.id === 'mistball') {
-					this.add('-message', 'The mist-ical energy altered the surroundings!');
-					this.field.changeTerrain('fairytaleterrain');
+					if (this.field.changeTerrain('fairytaleterrain', source, move)) this.add('-message', 'Mist Ball transformed the field for 5 turns!');
 					return;
 				}
 				if (terrain_change.includes(move.id)) {
 					this.field.changeTerrain('volcanicterrain');
 					return;
 				}
+				if (forwardChange) this.add('-message', 'The lava began to harden!');
 				this.field.terrainState.terrainChanges?.set('caveterrain', current + forwardChange);
 			},
 			onFieldStart() {
 				this.add('-message', 'If you wish to slay a dragon...');
 				this.add('-fieldstart', 'Dragon\'s Den Terrain',
 					...(this.field.terrainState.origin?.id === 'tyrantdomain' ? ['[turns] 8'] : []));
-				if (this.field.isWeather('hail')) {
+				if (['hail', 'snow', 'snowscape'].includes(this.field.weather)) {
+					this.add('-message', 'The ice melted in the heat!');
 					this.field.clearWeather();
 				}
 			},

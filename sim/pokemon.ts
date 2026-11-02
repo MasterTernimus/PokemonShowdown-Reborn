@@ -2649,7 +2649,9 @@ export class Pokemon {
 					typeMod = 0;
 				}
 				typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
-				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+				typeMod = this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+				if (type === 'Ice' && typeMod > 0 && this.battle.field.isAura('frozenaura')) continue;
+				totalTypeMod += typeMod;
 			}
 		}
 		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&

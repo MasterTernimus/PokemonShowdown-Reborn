@@ -90,7 +90,9 @@ SignaturePassiveComponents.tempestfury = ['angerpoint'];
 SignaturePassiveDescriptions.tempestfury.shortDesc += ' Anger Point.';
 SignaturePassiveDescriptions.tempestfury.desc += ' Includes full local Anger Point: the first damaging hit after activation raises Attack by 1, and a surviving critical hit maximizes Attack at the normal +6 cap.';
 
-SignaturePassiveComponents.oraclesrefrain = ['resonanceforce', 'soundproof'];
+SignaturePassiveComponents.oraclesrefrain = ['soundproof'];
 
 import {PlainLanguagePassiveDescriptions} from './ability-readability';
 Object.assign(SignaturePassiveDescriptions, PlainLanguagePassiveDescriptions);
+
+SignaturePassiveComponents.shelteringbreeze = ['friendguard', 'windrider'];

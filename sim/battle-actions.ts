@@ -295,7 +295,12 @@ export class BattleActions {
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
-		if (brokeTransferredSubstitute) this.battle.add('-end', pokemon, 'Substitute');
+		if (pokemon.illusion) {
+   const teammate = pokemon.illusion;
+   const disguise = teammate.name === teammate.species.name ? teammate.name : `${teammate.name} (${teammate.species.name})`;
+   pokemon.side.send('-message', `${pokemon.name} entered disguised as ${disguise}.`);
+  }
+  if (brokeTransferredSubstitute) this.battle.add('-end', pokemon, 'Substitute');
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 

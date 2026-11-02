@@ -1,6 +1,43 @@
 'use strict';const assert=require('assert').strict,common=require('../../common'),{Dex}=require('../../../dist/sim');
 describe('Tyranitar approved exact composites',()=>{let b;afterEach(()=>{b?.destroy();b=null});function setup(ability,species='Tyranitar'){const m={species:'Mew',ability:'No Ability',moves:['splash','earthquake','stoneedge','darkpulse']};b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{...m,species,ability}],[m]]);b.makeChoices('team 1','team 1');return[b.p1.active[0],b.p2.active[0]];}
-it('Mountainbreaker absorbs Ground, retains full Battle Armor, suppression removes both',()=>{const[p,q]=setup('Mountainbreaker');p.hp=100;p.maxhp=p.baseMaxhp=1000;b.actions.useMove('earthquake',q,{target:p});assert.equal(p.hp,350);assert.equal(b.runEvent('CriticalHit',p,q,Dex.getActiveMove('tackle')),false);assert.equal(b.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),80);b.boost({atk:-1},p,q,Dex.getActiveMove('growl'));assert.equal(p.boosts.def,2);b.field.terrain='fairytaleterrain';b.singleEvent('Start',p.getAbility(),p.abilityState,p);assert.equal(p.boosts.def,3);assert.deepEqual(p.getPassives(),['sandstream']);p.addVolatile('gastroacid');assert.equal(b.runEvent('ModifyDamage',q,p,Dex.getActiveMove('tackle'),100),100);assert.notEqual(b.runEvent('TryHit',p,q,Dex.getActiveMove('earthquake')),null);});
-it('Dread Presence boosts both sides, blocks berries/seeds and no status punishment',()=>{const[p,q]=setup('Dread Presence');for(const[a,z]of[[p,q],[q,p]])assert.equal(b.runEvent('BasePower',a,z,Dex.getActiveMove('darkpulse'),120),160);q.setItem('Sitrus Berry');q.hp=1;assert.equal(q.eatItem(),false);q.setItem('Elemental Seed');assert.equal(q.useItem(),false);assert.equal(Dex.abilities.get('dreadpresence').onAnyAfterMoveSecondarySelf,undefined);p.addVolatile('gastroacid');assert.equal(b.runEvent('BasePower',q,p,Dex.getActiveMove('darkpulse'),120),120);assert(q.useItem());});
-it('Mega retains only old matchup, not new base components',()=>{const[p,q]=setup('Sand Sovereign','Tyranitar-Mega');assert(!p.hasAbility('eartheater'));assert(!p.hasAbility('battlearmor'));const m=Dex.getActiveMove('stoneedge');b.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,q);assert.equal(typeof m.onEffectiveness,'function');q.setType('Steel');assert.equal(m.onEffectiveness.call(b,-1,q,'Steel',m),1);assert.equal(Dex.abilities.get('mountainbreaker').onModifyMove,undefined);assert.equal(p.species.abilities[0],'Sand Sovereign');});
+it('Mountain Hide reduces physical damage only in effective sand', () => {
+ const [p,q]=setup('Mountain Hide');
+ const damage=id=>b.runEvent('ModifyDamage',q,p,Dex.getActiveMove(id),100);
+ assert.equal(damage('tackle'),75);
+ assert.equal(damage('surf'),100);
+ assert(p.hasAbility('innerfocus'));
+ q.setAbility('Cloud Nine');
+ assert.equal(damage('tackle'),100);
+});
+it('Mountainbreaker hits Levitate and removes walls only after direct damage', () => {
+ const [p,q]=setup('Mountainbreaker');
+ q.setAbility('Levitate');q.maxhp=q.baseMaxhp=q.hp=2000;
+ q.side.addSideCondition('reflect',q);
+ q.addVolatile('protect',q);
+ b.actions.useMove('earthquake',p,{target:q});
+ assert(q.side.getSideCondition('reflect'));
+ q.removeVolatile('protect');
+ b.actions.useMove('earthquake',p,{target:q});
+ assert(q.hp<2000);
+ assert(!q.side.getSideCondition('reflect'));
+ q.side.addSideCondition('lightscreen',q);
+ const hp=q.hp;
+ b.actions.useMove('earthpower',p,{target:q});
+ assert.equal(q.hp,hp);
+ assert(q.side.getSideCondition('lightscreen'));
+});
+it('Dread Presence denies berries and boosts only its Dark attacks against weakened foes', () => {
+ const [p,q]=setup('Dread Presence');q.maxhp=q.baseMaxhp=1000;q.hp=501;
+ const power=(user,target,id)=>b.runEvent('BasePower',user,target,Dex.getActiveMove(id),100);
+ assert.equal(power(p,q,'crunch'),100);
+ q.hp=500;
+ assert.equal(power(p,q,'crunch'),130);
+ assert.equal(power(p,q,'stoneedge'),100);
+ assert.equal(power(q,p,'crunch'),100);
+ q.setItem('Sitrus Berry');assert.equal(q.eatItem(),false);
+ p.addVolatile('gastroacid',q);
+ assert.equal(power(p,q,'crunch'),100);
+ assert(q.eatItem());
+});
+it('Mega retains only old matchup, not new base components',()=>{const[p,q]=setup('Sand Sovereign','Tyranitar-Mega');assert(!p.hasAbility('eartheater'));assert(!p.hasAbility('battlearmor'));const m=Dex.getActiveMove('stoneedge');b.singleEvent('ModifyMove',p.getAbility(),p.abilityState,m,p,q);assert.equal(typeof m.onEffectiveness,'function');q.setType('Steel');assert.equal(m.onEffectiveness.call(b,-1,q,'Steel',m),1);assert(!p.hasAbility('mountainbreaker'));assert.equal(p.species.abilities[0],'Sand Sovereign');});
 });

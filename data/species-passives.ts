@@ -1,10 +1,11 @@
+import {CosmeticBattleCounterparts} from './cosmetic-counterparts';
 import {StanceDisguisePassives} from './stance-disguise-aggron';
 import {EeveeCloysterPassives} from './eeveelution-cloyster-approved';
 import {StarterPassives} from './starter-passives';
 
 /** Explicitly approved ordinary species; no evolution or battle-form inheritance. */
 export const ThematicPassiveGroups = {
-	windrider: ['jumpluff'],
+	shelteringbreeze: ['jumpluff'],
 	hypercutter: ['kingler', 'pinsir', 'crawdaunt', 'gliscor'],
 	shielddust: ['butterfree', 'vivillon', 'dustox', 'mothim', 'masquerain'],
 	overcoat: ['cacnea', 'cacturne', 'maractus'],
@@ -1333,5 +1334,9 @@ ThematicPassiveIds.add('liquidvoice');
 
 for (const id of ['machamp', 'machampalt', 'machampgmax', 'machampgmaxalt']) SpeciesPassives[id] = Object.freeze(['innerfocus']);
 ThematicPassiveIds.add('innerfocus');
+// Synchronize final passives after all base-form revisions.
+for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
+ SpeciesPassives[skin] = Object.freeze([...(SpeciesPassives[base] || [])]);
+}
 Object.freeze(SpeciesPassives);
 

@@ -2,13 +2,10 @@
 const assert = require('assert').strict;
 const common = require('../../common');
 const {Dex, TeamValidator} = require('../../../dist/sim');
-const {DisabledSpecies} = require('../../../dist/data/disabled-species');
 
 describe('Mega Hydreigon: Expiration and Abyssal Rebirth', () => {
 	let battle;
-	// Exercise retained historical mechanics only. Public availability is tested separately.
-	beforeEach(() => DisabledSpecies.delete('hydreigonmega'));
-	afterEach(() => { battle?.destroy(); battle = null; DisabledSpecies.add('hydreigonmega'); });
+	afterEach(() => { battle?.destroy(); battle = null; });
 	const set = (species = 'Mew', ability = 'No Ability', item = '') =>
 		({species, ability, item, moves: ['splash', 'tackle', 'darkpulse', 'outrage', 'gildedhelix', 'earthpower']});
 	function setup(gameType = 'singles', foeAbility = 'No Ability') {

@@ -3,8 +3,8 @@ import type { AbilityDataTable } from '../sim/dex-abilities';
 export const PassiveCleanupDescriptions = {
  rivalry: {shortDesc: '1.3x power vs same-gender or genderless targets; other allies take 0.75x attack damage. Stacks.', desc: 'Damaging moves have 1.3x power against targets of the same gender or genderless targets. All other matchups retain normal power with no penalty. Other allies take 25% less attack damage, including friendly fire, regardless of gender; the holder does not protect itself. Protection stacks with Friend Guard and with each other Rivalry holder. The same holder\'s active and passive Rivalry do not duplicate its effects.'},
 	rockypayload: {
-		shortDesc: 'Rock STAB; Rock attacks use 1.5x offense, or 2x on Rocky Field.',
-		desc: 'Rock-type attacks receive STAB. The attacking stat used by a Rock-type attack is multiplied by 1.5, or by 2 on Rocky Field.',
+		shortDesc: 'Rock attacks use 1.5x Attack or Sp. Atk.',
+		desc: 'Rock attacks use 1.5x Attack or Special Attack on all fields.',
 	},
 
 	unbridledwrath: {

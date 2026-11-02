@@ -3393,11 +3393,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 224,
 	},
 	berserk: {
-		onStart(pokemon) {
-			if (this.field.isTerrain('dragonsdenterrain')) {
-				this.boost({ atk: 2, spa: 2 }, pokemon, pokemon);
-			}
-		},
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType === 'Move' && damage > 0) {
 				const hit = target.getMoveHitData(effect);
@@ -3424,7 +3419,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!lastAttackedBy) return;
 			const hpBeforeDamage = target.getMoveHitData(move).hpBeforeDamage;
 			if (hpBeforeDamage !== undefined && target.hp <= target.maxhp / 2 && hpBeforeDamage > target.maxhp / 2) {
-				this.boost({ atk: 1, spa: 1 }, target, target);
+				this.boost(this.field.isTerrain('dragonsdenterrain') ? {spa: 2} : {atk: 1, spa: 1}, target, target);
 			}
 		},
 		flags: {},
@@ -4711,8 +4706,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effect.id === 'terraresolve') return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onDamagingHit(damage, target, source, move) { return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, move); },
-		onSourceModifyDamage(damage, source, target, move) {
-			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
+		onDragOutPriority: 1,
+		onDragOut(pokemon) {
+			return this.dex.abilities.get('suctioncups').onDragOut?.call(this, pokemon);
 		},
 		flags: { breakable: 1 },
 		name: "Terra Resolve",
@@ -6748,12 +6744,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (isUltraSuppressedTerrain(this)) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
+			if (!damage || !target.hp) return;
+			const hit = target.getMoveHitData(move);
+			if (hit.ultraEgoTriggered) return;
+			hit.ultraEgoTriggered = true;
+			if (!target.abilityState.skipUltraEgoBoost) this.boost({atk: 1, spa: 1}, target, target);
+			target.abilityState.skipUltraEgoBoost = !target.abilityState.skipUltraEgoBoost;
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);
 				return;
 			}
 			target.abilityState.ultraEgoHitTriggered = true;
-			this.boost({ atk: 1, spa: 1 }, target, target);
 			if ((this.dex.abilities.get('ultraego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
@@ -9263,10 +9264,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
-		onBasePower(basePower, source) {
-			if (this.field.isTerrain('dragonsdenterrain')) {
-				return this.chainModify(1.2);
-			}
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Steel' && typeMod > 0 && move.category !== 'Status' && this.field.isTerrain('dragonsdenterrain')) return 0;
 		},
 		flags: { breakable: 1 },
 		name: "Good as Gold",
@@ -13899,34 +13898,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	rockypayload: {
 		onModifyAtkPriority: 5,
-		onModifyMove(move) {
- if (skipPassiveComponent(this, this.effectState.target, 'rockypayload')) return;
-			if (move && this.movehasType(move, 'Rock')) move.forceSTAB = true;
-		},
 		onModifyAtk(atk, attacker, defender, move) {
- if (skipPassiveComponent(this, this.effectState.target, 'rockypayload')) return;
-			if (move && this.movehasType(move, 'Rock')) {
-				if (this.field.isTerrain('rockyterrain')) {
-					this.debug('Rocky Payload double boost');
-					return this.chainModify(2);
-				} else {
-					this.debug('Rocky Payload boost');
-					return this.chainModify(1.5);
-				}
-			}
+			if (skipPassiveComponent(this, attacker, 'rockypayload')) return;
+			if (this.movehasType(move, 'Rock')) return this.chainModify(1.5);
 		},
 		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
- if (skipPassiveComponent(this, this.effectState.target, 'rockypayload')) return;
-			if (move && this.movehasType(move, 'Rock')) {
-				if (this.field.isTerrain('rockyterrain')) {
-					this.debug('Rocky Payload double boost');
-					return this.chainModify(2);
-				} else {
-					this.debug('Rocky Payload boost');
-					return this.chainModify(1.5);
-				}
-			}
+		onModifySpA(spa, attacker, defender, move) {
+			if (skipPassiveComponent(this, attacker, 'rockypayload')) return;
+			if (this.movehasType(move, 'Rock')) return this.chainModify(1.5);
 		},
 		flags: {},
 		name: "Rocky Payload",
@@ -16371,7 +16350,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	stamina: {
 		onDamagingHit(damage, target, source, effect) {
 			if (skipPassiveComponent(this, this.effectState.target, 'stamina')) return;
-			if (!source || target.isAlly(source)) return;
+			if (damage <= 0 || !target.hp || !source || target.isAlly(source)) return;
+			const hit = target.getMoveHitData(effect);
+			if (hit.staminaTriggered) return;
+			hit.staminaTriggered = true;
 			if (this.effectState.staminaHitTurn !== this.turn) {
 				this.effectState.staminaHitTurn = this.turn;
 				this.boost({ def: 1 }, target, target);
@@ -18037,12 +18019,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (isUltraSuppressedTerrain(this)) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
+			if (!damage || !target.hp) return;
+			const hit = target.getMoveHitData(move);
+			if (hit.ultraEgoTriggered) return;
+			hit.ultraEgoTriggered = true;
+			if (!target.abilityState.skipUltraEgoBoost) this.boost({atk: 1, spa: 1}, target, target);
+			target.abilityState.skipUltraEgoBoost = !target.abilityState.skipUltraEgoBoost;
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);
 				return;
 			}
 			target.abilityState.ultraEgoHitTriggered = true;
-			this.boost({ atk: 1, spa: 1 }, target, target);
 			if ((this.dex.abilities.get('burningego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
@@ -18270,12 +18257,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.dex.abilities.get('flamebody').onDamagingHit?.call(this, damage, target, source, move);
 			if (isUltraSuppressedTerrain(this)) return;
 			if (!source || target.isAlly(source) || !move || move.category === 'Status') return;
+			if (!damage || !target.hp) return;
+			const hit = target.getMoveHitData(move);
+			if (hit.ultraEgoTriggered) return;
+			hit.ultraEgoTriggered = true;
+			if (!target.abilityState.skipUltraEgoBoost) this.boost({atk: 1, spa: 1}, target, target);
+			target.abilityState.skipUltraEgoBoost = !target.abilityState.skipUltraEgoBoost;
 			if (target.abilityState.ultraEgoHitTriggered) {
 				this.heal(target.baseMaxhp / 20, target, target);
 				return;
 			}
 			target.abilityState.ultraEgoHitTriggered = true;
-			this.boost({ atk: 1, spa: 1 }, target, target);
 			if ((this.dex.abilities.get('perfectego') as any).boostedField.call(this)) {
 				if (move.category === 'Physical' && !target.abilityState.ultraEgoDefBoosted) {
 					target.abilityState.ultraEgoDefBoosted = true;
@@ -21551,10 +21543,10 @@ Abilities.insight = {name: 'Insight', num: 11979, rating: 4, flags: {}};
 composeSelectedAbility(Abilities, 'insight', ['ultraego', 'telepathy', 'innerfocus'], true);
 composeSelectedAbility(Abilities, 'auraprecision', ['ultrainstinct', 'shielddust', 'mindseye'], true);
 Abilities.auraprecision = {...Abilities.auraprecision, flags: {}};
-composeSelectedAbility(Abilities, 'duskdrive', ['opportunist', 'ultraego'], true);
+composeSelectedAbility(Abilities, 'duskdrive', ['keeneye', 'ultraego'], true);
 // Keep the legacy ID for saved teams and replays; only its public name changes.
 Abilities.duskdrive = { ...Abilities.duskdrive, id: 'duskdrive' as ID, name: 'Dusk Ego' };
-composeSelectedAbility(Abilities, 'twilightinstinct', ['ultrainstinct', 'keeneye'], true);
+composeSelectedAbility(Abilities, 'twilightinstinct', ['ultrainstinct', 'opportunist'], true);
 Abilities.twilightinstinct = {...Abilities.twilightinstinct, flags: {}};
 Abilities.forsakensleeper = {name: 'Forsaken Sleeper', num: 11973, rating: 4, flags: {...Abilities.comatose.flags}};
 Abilities.coldexpertise = {name: 'Cold Expertise', num: 11974, rating: 4, flags: {}};
@@ -21729,3 +21721,9 @@ installMachampRework(Abilities);
 
 import {installAuditReworks} from './audit-reworks-approved';
 installAuditReworks(Abilities);
+Abilities.shelteringbreeze = {
+ name: 'Sheltering Breeze', num: 12190, rating: 4, flags: {},
+ shortDesc: 'Friend Guard + Wind Rider.',
+ desc: 'Allies take 25% less attack damage. Wind moves from other Pokémon raise its Attack by 1 instead of hitting it. Gains +1 Attack when its side starts Tailwind or it enters Tailwind. In Strong Winds, gains +1 Attack and Sp. Atk each turn.',
+};
+composeSelectedAbility(Abilities, 'shelteringbreeze', ['friendguard', 'windrider'], true);

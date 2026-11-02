@@ -40,19 +40,19 @@ describe('Oracle’s Refrain and requested coverage',()=>{
   p.setType(['Water','Normal']);assert.equal(p.runEffectiveness(move('closecombat')),1);assert.equal(p.runEffectiveness(move('psychic')),0);
   p.setType(['Water','Psychic']);assert.equal(p.runEffectiveness(move('psychic')),-1);
  });
- for(const ability of ['No Ability','Resonance Force',"Oracle's Refrain"]) it('boosts sound once with '+ability,()=>{
-  const [p,q]=setup(ability);assert.equal(battle.runEvent('BasePower',p,q,move('boomburst'),100),150);
+ for(const ability of ['No Ability','Resonance Force',"Oracle's Refrain"]) it('uses only independently selected sound power with '+ability,()=>{
+  const [p,q]=setup(ability);assert.equal(battle.runEvent('BasePower',p,q,move('boomburst'),100),ability === 'Resonance Force' ? 150 : 100);
   assert.equal(battle.runEvent('BasePower',p,q,move('psychic'),100),100);
  });
  it('keeps the passive through selected-ability suppression',()=>{
   const [p,q]=setup('Drizzle');p.addVolatile('gastroacid');assert.equal(p.runEffectiveness(move('psychic')),0);
   battle.actions.useMove(move('boomburst'),q,{target:p});assert.equal(p.hp,p.maxhp);
-  assert.equal(battle.runEvent('BasePower',p,q,move('boomburst'),100),150);
+  assert.equal(battle.runEvent('BasePower',p,q,move('boomburst'),100),100);
  });
- it('boosts allied sound and protects allies while Soundproof blocks opposing sound',()=>{
+ it('leaves allies exposed to sound while Soundproof protects its holder',()=>{
   const [p,q]=setup('No Ability','doubles'),ally=battle.p1.active[1];
-  assert.equal(battle.runEvent('BasePower',ally,q,move('boomburst'),100),150);
-  battle.actions.useMove(move('boomburst'),p,{target:q});assert.equal(ally.hp,ally.maxhp);assert(q.hp<q.maxhp);
+  assert.equal(battle.runEvent('BasePower',ally,q,move('boomburst'),100),100);
+  battle.actions.useMove(move('boomburst'),p,{target:q});assert(ally.hp<ally.maxhp);assert(q.hp<q.maxhp);
   p.hp=p.maxhp;battle.actions.useMove(move('boomburst'),ally,{target:q});assert.equal(p.hp,p.maxhp);
   battle.actions.useMove(move('boomburst'),q,{target:p});assert.equal(p.hp,p.maxhp);
  });

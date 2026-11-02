@@ -26,6 +26,7 @@ export function publicFieldGuide() {
 			'Boosts and general effects': [
 				...Object.entries(aura.typeMultipliers).map(([type, n]) => `${type} attacks: ${n < 1 ? 'weakened to ' : ''}${n}x power` + (aura.typeCondition === 'none' ? ', including airborne users.' : aura.typeCondition === 'special' ? ', for special attacks only.' : ', while the attacker is grounded and not semi-invulnerable.')),
 				'Matching field and aura type bonuses do not multiply together. Named move bonuses are separate.',
+				...(frozen ? ['On both sides, Frozen Aura neutralizes weaknesses from Ice typing. A second type keeps its usual weaknesses and resistances.'] : []),
 				...(aura.id === 'electricterrain' ? ['Electric Aura adds no type-wide bonus over Short-Circuit.'] : []),
 				...(frozen || ashen || rift ? ['This aura does not grant the full Eclipse field\'s defenses, weather rules, field lock or seed-ability contact effects.'] : []),
 				...(rift ? [

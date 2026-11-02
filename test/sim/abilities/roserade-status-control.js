@@ -18,8 +18,8 @@ describe('Approved Roserade status control',()=>{
   });
   it(ability+' caps secondaries, preserves guarantees, and does not multiply repeated calls',()=>{
    const[p,q]=setup(ability),m=modify(p,q,'tackle',{secondaries:[{chance:10,status:'brn'},{chance:40,status:'par'},{chance:100,boosts:{def:-1}}],self:{chance:30,boosts:{atk:1}}});
-   assert.deepEqual(m.secondaries.map(s=>s.chance),[20,60,100]);assert.equal(m.self.chance,60);
-   battle.runEvent('ModifyMove',p,q,m,m);assert.deepEqual(m.secondaries.map(s=>s.chance),[20,60,100]);assert.equal(m.self.chance,60);
+   assert.deepEqual(m.secondaries.map(s=>s.chance),[20,80,100]);assert.equal(m.self.chance,60);
+   battle.runEvent('ModifyMove',p,q,m,m);assert.deepEqual(m.secondaries.map(s=>s.chance),[20,80,100]);assert.equal(m.self.chance,60);
   });
   it(ability+' gives actual Prankster priority and marks its targeting rules',()=>{
    const[p,q]=setup(ability),m=Dex.getActiveMove('toxic');assert.equal(battle.runEvent('ModifyPriority',p,q,m,0),1);assert(m.pranksterBoosted);
@@ -30,9 +30,9 @@ describe('Approved Roserade status control',()=>{
    battle.makeChoices('move toxic','move splash');assert.equal(q.status,'');
    p.addVolatile('gastroacid');battle.makeChoices('move toxic','move splash');assert.equal(q.status,'tox');
   });
-  it(ability+' skips Solar Beam charge, while suppression restores it',()=>{
+  it(ability+' retains the Solar Beam charge turn',()=>{
    const[p,q]=setup(ability);q.hp=q.maxhp=q.baseMaxhp=10000;
-   assert(!modify(p,q,'solarbeam').flags.charge);battle.makeChoices('move solarbeam','move splash');assert(q.hp<10000);assert(!p.volatiles.twoturnmove);
+   assert(modify(p,q,'solarbeam').flags.charge);battle.makeChoices('move solarbeam','move splash');assert.equal(q.hp,10000);assert(p.volatiles.twoturnmove);
    p.addVolatile('gastroacid');assert(modify(p,q,'solarbeam').flags.charge);
   });
   it(ability+' neither cures nor heals on switching and has no residual recovery',()=>{
@@ -54,7 +54,7 @@ describe('Approved Roserade status control',()=>{
    ['roserade',{0:'False Devotion',1:'Invigorate',H:'Technician'},['beguilingbouquet']],
    ['roserademega',{0:'True Devotion'},['beguilingbouquet']],
    ['roseradeaevian',{0:'Dry Skin',1:'Technician',H:'False Devotion'},[]],
-   ['amoonguss',{0:'Effect Spore',1:'Spore Shroud',H:'Regenerator'},['dryskin']],
+   ['amoonguss',{0:'Sticky Hold',1:'Spore Shroud',H:'Regenerator'},['dryskin']],
   ]) {assert.deepEqual(Dex.species.get(id).abilities,abilities);assert.deepEqual(Dex.species.get(id).passives,passives);}
  });
 });

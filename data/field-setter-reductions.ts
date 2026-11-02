@@ -71,7 +71,7 @@ export function installFieldSetterReductions(abilities: AbilityDataTable) {
 		leaveGift.call(this, pokemon, 'lastbloom');
 	};
 	abilities.eternalflower.desc = 'Mold Breaker. Deals 2x damage to Pulse forms; Grass moves use 1.5x Attack and Sp. Atk. Opposing Mega, G-Max, Terastallized, Stellar and Ultra Beast Pokemon have their five non-HP stats reduced to 0.7x while it is active. Once per battle, fainting heals its immediate replacement by 25% of that Pokemon\'s max HP after entry hazards. A fainted, full-HP or heal-blocked replacement consumes the gift.';
-	abilities.eternalflower.shortDesc = 'Mold Breaker; boosts Grass/Pulse damage, weakens gimmicks; on faint, heals its replacement.';
+	abilities.eternalflower.shortDesc = 'Mold Breaker; stronger Grass/Pulse attacks; weakens opposing gimmicks. Fainting heals its replacement once.';
 	delete abilities.duneterror.onFaint;
 	abilities.duneterror.desc = 'Sand Stream + Sand Spit + full local Shed Skin. During effective sand, active foes take Ground-type damage equal to 1/16 max HP each turn; Ground immunities prevent this damage.';
 	abilities.duneterror.shortDesc = 'Summons sand on entry and when hit; Shed Skin; sand chips foes with Ground damage.';
@@ -83,8 +83,17 @@ export function installFieldSetterReductions(abilities: AbilityDataTable) {
 	};
 	abilities.auroradomain.desc = 'Full local Snow Warning + Refrigerate. On fainting, sets or refreshes its side\'s Aurora Veil for 5 turns, without requiring hail or snow.';
 	abilities.auroradomain.shortDesc = 'Hail and Refrigerate; fainting sets Aurora Veil for 5 turns.';
+	const startTyrantDomain = abilities.tyrantdomain.onStart!;
+	abilities.tyrantdomain.onStart = function (pokemon) {
+		startTyrantDomain.call(this, pokemon);
+		if (!this.field.isTerrain('dragonsdenterrain')) return;
+		const entry = pokemon.m.ultraRivalryEntryCount || 0;
+		if (pokemon.m.tyrantDenEntry === entry) return;
+		pokemon.m.tyrantDenEntry = entry;
+		for (const foe of pokemon.foes()) this.boost({def: -1, spd: -1}, foe, pokemon, this.effect);
+	};
 	abilities.tyrantdomain.onFaint = function (pokemon) { leaveGift.call(this, pokemon, 'tyrantlegacy'); };
-	abilities.tyrantdomain.desc = 'Full local Sand Stream + Supreme Overlord. Once per battle, fainting grants its immediate replacement +1 Attack after entry hazards. A replacement that faints on entry consumes the gift.';
+	abilities.tyrantdomain.desc = 'Sand Stream + Supreme Overlord. Holds an existing Dragon’s Den while active; entering it lowers each foe’s Defense and Sp. Def by 1. Once per battle, fainting grants its immediate replacement +1 Attack after entry hazards. A replacement that faints on entry consumes the gift.';
 	abilities.tyrantdomain.shortDesc = 'Sand Stream + Supreme Overlord; fainting grants its replacement +1 Attack once per battle.';
 	abilities.inversion.onStart = function (pokemon) {
 		if (pokemon.m.inversionFieldUsed) return;

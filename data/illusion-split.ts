@@ -20,6 +20,15 @@ function chosenInitialDisguise(pokemon: Pokemon): boolean {
  pokemon.illusion = target;
  return true;
 }
+function lastEligibleTeammate(pokemon: Pokemon) {
+ for (let i = pokemon.side.pokemon.length - 1; i >= 0; i--) {
+  const candidate = pokemon.side.pokemon[i];
+  if (candidate !== pokemon && candidate.hp && !candidate.fainted &&
+   (!pokemon.terastallized || !['Ogerpon', 'Terapagos'].includes(candidate.species.baseSpecies))) return candidate;
+ }
+ return null;
+}
+
 export function installIllusionSplit(abilities: AbilityDataTable) {
  const advanced = abilities.illusion;
  const end = advanced.onEnd! as (this: Battle, pokemon: Pokemon) => void;
@@ -30,7 +39,9 @@ export function installIllusionSplit(abilities: AbilityDataTable) {
  abilities.perfectillusion = {...advanced, name: 'Perfect Illusion', num: 11443,
   onBeforeSwitchIn(pokemon) {
    pokemon.m.perfectIllusion = true;
-   if (!chosenInitialDisguise(pokemon)) advanced.onBeforeSwitchIn!.call(this, pokemon);
+   if (chosenInitialDisguise(pokemon)) return;
+   if (!pokemon.previouslySwitchedIn) pokemon.illusion = lastEligibleTeammate(pokemon);
+   else advanced.onBeforeSwitchIn!.call(this, pokemon);
   },
   onStart(pokemon) {
    if (pokemon.illusion) pokemon.m.perfectIllusion = true;
@@ -50,13 +61,7 @@ export function installIllusionSplit(abilities: AbilityDataTable) {
    if (pokemon.m.perfectIllusion || (pokemon.ability === 'perfectillusion' && !pokemon.ignoringAbility())) return;
    pokemon.illusion = null;
    if (chosenInitialDisguise(pokemon)) return;
-   for (let i = pokemon.side.pokemon.length - 1; i >= 0; i--) {
-    const candidate = pokemon.side.pokemon[i];
-    if (candidate !== pokemon && !candidate.fainted && candidate.hp &&
-     (!pokemon.terastallized || !['Ogerpon', 'Terapagos'].includes(candidate.species.baseSpecies))) {
-     pokemon.illusion = candidate; break;
-    }
-   }
+   pokemon.illusion = lastEligibleTeammate(pokemon);
   },
   onDamagingHit: advanced.onDamagingHit,
   onEnd: clear,

@@ -105,6 +105,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (!protectsWarnedMove(target, source, effect)) return;
+			const omen = this.effectState.omenOpponents?.get(source);
+			if (omen?.anticipation === effect.id && target.hasAbilityOrPassive('omensight')) {
+				const forewarn = omen.forewarn === effect.id ? 0.75 : 0.8;
+				return this.chainModify(0.75 * forewarn);
+			}
 			return this.chainModify(0.75);
 		},
 	},
@@ -1578,6 +1583,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (effect?.id === 'tailwind') {
 				return 6;
 			}
+			if (effect?.id === 'supersonicskystrike') return 3;
 			return 0;
 		},
 		onBasePowerPriority: 6,
@@ -1599,7 +1605,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DeltaStream', '[from] ' + (effect.effectType === 'Move' ? 'move: ' : 'ability: ') + effect.name, `[of] ${source}`);
+			this.add('-weather', 'DeltaStream', '[from] ' + (effect.effectType === 'Move' ? 'move: ' : 'ability: ') + effect.name, `[of] ${source}`,
+				...(effect.id === 'supersonicskystrike' ? ['[turns] 3'] : []));
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {

@@ -40,8 +40,8 @@ describe('Approved Darts, Drive and Mamoswine packages', () => {
 		assert.equal(power(p, q), 90);
 	});
 	it('replaces the Drive packages rather than keeping removed components', () => {
-		assert.deepEqual(AbilityComponents.duskdrive, ['opportunist', 'ultraego']);
-		assert.deepEqual(AbilityComponents.twilightinstinct, ['ultrainstinct', 'keeneye']);
+		assert.deepEqual(AbilityComponents.duskdrive, ['keeneye', 'ultraego']);
+		assert.deepEqual(AbilityComponents.twilightinstinct, ['ultrainstinct', 'opportunist']);
 		assert(!Dex.abilities.get('duskdrive').onModifyCritRatio);
 		assert(Dex.abilities.get('duskdrive').desc.includes('Ultra Ego'));
 	});

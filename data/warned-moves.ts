@@ -58,6 +58,7 @@ function reportOmen(battle: Battle, pokemon: Pokemon, target: Pokemon, move: Mov
 }
 
 export function checkOmenSight(battle: Battle, pokemon: Pokemon, target: Pokemon) {
+	pokemon.volatiles.warnedmoves?.omenOpponents?.delete(target);
 	const reports = new Set<string>();
 	checkWarning(battle, pokemon, target, 'anticipation', reports);
 	checkWarning(battle, pokemon, target, 'forewarn', reports);
@@ -67,7 +68,15 @@ export function checkOmenSight(battle: Battle, pokemon: Pokemon, target: Pokemon
 export function warnIncomingOpponents(battle: Battle, entrants: Pokemon[]) {
 	if (battle.gen !== 9) return;
 	for (const holder of battle.getAllActive()) {
-		if (entrants.includes(holder) || !holder.isStarted || !holder.hp) continue;
+		if (!holder.hp) continue;
+  // Reveal incoming foes without rerunning Illuminate’s unrelated entry effects.
+  if (holder.hasAbilityOrPassive('illuminate')) {
+   for (const entrant of entrants) {
+    if (!entrant.hp || !entrant.illusion || holder.isAlly(entrant)) continue;
+    battle.singleEvent('End', battle.dex.abilities.get('illusion'), entrant.abilityState, entrant, holder, 'ability');
+   }
+  }
+  if (entrants.includes(holder) || !holder.isStarted) continue;
 		if (holder.hasAbilityOrPassive('omensight')) {
 			for (const entrant of entrants) checkOmenSight(battle, holder, entrant);
 			continue;

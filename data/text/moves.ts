@@ -1584,8 +1584,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragoncheer: {
 		name: "Dragon Cheer",
-		desc: "Raises the target's chance for a critical hit by 1 stage, or by 2 stages if the target is Dragon type. Fails if there is no ally adjacent to the user, or if the target already has this effect or the Focus Energy effect. Baton Pass can be used to transfer this effect to an ally.",
-		shortDesc: "Ally: Crit ratio +1, or +2 if ally is Dragon type.",
+		desc: "Raises the target's chance for a critical hit by 1 stage, or by 2 stages if the target is Dragon type (3 on Dragon’s Den). Fails if there is no ally adjacent to the user, or if the target already has this effect or the Focus Energy effect. Baton Pass can be used to transfer this effect to an ally.",
+		shortDesc: "Ally: +1 crit stage. Dragon ally: +2, or +3 on Dragon’s Den.",
 
 		start: "#focusenergy",
 	},
@@ -2016,7 +2016,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ficklebeam: {
 		name: "Fickle Beam",
-		shortDesc: "Has a 30% chance this move's power is doubled.",
+		shortDesc: "30% chance to double power; 50% on Dragon’s Den.",
 
 		activate: "  [POKEMON] is going all out for this attack!",
 	},
@@ -4312,8 +4312,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mist: {
 		name: "Mist",
-		desc: "For 5 turns, or 8 turns during Snow or Hail, the user and its party members are protected from stat drops by opposing Pokemon and opposing Abilities. Allies take 0.75x damage from spread moves, Ice- and Fairy-type allies restore 1/16 max HP each turn, and Misty Terrain is created for 3 turns. On Bewitched Woods, this extends Bewitched Woods instead of creating Misty Terrain. Fails if the effect is already active on the user's side. Lasts 8 turns when created during Magic Room; existing Mist is not extended.",
-		shortDesc: "Blocks stat drops; weakens spread; heals Ice/Fairy allies.",
+		desc: "For 5 turns, or 8 turns during Snow or Hail, the user and its party members are protected from stat drops by opposing Pokemon and opposing Abilities. Allies take 10% less attack damage, or 25% less from spread hits, Ice- and Fairy-type allies restore 1/16 max HP each turn, and Misty Terrain is created for 3 turns. On Bewitched Woods, this extends Bewitched Woods instead of creating Misty Terrain. Fails if the effect is already active on the user's side. Lasts 8 turns when created during Magic Room; existing Mist is not extended.",
+		shortDesc: "Blocks stat drops. Cuts attack damage by 10%, or 25% for spread hits.",
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "While active, user is protected from stat drops.",
@@ -5557,7 +5557,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	safeguard: {
 		name: "Safeguard",
 		desc: "This move has 5 base PP. For 3 turns, or 5 turns if used by a Pokemon with Invigorate, the user's side blocks opposing status, confusion, Yawn, and stat drops. Active Pokemon on that side take 0.9x damage from attacks and heal 1/16 max HP each turn. When Safeguard ends, they heal 1/8 max HP. Defog removes this effect. Fails if already active. Lasts 8 turns when created during Magic Room; existing Safeguard is not extended.",
-		shortDesc: "Blocks status/stat drops; reduces damage; heals. 3-8 turns.",
+		shortDesc: "Blocks status/stat drops, cuts attack damage by 10%, and heals.",
 		gen3: {
 			desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. Pokemon on the user's side cannot become affected by Yawn but can fall asleep from its effect. Fails if the effect is already active on the user's side.",
 		},
@@ -5645,8 +5645,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scaleshot: {
 		name: "Scale Shot",
-		desc: "Hits two to five times. Lowers the user's Defense by 1 stage and raises the user's Speed by 1 stage after the last hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
-		shortDesc: "Hits 2-5. User: -1 Def, +1 Spe after last hit.",
+		desc: "Hits two to five times. Lowers the user's Defense by 1 stage and raises the user's Speed by 1 stage after the last hit. Dragon’s Den prevents the Defense drop. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 5-6 times.",
+		shortDesc: "Hits 2-5. +1 Spe, -1 Def; no Def drop on Dragon’s Den.",
 	},
 	scaryface: {
 		name: "Scary Face",
@@ -6682,7 +6682,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	supersonicskystrike: {
 		name: "Supersonic Skystrike",
-		shortDesc: "Power is equal to the base move's Z-Power.",
+		desc: "Its power depends on the base Flying move. On a hit, sets Strong Winds for 3 turns.",
+		shortDesc: "Sets Strong Winds for 3 turns on a hit.",
 	},
 	surf: {
 		name: "Surf",
@@ -7791,7 +7792,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 const typeZMoves: [IDEntry, string][] = [
 	['savagespinout', 'Bug'], ['blackholeeclipse', 'Dark'], ['devastatingdrake', 'Dragon'],
 	['gigavolthavoc', 'Electric'], ['twinkletackle', 'Fairy'], ['alloutpummeling', 'Fighting'],
-	['infernooverdrive', 'Fire'], ['supersonicskystrike', 'Flying'], ['neverendingnightmare', 'Ghost'],
+	['infernooverdrive', 'Fire'], ['neverendingnightmare', 'Ghost'],
 	['bloomdoom', 'Grass'], ['tectonicrage', 'Ground'], ['subzeroslammer', 'Ice'],
 	['breakneckblitz', 'Normal'], ['aciddownpour', 'Poison'], ['shatteredpsyche', 'Psychic'],
 	['continentalcrush', 'Rock'], ['corkscrewcrash', 'Steel'], ['hydrovortex', 'Water'],

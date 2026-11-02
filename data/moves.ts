@@ -4759,9 +4759,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				// Found by DarkFE:
 				// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9894139
 				this.effectState.hasDragonType = target.hasType("Dragon");
+				this.effectState.denCheer = this.effectState.hasDragonType && this.field.isTerrain('dragonsdenterrain');
 			},
 			onModifyCritRatio(critRatio, source) {
-				return critRatio + (this.effectState.hasDragonType ? 2 : 1);
+				return critRatio + (this.effectState.denCheer ? 3 : this.effectState.hasDragonType ? 2 : 1);
 			},
 		},
 		target: "adjacentAlly",
@@ -6063,7 +6064,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, pokemon, target, move) {
-			if (this.randomChance(allOutChance(move), 10)) {
+			if (this.randomChance(allOutChance(move, this.field), 10)) {
 				this.attrLastMove('[anim] Fickle Beam All Out');
 				this.add('-activate', pokemon, 'move: Fickle Beam');
 				return this.chainModify(2);
@@ -13824,8 +13825,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 			},
-			onSourceModifyDamage(damage, source, target, move) {
-				if (target.side === this.effectState.target && move.spreadHit) return this.chainModify(0.75);
+			onAnyModifyDamage(damage, source, target, move) {
+				if (target.side === this.effectState.target && move.category !== 'Status') {
+					return this.chainModify(move.spreadHit ? 0.75 : 0.9);
+				}
 			},
 			onSideStart(side) {
 				this.add('-sidestart', side, 'Mist',
@@ -14799,7 +14802,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		isNonstandard: "Past",
+		isNonstandard: null,
 		name: "Obstruct",
 		pp: 10,
 		priority: 4,
@@ -18004,7 +18007,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-activate', target, 'move: Safeguard');
 				}
 			},
-			onSourceModifyDamage(damage, source, target, move) {
+			onAnyModifyDamage(damage, source, target, move) {
 				if (target.side === this.effectState.target && move.category !== 'Status') return this.chainModify(0.9);
 			},
 			onSideStart(side, source) {
@@ -21666,6 +21669,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {},
 		isZ: "flyiniumz",
+		self: {
+			onHit(source, target, move) {
+				this.field.setWeather('deltastream', source, move);
+			},
+		},
 		target: "normal",
 		type: "Flying",
 		contestType: "Cool",

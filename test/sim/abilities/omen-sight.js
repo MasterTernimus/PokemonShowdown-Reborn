@@ -44,7 +44,7 @@ describe('Omen Sight', () => {
 		assert.deepEqual(p.getPassives(), ['omensight']);
 		assert.equal(reports().length, 2);
 		const first = battle.p2.active[0], second = battle.p2.active[1];
-		assert.equal(damage(p, first, 'moonblast'), 750);
+		assert.equal(damage(p, first, 'moonblast'), 562);
 		assert.equal(damage(p, second, 'closecombat'), 750);
 		assert.equal(damage(p, second, 'moonblast'), 800);
 		for (let i = 0; i < 2; i++) {
@@ -65,7 +65,7 @@ describe('Omen Sight', () => {
 	it('keeps Anticipation coverage and Forewarn power warnings for the same foe', () => {
 		const p = start([[mon('Absol')], [mon('Mew', ['drainingkiss', 'hyperbeam', 'splash'])]], 'gen9nofieldsinglesgame');
 		assert.equal(reports().length, 2);
-		assert.equal(damage(p, battle.p2.active[0], 'drainingkiss'), 750);
+		assert.equal(damage(p, battle.p2.active[0], 'drainingkiss'), 600);
 		assert.equal(damage(p, battle.p2.active[0], 'hyperbeam'), 750);
 		assert.equal(damage(p, battle.p2.active[0], 'tackle'), 800);
 	});
@@ -74,7 +74,7 @@ describe('Omen Sight', () => {
 		assert.equal(reports().length, 1);
 		assert(!battle.log.some(line => line.includes('ability: Forewarn|')));
 		assert.equal(damage(p, battle.p2.active[0], 'tackle'), 800);
-		assert.equal(damage(p, battle.p2.active[0], 'moonblast'), 750);
+		assert.equal(damage(p, battle.p2.active[0], 'moonblast'), 562);
 	});
 	it('retains native passive sensing under suppression; selected Omen Sight is suppressed normally', () => {
 		const p = start([[mon('Absol')], [mon('Mew', ['moonblast', 'splash'], 'Neutralizing Gas'), mon('Mew', ['moonblast', 'splash'], 'Neutralizing Gas')]], 'gen9nofieldsinglesgame');

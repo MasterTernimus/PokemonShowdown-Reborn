@@ -85,8 +85,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Absorbs Ground for 1/4 HP; heals on Cave/Desert — first Ground absorption each switch-in clears own-side hazards."
 	},
 	"mossarmor": {
-		"desc": "Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this heal. switching out heals 1/8 max HP only after a Grass attack dealt opposing HP damage on the current or immediately preceding turn, with no intervening action.",
-		"shortDesc": "Airborne; immune to Ground attacks unless grounded; Opposing HP hits heal 1/16; +1 Defense once per turn; Switching cures status and heals 1/3 HP if cured; Woods cures status each turn."
+		"desc": "Airborne: immune to Ground attacks, Spikes, Toxic Spikes, Sticky Web and Arena Trap unless grounded. Thousand Arrows can still hit. Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Switching out cures major status and heals 1/8 max HP only if a status was cured. Bewitched Woods cures status at turn end without this heal. switching out heals 1/8 max HP only after a Grass attack dealt opposing HP damage on the current or immediately preceding turn, with no intervening action.",
+		"shortDesc": "Airborne; immune to Ground attacks unless grounded; Opposing attacks heal 1/16 once per use; +1 Defense once per turn; Switching cures status and heals 1/3 HP if cured; Woods cures status each turn."
 	},
 	"stormpower": {
 		"desc": "If Rain Dance or Primordial Sea is active, its Special Attack is multiplied by 1.5 and it loses 1/8 of its max HP at turn end.",
@@ -497,7 +497,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Extreme Speed always critically hits."
 	},
 	"berserk": {
-		"desc": "When an attack takes it from above half HP to half or less, gains +1 Attack and Sp. Atk after the move. Dragon's Den entry gives +2 Attack and Sp. Atk.",
+		"desc": "When an attack takes it from above half HP to half or less, gains +1 Attack and Sp. Atk after the move. On Dragon's Den, this trigger gives +2 Sp. Atk instead.",
 		"shortDesc": "Crossing half HP from an attack gives +1 Attack/Sp. Atk."
 	},
 	"bigpecks": {
@@ -629,11 +629,11 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Foe stat drops give +2 Sp. Atk; double Speed in rain/snow and supported fields; 1.3x same-type power."
 	},
 	"terraresolve": {
-		"desc": "Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Takes 20% less attack damage, or 40% less from super-effective attacks. Same-type moves have 1.3x power.",
-		"shortDesc": "Opposing HP hits heal 1/16; +1 Defense once per turn; 20% less attack damage; 40% less if super effective; Same-type moves have 1.3x power."
+		"desc": "Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Takes 20% less attack damage, or 40% less from super-effective attacks. Same-type moves have 1.3x power.",
+		"shortDesc": "Opposing attacks heal 1/16 once per use; +1 Defense once per turn; 20% less attack damage; 40% less if super effective; Same-type moves have 1.3x power."
 	},
 	"primalego": {
-		"desc": "When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. Same-type moves have 1.3x power. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field.",
+		"desc": "When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. Same-type moves have 1.3x power. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field.",
 		"shortDesc": "Ignores foe stages and abilities; stronger same-type moves; heals and gains stats in combat."
 	},
 	"eclipsevision": {
@@ -873,7 +873,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Magic Bounce + Magic Guard; fainting sets Doom Desire against each foe."
 	},
 	"perfectego": {
-		"desc": "Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. Moves cannot miss, including on the suppressing fields.",
+		"desc": "Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. Moves cannot miss, including on the suppressing fields.",
 		"shortDesc": "Never misses; ignores abilities; heals and gains stats in combat."
 	},
 	"heavenlychorus": {
@@ -885,7 +885,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "8-turn Hail/Veil; damaging moves add 30% frostbite; faint healing/curse; hit Disable."
 	},
 	"venombastion": {
-		"desc": "Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Once per turn, a poisoned foe that damages it loses one stage of its higher offensive stat. No separate Bug power boost, Merciless or Self Sufficient.",
+		"desc": "Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Once per turn, a poisoned foe that damages it loses one stage of its higher offensive stat. No separate Bug power boost, Merciless or Self Sufficient.",
 		"shortDesc": "HP hits heal 1/16 and boost Defense once per turn; poisoned attackers lose their higher offense once per turn."
 	},
 	"rimeknuckle": {
@@ -1213,8 +1213,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "1.5x Attack; 0.8x physical accuracy."
 	},
 	"hydraheart": {
-		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move.",
-		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Opposing HP hits heal 1/16; +1 Defense once per turn."
+		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move.",
+		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Opposing attacks heal 1/16 once per use; +1 Defense once per turn."
 	},
 	"sweetresonance": {
 		"desc": "On entry, it lowers the evasiveness of adjacent opposing Pokemon by 1 stage every time it switches in. Other Pokemon cannot remove its held item. When it is hit by an attack, the attacker is Embargoed for 5 turns. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. On entry, gives the first adjacent ally Dragon Cheer. Flower Garden entry also lowers foes' Defense and Sp. Def at stage 3+, Attack and Sp. Atk at stage 4+, and Speed and accuracy at stage 5, all by 1; Substitute blocks these entry drops. Misty Terrain entry lowers its own accuracy by 1.",
@@ -1245,7 +1245,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Maximum multi-hit count; 1.5x multi-hit power; Half Fire attacking stats and burn damage; Summons sandstorm on entry."
 	},
 	"voidtyrant": {
-		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. When an attack takes it from above half HP to half or less, gains +1 Attack and Sp. Atk after the move. Dragon's Den entry gives +2 Attack and Sp. Atk. Once per battle, after Draco Meteor applies its Sp. Atk drops, restores all negative stat stages to zero after the entire attack finishes. Positive stages remain.",
+		"desc": "Eligible single-target damaging moves hit three times; multi-hit moves, spread moves outside Free-for-All, charging moves, delayed attacks, Z/Max moves and moves barred from extra hits are excluded. The second and third hits deal 30% damage and retarget the foe's ally if the first target fainted. In Free-for-All battles, single-target moves hit all foes once at 1.3x power; spread moves hit all foes three times, with later hits at 30% power, and full-power spread moves stay full power. Moves have 1.2x power on Dragon's Den. When an attack takes it from above half HP to half or less, gains +1 Attack and Sp. Atk after the move. On Dragon's Den, this trigger gives +2 Sp. Atk instead. Once per battle, after Draco Meteor applies its Sp. Atk drops, restores all negative stat stages to zero after the entire attack finishes. Positive stages remain.",
 		"shortDesc": "Damaging moves hit 3x; hits 2/3 at 30%; FFA singles hit all foes at 1.3x; Crossing half HP from an attack gives +1 Attack/Sp. Atk — once per battle, Draco Meteor clears its negative stat stages."
 	},
 	"orchardbond": {
@@ -1866,8 +1866,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "+1 Speed after each full active turn; Same-type moves have 1.3x power; Kicks have 1.4x power; Halves Water/Ice attacking stats; prevents freeze; field defenses; No opposing accuracy drops; ignores evasion; reveals Illusions."
 	},
 	"ragingcurrent": {
-		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Absorbs Water moves for 1/4 max HP; incoming Fire moves have 1.25x power. Effective rain heals 1/8 HP per turn; sun costs 1/8. Field healing per turn: 1/16 on Underwater, Swamp, Misty or grounded Water Surface; 1/8 when grounded and Poison-type on Murkwater. Corrosive Mist heals Poison types by 1/8 but damages non-Steel others by 1/8. Desert costs 1/8 HP per turn. Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Same-type moves have 1.3x power. Water Veil and its burn immunity are removed.",
-		"shortDesc": "Double Speed in rain and water fields; Absorbs Water; rain/water fields heal; Fire, sun and Desert hurt; Opposing HP hits heal 1/16."
+		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Absorbs Water moves for 1/4 max HP; incoming Fire moves have 1.25x power. Effective rain heals 1/8 HP per turn; sun costs 1/8. Field healing per turn: 1/16 on Underwater, Swamp, Misty or grounded Water Surface; 1/8 when grounded and Poison-type on Murkwater. Corrosive Mist heals Poison types by 1/8 but damages non-Steel others by 1/8. Desert costs 1/8 HP per turn. Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Same-type moves have 1.3x power. Water Veil and its burn immunity are removed.",
+		"shortDesc": "Double Speed in rain and water fields; Absorbs Water; rain/water fields heal; Fire, sun and Desert hurt; Opposing attacks heal 1/16 once per use."
 	},
 	"toxicbloom": {
 		"desc": "Same-type moves have 1.3x power. Incoming Fire and Ice attacks use half the attacker's offensive stat. Immune to hail damage. When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. At turn end, opposing non-Grass Pokemon take Grass-type damage equal to 1/16 max HP, blocked by Grass immunities; it heals the damage dealt by that chip. Only in Free-for-All does Grass type effectiveness scale this chip. Heals 1/16 max HP each turn. Poison-type attacks restore 1/4 of actual opposing HP damage, using normal drain rounding and Heal Block, Liquid Ooze and Big Root interactions. No added drain from Substitute-only damage, misses, Protect, immunity or residual poison. Moves that already drain keep their native drain without an extra heal.",
@@ -1906,8 +1906,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Ignores redirection; +1 Sp. Atk on specified fields."
 	},
 	"stamina": {
-		"desc": "Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move.",
-		"shortDesc": "Opposing HP hits heal 1/16; +1 Defense once per turn."
+		"desc": "Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move.",
+		"shortDesc": "Opposing attacks heal 1/16 once per use; +1 Defense once per turn."
 	},
 	"static": {
 		"desc": "Contact attackers have a 30% paralysis chance, or 60% on Electric Terrain and Short-Circuit.",
@@ -2114,7 +2114,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Contact pierces protection at 1/4 damage; punches have 1.4x power; Heals 1/16 HP per turn; switching cures status and heals 1/3 HP if cured; no weather damage; 20% less attack damage at any HP; 40% less if super effective."
 	},
 	"ultraego": {
-		"desc": "Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field.",
+		"desc": "Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field.",
 		"shortDesc": "Ignores abilities; damage dealt or taken heals; qualifying hits boost attacking stats; field bonuses."
 	},
 	"territorial": {
@@ -2146,7 +2146,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Full Battle Fervor, Precision and Opportunist, including their field effects, entry behavior, item blocking, damage modifiers and boost-copy timing."
 	},
 	"burningego": {
-		"desc": "Same-type moves have 1.3x power. Contact attackers have a 30% burn chance, or 60% on Volcanic. On Infernal Eclipse, Flame Body grants +1 Defense and Sp. Def on entry; Cold Eclipse disables contact burns. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. On Infernal Eclipse, the two entry effects together give +2 Defense and Sp. Def.",
+		"desc": "Same-type moves have 1.3x power. Contact attackers have a 30% burn chance, or 60% on Volcanic. On Infernal Eclipse, Flame Body grants +1 Defense and Sp. Def on entry; Cold Eclipse disables contact burns. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. On Infernal Eclipse, the two entry effects together give +2 Defense and Sp. Def.",
 		"shortDesc": "Stronger same-type moves; healing and combat boosts; contact burns; Water/Ice and freeze protection."
 	},
 	"vitalspirit": {
@@ -2342,8 +2342,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Stall; 1.3x after the target acts; last-action attacks bypass Substitute and heal 1/8 once/turn."
 	},
 	"livingtangle": {
-		"desc": "Contact attackers lose 1 Speed stage. Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move.",
-		"shortDesc": "Contact attackers lose 1 Speed; Opposing HP hits heal 1/16; +1 Defense once per turn — contact slows foes while opposing hits raise Defense and heal."
+		"desc": "Contact attackers lose 1 Speed stage. Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move.",
+		"shortDesc": "Contact attackers lose 1 Speed; Opposing attacks heal 1/16 once per use; +1 Defense once per turn — contact slows foes while opposing hits raise Defense and heal."
 	},
 	"rootrenewal": {
 		"desc": "Heals 1/3 max HP on switching out. Switching out also cures one adjacent active ally's major status condition.",
@@ -2378,8 +2378,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "No move recoil except Struggle — once per turn, recoil-move damage lowers the foe’s Speed."
 	},
 	"rootediron": {
-		"desc": "Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. At the end of turns in which it did not attempt a damaging move, it restores 1/16 max HP. Also has this server's Stamina on-hit Defense gain and healing.",
-		"shortDesc": "Opposing HP hits heal 1/16; +1 Defense once per turn — heals 1/16 HP on turns when it does not attack."
+		"desc": "Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. At the end of turns in which it did not attempt a damaging move, it restores 1/16 max HP. Also has this server's Stamina on-hit Defense gain and healing.",
+		"shortDesc": "Opposing attacks heal 1/16 once per use; +1 Defense once per turn — heals 1/16 HP on turns when it does not attack."
 	},
 	"encorearia": {
 		"desc": "Doubles move secondary-effect chances and removes charging turns. Once per switch-in, successfully applying a move secondary effect creates Safeguard for 5 turns. A blocked secondary does not trigger this effect.",
@@ -2688,7 +2688,7 @@ Object.assign(AbilityDescriptionOverrides, {
 	},
 	"unleashedego": {
 		"name": "Unleashed Ego",
-		"desc": "Ultra Ego + Levitate + Raging Storm. Airborne unless grounded. Damaging hits from foes raise Attack and Sp. Atk once until it uses an attack; heals 1/16 max HP on that hit and 1/20 on further hits. Dealing attack damage heals 1/16 once per turn. Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale add once-per-entry Defense/Sp. Def boosts for physical/special hits and a one-use 1/4-HP pinch heal. Royal Decree or Empress enables 1.3x power (except against Battle Bond) and 0.7x incoming damage unless Neutralization is active. Bewitched Woods, Haunted and Holy fields disable Ultra Ego effects. Raging Storm bypasses abilities, screens, Substitute and defensive stat stages; +1 critical-hit ratio. Attack KOs splash 60% of the recorded hit damage onto remaining foes, or grant +1 Attack if no splash damage is dealt. Incoming priority damage is halved. Immune to hail; cannot be suppressed.",
+		"desc": "Ultra Ego + Levitate + Raging Storm. Airborne unless grounded. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. Dealing attack damage heals 1/16 once per turn. Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale add once-per-entry Defense/Sp. Def boosts for physical/special hits and a one-use 1/4-HP pinch heal. Royal Decree or Empress enables 1.3x power (except against Battle Bond) and 0.7x incoming damage unless Neutralization is active. Bewitched Woods, Haunted and Holy fields disable Ultra Ego effects. Raging Storm bypasses abilities, screens, Substitute and defensive stat stages; +1 critical-hit ratio. Attack KOs splash 60% of the recorded hit damage onto remaining foes, or grant +1 Attack if no splash damage is dealt. Incoming priority damage is halved. Immune to hail; cannot be suppressed.",
 		"shortDesc": "Ultra Ego boosts/healing; airborne; bypasses defenses; KO splash."
 	},
 	"moonlithide": {
@@ -3370,11 +3370,11 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "Combines the listed abilities."
 	},
 	"primalego": {
-		"desc": "When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field.",
+		"desc": "When attacking, ignores the target's Defense, Sp. Def and evasion stages. When defending, ignores the attacker's Attack, Defense, Sp. Atk and accuracy stages. Reveals opposing Illusions on entry. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field.",
 		"shortDesc": "Combines the listed abilities."
 	},
 	"terraresolve": {
-		"desc": "Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Takes 20% less attack damage, or 40% less from super-effective attacks.",
+		"desc": "Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Takes 20% less attack damage, or 40% less from super-effective attacks.",
 		"shortDesc": "Combines the listed abilities."
 	},
 	"queensguard": {
@@ -3411,7 +3411,7 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "Combines the listed abilities."
 	},
 	"burningego": {
-		"desc": "Contact attackers have a 30% burn chance, or 60% on Volcanic. On Infernal Eclipse, Flame Body grants +1 Defense and Sp. Def on entry; Cold Eclipse disables contact burns. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first opposing HP hit gives +1 Attack and Sp. Atk and heals 1/16 max HP; later hits heal 1/20 until it completes a damaging move and resets this trigger. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. On Infernal Eclipse, the two entry effects together give +2 Defense and Sp. Def.",
+		"desc": "Contact attackers have a 30% burn chance, or 60% on Volcanic. On Infernal Eclipse, Flame Body grants +1 Defense and Sp. Def on entry; Cold Eclipse disables contact burns. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. On Infernal Eclipse, the two entry effects together give +2 Defense and Sp. Def.",
 		"shortDesc": "Combines the listed abilities."
 	},
 	"astralwitchcraft": {
@@ -3443,7 +3443,7 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "1.5x biting power; rain/water fields double Speed; 20%/40% less attack damage."
 	},
 	"ragingcurrent": {
-		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Absorbs Water moves for 1/4 max HP; incoming Fire moves have 1.25x power. Effective rain heals 1/8 HP per turn; sun costs 1/8. Field healing per turn: 1/16 on Underwater, Swamp, Misty or grounded Water Surface; 1/8 when grounded and Poison-type on Murkwater. Corrosive Mist heals Poison types by 1/8 but damages non-Steel others by 1/8. Desert costs 1/8 HP per turn. Each opposing attack hit that damages HP heals 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Water Veil and its burn immunity are removed.",
+		"desc": "Doubles Speed in rain or on Water Surface, Murkwater Surface, Underwater and Midnight Zone. Absorbs Water moves for 1/4 max HP; incoming Fire moves have 1.25x power. Effective rain heals 1/8 HP per turn; sun costs 1/8. Field healing per turn: 1/16 on Underwater, Swamp, Misty or grounded Water Surface; 1/8 when grounded and Poison-type on Murkwater. Corrosive Mist heals Poison types by 1/8 but damages non-Steel others by 1/8. Desert costs 1/8 HP per turn. Each opposing attack that damages HP heals once for 1/16 max HP. The first such hit each turn also raises Defense by 1, before later hits of a multi-hit move. Water Veil and its burn immunity are removed.",
 		"shortDesc": "Combines the listed abilities."
 	},
 	"emperorsresolve": {
@@ -3859,7 +3859,7 @@ AbilityDescriptionOverrides.swiftvenom = {
 };
 AbilityDescriptionOverrides.badseeds = {
  shortDesc: 'Entry: Frozen Aura or Cold Eclipse for 5/8 turns; extra effects only on Cold Eclipse.',
- desc: 'On entry, creates Frozen Aura for 5 turns, or 8 with Amplifield Rock; on no field or Icy Field, instead attempts full Cold Eclipse for the same duration. Existing Frozen Aura is not refreshed. A successful Blizzard, Glaciate or Sheer Cold by an unsuppressed Bad Seeds holder converts Frozen Aura into full Cold Eclipse, consuming the Aura and preserving its remaining turns. Other users, Gravity and hail cannot trigger ordinary seed development. The specific Infernal Eclipse plus Frozen Aura plus successful Glaciate or Sheer Cold combination can instead be triggered by any user; it consumes the Aura and preserves the existing field timer. Field locks apply; fails on Dragon’s Den. Does not summon hail. Frozen Aura preserves the base field and boosts both sides: Ice attacks 1.3x; Ice Beam, Blizzard, Frost Breath and Aurora Beam an additional 1.2x (1.56x total); Dark Pulse, Snarl, Night Daze, Night Slash, Lash Out, Stomping Tantrum, Raging Fury, Thrash, Outrage, Rage, Freezing Glare, Fiery Wrath, Roar of Time, Bitter Blade and Bitter Malice 1.5x; Chilling Water 2x. Freeze Shock and Ice Burn skip charging; Dragon Rage deals 140 fixed damage. Only on full Cold Eclipse: halves damage exploiting the holder’s current Ice-type weakness after field typing effects, unless bypassed; eligible non-Ice contact attackers acquire Bad Seeds without repeating entry setup; non-Ice holders lose 1 Attack and Sp. Atk at turn end. Active unsuppressed holders prevent changing or breaking Cold Eclipse, but normal duration expiry remains allowed.',
+ desc: "On entry, sets Frozen Aura for 5 turns (8 with Amplifield Rock). On an empty field or Icy Field, sets Cold Eclipse instead.\n\nFrozen Aura boosts Ice attacks by 30% and removes weaknesses from Ice typing on both sides. Land Blizzard, Glaciate or Sheer Cold to turn the Aura into Cold Eclipse for its remaining turns. On Infernal Eclipse, any Pokémon can trigger this change with Glaciate or Sheer Cold, keeping the field timer.\n\nDuring Cold Eclipse, the holder takes half damage from weaknesses caused by its Ice typing and keeps the field in place until it expires or the holder leaves or is suppressed. Eligible non-Ice contact attackers inherit Bad Seeds. Non-Ice holders lose 1 Attack and Sp. Atk each turn.",
 };
 AbilityDescriptionOverrides.wintersmalice = {
  shortDesc: 'Refrigerate + Berserk + Cursed Body.',
@@ -4099,8 +4099,8 @@ Object.assign(AbilityDescriptionOverrides, {
 
 // Individually approved replacement packages.
 Object.assign(AbilityDescriptionOverrides, {
-	duskdrive: {"shortDesc":"Opportunist + Ultra Ego.","desc":"Full local Opportunist and Ultra Ego. Copies opposing positive stat changes at normal flush events; ability-bypassing attacks, damage-triggered attack boosts and recovery retain Ultra Ego's local field and rivalry rules."},
-	twilightinstinct: {"shortDesc":"Ultra Instinct + Keen Eye.","desc":"Ultra Instinct + Keen Eye. Keeps Ultra Instinct's attack timing bonus, first-attack protection, healing and field/rivalry effects. Prevents opposing accuracy drops, ignores evasion boosts and reveals opposing disguises. Mirror Arena grants +1 accuracy and Laser Focus."},
+	duskdrive: {"shortDesc":"Keen Eye + Ultra Ego.","desc":"Keen Eye prevents opposing accuracy drops, ignores evasion boosts and reveals Illusions. Includes Ultra Ego’s attack boosts, recovery, ability bypass and field interactions."},
+	twilightinstinct: {"shortDesc":"Ultra Instinct + Opportunist.","desc":"Copies opposing stat boosts. Retains Ultra Instinct’s attack timing bonus, incoming damage protection, recovery and field interactions."},
 	forsakensleeper: {"shortDesc":"Comatose + Soundproof + Rattled.","desc":"Full local Comatose, Soundproof and Rattled. Counts as asleep without a normal status and blocks major status; immune to other Pokemon's sound moves; Bug, Dark or Ghost hits and opposing Intimidate can raise Speed."},
 	coldexpertise: {"shortDesc":"Oblivious + Thick Fat.","desc":"Full local Oblivious and Thick Fat: prevents and cures attraction and Taunt, blocks Captivate and Intimidate's Attack drop. Fire and Ice attacks use half the attacker's offensive stat; immune to hail damage. Mamoswine's passive."},
 	oldnorth: {"shortDesc":"Ice Body + Ice Scales + Technician.","desc":"Full local Ice Body, Ice Scales and Technician. Half special attack damage; hail immunity, contact frostbite and cold-weather/field recovery. Mirror Arena grants +2 evasion; Icy/Snowy Mountain neutralize Ice weaknesses; Cold Eclipse doubles Defense. Moves at most 60 effective BP (80 on Factory) receive Technician's 1.5x boost."},
@@ -4206,3 +4206,6 @@ AbilityDescriptionOverrides.tidalpoise = TidalPoiseDescription;
 
 import {AuditReworkDescriptions} from './audit-reworks-approved';
 Object.assign(AbilityDescriptionOverrides, AuditReworkDescriptions);
+AbilityDescriptionOverrides.goodasgold = {shortDesc: 'Blocks status moves. Dragon’s Den removes Steel weaknesses.', desc: 'Blocks status moves from other Pokémon outside Burning Field. On Dragon’s Den, ignores weaknesses contributed by its Steel typing.'};
+
+AbilityDescriptionOverrides.terraresolve = {shortDesc: 'Stamina + Suction Cups.', desc: 'Opposing attacks that damage HP heal 1/16 max HP once per move. The first each turn raises Defense by 1. Prevents forced switching.'};

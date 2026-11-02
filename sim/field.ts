@@ -386,6 +386,10 @@ export class Field {
 
 	setWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
+		if (this.terrain === 'dragonsdenterrain' && ['hail', 'snow', 'snowscape'].includes(status.id)) {
+			this.battle.add('-message', 'The ice melted in the heat!');
+			return false;
+		}
 		if (this.terrain === 'infernaleclipseterrain' && ['raindance', 'primordialsea', 'hail'].includes(status.id)) {
 			this.battle.add('-message', 'The infernal heat consumed the rain or hail!');
 			return false;
@@ -454,6 +458,10 @@ export class Field {
 
 	changeWeather(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
+		if (this.terrain === 'dragonsdenterrain' && ['hail', 'snow', 'snowscape'].includes(status.id)) {
+			this.battle.add('-message', 'The ice melted in the heat!');
+			return false;
+		}
 		if (this.terrain === 'infernaleclipseterrain' && ['raindance', 'primordialsea', 'hail'].includes(status.id)) {
 			this.battle.add('-message', 'The infernal heat consumed the rain or hail!');
 			return false;
@@ -801,9 +809,14 @@ export class Field {
 		return true;
 	}
 
+	private tyrantMaintainsDen() {
+		return this.terrain === 'dragonsdenterrain' && this.battle.getAllActive().some(p => p.hp && p.hasAbilityOrPassive('tyrantdomain'));
+	}
+
 	changeTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null, gardenTransition = false) {
 		if (this.badSeedsLocksField()) return false;
 		status = this.battle.dex.conditions.get(status);
+		if (this.tyrantMaintainsDen()) return false;
 		if (this.isFlowerGardenBase() && !gardenTransition) return false;
 		if (this.terrain === 'midnightzoneterrain' && status.id !== 'underwaterterrain') return false;
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -841,6 +854,7 @@ export class Field {
 		if (!this.canBypassNeutralizationForTerrainChange(status.id) && this.neutralizeTerrainChange()) return false;
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
+		const mistBallOverlay = prevTerrain === 'dragonsdenterrain' && status.id === 'fairytaleterrain' && sourceEffect?.id === 'mistball';
 		const eclipseTransition = this.isEclipse() || !!prevTerrainState.purifiedEclipse;
 		const zMoveTerrain = !!prevTerrainState.zMoveTerrain;
 		const gardenBase = this.isFlowerGardenBase();
@@ -871,7 +885,9 @@ export class Field {
 			} : {}),
 			...(underlyingTerrain ? { underlyingTerrain } : {}),
 		});
-		if (zMoveTerrain) {
+		if (mistBallOverlay) {
+			Object.assign(this.terrainState, {terrain_type: 'Temp', permanent: false, duration: 5, durationUpdatedTurn: this.battle.turn - 1});
+		} else if (zMoveTerrain) {
 			this.terrainState.zMoveTerrain = true;
 			this.terrainState.zMoveExpired = !!prevTerrainState.zMoveExpired;
 		}
@@ -883,7 +899,8 @@ export class Field {
 			return false;
 		}
 		// Rift Garden stages share one lifetime instead of stacking obsolete stages.
-		if (prevTerrainState.terrain_type === 'Base' || prevTerrainState.riftGarden || eclipseTransition) {
+		if (mistBallOverlay) this.setTerrainDuration(5);
+		if (!mistBallOverlay && (prevTerrainState.terrain_type === 'Base' || prevTerrainState.riftGarden || eclipseTransition)) {
 			this.terrainStack[0] = this.terrainState;
 		} else {
 			this.terrainStack.unshift(this.terrainState);
@@ -923,6 +940,10 @@ export class Field {
 
 	clearTerrain(power: string | null = null) {
 		if (power === 'mid' && this.auraField && !this.terrainState.purifiedEclipse) return this.clearAura();
+		if (this.tyrantMaintainsDen()) {
+			if (this.terrainState.duration === 0) this.setTerrainDuration(1, false);
+			return false;
+		}
 		// Ordinary duration expiry remains allowed; this lock is not permanence.
 		if (this.badSeedsLocksField() && !((power === null || power === this.terrain) && this.terrainState.duration === 0)) return false;
 		if (this.isFlowerGardenBase()) return false;

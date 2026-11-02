@@ -2,8 +2,8 @@ import type {AbilityDataTable} from '../sim/dex-abilities';
 
 export const WeatherChoiceDescriptions = {
 	mountainhide: {
-		name: 'Mountain Hide', shortDesc: 'Full Solid Rock + Inner Focus.',
-		desc: "Full local Solid Rock and Inner Focus: takes 20% less attack damage, or 40% less from super-effective attacks, and prevents flinching and Intimidate Attack drops.",
+		name: 'Mountain Hide', shortDesc: 'Inner Focus; takes 25% less physical damage in sand.',
+		desc: "Prevents flinching and Intimidate. In effective sand, physical attacks deal 25% less damage.",
 	},
 	rimebark: {
 		name: 'Rimebark', shortDesc: 'Full Thick Fat + Ice Body.',
@@ -12,7 +12,12 @@ export const WeatherChoiceDescriptions = {
 };
 
 export function installWeatherChoices(abilities: AbilityDataTable) {
-	abilities.mountainhide = {...abilities.solidrock, ...abilities.innerfocus, name: 'Mountain Hide', num: 11497, rating: 4};
+	abilities.mountainhide = {
+  ...abilities.innerfocus, name: 'Mountain Hide', num: 11497, rating: 4,
+  onSourceModifyDamage(damage, source, target, move) {
+   if (move.category === 'Physical' && target.effectiveWeather() === 'sandstorm') return this.chainModify(0.75);
+  },
+ };
 	// Both components share only hail immunity; Ice Body preserves that identical immunity.
 	abilities.rimebark = {...abilities.thickfat, ...abilities.icebody, name: 'Rimebark', num: 11498, rating: 4};
 }

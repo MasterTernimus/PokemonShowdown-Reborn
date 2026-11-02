@@ -240,7 +240,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	spiralevolution: ['moldbreaker', 'adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
 	stormsovereign: ['galewings', 'keeneye'],
 	sunsovereign: ['moldbreaker', 'drought', 'unboundblaze', 'selfsufficient', 'proficient'],
-	terraresolve: ['stamina', 'solidrock', 'proficient'],
+	terraresolve: ['stamina', 'suctioncups', 'proficient'],
 	primalego: ['unaware', 'proficient', 'ultraego', 'moldbreaker'],
 	toxicbloom: ['pollenbloom', 'selfsufficient'],
 	toxicrenewal: ['adaptability', 'regenerator', 'poisontouch'],
@@ -885,7 +885,7 @@ AbilityComponents.abyssalcurrent = ['waterabsorb'];
 
 AbilityComponents.soothingbouquet = ['friendguard','infiltrator'];
 
-AbilityComponents.mountainhide = ['solidrock','innerfocus'];
+AbilityComponents.mountainhide = ['innerfocus'];
 AbilityComponents.rimebark = ['thickfat','icebody'];
 AbilityComponents.blademastery = ['sharpness','superluck'];
 AbilityComponents.goldentalons = ['stalwart','goodasgold','sharpness'];
@@ -1018,8 +1018,8 @@ AbilityComponents.pastelsanctuary = ['pastelveil'];
 AbilityComponents.moonlitprowl = ['infiltrator', 'limber'];
 
 AbilityComponents.dreepyvanguard = ['stalwart', 'technician'];
-AbilityComponents.duskdrive = ['opportunist', 'ultraego'];
-AbilityComponents.twilightinstinct = ['ultrainstinct', 'keeneye'];
+AbilityComponents.duskdrive = ['keeneye', 'ultraego'];
+AbilityComponents.twilightinstinct = ['ultrainstinct', 'opportunist'];
 AbilityComponents.forsakensleeper = ['comatose', 'soundproof', 'rattled'];
 AbilityComponents.coldexpertise = ['oblivious', 'thickfat'];
 AbilityComponents.oldnorth = ['icebody', 'icescales', 'technician'];
@@ -1043,7 +1043,7 @@ AbilityComponents.royalremedy = ['naturalcure', 'healer'];
 import {HitmonComponents} from './hitmon-rework';
 Object.assign(AbilityComponents, HitmonComponents);
 
-AbilityComponents.oraclesrefrain = ['resonanceforce', 'soundproof'];
+AbilityComponents.oraclesrefrain = ['soundproof'];
 
 AbilityComponents.monarchofice = ['slushrush'];
 AbilityComponents.emperorsresolve = ['swiftswim','competitive'];
@@ -1081,3 +1081,4 @@ AbilityComponents.cursedkeepsake = [];
 AbilityComponents.cursedmarionette = [];
 AbilityComponents.reapersgrip = ['selfsufficient'];
 AbilityComponents.bewitchingmajesty = ['magicbounce','queenlymajesty'];
+AbilityComponents.shelteringbreeze = ['friendguard', 'windrider'];

@@ -114,14 +114,14 @@ describe('Final starter/insect revision and settled passive choices', () => {
 		battle.runEvent('ModifyMove', p, t, rock, rock);
 		assert.deepEqual(rock.multihit, [2, 5]);
 	});
-	it('Rocky Payload preserves local Rock STAB and offensive field boost without added resistance', () => {
+	it('Rocky Payload boosts Rock attacks equally on and off Rocky Field without granting STAB', () => {
 		const [p, t] = setup('Conkeldurr', 'Rocky Payload');
 		const m = Dex.getActiveMove('rockslide');
 		battle.runEvent('ModifyMove', p, t, m, m);
-		assert(m.forceSTAB);
+		assert(!m.forceSTAB);
 		assert.equal(battle.runEvent('ModifyAtk', p, t, m, 100), 150);
 		battle.field.setTerrain('rockyterrain', p);
-		assert.equal(battle.runEvent('ModifyAtk', p, t, m, 100), 200);
+		assert.equal(battle.runEvent('ModifyAtk', p, t, m, 100), 150);
 		assert.equal(battle.runEvent('Effectiveness', p, 'Fire', Dex.getActiveMove('flamethrower'), 0), 0);
 	});
 	it('Nose Formation is the sole passive and retains Elevate and mini-noses without Filter', () => {

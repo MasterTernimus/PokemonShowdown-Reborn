@@ -13,7 +13,7 @@ import { PULSE_FIXED_MOVES } from '../data/pulse-fixed-moves';
  */
 
 import { Dex, toID } from './dex';
-import type { MoveSource } from './dex-species';
+import { Gen9MoveLearnsetExclusions, type MoveSource } from './dex-species';
 import { Utils } from '../lib/utils';
 import { Tags } from '../data/tags';
 import { Teams } from './teams';
@@ -636,8 +636,11 @@ export class TeamValidator {
 		if (!Array.isArray(set.moves)) set.moves = [];
 		// Reborn formats intentionally allow custom movepools without Obtainable
 		// Moves. Enforce this explicit removal even for pasted/packed teams.
-		if (dex.gen >= 9 && species.baseSpecies === 'Raichu' && set.moves.some(move => toID(move) === 'sing')) {
-			problems.push(`${species.name} can't learn Sing.`);
+		if (dex.gen >= 9 && (species.baseSpecies === 'Raichu' || ['bronzong', 'gigalith', 'lycanroc'].includes(species.id))) {
+			const excluded = Gen9MoveLearnsetExclusions[species.id] || [];
+			for (const move of set.moves) {
+				if (excluded.includes(toID(move))) problems.push(`${species.name} can't learn ${dex.moves.get(move).name}.`);
+			}
 		}
 
 		set.name = set.name || species.baseSpecies;
@@ -840,6 +843,10 @@ export class TeamValidator {
 		if (!set.moves?.length) {
 			problems.push(`${name} has no moves (it must have at least one to be usable).`);
 			set.moves = [];
+		}
+		if (dex.gen >= 9 && outOfBattleSpecies.id === 'umbreon' && ability.id !== 'ascendance' &&
+			set.moves.some(move => toID(move) === 'radiantassault')) {
+			problems.push(name + ' requires Ascendance to use Radiant Assault.');
 		}
 		if (toID(outOfBattleSpecies.baseSpecies) === 'politoed' && ability.id !== 'aevianking') {
 			for (const moveName of set.moves) if (AevianKingExclusiveMoves.includes(toID(moveName))) {

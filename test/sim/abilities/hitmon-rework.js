@@ -31,7 +31,14 @@ describe('Hitmon passive and signature rework', () => {
 			assert.equal(Dex.species.get(id).abilities.H, ability); assert.deepEqual(Dex.species.get(id).passives, [passive]);
 		}
 	});
-	it('Punch Fiend supplies Iron Fist once, Serene Grace and Keen Eye', () => {
+	for (const [species, ability] of [['Hitmonlee', 'Springheel'], ['Hitmontop', 'Cyclone Rhythm']]) {
+  it(ability + ' gives no Iron Fist bonus to punches', () => {
+   const [p, q] = setup(species, ability);
+   assert(!p.hasAbility('ironfist'));
+   assert.equal(battle.runEvent('BasePower', p, q, Dex.getActiveMove('firepunch'), 100), 100);
+  });
+ }
+ it('Punch Fiend supplies Iron Fist once, Serene Grace and Keen Eye', () => {
 		const [p, q] = setup(); const move = hit(p, q, 'firepunch');
 		assert.equal(battle.runEvent('BasePower', p, q, move, 1000), 1400);
 		assert.equal(move.secondaries[0].chance, 40); assert(move.ignoreEvasion);

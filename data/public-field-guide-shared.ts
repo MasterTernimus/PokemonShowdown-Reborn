@@ -60,7 +60,7 @@ export const FieldSeedNotes: { [id: string]: string } = {
 	flowergarden1: 'Synthetic Seed raises Special Defense by one stage, applies Ingrain and grows the garden by one stage. Its automatic activation list includes stage 1 only.',
 	corrosiveterrain: 'Telluric Seed applies Baneful Bunker.',
 	swampterrain: 'Telluric Seed raises Defense by one stage and replaces an eligible active ability with Clear Body. Its explicit protected-ability list and ordinary ability-changing restrictions still apply; it does not replace species passives.',
-	rockyterrain: 'Telluric Seed raises Defense by one stage and deals Rock-effectiveness-scaled damage based on 1/4 maximum HP to its holder.',
+	rockyterrain: 'Telluric Seed raises Defense and Special Defense by one stage each. The holder takes damage equal to 1/4 max HP, scaled by Rock effectiveness.',
 	desertterrain: 'Telluric Seed raises Defense, Special Defense and Speed by one stage and uses Sand Tomb on its holder.',
 	forestterrain: 'Telluric Seed applies Spiky Shield.',
 	ashenbeachterrain: 'Telluric Seed applies Focus Energy.',

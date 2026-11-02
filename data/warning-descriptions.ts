@@ -11,8 +11,8 @@ export const WarningDescriptions = {
 		shortDesc: 'Reveals strongest moves; takes 20% less move damage, or 25% less from the latest warning.',
 	},
 	omensight: {
-		desc: `${timing}, a super-effective or OHKO move, and a strongest damaging move. Takes 20% less move damage, or 25% less from each foe's warned moves until switching out, excluding OHKO moves. On Psychic Terrain, gains +2 Sp. Atk for each strongest-move reveal and each foe with no super-effective or OHKO threat.`,
-		shortDesc: 'Anticipation + Forewarn. Takes 20% less move damage, or 25% less from warned moves.',
+		desc: `${timing}, a super-effective or OHKO move, and a strongest damaging move. Remembers each foe's warned moves until switching out. Forewarn reduces attack damage by 20%, or 25% for its warning. Anticipation reduces its warned attack by another 25%. Neither warning shields against OHKO moves. On Psychic Terrain, gains +2 Sp. Atk for each strongest-move reveal and each foe with no super-effective or OHKO threat.`,
+		shortDesc: 'Anticipation and Forewarn stack: 43.75% less damage when both warn of the same move.',
 	},
 };
 

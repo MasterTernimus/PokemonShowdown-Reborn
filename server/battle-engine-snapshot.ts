@@ -45,8 +45,8 @@ export function captureEngineSnapshot(root: string, pinFile: string): EngineSnap
 	const reviewedDisplay: {
 		[id: string]: string,
 	} = {
-		'dist/data/ability-descriptions.js': 'caeb743312f8e27a14b0a2e9f8dbad90997f9147d81e01d5b1e258c5b88d291d',
-		'dist/data/ability-prose-audit.js': 'b9feeefd537c0a8411e6816022c0371bf484272cbfb445186e467704c1b7ba1d',
+		'dist/data/ability-descriptions.js': '9d1e463db1f66e6e6f2aec5ec0379e65d662f6dfdc50d5d6b3ca875b13130e8c',
+		'dist/data/ability-prose-audit.js': '3e1826bb2167b14ed39c61fe73f5984d97f852c202f9edfda5ffdc209d9681ba',
 		'dist/data/short-description-audit.js': '959dad25de39892b3e72ad0ffe0f22f1b8b35b89f08e834a8624080c14f7d28a',
 	};
 	const display = (pin.excludedNonmechanics || []).filter(e => e.file.endsWith('.js'));

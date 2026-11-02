@@ -2,8 +2,8 @@
 const assert = require('assert').strict, { Dex } = require('../../../dist/sim'), { SpeciesPassives, ThematicPassiveIds } = require('../../../dist/data/species-passives');
 describe('Jumpluff Wind Rider passive', () => {
 	it('changes only Jumpluff passive and preserves selected slot order', () => {
-		assert.deepEqual(SpeciesPassives.jumpluff, ['windrider']);
-		assert(ThematicPassiveIds.has('windrider'));
+		assert.deepEqual(SpeciesPassives.jumpluff, ['shelteringbreeze']);
+		assert(ThematicPassiveIds.has('shelteringbreeze'));
 		assert.deepEqual(Dex.species.get('jumpluff').abilities, { 0: 'Chlorophyll', 1: 'Infiltrator', H: 'Windy Surge' });
 		assert(!SpeciesPassives.hoppip?.includes('windrider'));
 		assert(!SpeciesPassives.skiploom?.includes('windrider'));
@@ -34,6 +34,6 @@ describe('Jumpluff selected and innate behavior', () => {
 	it('calculator resolves both the selected option and new passive', () => {
 		const c = require('../../../dist/sim/custom-calculator'), r = c.calculateScenario({ format: 'gen9nofieldsinglesgame', move: 'Acrobatics', samples: 8, seed: 1, actors: [{ species: 'Jumpluff', ability: 'Infiltrator' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }, { species: 'Mew', ability: 'No Ability' }] });
 		assert.equal(r.resolved.actors[0].ability, 'Infiltrator');
-		assert.deepEqual(r.resolved.actors[0].passives, ['windrider']);
+		assert.deepEqual(r.resolved.actors[0].passives, ['shelteringbreeze']);
 	});
 });

@@ -1,3 +1,4 @@
+import {CosmeticBattleCounterparts} from './cosmetic-counterparts';
 import { ENABLE_MEGA_HYDREIGON_X } from './disabled-custom-content';
 import {ApprovedStatRebalances} from './stat-balance-approved';
 import {MiddleStageReworks} from './middle-stage-reworks';
@@ -11597,7 +11598,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Conkeldurr",
 		types: ["Fighting"],
 		genderRatio: { M: 0.75, F: 0.25 },
-		baseStats: { hp: 120, atk: 140, def: 110, spa: 55, spd: 80, spe: 45 },
+		baseStats: { hp: 110, atk: 140, def: 100, spa: 85, spd: 70, spe: 45 },
 		abilities: { 0: "Forge Grit", 1: "Stamina", H: "Mason's Fist" },
 		heightm: 1.4,
 		weightkg: 87,
@@ -24145,45 +24146,7 @@ for (const [id, abilities] of Object.entries({
 // Verified artwork-only counterparts. Resolve after every roster update so skins
 // cannot retain stale slots. Do not infer this from isCosmeticForme: several
 // regional/custom gameplay forms use that flag too. Preserve skin transform routes.
-const cosmeticBattleCounterparts: {[id: string]: string} = {
-  "charizardalt": "charizard",
-  "charizardmegaxalt": "charizardmegax",
-  "arcaninealt": "arcanine",
-  "alakazamalt": "alakazam",
-  "alakazammegaalt": "alakazammega",
-  "machampalt": "machamp",
-  "machampgmaxalt": "machampgmax",
-  "jynxalt": "jynx",
-  "laprasazzy": "lapras",
-  "eeveestarteralt": "eeveestarter",
-  "typhlosionalt": "typhlosion",
-  "crobatalt": "crobat",
-  "lanturnalt": "lanturn",
-  "gardevoirmegaalt": "gardevoirmega",
-  "gastrodonazzy": "gastrodon",
-  "gastrodonazzy2": "gastrodon",
-  "galladeazzy": "gallade",
-  "gallademegaazzy": "gallademega",
-  "serperiorazzy": "serperior",
-  "emboaralt": "emboar",
-  "emboarmegaalt": "emboarmega",
-  "samurottalt": "samurott",
-  "samurotthisuialt": "samurotthisui",
-  "scolipedeazzy": "scolipede",
-  "scolipedemegaazzy": "scolipedemega",
-  "jellicentazzy": "jellicent",
-  "goodrahisuialt": "goodrahisui",
-  "decidueyealt": "decidueye",
-  "decidueyehisuialt": "decidueyehisui",
-  "incineroaralt": "incineroar",
-  "primarinaalt": "primarina",
-  "tsareenaalt": "tsareena",
-  "grimmsnarlazzy": "grimmsnarl",
-  "grimmsnarlgmaxazzy": "grimmsnarlgmax",
-  "skeledirgealt": "skeledirge",
-  "gligaralt": "gligar",
-  "gliscoralt": "gliscor"
-};
+
 
 // Explicitly approved base-species signature slots.
 Object.assign(Pokedex.tinkaton.abilities!, { "0": "Scrapbreaker" });
@@ -24793,14 +24756,7 @@ for (const [id, change] of Object.entries(MiddleStageReworks)) {
 	Pokedex[id as ID].abilities = {...Pokedex[id as ID].abilities!, [change.slot]: change.ability};
 }
 for (const [id, stats] of Object.entries(ApprovedStatRebalances)) Pokedex[id as ID].baseStats = {...stats};
-for (const [skinId, counterpartId] of Object.entries(cosmeticBattleCounterparts)) {
-	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;
-	const counterpart = Pokedex[counterpartId as ID] as import('../sim/dex-species').SpeciesData;
-	skin.types = [...counterpart.types];
-	skin.baseStats = { ...counterpart.baseStats };
-	skin.abilities = { ...counterpart.abilities };
-	if (counterpart.canGigantamax) Object.assign(skin, { canGigantamax: counterpart.canGigantamax });
-}
+
 
 // Cold Expertise is supplied only by the innate/passive slot.
 Pokedex.mamoswine.abilities = {0: 'Forsaken Sleeper', 1: 'Old North', H: 'Glacial Prime'};
@@ -24832,4 +24788,17 @@ Pokedex.entei.abilities!.H = 'Flash Fire';
 Pokedex.suicune.abilities!.H = 'Water Veil';
 Pokedex.golemalola.abilities!.H = 'Rock Head';
 Pokedex.mew.abilities![0] = 'Natural Cure';
-Pokedex.golduck.abilities!.H = 'Cloud Nine';
+Pokedex.golduck.abilities!.H = 'Competitive';
+Pokedex.pelipper.abilities![1] = 'Keen Eye';
+Pokedex.amoonguss.abilities![0] = 'Sticky Hold';
+Pokedex.sawk.abilities![1] = 'Sturdy';
+
+// Synchronize after every base-form override.
+for (const [skinId, counterpartId] of Object.entries(CosmeticBattleCounterparts)) {
+	const skin = Pokedex[skinId as ID] as import('../sim/dex-species').SpeciesData;
+	const counterpart = Pokedex[counterpartId as ID] as import('../sim/dex-species').SpeciesData;
+	skin.types = [...counterpart.types];
+	skin.baseStats = { ...counterpart.baseStats };
+	skin.abilities = { ...counterpart.abilities };
+	if (counterpart.canGigantamax) Object.assign(skin, { canGigantamax: counterpart.canGigantamax });
+}

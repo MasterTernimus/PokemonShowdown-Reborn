@@ -8,7 +8,7 @@ describe('Mudsdale passive Stamina on Rocky Terrain',()=>{
  it('zero Defense does not grant premature Rocky bullet protection',()=>{const[p,q]=setup();hit(q,p,'rockwrecker',{secondaries:[],secondary:null});assert.equal(p.hp,2150);assert.equal(p.boosts.def,1);});
  it('Substitute hits do not activate the passive',()=>{const[p,q]=setup();p.addVolatile('substitute');const hp=p.hp;hit(q,p);assert.equal(p.hp,hp);assert.equal(p.boosts.def,0);});
  it('the Rocky benefit ends when Defense is reset',()=>{const[p,q]=setup();hit(q,p);p.boosts.def=0;const hp=p.hp;hit(q,p,'rockwrecker',{secondaries:[],secondary:null});assert.equal(p.hp,hp+150);});
- it('heals on every multihit strike but boosts Defense only once',()=>{const[p,q]=setup();hit(q,p,'tackle',{multihit:3});assert.equal(p.hp,2450);assert.equal(p.boosts.def,1);});
+ it('heals once for a multihit attack and boosts Defense once',()=>{const[p,q]=setup();hit(q,p,'tackle',{multihit:3});assert.equal(p.hp,1950);assert.equal(p.boosts.def,1);});
  it('a copied active Stamina does not double the passive',()=>{const[p,q]=setup();p.setAbility('stamina');hit(q,p);assert.equal(p.hp,2150);assert.equal(p.boosts.def,1);hit(q,p);assert.equal(p.hp,2300);assert.equal(p.boosts.def,1);});
  it('does not invent a Rocky Aura',()=>{assert(!require('../../../dist/data/auras').Auras.rockyterrain);});
 });

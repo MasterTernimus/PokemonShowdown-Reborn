@@ -1313,7 +1313,7 @@ export const ReviewedReferenceDetails = {
 				"Fire attacks receive 1.5× power through the first branch on every field, including Cold Eclipse. On Burning or Volcanic, non-Fire special attacks also gain 1.5× without a burn. Cold Eclipse disables this second burned/special branch. The two branches return separately and do not stack with each other.",
 			],
 			"goodasgold": [
-				"Burning Field disables its protection from other Pokémon’s status moves. Dragon’s Den gives its attacks a 1.2× power modifier; the ordinary status-move immunity still applies there.",
+				"Burning Field disables its protection from other Pokémon’s status moves. Dragon’s Den neutralizes the weakness contributed by Steel typing.",
 			],
 			"sinisterblaze": [
 				"Fairy Tale, Starlight Arena, New World, Burning, Volcanic, Superheated and Cold Eclipse grant +1 Defense and Sp. Def on entry. Snowy Mountain, Icy and Cold Eclipse add Ice typing while this is the active ability, except for Abysseon and Divineon; this is not a blanket passive typing grant. Its ordinary self-burn, burn recovery and opposing chip remain separate.",
@@ -1456,7 +1456,7 @@ export const ReviewedReferenceDetails = {
 	"dragonsdenterrain": {
 		"abilities": {
 			"goodasgold": [
-				"Burning Field disables its protection from other Pokémon’s status moves. Dragon’s Den gives its attacks a 1.2× power modifier; the ordinary status-move immunity still applies there.",
+				"Burning Field disables its protection from other Pokémon’s status moves. Dragon’s Den neutralizes the weakness contributed by Steel typing.",
 			],
 			"thermalexchange": [
 				"Burning, Superheated, Dragon’s Den and Volcanic grant +1 Attack each turn, in addition to its ordinary Fire-hit Attack boost and burn prevention/cure. No Fire hit is required for the field boost.",
@@ -1477,7 +1477,7 @@ export const ReviewedReferenceDetails = {
 				"On Dragon’s Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Special Defense. Dragon’s Den also blocks incoming Fire moves from other Pokémon. Cold Eclipse removes its prevention of new frostbite, while its existing-status cure and halving of incoming Water/Ice offensive stats remain.",
 			],
 			"berserk": [
-				"On Dragon’s Den entry, gains +2 Attack and Special Attack. Its ordinary +1 to both after a surviving attack crosses from above half HP to half or less remains a separate trigger.",
+				"Crossing from above half HP to half or less after an attack grants +2 Special Attack on Dragon’s Den.",
 			],
 			"dragonize": [
 				"On Dragon’s Den and Fairy Tale, eligible Normal moves converted to Dragon have 1.5× power instead of 1.2×. Dragon STAB remains; moves with their own excluded type-setting effects are not converted.",
@@ -1492,7 +1492,7 @@ export const ReviewedReferenceDetails = {
 				"Dragon’s Den grants 1.2× move power through its Hydra Bond component. No additional field-based hit-count multiplier is added; the established native multi-hit exclusions remain.",
 			],
 			"tyrantdomain": [
-				"On fainting, prints “The Tyrant will persist” and attempts to create Dragon’s Den for five turns. The duration is set only when the field change succeeds; the message itself does not guarantee a successful transition.",
+				"Maintains an existing Dragon’s Den while active. On entry there, lowers every foe’s Defense and Special Defense by one stage.",
 			],
 			"hydrabond": [
 				"Dragon’s Den adds 1.2× move power. This does not change native multi-hit counts or add another follow-up sequence; its usual format-specific targeting and extra-hit exclusions still apply.",
@@ -2280,7 +2280,7 @@ export const ReviewedReferenceDetails = {
 				"Damaging attacks receive 2× power on Rocky, Fairy Tale, Big Top, Dragon’s Den, Mountain and Snowy Mountain; 1.5× on Desert, Forest, Burning, Superheated, Ashen Beach, Water Surface, Cave, Starlight Arena and New World. Cold Eclipse’s shared handler supplies its 2× damage and raises the priority-eligible base-power threshold from 60 to 80; the ability’s own Cold Eclipse return avoids doubling those modifiers.",
 			],
 			"rockypayload": [
-				"On Rocky Field, Rock attacks use 2× Attack or Special Attack instead of 1.5×. The ordinary Rock STAB grant remains separate.",
+				"Rocky Payload gives its usual 1.5× attacking-stat bonus. Rocky Field separately boosts Rock move power by 1.5×.",
 			],
 			"predator": [
 				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",

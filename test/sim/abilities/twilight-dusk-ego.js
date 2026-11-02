@@ -27,7 +27,7 @@ describe('Twilight Instinct and Dusk Ego', () => {
 		assert.equal(ability.name, 'Dusk Ego');
 		assert.equal(Dex.abilities.all().filter(entry => entry.num === ability.num).length, 1);
 		assert.equal(Dex.species.get('Lycanroc-Dusk').abilities.H, 'Dusk Ego');
-		assert.deepEqual(getAbilityDisplayComponents('Dusk Ego'), ['opportunist', 'ultraego']);
+		assert.deepEqual(getAbilityDisplayComponents('Dusk Ego'), ['keeneye', 'ultraego']);
 		assert(abilityIncludesComponent('Dusk Ego', 'Ultra Ego'));
 	});
 	for (const name of ['Dusk Drive', 'Dusk Ego']) {
@@ -47,7 +47,7 @@ describe('Twilight Instinct and Dusk Ego', () => {
 			assert(result[0].includes('Dusk Ego'));
 		}
 	});
-	it('keeps Dusk Ego retaliation and Opportunist under both names', () => {
+	it('keeps Dusk Ego retaliation and Keen Eye under both names', () => {
 		const [holder, foe] = setup('Dusk Ego');
 		assert(holder.hasAbility('Dusk Drive'));
 		assert(holder.hasAbility('Dusk Ego'));
@@ -56,13 +56,16 @@ describe('Twilight Instinct and Dusk Ego', () => {
 		assert.equal(holder.boosts.spa, 1);
 		battle.boost({ def: 2 }, foe, foe);
 		battle.fieldEvent('Residual');
-		assert.equal(holder.boosts.def, 2);
+		assert.equal(holder.boosts.def, 0);
 	});
-	it('uses only Ultra Instinct and Keen Eye, with no Battle Fervor effects', () => {
-		assert.deepEqual(AbilityComponents.twilightinstinct, ['ultrainstinct', 'keeneye']);
+	it('uses only Ultra Instinct and Opportunist, with no Battle Fervor effects', () => {
+		assert.deepEqual(AbilityComponents.twilightinstinct, ['ultrainstinct', 'opportunist']);
 		const [holder, foe] = setup();
 		assert(holder.hasAbility('ultrainstinct'));
-		assert(holder.hasAbility('keeneye'));
+		assert(holder.hasAbility('opportunist'));
+		battle.boost({ def: 2 }, foe, foe);
+		battle.fieldEvent('Residual');
+		assert.equal(holder.boosts.def, 2);
 		assert(!holder.hasAbility('battlefervor'));
 		foe.setItem('sitrusberry');
 		foe.hp = 1000;
@@ -73,7 +76,7 @@ describe('Twilight Instinct and Dusk Ego', () => {
 		assert.equal(holder.boosts.spa, 0);
 	});
 	it('prevents opposing accuracy drops and ignores evasion boosts', () => {
-		const [holder, foe] = setup();
+		const [holder, foe] = setup('Dusk Ego');
 		battle.boost({ accuracy: -1 }, holder, foe, Dex.moves.get('sandattack'));
 		assert.equal(holder.boosts.accuracy, 0);
 		const move = Dex.getActiveMove('tackle');
@@ -83,7 +86,7 @@ describe('Twilight Instinct and Dusk Ego', () => {
 		assert.equal(holder.boosts.accuracy, -1);
 	});
 	it('respects normal suppression for the Keen Eye component', () => {
-		const [holder, foe] = setup();
+		const [holder, foe] = setup('Dusk Ego');
 		holder.addVolatile('gastroacid', foe);
 		battle.boost({ accuracy: -1 }, holder, foe, Dex.moves.get('sandattack'));
 		assert.equal(holder.boosts.accuracy, -1);
@@ -94,7 +97,7 @@ describe('Twilight Instinct and Dusk Ego', () => {
 	it('includes the local Keen Eye Mirror Arena effect', () => {
 		const [holder] = setup('No Ability');
 		battle.field.setTerrain('mirrorarenaterrain', holder);
-		holder.setAbility('Twilight Instinct');
+		holder.setAbility('Dusk Ego');
 		assert.equal(holder.boosts.accuracy, 1);
 		assert(holder.volatiles.laserfocus);
 	});

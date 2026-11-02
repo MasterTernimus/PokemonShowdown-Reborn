@@ -34,9 +34,9 @@ export function describeYangBonuses(text: Record<string,{desc:string;shortDesc:s
   text[id].desc += ' Additional field effects: ' + rule;
  }
  text.kaboom.shortDesc = 'Adaptive; +1 matching offense; 1/4 recoil. Electric/Factory/Short Circuit bonuses.';
- text.frozenrefractals.shortDesc = 'Damaging hit: 3-turn Aurora Veil (4 in matching fields/Aura); no refresh.';
+ text.frozenrefractals.shortDesc = 'Damaging hits set Aurora Veil (3–4 turns), Mist and Safeguard.';
  text.spiritmend.shortDesc = 'Heals 1/2 HP; 66% on certain fields. Holy becomes Haunted.';
- text.winddance.shortDesc = 'Hit sets 4-turn Strong Winds (5 on matching fields); +1 priority in winds.';
+ text.winddance.shortDesc = 'Adaptive. Hit sets Strong Winds for 4–5 turns; +1 priority in Strong Winds.';
  text.sirenswrath.shortDesc = 'Adaptive; ignores abilities; next opposing attack deals 25–35% less.';
  text.rocknroll.shortDesc = 'Lowers Defense; sets Stealth Rock. Stronger on rocky fields.';
  text.airstreamassault.shortDesc = 'Adaptive; clears own hazards. Mountains: 3-turn Tailwind if absent.';

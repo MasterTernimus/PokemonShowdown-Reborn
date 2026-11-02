@@ -113305,3 +113305,6 @@ for (const id of ['raichu', 'raichualola'] as const) delete Learnsets[id].learns
 
 for (const id of ['pidgey', 'pidgeotto'] as const) delete Learnsets[id].learnset!.sing;
 Learnsets.pidgeot.learnset!.sing = ['9L1'];
+delete Learnsets.bronzong.learnset!.recover;
+
+delete Learnsets.lycanroc.learnset!.thousandarrows;

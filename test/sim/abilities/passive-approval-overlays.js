@@ -9,6 +9,7 @@ exports.passives = expected => {
 	for (const [id, passive] of Object.entries(require('./mega-approved-choices.json'))) expected[id] = [passive];
 	for (const [id, normal] of Object.entries(require('./mega-approved-variants.json'))) if (expected[normal]?.length) expected[id] = expected[normal];
 	for (const [id, p] of Object.entries(require('./gmax-approved.json').passives)) expected[id] = [p];
+	expected.gardevoir = ['breakingnews'];
 	expected.lapras = ['liquidvoice'];
 	expected.yanmega = ['levitate'];
 	return expected;
@@ -30,6 +31,7 @@ Object.assign(megaExpected, require('./mega-paused-explicit.json'));
 for (const [id, passive] of Object.entries(require('./mega-approved-choices.json'))) megaExpected[id] = [passive];
 for (const [id, normal] of Object.entries(require('./mega-approved-variants.json'))) if (megaExpected[normal]?.length) megaExpected[id] = megaExpected[normal];
 for (const [id, p] of Object.entries(require('./gmax-approved.json').passives)) megaExpected[id] = [p];
+megaExpected.gardevoir = ['breakingnews'];
 megaExpected.lapras = ['liquidvoice'];
 megaExpected.yanmega = ['levitate'];
 exports.current = (id, fallback) => ({dragonitemega: ['multiscale'], corviknight: ['mirrorarmor']}[id] || megaExpected[id] || fallback);

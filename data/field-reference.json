@@ -6124,31 +6124,6 @@
   "dragonsdenterrain": {
     "name": "Dragon's Den Terrain",
     "moves": {
-      "power ×1.3": [
-        "Accelerock",
-        "Ancient Power",
-        "Tail Smash",
-        "G-Max Volcalith",
-        "Head Smash",
-        "Hidden Power Rock",
-        "Horn Attack",
-        "Horn Drill",
-        "Max Rockfall",
-        "Meteor Beam",
-        "Mighty Cleave",
-        "Rock Blast",
-        "Rock Slide",
-        "Rock Throw",
-        "Rock Tomb",
-        "Rock Wrecker",
-        "Rollout",
-        "Salt Cure",
-        "Splintered Stormshards",
-        "Stone Axe",
-        "Stone Edge",
-        "Rocky Rampage",
-        "Paleo Wave"
-      ],
       "power ×0.5": [
         "Aqua Cutter",
         "Aqua Jet",
@@ -6238,6 +6213,7 @@
         "Clangorous Soulblaze",
         "Core Enforcer",
         "Devastating Drake",
+        "Diamond Storm",
         "Draco Meteor",
         "Dragon Breath",
         "Dragon Claw",
@@ -6290,11 +6266,11 @@
         "Outrage",
         "Overheat",
         "Cauterize",
+        "Power Gem",
         "Pyro Ball",
         "Raging Fury",
         "Roar of Time",
         "Sacred Fire",
-        "Scale Shot",
         "Searing Shot",
         "Sizzly Slide",
         "Spacial Rend",
@@ -6306,6 +6282,7 @@
         "Scaly Scorn",
         "Polar Flare",
         "Fever Pitch",
+        "Matrix Shot",
         "Infernal Rage",
         "Dragon Rend",
         "Beast Hunter",
@@ -6314,14 +6291,9 @@
       "stat changes: +2 Attack, +2 Defense, +2 accuracy": [
         "Coil"
       ],
-      "power ×2.6; dual typing: Rock / Fire": [
+      "power ×2; dual typing: Rock / Fire": [
         "Continental Crush",
         "Smack Down"
-      ],
-      "power ×1.95": [
-        "Diamond Storm",
-        "Power Gem",
-        "Matrix Shot"
       ],
       "power ×2": [
         "Dragon Ascent",
@@ -6369,6 +6341,9 @@
       ],
       "power ×1.5; dual typing: Normal / Fire": [
         "Rock Climb"
+      ],
+      "power ×1.5; user: +1 Speed": [
+        "Scale Shot"
       ],
       "secondary effects: 30% inflicts brn": [
         "Secret Power",

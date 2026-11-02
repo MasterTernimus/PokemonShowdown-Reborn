@@ -81,6 +81,7 @@ export const YangSignatureMovesB: MoveDataTable = {
  winddance: {
   num: 10450, name: 'Wind Dance', type: 'Flying', category: 'Special', basePower: 70, accuracy: 100,
   pp: 10, priority: 0, target: 'normal', flags: {...hitFlags, dance: 1},
+  onModifyMove: adaptiveCategory,
   onModifyPriority(priority) { if (this.field.isWeather('deltastream')) return priority + 1; },
   onHit(target, source, move) { if (hasHPDamage(target, move)) winds.call(this, target, source, move); },
   onAfterSubDamage(damage, target, source, move) { if (damage > 0) winds.call(this, target, source, move); },
@@ -250,7 +251,7 @@ export const YangSignatureLearnsetsB: {[id: string]: string[]} = {
 };
 const summaries: {[id: string]: string} = {
  m3g4qu4k3: 'Hits all adjacent Pokemon; damaged opposing targets lose 1 Defense and Sp. Def. Glitch boosts power 1.3x; Big Top applies its Striker roll.',
- winddance: 'Dance move. After a hit, sets Strong Winds for 4 turns. +1 priority if Strong Winds are already active. Big Top boosts power 1.5x; Mountain and Snowy Mountain retain their normal Flying boost. Clears fields that existing blowing moves clear.',
+ winddance: 'Uses the higher staged Attack or Sp. Atk, targeting the matching defense. Special on ties. After a hit, sets Strong Winds for 4 turns. +1 priority if Strong Winds are already active. Big Top boosts power 1.5x; Mountain and Snowy Mountain retain their normal Flying boost. Clears fields that existing blowing moves clear.',
  timeblade: 'Uses higher staged Attack or Sp. Atk (Special on ties). After damage, applies Encore for 2 turns if eligible. After HP or Substitute damage, splashes adjacent allies of the target for 1/16 of their maximum HP, or 1/8 on Fairy Tale, once per whole move. Splash is indirect damage like Flame Burst: it bypasses partner Protect and Substitute, but respects Magic Guard; it does not apply Encore or trigger another splash.',
  crestcleave: 'Uses higher staged Attack or Sp. Atk with the corresponding defense (Special on ties). Drains 1/3 of damage dealt.',
  sirensveil: 'Raises Defense and Sp. Def by 1; suppresses active opposing abilities until they switch. Also readies 1.3x power for the user\'s next damaging move, including all hits and targets. This charge does not stack, survives status moves, clears on switching, and is spent on a damaging move attempt even if it misses or is blocked. Respects Ability Shield and unsuppressible abilities. On Short Circuit, a working Covert Cloak also prevents suppression.',
