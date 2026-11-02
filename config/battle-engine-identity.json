@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "7626cd55879857ea44ee90c943821f52e1e1a1cb33782a22f0b34db0f4d726cb",
-  "packageManifestSHA256": "6cace719d9ee64fecf463e82d96d1e1bf7cddf897ac40cccdaea30d49dc4ddb0",
-  "mechanicsSHA256": "26e8cc246a4364212a133d9b26c654c0042ddbb0038e973d4b9d3500137dcc9c",
+  "packageEngineRevision": "08cbb32dd9019a229f5d9b4970c441472c00508117b73895196c1f164c5ca4c4",
+  "packageManifestSHA256": "2fb378864f3cd80fa85701f7733c29cbb81f87969d5c9e2014086c73964015af",
+  "mechanicsSHA256": "9e25a080871083153dae02bdfb0d4ef46dc65ff05e641e441e04ce554a153711",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -251,7 +251,7 @@
     },
     {
       "file": "dist/data/field-setter-reductions.js",
-      "sha256": "f9fe7f86630fcad7e2c1232cbeeda619259c5daa3ee9412afd7a0eb93e97c132"
+      "sha256": "2910e9b8f1a0ee4440d70dce66917f4d6c1fbb35754ff212a54e5d736994c367"
     },
     {
       "file": "dist/data/final-passive-migrations.js",
@@ -807,7 +807,7 @@
     },
     {
       "file": "dist/data/signature-move-summaries.js",
-      "sha256": "bfac8f4491565eafaab20c060f2f97d84e27345e583b78a81601b4e9335a1ad1"
+      "sha256": "c5c26576da5331f8163d181a16a3a0910fa9a597e40db9f8c032acc8d6dd38b5"
     },
     {
       "file": "dist/data/signature-passive-abilities.js",
