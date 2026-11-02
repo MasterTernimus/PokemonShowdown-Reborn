@@ -71,7 +71,7 @@ export function installFieldSetterReductions(abilities: AbilityDataTable) {
 		leaveGift.call(this, pokemon, 'lastbloom');
 	};
 	abilities.eternalflower.desc = 'Mold Breaker. Deals 2x damage to Pulse forms; Grass moves use 1.5x Attack and Sp. Atk. Opposing Mega, G-Max, Terastallized, Stellar and Ultra Beast Pokemon have their five non-HP stats reduced to 0.7x while it is active. Once per battle, fainting heals its immediate replacement by 25% of that Pokemon\'s max HP after entry hazards. A fainted, full-HP or heal-blocked replacement consumes the gift.';
-	abilities.eternalflower.shortDesc = 'Mold Breaker; stronger Grass/Pulse attacks; weakens opposing gimmicks. Fainting heals its replacement once.';
+	abilities.eternalflower.shortDesc = 'Mold Breaker. Boosts Grass and damage to Pulse. Weakens gimmicks. Heals its replacement once.';
 	delete abilities.duneterror.onFaint;
 	abilities.duneterror.desc = 'Sand Stream + Sand Spit + full local Shed Skin. During effective sand, active foes take Ground-type damage equal to 1/16 max HP each turn; Ground immunities prevent this damage.';
 	abilities.duneterror.shortDesc = 'Summons sand on entry and when hit; Shed Skin; sand chips foes with Ground damage.';

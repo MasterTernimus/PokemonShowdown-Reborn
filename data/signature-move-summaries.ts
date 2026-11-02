@@ -32,7 +32,7 @@ export const SignatureMoveSummaries: {[id: string]: string} = {
 	nomoswish: '+1 Defense and Sp. Def; sets Wish.',
 	queensgambit: 'Adaptive; lowers user\'s Defense and Sp. Def by 1.',
 	darkclasp: 'Uses user\'s Sp. Def to attack.',
-	beatdown: '3 hits; first accuracy miss per entry: +2 Atk. Each HP hit Taunts if absent (4 turns). Z:160.',
+	beatdown: '3 hits. First accuracy miss per entry: +2 Atk. HP hits Taunt for 4 turns.',
 	infernalrage: 'Hits foes; Torments; clears or transforms the field.',
 	m3g4qu4k3: 'Hits all adjacent; damaged foes lose 1 Defense and Sp. Def.',
 	winddance: 'Adaptive. Sets Strong Winds after a hit; +1 priority in them.',
