@@ -5,10 +5,7 @@ import {signatureMoveText} from './signature-move-summaries';
 
 const flags = {protect: 1, mirror: 1, metronome: 1} as const;
 const contact = {...flags, contact: 1} as const;
-function setFrozenBarriers(this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) {
- for (const barrier of ['mist', 'safeguard']) {
-  if (!source.side.getSideCondition(barrier)) source.side.addSideCondition(barrier, source, move);
- }
+function setFrozenVeil(this: Battle, source: Pokemon, move: ActiveMove) {
  if (source.side.getSideCondition('auroraveil')) return;
  if (source.side.addSideCondition('auroraveil', source, move)) {
   const duration = (move as YangMove).yang?.eligible ? 4 : 3;
@@ -69,14 +66,14 @@ export const YangSignatureMovesA: MoveDataTable = {
  chistrike: {num:10441,name:'Chi Strike',type:'Fighting',category:'Physical',basePower:75,accuracy:true,pp:15,priority:0,target:'normal',flags:contact,critModifier:2,onBasePower(bp,source,target){if(this.field.isTerrain('ashenbeachterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.3));}},
  gunkrock: {num:10442,name:'Gunk Rock',type:'Poison',category:'Special',basePower:80,accuracy:100,pp:10,priority:0,target:'allAdjacentFoes',flags:{...flags,sound:1},onBasePower(bp,source,target){if(this.field.isTerrain('wastelandterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},secondary:{chance:30,onHit(target,source,move){if(target.trySetStatus(this.sample(['brn','psn','par']),source,move)&&(move as YangMove).yang?.eligible)yangMessage(this,move,'Aya’s toxic riff left its mark!');}}},
  frozenrefractals: {num:10443,name:'Frozen Refractals',type:'Ice',category:'Special',basePower:75,accuracy:100,pp:10,priority:0,target:'normal',flags,
-  onAfterHit(target,source,move){if((target.getMoveHitData(move).damage||0)>0)setFrozenBarriers.call(this,target,source,move);},onAfterSubDamage(damage,target,source,move){if(damage>0)setFrozenBarriers.call(this,target,source,move);}},
+  onAfterHit(target,source,move){if((target.getMoveHitData(move).damage||0)>0)setFrozenVeil.call(this,source,move);},onAfterSubDamage(damage,target,source,move){if(damage>0)setFrozenVeil.call(this,source,move);}},
  nomoswish: {num:10444,name:"Nomos' Wish",type:'Normal',category:'Status',basePower:0,accuracy:100,pp:5,priority:0,target:'self',flags:{snatch:1,heal:1,metronome:1},boosts:{def:1,spd:1},slotCondition:'wish'},
  queensgambit: {num:10445,name:"Queen's Gambit",type:'Psychic',category:'Special',basePower:110,accuracy:100,pp:5,priority:0,target:'normal',flags,
   onTry(source){if(this.field.isTerrain('chessboardterrain')&&source.hasAbilityOrPassive('klutz'))return false;},onModifyMove(move,source){if(this.field.isTerrain('chessboardterrain')&&source.Role==='Queen')move.willCrit=true;move.category=source.getStat('atk',false,true)>source.getStat('spa',false,true)?'Physical':'Special';},self:{boosts:{def:-1,spd:-1}}},
  darkclasp: {num:10446,name:'Dark Clasp',type:'Dark',category:'Special',basePower:85,accuracy:100,pp:10,priority:0,target:'normal',flags,overrideOffensiveStat:'spd',onBasePower(bp,source,target){if(this.field.isTerrain('darkcrystalcavernterrain'))return this.chainModify(adaptiveFieldMultiplier(this,source,target,1.5));},onAfterHit(target,source,move){if((target.getMoveHitData(move).damage||0)<=0)return;const next=this.field.isTerrain(['caveterrain','crystalcavernterrain'])?'darkcrystalcavernterrain':this.field.isTerrain('factoryterrain')?'shortcircuitterrain':'';if(next)this.field.changeTerrain(next,source,move);},onAfterSubDamage(damage,target,source,move){if(damage<=0)return;const next=this.field.isTerrain(['caveterrain','crystalcavernterrain'])?'darkcrystalcavernterrain':this.field.isTerrain('factoryterrain')?'shortcircuitterrain':'';if(next)this.field.changeTerrain(next,source,move);}},
  beatdown: {num:10447,name:'Beatdown',type:'Fighting',category:'Physical',basePower:30,accuracy:95,pp:10,priority:0,target:'normal',flags:contact,multihit:3,multiaccuracy:true,zMove:{basePower:160},
   onHit(target, source, move) {
-   if (!target.hp || target.volatiles.taunt || (target.getMoveHitData(move).damage || 0) <= 0) return;
+   if (move.hit !== 1 || !target.hp || target.volatiles.taunt || (target.getMoveHitData(move).damage || 0) <= 0) return;
    if (target.addVolatile('taunt', source, move)) target.volatiles['taunt' as ID].duration = 4;
   }},
  infernalrage: {num:10448,name:'Infernal Rage',type:'Fire',category:'Special',basePower:90,accuracy:100,pp:10,priority:0,target:'allAdjacentFoes',flags,
@@ -106,11 +103,11 @@ const descriptions: {[id:string]:[string,string]} = {
  spiritmend:['Shade','Heals half maximum HP.'],
  chistrike:['Kiki','Always hits. Critical hits deal 2x damage; does not raise critical-hit chance.'],
  gunkrock:['Aya','Sound move hitting opposing Pokemon. 30% chance of a status: burn, poison or paralysis, equally likely. A blocked status is not rerolled.'],
- frozenrefractals:['Serra','Damaging a target or its Substitute sets Aurora Veil, Mist and Safeguard on the user’s side. Veil lasts 3 turns by default. Existing barriers keep their timers.'],
+ frozenrefractals:['Serra','Damaging a target or its Substitute sets Aurora Veil on the user’s side for 3 turns. An existing Veil keeps its timer.'],
  nomoswish:['Noel','Raises Defense and Sp. Def by 1 and sets native Wish in the user’s position, healing at the end of the following turn.'],
  queensgambit:['Radomus','Uses the higher current Attack or Sp. Atk and corresponding defense; ties use Special. Lowers the user’s Defense and Sp. Def by 1 afterward.'],
  darkclasp:['Luna','Uses the user’s Sp. Def instead of Sp. Atk against the target’s Sp. Def.'],
- beatdown:['Samson',"Hits up to three times with a separate 95% accuracy check per hit, stopping on a miss. The first accuracy miss each switch-in raises the user's Attack by 2, even after earlier hits; the opportunity is spent even at the Attack cap. Each direct hit inflicts a 4-turn Taunt if the target is not already Taunted. Protect, immunity and no target grant no boost. Blunder Policy can activate on a later miss unless the target is semi-invulnerable. Z-Move power: 160."],
+ beatdown:['Samson',"Hits up to three times with a separate 95% accuracy check per hit, stopping on a miss. The first accuracy miss each switch-in raises the user's Attack by 2, even after earlier hits; the opportunity is spent even at the Attack cap. Only the first hit can Taunt, for 4 turns, if it damages the target directly. Protect, immunity and no target grant no boost. Blunder Policy can activate on a later miss unless the target is semi-invulnerable. Z-Move power: 160."],
  infernalrage:['Charlotte','Hits opposing Pokemon and applies Torment to damaged targets. Clears a replaceable field after a hit, respecting field locks.'],
 };
 for (const [id, [credit, summary]] of Object.entries(descriptions)) {

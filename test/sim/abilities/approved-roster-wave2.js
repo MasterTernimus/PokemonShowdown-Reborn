@@ -200,8 +200,12 @@ describe('Approved roster follow-up', () => {
 	it('Scorch Sweep clears hazards while preventing recoil and Open Sky preserves itemless contact immunity', () => {
 		const [p, , foe] = make('Scorch Sweep');
 		p.side.addSideCondition('stealthrock', foe);
+		p.side.addSideCondition('spikes', foe);
 		hit('bravebird', p, foe);
 		assert(!p.side.sideConditions.stealthrock); assert.equal(p.hp, p.maxhp);
+		for (const hazard of ['Stealth Rock', 'Spikes']) {
+			assert(battle.log.some(line => line.startsWith('|-sideend|' + p.side + '|' + hazard + '|[from] ability: Scorch Sweep')));
+		}
 		p.setAbility('Open Sky');
 		assert(!modify('acrobatics', p, foe).flags.contact);
 		p.setItem('leftovers');

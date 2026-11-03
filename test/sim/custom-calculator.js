@@ -6,6 +6,36 @@ function scenario(overrides = {}) {
 }
 function format(mode, field = '') { return calculatorFormats().find(f => f.gameType === mode && (f.terrain || '') === field).id; }
 describe('Custom engine calculator', () => {
+	it('preserves an entry boost unless the scenario explicitly overrides it', () => {
+		const input = scenario({format:'gen9dragonsden', field:'dragonsdenterrain', move:'dragonpulse'});
+		Object.assign(input.actors[0], {species:'Drampa', ability:'Berserk'});
+		const auto = calculateScenario(input);
+		assert.equal(auto.resolved.actors[0].boosts.spa, 1);
+		input.actors[0].boosts = {spa:0};
+		const reset = calculateScenario(input);
+		assert.equal(reset.resolved.actors[0].boosts.spa, 0);
+		assert(auto.results[1].moveRange.min > reset.results[1].moveRange.min);
+	});
+	it('separates Blizzard damage rolls, critical hits, and uses that dealt no HP damage', () => {
+		const input = scenario({move: 'Blizzard', samples: 32});
+		input.actors[0].species = 'Glaceon';
+		input.actors[1].species = 'Dragonite';
+		const result = calculateScenario(input).results[1];
+		assert(result.damagingSamples > 0 && result.damagingSamples < 32);
+		assert.equal(result.kos, result.damagingSamples);
+		assert.equal(result.min, 0);
+		assert.equal(result.maxPercent, 100);
+		assert(result.normalRange.minPercent > 100);
+		assert(result.criticalRange.min > result.normalRange.max);
+		input.actors[1].item = 'Focus Sash';
+		const sash = calculateScenario(input).results[1];
+		assert.equal(sash.kos, 0);
+		assert(sash.moveRange.maxPercent < 100);
+		input.move = 'Splash';
+		const status = calculateScenario(input).results[1];
+		assert.equal(status.damagingSamples, 0);
+		assert.equal(status.moveRange, null);
+	});
 	it('exposes the complete field and authoritative species/component inventory', () => {
 		const {calculatorMetadata} = require('../../dist/sim/custom-calculator');
 		const {Terrains} = require('../../dist/data/terrains');
@@ -83,7 +113,7 @@ describe('Custom engine calculator', () => {
 		} finally { battle.destroy(); }
 		assert.throws(() => calculateScenario(scenario({ aura: 'electricterrain' })), /cannot support/);
 	});
-	it('executes Twin Cannons second hit against Defense and redirects it in FFA', () => {
+	it('executes Twin Cannons second hit against Defense on the same target in FFA', () => {
 		const input = scenario();
 		input.actors[0].ability = 'Twin Cannons';
 		input.actors[1].boosts = { def: 6, spd: 0 };
@@ -94,7 +124,9 @@ describe('Custom engine calculator', () => {
 		assert(lowDef.exampleLog.some(l => l.includes('|-hitcount|') && l.endsWith('|2')));
 		input.format = format('freeforall', 'mountainterrain');
 		const ffa = calculateScenario(input);
-		assert(ffa.results[2].max > 0 || ffa.results[3].max > 0);
+		assert(ffa.exampleLog.some(l => l.includes('|-hitcount|') && l.endsWith('|2')));
+		assert.equal(ffa.results[2].max, 0);
+		assert.equal(ffa.results[3].max, 0);
 		assert.equal(ffa.results.length, 4);
 	});
 	it('uses actual spread targeting in Doubles and FFA', () => {

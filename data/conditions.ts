@@ -1292,7 +1292,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				if (this.field.isTerrain('rainbowterrain')) {
 					this.field.setTerrainDuration(this.field.weatherState.duration);
 				} else {
-					this.field.setTerrain('rainbowterrain', source, effect);
+					this.field.setTerrain('rainbowterrain', source, this.dex.conditions.get('raindance'));
 				}
 			}
 			if (effect?.effectType === 'Ability') {
@@ -1376,7 +1376,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				if (this.field.isTerrain('rainbowterrain')) {
 					this.field.setTerrainDuration(this.field.weatherState.duration);
 				} else {
-					this.field.setTerrain('rainbowterrain', source, effect);
+					this.field.setTerrain('rainbowterrain', source, this.dex.conditions.get('sunnyday'));
 				}
 			}
 			if (effect?.effectType === 'Ability') {

@@ -965,7 +965,7 @@ SpeciesPassives.yanmega = Object.freeze(['levitate']);
 ThematicPassiveIds.add('liquidvoice');
 // Exact recipients approved in the ordinary-species shortlist; no family propagation.
 for (const [id, passive] of Object.entries({
-	drifblim: 'aftermath', beheeyem: 'analytic', farigiraf: 'earlybird',
+	drifblim: 'aftermath', beheeyem: 'analytic', farigiraf: 'gluttony',
 	polteageist: 'liquidooze', polteageistantique: 'liquidooze', dedenne: 'plus',
 })) {
 	SpeciesPassives[id] = Object.freeze([passive]);

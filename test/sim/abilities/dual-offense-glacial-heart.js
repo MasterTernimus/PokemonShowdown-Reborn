@@ -46,10 +46,29 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 		assert.equal(drampa.boosts.spa, 1);
 	});
 
-	it('raises both stats for Berserk and Lightning Rod field entry boosts', () => {
-		for (const [formatid, species, ability, stages] of [
-			['gen9dragonsden', 'Drampa', 'Berserk', 2],
-			['gen9electricfield', 'Manectric', 'Lightning Rod', 1],
+	for (const ability of ['Berserk', 'Worldbreaker', 'Expiration', 'Winter’s Malice', 'Helios', 'Void Tyrant']) {
+		it(ability + ' gains +1 Sp. Atk on entry, then +2 when an attack crosses half on Dragon’s Den', () => {
+			const set = {species: 'Drampa', ability, moves: ['splash']};
+			battle = common.createBattle({formatid: 'gen9dragonsden'}, [
+				[set, {species:'Mew', moves:['splash']}], [{species:'Mew', moves:['splash']}],
+			]);
+			battle.makeChoices('team 12', 'team 1');
+			const p = battle.p1.active[0], foe = battle.p2.active[0];
+			assert.equal(p.boosts.spa, 1);
+			battle.singleEvent('Start', p.getAbility(), p.abilityState, p);
+			assert.equal(p.boosts.spa, 1);
+			const move = Object.assign(battle.dex.getActiveMove('tackle'), {damage:Math.ceil(p.hp / 2), willCrit:false});
+			battle.actions.runMove(move, foe, foe.getLocOf(p), {externalMove:true});
+			assert.equal(p.boosts.spa, 3);
+			battle.makeChoices('switch 2', 'move splash');
+			battle.makeChoices('switch 2', 'move splash');
+			assert.equal(p.boosts.spa, 1);
+		});
+	}
+	it('applies the appropriate Berserk and Lightning Rod field entry boosts', () => {
+		for (const [formatid, species, ability, attack, specialAttack] of [
+			['gen9dragonsden', 'Drampa', 'Berserk', 0, 1],
+			['gen9electricfield', 'Manectric', 'Lightning Rod', 1, 1],
 		]) {
 			battle = common.createBattle({formatid}, [[
 				{species, ability, moves: ['splash']},
@@ -58,8 +77,8 @@ describe('Dual offensive boosts and Glacial Heart', () => {
 			]]);
 			battle.makeChoices('team 1', 'team 1');
 			const holder = battle.p1.active[0];
-			assert.equal(holder.boosts.atk, stages, `${ability} Attack on ${formatid}`);
-			assert.equal(holder.boosts.spa, stages, `${ability} Special Attack on ${formatid}`);
+			assert.equal(holder.boosts.atk, attack, `${ability} Attack on ${formatid}`);
+			assert.equal(holder.boosts.spa, specialAttack, `${ability} Special Attack on ${formatid}`);
 			battle.destroy();
 			battle = null;
 		}

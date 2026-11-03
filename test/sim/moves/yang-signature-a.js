@@ -28,14 +28,14 @@ describe('Yang signature moves 1–14',()=>{
  it('Frozen Refractals also creates Veil after damaging a Substitute',()=>{const[p,q]=setup();q.addVolatile('substitute');use('frozenrefractals',p,q,{damage:50});assert.equal(p.side.sideConditions.auroraveil.duration,3);});
  // Isolate Aurora Veil for its native screen-bypass and non-stacking checks.
  for(const doubles of [false,true])it('Frozen Refractals uses native screen reduction and bypasses in '+(doubles?'doubles':'singles'),()=>{
-  const[p,q]=setup(doubles);use('frozenrefractals',p,q,{damage:50});p.side.removeSideCondition('mist');p.side.removeSideCondition('safeguard');let move=Dex.getActiveMove('tackle');
+  const[p,q]=setup(doubles);use('frozenrefractals',p,q,{damage:50});let move=Dex.getActiveMove('tackle');
   assert.equal(battle.runEvent('ModifyDamage',q,p,move,120),doubles?80:60);
   move.infiltrates=true;assert.equal(battle.runEvent('ModifyDamage',q,p,move,120),120);delete move.infiltrates;
   p.getMoveHitData(move).crit=true;assert.equal(battle.runEvent('ModifyDamage',q,p,move,120),120);p.getMoveHitData(move).crit=false;
   p.side.addSideCondition('reflect',p);assert.equal(battle.runEvent('ModifyDamage',q,p,move,120),doubles?80:60);
   use('brickbreak',q,p,{damage:10});assert(!p.side.sideConditions.auroraveil);
  });
- it('Frozen Refractals retains native Light Screen non-stacking and Defog removal',()=>{const[p,q]=setup();use('frozenrefractals',p,q,{damage:20});p.side.removeSideCondition('mist');p.side.removeSideCondition('safeguard');p.side.addSideCondition('lightscreen',p);const move=Dex.getActiveMove('watergun');assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),50);use('defog',q,p);assert(!p.side.sideConditions.auroraveil);});
+ it('Frozen Refractals retains native Light Screen non-stacking and Defog removal',()=>{const[p,q]=setup();use('frozenrefractals',p,q,{damage:20});p.side.addSideCondition('lightscreen',p);const move=Dex.getActiveMove('watergun');assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),50);use('defog',q,p);assert(!p.side.sideConditions.auroraveil);});
  for(const terrain of ['chessboardterrain','glitchterrain','dragonsdenterrain','underwaterterrain'])it('Infernal Rage respects locked '+terrain,()=>{const[p,q]=setup();battle.field.terrain=terrain;use('infernalrage',p,q,{damage:20});assert.equal(battle.field.terrain,terrain);});
  it('Queen’s Gambit uses current staged stats, Special ties and the matching defense',()=>{
   const[p,q]=setup();p.storedStats.atk=100;p.storedStats.spa=100;

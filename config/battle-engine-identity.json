@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "08cbb32dd9019a229f5d9b4970c441472c00508117b73895196c1f164c5ca4c4",
-  "packageManifestSHA256": "2fb378864f3cd80fa85701f7733c29cbb81f87969d5c9e2014086c73964015af",
-  "mechanicsSHA256": "9e25a080871083153dae02bdfb0d4ef46dc65ff05e641e441e04ce554a153711",
+  "packageEngineRevision": "389ec8dbd55b399e1e2e93410aae81ec90e90ff452d9192e909375b3f591f41c",
+  "packageManifestSHA256": "18f21693883d4bbb194216aec178beaaf60e921770a5417989b9349dab3d091b",
+  "mechanicsSHA256": "fb7665f48fdd09b82077b4f595aad8959a7ae82e7a13e5b5d331fa8559aa14cf",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,7 +11,7 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "2c5080f7f921867190599fe829075339fd60a4e5d76e0c575f8199ca2661eb37"
+      "sha256": "7d6664550e4577d1a31377f2a184bd5ca3b31b269aaa30f12c4bdfd3f819a754"
     },
     {
       "file": "dist/data/ability-components.js",
@@ -19,7 +19,7 @@
     },
     {
       "file": "dist/data/ability-display-summaries.js",
-      "sha256": "9ec4a042857d4d1d0066c4d89fcb3d541142298f6cbb3635e5ee9dea2ecc22be"
+      "sha256": "795c0ef16b01f932aa19961bbaa59c6f1170d9d9ab6209f1d6ad4bb8011ada7f"
     },
     {
       "file": "dist/data/ability-display.js",
@@ -27,7 +27,7 @@
     },
     {
       "file": "dist/data/ability-readability.js",
-      "sha256": "c792f44c0e1e9df1e6ffe8726fedf29f2608287e14074f1f9b6aff23a518f3e1"
+      "sha256": "dfc45100e209027aafbf52c2faddba3f38678c715b0abb03ba954ef0927de10a"
     },
     {
       "file": "dist/data/absorption.js",
@@ -71,7 +71,7 @@
     },
     {
       "file": "dist/data/approved-ability-reworks.js",
-      "sha256": "5ddf7e4d1e3a80aa773e02e66f137b39d3e289498e3a521e56bbc08eada74a38"
+      "sha256": "4040afadce45549fd8d18e58aab9f9832d461d0e2069507706f8a395b08e8c23"
     },
     {
       "file": "dist/data/approved-signatures.js",
@@ -111,7 +111,7 @@
     },
     {
       "file": "dist/data/awakening-dragons.js",
-      "sha256": "bbc498e2e8bfed1c38334cfe6e028cbfec6c4d34ad9ea4eb1b858f279000f318"
+      "sha256": "a1683ee579812a74af2a43eec1a80eb1d6f65a235a853b92d1ffa8bd1b8de326"
     },
     {
       "file": "dist/data/base-guardian-reworks.js",
@@ -155,11 +155,11 @@
     },
     {
       "file": "dist/data/concise-ability-descriptions.js",
-      "sha256": "6b50b181a32cfc27ed9efbe054149cb94d20f9e179a0bc2770f9a136ed39df9e"
+      "sha256": "90f2d339ffc414c34063828c8e1e74c2d1eb2d15c4c6f95569d10c055b94bb6c"
     },
     {
       "file": "dist/data/conditions.js",
-      "sha256": "4c02eb1f09ee1a836c2003727fbd5cb1df36b16f77d7bd0db3f249083b26175e"
+      "sha256": "43f027101e4e2fb30239b54597ebc4fb8aca34532946bcba69b68f6ef1cdd097"
     },
     {
       "file": "dist/data/cosmetic-counterparts.js",
@@ -235,7 +235,7 @@
     },
     {
       "file": "dist/data/field-guide-reviewed-reference-data.js",
-      "sha256": "216b1ff071ee01ace0c09d6ad6664540be443774ed37e62e9b0354eeb9597926"
+      "sha256": "640555edb33186dccd6289a46495fa90c4c91282f158751ed4b7526346e39969"
     },
     {
       "file": "dist/data/field-guide.js",
@@ -327,7 +327,7 @@
     },
     {
       "file": "dist/data/hydreigon-approved.js",
-      "sha256": "dfc0143d5520bfebf6eb6b1a1d5bade9007efdc27e88e9a939710ef454106817"
+      "sha256": "035a04599e56d4ad1a4bf144585ffbf0b3fe73e0b1bc9c8ef3ecb87df83d1152"
     },
     {
       "file": "dist/data/illusion-split.js",
@@ -407,7 +407,7 @@
     },
     {
       "file": "dist/data/mega-hydreigon.js",
-      "sha256": "f56c6a7e05ef14d9ee3507d46e8c5262270ab921ca5319c7d5ada5edad69dcf3"
+      "sha256": "b0dc1ce2922c9a09132f19e592705f75f34cb40e0698807b3044ab624eac5f75"
     },
     {
       "file": "dist/data/mega-passive-abilities.js",
@@ -611,7 +611,7 @@
     },
     {
       "file": "dist/data/ordinary-approved-reductions.js",
-      "sha256": "c746305b94360a2862b4dd2db2b096eaf00eceb31fcd88524143eceec6f87c88"
+      "sha256": "0e71bc0d4ec165397ec68be184dd7b2b80eec36d8aebe019642f090658ad8342"
     },
     {
       "file": "dist/data/passive-ability-cleanup.js",
@@ -631,7 +631,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "0120905d4ef57de3b30160dd92a4f1adafc30151963dc8ec7fa0bb6fb7cf89e8"
+      "sha256": "1d2c9fd9b8dbb9390fc9dab80de4a09f9582cf9d8ccc06d5c15dec970f7ff949"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -795,7 +795,7 @@
     },
     {
       "file": "dist/data/selected-mega-simplification-data.js",
-      "sha256": "3f930be2ca8a1e74affe8df071b8e2c701225984db7044f2b5b25c14e34201b2"
+      "sha256": "24fd813efc6fd9b46a22531d90f461d1acb69074d700cd871b2243869eb1a588"
     },
     {
       "file": "dist/data/selected-mega-simplifications.js",
@@ -807,7 +807,7 @@
     },
     {
       "file": "dist/data/signature-move-summaries.js",
-      "sha256": "c5c26576da5331f8163d181a16a3a0910fa9a597e40db9f8c032acc8d6dd38b5"
+      "sha256": "22c1701d2dc18df497f54388e351eab58afaaac13841660579665b0a54d0da64"
     },
     {
       "file": "dist/data/signature-passive-abilities.js",
@@ -835,7 +835,7 @@
     },
     {
       "file": "dist/data/species-passives.js",
-      "sha256": "6ae897a187bf4047f1c6ba030a8e7764ce68573a16aadf087e962d83b42618a6"
+      "sha256": "86bf020bcc2c3fe340ba6454abf4a83b6368865b16e93d74a3386b825ab6ada0"
     },
     {
       "file": "dist/data/stance-disguise-aggron.js",
@@ -875,11 +875,11 @@
     },
     {
       "file": "dist/data/terrains.js",
-      "sha256": "a2d20895def9d7754418dd4457592e3fed18de1ef23addc67f581700e4ba2b60"
+      "sha256": "f3ea805a5fdec1f47fec323707b07361aea0fab65307d7dc201fb59af9a26761"
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "149a3044aac0cbd03c0e09ebbcb5447c77353d199cf3832d1da5b8dab4b18425"
+      "sha256": "7b5b7af252e7a8cba5021b38aa4f4068459284db44b1e8020483a7d44d4b6bbd"
     },
     {
       "file": "dist/data/text/default.js",
@@ -947,7 +947,7 @@
     },
     {
       "file": "dist/data/yang-bonus-descriptions.js",
-      "sha256": "18680313840c39df0719e1f3b8067bdbd222e1e2e073de1c738b105bcb5f7c18"
+      "sha256": "b8d022c4317195eb02f88d2a034a531529e407503f3a2e206a2eb59e6ad64fd6"
     },
     {
       "file": "dist/data/yang-field-bonuses.js",
@@ -955,11 +955,11 @@
     },
     {
       "file": "dist/data/yang-field-context.js",
-      "sha256": "ddb7b822da594077802c5c1e7645e4de4f2a1433480e352b26a7df090e933358"
+      "sha256": "9b1cf845fa487bf792d52c4689b7cf6a9579958afb4a01a2174495931233662b"
     },
     {
       "file": "dist/data/yang-signature-moves-a.js",
-      "sha256": "f1280c1aa310f2b2419e09a9074a518a1d414025d87e389733bd4ccfe790b99b"
+      "sha256": "6405cecfaeab318a51028d45211b936ced9704b2896a587cb1e8de07e580ba46"
     },
     {
       "file": "dist/data/yang-signature-moves-b.js",
@@ -967,7 +967,7 @@
     },
     {
       "file": "dist/data/yang-signature-moves.js",
-      "sha256": "c0b203a8a024164664d9b3ec3dd8cbcdabfe370321a63bb12f29cf83d9713e77"
+      "sha256": "ff05ddd87cd4a7770de8f5c5d789fad27f85e8bf93d48e4814304cd628610889"
     },
     {
       "file": "dist/lib/crashlogger.js",
@@ -1035,7 +1035,7 @@
     },
     {
       "file": "dist/sim/battle-actions.js",
-      "sha256": "22fd0d39b9389d32277281cefe6e44f4c24ad3c6dd68d7e994eb79f1937c619d"
+      "sha256": "2444a8a68e1c564aa3fb99b44c2e2a5ba9a33e27100a4b222f7e6ca31b719e59"
     },
     {
       "file": "dist/sim/battle-queue.js",
@@ -1047,7 +1047,7 @@
     },
     {
       "file": "dist/sim/battle.js",
-      "sha256": "7fea8412f5e25a32696c14891e8660ee0e72aa6a336d1890c6187bce882f7b58"
+      "sha256": "196a59db96e857caf33735235c0b2338a21e599e8cce115d35d1a6f0a67657aa"
     },
     {
       "file": "dist/sim/beast-hunter.js",
@@ -1230,12 +1230,12 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "9d1e463db1f66e6e6f2aec5ec0379e65d662f6dfdc50d5d6b3ca875b13130e8c",
+      "sha256": "dbc36719e38a656cdaf7194cf985ec04c6a28edbeb3eafa72bb61865fcf1e9a8",
       "reason": "Reviewed description-only table or license/readme."
     },
     {
       "file": "dist/data/ability-prose-audit.js",
-      "sha256": "3e1826bb2167b14ed39c61fe73f5984d97f852c202f9edfda5ffdc209d9681ba",
+      "sha256": "cea577fddd224b736a365ada61cee33f502b1610e5b49cb80021307d374f2452",
       "reason": "Reviewed description-only table or license/readme."
     },
     {
@@ -1266,7 +1266,7 @@
   ],
   "excludedOfflineSampler": {
     "file": "dist/sim/custom-calculator.js",
-    "packagedSHA256": "5a0b9cbb87fd2b6b086b39046d6b2807b1191e27a3282dedb96838268e6fa68d",
+    "packagedSHA256": "b03cd3998f60a5ddead571b950e8b1dfed7d28b7dfabe77cc2a0c9fe628fca7f",
     "reason": "Offline sampler is not a live battle-worker dependency."
   }
 }

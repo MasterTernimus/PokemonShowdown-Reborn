@@ -24,19 +24,19 @@ describe('Beatdown per-hit misses and entry budget',()=>{
  it('spends eligibility at +6, and obeys the normal cap from +5 and -6',()=>{for(const[start,want]of[[6,6],[5,6],[-6,-4]]){const[p,q]=setup();p.boosts.atk=start;attack(p,q,1);assert.equal(p.boosts.atk,want);assert(p.m.beatdownMissSpent);p.boosts.atk=0;attack(p,q,2);assert.equal(p.boosts.atk,0);b.destroy();b=null;}});
  for(const mode of['protect','immune','no target','early KO'])it('does not boost or spend eligibility on '+mode,()=>{const[p,q]=setup();if(mode==='protect')q.addVolatile('protect');if(mode==='immune')q.setType('Ghost');if(mode==='no target'){q.hp=0;q.fainted=true;}if(mode==='early KO')q.hp=1;const out=attack(p,q,2);assert.equal(p.boosts.atk,0);assert(!p.m.beatdownMissSpent);assert(out.checks<2);assert(!q.volatiles.taunt);});
  it('counts a sub-only partial sequence as success but does not Taunt through it',()=>{const[p,q]=setup();q.addVolatile('substitute');q.volatiles.substitute.hp=1000;const out=attack(p,q,2);assert.equal(out.damage,0);assert(out.result);assert.equal(q.volatiles.substitute.hp,980);assert.equal(p.boosts.atk,2);assert(!q.volatiles.taunt);});
- it('Taunts only after a broken Substitute exposes actual HP',()=>{const[p,q]=setup();q.addVolatile('substitute');q.volatiles.substitute.hp=10;const out=attack(p,q);assert.equal(out.damage,40);assert.equal(q.volatiles.taunt.duration,4);assert.equal(b.log.filter(x=>x.includes('|-start|')&&x.includes('Taunt')).length,1);});
+ it('does not Taunt after the first hit breaks a Substitute',()=>{const[p,q]=setup();q.addVolatile('substitute');q.volatiles.substitute.hp=10;const out=attack(p,q);assert.equal(out.damage,40);assert(!q.volatiles.taunt);});
  it('keeps all-sub sequences free of Taunt',()=>{const[p,q]=setup();q.addVolatile('substitute');q.volatiles.substitute.hp=1000;attack(p,q);assert(!q.volatiles.taunt);assert.equal(q.volatiles.substitute.hp,940);});
  it('sets exactly four effect-counter turns without refreshing existing Taunt',()=>{const[p,q]=setup();attack(p,q);assert.equal(q.volatiles.taunt.duration,4);q.volatiles.taunt.duration=2;attack(p,q);assert.equal(q.volatiles.taunt.duration,2);});
- it('reapplies Taunt on the second hit after Mental Herb cures the first',()=>{
+ it('lets Mental Herb cure the first hit’s Taunt for the rest of the move',()=>{
   const [p,q]=setup();
   q.setItem('mentalherb');
   const out=attack(p,q,3);
   assert.equal(out.damage,40);
   assert.equal(q.item,'');
-  assert.equal(q.volatiles.taunt.duration,4);
-  assert.equal(b.log.filter(line=>line.includes('|-start|') && line.includes('Taunt')).length,2);
+  assert(!q.volatiles.taunt);
+  assert.equal(b.log.filter(line=>line.includes('|-start|') && line.includes('Taunt')).length,1);
  });
- it('retries Taunt after a blocked first hit rather than locking the whole use',()=>{const[p,q]=setup();let attempts=0;b.onEvent('TryAddVolatile',b.format,(status,target)=>{if(status.id==='taunt'&&target===q){attempts++;if(attempts===1)return false;}});attack(p,q);assert.equal(attempts,2);assert.equal(q.volatiles.taunt.duration,4);});
+ it('only attempts Taunt once if the first attempt is blocked',()=>{const[p,q]=setup();let attempts=0;b.onEvent('TryAddVolatile',b.format,(status,target)=>{if(status.id==='taunt'&&target===q){attempts++;if(attempts===1)return false;}});attack(p,q);assert.equal(attempts,1);assert(!q.volatiles.taunt);});
  for(const ability of['Aroma Veil','Oblivious'])it('respects '+ability+' Taunt protection',()=>{const[p,q]=setup('','No Ability',ability);const out=attack(p,q);assert.equal(out.damage,60);assert(!q.volatiles.taunt);});
  for(const miss of[1,2,3])it('activates Blunder Policy exactly once on hit '+miss+' miss',()=>{const[p,q]=setup('Blunder Policy');attack(p,q,miss);assert.equal(p.item,'');assert.equal(p.boosts.spe,2);assert.equal(p.boosts.atk,2);attack(p,q,1);assert.equal(p.boosts.spe,2);assert.equal(p.boosts.atk,2);assert.equal(b.log.filter(x=>x.includes('|-enditem|')&&x.includes('Blunder Policy')).length,1);});
  it('does not activate Policy or the Attack boost on an initial semi-invulnerable failure',()=>{const[p,q]=setup('Blunder Policy');q.addVolatile('fly');const out=attack(p,q,1);assert.equal(out.checks,0);assert.equal(p.item,'blunderpolicy');assert.equal(p.boosts.atk,0);assert.equal(p.boosts.spe,0);assert(!p.m.beatdownMissSpent);});

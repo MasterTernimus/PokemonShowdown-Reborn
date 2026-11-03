@@ -41,7 +41,11 @@ export function installApprovedReworks(abilities: AbilityDataTable) {
   onSourceDamagingHit(this: Battle,damage: number,target: Pokemon,source: Pokemon,move: ActiveMove) {
    if(damage<=0||source.isAlly(target)||!move.recoil||source.m.scorchSweepUsed)return;
    let removed=false;
-   for(const id of ['spikes','toxicspikes','stealthrock','stickyweb','gmaxsteelsurge'])removed=source.side.removeSideCondition(id)||removed;
+   for(const id of ['spikes','toxicspikes','stealthrock','stickyweb','gmaxsteelsurge']){
+    if(!source.side.removeSideCondition(id))continue;
+    removed=true;
+    this.add('-sideend',source.side,this.dex.conditions.get(id).name,'[from] ability: Scorch Sweep',`[of] ${source}`);
+   }
    if(removed){source.m.scorchSweepUsed=true;this.add('-activate',source,'ability: Scorch Sweep');}
   },
  };

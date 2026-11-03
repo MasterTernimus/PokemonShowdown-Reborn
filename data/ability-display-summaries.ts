@@ -560,7 +560,7 @@ Object.assign(AbilityDisplaySummaries, {
 });
 
 Object.assign(AbilityDisplaySummaries, {
-  "apexpredator": "Dragon conversion/STAB and wind boosts.",
+  "apexpredator": "Dragon conversion and wind boosts.",
   "tyrantdomain": "Sandstorm and fallen-ally power; Dragon's Den on fainting.",
   "auroradomain": "Hail and stronger Ice moves; field and Veil on fainting."
 });

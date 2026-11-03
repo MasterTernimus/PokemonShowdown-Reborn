@@ -2591,7 +2591,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon, target) { this.dex.abilities.get('dragonize').onModifyType?.call(this, move, pokemon, target); },
 		onBasePower(basePower, source, target, move) { return this.dex.abilities.get('dragonize').onBasePower?.call(this, basePower, source, target, move); },
-		onModifySTAB(stab, source, target, move) { return this.dex.abilities.get('dragonize').onModifySTAB?.call(this, stab, source, target, move); },
 		flags: {},
 		name: "Apex Predator",
 		rating: 5,
@@ -3393,6 +3392,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 224,
 	},
 	berserk: {
+		onStart(pokemon) {
+			if (this.event.id === 'SwitchIn' && this.field.isTerrain('dragonsdenterrain')) {
+				this.boost({spa: 1}, pokemon, pokemon);
+			}
+		},
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType === 'Move' && damage > 0) {
 				const hit = target.getMoveHitData(effect);
@@ -3520,6 +3524,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Bulletproof",
 		rating: 3,
 		num: 171,
+	},
+	twinappetite: {
+		name: "Twin Appetite", num: 12191, rating: 3, flags: {},
+		onEatItem(item, pokemon) {
+			if (item.isBerry) this.boost({spa: 1}, pokemon, pokemon);
+		},
 	},
 	cheekpouch: {
 		onEatItem(item, pokemon) {
@@ -4538,9 +4548,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain'])) modifier = 1.5;
 			if (move.typeChangerBoosted === this.effect) return this.chainModify(modifier);
 		},
-		onModifySTAB(stab, source, target, move) {
-			if (move.type === 'Dragon' && !source.hasType('Dragon')) return 1.5;
-		},
 		flags: {},
 		name: "Dragonize",
 		rating: 4,
@@ -4551,9 +4558,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon, target) {
 			this.dex.abilities.get('dragonize').onModifyType?.call(this, move, pokemon, target);
-		},
-		onModifySTAB(stab, source, target, move) {
-			return this.dex.abilities.get('dragonize').onModifySTAB?.call(this, stab, source, target, move);
 		},
 		onModifyMove(move, pokemon, target) {
 			return this.dex.abilities.get('moldbreaker').onModifyMove?.call(this, move, pokemon, target);
@@ -8170,9 +8174,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, pokemon, target, move) {
 			return (this.dex.abilities.get('dragonize') as any).onBasePower?.call(this, basePower, pokemon, target, move);
 		},
-		onModifySTAB(stab, source, target, move) {
-			return (this.dex.abilities.get('dragonize') as any).onModifySTAB?.call(this, stab, source, target, move);
-		},
 		onImmunity(type, pokemon) {
 			const result = this.dex.abilities.get('selfsufficient').onImmunity?.call(this, type, pokemon);
 			if (result !== undefined) return result;
@@ -10533,9 +10534,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon, target) {
 			this.dex.abilities.get('dragonize').onModifyType?.call(this, move, pokemon, target);
-		},
-		onModifySTAB(stab, source, target, move) {
-			return this.dex.abilities.get('dragonize').onModifySTAB?.call(this, stab, source, target, move);
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {

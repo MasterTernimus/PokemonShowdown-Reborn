@@ -1477,10 +1477,10 @@ export const ReviewedReferenceDetails = {
 				"On Dragon’s Den, Volcanic or Cold Eclipse entry, gains +1 Defense and Special Defense. Dragon’s Den also blocks incoming Fire moves from other Pokémon. Cold Eclipse removes its prevention of new frostbite, while its existing-status cure and halving of incoming Water/Ice offensive stats remain.",
 			],
 			"berserk": [
-				"Crossing from above half HP to half or less after an attack grants +2 Special Attack on Dragon’s Den.",
+				"On Dragon’s Den, entering grants +1 Special Attack. Surviving an attack that takes the holder from above half HP to half HP or less grants another +2 Special Attack.",
 			],
 			"dragonize": [
-				"On Dragon’s Den and Fairy Tale, eligible Normal moves converted to Dragon have 1.5× power instead of 1.2×. Dragon STAB remains; moves with their own excluded type-setting effects are not converted.",
+				"On Dragon’s Den and Fairy Tale, eligible Normal moves converted to Dragon have 1.5× power instead of 1.2×. Moves with their own excluded type-setting effects are not converted.",
 			],
 			"draconicforce": [
 				"On Dragon’s Den and Fairy Tale, its Dragonize conversion bonus rises from 1.2× to 1.5×. Its separate Strong Jaw biting bonus and Mold Breaker remain.",
@@ -1587,7 +1587,7 @@ export const ReviewedReferenceDetails = {
 				"On Cold Eclipse, Fairy Tale, New World and Starlight Arena entry, gains +1 Special Defense. This field bonus does not raise Defense; Stamina can still grant Defense from qualifying opposing hits.",
 			],
 			"dragonize": [
-				"On Dragon’s Den and Fairy Tale, eligible Normal moves converted to Dragon have 1.5× power instead of 1.2×. Dragon STAB remains; moves with their own excluded type-setting effects are not converted.",
+				"On Dragon’s Den and Fairy Tale, eligible Normal moves converted to Dragon have 1.5× power instead of 1.2×. Moves with their own excluded type-setting effects are not converted.",
 			],
 			"draconicforce": [
 				"On Dragon’s Den and Fairy Tale, its Dragonize conversion bonus rises from 1.2× to 1.5×. Its separate Strong Jaw biting bonus and Mold Breaker remain.",

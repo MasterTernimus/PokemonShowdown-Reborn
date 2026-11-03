@@ -421,11 +421,11 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Bites have 1.5x power; 50% end-turn cure/reset and 1/4 heal; Dragon's Den changes the effect; Poison hits Poison/Steel; bites bypass protection and badly poison 30%."
 	},
 	"dragonize": {
-		"desc": "Its Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. It gains STAB on Dragon-type moves.",
-		"shortDesc": "Normal moves become Dragon type; Dragon STAB; converted moves 1.2x."
+		"desc": "Its Normal-type moves become Dragon-type moves and have their power multiplied by 1.2.",
+		"shortDesc": "Normal moves become Dragon type; converted moves 1.2x."
 	},
 	"apexpredator": {
-		"desc": "Prevents critical hits and takes 20% less attack damage. Its Rock typing adds no Fighting, Ground, Steel, Water or Grass weakness. Immune to sandstorm and hail damage. Gains +1 Defense and Sp. Def when a foe lowers its stats, and on entry on Desert, Fairy Tale, Cave, Crystal Cavern, New World or Volcanic. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
+		"desc": "Prevents critical hits and takes 20% less attack damage. Its Rock typing adds no Fighting, Ground, Steel, Water or Grass weakness. Immune to sandstorm and hail damage. Gains +1 Defense and Sp. Def when a foe lowers its stats, and on entry on Desert, Fairy Tale, Cave, Crystal Cavern, New World or Volcanic. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
 		"shortDesc": "Rock weaknesses neutralized; critical-hit/weather protection; stronger Dragon moves; wind boosts Attack."
 	},
 	"bullrush": {
@@ -497,8 +497,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Extreme Speed always critically hits."
 	},
 	"berserk": {
-		"desc": "When an attack takes it from above half HP to half or less, gains +1 Attack and Sp. Atk after the move. On Dragon's Den, this trigger gives +2 Sp. Atk instead.",
-		"shortDesc": "Crossing half HP from an attack gives +1 Attack/Sp. Atk."
+		"desc": "When an attack takes it from above half HP to half or less, gains +1 Attack and Sp. Atk after the move. On Dragon's Den, entering grants +1 Sp. Atk, and the half-HP trigger gives +2 Sp. Atk instead.",
+		"shortDesc": "Crossing half HP: +1 Atk/Sp. Atk. Dragon’s Den: +1 Sp. Atk on entry, +2 at half HP."
 	},
 	"bigpecks": {
 		"desc": "Other Pokemon cannot lower its Defense.",
@@ -601,8 +601,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Foe stat drops give +2 Attack."
 	},
 	"draconicforce": {
-		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Same-type moves have 1.3x power. Biting moves have 1.5x power. Moves ignore bypassable opposing abilities.",
-		"shortDesc": "Normal moves become Dragon; Dragon STAB; 1.3x same-type and 1.5x biting power; ignores abilities."
+		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Same-type moves have 1.3x power. Biting moves have 1.5x power. Moves ignore bypassable opposing abilities.",
+		"shortDesc": "Normal moves become Dragon; 1.3x same-type and 1.5x biting power; ignores abilities."
 	},
 	"drizzle": {
 		"desc": "On entry, summons rain for 5 turns, or 8 with Damp Rock.",
@@ -613,11 +613,11 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Summons sun on entry."
 	},
 	"unboundblaze": {
-		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All.",
+		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All.",
 		"shortDesc": "Stronger Dragon/same-type moves; Fire absorption; Water/Ice protection; end-turn Fire damage to foes."
 	},
 	"sunsovereign": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP at turn end.",
+		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP at turn end.",
 		"shortDesc": "Mold Breaker; 8-turn sun, stronger Dragon moves, healing and Fire chip."
 	},
 	"burningspirit": {
@@ -709,7 +709,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Mold Breaker; Powder/weather/flinch immunity; accuracy/power 1.3x; status Atk 1.5x; attacks deal 25% less; stage/bypass effects."
 	},
 	"atrocity": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Contact moves have 1.3x power. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
+		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Contact moves have 1.3x power. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
 		"shortDesc": "Mold Breaker; stronger attacks and defenses; healing and Fire chip."
 	},
 	"wickedsnare": {
@@ -1043,8 +1043,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Friend Guard reduces attack damage to allies by 25%. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop."
 	},
 	"royalscales": {
-		"desc": "Marvel Scale boosts Defense while statused or on supported fields. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Swift Swim boosts Speed in rain and supported water fields. Its Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. It gains STAB on Dragon-type moves. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage.",
-		"shortDesc": "Normal moves become Dragon type; Dragon STAB; converted moves 1.2x; Heals 1/16 HP each turn; immune to sandstorm and hail damage — heals 1/16 each turn; immune to Sandstorm and Hail."
+		"desc": "Marvel Scale boosts Defense while statused or on supported fields. Oblivious blocks Attract, Captivate, Taunt, and Intimidate's Attack drop. Swift Swim boosts Speed in rain and supported water fields. Its Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage.",
+		"shortDesc": "Normal moves become Dragon type; converted moves 1.2x; Heals 1/16 HP each turn; immune to sandstorm and hail damage — heals 1/16 each turn; immune to Sandstorm and Hail."
 	},
 	"relicmishap": {
 		"desc": "It takes 0.9x damage from attacks and has Self Sufficient, Water Absorb, and Volt Absorb. It restores 1/16 max HP each turn and is immune to Sandstorm and Hail damage. During Sandstorm, its Special Defense is multiplied by 1.5. During Hail or Snow, its Defense is multiplied by 1.5.",
@@ -1277,7 +1277,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Moves bypass Substitute and opposing screens."
 	},
 	"burningcrown": {
-		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry. Moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Takes 20% less attack damage. Moves have a further 1.5x power on New World, Cold Eclipse and Starlight Arena. Faints grant no stat boosts.",
+		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry. Moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Same-type moves have 1.3x power. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Takes 20% less attack damage. Moves have a further 1.5x power on New World, Cold Eclipse and Starlight Arena. Faints grant no stat boosts.",
 		"shortDesc": "Lowers foe Attack; prevents foe stat drops; stronger Dragon moves; heals each turn; 20% less attack damage."
 	},
 	"innerfocus": {
@@ -2282,7 +2282,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Physical hits set Toxic Spikes; contact attackers lose 1/6 HP; Poison bypasses type immunity; poisoned foes lose defenses; Critical hits against poisoned foes or on corrosive fields."
 	},
 	"helios": {
-		"desc": "On entry, it summons harsh sunlight. Its moves ignore opposing Abilities. Berserk raises its Special Attack by one stage when an attack leaves it at half HP or less, and by two stages on entry in Dragon's Den. Swift Swim doubles its Speed in rain, Water Surface, Murkwater Surface, Underwater, or Midnight Zone.",
+		"desc": "On entry, it summons harsh sunlight. Its moves ignore opposing Abilities. Berserk raises Attack and Sp. Atk by 1 when an attack crosses half HP. On Dragon's Den, it instead gains +1 Sp. Atk on entry and +2 Sp. Atk on crossing half HP. Swift Swim doubles its Speed in rain, Water Surface, Murkwater Surface, Underwater, or Midnight Zone.",
 		"shortDesc": "On entry, it summons harsh sunlight. Its moves ignore opposing Abilities."
 	},
 	"corneredfang": {
@@ -3390,15 +3390,15 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "Sets Forest and Grassy Aura for 5 turns, or 8 with Amplifield Rock."
 	},
 	"atrocity": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Contact moves have 1.3x power. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
+		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Contact moves have 1.3x power. Heals 1/16 max HP each turn. Damaging moves have a further 1.3x power, plus another 1.3x on Cold Eclipse. Defense and Sp. Def are 1.3x, or 1.5x on Cold Eclipse. While Royal Decree or Empress is active without Neutralization, move power gains another 1.3x and incoming attack damage falls by 30%. Cannot be suppressed.",
 		"shortDesc": "Stronger attacks and defenses; ignores bypassable abilities; heals 1/16 HP each turn."
 	},
 	"sunsovereign": {
-		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP at turn end.",
+		"desc": "Mold Breaker: moves ignore bypassable opposing abilities. Summons sun for 8 turns on entry. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. Immune to hail damage. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP at turn end.",
 		"shortDesc": "Summons 8-turn sunlight on entry."
 	},
 	"burningcrown": {
-		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry. Moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Takes 20% less attack damage. Moves have a further 1.5x power on New World, Cold Eclipse and Starlight Arena. Faints grant no stat boosts.",
+		"desc": "On entry, lowers adjacent foes' Attack by 1. Substitute and Intimidate protections still apply. Other Pokemon cannot lower its stat stages. Gains +1 Attack and Sp. Atk on Volcanic entry. Moves ignore bypassable opposing abilities. Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Prevents freezing outside Cold Eclipse and cures freeze. Incoming Water and Ice attacks use half the attacker's offensive stat. Dragon's Den and Infernal Eclipse block Fire moves. On Dragon's Den, Volcanic or Infernal Eclipse entry, gains +1 Defense and Sp. Def. At turn end, deals Fire-type damage to foes equal to 1/16 max HP, doubled if the foe is burned or the holder used a Fire or Dragon move that turn. Fire immunities block this damage; type effectiveness scales it only in Free-for-All. Heals 1/16 max HP each turn. Immune to sandstorm and hail damage. Takes 20% less attack damage. Moves have a further 1.5x power on New World, Cold Eclipse and Starlight Arena. Faints grant no stat boosts.",
 		"shortDesc": "Takes 20% less attack damage."
 	},
 
@@ -3435,7 +3435,7 @@ Object.assign(AbilityDescriptionOverrides, {
 		"shortDesc": "Critical-hit protection; 20% less damage; paired moves and Water chip; ally support; field Electric absorption."
 	},
 	"draconicforce": {
-		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Biting moves have 1.5x power. Moves ignore bypassable opposing abilities.",
+		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Biting moves have 1.5x power. Moves ignore bypassable opposing abilities.",
 		"shortDesc": "Combines the listed abilities."
 	},
 	"tidaljaw": {
@@ -3562,8 +3562,8 @@ Object.assign(AbilityDescriptionOverrides, {
 
 Object.assign(AbilityDescriptionOverrides, {
   "apexpredator": {
-		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
-    "shortDesc": "Dragon conversion/STAB and wind boosts."
+		"desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn.",
+    "shortDesc": "Dragon conversion and wind boosts."
   },
   "tyrantdomain": {
     "desc": "On entry, summons sandstorm for 5 turns, or 8 with Smooth Rock. Each fainted ally adds 10% move damage; in Free-for-All, allies count twice. At 2+ fallen allies it gains Infiltrator; 4+, flinch immunity; 5+, indirect-damage immunity and a one-time +1 Attack and Sp. Atk. Does not block stat drops. On fainting, creates Dragon's Den for 5 turns.",

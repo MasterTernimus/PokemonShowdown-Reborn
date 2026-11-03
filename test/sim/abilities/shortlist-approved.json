@@ -7,7 +7,7 @@
       "analytic"
     ],
     "farigiraf": [
-      "earlybird"
+      "gluttony"
     ],
     "polteageist": [
       "liquidooze"
@@ -340,6 +340,9 @@
     },
     "electrodehisui": {
       "S": "Brute Force"
+    },
+    "farigiraf": {
+      "0": "Twin Appetite"
     }
   }
 }

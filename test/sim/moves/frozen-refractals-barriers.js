@@ -21,15 +21,16 @@ describe('Frozen Refractals barriers', () => {
    side.removeSideCondition('safeguard');
    q.addVolatile('protect', q);
    battle.actions.useMove('frozenrefractals', p, {target:q});
-   assert(!side.getSideCondition('mist'));
+   for (const id of ['auroraveil', 'mist', 'safeguard']) assert(!side.getSideCondition(id), id);
    q.removeVolatile('protect');
    q.addVolatile('substitute', q);
    battle.actions.useMove('frozenrefractals', p, {target:q});
-   for(const id of ['auroraveil','mist','safeguard']) assert(side.getSideCondition(id),id);
+   assert(side.getSideCondition('auroraveil'));
+   for (const id of ['mist', 'safeguard']) assert(!side.getSideCondition(id), id);
    side.sideConditions.auroraveil.duration = 1;
-   side.removeSideCondition('mist');
+   q.removeVolatile('substitute');
    battle.actions.useMove('frozenrefractals', p, {target:q});
-   assert(side.getSideCondition('mist'));
+   for (const id of ['mist', 'safeguard']) assert(!side.getSideCondition(id), id);
    assert.equal(side.sideConditions.auroraveil.duration,1);
   } finally { battle.destroy(); }
  });

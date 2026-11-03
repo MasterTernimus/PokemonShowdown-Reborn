@@ -23,6 +23,16 @@ describe('Mega Hydreigon: Expiration and Abyssal Rebirth', () => {
 		const move = Object.assign(Dex.getActiveMove('tackle'), {damage: 150, accuracy: true, willCrit: false}, patch);
 		battle.actions.runMove(move, source, source.getLocOf(target));
 	}
+	it('caps Fairy effectiveness at neutral after Mega Evolution and preserves resistances', () => {
+		const [p, q] = setup();
+		const damage = type => battle.actions.getDamage(q, p, Object.assign(Dex.getActiveMove('moonblast'), {type, willCrit: false}));
+		for (const types of [['Dark','Dragon'], ['Dragon'], ['Normal']]) {
+			p.setType(types);
+			assert.equal(damage('Fairy'), damage('Flying'));
+		}
+		p.setType('Fire');
+		assert.equal(damage('Fairy'), damage('Ice'));
+	});
 	it('evolves through the real stone route with the approved stats, ability and passive', () => {
 		const [p] = setup();
 		assert.equal(p.species.name, 'Hydreigon-Mega');

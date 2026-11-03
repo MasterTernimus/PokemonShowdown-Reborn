@@ -9,6 +9,38 @@ describe('Approved Haxorus, furnace, scales and Gooey changes',()=>{
   const[p,t]=setup(ability,'Haxorus');t.boosts={atk:2,def:3,spa:1,spd:2,spe:2,accuracy:1,evasion:0};const before={...t.boosts};
   const m=hit(p,t,'tackle');assert.deepEqual(t.boosts,before);assert(m.ignoreAbility&&m.infiltrates&&m.ignoreDefensive);assert(p.hasAbility('battlearmor'));if(ability==='Raging Overlord')assert(p.hasAbility('supremeoverlord'));
  });
+ for(const ability of ['Dragonize','Draconic Force','Royal Scales','Unbound Blaze']) {
+  it(ability+' converts Normal moves without adding Dragon STAB',()=>{
+   const [p,t]=setup(ability);
+   const move=battle.dex.getActiveMove('tackle');
+   battle.singleEvent('ModifyType',p.getAbility(),p.abilityState,move,p,t);
+   assert.equal(move.type,'Dragon');
+   assert.equal(battle.runEvent('ModifySTAB',p,t,move,1),1);
+   p.setType('Dragon');
+   assert.equal(battle.runEvent('ModifySTAB',p,t,move,1.5),1.5);
+  });
+ }
+ it('keeps natural Dragon STAB but gives a non-Dragon no extra damage on Dragon Pulse',()=>{
+  const [p,t]=setup('Dragonize');
+  const damage=()=>battle.actions.getDamage(p,t,Object.assign(battle.dex.getActiveMove('dragonpulse'),{willCrit:false}));
+  const convertedHolder=damage();
+  p.setAbility('No Ability');
+  assert.equal(damage(),convertedHolder);
+  p.setType('Dragon');
+  const native=damage();
+  assert(native>convertedHolder);
+  p.setAbility('Dragonize');
+  assert.equal(damage(),native);
+ });
+ it('Dragon’s Den boosts both defenses for Dragons only',()=>{
+  const [p,t]=setup('No Ability');
+  p.setType('Dragon');
+  battle.field.startTerrain('dragonsdenterrain');
+  for(const event of ['ModifyDef','ModifySpD']) {
+   assert.equal(battle.runEvent(event,p,null,null,100),130);
+   assert.equal(battle.runEvent(event,t,null,null,100),100);
+  }
+ });
  it('Raging Storm still cleaves remaining FFA opponents on its KO',()=>{
   const[p,t]=setup('Raging Storm','Haxorus',true),others=battle.sides.slice(2).map(s=>s.active[0]),before=others.map(x=>x.hp);t.hp=1;hit(p,t,'tackle');battle.faintMessages();assert(others.every((x,i)=>x.hp<before[i]));
  });

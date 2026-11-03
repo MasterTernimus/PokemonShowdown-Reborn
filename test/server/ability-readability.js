@@ -19,7 +19,7 @@ describe('Readable ability summaries', () => {
 			assert.equal(Dex.abilities.get(id).shortDesc, shortDesc);
 			assert(Dex.abilities.get(id).desc.length > shortDesc.length, id);
 		}
-		assert.match(Dex.abilities.get('exaltedaether').desc, /12.5%.*25%.*Defensive screens apply normally/);
+		assert.match(Dex.abilities.get('exaltedaether').desc, /heals 25%.*second deals 40%.*Defensive screens apply normally/);
 		assert.match(Dex.abilities.get('forewarn').desc, /OHKO moves receive no/);
 	});
 	it('keeps battle, reference and exported descriptions consistent', () => {

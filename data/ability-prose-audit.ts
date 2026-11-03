@@ -165,7 +165,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Intact disguise blocks one hit, then costs 1/8 HP and curses an opposing attacker."
   },
   "draconicforce": {
-    "desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Dragon moves receive STAB. Biting moves have 1.5x power. Moves ignore bypassable opposing abilities.",
+    "desc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale. Biting moves have 1.5x power. Moves ignore bypassable opposing abilities.",
     "shortDesc": "Eligible Normal moves become Dragon with 1.2x power, or 1.5x on Dragon's Den and Fairy Tale."
   },
   "dragonsmaw": {

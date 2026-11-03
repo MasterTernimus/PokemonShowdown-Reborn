@@ -22,7 +22,7 @@ const ASSUMPTIONS = [
 	'Screens and supported side conditions apply to the named side. Protect, remaining Substitute HP and consumed Decoy Pincers are explicit optional inputs. Entry hazards, Helping Hand and arbitrary mid-battle volatile states are not configurable. No repeated-hit KO estimates are made.',
 	'Adaptive Cycle starts with empty memory in this fresh-entry calculator; completed adaptations require battle history and are not assumed.',
 	'Sampled single-action outcomes, not guaranteed min/max damage or exact KO probabilities. Misses, critical hits and random redirects are included.',
-	'Fresh battle entry effects run first. Requested HP and stages then replace entry HP/stages. Selected statuses are applied through the engine.',
+	'Fresh battle entry effects run first. Requested HP and explicit stage overrides then replace the corresponding entry values. Selected statuses are applied through the engine.',
 	'No previous turns, hits, faints, consumed items, stored moves, copied abilities or field history except explicitly supplied Rage Fist bonus. History-dependent abilities use fresh-entry state; an actor may explicitly start with Void Crossing curse, but this does not model a full mid-battle snapshot.',
 	'Only the selected attacker acts. No opponent move, speed-order contest, end-of-turn residuals, delayed-hit resolution or subsequent-turn KO prediction.',
 	'Damage is actual HP removed during the action, capped by available HP, and includes immediate triggered damage. Net HP loss can differ because of healing.',
@@ -142,7 +142,9 @@ function actor(input: unknown, move: string): CalcActor {
 	const rawBoosts = data.boosts === undefined ? {} : record(data.boosts);
 	keys(rawBoosts, [...BOOSTS]);
 	const boosts: SparseBoostsTable = {};
-	for (const stat of BOOSTS) boosts[stat] = integer(rawBoosts[stat], 0, -6, 6);
+	for (const stat of BOOSTS) {
+		if (rawBoosts[stat] !== undefined) boosts[stat] = integer(rawBoosts[stat], 0, -6, 6);
+	}
 	return {
 		protect: data.protect === true, substituteHP: integer(data.substituteHP, 0, 0, 9999), decoyPincersSpent: data.decoyPincersSpent === true,
 		set, boosts, hpPercent: integer(data.hpPercent, 100, 1, 100),
@@ -350,7 +352,7 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 
 export function calculateScenario(input: unknown) {
 	const scenario = validateScenario(input);
-	const outcomes: { damage: number[], loss: number[], ko: boolean[], maxhp: number[] }[] = [];
+	const outcomes: { damage: number[], moveDamage: number[], critical: boolean[], loss: number[], ko: boolean[], maxhp: number[] }[] = [];
 	let exampleLog: string[] = [];
 	let resolved: unknown;
 	const assumptions = scenario.evaluationMode === 'public-state' ? ASSUMPTIONS.filter(text => !text.startsWith('Fresh battle entry')).concat(['Bounded public-state mode skips switch-in callbacks, initializes reviewed current states, and treats actors as already active for one turn. Unsupported ability/item/passive initialization, gimmicks and sleep/toxic/frostbite counters are rejected. Field history and unlisted move-history state remain unsupported; this is not a full mid-battle snapshot.']) : ASSUMPTIONS;
@@ -376,11 +378,18 @@ export function calculateScenario(input: unknown) {
 				};
 			}
 			const damage = mons.map(() => 0);
+			const moveDamage = mons.map(() => 0);
+			const critical = mons.map(() => false);
 			for (const [i, mon] of mons.entries()) {
 				const original = mon.damage;
 				mon.damage = function (amount, source, effect) {
 					const result = original.call(this, amount, source, effect);
 					damage[i] += result;
+					if (result > 0 && source === mons[0] && effect?.effectType === 'Move') {
+						// Preserve survival effects. Only a lethal hit loses its excess to the remaining-HP cap.
+						moveDamage[i] += this.hp === 0 ? Math.max(result, Math.floor(amount)) : result;
+						if ((effect as ActiveMove).moveHitData?.[this.getSlot()]?.crit) critical[i] = true;
+					}
 					return result;
 				};
 			}
@@ -403,7 +412,7 @@ export function calculateScenario(input: unknown) {
 			battle.actions.runMove(move, attacker, attacker.getLocOf(mons[1]), options);
 			battle.faintMessages();
 			actionOutcomes.push({ before: beforeState, after: publicState(battle, mons), log: battle.log.slice(logStart).slice(0, 100) });
-			outcomes.push({ damage, loss: mons.map((mon, i) => before[i] - mon.hp), ko: mons.map(mon => !mon.hp), maxhp });
+			outcomes.push({ damage, moveDamage, critical, loss: mons.map((mon, i) => before[i] - mon.hp), ko: mons.map(mon => !mon.hp), maxhp });
 			if (!sample) {
 				exampleLog = battle.log.slice(logStart).slice(0, 100);
 			}
@@ -420,7 +429,18 @@ export function calculateScenario(input: unknown) {
 			const damage = outcomes.map(o => o.damage[i]);
 			const percent = outcomes.map(o => 100 * o.damage[i] / o.maxhp[i]);
 			const loss = outcomes.map(o => o.loss[i]);
+			const damaging = outcomes.filter(o => o.moveDamage[i] > 0);
+			function range(group: typeof damaging) {
+				if (!group.length) return null;
+				const rolls = group.map(o => o.moveDamage[i]);
+				const percent = group.map(o => 100 * o.moveDamage[i] / o.maxhp[i]);
+				return {min: Math.min(...rolls), max: Math.max(...rolls), minPercent: Math.min(...percent), maxPercent: Math.max(...percent)};
+			}
 			return {
+				damagingSamples: damaging.length,
+				moveRange: range(damaging),
+				normalRange: range(damaging.filter(o => !o.critical[i])),
+				criticalRange: range(damaging.filter(o => o.critical[i])),
 				label: labels[i], min: Math.min(...damage), max: Math.max(...damage),
 				minPercent: Math.min(...percent), maxPercent: Math.max(...percent),
 				minNetLoss: Math.min(...loss), maxNetLoss: Math.max(...loss),

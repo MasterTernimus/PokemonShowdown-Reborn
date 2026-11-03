@@ -17,6 +17,30 @@ function hit(id,p,q,extra={}) {return use(id,p,q,{damage:100,...extra});}
 function wish(p){const state=p.side.slotConditions[p.position].wish;assert(state);battle.singleEvent('End',Dex.conditions.get('wish'),state,p);}
 describe('Approved Yang field and Aura bonuses',()=>{
  afterEach(()=>{battle?.destroy();battle=null;});
+ for (const [field, count] of [['bigtopterrain', 1], ['rockyterrain', 0]]) {
+  it('announces Samson’s Big Top line ' + count + ' times on ' + field, () => {
+   const [p,q] = setup(field);
+   hit('beatdown',p,q);
+   assert.equal(p.boosts.def,1);
+   assert.equal(battle.log.filter(line => line === '|-message|Samson’s blows thundered through the big top!').length,count);
+  });
+ }
+ it('prints Serra’s field line on Substitute damage but not through Protect', () => {
+  const [p,q] = setup('icyterrain');
+  const line = '|-message|Serra’s frozen patterns shimmered across the battlefield!';
+  q.addVolatile('protect',q);
+  hit('frozenrefractals',p,q);
+  assert(!battle.log.includes(line));
+  q.removeVolatile('protect');
+  q.addVolatile('substitute',q);
+  hit('frozenrefractals',p,q);
+  assert.equal(battle.log.filter(text => text === line).length,1);
+ });
+ it('announces Noel’s status move on a matching Rainbow Aura', () => {
+  const [p] = setup('rockyterrain','rainbowterrain');
+  use('nomoswish',p,p);
+  assert(battle.log.includes('|-message|Noel’s wish settled over the peaceful battlefield!'));
+ });
  it('covers 27 moves and only real field/Aura identifiers',()=>{assert.equal(Object.keys(YangBonusFields).length,27);for(const fields of Object.values(YangBonusFields))for(const f of fields)assert(Dex.conditions.get(f==='flowergarden'?'flowergarden1':f+'terrain').exists,f);});
  for(const [id,fields] of Object.entries(YangBonusFields))for(const f of fields)it(id+' snapshots '+f,()=>{const[p,q]=setup(f==='flowergarden'?'flowergarden3':f+'terrain');const m=Dex.getActiveMove(id);m.onModifyMove.call(battle,m,p,q);assert(m.yang.full);assert(m.yang.eligible);});
  for(const [id,auras] of Object.entries(YangBonusAuras))for(const aura of auras)it(id+' accepts '+aura,()=>{const[p,q]=setup('caveterrain',aura);const m=Dex.getActiveMove(id);m.onModifyMove.call(battle,m,p,q);assert(m.yang.eligible);});

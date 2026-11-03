@@ -5,6 +5,8 @@ export const YangSignatureLearnsets = {...YangSignatureLearnsetsA, ...YangSignat
 export const YangSignatureDescriptions = {...YangSignatureDescriptionsA, ...YangSignatureDescriptionsB};
 
 import {installYangFieldBonuses} from './yang-field-bonuses';
+import {addYangFieldContext} from './yang-field-context';
+addYangFieldContext(YangSignatureMoves);
 installYangFieldBonuses(YangSignatureMoves);
 
 import {describeYangBonuses} from './yang-bonus-descriptions';

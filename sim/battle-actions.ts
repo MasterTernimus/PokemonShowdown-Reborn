@@ -2329,7 +2329,7 @@ export class BattleActions {
 			let damage = move.damageCallback ? move.damageCallback.call(this.battle, source, target) :
 				move.damage === 'level' ? source.level : move.damage!;
 			if (((move as any).wraithProcession || (move as any).exaltedAether) && move.hit > 1 && typeof damage === 'number' && damage > 0) {
-				damage = Math.max(1, this.battle.modify(damage, (move as any).exaltedAether ? 0.25 : 0.5));
+				damage = Math.max(1, this.battle.modify(damage, (move as any).exaltedAether ? 0.4 : 0.5));
 			}
 			return guardFixedDamage(this.battle, damage, source, target, move);
 		}
@@ -2387,6 +2387,7 @@ export class BattleActions {
 				previewType = Math.min(previewType, -1);
 			}
 			if (this.battle.movehasType(move, 'Rock') && target.hasAbility('infernaldominion') && previewType > 0) previewType = 0;
+			if (previewType > 0 && this.battle.movehasType(move, 'Fairy') && target.hasAbilityOrPassive('abyssalrebirth')) previewType = 0;
 			moveHit.typeMod = previewType;
 			dualContext.typeMod = dualTypeMod;
 			this.battle.runEvent('DualWieldDamageBoost', source, target, move, 4096);
@@ -2542,7 +2543,7 @@ export class BattleActions {
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if ((move as any).exaltedAether && move.hit > 1) {
-			baseDamage = this.battle.modify(baseDamage, 0.25);
+			baseDamage = this.battle.modify(baseDamage, 0.4);
 		} else if ((move as any).wraithProcession && move.hit > 1) {
 			baseDamage = this.battle.modify(baseDamage, 0.5);
 		} else if ((move.multihitType === 'parentalbond' || move.multihitType === 'hydrabond') && move.hit > 1) {
@@ -2631,6 +2632,7 @@ export class BattleActions {
 			if (!suppressMessages) this.battle.add('-message', target.name + "'s flames melted and weakened the incoming rocks!");
 			typeMod = 0;
 		}
+		if (typeMod > 0 && this.battle.movehasType(move, 'Fairy') && target.hasAbilityOrPassive('abyssalrebirth')) typeMod = 0;
 		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.battle.add('-supereffective', target);

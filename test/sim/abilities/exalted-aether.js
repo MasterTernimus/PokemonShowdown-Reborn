@@ -44,12 +44,12 @@ describe('Exalted Aether', () => {
 		assert(Dex.species.getFullLearnset('Ursaluna-Bloodmoon').some(s => s.learnset.bloodmoon));
 	});
 	for (const mode of ['singles', 'doubles', 'freeforall']) for (const id of ['dragonclaw', 'aerialace']) {
-		it(`${mode}: ${id} hits twice at full/25% and heals only on strike one`, () => {
+		it(`${mode}: ${id} hits twice at full/40% and heals only on strike one`, () => {
 			const [p, q] = setup(mode); p.hp = 5000;
 			const hits = hit(p, q, id);
 			assert.equal(hits.length, 2); assert(hits.every(h => h.target === q));
-			assert(Math.abs(hits[1].result - hits[0].result * 0.25) <= 2);
-			assert.equal(p.hp - 5000, Math.max(1, Math.floor(hits[0].result / 8)));
+			assert(Math.abs(hits[1].result - hits[0].result * 0.4) <= 2);
+			assert.equal(p.hp - 5000, Math.max(1, Math.floor(hits[0].result / 4)));
 		});
 	}
 	for (const mode of ['singles', 'doubles', 'freeforall']) for (const screen of ['reflect', 'auroraveil']) it(`${mode}: ${screen} reduces both strikes while positive Defense affects only strike one`, () => {
@@ -80,7 +80,7 @@ describe('Exalted Aether', () => {
 	});
 	for (const mode of ['doubles', 'freeforall']) it(`${mode}: first-hit KO heals actual damage without spillover`, () => {
 		const [p, q] = setup(mode); p.hp = 5000; q.hp = 8;
-		assert.equal(hit(p, q).length, 1); assert.equal(p.hp, 5001);
+		assert.equal(hit(p, q).length, 1); assert.equal(p.hp, 5002);
 		for (const other of battle.getAllActive()) if (other !== q && other !== p) assert.equal(other.hp, other.maxhp);
 	});
 	it('Substitute damage does not heal, including a first-hit break', () => {
@@ -122,8 +122,8 @@ describe('Exalted Aether', () => {
 	});
 	it('scales fixed physical Dragon damage and caps first-strike healing correctly', () => {
 		const [p, q] = setup(); p.hp = 5000;
-		assert.deepEqual(hit(p, q, 'dragonrage', {category: 'Physical'}).map(h => h.result), [40, 10]);
-		assert.equal(p.hp, 5005);
+		assert.deepEqual(hit(p, q, 'dragonrage', {category: 'Physical'}).map(h => h.result), [40, 16]);
+		assert.equal(p.hp, 5010);
 	});
 	for (const ability of ['Sturdy', 'No Ability']) it(`preserves ${ability === 'Sturdy' ? ability : 'Focus Sash'} on strike one before strike two finishes`, () => {
 		const [p, q] = setup('singles', 'Exalted Aether', ability); q.hp = q.maxhp = q.baseMaxhp = 100;
@@ -133,7 +133,7 @@ describe('Exalted Aether', () => {
 	it('retains contact reactions on both hits and does not grant Mold Breaker', () => {
 		const [p, q] = setup('singles', 'Exalted Aether', 'Rough Skin'); p.hp = 5000;
 		const hits = hit(p, q); assert.equal(hits.length, 2);
-		assert.equal(p.hp, 5000 + Math.max(1, Math.floor(hits[0].result / 8)) - 2 * p.baseMaxhp / 8);
+		assert.equal(p.hp, 5000 + Math.max(1, Math.floor(hits[0].result / 4)) - 2 * p.baseMaxhp / 8);
 		q.setAbility('Wonder Guard'); q.hp = q.maxhp; hit(p, q); assert.equal(q.hp, q.maxhp);
 	});
 });

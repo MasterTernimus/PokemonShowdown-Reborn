@@ -265,6 +265,8 @@ function announce(battle: Battle, move: ContextMove) {
 }
 export function addYangFieldContext(moves: MoveDataTable) {
  for (const [id, context] of Object.entries(YangFieldContexts)) {
+  // Nostras Wish already announces from its delayed impact on the field at that time.
+  if (id === 'nostraswish') continue;
   const data = moves[id as keyof MoveDataTable];
   const modify = data.onModifyMove;
   data.onModifyMove = function (move, source, target) {

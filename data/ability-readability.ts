@@ -51,7 +51,7 @@ export const ReadableAbilitySummaries: Record<string, string> = {
 	crescentrend: 'Flying attacks: no contact, ignore screens; excess Substitute damage reaches its owner.',
 	familyguardian: 'Friend Guard + Healer; once/entry heals self or a nearby ally 1/4 HP after crossing half HP.',
 	revealinggaze: 'Entry uses Miracle Eye; Psychic ignores marked foes’ positive Sp. Def. Keeps Miracle Eye bonuses.',
-	exaltedaether: 'Physical Dragon/Flying hits twice: 12.5% first-hit healing; 25% follow-up ignores Defense boosts.',
+	exaltedaether: 'Physical Dragon/Flying hits twice: 25% first-hit healing; 40% follow-up ignores Defense boosts.',
 };
 
 /** Plain-language explanations, shared by battle data, reference text and client exports. */

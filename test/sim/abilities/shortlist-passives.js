@@ -72,13 +72,23 @@ describe('Approved ordinary-species shortlist', () => {
 		assert.equal(battle.runEvent('BasePower', p, q, move, 100), 130);
 		p.addVolatile('gastroacid'); assert.equal(battle.runEvent('BasePower', p, q, move, 100), 130);
 	});
-	for (const ability of ['No Ability', 'Early Bird']) it('Farigiraf decrements sleep twice, never three times, with ' + ability, () => {
-		const [p, q] = setup('Farigiraf', ability); p.setStatus('slp', q); p.statusState.time = 4; p.hp = 1000;
-		p.addVolatile('gastroacid');
-		battle.singleEvent('BeforeMove', Dex.conditions.get('slp'), p.statusState, p, q, Dex.getActiveMove('splash'));
-		assert.equal(p.statusState.time, 2);
-		battle.singleEvent('BeforeMove', Dex.conditions.get('slp'), p.statusState, p, q, Dex.getActiveMove('splash'));
-		assert.equal(p.status, ''); assert.equal(p.hp, 2000);
+	for (const ability of ['Twin Appetite', 'Armor Tail', 'Royal Decree']) it('Farigiraf eats its Liechi Berry at half HP with ' + ability, () => {
+		const [p] = setup('Farigiraf', ability);
+		p.setItem('liechiberry');
+		p.hp = p.maxhp / 2 + 1;
+		battle.singleEvent('Update', p.getItem(), p.itemState, p);
+		assert.equal(p.item, 'liechiberry');
+		p.hp--;
+		battle.singleEvent('Update', p.getItem(), p.itemState, p);
+		assert.equal(p.item, '');
+		assert.equal(p.boosts.atk, 1);
+		assert.equal(p.boosts.spa, ability === 'Twin Appetite' ? 1 : 0);
+	});
+	it('Twin Appetite needs the Berry to be eaten', () => {
+		const [p, q] = setup('Farigiraf', 'Twin Appetite');
+		p.setItem('sitrusberry');
+		assert(p.takeItem(q));
+		assert.equal(p.boosts.spa, 0);
 	});
 	for (const species of ['Polteageist', 'Polteageist-Antique']) for (const field of ['', 'murkwatersurfaceterrain', 'wastelandterrain']) it(species + ' applies one Liquid Ooze on ' + (field || 'no field'), () => {
 		const [p, q] = setup(species, 'Liquid Ooze'); q.hp = 1000; battle.field.terrain = field;

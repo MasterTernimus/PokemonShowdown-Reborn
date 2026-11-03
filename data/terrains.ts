@@ -1070,7 +1070,7 @@ export const Terrains: { [k: string]: TerrainData } = {
 				}
 			},
 			onModifySpD(spd, pokemon) {
-				if (pokemon.hasType('dragon')) {
+				if (pokemon.hasType('Dragon')) {
 					return this.chainModify(1.3);
 				}
 			},

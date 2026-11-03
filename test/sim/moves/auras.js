@@ -194,6 +194,23 @@ describe('Full-field move exceptions',()=>{
  for(const moves of [['raindance','sunnyday'],['sunnyday','raindance']]){
   it(moves.join(' then ')+' creates Rainbow Aura',()=>{const [p]=setup('factoryterrain');for(const move of moves)battle.actions.useMove(move,p);assert.equal(battle.field.terrain,'factoryterrain');assert.equal(battle.field.auraField,'rainbowterrain');});
  }
+ for (const [initial, ability, item] of [['raindance', 'Drought', 'Heat Rock'], ['sunnyday', 'Drizzle', 'Damp Rock']]) {
+  it(ability + ' creates Rainbow Aura over Rocky Field and the reverse weather change refreshes it', () => {
+   const [user, setter] = setup('rockyterrain');
+   battle.actions.runMove(initial, user, 0, {externalMove: true});
+   assert.equal(battle.field.auraField, '');
+   setter.setItem(item);
+   setter.setAbility(ability);
+   assert.equal(battle.field.terrain, 'rockyterrain');
+   assert.equal(battle.field.auraField, 'rainbowterrain');
+   assert.equal(battle.field.auraTurns, 8);
+   battle.actions.runMove(initial, user, 0, {externalMove: true});
+   assert.equal(battle.field.terrain, 'rockyterrain');
+   assert.equal(battle.field.auraTurns, 5);
+   assert(battle.log.some(line => line.startsWith('|-fieldstart|Rainbow Aura|[aura]')));
+   assert(!battle.log.includes('|-fieldstart|Rainbow Terrain'));
+  });
+ }
  it('Ion Deluge remains an Aura on an existing field',()=>{const [p]=setup('rockyterrain');battle.actions.runMove('iondeluge',p,0,{externalMove:true});assert.equal(battle.field.terrain,'rockyterrain');assert.equal(battle.field.auraField,'electricterrain');});
  for(const [ability,field] of [['electricsurge','electricterrain'],['grassysurge','grassyterrain'],['mistysurge','mistyterrain'],['psychicsurge','psychicterrain']]){
   for(const base of ['factoryterrain',''])it(ability+' on '+(base||'no field'),()=>{const [p]=setup(base);p.setAbility(ability);assert.equal(battle.field.terrain,base||field);assert.equal(battle.field.auraField,base?field:'');});

@@ -3981,7 +3981,9 @@ export class Battle {
 		(this as any).log = [];
 	}
 
-	movehasType(move: ActiveMove, searchTypes: string | string[]): boolean {
+	movehasType(move: ActiveMove | null | undefined, searchTypes: string | string[]): boolean {
+		// A stat query outside damage calculation has no associated move.
+		if (!move) return false;
 		const types = move.types !== undefined ? move.types : [move.type];
 		if (Array.isArray(searchTypes)) {
 			for (const type of searchTypes) {
