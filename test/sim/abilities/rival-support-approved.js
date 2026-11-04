@@ -73,9 +73,9 @@ describe('Approved rival and support queue',()=>{
  it('Tinkaton Mold Breaker is passive; Scrapbreaker keeps Steel interaction and one Attack boost',()=>{
   const[p,q]=setup('Tinkaton','Scrapbreaker');assert.deepEqual(p.getPassives(),['moldbreaker']);q.setType('Steel');hit(p,q,'ironhead');assert.equal(p.boosts.atk,1);hit(p,q,'ironhead');assert.equal(p.boosts.atk,1);
  });
- it('Apocalyptic Flame heals independently and lowers stronger attacking stat',()=>{
+ it('Apocalyptic Flame marks instead of healing or dropping stats',()=>{
   const[p,q]=setup('Tinkaton','Apocalyptic Flame','singles',['tackle','splash']);p.hp=500;q.boosts.spa=2;
-  battle.makeChoices('move tackle','move splash');assert.equal(p.hp,625);assert.equal(q.boosts.spa,1);
+  battle.makeChoices('move tackle','move splash');assert.equal(p.hp,500);assert.equal(q.boosts.spa,2);assert(q.volatiles.apocalypticflame);
  });
 });
 

@@ -1906,6 +1906,10 @@ export class ChatRoom extends BasicRoom {
 }
 
 export class GameRoom extends BasicRoom {
+	override setPrivate(privacy: PrivacySetting) {
+		if (this.official && privacy) return;
+		return super.setPrivate(privacy);
+	}
 	declare readonly type: 'battle';
 	readonly format: string;
 	p1: User | null;
@@ -2186,6 +2190,11 @@ export const Rooms = {
 	 * No need for UI; this function sends popups to users.
 	 */
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
+		if (options.challengeType === 'challengeofficial') {
+			options = {...options, isPrivate: false, modjoin: null,
+				players: options.players.map(player => ({...player, hidden: false, inviteOnly: false})),
+			};
+		}
 		const players = options.players.map(player => player.user);
 		const format = Dex.formats.get(options.format);
 		if (players.length > format.playerCount) {

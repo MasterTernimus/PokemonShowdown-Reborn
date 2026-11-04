@@ -443,7 +443,7 @@ export const ReviewedReferenceDetails = {
 				"Absorbing another Pokémon’s Electric move grants +2 Speed on Factory or Short-Circuit instead of +1. On Electric Field, additionally gains +1 Speed at the end of each turn.",
 			],
 			"steelworker": [
-				"On Factory, Steel attacks use 2× Attack or Special Attack instead of 1.5×. On Short-Circuit, Steel moves gain Electric as an additional type. Steel STAB and its separate defensive Steel resistances remain.",
+				"On Factory, Steel attacks use 2× Attack or Special Attack instead of 1.5×. On Short-Circuit, Steel moves gain Electric as an additional type.",
 			],
 			"surgesurfer": [
 				"Doubles Speed on Electric Field, Water Surface, Underwater, Murkwater Surface and Short-Circuit. The current list does not include Midnight Zone.",
@@ -831,7 +831,7 @@ export const ReviewedReferenceDetails = {
 				"Electric attacks use 2× Attack or Special Attack on Electric and Factory fields instead of 1.3×. Electric Field additionally halves the offensive stat used by incoming Ground attacks.",
 			],
 			"railguncircuit": [
-				"Its Transistor component makes Electric attacks use 2× the offensive stat on Factory and Electric Field. Electric Field entry also grants +1 Attack and Special Attack through Lightning Rod; its redirection and absorption remain.",
+				"Electric Field entry grants +1 Attack and Special Attack through Lightning Rod."
 			],
 			"slowstart": [
 				"Holy removes its temporary Attack and Speed penalties and supplies 1.5× Defense instead of the temporary 2× defense outside Holy. Holy entry prints “Divine energy courses through [Pokémon]”. Electric Field removes one additional turn from the three-turn Slow Start countdown each turn.",
@@ -2590,13 +2590,13 @@ export const ReviewedReferenceDetails = {
 				"Absorbing another Pokémon’s Electric move grants +2 Speed on Factory or Short-Circuit instead of +1. On Electric Field, additionally gains +1 Speed at the end of each turn.",
 			],
 			"steelworker": [
-				"On Factory, Steel attacks use 2× Attack or Special Attack instead of 1.5×. On Short-Circuit, Steel moves gain Electric as an additional type. Steel STAB and its separate defensive Steel resistances remain.",
+				"On Factory, Steel attacks use 2× Attack or Special Attack instead of 1.5×. On Short-Circuit, Steel moves gain Electric as an additional type.",
 			],
 			"transistor": [
 				"Electric attacks use 2× Attack or Special Attack on Electric and Factory fields instead of 1.3×. Electric Field additionally halves the offensive stat used by incoming Ground attacks.",
 			],
 			"railguncircuit": [
-				"Its Transistor component makes Electric attacks use 2× the offensive stat on Factory and Electric Field. Electric Field entry also grants +1 Attack and Special Attack through Lightning Rod; its redirection and absorption remain.",
+				"Electric Field entry grants +1 Attack and Special Attack through Lightning Rod."
 			],
 			"pulsetriad": [
 				"Once per battle per holder, entry attempts to create or refresh Factory for exactly three turns, including when Amplifield Rock is held. A blocked attempt still spends the allowance. Magnezone-Pulse receives Flash Cannon, Discharge, Recover and Autotomize; switching or regaining the ability does not reset the field use.",

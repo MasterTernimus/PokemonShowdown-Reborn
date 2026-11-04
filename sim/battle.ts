@@ -17,7 +17,7 @@ import {resolveBurrowAmbush} from '../data/queued-abilities-approved';
 import {updateStarterBoostIndicators} from './starter-boost-indicators';
 import {updateCocoonIndicator} from './cocoon-indicator';
 import {takeCrescentSubDamage} from './crescent-rend';
-import {adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCaptureMove, adaptiveSkipAbility, adaptiveIgnoresAbility, adaptiveCheckpoint, adaptiveResistsBypass, adaptiveAnalyzed, adaptivePreventDamage, adaptiveDamaged, adaptiveDamageMultiplier, adaptiveEnvironmentalContribution, adaptiveEnvironment, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
+import {adaptiveZHit, adaptiveMoveView, adaptiveDisplay, adaptiveMoveSnapshot, adaptiveCaptureMove, adaptiveSkipAbility, adaptiveIgnoresAbility, adaptiveCheckpoint, adaptiveResistsBypass, adaptiveAnalyzed, adaptivePreventDamage, adaptiveDamaged, adaptiveDamageMultiplier, adaptiveEnvironmentalContribution, adaptiveEnvironment, adaptiveBlocksCondition, adaptiveStatus} from './adaptive-cycle';
 /* eslint-disable @stylistic/max-len */
 /**
  * Simulator Battle
@@ -957,6 +957,11 @@ export class Battle {
 		const parentEvent = this.event;
 		this.event = { id: eventid, target, source, effect: sourceEffect, modifier: 1 };
 		this.eventDepth++;
+		const damagingZ = sourceEffect?.effectType === 'Move' && (sourceEffect as ActiveMove).isZ && (sourceEffect as ActiveMove).category !== 'Status';
+		const defendingStat = eventid === 'ModifyDef' || eventid === 'ModifySpD';
+		const zDefender = defendingStat || eventid === 'Damage' ? target : source;
+		const unmitigatedZ = damagingZ && zDefender instanceof Pokemon && adaptiveZHit(zDefender, sourceEffect as ActiveMove) &&
+			(defendingStat || ['BasePower','ModifyAtk','ModifySpA','WeatherModifyDamage','ModifyDamage','Damage'].includes(eventid));
 		const zMoveDamageModifier = eventid.endsWith('ModifyDamage') &&
 			sourceEffect?.effectType === 'Move' && !!(sourceEffect as any).isZ;
 
@@ -1097,6 +1102,10 @@ export class Battle {
 			if (adaptiveMoveBefore && adaptiveEventMove) adaptiveCaptureMove(adaptiveEventMove, adaptiveMoveBefore, effect, effectHolder instanceof Pokemon ? effectHolder : undefined);
 			if (this.event.target instanceof Pokemon) {
 				returnVal = adaptiveEnvironmentalContribution(this, eventid, effect, this.event.target, source instanceof Pokemon ? source : null, args[0], returnVal, previousModifier);
+			}
+			if (unmitigatedZ) {
+				if (defendingStat ? this.event.modifier > previousModifier : this.event.modifier < previousModifier) this.event.modifier = previousModifier;
+				if (typeof returnVal === 'number' && typeof args[0] === 'number' && (defendingStat ? returnVal > args[0] : returnVal < args[0])) returnVal = args[0];
 			}
 			if (zMoveDamageModifier && effect.effectType === 'Ability' && this.event.modifier < previousModifier) {
 				this.debug(`${eventid} ability damage reduction bypassed by Z move: ${effect.name}`);
@@ -1544,6 +1553,7 @@ export class Battle {
 	}
 
 	checkMoveBypassesProtect(move: ActiveMove, attacker: Pokemon, defender: Pokemon, blockStatus = true) {
+		if (adaptiveZHit(defender, move)) return true;
 		// One target-local final reduction, even when another package also removes protection.
 		if (move.quarterContactProtect || (move.flags.contact && attacker.hasAbilityOrPassive('piercingdrill'))) {
 			const hit = defender.getMoveHitData(move);

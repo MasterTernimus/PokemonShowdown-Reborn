@@ -190,8 +190,7 @@ export const SelectedExactComponents: { [id: string]: string[] } = {
 		"rockhead",
 	],
 	"railguncircuit": [
-		"lightningrod",
-		"transistor",
+		"lightningrod"
 	],
 	"enlightenment": [
 		"innerfocus",
@@ -285,8 +284,8 @@ export const SelectedAbilityDescriptions: Record<string, { shortDesc: string, de
 		"desc": "Redirects eligible Electric moves, including allied moves, and absorbs Electric hits for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. Rock Head prevents move recoil except Struggle.",
 	},
 	"railguncircuit": {
-		"shortDesc": "Lightning Rod + Transistor.",
-		"desc": "Redirects eligible Electric moves, including allied moves, and absorbs Electric hits for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. Electric attacks use 1.3x Attack or Sp. Atk, or 2x on Electric Terrain and Factory.",
+		"shortDesc": "Lightning Rod. Special Electric hits break Light Screen and Aurora Veil.",
+		"desc": "Redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. After a special Electric hit damages a foe’s HP, removes Light Screen and Aurora Veil from its side.",
 	},
 	"lunarorbit": {
 		"shortDesc": "Magic Guard and five-turn Gravity entry.",

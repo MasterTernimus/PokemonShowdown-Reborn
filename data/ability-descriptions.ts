@@ -105,7 +105,7 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Absorbs Grass for +1 Attack/Sp. Atk; grassy-field healing; Cannot flinch; blocks Intimidate; Half contact damage; double Fire damage."
 	},
 	"scarecrow": {
-		"desc": "Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Adds Steel resistances and Poison immunity without Steel weaknesses. Attacks use double the offensive stat against targets that entered this turn.",
+		"desc": "Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Attacks use double the offensive stat against targets that entered this turn.",
 		"shortDesc": "Wind/Tailwind boosts Attack; Steel offense/resistances; double attacking stats against new entrants."
 	},
 	"bruteforce": {
@@ -1914,8 +1914,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "30% contact paralysis; 60% on electric fields."
 	},
 	"steelworker": {
-		"desc": "Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Adds Steel resistances and Poison immunity without Steel weaknesses.",
-		"shortDesc": "Steel STAB and attacking boost; Steel resistances without weaknesses."
+		"desc": "Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing.",
+		"shortDesc": "Steel moves gain STAB and use 1.5x Attack or Sp. Atk."
 	},
 	"stickyhold": {
 		"desc": "Other Pokemon cannot remove its item while it survives. Sticky Barb can still transfer.",
@@ -2018,8 +2018,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Boosts Electric attacking stats; Electric Terrain weakens Ground."
 	},
 	"railguncircuit": {
-		"desc": "Redirects single-target Electric moves to itself and absorbs Electric moves for +1 Attack and Sp. Atk. Electric Terrain entry also grants both boosts. never misses; boosts Electric attacks. Redirects and absorbs Electric moves, raising Attack and Special Attack. Electric moves are strengthened; Ground damage is reduced on Electric Terrain.",
-		"shortDesc": "Redirects/absorbs Electric for +1 Attack and Sp. Atk — never misses; boosts Electric attacks."
+		"desc": "Redirects and absorbs Electric moves for +1 Attack and Sp. Atk. Electric Terrain entry grants both boosts. After a special Electric hit damages a foe’s HP, removes Light Screen and Aurora Veil from its side.",
+		"shortDesc": "Lightning Rod. Special Electric hits break Light Screen and Aurora Veil."
 	},
 	"razorcurrent": {
 		"desc": "On entry, summons rain for 5 turns, or 8 with Damp Rock. Biting moves have 1.5x power. Gains +1 Speed at the end of each full turn it spends active.",
@@ -2595,8 +2595,8 @@ export const AbilityDescriptionOverrides: Record<string, {desc: string; shortDes
 		"shortDesc": "Absorbs Water/Poison for 1/4 HP; drain harms foes; Swalot-Pulse changes Underwater to Murkwater."
 	},
 	"agonyflame": {
-		"desc": "After it finishes a damaging Fire-type move that deals actual HP damage to an opponent, each surviving active opponent damaged by that move is burned if normal status protections allow, and receives Heal Block for 2 turns, including the current turn. Each target is affected once per move. Heal Block can apply even if burn fails, and a longer Heal Block is not shortened. If the move already burned a target, the Ability does not attempt to burn it again after a curing Berry. Protected, immune, Substitute-only, ally, self and delayed damage do not qualify. Ability suppression disables these effects.",
-		"shortDesc": "Fire hits burn foes and block healing for 2 turns; requires actual opposing HP damage."
+		"desc": "After a Fire move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.",
+		"shortDesc": "Fire hits block healing for 2 turns and have a 30% chance to burn."
 	},
 	"pulseeruption": {
 		"desc": "Camerupt-Pulse automatically receives Eruption, Snarl, Shadow Ball, and Earth Power in that order. Full Sturdy: OHKO moves fail, and direct move damage cannot KO it from full HP. On entry, attempts to create or refresh Super-Heated Terrain for 5 turns, respecting normal field restrictions. Skill Swap fails. At Camerupt-Pulse's fixed 1 HP, Sturdy can prevent repeated direct hits; indirect damage and ability bypass remain effective. Field creation or refresh is attempted only once per battle per holder, even if blocked; switching, suppression, revival, or ability changes never reset this use. Camerupt must be at full HP immediately before Pulse Evolution or it faints before its HP is converted to 1.",
@@ -2739,7 +2739,7 @@ AbilityDescriptionOverrides.fruitfulbough = {
 };
 
 AbilityDescriptionOverrides.soulanchor = {
-	"desc": "Steelworker: Steel attacks gain STAB and 1.5x Attack or Sp. Atk (2x on Factory); on Short-Circuit they also become Electric-type. Immune to Poison attacks; resists Normal, Flying, Rock, Bug, Steel, Grass, Psychic, Ice, Dragon and Fairy attacks. A foe successfully trapped by its Anchor Shot loses 1/16 maximum HP each turn end; the holder heals by actual damage dealt. Only one tether per holder; a new tether replaces the old, and either Pokemon leaving ends it. Trap immunity, escape, indirect-damage immunity, suppression and healing restrictions apply.",
+	"desc": "Steelworker: Steel attacks gain STAB and 1.5x Attack or Sp. Atk (2x on Factory); on Short-Circuit they also become Electric-type. A foe successfully trapped by its Anchor Shot loses 1/16 maximum HP each turn end; the holder heals by actual damage dealt. Only one tether per holder; a new tether replaces the old, and either Pokemon leaving ends it. Trap immunity, escape, indirect-damage immunity, suppression and healing restrictions apply.",
 	"shortDesc": "Steelworker; its Anchor Shot tethers one trapped foe, draining 1/16 HP each turn."
 };
 
@@ -3842,16 +3842,16 @@ AbilityDescriptionOverrides.ruinedsky = {
  desc: "This Pokemon's moves have the effects of Mold Breaker. Damage is multiplied by 1.3 if the target is currently Flying-type or Dragon-type; the bonus applies only once against Flying/Dragon targets. This does not bypass type immunities, including Flying's Ground immunity.",
 };
 AbilityDescriptionOverrides.apocalypticflame = {
- shortDesc: 'Own Tempo; once/turn after physical HP damage, lowers one damaged foe’s Attack.',
- desc: 'Own Tempo prevents and cures confusion and protects against Intimidate. Once per turn, after a physical move finishes dealing opposing HP damage, lowers one damaged, surviving opponent’s Attack by 1 stage, in normal target order. Multi-hit and spread moves trigger once. Ally and Substitute-only damage do not qualify. Normal stat-drop protections apply. The user must survive the move.',
+ shortDesc: "Single-target hits weaken the foe's next physical hit. Steel deals 1.3x to Flying or Dragon foes.",
+ desc: "Steel moves deal 1.3x damage to Flying or Dragon targets. A single-target attack that damages a foe weakens its next single-target physical hit by 25%. Gigaton Hammer also lowers the higher of Attack and Sp. Atk by 1 stage (Attack on ties). The mark lasts through the following turn. Spread moves skip the mark.",
 };
 AbilityDescriptionOverrides.rupturedheaven = {
  shortDesc: 'Sharpness; slicing moves become non-contact.',
  desc: "Full local Sharpness boosts slicing moves by 1.5, except on Cold Eclipse Terrain. Only slicing moves become non-contact. Other contact moves remain contact moves.",
 };
 AbilityDescriptionOverrides.burningquake = {
- shortDesc: '+1 critical-hit ratio; once/turn after a damaging critical hit, +1 Speed.',
- desc: "Raises the critical-hit ratio by 1 stage. Once per turn, after a move finishes landing a critical hit that damages an opponent’s HP, raises the user’s Speed by 1 stage. Multi-hit and spread moves trigger once. Ally and Substitute-only damage do not qualify. The user must survive the move.",
+ shortDesc: 'Physical hits deal 1.3x to Dragons. +1 crit ratio; damaging crits grant +1 Speed once per turn.',
+ desc: "Physical attacks deal 1.3x damage to Dragon types. Raises the critical-hit ratio by 1 stage. Once per turn, after a move finishes landing a critical hit that damages an opponent’s HP, raises the user’s Speed by 1 stage. Multi-hit and spread moves trigger once. Ally and Substitute-only damage do not qualify. The user must survive the move.",
 };
 AbilityDescriptionOverrides.swiftvenom = {
  shortDesc: 'Swift Swim + Merciless.',
@@ -3960,7 +3960,7 @@ Object.assign(AbilityDescriptionOverrides,FossilDescriptions);
 
 AbilityDescriptionOverrides.crystalward = {"shortDesc":"Blocks opposing ball/bomb moves for itself and adjacent allies.","desc":"Opposing ball/bomb moves cannot hit this Pokemon or adjacent active allies. Uses the ball/bomb move classification only, without other Bulletproof effects. Allied Pollen Puff still works. Protection ends when the holder leaves, faints or is suppressed, and respects Mold Breaker and Ability Shield."};
 
-AbilityDescriptionOverrides.agonyflame.desc = "After a damaging Fire move finishes, burns each surviving active opponent that lost HP and applies Heal Block for 2 turns including the current turn. Normal status protections apply. A longer Heal Block is not shortened. A target already burned by the move is not burned again after a curing Berry. Protected, immune, Substitute-only, allied, self and delayed damage do not qualify. As a species passive it remains active under ability suppression.";
+AbilityDescriptionOverrides.agonyflame.desc = "After a Fire move damages a foe directly, blocks healing for 2 turns and has a 30% chance to burn. Rolls once per damaged foe per move.";
 
 AbilityDescriptionOverrides.barbharvest = {"shortDesc":"Suction Cups; removes own-side Stealth Rock before taking entry damage.","desc":"Full local Suction Cups. On each genuine switch-in, absorbs and removes Stealth Rock from its own side before it causes entry damage. Other hazards remain. Ability restarts do not activate it, and suppression prevents removal."};
 
@@ -4136,7 +4136,7 @@ Object.assign(AbilityDescriptionOverrides, {
 
 AbilityDescriptionOverrides.venomarmor = {shortDesc: 'Dual Wield + Run Away on regular Zangoose.', desc: 'Eligible moves have independent 60%-power hits, or a full boosted first hit and 15% original-power second hit when an offensive ability multiplier applies. Regular Zangoose also has Run Away: it can switch despite trapping and bypasses entry hazards, including field variants. Rival Resolve is its separate passive.'};
 
-AbilityDescriptionOverrides.insight = {shortDesc: 'Ultra Ego + Telepathy + Inner Focus.', desc: 'Full local Ultra Ego, Telepathy and Inner Focus. Ultra Ego supplies its attack power, whole-attack recovery, defensive triggers and field interactions. Telepathy prevents allied damaging moves and doubles Speed on Psychic Terrain or Psychic Aura. Inner Focus prevents flinching and Intimidate.'};
+AbilityDescriptionOverrides.insight = {shortDesc: 'Telepathy + Inner Focus. Alternating physical and special hits bypasses that foe’s defensive boosts.', desc: 'Telepathy and Inner Focus. After damaging a foe, switch attack categories against it to ignore positive Defense stages on physical hits or positive Sp. Def stages on special hits. Switching either Pokémon clears the read.'};
 
 AbilityDescriptionOverrides.voidveil = {shortDesc: 'Levitate + Telepathy; Gravity immunity; airborne terrain and aura benefits.', desc: 'Levitate and Telepathy. Ordinary Gardevoir ignores Gravity grounding and airborne-move restrictions and receives beneficial terrain and aura eligibility while airborne: power bonuses, status and priority protection, and Grassy recovery. It remains airborne for Ground immunity and entry hazards. Other grounding effects and ability suppression remain effective. Misty Fairy Special Defense and move bonuses follow the existing field rules.'};
 
@@ -4208,4 +4208,4 @@ import {AuditReworkDescriptions} from './audit-reworks-approved';
 Object.assign(AbilityDescriptionOverrides, AuditReworkDescriptions);
 AbilityDescriptionOverrides.goodasgold = {shortDesc: 'Blocks status moves. Dragon’s Den removes Steel weaknesses.', desc: 'Blocks status moves from other Pokémon outside Burning Field. On Dragon’s Den, ignores weaknesses contributed by its Steel typing.'};
 
-AbilityDescriptionOverrides.terraresolve = {shortDesc: 'Stamina + Suction Cups.', desc: 'Opposing attacks that damage HP heal 1/16 max HP once per move. The first each turn raises Defense by 1. Prevents forced switching.'};
+AbilityDescriptionOverrides.terraresolve = {shortDesc: 'Stamina + Solid Rock + Suction Cups.', desc: 'Opposing attacks that damage HP heal 1/16 max HP once per move. The first each turn raises Defense by 1. Takes 20% less attack damage, or 40% less from super-effective hits. Prevents forced switching.'};

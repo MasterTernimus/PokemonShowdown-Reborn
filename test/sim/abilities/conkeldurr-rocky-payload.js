@@ -7,7 +7,7 @@ describe('Conkeldurr Stamina and offensive-only Rocky Payload',()=>{afterEach(()
   attacker.setAbility('Apocalyptic Flame');
   assert.equal(holder.getStat('atk'), holder.storedStats.atk);
   assert.equal(holder.getStat('spa'), holder.storedStats.spa);
-  battle.makeChoices('move splash', 'move tackle');
+  battle.actions.useMove('gigatonhammer', attacker, {target: holder});
   assert.equal(holder.boosts.atk, -1);
  });
  it('has exact selected slots and separate passive',()=>{assert.deepEqual(Dex.species.get('conkeldurr').abilities,{0:'Void Reprisal',1:'Rocky Payload',H:'Wrecking Crew'});assert.deepEqual(Dex.species.get('conkeldurr').passives,['stamina']);assert(!Dex.abilities.get('rockypayload').onEffectiveness);assert(!/resistan/i.test(Dex.abilities.get('rockypayload').desc));});

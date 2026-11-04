@@ -130,12 +130,18 @@ describe('Approved Kanto and Johto Mega splits', () => {
 			assert.equal(battle.runEvent('Invulnerability', target, source, move), 0);
 		}
 	});
-	it('Railgun Circuit retains electrical boosts without permanently inflating raw stats', () => {
-		const [p, q] = setup('Raichu-Mega-Y'), move = Dex.getActiveMove('thunderbolt');
-		assert.equal(battle.runEvent('ModifySpA', p, q, move, 100), 130);
-		assert.equal(battle.runEvent('ModifySpA', p, q, Dex.getActiveMove('psychic'), 100), 100);
-		battle.field.terrain = 'factoryterrain';
-		assert.equal(battle.runEvent('ModifySpA', p, q, move, 100), 200);
+	it('Railgun Circuit clears opposing special screens only after a special Electric HP hit', () => {
+		const [p,q] = setup('Raichu-Mega-Y');
+		q.hp=q.maxhp=q.baseMaxhp=4000;
+		for (const id of ['reflect','lightscreen','auroraveil']) q.side.addSideCondition(id,q);
+		const hit = id => battle.actions.useMove(Dex.getActiveMove(id),p,{target:q});
+		hit('nuzzle'); hit('psychic');
+		q.addVolatile('substitute');hit('thunderbolt');
+		assert(q.side.sideConditions.lightscreen && q.side.sideConditions.auroraveil);
+		q.removeVolatile('substitute');hit('thunderbolt');
+		assert(!q.side.sideConditions.lightscreen && !q.side.sideConditions.auroraveil);
+		assert(q.side.sideConditions.reflect);
+		assert(p.hasAbility('lightningrod'));assert(!p.hasAbility('transistor'));
 	});
 	it('Dry Skin absorbs once and applies its Fire modifier once through nested Parasitism', () => {
 		const [p, q] = setup('Parasect-Mega');

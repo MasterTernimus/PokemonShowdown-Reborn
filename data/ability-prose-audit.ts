@@ -13,7 +13,7 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Absorbs Grass moves for +1 Attack and Sp. Atk; allied Grass moves also grant both boosts."
   },
   "scarecrow": {
-		"desc": "Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Adds Steel resistances and Poison immunity without Steel weaknesses. Attacks use double the offensive stat against targets that entered this turn.",
+		"desc": "Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Attacks use double the offensive stat against targets that entered this turn.",
     "shortDesc": "Absorbs wind moves for +1 Attack."
   },
   "bruteforce": {
@@ -177,8 +177,8 @@ export const AbilityProseAudit: Record<string,{desc:string;shortDesc:string}> = 
     "shortDesc": "Opposing stat drops give +2 Sp. Atk."
   },
   "terraresolve": {
-    "desc": "Opposing attacks that damage HP heal 1/16 max HP once per move. The first each turn raises Defense by 1. Prevents forced switching.",
-    "shortDesc": "Stamina + Suction Cups."
+    "desc": "Opposing attacks that damage HP heal 1/16 max HP once per move. The first each turn raises Defense by 1. Takes 20% less attack damage, or 40% less from super-effective hits. Prevents forced switching.",
+    "shortDesc": "Stamina + Solid Rock + Suction Cups."
   },
   "primalego": {
     "desc": "Ignores target Defense/Sp. Def/evasion stages when attacking, and attacker Attack/Defense/Sp. Atk/accuracy stages when defending. Reveals opposing Illusions on entry. Moves ignore bypassable abilities. After dealing HP damage, heals 1/16 max HP once per turn. The first and every other opposing attack that damages HP gives +1 Attack and Sp. Atk. Heals once per incoming attack: 1/16 max HP, then 1/20 until the holder attacks. On Ashen Beach, New World, Starlight Arena, Cold Eclipse and Fairy Tale, the first qualifying physical and special hits also give +1 Defense and Sp. Def respectively. In those fields, a qualifying hit at half HP or less instead heals 1/4 max HP once per activation; blocked healing does not spend it. These effects stop on Bewitched Woods, Haunted and Holy Field. Against an opposing effective Ultra Instinct (including composites), its attacks ignore its own negative Attack and Sp. Atk stages. Ultra Instinct instead reduces its first HP-damaging move each turn by 40% and ignores positive Attack or Sp. Atk stages for that protected move. Stored stages are unchanged; normal +1 retaliation is unchanged. The rivalry is disabled on Bewitched Woods, Haunted and Holy.",

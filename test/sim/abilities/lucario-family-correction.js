@@ -53,14 +53,43 @@ describe('Corrected Lucario family ability release', () => {
 		assert.equal(p.hp, 900);
 		battle.runEvent('Residual', p); assert.equal(p.hp, 900);
 	});
-	it('gives normal Mega Ultra Ego and Telepathy with its Adaptability passive', () => {
+	it('gives normal Mega Aura Reading and Telepathy with its Adaptability passive', () => {
 		const [p] = start('Lucario-Mega', true), ally = battle.p1.active[1];
-		assert(p.hasAbility('ultraego')); assert(p.hasAbility('telepathy')); assert(p.hasAbility('innerfocus'));
+		assert(!p.hasAbility('ultraego')); assert(p.hasAbility('telepathy')); assert(p.hasAbility('innerfocus'));
 		assert(!p.addVolatile('flinch')); battle.boost({ atk: -1 }, p, battle.p2.active[0], battle.dex.abilities.get('intimidate')); assert.equal(p.boosts.atk, 0);
 		assert(!p.hasAbility('dualwield')); assert(!p.hasAbility('secondwind'));
 		const hp = p.hp; battle.actions.useMove('tackle', ally, { target: p }); assert.equal(p.hp, hp);
 		const speed = p.getStat('spe'); battle.field.setTerrain('psychicterrain', p);
 		assert.equal(p.getStat('spe'), speed * 2);
+	});
+	it('reads opposing HP hits by category and opponent', () => {
+		const [p,q] = start('Lucario-Mega', true), other = battle.p2.active[1];
+		battle.randomizer = damage => damage;
+		const damage = (target, id) => battle.actions.getDamage(p,target,Object.assign(Dex.getActiveMove(id),{willCrit:false}));
+		const special = damage(q,'swift'), physical = damage(q,'tackle');
+		q.boosts.def = q.boosts.spd = other.boosts.spd = 4;
+		const hit = (id) => battle.actions.useMove(Object.assign(Dex.getActiveMove(id),{willCrit:false}),p,{target:q});
+		assert(damage(q,'swift') < special);
+		hit('tackle');
+		assert.equal(damage(q,'swift'),special);
+		assert(damage(other,'swift') < special);
+		assert(damage(q,'tackle') < physical);
+		hit('watergun');
+		assert.equal(damage(q,'tackle'),physical);
+		assert(damage(q,'swift') < special);
+	});
+	for (const side of ['p1', 'p2']) it('clears Aura Reading when ' + side + ' switches out and returns', () => {
+		const [p,q] = start('Lucario-Mega');
+		const special = () => battle.actions.getDamage(p,q,Object.assign(Dex.getActiveMove('aurasphere'),{willCrit:false}));
+		battle.randomizer = damage => damage;
+		q.boosts.spd = 4;
+		const guarded = special();
+		battle.actions.useMove('tackle',p,{target:q});
+		assert(special() > guarded);
+		for (let i = 0; i < 2; i++) battle.makeChoices(side === 'p1' ? 'switch 2' : 'move splash', side === 'p2' ? 'switch 2' : 'move splash');
+		assert.equal(battle.p1.active[0],p); assert.equal(battle.p2.active[0],q);
+		q.boosts.spd = 4;
+		assert.equal(special(),guarded);
 	});
 	for (const species of ['Lucario-Mega', 'Lucario-Mega-Z']) it('uses the corrected ability after real evolution into ' + species, () => {
 		const s = Dex.species.get(species);

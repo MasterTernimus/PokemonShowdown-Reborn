@@ -80,3 +80,25 @@ describe('Public official battle metadata', () => {
 		assert.equal(second.requestId, 'request-2');
 	});
 });
+
+describe('Official Battle spectator access', () => {
+	const {makeUser, destroyUser} = require('../users-utils');
+	it('discards hiding preferences and keeps the official room listed and joinable', async function () {
+		const users=['PublicWolf','PublicFox','WatchingOwl'].map((name,i)=>makeUser(name,'192.0.2.'+(i+1)));
+		let room;
+		try {
+			room=Rooms.createBattle({format:'gen9nofieldsinglesgame',challengeType:'challengeofficial',
+				isPrivate:'hidden',modjoin:'%',players:users.slice(0,2).map(user=>({user,hidden:true,inviteOnly:true,team:'Mew||||splash|||||||'}))});
+			assert(room.official);assert(!room.settings.isPrivate);assert(!room.settings.modjoin);
+			const id=room.roomid;room.setPrivate('hidden');assert.equal(room.roomid,id);assert(!room.settings.isPrivate);
+			const commands=require('../../dist/server/chat-commands/room-settings').commands;
+			const ctx={requireRoom:()=>room,meansNo:()=>false,checkCan:()=>{}};
+			for(const cmd of ['hiddenroom','secretroom','unlistroom'])assert.throws(()=>commands.privateroom.call(ctx,'',room,users[0],null,cmd),/Official Battles are public/);
+			assert.throws(()=>commands.modjoin.call(ctx,'%',room,users[0]),/Official Battles are public/);
+			this.timeout(10000);
+			for(let i=0;i<100 && !room.active;i++) await new Promise(resolve=>setTimeout(resolve,30));
+			assert(Rooms.global.getBattles('')[id]?.official);
+			assert(room.checkModjoin(users[2]));users[2].joinRoom(room);assert(users[2].inRooms.has(id));
+		} finally {room?.destroy(); for(const user of users) destroyUser(user);}
+	});
+});

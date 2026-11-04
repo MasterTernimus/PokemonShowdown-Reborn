@@ -1111,7 +1111,7 @@ export class Pokemon {
 				target = this.battle.gameType === 'freeforall' ? 'normal' : 'self';
 				break;
 			case 'curse':
-				if (!this.hasType('Ghost')) {
+				if (!this.usesGhostCurse()) {
 					target = this.battle.dex.moves.get('curse').nonGhostTarget;
 				}
 				break;
@@ -1188,7 +1188,7 @@ export class Pokemon {
 			if (move.id === 'decorate' && this.hasAbility('masterpatissier')) actualTarget = 'normalOrSelf';
 			switch (moveSlot.id) {
 			case 'curse':
-				if (!this.hasType('Ghost')) {
+				if (!this.usesGhostCurse()) {
 					actualTarget = this.battle.dex.moves.get('curse').nonGhostTarget!;
 				}
 				break;
@@ -2520,6 +2520,12 @@ export class Pokemon {
 		}
 		return { side: this.side.id, secret, shared };
 	};
+
+	/** Protean and Libero change type after target selection, before Curse hits. */
+	usesGhostCurse() {
+		return this.hasType('Ghost') || (this.battle.gen >= 9 && !this.terastallized &&
+			this.species.num !== 493 && this.species.num !== 773 && this.hasAbilityOrPassive(['protean', 'libero']));
+	}
 
 	/**
 	 * Sets a type (except on Arceus, who resists type changes)

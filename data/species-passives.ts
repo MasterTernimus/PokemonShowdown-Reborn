@@ -5,7 +5,12 @@ import {StarterPassives} from './starter-passives';
 
 /** Explicitly approved ordinary species; no evolution or battle-form inheritance. */
 export const ThematicPassiveGroups = {
-	shelteringbreeze: ['jumpluff'],
+	cottondown: ['jumpluff'],
+	cheekcapacitor: [
+		'pikachu', 'pikachucosplay', 'pikachurockstar', 'pikachubelle', 'pikachupopstar', 'pikachuphd', 'pikachulibre',
+		'pikachuoriginal', 'pikachuhoenn', 'pikachusinnoh', 'pikachuunova', 'pikachukalos',
+		'pikachualola', 'pikachupartner', 'pikachustarter', 'pikachuworld',
+	],
 	hypercutter: ['kingler', 'pinsir', 'crawdaunt', 'gliscor'],
 	shielddust: ['butterfree', 'vivillon', 'dustox', 'mothim', 'masquerain'],
 	overcoat: ['cacnea', 'cacturne', 'maractus'],
@@ -1334,6 +1339,8 @@ ThematicPassiveIds.add('liquidvoice');
 
 for (const id of ['machamp', 'machampalt', 'machampgmax', 'machampgmaxalt']) SpeciesPassives[id] = Object.freeze(['innerfocus']);
 ThematicPassiveIds.add('innerfocus');
+SpeciesPassives.sableye = Object.freeze(['prankster']);
+ThematicPassiveIds.add('prankster');
 // Synchronize final passives after all base-form revisions.
 for (const [skin, base] of Object.entries(CosmeticBattleCounterparts)) {
  SpeciesPassives[skin] = Object.freeze([...(SpeciesPassives[base] || [])]);

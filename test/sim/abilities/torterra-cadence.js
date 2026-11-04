@@ -31,7 +31,7 @@ describe('Mega Torterra attack cadence', () => {
   attack(q,p,3);
   assert.deepEqual([p.boosts.atk,p.boosts.spa,p.hp],[2,2,before-30+80]);
  });
- it('Y heals once per attack, gains Defense once per turn and resists forced switching', () => {
+ it('Y heals once per attack, gains Defense once per turn and reduces attack damage with Solid Rock', () => {
   const [p,q] = start('Torterra-Mega-Y','Terra Resolve');
   attack(q,p,5);
   assert.equal(p.hp,850);
@@ -39,9 +39,12 @@ describe('Mega Torterra attack cadence', () => {
   attack(q,p,1);
   assert.equal(p.hp,940);
   assert.equal(p.boosts.def,1);
-  assert(!battle.runEvent('DragOut',p,q,Dex.getActiveMove('roar')));
-  assert.equal(battle.runEvent('ModifyDamage',q,p,Dex.getActiveMove('icebeam'),100),100);
-  assert.equal(p.hasAbility('solidrock'),false);
+  assert.equal(battle.runEvent('DragOut',p,q,Dex.getActiveMove('roar')),null);
+  const move = Dex.getActiveMove('icebeam');
+  assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),80);
+  p.getMoveHitData(move).typeMod = 1;
+  assert.equal(battle.runEvent('ModifyDamage',q,p,move,100),60);
+  assert(p.hasAbility('solidrock'));
   assert(p.hasAbility('suctioncups'));
  });
 });

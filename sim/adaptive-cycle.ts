@@ -21,6 +21,10 @@ export interface AdaptiveMemory {
 export function adaptiveActive(p: Pokemon | null | undefined): p is Pokemon {
 	return !!(p?.hp && p.isActive && p.ability === 'adaptivecycle' && !p.ignoringAbility());
 }
+/** Damaging Z-Moves exploit the holder independently of its learned counters. */
+export function adaptiveZHit(target: Pokemon | null | undefined, move: Pick<ActiveMove, 'isZ' | 'category'>) {
+	return !!move.isZ && move.category !== 'Status' && target?.species.id !== 'divineon' && adaptiveActive(target);
+}
 export function adaptiveMemory(p: Pokemon): AdaptiveMemory {
 	return p.m.adaptiveCycle ||= {
 		types: {}, activeTypes: [], pendingTypes: [], opponents: {}, statuses: {}, chip: {}, fields: {}, weather: {}, checkpoint: -1,
@@ -99,7 +103,7 @@ export function adaptiveHarmfulStatus(move: ActiveMove) {
 	return true;
 }
 export function adaptiveDamageMultiplier(p: Pokemon, foe: Pokemon, move: ActiveMove) {
-	if (!adaptiveFunctioningAgainst(p, foe) || p.isAlly(foe)) return 1;
+	if (adaptiveZHit(p, move) || !adaptiveFunctioningAgainst(p, foe) || p.isAlly(foe)) return 1;
 	const m = p.m.adaptiveCycle as AdaptiveMemory | undefined;
 	const stage = m?.activeTypes.includes(move.type) ? m.types[move.type].stage : 0;
 	return Math.min([1, 0.8, 0.65, 0.5][stage || 0], adaptiveAnalyzed(p, foe) ? 0.5 : 1);
@@ -250,7 +254,7 @@ export function adaptiveMoveView(move: ActiveMove, source: Pokemon, target: Poke
 			}
 		}
 	}
-	if (move.category !== 'Status' && adaptiveAnalyzed(source, target)) {
+	if (adaptiveZHit(target, move) || (move.category !== 'Status' && adaptiveAnalyzed(source, target))) {
 		if (view === move) view = {...move, ...adaptiveMoveSnapshot(move)};
 		view.ignoreImmunity = true;
 	}
@@ -338,7 +342,7 @@ export function adaptiveDisplay(p: Pokemon) {
 export const ADAPTIVE_TYPE_ORDER = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
 	'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'];
 export function adaptiveCountertype(p: Pokemon, source: Pokemon, move: ActiveMove) {
-	if (move.category === 'Status' || !adaptiveAnalyzed(p, source) || !p.runImmunity(move) || p.runEffectiveness(move) < 0) return;
+	if (move.isZ || move.category === 'Status' || !adaptiveAnalyzed(p, source) || !p.runImmunity(move) || p.runEffectiveness(move) < 0) return;
 	const previous = p.types;
 	const added = p.addedType;
 	let selected = '';

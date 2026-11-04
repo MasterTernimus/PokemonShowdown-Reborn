@@ -1,3 +1,4 @@
+import {adaptiveZHit} from '../sim/adaptive-cycle';
 import { clearWonderRoomDrops, wonderRoomPowerTrick } from './room-move-effects';
 import { resolveNaturePowerMove } from './nature-power';
 import { tidalSoundproofSource } from './primarina-approved';
@@ -3853,7 +3854,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { bypasssub: 1, metronome: 1 },
 		volatileStatus: 'curse',
 		onModifyMove(move, source, target) {
-			if (!source.hasType('Ghost')) {
+			if (!source.usesGhostCurse()) {
 				move.target = move.nonGhostTarget!;
 			} else if (source.isAlly(target)) {
 				move.target = 'randomNormal';
@@ -3864,7 +3865,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				delete move.volatileStatus;
 				delete move.onHit;
 				move.self = { boosts: { spe: -1, atk: 1, def: 1 } };
-			} else if (move.volatileStatus && target.volatiles['curse']) {
+			} else if ((this.gen >= 9 && source.isAlly(target)) || (move.volatileStatus && target.volatiles['curse'])) {
 				return false;
 			}
 		},
@@ -3893,7 +3894,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const caster = this.effectState.source;
 				if (sourceEffect?.id === 'cursedkeepsake' && caster?.hp && caster.isActive && caster.hasAbility('cursedkeepsake') && typeof dealt === 'number' && dealt > 0) this.heal(dealt / 2, caster, pokemon, 'drain');
 				if (this.field.isTerrain('holyterrain')) {
-					pokemon.removeVolatile('curse');
+					if (pokemon.removeVolatile('curse')) this.add('-end', pokemon, 'Curse', '[silent]');
 				}
 			},
 		},
@@ -9210,6 +9211,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 0,
 		damageCallback(pokemon, target) {
 			const hp75 = Math.floor(target.getUndynamaxedHP() * 3 / 4);
+			if (adaptiveZHit(target, this.dex.moves.get('guardianofalola'))) return Math.max(1, hp75);
 			if (
 				target.volatiles['protect'] || target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] ||
 				target.volatiles['spikyshield'] || target.side.getSideCondition('matblock')
@@ -12801,6 +12803,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
+				if (adaptiveZHit(target, move)) return;
 				const bypassesMaxGuard = [
 					'acupressure', 'afteryou', 'allyswitch', 'aromatherapy', 'aromaticmist', 'coaching', 'confide', 'copycat', 'curse', 'decorate', 'doomdesire', 'feint', 'futuresight', 'gmaxoneblow', 'gmaxrapidflow', 'healbell', 'holdhands', 'howl', 'junglehealing', 'lifedew', 'meanlook', 'perishsong', 'playnice', 'powertrick', 'roar', 'roleplay', 'tearfullook',
 				];

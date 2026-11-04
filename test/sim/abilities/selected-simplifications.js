@@ -7,6 +7,7 @@ const historical = require('./selected-simplifications-approved.json');
 const approved = {...historical, exact: {...historical.exact}, removed: {...historical.removed}};
 // Later approvals replace Ange's selected/passive split and restore Stamina.
 approved.exact.siegelauncher = ['megalauncher', 'waterbarrage', 'overcoat'];
+approved.exact.railguncircuit = ['lightningrod'];
 approved.exact.ange = ['fairyaura'];
 approved.removed.ange = ['eternalflower', 'moldbreaker', 'magicguard'];
 approved.removed.ragingcurrent = approved.removed.ragingcurrent.filter(id => id !== 'stamina');
@@ -80,11 +81,11 @@ describe('Individually selected Mega simplifications', () => {
 		assert.equal(p.hp, 1600); assert.equal(p.boosts.atk, atk + 1); assert.equal(p.boosts.spa, spa + 1);
 		assert.equal(battle.runEvent('ModifyDamage', q, p, Dex.getActiveMove('tackle'), 100), 100);
 	});
-	it('Railgun Circuit keeps local Transistor strength and loses Ground mitigation', () => {
+	it('Railgun Circuit has no Transistor multiplier on any field', () => {
 		const [p, q] = setup('Raichu-Mega-Y', 'Railgun Circuit');
 		for (const field of ['', 'electricterrain', 'factoryterrain']) {
 			battle.field.terrain = field;
-			assert.equal(battle.runEvent('ModifySpA', p, q, Dex.getActiveMove('thunderbolt'), 100), field ? 200 : 130);
+			assert.equal(battle.runEvent('ModifySpA', p, q, Dex.getActiveMove('thunderbolt'), 100), 100);
 			assert.equal(battle.runEvent('ModifyAtk', q, p, Dex.getActiveMove('earthquake'), 100), 100);
 		}
 	});

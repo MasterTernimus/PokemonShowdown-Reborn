@@ -23,7 +23,7 @@ export const LoreDescriptions: Record<string, { name: string, shortDesc: string,
 		desc: 'Forewarn: scans each foe on entry and every opposing switch-in, reveals a strongest attack and removes Illusion. Takes 20% less move damage, or 25% less from the latest warned attack; these reductions do not stack. Successful reveals on Psychic Terrain grant +2 Sp. Atk. Successful opposing status moves expose their user through the following turn. The reporter and adjacent allies ignore exposed foes\' positive defensive stages; the reporter\'s Psychic/Fairy attacks also gain 25% power. An exposed foe switching out clears its mark; leaving ends that reporter\'s marks.' },
 	blackwateranchor: { name: 'Blackwater Anchor',
 		shortDesc: 'Steelworker; Grass/Steel hits slow foes. Anchor Shot drains; water fields share poisoned-foe drain.',
-		desc: 'Full Steelworker, including Steel STAB, its attacking-stat boost, resistances, Poison immunity and field effects. Grass/Steel hits lower each foe\'s Speed by 1, once per turn. Anchor Shot tethers one trapped foe, draining 1/16 max HP per turn and healing the user by actual damage dealt. On Water Surface or Underwater, draining a poisoned tethered foe also heals adjacent allies by that amount. Either participant leaving ends the tether; escape, suppression, damage immunity and healing restrictions apply.' },
+		desc: 'Full Steelworker, including Steel STAB, its attacking-stat boost and field effects. Grass/Steel hits lower each foe\'s Speed by 1, once per turn. Anchor Shot tethers one trapped foe, draining 1/16 max HP per turn and healing the user by actual damage dealt. On Water Surface or Underwater, draining a poisoned tethered foe also heals adjacent allies by that amount. Either participant leaving ends the tether; escape, suppression, damage immunity and healing restrictions apply.' },
 	blackwatervenom: { name: 'Blackwater Venom',
 		shortDesc: 'Poison hits poison slowed foes; Dragon gains 25% vs poison. Ignores water-field Speed penalties.',
 		desc: 'Damaging Poison hits poison foes with negative Speed stages, respecting status protections. Dragon attacks gain 25% power against poisoned or badly poisoned foes. Ignores the Speed penalties of Water Surface and Underwater.' },
@@ -155,22 +155,6 @@ export function installLorePairs(abilities: AbilityDataTable) {
 	abilities.breakingnews.onEnd = clearReports;
 	abilities.blackwateranchor.onSourceDamagingHit = function (damage, target, source, move) {
 		if (this.movehasType(move, 'Grass') || this.movehasType(move, 'Steel')) slowFoe(this, damage, target, source);
-	};
-	// Apply the added Steel resistance once, based on the incoming attack, not the holder's types.
-	abilities.blackwateranchor.onEffectiveness = function (typeMod, target, type, move) {
-		if (target && type === target.getTypes()[0] &&
-			['Normal', 'Flying', 'Rock', 'Bug', 'Steel', 'Grass', 'Psychic', 'Ice', 'Dragon', 'Fairy'].includes(move.type)) {
-			return typeMod - 1;
-		}
-	};
-	abilities.blackwateranchor.onTryHit = function (target, source, move) {
-		if (target !== source && move.category !== 'Status' && this.movehasType(move, 'Poison')) {
-			this.add('-immune', target, '[from] ability: Blackwater Anchor');
-			return null;
-		}
-	};
-	abilities.blackwateranchor.onSetStatus = function (status) {
-		if (status.id === 'psn' || status.id === 'tox') return false;
 	};
 	abilities.blackwatervenom.onSourceDamagingHit = function (damage, target, source, move) {
 		if (damage > 0 && target.hp && !source.isAlly(target) && target.boosts.spe < 0 && this.movehasType(move, 'Poison')) {

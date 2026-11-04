@@ -23,6 +23,48 @@ describe('Adaptive Cycle', () => {
 		assert(A.adaptiveAnalyzed(p, foe));
 	}
 
+	for (const weather of ['', 'raindance', 'primordialsea']) it('takes the full Fire Z-Move through Protect: '+(weather || 'clear'),()=>{
+		setup();
+		battle.randomizer = damage => damage;
+		foe.setItem('firiumz');
+		p.setType('Normal');
+		const z = Object.assign(Dex.getActiveMove('infernooverdrive'), {basePower:100,category:'Special',willCrit:false});
+		p.setAbility('No Ability');
+		const neutral = battle.actions.getDamage(foe,p,z);
+		p.setAbility('Adaptive Cycle');
+		analyzed();
+		p.setType('Fire');
+		const memory = A.adaptiveMemory(p);
+		memory.types.Fire = {stage:3,turn:battle.turn};memory.activeTypes = ['Fire'];
+		p.hp = p.maxhp = p.baseMaxhp = 4000;
+		if (weather) battle.field.setWeather(weather,foe);
+		p.side.addSideCondition('lightscreen',p);
+		let directDamage = 0;
+		battle.onEvent('DamagingHit',battle.format,(damage,target,source,move)=>{
+			if (target === p && move.isZ) directDamage += damage;
+		});
+		battle.makeChoices('move protect','move ember zmove');
+		assert.equal(directDamage,neutral*4);
+	});
+	it('Hydro Vortex hits through harsh sun and Max Guard at full strength',()=>{
+		setup();
+		battle.randomizer = damage => damage;
+		const attack = () => Object.assign(Dex.getActiveMove('hydrovortex'),{category:'Special',basePower:100,willCrit:false});
+		p.hp = p.maxhp = p.baseMaxhp = 4000;
+		const expected = battle.actions.getDamage(foe,p,attack());
+		battle.field.setWeather('desolateland',foe);
+		p.addVolatile('maxguard',p);
+		battle.actions.useMove(attack(),foe,{target:p});
+		assert.equal(4000-p.hp,expected);
+	});
+	it('hits a naturally immune holder but respects other Pokémon’s immunities',()=>{
+		setup();p.setType('Ground');
+		const z=Object.assign(Dex.getActiveMove('gigavolthavoc'),{category:'Special',basePower:100});
+		assert(battle.actions.getDamage(foe,p,z)>0);
+		assert.equal(p.getMoveHitData(z).typeMod,2);
+		p.setAbility('No Ability');
+		assert.equal(battle.actions.getDamage(foe,p,Dex.getActiveMove('gigavolthavoc')),false);
+	});
 	it('stops Murkwater damage and hurt messages after natural field adaptation', () => {
 		setup(); battle.field.setTerrain('murkwatersurfaceterrain', p);
 		for (let turn = 0; turn < 3; turn++) battle.makeChoices('move splash', 'move splash');

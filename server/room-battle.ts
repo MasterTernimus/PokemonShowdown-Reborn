@@ -1055,7 +1055,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		this.room.parent?.game?.onBattleWin?.(this.room, winnerid);
 		// If the room's replay was hidden, don't let users join after the game is over
-		if (this.room.hideReplay) {
+		if (this.room.hideReplay && !this.room.official) {
 			this.room.settings.modjoin = '%';
 			this.room.setPrivate('hidden');
 		}

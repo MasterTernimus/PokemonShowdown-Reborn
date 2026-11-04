@@ -567,6 +567,7 @@ export class DexSpecies {
 					for (const forme of species.cosmeticFormes) {
 						if (this.dex.data.Pokedex.hasOwnProperty(toID(forme))) continue;
 						if (toID(forme) === id) {
+							const basePassives = species.passives;
 							species = new Species({
 								...species,
 								name: forme,
@@ -577,6 +578,7 @@ export class DexSpecies {
 								otherFormes: null,
 								cosmeticFormes: null,
 							});
+							species.passives = SpeciesPassives[id] ?? basePassives;
 							break;
 						}
 					}

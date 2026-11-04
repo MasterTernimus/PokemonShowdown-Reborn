@@ -59,28 +59,27 @@ describe('Curse', function () {
 		]]);
 		battle.makeChoices('move reflecttype', 'auto');
 
-		assert.deepEqual(battle.p1.active[0].getTypes(), ["Dark"]); // Copied Zoroark's type instead of Gengar's
+		assert.deepEqual(battle.p1.active[0].getTypes(), battle.dex.species.get("Zoroark").types); // Copied Zoroark's type instead of Gengar's
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
-	it(`should curse a non-Ghost user with Protean`, function () {
-		battle = common.createBattle([[
-			{species: 'Greninja', ability: 'protean', moves: ['curse', 'spite']},
-		], [
-			{species: 'Caterpie', moves: ['sleeptalk']},
-		]]);
-		const greninja = battle.p1.active[0];
-		const caterpie = battle.p2.active[0];
-		const curseResidual = Math.floor(greninja.maxhp / 4);
-		battle.makeChoices();
-		assert.equal(greninja.hp, greninja.maxhp - Math.floor(greninja.maxhp / 2) - curseResidual, `Greninja should have Cursed itself`);
-		assert.fullHP(caterpie);
-
-		battle.makeChoices('move spite', 'auto');
-		assert.equal(greninja.hp, greninja.maxhp - Math.floor(greninja.maxhp / 2) - curseResidual * 2, `Greninja should have taken Curse damage again`);
-		assert.fullHP(caterpie);
+	it('lets passive Protean Kecleon select the second opposing slot in doubles', () => {
+		const mon = (species, moves) => ({species, moves});
+		battle = common.createBattle({gameType:'doubles'}, [[mon('Kecleon',['curse']),mon('Claydol',['splash'])],[mon('Pelipper',['splash']),mon('Archaludon',['splash'])]]);
+		const [user,ally] = battle.p1.active, [other,chosen] = battle.p2.active;
+		assert.equal(user.getMoveRequestData().moves[0].target,'normal');
+		battle.makeChoices('move curse 2, move splash','auto');
+		assert(user.hasType('Ghost'));assert(chosen.volatiles.curse);
+		for (const pokemon of [user,ally,other]) assert(!pokemon.volatiles.curse);
+		assert.equal(user.hp,user.maxhp-Math.floor(user.maxhp/3));
 	});
-
+	it('keeps self boosts when selected Protean is suppressed', () => {
+		battle = common.createBattle([[{species:'Mew',ability:'Protean',moves:['curse']}],[{species:'Mew',moves:['splash']}]]);
+		const p = battle.p1.active[0];p.addVolatile('gastroacid');
+		assert.equal(p.getMoveRequestData().moves[0].target,'self');
+		battle.makeChoices();assert.equal(p.boosts.atk,1);assert.equal(p.boosts.def,1);assert.equal(p.boosts.spe,-1);
+		assert(!p.volatiles.curse);
+	});
 	it(`should curse the target if a Ghost user has Protean`, function () {
 		battle = common.createBattle([[
 			{species: 'Gengar', ability: 'protean', moves: ['curse']},
@@ -91,11 +90,11 @@ describe('Curse', function () {
 		const caterpie = battle.p2.active[0];
 		const curseResidual = Math.floor(caterpie.maxhp / 4);
 		battle.makeChoices();
-		assert.equal(gengar.hp, gengar.maxhp - Math.floor(gengar.maxhp / 2));
+		assert.equal(gengar.hp, gengar.maxhp - Math.floor(gengar.maxhp / 3));
 		assert.equal(caterpie.hp, caterpie.maxhp - curseResidual);
 
 		battle.makeChoices();
-		assert.equal(gengar.hp, gengar.maxhp - Math.floor(gengar.maxhp / 2));
+		assert.equal(gengar.hp, gengar.maxhp - Math.floor(gengar.maxhp / 3));
 		assert.equal(caterpie.hp, caterpie.maxhp - curseResidual * 2);
 	});
 

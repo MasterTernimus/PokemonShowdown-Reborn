@@ -259,6 +259,9 @@ export const commands: Chat.ChatCommands = {
 			const modjoinSetting = room.settings.modjoin === true ? "SYNC" : room.settings.modjoin || "OFF";
 			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
 		}
+		if (room.type === 'battle' && room.official && !this.meansNo(target)) {
+			throw new Chat.ErrorMessage('Official Battles are public so anyone can spectate.');
+		}
 		if (room.battle) {
 			this.checkCan('editprivacy', null, room);
 			if (room.battle.forcedSettings.privacy) {
@@ -1091,6 +1094,9 @@ export const commands: Chat.ChatCommands = {
 	unlistroom: 'privateroom',
 	privateroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
+		if (room.type === 'battle' && room.official && cmd !== 'publicroom') {
+			throw new Chat.ErrorMessage('Official Battles are public so anyone can spectate.');
+		}
 		const battle = room.battle || room.bestOf;
 		if (battle) {
 			this.checkCan('editprivacy', null, room);

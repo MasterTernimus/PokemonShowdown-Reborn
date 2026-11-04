@@ -24,6 +24,8 @@ describe('Lycanroc options and Qwilfish Spiny Hide',()=>{
   assert.equal(battle.runEvent('BasePower',p,t,battle.dex.getActiveMove('tackle'),100,true),100);
   battle.singleEvent('ModifyMove',p.getAbility(),p.abilityState,move,p,t);
   assert.equal(move.accuracy,80);assert(move.ignoreEvasion);
+  hit(p,t,'rockblast',{multihit:3});
+  assert.equal(battle.log.filter(line=>line.includes('spotted an opening!')).length,1);
  });
  it('ignores positive Defense at full target HP but preserves negative stages and Sp. Def',()=>{
   const[p,t]=start(mon('Keen Hunt'));
@@ -64,6 +66,7 @@ describe('Lycanroc options and Qwilfish Spiny Hide',()=>{
   const received=150+Math.round(p.maxhp/4)-p.hp;
   assert(received>0);assert.equal(t.maxhp-t.hp,received*2);
   assert.equal(p.hp,150-received+Math.round(p.maxhp/4));
+  assert.equal(battle.log.filter(line=>line.includes('stood its ground!')).length,1);
  });
  it('Counter healing is once per turn, works on Substitute, and a blocked heal spends the allowance',()=>{
   const[p,t]=start(mon('Blood Challenge'));p.hp=100;

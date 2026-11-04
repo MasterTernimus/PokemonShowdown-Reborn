@@ -283,7 +283,7 @@ export const AbilityDisplaySummaries: Record<string, string> = {
 	"fluffycraft": "Combines the listed abilities.",
 	"mightyjaw": "Biting moves gain +2 priority on first action.",
 	"supersweetsyrup": "On switch-in, lowers adjacent foes' evasiveness 1 stage; attackers are Embargoed for 5 turns.",
-	"railguncircuit": "Never misses; boosts Electric attacks.",
+	"railguncircuit": "Lightning Rod. Special Electric hits break Light Screen and Aurora Veil.",
 	"razorcurrent": "Summons rain on entry; Bites have 1.5x power; +1 Speed after each full active turn.",
 	"rainsovereign": "8-turn Rain; Electric/Water/Flying STAB; Water chip scales by type in FFA.",
 	"toxicrenewal": "2x STAB; switching heals 1/3 HP; contact attacks may poison.",

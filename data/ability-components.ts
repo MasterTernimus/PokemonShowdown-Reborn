@@ -240,7 +240,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	spiralevolution: ['moldbreaker', 'adaptability', 'levitate', 'dualwield', 'infiltrator', 'shielddust'],
 	stormsovereign: ['galewings', 'keeneye'],
 	sunsovereign: ['moldbreaker', 'drought', 'unboundblaze', 'selfsufficient', 'proficient'],
-	terraresolve: ['stamina', 'suctioncups', 'proficient'],
+	terraresolve: ['stamina', 'suctioncups', 'solidrock', 'proficient'],
 	primalego: ['unaware', 'proficient', 'ultraego', 'moldbreaker'],
 	toxicbloom: ['pollenbloom', 'selfsufficient'],
 	toxicrenewal: ['adaptability', 'regenerator', 'poisontouch'],
@@ -780,7 +780,7 @@ AbilityComponents.hauntingveil = ['cursedbody', 'infiltrator'];
 
 AbilityComponents.solartrap = ['accumulation', 'liquidooze'];
 AbilityComponents.auraprecision = ['ultrainstinct', 'shielddust', 'mindseye'];
-AbilityComponents.insight = ['ultraego', 'telepathy', 'innerfocus'];
+AbilityComponents.insight = ['telepathy', 'innerfocus'];
 
 import {SelectedComponentRemovals, SelectedExactComponents} from './selected-mega-simplification-data';
 for (const [id, removed] of Object.entries(SelectedComponentRemovals)) {
@@ -829,7 +829,7 @@ Object.assign(AbilityComponents, FinalPassiveComponents, FamilyReplacementCompon
 AbilityComponents.knightsguard = ['swornduty'];
 
 AbilityComponents.ruinedsky = ['moldbreaker'];
-AbilityComponents.apocalypticflame = ['owntempo'];
+AbilityComponents.apocalypticflame = [];
 AbilityComponents.rupturedheaven = ['sharpness'];
 AbilityComponents.burningquake = ['superluck'];
 
@@ -1081,4 +1081,6 @@ AbilityComponents.cursedkeepsake = [];
 AbilityComponents.cursedmarionette = [];
 AbilityComponents.reapersgrip = ['selfsufficient'];
 AbilityComponents.bewitchingmajesty = ['magicbounce','queenlymajesty'];
+
 AbilityComponents.shelteringbreeze = ['friendguard', 'windrider'];
+AbilityComponents.acquiredtaste = ['frisk'];

@@ -15,7 +15,13 @@ export function installLycanrocQwilfishReworks(abilities: AbilityDataTable) {
 	});
 	abilities.keenhunt.onBasePowerPriority = 21;
 	abilities.keenhunt.onBasePower = function (power, source, target, move) {
-		if (this.movehasType(move, 'Rock')) return this.chainModify(!source.isAlly(target) && target.hp <= target.maxhp / 2 ? 1.5 : 1.3);
+		if (!this.movehasType(move, 'Rock')) return;
+		const opening = !source.isAlly(target) && target.hp <= target.maxhp / 2;
+		if (opening && this.activeMove && !this.activeMove.keenHuntAnnounced) {
+			this.activeMove.keenHuntAnnounced = true;
+			this.add('-message', source.name + ' spotted an opening!');
+		}
+		return this.chainModify(opening ? 1.5 : 1.3);
 	};
 	delete abilities.bloodchallenge.onStart;
 	delete abilities.bloodchallenge.onSourceModifyDamage;
@@ -36,7 +42,7 @@ export function installLycanrocQwilfishReworks(abilities: AbilityDataTable) {
 	abilities.bloodchallenge.onSourceDamagingHit = function (damage, target, source, move) {
 		if (damage <= 0 || move.id !== 'counter' || source.isAlly(target) || !source.hp || source.m.bloodChallengeHealTurn === this.turn) return;
 		source.m.bloodChallengeHealTurn = this.turn;
-		this.heal(source.baseMaxhp / 4, source, source, this.effect);
+		if (this.heal(source.baseMaxhp / 4, source, source, this.effect)) this.add('-message', source.name + ' stood its ground!');
 	};
 	abilities.bloodchallenge.onSourceAfterSubDamage = abilities.bloodchallenge.onSourceDamagingHit;
 	Object.assign(abilities.bloodchallenge, {

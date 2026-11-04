@@ -6,6 +6,17 @@ describe('Approved cosmetic counterpart synchronization',()=>{
  for(const [skin,base] of Object.entries(pairs))it(skin+' matches '+base,()=>{
   const s=Dex.species.get(skin),b=Dex.species.get(base);assert(s.exists&&b.exists);for(const k of ['types','baseStats','abilities','passives'])assert.deepEqual(s[k],b[k],k);if(b.canGigantamax)assert.equal(s.canGigantamax,b.canGigantamax);
  });
+ it('inherits final passives when building an artwork-only form from its base', () => {
+  for (const base of ['unown', 'florges', 'spiritomb', 'dusknoir', 'gardevoir']) {
+   const species = Dex.species.get(base);
+   for (const name of species.cosmeticFormes) {
+    const skin = Dex.species.get(name);
+    if (skin.baseSpecies === species.name && !Dex.data.Pokedex[skin.id]) {
+     assert.deepEqual(skin.passives, species.passives, name);
+    }
+   }
+  }
+ });
  it('preserves deliberately different regional and custom gameplay forms',()=>{
   for(const [a,b]of [['laprasaevian','lapras'],['palossandfiery','palossand'],['florgesreborn','florges'],['toxtricityaevian','toxtricity'],['scolipedemega','scolipede']])assert.notDeepEqual(Dex.species.get(a).types,Dex.species.get(b).types);
   assert.notDeepEqual(Dex.species.get('cinccinodeso').abilities,Dex.species.get('cinccino').abilities);

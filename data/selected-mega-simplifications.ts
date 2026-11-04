@@ -37,10 +37,12 @@ export function installSelectedMegaSimplifications(abilities: AbilityDataTable) 
 	compose('siegelauncher', ['megalauncher', 'waterbarrage', 'overcoat']);
 	compose('neurotoxin', ['hydrabond', 'regenerator']);
 	compose('surgeconduit', ['lightningrod', 'rockhead']);
-	compose('railguncircuit', ['lightningrod', 'transistor']);
-	// The explicit defensive cut also covers Transistor's local terrain mitigation.
-	delete abilities.railguncircuit.onSourceModifyAtk;
-	delete abilities.railguncircuit.onSourceModifySpA;
+	compose('railguncircuit', ['lightningrod']);
+	abilities.railguncircuit.onSourceDamagingHit = function (damage, target, source, move) {
+		if (damage <= 0 || source.isAlly(target) || move.category !== 'Special' || !this.movehasType(move, 'Electric')) return;
+		target.side.removeSideCondition('lightscreen');
+		target.side.removeSideCondition('auroraveil');
+	};
 	compose('enlightenment', ['innerfocus', 'technician']);
 	compose('stormfright', ['stormpower', 'lightningrod']);
 	compose('apexcleave', ['dualwield', 'moxie']);

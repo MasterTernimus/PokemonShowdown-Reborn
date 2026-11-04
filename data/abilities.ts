@@ -1084,12 +1084,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidual(pokemon) {
 			this.dex.abilities.get('windrider').onResidual?.call(this, pokemon);
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			return this.dex.abilities.get('steelworker').onEffectiveness?.call(this, typeMod, target, type, move);
-		},
-		onImmunity(type, pokemon) {
-			return this.dex.abilities.get('steelworker').onImmunity?.call(this, type, pokemon);
-		},
 		onModifyMove(move, pokemon, target) {
 			this.dex.abilities.get('steelworker').onModifyMove?.call(this, move, pokemon, target );
 		},
@@ -4710,6 +4704,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.effect.id === 'terraresolve') return this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, attacker, defender, move);
 		},
 		onDamagingHit(damage, target, source, move) { return this.dex.abilities.get('stamina').onDamagingHit?.call(this, damage, target, source, move); },
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.dex.abilities.get('solidrock').onSourceModifyDamage?.call(this, damage, source, target, move);
+		},
 		onDragOutPriority: 1,
 		onDragOut(pokemon) {
 			return this.dex.abilities.get('suctioncups').onDragOut?.call(this, pokemon);
@@ -16496,14 +16493,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 243,
 	},
 	steelworker: {
-		onEffectiveness(typeMod, target, type, move) {
-			if (['Normal', 'Flying', 'Rock', 'Bug', 'Steel', 'Grass', 'Psychic', 'Ice', 'Dragon', 'Fairy'].includes(type)) {
-				return typeMod - 1;
-			}
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'Poison') return false;
-		},
 		onModifyAtkPriority: 5,
 		onModifyMove(move) {
 			if (move && this.movehasType(move, 'Steel')) move.forceSTAB = true;
@@ -19814,7 +19803,7 @@ Abilities.agonyflame = {
 		delete this.effectState.agonyFlameBurned;
 		for (const foe of targets) {
 			if (!foe.hp || !foe.isActive) continue;
-			if (!burned.has(foe)) foe.trySetStatus('brn', pokemon, this.effect);
+			if (!foe.status && !burned.has(foe) && this.randomChance(3, 10)) foe.trySetStatus('brn', pokemon, this.effect);
 			const existing = foe.volatiles['healblock'];
 			if (existing) {
 				if (existing.duration && existing.duration < 2) existing.duration = 2;
@@ -21537,8 +21526,15 @@ import {installMoonlitProwl} from './moonlit-prowl';
 installMoonlitProwl(Abilities);
 
 // Individually approved packages; install after their current local primitives.
-Abilities.insight = {name: 'Insight', num: 11979, rating: 4, flags: {}};
-composeSelectedAbility(Abilities, 'insight', ['ultraego', 'telepathy', 'innerfocus'], true);
+Abilities.insight = {
+ name: 'Insight', num: 11979, rating: 4, flags: {},
+};
+composeSelectedAbility(Abilities, 'insight', ['telepathy', 'innerfocus'], true);
+Abilities.insight.onSourceDamagingHit = function (damage, target, source, move) {
+  if (damage <= 0 || target.isAlly(source) || move.category === 'Status') return;
+  const reads = this.effectState.auraReads ||= {};
+  reads[target.m.ultraRivalryEntryToken] = move.category;
+};
 composeSelectedAbility(Abilities, 'auraprecision', ['ultrainstinct', 'shielddust', 'mindseye'], true);
 Abilities.auraprecision = {...Abilities.auraprecision, flags: {}};
 composeSelectedAbility(Abilities, 'duskdrive', ['keeneye', 'ultraego'], true);
@@ -21725,3 +21721,49 @@ Abilities.shelteringbreeze = {
  desc: 'Allies take 25% less attack damage. Wind moves from other Pokémon raise its Attack by 1 instead of hitting it. Gains +1 Attack when its side starts Tailwind or it enters Tailwind. In Strong Winds, gains +1 Attack and Sp. Atk each turn.',
 };
 composeSelectedAbility(Abilities, 'shelteringbreeze', ['friendguard', 'windrider'], true);
+
+Abilities.cheekcapacitor = {
+	name: 'Cheek Capacitor', num: 12195, rating: 3, flags: {},
+	shortDesc: 'First Electric hit on a foe each entry raises Speed by 1.',
+	desc: 'The first Electric attack each entry that damages an opposing Pokémon raises the user’s Speed by 1 stage.',
+	onSourceDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || source.isAlly(target) || move.flags.futuremove || !this.movehasType(move, 'Electric')) return;
+		const entry = source.m.ultraRivalryEntryToken;
+		if (source.m.cheekCapacitorEntry === entry) return;
+		source.m.cheekCapacitorEntry = entry;
+		this.boost({spe: 1}, source, source, this.effect);
+	},
+};
+
+Abilities.acquiredtaste = {
+	...Abilities.frisk, name: "Acquired Taste", num: 12193, rating: 3,
+	shortDesc: "Frisk. Once per foe each entry, heals 1/8 HP when that foe hits it.",
+	desc: "Frisk reveals opposing held items and Illusions on entry. Each item holder has a 30% chance of Embargo for 5 turns. Heals 1/8 max HP the first time each foe damages it with an attack. Switching out resets this.",
+	onDamagingHit(damage, target, source) {
+		if (damage <= 0 || !target.hp || target.isAlly(source)) return;
+		const tasted: Pokemon[] = target.m.acquiredTasteFoes ||= [];
+		if (tasted.includes(source)) return;
+		tasted.push(source);
+		this.heal(target.baseMaxhp / 8, target, target, this.effect);
+	},
+};
+
+Abilities.tomeofavarice = {
+	name: "Tome of Avarice", num: 12194, rating: 4, flags: {breakable: 1},
+	shortDesc: "Takes 30% less damage from moves that already hurt it this entry.",
+	desc: "Remembers opposing moves that damage its HP. Later uses of those moves deal 30% less damage to it until it switches out.",
+	onSourceModifyDamage(damage, source, target, move) {
+		if (source.isAlly(target)) return;
+		const hit = target.getMoveHitData(move);
+		hit.tomeRead ??= !!this.effectState.learnedMoves?.includes(move.id);
+		if (hit.tomeRead) return this.chainModify(0.7);
+	},
+	onDamagingHit(damage, target, source, move) {
+		if (damage <= 0 || source.isAlly(target)) return;
+		const moves: ID[] = this.effectState.learnedMoves ||= [];
+		if (!moves.includes(move.id)) {
+			moves.push(move.id);
+			this.add('-message', target.name + "'s Tome of Avarice recorded " + move.name + "!");
+		}
+	},
+};

@@ -117,19 +117,6 @@ export function installRivalSupport(a: AbilityDataTable) {
 			if (damage > 0 && !target.isAlly(source) && target.hasType('Steel') && source.m.scrapbreakerTurn !== this.turn) { source.m.scrapbreakerTurn = this.turn; this.boost({atk:1},source,source,this.effect); }
 		},
 	};
-	const flame = a.apocalypticflame;
-	a.apocalypticflame = {...flame,
-		onAfterMove(source,target,move) {
-			if (this.effectState.strikeMove !== move) return;
-			const damaged: Pokemon[] = this.effectState.strikeTargets, order: Pokemon[] = this.effectState.targetOrder;
-			delete this.effectState.strikeMove; delete this.effectState.strikeTargets; delete this.effectState.targetOrder;
-			if (!source.hp || source.m.apocalypticFlameTurn === this.turn) return;
-			source.m.apocalypticFlameTurn = this.turn;
-			this.heal(source.maxhp / 8, source, source, this.effect);
-			const foe = order.find(p => damaged.includes(p) && p.hp && p.isActive);
-			if (foe) this.boost(foe.getStat('atk') >= foe.getStat('spa') ? {atk:-1} : {spa:-1},foe,source,this.effect);
-		},
-	};
 	for (const id of ['rivalresolve','rivalmalice'] as const) for (const key of Object.keys(a[id])) {
 		const fn = (a[id] as any)[key]; if (!key.startsWith('on') || typeof fn !== 'function') continue;
 		(a[id] as any)[key] = function (this: Battle,...args:any[]) { if (!skipPassiveComponent(this,this.effectState.target,id)) return fn.apply(this,args); };

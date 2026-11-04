@@ -5,7 +5,7 @@ describe('Mega Houndoom composite and Pelipper Drizzle passive',()=>{
  function setup(species='Houndoom-Mega',ability='Hellfire Eclipse',item=''){
   const m={species:'Mew',ability:'No Ability',moves:['splash','ember','tackle']};
   b=common.createBattle({formatid:'gen9nofieldsinglesgame'},[[{...m,species,ability,item},m],[m,m]]);b.makeChoices('team 12','team 12');
-  for(const s of b.sides)for(const p of s.pokemon)p.hp=p.maxhp=p.baseMaxhp=4800;b.randomChance=(n,d)=>n>=d;return[b.p1.active[0],b.p2.active[0]];
+  for(const s of b.sides)for(const p of s.pokemon)p.hp=p.maxhp=p.baseMaxhp=4800;b.randomChance=(n,d)=>(n===3&&d===10)||n>=d;return[b.p1.active[0],b.p2.active[0]];
  }
  function hit(p,q){b.actions.runMove(Object.assign(Dex.getActiveMove('ember'),{accuracy:true,willCrit:false}),p,p.getLocOf(q));}
  it('changes Mega only and inherits precisely the approved components',()=>{const[p,q]=setup();assert.deepEqual(p.getPassives(),['solarpower']);assert.deepEqual(Dex.species.get('houndoom').passives,['agonyflame']);for(const id of ['darkaura','agonyflame','intimidate'])assert(p.hasAbility(id));assert(!p.hasAbility('flashfire'));assert.equal(q.boosts.atk,-1);});

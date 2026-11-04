@@ -327,6 +327,8 @@ export interface Move extends Readonly<BasicEffect & MoveData> {
 
 interface MoveHitData {
 	[targetSlotid: string]: {
+		auraRead?: boolean,
+		tomeRead?: boolean,
 		/** Did this move crit against the target? */
 		crit: boolean,
 		/** The type effectiveness of this move against the target */
@@ -350,6 +352,7 @@ interface MoveHitData {
 
 type MutableMove = BasicEffect & MoveData;
 export interface ActiveMove extends MutableMove {
+	keenHuntAnnounced?: boolean;
 	/** Chosen moveset slot for PP accounting when multiple slots share an ID. */
 	ppSlot?: number;
 	/** Retains the Ground field bonus after Midnight Zone converts the move to Water. */

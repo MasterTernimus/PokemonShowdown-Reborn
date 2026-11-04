@@ -11,7 +11,7 @@ import {radiantTarget} from './radiant-target';
 import {endArsenal} from './adaptive-arsenal';
 import {settleFinisherCost} from './finisher-cost';
 import {settleRecharge} from './recharge';
-import {adaptiveAnalyzed, adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
+import {adaptiveZHit, adaptiveAnalyzed, adaptiveHarmfulStatus, adaptiveMoveSnapshot, adaptiveCaptureNativeMove, adaptiveWeatherSecondaries, adaptiveMoveView, adaptiveAfterMove, adaptiveCountertype, adaptiveSetup, adaptiveKnownMove} from './adaptive-cycle';
 import { Dex, toID } from './dex';
 import {takeCrescentOverflow, hasCrescentSubDamage} from './crescent-rend';
 import {predatorUltraMatch} from './predator';
@@ -257,6 +257,8 @@ export class BattleActions {
 		delete pokemon.m.climateReserveUsed;
 		delete pokemon.m.climateReservePending;
 		pokemon.m.enteredBattleTurn = this.battle.turn;
+
+		delete pokemon.m.acquiredTasteFoes;
 		pokemon.m.ultraRivalryEntryCount = (pokemon.m.ultraRivalryEntryCount || 0) + 1;
 		pokemon.m.ultraRivalryEntryToken = `${pokemon.side.id}:${pokemon.side.pokemon.reduce((n, p) => n + (p.m.ultraRivalryEntryCount || 0), 0)}`;
 		delete pokemon.m.ultraRivalryAnnounced;
@@ -2331,6 +2333,7 @@ export class BattleActions {
 			if (((move as any).wraithProcession || (move as any).exaltedAether) && move.hit > 1 && typeof damage === 'number' && damage > 0) {
 				damage = Math.max(1, this.battle.modify(damage, (move as any).exaltedAether ? 0.4 : 0.5));
 			}
+			if (typeof damage === 'number' && adaptiveZHit(target, move)) return damage * 4;
 			return guardFixedDamage(this.battle, damage, source, target, move);
 		}
 
@@ -2444,6 +2447,13 @@ export class BattleActions {
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = (!!(move as any).exaltedAether && move.hit > 1) || grandStrategyPrepared(source, target, move) || ((move as any).aimAssistTarget ? (move as any).aimAssistTarget === target : !!move.ignorePositiveDefensive);
+		if (source.hasAbility('insight') && !source.isAlly(target)) {
+			// Keep the read from the first strike for every hit against this foe in the same move.
+			const previous = source.abilityState.auraReads?.[target.m.ultraRivalryEntryToken];
+			moveHit.auraRead ??= (previous === 'Physical' && move.category === 'Special' && defenseStat === 'spd') ||
+				(previous === 'Special' && move.category === 'Physical' && defenseStat === 'def');
+			if (moveHit.auraRead) ignorePositiveDefensive = true;
+		}
 		if (move.category !== 'Status' && this.battle.movehasType(move, 'Fire') && source.hasAbilityOrPassive('coronafurnace')) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && this.battle.movehasType(move, 'Rock') && source.hasAbility('keenhunt') && !source.isAlly(target)) ignorePositiveDefensive = true;
 		if (defenseStat === 'def' && move.flags.kick && source.hasAbility('imperialprincess')) ignorePositiveDefensive = true;
@@ -2576,7 +2586,7 @@ export class BattleActions {
 		baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 		if ([pokemon, target].some(p => p.hasAbilityOrPassive('solarmimicry') && p.effectiveWeather() === 'sunnyday')) {
 			if (move.type === 'Fire' || move.id === 'hydrosteam') baseDamage = this.battle.modify(baseDamage, 1.5);
-			else if (move.type === 'Water') baseDamage = this.battle.modify(baseDamage, 0.5);
+			else if (move.type === 'Water' && !adaptiveZHit(target, move)) baseDamage = this.battle.modify(baseDamage, 0.5);
 		}
 
 		// crit - not a modifier
@@ -2621,7 +2631,9 @@ export class BattleActions {
 			typeMod = 0;
 		}
 		// Completed defender adaptation wins when both individuals have analyzed each other.
-		if (adaptiveAnalyzed(target, pokemon)) {
+		if (adaptiveZHit(target, move)) {
+			typeMod = 2;
+		} else if (adaptiveAnalyzed(target, pokemon)) {
 			typeMod = Math.min(typeMod, -1);
 		} else if (adaptiveAnalyzed(pokemon, target)) {
 			typeMod = Math.max(typeMod, 1);
@@ -2702,7 +2714,7 @@ export class BattleActions {
 		}
 
 		const bypassProtect = target.getMoveHitData(move).bypassProtect;
-		if (bypassProtect) {
+		if (bypassProtect && !adaptiveZHit(target, move)) {
 			const shadowFeint = bypassProtect !== true && bypassProtect.id === 'shadowfeint';
 			baseDamage = this.battle.modify(baseDamage, shadowFeint ? [1, 3] : 0.25);
 			if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {

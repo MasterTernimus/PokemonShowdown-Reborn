@@ -341,7 +341,7 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Consuming its own Berry heals active allies 1/8 HP once/turn, excluding itself."
   },
   "soulanchor": {
-    "desc": "Steelworker: Steel attacks gain STAB and 1.5x Attack or Sp. Atk (2x on Factory); on Short-Circuit they also become Electric-type. Immune to Poison attacks; resists Normal, Flying, Rock, Bug, Steel, Grass, Psychic, Ice, Dragon and Fairy attacks. A foe successfully trapped by its Anchor Shot loses 1/16 max HP each turn end; the holder heals by actual damage dealt. Only one tether per holder; a new tether replaces the old, and either Pokemon leaving ends it. Trap immunity, escape, indirect-damage immunity, suppression and healing restrictions apply.",
+    "desc": "Steelworker: Steel attacks gain STAB and 1.5x Attack or Sp. Atk (2x on Factory); on Short-Circuit they also become Electric-type. A foe successfully trapped by its Anchor Shot loses 1/16 max HP each turn end; the holder heals by actual damage dealt. Only one tether per holder; a new tether replaces the old, and either Pokemon leaving ends it. Trap immunity, escape, indirect-damage immunity, suppression and healing restrictions apply.",
     "shortDesc": "Its Anchor Shot tethers one trapped foe, draining 1/16 HP each turn."
   },
   "eldritchremedy": {
@@ -581,8 +581,8 @@ export const ConciseAbilityDescriptions: Record<string, {desc:string;shortDesc:s
     "shortDesc": "Friend Guard + Healer; once/entry, rescues self or an adjacent ally crossing half HP with 1/4 healing."
   },
   "apocalypticflame": {
-    "desc": "Own Tempo. Once per turn after a physical attack deals opposing HP damage, heals 1/8 max HP and attempts to lower one damaged surviving opponent’s stronger attacking stat by one stage, Attack on ties. Normal healing and stat-drop restrictions apply independently.",
-    "shortDesc": "Own Tempo; physical HP hit heals 1/8 and lowers foe’s stronger attack once per turn."
+    "desc": "Steel moves deal 1.3x damage to Flying or Dragon targets. A single-target attack that damages a foe weakens its next single-target physical hit by 25%. Gigaton Hammer also lowers the higher of Attack and Sp. Atk by 1 stage (Attack on ties). The mark lasts through the following turn. Spread moves skip the mark.",
+    "shortDesc": "Single-target hits weaken the foe's next physical hit. Steel deals 1.3x to Flying or Dragon foes."
   },
   "rupturedheaven": {
     "desc": "Sharpness boosts slicing moves by 1.5, except on Cold Eclipse Terrain. Only slicing moves become non-contact. Other contact moves remain contact moves.",

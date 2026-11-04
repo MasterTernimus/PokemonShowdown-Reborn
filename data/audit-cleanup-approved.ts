@@ -206,7 +206,7 @@ export const AuditCleanupDescriptions: {[id: string]: {shortDesc: string, desc: 
 	},
 	scarecrow: {
 		shortDesc: 'Wind Rider and Steelworker.',
-		desc: 'Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing. Adds Steel resistances and Poison immunity without Steel weaknesses.',
+		desc: 'Absorbs wind moves for +1 Attack. Gains +1 Attack when Tailwind starts on its side or it enters during Tailwind. Strong Winds gives +1 Attack and Sp. Atk each turn. Steel moves receive STAB and use 1.5x Attack or Sp. Atk (2x on Factory). On Short-Circuit, Steel moves also gain Electric typing.',
 	},
 	kickfiend: {
 		shortDesc: 'Striker and Limber.',

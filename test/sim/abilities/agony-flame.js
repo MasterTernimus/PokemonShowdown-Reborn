@@ -8,18 +8,24 @@ describe('Agony Flame',function(){
   const teams=format.includes('freeforall')?[[p],[t],[t],[t]]:format.includes('doubles')?[[p,t],[t,t]]:[[p],[t]];
   b=common.createBattle({formatid:format},teams);b.makeChoices(...teams.map(t=>t.length>1?'team 12':'team 1'));
   if(format.includes('freeforall'))b.field.changeTerrain('factoryterrain',b.p1.active[0]);
-  b.randomChance=(n,d)=>n>=d;return[b.p1.active[0],b.p2.active[0]];
+  b.randomChance=(n,d)=>(n===3&&d===10)||n>=d;return[b.p1.active[0],b.p2.active[0]];
  }
  function use(p,t,extra={},name='flamethrower'){const m=b.dex.getActiveMove(name);Object.assign(m,{accuracy:true,willCrit:false,basePower:5,secondaries:undefined},extra);b.actions.runMove(m,p,p.getLocOf(t));}
  it('uses approved base/Mega stats and separate abilities',()=>{
-  const[p]=setup();assert.deepEqual(p.species.baseStats,{hp:75,atk:110,def:60,spa:120,spd:85,spe:110});assert.equal(p.species.bst,560);
+  const[p]=setup();assert.deepEqual(p.species.baseStats,{hp:75,atk:110,def:60,spa:120,spd:85,spe:105});assert.equal(p.species.bst,555);
   assert.deepEqual(p.species.abilities,{0:'Flash Fire',1:'Infiltrator',H:'Battle Fervor'});
-  const mega=b.dex.species.get('houndoommega');assert.deepEqual(mega.baseStats,{hp:75,atk:110,def:100,spa:150,spd:95,spe:130});assert.equal(mega.bst,660);assert.equal(mega.abilities[0],'Hellfire Eclipse');
+  const mega=b.dex.species.get('houndoommega');assert.deepEqual(mega.baseStats,{hp:75,atk:110,def:100,spa:150,spd:95,spe:125});assert.equal(mega.bst,655);assert.equal(mega.abilities[0],'Hellfire Eclipse');
  });
  it('burns and Heal Blocks after the whole multi-hit move, once per target',()=>{
   const[p,t]=setup();const during=[];b.onEvent('DamagingHit',b.format,()=>during.push(t.status));use(p,t,{multihit:3});
   assert.deepEqual(during,['','','']);assert.equal(t.status,'brn');assert.equal(t.volatiles.healblock.duration,2);
   assert.equal(b.log.filter(l=>l.includes('|-status|')&&l.includes('|brn')).length,1);
+ });
+ it('rolls burn once per foe per move and still Heal Blocks on a failed roll',()=>{
+  const [p,t]=setup();let rolls=0;
+  b.randomChance=(n,d)=>{if(n===3&&d===10)rolls++;return n>=d;};
+  use(p,t,{multihit:3});
+  assert.equal(rolls,1);assert.equal(t.status,'');assert.equal(t.volatiles.healblock.duration,2);
  });
  it('affects each actually damaged FFA opponent',()=>{
   const[p,t]=setup('gen9freeforall4pmistyfieldadrienn');use(p,t,{},'heatwave');
@@ -50,7 +56,7 @@ describe('Agony Flame',function(){
  });
  it('refreshes a shorter Heal Block without stacking durations',()=>{const[p,t]=setup();use(p,t);t.volatiles.healblock.duration=1;b.turn++;use(p,t);assert.equal(t.volatiles.healblock.duration,2);});
  it('Mega Evolution retains Agony Flame passive alongside Hellfire Eclipse',()=>{
-  const[p,t]=setup();assert(b.actions.runMegaEvo(p));assert.equal(p.ability,'hellfireeclipse');assert.equal(p.species.bst,660);use(p,t);assert.equal(t.status,'brn');assert(t.volatiles.healblock);assert.equal(b.field.weather,'sunnyday');
+  const[p,t]=setup();assert(b.actions.runMegaEvo(p));assert.equal(p.ability,'hellfireeclipse');assert.equal(p.species.bst,655);use(p,t);assert.equal(t.status,'brn');assert(t.volatiles.healblock);assert.equal(b.field.weather,'');
  });
  for(const ability of ['Infiltrator','Agony Flame','Flash Fire'])it('passive burns once under suppression with selected '+ability,()=>{const[p,t]=setup();p.setAbility(ability);p.addVolatile('gastroacid');use(p,t);assert.equal(t.status,'brn');assert.equal(t.volatiles.healblock.duration,2);assert.equal(b.log.filter(l=>l.includes('|-status|')&&l.includes('|brn')).length,1);});
  it('Infiltrator HP damage through Substitute triggers the passive',()=>{const[p,t]=setup();p.setAbility('Infiltrator');t.addVolatile('substitute');const hp=t.hp,sub=t.volatiles.substitute.hp;use(p,t);assert(t.hp<hp);assert.equal(t.volatiles.substitute.hp,sub);assert.equal(t.status,'brn');assert(t.volatiles.healblock);});

@@ -168,20 +168,30 @@ describe('Lore partnership reworks', () => {
 		battle.makeChoices('switch 2', 'move splash'); assert(!t.volatiles.gossipexposed);
 	});
 
+	for (const species of ['Cacturne', 'Cacturne-Alt']) it(species + ' mirrors the base profile and is weak to Sacred Fire on Rocky Field', () => {
+		const [cacturne, foe] = start(species, 'Solar Rush', 'doubles');
+		const base = Dex.species.get('Cacturne');
+		for (const key of ['abilities', 'passives', 'types', 'baseStats']) assert.deepEqual(cacturne.species[key], base[key]);
+		foe.formeChange('Arcanine');
+		field('rockyterrain', cacturne);
+		battle.actions.terastallize(foe);
+		hit(foe, cacturne, 'sacredfire');
+		assert(battle.log.some(line => line.startsWith('|-supereffective|p1a: Cacturne')));
+	});
 	it('Blackwater Anchor keeps Steelworker, slows targets and creates the existing tether', () => {
 		const [p, t] = start('Dhelmise', 'Blackwater Anchor');
-		assert(p.hasAbility('steelworker')); assert.equal(hit(t, p, 'sludgebomb').damage, 0);
+		assert(p.hasAbility('steelworker')); assert(hit(t, p, 'sludgebomb', { secondaries: [] }).damage > 0);
 		hit(p, t, 'anchorshot', { basePower: 1 });
 		assert.equal(t.boosts.spe, -1); assert(p.volatiles.soulanchortether);
 		p.hp = 2048; t.hp = 4096; battle.fieldEvent('Residual');
 		assert.equal(p.hp, 2304); assert.equal(t.hp, 3840);
 	});
-	it('Blackwater Anchor adds each Steel resistance once without adding weaknesses', () => {
+	it('Blackwater Anchor retains natural weaknesses and can be poisoned', () => {
 		const [p, t] = start('Dhelmise', 'Blackwater Anchor');
-		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('icebeam')), 0);
+		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('icebeam')), 1);
 		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('ember')), 1);
 		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('darkpulse')), 1);
-		hit(t, p, 'toxic'); assert.equal(p.status, '');
+		hit(t, p, 'toxic'); assert.equal(p.status, 'tox');
 		p.addVolatile('gastroacid', t);
 		assert.equal(p.runEffectiveness(battle.dex.getActiveMove('icebeam')), 1);
 		assert(hit(t, p, 'sludgebomb', { secondaries: [] }).damage > 0);
