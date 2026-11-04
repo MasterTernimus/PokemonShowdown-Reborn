@@ -14,12 +14,12 @@ export function installMachampRework(abilities: AbilityDataTable) {
   shortDesc: 'Critical-hit immunity. First foe attack each turn deals 25% less damage.',
   desc: 'Cannot be critically hit. The first opposing attack to damage its HP each turn deals 25% less damage across all hits. Switching or changing abilities does not refresh this protection.',
   onCriticalHit: false,
-  onDamagePriority: -15,
+  onDamagePriority: 0,
   onDamage(damage, target, source, move) {
    if (!source || source.isAlly(target) || move?.effectType !== 'Move' || move.category === 'Status') return;
    const token = this.activePokemon === source && this.activeMove?.id === move.id ? this.activeMove : move;
    if (target.m.fourthholdTurn === this.turn && target.m.fourthholdMove !== token) return;
-   return this.chainModify(0.75);
+   return this.modifyAbilityGuard(damage, 0.75);
   },
   onAfterDamageApplied(damage, target, source, move) {
    if (damage <= 0 || !source || source.isAlly(target) || move?.effectType !== 'Move' || move.category === 'Status' || target.m.fourthholdTurn === this.turn) return;

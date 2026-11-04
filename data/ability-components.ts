@@ -254,7 +254,7 @@ export const AbilityComponents: { [id: string]: string[] } = {
 	ragingstorm: ['moldbreaker'],
 	ragingoverlord: ['ragingstorm', 'supremeoverlord', 'moldbreaker'],
 	abysssniper: ['sniper', 'stalwart'],
-	atrocity: ['moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient', 'toughclaws'],
+	atrocity: ['moldbreaker', 'unboundblaze', 'selfsufficient', 'proficient'],
 	streettyrant: ['intimidate', 'shedskin', 'moldbreaker'],
 	vitalsigns: ['invigorate'],
 	divineintervention: ['vitalsigns', 'triage', 'regenerator', 'friendguard'],
@@ -1025,7 +1025,7 @@ AbilityComponents.coldexpertise = ['oblivious', 'thickfat'];
 AbilityComponents.oldnorth = ['icebody', 'icescales', 'technician'];
 AbilityComponents.glacialprime = ['slushrush', 'refrigerate'];
 
-AbilityComponents.atrocity = ['unboundblaze', 'toughclaws', 'fireward'];
+AbilityComponents.atrocity = ['unboundblaze', 'fireward'];
 
 AbilityComponents.apexpredator = ['windrider', 'toughclaws'];
 

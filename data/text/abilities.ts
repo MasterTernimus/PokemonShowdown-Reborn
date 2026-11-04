@@ -1013,7 +1013,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	atrocity: {
 		"name": "Atrocity",
-		"desc": "Unbound Blaze + Tough Claws + Fire Ward",
+		"desc": "Unbound Blaze + Fire Ward",
 		"shortDesc": "Mold Breaker; stronger attacks and defenses; healing and Fire chip."
 	},
 	wickedsnare: {

@@ -68,9 +68,9 @@ describe('Approved healing, PP and Atrocity components', () => {
   const [p,q]=start('Withering Shell');q.setAbility('moldbreaker');
   battle.makeChoices('move splash','move knockoff');assert.equal(p.item,'');
  });
- it('Atrocity adds Tough Claws once and keeps the defense modifier single',()=>{
+ it('Atrocity removes Tough Claws and keeps the defense modifier single',()=>{
   const [p,q]=start('Atrocity');const m=battle.dex.getActiveMove('tackle');m.type='Water';m.flags={contact:1};
-  assert.equal(battle.runEvent('BasePower',p,q,m,100),169);
+  assert.equal(battle.runEvent('BasePower',p,q,m,100),130);
   for(const terrain of ['', 'coldeclipseterrain','dragonsdenterrain']) {
    if(terrain)battle.field.setTerrain(terrain,p);
    assert.equal(p.getStat('def'),battle.modify(p.getStat('def',false,true),terrain?1.5:1.3));

@@ -2826,6 +2826,9 @@ export class BattleActions {
 		if (pokemon.baseSpecies.id === 'flygon' && pokemon.getItem().id === 'flygonite') {
 			return 'Flygon-Mega-Z';
 		}
+		if (pokemon.baseSpecies.id === 'garchomp' && pokemon.getItem().id === 'garchompite') {
+			return 'Garchomp-Mega-Z';
+		}
 		const gardevoirFormes = ['Gardevoir', 'Gardevoir-Void', 'Gardevoir-Mega-Alt', 'Gardevoir-Mega', 'Gardevoir-Mega-Z', 'Gardevoir-Void-Mega'];
 		if (
 			gardevoirFormes.includes(pokemon.baseSpecies.name) &&

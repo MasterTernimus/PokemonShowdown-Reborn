@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "e824caba3476585e64f97c51b4095806f6bfd62dfbc4a131c1ccaeaab6809038",
-  "packageManifestSHA256": "04e7a06d2bd055efa83986f007d9530c30f413a37c5de978ecb073033c50a91b",
-  "mechanicsSHA256": "be4a9dd7e3ebf9a25ae91ae5cd49c9d69901d51296611951b905e4f28fe862e0",
+  "packageEngineRevision": "b27885ba5763d530dc182215e54ddfaecae6976663f22e75d2c2feee4f7dd2d1",
+  "packageManifestSHA256": "198a17630b585cbeb88e7e263a37ccf7447ae0f18e51c1a666a9cc63ff37d94b",
+  "mechanicsSHA256": "a3aeb179e29669c8b5c428cb3541d31746caa59301bfc97cdb63347ad3034300",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -11,15 +11,15 @@
     },
     {
       "file": "dist/data/abilities.js",
-      "sha256": "f2bc686a63a0f87aeb63fbab966a47aea90aa8a2c69cc3dafa5589a8b6ef19ca"
+      "sha256": "6965cc7c8e94151dd7ac9e95dfb4169a13aa41b0716b3329a1f4c46dc109e5ac"
     },
     {
       "file": "dist/data/ability-components.js",
-      "sha256": "9a3eddb0a047f4005c2220e6175910e16335f984dc41217825755bd15e5c39c4"
+      "sha256": "b138a74ce36dd7e5f9ccdb5b4c1ae3b0369be8cad008032e3b2f30c085177971"
     },
     {
       "file": "dist/data/ability-display-summaries.js",
-      "sha256": "d41f06002e2f2ec6bc980f1ff6b4688bd1f30811851a5e683398cb4be0c60ddb"
+      "sha256": "eb0d2f742801de5e39854705c5ff3a50a60f95f3d7b8ac5b99de38a76a500bd5"
     },
     {
       "file": "dist/data/ability-display.js",
@@ -163,7 +163,7 @@
     },
     {
       "file": "dist/data/conditions.js",
-      "sha256": "3d76fcbcb7e67ec8656f94af855b428c23431b0726612cdb9a8375434166f38b"
+      "sha256": "5e57e30bb456248c7457836342a62919abddf413d2431f71df471a3186ff947f"
     },
     {
       "file": "dist/data/cosmetic-counterparts.js",
@@ -407,7 +407,7 @@
     },
     {
       "file": "dist/data/machamp-rework.js",
-      "sha256": "32876612cb87d97ff620b46b14e3f4878d70f84f89b19e7dad031be6ec95ec5c"
+      "sha256": "58cd193842dba0545e49da6fe7eab96b86ceec5e8d55d4fdaea306ce4eabd3f3"
     },
     {
       "file": "dist/data/mega-hydreigon.js",
@@ -587,7 +587,7 @@
     },
     {
       "file": "dist/data/moves.js",
-      "sha256": "d90a5f5569dd74f4cf32c97e1d2aed77cdfd2c087a1cef493e086cc3fc5d475d"
+      "sha256": "3e56a75ea59ccbf88b9aa5c5427a5334fde6fb0d583a4c29f3ca5f15fea58203"
     },
     {
       "file": "dist/data/natdex-gen8-gen9-learnsets.js",
@@ -615,7 +615,7 @@
     },
     {
       "file": "dist/data/ordinary-approved-reductions.js",
-      "sha256": "0e71bc0d4ec165397ec68be184dd7b2b80eec36d8aebe019642f090658ad8342"
+      "sha256": "50565e9364845586333e16d4cfcf3926b31fc266e949e5f14a35a1b978dceec0"
     },
     {
       "file": "dist/data/passive-ability-cleanup.js",
@@ -635,7 +635,7 @@
     },
     {
       "file": "dist/data/pokedex.js",
-      "sha256": "fca0edf4a0ffe6052911bbe3ce93f5c64bbeb0330561c1fc2c839f960b3256fb"
+      "sha256": "ff483b1c5a510f2e422dc5a6cf5cd8086556745ff8a89dd4ef0fd987bd9597dc"
     },
     {
       "file": "dist/data/pokemongo.js",
@@ -883,7 +883,7 @@
     },
     {
       "file": "dist/data/text/abilities.js",
-      "sha256": "9a06e2472028392facfcb60d6a8fa47a29f72eeb90cd51064e563b3993b68950"
+      "sha256": "65a7561ff6d1ac20bfa9355bcc75bc28205f5bd790ec9f8a33ab894ae29144fa"
     },
     {
       "file": "dist/data/text/default.js",
@@ -891,7 +891,7 @@
     },
     {
       "file": "dist/data/text/items.js",
-      "sha256": "ed28bd6c49f16d15e279bae606315931f33b54a402a3ba3ca1b9507b5aeb6678"
+      "sha256": "b9d90bfbd797f1ec1f48955b738622aea395d1a36265b45e7c3c71a7da7c45ae"
     },
     {
       "file": "dist/data/text/moves.js",
@@ -1039,7 +1039,7 @@
     },
     {
       "file": "dist/sim/battle-actions.js",
-      "sha256": "2124640b7a6517d3dc65c35d710325a3f6231ad8f8f68c2fd2d2072bec780ece"
+      "sha256": "173862e1f8d8be81e84e55f9c672410bb0564c048cbd1f0d8feefd2b451d04d2"
     },
     {
       "file": "dist/sim/battle-queue.js",
@@ -1234,7 +1234,7 @@
     },
     {
       "file": "dist/data/ability-descriptions.js",
-      "sha256": "fe540d2d5f53607754ea96fd5891a816d10b55d99fcf1b34ea27c5adb8a235a7",
+      "sha256": "48877b55b369295ce190fd07658133bd151df0cba0b668dbe520d8aba72dc948",
       "reason": "Reviewed description-only table or license/readme."
     },
     {
@@ -1244,7 +1244,7 @@
     },
     {
       "file": "dist/data/short-description-audit.js",
-      "sha256": "959dad25de39892b3e72ad0ffe0f22f1b8b35b89f08e834a8624080c14f7d28a",
+      "sha256": "c82da3035080bdc8f48211da769a3908e3d8bee9f6cc1cdb75093efc8401178c",
       "reason": "Reviewed description-only table or license/readme."
     },
     {

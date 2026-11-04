@@ -837,7 +837,7 @@ AbilityDisplaySummaries.moonlitprowl = "Infiltrator + full local Limber: paralys
 for (const id of ["duskdrive","twilightinstinct","forsakensleeper","coldexpertise","oldnorth","glacialprime","dreepyvanguard"]) AbilityDisplaySummaries[id] = AbilityDescriptionOverrides[id].shortDesc;
 
 Object.assign(AbilityDisplaySummaries, {
-	atrocity: 'Unbound Blaze + Tough Claws + Fire Ward',
+	atrocity: 'Unbound Blaze + Fire Ward',
 	fireward: 'Defense and Sp. Def 1.3x; 1.5x on Cold Eclipse or Dragon’s Den.',
 	witheringshell: 'Crumbling Shell + Rain Dish + Sticky Hold.',
 	apexpredator: 'Wind Rider + Tough Claws.',

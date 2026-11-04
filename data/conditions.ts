@@ -103,16 +103,16 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	},
 	warnedmoves: {
 		name: 'Warned Moves', noCopy: true,
-		onDamagePriority: -30,
+		// Resolve the actual damage before Endure, Sturdy, and Focus Sash inspect it.
+		onDamagePriority: 0,
 		onDamage(damage, target, source, effect) {
 			if (!protectsWarnedMove(target, source, effect)) return;
 			const omen = this.effectState.omenOpponents?.get(source);
 			if (omen?.anticipation === effect.id && target.hasAbilityOrPassive('omensight')) {
 				const forewarn = omen.forewarn === effect.id ? 0.75 : 0.8;
-				this.chainModify(forewarn);
-				return this.chainModify(0.75);
+				damage = this.modifyAbilityGuard(damage, forewarn);
 			}
-			return this.chainModify(0.75);
+			return this.modifyAbilityGuard(damage, 0.75);
 		},
 	},
     artilleryreload: {

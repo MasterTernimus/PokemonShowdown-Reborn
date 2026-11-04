@@ -778,7 +778,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	garchompite: {
 		name: "Garchompite",
-		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp.",
+		shortDesc: "Allows Garchomp to Mega Evolve into Garchomp-Mega or Garchomp-Mega-Z.",
 	},
 	garchompitez: {
 		name: "Garchompite Z",

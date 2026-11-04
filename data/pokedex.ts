@@ -9467,7 +9467,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 99,
 		color: "Blue",
 		eggGroups: ["Monster", "Dragon"],
-		requiredItem: "Garchompite Z",
+		requiredItems: ["Garchompite", "Garchompite Z"],
 		gen: 9,
 	},
 	garchompbattlebond: {

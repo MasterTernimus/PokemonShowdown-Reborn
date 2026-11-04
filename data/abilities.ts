@@ -3892,9 +3892,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onNegateImmunity(pokemon, type) {
 			if (pokemon.hasType('Steel') && type === 'Poison') return false;
 		},
-		onDamage() {
+		onDamage(damage) {
 			if (this.field.isTerrain('corrosivemistterrain') || this.field.isTerrain('corrosiveterrain'))
-				this.chainModify(1.5);
+				return this.modify(damage, 1.5);
 		},
 		onFoeAfterSetStatus(status, target) {
 			if (status.id === 'tox' || status.id === 'psn') {
@@ -4340,7 +4340,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (effect?.id === 'confused') {
 				this.damage(target.baseMaxhp / 8, target, target, this.dex.abilities.get('fossilfrenzy'));
 			}
-			if (source && source !== target && target.volatiles['confusion'] && effect?.effectType === 'Move') return this.chainModify(1.25);
+			if (source && source !== target && target.volatiles['confusion'] && effect?.effectType === 'Move') return this.modify(damage, 1.25);
 		},
 		flags: { breakable: 1 },
 		name: "Fossil Frenzy",
@@ -5328,7 +5328,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Nested composite calls must not apply Proficient twice.
 			if (this.effect.id === 'atrocity') this.dex.abilities.get('proficient').onBasePower?.call(this, basePower, source, target, move);
 			if (move.category === 'Status') return;
-			this.dex.abilities.get('toughclaws').onBasePower?.call(this, basePower, source, target, move);
 			let modifier = 1.3;
 			if (move.typeChangerBoosted === this.effect) {
 				modifier *= this.field.isTerrain(['dragonsdenterrain', 'fairytaleterrain']) ? 1.5 : 1.2;
@@ -8832,7 +8831,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (skipPassiveComponent(this, this.effectState.target, 'forewarn')) return;
 			if (protectsWarnedMove(source, target, effect)) return;
 			if (effect && effect.effectType === 'Move' && effect.category !== 'Status')
-				return this.chainModify(0.8);
+				return this.modifyAbilityGuard(damage, 0.8);
 		},
 		flags: {},
 		name: "Forewarn",
@@ -9629,7 +9628,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect?.effectType === 'Move' && effect.category === 'Physical') {
-				return this.chainModify(0.5);
+				return this.modifyAbilityGuard(damage, 0.5);
 			}
 		},
 		flags: { breakable: 1 },

@@ -14640,7 +14640,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onDamage(damage) {
 			if (this.field.isTerrain('hauntedterrain')) {
-				return this.chainModify(1.5);
+				return this.modify(damage, 1.5);
 			}
 		},
 		target: "normal",
