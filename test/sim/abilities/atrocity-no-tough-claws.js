@@ -3,12 +3,14 @@ const assert = require('assert').strict;
 const common = require('../../common');
 const {Dex} = require('../../../dist/sim');
 const {AbilityComponents} = require('../../../dist/data/ability-components');
+const {getAbilityDisplayComponents} = require('../../../dist/data/ability-display');
 
 describe('Atrocity without Tough Claws', () => {
 	let battle;
 	afterEach(() => battle?.destroy());
 	it('retains its other components and gives contact no extra power', () => {
 		assert.deepEqual(AbilityComponents.atrocity, ['unboundblaze', 'fireward']);
+		assert.deepEqual(getAbilityDisplayComponents('atrocity'), ['unboundblaze', 'fireward']);
 		assert(!/Tough Claws|Contact moves have/.test(Dex.abilities.get('atrocity').desc));
 		battle = common.createBattle({}, [[{species: 'Mew', ability: 'Atrocity', moves: ['splash']}],
 			[{species: 'Mew', ability: 'No Ability', moves: ['splash']}]]);
