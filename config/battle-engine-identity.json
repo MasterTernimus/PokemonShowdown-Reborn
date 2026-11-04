@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "b27885ba5763d530dc182215e54ddfaecae6976663f22e75d2c2feee4f7dd2d1",
-  "packageManifestSHA256": "198a17630b585cbeb88e7e263a37ccf7447ae0f18e51c1a666a9cc63ff37d94b",
-  "mechanicsSHA256": "a3aeb179e29669c8b5c428cb3541d31746caa59301bfc97cdb63347ad3034300",
+  "packageEngineRevision": "fa207d800889a3d883b68887fc55f6e6e7d11900e58c15b24931e20e93fe6cbe",
+  "packageManifestSHA256": "f58db97a0334a3a08f9b8aefbdf2ec117e1f5e70b39608079c4f542dacf6b66f",
+  "mechanicsSHA256": "8893ac8aae93a9a002008e920e46d364ca2b2a1fc542728acd8e68d709bb2c4e",
   "files": [
     {
       "file": "dist/config/formats.js",
@@ -23,7 +23,7 @@
     },
     {
       "file": "dist/data/ability-display.js",
-      "sha256": "66c8283cf95903597631ea8a9c0f7cfbbfd9020f0f8c2073443b0715c425a69b"
+      "sha256": "80a4417fb35eb47d32e2672ba0e503677e049110c957504b69736de189094f16"
     },
     {
       "file": "dist/data/ability-readability.js",
