@@ -233,7 +233,8 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 	const normalRunSwitch = battle.actions.runSwitch;
 	try {
 		if (scenario.evaluationMode === 'public-state') {
-			for (const spec of scenario.actors) {
+			const participants = scenario.format.gameType === 'singles' ? scenario.actors.slice(0, 2) : scenario.actors;
+			for (const spec of participants) {
 				if (['slp', 'tox', 'frz'].includes(spec.status)) throw new Error('Public-state sleep, toxic and frostbite counters are not supported.');
 				if (!PUBLIC_STATE_ABILITIES.includes(Dex.toID(spec.set.ability)) || !PUBLIC_STATE_ITEMS.includes(Dex.toID(spec.set.item)) || spec.gimmick) throw new Error('Unsupported public-state ability, item or gimmick; use a reviewed configuration.');
 				const species = Dex.species.get(spec.set.species);
@@ -350,20 +351,20 @@ export function buildCalculatorBattle(scenario: CalcScenario, sample: number) {
 	}
 }
 
-export function calculateScenario(input: unknown) {
+export function calculateScenario(input: unknown, includeActionOutcomes = true) {
 	const scenario = validateScenario(input);
 	const outcomes: { damage: number[], moveDamage: number[], critical: boolean[], loss: number[], ko: boolean[], maxhp: number[] }[] = [];
 	let exampleLog: string[] = [];
 	let resolved: unknown;
 	const assumptions = scenario.evaluationMode === 'public-state' ? ASSUMPTIONS.filter(text => !text.startsWith('Fresh battle entry')).concat(['Bounded public-state mode skips switch-in callbacks, initializes reviewed current states, and treats actors as already active for one turn. Unsupported ability/item/passive initialization, gimmicks and sleep/toxic/frostbite counters are rejected. Field history and unlisted move-history state remain unsupported; this is not a full mid-battle snapshot.']) : ASSUMPTIONS;
 	let incenseBranches = false;
-	const actionOutcomes: unknown[] = [];
+	const actionOutcomes: unknown[] | undefined = includeActionOutcomes ? [] : undefined;
 	const publicState = (battle: Battle, mons: Pokemon[]) => ({ field: battle.field.terrain, aura: battle.field.auraField, weather: battle.field.weather, actors: mons.map(mon => ({ hp: mon.hp, maxhp: mon.maxhp, status: mon.status, boosts: { ...mon.boosts }, substituteHP: mon.volatiles.substitute?.hp || 0, fainted: !mon.hp, abilitySuppressed: mon.ignoringAbility(), passives: mon.getPassives() })) });
 	for (let sample = 0; sample < scenario.samples; sample++) {
 		const { battle, mons } = buildCalculatorBattle(scenario, sample);
 		try {
 			const before = mons.map(mon => mon.hp);
-			const beforeState = publicState(battle, mons);
+			const beforeState = actionOutcomes && publicState(battle, mons);
 			const maxhp = mons.map(mon => mon.maxhp);
 			if (!sample) {
 				resolved = {
@@ -411,7 +412,7 @@ export function calculateScenario(input: unknown) {
 			}
 			battle.actions.runMove(move, attacker, attacker.getLocOf(mons[1]), options);
 			battle.faintMessages();
-			actionOutcomes.push({ before: beforeState, after: publicState(battle, mons), log: battle.log.slice(logStart).slice(0, 100) });
+			actionOutcomes?.push({ before: beforeState, after: publicState(battle, mons), log: battle.log.slice(logStart).slice(0, 100) });
 			outcomes.push({ damage, moveDamage, critical, loss: mons.map((mon, i) => before[i] - mon.hp), ko: mons.map(mon => !mon.hp), maxhp });
 			if (!sample) {
 				exampleLog = battle.log.slice(logStart).slice(0, 100);

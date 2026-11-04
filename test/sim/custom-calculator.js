@@ -6,6 +6,24 @@ function scenario(overrides = {}) {
 }
 function format(mode, field = '') { return calculatorFormats().find(f => f.gameType === mode && (f.terrain || '') === field).id; }
 describe('Custom engine calculator', () => {
+	it('omits action traces on summary requests while preserving damage and KO results', () => {
+		const input = scenario();
+		const detailed = calculateScenario(input);
+		const summary = calculateScenario(input, false);
+		assert.equal(detailed.actionOutcomes.length, input.samples);
+		assert.equal(JSON.parse(JSON.stringify(summary)).actionOutcomes, undefined);
+		assert.deepEqual(summary.results, detailed.results);
+		assert.deepEqual(summary.exampleLog, detailed.exampleLog);
+	});
+	it('only checks participating slots for public-state eligibility', () => {
+		const input = scenario({evaluationMode: 'public-state'});
+		input.actors[2].ability = 'Berserk';
+		assert.equal(calculateScenario(input).results.length, 2);
+		for (const mode of ['doubles', 'freeforall']) {
+			input.format = calculatorFormats().find(f => f.gameType === mode).id;
+			assert.throws(() => calculateScenario(input), /Unsupported public-state ability/);
+		}
+	});
 	it('preserves an entry boost unless the scenario explicitly overrides it', () => {
 		const input = scenario({format:'gen9dragonsden', field:'dragonsdenterrain', move:'dragonpulse'});
 		Object.assign(input.actors[0], {species:'Drampa', ability:'Berserk'});

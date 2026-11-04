@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "algorithm": "sha256-json-canonical-runtime-files-v1",
-  "packageEngineRevision": "389ec8dbd55b399e1e2e93410aae81ec90e90ff452d9192e909375b3f591f41c",
-  "packageManifestSHA256": "18f21693883d4bbb194216aec178beaaf60e921770a5417989b9349dab3d091b",
+  "packageEngineRevision": "03e2dfdeb35e30f1d460f2285edbda00f56e9d36ccb0c3b205e5faeb265cc6fb",
+  "packageManifestSHA256": "f873aa2577a9a684f18a091718ac336df75c996c87c9bcd853dcfe4fbc6d22d5",
   "mechanicsSHA256": "fb7665f48fdd09b82077b4f595aad8959a7ae82e7a13e5b5d331fa8559aa14cf",
   "files": [
     {
@@ -1266,7 +1266,7 @@
   ],
   "excludedOfflineSampler": {
     "file": "dist/sim/custom-calculator.js",
-    "packagedSHA256": "b03cd3998f60a5ddead571b950e8b1dfed7d28b7dfabe77cc2a0c9fe628fca7f",
+    "packagedSHA256": "4dd9c891bf7c6334f8a1fa5a2f73c3785d464f12989f35c682764ee4ec8f180a",
     "reason": "Offline sampler is not a live battle-worker dependency."
   }
 }

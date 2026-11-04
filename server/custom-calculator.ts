@@ -102,7 +102,9 @@ if (process.argv.includes('--custom-calculator-worker')) {
 			if (typeof message !== 'string' || message.length > 16000) throw new Error('Invalid calculator request.');
 			const version = buildVersion();
 			const calculator = require('../sim/custom-calculator') as typeof import('../sim/custom-calculator');
-			const result = message ? calculator.calculateScenario(JSON.parse(message)) : calculator.calculatorMetadata();
+			const input = message ? JSON.parse(message) : null;
+			// The interaction sandbox explicitly selects an evaluation mode and inspects every action.
+			const result = message ? calculator.calculateScenario(input, input?.evaluationMode !== undefined) : calculator.calculatorMetadata();
 			if (buildVersion().engine !== version.engine) {
 				throw new Error('The engine build changed during calculation. Please retry.');
 			}
