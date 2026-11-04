@@ -1,3 +1,4 @@
+import {fieldDisablesArmorReduction} from './armor-reductions';
 import { markDualWieldScale } from '../sim/dual-wield-power';
 import {absorbHit} from './absorption';
 import {getRKSSystemMemoryAbilities} from './rks-system-memory';
@@ -3026,6 +3027,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
 		onSourceModifyDamage(damage, source, target, move) {
+			if (fieldDisablesArmorReduction(this.field.terrain, 'battlearmor')) return;
 			if (skipPassiveComponent(this, this.effectState.target, 'battlearmor')) return;
 			return this.chainModify(0.8);
 		},
@@ -4045,7 +4047,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					(effect as ActiveMove).category === 'Status' || source === target) return;
 				if (this.effectState.spent && this.effectState.protectedMove !== effect) return;
 				this.effectState.protectedMove = effect;
-				return this.modify(damage, 0.75);
+				return this.modifyAbilityGuard(damage, 0.75);
 			},
 			onAfterDamageApplied(damage, target, source, effect) {
 				if (damage > 0 && this.effectState.protectedMove === effect) this.effectState.spent = true;
@@ -7872,6 +7874,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	filter: {
 		onSourceModifyDamage(damage, source, target, move) {
+			if (fieldDisablesArmorReduction(this.field.terrain, 'filter')) return;
 			if (skipPassiveComponent(this, target, 'filter')) return;
 			let modifier = 0.8;
 			if (target.getMoveHitData(move).typeMod > 0) {
@@ -14741,6 +14744,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onCriticalHit: false,
 		flags: { breakable: 1 },
 		onSourceModifyDamage(damage, source, target, move) {
+			if (fieldDisablesArmorReduction(this.field.terrain, 'shellarmor')) return;
 			if (skipPassiveComponent(this, this.effectState.target, 'shellarmor')) return;
 			return this.chainModify(0.8);
 		},
@@ -15091,6 +15095,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 		solidrock: {
 		onSourceModifyDamage(damage, source, target, move) {
+			if (fieldDisablesArmorReduction(this.field.terrain, 'solidrock')) return;
 			if (skipPassiveComponent(this, this.effectState.target, 'solidrock')) return;
 			let modifier = 0.8;
 			if (target.getMoveHitData(move).typeMod > 0) {
@@ -21484,7 +21489,7 @@ Abilities.silentflight = { name: 'Silent Flight', num: 11967, rating: 4, flags: 
 	onDamage(damage, target, source, effect) {
 		if (effect?.effectType !== 'Move' || !(effect.damage || effect.damageCallback)) return;
 		target.addVolatile('silentflight');
-		if (!target.volatiles.silentflight.spent) return this.modify(damage, 0.75);
+		if (!target.volatiles.silentflight.spent) return this.modifyAbilityGuard(damage, 0.75);
 	},
 	onDamagingHit(damage, target) { if (damage && target.volatiles.silentflight) target.volatiles.silentflight.spent = true; },
 	condition: { noCopy: true },

@@ -1507,7 +1507,7 @@ export const ReviewedReferenceDetails = {
 				"On Dragon’s Den, a qualifying end-of-turn recovery activates without its ordinary 50% roll: cure status, heal 1/4 max HP, raise the higher attacking stat by one stage (Attack wins ties), and lower Defense and Special Defense by one stage. It does not clear negative stages or listed volatile ailments in this branch, although those can trigger it. Scrafty with Shed Skin or Street Tyrant heals 1/8 instead.",
 			],
 			"shellarmor": [
-				"On Dragon’s Den or Fairy Tale entry, gains +1 Defense. Its ordinary critical-hit prevention, 20% attack-damage reduction and +2 Special Defense response to an opposing stat drop remain.",
+				"Gains +1 Defense on Dragon’s Den or Fairy Tale entry. Prevents critical hits and gains +2 Special Defense when a foe lowers its stats. Its 20% damage cut applies on Fairy Tale only of these two fields.",
 			],
 			"predator": [
 				"Against newly switched or still-pending-action targets, Predator gives 1.5× power on Mountain, Snowy Mountain and Rocky, or 1.3× on other fields including Fairy Tale, Dragon’s Den and Big Top. Its 1.5× authority/Ultra matchup bonus replaces this timing bonus; Predator bonuses never stack or exceed 1.5×. Ultra matchups are disabled on Bewitched Woods, Haunted and Holy.",
@@ -1602,7 +1602,7 @@ export const ReviewedReferenceDetails = {
 				"Defense is 1.5× on Dragon’s Den, Fairy Tale, Rainbow, Starlight Arena and Misty without requiring a status condition. Having both a status and one of these fields does not stack the bonus.",
 			],
 			"shellarmor": [
-				"On Dragon’s Den or Fairy Tale entry, gains +1 Defense. Its ordinary critical-hit prevention, 20% attack-damage reduction and +2 Special Defense response to an opposing stat drop remain.",
+				"Gains +1 Defense on Dragon’s Den or Fairy Tale entry. Prevents critical hits and gains +2 Special Defense when a foe lowers its stats. Its 20% damage cut applies on Fairy Tale only of these two fields.",
 			],
 			"armortail": [
 				"On Fairy Tale entry, gains +1 Defense and Special Defense in addition to its ordinary protection against opposing priority moves.",

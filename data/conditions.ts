@@ -109,7 +109,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const omen = this.effectState.omenOpponents?.get(source);
 			if (omen?.anticipation === effect.id && target.hasAbilityOrPassive('omensight')) {
 				const forewarn = omen.forewarn === effect.id ? 0.75 : 0.8;
-				return this.chainModify(0.75 * forewarn);
+				this.chainModify(forewarn);
+				return this.chainModify(0.75);
 			}
 			return this.chainModify(0.75);
 		},
@@ -720,7 +721,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onDamage(damage, target, source, effect) {
 			if (damage <= 0 || effect?.effectType !== 'Move' || (effect as ActiveMove).category === 'Status') return;
 			target.removeVolatile('royalescortshield');
-			return this.modify(damage, 0.75);
+			return this.modifyAbilityGuard(damage, 0.75);
 		},
 		onResidualOrder: 100,
 	},
@@ -783,7 +784,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (damage <= 0 || !source || source.isAlly(target) || effect?.effectType !== 'Move' ||
 				(effect as ActiveMove).category === 'Status') return;
 			target.removeVolatile('lifeguardguard');
-			return this.modify(damage, 0.75);
+			return this.modifyAbilityGuard(damage, 0.75);
 		},
 		onResidualOrder: 100,
 	},
@@ -803,7 +804,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (damage <= 0 || !source || source.isAlly(target) || effect?.effectType !== 'Move' ||
 				(effect as ActiveMove).category === 'Status') return;
 			this.effectState.guardedMove ||= effect;
-			if (this.effectState.guardedMove === effect) return this.modify(damage, 0.8);
+			if (this.effectState.guardedMove === effect) return this.modifyAbilityGuard(damage, 0.8);
 		},
 		onAnyAfterAttackResolved(source, target, move) {
 			if (this.effectState.guardedMove === move) this.effectState.target.removeVolatile('nobledanceward');
@@ -817,7 +818,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (damage <= 0 || !source || source === target || effect?.effectType !== 'Move' ||
 				(effect as ActiveMove).category === 'Status') return;
 			this.effectState.guardedMove ||= effect;
-			if (this.effectState.guardedMove === effect) return this.modify(damage, 0.75);
+			if (this.effectState.guardedMove === effect) return this.modifyAbilityGuard(damage, 0.75);
 		},
 		onAnyAfterAttackResolved(source, target, move) {
 			if (this.effectState.guardedMove === move) this.effectState.target.removeVolatile('hivecourierguard');

@@ -131,7 +131,10 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 // An individual Side's request state is encapsulated in its `activeRequest` field.
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
+import {hasReductionArmor} from '../data/armor-reductions';
+
 export class Battle {
+	armorHit?: {move: ActiveMove, defender: Pokemon, best: number, enabled?: boolean};
 	readonly challengeOptions: Readonly<ChallengeOptions>;
 	readonly gimmickLimit: number;
 	readonly id: ID;
@@ -2683,8 +2686,39 @@ export class Battle {
 			denominator = numerator[1];
 			numerator = numerator[0];
 		}
-		const nextMod = this.trunc(numerator * 4096 / denominator);
+		let nextMod = this.trunc(numerator * 4096 / denominator);
+		if (nextMod > 0 && nextMod < 4096) nextMod = this.armorReductionModifier(nextMod);
 		this.event.modifier = ((previousMod * nextMod + 2048) >> 12) / 4096;
+	}
+
+	/** Only upgrade the strongest defensive percentage already applied to this particular hit. */
+	private armorReductionModifier(factor: number, abilityGuard = false) {
+		const event = this.event;
+		const move = event.effect as ActiveMove;
+		if (move?.effectType !== 'Move' || move.category === 'Status' || move.isZ ||
+			move.damage || move.damageCallback || move.ohko) return factor;
+		const late = event.id === 'Damage';
+		if (!late && !['BasePower', 'ModifyAtk', 'ModifySpA', 'ModifyDamage'].includes(event.id)) return factor;
+		const defender = late ? event.target : event.source;
+		if (!(defender instanceof Pokemon)) return factor;
+		const holder = this.effectState.target;
+		const sideProtection = ['safeguard', 'mist', 'luckychant'].includes(this.effect.id);
+		const defensiveAbility = (this.effect.effectType === 'Ability' || this.effectState.speciesPassive ||
+			this.effect.id === 'warnedmoves') && holder instanceof Pokemon && holder.isAlly(defender);
+		if (!sideProtection && !defensiveAbility && !abilityGuard) return factor;
+		const hit = this.armorHit;
+		const state = hit?.move === move && hit.defender === defender ? hit :
+			(event.armorReduction ||= {best: late ? defender.getMoveHitData(move).armorFactor || 4096 : 4096});
+		state.enabled ??= hasReductionArmor(defender);
+		if (!state.enabled || factor >= state.best) return state.enabled ? 4096 : factor;
+		const relative = Math.round(factor * 4096 / state.best);
+		state.best = factor;
+		return relative;
+	}
+
+	/** Apply a late ability shield before HP survival thresholds, including one-shot volatile shields. */
+	modifyAbilityGuard(damage: number, fraction: number) {
+		return this.modify(damage, this.armorReductionModifier(this.trunc(fraction * 4096), true), 4096);
 	}
 
 	modify(value: number, numerator: number | number[], denominator = 1) {

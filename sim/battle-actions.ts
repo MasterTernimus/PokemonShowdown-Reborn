@@ -2298,9 +2298,13 @@ export class BattleActions {
 		source: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages = false
 	): number | undefined | null | false {
 		const previous = dualWieldContext(this.battle);
+		const previousArmorHit = this.battle.armorHit;
 		try {
 			return this.getDamageWithAbilityPower(source, target, move, suppressMessages);
 		} finally {
+			const hit = this.battle.armorHit;
+			if (hit && hit !== previousArmorHit) hit.defender.getMoveHitData(hit.move).armorFactor = hit.best;
+			this.battle.armorHit = previousArmorHit;
 			restoreDualWieldContext(this.battle, previous);
 		}
 	}
@@ -2321,6 +2325,7 @@ export class BattleActions {
 		}
 
 		move = adaptiveMoveView(move, source, target);
+		this.battle.armorHit = {move, defender: target, best: 4096};
 		setDualWieldContext(this.battle, move, source, target);
 		if (!target.runImmunity(move, !suppressMessages)) {
 			return false;

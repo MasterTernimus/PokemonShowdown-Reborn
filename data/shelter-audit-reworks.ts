@@ -34,7 +34,7 @@ export const ShelterConditions: ConditionDataTable = {
 		onDamagePriority: -1,
 		onDamage(damage, target, source, effect) {
 			if (damage > 0 && source && !source.isAlly(target) && effect?.effectType === 'Move' &&
-				(effect).category !== 'Status') return this.modify(damage, 0.8);
+				(effect).category !== 'Status') return this.modifyAbilityGuard(damage, 0.8);
 		},
 		onAfterDamageApplied(damage, target, source, effect) {
 			if (damage > 0 && source && !source.isAlly(target) && effect?.effectType === 'Move' &&

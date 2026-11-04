@@ -4857,3 +4857,13 @@ AbilitiesText.tidalpoise = TidalPoiseDescription;
 
 AbilitiesText.omensight = {name: 'Omen Sight', ...WarningDescriptions.omensight,
 	activate: "  [TARGET]'s [MOVE] was revealed!"};
+
+const armorFieldNote = 'Its damage reduction is inactive on New World, Dragon’s Den, Mountain, Holy, Haunted, Starlight Arena, Snowy Mountain and all Flower Garden stages.';
+const armorStackNote = 'With Solid Rock, Filter or Prism Armor, only the strongest damage cut from abilities, passives, Mist, Safeguard or Lucky Chant applies.';
+for (const id of ['filter', 'shellarmor', 'battlearmor', 'solidrock', 'prismarmor', 'terraresolve', 'friendguard', 'rivalry']) {
+	const text = AbilitiesText[id as ID];
+	let desc = text.desc || text.shortDesc || '';
+	if (['solidrock', 'filter', 'shellarmor', 'battlearmor', 'terraresolve'].includes(id)) desc += ' ' + armorFieldNote;
+	if (!['shellarmor', 'battlearmor'].includes(id)) desc += ' ' + armorStackNote;
+	text.desc = desc;
+}

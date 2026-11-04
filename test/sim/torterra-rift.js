@@ -36,9 +36,9 @@ describe('Torterra-Rift and Mountain Rift', () => {
 		assert.deepEqual(torterra.moveSlots.map(slot => slot.id), ['earthquake', 'desertsmark', 'mountaingale', 'stoneedge']);
 		assert(torterra.hasAbility('shellarmor'));
 		assert(torterra.hasAbility('selfsufficient'));
-		assert.equal(torterra.getAbility().onCriticalHit, false);
-		assert.equal(battle.runEvent('SourceModifyDamage', torterra, battle.p2.active[0],
-			battle.dex.getActiveMove('tackle'), 100), 80);
+		const move = battle.dex.getActiveMove('tackle');
+		assert.equal(battle.runEvent('CriticalHit', torterra, battle.p2.active[0], move), false);
+		assert.equal(battle.runEvent('ModifyDamage', battle.p2.active[0], torterra, move, 100), 100);
 		assert.equal(battle.field.terrain, 'mountainterrain');
 		assert.equal(battle.field.terrainState.duration, 4);
 		assert.match(battle.log.join('\n'), /created Mountain Field for 5 turns/);

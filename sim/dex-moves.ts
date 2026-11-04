@@ -329,6 +329,7 @@ interface MoveHitData {
 	[targetSlotid: string]: {
 		auraRead?: boolean,
 		tomeRead?: boolean,
+		armorFactor?: number,
 		/** Did this move crit against the target? */
 		crit: boolean,
 		/** The type effectiveness of this move against the target */

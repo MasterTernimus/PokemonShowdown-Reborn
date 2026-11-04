@@ -262,7 +262,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		name: 'Twilight Instinct', num: base.twilightinstinct.num, rating: 4, flags: { breakable: 1 },
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move' || !source || target.isAlly(source) || budget(target).twilightGuardUsed) return;
-			return this.modify(damage, 0.75);
+			return this.modifyAbilityGuard(damage, 0.75);
 		},
 		onDamagingHit(damage, target, source) {
 			if (!foeHit(damage, target, source)) return;
@@ -310,7 +310,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move' || effect.category !== 'Special' || !budget(target).steamVeil) return;
 			budget(target).steamVeil = false;
-			return this.modify(damage, 0.75);
+			return this.modifyAbilityGuard(damage, 0.75);
 		},
 	});
 	add('pressurekiln', 'Pressure Kiln', {
@@ -331,7 +331,7 @@ export function applyApprovedSignatures(base: AbilityDataTable) {
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move' || effect.category !== 'Physical' || !source || target.isAlly(source) ||
 				budget(target).shellBroken) return;
-			return this.modify(damage, 0.5);
+			return this.modifyAbilityGuard(damage, 0.5);
 		},
 		onDamagingHit(damage, target, source, move) {
 			base.crumblingshell.onDamagingHit?.call(this, damage, target, source, move);
