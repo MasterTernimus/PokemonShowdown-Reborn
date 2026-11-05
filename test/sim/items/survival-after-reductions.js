@@ -40,4 +40,23 @@ describe('Survival checks after late damage modifiers', () => {
 			assert.equal(p.hp, hp); assert.equal(p.item, 'focussash');
 		});
 	}
+	for (const [ability, terrain, moveName, confusion] of [
+		['No Ability', 'hauntedterrain', 'nightshade', false],
+		['Corrosion', 'corrosiveterrain', 'tackle', false],
+		['Fossil Frenzy', '', 'tackle', true],
+	]) it(`includes late ${ability === 'No Ability' ? moveName : ability} amplification before survival`, () => {
+		const [p, q] = setup('Focus Sash', ability, 'Mew');
+		battle.field.terrain = terrain;
+		// Fossil Frenzy includes Klutz, so exercise Endure instead of a suppressed item.
+		if (confusion) { p.addVolatile('confusion'); p.addVolatile('endure'); p.hp = p.maxhp; }
+		battle.damage(350, p, q, battle.dex.getActiveMove(moveName));
+		assert.equal(p.hp, 1); assert.equal(p.item, confusion ? 'focussash' : '');
+	});
+	it('does not grant a damaged holder a second-hit Sash rescue', () => {
+		const [p, q] = setup();
+		battle.damage(450, p, q, battle.dex.getActiveMove('megakick'));
+		assert.equal(p.item, 'focussash');
+		battle.damage(450, p, q, battle.dex.getActiveMove('megakick'));
+		assert.equal(p.hp, 0); assert.equal(p.item, 'focussash');
+	});
 });
