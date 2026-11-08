@@ -13,8 +13,16 @@ const database = SQL('test-sql', module, {file: `:memory:`});
 		select = await database.prepare(`SELECT * FROM test`);
 		insert = await database.prepare(`INSERT INTO test (col, col2) VALUES (?, ?)`);
 	});
-	it(`should require you to prepare a statement before running`, async () => {
-		await assert.rejects(database.get('SELECT col FROM test'));
+	it(`should require a cached statement only when explicitly requested`, async () => {
+		const query = 'SELECT col FROM test WHERE col = ?';
+		await assert.rejects(database.get(query, ['uncached'], true), /Missing cached statement/);
+		await database.prepare(query);
+		assert.equal(await database.get(query, ['uncached'], true), undefined);
+	});
+	it(`should automatically prepare uncached statements by default`, async () => {
+		const query = 'SELECT col2 FROM test WHERE col2 = ?';
+		assert.equal(await database.get(query, ['automatic']), undefined);
+		assert.equal(await database.get(query, ['automatic'], true), undefined);
 	});
 	it(`should support both statement strings and corresponding statement classes`, async () => {
 		await database.run(`INSERT INTO test (col, col2) VALUES (?, ?)`, ['a', 'b']);
